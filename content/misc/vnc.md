@@ -1,5 +1,6 @@
 +++
 title = 'VNCによる画面共有'
+tags = ["communication"]
 [menu.main]
   parent = "misc"
 +++

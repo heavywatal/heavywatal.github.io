@@ -1,5 +1,6 @@
 +++
 title = 'MacPorts'
+tags = ["mac", "package"]
 [menu.main]
   parent = "mac"
 +++
@@ -89,7 +90,7 @@ port は `/opt/local/` 以下にインストールされる。
 
         % sudo port -n upgrade --force [port]
 
--   
+-
 
     過去のバージョンのportをインストール
     :   1.  <http://trac.macports.org/browser/trunk/dports> から目的のportのページを開く

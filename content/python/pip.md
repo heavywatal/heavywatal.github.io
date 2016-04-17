@@ -1,6 +1,7 @@
 +++
 title = 'pip'
 subtitle = "パッケージ管理"
+tags = ["python"]
 [menu.main]
   parent = "python"
 +++

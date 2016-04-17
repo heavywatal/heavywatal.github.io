@@ -1,5 +1,6 @@
 +++
 title = 'Spotlight'
+tags = ["mac"]
 [menu.main]
   parent = "mac"
 +++

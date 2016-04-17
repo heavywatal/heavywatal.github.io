@@ -1,6 +1,7 @@
 +++
 title = 'stringr'
 subtitle = "Rの文字列をまともな方法で処理する"
+tags = ["r"]
 [menu.main]
   parent = "rstats"
 +++

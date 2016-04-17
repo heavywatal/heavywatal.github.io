@@ -1,5 +1,6 @@
 +++
 title = 'mount'
+tags = ["communication"]
 [menu.main]
   parent = "dev"
 +++

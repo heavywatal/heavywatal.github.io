@@ -1,6 +1,7 @@
 +++
 title = 'matplotlib + seaborn'
 subtitle = "Pythonでグラフ描画"
+tags = ["python", "graph"]
 [menu.main]
   parent = "python"
 +++

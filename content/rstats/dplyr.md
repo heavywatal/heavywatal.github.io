@@ -1,6 +1,7 @@
 +++
 title = 'dplyr'
 subtitle = "高速data.frame処理"
+tags = ["r"]
 [menu.main]
   parent = "rstats"
 +++

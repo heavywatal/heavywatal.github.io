@@ -1,5 +1,6 @@
 +++
 title = 'CentOS 6.5'
+tags = ["linux"]
 [menu.main]
   parent = "linux"
 +++

@@ -1,5 +1,6 @@
 +++
 title = 'DnaSP'
+tags = ["genetics"]
 [menu.main]
   parent = "bio"
 +++

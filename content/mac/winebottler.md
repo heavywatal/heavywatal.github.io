@@ -1,5 +1,6 @@
 +++
 title = 'WineBottler'
+tags = ["mac", "windows"]
 [menu.main]
   parent = "mac"
 +++

@@ -1,5 +1,6 @@
 +++
 title = 'TeX'
+tags = ["writing"]
 [menu.main]
   parent = "dev"
 +++

@@ -1,6 +1,7 @@
 +++
 title = 'tidyr'
 subtitle = "シンプルなデータ変形ツール"
+tags = ["r"]
 [menu.main]
   parent = "rstats"
 +++

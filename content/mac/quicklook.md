@@ -1,5 +1,6 @@
 +++
 title = 'QuickLook'
+tags = ["mac"]
 [menu.main]
   parent = "mac"
 +++

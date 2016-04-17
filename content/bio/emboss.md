@@ -1,5 +1,6 @@
 +++
 title = 'EMBOSS'
+tags = ["genetics"]
 [menu.main]
   parent = "bio"
 +++

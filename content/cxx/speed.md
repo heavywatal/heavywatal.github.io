@@ -1,5 +1,6 @@
 +++
 title = 'めざせC++高速プログラム'
+tags = ["c++"]
 [menu.main]
   parent = "cxx"
 +++

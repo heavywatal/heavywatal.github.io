@@ -1,5 +1,6 @@
 +++
 title = 'gcc'
+tags = ["c++"]
 [menu.main]
   parent = "cxx"
 +++
@@ -24,7 +25,7 @@ title = 'gcc'
 <http://gcc.gnu.org/onlinedocs/gcc-4.9.0/gcc/Invoking-GCC.html>
 
 **出力オプション** <http://gcc.gnu.org/onlinedocs/gcc-4.9.0/gcc/Overall-Options.html>
-:   
+:
 
     `-c`
     :   コンパイルするだけでリンクしない
@@ -33,7 +34,7 @@ title = 'gcc'
     :   出力先のファイル名を指定
 
 **C/C++オプション** <http://gcc.gnu.org/onlinedocs/gcc-4.9.0/gcc/C-Dialect-Options.html>
-:   
+:
 
     `-std=c++11`
     :   2011年のISO標準でコンパイルする。
@@ -42,7 +43,7 @@ title = 'gcc'
         <http://gcc.gnu.org/projects/cxx1y.html>
 
 **警告オプション** <http://gcc.gnu.org/onlinedocs/gcc-4.9.0/gcc/Warning-Options.html>
-:   
+:
 
     `-Wall`
     :   基本的な警告
@@ -54,13 +55,13 @@ title = 'gcc'
     :   警告をエラー扱いにする
 
 **デバッグオプション** <http://gcc.gnu.org/onlinedocs/gcc-4.9.0/gcc/Debugging-Options.html>
-:   
+:
 
     `-g`
     :   gdb で使えるデバッグ情報を埋め込む
 
 **最適化オプション** <http://gcc.gnu.org/onlinedocs/gcc-4.9.0/gcc/Optimize-Options.html>
-:   
+:
 
     `-O1`
     :   軽い最適化
@@ -75,7 +76,7 @@ title = 'gcc'
     :   コードサイズが最小になるように
 
 **プリプロセッサオプション** <http://gcc.gnu.org/onlinedocs/gcc-4.9.0/gcc/Preprocessor-Options.html>
-:   
+:
 
     `-D {name}`, `-D {name=definition}`
     :   ソースコードで `#define` するのと同じようにマクロを定義する
@@ -91,7 +92,7 @@ title = 'gcc'
         前者はシステムヘッダーを含み、後者は含まない。
 
 **リンクオプション** <http://gcc.gnu.org/onlinedocs/gcc-4.9.0/gcc/Link-Options.html>
-:   
+:
 
     `-l {library}`
     :   リンクするライブラリを指定する。

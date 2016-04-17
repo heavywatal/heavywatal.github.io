@@ -1,5 +1,6 @@
 +++
 title = 'PAML'
+tags = ["genetics"]
 [menu.main]
   parent = "bio"
 +++

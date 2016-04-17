@@ -1,6 +1,7 @@
 +++
 title = 'nano'
 subtitle = "ターミナルで動く軽量テキストエディタ"
+tags = ["editor"]
 [menu.main]
   parent = "dev"
 +++

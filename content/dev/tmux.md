@@ -1,6 +1,7 @@
 +++
 title = 'tmux'
 subtitle = "仮想端末でリモート仕事を安全に"
+tags = ["job", "shell"]
 [menu.main]
   parent = "dev"
 +++
@@ -10,13 +11,13 @@ subtitle = "仮想端末でリモート仕事を安全に"
 [GNU screen](http://www.gnu.org/software/screen/)
 の後を継ぐ端末多重化ソフト(terminal multiplexer)。
 
--   
+-
 
     1つの画面の中でウインドウを追加・分割して複数の端末を開く
     :   -   GUIのタブが不要になる
         -   1つの `ssh` セッションで複数の端末を持てる
 
--   
+-
 
     `ssh` 切断後も端末丸ごと継続され、後でまた繋ぎ直せる
     :   -   不意の `ssh` 切断でも作業が失われない
@@ -75,19 +76,19 @@ prefix keyはデフォルトで `C-b` だが
 
 <https://github.com/heavywatal/dotfiles/blob/master/.tmux.conf>
 
--   
+-
 
     prefix 変更
     :   `C-b` はキャレット左移動に使われるべきなので、
         `zsh` や `emacs` で使わない `C-t` に変更する。
         tmux の頭文字で覚えやすいし、`b` より若干近い。
 
--   
+-
 
     起動時ウィンドウサイズ変更 `aggressive-resize`
     :   サイズの異なる端末からアクセスしたときに随時ウィンドウサイズ変更
 
--   
+-
 
     Mac `open` 問題
     :   `tmux` 内だと `open` がうまく働かないのでそれを回避するために
@@ -96,7 +97,7 @@ prefix keyはデフォルトで `C-b` だが
 
             % brew install reattach-to-user-namespace
 
--   
+-
 
     タブの横幅を広くする
     :   `defaults write com.googlecode.iterm2 OptimumTabWidth -int 360`

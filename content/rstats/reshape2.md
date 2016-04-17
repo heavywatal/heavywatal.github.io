@@ -1,6 +1,7 @@
 +++
 title = 'reshape2'
 subtitle = "柔軟なデータ変形ツール"
+tags = ["r"]
 [menu.main]
   parent = "rstats"
 +++

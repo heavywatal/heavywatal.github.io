@@ -1,5 +1,6 @@
 +++
 title = 'zsh'
+tags = ["shell"]
 [menu.main]
   parent = "dev"
 +++

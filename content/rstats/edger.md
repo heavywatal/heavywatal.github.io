@@ -1,6 +1,7 @@
 +++
 title = 'edgeR'
 subtitle = "リードカウントから発現変動遺伝子を検出"
+tags = ["r"]
 [menu.main]
   parent = "rstats"
 +++

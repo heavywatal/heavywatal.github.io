@@ -1,5 +1,6 @@
 +++
 title = 'ufw'
+tags = ["linux"]
 [menu.main]
   parent = "linux"
 +++

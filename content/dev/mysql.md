@@ -1,5 +1,6 @@
 +++
 title = 'MySQL'
+tags = ["database"]
 [menu.main]
   parent = "dev"
 +++

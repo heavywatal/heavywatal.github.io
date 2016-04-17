@@ -1,5 +1,6 @@
 +++
 title = 'RepeatMasker'
+tags = ["genetics"]
 [menu.main]
   parent = "bio"
 +++

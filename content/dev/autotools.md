@@ -1,5 +1,6 @@
 +++
 title = 'autoconf, automake'
+tags = ["package"]
 [menu.main]
   parent = "dev"
 +++

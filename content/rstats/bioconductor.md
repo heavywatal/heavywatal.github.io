@@ -1,6 +1,7 @@
 +++
 title = 'Bioconductor'
 subtitle = "Genomicデータ解析ツール群"
+tags = ["r", "bioconductor"]
 [menu.main]
   parent = "rstats"
 +++

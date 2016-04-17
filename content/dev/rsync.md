@@ -1,5 +1,6 @@
 +++
 title = 'rsync'
+tags = ["communication"]
 [menu.main]
   parent = "dev"
 +++

@@ -1,5 +1,6 @@
 +++
 title = 'Fonts'
+tags = ["writing"]
 [menu.main]
   parent = "misc"
 +++

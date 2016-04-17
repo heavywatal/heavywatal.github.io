@@ -1,5 +1,6 @@
 +++
 title = 'Emacs'
+tags = ["editor"]
 [menu.main]
   parent = "dev"
 +++

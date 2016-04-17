@@ -1,5 +1,6 @@
 +++
 title = 'dadi'
+tags = ["genetics", "python"]
 [menu.main]
   parent = "bio"
 +++

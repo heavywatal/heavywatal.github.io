@@ -1,5 +1,6 @@
 +++
 title = 'SAMtools'
+tags = ["genetics"]
 [menu.main]
   parent = "bio"
 +++

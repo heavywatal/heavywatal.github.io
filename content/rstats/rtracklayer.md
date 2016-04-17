@@ -1,5 +1,6 @@
 +++
 title = 'rtracklayer'
+tags = ["r", "bioconductor"]
 [menu.main]
   parent = "rstats"
 +++

@@ -1,5 +1,6 @@
 +++
-title = 'ソフトウェアの管理'
+title = 'apt/dpkg'
+tags = ["linux", "package"]
 [menu.main]
   parent = "linux"
 +++

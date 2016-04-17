@@ -1,5 +1,6 @@
 +++
 title = 'Ensembl'
+tags = ["genetics", "database"]
 [menu.main]
   parent = "bio"
 +++

@@ -1,6 +1,7 @@
 +++
 title = 'plyr'
 subtitle = "データ分割-関数適用-再結合を効率的に"
+tags = ["r"]
 [menu.main]
   parent = "rstats"
 +++

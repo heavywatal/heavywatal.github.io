@@ -1,6 +1,7 @@
 +++
 title = 'devtools'
 subtitle = "Rパッケージ作成支援"
+tags = ["r"]
 [menu.main]
   parent = "rstats"
 +++

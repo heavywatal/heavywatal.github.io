@@ -1,5 +1,6 @@
 +++
 title = 'ことえり'
+tags = ["mac", "writing"]
 [menu.main]
   parent = "mac"
 +++

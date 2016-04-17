@@ -1,5 +1,6 @@
 +++
 title = 'clang / llvm'
+tags = ["c++"]
 [menu.main]
   parent = "cxx"
 +++

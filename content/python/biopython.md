@@ -1,6 +1,7 @@
 +++
 title = 'BioPython'
 subtitle = "Tools for biological computation"
+tags = ["python"]
 [menu.main]
   parent = "python"
 +++

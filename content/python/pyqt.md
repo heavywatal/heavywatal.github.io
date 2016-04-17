@@ -1,6 +1,7 @@
 +++
 title = 'PyQt'
 subtitle = "Python bindings for Qt framework"
+tags = ["python"]
 [menu.main]
   parent = "python"
 +++

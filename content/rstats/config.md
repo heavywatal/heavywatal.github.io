@@ -1,5 +1,6 @@
 +++
 title = '環境設定'
+tags = ["r"]
 [menu.main]
   parent = "rstats"
 +++

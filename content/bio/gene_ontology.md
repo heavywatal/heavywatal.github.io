@@ -1,5 +1,6 @@
 +++
 title = 'Gene Ontology'
+tags = ["genetics", "database"]
 [menu.main]
   parent = "bio"
 +++

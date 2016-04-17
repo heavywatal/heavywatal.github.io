@@ -1,6 +1,7 @@
 +++
 title = 'NumPy, SciPy'
 subtitle = "数値配列演算・科学技術計算ライブラリ"
+tags = ["python"]
 [menu.main]
   parent = "python"
 +++

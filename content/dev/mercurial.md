@@ -1,6 +1,7 @@
 +++
 title = 'Mercurial'
 subtitle = "バージョン管理システム"
+tags = ["python"]
 [menu.main]
   parent = "dev"
 +++

@@ -1,5 +1,6 @@
 +++
 title = '自学自習のための基礎知識'
+tags = ["r"]
 [menu.main]
   parent = "rstats"
 +++

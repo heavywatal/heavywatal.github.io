@@ -1,6 +1,7 @@
 +++
 title = 'topGO'
 subtitle = "Bioconductor でenrichment解析"
+tags = ["r", "bioconductor"]
 [menu.main]
   parent = "rstats"
 +++

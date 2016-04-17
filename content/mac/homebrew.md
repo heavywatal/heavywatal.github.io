@@ -1,5 +1,6 @@
 +++
 title = 'Homebrew'
+tags = ["mac", "package"]
 [menu.main]
   parent = "mac"
 +++

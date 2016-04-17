@@ -1,5 +1,6 @@
 +++
 title = 'make'
+tags = ["c++"]
 [menu.main]
   parent = "dev"
 +++
@@ -144,7 +145,7 @@ ${PROGRAM}: ${OBJS}
     <http://www.gnu.org/software/make/manual/make.html#Conditional-Syntax>
 
 その他
-:   
+:
 
     `$(foreach {var},{list},{text})`
     :   `{list}` の中身をそれぞれ `{var}` に入れて

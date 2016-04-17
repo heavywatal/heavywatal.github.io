@@ -1,5 +1,6 @@
 +++
-title = '日本語環境'
+title = 'Linux日本語環境'
+tags = ["linux", "writing"]
 [menu.main]
   parent = "linux"
 +++

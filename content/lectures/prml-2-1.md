@@ -1,5 +1,6 @@
 +++
 title = 'PRML輪読会 2章前半'
+tags = ["math", "book"]
 [menu.main]
   parent = "lectures"
 +++

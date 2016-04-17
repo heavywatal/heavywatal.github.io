@@ -1,6 +1,7 @@
 +++
 title = 'プロセス管理'
 subtitle = "nohup, disown, kill"
+tags = ["job"]
 [menu.main]
   parent = "dev"
 +++

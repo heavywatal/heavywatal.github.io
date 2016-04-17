@@ -1,5 +1,6 @@
 +++
 title = 'copy'
+tags = ["python"]
 [menu.main]
   parent = "python"
 +++
@@ -50,14 +51,14 @@ C++からプログラミングを始めて、Pythonにおけるオブジェク�
 
 ## mutable / immutable
 
--   
+-
 
     mutable
     :   -   `list`
         -   `set`
         -   `dict`
 
--   
+-
 
     immutable
     :   -   `0, 1, 2, ...`

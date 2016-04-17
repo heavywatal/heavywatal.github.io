@@ -1,5 +1,6 @@
 +++
 title = 'MrBayes'
+tags = ["genetics"]
 [menu.main]
   parent = "bio"
 +++

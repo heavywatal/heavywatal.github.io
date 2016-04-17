@@ -1,5 +1,6 @@
 +++
 title = 'sshfs'
+tags = ["communication"]
 [menu.main]
   parent = "dev"
 +++
@@ -16,7 +17,7 @@ SSH File Transfer Protocol
 
 1.  [OSXFUSE](http://osxfuse.github.com/) をインストール
 2.  [Macfusion](http://macfusionapp.org/) をインストール
-3.  
+3.
 
     Macfusion を起動
     :   1.  左下の[+]からSSHFSを選択

@@ -1,6 +1,7 @@
 +++
 title = 'Qt'
 subtitle = "多OS対応GUIフレームワーク"
+tags = ["c++"]
 [menu.main]
   parent = "dev"
 +++

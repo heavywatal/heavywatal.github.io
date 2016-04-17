@@ -1,5 +1,6 @@
 +++
 title = 'Stochastic Process'
+tags = ["genetics", "math"]
 [menu.main]
   parent = "bio"
 +++

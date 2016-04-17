@@ -1,5 +1,6 @@
 +++
 title = 'TORQUE'
+tags = ["job"]
 [menu.main]
   parent = "dev"
 +++

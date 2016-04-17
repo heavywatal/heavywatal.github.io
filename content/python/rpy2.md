@@ -1,6 +1,7 @@
 +++
 title = 'rpy2'
 subtitle = "PythonからRを呼び出す"
+tags = ["python", "r"]
 [menu.main]
   parent = "python"
 +++

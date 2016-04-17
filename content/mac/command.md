@@ -1,5 +1,6 @@
 +++
-title = 'Command'
+title = 'Mac Command'
+tags = ["mac"]
 [menu.main]
   parent = "mac"
 +++

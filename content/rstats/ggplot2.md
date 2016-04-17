@@ -1,6 +1,7 @@
 +++
 title = 'ggplot2'
 subtitle = "きれいなグラフを簡単に合理的に"
+tags = ["r", "graph"]
 [menu.main]
   parent = "rstats"
 +++

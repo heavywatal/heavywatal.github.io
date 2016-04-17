@@ -1,5 +1,6 @@
 +++
 title = '/etc'
+tags = ["shell"]
 [menu.main]
   parent = "dev"
 +++

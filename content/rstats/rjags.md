@@ -1,6 +1,7 @@
 +++
 title = 'rjags'
 subtitle = "JAGSを使ってベイズ統計"
+tags = ["r"]
 [menu.main]
   parent = "rstats"
 +++

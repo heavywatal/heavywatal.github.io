@@ -1,5 +1,6 @@
 +++
 title = 'Wakeley輪読会 2章2節'
+tags = ["genetics", "book"]
 [menu.main]
   parent = "lectures"
 +++

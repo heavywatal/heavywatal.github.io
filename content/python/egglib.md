@@ -1,6 +1,7 @@
 +++
 title = 'EggLib'
 subtitle = "Tools for Evolutionary Genetics and Genomics"
+tags = ["python"]
 [menu.main]
   parent = "python"
 +++

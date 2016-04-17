@@ -1,6 +1,7 @@
 +++
 title = 'rgl'
 subtitle = "3Dグラフ描画"
+tags = ["r", "graph"]
 [menu.main]
   parent = "rstats"
 +++

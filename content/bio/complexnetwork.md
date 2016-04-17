@@ -1,5 +1,6 @@
 +++
 title = '複雑ネットワーク'
+tags = ["math"]
 [menu.main]
   parent = "bio"
 +++

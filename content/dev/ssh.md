@@ -1,5 +1,6 @@
 +++
 title = 'ssh'
+tags = ["shell", "communication"]
 [menu.main]
   parent = "dev"
 +++

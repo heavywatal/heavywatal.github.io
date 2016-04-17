@@ -1,5 +1,6 @@
 +++
 title = '擬似乱数生成器'
+tags = ["c++"]
 [menu.main]
   parent = "cxx"
 +++

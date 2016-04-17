@@ -1,5 +1,6 @@
 +++
 title = 'Shell Script'
+tags = ["shell"]
 [menu.main]
   parent = "dev"
 +++

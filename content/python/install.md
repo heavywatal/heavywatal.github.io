@@ -1,5 +1,6 @@
 +++
 title = 'Installation'
+tags = ["python"]
 [menu.main]
   parent = "python"
 +++

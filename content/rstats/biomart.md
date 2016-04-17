@@ -1,6 +1,7 @@
 +++
 title = 'biomaRt'
 subtitle = "プログラム的にデータ取得"
+tags = ["r", "bioconductor"]
 [menu.main]
   parent = "rstats"
 +++

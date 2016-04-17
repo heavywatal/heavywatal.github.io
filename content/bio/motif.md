@@ -1,5 +1,6 @@
 +++
 title = '配列モチーフ探索'
+tags = ["genetics"]
 [menu.main]
   parent = "bio"
 +++

@@ -1,5 +1,6 @@
 +++
 title = 'AppleScript'
+tags = ["mac"]
 [menu.main]
   parent = "mac"
 +++

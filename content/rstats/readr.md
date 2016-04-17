@@ -1,6 +1,7 @@
 +++
 title = 'readr'
 subtitle = "高速で柔軟なテーブル読み込みツール"
+tags = ["r"]
 [menu.main]
   parent = "rstats"
 +++

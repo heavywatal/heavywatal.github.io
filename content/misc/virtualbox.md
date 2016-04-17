@@ -1,5 +1,6 @@
 +++
 title = 'VirtualBox'
+tags = ["communication"]
 [menu.main]
   parent = "misc"
 +++

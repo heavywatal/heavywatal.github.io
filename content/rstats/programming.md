@@ -1,5 +1,6 @@
 +++
 title = 'プログラミングTips'
+tags = ["r"]
 [menu.main]
   parent = "rstats"
 +++
