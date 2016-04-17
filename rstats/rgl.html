@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>rgl: 3Dグラフ描画 - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+rgl — 3Dグラフ描画
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<p>3D visualization device system (OpenGL).</p>
+
+<ul>
+<li><a href="http://rgl.neoscientists.org/">Project Homepage</a></li>
+<li><a href="http://cse.naro.affrc.go.jp/takezawa/r-tips/r/57.html">R-tips</a></li>
+<li><a href="https://cran.r-project.org/web/packages/rgl/vignettes/rgl.html">https://cran.r-project.org/web/packages/rgl/vignettes/rgl.html</a></li>
+<li><a href="http://cran.r-project.org/web/packages/rgl/">http://cran.r-project.org/web/packages/rgl/</a></li>
+<li><a href="http://www.rdocumentation.org/packages/rgl">http://www.rdocumentation.org/packages/rgl</a></li>
+</ul>
+
+<h2 id="デバイスの起動と終了">デバイスの起動と終了</h2>
+
+<pre><code class="language-r">rgl::open3d()  # open new device
+rgl.close()    # close current device
+rgl.quit()     # shutdown rgl device system
+</code></pre>
+
+<p><code>rgl::clear3d(type=c('shapes', 'bboxdeco', 'material'), defaults, subscene=0)</code></p>
+
+<h2 id="プロット">プロット</h2>
+
+<dl>
+<dt><code>rgl::points3d()</code></dt>
+<dd>散布図。</dd>
+<dt><code>rgl::spheres3d()</code></dt>
+<dd>球。</dd>
+<dt><code>rgl::lines3d()</code></dt>
+<dd>折れ線</dd>
+<dt><code>rgl::segments3d()</code></dt>
+<dd>線分</dd>
+<dt><code>rgl::triangles3d()</code></dt>
+<dd>3点を結ぶ面</dd>
+<dt><code>rgl::quads3d()</code></dt>
+<dd>4点を結ぶ三角形2つ</dd>
+<dt><code>rgl::surface3d()</code>, <code>rgl::terrain3d()</code></dt>
+<dd>地形図のような局面</dd>
+</dl>
+
+<h2 id="背景や軸などの調整">背景や軸などの調整</h2>
+
+<dl>
+<dt><code>rgl::title3d(main, sub, xlab, ylab, zlab, line=NA, ...)</code></dt>
+<dd>これを使うとmainとsubも視点によって動いてしまう。
+<code>bgplot3d({plot.new(); title('main')})</code> なら固定背景に書ける。</dd>
+</dl>
+
+<p><code>rgl::mtext3d(text, edge, line=0, at=NULL, pos=NA, ...)</code></p>
+
+<p><code>rgl::bg3d()</code></p>
+
+<p><code>rgl::light3d()</code></p>
+
+<p><code>rgl::par3d()</code></p>
+
+<p><code>rgl::material3d()</code></p>
+
+<h3 id="軸">軸</h3>
+
+<dl>
+<dt><code>rgl::axis3d(edge, at=NULL, labels=TRUE, tick=TRUe, line=0, pos=NULL, nticks=5, ...)</code></dt>
+<dd><code>xyz</code> と <code>+-</code> の組み合わせで軸1本を指定して描く。
+<code>x</code> は　<code>x--</code> と等価。</dd>
+<dt><code>rgl::box3d(...)</code></dt>
+<dd>12辺の箱を描く。</dd>
+<dt><code>rgl::bbox3d(xat=NULL, yat, zat, xunit='pretty', yunit, zunit, expand=1.03, draw_front=FALSE)</code></dt>
+<dd>手前の辺が自動で消えるような箱を描く。</dd>
+<dt><code>rgl::axes3d(edges='bbox', labels=TRUE, tick=TRUE, nticks=5, box=FALSE, expand=1.03, ...)</code></dt>
+<dd>上記の3つをまとめる関数。分かりにくいので使わないほうがいい。
+<code>edges='bbox'</code> の場合 <code>tick=FALSE</code> は効かないので <code>xlen=0, ylen=0, zlen=0</code> とする必要がある。</dd>
+<dt><code>rgl::view3d(theta=0, phi=15, fov=60, zoom=1, scale=par3d(&quot;scale&quot;), interactive=TRUE, userMatrix)</code></dt>
+<dd><code>theta</code>: 0のとき正面がxy平面。観察者が地球の公転と同じ方向に動くのが正。<br />
+<code>phi</code> [-90, 90]: 0のとき視点が水平面(xz平面)上。観察者が上に動くのが正。<br />
+<code>fov</code> [0, 179]: 0のとき無限遠から見たような平行投影。</dd>
+</dl>
+
+<h2 id="ファイルに書き出す">ファイルに書き出す</h2>
+
+<dl>
+<dt><code>rgl::snapshot3d(...)</code></dt>
+<dd>PNGのみ</dd>
+<dt><code>rbl.postscript(filename, fmt='eps', drawText=TRUE)</code></dt>
+<dd>ps, eps, tex, pdf, svg をサポート。
+透過や <code>bgplot3d</code> は反映されないらしいので注意。</dd>
+<dt><code>rgl::writeWebGL(dir='webGL', filename, template, prefix, snapshot, commonParts, reuse, font, width, height)</code></dt>
+<dd>ディレクトリ構造無しの単発HTMLでいい場合は
+<code>writeWebGL('.', 'rgl.html')</code> のように指定する。</dd>
+</dl>
+
+<h2 id="アニメーション">アニメーション</h2>
+
+<p><code>rgl::spin3d(axis=c(0, 0, 1), rpm=5)</code></p>
+
+<p><code>rgl::par3dinterp(times=NULL, userMatrix, scale, zoom, FOV, method, extrapolate)</code></p>
+
+<p><code>rgl::play3d(f, duration=Inf, ...)</code></p>
+
+<p><code>rgl::movie3d(f, duration, ..., fps=10, movie=&quot;movie&quot;, frames=movie, dir=tempdir(), ...)</code></p>
+
+<pre><code class="language-r">## 角度をセット
+rgl::view3d(-25, 15, 40)
+
+## 最前面に持ってくる
+rgl.bringtotop()
+
+## アニメーション関数を作る
+.anime = rgl::spin3d(axis=c(0, 1, 0), rpm=15)
+
+## X11で再生
+rgl::play3d(.anime)
+
+## GIFアニメとして保存
+rgl::movie3d(.anime, duration=4, fps=16, movie=&quot;basename&quot;, dir=&quot;~/tmp&quot;)
+</code></pre>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats" checked>
+<label for="R stats" class="active">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li class="active"><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "rgl"
++++
+
+3D visualization device system (OpenGL).
+
+-   [Project Homepage](http://rgl.neoscientists.org/)
+-   [R-tips](http://cse.naro.affrc.go.jp/takezawa/r-tips/r/57.html)
+-   &lt;https://cran.r-project.org/web/packages/rgl/vignettes/rgl.html&gt;
+-   &lt;http://cran.r-project.org/web/packages/rgl/&gt;
+-   &lt;http://www.rdocumentation.org/packages/rgl&gt;
+
+## デバイスの起動と終了
+
+```r
+rgl::open3d()  # open new device
+rgl.close()    # close current device
+rgl.quit()     # shutdown rgl device system
+```
+
+`rgl::clear3d(type=c(&#39;shapes&#39;, &#39;bboxdeco&#39;, &#39;material&#39;), defaults, subscene=0)`
+
+## プロット
+
+`rgl::points3d()`
+:   散布図。
+
+`rgl::spheres3d()`
+:   球。
+
+`rgl::lines3d()`
+:   折れ線
+
+`rgl::segments3d()`
+:   線分
+
+`rgl::triangles3d()`
+:   3点を結ぶ面
+
+`rgl::quads3d()`
+:   4点を結ぶ三角形2つ
+
+`rgl::surface3d()`, `rgl::terrain3d()`
+:   地形図のような局面
+
+## 背景や軸などの調整
+
+`rgl::title3d(main, sub, xlab, ylab, zlab, line=NA, ...)`
+:   これを使うとmainとsubも視点によって動いてしまう。
+    `bgplot3d({plot.new(); title(&#39;main&#39;)})` なら固定背景に書ける。
+
+`rgl::mtext3d(text, edge, line=0, at=NULL, pos=NA, ...)`
+
+`rgl::bg3d()`
+
+`rgl::light3d()`
+
+`rgl::par3d()`
+
+`rgl::material3d()`
+
+### 軸
+
+`rgl::axis3d(edge, at=NULL, labels=TRUE, tick=TRUe, line=0, pos=NULL, nticks=5, ...)`
+:   `xyz` と `&#43;-` の組み合わせで軸1本を指定して描く。
+    `x` は　`x--` と等価。
+
+`rgl::box3d(...)`
+:   12辺の箱を描く。
+
+`rgl::bbox3d(xat=NULL, yat, zat, xunit=&#39;pretty&#39;, yunit, zunit, expand=1.03, draw_front=FALSE)`
+:   手前の辺が自動で消えるような箱を描く。
+
+`rgl::axes3d(edges=&#39;bbox&#39;, labels=TRUE, tick=TRUE, nticks=5, box=FALSE, expand=1.03, ...)`
+:   上記の3つをまとめる関数。分かりにくいので使わないほうがいい。
+    `edges=&#39;bbox&#39;` の場合 `tick=FALSE` は効かないので `xlen=0, ylen=0, zlen=0` とする必要がある。
+
+`rgl::view3d(theta=0, phi=15, fov=60, zoom=1, scale=par3d(&#34;scale&#34;), interactive=TRUE, userMatrix)`
+:   `theta`: 0のとき正面がxy平面。観察者が地球の公転と同じ方向に動くのが正。\
+    `phi` [-90, 90]: 0のとき視点が水平面(xz平面)上。観察者が上に動くのが正。\
+    `fov` [0, 179]: 0のとき無限遠から見たような平行投影。
+
+## ファイルに書き出す
+
+`rgl::snapshot3d(...)`
+:   PNGのみ
+
+`rbl.postscript(filename, fmt=&#39;eps&#39;, drawText=TRUE)`
+:   ps, eps, tex, pdf, svg をサポート。
+    透過や `bgplot3d` は反映されないらしいので注意。
+
+`rgl::writeWebGL(dir=&#39;webGL&#39;, filename, template, prefix, snapshot, commonParts, reuse, font, width, height)`
+:   ディレクトリ構造無しの単発HTMLでいい場合は
+    `writeWebGL(&#39;.&#39;, &#39;rgl.html&#39;)` のように指定する。
+
+## アニメーション
+
+`rgl::spin3d(axis=c(0, 0, 1), rpm=5)`
+
+`rgl::par3dinterp(times=NULL, userMatrix, scale, zoom, FOV, method, extrapolate)`
+
+`rgl::play3d(f, duration=Inf, ...)`
+
+`rgl::movie3d(f, duration, ..., fps=10, movie=&#34;movie&#34;, frames=movie, dir=tempdir(), ...)`
+
+```r
+## 角度をセット
+rgl::view3d(-25, 15, 40)
+
+## 最前面に持ってくる
+rgl.bringtotop()
+
+## アニメーション関数を作る
+.anime = rgl::spin3d(axis=c(0, 1, 0), rpm=15)
+
+## X11で再生
+rgl::play3d(.anime)
+
+## GIFアニメとして保存
+rgl::movie3d(.anime, duration=4, fps=16, movie=&#34;basename&#34;, dir=&#34;~/tmp&#34;)
+```
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

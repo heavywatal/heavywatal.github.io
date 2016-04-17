@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>C&#43;&#43; コマンドライン引数の取得 - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+C&#43;&#43; コマンドライン引数の取得
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<h2 id="理想">理想</h2>
+
+<ul>
+<li>ヘッダ1つの <code>#include</code> で使える</li>
+<li>オプションの管理を <code>main()</code> でなくクラスのソースファイルなどに分散できる</li>
+<li>オプション定義時に格納先の変数をアドレス渡しで指定できる</li>
+<li>ファイルや <code>std::string</code> からも読み込める</li>
+<li>ヘルプを自動生成してくれる</li>
+<li>読み込める形式で全オプションと値を <code>std::string</code> あるいはファイルに書き出せる</li>
+<li>マクロではなく <code>template</code> など真っ当な C++ で書かれている</li>
+</ul>
+
+<h2 id="gnu-getopt">GNU <code>getopt</code></h2>
+
+<p><a href="http://www.gnu.org/s/libc/manual/html_node/Getopt.html">http://www.gnu.org/s/libc/manual/html_node/Getopt.html</a></p>
+
+<ul>
+<li><code>gcc</code> ならインストール不要、<code>#include &lt;getopt.h&gt;</code> するだけで使える</li>
+<li>オプションの管理を各ソースファイルに分散できない</li>
+<li>ヘルプなど自動生成してくれない</li>
+<li>使い方がわかりにくい</li>
+</ul>
+
+<h2 id="boost-program-options"><code>boost::program_options</code></h2>
+
+<p><a href="http://www.boost.org/doc/html/program_options.html">http://www.boost.org/doc/html/program_options.html</a></p>
+
+<ul>
+<li>格納する変数のアドレスを渡せる</li>
+<li>ファイルから読み込みをサポート</li>
+<li>読み込み可能なファイルの出力方法は用意されてないので自分で書く必要がある</li>
+<li>Boostライブラリのヘッダだけでなくビルドとリンクが必要 cf. <a href="/students/iwasaki/cxx/boost.html">boost</a></li>
+
+<li><p>各ソースファイルに分散するには</p>
+
+<dl>
+<dd>1.  各クラスの <code>static</code> メソッドで <code>options_description</code> オブジェクトを生成
+
+<ol>
+<li><code>main()</code> の <code>options_description</code> オブジェクトに <code>add()</code> する。</li>
+</ol></dd>
+</dl></li>
+</ul>
+
+<h2 id="gflags"><code>gflags</code></h2>
+
+<p><a href="https://gflags.github.io/gflags/">https://gflags.github.io/gflags/</a></p>
+
+<ul>
+<li>テンプレートではなくマクロをふんだんに使って実装されているのでちょっと怖い</li>
+<li><code>main()</code> 関数まわりをほとんど変更することなく、 各ソースファイルで自由にオプションを定義できる(しかもたった1行で)</li>
+<li>格納されるのは頭に <code>FLAGS_</code> という接頭辞がついた変数</li>
+<li>入力可能なファイルを出力することも可能</li>
+<li>ライブラリのビルドとリンクが必要</li>
+</ul>
+
+<h3 id="usage">Usage</h3>
+
+<p><code>main()</code> 関数に書く必要があるのはこれだけ</p>
+
+<pre><code class="language-c++">##include &lt;gflags/gflags.h&gt;
+
+int main(int argc, char* argv[]) {
+    gflags::SetUsageMessage(&quot;This is a program to test gflags&quot;);
+    gflags::ParseCommandLineFlags(&amp;argc, &amp;argv, true);
+    // do something
+    return 0;
+}
+</code></pre>
+
+<p>あとは個々のソースファイルでオプションを追加。<code>namespace</code> にも入れられる。</p>
+
+<pre><code class="language-c++">##include &lt;gflags/gflags.h&gt;
+
+namespace tapiola {
+    DEFINE_uint64(sibelius, 0, &quot;string that is displayed with --help flag&quot;);
+}
+
+void func(){
+    std::cout &lt;&lt; tapiola::FLAGS_sibelius &lt;&lt; std::endl;
+}
+</code></pre>
+
+<h2 id="cmdline">cmdline</h2>
+
+<p><a href="https://github.com/tanakh/cmdline">https://github.com/tanakh/cmdline</a><br />
+<a href="http://d.hatena.ne.jp/tanakh/20091028">http://d.hatena.ne.jp/tanakh/20091028</a></p>
+
+<ul>
+<li>たった1つのヘッダファイルで構成されてるのでインストールもビルドも楽チン</li>
+<li>直感的でC++らしいデザインなので分かりやすい</li>
+<li>ファイルの読み取りはサポートしていないが <code>std::string</code> は読める</li>
+<li>変数に直接格納することはできず、パーサのメソッドで値を取得:
+<code>template &lt;class T&gt; const T &amp;parser::get(const std::string &amp;name)</code></li>
+
+<li><p>各ソースファイルに分散できるっちゃできる？</p>
+
+<dl>
+<dd>1.  <code>main()</code> あたりで <code>parser</code> オブジェクトを定義
+
+<ol>
+<li>それを各クラスの <code>static</code> メソッドに渡し、中で <code>parser::add()</code></li>
+<li><code>main()</code> で <code>parser::parse(argc, argv)</code></li>
+<li>再び各クラスの <code>static</code> メソッドを呼んで <code>parser::get()</code> から変数に代入</li>
+</ol></dd>
+</dl></li>
+</ul>
+
+<h2 id="tclap">TCLAP</h2>
+
+<p><a href="http://tclap.sourceforge.net/">http://tclap.sourceforge.net/</a></p>
+
+<ul>
+<li>&ldquo;Templatized C++ Command Line Parser Library&rdquo;の名のとおり
+<code>template</code> で書かれておりヘッダだけで構成される</li>
+<li>が、<code>configure</code> と <code>make install</code> というインストール手順を踏む</li>
+<li>ファイルの読み取りはサポートしていないが、<code>std::string</code> からパース可能</li>
+<li>読み込めるファイルの出力は用意されていないが、自分で書くのは簡単そう</li>
+<li>格納する変数は指定できず、<code>*Arg</code> オブジェクトの <code>getValue()</code> メソッドで値を取得</li>
+
+<li><p>各ソースファイルに分散するには</p>
+
+<dl>
+<dd>1.  <code>main()</code> あたりで <code>CmdLine</code> オブジェクトを定義
+
+<ol>
+<li>それを各クラスの <code>static</code> メソッドに渡し、中で <code>*Arg</code> オブジェクトを生成</li>
+<li><code>main()</code> で <code>CmdLine::parse(argc, argv)</code></li>
+<li>各 <code>*Args</code> オブジェクトに格納されている値を <code>getValue()</code> メソッドで取得</li>
+</ol></dd>
+</dl></li>
+</ul>
+
+<h2 id="getoptpp">getoptpp</h2>
+
+<p><a href="http://code.google.com/p/getoptpp/">http://code.google.com/p/getoptpp/</a></p>
+
+<ul>
+<li><code>istream</code> っぽく <code>&gt;&gt;operator</code> を使う</li>
+<li>格納する変数を指定できる</li>
+<li>基本的にはライブラリをビルドして使うが、ちょっといじればヘッダの <code>#include</code> だけでも使える</li>
+<li>ファイルの読み込みやヘルプの生成は一切手伝ってくれない</li>
+
+<li><p>各ソースファイルに分散するには</p>
+
+<dl>
+<dd>1.  <code>main()</code> あたりで <code>(argc, argv)</code> を引数に <code>GetOpt_pp</code> オブジェクトを生成
+
+<ol>
+<li>それを各クラスの <code>static</code> メソッドに渡し、中で値を取得:
+<code>args &gt;&gt; Option('i', &quot;long_option&quot;, var)</code></li>
+</ol></dd>
+</dl></li>
+</ul>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats">
+<label for="R stats">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;" checked>
+<label for="C&#43;&#43;" class="active">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li class="active"><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "C&#43;&#43; コマンドライン引数の取得"
++++
+
+## 理想
+
+-   ヘッダ1つの `#include` で使える
+-   オプションの管理を `main()` でなくクラスのソースファイルなどに分散できる
+-   オプション定義時に格納先の変数をアドレス渡しで指定できる
+-   ファイルや `std::string` からも読み込める
+-   ヘルプを自動生成してくれる
+-   読み込める形式で全オプションと値を `std::string` あるいはファイルに書き出せる
+-   マクロではなく `template` など真っ当な C&#43;&#43; で書かれている
+
+## GNU `getopt`
+
+&lt;http://www.gnu.org/s/libc/manual/html_node/Getopt.html&gt;
+
+-   `gcc` ならインストール不要、`#include &lt;getopt.h&gt;` するだけで使える
+-   オプションの管理を各ソースファイルに分散できない
+-   ヘルプなど自動生成してくれない
+-   使い方がわかりにくい
+
+## `boost::program_options`
+
+&lt;http://www.boost.org/doc/html/program_options.html&gt;
+
+-   格納する変数のアドレスを渡せる
+-   ファイルから読み込みをサポート
+-   読み込み可能なファイルの出力方法は用意されてないので自分で書く必要がある
+-   Boostライブラリのヘッダだけでなくビルドとリンクが必要 cf. [boost]({#{#HUGOSHORTCODE-1#}#})
+-   
+
+    各ソースファイルに分散するには
+    :   1.  各クラスの `static` メソッドで `options_description` オブジェクトを生成
+        2.  `main()` の `options_description` オブジェクトに `add()` する。
+
+## `gflags`
+
+&lt;https://gflags.github.io/gflags/&gt;
+
+-   テンプレートではなくマクロをふんだんに使って実装されているのでちょっと怖い
+-   `main()` 関数まわりをほとんど変更することなく、 各ソースファイルで自由にオプションを定義できる(しかもたった1行で)
+-   格納されるのは頭に `FLAGS_` という接頭辞がついた変数
+-   入力可能なファイルを出力することも可能
+-   ライブラリのビルドとリンクが必要
+
+### Usage
+
+`main()` 関数に書く必要があるのはこれだけ
+
+```c&#43;&#43;
+##include &lt;gflags/gflags.h&gt;
+
+int main(int argc, char* argv[]) {
+    gflags::SetUsageMessage(&#34;This is a program to test gflags&#34;);
+    gflags::ParseCommandLineFlags(&amp;argc, &amp;argv, true);
+    // do something
+    return 0;
+}
+```
+
+あとは個々のソースファイルでオプションを追加。`namespace` にも入れられる。
+
+```c&#43;&#43;
+##include &lt;gflags/gflags.h&gt;
+
+namespace tapiola {
+    DEFINE_uint64(sibelius, 0, &#34;string that is displayed with --help flag&#34;);
+}
+
+void func(){
+    std::cout &lt;&lt; tapiola::FLAGS_sibelius &lt;&lt; std::endl;
+}
+```
+
+## cmdline
+
+&lt;https://github.com/tanakh/cmdline&gt;\
+&lt;http://d.hatena.ne.jp/tanakh/20091028&gt;
+
+-   たった1つのヘッダファイルで構成されてるのでインストールもビルドも楽チン
+-   直感的でC&#43;&#43;らしいデザインなので分かりやすい
+-   ファイルの読み取りはサポートしていないが `std::string` は読める
+-   変数に直接格納することはできず、パーサのメソッドで値を取得:
+    `template &lt;class T&gt; const T &amp;parser::get(const std::string &amp;name)`
+-   
+
+    各ソースファイルに分散できるっちゃできる？
+    :   1.  `main()` あたりで `parser` オブジェクトを定義
+        2.  それを各クラスの `static` メソッドに渡し、中で `parser::add()`
+        3.  `main()` で `parser::parse(argc, argv)`
+        4.  再び各クラスの `static` メソッドを呼んで `parser::get()` から変数に代入
+
+## TCLAP
+
+&lt;http://tclap.sourceforge.net/&gt;
+
+-   &#34;Templatized C&#43;&#43; Command Line Parser Library&#34;の名のとおり
+    `template` で書かれておりヘッダだけで構成される
+-   が、`configure` と `make install` というインストール手順を踏む
+-   ファイルの読み取りはサポートしていないが、`std::string` からパース可能
+-   読み込めるファイルの出力は用意されていないが、自分で書くのは簡単そう
+-   格納する変数は指定できず、`*Arg` オブジェクトの `getValue()` メソッドで値を取得
+-   
+
+    各ソースファイルに分散するには
+    :   1.  `main()` あたりで `CmdLine` オブジェクトを定義
+        2.  それを各クラスの `static` メソッドに渡し、中で `*Arg` オブジェクトを生成
+        3.  `main()` で `CmdLine::parse(argc, argv)`
+        4.  各 `*Args` オブジェクトに格納されている値を `getValue()` メソッドで取得
+
+## getoptpp
+
+&lt;http://code.google.com/p/getoptpp/&gt;
+
+-   `istream` っぽく `&gt;&gt;operator` を使う
+-   格納する変数を指定できる
+-   基本的にはライブラリをビルドして使うが、ちょっといじればヘッダの `#include` だけでも使える
+-   ファイルの読み込みやヘルプの生成は一切手伝ってくれない
+-   
+
+    各ソースファイルに分散するには
+    :   1.  `main()` あたりで `(argc, argv)` を引数に `GetOpt_pp` オブジェクトを生成
+        2.  それを各クラスの `static` メソッドに渡し、中で値を取得:
+            `args &gt;&gt; Option(&#39;i&#39;, &#34;long_option&#34;, var)`
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

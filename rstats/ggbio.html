@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>ggbio: Bioconductor データを ggplot2 的に描画 - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+ggbio — Bioconductor データを ggplot2 的に描画
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<p><a href="http://www.tengfei.name/ggbio/">http://www.tengfei.name/ggbio/</a></p>
+
+<p>Yin, Cook, and Lawrence (2012)
+ggbio: an R package for extending the grammar of graphics for genomic data.
+<em>Genome Biology</em> 13:R77
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/22937822">http://www.ncbi.nlm.nih.gov/pubmed/22937822</a></p>
+
+<p><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a> を読み込んでインストール</p>
+
+<pre><code class="language-r">source(&quot;http://bioconductor.org/biocLite.R&quot;)
+biocLite('ggbio')
+library(ggbio)
+</code></pre>
+
+<h2 id="使い方">使い方</h2>
+
+<p><a href="http://www.tengfei.name/ggbio/docs/man/">http://www.tengfei.name/ggbio/docs/man/</a></p>
+
+<dl>
+<dt><code>autoplot(gr, ...)</code></dt>
+<dd><code>xlab, ylab, main</code><br />
+<code>trancate.gaps=FALSE</code><br />
+<code>truncate.fun=NULL</code><br />
+<code>ratio=0.0025</code><br />
+<code>space.skip=0.1</code><br />
+<code>legend=TRUE</code><br />
+<code>geom=NULL</code><br />
+<code>stat=NULL</code><br />
+<code>coord=c('default', 'genome', 'truncate_gaps')</code><br />
+<code>layout=c('linear', 'karyogram', 'circle')</code></dd>
+</dl>
+
+<p><code>plotSingleChrom()</code>, <code>plotIdeogram()</code>, <code>Ideogram()</code></p>
+
+<p><code>plotStackedOverview()</code>, <code>plotKaryogram()</code></p>
+
+<p><code>plotGrandLinear()</code></p>
+
+<hr />
+
+<p><code>geom_alignment()</code></p>
+
+<p><code>geon_arch()</code></p>
+
+<p><code>geom_arrow()</code></p>
+
+<p><code>geom_arrowrect()</code></p>
+
+<p><code>geom_bar()</code></p>
+
+<p><code>geom_chevron()</code></p>
+
+<p><code>geom_rect()</code></p>
+
+<p><code>geom_segment()</code></p>
+
+<hr />
+
+<p><code>layout_karyogram(data, ...)</code></p>
+
+<p><code>layout_circle()</code></p>
+
+<hr />
+
+<p><code>stat_aggregate</code>
+<code>stat_bin</code>
+<code>stat_coverage</code>
+<code>stat_gene</code>
+<code>stat_identity</code>
+<code>stat_mismatch</code>
+<code>stat_reduce</code>
+<code>stat_slice</code>
+<code>stat_stepping</code>
+<code>stat_table</code></p>
+
+<hr />
+
+<p><code>theme_alignment</code>
+<code>theme_clear</code>
+<code>theme_genome</code>
+<code>theme_noexpand</code>
+<code>theme_null</code>
+<code>theme_pack_panels</code>
+<code>theme_tracks_sunset</code></p>
+
+<hr />
+
+<dl>
+<dt><code>tracks(...)</code></dt>
+<dd>複数のトラックをひとつの図にまとめる<br />
+<code>heights</code>, <code>xlim</code>,<br />
+<code>xlab</code>, <code>main</code>, <code>title</code>, <code>theme</code>,<br />
+<code>track.plot.color</code>, <code>track.bg.color</code>,<br />
+<code>main.height=unit(1.5, 'lines')</code>,<br />
+<code>scale.height=unit(1, 'lines')</code>,<br />
+<code>xlab.height=unit(1.5, 'lines')</code>,<br />
+<code>padding=unit(-1, 'lines')</code>,<br />
+<code>label.bg.color='white'</code>, <code>label.bg.fill='gray80'</code>,<br />
+<code>label.text.color='black'</code>, <code>label.text.cex=1</code>,<br />
+<code>label.width=unit(2.5, 'lines')</code></dd>
+</dl>
+
+<p><code>zoom()</code>, <code>zoom_in()</code>, <code>zoom_out()</code></p>
+
+<p><code>nextView()</code> , <code>prevView()</code></p>
+
+<h2 id="biovizbase"><code>biovizBase</code></h2>
+
+<p><a href="http://master.bioconductor.org/packages/release/bioc/html/biovizBase.html">http://master.bioconductor.org/packages/release/bioc/html/biovizBase.html</a></p>
+
+<hr />
+
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4621062506/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41aQBFtkgBL._SX160_.jpg" alt="RとBioconductorを用いたバイオインフォマティクス" /></a>
+<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320057082/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51yBjAPptKL._SX160_.jpg" alt="Rによるバイオインフォマティクスデータ解析 第2版 －Bioconductorを用いたゲノムスケールのデータマイニング－" /></a>
+<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320123700/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41aoEmhUR0L._SX160_.jpg" alt="トランスクリプトーム解析 (シリーズ Useful R 7)" /></a></p>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats" checked>
+<label for="R stats" class="active">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li class="active"><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "ggbio"
++++
+
+&lt;http://www.tengfei.name/ggbio/&gt;
+
+Yin, Cook, and Lawrence (2012)
+ggbio: an R package for extending the grammar of graphics for genomic data.
+*Genome Biology* 13:R77
+&lt;http://www.ncbi.nlm.nih.gov/pubmed/22937822&gt;
+
+[Bioconductor]({#{#HUGOSHORTCODE-1#}#}) を読み込んでインストール
+
+```r
+source(&#34;http://bioconductor.org/biocLite.R&#34;)
+biocLite(&#39;ggbio&#39;)
+library(ggbio)
+```
+
+## 使い方
+
+&lt;http://www.tengfei.name/ggbio/docs/man/&gt;
+
+`autoplot(gr, ...)`
+:   `xlab, ylab, main`\
+    `trancate.gaps=FALSE`\
+    `truncate.fun=NULL`\
+    `ratio=0.0025`\
+    `space.skip=0.1`\
+    `legend=TRUE`\
+    `geom=NULL`\
+    `stat=NULL`\
+    `coord=c(&#39;default&#39;, &#39;genome&#39;, &#39;truncate_gaps&#39;)`\
+    `layout=c(&#39;linear&#39;, &#39;karyogram&#39;, &#39;circle&#39;)`
+
+`plotSingleChrom()`, `plotIdeogram()`, `Ideogram()`
+
+`plotStackedOverview()`, `plotKaryogram()`
+
+`plotGrandLinear()`
+
+------------------------------------------------------------------------
+
+`geom_alignment()`
+
+`geon_arch()`
+
+`geom_arrow()`
+
+`geom_arrowrect()`
+
+`geom_bar()`
+
+`geom_chevron()`
+
+`geom_rect()`
+
+`geom_segment()`
+
+------------------------------------------------------------------------
+
+`layout_karyogram(data, ...)`
+
+`layout_circle()`
+
+------------------------------------------------------------------------
+
+`stat_aggregate`
+`stat_bin`
+`stat_coverage`
+`stat_gene`
+`stat_identity`
+`stat_mismatch`
+`stat_reduce`
+`stat_slice`
+`stat_stepping`
+`stat_table`
+
+------------------------------------------------------------------------
+
+`theme_alignment`
+`theme_clear`
+`theme_genome`
+`theme_noexpand`
+`theme_null`
+`theme_pack_panels`
+`theme_tracks_sunset`
+
+------------------------------------------------------------------------
+
+`tracks(...)`
+:   複数のトラックをひとつの図にまとめる\
+    `heights`, `xlim`,\
+    `xlab`, `main`, `title`, `theme`,\
+    `track.plot.color`, `track.bg.color`,\
+    `main.height=unit(1.5, &#39;lines&#39;)`,\
+    `scale.height=unit(1, &#39;lines&#39;)`,\
+    `xlab.height=unit(1.5, &#39;lines&#39;)`,\
+    `padding=unit(-1, &#39;lines&#39;)`,\
+    `label.bg.color=&#39;white&#39;`, `label.bg.fill=&#39;gray80&#39;`,\
+    `label.text.color=&#39;black&#39;`, `label.text.cex=1`,\
+    `label.width=unit(2.5, &#39;lines&#39;)`
+
+`zoom()`, `zoom_in()`, `zoom_out()`
+
+`nextView()` , `prevView()`
+
+## `biovizBase`
+
+&lt;http://master.bioconductor.org/packages/release/bioc/html/biovizBase.html&gt;
+
+------------------------------------------------------------------------
+
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4621062506/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/41aQBFtkgBL._SX160_.jpg&#34; alt=&#34;RとBioconductorを用いたバイオインフォマティクス&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4320057082/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/51yBjAPptKL._SX160_.jpg&#34; alt=&#34;Rによるバイオインフォマティクスデータ解析 第2版 －Bioconductorを用いたゲノムスケールのデータマイニング－&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4320123700/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/41aoEmhUR0L._SX160_.jpg&#34; alt=&#34;トランスクリプトーム解析 (シリーズ Useful R 7)&#34; /&gt;&lt;/a&gt;
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

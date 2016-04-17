@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>tmux: 仮想端末でリモート仕事を安全に - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+tmux — 仮想端末でリモート仕事を安全に
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<p><a href="http://tmux.github.io/">http://tmux.github.io/</a></p>
+
+<p><a href="http://www.gnu.org/software/screen/">GNU screen</a>
+の後を継ぐ端末多重化ソフト(terminal multiplexer)。</p>
+
+<ul>
+<li><p>1つの画面の中でウインドウを追加・分割して複数の端末を開く</p>
+
+<dl>
+<dd>-   GUIのタブが不要になる
+
+<ul>
+<li>1つの <code>ssh</code> セッションで複数の端末を持てる</li>
+</ul></dd>
+</dl></li>
+
+<li><p><code>ssh</code> 切断後も端末丸ごと継続され、後でまた繋ぎ直せる</p>
+
+<dl>
+<dd>-   不意の <code>ssh</code> 切断でも作業が失われない
+
+<ul>
+<li>別の端末から接続しても同じ作業を継続できる</li>
+<li><code>nohup</code> とかバックグラウンド化とか考えるより楽チン cf. <a href="/students/iwasaki/dev/nohup.html">nohup</a></li>
+</ul></dd>
+</dl></li>
+</ul>
+
+<p><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a> あるいはLinuxbrewで一発インストール:
+<code>brew install tmux</code></p>
+
+<h2 id="キーバインド">キーバインド</h2>
+
+<p>tmux 内で <strong>prefix key</strong> に続けて特定のキーを送信すると、
+そのキーに応じたさまざまなコマンドを実行できる。
+prefix keyはデフォルトで <code>C-b</code> だが
+後述の設定で <code>C-t</code> に変更することにする。
+<code>control + b</code> を <code>C-b</code> のように表記する
+(e.g. <code>C-t ?</code> でキーバインドを列挙)。</p>
+
+<pre><code>? 　list-keys
+d 　detach-client
+[ 　copy-mode
+] 　paste-buffer
+c 　new-window
+n 　next-window
+p 　previous-window
+l 　last-window
+, 　rename-window
+&quot; 　split-window
+% 　split-window -h
+↑ 　select-pane -U
+↓ 　select-pane -D
+← 　select-pane -L
+→ 　select-pane -R
+o 　select-pane -t:.+
+: 　command-prompt
+x 　confirm-before kill-pane
+&amp; 　confirm-before kill-window
+</code></pre>
+
+<h3 id="コピーモード">コピーモード</h3>
+
+<p>上に戻ってスクロールしたり、その内容をコピーしたいときはコピーモードを使う。
+コピーモード中のキー操作はデフォルトでは <code>emacs</code> 風になっている。</p>
+
+<ol>
+<li><code>&lt;prefix&gt; [</code> でコピーモードに入る</li>
+<li><code>C-space</code> でコピー開始点をマーク</li>
+<li><code>C-w</code> で終点をマークし、コピーモードを出る</li>
+<li><code>&lt;prefix&gt; ]</code> でペースト</li>
+</ol>
+
+<p>設定ファイルに
+<code>bind-key -t emacs-copy C-w copy-pipe &quot;pbcopy&quot;</code>
+と書いておけばコピー内容がMacのクリップボードにも送られる。</p>
+
+<h2 id="設定">設定</h2>
+
+<p>設定ファイル： <code>$HOME/.tmux.conf</code></p>
+
+<p><a href="https://github.com/heavywatal/dotfiles/blob/master/.tmux.conf">https://github.com/heavywatal/dotfiles/blob/master/.tmux.conf</a></p>
+
+<ul>
+<li><p>prefix 変更</p>
+
+<dl>
+<dd><code>C-b</code> はキャレット左移動に使われるべきなので、
+<code>zsh</code> や <code>emacs</code> で使わない <code>C-t</code> に変更する。
+tmux の頭文字で覚えやすいし、<code>b</code> より若干近い。</dd>
+</dl></li>
+
+<li><p>起動時ウィンドウサイズ変更 <code>aggressive-resize</code></p>
+
+<dl>
+<dd>サイズの異なる端末からアクセスしたときに随時ウィンドウサイズ変更</dd>
+</dl></li>
+
+<li><p>Mac <code>open</code> 問題</p>
+
+<dl>
+<dd><p><code>tmux</code> 内だと <code>open</code> がうまく働かないのでそれを回避するために
+<a href="https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard">reattach-to-user-namespace</a>
+をインストールして挟む:</p>
+
+<pre><code>% brew install reattach-to-user-namespace
+</code></pre></dd>
+</dl></li>
+
+<li><p>タブの横幅を広くする</p>
+
+<dl>
+<dd><code>defaults write com.googlecode.iterm2 OptimumTabWidth -int 360</code></dd>
+</dl></li>
+</ul>
+
+<h2 id="利用例">利用例</h2>
+
+<ol>
+<li><p>リモートサーバーに ssh ログインし、
+tmux の新しいセッションを開始:</p>
+
+<pre><code>% ssh charles
+% tmux -2u
+</code></pre></li>
+
+<li><p>ウィンドウを縦に分割し、右ペインでPythonインタプリタを起動:</p>
+
+<pre><code>&lt;prefix&gt; %
+
+% python
+</code></pre></li>
+
+<li><p>左ペインにフォーカスを戻し、ファイルを閲覧したり何だり:</p>
+
+<pre><code>&lt;prefix&gt; o
+
+% less ~/.ssh/config
+</code></pre></li>
+
+<li><p>新しいウィンドウを作って <code>root</code> 仕事をしたり何だり:</p>
+
+<pre><code>&lt;prefix&gt; c
+
+% su -
+Password:
+</code></pre></li>
+
+<li><p>ウィンドウを切り替える:</p>
+
+<pre><code>&lt;prefix&gt; l
+&lt;prefix&gt; n
+&lt;prefix&gt; p
+</code></pre></li>
+
+<li><p>このセッションをデタッチし、ログアウトして家に帰る:</p>
+
+<pre><code>&lt;prefix&gt; d
+
+% logout
+</code></pre></li>
+
+<li><p>家からサーバーに再び ssh ログインして、
+さっきの tmux セッションをアタッチして作業を再開:</p>
+
+<pre><code>% ssh charles
+% tmux attach -d
+</code></pre></li>
+</ol>
+
+<h3 id="備忘">備忘</h3>
+
+<p>デタッチ後しばらくしてシェルを起動すると
+既に存在しているセッションを忘れがちなので、
+以下のようなものを <code>.zshrc</code> とかに書いておく。</p>
+
+<pre><code class="language-sh">tmux has-session &gt;/dev/null 2&gt;&amp;1 &amp;&amp; if [ -z &quot;${TMUX}&quot; ]; then
+    echo '% tmux list-sessions'
+    tmux list-sessions
+    echo '% tmux list-windows -a'
+    tmux list-windows -a
+fi
+</code></pre>
+
+<h3 id="ssh-先で即-tmux"><code>ssh</code> 先で即 <code>tmux</code></h3>
+
+<p>以下の様なzsh関数を <code>sshmux</code> とかいう名前で定義する</p>
+
+<pre><code class="language-sh">if [ -n &quot;$1&quot; ]; then
+    ssh -t $* &quot;tmux -2u attach -d || tmux -2u&quot;
+else
+    echo &quot;$0: missing hostname&quot;
+    return 1
+fi
+</code></pre>
+
+<p>さらに <code>.zshrc</code> に <code>compdef sshmux=ssh</code>
+と書いておけば補完もいい感じになる。</p>
+
+<h2 id="書籍">書籍</h2>
+
+<p><a href="http://www.amazon.co.jp/gp/product/B00A4I3ZVY/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=B00A4I3ZVY&linkCode=as2&tag=heavywatal-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B00A4I3ZVY&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=as2&o=9&a=B00A4I3ZVY" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+<a href="http://www.amazon.co.jp/gp/product/178398516X/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=178398516X&linkCode=as2&tag=heavywatal-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=178398516X&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=as2&o=9&a=178398516X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats">
+<label for="R stats">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools" checked>
+<label for="Developer Tools" class="active">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li class="active"><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "tmux"
++++
+
+&lt;http://tmux.github.io/&gt;
+
+[GNU screen](http://www.gnu.org/software/screen/)
+の後を継ぐ端末多重化ソフト(terminal multiplexer)。
+
+-   
+
+    1つの画面の中でウインドウを追加・分割して複数の端末を開く
+    :   -   GUIのタブが不要になる
+        -   1つの `ssh` セッションで複数の端末を持てる
+
+-   
+
+    `ssh` 切断後も端末丸ごと継続され、後でまた繋ぎ直せる
+    :   -   不意の `ssh` 切断でも作業が失われない
+        -   別の端末から接続しても同じ作業を継続できる
+        -   `nohup` とかバックグラウンド化とか考えるより楽チン cf. [nohup]({#{#HUGOSHORTCODE-1#}#})
+
+[Homebrew]({#{#HUGOSHORTCODE-2#}#}) あるいはLinuxbrewで一発インストール:
+`brew install tmux`
+
+## キーバインド
+
+tmux 内で **prefix key** に続けて特定のキーを送信すると、
+そのキーに応じたさまざまなコマンドを実行できる。
+prefix keyはデフォルトで `C-b` だが
+後述の設定で `C-t` に変更することにする。
+`control &#43; b` を `C-b` のように表記する
+(e.g. `C-t ?` でキーバインドを列挙)。
+
+    ? 　list-keys
+    d 　detach-client
+    [ 　copy-mode
+    ] 　paste-buffer
+    c 　new-window
+    n 　next-window
+    p 　previous-window
+    l 　last-window
+    , 　rename-window
+    &#34; 　split-window
+    % 　split-window -h
+    ↑ 　select-pane -U
+    ↓ 　select-pane -D
+    ← 　select-pane -L
+    → 　select-pane -R
+    o 　select-pane -t:.&#43;
+    : 　command-prompt
+    x 　confirm-before kill-pane
+    &amp; 　confirm-before kill-window
+
+### コピーモード
+
+上に戻ってスクロールしたり、その内容をコピーしたいときはコピーモードを使う。
+コピーモード中のキー操作はデフォルトでは `emacs` 風になっている。
+
+1.  `&lt;prefix&gt; [` でコピーモードに入る
+2.  `C-space` でコピー開始点をマーク
+3.  `C-w` で終点をマークし、コピーモードを出る
+4.  `&lt;prefix&gt; ]` でペースト
+
+設定ファイルに
+`bind-key -t emacs-copy C-w copy-pipe &#34;pbcopy&#34;`
+と書いておけばコピー内容がMacのクリップボードにも送られる。
+
+## 設定
+
+設定ファイル： `$HOME/.tmux.conf`
+
+&lt;https://github.com/heavywatal/dotfiles/blob/master/.tmux.conf&gt;
+
+-   
+
+    prefix 変更
+    :   `C-b` はキャレット左移動に使われるべきなので、
+        `zsh` や `emacs` で使わない `C-t` に変更する。
+        tmux の頭文字で覚えやすいし、`b` より若干近い。
+
+-   
+
+    起動時ウィンドウサイズ変更 `aggressive-resize`
+    :   サイズの異なる端末からアクセスしたときに随時ウィンドウサイズ変更
+
+-   
+
+    Mac `open` 問題
+    :   `tmux` 内だと `open` がうまく働かないのでそれを回避するために
+        [reattach-to-user-namespace](https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard)
+        をインストールして挟む:
+
+            % brew install reattach-to-user-namespace
+
+-   
+
+    タブの横幅を広くする
+    :   `defaults write com.googlecode.iterm2 OptimumTabWidth -int 360`
+
+## 利用例
+
+1.  リモートサーバーに ssh ログインし、
+    tmux の新しいセッションを開始:
+
+        % ssh charles
+        % tmux -2u
+
+2.  ウィンドウを縦に分割し、右ペインでPythonインタプリタを起動:
+
+        &lt;prefix&gt; %
+
+        % python
+
+3.  左ペインにフォーカスを戻し、ファイルを閲覧したり何だり:
+
+        &lt;prefix&gt; o
+
+        % less ~/.ssh/config
+
+4.  新しいウィンドウを作って `root` 仕事をしたり何だり:
+
+        &lt;prefix&gt; c
+
+        % su -
+        Password:
+
+5.  ウィンドウを切り替える:
+
+        &lt;prefix&gt; l
+        &lt;prefix&gt; n
+        &lt;prefix&gt; p
+
+6.  このセッションをデタッチし、ログアウトして家に帰る:
+
+        &lt;prefix&gt; d
+
+        % logout
+
+7.  家からサーバーに再び ssh ログインして、
+    さっきの tmux セッションをアタッチして作業を再開:
+
+        % ssh charles
+        % tmux attach -d
+
+### 備忘
+
+デタッチ後しばらくしてシェルを起動すると
+既に存在しているセッションを忘れがちなので、
+以下のようなものを `.zshrc` とかに書いておく。
+
+```sh
+tmux has-session &gt;/dev/null 2&gt;&amp;1 &amp;&amp; if [ -z &#34;${TMUX}&#34; ]; then
+    echo &#39;% tmux list-sessions&#39;
+    tmux list-sessions
+    echo &#39;% tmux list-windows -a&#39;
+    tmux list-windows -a
+fi
+```
+
+### `ssh` 先で即 `tmux`
+
+以下の様なzsh関数を `sshmux` とかいう名前で定義する
+
+```sh
+if [ -n &#34;$1&#34; ]; then
+    ssh -t $* &#34;tmux -2u attach -d || tmux -2u&#34;
+else
+    echo &#34;$0: missing hostname&#34;
+    return 1
+fi
+```
+
+さらに `.zshrc` に `compdef sshmux=ssh`
+と書いておけば補完もいい感じになる。
+
+## 書籍
+
+&lt;a href=&#34;http://www.amazon.co.jp/gp/product/B00A4I3ZVY/ref=as_li_ss_il?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00A4I3ZVY&amp;linkCode=as2&amp;tag=heavywatal-22&#34;&gt;&lt;img border=&#34;0&#34; src=&#34;http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&amp;ASIN=B00A4I3ZVY&amp;Format=_SL160_&amp;ID=AsinImage&amp;MarketPlace=JP&amp;ServiceVersion=20070822&amp;WS=1&amp;tag=heavywatal-22&#34; &gt;&lt;/a&gt;&lt;img src=&#34;http://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&amp;l=as2&amp;o=9&amp;a=B00A4I3ZVY&#34; width=&#34;1&#34; height=&#34;1&#34; border=&#34;0&#34; alt=&#34;&#34; style=&#34;border:none !important; margin:0px !important;&#34; /&gt;
+&lt;a href=&#34;http://www.amazon.co.jp/gp/product/178398516X/ref=as_li_ss_il?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=178398516X&amp;linkCode=as2&amp;tag=heavywatal-22&#34;&gt;&lt;img border=&#34;0&#34; src=&#34;http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&amp;ASIN=178398516X&amp;Format=_SL160_&amp;ID=AsinImage&amp;MarketPlace=JP&amp;ServiceVersion=20070822&amp;WS=1&amp;tag=heavywatal-22&#34; &gt;&lt;/a&gt;&lt;img src=&#34;http://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&amp;l=as2&amp;o=9&amp;a=178398516X&#34; width=&#34;1&#34; height=&#34;1&#34; border=&#34;0&#34; alt=&#34;&#34; style=&#34;border:none !important; margin:0px !important;&#34; /&gt;
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

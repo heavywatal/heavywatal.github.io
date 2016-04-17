@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>PRML輪読会 3章4節 - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+PRML輪読会 3章4節
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/0387310738/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/612j5Uo43eL._SX180_.jpg" alt="Pattern Recognition and Machine Learning (Information Science and Statistics)" /></a>
+<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4621061224/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41O0QFyTHJL._SX160_.jpg" alt="パターン認識と機械学習 上" /></a>
+<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4621061240/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/418MuoJetFL._SX160_.jpg" alt="パターン認識と機械学習 下 (ベイズ理論による統計的予測)" /></a></p>
+
+<dl>
+<dt>Author</dt>
+<dd>Christopher M. Bishop</dd>
+<dt>Book</dt>
+<dd><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4621061224/heavywatal-22/">Pattern Recognition and Machine Learning</a></dd>
+<dt>Publisher</dt>
+<dd><a href="http://www.springer.com/computer/image+processing/book/978-0-387-31073-2">Springer</a></dd>
+<dt>Materials</dt>
+<dd><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/">http://research.microsoft.com/en-us/um/people/cmbishop/prml/</a></dd>
+<dt>輪読担当</dt>
+<dd>岩嵜航</dd>
+<dt>日程</dt>
+<dd>2014-06-30</dd>
+</dl>
+
+<h2 id="3-linnear-models-for-regression">3. Linnear Models For Regression</h2>
+
+<p>3.1 Linear Basis Function Models: 八島さん、関口さん</p>
+
+<p>3.2 The Bias-Variance Decomposition: チャッキーさん</p>
+
+<p>3.3 Bayesian Linear Regression: 佐伯さん、永田さん</p>
+
+<h3 id="3-4-bayesian-model-comparison">3.4 Bayesian Model Comparison</h3>
+
+<p>最尤推定における過学習の問題 → 点推定じゃなくて周辺化することで回避しよう</p>
+
+<ul>
+<li>訓練データだけでモデルを比較できる (確認データ不要)</li>
+<li>すべてのデータを訓練に使うことができる (cross-validation不要)</li>
+<li>複雑性のパラメータも含めて同時に決められる e.g. <em>relevance vector machine</em> (Chapter 7)</li>
+</ul>
+
+<p>モデルの不確実さを確率で表し、加法定理・乗法定理を駆使して評価しよう</p>
+
+<div>$$\begin{split}
+p(X)   &= \sum^Y p(X,Y) \\
+p(X,Y) &= p(Y \mid X) P(X)
+\end{split}$$</div>
+
+<div class="note">
+<p>変数</p>
+
+<p>新しい入力: $\mathbf x$<br />
+それに対する出力(予測したい): $t$<br />
+モデルの中のパラメータ: $\mathbf w$<br />
+観察(トレーニング)データ: $\mathcal D$<br />
+<em>L</em> 個のモデル: <code>$\mathcal M_1, ..., \mathcal M_L$</code></p>
+
+</div>
+
+
+<hr />
+
+<p>モデルの事後分布 <code>$p(\mathcal M _i \mid \mathcal D)$</code> は、</p>
+
+<ul>
+<li>$p(\mathcal M _i)$: どのモデルがアリかなという好み(事前分布)と、</li>
+<li>$p(\mathcal D \mid \mathcal M _i)$:
+そのモデルの下での観察データの出やすさ
+(<em>model evidence</em>; <em>marginal likelihood</em> <strong>周辺尤度</strong>)</li>
+</ul>
+
+<p>の積に比例する (<strong>式 3.66</strong>)。</p>
+
+<div>$$\begin{split}
+p(\mathcal M _i \mid \mathcal D)
+   \propto p(\mathcal M _i) p(\mathcal D \mid \mathcal M _i)
+\end{split}$$</div>
+
+<p>これを評価したいんだけど、
+モデルの事前分布なんてだいたい分からないので、重要なのは後者のevidence。</p>
+
+<div class="note">
+<p><em>Bayes factor</em> <strong>ベイズ因子</strong></p>
+
+<p>モデル <code>$\mathcal M _j$</code> に対する <code>$\mathcal M _i$</code> のevidence比
+<code>$\frac {p(\mathcal D \mid \mathcal M _i)} {p(\mathcal D \mid \mathcal M _j)}$</code></p>
+
+</div>
+
+
+<hr />
+
+<p><strong>Mixture distribution</strong></p>
+
+<p>モデルの事後分布が分かれば予測分布 <em>predictive distribution</em>
+(新しい $\mathbf x$ に対して $t$ がどんな値となるか)
+も加法定理と乗法定理より導かれる (<strong>式 3.67</strong>)</p>
+
+<div>$$\begin{split}
+p(t \mid \mathbf x, \mathcal D)
+   &= \sum _{i=1} ^L p(t, \mathcal M _i \mid \mathbf x, \mathcal D) \\
+   &= \sum _{i=1} ^L {p(t \mid \mathbf x, \mathcal M _i, \mathcal D) p(\mathcal M _i \mid \mathcal D)}
+\end{split}$$</div>
+
+<p>これは、それぞれのモデルでの予測分布(入力に対してどういう出力になりそうか)を
+事後分布(どのモデルっぽいか)で重み付けした平均した、混合分布。</p>
+
+<p>例えば L=2 でモデルの片方の予測が $t = a$ らへんの鋭いピーク、
+もう片方のモデルの予測が $t = b$ らへんの鋭いピークだった場合、
+混合分布の予測はその中点 $t = (a + b) / 2$ にピークを持つのではなく、二山になってしまう。</p>
+
+<hr />
+
+<p><strong>Model selection</strong></p>
+
+<p>パラメータセット $w$ を持つモデル <code>$\mathcal M _i$</code>
+のevidenceをまた加法定理と乗法定理でばらしてみると (<strong>式 3.68</strong>)</p>
+
+<div>$$\begin{split}
+p(\mathcal D \mid \mathcal M _i)
+   &= \int p(\mathcal D, \mathbf w \mid \mathcal M _i) \mathrm d \mathbf w \\
+   &= \int p(\mathcal D \mid \mathbf w, \mathcal M _i) p(\mathbf w \mid \mathcal M _i) \mathrm d \mathbf w
+\end{split}$$</div>
+
+<p>パラメータセットの尤度をその確率分布で重み付けして積分したもの、
+ってことで周辺尤度と呼ばれるのが納得できる。
+また、そのモデルからデータセットが生成される確率
+(ただしパラメータは事前分布からランダムに取ったもの) とも理解できる。
+この <code>$p(\mathbf w \mid \mathcal M _i)$</code>
+はモデルで想定してる何らかの事前分布ってことでいいのかな？</p>
+
+<div class="note">
+<p>積分の中身からすると、パラメータの事後分布を求める式の正規化項になる (<strong>式 3.69</strong>)</p>
+
+<div>$$\begin{split}
+p(\mathbf w \mid \mathcal D, \mathcal M _i)
+   = \frac {p(\mathcal D \mid \mathbf w, \mathcal M _i) p(\mathbf w \mid \mathcal M _i)}
+           {p(\mathcal D \mid \mathcal M _i)}
+\end{split}$$</div>
+
+</div>
+
+
+<p>あるひとつのパラメータ $w$ を持つモデルを考える。</p>
+
+<div class="note">
+<p><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure3.12.png">Figure 3.12</a> 近似</p>
+
+<p><p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure3.12.png"/ alt="Figure 3.12" width="300px"></p>
+パラメータ $w$ の事前分布(青)と、それよりシャープな事後分布(赤)。
+MAP推定値らへんで長方形に分布してるものとして近似。</p>
+
+</div>
+
+
+<p><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure3.12.png">Figure 3.12</a> のように近似すると式3.68の積分をただの掛け算で書き変えられる
+(モデル依存の表記を省略, <strong>式 3.70, 3.71</strong>)。</p>
+
+<div>$$\begin{split}
+p(\mathcal D)
+   &= \int p(\mathcal D \mid w) p (w) \mathrm dw \\
+   &\simeq \frac 1 {\Delta w _\mathrm{prior}} \int p(\mathcal D \mid w) \mathrm dw \\
+   &\simeq \frac 1 {\Delta w _\mathrm{prior}}
+           p(\mathcal D \mid w _\mathrm{MAP}) \Delta w _\mathrm{posterior} \\
+   &= p(\mathcal D \mid w _\mathrm{MAP}) \frac {\Delta w _\mathrm{posterior}}
+                                                {\Delta w _\mathrm{prior}} \\
+\ln p(\mathcal D)
+   &\simeq \ln p(\mathcal D \mid w _\mathrm{MAP})
+         + \ln \left( \frac {\Delta w _\mathrm{posterior}} {\Delta w _\mathrm{prior}} \right)
+\end{split}$$</div>
+
+<p>第一項は一番いいパラメータの当てはまりの良さ、
+第二項はモデルの複雑性によるペナルティ
+(事後分布の幅が狭くなるほど大きな負になる)。</p>
+
+<p>$M$ 個のパラメータを持つモデルを考える。
+事前分布と事後分布の幅の比が全てのパラメータで等しいとすると (<strong>式 3.72</strong>)</p>
+
+<div>$$\begin{split}
+p(\mathcal D)
+   &= p(\mathcal D \mid w _\mathrm{MAP}) \left(\frac {\Delta w _\mathrm{posterior}}
+                                                     {\Delta w _\mathrm{prior}} \right)^M \\
+\ln p(\mathcal D)
+   &\simeq \ln p(\mathcal D \mid w _\mathrm{MAP})
+         + M \ln \left( \frac {\Delta w _\mathrm{posterior}} {\Delta w _\mathrm{prior}} \right)
+\end{split}$$</div>
+
+<p>パラメータが増える(モデルの複雑性が増す)ごとに第一項は大きくなっていくかもしれないが、
+第二項のペナルティも大きな負になっていく。
+<strong>中程度が良さそう → 過学習しない！</strong></p>
+
+<div class="note">
+<p>長方形じゃなくてもっとちゃんとしたGaussian近似をSection 4.4.1で</p>
+
+</div>
+
+
+<div class="note">
+<p><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure3.13.png">Figure 3.13</a> <strong>どうして中程度の複雑性のモデルが好まれるか</strong></p>
+
+<p><p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure3.13.png"/ alt="Figure 3.13" width="300px"></p>
+横軸はデータセットが取りうる値を1次元で表現。
+モデルの複雑性を <code>$\mathcal M _1 &lt; \mathcal M _2 &lt;  \mathcal M _3$</code> とする。</p>
+
+<p>シンプルなモデル <code>$\mathcal M _1$</code> は生成(説明)できるデータの範囲が狭く
+(いろいろパラメータを変えても似通ったデータセットしか出てこない)、
+複雑なモデル <code>$\mathcal M _3$</code> はいろんなデータを生成できるがそれぞれの重みは低い。
+特定のデータセット <code>$\mathcal D _0$</code> に対しては中程度の複雑さを持つモデル
+<code>$\mathcal M _2$</code> が一番大きいevidenceを持つことになる。</p>
+
+</div>
+
+
+<hr />
+
+<p><strong>Expected Bayes factor</strong></p>
+
+<p><code>$\mathcal M _1$</code> が真のモデルだとする。
+ベイズ因子は個々のデータで見ると
+正しくない <code>$\mathcal M _2$</code> とかで大きくなる場合もあるが、
+真の分布の上でを平均すると (<strong>式 3.73</strong>)</p>
+
+<div>$$\begin{split}
+\int p(\mathcal D \mid \mathcal M _1)
+    \ln \frac {p(\mathcal D \mid \mathcal M _1)}
+              {p(\mathcal D \mid \mathcal M _2)} \mathrm d \mathcal D
+\end{split}$$</div>
+
+<p>で <em>Kullback-Leibler divergence</em> (Section 1.6.1 <strong>式 1.113</strong>)
+と同じ形になり（対数の中身と符号を入れ替え）、
+常に正（ただし2つの分布が等しい場合は0）の値をとることが分かっているので、
+<strong>平均的には正しいモデルのベイズ因子が大きくなり、好まれる。</strong>
+ただし、データを生成する真の分布が <em>L</em> 個のモデルの中に含まれてれば、の話。</p>
+
+<hr />
+
+<p><strong>まとめ</strong></p>
+
+<ul>
+<li>Bayesian frameworkでは過学習を避け、訓練データだけでモデル比較できる</li>
+<li>でもモデルの形に関する仮定は必要で、それが正しくないと誤った結論を導きうる</li>
+<li>結論は事前分布の特性にかなり依存
+
+<ul>
+<li>非正則事前分布では正規化定数が定義できないためevidenceを定義できない</li>
+<li>じゃあ正則事前分布の極限(e.g. 分散∞の正規分布)をとればいいかというと、
+それではevidenceが0に収束してしまう</li>
+<li>先に2つのモデルのevidence比を取ってから極限をとるといいかも</li>
+</ul></li>
+<li>実際の応用では独立なテストデータを評価用に取っとくのが賢明 (←え、結局？)</li>
+</ul>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats">
+<label for="R stats">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures" checked>
+<label for="Lectures" class="active">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li class="active"><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "PRML輪読会 3章4節"
++++
+
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/0387310738/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/612j5Uo43eL._SX180_.jpg&#34; alt=&#34;Pattern Recognition and Machine Learning (Information Science and Statistics)&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4621061224/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/41O0QFyTHJL._SX160_.jpg&#34; alt=&#34;パターン認識と機械学習 上&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4621061240/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/418MuoJetFL._SX160_.jpg&#34; alt=&#34;パターン認識と機械学習 下 (ベイズ理論による統計的予測)&#34; /&gt;&lt;/a&gt;
+
+Author
+:   Christopher M. Bishop
+
+Book
+:   [Pattern Recognition and Machine Learning](http://www.amazon.co.jp/exec/obidos/ASIN/4621061224/heavywatal-22/)
+
+Publisher
+:   [Springer](http://www.springer.com/computer/image&#43;processing/book/978-0-387-31073-2)
+
+Materials
+:   &lt;http://research.microsoft.com/en-us/um/people/cmbishop/prml/&gt;
+
+輪読担当
+:   岩嵜航
+
+日程
+:   2014-06-30
+
+## 3. Linnear Models For Regression
+
+3.1 Linear Basis Function Models: 八島さん、関口さん
+
+3.2 The Bias-Variance Decomposition: チャッキーさん
+
+3.3 Bayesian Linear Regression: 佐伯さん、永田さん
+
+### 3.4 Bayesian Model Comparison
+
+最尤推定における過学習の問題 → 点推定じゃなくて周辺化することで回避しよう
+
+-   訓練データだけでモデルを比較できる (確認データ不要)
+-   すべてのデータを訓練に使うことができる (cross-validation不要)
+-   複雑性のパラメータも含めて同時に決められる e.g. *relevance vector machine* (Chapter 7)
+
+モデルの不確実さを確率で表し、加法定理・乗法定理を駆使して評価しよう
+
+&lt;div&gt;$$\begin{split}
+p(X)   &amp;= \sum^Y p(X,Y) \\
+p(X,Y) &amp;= p(Y \mid X) P(X)
+\end{split}$$&lt;/div&gt;
+
+{#{#HUGOSHORTCODE-1#}#}
+
+------------------------------------------------------------------------
+
+モデルの事後分布 `$p(\mathcal M _i \mid \mathcal D)$` は、
+
+-   $p(\mathcal M _i)$: どのモデルがアリかなという好み(事前分布)と、
+-   $p(\mathcal D \mid \mathcal M _i)$:
+    そのモデルの下での観察データの出やすさ
+    (*model evidence*; *marginal likelihood* **周辺尤度**)
+
+の積に比例する (**式 3.66**)。
+
+&lt;div&gt;$$\begin{split}
+p(\mathcal M _i \mid \mathcal D)
+   \propto p(\mathcal M _i) p(\mathcal D \mid \mathcal M _i)
+\end{split}$$&lt;/div&gt;
+
+これを評価したいんだけど、
+モデルの事前分布なんてだいたい分からないので、重要なのは後者のevidence。
+
+{#{#HUGOSHORTCODE-2#}#}
+
+------------------------------------------------------------------------
+
+**Mixture distribution**
+
+モデルの事後分布が分かれば予測分布 *predictive distribution*
+(新しい $\mathbf x$ に対して $t$ がどんな値となるか)
+も加法定理と乗法定理より導かれる (**式 3.67**)
+
+&lt;div&gt;$$\begin{split}
+p(t \mid \mathbf x, \mathcal D)
+   &amp;= \sum _{i=1} ^L p(t, \mathcal M _i \mid \mathbf x, \mathcal D) \\
+   &amp;= \sum _{i=1} ^L {p(t \mid \mathbf x, \mathcal M _i, \mathcal D) p(\mathcal M _i \mid \mathcal D)}
+\end{split}$$&lt;/div&gt;
+
+これは、それぞれのモデルでの予測分布(入力に対してどういう出力になりそうか)を
+事後分布(どのモデルっぽいか)で重み付けした平均した、混合分布。
+
+例えば L=2 でモデルの片方の予測が $t = a$ らへんの鋭いピーク、
+もう片方のモデルの予測が $t = b$ らへんの鋭いピークだった場合、
+混合分布の予測はその中点 $t = (a &#43; b) / 2$ にピークを持つのではなく、二山になってしまう。
+
+------------------------------------------------------------------------
+
+**Model selection**
+
+パラメータセット $w$ を持つモデル `$\mathcal M _i$`
+のevidenceをまた加法定理と乗法定理でばらしてみると (**式 3.68**)
+
+&lt;div&gt;$$\begin{split}
+p(\mathcal D \mid \mathcal M _i)
+   &amp;= \int p(\mathcal D, \mathbf w \mid \mathcal M _i) \mathrm d \mathbf w \\
+   &amp;= \int p(\mathcal D \mid \mathbf w, \mathcal M _i) p(\mathbf w \mid \mathcal M _i) \mathrm d \mathbf w
+\end{split}$$&lt;/div&gt;
+
+パラメータセットの尤度をその確率分布で重み付けして積分したもの、
+ってことで周辺尤度と呼ばれるのが納得できる。
+また、そのモデルからデータセットが生成される確率
+(ただしパラメータは事前分布からランダムに取ったもの) とも理解できる。
+この `$p(\mathbf w \mid \mathcal M _i)$`
+はモデルで想定してる何らかの事前分布ってことでいいのかな？
+
+{#{#HUGOSHORTCODE-3#}#}
+
+あるひとつのパラメータ $w$ を持つモデルを考える。
+
+{#{#HUGOSHORTCODE-4#}#}
+
+[Figure 3.12](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure3.12.png) のように近似すると式3.68の積分をただの掛け算で書き変えられる
+(モデル依存の表記を省略, **式 3.70, 3.71**)。
+
+&lt;div&gt;$$\begin{split}
+p(\mathcal D)
+   &amp;= \int p(\mathcal D \mid w) p (w) \mathrm dw \\
+   &amp;\simeq \frac 1 {\Delta w _\mathrm{prior}} \int p(\mathcal D \mid w) \mathrm dw \\
+   &amp;\simeq \frac 1 {\Delta w _\mathrm{prior}}
+           p(\mathcal D \mid w _\mathrm{MAP}) \Delta w _\mathrm{posterior} \\
+   &amp;= p(\mathcal D \mid w _\mathrm{MAP}) \frac {\Delta w _\mathrm{posterior}}
+                                                {\Delta w _\mathrm{prior}} \\
+\ln p(\mathcal D)
+   &amp;\simeq \ln p(\mathcal D \mid w _\mathrm{MAP})
+         &#43; \ln \left( \frac {\Delta w _\mathrm{posterior}} {\Delta w _\mathrm{prior}} \right)
+\end{split}$$&lt;/div&gt;
+
+第一項は一番いいパラメータの当てはまりの良さ、
+第二項はモデルの複雑性によるペナルティ
+(事後分布の幅が狭くなるほど大きな負になる)。
+
+$M$ 個のパラメータを持つモデルを考える。
+事前分布と事後分布の幅の比が全てのパラメータで等しいとすると (**式 3.72**)
+
+&lt;div&gt;$$\begin{split}
+p(\mathcal D)
+   &amp;= p(\mathcal D \mid w _\mathrm{MAP}) \left(\frac {\Delta w _\mathrm{posterior}}
+                                                     {\Delta w _\mathrm{prior}} \right)^M \\
+\ln p(\mathcal D)
+   &amp;\simeq \ln p(\mathcal D \mid w _\mathrm{MAP})
+         &#43; M \ln \left( \frac {\Delta w _\mathrm{posterior}} {\Delta w _\mathrm{prior}} \right)
+\end{split}$$&lt;/div&gt;
+
+パラメータが増える(モデルの複雑性が増す)ごとに第一項は大きくなっていくかもしれないが、
+第二項のペナルティも大きな負になっていく。
+**中程度が良さそう → 過学習しない！**
+
+{#{#HUGOSHORTCODE-5#}#}
+
+{#{#HUGOSHORTCODE-6#}#}
+
+------------------------------------------------------------------------
+
+**Expected Bayes factor**
+
+`$\mathcal M _1$` が真のモデルだとする。
+ベイズ因子は個々のデータで見ると
+正しくない `$\mathcal M _2$` とかで大きくなる場合もあるが、
+真の分布の上でを平均すると (**式 3.73**)
+
+&lt;div&gt;$$\begin{split}
+\int p(\mathcal D \mid \mathcal M _1)
+    \ln \frac {p(\mathcal D \mid \mathcal M _1)}
+              {p(\mathcal D \mid \mathcal M _2)} \mathrm d \mathcal D
+\end{split}$$&lt;/div&gt;
+
+で *Kullback-Leibler divergence* (Section 1.6.1 **式 1.113**)
+と同じ形になり（対数の中身と符号を入れ替え）、
+常に正（ただし2つの分布が等しい場合は0）の値をとることが分かっているので、
+**平均的には正しいモデルのベイズ因子が大きくなり、好まれる。**
+ただし、データを生成する真の分布が *L* 個のモデルの中に含まれてれば、の話。
+
+------------------------------------------------------------------------
+
+**まとめ**
+
+-   Bayesian frameworkでは過学習を避け、訓練データだけでモデル比較できる
+-   でもモデルの形に関する仮定は必要で、それが正しくないと誤った結論を導きうる
+-   結論は事前分布の特性にかなり依存
+    -   非正則事前分布では正規化定数が定義できないためevidenceを定義できない
+    -   じゃあ正則事前分布の極限(e.g. 分散∞の正規分布)をとればいいかというと、
+        それではevidenceが0に収束してしまう
+    -   先に2つのモデルのevidence比を取ってから極限をとるといいかも
+-   実際の応用では独立なテストデータを評価用に取っとくのが賢明 (←え、結局？)
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

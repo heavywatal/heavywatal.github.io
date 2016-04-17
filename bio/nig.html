@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>遺伝研スパコン - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+遺伝研スパコン
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<p><a href="https://sc.ddbj.nig.ac.jp/">Homepage</a></p>
+
+<h2 id="利用開始">利用開始</h2>
+
+<p><a href="https://sc.ddbj.nig.ac.jp/index.php/ja-howtouse">https://sc.ddbj.nig.ac.jp/index.php/ja-howtouse</a></p>
+
+<ol>
+<li><a href="https://sc.ddbj.nig.ac.jp/index.php/ja-new-application">新規ユーザ登録申請</a></li>
+<li>責任者にメールが届くので、それに従って誓約書PDFを管理者に送信</li>
+<li>アカウント登録証が手元に届く</li>
+<li>Homepage_ でログイン</li>
+<li><a href="https://sc.ddbj.nig.ac.jp/index.php/2014-09-17-05-42-33">SSH公開鍵登録</a> (パスワード認証ではSSHできない)</li>
+
+<li><p><code>~/.ssh/config</code> に設定を追加:</p>
+
+<pre><code>Host *.ddbj.nig.ac.jp
+  User heavywatal
+  RequestTTY yes
+</code></pre>
+
+<p>sshコマンドでユーザ名と <code>-t</code> オプションを省略できるようになる。</p></li>
+
+<li><p>システム内ノード間SSHのパスワード認証を省くために
+非公開鍵も送っておく(いいのかな？):</p>
+
+<pre><code>% rsync -auv ~/.ssh/id_rsa gw2.ddbj.nig.ac.jp:~/.ssh/
+</code></pre></li>
+
+<li><p>ゲートウェイノードにSSH接続してログインノードに <code>qlogin</code>:</p>
+
+<pre><code>% ssh gw2.ddbj.nig.ac.jp qlogin
+</code></pre></li>
+</ol>
+
+<div class="note">
+<p>Phase 1 と Phase 2 という異なるシステムが存在しているが、
+基本的にはPhase 2システムを使えば良さそう。
+共有されるのはユーザ情報のみで、ホームのファイルシステムも別。
+Phase 1システムにデータをコピーするには、
+Phase 2ゲートウェイから
+<code>qlogin -l trans</code>
+でデータ移行用ノードにログインし、
+<code>/home_ph1/</code> 以下に見える自分のホームに <code>rsync</code> する。</p>
+
+</div>
+
+
+<h2 id="環境整備">環境整備</h2>
+
+<p><a href="https://sc.ddbj.nig.ac.jp/index.php/system-software-config">https://sc.ddbj.nig.ac.jp/index.php/system-software-config</a></p>
+
+<p>Phase 1 Red Hat Enterprise Linux 6.1<br />
+Phase 2 Red Hat Enterprise Linux 6.4</p>
+
+<p>Linuxbrewで環境を整える。
+cf. <a href="/students/iwasaki/dev/devenv.html">/dev/devenv</a></p>
+
+<div class="note">
+<p>mercurialはインストールできてもglibcらへんの関係でうまく動かない。
+emacsは <code>User *** has no home directory</code> という謎のエラーを吐く。
+clang/boostは要調整。</p>
+
+</div>
+
+
+<h3 id="ログインシェルをzshに変更-しないで対処">ログインシェルをzshに変更(しないで対処)</h3>
+
+<p><a href="https://sc.ddbj.nig.ac.jp/index.php/ja-tips">https://sc.ddbj.nig.ac.jp/index.php/ja-tips</a></p>
+
+<p>LDAPで管理されているので <code>chsh</code> は効かない:</p>
+
+<pre><code>% ldapmodify -x -D uid=heavywatal,ou=people,dc=nig,dc=ac,dc=jp -W
+Enter LDAP Password: ********
+dn: uid=heavywatal,ou=people,dc=nig,dc=ac,dc=jp
+changetype:modify
+replace:loginShell
+loginShell:/bin/zsh
+# ctrl-d
+</code></pre>
+
+<p>反映されるまで少し時間がかかるっぽい。</p>
+
+<p><code>/etc/profile.d/*</code> の読み込みのタイミングのせいか、
+zshにすると <code>ssh -t gw.nig qlogin</code> で <code>command not found</code> になってしまう。
+しかも <code>/bin/zsh</code> が結構古くて微妙。</p>
+
+<p><code>~/.bashrc</code> にエイリアスを定義して対処したほうが良さそう:</p>
+
+<pre><code>PATH=${HOME}/.homebrew/bin:${PATH}
+alias zmux='SHELL=$(brew --prefix)/bin/zsh tmux'
+</code></pre>
+
+<p>ちなみにtmuxセッションの寿命はどうなってるんだろう&hellip;</p>
+
+<h2 id="ジョブ投入-管理">ジョブ投入、管理</h2>
+
+<p><a href="https://sc.ddbj.nig.ac.jp/index.php/ja-howtouse">https://sc.ddbj.nig.ac.jp/index.php/ja-howtouse</a></p>
+
+<p><a href="https://sc.ddbj.nig.ac.jp/index.php/ja-uge-additional">https://sc.ddbj.nig.ac.jp/index.php/ja-uge-additional</a></p>
+
+<p><a href="http://www.univa.com/products/grid-engine">Univa Grid Engine (UGE)</a></p>
+
+<p><a href="http://gridengine.eu/grid-engine-documentation">http://gridengine.eu/grid-engine-documentation</a></p>
+
+<h3 id="qsub"><code>qsub</code></h3>
+
+<p>遺伝研ウェブサイトにはスクリプトを書いてから渡す方法しか書いてないが、
+コマンド引数として直接渡すほうが圧倒的に楽チン。</p>
+
+<pre><code class="language-sh">## スクリプトを書いてから渡す
+qsub test.sh
+
+## コマンドライン引数として直接渡す
+qsub -l debug -b y -shell n -cwd -N test &quot;pwd; sleep 5; ls &gt;ls.txt&quot;
+</code></pre>
+
+<dl>
+<dt><code>-l ***</code></dt>
+<dd>管理者が定義したキューから選んで指定し、
+実行時間や計算ノードなどの要求を伝える。
+例えば、24時間以内に終わるものなら <code>-l short</code> や <code>-l debug</code>、
+2か月かかるものなら <code>-l month</code> を指定。
+<code>qstat -g c</code> でキューの一覧とそれぞれの負荷を確認できる。</dd>
+<dt><code>-cwd</code></dt>
+<dd>カレントディレクトリでジョブ実行。
+デフォルトでは <code>$HOME</code>。</dd>
+<dt><code>-N ***</code></dt>
+<dd>ジョブに名前をつける。
+デフォルトではスクリプト名。</dd>
+<dt><code>-o ***</code>, <code>-e ***</code></dt>
+<dd>標準出力・標準エラー出力の書き出し先。
+デフォルトではワーキングディレクトリ以下に
+<code>{JOBNAME}.o{JOBID}</code>, <code>{JOBNAME}.e{JOBID}</code>
+という名前で書き出される(空っぽでさえ)。
+不要な出力は <code>/dev/null</code> に流し込むべし。</dd>
+<dt><code>-b y</code></dt>
+<dd>計算ノードにバイナリがあるものとしてジョブを投げる。
+これを指定しない場合はスクリプト扱いになり、
+投入ノードから計算ノードへのコピーなど余計なプロセスが挟まるらしい。</dd>
+<dt><code>-shell n</code></dt>
+<dd>環境変数の解決など、
+プログラムの呼び出しにシェルを介す必要がない場合は
+これを指定することで多少コスト削減できる。
+当然 <code>-b y</code> のときのみ有効。</dd>
+<dt><code>-S /bin/sh</code></dt>
+<dd>インタープリタを指定。
+指定しないと <code>csh</code> が利用されるせいか、
+標準出力で <code>Warning: no access to tty</code> と怒られる。</dd>
+<dt><code>-t 1-M</code></dt>
+<dd>M個のタスクを持つアレイジョブとして投入する。
+タスクごとにパラメータを変えてプログラムを走らせたい場合は、
+スクリプトの中で環境変数 <code>SGE_TASK_ID</code> を拾ってどうにかする。
+<code>qsub</code> コマンドを生成して何回も呼ぶほうが圧倒的に楽だけど、
+アレイジョブのほうがクラスタ側の負荷が小さいらしい。ほんとかな。</dd>
+<dt><code>-tc MAX_RUNNING_TASKS</code></dt>
+<dd>アレイジョブで同時実行するタスク数の上限を指定。
+システムからユーザーに与えられた上限は <code>qquota</code> コマンドで確認できる。
+いまのところ500らしい。</dd>
+<dt><code>-v VARIABLE=value</code></dt>
+<dd>環境変数を定義してジョブに引き継ぐ</dd>
+<dt><code>-pe def_slot N</code></dt>
+<dd>parallel environment:
+並列処理で使用するスレッド数を指定</dd>
+</dl>
+
+<h3 id="qsub-スクリプト"><code>qsub</code> スクリプト</h3>
+
+<p><code>#$</code> で始まる行は <code>qsub</code> へのオプションと見なされる。</p>
+
+<p>ジョブスクリプト内で参照可能な特殊環境変数をプリントしてみるジョブの例:</p>
+
+<pre><code class="language-sh">##!/bin/sh
+##$ -S /bin/sh
+##$ -l debug
+##$ -cwd
+##$ -t 1-2
+##$ -N test_sh
+echo HOME: $HOME
+echo USER: $USER
+echo JOB_ID: $JOB_ID
+echo JOB_NAME: $JOB_NAME
+echo HOSTNAME: $HOSTNAME
+echo SGE_TASK_ID: $SGE_TASK_ID
+echo SGE_TASK_FIRST:$SGE_TASK_FIRST
+echo SGE_TASK_LAST: $SGE_TASK_LAST
+echo SGE_TASK_STEPSIZE: `$SGE_TASK_STEPSIZE
+pwd
+ls
+</code></pre>
+
+<p>スクリプトはPythonでもいい。
+インタープリタを <code>-S /usr/bin/env python</code> で指定できないのは残念。</p>
+
+<pre><code class="language-py">##!/usr/bin/env python
+##$` -S $HOME/.virtualenv/py3/bin/python
+##$ -l debug
+##$ -cwd
+##$ -t 1-2
+##$ -N test_py
+import os
+print(&quot;SGE_TASK_ID: &quot; + os.environ[&quot;SGE_TASK_ID&quot;])
+</code></pre>
+
+<h3 id="補助コマンド">補助コマンド</h3>
+
+<dl>
+<dt><code>qstat</code></dt>
+<dd>現在実行中のジョブ一覧</dd>
+<dt><code>qstat -g c</code></dt>
+<dd>クラスタで定義されているキューの一覧と、それぞれの負荷を表示</dd>
+<dt><code>qstat -f</code></dt>
+<dd>全ノードの状況をfullに表示</dd>
+<dt><code>qstat -j JOBID</code></dt>
+<dd>ジョブの詳細表示</dd>
+<dt><code>qacct -j JOBID</code></dt>
+<dd>ジョブ実行後にリソース消費を確認</dd>
+<dt><code>qdel JOBID</code></dt>
+<dd>ジョブ削除</dd>
+<dt><code>qquota</code></dt>
+<dd>ユーザーに与えられたリソースを表示</dd>
+</dl>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats">
+<label for="R stats">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology" checked>
+<label for="Biology" class="active">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li class="active"><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "遺伝研スパコン"
++++
+
+[Homepage](https://sc.ddbj.nig.ac.jp/)
+
+## 利用開始
+
+&lt;https://sc.ddbj.nig.ac.jp/index.php/ja-howtouse&gt;
+
+1.  [新規ユーザ登録申請](https://sc.ddbj.nig.ac.jp/index.php/ja-new-application)
+2.  責任者にメールが届くので、それに従って誓約書PDFを管理者に送信
+3.  アカウント登録証が手元に届く
+4.  Homepage\_ でログイン
+5.  [SSH公開鍵登録](https://sc.ddbj.nig.ac.jp/index.php/2014-09-17-05-42-33) (パスワード認証ではSSHできない)
+6.  `~/.ssh/config` に設定を追加:
+
+        Host *.ddbj.nig.ac.jp
+          User heavywatal
+          RequestTTY yes
+
+    sshコマンドでユーザ名と `-t` オプションを省略できるようになる。
+
+7.  システム内ノード間SSHのパスワード認証を省くために
+    非公開鍵も送っておく(いいのかな？):
+
+        % rsync -auv ~/.ssh/id_rsa gw2.ddbj.nig.ac.jp:~/.ssh/
+
+8.  ゲートウェイノードにSSH接続してログインノードに `qlogin`:
+
+        % ssh gw2.ddbj.nig.ac.jp qlogin
+
+{#{#HUGOSHORTCODE-1#}#}
+
+## 環境整備
+
+&lt;https://sc.ddbj.nig.ac.jp/index.php/system-software-config&gt;
+
+Phase 1 Red Hat Enterprise Linux 6.1\
+Phase 2 Red Hat Enterprise Linux 6.4
+
+Linuxbrewで環境を整える。
+cf. [/dev/devenv]({#{#HUGOSHORTCODE-2#}#})
+
+{#{#HUGOSHORTCODE-3#}#}
+
+### ログインシェルをzshに変更(しないで対処)
+
+&lt;https://sc.ddbj.nig.ac.jp/index.php/ja-tips&gt;
+
+LDAPで管理されているので `chsh` は効かない:
+
+    % ldapmodify -x -D uid=heavywatal,ou=people,dc=nig,dc=ac,dc=jp -W
+    Enter LDAP Password: ********
+    dn: uid=heavywatal,ou=people,dc=nig,dc=ac,dc=jp
+    changetype:modify
+    replace:loginShell
+    loginShell:/bin/zsh
+    # ctrl-d
+
+反映されるまで少し時間がかかるっぽい。
+
+`/etc/profile.d/*` の読み込みのタイミングのせいか、
+zshにすると `ssh -t gw.nig qlogin` で `command not found` になってしまう。
+しかも `/bin/zsh` が結構古くて微妙。
+
+`~/.bashrc` にエイリアスを定義して対処したほうが良さそう:
+
+    PATH=${HOME}/.homebrew/bin:${PATH}
+    alias zmux=&#39;SHELL=$(brew --prefix)/bin/zsh tmux&#39;
+
+ちなみにtmuxセッションの寿命はどうなってるんだろう...
+
+## ジョブ投入、管理
+
+&lt;https://sc.ddbj.nig.ac.jp/index.php/ja-howtouse&gt;
+
+&lt;https://sc.ddbj.nig.ac.jp/index.php/ja-uge-additional&gt;
+
+[Univa Grid Engine (UGE)](http://www.univa.com/products/grid-engine)
+
+&lt;http://gridengine.eu/grid-engine-documentation&gt;
+
+### `qsub`
+
+遺伝研ウェブサイトにはスクリプトを書いてから渡す方法しか書いてないが、
+コマンド引数として直接渡すほうが圧倒的に楽チン。
+
+```sh
+## スクリプトを書いてから渡す
+qsub test.sh
+
+## コマンドライン引数として直接渡す
+qsub -l debug -b y -shell n -cwd -N test &#34;pwd; sleep 5; ls &gt;ls.txt&#34;
+```
+
+`-l ***`
+:   管理者が定義したキューから選んで指定し、
+    実行時間や計算ノードなどの要求を伝える。
+    例えば、24時間以内に終わるものなら `-l short` や `-l debug`、
+    2か月かかるものなら `-l month` を指定。
+    `qstat -g c` でキューの一覧とそれぞれの負荷を確認できる。
+
+`-cwd`
+:   カレントディレクトリでジョブ実行。
+    デフォルトでは `$HOME`。
+
+`-N ***`
+:   ジョブに名前をつける。
+    デフォルトではスクリプト名。
+
+`-o ***`, `-e ***`
+:   標準出力・標準エラー出力の書き出し先。
+    デフォルトではワーキングディレクトリ以下に
+    `{JOBNAME}.o{JOBID}`, `{JOBNAME}.e{JOBID}`
+    という名前で書き出される(空っぽでさえ)。
+    不要な出力は `/dev/null` に流し込むべし。
+
+`-b y`
+:   計算ノードにバイナリがあるものとしてジョブを投げる。
+    これを指定しない場合はスクリプト扱いになり、
+    投入ノードから計算ノードへのコピーなど余計なプロセスが挟まるらしい。
+
+`-shell n`
+:   環境変数の解決など、
+    プログラムの呼び出しにシェルを介す必要がない場合は
+    これを指定することで多少コスト削減できる。
+    当然 `-b y` のときのみ有効。
+
+`-S /bin/sh`
+:   インタープリタを指定。
+    指定しないと `csh` が利用されるせいか、
+    標準出力で `Warning: no access to tty` と怒られる。
+
+`-t 1-M`
+:   M個のタスクを持つアレイジョブとして投入する。
+    タスクごとにパラメータを変えてプログラムを走らせたい場合は、
+    スクリプトの中で環境変数 `SGE_TASK_ID` を拾ってどうにかする。
+    `qsub` コマンドを生成して何回も呼ぶほうが圧倒的に楽だけど、
+    アレイジョブのほうがクラスタ側の負荷が小さいらしい。ほんとかな。
+
+`-tc MAX_RUNNING_TASKS`
+:   アレイジョブで同時実行するタスク数の上限を指定。
+    システムからユーザーに与えられた上限は `qquota` コマンドで確認できる。
+    いまのところ500らしい。
+
+`-v VARIABLE=value`
+:   環境変数を定義してジョブに引き継ぐ
+
+`-pe def_slot N`
+:   parallel environment:
+    並列処理で使用するスレッド数を指定
+
+### `qsub` スクリプト
+
+`#$` で始まる行は `qsub` へのオプションと見なされる。
+
+ジョブスクリプト内で参照可能な特殊環境変数をプリントしてみるジョブの例:
+
+```sh
+##!/bin/sh
+##$ -S /bin/sh
+##$ -l debug
+##$ -cwd
+##$ -t 1-2
+##$ -N test_sh
+echo HOME: $HOME
+echo USER: $USER
+echo JOB_ID: $JOB_ID
+echo JOB_NAME: $JOB_NAME
+echo HOSTNAME: $HOSTNAME
+echo SGE_TASK_ID: $SGE_TASK_ID
+echo SGE_TASK_FIRST:$SGE_TASK_FIRST
+echo SGE_TASK_LAST: $SGE_TASK_LAST
+echo SGE_TASK_STEPSIZE: `$SGE_TASK_STEPSIZE
+pwd
+ls
+```
+
+スクリプトはPythonでもいい。
+インタープリタを `-S /usr/bin/env python` で指定できないのは残念。
+
+```py
+##!/usr/bin/env python
+##$` -S $HOME/.virtualenv/py3/bin/python
+##$ -l debug
+##$ -cwd
+##$ -t 1-2
+##$ -N test_py
+import os
+print(&#34;SGE_TASK_ID: &#34; &#43; os.environ[&#34;SGE_TASK_ID&#34;])
+```
+
+### 補助コマンド
+
+`qstat`
+:   現在実行中のジョブ一覧
+
+`qstat -g c`
+:   クラスタで定義されているキューの一覧と、それぞれの負荷を表示
+
+`qstat -f`
+:   全ノードの状況をfullに表示
+
+`qstat -j JOBID`
+:   ジョブの詳細表示
+
+`qacct -j JOBID`
+:   ジョブ実行後にリソース消費を確認
+
+`qdel JOBID`
+:   ジョブ削除
+
+`qquota`
+:   ユーザーに与えられたリソースを表示
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>tidyr: シンプルなデータ変形ツール - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+tidyr — シンプルなデータ変形ツール
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<ul>
+<li><a href="https://github.com/hadley/tidyr">https://github.com/hadley/tidyr</a></li>
+<li><a href="http://rpubs.com/m_dev/tidyr-intro-and-demos">http://rpubs.com/m_dev/tidyr-intro-and-demos</a></li>
+<li><a href="http://blog.rstudio.org/2014/07/22/introducing-tidyr/">http://blog.rstudio.org/2014/07/22/introducing-tidyr/</a></li>
+<li><code>vignette(&quot;tidy-data&quot;)</code></li>
+<li><code>demo(package=&quot;tidyr&quot;)</code></li>
+</ul>
+
+<p><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a> と共に <code>data.frame</code> を整形するためのツール。
+<a href="/students/iwasaki/rstats/reshape2.html">reshape2</a> を置き換えるべく再設計された改良版。</p>
+
+<p>Rの中で <code>install.packages('tidyr')</code> としてインストールし、
+使う前に <code>library(tidyr)</code> で読み込む。</p>
+
+<p>下記のコード例で使うデータ</p>
+
+<pre><code class="language-r">iris %&gt;% head(3) %&gt;% add_rownames('id')
+
+Source: local data frame [3 x 6]
+
+     id Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+  (chr)        (dbl)       (dbl)        (dbl)       (dbl)  (fctr)
+1     1          5.1         3.5          1.4         0.2  setosa
+2     2          4.9         3.0          1.4         0.2  setosa
+3     3          4.7         3.2          1.3         0.2  setosa
+</code></pre>
+
+<h2 id="tidyr-gather"><code>tidyr::gather()</code></h2>
+
+<p>複数列にまたがっていた値を、カテゴリ変数と値の2列に変換することで、
+wide-formatな <code>data.frame</code> をlong-formatに変形する。
+<code>reshape2::melt()</code> に相当。</p>
+
+<p><code>tidyr::gather(data, key, value, ..., na.rm=FALSE, convert=FALSE)</code></p>
+
+<dl>
+<dt><code>data</code></dt>
+<dd><code>%&gt;%</code> 越しに渡す</dd>
+<dt><code>key</code>, <code>value</code></dt>
+<dd>出力結果で使う列名</dd>
+<dt><code>...</code></dt>
+<dd>動かす列名を指定。コロンによる範囲指定、マイナスによる除外指定も可。</dd>
+</dl>
+
+<p>e.g., <code>Species</code> 以外の列について、
+元の列名を <code>kagi</code> 、値を <code>atai</code> に格納した縦長の表に変形</p>
+
+<pre><code class="language-r">iris %&gt;% head(3) %&gt;% add_rownames('id') %&gt;%
+    gather(kagi, atai, -id, -Species)
+
+Source: local data frame [12 x 4]
+
+      id Species         kagi  atai
+   (chr)  (fctr)       (fctr) (dbl)
+1      1  setosa Sepal.Length   5.1
+2      2  setosa Sepal.Length   4.9
+3      3  setosa Sepal.Length   4.7
+4      1  setosa  Sepal.Width   3.5
+5      2  setosa  Sepal.Width   3.0
+6      3  setosa  Sepal.Width   3.2
+7      1  setosa Petal.Length   1.4
+8      2  setosa Petal.Length   1.4
+9      3  setosa Petal.Length   1.3
+10     1  setosa  Petal.Width   0.2
+11     2  setosa  Petal.Width   0.2
+12     3  setosa  Petal.Width   0.2
+</code></pre>
+
+<h2 id="tidyr-spread"><code>tidyr::spread()</code></h2>
+
+<p><code>tidyr::gather()</code> の逆で、
+long-formatの <code>data.frame</code> をwide-formatに変形する。
+<code>reshape2::dcast()</code> に相当。
+IDとなるような列がないと <code>Error: Duplicate identifiers</code> と怒られる。</p>
+
+<p><code>tidyr::spread(data, key, value, fill=NA, convert=FALSE, drop=TRUE)</code></p>
+
+<dl>
+<dt><code>data</code></dt>
+<dd><code>%&gt;%</code> 越しに渡す</dd>
+<dt><code>key</code></dt>
+<dd>ここに指定したカテゴリ変数のぶんだけ新しい列が作られる</dd>
+<dt><code>value</code></dt>
+<dd>値が入ってる列</dd>
+<dt><code>fill=NA</code></dt>
+<dd>該当する組み合わせの値が存在しない場合に何で埋めるか</dd>
+<dt><code>convert=FALSE</code></dt>
+<dd>-</dd>
+<dt><code>drop=TRUE</code></dt>
+<dd>該当する組み合わせの行が存在しない場合に欠落させるか</dd>
+</dl>
+
+<p>e.g., <code>kagi</code> 内の文字列を新たな列名として横長の表に変形して <code>atai</code> を移す</p>
+
+<pre><code class="language-r">iris %&gt;% head(3) %&gt;% add_rownames('id') %&gt;%
+    gather(kagi, atai, -id, -Species) %&gt;%
+    spread(kagi, atai)
+
+Source: local data frame [3 x 6]
+
+     id Species Sepal.Length Sepal.Width Petal.Length Petal.Width
+  (chr)  (fctr)        (dbl)       (dbl)        (dbl)       (dbl)
+1     1  setosa          5.1         3.5          1.4         0.2
+2     2  setosa          4.9         3.0          1.4         0.2
+3     3  setosa          4.7         3.2          1.3         0.2
+</code></pre>
+
+<h2 id="tidyr-separate"><code>tidyr::separate()</code></h2>
+
+<p><code>reshape2::colsplit()</code> に相当。
+<code>character</code> 列を任意のセパレータで複数の列に分割。</p>
+
+<p><code>tidyr::separate(data, col, into, sep='[^[:alnum:]]', remove=TRUE, convert=FALSE, extra='warn', fill='warn')</code></p>
+
+<dl>
+<dt><code>data</code></dt>
+<dd><code>%&gt;%</code> 越しに渡す</dd>
+<dt><code>col</code></dt>
+<dd>切り分けたい列の名前</dd>
+<dt><code>into</code></dt>
+<dd>切り分けたあとの新しい列名を文字列ベクタで</dd>
+<dt><code>sep='[^[:alnum:]]'</code></dt>
+<dd>セパレータを正規表現で。デフォルトはあらゆる非アルファベット。</dd>
+<dt><code>remove=TRUE</code></dt>
+<dd>切り分ける前の列を取り除くかどうか</dd>
+<dt><code>convert=FALSE</code></dt>
+<dd>-</dd>
+<dt><code>extra='warn'</code></dt>
+<dd>列数が揃わないときにどうするか: <code>warn</code>, <code>drop</code>, <code>merge</code></dd>
+<dt><code>fill='warn'</code></dt>
+<dd>足りない場合にどっちから埋めるか: <code>warn</code>, <code>right</code>, <code>left</code></dd>
+</dl>
+
+<p><code>kagi</code> 列を <code>part</code>, <code>axis</code> という2列に分割</p>
+
+<pre><code class="language-r">iris %&gt;% head(3) %&gt;% add_rownames('id') %&gt;%
+   gather(kagi, atai, -id, -Species) %&gt;%
+   separate(kagi, c('part', 'axis'))
+
+Source: local data frame [12 x 5]
+
+      id Species  part   axis  atai
+   (chr)  (fctr) (chr)  (chr) (dbl)
+1      1  setosa Sepal Length   5.1
+2      2  setosa Sepal Length   4.9
+3      3  setosa Sepal Length   4.7
+4      1  setosa Sepal  Width   3.5
+5      2  setosa Sepal  Width   3.0
+6      3  setosa Sepal  Width   3.2
+7      1  setosa Petal Length   1.4
+8      2  setosa Petal Length   1.4
+9      3  setosa Petal Length   1.3
+10     1  setosa Petal  Width   0.2
+11     2  setosa Petal  Width   0.2
+12     3  setosa Petal  Width   0.2
+</code></pre>
+
+<p>逆をやるのが <code>tidyr::unite(data, col, ..., sep='_', remove=TRUE)</code> 。</p>
+
+<p><code>tidyr::extract(data, col, into, regex, ...)</code>
+を使えば正規表現でもっと細かく指定できる。</p>
+
+<p>名前の似てる <code>tidyr::extract_numeric(x)</code> は
+文字列から数字部分を抜き出して <code>numeric</code> で返す関数。</p>
+
+<h2 id="tidyr-nest-tidyr-unnest"><code>tidyr::nest()</code>, <code>tidyr::unnest()</code></h2>
+
+<p>ネストされた <code>data.frame</code> とは、
+<code>vector</code> ではなく <code>list</code> の列を持っていて、
+ひとつのセルに複数の値を保持した状態のものを指す。</p>
+
+<p><code>nest()</code> で <code>data.frame</code> を圧縮し、
+<code>unnest()</code> で <code>list</code> を展開してフラットにする</p>
+
+<pre><code class="language-r">iris %&gt;% nest(-Species)
+
+Source: local data frame [3 x 5]
+Groups: &lt;by row&gt;
+
+     Species Sepal.Length Sepal.Width Petal.Length Petal.Width
+      (fctr)        (chr)       (chr)        (chr)       (chr)
+1     setosa    &lt;dbl[50]&gt;   &lt;dbl[50]&gt;    &lt;dbl[50]&gt;   &lt;dbl[50]&gt;
+2 versicolor    &lt;dbl[50]&gt;   &lt;dbl[50]&gt;    &lt;dbl[50]&gt;   &lt;dbl[50]&gt;
+3  virginica    &lt;dbl[50]&gt;   &lt;dbl[50]&gt;    &lt;dbl[50]&gt;   &lt;dbl[50]&gt;
+</code></pre>
+
+<h2 id="tidyr-expand"><code>tidyr::expand()</code></h2>
+
+<p><code>base::expand.grid()</code> のラッパー。
+指定した列の全ての組み合わせが登場するように、欠損値 <code>NA</code> の入った行を挿入する。</p>
+
+<h2 id="tidyr-replace-na"><code>tidyr::replace_na()</code></h2>
+
+<p>欠損値 <code>NA</code> を好きな値で置き換える。
+これまでは <code>mutate(x= ifelse(is.na(x), 0, x))</code> のようにしてたところを</p>
+
+<pre><code class="language-r">df %&gt;% replace_na(list(x=0, y='unknown'))
+</code></pre>
+
+<h2 id="tidyr-complete"><code>tidyr::complete()</code></h2>
+
+<p>指定した列の全ての組み合わせが登場するように、
+他の列を <code>NA</code> などにして補完する</p>
+
+<pre><code class="language-r">df %&gt;% complete(col1, col2, fill=list(col1=0, col2='-'))
+</code></pre>
+
+<h2 id="tidyr-fill"><code>tidyr::fill()</code></h2>
+
+<p><code>NA</code> を、その列の直前の <code>NA</code> でない値で埋める。
+えくせるでセルの結合とかやってしまって、
+最初のセルにしか値が無いような場合に使うのかな？</p>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats" checked>
+<label for="R stats" class="active">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li class="active"><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "tidyr"
++++
+
+-   &lt;https://github.com/hadley/tidyr&gt;
+-   &lt;http://rpubs.com/m_dev/tidyr-intro-and-demos&gt;
+-   &lt;http://blog.rstudio.org/2014/07/22/introducing-tidyr/&gt;
+-   `vignette(&#34;tidy-data&#34;)`
+-   `demo(package=&#34;tidyr&#34;)`
+
+[dplyr]({#{#HUGOSHORTCODE-1#}#}) と共に `data.frame` を整形するためのツール。
+[reshape2]({#{#HUGOSHORTCODE-2#}#}) を置き換えるべく再設計された改良版。
+
+Rの中で `install.packages(&#39;tidyr&#39;)` としてインストールし、
+使う前に `library(tidyr)` で読み込む。
+
+下記のコード例で使うデータ
+
+```r
+iris %&gt;% head(3) %&gt;% add_rownames(&#39;id&#39;)
+
+Source: local data frame [3 x 6]
+
+     id Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+  (chr)        (dbl)       (dbl)        (dbl)       (dbl)  (fctr)
+1     1          5.1         3.5          1.4         0.2  setosa
+2     2          4.9         3.0          1.4         0.2  setosa
+3     3          4.7         3.2          1.3         0.2  setosa
+```
+
+## `tidyr::gather()`
+
+複数列にまたがっていた値を、カテゴリ変数と値の2列に変換することで、
+wide-formatな `data.frame` をlong-formatに変形する。
+`reshape2::melt()` に相当。
+
+`tidyr::gather(data, key, value, ..., na.rm=FALSE, convert=FALSE)`
+
+`data`
+:   `%&gt;%` 越しに渡す
+
+`key`, `value`
+:   出力結果で使う列名
+
+`...`
+:   動かす列名を指定。コロンによる範囲指定、マイナスによる除外指定も可。
+
+e.g., `Species` 以外の列について、
+元の列名を `kagi` 、値を `atai` に格納した縦長の表に変形
+
+```r
+iris %&gt;% head(3) %&gt;% add_rownames(&#39;id&#39;) %&gt;%
+    gather(kagi, atai, -id, -Species)
+
+Source: local data frame [12 x 4]
+
+      id Species         kagi  atai
+   (chr)  (fctr)       (fctr) (dbl)
+1      1  setosa Sepal.Length   5.1
+2      2  setosa Sepal.Length   4.9
+3      3  setosa Sepal.Length   4.7
+4      1  setosa  Sepal.Width   3.5
+5      2  setosa  Sepal.Width   3.0
+6      3  setosa  Sepal.Width   3.2
+7      1  setosa Petal.Length   1.4
+8      2  setosa Petal.Length   1.4
+9      3  setosa Petal.Length   1.3
+10     1  setosa  Petal.Width   0.2
+11     2  setosa  Petal.Width   0.2
+12     3  setosa  Petal.Width   0.2
+```
+
+## `tidyr::spread()`
+
+`tidyr::gather()` の逆で、
+long-formatの `data.frame` をwide-formatに変形する。
+`reshape2::dcast()` に相当。
+IDとなるような列がないと `Error: Duplicate identifiers` と怒られる。
+
+`tidyr::spread(data, key, value, fill=NA, convert=FALSE, drop=TRUE)`
+
+`data`
+:   `%&gt;%` 越しに渡す
+
+`key`
+:   ここに指定したカテゴリ変数のぶんだけ新しい列が作られる
+
+`value`
+:   値が入ってる列
+
+`fill=NA`
+:   該当する組み合わせの値が存在しない場合に何で埋めるか
+
+`convert=FALSE`
+:   -
+
+`drop=TRUE`
+:   該当する組み合わせの行が存在しない場合に欠落させるか
+
+e.g., `kagi` 内の文字列を新たな列名として横長の表に変形して `atai` を移す
+
+```r
+iris %&gt;% head(3) %&gt;% add_rownames(&#39;id&#39;) %&gt;%
+    gather(kagi, atai, -id, -Species) %&gt;%
+    spread(kagi, atai)
+
+Source: local data frame [3 x 6]
+
+     id Species Sepal.Length Sepal.Width Petal.Length Petal.Width
+  (chr)  (fctr)        (dbl)       (dbl)        (dbl)       (dbl)
+1     1  setosa          5.1         3.5          1.4         0.2
+2     2  setosa          4.9         3.0          1.4         0.2
+3     3  setosa          4.7         3.2          1.3         0.2
+```
+
+## `tidyr::separate()`
+
+`reshape2::colsplit()` に相当。
+`character` 列を任意のセパレータで複数の列に分割。
+
+`tidyr::separate(data, col, into, sep=&#39;[^[:alnum:]]&#39;, remove=TRUE, convert=FALSE, extra=&#39;warn&#39;, fill=&#39;warn&#39;)`
+
+`data`
+:   `%&gt;%` 越しに渡す
+
+`col`
+:   切り分けたい列の名前
+
+`into`
+:   切り分けたあとの新しい列名を文字列ベクタで
+
+`sep=&#39;[^[:alnum:]]&#39;`
+:   セパレータを正規表現で。デフォルトはあらゆる非アルファベット。
+
+`remove=TRUE`
+:   切り分ける前の列を取り除くかどうか
+
+`convert=FALSE`
+:   -
+
+`extra=&#39;warn&#39;`
+:   列数が揃わないときにどうするか: `warn`, `drop`, `merge`
+
+`fill=&#39;warn&#39;`
+:   足りない場合にどっちから埋めるか: `warn`, `right`, `left`
+
+`kagi` 列を `part`, `axis` という2列に分割
+
+```r
+iris %&gt;% head(3) %&gt;% add_rownames(&#39;id&#39;) %&gt;%
+   gather(kagi, atai, -id, -Species) %&gt;%
+   separate(kagi, c(&#39;part&#39;, &#39;axis&#39;))
+
+Source: local data frame [12 x 5]
+
+      id Species  part   axis  atai
+   (chr)  (fctr) (chr)  (chr) (dbl)
+1      1  setosa Sepal Length   5.1
+2      2  setosa Sepal Length   4.9
+3      3  setosa Sepal Length   4.7
+4      1  setosa Sepal  Width   3.5
+5      2  setosa Sepal  Width   3.0
+6      3  setosa Sepal  Width   3.2
+7      1  setosa Petal Length   1.4
+8      2  setosa Petal Length   1.4
+9      3  setosa Petal Length   1.3
+10     1  setosa Petal  Width   0.2
+11     2  setosa Petal  Width   0.2
+12     3  setosa Petal  Width   0.2
+```
+
+逆をやるのが `tidyr::unite(data, col, ..., sep=&#39;_&#39;, remove=TRUE)` 。
+
+`tidyr::extract(data, col, into, regex, ...)`
+を使えば正規表現でもっと細かく指定できる。
+
+名前の似てる `tidyr::extract_numeric(x)` は
+文字列から数字部分を抜き出して `numeric` で返す関数。
+
+## `tidyr::nest()`, `tidyr::unnest()`
+
+ネストされた `data.frame` とは、
+`vector` ではなく `list` の列を持っていて、
+ひとつのセルに複数の値を保持した状態のものを指す。
+
+`nest()` で `data.frame` を圧縮し、
+`unnest()` で `list` を展開してフラットにする
+
+```r
+iris %&gt;% nest(-Species)
+
+Source: local data frame [3 x 5]
+Groups: &lt;by row&gt;
+
+     Species Sepal.Length Sepal.Width Petal.Length Petal.Width
+      (fctr)        (chr)       (chr)        (chr)       (chr)
+1     setosa    &lt;dbl[50]&gt;   &lt;dbl[50]&gt;    &lt;dbl[50]&gt;   &lt;dbl[50]&gt;
+2 versicolor    &lt;dbl[50]&gt;   &lt;dbl[50]&gt;    &lt;dbl[50]&gt;   &lt;dbl[50]&gt;
+3  virginica    &lt;dbl[50]&gt;   &lt;dbl[50]&gt;    &lt;dbl[50]&gt;   &lt;dbl[50]&gt;
+```
+
+## `tidyr::expand()`
+
+`base::expand.grid()` のラッパー。
+指定した列の全ての組み合わせが登場するように、欠損値 `NA` の入った行を挿入する。
+
+## `tidyr::replace_na()`
+
+欠損値 `NA` を好きな値で置き換える。
+これまでは `mutate(x= ifelse(is.na(x), 0, x))` のようにしてたところを
+
+```r
+df %&gt;% replace_na(list(x=0, y=&#39;unknown&#39;))
+```
+
+## `tidyr::complete()`
+
+指定した列の全ての組み合わせが登場するように、
+他の列を `NA` などにして補完する
+
+```r
+df %&gt;% complete(col1, col2, fill=list(col1=0, col2=&#39;-&#39;))
+```
+
+## `tidyr::fill()`
+
+`NA` を、その列の直前の `NA` でない値で埋める。
+えくせるでセルの結合とかやってしまって、
+最初のセルにしか値が無いような場合に使うのかな？
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

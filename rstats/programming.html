@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>プログラミングTips - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+プログラミングTips
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<h2 id="確率分布">確率分布</h2>
+
+<p><a href="http://cran.r-project.org/web/views/Distributions.html">http://cran.r-project.org/web/views/Distributions.html</a></p>
+
+<p><a href="http://en.wikibooks.org/wiki/R_Programming/Probability_Distributions">http://en.wikibooks.org/wiki/R_Programming/Probability_Distributions</a></p>
+
+<h3 id="関数の種類">関数の種類</h3>
+
+<dl>
+<dt><code>d___(x, ...)</code></dt>
+<dd>確率密度関数。 $P[X = x]$</dd>
+<dt><code>p___(q, ..., lower.tail=TRUE, log.p=FALSE)</code></dt>
+<dd><p>累積分布関数。
+デフォルトでは左から $P[X \leq x]$ 。
+<code>lower.tail=FALSE</code> とすると右から $P[X &gt; x]$ 。</p>
+
+<div class="warning">
+<p>離散分布の場合は境界の値を含むか含まないかでバー1本分の差が出るので注意。
+ホントは <code>lower.tail=FALSE</code> でも境界を含むべきだと思うんだけど。</p>
+
+</div>
+</dd>
+<dt><code>q___(p, ..., lower.tail=TRUE, log.p=FALSE)</code></dt>
+<dd><p>累積分布関数の逆関数。
+左からの累積確率が <code>p</code> となる確率変数の値。
+<code>p___()</code> の逆関数。
+<code>lower.tail=FALSE</code> とすると右から。</p></dd>
+<dt><code>r___(n, ...)</code></dt>
+<dd><p>乱数を <code>n</code> 個生成する</p></dd>
+</dl>
+
+<pre><code class="language-r">&gt; dnorm(c(0, 1.96))
+[1] 0.39894228 0.05844094
+&gt; pnorm(c(0, 1.96))
+[1] 0.5000000 0.9750021
+&gt; qnorm(c(0.5, 0.975))
+[1] 0.000000 1.959964
+&gt; rnorm(4)
+[1] -1.77327259  0.95713346  0.27941121  0.08387267
+</code></pre>
+
+<h3 id="分布の種類">分布の種類</h3>
+
+<p>離散</p>
+
+<pre><code class="language-r">_binom(size, prob)
+_geom(prob)
+_hyper(m, n, k)
+_nbinom(size, prob, mu)
+_pois(lambda)
+_signrank(n)
+_wilcox(m, n)
+</code></pre>
+
+<p>連続</p>
+
+<pre><code class="language-r">_beta(shape1, shape2)
+_cauchy(location=0, scale=1)
+_chisq(df)
+_exp(rate=1)
+_f(df1, df2)
+_gamma(shape, rate=1, scale=1/rate)
+_lnorm(meanlog=0, sdlog=1)
+_logis(location=0, scale=1)
+_norm(mean=0, sd=1)
+_t(df)
+_unif(min=0, max=1)
+_weibull(shape, scale=1)
+</code></pre>
+
+<h2 id="関数を作る">関数を作る</h2>
+
+<p>基本</p>
+
+<pre><code class="language-r">my_add = function(x, y=1) {
+   x + y
+}
+
+my_add(13, 29)  # 42
+my_add(3)       # 4   (2つめの引数を省略すると1)
+</code></pre>
+
+<h3 id="引数の選択肢を指定-チェック-match-arg">引数の選択肢を指定・チェック (<code>match.arg()</code>)</h3>
+
+<p>省略すると先頭の要素が採用される</p>
+
+<pre><code class="language-r">great_scott = function(name=c('Marty', 'Emmett', 'Biff')) {
+    name = match.arg(name)
+    print(sprintf('I am %s.', name))
+}
+great_scott('Marty')     # OK
+great_scott('DeLorean')  # Error
+great_scott()            # OK, Marty
+</code></pre>
+
+<h3 id="引数の有無をチェック">引数の有無をチェック</h3>
+
+<p>困ったことに、引数不足で呼び出した瞬間にはエラーを出してくれず、
+関数の中でその引数の中身を参照しようとしたところで初めてエラーが出て止まる</p>
+
+<pre><code class="language-r">my_func = function(x) {
+    print('WTF! This line is printed anyway.')
+    print(x)
+}
+my_func()
+</code></pre>
+
+<p>関数の中で <code>missing()</code> を使えばエラーを出さずに有無をチェックできる。
+これを利用して引数省略可能な関数を作ることもできるが、
+それなら素直にデフォルト引数を使ったほうがシンプルだし、
+利用者は引数を見るだけで意図を読み取れる</p>
+
+<pre><code class="language-r">good_func = function(x, y=x) {
+    x + y
+}
+
+bad_func = function(x, y) {
+    if (missing(y)) {y = x}
+    x + y
+}
+
+good_func(3)  # 6
+bad_func(3)   # 6
+</code></pre>
+
+<h3 id="可変長引数">可変長引数 (<code>...</code>)</h3>
+
+<p>最後の引数をピリオド３つにし、<code>list(...)</code> か <code>c(...)</code> で受け取る</p>
+
+<pre><code class="language-r">func = function(x, y, ...){
+    for (i in c(...)) {
+        cat(i, &quot;\n&quot;)
+    }
+}
+</code></pre>
+
+<h2 id="1列でも-matrix-のまま">1列でも <code>matrix</code> のまま</h2>
+
+<p><code>matrix</code> から添字で1行だけ取ると、自動で <code>vector</code> にしてくれる。
+大抵はそれでいいんだけど、そうしてほしくないときは <code>drop=FALSE</code></p>
+
+<pre><code class="language-r">&gt; m = matrix(1:8, 2, 4)
+&gt; m
+     [,1] [,2] [,3] [,4]
+[1,]    1    3    5    7
+[2,]    2    4    6    8
+&gt; m[1, ]
+[1] 1 3 5 7
+&gt; m[1, , drop=FALSE]
+     [,1] [,2] [,3] [,4]
+[1,]    1    3    5    7
+</code></pre>
+
+<h2 id="文字列をrコマンドとして実行">文字列をRコマンドとして実行</h2>
+
+<p>ショートカットとしてこのような関数を用意しておいて</p>
+
+<pre><code class="language-r">eval_parse = function(...){
+    eval.parent(parse(text=paste0(...)))
+}
+</code></pre>
+
+<p>変数や関数を規則的に定義するとか</p>
+
+<pre><code class="language-r">&gt; v = seq_len(4)
+&gt; eval_parse('x', v, ' = ', v ^ 2)
+&gt; c(x1, x2, x3, x4)
+[1]  1  4  9 16
+</code></pre>
+
+<h2 id="空の-list">空の <code>list</code></h2>
+
+<p>ある大きさを持った空のリストを作る。意外と難しい。</p>
+
+<pre><code class="language-r">&gt; as.list(rep(list(NULL),3))
+[[1]]
+NULL
+
+[[2]]
+NULL
+
+[[3]]
+NULL
+</code></pre>
+
+<h2 id="attach-するべからず"><code>attach()</code> するべからず</h2>
+
+<p>データフレーム <code>some.data</code> のある要素 <code>some.item</code> にアクセスしたいとき、
+普通はダラーを使って <code>some.data$some.item</code> のようにする。
+<code>attach(some.data)</code> すると、データフレーム内のすべての要素が独立した変数みたいになって、
+<code>some.item</code> だけでアクセスできるようになる (<code>detach()</code> するまで)。
+でもそうすると、ワークスペースは変数でいっぱいになってしまうし、
+名前の衝突による不具合が起こる危険性がある。
+そこで、範囲限定で一時的に <code>attach()</code> 状態を作り出す <code>with()</code> を使う。
+安全で楽チン。</p>
+
+<pre><code class="language-r">half = iris$Sepal.Length / 2
+
+with(iris, {
+    ## このブレースの中では
+    ## attach(iris)されたのと同じように、
+    ## 列の名前でダイレクトにアクセスできる。
+
+    half = Sepal.Length / 2
+})
+</code></pre>
+
+<h2 id="最適化-高速化">最適化・高速化</h2>
+
+<h3 id="最新の-r-を使う">最新の R を使う</h3>
+
+<ul>
+<li>2.11.0 64bit化</li>
+<li>2.14.0 すべての標準パッケージがバイトコンパイルされている</li>
+<li>2.15.? <code>data.frame</code> の操作が劇的に速くなった</li>
+</ul>
+
+<h3 id="ベクトル化されてる関数-演算子を使う">ベクトル化されてる関数・演算子を使う</h3>
+
+<p>ナマの <code>for</code> 文や <code>if</code> 文を避けるのと同義</p>
+
+<pre><code class="language-r">&gt; vec = seq_len(1000000)
+&gt; ifelse(vec %% 3,
++        ifelse(vec %% 5, vec, 'buzz'),
++        ifelse(vec %% 5, 'fizz', 'fizzbuzz'))
+</code></pre>
+
+<h3 id="list-data-frame"><code>list</code>, <code>data.frame</code></h3>
+
+<ul>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a><code>や</code><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a> を介して操作すると楽チンかつ高速。</li>
+<li>基本的に <code>list</code> や <code>data.frame</code> は遅いので、
+<code>matrix</code> で済むもの(数値のみの表など)は <code>matrix</code> で。</li>
+</ul>
+
+<h3 id="並列化">並列化</h3>
+
+<p><a href="http://cran.r-project.org/web/views/HighPerformanceComputing.html">http://cran.r-project.org/web/views/HighPerformanceComputing.html</a></p>
+
+<p><code>snow</code> とか <code>multicore</code> が使われてきたが、
+バージョン2.14から <code>parallel</code> が標準ライブラリに入った。</p>
+
+<p><a href="http://www.rdocumentation.org/packages/parallel">http://www.rdocumentation.org/packages/parallel</a></p>
+
+<p>CPUコア数を取得する</p>
+
+<pre><code class="language-r">&gt; library(parallel)
+&gt; parallel::detectCores()
+[1] 4
+</code></pre>
+
+<p><a href="/students/iwasaki/rstats/plyr.html">plyr</a> を使っても <code>apply()</code> 的な処理を簡単に並列化できる。</p>
+
+<h3 id="ボトルネックを知る">ボトルネックを知る</h3>
+
+<pre><code class="language-r">&gt; Rprof()           # start profiling
+&gt; some_hard_work()
+&gt; Rprof(NULL)       # end profiling
+&gt; summaryRprof()
+</code></pre>
+
+<h3 id="実行時間の計測">実行時間の計測</h3>
+
+<pre><code class="language-r">&gt; system.time(測定したいコマンド)
+</code></pre>
+
+<h3 id="バイトコンパイル">バイトコンパイル</h3>
+
+<p>より機械語に近い、構文解析を済ませた形まで関数を変換させておく (2.13以降)</p>
+
+<pre><code class="language-r">library(compiler)
+cfun = compiler::cmpfun(my_func)
+</code></pre>
+
+<h2 id="mac">Mac</h2>
+
+<h3 id="mi-app-で選択中の文字列を-r-app-で実行するapplescript">mi.app で選択中の文字列を R.app で実行するAppleScript</h3>
+
+<ol>
+<li>下記のスクリプトを Script Editor.app にコピペ</li>
+<li>スクリプトとして保存(e.g. <code>mi2R.scpt</code>)</li>
+<li><code>$HOME/Library/Application Support/mi/mode/*/tool/</code>
+以下に置く
+(*印に入るのは、RとかNormalとか、miの何モードでRスクリプトを書いているかによる）</li>
+<li>mi.app の「モード設定」の「ツール」で「フォルダから再構成」</li>
+<li>コマンドショートカットで <code>command + R</code> とかに割り当てて使おう</li>
+</ol>
+
+<pre><code class="language-applescript">tell application &quot;mi&quot;
+        tell document 1
+                set CommandLines to selection
+        end tell
+end tell
+
+tell application &quot;R&quot;
+        activate
+        ignoring application responses
+                cmd CommandLines
+        end ignoring
+end tell
+</code></pre>
+
+<hr />
+
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/1593273843/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/511RD-C-K%2BL._SX160_.jpg" alt="The Art of R Programming: A Tour of Statistical Software Design" /></a>
+<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4873115795/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51sGGydPkYL._SX160_.jpg" alt="アート・オブ・Rプログラミング" /></a></p>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats" checked>
+<label for="R stats" class="active">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li class="active"><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "プログラミングTips"
++++
+
+## 確率分布
+
+&lt;http://cran.r-project.org/web/views/Distributions.html&gt;
+
+&lt;http://en.wikibooks.org/wiki/R_Programming/Probability_Distributions&gt;
+
+### 関数の種類
+
+`d___(x, ...)`
+:   確率密度関数。 $P[X = x]$
+
+`p___(q, ..., lower.tail=TRUE, log.p=FALSE)`
+:   累積分布関数。
+    デフォルトでは左から $P[X \leq x]$ 。
+    `lower.tail=FALSE` とすると右から $P[X &gt; x]$ 。
+
+    {#{#HUGOSHORTCODE-1#}#}
+
+`q___(p, ..., lower.tail=TRUE, log.p=FALSE)`
+:   累積分布関数の逆関数。
+    左からの累積確率が `p` となる確率変数の値。
+    `p___()` の逆関数。
+    `lower.tail=FALSE` とすると右から。
+
+`r___(n, ...)`
+:   乱数を `n` 個生成する
+
+```r
+&gt; dnorm(c(0, 1.96))
+[1] 0.39894228 0.05844094
+&gt; pnorm(c(0, 1.96))
+[1] 0.5000000 0.9750021
+&gt; qnorm(c(0.5, 0.975))
+[1] 0.000000 1.959964
+&gt; rnorm(4)
+[1] -1.77327259  0.95713346  0.27941121  0.08387267
+```
+
+### 分布の種類
+
+離散
+
+```r
+_binom(size, prob)
+_geom(prob)
+_hyper(m, n, k)
+_nbinom(size, prob, mu)
+_pois(lambda)
+_signrank(n)
+_wilcox(m, n)
+```
+
+連続
+
+```r
+_beta(shape1, shape2)
+_cauchy(location=0, scale=1)
+_chisq(df)
+_exp(rate=1)
+_f(df1, df2)
+_gamma(shape, rate=1, scale=1/rate)
+_lnorm(meanlog=0, sdlog=1)
+_logis(location=0, scale=1)
+_norm(mean=0, sd=1)
+_t(df)
+_unif(min=0, max=1)
+_weibull(shape, scale=1)
+```
+
+## 関数を作る
+
+基本
+
+```r
+my_add = function(x, y=1) {
+   x &#43; y
+}
+
+my_add(13, 29)  # 42
+my_add(3)       # 4   (2つめの引数を省略すると1)
+```
+
+### 引数の選択肢を指定・チェック (`match.arg()`)
+
+省略すると先頭の要素が採用される
+
+```r
+great_scott = function(name=c(&#39;Marty&#39;, &#39;Emmett&#39;, &#39;Biff&#39;)) {
+    name = match.arg(name)
+    print(sprintf(&#39;I am %s.&#39;, name))
+}
+great_scott(&#39;Marty&#39;)     # OK
+great_scott(&#39;DeLorean&#39;)  # Error
+great_scott()            # OK, Marty
+```
+
+### 引数の有無をチェック
+
+困ったことに、引数不足で呼び出した瞬間にはエラーを出してくれず、
+関数の中でその引数の中身を参照しようとしたところで初めてエラーが出て止まる
+
+```r
+my_func = function(x) {
+    print(&#39;WTF! This line is printed anyway.&#39;)
+    print(x)
+}
+my_func()
+```
+
+関数の中で `missing()` を使えばエラーを出さずに有無をチェックできる。
+これを利用して引数省略可能な関数を作ることもできるが、
+それなら素直にデフォルト引数を使ったほうがシンプルだし、
+利用者は引数を見るだけで意図を読み取れる
+
+```r
+good_func = function(x, y=x) {
+    x &#43; y
+}
+
+bad_func = function(x, y) {
+    if (missing(y)) {y = x}
+    x &#43; y
+}
+
+good_func(3)  # 6
+bad_func(3)   # 6
+```
+
+### 可変長引数 (`...`)
+
+最後の引数をピリオド３つにし、`list(...)` か `c(...)` で受け取る
+
+```r
+func = function(x, y, ...){
+    for (i in c(...)) {
+        cat(i, &#34;\n&#34;)
+    }
+}
+```
+
+## 1列でも `matrix` のまま
+
+`matrix` から添字で1行だけ取ると、自動で `vector` にしてくれる。
+大抵はそれでいいんだけど、そうしてほしくないときは `drop=FALSE`
+
+```r
+&gt; m = matrix(1:8, 2, 4)
+&gt; m
+     [,1] [,2] [,3] [,4]
+[1,]    1    3    5    7
+[2,]    2    4    6    8
+&gt; m[1, ]
+[1] 1 3 5 7
+&gt; m[1, , drop=FALSE]
+     [,1] [,2] [,3] [,4]
+[1,]    1    3    5    7
+```
+
+## 文字列をRコマンドとして実行
+
+ショートカットとしてこのような関数を用意しておいて
+
+```r
+eval_parse = function(...){
+    eval.parent(parse(text=paste0(...)))
+}
+```
+
+変数や関数を規則的に定義するとか
+
+```r
+&gt; v = seq_len(4)
+&gt; eval_parse(&#39;x&#39;, v, &#39; = &#39;, v ^ 2)
+&gt; c(x1, x2, x3, x4)
+[1]  1  4  9 16
+```
+
+## 空の `list`
+
+ある大きさを持った空のリストを作る。意外と難しい。
+
+```r
+&gt; as.list(rep(list(NULL),3))
+[[1]]
+NULL
+
+[[2]]
+NULL
+
+[[3]]
+NULL
+```
+
+## `attach()` するべからず
+
+データフレーム `some.data` のある要素 `some.item` にアクセスしたいとき、
+普通はダラーを使って `some.data$some.item` のようにする。
+`attach(some.data)` すると、データフレーム内のすべての要素が独立した変数みたいになって、
+`some.item` だけでアクセスできるようになる (`detach()` するまで)。
+でもそうすると、ワークスペースは変数でいっぱいになってしまうし、
+名前の衝突による不具合が起こる危険性がある。
+そこで、範囲限定で一時的に `attach()` 状態を作り出す `with()` を使う。
+安全で楽チン。
+
+```r
+half = iris$Sepal.Length / 2
+
+with(iris, {
+    ## このブレースの中では
+    ## attach(iris)されたのと同じように、
+    ## 列の名前でダイレクトにアクセスできる。
+
+    half = Sepal.Length / 2
+})
+```
+
+## 最適化・高速化
+
+### 最新の R を使う
+
+-   2.11.0 64bit化
+-   2.14.0 すべての標準パッケージがバイトコンパイルされている
+-   2.15.? `data.frame` の操作が劇的に速くなった
+
+### ベクトル化されてる関数・演算子を使う
+
+ナマの `for` 文や `if` 文を避けるのと同義
+
+```r
+&gt; vec = seq_len(1000000)
+&gt; ifelse(vec %% 3,
+&#43;        ifelse(vec %% 5, vec, &#39;buzz&#39;),
+&#43;        ifelse(vec %% 5, &#39;fizz&#39;, &#39;fizzbuzz&#39;))
+```
+
+### `list`, `data.frame`
+
+-   [plyr]({#{#HUGOSHORTCODE-2#}#})` や `[tidyr]({#{#HUGOSHORTCODE-3#}#}) を介して操作すると楽チンかつ高速。
+-   基本的に `list` や `data.frame` は遅いので、
+    `matrix` で済むもの(数値のみの表など)は `matrix` で。
+
+### 並列化
+
+&lt;http://cran.r-project.org/web/views/HighPerformanceComputing.html&gt;
+
+`snow` とか `multicore` が使われてきたが、
+バージョン2.14から `parallel` が標準ライブラリに入った。
+
+&lt;http://www.rdocumentation.org/packages/parallel&gt;
+
+CPUコア数を取得する
+
+```r
+&gt; library(parallel)
+&gt; parallel::detectCores()
+[1] 4
+```
+
+[plyr]({#{#HUGOSHORTCODE-4#}#}) を使っても `apply()` 的な処理を簡単に並列化できる。
+
+### ボトルネックを知る
+
+```r
+&gt; Rprof()           # start profiling
+&gt; some_hard_work()
+&gt; Rprof(NULL)       # end profiling
+&gt; summaryRprof()
+```
+
+### 実行時間の計測
+
+```r
+&gt; system.time(測定したいコマンド)
+```
+
+### バイトコンパイル
+
+より機械語に近い、構文解析を済ませた形まで関数を変換させておく (2.13以降)
+
+```r
+library(compiler)
+cfun = compiler::cmpfun(my_func)
+```
+
+## Mac
+
+### mi.app で選択中の文字列を R.app で実行するAppleScript
+
+1.  下記のスクリプトを Script Editor.app にコピペ
+2.  スクリプトとして保存(e.g. `mi2R.scpt`)
+3.  `$HOME/Library/Application Support/mi/mode/*/tool/`
+    以下に置く
+    (\*印に入るのは、RとかNormalとか、miの何モードでRスクリプトを書いているかによる）
+4.  mi.app の「モード設定」の「ツール」で「フォルダから再構成」
+5.  コマンドショートカットで `command &#43; R` とかに割り当てて使おう
+
+```applescript
+tell application &#34;mi&#34;
+        tell document 1
+                set CommandLines to selection
+        end tell
+end tell
+
+tell application &#34;R&#34;
+        activate
+        ignoring application responses
+                cmd CommandLines
+        end ignoring
+end tell
+```
+
+------------------------------------------------------------------------
+
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/1593273843/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/511RD-C-K%2BL._SX160_.jpg&#34; alt=&#34;The Art of R Programming: A Tour of Statistical Software Design&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4873115795/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/51sGGydPkYL._SX160_.jpg&#34; alt=&#34;アート・オブ・Rプログラミング&#34; /&gt;&lt;/a&gt;
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

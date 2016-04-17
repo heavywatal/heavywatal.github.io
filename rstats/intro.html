@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>自学自習のための基礎知識 - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+自学自習のための基礎知識
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<h2 id="インターネットで調べる">インターネットで調べる</h2>
+
+<ul>
+<li><a href="http://cse.naro.affrc.go.jp/takezawa/r-tips/r.html">R-Tips</a></li>
+<li><a href="http://www.okada.jp.org/RWiki/">RjpWiki</a></li>
+<li><a href="http://www.google.com/">http://www.google.com/</a></li>
+<li><a href="http://seekr.jp/">http://seekr.jp/</a> &mdash; Googleカスタム検索 for R</li>
+<li><a href="http://www.rseek.org/">http://www.rseek.org/</a> &mdash; Google Custom Search for R</li>
+<li><a href="http://www.r-bloggers.com/">http://www.r-bloggers.com/</a></li>
+<li><a href="http://cran.r-project.org/web/views/">http://cran.r-project.org/web/views/</a></li>
+<li><a href="http://www.rdocumentation.org/">http://www.rdocumentation.org/</a></li>
+</ul>
+
+<h2 id="スクリプトを保存">スクリプトを保存</h2>
+
+<p>R のコンソールにコマンドを打ち込むと、即座に結果が返ってくる。
+一度きりで済むならそのように対話的な方法が分かりやすいかもしれないが、
+別のデータにも使い回すとか、タイプミスでやり直すとか、
+同じような処理を何度か繰り返す場合には(大抵はそうなる)、
+一連の処理をまとめてスクリプト(テキストファイル)に書き出しておくとよい。
+そこからのコピペでいろいろ楽ができるし、
+あれどうやったんだっけと忘れる心配も減る(無くなりはしない)。
+ファイルの拡張子は <code>.txt</code> でも何でもいいが <code>.R</code> にしとくと分かりやすい。</p>
+
+<h2 id="パッケージ">パッケージ</h2>
+
+<p>便利な関数やサンプルデータなどをひとまとめにしたもの。
+R開発チームが公式に作ってるものから、
+ユーザーが自分用に作ってアップロードしたものまで、さまざまある。
+自分でやろうとしてることは既に誰かがやってくれてる可能性が高いので、
+車輪の再発明をする前に、まずは既存のパッケージを調べるべし。</p>
+
+<h3 id="standard-packages">Standard Packages</h3>
+
+<p>R の標準機能。
+何もしなくても使用可能な状態になっているので、
+パッケージであることはあまり意識しなくてもいい。</p>
+
+<ul>
+<li><code>base</code>: <code>c()</code>, <code>data.frame()</code>, <code>sum()</code> などホントに基本的なもの</li>
+<li><code>graphics</code>, <code>grDevices</code>, <code>grid</code>: <code>plot()</code> などグラフ描画関連</li>
+<li><code>stats</code>: <code>anova()</code>, <code>glm()</code>, <code>t.test()</code> など統計解析関連</li>
+<li><code>utils</code>: <code>help()</code>, <code>install.packages()</code>, <code>read.table()</code> など</li>
+</ul>
+
+<p>ほかに
+<code>compiler</code>, <code>datasets</code>, <code>methods</code>, <code>parallel</code>,
+<code>splines</code>, <code>stats4</code>, <code>tcltk</code>, <code>tools</code></p>
+
+<h3 id="recommended-packages">Recommended Packages</h3>
+
+<p>R と一緒にインストールされるが、
+使用する前に <code>library()</code> で呼び出しておく必要があるパッケージ。</p>
+
+<p>例えば <code>MASS</code> に入ってる <code>stepAIC()</code> を使うには</p>
+
+<pre><code class="language-r">&gt; stepAIC(model)
+Error: could not find function &quot;stepAIC&quot;
+&gt; library(MASS)
+&gt; stepAIC(model)  # OK
+</code></pre>
+
+<p>ほかに
+<code>boot</code>, <code>class</code>, <code>cluster</code>, <code>codetools</code>,
+<code>foreign</code>, <code>KernSmooth</code>, <code>lattice</code>, <code>Matrix</code>,
+<code>mgcv</code>, <code>nlmennet</code>, <code>rpart</code>, <code>spatial</code>, <code>survival</code></p>
+
+<h3 id="contributed-packages">Contributed Packages</h3>
+
+<p>数千ものパッケージが有志により開発され、CRANにまとめて公開されている。
+Rの中から下記のようなコマンドでインストールする</p>
+
+<pre><code class="language-r">&gt; install.packages('ggplot2')
+</code></pre>
+
+<p>例えば
+<a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a><code>,</code><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a><code>,</code><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a><code>,</code><a href="/students/iwasaki/rstats/stringr.html">stringr</a><code>,</code><a href="/students/iwasaki/rstats/readr.html">readr</a>
+などは標準になってもいいくらい便利。</p>
+
+<p>そのほか
+<a href="http://cran.r-project.org/web/views/">http://cran.r-project.org/web/views/</a>
+で用途別に紹介されている。</p>
+
+<h2 id="作業ディレクトリ">作業ディレクトリ</h2>
+
+<p>R ではどこかのディレクトリ (= フォルダ) に身をおいて作業する。
+<code>read.table()</code> でファイルを開くときなどに
+R がファイルを探すのはこの作業ディレクトリである。
+<code>No such file or directory</code> と怒られる場合は、
+作業ディレクトリとファイルの場所が合っていないかったり、
+ファイル名のタイプミスだったりすることが多い。</p>
+
+<dl>
+<dt><code>getwd()</code>, <code>setwd()</code></dt>
+<dd><p>現在地の working directory を get/set する関数</p>
+
+<pre><code class="language-r">&gt; getwd()
+[1] /Users/watal
+
+&gt; setwd(&quot;~/Desktop&quot;)
+
+&gt; getwd()
+[1] /Users/watal/Desktop
+</code></pre></dd>
+<dt><code>list.files(path = &quot;.&quot;, ...)</code> または <code>dir(path = &quot;.&quot;, ...)</code></dt>
+<dd><p>ディレクトリ内のファイルを列挙する関数。
+path を省略するとワーキングディレクトリが対象となる</p>
+
+<pre><code class="language-r">&gt; read.table(&quot;mydata.txt&quot;, header=TRUE)
+Warning in file(file, &quot;rt&quot;) :
+  cannot open file 'mydata.txt': No such file or directory
+Error in file(file, &quot;rt&quot;) : cannot open the connection
+&gt; list.files()
+[1] mydate.txt
+# ファイル名が微妙に違う!!
+</code></pre></dd>
+</dl>
+
+<h2 id="r-で調べる">R で調べる</h2>
+
+<dl>
+<dt><code>help(topic, package=NULL, ...)</code></dt>
+<dd><p>ヘルプを表示する。
+知りたいオブジェクトの先頭にクエスチョンマークを付けるという方法もある。
+以下の2つは等価</p>
+
+<pre><code class="language-r">&gt; help(sum)
+&gt; ?sum
+</code></pre></dd>
+<dt><code>help.start()</code></dt>
+<dd><p>組み込みヘルプをウェブブラウザで開く。
+インストール済みパッケージのヘルプも Packages のリンクから見られる。</p></dd>
+<dt><code>attributes(obj)</code>, <code>str(obj)</code></dt>
+<dd><p>オブジェクトの属性や構造を調べる。
+<code>$names</code> に列挙されてる属性はダラー <code>$</code> を挟んで取り出せる</p>
+
+<pre><code class="language-r">&gt; x = rnorm(100)
+&gt; y = rnorm(100)
+&gt; mymodel = lm(y ~ x)
+&gt; attributes(mymodel)
+$names
+ [1] &quot;coefficients&quot;  &quot;residuals&quot;     &quot;effects&quot;       &quot;rank&quot;
+ [5] &quot;fitted.values&quot; &quot;assign&quot;        &quot;qr&quot;            &quot;df.residual&quot;
+ [9] &quot;xlevels&quot;       &quot;call&quot;          &quot;terms&quot;         &quot;model&quot;
+
+$class
+[1] &quot;lm&quot;
+&gt;
+&gt; mymodel$coefficients
+(Intercept)           x
+ -0.1494812   0.1218096
+&gt;
+&gt; str(mymodel)
+List of 12
+ $ coefficients : Named num [1:2] -0.171 -0.198
+  ..- attr(*, &quot;names&quot;)= chr [1:2] &quot;(Intercept)&quot; &quot;x&quot;
+ $ residuals    : Named num [1:100] -0.5143 -1.3148 0.1954 1.6039 -0.0875 ...
+  ..- attr(*, &quot;names&quot;)= chr [1:100] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; ...
+ $ effects      : Named num [1:100] 1.2027 2.0571 0.1179 1.8384 -0.0946 ...
+  ..- attr(*, &quot;names&quot;)= chr [1:100] &quot;(Intercept)&quot; &quot;x&quot; &quot;&quot; &quot;&quot; ...
+</code></pre></dd>
+</dl>
+
+<h2 id="データ読み込み">データ読み込み</h2>
+
+<p>See <a href="/students/iwasaki/rstats/readr.html">readr</a></p>
+
+<h2 id="グラフ作図">グラフ作図</h2>
+
+<p>See <a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></p>
+
+<h2 id="参考図書">参考図書</h2>
+
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320018575/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41dIXM4egfL._SX160_.jpg" alt="統計学:Rを用いた入門書" /></a>
+<a href="http://www.amazon.co.jp/exec/obidos/ASIN/400006973X/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51wEV2xJA1L._SX160_.jpg" alt="データ解析のための統計モデリング入門――一般化線形モデル・階層ベイズモデル・MCMC (確率と情報の科学)" /></a>
+<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4274067831/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41PFcUnw4aL._SX160_.jpg" alt="The R Tips―データ解析環境Rの基本技・グラフィックス活用集" /></a></p>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats" checked>
+<label for="R stats" class="active">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li class="active"><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "自学自習のための基礎知識"
++++
+
+## インターネットで調べる
+
+-   [R-Tips](http://cse.naro.affrc.go.jp/takezawa/r-tips/r.html)
+-   [RjpWiki](http://www.okada.jp.org/RWiki/)
+-   &lt;http://www.google.com/&gt;
+-   &lt;http://seekr.jp/&gt; --- Googleカスタム検索 for R
+-   &lt;http://www.rseek.org/&gt; --- Google Custom Search for R
+-   &lt;http://www.r-bloggers.com/&gt;
+-   &lt;http://cran.r-project.org/web/views/&gt;
+-   &lt;http://www.rdocumentation.org/&gt;
+
+## スクリプトを保存
+
+R のコンソールにコマンドを打ち込むと、即座に結果が返ってくる。
+一度きりで済むならそのように対話的な方法が分かりやすいかもしれないが、
+別のデータにも使い回すとか、タイプミスでやり直すとか、
+同じような処理を何度か繰り返す場合には(大抵はそうなる)、
+一連の処理をまとめてスクリプト(テキストファイル)に書き出しておくとよい。
+そこからのコピペでいろいろ楽ができるし、
+あれどうやったんだっけと忘れる心配も減る(無くなりはしない)。
+ファイルの拡張子は `.txt` でも何でもいいが `.R` にしとくと分かりやすい。
+
+## パッケージ
+
+便利な関数やサンプルデータなどをひとまとめにしたもの。
+R開発チームが公式に作ってるものから、
+ユーザーが自分用に作ってアップロードしたものまで、さまざまある。
+自分でやろうとしてることは既に誰かがやってくれてる可能性が高いので、
+車輪の再発明をする前に、まずは既存のパッケージを調べるべし。
+
+### Standard Packages
+
+R の標準機能。
+何もしなくても使用可能な状態になっているので、
+パッケージであることはあまり意識しなくてもいい。
+
+-   `base`: `c()`, `data.frame()`, `sum()` などホントに基本的なもの
+-   `graphics`, `grDevices`, `grid`: `plot()` などグラフ描画関連
+-   `stats`: `anova()`, `glm()`, `t.test()` など統計解析関連
+-   `utils`: `help()`, `install.packages()`, `read.table()` など
+
+ほかに
+`compiler`, `datasets`, `methods`, `parallel`,
+`splines`, `stats4`, `tcltk`, `tools`
+
+### Recommended Packages
+
+R と一緒にインストールされるが、
+使用する前に `library()` で呼び出しておく必要があるパッケージ。
+
+例えば `MASS` に入ってる `stepAIC()` を使うには
+
+```r
+&gt; stepAIC(model)
+Error: could not find function &#34;stepAIC&#34;
+&gt; library(MASS)
+&gt; stepAIC(model)  # OK
+```
+
+ほかに
+`boot`, `class`, `cluster`, `codetools`,
+`foreign`, `KernSmooth`, `lattice`, `Matrix`,
+`mgcv`, `nlmennet`, `rpart`, `spatial`, `survival`
+
+### Contributed Packages
+
+数千ものパッケージが有志により開発され、CRANにまとめて公開されている。
+Rの中から下記のようなコマンドでインストールする
+
+```r
+&gt; install.packages(&#39;ggplot2&#39;)
+```
+
+例えば
+[ggplot2]({#{#HUGOSHORTCODE-1#}#})`, `[tidyr]({#{#HUGOSHORTCODE-2#}#})`, `[dplyr]({#{#HUGOSHORTCODE-3#}#})`, `[stringr]({#{#HUGOSHORTCODE-4#}#})`, `[readr]({#{#HUGOSHORTCODE-5#}#})
+などは標準になってもいいくらい便利。
+
+そのほか
+&lt;http://cran.r-project.org/web/views/&gt;
+で用途別に紹介されている。
+
+## 作業ディレクトリ
+
+R ではどこかのディレクトリ (= フォルダ) に身をおいて作業する。
+`read.table()` でファイルを開くときなどに
+R がファイルを探すのはこの作業ディレクトリである。
+`No such file or directory` と怒られる場合は、
+作業ディレクトリとファイルの場所が合っていないかったり、
+ファイル名のタイプミスだったりすることが多い。
+
+`getwd()`, `setwd()`
+:   現在地の working directory を get/set する関数
+
+    ```r
+    &gt; getwd()
+    [1] /Users/watal
+
+    &gt; setwd(&#34;~/Desktop&#34;)
+
+    &gt; getwd()
+    [1] /Users/watal/Desktop
+    ```
+
+`list.files(path = &#34;.&#34;, ...)` または `dir(path = &#34;.&#34;, ...)`
+:   ディレクトリ内のファイルを列挙する関数。
+    path を省略するとワーキングディレクトリが対象となる
+
+    ```r
+    &gt; read.table(&#34;mydata.txt&#34;, header=TRUE)
+    Warning in file(file, &#34;rt&#34;) :
+      cannot open file &#39;mydata.txt&#39;: No such file or directory
+    Error in file(file, &#34;rt&#34;) : cannot open the connection
+    &gt; list.files()
+    [1] mydate.txt
+    # ファイル名が微妙に違う!!
+    ```
+
+## R で調べる
+
+`help(topic, package=NULL, ...)`
+:   ヘルプを表示する。
+    知りたいオブジェクトの先頭にクエスチョンマークを付けるという方法もある。
+    以下の2つは等価
+
+    ```r
+    &gt; help(sum)
+    &gt; ?sum
+    ```
+
+`help.start()`
+:   組み込みヘルプをウェブブラウザで開く。
+    インストール済みパッケージのヘルプも Packages のリンクから見られる。
+
+`attributes(obj)`, `str(obj)`
+:   オブジェクトの属性や構造を調べる。
+    `$names` に列挙されてる属性はダラー `$` を挟んで取り出せる
+
+    ```r
+    &gt; x = rnorm(100)
+    &gt; y = rnorm(100)
+    &gt; mymodel = lm(y ~ x)
+    &gt; attributes(mymodel)
+    $names
+     [1] &#34;coefficients&#34;  &#34;residuals&#34;     &#34;effects&#34;       &#34;rank&#34;
+     [5] &#34;fitted.values&#34; &#34;assign&#34;        &#34;qr&#34;            &#34;df.residual&#34;
+     [9] &#34;xlevels&#34;       &#34;call&#34;          &#34;terms&#34;         &#34;model&#34;
+
+    $class
+    [1] &#34;lm&#34;
+    &gt;
+    &gt; mymodel$coefficients
+    (Intercept)           x
+     -0.1494812   0.1218096
+    &gt;
+    &gt; str(mymodel)
+    List of 12
+     $ coefficients : Named num [1:2] -0.171 -0.198
+      ..- attr(*, &#34;names&#34;)= chr [1:2] &#34;(Intercept)&#34; &#34;x&#34;
+     $ residuals    : Named num [1:100] -0.5143 -1.3148 0.1954 1.6039 -0.0875 ...
+      ..- attr(*, &#34;names&#34;)= chr [1:100] &#34;1&#34; &#34;2&#34; &#34;3&#34; &#34;4&#34; ...
+     $ effects      : Named num [1:100] 1.2027 2.0571 0.1179 1.8384 -0.0946 ...
+      ..- attr(*, &#34;names&#34;)= chr [1:100] &#34;(Intercept)&#34; &#34;x&#34; &#34;&#34; &#34;&#34; ...
+    ```
+
+## データ読み込み
+
+See [readr]({#{#HUGOSHORTCODE-6#}#})
+
+## グラフ作図
+
+See [ggplot2]({#{#HUGOSHORTCODE-7#}#})
+
+## 参考図書
+
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4320018575/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/41dIXM4egfL._SX160_.jpg&#34; alt=&#34;統計学:Rを用いた入門書&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/400006973X/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/51wEV2xJA1L._SX160_.jpg&#34; alt=&#34;データ解析のための統計モデリング入門――一般化線形モデル・階層ベイズモデル・MCMC (確率と情報の科学)&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4274067831/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/41PFcUnw4aL._SX160_.jpg&#34; alt=&#34;The R Tips―データ解析環境Rの基本技・グラフィックス活用集&#34; /&gt;&lt;/a&gt;
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

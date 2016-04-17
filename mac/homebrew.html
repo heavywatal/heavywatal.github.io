@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>Homebrew - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+Homebrew
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<p>Unixツールをパッケージとして手軽にインストールできるMac用パッケージ管理ソフト。</p>
+
+<p><a href="http://brew.sh/">http://brew.sh/</a></p>
+
+<h2 id="installation">Installation</h2>
+
+<p><a href="https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/Installation.md">https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/Installation.md</a></p>
+
+<ol>
+<li>Command Line Tools をインストールする。 cf. <a href="/students/iwasaki/dev/devenv.html">/dev/devenv</a></li>
+
+<li><p>公式では <code>/usr/local/</code> へのインストールが推奨されているが、
+個人的にあまり好ましくないので <code>~/.homebrew/</code> にインストールする:</p>
+
+<pre><code>% cd
+% mkdir .homebrew
+% curl -L https://github.com/mxcl/homebrew/tarball/master | tar xz --strip 1 -C .homebrew
+</code></pre></li>
+
+<li><p><code>.zshrc</code> を書き換えてシェル環境を整える:</p>
+
+<pre><code># パスを通す
+export PATH=$HOME/.homebrew/bin:$PATH
+export MANPATH=$HOME/.homebrew/share/man:$MANPATH
+if [ -d $HOME/.homebrew/share/zsh-completions ]; then
+    fpath=($HOME/.homebrew/share/zsh-completions $fpath)
+fi
+
+# お好みでデフォルトコンパイラを変更
+export HOMEBREW_CC=clang
+</code></pre></li>
+</ol>
+
+<h2 id="usage">Usage</h2>
+
+<p><a href="https://github.com/mxcl/homebrew/wiki/The-brew-command">https://github.com/mxcl/homebrew/wiki/The-brew-command</a></p>
+
+<ul>
+<li><p>Homebrew本体とカタログをアップデートし、アップグレード可能なパッケージの表示:</p>
+
+<pre><code>% brew update &amp;&amp; brew outdated
+</code></pre></li>
+
+<li><p>パッケージ検索:</p>
+
+<pre><code>% brew search text
+</code></pre></li>
+
+<li><p>パッケージ情報の表示:</p>
+
+<pre><code>% brew info formula
+</code></pre></li>
+
+<li><p>パッケージのインストール・アンインストール:</p>
+
+<pre><code>% brew install formula
+% brew remove formula
+</code></pre></li>
+
+<li><p>インストール済みパッケージ、またはパッケージ内ファイルの一覧:</p>
+
+<pre><code>% brew list [formula]
+</code></pre></li>
+
+<li><p>パッケージを指定しなければ <code>outdated</code> なものを全てアップグレード:</p>
+
+<pre><code>% brew outgrade [formulae]
+</code></pre></li>
+</ul>
+
+<h2 id="brew-install">brew install</h2>
+
+<p>公式リポジトリから明示的にインストールしたものメモ:</p>
+
+<pre><code>aspell
+autoconf
+binutils
+boost
+coreutils
+doxygen
+emacs
+fftw --with-fortran
+findutils
+gcc
+gibo
+git --without-completions
+gnu-sed
+gnu-tar
+gnuplot
+graphviz --with-bindings
+gsl
+jags
+lesspipe
+mercurial
+nkf
+rmtrash
+tmux
+tree
+wakeonlan
+wget
+xz
+zsh --without-etcdir
+zsh-completions
+</code></pre>
+
+<div class="note">
+<p>コンパイル済みパッケージ(bottle)が提供されてる場合はダウンロードだけで済むが、
+オプションを付けるとソースからビルドする羽目になるので注意。
+gccやboostなどのデカいやつはとりあえずデフォルトで入れたほうが早い。</p>
+
+<p><code>--force-bottle</code> と <code>--build-from-source</code> で明示的に切り替えられる。</p>
+
+</div>
+
+
+<div class="note">
+<p><code>coreutils</code>, <code>gnu-sed</code>, <code>gnu-tar</code>
+などは既存のコマンドとごっちゃにならないよう頭に <code>g</code>
+を付けてインストールしてくれる。
+元の名前でアクセスする方法はいくつかあるが、
+<code>$(brew --prefix)/opt/{{coreutils,gnu-sed,gnu-tar}}/libexec/gnubin</code> に
+<code>PATH</code> を通すのがよい。
+<code>brew unlink coreutils gnu-sed gnu-tar</code> してもそれらのディレクトリは残る。</p>
+
+</div>
+
+
+<h2 id="brew-tap">brew tap</h2>
+
+<p><a href="https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/brew-tap.md">https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/brew-tap.md</a></p>
+
+<p><a href="https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/Interesting-Taps-&amp;-Branches.md">https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/Interesting-Taps-&amp;-Branches.md</a></p>
+
+<p>非公式フォーミュラを公開しているリポジトリを追加する:</p>
+
+<pre><code>% brew tap homebrew/science
+% brew install samtools
+</code></pre>
+
+<p><code>brew tap</code> せずに直接インストールも可能:</p>
+
+<pre><code>% brew install homebrew/science/samtools
+</code></pre>
+
+<ul>
+<li><p><code>brew tap homebrew/dupes</code> - <a href="https://github.com/Homebrew/homebrew-dupes">https://github.com/Homebrew/homebrew-dupes</a><br />
+システムに既にあるものと重複してでも新しいのを持っておきたいツール群。例えば</p>
+
+<pre><code>diffutils
+grep --with-default-names
+make
+nano
+rsync
+</code></pre></li>
+
+<li><p><code>brew tap homebrew/versions</code> - <a href="https://github.com/Homebrew/homebrew-versions">https://github.com/Homebrew/homebrew-versions</a><br />
+既に存在しているパッケージのバージョン違いを提供してくれている。例えば</p>
+
+<pre><code>gcc49 --with-fortran
+</code></pre></li>
+
+<li><p><code>brew tap homebrew/science</code> - <a href="https://github.com/Homebrew/homebrew-science">https://github.com/Homebrew/homebrew-science</a><br />
+バイオインフォマティクスなど科学計算のツール群。例えば</p>
+
+<pre><code>bcftools
+blast
+bowtie2
+bwa
+cd-hit
+clustal-w
+cufflinks
+emboss
+fastqc
+fwdpp
+igv
+igvtools
+libsequence
+mafft
+paml
+phylip
+repeatmasker
+samtools
+snpeff
+tophat
+varscan
+</code></pre></li>
+
+<li><p><code>brew tap homebrew/python</code> - <a href="https://github.com/Homebrew/homebrew-python">https://github.com/Homebrew/homebrew-python</a><br />
+ライブラリ依存性などにより <a href="/students/iwasaki/python/pip.html">pip</a> からインストールしにくいPythonライブラリ。例えば</p>
+
+<pre><code>matplotlib
+numpy
+pillow
+scipy
+</code></pre></li>
+</ul>
+
+<h2 id="cask">Cask</h2>
+
+<p><a href="http://caskroom.io/">http://caskroom.io/</a></p>
+
+<p>GUIアプリケーションもHomebrewで管理してしまおうという野心的な拡張機能。</p>
+
+<p>インストールは1行:</p>
+
+<pre><code>% brew install caskroom/cask/brew-cask
+</code></pre>
+
+<p>使うときは普通の <code>brew</code> コマンドに <code>cask</code> を挟むだけ:</p>
+
+<pre><code>% brew cask install libreoffice
+% brew cask list
+</code></pre>
+
+<p>アプリ側でアップデートを実行するとCask内でのバージョンと食い違っちゃうけど使用上は問題ないらしい。</p>
+
+<p>alfred, amazon-cloud-drive, atom, audacity,
+basictex, bibdesk, caffeine,
+dia, dropbox, evernote, firefox, gephi,
+google-chrome, google-drive, google-earth, google-japanese-ime,
+inkscape, iterm2, karabiner, kindle, libreoffice,
+macdown, macfusion, megasync, mendeley-desktop, mro,
+onyx, openoffice, osxfuse, pandoc, picasa, quicksilver,
+rstudio, seashore, skitch, skim, skype, spideroakone, sshfs,
+the-unarchiver, vlc</p>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats">
+<label for="R stats">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac" checked>
+<label for="Mac" class="active">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li class="active"><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "Homebrew"
++++
+
+Unixツールをパッケージとして手軽にインストールできるMac用パッケージ管理ソフト。
+
+&lt;http://brew.sh/&gt;
+
+## Installation
+
+&lt;https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/Installation.md&gt;
+
+1.  Command Line Tools をインストールする。 cf. [/dev/devenv]({#{#HUGOSHORTCODE-1#}#})
+2.  公式では `/usr/local/` へのインストールが推奨されているが、
+    個人的にあまり好ましくないので `~/.homebrew/` にインストールする:
+
+        % cd
+        % mkdir .homebrew
+        % curl -L https://github.com/mxcl/homebrew/tarball/master | tar xz --strip 1 -C .homebrew
+
+3.  `.zshrc` を書き換えてシェル環境を整える:
+
+        # パスを通す
+        export PATH=$HOME/.homebrew/bin:$PATH
+        export MANPATH=$HOME/.homebrew/share/man:$MANPATH
+        if [ -d $HOME/.homebrew/share/zsh-completions ]; then
+            fpath=($HOME/.homebrew/share/zsh-completions $fpath)
+        fi
+
+        # お好みでデフォルトコンパイラを変更
+        export HOMEBREW_CC=clang
+
+## Usage
+
+&lt;https://github.com/mxcl/homebrew/wiki/The-brew-command&gt;
+
+-   Homebrew本体とカタログをアップデートし、アップグレード可能なパッケージの表示:
+
+        % brew update &amp;&amp; brew outdated
+
+-   パッケージ検索:
+
+        % brew search text
+
+-   パッケージ情報の表示:
+
+        % brew info formula
+
+-   パッケージのインストール・アンインストール:
+
+        % brew install formula
+        % brew remove formula
+
+-   インストール済みパッケージ、またはパッケージ内ファイルの一覧:
+
+        % brew list [formula]
+
+-   パッケージを指定しなければ `outdated` なものを全てアップグレード:
+
+        % brew outgrade [formulae]
+
+## brew install
+
+公式リポジトリから明示的にインストールしたものメモ:
+
+    aspell
+    autoconf
+    binutils
+    boost
+    coreutils
+    doxygen
+    emacs
+    fftw --with-fortran
+    findutils
+    gcc
+    gibo
+    git --without-completions
+    gnu-sed
+    gnu-tar
+    gnuplot
+    graphviz --with-bindings
+    gsl
+    jags
+    lesspipe
+    mercurial
+    nkf
+    rmtrash
+    tmux
+    tree
+    wakeonlan
+    wget
+    xz
+    zsh --without-etcdir
+    zsh-completions
+
+{#{#HUGOSHORTCODE-2#}#}
+
+{#{#HUGOSHORTCODE-3#}#}
+
+## brew tap
+
+&lt;https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/brew-tap.md&gt;
+
+&lt;https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/Interesting-Taps-&amp;-Branches.md&gt;
+
+非公式フォーミュラを公開しているリポジトリを追加する:
+
+    % brew tap homebrew/science
+    % brew install samtools
+
+`brew tap` せずに直接インストールも可能:
+
+    % brew install homebrew/science/samtools
+
+-   `brew tap homebrew/dupes` - &lt;https://github.com/Homebrew/homebrew-dupes&gt;\
+    システムに既にあるものと重複してでも新しいのを持っておきたいツール群。例えば
+
+        diffutils
+        grep --with-default-names
+        make
+        nano
+        rsync
+
+-   `brew tap homebrew/versions` - &lt;https://github.com/Homebrew/homebrew-versions&gt;\
+    既に存在しているパッケージのバージョン違いを提供してくれている。例えば
+
+        gcc49 --with-fortran
+
+-   `brew tap homebrew/science` - &lt;https://github.com/Homebrew/homebrew-science&gt;\
+    バイオインフォマティクスなど科学計算のツール群。例えば
+
+        bcftools
+        blast
+        bowtie2
+        bwa
+        cd-hit
+        clustal-w
+        cufflinks
+        emboss
+        fastqc
+        fwdpp
+        igv
+        igvtools
+        libsequence
+        mafft
+        paml
+        phylip
+        repeatmasker
+        samtools
+        snpeff
+        tophat
+        varscan
+
+-   `brew tap homebrew/python` - &lt;https://github.com/Homebrew/homebrew-python&gt;\
+    ライブラリ依存性などにより [pip]({#{#HUGOSHORTCODE-4#}#}) からインストールしにくいPythonライブラリ。例えば
+
+        matplotlib
+        numpy
+        pillow
+        scipy
+
+## Cask
+
+&lt;http://caskroom.io/&gt;
+
+GUIアプリケーションもHomebrewで管理してしまおうという野心的な拡張機能。
+
+インストールは1行:
+
+    % brew install caskroom/cask/brew-cask
+
+使うときは普通の `brew` コマンドに `cask` を挟むだけ:
+
+    % brew cask install libreoffice
+    % brew cask list
+
+アプリ側でアップデートを実行するとCask内でのバージョンと食い違っちゃうけど使用上は問題ないらしい。
+
+alfred, amazon-cloud-drive, atom, audacity,
+basictex, bibdesk, caffeine,
+dia, dropbox, evernote, firefox, gephi,
+google-chrome, google-drive, google-earth, google-japanese-ime,
+inkscape, iterm2, karabiner, kindle, libreoffice,
+macdown, macfusion, megasync, mendeley-desktop, mro,
+onyx, openoffice, osxfuse, pandoc, picasa, quicksilver,
+rstudio, seashore, skitch, skim, skype, spideroakone, sshfs,
+the-unarchiver, vlc
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

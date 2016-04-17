@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>BLAST - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+BLAST
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<p>Basic Local Alignment Search Tool</p>
+
+<p><a href="http://blast.ncbi.nlm.nih.gov/">http://blast.ncbi.nlm.nih.gov/</a></p>
+
+<h2 id="blast-のインストール">blast+ のインストール</h2>
+
+<p><code>/usr/local/ncbi/blast/bin</code> にパスを通して使うことにする。</p>
+
+<h3 id="linux-mac-binary">Linux, Mac (binary)</h3>
+
+<ol>
+<li><p><a href="ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST">ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST</a>
+から最新版の <code>ncbi-blast-*-x64-linux.tar.gz</code>
+あるいは <code>ncbi-blast-*-universal-macosx.tar.gz</code>
+をダウンロードして展開:</p>
+
+<pre><code>% wget -O- ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.2.30+-x64-linux.tar.gz | tar xz
+</code></pre></li>
+
+<li><p>しかるべきところに移動してシムリンク:</p>
+
+<pre><code>% sudo mv ncbi-blast-2.2.30+ /usr/local/
+% sudo ln -s /usr/local/ncbi-blast-2.2.30+ /usr/local/ncbi/blast
+</code></pre></li>
+</ol>
+
+<h3 id="mac-homebrew">Mac (Homebrew)</h3>
+
+<p>そのままだといろいろ余計なプログラムに依存してしまうので外しつつ:</p>
+
+<pre><code>% brew tap homebrew/science
+% brew info blast
+% brew install blast --without-check --without-jpeg --without-libpng --without-pcre
+</code></pre>
+
+<h3 id="mac-source">Mac (source)</h3>
+
+<p><code>ncbi-blast-*.dmg</code> や <code>ncbi-blast-*-universal-macosx.tar.gz</code>
+は古いGCCでUniversalビルドされてるっぽいので、
+自分のマシンに最適化されるようにビルドしてみる。
+ホントに速いかどうかは試してない。</p>
+
+<p><a href="http://www.ncbi.nlm.nih.gov/books/NBK1763/#CmdLineAppsManual.Installation">http://www.ncbi.nlm.nih.gov/books/NBK1763/#CmdLineAppsManual.Installation</a></p>
+
+<ol>
+<li>Boost ライブラリをインストールする。このとき
+<code>regex</code>, <code>spirit</code>, <code>system</code>, <code>filesystem</code>, <code>test</code>, <code>thread</code>
+をビルド対象に含める。 cf. <a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST">ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST</a>
+から最新版の <code>ncbi-blast-*-src.tar.gz</code> をダウンロード</li>
+
+<li><p>展開して移動:</p>
+
+<pre><code>% tar xzf ncbi-blast-2.2.30+-src.tar.gz
+% cd ncbi-blast-2.2.30+-src/c++/
+</code></pre></li>
+
+<li><p><code>ncbi-blast-*-universal-macosx.tar.gz</code> に入ってる
+<code>ncbi_package_info</code> を参考に <code>configure</code> して <code>make</code>:</p>
+
+<pre><code>% ./configure --without-debug --with-strip --without-pcre --with-mt --with-flat-makefile --with-64 --with-ncbi-public --without-ccache --without-caution --without-makefile-auto-update --with-projects=scripts/projects/blast/project.lst --with-internal --prefix=/usr/local/ncbi/blast --with-boost=/usr/local/boost-gcc CC=gcc-4.9 CXX=g++-4.9
+</code></pre>
+
+<div class="note">
+<p><code>clang</code> (および Xcode のニセ <code>gcc</code>)
+では <code>configure</code> が通らないので本物の <code>gcc</code> を
+<a href="/students/iwasaki/mac/homebrew.html">Homebrew</a> などでインストールしておく。</p>
+
+</div>
+</li>
+
+<li><p>そのまま <code>make</code> してもダメらしいので
+<code>Makefile.mk</code> の <code>-std=gnu++11</code> を消す:</p>
+
+<pre><code>% sed -i.orig -e 's/-std=[a-z0-9+]\+//' ReleaseMT/build/Makefile.mk
+</code></pre></li>
+
+<li><p>ビルドしてインストール:</p>
+
+<pre><code>% make
+% sudo make install
+</code></pre></li>
+</ol>
+
+<h3 id="共通設定">共通設定</h3>
+
+<ol>
+<li><p><code>.zshenv</code> 等でプログラムとデータベースのパスを設定:</p>
+
+<pre><code>export PATH=/usr/local/ncbi/blast/bin:${PATH}
+export BLASTDB=${HOME}/db/blast
+</code></pre>
+
+<div class="note">
+<p><code>~/.ncbirc</code> でも <code>BLASTDB</code> を指定できるっぽいけど
+普通にシェルの環境変数を使うほうがわかりやすいし、
+<code>makeblastdb</code> の出力先として参照できるので便利。</p>
+
+</div>
+</li>
+
+<li><p>確認:</p>
+
+<pre><code>% rehash
+% blastn -version
+</code></pre></li>
+</ol>
+
+<h2 id="ローカルデータベース構築">ローカルデータベース構築</h2>
+
+<p><code>-subject</code> オプションを使えばFASTAファイル同士でいきなり検索できるが、
+何度もやるならデータベース化しておいたほうが効率いいはず。</p>
+
+<p><a href="http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.makeblastdb_application_opt">http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.makeblastdb_application_opt</a></p>
+
+<ol>
+<li>データベースの置き場所をひとつ決め (e.g. <code>~/db/blast</code>)、
+上記のように環境変数 <code>BLASTDB</code> を設定しておく。</li>
+<li>FASTA形式の配列データを用意する (e.g. <a href="ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/">ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/</a> から <code>yeast.aa.gz</code>)</li>
+
+<li><p><code>makeblastdb</code> コマンドでBLASTデータベース形式に変換:</p>
+
+<pre><code>% makeblastdb -in yeast.nt -out ${BLASTDB}/yeast.nt -dbtype nucl -parse_seqids -hash_index
+% makeblastdb -in yeast.aa -out ${BLASTDB}/yeast.aa -dbtype prot -parse_seqids -hash_index
+</code></pre>
+
+<p>圧縮ファイルは直接読めないので、展開して標準入力に流し込む。
+このとき <code>-title</code> と <code>-out</code> は必須の引数になる:</p>
+
+<pre><code>% gunzip -c mydata.fa.gz | makeblastdb -in - -title mydata -out ${BLASTDB}/mydata -dbtype nucl -hash_index
+</code></pre></li>
+</ol>
+
+<p><code>-in</code> (stdin)</p>
+
+<dl>
+<dt><code>-dbtype</code> (<code>prot</code>)</dt>
+<dd><code>prot</code> or <code>nucl</code></dd>
+<dt><code>-title</code> (入力ファイル名)</dt>
+<dd>どういうときに使われるか不明。
+標準入力を使う場合は必須オプション。</dd>
+<dt><code>-parse_seqids</code></dt>
+<dd>配列名が <code>gi|129295</code> みたいな特定の形式になってる場合にうまいことやる</dd>
+<dt><code>-hash_index</code></dt>
+<dd>よくわからんけど検索のスピードアップに繋がるっぽいオプション</dd>
+<dt><code>-out</code> (入力ファイル名)</dt>
+<dd>出力先のベースネーム。
+標準入力を使う場合は必須オプション。</dd>
+</dl>
+
+<p><code>-taxid</code></p>
+
+<h2 id="プログラム実行">プログラム実行</h2>
+
+<h3 id="共通オプション">共通オプション</h3>
+
+<p><a href="http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.options_common_to_all_blast">http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.options_common_to_all_blast</a></p>
+
+<p><code>-db</code></p>
+
+<p><code>-query</code> (stdin)</p>
+
+<p><code>-out</code> (stdout)</p>
+
+<p><code>-evalue</code> (10.0)</p>
+
+<dl>
+<dt><code>-subject</code></dt>
+<dd>データベース化してないFASTAファイルを検索対象として直接指定。
+ただし <code>-num_threads</code> を指定しても並列化できない。</dd>
+</dl>
+
+<p><code>-num_threads</code> (1)</p>
+
+<dl>
+<dt><code>-outfmt</code> (0)</dt>
+<dd><p>0 = pairwise,<br />
+1 = query-anchored showing identities,<br />
+2 = query-anchored no identities,<br />
+3 = flat query-anchored, show identities,<br />
+4 = flat query-anchored, no identities,<br />
+5 = XML Blast output,<br />
+<strong>6</strong> = tabular,<br />
+<strong>7</strong> = tabular with comment lines,<br />
+8 = Text ASN.1,<br />
+9 = Binary ASN.1<br />
+<strong>10</strong> = Comma-separated values<br />
+11 = BLAST archive format (ASN.1)</p>
+
+<p>TSV/CSVテーブル(6, 7, 10)の場合は出力内容を細かく指定できる。デフォルトは
+<code>-outfmt &quot;7 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore&quot;</code></p>
+
+<p><code>qseqid</code>: Query Seq-id<br />
+<code>qgi</code>: Query GI<br />
+<code>qacc</code>: Query accesion<br />
+<code>sseqid</code>: Subject Seq-id<br />
+<code>sallseqid</code>: All subject Seq-id(s), separated by a &lsquo;;&rsquo;<br />
+<code>sgi</code>: Subject GI<br />
+<code>sallgi</code>: All subject GIs<br />
+<code>sacc</code>: Subject accession<br />
+<code>sallacc</code>: All subject accessions<br />
+<code>qstart</code>: Start of alignment in query<br />
+<code>qend</code>: End of alignment in query<br />
+<code>sstart</code>: Start of alignment in subject<br />
+<code>send</code>: End of alignment in subject<br />
+<code>qseq</code>: Aligned part of query sequence<br />
+<code>sseq</code>: Aligned part of subject sequence<br />
+<code>evalue</code>: Expect value<br />
+<code>bitscore</code>: Bit score<br />
+<code>score</code>: Raw score<br />
+<code>length</code>: Alignment length<br />
+<code>pident</code>: Percentage of identical matches<br />
+<code>nident</code>: Number of identical matches<br />
+<code>mismatch</code>: Number of mismatches<br />
+<code>positive</code>: Number of positive-scoring matches<br />
+<code>gapopen</code>: Number of gap openings<br />
+<code>gaps</code>: Total number of gap<br />
+<code>ppos</code>: Percentage of positive-scoring matches<br />
+<code>frames</code>: Query and subject frames separated by a &lsquo;/&rsquo;<br />
+<code>qframe</code>: Query frame<br />
+<code>sframe</code>: Subject frame<br />
+<code>btop</code>: Blast traceback operations (BTOP)<br />
+<code>staxids</code>: unique Subject Taxonomy ID(s), separated by a &lsquo;;&rsquo;(in numerical order)<br />
+<code>sscinames</code>: unique Subject Scientific Name(s), separated by a &lsquo;;&rsquo;<br />
+<code>scomnames</code>: unique Subject Common Name(s), separated by a &lsquo;;&rsquo;<br />
+<code>sblastnames</code>: unique Subject Blast Name(s), separated by a &lsquo;;&rsquo; (in alphabetical order)<br />
+<code>sskingdoms</code>: unique Subject Super Kingdom(s), separated by a &lsquo;;&rsquo; (in alphabetical order)<br />
+<code>stitle</code>: Subject Title<br />
+<code>salltitles</code>: All Subject Title(s), separated by a &lsquo;&lt;&gt;&lsquo;<br />
+<code>sstrand</code>: Subject Strand<br />
+<code>qcovs</code>: Query Coverage Per Subject<br />
+<code>qcovhsp</code>: Query Coverage Per HSP</p></dd>
+</dl>
+
+<h3 id="blastn"><code>blastn</code></h3>
+
+<p>Nucleotide query vs Nucleotide subject</p>
+
+<p><a href="http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.blastn_application_options">http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.blastn_application_options</a></p>
+
+<dl>
+<dt><code>-word_size</code> (11, short: 7, mega: 28)</dt>
+<dd>最初にexact matchさせる配列の長さ。
+短いほどいろんな開始地点から探せるが、遅くなる。</dd>
+</dl>
+
+<p><code>-gapopen</code> (5, mega: 0)</p>
+
+<p><code>-gapextend</code> (2, mega: none)</p>
+
+<p><code>-reward</code> (2, short: 1, mega: 1)</p>
+
+<p><code>-penalty</code> (-3, mega: -2)</p>
+
+<p><code>-perc_identity</code> (0)</p>
+
+<p><code>-ungapped</code></p>
+
+<hr />
+
+<dl>
+<dt><code>blastp</code></dt>
+<dd>Protein query vs Protein subject
+<a href="http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.blastp_application_options">http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.blastp_application_options</a></dd>
+<dt><code>blastx</code></dt>
+<dd>Nucleotide query (translated) vs Protein subject
+<a href="http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.blastx_application_options">http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.blastx_application_options</a></dd>
+<dt><code>tblastn</code></dt>
+<dd>Protein query vs Nucleotide subject (translated)
+<a href="http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.tblastn_application_options">http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.tblastn_application_options</a></dd>
+<dt><code>tblastx</code></dt>
+<dd>Nucleotide query (translated) vs Nucleotide subject (translated)
+<a href="http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.tblastx_application_options">http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.tblastx_application_options</a></dd>
+</dl>
+
+<h2 id="{#HUGOSHORTCODE-4#">[BioPython](</h2>
+
+<p>#}) から実行</p>
+
+<p><a href="http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc84">http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc84</a></p>
+
+<p><a href="http://biopython.org/DIST/docs/api/Bio.Blast.Applications-module.html">http://biopython.org/DIST/docs/api/Bio.Blast.Applications-module.html</a></p>
+
+<pre><code class="language-py">from Bio.Blast.Applications import NcbiblastnCommandline
+</code></pre>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats">
+<label for="R stats">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology" checked>
+<label for="Biology" class="active">Biology</label>
+<ul>
+<li class="active"><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "BLAST"
++++
+
+Basic Local Alignment Search Tool
+
+&lt;http://blast.ncbi.nlm.nih.gov/&gt;
+
+## blast&#43; のインストール
+
+`/usr/local/ncbi/blast/bin` にパスを通して使うことにする。
+
+### Linux, Mac (binary)
+
+1.  &lt;ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast&#43;/LATEST&gt;
+    から最新版の `ncbi-blast-*-x64-linux.tar.gz`
+    あるいは `ncbi-blast-*-universal-macosx.tar.gz`
+    をダウンロードして展開:
+
+        % wget -O- ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast&#43;/LATEST/ncbi-blast-2.2.30&#43;-x64-linux.tar.gz | tar xz
+
+2.  しかるべきところに移動してシムリンク:
+
+        % sudo mv ncbi-blast-2.2.30&#43; /usr/local/
+        % sudo ln -s /usr/local/ncbi-blast-2.2.30&#43; /usr/local/ncbi/blast
+
+### Mac (Homebrew)
+
+そのままだといろいろ余計なプログラムに依存してしまうので外しつつ:
+
+    % brew tap homebrew/science
+    % brew info blast
+    % brew install blast --without-check --without-jpeg --without-libpng --without-pcre
+
+### Mac (source)
+
+`ncbi-blast-*.dmg` や `ncbi-blast-*-universal-macosx.tar.gz`
+は古いGCCでUniversalビルドされてるっぽいので、
+自分のマシンに最適化されるようにビルドしてみる。
+ホントに速いかどうかは試してない。
+
+&lt;http://www.ncbi.nlm.nih.gov/books/NBK1763/#CmdLineAppsManual.Installation&gt;
+
+1.  Boost ライブラリをインストールする。このとき
+    `regex`, `spirit`, `system`, `filesystem`, `test`, `thread`
+    をビルド対象に含める。 cf. [Boost]({#{#HUGOSHORTCODE-1#}#})
+2.  &lt;ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast&#43;/LATEST&gt;
+    から最新版の `ncbi-blast-*-src.tar.gz` をダウンロード
+3.  展開して移動:
+
+        % tar xzf ncbi-blast-2.2.30&#43;-src.tar.gz
+        % cd ncbi-blast-2.2.30&#43;-src/c&#43;&#43;/
+
+4.  `ncbi-blast-*-universal-macosx.tar.gz` に入ってる
+    `ncbi_package_info` を参考に `configure` して `make`:
+
+        % ./configure --without-debug --with-strip --without-pcre --with-mt --with-flat-makefile --with-64 --with-ncbi-public --without-ccache --without-caution --without-makefile-auto-update --with-projects=scripts/projects/blast/project.lst --with-internal --prefix=/usr/local/ncbi/blast --with-boost=/usr/local/boost-gcc CC=gcc-4.9 CXX=g&#43;&#43;-4.9
+
+    {#{#HUGOSHORTCODE-2#}#}
+
+5.  そのまま `make` してもダメらしいので
+    `Makefile.mk` の `-std=gnu&#43;&#43;11` を消す:
+
+        % sed -i.orig -e &#39;s/-std=[a-z0-9&#43;]\&#43;//&#39; ReleaseMT/build/Makefile.mk
+
+6.  ビルドしてインストール:
+
+        % make
+        % sudo make install
+
+### 共通設定
+
+1.  `.zshenv` 等でプログラムとデータベースのパスを設定:
+
+        export PATH=/usr/local/ncbi/blast/bin:${PATH}
+        export BLASTDB=${HOME}/db/blast
+
+    {#{#HUGOSHORTCODE-3#}#}
+
+2.  確認:
+
+        % rehash
+        % blastn -version
+
+## ローカルデータベース構築
+
+`-subject` オプションを使えばFASTAファイル同士でいきなり検索できるが、
+何度もやるならデータベース化しておいたほうが効率いいはず。
+
+&lt;http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.makeblastdb_application_opt&gt;
+
+1.  データベースの置き場所をひとつ決め (e.g. `~/db/blast`)、
+    上記のように環境変数 `BLASTDB` を設定しておく。
+2.  FASTA形式の配列データを用意する (e.g. &lt;ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/&gt; から `yeast.aa.gz`)
+3.  `makeblastdb` コマンドでBLASTデータベース形式に変換:
+
+        % makeblastdb -in yeast.nt -out ${BLASTDB}/yeast.nt -dbtype nucl -parse_seqids -hash_index
+        % makeblastdb -in yeast.aa -out ${BLASTDB}/yeast.aa -dbtype prot -parse_seqids -hash_index
+
+    圧縮ファイルは直接読めないので、展開して標準入力に流し込む。
+    このとき `-title` と `-out` は必須の引数になる:
+
+        % gunzip -c mydata.fa.gz | makeblastdb -in - -title mydata -out ${BLASTDB}/mydata -dbtype nucl -hash_index
+
+`-in` (stdin)
+
+`-dbtype` (`prot`)
+:   `prot` or `nucl`
+
+`-title` (入力ファイル名)
+:   どういうときに使われるか不明。
+    標準入力を使う場合は必須オプション。
+
+`-parse_seqids`
+:   配列名が `gi|129295` みたいな特定の形式になってる場合にうまいことやる
+
+`-hash_index`
+:   よくわからんけど検索のスピードアップに繋がるっぽいオプション
+
+`-out` (入力ファイル名)
+:   出力先のベースネーム。
+    標準入力を使う場合は必須オプション。
+
+`-taxid`
+
+## プログラム実行
+
+### 共通オプション
+
+&lt;http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.options_common_to_all_blast&gt;
+
+`-db`
+
+`-query` (stdin)
+
+`-out` (stdout)
+
+`-evalue` (10.0)
+
+`-subject`
+:   データベース化してないFASTAファイルを検索対象として直接指定。
+    ただし `-num_threads` を指定しても並列化できない。
+
+`-num_threads` (1)
+
+`-outfmt` (0)
+:   0 = pairwise,\
+    1 = query-anchored showing identities,\
+    2 = query-anchored no identities,\
+    3 = flat query-anchored, show identities,\
+    4 = flat query-anchored, no identities,\
+    5 = XML Blast output,\
+    **6** = tabular,\
+    **7** = tabular with comment lines,\
+    8 = Text ASN.1,\
+    9 = Binary ASN.1\
+    **10** = Comma-separated values\
+    11 = BLAST archive format (ASN.1)
+
+    TSV/CSVテーブル(6, 7, 10)の場合は出力内容を細かく指定できる。デフォルトは
+    `-outfmt &#34;7 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore&#34;`
+
+    `qseqid`: Query Seq-id\
+    `qgi`: Query GI\
+    `qacc`: Query accesion\
+    `sseqid`: Subject Seq-id\
+    `sallseqid`: All subject Seq-id(s), separated by a &#39;;&#39;\
+    `sgi`: Subject GI\
+    `sallgi`: All subject GIs\
+    `sacc`: Subject accession\
+    `sallacc`: All subject accessions\
+    `qstart`: Start of alignment in query\
+    `qend`: End of alignment in query\
+    `sstart`: Start of alignment in subject\
+    `send`: End of alignment in subject\
+    `qseq`: Aligned part of query sequence\
+    `sseq`: Aligned part of subject sequence\
+    `evalue`: Expect value\
+    `bitscore`: Bit score\
+    `score`: Raw score\
+    `length`: Alignment length\
+    `pident`: Percentage of identical matches\
+    `nident`: Number of identical matches\
+    `mismatch`: Number of mismatches\
+    `positive`: Number of positive-scoring matches\
+    `gapopen`: Number of gap openings\
+    `gaps`: Total number of gap\
+    `ppos`: Percentage of positive-scoring matches\
+    `frames`: Query and subject frames separated by a &#39;/&#39;\
+    `qframe`: Query frame\
+    `sframe`: Subject frame\
+    `btop`: Blast traceback operations (BTOP)\
+    `staxids`: unique Subject Taxonomy ID(s), separated by a &#39;;&#39;(in numerical order)\
+    `sscinames`: unique Subject Scientific Name(s), separated by a &#39;;&#39;\
+    `scomnames`: unique Subject Common Name(s), separated by a &#39;;&#39;\
+    `sblastnames`: unique Subject Blast Name(s), separated by a &#39;;&#39; (in alphabetical order)\
+    `sskingdoms`: unique Subject Super Kingdom(s), separated by a &#39;;&#39; (in alphabetical order)\
+    `stitle`: Subject Title\
+    `salltitles`: All Subject Title(s), separated by a &#39;&amp;lt;&amp;gt;&#39;\
+    `sstrand`: Subject Strand\
+    `qcovs`: Query Coverage Per Subject\
+    `qcovhsp`: Query Coverage Per HSP
+
+### `blastn`
+
+Nucleotide query vs Nucleotide subject
+
+&lt;http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.blastn_application_options&gt;
+
+`-word_size` (11, short: 7, mega: 28)
+:   最初にexact matchさせる配列の長さ。
+    短いほどいろんな開始地点から探せるが、遅くなる。
+
+`-gapopen` (5, mega: 0)
+
+`-gapextend` (2, mega: none)
+
+`-reward` (2, short: 1, mega: 1)
+
+`-penalty` (-3, mega: -2)
+
+`-perc_identity` (0)
+
+`-ungapped`
+
+------------------------------------------------------------------------
+
+`blastp`
+:   Protein query vs Protein subject
+    &lt;http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.blastp_application_options&gt;
+
+`blastx`
+:   Nucleotide query (translated) vs Protein subject
+    &lt;http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.blastx_application_options&gt;
+
+`tblastn`
+:   Protein query vs Nucleotide subject (translated)
+    &lt;http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.tblastn_application_options&gt;
+
+`tblastx`
+:   Nucleotide query (translated) vs Nucleotide subject (translated)
+    &lt;http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.tblastx_application_options&gt;
+
+## [BioPython]({#{#HUGOSHORTCODE-4#}#}) から実行
+
+&lt;http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc84&gt;
+
+&lt;http://biopython.org/DIST/docs/api/Bio.Blast.Applications-module.html&gt;
+
+```py
+from Bio.Blast.Applications import NcbiblastnCommandline
+```
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

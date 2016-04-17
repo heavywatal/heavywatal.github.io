@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>RepeatMasker - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+RepeatMasker
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<p><a href="http://www.repeatmasker.org/RMDownload.html">http://www.repeatmasker.org/RMDownload.html</a></p>
+
+<h2 id="前準備">前準備</h2>
+
+<p><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a> を使う。
+<code>brew tap homebrew/science</code> しておく。</p>
+
+<h3 id="プログラム">プログラム</h3>
+
+<ul>
+<li><p>Perl 5.8 以上:</p>
+
+<pre><code>% perl --version
+</code></pre></li>
+
+<li><p>検索エンジンをどれか1つ以上</p>
+
+<ol>
+<li><a href="http://www.phrap.org/">CrossMatch</a></li>
+
+<li><p><a href="http://www.repeatmasker.org/RMBlast.html">RMBlast</a>
+(NCBI BLASTを RepeatMasker で使えるようにするためのラッパー)</p>
+
+<ul>
+<li>まず普通の <a href="/students/iwasaki/bio/blast.html">NCBI BLAST+</a> をインストール。
+Homebrewでもできるけどビルドに時間かかるのでバイナリで。</li>
+
+<li><p>RMBlastをインストールし、元のBLASTの <code>bin</code> 内にシムリンクを張る:</p>
+
+<pre><code>% brew install rmblast --without-blast
+% brew list rmblast
+% sudo ln -s $(brew --prefix)/bin/rmblastn /usr/local/ncbi/blast/bin/
+</code></pre></li>
+</ul></li>
+
+<li><p><a href="http://www.advbiocomp.com/blast.html">AB-BLAST</a> (有料)</p></li>
+
+<li><p><a href="http://hmmer.janelia.org/">HMMER</a> &amp; DFAM (human only):</p>
+
+<pre><code>% brew install hmmer
+</code></pre></li>
+</ol></li>
+
+<li><p><a href="http://tandem.bu.edu/trf/trf.html">Tandem Repeat Finder</a> :</p>
+
+<pre><code>% brew install trf
+</code></pre></li>
+
+<li><p>RepeatMasker 本体
+(どこでもいいけど今回は <code>/usr/local/</code> に入れる):</p>
+
+<pre><code>% wget -O- http://www.repeatmasker.org/RepeatMasker-open-4-0-5.tar.gz | tar xz
+% sudo mv RepeatMasker /usr/local/
+</code></pre>
+
+<p>Homebrewで入れる場合は <code>--without-configure</code> をつけて、
+後から自分で <code>./configure</code> する。</p></li>
+
+<li><p>データベースを入れて <code>configure</code> (下記)</p></li>
+</ul>
+
+<h3 id="データベース">データベース</h3>
+
+<p>RepeatMasker 用に加工された
+<a href="http://www.girinst.org/repbase">RepBase</a> ライブラリを用いる。
+ただし取得には無料登録が必要で、承認まで時間がかかる。
+また <code>@gmail.com</code> のような商用ドメインでは弾かれるので、
+<code>@soken.ac.jp</code> のような所属機関アドレスが必要。</p>
+
+<ol>
+<li><p><code>/usr/local/RepeatMasker/Libraries/</code> 直下に格納
+(念のためフォルダごと取っといてシムリンク。古いやつは適当に保持):</p>
+
+<pre><code>% cd /usr/local/RepeatMasker/Libraries/
+% wget -O- --http-user=&quot;USERNAME&quot; --http-password=&quot;PASSWORD&quot; http://www.girinst.org/server/archive/RepBase20.04/protected/repeatmaskerlibraries/repeatmaskerlibraries-20140131.tar.gz | tar xz
+% mv Libraries repeatmaskerlibraries-20140131
+% mv RepeatMaskerLib.embl RepeatMaskerLib.embl.orig
+% ln -s repeatmaskerlibraries-20140131/RepeatMaskerLib.embl
+</code></pre></li>
+
+<li><p><a href="http://www.dfam.org/">Dfam</a> のアップデートがあれば
+<code>Libraries/Dfam.hmm</code> ファイルを入れ替え:</p>
+
+<pre><code>% mv Dfam.hmm Dfam.hmm.orig
+% wget ftp://selab.janelia.org/pub/dfam/Release/Dfam_1.4/Dfam.hmm.gz
+% gunzip Dfam.hmm.gz
+</code></pre></li>
+
+<li><p><code>configure</code> スクリプト実行:</p>
+
+<pre><code>% cd ..
+% ./configure &lt;~/bio/RepeatMasker.conf
+</code></pre>
+
+<p>標準入力は毎回同じなのでファイルにしてしまったほうが楽チン</p></li>
+</ol>
+
+<p>FASTA形式の反復配列を分類群単位で入手することもできる:</p>
+
+<pre><code>% wget -o- --http-user=&quot;USERNAME&quot; --http-password=&quot;PASSWORD&quot; http://www.girinst.org/server/RepBase/protected/RepBase20.04.fasta/fngrep.ref
+</code></pre>
+
+<h2 id="使用方法">使用方法</h2>
+
+<p><a href="http://www.repeatmasker.org/webrepeatmaskerhelp.html">http://www.repeatmasker.org/webrepeatmaskerhelp.html</a></p>
+
+<h3 id="コマンド">コマンド</h3>
+
+<p><a href="http://www.animalgenome.org/bioinfo/resources/manuals/RepeatMasker.html">http://www.animalgenome.org/bioinfo/resources/manuals/RepeatMasker.html</a> :</p>
+
+<pre><code>% /usr/local/RepeatMasker/RepeatMasker -h | less
+% less /usr/local/RepeatMasker/repeatmasker.help
+</code></pre>
+
+<p><code>-engine [crossmatch|wublast|abblast|ncbi|hmmer|decypher]</code></p>
+
+<dl>
+<dt><code>-parallel 1</code></dt>
+<dd>並列化の恩恵は大きい</dd>
+<dt><code>-s</code> (slow), <code>-q</code> (quick), <code>-qq</code> (rush)</dt>
+<dd>sensitivityとのトレードオフ</dd>
+<dt><code>-nolow</code></dt>
+<dd>low complexity DNAをマスクしない</dd>
+<dt><code>-noint</code></dt>
+<dd>interspersed repeatsをマスクしない</dd>
+<dt><code>norna</code></dt>
+<dd>small RNAをマスクしない</dd>
+<dt><code>-div [number]</code></dt>
+<dd>コンセンサスからの分化度が指定したパーセント未満のやつだけマスク</dd>
+</dl>
+
+<p><code>-cutoff 225</code></p>
+
+<dl>
+<dt><code>-species CLADE_NAME</code></dt>
+<dd><a href="http://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/">http://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/</a>
+に出てくるクレード名で指定可能。
+大文字小文字は無視。
+chimpanzee, mammals みたいな英語名も一部可能。
+デフォルトは primate らしい。</dd>
+<dt><code>-frag 60000</code></dt>
+<dd>最大マスク長</dd>
+<dt><code>-nopost</code></dt>
+<dd>最後に自動で PostProcess を走らせない。</dd>
+<dt><code>-dir OUTDIR</code></dt>
+<dd>出力先。デフォルトはカレントではなくクエリと同じとこ。</dd>
+<dt><code>-gff</code></dt>
+<dd>GFFファイルも出力する。</dd>
+</dl>
+
+<h3 id="生成物">生成物</h3>
+
+<dl>
+<dt><code>${INFILE}.masked</code></dt>
+<dd>見つかった箇所 <code>NNNNN</code> に置き換えたファイル</dd>
+<dt><code>${INFILE}.cat.gz</code></dt>
+<dd>RepeatMasker が出力する大元の結果。
+以下のファイルはこれを元に ProcessRepeats が作る。</dd>
+<dt><code>${INFILE}.tbl</code></dt>
+<dd>見つかった反復配列の要約</dd>
+<dt><code>${INFILE}.out</code></dt>
+<dd><p>アノテーション情報。
+TSVではなく固定幅に近い表で、例外も多くて使いにくい。</p>
+
+<div class="warning">
+<p>バグってるのでこのファイルを使ってはいけない！</p>
+
+</div>
+</dd>
+</dl>
+
+<h2 id="repeatscout">RepeatScout</h2>
+
+<p><a href="http://bix.ucsd.edu/repeatscout/">http://bix.ucsd.edu/repeatscout/</a></p>
+
+<p>反復配列を <em>de novo</em> で拾い、RepeatMaskerで利用可能なライブラリを生成する。</p>
+
+<ol>
+<li><p>RepeatScout本体をインストール:</p>
+
+<pre><code>% brew install repeatscout --with-trf
+</code></pre></li>
+
+<li><p>L-mer の頻度テーブルをつくる:</p>
+
+<pre><code>% build_lmer_table -l 14 -sequence myseq.fa -freq lmer_table
+</code></pre></li>
+
+<li><p>そのテーブルと配列から反復配列のFASTAを作る:</p>
+
+<pre><code>% RepeatScout -sequence myseq.fa -output rs_output.fa -freq lmer_table -l 14
+</code></pre></li>
+
+<li><p>TRFとNSEGを呼び出して &gt;50% low-complexity なものを除外:</p>
+
+<pre><code>% cat rs_output.fa | filter-stage-1.prl &gt;rs_filtered1.fa
+</code></pre>
+
+<div class="note">
+<p><a href="ftp://ftp.ncbi.nih.gov/pub/seg/nseg/">NSEG</a> はビルド不可能なので
+<code>filter-stage-1.prl</code> を適当に書き換える必要がある。</p>
+
+</div>
+</li>
+
+<li><p>RepeatMaskerで位置と登場回数を調べる:</p>
+
+<pre><code>% RepeatMasker -parallel 4 -dir . -lib rs_filtered1.fa myseq.fa
+</code></pre></li>
+
+<li><p>一定回数に満たないものを除外:</p>
+
+<pre><code>% cat rs_filtered1.fa | filter-stage-2.prl --thresh=10 --cat=myseq.fa.out &gt;rs_filtered2.fa
+</code></pre></li>
+
+<li><p>遺伝子領域のGFFなどを与え、mobile elementっぽくないものを除去:</p>
+
+<pre><code>% compare-out-to-gff.prl --gff=known_genes.gff --cat=myseq.fa.out --f=rs_filtered2.fa &gt;lib.ref
+</code></pre></li>
+</ol>
+
+<h2 id="repeatmodeler">RepeatModeler</h2>
+
+<p><a href="http://www.repeatmasker.org/RepeatModeler.html">http://www.repeatmasker.org/RepeatModeler.html</a></p>
+
+<p>上記RepeatScout手順を簡単に実行するラッパー？</p>
+
+<div class="warning">
+<p>うまくできた試しがないので、RepeatScoutを直に動かしたほうが良い。</p>
+
+</div>
+
+
+<h3 id="前準備-1">前準備</h3>
+
+<ul>
+<li>RepeatMasker: 上記</li>
+<li>RepeatScout: 上記</li>
+
+<li><p>RECON:</p>
+
+<pre><code>% brew install recon
+</code></pre></li>
+
+<li><p>RepeatModeler 本体:</p>
+
+<pre><code>% wget -O- http://www.repeatmasker.org/RepeatModeler-open-1-0-8.tar.gz | tar xz
+% sudo mv RepeatModeler /usr/local/
+</code></pre>
+
+<p>例によって <code>configure</code> も実行:</p>
+
+<pre><code>% cd /usr/local/RepeatModeler
+% perl configure &lt;~/bio/RepeatModeler.conf
+</code></pre></li>
+</ul>
+
+<h3 id="使い方">使い方</h3>
+
+<ol>
+<li><p>カレントディレクトリにBLASTデータベースを構築:</p>
+
+<pre><code>% BuilDatabase -name Colletotrichum_orbiculare -engine ncbi path/to/Colletotrichum_orbiculare.fa
+</code></pre></li>
+
+<li><p>本体を実行(かなり時間がかかる):</p>
+
+<pre><code>% RepeatModeler -engine ncbi -pa 4 -database Colletotrichum_orbiculare &gt;run.out
+</code></pre>
+
+<p><code>RM_[PID].[DATE]/</code> に結果が書き出される。</p></li>
+
+<li><p>できあがった <code>consensi.fa.classified</code> をライブラリとして RepeatMasker を実行:</p>
+
+<pre><code>% RepeatMasker -lib consensi.fa.classified some_sequence.fa
+</code></pre></li>
+</ol>
+
+<h2 id="teclass">TEclass</h2>
+
+<p><a href="http://www.compgen.uni-muenster.de/tools/teclass/">http://www.compgen.uni-muenster.de/tools/teclass/</a></p>
+
+<p>トランスポゾンを分類する。</p>
+
+<p>与えられたFASTAに含まれているのはTEだ、という仮定で分類するだけので、
+単純反復配列や重複遺伝子などを予めしっかり除去しておく必要がある。</p>
+
+<ol>
+<li><p>本体をダウンロード:</p>
+
+<pre><code>% wget -O- http://www.compgen.uni-muenster.de/tools/teclass/download/TEclass-2.1.3.tar.gz | tar xz
+% cd TEclass-2.1.3/
+% less README
+</code></pre></li>
+
+<li><p>周辺ライブラリを整備。
+でもとりあえず分類したいだけならblastclustなどは不要らしい:</p>
+
+<pre><code>% ./Download_dependencies.sh
+% ./Compile_dependencies.sh
+% ./Configure.pl
+</code></pre></li>
+
+<li><p>pre-built classifiers (&gt;400MB) をダウンロード:</p>
+
+<pre><code>% cd path/to/TEclass/classifiers/
+% wget -O- http://www.compgen.uni-muenster.de/tools/teclass/download/classifiers.tar.gz | tar xz
+</code></pre></li>
+
+<li><p>実行:</p>
+
+<pre><code>% ./TEclassTest.pl file.fa
+</code></pre></li>
+
+<li><p>結果はひとつのディレクトリにまとめて書き出される</p>
+
+<ul>
+<li><code>file.fa</code>: 元ファイルからTEだけ抜き出したもの？</li>
+<li><code>file.fa.html</code>: 一覧</li>
+<li><code>file.fa.lib</code>: RepeatMasker用？</li>
+<li><code>file.fa.stat</code>: LTRなどがそれぞれいくつあったか集計</li>
+</ul></li>
+</ol>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats">
+<label for="R stats">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology" checked>
+<label for="Biology" class="active">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li class="active"><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "RepeatMasker"
++++
+
+&lt;http://www.repeatmasker.org/RMDownload.html&gt;
+
+## 前準備
+
+[Homebrew]({#{#HUGOSHORTCODE-1#}#}) を使う。
+`brew tap homebrew/science` しておく。
+
+### プログラム
+
+-   Perl 5.8 以上:
+
+        % perl --version
+
+-   検索エンジンをどれか1つ以上
+    1.  [CrossMatch](http://www.phrap.org/)
+    2.  [RMBlast](http://www.repeatmasker.org/RMBlast.html)
+        (NCBI BLASTを RepeatMasker で使えるようにするためのラッパー)
+        -   まず普通の [NCBI BLAST&#43;]({#{#HUGOSHORTCODE-2#}#}) をインストール。
+            Homebrewでもできるけどビルドに時間かかるのでバイナリで。
+        -   RMBlastをインストールし、元のBLASTの `bin` 内にシムリンクを張る:
+
+                % brew install rmblast --without-blast
+                % brew list rmblast
+                % sudo ln -s $(brew --prefix)/bin/rmblastn /usr/local/ncbi/blast/bin/
+
+    3.  [AB-BLAST](http://www.advbiocomp.com/blast.html) (有料)
+    4.  [HMMER](http://hmmer.janelia.org/) &amp; DFAM (human only):
+
+            % brew install hmmer
+
+-   [Tandem Repeat Finder](http://tandem.bu.edu/trf/trf.html) :
+
+        % brew install trf
+
+-   RepeatMasker 本体
+    (どこでもいいけど今回は `/usr/local/` に入れる):
+
+        % wget -O- http://www.repeatmasker.org/RepeatMasker-open-4-0-5.tar.gz | tar xz
+        % sudo mv RepeatMasker /usr/local/
+
+    Homebrewで入れる場合は `--without-configure` をつけて、
+    後から自分で `./configure` する。
+
+-   データベースを入れて `configure` (下記)
+
+### データベース
+
+RepeatMasker 用に加工された
+[RepBase](http://www.girinst.org/repbase) ライブラリを用いる。
+ただし取得には無料登録が必要で、承認まで時間がかかる。
+また `@gmail.com` のような商用ドメインでは弾かれるので、
+`@soken.ac.jp` のような所属機関アドレスが必要。
+
+1.  `/usr/local/RepeatMasker/Libraries/` 直下に格納
+    (念のためフォルダごと取っといてシムリンク。古いやつは適当に保持):
+
+        % cd /usr/local/RepeatMasker/Libraries/
+        % wget -O- --http-user=&#34;USERNAME&#34; --http-password=&#34;PASSWORD&#34; http://www.girinst.org/server/archive/RepBase20.04/protected/repeatmaskerlibraries/repeatmaskerlibraries-20140131.tar.gz | tar xz
+        % mv Libraries repeatmaskerlibraries-20140131
+        % mv RepeatMaskerLib.embl RepeatMaskerLib.embl.orig
+        % ln -s repeatmaskerlibraries-20140131/RepeatMaskerLib.embl
+
+2.  [Dfam](http://www.dfam.org/) のアップデートがあれば
+    `Libraries/Dfam.hmm` ファイルを入れ替え:
+
+        % mv Dfam.hmm Dfam.hmm.orig
+        % wget ftp://selab.janelia.org/pub/dfam/Release/Dfam_1.4/Dfam.hmm.gz
+        % gunzip Dfam.hmm.gz
+
+3.  `configure` スクリプト実行:
+
+        % cd ..
+        % ./configure &lt;~/bio/RepeatMasker.conf
+
+    標準入力は毎回同じなのでファイルにしてしまったほうが楽チン
+
+FASTA形式の反復配列を分類群単位で入手することもできる:
+
+    % wget -o- --http-user=&#34;USERNAME&#34; --http-password=&#34;PASSWORD&#34; http://www.girinst.org/server/RepBase/protected/RepBase20.04.fasta/fngrep.ref
+
+## 使用方法
+
+&lt;http://www.repeatmasker.org/webrepeatmaskerhelp.html&gt;
+
+### コマンド
+
+&lt;http://www.animalgenome.org/bioinfo/resources/manuals/RepeatMasker.html&gt; :
+
+    % /usr/local/RepeatMasker/RepeatMasker -h | less
+    % less /usr/local/RepeatMasker/repeatmasker.help
+
+`-engine [crossmatch|wublast|abblast|ncbi|hmmer|decypher]`
+
+`-parallel 1`
+:   並列化の恩恵は大きい
+
+`-s` (slow), `-q` (quick), `-qq` (rush)
+:   sensitivityとのトレードオフ
+
+`-nolow`
+:   low complexity DNAをマスクしない
+
+`-noint`
+:   interspersed repeatsをマスクしない
+
+`norna`
+:   small RNAをマスクしない
+
+`-div [number]`
+:   コンセンサスからの分化度が指定したパーセント未満のやつだけマスク
+
+`-cutoff 225`
+
+`-species CLADE_NAME`
+:   &lt;http://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/&gt;
+    に出てくるクレード名で指定可能。
+    大文字小文字は無視。
+    chimpanzee, mammals みたいな英語名も一部可能。
+    デフォルトは primate らしい。
+
+`-frag 60000`
+:   最大マスク長
+
+`-nopost`
+:   最後に自動で PostProcess を走らせない。
+
+`-dir OUTDIR`
+:   出力先。デフォルトはカレントではなくクエリと同じとこ。
+
+`-gff`
+:   GFFファイルも出力する。
+
+### 生成物
+
+`${INFILE}.masked`
+:   見つかった箇所 `NNNNN` に置き換えたファイル
+
+`${INFILE}.cat.gz`
+:   RepeatMasker が出力する大元の結果。
+    以下のファイルはこれを元に ProcessRepeats が作る。
+
+`${INFILE}.tbl`
+:   見つかった反復配列の要約
+
+`${INFILE}.out`
+:   アノテーション情報。
+    TSVではなく固定幅に近い表で、例外も多くて使いにくい。
+
+    {#{#HUGOSHORTCODE-3#}#}
+
+## RepeatScout
+
+&lt;http://bix.ucsd.edu/repeatscout/&gt;
+
+反復配列を *de novo* で拾い、RepeatMaskerで利用可能なライブラリを生成する。
+
+1.  RepeatScout本体をインストール:
+
+        % brew install repeatscout --with-trf
+
+2.  L-mer の頻度テーブルをつくる:
+
+        % build_lmer_table -l 14 -sequence myseq.fa -freq lmer_table
+
+3.  そのテーブルと配列から反復配列のFASTAを作る:
+
+        % RepeatScout -sequence myseq.fa -output rs_output.fa -freq lmer_table -l 14
+
+4.  TRFとNSEGを呼び出して &amp;gt;50% low-complexity なものを除外:
+
+        % cat rs_output.fa | filter-stage-1.prl &gt;rs_filtered1.fa
+
+    {#{#HUGOSHORTCODE-4#}#}
+
+5.  RepeatMaskerで位置と登場回数を調べる:
+
+        % RepeatMasker -parallel 4 -dir . -lib rs_filtered1.fa myseq.fa
+
+6.  一定回数に満たないものを除外:
+
+        % cat rs_filtered1.fa | filter-stage-2.prl --thresh=10 --cat=myseq.fa.out &gt;rs_filtered2.fa
+
+7.  遺伝子領域のGFFなどを与え、mobile elementっぽくないものを除去:
+
+        % compare-out-to-gff.prl --gff=known_genes.gff --cat=myseq.fa.out --f=rs_filtered2.fa &gt;lib.ref
+
+## RepeatModeler
+
+&lt;http://www.repeatmasker.org/RepeatModeler.html&gt;
+
+上記RepeatScout手順を簡単に実行するラッパー？
+
+{#{#HUGOSHORTCODE-5#}#}
+
+### 前準備
+
+-   RepeatMasker: 上記
+-   RepeatScout: 上記
+-   RECON:
+
+        % brew install recon
+
+-   RepeatModeler 本体:
+
+        % wget -O- http://www.repeatmasker.org/RepeatModeler-open-1-0-8.tar.gz | tar xz
+        % sudo mv RepeatModeler /usr/local/
+
+    例によって `configure` も実行:
+
+        % cd /usr/local/RepeatModeler
+        % perl configure &lt;~/bio/RepeatModeler.conf
+
+### 使い方
+
+1.  カレントディレクトリにBLASTデータベースを構築:
+
+        % BuilDatabase -name Colletotrichum_orbiculare -engine ncbi path/to/Colletotrichum_orbiculare.fa
+
+2.  本体を実行(かなり時間がかかる):
+
+        % RepeatModeler -engine ncbi -pa 4 -database Colletotrichum_orbiculare &gt;run.out
+
+    `RM_[PID].[DATE]/` に結果が書き出される。
+
+3.  できあがった `consensi.fa.classified` をライブラリとして RepeatMasker を実行:
+
+        % RepeatMasker -lib consensi.fa.classified some_sequence.fa
+
+## TEclass
+
+&lt;http://www.compgen.uni-muenster.de/tools/teclass/&gt;
+
+トランスポゾンを分類する。
+
+与えられたFASTAに含まれているのはTEだ、という仮定で分類するだけので、
+単純反復配列や重複遺伝子などを予めしっかり除去しておく必要がある。
+
+1.  本体をダウンロード:
+
+        % wget -O- http://www.compgen.uni-muenster.de/tools/teclass/download/TEclass-2.1.3.tar.gz | tar xz
+        % cd TEclass-2.1.3/
+        % less README
+
+2.  周辺ライブラリを整備。
+    でもとりあえず分類したいだけならblastclustなどは不要らしい:
+
+        % ./Download_dependencies.sh
+        % ./Compile_dependencies.sh
+        % ./Configure.pl
+
+3.  pre-built classifiers (&amp;gt;400MB) をダウンロード:
+
+        % cd path/to/TEclass/classifiers/
+        % wget -O- http://www.compgen.uni-muenster.de/tools/teclass/download/classifiers.tar.gz | tar xz
+
+4.  実行:
+
+        % ./TEclassTest.pl file.fa
+
+5.  結果はひとつのディレクトリにまとめて書き出される
+    -   `file.fa`: 元ファイルからTEだけ抜き出したもの？
+    -   `file.fa.html`: 一覧
+    -   `file.fa.lib`: RepeatMasker用？
+    -   `file.fa.stat`: LTRなどがそれぞれいくつあったか集計
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

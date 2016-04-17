@@ -9,7 +9,24 @@
 <link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
 <link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
-<title>Watal M. Iwasaki</title>
+<title>topGO: Bioconductor でenrichment解析 - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -29,11 +46,123 @@ Watal M. Iwasaki
 
 <main>
 <article>
-<header><h1>Index</h1></header>
+<header><h1><a href="">
+topGO — Bioconductor でenrichment解析
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
 
-<h2><a href="/tags">tags</a></h2>
-<dl id="terms">
+
+
+<p><a href="http://www.bioconductor.org/packages/release/bioc/html/topGO.html">http://www.bioconductor.org/packages/release/bioc/html/topGO.html</a></p>
+
+<p>Rの中からインストール</p>
+
+<pre><code class="language-r">source(&quot;http://bioconductor.org/biocLite.R&quot;)
+biocLite('topGO')
+</code></pre>
+
+<h2 id="使い方">使い方</h2>
+
+<h3 id="topgodata-を作る"><code>topGOdata</code> を作る</h3>
+
+<pre><code class="language-r">tg_data = new('topGOdata',
+    ontology='BP',
+    allGenes=setNames(score, name),
+    geneSelectionFun=function(x) {x &gt; threshold},
+    nodeSize=10,
+    annotationFun=annFUN.org,
+    mapping='org.Hs.eg.db',
+    ID='entrez')
+</code></pre>
+
+<dl>
+<dt><code>ontology</code></dt>
+<dd><code>BP</code>, <code>CC</code>, <code>MF</code> のどれか</dd>
+<dt><code>description</code> (省略可)</dt>
+<dd>説明string</dd>
+<dt><code>allGenes</code></dt>
+<dd>遺伝子名を名前とするnamed vector。
+値はP-valueとかなんとか、好きなスコア。</dd>
+<dt><code>geneSelectionFun</code></dt>
+<dd><code>allGenes</code> の数値を引数として、
+今回興味のある遺伝子に <code>TRUE</code> を返すような関数。</dd>
+<dt><code>nodeSize</code></dt>
+<dd>1以上の整数。
+これ以下の遺伝子数しかないGO termを結果から除外。</dd>
+<dt><code>annotationFun</code></dt>
+<dd>遺伝子IDとGO termを結びつける関数。
+一般的なデータベースのIDなら <code>annFUN.org</code> で足りるはず。</dd>
+<dt><code>...</code></dt>
+<dd>以降は <code>annotationFun()</code> に渡す引数。</dd>
 </dl>
+
+<hr />
+
+<p><code>annFUN.org(whichOnto, feasibleGenes, mapping, ID='entrez')</code></p>
+
+<dl>
+<dt><code>mapping</code></dt>
+<dd><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a> のマッピングパッケージ。
+例えばヒトなら <code>org.Hs.eg.db</code> 。</dd>
+<dt><code>ID</code></dt>
+<dd><code>allGenes</code> に与えた名前の種類。
+<code>entrez</code>, <code>genbank</code>, <code>alias</code>, <code>ensembl</code>,
+<code>symbol</code>, <code>genename</code>, <code>unigene</code></dd>
+</dl>
+
+<h3 id="解析">解析</h3>
+
+<pre><code class="language-r">whichTests()
+whichAlgorithms()
+tg_result = runTest(tg_data, algorithm='classic', statistic='fisher')
+</code></pre>
+
+<dl>
+<dt><code>algorithm</code></dt>
+<dd><code>classic</code>, <code>elim</code>, <code>weight</code>,
+<code>weight01</code>, <code>lea</code>, <code>parentChild</code></dd>
+<dt><code>statistic</code></dt>
+<dd><code>fisher</code>, <code>ks</code>, <code>t</code>, <code>globaltest</code>, <code>sum</code></dd>
+<dt><code>scoreOrder</code></dt>
+<dd>デフォルトはP値を扱うように <code>increasing</code> 。
+興味のある遺伝子で値が高くなるスコアの場合は <code>decreasing</code> を指定。</dd>
+</dl>
+
+<p>結果は <code>topGOresult</code> オブジェクト</p>
+
+<pre><code class="language-r">score(tg_result)
+geneData(tg_result)
+</code></pre>
+
+<h3 id="解釈-描画">解釈・描画</h3>
+
+<p>GO termのOver-representationランキング</p>
+
+<pre><code class="language-r">num_significant = geneData(tg_result)['Significant']
+GenTable(tg_data, classic_fisher=tg_result, topNodes=num_significant)
+</code></pre>
+
+<p><code>runTest()</code> の結果は好きな名前で複数並べることができる。</p>
+
+<hr />
+
+<p><code>Rgraphviz</code> を使ってDAG描画</p>
+
+<pre><code class="language-r">showSigOfNodes(tg_data, score(tg_result), firstSigNodes=10, useInfo='all')
+printGraph(tg_data, tg_result, 20, fn.prefix='go_fisher', pdfSW=TRUE)
+</code></pre>
+
+<p>前者はプロットだけ、後者はPDFに書き出し。
+significant nodeが四角で、赤いほど低いP値。</p>
+
+<h2 id="go-terms">GO terms</h2>
+
+<pre><code class="language-r">BPterms = ls(GOBPTerm)
+MFterms = ls(GOMFTerm)
+CCterms = ls(GOCCTerm)
+</code></pre>
 
 </article>
 </main>
@@ -47,7 +176,7 @@ Watal M. Iwasaki
 
 
 <input type="checkbox" id="R stats" checked>
-<label for="R stats">R stats</label>
+<label for="R stats" class="active">R stats</label>
 <ul>
 <li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
 <li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
@@ -64,13 +193,13 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
 <li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
 <li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
-<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li class="active"><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
 <li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
 <li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
 <li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
 </ul>
 
-<input type="checkbox" id="Python" checked>
+<input type="checkbox" id="Python">
 <label for="Python">Python</label>
 <ul>
 <li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
@@ -85,7 +214,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
 </ul>
 
-<input type="checkbox" id="C&#43;&#43;" checked>
+<input type="checkbox" id="C&#43;&#43;">
 <label for="C&#43;&#43;">C&#43;&#43;</label>
 <ul>
 <li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
@@ -96,7 +225,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
 </ul>
 
-<input type="checkbox" id="Biology" checked>
+<input type="checkbox" id="Biology">
 <label for="Biology">Biology</label>
 <ul>
 <li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
@@ -118,7 +247,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
 </ul>
 
-<input type="checkbox" id="Developer Tools" checked>
+<input type="checkbox" id="Developer Tools">
 <label for="Developer Tools">Developer Tools</label>
 <ul>
 <li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
@@ -142,7 +271,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
 </ul>
 
-<input type="checkbox" id="Linux" checked>
+<input type="checkbox" id="Linux">
 <label for="Linux">Linux</label>
 <ul>
 <li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
@@ -151,7 +280,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
 </ul>
 
-<input type="checkbox" id="Mac" checked>
+<input type="checkbox" id="Mac">
 <label for="Mac">Mac</label>
 <ul>
 <li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
@@ -165,7 +294,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
 </ul>
 
-<input type="checkbox" id="Lectures" checked>
+<input type="checkbox" id="Lectures">
 <label for="Lectures">Lectures</label>
 <ul>
 <li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
@@ -175,7 +304,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
 </ul>
 
-<input type="checkbox" id="Miscellaneous" checked>
+<input type="checkbox" id="Miscellaneous">
 <label for="Miscellaneous">Miscellaneous</label>
 <ul>
 <li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
@@ -186,7 +315,135 @@ Watal M. Iwasaki
 </nav>
 
 
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "topGO"
++++
 
+&lt;http://www.bioconductor.org/packages/release/bioc/html/topGO.html&gt;
+
+Rの中からインストール
+
+```r
+source(&#34;http://bioconductor.org/biocLite.R&#34;)
+biocLite(&#39;topGO&#39;)
+```
+
+## 使い方
+
+### `topGOdata` を作る
+
+```r
+tg_data = new(&#39;topGOdata&#39;,
+    ontology=&#39;BP&#39;,
+    allGenes=setNames(score, name),
+    geneSelectionFun=function(x) {x &gt; threshold},
+    nodeSize=10,
+    annotationFun=annFUN.org,
+    mapping=&#39;org.Hs.eg.db&#39;,
+    ID=&#39;entrez&#39;)
+```
+
+`ontology`
+:   `BP`, `CC`, `MF` のどれか
+
+`description` (省略可)
+:   説明string
+
+`allGenes`
+:   遺伝子名を名前とするnamed vector。
+    値はP-valueとかなんとか、好きなスコア。
+
+`geneSelectionFun`
+:   `allGenes` の数値を引数として、
+    今回興味のある遺伝子に `TRUE` を返すような関数。
+
+`nodeSize`
+:   1以上の整数。
+    これ以下の遺伝子数しかないGO termを結果から除外。
+
+`annotationFun`
+:   遺伝子IDとGO termを結びつける関数。
+    一般的なデータベースのIDなら `annFUN.org` で足りるはず。
+
+`...`
+:   以降は `annotationFun()` に渡す引数。
+
+------------------------------------------------------------------------
+
+`annFUN.org(whichOnto, feasibleGenes, mapping, ID=&#39;entrez&#39;)`
+
+`mapping`
+:   [Bioconductor]({#{#HUGOSHORTCODE-1#}#}) のマッピングパッケージ。
+    例えばヒトなら `org.Hs.eg.db` 。
+
+`ID`
+:   `allGenes` に与えた名前の種類。
+    `entrez`, `genbank`, `alias`, `ensembl`,
+    `symbol`, `genename`, `unigene`
+
+### 解析
+
+```r
+whichTests()
+whichAlgorithms()
+tg_result = runTest(tg_data, algorithm=&#39;classic&#39;, statistic=&#39;fisher&#39;)
+```
+
+`algorithm`
+:   `classic`, `elim`, `weight`,
+    `weight01`, `lea`, `parentChild`
+
+`statistic`
+:   `fisher`, `ks`, `t`, `globaltest`, `sum`
+
+`scoreOrder`
+:   デフォルトはP値を扱うように `increasing` 。
+    興味のある遺伝子で値が高くなるスコアの場合は `decreasing` を指定。
+
+結果は `topGOresult` オブジェクト
+
+```r
+score(tg_result)
+geneData(tg_result)
+```
+
+### 解釈・描画
+
+GO termのOver-representationランキング
+
+```r
+num_significant = geneData(tg_result)[&#39;Significant&#39;]
+GenTable(tg_data, classic_fisher=tg_result, topNodes=num_significant)
+```
+
+`runTest()` の結果は好きな名前で複数並べることができる。
+
+------------------------------------------------------------------------
+
+`Rgraphviz` を使ってDAG描画
+
+```r
+showSigOfNodes(tg_data, score(tg_result), firstSigNodes=10, useInfo=&#39;all&#39;)
+printGraph(tg_data, tg_result, 20, fn.prefix=&#39;go_fisher&#39;, pdfSW=TRUE)
+```
+
+前者はプロットだけ、後者はPDFに書き出し。
+significant nodeが四角で、赤いほど低いP値。
+
+## GO terms
+
+```r
+BPterms = ls(GOBPTerm)
+MFterms = ls(GOMFTerm)
+CCterms = ls(GOCCTerm)
+```
+
+</code></pre>
+</aside>
 
 <footer>(ɔ) 2008 Watal M. Iwasaki</footer>
 </div>

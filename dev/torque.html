@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>TORQUE - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+TORQUE
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<p><a href="http://www.adaptivecomputing.com/products/open-source/torque/">http://www.adaptivecomputing.com/products/open-source/torque/</a></p>
+
+<p>Ubuntu 12.04 LTS Precise Pangolin</p>
+
+<h2 id="usage">Usage</h2>
+
+<p><a href="http://www.adaptivecomputing.com/resources/docs/torque/2-5-9/a.acommands.php">Commands Overview</a></p>
+
+<p>Pythonのvirtualenvは計算ノードに引き継がれないので、
+メインのコマンドの前に明示的にactivateする必要あり:</p>
+
+<pre><code>echo &quot;. ~/.virtualenv/project/bin/activate &amp;&amp; ./a.out&quot; | /usr/bin/qsub [options]
+</code></pre>
+
+<h2 id="installation">Installation</h2>
+
+<p><a href="http://tech.ckme.co.jp/torque.shtml">http://tech.ckme.co.jp/torque.shtml</a><br />
+<a href="http://www.clusterresources.com/torquedocs/">http://www.clusterresources.com/torquedocs/</a><br />
+<a href="http://www.adaptivecomputing.com/resources/docs/torque/2-5-9/index.php">http://www.adaptivecomputing.com/resources/docs/torque/2-5-9/index.php</a></p>
+
+<h3 id="compute-node">Compute node</h3>
+
+<ol>
+<li><p><code>torque-mom</code> と <code>torque-client</code> をインストール:</p>
+
+<pre><code>% sudo apt-get install torque-mom torque-client
+</code></pre></li>
+
+<li><p><code>/etc/hosts</code> を確認。
+ヘッドノードのホスト名が解決できるように:</p>
+
+<pre><code>192.168.0.254 charles
+</code></pre>
+
+<p>ヘッドノードが複数のインターフェイスを持つ場合は
+計算ノードから見えるIPを記述した行が一番上になるようにする。
+そうしないと <code>qsub</code> でキューを出しても実行されず、
+以下のような警告が静かに書き出される:</p>
+
+<pre><code>% sudo momctl -d3
+WARNING: invalid attempt to connect from server 192.168.0.254:1022  (server not authorized)
+
+% less /var/spool/torque/mom_logs/2012xxxx
+pbs_mom;Job;process_request;request type QueueJob from host charles rejected (host not authorized)
+pbs_mom;Req;req_reject;Reject reply code=15008(Access from host not allowed, or unknown host MSG=request not authorized), aux=0, type=QueueJob, from PBS_Server@charles
+</code></pre></li>
+
+<li><p>ヘッドノードのホスト名を <code>/etc/torque/server_name</code> に設定: <code>charles</code></p></li>
+
+<li><p><code>/var/spool/torque/mom_priv/config</code> に設定記述 (ref. <a href="http://www.adaptivecomputing.com/resources/docs/torque/2-5-9/a.cmomconfig.php">MOM Configuration</a>)</p>
+
+<p><code>/home</code> を NFSマウントしてるので <code>scp</code> しないように:</p>
+
+<pre><code>$usecp *:/home /home
+</code></pre>
+
+<p>ログファイルの末尾に計算ノードの名前を追加:</p>
+
+<pre><code>$log_file_suffix %h
+</code></pre></li>
+
+<li><p><code>pbs_mom</code> を再起動:</p>
+
+<pre><code>% sudo service torque-mom restart
+</code></pre></li>
+</ol>
+
+<h3 id="head-node">Head node</h3>
+
+<ol>
+<li><p><code>torque-server</code> をインストール:</p>
+
+<pre><code>% sudo apt-get install torque-server
+</code></pre></li>
+
+<li><p><code>pbs_server</code> が動いてしまっていたら <code>kill</code>:</p>
+
+<pre><code>% ps aux | grep pbs
+</code></pre></li>
+
+<li><p><code>/etc/hosts</code> を確認。
+計算ノードのホスト名が解決できるように:</p>
+
+<pre><code>192.168.0.1 node01
+192.168.0.2 node02
+192.168.0.3 node03
+</code></pre></li>
+
+<li><p>ヘッドノードのホスト名を <code>/etc/torque/server_name</code> に設定: <code>charles</code></p></li>
+
+<li><p>計算ノードの情報を <code>/var/spool/torque/server_priv/nodes</code> に書き込む:</p>
+
+<pre><code>node01 np=4
+node02 np=4
+node03 np=4
+</code></pre>
+
+<div class="note">
+<p><code>np</code> はコア数</p>
+
+</div>
+</li>
+
+<li><p><code>/var/spool/torque/spool</code> のパーミションを設定:</p>
+
+<pre><code>% sudo chmod 777 /var/spool/torque/spool/
+% sudo chmod o+t /var/spool/torque/spool/
+</code></pre></li>
+
+<li><p><code>pbs_server</code> を新規作成:</p>
+
+<pre><code>% sudo pbs_server -t create
+</code></pre></li>
+
+<li><p><code>pbs_server</code> の設定 (ref. <a href="http://www.adaptivecomputing.com/resources/docs/torque/2-5-9/a.bserverparameters.php">Server Parameters</a>):</p>
+
+<pre><code>% sudo qmgr -c &quot;create queue batch queue_type=execution&quot;
+% sudo qmgr -c &quot;set queue batch priority=0&quot;
+% sudo qmgr -c &quot;set queue batch resources_default.nodes=1&quot;
+% sudo qmgr -c &quot;set queue batch resources_default.ncpus=1&quot;
+% sudo qmgr -c &quot;set queue batch resources_default.walltime=96:00:00&quot;
+% sudo qmgr -c &quot;set queue batch keep_completed=3600&quot;
+% sudo qmgr -c &quot;set queue batch enabled=true&quot;
+% sudo qmgr -c &quot;set queue batch started=true&quot;
+
+% sudo qmgr -c &quot;create queue low queue_type=execution&quot;
+% sudo qmgr -c &quot;set queue low priority=-255&quot;
+% sudo qmgr -c &quot;set queue low resources_default.nodes=1&quot;
+% sudo qmgr -c &quot;set queue low resources_default.ncpus=1&quot;
+% sudo qmgr -c &quot;set queue low resources_default.walltime=96:00:00&quot;
+% sudo qmgr -c &quot;set queue low keep_completed=3600&quot;
+% sudo qmgr -c &quot;set queue low enabled=true&quot;
+% sudo qmgr -c &quot;set queue low started=true&quot;
+
+% sudo qmgr -c &quot;create queue high queue_type=execution&quot;
+% sudo qmgr -c &quot;set queue high priority=255&quot;
+% sudo qmgr -c &quot;set queue high resources_default.nodes=1&quot;
+% sudo qmgr -c &quot;set queue high resources_default.ncpus=1&quot;
+% sudo qmgr -c &quot;set queue high resources_default.walltime=96:00:00&quot;
+% sudo qmgr -c &quot;set queue high keep_completed=3600&quot;
+% sudo qmgr -c &quot;set queue high enabled=true&quot;
+% sudo qmgr -c &quot;set queue high started=true&quot;
+
+% sudo qmgr -c &quot;set server default_queue=batch&quot;
+% sudo qmgr -c &quot;set server scheduling=true&quot;
+% sudo qmgr -c &quot;set server allow_node_submit = True&quot;
+</code></pre></li>
+
+<li><p><code>pbs_server</code> を再起動:</p>
+
+<pre><code>% sudo service torque-server restart
+% sudo service torque-scheduler restart
+</code></pre></li>
+
+<li><p>計算ノードの認識を確認 (<code>state = free</code>):</p>
+
+<pre><code>% pbsnodes -a
+</code></pre></li>
+
+<li><p>試しにジョブを投入:</p>
+
+<pre><code>% echo &quot;sleep 30&quot; | qsub
+</code></pre></li>
+
+<li><p>実行されているか確認 (<code>S</code> の下が <code>R</code> なら走ってる):</p>
+
+<pre><code>% qstat
+</code></pre></li>
+</ol>
+
+<h2 id="maintenance-trouble-shooting">Maintenance / Trouble Shooting</h2>
+
+<h3 id="head-node-1">Head node</h3>
+
+<p>設定確認:</p>
+
+<pre><code>% qmgr -c 'p s'
+</code></pre>
+
+<p>計算ノードの認識を確認:</p>
+
+<pre><code>% pbsnodes -a
+</code></pre>
+
+<p>投入したジョブの状態を確認:</p>
+
+<pre><code>% qstat
+% qstat -q
+</code></pre>
+
+<p>ログを見る:</p>
+
+<pre><code>% less /var/spool/torque/server_logs/2012xxxx
+% less /var/spool/torque/sched_logs/2012xxxx
+</code></pre>
+
+<p>サービス再起動:</p>
+
+<pre><code>% sudo service torque-server restart
+% sudo service torque-sched restart
+</code></pre>
+
+<p>計算ノードが落ちたあと <code>qstat</code> リストに残ってしまうジョブを消す:</p>
+
+<pre><code>% sudo qdel -p
+</code></pre>
+
+<h3 id="compute-node-1">Compute node</h3>
+
+<p>状態確認:</p>
+
+<pre><code>% sudo momctl -d3
+</code></pre>
+
+<p>ログを見る:</p>
+
+<pre><code>% less /var/spool/torque/mom_logs/2012xxxx
+</code></pre>
+
+<p>サービス再起動:</p>
+
+<pre><code>% sudo service torque-mom restart
+</code></pre>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats">
+<label for="R stats">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools" checked>
+<label for="Developer Tools" class="active">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li class="active"><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "TORQUE"
++++
+
+&lt;http://www.adaptivecomputing.com/products/open-source/torque/&gt;
+
+Ubuntu 12.04 LTS Precise Pangolin
+
+## Usage
+
+[Commands Overview](http://www.adaptivecomputing.com/resources/docs/torque/2-5-9/a.acommands.php)
+
+Pythonのvirtualenvは計算ノードに引き継がれないので、
+メインのコマンドの前に明示的にactivateする必要あり:
+
+    echo &#34;. ~/.virtualenv/project/bin/activate &amp;&amp; ./a.out&#34; | /usr/bin/qsub [options]
+
+## Installation
+
+&lt;http://tech.ckme.co.jp/torque.shtml&gt;\
+&lt;http://www.clusterresources.com/torquedocs/&gt;\
+&lt;http://www.adaptivecomputing.com/resources/docs/torque/2-5-9/index.php&gt;
+
+### Compute node
+
+1.  `torque-mom` と `torque-client` をインストール:
+
+        % sudo apt-get install torque-mom torque-client
+
+2.  `/etc/hosts` を確認。
+    ヘッドノードのホスト名が解決できるように:
+
+        192.168.0.254 charles
+
+    ヘッドノードが複数のインターフェイスを持つ場合は
+    計算ノードから見えるIPを記述した行が一番上になるようにする。
+    そうしないと `qsub` でキューを出しても実行されず、
+    以下のような警告が静かに書き出される:
+
+        % sudo momctl -d3
+        WARNING: invalid attempt to connect from server 192.168.0.254:1022  (server not authorized)
+
+        % less /var/spool/torque/mom_logs/2012xxxx
+        pbs_mom;Job;process_request;request type QueueJob from host charles rejected (host not authorized)
+        pbs_mom;Req;req_reject;Reject reply code=15008(Access from host not allowed, or unknown host MSG=request not authorized), aux=0, type=QueueJob, from PBS_Server@charles
+
+3.  ヘッドノードのホスト名を `/etc/torque/server_name` に設定: `charles`
+4.  `/var/spool/torque/mom_priv/config` に設定記述 (ref. [MOM Configuration](http://www.adaptivecomputing.com/resources/docs/torque/2-5-9/a.cmomconfig.php))
+
+    `/home` を NFSマウントしてるので `scp` しないように:
+
+        $usecp *:/home /home
+
+    ログファイルの末尾に計算ノードの名前を追加:
+
+        $log_file_suffix %h
+
+5.  `pbs_mom` を再起動:
+
+        % sudo service torque-mom restart
+
+### Head node
+
+1.  `torque-server` をインストール:
+
+        % sudo apt-get install torque-server
+
+2.  `pbs_server` が動いてしまっていたら `kill`:
+
+        % ps aux | grep pbs
+
+3.  `/etc/hosts` を確認。
+    計算ノードのホスト名が解決できるように:
+
+        192.168.0.1 node01
+        192.168.0.2 node02
+        192.168.0.3 node03
+
+4.  ヘッドノードのホスト名を `/etc/torque/server_name` に設定: `charles`
+5.  計算ノードの情報を `/var/spool/torque/server_priv/nodes` に書き込む:
+
+        node01 np=4
+        node02 np=4
+        node03 np=4
+
+    {#{#HUGOSHORTCODE-1#}#}
+
+6.  `/var/spool/torque/spool` のパーミションを設定:
+
+        % sudo chmod 777 /var/spool/torque/spool/
+        % sudo chmod o&#43;t /var/spool/torque/spool/
+
+7.  `pbs_server` を新規作成:
+
+        % sudo pbs_server -t create
+
+8.  `pbs_server` の設定 (ref. [Server Parameters](http://www.adaptivecomputing.com/resources/docs/torque/2-5-9/a.bserverparameters.php)):
+
+        % sudo qmgr -c &#34;create queue batch queue_type=execution&#34;
+        % sudo qmgr -c &#34;set queue batch priority=0&#34;
+        % sudo qmgr -c &#34;set queue batch resources_default.nodes=1&#34;
+        % sudo qmgr -c &#34;set queue batch resources_default.ncpus=1&#34;
+        % sudo qmgr -c &#34;set queue batch resources_default.walltime=96:00:00&#34;
+        % sudo qmgr -c &#34;set queue batch keep_completed=3600&#34;
+        % sudo qmgr -c &#34;set queue batch enabled=true&#34;
+        % sudo qmgr -c &#34;set queue batch started=true&#34;
+
+        % sudo qmgr -c &#34;create queue low queue_type=execution&#34;
+        % sudo qmgr -c &#34;set queue low priority=-255&#34;
+        % sudo qmgr -c &#34;set queue low resources_default.nodes=1&#34;
+        % sudo qmgr -c &#34;set queue low resources_default.ncpus=1&#34;
+        % sudo qmgr -c &#34;set queue low resources_default.walltime=96:00:00&#34;
+        % sudo qmgr -c &#34;set queue low keep_completed=3600&#34;
+        % sudo qmgr -c &#34;set queue low enabled=true&#34;
+        % sudo qmgr -c &#34;set queue low started=true&#34;
+
+        % sudo qmgr -c &#34;create queue high queue_type=execution&#34;
+        % sudo qmgr -c &#34;set queue high priority=255&#34;
+        % sudo qmgr -c &#34;set queue high resources_default.nodes=1&#34;
+        % sudo qmgr -c &#34;set queue high resources_default.ncpus=1&#34;
+        % sudo qmgr -c &#34;set queue high resources_default.walltime=96:00:00&#34;
+        % sudo qmgr -c &#34;set queue high keep_completed=3600&#34;
+        % sudo qmgr -c &#34;set queue high enabled=true&#34;
+        % sudo qmgr -c &#34;set queue high started=true&#34;
+
+        % sudo qmgr -c &#34;set server default_queue=batch&#34;
+        % sudo qmgr -c &#34;set server scheduling=true&#34;
+        % sudo qmgr -c &#34;set server allow_node_submit = True&#34;
+
+9.  `pbs_server` を再起動:
+
+        % sudo service torque-server restart
+        % sudo service torque-scheduler restart
+
+10. 計算ノードの認識を確認 (`state = free`):
+
+        % pbsnodes -a
+
+11. 試しにジョブを投入:
+
+        % echo &#34;sleep 30&#34; | qsub
+
+12. 実行されているか確認 (`S` の下が `R` なら走ってる):
+
+        % qstat
+
+## Maintenance / Trouble Shooting
+
+### Head node
+
+設定確認:
+
+    % qmgr -c &#39;p s&#39;
+
+計算ノードの認識を確認:
+
+    % pbsnodes -a
+
+投入したジョブの状態を確認:
+
+    % qstat
+    % qstat -q
+
+ログを見る:
+
+    % less /var/spool/torque/server_logs/2012xxxx
+    % less /var/spool/torque/sched_logs/2012xxxx
+
+サービス再起動:
+
+    % sudo service torque-server restart
+    % sudo service torque-sched restart
+
+計算ノードが落ちたあと `qstat` リストに残ってしまうジョブを消す:
+
+    % sudo qdel -p
+
+### Compute node
+
+状態確認:
+
+    % sudo momctl -d3
+
+ログを見る:
+
+    % less /var/spool/torque/mom_logs/2012xxxx
+
+サービス再起動:
+
+    % sudo service torque-mom restart
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

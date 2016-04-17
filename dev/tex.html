@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>TeX - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+TeX
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<h2 id="基本操作">基本操作</h2>
+
+<h3 id="mac-os-x-にインストール">Mac OS X にインストール</h3>
+
+<ol>
+<li><p><a href="http://www.tug.org/mactex/">http://www.tug.org/mactex/</a> から
+<code>BasicTeX.pkg (mactex-basic.pkg)</code> をダウンロードしてインストール。
+あるいは:</p>
+
+<pre><code>% brew cask install basictex
+</code></pre></li>
+
+<li><p><code>/Library/TeX/texbin/</code> にパスを通す。
+基本的には <code>/etc/paths.d/TeX</code> 越しに自動的に設定されるはず。</p></li>
+
+<li><p><code>sudo tlmgr update --self --all</code> で諸々アップデート</p></li>
+</ol>
+
+<h3 id="texをpdfにコンパイル">TeXをPDFにコンパイル</h3>
+
+<ol>
+<li><p>ソースコードを書く</p>
+
+<pre><code class="language-tex">\documentclass{article}
+\begin{document}
+Hello, World!
+\end{document}
+</code></pre></li>
+
+<li><p>ターミナルからコンパイル:</p>
+
+<pre><code>% xelatex hello.tex
+% open hello.pdf
+</code></pre></li>
+</ol>
+
+<h3 id="tlmgr-でパッケージ管理">tlmgr でパッケージ管理</h3>
+
+<pre><code>% sudo tlmgr update --self --all
+% tlmgr search --global japanese
+% tlmgr search --global --file zxxrl7z
+% tlmgr info --list newtx
+% sudo tlmgr install ptex
+</code></pre>
+
+<h2 id="基本要素">基本要素</h2>
+
+<h3 id="数式">数式</h3>
+
+<p>とりあえず
+<a href="ftp://ftp.ams.org/pub/tex/doc/amsmath/short-math-guide.pdf">Short Math Guide for LaTeX</a>
+(PDF)を読むべし。</p>
+
+<ul>
+<li><p>基本的に <code>amsmath</code> を使う。
+数式環境のデファクトスタンダード。
+アメリカ数学会(AMS)が開発したらしいが、
+ガチ数学じゃなくても数式を書く場合はこれらしい。
+<a href="http://www.ams.org/publications/authors/tex/amslatex">http://www.ams.org/publications/authors/tex/amslatex</a></p>
+
+<pre><code class="language-tex">\usepackage{amsmath}
+\usepackage[all, warning]{onlyamsmath}
+</code></pre></li>
+
+<li><p>Inline math:</p>
+
+<pre><code class="language-tex">if $N_e u \ll 1$, then the population is monomorphic most of the time,
+</code></pre></li>
+
+<li><p>Display math</p>
+
+<pre><code class="language-tex">\begin{equation*}
+  N_t = N_0 e^{rt}
+\end{equation*}
+</code></pre></li>
+
+<li><p>改行を含む数式を等号で揃える</p>
+
+<pre><code class="language-tex">\begin{equation}
+\begin{split}
+  N_t &amp;= N_0 e^{rt} \\
+      &amp;= N_0 \lambda^t
+\end{split}
+\end{equation}
+
+\begin{align}
+  S &amp;= 4 \pi r^2 \\
+  V &amp;= \frac {4 \pi r^3} 3 \\
+\end{align}
+</code></pre>
+
+<p><code>split</code> 環境では全体でラベルが1つ、
+<code>align</code> 環境では行ごとにラベルが生成されるので、
+用途が少し違う。</p>
+
+<p>古い <code>eqnarray</code> 環境でも似たようなことはできるが、
+スペースとかに問題あるらしく非推奨。</p></li>
+
+<li><p>記号:
+<a href="http://www.ctan.org/tex-archive/info/symbols/comprehensive/">http://www.ctan.org/tex-archive/info/symbols/comprehensive/</a>
+に網羅されてるけど、だいたい
+Short Math Guide for LaTeX_
+にまとめられてるやつで足りるはず。</p>
+
+<ul>
+<li>&ldquo;given that&rdquo; を示す縦棒はパイプ記号 <code>|</code> ではなく
+<code>\mid</code> を使うのが正しいし適度なスペースが入って読みやすい。</li>
+<li>カッコの大きさを変えたいときは <code>\left(</code> と <code>\right)</code> を使っておけば、
+前後のサイズに応じて自動的にうまいことやってくれる。
+e.g., 分数を挟むとか、カッコの入れ子とか</li>
+<li>斜体にしたくない文字を普通にするには <code>\mathrm{Var}</code> 。
+記号じゃないテキストには <code>\text{otherwise}</code> 。
+よく使われるやつは定義済み e.g., <code>\log</code>, <code>\exp</code></li>
+</ul></li>
+</ul>
+
+<h3 id="図">図</h3>
+
+<p>通常LaTeXではプリアンブルで <code>\usepackage[dvipdfmx,final]{graphicx}</code> と宣言。
+XeTeXでは不要っぽい。</p>
+
+<pre><code class="language-tex">\begin{figure}[htbp]
+\includegraphics[width=100mm]{great.pdf}
+\caption{some description}
+\label{fig:great}
+\end{figure}
+</code></pre>
+
+<p><code>[hb]</code> のようにして場所を指定できるが、
+結局はいろんな兼ね合いでコンパイラが位置を決める。
+デフォルトは <code>[tbp]</code>。
+複数指定した場合、どの順序で書いても下記の順に優先される。</p>
+
+<p><code>h</code> here: ソースと同じ位置に<br />
+<code>t</code> top: 上部に<br />
+<code>b</code> bottom: 下部に<br />
+<code>p</code> float page: 図だけを含む独立したページに</p>
+
+<p>ひとつの領域に複数の図を貼るには
+<a href="https://www.ctan.org/pkg/subfig">subfig</a>
+の <code>\subfloat[caption]{filename}</code> を用いる。</p>
+
+<p>キャプションをカスタマイズするには
+<a href="https://www.ctan.org/pkg/caption">caption</a>
+の <code>\captionsetup{...}</code> を用いる。</p>
+
+<h3 id="表">表</h3>
+
+<p><a href="https://en.wikibooks.org/wiki/LaTeX/Tables">https://en.wikibooks.org/wiki/LaTeX/Tables</a></p>
+
+<p>キャプションやラベルなどをまとめるのが <code>table</code> 環境、
+表本体が <code>tabular</code> 環境</p>
+
+<pre><code class="language-tex">\begin{table}
+  \caption{Parameters}
+  \label{parameters}
+  \begin{tabular}{rl}
+    Symbol &amp; Description \\
+    \hline
+    $\mu$ &amp; mutation rate per division \\
+    `$N_0$` &amp; initial population size \\
+  \end{tabular}
+\end{table}
+</code></pre>
+
+<p>ページに合わせて幅をうまいことやるには <code>\usepackage{tabulary}</code> 。</p>
+
+<p>複数ページにまたがる表を作るには標準 <code>\begin{longtable}</code> やその派生。</p>
+
+<h3 id="箇条書き">箇条書き</h3>
+
+<p><a href="https://www.ctan.org/pkg/enumitem">enumitem</a>
+を使うといろいろなオプションが設定可能になる。</p>
+
+<pre><code class="language-tex">\usepackage{enumitem}
+%%%
+
+\begin{itemize}
+  \item Judas Priest
+  \item Iron Maiden
+\end{itemize}
+
+\begin{enumerate}[nosep,leftmargin=*]
+  \item Judas Priest
+  \item Iron Maiden
+\end{enumerate}
+
+\begin{description}[nextline]
+  \item[key1] value1
+  \item[key2] value2
+\end{description}
+</code></pre>
+
+<p><a href="http://konoyonohana.blog.fc2.com/blog-entry-58.html">http://konoyonohana.blog.fc2.com/blog-entry-58.html</a></p>
+
+<h3 id="引用">引用</h3>
+
+<p><a href="https://en.wikibooks.org/wiki/LaTeX/More_Bibliographies">https://en.wikibooks.org/wiki/LaTeX/More_Bibliographies</a></p>
+
+<ol>
+<li><a href="http://bibdesk.sourceforge.net/">Bibdesk</a>
+などの文献管理アプリでbibtex形式の文献リストを作る。
+e.g., <code>mybibdata.bib</code></li>
+
+<li><p>コマンドにcite keyを入れて本文に挿入。
+このとき標準の <code>\cite</code> ではなく <code>{natbib}</code> のものを使う。</p>
+
+<pre><code class="language-tex">\usepackage[authoryear,round,sort&amp;compress]{natbib}
+%%%
+
+\citet{hudson1987g}         # Hudson et al. (1987)
+\citep{hudson1987g}         # (Hudson et al. 1987)
+\citep*{hudson1987g}        # (Hudson, Kreitman and Aguadé, 1987)
+\citep[eq. 5]{hudson1987g}  # (Hudson et al. 1987, eq. 5)
+\citep[see][]{hudson1987g}  # (see Hudson et al. 1987)
+</code></pre></li>
+
+<li><p>最後の方に文献リストを挿入</p>
+
+<pre><code class="language-tex">\bibliographystyle{abbrvnat}
+\bibliography{mybibdata}
+</code></pre>
+
+<p>スタイルを規定するのは <code>bst</code> ファイル</p></li>
+
+<li><p>元の <code>tex</code> をコンパイルして <code>aux</code> を生成</p></li>
+
+<li><p><code>bibtex</code> に <code>aux</code> を渡して <code>bbl</code> を生成</p></li>
+
+<li><p>再び <code>tex</code> をコンパイルすると <code>bbl</code> が取り込まれて文献リストができる (でもまだなぜか引用部分がハテナ?のまま)</p></li>
+
+<li><p>さらにもう1回コンパイルして完成</p></li>
+</ol>
+
+<p>適切な <code>Makefile</code> を書いて自動化するべし。</p>
+
+<h3 id="文字色">文字色</h3>
+
+<p><a href="https://en.wikibooks.org/wiki/LaTeX/Colors">https://en.wikibooks.org/wiki/LaTeX/Colors</a></p>
+
+<pre><code class="language-tex">\usepackage{color}
+%%%
+
+\textcolor{red}{colored text}
+{\text{red} colored text}
+</code></pre>
+
+<p>ドライバを指定して <code>\usepackage[dvipdfmx]{color}</code> としないと
+<code>graphicx</code> がおかしくなってPNG図が空白になる、謎。
+<a href="http://qiita.com/zr_tex8r/items/442b75b452b11bee8049">http://qiita.com/zr_tex8r/items/442b75b452b11bee8049</a></p>
+
+<h2 id="tips">Tips</h2>
+
+<h3 id="ダメな使い方を警告してもらう">ダメな使い方を警告してもらう</h3>
+
+<p>いろんなパッケージを使ったいろんな書き方がネット上にあふれているが、
+中には古すぎたりするため避けたほうがよいものもある。
+ファイルの先頭で <code>nag</code> を読み込むことで、
+コンパイル時にそういうのを警告してもらえる。</p>
+
+<pre><code class="language-tex">\RequirePackage[l2tabu, orthodox]{nag}
+
+\documentclass{article}  % これよりも前
+</code></pre>
+
+<h3 id="ligature問題">ligature問題</h3>
+
+<p>表示の美しさという点でリガチャは素晴らしいけど、
+PDF内の検索やPDFからのコピペ時に問題が発生する。
+例えば <code>fi</code> が合字になるため <code>definition</code> が検索でひっかからない。
+<code>definition</code> をコピペすると <code>de nition</code> になってしまう。</p>
+
+<p>次のコードをプリアンブルの頭の方に記述するといいらしいが、うまく機能しない。。。</p>
+
+<pre><code class="language-tex">\input{glyphtounicode.tex}
+\pdfgentounicode=1
+% あるいは
+\usepackage{mmap}
+</code></pre>
+
+<h2 id="日本語を使う">日本語を使う</h2>
+
+<h3 id="lualatex">LuaLaTeX</h3>
+
+<ul>
+<li>pdfTeXの後継として、今後のスタンダード</li>
+
+<li><p><code>luatexja</code> で日本語を利用可能にする</p>
+
+<ul>
+<li>依存: <code>ctablestack</code>, <code>cjk-gs-integrate</code>, <code>jfontmaps</code></li>
+
+<li><p>フォント関連:</p>
+
+<pre><code>% rm -rf ~/Library/texlive/2015basic/texmf-var/luatex-cache/
+% luaotfload-tool -u -v
+</code></pre></li>
+
+<li><p><code>bad argument #1 to 'open'</code> などと怒られる問題は、
+必要な CMap が LuaTeX から見えていないのが原因で、
+<code>adobemapping</code> をインストールして解決。
+確認するには:</p>
+
+<pre><code>% kpsewhich -format=cmap UniJIS2004-UTF32-H
+/usr/local/texlive/2015basic/texmf-dist/fonts/cmap/adobemapping/aj16/CMap/UniJIS2004-UTF32-V
+% kpsewhich -format=cmap UniJIS2004-UTF32-V
+/usr/local/texlive/2015basic/texmf-dist/fonts/cmap/adobemapping/aj16/CMap/UniJIS2004-UTF32-V
+% kpsewhich -format=cmap Adobe-Japan1-UCS2
+/usr/local/texlive/2015basic/texmf-dist/fonts/cmap/adobemapping/ToUnicode/Adobe-Japan1-UCS2
+</code></pre></li>
+</ul></li>
+
+<li><p>El Capitanにおけるヒラギノまわりの更新:</p>
+
+<pre><code>% sudo tlmgr install cjk-gs-integrate jfontmaps
+% sudo cjk-gs-integrate --link-texmf --force
+% sudo mktexlsr
+% updmap --setoption kanjiEmbed hiragino-elcapitan-pron
+% kanji-config-updmap hiragino-elcapitan-pron
+</code></pre>
+
+<div class="warning">
+<p>上記の更新をしても、肝心の LuaLaTeX 本体と
+luaotfload が更新されないと結局使えない。
+パンピー使えるようになるのは2016以降になるらしいので、
+しばらく我慢してIPAフォントを使うほかない。</p>
+
+</div>
+</li>
+</ul>
+
+<h3 id="xelatex">XeLaTeX</h3>
+
+<p><a href="http://zrbabbler.sp.land.to/xelatex.html">http://zrbabbler.sp.land.to/xelatex.html</a></p>
+
+<ul>
+<li>BasicTeX に含まれているのでそのまま使える</li>
+<li>OS上にあるOTFやTTFなどのフォントがそのまま使える</li>
+<li>El Capitanでも問題なし</li>
+<li>日本語に特化した pLaTeX 用のツールが使えない</li>
+</ul>
+
+<h3 id="uplatex">upLaTeX</h3>
+
+<ul>
+<li>日本語を使えるように LaTeX を改良したもの</li>
+<li>歴史が長いので日本語組版のための便利な道具が揃っている</li>
+
+<li><p>BasicTeX には含まれていないのでいろいろインストールが必要</p>
+
+<p><code>ptex</code>, <code>uptex</code></p>
+
+<dl>
+<dd><code>platex</code> などを含む</dd>
+<dt><code>jfontmaps</code></dt>
+<dd>フォント埋め込みツール <code>kanji-config-updmap</code> など</dd>
+<dt><code>jsclasses</code></dt>
+<dd><code>\documentclass{jsarticle}</code> などを含む</dd>
+<dt><code>japanese-otf</code>, <code>japanese-otf-uptex</code></dt>
+<dd><code>\usepackage[uplatex,deluxe,jis2004]{otf}</code> でヒラギノが使える</dd>
+<dt><code>ptex2pdf</code></dt>
+<dd><p><code>pdflatex</code> のように一発でPDFを作るための便利スクリプト。
+例えば <code>uplatex</code> を使ってコンパイルするには:</p>
+
+<pre><code>% ptex2pdf -u -l main.tex
+</code></pre></dd>
+</dl></li>
+
+<li><p>フォントマップの設定をする:</p>
+
+<pre><code>% kanji-config-updmap status
+% kanji-config-updmap auto
+% kanji-config-updmap noEmbed
+% kanji-config-updmap hiragino
+</code></pre></li>
+</ul>
+
+<h2 id="フォント">フォント</h2>
+
+<dl>
+<dt>Computer Modern</dt>
+<dd>Knuth先生が作ったデフォルトフォント。</dd>
+<dt><code>\usepackage{lmodern}</code> &mdash; Latin Modern</dt>
+<dd>Computer Modern の改良版。</dd>
+<dt><code>\usepackage{times}</code></dt>
+<dd>ローマンとサンセリフにそれぞれ Times と Helvetica を割り当てる。
+数式は Computer Modern のまま。</dd>
+<dt><code>\usepackage{txfonts}</code></dt>
+<dd><code>times</code> の改良版？
+数式も Times にする。
+既にメンテナンスは放棄されている。</dd>
+<dt><code>\usepackage{newtxtext,newtxmath}</code></dt>
+<dd><code>txfonts</code> の後継で現役。
+本文と数式を別々に指定できる。
+<code>\usepackage[libertine]{newtxmath}</code> とすると Libertine を数式に使える。
+インストールするときは <code>newtx</code> だけでなく
+<code>txfonts</code> と <code>boondox</code> も入れないと
+<code>Unable to find TFM file</code> と怒られる。</dd>
+<dt><code>\usepackage{newpxtext,newpxmath}</code></dt>
+<dd>Palatino版 <code>newtx</code> 。
+<code>palatino</code>, <code>pxfonts</code>, <code>tex-gyre</code> も必要</dd>
+<dt>TeX Gyre Pagella</dt>
+<dd>OpenType志向のPalatinoクローン。
+<code>newpx</code> や <code>unicode-math</code> 越しに使う。
+<code>tex-gyre</code>, <code>tex-gyre-math</code></dd>
+<dt><code>\usepackage{libertine}</code> &mdash; Linux Libertine</dt>
+<dd>印刷用途でも通用するよう作られた美しいフリーフォント。
+<code>fontaxes</code> もインストールする必要がある。</dd>
+</dl>
+
+<p>XeTeX なら OS のフォントをフルネームで指定して使える</p>
+
+<pre><code class="language-tex">\usepackage{amsthm, amsmath} % must be called ahead of mathspec
+\usepackage[all, warning]{onlyamsmath}
+\ifxetex
+  \usepackage[libertine,bigdelims,cmintegrals]{newtxmath} % calls amsmath
+  \usepackage{mathspec} % must be called ahead of fontspec
+  \setmathrm{Linux Libertine O} % newtxmath lacks roman
+  \usepackage{fontspec}
+  \usepackage{libertine}
+  \usepackage{xeCJK}
+  \setCJKmainfont[Scale=0.9,BoldFont=Hiragino Mincho ProN W6]
+                                    {Hiragino Mincho ProN W3}
+  \setCJKsansfont[Scale=0.9,BoldFont=Hiragino Kaku Gothic ProN W6]
+                                    {Hiragino Kaku Gothic ProN W3}
+  \setCJKmonofont[Scale=0.9,BoldFont=Hiragino Kaku Gothic ProN W6]
+                                    {Hiragino Kaku Gothic ProN W3}
+\else
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{libertine}
+  \usepackage[libertine,bigdelims,cmintegrals]{newtxmath}
+  %\usepackage[uplatex,deluxe,jis2004]{otf}
+  \usepackage{textcomp}
+\fi
+</code></pre>
+
+<p>フォント関連のものをインストールしたあとは以下のようなコマンドで読み込み直す:</p>
+
+<pre><code>% updmap
+% sudo updmap-sys
+</code></pre>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats">
+<label for="R stats">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools" checked>
+<label for="Developer Tools" class="active">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li class="active"><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "TeX"
++++
+
+## 基本操作
+
+### Mac OS X にインストール
+
+1.  &lt;http://www.tug.org/mactex/&gt; から
+    `BasicTeX.pkg (mactex-basic.pkg)` をダウンロードしてインストール。
+    あるいは:
+
+        % brew cask install basictex
+
+2.  `/Library/TeX/texbin/` にパスを通す。
+    基本的には `/etc/paths.d/TeX` 越しに自動的に設定されるはず。
+3.  `sudo tlmgr update --self --all` で諸々アップデート
+
+### TeXをPDFにコンパイル
+
+1.  ソースコードを書く
+
+    ```tex
+    \documentclass{article}
+    \begin{document}
+    Hello, World!
+    \end{document}
+    ```
+
+2.  ターミナルからコンパイル:
+
+        % xelatex hello.tex
+        % open hello.pdf
+
+### tlmgr でパッケージ管理
+
+    % sudo tlmgr update --self --all
+    % tlmgr search --global japanese
+    % tlmgr search --global --file zxxrl7z
+    % tlmgr info --list newtx
+    % sudo tlmgr install ptex
+
+## 基本要素
+
+### 数式
+
+とりあえず
+[Short Math Guide for LaTeX](ftp://ftp.ams.org/pub/tex/doc/amsmath/short-math-guide.pdf)
+(PDF)を読むべし。
+
+-   基本的に `amsmath` を使う。
+    数式環境のデファクトスタンダード。
+    アメリカ数学会(AMS)が開発したらしいが、
+    ガチ数学じゃなくても数式を書く場合はこれらしい。
+    &lt;http://www.ams.org/publications/authors/tex/amslatex&gt;
+
+    ```tex
+    \usepackage{amsmath}
+    \usepackage[all, warning]{onlyamsmath}
+    ```
+
+-   Inline math:
+
+    ```tex
+    if $N_e u \ll 1$, then the population is monomorphic most of the time,
+    ```
+
+-   Display math
+
+    ```tex
+    \begin{equation*}
+      N_t = N_0 e^{rt}
+    \end{equation*}
+    ```
+
+-   改行を含む数式を等号で揃える
+
+    ```tex
+    \begin{equation}
+    \begin{split}
+      N_t &amp;= N_0 e^{rt} \\
+          &amp;= N_0 \lambda^t
+    \end{split}
+    \end{equation}
+
+    \begin{align}
+      S &amp;= 4 \pi r^2 \\
+      V &amp;= \frac {4 \pi r^3} 3 \\
+    \end{align}
+    ```
+
+    `split` 環境では全体でラベルが1つ、
+    `align` 環境では行ごとにラベルが生成されるので、
+    用途が少し違う。
+
+    古い `eqnarray` 環境でも似たようなことはできるが、
+    スペースとかに問題あるらしく非推奨。
+
+-   記号:
+    &lt;http://www.ctan.org/tex-archive/info/symbols/comprehensive/&gt;
+    に網羅されてるけど、だいたい
+    Short Math Guide for LaTeX\_
+    にまとめられてるやつで足りるはず。
+    -   &#34;given that&#34; を示す縦棒はパイプ記号 `|` ではなく
+        `\mid` を使うのが正しいし適度なスペースが入って読みやすい。
+    -   カッコの大きさを変えたいときは `\left(` と `\right)` を使っておけば、
+        前後のサイズに応じて自動的にうまいことやってくれる。
+        e.g., 分数を挟むとか、カッコの入れ子とか
+    -   斜体にしたくない文字を普通にするには `\mathrm{Var}` 。
+        記号じゃないテキストには `\text{otherwise}` 。
+        よく使われるやつは定義済み e.g., `\log`, `\exp`
+
+### 図
+
+通常LaTeXではプリアンブルで `\usepackage[dvipdfmx,final]{graphicx}` と宣言。
+XeTeXでは不要っぽい。
+
+```tex
+\begin{figure}[htbp]
+\includegraphics[width=100mm]{great.pdf}
+\caption{some description}
+\label{fig:great}
+\end{figure}
+```
+
+`[hb]` のようにして場所を指定できるが、
+結局はいろんな兼ね合いでコンパイラが位置を決める。
+デフォルトは `[tbp]`。
+複数指定した場合、どの順序で書いても下記の順に優先される。
+
+`h` here: ソースと同じ位置に\
+`t` top: 上部に\
+`b` bottom: 下部に\
+`p` float page: 図だけを含む独立したページに
+
+ひとつの領域に複数の図を貼るには
+[subfig](https://www.ctan.org/pkg/subfig)
+の `\subfloat[caption]{filename}` を用いる。
+
+キャプションをカスタマイズするには
+[caption](https://www.ctan.org/pkg/caption)
+の `\captionsetup{...}` を用いる。
+
+### 表
+
+&lt;https://en.wikibooks.org/wiki/LaTeX/Tables&gt;
+
+キャプションやラベルなどをまとめるのが `table` 環境、
+表本体が `tabular` 環境
+
+```tex
+\begin{table}
+  \caption{Parameters}
+  \label{parameters}
+  \begin{tabular}{rl}
+    Symbol &amp; Description \\
+    \hline
+    $\mu$ &amp; mutation rate per division \\
+    `$N_0$` &amp; initial population size \\
+  \end{tabular}
+\end{table}
+```
+
+ページに合わせて幅をうまいことやるには `\usepackage{tabulary}` 。
+
+複数ページにまたがる表を作るには標準 `\begin{longtable}` やその派生。
+
+### 箇条書き
+
+[enumitem](https://www.ctan.org/pkg/enumitem)
+を使うといろいろなオプションが設定可能になる。
+
+```tex
+\usepackage{enumitem}
+%%%
+
+\begin{itemize}
+  \item Judas Priest
+  \item Iron Maiden
+\end{itemize}
+
+\begin{enumerate}[nosep,leftmargin=*]
+  \item Judas Priest
+  \item Iron Maiden
+\end{enumerate}
+
+\begin{description}[nextline]
+  \item[key1] value1
+  \item[key2] value2
+\end{description}
+```
+
+&lt;http://konoyonohana.blog.fc2.com/blog-entry-58.html&gt;
+
+### 引用
+
+&lt;https://en.wikibooks.org/wiki/LaTeX/More_Bibliographies&gt;
+
+1.  [Bibdesk](http://bibdesk.sourceforge.net/)
+    などの文献管理アプリでbibtex形式の文献リストを作る。
+    e.g., `mybibdata.bib`
+2.  コマンドにcite keyを入れて本文に挿入。
+    このとき標準の `\cite` ではなく `{natbib}` のものを使う。
+
+    ```tex
+    \usepackage[authoryear,round,sort&amp;compress]{natbib}
+    %%%
+
+    \citet{hudson1987g}         # Hudson et al. (1987)
+    \citep{hudson1987g}         # (Hudson et al. 1987)
+    \citep*{hudson1987g}        # (Hudson, Kreitman and Aguadé, 1987)
+    \citep[eq. 5]{hudson1987g}  # (Hudson et al. 1987, eq. 5)
+    \citep[see][]{hudson1987g}  # (see Hudson et al. 1987)
+    ```
+
+3.  最後の方に文献リストを挿入
+
+    ```tex
+    \bibliographystyle{abbrvnat}
+    \bibliography{mybibdata}
+    ```
+
+    スタイルを規定するのは `bst` ファイル
+
+4.  元の `tex` をコンパイルして `aux` を生成
+5.  `bibtex` に `aux` を渡して `bbl` を生成
+6.  再び `tex` をコンパイルすると `bbl` が取り込まれて文献リストができる (でもまだなぜか引用部分がハテナ?のまま)
+7.  さらにもう1回コンパイルして完成
+
+適切な `Makefile` を書いて自動化するべし。
+
+### 文字色
+
+&lt;https://en.wikibooks.org/wiki/LaTeX/Colors&gt;
+
+```tex
+\usepackage{color}
+%%%
+
+\textcolor{red}{colored text}
+{\text{red} colored text}
+```
+
+ドライバを指定して `\usepackage[dvipdfmx]{color}` としないと
+`graphicx` がおかしくなってPNG図が空白になる、謎。
+&lt;http://qiita.com/zr_tex8r/items/442b75b452b11bee8049&gt;
+
+## Tips
+
+### ダメな使い方を警告してもらう
+
+いろんなパッケージを使ったいろんな書き方がネット上にあふれているが、
+中には古すぎたりするため避けたほうがよいものもある。
+ファイルの先頭で `nag` を読み込むことで、
+コンパイル時にそういうのを警告してもらえる。
+
+```tex
+\RequirePackage[l2tabu, orthodox]{nag}
+
+\documentclass{article}  % これよりも前
+```
+
+### ligature問題
+
+表示の美しさという点でリガチャは素晴らしいけど、
+PDF内の検索やPDFからのコピペ時に問題が発生する。
+例えば `fi` が合字になるため `definition` が検索でひっかからない。
+`definition` をコピペすると `de nition` になってしまう。
+
+次のコードをプリアンブルの頭の方に記述するといいらしいが、うまく機能しない。。。
+
+```tex
+\input{glyphtounicode.tex}
+\pdfgentounicode=1
+% あるいは
+\usepackage{mmap}
+```
+
+## 日本語を使う
+
+### LuaLaTeX
+
+-   pdfTeXの後継として、今後のスタンダード
+-   `luatexja` で日本語を利用可能にする
+    -   依存: `ctablestack`, `cjk-gs-integrate`, `jfontmaps`
+    -   フォント関連:
+
+            % rm -rf ~/Library/texlive/2015basic/texmf-var/luatex-cache/
+            % luaotfload-tool -u -v
+
+    -   `bad argument #1 to &#39;open&#39;` などと怒られる問題は、
+        必要な CMap が LuaTeX から見えていないのが原因で、
+        `adobemapping` をインストールして解決。
+        確認するには:
+
+            % kpsewhich -format=cmap UniJIS2004-UTF32-H
+            /usr/local/texlive/2015basic/texmf-dist/fonts/cmap/adobemapping/aj16/CMap/UniJIS2004-UTF32-V
+            % kpsewhich -format=cmap UniJIS2004-UTF32-V
+            /usr/local/texlive/2015basic/texmf-dist/fonts/cmap/adobemapping/aj16/CMap/UniJIS2004-UTF32-V
+            % kpsewhich -format=cmap Adobe-Japan1-UCS2
+            /usr/local/texlive/2015basic/texmf-dist/fonts/cmap/adobemapping/ToUnicode/Adobe-Japan1-UCS2
+
+-   El Capitanにおけるヒラギノまわりの更新:
+
+        % sudo tlmgr install cjk-gs-integrate jfontmaps
+        % sudo cjk-gs-integrate --link-texmf --force
+        % sudo mktexlsr
+        % updmap --setoption kanjiEmbed hiragino-elcapitan-pron
+        % kanji-config-updmap hiragino-elcapitan-pron
+
+    {#{#HUGOSHORTCODE-1#}#}
+
+### XeLaTeX
+
+&lt;http://zrbabbler.sp.land.to/xelatex.html&gt;
+
+-   BasicTeX に含まれているのでそのまま使える
+-   OS上にあるOTFやTTFなどのフォントがそのまま使える
+-   El Capitanでも問題なし
+-   日本語に特化した pLaTeX 用のツールが使えない
+
+### upLaTeX
+
+-   日本語を使えるように LaTeX を改良したもの
+-   歴史が長いので日本語組版のための便利な道具が揃っている
+-   BasicTeX には含まれていないのでいろいろインストールが必要
+
+    `ptex`, `uptex`
+    :   `platex` などを含む
+
+    `jfontmaps`
+    :   フォント埋め込みツール `kanji-config-updmap` など
+
+    `jsclasses`
+    :   `\documentclass{jsarticle}` などを含む
+
+    `japanese-otf`, `japanese-otf-uptex`
+    :   `\usepackage[uplatex,deluxe,jis2004]{otf}` でヒラギノが使える
+
+    `ptex2pdf`
+    :   `pdflatex` のように一発でPDFを作るための便利スクリプト。
+        例えば `uplatex` を使ってコンパイルするには:
+
+            % ptex2pdf -u -l main.tex
+
+-   フォントマップの設定をする:
+
+        % kanji-config-updmap status
+        % kanji-config-updmap auto
+        % kanji-config-updmap noEmbed
+        % kanji-config-updmap hiragino
+
+## フォント
+
+Computer Modern
+:   Knuth先生が作ったデフォルトフォント。
+
+`\usepackage{lmodern}` --- Latin Modern
+:   Computer Modern の改良版。
+
+`\usepackage{times}`
+:   ローマンとサンセリフにそれぞれ Times と Helvetica を割り当てる。
+    数式は Computer Modern のまま。
+
+`\usepackage{txfonts}`
+:   `times` の改良版？
+    数式も Times にする。
+    既にメンテナンスは放棄されている。
+
+`\usepackage{newtxtext,newtxmath}`
+:   `txfonts` の後継で現役。
+    本文と数式を別々に指定できる。
+    `\usepackage[libertine]{newtxmath}` とすると Libertine を数式に使える。
+    インストールするときは `newtx` だけでなく
+    `txfonts` と `boondox` も入れないと
+    `Unable to find TFM file` と怒られる。
+
+`\usepackage{newpxtext,newpxmath}`
+:   Palatino版 `newtx` 。
+    `palatino`, `pxfonts`, `tex-gyre` も必要
+
+TeX Gyre Pagella
+:   OpenType志向のPalatinoクローン。
+    `newpx` や `unicode-math` 越しに使う。
+    `tex-gyre`, `tex-gyre-math`
+
+`\usepackage{libertine}` --- Linux Libertine
+:   印刷用途でも通用するよう作られた美しいフリーフォント。
+    `fontaxes` もインストールする必要がある。
+
+XeTeX なら OS のフォントをフルネームで指定して使える
+
+```tex
+\usepackage{amsthm, amsmath} % must be called ahead of mathspec
+\usepackage[all, warning]{onlyamsmath}
+\ifxetex
+  \usepackage[libertine,bigdelims,cmintegrals]{newtxmath} % calls amsmath
+  \usepackage{mathspec} % must be called ahead of fontspec
+  \setmathrm{Linux Libertine O} % newtxmath lacks roman
+  \usepackage{fontspec}
+  \usepackage{libertine}
+  \usepackage{xeCJK}
+  \setCJKmainfont[Scale=0.9,BoldFont=Hiragino Mincho ProN W6]
+                                    {Hiragino Mincho ProN W3}
+  \setCJKsansfont[Scale=0.9,BoldFont=Hiragino Kaku Gothic ProN W6]
+                                    {Hiragino Kaku Gothic ProN W3}
+  \setCJKmonofont[Scale=0.9,BoldFont=Hiragino Kaku Gothic ProN W6]
+                                    {Hiragino Kaku Gothic ProN W3}
+\else
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{libertine}
+  \usepackage[libertine,bigdelims,cmintegrals]{newtxmath}
+  %\usepackage[uplatex,deluxe,jis2004]{otf}
+  \usepackage{textcomp}
+\fi
+```
+
+フォント関連のものをインストールしたあとは以下のようなコマンドで読み込み直す:
+
+    % updmap
+    % sudo updmap-sys
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

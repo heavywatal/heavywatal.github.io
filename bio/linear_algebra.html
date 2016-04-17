@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>線形代数 - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+線形代数
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<h2 id="用語">用語</h2>
+
+<dl>
+<dt><strong>正方行列 (square)</strong></dt>
+<dd>行と列の数が等しい行列。</dd>
+<dt><strong>上三角行列 (upper triangular)</strong>, <strong>下三角行列(lower triangular)</strong></dt>
+<dd>対角線の左下、右上が0となる正方行列。
+対角成分の積が行列式になる。</dd>
+<dt><strong>対角行列 (diagonal)</strong></dt>
+<dd>対角成分以外が0の正方行列。上三角かつ下三角。
+軸方向の伸縮だけで歪まない写像。
+べき乗が対角成分それぞれのべき乗だけで計算できる。</dd>
+<dt><strong>単位行列 (identity)</strong> $I, E$</dt>
+<dd>対角成分が全て1の対角行列。</dd>
+<dt><strong>正則行列 (invertible, non-singular, non-degenerate, regular)</strong></dt>
+<dd>逆行列を持つ。行列式が0じゃない。固有値0を持たない。</dd>
+</dl>
+
+<hr />
+
+<dl>
+<dt><strong>行列式 (determinant)</strong> $\mathrm{det}\, A, |A|$</dt>
+<dd>正方行列による変換の体積拡大率。
+行列式が0 ⇔ 写像がぺちゃんこになる ⇔ 逆行列が存在しない。
+固有値の積と等しい。</dd>
+<dt><strong>跡 (trace)</strong> $\mathrm{tr}\, A$</dt>
+<dd>正方行列の対角成分の和。
+固有値の和と等しい。</dd>
+<dt><strong>核 (kernel)</strong> $\mathrm{Ker}\, A$</dt>
+<dd>$A\mathbf{x} = \mathbf{o}$ で原点に移るような
+$\mathbf{x}$ の集合。 核が原点だけ(0次元) ⇔ ランク＝元の次元数 ⇔ 写像は <strong>単射</strong>。</dd>
+<dt><strong>像 (image)</strong> $\mathrm{Im}\, A$</dt>
+<dd>$\mathbf{x}$ を目一杯いろいろ動かしたときの
+$\mathbf{y} = A\mathbf{x}$ の集合。
+像が行き先の全空間 ⇔ ランク＝行き先の次元数 ⇔ 写像は <strong>全射</strong>。</dd>
+<dt><strong>ランク (rank)</strong> $\mathrm{rank}\, A$</dt>
+<dd>像の次元数。</dd>
+</dl>
+
+<h2 id="行列のべき乗">行列のべき乗</h2>
+
+<p>行列は写像。行列のべき乗は写像の繰り返し。</p>
+
+<p>ベクトル $\mathbf{x}$ に正方行列 $A$ を
+$t$ 回かけたらどうなるか知りたい。</p>
+
+<div>$$\begin{split}
+\mathbf{x}(t) = A\mathbf{x}(t-1) = A^t\mathbf{x}(0)
+\end{split}$$</div>
+
+<p>そのまま行列計算をするのではなく、適当な正則行列で
+$\mathbf{x}(t) = P\mathbf{y}(t)$ という変数変換をしてみると</p>
+
+<div>$$\begin{split}
+\mathbf{y}(t) &= P^{-1}\mathbf{x}(t) \\
+              &= P^{-1}A\mathbf{x}(t-1) \\
+              &= P^{-1}AP\mathbf{y}(t-1) \\
+              &= (P^{-1}AP)^t\mathbf{y}(0) \\
+              &= \Lambda^t\mathbf{y}(0) \\
+\mathbf{x}(t) &= P\mathbf{y}(t) \\
+              &= P\Lambda^t\mathbf{y}(0) \\
+              &= P\Lambda^tP^{-1}\mathbf{x}(0)
+\end{split}$$</div>
+
+<p>このとき $\Lambda = P^{-1}AP$ が対角行列になってくれてると
+$t$ 乗する計算がすごく楽チン。</p>
+
+<div>$$\begin{split}
+\Lambda^t &= \mathrm{diag}(\lambda _1, ..., \lambda _n)^t \\
+          &= \mathrm{diag}(\lambda _1^t, ..., \lambda _n^t)
+\end{split}$$</div>
+
+<p>この <strong>対角化 (diagonalization)</strong> をもたらす変換行列 $P$ とはどういうものか</p>
+
+<div>$$\begin{split}
+P^{-1}AP &= \mathrm{diag}(\lambda _1, ..., \lambda _n) \\
+      AP &= P \mathrm{diag}(\lambda _1, ..., \lambda _n)
+\end{split}$$</div>
+
+<p><code>$P = (\mathbf{p}_1, ..., \mathbf{p}_n)$</code> として列ごとに見ると</p>
+
+<div>$$\begin{split}
+A\mathbf{p}_1 &= \lambda_1 \mathbf{p}_1 \\
+\vdots \\
+A\mathbf{p}_n &= \lambda_n \mathbf{p}_n
+\end{split}$$</div>
+
+<p>$A$ をかけても長さが変わるだけで方向は変わらない。
+この伸縮率 $\lambda$ が <strong>固有値 (eigenvalue)</strong> で、それぞれに対応する
+$\mathbf{o}$ でない $\mathbf{p}$ が <strong>固有ベクトル (eigenvector)</strong>。</p>
+
+<p>つまり変換行列 $P$ は $A$ の固有ベクトルを並べたもので、
+$\Lambda$ は対角成分に $A$ の固有値を並べたもの。
+そうするとさっきの $\mathbf{x} = P\mathbf{y}$ は、
+$\mathbf{x}$ を $A$ の固有ベクトルの線形結合として表し、
+$A$ をかけても方向が変わらないように変数変換しておくということに相当する。</p>
+
+<div>$$\begin{split}
+A^t\mathbf{x} &= A^t P \mathbf{y} \\
+              &= A^t (y_1\mathbf{p_1} + ... + y_n\mathbf{p_n}) \\
+              &= y_1 A^t \mathbf{p_1} + ... + y_n A^t \mathbf{p_n} \\
+              &= y_1 \lambda _1^t \mathbf{p_1} + ... + y_n \lambda _n^t \mathbf{p_n} \\
+              &= \lambda_k ^t (
+                   y_1 \left(\frac {\lambda _1} {\lambda _k}\right) ^t \mathbf{p_1}
+                   + ... + y_k \mathbf{p_k}
+                   + ... + y_n \left(\frac {\lambda _n} {\lambda _k}\right) ^t \mathbf{p_n}) \\
+              &\sim y_k \lambda_k ^t \mathbf{p_k}
+\end{split}$$</div>
+
+<p>$t$ が大きくなるにつれて最大の固有値 <code>$\lambda_k$</code>
+に対応する固有ベクトル <code>$\mathbf{p_k}$</code> の向きに近づいていく。
+その極限には行かないにしても、固有値の大きな固有ベクトルの方向に寄っていく傾向があるってこと。</p>
+
+<div class="note">
+<p>固有値が重解を含んでいてもその重複と同じ分だけ固有ベクトルが取れれば
+(代数的重複度＝幾何的重複度ならば) 対角化可能。
+対角化できない正方行列でも $P^{-1}AP = J$ となる $P$ を見つけて
+<strong>Jordan標準形</strong> まで持っていくことは可能。
+$J^t$ の計算は $\Lambda^t$ ほどじゃないにせよそれなりに楽。</p>
+
+</div>
+
+
+<h2 id="参考文献">参考文献</h2>
+
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4274065782/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51QTY7RSFRL._SX160_.jpg" alt="プログラミングのための線形代数" /></a></p>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats">
+<label for="R stats">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology" checked>
+<label for="Biology" class="active">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li class="active"><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "線形代数"
++++
+
+## 用語
+
+**正方行列 (square)**
+:   行と列の数が等しい行列。
+
+**上三角行列 (upper triangular)**, **下三角行列(lower triangular)**
+:   対角線の左下、右上が0となる正方行列。
+    対角成分の積が行列式になる。
+
+**対角行列 (diagonal)**
+:   対角成分以外が0の正方行列。上三角かつ下三角。
+    軸方向の伸縮だけで歪まない写像。
+    べき乗が対角成分それぞれのべき乗だけで計算できる。
+
+**単位行列 (identity)** $I, E$
+:   対角成分が全て1の対角行列。
+
+**正則行列 (invertible, non-singular, non-degenerate, regular)**
+:   逆行列を持つ。行列式が0じゃない。固有値0を持たない。
+
+------------------------------------------------------------------------
+
+**行列式 (determinant)** $\mathrm{det}\, A, |A|$
+:   正方行列による変換の体積拡大率。
+    行列式が0 ⇔ 写像がぺちゃんこになる ⇔ 逆行列が存在しない。
+    固有値の積と等しい。
+
+**跡 (trace)** $\mathrm{tr}\, A$
+:   正方行列の対角成分の和。
+    固有値の和と等しい。
+
+**核 (kernel)** $\mathrm{Ker}\, A$
+:   $A\mathbf{x} = \mathbf{o}$ で原点に移るような
+    $\mathbf{x}$ の集合。 核が原点だけ(0次元) ⇔ ランク＝元の次元数 ⇔ 写像は **単射**。
+
+**像 (image)** $\mathrm{Im}\, A$
+:   $\mathbf{x}$ を目一杯いろいろ動かしたときの
+    $\mathbf{y} = A\mathbf{x}$ の集合。
+    像が行き先の全空間 ⇔ ランク＝行き先の次元数 ⇔ 写像は **全射**。
+
+**ランク (rank)** $\mathrm{rank}\, A$
+:   像の次元数。
+
+## 行列のべき乗
+
+行列は写像。行列のべき乗は写像の繰り返し。
+
+ベクトル $\mathbf{x}$ に正方行列 $A$ を
+$t$ 回かけたらどうなるか知りたい。
+
+&lt;div&gt;$$\begin{split}
+\mathbf{x}(t) = A\mathbf{x}(t-1) = A^t\mathbf{x}(0)
+\end{split}$$&lt;/div&gt;
+
+そのまま行列計算をするのではなく、適当な正則行列で
+$\mathbf{x}(t) = P\mathbf{y}(t)$ という変数変換をしてみると
+
+&lt;div&gt;$$\begin{split}
+\mathbf{y}(t) &amp;= P^{-1}\mathbf{x}(t) \\
+              &amp;= P^{-1}A\mathbf{x}(t-1) \\
+              &amp;= P^{-1}AP\mathbf{y}(t-1) \\
+              &amp;= (P^{-1}AP)^t\mathbf{y}(0) \\
+              &amp;= \Lambda^t\mathbf{y}(0) \\
+\mathbf{x}(t) &amp;= P\mathbf{y}(t) \\
+              &amp;= P\Lambda^t\mathbf{y}(0) \\
+              &amp;= P\Lambda^tP^{-1}\mathbf{x}(0)
+\end{split}$$&lt;/div&gt;
+
+このとき $\Lambda = P^{-1}AP$ が対角行列になってくれてると
+$t$ 乗する計算がすごく楽チン。
+
+&lt;div&gt;$$\begin{split}
+\Lambda^t &amp;= \mathrm{diag}(\lambda _1, ..., \lambda _n)^t \\
+          &amp;= \mathrm{diag}(\lambda _1^t, ..., \lambda _n^t)
+\end{split}$$&lt;/div&gt;
+
+この **対角化 (diagonalization)** をもたらす変換行列 $P$ とはどういうものか
+
+&lt;div&gt;$$\begin{split}
+P^{-1}AP &amp;= \mathrm{diag}(\lambda _1, ..., \lambda _n) \\
+      AP &amp;= P \mathrm{diag}(\lambda _1, ..., \lambda _n)
+\end{split}$$&lt;/div&gt;
+
+`$P = (\mathbf{p}_1, ..., \mathbf{p}_n)$` として列ごとに見ると
+
+&lt;div&gt;$$\begin{split}
+A\mathbf{p}_1 &amp;= \lambda_1 \mathbf{p}_1 \\
+\vdots \\
+A\mathbf{p}_n &amp;= \lambda_n \mathbf{p}_n
+\end{split}$$&lt;/div&gt;
+
+$A$ をかけても長さが変わるだけで方向は変わらない。
+この伸縮率 $\lambda$ が **固有値 (eigenvalue)** で、それぞれに対応する
+$\mathbf{o}$ でない $\mathbf{p}$ が **固有ベクトル (eigenvector)**。
+
+つまり変換行列 $P$ は $A$ の固有ベクトルを並べたもので、
+$\Lambda$ は対角成分に $A$ の固有値を並べたもの。
+そうするとさっきの $\mathbf{x} = P\mathbf{y}$ は、
+$\mathbf{x}$ を $A$ の固有ベクトルの線形結合として表し、
+$A$ をかけても方向が変わらないように変数変換しておくということに相当する。
+
+&lt;div&gt;$$\begin{split}
+A^t\mathbf{x} &amp;= A^t P \mathbf{y} \\
+              &amp;= A^t (y_1\mathbf{p_1} &#43; ... &#43; y_n\mathbf{p_n}) \\
+              &amp;= y_1 A^t \mathbf{p_1} &#43; ... &#43; y_n A^t \mathbf{p_n} \\
+              &amp;= y_1 \lambda _1^t \mathbf{p_1} &#43; ... &#43; y_n \lambda _n^t \mathbf{p_n} \\
+              &amp;= \lambda_k ^t (
+                   y_1 \left(\frac {\lambda _1} {\lambda _k}\right) ^t \mathbf{p_1}
+                   &#43; ... &#43; y_k \mathbf{p_k}
+                   &#43; ... &#43; y_n \left(\frac {\lambda _n} {\lambda _k}\right) ^t \mathbf{p_n}) \\
+              &amp;\sim y_k \lambda_k ^t \mathbf{p_k}
+\end{split}$$&lt;/div&gt;
+
+$t$ が大きくなるにつれて最大の固有値 `$\lambda_k$`
+に対応する固有ベクトル `$\mathbf{p_k}$` の向きに近づいていく。
+その極限には行かないにしても、固有値の大きな固有ベクトルの方向に寄っていく傾向があるってこと。
+
+{#{#HUGOSHORTCODE-1#}#}
+
+## 参考文献
+
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4274065782/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/51QTY7RSFRL._SX160_.jpg&#34; alt=&#34;プログラミングのための線形代数&#34; /&gt;&lt;/a&gt;
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

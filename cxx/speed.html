@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>めざせC&#43;&#43;高速プログラム - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+めざせC&#43;&#43;高速プログラム
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<h2 id="はじめに">はじめに</h2>
+
+<ul>
+<li>速いプログラムで得られるメリットを超えるようなコストを払わないように。
+まずは動くプログラムを書いて目的を達成することが大事。
+自分律速じゃなくてプログラム律速だなと感じた段階でリファクタリングを考える。</li>
+<li>プログラム本来の意図が読み取れなくなりそうなマニアックな高速化は避ける。
+清く正しくメンテナンスしやすいプログラムを書くほうが結局は生産的。</li>
+<li>学習目的でない限り、車輪の再発明を避ける。
+やろうとしていることはきっと既に誰かが実現し、
+再利用可能な形で公開してくれているはず。
+まずは標準ライブラリとBoostを探してみる。</li>
+</ul>
+
+<h2 id="頑張れコンパイラ">頑張れコンパイラ</h2>
+
+<p>Intelの icc でビルドされたプログラムは速いらしい。
+gcc や clang の最適化技術も着々と進歩しており、
+新しいコンパイラを使うほうがその恩恵を受けられる、はず。</p>
+
+<h3 id="最適化オプション">最適化オプション</h3>
+
+<p><a href="http://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html">http://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html</a></p>
+
+<pre><code class="language-sh">% g++ -O3 main.cpp
+</code></pre>
+
+<h3 id="コンパイル時定数">コンパイル時定数</h3>
+
+<p>定数同士の四則演算などがコード中に転がっていると、
+コンパイルの段階でコンパイラが計算して１つの定数に置き換えてくれる。
+つまり、実行時の計算を減らすことができる。
+したがって、定数と変数が混ざった計算があるときは、定数をまとめておくとよさそう。</p>
+
+<p>四則演算の中でも、割り算は特に遅いらしい。
+コンパイル時に逆数のかけ算になるような書き方のほうが高速になる可能性がある。
+(自動的にやってくれたりしないのかな?)</p>
+
+<pre><code class="language-c++">// 毎回割り算
+rand() / 4294967296.0;
+
+// カッコ内はコンパイル時に計算されて下のようになるはず
+(1.0 / 4294967296.0) * rand();
+(2.328306436538696e-10) * rand();
+</code></pre>
+
+<p>C++11では明示的に <code>constexpr</code> を指定することで、
+確実にコンパイル時定数にできるので積極的に使うべし。
+それ以外にも、テンプレートメタプログラミングで
+なるべくコンパイル時に計算させることができる。</p>
+
+<h3 id="インライン展開">インライン展開</h3>
+
+<p>関数の呼び出しにはコストがかかり、
+コードが短くて何度も呼ばれる関数では特にそのコストの割合が高くて馬鹿にできない。
+呼び出される予定のところにコンパイルの段階で関数を展開してやること
+(=インライン展開) でそのコストを無くせる。</p>
+
+<p>ファイルをまたいで使う関数の場合は定義宣言を
+<code>ソース.cpp</code> ではなく <code>ヘッダ.h</code> に置き、頭に <code>inline</code> を付ける。
+メンバ関数の場合はクラス定義の中で定義宣言にするだけでよい。
+ただしそのように書いてもコンパイラへのヒントになるだけで、
+インライン展開に必要でも十分でもない。</p>
+
+<p><code>-O2</code> では <code>-finline-small-functions</code> がオンになり、
+<code>-O3</code> では <code>-finline-functions</code> がオンになる。
+実行ファイルのサイズがデカくなるし、コンパイルは遅くなるので、バランスを考える。</p>
+
+<pre><code class="language-c++">inline double rexp(const double lambda=1.0) {
+    return -log(1.0 - runif()) / lambda;
+}
+</code></pre>
+
+<h3 id="関数オブジェクト">関数オブジェクト</h3>
+
+<p>関数オブジェクトとは、<code>operator()</code> を定義した <code>class</code> または <code>struct</code> のこと。
+<code>std::for_each()</code> や <code>std::transform()</code> の最後の引数に関数を渡す場合など、
+何度も呼び出される小さい関数については、
+普通の関数や関数ポインタで渡すよりも関数オブジェクトを使ったほうが高速。
+インライン展開などコンパイラによる最適化がしやすいらしい。
+あと、メンバ変数として値を保持できるので、
+引数のやり取りやメモリの確保・開放が少なくてすむという場面もありそう。</p>
+
+<pre><code class="language-c++">class isAboveThreshold {
+  public:
+    isAboveThreshold(const double t): threshold_(t);
+    bool operator()(const double x) const {
+        return x &gt; threshold_;
+    }
+  private:
+    const double threshold_;
+};
+
+std::transform(v.begin(), v.end(), result.begin(), isAboveThreshold(3.14));
+</code></pre>
+
+<p>C++11からはラムダ式が便利</p>
+
+<pre><code class="language-c++">const double threshold = 3.14;
+std::transform(v.begin(), v.end(), result.begin(),
+               [threshold](int x) -&gt; bool {return x &gt; threshold});
+</code></pre>
+
+<h2 id="余計な一時オブジェクトを作らない">余計な一時オブジェクトを作らない</h2>
+
+<p>普通にプログラムを書くと、思わぬところで余計な一時オブジェクトが作られることになる。
+メモリもcpu時間ももったいないので、なるべく避けよう。</p>
+
+<h3 id="const-参照渡し-or-ポインタ渡し"><code>const</code> 参照渡し or ポインタ渡し</h3>
+
+<p><code>int</code> とか <code>double</code> のような単純な型の場合は気にしなくてもいいが、
+そうでないオブジェクトの値渡しにはコピーコンストラクタが呼ばれるコストが生じる。
+したがって、<code>std::string</code> とかSTLコンテナとか自作クラスなどは参照渡し
+（そいつのアドレスだけを渡す）のほうが遥かに高速。
+参照渡しされた仮引数の中身を関数内で変更すると、
+呼び出し元の実引数の値も変更されることになる。
+変更するつもりがない場合は明示的に <code>const</code> をつけて受け取るようにすると安全</p>
+
+<pre><code class="language-c++">void do_something(const std::vector&lt;int&gt;&amp; huge_array) {
+    // コピーせず本体への参照のみ受け取る。
+    // constがついているので、変更しようとするとコンパイルエラー
+}
+</code></pre>
+
+<p>引数の中身を変更するつもりがある場合はポインタを受け取るようにすると、
+呼び出すときに <code>&amp;</code> が必要となるので意図が伝わりやすい</p>
+
+<pre><code class="language-c++">void do_something(std::vector&lt;int&gt;* huge_array) {
+    // コピーせずポインタを受け取る。
+    // huge_arrayの変更は呼び出し元にも影響する。
+}
+
+do_something(&amp;some_array);  // ああ、この配列は変更されるんだな
+</code></pre>
+
+<h3 id="複合代入演算子">複合代入演算子</h3>
+
+<p><code>int</code> や <code>double</code> とかならまだしも、<code>std::string</code> とかだとかなり違うはず。</p>
+
+<pre><code class="language-c++">// (a+b)の結果を持つ一時オブジェクトが作られ、xに代入される。
+T x = a + b;
+
+// xをaで初期化して、bを足す。一時オブジェクトは作られない。
+T x(a);
+x += b;
+</code></pre>
+
+<h3 id="ムーブ-c-11">ムーブ (C++11)</h3>
+
+<h2 id="コンテナ">コンテナ</h2>
+
+<h3 id="用途に合わせる">用途に合わせる</h3>
+
+<dl>
+<dt><code>std::vector</code></dt>
+<dd>メモリ上に連続した領域を確保する。
+そのため、途中に <code>insert()</code> するのは遅い
+（メモリ領域を別のところに再確保して全部コピーしなければならないので）。
+その代わり、要素へのアクセスは高速で、インデックス <code>[ ]</code> によるランダムアクセスも可能。</dd>
+<dt><code>std::deque</code></dt>
+<dd><code>vector</code> とほぼ同じだが、<code>reserve()</code> ができない。
+代わりに、<code>push_front()</code> と <code>pop_front()</code> が使える。
+つまり、先頭に対する追加・削除が必要な場合だけ使うコンテナ。</dd>
+<dt><code>std::list</code></dt>
+<dd>上記２つとは違って、飛び飛びの領域にまたがって存在できる。
+これは、各要素の値とともに前後の要素を示すイテレータを格納することで実現されている。
+そのため、途中への <code>insert()</code> はイテレータを書き換えるだけなので高速。
+ただし、その分メモリは余分に食うし、ランダムアクセスできないし、イテレータで総なめするのも遅い。</dd>
+</dl>
+
+<h3 id="メモリは一気に確保">メモリは一気に確保</h3>
+
+<p><code>std::vector</code> の <code>push_back()</code> は勝手にメモリ領域を確保してくれるので、
+大きさの心配をする必要がなくて便利。
+これは、領域が足りなくなる都度「別のところに倍の領域を確保してコピー」
+という処理をすることによって行われる。
+始め1、次2、4、8、16、、、という具合に。
+なので、10000個の要素を格納すると分かっている場合には、始めからそれだけ確保しておくと速い。</p>
+
+<pre><code class="language-c++">std::vector&lt;int&gt; v;
+v.reserve(10000);
+</code></pre>
+
+<h2 id="ループ">ループ</h2>
+
+<p><code>for</code> や <code>while</code> を回すときの継続条件式は回る度に評価されるので、
+そのコストをよく考えなければならない。</p>
+
+<h3 id="継続条件">継続条件</h3>
+
+<p>イテレータで回すときの <code>v.end()</code> も毎回呼び出されるので、
+ループの中身が軽い処理の場合には無視できない差になるかもしれない。</p>
+
+<pre><code class="language-c++">for (size_t i=0; i&lt;v.size(); ++i) {
+    // このv.size()は毎回呼び出されてしまう。
+}
+
+for (size_t i=0, n=v.size(); i&lt;n; ++i) {
+    // size()の呼び出しは一度だけで済み、nの名前はforの中しか汚さない。
+}
+
+for (vector&lt;int&gt;::iterator it=v.begin(), v_end=v.end(); it!=v_end; ++it) {
+    // これも、end()の呼び出しは一度きり。
+}
+
+for (const auto&amp; x: v) {
+    // コンテナ全体を舐めるなら C++11 range-based for
+}
+</code></pre>
+
+<h3 id="前置インクリメント">前置インクリメント</h3>
+
+<p><code>for</code> でカウンタをインクリメントするだけなら
+後置インクリメント <code>i++</code> でも
+前置インクリメント <code>++i</code> でも計算結果は同じになる。
+が、<code>i++</code> だと前の値を記憶してからプラスする（一時オブジェクトを作るという無駄が発生する）ので、
+<code>++i</code> のほうがいいらしい。特にイテレータのとき。</p>
+
+<pre><code class="language-c++">for (std::vector&lt;int&gt;::iterator it=v.begin(); it!=v.end(); ++it) {
+    // do something
+}
+</code></pre>
+
+<h3 id="出来る限り外で処理">出来る限り外で処理</h3>
+
+<p><code>if-else</code> や <code>try-catch</code> のブロックをループの外で大きく取れないか、
+一時変数の定義や演算などをループの外で予めやっておけないか、確認すべし。</p>
+
+<h2 id="入出力">入出力</h2>
+
+<h3 id="まとめて書き出す">まとめて書き出す</h3>
+
+<p>ディスクレスクラスタで計算させる場合などは
+特に通信やディスク書き込みのオーバーヘッドが大きい。
+ファイルに逐次追記していくのではなく、
+<code>std::ostringstream</code> や <code>std::vector&lt;std::string&gt;</code>
+などでメモリ上にためておき、最後の最後でまとめて書き出すほうがいい。</p>
+
+<h3 id="標準入出力">標準入出力</h3>
+
+<p>Cストリーム(<code>std::printf</code> とか)とC++ストリーム(<code>std::cout</code> とか)
+が混在するプログラムでもちゃんと関数が呼ばれた順に入出力を行うため、
+デフォルトではこれら２つのストリームが同期するようになっている。
+必要がなければ切っておく。</p>
+
+<p><code>std::cin</code> はデフォルトで <code>std::cout</code> に結びつけられてて、
+<code>std::cin</code> される度に <code>std::flush</code> されてしまうらしいので、
+そうならないように切り離す。</p>
+
+<pre><code class="language-c++">##include &lt;iostream&gt;
+
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(0);
+}
+</code></pre>
+
+<h2 id="参考図書">参考図書</h2>
+
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4774157155/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51Pwt65tXnL._SX150_.jpg" alt="C++ ポケットリファレンス" /></a>
+<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4894714515/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51TFT3FMS1L._SX160_.jpg" alt="Effective C++ 原著第3版 (ADDISON-WESLEY PROFESSIONAL COMPUTING SERIES)" /></a>
+<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4894714108/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41W5R878R7L._SX160_.jpg" alt="Effective STL―STLを効果的に使いこなす50の鉄則" /></a>
+<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4894712458/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51BC2Q8XFRL._SX160_.jpg" alt="Efficient C++パフォーマンスプログラミングテクニック" /></a></p>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats">
+<label for="R stats">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;" checked>
+<label for="C&#43;&#43;" class="active">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li class="active"><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "めざせC&#43;&#43;高速プログラム"
++++
+
+## はじめに
+
+-   速いプログラムで得られるメリットを超えるようなコストを払わないように。
+    まずは動くプログラムを書いて目的を達成することが大事。
+    自分律速じゃなくてプログラム律速だなと感じた段階でリファクタリングを考える。
+-   プログラム本来の意図が読み取れなくなりそうなマニアックな高速化は避ける。
+    清く正しくメンテナンスしやすいプログラムを書くほうが結局は生産的。
+-   学習目的でない限り、車輪の再発明を避ける。
+    やろうとしていることはきっと既に誰かが実現し、
+    再利用可能な形で公開してくれているはず。
+    まずは標準ライブラリとBoostを探してみる。
+
+## 頑張れコンパイラ
+
+Intelの icc でビルドされたプログラムは速いらしい。
+gcc や clang の最適化技術も着々と進歩しており、
+新しいコンパイラを使うほうがその恩恵を受けられる、はず。
+
+### 最適化オプション
+
+&lt;http://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html&gt;
+
+```sh
+% g&#43;&#43; -O3 main.cpp
+```
+
+### コンパイル時定数
+
+定数同士の四則演算などがコード中に転がっていると、
+コンパイルの段階でコンパイラが計算して１つの定数に置き換えてくれる。
+つまり、実行時の計算を減らすことができる。
+したがって、定数と変数が混ざった計算があるときは、定数をまとめておくとよさそう。
+
+四則演算の中でも、割り算は特に遅いらしい。
+コンパイル時に逆数のかけ算になるような書き方のほうが高速になる可能性がある。
+(自動的にやってくれたりしないのかな?)
+
+```c&#43;&#43;
+// 毎回割り算
+rand() / 4294967296.0;
+
+// カッコ内はコンパイル時に計算されて下のようになるはず
+(1.0 / 4294967296.0) * rand();
+(2.328306436538696e-10) * rand();
+```
+
+C&#43;&#43;11では明示的に `constexpr` を指定することで、
+確実にコンパイル時定数にできるので積極的に使うべし。
+それ以外にも、テンプレートメタプログラミングで
+なるべくコンパイル時に計算させることができる。
+
+### インライン展開
+
+関数の呼び出しにはコストがかかり、
+コードが短くて何度も呼ばれる関数では特にそのコストの割合が高くて馬鹿にできない。
+呼び出される予定のところにコンパイルの段階で関数を展開してやること
+(=インライン展開) でそのコストを無くせる。
+
+ファイルをまたいで使う関数の場合は定義宣言を
+`ソース.cpp` ではなく `ヘッダ.h` に置き、頭に `inline` を付ける。
+メンバ関数の場合はクラス定義の中で定義宣言にするだけでよい。
+ただしそのように書いてもコンパイラへのヒントになるだけで、
+インライン展開に必要でも十分でもない。
+
+`-O2` では `-finline-small-functions` がオンになり、
+`-O3` では `-finline-functions` がオンになる。
+実行ファイルのサイズがデカくなるし、コンパイルは遅くなるので、バランスを考える。
+
+```c&#43;&#43;
+inline double rexp(const double lambda=1.0) {
+    return -log(1.0 - runif()) / lambda;
+}
+```
+
+### 関数オブジェクト
+
+関数オブジェクトとは、`operator()` を定義した `class` または `struct` のこと。
+`std::for_each()` や `std::transform()` の最後の引数に関数を渡す場合など、
+何度も呼び出される小さい関数については、
+普通の関数や関数ポインタで渡すよりも関数オブジェクトを使ったほうが高速。
+インライン展開などコンパイラによる最適化がしやすいらしい。
+あと、メンバ変数として値を保持できるので、
+引数のやり取りやメモリの確保・開放が少なくてすむという場面もありそう。
+
+```c&#43;&#43;
+class isAboveThreshold {
+  public:
+    isAboveThreshold(const double t): threshold_(t);
+    bool operator()(const double x) const {
+        return x &gt; threshold_;
+    }
+  private:
+    const double threshold_;
+};
+
+std::transform(v.begin(), v.end(), result.begin(), isAboveThreshold(3.14));
+```
+
+C&#43;&#43;11からはラムダ式が便利
+
+```c&#43;&#43;
+const double threshold = 3.14;
+std::transform(v.begin(), v.end(), result.begin(),
+               [threshold](int x) -&gt; bool {return x &gt; threshold});
+```
+
+## 余計な一時オブジェクトを作らない
+
+普通にプログラムを書くと、思わぬところで余計な一時オブジェクトが作られることになる。
+メモリもcpu時間ももったいないので、なるべく避けよう。
+
+### `const` 参照渡し or ポインタ渡し
+
+`int` とか `double` のような単純な型の場合は気にしなくてもいいが、
+そうでないオブジェクトの値渡しにはコピーコンストラクタが呼ばれるコストが生じる。
+したがって、`std::string` とかSTLコンテナとか自作クラスなどは参照渡し
+（そいつのアドレスだけを渡す）のほうが遥かに高速。
+参照渡しされた仮引数の中身を関数内で変更すると、
+呼び出し元の実引数の値も変更されることになる。
+変更するつもりがない場合は明示的に `const` をつけて受け取るようにすると安全
+
+```c&#43;&#43;
+void do_something(const std::vector&lt;int&gt;&amp; huge_array) {
+    // コピーせず本体への参照のみ受け取る。
+    // constがついているので、変更しようとするとコンパイルエラー
+}
+```
+
+引数の中身を変更するつもりがある場合はポインタを受け取るようにすると、
+呼び出すときに `&amp;` が必要となるので意図が伝わりやすい
+
+```c&#43;&#43;
+void do_something(std::vector&lt;int&gt;* huge_array) {
+    // コピーせずポインタを受け取る。
+    // huge_arrayの変更は呼び出し元にも影響する。
+}
+
+do_something(&amp;some_array);  // ああ、この配列は変更されるんだな
+```
+
+### 複合代入演算子
+
+`int` や `double` とかならまだしも、`std::string` とかだとかなり違うはず。
+
+```c&#43;&#43;
+// (a&#43;b)の結果を持つ一時オブジェクトが作られ、xに代入される。
+T x = a &#43; b;
+
+// xをaで初期化して、bを足す。一時オブジェクトは作られない。
+T x(a);
+x &#43;= b;
+```
+
+### ムーブ (C&#43;&#43;11)
+
+## コンテナ
+
+### 用途に合わせる
+
+`std::vector`
+:   メモリ上に連続した領域を確保する。
+    そのため、途中に `insert()` するのは遅い
+    （メモリ領域を別のところに再確保して全部コピーしなければならないので）。
+    その代わり、要素へのアクセスは高速で、インデックス `[ ]` によるランダムアクセスも可能。
+
+`std::deque`
+:   `vector` とほぼ同じだが、`reserve()` ができない。
+    代わりに、`push_front()` と `pop_front()` が使える。
+    つまり、先頭に対する追加・削除が必要な場合だけ使うコンテナ。
+
+`std::list`
+:   上記２つとは違って、飛び飛びの領域にまたがって存在できる。
+    これは、各要素の値とともに前後の要素を示すイテレータを格納することで実現されている。
+    そのため、途中への `insert()` はイテレータを書き換えるだけなので高速。
+    ただし、その分メモリは余分に食うし、ランダムアクセスできないし、イテレータで総なめするのも遅い。
+
+### メモリは一気に確保
+
+`std::vector` の `push_back()` は勝手にメモリ領域を確保してくれるので、
+大きさの心配をする必要がなくて便利。
+これは、領域が足りなくなる都度「別のところに倍の領域を確保してコピー」
+という処理をすることによって行われる。
+始め1、次2、4、8、16、、、という具合に。
+なので、10000個の要素を格納すると分かっている場合には、始めからそれだけ確保しておくと速い。
+
+```c&#43;&#43;
+std::vector&lt;int&gt; v;
+v.reserve(10000);
+```
+
+## ループ
+
+`for` や `while` を回すときの継続条件式は回る度に評価されるので、
+そのコストをよく考えなければならない。
+
+### 継続条件
+
+イテレータで回すときの `v.end()` も毎回呼び出されるので、
+ループの中身が軽い処理の場合には無視できない差になるかもしれない。
+
+```c&#43;&#43;
+for (size_t i=0; i&lt;v.size(); &#43;&#43;i) {
+    // このv.size()は毎回呼び出されてしまう。
+}
+
+for (size_t i=0, n=v.size(); i&lt;n; &#43;&#43;i) {
+    // size()の呼び出しは一度だけで済み、nの名前はforの中しか汚さない。
+}
+
+for (vector&lt;int&gt;::iterator it=v.begin(), v_end=v.end(); it!=v_end; &#43;&#43;it) {
+    // これも、end()の呼び出しは一度きり。
+}
+
+for (const auto&amp; x: v) {
+    // コンテナ全体を舐めるなら C&#43;&#43;11 range-based for
+}
+```
+
+### 前置インクリメント
+
+`for` でカウンタをインクリメントするだけなら
+後置インクリメント `i&#43;&#43;` でも
+前置インクリメント `&#43;&#43;i` でも計算結果は同じになる。
+が、`i&#43;&#43;` だと前の値を記憶してからプラスする（一時オブジェクトを作るという無駄が発生する）ので、
+`&#43;&#43;i` のほうがいいらしい。特にイテレータのとき。
+
+```c&#43;&#43;
+for (std::vector&lt;int&gt;::iterator it=v.begin(); it!=v.end(); &#43;&#43;it) {
+    // do something
+}
+```
+
+### 出来る限り外で処理
+
+`if-else` や `try-catch` のブロックをループの外で大きく取れないか、
+一時変数の定義や演算などをループの外で予めやっておけないか、確認すべし。
+
+## 入出力
+
+### まとめて書き出す
+
+ディスクレスクラスタで計算させる場合などは
+特に通信やディスク書き込みのオーバーヘッドが大きい。
+ファイルに逐次追記していくのではなく、
+`std::ostringstream` や `std::vector&lt;std::string&gt;`
+などでメモリ上にためておき、最後の最後でまとめて書き出すほうがいい。
+
+### 標準入出力
+
+Cストリーム(`std::printf` とか)とC&#43;&#43;ストリーム(`std::cout` とか)
+が混在するプログラムでもちゃんと関数が呼ばれた順に入出力を行うため、
+デフォルトではこれら２つのストリームが同期するようになっている。
+必要がなければ切っておく。
+
+`std::cin` はデフォルトで `std::cout` に結びつけられてて、
+`std::cin` される度に `std::flush` されてしまうらしいので、
+そうならないように切り離す。
+
+```c&#43;&#43;
+##include &lt;iostream&gt;
+
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(0);
+}
+```
+
+## 参考図書
+
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4774157155/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/51Pwt65tXnL._SX150_.jpg&#34; alt=&#34;C&#43;&#43; ポケットリファレンス&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4894714515/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/51TFT3FMS1L._SX160_.jpg&#34; alt=&#34;Effective C&#43;&#43; 原著第3版 (ADDISON-WESLEY PROFESSIONAL COMPUTING SERIES)&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4894714108/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/41W5R878R7L._SX160_.jpg&#34; alt=&#34;Effective STL―STLを効果的に使いこなす50の鉄則&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4894712458/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/51BC2Q8XFRL._SX160_.jpg&#34; alt=&#34;Efficient C&#43;&#43;パフォーマンスプログラミングテクニック&#34; /&gt;&lt;/a&gt;
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

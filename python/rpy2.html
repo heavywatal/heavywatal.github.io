@@ -9,7 +9,24 @@
 <link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
 <link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
-<title>Watal M. Iwasaki</title>
+<title>rpy2: PythonからRを呼び出す - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -29,11 +46,41 @@ Watal M. Iwasaki
 
 <main>
 <article>
-<header><h1>Index</h1></header>
+<header><h1><a href="">
+rpy2 — PythonからRを呼び出す
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
 
-<h2><a href="/tags">tags</a></h2>
-<dl id="terms">
-</dl>
+
+
+<p><a href="http://rpy.sourceforge.net/rpy2.html">http://rpy.sourceforge.net/rpy2.html</a></p>
+
+<h2 id="example">Example</h2>
+
+<pre><code class="language-python">import rpy2.robjects as robjects
+R = robjects.r
+
+R('''
+png(&quot;plot1.png&quot;)
+plot(rnorm(1000), rnorm(1000))
+dev.off()
+''')
+
+R.png(&quot;plot2.png&quot;)
+R.plot(robjects.FloatVector(R.runif(10)), ann=False)
+R[&quot;dev.off&quot;]()
+</code></pre>
+
+<h2 id="installation">Installation</h2>
+
+<ol>
+<li><p><a href="/students/iwasaki/python/pip.html">pip</a> を使ってインストール:</p>
+
+<pre><code>% pip install rpy2
+</code></pre></li>
+</ol>
 
 </article>
 </main>
@@ -46,7 +93,7 @@ Watal M. Iwasaki
 <div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
 
 
-<input type="checkbox" id="R stats" checked>
+<input type="checkbox" id="R stats">
 <label for="R stats">R stats</label>
 <ul>
 <li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
@@ -71,7 +118,7 @@ Watal M. Iwasaki
 </ul>
 
 <input type="checkbox" id="Python" checked>
-<label for="Python">Python</label>
+<label for="Python" class="active">Python</label>
 <ul>
 <li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
 <li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
@@ -82,10 +129,10 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/python/copy.html">copy</a></li>
 <li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
 <li><a href="/students/iwasaki/python/pip.html">pip</a></li>
-<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+<li class="active"><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
 </ul>
 
-<input type="checkbox" id="C&#43;&#43;" checked>
+<input type="checkbox" id="C&#43;&#43;">
 <label for="C&#43;&#43;">C&#43;&#43;</label>
 <ul>
 <li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
@@ -96,7 +143,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
 </ul>
 
-<input type="checkbox" id="Biology" checked>
+<input type="checkbox" id="Biology">
 <label for="Biology">Biology</label>
 <ul>
 <li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
@@ -118,7 +165,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
 </ul>
 
-<input type="checkbox" id="Developer Tools" checked>
+<input type="checkbox" id="Developer Tools">
 <label for="Developer Tools">Developer Tools</label>
 <ul>
 <li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
@@ -142,7 +189,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
 </ul>
 
-<input type="checkbox" id="Linux" checked>
+<input type="checkbox" id="Linux">
 <label for="Linux">Linux</label>
 <ul>
 <li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
@@ -151,7 +198,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
 </ul>
 
-<input type="checkbox" id="Mac" checked>
+<input type="checkbox" id="Mac">
 <label for="Mac">Mac</label>
 <ul>
 <li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
@@ -165,7 +212,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
 </ul>
 
-<input type="checkbox" id="Lectures" checked>
+<input type="checkbox" id="Lectures">
 <label for="Lectures">Lectures</label>
 <ul>
 <li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
@@ -175,7 +222,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
 </ul>
 
-<input type="checkbox" id="Miscellaneous" checked>
+<input type="checkbox" id="Miscellaneous">
 <label for="Miscellaneous">Miscellaneous</label>
 <ul>
 <li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
@@ -186,7 +233,41 @@ Watal M. Iwasaki
 </nav>
 
 
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "rpy2"
++++
 
+&lt;http://rpy.sourceforge.net/rpy2.html&gt;
+
+## Example
+
+```python
+import rpy2.robjects as robjects
+R = robjects.r
+
+R(&#39;&#39;&#39;
+png(&#34;plot1.png&#34;)
+plot(rnorm(1000), rnorm(1000))
+dev.off()
+&#39;&#39;&#39;)
+
+R.png(&#34;plot2.png&#34;)
+R.plot(robjects.FloatVector(R.runif(10)), ann=False)
+R[&#34;dev.off&#34;]()
+```
+
+## Installation
+
+1.  [pip]({#{#HUGOSHORTCODE-1#}#}) を使ってインストール:
+
+        % pip install rpy2
+
+</code></pre>
+</aside>
 
 <footer>(ɔ) 2008 Watal M. Iwasaki</footer>
 </div>

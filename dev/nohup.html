@@ -9,7 +9,24 @@
 <link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
 <link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
-<title>Watal M. Iwasaki</title>
+<title>プロセス管理: nohup, disown, kill - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -29,11 +46,126 @@ Watal M. Iwasaki
 
 <main>
 <article>
-<header><h1>Index</h1></header>
+<header><h1><a href="">
+プロセス管理 — nohup, disown, kill
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
 
-<h2><a href="/tags">tags</a></h2>
-<dl id="terms">
-</dl>
+
+
+<h2 id="実行中プロセスを知る">実行中プロセスを知る</h2>
+
+<p><code>top</code></p>
+
+<p><code>ps</code></p>
+
+<p><code>jobs</code></p>
+
+<p>Activity Monitor</p>
+
+<h2 id="ジョブコントロール">ジョブコントロール</h2>
+
+<p>プログラムを実行:</p>
+
+<pre><code>% ./a.out
+</code></pre>
+
+<p>ここで <code>control + z</code> を押すと、プロセスはバックグラウンドで一時停止する:</p>
+
+<pre><code>[1]  + 19310 suspended  a.out
+</code></pre>
+
+<p>バックグラウンドのプロセスを確認するには <code>jobs</code> コマンド。
+左からジョブ番号、カレントジョブか否か、状態、コマンド内容:</p>
+
+<pre><code>% jobs
+[1]  + suspended  a.out
+</code></pre>
+
+<p>フォアグラウンドで再開するには <code>fg</code> コマンド。
+引数としてジョブ番号かプログラム名をパーセントに続けて指定する
+(<code>%1</code> とか <code>%a.out</code> とか)。
+<a href="/students/iwasaki/dev/zsh.html">zsh</a> なら補完もしてくれる。
+引数を省略すると、<code>jobs</code> で <code>+</code> がついてるカレントジョブが選択される。
+:</p>
+
+<pre><code>% fg %1
+[1]  + 19310 continued  a.out
+</code></pre>
+
+<p>再び一時停止して、今度はバックグラウンドで再開する。コマンドは <code>bg</code>:</p>
+
+<pre><code>[1]  + 19310 suspended  a.out
+% bg %a.out
+</code></pre>
+
+<p>始めからバックグラウンドで走らせるなら末尾にアンド:</p>
+
+<pre><code>% ./a.out &amp;
+</code></pre>
+
+<p>中止させるには <code>kill [-9] {job}</code> 。
+あるいは <code>ps</code> 等で調べて生のプロセスIDを指定してもよい。
+<code>-9</code> オプションをつけると <code>SIGKILL</code> で強制終了。
+<code>killall</code> は指定した文字列と前方一致するプロセスを
+すべて <code>kill</code> する。</p>
+
+<pre><code>% kill %1
+% kill -9 %a.out
+% kill 19310
+% killall a.out
+</code></pre>
+
+<h2 id="ログアウト後も継続">ログアウト後も継続</h2>
+
+<p>バックグラウンドで実行中のプロセスも、
+ログアウトするとhangup(<code>HUP</code>)シグナルによって終了してしまう。
+これを無視して実行し続けるようにプログラムを起動するのが <code>nohup</code>。
+バックグランド化までは面倒見てくれないので末尾の <code>&amp;</code> を忘れずに:</p>
+
+<pre><code>% nohup COMMAND [ARGUMENTS] &amp;
+</code></pre>
+
+<p>標準出力と標準エラー出力は指定しなければ <code>nohup.out</code>
+または <code>$HOME/nohup.out</code> に追記モードでリダイレクトされる。</p>
+
+<blockquote>
+<ul>
+<li>標準出力の書き出し先を指定するには <code>&gt;{OUTFILE}</code></li>
+<li>標準エラー出力の書き出し先を指定するには <code>2&gt;{OUTFILE}</code></li>
+<li>標準エラー出力を標準出力と同じところに流すには <code>&gt;{OUTFILE} 2&gt;&amp;1</code></li>
+</ul>
+</blockquote>
+
+<pre><code>% nohup COMMAND &gt;out.log 2&gt;err.log &amp;
+</code></pre>
+
+<p><a href="/students/iwasaki/dev/ssh.html">ssh</a> 接続先のサーバーで <code>nohup</code> ジョブを走らせるときは
+標準入出力をすべて切っておかないと期待通りにsshを抜けられない:</p>
+
+<pre><code>% nohup COMMAND &gt;/dev/null 2&gt;&amp;1 &lt;/dev/null &amp;
+</code></pre>
+
+<p>うっかり普通に開始してしまったプロセスを後から <code>nohup</code> 状態にするには、
+一時停止して、バックグラウンドで再開して、<code>disown</code> に渡す:</p>
+
+<pre><code>% ./a.out  # control + z
+[1]  + 19310 suspended  a.out
+% bg %1
+[1]  + 19310 continued  a.out
+% disown %1
+</code></pre>
+
+<div class="note">
+<p><a href="/students/iwasaki/dev/tmux.html">tmux</a></p>
+
+<p><code>nohup</code>, <code>disown</code> がプロセス単位で切り離すのに対して、
+<code>tmux</code> は端末セッション丸ごと切り離し＆復帰することができる。</p>
+
+</div>
+
 
 </article>
 </main>
@@ -46,7 +178,7 @@ Watal M. Iwasaki
 <div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
 
 
-<input type="checkbox" id="R stats" checked>
+<input type="checkbox" id="R stats">
 <label for="R stats">R stats</label>
 <ul>
 <li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
@@ -70,7 +202,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
 </ul>
 
-<input type="checkbox" id="Python" checked>
+<input type="checkbox" id="Python">
 <label for="Python">Python</label>
 <ul>
 <li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
@@ -85,7 +217,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
 </ul>
 
-<input type="checkbox" id="C&#43;&#43;" checked>
+<input type="checkbox" id="C&#43;&#43;">
 <label for="C&#43;&#43;">C&#43;&#43;</label>
 <ul>
 <li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
@@ -96,7 +228,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
 </ul>
 
-<input type="checkbox" id="Biology" checked>
+<input type="checkbox" id="Biology">
 <label for="Biology">Biology</label>
 <ul>
 <li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
@@ -119,7 +251,7 @@ Watal M. Iwasaki
 </ul>
 
 <input type="checkbox" id="Developer Tools" checked>
-<label for="Developer Tools">Developer Tools</label>
+<label for="Developer Tools" class="active">Developer Tools</label>
 <ul>
 <li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
 <li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
@@ -138,11 +270,11 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
 <li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
 <li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
-<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li class="active"><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
 <li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
 </ul>
 
-<input type="checkbox" id="Linux" checked>
+<input type="checkbox" id="Linux">
 <label for="Linux">Linux</label>
 <ul>
 <li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
@@ -151,7 +283,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
 </ul>
 
-<input type="checkbox" id="Mac" checked>
+<input type="checkbox" id="Mac">
 <label for="Mac">Mac</label>
 <ul>
 <li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
@@ -165,7 +297,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
 </ul>
 
-<input type="checkbox" id="Lectures" checked>
+<input type="checkbox" id="Lectures">
 <label for="Lectures">Lectures</label>
 <ul>
 <li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
@@ -175,7 +307,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
 </ul>
 
-<input type="checkbox" id="Miscellaneous" checked>
+<input type="checkbox" id="Miscellaneous">
 <label for="Miscellaneous">Miscellaneous</label>
 <ul>
 <li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
@@ -186,7 +318,106 @@ Watal M. Iwasaki
 </nav>
 
 
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "プロセス管理"
++++
 
+## 実行中プロセスを知る
+
+`top`
+
+`ps`
+
+`jobs`
+
+Activity Monitor
+
+## ジョブコントロール
+
+プログラムを実行:
+
+    % ./a.out
+
+ここで `control &#43; z` を押すと、プロセスはバックグラウンドで一時停止する:
+
+    [1]  &#43; 19310 suspended  a.out
+
+バックグラウンドのプロセスを確認するには `jobs` コマンド。
+左からジョブ番号、カレントジョブか否か、状態、コマンド内容:
+
+    % jobs
+    [1]  &#43; suspended  a.out
+
+フォアグラウンドで再開するには `fg` コマンド。
+引数としてジョブ番号かプログラム名をパーセントに続けて指定する
+(`%1` とか `%a.out` とか)。
+[zsh]({#{#HUGOSHORTCODE-1#}#}) なら補完もしてくれる。
+引数を省略すると、`jobs` で `&#43;` がついてるカレントジョブが選択される。
+:
+
+    % fg %1
+    [1]  &#43; 19310 continued  a.out
+
+再び一時停止して、今度はバックグラウンドで再開する。コマンドは `bg`:
+
+    [1]  &#43; 19310 suspended  a.out
+    % bg %a.out
+
+始めからバックグラウンドで走らせるなら末尾にアンド:
+
+    % ./a.out &amp;
+
+中止させるには `kill [-9] {job}` 。
+あるいは `ps` 等で調べて生のプロセスIDを指定してもよい。
+`-9` オプションをつけると `SIGKILL` で強制終了。
+`killall` は指定した文字列と前方一致するプロセスを
+すべて `kill` する。
+
+    % kill %1
+    % kill -9 %a.out
+    % kill 19310
+    % killall a.out
+
+## ログアウト後も継続
+
+バックグラウンドで実行中のプロセスも、
+ログアウトするとhangup(`HUP`)シグナルによって終了してしまう。
+これを無視して実行し続けるようにプログラムを起動するのが `nohup`。
+バックグランド化までは面倒見てくれないので末尾の `&amp;` を忘れずに:
+
+    % nohup COMMAND [ARGUMENTS] &amp;
+
+標準出力と標準エラー出力は指定しなければ `nohup.out`
+または `$HOME/nohup.out` に追記モードでリダイレクトされる。
+
+&gt; -   標準出力の書き出し先を指定するには `&gt;{OUTFILE}`
+&gt; -   標準エラー出力の書き出し先を指定するには `2&gt;{OUTFILE}`
+&gt; -   標準エラー出力を標準出力と同じところに流すには `&gt;{OUTFILE} 2&gt;&amp;1`
+
+    % nohup COMMAND &gt;out.log 2&gt;err.log &amp;
+
+[ssh]({#{#HUGOSHORTCODE-2#}#}) 接続先のサーバーで `nohup` ジョブを走らせるときは
+標準入出力をすべて切っておかないと期待通りにsshを抜けられない:
+
+    % nohup COMMAND &gt;/dev/null 2&gt;&amp;1 &lt;/dev/null &amp;
+
+うっかり普通に開始してしまったプロセスを後から `nohup` 状態にするには、
+一時停止して、バックグラウンドで再開して、`disown` に渡す:
+
+    % ./a.out  # control &#43; z
+    [1]  &#43; 19310 suspended  a.out
+    % bg %1
+    [1]  &#43; 19310 continued  a.out
+    % disown %1
+
+{#{#HUGOSHORTCODE-3#}#}
+
+</code></pre>
+</aside>
 
 <footer>(ɔ) 2008 Watal M. Iwasaki</footer>
 </div>

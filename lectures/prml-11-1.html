@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>PRML輪読会 11章1節 - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+PRML輪読会 11章1節
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/0387310738/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/612j5Uo43eL._SX180_.jpg" alt="Pattern Recognition and Machine Learning (Information Science and Statistics)" /></a>
+<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4621061224/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41O0QFyTHJL._SX160_.jpg" alt="パターン認識と機械学習 上" /></a>
+<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4621061240/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/418MuoJetFL._SX160_.jpg" alt="パターン認識と機械学習 下 (ベイズ理論による統計的予測)" /></a></p>
+
+<dl>
+<dt>Author</dt>
+<dd>Christopher M. Bishop</dd>
+<dt>Book</dt>
+<dd><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4621061224/heavywatal-22/">Pattern Recognition and Machine Learning</a></dd>
+<dt>Publisher</dt>
+<dd><a href="http://www.springer.com/computer/image+processing/book/978-0-387-31073-2">Springer</a></dd>
+<dt>Materials</dt>
+<dd><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/">http://research.microsoft.com/en-us/um/people/cmbishop/prml/</a></dd>
+<dt>輪読担当</dt>
+<dd>岩嵜航</dd>
+<dt>日程</dt>
+<dd>2014-12-08</dd>
+</dl>
+
+<h2 id="11-sampling-methods">11. Sampling Methods</h2>
+
+<p>10章では決定論的な近似を見てきた。
+この章ではサンプリングを伴う <em>Monte Carlo</em> 法を取り扱う。</p>
+
+<div class="note">
+<p>モンテカルロ法の由来</p>
+
+<p>スタニスワフ・ウラムがソリテアの成功率を考えてた時に思いついて、
+同僚のジョン・フォン・ノイマンが計算機上での実用まで持ってったらしい。
+モナコ公国のモンテカルロ地区に国営カジノがあって、
+ウラムの叔父がそこで負けて親戚から借金したことにちなんで
+同僚のニコラス・メトロポリスが命名したらしい。</p>
+
+</div>
+
+
+<p><strong>目標:</strong>
+変数 $\mathbf z$ の分布 $\color{red}{p(\mathbf z)}$ を考えた上で、
+ある関数 $\color{blue}{f(\mathbf z)}$ の値がどうなるか予測したい。</p>
+
+<div class="note">
+<p><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.1.png">Figure 11.1</a></p>
+
+<p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.1.png"/ alt="Figure 11.1" width="300px"></p>
+
+</div>
+
+
+<p>$\color{blue}{f(\textbf{z})}$ の期待値は (<strong>式11.1</strong>)</p>
+
+<div>$$\begin{split}
+\mathbb E[f] = \int f(\mathbf z) p(\mathbf z) \mathrm d \mathbf z
+\end{split}$$</div>
+
+<p>みたいな感じで表せるが、だいたいは複雑過ぎて解析的に解けないので、そういうときどうしようかという話。</p>
+
+<p>$\color{red}{p(\mathbf z)}$ の分布から $L$ 個サンプリングしてきた
+<code>$\mathbf{z}_l$</code> をそれぞれ $f$ に放り込んで平均を取ってみよう (<strong>式11.2</strong>)。</p>
+
+<div>$$\begin{split}
+\hat f = \frac 1 L \sum^L_{l=1} f(\mathbf z_l)
+\end{split}$$</div>
+
+<p>その推定値の期待値は (<strong>Exercise 11.1</strong>)</p>
+
+<div>$$\begin{split}
+\mathbb E[\hat f] &= \mathbb E \left[\frac 1 L \sum^L_{l=1} f(\mathbf z_l) \right] \\
+                  &= \frac 1 L \sum^L_{l=1} \int f(\mathbf z_l) p(\mathbf z_l) \mathrm d \mathbf z_l \\
+                  &= \frac 1 L \sum^L_{l=1} \mathbb E[f] \\
+                  &= \mathbb E[f]
+\end{split}$$</div>
+
+<p>で真の期待値と同じになる。
+この推定値の分散は (<strong>Exercise 11.1</strong>, <strong>式 11.3</strong>)</p>
+
+<div>$$\begin{split}
+\mathrm{var}[\hat f] &= \mathrm{var} \left[\frac 1 L \sum^L_{l=1} f(\mathbf z_l) \right] \\
+                     &= \frac 1 {L^2} \sum^L_{l=1} \mathrm{var}[f(\mathbf z)] \\
+                     &= \frac 1 L \mathrm{var}[f] \\
+                     &= \frac 1 L \mathbb E[(f - \mathbb E[f])^2]
+\end{split}$$</div>
+
+<p>となる。注意すべき点としては:</p>
+
+<ul>
+<li>推定精度が次元数によらない</li>
+<li>基本的には $L$ をそんなに大きく取らなくても(10とか20くらいで)よさそう</li>
+<li>ただし、サンプルが独立じゃない場合にはその辺を加味した有効サンプル数が十分になるように多めに取るべし</li>
+<li>$\color{red}{p(\mathbf z)}$ が大きいところで $\color{blue}{f(\mathbf z)}$ がゼロに近くなるような場合、少確率で出てくる大きな値に推定値が引っ張られることがあるので比較的多めに取るべし</li>
+</ul>
+
+<hr />
+
+<p>$\color{red}{p(\mathbf z)}$ が実は <code>$p(z_1, z_2, ..., z_M)$</code> という同時確率だということを思い出そう。
+<code>$z_i$</code> がそれぞれ独立な分布から出てくる場合はいいとして、そうじゃない場合はどうしたらいいか？</p>
+
+<div class="note">
+<p><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure8.2.png">Figure 8.2</a></p>
+
+<p><p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure8.2.png"/ alt="Figure 8.2" width="200px"></p>
+変数の因果関係がこのような閉路なし有向グラフで表せる場合、同時確率は <strong>式 8.4</strong>
+<code>$p(x_1)p(x_2)p(x_3)p(x_4 \mid x_1,x_2,x_3)p(x_5 \mid x_1,x_3)p(x_6 \mid x_4)p(x_7 \mid x_4,x_5)$</code>
+のように条件付き確率の積で表せる。</p>
+
+</div>
+
+
+<p>依存関係の親となるほうから順に条件付き確率で生成 (<em>ancestral sampling</em> <strong>伝承サンプリング</strong>)
+していくことにすると、同時確率は一般的に (<strong>式 11.4</strong>)</p>
+
+<div>$$\begin{split}
+p(\mathbf z) = \prod_{i=1}^M p(\mathbf z_i \mid \mathrm{pa}_i)
+\end{split}$$</div>
+
+<p>というふうに書ける。
+変数の一部が観測可能な場合は <em>logic sampling</em>
+(セクション11.1.4で登場する <strong>重点サンプリング</strong> <em>importance sampling</em> の特殊ケース)
+が使える。</p>
+
+<p>因果が分からなくて無向グラフで表されるような場合には
+<code>$z_1$</code> から <code>$z_M$</code> まで一周するだけでは求まらず、
+ギブズサンプリング (Gibbs sampling) のような計算量のかかる手法が必要になる。</p>
+
+<h3 id="11-1-basic-sampling-algorithms">11.1. Basic Sampling Algorithms</h3>
+
+<p>コンピュータ上でサンプリングを行うときに真の乱数を使うことは稀で、だいたいは適当なシードから決定論的な過程で擬似乱数を生成することになる。
+擬似乱数の質も問題になったりするけどこの本では詳しく扱わない。
+いい感じで $(0,1)$ の一様乱数が生成できるものとして進める。</p>
+
+<div class="note">
+<p>Unix/Linux系OSが提供する乱数</p>
+
+<p>ハードウェア的なノイズから生成した真の乱数は <code>/dev/random</code> から読み出せるが、
+いくつも生成しようとするとノイズが溜まるまで待たされることになるのであまり使わない。
+待ち時間無しにそれなりの擬似乱数を作ってくれるデバイスとして <code>/dev/urandom</code>
+があるが、ここから毎回読み出すのもコストが高いので、シード生成にのみ使う。</p>
+
+</div>
+
+
+<div class="note">
+<p><a href="/students/iwasaki/cxx/random.html">/cxx/random</a></p>
+
+</div>
+
+
+<h4 id="11-1-1-standard-distributions">11.1.1 Standard distributions</h4>
+
+<p>変数 $z$ が $(0,1)$ の一様乱数だとして、
+適当な関数をかけて $y = f(z)$ とするとその分布は (<strong>式 11.5</strong>)</p>
+
+<div>$$\begin{split}
+p(y) = p(z) \left| \frac {\mathrm dz} {\mathrm dy} \right|
+\end{split}$$</div>
+
+<p>となる。
+変換後の乱数 $y$ が任意の形の分布 $\color{red}{p(y)}$ に従うようにするにはどうしたらいいか。
+$\color{red}{p(y)}$ の不定積分を (<strong>式 11.6</strong>)</p>
+
+<div>$$\begin{split}
+z = h(y) \equiv \int _{-\infty}^y p(\hat y) \mathrm d\hat y
+\end{split}$$</div>
+
+<p>のように $\color{blue}{h(y)}$ として定義してみると <strong>図 11.2</strong> のような関係になる。</p>
+
+<div class="note">
+<p><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.2.png">Figure 11.2</a></p>
+
+<p><p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.2.png"/ alt="Figure 11.2" width="300px"></p>
+縦軸を $z$ として青い線を逆関数の目線で見てみると、$y$ が中央付近に来るような $z$ の区間はすごく短いが、$y$ が左から3分の1くらいのところに来るような $z$ の区間はかなり長い。</p>
+
+</div>
+
+
+<p>その不定積分の逆関数を一様乱数にかけて $y = h^{-1}(z)$ とすれば欲しかった分布の乱数が出てくる！</p>
+
+<p>例えば指数分布だと (<strong>式 11.7</strong>)</p>
+
+<div>$$\begin{split}
+p(y) &= \lambda \exp(-\lambda y) \\
+z = h(y) &= \int_0^y \lambda \exp(-\lambda \hat y) \mathrm d \hat y \\
+         &= \left[-\exp(-\lambda \hat y) \right]_0^y \\
+         &= 1 - \exp(-\lambda y) \\
+\exp(-\lambda y) &= 1 - z \\
+     -\lambda y  &= \ln(1 - z) \\
+               y &= -\frac {\ln(1 - z)} \lambda
+\end{split}$$</div>
+
+<p>となるので、$y = -\lambda^{-1} \ln(1 - z)$ とすれば $y$ は指数分布に従う乱数となる。</p>
+
+<hr />
+
+<p>別の例としてコーシー分布も同じように変換できる (<strong>式 11.8</strong>, <strong>Exercise 11.3</strong>)</p>
+
+<div>$$\begin{split}
+p(y) &= \frac 1 \pi \frac 1 {1 + y^2} \\
+z = h(y) &= \int_{-\infty}^y \frac 1 \pi \frac 1 {1 + \hat y^2} \mathrm d \hat y \\
+         &= \frac 1 \pi \left[\arctan(\hat y) \right]_{-\infty}^y \\
+         &= \frac 1 \pi \left(\arctan(y) + \frac \pi 2 \right) \\
+         &= \frac {\arctan(y)} \pi + \frac 1 2 \\
+\arctan(y) &= \pi(z - \frac 1 2) \\
+         y &= \tan\left[\pi(z - \frac 1 2)\right]
+\end{split}$$</div>
+
+<hr />
+
+<p>多変量の場合はヤコビアンを使えばよい</p>
+
+<div>$$\begin{split}
+p(y_1, ..., y_M) = p(z_1, ..., z_M) \left| \frac {\partial (z_1, ..., z_M)}
+                                                {\partial (y_1, ..., y_M)} \right|
+\end{split}$$</div>
+
+<p>例として2系統の独立な正規乱数を生成する <em>Box-Muller</em> 法を見てみる。
+まず $(-1,1)$ の一様乱数をふたつ <code>$z_1, z_2$</code> として取ってきて、
+<code>$z_1^2 + z_2^2 \leq 1$</code> を満たさなければ捨てる。
+これは下図の円の中に収まる一様乱数だけ取ってくることに相当する。</p>
+
+<div class="note">
+<p><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.2.png">Figure 11.3</a></p>
+
+<p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.3.png"/ alt="Figure 11.3" width="200px"></p>
+
+</div>
+
+
+<p><code>$r^2 = z_1^2 + z_2^2$</code> として (<strong>式 11.10</strong>, <strong>式 11.11</strong>)</p>
+
+<div>$$\begin{split}
+y_1 &= z_1 \left(\frac {-2\ln r^2} {r^2}\right)^{1/2}\\
+y_2 &= z_2 \left(\frac {-2\ln r^2} {r^2}\right)^{1/2}
+\end{split}$$</div>
+
+<p>のように変換すると <code>$y_1$</code> と <code>$y_2$</code> の同時分布は</p>
+
+<div>$$\begin{split}
+p(y_1, y_2) &= p(z_1, z_2) \left| \frac{\partial(z_1, z_2)} {\partial(y_1, y_2)} \right|\\
+            &= \left[\frac 1 {\sqrt{2\pi}} \exp(-\frac {y_1^2} 2) \right]
+               \left[\frac 1 {\sqrt{2\pi}} \exp(-\frac {y_2^2} 2) \right]
+\end{split}$$</div>
+
+<p>のように表され、それぞれ独立な標準正規乱数になっていることがわかる。
+平均と分散を変えたければ、$y = \mu + \sigma z$ のように標準偏差をかけて平均を足せばよい。</p>
+
+<div class="note">
+<p>C++11 の <code>std::normal_distribution</code> や GSL の <code>gsl_ran_gaussian</code> でも使われている。
+円に収まらないものを棄却する方法ではなく、三角関数を使ってそのまま用いる方法が取られる。</p>
+
+</div>
+
+
+<p>多変量の場合も同様に $\mathbf y = \mathbf \mu + \mathbf{Lz}$ として動かせる。
+ただし共分散は $\mathbf \Sigma = \mathbf{LL}^\mathrm T$ として <strong>コレスキー分解</strong> (<em>Cholesky decomposition</em>)する。
+これは対称行列に特化したLU分解で、$\mathbf L$ は下三角行列になる。
+変換後の平均と分散を確かめてみる (<strong>Excersize 11.5</strong>)</p>
+
+<div>$$\begin{split}
+\mathbb E[\mathbf y] &= \mathbb E[\mathbf \mu + \mathbf{Lz}] = \mathbf \mu + \mathbf 0 \\
+\mathrm{cov}[\mathbf y]
+   &= \mathbb E\left[(\mathbf y - \mathbb E[\mathbf y])(\mathbf y - \mathbb E[\mathbf y])^\mathrm T \right] \\
+   &= \mathbb E[(\mathbf \mu + \mathbf{Lz} - \mathbf \mu)(\mathbf \mu + \mathbf{Lz} - \mathbf \mu)^\mathrm T] \\
+   &= \mathbb E[\mathbf{Lz}(\mathbf{Lz})^\mathrm T] \\
+   &= \mathbf{LL}^\mathrm T = \mathbf \Sigma\\
+\end{split}$$</div>
+
+<p>ただし一様乱数 $\mathbf z$ については $\mathbb E[\mathbf z] = \mathbf 0$ かつ $\mathbb E[\mathbf{zz}^\mathrm T] = \mathbf I$ 。</p>
+
+<hr />
+
+<p>ここで説明したような手法が使えるのは、不定積分の逆関数が簡単に得られるような場合だけ。
+より一般的に使える <em>rejection sampling</em> と <em>importance sampling</em> について、この先で見ていく。</p>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats">
+<label for="R stats">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures" checked>
+<label for="Lectures" class="active">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li class="active"><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "PRML輪読会 11章1節"
++++
+
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/0387310738/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/612j5Uo43eL._SX180_.jpg&#34; alt=&#34;Pattern Recognition and Machine Learning (Information Science and Statistics)&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4621061224/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/41O0QFyTHJL._SX160_.jpg&#34; alt=&#34;パターン認識と機械学習 上&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4621061240/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/418MuoJetFL._SX160_.jpg&#34; alt=&#34;パターン認識と機械学習 下 (ベイズ理論による統計的予測)&#34; /&gt;&lt;/a&gt;
+
+Author
+:   Christopher M. Bishop
+
+Book
+:   [Pattern Recognition and Machine Learning](http://www.amazon.co.jp/exec/obidos/ASIN/4621061224/heavywatal-22/)
+
+Publisher
+:   [Springer](http://www.springer.com/computer/image&#43;processing/book/978-0-387-31073-2)
+
+Materials
+:   &lt;http://research.microsoft.com/en-us/um/people/cmbishop/prml/&gt;
+
+輪読担当
+:   岩嵜航
+
+日程
+:   2014-12-08
+
+## 11. Sampling Methods
+
+10章では決定論的な近似を見てきた。
+この章ではサンプリングを伴う *Monte Carlo* 法を取り扱う。
+
+{#{#HUGOSHORTCODE-1#}#}
+
+**目標:**
+変数 $\mathbf z$ の分布 $\color{red}{p(\mathbf z)}$ を考えた上で、
+ある関数 $\color{blue}{f(\mathbf z)}$ の値がどうなるか予測したい。
+
+{#{#HUGOSHORTCODE-2#}#}
+
+$\color{blue}{f(\textbf{z})}$ の期待値は (**式11.1**)
+
+&lt;div&gt;$$\begin{split}
+\mathbb E[f] = \int f(\mathbf z) p(\mathbf z) \mathrm d \mathbf z
+\end{split}$$&lt;/div&gt;
+
+みたいな感じで表せるが、だいたいは複雑過ぎて解析的に解けないので、そういうときどうしようかという話。
+
+$\color{red}{p(\mathbf z)}$ の分布から $L$ 個サンプリングしてきた
+`$\mathbf{z}_l$` をそれぞれ $f$ に放り込んで平均を取ってみよう (**式11.2**)。
+
+&lt;div&gt;$$\begin{split}
+\hat f = \frac 1 L \sum^L_{l=1} f(\mathbf z_l)
+\end{split}$$&lt;/div&gt;
+
+その推定値の期待値は (**Exercise 11.1**)
+
+&lt;div&gt;$$\begin{split}
+\mathbb E[\hat f] &amp;= \mathbb E \left[\frac 1 L \sum^L_{l=1} f(\mathbf z_l) \right] \\
+                  &amp;= \frac 1 L \sum^L_{l=1} \int f(\mathbf z_l) p(\mathbf z_l) \mathrm d \mathbf z_l \\
+                  &amp;= \frac 1 L \sum^L_{l=1} \mathbb E[f] \\
+                  &amp;= \mathbb E[f]
+\end{split}$$&lt;/div&gt;
+
+で真の期待値と同じになる。
+この推定値の分散は (**Exercise 11.1**, **式 11.3**)
+
+&lt;div&gt;$$\begin{split}
+\mathrm{var}[\hat f] &amp;= \mathrm{var} \left[\frac 1 L \sum^L_{l=1} f(\mathbf z_l) \right] \\
+                     &amp;= \frac 1 {L^2} \sum^L_{l=1} \mathrm{var}[f(\mathbf z)] \\
+                     &amp;= \frac 1 L \mathrm{var}[f] \\
+                     &amp;= \frac 1 L \mathbb E[(f - \mathbb E[f])^2]
+\end{split}$$&lt;/div&gt;
+
+となる。注意すべき点としては:
+
+-   推定精度が次元数によらない
+-   基本的には $L$ をそんなに大きく取らなくても(10とか20くらいで)よさそう
+-   ただし、サンプルが独立じゃない場合にはその辺を加味した有効サンプル数が十分になるように多めに取るべし
+-   $\color{red}{p(\mathbf z)}$ が大きいところで $\color{blue}{f(\mathbf z)}$ がゼロに近くなるような場合、少確率で出てくる大きな値に推定値が引っ張られることがあるので比較的多めに取るべし
+
+------------------------------------------------------------------------
+
+$\color{red}{p(\mathbf z)}$ が実は `$p(z_1, z_2, ..., z_M)$` という同時確率だということを思い出そう。
+`$z_i$` がそれぞれ独立な分布から出てくる場合はいいとして、そうじゃない場合はどうしたらいいか？
+
+{#{#HUGOSHORTCODE-3#}#}
+
+依存関係の親となるほうから順に条件付き確率で生成 (*ancestral sampling* **伝承サンプリング**)
+していくことにすると、同時確率は一般的に (**式 11.4**)
+
+&lt;div&gt;$$\begin{split}
+p(\mathbf z) = \prod_{i=1}^M p(\mathbf z_i \mid \mathrm{pa}_i)
+\end{split}$$&lt;/div&gt;
+
+というふうに書ける。
+変数の一部が観測可能な場合は *logic sampling*
+(セクション11.1.4で登場する **重点サンプリング** *importance sampling* の特殊ケース)
+が使える。
+
+因果が分からなくて無向グラフで表されるような場合には
+`$z_1$` から `$z_M$` まで一周するだけでは求まらず、
+ギブズサンプリング (Gibbs sampling) のような計算量のかかる手法が必要になる。
+
+### 11.1. Basic Sampling Algorithms
+
+コンピュータ上でサンプリングを行うときに真の乱数を使うことは稀で、だいたいは適当なシードから決定論的な過程で擬似乱数を生成することになる。
+擬似乱数の質も問題になったりするけどこの本では詳しく扱わない。
+いい感じで $(0,1)$ の一様乱数が生成できるものとして進める。
+
+{#{#HUGOSHORTCODE-4#}#}
+
+{#{#HUGOSHORTCODE-5#}#}
+
+#### 11.1.1 Standard distributions
+
+変数 $z$ が $(0,1)$ の一様乱数だとして、
+適当な関数をかけて $y = f(z)$ とするとその分布は (**式 11.5**)
+
+&lt;div&gt;$$\begin{split}
+p(y) = p(z) \left| \frac {\mathrm dz} {\mathrm dy} \right|
+\end{split}$$&lt;/div&gt;
+
+となる。
+変換後の乱数 $y$ が任意の形の分布 $\color{red}{p(y)}$ に従うようにするにはどうしたらいいか。
+$\color{red}{p(y)}$ の不定積分を (**式 11.6**)
+
+&lt;div&gt;$$\begin{split}
+z = h(y) \equiv \int _{-\infty}^y p(\hat y) \mathrm d\hat y
+\end{split}$$&lt;/div&gt;
+
+のように $\color{blue}{h(y)}$ として定義してみると **図 11.2** のような関係になる。
+
+{#{#HUGOSHORTCODE-6#}#}
+
+その不定積分の逆関数を一様乱数にかけて $y = h^{-1}(z)$ とすれば欲しかった分布の乱数が出てくる！
+
+例えば指数分布だと (**式 11.7**)
+
+&lt;div&gt;$$\begin{split}
+p(y) &amp;= \lambda \exp(-\lambda y) \\
+z = h(y) &amp;= \int_0^y \lambda \exp(-\lambda \hat y) \mathrm d \hat y \\
+         &amp;= \left[-\exp(-\lambda \hat y) \right]_0^y \\
+         &amp;= 1 - \exp(-\lambda y) \\
+\exp(-\lambda y) &amp;= 1 - z \\
+     -\lambda y  &amp;= \ln(1 - z) \\
+               y &amp;= -\frac {\ln(1 - z)} \lambda
+\end{split}$$&lt;/div&gt;
+
+となるので、$y = -\lambda^{-1} \ln(1 - z)$ とすれば $y$ は指数分布に従う乱数となる。
+
+------------------------------------------------------------------------
+
+別の例としてコーシー分布も同じように変換できる (**式 11.8**, **Exercise 11.3**)
+
+&lt;div&gt;$$\begin{split}
+p(y) &amp;= \frac 1 \pi \frac 1 {1 &#43; y^2} \\
+z = h(y) &amp;= \int_{-\infty}^y \frac 1 \pi \frac 1 {1 &#43; \hat y^2} \mathrm d \hat y \\
+         &amp;= \frac 1 \pi \left[\arctan(\hat y) \right]_{-\infty}^y \\
+         &amp;= \frac 1 \pi \left(\arctan(y) &#43; \frac \pi 2 \right) \\
+         &amp;= \frac {\arctan(y)} \pi &#43; \frac 1 2 \\
+\arctan(y) &amp;= \pi(z - \frac 1 2) \\
+         y &amp;= \tan\left[\pi(z - \frac 1 2)\right]
+\end{split}$$&lt;/div&gt;
+
+------------------------------------------------------------------------
+
+多変量の場合はヤコビアンを使えばよい
+
+&lt;div&gt;$$\begin{split}
+p(y_1, ..., y_M) = p(z_1, ..., z_M) \left| \frac {\partial (z_1, ..., z_M)}
+                                                {\partial (y_1, ..., y_M)} \right|
+\end{split}$$&lt;/div&gt;
+
+例として2系統の独立な正規乱数を生成する *Box-Muller* 法を見てみる。
+まず $(-1,1)$ の一様乱数をふたつ `$z_1, z_2$` として取ってきて、
+`$z_1^2 &#43; z_2^2 \leq 1$` を満たさなければ捨てる。
+これは下図の円の中に収まる一様乱数だけ取ってくることに相当する。
+
+{#{#HUGOSHORTCODE-7#}#}
+
+`$r^2 = z_1^2 &#43; z_2^2$` として (**式 11.10**, **式 11.11**)
+
+&lt;div&gt;$$\begin{split}
+y_1 &amp;= z_1 \left(\frac {-2\ln r^2} {r^2}\right)^{1/2}\\
+y_2 &amp;= z_2 \left(\frac {-2\ln r^2} {r^2}\right)^{1/2}
+\end{split}$$&lt;/div&gt;
+
+のように変換すると `$y_1$` と `$y_2$` の同時分布は
+
+&lt;div&gt;$$\begin{split}
+p(y_1, y_2) &amp;= p(z_1, z_2) \left| \frac{\partial(z_1, z_2)} {\partial(y_1, y_2)} \right|\\
+            &amp;= \left[\frac 1 {\sqrt{2\pi}} \exp(-\frac {y_1^2} 2) \right]
+               \left[\frac 1 {\sqrt{2\pi}} \exp(-\frac {y_2^2} 2) \right]
+\end{split}$$&lt;/div&gt;
+
+のように表され、それぞれ独立な標準正規乱数になっていることがわかる。
+平均と分散を変えたければ、$y = \mu &#43; \sigma z$ のように標準偏差をかけて平均を足せばよい。
+
+{#{#HUGOSHORTCODE-8#}#}
+
+多変量の場合も同様に $\mathbf y = \mathbf \mu &#43; \mathbf{Lz}$ として動かせる。
+ただし共分散は $\mathbf \Sigma = \mathbf{LL}^\mathrm T$ として **コレスキー分解** (*Cholesky decomposition*)する。
+これは対称行列に特化したLU分解で、$\mathbf L$ は下三角行列になる。
+変換後の平均と分散を確かめてみる (**Excersize 11.5**)
+
+&lt;div&gt;$$\begin{split}
+\mathbb E[\mathbf y] &amp;= \mathbb E[\mathbf \mu &#43; \mathbf{Lz}] = \mathbf \mu &#43; \mathbf 0 \\
+\mathrm{cov}[\mathbf y]
+   &amp;= \mathbb E\left[(\mathbf y - \mathbb E[\mathbf y])(\mathbf y - \mathbb E[\mathbf y])^\mathrm T \right] \\
+   &amp;= \mathbb E[(\mathbf \mu &#43; \mathbf{Lz} - \mathbf \mu)(\mathbf \mu &#43; \mathbf{Lz} - \mathbf \mu)^\mathrm T] \\
+   &amp;= \mathbb E[\mathbf{Lz}(\mathbf{Lz})^\mathrm T] \\
+   &amp;= \mathbf{LL}^\mathrm T = \mathbf \Sigma\\
+\end{split}$$&lt;/div&gt;
+
+ただし一様乱数 $\mathbf z$ については $\mathbb E[\mathbf z] = \mathbf 0$ かつ $\mathbb E[\mathbf{zz}^\mathrm T] = \mathbf I$ 。
+
+------------------------------------------------------------------------
+
+ここで説明したような手法が使えるのは、不定積分の逆関数が簡単に得られるような場合だけ。
+より一般的に使える *rejection sampling* と *importance sampling* について、この先で見ていく。
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

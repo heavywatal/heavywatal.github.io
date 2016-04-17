@@ -9,7 +9,24 @@
 <link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
 <link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
-<title>Watal M. Iwasaki</title>
+<title>NumPy, SciPy: 数値配列演算・科学技術計算ライブラリ - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -29,11 +46,116 @@ Watal M. Iwasaki
 
 <main>
 <article>
-<header><h1>Index</h1></header>
+<header><h1><a href="">
+NumPy, SciPy — 数値配列演算・科学技術計算ライブラリ
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
 
-<h2><a href="/tags">tags</a></h2>
-<dl id="terms">
-</dl>
+
+
+<p><a href="http://www.scipy.org/">http://www.scipy.org/</a></p>
+
+<h2 id="installation">Installation</h2>
+
+<p><a href="http://www.scipy.org/install.html">http://www.scipy.org/install.html</a><br />
+<a href="http://www.scipy.org/scipylib/download.html">http://www.scipy.org/scipylib/download.html</a><br />
+<a href="http://www.scipy.org/scipylib/building/">http://www.scipy.org/scipylib/building/</a><br />
+<a href="http://docs.scipy.org/doc/numpy/user/install.html">http://docs.scipy.org/doc/numpy/user/install.html</a></p>
+
+<ol>
+<li><p><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a> などで gfortran をインストール:</p>
+
+<pre><code>% brew install gcc49 --enable-gfortran
+% ln -s gfortran-4.9 $(brew --prefix)/bin/gfortran
+</code></pre>
+
+<p>Ubuntuなら:</p>
+
+<pre><code>% sudo apt-get install build-essential gfortran
+% sudo apt-get install python3-dev
+% sudo apt-get install libatlas-base-dev
+</code></pre></li>
+
+<li><p><code>NumPy</code> をインストール:</p>
+
+<pre><code>% pip install numpy
+</code></pre></li>
+
+<li><p><code>SciPy</code> をインストール:</p>
+
+<pre><code>% CC=clang CXX=clang++ FFLAGS=-ff2c pip install scipy
+</code></pre></li>
+</ol>
+
+<h3 id="test">test</h3>
+
+<p><code>nose</code> というパッケージが必要:</p>
+
+<pre><code>&gt;&gt;&gt; import numpy
+&gt;&gt;&gt; numpy.test()
+</code></pre>
+
+<p>BLAS/LAPACK関連の確認:</p>
+
+<pre><code>&gt;&gt;&gt; import numpy
+&gt;&gt;&gt; numpy.show_config()
+</code></pre>
+
+<h2 id="numpy"><code>NumPy</code></h2>
+
+<p>数値計算・配列演算ライブラリ</p>
+
+<p><a href="https://pypi.python.org/pypi/numpy">https://pypi.python.org/pypi/numpy</a><br />
+<a href="http://www.numpy.org/">http://www.numpy.org/</a><br />
+<a href="http://docs.scipy.org/doc/numpy/reference/">http://docs.scipy.org/doc/numpy/reference/</a></p>
+
+<h3 id="ndarray-クラス"><code>ndarray</code> クラス</h3>
+
+<p><a href="http://docs.scipy.org/doc/numpy/reference/arrays.ndarray.html">http://docs.scipy.org/doc/numpy/reference/arrays.ndarray.html</a></p>
+
+<p>N次元配列</p>
+
+<hr />
+
+<p><code>numpy.matrix</code> クラスはそれを2D行列に特殊化したもの</p>
+
+<p><a href="http://docs.scipy.org/doc/numpy/reference/routines.matlib.html">http://docs.scipy.org/doc/numpy/reference/routines.matlib.html</a></p>
+
+<h3 id="universal-functions-ufunc">Universal functions (<code>ufunc</code>)</h3>
+
+<p><a href="http://docs.scipy.org/doc/numpy/reference/ufuncs.html#available-ufuncs">http://docs.scipy.org/doc/numpy/reference/ufuncs.html#available-ufuncs</a></p>
+
+<p><code>ndarray</code> に対して効率よく element-wise な演算をする関数</p>
+
+<h3 id="routine">Routine</h3>
+
+<p><a href="http://docs.scipy.org/doc/numpy/reference/routines.html">http://docs.scipy.org/doc/numpy/reference/routines.html</a></p>
+
+<p><code>ndarray</code> を作ったり操作したりする関数全般</p>
+
+<p><a href="http://docs.scipy.org/doc/numpy/reference/routines.array-creation.html">http://docs.scipy.org/doc/numpy/reference/routines.array-creation.html</a></p>
+
+<p><a href="http://docs.scipy.org/doc/numpy/reference/routines.array-manipulation.html">http://docs.scipy.org/doc/numpy/reference/routines.array-manipulation.html</a></p>
+
+<p><a href="http://docs.scipy.org/doc/numpy/reference/routines.math.html">http://docs.scipy.org/doc/numpy/reference/routines.math.html</a></p>
+
+<p><a href="http://docs.scipy.org/doc/numpy/reference/routines.random.html">http://docs.scipy.org/doc/numpy/reference/routines.random.html</a></p>
+
+<h2 id="scipy"><code>SciPy</code></h2>
+
+<p>高度な科学技術計算ライブラリ</p>
+
+<p><a href="https://pypi.python.org/pypi/scipy">https://pypi.python.org/pypi/scipy</a><br />
+<a href="http://www.scipy.org/scipylib/index.html">http://www.scipy.org/scipylib/index.html</a><br />
+<a href="http://docs.scipy.org/doc/scipy/reference/">http://docs.scipy.org/doc/scipy/reference/</a></p>
+
+<h3 id="scipy-stats"><code>scipy.stats</code></h3>
+
+<p><a href="http://docs.scipy.org/doc/scipy/reference/tutorial/stats.html">http://docs.scipy.org/doc/scipy/reference/tutorial/stats.html</a></p>
+
+<p><a href="http://docs.scipy.org/doc/scipy/reference/stats.html">http://docs.scipy.org/doc/scipy/reference/stats.html</a></p>
 
 </article>
 </main>
@@ -46,7 +168,7 @@ Watal M. Iwasaki
 <div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
 
 
-<input type="checkbox" id="R stats" checked>
+<input type="checkbox" id="R stats">
 <label for="R stats">R stats</label>
 <ul>
 <li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
@@ -71,13 +193,13 @@ Watal M. Iwasaki
 </ul>
 
 <input type="checkbox" id="Python" checked>
-<label for="Python">Python</label>
+<label for="Python" class="active">Python</label>
 <ul>
 <li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
 <li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
 <li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
 <li><a href="/students/iwasaki/python/install.html">Installation</a></li>
-<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li class="active"><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
 <li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
 <li><a href="/students/iwasaki/python/copy.html">copy</a></li>
 <li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
@@ -85,7 +207,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
 </ul>
 
-<input type="checkbox" id="C&#43;&#43;" checked>
+<input type="checkbox" id="C&#43;&#43;">
 <label for="C&#43;&#43;">C&#43;&#43;</label>
 <ul>
 <li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
@@ -96,7 +218,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
 </ul>
 
-<input type="checkbox" id="Biology" checked>
+<input type="checkbox" id="Biology">
 <label for="Biology">Biology</label>
 <ul>
 <li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
@@ -118,7 +240,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
 </ul>
 
-<input type="checkbox" id="Developer Tools" checked>
+<input type="checkbox" id="Developer Tools">
 <label for="Developer Tools">Developer Tools</label>
 <ul>
 <li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
@@ -142,7 +264,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
 </ul>
 
-<input type="checkbox" id="Linux" checked>
+<input type="checkbox" id="Linux">
 <label for="Linux">Linux</label>
 <ul>
 <li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
@@ -151,7 +273,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
 </ul>
 
-<input type="checkbox" id="Mac" checked>
+<input type="checkbox" id="Mac">
 <label for="Mac">Mac</label>
 <ul>
 <li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
@@ -165,7 +287,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
 </ul>
 
-<input type="checkbox" id="Lectures" checked>
+<input type="checkbox" id="Lectures">
 <label for="Lectures">Lectures</label>
 <ul>
 <li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
@@ -175,7 +297,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
 </ul>
 
-<input type="checkbox" id="Miscellaneous" checked>
+<input type="checkbox" id="Miscellaneous">
 <label for="Miscellaneous">Miscellaneous</label>
 <ul>
 <li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
@@ -186,7 +308,110 @@ Watal M. Iwasaki
 </nav>
 
 
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "NumPy, SciPy"
++++
 
+&lt;http://www.scipy.org/&gt;
+
+## Installation
+
+&lt;http://www.scipy.org/install.html&gt;\
+&lt;http://www.scipy.org/scipylib/download.html&gt;\
+&lt;http://www.scipy.org/scipylib/building/&gt;\
+&lt;http://docs.scipy.org/doc/numpy/user/install.html&gt;
+
+1.  [Homebrew]({#{#HUGOSHORTCODE-1#}#}) などで gfortran をインストール:
+
+        % brew install gcc49 --enable-gfortran
+        % ln -s gfortran-4.9 $(brew --prefix)/bin/gfortran
+
+    Ubuntuなら:
+
+        % sudo apt-get install build-essential gfortran
+        % sudo apt-get install python3-dev
+        % sudo apt-get install libatlas-base-dev
+
+2.  `NumPy` をインストール:
+
+        % pip install numpy
+
+3.  `SciPy` をインストール:
+
+        % CC=clang CXX=clang&#43;&#43; FFLAGS=-ff2c pip install scipy
+
+### test
+
+`nose` というパッケージが必要:
+
+    &gt;&gt;&gt; import numpy
+    &gt;&gt;&gt; numpy.test()
+
+BLAS/LAPACK関連の確認:
+
+    &gt;&gt;&gt; import numpy
+    &gt;&gt;&gt; numpy.show_config()
+
+## `NumPy`
+
+数値計算・配列演算ライブラリ
+
+&lt;https://pypi.python.org/pypi/numpy&gt;\
+&lt;http://www.numpy.org/&gt;\
+&lt;http://docs.scipy.org/doc/numpy/reference/&gt;
+
+### `ndarray` クラス
+
+&lt;http://docs.scipy.org/doc/numpy/reference/arrays.ndarray.html&gt;
+
+N次元配列
+
+------------------------------------------------------------------------
+
+`numpy.matrix` クラスはそれを2D行列に特殊化したもの
+
+&lt;http://docs.scipy.org/doc/numpy/reference/routines.matlib.html&gt;
+
+### Universal functions (`ufunc`)
+
+&lt;http://docs.scipy.org/doc/numpy/reference/ufuncs.html#available-ufuncs&gt;
+
+`ndarray` に対して効率よく element-wise な演算をする関数
+
+### Routine
+
+&lt;http://docs.scipy.org/doc/numpy/reference/routines.html&gt;
+
+`ndarray` を作ったり操作したりする関数全般
+
+&lt;http://docs.scipy.org/doc/numpy/reference/routines.array-creation.html&gt;
+
+&lt;http://docs.scipy.org/doc/numpy/reference/routines.array-manipulation.html&gt;
+
+&lt;http://docs.scipy.org/doc/numpy/reference/routines.math.html&gt;
+
+&lt;http://docs.scipy.org/doc/numpy/reference/routines.random.html&gt;
+
+## `SciPy`
+
+高度な科学技術計算ライブラリ
+
+&lt;https://pypi.python.org/pypi/scipy&gt;\
+&lt;http://www.scipy.org/scipylib/index.html&gt;\
+&lt;http://docs.scipy.org/doc/scipy/reference/&gt;
+
+### `scipy.stats`
+
+&lt;http://docs.scipy.org/doc/scipy/reference/tutorial/stats.html&gt;
+
+&lt;http://docs.scipy.org/doc/scipy/reference/stats.html&gt;
+
+</code></pre>
+</aside>
 
 <footer>(ɔ) 2008 Watal M. Iwasaki</footer>
 </div>

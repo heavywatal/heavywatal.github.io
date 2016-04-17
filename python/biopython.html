@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>BioPython: Tools for biological computation - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+BioPython — Tools for biological computation
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<p><a href="http://biopython.org">http://biopython.org</a>
+<a href="http://biopython.org/DIST/docs/api/Bio-module.html">http://biopython.org/DIST/docs/api/Bio-module.html</a></p>
+
+<h2 id="seqio"><code>SeqIO</code></h2>
+
+<ul>
+<li><a href="http://biopython.org/wiki/SeqIO">http://biopython.org/wiki/SeqIO</a></li>
+<li><a href="http://biopython.org/DIST/docs/tutorial/Tutorial.html#sec51">http://biopython.org/DIST/docs/tutorial/Tutorial.html#sec51</a></li>
+<li><a href="http://biopython.org/DIST/docs/api/Bio.SeqIO-module.html">http://biopython.org/DIST/docs/api/Bio.SeqIO-module.html</a></li>
+</ul>
+
+<dl>
+<dt><code>read(file, format, alphabet=None)</code></dt>
+<dd>1配列しか含まないファイルを読んで <code>SeqRecord</code> を返す</dd>
+<dt><code>parse(file, format, alphabet=None)</code></dt>
+<dd>複数の配列を含むファイルを読んで <code>SeqRecord</code> のイテレータを返す</dd>
+<dt><code>index(filename, format, alphabet=None, key_function=None)</code></dt>
+<dd><code>id</code> をキーとした辞書likeオブジェクトを返す</dd>
+</dl>
+
+<p><code>write(sequences, file, format)</code></p>
+
+<p><code>to_dict(sequences, key_function=None)</code></p>
+
+<p><code>convert(in_file, in_format, out_file, out_format, alphabet=None)</code></p>
+
+<pre><code>from Bio import SeqIO
+
+with open('beer.fasta', 'r') as fin:
+    for record in SeqIO.parse(fin, 'fasta'):
+        print(record.id)
+        print(record.seq)
+</code></pre>
+
+<h2 id="seqrecord"><code>SeqRecord</code></h2>
+
+<ul>
+<li><a href="http://biopython.org/wiki/SeqRecord">http://biopython.org/wiki/SeqRecord</a></li>
+<li><a href="http://biopython.org/DIST/docs/tutorial/Tutorial.html#sec32">http://biopython.org/DIST/docs/tutorial/Tutorial.html#sec32</a></li>
+<li><a href="http://biopython.org/DIST/docs/api/Bio.SeqRecord.SeqRecord-class.html">http://biopython.org/DIST/docs/api/Bio.SeqRecord.SeqRecord-class.html</a></li>
+</ul>
+
+<p><code>Seq</code> とそのほかの情報をひとまとまりにしたクラス。</p>
+
+<p><code>id</code><br />
+<code>seq</code></p>
+
+<p><code>name</code><br />
+<code>description</code><br />
+<code>dbxrefs</code><br />
+<code>features</code><br />
+<code>annotations</code><br />
+<code>letter_annotations</code></p>
+
+<pre><code>&gt;&gt;&gt; for record in SeqIO.parse(fin, 'fasta'):
+...     print(record)
+...
+ID: gi|186972394|gb|EU490707.1|
+Name: gi|186972394|gb|EU490707.1|
+Description: gi|186972394|gb|EU490707.1| Selenipedium aequinoctiale maturase K (matK) gene, partial cds; chloroplast
+Number of features: 0
+Seq('ATTTTTTACGAACCTGTGGAAATTTTTGGTTATGACAATAAATCTAGTTTAGTA...GAA', SingleLetterAlphabet())
+ID: gi|186972391|gb|ACC99454.1|
+Name: gi|186972391|gb|ACC99454.1|
+Description: gi|186972391|gb|ACC99454.1| maturase K [Scaphosepalum rapax]
+Number of features: 0
+Seq('IFYEPVEILGYDNKSSLVLVKRLITRMYQQKSLISSLNDSNQNEFWGHKNSFSS...EEE', SingleLetterAlphabet())
+</code></pre>
+
+<h2 id="seq"><code>Seq</code></h2>
+
+<ul>
+<li><a href="http://biopython.org/wiki/Seq">http://biopython.org/wiki/Seq</a></li>
+<li><a href="http://biopython.org/DIST/docs/tutorial/Tutorial.html#sec17">http://biopython.org/DIST/docs/tutorial/Tutorial.html#sec17</a></li>
+<li><a href="http://biopython.org/DIST/docs/api/Bio.Seq.Seq-class.html">http://biopython.org/DIST/docs/api/Bio.Seq.Seq-class.html</a></li>
+</ul>
+
+<p>塩基配列・アミノ酸配列のクラス。
+標準 <code>str</code> とほとんど同じように扱えるほか、
+相補鎖とかなんとかを簡単に扱えるメソッドが備わっている。</p>
+
+<ul>
+<li><code>complement(self)</code></li>
+<li><code>reverse_complement(self)</code></li>
+<li><code>transcribe(self)</code></li>
+<li><code>back_transcribe(self)</code></li>
+<li><code>translate(self, table=&quot;Standard&quot;, stop_symbol=&quot;*&quot;, to_stop=False, cds=False)</code></li>
+<li><code>ungap(self, gap=None)</code></li>
+</ul>
+
+<h2 id="genomediagram">GenomeDiagram</h2>
+
+<p><a href="http://biopython.org/DIST/docs/tutorial/Tutorial.html#sec328">http://biopython.org/DIST/docs/tutorial/Tutorial.html#sec328</a>
+<a href="http://biopython.org/DIST/docs/GenomeDiagram/userguide.pdf">http://biopython.org/DIST/docs/GenomeDiagram/userguide.pdf</a></p>
+
+<h2 id="entrez">Entrez</h2>
+
+<ul>
+<li><a href="http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc90">http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc90</a></li>
+</ul>
+
+<h3 id="esearch">esearch</h3>
+
+<ul>
+<li><a href="http://www.ncbi.nlm.nih.gov/entrez/query/static/esearch_help.html">NCBI ESerch Utility</a></li>
+<li><a href="http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc93">http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc93</a></li>
+</ul>
+
+<!-- -->
+
+<pre><code>&gt;&gt;&gt; from Bio import Entrez
+&gt;&gt;&gt; handle = Entrez.esearch(db=&quot;nucleotide&quot;, retmax=10, term=&quot;Opuntia&quot;)
+&gt;&gt;&gt; record = Entrez.read(handle)
+&gt;&gt;&gt; for item in record.items():
+...     print(item)
+...
+(u'Count', '390')
+(u'RetMax', '10')
+(u'IdList', ['257359511', '283467266', '246905625', '246905624', '246655205', '246655204', '240253899', '240253897', '240253576', '240253574'])
+(u'TranslationStack', [{u'Count': '200', u'Field': 'Organism', u'Term': '&quot;Opuntia&quot;[Organism]', u'Explode': 'Y'}, {u'Count': '390', u'Field': 'All Fields', u'Term': 'Opuntia[All Fields]', u'Explode': 'Y'}, 'OR', 'GROUP'])
+(u'TranslationSet', [{u'To': '&quot;Opuntia&quot;[Organism] OR Opuntia[All Fields]', u'From': 'Opuntia'}])
+(u'RetStart', '0')
+(u'QueryTranslation', '&quot;Opuntia&quot;[Organism] OR Opuntia[All Fields]')
+</code></pre>
+
+<h3 id="efetch">efetch</h3>
+
+<ul>
+<li><a href="http://eutils.ncbi.nlm.nih.gov/corehtml/query/static/efetch_help.html">NCBI EFetch Utility</a></li>
+<li><a href="http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc96">http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc96</a></li>
+</ul>
+
+<p>返り値は結果(XML)へのハンドル。:</p>
+
+<pre><code>from Bio import Entrez
+
+handle = Entrez.efetch(db=&quot;nucleotide&quot;, id=&quot;186972394,186972394&quot;, rettype=&quot;fasta&quot;)
+record = SeqIO.parse(handle, &quot;fasta&quot;)
+for x in record:
+    print(i)
+</code></pre>
+
+<h2 id="installation">Installation</h2>
+
+<p><a href="/students/iwasaki/python/pip.html">pip</a> で一発:</p>
+
+<pre><code>% pip install biopython
+</code></pre>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats">
+<label for="R stats">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python" checked>
+<label for="Python" class="active">Python</label>
+<ul>
+<li class="active"><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "BioPython"
++++
+
+&lt;http://biopython.org&gt;
+&lt;http://biopython.org/DIST/docs/api/Bio-module.html&gt;
+
+## `SeqIO`
+
+-   &lt;http://biopython.org/wiki/SeqIO&gt;
+-   &lt;http://biopython.org/DIST/docs/tutorial/Tutorial.html#sec51&gt;
+-   &lt;http://biopython.org/DIST/docs/api/Bio.SeqIO-module.html&gt;
+
+`read(file, format, alphabet=None)`
+:   1配列しか含まないファイルを読んで `SeqRecord` を返す
+
+`parse(file, format, alphabet=None)`
+:   複数の配列を含むファイルを読んで `SeqRecord` のイテレータを返す
+
+`index(filename, format, alphabet=None, key_function=None)`
+:   `id` をキーとした辞書likeオブジェクトを返す
+
+`write(sequences, file, format)`
+
+`to_dict(sequences, key_function=None)`
+
+`convert(in_file, in_format, out_file, out_format, alphabet=None)`
+
+    from Bio import SeqIO
+
+    with open(&#39;beer.fasta&#39;, &#39;r&#39;) as fin:
+        for record in SeqIO.parse(fin, &#39;fasta&#39;):
+            print(record.id)
+            print(record.seq)
+
+## `SeqRecord`
+
+-   &lt;http://biopython.org/wiki/SeqRecord&gt;
+-   &lt;http://biopython.org/DIST/docs/tutorial/Tutorial.html#sec32&gt;
+-   &lt;http://biopython.org/DIST/docs/api/Bio.SeqRecord.SeqRecord-class.html&gt;
+
+`Seq` とそのほかの情報をひとまとまりにしたクラス。
+
+`id`\
+`seq`
+
+`name`\
+`description`\
+`dbxrefs`\
+`features`\
+`annotations`\
+`letter_annotations`
+
+    &gt;&gt;&gt; for record in SeqIO.parse(fin, &#39;fasta&#39;):
+    ...     print(record)
+    ...
+    ID: gi|186972394|gb|EU490707.1|
+    Name: gi|186972394|gb|EU490707.1|
+    Description: gi|186972394|gb|EU490707.1| Selenipedium aequinoctiale maturase K (matK) gene, partial cds; chloroplast
+    Number of features: 0
+    Seq(&#39;ATTTTTTACGAACCTGTGGAAATTTTTGGTTATGACAATAAATCTAGTTTAGTA...GAA&#39;, SingleLetterAlphabet())
+    ID: gi|186972391|gb|ACC99454.1|
+    Name: gi|186972391|gb|ACC99454.1|
+    Description: gi|186972391|gb|ACC99454.1| maturase K [Scaphosepalum rapax]
+    Number of features: 0
+    Seq(&#39;IFYEPVEILGYDNKSSLVLVKRLITRMYQQKSLISSLNDSNQNEFWGHKNSFSS...EEE&#39;, SingleLetterAlphabet())
+
+## `Seq`
+
+-   &lt;http://biopython.org/wiki/Seq&gt;
+-   &lt;http://biopython.org/DIST/docs/tutorial/Tutorial.html#sec17&gt;
+-   &lt;http://biopython.org/DIST/docs/api/Bio.Seq.Seq-class.html&gt;
+
+塩基配列・アミノ酸配列のクラス。
+標準 `str` とほとんど同じように扱えるほか、
+相補鎖とかなんとかを簡単に扱えるメソッドが備わっている。
+
+-   `complement(self)`
+-   `reverse_complement(self)`
+-   `transcribe(self)`
+-   `back_transcribe(self)`
+-   `translate(self, table=&#34;Standard&#34;, stop_symbol=&#34;*&#34;, to_stop=False, cds=False)`
+-   `ungap(self, gap=None)`
+
+## GenomeDiagram
+
+&lt;http://biopython.org/DIST/docs/tutorial/Tutorial.html#sec328&gt;
+&lt;http://biopython.org/DIST/docs/GenomeDiagram/userguide.pdf&gt;
+
+## Entrez
+
+-   &lt;http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc90&gt;
+
+### esearch
+
+-   [NCBI ESerch Utility](http://www.ncbi.nlm.nih.gov/entrez/query/static/esearch_help.html)
+-   &lt;http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc93&gt;
+
+&lt;!-- --&gt;
+
+    &gt;&gt;&gt; from Bio import Entrez
+    &gt;&gt;&gt; handle = Entrez.esearch(db=&#34;nucleotide&#34;, retmax=10, term=&#34;Opuntia&#34;)
+    &gt;&gt;&gt; record = Entrez.read(handle)
+    &gt;&gt;&gt; for item in record.items():
+    ...     print(item)
+    ...
+    (u&#39;Count&#39;, &#39;390&#39;)
+    (u&#39;RetMax&#39;, &#39;10&#39;)
+    (u&#39;IdList&#39;, [&#39;257359511&#39;, &#39;283467266&#39;, &#39;246905625&#39;, &#39;246905624&#39;, &#39;246655205&#39;, &#39;246655204&#39;, &#39;240253899&#39;, &#39;240253897&#39;, &#39;240253576&#39;, &#39;240253574&#39;])
+    (u&#39;TranslationStack&#39;, [{u&#39;Count&#39;: &#39;200&#39;, u&#39;Field&#39;: &#39;Organism&#39;, u&#39;Term&#39;: &#39;&#34;Opuntia&#34;[Organism]&#39;, u&#39;Explode&#39;: &#39;Y&#39;}, {u&#39;Count&#39;: &#39;390&#39;, u&#39;Field&#39;: &#39;All Fields&#39;, u&#39;Term&#39;: &#39;Opuntia[All Fields]&#39;, u&#39;Explode&#39;: &#39;Y&#39;}, &#39;OR&#39;, &#39;GROUP&#39;])
+    (u&#39;TranslationSet&#39;, [{u&#39;To&#39;: &#39;&#34;Opuntia&#34;[Organism] OR Opuntia[All Fields]&#39;, u&#39;From&#39;: &#39;Opuntia&#39;}])
+    (u&#39;RetStart&#39;, &#39;0&#39;)
+    (u&#39;QueryTranslation&#39;, &#39;&#34;Opuntia&#34;[Organism] OR Opuntia[All Fields]&#39;)
+
+### efetch
+
+-   [NCBI EFetch Utility](http://eutils.ncbi.nlm.nih.gov/corehtml/query/static/efetch_help.html)
+-   &lt;http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc96&gt;
+
+返り値は結果(XML)へのハンドル。:
+
+    from Bio import Entrez
+
+    handle = Entrez.efetch(db=&#34;nucleotide&#34;, id=&#34;186972394,186972394&#34;, rettype=&#34;fasta&#34;)
+    record = SeqIO.parse(handle, &#34;fasta&#34;)
+    for x in record:
+        print(i)
+
+## Installation
+
+[pip]({#{#HUGOSHORTCODE-1#}#}) で一発:
+
+    % pip install biopython
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

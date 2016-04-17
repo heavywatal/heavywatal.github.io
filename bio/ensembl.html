@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>Ensembl - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+Ensembl
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<p><a href="http://www.ensembl.org/">http://www.ensembl.org/</a></p>
+
+<p>よくアノテーションされてて、相同な遺伝子などを探しやすいゲノムデータベース。
+<a href="http://www.ncbi.nlm.nih.gov/refseq/">RefSeq</a> とか <a href="http://www.uniprot.org/">UniProt</a> に比べると、ゲノム上での位置とかが得意なのかな。
+脊椎動物以外は別サイトに分かれてる。</p>
+
+<ul>
+<li><a href="http://metazoa.ensembl.org/">http://metazoa.ensembl.org/</a></li>
+<li><a href="http://plants.ensembl.org/">http://plants.ensembl.org/</a></li>
+<li><a href="http://fungi.ensembl.org/">http://fungi.ensembl.org/</a></li>
+<li><a href="http://protists.ensembl.org/">http://protists.ensembl.org/</a></li>
+<li><a href="http://bacteria.ensembl.org/">http://bacteria.ensembl.org/</a></li>
+</ul>
+
+<div class="note">
+<p>Features の Attributes
+でEnsemblやRefSeqのIDを複数同時に指定すると
+パラログの対応がちゃんとしてないせいか
+ID同士の組み合わせの数だけ結果が膨れてしまう&hellip;?</p>
+
+</div>
+
+
+<h2 id="プログラムからアクセス">プログラムからアクセス</h2>
+
+<dl>
+<dt><a href="http://www.ensembl.org/info/docs/api/">Ensembl API</a></dt>
+<dd>Perl 限定なので却下</dd>
+<dt><a href="http://beta.rest.ensembl.org/">REST API</a></dt>
+<dd>2012年9月に公開され、Perl以外の言語からでも簡単にアクセスできるようになった。
+例えば Python ラッパーとして
+<a href="https://pypi.python.org/pypi/pyensemblrest">pyensemblrest</a>
+というパッケージが公開されている。</dd>
+<dt><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></dt>
+<dd>R の <a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a> 上で利用できる。
+データが少なければこれが一番使い勝手いいかなぁ。
+単なるダウンロードではなくサーバー上の演算が絡むっぽいので
+データが多くなるとかなり遅くなる。</dd>
+<dt><a href="http://www.ensembl.org/info/data/ftp/index.html">FTP Download</a></dt>
+<dd>どんなデータが入手可能かブラウザから見てみるのには良い。</dd>
+<dt><a href="http://www.ensembl.org/info/data/ftp/rsync.html">rsync</a></dt>
+<dd>複雑なパターンマッチや、既存ファイル無視などができる分、
+実際に落とすときはFTPよりも <code>rsync</code> のほうが強力。 cf. <a href="/students/iwasaki/dev/rsync.html">/dev/rsync</a></dd>
+<dt><a href="http://www.ensembl.org/info/data/mysql.html">MySQL</a></dt>
+<dd>データベースを構成する MySQL にダイレクトにアクセスする。
+下記のようにローカルサーバーにごっそりミラーリングすることも可能。</dd>
+</dl>
+
+<h2 id="ローカルデータベース構築">ローカルデータベース構築</h2>
+
+<p>イトヨの例</p>
+
+<ol>
+<li>MySQL 環境を整える cf. <a href="/students/iwasaki/dev/mysql.html">/dev/mysql</a></li>
+
+<li><p>データをダウンロードする:</p>
+
+<pre><code>% x=gasterosteus_aculeatus_core_57_1j
+% wget -m ftp://ftp.ensembl.org/pub/current_mysql/$x
+</code></pre></li>
+
+<li><p>落としてきたファイルをデータベースに組み込む:</p>
+
+<pre><code>% cd ftp.ensembl.org/pub/current_mysql
+% gunzip $x/*.gz
+% mysqladmin5 -u root --password=PASSWORD create $x
+% mysql5 -u root --password=PASSWORD $i &lt; $x/$x.sql
+% mysqlimport5 -u root --password=PASSWORD $i -L $x/*.txt
+</code></pre>
+
+<p>全種でやるなら <code>wget -m ftp://ftp.ensembl.org/pub/current_mysql</code>
+で全部落として、以下のようなシェルスクリプトを実行する:</p>
+
+<pre><code>for x in *; do
+    echo $x
+    gunzip $x/*.gz
+    mysqladmin5 -u root --password=PASSWORD create $x
+    mysql5 -u root --password=PASSWORD $x &lt; $x/$x.sql
+    mysqlimport5 -u root --password=PASSWORD $x -L $x/*.txt
+done
+</code></pre></li>
+</ol>
+
+<p>スペースとスピードの観点からすると、本当はいちいち展開したファイルを作らずに
+<code>gunzip -c dna.txt.gz | mysqlimport ...</code>
+ってな感じでパイプで流し込みたい。
+<a href="http://www.google.co.jp/search?q=mysqlimport+stdin">&ldquo;mysqlimport stdin&rdquo;でググってみる</a>
+と、どうやら同じような不満を持つ人がたくさんいるらしいことと、
+MySQL側はそれを改善する気がないことと、
+Perlでは <code>MySQL::Slurp</code> を使ってそれができるということはわかった。</p>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats">
+<label for="R stats">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology" checked>
+<label for="Biology" class="active">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li class="active"><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "Ensembl"
++++
+
+&lt;http://www.ensembl.org/&gt;
+
+よくアノテーションされてて、相同な遺伝子などを探しやすいゲノムデータベース。
+[RefSeq](http://www.ncbi.nlm.nih.gov/refseq/) とか [UniProt](http://www.uniprot.org/) に比べると、ゲノム上での位置とかが得意なのかな。
+脊椎動物以外は別サイトに分かれてる。
+
+-   &lt;http://metazoa.ensembl.org/&gt;
+-   &lt;http://plants.ensembl.org/&gt;
+-   &lt;http://fungi.ensembl.org/&gt;
+-   &lt;http://protists.ensembl.org/&gt;
+-   &lt;http://bacteria.ensembl.org/&gt;
+
+{#{#HUGOSHORTCODE-1#}#}
+
+## プログラムからアクセス
+
+[Ensembl API](http://www.ensembl.org/info/docs/api/)
+:   Perl 限定なので却下
+
+[REST API](http://beta.rest.ensembl.org/)
+:   2012年9月に公開され、Perl以外の言語からでも簡単にアクセスできるようになった。
+    例えば Python ラッパーとして
+    [pyensemblrest](https://pypi.python.org/pypi/pyensemblrest)
+    というパッケージが公開されている。
+
+[biomaRt]({#{#HUGOSHORTCODE-2#}#})
+:   R の [Bioconductor]({#{#HUGOSHORTCODE-3#}#}) 上で利用できる。
+    データが少なければこれが一番使い勝手いいかなぁ。
+    単なるダウンロードではなくサーバー上の演算が絡むっぽいので
+    データが多くなるとかなり遅くなる。
+
+[FTP Download](http://www.ensembl.org/info/data/ftp/index.html)
+:   どんなデータが入手可能かブラウザから見てみるのには良い。
+
+[rsync](http://www.ensembl.org/info/data/ftp/rsync.html)
+:   複雑なパターンマッチや、既存ファイル無視などができる分、
+    実際に落とすときはFTPよりも `rsync` のほうが強力。 cf. [/dev/rsync]({#{#HUGOSHORTCODE-4#}#})
+
+[MySQL](http://www.ensembl.org/info/data/mysql.html)
+:   データベースを構成する MySQL にダイレクトにアクセスする。
+    下記のようにローカルサーバーにごっそりミラーリングすることも可能。
+
+## ローカルデータベース構築
+
+イトヨの例
+
+1.  MySQL 環境を整える cf. [/dev/mysql]({#{#HUGOSHORTCODE-5#}#})
+2.  データをダウンロードする:
+
+        % x=gasterosteus_aculeatus_core_57_1j
+        % wget -m ftp://ftp.ensembl.org/pub/current_mysql/$x
+
+3.  落としてきたファイルをデータベースに組み込む:
+
+        % cd ftp.ensembl.org/pub/current_mysql
+        % gunzip $x/*.gz
+        % mysqladmin5 -u root --password=PASSWORD create $x
+        % mysql5 -u root --password=PASSWORD $i &lt; $x/$x.sql
+        % mysqlimport5 -u root --password=PASSWORD $i -L $x/*.txt
+
+    全種でやるなら `wget -m ftp://ftp.ensembl.org/pub/current_mysql`
+    で全部落として、以下のようなシェルスクリプトを実行する:
+
+        for x in *; do
+            echo $x
+            gunzip $x/*.gz
+            mysqladmin5 -u root --password=PASSWORD create $x
+            mysql5 -u root --password=PASSWORD $x &lt; $x/$x.sql
+            mysqlimport5 -u root --password=PASSWORD $x -L $x/*.txt
+        done
+
+スペースとスピードの観点からすると、本当はいちいち展開したファイルを作らずに
+`gunzip -c dna.txt.gz | mysqlimport ...`
+ってな感じでパイプで流し込みたい。
+[&#34;mysqlimport stdin&#34;でググってみる](http://www.google.co.jp/search?q=mysqlimport&#43;stdin)
+と、どうやら同じような不満を持つ人がたくさんいるらしいことと、
+MySQL側はそれを改善する気がないことと、
+Perlでは `MySQL::Slurp` を使ってそれができるということはわかった。
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>Bioconductor: Genomicデータ解析ツール群 - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+Bioconductor — Genomicデータ解析ツール群
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4621062506/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41aQBFtkgBL._SX160_.jpg" alt="RとBioconductorを用いたバイオインフォマティクス" /></a>
+<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320057082/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51yBjAPptKL._SX160_.jpg" alt="Rによるバイオインフォマティクスデータ解析 第2版 －Bioconductorを用いたゲノムスケールのデータマイニング－" /></a>
+<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320123700/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41aoEmhUR0L._SX160_.jpg" alt="トランスクリプトーム解析 (シリーズ Useful R 7)" /></a>
+<a href="http://www.bioconductor.org">http://www.bioconductor.org</a></p>
+
+<p><a href="http://blog.hackingisbelieving.org/2010/09/r-package_06.html">http://blog.hackingisbelieving.org/2010/09/r-package_06.html</a></p>
+
+<p><a href="http://qiita.com/tags/bioconductor">http://qiita.com/tags/bioconductor</a></p>
+
+<p><a href="http://manuals.bioinformatics.ucr.edu/home/R_BioCondManual">http://manuals.bioinformatics.ucr.edu/home/R_BioCondManual</a></p>
+
+<p><a href="http://search.bioconductor.jp/">http://search.bioconductor.jp/</a></p>
+
+<h2 id="基本操作">基本操作</h2>
+
+<h3 id="インストール">インストール</h3>
+
+<p><a href="http://www.bioconductor.org/install/">http://www.bioconductor.org/install/</a></p>
+
+<ol>
+<li>R 本体をインストール <a href="http://cran.rstudio.com/">http://cran.rstudio.com/</a></li>
+
+<li><p>R の中でコマンドを実行</p>
+
+<pre><code class="language-r">options(BioC_mirror=&quot;http://bioconductor.jp/&quot;)
+source(&quot;http://bioconductor.org/biocLite.R&quot;)
+biocLite()
+</code></pre></li>
+</ol>
+
+<p>すると基本パッケージがインストールされる:
+Biobase
+IRanges
+AnnotationDbi
+BiocGenerics
+GenomeINfoDb
+DBI
+RSQLite</p>
+
+<h3 id="起動">起動</h3>
+
+<p>R を立ち上げる度に読み込み＆アップデート</p>
+
+<pre><code class="language-r">source(&quot;http://bioconductor.org/biocLite.R&quot;)
+biocLite()
+</code></pre>
+
+<h3 id="パッケージ管理">パッケージ管理</h3>
+
+<p><code>install.packages()</code> じゃなくて <code>biocLite()</code> を使う</p>
+
+<pre><code class="language-r">biocLite('ggbio')
+biocLite(all_group())
+</code></pre>
+
+<p>インストールしたものを使うときには普通と同じく</p>
+
+<pre><code class="language-r">library(ggbio)
+</code></pre>
+
+<dl>
+<dt>一覧</dt>
+<dd><a href="http://www.bioconductor.org/packages/release/bioc/">http://www.bioconductor.org/packages/release/bioc/</a><br />
+<a href="http://www.bioconductor.org/packages/release/data/annotation/">http://www.bioconductor.org/packages/release/data/annotation/</a><br />
+<a href="http://www.bioconductor.org/packages/release/data/experiment/">http://www.bioconductor.org/packages/release/data/experiment/</a></dd>
+<dt>検索</dt>
+<dd><a href="http://www.bioconductor.org/packages/release/BiocViews.html">http://www.bioconductor.org/packages/release/BiocViews.html</a></dd>
+</dl>
+
+<p>使い方を調べる</p>
+
+<pre><code class="language-r">help(package='Biostrings')
+browseVignettes(package='Biostrings')
+</code></pre>
+
+<h2 id="biostrings"><code>Biostrings</code></h2>
+
+<p><a href="http://www.bioconductor.org/packages/release/bioc/html/Biostrings.html">http://www.bioconductor.org/packages/release/bioc/html/Biostrings.html</a></p>
+
+<h3 id="クラス">クラス</h3>
+
+<dl>
+<dt>配列</dt>
+<dd><code>BString</code><br />
+<code>DNAString</code><br />
+<code>RNAString</code><br />
+<code>AAString</code></dd>
+<dt>配列セット e.g. ある遺伝子の複数のcds</dt>
+<dd><code>BStringSet</code><br />
+<code>DNAStringSet</code><br />
+<code>RNAStringSet</code><br />
+<code>AAStringSet</code></dd>
+<dt>配列セットリスト e.g. 遺伝子ごとの配列セット <code>cdsBy(txdb, by='gene')</code></dt>
+<dd><code>BStringSetList</code><br />
+<code>DNAStringSetList</code><br />
+<code>RNAStringSetList</code><br />
+<code>AAStringSetList</code></dd>
+<dt>多重整列</dt>
+<dd><code>DNAMultipleAlignment</code><br />
+<code>RNAMultipleAlignment</code><br />
+<code>AAMultipleAlignment</code></dd>
+<dt>ペアワイズ整列</dt>
+<dd><p><code>PairwiseAlignments</code></p>
+
+<div class="warning">
+<p>このコンストラクタを直接呼び出してはいけない。
+<code>pairwiseAlignment()</code> 関数を使うべし。</p>
+
+</div>
+</dd>
+<dt><code>Views</code> <code>(x, start=NULL, end=NULL, width=NULL, names=NULL)</code></dt>
+<dd><p>「ある配列のこの領域とこの領域」を表現したいとき、
+配列を切り出すのではなく、その切り取り方のみを保持する。
+<code>IRanges</code> みたいな感じ。
+<code>as.character()</code> でその部分配列を文字列として取り出せる。</p></dd>
+<dt><code>PDict</code> <code>(x, max.mismatch=NA, ...)</code></dt>
+<dd><p>正規表現 <code>TAA|TAG|TGA</code> のように複数の配列で検索する場合にまとめておく。
+<code>matchPDict()</code> とかで使う。</p></dd>
+</dl>
+
+<p>デモデータ</p>
+
+<pre><code class="language-r">.file = system.file(&quot;extdata&quot;, &quot;someORF.fa&quot;, package=&quot;Biostrings&quot;)
+bss = readDNAStringSet(.file)
+</code></pre>
+
+<h3 id="関数">関数</h3>
+
+<dl>
+<dt>配列変換</dt>
+<dd><p><code>reverse(bs)</code><br />
+<code>complement(bs)</code><br />
+<code>reverseComplement(bs)</code></p>
+
+<p><code>transcribe(dna)</code> &mdash; <em>deprecated</em><br />
+   3&rsquo;-鋳型鎖=アンチセンス鎖-5&rsquo; を引数として相補的な 5&rsquo;-mRNA-3&rsquo; を返す。非推奨。</p>
+
+<p><code>translate(bs, genetic.code=GENETIC_CODE, if.fuzzy.codon='error')</code><br />
+   翻訳して <code>AAString</code> に変換。 引数はDNAでもRNAでもよい。 <code>genetic.code</code> は名前付き文字列ベクタで、 組み込みで使えるやつは <code>getGeneticCode('SGC2')</code> のように指定できる。 何がどの名前で使えるかは <code>GENETIC_CODE_TABLE</code> で確認。</p>
+
+<p><code>codons(bs)</code><br />
+   3塩基ずつ切って見る <code>Views</code> オブジェクトを返す。</p>
+
+<p><code>subseq(bs, start, end)&lt;-</code><br />
+   部分置換</p>
+
+<p><code>xscat(...)</code><br />
+   <code>Bstring</code> 版 <code>paste0()</code></p></dd>
+<dt>頻度を数える</dt>
+<dd><p><code>alphabetFrequency(x, as.prob=FALSE, ...)</code><br />
+<code>letterFrequency(x, letters, OR='|', as.prob=FALSE, ...)</code><br />
+<code>dinucleotideFrequency(x, ...)</code><br />
+<code>trinucleotideFrequency(x, ...)</code><br />
+<code>oligonucleotideFrequency(x, width, ...)</code><br />
+<code>nucleotideFrequencyAt(set_or_views, at)</code></p></dd>
+<dt>コンセンサス</dt>
+<dd><p><code>consensusMatrix(set_or_views)</code><br />
+<code>consensusString(set_or_views, ambiguityMap, threshold, ...)</code></p></dd>
+<dt>配列ファイルを読む、書く (FASTA, FASTQ)</dt>
+<dd><p><code>readBStringSet(file, format='fasta', ...)</code><br />
+<code>readDNAStringSet(file, format='fasta', ...)</code><br />
+<code>readRNAStringSet(file, format='fasta', ...)</code><br />
+<code>readAAStringSet(file, format='fasta', ...)</code><br />
+<code>writeXStringSet(x, filepath, append=FALSE, compress=FALSE, format='fasta', ...)</code></p></dd>
+<dt>アラインメントを読む (FASTA, stockholm, clustal)</dt>
+<dd><p><code>readDNAMultipleAlignment()</code><br />
+<code>readRNAMultipleAlignment()</code><br />
+<code>readAAMultipleAlignment()</code></p></dd>
+<dt>配列を読み込まずに情報だけを見る</dt>
+<dd><p><code>fasta.info(file, ...)</code><br />
+<code>fastq.geometry(file, ...)</code></p></dd>
+<dt>検索</dt>
+<dd><p><code>matchPattern(pattern, subject, ...)</code><br />
+<code>matchPDict(PDict, subject, ...)</code><br />
+<code>matchPWM(pwm, subject, min.score='80%', widh.score=FALSE, ...)</code><br />
+対象は <code>Bstring</code> だけでなく <code>Views</code> でもよい。 例えば <code>codons()</code> の結果を対象とすれば読み枠限定の検索となる。 結果の返し方の違う <code>vmatchXXX()</code> と <code>countXXX()</code> もある。</p></dd>
+</dl>
+
+<h2 id="genomicranges"><code>GenomicRanges</code></h2>
+
+<p><a href="http://www.bioconductor.org/packages/release/bioc/html/GenomicRanges.html">http://www.bioconductor.org/packages/release/bioc/html/GenomicRanges.html</a></p>
+
+<p><a href="http://qiita.com/yuifu/items/556af5d4d086c96ec783">http://qiita.com/yuifu/items/556af5d4d086c96ec783</a></p>
+
+<h3 id="クラス-1">クラス</h3>
+
+<dl>
+<dt><code>GRanges</code></dt>
+<dd><code>@seqnames</code><br />
+<code>@ranges</code><br />
+<code>@strand</code><br />
+<code>@elementMetadata</code><br />
+<code>@seqinfo</code><br />
+<code>@metadata</code></dd>
+<dt><code>makeGRangesFromDataFrame(df, keep.extra.columns=FALSE, ignore.strand=FALSE, seqinfo=NULL, ...)</code></dt>
+<dd>対応する列名 <code>seqnames.field</code>, <code>start.field</code>, <code>end.field</code>, <code>strand.field</code>
+を指定することもできるが、大概いい感じに拾ってくれる。</dd>
+</dl>
+
+<p><code>GRangesList</code> <code>(gr1, gr2, ...)</code></p>
+
+<dl>
+<dt><code>Seqinfo</code> <code>(seqnames, seqlengths, isCircular, genome)</code></dt>
+<dd><code>@genome</code><br />
+<code>@is_circular</code><br />
+<code>@seqlengths</code><br />
+<code>@seqnames</code></dd>
+</dl>
+
+<h3 id="関数-1">関数</h3>
+
+<dl>
+<dt>配列の情報を get, set, modify</dt>
+<dd><code>seqinfo(x)</code><br />
+<code>seqnames(x)</code><br />
+<code>seqlevels(x)</code><br />
+   特定の染色体だけ対象にしたい場合は<br />
+   <code>seqlevels(x, force=TRUE) = paste0('chr', c(1:22, 'X', 'Y'))</code><br />
+   のように削り <code>seqlevels0(x)</code> で戻せる<br />
+<code>seqlengths(x)</code><br />
+<code>isCircular(x)</code><br />
+<code>genome(x)</code></dd>
+<dt>個々の区間のプロパティを参照</dt>
+<dd><code>start(gr)</code>, <code>end(gr)</code>, <code>width(gr)</code><br />
+<code>strand(gr)</code><br />
+<code>names(gr)</code><br />
+<code>metadata(gr)</code></dd>
+<dt>区間の集合を操作 (デフォルトではstrand毎に)</dt>
+<dd><p><a href="http://qiita.com/wakuteka/items/9634e5ed96db3536756f">http://qiita.com/wakuteka/items/9634e5ed96db3536756f</a></p>
+
+<p><code>range(gr, ..., ignore.strand=FALSE, na.rm=FALSE)</code><br />
+   端から端まで1つの区間として返す</p>
+
+<p><code>reduce(gr, ...)</code><br />
+   重なってる区間をつなげる</p>
+
+<p><code>gaps(gr, start=1, end=seqlengths(gr))</code><br />
+   含まれていない部分だけ抽出 (= 全区間 - <code>reduce(gr)</code>)</p>
+
+<p><code>disjoin(gr, ...)</code><br />
+   重ならない部分だけ抽出</p>
+
+<p><code>isDisjoint(gr, ...)</code><br />
+<code>disjointBins(gr, ...)</code><br />
+<code>coverage(gr, shift=0, width=NULL, wight=1, method=c('auto', 'sort', 'hash'))</code></p></dd>
+<dt>個々の区間を操作</dt>
+<dd><p><code>shift(gr, shift=0, ...)</code><br />
+<code>narrow(gr, start=NA, end=NA, width=NA, ...)</code><br />
+<code>flank(gr, width, start=TRUE, both=FALSE, ...)</code><br />
+<code>promoters(gr, upstream=2000, downstream=200, ...)</code><br />
+<code>resize(gr, width, fix='start', ...)</code><br />
+<code>restrict(gr, start=NA, end=NA, ...)</code><br />
+<code>trim(gr, ...)</code></p></dd>
+<dt>重なり <a href="http://qiita.com/wakuteka/items/10027edccc6c2e244cd2">http://qiita.com/wakuteka/items/10027edccc6c2e244cd2</a></dt>
+<dd><p><code>findOverlaps(query, subject, ...)</code><br />
+<code>countOverlaps(query, subject, ...)</code><br />
+<code>overlapsAny(query, subject, ...)</code><br />
+<code>subsetByOverlaps(query, subject, ...)</code></p></dd>
+</dl>
+
+<h2 id="genomicfeatures"><code>GenomicFeatures</code></h2>
+
+<p><a href="http://www.bioconductor.org/packages/release/bioc/html/GenomicFeatures.html">http://www.bioconductor.org/packages/release/bioc/html/GenomicFeatures.html</a></p>
+
+<p><a href="http://qiita.com/yuifu/items/4bab5f713aa75bd18a84">http://qiita.com/yuifu/items/4bab5f713aa75bd18a84</a></p>
+
+<p><code>TranscriptDB</code> からいろんな条件で絞り込み、
+該当する区間を <code>GRanges</code> または <code>GRangesList</code> で返す。</p>
+
+<dl>
+<dt>絞り込んで <code>GRanges</code> を返す</dt>
+<dd><code>transcripts(txdb, vals=NULL, columns)</code><br />
+   <code>vals=list(tx_chrom=c('chrI', 'chrV'))</code> のように指定する。 取りうる値: gene_id, tx_id, tx_name, tx_chrom, tx_strand, exon_id, exon_name, exon_chrom, exon_strand, cds_id, cds_name, cds_chrom, cds_strand, exon_rank<br />
+<code>exons(txdb, ...)</code><br />
+<code>cds(txdb, ...)</code><br />
+<code>genes(txdb, ...)</code><br />
+<code>promoters(txdb, upstream=2000, downstream=200, ...)</code><br />
+<code>disjointExons(txdb, aggregateGenes=FALSE, includeTranscripts=TRUE, ...)</code><br />
+<code>microRNAs(txdb)</code><br />
+<code>tRNAs(txdb)</code><br />
+   <code>library(FDb.UCSC.tRNAs)</code> の情報を使ってtRNAコーディング部分を抽出</dd>
+<dt>グループ毎に絞り込んで <code>GRangesList</code> を返す</dt>
+<dd><code>transcriptsBy(txdb, by, use.names=FALSE, ...)</code><br />
+   <code>by</code> は <code>'gene'</code>, <code>'exon'</code>, <code>'cds'</code>, <code>'tx'</code> のどれか。<br />
+<code>exonsBy(txdb, by, ...)</code><br />
+<code>cdsBy(txdb, by, ...)</code><br />
+<code>intronsByTranscript(txdb, ...)</code><br />
+<code>fiveUTRsByTranscript(txdb, ...)</code><br />
+<code>threeUTRsByTranscript(txdb, ...)</code></dd>
+<dt><code>extractTranscriptSeqs(s, transcripts)</code></dt>
+<dd><code>DNAString</code> または <code>BSgenome</code> から配列を抜き出す。
+<code>transcripts</code> 引数は <code>GRanges</code>, <code>GRangesList</code>, <code>TranscriptDb</code> のどれか。</dd>
+<dt><code>TranscriptDB</code> の形式変換</dt>
+<dd><code>makeTranscriptDbFromBiomart(biomart='ensembl', dataset='hsapiens_gene_ensembl', ...)</code><br />
+<code>makeTranscriptDbFromUCSC(genome='hg18', table='knownGene', ...)</code><br />
+<code>makeTranscriptDBFromGFF(file, format=c('gff3', 'gtf'), ...)</code><br />
+<code>asBED(txdb)</code><br />
+<code>asGFF(txdb)</code></dd>
+</dl>
+
+<h3 id="transcriptdb"><code>TranscriptDB</code></h3>
+
+<p>データのインストールと読み込み</p>
+
+<pre><code class="language-r">biocLite(&quot;TxDb.Scerevisiae.UCSC.sacCer3.sgdGene&quot;)
+
+library(&quot;TxDb.Scerevisiae.UCSC.sacCer3.sgdGene&quot;)
+txdb = TxDb.Scerevisiae.UCSC.sacCer3.sgdGene
+</code></pre>
+
+<h2 id="bsgenome"><code>BSgenome</code></h2>
+
+<p><a href="http://www.bioconductor.org/packages/release/bioc/html/BSgenome.html">http://www.bioconductor.org/packages/release/bioc/html/BSgenome.html</a></p>
+
+<p>インストール、利用</p>
+
+<pre><code class="language-r">&gt; biocLite(&quot;BSgenome.Scerevisiae.UCSC.sacCer3&quot;)
+
+&gt; library(&quot;BSgenome.Scerevisiae.UCSC.sacCer3&quot;)
+&gt; bsg = BSgenome.Scerevisiae.UCSC.sacCer3
+</code></pre>
+
+<h3 id="クラス-2">クラス</h3>
+
+<dl>
+<dt><code>BSgenome</code></dt>
+<dd><code>@organism</code><br />
+<code>@species</code><br />
+<code>@provider</code><br />
+<code>@provider_version</code><br />
+<code>@release_date</code><br />
+<code>@release_name</code><br />
+<code>@source_url</code><br />
+<code>@seqinfo</code><br />
+<code>@user_seqnames</code><br />
+<code>@masks</code><br />
+<code>@single_sequences</code><br />
+<code>@multiple_sequences</code><br />
+<code>@pkgname</code> ほか</dd>
+</dl>
+
+<p>染色体(<code>DNAString</code>)にアクセス</p>
+
+<pre><code class="language-r">bsg$chrI
+bsg[['chrI']]
+bsg[[1]]
+</code></pre>
+
+<hr />
+
+<dl>
+<dt><code>BSParams</code></dt>
+<dd><code>@X</code><br />
+<code>@FUN</code><br />
+<code>@exclude</code><br />
+<code>@simplify</code><br />
+<code>@maskList</code><br />
+<code>@motifList</code><br />
+<code>@userMask</code><br />
+<code>@invertUserMask</code></dd>
+</dl>
+
+<p><code>new()()</code> で作って <code>bsapply()()</code> に渡すらしい</p>
+
+<hr />
+
+<p><code>GenomeData</code></p>
+
+<p><code>GenomeDescription</code></p>
+
+<h3 id="関数-2">関数</h3>
+
+<dl>
+<dt>アクセサー</dt>
+<dd><code>organism(bsg)</code><br />
+<code>species(bsg)</code><br />
+<code>provider(bsg)</code><br />
+<code>providerVersion(bsg)</code><br />
+<code>releaseDate(bsg)</code><br />
+<code>releaseName(bsg)</code><br />
+<code>bsgenomeName(bsg)</code><br />
+<code>seqlengths()</code> などseqinfo系関数も使える</dd>
+<dt>利用可能なデータを調べる</dt>
+<dd><code>available.genomes(splitNameParts=FALSE, type=getOption('pkgType'))</code><br />
+<code>installed.genomes(splitNameParts=FALSE)</code></dd>
+<dt><code>getBSgenome(name, masked=FALSE)</code></dt>
+<dd>インストール済みデータから読み込み。
+<code>BSgenome.Scerevisiae.UCSC.sacCer3</code> あるいは <code>sacCer3</code> のような名前で。</dd>
+<dt><code>getSeq(bsg, names, start=NA, end=NA, width=NA, starnd='+', as.character=FALSE)</code></dt>
+<dd><code>BSgenome</code> オブジェクトから配列を抜き出す。
+<code>names</code> は配列名の文字列ベクタか <code>GRanges</code> か <code>GRangesList</code></dd>
+</dl>
+
+<h3 id="データパッケージを作る">データパッケージを作る</h3>
+
+<p><a href="http://www.bioconductor.org/packages/release/bioc/vignettes/BSgenome/inst/doc/BSgenomeForge.pdf">http://www.bioconductor.org/packages/release/bioc/vignettes/BSgenome/inst/doc/BSgenomeForge.pdf</a></p>
+
+<ol>
+<li><p>染色体ごとのFASTAファイルを用意する e.g. Ensemblから <code>*.chromosome.*.fa.gz</code> をダウンロードして展開</p>
+
+<div class="note">
+<p>染色体名と拡張子だけを残したファイル名にする必要がある。
+しかもgzipのままでは読めない残念な仕様なので展開しておく。 e.g. <code>IV.fa</code></p>
+
+</div>
+</li>
+
+<li><p>既存の <code>BSgenome</code> のやつを参考に適当にseedファイルを作る:</p>
+
+<pre><code>Package: BSgenome.Scerevisiae.EF4.74.ensembl
+Title: BSgenome.Scerevisiae.EF4.74.ensembl
+Description: BSgenome.Scerevisiae.EF4.74.ensembl
+Version: 0.74.1
+organism: Saccharomyces_cerevisiae
+species: Scerevisiae
+provider: ENSEMBL
+provider_version: release-74
+release_date: 2013-11-25T21:47:17
+release_name: EF4.74
+source_url: ftp://ftp.ensembl.org/pub/release-74/fasta/Saccharomyces_cerevisiae/dna/
+organism_biocview: Saccharomyces_cerevisiae
+BSgenomeObjname: BSgenome.Scerevisiae.EF4.74.ensembl
+seqnames: c(&quot;I&quot;, &quot;II&quot;, &quot;III&quot;, &quot;IV&quot;, &quot;IX&quot;, &quot;Mito&quot;, &quot;V&quot;, &quot;VI&quot;, &quot;VII&quot;, &quot;VIII&quot;, &quot;X&quot;, &quot;XI&quot;, &quot;XII&quot;, &quot;XIII&quot;, &quot;XIV&quot;, &quot;XV&quot;, &quot;XVI&quot;)
+circ_seqs: c(&quot;Mito&quot;)
+SrcDataFiles1: Saccharomyces_cerevisiae.EF4.74.dna.chromosome.I.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.II.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.III.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.IV.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.IX.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.Mito.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.V.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.VI.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.VII.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.VIII.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.X.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.XI.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.XII.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.XIII.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.XIV.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.XV.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.XVI.fa.gz
+        from ftp://ftp.ensembl.org/pub/release-74/fasta/Saccharomyces_cerevisiae/dna/
+PkgExamples: genome$I  # same as genome[[&quot;I&quot;]]
+seqs_srcdir: /Users/watal/db/ensembl/release-74/fasta/saccharomyces_cerevisiae/dna
+</code></pre>
+
+<div class="note">
+<p>パッケージ名に使える文字は結構限られてるので注意</p>
+
+</div>
+</li>
+
+<li><p>R で <code>forgeBSgenomeDataPkg(seedfile)</code> を実行</p></li>
+
+<li><p>できあがったパッケージディレクトリをビルドしてインストール:</p>
+
+<pre><code>% R CMD build BSgenome.Scerevisiae.EF4.74.ensembl
+% R CMD INSTALL BSgenome.Scerevisiae.EF4.74.ensembl
+</code></pre></li>
+</ol>
+
+<h2 id="variantannotation"><code>VariantAnnotation</code></h2>
+
+<p><a href="http://www.bioconductor.org/packages/release/bioc/html/VariantAnnotation.html">http://www.bioconductor.org/packages/release/bioc/html/VariantAnnotation.html</a></p>
+
+<h3 id="クラス-3">クラス</h3>
+
+<dl>
+<dt><code>VCF</code>, <code>CollapsedVCF</code>, <code>ExpandedVCF</code></dt>
+<dd><code>@assays</code><br />
+<code>@colData</code><br />
+<code>@exptData</code><br />
+<code>@fixed</code> <code>DataFrame</code><br />
+   <code>$REF</code>: 参照配列の塩基 <code>ref()</code><br />
+   <code>$ALT</code>: 変異配列の塩基 <code>alt()</code><br />
+   <code>$QUAL</code><br />
+   <code>$FILTER</code><br />
+<code>@info</code> <code>DataFrame</code><br />
+   <code>$TSA</code>: SNV, deletion, insertion<br />
+   <code>$VE</code>: <code>*_incl_consequences.vcf.gz</code> の追加情報<br />
+<code>@rowData</code><br />
+   変異の位置情報 <code>GRanges</code>。 <code>rowData()</code> でアクセスすると <code>@fixed</code> の情報込みで表示される。</dd>
+</dl>
+
+<h3 id="関数-3">関数</h3>
+
+<dl>
+<dt><code>readVcf(file, genome, param)</code></dt>
+<dd>予めターミナルで <code>tabix -h some_file.vcf.gz</code> を実行して
+indexファイル <code>some_file.vcf.gz.tbi</code> を作っておく。
+file には生のファイル名ではなく <code>Rsamtools::TabixFile</code> を渡す。
+genome は <code>sacCer3</code> みたいな名前か <code>Seqinfo</code> を指定。
+param に <code>GRanges</code> などを入れると範囲限定で読み込む。
+染色体の名前(<code>seqlevels</code>)が合ってないと怒られるので修正する。</dd>
+<dt><code>writeVcf(obj, filename, index=FALSE)</code></dt>
+<dd><code>index=TRUE</code> とすると <code>bgzip</code> 圧縮と <code>tabix</code> 生成を試みるが失敗する。</dd>
+<dt><code>predictCoding(query, subject, seqSource, varAllele, ..., ignore.strand=FALSE)</code></dt>
+<dd>それぞれの変異がCDSやprotein上のどの位置でどういう変化を引き起こすか というのを計算して <code>GRanges</code> のmetadataに書き出す。 (引数の型判別がバグってるっぽいので <code>vcf@rowData, txdb, bsgenome, alt(vcf)</code> とする)<br />
+query : <code>VCF</code> あるいは <code>rowData(vcf)</code><br />
+subject : <code>TxDb</code> オブジェクト<br />
+seqSource : <code>BSgenome</code> オブジェクト<br />
+varAllele : 省略あるいは <code>alt(vcf)</code></dd>
+</dl>
+
+<h2 id="データ読み込み-取得">データ読み込み、取得</h2>
+
+<p><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></p>
+
+<p><a href="/students/iwasaki/rstats/biomart.html">biomart</a></p>
+
+<p><code>GEOquery</code></p>
+
+<p><a href="http://www.bioconductor.org/packages/release/bioc/html/GEOquery.html">http://www.bioconductor.org/packages/release/bioc/html/GEOquery.html</a></p>
+
+<h2 id="モチーフ検索">モチーフ検索</h2>
+
+<p><a href="http://blog.hackingisbelieving.org/2012/02/dna-bioconductor.html">http://blog.hackingisbelieving.org/2012/02/dna-bioconductor.html</a></p>
+
+<p><a href="/students/iwasaki/bio/motif.html">/bio/motif</a></p>
+
+<h2 id="作図">作図</h2>
+
+<p><a href="http://blog.hackingisbelieving.org/2012/02/rbioconductor.html">http://blog.hackingisbelieving.org/2012/02/rbioconductor.html</a></p>
+
+<p><a href="http://blog.hackingisbelieving.org/2012/02/r.html">http://blog.hackingisbelieving.org/2012/02/r.html</a></p>
+
+<p><a href="http://qiita.com/wakuteka/items/a99d5fb9f24367f55461">http://qiita.com/wakuteka/items/a99d5fb9f24367f55461</a></p>
+
+<p><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></p>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats" checked>
+<label for="R stats" class="active">R stats</label>
+<ul>
+<li class="active"><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "Bioconductor"
++++
+
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4621062506/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/41aQBFtkgBL._SX160_.jpg&#34; alt=&#34;RとBioconductorを用いたバイオインフォマティクス&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4320057082/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/51yBjAPptKL._SX160_.jpg&#34; alt=&#34;Rによるバイオインフォマティクスデータ解析 第2版 －Bioconductorを用いたゲノムスケールのデータマイニング－&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4320123700/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/41aoEmhUR0L._SX160_.jpg&#34; alt=&#34;トランスクリプトーム解析 (シリーズ Useful R 7)&#34; /&gt;&lt;/a&gt;
+&lt;http://www.bioconductor.org&gt;
+
+&lt;http://blog.hackingisbelieving.org/2010/09/r-package_06.html&gt;
+
+&lt;http://qiita.com/tags/bioconductor&gt;
+
+&lt;http://manuals.bioinformatics.ucr.edu/home/R_BioCondManual&gt;
+
+&lt;http://search.bioconductor.jp/&gt;
+
+## 基本操作
+
+### インストール
+
+&lt;http://www.bioconductor.org/install/&gt;
+
+1.  R 本体をインストール &lt;http://cran.rstudio.com/&gt;
+2.  R の中でコマンドを実行
+
+    ```r
+    options(BioC_mirror=&#34;http://bioconductor.jp/&#34;)
+    source(&#34;http://bioconductor.org/biocLite.R&#34;)
+    biocLite()
+    ```
+
+すると基本パッケージがインストールされる:
+Biobase
+IRanges
+AnnotationDbi
+BiocGenerics
+GenomeINfoDb
+DBI
+RSQLite
+
+### 起動
+
+R を立ち上げる度に読み込み＆アップデート
+
+```r
+source(&#34;http://bioconductor.org/biocLite.R&#34;)
+biocLite()
+```
+
+### パッケージ管理
+
+`install.packages()` じゃなくて `biocLite()` を使う
+
+```r
+biocLite(&#39;ggbio&#39;)
+biocLite(all_group())
+```
+
+インストールしたものを使うときには普通と同じく
+
+```r
+library(ggbio)
+```
+
+一覧
+:   &lt;http://www.bioconductor.org/packages/release/bioc/&gt;\
+    &lt;http://www.bioconductor.org/packages/release/data/annotation/&gt;\
+    &lt;http://www.bioconductor.org/packages/release/data/experiment/&gt;
+
+検索
+:   &lt;http://www.bioconductor.org/packages/release/BiocViews.html&gt;
+
+使い方を調べる
+
+```r
+help(package=&#39;Biostrings&#39;)
+browseVignettes(package=&#39;Biostrings&#39;)
+```
+
+## `Biostrings`
+
+&lt;http://www.bioconductor.org/packages/release/bioc/html/Biostrings.html&gt;
+
+### クラス
+
+配列
+:   `BString`\
+    `DNAString`\
+    `RNAString`\
+    `AAString`
+
+配列セット e.g. ある遺伝子の複数のcds
+:   `BStringSet`\
+    `DNAStringSet`\
+    `RNAStringSet`\
+    `AAStringSet`
+
+配列セットリスト e.g. 遺伝子ごとの配列セット `cdsBy(txdb, by=&#39;gene&#39;)`
+:   `BStringSetList`\
+    `DNAStringSetList`\
+    `RNAStringSetList`\
+    `AAStringSetList`
+
+多重整列
+:   `DNAMultipleAlignment`\
+    `RNAMultipleAlignment`\
+    `AAMultipleAlignment`
+
+ペアワイズ整列
+:   `PairwiseAlignments`
+
+    {#{#HUGOSHORTCODE-1#}#}
+
+`Views` `(x, start=NULL, end=NULL, width=NULL, names=NULL)`
+:   「ある配列のこの領域とこの領域」を表現したいとき、
+    配列を切り出すのではなく、その切り取り方のみを保持する。
+    `IRanges` みたいな感じ。
+    `as.character()` でその部分配列を文字列として取り出せる。
+
+`PDict` `(x, max.mismatch=NA, ...)`
+:   正規表現 `TAA|TAG|TGA` のように複数の配列で検索する場合にまとめておく。
+    `matchPDict()` とかで使う。
+
+デモデータ
+
+```r
+.file = system.file(&#34;extdata&#34;, &#34;someORF.fa&#34;, package=&#34;Biostrings&#34;)
+bss = readDNAStringSet(.file)
+```
+
+### 関数
+
+配列変換
+:   `reverse(bs)`\
+    `complement(bs)`\
+    `reverseComplement(bs)`
+
+    `transcribe(dna)` --- *deprecated*\
+       3&#39;-鋳型鎖=アンチセンス鎖-5&#39; を引数として相補的な 5&#39;-mRNA-3&#39; を返す。非推奨。
+
+    `translate(bs, genetic.code=GENETIC_CODE, if.fuzzy.codon=&#39;error&#39;)`\
+       翻訳して `AAString` に変換。 引数はDNAでもRNAでもよい。 `genetic.code` は名前付き文字列ベクタで、 組み込みで使えるやつは `getGeneticCode(&#39;SGC2&#39;)` のように指定できる。 何がどの名前で使えるかは `GENETIC_CODE_TABLE` で確認。
+
+    `codons(bs)`\
+       3塩基ずつ切って見る `Views` オブジェクトを返す。
+
+    `subseq(bs, start, end)&lt;-`\
+       部分置換
+
+    `xscat(...)`\
+       `Bstring` 版 `paste0()`
+
+頻度を数える
+:   `alphabetFrequency(x, as.prob=FALSE, ...)`\
+    `letterFrequency(x, letters, OR=&#39;|&#39;, as.prob=FALSE, ...)`\
+    `dinucleotideFrequency(x, ...)`\
+    `trinucleotideFrequency(x, ...)`\
+    `oligonucleotideFrequency(x, width, ...)`\
+    `nucleotideFrequencyAt(set_or_views, at)`
+
+コンセンサス
+:   `consensusMatrix(set_or_views)`\
+    `consensusString(set_or_views, ambiguityMap, threshold, ...)`
+
+配列ファイルを読む、書く (FASTA, FASTQ)
+:   `readBStringSet(file, format=&#39;fasta&#39;, ...)`\
+    `readDNAStringSet(file, format=&#39;fasta&#39;, ...)`\
+    `readRNAStringSet(file, format=&#39;fasta&#39;, ...)`\
+    `readAAStringSet(file, format=&#39;fasta&#39;, ...)`\
+    `writeXStringSet(x, filepath, append=FALSE, compress=FALSE, format=&#39;fasta&#39;, ...)`
+
+アラインメントを読む (FASTA, stockholm, clustal)
+:   `readDNAMultipleAlignment()`\
+    `readRNAMultipleAlignment()`\
+    `readAAMultipleAlignment()`
+
+配列を読み込まずに情報だけを見る
+:   `fasta.info(file, ...)`\
+    `fastq.geometry(file, ...)`
+
+検索
+:   `matchPattern(pattern, subject, ...)`\
+    `matchPDict(PDict, subject, ...)`\
+    `matchPWM(pwm, subject, min.score=&#39;80%&#39;, widh.score=FALSE, ...)`\
+    対象は `Bstring` だけでなく `Views` でもよい。 例えば `codons()` の結果を対象とすれば読み枠限定の検索となる。 結果の返し方の違う `vmatchXXX()` と `countXXX()` もある。
+
+## `GenomicRanges`
+
+&lt;http://www.bioconductor.org/packages/release/bioc/html/GenomicRanges.html&gt;
+
+&lt;http://qiita.com/yuifu/items/556af5d4d086c96ec783&gt;
+
+### クラス
+
+`GRanges`
+:   `@seqnames`\
+    `@ranges`\
+    `@strand`\
+    `@elementMetadata`\
+    `@seqinfo`\
+    `@metadata`
+
+`makeGRangesFromDataFrame(df, keep.extra.columns=FALSE, ignore.strand=FALSE, seqinfo=NULL, ...)`
+:   対応する列名 `seqnames.field`, `start.field`, `end.field`, `strand.field`
+    を指定することもできるが、大概いい感じに拾ってくれる。
+
+`GRangesList` `(gr1, gr2, ...)`
+
+`Seqinfo` `(seqnames, seqlengths, isCircular, genome)`
+:   `@genome`\
+    `@is_circular`\
+    `@seqlengths`\
+    `@seqnames`
+
+### 関数
+
+配列の情報を get, set, modify
+:   `seqinfo(x)`\
+    `seqnames(x)`\
+    `seqlevels(x)`\
+       特定の染色体だけ対象にしたい場合は\
+       `seqlevels(x, force=TRUE) = paste0(&#39;chr&#39;, c(1:22, &#39;X&#39;, &#39;Y&#39;))`\
+       のように削り `seqlevels0(x)` で戻せる\
+    `seqlengths(x)`\
+    `isCircular(x)`\
+    `genome(x)`
+
+個々の区間のプロパティを参照
+:   `start(gr)`, `end(gr)`, `width(gr)`\
+    `strand(gr)`\
+    `names(gr)`\
+    `metadata(gr)`
+
+区間の集合を操作 (デフォルトではstrand毎に)
+:   &lt;http://qiita.com/wakuteka/items/9634e5ed96db3536756f&gt;
+
+    `range(gr, ..., ignore.strand=FALSE, na.rm=FALSE)`\
+       端から端まで1つの区間として返す
+
+    `reduce(gr, ...)`\
+       重なってる区間をつなげる
+
+    `gaps(gr, start=1, end=seqlengths(gr))`\
+       含まれていない部分だけ抽出 (= 全区間 - `reduce(gr)`)
+
+    `disjoin(gr, ...)`\
+       重ならない部分だけ抽出
+
+    `isDisjoint(gr, ...)`\
+    `disjointBins(gr, ...)`\
+    `coverage(gr, shift=0, width=NULL, wight=1, method=c(&#39;auto&#39;, &#39;sort&#39;, &#39;hash&#39;))`
+
+個々の区間を操作
+:   `shift(gr, shift=0, ...)`\
+    `narrow(gr, start=NA, end=NA, width=NA, ...)`\
+    `flank(gr, width, start=TRUE, both=FALSE, ...)`\
+    `promoters(gr, upstream=2000, downstream=200, ...)`\
+    `resize(gr, width, fix=&#39;start&#39;, ...)`\
+    `restrict(gr, start=NA, end=NA, ...)`\
+    `trim(gr, ...)`
+
+重なり &lt;http://qiita.com/wakuteka/items/10027edccc6c2e244cd2&gt;
+:   `findOverlaps(query, subject, ...)`\
+    `countOverlaps(query, subject, ...)`\
+    `overlapsAny(query, subject, ...)`\
+    `subsetByOverlaps(query, subject, ...)`
+
+## `GenomicFeatures`
+
+&lt;http://www.bioconductor.org/packages/release/bioc/html/GenomicFeatures.html&gt;
+
+&lt;http://qiita.com/yuifu/items/4bab5f713aa75bd18a84&gt;
+
+`TranscriptDB` からいろんな条件で絞り込み、
+該当する区間を `GRanges` または `GRangesList` で返す。
+
+絞り込んで `GRanges` を返す
+:   `transcripts(txdb, vals=NULL, columns)`\
+       `vals=list(tx_chrom=c(&#39;chrI&#39;, &#39;chrV&#39;))` のように指定する。 取りうる値: gene\_id, tx\_id, tx\_name, tx\_chrom, tx\_strand, exon\_id, exon\_name, exon\_chrom, exon\_strand, cds\_id, cds\_name, cds\_chrom, cds\_strand, exon\_rank\
+    `exons(txdb, ...)`\
+    `cds(txdb, ...)`\
+    `genes(txdb, ...)`\
+    `promoters(txdb, upstream=2000, downstream=200, ...)`\
+    `disjointExons(txdb, aggregateGenes=FALSE, includeTranscripts=TRUE, ...)`\
+    `microRNAs(txdb)`\
+    `tRNAs(txdb)`\
+       `library(FDb.UCSC.tRNAs)` の情報を使ってtRNAコーディング部分を抽出
+
+グループ毎に絞り込んで `GRangesList` を返す
+:   `transcriptsBy(txdb, by, use.names=FALSE, ...)`\
+       `by` は `&#39;gene&#39;`, `&#39;exon&#39;`, `&#39;cds&#39;`, `&#39;tx&#39;` のどれか。\
+    `exonsBy(txdb, by, ...)`\
+    `cdsBy(txdb, by, ...)`\
+    `intronsByTranscript(txdb, ...)`\
+    `fiveUTRsByTranscript(txdb, ...)`\
+    `threeUTRsByTranscript(txdb, ...)`
+
+`extractTranscriptSeqs(s, transcripts)`
+:   `DNAString` または `BSgenome` から配列を抜き出す。
+    `transcripts` 引数は `GRanges`, `GRangesList`, `TranscriptDb` のどれか。
+
+`TranscriptDB` の形式変換
+:   `makeTranscriptDbFromBiomart(biomart=&#39;ensembl&#39;, dataset=&#39;hsapiens_gene_ensembl&#39;, ...)`\
+    `makeTranscriptDbFromUCSC(genome=&#39;hg18&#39;, table=&#39;knownGene&#39;, ...)`\
+    `makeTranscriptDBFromGFF(file, format=c(&#39;gff3&#39;, &#39;gtf&#39;), ...)`\
+    `asBED(txdb)`\
+    `asGFF(txdb)`
+
+### `TranscriptDB`
+
+データのインストールと読み込み
+
+```r
+biocLite(&#34;TxDb.Scerevisiae.UCSC.sacCer3.sgdGene&#34;)
+
+library(&#34;TxDb.Scerevisiae.UCSC.sacCer3.sgdGene&#34;)
+txdb = TxDb.Scerevisiae.UCSC.sacCer3.sgdGene
+```
+
+## `BSgenome`
+
+&lt;http://www.bioconductor.org/packages/release/bioc/html/BSgenome.html&gt;
+
+インストール、利用
+
+```r
+&gt; biocLite(&#34;BSgenome.Scerevisiae.UCSC.sacCer3&#34;)
+
+&gt; library(&#34;BSgenome.Scerevisiae.UCSC.sacCer3&#34;)
+&gt; bsg = BSgenome.Scerevisiae.UCSC.sacCer3
+```
+
+### クラス
+
+`BSgenome`
+:   `@organism`\
+    `@species`\
+    `@provider`\
+    `@provider_version`\
+    `@release_date`\
+    `@release_name`\
+    `@source_url`\
+    `@seqinfo`\
+    `@user_seqnames`\
+    `@masks`\
+    `@single_sequences`\
+    `@multiple_sequences`\
+    `@pkgname` ほか
+
+染色体(`DNAString`)にアクセス
+
+```r
+bsg$chrI
+bsg[[&#39;chrI&#39;]]
+bsg[[1]]
+```
+
+------------------------------------------------------------------------
+
+`BSParams`
+:   `@X`\
+    `@FUN`\
+    `@exclude`\
+    `@simplify`\
+    `@maskList`\
+    `@motifList`\
+    `@userMask`\
+    `@invertUserMask`
+
+`new()()` で作って `bsapply()()` に渡すらしい
+
+------------------------------------------------------------------------
+
+`GenomeData`
+
+`GenomeDescription`
+
+### 関数
+
+アクセサー
+:   `organism(bsg)`\
+    `species(bsg)`\
+    `provider(bsg)`\
+    `providerVersion(bsg)`\
+    `releaseDate(bsg)`\
+    `releaseName(bsg)`\
+    `bsgenomeName(bsg)`\
+    `seqlengths()` などseqinfo系関数も使える
+
+利用可能なデータを調べる
+:   `available.genomes(splitNameParts=FALSE, type=getOption(&#39;pkgType&#39;))`\
+    `installed.genomes(splitNameParts=FALSE)`
+
+`getBSgenome(name, masked=FALSE)`
+:   インストール済みデータから読み込み。
+    `BSgenome.Scerevisiae.UCSC.sacCer3` あるいは `sacCer3` のような名前で。
+
+`getSeq(bsg, names, start=NA, end=NA, width=NA, starnd=&#39;&#43;&#39;, as.character=FALSE)`
+:   `BSgenome` オブジェクトから配列を抜き出す。
+    `names` は配列名の文字列ベクタか `GRanges` か `GRangesList`
+
+### データパッケージを作る
+
+&lt;http://www.bioconductor.org/packages/release/bioc/vignettes/BSgenome/inst/doc/BSgenomeForge.pdf&gt;
+
+1.  染色体ごとのFASTAファイルを用意する e.g. Ensemblから `*.chromosome.*.fa.gz` をダウンロードして展開
+
+    {#{#HUGOSHORTCODE-2#}#}
+
+2.  既存の `BSgenome` のやつを参考に適当にseedファイルを作る:
+
+        Package: BSgenome.Scerevisiae.EF4.74.ensembl
+        Title: BSgenome.Scerevisiae.EF4.74.ensembl
+        Description: BSgenome.Scerevisiae.EF4.74.ensembl
+        Version: 0.74.1
+        organism: Saccharomyces_cerevisiae
+        species: Scerevisiae
+        provider: ENSEMBL
+        provider_version: release-74
+        release_date: 2013-11-25T21:47:17
+        release_name: EF4.74
+        source_url: ftp://ftp.ensembl.org/pub/release-74/fasta/Saccharomyces_cerevisiae/dna/
+        organism_biocview: Saccharomyces_cerevisiae
+        BSgenomeObjname: BSgenome.Scerevisiae.EF4.74.ensembl
+        seqnames: c(&#34;I&#34;, &#34;II&#34;, &#34;III&#34;, &#34;IV&#34;, &#34;IX&#34;, &#34;Mito&#34;, &#34;V&#34;, &#34;VI&#34;, &#34;VII&#34;, &#34;VIII&#34;, &#34;X&#34;, &#34;XI&#34;, &#34;XII&#34;, &#34;XIII&#34;, &#34;XIV&#34;, &#34;XV&#34;, &#34;XVI&#34;)
+        circ_seqs: c(&#34;Mito&#34;)
+        SrcDataFiles1: Saccharomyces_cerevisiae.EF4.74.dna.chromosome.I.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.II.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.III.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.IV.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.IX.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.Mito.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.V.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.VI.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.VII.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.VIII.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.X.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.XI.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.XII.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.XIII.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.XIV.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.XV.fa.gz, Saccharomyces_cerevisiae.EF4.74.dna.chromosome.XVI.fa.gz
+                from ftp://ftp.ensembl.org/pub/release-74/fasta/Saccharomyces_cerevisiae/dna/
+        PkgExamples: genome$I  # same as genome[[&#34;I&#34;]]
+        seqs_srcdir: /Users/watal/db/ensembl/release-74/fasta/saccharomyces_cerevisiae/dna
+
+    {#{#HUGOSHORTCODE-3#}#}
+
+3.  R で `forgeBSgenomeDataPkg(seedfile)` を実行
+4.  できあがったパッケージディレクトリをビルドしてインストール:
+
+        % R CMD build BSgenome.Scerevisiae.EF4.74.ensembl
+        % R CMD INSTALL BSgenome.Scerevisiae.EF4.74.ensembl
+
+## `VariantAnnotation`
+
+&lt;http://www.bioconductor.org/packages/release/bioc/html/VariantAnnotation.html&gt;
+
+### クラス
+
+`VCF`, `CollapsedVCF`, `ExpandedVCF`
+:   `@assays`\
+    `@colData`\
+    `@exptData`\
+    `@fixed` `DataFrame`\
+       `$REF`: 参照配列の塩基 `ref()`\
+       `$ALT`: 変異配列の塩基 `alt()`\
+       `$QUAL`\
+       `$FILTER`\
+    `@info` `DataFrame`\
+       `$TSA`: SNV, deletion, insertion\
+       `$VE`: `*_incl_consequences.vcf.gz` の追加情報\
+    `@rowData`\
+       変異の位置情報 `GRanges`。 `rowData()` でアクセスすると `@fixed` の情報込みで表示される。
+
+### 関数
+
+`readVcf(file, genome, param)`
+:   予めターミナルで `tabix -h some_file.vcf.gz` を実行して
+    indexファイル `some_file.vcf.gz.tbi` を作っておく。
+    file には生のファイル名ではなく `Rsamtools::TabixFile` を渡す。
+    genome は `sacCer3` みたいな名前か `Seqinfo` を指定。
+    param に `GRanges` などを入れると範囲限定で読み込む。
+    染色体の名前(`seqlevels`)が合ってないと怒られるので修正する。
+
+`writeVcf(obj, filename, index=FALSE)`
+:   `index=TRUE` とすると `bgzip` 圧縮と `tabix` 生成を試みるが失敗する。
+
+`predictCoding(query, subject, seqSource, varAllele, ..., ignore.strand=FALSE)`
+:   それぞれの変異がCDSやprotein上のどの位置でどういう変化を引き起こすか というのを計算して `GRanges` のmetadataに書き出す。 (引数の型判別がバグってるっぽいので `vcf@rowData, txdb, bsgenome, alt(vcf)` とする)\
+    query : `VCF` あるいは `rowData(vcf)`\
+    subject : `TxDb` オブジェクト\
+    seqSource : `BSgenome` オブジェクト\
+    varAllele : 省略あるいは `alt(vcf)`
+
+## データ読み込み、取得
+
+[rtracklayer]({#{#HUGOSHORTCODE-4#}#})
+
+[biomart]({#{#HUGOSHORTCODE-5#}#})
+
+`GEOquery`
+
+&lt;http://www.bioconductor.org/packages/release/bioc/html/GEOquery.html&gt;
+
+## モチーフ検索
+
+&lt;http://blog.hackingisbelieving.org/2012/02/dna-bioconductor.html&gt;
+
+[/bio/motif]({#{#HUGOSHORTCODE-6#}#})
+
+## 作図
+
+&lt;http://blog.hackingisbelieving.org/2012/02/rbioconductor.html&gt;
+
+&lt;http://blog.hackingisbelieving.org/2012/02/r.html&gt;
+
+&lt;http://qiita.com/wakuteka/items/a99d5fb9f24367f55461&gt;
+
+[ggbio]({#{#HUGOSHORTCODE-7#}#})
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

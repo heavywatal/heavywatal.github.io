@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>edgeR: リードカウントから発現変動遺伝子を検出 - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+edgeR — リードカウントから発現変動遺伝子を検出
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<p><a href="https://bioconductor.org/packages/release/bioc/html/edgeR.html">https://bioconductor.org/packages/release/bioc/html/edgeR.html</a></p>
+
+<p>Robinson MD, McCarthy DJ, Smyth GK (2010)
+&ldquo;edgeR: a Bioconductor package for differential expression analysis of digital gene expression data.&rdquo;
+<em>Bioinformatics</em> <strong>26</strong> (1):139&ndash;140
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/19910308">http://www.ncbi.nlm.nih.gov/pubmed/19910308</a></p>
+
+<p><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a> パッケージとしてインストール</p>
+
+<pre><code class="language-r">source('http://bioconductor.org/biocLite.R')
+biocLite('edgeR')
+</code></pre>
+
+<p>ユーザーガイドPDFを開く</p>
+
+<pre><code class="language-r">edgeRUsersGuide()
+</code></pre>
+
+<p>とても良くできたドキュメントなので必読</p>
+
+<h2 id="使い方">使い方</h2>
+
+<ol>
+<li><code>HTSeq</code> などで遺伝子ごとのリードカウントを用意する</li>
+
+<li><p>Rで読み込む</p>
+
+<pre><code class="language-r">library(edgeR)
+
+targets = data.frame(group=c('control', 'case'),
+                     files=c('control.txt', 'case.txt'))
+dge = readDGE(targets, header=FALSE)
+</code></pre></li>
+
+<li><p>低カウント過ぎる遺伝子を除去</p>
+
+<pre><code class="language-r">ok_c = (dge$counts &gt; 5) %&gt;% rowSums %&gt;% {. &gt; 0}
+ok_cpm = dge %&gt;% cpm %&gt;% {. &gt; 1} %&gt;% rowSums %&gt;% {. &gt; 0}
+dge = dge[ok_c &amp; ok_cpm, , keep.lib.sizes=FALSE]
+</code></pre></li>
+
+<li><p>正規化係数を計算</p>
+
+<pre><code class="language-r">dge = calcNormFactors(dge)
+dge$samples
+</code></pre></li>
+
+<li><p>モデル</p>
+
+<pre><code class="language-r">design = model.matrix(~ 0 + group, data=targets)
+</code></pre></li>
+
+<li><p>common dispersion, trended dispersion, tagwise dispersionを推定</p>
+
+<pre><code class="language-r">dge = estimateDisp(dge, design)
+</code></pre>
+
+<p>ただしこれにはbiological replicatesが必要。
+1グループ1サンプルずつしか無い場合は4つの選択肢がある。</p>
+
+<ol>
+<li>検定を諦めてdescriptive discussion (推奨)</li>
+
+<li><p>経験的な値を適当に入れとく</p>
+
+<pre><code class="language-r">bcv = 0.4  # for human
+bcv = 0.1  # for genetically identical model organisms
+bcv = 0.01 # for technical replicates
+dge$common.dispersion = bcv ^ 2
+</code></pre></li>
+
+<li><p>説明変数を減らしたモデルでdispersionを推定し、フルモデルで使う</p>
+
+<pre><code class="language-r">reduced = estimateGLMCommonDisp(dge, reduced.design, method='deviance', robust=TRUE, subset=NULL)
+dge$common.dispersion = reduced$common.dispersion
+</code></pre>
+
+<p>合計カウントが多くてDEGが比較的少ないときに有効。
+当然、1変数2群比較では使えない。</p></li>
+
+<li><p>群間で差がないと考えられるhousekeeping genesから推定。
+100個以上の遺伝子を使うのが望ましい。
+例えばヒトなら</p>
+
+<pre><code class="language-r">system('wget http://www.tau.ac.il/~elieis/HKG/HK_genes.txt')
+hk_genes = read_tsv('HK_genes.txt', col_names=c('gene_symbol', 'refseq'))
+tmp = dge
+tmp$samples$group = 1
+housekeeping = rownames(tmp$counts) %in% hk_genes$gene_symbol
+hk = estimateCommonDisp(tmp[housekeeping,])
+dge$common.dispersion = hk$common.dispersion
+</code></pre></li>
+</ol></li>
+
+<li><p>1変数2群ならシンプルに検定</p>
+
+<pre><code class="language-r">et = exactTest(dge)
+topTags(et, 20, adjust.method='BH', sort.by='PValue')
+</code></pre>
+
+<p>多群ならGLMで尤度比検定</p>
+
+<pre><code class="language-r">fit = glmFit(dge, design)
+lrt = glmLRT(fit, coef=2:3)
+
+lrt_1vs2 = glmLRT(fit, coef=2)
+lrt_1vs3 = glmLRT(fit, coef=3)
+lrt_2vs3 = glmLRT(fit, contrast=c(0, -1, 1))
+</code></pre>
+
+<p>検定結果からDEGを抜き出す</p>
+
+<pre><code class="language-r">min_lfc = 1
+de = decideTestsDGE(et, adjust.method='BH', p.value=0.01, lfc=min_lfc)
+de_tags = rownames(dge)[as.logical(de)]
+</code></pre>
+
+<p>P値とlogFCの両方で切ったほうがいいらしい。</p>
+
+<div class="note">
+<p><code>topTags()</code> や <code>decideTestsDGE()</code>
+で多重検定の補正をするということは、
+<code>et</code> や <code>lrt</code> の <code>PValue</code> は補正前。</p>
+
+</div>
+</li>
+
+<li><p>プロット <code>logFC ~ mean(logCPM)</code> してみる</p>
+
+<pre><code class="language-r">plotSmear(et, de.tags=de_tags)
+abline(h=min_lfc * c(-1, 1), col=&quot;blue&quot;)
+</code></pre></li>
+
+<li><p>Gene Ontology解析</p>
+
+<pre><code class="language-r">go = goana(lrt, species='Hs')
+topGO(go)
+</code></pre>
+
+<p>NCBI RefSeqアノテーションを使うのでIDはEntrez系で</p></li>
+</ol>
+
+<h2 id="appendix">Appendix</h2>
+
+<p>レプリケート <em>i</em> における遺伝子 <em>g</em> の観察リード数を <code>$y _{gi}$</code> 、
+知りたい真の発現fractionを <code>$\pi _{gi}$</code> とする。</p>
+
+<div>$$\begin{split}
+\sum _g \pi _{gi} &= 1 \\
+\sqrt {\phi _g} &\equiv \mathrm{CV}[\pi _{gi}]_i
+                = \frac {\mathrm {sd}[\pi _{gi}]_i} {\mathrm{mean}[\pi _{gi}]_i} \\
+N_i \pi _{gi} &\sim \mathrm{Gamma}(\phi _g^{-1}, \mu _{gi} \phi _g) \\
+\mathrm E[N_i \pi _{gi}] &= k\theta = \mu _{gi} \\
+\mathrm{var}[N_i \pi _{gi}] &= k\theta^2 = \mu _{gi}^2 \phi _g \\
+y_{gi} &\sim \mathrm{Poisson}(N_i \pi _{gi}) \\
+       &= \int _0^\infty \mathrm{Poisson}(N_i \pi _{gi})~
+                         \mathrm{Gamma}(\phi _g^{-1}, \mu _{gi} \phi _g)~ \mathrm d N_i \pi _{gi} \\
+       &= \mathrm{NB}(\phi _g^{-1}, \frac {\mu _{gi} \phi _g} {1 + \mu _{gi} \phi _g}) \\
+\mathrm E[y_{gi}] &= \mu _{gi} \\
+\mathrm{var}[y_{gi}] &= \mathrm E \big[\mathrm{var}[y_{gi} \mid \pi _{gi}]_i \big]_\pi
+                      + \mathrm{var} \big[\mathrm E[y_{gi}\mid \pi _{gi}]_i \big]_\pi \\
+                     &= \mathrm E[N_i \pi _{gi}]_\pi + \mathrm{var}[N_i \pi _{gi}]_\pi \\
+                     &= \mu _{gi} + \mu _{gi}^2 \phi _g \\
+\mathrm{CV}^2[y_{gi}] &= 1 / \mu _{gi} + \phi _g \\
+                   &= \mathrm{CV}^2[y_{gi} \mid \pi _{gi}] + \mathrm{CV}^2[\pi _{gi}] \\
+                   &= \mathrm{Technical~CV}^2 + \mathrm{Biological~CV}^2 \\
+\end{split}$$</div>
+
+<dl>
+<dt>dispersion <code>$\phi _g$</code></dt>
+<dd>普通は $D = \sigma^2 / \mu$ と定義されるけど、
+ここでは $\mathrm{CV}^2$</dd>
+<dt>BCV <code>$\sqrt{\phi _g}$</code></dt>
+<dd>biological coefficient of variation.
+こっちは普通と同じように $\mathrm{CV} = \sigma / \mu$ 。
+sequencing depthがどんなに大きくても残るばらつき。</dd>
+<dt>DGE</dt>
+<dd>digital gene expression</dd>
+<dt>CPM</dt>
+<dd>counts per million</dd>
+<dt>logFC</dt>
+<dd>log2-fold-change</dd>
+</dl>
+
+<hr />
+
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4621062506/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41aQBFtkgBL._SX160_.jpg" alt="RとBioconductorを用いたバイオインフォマティクス" /></a>
+<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320057082/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51yBjAPptKL._SX160_.jpg" alt="Rによるバイオインフォマティクスデータ解析 第2版 －Bioconductorを用いたゲノムスケールのデータマイニング－" /></a>
+<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320123700/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41aoEmhUR0L._SX160_.jpg" alt="トランスクリプトーム解析 (シリーズ Useful R 7)" /></a></p>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats" checked>
+<label for="R stats" class="active">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li class="active"><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "edgeR"
++++
+
+&lt;https://bioconductor.org/packages/release/bioc/html/edgeR.html&gt;
+
+Robinson MD, McCarthy DJ, Smyth GK (2010)
+&#34;edgeR: a Bioconductor package for differential expression analysis of digital gene expression data.&#34;
+*Bioinformatics* **26** (1):139--140
+&lt;http://www.ncbi.nlm.nih.gov/pubmed/19910308&gt;
+
+[Bioconductor]({#{#HUGOSHORTCODE-1#}#}) パッケージとしてインストール
+
+```r
+source(&#39;http://bioconductor.org/biocLite.R&#39;)
+biocLite(&#39;edgeR&#39;)
+```
+
+ユーザーガイドPDFを開く
+
+```r
+edgeRUsersGuide()
+```
+
+とても良くできたドキュメントなので必読
+
+## 使い方
+
+1.  `HTSeq` などで遺伝子ごとのリードカウントを用意する
+2.  Rで読み込む
+
+    ```r
+    library(edgeR)
+
+    targets = data.frame(group=c(&#39;control&#39;, &#39;case&#39;),
+                         files=c(&#39;control.txt&#39;, &#39;case.txt&#39;))
+    dge = readDGE(targets, header=FALSE)
+    ```
+
+3.  低カウント過ぎる遺伝子を除去
+
+    ```r
+    ok_c = (dge$counts &gt; 5) %&gt;% rowSums %&gt;% {. &gt; 0}
+    ok_cpm = dge %&gt;% cpm %&gt;% {. &gt; 1} %&gt;% rowSums %&gt;% {. &gt; 0}
+    dge = dge[ok_c &amp; ok_cpm, , keep.lib.sizes=FALSE]
+    ```
+
+4.  正規化係数を計算
+
+    ```r
+    dge = calcNormFactors(dge)
+    dge$samples
+    ```
+
+5.  モデル
+
+    ```r
+    design = model.matrix(~ 0 &#43; group, data=targets)
+    ```
+
+6.  common dispersion, trended dispersion, tagwise dispersionを推定
+
+    ```r
+    dge = estimateDisp(dge, design)
+    ```
+
+    ただしこれにはbiological replicatesが必要。
+    1グループ1サンプルずつしか無い場合は4つの選択肢がある。
+
+    1.  検定を諦めてdescriptive discussion (推奨)
+    2.  経験的な値を適当に入れとく
+
+        ```r
+        bcv = 0.4  # for human
+        bcv = 0.1  # for genetically identical model organisms
+        bcv = 0.01 # for technical replicates
+        dge$common.dispersion = bcv ^ 2
+        ```
+
+    3.  説明変数を減らしたモデルでdispersionを推定し、フルモデルで使う
+
+        ```r
+        reduced = estimateGLMCommonDisp(dge, reduced.design, method=&#39;deviance&#39;, robust=TRUE, subset=NULL)
+        dge$common.dispersion = reduced$common.dispersion
+        ```
+
+        合計カウントが多くてDEGが比較的少ないときに有効。
+        当然、1変数2群比較では使えない。
+
+    4.  群間で差がないと考えられるhousekeeping genesから推定。
+        100個以上の遺伝子を使うのが望ましい。
+        例えばヒトなら
+
+        ```r
+        system(&#39;wget http://www.tau.ac.il/~elieis/HKG/HK_genes.txt&#39;)
+        hk_genes = read_tsv(&#39;HK_genes.txt&#39;, col_names=c(&#39;gene_symbol&#39;, &#39;refseq&#39;))
+        tmp = dge
+        tmp$samples$group = 1
+        housekeeping = rownames(tmp$counts) %in% hk_genes$gene_symbol
+        hk = estimateCommonDisp(tmp[housekeeping,])
+        dge$common.dispersion = hk$common.dispersion
+        ```
+
+7.  1変数2群ならシンプルに検定
+
+    ```r
+    et = exactTest(dge)
+    topTags(et, 20, adjust.method=&#39;BH&#39;, sort.by=&#39;PValue&#39;)
+    ```
+
+    多群ならGLMで尤度比検定
+
+    ```r
+    fit = glmFit(dge, design)
+    lrt = glmLRT(fit, coef=2:3)
+
+    lrt_1vs2 = glmLRT(fit, coef=2)
+    lrt_1vs3 = glmLRT(fit, coef=3)
+    lrt_2vs3 = glmLRT(fit, contrast=c(0, -1, 1))
+    ```
+
+    検定結果からDEGを抜き出す
+
+    ```r
+    min_lfc = 1
+    de = decideTestsDGE(et, adjust.method=&#39;BH&#39;, p.value=0.01, lfc=min_lfc)
+    de_tags = rownames(dge)[as.logical(de)]
+    ```
+
+    P値とlogFCの両方で切ったほうがいいらしい。
+
+    {#{#HUGOSHORTCODE-2#}#}
+
+8.  プロット `logFC ~ mean(logCPM)` してみる
+
+    ```r
+    plotSmear(et, de.tags=de_tags)
+    abline(h=min_lfc * c(-1, 1), col=&#34;blue&#34;)
+    ```
+
+9.  Gene Ontology解析
+
+    ```r
+    go = goana(lrt, species=&#39;Hs&#39;)
+    topGO(go)
+    ```
+
+    NCBI RefSeqアノテーションを使うのでIDはEntrez系で
+
+## Appendix
+
+レプリケート *i* における遺伝子 *g* の観察リード数を `$y _{gi}$` 、
+知りたい真の発現fractionを `$\pi _{gi}$` とする。
+
+&lt;div&gt;$$\begin{split}
+\sum _g \pi _{gi} &amp;= 1 \\
+\sqrt {\phi _g} &amp;\equiv \mathrm{CV}[\pi _{gi}]_i
+                = \frac {\mathrm {sd}[\pi _{gi}]_i} {\mathrm{mean}[\pi _{gi}]_i} \\
+N_i \pi _{gi} &amp;\sim \mathrm{Gamma}(\phi _g^{-1}, \mu _{gi} \phi _g) \\
+\mathrm E[N_i \pi _{gi}] &amp;= k\theta = \mu _{gi} \\
+\mathrm{var}[N_i \pi _{gi}] &amp;= k\theta^2 = \mu _{gi}^2 \phi _g \\
+y_{gi} &amp;\sim \mathrm{Poisson}(N_i \pi _{gi}) \\
+       &amp;= \int _0^\infty \mathrm{Poisson}(N_i \pi _{gi})~
+                         \mathrm{Gamma}(\phi _g^{-1}, \mu _{gi} \phi _g)~ \mathrm d N_i \pi _{gi} \\
+       &amp;= \mathrm{NB}(\phi _g^{-1}, \frac {\mu _{gi} \phi _g} {1 &#43; \mu _{gi} \phi _g}) \\
+\mathrm E[y_{gi}] &amp;= \mu _{gi} \\
+\mathrm{var}[y_{gi}] &amp;= \mathrm E \big[\mathrm{var}[y_{gi} \mid \pi _{gi}]_i \big]_\pi
+                      &#43; \mathrm{var} \big[\mathrm E[y_{gi}\mid \pi _{gi}]_i \big]_\pi \\
+                     &amp;= \mathrm E[N_i \pi _{gi}]_\pi &#43; \mathrm{var}[N_i \pi _{gi}]_\pi \\
+                     &amp;= \mu _{gi} &#43; \mu _{gi}^2 \phi _g \\
+\mathrm{CV}^2[y_{gi}] &amp;= 1 / \mu _{gi} &#43; \phi _g \\
+                   &amp;= \mathrm{CV}^2[y_{gi} \mid \pi _{gi}] &#43; \mathrm{CV}^2[\pi _{gi}] \\
+                   &amp;= \mathrm{Technical~CV}^2 &#43; \mathrm{Biological~CV}^2 \\
+\end{split}$$&lt;/div&gt;
+
+dispersion `$\phi _g$`
+:   普通は $D = \sigma^2 / \mu$ と定義されるけど、
+    ここでは $\mathrm{CV}^2$
+
+BCV `$\sqrt{\phi _g}$`
+:   biological coefficient of variation.
+    こっちは普通と同じように $\mathrm{CV} = \sigma / \mu$ 。
+    sequencing depthがどんなに大きくても残るばらつき。
+
+DGE
+:   digital gene expression
+
+CPM
+:   counts per million
+
+logFC
+:   log2-fold-change
+
+------------------------------------------------------------------------
+
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4621062506/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/41aQBFtkgBL._SX160_.jpg&#34; alt=&#34;RとBioconductorを用いたバイオインフォマティクス&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4320057082/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/51yBjAPptKL._SX160_.jpg&#34; alt=&#34;Rによるバイオインフォマティクスデータ解析 第2版 －Bioconductorを用いたゲノムスケールのデータマイニング－&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4320123700/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/41aoEmhUR0L._SX160_.jpg&#34; alt=&#34;トランスクリプトーム解析 (シリーズ Useful R 7)&#34; /&gt;&lt;/a&gt;
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

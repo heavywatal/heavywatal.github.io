@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>MacPorts - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+MacPorts
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<div class="note">
+<p><a href="/students/iwasaki/mac/homebrew.html">homebrew</a></p>
+
+<p>最近は <a href="/students/iwasaki/mac/homebrew.html">Homebrew</a> ばっかり使っててこっちの情報は更新してない</p>
+
+</div>
+
+
+<h2 id="package-manager-for-mac-os-x">Package Manager for Mac OS X</h2>
+
+<p><a href="http://www.macports.org/">http://www.macports.org/</a></p>
+
+<p>MacPorts はLinuxで言うところの
+<code>apt</code> や <code>yum</code> のようなもので、
+さまざまなソフトウェアをコマンドラインから簡単に管理できるパッケージ管理システム。
+ソースコードからコンパイルしてインストールという難しい手順も自動でやってくれるし、
+アップデートやアンインストールもコマンドひとつで行える。
+それぞれのパッケージのことを port と呼ぶ。
+port は <code>/opt/local/</code> 以下にインストールされる。</p>
+
+<h2 id="installation">Installation</h2>
+
+<ol>
+<li>Command Line Tools をインストールする。 cf. <a href="/students/iwasaki/dev/devenv.html">/dev/devenv</a></li>
+<li><a href="http://www.macports.org/">公式サイト</a> から
+OSに合ったディスクイメージ <code>MacPorts-***.dmg</code> をダウンロード</li>
+<li>それをマウントしてインストーラを実行</li>
+
+<li><p>コマンドがインストールされる <code>/opt/local/bin</code> にパスを通す。
+例えば <code>.zshenv</code> や <code>.bashrc</code> に以下のように記述。:</p>
+
+<pre><code>export PATH=/opt/local/bin:/opt/local/sbin:${PATH}
+</code></pre></li>
+
+<li><p>Terminal を開いて
+MacPorts 本体とportカタログをアップデート:</p>
+
+<pre><code>% sudo port selfupdate
+</code></pre></li>
+</ol>
+
+<h2 id="usage">Usage</h2>
+
+<p>ほかにもいろんなコマンドがあるけど代表的なものだけ。詳しくは <code>man port</code> で。</p>
+
+<ul>
+<li><p>欲しいportを検索:</p>
+
+<pre><code>% port search bio
+</code></pre></li>
+
+<li><p>気になったportの詳細を表示:</p>
+
+<pre><code>% port info [port]
+</code></pre></li>
+
+<li><p>portをインストールする時に選択できるオプションを表示。:</p>
+
+<pre><code>% port variants [port]
+</code></pre></li>
+
+<li><p>そのportを入れるために必要な（依存している）portを表示。
+下はrecursive版で、<code>--full</code> オプションでフル表示できる。:</p>
+
+<pre><code>% port deps [port]
+% port rdeps [port]
+</code></pre></li>
+
+<li><p>そのportに依存しているやつらを表示。:</p>
+
+<pre><code>% port dependents [port]
+% port rdependents [port]
+</code></pre></li>
+
+<li><p>portのインストール/アンインストール。
+そいつが依存しているほかのportも自動的にインストールされる。:</p>
+
+<pre><code>% sudo port install [port] [+variant]
+% sudo port uninstall [port]
+</code></pre></li>
+
+<li><p>インストール済みのportを一覧表示:</p>
+
+<pre><code>% port installed
+</code></pre></li>
+
+<li><p>MacPorts 本体とportカタログをアップデートし、
+アップデート可能なものを一覧表示:</p>
+
+<pre><code>% sudo port selfupdate &amp;&amp; port outdated
+</code></pre></li>
+
+<li><p>アップデート可能なものをすべてアップデート。
+古いものを自動でアンインストールするには <code>-u</code> オプションを付ける。:</p>
+
+<pre><code>% sudo port upgrade outdated
+</code></pre></li>
+
+<li><p>インストール済みのportを再インストール:</p>
+
+<pre><code>% sudo port -n upgrade --force [port]
+</code></pre></li>
+
+<li><p>過去のバージョンのportをインストール</p>
+
+<dl>
+<dd><ol>
+<li><a href="http://trac.macports.org/browser/trunk/dports">http://trac.macports.org/browser/trunk/dports</a> から目的のportのページを開く</li>
+</ol>
+
+<ol>
+<li>右上の&rdquo;Revision Log&rdquo;からお目当てのバージョンのリビジョン番号を確認</li>
+
+<li><p>以下のような svn コマンドで
+<code>Portfile</code> をダウンロードし、インストール:</p>
+
+<pre><code>% svn checkout -r 74577 http://svn.macports.org/repository/macports/trunk/dports/shells/zsh-devel zsh-devel-4.3.11
+% cd zsh-devel-4.3.11
+% sudo port install +mp_completion +doc +examples
+</code></pre></li>
+</ol></dd>
+</dl></li>
+</ul>
+
+<h3 id="pseudo-portnames">pseudo-portnames</h3>
+
+<p>各コマンドの対象となるportを、実名だけでなく状態によってまとめて指定できる。
+e.g.:</p>
+
+<pre><code>% port list leaves
+% sudo port uninstall $(port echo inactive)
+</code></pre>
+
+<dl>
+<dt><code>all</code></dt>
+<dd>all the ports in each ports tree listed in sources.conf</dd>
+<dt><code>current</code></dt>
+<dd>the port in the current working directory.</dd>
+<dt><code>active</code></dt>
+<dd>set of installed and active ports.</dd>
+<dt><code>inactive</code></dt>
+<dd>set of installed but inactive ports.</dd>
+<dt><code>actinact</code></dt>
+<dd>set of installed ports that have both an active version and one or more inactive versions.</dd>
+<dt><code>installed</code></dt>
+<dd>set of all installed ports.</dd>
+<dt><code>uninstalled</code></dt>
+<dd>ports in the ports tree(s) that aren&rsquo;t installed.</dd>
+<dt><code>outdated</code></dt>
+<dd>installed ports that are out of date with respect to their current version/revision in the ports tree(s)</dd>
+<dt><code>obsolete</code></dt>
+<dd>set of ports that are installed but no longer exist in any port tree</dd>
+<dt><code>requested</code></dt>
+<dd>installed ports that were explicitly asked for.</dd>
+<dt><code>unrequested</code></dt>
+<dd>installed ports that were installed only to satisfy dependencies.</dd>
+<dt><code>leaves</code></dt>
+<dd>installed ports that are unrequested and have no dependents.</dd>
+</dl>
+
+<h2 id="port-installed">port installed</h2>
+
+<h3 id="coreutils">coreutils</h3>
+
+<p>MacはFreeBSDの上にできてるので各種コマンドラインツールもBSD製のものが多い。
+一方LinuxのコマンドはGNU製が多いので、
+同じ名前でも微妙にオプションや挙動が異なったりして戸惑うことがある。
+そこで、MacPorts を使って
+GNU製のコマンドラインツール群であるcoreutilsをMacに入れる。</p>
+
+<p>各プログラムはデフォルトで接頭辞 <code>g</code> のついた状態で
+<code>/opt/local/bin/</code> にインストールされる。
+variantとして <code>+with_default_names</code> を指定してインストールすれば元の名前で入るが、
+そうすべきではないと思う。
+必要なものを <code>/usr/local/bin/</code> にシムリンク張るか、
+<code>.zshrc</code> などにエイリアスを定義して使う。:</p>
+
+<pre><code>% sudo port install coreutils
+% sudo ln -s /opt/local/bin/gls /usr/local/bin/ls
+
+alias ls=&quot;gls -vF --show-control-chars --color=auto&quot;
+</code></pre>
+
+<h3 id="gnu-tar-xz">GNU tar &amp; xz</h3>
+
+<p>GNU <code>tar</code> 1.22からxz圧縮をサポートするようになった。
+Macにプリインストールされてる <code>bsdtar</code> や
+<code>gnutar</code> (1.17) では使えない。
+gzipは圧縮も展開も高速で（CPU負荷が小さくて）圧縮率が低い。
+bzipは圧縮も展開も遅くて（CPU負荷が大きくて）圧縮率が高い。
+xzは最も圧縮率が高く、圧縮にはbzip2よりも時間がかかる一方で展開はgzip並みに速い。
+ということで、多くのユーザーに配布・展開されるようなファイルの圧縮に効果的。
+あるいは、書き換える予定は無いが長期保存しておかなければいけないデカいファイルとか。:</p>
+
+<pre><code>% sudo port install xz gnutar
+% tar cJf archive.tar.xz archive/
+</code></pre>
+
+<h3 id="zsh">zsh</h3>
+
+<p>Macには元から入ってるし、ソースからインストールするのも簡単だけど、
+port コマンドを補完できるvariantがあるのでこれを使う。
+ログインシェルにするにはひと手間必要。
+その後の設定は <a href="/students/iwasaki/dev/zsh.html">こちらのページ参照</a> 。:</p>
+
+<pre><code>% sudo port install zsh-devel +mp_completion +doc +examples
+% sudo emacs -nw /etc/shells # 末尾に/opt/local/bin/zshを追加
+% chsh -s /opt/local/bin/zsh
+% exit
+</code></pre>
+
+<h3 id="misc">misc.</h3>
+
+<p>そのほか意識的に入れるもの。依存パッケージとして勝手に入るものではなく。:</p>
+
+<pre><code>clang-3.1
+emacs
+gcc47
+gnuplot +no_x11
+graphviz +no_x11
+grep
+gsed
+llvm-3.1
+nkf
+rmtrash
+rsync
+tmux
+wakeonlan
+wget
+</code></pre>
+
+<p>意識的には入れないけど、ぼーっとしてるとX11関連のportと共に勝手にインストールされてしまうもの。
+明示的に <code>+no_x11</code> をつけてインストールしておき、それを防ぐ。:</p>
+
+<pre><code>cairo +no_x11 +quartz
+gd2 +no_x11
+ghostscript +no_x11
+</code></pre>
+
+<p>あるいは <code>/opt/local/etc/macports/variants.conf</code>
+に以下のように書いておくと自動的にそうしてくれる。:</p>
+
+<pre><code>+no_x11 +quartz
+</code></pre>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats">
+<label for="R stats">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac" checked>
+<label for="Mac" class="active">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li class="active"><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "MacPorts"
++++
+
+{#{#HUGOSHORTCODE-1#}#}
+
+## Package Manager for Mac OS X
+
+&lt;http://www.macports.org/&gt;
+
+MacPorts はLinuxで言うところの
+`apt` や `yum` のようなもので、
+さまざまなソフトウェアをコマンドラインから簡単に管理できるパッケージ管理システム。
+ソースコードからコンパイルしてインストールという難しい手順も自動でやってくれるし、
+アップデートやアンインストールもコマンドひとつで行える。
+それぞれのパッケージのことを port と呼ぶ。
+port は `/opt/local/` 以下にインストールされる。
+
+## Installation
+
+1.  Command Line Tools をインストールする。 cf. [/dev/devenv]({#{#HUGOSHORTCODE-2#}#})
+2.  [公式サイト](http://www.macports.org/) から
+    OSに合ったディスクイメージ `MacPorts-***.dmg` をダウンロード
+3.  それをマウントしてインストーラを実行
+4.  コマンドがインストールされる `/opt/local/bin` にパスを通す。
+    例えば `.zshenv` や `.bashrc` に以下のように記述。:
+
+        export PATH=/opt/local/bin:/opt/local/sbin:${PATH}
+
+5.  Terminal を開いて
+    MacPorts 本体とportカタログをアップデート:
+
+        % sudo port selfupdate
+
+## Usage
+
+ほかにもいろんなコマンドがあるけど代表的なものだけ。詳しくは `man port` で。
+
+-   欲しいportを検索:
+
+        % port search bio
+
+-   気になったportの詳細を表示:
+
+        % port info [port]
+
+-   portをインストールする時に選択できるオプションを表示。:
+
+        % port variants [port]
+
+-   そのportを入れるために必要な（依存している）portを表示。
+    下はrecursive版で、`--full` オプションでフル表示できる。:
+
+        % port deps [port]
+        % port rdeps [port]
+
+-   そのportに依存しているやつらを表示。:
+
+        % port dependents [port]
+        % port rdependents [port]
+
+-   portのインストール/アンインストール。
+    そいつが依存しているほかのportも自動的にインストールされる。:
+
+        % sudo port install [port] [&#43;variant]
+        % sudo port uninstall [port]
+
+-   インストール済みのportを一覧表示:
+
+        % port installed
+
+-   MacPorts 本体とportカタログをアップデートし、
+    アップデート可能なものを一覧表示:
+
+        % sudo port selfupdate &amp;&amp; port outdated
+
+-   アップデート可能なものをすべてアップデート。
+    古いものを自動でアンインストールするには `-u` オプションを付ける。:
+
+        % sudo port upgrade outdated
+
+-   インストール済みのportを再インストール:
+
+        % sudo port -n upgrade --force [port]
+
+-   
+
+    過去のバージョンのportをインストール
+    :   1.  &lt;http://trac.macports.org/browser/trunk/dports&gt; から目的のportのページを開く
+        2.  右上の&#34;Revision Log&#34;からお目当てのバージョンのリビジョン番号を確認
+        3.  以下のような svn コマンドで
+            `Portfile` をダウンロードし、インストール:
+
+                % svn checkout -r 74577 http://svn.macports.org/repository/macports/trunk/dports/shells/zsh-devel zsh-devel-4.3.11
+                % cd zsh-devel-4.3.11
+                % sudo port install &#43;mp_completion &#43;doc &#43;examples
+
+### pseudo-portnames
+
+各コマンドの対象となるportを、実名だけでなく状態によってまとめて指定できる。
+e.g.:
+
+    % port list leaves
+    % sudo port uninstall $(port echo inactive)
+
+`all`
+:   all the ports in each ports tree listed in sources.conf
+
+`current`
+:   the port in the current working directory.
+
+`active`
+:   set of installed and active ports.
+
+`inactive`
+:   set of installed but inactive ports.
+
+`actinact`
+:   set of installed ports that have both an active version and one or more inactive versions.
+
+`installed`
+:   set of all installed ports.
+
+`uninstalled`
+:   ports in the ports tree(s) that aren&#39;t installed.
+
+`outdated`
+:   installed ports that are out of date with respect to their current version/revision in the ports tree(s)
+
+`obsolete`
+:   set of ports that are installed but no longer exist in any port tree
+
+`requested`
+:   installed ports that were explicitly asked for.
+
+`unrequested`
+:   installed ports that were installed only to satisfy dependencies.
+
+`leaves`
+:   installed ports that are unrequested and have no dependents.
+
+## port installed
+
+### coreutils
+
+MacはFreeBSDの上にできてるので各種コマンドラインツールもBSD製のものが多い。
+一方LinuxのコマンドはGNU製が多いので、
+同じ名前でも微妙にオプションや挙動が異なったりして戸惑うことがある。
+そこで、MacPorts を使って
+GNU製のコマンドラインツール群であるcoreutilsをMacに入れる。
+
+各プログラムはデフォルトで接頭辞 `g` のついた状態で
+`/opt/local/bin/` にインストールされる。
+variantとして `&#43;with_default_names` を指定してインストールすれば元の名前で入るが、
+そうすべきではないと思う。
+必要なものを `/usr/local/bin/` にシムリンク張るか、
+`.zshrc` などにエイリアスを定義して使う。:
+
+    % sudo port install coreutils
+    % sudo ln -s /opt/local/bin/gls /usr/local/bin/ls
+
+    alias ls=&#34;gls -vF --show-control-chars --color=auto&#34;
+
+### GNU tar &amp; xz
+
+GNU `tar` 1.22からxz圧縮をサポートするようになった。
+Macにプリインストールされてる `bsdtar` や
+`gnutar` (1.17) では使えない。
+gzipは圧縮も展開も高速で（CPU負荷が小さくて）圧縮率が低い。
+bzipは圧縮も展開も遅くて（CPU負荷が大きくて）圧縮率が高い。
+xzは最も圧縮率が高く、圧縮にはbzip2よりも時間がかかる一方で展開はgzip並みに速い。
+ということで、多くのユーザーに配布・展開されるようなファイルの圧縮に効果的。
+あるいは、書き換える予定は無いが長期保存しておかなければいけないデカいファイルとか。:
+
+    % sudo port install xz gnutar
+    % tar cJf archive.tar.xz archive/
+
+### zsh
+
+Macには元から入ってるし、ソースからインストールするのも簡単だけど、
+port コマンドを補完できるvariantがあるのでこれを使う。
+ログインシェルにするにはひと手間必要。
+その後の設定は [こちらのページ参照]({#{#HUGOSHORTCODE-3#}#}) 。:
+
+    % sudo port install zsh-devel &#43;mp_completion &#43;doc &#43;examples
+    % sudo emacs -nw /etc/shells # 末尾に/opt/local/bin/zshを追加
+    % chsh -s /opt/local/bin/zsh
+    % exit
+
+### misc.
+
+そのほか意識的に入れるもの。依存パッケージとして勝手に入るものではなく。:
+
+    clang-3.1
+    emacs
+    gcc47
+    gnuplot &#43;no_x11
+    graphviz &#43;no_x11
+    grep
+    gsed
+    llvm-3.1
+    nkf
+    rmtrash
+    rsync
+    tmux
+    wakeonlan
+    wget
+
+意識的には入れないけど、ぼーっとしてるとX11関連のportと共に勝手にインストールされてしまうもの。
+明示的に `&#43;no_x11` をつけてインストールしておき、それを防ぐ。:
+
+    cairo &#43;no_x11 &#43;quartz
+    gd2 &#43;no_x11
+    ghostscript &#43;no_x11
+
+あるいは `/opt/local/etc/macports/variants.conf`
+に以下のように書いておくと自動的にそうしてくれる。:
+
+    &#43;no_x11 &#43;quartz
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

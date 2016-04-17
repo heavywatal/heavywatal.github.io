@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>Qt: 多OS対応GUIフレームワーク - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+Qt — 多OS対応GUIフレームワーク
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<p><a href="http://qt-project.org/">http://qt-project.org/</a></p>
+
+<p><a href="http://qt-project.org/doc/qt-5/reference-overview.html">http://qt-project.org/doc/qt-5/reference-overview.html</a></p>
+
+<h2 id="インストール-mac-os-x">インストール (Mac OS X)</h2>
+
+<p><a href="http://qt-project.org/doc/qt-5/macosx-building.html">http://qt-project.org/doc/qt-5/macosx-building.html</a></p>
+
+<p><a href="http://doc.qt.digia.com/qtcreator-extending/getting-and-building.html">http://doc.qt.digia.com/qtcreator-extending/getting-and-building.html</a></p>
+
+<ol>
+<li><p>Qt Library を <code>developer</code> オプション付きでインストール。
+例えば Homebrew なら:</p>
+
+<pre><code>% brew install qt5 --developer
+% brew linkapps
+</code></pre></li>
+
+<li><p>Qt Creator のソースコードを
+<a href="http://qt-project.org/downloads">公式サイト</a>
+から落として展開:</p>
+
+<pre><code>% wget -O- http://download.qt-project.org/official_releases/qtcreator/3.1/3.1.0/qt-creator-opensource-src-3.1.0.tar.gz | tar xz
+</code></pre></li>
+
+<li><p>Qt Library でインストールされた qmake を使ってビルド:</p>
+
+<pre><code>% cd qt-creator-opensource-src-3.1.0/
+% mkdir build
+% cd build/
+% qmake -r ..
+% make
+% mv bin/Qt\ Creator.app /Applications/
+</code></pre></li>
+
+<li><p>Qt Creator を立ち上げて環境設定を開き
+<code>Build and Run --&gt; Qt Version --&gt; Add...</code>
+から qmake のパスを指定。例えば:</p>
+
+<pre><code>${HOME}/.homebrew/opt/qt5/bin/qmake
+</code></pre></li>
+
+<li><p>隣のタブの <code>Kits --&gt; Manual --&gt; Desktop (default) --&gt; Qt version</code>
+を確認する。そのほかの項目も適当に。</p></li>
+</ol>
+
+<div class="note">
+<p>古い <code>QMAKEFEATURES</code> 設定が残ってたりすると失敗するので
+再インストールを試みるときなどは注意</p>
+
+<pre><code class="language-sh">Failed to process makespec for platform 'macx-clang'
+ASSERT: &quot;fileName.isEmpty() || isAbsolutePath(fileName)&quot; in file */qtbase/qmake/library/ioutils.cpp, line 61
+</code></pre>
+
+</div>
+
+
+<h2 id="qwt-qt用のグラフ描画プラグイン">qwt &mdash; Qt用のグラフ描画プラグイン</h2>
+
+<p><a href="http://qwt.sourceforge.net/">http://qwt.sourceforge.net/</a></p>
+
+<h3 id="インストール">インストール</h3>
+
+<p><a href="http://qwt.sourceforge.net/qwtinstall.html">http://qwt.sourceforge.net/qwtinstall.html</a></p>
+
+<p><a href="http://qt-project.org/doc/qt-5.1/qtdoc/deployment-plugins.html">http://qt-project.org/doc/qt-5.1/qtdoc/deployment-plugins.html</a></p>
+
+<p><a href="https://qt-project.org/doc/qtcreator-3.1/adding-plugins.html">https://qt-project.org/doc/qtcreator-3.1/adding-plugins.html</a></p>
+
+<div class="note">
+<p>Qt Library のバージョンを変えたらプラグインもビルドし直すべし。</p>
+
+</div>
+
+
+<ol>
+<li><p><a href="http://sourceforge.net/projects/qwt/files/qwt/">プロジェクトページ</a>
+からソースコードをダウンロードして展開:</p>
+
+<pre><code>% wget -O- http://sourceforge.net/projects/qwt/files/latest/download?source=files | tar xj
+</code></pre></li>
+
+<li><p>インストール済みのQtを使ってビルド:</p>
+
+<pre><code>% cd qwt-6.1.0/
+% qmake qwt.pro
+% make
+</code></pre></li>
+
+<li><p><code>/usr/local/qwt-{VERSION}/</code> にインストールされる:</p>
+
+<pre><code>% sudo make install
+</code></pre></li>
+
+<li><p>Qt Creator から見えるところにプラグインをシムリンク:</p>
+
+<pre><code>% ln -s /usr/local/qwt-6.1.0/plugins/designer/libqwt_designer_plugin.dylib $(brew --prefix)/opt/qt5/plugins/designer
+</code></pre></li>
+
+<li><p>dylibの依存関係を確認し <code>qwt</code> の部分を絶対パスに書き換える:</p>
+
+<pre><code>% otool -L /usr/local/qwt-6.1.0/plugins/designer/libqwt_designer_plugin.dylib
+% sudo install_name_tool -change qwt.framework/Versions/6/qwt /usr/local/qwt-6.1.0/lib/qwt.framework/qwt /usr/local/qwt-6.1.0/plugins/designer/libqwt_designer_plugin.dylib
+% otool -L /usr/local/qwt-6.1.0/plugins/designer/libqwt_designer_plugin.dylib
+</code></pre></li>
+
+<li><p>Qt Creator で適当なプロジェクトのuiファイルを開き、
+Design タブに Qwt Widgets が登場していれば成功。</p>
+
+<p>無い場合はその画面のメニューバーから
+<code>Tools --&gt; Form Editor --&gt; About Qt Designer Plugins...</code>
+を見て原因を探す。</p>
+
+<div class="note">
+<p>例えばこんなエラーなら、
+プラグインそのものは Qt Creator から見えているが、
+<code>qwt</code> ライブラリが読み込めていない</p>
+
+<pre><code class="language-sh">Library not loaded: qwt.framework/Versions/6/qwt
+Referenced from: /usr/local/qwt-6.1.0/plugins/designer/libqwt_designer_plugin.dylib
+Reason: image not found
+</code></pre>
+
+<p>これすらも無い場合はプラグインがそもそも見えていない。</p>
+
+</div>
+</li>
+</ol>
+
+<h3 id="ビルド方法">ビルド方法</h3>
+
+<ol>
+<li><p><code>.pro</code> ファイルにこんな感じで追加:</p>
+
+<pre><code>include ( /usr/local/qwt-6.1.0/features/qwt.prf )
+</code></pre></li>
+
+<li><p>Qt Creator 左下の緑三角でビルド＆ランしてみると怒られる:</p>
+
+<pre><code>dyld: Library not loaded: qwt.framework/Versions/6/qwt
+  Referenced from: /Users/***/build-MyApp-Desktop-Release/MyApp.app/Contents/MacOS/MyApp
+  Reason: image not found
+The program has unexpectedly finished.
+</code></pre></li>
+
+<li><p>実行ファイルを見てみると、こいつも相対パスでライブラリ参照している:</p>
+
+<pre><code>% otool -L /path/to/MyApp.app/Contents/MacOS/MyApp
+        qwt.framework/Versions/6/qwt (compatibility version 6.1.0, current version 6.1.0)
+</code></pre></li>
+
+<li><p>絶対パスに修正:</p>
+
+<pre><code>% install_name_tool -change qwt.framework/Versions/6/qwt /usr/local/qwt-6.1.0/lib/qwt.framework/Versions/6/qwt build-MyApp-Desktop-Release/MyApp.app/Contents/MacOS/MyApp
+</code></pre></li>
+
+<li><p>Qt Creator 左下の緑三角で再びランしてみる。</p>
+
+<div class="note">
+<p>この段階で、開発マシンで起動できるようにはなっているはず。
+しかしQtも含めあらゆるライブラリを絶対パスで参照してしまっているので、
+このままほかのマシンにコピーしても起動できない。</p>
+
+</div>
+</li>
+
+<li><p>ライブラリをアプリケーションバンドル内にコピーし、参照先を変更する:</p>
+
+<pre><code>% macdeployqt build-MyApp-Desktop-Release/MyApp.app
+</code></pre></li>
+</ol>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats">
+<label for="R stats">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools" checked>
+<label for="Developer Tools" class="active">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li class="active"><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "Qt"
++++
+
+&lt;http://qt-project.org/&gt;
+
+&lt;http://qt-project.org/doc/qt-5/reference-overview.html&gt;
+
+## インストール (Mac OS X)
+
+&lt;http://qt-project.org/doc/qt-5/macosx-building.html&gt;
+
+&lt;http://doc.qt.digia.com/qtcreator-extending/getting-and-building.html&gt;
+
+1.  Qt Library を `developer` オプション付きでインストール。
+    例えば Homebrew なら:
+
+        % brew install qt5 --developer
+        % brew linkapps
+
+2.  Qt Creator のソースコードを
+    [公式サイト](http://qt-project.org/downloads)
+    から落として展開:
+
+        % wget -O- http://download.qt-project.org/official_releases/qtcreator/3.1/3.1.0/qt-creator-opensource-src-3.1.0.tar.gz | tar xz
+
+3.  Qt Library でインストールされた qmake を使ってビルド:
+
+        % cd qt-creator-opensource-src-3.1.0/
+        % mkdir build
+        % cd build/
+        % qmake -r ..
+        % make
+        % mv bin/Qt\ Creator.app /Applications/
+
+4.  Qt Creator を立ち上げて環境設定を開き
+    `Build and Run --&gt; Qt Version --&gt; Add...`
+    から qmake のパスを指定。例えば:
+
+        ${HOME}/.homebrew/opt/qt5/bin/qmake
+
+5.  隣のタブの `Kits --&gt; Manual --&gt; Desktop (default) --&gt; Qt version`
+    を確認する。そのほかの項目も適当に。
+
+{#{#HUGOSHORTCODE-1#}#}
+
+## qwt --- Qt用のグラフ描画プラグイン
+
+&lt;http://qwt.sourceforge.net/&gt;
+
+### インストール
+
+&lt;http://qwt.sourceforge.net/qwtinstall.html&gt;
+
+&lt;http://qt-project.org/doc/qt-5.1/qtdoc/deployment-plugins.html&gt;
+
+&lt;https://qt-project.org/doc/qtcreator-3.1/adding-plugins.html&gt;
+
+{#{#HUGOSHORTCODE-2#}#}
+
+1.  [プロジェクトページ](http://sourceforge.net/projects/qwt/files/qwt/)
+    からソースコードをダウンロードして展開:
+
+        % wget -O- http://sourceforge.net/projects/qwt/files/latest/download?source=files | tar xj
+
+2.  インストール済みのQtを使ってビルド:
+
+        % cd qwt-6.1.0/
+        % qmake qwt.pro
+        % make
+
+3.  `/usr/local/qwt-{VERSION}/` にインストールされる:
+
+        % sudo make install
+
+4.  Qt Creator から見えるところにプラグインをシムリンク:
+
+        % ln -s /usr/local/qwt-6.1.0/plugins/designer/libqwt_designer_plugin.dylib $(brew --prefix)/opt/qt5/plugins/designer
+
+5.  dylibの依存関係を確認し `qwt` の部分を絶対パスに書き換える:
+
+        % otool -L /usr/local/qwt-6.1.0/plugins/designer/libqwt_designer_plugin.dylib
+        % sudo install_name_tool -change qwt.framework/Versions/6/qwt /usr/local/qwt-6.1.0/lib/qwt.framework/qwt /usr/local/qwt-6.1.0/plugins/designer/libqwt_designer_plugin.dylib
+        % otool -L /usr/local/qwt-6.1.0/plugins/designer/libqwt_designer_plugin.dylib
+
+6.  Qt Creator で適当なプロジェクトのuiファイルを開き、
+    Design タブに Qwt Widgets が登場していれば成功。
+
+    無い場合はその画面のメニューバーから
+    `Tools --&gt; Form Editor --&gt; About Qt Designer Plugins...`
+    を見て原因を探す。
+
+    {#{#HUGOSHORTCODE-3#}#}
+
+### ビルド方法
+
+1.  `.pro` ファイルにこんな感じで追加:
+
+        include ( /usr/local/qwt-6.1.0/features/qwt.prf )
+
+2.  Qt Creator 左下の緑三角でビルド＆ランしてみると怒られる:
+
+        dyld: Library not loaded: qwt.framework/Versions/6/qwt
+          Referenced from: /Users/***/build-MyApp-Desktop-Release/MyApp.app/Contents/MacOS/MyApp
+          Reason: image not found
+        The program has unexpectedly finished.
+
+3.  実行ファイルを見てみると、こいつも相対パスでライブラリ参照している:
+
+        % otool -L /path/to/MyApp.app/Contents/MacOS/MyApp
+                qwt.framework/Versions/6/qwt (compatibility version 6.1.0, current version 6.1.0)
+
+4.  絶対パスに修正:
+
+        % install_name_tool -change qwt.framework/Versions/6/qwt /usr/local/qwt-6.1.0/lib/qwt.framework/Versions/6/qwt build-MyApp-Desktop-Release/MyApp.app/Contents/MacOS/MyApp
+
+5.  Qt Creator 左下の緑三角で再びランしてみる。
+
+    {#{#HUGOSHORTCODE-4#}#}
+
+6.  ライブラリをアプリケーションバンドル内にコピーし、参照先を変更する:
+
+        % macdeployqt build-MyApp-Desktop-Release/MyApp.app
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

@@ -9,7 +9,24 @@
 <link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
 <link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
-<title>Watal M. Iwasaki</title>
+<title>Gene Ontology - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -29,10 +46,97 @@ Watal M. Iwasaki
 
 <main>
 <article>
-<header><h1>Index</h1></header>
+<header><h1><a href="">
+Gene Ontology
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
 
-<h2><a href="/tags">tags</a></h2>
-<dl id="terms">
+
+
+<p>生物種や分野によらない共通の語彙で遺伝子産物の機能を記述するための用語体系。</p>
+
+<p>機能に応じて遺伝子にたくさんのタグ(<strong>GO term</strong>)を付けましょうってこと。</p>
+
+<p>e.g. Human RB1
+<a href="http://amigo.geneontology.org/amigo/gene_product/UniProtKB:P06400">http://amigo.geneontology.org/amigo/gene_product/UniProtKB:P06400</a></p>
+
+<h2 id="go-term">GO term</h2>
+
+<p><a href="http://geneontology.org/page/ontology-structure">http://geneontology.org/page/ontology-structure</a></p>
+
+<p>e.g. <a href="http://amigo.geneontology.org/amigo/term/GO:0043065#display-graphics-tab">http://amigo.geneontology.org/amigo/term/GO:0043065#display-graphics-tab</a></p>
+
+<p>小さくて専門的な下位termから、大きくて一般的な上位termに向かう
+directed acyclic graph (DAG) を構成している。
+かなり細かい多層構造。
+分岐したあと上位でまた合流するので、木構造での表示には限界がある。</p>
+
+<p>最上位のtermは3つ:</p>
+
+<dl>
+<dt><a href="http://geneontology.org/page/biological-process-ontology-guidelines">Biological Process</a></dt>
+<dd>生物学的な機能。
+下位には例えば、分化、細胞分裂、細胞死など。
+<code>GO:0008150</code></dd>
+<dt><a href="http://geneontology.org/page/cellular-component-ontology-guidelines">Cellular Component</a></dt>
+<dd>細胞内での局在。
+下位には例えば、核内、小胞体など。
+<code>GO:0005575</code></dd>
+<dt><a href="http://geneontology.org/page/molecular-function-ontology-guidelines">Molecular Function</a></dt>
+<dd>化学的な機能。
+下位には例えば、加水分解酵素、DNA結合など。
+<code>GO:0003674</code></dd>
+</dl>
+
+<p>ほかのアノテーションと同じようにEvidenceのレベルもいろいろある。</p>
+
+<h3 id="go-relation">GO relation</h3>
+
+<p><a href="http://geneontology.org/page/ontology-relations">http://geneontology.org/page/ontology-relations</a></p>
+
+<p>DAGのエッジのことをrelationと呼ぶ。</p>
+
+<ul>
+<li><em>is a</em></li>
+<li><em>part of</em></li>
+<li><em>regulates</em>: <em>positively</em> or <em>negatively</em></li>
+</ul>
+
+<p>フィードフォワード的なショートカットも推定される。。</p>
+
+<h2 id="go解析">GO解析</h2>
+
+<p>何らかの解析で遺伝子のサブセットが抽出されたとして、
+それらが持つGO termの組成を全ゲノムでの組成と比較してみたときに、
+特定の機能群におけるenrichmentが見られるかどうか？</p>
+
+<p>e.g. 対照区と処理区で発現が変化した遺伝子には、XXXというtermが多く含まれる</p>
+
+<p>超幾何分布</p>
+
+<h2 id="ツール">ツール</h2>
+
+<h3 id="amigo">Amigo</h3>
+
+<p><a href="http://amigo.geneontology.org">http://amigo.geneontology.org</a></p>
+
+<h3 id="bioconductor">BioConductor</h3>
+
+<dl>
+<dt><a href="http://www.bioconductor.org/packages/release/data/annotation/html/GO.db.html">GO.db</a></dt>
+<dd>GO term/relationの構造データ。遺伝子のデータではない。</dd>
+<dt><a href="http://www.bioconductor.org/packages/release/bioc/html/GOstats.html">GOstats</a></dt>
+<dd>enrichment解析。あまり人気がないっぽい。</dd>
+<dt><a href="http://www.bioconductor.org/packages/release/bioc/html/topGO.html">topGO</a></dt>
+<dd>enrichment解析</dd>
+<dt><a href="http://www.bioconductor.org/packages/release/bioc/html/GOexpress.html">GOexpress</a></dt>
+<dd>発現パターンで遺伝子をクラスタリングしてGO解析</dd>
+<dt><a href="http://www.bioconductor.org/packages/release/bioc/html/GOSemSim.html">GOSemSim</a></dt>
+<dd>2つの遺伝子群の機能的類似度をGOベースで</dd>
+<dt><a href="http://www.bioconductor.org/packages/release/bioc/html/goseq.html">goseq</a></dt>
+<dd>RNA-seqからGOまで直行？</dd>
 </dl>
 
 </article>
@@ -46,7 +150,7 @@ Watal M. Iwasaki
 <div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
 
 
-<input type="checkbox" id="R stats" checked>
+<input type="checkbox" id="R stats">
 <label for="R stats">R stats</label>
 <ul>
 <li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
@@ -70,7 +174,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
 </ul>
 
-<input type="checkbox" id="Python" checked>
+<input type="checkbox" id="Python">
 <label for="Python">Python</label>
 <ul>
 <li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
@@ -85,7 +189,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
 </ul>
 
-<input type="checkbox" id="C&#43;&#43;" checked>
+<input type="checkbox" id="C&#43;&#43;">
 <label for="C&#43;&#43;">C&#43;&#43;</label>
 <ul>
 <li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
@@ -97,13 +201,13 @@ Watal M. Iwasaki
 </ul>
 
 <input type="checkbox" id="Biology" checked>
-<label for="Biology">Biology</label>
+<label for="Biology" class="active">Biology</label>
 <ul>
 <li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
 <li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
 <li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
 <li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
-<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li class="active"><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
 <li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
 <li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
@@ -118,7 +222,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
 </ul>
 
-<input type="checkbox" id="Developer Tools" checked>
+<input type="checkbox" id="Developer Tools">
 <label for="Developer Tools">Developer Tools</label>
 <ul>
 <li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
@@ -142,7 +246,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
 </ul>
 
-<input type="checkbox" id="Linux" checked>
+<input type="checkbox" id="Linux">
 <label for="Linux">Linux</label>
 <ul>
 <li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
@@ -151,7 +255,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
 </ul>
 
-<input type="checkbox" id="Mac" checked>
+<input type="checkbox" id="Mac">
 <label for="Mac">Mac</label>
 <ul>
 <li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
@@ -165,7 +269,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
 </ul>
 
-<input type="checkbox" id="Lectures" checked>
+<input type="checkbox" id="Lectures">
 <label for="Lectures">Lectures</label>
 <ul>
 <li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
@@ -175,7 +279,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
 </ul>
 
-<input type="checkbox" id="Miscellaneous" checked>
+<input type="checkbox" id="Miscellaneous">
 <label for="Miscellaneous">Miscellaneous</label>
 <ul>
 <li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
@@ -186,7 +290,101 @@ Watal M. Iwasaki
 </nav>
 
 
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "Gene Ontology"
++++
 
+生物種や分野によらない共通の語彙で遺伝子産物の機能を記述するための用語体系。
+
+機能に応じて遺伝子にたくさんのタグ(**GO term**)を付けましょうってこと。
+
+e.g. Human RB1
+&lt;http://amigo.geneontology.org/amigo/gene_product/UniProtKB:P06400&gt;
+
+## GO term
+
+&lt;http://geneontology.org/page/ontology-structure&gt;
+
+e.g. &lt;http://amigo.geneontology.org/amigo/term/GO:0043065#display-graphics-tab&gt;
+
+小さくて専門的な下位termから、大きくて一般的な上位termに向かう
+directed acyclic graph (DAG) を構成している。
+かなり細かい多層構造。
+分岐したあと上位でまた合流するので、木構造での表示には限界がある。
+
+最上位のtermは3つ:
+
+[Biological Process](http://geneontology.org/page/biological-process-ontology-guidelines)
+:   生物学的な機能。
+    下位には例えば、分化、細胞分裂、細胞死など。
+    `GO:0008150`
+
+[Cellular Component](http://geneontology.org/page/cellular-component-ontology-guidelines)
+:   細胞内での局在。
+    下位には例えば、核内、小胞体など。
+    `GO:0005575`
+
+[Molecular Function](http://geneontology.org/page/molecular-function-ontology-guidelines)
+:   化学的な機能。
+    下位には例えば、加水分解酵素、DNA結合など。
+    `GO:0003674`
+
+ほかのアノテーションと同じようにEvidenceのレベルもいろいろある。
+
+### GO relation
+
+&lt;http://geneontology.org/page/ontology-relations&gt;
+
+DAGのエッジのことをrelationと呼ぶ。
+
+-   *is a*
+-   *part of*
+-   *regulates*: *positively* or *negatively*
+
+フィードフォワード的なショートカットも推定される。。
+
+## GO解析
+
+何らかの解析で遺伝子のサブセットが抽出されたとして、
+それらが持つGO termの組成を全ゲノムでの組成と比較してみたときに、
+特定の機能群におけるenrichmentが見られるかどうか？
+
+e.g. 対照区と処理区で発現が変化した遺伝子には、XXXというtermが多く含まれる
+
+超幾何分布
+
+## ツール
+
+### Amigo
+
+&lt;http://amigo.geneontology.org&gt;
+
+### BioConductor
+
+[GO.db](http://www.bioconductor.org/packages/release/data/annotation/html/GO.db.html)
+:   GO term/relationの構造データ。遺伝子のデータではない。
+
+[GOstats](http://www.bioconductor.org/packages/release/bioc/html/GOstats.html)
+:   enrichment解析。あまり人気がないっぽい。
+
+[topGO](http://www.bioconductor.org/packages/release/bioc/html/topGO.html)
+:   enrichment解析
+
+[GOexpress](http://www.bioconductor.org/packages/release/bioc/html/GOexpress.html)
+:   発現パターンで遺伝子をクラスタリングしてGO解析
+
+[GOSemSim](http://www.bioconductor.org/packages/release/bioc/html/GOSemSim.html)
+:   2つの遺伝子群の機能的類似度をGOベースで
+
+[goseq](http://www.bioconductor.org/packages/release/bioc/html/goseq.html)
+:   RNA-seqからGOまで直行？
+
+</code></pre>
+</aside>
 
 <footer>(ɔ) 2008 Watal M. Iwasaki</footer>
 </div>

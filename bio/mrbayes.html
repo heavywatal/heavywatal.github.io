@@ -9,7 +9,24 @@
 <link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
 <link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
-<title>Watal M. Iwasaki</title>
+<title>MrBayes - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -29,11 +46,62 @@ Watal M. Iwasaki
 
 <main>
 <article>
-<header><h1>Index</h1></header>
+<header><h1><a href="">
+MrBayes
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
 
-<h2><a href="/tags">tags</a></h2>
-<dl id="terms">
-</dl>
+
+
+<p><a href="http://mrbayes.sourceforge.net/">http://mrbayes.sourceforge.net/</a></p>
+
+<h2 id="installation">Installation</h2>
+
+<ol>
+<li><p>OpenMPI をインストール:</p>
+
+<pre><code>% sudo apt-get install libopenmpi1.5-dev openmpi1.5-bin
+</code></pre></li>
+
+<li><p>ソースコードをダウンロードして展開:</p>
+
+<pre><code>% wget -O- http://sourceforge.net/projects/mrbayes/files/mrbayes/3.2.2/mrbayes-3.2.2.tar.gz/download | tar xz
+</code></pre></li>
+
+<li><p>コンパイルの仕方を調べて実行:</p>
+
+<pre><code>% cd mrbayes-3.2.2/src/
+% less CompileInstructions.txt
+% autoconf
+% ./configure --with-beagle=no --enable-mpi=yes
+</code></pre></li>
+
+<li><p>ビルド:</p>
+
+<pre><code>% make
+</code></pre>
+
+<p>このようなエラーが出たら:</p>
+
+<pre><code>`undefined reference to __exp_finite`
+`undefined reference to __log_finite`
+</code></pre>
+
+<p><code>LDFLAGS</code> がオブジェクトのあとに来るように、
+<code>Makefile</code> のターゲット mb を書き換える:</p>
+
+<pre><code>mb: $(OBJECTS)
+        $(CC) $(CFLAGS) $^ $(LDFLAGS) $(OUTPUT_OPTION)
+</code></pre></li>
+
+<li><p>インストール:</p>
+
+<pre><code>% sudo cp mb /usr/local/bin/
+% sudo cp mb /nfsroot/usr/local/bin/
+</code></pre></li>
+</ol>
 
 </article>
 </main>
@@ -46,7 +114,7 @@ Watal M. Iwasaki
 <div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
 
 
-<input type="checkbox" id="R stats" checked>
+<input type="checkbox" id="R stats">
 <label for="R stats">R stats</label>
 <ul>
 <li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
@@ -70,7 +138,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
 </ul>
 
-<input type="checkbox" id="Python" checked>
+<input type="checkbox" id="Python">
 <label for="Python">Python</label>
 <ul>
 <li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
@@ -85,7 +153,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
 </ul>
 
-<input type="checkbox" id="C&#43;&#43;" checked>
+<input type="checkbox" id="C&#43;&#43;">
 <label for="C&#43;&#43;">C&#43;&#43;</label>
 <ul>
 <li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
@@ -97,7 +165,7 @@ Watal M. Iwasaki
 </ul>
 
 <input type="checkbox" id="Biology" checked>
-<label for="Biology">Biology</label>
+<label for="Biology" class="active">Biology</label>
 <ul>
 <li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
 <li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
@@ -105,7 +173,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
 <li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
-<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li class="active"><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
 <li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
 <li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
 <li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
@@ -118,7 +186,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
 </ul>
 
-<input type="checkbox" id="Developer Tools" checked>
+<input type="checkbox" id="Developer Tools">
 <label for="Developer Tools">Developer Tools</label>
 <ul>
 <li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
@@ -142,7 +210,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
 </ul>
 
-<input type="checkbox" id="Linux" checked>
+<input type="checkbox" id="Linux">
 <label for="Linux">Linux</label>
 <ul>
 <li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
@@ -151,7 +219,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
 </ul>
 
-<input type="checkbox" id="Mac" checked>
+<input type="checkbox" id="Mac">
 <label for="Mac">Mac</label>
 <ul>
 <li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
@@ -165,7 +233,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
 </ul>
 
-<input type="checkbox" id="Lectures" checked>
+<input type="checkbox" id="Lectures">
 <label for="Lectures">Lectures</label>
 <ul>
 <li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
@@ -175,7 +243,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
 </ul>
 
-<input type="checkbox" id="Miscellaneous" checked>
+<input type="checkbox" id="Miscellaneous">
 <label for="Miscellaneous">Miscellaneous</label>
 <ul>
 <li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
@@ -186,7 +254,55 @@ Watal M. Iwasaki
 </nav>
 
 
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "MrBayes"
++++
 
+&lt;http://mrbayes.sourceforge.net/&gt;
+
+## Installation
+
+1.  OpenMPI をインストール:
+
+        % sudo apt-get install libopenmpi1.5-dev openmpi1.5-bin
+
+2.  ソースコードをダウンロードして展開:
+
+        % wget -O- http://sourceforge.net/projects/mrbayes/files/mrbayes/3.2.2/mrbayes-3.2.2.tar.gz/download | tar xz
+
+3.  コンパイルの仕方を調べて実行:
+
+        % cd mrbayes-3.2.2/src/
+        % less CompileInstructions.txt
+        % autoconf
+        % ./configure --with-beagle=no --enable-mpi=yes
+
+4.  ビルド:
+
+        % make
+
+    このようなエラーが出たら:
+
+        `undefined reference to __exp_finite`
+        `undefined reference to __log_finite`
+
+    `LDFLAGS` がオブジェクトのあとに来るように、
+    `Makefile` のターゲット mb を書き換える:
+
+        mb: $(OBJECTS)
+                $(CC) $(CFLAGS) $^ $(LDFLAGS) $(OUTPUT_OPTION)
+
+5.  インストール:
+
+        % sudo cp mb /usr/local/bin/
+        % sudo cp mb /nfsroot/usr/local/bin/
+
+</code></pre>
+</aside>
 
 <footer>(ɔ) 2008 Watal M. Iwasaki</footer>
 </div>

@@ -9,7 +9,24 @@
 <link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
 <link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
-<title>Watal M. Iwasaki</title>
+<title>dadi - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -29,11 +46,73 @@ Watal M. Iwasaki
 
 <main>
 <article>
-<header><h1>Index</h1></header>
+<header><h1><a href="">
+dadi
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
 
-<h2><a href="/tags">tags</a></h2>
-<dl id="terms">
-</dl>
+
+
+<p><a href="https://bitbucket.org/RyanGutenkunst/dadi">https://bitbucket.org/RyanGutenkunst/dadi</a></p>
+
+<h2 id="installation">Installation</h2>
+
+<p><a href="https://bitbucket.org/RyanGutenkunst/dadi/wiki/Installation">https://bitbucket.org/RyanGutenkunst/dadi/wiki/Installation</a></p>
+
+<ol>
+<li><p>Python 2.7 で <code>dadi</code> 用の <code>virtualenv</code> を作って、中に入る:</p>
+
+<pre><code>% virtualenv ~/.virtualenv/dadi
+% source ~/.virtualenv/dadi/bin/activate
+</code></pre></li>
+
+<li><p>依存パッケージをインストール:</p>
+
+<pre><code>% pip install -U numpy==1.9.2 scipy matplotlib
+</code></pre>
+
+<div class="note">
+<p><code>numpy==1.10.0</code> だと
+<code>ValueError: Cannot operate with a folded Spectrum and an unfolded one.</code>
+というエラーが出て使えなかったのでとりあえず
+<code>numpy==1.9.2</code> を使うべし。</p>
+
+</div>
+</li>
+
+<li><p><code>git</code> でリポジトリのクローンを取得:</p>
+
+<pre><code>% git clone git@bitbucket.org:RyanGutenkunst/dadi.git
+</code></pre></li>
+
+<li><p>リリース版をチェックアウト:</p>
+
+<pre><code>% cd dadi/
+% git tag
+% git checkout 1.7.0
+</code></pre></li>
+
+<li><p>インストール:</p>
+
+<pre><code>% python setup.py build
+% python setup.py install
+</code></pre></li>
+
+<li><p>テスト:</p>
+
+<pre><code>% cd tests/
+% python run_tests.py
+% cd ..
+</code></pre></li>
+
+<li><p><code>doc/</code> 以下に結構詳しいドキュメントが入ってるので読む (これもウェブで公開してくれたらいいのに)</p></li>
+</ol>
+
+<h2 id="入力データ">入力データ</h2>
+
+<p><a href="https://bitbucket.org/RyanGutenkunst/dadi/wiki/DataFormats">https://bitbucket.org/RyanGutenkunst/dadi/wiki/DataFormats</a></p>
 
 </article>
 </main>
@@ -46,7 +125,7 @@ Watal M. Iwasaki
 <div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
 
 
-<input type="checkbox" id="R stats" checked>
+<input type="checkbox" id="R stats">
 <label for="R stats">R stats</label>
 <ul>
 <li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
@@ -70,7 +149,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
 </ul>
 
-<input type="checkbox" id="Python" checked>
+<input type="checkbox" id="Python">
 <label for="Python">Python</label>
 <ul>
 <li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
@@ -85,7 +164,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
 </ul>
 
-<input type="checkbox" id="C&#43;&#43;" checked>
+<input type="checkbox" id="C&#43;&#43;">
 <label for="C&#43;&#43;">C&#43;&#43;</label>
 <ul>
 <li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
@@ -97,7 +176,7 @@ Watal M. Iwasaki
 </ul>
 
 <input type="checkbox" id="Biology" checked>
-<label for="Biology">Biology</label>
+<label for="Biology" class="active">Biology</label>
 <ul>
 <li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
 <li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
@@ -111,14 +190,14 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
 <li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
 <li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li class="active"><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
 <li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
 <li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
 <li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
 </ul>
 
-<input type="checkbox" id="Developer Tools" checked>
+<input type="checkbox" id="Developer Tools">
 <label for="Developer Tools">Developer Tools</label>
 <ul>
 <li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
@@ -142,7 +221,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
 </ul>
 
-<input type="checkbox" id="Linux" checked>
+<input type="checkbox" id="Linux">
 <label for="Linux">Linux</label>
 <ul>
 <li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
@@ -151,7 +230,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
 </ul>
 
-<input type="checkbox" id="Mac" checked>
+<input type="checkbox" id="Mac">
 <label for="Mac">Mac</label>
 <ul>
 <li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
@@ -165,7 +244,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
 </ul>
 
-<input type="checkbox" id="Lectures" checked>
+<input type="checkbox" id="Lectures">
 <label for="Lectures">Lectures</label>
 <ul>
 <li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
@@ -175,7 +254,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
 </ul>
 
-<input type="checkbox" id="Miscellaneous" checked>
+<input type="checkbox" id="Miscellaneous">
 <label for="Miscellaneous">Miscellaneous</label>
 <ul>
 <li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
@@ -186,7 +265,60 @@ Watal M. Iwasaki
 </nav>
 
 
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "dadi"
++++
 
+&lt;https://bitbucket.org/RyanGutenkunst/dadi&gt;
+
+## Installation
+
+&lt;https://bitbucket.org/RyanGutenkunst/dadi/wiki/Installation&gt;
+
+1.  Python 2.7 で `dadi` 用の `virtualenv` を作って、中に入る:
+
+        % virtualenv ~/.virtualenv/dadi
+        % source ~/.virtualenv/dadi/bin/activate
+
+2.  依存パッケージをインストール:
+
+        % pip install -U numpy==1.9.2 scipy matplotlib
+
+    {#{#HUGOSHORTCODE-1#}#}
+
+3.  `git` でリポジトリのクローンを取得:
+
+        % git clone git@bitbucket.org:RyanGutenkunst/dadi.git
+
+4.  リリース版をチェックアウト:
+
+        % cd dadi/
+        % git tag
+        % git checkout 1.7.0
+
+5.  インストール:
+
+        % python setup.py build
+        % python setup.py install
+
+6.  テスト:
+
+        % cd tests/
+        % python run_tests.py
+        % cd ..
+
+7.  `doc/` 以下に結構詳しいドキュメントが入ってるので読む (これもウェブで公開してくれたらいいのに)
+
+## 入力データ
+
+&lt;https://bitbucket.org/RyanGutenkunst/dadi/wiki/DataFormats&gt;
+
+</code></pre>
+</aside>
 
 <footer>(ɔ) 2008 Watal M. Iwasaki</footer>
 </div>

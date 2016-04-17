@@ -9,7 +9,24 @@
 <link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
 <link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
-<title>Watal M. Iwasaki</title>
+<title>AppleScript - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -29,11 +46,88 @@ Watal M. Iwasaki
 
 <main>
 <article>
-<header><h1>Index</h1></header>
+<header><h1><a href="">
+AppleScript
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
 
-<h2><a href="/tags">tags</a></h2>
-<dl id="terms">
-</dl>
+
+
+<h2 id="finder-get-file-path">Finder: Get file path</h2>
+
+<pre><code>tell application &quot;Finder&quot;
+    set the clipboard to POSIX path of (the selection as alias)
+end tell
+</code></pre>
+
+<h2 id="itunes-equalizer">iTunes Equalizer</h2>
+
+<p>イコライザを設定するスクリプト。
+<code>band 1</code> が低音で <code>band 10</code> が高音。
+下記の設定は Equal-loudness contour(等ラウドネス曲線) を考慮して
+小さい音量でもシャカシャカせずそれなりのバランスで聴こえるようにした値。
+音量やスピーカや好みによって調整し、別々のスクリプトとして保存しておくとよい:</p>
+
+<pre><code>tell application &quot;iTunes&quot;
+        tell EQ preset &quot;Manual&quot;
+                set band 1 to 1.5
+                set band 2 to 0.7
+                set band 3 to 0.3
+                set band 4 to 0.1
+                set band 5 to -0.1
+                set band 6 to -0.5
+                set band 7 to -1
+                set band 8 to -2
+                set band 9 to 0.3
+                set band 10 to 0.7
+                set preamp to 0
+        end tell
+end tell
+</code></pre>
+
+<h2 id="osascript-スクリプトをターミナルで実行">osascript: スクリプトをターミナルで実行</h2>
+
+<p>スクリプトを置いたディレクトリにパスを通せれば楽なんだけど。できるのかな？:</p>
+
+<pre><code>% osascript ${HOME}/Library/Scripts/Applications/Bibdesk/exportOOXML.scpt
+</code></pre>
+
+<h2 id="mi-で選択中の文字列をターミナルで実行">mi で選択中の文字列をターミナルで実行</h2>
+
+<pre><code>tell application &quot;mi&quot;
+        tell document 1
+                set CommandLines to selection
+        end tell
+end tell
+
+tell application &quot;Terminal&quot;
+        activate
+        ignoring application responses
+                do script with command CommandLines in window 1
+        end ignoring
+end tell
+</code></pre>
+
+<h2 id="bibdesk-からgroupとtemplateを指定してexport">Bibdesk からGroupとTemplateを指定してExport</h2>
+
+<p>出力先、グループ名、テンプレートを最初の３行で指定し、Exportしたいライブラリを開いた状態で実行:</p>
+
+<pre><code>set theOutFile to POSIX file &quot;/Users/Iwasaki/Presentations/20100118Thesis/items1.xml&quot;
+set theGroup to &quot;20100118 Thesis&quot;
+set theTemplateName to &quot;OOXML template&quot;
+
+using terms from application &quot;BibDesk&quot;
+        tell application &quot;BibDesk&quot;
+                set theDoc to first document
+                set thePubs to publication of static group theGroup of theDoc
+                tell theDoc
+                        export for thePubs using template theTemplateName to theOutFile
+                end tell
+        end tell
+end using terms from
+</code></pre>
 
 </article>
 </main>
@@ -46,7 +140,7 @@ Watal M. Iwasaki
 <div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
 
 
-<input type="checkbox" id="R stats" checked>
+<input type="checkbox" id="R stats">
 <label for="R stats">R stats</label>
 <ul>
 <li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
@@ -70,7 +164,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
 </ul>
 
-<input type="checkbox" id="Python" checked>
+<input type="checkbox" id="Python">
 <label for="Python">Python</label>
 <ul>
 <li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
@@ -85,7 +179,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
 </ul>
 
-<input type="checkbox" id="C&#43;&#43;" checked>
+<input type="checkbox" id="C&#43;&#43;">
 <label for="C&#43;&#43;">C&#43;&#43;</label>
 <ul>
 <li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
@@ -96,7 +190,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
 </ul>
 
-<input type="checkbox" id="Biology" checked>
+<input type="checkbox" id="Biology">
 <label for="Biology">Biology</label>
 <ul>
 <li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
@@ -118,7 +212,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
 </ul>
 
-<input type="checkbox" id="Developer Tools" checked>
+<input type="checkbox" id="Developer Tools">
 <label for="Developer Tools">Developer Tools</label>
 <ul>
 <li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
@@ -142,7 +236,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
 </ul>
 
-<input type="checkbox" id="Linux" checked>
+<input type="checkbox" id="Linux">
 <label for="Linux">Linux</label>
 <ul>
 <li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
@@ -152,9 +246,9 @@ Watal M. Iwasaki
 </ul>
 
 <input type="checkbox" id="Mac" checked>
-<label for="Mac">Mac</label>
+<label for="Mac" class="active">Mac</label>
 <ul>
-<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li class="active"><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
 <li><a href="/students/iwasaki/mac/command.html">Command</a></li>
 <li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
 <li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
@@ -165,7 +259,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
 </ul>
 
-<input type="checkbox" id="Lectures" checked>
+<input type="checkbox" id="Lectures">
 <label for="Lectures">Lectures</label>
 <ul>
 <li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
@@ -175,7 +269,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
 </ul>
 
-<input type="checkbox" id="Miscellaneous" checked>
+<input type="checkbox" id="Miscellaneous">
 <label for="Miscellaneous">Miscellaneous</label>
 <ul>
 <li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
@@ -186,7 +280,85 @@ Watal M. Iwasaki
 </nav>
 
 
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "AppleScript"
++++
 
+## Finder: Get file path
+
+    tell application &#34;Finder&#34;
+        set the clipboard to POSIX path of (the selection as alias)
+    end tell
+
+## iTunes Equalizer
+
+イコライザを設定するスクリプト。
+`band 1` が低音で `band 10` が高音。
+下記の設定は Equal-loudness contour(等ラウドネス曲線) を考慮して
+小さい音量でもシャカシャカせずそれなりのバランスで聴こえるようにした値。
+音量やスピーカや好みによって調整し、別々のスクリプトとして保存しておくとよい:
+
+    tell application &#34;iTunes&#34;
+            tell EQ preset &#34;Manual&#34;
+                    set band 1 to 1.5
+                    set band 2 to 0.7
+                    set band 3 to 0.3
+                    set band 4 to 0.1
+                    set band 5 to -0.1
+                    set band 6 to -0.5
+                    set band 7 to -1
+                    set band 8 to -2
+                    set band 9 to 0.3
+                    set band 10 to 0.7
+                    set preamp to 0
+            end tell
+    end tell
+
+## osascript: スクリプトをターミナルで実行
+
+スクリプトを置いたディレクトリにパスを通せれば楽なんだけど。できるのかな？:
+
+    % osascript ${HOME}/Library/Scripts/Applications/Bibdesk/exportOOXML.scpt
+
+## mi で選択中の文字列をターミナルで実行
+
+    tell application &#34;mi&#34;
+            tell document 1
+                    set CommandLines to selection
+            end tell
+    end tell
+
+    tell application &#34;Terminal&#34;
+            activate
+            ignoring application responses
+                    do script with command CommandLines in window 1
+            end ignoring
+    end tell
+
+## Bibdesk からGroupとTemplateを指定してExport
+
+出力先、グループ名、テンプレートを最初の３行で指定し、Exportしたいライブラリを開いた状態で実行:
+
+    set theOutFile to POSIX file &#34;/Users/Iwasaki/Presentations/20100118Thesis/items1.xml&#34;
+    set theGroup to &#34;20100118 Thesis&#34;
+    set theTemplateName to &#34;OOXML template&#34;
+
+    using terms from application &#34;BibDesk&#34;
+            tell application &#34;BibDesk&#34;
+                    set theDoc to first document
+                    set thePubs to publication of static group theGroup of theDoc
+                    tell theDoc
+                            export for thePubs using template theTemplateName to theOutFile
+                    end tell
+            end tell
+    end using terms from
+
+</code></pre>
+</aside>
 
 <footer>(ɔ) 2008 Watal M. Iwasaki</footer>
 </div>

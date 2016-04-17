@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>biomaRt: プログラム的にデータ取得 - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+biomaRt — プログラム的にデータ取得
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<p><a href="http://www.bioconductor.org/packages/release/bioc/html/biomaRt.html">http://www.bioconductor.org/packages/release/bioc/html/biomaRt.html</a></p>
+
+<p><a href="http://qiita.com/yuifu/items/a757629506c1cd98156b">http://qiita.com/yuifu/items/a757629506c1cd98156b</a></p>
+
+<p>BioMartからプログラマチックにデータを取得するための <a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a> 拡張。
+ウェブアプリ <a href="http://www.biomart.org/biomart/martview">MartView</a> のGUIでひととおり慣れておくと良い。</p>
+
+<h2 id="クラス">クラス</h2>
+
+<dl>
+<dt><code>Mart</code></dt>
+<dd><p><code>@biomart</code> &mdash; <code>ensembl</code></p>
+
+<p><code>@host</code> &mdash; <code>http://www.biomart.org:80/biomart/martservice</code></p>
+
+<p><code>@dataset</code> &mdash; <code>scerevisiae_gene_ensembl</code></p>
+
+<p><code>@filters</code></p>
+
+<dl>
+<dd><code>$name</code> &mdash; <code>chromosome_name</code>, <code>biotype</code>, &hellip;<br />
+<code>$options</code> &mdash; <code>[ncRNA,protein_coding,pseudogene,rRNA,snoRNA,snRNA,tRNA]</code>, &hellip;<br />
+<code>$operation</code> &mdash; <code>=</code>, <code>&gt;=</code>, <code>only,excluded</code>, &hellip;<br />
+<code>$description</code><br />
+<code>$fullDescription</code><br />
+&hellip;</dd>
+<dt><code>@attributes</code></dt>
+<dd><code>$name</code> &mdash; <code>ensembl_gene_id</code>, <code>entrezgene</code>, &hellip;<br />
+<code>$page</code> &mdash; <code>feature_page</code>, <code>structure</code>, <code>homologs</code>, <code>snp</code>, <code>sequences</code><br />
+<code>$description</code><br />
+<code>$fullDescription</code><br />
+&hellip;</dd>
+</dl></dd>
+</dl>
+
+<h2 id="関数">関数</h2>
+
+<dl>
+<dt><code>listMarts(mart, host='www.biomart.org', ..., archive=FALSE, ...)</code></dt>
+<dd>利用可能なマート列挙。 e.g. <code>ensembl</code>, <code>fungi_mart_21</code>, <code>unimart</code></dd>
+<dt><code>listDatasets(mart, verbose=FALSE)</code></dt>
+<dd>マートで利用可能なデータセット列挙。 e.g. <code>scerevisiae_gene_ensembl</code></dd>
+<dt><code>attributePages(mart)</code></dt>
+<dd>マートで利用可能なデータのカテゴリ分け(ページ)を列挙。
+<code>unique(mart@attributes$page)</code> と同じ。
+データを取得するときはこれらの間を跨がないようにアトリビュートを選ぶ。</dd>
+<dt><code>listAttributes(mart, page, what=c('name', 'desciption'))</code></dt>
+<dd>マートで利用可能なアトリビュート列挙。
+<code>mart@attributes</code> へのアクセサ。</dd>
+<dt><code>listFilters(mart, what=c('name', 'description'))</code></dt>
+<dd>マートで利用可能なフィルター列挙。
+<code>mart@filters</code> へのアクセサ。</dd>
+<dt><code>useMart(martname, dataset, host='www.biomart.org', ..., archive=FALSE, ...)</code></dt>
+<dd>利用するマート(とデータセット)を指定して <code>Mart</code> オブジェクトを作る。
+データセットを決めずにも作れる。 e.g. <code>mart = useMart('ensembl', 'scerevisiae_gene_ensembl')</code></dd>
+<dt><code>useDataset(dataset, mart, verbose=FALSE)</code></dt>
+<dd>データセットを決めた <code>Mart</code> オブジェクトを作る。
+でもこれって <code>useMart()</code> にもできるので不要&hellip;？ e.g. <code>mart = useDataset('scerevisiae_gene_ensembl', mart)</code></dd>
+<dt><code>getBM(attributes, filters='', values='', mart, curl=NULL, checkFilters=TRUE, verbose=FALSE, uniqueRows=TRUE, bmHeader=FALSE)</code></dt>
+<dd><p>このパッケージのメイン関数。
+フィルターは名前付きリストで渡す。
+<code>filter</code> に渡すと <code>AND</code> 結合:</p>
+
+<pre><code>getBM(c('ensembl_gene_id', 'sgd_gene'),
+      filters=list(chromosome_name='IV', biotype='tRNA'),
+      mart=ensembl)
+# 第四染色体上のtRNA遺伝子
+</code></pre>
+
+<p><code>values</code> に渡すと <code>OR</code> 結合:</p>
+
+<pre><code>getBM(c('ensembl_gene_id', 'sgd_gene'),
+      values=list(chromosome_name='IV', biotype='tRNA'),
+      mart=ensembl)
+# 第四染色体上の遺伝子とtRNA遺伝子
+</code></pre>
+
+<p>このへんとか <code>useDataset()</code> らへんとか、
+インターフェイスがあまり洗練されてない印象だなぁ&hellip;。</p></dd>
+<dt><code>getSequence(chromosome, start, end, id, type, seqType, upstream, downstream, mart)</code></dt>
+<dd><p>Sequencesページのデータをダウンロードすることに特化した <code>getBM()</code> ラッパー。 結果は2列(配列とID)の <code>data.frame</code>。<br />
+<strong>seqType</strong>: <code>gene_exon</code>, <code>transcript_exon</code>, <code>transcript_exon_intron</code>, <code>gene_exon_intron</code>, <code>cdna</code>, <code>coding</code>, <code>coding_transcript_flank</code>, <code>coding_gene_flank</code>, <code>transcript_flank</code>, <code>gene_flank</code>, <code>peptide</code>, <code>3utr</code>, <code>5utr</code></p></dd>
+<dt><code>getGene(id, type, mart)</code></dt>
+<dd><p>IDを指定して遺伝子情報をダウンロードすることに特化した <code>getBM()</code> ラッパー。
+得られる <code>data.frame</code> は9列:
+指定したID, <code>external_gene_id</code>, <code>description</code>, <code>chromosome_name</code>,
+<code>band</code>, <code>strand</code>, <code>start_position</code>, <code>end_position</code>, <code>ensembl_gene_id</code></p></dd>
+<dt><code>select(mart, keys, columns, keytype)</code></dt>
+<dd><p><code>getBM()</code> を生のSQLっぽくした感じ。
+keytype(フィルター)は1つしか使えない。
+<code>dplyr::select()</code> と名前が衝突する。</p></dd>
+<dt><code>columns(mart)</code></dt>
+<dd><p><code>mart@attributes$name</code> と同じ</p></dd>
+<dt><code>keytypes(mart)</code></dt>
+<dd><p><code>mart@filters$name</code> と同じ</p></dd>
+<dt><code>keys(mart, keytype)</code></dt>
+<dd><p><code>subset(mart@filters, name==keytype)$options</code>
+をちゃんと要素ごとに切った文字列ベクタで。</p></dd>
+</dl>
+
+<p><code>exportFASTA(sequences, file)</code></p>
+
+<h2 id="使用例">使用例</h2>
+
+<h3 id="ensembl">Ensembl</h3>
+
+<p>マートとデータセットの決定</p>
+
+<pre><code class="language-r">library(biomaRt)
+ensembl = useMart('ensembl', 'scerevisiae_gene_ensembl')
+
+## あるいは
+listMarts()
+ensembl = useMart('ensembl')
+listDatasets(ensembl)
+ensembl = useDataset('scerevisiae_gene_ensembl', ensembl)
+</code></pre>
+
+<p>どんなデータやフィルタが利用可能か調べる</p>
+
+<pre><code class="language-r">attributePages(ensembl)
+listAttributes(ensembl, 'feature_page')
+subset(ensembl@filters, select=c(name, description, type, operation))
+</code></pre>
+
+<p>フィルタの選択肢を調べる</p>
+
+<pre><code class="language-r">&gt; subset(ensembl@filters, name=='biotype')$options
+[1] &quot;[ncRNA,protein_coding,pseudogene,rRNA,snoRNA,snRNA,tRNA]&quot;
+&gt; keys(ensembl, 'biotype')
+[1] &quot;ncRNA&quot; &quot;protein_coding&quot; &quot;pseudogene&quot; &quot;rRNA&quot; &quot;snoRNA&quot; &quot;snRNA&quot; &quot;tRNA&quot;
+&gt; keys(ensembl, 'go_evidence_code')
+[1] &quot;IBA&quot; &quot;IC&quot;  &quot;IDA&quot; &quot;IEA&quot; &quot;IEP&quot; &quot;IGI&quot; &quot;IMP&quot; &quot;IPI&quot; &quot;ISA&quot; &quot;ISM&quot; &quot;ISS&quot; &quot;NAS&quot; &quot;ND&quot;  &quot;TAS&quot;
+</code></pre>
+
+<p>近いミラーを使う</p>
+
+<pre><code class="language-r">&gt; listMarts(host='asia.ensembl.org')
+               biomart               version
+1 ENSEMBL_MART_ENSEMBL      Ensembl Genes 75
+2     ENSEMBL_MART_SNP  Ensembl Variation 75
+3 ENSEMBL_MART_FUNCGEN Ensembl Regulation 75
+4    ENSEMBL_MART_VEGA               Vega 55
+5                pride        PRIDE (EBI UK)
+&gt; ensembl = useMart('ENSEMBL_MART_SNP', 'scerevisiae_snp', host='asia.ensembl.org')
+</code></pre>
+
+<h3 id="uniprot-http-www-uniprot-org"><a href="http://www.uniprot.org/">UniProt</a></h3>
+
+<p>フィルタ列挙</p>
+
+<pre><code class="language-r">&gt; unimart = useMart('unimart', 'uniprot')
+&gt; subset(unimart@filters, select=c(name, description, type, operation))
+               name       description    type operation
+1  superregnum_name  Superregnum name    list         =
+2     proteome_name Complete proteome    list         =
+3         accession         Accession    text         =
+4      protein_name           Protein    text         =
+5    length_greater          Length &gt;    text         &gt;
+6    length_smaller          Length &lt;    text         &lt;
+7  protein_evidence Protein existence    list         =
+8           embl_id          EMBL IDs id_list      =,in
+9   arrayexpress_id  ArrayExpress IDs id_list      =,in
+10       ensembl_id       Ensembl IDs id_list      =,in
+11        pdbsum_id        PDBSum IDs id_list      =,in
+12        intact_id        IntAct IDs id_list      =,in
+13      interpro_id      InterPro IDs id_list      =,in
+14            go_id Gene Ontology IDs id_list      =,in
+15        gene_name         Gene name    text         =
+16       entry_type        Entry type    list         =
+17        organelle         organelle    list         =
+18        plasmid_f           Plasmid    text         =
+</code></pre>
+
+<p>フィルタの選択肢</p>
+
+<pre><code class="language-r">&gt; subset(unimart@filters, 3 &lt; nchar(options) &amp; nchar(options) &lt; 120, select=c(name, options))
+               name                                                                                                            options
+1  superregnum_name                                                                               [Eukaryota,Bacteria,Archaea,Viruses]
+7  protein_evidence [1: Evidence at protein level,2: Evidence at transcript level,3: Inferred from homology,4: Predicted,5: Uncertain]
+16       entry_type                                                                                                [Swiss-Prot,TrEMBL]
+</code></pre>
+
+<p>&ldquo;Complete proteome&rdquo; の選択肢(すげえ長い)を抜き出す</p>
+
+<pre><code class="language-r">proteome_name = biomaRt::keys(unimart, 'proteome_name')
+grep('Sac.* cer.*', proteome_name, value=TRUE)
+</code></pre>
+
+<p>アトリビュート列挙
+(ただし <code>embl_id</code> 以降の項目はほとんど使えない)</p>
+
+<pre><code class="language-r">&gt; listAttributes(unimart)
+                      name       description
+1                accession         Accession
+2                     name        Entry name
+3             protein_name      Protein name
+4                gene_name         Gene name
+5                 organism          Organism
+6         protein_evidence Protein existence
+7               entry_type            Status
+8                    go_id             GO ID
+9                  go_name           GO name
+10  db2go_p__dm_primary_id          GO ID(p)
+11 db2go_p__dm_description           GO name
+12 db2go_f__dm_description       GO name (F)
+13  db2go_f__dm_primary_id         GO ID (F)
+14  db2go_c__dm_primary_id         GO ID (C)
+15 db2go_c__dm_description       GO name (C)
+16                 embl_id          EMBL IDs
+17              ensembl_id       Ensembl IDs
+18             interpro_id      InterPro IDs
+19               pdbsum_id        PDBSum IDs
+20                  pdb_id           PDB IDs
+21            arrayexpress  ArrayExpress IDs
+22                pride_id         PRIDE IDs
+23             interact_id        IntAct IDs
+24                comments          Comments
+25               ec_number         Ec number
+26                 keyword           Keyword
+27            plasmid_name      Plasmid name
+28          organelle_name    organelle name
+</code></pre>
+
+<hr />
+
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4621062506/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41aQBFtkgBL._SX160_.jpg" alt="RとBioconductorを用いたバイオインフォマティクス" /></a>
+<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320057082/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51yBjAPptKL._SX160_.jpg" alt="Rによるバイオインフォマティクスデータ解析 第2版 －Bioconductorを用いたゲノムスケールのデータマイニング－" /></a>
+<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320123700/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41aoEmhUR0L._SX160_.jpg" alt="トランスクリプトーム解析 (シリーズ Useful R 7)" /></a></p>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats" checked>
+<label for="R stats" class="active">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li class="active"><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "biomaRt"
++++
+
+&lt;http://www.bioconductor.org/packages/release/bioc/html/biomaRt.html&gt;
+
+&lt;http://qiita.com/yuifu/items/a757629506c1cd98156b&gt;
+
+BioMartからプログラマチックにデータを取得するための [Bioconductor]({#{#HUGOSHORTCODE-1#}#}) 拡張。
+ウェブアプリ [MartView](http://www.biomart.org/biomart/martview) のGUIでひととおり慣れておくと良い。
+
+## クラス
+
+`Mart`
+:   `@biomart` --- `ensembl`
+
+    `@host` --- `http://www.biomart.org:80/biomart/martservice`
+
+    `@dataset` --- `scerevisiae_gene_ensembl`
+
+    `@filters`
+    :   `$name` --- `chromosome_name`, `biotype`, ...\
+        `$options` --- `[ncRNA,protein_coding,pseudogene,rRNA,snoRNA,snRNA,tRNA]`, ...\
+        `$operation` --- `=`, `&gt;=`, `only,excluded`, ...\
+        `$description`\
+        `$fullDescription`\
+        ...
+
+    `@attributes`
+    :   `$name` --- `ensembl_gene_id`, `entrezgene`, ...\
+        `$page` --- `feature_page`, `structure`, `homologs`, `snp`, `sequences`\
+        `$description`\
+        `$fullDescription`\
+        ...
+
+## 関数
+
+`listMarts(mart, host=&#39;www.biomart.org&#39;, ..., archive=FALSE, ...)`
+:   利用可能なマート列挙。 e.g. `ensembl`, `fungi_mart_21`, `unimart`
+
+`listDatasets(mart, verbose=FALSE)`
+:   マートで利用可能なデータセット列挙。 e.g. `scerevisiae_gene_ensembl`
+
+`attributePages(mart)`
+:   マートで利用可能なデータのカテゴリ分け(ページ)を列挙。
+    `unique(mart@attributes$page)` と同じ。
+    データを取得するときはこれらの間を跨がないようにアトリビュートを選ぶ。
+
+`listAttributes(mart, page, what=c(&#39;name&#39;, &#39;desciption&#39;))`
+:   マートで利用可能なアトリビュート列挙。
+    `mart@attributes` へのアクセサ。
+
+`listFilters(mart, what=c(&#39;name&#39;, &#39;description&#39;))`
+:   マートで利用可能なフィルター列挙。
+    `mart@filters` へのアクセサ。
+
+`useMart(martname, dataset, host=&#39;www.biomart.org&#39;, ..., archive=FALSE, ...)`
+:   利用するマート(とデータセット)を指定して `Mart` オブジェクトを作る。
+    データセットを決めずにも作れる。 e.g. `mart = useMart(&#39;ensembl&#39;, &#39;scerevisiae_gene_ensembl&#39;)`
+
+`useDataset(dataset, mart, verbose=FALSE)`
+:   データセットを決めた `Mart` オブジェクトを作る。
+    でもこれって `useMart()` にもできるので不要...？ e.g. `mart = useDataset(&#39;scerevisiae_gene_ensembl&#39;, mart)`
+
+`getBM(attributes, filters=&#39;&#39;, values=&#39;&#39;, mart, curl=NULL, checkFilters=TRUE, verbose=FALSE, uniqueRows=TRUE, bmHeader=FALSE)`
+:   このパッケージのメイン関数。
+    フィルターは名前付きリストで渡す。
+    `filter` に渡すと `AND` 結合:
+
+        getBM(c(&#39;ensembl_gene_id&#39;, &#39;sgd_gene&#39;),
+              filters=list(chromosome_name=&#39;IV&#39;, biotype=&#39;tRNA&#39;),
+              mart=ensembl)
+        # 第四染色体上のtRNA遺伝子
+
+    `values` に渡すと `OR` 結合:
+
+        getBM(c(&#39;ensembl_gene_id&#39;, &#39;sgd_gene&#39;),
+              values=list(chromosome_name=&#39;IV&#39;, biotype=&#39;tRNA&#39;),
+              mart=ensembl)
+        # 第四染色体上の遺伝子とtRNA遺伝子
+
+    このへんとか `useDataset()` らへんとか、
+    インターフェイスがあまり洗練されてない印象だなぁ...。
+
+`getSequence(chromosome, start, end, id, type, seqType, upstream, downstream, mart)`
+:   Sequencesページのデータをダウンロードすることに特化した `getBM()` ラッパー。 結果は2列(配列とID)の `data.frame`。\
+    **seqType**: `gene_exon`, `transcript_exon`, `transcript_exon_intron`, `gene_exon_intron`, `cdna`, `coding`, `coding_transcript_flank`, `coding_gene_flank`, `transcript_flank`, `gene_flank`, `peptide`, `3utr`, `5utr`
+
+`getGene(id, type, mart)`
+:   IDを指定して遺伝子情報をダウンロードすることに特化した `getBM()` ラッパー。
+    得られる `data.frame` は9列:
+    指定したID, `external_gene_id`, `description`, `chromosome_name`,
+    `band`, `strand`, `start_position`, `end_position`, `ensembl_gene_id`
+
+`select(mart, keys, columns, keytype)`
+:   `getBM()` を生のSQLっぽくした感じ。
+    keytype(フィルター)は1つしか使えない。
+    `dplyr::select()` と名前が衝突する。
+
+`columns(mart)`
+:   `mart@attributes$name` と同じ
+
+`keytypes(mart)`
+:   `mart@filters$name` と同じ
+
+`keys(mart, keytype)`
+:   `subset(mart@filters, name==keytype)$options`
+    をちゃんと要素ごとに切った文字列ベクタで。
+
+`exportFASTA(sequences, file)`
+
+## 使用例
+
+### Ensembl
+
+マートとデータセットの決定
+
+```r
+library(biomaRt)
+ensembl = useMart(&#39;ensembl&#39;, &#39;scerevisiae_gene_ensembl&#39;)
+
+## あるいは
+listMarts()
+ensembl = useMart(&#39;ensembl&#39;)
+listDatasets(ensembl)
+ensembl = useDataset(&#39;scerevisiae_gene_ensembl&#39;, ensembl)
+```
+
+どんなデータやフィルタが利用可能か調べる
+
+```r
+attributePages(ensembl)
+listAttributes(ensembl, &#39;feature_page&#39;)
+subset(ensembl@filters, select=c(name, description, type, operation))
+```
+
+フィルタの選択肢を調べる
+
+```r
+&gt; subset(ensembl@filters, name==&#39;biotype&#39;)$options
+[1] &#34;[ncRNA,protein_coding,pseudogene,rRNA,snoRNA,snRNA,tRNA]&#34;
+&gt; keys(ensembl, &#39;biotype&#39;)
+[1] &#34;ncRNA&#34; &#34;protein_coding&#34; &#34;pseudogene&#34; &#34;rRNA&#34; &#34;snoRNA&#34; &#34;snRNA&#34; &#34;tRNA&#34;
+&gt; keys(ensembl, &#39;go_evidence_code&#39;)
+[1] &#34;IBA&#34; &#34;IC&#34;  &#34;IDA&#34; &#34;IEA&#34; &#34;IEP&#34; &#34;IGI&#34; &#34;IMP&#34; &#34;IPI&#34; &#34;ISA&#34; &#34;ISM&#34; &#34;ISS&#34; &#34;NAS&#34; &#34;ND&#34;  &#34;TAS&#34;
+```
+
+近いミラーを使う
+
+```r
+&gt; listMarts(host=&#39;asia.ensembl.org&#39;)
+               biomart               version
+1 ENSEMBL_MART_ENSEMBL      Ensembl Genes 75
+2     ENSEMBL_MART_SNP  Ensembl Variation 75
+3 ENSEMBL_MART_FUNCGEN Ensembl Regulation 75
+4    ENSEMBL_MART_VEGA               Vega 55
+5                pride        PRIDE (EBI UK)
+&gt; ensembl = useMart(&#39;ENSEMBL_MART_SNP&#39;, &#39;scerevisiae_snp&#39;, host=&#39;asia.ensembl.org&#39;)
+```
+
+### [UniProt](http://www.uniprot.org/)
+
+フィルタ列挙
+
+```r
+&gt; unimart = useMart(&#39;unimart&#39;, &#39;uniprot&#39;)
+&gt; subset(unimart@filters, select=c(name, description, type, operation))
+               name       description    type operation
+1  superregnum_name  Superregnum name    list         =
+2     proteome_name Complete proteome    list         =
+3         accession         Accession    text         =
+4      protein_name           Protein    text         =
+5    length_greater          Length &gt;    text         &gt;
+6    length_smaller          Length &lt;    text         &lt;
+7  protein_evidence Protein existence    list         =
+8           embl_id          EMBL IDs id_list      =,in
+9   arrayexpress_id  ArrayExpress IDs id_list      =,in
+10       ensembl_id       Ensembl IDs id_list      =,in
+11        pdbsum_id        PDBSum IDs id_list      =,in
+12        intact_id        IntAct IDs id_list      =,in
+13      interpro_id      InterPro IDs id_list      =,in
+14            go_id Gene Ontology IDs id_list      =,in
+15        gene_name         Gene name    text         =
+16       entry_type        Entry type    list         =
+17        organelle         organelle    list         =
+18        plasmid_f           Plasmid    text         =
+```
+
+フィルタの選択肢
+
+```r
+&gt; subset(unimart@filters, 3 &lt; nchar(options) &amp; nchar(options) &lt; 120, select=c(name, options))
+               name                                                                                                            options
+1  superregnum_name                                                                               [Eukaryota,Bacteria,Archaea,Viruses]
+7  protein_evidence [1: Evidence at protein level,2: Evidence at transcript level,3: Inferred from homology,4: Predicted,5: Uncertain]
+16       entry_type                                                                                                [Swiss-Prot,TrEMBL]
+```
+
+&#34;Complete proteome&#34; の選択肢(すげえ長い)を抜き出す
+
+```r
+proteome_name = biomaRt::keys(unimart, &#39;proteome_name&#39;)
+grep(&#39;Sac.* cer.*&#39;, proteome_name, value=TRUE)
+```
+
+アトリビュート列挙
+(ただし `embl_id` 以降の項目はほとんど使えない)
+
+```r
+&gt; listAttributes(unimart)
+                      name       description
+1                accession         Accession
+2                     name        Entry name
+3             protein_name      Protein name
+4                gene_name         Gene name
+5                 organism          Organism
+6         protein_evidence Protein existence
+7               entry_type            Status
+8                    go_id             GO ID
+9                  go_name           GO name
+10  db2go_p__dm_primary_id          GO ID(p)
+11 db2go_p__dm_description           GO name
+12 db2go_f__dm_description       GO name (F)
+13  db2go_f__dm_primary_id         GO ID (F)
+14  db2go_c__dm_primary_id         GO ID (C)
+15 db2go_c__dm_description       GO name (C)
+16                 embl_id          EMBL IDs
+17              ensembl_id       Ensembl IDs
+18             interpro_id      InterPro IDs
+19               pdbsum_id        PDBSum IDs
+20                  pdb_id           PDB IDs
+21            arrayexpress  ArrayExpress IDs
+22                pride_id         PRIDE IDs
+23             interact_id        IntAct IDs
+24                comments          Comments
+25               ec_number         Ec number
+26                 keyword           Keyword
+27            plasmid_name      Plasmid name
+28          organelle_name    organelle name
+```
+
+------------------------------------------------------------------------
+
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4621062506/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/41aQBFtkgBL._SX160_.jpg&#34; alt=&#34;RとBioconductorを用いたバイオインフォマティクス&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4320057082/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/51yBjAPptKL._SX160_.jpg&#34; alt=&#34;Rによるバイオインフォマティクスデータ解析 第2版 －Bioconductorを用いたゲノムスケールのデータマイニング－&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4320123700/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/41aoEmhUR0L._SX160_.jpg&#34; alt=&#34;トランスクリプトーム解析 (シリーズ Useful R 7)&#34; /&gt;&lt;/a&gt;
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

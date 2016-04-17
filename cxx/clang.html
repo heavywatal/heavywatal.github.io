@@ -9,7 +9,24 @@
 <link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
 <link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
-<title>Watal M. Iwasaki</title>
+<title>clang / llvm - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -29,11 +46,134 @@ Watal M. Iwasaki
 
 <main>
 <article>
-<header><h1>Index</h1></header>
+<header><h1><a href="">
+clang / llvm
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
 
-<h2><a href="/tags">tags</a></h2>
-<dl id="terms">
-</dl>
+
+
+<p>C language family frontend for LLVM</p>
+
+<p><a href="http://clang.llvm.org/">http://clang.llvm.org/</a></p>
+
+<h2 id="installation">Installation</h2>
+
+<p><a href="http://clang.llvm.org/get_started.html">http://clang.llvm.org/get_started.html</a></p>
+
+<h3 id="mac">Mac</h3>
+
+<p>Xcode の Command Line Tools にほぼ最新版が含まれている:</p>
+
+<pre><code>% clang -v
+Apple LLVM version 5.1 (clang-503.0.40) (based on LLVM 3.4svn)
+Target: x86_64-apple-darwin13.1.0
+Thread model: posix
+</code></pre>
+
+<h3 id="ubuntu-12-04-binary">Ubuntu 12.04 (Binary)</h3>
+
+<ol>
+<li><p>ダウンロードして展開:</p>
+
+<pre><code>% wget -O- http://llvm.org/releases/3.3/clang+llvm-3.3-amd64-Ubuntu-12.04.2.tar.gz | tar xz
+</code></pre></li>
+
+<li><p>適当なところに置いてパスを通す:</p>
+
+<pre><code>% sudo mv clang+llvm-3.3-amd64-Ubuntu-12.04.2 /usr/local/llvm-3.3
+% sudo ln -s llvm-3.3 /usr/local/llvm
+% export PATH=/usr/local/llvm/bin:$PATH
+</code></pre></li>
+
+<li><p><a href="#libc">libc++をインストールする</a></p></li>
+</ol>
+
+<h3 id="ubuntu-12-04-source">Ubuntu 12.04 (Source)</h3>
+
+<ol>
+<li><p>必要な道具を揃える (<a href="http://llvm.org/docs/GettingStarted.html#requirements">Requirements</a>):</p>
+
+<pre><code>% sudo apt-get install build-essential subversion texinfo
+</code></pre>
+
+<p><code>llvm/test/</code> のテストを実行したい場合は:</p>
+
+<pre><code>% sudo apt-get install dejagnu tcl expect
+</code></pre></li>
+
+<li><p>LLVM をダウンロード:</p>
+
+<pre><code>% svn checkout http://llvm.org/svn/llvm-project/llvm/tags/RELEASE_33/final/ llvm
+</code></pre></li>
+
+<li><p>その中の <code>tools/</code> に Clang を、
+<code>projects/</code> に Compiler-RT をダウンロード:</p>
+
+<pre><code>% cd llvm/tools/
+% svn checkout http://llvm.org/svn/llvm-project/cfe/tags/RELEASE_33/final/ clang
+% cd ../projects/
+% svn checkout http://llvm.org/svn/llvm-project/compiler-rt/tags/RELEASE_33/final/ compiler-rt
+</code></pre></li>
+
+<li><p>外に <code>build</code> ディレクトリを作って、そこに入る:</p>
+
+<pre><code>% cd ../..
+% mkdir build
+% cd build
+</code></pre></li>
+
+<li><p>オプションを確認してビルド:</p>
+
+<pre><code>% ../llvm/configure --help
+% ../llvm/configure --enable-optimized --disable-assertions --enable-targets=x86_64 --enable-shared --enable-libffi
+% make
+% sudo make install
+</code></pre>
+
+<div class="note">
+<p>裸で configure するとデバッグモードでビルドされる</p>
+
+</div>
+</li>
+
+<li><p><a href="#libc">libc++をインストールする</a></p></li>
+</ol>
+
+<h3 id="libc"><code>libc++</code></h3>
+
+<p><a href="http://libcxx.llvm.org/">http://libcxx.llvm.org/</a></p>
+
+<ol>
+<li><p><code>libsupc++</code> の位置を確認:</p>
+
+<pre><code>% echo | g++-4.8 -Wp,-v -x c++ - -fsyntax-only
+</code></pre></li>
+
+<li><p><code>libcxx</code> をダウンロード:</p>
+
+<pre><code>% svn checkout http://llvm.org/svn/llvm-project/libcxx/tags/RELEASE_33/final/ libcxx
+</code></pre></li>
+
+<li><p>一時ディレクトリに移ってビルド:</p>
+
+<pre><code>% mkdir build-libcxx
+% cd build-libcxx
+% CC=clang CXX=clang++ cmake -G &quot;Unix Makefiles&quot; -DLIBCXX_CXX_ABI=libsupc++ -DLIBCXX_LIBSUPCXX_INCLUDE_PATHS=&quot;/usr/local/include/c++/4.8.1/;/usr/local/include/c++/4.8.1/x86_64-linux-gnu/&quot; -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local ../libcxx
+% make
+% sudo make install
+</code></pre></li>
+
+<li><p><code>Makefile</code> で以下のようなオプションと共に使う:</p>
+
+<pre><code>CPPFLAGS := -isystem /usr/local/include/c++/v1
+CXXFLAGS := -std=c++11 -stdlib=libc++
+LD_FLAGS := -L/usr/local/lib
+LDLIBS := -lsupc++
+</code></pre></li>
+</ol>
 
 </article>
 </main>
@@ -46,7 +186,7 @@ Watal M. Iwasaki
 <div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
 
 
-<input type="checkbox" id="R stats" checked>
+<input type="checkbox" id="R stats">
 <label for="R stats">R stats</label>
 <ul>
 <li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
@@ -70,7 +210,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
 </ul>
 
-<input type="checkbox" id="Python" checked>
+<input type="checkbox" id="Python">
 <label for="Python">Python</label>
 <ul>
 <li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
@@ -86,17 +226,17 @@ Watal M. Iwasaki
 </ul>
 
 <input type="checkbox" id="C&#43;&#43;" checked>
-<label for="C&#43;&#43;">C&#43;&#43;</label>
+<label for="C&#43;&#43;" class="active">C&#43;&#43;</label>
 <ul>
 <li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
 <li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
-<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li class="active"><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
 <li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
 <li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
 <li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
 </ul>
 
-<input type="checkbox" id="Biology" checked>
+<input type="checkbox" id="Biology">
 <label for="Biology">Biology</label>
 <ul>
 <li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
@@ -118,7 +258,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
 </ul>
 
-<input type="checkbox" id="Developer Tools" checked>
+<input type="checkbox" id="Developer Tools">
 <label for="Developer Tools">Developer Tools</label>
 <ul>
 <li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
@@ -142,7 +282,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
 </ul>
 
-<input type="checkbox" id="Linux" checked>
+<input type="checkbox" id="Linux">
 <label for="Linux">Linux</label>
 <ul>
 <li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
@@ -151,7 +291,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
 </ul>
 
-<input type="checkbox" id="Mac" checked>
+<input type="checkbox" id="Mac">
 <label for="Mac">Mac</label>
 <ul>
 <li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
@@ -165,7 +305,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
 </ul>
 
-<input type="checkbox" id="Lectures" checked>
+<input type="checkbox" id="Lectures">
 <label for="Lectures">Lectures</label>
 <ul>
 <li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
@@ -175,7 +315,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
 </ul>
 
-<input type="checkbox" id="Miscellaneous" checked>
+<input type="checkbox" id="Miscellaneous">
 <label for="Miscellaneous">Miscellaneous</label>
 <ul>
 <li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
@@ -186,7 +326,113 @@ Watal M. Iwasaki
 </nav>
 
 
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "clang / llvm"
++++
 
+C language family frontend for LLVM
+
+&lt;http://clang.llvm.org/&gt;
+
+## Installation
+
+&lt;http://clang.llvm.org/get_started.html&gt;
+
+### Mac
+
+Xcode の Command Line Tools にほぼ最新版が含まれている:
+
+    % clang -v
+    Apple LLVM version 5.1 (clang-503.0.40) (based on LLVM 3.4svn)
+    Target: x86_64-apple-darwin13.1.0
+    Thread model: posix
+
+### Ubuntu 12.04 (Binary)
+
+1.  ダウンロードして展開:
+
+        % wget -O- http://llvm.org/releases/3.3/clang&#43;llvm-3.3-amd64-Ubuntu-12.04.2.tar.gz | tar xz
+
+2.  適当なところに置いてパスを通す:
+
+        % sudo mv clang&#43;llvm-3.3-amd64-Ubuntu-12.04.2 /usr/local/llvm-3.3
+        % sudo ln -s llvm-3.3 /usr/local/llvm
+        % export PATH=/usr/local/llvm/bin:$PATH
+
+3.  [libc&#43;&#43;をインストールする]({#{#HUGOSHORTCODE-1#}#})
+
+### Ubuntu 12.04 (Source)
+
+1.  必要な道具を揃える ([Requirements](http://llvm.org/docs/GettingStarted.html#requirements)):
+
+        % sudo apt-get install build-essential subversion texinfo
+
+    `llvm/test/` のテストを実行したい場合は:
+
+        % sudo apt-get install dejagnu tcl expect
+
+2.  LLVM をダウンロード:
+
+        % svn checkout http://llvm.org/svn/llvm-project/llvm/tags/RELEASE_33/final/ llvm
+
+3.  その中の `tools/` に Clang を、
+    `projects/` に Compiler-RT をダウンロード:
+
+        % cd llvm/tools/
+        % svn checkout http://llvm.org/svn/llvm-project/cfe/tags/RELEASE_33/final/ clang
+        % cd ../projects/
+        % svn checkout http://llvm.org/svn/llvm-project/compiler-rt/tags/RELEASE_33/final/ compiler-rt
+
+4.  外に `build` ディレクトリを作って、そこに入る:
+
+        % cd ../..
+        % mkdir build
+        % cd build
+
+5.  オプションを確認してビルド:
+
+        % ../llvm/configure --help
+        % ../llvm/configure --enable-optimized --disable-assertions --enable-targets=x86_64 --enable-shared --enable-libffi
+        % make
+        % sudo make install
+
+    {#{#HUGOSHORTCODE-2#}#}
+
+6.  [libc&#43;&#43;をインストールする]({#{#HUGOSHORTCODE-3#}#})
+
+### `libc&#43;&#43;`
+
+&lt;http://libcxx.llvm.org/&gt;
+
+1.  `libsupc&#43;&#43;` の位置を確認:
+
+        % echo | g&#43;&#43;-4.8 -Wp,-v -x c&#43;&#43; - -fsyntax-only
+
+2.  `libcxx` をダウンロード:
+
+        % svn checkout http://llvm.org/svn/llvm-project/libcxx/tags/RELEASE_33/final/ libcxx
+
+3.  一時ディレクトリに移ってビルド:
+
+        % mkdir build-libcxx
+        % cd build-libcxx
+        % CC=clang CXX=clang&#43;&#43; cmake -G &#34;Unix Makefiles&#34; -DLIBCXX_CXX_ABI=libsupc&#43;&#43; -DLIBCXX_LIBSUPCXX_INCLUDE_PATHS=&#34;/usr/local/include/c&#43;&#43;/4.8.1/;/usr/local/include/c&#43;&#43;/4.8.1/x86_64-linux-gnu/&#34; -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local ../libcxx
+        % make
+        % sudo make install
+
+4.  `Makefile` で以下のようなオプションと共に使う:
+
+        CPPFLAGS := -isystem /usr/local/include/c&#43;&#43;/v1
+        CXXFLAGS := -std=c&#43;&#43;11 -stdlib=libc&#43;&#43;
+        LD_FLAGS := -L/usr/local/lib
+        LDLIBS := -lsupc&#43;&#43;
+
+</code></pre>
+</aside>
 
 <footer>(ɔ) 2008 Watal M. Iwasaki</footer>
 </div>

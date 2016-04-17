@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>SAMtools - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+SAMtools
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<p><a href="http://www.htslib.org/">http://www.htslib.org/</a></p>
+
+<h2 id="操作">操作</h2>
+
+<p><a href="http://www.htslib.org/doc/samtools.html">http://www.htslib.org/doc/samtools.html</a></p>
+
+<h3 id="下ごしらえ">下ごしらえ</h3>
+
+<ul>
+<li><p>適当な条件でフィルタリング:</p>
+
+<pre><code>% samtools view -hb -f3 -q2 aln.bam -o filtered.bam
+</code></pre></li>
+
+<li><p>ソート:</p>
+
+<pre><code>% samtools sort -T tmpsam -@2 -o sorted.bam aln.bam
+</code></pre>
+
+<p>一時ファイルの名前なんか適当にユニークに決めてくれたらいいのに、
+<code>-T {PREFIX}</code> を指定しないと使えない。</p>
+
+<p>デフォルトでは位置でソートされるが、
+オプション <code>-n</code> で名前順(=ペアが隣り合う)にもできる。</p></li>
+
+<li><p>標準入力stdinからパイプする場合は <code>-</code> を引数に:</p>
+
+<pre><code>% samtools view -hb -f3 aln.bam | samtools sort -T tmpsam -@2 -o piped.bam
+</code></pre></li>
+
+<li><p>BAMインデックス作成:</p>
+
+<pre><code>% samtools index aln.bam
+</code></pre>
+
+<p><code>aln.bam.bai</code> が書き出される</p></li>
+
+<li><p>参照配列インデックス作成:</p>
+
+<pre><code>% samtools faidx ref.fa
+</code></pre>
+
+<p><code>tview</code> や <code>pileup</code> などで必要になる
+<code>ref.fa.fai</code> が書き出される</p></li>
+
+<li><p>PCR duplicatesを除去:</p>
+
+<pre><code>% samtools rmdup aln.bam unique.bam
+</code></pre></li>
+</ul>
+
+<p>fixmate</p>
+
+<h3 id="閲覧">閲覧</h3>
+
+<ul>
+<li><p>生のSAMを <code>less</code> で閲覧:</p>
+
+<pre><code>% samtools view -h aln.bam | less
+</code></pre>
+
+<p><code>-o out.sam</code> とすればファイルに書き出せる。</p></li>
+
+<li><p>マッピングされた形で閲覧:</p>
+
+<pre><code>% samtools tview aln.bam [ref.fa]
+</code></pre>
+
+<p>参照配列を与えると表示方法に選択肢が増える。
+予めインデックスを作っておかなくても初回実行時に
+<code>faidx</code> が勝手に走って <code>ref.fa.fai</code> が作成される。</p>
+
+<p>ヘルプ</p>
+
+<dl>
+<dd><code>shift+/</code></dd>
+<dt>ジャンプ</dt>
+<dd><code>g</code> または <code>/</code>
+<code>chr1:10000</code> のように染色体を付けて</dd>
+</dl></li>
+
+<li><p>インデックス作成済みBAMの統計量を表示:</p>
+
+<pre><code>% samtools idxstats aln.bam
+chr1    249250621       6343976 0
+chr10   135534747       2407204 0
+chr11   135006516       3773511 0
+chr12   133851895       3696141 0
+...
+</code></pre>
+
+<p>seqnames, seqlengths, mapped reads, unmapped reads</p></li>
+
+<li><p>フラグの要約統計:</p>
+
+<pre><code>% samtools flagstat aln.bam
+65182282 + 0 in total (QC-passed reads + QC-failed reads)
+6895859 + 0 secondary
+0 + 0 supplementary
+0 + 0 duplicates
+65182282 + 0 mapped (100.00%:nan%)
+58286423 + 0 paired in sequencing
+29382202 + 0 read1
+28904221 + 0 read2
+52470794 + 0 properly paired (90.02%:nan%)
+55907370 + 0 with itself and mate mapped
+2379053 + 0 singletons (4.08%:nan%)
+456098 + 0 with mate mapped to a different chr
+169500 + 0 with mate mapped to a different chr (mapQ&gt;=5)
+</code></pre></li>
+
+<li><p>サイトごとのdepthをタブ区切りで:</p>
+
+<pre><code>% samtools depth aln.bam
+chr1 12345 1
+chr1 12346 1
+...
+</code></pre></li>
+</ul>
+
+<h3 id="snp-calling">SNP calling</h3>
+
+<p>VCF/BCFを書き出す:</p>
+
+<pre><code>% samtools mpileup -uv aln.bam
+chr1 12345
+</code></pre>
+
+<p><code>-f ref.fa</code></p>
+
+<p>calmd</p>
+
+<hr />
+
+<p>merge</p>
+
+<p>reheader</p>
+
+<p>cat</p>
+
+<p>targetcut</p>
+
+<p>phase</p>
+
+<h2 id="sam形式">SAM形式</h2>
+
+<p><a href="http://www.htslib.org/doc/sam.html">http://www.htslib.org/doc/sam.html</a></p>
+
+<p><a href="https://samtools.github.io/hts-specs/">https://samtools.github.io/hts-specs/</a></p>
+
+<ol>
+<li><code>QNAME</code>: リード名</li>
+
+<li><p><code>FLAG</code>: マッピングの状況をビット表現:</p>
+
+<pre><code>0x001     1  paired in sequencing
+0x002     2  mapped in proper pair
+0x004     4  unmapped
+0x008     8  mate unmapped
+0x010    16  reverse strand
+0x020    32  mate reverse strand
+0x040    64  first read in pair
+0x080   128  second read in pair
+0x100   256  not primary alignment
+0x200   512  not passing platform/vendor quality checks
+0x400  1024  PCR or optical duplicate
+0x800  2048  supplementary alignment
+</code></pre>
+
+<p>paired-end でだいたいちゃんと張り付いたものをとるには
+<code>-f 3</code> (= 1 + 2)</p>
+
+<p>マップされたリード数を数えたいときなどは
+<code>-F 256</code> で各リードが1度だけ登場するようにフィルタできるが、
+<code>0x100</code> が立っててもmultiple hitで同点優勝してる可能性があり、
+このときどれがprimaryになるかはマッパー依存。
+重複遺伝子などを考慮する場合はむやみに捨ててはいけない。</p>
+
+<p>数字とフラグを変換してくれる便利 web app:
+<a href="http://broadinstitute.github.io/picard/explain-flags.html">http://broadinstitute.github.io/picard/explain-flags.html</a></p>
+
+<p>strandも場合分けして詳細に数え上げた例:
+<a href="https://ppotato.wordpress.com/2010/08/25/samtool-bitwise-flag-paired-reads/">https://ppotato.wordpress.com/2010/08/25/samtool-bitwise-flag-paired-reads/</a></p></li>
+
+<li><p><code>RNAME</code>: 参照配列・染色体の名前</p></li>
+
+<li><p><code>POS</code>: 位置</p></li>
+
+<li><p><code>MAPQ</code>: マッピングクオリティ
+= round($-10\log_{10}\mathrm{Pr[mapping~is~wrong]}$)</p>
+
+<p>マッパーによって微妙に違うらしい。
+例えばTopHatでは:</p>
+
+<pre><code>50:        unique
+ 3:   2 locations
+ 2:   3 locations
+ 1: 4–9 locations
+ 0: &gt;10 locations
+</code></pre></li>
+
+<li><p><code>CIGAR</code>: マッピング状況とその長さ
+e.g., <code>101M</code>, <code>18M200I83M</code>, <code>65M36S</code>
+:</p>
+
+<pre><code>M: alignment match
+I: insertion
+D: deletion
+N: skipped = intron
+S: soft clipping = 部分マッチで無視された部分
+H: hard clipping = 部分マッチで無視された部分
+X: sequence mismatch
+</code></pre></li>
+
+<li><p><code>RNEXT</code>: paired-endの他方が張り付いた染色体。
+同じときは <code>=</code> で不明なときは <code>*</code></p></li>
+
+<li><p><code>PNEXT</code>: paired-endの他方が張り付いた位置</p></li>
+
+<li><p><code>TLEN</code>: inferred Template LENgth。
+左腕の左端から右腕の右端までの距離。
+左腕なら正、右腕なら負、single-endなら0。</p></li>
+
+<li><p><code>SEQ</code>: 塩基配列</p></li>
+
+<li><p><code>QUAL</code>: 塩基クオリティ</p></li>
+
+<li><p>それ以降はマッパー依存。
+形式は <code>TAG:VTYPE:VALUE</code></p></li>
+</ol>
+
+<h2 id="binding">Binding</h2>
+
+<h3 id="pysam">pysam</h3>
+
+<p><a href="https://pysam.readthedocs.org/">https://pysam.readthedocs.org/</a></p>
+
+<p><a href="http://bi.biopapyrus.net/python/modules/pysam.html">http://bi.biopapyrus.net/python/modules/pysam.html</a></p>
+
+<h3 id="rsamtools">Rsamtools</h3>
+
+<p><a href="http://bioconductor.org/packages/release/bioc/html/Rsamtools.html">http://bioconductor.org/packages/release/bioc/html/Rsamtools.html</a></p>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats">
+<label for="R stats">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology" checked>
+<label for="Biology" class="active">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li class="active"><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "SAMtools"
++++
+
+&lt;http://www.htslib.org/&gt;
+
+## 操作
+
+&lt;http://www.htslib.org/doc/samtools.html&gt;
+
+### 下ごしらえ
+
+-   適当な条件でフィルタリング:
+
+        % samtools view -hb -f3 -q2 aln.bam -o filtered.bam
+
+-   ソート:
+
+        % samtools sort -T tmpsam -@2 -o sorted.bam aln.bam
+
+    一時ファイルの名前なんか適当にユニークに決めてくれたらいいのに、
+    `-T {PREFIX}` を指定しないと使えない。
+
+    デフォルトでは位置でソートされるが、
+    オプション `-n` で名前順(=ペアが隣り合う)にもできる。
+
+-   標準入力stdinからパイプする場合は `-` を引数に:
+
+        % samtools view -hb -f3 aln.bam | samtools sort -T tmpsam -@2 -o piped.bam
+
+-   BAMインデックス作成:
+
+        % samtools index aln.bam
+
+    `aln.bam.bai` が書き出される
+
+-   参照配列インデックス作成:
+
+        % samtools faidx ref.fa
+
+    `tview` や `pileup` などで必要になる
+    `ref.fa.fai` が書き出される
+
+-   PCR duplicatesを除去:
+
+        % samtools rmdup aln.bam unique.bam
+
+fixmate
+
+### 閲覧
+
+-   生のSAMを `less` で閲覧:
+
+        % samtools view -h aln.bam | less
+
+    `-o out.sam` とすればファイルに書き出せる。
+
+-   マッピングされた形で閲覧:
+
+        % samtools tview aln.bam [ref.fa]
+
+    参照配列を与えると表示方法に選択肢が増える。
+    予めインデックスを作っておかなくても初回実行時に
+    `faidx` が勝手に走って `ref.fa.fai` が作成される。
+
+    ヘルプ
+    :   `shift&#43;/`
+
+    ジャンプ
+    :   `g` または `/`
+        `chr1:10000` のように染色体を付けて
+
+-   インデックス作成済みBAMの統計量を表示:
+
+        % samtools idxstats aln.bam
+        chr1    249250621       6343976 0
+        chr10   135534747       2407204 0
+        chr11   135006516       3773511 0
+        chr12   133851895       3696141 0
+        ...
+
+    seqnames, seqlengths, mapped reads, unmapped reads
+
+-   フラグの要約統計:
+
+        % samtools flagstat aln.bam
+        65182282 &#43; 0 in total (QC-passed reads &#43; QC-failed reads)
+        6895859 &#43; 0 secondary
+        0 &#43; 0 supplementary
+        0 &#43; 0 duplicates
+        65182282 &#43; 0 mapped (100.00%:nan%)
+        58286423 &#43; 0 paired in sequencing
+        29382202 &#43; 0 read1
+        28904221 &#43; 0 read2
+        52470794 &#43; 0 properly paired (90.02%:nan%)
+        55907370 &#43; 0 with itself and mate mapped
+        2379053 &#43; 0 singletons (4.08%:nan%)
+        456098 &#43; 0 with mate mapped to a different chr
+        169500 &#43; 0 with mate mapped to a different chr (mapQ&gt;=5)
+
+-   サイトごとのdepthをタブ区切りで:
+
+        % samtools depth aln.bam
+        chr1 12345 1
+        chr1 12346 1
+        ...
+
+### SNP calling
+
+VCF/BCFを書き出す:
+
+    % samtools mpileup -uv aln.bam
+    chr1 12345
+
+`-f ref.fa`
+
+calmd
+
+------------------------------------------------------------------------
+
+merge
+
+reheader
+
+cat
+
+targetcut
+
+phase
+
+## SAM形式
+
+&lt;http://www.htslib.org/doc/sam.html&gt;
+
+&lt;https://samtools.github.io/hts-specs/&gt;
+
+1.  `QNAME`: リード名
+2.  `FLAG`: マッピングの状況をビット表現:
+
+        0x001     1  paired in sequencing
+        0x002     2  mapped in proper pair
+        0x004     4  unmapped
+        0x008     8  mate unmapped
+        0x010    16  reverse strand
+        0x020    32  mate reverse strand
+        0x040    64  first read in pair
+        0x080   128  second read in pair
+        0x100   256  not primary alignment
+        0x200   512  not passing platform/vendor quality checks
+        0x400  1024  PCR or optical duplicate
+        0x800  2048  supplementary alignment
+
+    paired-end でだいたいちゃんと張り付いたものをとるには
+    `-f 3` (= 1 &#43; 2)
+
+    マップされたリード数を数えたいときなどは
+    `-F 256` で各リードが1度だけ登場するようにフィルタできるが、
+    `0x100` が立っててもmultiple hitで同点優勝してる可能性があり、
+    このときどれがprimaryになるかはマッパー依存。
+    重複遺伝子などを考慮する場合はむやみに捨ててはいけない。
+
+    数字とフラグを変換してくれる便利 web app:
+    &lt;http://broadinstitute.github.io/picard/explain-flags.html&gt;
+
+    strandも場合分けして詳細に数え上げた例:
+    &lt;https://ppotato.wordpress.com/2010/08/25/samtool-bitwise-flag-paired-reads/&gt;
+
+3.  `RNAME`: 参照配列・染色体の名前
+4.  `POS`: 位置
+5.  `MAPQ`: マッピングクオリティ
+    = round($-10\log_{10}\mathrm{Pr[mapping~is~wrong]}$)
+
+    マッパーによって微妙に違うらしい。
+    例えばTopHatでは:
+
+        50:        unique
+         3:   2 locations
+         2:   3 locations
+         1: 4–9 locations
+         0: &gt;10 locations
+
+6.  `CIGAR`: マッピング状況とその長さ
+    e.g., `101M`, `18M200I83M`, `65M36S`
+    :
+
+        M: alignment match
+        I: insertion
+        D: deletion
+        N: skipped = intron
+        S: soft clipping = 部分マッチで無視された部分
+        H: hard clipping = 部分マッチで無視された部分
+        X: sequence mismatch
+
+7.  `RNEXT`: paired-endの他方が張り付いた染色体。
+    同じときは `=` で不明なときは `*`
+8.  `PNEXT`: paired-endの他方が張り付いた位置
+9.  `TLEN`: inferred Template LENgth。
+    左腕の左端から右腕の右端までの距離。
+    左腕なら正、右腕なら負、single-endなら0。
+10. `SEQ`: 塩基配列
+11. `QUAL`: 塩基クオリティ
+12. それ以降はマッパー依存。
+    形式は `TAG:VTYPE:VALUE`
+
+## Binding
+
+### pysam
+
+&lt;https://pysam.readthedocs.org/&gt;
+
+&lt;http://bi.biopapyrus.net/python/modules/pysam.html&gt;
+
+### Rsamtools
+
+&lt;http://bioconductor.org/packages/release/bioc/html/Rsamtools.html&gt;
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

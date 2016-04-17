@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>pip: パッケージ管理 - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+pip — パッケージ管理
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<p>Python 2 (3.2以下) ではパッケージ管理のために
+外部ツールを別途インストールする必要がある(結構多くて複雑&hellip;)。
+Python 3.4 以降では <code>venv</code> と <code>ensurepip</code>
+が標準ライブラリに入るため楽チン。</p>
+
+<h2 id="installation-python-2">Installation (Python 2)</h2>
+
+<ol>
+<li><p>ベースのPythonインタープリタをひとつ決め
+(例えばOSに標準装備されてる <code>/usr/bin/python</code>)、
+それを使って <code>setuptools</code> をインストール:</p>
+
+<pre><code>% curl -O https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py
+% /usr/bin/python ez_setup.py --user
+</code></pre></li>
+
+<li><p>続いて <code>pip</code> をインストール:</p>
+
+<pre><code>% curl -O https://bootstrap.pypa.io/get-pip.py
+% /usr/bin/python get-pip.py --user
+</code></pre></li>
+
+<li><p>Macなら <code>~/Library/Python/2.7/</code> 以下に、
+Linuxなら <code>~/.local/</code> 以下に上記のライブラリがインストールされるので、
+その中にある <code>bin</code> を <code>PATH</code> に追加する。</p></li>
+
+<li><p><code>pip</code> を使って <code>virtualenv</code> をインストール:</p>
+
+<pre><code>% pip install --user virtualenv
+</code></pre></li>
+</ol>
+
+<h2 id="usage">Usage</h2>
+
+<h3 id="venv-virtualenv"><code>venv</code> / <code>virtualenv</code></h3>
+
+<dl>
+<dt>Doc</dt>
+<dd><a href="http://www.virtualenv.org/">http://www.virtualenv.org/</a></dd>
+<dt>PyPI</dt>
+<dd><a href="http://pypi.python.org/pypi/virtualenv">http://pypi.python.org/pypi/virtualenv</a></dd>
+<dt>Python3</dt>
+<dd><a href="http://docs.python.org/3/library/venv">http://docs.python.org/3/library/venv</a></dd>
+</dl>
+
+<p>Python実行環境を仮想化するパッケージ。
+これで作った仮想環境内で <code>pip</code> を使ってパッケージ管理する。
+Python 3.3 以降では <code>venv</code> が標準ライブラリ入りしたので
+<code>virtualenv</code> は不要になった。</p>
+
+<ul>
+<li><p>仮想環境を作る:</p>
+
+<pre><code>% python3.4 -m venv [OPTIONS] /path/to/projectx
+% pyvenv3.4         [OPTIONS] /path/to/projectx
+% virtualenv        [OPTIONS] /path/to/projectx
+</code></pre></li>
+
+<li><p>仮想環境に入る、から出る:</p>
+
+<pre><code>% source /path/to/projectx/bin/activate
+(projectx) % deactivate
+</code></pre></li>
+
+<li><p>Pythonを更新したりするとシムリンクが壊れるので一旦消して張り直す:</p>
+
+<pre><code>% find /path/to/projectx/ -type l
+% find /path/to/projectx/ -type l -delete
+% find /path/to/projectx/ -type l
+% virtualenv /path/to/projectx
+</code></pre></li>
+</ul>
+
+<h3 id="ensurepip"><code>ensurepip</code></h3>
+
+<dl>
+<dt>Python3</dt>
+<dd><a href="http://docs.python.org/3/library/ensurepip">http://docs.python.org/3/library/ensurepip</a></dd>
+</dl>
+
+<p><code>pip</code> を自動インストールするための公式ライブラリ。
+手動でも使える:</p>
+
+<pre><code>% python3.4 -m ensurepip -h
+% python3.4 -m ensurepip --upgrade
+</code></pre>
+
+<h3 id="pip"><code>pip</code></h3>
+
+<dl>
+<dt>Doc</dt>
+<dd><a href="https://pip.pypa.io/">https://pip.pypa.io/</a></dd>
+<dt>PyPI</dt>
+<dd><a href="http://pypi.python.org/pypi/pip">http://pypi.python.org/pypi/pip</a></dd>
+</dl>
+
+<p><a href="http://pypi.python.org">PyPI</a> からのパッケージのダウンロード、ビルド、インストールを
+簡単にできるようにするツール。
+アンインストール機能の無い easy_install に取って代わり、
+現在では公式推奨となっている。
+Python 3.4 以降では標準ライブラリの <code>ensurepip</code>
+によって自動的にインストールされる。
+<code>setuptools</code> に依存している。</p>
+
+<ul>
+<li><code>pip</code> コマンド
+
+<ul>
+<li><code>install</code>: Install packages.</li>
+<li><code>uninstall</code>: Uninstall packages.</li>
+<li><code>freeze</code>: Output installed packages in requirements format.</li>
+<li><code>list</code>: List installed packages.</li>
+<li><code>show</code>: Show information about installed packages.</li>
+<li><code>search</code>: Search PyPI for packages.</li>
+<li><code>help</code>: Show help for commands.</li>
+</ul></li>
+
+<li><p>全体のヘルプ、コマンド毎の詳細ヘルプ:</p>
+
+<pre><code>% pip help
+% pip install --help
+</code></pre></li>
+
+<li><p><code>setup.py</code> にオプションを渡す:</p>
+
+<pre><code>% pip install --install-option=&quot;--prefix=/usr/local&quot; numpy
+</code></pre></li>
+
+<li><p>よく使うコマンド:</p>
+
+<pre><code>% pip list &amp;&amp; pip list --outdated
+% pip search numpy
+% pip install --upgrade numpy
+</code></pre></li>
+
+<li><p>設定ファイルは <code>~/.pip/pip.conf</code> :</p>
+
+<pre><code>[global]
+download-cache = ~/.pip/cache
+</code></pre></li>
+</ul>
+
+<h3 id="setuptools"><code>setuptools</code></h3>
+
+<p>パッケージ管理の基本となるライブラリ。
+コマンドラインツール easy_install
+はこれの一部として含まれているが、直接使うことはない。
+(<code>pip</code> を使う)</p>
+
+<dl>
+<dt>Website</dt>
+<dd><a href="http://pythonhosted.org/setuptools/">http://pythonhosted.org/setuptools/</a></dd>
+<dt>PyPI</dt>
+<dd><a href="https://pypi.python.org/pypi/setuptools/">https://pypi.python.org/pypi/setuptools/</a></dd>
+</dl>
+
+<h3 id="distribute"><code>distribute</code></h3>
+
+<p><code>setuptools</code> の改良版としてしばらく利用されていたが、
+その成果が <code>setuptools</code> にマージされたのでもう使われない。</p>
+
+<dl>
+<dt>Website</dt>
+<dd><a href="http://packages.python.org/distribute">http://packages.python.org/distribute</a></dd>
+<dt>PyPI</dt>
+<dd><a href="http://pypi.python.org/pypi/distribute">http://pypi.python.org/pypi/distribute</a></dd>
+</dl>
+
+<h2 id="書籍">書籍</h2>
+
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4797371595/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51uQpDtF%2BdL._SX160_.jpg" alt="みんなのPython 第3版" /></a>
+<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4798032948/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41bZDMzzeTL._SX160_.jpg" alt="Pythonプロフェッショナルプログラミング" /></a>
+<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4048686291/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51wSTTIQtgL._SX160_.jpg" alt="エキスパートPythonプログラミング" /></a></p>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats">
+<label for="R stats">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python" checked>
+<label for="Python" class="active">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li class="active"><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "pip"
++++
+
+Python 2 (3.2以下) ではパッケージ管理のために
+外部ツールを別途インストールする必要がある(結構多くて複雑...)。
+Python 3.4 以降では `venv` と `ensurepip`
+が標準ライブラリに入るため楽チン。
+
+## Installation (Python 2)
+
+1.  ベースのPythonインタープリタをひとつ決め
+    (例えばOSに標準装備されてる `/usr/bin/python`)、
+    それを使って `setuptools` をインストール:
+
+        % curl -O https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py
+        % /usr/bin/python ez_setup.py --user
+
+2.  続いて `pip` をインストール:
+
+        % curl -O https://bootstrap.pypa.io/get-pip.py
+        % /usr/bin/python get-pip.py --user
+
+3.  Macなら `~/Library/Python/2.7/` 以下に、
+    Linuxなら `~/.local/` 以下に上記のライブラリがインストールされるので、
+    その中にある `bin` を `PATH` に追加する。
+4.  `pip` を使って `virtualenv` をインストール:
+
+        % pip install --user virtualenv
+
+## Usage
+
+### `venv` / `virtualenv`
+
+Doc
+:   &lt;http://www.virtualenv.org/&gt;
+
+PyPI
+:   &lt;http://pypi.python.org/pypi/virtualenv&gt;
+
+Python3
+:   &lt;http://docs.python.org/3/library/venv&gt;
+
+Python実行環境を仮想化するパッケージ。
+これで作った仮想環境内で `pip` を使ってパッケージ管理する。
+Python 3.3 以降では `venv` が標準ライブラリ入りしたので
+`virtualenv` は不要になった。
+
+-   仮想環境を作る:
+
+        % python3.4 -m venv [OPTIONS] /path/to/projectx
+        % pyvenv3.4         [OPTIONS] /path/to/projectx
+        % virtualenv        [OPTIONS] /path/to/projectx
+
+-   仮想環境に入る、から出る:
+
+        % source /path/to/projectx/bin/activate
+        (projectx) % deactivate
+
+-   Pythonを更新したりするとシムリンクが壊れるので一旦消して張り直す:
+
+        % find /path/to/projectx/ -type l
+        % find /path/to/projectx/ -type l -delete
+        % find /path/to/projectx/ -type l
+        % virtualenv /path/to/projectx
+
+### `ensurepip`
+
+Python3
+:   &lt;http://docs.python.org/3/library/ensurepip&gt;
+
+`pip` を自動インストールするための公式ライブラリ。
+手動でも使える:
+
+    % python3.4 -m ensurepip -h
+    % python3.4 -m ensurepip --upgrade
+
+### `pip`
+
+Doc
+:   &lt;https://pip.pypa.io/&gt;
+
+PyPI
+:   &lt;http://pypi.python.org/pypi/pip&gt;
+
+[PyPI](http://pypi.python.org) からのパッケージのダウンロード、ビルド、インストールを
+簡単にできるようにするツール。
+アンインストール機能の無い easy\_install に取って代わり、
+現在では公式推奨となっている。
+Python 3.4 以降では標準ライブラリの `ensurepip`
+によって自動的にインストールされる。
+`setuptools` に依存している。
+
+-   `pip` コマンド
+    -   `install`: Install packages.
+    -   `uninstall`: Uninstall packages.
+    -   `freeze`: Output installed packages in requirements format.
+    -   `list`: List installed packages.
+    -   `show`: Show information about installed packages.
+    -   `search`: Search PyPI for packages.
+    -   `help`: Show help for commands.
+-   全体のヘルプ、コマンド毎の詳細ヘルプ:
+
+        % pip help
+        % pip install --help
+
+-   `setup.py` にオプションを渡す:
+
+        % pip install --install-option=&#34;--prefix=/usr/local&#34; numpy
+
+-   よく使うコマンド:
+
+        % pip list &amp;&amp; pip list --outdated
+        % pip search numpy
+        % pip install --upgrade numpy
+
+-   設定ファイルは `~/.pip/pip.conf` :
+
+        [global]
+        download-cache = ~/.pip/cache
+
+### `setuptools`
+
+パッケージ管理の基本となるライブラリ。
+コマンドラインツール easy\_install
+はこれの一部として含まれているが、直接使うことはない。
+(`pip` を使う)
+
+Website
+:   &lt;http://pythonhosted.org/setuptools/&gt;
+
+PyPI
+:   &lt;https://pypi.python.org/pypi/setuptools/&gt;
+
+### `distribute`
+
+`setuptools` の改良版としてしばらく利用されていたが、
+その成果が `setuptools` にマージされたのでもう使われない。
+
+Website
+:   &lt;http://packages.python.org/distribute&gt;
+
+PyPI
+:   &lt;http://pypi.python.org/pypi/distribute&gt;
+
+## 書籍
+
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4797371595/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/51uQpDtF%2BdL._SX160_.jpg&#34; alt=&#34;みんなのPython 第3版&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4798032948/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/41bZDMzzeTL._SX160_.jpg&#34; alt=&#34;Pythonプロフェッショナルプログラミング&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4048686291/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/51wSTTIQtgL._SX160_.jpg&#34; alt=&#34;エキスパートPythonプログラミング&#34; /&gt;&lt;/a&gt;
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

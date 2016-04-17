@@ -9,7 +9,24 @@
 <link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
 <link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
-<title>Watal M. Iwasaki</title>
+<title>ことえり - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -29,11 +46,85 @@ Watal M. Iwasaki
 
 <main>
 <article>
-<header><h1>Index</h1></header>
+<header><h1><a href="">
+ことえり
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
 
-<h2><a href="/tags">tags</a></h2>
-<dl id="terms">
+
+
+<div class="note">
+<p>ことえり は使えないにもほどがあるので
+<a href="http://www.google.co.jp/ime/">Google日本語入力</a>
+をインストールして使うべし。
+以下は、まだ ことえり を使ってたときのメモ。</p>
+
+</div>
+
+
+<dl>
+<dt>学習辞書の本体:</dt>
+<dd><code>~/Library/Preferences/com.apple.JapaneseAnalysis/LearningDictionray.dict</code></dd>
+<dt>ユーザー辞書の所在:</dt>
+<dd><code>~/Library/Dictionary</code></dd>
+<dt>ライフサイエンス辞書</dt>
+<dd><a href="http://lsd.pharm.kyoto-u.ac.jp/ja/index.html">ライフサイエンス辞書プロジェクト</a> から
+ことえり用の辞書をダウンロード。インストール方法は同梱のpdfに書いてある。「卵母細胞」と「扁桃体」が一発変換できるようになればインストール完了。</dd>
 </dl>
+
+<h2 id="学習辞書の修正">学習辞書の修正</h2>
+
+<ol>
+<li>右上のことえり「単語登録／辞書編集」</li>
+<li>上バーの「辞書」→「新規ユーザー辞書作成」で適当な名前の辞書作成</li>
+<li>上バーの「辞書」→「テキストや辞書から取り込む」で <code>LearningDictionary.dict</code> を開く</li>
+<li>上バーの「辞書」→「テキストに書き出す」</li>
+<li>拡張子をcsvに変え、エクセルなどで編集し、拡張子をtxtに戻す</li>
+<li>上バーの「辞書」→「新規ユーザー辞書作成」で <code>LearningDictionary.dict</code> を作成</li>
+<li>上バーの「辞書」→「テキストや辞書から取り込む」で編集後のtxtを取り込む</li>
+<li><code>~/library/Dictionaries/</code> にできた <code>LearningDictionary.dict</code> を本物に重ねて再起動</li>
+</ol>
+
+<h2 id="dictionarytrainer">DictionaryTrainer</h2>
+
+<p>たまにCPUを食うプロセス。
+噂によると、メールにあるカタカナ語をせっせと辞書に登録してくださってるらしい。
+もちろん、余計なお世話。実行権限を取り除いて無効化しておく:</p>
+
+<pre><code>% sudo chmod 600 /System/Library/Input\ Methods/Kotoeri.app/Contents/Support/DictionaryTrainer.app
+</code></pre>
+
+<h2 id="日本語モードでも半角スペース">日本語モードでも半角スペース</h2>
+
+<p>普通、日本語モードのときは全角のスペースが入力される。
+でも、ほとんど使わないし、むしろ半角スペースを入力したい場面のほうが多い。
+ということで、いつでも半角スペースが入力されるように設定する。
+全角スペースを入力したいときは <code>option + space</code>:</p>
+
+<pre><code>% defaults write com.apple.inputmethod.Kotoeri zhsy -dict-add &quot; &quot; -bool false
+% killall Kotoeri
+</code></pre>
+
+<p>と思ったけど、やっぱり日本語モードのときは全角スペースのほうが自然だな。
+でもメモとして残しておく。
+あと、スペースだけじゃなくていろんな記号で設定できるらしい:</p>
+
+<pre><code>!&quot;#$%&amp;'()*+,-./:;&lt;=&gt;?@[\]^_`{|}~¥
+</code></pre>
+
+<h2 id="半角英数はromajiではなくu-s-で">半角英数はRomajiではなくU.S.で</h2>
+
+<p>半角英数はことえりのRomajiでも打てるが、U.S.でやったほうがいい。
+ことえりはアプリケーション（iTunesとか）との相性が悪くて問題を起こす場合があるので。
+半角英数モードは最低1つオンにしておかなきゃいけないようなので、以下の順で設定する。</p>
+
+<ol>
+<li>System Preferences &ndash;&gt; Language &amp; Text &ndash;&gt; Input Sources</li>
+<li>U.S.にチェック</li>
+<li>KotoeriのRomajiを外す</li>
+</ol>
 
 </article>
 </main>
@@ -46,7 +137,7 @@ Watal M. Iwasaki
 <div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
 
 
-<input type="checkbox" id="R stats" checked>
+<input type="checkbox" id="R stats">
 <label for="R stats">R stats</label>
 <ul>
 <li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
@@ -70,7 +161,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
 </ul>
 
-<input type="checkbox" id="Python" checked>
+<input type="checkbox" id="Python">
 <label for="Python">Python</label>
 <ul>
 <li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
@@ -85,7 +176,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
 </ul>
 
-<input type="checkbox" id="C&#43;&#43;" checked>
+<input type="checkbox" id="C&#43;&#43;">
 <label for="C&#43;&#43;">C&#43;&#43;</label>
 <ul>
 <li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
@@ -96,7 +187,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
 </ul>
 
-<input type="checkbox" id="Biology" checked>
+<input type="checkbox" id="Biology">
 <label for="Biology">Biology</label>
 <ul>
 <li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
@@ -118,7 +209,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
 </ul>
 
-<input type="checkbox" id="Developer Tools" checked>
+<input type="checkbox" id="Developer Tools">
 <label for="Developer Tools">Developer Tools</label>
 <ul>
 <li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
@@ -142,7 +233,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
 </ul>
 
-<input type="checkbox" id="Linux" checked>
+<input type="checkbox" id="Linux">
 <label for="Linux">Linux</label>
 <ul>
 <li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
@@ -152,7 +243,7 @@ Watal M. Iwasaki
 </ul>
 
 <input type="checkbox" id="Mac" checked>
-<label for="Mac">Mac</label>
+<label for="Mac" class="active">Mac</label>
 <ul>
 <li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
 <li><a href="/students/iwasaki/mac/command.html">Command</a></li>
@@ -162,10 +253,10 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
 <li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
 <li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
-<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+<li class="active"><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
 </ul>
 
-<input type="checkbox" id="Lectures" checked>
+<input type="checkbox" id="Lectures">
 <label for="Lectures">Lectures</label>
 <ul>
 <li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
@@ -175,7 +266,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
 </ul>
 
-<input type="checkbox" id="Miscellaneous" checked>
+<input type="checkbox" id="Miscellaneous">
 <label for="Miscellaneous">Miscellaneous</label>
 <ul>
 <li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
@@ -186,7 +277,73 @@ Watal M. Iwasaki
 </nav>
 
 
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "ことえり"
++++
 
+{#{#HUGOSHORTCODE-1#}#}
+
+学習辞書の本体:
+:   `~/Library/Preferences/com.apple.JapaneseAnalysis/LearningDictionray.dict`
+
+ユーザー辞書の所在:
+:   `~/Library/Dictionary`
+
+ライフサイエンス辞書
+:   [ライフサイエンス辞書プロジェクト](http://lsd.pharm.kyoto-u.ac.jp/ja/index.html) から
+    ことえり用の辞書をダウンロード。インストール方法は同梱のpdfに書いてある。「卵母細胞」と「扁桃体」が一発変換できるようになればインストール完了。
+
+## 学習辞書の修正
+
+1.  右上のことえり「単語登録／辞書編集」
+2.  上バーの「辞書」→「新規ユーザー辞書作成」で適当な名前の辞書作成
+3.  上バーの「辞書」→「テキストや辞書から取り込む」で `LearningDictionary.dict` を開く
+4.  上バーの「辞書」→「テキストに書き出す」
+5.  拡張子をcsvに変え、エクセルなどで編集し、拡張子をtxtに戻す
+6.  上バーの「辞書」→「新規ユーザー辞書作成」で `LearningDictionary.dict` を作成
+7.  上バーの「辞書」→「テキストや辞書から取り込む」で編集後のtxtを取り込む
+8.  `~/library/Dictionaries/` にできた `LearningDictionary.dict` を本物に重ねて再起動
+
+## DictionaryTrainer
+
+たまにCPUを食うプロセス。
+噂によると、メールにあるカタカナ語をせっせと辞書に登録してくださってるらしい。
+もちろん、余計なお世話。実行権限を取り除いて無効化しておく:
+
+    % sudo chmod 600 /System/Library/Input\ Methods/Kotoeri.app/Contents/Support/DictionaryTrainer.app
+
+## 日本語モードでも半角スペース
+
+普通、日本語モードのときは全角のスペースが入力される。
+でも、ほとんど使わないし、むしろ半角スペースを入力したい場面のほうが多い。
+ということで、いつでも半角スペースが入力されるように設定する。
+全角スペースを入力したいときは `option &#43; space`:
+
+    % defaults write com.apple.inputmethod.Kotoeri zhsy -dict-add &#34; &#34; -bool false
+    % killall Kotoeri
+
+と思ったけど、やっぱり日本語モードのときは全角スペースのほうが自然だな。
+でもメモとして残しておく。
+あと、スペースだけじゃなくていろんな記号で設定できるらしい:
+
+    !&#34;#$%&amp;&#39;()*&#43;,-./:;&lt;=&gt;?@[\]^_`{|}~¥
+
+## 半角英数はRomajiではなくU.S.で
+
+半角英数はことえりのRomajiでも打てるが、U.S.でやったほうがいい。
+ことえりはアプリケーション（iTunesとか）との相性が悪くて問題を起こす場合があるので。
+半角英数モードは最低1つオンにしておかなきゃいけないようなので、以下の順で設定する。
+
+1.  System Preferences --&amp;gt; Language &amp; Text --&amp;gt; Input Sources
+2.  U.S.にチェック
+3.  KotoeriのRomajiを外す
+
+</code></pre>
+</aside>
 
 <footer>(ɔ) 2008 Watal M. Iwasaki</footer>
 </div>

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>plyr: データ分割-関数適用-再結合を効率的に - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+plyr — データ分割-関数適用-再結合を効率的に
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<ul>
+<li><a href="http://plyr.had.co.nz/">http://plyr.had.co.nz/</a></li>
+<li><a href="http://www.jstatsoft.org/v40/i01">http://www.jstatsoft.org/v40/i01</a></li>
+<li><a href="http://www.rdocumentation.org/packages/plyr">http://www.rdocumentation.org/packages/plyr</a></li>
+<li><a href="http://cran.r-project.org/web/packages/plyr/index.html">http://cran.r-project.org/web/packages/plyr/index.html</a></li>
+</ul>
+
+<dl>
+<dt>Split, Apply, Combine</dt>
+<dd>特定の条件でデータを分割し、それぞれに関数を適用し、再びそれを統合する。
+R標準 <code>apply</code> 系の関数よりも直感的な使い方ができ、処理も高速。</dd>
+</dl>
+
+<p>Rの中から <code>install.packages('plyr')</code> でインストールし、
+使う前に <code>library(plyr)</code> で読み込む。</p>
+
+<div class="note">
+<p><code>list</code> 処理ではこれがまだ現役だが、
+<code>data.frame</code> に関する処理では改良版の <code>dplyr</code> を使うべし。
+両方使う場合は <code>dplyr</code> を後に読み込むほうがいいらしい。</p>
+
+</div>
+
+
+<h2 id="コア関数">コア関数</h2>
+
+<pre><code>from                           to array  da.fr  list   nothing
+array                             aaply  adply  alply  a_ply
+data.frame                        daply  ddply  dlply  d_ply
+list or vector                    laply  ldply  llply  l_ply
+(Replicates evaluation)           raply  rdply  rlply  r_ply
+(Call a multi-argument function)  maply  mdply  mlply  m_ply
+</code></pre>
+
+<p>e.g. 複数ファイルを読み込んでひとつの <code>data.frame</code> にまとめる。
+<code>list</code> から <code>data.frame</code> を作るので <code>ldply()</code></p>
+
+<pre><code class="language-r">&gt; filenames = list.files(pattern='\\.csv$')
+&gt; large_table = ldply(filenames, read.csv)
+</code></pre>
+
+<p>e.g. <code>data.frame</code> についてある列の値でグループ化し、
+グループ毎に数値の列の平均を取る。
+<code>data.frame</code> から <code>data.frame</code> を作るので <code>ddply()</code></p>
+
+<pre><code class="language-r">&gt; ddply(iris, .(Species), numcolwise(mean))
+     Species Sepal.Length Sepal.Width Petal.Length Petal.Width
+1     setosa        5.006       3.428        1.462       0.246
+2 versicolor        5.936       2.770        4.260       1.326
+3  virginica        6.588       2.974        5.552       2.026
+</code></pre>
+
+<h2 id="ヘルパー関数">ヘルパー関数</h2>
+
+<dl>
+<dt><code>plyr::join(x, y, by=NULL, type=&quot;left&quot;, match=&quot;all&quot;)</code></dt>
+<dd><p><code>by</code> で指定した列の値が等しいものを同じ行として、いい感じに <code>cbind()</code>。
+複数行がマッチした場合のデフォルトの挙動は <code>base::merge()</code> と同じく
+<code>match=&quot;all&quot;</code> だが <code>match=&quot;first&quot;</code> も指定できて、そちらは高速らしい。</p>
+
+<p><code>type=</code></p>
+
+<dl>
+<dd><code>&quot;inner&quot;</code>: <code>x</code> と <code>y</code> の <code>by</code> がマッチする行のみ<br />
+<code>&quot;left&quot;</code>: <code>x</code> の全ての行を保持<br />
+<code>&quot;right&quot;</code>: <code>y</code> の全ての行を保持<br />
+<code>&quot;full&quot;</code>: <code>&quot;left&quot;</code> の結果の下に、<code>y</code> の残りの行を追加</dd>
+</dl></dd>
+<dt><code>plyr::join_all(dfs, by=NULL, type=&quot;left&quot;, match=&quot;all&quot;)</code></dt>
+<dd><p><code>list</code> に入った複数の <code>data.frame</code> を再帰的に <code>join()</code> する。</p></dd>
+<dt><code>plyr::rename(x, replace)</code></dt>
+<dd><p><code>data.frame</code> 列名などを <strong>部分的に</strong> 変更</p>
+
+<pre><code class="language-r"># replace引数には名前付き文字列vectorを与える
+# 古い名前が名前、新しい名前が値
+plyr::rename(.data, c(col_a = &quot;alpha&quot;, col_b = &quot;beta&quot;))
+</code></pre></dd>
+<dt><code>plyr::count(.data, vars=NULL, wt_var=NULL)</code></dt>
+<dd><p><code>data.frame</code> のなかで <code>vars</code> 列に関してユニークな行数をカウント。
+重み付けに使う列を <code>wt_var</code> に指定できる。</p></dd>
+<dt><code>plyr::colwise(.fun, .cols=true, ...)</code>,</dt>
+<dd><p>関数を列ごとに適用するものに変換する。
+例えば <code>colwise(mean)(.data)</code> は <code>colMeans(.data)</code> とほぼ同義。
+関数で使えない型が含まれている行の結果には <code>NA</code> が入る。
+<code>numcolwise(.fun, ...)</code> と <code>catcolwisw(.fun, ...)</code>
+はそれぞれ数値の行、カテゴリ変数の行だけに適用する関数を返してくれる。</p></dd>
+<dt><code>plyr::each(func1, func2, ...)</code></dt>
+<dd><p>同じ引数に対して複数の関数を並列に作用させる。 e.g. <code>each(min, max, mean)(1:10)</code>, <code>each(head, tail)(.data, n=10)</code></p></dd>
+<dt><code>plyr::splat(func)</code></dt>
+<dd><p>ひとつのリストや文字列ベクタでまとめて引数を受け取れるような関数に変換する。
+<code>do.call()</code> は <code>list</code> しか取らないがこちらは名前付きベクタも可</p>
+
+<pre><code class="language-r">&gt; params = c(by=2, length=4)
+&gt; splat(seq)(params)
+[1] 1 3 5 7
+&gt; do.call(seq, as.list(params))
+[1] 1 3 5 7
+</code></pre></dd>
+</dl>
+
+<h2 id="並列化">並列化</h2>
+
+<p><code>doMC</code> 越しに <code>foreach</code> をバックエンドとして使用する</p>
+
+<pre><code class="language-r">install.packages(&quot;doMC&quot;)
+library(doMC)
+doMC::registerDoMC(parallel::detectCores())
+
+.data = plyr::ldply(lst, func, .parallel=TRUE)
+</code></pre>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats" checked>
+<label for="R stats" class="active">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li class="active"><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "plyr"
++++
+
+-   &lt;http://plyr.had.co.nz/&gt;
+-   &lt;http://www.jstatsoft.org/v40/i01&gt;
+-   &lt;http://www.rdocumentation.org/packages/plyr&gt;
+-   &lt;http://cran.r-project.org/web/packages/plyr/index.html&gt;
+
+Split, Apply, Combine
+:   特定の条件でデータを分割し、それぞれに関数を適用し、再びそれを統合する。
+    R標準 `apply` 系の関数よりも直感的な使い方ができ、処理も高速。
+
+Rの中から `install.packages(&#39;plyr&#39;)` でインストールし、
+使う前に `library(plyr)` で読み込む。
+
+{#{#HUGOSHORTCODE-1#}#}
+
+## コア関数
+
+    from                           to array  da.fr  list   nothing
+    array                             aaply  adply  alply  a_ply
+    data.frame                        daply  ddply  dlply  d_ply
+    list or vector                    laply  ldply  llply  l_ply
+    (Replicates evaluation)           raply  rdply  rlply  r_ply
+    (Call a multi-argument function)  maply  mdply  mlply  m_ply
+
+e.g. 複数ファイルを読み込んでひとつの `data.frame` にまとめる。
+`list` から `data.frame` を作るので `ldply()`
+
+```r
+&gt; filenames = list.files(pattern=&#39;\\.csv$&#39;)
+&gt; large_table = ldply(filenames, read.csv)
+```
+
+e.g. `data.frame` についてある列の値でグループ化し、
+グループ毎に数値の列の平均を取る。
+`data.frame` から `data.frame` を作るので `ddply()`
+
+```r
+&gt; ddply(iris, .(Species), numcolwise(mean))
+     Species Sepal.Length Sepal.Width Petal.Length Petal.Width
+1     setosa        5.006       3.428        1.462       0.246
+2 versicolor        5.936       2.770        4.260       1.326
+3  virginica        6.588       2.974        5.552       2.026
+```
+
+## ヘルパー関数
+
+`plyr::join(x, y, by=NULL, type=&#34;left&#34;, match=&#34;all&#34;)`
+:   `by` で指定した列の値が等しいものを同じ行として、いい感じに `cbind()`。
+    複数行がマッチした場合のデフォルトの挙動は `base::merge()` と同じく
+    `match=&#34;all&#34;` だが `match=&#34;first&#34;` も指定できて、そちらは高速らしい。
+
+    `type=`
+    :   `&#34;inner&#34;`: `x` と `y` の `by` がマッチする行のみ\
+        `&#34;left&#34;`: `x` の全ての行を保持\
+        `&#34;right&#34;`: `y` の全ての行を保持\
+        `&#34;full&#34;`: `&#34;left&#34;` の結果の下に、`y` の残りの行を追加
+
+`plyr::join_all(dfs, by=NULL, type=&#34;left&#34;, match=&#34;all&#34;)`
+:   `list` に入った複数の `data.frame` を再帰的に `join()` する。
+
+`plyr::rename(x, replace)`
+:   `data.frame` 列名などを **部分的に** 変更
+
+    ```r
+    # replace引数には名前付き文字列vectorを与える
+    # 古い名前が名前、新しい名前が値
+    plyr::rename(.data, c(col_a = &#34;alpha&#34;, col_b = &#34;beta&#34;))
+    ```
+
+`plyr::count(.data, vars=NULL, wt_var=NULL)`
+:   `data.frame` のなかで `vars` 列に関してユニークな行数をカウント。
+    重み付けに使う列を `wt_var` に指定できる。
+
+`plyr::colwise(.fun, .cols=true, ...)`,
+:   関数を列ごとに適用するものに変換する。
+    例えば `colwise(mean)(.data)` は `colMeans(.data)` とほぼ同義。
+    関数で使えない型が含まれている行の結果には `NA` が入る。
+    `numcolwise(.fun, ...)` と `catcolwisw(.fun, ...)`
+    はそれぞれ数値の行、カテゴリ変数の行だけに適用する関数を返してくれる。
+
+`plyr::each(func1, func2, ...)`
+:   同じ引数に対して複数の関数を並列に作用させる。 e.g. `each(min, max, mean)(1:10)`, `each(head, tail)(.data, n=10)`
+
+`plyr::splat(func)`
+:   ひとつのリストや文字列ベクタでまとめて引数を受け取れるような関数に変換する。
+    `do.call()` は `list` しか取らないがこちらは名前付きベクタも可
+
+    ```r
+    &gt; params = c(by=2, length=4)
+    &gt; splat(seq)(params)
+    [1] 1 3 5 7
+    &gt; do.call(seq, as.list(params))
+    [1] 1 3 5 7
+    ```
+
+## 並列化
+
+`doMC` 越しに `foreach` をバックエンドとして使用する
+
+```r
+install.packages(&#34;doMC&#34;)
+library(doMC)
+doMC::registerDoMC(parallel::detectCores())
+
+.data = plyr::ldply(lst, func, .parallel=TRUE)
+```
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

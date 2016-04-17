@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>MEME: モチーフ発見ツール - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+MEME — モチーフ発見ツール
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<p><a href="http://meme.nbcr.net/meme/">http://meme.nbcr.net/meme/</a></p>
+
+<p><a href="http://meme.nbcr.net/meme/doc/overview.html">http://meme.nbcr.net/meme/doc/overview.html</a></p>
+
+<p><a href="http://nar.oxfordjournals.org/content/37/suppl_2/W202.abstract">Bailey et al. 2009</a></p>
+
+<p><a href="http://www.ncbi.nlm.nih.gov/pubmed/7584402">Bailey and Elkan 1994</a></p>
+
+<h2 id="インストール">インストール</h2>
+
+<p><a href="http://meme.nbcr.net/meme/doc/meme-install.html">http://meme.nbcr.net/meme/doc/meme-install.html</a></p>
+
+<ol>
+<li><p>ソースコードをダウンロードして展開:</p>
+
+<pre><code>% wget -O- http://ebi.edu.au/ftp/software/MEME/4.9.1/meme_4.9.1.tar.gz | tar xz
+</code></pre></li>
+
+<li><p><code>configure</code> してビルド:</p>
+
+<pre><code>% cd meme_4.9.1/
+% ./configure --prefix=/usr/local/meme --with-url=http://meme.nbcr.net/meme --enable-opt CC=clang
+% make
+</code></pre></li>
+
+<li><p>パスを通す:</p>
+
+<pre><code>export PATH=${PATH}:/usr/local/meme/bin
+</code></pre></li>
+</ol>
+
+<h2 id="meme">MEME</h2>
+
+<p><a href="http://meme.nbcr.net/meme/doc/meme.html">http://meme.nbcr.net/meme/doc/meme.html</a></p>
+
+<h3 id="使い方">使い方</h3>
+
+<p>複数の配列が含まれるFASTAファイルを渡すだけ:</p>
+
+<pre><code>% meme sequences.fasta [optional arguments]
+</code></pre>
+
+<dl>
+<dt><code>-h</code>, <code>-version</code></dt>
+<dd>ヘルプ、バージョン表示</dd>
+<dt><code>-dna</code>, <code>-protein</code></dt>
+<dd>配列がDNAかタンパク質か (<code>-protein</code>)</dd>
+<dt><code>-maxsize</code></dt>
+<dd>入力ファイルの許容サイズ (<code>100000</code>)</dd>
+<dt><code>-nmotifs</code>, <code>-evt</code></dt>
+<dd>探索するモチーフ数を制御するため、
+個数そのものか E-value の上限を指定する。
+<code>-evt</code> を使うときは <code>-nmotifs</code> 大きめにしておく。
+(<code>-nmotifs 1</code>)</dd>
+<dt><code>-mod</code></dt>
+<dd>モチーフが配列上にどう分布しているか<br />
+<code>oops</code>: One Occurence Per Sequence<br />
+<code>zoops</code>: Zero or OOPS<br />
+<code>anr</code>: Any Number of Repetitions</dd>
+<dt><code>-nsites</code>, <code>-minsites</code>, <code>-maxsites</code></dt>
+<dd>それぞれのモチーフがいくつ登場すると仮定するか
+(デフォルト値は <code>-mod</code> により異なる)</dd>
+<dt><code>-w</code>, <code>-minw</code>, <code>-max</code></dt>
+<dd>探索するモチーフの長さを指定
+(<code>-minw 8 -maxw 50</code>)</dd>
+<dt><code>-revcomp</code></dt>
+<dd>逆向きも考慮する</dd>
+<dt><code>-pal</code></dt>
+<dd>パリンドロームを探す</dd>
+<dt><code>-bfile &lt;bfile&gt;</code></dt>
+<dd><p>バックグラウンド配列を生成するマルコフ過程のパラメータを記述したファイルを指定。
+これを指定しない場合はトレーニング配列の塩基頻度のみを利用した0階マルコフ。
+FASTA配列からファイルを作ってくれるプログラム <code>fasta-get-markov</code> も用意されてる。
+<a href="http://meme.nbcr.net/meme/doc/fasta-get-markov.html">http://meme.nbcr.net/meme/doc/fasta-get-markov.html</a>:</p>
+
+<pre><code># order 0
+A 3.081e-01
+C 1.919e-01
+G 1.919e-01
+T 3.081e-01
+# order 1
+AA 1.078e-01
+AC 5.256e-02
+AG 5.908e-02
+AT 8.848e-02
+CA 6.519e-02
+CC 3.858e-02
+CG 2.908e-02
+CT 5.908e-02
+GA 6.239e-02
+GC 3.841e-02
+GG 3.858e-02
+GT 5.256e-02
+TA 7.284e-02
+TC 6.239e-02
+TG 6.519e-02
+TT 1.078e-01
+</code></pre></dd>
+</dl>
+
+<div class="note">
+<p>一度適当に走らせてみて、出力結果
+<code>meme.txt</code> の <strong>COMMAND LINE SUMMARY</strong> や
+<code>meme.html</code> の <strong>model parameters</strong>
+を見るとよい。デフォルト値もそこで分かる。</p>
+
+</div>
+
+
+<h3 id="スコア">スコア</h3>
+
+<p><a href="http://bioinformatics.oxfordjournals.org/content/14/1/48">Bailey and Gribskov 1998</a></p>
+
+<dl>
+<dt>E-value</dt>
+<dd>そのモチーフが同じサイズのランダムな配列の中にたまたま見つかる個数の期待値</dd>
+</dl>
+
+<p>Position p-value</p>
+
+<p>Combined p-value</p>
+
+<h3 id="モチーフの出力形式">モチーフの出力形式</h3>
+
+<dl>
+<dt>LOGO</dt>
+<dd>アルファベットの大きさで視覚的に表示</dd>
+<dt>PSPM: position-specific probability matrix</dt>
+<dd>ポジションごとの塩基・アミノ酸の相対的な頻度を実数[0, 1]の行列で表示。
+position weight matrix (PWM) と呼ぶことが多いような。</dd>
+<dt>PSSM: position-specific scoring matrix</dt>
+<dd>このあと MAST で使える形式の行列</dd>
+<dt>BLOCKS, FASTA</dt>
+<dd>そのモチーフを含む配列のID、開始位置、ヒットした領域の配列</dd>
+<dt>Raw</dt>
+<dd>モチーフにヒットした領域を切り出して並べただけ</dd>
+<dt>regular expression</dt>
+<dd><code>[AT]</code> のように正規表現の文字集合を使った配列</dd>
+</dl>
+
+<h2 id="dreme"><code>DREME</code></h2>
+
+<p>Discriminative Regular Expression Motif Elicitation</p>
+
+<p>短いモチーフが得意で効率的。
+background (negative) 配列を指定できる。
+ChIP-seqデータではピーク周辺100bpくらいを使うべし。</p>
+
+<h2 id="meme-chip"><code>MEME-ChIP</code></h2>
+
+<p>長いモチーフが得意な <code>MEME</code> と
+短いモチーフが得意な <code>DREME</code> を組み合わせて ensemble。</p>
+
+<h2 id="mast"><code>MAST</code></h2>
+
+<p><a href="http://meme.nbcr.net/meme/doc/mast.html">http://meme.nbcr.net/meme/doc/mast.html</a></p>
+
+<p>既知のモチーフ (<code>MEME</code> で発見されたとか) を配列データベースから検索する。</p>
+
+<h2 id="references">References</h2>
+
+<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320056507/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41mFg6u4ZLL._SX180_.jpg" alt="バイオインフォマティクスのためのアルゴリズム入門" /></a>
+<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4621062514/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41-8yNqP0hL._SX180_.jpg" alt="バイオインフォマティクス" /></a>
+<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320056280/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51EA2RU0BXL._SX180_.jpg" alt="バイオインフォマティクス事典" /></a>
+<a href="http://www.amazon.co.jp/exec/obidos/ASIN/0387310738/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/612j5Uo43eL._SX180_.jpg" alt="Pattern Recognition and Machine Learning (Information Science and Statistics)" /></a></p>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats">
+<label for="R stats">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology" checked>
+<label for="Biology" class="active">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li class="active"><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "MEME"
++++
+
+&lt;http://meme.nbcr.net/meme/&gt;
+
+&lt;http://meme.nbcr.net/meme/doc/overview.html&gt;
+
+[Bailey et al. 2009](http://nar.oxfordjournals.org/content/37/suppl_2/W202.abstract)
+
+[Bailey and Elkan 1994](http://www.ncbi.nlm.nih.gov/pubmed/7584402)
+
+## インストール
+
+&lt;http://meme.nbcr.net/meme/doc/meme-install.html&gt;
+
+1.  ソースコードをダウンロードして展開:
+
+        % wget -O- http://ebi.edu.au/ftp/software/MEME/4.9.1/meme_4.9.1.tar.gz | tar xz
+
+2.  `configure` してビルド:
+
+        % cd meme_4.9.1/
+        % ./configure --prefix=/usr/local/meme --with-url=http://meme.nbcr.net/meme --enable-opt CC=clang
+        % make
+
+3.  パスを通す:
+
+        export PATH=${PATH}:/usr/local/meme/bin
+
+## MEME
+
+&lt;http://meme.nbcr.net/meme/doc/meme.html&gt;
+
+### 使い方
+
+複数の配列が含まれるFASTAファイルを渡すだけ:
+
+    % meme sequences.fasta [optional arguments]
+
+`-h`, `-version`
+:   ヘルプ、バージョン表示
+
+`-dna`, `-protein`
+:   配列がDNAかタンパク質か (`-protein`)
+
+`-maxsize`
+:   入力ファイルの許容サイズ (`100000`)
+
+`-nmotifs`, `-evt`
+:   探索するモチーフ数を制御するため、
+    個数そのものか E-value の上限を指定する。
+    `-evt` を使うときは `-nmotifs` 大きめにしておく。
+    (`-nmotifs 1`)
+
+`-mod`
+:   モチーフが配列上にどう分布しているか\
+    `oops`: One Occurence Per Sequence\
+    `zoops`: Zero or OOPS\
+    `anr`: Any Number of Repetitions
+
+`-nsites`, `-minsites`, `-maxsites`
+:   それぞれのモチーフがいくつ登場すると仮定するか
+    (デフォルト値は `-mod` により異なる)
+
+`-w`, `-minw`, `-max`
+:   探索するモチーフの長さを指定
+    (`-minw 8 -maxw 50`)
+
+`-revcomp`
+:   逆向きも考慮する
+
+`-pal`
+:   パリンドロームを探す
+
+`-bfile &lt;bfile&gt;`
+:   バックグラウンド配列を生成するマルコフ過程のパラメータを記述したファイルを指定。
+    これを指定しない場合はトレーニング配列の塩基頻度のみを利用した0階マルコフ。
+    FASTA配列からファイルを作ってくれるプログラム `fasta-get-markov` も用意されてる。
+    &lt;http://meme.nbcr.net/meme/doc/fasta-get-markov.html&gt;:
+
+        # order 0
+        A 3.081e-01
+        C 1.919e-01
+        G 1.919e-01
+        T 3.081e-01
+        # order 1
+        AA 1.078e-01
+        AC 5.256e-02
+        AG 5.908e-02
+        AT 8.848e-02
+        CA 6.519e-02
+        CC 3.858e-02
+        CG 2.908e-02
+        CT 5.908e-02
+        GA 6.239e-02
+        GC 3.841e-02
+        GG 3.858e-02
+        GT 5.256e-02
+        TA 7.284e-02
+        TC 6.239e-02
+        TG 6.519e-02
+        TT 1.078e-01
+
+{#{#HUGOSHORTCODE-1#}#}
+
+### スコア
+
+[Bailey and Gribskov 1998](http://bioinformatics.oxfordjournals.org/content/14/1/48)
+
+E-value
+:   そのモチーフが同じサイズのランダムな配列の中にたまたま見つかる個数の期待値
+
+Position p-value
+
+Combined p-value
+
+### モチーフの出力形式
+
+LOGO
+:   アルファベットの大きさで視覚的に表示
+
+PSPM: position-specific probability matrix
+:   ポジションごとの塩基・アミノ酸の相対的な頻度を実数[0, 1]の行列で表示。
+    position weight matrix (PWM) と呼ぶことが多いような。
+
+PSSM: position-specific scoring matrix
+:   このあと MAST で使える形式の行列
+
+BLOCKS, FASTA
+:   そのモチーフを含む配列のID、開始位置、ヒットした領域の配列
+
+Raw
+:   モチーフにヒットした領域を切り出して並べただけ
+
+regular expression
+:   `[AT]` のように正規表現の文字集合を使った配列
+
+## `DREME`
+
+Discriminative Regular Expression Motif Elicitation
+
+短いモチーフが得意で効率的。
+background (negative) 配列を指定できる。
+ChIP-seqデータではピーク周辺100bpくらいを使うべし。
+
+## `MEME-ChIP`
+
+長いモチーフが得意な `MEME` と
+短いモチーフが得意な `DREME` を組み合わせて ensemble。
+
+## `MAST`
+
+&lt;http://meme.nbcr.net/meme/doc/mast.html&gt;
+
+既知のモチーフ (`MEME` で発見されたとか) を配列データベースから検索する。
+
+## References
+
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4320056507/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/41mFg6u4ZLL._SX180_.jpg&#34; alt=&#34;バイオインフォマティクスのためのアルゴリズム入門&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4621062514/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/41-8yNqP0hL._SX180_.jpg&#34; alt=&#34;バイオインフォマティクス&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4320056280/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/51EA2RU0BXL._SX180_.jpg&#34; alt=&#34;バイオインフォマティクス事典&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/0387310738/heavywatal-22/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/612j5Uo43eL._SX180_.jpg&#34; alt=&#34;Pattern Recognition and Machine Learning (Information Science and Statistics)&#34; /&gt;&lt;/a&gt;
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

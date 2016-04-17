@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>PyQt: Python bindings for Qt framework - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+PyQt — Python bindings for Qt framework
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<p><a href="http://www.riverbankcomputing.co.uk/software/pyqt/">http://www.riverbankcomputing.co.uk/software/pyqt/</a>
+<a href="http://pyqt.sourceforge.net/Docs/PyQt5/index.html">http://pyqt.sourceforge.net/Docs/PyQt5/index.html</a></p>
+
+<p>クロスプラットフォームなGUIアプリケーションを作るためのC++ツールキットである
+<code>Qt</code> をPythonから利用するためのライブラリ。
+ほかのPythonバインディングとしては
+<code>Qt</code> プロジェクト公式の <code>PySide</code> があるけど、
+なぜかそれよりもこちらのほうが早く Qt 5 や Python 3 に対応したりしてる。
+単独で実行可能なファイルに固めるには <code>PyInstaller</code> を使う。</p>
+
+<h2 id="installation">Installation</h2>
+
+<p>Linuxなら <code>apt-get</code> を使ってもよい。</p>
+
+<ol>
+<li><code>Qt</code> Library をインストール</li>
+
+<li><p>SIP をインストール <a href="http://www.riverbankcomputing.co.uk/software/sip/download">http://www.riverbankcomputing.co.uk/software/sip/download</a>:</p>
+
+<pre><code>% tar xzf sip-4.13.2.tar.gz
+% cd sip-4.13.2/
+% /usr/local/bin/python2.7 configure.py --arch=x86_64
+% make
+% sudo make install
+</code></pre>
+
+<p>Macで <code>--enable-framework</code> を付けずにビルドして使いたい場合は、
+<code>sipconfig.py</code> と <code>siputils.py</code> にある以下の行をコメントアウトする:</p>
+
+<pre><code>#            if &quot;Python.framework&quot; not in dl:
+#                error(&quot;SIP requires Python to be built as a framework&quot;)
+</code></pre></li>
+
+<li><p><code>PyQt</code> をインストール <a href="http://www.riverbankcomputing.co.uk/software/pyqt/download">http://www.riverbankcomputing.co.uk/software/pyqt/download</a>:</p>
+
+<pre><code>% tar xzf PyQt-mac-gpl-4.9.1.tar.gz
+% cd PyQt-mac-gpl-4.9.1/
+% /usr/local/bin/python2.7 configure.py --use-arch=x86_64
+% make
+% sudo make install
+</code></pre></li>
+</ol>
+
+<h2 id="example">Example</h2>
+
+<pre><code>#!/usr/bin/python
+# -*- coding: utf-8 -*-
+&quot;&quot;&quot;
+&quot;&quot;&quot;
+import sys
+
+from PyQt4 import QtGui, QtCore
+
+class MainWindow(QtGui.QMainWindow):
+    def __init__(self, *args):
+        super(MainWindow, self).__init__(*args)
+        self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
+        self.setWindowTitle(&quot;Window Title&quot;)
+        self.resize(480, 240)
+
+        self.statusBar()
+
+        self.centralwidget = QtGui.QWidget(self)
+        hbox = QtGui.QHBoxLayout(self.centralwidget)
+        hbox.addWidget(QtGui.QPushButton(&quot;Close&quot;, self, clicked=self.close))
+        hbox.addWidget(QtGui.QPushButton(&quot;Quit&quot;, self, clicked=app.quit))
+        hbox.addWidget(QtGui.QPushButton(&quot;Exit&quot;, self, clicked=sys.exit))
+        self.setCentralWidget(self.centralwidget)
+
+if __name__ == '__main__':
+    app = QtGui.QApplication(sys.argv)
+    win = MainWindow()
+    win.show()
+    win.raise_()
+    sys.exit(app.exec_())
+</code></pre>
+
+<h2 id="qthread">QThread</h2>
+
+<p>アプリケーションをマルチスレッド化するには
+<code>QtCore.QThread</code> クラスを継承して <code>run</code> をオーバーライドする。
+素直にそうするとMacでは以下のようなエラーが出てくる。:</p>
+
+<pre><code>Python[31533:53e7] *** __NSAutoreleaseNoPool(): Object 0x11e01f6c0 of class NSConcreteMapTable autoreleased with no pool in place - just leaking
+</code></pre>
+
+<p><code>PyQt</code> に限らずCocoaアプリのマルチスレッド化には
+<code>NSAutoreleasePool</code> の呪文が必要らしいので以下のようにする。:</p>
+
+<pre><code>import QtCore
+
+if sys.platform.startswith(&quot;darwin&quot;):
+    import Foundation
+
+class Thread(QtCore.QThread):
+    def __init__(self, parent=None, target=None):
+        super(Thread, self).__init__(parent)
+        self.target = target
+
+    def run(self):
+        if sys.platform.startswith(&quot;darwin&quot;):
+            pool = Foundation.NSAutoreleasePool.alloc().init()
+        self.target()
+        return
+</code></pre>
+
+<h2 id="i18n">i18n</h2>
+
+<ol>
+<li><p>ソースファイル内の翻訳対象文字列を <code>self.tr()</code> で囲む
+(<code>tr</code> は <code>QObject</code> を継承してるクラスなら持ってるはず):</p>
+
+<pre><code>self.tr(&quot;Gene&quot;)
+</code></pre></li>
+
+<li><p>プロジェクトファイル(.pro)を作り、ソースファイルと言語ファイルを指定:</p>
+
+<pre><code>SOURCES = gui.py
+TRANSLATIONS = translations/ja_JP.ts
+</code></pre></li>
+
+<li><p>プロジェクトファイルに書かれたソースから翻訳対象を抜き出して
+<code>ts</code> ファイルを生成:</p>
+
+<pre><code>% pylupdate4-2.7 pyqt4.pro
+</code></pre></li>
+
+<li><p>Qt Linguist で <code>ts</code> ファイルを開き、翻訳。
+ただのXMLなのでテキストエディタで直接編集しても良い</p></li>
+
+<li><p><code>ts</code> ファイルをコンパイルして <code>qm</code> ファイルを作る
+(Linguist のメニューからもできる):</p>
+
+<pre><code>% lrelease translations/ja_JP.ts
+</code></pre></li>
+
+<li><p><code>qrc</code> ファイルに <code>qm</code> ファイルを登録する:</p>
+
+<pre><code>&lt;!DOCTYPE RCC&gt;&lt;RCC version=&quot;1.0&quot;&gt;
+&lt;qresource&gt;
+&lt;file&gt;translations/ja_JP.qm&lt;/file&gt;
+&lt;/qresource&gt;
+&lt;/RCC&gt;
+</code></pre></li>
+
+<li><p><code>qrc</code> ファイルを <code>py</code> モジュールに変換する:</p>
+
+<pre><code>% pyrcc4-2.7 translations.qrc -o translations.py
+</code></pre></li>
+
+<li><p>ソースファイルで <code>py</code> モジュールを <code>import</code> し、
+ファイル名をリソースとして記述。
+実際にはシステムあるいは環境変数のロケールを反映するために
+<code>QtCore.QLocale().system().name()</code> などを使うと良い。:</p>
+
+<pre><code>if __name__ == '__main__':
+    app = QtGui.QApplication(sys.argv)
+
+    import translations
+    translator = QtCore.QTranslator()
+    translator.load(&quot;:translations/ja_JP.qm&quot;)
+
+    app.installTranslator(translator)
+
+    win = MainWindow()
+    win.show()
+    win.raise_() # for Mac
+    sys.exit(app.exec_())
+</code></pre></li>
+</ol>
+
+<h2 id="pyside"><code>PySide</code></h2>
+
+<p><code>Qt</code> プロジェクト公式のPythonバインディング。
+既に広く使われている <code>PyQt</code>
+とのAPI互換性を維持しつつLGPLで公開されている。
+最近は開発が進んでいないようで、Qt5とかPython3への対応はまだ。</p>
+
+<ul>
+<li><a href="http://qt-project.org/wiki/PySide">http://qt-project.org/wiki/PySide</a></li>
+<li><a href="http://qt-project.org/wiki/PySideDocumentation">http://qt-project.org/wiki/PySideDocumentation</a></li>
+<li><a href="http://pyside.github.io/docs/pyside/">http://pyside.github.io/docs/pyside/</a></li>
+</ul>
+
+<h3 id="installation-1">Installation</h3>
+
+<p><a href="http://qt-project.org/wiki/PySideDownloads/">http://qt-project.org/wiki/PySideDownloads/</a></p>
+
+<p>Macなら公式サイトからインストーラ <code>pyside-*.pkg</code>
+をダウンロードしてコマンドから実行:</p>
+
+<pre><code>% cd ~/Downloads/
+% sudo installer -pkg pyside-0.4.1-qt47-py26apple.pkg -target &quot;/&quot;
+</code></pre>
+
+<p>Ubuntuなら <a href="https://launchpad.net/~pyside/+archive/ppa">PPA</a>
+からインストール:</p>
+
+<pre><code>% sudo add-apt-repository ppa:pyside
+% sudo apt-get update
+% sudo apt-get install python-pyside
+</code></pre>
+
+<h2 id="pyinstaller"><code>PyInstaller</code></h2>
+
+<p><a href="http://www.pyinstaller.org/">http://www.pyinstaller.org/</a><br />
+<a href="http://pythonhosted.org/PyInstaller/">http://pythonhosted.org/PyInstaller/</a></p>
+
+<p>Pythonスクリプトを単独で実行可能なアプリケーションに変換するプログラム。
+Linux, Mac, Windowsに対応。</p>
+
+<p>昔はインストールも使用もいろいろ難しい手続きが必要だったけど
+今はかなり使いやすくなってる。</p>
+
+<p><a href="/students/iwasaki/python/pip.html">pip</a> で一撃インストール:</p>
+
+<pre><code>% pip install pyinstaller
+</code></pre>
+
+<p>使う時もコマンドひとつ:</p>
+
+<pre><code>% pyinstaller --windowed myqtapp.py
+</code></pre>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats">
+<label for="R stats">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python" checked>
+<label for="Python" class="active">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li class="active"><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "PyQt"
++++
+
+&lt;http://www.riverbankcomputing.co.uk/software/pyqt/&gt;
+&lt;http://pyqt.sourceforge.net/Docs/PyQt5/index.html&gt;
+
+クロスプラットフォームなGUIアプリケーションを作るためのC&#43;&#43;ツールキットである
+`Qt` をPythonから利用するためのライブラリ。
+ほかのPythonバインディングとしては
+`Qt` プロジェクト公式の `PySide` があるけど、
+なぜかそれよりもこちらのほうが早く Qt 5 や Python 3 に対応したりしてる。
+単独で実行可能なファイルに固めるには `PyInstaller` を使う。
+
+## Installation
+
+Linuxなら `apt-get` を使ってもよい。
+
+1.  `Qt` Library をインストール
+2.  SIP をインストール &lt;http://www.riverbankcomputing.co.uk/software/sip/download&gt;:
+
+        % tar xzf sip-4.13.2.tar.gz
+        % cd sip-4.13.2/
+        % /usr/local/bin/python2.7 configure.py --arch=x86_64
+        % make
+        % sudo make install
+
+    Macで `--enable-framework` を付けずにビルドして使いたい場合は、
+    `sipconfig.py` と `siputils.py` にある以下の行をコメントアウトする:
+
+        #            if &#34;Python.framework&#34; not in dl:
+        #                error(&#34;SIP requires Python to be built as a framework&#34;)
+
+3.  `PyQt` をインストール &lt;http://www.riverbankcomputing.co.uk/software/pyqt/download&gt;:
+
+        % tar xzf PyQt-mac-gpl-4.9.1.tar.gz
+        % cd PyQt-mac-gpl-4.9.1/
+        % /usr/local/bin/python2.7 configure.py --use-arch=x86_64
+        % make
+        % sudo make install
+
+## Example
+
+    #!/usr/bin/python
+    # -*- coding: utf-8 -*-
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+    import sys
+
+    from PyQt4 import QtGui, QtCore
+
+    class MainWindow(QtGui.QMainWindow):
+        def __init__(self, *args):
+            super(MainWindow, self).__init__(*args)
+            self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
+            self.setWindowTitle(&#34;Window Title&#34;)
+            self.resize(480, 240)
+
+            self.statusBar()
+
+            self.centralwidget = QtGui.QWidget(self)
+            hbox = QtGui.QHBoxLayout(self.centralwidget)
+            hbox.addWidget(QtGui.QPushButton(&#34;Close&#34;, self, clicked=self.close))
+            hbox.addWidget(QtGui.QPushButton(&#34;Quit&#34;, self, clicked=app.quit))
+            hbox.addWidget(QtGui.QPushButton(&#34;Exit&#34;, self, clicked=sys.exit))
+            self.setCentralWidget(self.centralwidget)
+
+    if __name__ == &#39;__main__&#39;:
+        app = QtGui.QApplication(sys.argv)
+        win = MainWindow()
+        win.show()
+        win.raise_()
+        sys.exit(app.exec_())
+
+## QThread
+
+アプリケーションをマルチスレッド化するには
+`QtCore.QThread` クラスを継承して `run` をオーバーライドする。
+素直にそうするとMacでは以下のようなエラーが出てくる。:
+
+    Python[31533:53e7] *** __NSAutoreleaseNoPool(): Object 0x11e01f6c0 of class NSConcreteMapTable autoreleased with no pool in place - just leaking
+
+`PyQt` に限らずCocoaアプリのマルチスレッド化には
+`NSAutoreleasePool` の呪文が必要らしいので以下のようにする。:
+
+    import QtCore
+
+    if sys.platform.startswith(&#34;darwin&#34;):
+        import Foundation
+
+    class Thread(QtCore.QThread):
+        def __init__(self, parent=None, target=None):
+            super(Thread, self).__init__(parent)
+            self.target = target
+
+        def run(self):
+            if sys.platform.startswith(&#34;darwin&#34;):
+                pool = Foundation.NSAutoreleasePool.alloc().init()
+            self.target()
+            return
+
+## i18n
+
+1.  ソースファイル内の翻訳対象文字列を `self.tr()` で囲む
+    (`tr` は `QObject` を継承してるクラスなら持ってるはず):
+
+        self.tr(&#34;Gene&#34;)
+
+2.  プロジェクトファイル(.pro)を作り、ソースファイルと言語ファイルを指定:
+
+        SOURCES = gui.py
+        TRANSLATIONS = translations/ja_JP.ts
+
+3.  プロジェクトファイルに書かれたソースから翻訳対象を抜き出して
+    `ts` ファイルを生成:
+
+        % pylupdate4-2.7 pyqt4.pro
+
+4.  Qt Linguist で `ts` ファイルを開き、翻訳。
+    ただのXMLなのでテキストエディタで直接編集しても良い
+5.  `ts` ファイルをコンパイルして `qm` ファイルを作る
+    (Linguist のメニューからもできる):
+
+        % lrelease translations/ja_JP.ts
+
+6.  `qrc` ファイルに `qm` ファイルを登録する:
+
+        &lt;!DOCTYPE RCC&gt;&lt;RCC version=&#34;1.0&#34;&gt;
+        &lt;qresource&gt;
+        &lt;file&gt;translations/ja_JP.qm&lt;/file&gt;
+        &lt;/qresource&gt;
+        &lt;/RCC&gt;
+
+7.  `qrc` ファイルを `py` モジュールに変換する:
+
+        % pyrcc4-2.7 translations.qrc -o translations.py
+
+8.  ソースファイルで `py` モジュールを `import` し、
+    ファイル名をリソースとして記述。
+    実際にはシステムあるいは環境変数のロケールを反映するために
+    `QtCore.QLocale().system().name()` などを使うと良い。:
+
+        if __name__ == &#39;__main__&#39;:
+            app = QtGui.QApplication(sys.argv)
+
+            import translations
+            translator = QtCore.QTranslator()
+            translator.load(&#34;:translations/ja_JP.qm&#34;)
+
+            app.installTranslator(translator)
+
+            win = MainWindow()
+            win.show()
+            win.raise_() # for Mac
+            sys.exit(app.exec_())
+
+## `PySide`
+
+`Qt` プロジェクト公式のPythonバインディング。
+既に広く使われている `PyQt`
+とのAPI互換性を維持しつつLGPLで公開されている。
+最近は開発が進んでいないようで、Qt5とかPython3への対応はまだ。
+
+-   &lt;http://qt-project.org/wiki/PySide&gt;
+-   &lt;http://qt-project.org/wiki/PySideDocumentation&gt;
+-   &lt;http://pyside.github.io/docs/pyside/&gt;
+
+### Installation
+
+&lt;http://qt-project.org/wiki/PySideDownloads/&gt;
+
+Macなら公式サイトからインストーラ `pyside-*.pkg`
+をダウンロードしてコマンドから実行:
+
+    % cd ~/Downloads/
+    % sudo installer -pkg pyside-0.4.1-qt47-py26apple.pkg -target &#34;/&#34;
+
+Ubuntuなら [PPA](https://launchpad.net/~pyside/&#43;archive/ppa)
+からインストール:
+
+    % sudo add-apt-repository ppa:pyside
+    % sudo apt-get update
+    % sudo apt-get install python-pyside
+
+## `PyInstaller`
+
+&lt;http://www.pyinstaller.org/&gt;\
+&lt;http://pythonhosted.org/PyInstaller/&gt;
+
+Pythonスクリプトを単独で実行可能なアプリケーションに変換するプログラム。
+Linux, Mac, Windowsに対応。
+
+昔はインストールも使用もいろいろ難しい手続きが必要だったけど
+今はかなり使いやすくなってる。
+
+[pip]({#{#HUGOSHORTCODE-1#}#}) で一撃インストール:
+
+    % pip install pyinstaller
+
+使う時もコマンドひとつ:
+
+    % pyinstaller --windowed myqtapp.py
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

@@ -9,7 +9,24 @@
 <link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
 <link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
-<title>Watal M. Iwasaki</title>
+<title>EMBOSS - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -29,11 +46,113 @@ Watal M. Iwasaki
 
 <main>
 <article>
-<header><h1>Index</h1></header>
+<header><h1><a href="">
+EMBOSS
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
 
-<h2><a href="/tags">tags</a></h2>
-<dl id="terms">
-</dl>
+
+
+<p>The European Molecular Biology Open Software Suite</p>
+
+<p><a href="http://emboss.sourceforge.net/">http://emboss.sourceforge.net/</a></p>
+
+<h2 id="installation">Installation</h2>
+
+<ol>
+<li><p><a href="ftp://emboss.open-bio.org/pub/EMBOSS/">ftp://emboss.open-bio.org/pub/EMBOSS/</a>
+からソースコードをダウンロードしてきて展開し、
+そのディレクトリに <code>cd</code> する:</p>
+
+<pre><code>% wget -O- ftp://emboss.open-bio.org/pub/EMBOSS/EMBOSS-latest.tar.gz | tar xz
+% cd EMBOSS-6.6.0/
+</code></pre></li>
+
+<li><p>コンパイルしてインストール:</p>
+
+<pre><code>% ./configure --disable-debug --disable-dependency-tracking --enable-64 --with-thread --without-x --prefix=/usr/local/emboss
+% make &amp;&amp; make check
+% sudo make install
+</code></pre></li>
+
+<li><p>パスを通す。
+例えば <code>.zshenv</code> や <code>.bashrc</code> に以下のように記述する:</p>
+
+<pre><code>export PATH=${PATH}:/usr/local/emboss/bin
+</code></pre></li>
+</ol>
+
+<div class="note">
+<p>Mac なら <a href="/students/iwasaki/mac/homebrew.html">Homebrew</a> でも入れられる</p>
+
+<pre><code class="language-sh">% brew tap homebrew/science
+% brew install emboss
+</code></pre>
+
+</div>
+
+
+<h2 id="embassy">EMBASSY</h2>
+
+<p><a href="http://emboss.sourceforge.net/embassy/">http://emboss.sourceforge.net/embassy/</a></p>
+
+<h3 id="phylip">PHYLIP</h3>
+
+<p>PHYLogeny Inference Package</p>
+
+<p><a href="http://evolution.genetics.washington.edu/phylip.html">http://evolution.genetics.washington.edu/phylip.html</a></p>
+
+<p>本家PHYLIPに含まれる protdist や dnadist
+はコマンドライン引数が取れないので、そのままでは大変使いにくい。
+そのへんを改良したPHYLIPNEWというのがEMBASSYパッケージとして提供されているのでこっちを使う。
+しかもこっちなら <a href="/students/iwasaki/python/biopython.html">BioPython</a> から使うこともできるっぽい。
+元のPHYLIPと区別するためか、プログラム名の先頭にすべて <code>f</code> が付く。</p>
+
+<ol>
+<li>EMBOSSをインストール</li>
+
+<li><p><a href="ftp://emboss.open-bio.org/pub/EMBOSS/">ftp://emboss.open-bio.org/pub/EMBOSS/</a> からソースコードをダウンロードして展開し、
+そこに <code>cd</code> する:</p>
+
+<pre><code>% wget -O- ftp://emboss.open-bio.org/pub/EMBOSS/PHYLIPNEW-3.69.tar.gz | tar xz
+% cd PHYLIPNEW-3.69/
+</code></pre></li>
+
+<li><p>EMBOSSと同じ <code>prefix</code> を指定して <code>configure</code> 、コンパイル、インストール:</p>
+
+<pre><code>% ./configure --prefix=/usr/local/emboss --without-x
+% make
+% sudo make install
+</code></pre></li>
+
+<li><p>EMBOSSインストール時にパスを通してあればそのまま使えるはず:</p>
+
+<pre><code>% fdnadist --help
+</code></pre></li>
+</ol>
+
+<div class="note">
+<p><code>make</code> すると
+<code>/usr/local/emboss/include/ajreg.h:19: fatal error: pcre_config.h: No such file or directory</code>
+のように怒られる場合がある。
+どっちかっつーとEMBOSSの問題だと思うんだけど、
+そのファイルは <code>/usr/local/emboss/include/</code> ではなく
+その下の <code>epcre/</code> にインストールされている。
+<code>configure</code> かコンパイルの時に <code>-I</code> オプションか何かを指定してやるのが
+正しい解決なのかもしれないけど、簡単にシムリンクを張ってやり過ごす</p>
+
+<pre><code class="language-sh">% cd /usr/local/emboss/include/
+% sudo ln -s epcre/* ./
+</code></pre>
+
+</div>
+
+
+<h2 id="gembassy">GEMBASSY</h2>
+
+<p><a href="http://www.g-language.org/gembassy/">http://www.g-language.org/gembassy/</a></p>
 
 </article>
 </main>
@@ -46,7 +165,7 @@ Watal M. Iwasaki
 <div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
 
 
-<input type="checkbox" id="R stats" checked>
+<input type="checkbox" id="R stats">
 <label for="R stats">R stats</label>
 <ul>
 <li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
@@ -70,7 +189,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
 </ul>
 
-<input type="checkbox" id="Python" checked>
+<input type="checkbox" id="Python">
 <label for="Python">Python</label>
 <ul>
 <li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
@@ -85,7 +204,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
 </ul>
 
-<input type="checkbox" id="C&#43;&#43;" checked>
+<input type="checkbox" id="C&#43;&#43;">
 <label for="C&#43;&#43;">C&#43;&#43;</label>
 <ul>
 <li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
@@ -97,11 +216,11 @@ Watal M. Iwasaki
 </ul>
 
 <input type="checkbox" id="Biology" checked>
-<label for="Biology">Biology</label>
+<label for="Biology" class="active">Biology</label>
 <ul>
 <li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
 <li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
-<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li class="active"><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
 <li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
 <li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
@@ -118,7 +237,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
 </ul>
 
-<input type="checkbox" id="Developer Tools" checked>
+<input type="checkbox" id="Developer Tools">
 <label for="Developer Tools">Developer Tools</label>
 <ul>
 <li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
@@ -142,7 +261,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
 </ul>
 
-<input type="checkbox" id="Linux" checked>
+<input type="checkbox" id="Linux">
 <label for="Linux">Linux</label>
 <ul>
 <li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
@@ -151,7 +270,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
 </ul>
 
-<input type="checkbox" id="Mac" checked>
+<input type="checkbox" id="Mac">
 <label for="Mac">Mac</label>
 <ul>
 <li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
@@ -165,7 +284,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
 </ul>
 
-<input type="checkbox" id="Lectures" checked>
+<input type="checkbox" id="Lectures">
 <label for="Lectures">Lectures</label>
 <ul>
 <li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
@@ -175,7 +294,7 @@ Watal M. Iwasaki
 <li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
 </ul>
 
-<input type="checkbox" id="Miscellaneous" checked>
+<input type="checkbox" id="Miscellaneous">
 <label for="Miscellaneous">Miscellaneous</label>
 <ul>
 <li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
@@ -186,7 +305,81 @@ Watal M. Iwasaki
 </nav>
 
 
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "EMBOSS"
++++
 
+The European Molecular Biology Open Software Suite
+
+&lt;http://emboss.sourceforge.net/&gt;
+
+## Installation
+
+1.  &lt;ftp://emboss.open-bio.org/pub/EMBOSS/&gt;
+    からソースコードをダウンロードしてきて展開し、
+    そのディレクトリに `cd` する:
+
+        % wget -O- ftp://emboss.open-bio.org/pub/EMBOSS/EMBOSS-latest.tar.gz | tar xz
+        % cd EMBOSS-6.6.0/
+
+2.  コンパイルしてインストール:
+
+        % ./configure --disable-debug --disable-dependency-tracking --enable-64 --with-thread --without-x --prefix=/usr/local/emboss
+        % make &amp;&amp; make check
+        % sudo make install
+
+3.  パスを通す。
+    例えば `.zshenv` や `.bashrc` に以下のように記述する:
+
+        export PATH=${PATH}:/usr/local/emboss/bin
+
+{#{#HUGOSHORTCODE-1#}#}
+
+## EMBASSY
+
+&lt;http://emboss.sourceforge.net/embassy/&gt;
+
+### PHYLIP
+
+PHYLogeny Inference Package
+
+&lt;http://evolution.genetics.washington.edu/phylip.html&gt;
+
+本家PHYLIPに含まれる protdist や dnadist
+はコマンドライン引数が取れないので、そのままでは大変使いにくい。
+そのへんを改良したPHYLIPNEWというのがEMBASSYパッケージとして提供されているのでこっちを使う。
+しかもこっちなら [BioPython]({#{#HUGOSHORTCODE-2#}#}) から使うこともできるっぽい。
+元のPHYLIPと区別するためか、プログラム名の先頭にすべて `f` が付く。
+
+1.  EMBOSSをインストール
+2.  &lt;ftp://emboss.open-bio.org/pub/EMBOSS/&gt; からソースコードをダウンロードして展開し、
+    そこに `cd` する:
+
+        % wget -O- ftp://emboss.open-bio.org/pub/EMBOSS/PHYLIPNEW-3.69.tar.gz | tar xz
+        % cd PHYLIPNEW-3.69/
+
+3.  EMBOSSと同じ `prefix` を指定して `configure` 、コンパイル、インストール:
+
+        % ./configure --prefix=/usr/local/emboss --without-x
+        % make
+        % sudo make install
+
+4.  EMBOSSインストール時にパスを通してあればそのまま使えるはず:
+
+        % fdnadist --help
+
+{#{#HUGOSHORTCODE-3#}#}
+
+## GEMBASSY
+
+&lt;http://www.g-language.org/gembassy/&gt;
+
+</code></pre>
+</aside>
 
 <footer>(ɔ) 2008 Watal M. Iwasaki</footer>
 </div>

@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>Mailman - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+Mailman
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<p>Webベースのメーリングリスト管理システム</p>
+
+<p>公式サイト: <a href="http://www.gnu.org/software/mailman/">http://www.gnu.org/software/mailman/</a><br />
+日本語情報: <a href="http://docs.python.jp/contrib/mailman/">http://docs.python.jp/contrib/mailman/</a></p>
+
+<h2 id="install-on-mac-os-10-8-mountain-lion-server">Install on Mac OS 10.8 Mountain Lion Server</h2>
+
+<p>新しい Mac サーバーでは標準搭載されていないらしいので、
+ソースコードから自分でセットアップする必要がある。</p>
+
+<p>やり方は基本的に
+<a href="http://www.livetime.com/mountain-lion-mailman-mailing-list/">http://www.livetime.com/mountain-lion-mailman-mailing-list/</a>
+を参考にした。</p>
+
+<ol>
+<li>App Store から Xcode をインストール</li>
+<li>Xcode を起動して、設定画面から
+Command Line Tools をインストール</li>
+
+<li><p>ここからは Terminal.app 上での作業となる。
+インストール先のディレクトリを準備。
+グループはアンダースコアが付いて <code>_mailman</code> となるが気にしない:</p>
+
+<pre><code>% sudo mkdir /usr/local/mailman
+% cd /usr/local/mailman
+% sudo chgrp mailman .
+% sudo chmod a+rx,g+ws .
+</code></pre></li>
+
+<li><p>Mailman をダウンロードして展開:</p>
+
+<pre><code>% cd /tmp/
+% wget -O- http://ftp.gnu.org/gnu/mailman/mailman-2.1.15.tgz | tar xz
+% cd mailman-2.1.15/
+</code></pre></li>
+
+<li><p><code>/usr/bin/python</code> が使われるように注意して
+<code>configure</code> &amp; <code>make</code>。
+初めから <code>sudo</code> してやるほうがいいかも:</p>
+
+<pre><code>% sudo ./configure
+% sudo make
+% sudo make install
+</code></pre></li>
+
+<li><p>インストール先に行ってアクセス権を修復:</p>
+
+<pre><code>% cd /usr/local/mailman/
+% sudo ./bin/check_perms -f
+</code></pre></li>
+
+<li><p><code>/etc/apache2/extra/httpd_mailman.conf</code> を作る</p>
+
+<pre><code class="language-apache">ScriptAlias /mailman/ &quot;/usr/local/mailman/cgi-bin/&quot;
+Alias /pipermail/ &quot;/usr/local/mailman/archives/public/&quot;
+Alias /icons/ &quot;/usr/local/mailman/icons/&quot;
+&lt;Directory &quot;/usr/local/mailman/archives/public/&quot;&gt;
+    Options FollowSymLinks MultiViews Indexes
+    AllowOverride None
+    Order allow,deny
+    Allow from all
+&lt;/Directory&gt;
+</code></pre></li>
+
+<li><p><code>/Library/Server/Web/Config/apache2/httpd_server_app.conf</code> を編集する。
+550行目らへん、SSL/TLSのコメントのすぐ上あたりに下記の行を追加:</p>
+
+<pre><code>Include /private/etc/apache2/extra/httpd-mailman.conf
+</code></pre></li>
+
+<li><p>Apache ウェブサーバを再起動:</p>
+
+<pre><code>% sudo apachectl graceful
+</code></pre></li>
+
+<li><p>ウェブブラウザから <code>http:://{SERVER_ADDRESS}/mailman/admin</code> にアクセスしてみる。
+エラーが発生していたら
+<code>/usr/local/mailman/logs/</code> 以下あるいは
+<code>/var/log/apache2/</code> 以下のログを見てみる。</p></li>
+
+<li><p><code>/usr/local/mailman/Mailman/mm_cfg.py</code> に以下を追記:</p>
+
+<pre><code>MTA = `Postfix`
+</code></pre></li>
+
+<li><p>エイリアスを作ってアクセス権を調整:</p>
+
+<pre><code>% sudo ./bin/genaliases
+% sudo chown mailman:mailman data/aliases*
+% sudo chmod g+w data/aliases*
+</code></pre></li>
+
+<li><p><code>/Library/Server/Mail/Config/postfix/main.cf</code> に以下を追記。
+当方の環境では <code>hash:/etc/aliases</code> を書くと失敗した:</p>
+
+<pre><code>alias_maps = hash:/usr/local/mailman/data/aliases
+</code></pre></li>
+
+<li><p>Postfix メールサーバの設定を再読み込み:</p>
+
+<pre><code>% sudo postfix reload
+</code></pre></li>
+
+<li><p>Mailman のサイトパスワードを設定:</p>
+
+<pre><code>% sudo /usr/local/mailman/bin/mmsitepass XXXXXXXX
+</code></pre></li>
+
+<li><p>新しいメーリスを作ってみる(必要かどうかは不明):</p>
+
+<pre><code>% sudo ./bin/newlist mailman
+% sudo ./bin/config_list -i data/sitelist.cfg mailman
+</code></pre></li>
+
+<li><p>qrunner を起動:</p>
+
+<pre><code>% sudo ./bin/mailmanctl start
+</code></pre></li>
+
+<li><p><code>/System/Library/LaunchDaemons/org.list.mailmanctl.plist</code>
+を作り、システム起動後に自動的に始まるようにする</p>
+
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE plist PUBLIC &quot;-//Apple Computer//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+&lt;plist version=&quot;1.0&quot;&gt;
+&lt;dict&gt;
+    &lt;key&gt;Debug&lt;/key&gt;
+    &lt;true/&gt;
+    &lt;key&gt;Disabled&lt;/key&gt;
+    &lt;false/&gt;
+    &lt;key&gt;Label&lt;/key&gt;
+    &lt;string&gt;org.list.mailmanctl&lt;/string&gt;
+    &lt;key&gt;Program&lt;/key&gt;
+    &lt;string&gt;/usr/local/mailman/bin/mailmanctl&lt;/string&gt;
+    &lt;key&gt;ProgramArguments&lt;/key&gt;
+    &lt;array&gt;
+        &lt;string&gt;mailmanctl&lt;/string&gt;
+        &lt;string&gt;-s&lt;/string&gt;
+        &lt;string&gt;start&lt;/string&gt;
+    &lt;/array&gt;
+    &lt;key&gt;KeepAlive&lt;/key&gt;
+    &lt;false/&gt;
+    &lt;key&gt;RunAtLoad&lt;/key&gt;
+    &lt;true/&gt;
+    &lt;key&gt;AbandonProcessGroup&lt;/key&gt;
+    &lt;true/&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+</code></pre></li>
+
+<li><p>リストを引き継ぐには <code>mailman/</code> ディレクトリの
+<code>lists/</code> と <code>archives/</code> をコピーすれば良い。
+古いサーバーから移行してきた場合、それらは
+<code>/Library/Server/Migrated/var/mailman</code> にある:</p>
+
+<pre><code>% sudo rsync -auv /Library/Server/Migrated/var/mailman/lists/ /usr/local/mailman/lists/
+% sudo rsync -auv /Library/Server/Migrated/var/mailman/archives/ /usr/local/mailman/archives/
+</code></pre></li>
+
+<li><p>エイリアスを作り直し、アクセス権を修復し、再起動:</p>
+
+<pre><code>% sudo ./bin/genaliases
+% sudo ./bin/check_perms -f
+% sudo ./bin/mailmanctl restart
+</code></pre></li>
+
+<li><p>テストメールを送って確認。</p></li>
+</ol>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats">
+<label for="R stats">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous" checked>
+<label for="Miscellaneous" class="active">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li class="active"><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "Mailman"
++++
+
+Webベースのメーリングリスト管理システム
+
+公式サイト: &lt;http://www.gnu.org/software/mailman/&gt;\
+日本語情報: &lt;http://docs.python.jp/contrib/mailman/&gt;
+
+## Install on Mac OS 10.8 Mountain Lion Server
+
+新しい Mac サーバーでは標準搭載されていないらしいので、
+ソースコードから自分でセットアップする必要がある。
+
+やり方は基本的に
+&lt;http://www.livetime.com/mountain-lion-mailman-mailing-list/&gt;
+を参考にした。
+
+1.  App Store から Xcode をインストール
+2.  Xcode を起動して、設定画面から
+    Command Line Tools をインストール
+3.  ここからは Terminal.app 上での作業となる。
+    インストール先のディレクトリを準備。
+    グループはアンダースコアが付いて `_mailman` となるが気にしない:
+
+        % sudo mkdir /usr/local/mailman
+        % cd /usr/local/mailman
+        % sudo chgrp mailman .
+        % sudo chmod a&#43;rx,g&#43;ws .
+
+4.  Mailman をダウンロードして展開:
+
+        % cd /tmp/
+        % wget -O- http://ftp.gnu.org/gnu/mailman/mailman-2.1.15.tgz | tar xz
+        % cd mailman-2.1.15/
+
+5.  `/usr/bin/python` が使われるように注意して
+    `configure` &amp; `make`。
+    初めから `sudo` してやるほうがいいかも:
+
+        % sudo ./configure
+        % sudo make
+        % sudo make install
+
+6.  インストール先に行ってアクセス権を修復:
+
+        % cd /usr/local/mailman/
+        % sudo ./bin/check_perms -f
+
+7.  `/etc/apache2/extra/httpd_mailman.conf` を作る
+
+    ```apache
+    ScriptAlias /mailman/ &#34;/usr/local/mailman/cgi-bin/&#34;
+    Alias /pipermail/ &#34;/usr/local/mailman/archives/public/&#34;
+    Alias /icons/ &#34;/usr/local/mailman/icons/&#34;
+    &lt;Directory &#34;/usr/local/mailman/archives/public/&#34;&gt;
+        Options FollowSymLinks MultiViews Indexes
+        AllowOverride None
+        Order allow,deny
+        Allow from all
+    &lt;/Directory&gt;
+    ```
+
+8.  `/Library/Server/Web/Config/apache2/httpd_server_app.conf` を編集する。
+    550行目らへん、SSL/TLSのコメントのすぐ上あたりに下記の行を追加:
+
+        Include /private/etc/apache2/extra/httpd-mailman.conf
+
+9.  Apache ウェブサーバを再起動:
+
+        % sudo apachectl graceful
+
+10. ウェブブラウザから `http:://{SERVER_ADDRESS}/mailman/admin` にアクセスしてみる。
+    エラーが発生していたら
+    `/usr/local/mailman/logs/` 以下あるいは
+    `/var/log/apache2/` 以下のログを見てみる。
+11. `/usr/local/mailman/Mailman/mm_cfg.py` に以下を追記:
+
+        MTA = `Postfix`
+
+12. エイリアスを作ってアクセス権を調整:
+
+        % sudo ./bin/genaliases
+        % sudo chown mailman:mailman data/aliases*
+        % sudo chmod g&#43;w data/aliases*
+
+13. `/Library/Server/Mail/Config/postfix/main.cf` に以下を追記。
+    当方の環境では `hash:/etc/aliases` を書くと失敗した:
+
+        alias_maps = hash:/usr/local/mailman/data/aliases
+
+14. Postfix メールサーバの設定を再読み込み:
+
+        % sudo postfix reload
+
+15. Mailman のサイトパスワードを設定:
+
+        % sudo /usr/local/mailman/bin/mmsitepass XXXXXXXX
+
+16. 新しいメーリスを作ってみる(必要かどうかは不明):
+
+        % sudo ./bin/newlist mailman
+        % sudo ./bin/config_list -i data/sitelist.cfg mailman
+
+17. qrunner を起動:
+
+        % sudo ./bin/mailmanctl start
+
+18. `/System/Library/LaunchDaemons/org.list.mailmanctl.plist`
+    を作り、システム起動後に自動的に始まるようにする
+
+    ```xml
+    &lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
+    &lt;!DOCTYPE plist PUBLIC &#34;-//Apple Computer//DTD PLIST 1.0//EN&#34; &#34;http://www.apple.com/DTDs/PropertyList-1.0.dtd&#34;&gt;
+    &lt;plist version=&#34;1.0&#34;&gt;
+    &lt;dict&gt;
+        &lt;key&gt;Debug&lt;/key&gt;
+        &lt;true/&gt;
+        &lt;key&gt;Disabled&lt;/key&gt;
+        &lt;false/&gt;
+        &lt;key&gt;Label&lt;/key&gt;
+        &lt;string&gt;org.list.mailmanctl&lt;/string&gt;
+        &lt;key&gt;Program&lt;/key&gt;
+        &lt;string&gt;/usr/local/mailman/bin/mailmanctl&lt;/string&gt;
+        &lt;key&gt;ProgramArguments&lt;/key&gt;
+        &lt;array&gt;
+            &lt;string&gt;mailmanctl&lt;/string&gt;
+            &lt;string&gt;-s&lt;/string&gt;
+            &lt;string&gt;start&lt;/string&gt;
+        &lt;/array&gt;
+        &lt;key&gt;KeepAlive&lt;/key&gt;
+        &lt;false/&gt;
+        &lt;key&gt;RunAtLoad&lt;/key&gt;
+        &lt;true/&gt;
+        &lt;key&gt;AbandonProcessGroup&lt;/key&gt;
+        &lt;true/&gt;
+    &lt;/dict&gt;
+    &lt;/plist&gt;
+    ```
+
+19. リストを引き継ぐには `mailman/` ディレクトリの
+    `lists/` と `archives/` をコピーすれば良い。
+    古いサーバーから移行してきた場合、それらは
+    `/Library/Server/Migrated/var/mailman` にある:
+
+        % sudo rsync -auv /Library/Server/Migrated/var/mailman/lists/ /usr/local/mailman/lists/
+        % sudo rsync -auv /Library/Server/Migrated/var/mailman/archives/ /usr/local/mailman/archives/
+
+20. エイリアスを作り直し、アクセス権を修復し、再起動:
+
+        % sudo ./bin/genaliases
+        % sudo ./bin/check_perms -f
+        % sudo ./bin/mailmanctl restart
+
+21. テストメールを送って確認。
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

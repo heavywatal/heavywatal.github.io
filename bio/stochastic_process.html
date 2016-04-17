@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>Stochastic Process - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+Stochastic Process
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<h2 id="geometric-distribution-幾何分布">Geometric distribution 幾何分布</h2>
+
+<p>確率 <em>p</em> のBernoulli試行で <em>k</em> 回目に初めて当たる確率。
+まず外し続ける必要がある。</p>
+
+<div>$$\begin{split}
+\mathrm{Prob}[X = k] &= p(1 - p)^{k - 1} \\
+\mathrm E[X] &= \frac 1 p \\
+\mathrm{Var}[X] &= \frac {1 - p} p
+\end{split}$$</div>
+
+<h2 id="negative-binomial-distribution-負の二項分布">Negative binomial distribution 負の二項分布</h2>
+
+<p>確率 <em>p</em> のBernoulli試行で <em>r</em> 回目の当たりが <em>k</em> 回目に出る確率。
+幾何分布を <em>r</em> 回畳み込んだもの。</p>
+
+<div>$$\begin{split}
+\mathrm{Prob}[X = k] &= {k - 1 \choose r - 1} p^r (1 - p)^{k - r} \\
+\mathrm E[X] &= \frac r p \\
+\mathrm{Var}[X] &= \frac {r(1 - p)} {p^2}
+\end{split}$$</div>
+
+<h2 id="exponential-distribution-指数分布">Exponential distribution 指数分布</h2>
+
+<p>幾何分布の連続時間バージョン。
+時間あたり $\lambda$ 回起こるPoisson過程で時間 $t$ まで起こらない確率 $Q(t)$</p>
+
+<div>$$\begin{split}
+Q(t) &= \lim_{\mathrm dt \to 0} (1 - \lambda \mathrm dt) ^ {t/ \mathrm d t}\\
+     &= \lim_{n \to \infty} (1 - \frac {\lambda t} n) ^ n\\
+     &= e ^ {-\lambda t}
+\end{split}$$</div>
+
+<div class="note">
+<p>ネイピア数</p>
+
+<div>$$\begin{split}
+\lim_{x \to \infty} \left(1 + \frac 1 x \right)^x &= e\\
+\lim_{x \to \infty} \left(1 + \frac a x \right)^x
+   &= \lim_{y \to \infty} \left(1 + \frac 1 y \right)^{ay}\\
+   &= e^a
+\end{split}$$</div>
+
+</div>
+
+
+<div class="note">
+<p>別の考え方</p>
+
+<div>$$\begin{split}
+Q(t + \mathrm dt) &= Q(t) (1 - \lambda \mathrm dt)\\
+Q(t + \mathrm dt) - Q(t) &= -\lambda Q(t) \mathrm dt\\
+\frac {\mathrm dQ(t)} {\mathrm dt} &= -\lambda Q(t)\\
+\frac 1 {Q(t)} \mathrm dQ(t) &= -\lambda \mathrm dt\\
+\ln Q(t) &= -\lambda t\\
+Q(t) &= e ^ {-\lambda t}
+\end{split}$$</div>
+
+</div>
+
+
+<p>$t$ らへんで初めて起こる確率は、
+$t$ まで起こらず次の瞬間に起こる確率
+$Q(t) \lambda \mathrm dt = \lambda e ^ {-\lambda t} \mathrm dt$
+であり、それを全区間たすと1になる</p>
+
+<div>$$\begin{split}
+\int _0^\infty \lambda e ^ {-\lambda t} \mathrm dt
+   = -e ^ {\lambda t} \Big | _0^\infty
+   = 1
+\end{split}$$</div>
+
+<p>よって、最初の事象が起こるまでの待ち時間 $t$ の分布、
+すなわち確率密度関数 (PDF: probability density function) は</p>
+
+<div>$$\begin{split}
+f(t; \lambda) &= \lambda e ^ {-\lambda t} \\
+\mathrm E[t] &= \frac 1 \lambda \\
+\mathrm{Var}[t] &= \frac 1 {\lambda^2}
+\end{split}$$</div>
+
+<p>また、$t$ までに最低1回は起こる確率、
+すなわち累積分布関数 (CDF: cumulative distribution function) は</p>
+
+<div>$$\begin{split}
+F(t; \lambda)
+   &= \int _0^t f(x, \lambda) \mathrm dx
+   &= \int _0^t \lambda e ^ {-\lambda x} \mathrm dx\\
+   &= -e ^ {-\lambda x} \Big | _0^t\\
+   &= 1 - e ^ {-\lambda t}
+\end{split}$$</div>
+
+<p>これは起こらない確率 $Q(t)$ を1から引いたものに等しい。</p>
+
+<h2 id="gamma-distribution">Gamma distribution</h2>
+
+<p>パラメータの取り方によって書き方がいくつかある。
+shape <em>k</em> (&gt;0), scale <em>θ</em> (&gt;0) を使った一般的な表し方では、
+平均待ち時間 <em>θ</em> の事象が <em>k</em> 回起こるまでの待ち時間の分布と見なせる。</p>
+
+<div>$$\begin{split}
+f(x; k, \theta) &= \frac {x^{k-1} \exp[-\frac x \theta]} {\theta^k \Gamma(k)} \\
+\mathrm E[x] &= k\theta \\
+\mathrm{Var}[x] &= k\theta^2 \\
+\end{split}$$</div>
+
+<p>rate parameter $\lambda = \frac 1 \theta$ を使った形だと導出もイメージしやすい。
+時間当たり <em>λ</em> 回起こるPoisson過程で <em>k</em> 回起こるまでの待ち時間の分布、
+すなわち指数分布を <em>k</em> 個畳み込んだ分布。
+cf. <a href="/students/iwasaki/lectures/wakeley-2-2.html">/lectures/wakeley-2-2</a></p>
+
+<div>$$\begin{split}
+f(t; k, \lambda) &= \lambda e^{-\lambda t}
+                \frac {(\lambda t)^{k-1}}
+                      {\Gamma(k)} \\
+\mathrm E[t] &= \frac k \lambda \\
+\mathrm{Var}[t] &= \frac k {\lambda^2} \\
+\end{split}$$</div>
+
+<p>内部的に <em>k</em> ステップからなる過程が時間 $\mu = \frac k \lambda = k\theta$ で完了する。</p>
+
+<div>$$\begin{split}
+f(t; k, \mu) &= e^{-\left(\frac k \mu t \right)}
+                \frac {k^k t^{k-1}}
+                      {\mu^k \Gamma(k)} \\
+\mathrm E[t] &= \mu \\
+\mathrm{Var}[t] &= \frac {\mu^2} k \\
+\end{split}$$</div>
+
+<h2 id="weibull-distribution">Weibull distribution</h2>
+
+<p>指数関数がmemerylessな待ち時間なのに対して、
+こちらはある時間まで事象が起こらなかったという記憶ありの待ち時間</p>
+
+<div>$$\begin{split}
+f(t; k, \lambda) &= \frac k \lambda \left(\frac t \lambda \right)^{k - 1}
+                    \exp[-\left(\frac t \lambda \right)^k] \\
+F(t; k, \lambda) &= 1 - \exp[-\left(\frac t \lambda \right)^k]
+\end{split}$$</div>
+
+<ul>
+<li>Scale parameter: $\lambda$</li>
+<li>Shape parameter: <em>k</em></li>
+</ul>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats">
+<label for="R stats">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology" checked>
+<label for="Biology" class="active">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li class="active"><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "Stochastic Process"
++++
+
+## Geometric distribution 幾何分布
+
+確率 *p* のBernoulli試行で *k* 回目に初めて当たる確率。
+まず外し続ける必要がある。
+
+&lt;div&gt;$$\begin{split}
+\mathrm{Prob}[X = k] &amp;= p(1 - p)^{k - 1} \\
+\mathrm E[X] &amp;= \frac 1 p \\
+\mathrm{Var}[X] &amp;= \frac {1 - p} p
+\end{split}$$&lt;/div&gt;
+
+## Negative binomial distribution 負の二項分布
+
+確率 *p* のBernoulli試行で *r* 回目の当たりが *k* 回目に出る確率。
+幾何分布を *r* 回畳み込んだもの。
+
+&lt;div&gt;$$\begin{split}
+\mathrm{Prob}[X = k] &amp;= {k - 1 \choose r - 1} p^r (1 - p)^{k - r} \\
+\mathrm E[X] &amp;= \frac r p \\
+\mathrm{Var}[X] &amp;= \frac {r(1 - p)} {p^2}
+\end{split}$$&lt;/div&gt;
+
+## Exponential distribution 指数分布
+
+幾何分布の連続時間バージョン。
+時間あたり $\lambda$ 回起こるPoisson過程で時間 $t$ まで起こらない確率 $Q(t)$
+
+&lt;div&gt;$$\begin{split}
+Q(t) &amp;= \lim_{\mathrm dt \to 0} (1 - \lambda \mathrm dt) ^ {t/ \mathrm d t}\\
+     &amp;= \lim_{n \to \infty} (1 - \frac {\lambda t} n) ^ n\\
+     &amp;= e ^ {-\lambda t}
+\end{split}$$&lt;/div&gt;
+
+{#{#HUGOSHORTCODE-1#}#}
+
+{#{#HUGOSHORTCODE-2#}#}
+
+$t$ らへんで初めて起こる確率は、
+$t$ まで起こらず次の瞬間に起こる確率
+$Q(t) \lambda \mathrm dt = \lambda e ^ {-\lambda t} \mathrm dt$
+であり、それを全区間たすと1になる
+
+&lt;div&gt;$$\begin{split}
+\int _0^\infty \lambda e ^ {-\lambda t} \mathrm dt
+   = -e ^ {\lambda t} \Big | _0^\infty
+   = 1
+\end{split}$$&lt;/div&gt;
+
+よって、最初の事象が起こるまでの待ち時間 $t$ の分布、
+すなわち確率密度関数 (PDF: probability density function) は
+
+&lt;div&gt;$$\begin{split}
+f(t; \lambda) &amp;= \lambda e ^ {-\lambda t} \\
+\mathrm E[t] &amp;= \frac 1 \lambda \\
+\mathrm{Var}[t] &amp;= \frac 1 {\lambda^2}
+\end{split}$$&lt;/div&gt;
+
+また、$t$ までに最低1回は起こる確率、
+すなわち累積分布関数 (CDF: cumulative distribution function) は
+
+&lt;div&gt;$$\begin{split}
+F(t; \lambda)
+   &amp;= \int _0^t f(x, \lambda) \mathrm dx
+   &amp;= \int _0^t \lambda e ^ {-\lambda x} \mathrm dx\\
+   &amp;= -e ^ {-\lambda x} \Big | _0^t\\
+   &amp;= 1 - e ^ {-\lambda t}
+\end{split}$$&lt;/div&gt;
+
+これは起こらない確率 $Q(t)$ を1から引いたものに等しい。
+
+## Gamma distribution
+
+パラメータの取り方によって書き方がいくつかある。
+shape *k* (&amp;gt;0), scale *θ* (&amp;gt;0) を使った一般的な表し方では、
+平均待ち時間 *θ* の事象が *k* 回起こるまでの待ち時間の分布と見なせる。
+
+&lt;div&gt;$$\begin{split}
+f(x; k, \theta) &amp;= \frac {x^{k-1} \exp[-\frac x \theta]} {\theta^k \Gamma(k)} \\
+\mathrm E[x] &amp;= k\theta \\
+\mathrm{Var}[x] &amp;= k\theta^2 \\
+\end{split}$$&lt;/div&gt;
+
+rate parameter $\lambda = \frac 1 \theta$ を使った形だと導出もイメージしやすい。
+時間当たり *λ* 回起こるPoisson過程で *k* 回起こるまでの待ち時間の分布、
+すなわち指数分布を *k* 個畳み込んだ分布。
+cf. [/lectures/wakeley-2-2]({#{#HUGOSHORTCODE-3#}#})
+
+&lt;div&gt;$$\begin{split}
+f(t; k, \lambda) &amp;= \lambda e^{-\lambda t}
+                \frac {(\lambda t)^{k-1}}
+                      {\Gamma(k)} \\
+\mathrm E[t] &amp;= \frac k \lambda \\
+\mathrm{Var}[t] &amp;= \frac k {\lambda^2} \\
+\end{split}$$&lt;/div&gt;
+
+内部的に *k* ステップからなる過程が時間 $\mu = \frac k \lambda = k\theta$ で完了する。
+
+&lt;div&gt;$$\begin{split}
+f(t; k, \mu) &amp;= e^{-\left(\frac k \mu t \right)}
+                \frac {k^k t^{k-1}}
+                      {\mu^k \Gamma(k)} \\
+\mathrm E[t] &amp;= \mu \\
+\mathrm{Var}[t] &amp;= \frac {\mu^2} k \\
+\end{split}$$&lt;/div&gt;
+
+## Weibull distribution
+
+指数関数がmemerylessな待ち時間なのに対して、
+こちらはある時間まで事象が起こらなかったという記憶ありの待ち時間
+
+&lt;div&gt;$$\begin{split}
+f(t; k, \lambda) &amp;= \frac k \lambda \left(\frac t \lambda \right)^{k - 1}
+                    \exp[-\left(\frac t \lambda \right)^k] \\
+F(t; k, \lambda) &amp;= 1 - \exp[-\left(\frac t \lambda \right)^k]
+\end{split}$$&lt;/div&gt;
+
+-   Scale parameter: $\lambda$
+-   Shape parameter: *k*
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

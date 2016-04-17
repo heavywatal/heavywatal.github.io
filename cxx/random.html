@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>擬似乱数生成器 - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+擬似乱数生成器
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<div class="warning">
+<ul>
+<li><code>&lt;cstdlib&gt;</code> の <code>std::rand()</code> は乱数の質も悪く、速度も遅いので非推奨。</li>
+<li><code>&lt;algorithm&gt;</code> の <code>std::random_shuffle()</code> は引数省略で
+<code>std::rand()</code> が使われてしまうので非推奨。</li>
+</ul>
+
+</div>
+
+
+<ul>
+<li>外部の生成器としてはSFMTやdSFMTが高速で高品質。</li>
+<li>C++11 からは新しい <code>&lt;random&gt;</code> が標準ライブラリに追加されてまともに使えるっぽい。</li>
+<li>C++11 の <code>&lt;algorithm&gt;</code> の <code>std::shuffle()</code>
+は生成器を明示的に渡す必要があるのでよい。</li>
+</ul>
+
+<h2 id="mersenne-twister">Mersenne Twister</h2>
+
+<p><a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt.html">http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt.html</a></p>
+
+<p>松本眞と西村拓士によって開発された高速・高品質な擬似乱数生成器。
+標準の <code>&lt;random&gt;</code> でも利用可能。</p>
+
+<h3 id="sfmt">SFMT</h3>
+
+<p><a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/">http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/</a></p>
+
+<p>Mersenne Twisterを松本眞と斎藤睦夫がさらに改良したもの。
+2倍速く、より均等な分布になってるらしい。整数乱数。
+標準には含まれず、ソースからのビルドが必要。</p>
+
+<h3 id="dsfmt">dSFMT</h3>
+
+<p><a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/#dSFMT">http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/#dSFMT</a></p>
+
+<p>SFMTの <code>double</code> 版。
+整数乱数から除算で変換するよりも良質で高速。
+v2.1からは整数も出力可能。
+標準には含まれず、ソースからのビルドが必要。</p>
+
+<div class="note">
+<p>SFMTやdSFMTを簡単に導入するためのインストーラを作った。</p>
+
+<p><a href="https://github.com/heavywatal/sfmt-installer/releases">https://github.com/heavywatal/sfmt-installer/releases</a></p>
+
+</div>
+
+
+<h2 id="xorshift">Xorshift</h2>
+
+<p><a href="http://www.jstatsoft.org/v08/i14"><a href="http://www.jstatsoft.org/v08/i14">http://www.jstatsoft.org/v08/i14</a></a></p>
+
+<p>周期が2\^128でSFMTほど良質ではないらしいが、生成は超高速で、
+何より実装が簡単</p>
+
+<pre><code class="language-c++">// シードは４要素の配列。どっかで一度適当に定義すること。
+extern unsigned int seed128[4];
+
+// シードを与える関数
+inline void init_xorshift(unsigned int s){
+    for (unsigned int i=0; i&lt;4; ++i) seed128[i]=s=1812433253U*(s^(s&gt;&gt;30))+i;
+}
+
+// 32bitの整数乱数を生成
+inline unsigned int xorshift128(){
+    unsigned int *a(seed128);
+    unsigned int  t(a[0]^(a[0]&lt;&lt;11));
+    a[0] = a[1]; a[1] = a[2]; a[2] = a[3];
+    return a[3]=(a[3]^(a[3]&gt;&gt;19))^(t^(t&gt;&gt;8));
+}
+</code></pre>
+
+<h2 id="random"><code>&lt;random&gt;</code></h2>
+
+<ul>
+<li><a href="http://www.cplusplus.com/reference/random/">http://www.cplusplus.com/reference/random/</a></li>
+<li><a href="http://en.cppreference.com/w/cpp/numeric/random">http://en.cppreference.com/w/cpp/numeric/random</a></li>
+<li><a href="https://sites.google.com/site/cpprefjp/reference/random">https://sites.google.com/site/cpprefjp/reference/random</a></li>
+</ul>
+
+<p>C++11 ではまともに使える乱数ライブラリが追加された。
+乱数生成エンジンと分布生成器を組み合わせて使う。</p>
+
+<h2 id="seed">Seed</h2>
+
+<h3 id="dev-urandom"><code>/dev/urandom</code></h3>
+
+<p><code>/dev/random</code> は擬似乱数を生成するデバイスで、
+環境ノイズから乱数を生成するため自然乱数に近い。
+<code>/dev/urandom</code> は十分なノイズが蓄積していなくても
+内部プールの再利用によってすぐに生成してくれるが、
+そのために <code>/dev/random</code> ほど安全ではない。
+長期に渡って使われる暗号鍵の生成以外の目的では
+<code>/dev/urandom</code> の利用が推奨されている。
+LinuxやOSXで利用可能。</p>
+
+<pre><code class="language-c++">##include &lt;fstream&gt;
+
+unsigned int dev_urandom() {
+    unsigned int x;
+    try {
+        std::ifstream fin(&quot;/dev/urandom&quot;, std::ios::binary | std::ios::in);
+        fin.exceptions(std::ios::failbit);
+        fin.read(reinterpret_cast&lt;char*&gt;(&amp;x), sizeof(unsigned int));
+    }
+    catch (std::ios::failure&amp; e) {throw std::ios::failure(&quot;/dev/urandom&quot;);}
+    return x;
+}
+</code></pre>
+
+<h3 id="std-random-device"><code>std::random_device</code></h3>
+
+<p>C++11ではそのための関数が <code>&lt;random&gt;</code> に用意されている。
+これも基本的には <code>/dev/urandom</code> から生成するらしい</p>
+
+<pre><code class="language-c++">std::random_device rd;
+const std::random_device::result_type seed = rd();
+</code></pre>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats">
+<label for="R stats">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;" checked>
+<label for="C&#43;&#43;" class="active">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li class="active"><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "擬似乱数生成器"
++++
+
+{#{#HUGOSHORTCODE-1#}#}
+
+-   外部の生成器としてはSFMTやdSFMTが高速で高品質。
+-   C&#43;&#43;11 からは新しい `&lt;random&gt;` が標準ライブラリに追加されてまともに使えるっぽい。
+-   C&#43;&#43;11 の `&lt;algorithm&gt;` の `std::shuffle()`
+    は生成器を明示的に渡す必要があるのでよい。
+
+## Mersenne Twister
+
+&lt;http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt.html&gt;
+
+松本眞と西村拓士によって開発された高速・高品質な擬似乱数生成器。
+標準の `&lt;random&gt;` でも利用可能。
+
+### SFMT
+
+&lt;http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/&gt;
+
+Mersenne Twisterを松本眞と斎藤睦夫がさらに改良したもの。
+2倍速く、より均等な分布になってるらしい。整数乱数。
+標準には含まれず、ソースからのビルドが必要。
+
+### dSFMT
+
+&lt;http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/#dSFMT&gt;
+
+SFMTの `double` 版。
+整数乱数から除算で変換するよりも良質で高速。
+v2.1からは整数も出力可能。
+標準には含まれず、ソースからのビルドが必要。
+
+{#{#HUGOSHORTCODE-2#}#}
+
+## Xorshift
+
+[&lt;http://www.jstatsoft.org/v08/i14&gt;](http://www.jstatsoft.org/v08/i14)
+
+周期が2\^128でSFMTほど良質ではないらしいが、生成は超高速で、
+何より実装が簡単
+
+```c&#43;&#43;
+// シードは４要素の配列。どっかで一度適当に定義すること。
+extern unsigned int seed128[4];
+
+// シードを与える関数
+inline void init_xorshift(unsigned int s){
+    for (unsigned int i=0; i&lt;4; &#43;&#43;i) seed128[i]=s=1812433253U*(s^(s&gt;&gt;30))&#43;i;
+}
+
+// 32bitの整数乱数を生成
+inline unsigned int xorshift128(){
+    unsigned int *a(seed128);
+    unsigned int  t(a[0]^(a[0]&lt;&lt;11));
+    a[0] = a[1]; a[1] = a[2]; a[2] = a[3];
+    return a[3]=(a[3]^(a[3]&gt;&gt;19))^(t^(t&gt;&gt;8));
+}
+```
+
+## `&lt;random&gt;`
+
+-   &lt;http://www.cplusplus.com/reference/random/&gt;
+-   &lt;http://en.cppreference.com/w/cpp/numeric/random&gt;
+-   &lt;https://sites.google.com/site/cpprefjp/reference/random&gt;
+
+C&#43;&#43;11 ではまともに使える乱数ライブラリが追加された。
+乱数生成エンジンと分布生成器を組み合わせて使う。
+
+## Seed
+
+### `/dev/urandom`
+
+`/dev/random` は擬似乱数を生成するデバイスで、
+環境ノイズから乱数を生成するため自然乱数に近い。
+`/dev/urandom` は十分なノイズが蓄積していなくても
+内部プールの再利用によってすぐに生成してくれるが、
+そのために `/dev/random` ほど安全ではない。
+長期に渡って使われる暗号鍵の生成以外の目的では
+`/dev/urandom` の利用が推奨されている。
+LinuxやOSXで利用可能。
+
+```c&#43;&#43;
+##include &lt;fstream&gt;
+
+unsigned int dev_urandom() {
+    unsigned int x;
+    try {
+        std::ifstream fin(&#34;/dev/urandom&#34;, std::ios::binary | std::ios::in);
+        fin.exceptions(std::ios::failbit);
+        fin.read(reinterpret_cast&lt;char*&gt;(&amp;x), sizeof(unsigned int));
+    }
+    catch (std::ios::failure&amp; e) {throw std::ios::failure(&#34;/dev/urandom&#34;);}
+    return x;
+}
+```
+
+### `std::random_device`
+
+C&#43;&#43;11ではそのための関数が `&lt;random&gt;` に用意されている。
+これも基本的には `/dev/urandom` から生成するらしい
+
+```c&#43;&#43;
+std::random_device rd;
+const std::random_device::result_type seed = rd();
+```
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

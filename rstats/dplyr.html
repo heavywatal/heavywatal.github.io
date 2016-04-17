@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>dplyr: 高速data.frame処理 - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+dplyr — 高速data.frame処理
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<ul>
+<li><a href="https://github.com/hadley/dplyr">https://github.com/hadley/dplyr</a></li>
+<li><a href="http://cran.r-project.org/web/packages/dplyr/vignettes/introduction.html">http://cran.r-project.org/web/packages/dplyr/vignettes/introduction.html</a></li>
+<li><a href="http://blog.rstudio.org/2014/01/17/introducing-dplyr/">http://blog.rstudio.org/2014/01/17/introducing-dplyr/</a></li>
+<li><a href="http://www.rstudio.com/resources/cheatsheets/">http://www.rstudio.com/resources/cheatsheets/</a></li>
+</ul>
+
+<p>データフレームに特化した版 <a href="/students/iwasaki/rstats/plyr.html">plyr</a> 。
+<a href="/students/iwasaki/rstats/tidyr.html">tidyr</a> と一緒に使うとよい。</p>
+
+<p><code>install.packages('dplyr')</code> でインストールし、
+<code>library(dplyr)</code> で読み込んでから使う。</p>
+
+<h2 id="関数の連結">関数の連結</h2>
+
+<p><code>plyr::ddply()</code> 的な処理をもっと柔軟に、見やすく書ける</p>
+
+<pre><code class="language-r">## plyr
+plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, Sepal.Length)), petal_area=Petal.Length*Petal.Width*0.5), .(Species), numcolwise(mean))
+
+## dplyr
+iris %&gt;%
+   dplyr::filter(Species != 'setosa') %&gt;%
+   dplyr::select(-starts_with('Sepal')) %&gt;%
+   dplyr::mutate(petal_area=Petal.Length * Petal.Width * 0.5) %&gt;%
+   dplyr::group_by(Species) %&gt;%
+   dplyr::summarise_each(funs(mean))
+
+## どちらも結果は
+     Species Petal.Length Petal.Width petal_area
+1 versicolor        4.260       1.326     2.8602
+2  virginica        5.552       2.026     5.6481
+</code></pre>
+
+<dl>
+<dt><code>%&gt;%</code></dt>
+<dd><p>左の値を右の関数に第一引数として渡す。
+<code>.data %&gt;% func(arg1, arg2)</code> は <code>func(.data, arg1, arg2)</code> になる。
+処理する順に書けるので、次々と関数を適用していくときでも読みやすい。</p>
+
+<div class="note">
+<p>現状 <code>dplyr</code> は <code>magrittr</code> パッケージのものを採用しているが、
+<code>pipeR</code> パッケージの <code>%&gt;&gt;%</code> のほうが柔軟で高速。
+<a href="http://renkun.me/pipeR-tutorial/">http://renkun.me/pipeR-tutorial/</a></p>
+
+</div>
+</dd>
+<dt><code>dplyr::group_by(.data, col1, col2, ..., add=FALSE)</code></dt>
+<dd><p>グループごとに区切って次の処理に渡す。 e.g. <code>summarise()</code>, <code>tally()</code>, <code>do()</code> など</p></dd>
+<dt><code>dplyr::rowwise(.data)</code></dt>
+<dd><p>行ごとに区切って次の処理に渡す</p></dd>
+<dt><code>dplyr::do(.data, ...)</code></dt>
+<dd><p>グループごとに処理する。
+<code>{}</code> 内に長い処理を書いてもいいし、関数に渡してもよい。
+グループごとに切りだされた部分は <code>.</code> で参照できる。
+出力が <code>data.frame</code> じゃないと
+<code>Error: Results are not data frames at positions: 1</code>
+のように怒られるが、
+<code>do(dummy=func(.))</code> のように名前付きにすると
+<code>data.frame</code> に入らないような型でも大丈夫になる。</p></dd>
+</dl>
+
+<h2 id="コア関数-verb">コア関数 (verb)</h2>
+
+<dl>
+<dt><code>dplyr::filter(.data, ...)</code></dt>
+<dd><p>列の値で行を絞る。<code>base::subset()</code> と似たようなもの</p>
+
+<pre><code class="language-r">&gt; iris %&gt;% dplyr::filter(Sepal.Length&lt;6, Sepal.Width&gt;4)
+  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+1          5.7         4.4          1.5         0.4  setosa
+2          5.2         4.1          1.5         0.1  setosa
+3          5.5         4.2          1.4         0.2  setosa
+</code></pre></dd>
+<dt><code>dplyr::slice(.data, ...)</code></dt>
+<dd><p>行数を指定して行を絞る。
+<code>`[`(i,)</code> の代わりに</p>
+
+<pre><code class="language-r">&gt; iris %&gt;% dplyr::slice(2:4)
+  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+1          4.9         3.0          1.4         0.2  setosa
+2          4.7         3.2          1.3         0.2  setosa
+3          4.6         3.1          1.5         0.2  setosa
+</code></pre></dd>
+<dt><code>dplyr::select(.data, ...)</code></dt>
+<dd><p>使う列を絞る。複数指定, 範囲指定、負の指定、パターン指定が可能<br />
+<code>starts_with(x, ignore.case=FALSE)</code><br />
+<code>ends_width(x, ignore.case=FALSE)</code><br />
+<code>contains(x, ignore.case=FALSE)</code><br />
+<code>matches(x, ignore.case=FALSE)</code><br />
+<code>num_range('x', 1:5, width=2)</code></p>
+
+<pre><code class="language-r">iris %&gt;% dplyr::select(-(Sepal.Width:Petal.Length))
+iris %&gt;% dplyr::select(ends_with('Length'))
+</code></pre>
+
+<p><code>.data[, j, drop=TRUE]</code> のように1列分をベクタで得たいときは二重角括弧か、
+<code>pipeR</code> の <code>%&gt;&gt;%</code> を通して括弧に流す。</p>
+
+<pre><code class="language-r">iris %&gt;% `[[`('Species')
+iris %&gt;&gt;% (Species)
+</code></pre></dd>
+<dt><code>dplyr::rename(.data, ...)</code></dt>
+<dd><p>列の改名</p>
+
+<pre><code class="language-r">&gt; iris %&gt;% dplyr::rename(sp=Species)
+  Sepal.Length Sepal.Width Petal.Length Petal.Width     sp
+1          5.1         3.5          1.4         0.2 setosa
+2          4.9         3.0          1.4         0.2 setosa
+3          4.7         3.2          1.3         0.2 setosa
+</code></pre></dd>
+<dt><code>dplyr::mutate(.data, ...)</code></dt>
+<dd><p>既存の列を使って新しい列を作る。
+<code>base::transform()</code> とほとんど同じだがそれよりも高速で高機能</p>
+
+<pre><code class="language-r"># modify existing column
+iris %&gt;% dplyr::mutate(Sepal.Length = log(Sepal.Length))
+
+# create new column
+iris %&gt;% dplyr::mutate(ln_sepal_length = log(Sepal.Length))
+</code></pre></dd>
+<dt><code>dplyr::transmute(.data, ...)</code></dt>
+<dd><p>指定した列以外を保持しない版の <code>mutate()</code></p></dd>
+<dt><code>dplyr::distinct(.data, ...)</code></dt>
+<dd><p>指定した列に関してユニークな行のみ返す</p>
+
+<pre><code class="language-r">&gt; iris %&gt;% distinct(Species)
+  Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
+1          5.1         3.5          1.4         0.2     setosa
+2          7.0         3.2          4.7         1.4 versicolor
+3          6.3         3.3          6.0         2.5  virginica
+</code></pre></dd>
+<dt><code>dplyr::arrange(.data, column1, column2, ...)</code></dt>
+<dd><p>指定した列の昇順で <code>data.frame</code> の行を並べ替える。
+<code>arrange(desc(column))</code> で降順になる。
+<code>order()</code> を使うよりもタイピングの繰り返しが少ないし直感的</p>
+
+<pre><code class="language-r">.data[with(.data, order(col_a, col_b)), ]
+# is equivalent to
+.data %&gt;% dplyr::arrange(col_a, col_b)
+</code></pre></dd>
+<dt><code>dplyr::summarise(.data, ...)</code></dt>
+<dd><p>列に対する関数をグループごとに適用して1行にしたものを <code>rbind()</code> してまとめる</p>
+
+<pre><code class="language-r">&gt; iris %&gt;% group_by(Species) %&gt;% summarise(minpl=min(Petal.Length), maxsw=max(Sepal.Width))
+     Species minpl maxsw
+1     setosa   1.0   4.4
+2 versicolor   3.0   3.4
+3  virginica   4.5   3.8
+</code></pre></dd>
+<dt><code>dplyr::summarise_each(.data, funs, ...)</code>, <code>dplyr::mutate_each(.data, funs, ...)</code></dt>
+<dd><p>複数の列に複数の関数を適用する(<code>dplyr::funs()</code> と共に)</p>
+
+<pre><code class="language-r">iris %&gt;% group_by(Species) %&gt;% summarise_each(funs(min, mean, max), ends_with(&quot;Width&quot;))
+</code></pre></dd>
+</dl>
+
+<h2 id="その他の関数">その他の関数</h2>
+
+<dl>
+<dt><code>dplyr::data_frame(...)</code></dt>
+<dd><p>より便利でバグの混入しにくい方法で <code>data.frame</code> を作る。</p>
+
+<ul>
+<li>勝手に型変換しない (<code>stringsAsFactors=FALSE</code>)</li>
+<li>勝手に列名を変えない</li>
+<li>長さ1の変数以外はリサイクルしない</li>
+<li>引数の評価がlazyに行われるので前の列を利用して後の列を作ったりできる</li>
+<li><code>tbl_df</code> クラスを付加</li>
+<li>ただし <code>matrix</code> からの直接変換はサポートしなそう
+<a href="https://github.com/hadley/dplyr/issues/324">https://github.com/hadley/dplyr/issues/324</a></li>
+</ul></dd>
+<dt><code>dplyr::***_join(x, y, by=NULL, copy=FALSE)</code></dt>
+<dd><p><code>by</code> で指定した列がマッチするように行を合わせて <code>cbind()</code></p>
+
+<p><code>full_join()</code>: <code>x</code> と <code>y</code> の全ての行を保持。<br />
+<code>inner_join()</code>: <code>x</code> と <code>y</code> の <code>by</code> がマッチする行のみ<br />
+<code>left_join()</code>: <code>x</code> の全ての行を保持。<code>y</code> に複数マッチする行があったらすべて保持。<br />
+<code>right_join()</code>: <code>y</code> の全ての行を保持。<code>x</code> に複数マッチする行があったらすべて保持。<br />
+<code>semi_join()</code>: <code>x</code> の全ての行を保持。<code>y</code> に複数マッチする行があっても元の <code>x</code> の行だけ保持。<br />
+<code>anti_join()</code>: <code>y</code> にマッチしない <code>x</code> の行のみ。</p>
+
+<p>列名が異なる場合は <code>by</code> を名前付きベクタにすればよい</p></dd>
+<dt><code>dplyr::bind_rows(...)</code>, <code>dplyr::bind_cols(...)</code></dt>
+<dd><p>標準の <code>rbind()</code>, <code>cbind()</code> より効率よく <code>data.frame</code> を結合。
+引数は個別でもリストでもよい。</p></dd>
+<dt><code>dplyr::add_rownames(x, var='rowname')</code></dt>
+<dd><p>1列目に行名として1からの整数を振る。</p></dd>
+<dt><code>dplyr::ntile(x, n)</code></dt>
+<dd><p>数値ベクトル <code>x</code> を順位によって <code>n</code> 個のクラスに均等分け</p></dd>
+<dt><code>dplyr::n_distinct(x)</code></dt>
+<dd><p>高速で簡潔な <code>length(unique(x))</code></p></dd>
+<dt><code>dplyr::last(x, order_by=NULL, default=default_missing(x))</code></dt>
+<dd><p>最後の要素にアクセス。
+<code>x[length(x)]</code> と書かなくて済む！</p></dd>
+<dt><code>dplyr::glimpse(.data, width=getOption('width'))</code></dt>
+<dd><p>データの中身をざっと見る。
+<code>print()</code> とか <code>str()</code> のようなもの。</p></dd>
+<dt><code>dplyr::lead(x n=1, default=NA, order_by=NULL)</code>, <code>dplyr::lag(...)</code></dt>
+<dd><p><code>x</code> の中身を <code>n</code> だけずらして <code>default</code> で埋める。
+<code>lead()</code> は前に、<code>lag()</code> は後ろにずらす</p>
+
+<pre><code class="language-r">&gt; lag(seq_len(5), 2)
+[1] NA NA 1 2 3
+</code></pre></dd>
+<dt><code>dplyr::top_n(.data, n, wt=NULL)</code></dt>
+<dd><p><code>.data %&gt;% arrange(wt) %&gt;% head(n)</code> を一撃で、グループごとに。</p></dd>
+<dt><code>dplyr::tally(x, wt, sort=FALSE)</code></dt>
+<dd><p><code>summarise(x, n=n())</code> のショートカット。
+<code>wt</code> にカラムを指定して重み付けすることもできる。</p></dd>
+<dt><code>dplyr::count(x, ..., wt=NULL, sort=FALSE)</code></dt>
+<dd><p><code>group_by(...) %&gt;% tally()</code> のショートカット。</p></dd>
+<dt><code>dplyr::between(x, left, right)</code></dt>
+<dd><p><code>left &lt;= x &amp; x &lt;= right</code> に相当</p></dd>
+</dl>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats" checked>
+<label for="R stats" class="active">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li class="active"><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools">
+<label for="Developer Tools">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "dplyr"
++++
+
+-   &lt;https://github.com/hadley/dplyr&gt;
+-   &lt;http://cran.r-project.org/web/packages/dplyr/vignettes/introduction.html&gt;
+-   &lt;http://blog.rstudio.org/2014/01/17/introducing-dplyr/&gt;
+-   &lt;http://www.rstudio.com/resources/cheatsheets/&gt;
+
+データフレームに特化した版 [plyr]({#{#HUGOSHORTCODE-1#}#}) 。
+[tidyr]({#{#HUGOSHORTCODE-2#}#}) と一緒に使うとよい。
+
+`install.packages(&#39;dplyr&#39;)` でインストールし、
+`library(dplyr)` で読み込んでから使う。
+
+## 関数の連結
+
+`plyr::ddply()` 的な処理をもっと柔軟に、見やすく書ける
+
+```r
+## plyr
+plyr::ddply(plyr::mutate(subset(iris, Species!=&#39;setosa&#39;, select=-c(Sepal.Width, Sepal.Length)), petal_area=Petal.Length*Petal.Width*0.5), .(Species), numcolwise(mean))
+
+## dplyr
+iris %&gt;%
+   dplyr::filter(Species != &#39;setosa&#39;) %&gt;%
+   dplyr::select(-starts_with(&#39;Sepal&#39;)) %&gt;%
+   dplyr::mutate(petal_area=Petal.Length * Petal.Width * 0.5) %&gt;%
+   dplyr::group_by(Species) %&gt;%
+   dplyr::summarise_each(funs(mean))
+
+## どちらも結果は
+     Species Petal.Length Petal.Width petal_area
+1 versicolor        4.260       1.326     2.8602
+2  virginica        5.552       2.026     5.6481
+```
+
+`%&gt;%`
+:   左の値を右の関数に第一引数として渡す。
+    `.data %&gt;% func(arg1, arg2)` は `func(.data, arg1, arg2)` になる。
+    処理する順に書けるので、次々と関数を適用していくときでも読みやすい。
+
+    {#{#HUGOSHORTCODE-3#}#}
+
+`dplyr::group_by(.data, col1, col2, ..., add=FALSE)`
+:   グループごとに区切って次の処理に渡す。 e.g. `summarise()`, `tally()`, `do()` など
+
+`dplyr::rowwise(.data)`
+:   行ごとに区切って次の処理に渡す
+
+`dplyr::do(.data, ...)`
+:   グループごとに処理する。
+    `{}` 内に長い処理を書いてもいいし、関数に渡してもよい。
+    グループごとに切りだされた部分は `.` で参照できる。
+    出力が `data.frame` じゃないと
+    `Error: Results are not data frames at positions: 1`
+    のように怒られるが、
+    `do(dummy=func(.))` のように名前付きにすると
+    `data.frame` に入らないような型でも大丈夫になる。
+
+## コア関数 (verb)
+
+`dplyr::filter(.data, ...)`
+:   列の値で行を絞る。`base::subset()` と似たようなもの
+
+    ```r
+    &gt; iris %&gt;% dplyr::filter(Sepal.Length&lt;6, Sepal.Width&gt;4)
+      Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+    1          5.7         4.4          1.5         0.4  setosa
+    2          5.2         4.1          1.5         0.1  setosa
+    3          5.5         4.2          1.4         0.2  setosa
+    ```
+
+`dplyr::slice(.data, ...)`
+:   行数を指定して行を絞る。
+    `` `[`(i,) `` の代わりに
+
+    ```r
+    &gt; iris %&gt;% dplyr::slice(2:4)
+      Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+    1          4.9         3.0          1.4         0.2  setosa
+    2          4.7         3.2          1.3         0.2  setosa
+    3          4.6         3.1          1.5         0.2  setosa
+    ```
+
+`dplyr::select(.data, ...)`
+:   使う列を絞る。複数指定, 範囲指定、負の指定、パターン指定が可能\
+    `starts_with(x, ignore.case=FALSE)`\
+    `ends_width(x, ignore.case=FALSE)`\
+    `contains(x, ignore.case=FALSE)`\
+    `matches(x, ignore.case=FALSE)`\
+    `num_range(&#39;x&#39;, 1:5, width=2)`
+
+    ```r
+    iris %&gt;% dplyr::select(-(Sepal.Width:Petal.Length))
+    iris %&gt;% dplyr::select(ends_with(&#39;Length&#39;))
+    ```
+
+    `.data[, j, drop=TRUE]` のように1列分をベクタで得たいときは二重角括弧か、
+    `pipeR` の `%&gt;&gt;%` を通して括弧に流す。
+
+    ```r
+    iris %&gt;% `[[`(&#39;Species&#39;)
+    iris %&gt;&gt;% (Species)
+    ```
+
+`dplyr::rename(.data, ...)`
+:   列の改名
+
+    ```r
+    &gt; iris %&gt;% dplyr::rename(sp=Species)
+      Sepal.Length Sepal.Width Petal.Length Petal.Width     sp
+    1          5.1         3.5          1.4         0.2 setosa
+    2          4.9         3.0          1.4         0.2 setosa
+    3          4.7         3.2          1.3         0.2 setosa
+    ```
+
+`dplyr::mutate(.data, ...)`
+:   既存の列を使って新しい列を作る。
+    `base::transform()` とほとんど同じだがそれよりも高速で高機能
+
+    ```r
+    # modify existing column
+    iris %&gt;% dplyr::mutate(Sepal.Length = log(Sepal.Length))
+
+    # create new column
+    iris %&gt;% dplyr::mutate(ln_sepal_length = log(Sepal.Length))
+    ```
+
+`dplyr::transmute(.data, ...)`
+:   指定した列以外を保持しない版の `mutate()`
+
+`dplyr::distinct(.data, ...)`
+:   指定した列に関してユニークな行のみ返す
+
+    ```r
+    &gt; iris %&gt;% distinct(Species)
+      Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
+    1          5.1         3.5          1.4         0.2     setosa
+    2          7.0         3.2          4.7         1.4 versicolor
+    3          6.3         3.3          6.0         2.5  virginica
+    ```
+
+`dplyr::arrange(.data, column1, column2, ...)`
+:   指定した列の昇順で `data.frame` の行を並べ替える。
+    `arrange(desc(column))` で降順になる。
+    `order()` を使うよりもタイピングの繰り返しが少ないし直感的
+
+    ```r
+    .data[with(.data, order(col_a, col_b)), ]
+    # is equivalent to
+    .data %&gt;% dplyr::arrange(col_a, col_b)
+    ```
+
+`dplyr::summarise(.data, ...)`
+:   列に対する関数をグループごとに適用して1行にしたものを `rbind()` してまとめる
+
+    ```r
+    &gt; iris %&gt;% group_by(Species) %&gt;% summarise(minpl=min(Petal.Length), maxsw=max(Sepal.Width))
+         Species minpl maxsw
+    1     setosa   1.0   4.4
+    2 versicolor   3.0   3.4
+    3  virginica   4.5   3.8
+    ```
+
+`dplyr::summarise_each(.data, funs, ...)`, `dplyr::mutate_each(.data, funs, ...)`
+:   複数の列に複数の関数を適用する(`dplyr::funs()` と共に)
+
+    ```r
+    iris %&gt;% group_by(Species) %&gt;% summarise_each(funs(min, mean, max), ends_with(&#34;Width&#34;))
+    ```
+
+## その他の関数
+
+`dplyr::data_frame(...)`
+:   より便利でバグの混入しにくい方法で `data.frame` を作る。
+
+    -   勝手に型変換しない (`stringsAsFactors=FALSE`)
+    -   勝手に列名を変えない
+    -   長さ1の変数以外はリサイクルしない
+    -   引数の評価がlazyに行われるので前の列を利用して後の列を作ったりできる
+    -   `tbl_df` クラスを付加
+    -   ただし `matrix` からの直接変換はサポートしなそう
+        &lt;https://github.com/hadley/dplyr/issues/324&gt;
+
+`dplyr::***_join(x, y, by=NULL, copy=FALSE)`
+:   `by` で指定した列がマッチするように行を合わせて `cbind()`
+
+    `full_join()`: `x` と `y` の全ての行を保持。\
+    `inner_join()`: `x` と `y` の `by` がマッチする行のみ\
+    `left_join()`: `x` の全ての行を保持。`y` に複数マッチする行があったらすべて保持。\
+    `right_join()`: `y` の全ての行を保持。`x` に複数マッチする行があったらすべて保持。\
+    `semi_join()`: `x` の全ての行を保持。`y` に複数マッチする行があっても元の `x` の行だけ保持。\
+    `anti_join()`: `y` にマッチしない `x` の行のみ。
+
+    列名が異なる場合は `by` を名前付きベクタにすればよい
+
+`dplyr::bind_rows(...)`, `dplyr::bind_cols(...)`
+:   標準の `rbind()`, `cbind()` より効率よく `data.frame` を結合。
+    引数は個別でもリストでもよい。
+
+`dplyr::add_rownames(x, var=&#39;rowname&#39;)`
+:   1列目に行名として1からの整数を振る。
+
+`dplyr::ntile(x, n)`
+:   数値ベクトル `x` を順位によって `n` 個のクラスに均等分け
+
+`dplyr::n_distinct(x)`
+:   高速で簡潔な `length(unique(x))`
+
+`dplyr::last(x, order_by=NULL, default=default_missing(x))`
+:   最後の要素にアクセス。
+    `x[length(x)]` と書かなくて済む！
+
+`dplyr::glimpse(.data, width=getOption(&#39;width&#39;))`
+:   データの中身をざっと見る。
+    `print()` とか `str()` のようなもの。
+
+`dplyr::lead(x n=1, default=NA, order_by=NULL)`, `dplyr::lag(...)`
+:   `x` の中身を `n` だけずらして `default` で埋める。
+    `lead()` は前に、`lag()` は後ろにずらす
+
+    ```r
+    &gt; lag(seq_len(5), 2)
+    [1] NA NA 1 2 3
+    ```
+
+`dplyr::top_n(.data, n, wt=NULL)`
+:   `.data %&gt;% arrange(wt) %&gt;% head(n)` を一撃で、グループごとに。
+
+`dplyr::tally(x, wt, sort=FALSE)`
+:   `summarise(x, n=n())` のショートカット。
+    `wt` にカラムを指定して重み付けすることもできる。
+
+`dplyr::count(x, ..., wt=NULL, sort=FALSE)`
+:   `group_by(...) %&gt;% tally()` のショートカット。
+
+`dplyr::between(x, left, right)`
+:   `left &lt;= x &amp; x &lt;= right` に相当
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+

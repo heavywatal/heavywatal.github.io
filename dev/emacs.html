@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/students/iwasaki/css/theme.css">
+<link rel="stylesheet" href="/students/iwasaki/css/highlight.css">
+<link rel="shortcut icon" href="/students/iwasaki/favicon.ico">
+<link rel="icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/students/iwasaki/favicon-192x192.png" sizes="192x192">
+<title>Emacs - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-41178626-1', 'auto');
+ga('send', 'pageview');
+</script>
+</head>
+<body><div id="container">
+<header><h1><a href="/students/iwasaki/">
+<img class="logo" src="/students/iwasaki/favicon-32x32.png" alt="航">
+Watal M. Iwasaki
+</a></h1>
+</header>
+
+<main>
+<article>
+<header><h1><a href="">
+Emacs
+</a></h1>
+<ul id="tags">
+</ul>
+</header>
+
+
+
+<h2 id="単語">単語</h2>
+
+<dl>
+<dt><strong>buffer</strong></dt>
+<dd>ファイル編集領域</dd>
+<dt><strong>minibuffer</strong></dt>
+<dd>画面の下端でコマンドを受け付けるところ</dd>
+<dt><strong>kill-ring</strong></dt>
+<dd>paste board</dd>
+<dt><strong>window</strong></dt>
+<dd>tmuxでいうpane</dd>
+<dt><strong>frame</strong></dt>
+<dd>tmuxでいうwindow</dd>
+</dl>
+
+<h2 id="keybind">Keybind</h2>
+
+<p><code>C-</code> は左手小指の <code>control</code></p>
+
+<p><code>M-</code> は <code>ESC</code> または <code>C-[</code></p>
+
+<pre><code>C-g        keyboard-quit    とにかくキャンセル
+C-z        suspend-emacs    とりあえずemacsを抜ける
+C-x u      advertised-undo  元に戻す
+C-_        advertised-undo  元に戻す
+C-/        advertised-undo  元に戻す
+
+M-h        help    ヘルプ
+M-x                ミニバッファをコマンド受付状態にする
+M-!                ミニバッファをシェルコマンド受付状態にする
+
+C-x C-f    find-file                 開く
+C-x C-s    save-file                 上書き保存
+C-x C-w    write-file                別名で保存
+C-x C-c    save-buffers-kill-emacs   終了
+C-x d      dired                     directory edit に突入 (下記)
+
+C-s        isearch-forward     下に検索
+C-r        isearch-backward    上に検索
+M-%                            置換
+
+C-Space    set-mark-command    開始位置をマーク
+C-w        kill-region         マークから現在地までカット
+M-w        copy-region-as-kill マークから現在地までコピー
+C-y        yank                貼り付け
+
+C-x r k    kill-rectangle    矩形にカット
+C-x r y    yank-rectangle    矩形にペースト
+C-x r o    open-rectangle    矩形にスペース
+
+C-q TAB                      タブコード \t 入力
+C-x TAB    indent-rigidly    選択された領域を左右キーで手動インデント
+
+C-x k      kill-buffer       バッファを消す = ファイルを閉じる
+C-x b      switch-to-buffer  バッファを切り替える
+C-x C-b    list-buffers      バッファリストを開く(下記)
+
+C-x 0      このwindowを閉じて分割解除
+C-x 1      分割解除してこのwindowを最大化
+C-x 2      上下分割
+C-x 3      左右分割
+C-x o      other (next) windowにフォーカスを移す
+
+C-x 5 0    delete-frame
+C-x 5 1    delete-other-frame
+C-x 5 2    make-frame-command
+C-x 5 o    other-frame
+C-x 5 b    switch-tobuffer-other-frame
+C-x 5 f    find-file-other-frame
+C-x 5 d    dired-other-frame
+</code></pre>
+
+<h3 id="c-x-c-b-list-buffers"><code>C-x C-b</code>: <code>list-buffers</code></h3>
+
+<p>バッファリストを隣のウィンドウで開く。</p>
+
+<p><code>C-u</code> を頭につけるとファイルを開いてるbufferに限定して。</p>
+
+<p>バッファメニューをそのペインで開くコマンドはずばり <code>buffer-menu</code></p>
+
+<p><code>?</code>, ヘルプ<br />
+<code>o</code>, 隣のwindowで開く<br />
+<code>f</code>, そのwindowで開く (<code>RET</code>)<br />
+<code>k</code>, 閉じる候補にマーク<br />
+<code>s</code>, 保存候補にマーク<br />
+<code>x</code>, マーク内容の実行<br />
+<code>u</code>, マーク取り消し<br />
+<code>q</code>, list終了</p>
+
+<h3 id="c-x-d-dired"><code>C-x d</code>: <code>dired</code></h3>
+
+<p>ファイラのようなバッファ。
+コピーや移動もできるけど、まあそれはシェルからやればいい。</p>
+
+<p><code>o</code>, 別バッファで開く<br />
+<code>f</code>, そのバッファで開く (RET)<br />
+<code>v</code>, 見てみる<br />
+<code>q</code>, 終了</p>
+
+<h3 id="繰り返し入力">繰り返し入力</h3>
+
+<p><code>C-u N X</code> あるいは <code>M N X</code> で、XをN回入力する。</p>
+
+<p>e.g., <code>C-u 79 -</code> と打てば水平線を入力できる。</p>
+
+<p>e.g., <code>C-u 3 C-_</code> とすれば3操作分だけ元に戻せる。</p>
+
+<h2 id="モード">モード</h2>
+
+<p><code>C-c</code>, モード特有コマンドのprefix<br />
+<code>M-;</code>, モードに従ってコメント記号の自動挿入<br />
+<code>M-/</code>, コード補完</p>
+
+<p><code>list-faces-display</code></p>
+
+<p><code>customize-face</code></p>
+
+<h3 id="markdown">Markdown</h3>
+
+<p><code>C-c C-c p</code>, preview on browser<br />
+<code>C-c C-c m</code>, preview on buffer<br />
+<code>C-c C-c v</code>, write preview and open in browser<br />
+<code>C-c C-c e</code>, write preview</p>
+
+<h3 id="r-ess">R (ESS)</h3>
+
+<p><code>M-x R</code>, R起動<br />
+<code>C-c C-r</code>, <code>ess-eval-region</code><br />
+<code>C-c C-q</code>, R終了</p>
+
+<h2 id="設定">設定</h2>
+
+<p><code>~/.emacs.d/init.el</code></p>
+
+<p><a href="https://github.com/heavywatal/dotfiles/blob/master/.emacs.d/init.el">https://github.com/heavywatal/dotfiles/blob/master/.emacs.d/init.el</a></p>
+
+<h2 id="caskでパッケージ管理">Caskでパッケージ管理</h2>
+
+<ul>
+<li><a href="https://github.com/cask/cask">https://github.com/cask/cask</a></li>
+<li><a href="http://cask.readthedocs.org/">http://cask.readthedocs.org/</a></li>
+</ul>
+
+<p>Emacs 24以上じゃないと動かない (=CentOS 6.5ではダメ)</p>
+
+<p><code>cask</code> コマンドは基本的に <code>Cask</code>
+ファイルが置いてあるディレクトリ (e.g., <code>~/.emacs.d/</code>)
+で実行することが想定されている。
+それ以外の場所で実行するときは <code>--path ~/.emacs.d/</code>
+のようなオプションを付ける。</p>
+
+<h3 id="セットアップ">セットアップ</h3>
+
+<p><a href="http://cask.readthedocs.org/en/latest/guide/installation.html">http://cask.readthedocs.org/en/latest/guide/installation.html</a></p>
+
+<ol>
+<li><p>Cask本体を <code>~/.cask</code> にインストール:</p>
+
+<pre><code>% curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python
+</code></pre>
+
+<p>実行ファイルは <code>~/.cask/bin/</code> に置かれるので、
+<code>.zshrc</code> などで <code>PATH</code> を設定するか、
+既に通ってるところにシムリンクを張るか、フルパスで使う。</p></li>
+
+<li><p><code>~/.emacs.d/Cask</code> を書く。 cf. <a href="https://github.com/heavywatal/dotfiles/blob/master/.emacs.d/Cask">https://github.com/heavywatal/dotfiles/blob/master/.emacs.d/Cask</a></p></li>
+
+<li><p><code>~/.emacs.d/Cask</code> に書かれたパッケージをインストール:</p>
+
+<pre><code>% cask install --path ~/.emacs.d/
+</code></pre></li>
+
+<li><p><code>~/.emacs.d/init.el</code> に設定を書く:</p>
+
+<pre><code>(require 'cask &quot;~/.cask/cask.el&quot;)
+(cask-initialize)
+</code></pre></li>
+</ol>
+
+<h3 id="メンテナンス">メンテナンス</h3>
+
+<p>パッケージをアップデート:</p>
+
+<pre><code>% cask update --path ~/.emacs.d/
+</code></pre>
+
+<p>Cask本体をアップデート:</p>
+
+<pre><code>% cask upgrade
+</code></pre>
+
+</article>
+</main>
+
+<nav id="menu">
+
+<div ><a href="/students/iwasaki/cv.html">Curriculum Vitae</a></div>
+
+
+<div ><a href="/students/iwasaki/research.html">Research Interests</a></div>
+
+
+<input type="checkbox" id="R stats">
+<label for="R stats">R stats</label>
+<ul>
+<li><a href="/students/iwasaki/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/students/iwasaki/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/students/iwasaki/rstats/devtools.html">devtools</a></li>
+<li><a href="/students/iwasaki/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/students/iwasaki/rstats/edger.html">edgeR</a></li>
+<li><a href="/students/iwasaki/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/students/iwasaki/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/students/iwasaki/rstats/plyr.html">plyr</a></li>
+<li><a href="/students/iwasaki/rstats/readr.html">readr</a></li>
+<li><a href="/students/iwasaki/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/students/iwasaki/rstats/rgl.html">rgl</a></li>
+<li><a href="/students/iwasaki/rstats/rjags.html">rjags</a></li>
+<li><a href="/students/iwasaki/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/students/iwasaki/rstats/stringr.html">stringr</a></li>
+<li><a href="/students/iwasaki/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/students/iwasaki/rstats/topgo.html">topGO</a></li>
+<li><a href="/students/iwasaki/rstats/programming.html">プログラミングTips</a></li>
+<li><a href="/students/iwasaki/rstats/config.html">環境設定</a></li>
+<li><a href="/students/iwasaki/rstats/intro.html">自学自習のための基礎知識</a></li>
+</ul>
+
+<input type="checkbox" id="Python">
+<label for="Python">Python</label>
+<ul>
+<li><a href="/students/iwasaki/python/biopython.html">BioPython</a></li>
+<li><a href="/students/iwasaki/python/egglib.html">EggLib</a></li>
+<li><a href="/students/iwasaki/python/ipython.html">IPython</a></li>
+<li><a href="/students/iwasaki/python/install.html">Installation</a></li>
+<li><a href="/students/iwasaki/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/students/iwasaki/python/pyqt.html">PyQt</a></li>
+<li><a href="/students/iwasaki/python/copy.html">copy</a></li>
+<li><a href="/students/iwasaki/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/students/iwasaki/python/pip.html">pip</a></li>
+<li><a href="/students/iwasaki/python/rpy2.html">rpy2</a></li>
+</ul>
+
+<input type="checkbox" id="C&#43;&#43;">
+<label for="C&#43;&#43;">C&#43;&#43;</label>
+<ul>
+<li><a href="/students/iwasaki/cxx/boost.html">Boost</a></li>
+<li><a href="/students/iwasaki/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/students/iwasaki/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/students/iwasaki/cxx/gcc.html">gcc</a></li>
+<li><a href="/students/iwasaki/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
+<li><a href="/students/iwasaki/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="Biology">
+<label for="Biology">Biology</label>
+<ul>
+<li><a href="/students/iwasaki/bio/blast.html">BLAST</a></li>
+<li><a href="/students/iwasaki/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/students/iwasaki/bio/emboss.html">EMBOSS</a></li>
+<li><a href="/students/iwasaki/bio/ensembl.html">Ensembl</a></li>
+<li><a href="/students/iwasaki/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/students/iwasaki/bio/meme.html">MEME</a></li>
+<li><a href="/students/iwasaki/bio/mrbayes.html">MrBayes</a></li>
+<li><a href="/students/iwasaki/bio/paml.html">PAML</a></li>
+<li><a href="/students/iwasaki/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/students/iwasaki/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/students/iwasaki/bio/samtools.html">SAMtools</a></li>
+<li><a href="/students/iwasaki/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/students/iwasaki/bio/dadi.html">dadi</a></li>
+<li><a href="/students/iwasaki/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/students/iwasaki/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/students/iwasaki/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/students/iwasaki/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="Developer Tools" checked>
+<label for="Developer Tools" class="active">Developer Tools</label>
+<ul>
+<li><a href="/students/iwasaki/dev/etc.html">/etc</a></li>
+<li class="active"><a href="/students/iwasaki/dev/emacs.html">Emacs</a></li>
+<li><a href="/students/iwasaki/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/students/iwasaki/dev/mysql.html">MySQL</a></li>
+<li><a href="/students/iwasaki/dev/qt.html">Qt</a></li>
+<li><a href="/students/iwasaki/dev/sh.html">Shell Script</a></li>
+<li><a href="/students/iwasaki/dev/torque.html">TORQUE</a></li>
+<li><a href="/students/iwasaki/dev/tex.html">TeX</a></li>
+<li><a href="/students/iwasaki/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/students/iwasaki/dev/make.html">make</a></li>
+<li><a href="/students/iwasaki/dev/mount.html">mount</a></li>
+<li><a href="/students/iwasaki/dev/nano.html">nano</a></li>
+<li><a href="/students/iwasaki/dev/rsync.html">rsync</a></li>
+<li><a href="/students/iwasaki/dev/ssh.html">ssh</a></li>
+<li><a href="/students/iwasaki/dev/sshfs.html">sshfs</a></li>
+<li><a href="/students/iwasaki/dev/tmux.html">tmux</a></li>
+<li><a href="/students/iwasaki/dev/zsh.html">zsh</a></li>
+<li><a href="/students/iwasaki/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/students/iwasaki/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="Linux">
+<label for="Linux">Linux</label>
+<ul>
+<li><a href="/students/iwasaki/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/students/iwasaki/linux/ufw.html">ufw</a></li>
+<li><a href="/students/iwasaki/linux/apt.html">ソフトウェアの管理</a></li>
+<li><a href="/students/iwasaki/linux/japanese.html">日本語環境</a></li>
+</ul>
+
+<input type="checkbox" id="Mac">
+<label for="Mac">Mac</label>
+<ul>
+<li><a href="/students/iwasaki/mac/applescript.html">AppleScript</a></li>
+<li><a href="/students/iwasaki/mac/command.html">Command</a></li>
+<li><a href="/students/iwasaki/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/students/iwasaki/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/students/iwasaki/mac/macports.html">MacPorts</a></li>
+<li><a href="/students/iwasaki/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/students/iwasaki/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/students/iwasaki/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/students/iwasaki/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="Lectures">
+<label for="Lectures">Lectures</label>
+<ul>
+<li><a href="/students/iwasaki/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/students/iwasaki/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/students/iwasaki/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/students/iwasaki/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/students/iwasaki/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="Miscellaneous">
+<label for="Miscellaneous">Miscellaneous</label>
+<ul>
+<li><a href="/students/iwasaki/misc/fonts.html">Fonts</a></li>
+<li><a href="/students/iwasaki/misc/mailman.html">Mailman</a></li>
+<li><a href="/students/iwasaki/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/students/iwasaki/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+</nav>
+
+
+<aside>
+<h1><label for="inputsource">Page source</label></h1>
+<input type="checkbox" id="inputsource">
+<pre id="pagesource"><code class="language-markdown">
++++
+title = "Emacs"
++++
+
+## 単語
+
+**buffer**
+:   ファイル編集領域
+
+**minibuffer**
+:   画面の下端でコマンドを受け付けるところ
+
+**kill-ring**
+:   paste board
+
+**window**
+:   tmuxでいうpane
+
+**frame**
+:   tmuxでいうwindow
+
+## Keybind
+
+`C-` は左手小指の `control`
+
+`M-` は `ESC` または `C-[`
+
+    C-g        keyboard-quit    とにかくキャンセル
+    C-z        suspend-emacs    とりあえずemacsを抜ける
+    C-x u      advertised-undo  元に戻す
+    C-_        advertised-undo  元に戻す
+    C-/        advertised-undo  元に戻す
+
+    M-h        help    ヘルプ
+    M-x                ミニバッファをコマンド受付状態にする
+    M-!                ミニバッファをシェルコマンド受付状態にする
+
+    C-x C-f    find-file                 開く
+    C-x C-s    save-file                 上書き保存
+    C-x C-w    write-file                別名で保存
+    C-x C-c    save-buffers-kill-emacs   終了
+    C-x d      dired                     directory edit に突入 (下記)
+
+    C-s        isearch-forward     下に検索
+    C-r        isearch-backward    上に検索
+    M-%                            置換
+
+    C-Space    set-mark-command    開始位置をマーク
+    C-w        kill-region         マークから現在地までカット
+    M-w        copy-region-as-kill マークから現在地までコピー
+    C-y        yank                貼り付け
+
+    C-x r k    kill-rectangle    矩形にカット
+    C-x r y    yank-rectangle    矩形にペースト
+    C-x r o    open-rectangle    矩形にスペース
+
+    C-q TAB                      タブコード \t 入力
+    C-x TAB    indent-rigidly    選択された領域を左右キーで手動インデント
+
+    C-x k      kill-buffer       バッファを消す = ファイルを閉じる
+    C-x b      switch-to-buffer  バッファを切り替える
+    C-x C-b    list-buffers      バッファリストを開く(下記)
+
+    C-x 0      このwindowを閉じて分割解除
+    C-x 1      分割解除してこのwindowを最大化
+    C-x 2      上下分割
+    C-x 3      左右分割
+    C-x o      other (next) windowにフォーカスを移す
+
+    C-x 5 0    delete-frame
+    C-x 5 1    delete-other-frame
+    C-x 5 2    make-frame-command
+    C-x 5 o    other-frame
+    C-x 5 b    switch-tobuffer-other-frame
+    C-x 5 f    find-file-other-frame
+    C-x 5 d    dired-other-frame
+
+### `C-x C-b`: `list-buffers`
+
+バッファリストを隣のウィンドウで開く。
+
+`C-u` を頭につけるとファイルを開いてるbufferに限定して。
+
+バッファメニューをそのペインで開くコマンドはずばり `buffer-menu`
+
+`?`, ヘルプ\
+`o`, 隣のwindowで開く\
+`f`, そのwindowで開く (`RET`)\
+`k`, 閉じる候補にマーク\
+`s`, 保存候補にマーク\
+`x`, マーク内容の実行\
+`u`, マーク取り消し\
+`q`, list終了
+
+### `C-x d`: `dired`
+
+ファイラのようなバッファ。
+コピーや移動もできるけど、まあそれはシェルからやればいい。
+
+`o`, 別バッファで開く\
+`f`, そのバッファで開く (RET)\
+`v`, 見てみる\
+`q`, 終了
+
+### 繰り返し入力
+
+`C-u N X` あるいは `M N X` で、XをN回入力する。
+
+e.g., `C-u 79 -` と打てば水平線を入力できる。
+
+e.g., `C-u 3 C-_` とすれば3操作分だけ元に戻せる。
+
+## モード
+
+`C-c`, モード特有コマンドのprefix\
+`M-;`, モードに従ってコメント記号の自動挿入\
+`M-/`, コード補完
+
+`list-faces-display`
+
+`customize-face`
+
+### Markdown
+
+`C-c C-c p`, preview on browser\
+`C-c C-c m`, preview on buffer\
+`C-c C-c v`, write preview and open in browser\
+`C-c C-c e`, write preview
+
+### R (ESS)
+
+`M-x R`, R起動\
+`C-c C-r`, `ess-eval-region`\
+`C-c C-q`, R終了
+
+## 設定
+
+`~/.emacs.d/init.el`
+
+&lt;https://github.com/heavywatal/dotfiles/blob/master/.emacs.d/init.el&gt;
+
+## Caskでパッケージ管理
+
+-   &lt;https://github.com/cask/cask&gt;
+-   &lt;http://cask.readthedocs.org/&gt;
+
+Emacs 24以上じゃないと動かない (=CentOS 6.5ではダメ)
+
+`cask` コマンドは基本的に `Cask`
+ファイルが置いてあるディレクトリ (e.g., `~/.emacs.d/`)
+で実行することが想定されている。
+それ以外の場所で実行するときは `--path ~/.emacs.d/`
+のようなオプションを付ける。
+
+### セットアップ
+
+&lt;http://cask.readthedocs.org/en/latest/guide/installation.html&gt;
+
+1.  Cask本体を `~/.cask` にインストール:
+
+        % curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python
+
+    実行ファイルは `~/.cask/bin/` に置かれるので、
+    `.zshrc` などで `PATH` を設定するか、
+    既に通ってるところにシムリンクを張るか、フルパスで使う。
+
+2.  `~/.emacs.d/Cask` を書く。 cf. &lt;https://github.com/heavywatal/dotfiles/blob/master/.emacs.d/Cask&gt;
+3.  `~/.emacs.d/Cask` に書かれたパッケージをインストール:
+
+        % cask install --path ~/.emacs.d/
+
+4.  `~/.emacs.d/init.el` に設定を書く:
+
+        (require &#39;cask &#34;~/.cask/cask.el&#34;)
+        (cask-initialize)
+
+### メンテナンス
+
+パッケージをアップデート:
+
+    % cask update --path ~/.emacs.d/
+
+Cask本体をアップデート:
+
+    % cask upgrade
+
+</code></pre>
+</aside>
+
+<footer>(ɔ) 2008 Watal M. Iwasaki</footer>
+</div>
+
+<script src="/students/iwasaki/js/highlight.pack.js"></script>
+<script>
+hljs.configure({languages: ["sh","c++","python","r","tex"]});
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
+
