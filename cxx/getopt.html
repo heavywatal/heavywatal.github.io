@@ -50,6 +50,7 @@ Watal M. Iwasaki
 C&#43;&#43; コマンドライン引数の取得
 </a></h1>
 <ul id="tags">
+<li><a href="/tags/c&#43;&#43;">c&#43;&#43;</a></li>
 </ul>
 </header>
 
@@ -86,9 +87,10 @@ C&#43;&#43; コマンドライン引数の取得
 <li>格納する変数のアドレスを渡せる</li>
 <li>ファイルから読み込みをサポート</li>
 <li>読み込み可能なファイルの出力方法は用意されてないので自分で書く必要がある</li>
-<li>Boostライブラリのヘッダだけでなくビルドとリンクが必要 cf. <a href="/cxx/boost.html">boost</a></li>
 
-<li><p>各ソースファイルに分散するには</p>
+<li><h2 id="boostライブラリのヘッダだけでなくビルドとリンクが必要-cf-boost-hugoshortcode-1">Boostライブラリのヘッダだけでなくビルドとリンクが必要 cf. <a href="/cxx/boost.html">boost</a></h2>
+
+<p>各ソースファイルに分散するには</p>
 
 <dl>
 <dd>1.  各クラスの <code>static</code> メソッドで <code>options_description</code> オブジェクトを生成
@@ -147,10 +149,12 @@ void func(){
 <li>たった1つのヘッダファイルで構成されてるのでインストールもビルドも楽チン</li>
 <li>直感的でC++らしいデザインなので分かりやすい</li>
 <li>ファイルの読み取りはサポートしていないが <code>std::string</code> は読める</li>
-<li>変数に直接格納することはできず、パーサのメソッドで値を取得:
-<code>template &lt;class T&gt; const T &amp;parser::get(const std::string &amp;name)</code></li>
 
-<li><p>各ソースファイルに分散できるっちゃできる？</p>
+<li><p>変数に直接格納することはできず、パーサのメソッドで値を取得:</p>
+
+<h2 id="template-class-t-const-t-parser-get-const-std-string-name"><code>template &lt;class T&gt; const T &amp;parser::get(const std::string &amp;name)</code></h2>
+
+<p>各ソースファイルに分散できるっちゃできる？</p>
 
 <dl>
 <dd>1.  <code>main()</code> あたりで <code>parser</code> オブジェクトを定義
@@ -173,9 +177,10 @@ void func(){
 <li>が、<code>configure</code> と <code>make install</code> というインストール手順を踏む</li>
 <li>ファイルの読み取りはサポートしていないが、<code>std::string</code> からパース可能</li>
 <li>読み込めるファイルの出力は用意されていないが、自分で書くのは簡単そう</li>
-<li>格納する変数は指定できず、<code>*Arg</code> オブジェクトの <code>getValue()</code> メソッドで値を取得</li>
 
-<li><p>各ソースファイルに分散するには</p>
+<li><h2 id="格納する変数は指定できず-arg-オブジェクトの-getvalue-メソッドで値を取得">格納する変数は指定できず、<code>*Arg</code> オブジェクトの <code>getValue()</code> メソッドで値を取得</h2>
+
+<p>各ソースファイルに分散するには</p>
 
 <dl>
 <dd>1.  <code>main()</code> あたりで <code>CmdLine</code> オブジェクトを定義
@@ -196,9 +201,10 @@ void func(){
 <li><code>istream</code> っぽく <code>&gt;&gt;operator</code> を使う</li>
 <li>格納する変数を指定できる</li>
 <li>基本的にはライブラリをビルドして使うが、ちょっといじればヘッダの <code>#include</code> だけでも使える</li>
-<li>ファイルの読み込みやヘルプの生成は一切手伝ってくれない</li>
 
-<li><p>各ソースファイルに分散するには</p>
+<li><h2 id="ファイルの読み込みやヘルプの生成は一切手伝ってくれない">ファイルの読み込みやヘルプの生成は一切手伝ってくれない</h2>
+
+<p>各ソースファイルに分散するには</p>
 
 <dl>
 <dd>1.  <code>main()</code> あたりで <code>(argc, argv)</code> を引数に <code>GetOpt_pp</code> オブジェクトを生成
@@ -321,18 +327,18 @@ void func(){
 <label for="Linux">Linux</label>
 <ul>
 <li><a href="/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/linux/japanese.html">Linux日本語環境</a></li>
+<li><a href="/linux/apt.html">apt/dpkg</a></li>
 <li><a href="/linux/ufw.html">ufw</a></li>
-<li><a href="/linux/apt.html">ソフトウェアの管理</a></li>
-<li><a href="/linux/japanese.html">日本語環境</a></li>
 </ul>
 
 <input type="checkbox" id="Mac">
 <label for="Mac">Mac</label>
 <ul>
 <li><a href="/mac/applescript.html">AppleScript</a></li>
-<li><a href="/mac/command.html">Command</a></li>
 <li><a href="/mac/homebrew.html">Homebrew</a></li>
 <li><a href="/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/mac/command.html">Mac Command</a></li>
 <li><a href="/mac/macports.html">MacPorts</a></li>
 <li><a href="/mac/quicklook.html">QuickLook</a></li>
 <li><a href="/mac/spotlight.html">Spotlight</a></li>
@@ -396,7 +402,7 @@ title = "C&#43;&#43; コマンドライン引数の取得"
 -   ファイルから読み込みをサポート
 -   読み込み可能なファイルの出力方法は用意されてないので自分で書く必要がある
 -   Boostライブラリのヘッダだけでなくビルドとリンクが必要 cf. [boost]({#{#HUGOSHORTCODE-1#}#})
--   
+-
 
     各ソースファイルに分散するには
     :   1.  各クラスの `static` メソッドで `options_description` オブジェクトを生成
@@ -451,7 +457,7 @@ void func(){
 -   ファイルの読み取りはサポートしていないが `std::string` は読める
 -   変数に直接格納することはできず、パーサのメソッドで値を取得:
     `template &lt;class T&gt; const T &amp;parser::get(const std::string &amp;name)`
--   
+-
 
     各ソースファイルに分散できるっちゃできる？
     :   1.  `main()` あたりで `parser` オブジェクトを定義
@@ -469,7 +475,7 @@ void func(){
 -   ファイルの読み取りはサポートしていないが、`std::string` からパース可能
 -   読み込めるファイルの出力は用意されていないが、自分で書くのは簡単そう
 -   格納する変数は指定できず、`*Arg` オブジェクトの `getValue()` メソッドで値を取得
--   
+-
 
     各ソースファイルに分散するには
     :   1.  `main()` あたりで `CmdLine` オブジェクトを定義
@@ -485,7 +491,7 @@ void func(){
 -   格納する変数を指定できる
 -   基本的にはライブラリをビルドして使うが、ちょっといじればヘッダの `#include` だけでも使える
 -   ファイルの読み込みやヘルプの生成は一切手伝ってくれない
--   
+-
 
     各ソースファイルに分散するには
     :   1.  `main()` あたりで `(argc, argv)` を引数に `GetOpt_pp` オブジェクトを生成

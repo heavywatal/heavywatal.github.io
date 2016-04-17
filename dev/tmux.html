@@ -50,6 +50,8 @@ Watal M. Iwasaki
 tmux — 仮想端末でリモート仕事を安全に
 </a></h1>
 <ul id="tags">
+<li><a href="/tags/job">job</a></li>
+<li><a href="/tags/shell">shell</a></li>
 </ul>
 </header>
 
@@ -60,28 +62,20 @@ tmux — 仮想端末でリモート仕事を安全に
 <p><a href="http://www.gnu.org/software/screen/">GNU screen</a>
 の後を継ぐ端末多重化ソフト(terminal multiplexer)。</p>
 
-<ul>
-<li><p>1つの画面の中でウインドウを追加・分割して複数の端末を開く</p>
+<p>-</p>
 
-<dl>
-<dd>-   GUIのタブが不要になる
+<pre><code>1つの画面の中でウインドウを追加・分割して複数の端末を開く
+:   -   GUIのタブが不要になる
+    -   1つの `ssh` セッションで複数の端末を持てる
+</code></pre>
 
-<ul>
-<li>1つの <code>ssh</code> セッションで複数の端末を持てる</li>
-</ul></dd>
-</dl></li>
+<p>-</p>
 
-<li><p><code>ssh</code> 切断後も端末丸ごと継続され、後でまた繋ぎ直せる</p>
-
-<dl>
-<dd>-   不意の <code>ssh</code> 切断でも作業が失われない
-
-<ul>
-<li>別の端末から接続しても同じ作業を継続できる</li>
-<li><code>nohup</code> とかバックグラウンド化とか考えるより楽チン cf. <a href="/dev/nohup.html">nohup</a></li>
-</ul></dd>
-</dl></li>
-</ul>
+<pre><code>`ssh` 切断後も端末丸ごと継続され、後でまた繋ぎ直せる
+:   -   不意の `ssh` 切断でも作業が失われない
+    -   別の端末から接続しても同じ作業を継続できる
+    -   `nohup` とかバックグラウンド化とか考えるより楽チン cf. [nohup](/dev/nohup.html)
+</code></pre>
 
 <p><a href="/mac/homebrew.html">Homebrew</a> あるいはLinuxbrewで一発インストール:
 <code>brew install tmux</code></p>
@@ -138,38 +132,35 @@ x 　confirm-before kill-pane
 
 <p><a href="https://github.com/heavywatal/dotfiles/blob/master/.tmux.conf">https://github.com/heavywatal/dotfiles/blob/master/.tmux.conf</a></p>
 
-<ul>
-<li><p>prefix 変更</p>
+<p>-</p>
 
-<dl>
-<dd><code>C-b</code> はキャレット左移動に使われるべきなので、
-<code>zsh</code> や <code>emacs</code> で使わない <code>C-t</code> に変更する。
-tmux の頭文字で覚えやすいし、<code>b</code> より若干近い。</dd>
-</dl></li>
+<pre><code>prefix 変更
+:   `C-b` はキャレット左移動に使われるべきなので、
+    `zsh` や `emacs` で使わない `C-t` に変更する。
+    tmux の頭文字で覚えやすいし、`b` より若干近い。
+</code></pre>
 
-<li><p>起動時ウィンドウサイズ変更 <code>aggressive-resize</code></p>
+<p>-</p>
 
-<dl>
-<dd>サイズの異なる端末からアクセスしたときに随時ウィンドウサイズ変更</dd>
-</dl></li>
+<pre><code>起動時ウィンドウサイズ変更 `aggressive-resize`
+:   サイズの異なる端末からアクセスしたときに随時ウィンドウサイズ変更
+</code></pre>
 
-<li><p>Mac <code>open</code> 問題</p>
+<p>-</p>
 
-<dl>
-<dd><p><code>tmux</code> 内だと <code>open</code> がうまく働かないのでそれを回避するために
-<a href="https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard">reattach-to-user-namespace</a>
-をインストールして挟む:</p>
+<pre><code>Mac `open` 問題
+:   `tmux` 内だと `open` がうまく働かないのでそれを回避するために
+    [reattach-to-user-namespace](https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard)
+    をインストールして挟む:
 
-<pre><code>% brew install reattach-to-user-namespace
-</code></pre></dd>
-</dl></li>
+        % brew install reattach-to-user-namespace
+</code></pre>
 
-<li><p>タブの横幅を広くする</p>
+<p>-</p>
 
-<dl>
-<dd><code>defaults write com.googlecode.iterm2 OptimumTabWidth -int 360</code></dd>
-</dl></li>
-</ul>
+<pre><code>タブの横幅を広くする
+:   `defaults write com.googlecode.iterm2 OptimumTabWidth -int 360`
+</code></pre>
 
 <h2 id="利用例">利用例</h2>
 
@@ -370,18 +361,18 @@ fi
 <label for="Linux">Linux</label>
 <ul>
 <li><a href="/linux/centos.html">CentOS 6.5</a></li>
+<li><a href="/linux/japanese.html">Linux日本語環境</a></li>
+<li><a href="/linux/apt.html">apt/dpkg</a></li>
 <li><a href="/linux/ufw.html">ufw</a></li>
-<li><a href="/linux/apt.html">ソフトウェアの管理</a></li>
-<li><a href="/linux/japanese.html">日本語環境</a></li>
 </ul>
 
 <input type="checkbox" id="Mac">
 <label for="Mac">Mac</label>
 <ul>
 <li><a href="/mac/applescript.html">AppleScript</a></li>
-<li><a href="/mac/command.html">Command</a></li>
 <li><a href="/mac/homebrew.html">Homebrew</a></li>
 <li><a href="/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/mac/command.html">Mac Command</a></li>
 <li><a href="/mac/macports.html">MacPorts</a></li>
 <li><a href="/mac/quicklook.html">QuickLook</a></li>
 <li><a href="/mac/spotlight.html">Spotlight</a></li>
@@ -423,13 +414,13 @@ title = "tmux"
 [GNU screen](http://www.gnu.org/software/screen/)
 の後を継ぐ端末多重化ソフト(terminal multiplexer)。
 
--   
+-
 
     1つの画面の中でウインドウを追加・分割して複数の端末を開く
     :   -   GUIのタブが不要になる
         -   1つの `ssh` セッションで複数の端末を持てる
 
--   
+-
 
     `ssh` 切断後も端末丸ごと継続され、後でまた繋ぎ直せる
     :   -   不意の `ssh` 切断でも作業が失われない
@@ -488,19 +479,19 @@ prefix keyはデフォルトで `C-b` だが
 
 &lt;https://github.com/heavywatal/dotfiles/blob/master/.tmux.conf&gt;
 
--   
+-
 
     prefix 変更
     :   `C-b` はキャレット左移動に使われるべきなので、
         `zsh` や `emacs` で使わない `C-t` に変更する。
         tmux の頭文字で覚えやすいし、`b` より若干近い。
 
--   
+-
 
     起動時ウィンドウサイズ変更 `aggressive-resize`
     :   サイズの異なる端末からアクセスしたときに随時ウィンドウサイズ変更
 
--   
+-
 
     Mac `open` 問題
     :   `tmux` 内だと `open` がうまく働かないのでそれを回避するために
@@ -509,7 +500,7 @@ prefix keyはデフォルトで `C-b` だが
 
             % brew install reattach-to-user-namespace
 
--   
+-
 
     タブの横幅を広くする
     :   `defaults write com.googlecode.iterm2 OptimumTabWidth -int 360`
