@@ -276,74 +276,7 @@ mysql&gt; purge master logs before now();
 </nav>
 
 
-<aside>
-<h1><label for="inputsource">Page source</label></h1>
-<input type="checkbox" id="inputsource">
-<pre id="pagesource"><code class="language-markdown">
-+++
-title = "MySQL"
-+++
 
-[&lt;http://dev.mysql.com/&gt;](http://dev.mysql.com/)
-
-The MySQL™ software delivers a very fast, multi-threaded, multi-user, and robust SQL (Structured Query Language) database server.
-
-## Operation
-
-ログイン:
-
-    % mysql -u root -p
-    Enter password:
-
-文末にはセミコロン:
-
-    mysql&gt; show databases;
-    mysql&gt; show status;
-
-`like` とパーセント記号によるワイルドカードで絞り込める:
-
-    mysql&gt; show variables like &#34;%log%&#34;
-
-## Administration
-
-ユーザーの指定方法。ホストのアドレスにはワイルドカードが使える。パスワード・ユーザー名・ホストは省略可能:
-
-    USERNAME@&#39;HOST&#39; identified by &#39;PASSWORD&#39;
-    meme@&#39;130.34.107.135&#39;
-    klabo@&#39;130.34.107.%&#39;
-    biol@&#39;%.biology.tohoku.ac.jp&#39;
-    root@&#39;&#39;
-    &#39;&#39;@localhost
-
-ユーザーの一覧:
-
-    mysql&gt; select User,Host,Password from mysql.user;
-
-ユーザーの追加・削除:
-
-    mysql&gt; create user [USER];
-    mysql&gt; drop user [USER];
-
-パスワードの設定・変更:
-
-    mysql&gt; set password for USERNAME@HOST=password(&#34;PASSWORD&#34;);
-
-権限を与える:
-
-    mysql&gt; show grants for [USER];
-    mysql&gt; grant select on *.* to [USER];
-
-設定を反映:
-
-    mysql&gt; flush privileges;
-
-ログを削除:
-
-    mysql&gt; show binary logs;
-    mysql&gt; purge master logs before now();
-
-</code></pre>
-</aside>
 
 <footer>(ɔ) 2008 Watal M. Iwasaki</footer>
 </div>

@@ -257,66 +257,7 @@ tableNames(query)
 </nav>
 
 
-<aside>
-<h1><label for="inputsource">Page source</label></h1>
-<input type="checkbox" id="inputsource">
-<pre id="pagesource"><code class="language-markdown">
-+++
-title = "rtracklayer"
-+++
 
-&lt;http://www.bioconductor.org/packages/devel/bioc/html/rtracklayer.html&gt;
-
-## 読み書き
-
-&lt;http://genome.ucsc.edu/FAQ/FAQformat.html&gt;
-
-GFF, BED, bedGraph, BED15, WIG, BigWig, 2bit &amp;lt;---&amp;gt; `GRanges`, `GRangesList`
-
-`import(filename, format, text, ...)`
-:   ファイルあるいは文字列を読み込んで `GRanges` に変換する。
-    `format` は拡張子から判断してくれる。
-    `import.gff()`, `import.bed()` など形式ごとの関数も定義されていて、
-    引数などの詳しいヘルプもそっちから見られる。
-
-    GFFは `feature.type=&#39;exon&#39;` などとして興味のある行だけ読んだほうが良さそう。
-    結果として、余分な列も減る。
-
-`export(gr, filename, format, ...)`
-:   `GRanges` をGFFなどの形式でファイルに書き出す。
-
-## UCSC Table Browserにアクセス
-
-&lt;https://genome.ucsc.edu/cgi-bin/hgTables&gt;
-
-ゲノム、トラック、テーブルの指定方法が独特
-
-```r
-session = browserSession()
-genome(session) = &#39;hg19&#39;
-query = ucscTableQuery(session, &#39;knownGene&#39;)
-tableName(query) = &#39;kgXref&#39;
-kgXref = getTable(query)  # data.frame
-
-query = ucscTableQuery(session, &#39;knownGene&#39;, &#39;hg19&#39;, &#39;kgXref&#39;)
-```
-
-テーブルを指定しなければ先頭が使われる
-
-```r
-query = ucscTableQuery(session, &#39;cytoBand&#39;, &#39;hg19&#39;)
-cytoBand = track(query)  # GRanges
-```
-
-トラックやテーブルの名前を閲覧
-
-```r
-trackNames(session)
-tableNames(query)
-```
-
-</code></pre>
-</aside>
 
 <footer>(ɔ) 2008 Watal M. Iwasaki</footer>
 </div>

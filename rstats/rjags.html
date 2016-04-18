@@ -268,72 +268,7 @@ install.packages(&quot;rjags&quot;, type=&quot;source&quot;, configure.args=args
 </nav>
 
 
-<aside>
-<h1><label for="inputsource">Page source</label></h1>
-<input type="checkbox" id="inputsource">
-<pre id="pagesource"><code class="language-markdown">
-+++
-title = "rjags"
-+++
 
--   &lt;http://mcmc-jags.sourceforge.net/&gt;
--   &lt;http://www.rdocumentation.org/packages/rjags&gt;
-
-JAGS (Just Another Gibbs Sampler)
-はギブズサンプリングをやってくれるCプログラム。
-それをRから動かすためのパッケージが `rjags` 。
-データを R で整えて JAGS に渡し、
-出て来た結果を R で受け取って解析する。
-
-## Installation
-
-### 普通にコンパイル済みのやつを入れる
-
-1.  &lt;http://sourceforge.net/projects/mcmc-jags/files/&gt;
-    からOSに合ったインストールファイルをダウンロード。
-2.  ダウンロードしたファイルを実行し、「はい」とか「次へ」で普通にインストール。
-    これでJAGS本体のインストール完了。
-3.  Rを立ち上げて `rjags` というパッケージをインストール。
-    画面上部のメニューからインストーラを立ち上げるか、以下のコマンドをコピペ
-
-    ```r
-    install.packages(&#34;rjags&#34;, dependencies=TRUE)
-    ```
-
-    Rのバージョンによって相性があるようなので、問題があったらそのへんをいじってみるといいかも。
-
-### Homebrew で入れる
-
-1.  [Homebrew]({#{#HUGOSHORTCODE-1#}#}) をインストール
-2.  JAGS本体をインストール
-
-    ```sh
-    % brew install jags
-    ```
-
-    ソースコードからビルドしてもよい
-
-    ```sh
-    % wget -O- http://sourceforge.net/projects/mcmc-jags/files/JAGS/3.x/Source/JAGS-3.4.0.tar.gz | tar xz
-    % cd JAGS-3.4.0/
-    % ./configure --help
-    % ./configure --prefix=/usr/local/jags
-    % make
-    % sudo make install
-    ```
-
-3.  R を立ちあげ、JAGSの場所を指定して
-    `rjags` をソースコードからインストール
-
-    ```r
-    prefix = system(&#39;brew --prefix&#39;, TRUE)
-    template = &#34;--with-jags-include=%s/include/JAGS --with-jags-lib=%s/lib&#34;
-    args = sprintf(template, prefix, prefix)
-    install.packages(&#34;rjags&#34;, type=&#34;source&#34;, configure.args=args)
-    ```
-
-</code></pre>
-</aside>
 
 <footer>(ɔ) 2008 Watal M. Iwasaki</footer>
 </div>
