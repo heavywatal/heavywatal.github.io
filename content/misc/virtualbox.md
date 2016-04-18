@@ -11,8 +11,8 @@ tags = ["communication"]
 
 現在使っている条件
 
--   ホストOS: Mac OS X 10.7 Lion
--   ゲストOS: Windows 7 Ultimate 64-bit
+-   ホストOS: Mac OS X 10.11 El Capitan
+-   ゲストOS: Windows 7 Ultimate 64-bit から Windows 10 に無償アップグレード
 
 <http://www.virtualbox.org/manual/>
 
@@ -71,6 +71,7 @@ CentOSの場合はまず
 `gcc`, `make`, `kernel-devel`
 をインストールして再起動してから。
 {{%/div%}}
+I8ES5s0fKcG
 
 ## Network
 
@@ -96,3 +97,17 @@ CentOSの場合はまず
     % vnc4server :6
 
     % vnc://localhost:5906
+
+## 仮想ディスク.vdiを拡張する
+
+意外と簡単ですぐ終わる。
+
+1. ホストOSのターミナルからコマンド実行
+   ```
+   % VBoxManage modifyhd Win7U.vdi --resize 40960
+   ```
+
+1. ゲストOSを起動して容量確認。まだ変わってない。
+
+1. 管理ツールからディスクの管理を起動すると未使用領域が見えるので、
+   そこの右クリックメニューから拡張を選択。
