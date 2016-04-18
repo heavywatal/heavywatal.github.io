@@ -64,8 +64,8 @@ VirtualBox
 <p>現在使っている条件</p>
 
 <ul>
-<li>ホストOS: Mac OS X 10.7 Lion</li>
-<li>ゲストOS: Windows 7 Ultimate 64-bit</li>
+<li>ホストOS: Mac OS X 10.11 El Capitan</li>
+<li>ゲストOS: Windows 7 Ultimate 64-bit から Windows 10 に無償アップグレード</li>
 </ul>
 
 <p><a href="http://www.virtualbox.org/manual/">http://www.virtualbox.org/manual/</a></p>
@@ -135,13 +135,14 @@ VirtualBox
 <li>ゲストOSのCD/DVDドライブに読み込まれるインストーラを実行</li>
 </ol>
 
-<div class="note">
+<p><div class="note">
 <p>CentOSの場合はまず
 <code>gcc</code>, <code>make</code>, <code>kernel-devel</code>
 をインストールして再起動してから。</p>
 
 </div>
 
+I8ES5s0fKcG</p>
 
 <h2 id="network">Network</h2>
 
@@ -170,6 +171,22 @@ VirtualBox
 
 % vnc://localhost:5906
 </code></pre>
+
+<h2 id="仮想ディスク-vdiを拡張する">仮想ディスク.vdiを拡張する</h2>
+
+<p>意外と簡単ですぐ終わる。</p>
+
+<ol>
+<li><p>ホストOSのターミナルからコマンド実行</p>
+
+<pre><code>% VBoxManage modifyhd Win7U.vdi --resize 40960
+</code></pre></li>
+
+<li><p>ゲストOSを起動して容量確認。まだ変わってない。</p></li>
+
+<li><p>管理ツールからディスクの管理を起動すると未使用領域が見えるので、
+そこの右クリックメニューから拡張を選択。</p></li>
+</ol>
 
 </article>
 </main>
@@ -336,8 +353,8 @@ title = "VirtualBox"
 
 現在使っている条件
 
--   ホストOS: Mac OS X 10.7 Lion
--   ゲストOS: Windows 7 Ultimate 64-bit
+-   ホストOS: Mac OS X 10.11 El Capitan
+-   ゲストOS: Windows 7 Ultimate 64-bit から Windows 10 に無償アップグレード
 
 &lt;http://www.virtualbox.org/manual/&gt;
 
@@ -392,6 +409,7 @@ title = "VirtualBox"
 3.  ゲストOSのCD/DVDドライブに読み込まれるインストーラを実行
 
 {#{#HUGOSHORTCODE-1#}#}
+I8ES5s0fKcG
 
 ## Network
 
@@ -417,6 +435,20 @@ title = "VirtualBox"
     % vnc4server :6
 
     % vnc://localhost:5906
+
+## 仮想ディスク.vdiを拡張する
+
+意外と簡単ですぐ終わる。
+
+1. ホストOSのターミナルからコマンド実行
+   ```
+   % VBoxManage modifyhd Win7U.vdi --resize 40960
+   ```
+
+1. ゲストOSを起動して容量確認。まだ変わってない。
+
+1. 管理ツールからディスクの管理を起動すると未使用領域が見えるので、
+   そこの右クリックメニューから拡張を選択。
 
 </code></pre>
 </aside>
