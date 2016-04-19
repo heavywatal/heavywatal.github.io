@@ -13,16 +13,15 @@ aliases = ["/cv.html"]
 Watal M. Iwasaki, PhD
 :   Postdoctoral fellow in [Innan Laboratory](http://www.sendou.soken.ac.jp/esb/innan/InnanLab/),\
     Department of Evolutionary Studies of Biosystems,\
-    School of Advanced Sciences,\
     SOKENDAI (Graduate University for Advanced Studies)
 
 Address:
-:   Department of Evolutionary Studies of Biosystems,\
-    Graduate University for Advanced Studies,\
-    Hayama, Kanagawa, 240-0193, Japan
+:   School of Advanced Sciences, SOKENDAI,
+    Shonan Village, Hayama, 240-0193, Japan
+:   240-0193 神奈川県三浦郡葉山町 湘南国際村 (上山口1560-35) 総研大
 
 Phone:
-:   +81-46-858-1576 (Lab)
+:   +81-46-858-1576
 
 Email:
 :   heavy.watalあgmail.com
