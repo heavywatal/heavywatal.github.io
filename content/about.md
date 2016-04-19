@@ -1,21 +1,19 @@
 +++
-title = 'Curriculum Vitae'
+title = 'About'
 menu = "main"
+type = "home"
 +++
 
-**岩嵜 航**
+岩嵜 航
+:   総合研究大学院大学 先導科学研究科 生命共生体進化学専攻\
+    [印南研究室](http://www.sendou.soken.ac.jp/esb/innan/InnanLab/)
+    特別研究員
 
-**Watal M. Iwasaki**
-
-Postdoctoral fellow in [Innan Laboratory](http://www.sendou.soken.ac.jp/esb/innan/InnanLab/),\
-Department of Evolutionary Studies of Biosystems,\
-School of Advanced Sciences,\
-SOKENDAI (Graduate University for Advanced Studies)
-
-総合研究大学院大学 先導科学研究科 生命共生体進化学専攻\
-[印南研究室](http://www.sendou.soken.ac.jp/esb/innan/InnanLab/)
-
-## Contact
+Watal M. Iwasaki, PhD
+:   Postdoctoral fellow in [Innan Laboratory](http://www.sendou.soken.ac.jp/esb/innan/InnanLab/),\
+    Department of Evolutionary Studies of Biosystems,\
+    School of Advanced Sciences,\
+    SOKENDAI (Graduate University for Advanced Studies)
 
 Address:
 :   Department of Evolutionary Studies of Biosystems,\
@@ -28,15 +26,15 @@ Phone:
 Email:
 :   heavy.watalあgmail.com
 
-<dt>Social Media:</dt>
-<dd><div class="first last line-block">
-<div class="line"><a rel="me" class="reference external" href="https://github.com/heavywatal">heavywatal</a> on GitHub</div>
-<div class="line"><a rel="me" class="reference external" href="https://plus.google.com/u/0/+WatalMIwasaki">Google+</a></div>
-<div class="line"><a rel="me" class="reference external" href="http://www.facebook.com/heavy.watal">Facebook</a></div>
-<div class="line"><a rel="me" class="reference external" href="skype:heavy.watal?userinfo">Skype</a></div>
-<div class="line"><a rel="me" class="reference external" href="http://twitter.com/heavy_watal">&#64;heavy_watal</a> on Twitter</div>
-</div>
-</dd>
+Find me on
+: <a rel="me" href="https://github.com/heavywatal">GitHub</a>,
+  <a rel="me" href="http://www.facebook.com/heavy.watal">Facebook</a>,
+  <a rel="me" href="http://twitter.com/heavy_watal">Twitter</a>,
+  <a rel="me" href="https://plus.google.com/u/0/+WatalMIwasaki">Google+</a>,
+  <a rel="me" href="skype:heavy.watal?userinfo">Skype</a>
+
+<!--more-->
+
 ## Education
 
 [東北大学 生命科学研究科 河田研究室](http://meme.biology.tohoku.ac.jp/klabo-wiki/)
