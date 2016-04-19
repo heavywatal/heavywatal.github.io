@@ -2,6 +2,7 @@
 title = 'About'
 menu = "main"
 type = "home"
+aliases = ["/cv.html"]
 +++
 
 岩嵜 航
