@@ -8,74 +8,77 @@ tags = ["writing"]
 使えるフリーフォント
 
 [Noto Fonts](http://www.google.com/get/noto/)
-:   -   "No tofu" を目指してGoogleが開発している多言語対応フォント。
-    -   Droid fontを継承してるっぽい
-    -   [Noto Sans CJK](http://www.google.com/get/noto/help/cjk/)
-        の日本語部分はAdobeと共同開発で、
-        同じものを違う名前で公開している。
-        英数字は Source Sans Pro がリンクされているので、
-        どっちかといえば Source Han Sans を使ったほうがいいのかな。
-    -   Noto Serif はディスプレイ上での視認性がとてもよい(があまり美しくはない)
+:   "No tofu" を目指してGoogleが開発している多言語対応フォント。
+:   Droid fontを継承してるっぽい。
+:   [Noto Sans CJK](http://www.google.com/get/noto/help/cjk/)
+    の日本語部分はAdobeと共同開発で、
+    同じものを違う名前で公開している。
+    英数字は Source Sans Pro がリンクされているので、
+    どっちかといえば Source Han Sans を使ったほうがいいのかな。
+:   Noto Serif はディスプレイ上での視認性がとてもよい(があまり美しくはない)。
 
 [Source Sans Pro](https://github.com/adobe-fonts/source-sans-pro)
-:   -   Adobe初のオープンソースフォント
-    -   小文字の l が曲がってて良いけど全体的に狭苦しい
-    -   Googleと共同開発の
-        [Source Han Sans](https://github.com/adobe-fonts/source-han-sans)
-        (源ノ角ゴシック)は素晴らしい日本語フォント。
-        ウェイトもたくさんある。
-    -   Source Han Code JP は普通の固定幅フォントよりも幅広で、
-        和文と欧文の幅が3:2になるよう調整されている。
-        俺は2:1のUbuntu Monoのほうが好き。
+:   Adobe初のオープンソースフォント。
+:   小文字の l が曲がってて良いけど全体的に狭苦しい。
+:   Googleと共同開発の
+    [Source Han Sans](https://github.com/adobe-fonts/source-han-sans)
+    (源ノ角ゴシック)は素晴らしい日本語フォント。
+    ウェイトもたくさんある。
+:   Source Han Code JP は普通の固定幅フォントよりも幅広で、
+    和文と欧文の幅が3:2になるよう調整されている。
+    俺は2:1のUbuntu Monoのほうが好き。
 
 [Ubuntu](http://font.ubuntu.com)
-:   -   スクリーン上での視認性を重視してデザインされたフォントで、
-        個性的でありながら見やすい
-    -   エルの小文字 l が曲がってて良い
-    -   Ubuntu Mono は特にプログラミング用のフォントとして最適
-    -   普通の欧文 `monospace` よりもひとまわり小さく、
-        Osaka-Mono など日本語の半角文字と同じ幅になるのもポイント
+:   スクリーン上での視認性を重視してデザインされたフォントで、
+    個性的でありながら見やすい。
+:   エルの小文字 l が曲がってて良い。
+:   Ubuntu Mono は特にプログラミング用のフォントとして最適。
+:   普通の欧文 `monospace` よりもひとまわり小さく、
+    Osaka-Mono など日本語の半角文字と同じ幅になるのもポイント。
 
 [Open Sans](https://www.google.com/fonts/specimen/Open+Sans)
-:   -   すっきりゆったりニュートラルで見やすい
-    -   ファイルサイズも小さいのでウェブフォントとして使いやすい
+:   すっきりゆったりニュートラルで見やすい。
+:   ファイルサイズも小さいのでウェブフォントとして使いやすい。
 
 [Linux Libertine](http://www.linuxlibertine.org)
-:   -   印刷に耐えうるクオリティを目指して開発されたカッコいいセリフ体
-    -   近代 LaTeX ではこれがスタンダードになっていくのでは
-    -   兄弟の Linux Biolinum も半セリフみたいな感じでカッコいい
-    -   ひとまわり小さいのでほかのフォントとバランスとるのが難しい
+:   印刷に耐えうるクオリティを目指して開発されたカッコいいセリフ体。
+:   近代LaTeXのスタンダード的な。
+:   兄弟の Linux Biolinum も半セリフみたいな感じでカッコいい。
+:   ひとまわり小さいのでほかのフォントとバランスとるのが難しい。
 
 [Roboto](https://github.com/google/roboto)
-:   -   かっちりコンパクト、いかにもシステム向けなフォント
-    -   でもちょっと c とかの切れ目が小さすぎる気がする
+:   かっちりコンパクト、いかにもシステム向けなフォント。
+:   でもちょっと c とかの切れ目が小さすぎる気がする。
 
-------------------------------------------------------------------------
+----
+
+あまり使わなくなったやつ:
 
 [DejaVu](http://dejavu-fonts.org/)
-:   -   Bitstream Vera の後を継いで多言語対応が進められている
-    -   Linuxにはだいたい入ってる
-    -   DejaVu Sans は Verdana のように幅が広く、スクリーン上で読みやすい
-    -   DejaVu Sans Mono はプログラミングに使いやすい
+:   Bitstream Vera の後を継いで多言語対応が進められている。
+:   Linuxにはだいたい入ってる。
+:   DejaVu Sans は Verdana のように幅が広く、スクリーン上で読みやすい。
+:   DejaVu Sans Mono はプログラミングに使いやすい。
 
 [Liberation](https://fedorahosted.org/liberation-fonts/)
-:   -   Fedora が Arial, Times New Roman, Courier New からの解放を目指して作ってる
-    -   英数字はいいけど、グリフ数は少ない
-    -   でも Liberation Mono は Courier New というより Courier な太さ?
+:   Fedora が Arial, Times New Roman, Courier New からの解放を目指して作ってる。
+:   英数字はいいけど、グリフ数は少ない。
+:   でも Liberation Mono は Courier New というより Courier な太さ?
 
 [GNU FreeFont](http://www.gnu.org/software/freefont/)
-:   -   Helvetica, Times, Courier の置き換えを狙ったフォント
-    -   でも FreeMono は Courier というより Courier New な細さ?
+:   Helvetica, Times, Courier の置き換えを狙ったフォント。
+:   でも FreeMono は Courier というより Courier New な細さ?
 
 [IPA](http://ossipedia.ipa.go.jp/ipafont/)
-:   -   十分使える日本語フリーフォントだったが、
-        源ノ角ゴシックの登場により役目を終えた感・・・？
-    -   公式のIPAフォントは更新サイクルが遅いので
-        [Takao](https://launchpad.net/takao-fonts)
-        という名前でUbuntuコミュニティが保守している
+:   十分使える日本語フリーフォントだったが、
+    源ノ角ゴシックの登場により役目を終えた感・・・？
+:   公式のIPAフォントは更新サイクルが遅いので
+    [Takao](https://launchpad.net/takao-fonts)
+    という名前でUbuntuコミュニティが保守している。
 
 [MigMix](https://mix-mplus-ipa.sourceforge.jp/migmix/)
-:   -   視認性の高いM+フォントに足りない漢字をIPAゴシックから補完した合成フォント。
+:   視認性の高いM+フォントに足りない漢字をIPAゴシックから補完した合成フォント。
+
 
 ## serif
 
@@ -128,6 +131,7 @@ tags = ["writing"]
   <td>abcdefghijklmnopqrstuvwxyz</td><td>!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~</td>
 </tr>
 </table>
+
 ## sans-serif
 
 <table summary="" border=0 cellpadding=3px cellspacing=3px class="tabel"><tr style="font-family: 'Helvetica Neue', serif" bgcolor="#eeeeee">
@@ -227,6 +231,7 @@ tags = ["writing"]
   <td>abcdefghijklmnopqrstuvwxyz</td><td>!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~</td>
 </tr>
 </table>
+
 ## monospace
 
 <table summary="" border=0 cellpadding=3px cellspacing=3px class="tabel"><tr style="font-family: 'Courier', serif" bgcolor="#eeeeee">
@@ -284,6 +289,7 @@ tags = ["writing"]
   <td>abcdefghijklmnopqrstuvwxyz</td><td>!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~</td>
 </tr>
 </table>
+
 ## Japanese
 
 <table summary="" border=0 cellpadding=3px cellspacing=3px class="tabel"><tr style="font-family: 'Hiragino Kaku Gothic ProN', serif" bgcolor="#eeeeee">
