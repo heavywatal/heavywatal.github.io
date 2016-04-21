@@ -74,11 +74,13 @@ Activity Monitor
 標準出力と標準エラー出力は指定しなければ `nohup.out`
 または `$HOME/nohup.out` に追記モードでリダイレクトされる。
 
-> -   標準出力の書き出し先を指定するには `>{OUTFILE}`
-> -   標準エラー出力の書き出し先を指定するには `2>{OUTFILE}`
-> -   標準エラー出力を標準出力と同じところに流すには `>{OUTFILE} 2>&1`
+- 標準出力の書き出し先を指定するには `>{OUTFILE}`
+- 標準エラー出力の書き出し先を指定するには `2>{OUTFILE}`
+- 標準エラー出力を標準出力と同じところに流すには `>{OUTFILE} 2>&1`
 
-    % nohup COMMAND >out.log 2>err.log &
+```
+% nohup COMMAND >out.log 2>err.log &
+```
 
 [ssh]({{< relref "ssh.md" >}}) 接続先のサーバーで `nohup` ジョブを走らせるときは
 標準入出力をすべて切っておかないと期待通りにsshを抜けられない:
