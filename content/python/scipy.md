@@ -15,10 +15,9 @@ tags = ["python"]
 <http://www.scipy.org/scipylib/building/>\
 <http://docs.scipy.org/doc/numpy/user/install.html>
 
-1.  [Homebrew]({{< relref "mac/homebrew.md" >}}) などで gfortran をインストール:
+1.  [Homebrew]({{< relref "mac/homebrew.md" >}}) などで `gfortran` をインストール:
 
-        % brew install gcc49 --enable-gfortran
-        % ln -s gfortran-4.9 $(brew --prefix)/bin/gfortran
+        % brew install gcc
 
     Ubuntuなら:
 
