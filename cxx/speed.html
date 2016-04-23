@@ -10,7 +10,7 @@
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="icon" href="/favicon-192x192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/favicon-192x192.png" sizes="192x192">
-<title>めざせC&#43;&#43;高速プログラム - Watal M. Iwasaki</title>
+<title>C&#43;&#43;高速化 - Watal M. Iwasaki</title>
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
   tex2jax: {
@@ -48,7 +48,7 @@ Watal M. Iwasaki
 <main>
 <article>
 <header><h1><a href="">
-めざせC&#43;&#43;高速プログラム
+C&#43;&#43;高速化
 </a></h1>
 <ul id="tags">
 <li><a href="/tags/c&#43;&#43;">c&#43;&#43;</a></li>
@@ -84,29 +84,25 @@ gcc や clang の最適化技術も着々と進歩しており、
 <pre><code class="language-sh">% g++ -O3 main.cpp
 </code></pre>
 
-<h3 id="コンパイル時定数">コンパイル時定数</h3>
+<h3 id="コンパイル時定数-constexpr">コンパイル時定数 <code>constexpr</code></h3>
 
-<p>定数同士の四則演算などがコード中に転がっていると、
-コンパイルの段階でコンパイラが計算して１つの定数に置き換えてくれる。
-つまり、実行時の計算を減らすことができる。
-したがって、定数と変数が混ざった計算があるときは、定数をまとめておくとよさそう。</p>
+<p>コンパイル時に計算できるものを予め計算して定数にしておくことで、
+実行時の計算を減らすことができる。
+C++11では明示的に <code>constexpr</code> 修飾することができるので積極的に使うべし。
+テンプレートメタプログラミングという手もある。
+C++11を使えない場合でも、
+定数同士の四則演算などはまとめておけばコンパイラが計算してくれるはず。</p>
 
-<p>四則演算の中でも、割り算は特に遅いらしい。
-コンパイル時に逆数のかけ算になるような書き方のほうが高速になる可能性がある。
-(自動的にやってくれたりしないのかな?)</p>
+<pre><code class="language-c++">// 掛け算も割り算も毎回計算
+return 4.0 * M_PI * wtl::pow(radius, 3) / 3.0;
 
-<pre><code class="language-c++">// 毎回割り算
-rand() / 4294967296.0;
-
-// カッコ内はコンパイル時に計算されて下のようになるはず
-(1.0 / 4294967296.0) * rand();
-(2.328306436538696e-10) * rand();
+// コンパイル時定数を掛けるだけ
+constexpr c = 4.0 * M_PI / 3.0;
+return c * wtl::pow(radius, 3);
 </code></pre>
 
-<p>C++11では明示的に <code>constexpr</code> を指定することで、
-確実にコンパイル時定数にできるので積極的に使うべし。
-それ以外にも、テンプレートメタプログラミングで
-なるべくコンパイル時に計算させることができる。</p>
+<p>また、四則演算の中でも割り算は特に遅いらしいので、
+逆数のかけ算になるような書き方のほうが高速になるかもしれない。</p>
 
 <h3 id="インライン展開">インライン展開</h3>
 
@@ -157,7 +153,7 @@ std::transform(v.begin(), v.end(), result.begin(), isAboveThreshold(3.14));
 
 <pre><code class="language-c++">const double threshold = 3.14;
 std::transform(v.begin(), v.end(), result.begin(),
-               [threshold](int x) -&gt; bool {return x &gt; threshold});
+               [threshold](double x) -&gt; bool {return x &gt; threshold});
 </code></pre>
 
 <h2 id="余計な一時オブジェクトを作らない">余計な一時オブジェクトを作らない</h2>
@@ -194,15 +190,15 @@ do_something(&amp;some_array);  // ああ、この配列は変更されるんだ
 
 <h3 id="複合代入演算子">複合代入演算子</h3>
 
-<p><code>int</code> や <code>double</code> とかならまだしも、<code>std::string</code> とかだとかなり違うはず。</p>
-
 <pre><code class="language-c++">// (a+b)の結果を持つ一時オブジェクトが作られ、xに代入される。
-T x = a + b;
+int x = a + b;
 
 // xをaで初期化して、bを足す。一時オブジェクトは作られない。
-T x(a);
+int x = a;
 x += b;
 </code></pre>
+
+<p><code>int</code> や <code>double</code> くらいならそれより可読性を重視したほうがいいかも。</p>
 
 <h3 id="ムーブ-c-11">ムーブ (C++11)</h3>
 
@@ -225,13 +221,16 @@ x += b;
 これは、各要素の値とともに前後の要素を示すイテレータを格納することで実現されている。
 そのため、途中への <code>insert()</code> はイテレータを書き換えるだけなので高速。
 ただし、その分メモリは余分に食うし、ランダムアクセスできないし、イテレータで総なめするのも遅い。</dd>
+<dt><code>std::unordered_set</code>, <code>std::unordered_map</code></dt>
+<dd>順序を気にしないぶん <code>std::set</code> や <code>std::map</code> より高速。
+ただしハッシュ関数の準備など多少めんどい。</dd>
 </dl>
 
 <h3 id="メモリは一気に確保">メモリは一気に確保</h3>
 
 <p><code>std::vector</code> の <code>push_back()</code> は勝手にメモリ領域を確保してくれるので、
 大きさの心配をする必要がなくて便利。
-これは、領域が足りなくなる都度「別のところに倍の領域を確保してコピー」
+これは多くの場合、領域が足りなくなる都度「別のところに倍の領域を確保してコピー」
 という処理をすることによって行われる。
 始め1、次2、4、8、16、、、という具合に。
 なので、10000個の要素を格納すると分かっている場合には、始めからそれだけ確保しておくと速い。</p>
@@ -375,10 +374,10 @@ int main() {
 <label for="menu-cxx" class="active">C&#43;&#43;</label>
 <ul>
 <li><a href="/cxx/boost.html">Boost</a></li>
-<li><a href="/cxx/getopt.html">C&#43;&#43; コマンドライン引数の取得</a></li>
+<li><a href="/cxx/getopt.html">C&#43;&#43;コマンドライン引数</a></li>
+<li class="active"><a href="/cxx/speed.html">C&#43;&#43;高速化</a></li>
 <li><a href="/cxx/clang.html">clang / llvm</a></li>
 <li><a href="/cxx/gcc.html">gcc</a></li>
-<li class="active"><a href="/cxx/speed.html">めざせC&#43;&#43;高速プログラム</a></li>
 <li><a href="/cxx/random.html">擬似乱数生成器</a></li>
 </ul>
 
