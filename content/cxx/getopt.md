@@ -1,5 +1,5 @@
 +++
-title = 'C++ コマンドライン引数の取得'
+title = 'C++コマンドライン引数'
 tags = ["c++"]
 [menu.main]
   parent = "cxx"
