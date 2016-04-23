@@ -45,7 +45,7 @@ C++11を使えない場合でも、
 return 4.0 * M_PI * wtl::pow(radius, 3) / 3.0;
 
 // コンパイル時定数を掛けるだけ
-constexpr c = 4.0 * M_PI / 3.0;
+constexpr double c = 4.0 * M_PI / 3.0;
 return c * wtl::pow(radius, 3);
 ```
 
