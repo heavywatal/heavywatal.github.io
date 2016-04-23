@@ -43,6 +43,13 @@ tags = ["writing"]
     % tlmgr info --list newtx
     % sudo tlmgr install ptex
 
+{{%div class="warning"%}}
+パッケージをアンインストールしようと思って
+``tlmgr uninstall some-package``
+などとするとTeX Live全体が消えてしまうので注意。
+正しくは ``tlmgr remove some-package``
+{{%/div%}}
+
 ## 基本要素
 
 ### 数式
