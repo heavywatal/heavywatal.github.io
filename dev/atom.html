@@ -10,7 +10,7 @@
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="icon" href="/favicon-192x192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/favicon-192x192.png" sizes="192x192">
-<title>BioPython: Tools for biological computation - Watal M. Iwasaki</title>
+<title>Atom: 最強のテキストエディタ - Watal M. Iwasaki</title>
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
   tex2jax: {
@@ -48,163 +48,72 @@ Watal M. Iwasaki
 <main>
 <article>
 <header><h1><a href="">
-BioPython — Tools for biological computation
+Atom — 最強のテキストエディタ
 </a></h1>
 <ul id="tags">
-<li><a href="/tags/python">python</a></li>
+<li><a href="/tags/editor">editor</a></li>
 </ul>
 </header>
 
 
 
-<p><a href="http://biopython.org">http://biopython.org</a>
-<a href="http://biopython.org/DIST/docs/api/Bio-module.html">http://biopython.org/DIST/docs/api/Bio-module.html</a></p>
+<p><a href="https://atom.io">https://atom.io</a></p>
 
-<h2 id="seqio"><code>SeqIO</code></h2>
+<p><a href="http://flight-manual.atom.io/">http://flight-manual.atom.io/</a></p>
 
-<ul>
-<li><a href="http://biopython.org/wiki/SeqIO">http://biopython.org/wiki/SeqIO</a></li>
-<li><a href="http://biopython.org/DIST/docs/tutorial/Tutorial.html#sec51">http://biopython.org/DIST/docs/tutorial/Tutorial.html#sec51</a></li>
-<li><a href="http://biopython.org/DIST/docs/api/Bio.SeqIO-module.html">http://biopython.org/DIST/docs/api/Bio.SeqIO-module.html</a></li>
-</ul>
+<p>Githubが開発したオープンソースのGUIテキストエディタ。
+ChromiumとNode.js(を用いたElectronフレームワーク)でできている。
+コミュニティの力により現在も急速に成長中。</p>
+
+<pre><code class="language-sh">brew install atom
+</code></pre>
+
+<h2 id="環境設定">環境設定</h2>
+
+<p><a href="http://flight-manual.atom.io/using-atom/sections/basic-customization/">http://flight-manual.atom.io/using-atom/sections/basic-customization/</a></p>
+
+<p><a href="https://github.com/heavywatal/dotfiles/tree/master/.atom">https://github.com/heavywatal/dotfiles/tree/master/.atom</a></p>
+
+<p>いつもの <code>cmd-,</code> キーで設定画面を起動。</p>
+
+<p>設定ファイルは <code>~/.atom/</code> 以下に置かれる。
+設定画面から&rdquo;Open Config Folder&rdquo;ボタンを押すとAtom内でそれらを開くことができる。
+変更は即時反映される。</p>
 
 <dl>
-<dt><code>read(file, format, alphabet=None)</code></dt>
-<dd>1配列しか含まないファイルを読んで <code>SeqRecord</code> を返す</dd>
-<dt><code>parse(file, format, alphabet=None)</code></dt>
-<dd>複数の配列を含むファイルを読んで <code>SeqRecord</code> のイテレータを返す</dd>
-<dt><code>index(filename, format, alphabet=None, key_function=None)</code></dt>
-<dd><code>id</code> をキーとした辞書likeオブジェクトを返す</dd>
+<dt><code>config.cson</code></dt>
+<dd>Core Settings</dd>
+<dt><code>keymap.cson</code></dt>
+<dd>Keybindings</dd>
+<dt><code>snippets.cson</code></dt>
+<dd>定型句に名前を付けておいて簡単に呼び出せるようにする。
+<a href="http://flight-manual.atom.io/using-atom/sections/snippets/">http://flight-manual.atom.io/using-atom/sections/snippets/</a></dd>
+<dt><code>styles.less</code></dt>
+<dd>エディタ本体も含めていろんな部分をCSS的にスタイル設定可能。</dd>
 </dl>
 
-<p><code>write(sequences, file, format)</code></p>
+<p><code>cmd-alt-i</code> でWeb Inspectorを起動させればあらゆる要素を調べることができる。
+カーソル位置のスコープを知りたいだけなら <code>cmd-alt-p</code> が簡便。</p>
 
-<p><code>to_dict(sequences, key_function=None)</code></p>
+<h2 id="パッケージ">パッケージ</h2>
 
-<p><code>convert(in_file, in_format, out_file, out_format, alphabet=None)</code></p>
+<p><a href="https://atom.io/packages">https://atom.io/packages</a></p>
 
-<pre><code>from Bio import SeqIO
+<p><a href="https://atom.io/users/heavywatal/stars">https://atom.io/users/heavywatal/stars</a></p>
 
-with open('beer.fasta', 'r') as fin:
-    for record in SeqIO.parse(fin, 'fasta'):
-        print(record.id)
-        print(record.seq)
+<p>環境設定のInstallメニューからインストールし、
+Packagesメニューで管理する。</p>
+
+<p><code>apm</code> コマンドを利用してもよい。</p>
+
+<pre><code class="language-sh">apm install pigments
+apm uninstall pigments
+apm upgrade
 </code></pre>
 
-<h2 id="seqrecord"><code>SeqRecord</code></h2>
+<h2 id="使い方">使い方</h2>
 
-<ul>
-<li><a href="http://biopython.org/wiki/SeqRecord">http://biopython.org/wiki/SeqRecord</a></li>
-<li><a href="http://biopython.org/DIST/docs/tutorial/Tutorial.html#sec32">http://biopython.org/DIST/docs/tutorial/Tutorial.html#sec32</a></li>
-<li><a href="http://biopython.org/DIST/docs/api/Bio.SeqRecord.SeqRecord-class.html">http://biopython.org/DIST/docs/api/Bio.SeqRecord.SeqRecord-class.html</a></li>
-</ul>
-
-<p><code>Seq</code> とそのほかの情報をひとまとまりにしたクラス。</p>
-
-<p><code>id</code><br />
-<code>seq</code></p>
-
-<p><code>name</code><br />
-<code>description</code><br />
-<code>dbxrefs</code><br />
-<code>features</code><br />
-<code>annotations</code><br />
-<code>letter_annotations</code></p>
-
-<pre><code>&gt;&gt;&gt; for record in SeqIO.parse(fin, 'fasta'):
-...     print(record)
-...
-ID: gi|186972394|gb|EU490707.1|
-Name: gi|186972394|gb|EU490707.1|
-Description: gi|186972394|gb|EU490707.1| Selenipedium aequinoctiale maturase K (matK) gene, partial cds; chloroplast
-Number of features: 0
-Seq('ATTTTTTACGAACCTGTGGAAATTTTTGGTTATGACAATAAATCTAGTTTAGTA...GAA', SingleLetterAlphabet())
-ID: gi|186972391|gb|ACC99454.1|
-Name: gi|186972391|gb|ACC99454.1|
-Description: gi|186972391|gb|ACC99454.1| maturase K [Scaphosepalum rapax]
-Number of features: 0
-Seq('IFYEPVEILGYDNKSSLVLVKRLITRMYQQKSLISSLNDSNQNEFWGHKNSFSS...EEE', SingleLetterAlphabet())
-</code></pre>
-
-<h2 id="seq"><code>Seq</code></h2>
-
-<ul>
-<li><a href="http://biopython.org/wiki/Seq">http://biopython.org/wiki/Seq</a></li>
-<li><a href="http://biopython.org/DIST/docs/tutorial/Tutorial.html#sec17">http://biopython.org/DIST/docs/tutorial/Tutorial.html#sec17</a></li>
-<li><a href="http://biopython.org/DIST/docs/api/Bio.Seq.Seq-class.html">http://biopython.org/DIST/docs/api/Bio.Seq.Seq-class.html</a></li>
-</ul>
-
-<p>塩基配列・アミノ酸配列のクラス。
-標準 <code>str</code> とほとんど同じように扱えるほか、
-相補鎖とかなんとかを簡単に扱えるメソッドが備わっている。</p>
-
-<ul>
-<li><code>complement(self)</code></li>
-<li><code>reverse_complement(self)</code></li>
-<li><code>transcribe(self)</code></li>
-<li><code>back_transcribe(self)</code></li>
-<li><code>translate(self, table=&quot;Standard&quot;, stop_symbol=&quot;*&quot;, to_stop=False, cds=False)</code></li>
-<li><code>ungap(self, gap=None)</code></li>
-</ul>
-
-<h2 id="genomediagram">GenomeDiagram</h2>
-
-<p><a href="http://biopython.org/DIST/docs/tutorial/Tutorial.html#sec328">http://biopython.org/DIST/docs/tutorial/Tutorial.html#sec328</a>
-<a href="http://biopython.org/DIST/docs/GenomeDiagram/userguide.pdf">http://biopython.org/DIST/docs/GenomeDiagram/userguide.pdf</a></p>
-
-<h2 id="entrez">Entrez</h2>
-
-<ul>
-<li><a href="http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc90">http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc90</a></li>
-</ul>
-
-<h3 id="esearch">esearch</h3>
-
-<ul>
-<li><a href="http://www.ncbi.nlm.nih.gov/entrez/query/static/esearch_help.html">NCBI ESerch Utility</a></li>
-<li><a href="http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc93">http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc93</a></li>
-</ul>
-
-<!-- -->
-
-<pre><code>&gt;&gt;&gt; from Bio import Entrez
-&gt;&gt;&gt; handle = Entrez.esearch(db=&quot;nucleotide&quot;, retmax=10, term=&quot;Opuntia&quot;)
-&gt;&gt;&gt; record = Entrez.read(handle)
-&gt;&gt;&gt; for item in record.items():
-...     print(item)
-...
-(u'Count', '390')
-(u'RetMax', '10')
-(u'IdList', ['257359511', '283467266', '246905625', '246905624', '246655205', '246655204', '240253899', '240253897', '240253576', '240253574'])
-(u'TranslationStack', [{u'Count': '200', u'Field': 'Organism', u'Term': '&quot;Opuntia&quot;[Organism]', u'Explode': 'Y'}, {u'Count': '390', u'Field': 'All Fields', u'Term': 'Opuntia[All Fields]', u'Explode': 'Y'}, 'OR', 'GROUP'])
-(u'TranslationSet', [{u'To': '&quot;Opuntia&quot;[Organism] OR Opuntia[All Fields]', u'From': 'Opuntia'}])
-(u'RetStart', '0')
-(u'QueryTranslation', '&quot;Opuntia&quot;[Organism] OR Opuntia[All Fields]')
-</code></pre>
-
-<h3 id="efetch">efetch</h3>
-
-<ul>
-<li><a href="http://eutils.ncbi.nlm.nih.gov/corehtml/query/static/efetch_help.html">NCBI EFetch Utility</a></li>
-<li><a href="http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc96">http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc96</a></li>
-</ul>
-
-<p>返り値は結果(XML)へのハンドル。:</p>
-
-<pre><code>from Bio import Entrez
-
-handle = Entrez.efetch(db=&quot;nucleotide&quot;, id=&quot;186972394,186972394&quot;, rettype=&quot;fasta&quot;)
-record = SeqIO.parse(handle, &quot;fasta&quot;)
-for x in record:
-    print(i)
-</code></pre>
-
-<h2 id="installation">Installation</h2>
-
-<p><a href="/python/pip.html">pip</a> で一発:</p>
-
-<pre><code>% pip install biopython
-</code></pre>
+<p>とりあえず <code>cmd-shift-p</code> でコマンドパレットを呼び出してみる。</p>
 
 </article>
 </main>
@@ -241,10 +150,10 @@ for x in record:
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
 
-<input type="checkbox" id="menu-python" checked>
-<label for="menu-python" class="active">Python</label>
+<input type="checkbox" id="menu-python">
+<label for="menu-python">Python</label>
 <ul>
-<li class="active"><a href="/python/biopython.html">BioPython</a></li>
+<li><a href="/python/biopython.html">BioPython</a></li>
 <li><a href="/python/egglib.html">EggLib</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/install.html">Installation</a></li>
@@ -289,11 +198,11 @@ for x in record:
 <li><a href="/bio/motif.html">配列モチーフ探索</a></li>
 </ul>
 
-<input type="checkbox" id="menu-dev">
-<label for="menu-dev">Developer Tools</label>
+<input type="checkbox" id="menu-dev" checked>
+<label for="menu-dev" class="active">Developer Tools</label>
 <ul>
 <li><a href="/dev/etc.html">/etc</a></li>
-<li><a href="/dev/atom.html">Atom</a></li>
+<li class="active"><a href="/dev/atom.html">Atom</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mysql.html">MySQL</a></li>
