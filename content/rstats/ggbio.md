@@ -4,6 +4,7 @@ subtitle = "Bioconductor データを ggplot2 的に描画"
 tags = ["r", "bioconductor", "graph"]
 [menu.main]
   parent = "rstats"
+  weight = -31
 +++
 
 <http://www.tengfei.name/ggbio/>

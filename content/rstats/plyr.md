@@ -4,6 +4,7 @@ subtitle = "データ分割-関数適用-再結合を効率的に"
 tags = ["r"]
 [menu.main]
   parent = "rstats"
+  weight = 99
 +++
 
 -   <http://plyr.had.co.nz/>

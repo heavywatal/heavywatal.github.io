@@ -3,6 +3,7 @@ title = 'rtracklayer'
 tags = ["r", "bioconductor"]
 [menu.main]
   parent = "rstats"
+  weight = -35
 +++
 
 <http://www.bioconductor.org/packages/devel/bioc/html/rtracklayer.html>

@@ -1,9 +1,10 @@
 +++
 title = 'edgeR'
 subtitle = "リードカウントから発現変動遺伝子を検出"
-tags = ["r"]
+tags = ["r", "bioconductor"]
 [menu.main]
   parent = "rstats"
+  weight = -30
 +++
 
 <https://bioconductor.org/packages/release/bioc/html/edgeR.html>

@@ -1,8 +1,9 @@
 +++
-title = '自学自習のための基礎知識'
+title = 'R自学自習の基礎知識'
 tags = ["r"]
 [menu.main]
   parent = "rstats"
+  weight = -99
 +++
 
 ## インターネットで調べる

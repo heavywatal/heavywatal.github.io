@@ -1,8 +1,9 @@
 +++
-title = '環境設定'
+title = 'R環境設定'
 tags = ["r"]
 [menu.main]
   parent = "rstats"
+  weight = -95
 +++
 
 ## インストール

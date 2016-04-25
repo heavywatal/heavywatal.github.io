@@ -4,6 +4,7 @@ subtitle = "高速で柔軟なテーブル読み込みツール"
 tags = ["r"]
 [menu.main]
   parent = "rstats"
+  weight = -65
 +++
 
 <https://github.com/hadley/readr>

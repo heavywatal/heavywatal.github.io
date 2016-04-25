@@ -4,6 +4,7 @@ subtitle = "柔軟なデータ変形ツール"
 tags = ["r"]
 [menu.main]
   parent = "rstats"
+  weight = 99
 +++
 
 {{%div class="warning"%}}

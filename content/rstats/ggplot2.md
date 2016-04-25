@@ -4,6 +4,7 @@ subtitle = "きれいなグラフを簡単に合理的に"
 tags = ["r", "graph"]
 [menu.main]
   parent = "rstats"
+  weight = -79
 +++
 
 -   <http://ggplot2.org/>

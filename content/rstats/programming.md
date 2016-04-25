@@ -1,8 +1,9 @@
 +++
-title = 'プログラミングTips'
+title = 'RプログラミングTips'
 tags = ["r"]
 [menu.main]
   parent = "rstats"
+  weight = -90
 +++
 
 ## 確率分布
@@ -245,7 +246,7 @@ with(iris, {
 
 ### `list`, `data.frame`
 
--   [plyr]({{< relref "plyr.md" >}})` や `[tidyr]({{< relref "tidyr.md" >}}) を介して操作すると楽チンかつ高速。
+-   [plyr]({{< relref "dplyr.md" >}}) や [tidyr]({{< relref "tidyr.md" >}}) を介して操作すると楽チンかつ高速。
 -   基本的に `list` や `data.frame` は遅いので、
     `matrix` で済むもの(数値のみの表など)は `matrix` で。
 
@@ -266,7 +267,7 @@ CPUコア数を取得する
 [1] 4
 ```
 
-[plyr]({{< relref "plyr.md" >}}) を使っても `apply()` 的な処理を簡単に並列化できる。
+[plyr]({{< relref "plyr.md" >}}) にも `apply()` 的な処理を簡単に並列化する機能がある。
 
 ### ボトルネックを知る
 
@@ -290,33 +291,6 @@ CPUコア数を取得する
 ```r
 library(compiler)
 cfun = compiler::cmpfun(my_func)
-```
-
-## Mac
-
-### mi.app で選択中の文字列を R.app で実行するAppleScript
-
-1.  下記のスクリプトを Script Editor.app にコピペ
-2.  スクリプトとして保存(e.g. `mi2R.scpt`)
-3.  `$HOME/Library/Application Support/mi/mode/*/tool/`
-    以下に置く
-    (\*印に入るのは、RとかNormalとか、miの何モードでRスクリプトを書いているかによる）
-4.  mi.app の「モード設定」の「ツール」で「フォルダから再構成」
-5.  コマンドショートカットで `command + R` とかに割り当てて使おう
-
-```applescript
-tell application "mi"
-        tell document 1
-                set CommandLines to selection
-        end tell
-end tell
-
-tell application "R"
-        activate
-        ignoring application responses
-                cmd CommandLines
-        end ignoring
-end tell
 ```
 
 ------------------------------------------------------------------------

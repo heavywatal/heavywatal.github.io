@@ -4,6 +4,7 @@ subtitle = "Rの文字列をまともな方法で処理する"
 tags = ["r"]
 [menu.main]
   parent = "rstats"
+  weight = -60
 +++
 
 -   <http://cran.r-project.org/web/packages/stringr/>

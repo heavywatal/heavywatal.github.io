@@ -4,6 +4,7 @@ subtitle = "Genomicデータ解析ツール群"
 tags = ["r", "bioconductor"]
 [menu.main]
   parent = "rstats"
+  weight = -40
 +++
 
 <a href="http://www.amazon.co.jp/exec/obidos/ASIN/4621062506/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41aQBFtkgBL._SX160_.jpg" alt="RとBioconductorを用いたバイオインフォマティクス" /></a>

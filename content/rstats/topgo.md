@@ -4,6 +4,7 @@ subtitle = "Bioconductor でenrichment解析"
 tags = ["r", "bioconductor"]
 [menu.main]
   parent = "rstats"
+  weight = -30
 +++
 
 <http://www.bioconductor.org/packages/release/bioc/html/topGO.html>

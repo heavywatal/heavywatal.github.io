@@ -4,6 +4,7 @@ subtitle = "Rパッケージ作成支援"
 tags = ["r"]
 [menu.main]
   parent = "rstats"
+  weight = -50
 +++
 
 <http://r-pkgs.had.co.nz/>
