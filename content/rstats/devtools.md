@@ -1,7 +1,7 @@
 +++
 title = 'devtools'
 subtitle = "Rパッケージ作成支援"
-tags = ["r"]
+tags = ["r", "hadley"]
 [menu.main]
   parent = "rstats"
   weight = -50

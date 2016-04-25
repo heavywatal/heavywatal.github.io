@@ -1,7 +1,7 @@
 +++
 title = 'stringr'
 subtitle = "Rの文字列をまともな方法で処理する"
-tags = ["r"]
+tags = ["r", "hadley"]
 [menu.main]
   parent = "rstats"
   weight = -60

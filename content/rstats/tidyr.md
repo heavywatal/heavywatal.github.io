@@ -1,7 +1,7 @@
 +++
 title = 'tidyr'
 subtitle = "シンプルなデータ変形ツール"
-tags = ["r"]
+tags = ["r", "hadley"]
 [menu.main]
   parent = "rstats"
   weight = -75

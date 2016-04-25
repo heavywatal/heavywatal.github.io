@@ -1,7 +1,7 @@
 +++
 title = 'reshape2'
 subtitle = "柔軟なデータ変形ツール"
-tags = ["r"]
+tags = ["r", "hadley"]
 [menu.main]
   parent = "rstats"
   weight = 99

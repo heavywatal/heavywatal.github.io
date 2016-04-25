@@ -1,7 +1,7 @@
 +++
 title = 'readr'
 subtitle = "高速で柔軟なテーブル読み込みツール"
-tags = ["r"]
+tags = ["r", "hadley"]
 [menu.main]
   parent = "rstats"
   weight = -65

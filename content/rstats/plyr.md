@@ -1,7 +1,7 @@
 +++
 title = 'plyr'
 subtitle = "データ分割-関数適用-再結合を効率的に"
-tags = ["r"]
+tags = ["r", "hadley"]
 [menu.main]
   parent = "rstats"
   weight = 99

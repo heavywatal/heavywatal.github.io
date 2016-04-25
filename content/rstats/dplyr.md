@@ -1,7 +1,7 @@
 +++
 title = 'dplyr'
 subtitle = "高速data.frame処理"
-tags = ["r"]
+tags = ["r", "hadley"]
 [menu.main]
   parent = "rstats"
   weight = -70

@@ -1,7 +1,7 @@
 +++
 title = 'ggplot2'
 subtitle = "きれいなグラフを簡単に合理的に"
-tags = ["r", "graph"]
+tags = ["r", "graph", "hadley"]
 [menu.main]
   parent = "rstats"
   weight = -79
