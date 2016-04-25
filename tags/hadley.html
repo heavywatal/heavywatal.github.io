@@ -10,24 +10,7 @@
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="icon" href="/favicon-192x192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/favicon-192x192.png" sizes="192x192">
-<title>readr: 高速で柔軟なテーブル読み込みツール - Watal M. Iwasaki</title>
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-  tex2jax: {
-    inlineMath: [['$','$']],
-    displayMath: [['$$','$$']],
-    processEnvironments: false,
-    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
-  }
-});
-MathJax.Hub.Queue(function() {
-  var all = MathJax.Hub.getAllJax(), i;
-  for(i = 0; i < all.length; i += 1) {
-    all[i].SourceElement().parentNode.classList.add('has-jax');
-  }
-});
-</script>
-<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+<title>Hadley - Watal M. Iwasaki</title>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -47,112 +30,19 @@ Watal M. Iwasaki
 
 <main>
 <article>
-<header><h1><a href="">
-readr — 高速で柔軟なテーブル読み込みツール
-</a></h1>
-<ul id="tags">
-<li><a href="/tags/r">r</a></li>
-<li><a href="/tags/hadley">hadley</a></li>
-</ul>
-</header>
-
-
-
-<p><a href="https://github.com/hadley/readr">https://github.com/hadley/readr</a></p>
-
-<p>タブ区切りテキストやCSVファイルを読み込んで <code>data.frame</code> にするツール。
-標準でも <code>read.table()</code> や <code>read.csv()</code> があるけど、それらと違って</p>
-
+<header><a href="/tags">tags</a> / <h1>
+<a href="/tags/hadley.html">Hadley</a>
+</h1></header>
 <ul>
-<li>場合により10倍ほど高速</li>
-<li>文字列を勝手にfactor扱いしたりしないので
-<code>stringsAsFactors=FALSE</code> とイチイチ書かなくて済む</li>
-<li>勝手に列名を変更しない</li>
-<li>列の名前や型を指定しやすい</li>
-<li>返ってくるクラスが <code>c('tbl_df', 'tbl', 'data.frame')</code></li>
+<li><a href="/rstats/devtools.html">devtools</a>
+<li><a href="/rstats/dplyr.html">dplyr</a>
+<li><a href="/rstats/ggplot2.html">ggplot2</a>
+<li><a href="/rstats/plyr.html">plyr</a>
+<li><a href="/rstats/readr.html">readr</a>
+<li><a href="/rstats/reshape2.html">reshape2</a>
+<li><a href="/rstats/stringr.html">stringr</a>
+<li><a href="/rstats/tidyr.html">tidyr</a>
 </ul>
-
-<p>Rの中から <code>install.packages('readr')</code> でインストールし、
-使う前に <code>library(readr)</code> でパッケージを読み込む。</p>
-
-<h2 id="主な関数">主な関数</h2>
-
-<dl>
-<dt><code>read_csv(file, col_names=TRUE, col_types=NULL, na='NA', skip=0, ...)</code></dt>
-<dd>カンマ区切りテキスト</dd>
-<dt><code>read_tsv(file, col_names=TRUE, col_types=NULL, na='NA', skip=0, ...)</code></dt>
-<dd>タブ区切りテキスト</dd>
-<dt><code>read_table(file, col_names=TRUE, col_types=NULL, na='NA', skip=0, n_max=-1)</code></dt>
-<dd>連続する空白文字をひとつの区切りと見なして処理</dd>
-<dt><code>read_fwf(file, col_positions, col_types=NULL, ...)</code></dt>
-<dd><p>fixed width file. 第二引数の指定方法は</p>
-
-<ol>
-<li><code>fwf_empty(infile, skip=0, col_names=NULL)</code> で自動推定</li>
-<li><code>fwf_widths(widths, col_names=NULL)</code> で幅指定</li>
-<li><code>fwf_positions(start, end, col_names=NULL)</code> で開始・終了位置指定</li>
-</ol></dd>
-<dt><code>read_delim(file, delim, quote='&quot;', ...)</code></dt>
-<dd><p>区切り文字など自分で細かく指定</p></dd>
-<dt><code>read_lines(file, n_max=-1L)</code></dt>
-<dd><p>1行を1要素とした文字列ベクタを返す</p></dd>
-<dt><code>read_file(file)</code></dt>
-<dd><p>ファイルの内容まるごと文字列で返す</p></dd>
-</dl>
-
-<h2 id="列の型を指定する">列の型を指定する</h2>
-
-<p>基本的には何も指定しなくても数値や文字列を認識していい感じに設定してくれる。
-標準の <code>read.csv()</code> などと違って暗黙のfactor変換もしない。
-明示的に型を指定したい場合は <code>col_types</code> 引数に名前付きリストを渡す。
-文字列を使って <code>'ccdi_'</code> のようにも指定できる。</p>
-
-<dl>
-<dt><code>[_] col_skip()</code></dt>
-<dd>列を読まない</dd>
-<dt><code>[i] col_integer()</code></dt>
-<dd>整数</dd>
-<dt><code>[d] col_double()</code></dt>
-<dd>実数</dd>
-<dt><code>[n] col_numeric()</code></dt>
-<dd>数字以外の文字が含まれていても無視して数字として返す</dd>
-<dt><code>[l] col_logical()</code></dt>
-<dd>TRUE or FALSE</dd>
-<dt><code>[c] col_character()</code></dt>
-<dd>文字列</dd>
-<dt><code>col_factor(levels, ordered)</code></dt>
-<dd>factor</dd>
-<dt><code>col_date(format='')</code>, <code>col_datetime(format='', tz='UTC')</code></dt>
-<dd>日付</dd>
-</dl>
-
-<pre><code class="language-r">read_csv('mydata.csv', col_types='ccdi_')
-
-read_csv('mydata.csv', col_types=list(
-   length=col_double(),
-   count=col_integer(),
-   misc=col_skip())
-</code></pre>
-
-<h2 id="excelファイルを読み込む">Excelファイルを読み込む</h2>
-
-<p>自分のデータは絶対にExcel形式ではなくCSVやTSV形式で保存すべきだが、
-人から受け取ったファイルや論文のサプリデータがExcelだったら仕方がない。
-<code>readxl</code> というパッケージを利用すれば、
-一旦Officeで開いてCSVに変換するという手間なしで直接Rに読み込める。</p>
-
-<p>Rの中から <code>install.packages('readxl')</code> でインストールし、
-使う前に <code>library(readxl)</code> でパッケージを読み込む。</p>
-
-<dl>
-<dt><code>excel_sheets(path)</code></dt>
-<dd>ファイルに含まれるシートの名前を取得</dd>
-<dt><code>read_excel(path, sheet=1, col_names=TRUE, col_types=NULL, na='', skip=0)</code></dt>
-<dd><code>.xls</code> と <code>xlsx</code> のどちらの形式でも読める。
-<code>sheet</code> は番号でも名前でもいい。
-それ以降の引数については <code>readr</code> の関数と同じ。</dd>
-</dl>
-
 </article>
 </main>
 
@@ -164,8 +54,8 @@ read_csv('mydata.csv', col_types=list(
 <div><a href="/research.html">Research Interests</a></div>
 
 
-<input type="checkbox" id="menu-rstats" checked>
-<label for="menu-rstats" class="active">R stats</label>
+<input type="checkbox" id="menu-rstats">
+<label for="menu-rstats">R stats</label>
 <ul>
 <li><a href="/rstats/intro.html">R自学自習の基礎知識</a></li>
 <li><a href="/rstats/config.html">R環境設定</a></li>
@@ -173,7 +63,7 @@ read_csv('mydata.csv', col_types=list(
 <li><a href="/rstats/ggplot2.html">ggplot2</a></li>
 <li><a href="/rstats/tidyr.html">tidyr</a></li>
 <li><a href="/rstats/dplyr.html">dplyr</a></li>
-<li class="active"><a href="/rstats/readr.html">readr</a></li>
+<li><a href="/rstats/readr.html">readr</a></li>
 <li><a href="/rstats/stringr.html">stringr</a></li>
 <li><a href="/rstats/devtools.html">devtools</a></li>
 <li><a href="/rstats/bioconductor.html">Bioconductor</a></li>
