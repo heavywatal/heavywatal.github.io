@@ -138,7 +138,7 @@ Macの [Homebrew]({{< relref "mac/homebrew.md" >}}) をLinuxに移植したパ�
 
 ### エディタ
 
-[Atom](https://atom.io/)
+[/dev/emacs]({{< relref "dev/atom.md" >}})
 
 [/dev/emacs]({{< relref "dev/emacs.md" >}})
 
