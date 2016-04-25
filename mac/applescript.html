@@ -96,9 +96,19 @@ end tell
 <pre><code>% osascript ${HOME}/Library/Scripts/Applications/Bibdesk/exportOOXML.scpt
 </code></pre>
 
-<h2 id="mi-で選択中の文字列をターミナルで実行">mi で選択中の文字列をターミナルで実行</h2>
+<h2 id="mi-app-で選択中の文字列をターミナルやr-appで実行">mi.app で選択中の文字列をターミナルやR.appで実行</h2>
 
-<pre><code>tell application &quot;mi&quot;
+<ol>
+<li>下記のスクリプトを Script Editor.app にコピペ</li>
+<li>スクリプトとして保存(e.g. <code>mi2R.scpt</code>)</li>
+<li><code>~/Library/Application Support/mi/mode/*/tool/</code>
+以下に置く
+(*印に入るのは、RとかNormalとか、miの何モードでRスクリプトを書いているかによる）</li>
+<li>mi.app の「モード設定」の「ツール」で「フォルダから再構成」</li>
+<li>コマンドショートカットで <code>command + R</code> とかに割り当てて使おう</li>
+</ol>
+
+<pre><code class="language-applescript">tell application &quot;mi&quot;
         tell document 1
                 set CommandLines to selection
         end tell
@@ -108,6 +118,13 @@ tell application &quot;Terminal&quot;
         activate
         ignoring application responses
                 do script with command CommandLines in window 1
+        end ignoring
+end tell
+
+tell application &quot;R&quot;
+        activate
+        ignoring application responses
+                cmd CommandLines
         end ignoring
 end tell
 </code></pre>
@@ -145,25 +162,25 @@ end using terms from
 <input type="checkbox" id="menu-rstats">
 <label for="menu-rstats">R stats</label>
 <ul>
-<li><a href="/rstats/bioconductor.html">Bioconductor</a></li>
-<li><a href="/rstats/biomart.html">biomaRt</a></li>
-<li><a href="/rstats/devtools.html">devtools</a></li>
-<li><a href="/rstats/dplyr.html">dplyr</a></li>
-<li><a href="/rstats/edger.html">edgeR</a></li>
-<li><a href="/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/rstats/intro.html">R自学自習の基礎知識</a></li>
+<li><a href="/rstats/config.html">R環境設定</a></li>
+<li><a href="/rstats/programming.html">RプログラミングTips</a></li>
 <li><a href="/rstats/ggplot2.html">ggplot2</a></li>
-<li><a href="/rstats/plyr.html">plyr</a></li>
+<li><a href="/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/rstats/dplyr.html">dplyr</a></li>
 <li><a href="/rstats/readr.html">readr</a></li>
-<li><a href="/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/rstats/stringr.html">stringr</a></li>
+<li><a href="/rstats/devtools.html">devtools</a></li>
+<li><a href="/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/rstats/edger.html">edgeR</a></li>
+<li><a href="/rstats/topgo.html">topGO</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
 <li><a href="/rstats/rjags.html">rjags</a></li>
-<li><a href="/rstats/rtracklayer.html">rtracklayer</a></li>
-<li><a href="/rstats/stringr.html">stringr</a></li>
-<li><a href="/rstats/tidyr.html">tidyr</a></li>
-<li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/programming.html">プログラミングTips</a></li>
-<li><a href="/rstats/config.html">環境設定</a></li>
-<li><a href="/rstats/intro.html">自学自習のための基礎知識</a></li>
+<li><a href="/rstats/plyr.html">plyr</a></li>
+<li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
 
 <input type="checkbox" id="menu-python">

@@ -10,7 +10,7 @@
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="icon" href="/favicon-192x192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/favicon-192x192.png" sizes="192x192">
-<title>プログラミングTips - Watal M. Iwasaki</title>
+<title>RプログラミングTips - Watal M. Iwasaki</title>
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
   tex2jax: {
@@ -48,7 +48,7 @@ Watal M. Iwasaki
 <main>
 <article>
 <header><h1><a href="">
-プログラミングTips
+RプログラミングTips
 </a></h1>
 <ul id="tags">
 <li><a href="/tags/r">r</a></li>
@@ -287,7 +287,7 @@ with(iris, {
 <h3 id="list-data-frame"><code>list</code>, <code>data.frame</code></h3>
 
 <ul>
-<li><a href="/rstats/plyr.html">plyr</a><code>や</code><a href="/rstats/tidyr.html">tidyr</a> を介して操作すると楽チンかつ高速。</li>
+<li><a href="/rstats/dplyr.html">plyr</a> や <a href="/rstats/tidyr.html">tidyr</a> を介して操作すると楽チンかつ高速。</li>
 <li>基本的に <code>list</code> や <code>data.frame</code> は遅いので、
 <code>matrix</code> で済むもの(数値のみの表など)は <code>matrix</code> で。</li>
 </ul>
@@ -308,7 +308,7 @@ with(iris, {
 [1] 4
 </code></pre>
 
-<p><a href="/rstats/plyr.html">plyr</a> を使っても <code>apply()</code> 的な処理を簡単に並列化できる。</p>
+<p><a href="/rstats/plyr.html">plyr</a> にも <code>apply()</code> 的な処理を簡単に並列化する機能がある。</p>
 
 <h3 id="ボトルネックを知る">ボトルネックを知る</h3>
 
@@ -331,34 +331,6 @@ with(iris, {
 cfun = compiler::cmpfun(my_func)
 </code></pre>
 
-<h2 id="mac">Mac</h2>
-
-<h3 id="mi-app-で選択中の文字列を-r-app-で実行するapplescript">mi.app で選択中の文字列を R.app で実行するAppleScript</h3>
-
-<ol>
-<li>下記のスクリプトを Script Editor.app にコピペ</li>
-<li>スクリプトとして保存(e.g. <code>mi2R.scpt</code>)</li>
-<li><code>$HOME/Library/Application Support/mi/mode/*/tool/</code>
-以下に置く
-(*印に入るのは、RとかNormalとか、miの何モードでRスクリプトを書いているかによる）</li>
-<li>mi.app の「モード設定」の「ツール」で「フォルダから再構成」</li>
-<li>コマンドショートカットで <code>command + R</code> とかに割り当てて使おう</li>
-</ol>
-
-<pre><code class="language-applescript">tell application &quot;mi&quot;
-        tell document 1
-                set CommandLines to selection
-        end tell
-end tell
-
-tell application &quot;R&quot;
-        activate
-        ignoring application responses
-                cmd CommandLines
-        end ignoring
-end tell
-</code></pre>
-
 <hr />
 
 <p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/1593273843/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/511RD-C-K%2BL._SX160_.jpg" alt="The Art of R Programming: A Tour of Statistical Software Design" /></a>
@@ -378,25 +350,25 @@ end tell
 <input type="checkbox" id="menu-rstats" checked>
 <label for="menu-rstats" class="active">R stats</label>
 <ul>
-<li><a href="/rstats/bioconductor.html">Bioconductor</a></li>
-<li><a href="/rstats/biomart.html">biomaRt</a></li>
-<li><a href="/rstats/devtools.html">devtools</a></li>
-<li><a href="/rstats/dplyr.html">dplyr</a></li>
-<li><a href="/rstats/edger.html">edgeR</a></li>
-<li><a href="/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/rstats/intro.html">R自学自習の基礎知識</a></li>
+<li><a href="/rstats/config.html">R環境設定</a></li>
+<li class="active"><a href="/rstats/programming.html">RプログラミングTips</a></li>
 <li><a href="/rstats/ggplot2.html">ggplot2</a></li>
-<li><a href="/rstats/plyr.html">plyr</a></li>
+<li><a href="/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/rstats/dplyr.html">dplyr</a></li>
 <li><a href="/rstats/readr.html">readr</a></li>
-<li><a href="/rstats/reshape2.html">reshape2</a></li>
+<li><a href="/rstats/stringr.html">stringr</a></li>
+<li><a href="/rstats/devtools.html">devtools</a></li>
+<li><a href="/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/rstats/edger.html">edgeR</a></li>
+<li><a href="/rstats/topgo.html">topGO</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
 <li><a href="/rstats/rjags.html">rjags</a></li>
-<li><a href="/rstats/rtracklayer.html">rtracklayer</a></li>
-<li><a href="/rstats/stringr.html">stringr</a></li>
-<li><a href="/rstats/tidyr.html">tidyr</a></li>
-<li><a href="/rstats/topgo.html">topGO</a></li>
-<li class="active"><a href="/rstats/programming.html">プログラミングTips</a></li>
-<li><a href="/rstats/config.html">環境設定</a></li>
-<li><a href="/rstats/intro.html">自学自習のための基礎知識</a></li>
+<li><a href="/rstats/plyr.html">plyr</a></li>
+<li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
 
 <input type="checkbox" id="menu-python">
