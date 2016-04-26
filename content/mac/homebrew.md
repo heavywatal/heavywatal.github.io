@@ -15,7 +15,8 @@ Unixツールをパッケージとして手軽にインストールできるMac�
 
 1.  Command Line Tools をインストールする。 cf. [/dev/devenv]({{< relref "dev/devenv.md" >}})
 2.  公式では `/usr/local/` へのインストールが推奨されているが、
-    個人的にあまり好ましくないので `~/.homebrew/` にインストールする:
+    個人的にあまり好ましくないのでホームディレクトリに
+    `~/.homebrew/` を作ってインストールする:
 
         % cd
         % mkdir .homebrew
