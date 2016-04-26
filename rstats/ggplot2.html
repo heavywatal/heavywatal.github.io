@@ -110,47 +110,47 @@ ggsave(&quot;iris_sepal.png&quot;, gp)
 <dt><a href="http://docs.ggplot2.org/current/geom_point.html">散布図</a></dt>
 <dd><code>gp + geom_point(size=2, alpha=0.3)</code></dd>
 <dt><a href="http://docs.ggplot2.org/current/geom_line.html">折れ線グラフ</a></dt>
-<dd><code>gp + geom_line(size=2, linetype=&quot;dashed&quot;)</code><br />
-<code>gp + geom_path()</code><br />
+<dd><code>gp + geom_line(size=2, linetype=&quot;dashed&quot;)</code><br>
+<code>gp + geom_path()</code><br>
 前者はx軸の小さい順に結び、後者はデータ順に結ぶ</dd>
 <dt><a href="http://docs.ggplot2.org/current/geom_histogram.html">ヒストグラム、密度曲線</a></dt>
-<dd><code>gp + geom_histogram(fill=..count..)</code><br />
+<dd><code>gp + geom_histogram(fill=..count..)</code><br>
 <code>gp + geom_density(alpha = 0.2)</code></dd>
 <dt><a href="http://docs.ggplot2.org/current/geom_bar.html">棒グラフ</a></dt>
-<dd><code>gp + geom_bar(stat='identity')</code><br />
+<dd><code>gp + geom_bar(stat='identity')</code><br>
 stat を指定しないとヒストグラムになってしまう。 <code>position='dodge'</code> にすると横並び (デフォルト: <code>'stack'</code>)。</dd>
 <dt><a href="http://docs.ggplot2.org/current/geom_boxplot.html">箱ひげ図</a></dt>
-<dd><code>gp + geom_boxplot()</code><br />
+<dd><code>gp + geom_boxplot()</code><br>
 <code>gp + geom_violin()</code></dd>
 <dt><a href="http://docs.ggplot2.org/current/geom_tile.html">ヒートマップ</a></dt>
-<dd><code>gp + geom_tile(aes(fill=z))</code><br />
-<code>gp + geom_raster(aes(fill=z))</code><br />
+<dd><code>gp + geom_tile(aes(fill=z))</code><br>
+<code>gp + geom_raster(aes(fill=z))</code><br>
 後者は各タイルの大きさがすべて同じ場合の特殊ケースで、高速。</dd>
 <dt><a href="http://docs.ggplot2.org/current/geom_errorbar.html">エラーバー</a></dt>
-<dd><code>limits = aes(ymax=height+se, ymin=height-se)</code><br />
-<code>gp + geom_errorbar(limits, width=0.1)</code><br />
-<code>gp + geom_pointrange(limits)</code><br />
+<dd><code>limits = aes(ymax=height+se, ymin=height-se)</code><br>
+<code>gp + geom_errorbar(limits, width=0.1)</code><br>
+<code>gp + geom_pointrange(limits)</code><br>
 <code>gp + geom_crossbar(limits, width=0.2)</code></dd>
 <dt><a href="http://docs.ggplot2.org/current/stat_function.html">関数</a></dt>
 <dd><code>ggplot(data.frame(x=c(-4, 4)), aes(x)) + stat_function(fun=dnorm, args=c(0, 1), n=200)</code></dd>
 </dl>
 
-<hr />
+<hr>
 
 <dl>
 <dt><a href="http://docs.ggplot2.org/current/geom_smooth.html">回帰曲線</a></dt>
 <dd><code>gp + geom_smooth(method=glm, family=poisson, se=FALSE)</code></dd>
 <dt><a href="http://docs.ggplot2.org/current/geom_abline.html">切片と傾きで直線を描く</a></dt>
-<dd><code>gp + geom_abline(intercept=3, slope=5)</code><br />
+<dd><code>gp + geom_abline(intercept=3, slope=5)</code><br>
 <code>gp + geom_hline(yintercept=7) + geom_vline(xintercept=11)</code></dd>
 <dt><a href="http://docs.ggplot2.org/current/geom_segment.html">始点と終点で曲線や矢印を描く</a></dt>
-<dd><code>gp + geom_curve(aes(x, y, xend, yend), curvature = -0.2)</code><br />
-<code>gp + geom_segment(aes(x, y, xend, yend), arrow=arrow())</code><br />
+<dd><code>gp + geom_curve(aes(x, y, xend, yend), curvature = -0.2)</code><br>
+<code>gp + geom_segment(aes(x, y, xend, yend), arrow=arrow())</code><br>
 矢印の調整は <a href="http://www.inside-r.org/r-doc/grid/arrow">grid::arrow()</a></dd>
 <dt><a href="http://docs.ggplot2.org/current/annotate.html">文字列や図形を書き加える</a></dt>
-<dd><code>gp + geom_text(aes(y=y_val+10), label=y_val)</code><br />
-<code>gp + annotate(&quot;text&quot;, x=1:4, y=4:1, label=sprintf(&quot;x = %d&quot;, 1:4))</code><br />
-テーマの <code>base_family</code> は引き継がれないので <code>family=</code> で指定すべし。<br />
+<dd><code>gp + geom_text(aes(y=y_val+10), label=y_val)</code><br>
+<code>gp + annotate(&quot;text&quot;, x=1:4, y=4:1, label=sprintf(&quot;x = %d&quot;, 1:4))</code><br>
+テーマの <code>base_family</code> は引き継がれないので <code>family=</code> で指定すべし。<br>
 数式を使う場合は文字列 <code>label='italic(N[t])'</code> のような文字列で渡して <code>parse=TRUE</code>。</dd>
 </dl>
 
@@ -158,11 +158,11 @@ stat を指定しないとヒストグラムになってしまう。 <code>posit
 
 <h3 id="データによって色やサイズを変える">データによって色やサイズを変える</h3>
 
-<p><code>colour</code>: 点や線の色<br />
-<code>fill</code>: 塗りつぶしの色<br />
-<code>size</code>: 点や線のサイズ <a href="http://docs.ggplot2.org/current/scale_size.html">http://docs.ggplot2.org/current/scale_size.html</a><br />
-<code>shape</code>: 点の形 <a href="http://docs.ggplot2.org/current/scale_shape.html">http://docs.ggplot2.org/current/scale_shape.html</a><br />
-<code>linetype</code>: 線 <a href="http://docs.ggplot2.org/current/scale_linetype.html">http://docs.ggplot2.org/current/scale_linetype.html</a><br />
+<p><code>colour</code>: 点や線の色<br>
+<code>fill</code>: 塗りつぶしの色<br>
+<code>size</code>: 点や線のサイズ <a href="http://docs.ggplot2.org/current/scale_size.html">http://docs.ggplot2.org/current/scale_size.html</a><br>
+<code>shape</code>: 点の形 <a href="http://docs.ggplot2.org/current/scale_shape.html">http://docs.ggplot2.org/current/scale_shape.html</a><br>
+<code>linetype</code>: 線 <a href="http://docs.ggplot2.org/current/scale_linetype.html">http://docs.ggplot2.org/current/scale_linetype.html</a><br>
 <code>alpha</code>: 不透明度 (0が透明、1が不透明) <a href="http://docs.ggplot2.org/current/scale_alpha.html">http://docs.ggplot2.org/current/scale_alpha.html</a></p>
 
 <p><code>aes()</code> の中にはデータによって描き分けたい列名を指定し、
@@ -178,20 +178,20 @@ geom_point(aes(size=frequency), colour='red')
 
 <dl>
 <dt><a href="http://docs.ggplot2.org/current/scale_brewer.html">http://docs.ggplot2.org/current/scale_brewer.html</a></dt>
-<dd><a href="http://colorbrewer2.org/">Colorbrewer</a> で定義されているパレットを使う。 色盲対策もできるし、原色も出てこないのでオススメ。<br />
-cf. <a href="http://www.inside-r.org/packages/cran/RColorBrewer/docs/ColorBrewer">RColorBrewer</a><br />
-<code>scale_{colour/fill}_brewer(..., type='seq', palette=1, direction=1)</code>: 離散値<br />
+<dd><a href="http://colorbrewer2.org/">Colorbrewer</a> で定義されているパレットを使う。 色盲対策もできるし、原色も出てこないのでオススメ。<br>
+cf. <a href="http://www.inside-r.org/packages/cran/RColorBrewer/docs/ColorBrewer">RColorBrewer</a><br>
+<code>scale_{colour/fill}_brewer(..., type='seq', palette=1, direction=1)</code>: 離散値<br>
 <code>scale_{colour/fill}_distiller(...)</code>: 連続値</dd>
 <dt><a href="http://docs.ggplot2.org/current/scale_gradient.html">http://docs.ggplot2.org/current/scale_gradient.html</a></dt>
-<dd>グラデーションの基準色を指定する。<br />
-<code>scale_{colour/fill}_gradient(..., low, high, ...)</code>: 普通の連続値に<br />
-<code>scale_{colour/fill}_gradient2(..., low, mid, high, midpoint=0, ...)</code>: ある中央値を挟んで上下に分けたいとき<br />
+<dd>グラデーションの基準色を指定する。<br>
+<code>scale_{colour/fill}_gradient(..., low, high, ...)</code>: 普通の連続値に<br>
+<code>scale_{colour/fill}_gradient2(..., low, mid, high, midpoint=0, ...)</code>: ある中央値を挟んで上下に分けたいとき<br>
 <code>scale_{colour/fill}_gradientn(..., colours, ...)</code>: 多色のヒートマップなどに e.g., <code>colours=c('#000000', '#0000FF', '#00FFFF', '#00FF00', '#FFFF00', '#FF0000')</code></dd>
 <dt><a href="http://docs.ggplot2.org/current/scale_identity.html">http://docs.ggplot2.org/current/scale_identity.html</a></dt>
-<dd>データフレームに入ってる値をそのまま使う<br />
+<dd>データフレームに入ってる値をそのまま使う<br>
 <code>scale_{colour/fill/size/shape/linetype/alpha}_identity(..., guide='none')</code></dd>
 <dt><a href="http://docs.ggplot2.org/current/scale_manual.html">http://docs.ggplot2.org/current/scale_manual.html</a></dt>
-<dd>値を直に指定する<br />
+<dd>値を直に指定する<br>
 <code>scale_{colour/fill/size/shape/linetype/alpha}_manual(..., values)</code></dd>
 </dl>
 
@@ -231,18 +231,18 @@ ggplot(iris, aes(Petal.Length, Sepal.Length))+geom_point()+
 
 <dl>
 <dt><a href="http://docs.ggplot2.org/current/scale_continuous.html">軸の区切りを変更したり対数にしたり</a></dt>
-<dd><code>gp + scale_x_continuous(breaks=seq(10, 100, by=10))</code><br />
-<code>gp + scale_y_log10(&quot;Beer consumption&quot;)</code><br />
-オプション: name, breaks, labels, na.value, limits, trans, expand<br />
+<dd><code>gp + scale_x_continuous(breaks=seq(10, 100, by=10))</code><br>
+<code>gp + scale_y_log10(&quot;Beer consumption&quot;)</code><br>
+オプション: name, breaks, labels, na.value, limits, trans, expand<br>
 デフォルトでは値域よりも少し余裕を持たせてあるが、 <code>geom_tile()</code> などでピッタリにしたいときは軸ごとに <code>expand=c(0, 0)</code> とか。</dd>
 <dt><a href="http://docs.ggplot2.org/current/coord_cartesian.html">描画する範囲を指定</a></dt>
-<dd><code>gp + ylim(0, 42) + xlim(&quot;b&quot;, &quot;c&quot;, &quot;d&quot;)</code><br />
-<code>gp + coord_cartesian(xlim = NULL, ylim = NULL)</code><br />
+<dd><code>gp + ylim(0, 42) + xlim(&quot;b&quot;, &quot;c&quot;, &quot;d&quot;)</code><br>
+<code>gp + coord_cartesian(xlim = NULL, ylim = NULL)</code><br>
 前者はデータそのものを切るが、後者はデータを変えずに描画領域だけズームする</dd>
 <dt><a href="http://docs.ggplot2.org/current/coord_flip.html">XY軸の反転</a></dt>
 <dd><code>gp + coord_flip()</code></dd>
 <dt><a href="http://docs.ggplot2.org/current/labs.html">軸ラベルとタイトル</a></dt>
-<dd><code>gp + labs(x=&quot;time&quot;, y=&quot;weight&quot;, title=&quot;growth&quot;)</code><br />
+<dd><code>gp + labs(x=&quot;time&quot;, y=&quot;weight&quot;, title=&quot;growth&quot;)</code><br>
 <code>gp + xlab(&quot;time&quot;) + ylab(&quot;weight&quot;) + ggtitle(&quot;growth&quot;)</code></dd>
 </dl>
 
@@ -305,70 +305,70 @@ gp = gp + theme(plot.background=element_rect(fill=&quot;transparent&quot;))
 
 <p>全体</p>
 
-<p><code>line</code>: (<code>element_line</code>)<br />
-<code>rect</code>: (<code>element_rect</code>)<br />
-<code>text</code>: (<code>element_text</code>)<br />
+<p><code>line</code>: (<code>element_line</code>)<br>
+<code>rect</code>: (<code>element_rect</code>)<br>
+<code>text</code>: (<code>element_text</code>)<br>
 <code>title</code>: (<code>element_text</code>; inherits from <code>text</code>)</p>
 
 <p>軸タイトル、軸ラベル、目盛</p>
 
-<p><code>axis.title</code>: (<code>element_text</code>; inherits from <code>text</code>)<br />
-<code>axis.title.x</code>: (<code>element_text</code>; inherits from <code>axis.title</code>)<br />
-<code>axis.title.y</code>: (<code>element_text</code>; inherits from <code>axis.title</code>)<br />
-<code>axis.text</code>: (<code>element_text</code>; inherits from <code>text</code>)<br />
-<code>axis.text.x</code>: (<code>element_text</code>; inherits from <code>axis.text</code>)<br />
-<code>axis.text.y</code>: (<code>element_text</code>; inherits from <code>axis.text</code>)<br />
-<code>axis.ticks</code>: (<code>element_line</code>; inherits from <code>line</code>)<br />
-<code>axis.ticks.x</code>: (<code>element_line</code>; inherits from <code>axis.ticks</code>)<br />
-<code>axis.ticks.y</code>: (<code>element_line</code>; inherits from <code>axis.ticks</code>)<br />
-<code>axis.ticks.length</code>: (<code>unit</code>)<br />
-<code>axis.ticks.margin</code>: (<code>unit</code>)<br />
-<code>axis.line</code>: (<code>element_line</code>; inherits from <code>line</code>)<br />
-<code>axis.line.x</code>: (<code>element_line</code>; inherits from <code>axis.line</code>)<br />
+<p><code>axis.title</code>: (<code>element_text</code>; inherits from <code>text</code>)<br>
+<code>axis.title.x</code>: (<code>element_text</code>; inherits from <code>axis.title</code>)<br>
+<code>axis.title.y</code>: (<code>element_text</code>; inherits from <code>axis.title</code>)<br>
+<code>axis.text</code>: (<code>element_text</code>; inherits from <code>text</code>)<br>
+<code>axis.text.x</code>: (<code>element_text</code>; inherits from <code>axis.text</code>)<br>
+<code>axis.text.y</code>: (<code>element_text</code>; inherits from <code>axis.text</code>)<br>
+<code>axis.ticks</code>: (<code>element_line</code>; inherits from <code>line</code>)<br>
+<code>axis.ticks.x</code>: (<code>element_line</code>; inherits from <code>axis.ticks</code>)<br>
+<code>axis.ticks.y</code>: (<code>element_line</code>; inherits from <code>axis.ticks</code>)<br>
+<code>axis.ticks.length</code>: (<code>unit</code>)<br>
+<code>axis.ticks.margin</code>: (<code>unit</code>)<br>
+<code>axis.line</code>: (<code>element_line</code>; inherits from <code>line</code>)<br>
+<code>axis.line.x</code>: (<code>element_line</code>; inherits from <code>axis.line</code>)<br>
 <code>axis.line.y</code>: (<code>element_line</code>; inherits from <code>axis.line</code>)</p>
 
 <p>凡例</p>
 
-<p><code>legend.background</code>: (<code>element_rect</code>; inherits from <code>rect</code>)<br />
-<code>legend.margin</code>: (<code>unit</code>)<br />
-<code>legend.key</code>: (<code>element_rect</code>; inherits from <code>rect</code>)<br />
-<code>legend.key.size</code>: (<code>unit</code>)<br />
-<code>legend.key.height</code>: (<code>unit</code>; inherits from <code>legend.key.size</code>)<br />
-<code>legend.key.width</code>: (<code>unit</code>; inherits from <code>legend.key.size</code>)<br />
-<code>legend.text</code>: (<code>element_text</code>; inherits from <code>text</code>)<br />
-<code>legend.text.align</code>: (number from <code>0</code> (left) to <code>1</code> (right))<br />
-<code>legend.title</code>: (<code>element_text</code>; inherits from <code>title</code>)<br />
-<code>legend.title.align</code>: (number from <code>0</code> (left) to <code>1</code> (right))<br />
-<code>legend.position</code>: (<code>&quot;left&quot;</code>, <code>&quot;right&quot;</code>, <code>&quot;bottom&quot;</code>, <code>&quot;top&quot;</code>, <code>&quot;none&quot;</code>; プロット領域内での位置を <code>c(0, 1)</code> のような数値で)<br />
-<code>legend.direction</code>: (<code>&quot;horizontal&quot;</code> or <code>&quot;vertical&quot;</code>)<br />
-<code>legend.justification</code>: (<code>&quot;center&quot;</code> or <code>c(0, 1)</code> のような数値でアンカー位置を指定)<br />
-<code>legend.box</code>: (<code>&quot;horizontal&quot;</code> or <code>&quot;vertical&quot;</code>)<br />
+<p><code>legend.background</code>: (<code>element_rect</code>; inherits from <code>rect</code>)<br>
+<code>legend.margin</code>: (<code>unit</code>)<br>
+<code>legend.key</code>: (<code>element_rect</code>; inherits from <code>rect</code>)<br>
+<code>legend.key.size</code>: (<code>unit</code>)<br>
+<code>legend.key.height</code>: (<code>unit</code>; inherits from <code>legend.key.size</code>)<br>
+<code>legend.key.width</code>: (<code>unit</code>; inherits from <code>legend.key.size</code>)<br>
+<code>legend.text</code>: (<code>element_text</code>; inherits from <code>text</code>)<br>
+<code>legend.text.align</code>: (number from <code>0</code> (left) to <code>1</code> (right))<br>
+<code>legend.title</code>: (<code>element_text</code>; inherits from <code>title</code>)<br>
+<code>legend.title.align</code>: (number from <code>0</code> (left) to <code>1</code> (right))<br>
+<code>legend.position</code>: (<code>&quot;left&quot;</code>, <code>&quot;right&quot;</code>, <code>&quot;bottom&quot;</code>, <code>&quot;top&quot;</code>, <code>&quot;none&quot;</code>; プロット領域内での位置を <code>c(0, 1)</code> のような数値で)<br>
+<code>legend.direction</code>: (<code>&quot;horizontal&quot;</code> or <code>&quot;vertical&quot;</code>)<br>
+<code>legend.justification</code>: (<code>&quot;center&quot;</code> or <code>c(0, 1)</code> のような数値でアンカー位置を指定)<br>
+<code>legend.box</code>: (<code>&quot;horizontal&quot;</code> or <code>&quot;vertical&quot;</code>)<br>
 <code>legend.box.just</code>: (<code>&quot;top&quot;</code>, <code>&quot;bottom&quot;</code>, <code>&quot;left&quot;</code>, or <code>&quot;right&quot;</code>)</p>
 
 <p>プロット領域の背景、余白、格子</p>
 
-<p><code>panel.background</code>: (<code>element_rect</code>; inherits from <code>rect</code>)<br />
-<code>panel.border</code>: (<code>element_rect</code>; inherits from <code>rect</code>; should be used with <code>fill=NA</code>)<br />
-<code>panel.margin</code>: (<code>unit</code>; <code>facet_*</code> の間隔)<br />
-<code>panel.grid</code>: (<code>element_line</code>; inherits from <code>line</code>)<br />
-<code>panel.grid.major</code>: (<code>element_line</code>; inherits from <code>panel.grid</code>)<br />
-<code>panel.grid.minor</code>: (<code>element_line</code>; inherits from <code>panel.grid</code>)<br />
-<code>panel.grid.major.x</code>: (<code>element_line</code>; inherits from <code>panel.grid.major</code>)<br />
-<code>panel.grid.major.y</code>: (<code>element_line</code>; inherits from <code>panel.grid.major</code>)<br />
-<code>panel.grid.minor.x</code>: (<code>element_line</code>; inherits from <code>panel.grid.minor</code>)<br />
+<p><code>panel.background</code>: (<code>element_rect</code>; inherits from <code>rect</code>)<br>
+<code>panel.border</code>: (<code>element_rect</code>; inherits from <code>rect</code>; should be used with <code>fill=NA</code>)<br>
+<code>panel.margin</code>: (<code>unit</code>; <code>facet_*</code> の間隔)<br>
+<code>panel.grid</code>: (<code>element_line</code>; inherits from <code>line</code>)<br>
+<code>panel.grid.major</code>: (<code>element_line</code>; inherits from <code>panel.grid</code>)<br>
+<code>panel.grid.minor</code>: (<code>element_line</code>; inherits from <code>panel.grid</code>)<br>
+<code>panel.grid.major.x</code>: (<code>element_line</code>; inherits from <code>panel.grid.major</code>)<br>
+<code>panel.grid.major.y</code>: (<code>element_line</code>; inherits from <code>panel.grid.major</code>)<br>
+<code>panel.grid.minor.x</code>: (<code>element_line</code>; inherits from <code>panel.grid.minor</code>)<br>
 <code>panel.grid.minor.y</code>: (<code>element_line</code>; inherits from <code>panel.grid.minor</code>)</p>
 
 <p>全体の背景、タイトル、余白</p>
 
-<p><code>plot.background</code>: (<code>element_rect</code>; inherits from <code>rect</code>)<br />
-<code>plot.title</code>: (<code>element_text</code>; inherits from <code>title</code>)<br />
+<p><code>plot.background</code>: (<code>element_rect</code>; inherits from <code>rect</code>)<br>
+<code>plot.title</code>: (<code>element_text</code>; inherits from <code>title</code>)<br>
 <code>plot.margin</code>: (<code>unit</code> with the sizes of the top, right, bottom, and left margins)</p>
 
 <p><code>facet</code> したときのラベル</p>
 
-<p><code>strip.background</code>: (<code>element_rect</code>; inherits from <code>rect</code>)<br />
-<code>strip.text</code>: (<code>element_text</code>; inherits from <code>text</code>)<br />
-<code>strip.text.x</code>: (<code>element_text</code>; inherits from <code>strip.text</code>)<br />
+<p><code>strip.background</code>: (<code>element_rect</code>; inherits from <code>rect</code>)<br>
+<code>strip.text</code>: (<code>element_text</code>; inherits from <code>text</code>)<br>
+<code>strip.text.x</code>: (<code>element_text</code>; inherits from <code>strip.text</code>)<br>
 <code>strip.text.y</code>: (<code>element_text</code>; inherits from <code>strip.text</code>)</p>
 
 <h3 id="エレメント">エレメント</h3>
@@ -377,13 +377,13 @@ gp = gp + theme(plot.background=element_rect(fill=&quot;transparent&quot;))
 
 <dl>
 <dt><code>element_rect(fill, colour, size, linetype)</code> &mdash; 長方形</dt>
-<dd><code>fill</code>: 塗りつぶしの色<br />
+<dd><code>fill</code>: 塗りつぶしの色<br>
 <code>colour</code>: 枠の色</dd>
 <dt><code>element_text(family, face, colour, size, hjust, vjust, angle, lineheight, margin)</code> &mdash; 文字</dt>
-<dd><code>family</code>: フォントファミリー。 空なら <code>theme_bw(base_family=...)</code> などの指定を継承。<br />
-<code>face</code>: (<code>'plain'</code>, <code>'italic'</code>, <code>'bold'</code>, <code>'bold.italic'</code>)<br />
-<code>hjust</code>, <code>vjust</code>: 水平位置と垂直位置の寄せ方をそれぞれ <code>[0, 1]</code> の実数で。<br />
-<code>angle</code>: 角度 <code>[0, 360]</code><br />
+<dd><code>family</code>: フォントファミリー。 空なら <code>theme_bw(base_family=...)</code> などの指定を継承。<br>
+<code>face</code>: (<code>'plain'</code>, <code>'italic'</code>, <code>'bold'</code>, <code>'bold.italic'</code>)<br>
+<code>hjust</code>, <code>vjust</code>: 水平位置と垂直位置の寄せ方をそれぞれ <code>[0, 1]</code> の実数で。<br>
+<code>angle</code>: 角度 <code>[0, 360]</code><br>
 <code>margin</code>: スペース調整を関数 <code>margin(top, right, bottom, left)</code> 越しに。</dd>
 <dt><code>element_blank()</code> &mdash; 空</dt>
 <dd><p>消したい要素にはこれを指定する</p>
@@ -400,12 +400,12 @@ units で使いそうなのは
 <dt><code>calc_element(element, theme, verbose=FALSE)</code></dt>
 <dd><p>継承などを考慮した上でelementがどんな値にセットされるか確かめる。</p></dd>
 <dt><a href="http://www.cookbook-r.com/Graphs/Shapes_and_line_types/">線の種類</a> &mdash; <code>linetype=</code></dt>
-<dd><p><code>0</code>: <code>'blank'</code><br />
-<code>1</code>: <code>'solid'</code><br />
-<code>2</code>: <code>'dashed'</code><br />
-<code>3</code>: <code>'dotted'</code><br />
-<code>4</code>: <code>'dotdash'</code><br />
-<code>5</code>: <code>'longdash'</code><br />
+<dd><p><code>0</code>: <code>'blank'</code><br>
+<code>1</code>: <code>'solid'</code><br>
+<code>2</code>: <code>'dashed'</code><br>
+<code>3</code>: <code>'dotted'</code><br>
+<code>4</code>: <code>'dotdash'</code><br>
+<code>5</code>: <code>'longdash'</code><br>
 <code>6</code>: <code>'twodash'</code></p></dd>
 </dl>
 
