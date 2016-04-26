@@ -68,3 +68,8 @@ apm upgrade
 ## 使い方
 
 とりあえず `cmd-shift-p` でコマンドパレットを呼び出してみる。
+
+矩形(ブロック)選択
+: `ctrl-shift-down` / `ctrl-shift-up`
+: MacではデフォルトでMission Controlに割り当てられてしまっているので
+  システム環境設定からそれを解除しておく。
