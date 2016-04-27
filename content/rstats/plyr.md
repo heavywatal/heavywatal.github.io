@@ -21,7 +21,8 @@ Rの中から `install.packages('plyr')` でインストールし、
 
 {{%div class="note"%}}
 `list` 処理ではこれがまだ現役だが、
-`data.frame` に関する処理では改良版の `dplyr` を使うべし。
+`data.frame` に関する処理では改良版の
+[dplyr]({{< relref "dplyr.md" >}}) を使うべし。
 両方使う場合は `dplyr` を後に読み込むほうがいいらしい。
 {{%/div%}}
 

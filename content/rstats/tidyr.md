@@ -4,7 +4,7 @@ subtitle = "シンプルなデータ変形ツール"
 tags = ["r", "hadley"]
 [menu.main]
   parent = "rstats"
-  weight = -75
+  weight = -70
 +++
 
 -   <https://github.com/hadley/tidyr>

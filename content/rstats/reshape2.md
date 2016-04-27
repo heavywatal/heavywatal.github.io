@@ -9,7 +9,7 @@ tags = ["r", "hadley"]
 
 {{%div class="warning"%}}
 半端に多機能な `reshape2` ではなく、
-新しい [tidyr]({{< relref "tidyr.md" >}})` + `[dplyr]({{< relref "dplyr.md" >}}) を使おう。
+新しい [tidyr]({{< relref "tidyr.md" >}}) + [dplyr]({{< relref "dplyr.md" >}}) を使おう。
 {{%/div%}}
 
 -   <http://had.co.nz/reshape/>

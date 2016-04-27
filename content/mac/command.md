@@ -48,6 +48,9 @@ Terminal から一発でファイルを開くことができる。
 [Tinkertool](http://www.bresink.com/osx/TinkerTool.html)
 などのGUIアプリを使うほうが簡単で安心かも
 
+iTerm2のタブの横幅を広くする
+:   `defaults write com.googlecode.iterm2 OptimumTabWidth -int 360`
+
 ## `killall`
 
 Finder や Dock など、GUIから終了させにくいアプリケーションを再起動する。

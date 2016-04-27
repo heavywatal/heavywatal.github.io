@@ -7,16 +7,12 @@ tags = ["r", "graph", "hadley"]
   weight = -79
 +++
 
--   <http://ggplot2.org/>
--   <http://docs.ggplot2.org/>
--   <http://www.cookbook-r.com/Graphs/>
--   <http://www.rdocumentation.org/packages/ggplot2>
+- <http://ggplot2.org/>
+- <http://docs.ggplot2.org/>
+- <http://www.cookbook-r.com/Graphs/>
+- <http://www.rdocumentation.org/packages/ggplot2>
 
-R で以下のコマンドを実行してインストール
-
-```r
-install.packages("ggplot2")
-```
+R で `install.packages("ggplot2")` を実行してインストール
 
 ## 基本的な使い方
 
@@ -47,7 +43,8 @@ ggsave("iris_sepal.png", gp)
 ```
 
 {{%div class="note"%}}
-`ggplot()` に渡すデータを整形するには [tidyr]({{< relref "tidyr.md" >}}) が便利。
+`ggplot()` に渡すデータを整形するには
+[dplyr]({{< relref "dplyr.md" >}}) と [tidyr]({{< relref "tidyr.md" >}}) を使う。
 {{%/div%}}
 
 ## プロット
@@ -55,10 +52,10 @@ ggsave("iris_sepal.png", gp)
 [散布図](http://docs.ggplot2.org/current/geom_point.html)
 :   `gp + geom_point(size=2, alpha=0.3)`
 
-[折れ線グラフ](http://docs.ggplot2.org/current/geom_line.html)
-:   `gp + geom_line(size=2, linetype="dashed")`\
-    `gp + geom_path()`\
-    前者はx軸の小さい順に結び、後者はデータ順に結ぶ
+[折れ線グラフ](http://docs.ggplot2.org/current/geom_path.html)
+:   `gp + geom_path(size=2, linetype="dashed")` データ順に結ぶ\
+    `gp + geom_line()` x軸上の順で結ぶ\
+    `gp + geom_step()` 階段状に結ぶ
 
 [ヒストグラム、密度曲線](http://docs.ggplot2.org/current/geom_histogram.html)
 :   `gp + geom_histogram(fill=..count..)`\

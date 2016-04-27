@@ -42,10 +42,17 @@ R の標準機能。
 何もしなくても使用可能な状態になっているので、
 パッケージであることはあまり意識しなくてもいい。
 
--   `base`: `c()`, `data.frame()`, `sum()` などホントに基本的なもの
--   `graphics`, `grDevices`, `grid`: `plot()` などグラフ描画関連
--   `stats`: `anova()`, `glm()`, `t.test()` など統計解析関連
--   `utils`: `help()`, `install.packages()`, `read.table()` など
+`base`
+: `c()`, `data.frame()`, `sum()` などホントに基本的なもの
+
+`graphics`, `grDevices`, `grid`
+: `plot()` などグラフ描画関連
+
+`stats`
+: `anova()`, `glm()`, `t.test()` など統計解析関連
+
+`utils`
+: `help()`, `install.packages()`, `read.table()` など
 
 ほかに
 `compiler`, `datasets`, `methods`, `parallel`,
@@ -80,7 +87,11 @@ Rの中から下記のようなコマンドでインストールする
 ```
 
 例えば
-[ggplot2]({{< relref "ggplot2.md" >}})`, `[tidyr]({{< relref "tidyr.md" >}})`, `[dplyr]({{< relref "dplyr.md" >}})`, `[stringr]({{< relref "stringr.md" >}})`, `[readr]({{< relref "readr.md" >}})
+[ggplot2]({{< relref "ggplot2.md" >}}),
+[dplyr]({{< relref "dplyr.md" >}}),
+[tidyr]({{< relref "tidyr.md" >}}),
+[readr]({{< relref "readr.md" >}}),
+[stringr]({{< relref "stringr.md" >}})
 などは標準になってもいいくらい便利。
 
 そのほか
@@ -173,6 +184,10 @@ R がファイルを探すのはこの作業ディレクトリである。
 ## データ読み込み
 
 See [readr]({{< relref "readr.md" >}})
+
+## データ処理・整形
+
+See [dplyr]({{< relref "dplyr.md" >}}) and [tidyr]({{< relref "tidyr.md" >}})
 
 ## グラフ作図
 

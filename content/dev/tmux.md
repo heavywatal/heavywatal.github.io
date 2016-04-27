@@ -32,25 +32,27 @@ prefix keyはデフォルトで `C-b` だが
 `control + b` を `C-b` のように表記する
 (e.g. `C-t ?` でキーバインドを列挙)。
 
-    ? 　list-keys
-    d 　detach-client
-    [ 　copy-mode
-    ] 　paste-buffer
-    c 　new-window
-    n 　next-window
-    p 　previous-window
-    l 　last-window
-    , 　rename-window
-    " 　split-window
-    % 　split-window -h
-    ↑ 　select-pane -U
-    ↓ 　select-pane -D
-    ← 　select-pane -L
-    → 　select-pane -R
-    o 　select-pane -t:.+
-    : 　command-prompt
-    x 　confirm-before kill-pane
-    & 　confirm-before kill-window
+```nohighlight
+? 　list-keys
+d 　detach-client
+[ 　copy-mode
+] 　paste-buffer
+c 　new-window
+n 　next-window
+p 　previous-window
+l 　last-window
+, 　rename-window
+" 　split-window
+% 　split-window -h
+↑ 　select-pane -U
+↓ 　select-pane -D
+← 　select-pane -L
+→ 　select-pane -R
+o 　select-pane -t:.+
+: 　command-prompt
+x 　confirm-before kill-pane
+& 　confirm-before kill-window
+```
 
 ### コピーモード
 
@@ -86,9 +88,6 @@ Mac `open` 問題
     をインストールして挟む:
 
         % brew install reattach-to-user-namespace
-
-タブの横幅を広くする
-:   `defaults write com.googlecode.iterm2 OptimumTabWidth -int 360`
 
 
 ## 利用例
