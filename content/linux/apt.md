@@ -5,9 +5,9 @@ tags = ["linux", "package"]
   parent = "linux"
 +++
 
--   Applications &gt; Ubuntu Software Center
--   System &gt; Administration &gt; Synaptic Package Manager, Update Manager
--   Applications &gt; Accessories &gt; Terminal で `apt-get`, `apt-cache`, `dpkg`
+- Applications > Ubuntu Software Center
+- System > Administration > Synaptic Package Manager, Update Manager
+- Applications > Accessories > Terminal で `apt-get`, `apt-cache`, `dpkg`
 
 ## apt-get
 
@@ -50,26 +50,25 @@ tags = ["linux", "package"]
     sudo apt-key adv --keyserver pgp.mit.edu --recv-keys 5044912E
     sudo add-apt-repository "deb http://linux.dropbox.com/ubuntu $(lsb_release -sc) main"
 
-[Personal Package Archives for Ubuntu](https://launchpad.net/ubuntu/+ppas)
+[Personal Package Archives for Ubuntu](https://launchpad.net/ubuntu/+ppas):
+
 公式版のパッケージは安定性のために新しさを犠牲にしている場合が多い。か
 と言って、ソースをダウンロードして自分でビルド・インストールするのは難しい。
 誰かが非公式にビルドした最新版がこのPPAで提供されていれば、
 そのリポジトリを追加することで簡単にインストールできる。
-以下のように、その提供者の\`ppa:&lt;user-name&gt;/&lt;ppa-name&gt;さえ分かれば
+以下のように、その提供者の `ppa:<user-name>/<ppa-name>` さえ分かれば
 コマンド１行でリポジトリと鍵を登録できる。
 このコマンドは python-software-properties というパッケージで提供されている。
 
-::
-
-    sudo add-apt-repository ppa:&lt;user-name&gt;/&lt;ppa-name&gt;
+    sudo add-apt-repository ppa:<user-name>/<ppa-name>
     sudo apt-get update
 
-Toolchain test builds &lt;<https://launchpad.net/~ubuntu-toolchain-r/+archive/test>&gt;\_: ppa:ubuntu-toolchain-r/test\`
-GCCなど開発ツールの最新版を自分でビルドしたくない場合はこれを。
-ただし `base-files` パッケージのインストールにより
-`/etc/issue` や `/etc/lsb-release` が書き換わったりして
-困ったことになる場合があるのでそうなったら手で書きなおす。
-[ref.](http://askubuntu.com/questions/126498/ubuntu-12-04-reports-itself-as-quantal)
+[Toolchain test builds](https://launchpad.net/~ubuntu-toolchain-r/+archive/test): `ppa:ubuntu-toolchain-r/test`
+: GCCなど開発ツールの最新版を自分でビルドしたくない場合はこれを。
+  ただし `base-files` パッケージのインストールにより
+  `/etc/issue` や `/etc/lsb-release` が書き換わったりして
+  困ったことになる場合があるのでそうなったら手で書きなおす。
+  http://askubuntu.com/questions/126498/ubuntu-12-04-reports-itself-as-quantal
 
 [PPA for Ubuntu Japanese Team](https://launchpad.net/~japaneseteam/+archive/ppa/): `ppa:japaneseteam/ppa`
 :   日本語環境のサポート
