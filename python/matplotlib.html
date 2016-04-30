@@ -83,11 +83,11 @@ Python にいくつかのモジュールを導入することで
 <ul>
 <li><a href="http://matplotlib.org/faq/usage_faq.html">http://matplotlib.org/faq/usage_faq.html</a></li>
 <li><a href="http://matplotlib.org/users/pyplot_tutorial.html">http://matplotlib.org/users/pyplot_tutorial.html</a></li>
+<li><a href="http://matplotlib.org/faq/howto_faq.html">http://matplotlib.org/faq/howto_faq.html</a></li>
+<li><a href="http://www.scipy-lectures.org/intro/matplotlib/matplotlib.html">http://www.scipy-lectures.org/intro/matplotlib/matplotlib.html</a></li>
 </ul>
 
-<!-- -->
-
-<pre><code>import numpy as np
+<pre><code class="language-py">import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -100,11 +100,6 @@ sns.regplot('sepal_width', 'sepal_length', data=iris, ax=ax)
 plt.show()  # opens a window
 fig.savefig('example.png')
 </code></pre>
-
-<ul>
-<li><a href="http://matplotlib.org/faq/howto_faq.html">http://matplotlib.org/faq/howto_faq.html</a></li>
-<li><a href="http://www.scipy-lectures.org/intro/matplotlib/matplotlib.html">http://www.scipy-lectures.org/intro/matplotlib/matplotlib.html</a></li>
-</ul>
 
 <h3 id="figure-axes">Figure, Axes</h3>
 
@@ -304,43 +299,37 @@ e.g., <code>sns.color_palette('RdBu', n_colors=7)</code></p>
 
 <p><a href="http://stanford.edu/~mwaskom/software/seaborn/tutorial/axis_grids.html">http://stanford.edu/~mwaskom/software/seaborn/tutorial/axis_grids.html</a></p>
 
-<p><code>sns.FacetGrid(data, row, col, hue, col_wrap, sharex, sharey, ...)</code></p>
+<h3 id="sns-facetgrid-data-row-col-hue-col-wrap-sharex-sharey"><code>sns.FacetGrid(data, row, col, hue, col_wrap, sharex, sharey, ...)</code></h3>
 
-<blockquote>
 <p>カテゴリカル変数でプロットを分ける:</p>
 
-<pre><code>grid = sns.FacetGrid(iris, col='species', col_wrap=2)
+<pre><code class="language-py">grid = sns.FacetGrid(iris, col='species', col_wrap=2)
 grid.map(sns.regplot, 'sepal_width', 'sepal_length')
 </code></pre>
 
 <p>色分けもこれの仕事:</p>
 
-<pre><code>grid = sns.FacetGrid(iris, hue='species')
+<pre><code class="language-py">grid = sns.FacetGrid(iris, hue='species')
 grid.map(sns.regplot, 'sepal_width', 'sepal_length')
 </code></pre>
-</blockquote>
 
-<p><code>sns.PairGrid(data, ..., vars, x_vars, y_vars, ...)</code></p>
+<h3 id="sns-pairgrid-data-vars-x-vars-y-vars"><code>sns.PairGrid(data, ..., vars, x_vars, y_vars, ...)</code></h3>
 
-<blockquote>
-<p>ペアワイズ散布図 + ヒストグラム:</p>
+<p>ペアワイズ散布図 + ヒストグラム</p>
 
-<pre><code>grid = sns.PairGrid(iris)
+<pre><code class="language-py">grid = sns.PairGrid(iris)
 grid = grid.map_diag(sns.distplot)
 grid = grid.map_offdiag(sns.regplot)
 </code></pre>
-</blockquote>
 
-<p><code>sns.JointGrid(x, y, data, ...)</code></p>
+<h3 id="sns-jointgrid-x-y-data"><code>sns.JointGrid(x, y, data, ...)</code></h3>
 
-<blockquote>
 <p>散布図 + 周辺分布:</p>
 
-<pre><code>grid = sns.JointGrid('sepal_width', 'sepal_length', iris)
+<pre><code class="language-py">grid = sns.JointGrid('sepal_width', 'sepal_length', iris)
 grid = grid.plot_joint(sns.regplot)
 grid = grid.plot_marginals(sns.distplot, kde=False)
 </code></pre>
-</blockquote>
 
 <hr>
 
@@ -350,41 +339,35 @@ grid = grid.plot_marginals(sns.distplot, kde=False)
 
 <p>データに関係なく複数の図を並べる。</p>
 
-<p><code>plt.subplots(nrows, ncols, sharex, sharey, ...)</code></p>
+<h3 id="plt-subplots-nrows-ncols-sharex-sharey"><code>plt.subplots(nrows, ncols, sharex, sharey, ...)</code></h3>
 
-<blockquote>
 <p>等サイズに分割:</p>
 
-<pre><code>fig, axes = plt.subplots(2, 2)
+<pre><code class="language-py">fig, axes = plt.subplots(2, 2)
 sns.regplot('x', 'y', d, ax=axes[0, 0])
 fig.tight_layout()
 </code></pre>
-</blockquote>
 
-<p><code>sns.gridspec.GridSpec(nrows, ncols, ...)</code></p>
+<h3 id="sns-gridspec-gridspec-nrows-ncols"><code>sns.gridspec.GridSpec(nrows, ncols, ...)</code></h3>
 
-<blockquote>
 <p>e.g., 2x2分割して &ldquo;品&rdquo; みたいな配置にする:</p>
 
-<pre><code>gs = sns.gridspec.GridSpec(2, 2)
+<pre><code class="language-py">gs = sns.gridspec.GridSpec(2, 2)
 ax_top = plt.subplot(gs[0, :])
 ax_bottom_l = plt.subplot(gs[1, 0])
 ax_bottom_r = plt.subplot(gs[1, 1])
 </code></pre>
-</blockquote>
 
-<p><code>sns.gridspec,GridSpecFromSubplotSpec(nrows, ncols, subplot_spec, ...)</code></p>
+<h3 id="sns-gridspec-gridspecfromsubplotspec-nrows-ncols-subplot-spec"><code>sns.gridspec,GridSpecFromSubplotSpec(nrows, ncols, subplot_spec, ...)</code></h3>
 
-<blockquote>
 <p>入れ子で分割。
 e.g., 左右に分け、それぞれをさらに3段に分ける:</p>
 
-<pre><code>gs = sns.gridspec.GridSpec(1, 2)
+<pre><code class="language-py">gs = sns.gridspec.GridSpec(1, 2)
 gsl = sns.gridspec.GridSpecFromSubplotSpec(3, 1, gs[0])
 gsr = sns.gridspec.GridSpecFromSubplotSpec(3, 1, gs[1])
 ax_ltop = plt.subplot(gsl[0])
 </code></pre>
-</blockquote>
 
 <h2 id="その他">その他</h2>
 
