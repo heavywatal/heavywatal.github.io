@@ -28,24 +28,24 @@ Python にいくつかのモジュールを導入することで
 
 -   <http://matplotlib.org/faq/usage_faq.html>
 -   <http://matplotlib.org/users/pyplot_tutorial.html>
-
-<!-- -->
-
-    import numpy as np
-    import pandas as pd
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-
-    iris = sns.load_dataset('iris')
-
-    fig, ax = plt.subplots(figsize=(7, 7))
-    sns.regplot('sepal_width', 'sepal_length', data=iris, ax=ax)
-
-    plt.show()  # opens a window
-    fig.savefig('example.png')
-
 -   <http://matplotlib.org/faq/howto_faq.html>
 -   <http://www.scipy-lectures.org/intro/matplotlib/matplotlib.html>
+
+```py
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+iris = sns.load_dataset('iris')
+
+fig, ax = plt.subplots(figsize=(7, 7))
+sns.regplot('sepal_width', 'sepal_length', data=iris, ax=ax)
+
+plt.show()  # opens a window
+fig.savefig('example.png')
+```
+
 
 ### Figure, Axes
 
@@ -243,33 +243,37 @@ Grid に Axes-level plot を乗せて返す高レベル関数。
 
 <http://stanford.edu/~mwaskom/software/seaborn/tutorial/axis_grids.html>
 
-`sns.FacetGrid(data, row, col, hue, col_wrap, sharex, sharey, ...)`
+### `sns.FacetGrid(data, row, col, hue, col_wrap, sharex, sharey, ...)`
 
-> カテゴリカル変数でプロットを分ける:
->
->     grid = sns.FacetGrid(iris, col='species', col_wrap=2)
->     grid.map(sns.regplot, 'sepal_width', 'sepal_length')
->
-> 色分けもこれの仕事:
->
->     grid = sns.FacetGrid(iris, hue='species')
->     grid.map(sns.regplot, 'sepal_width', 'sepal_length')
+カテゴリカル変数でプロットを分ける:
+```py
+grid = sns.FacetGrid(iris, col='species', col_wrap=2)
+grid.map(sns.regplot, 'sepal_width', 'sepal_length')
+```
 
-`sns.PairGrid(data, ..., vars, x_vars, y_vars, ...)`
+色分けもこれの仕事:
+```py
+grid = sns.FacetGrid(iris, hue='species')
+grid.map(sns.regplot, 'sepal_width', 'sepal_length')
+```
 
-> ペアワイズ散布図 + ヒストグラム:
->
->     grid = sns.PairGrid(iris)
->     grid = grid.map_diag(sns.distplot)
->     grid = grid.map_offdiag(sns.regplot)
+### `sns.PairGrid(data, ..., vars, x_vars, y_vars, ...)`
 
-`sns.JointGrid(x, y, data, ...)`
+ペアワイズ散布図 + ヒストグラム
+```py
+grid = sns.PairGrid(iris)
+grid = grid.map_diag(sns.distplot)
+grid = grid.map_offdiag(sns.regplot)
+```
 
-> 散布図 + 周辺分布:
->
->     grid = sns.JointGrid('sepal_width', 'sepal_length', iris)
->     grid = grid.plot_joint(sns.regplot)
->     grid = grid.plot_marginals(sns.distplot, kde=False)
+### `sns.JointGrid(x, y, data, ...)`
+
+散布図 + 周辺分布:
+```py
+grid = sns.JointGrid('sepal_width', 'sepal_length', iris)
+grid = grid.plot_joint(sns.regplot)
+grid = grid.plot_marginals(sns.distplot, kde=False)
+```
 
 ------------------------------------------------------------------------
 
@@ -279,32 +283,35 @@ Grid に Axes-level plot を乗せて返す高レベル関数。
 
 データに関係なく複数の図を並べる。
 
-`plt.subplots(nrows, ncols, sharex, sharey, ...)`
+### `plt.subplots(nrows, ncols, sharex, sharey, ...)`
 
-> 等サイズに分割:
->
->     fig, axes = plt.subplots(2, 2)
->     sns.regplot('x', 'y', d, ax=axes[0, 0])
->     fig.tight_layout()
+等サイズに分割:
+```py
+fig, axes = plt.subplots(2, 2)
+sns.regplot('x', 'y', d, ax=axes[0, 0])
+fig.tight_layout()
+```
 
-`sns.gridspec.GridSpec(nrows, ncols, ...)`
+### `sns.gridspec.GridSpec(nrows, ncols, ...)`
 
-> e.g., 2x2分割して "品" みたいな配置にする:
->
->     gs = sns.gridspec.GridSpec(2, 2)
->     ax_top = plt.subplot(gs[0, :])
->     ax_bottom_l = plt.subplot(gs[1, 0])
->     ax_bottom_r = plt.subplot(gs[1, 1])
+e.g., 2x2分割して "品" みたいな配置にする:
+```py
+gs = sns.gridspec.GridSpec(2, 2)
+ax_top = plt.subplot(gs[0, :])
+ax_bottom_l = plt.subplot(gs[1, 0])
+ax_bottom_r = plt.subplot(gs[1, 1])
+```
 
-`sns.gridspec,GridSpecFromSubplotSpec(nrows, ncols, subplot_spec, ...)`
+### `sns.gridspec,GridSpecFromSubplotSpec(nrows, ncols, subplot_spec, ...)`
 
-> 入れ子で分割。
-> e.g., 左右に分け、それぞれをさらに3段に分ける:
->
->     gs = sns.gridspec.GridSpec(1, 2)
->     gsl = sns.gridspec.GridSpecFromSubplotSpec(3, 1, gs[0])
->     gsr = sns.gridspec.GridSpecFromSubplotSpec(3, 1, gs[1])
->     ax_ltop = plt.subplot(gsl[0])
+入れ子で分割。
+e.g., 左右に分け、それぞれをさらに3段に分ける:
+```py
+gs = sns.gridspec.GridSpec(1, 2)
+gsl = sns.gridspec.GridSpecFromSubplotSpec(3, 1, gs[0])
+gsr = sns.gridspec.GridSpecFromSubplotSpec(3, 1, gs[1])
+ax_ltop = plt.subplot(gsl[0])
+```
 
 ## その他
 
