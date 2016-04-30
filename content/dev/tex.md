@@ -9,6 +9,12 @@ tags = ["writing"]
 
 ### Mac OS X にインストール
 
+とにかく動く環境が欲しい人は、素直にフルのMacTeXをインストールするだけ。
+ただし2GB以上の大きなインストーラをダウンロードする必要があるので注意。
+
+BibDesk, LaTeXiT, TeX Live Utility, TeXShop などのGUIアプリが不要で、
+必要なパッケージをコマンドラインからインストールできる人は下記の手順で小さくインストールできる。
+
 1.  <http://www.tug.org/mactex/> から
     `BasicTeX.pkg (mactex-basic.pkg)` をダウンロードしてインストール。
     あるいは:
@@ -17,6 +23,7 @@ tags = ["writing"]
 
 2.  `/Library/TeX/texbin/` にパスを通す。
     基本的には `/etc/paths.d/TeX` 越しに自動的に設定されるはず。
+
 3.  `sudo tlmgr update --self --all` で諸々アップデート
 
 ### TeXをPDFにコンパイル
@@ -434,4 +441,4 @@ XeTeX なら OS のフォントをフルネームで指定して使える
 フォント関連のものをインストールしたあとは以下のようなコマンドで読み込み直す:
 
     % updmap
-    % sudo updmap-sys
+    ## もしくは sudo updmap-sys
