@@ -14,6 +14,15 @@ tags = ["r", "graph"]
 -   <http://cran.r-project.org/web/packages/rgl/>
 -   <http://www.rdocumentation.org/packages/rgl>
 
+{{%div class="note"%}}
+なんかAPIもガチャガチャだしドキュメントもいい加減で古臭いので、
+JavaScriptベースの
+[plotly](https://plot.ly/r/) や
+[threejs](http://bwlewis.github.io/rthreejs/)
+を使ったほうがいいかも。
+{{%/div%}}
+
+
 ## デバイスの起動と終了
 
 ```r
@@ -86,7 +95,7 @@ rgl.quit()     # shutdown rgl device system
 
 ## ファイルに書き出す
 
-`rgl::snapshot3d(...)`
+`rgl::snapshot3d(filename, fmt='png', top=TRUE)`
 :   PNGのみ
 
 `rbl.postscript(filename, fmt='eps', drawText=TRUE)`
@@ -96,6 +105,7 @@ rgl.quit()     # shutdown rgl device system
 `rgl::writeWebGL(dir='webGL', filename, template, prefix, snapshot, commonParts, reuse, font, width, height)`
 :   ディレクトリ構造無しの単発HTMLでいい場合は
     `writeWebGL('.', 'rgl.html')` のように指定する。
+    ヘルプには `snapshot` がファイル名も受け取れると書いてあるが嘘で `TRUE/FALSE` のみ。
 
 ## アニメーション
 
