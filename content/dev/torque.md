@@ -7,7 +7,10 @@ tags = ["job"]
 
 <http://www.adaptivecomputing.com/products/open-source/torque/>
 
-Ubuntu 12.04 LTS Precise Pangolin
+環境
+: Ubuntu 12.04 LTS Precise Pangolin
+: Torque 2.4.16
+
 
 ## Usage
 
