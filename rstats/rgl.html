@@ -68,6 +68,16 @@ rgl — 3Dグラフ描画
 <li><a href="http://www.rdocumentation.org/packages/rgl">http://www.rdocumentation.org/packages/rgl</a></li>
 </ul>
 
+<div class="note">
+<p>なんかAPIもガチャガチャだしドキュメントもいい加減で古臭いので、
+JavaScriptベースの
+<a href="https://plot.ly/r/">plotly</a> や
+<a href="http://bwlewis.github.io/rthreejs/">threejs</a>
+を使ったほうがいいかも。</p>
+
+</div>
+
+
 <h2 id="デバイスの起動と終了">デバイスの起動と終了</h2>
 
 <pre><code class="language-r">rgl::open3d()  # open new device
@@ -136,14 +146,15 @@ rgl.quit()     # shutdown rgl device system
 <h2 id="ファイルに書き出す">ファイルに書き出す</h2>
 
 <dl>
-<dt><code>rgl::snapshot3d(...)</code></dt>
+<dt><code>rgl::snapshot3d(filename, fmt='png', top=TRUE)</code></dt>
 <dd>PNGのみ</dd>
 <dt><code>rbl.postscript(filename, fmt='eps', drawText=TRUE)</code></dt>
 <dd>ps, eps, tex, pdf, svg をサポート。
 透過や <code>bgplot3d</code> は反映されないらしいので注意。</dd>
 <dt><code>rgl::writeWebGL(dir='webGL', filename, template, prefix, snapshot, commonParts, reuse, font, width, height)</code></dt>
 <dd>ディレクトリ構造無しの単発HTMLでいい場合は
-<code>writeWebGL('.', 'rgl.html')</code> のように指定する。</dd>
+<code>writeWebGL('.', 'rgl.html')</code> のように指定する。
+ヘルプには <code>snapshot</code> がファイル名も受け取れると書いてあるが嘘で <code>TRUE/FALSE</code> のみ。</dd>
 </dl>
 
 <h2 id="アニメーション">アニメーション</h2>
