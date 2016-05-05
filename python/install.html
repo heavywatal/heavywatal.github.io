@@ -62,13 +62,12 @@ Installation
 <h2 id="ubuntu">Ubuntu</h2>
 
 <p><code>/usr/bin/python</code> が既にインストールされている。
-他のバージョンも Synaptic や apt-get で簡単に入れられる。</p>
-
-<p>新しいや古いのが欲しい場合はソースからビルドするか
+他のバージョンも Synaptic や <code>apt-get</code> で簡単に入れられる。
+標準より新しいや古いのが欲しい場合はソースからビルドするか
 <a href="https://launchpad.net/~fkrull/+archive/deadsnakes">ppa:fkrull/deadsnakes</a>
-などのリポジトリを登録するとよい。:</p>
+などのリポジトリを利用するとよい。</p>
 
-<pre><code>% sudo add-apt-repository ppa:fkrull/deadsnakes
+<pre><code class="language-sh">% sudo add-apt-repository ppa:fkrull/deadsnakes
 % sudo apt-get update
 % sudo apt-get install python2.7
 </code></pre>
@@ -76,57 +75,44 @@ Installation
 <h2 id="mac">Mac</h2>
 
 <p><code>/usr/bin/python</code> が既にインストールされている。
-他のバージョンも <a href="/mac/homebrew.html">Homebrew</a><code>や</code><a href="/mac/macports.html">MacPorts</a> で簡単に入れられる。
-昔は tk や quartz 周りで面倒があったが、
-tk が別パッケージに分離されたので楽になった:</p>
+他のバージョンも <a href="/mac/homebrew.html">Homebrew</a> や
+<a href="/mac/macports.html">MacPorts</a>
+などのパッケージマネージャで簡単に入れられる。</p>
 
-<pre><code>% brew install python3
-% sudo port install python27
-</code></pre>
-
-<p>いろんなライブラリも提供されてるけどそれらは利用せず
-<a href="/python/pip.html">pip</a> とかを使ったほうが良い:</p>
-
-<pre><code>% port search py27
+<pre><code class="language-sh">% brew install python3
 </code></pre>
 
 <h2 id="source">Source</h2>
 
 <ol>
-<li><p>必要なパッケージをインストールしておく</p>
+<li><p>必要なパッケージをインストールしておく:</p>
 
-<p>Ubuntuなら:</p>
+<p>Ubuntuなら</p>
 
-<pre><code>% sudo apt-get install build-essential
-% sudo apt-get install libreadline6-dev
-% sudo apt-get install libsqlite3-dev
-% sudo apt-get install libgdbm-dev
-% sudo apt-get install zlib1g-dev
-% sudo apt-get install libbz2-dev
-% sudo apt-get install liblzma-dev
+<pre><code class="language-sh">% sudo apt-get install build-essential libreadline6-dev libsqlite3-dev libgdbm-dev zlib1g-dev libbz2-dev liblzma-dev
 </code></pre>
 
-<p>CentOSなら:</p>
+<p>CentOSなら</p>
 
-<pre><code>% sudo yum groupinstall &quot;Development Tools&quot;
+<pre><code class="language-sh">% sudo yum groupinstall &quot;Development Tools&quot;
 % sudo yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel gdbm-devel xz-devel
 </code></pre>
 
-<p>Macなら:</p>
+<p>Macなら</p>
 
-<pre><code>% brew install gdbm openssl readline sqlite xz
+<pre><code class="language-sh">% brew install gdbm libressl readline sqlite xz
 </code></pre></li>
 
 <li><p>ダウンロードして展開:</p>
 
-<pre><code>% wget -O- http://www.python.org/ftp/python/3.4.1/Python-3.4.1.tar.xz | tar xJ
+<pre><code>% wget -O- https://www.python.org/ftp/python/3.5.1/Python-3.5.1.tar.xz | tar xJ
 </code></pre></li>
 
 <li><p>configure してビルド:</p>
 
-<pre><code>% cd Python-3.4.1/
+<pre><code class="language-sh">% cd Python-3.5.1/
 % ./configure --help
-% ./configure --with-threads
+% ./configure --prefix=${HOME}/.virtualenv/Python
 % make
 </code></pre>
 
@@ -146,11 +132,15 @@ Python 2をucs4でビルドするには
 警告メッセージが表示されるが、だいたい問題ない。
 使いそうなモジュールが含まれている場合は、
 必要なヘッダファイルを持ってそうなパッケージ (<code>libXXX-dev</code> のようなもの) を
-Synaptic などからインストールして <code>make</code> し直すとよい。
-Homebrew で入れたライブラリを利用する場合はオプション付きで <code>configure</code>
-(特に readline や sqlite は keg-only なので注意):</p>
+パッケージマネージャからインストールして <code>make</code> し直すとよい。</p>
 
-<pre><code class="language-sh">./configure --with-threads --prefix=${HOME}/.virtualenv/python CPPFLAGS=&quot;-I$(brew --prefix)/include -I$(brew --prefix)/opt/readline/include -I$(brew --prefix)/opt/sqlite/include -I$(brew --prefix)/opt/openssl/include&quot; LDFLAGS=&quot;-L$(brew --prefix)/lib -L$(brew --prefix)/opt/readline/lib -L$(brew --prefix)/opt/sqlite/lib -L$(brew --prefix)/opt/openssl/lib&quot;
+<p>Macの場合は <code>--enable-framework</code>
+を付けてビルドしておかないと使えないモジュールが出てくるので注意。
+Homebrewで入れたライブラリを利用する場合は明示的に位置指定が必要。
+(特に readline, sqlite, openssl/libressl は keg-only なので注意):</p>
+
+<pre><code class="language-sh">DST=${HOME}/.virtualenv
+./configure --enable-framework=${DST} --prefix=${DST} CPPFLAGS=&quot;-I$(brew --prefix)/include -I$(brew --prefix)/opt/readline/include -I$(brew --prefix)/opt/sqlite/include -I$(brew --prefix)/opt/libressl/include&quot; LDFLAGS=&quot;-L$(brew --prefix)/lib -L$(brew --prefix)/opt/readline/lib -L$(brew --prefix)/opt/sqlite/lib -L$(brew --prefix)/opt/libressl/lib&quot;
 </code></pre>
 
 </div>
@@ -159,11 +149,13 @@ Homebrew で入れたライブラリを利用する場合はオプション付�
 <li><p>インストール
 (古いバージョンに上書きせず共存させるため <code>altinstall</code>):</p>
 
-<pre><code>% sudo make altinstall
+<pre><code>% make altinstall
 </code></pre></li>
 </ol>
 
 <h2 id="環境設定">環境設定</h2>
+
+<h3 id="パッケージ管理">パッケージ管理</h3>
 
 <p>See <a href="/python/pip.html">pip</a></p>
 
@@ -203,6 +195,8 @@ else:
         readline.parse_and_bind(&quot;tab: complete&quot;)
 </code></pre>
 
+<p>対話モードをさらに便利にするには <a href="/python/ipython.html">IPython</a> を使う。</p>
+
 </article>
 </main>
 
@@ -241,15 +235,15 @@ else:
 <input type="checkbox" id="menu-python" checked>
 <label for="menu-python" class="active">Python</label>
 <ul>
+<li class="active"><a href="/python/install.html">Installation</a></li>
+<li><a href="/python/pip.html">pip</a></li>
+<li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
 <li><a href="/python/egglib.html">EggLib</a></li>
-<li><a href="/python/ipython.html">IPython</a></li>
-<li class="active"><a href="/python/install.html">Installation</a></li>
 <li><a href="/python/scipy.html">NumPy, SciPy</a></li>
 <li><a href="/python/pyqt.html">PyQt</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
-<li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/rpy2.html">rpy2</a></li>
 </ul>
 
