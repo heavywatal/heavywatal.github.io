@@ -3,6 +3,7 @@ title = 'Installation'
 tags = ["python"]
 [menu.main]
   parent = "python"
+  weight = -99
 +++
 
 <https://www.python.org/downloads/>
@@ -10,64 +11,57 @@ tags = ["python"]
 ## Ubuntu
 
 `/usr/bin/python` が既にインストールされている。
-他のバージョンも Synaptic や apt-get で簡単に入れられる。
-
-新しいや古いのが欲しい場合はソースからビルドするか
+他のバージョンも Synaptic や `apt-get` で簡単に入れられる。
+標準より新しいや古いのが欲しい場合はソースからビルドするか
 [ppa:fkrull/deadsnakes](https://launchpad.net/~fkrull/+archive/deadsnakes)
-などのリポジトリを登録するとよい。:
-
-    % sudo add-apt-repository ppa:fkrull/deadsnakes
-    % sudo apt-get update
-    % sudo apt-get install python2.7
+などのリポジトリを利用するとよい。
+```sh
+% sudo add-apt-repository ppa:fkrull/deadsnakes
+% sudo apt-get update
+% sudo apt-get install python2.7
+```
 
 ## Mac
 
 `/usr/bin/python` が既にインストールされている。
-他のバージョンも [Homebrew]({{< relref "mac/homebrew.md" >}})` や `[MacPorts]({{< relref "mac/macports.md" >}}) で簡単に入れられる。
-昔は tk や quartz 周りで面倒があったが、
-tk が別パッケージに分離されたので楽になった:
-
-    % brew install python3
-    % sudo port install python27
-
-いろんなライブラリも提供されてるけどそれらは利用せず
-[pip]({{< relref "pip.md" >}}) とかを使ったほうが良い:
-
-    % port search py27
+他のバージョンも [Homebrew]({{< relref "mac/homebrew.md" >}}) や
+[MacPorts]({{< relref "mac/macports.md" >}})
+などのパッケージマネージャで簡単に入れられる。
+```sh
+% brew install python3
+```
 
 ## Source
 
-1.  必要なパッケージをインストールしておく
+1.  必要なパッケージをインストールしておく:
 
-    Ubuntuなら:
+    Ubuntuなら
+    ```sh
+    % sudo apt-get install build-essential libreadline6-dev libsqlite3-dev libgdbm-dev zlib1g-dev libbz2-dev liblzma-dev
+    ```
 
-        % sudo apt-get install build-essential
-        % sudo apt-get install libreadline6-dev
-        % sudo apt-get install libsqlite3-dev
-        % sudo apt-get install libgdbm-dev
-        % sudo apt-get install zlib1g-dev
-        % sudo apt-get install libbz2-dev
-        % sudo apt-get install liblzma-dev
+    CentOSなら
+    ```sh
+    % sudo yum groupinstall "Development Tools"
+    % sudo yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel gdbm-devel xz-devel
+    ```
 
-    CentOSなら:
-
-        % sudo yum groupinstall "Development Tools"
-        % sudo yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel gdbm-devel xz-devel
-
-    Macなら:
-
-        % brew install gdbm openssl readline sqlite xz
+    Macなら
+    ```sh
+    % brew install gdbm libressl readline sqlite xz
+    ```
 
 2.  ダウンロードして展開:
 
-        % wget -O- http://www.python.org/ftp/python/3.4.1/Python-3.4.1.tar.xz | tar xJ
+        % wget -O- https://www.python.org/ftp/python/3.5.1/Python-3.5.1.tar.xz | tar xJ
 
 3.  configure してビルド:
-
-        % cd Python-3.4.1/
-        % ./configure --help
-        % ./configure --with-threads
-        % make
+    ```sh
+    % cd Python-3.5.1/
+    % ./configure --help
+    % ./configure --prefix=${HOME}/.virtualenv/Python
+    % make
+    ```
 
     {{%div class="note"%}}
 ユニコードにはバイト幅の異なる UCS-4 と UCS-2 という2種類があり、
@@ -83,21 +77,28 @@ Python 2をucs4でビルドするには
 警告メッセージが表示されるが、だいたい問題ない。
 使いそうなモジュールが含まれている場合は、
 必要なヘッダファイルを持ってそうなパッケージ (`libXXX-dev` のようなもの) を
-Synaptic などからインストールして `make` し直すとよい。
-Homebrew で入れたライブラリを利用する場合はオプション付きで `configure`
-(特に readline や sqlite は keg-only なので注意):
+パッケージマネージャからインストールして `make` し直すとよい。
+
+Macの場合は `--enable-framework`
+を付けてビルドしておかないと使えないモジュールが出てくるので注意。
+Homebrewで入れたライブラリを利用する場合は明示的に位置指定が必要。
+(特に readline, sqlite, openssl/libressl は keg-only なので注意):
 
 ```sh
-./configure --with-threads --prefix=${HOME}/.virtualenv/python CPPFLAGS="-I$(brew --prefix)/include -I$(brew --prefix)/opt/readline/include -I$(brew --prefix)/opt/sqlite/include -I$(brew --prefix)/opt/openssl/include" LDFLAGS="-L$(brew --prefix)/lib -L$(brew --prefix)/opt/readline/lib -L$(brew --prefix)/opt/sqlite/lib -L$(brew --prefix)/opt/openssl/lib"
+DST=${HOME}/.virtualenv
+./configure --enable-framework=${DST} --prefix=${DST} CPPFLAGS="-I$(brew --prefix)/include -I$(brew --prefix)/opt/readline/include -I$(brew --prefix)/opt/sqlite/include -I$(brew --prefix)/opt/libressl/include" LDFLAGS="-L$(brew --prefix)/lib -L$(brew --prefix)/opt/readline/lib -L$(brew --prefix)/opt/sqlite/lib -L$(brew --prefix)/opt/libressl/lib"
 ```
     {{%/div%}}
 
 4.  インストール
     (古いバージョンに上書きせず共存させるため `altinstall`):
 
-        % sudo make altinstall
+        % make altinstall
+
 
 ## 環境設定
+
+### パッケージ管理
 
 See [pip]({{< relref "pip.md" >}})
 
@@ -130,3 +131,5 @@ See [pip]({{< relref "pip.md" >}})
             readline.parse_and_bind("bind ^I rl_complete")
         else:
             readline.parse_and_bind("tab: complete")
+
+対話モードをさらに便利にするには [IPython]({{< relref "ipython.md" >}}) を使う。

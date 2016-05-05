@@ -4,6 +4,7 @@ subtitle = "パッケージ管理"
 tags = ["python"]
 [menu.main]
   parent = "python"
+  weight = -95
 +++
 
 Python 2 (3.2以下) ではパッケージ管理のために
