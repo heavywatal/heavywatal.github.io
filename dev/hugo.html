@@ -10,7 +10,24 @@
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="icon" href="/favicon-192x192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/favicon-192x192.png" sizes="192x192">
-<title>Lectures - Watal M. Iwasaki</title>
+<title>Hugo: 静的サイトを高速生成 - Watal M. Iwasaki</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEnvironments: false,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i = 0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.classList.add('has-jax');
+  }
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -30,16 +47,120 @@ Watal M. Iwasaki
 
 <main>
 <article>
-<header><h1>
-<a href="/lectures.html">Lectures</a>
-</h1></header>
-<ul>
-<li><a href="/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a>
-<li><a href="/lectures/prml-11-1.html">PRML輪読会 11章1節</a>
-<li><a href="/lectures/prml-2-1.html">PRML輪読会 2章前半</a>
-<li><a href="/lectures/prml-3-4.html">PRML輪読会 3章4節</a>
-<li><a href="/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a>
+<header><h1><a href="">
+Hugo — 静的サイトを高速生成
+</a></h1>
+<ul class="tags">
+<li><a href="/tags/writing">writing</a></li>
 </ul>
+</header>
+
+
+
+<p>Markdown記法のテキストをHTMLに変換する、静的ウェブサイト生成プログラム。
+公式ドキュメントが充実しているので基本的にそれに従えば簡単にできる。</p>
+
+<ul>
+<li><a href="https://gohugo.io/overview/introduction/">https://gohugo.io/overview/introduction/</a></li>
+<li><a href="https://discuss.gohugo.io/">https://discuss.gohugo.io/</a></li>
+<li><a href="https://github.com/spf13/hugo">https://github.com/spf13/hugo</a></li>
+</ul>
+
+<p>高速さとシンプルさに惹かれてSphinxから移行し、
+本サイトもHugoでビルドしている。</p>
+
+<h2 id="quickstart">Quickstart</h2>
+
+<p><a href="http://gohugo.io/overview/quickstart/">http://gohugo.io/overview/quickstart/</a></p>
+
+<ul>
+<li><p>インストール</p>
+
+<pre><code class="language-sh">% brew install hugo
+</code></pre>
+
+<p>まだまだ開発途上で機能追加や不具合修正も活発なので
+githubをフォローして最新版を入れたほうがいいかも
+<a href="https://gohugo.io/overview/installing/">https://gohugo.io/overview/installing/</a></p>
+
+<pre><code class="language-sh">export GOPATH=${HOME}/.go
+export PATH=${PATH}:${GOPATH}/bin
+go get -v github.com/spf13/hugo
+</code></pre></li>
+
+<li><p>骨組みを作る</p>
+
+<pre><code class="language-sh">cd path/to/site
+hugo new site .
+</code></pre></li>
+
+<li><p>ページをMarkdownで書く</p>
+
+<pre><code class="language-sh">hugo new about.md
+</code></pre>
+
+<pre><code class="language-markdown">+++
+date = &quot;2016-02-26T19:10:22+09:00&quot;
+title = &quot;About&quot;
++++
+
+## Heading
+
+normal *italic* **bold**
+</code></pre></li>
+
+<li><p>テーマをとりあえず全部インストール</p>
+
+<pre><code class="language-sh">git clone --depth 1 --recursive https://github.com/spf13/hugoThemes.git themes
+</code></pre></li>
+
+<li><p>ウェブサーバーを走らせる</p>
+
+<pre><code class="language-sh">hugo server -w D -t hyde
+</code></pre></li>
+
+<li><p>ブラウザから <a href="http://localhost:1313/about">http://localhost:1313/about</a> にアクセスしてみる。
+監視オプション <code>-w</code> を付けておけば、ファイルの変更がすぐに反映される。</p></li>
+</ul>
+
+<h2 id="設定">設定</h2>
+
+<p><a href="https://gohugo.io/overview/configuration/">https://gohugo.io/overview/configuration/</a></p>
+
+<p><code>config.toml</code></p>
+
+<h2 id="theme">Theme</h2>
+
+<p><a href="http://themes.gohugo.io/">http://themes.gohugo.io/</a></p>
+
+<p>デフォルトのテーマというものが存在しないのがつらい。
+ユーザーによっていろいろ投稿されてるけどほとんどがブログ用途。
+ということで非ブログ用に簡単なものを自作して使っている:</p>
+
+<p><a href="https://github.com/heavywatal/hugo-theme-nonblog">https://github.com/heavywatal/hugo-theme-nonblog</a></p>
+
+<h2 id="content">Content</h2>
+
+<h3 id="markdown">Markdown</h3>
+
+<p>正式な仕様が未だに存在せず、いくつかの方言(flavor)が存在する。</p>
+
+<dl>
+<dt><a href="http://spec.commonmark.org/">CommonMark</a></dt>
+<dd>標準仕様決定に向けて議論中。</dd>
+<dt><a href="https://help.github.com/articles/basic-writing-and-formatting-syntax/">GitHub Flavored Markdown (GFM)</a></dt>
+<dd>いま最もよく書かれているのはこれかな？ Atomでも標準サポート。</dd>
+<dt><a href="https://github.com/russross/blackfriday">Blackfriday</a></dt>
+<dd>HugoのMarkdownエンジンはこれ。
+残念ながら上記2つとも微妙に違う。</dd>
+</dl>
+
+<h3 id="front-matter-https-gohugo-io-content-front-matter"><a href="https://gohugo.io/content/front-matter/">Front matter</a></h3>
+
+<p>タイトルや日付などのメタデータをファイルの先頭で記述する。
+YAMLやJSONでもいいけど、
+<a href="https://github.com/toml-lang/toml">TOML</a>のほうが将来性ありそう。</p>
+
 </article>
 </main>
 
@@ -123,13 +244,13 @@ Watal M. Iwasaki
 <li><a href="/bio/motif.html">配列モチーフ探索</a></li>
 </ul>
 
-<input type="checkbox" id="menu-dev">
-<label for="menu-dev">Developer Tools</label>
+<input type="checkbox" id="menu-dev" checked>
+<label for="menu-dev" class="active">Developer Tools</label>
 <ul>
 <li><a href="/dev/etc.html">/etc</a></li>
 <li><a href="/dev/atom.html">Atom</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
-<li><a href="/dev/hugo.html">Hugo</a></li>
+<li class="active"><a href="/dev/hugo.html">Hugo</a></li>
 <li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mysql.html">MySQL</a></li>
 <li><a href="/dev/qt.html">Qt</a></li>
