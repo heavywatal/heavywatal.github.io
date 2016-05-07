@@ -52,6 +52,7 @@ DnaSP
 </a></h1>
 <ul class="tags">
 <li><a href="/tags/genetics">genetics</a></li>
+<li><a href="/tags/windows">windows</a></li>
 </ul>
 </header>
 
@@ -75,8 +76,7 @@ ActiveX component can't create object
 <h3 id="はじめに">はじめに</h3>
 
 <ol>
-<li>WineBottler および Wine をインストール。
-分からない人はまず <a href="/mac/winebottler.html">こちらのページ</a> を最後まで熟読すること。</li>
+<li><a href="/mac/winebottler.html">WineBottler</a> および Wine をインストール。</li>
 <li><a href="http://www.ub.es/dnasp/">DnaSP作者のウェブサイト</a> からインストーラ
 dnasp51001.msi をダウンロード。</li>
 <li>微妙に違う2つのやり方があるのでどっちにするか決める。</li>
@@ -87,7 +87,7 @@ dnasp51001.msi をダウンロード。</li>
 <ol>
 <li>WineBottler を使って <code>/Applications</code> に DnaSP.app を作る。</li>
 <li>DnaSP.app を一度だけ起動して、すぐ終了する。
-<code>${HOME}/Library/Application Support/Wine/prefixes/DnaSP</code>
+<code>~/Library/Application Support/Wine/prefixes/DnaSP</code>
 にPrefixができる。
 WineBottler で“DnaSP”じゃないアプリケーション名を指定して作った人は
 <code>prefixes/</code> の下の名前も変わるので注意。</li>
@@ -97,26 +97,24 @@ WineBottler で“DnaSP”じゃないアプリケーション名を指定して
 <ol>
 <li><a href="http://www.dll-files.com/">http://www.dll-files.com/</a> らへんから
 <code>scrrun.dll</code> を入手し、
-<code>${HOME}/Library/Application\ Support/Wine/prefixes/DnaSP/drive_c/windows/system32/</code>
+<code>~/Library/Application\ Support/Wine/prefixes/DnaSP/drive_c/windows/system32/</code>
 にコピー</li>
 
-<li><p>Terminal.app で以下のコマンドを実行。
-1行ずつコピペ、リターンで行けるはず。
-先頭のパーセント記号はコマンドの一部ではなくプロンプトなのでコピペに含めないこと:</p>
+<li><p>Terminal.app で以下のコマンドを実行:</p>
 
-<pre><code>% cd ~/Library/Application\ Support/Wine/prefixes/DnaSP/drive_c/windows/system32
-% cp ../../Program\ Files/DnaSP\ v5/mfc40.dll ./
-% WINEPREFIX=${HOME}/Library/Application\ Support/Wine/prefixes/DnaSP /Applications/Wine.app/Contents/MacOS/startwine regsvr32.exe scrrun.dll mfc40.dll threed32.ocx
+<pre><code>cd ~/Library/Application\ Support/Wine/prefixes/DnaSP/drive_c/windows/system32
+cp ../../Program\ Files/DnaSP\ v5/mfc40.dll ./
+WINEPREFIX=${HOME}/Library/Application\ Support/Wine/prefixes/DnaSP /Applications/Wine.app/Contents/MacOS/startwine regsvr32.exe scrrun.dll mfc40.dll threed32.ocx
 </code></pre>
 
 <p>wget をインストールしてある人は以下のコマンドで一発のはず:</p>
 
-<pre><code>% cd ~/Library/Application\ Support/Wine/prefixes/DnaSP/drive_c/windows/system32
-% wget http://www.dll-download-system.com/dlls/scrrun.zip
-% unzip scrrun.zip scrrun.dll
-% rm scrrun.zip
-% cp ../../Program\ Files/DnaSP\ v5/mfc40.dll ./
-% WINEPREFIX=${HOME}/Library/Application\ Support/Wine/prefixes/DnaSP /Applications/Wine.app/Contents/MacOS/startwine regsvr32.exe scrrun.dll mfc40.dll threed32.ocx
+<pre><code>cd ~/Library/Application\ Support/Wine/prefixes/DnaSP/drive_c/windows/system32
+wget http://www.dll-download-system.com/dlls/scrrun.zip
+unzip scrrun.zip scrrun.dll
+rm scrrun.zip
+cp ../../Program\ Files/DnaSP\ v5/mfc40.dll ./
+WINEPREFIX=${HOME}/Library/Application\ Support/Wine/prefixes/DnaSP /Applications/Wine.app/Contents/MacOS/startwine regsvr32.exe scrrun.dll mfc40.dll threed32.ocx
 </code></pre></li>
 </ol></li>
 
@@ -126,7 +124,7 @@ WineBottler で“DnaSP”じゃないアプリケーション名を指定して
 <h3 id="dnasp-appを作らず直接dnasp5-exeを実行する方法">DnaSP.appを作らず直接dnasp5.exeを実行する方法</h3>
 
 <ol>
-<li>Wine でPrefixを <code>${HOME}/.wine</code> に設定。
+<li>Wine でPrefixを <code>~/.wine</code> に設定。
 違う場所にした人はこれ以下を適宜読み替えること。</li>
 <li>インストーラ dnasp51001.msi を実行し、
 Next 連打で普通にインストールする。</li>
@@ -135,21 +133,21 @@ Next 連打で普通にインストールする。</li>
 ActiveX の設定をする。
 コマンドでの作業が嫌いな人はその下の手順でどうぞ:</p>
 
-<pre><code>% cd ~/.wine/drive_c/windows/system32/
-% wget http://www.dll-download-system.com/dlls/scrrun.zip
-% unzip scrrun.zip scrrun.dll
-% rm scrrun.zip
-% cp ../../Program\ Files/DnaSP\ v5/mfc40.dll ./
-% WINEPREFIX=${HOME}/.wine /Applications/Wine.app/Contents/MacOS/startwine regsvr32.exe scrrun.dll mfc40.dll threed32.ocx
+<pre><code>cd ~/.wine/drive_c/windows/system32/
+wget http://www.dll-download-system.com/dlls/scrrun.zip
+unzip scrrun.zip scrrun.dll
+rm scrrun.zip
+cp ../../Program\ Files/DnaSP\ v5/mfc40.dll ./
+WINEPREFIX=${HOME}/.wine /Applications/Wine.app/Contents/MacOS/startwine regsvr32.exe scrrun.dll mfc40.dll threed32.ocx
 </code></pre>
 
 <ol>
-<li><code>${HOME}/.wine/driver_c/Program Files/DnaSP v5/</code> にある
+<li><code>~/.wine/driver_c/Program Files/DnaSP v5/</code> にある
 <code>mfc40.dll</code> を
-<code>${HOME}/.wine/drive_c/windows/system32/</code> にコピー</li>
+<code>~/.wine/drive_c/windows/system32/</code> にコピー</li>
 <li><a href="http://www.dll-files.com/">http://www.dll-files.com/</a> らへんから
 <code>scrrun.dll</code> をダウンロードし、
-<code>${HOME}/.wine/drive_c/windows/system32/</code> にコピー</li>
+<code>~/.wine/drive_c/windows/system32/</code> にコピー</li>
 
 <li><p>右上メニューバーの
 <code>ワイングラス &gt; DOS Prompt</code> で出てきた黒い窓に
@@ -161,8 +159,8 @@ regsvr32 scrrun.dll mfc40.dll threed32.ocx
 
 <p>DOS窓が出てこなかった人は Terminal から以下のコマンドを実行する:</p>
 
-<pre><code>% cd ~/.wine/drive_c/windows/system32/
-% /Applications/Wine.app/Contents/MacOS/startwine regsvr32 scrrun.dll mfc40.dll threed32.ocx
+<pre><code>cd ~/.wine/drive_c/windows/system32/
+/Applications/Wine.app/Contents/MacOS/startwine regsvr32 scrrun.dll mfc40.dll threed32.ocx
 </code></pre></li>
 </ol></li>
 
