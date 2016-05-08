@@ -15,6 +15,7 @@ Markdown記法のテキストをHTMLに変換する、静的ウェブサイト�
 
 高速さとシンプルさに惹かれてSphinxから移行し、
 本サイトもHugoでビルドしている。
+オフラインの研究ノートとしても有用。
 
 ## Quickstart
 
@@ -106,3 +107,7 @@ https://github.com/heavywatal/hugo-theme-nonblog
 タイトルや日付などのメタデータをファイルの先頭で記述する。
 YAMLやJSONでもいいけど、
 [TOML](https://github.com/toml-lang/toml)のほうが将来性ありそう。
+
+## GitHub Pages で公開
+
+See [Git]({{< relref "git.md" >}})

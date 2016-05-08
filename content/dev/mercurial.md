@@ -1,7 +1,7 @@
 +++
 title = 'Mercurial'
-subtitle = "バージョン管理システム"
-tags = ["python"]
+subtitle = "分散型バージョン管理システム"
+tags = ["vcs", "python"]
 [menu.main]
   parent = "dev"
 +++
@@ -11,6 +11,14 @@ tags = ["python"]
 -   [日本語チュートリアル](http://mercurial.selenic.com/wiki/JapaneseTutorial)
 -   [The Definitive Guide by Bryan O'Sullivan](http://hgbook.red-bean.com/read/)
 -   [Glossary](http://mercurial.selenic.com/wiki/Glossary)
+
+{{%div class="note"%}}
+[GitHub](https://github.com)が確固たる地位を確立し、
+今や[BitBucket](https://bitbucket.org)もGitに対応したので、
+どうしても既存のMercurialリポジトリを使わなきゃいけない場合を除いて、
+基本的にはGitを使うようにしたほうがよい。
+See [Git]({{< relref "git.md" >}}).
+{{%/div%}}
 
 ## 基本的な操作
 

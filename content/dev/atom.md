@@ -1,6 +1,6 @@
 +++
 date = "2016-04-25T17:03:29+09:00"
-tags = ["editor"]
+tags = ["editor", "writing"]
 title = "Atom"
 subtitle = "最強のテキストエディタ"
 
@@ -15,9 +15,10 @@ http://flight-manual.atom.io/
 Githubが開発したオープンソースのGUIテキストエディタ。
 ChromiumとNode.js(を用いたElectronフレームワーク)でできている。
 コミュニティの力により現在も急速に成長中。
+当然[Git]({{< relref "git.md" >}})によるバージョン管理とも相性が良い。
 
 ```sh
-brew install atom
+brew cask install atom
 ```
 
 ## 環境設定
