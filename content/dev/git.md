@@ -28,15 +28,15 @@ Gitでなければ得られない恩恵が大きくなってきている。
 ### 手元の変更を外に伝える
 
 working directory (working tree)
-: ファイルを変更したが、未登録
+: 手元のファイルの変更はまだリポジトリに登録されていない
 : ↓ `add`
 
 staging area (index)
-: 次のコミットに含めるファイルをマークした状態
+: 次のコミットに含めるファイルをマークする段階
 : ↓ `commit`
 
 local repository
-: 変更履歴が `.git/` 内に登録された状態
+: 変更履歴が `.git/` 内に記録されている
 : ↓ `push`
 
 remote repository
@@ -49,7 +49,7 @@ remote repository
 : ↓ `fetch`
 
 local repository
-: 変更が `.git/` 取り込まれたが、見えてるファイルには反映されてない
+: 変更が `.git/` に取り込まれたが、見えてるファイルには反映されてない
 : ↓ `checkout` or `merge`
 
 working directory
@@ -69,7 +69,7 @@ tree
   その変化は親に伝播する。
 
 commit
-: git内部でroot treeの1つのsnapshotを指すオブジェクト。
+: git内部でroot treeのsnapshotを指すオブジェクト。
   root treeのハッシュID、著者、コメントなどの情報を持つ。
   動詞としては、staging areaの情報をひとつのcommitとしてリポジトリに登録することを指す。
 
@@ -108,23 +108,24 @@ repository
 
     # working directoryの変更を取り消す, DANGEROUS!
     git reset --hard HEAD
+    # それでもuntrackedは残るので、消したければ git clean
 
     # 直前のresetを取り消す
     git reset --hard ORIG_HEAD
 
-track対象から外して忘れさせる(手元のファイルはそのまま):
+tracking対象から外して忘れさせる(手元のファイルはそのまま):
 
     git rm --cached <file>
 
 差分を表示:
 
-    # index vs working (staging前のファイルが対象)
+    # HEAD vs working (staging前のファイルが対象)
     git diff
 
     # HEAD vs index (staging済みcommit前のファイルが対象)
-    git diff --cached
+    git diff --staged
 
-    # HEAD vs working (commit前の全ファイルが対象)
+    # HEAD vs working+index (commit前の全ファイルが対象)
     git diff HEAD
 
     # 最新コミットの変更点
@@ -143,9 +144,8 @@ git submodule add -b gitsubmodule_https https://github.com/heavywatal/x18n.git
 ```
 
 {{%div class="note"%}}
-gh-pagesで公開する場合はサブモジュール参照のプロトコルを
-`git://` ではなく `https://` にする必要があるので
-`.gitmodules` を確認。
+gh-pagesで公開する場合は参照プロトコルを
+`git://` ではなく `https://` にする必要がある。
 {{%/div%}}
 
 
@@ -155,12 +155,10 @@ gh-pagesで公開する場合はサブモジュール参照のプロトコルを
 
     git submodule update --init
 
-使いたいsubmoduleのbranchがmasterではない場合は `--remote` を付ける:
-
+    # 使いたいbranchがmasterではない場合は --remote
     git submodule update --init --remote x18n
 
-歴史があって重いリポジトリはshallowに:
-
+    # 歴史があって重いリポジトリはshallowに
     git submodule update --init --depth=5 d3
 
 ### submoduleを更新
