@@ -69,18 +69,22 @@ rgl — 3Dグラフ描画
 </ul>
 
 <div class="note">
-<p>なんかAPIもガチャガチャだしドキュメントもいい加減で古臭いので、
-JavaScriptベースの
+<p>なんかAPIもガチャガチャだしドキュメントも結構いい加減なので、
+JavaScript+WebGLベースの
 <a href="https://plot.ly/r/">plotly</a> や
 <a href="http://bwlewis.github.io/rthreejs/">threejs</a>
-を使ったほうがいいかも。</p>
+を使ったほうがいいかも。
+科学プロット用のOpenGLラッパーとしてはPythonの<a href="http://vispy.org/">VisPy</a>が将来有望。</p>
 
 </div>
 
 
+<p>関数は低水準の<code>rgl.*()</code>と高水準の<code>*3d()</code>に分かれていて、
+両者を混ぜて使うのは避けたほうがいいらしい。</p>
+
 <h2 id="デバイスの起動と終了">デバイスの起動と終了</h2>
 
-<pre><code class="language-r">rgl::open3d()  # open new device
+<pre><code>rgl::open3d()  # open new device
 rgl.close()    # close current device
 rgl.quit()     # shutdown rgl device system
 </code></pre>
@@ -122,7 +126,10 @@ rgl.quit()     # shutdown rgl device system
 
 <p><code>rgl::par3d()</code></p>
 
-<p><code>rgl::material3d()</code></p>
+<dl>
+<dt><a href="http://www.inside-r.org/packages/cran/rgl/docs/material3d"><code>rgl::material3d(...)</code></a></dt>
+<dd>プロットに渡せるオプション(<code>color</code>など)はここで確認</dd>
+</dl>
 
 <h3 id="軸">軸</h3>
 
@@ -143,11 +150,29 @@ rgl.quit()     # shutdown rgl device system
 <code>fov</code> [0, 179]: 0のとき無限遠から見たような平行投影。</dd>
 </dl>
 
+<h3 id="複数の図をまとめる">複数の図をまとめる</h3>
+
+<pre><code># レイアウトを指定
+mfrow3d(nr, nc, byrow=TRUE, parent=NA, sharedMouse=FALSE, ...)
+layout3d(mat, widths, heights, parent=NA, sharedMouse=FALSE, ...)
+
+# 次のsubsceneに移動
+next3d(current=NA, clear=TRUE, reuse=TRUE)
+</code></pre>
+
+<div class="warning">
+<p>これらはなぜかグローバルスコープでしか動作しない。
+つまり、関数やループ内に入れるとサイズなどがうまく反映されない。</p>
+
+</div>
+
+
 <h2 id="ファイルに書き出す">ファイルに書き出す</h2>
 
 <dl>
 <dt><code>rgl::snapshot3d(filename, fmt='png', top=TRUE)</code></dt>
-<dd>PNGのみ</dd>
+<dd>PNGのみ。
+<code>top=FALSE</code>にしてはダメ。謎。</dd>
 <dt><code>rbl.postscript(filename, fmt='eps', drawText=TRUE)</code></dt>
 <dd>ps, eps, tex, pdf, svg をサポート。
 透過や <code>bgplot3d</code> は反映されないらしいので注意。</dd>

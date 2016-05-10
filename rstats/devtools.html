@@ -91,8 +91,8 @@ library(devtools)
 
 <pre><code class="language-r">setwd('~/tmp/')
 library(devtools)
-pkgname = 'beer'
-title_desc = 'Great R package for hopheads'
+pkgname = 'namaespace'
+title_desc = 'Utility to create dummy R packages for namespace'
 github_repo = sprintf('https://github.com/heavywatal/%s', pkgname)
 devtools::create(pkgname, description=list(
     Package=pkgname,
@@ -100,8 +100,8 @@ devtools::create(pkgname, description=list(
     Description=paste0(title_desc, '.'),
     `Authors@R`=&quot;person('Watal M.', 'Iwasaki', email='user@example.com', role=c('aut', 'cre'))&quot;,
     License='MIT',
-    Suggests='pipeR',
-    Imports='readr, stringr',
+    Suggests='readr, tidyr, dplyr, ggplot2',
+    Imports='devtools, stringr',
     URL=github_repo,
     BugReports=paste0(github_repo, '/issues'))
 </code></pre></li>
@@ -127,13 +127,13 @@ devtools::create(pkgname, description=list(
 <pre><code class="language-sh">% git init
 % git add --all
 % git commit -m &quot;first commit&quot;
-% git remote add origin git@github.com:heavywatal/beer.git
+% git remote add origin git@github.com:heavywatal/namaespace.git
 % git push -u origin master
 </code></pre></li>
 
 <li><p>とりあえず誰でもインストール可能なパッケージができたはず</p>
 
-<pre><code class="language-r">install_github('heavywatal/beer')
+<pre><code class="language-r">install_github('heavywatal/namaespace')
 </code></pre></li>
 
 <li><p>あとは <code>R/</code> にソースコードを置いたり <code>README.md</code> を書いたり</p></li>
@@ -169,7 +169,9 @@ vignettes/
 <li><code>roxygen2</code> がソースコードから自動生成するので直接触らない (下記)</li>
 <li>ここで <code>export()</code> された関数だけがユーザーから見える</li>
 <li>ここで <code>import()</code> された関数はパッケージ内でattachされた状態になるが、
-そうしないで毎回名前空間 <code>::</code> 越しにアクセスしたほうがよい</li>
+そうしないで毎回名前空間 <code>::</code> 越しにアクセスしたほうがよい。
+<code>magrittr::%&gt;%</code> とか <code>pipeR::%&gt;&gt;%</code> のような演算子は仕方がないので
+<code>importFrom()</code> で個別指定する。</li>
 </ul>
 
 <h3 id="rソースコード">Rソースコード</h3>
@@ -274,7 +276,11 @@ options(devtools.desc.license='MIT')
 
 <dl>
 <dt><code>@import pkg1, pkg2, ...</code></dt>
-<dd><code>NAMESPACE</code> で <code>import()</code> するパッケージを指定。</dd>
+<dd><code>NAMESPACE</code> で <code>import()</code> するパッケージを指定。
+名前の衝突が怖いので基本的に使わない。</dd>
+<dt><code>@importFrom pkg func</code></dt>
+<dd><code>NAMESPACE</code> で <code>importFrom()</code> するパッケージを指定。
+e.g., <code>@importFrom pipeR %&gt;&gt;%</code></dd>
 <dt><code>@export</code></dt>
 <dd><code>NAMESPACE</code> で <code>export()</code> するパッケージを指定。</dd>
 <dt><code>@param arg1 description...</code></dt>
