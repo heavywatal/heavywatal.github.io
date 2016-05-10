@@ -39,8 +39,8 @@ GitHubに公開しておけば誰でも使えるようになるので、
     ```r
     setwd('~/tmp/')
     library(devtools)
-    pkgname = 'beer'
-    title_desc = 'Great R package for hopheads'
+    pkgname = 'namaespace'
+    title_desc = 'Utility to create dummy R packages for namespace'
     github_repo = sprintf('https://github.com/heavywatal/%s', pkgname)
     devtools::create(pkgname, description=list(
         Package=pkgname,
@@ -48,8 +48,8 @@ GitHubに公開しておけば誰でも使えるようになるので、
         Description=paste0(title_desc, '.'),
         `Authors@R`="person('Watal M.', 'Iwasaki', email='user@example.com', role=c('aut', 'cre'))",
         License='MIT',
-        Suggests='pipeR',
-        Imports='readr, stringr',
+        Suggests='readr, tidyr, dplyr, ggplot2',
+        Imports='devtools, stringr',
         URL=github_repo,
         BugReports=paste0(github_repo, '/issues'))
     ```
@@ -71,14 +71,14 @@ LaTeX 関連で怒られたら足りないパッケージを入れる:
     % git init
     % git add --all
     % git commit -m "first commit"
-    % git remote add origin git@github.com:heavywatal/beer.git
+    % git remote add origin git@github.com:heavywatal/namaespace.git
     % git push -u origin master
     ```
 
 6.  とりあえず誰でもインストール可能なパッケージができたはず
 
     ```r
-    install_github('heavywatal/beer')
+    install_github('heavywatal/namaespace')
     ```
 
 7.  あとは `R/` にソースコードを置いたり `README.md` を書いたり
@@ -111,7 +111,9 @@ vignettes/
 -   `roxygen2` がソースコードから自動生成するので直接触らない (下記)
 -   ここで `export()` された関数だけがユーザーから見える
 -   ここで `import()` された関数はパッケージ内でattachされた状態になるが、
-    そうしないで毎回名前空間 `::` 越しにアクセスしたほうがよい
+    そうしないで毎回名前空間 `::` 越しにアクセスしたほうがよい。
+    `magrittr::%>%` とか `pipeR::%>>%` のような演算子は仕方がないので
+    `importFrom()` で個別指定する。
 
 ### Rソースコード
 
@@ -215,6 +217,11 @@ Rソースコードのコメントからヘルプを自動生成する。
 
 `@import pkg1, pkg2, ...`
 :   `NAMESPACE` で `import()` するパッケージを指定。
+    名前の衝突が怖いので基本的に使わない。
+
+`@importFrom pkg func`
+:   `NAMESPACE` で `importFrom()` するパッケージを指定。
+    e.g., `@importFrom pipeR %>>%`
 
 `@export`
 :   `NAMESPACE` で `export()` するパッケージを指定。

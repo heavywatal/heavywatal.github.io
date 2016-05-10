@@ -15,17 +15,20 @@ tags = ["r", "graph"]
 -   <http://www.rdocumentation.org/packages/rgl>
 
 {{%div class="note"%}}
-なんかAPIもガチャガチャだしドキュメントもいい加減で古臭いので、
-JavaScriptベースの
+なんかAPIもガチャガチャだしドキュメントも結構いい加減なので、
+JavaScript+WebGLベースの
 [plotly](https://plot.ly/r/) や
 [threejs](http://bwlewis.github.io/rthreejs/)
 を使ったほうがいいかも。
+科学プロット用のOpenGLラッパーとしてはPythonの[VisPy](http://vispy.org/)が将来有望。
 {{%/div%}}
 
+関数は低水準の`rgl.*()`と高水準の`*3d()`に分かれていて、
+両者を混ぜて使うのは避けたほうがいいらしい。
 
 ## デバイスの起動と終了
 
-```r
+```
 rgl::open3d()  # open new device
 rgl.close()    # close current device
 rgl.quit()     # shutdown rgl device system
@@ -70,7 +73,8 @@ rgl.quit()     # shutdown rgl device system
 
 `rgl::par3d()`
 
-`rgl::material3d()`
+[`rgl::material3d(...)`](http://www.inside-r.org/packages/cran/rgl/docs/material3d)
+: プロットに渡せるオプション(`color`など)はここで確認
 
 ### 軸
 
@@ -93,10 +97,29 @@ rgl.quit()     # shutdown rgl device system
     `phi` [-90, 90]: 0のとき視点が水平面(xz平面)上。観察者が上に動くのが正。\
     `fov` [0, 179]: 0のとき無限遠から見たような平行投影。
 
+
+### 複数の図をまとめる
+
+```
+# レイアウトを指定
+mfrow3d(nr, nc, byrow=TRUE, parent=NA, sharedMouse=FALSE, ...)
+layout3d(mat, widths, heights, parent=NA, sharedMouse=FALSE, ...)
+
+# 次のsubsceneに移動
+next3d(current=NA, clear=TRUE, reuse=TRUE)
+```
+
+{{%div class="warning"%}}
+これらはなぜかグローバルスコープでしか動作しない。
+つまり、関数やループ内に入れるとサイズなどがうまく反映されない。
+{{%/div%}}
+
+
 ## ファイルに書き出す
 
 `rgl::snapshot3d(filename, fmt='png', top=TRUE)`
-:   PNGのみ
+: PNGのみ。
+  `top=FALSE`にしてはダメ。謎。
 
 `rbl.postscript(filename, fmt='eps', drawText=TRUE)`
 :   ps, eps, tex, pdf, svg をサポート。
