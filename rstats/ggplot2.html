@@ -64,6 +64,7 @@ ggplot2 — きれいなグラフを簡単に合理的に
 <li><a href="http://docs.ggplot2.org/">http://docs.ggplot2.org/</a></li>
 <li><a href="http://www.cookbook-r.com/Graphs/">http://www.cookbook-r.com/Graphs/</a></li>
 <li><a href="http://www.rdocumentation.org/packages/ggplot2">http://www.rdocumentation.org/packages/ggplot2</a></li>
+<li><a href="https://github.com/hadley/ggplot2-book">https://github.com/hadley/ggplot2-book</a></li>
 </ul>
 
 <p>R で <code>install.packages(&quot;ggplot2&quot;)</code> を実行してインストール</p>
@@ -112,11 +113,13 @@ ggsave(&quot;iris_sepal.png&quot;, gp)
 <code>gp + geom_line()</code> x軸上の順で結ぶ<br>
 <code>gp + geom_step()</code> 階段状に結ぶ</dd>
 <dt><a href="http://docs.ggplot2.org/current/geom_histogram.html">ヒストグラム、密度曲線</a></dt>
-<dd><code>gp + geom_histogram(fill=..count..)</code><br>
-<code>gp + geom_density(alpha = 0.2)</code></dd>
+<dd><code>gp + geom_histogram()</code> &mdash; 棒グラフ</dd>
+<dd><code>gp + geom_freqpoly()</code> &mdash; 折れ線</dd>
+<dd><code>gp + geom_density()</code> &mdash; 密度推定されたスムーズな線</dd>
 <dt><a href="http://docs.ggplot2.org/current/geom_bar.html">棒グラフ</a></dt>
 <dd><code>gp + geom_bar(stat='identity')</code><br>
-stat を指定しないとヒストグラムになってしまう。 <code>position='dodge'</code> にすると横並び (デフォルト: <code>'stack'</code>)。</dd>
+stat を指定しないとヒストグラムになってしまう。
+<code>position='dodge'</code> にすると横並び (デフォルト: <code>'stack'</code>)。</dd>
 <dt><a href="http://docs.ggplot2.org/current/geom_boxplot.html">箱ひげ図</a></dt>
 <dd><code>gp + geom_boxplot()</code><br>
 <code>gp + geom_violin()</code></dd>
@@ -124,7 +127,7 @@ stat を指定しないとヒストグラムになってしまう。 <code>posit
 <dd><code>gp + geom_tile(aes(fill=z))</code><br>
 <code>gp + geom_raster(aes(fill=z))</code><br>
 後者は各タイルの大きさがすべて同じ場合の特殊ケースで、高速。</dd>
-<dt><a href="http://docs.ggplot2.org/current/geom_errorbar.html">エラーバー</a></dt>
+<dt><a href="http://docs.ggplot2.org/current/geom_linerange.html">エラーバー</a></dt>
 <dd><code>limits = aes(ymax=height+se, ymin=height-se)</code><br>
 <code>gp + geom_errorbar(limits, width=0.1)</code><br>
 <code>gp + geom_pointrange(limits)</code><br>
@@ -193,12 +196,25 @@ cf. <a href="http://www.inside-r.org/packages/cran/RColorBrewer/docs/ColorBrewer
 <code>scale_{colour/fill/size/shape/linetype/alpha}_manual(..., values)</code></dd>
 </dl>
 
+<h3 id="内部変数を使う">内部変数を使う</h3>
+
+<p><a href="https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variables">https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variables</a></p>
+
+<p>ヒストグラムや箱ヒゲなどの表示に必要な計算は
+ggplot内部で <code>stat_*()</code> を通して行われる。
+そうした値 (computed variables) の一部は
+<code>..count..</code> や <code>..density..</code> みたいに
+ピリオドで囲まれた特殊な名前で参照することができる。</p>
+
+<pre><code class="language-r">
+</code></pre>
+
 <h3 id="パネルの分割">パネルの分割</h3>
 
 <p>年ごとや種ごとに傾向を見たいときなど、データに応じてパネルを分割して並べる。</p>
 
 <dl>
-<dt><a href="http://docs.ggplot2.org/current/facet_wrap.html">http://docs.ggplot2.org/current/facet_wrap.html</a></dt>
+<dt><a href="http://docs.ggplot2.org/current/facet_wrap.html"><code>facet_wrap()</code></a></dt>
 <dd><p>1変数で分割して並べる</p>
 
 <pre><code class="language-r">facet_wrap(facets, nrow=NULL, ncol=NULL, scales='fixed',
@@ -208,7 +224,7 @@ cf. <a href="http://www.inside-r.org/packages/cran/RColorBrewer/docs/ColorBrewer
 ggplot(iris, aes(Petal.Length, Sepal.Length))+geom_point()+
     facet_wrap(~Species, nrow=2)
 </code></pre></dd>
-<dt><a href="http://docs.ggplot2.org/current/facet_grid.html">http://docs.ggplot2.org/current/facet_grid.html</a></dt>
+<dt><a href="http://docs.ggplot2.org/current/facet_grid.html"><code>facet_grid()</code></a></dt>
 <dd><p>2変数で分割して縦横に並べる</p>
 
 <pre><code class="language-r">facet_grid(facets, margins=FALSE, scales='fixed', space='fixed',
@@ -220,7 +236,7 @@ ggplot(iris, aes(Petal.Length, Sepal.Length))+geom_point()+
 </code></pre>
 
 <p>1変数でいい場合は片方をドット <code>.</code> で固定できる。</p></dd>
-<dt><a href="http://docs.ggplot2.org/current/labellers.html">http://docs.ggplot2.org/current/labellers.html</a></dt>
+<dt><a href="http://docs.ggplot2.org/current/labellers.html">ファセットラベルの調整</a></dt>
 <dd><p>デフォルトでは値だけがfacetラベルに表示されるが、
 変数名を同時に表示するなど細かい調整も可能。</p></dd>
 </dl>
@@ -237,8 +253,16 @@ ggplot(iris, aes(Petal.Length, Sepal.Length))+geom_point()+
 <dd><code>gp + ylim(0, 42) + xlim(&quot;b&quot;, &quot;c&quot;, &quot;d&quot;)</code><br>
 <code>gp + coord_cartesian(xlim = NULL, ylim = NULL)</code><br>
 前者はデータそのものを切るが、後者はデータを変えずに描画領域だけズームする</dd>
+<dt><a href="http://docs.ggplot2.org/current/coord_fixed.html">X軸とY軸の比率を固定</a></dt>
+<dd><code>gp + coord_fixed(ratio=1)</code></dd>
 <dt><a href="http://docs.ggplot2.org/current/coord_flip.html">XY軸の反転</a></dt>
 <dd><code>gp + coord_flip()</code></dd>
+<dt><a href="http://docs.ggplot2.org/current/coord_polar.html">極座標</a></dt>
+<dd>パイチャートも作れるらしい</dd>
+<dt><a href="http://docs.ggplot2.org/current/coord_trans.html">座標変換</a></dt>
+<dd><code>gp + coord_trans(x='log10', y='sqrt')</code><br>
+表示の座標だけ変更する。
+stat前に適用される <code>scale_x_*</code> とかとはちょいと違う。</dd>
 <dt><a href="http://docs.ggplot2.org/current/labs.html">軸ラベルとタイトル</a></dt>
 <dd><code>gp + labs(x=&quot;time&quot;, y=&quot;weight&quot;, title=&quot;growth&quot;)</code><br>
 <code>gp + xlab(&quot;time&quot;) + ylab(&quot;weight&quot;) + ggtitle(&quot;growth&quot;)</code></dd>
@@ -301,73 +325,64 @@ gp = gp + theme(legend.position='bottom')
 gp = gp + theme(plot.background=element_rect(fill=&quot;transparent&quot;))
 </code></pre>
 
-<p>全体</p>
-
-<p><code>line</code>: (<code>element_line</code>)<br>
-<code>rect</code>: (<code>element_rect</code>)<br>
-<code>text</code>: (<code>element_text</code>)<br>
-<code>title</code>: (<code>element_text</code>; inherits from <code>text</code>)</p>
-
-<p>軸タイトル、軸ラベル、目盛</p>
-
-<p><code>axis.title</code>: (<code>element_text</code>; inherits from <code>text</code>)<br>
-<code>axis.title.x</code>: (<code>element_text</code>; inherits from <code>axis.title</code>)<br>
-<code>axis.title.y</code>: (<code>element_text</code>; inherits from <code>axis.title</code>)<br>
-<code>axis.text</code>: (<code>element_text</code>; inherits from <code>text</code>)<br>
-<code>axis.text.x</code>: (<code>element_text</code>; inherits from <code>axis.text</code>)<br>
-<code>axis.text.y</code>: (<code>element_text</code>; inherits from <code>axis.text</code>)<br>
-<code>axis.ticks</code>: (<code>element_line</code>; inherits from <code>line</code>)<br>
-<code>axis.ticks.x</code>: (<code>element_line</code>; inherits from <code>axis.ticks</code>)<br>
-<code>axis.ticks.y</code>: (<code>element_line</code>; inherits from <code>axis.ticks</code>)<br>
-<code>axis.ticks.length</code>: (<code>unit</code>)<br>
-<code>axis.ticks.margin</code>: (<code>unit</code>)<br>
-<code>axis.line</code>: (<code>element_line</code>; inherits from <code>line</code>)<br>
-<code>axis.line.x</code>: (<code>element_line</code>; inherits from <code>axis.line</code>)<br>
-<code>axis.line.y</code>: (<code>element_line</code>; inherits from <code>axis.line</code>)</p>
-
-<p>凡例</p>
-
-<p><code>legend.background</code>: (<code>element_rect</code>; inherits from <code>rect</code>)<br>
-<code>legend.margin</code>: (<code>unit</code>)<br>
-<code>legend.key</code>: (<code>element_rect</code>; inherits from <code>rect</code>)<br>
-<code>legend.key.size</code>: (<code>unit</code>)<br>
-<code>legend.key.height</code>: (<code>unit</code>; inherits from <code>legend.key.size</code>)<br>
-<code>legend.key.width</code>: (<code>unit</code>; inherits from <code>legend.key.size</code>)<br>
-<code>legend.text</code>: (<code>element_text</code>; inherits from <code>text</code>)<br>
-<code>legend.text.align</code>: (number from <code>0</code> (left) to <code>1</code> (right))<br>
-<code>legend.title</code>: (<code>element_text</code>; inherits from <code>title</code>)<br>
-<code>legend.title.align</code>: (number from <code>0</code> (left) to <code>1</code> (right))<br>
-<code>legend.position</code>: (<code>&quot;left&quot;</code>, <code>&quot;right&quot;</code>, <code>&quot;bottom&quot;</code>, <code>&quot;top&quot;</code>, <code>&quot;none&quot;</code>; プロット領域内での位置を <code>c(0, 1)</code> のような数値で)<br>
-<code>legend.direction</code>: (<code>&quot;horizontal&quot;</code> or <code>&quot;vertical&quot;</code>)<br>
-<code>legend.justification</code>: (<code>&quot;center&quot;</code> or <code>c(0, 1)</code> のような数値でアンカー位置を指定)<br>
-<code>legend.box</code>: (<code>&quot;horizontal&quot;</code> or <code>&quot;vertical&quot;</code>)<br>
-<code>legend.box.just</code>: (<code>&quot;top&quot;</code>, <code>&quot;bottom&quot;</code>, <code>&quot;left&quot;</code>, or <code>&quot;right&quot;</code>)</p>
-
-<p>プロット領域の背景、余白、格子</p>
-
-<p><code>panel.background</code>: (<code>element_rect</code>; inherits from <code>rect</code>)<br>
-<code>panel.border</code>: (<code>element_rect</code>; inherits from <code>rect</code>; should be used with <code>fill=NA</code>)<br>
-<code>panel.margin</code>: (<code>unit</code>; <code>facet_*</code> の間隔)<br>
-<code>panel.grid</code>: (<code>element_line</code>; inherits from <code>line</code>)<br>
-<code>panel.grid.major</code>: (<code>element_line</code>; inherits from <code>panel.grid</code>)<br>
-<code>panel.grid.minor</code>: (<code>element_line</code>; inherits from <code>panel.grid</code>)<br>
-<code>panel.grid.major.x</code>: (<code>element_line</code>; inherits from <code>panel.grid.major</code>)<br>
-<code>panel.grid.major.y</code>: (<code>element_line</code>; inherits from <code>panel.grid.major</code>)<br>
-<code>panel.grid.minor.x</code>: (<code>element_line</code>; inherits from <code>panel.grid.minor</code>)<br>
-<code>panel.grid.minor.y</code>: (<code>element_line</code>; inherits from <code>panel.grid.minor</code>)</p>
-
-<p>全体の背景、タイトル、余白</p>
-
-<p><code>plot.background</code>: (<code>element_rect</code>; inherits from <code>rect</code>)<br>
-<code>plot.title</code>: (<code>element_text</code>; inherits from <code>title</code>)<br>
-<code>plot.margin</code>: (<code>unit</code> with the sizes of the top, right, bottom, and left margins)</p>
-
-<p><code>facet</code> したときのラベル</p>
-
-<p><code>strip.background</code>: (<code>element_rect</code>; inherits from <code>rect</code>)<br>
-<code>strip.text</code>: (<code>element_text</code>; inherits from <code>text</code>)<br>
-<code>strip.text.x</code>: (<code>element_text</code>; inherits from <code>strip.text</code>)<br>
-<code>strip.text.y</code>: (<code>element_text</code>; inherits from <code>strip.text</code>)</p>
+<dl>
+<dt>全体</dt>
+<dd><code>line</code>: (<code>element_line</code>)</dd>
+<dd><code>rect</code>: (<code>element_rect</code>)</dd>
+<dd><code>text</code>: (<code>element_text</code>)</dd>
+<dd><code>title</code>: (<code>element_text</code>; inherits from <code>text</code>)</dd>
+<dt>軸タイトル、軸ラベル、目盛</dt>
+<dd><code>axis.title</code>: (<code>element_text</code>; inherits from <code>text</code>)</dd>
+<dd><code>axis.title.x</code>: (<code>element_text</code>; inherits from <code>axis.title</code>)</dd>
+<dd><code>axis.title.y</code>: (<code>element_text</code>; inherits from <code>axis.title</code>)</dd>
+<dd><code>axis.text</code>: (<code>element_text</code>; inherits from <code>text</code>)</dd>
+<dd><code>axis.text.x</code>: (<code>element_text</code>; inherits from <code>axis.text</code>)</dd>
+<dd><code>axis.text.y</code>: (<code>element_text</code>; inherits from <code>axis.text</code>)</dd>
+<dd><code>axis.ticks</code>: (<code>element_line</code>; inherits from <code>line</code>)</dd>
+<dd><code>axis.ticks.x</code>: (<code>element_line</code>; inherits from <code>axis.ticks</code>)</dd>
+<dd><code>axis.ticks.y</code>: (<code>element_line</code>; inherits from <code>axis.ticks</code>)</dd>
+<dd><code>axis.ticks.length</code>: (<code>unit</code>)</dd>
+<dd><code>axis.ticks.margin</code>: (<code>unit</code>)</dd>
+<dd><code>axis.line</code>: (<code>element_line</code>; inherits from <code>line</code>)</dd>
+<dd><code>axis.line.x</code>: (<code>element_line</code>; inherits from <code>axis.line</code>)</dd>
+<dd><code>axis.line.y</code>: (<code>element_line</code>; inherits from <code>axis.line</code>)</dd>
+<dt>凡例</dt>
+<dd><code>legend.background</code>: (<code>element_rect</code>; inherits from <code>rect</code>)</dd>
+<dd><code>legend.margin</code>: (<code>unit</code>)</dd>
+<dd><code>legend.key</code>: (<code>element_rect</code>; inherits from <code>rect</code>)</dd>
+<dd><code>legend.key.size</code>: (<code>unit</code>)</dd>
+<dd><code>legend.key.height</code>: (<code>unit</code>; inherits from <code>legend.key.size</code>)</dd>
+<dd><code>legend.key.width</code>: (<code>unit</code>; inherits from <code>legend.key.size</code>)</dd>
+<dd><code>legend.text</code>: (<code>element_text</code>; inherits from <code>text</code>)</dd>
+<dd><code>legend.text.align</code>: (number from <code>0</code> (left) to <code>1</code> (right))</dd>
+<dd><code>legend.title</code>: (<code>element_text</code>; inherits from <code>title</code>)</dd>
+<dd><code>legend.title.align</code>: (number from <code>0</code> (left) to <code>1</code> (right))</dd>
+<dd><code>legend.position</code>: (<code>&quot;left&quot;</code>, <code>&quot;right&quot;</code>, <code>&quot;bottom&quot;</code>, <code>&quot;top&quot;</code>, <code>&quot;none&quot;</code> <code>c(0, 1)</code></dd>
+<dd><code>legend.direction</code>: (<code>&quot;horizontal&quot;</code> or <code>&quot;vertical&quot;</code>)</dd>
+<dd><code>legend.justification</code>: (<code>&quot;center&quot;</code> or <code>c(0, 1)</code> のような数値でアンカー位置を指定)</dd>
+<dd><code>legend.box</code>: (<code>&quot;horizontal&quot;</code> or <code>&quot;vertical&quot;</code>)</dd>
+<dd><code>legend.box.just</code>: (<code>&quot;top&quot;</code>, <code>&quot;bottom&quot;</code>, <code>&quot;left&quot;</code>, or <code>&quot;right&quot;</code>)</dd>
+<dt>プロット領域の背景、余白、格子</dt>
+<dd><code>panel.background</code>: (<code>element_rect</code>; inherits from <code>rect</code>)</dd>
+<dd><code>panel.border</code>: (<code>element_rect</code>; inherits from <code>rect</code>; should be used with <code>fill=NA</code>)</dd>
+<dd><code>panel.margin</code>: (<code>unit</code>; <code>facet_*</code> の間隔)</dd>
+<dd><code>panel.grid</code>: (<code>element_line</code>; inherits from <code>line</code>)</dd>
+<dd><code>panel.grid.major</code>: (<code>element_line</code>; inherits from <code>panel.grid</code>)</dd>
+<dd><code>panel.grid.minor</code>: (<code>element_line</code>; inherits from <code>panel.grid</code>)</dd>
+<dd><code>panel.grid.major.x</code>: (<code>element_line</code>; inherits from <code>panel.grid.major</code>)</dd>
+<dd><code>panel.grid.major.y</code>: (<code>element_line</code>; inherits from <code>panel.grid.major</code>)</dd>
+<dd><code>panel.grid.minor.x</code>: (<code>element_line</code>; inherits from <code>panel.grid.minor</code>)</dd>
+<dd><code>panel.grid.minor.y</code>: (<code>element_line</code>; inherits from <code>panel.grid.minor</code>)</dd>
+<dt>全体の背景、タイトル、余白</dt>
+<dd><code>plot.background</code>: (<code>element_rect</code>; inherits from <code>rect</code>)</dd>
+<dd><code>plot.title</code>: (<code>element_text</code>; inherits from <code>title</code>)</dd>
+<dd><code>plot.margin</code>: (<code>unit</code> with the sizes of the top, right, bottom, and left margins)</dd>
+<dt><code>facet</code> したときのラベル</dt>
+<dd><code>strip.background</code>: (<code>element_rect</code>; inherits from <code>rect</code>)</dd>
+<dd><code>strip.text</code>: (<code>element_text</code>; inherits from <code>text</code>)</dd>
+<dd><code>strip.text.x</code>: (<code>element_text</code>; inherits from <code>strip.text</code>)</dd>
+<dd><code>strip.text.y</code>: (<code>element_text</code>; inherits from <code>strip.text</code>)</dd>
+</dl>
 
 <h3 id="エレメント">エレメント</h3>
 
@@ -384,27 +399,27 @@ gp = gp + theme(plot.background=element_rect(fill=&quot;transparent&quot;))
 <code>angle</code>: 角度 <code>[0, 360]</code><br>
 <code>margin</code>: スペース調整を関数 <code>margin(top, right, bottom, left)</code> 越しに。</dd>
 <dt><code>element_blank()</code> &mdash; 空</dt>
-<dd><p>消したい要素にはこれを指定する</p>
-
-<pre><code class="language-r">gp = gp + theme(axis.title=element_blank())
+<dd>消したい要素にはこれを指定する
+<code>r
+gp = gp + theme(axis.title=element_blank())
 gp = gp + theme(panel.grid=element_blank())
-</code></pre></dd>
+</code></dd>
 <dt><code>rel(x)</code></dt>
-<dd><p>デフォルトからの相対値で <code>size</code> 引数を指定したいときに。</p></dd>
+<dd>デフォルトからの相対値で <code>size</code> 引数を指定したいときに。</dd>
 <dt><code>grid::unit(x, units, data=NULL)</code></dt>
-<dd><p>こちらは絶対指定。<code>grid</code> パッケージに入ってる。
+<dd>こちらは絶対指定。<code>grid</code> パッケージに入ってる。
 units で使いそうなのは
-<code>cm</code>, <code>mm</code>, <code>inches</code>, <code>points</code>, <code>lines</code>, <code>native</code></p></dd>
+<code>cm</code>, <code>mm</code>, <code>inches</code>, <code>points</code>, <code>lines</code>, <code>native</code></dd>
 <dt><code>calc_element(element, theme, verbose=FALSE)</code></dt>
-<dd><p>継承などを考慮した上でelementがどんな値にセットされるか確かめる。</p></dd>
+<dd>継承などを考慮した上でelementがどんな値にセットされるか確かめる。</dd>
 <dt><a href="http://www.cookbook-r.com/Graphs/Shapes_and_line_types/">線の種類</a> &mdash; <code>linetype=</code></dt>
-<dd><p><code>0</code>: <code>'blank'</code><br>
+<dd><code>0</code>: <code>'blank'</code><br>
 <code>1</code>: <code>'solid'</code><br>
 <code>2</code>: <code>'dashed'</code><br>
 <code>3</code>: <code>'dotted'</code><br>
 <code>4</code>: <code>'dotdash'</code><br>
 <code>5</code>: <code>'longdash'</code><br>
-<code>6</code>: <code>'twodash'</code></p></dd>
+<code>6</code>: <code>'twodash'</code></dd>
 </dl>
 
 <h2 id="ファイルに書き出す">ファイルに書き出す</h2>
@@ -442,7 +457,7 @@ quartz.save('plot.png')
 <p>ggplotを拡張するための仕組みがversion 2.0から正式に導入され、
 ユーザーが独自の stats や geom を作って登録することが容易になった。</p>
 
-<p><a href="http://ggplot2-exts.github.io/">http://ggplot2-exts.github.io/</a></p>
+<p><a href="http://www.ggplot2-exts.org/">http://www.ggplot2-exts.org/</a></p>
 
 <h3 id="gridextra"><code>gridExtra</code></h3>
 
