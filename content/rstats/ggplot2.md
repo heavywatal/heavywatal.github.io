@@ -11,6 +11,7 @@ tags = ["r", "graph", "hadley"]
 - <http://docs.ggplot2.org/>
 - <http://www.cookbook-r.com/Graphs/>
 - <http://www.rdocumentation.org/packages/ggplot2>
+- <https://github.com/hadley/ggplot2-book>
 
 R で `install.packages("ggplot2")` を実行してインストール
 
@@ -58,12 +59,14 @@ ggsave("iris_sepal.png", gp)
     `gp + geom_step()` 階段状に結ぶ
 
 [ヒストグラム、密度曲線](http://docs.ggplot2.org/current/geom_histogram.html)
-:   `gp + geom_histogram(fill=..count..)`\
-    `gp + geom_density(alpha = 0.2)`
+:   `gp + geom_histogram()` --- 棒グラフ
+:   `gp + geom_freqpoly()` --- 折れ線
+:   `gp + geom_density()` --- 密度推定されたスムーズな線
 
 [棒グラフ](http://docs.ggplot2.org/current/geom_bar.html)
 :   `gp + geom_bar(stat='identity')`\
-    stat を指定しないとヒストグラムになってしまう。 `position='dodge'` にすると横並び (デフォルト: `'stack'`)。
+    stat を指定しないとヒストグラムになってしまう。
+    `position='dodge'` にすると横並び (デフォルト: `'stack'`)。
 
 [箱ひげ図](http://docs.ggplot2.org/current/geom_boxplot.html)
 :   `gp + geom_boxplot()`\
@@ -74,7 +77,7 @@ ggsave("iris_sepal.png", gp)
     `gp + geom_raster(aes(fill=z))`\
     後者は各タイルの大きさがすべて同じ場合の特殊ケースで、高速。
 
-[エラーバー](http://docs.ggplot2.org/current/geom_errorbar.html)
+[エラーバー](http://docs.ggplot2.org/current/geom_linerange.html)
 :   `limits = aes(ymax=height+se, ymin=height-se)`\
     `gp + geom_errorbar(limits, width=0.1)`\
     `gp + geom_pointrange(limits)`\
@@ -144,13 +147,26 @@ ggsave("iris_sepal.png", gp)
 :   値を直に指定する\
     `scale_{colour/fill/size/shape/linetype/alpha}_manual(..., values)`
 
+### 内部変数を使う
+
+https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variables
+
+ヒストグラムや箱ヒゲなどの表示に必要な計算は
+ggplot内部で `stat_*()` を通して行われる。
+そうした値 (computed variables) の一部は
+`..count..` や `..density..` みたいに
+ピリオドで囲まれた特殊な名前で参照することができる。
+
+```r
+
+```
+
 ### パネルの分割
 
 年ごとや種ごとに傾向を見たいときなど、データに応じてパネルを分割して並べる。
 
-<http://docs.ggplot2.org/current/facet_wrap.html>
+[`facet_wrap()`](http://docs.ggplot2.org/current/facet_wrap.html)
 :   1変数で分割して並べる
-
     ```r
     facet_wrap(facets, nrow=NULL, ncol=NULL, scales='fixed',
                shrink=TRUE, labeller='label_value',
@@ -160,9 +176,8 @@ ggsave("iris_sepal.png", gp)
         facet_wrap(~Species, nrow=2)
     ```
 
-<http://docs.ggplot2.org/current/facet_grid.html>
+[`facet_grid()`](http://docs.ggplot2.org/current/facet_grid.html)
 :   2変数で分割して縦横に並べる
-
     ```r
     facet_grid(facets, margins=FALSE, scales='fixed', space='fixed',
                shrink=TRUE, labeller='label_value',
@@ -174,9 +189,10 @@ ggsave("iris_sepal.png", gp)
 
     1変数でいい場合は片方をドット `.` で固定できる。
 
-<http://docs.ggplot2.org/current/labellers.html>
+[ファセットラベルの調整](http://docs.ggplot2.org/current/labellers.html)
 :   デフォルトでは値だけがfacetラベルに表示されるが、
     変数名を同時に表示するなど細かい調整も可能。
+
 
 ### 軸やタイトルを変更
 
@@ -191,8 +207,19 @@ ggsave("iris_sepal.png", gp)
     `gp + coord_cartesian(xlim = NULL, ylim = NULL)`\
     前者はデータそのものを切るが、後者はデータを変えずに描画領域だけズームする
 
+[X軸とY軸の比率を固定](http://docs.ggplot2.org/current/coord_fixed.html)
+:   `gp + coord_fixed(ratio=1)`
+
 [XY軸の反転](http://docs.ggplot2.org/current/coord_flip.html)
 :   `gp + coord_flip()`
+
+[極座標](http://docs.ggplot2.org/current/coord_polar.html)
+:   パイチャートも作れるらしい
+
+[座標変換](http://docs.ggplot2.org/current/coord_trans.html)
+:   `gp + coord_trans(x='log10', y='sqrt')`\
+    表示の座標だけ変更する。
+    stat前に適用される `scale_x_*` とかとはちょいと違う。
 
 [軸ラベルとタイトル](http://docs.ggplot2.org/current/labs.html)
 :   `gp + labs(x="time", y="weight", title="growth")`\
@@ -259,72 +286,66 @@ gp = gp + theme(plot.background=element_rect(fill="transparent"))
 ```
 
 全体
-
-`line`: (`element_line`)\
-`rect`: (`element_rect`)\
-`text`: (`element_text`)\
-`title`: (`element_text`; inherits from `text`)
+: `line`: (`element_line`)
+: `rect`: (`element_rect`)
+: `text`: (`element_text`)
+: `title`: (`element_text`; inherits from `text`)
 
 軸タイトル、軸ラベル、目盛
-
-`axis.title`: (`element_text`; inherits from `text`)\
-`axis.title.x`: (`element_text`; inherits from `axis.title`)\
-`axis.title.y`: (`element_text`; inherits from `axis.title`)\
-`axis.text`: (`element_text`; inherits from `text`)\
-`axis.text.x`: (`element_text`; inherits from `axis.text`)\
-`axis.text.y`: (`element_text`; inherits from `axis.text`)\
-`axis.ticks`: (`element_line`; inherits from `line`)\
-`axis.ticks.x`: (`element_line`; inherits from `axis.ticks`)\
-`axis.ticks.y`: (`element_line`; inherits from `axis.ticks`)\
-`axis.ticks.length`: (`unit`)\
-`axis.ticks.margin`: (`unit`)\
-`axis.line`: (`element_line`; inherits from `line`)\
-`axis.line.x`: (`element_line`; inherits from `axis.line`)\
-`axis.line.y`: (`element_line`; inherits from `axis.line`)
+: `axis.title`: (`element_text`; inherits from `text`)
+: `axis.title.x`: (`element_text`; inherits from `axis.title`)
+: `axis.title.y`: (`element_text`; inherits from `axis.title`)
+: `axis.text`: (`element_text`; inherits from `text`)
+: `axis.text.x`: (`element_text`; inherits from `axis.text`)
+: `axis.text.y`: (`element_text`; inherits from `axis.text`)
+: `axis.ticks`: (`element_line`; inherits from `line`)
+: `axis.ticks.x`: (`element_line`; inherits from `axis.ticks`)
+: `axis.ticks.y`: (`element_line`; inherits from `axis.ticks`)
+: `axis.ticks.length`: (`unit`)
+: `axis.ticks.margin`: (`unit`)
+: `axis.line`: (`element_line`; inherits from `line`)
+: `axis.line.x`: (`element_line`; inherits from `axis.line`)
+: `axis.line.y`: (`element_line`; inherits from `axis.line`)
 
 凡例
-
-`legend.background`: (`element_rect`; inherits from `rect`)\
-`legend.margin`: (`unit`)\
-`legend.key`: (`element_rect`; inherits from `rect`)\
-`legend.key.size`: (`unit`)\
-`legend.key.height`: (`unit`; inherits from `legend.key.size`)\
-`legend.key.width`: (`unit`; inherits from `legend.key.size`)\
-`legend.text`: (`element_text`; inherits from `text`)\
-`legend.text.align`: (number from `0` (left) to `1` (right))\
-`legend.title`: (`element_text`; inherits from `title`)\
-`legend.title.align`: (number from `0` (left) to `1` (right))\
-`legend.position`: (`"left"`, `"right"`, `"bottom"`, `"top"`, `"none"`; プロット領域内での位置を `c(0, 1)` のような数値で)\
-`legend.direction`: (`"horizontal"` or `"vertical"`)\
-`legend.justification`: (`"center"` or `c(0, 1)` のような数値でアンカー位置を指定)\
-`legend.box`: (`"horizontal"` or `"vertical"`)\
-`legend.box.just`: (`"top"`, `"bottom"`, `"left"`, or `"right"`)
+: `legend.background`: (`element_rect`; inherits from `rect`)
+: `legend.margin`: (`unit`)
+: `legend.key`: (`element_rect`; inherits from `rect`)
+: `legend.key.size`: (`unit`)
+: `legend.key.height`: (`unit`; inherits from `legend.key.size`)
+: `legend.key.width`: (`unit`; inherits from `legend.key.size`)
+: `legend.text`: (`element_text`; inherits from `text`)
+: `legend.text.align`: (number from `0` (left) to `1` (right))
+: `legend.title`: (`element_text`; inherits from `title`)
+: `legend.title.align`: (number from `0` (left) to `1` (right))
+: `legend.position`: (`"left"`, `"right"`, `"bottom"`, `"top"`, `"none"` `c(0, 1)`
+: `legend.direction`: (`"horizontal"` or `"vertical"`)
+: `legend.justification`: (`"center"` or `c(0, 1)` のような数値でアンカー位置を指定)
+: `legend.box`: (`"horizontal"` or `"vertical"`)
+: `legend.box.just`: (`"top"`, `"bottom"`, `"left"`, or `"right"`)
 
 プロット領域の背景、余白、格子
-
-`panel.background`: (`element_rect`; inherits from `rect`)\
-`panel.border`: (`element_rect`; inherits from `rect`; should be used with `fill=NA`)\
-`panel.margin`: (`unit`; `facet_*` の間隔)\
-`panel.grid`: (`element_line`; inherits from `line`)\
-`panel.grid.major`: (`element_line`; inherits from `panel.grid`)\
-`panel.grid.minor`: (`element_line`; inherits from `panel.grid`)\
-`panel.grid.major.x`: (`element_line`; inherits from `panel.grid.major`)\
-`panel.grid.major.y`: (`element_line`; inherits from `panel.grid.major`)\
-`panel.grid.minor.x`: (`element_line`; inherits from `panel.grid.minor`)\
-`panel.grid.minor.y`: (`element_line`; inherits from `panel.grid.minor`)
+: `panel.background`: (`element_rect`; inherits from `rect`)
+: `panel.border`: (`element_rect`; inherits from `rect`; should be used with `fill=NA`)
+: `panel.margin`: (`unit`; `facet_*` の間隔)
+: `panel.grid`: (`element_line`; inherits from `line`)
+: `panel.grid.major`: (`element_line`; inherits from `panel.grid`)
+: `panel.grid.minor`: (`element_line`; inherits from `panel.grid`)
+: `panel.grid.major.x`: (`element_line`; inherits from `panel.grid.major`)
+: `panel.grid.major.y`: (`element_line`; inherits from `panel.grid.major`)
+: `panel.grid.minor.x`: (`element_line`; inherits from `panel.grid.minor`)
+: `panel.grid.minor.y`: (`element_line`; inherits from `panel.grid.minor`)
 
 全体の背景、タイトル、余白
-
-`plot.background`: (`element_rect`; inherits from `rect`)\
-`plot.title`: (`element_text`; inherits from `title`)\
-`plot.margin`: (`unit` with the sizes of the top, right, bottom, and left margins)
+: `plot.background`: (`element_rect`; inherits from `rect`)
+: `plot.title`: (`element_text`; inherits from `title`)
+: `plot.margin`: (`unit` with the sizes of the top, right, bottom, and left margins)
 
 `facet` したときのラベル
-
-`strip.background`: (`element_rect`; inherits from `rect`)\
-`strip.text`: (`element_text`; inherits from `text`)\
-`strip.text.x`: (`element_text`; inherits from `strip.text`)\
-`strip.text.y`: (`element_text`; inherits from `strip.text`)
+: `strip.background`: (`element_rect`; inherits from `rect`)
+: `strip.text`: (`element_text`; inherits from `text`)
+: `strip.text.x`: (`element_text`; inherits from `strip.text`)
+: `strip.text.y`: (`element_text`; inherits from `strip.text`)
 
 ### エレメント
 
@@ -343,7 +364,6 @@ gp = gp + theme(plot.background=element_rect(fill="transparent"))
 
 `element_blank()` --- 空
 :   消したい要素にはこれを指定する
-
     ```r
     gp = gp + theme(axis.title=element_blank())
     gp = gp + theme(panel.grid=element_blank())
@@ -404,7 +424,7 @@ quartz.save('plot.png')
 ggplotを拡張するための仕組みがversion 2.0から正式に導入され、
 ユーザーが独自の stats や geom を作って登録することが容易になった。
 
-<http://ggplot2-exts.github.io/>
+<http://www.ggplot2-exts.org/>
 
 ### `gridExtra`
 
