@@ -1,6 +1,6 @@
 +++
 title = 'DnaSP'
-tags = ["genetics", "windows"]
+tags = ["genetics", "mac", "windows"]
 [menu.main]
   parent = "bio"
 +++
@@ -9,10 +9,11 @@ DNA Sequence Polymorphism
 
 <http://www.ub.es/dnasp/>
 
-## Installation on Mac
+## Macで使う
 
-普通のWindowsアプリと同じように WineBottler と Wine
-でインストールして使えるが、
+Windowsアプリしかないので、仕方なく
+[Wine/WineBottler]({{< relref "mac/winebottler.md" >}})
+越しに動かす。
 インストール後にActiveXの設定をしないと以下のように怒られて
 強制終了になってしまう（起動はできる）:
 
@@ -21,10 +22,10 @@ DNA Sequence Polymorphism
 
 ### はじめに
 
-1.  [WineBottler]({{< relref "mac/winebottler.md" >}}) および Wine をインストール。
-2.  [DnaSP作者のウェブサイト](http://www.ub.es/dnasp/) からインストーラ
-    dnasp51001.msi をダウンロード。
-3.  微妙に違う2つのやり方があるのでどっちにするか決める。
+1. [WineBottler]({{< relref "mac/winebottler.md" >}})およびWineをインストール。
+2. [DnaSP作者のウェブサイト](http://www.ub.es/dnasp/) からインストーラ
+   `dnasp51001.msi` をダウンロード。
+3. 微妙に違う2つのやり方があるのでどっちにするか決める。
 
 ### DnaSP.appを作る方法
 
@@ -79,9 +80,8 @@ DNA Sequence Polymorphism
     2.  <http://www.dll-files.com/> らへんから
         `scrrun.dll` をダウンロードし、
         `~/.wine/drive_c/windows/system32/` にコピー
-    3.  右上メニューバーの
-        `ワイングラス > DOS Prompt` で出てきた黒い窓に
-        以下のコマンドを1行ずつ入力して実行:
+    3.  右上メニューバーのワイングラスからDOS Promptを選び、
+        出てきた黒い窓に以下のコマンドを1行ずつ入力して実行:
 
             cd windows\system32
             regsvr32 scrrun.dll mfc40.dll threed32.ocx
