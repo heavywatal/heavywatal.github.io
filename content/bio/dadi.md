@@ -5,11 +5,11 @@ tags = ["genetics", "python"]
   parent = "bio"
 +++
 
-<https://bitbucket.org/RyanGutenkunst/dadi>
+https://bitbucket.org/gutenkunstlab/dadi
 
 ## Installation
 
-<https://bitbucket.org/RyanGutenkunst/dadi/wiki/Installation>
+https://bitbucket.org/gutenkunstlab/dadi/wiki/Installation
 
 1.  Python 2.7 で `dadi` 用の `virtualenv` を作って、中に入る:
 
@@ -52,4 +52,4 @@ tags = ["genetics", "python"]
 
 ## 入力データ
 
-<https://bitbucket.org/RyanGutenkunst/dadi/wiki/DataFormats>
+https://bitbucket.org/gutenkunstlab/dadi/wiki/DataFormats
