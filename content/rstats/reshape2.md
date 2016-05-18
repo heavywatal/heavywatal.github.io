@@ -8,8 +8,10 @@ tags = ["r", "hadley"]
 +++
 
 {{%div class="warning"%}}
-半端に多機能な `reshape2` ではなく、
-新しい [tidyr]({{< relref "tidyr.md" >}}) + [dplyr]({{< relref "dplyr.md" >}}) を使おう。
+`reshape2` はもう古いので、このページの内容も更新しない。
+同じ作者が新しく設計しなおした
+[tidyr]({{< relref "tidyr.md" >}}) + [dplyr]({{< relref "dplyr.md" >}})
+のほうがより高速で洗練されているのでそちらを使おう。
 {{%/div%}}
 
 -   <http://had.co.nz/reshape/>
@@ -17,15 +19,15 @@ tags = ["r", "hadley"]
 -   <http://www.rdocumentation.org/packages/reshape2>
 -   <http://seananderson.ca/2013/10/19/reshape.html>
 
-## Installation
-
-[ggplot2]({{< relref "ggplot2.md" >}}) をインストールすれば自動的に入るはず。
-
 ## `melt()`
 
 `data.frame` の複数列の値を、カテゴリ変数1列と値1列の組に変換する。
 これにより、変換する列数の分だけ `data.frame` が縦長(long-format)になる。
 やや冗長性は増すが、[ggplot2]({{< relref "ggplot2.md" >}}) での作図などさまざまな操作がしやすくなる。
+
+{{%div class="note"%}}
+これじゃなくて[tidyr]({{< relref "tidyr.md" >}})の`gather()`を使おう。
+{{%/div%}}
 
 ```r
 reshape2::melt(data, id.vars, measure.vars,
@@ -55,8 +57,7 @@ reshape2::melt(data, id.vars, measure.vars,
 
 ### Example
 
-1.  ライブラリを読み込んでサンプルデータを見てみる(wide-format)
-
+1. ライブラリを読み込んでサンプルデータを見てみる(wide-format)
     ```r
     > library(reshape2)
     > head(reshape2::french_fries)
@@ -69,21 +70,20 @@ reshape2::melt(data, id.vars, measure.vars,
     27    1         1      15   2    8.8     3.0    3.6    1.5    2.3
     ```
 
-2.  データをlong-formatに整形
-
-    ```r
-    > molten = reshape2::melt(reshape2::french_fries,
-    +                         id.vars=c("time", "treatment", "subject", "rep"),
-    +                         variable.name="flavor", na.rm=TRUE)
-    > head(molten)
-      time treatment subject rep flavor value
-    1    1         1       3   1 potato   2.9
-    2    1         1       3   2 potato  14.0
-    3    1         1      10   1 potato  11.0
-    4    1         1      10   2 potato   9.9
-    5    1         1      15   1 potato   1.2
-    6    1         1      15   2 potato   8.8
-    ```
+2. データをlong-formatに整形
+   ```r
+   > molten = reshape2::melt(reshape2::french_fries,
+                             id.vars=c("time", "treatment", "subject", "rep"),
+                             variable.name="flavor", na.rm=TRUE)
+   > head(molten)
+     time treatment subject rep flavor value
+   1    1         1       3   1 potato   2.9
+   2    1         1       3   2 potato  14.0
+   3    1         1      10   1 potato  11.0
+   4    1         1      10   2 potato   9.9
+   5    1         1      15   1 potato   1.2
+   6    1         1      15   2 potato   8.8
+   ```
 
 3.  [ggplot2]({{< relref "ggplot2.md" >}}) で作図
 
@@ -104,8 +104,9 @@ reshape2::melt(data, id.vars, measure.vars,
 3次元以上の `Array` が欲しければ `acast()` を使う。
 
 {{%div class="note"%}}
-グループごとに関数を適用したりもできるが、
-その用途なら [plyr]({{< relref "plyr.md" >}})` や `[dplyr]({{< relref "dplyr.md" >}}) のほうが使いやすい。
+これじゃなくて[tidyr]({{< relref "tidyr.md" >}})の`spread()`を使おう。
+`fun.aggregate`のように関数をグループごとに適用したい場合は
+[dplyr]({{< relref "dplyr.md" >}})の`group_by()`と`summarise()`を使う。
 {{%/div%}}
 
 ```r

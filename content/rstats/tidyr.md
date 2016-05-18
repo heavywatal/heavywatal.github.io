@@ -33,6 +33,9 @@ Source: local data frame [3 x 6]
 3     3          4.7         3.2          1.3         0.2  setosa
 ```
 
+パイプ演算子 `%>%` については[dplyr]({{< relref "dplyr.md" >}})を参照。
+
+
 ## `tidyr::gather()`
 
 複数列にまたがっていた値を、カテゴリ変数と値の2列に変換することで、
