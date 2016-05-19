@@ -10,7 +10,7 @@
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="icon" href="/favicon-192x192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/favicon-192x192.png" sizes="192x192">
-<title>NumPy, SciPy: 数値配列演算・科学技術計算ライブラリ - Watal M. Iwasaki</title>
+<title>vi - Watal M. Iwasaki</title>
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
   tex2jax: {
@@ -48,115 +48,233 @@ Watal M. Iwasaki
 <main>
 <article>
 <header><h1><a href="">
-NumPy, SciPy — 数値配列演算・科学技術計算ライブラリ
+vi
 </a></h1>
 <ul class="tags">
-<li><a href="/tags/python">python</a></li>
+<li><a href="/tags/editor">editor</a></li>
 </ul>
 </header>
 
 
 
-<p><a href="http://www.scipy.org/">http://www.scipy.org/</a></p>
+<h2 id="基礎知識">基礎知識</h2>
 
-<h2 id="installation">Installation</h2>
+<p>オリジナルがvi、改良版がvim (Vi IMproved)。
+ただし、shの正体がbashであるように、LinuxやMacに入ってるviの正体はvim。
+vimのデフォルトは拡張を無効にしたvi互換モード。
+つまり設定をいじらなければ起動コマンドはviでもvimでも同じ？</p>
 
-<p><a href="http://www.scipy.org/install.html">http://www.scipy.org/install.html</a><br>
-<a href="http://www.scipy.org/scipylib/download.html">http://www.scipy.org/scipylib/download.html</a><br>
-<a href="http://www.scipy.org/scipylib/building/">http://www.scipy.org/scipylib/building/</a><br>
-<a href="http://docs.scipy.org/doc/numpy/user/install.html">http://docs.scipy.org/doc/numpy/user/install.html</a></p>
+<p>文字入力はインサートモード、それ以外はすべてノーマルモードで行う。
+起動時はノーマルモード。</p>
 
-<ol>
-<li><p><a href="/mac/homebrew.html">Homebrew</a> などで <code>gfortran</code> をインストール:</p>
+<h2 id="ノーマルモード">ノーマルモード</h2>
 
-<pre><code>% brew install gcc
+<h3 id="とりあえず覚えてないと死ぬやつ">とりあえず覚えてないと死ぬやつ</h3>
+
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>action</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>hjkl</code></td>
+<td><code>←↓↑→</code></td>
+</tr>
+
+<tr>
+<td><code>i</code></td>
+<td>インサートモードに移行</td>
+</tr>
+
+<tr>
+<td><code>:w</code></td>
+<td>保存</td>
+</tr>
+
+<tr>
+<td><code>:q</code></td>
+<td>終了</td>
+</tr>
+
+<tr>
+<td><code>:q!</code></td>
+<td>保存しないで強制終了</td>
+</tr>
+
+<tr>
+<td><code>u</code></td>
+<td>元に戻す</td>
+</tr>
+
+<tr>
+<td><code>x</code></td>
+<td>1文字削除 (行は消せない)</td>
+</tr>
+
+<tr>
+<td><code>dd</code></td>
+<td>行カット</td>
+</tr>
+
+<tr>
+<td><code>ctrl-c</code></td>
+<td>中断 (Emacs <code>ctrl-g</code>)</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="移動">移動</h3>
+
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>action</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>b</code></td>
+<td>単語頭</td>
+</tr>
+
+<tr>
+<td><code>e</code></td>
+<td>単語末</td>
+</tr>
+
+<tr>
+<td><code>w</code></td>
+<td>単語末の空白</td>
+</tr>
+
+<tr>
+<td><code>0</code></td>
+<td>行頭</td>
+</tr>
+
+<tr>
+<td><code>^</code></td>
+<td>行頭 (非空白)</td>
+</tr>
+
+<tr>
+<td><code>$</code></td>
+<td>行末</td>
+</tr>
+
+<tr>
+<td><code>H</code></td>
+<td>画面先頭</td>
+</tr>
+
+<tr>
+<td><code>L</code></td>
+<td>画面末尾</td>
+</tr>
+
+<tr>
+<td><code>gg</code></td>
+<td>ファイル先頭</td>
+</tr>
+
+<tr>
+<td><code>G</code></td>
+<td>ファイル末尾</td>
+</tr>
+
+<tr>
+<td><code>ctrl-b</code></td>
+<td>前ページ</td>
+</tr>
+
+<tr>
+<td><code>ctrl-u</code></td>
+<td>半ページ上</td>
+</tr>
+
+<tr>
+<td><code>ctrl-d</code></td>
+<td>半ページ下</td>
+</tr>
+
+<tr>
+<td><code>ctrl-f</code></td>
+<td>次ページ</td>
+</tr>
+</tbody>
+</table>
+
+<p>数字と組み合わせられる。
+e.g., <code>3j</code>で3行下</p>
+
+<p><code>shift-b</code>, <code>shift-e</code>, <code>shift-w</code> はドットなどの区切り文字をすっ飛ばして大きめ移動。</p>
+
+<p>カーソルの移動だけでなく、コピーなどの動作対象の指定にも使う。</p>
+
+<h3 id="コピペ">コピペ</h3>
+
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>action</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>d</code></td>
+<td>カット</td>
+</tr>
+
+<tr>
+<td><code>y</code></td>
+<td>コピー</td>
+</tr>
+
+<tr>
+<td><code>shift-p</code></td>
+<td>ペースト</td>
+</tr>
+</tbody>
+</table>
+
+<p>カットとコピーは対象を指定する必要がある。</p>
+
+<pre><code>d3l  # 右に3文字カット; 3dl でもいい
+yy   # 1行まるまるコピー
 </code></pre>
 
-<p>Ubuntuなら:</p>
+<p>ただの<code>p</code>でもペーストだが、カーソルの右に入るのが気持ち悪い。</p>
 
-<pre><code>% sudo apt-get install build-essential gfortran
-% sudo apt-get install python3-dev
-% sudo apt-get install libatlas-base-dev
-</code></pre></li>
+<p>範囲選択を見ながら操作したい場合は下記のヴィジュアルモードを使う。</p>
 
-<li><p><code>NumPy</code> をインストール:</p>
+<h2 id="インサートモード-insert">インサートモード <code>-- INSERT --</code></h2>
 
-<pre><code>% pip install numpy
-</code></pre></li>
+<p>キー入力しかしない。
+カーソルキーで移動はできるが、基本的にはしないつもりで。</p>
 
-<li><p><code>SciPy</code> をインストール:</p>
+<dl>
+<dt>ノーマルモードへの戻り方</dt>
+<dd><code>esc</code>: 標準だが遠すぎるので却下。</dd>
+<dd><code>ctrl-[</code>: それなりに押しやすく、<code>esc</code>と同じ挙動。</dd>
+<dd><code>ctrl-c</code>: 最も押しやすいし覚えやすい。
+インサートモードでのあらゆる動作を中断して戻るので注意。</dd>
+</dl>
 
-<pre><code>% CC=clang CXX=clang++ FFLAGS=-ff2c pip install scipy
-</code></pre></li>
-</ol>
+<h2 id="ヴィジュアルモード-visual">ヴィジュアルモード <code>-- VISUAL --</code></h2>
 
-<h3 id="test">test</h3>
+<p><code>v</code> で始まる範囲選択モード。
+Emacsでいう<code>ctrl-space</code>。</p>
 
-<p><code>nose</code> というパッケージが必要:</p>
-
-<pre><code>&gt;&gt;&gt; import numpy
-&gt;&gt;&gt; numpy.test()
-</code></pre>
-
-<p>BLAS/LAPACK関連の確認:</p>
-
-<pre><code>&gt;&gt;&gt; import numpy
-&gt;&gt;&gt; numpy.show_config()
-</code></pre>
-
-<h2 id="numpy"><code>NumPy</code></h2>
-
-<p>数値計算・配列演算ライブラリ</p>
-
-<p><a href="https://pypi.python.org/pypi/numpy">https://pypi.python.org/pypi/numpy</a><br>
-<a href="http://www.numpy.org/">http://www.numpy.org/</a><br>
-<a href="http://docs.scipy.org/doc/numpy/reference/">http://docs.scipy.org/doc/numpy/reference/</a></p>
-
-<h3 id="ndarray-クラス"><code>ndarray</code> クラス</h3>
-
-<p><a href="http://docs.scipy.org/doc/numpy/reference/arrays.ndarray.html">http://docs.scipy.org/doc/numpy/reference/arrays.ndarray.html</a></p>
-
-<p>N次元配列</p>
-
-<hr>
-
-<p><code>numpy.matrix</code> クラスはそれを2D行列に特殊化したもの</p>
-
-<p><a href="http://docs.scipy.org/doc/numpy/reference/routines.matlib.html">http://docs.scipy.org/doc/numpy/reference/routines.matlib.html</a></p>
-
-<h3 id="universal-functions-ufunc">Universal functions (<code>ufunc</code>)</h3>
-
-<p><a href="http://docs.scipy.org/doc/numpy/reference/ufuncs.html#available-ufuncs">http://docs.scipy.org/doc/numpy/reference/ufuncs.html#available-ufuncs</a></p>
-
-<p><code>ndarray</code> に対して効率よく element-wise な演算をする関数</p>
-
-<h3 id="routine">Routine</h3>
-
-<p><a href="http://docs.scipy.org/doc/numpy/reference/routines.html">http://docs.scipy.org/doc/numpy/reference/routines.html</a></p>
-
-<p><code>ndarray</code> を作ったり操作したりする関数全般</p>
-
-<p><a href="http://docs.scipy.org/doc/numpy/reference/routines.array-creation.html">http://docs.scipy.org/doc/numpy/reference/routines.array-creation.html</a></p>
-
-<p><a href="http://docs.scipy.org/doc/numpy/reference/routines.array-manipulation.html">http://docs.scipy.org/doc/numpy/reference/routines.array-manipulation.html</a></p>
-
-<p><a href="http://docs.scipy.org/doc/numpy/reference/routines.math.html">http://docs.scipy.org/doc/numpy/reference/routines.math.html</a></p>
-
-<p><a href="http://docs.scipy.org/doc/numpy/reference/routines.random.html">http://docs.scipy.org/doc/numpy/reference/routines.random.html</a></p>
-
-<h2 id="scipy"><code>SciPy</code></h2>
-
-<p>高度な科学技術計算ライブラリ</p>
-
-<p><a href="https://pypi.python.org/pypi/scipy">https://pypi.python.org/pypi/scipy</a><br>
-<a href="http://www.scipy.org/scipylib/index.html">http://www.scipy.org/scipylib/index.html</a><br>
-<a href="http://docs.scipy.org/doc/scipy/reference/">http://docs.scipy.org/doc/scipy/reference/</a></p>
-
-<h3 id="scipy-stats"><code>scipy.stats</code></h3>
-
-<p><a href="http://docs.scipy.org/doc/scipy/reference/tutorial/stats.html">http://docs.scipy.org/doc/scipy/reference/tutorial/stats.html</a></p>
-
-<p><a href="http://docs.scipy.org/doc/scipy/reference/stats.html">http://docs.scipy.org/doc/scipy/reference/stats.html</a></p>
+<p><code>shift-v</code> で行単位選択。
+<code>ctrl-v</code> で矩形選択。</p>
 
 </article>
 </main>
@@ -193,15 +311,15 @@ NumPy, SciPy — 数値配列演算・科学技術計算ライブラリ
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
 
-<input type="checkbox" id="menu-python" checked>
-<label for="menu-python" class="active">Python</label>
+<input type="checkbox" id="menu-python">
+<label for="menu-python">Python</label>
 <ul>
 <li><a href="/python/install.html">Installation</a></li>
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
 <li><a href="/python/egglib.html">EggLib</a></li>
-<li class="active"><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
 <li><a href="/python/pyqt.html">PyQt</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
@@ -241,8 +359,8 @@ NumPy, SciPy — 数値配列演算・科学技術計算ライブラリ
 <li><a href="/bio/motif.html">配列モチーフ探索</a></li>
 </ul>
 
-<input type="checkbox" id="menu-dev">
-<label for="menu-dev">Developer Tools</label>
+<input type="checkbox" id="menu-dev" checked>
+<label for="menu-dev" class="active">Developer Tools</label>
 <ul>
 <li><a href="/dev/etc.html">/etc</a></li>
 <li><a href="/dev/atom.html">Atom</a></li>
@@ -263,7 +381,7 @@ NumPy, SciPy — 数値配列演算・科学技術計算ライブラリ
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/sshfs.html">sshfs</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
-<li><a href="/dev/vi.html">vi</a></li>
+<li class="active"><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/nohup.html">プロセス管理</a></li>
 <li><a href="/dev/devenv.html">開発環境</a></li>
