@@ -39,13 +39,13 @@ tags = ["package"]
 Macの [Homebrew]({{< relref "mac/homebrew.md" >}}) をLinuxに移植したパッケージマネージャ。
 使い勝手はほぼ一緒だけど依存関係の処理などがやや甘い。
 
-1.  `git --version` を確認して
-    1.7.12 未満だったら新しいものをソースコードからインストール:
+1.  `git --version` を確認して 1.7.12 未満だったら
+    [最新版](https://github.com/git/git/releases)をソースコードからインストール:
 
-        % wget -O- https://github.com/git/git/archive/v2.7.2.tar.gz | tar xz
-        % cd git-2.7.2/
+        % wget -O- https://github.com/git/git/archive/v2.8.3.tar.gz | tar xz
+        % cd git-2.8.3/
         % autoreconf -i
-        % configure --prefix=${HOME}/local
+        % ./configure --prefix=${HOME}/local
         % make
         % make install
 
@@ -55,7 +55,7 @@ Macの [Homebrew]({{< relref "mac/homebrew.md" >}}) をLinuxに移植したパ�
 
 3.  必要なもろもろをインストール:
 
-        % brew install git
+        % brew install tmux
 
         git
         mercurial
