@@ -96,13 +96,16 @@ X - (X \bullet B)
 元画像とclosingの差。
 *X* 内のヒビやトゲの根元らへんが得られる。
 
-### Morphological gradient --- エッジ検出
+### Morphological gradient
 
 <div>$$\begin{split}
 (X \oplus B) - (X \ominus B)
 \end{split}$$</div>
 
 dilationとerosionの差。
+エッジ検出法のひとつ。
+X上の境界が欲しい場合は$X - (X \ominus B)$。
+背景側の境界が欲しい場合は$(X \oplus B) - X$。
 
 
 ## ライブラリ
@@ -123,7 +126,7 @@ dilationとerosionの差。
   ドキュメントも良さげ。
 
 [imager](http://dahtah.github.io/imager/)
-: R。新しめでドキュメントも充実してる。内部でCImgを利用。
+: R。新しめでドキュメントも充実。内部でCImgを利用。
 
 [mmand](https://github.com/jonclayden/mmand)
 : R。READMEは良さげ。
