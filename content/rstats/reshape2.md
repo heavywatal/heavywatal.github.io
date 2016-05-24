@@ -8,10 +8,11 @@ tags = ["r", "hadley"]
 +++
 
 {{%div class="warning"%}}
-`reshape2` はもう古いので、このページの内容も更新しない。
-同じ作者が新しく設計しなおした
+`reshape2`はもう古い。
+`data.frame`を処理をするなら、同じ作者が新しく設計しなおした
 [tidyr]({{< relref "tidyr.md" >}}) + [dplyr]({{< relref "dplyr.md" >}})
 のほうがより高速で洗練されているのでそちらを使おう。
+ただし3次元以上の`array`を扱うにはまだ便利。
 {{%/div%}}
 
 -   <http://had.co.nz/reshape/>
@@ -26,7 +27,13 @@ tags = ["r", "hadley"]
 やや冗長性は増すが、[ggplot2]({{< relref "ggplot2.md" >}}) での作図などさまざまな操作がしやすくなる。
 
 {{%div class="note"%}}
-これじゃなくて[tidyr]({{< relref "tidyr.md" >}})の`gather()`を使おう。
+この用途ならこれじゃなくて
+[tidyr]({{< relref "tidyr.md" >}})の`gather()`を使おう。
+
+`array`対象ならまだ使い道はある。
+例えば3次元`array`を `melt(arr, c('x', 'y', 'z'))`
+として3列の`matrix`に戻せるのは便利。
+See `?reshape2:::melt.array`.
 {{%/div%}}
 
 ```r
@@ -96,17 +103,19 @@ reshape2::melt(data, id.vars, measure.vars,
     > gp
     ```
 
-## `dcast()`, `acast()`
+## `dcast()`
 
 カテゴリ変数を含む `data.frame` を `melt()` と逆方向に
 (long-formatからwide-formatへ)整形する。
-2次元までの `data.frame` が欲しければ `dcast()` 、
-3次元以上の `Array` が欲しければ `acast()` を使う。
 
 {{%div class="note"%}}
-これじゃなくて[tidyr]({{< relref "tidyr.md" >}})の`spread()`を使おう。
+この用途ならこれじゃなくて
+[tidyr]({{< relref "tidyr.md" >}})の`spread()`を使おう。
 `fun.aggregate`のように関数をグループごとに適用したい場合は
 [dplyr]({{< relref "dplyr.md" >}})の`group_by()`と`summarise()`を使う。
+
+3次元以上の`array`を作りたいときは`reshape2::acast()`が便利。\
+e.g., `acast(data, x ~ y ~ z, dplyr::first, value.var='v', fill=0)`
 {{%/div%}}
 
 ```r
