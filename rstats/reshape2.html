@@ -61,10 +61,11 @@ reshape2 — 柔軟なデータ変形ツール
 
 
 <div class="warning">
-<p><code>reshape2</code> はもう古いので、このページの内容も更新しない。
-同じ作者が新しく設計しなおした
+<p><code>reshape2</code>はもう古い。
+<code>data.frame</code>を処理をするなら、同じ作者が新しく設計しなおした
 <a href="/rstats/tidyr.html">tidyr</a> + <a href="/rstats/dplyr.html">dplyr</a>
-のほうがより高速で洗練されているのでそちらを使おう。</p>
+のほうがより高速で洗練されているのでそちらを使おう。
+ただし3次元以上の<code>array</code>を扱うにはまだ便利。</p>
 
 </div>
 
@@ -83,7 +84,13 @@ reshape2 — 柔軟なデータ変形ツール
 やや冗長性は増すが、<a href="/rstats/ggplot2.html">ggplot2</a> での作図などさまざまな操作がしやすくなる。</p>
 
 <div class="note">
-<p>これじゃなくて<a href="/rstats/tidyr.html">tidyr</a>の<code>gather()</code>を使おう。</p>
+<p>この用途ならこれじゃなくて
+<a href="/rstats/tidyr.html">tidyr</a>の<code>gather()</code>を使おう。</p>
+
+<p><code>array</code>対象ならまだ使い道はある。
+例えば3次元<code>array</code>を <code>melt(arr, c('x', 'y', 'z'))</code>
+として3列の<code>matrix</code>に戻せるのは便利。
+See <code>?reshape2:::melt.array</code>.</p>
 
 </div>
 
@@ -152,17 +159,19 @@ reshape2 — 柔軟なデータ変形ツール
 </code></pre></li>
 </ol>
 
-<h2 id="dcast-acast"><code>dcast()</code>, <code>acast()</code></h2>
+<h2 id="dcast"><code>dcast()</code></h2>
 
 <p>カテゴリ変数を含む <code>data.frame</code> を <code>melt()</code> と逆方向に
-(long-formatからwide-formatへ)整形する。
-2次元までの <code>data.frame</code> が欲しければ <code>dcast()</code> 、
-3次元以上の <code>Array</code> が欲しければ <code>acast()</code> を使う。</p>
+(long-formatからwide-formatへ)整形する。</p>
 
 <div class="note">
-<p>これじゃなくて<a href="/rstats/tidyr.html">tidyr</a>の<code>spread()</code>を使おう。
+<p>この用途ならこれじゃなくて
+<a href="/rstats/tidyr.html">tidyr</a>の<code>spread()</code>を使おう。
 <code>fun.aggregate</code>のように関数をグループごとに適用したい場合は
 <a href="/rstats/dplyr.html">dplyr</a>の<code>group_by()</code>と<code>summarise()</code>を使う。</p>
+
+<p>3次元以上の<code>array</code>を作りたいときは<code>reshape2::acast()</code>が便利。<br>
+e.g., <code>acast(data, x ~ y ~ z, dplyr::first, value.var='v', fill=0)</code></p>
 
 </div>
 
