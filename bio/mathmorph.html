@@ -111,6 +111,9 @@ X \circ B = (X \ominus B) \oplus B
 トゲの先端や <em>X</em> 外部のチリなど、SEより小さい構造が削られて小さくなる。
 特定の形を持ったSEを使えば、それを含む領域だけを抽出するのにも使える。</p>
 
+<p>元画像との差分 $X - (X \circ B)$ は <strong>Top Hat</strong> と呼ばれ、
+トゲの先っちょや背景のノイズ成分が得られる。</p>
+
 <h3 id="closing">Closing</h3>
 
 <div>$$\begin{split}
@@ -121,6 +124,9 @@ X \bullet B = (X \oplus B) \ominus B
 <em>X</em> の外部をOpeningすることと同義。
 <em>X</em> 内部のヒビやチリなど、SEより小さい構造が塗りつぶされ、大きくなる。</p>
 
+<p>元画像との差分 $(X \bullet B) - X$ は <strong>Black Hat</strong> と呼ばれ、
+<em>X</em> 内のヒビやトゲの根元らへんが得られる。</p>
+
 <h2 id="応用">応用</h2>
 
 <h3 id="pattern-spectrum-サイズ分布">Pattern Spectrum, サイズ分布</h3>
@@ -129,25 +135,7 @@ X \bullet B = (X \oplus B) \ominus B
 Openingで削れた部分の面積を記録していく。
 元画像の面積で割ったものはサイズ密度関数(size density function)と呼ばれる。
 細かいギザギザを含む図形ほど小さいSEで削れる成分が多い。
-要約統計量としてはエントロピーが使える(ギザギザ持ちほど高い)。</p>
-
-<h3 id="top-hat">Top Hat</h3>
-
-<div>$$\begin{split}
-X - (X \circ B)
-\end{split}$$</div>
-
-<p>元画像とopeningの差。
-トンガリの先っちょや背景のノイズ成分が得られる。</p>
-
-<h3 id="black-hat">Black Hat</h3>
-
-<div>$$\begin{split}
-X - (X \bullet B)
-\end{split}$$</div>
-
-<p>元画像とclosingの差。
-<em>X</em> 内のヒビやトゲの根元らへんが得られる。</p>
+要約統計量としてはモーメントやエントロピーが使える。</p>
 
 <h3 id="morphological-gradient">Morphological gradient</h3>
 
