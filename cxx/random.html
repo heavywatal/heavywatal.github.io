@@ -72,17 +72,53 @@ Watal M. Iwasaki
 
 <ul>
 <li>外部の生成器としてはSFMTやdSFMTが高速で高品質。</li>
-<li>C++11 からは新しい <code>&lt;random&gt;</code> が標準ライブラリに追加されてまともに使えるっぽい。</li>
+<li>C++11 からは新しい <code>&lt;random&gt;</code> が標準ライブラリに追加され、まともに使える。</li>
 <li>C++11 の <code>&lt;algorithm&gt;</code> の <code>std::shuffle()</code>
-は生成器を明示的に渡す必要があるのでよい。</li>
+は生成器を明示的に渡す必要があるので安全。</li>
 </ul>
+
+<h2 id="random"><code>&lt;random&gt;</code></h2>
+
+<ul>
+<li><a href="http://www.cplusplus.com/reference/random/">http://www.cplusplus.com/reference/random/</a></li>
+<li><a href="http://en.cppreference.com/w/cpp/numeric/random">http://en.cppreference.com/w/cpp/numeric/random</a></li>
+<li><a href="https://sites.google.com/site/cpprefjp/reference/random">https://sites.google.com/site/cpprefjp/reference/random</a></li>
+</ul>
+
+<p>C++11 ではまともに使える乱数ライブラリが追加された。
+乱数生成エンジンと分布生成器を組み合わせて使う。</p>
+
+<pre><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;random&gt;
+
+int main() {
+    // seed
+    std::random_device rd;
+    const auto seed = rd();
+
+    // engine
+    std::mt19937 rng(seed);
+
+    // probability density distribution
+    const double mean = 0.0;
+    const double sd = 1.0;
+    std::normal_distribution&lt;double&gt; dist(mean, sd);
+
+    // generate!
+    for (size_t i=0; i&lt;8; ++i) {
+        std::cout &lt;&lt; dist(rng) &lt;&lt; std::endl;
+    }
+
+    return 0;
+}
+</code></pre>
 
 <h2 id="mersenne-twister">Mersenne Twister</h2>
 
 <p><a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt.html">http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt.html</a></p>
 
 <p>松本眞と西村拓士によって開発された高速・高品質な擬似乱数生成器。
-標準の <code>&lt;random&gt;</code> でも利用可能。</p>
+標準の <code>&lt;random&gt;</code> にも <code>std::mt19937</code> として組み込まれている。</p>
 
 <h3 id="sfmt">SFMT</h3>
 
@@ -101,19 +137,21 @@ Watal M. Iwasaki
 v2.1からは整数も出力可能。
 標準には含まれず、ソースからのビルドが必要。</p>
 
-<div class="note">
-<p>SFMTやdSFMTを簡単に導入するためのインストーラを作った。</p>
+<h3 id="インストール方法-使い方">インストール方法、使い方</h3>
 
-<p><a href="https://github.com/heavywatal/sfmt-installer/releases">https://github.com/heavywatal/sfmt-installer/releases</a></p>
+<p>SFMTやdSFMTを簡単に導入するためのインストーラを作って公開した。
+<a href="https://github.com/heavywatal/sfmt-installer/">https://github.com/heavywatal/sfmt-installer/</a></p>
 
-</div>
-
+<p>標準の <code>std::mt19937</code> と同じように使えるようにしたラッパー
+(<code>wtl::sfmt19937</code>) も書いた。
+<a href="https://github.com/heavywatal/cxxwtils/">cxxwtils</a> の
+<code>prandom.hpp</code> で定義してある。</p>
 
 <h2 id="xorshift">Xorshift</h2>
 
 <p><a href="http://www.jstatsoft.org/v08/i14"><a href="http://www.jstatsoft.org/v08/i14">http://www.jstatsoft.org/v08/i14</a></a></p>
 
-<p>周期が2\^128でSFMTほど良質ではないらしいが、生成は超高速で、
+<p>周期が $2^{128}$ でSFMTほど良質ではないらしいが、生成は超高速で、
 何より実装が簡単</p>
 
 <pre><code class="language-c++">// シードは４要素の配列。どっかで一度適当に定義すること。
@@ -133,17 +171,6 @@ inline unsigned int xorshift128(){
 }
 </code></pre>
 
-<h2 id="random"><code>&lt;random&gt;</code></h2>
-
-<ul>
-<li><a href="http://www.cplusplus.com/reference/random/">http://www.cplusplus.com/reference/random/</a></li>
-<li><a href="http://en.cppreference.com/w/cpp/numeric/random">http://en.cppreference.com/w/cpp/numeric/random</a></li>
-<li><a href="https://sites.google.com/site/cpprefjp/reference/random">https://sites.google.com/site/cpprefjp/reference/random</a></li>
-</ul>
-
-<p>C++11 ではまともに使える乱数ライブラリが追加された。
-乱数生成エンジンと分布生成器を組み合わせて使う。</p>
-
 <h2 id="seed">Seed</h2>
 
 <h3 id="dev-urandom"><code>/dev/urandom</code></h3>
@@ -154,10 +181,9 @@ inline unsigned int xorshift128(){
 内部プールの再利用によってすぐに生成してくれるが、
 そのために <code>/dev/random</code> ほど安全ではない。
 長期に渡って使われる暗号鍵の生成以外の目的では
-<code>/dev/urandom</code> の利用が推奨されている。
-LinuxやOSXで利用可能。</p>
+<code>/dev/urandom</code> の利用が推奨されている。</p>
 
-<pre><code class="language-c++">##include &lt;fstream&gt;
+<pre><code class="language-c++">#include &lt;fstream&gt;
 
 unsigned int dev_urandom() {
     unsigned int x;
