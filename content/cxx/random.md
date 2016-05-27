@@ -12,16 +12,52 @@ tags = ["c++"]
 {{%/div%}}
 
 -   外部の生成器としてはSFMTやdSFMTが高速で高品質。
--   C++11 からは新しい `<random>` が標準ライブラリに追加されてまともに使えるっぽい。
+-   C++11 からは新しい `<random>` が標準ライブラリに追加され、まともに使える。
 -   C++11 の `<algorithm>` の `std::shuffle()`
-    は生成器を明示的に渡す必要があるのでよい。
+    は生成器を明示的に渡す必要があるので安全。
+
+
+## `<random>`
+
+-   <http://www.cplusplus.com/reference/random/>
+-   <http://en.cppreference.com/w/cpp/numeric/random>
+-   <https://sites.google.com/site/cpprefjp/reference/random>
+
+C++11 ではまともに使える乱数ライブラリが追加された。
+乱数生成エンジンと分布生成器を組み合わせて使う。
+
+```c++
+#include <iostream>
+#include <random>
+
+int main() {
+    // seed
+    std::random_device rd;
+    const auto seed = rd();
+
+    // engine
+    std::mt19937 rng(seed);
+
+    // probability density distribution
+    const double mean = 0.0;
+    const double sd = 1.0;
+    std::normal_distribution<double> dist(mean, sd);
+
+    // generate!
+    for (size_t i=0; i<8; ++i) {
+        std::cout << dist(rng) << std::endl;
+    }
+
+    return 0;
+}
+```
 
 ## Mersenne Twister
 
 <http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt.html>
 
 松本眞と西村拓士によって開発された高速・高品質な擬似乱数生成器。
-標準の `<random>` でも利用可能。
+標準の `<random>` にも `std::mt19937` として組み込まれている。
 
 ### SFMT
 
@@ -40,17 +76,22 @@ SFMTの `double` 版。
 v2.1からは整数も出力可能。
 標準には含まれず、ソースからのビルドが必要。
 
-{{%div class="note"%}}
-SFMTやdSFMTを簡単に導入するためのインストーラを作った。
+### インストール方法、使い方
 
-<https://github.com/heavywatal/sfmt-installer/releases>
-{{%/div%}}
+SFMTやdSFMTを簡単に導入するためのインストーラを作って公開した。
+<https://github.com/heavywatal/sfmt-installer/>
+
+標準の `std::mt19937` と同じように使えるようにしたラッパー
+(`wtl::sfmt19937`) も書いた。
+[cxxwtils](https://github.com/heavywatal/cxxwtils/) の
+`prandom.hpp` で定義してある。
+
 
 ## Xorshift
 
 [<http://www.jstatsoft.org/v08/i14>](http://www.jstatsoft.org/v08/i14)
 
-周期が2\^128でSFMTほど良質ではないらしいが、生成は超高速で、
+周期が $2^{128}$ でSFMTほど良質ではないらしいが、生成は超高速で、
 何より実装が簡単
 
 ```c++
@@ -71,15 +112,6 @@ inline unsigned int xorshift128(){
 }
 ```
 
-## `<random>`
-
--   <http://www.cplusplus.com/reference/random/>
--   <http://en.cppreference.com/w/cpp/numeric/random>
--   <https://sites.google.com/site/cpprefjp/reference/random>
-
-C++11 ではまともに使える乱数ライブラリが追加された。
-乱数生成エンジンと分布生成器を組み合わせて使う。
-
 ## Seed
 
 ### `/dev/urandom`
@@ -91,10 +123,9 @@ C++11 ではまともに使える乱数ライブラリが追加された。
 そのために `/dev/random` ほど安全ではない。
 長期に渡って使われる暗号鍵の生成以外の目的では
 `/dev/urandom` の利用が推奨されている。
-LinuxやOSXで利用可能。
 
 ```c++
-##include <fstream>
+#include <fstream>
 
 unsigned int dev_urandom() {
     unsigned int x;
