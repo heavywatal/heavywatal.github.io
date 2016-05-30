@@ -154,6 +154,21 @@ alias zmux='SHELL=$(brew --prefix)/bin/zsh tmux'
 
 <p>ちなみにtmuxセッションの寿命はどうなってるんだろう&hellip;</p>
 
+<h3 id="最新版rをインストール">最新版Rをインストール</h3>
+
+<p>環境が古すぎて手こずった。
+依存関係について、何が必要十分なのかまでは検証していないが、
+いくつかのライブラリは新しいものをLinuxbrewで入れておく必要がある。
+e.g., gcc, binutils, bzip2</p>
+
+<pre><code class="language-sh">wget -O- https://cran.r-project.org/src/base/R-3/R-3.3.0.tar.gz | tar xz
+cd R-3.3.0/
+./configure -h | less
+./configure LIBS=&quot;-lpthread&quot; --prefix=${HOME}/R --disable-openmp --disable-java
+make
+make install
+</code></pre>
+
 <h2 id="ジョブ投入-管理">ジョブ投入、管理</h2>
 
 <p><a href="https://sc.ddbj.nig.ac.jp/index.php/ja-howtouse">https://sc.ddbj.nig.ac.jp/index.php/ja-howtouse</a></p>
