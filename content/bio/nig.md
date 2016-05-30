@@ -87,6 +87,22 @@ zshにすると `ssh -t gw.nig qlogin` で `command not found` になってし�
 
 ちなみにtmuxセッションの寿命はどうなってるんだろう...
 
+### 最新版Rをインストール
+
+環境が古すぎて手こずった。
+依存関係について、何が必要十分なのかまでは検証していないが、
+いくつかのライブラリは新しいものをLinuxbrewで入れておく必要がある。
+e.g., gcc, binutils, bzip2
+
+```sh
+wget -O- https://cran.r-project.org/src/base/R-3/R-3.3.0.tar.gz | tar xz
+cd R-3.3.0/
+./configure -h | less
+./configure LIBS="-lpthread" --prefix=${HOME}/R --disable-openmp --disable-java
+make
+make install
+```
+
 ## ジョブ投入、管理
 
 <https://sc.ddbj.nig.ac.jp/index.php/ja-howtouse>
