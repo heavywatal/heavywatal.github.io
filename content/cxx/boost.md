@@ -37,9 +37,15 @@ tags = ["c++"]
     -   b2 に渡すオプションが書かれた
         `project-config.jam` が生成される
 
-    <!-- -->
+    ```sh
+    % ./bootstrap.sh --without-icu --with-libraries=filesystem,graph,iostreams,program_options,serialization,system,test
+    ```
 
-        % ./bootstrap.sh --without-icu --with-libraries=filesystem,graph,iostreams,program_options,serialization,system,test
+    新しめのHomebrew gccで使うとzlibのリンクでエラーが出るっぽい。
+    [zlib公式](http://zlib.net/)からソースを落として展開し、
+    [`ZLIB_SOURCE`をフルパスで指定する。]
+    (http://www.boost.org/doc/libs/1_61_0/libs/iostreams/doc/installation.html)
+
 
 5.  ヘルプを見る:
 
