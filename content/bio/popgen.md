@@ -11,27 +11,28 @@ tags = ["genetics"]
 <a href="http://www.amazon.co.jp/exec/obidos/ASIN/1932846123/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41f8rXshBRL._SX150_.jpg" alt="An Introduction to Population Genetics Theory" /></a>
 ## Model
 
-**Wright-Fisher model**
-:   -   ランダム交配
-    -   世代重複なし
-    -   **集団サイズは有限** のNで一定
-        （ここがHardy-Weinbergと違う。そしてこのことによる遺伝的浮動に興味がある）
-    -   係数sの変異の固定確率 $\frac {1 - e^{-2s}} {1 - e^{-4Ns}}$
+- **Wright-Fisher model**
+  -   ランダム交配
+  -   世代重複なし
+  -   **集団サイズは有限** のNで一定
+      （ここがHardy-Weinbergと違う。そしてこのことによる遺伝的浮動に興味がある）
+  -   係数sの変異の固定確率 $\frac {1 - e^{-2s}} {1 - e^{-4Ns}}$
 
-**Moran model**
-:   -   世代重複あり(1個体が複製して、死ぬ1個体を置き換える)。
-    -   Wright-Fisherに合わせるならNステップを1世代と考える。
-    -   繁殖成功の標準偏差(ヘテロ接合頻度の減少速度＝遺伝的浮動の強さ)はWright-Fisherの倍。
-        有効集団サイズが半分。
-    -   増殖率rの変異の固定確率 $\frac {1 - 1/r} {1 - 1/r^N}$
+- **Moran model**
+  -   世代重複あり(1個体が複製して、死ぬ1個体を置き換える)。
+  -   Wright-Fisherに合わせるならNステップを1世代と考える。
+  -   繁殖成功の標準偏差(ヘテロ接合頻度の減少速度＝遺伝的浮動の強さ)はWright-Fisherの倍。
+      有効集団サイズが半分。
+  -   増殖率rの変異の固定確率 $\frac {1 - 1/r} {1 - 1/r^N}$
 
 ## Statistics
 
 **The unfolded site-frequency counts** `$\xi_i$`
-:   変異型のアリルが *i* 個、祖先型のアリルが *n-i* 個である変異サイトの数
+:   派生型のアリルが *i* 個、祖先型のアリルが *n-i* 個である変異サイトの数
 
 **The folded site-frequency counts** `$\eta_i$`
-:   片方のアリルが *i* 個、もう片方のアリルが *n-i* 個である変異サイトの数
+:   どっちが祖先型か不明な状態。
+    片方のアリルが *i* 個、もう片方のアリルが *n-i* 個である変異サイトの数
 
     `$\eta_i = \frac{\xi_i + \xi_{n - i}}{1 + \delta_{i, n - i}}$`
 
@@ -39,7 +40,8 @@ tags = ["genetics"]
 :   配列セットの中で、多型のあるサイトの数
 
 **Nucleotide diversity / 塩基多様度** $\pi$
-:   配列セットについて総当たりのペアワイズで塩基が異なる箇所を数え、平均したもの。
+:   整列済み配列セットについてペアワイズで塩基の異なるサイト数を数え、
+    ペアあたりで平均したもの。
     多型サイト数が同じでも、アリル頻度が均等なほど大きくなり、
     少数のアリルが優占してたりすると小さくなる。
 
