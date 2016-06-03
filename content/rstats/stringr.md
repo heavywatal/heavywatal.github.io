@@ -20,6 +20,7 @@ R標準の `base` パッケージが提供する関数とほとんど同じ機�
 -   引数オブジェクトに `NA` が含まれる場合はその部分の結果を `NA` とする
 -   対象文字列が一貫して第一引数
 -   [stringi](http://www.rexamine.com/resources/stringi/) を使って動くため高速
+-   [ICU正規表現](http://userguide.icu-project.org/strings/regexp)
 
 今や `stringr` は [stringi](http://www.rexamine.com/resources/stringi/) のラッパーだし、
 どちらもほぼ同じインターフェイスなので、
@@ -87,7 +88,7 @@ Rの中から `install.package('stringr')` でインストールし、
 
 ------------------------------------------------------------------------
 
-上記の関数の引数 `pattern` はデフォルトでPOSIX拡張の正規表現として扱われる。
+引数`pattern`はデフォルトで[ICU正規表現](http://userguide.icu-project.org/strings/regexp)。
 以下の関数を通して渡すことでそれを変更できる。
 
 `stringr::fixed(string)`
