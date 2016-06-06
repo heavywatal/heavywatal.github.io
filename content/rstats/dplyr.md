@@ -221,7 +221,8 @@ iris %>%
 
 `dplyr::last(x, order_by=NULL, default=default_missing(x))`
 :   最後の要素にアクセス。
-    `x[length(x)]` と書かなくて済む！
+    `x[length(x)]` や `tail(x, 1)` よりも楽チンだが、
+    安全性重視の `dplyr::nth()` を内部で呼び出すため遅い。
 
 `dplyr::glimpse(.data, width=getOption('width'))`
 :   データの中身をざっと見る。
