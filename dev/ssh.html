@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="generator" content="Hugo 0.16-DEV" />
+<meta name="generator" content="Hugo 0.16" />
 <meta name="author" content="Watal M. Iwasaki">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic%7CUbuntu+Mono:400,400italic,700,700italic">
@@ -73,8 +73,11 @@ ssh
 <dt>場所</dt>
 <dd>デフォルトの <code>~/.ssh/</code></dd>
 <dt>パスフレーズ</dt>
-<dd><p>無し</p></dd>
-<dd><p>まず、鍵ペア (秘密鍵 <code>id_rsa</code> と公開鍵 <code>id_rsa.pub</code>) を作る:</p>
+<dd>無し</dd>
+</dl>
+
+<ol>
+<li><p>まず、鍵ペア (秘密鍵 <code>id_rsa</code> と公開鍵 <code>id_rsa.pub</code>) を作る:</p>
 
 <pre><code>% ssh-keygen -b 2048 -t rsa
 Generating public/private rsa key pair.
@@ -84,8 +87,9 @@ Enter passphrase (empty for no passphrase): ＃そのままリターン
 Enter same passphrase again: ＃そのままリターン
 Your identification has been saved in $HOME/.ssh/id_rsa.
 Your public key has been saved in $HOME/.ssh/id_rsa.pub.
-</code></pre></dd>
-<dd><p>できあがった公開鍵を <code>authorized_keys</code> にリネームまたは追加。
+</code></pre></li>
+
+<li><p>できあがった公開鍵を <code>authorized_keys</code> にリネームまたは追加。
 公開されるのはこの <code>authorized_keys</code>:</p>
 
 <pre><code>% cd ~/.ssh/
@@ -96,17 +100,19 @@ Your public key has been saved in $HOME/.ssh/id_rsa.pub.
 
 <pre><code>% cat id_rsa.pub &gt;&gt; authorized_keys
 % rm id_rsa.pub
-</code></pre></dd>
-<dd><p>パーミッションを設定:</p>
+</code></pre></li>
+
+<li><p>パーミッションを設定:</p>
 
 <pre><code>% chmod 700 ~/.ssh
 % chmod 600 ~/.ssh/id_rsa
 % chmod 600 ~/.ssh/authorized_keys
-</code></pre></dd>
-<dd><p>リモートホスト・ローカルホストの <code>~/.ssh/</code> に鍵を適宜配置する。
+</code></pre></li>
+
+<li><p>リモートホスト・ローカルホストの <code>~/.ssh/</code> に鍵を適宜配置する。
 秘密鍵を持っているホストから公開鍵を持っているホストにパスワード無しで
-<code>ssh</code>, <code>scp</code> できるようになる。</p></dd>
-</dl>
+<code>ssh</code>, <code>scp</code> できるようになる。</p></li>
+</ol>
 
 <h2 id="configuration">Configuration</h2>
 
