@@ -61,12 +61,16 @@ Watal M. Iwasaki
 
 
 
+<p>2D/3D Cellular Automaton上の個体・細胞の分布を評価したい。
+そのためには白黒の二値画像処理の手法が結構使える。</p>
+
 <dl>
 <dt>図形 <em>X</em></dt>
-<dd>binaryでいう1の画素の集合。
+<dd>それぞれのノード(画素)の在・不在情報の集合。
 $x \in X$</dd>
 <dt>構造要素 (Structuring Element: SE)</dt>
-<dd>原点と近傍の集合。
+<dd>さまざまな処理を施すために用いられる単位図形のようなもの。
+例えば、原点とそのムーア近傍。
 $b \in B$</dd>
 <dt>voxel</dt>
 <dd>3D空間における単位。2Dでいうpixel。</dd>
@@ -150,13 +154,15 @@ X上の境界が欲しい場合は$X - (X \ominus B)$。
 
 <h2 id="ライブラリ">ライブラリ</h2>
 
+<p>画像処理を施す</p>
+
 <dl>
-<dt><a href="http://docs.scipy.org/doc/scipy/reference/tutorial/ndimage.html">scipy.ndimage</a></dt>
-<dd>SciPyのサブモジュール。<code>np.array</code>を利用する。</dd>
 <dt><a href="http://scikit-image.org/">scikit-image</a></dt>
 <dd>Pythonモジュール。
-SciPyコミュニティの人たちが作ってて<code>scipy.ndimage</code>の拡張だと言っているので、
-とりあえずこっちを使っておけばいいんじゃなかろうか。</dd>
+<a href="http://docs.scipy.org/doc/scipy/reference/tutorial/ndimage.html">scipy.ndimage</a>
+を更に拡張したもの。
+<a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html">numpy.array</a>
+を使って表現されるので汎用関数の適用も容易。</dd>
 <dt><a href="http://opencv.org/">OpenCV (Open Source Computer Vision)</a></dt>
 <dd>C++、Pythonなど。信頼と実績があるらしく、書籍やネット上の情報も多い。</dd>
 <dt><a href="http://cimg.eu/">CImg</a></dt>
