@@ -8,12 +8,16 @@ subtitle = "Mathematical morphology"
   parent = "bio"
 +++
 
+2D/3D Cellular Automaton上の個体・細胞の分布を評価したい。
+そのためには白黒の二値画像処理の手法が結構使える。
+
 図形 *X*
-: binaryでいう1の画素の集合。
+: それぞれのノード(画素)の在・不在情報の集合。
   $x \in X$
 
 構造要素 (Structuring Element: SE)
-: 原点と近傍の集合。
+: さまざまな処理を施すために用いられる単位図形のようなもの。
+  例えば、原点とそのムーア近傍。
   $b \in B$
 
 voxel
@@ -98,13 +102,14 @@ X上の境界が欲しい場合は$X - (X \ominus B)$。
 
 ## ライブラリ
 
-[scipy.ndimage](http://docs.scipy.org/doc/scipy/reference/tutorial/ndimage.html)
-: SciPyのサブモジュール。`np.array`を利用する。
+画像処理を施す
 
 [scikit-image](http://scikit-image.org/)
 : Pythonモジュール。
-  SciPyコミュニティの人たちが作ってて`scipy.ndimage`の拡張だと言っているので、
-  とりあえずこっちを使っておけばいいんじゃなかろうか。
+  [scipy.ndimage](http://docs.scipy.org/doc/scipy/reference/tutorial/ndimage.html)
+  を更に拡張したもの。
+  [numpy.array](http://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html)
+  を使って表現されるので汎用関数の適用も容易。
 
 [OpenCV (Open Source Computer Vision)](http://opencv.org/)
 : C++、Pythonなど。信頼と実績があるらしく、書籍やネット上の情報も多い。
