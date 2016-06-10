@@ -88,7 +88,7 @@ P^{-1}AP &= \mathrm{diag}(\lambda _1, ..., \lambda _n) \\
       AP &= P \mathrm{diag}(\lambda _1, ..., \lambda _n)
 \end{split}$$</div>
 
-`$P = (\mathbf{p}_1, ..., \mathbf{p}_n)$` として列ごとに見ると
+$P = (\mathbf{p}_1, ..., \mathbf{p}_n)$ として列ごとに見ると
 
 <div>$$\begin{split}
 A\mathbf{p}_1 &= \lambda_1 \mathbf{p}_1 \\
@@ -118,8 +118,8 @@ A^t\mathbf{x} &= A^t P \mathbf{y} \\
               &\sim y_k \lambda_k ^t \mathbf{p_k}
 \end{split}$$</div>
 
-$t$ が大きくなるにつれて最大の固有値 `$\lambda_k$`
-に対応する固有ベクトル `$\mathbf{p_k}$` の向きに近づいていく。
+$t$ が大きくなるにつれて最大の固有値 $\lambda_k$
+に対応する固有ベクトル $\mathbf{p_k}$ の向きに近づいていく。
 その極限には行かないにしても、固有値の大きな固有ベクトルの方向に寄っていく傾向があるってこと。
 
 {{%div class="note"%}}

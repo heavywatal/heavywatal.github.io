@@ -56,8 +56,8 @@ https://bitbucket.org/gutenkunstlab/dadi/wiki/DataFormats
 
 ## Tips
 
-- `$\theta = 4N_0\mu$` は ms と同じだが、
-  時間とmigration rateは `$2N_0$` 単位。
+- $\theta = 4N_0\mu$ は ms と同じだが、
+  時間とmigration rateは $2N_0$ 単位。
 - 時間とmigration rateは大きすぎると遅くなるので
   upper bound はそれぞれ 10, 20 を推奨
 - population size は逆に小さいとき遅くなるので

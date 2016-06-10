@@ -27,14 +27,14 @@ tags = ["genetics"]
 
 ## Statistics
 
-**The unfolded site-frequency counts** `$\xi_i$`
+**The unfolded site-frequency counts** $\xi_i$
 :   派生型のアリルが *i* 個、祖先型のアリルが *n-i* 個である変異サイトの数
 
-**The folded site-frequency counts** `$\eta_i$`
+**The folded site-frequency counts** $\eta_i$
 :   どっちが祖先型か不明な状態。
     片方のアリルが *i* 個、もう片方のアリルが *n-i* 個である変異サイトの数
 
-    `$\eta_i = \frac{\xi_i + \xi_{n - i}}{1 + \delta_{i, n - i}}$`
+    $\eta_i = \frac{\xi_i + \xi _{n - i}}{1 + \delta _{i, n - i}}$
 
 **The number of segregating (polymorphic) sites** $S$
 :   配列セットの中で、多型のあるサイトの数

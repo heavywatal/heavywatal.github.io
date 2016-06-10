@@ -134,11 +134,11 @@ They will each form a Poisson process.
 ##### The Sum of Independent Poissons
 
 Two independent Poisson random variables:
-:   `$X_1$` with occurrence rate $\lambda _1$\
-    `$X_2$` with occurrence rate `$\lambda _2$`
+:   $X_1$ with occurrence rate $\lambda _1$\
+    $X_2$ with occurrence rate $\lambda _2$
 
 (Eq. 2.58)
-The distribution of `$Y = X_1 + X_2$` can be obtained by convolution:
+The distribution of $Y = X_1 + X_2$ can be obtained by convolution:
 
 <div>$$\begin{split}
 P[Y=k] \;&=\; \sum _{i=0}^k P[X_1=i] \; P[X_2=k-i] \\
@@ -158,7 +158,7 @@ The sum of independent Poisson processes is another Poisson process.
 ##### The Probability that the First Event Is of a Particular Type
 
 (Eq 2.60)
-The probability that `$X_1$` is observed before `$X_2$`
+The probability that $X_1$ is observed before $X_2$
 is given simply by the relative rate of the event
 (i.e., as a fraction of the total rate):
 
@@ -184,7 +184,7 @@ P[T>t] \;&=\; \int _t^\infty \lambda e^{-\lambda t} dt \\
 ##### The Time to the First Event among Independent Poissons
 
 (Eq. 2.61)
-The distribution of `$T = \min(T_1, T_2)$`
+The distribution of $T = \min(T_1, T_2)$
 
 <div>$$\begin{split}
 P[T>t] \;&=\; P[\min(T_1, T_2) > t] \\
@@ -194,17 +194,17 @@ P[T>t] \;&=\; P[\min(T_1, T_2) > t] \\
          &=\; e^{-(\lambda _1 + \lambda _2) t}
 \end{split}$$</div>
 
-Therefore, `$f_{\min(T_1,T_2)}(t) = (\lambda _1 + \lambda _2) e^{-(\lambda _2 + \lambda _1)t}$`
+Therefore, $f_ {\min(T_1, T_2)}(t) = (\lambda _1 + \lambda _2) e^{-(\lambda _2 + \lambda _1)t}$
 
-There is a one-to-one correspondence between cumulative distribution $P[T \le t]$ and probability densities `$f_T(t)$`
+There is a one-to-one correspondence between cumulative distribution $P[T \le t]$ and probability densities $f_T(t)$
 
 ##### The Number of Events Required to See a Particular Outcome
 
 $X_2, X_2, X_2, ..., X_2, \boldsymbol{X_1}$, ...
 
 (Eq. 2.62)
-How many `$X_2$` (e.g., mutation events) occur
-before `$X_1$` (e.g., common ancector event)?
+How many $X_2$ (e.g., mutation events) occur
+before $X_1$ (e.g., common ancector event)?
 
 <div>$$\begin{split}
 P[K=k] \;&=\; P[\text{First }X_1\text{ occurs at }K\text{th trial}] \\
@@ -221,7 +221,7 @@ $p = \frac {\lambda _1} {\lambda _1 + \lambda _2}$.
 
 ##### Tying All This Together: A Filtered Poisson Process
 
-Reinterpret `$f_T(t)$` with the sum rule and product rule
+Reinterpret $f_T(t)$ with the sum rule and product rule
 (see Eq. 2.7, 2.8).
 
 <div>$$\begin{split}
@@ -249,10 +249,10 @@ e^x \;&=\; 1 + \frac x 1 + \frac {x^2} {2!} + \frac {x^3} {3!} + \cdots \\
 \end{split}$$</div>
 {{%/div%}}
 
-Filtered Poisson process = Poisson process with rate `$\lambda p\; (=\lambda _1)$`
-:   -   total occurrence rate `$\lambda = \lambda _1 + \lambda _2$`
+Filtered Poisson process = Poisson process with rate $\lambda p\; (=\lambda _1)$
+:   -   total occurrence rate $\lambda = \lambda _1 + \lambda _2$
     -   acceptance rate (proportion of the focal event)
-        `$p = \frac {\lambda _1} {\lambda _1 + \lambda _2}$`
+        $p = \frac {\lambda _1} {\lambda _1 + \lambda _2}$
 
 #### 2.2.2 Convolutions of Exponential Distributions
 

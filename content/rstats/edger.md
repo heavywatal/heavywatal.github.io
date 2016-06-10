@@ -158,8 +158,8 @@ edgeRUsersGuide()
 
 ## Appendix
 
-レプリケート *i* における遺伝子 *g* の観察リード数を `$y _{gi}$` 、
-知りたい真の発現fractionを `$\pi _{gi}$` とする。
+レプリケート *i* における遺伝子 *g* の観察リード数を $y _{gi}$、
+知りたい真の発現fractionを $\pi _{gi}$ とする。
 
 <div>$$\begin{split}
 \sum _g \pi _{gi} &= 1 \\
@@ -182,11 +182,11 @@ y_{gi} &\sim \mathrm{Poisson}(N_i \pi _{gi}) \\
                    &= \mathrm{Technical~CV}^2 + \mathrm{Biological~CV}^2 \\
 \end{split}$$</div>
 
-dispersion `$\phi _g$`
+dispersion $\phi _g$
 :   普通は $D = \sigma^2 / \mu$ と定義されるけど、
     ここでは $\mathrm{CV}^2$
 
-BCV `$\sqrt{\phi _g}$`
+BCV $\sqrt{\phi _g}$
 :   biological coefficient of variation.
     こっちは普通と同じように $\mathrm{CV} = \sigma / \mu$ 。
     sequencing depthがどんなに大きくても残るばらつき。

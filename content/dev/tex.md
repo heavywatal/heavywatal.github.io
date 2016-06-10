@@ -173,7 +173,7 @@ XeTeXでは不要っぽい。
     Symbol & Description \\
     \hline
     $\mu$ & mutation rate per division \\
-    `$N_0$` & initial population size \\
+    $N_0$ & initial population size \\
   \end{tabular}
 \end{table}
 ```

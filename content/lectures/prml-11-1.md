@@ -61,7 +61,7 @@ $\color{blue}{f(\textbf{z})}$ の期待値は (**式11.1**)
 みたいな感じで表せるが、だいたいは複雑過ぎて解析的に解けないので、そういうときどうしようかという話。
 
 $\color{red}{p(\mathbf z)}$ の分布から $L$ 個サンプリングしてきた
-`$\mathbf{z}_l$` をそれぞれ $f$ に放り込んで平均を取ってみよう (**式11.2**)。
+$\mathbf{z}_l$ をそれぞれ $f$ に放り込んで平均を取ってみよう (**式11.2**)。
 
 <div>$$\begin{split}
 \hat f = \frac 1 L \sum^L_{l=1} f(\mathbf z_l)
@@ -95,15 +95,15 @@ $\color{red}{p(\mathbf z)}$ の分布から $L$ 個サンプリングしてき�
 
 ------------------------------------------------------------------------
 
-$\color{red}{p(\mathbf z)}$ が実は `$p(z_1, z_2, ..., z_M)$` という同時確率だということを思い出そう。
-`$z_i$` がそれぞれ独立な分布から出てくる場合はいいとして、そうじゃない場合はどうしたらいいか？
+$\color{red}{p(\mathbf z)}$ が実は $p(z_1, z_2, ..., z_M)$ という同時確率だということを思い出そう。
+$z_i$ がそれぞれ独立な分布から出てくる場合はいいとして、そうじゃない場合はどうしたらいいか？
 
 {{%div class="note"%}}
 [Figure 8.2](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure8.2.png)
 
 <p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure8.2.png"/ alt="Figure 8.2" width="200px"></p>
 変数の因果関係がこのような閉路なし有向グラフで表せる場合、同時確率は **式 8.4**
-`$p(x_1)p(x_2)p(x_3)p(x_4 \mid x_1,x_2,x_3)p(x_5 \mid x_1,x_3)p(x_6 \mid x_4)p(x_7 \mid x_4,x_5)$`
+$p(x_1)p(x_2)p(x_3)p(x_4 \mid x_1,x_2,x_3)p(x_5 \mid x_1,x_3)p(x_6 \mid x_4)p(x_7 \mid x_4,x_5)$
 のように条件付き確率の積で表せる。
 {{%/div%}}
 
@@ -120,7 +120,7 @@ p(\mathbf z) = \prod_{i=1}^M p(\mathbf z_i \mid \mathrm{pa}_i)
 が使える。
 
 因果が分からなくて無向グラフで表されるような場合には
-`$z_1$` から `$z_M$` まで一周するだけでは求まらず、
+$z_1$ から $z_M$ まで一周するだけでは求まらず、
 ギブズサンプリング (Gibbs sampling) のような計算量のかかる手法が必要になる。
 
 ### 11.1. Basic Sampling Algorithms
@@ -208,8 +208,8 @@ p(y_1, ..., y_M) = p(z_1, ..., z_M) \left| \frac {\partial (z_1, ..., z_M)}
 \end{split}$$</div>
 
 例として2系統の独立な正規乱数を生成する *Box-Muller* 法を見てみる。
-まず $(-1,1)$ の一様乱数をふたつ `$z_1, z_2$` として取ってきて、
-`$z_1^2 + z_2^2 \leq 1$` を満たさなければ捨てる。
+まず $(-1,1)$ の一様乱数をふたつ $z_1, z_2$ として取ってきて、
+$z_1^2 + z_2^2 \leq 1$ を満たさなければ捨てる。
 これは下図の円の中に収まる一様乱数だけ取ってくることに相当する。
 
 {{%div class="note"%}}
@@ -218,14 +218,14 @@ p(y_1, ..., y_M) = p(z_1, ..., z_M) \left| \frac {\partial (z_1, ..., z_M)}
 <p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.3.png"/ alt="Figure 11.3" width="200px"></p>
 {{%/div%}}
 
-`$r^2 = z_1^2 + z_2^2$` として (**式 11.10**, **式 11.11**)
+$r^2 = z_1^2 + z_2^2$ として (**式 11.10**, **式 11.11**)
 
 <div>$$\begin{split}
 y_1 &= z_1 \left(\frac {-2\ln r^2} {r^2}\right)^{1/2}\\
 y_2 &= z_2 \left(\frac {-2\ln r^2} {r^2}\right)^{1/2}
 \end{split}$$</div>
 
-のように変換すると `$y_1$` と `$y_2$` の同時分布は
+のように変換すると $y_1$ と $y_2$ の同時分布は
 
 <div>$$\begin{split}
 p(y_1, y_2) &= p(z_1, z_2) \left| \frac{\partial(z_1, z_2)} {\partial(y_1, y_2)} \right|\\

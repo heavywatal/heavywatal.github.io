@@ -64,7 +64,7 @@ Macなら [Homebrew]({{< relref "mac/homebrew.md" >}}) で入れることもで�
 `pamp`
 
 `yn00`
-:   配列ペア間の `$d_N$` と `$d_S$` を推定。
+:   配列ペア間の $d_N$ と $d_S$ を推定。
     [Yang and Nielsen (2000) MBE](http://www.ncbi.nlm.nih.gov/pubmed/10666704)
 
 ## Citation

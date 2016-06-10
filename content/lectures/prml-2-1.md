@@ -77,7 +77,7 @@ p(x = 0 \mid \mu) &= 1 - \mu
 \mbox{var}[x] &= \mbox{E}[(x - \mu)^2] = \mu^2 (1 - \mu) + (1 - \mu)^2 \mu = \mu (1 - \mu)
 \end{split}$$</div>
 
-パラメータ *μ* の下で *N* 回投げたデータセット `$D = \{x_1, ..., x_N\}$`
+パラメータ *μ* の下で *N* 回投げたデータセット $D = \{x_1, ..., x_N\}$
 が得られる確率、すなわち尤度は
 
 <div>$$\begin{split}
@@ -97,8 +97,8 @@ p(D \mid \mu) = \prod_{n = 1}^N {p(x_n \mid \mu)}
 {{%div class="note"%}}
 *sufficient statistic*: **十分統計量**
 
-ここで対数尤度は個々の `$x_n$` によらず、
-総和 `$\sum_n {x_n}$` だけに依存している。
+ここで対数尤度は個々の $x_n$ によらず、
+総和 $\sum_n {x_n}$ だけに依存している。
 そんな感じのやつを十分統計量と呼ぶが、ここでは詳しく触れない。
 {{%/div%}}
 
@@ -283,7 +283,7 @@ p(x = 1 \mid D) = \int_0^1 p(x = 1 \mid \mu) p(\mu \mid D) d\mu
 :   サイコロの目のように、3つ以上の値を取りうる確率変数。 e.g. $x \in \{1,2,3,4,5,6\}$
 
 **1-of-K 符号化法**
-:   長さ *K* のベクトルのうち `$x_k$` だけが1で、そのほかが0。
+:   長さ *K* のベクトルのうち $x_k$ だけが1で、そのほかが0。
     例えばサイコロで3が出たらその観察値の表記は
 
 <div>$$\begin{split}
@@ -292,7 +292,7 @@ p(x = 1 \mid D) = \int_0^1 p(x = 1 \mid \mu) p(\mu \mid D) d\mu
 
 ------------------------------------------------------------------------
 
-確率 `$\mu_k$` で `$x_k = 1$` になるとすると、
+確率 $\mu_k$ で $x_k = 1$ になるとすると、
 サイコロを1回振るときの *x* の分布は以下のように表せる。
 
 <div>$$\begin{split}
@@ -312,11 +312,11 @@ p(D \mid \vec{\mu}) = \prod_{n=1}^N \prod_{k=1}^K \mu_k^{x_{nk}}
                     = \prod_{k=1}^K \mu_k^{m_k}
 \end{split}$$</div>
 
-`$m_k$` は *N* 回のうち *k* が出た回数。
+$m_k$ は *N* 回のうち *k* が出た回数。
 出る順番や他の出目にはよらず、総和だけでよい、つまりこれも **十分統計量** の例。
 
-`$\mu_k$` の和が1になるという拘束条件の下で対数尤度を最大化する
-`$\mu_k$` を求めるには下記のようにラグランジュ未定乗数法を用いる。
+$\mu_k$ の和が1になるという拘束条件の下で対数尤度を最大化する
+$\mu_k$ を求めるには下記のようにラグランジュ未定乗数法を用いる。
 
 <div>$$\begin{split}
 \mu_k^{ML} = - \frac{m_k}{\lambda} = \frac{m_k}{N}
@@ -370,7 +370,7 @@ N + \lambda &= 0\\
 
 多変量分布の共役事前分布を考えよう。
 
-式の形からするとおそらく `$\mu_k$` の累乗にすればいいはず。
+式の形からするとおそらく $\mu_k$ の累乗にすればいいはず。
 ということで、積分して1になるように正規化してみる。
 
 <div>$$\begin{split}
@@ -382,7 +382,7 @@ N + \lambda &= 0\\
 [Figure 2.4](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.4.png)
 
 <p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.4.png"/ alt="Figure 2.4" width="200px"></p>
-`$0 \le \mu_k \le 1$` かつ `$\sum_k \mu_k = 1$`
+$0 \le \mu_k \le 1$ かつ $\sum_k \mu_k = 1$
 という制約下での *K* 変数のディリクレ分布は *K* – 1 次元の
 **単体** (*simplex*) になる。
 {{%/div%}}
@@ -415,7 +415,7 @@ p(\vec{\mu} \mid D, \vec{\alpha})
 
 確かに事後分布もディリクレ分布の形をしている。
 *K* = 2 にすると二項分布・ベータ分布の話と一致。
-超パラメータ `$\alpha_k$` はサイコロで *k* が出た有効観察数のように解釈できる。
+超パラメータ $\alpha_k$ はサイコロで *k* が出た有効観察数のように解釈できる。
 
 {{%div class="note"%}}
 **Johann Peter Gustav Lejeune Dirichlet** (1805–1859)

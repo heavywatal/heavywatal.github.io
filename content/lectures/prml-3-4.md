@@ -57,12 +57,12 @@ p(X,Y) &= p(Y \mid X) P(X)
 それに対する出力(予測したい): $t$\
 モデルの中のパラメータ: $\mathbf w$\
 観察(トレーニング)データ: $\mathcal D$\
-*L* 個のモデル: `$\mathcal M_1, ..., \mathcal M_L$`
+*L* 個のモデル: $\mathcal M_1, ..., \mathcal M_L$
 {{%/div%}}
 
 ------------------------------------------------------------------------
 
-モデルの事後分布 `$p(\mathcal M _i \mid \mathcal D)$` は、
+モデルの事後分布 $p(\mathcal M _i \mid \mathcal D)$ は、
 
 -   $p(\mathcal M _i)$: どのモデルがアリかなという好み(事前分布)と、
 -   $p(\mathcal D \mid \mathcal M _i)$:
@@ -82,8 +82,8 @@ p(\mathcal M _i \mid \mathcal D)
 {{%div class="note"%}}
 *Bayes factor* **ベイズ因子**
 
-モデル `$\mathcal M _j$` に対する `$\mathcal M _i$` のevidence比
-`$\frac {p(\mathcal D \mid \mathcal M _i)} {p(\mathcal D \mid \mathcal M _j)}$`
+モデル $\mathcal M _j$ に対する $\mathcal M _i$ のevidence比
+$\frac {p(\mathcal D \mid \mathcal M _i)} {p(\mathcal D \mid \mathcal M _j)}$
 {{%/div%}}
 
 ------------------------------------------------------------------------
@@ -111,7 +111,7 @@ p(t \mid \mathbf x, \mathcal D)
 
 **Model selection**
 
-パラメータセット $w$ を持つモデル `$\mathcal M _i$`
+パラメータセット $w$ を持つモデル $\mathcal M_i$
 のevidenceをまた加法定理と乗法定理でばらしてみると (**式 3.68**)
 
 <div>$$\begin{split}
@@ -124,7 +124,7 @@ p(\mathcal D \mid \mathcal M _i)
 ってことで周辺尤度と呼ばれるのが納得できる。
 また、そのモデルからデータセットが生成される確率
 (ただしパラメータは事前分布からランダムに取ったもの) とも理解できる。
-この `$p(\mathbf w \mid \mathcal M _i)$`
+この $p(\mathbf w \mid \mathcal M_i)$
 はモデルで想定してる何らかの事前分布ってことでいいのかな？
 
 {{%div class="note"%}}
@@ -192,22 +192,22 @@ p(\mathcal D)
 
 <p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure3.13.png"/ alt="Figure 3.13" width="300px"></p>
 横軸はデータセットが取りうる値を1次元で表現。
-モデルの複雑性を `$\mathcal M _1 < \mathcal M _2 <  \mathcal M _3$` とする。
+モデルの複雑性を $\mathcal M _1 < \mathcal M _2 <  \mathcal M _3$ とする。
 
-シンプルなモデル `$\mathcal M _1$` は生成(説明)できるデータの範囲が狭く
+シンプルなモデル $\mathcal M _1$ は生成(説明)できるデータの範囲が狭く
 (いろいろパラメータを変えても似通ったデータセットしか出てこない)、
-複雑なモデル `$\mathcal M _3$` はいろんなデータを生成できるがそれぞれの重みは低い。
-特定のデータセット `$\mathcal D _0$` に対しては中程度の複雑さを持つモデル
-`$\mathcal M _2$` が一番大きいevidenceを持つことになる。
+複雑なモデル $\mathcal M _3$ はいろんなデータを生成できるがそれぞれの重みは低い。
+特定のデータセット $\mathcal D _0$ に対しては中程度の複雑さを持つモデル
+$\mathcal M _2$ が一番大きいevidenceを持つことになる。
 {{%/div%}}
 
 ------------------------------------------------------------------------
 
 **Expected Bayes factor**
 
-`$\mathcal M _1$` が真のモデルだとする。
+$\mathcal M_1$ が真のモデルだとする。
 ベイズ因子は個々のデータで見ると
-正しくない `$\mathcal M _2$` とかで大きくなる場合もあるが、
+正しくない $\mathcal M_2$ とかで大きくなる場合もあるが、
 真の分布の上でを平均すると (**式 3.73**)
 
 <div>$$\begin{split}
