@@ -19,8 +19,7 @@ MathJax.Hub.Config({
   tex2jax: {
     inlineMath: [['$','$']],
     displayMath: [['$$','$$']],
-    processEnvironments: false,
-    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+    processEnvironments: false
   }
 });
 MathJax.Hub.Queue(function() {
@@ -130,7 +129,7 @@ p(x = 0 \mid \mu) &= 1 - \mu
 \mbox{var}[x] &= \mbox{E}[(x - \mu)^2] = \mu^2 (1 - \mu) + (1 - \mu)^2 \mu = \mu (1 - \mu)
 \end{split}$$</div>
 
-<p>パラメータ <em>μ</em> の下で <em>N</em> 回投げたデータセット <code>$D = \{x_1, ..., x_N\}$</code>
+<p>パラメータ <em>μ</em> の下で <em>N</em> 回投げたデータセット $D = {x_1, &hellip;, x_N}$
 が得られる確率、すなわち尤度は</p>
 
 <div>$$\begin{split}
@@ -150,8 +149,8 @@ p(D \mid \mu) = \prod_{n = 1}^N {p(x_n \mid \mu)}
 <div class="note">
 <p><em>sufficient statistic</em>: <strong>十分統計量</strong></p>
 
-<p>ここで対数尤度は個々の <code>$x_n$</code> によらず、
-総和 <code>$\sum_n {x_n}$</code> だけに依存している。
+<p>ここで対数尤度は個々の $x_n$ によらず、
+総和 $\sum_n {x_n}$ だけに依存している。
 そんな感じのやつを十分統計量と呼ぶが、ここでは詳しく触れない。</p>
 
 </div>
@@ -346,7 +345,7 @@ p(x = 1 \mid D) = \int_0^1 p(x = 1 \mid \mu) p(\mu \mid D) d\mu
 <dt><strong>多値変数</strong> $x \in {1, 2, &hellip;, K}$</dt>
 <dd>サイコロの目のように、3つ以上の値を取りうる確率変数。 e.g. $x \in {1,2,3,4,5,6}$</dd>
 <dt><strong>1-of-K 符号化法</strong></dt>
-<dd>長さ <em>K</em> のベクトルのうち <code>$x_k$</code> だけが1で、そのほかが0。
+<dd>長さ <em>K</em> のベクトルのうち $x_k$ だけが1で、そのほかが0。
 例えばサイコロで3が出たらその観察値の表記は</dd>
 </dl>
 
@@ -356,7 +355,7 @@ p(x = 1 \mid D) = \int_0^1 p(x = 1 \mid \mu) p(\mu \mid D) d\mu
 
 <hr>
 
-<p>確率 <code>$\mu_k$</code> で <code>$x_k = 1$</code> になるとすると、
+<p>確率 $\mu_k$ で $x_k = 1$ になるとすると、
 サイコロを1回振るときの <em>x</em> の分布は以下のように表せる。</p>
 
 <div>$$\begin{split}
@@ -376,11 +375,11 @@ p(D \mid \vec{\mu}) = \prod_{n=1}^N \prod_{k=1}^K \mu_k^{x_{nk}}
                     = \prod_{k=1}^K \mu_k^{m_k}
 \end{split}$$</div>
 
-<p><code>$m_k$</code> は <em>N</em> 回のうち <em>k</em> が出た回数。
+<p>$m_k$ は <em>N</em> 回のうち <em>k</em> が出た回数。
 出る順番や他の出目にはよらず、総和だけでよい、つまりこれも <strong>十分統計量</strong> の例。</p>
 
-<p><code>$\mu_k$</code> の和が1になるという拘束条件の下で対数尤度を最大化する
-<code>$\mu_k$</code> を求めるには下記のようにラグランジュ未定乗数法を用いる。</p>
+<p>$\mu_k$ の和が1になるという拘束条件の下で対数尤度を最大化する
+$\mu_k$ を求めるには下記のようにラグランジュ未定乗数法を用いる。</p>
 
 <div>$$\begin{split}
 \mu_k^{ML} = - \frac{m_k}{\lambda} = \frac{m_k}{N}
@@ -436,7 +435,7 @@ N + \lambda &= 0\\
 
 <p>多変量分布の共役事前分布を考えよう。</p>
 
-<p>式の形からするとおそらく <code>$\mu_k$</code> の累乗にすればいいはず。
+<p>式の形からするとおそらく $\mu_k$ の累乗にすればいいはず。
 ということで、積分して1になるように正規化してみる。</p>
 
 <div>$$\begin{split}
@@ -448,7 +447,7 @@ N + \lambda &= 0\\
 <p><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.4.png">Figure 2.4</a></p>
 
 <p><p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.4.png"/ alt="Figure 2.4" width="200px"></p>
-<code>$0 \le \mu_k \le 1$</code> かつ <code>$\sum_k \mu_k = 1$</code>
+$0 \le \mu_k \le 1$ かつ $\sum_k \mu_k = 1$
 という制約下での <em>K</em> 変数のディリクレ分布は <em>K</em> – 1 次元の
 <strong>単体</strong> (<em>simplex</em>) になる。</p>
 
@@ -485,7 +484,7 @@ p(\vec{\mu} \mid D, \vec{\alpha})
 
 <p>確かに事後分布もディリクレ分布の形をしている。
 <em>K</em> = 2 にすると二項分布・ベータ分布の話と一致。
-超パラメータ <code>$\alpha_k$</code> はサイコロで <em>k</em> が出た有効観察数のように解釈できる。</p>
+超パラメータ $\alpha_k$ はサイコロで <em>k</em> が出た有効観察数のように解釈できる。</p>
 
 <div class="note">
 <p><strong>Johann Peter Gustav Lejeune Dirichlet</strong> (1805–1859)</p>
