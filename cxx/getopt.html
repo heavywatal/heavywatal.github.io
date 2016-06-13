@@ -90,18 +90,13 @@ C&#43;&#43;コマンドライン引数
 <li>格納する変数のアドレスを渡せる</li>
 <li>ファイルから読み込みをサポート</li>
 <li>読み込み可能なファイルの出力方法は用意されてないので自分で書く必要がある</li>
-
-<li><h2 id="boostライブラリのヘッダだけでなくビルドとリンクが必要-cf-boost-hugoshortcode-1">Boostライブラリのヘッダだけでなくビルドとリンクが必要 cf. <a href="/cxx/boost.html">boost</a></h2>
-
-<p>各ソースファイルに分散するには</p>
-
-<dl>
-<dd>1.  各クラスの <code>static</code> メソッドで <code>options_description</code> オブジェクトを生成
+<li>Boostライブラリのヘッダだけでなくビルドとリンクが必要 cf. <a href="/cxx/boost.html">boost</a></li>
+<li>各ソースファイルに分散するには:
 
 <ol>
+<li>各クラスの <code>static</code> メソッドで <code>options_description</code> オブジェクトを生成</li>
 <li><code>main()</code> の <code>options_description</code> オブジェクトに <code>add()</code> する。</li>
-</ol></dd>
-</dl></li>
+</ol></li>
 </ul>
 
 <h2 id="gflags"><code>gflags</code></h2>
@@ -120,7 +115,7 @@ C&#43;&#43;コマンドライン引数
 
 <p><code>main()</code> 関数に書く必要があるのはこれだけ</p>
 
-<pre><code class="language-c++">##include &lt;gflags/gflags.h&gt;
+<pre><code class="language-c++">#include &lt;gflags/gflags.h&gt;
 
 int main(int argc, char* argv[]) {
     gflags::SetUsageMessage(&quot;This is a program to test gflags&quot;);
@@ -132,7 +127,7 @@ int main(int argc, char* argv[]) {
 
 <p>あとは個々のソースファイルでオプションを追加。<code>namespace</code> にも入れられる。</p>
 
-<pre><code class="language-c++">##include &lt;gflags/gflags.h&gt;
+<pre><code class="language-c++">#include &lt;gflags/gflags.h&gt;
 
 namespace tapiola {
     DEFINE_uint64(sibelius, 0, &quot;string that is displayed with --help flag&quot;);
@@ -152,22 +147,16 @@ void func(){
 <li>たった1つのヘッダファイルで構成されてるのでインストールもビルドも楽チン</li>
 <li>直感的でC++らしいデザインなので分かりやすい</li>
 <li>ファイルの読み取りはサポートしていないが <code>std::string</code> は読める</li>
-
-<li><p>変数に直接格納することはできず、パーサのメソッドで値を取得:</p>
-
-<h2 id="template-class-t-const-t-parser-get-const-std-string-name"><code>template &lt;class T&gt; const T &amp;parser::get(const std::string &amp;name)</code></h2>
-
-<p>各ソースファイルに分散できるっちゃできる？</p>
-
-<dl>
-<dd>1.  <code>main()</code> あたりで <code>parser</code> オブジェクトを定義
+<li>変数に直接格納することはできず、パーサのメソッドで値を取得:
+<code>template &lt;class T&gt; const T &amp;parser::get(const std::string &amp;name)</code></li>
+<li>各ソースファイルに分散できるっちゃできる？
 
 <ol>
+<li><code>main()</code> あたりで <code>parser</code> オブジェクトを定義</li>
 <li>それを各クラスの <code>static</code> メソッドに渡し、中で <code>parser::add()</code></li>
 <li><code>main()</code> で <code>parser::parse(argc, argv)</code></li>
 <li>再び各クラスの <code>static</code> メソッドを呼んで <code>parser::get()</code> から変数に代入</li>
-</ol></dd>
-</dl></li>
+</ol></li>
 </ul>
 
 <h2 id="tclap">TCLAP</h2>
@@ -180,20 +169,15 @@ void func(){
 <li>が、<code>configure</code> と <code>make install</code> というインストール手順を踏む</li>
 <li>ファイルの読み取りはサポートしていないが、<code>std::string</code> からパース可能</li>
 <li>読み込めるファイルの出力は用意されていないが、自分で書くのは簡単そう</li>
-
-<li><h2 id="格納する変数は指定できず-arg-オブジェクトの-getvalue-メソッドで値を取得">格納する変数は指定できず、<code>*Arg</code> オブジェクトの <code>getValue()</code> メソッドで値を取得</h2>
-
-<p>各ソースファイルに分散するには</p>
-
-<dl>
-<dd>1.  <code>main()</code> あたりで <code>CmdLine</code> オブジェクトを定義
+<li>格納する変数は指定できず、<code>*Arg</code> オブジェクトの <code>getValue()</code> メソッドで値を取得</li>
+<li>各ソースファイルに分散するには:
 
 <ol>
+<li><code>main()</code> あたりで <code>CmdLine</code> オブジェクトを定義</li>
 <li>それを各クラスの <code>static</code> メソッドに渡し、中で <code>*Arg</code> オブジェクトを生成</li>
 <li><code>main()</code> で <code>CmdLine::parse(argc, argv)</code></li>
 <li>各 <code>*Args</code> オブジェクトに格納されている値を <code>getValue()</code> メソッドで取得</li>
-</ol></dd>
-</dl></li>
+</ol></li>
 </ul>
 
 <h2 id="getoptpp">getoptpp</h2>
@@ -204,19 +188,24 @@ void func(){
 <li><code>istream</code> っぽく <code>&gt;&gt;operator</code> を使う</li>
 <li>格納する変数を指定できる</li>
 <li>基本的にはライブラリをビルドして使うが、ちょっといじればヘッダの <code>#include</code> だけでも使える</li>
-
-<li><h2 id="ファイルの読み込みやヘルプの生成は一切手伝ってくれない">ファイルの読み込みやヘルプの生成は一切手伝ってくれない</h2>
-
-<p>各ソースファイルに分散するには</p>
-
-<dl>
-<dd>1.  <code>main()</code> あたりで <code>(argc, argv)</code> を引数に <code>GetOpt_pp</code> オブジェクトを生成
+<li>ファイルの読み込みやヘルプの生成は一切手伝ってくれない</li>
+<li>各ソースファイルに分散するには:
 
 <ol>
+<li><code>main()</code> あたりで <code>(argc, argv)</code> を引数に <code>GetOpt_pp</code> オブジェクトを生成</li>
 <li>それを各クラスの <code>static</code> メソッドに渡し、中で値を取得:
 <code>args &gt;&gt; Option('i', &quot;long_option&quot;, var)</code></li>
-</ol></dd>
-</dl></li>
+</ol></li>
+</ul>
+
+<h2 id="そのほか">そのほか</h2>
+
+<p>Githubで上位に出てくるこれらもそのうち試したい:</p>
+
+<ul>
+<li><a href="https://github.com/weisslj/cpp-argparse">https://github.com/weisslj/cpp-argparse</a></li>
+<li><a href="https://github.com/jarro2783/cxxopts">https://github.com/jarro2783/cxxopts</a></li>
+<li><a href="https://github.com/hackorama/AnyOption">https://github.com/hackorama/AnyOption</a></li>
 </ul>
 
 </article>
