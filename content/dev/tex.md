@@ -42,7 +42,17 @@ BibDesk, LaTeXiT, TeX Live Utility, TeXShop などのGUIアプリが不要で、
         % xelatex hello.tex
         % open hello.pdf
 
+   MacTeXに含まれるTeXShopというアプリを使えば、
+   原稿書きからコンパイルまで面倒を見てもらえるので、
+   ターミナルにコマンドを打ち込む必要はないらしい。
+
+
 ### tlmgr でパッケージ管理
+
+BasicTeXの場合は最小限のパッケージしか含まれていないので、
+大抵いくつか別途インストールする必要がある。
+"By default, installing a package ensures that all dependencies of this package are fulfilled"
+と言っているが嘘で、実際には依存パッケージも手動でインストールする必要がある。
 
     % sudo tlmgr update --self --all
     % tlmgr search --global japanese
