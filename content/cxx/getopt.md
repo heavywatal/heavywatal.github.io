@@ -32,11 +32,9 @@ tags = ["c++"]
 -   ファイルから読み込みをサポート
 -   読み込み可能なファイルの出力方法は用意されてないので自分で書く必要がある
 -   Boostライブラリのヘッダだけでなくビルドとリンクが必要 cf. [boost]({{< relref "boost.md" >}})
--
-
-    各ソースファイルに分散するには
-    :   1.  各クラスの `static` メソッドで `options_description` オブジェクトを生成
-        2.  `main()` の `options_description` オブジェクトに `add()` する。
+-   各ソースファイルに分散するには:
+    1.  各クラスの `static` メソッドで `options_description` オブジェクトを生成
+    2.  `main()` の `options_description` オブジェクトに `add()` する。
 
 ## `gflags`
 
@@ -53,7 +51,7 @@ tags = ["c++"]
 `main()` 関数に書く必要があるのはこれだけ
 
 ```c++
-##include <gflags/gflags.h>
+#include <gflags/gflags.h>
 
 int main(int argc, char* argv[]) {
     gflags::SetUsageMessage("This is a program to test gflags");
@@ -66,7 +64,7 @@ int main(int argc, char* argv[]) {
 あとは個々のソースファイルでオプションを追加。`namespace` にも入れられる。
 
 ```c++
-##include <gflags/gflags.h>
+#include <gflags/gflags.h>
 
 namespace tapiola {
     DEFINE_uint64(sibelius, 0, "string that is displayed with --help flag");
@@ -87,13 +85,11 @@ void func(){
 -   ファイルの読み取りはサポートしていないが `std::string` は読める
 -   変数に直接格納することはできず、パーサのメソッドで値を取得:
     `template <class T> const T &parser::get(const std::string &name)`
--
-
-    各ソースファイルに分散できるっちゃできる？
-    :   1.  `main()` あたりで `parser` オブジェクトを定義
-        2.  それを各クラスの `static` メソッドに渡し、中で `parser::add()`
-        3.  `main()` で `parser::parse(argc, argv)`
-        4.  再び各クラスの `static` メソッドを呼んで `parser::get()` から変数に代入
+-   各ソースファイルに分散できるっちゃできる？
+    1.  `main()` あたりで `parser` オブジェクトを定義
+    2.  それを各クラスの `static` メソッドに渡し、中で `parser::add()`
+    3.  `main()` で `parser::parse(argc, argv)`
+    4.  再び各クラスの `static` メソッドを呼んで `parser::get()` から変数に代入
 
 ## TCLAP
 
@@ -105,13 +101,11 @@ void func(){
 -   ファイルの読み取りはサポートしていないが、`std::string` からパース可能
 -   読み込めるファイルの出力は用意されていないが、自分で書くのは簡単そう
 -   格納する変数は指定できず、`*Arg` オブジェクトの `getValue()` メソッドで値を取得
--
-
-    各ソースファイルに分散するには
-    :   1.  `main()` あたりで `CmdLine` オブジェクトを定義
-        2.  それを各クラスの `static` メソッドに渡し、中で `*Arg` オブジェクトを生成
-        3.  `main()` で `CmdLine::parse(argc, argv)`
-        4.  各 `*Args` オブジェクトに格納されている値を `getValue()` メソッドで取得
+-   各ソースファイルに分散するには:
+    1.  `main()` あたりで `CmdLine` オブジェクトを定義
+    2.  それを各クラスの `static` メソッドに渡し、中で `*Arg` オブジェクトを生成
+    3.  `main()` で `CmdLine::parse(argc, argv)`
+    4.  各 `*Args` オブジェクトに格納されている値を `getValue()` メソッドで取得
 
 ## getoptpp
 
@@ -121,9 +115,15 @@ void func(){
 -   格納する変数を指定できる
 -   基本的にはライブラリをビルドして使うが、ちょっといじればヘッダの `#include` だけでも使える
 -   ファイルの読み込みやヘルプの生成は一切手伝ってくれない
--
+-   各ソースファイルに分散するには:
+    1.  `main()` あたりで `(argc, argv)` を引数に `GetOpt_pp` オブジェクトを生成
+    2.  それを各クラスの `static` メソッドに渡し、中で値を取得:
+        `args >> Option('i', "long_option", var)`
 
-    各ソースファイルに分散するには
-    :   1.  `main()` あたりで `(argc, argv)` を引数に `GetOpt_pp` オブジェクトを生成
-        2.  それを各クラスの `static` メソッドに渡し、中で値を取得:
-            `args >> Option('i', "long_option", var)`
+## そのほか
+
+Githubで上位に出てくるこれらもそのうち試したい:
+
+- https://github.com/weisslj/cpp-argparse
+- https://github.com/jarro2783/cxxopts
+- https://github.com/hackorama/AnyOption
