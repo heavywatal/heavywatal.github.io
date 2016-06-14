@@ -66,7 +66,7 @@ Homebrew
 
 <h2 id="installation">Installation</h2>
 
-<p><a href="https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/Installation.md">https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/Installation.md</a></p>
+<p><a href="https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/Installation.md">https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/Installation.md</a></p>
 
 <ol>
 <li>Command Line Tools をインストールする。 cf. <a href="/dev/devenv.html">/dev/devenv</a></li>
@@ -96,12 +96,23 @@ export HOMEBREW_CC=clang
 
 <h2 id="usage">Usage</h2>
 
-<p><a href="https://github.com/mxcl/homebrew/wiki/The-brew-command">https://github.com/mxcl/homebrew/wiki/The-brew-command</a></p>
+<p><a href="https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/FAQ.md">https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/FAQ.md</a></p>
 
 <ul>
-<li><p>Homebrew本体とカタログをアップデートし、アップグレード可能なパッケージの表示:</p>
+<li><p>Homebrew本体とカタログをアップデートし、アップグレード可能なパッケージを表示:</p>
 
 <pre><code>% brew update &amp;&amp; brew outdated
+</code></pre></li>
+
+<li><p><code>outdated</code> なものを全てアップグレード:</p>
+
+<pre><code>% brew upgrade --all
+</code></pre></li>
+
+<li><p>パッケージのバージョンを固定し、<code>brew upgrade --all</code> の適用外にする。
+頻繁に更新され、やたらCPUを使うやつらに。</p>
+
+<pre><code>% brew pin imagemagick
 </code></pre></li>
 
 <li><p>パッケージ検索:</p>
@@ -117,17 +128,12 @@ export HOMEBREW_CC=clang
 <li><p>パッケージのインストール・アンインストール:</p>
 
 <pre><code>% brew install formula
-% brew remove formula
+% brew uninstall formula
 </code></pre></li>
 
 <li><p>インストール済みパッケージ、またはパッケージ内ファイルの一覧:</p>
 
 <pre><code>% brew list [formula]
-</code></pre></li>
-
-<li><p>パッケージを指定しなければ <code>outdated</code> なものを全てアップグレード:</p>
-
-<pre><code>% brew outgrade [formulae]
 </code></pre></li>
 </ul>
 
@@ -139,10 +145,11 @@ export HOMEBREW_CC=clang
 autoconf
 binutils
 boost
+colordiff
 coreutils
 doxygen
 emacs
-fftw --with-fortran
+fftw
 findutils
 gcc
 gibo
@@ -190,9 +197,9 @@ gccやboostなどのデカいやつはとりあえずデフォルトで入れた
 
 <h2 id="brew-tap">brew tap</h2>
 
-<p><a href="https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/brew-tap.md">https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/brew-tap.md</a></p>
+<p><a href="https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/brew-tap.md">https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/brew-tap.md</a></p>
 
-<p><a href="https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/Interesting-Taps-&amp;-Branches.md">https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/Interesting-Taps-&amp;-Branches.md</a></p>
+<p><a href="https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/Interesting-Taps-&amp;-Branches.md">https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/Interesting-Taps-&amp;-Branches.md</a></p>
 
 <p>非公式フォーミュラを公開しているリポジトリを追加する:</p>
 
@@ -219,7 +226,7 @@ rsync
 <li><p><code>brew tap homebrew/versions</code> - <a href="https://github.com/Homebrew/homebrew-versions">https://github.com/Homebrew/homebrew-versions</a><br>
 既に存在しているパッケージのバージョン違いを提供してくれている。例えば</p>
 
-<pre><code>gcc49 --with-fortran
+<pre><code>gcc5
 </code></pre></li>
 
 <li><p><code>brew tap homebrew/science</code> - <a href="https://github.com/Homebrew/homebrew-science">https://github.com/Homebrew/homebrew-science</a><br>
@@ -266,7 +273,7 @@ scipy
 
 <p>インストールは1行:</p>
 
-<pre><code>% brew install caskroom/cask/brew-cask
+<pre><code>% brew tap caskroom/cask
 </code></pre>
 
 <p>使うときは普通の <code>brew</code> コマンドに <code>cask</code> を挟むだけ:</p>
@@ -282,10 +289,10 @@ basictex, bibdesk, caffeine,
 dia, dropbox, evernote, firefox, gephi,
 google-chrome, google-drive, google-earth, google-japanese-ime,
 inkscape, iterm2, karabiner, kindle, libreoffice,
-macfusion, megasync, mendeley-desktop, mro,
+macfusion, megasync, mendeley-desktop,
 onyx, openoffice, osxfuse, pandoc, quicksilver,
-rstudio, seashore, skitch, skim, skype, spideroakone, sshfs,
-the-unarchiver, vlc</p>
+r, rstudio, seashore, skim, skitch, skype, spideroakone, sshfs,
+the-unarchiver, vlc, yujitach-menumeters</p>
 
 </article>
 </main>
