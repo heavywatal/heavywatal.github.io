@@ -44,6 +44,14 @@ GenomeINfoDb
 DBI
 RSQLite
 
+{{%div class="note"%}}
+アップデートしようとして `biocLite("BiocUpgrade")` すると
+`Error: Bioconductor version 3.2 cannot be upgraded with R version 3.3.0`
+などと怒られることがあるので、その場合は一度ターミナルから
+`R CMD REMOVE BiocInstaller` してからインストールしなおす。
+{{%/div%}}
+
+
 ### 起動
 
 R を立ち上げる度に読み込み＆アップデート
