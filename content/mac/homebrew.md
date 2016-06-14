@@ -11,7 +11,7 @@ Unixツールをパッケージとして手軽にインストールできるMac�
 
 ## Installation
 
-<https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/Installation.md>
+https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/Installation.md
 
 1.  Command Line Tools をインストールする。 cf. [/dev/devenv]({{< relref "dev/devenv.md" >}})
 2.  公式では `/usr/local/` へのインストールが推奨されているが、
@@ -36,32 +36,38 @@ Unixツールをパッケージとして手軽にインストールできるMac�
 
 ## Usage
 
-<https://github.com/mxcl/homebrew/wiki/The-brew-command>
+https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/FAQ.md
 
--   Homebrew本体とカタログをアップデートし、アップグレード可能なパッケージの表示:
+- Homebrew本体とカタログをアップデートし、アップグレード可能なパッケージを表示:
 
         % brew update && brew outdated
 
--   パッケージ検索:
+- `outdated` なものを全てアップグレード:
+
+        % brew upgrade --all
+
+- パッケージのバージョンを固定し、`brew upgrade --all` の適用外にする。
+  頻繁に更新され、やたらCPUを使うやつらに。
+
+        % brew pin imagemagick
+
+- パッケージ検索:
 
         % brew search text
 
--   パッケージ情報の表示:
+- パッケージ情報の表示:
 
         % brew info formula
 
--   パッケージのインストール・アンインストール:
+- パッケージのインストール・アンインストール:
 
         % brew install formula
-        % brew remove formula
+        % brew uninstall formula
 
--   インストール済みパッケージ、またはパッケージ内ファイルの一覧:
+- インストール済みパッケージ、またはパッケージ内ファイルの一覧:
 
         % brew list [formula]
 
--   パッケージを指定しなければ `outdated` なものを全てアップグレード:
-
-        % brew outgrade [formulae]
 
 ## brew install
 
@@ -71,10 +77,11 @@ Unixツールをパッケージとして手軽にインストールできるMac�
     autoconf
     binutils
     boost
+    colordiff
     coreutils
     doxygen
     emacs
-    fftw --with-fortran
+    fftw
     findutils
     gcc
     gibo
@@ -117,9 +124,9 @@ gccやboostなどのデカいやつはとりあえずデフォルトで入れた
 
 ## brew tap
 
-<https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/brew-tap.md>
+https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/brew-tap.md
 
-<https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/Interesting-Taps-&-Branches.md>
+https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/Interesting-Taps-&-Branches.md
 
 非公式フォーミュラを公開しているリポジトリを追加する:
 
@@ -142,7 +149,7 @@ gccやboostなどのデカいやつはとりあえずデフォルトで入れた
 -   `brew tap homebrew/versions` - <https://github.com/Homebrew/homebrew-versions>\
     既に存在しているパッケージのバージョン違いを提供してくれている。例えば
 
-        gcc49 --with-fortran
+        gcc5
 
 -   `brew tap homebrew/science` - <https://github.com/Homebrew/homebrew-science>\
     バイオインフォマティクスなど科学計算のツール群。例えば
@@ -185,7 +192,7 @@ GUIアプリケーションもHomebrewで管理してしまおうという野心
 
 インストールは1行:
 
-    % brew install caskroom/cask/brew-cask
+    % brew tap caskroom/cask
 
 使うときは普通の `brew` コマンドに `cask` を挟むだけ:
 
@@ -199,7 +206,7 @@ basictex, bibdesk, caffeine,
 dia, dropbox, evernote, firefox, gephi,
 google-chrome, google-drive, google-earth, google-japanese-ime,
 inkscape, iterm2, karabiner, kindle, libreoffice,
-macfusion, megasync, mendeley-desktop, mro,
+macfusion, megasync, mendeley-desktop,
 onyx, openoffice, osxfuse, pandoc, quicksilver,
-rstudio, seashore, skitch, skim, skype, spideroakone, sshfs,
-the-unarchiver, vlc
+r, rstudio, seashore, skim, skitch, skype, spideroakone, sshfs,
+the-unarchiver, vlc, yujitach-menumeters
