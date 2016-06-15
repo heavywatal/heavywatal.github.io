@@ -66,18 +66,22 @@ Boost — ほぼ標準C&#43;&#43;ライブラリ
 
 <h2 id="installation">Installation</h2>
 
+<h3 id="ソースから">ソースから</h3>
+
 <p><a href="http://boostjp.github.io/howtobuild.html">http://boostjp.github.io/howtobuild.html</a></p>
 
 <p><a href="http://www.boost.org/doc/libs/release/more/getting_started/unix-variants.html">http://www.boost.org/doc/libs/release/more/getting_started/unix-variants.html</a></p>
 
-<p>普通の configure と <code>make</code> じゃないので混乱するけど、まあまあ相同な手順。</p>
+<p>普通の <code>configure</code> と <code>make</code> じゃないので混乱するけど、まあまあ相同な手順。
+gccとclangの両方から使える統一ライブラリを作るのは難しいらしいので、
+それぞれのコンパイラで別々にビルドしてインストールする。</p>
 
 <ol>
 <li><p><a href="http://sourceforge.net/projects/boost/">http://sourceforge.net/projects/boost/</a> から最新ソースを入手して展開。
 とりあえず <code>boost-jam</code> とか <code>boost-build</code> とかは無視して <code>boost</code> 本体のみで結構:</p>
 
-<pre><code>% wget -O- http://downloads.sourceforge.net/boost/boost_1_59_0.tar.bz2 | tar xj
-% cd boost_1_59_0/
+<pre><code>% wget -O- http://downloads.sourceforge.net/boost/boost_1_61_0.tar.bz2 | tar xj
+% cd boost_1_61_0/
 </code></pre></li>
 
 <li><p>ヘルプを見る:</p>
@@ -90,50 +94,53 @@ Boost — ほぼ標準C&#43;&#43;ライブラリ
 <pre><code>% ./bootstrap.sh --show-libraries
 </code></pre></li>
 
-<li><p>適当なオプションを与えて bootstrap.sh を実行</p>
-
-<ul>
-<li>b2 がビルドされる</li>
-<li>b2 に渡すオプションが書かれた
-<code>project-config.jam</code> が生成される</li>
-</ul>
+<li><p>適当なオプションを与えて <code>bootstrap.sh</code> を実行:</p>
 
 <pre><code class="language-sh">% ./bootstrap.sh --without-icu --with-libraries=filesystem,graph,iostreams,program_options,serialization,system,test
 </code></pre>
 
-<p>新しめのHomebrew gccで使うとzlibのリンクでエラーが出るっぽい。
-<a href="http://zlib.net/">zlib公式</a>からソースを落として展開し、
-<a href="http://www.boost.org/doc/libs/1_61_0/libs/iostreams/doc/installation.html"><code>ZLIB_SOURCE</code>をフルパスで指定する。</a></p></li>
+<p><code>b2</code> がビルドされ、
+<code>b2</code> に渡すオプションが書かれた <code>project-config.jam</code> が生成される。</p></li>
 
 <li><p>ヘルプを見る:</p>
 
 <pre><code>% ./b2 --help
 </code></pre></li>
 
-<li><p>コンパイラやオプションを指定してビルド:</p>
+<li><p><code>~/user-config.jam</code> にツールセットを定義:</p>
 
-<pre><code>% ./b2 -j2 toolset=gcc-5 cxxflags=&quot;-std=c++11&quot; link=static runtime-link=shared threading=multi variant=release --layout=system --stagedir=stage_gcc stage 2&gt;&amp;1 | tee stage.log
-% ./b2 -j2 toolset=clang cxxflags=&quot;-std=c++11 -stdlib=libc++&quot; linkflags=&quot;-stdlib=libc++&quot; link=static runtime-link=shared threading=multi variant=release --layout=system --stagedir=stage_clang stage 2&gt;&amp;1 | tee stage.log
+<pre><code>using gcc : 14 : g++-6 : &lt;cxxflags&gt;-std=c++14 -stdlib=libstdc++ &lt;linkflags&gt;-stdlib=libstdc++ ;
+using clang : 14 : clang++ : &lt;cxxflags&gt;-std=c++14 -stdlib=libc++ &lt;linkflags&gt;-stdlib=libc++ ;
 </code></pre></li>
+
+<li><p>ツールセットを指定してビルド:</p>
+
+<pre><code>% ZLIB_SOURCE=${HOME}/tmp/build/zlib-1.2.8 ./b2 -j2 toolset=gcc-14 link=static runtime-link=shared threading=multi variant=release --layout=system --stagedir=stage_gcc stage 2&gt;&amp;1 | tee stage.log
+% ./b2 -j2 toolset=clang-14 link=static runtime-link=shared threading=multi variant=release --layout=system --stagedir=stage_clang stage 2&gt;&amp;1 | tee stage.log
+</code></pre>
+
+<div class="note">
+<p>新しめのHomebrew gccで使うとzlibのリンクでエラーが出るっぽい。
+<a href="http://zlib.net/">zlib公式</a>からソースを落として展開し、
+<a href="http://www.boost.org/doc/libs/1_61_0/libs/iostreams/doc/installation.html"><code>ZLIB_SOURCE</code>をフルパスで指定する。</a></p>
+
+</div>
+</li>
 
 <li><p>古いやつがあれば消しておく:</p>
 
-<pre><code>% rm -rf ~/local/boost*
+<pre><code>% mv ~/local/boost* ~/local/include/boost ~/.Trash
 </code></pre></li>
 
-<li><p>インストール (<code>prefix</code> によっては要 <code>sudo</code>):</p>
+<li><p>手動でインストール:</p>
 
-<pre><code>% ./b2 -j2 toolset=gcc-5 cxxflags=&quot;-std=c++11&quot; link=static runtime-link=shared threading=multi variant=release --layout=system --stagedir=stage_gcc install --prefix=${HOME}/local/boost-gcc 2&gt;&amp;1 | tee install.log
-% ./b2 -j2 toolset=clang cxxflags=&quot;-std=c++11 -stdlib=libc++&quot; linkflags=&quot;-stdlib=libc++&quot; link=static runtime-link=shared threading=multi variant=release --layout=system --stagedir=stage_clang install --prefix=${HOME}/local/boost-clang 2&gt;&amp;1 | tee install.log
-</code></pre></li>
-
-<li><p>ヘッダーは1か所でもよさそう:</p>
-
-<pre><code>% rsync -auv boost ~/local/include
+<pre><code>% mv stage_gcc ~/local/boost-gcc
+% mv stage_clang ~/local/boost-clang
+% rsync -au boost ~/local/include
 </code></pre></li>
 </ol>
 
-<hr>
+<h3 id="パッケージマネージャで簡単インストール">パッケージマネージャで簡単インストール</h3>
 
 <p>Macなら <a href="/mac/homebrew.html">Homebrew</a> でもインストールできる:</p>
 
@@ -141,7 +148,8 @@ Boost — ほぼ標準C&#43;&#43;ライブラリ
 </code></pre>
 
 <p>ただし <code>--layout=tagged</code> になっているため、
-リンクするときは末尾に <code>-mt</code> が必要になる。</p>
+リンクするときは末尾に <code>-mt</code> が必要になる。
+基本的にはclangからのみ利用可能。</p>
 
 <p>Ubuntuなら <a href="https://launchpad.net/~boost-latest/+archive/ppa">ppa:boost-latest/ppa</a>
 リポジトリを加えて <code>libboost*-dev</code> を適当にインストール:</p>
