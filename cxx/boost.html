@@ -84,15 +84,9 @@ gccとclangの両方から使える統一ライブラリを作るのは難しい
 % cd boost_1_61_0/
 </code></pre></li>
 
-<li><p>ヘルプを見る:</p>
+<li><p>ヘルプを見る <code>./bootstrap.sh --help</code></p></li>
 
-<pre><code>% ./bootstrap.sh --help
-</code></pre></li>
-
-<li><p>ビルドすべきライブラリを考える:</p>
-
-<pre><code>% ./bootstrap.sh --show-libraries
-</code></pre></li>
+<li><p>ビルドすべきライブラリを考える <code>./bootstrap.sh --show-libraries</code></p></li>
 
 <li><p>適当なオプションを与えて <code>bootstrap.sh</code> を実行:</p>
 
@@ -102,10 +96,7 @@ gccとclangの両方から使える統一ライブラリを作るのは難しい
 <p><code>b2</code> がビルドされ、
 <code>b2</code> に渡すオプションが書かれた <code>project-config.jam</code> が生成される。</p></li>
 
-<li><p>ヘルプを見る:</p>
-
-<pre><code>% ./b2 --help
-</code></pre></li>
+<li><p>ヘルプを見る <code>./b2 --help</code></p></li>
 
 <li><p><code>~/user-config.jam</code> にツールセットを定義:</p>
 
@@ -113,29 +104,25 @@ gccとclangの両方から使える統一ライブラリを作るのは難しい
 using clang : 14 : clang++ : &lt;cxxflags&gt;-std=c++14 -stdlib=libc++ &lt;linkflags&gt;-stdlib=libc++ ;
 </code></pre></li>
 
+<li><p>システム標準zlibをリンクしようとしてエラーになることがあるので、
+<a href="http://zlib.net/">zlib公式</a>からソースを落として展開し、
+<a href="http://www.boost.org/doc/libs/1_61_0/libs/iostreams/doc/installation.html">一緒にビルドされるように</a>
+<code>ZLIB_SOURCE</code>をフルパス指定する。</p>
+
+<pre><code>% wget -O- http://zlib.net/zlib-1.2.8.tar.gz | tar xz -C ${HOME}/tmp/build
+% export ZLIB_SOURCE=${HOME}/tmp/build/zlib-1.2.8
+</code></pre></li>
+
 <li><p>ツールセットを指定してビルド:</p>
 
-<pre><code>% ZLIB_SOURCE=${HOME}/tmp/build/zlib-1.2.8 ./b2 -j2 toolset=gcc-14 link=static runtime-link=shared threading=multi variant=release --layout=system --stagedir=stage_gcc stage 2&gt;&amp;1 | tee stage.log
+<pre><code>% ./b2 -j2 toolset=gcc-14 link=static runtime-link=shared threading=multi variant=release --layout=system --stagedir=stage_gcc stage 2&gt;&amp;1 | tee stage.log
 % ./b2 -j2 toolset=clang-14 link=static runtime-link=shared threading=multi variant=release --layout=system --stagedir=stage_clang stage 2&gt;&amp;1 | tee stage.log
-</code></pre>
-
-<div class="note">
-<p>新しめのHomebrew gccで使うとzlibのリンクでエラーが出るっぽい。
-<a href="http://zlib.net/">zlib公式</a>からソースを落として展開し、
-<a href="http://www.boost.org/doc/libs/1_61_0/libs/iostreams/doc/installation.html"><code>ZLIB_SOURCE</code>をフルパスで指定する。</a></p>
-
-</div>
-</li>
-
-<li><p>古いやつがあれば消しておく:</p>
-
-<pre><code>% mv ~/local/boost* ~/local/include/boost ~/.Trash
 </code></pre></li>
 
 <li><p>手動でインストール:</p>
 
-<pre><code>% mv stage_gcc ~/local/boost-gcc
-% mv stage_clang ~/local/boost-clang
+<pre><code>% rsync -auv stage_gcc/ ~/local/boost-gcc
+% rsync -auv stage_clang/ ~/local/boost-clang
 % rsync -au boost ~/local/include
 </code></pre></li>
 </ol>
