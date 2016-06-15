@@ -23,20 +23,16 @@ gccとclangの両方から使える統一ライブラリを作るのは難しい
 
 1.  <http://sourceforge.net/projects/boost/> から最新ソースを入手して展開。
     とりあえず `boost-jam` とか `boost-build` とかは無視して `boost` 本体のみで結構:
+    ```
+    % wget -O- http://downloads.sourceforge.net/boost/boost_1_61_0.tar.bz2 | tar xj
+    % cd boost_1_61_0/
+    ```
 
-        % wget -O- http://downloads.sourceforge.net/boost/boost_1_61_0.tar.bz2 | tar xj
-        % cd boost_1_61_0/
+2.  ヘルプを見る `./bootstrap.sh --help`
 
-2.  ヘルプを見る:
-
-        % ./bootstrap.sh --help
-
-3.  ビルドすべきライブラリを考える:
-
-        % ./bootstrap.sh --show-libraries
+3.  ビルドすべきライブラリを考える `./bootstrap.sh --show-libraries`
 
 4.  適当なオプションを与えて `bootstrap.sh` を実行:
-
     ```sh
     % ./bootstrap.sh --without-icu --with-libraries=filesystem,graph,iostreams,program_options,serialization,system,test
     ```
@@ -44,38 +40,36 @@ gccとclangの両方から使える統一ライブラリを作るのは難しい
     `b2` がビルドされ、
     `b2` に渡すオプションが書かれた `project-config.jam` が生成される。
 
-5.  ヘルプを見る:
-
-        % ./b2 --help
+5.  ヘルプを見る `./b2 --help`
 
 6. `~/user-config.jam` にツールセットを定義:
+    ```
+    using gcc : 14 : g++-6 : <cxxflags>-std=c++14 -stdlib=libstdc++ <linkflags>-stdlib=libstdc++ ;
+    using clang : 14 : clang++ : <cxxflags>-std=c++14 -stdlib=libc++ <linkflags>-stdlib=libc++ ;
+    ```
 
-        using gcc : 14 : g++-6 : <cxxflags>-std=c++14 -stdlib=libstdc++ <linkflags>-stdlib=libstdc++ ;
-        using clang : 14 : clang++ : <cxxflags>-std=c++14 -stdlib=libc++ <linkflags>-stdlib=libc++ ;
+7.  システム標準zlibをリンクしようとしてエラーになることがあるので、
+    [zlib公式](http://zlib.net/)からソースを落として展開し、
+    [一緒にビルドされるように]
+    (http://www.boost.org/doc/libs/1_61_0/libs/iostreams/doc/installation.html)
+    `ZLIB_SOURCE`をフルパス指定する。
+    ```
+    % wget -O- http://zlib.net/zlib-1.2.8.tar.gz | tar xz -C ${HOME}/tmp/build
+    % export ZLIB_SOURCE=${HOME}/tmp/build/zlib-1.2.8
+    ```
 
-7.  ツールセットを指定してビルド:
-
-        % ZLIB_SOURCE=${HOME}/tmp/build/zlib-1.2.8 ./b2 -j2 toolset=gcc-14 link=static runtime-link=shared threading=multi variant=release --layout=system --stagedir=stage_gcc stage 2>&1 | tee stage.log
-        % ./b2 -j2 toolset=clang-14 link=static runtime-link=shared threading=multi variant=release --layout=system --stagedir=stage_clang stage 2>&1 | tee stage.log
-
-    {{%div class="note"%}}
-新しめのHomebrew gccで使うとzlibのリンクでエラーが出るっぽい。
-[zlib公式](http://zlib.net/)からソースを落として展開し、
-[`ZLIB_SOURCE`をフルパスで指定する。]
-(http://www.boost.org/doc/libs/1_61_0/libs/iostreams/doc/installation.html)
-{{%/div%}}
-
-
-8.  古いやつがあれば消しておく:
-
-        % mv ~/local/boost* ~/local/include/boost ~/.Trash
+8.  ツールセットを指定してビルド:
+    ```
+    % ./b2 -j2 toolset=gcc-14 link=static runtime-link=shared threading=multi variant=release --layout=system --stagedir=stage_gcc stage 2>&1 | tee stage.log
+    % ./b2 -j2 toolset=clang-14 link=static runtime-link=shared threading=multi variant=release --layout=system --stagedir=stage_clang stage 2>&1 | tee stage.log
+    ```
 
 9.  手動でインストール:
-
-        % mv stage_gcc ~/local/boost-gcc
-        % mv stage_clang ~/local/boost-clang
-        % rsync -au boost ~/local/include
-
+    ```
+    % rsync -auv stage_gcc/ ~/local/boost-gcc
+    % rsync -auv stage_clang/ ~/local/boost-clang
+    % rsync -au boost ~/local/include
+    ```
 
 ### パッケージマネージャで簡単インストール
 
