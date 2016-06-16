@@ -63,6 +63,7 @@ readr — 高速で柔軟なテーブル読み込みツール
 <p><a href="https://github.com/hadley/readr">https://github.com/hadley/readr</a></p>
 
 <p>タブ区切りテキストやCSVファイルを読み込んで <code>data.frame</code> にするツール。
+圧縮された <code>***.tsv.gz</code> なども自動的に展開して読んでくれる。
 標準でも <code>read.table()</code> や <code>read.csv()</code> があるけど、それらと違って</p>
 
 <ul>
@@ -80,13 +81,13 @@ readr — 高速で柔軟なテーブル読み込みツール
 <h2 id="主な関数">主な関数</h2>
 
 <dl>
-<dt><code>read_csv(file, col_names=TRUE, col_types=NULL, na='NA', skip=0, ...)</code></dt>
+<dt><code>read_csv(file, col_names=TRUE, col_types=NULL, locale=default_locale(), na=c('', 'NA'), comment='', trim_ws=TRUE, skip=0, n_max=-1, progress=interactive())</code></dt>
 <dd>カンマ区切りテキスト</dd>
-<dt><code>read_tsv(file, col_names=TRUE, col_types=NULL, na='NA', skip=0, ...)</code></dt>
+<dt><code>read_tsv(...)</code></dt>
 <dd>タブ区切りテキスト</dd>
-<dt><code>read_table(file, col_names=TRUE, col_types=NULL, na='NA', skip=0, n_max=-1)</code></dt>
+<dt><code>read_table(...)</code></dt>
 <dd>連続する空白文字をひとつの区切りと見なして処理</dd>
-<dt><code>read_fwf(file, col_positions, col_types=NULL, ...)</code></dt>
+<dt><code>read_fwf(file, col_positions, ...)</code></dt>
 <dd><p>fixed width file. 第二引数の指定方法は</p>
 
 <ol>
@@ -94,9 +95,9 @@ readr — 高速で柔軟なテーブル読み込みツール
 <li><code>fwf_widths(widths, col_names=NULL)</code> で幅指定</li>
 <li><code>fwf_positions(start, end, col_names=NULL)</code> で開始・終了位置指定</li>
 </ol></dd>
-<dt><code>read_delim(file, delim, quote='&quot;', ...)</code></dt>
+<dt><code>read_delim(file, delim, quote='&quot;', escape_backslash=FALSE, ...)</code></dt>
 <dd><p>区切り文字など自分で細かく指定</p></dd>
-<dt><code>read_lines(file, n_max=-1L)</code></dt>
+<dt><code>read_lines(file, skip=0, n_max=-1L, ...)</code>, <code>read_lines_raw(...)</code></dt>
 <dd><p>1行を1要素とした文字列ベクタを返す</p></dd>
 <dt><code>read_file(file)</code></dt>
 <dd><p>ファイルの内容まるごと文字列で返す</p></dd>
@@ -104,39 +105,38 @@ readr — 高速で柔軟なテーブル読み込みツール
 
 <h2 id="列の型を指定する">列の型を指定する</h2>
 
-<p>基本的には何も指定しなくても数値や文字列を認識していい感じに設定してくれる。
-標準の <code>read.csv()</code> などと違って暗黙のfactor変換もしない。
-明示的に型を指定したい場合は <code>col_types</code> 引数に名前付きリストを渡す。
-文字列を使って <code>'ccdi_'</code> のようにも指定できる。</p>
+<p><a href="https://cran.r-project.org/web/packages/readr/vignettes/column-types.html">https://cran.r-project.org/web/packages/readr/vignettes/column-types.html</a></p>
 
-<dl>
-<dt><code>[_] col_skip()</code></dt>
-<dd>列を読まない</dd>
-<dt><code>[i] col_integer()</code></dt>
-<dd>整数</dd>
-<dt><code>[d] col_double()</code></dt>
-<dd>実数</dd>
-<dt><code>[n] col_numeric()</code></dt>
-<dd>数字以外の文字が含まれていても無視して数字として返す</dd>
-<dt><code>[l] col_logical()</code></dt>
-<dd>TRUE or FALSE</dd>
-<dt><code>[c] col_character()</code></dt>
-<dd>文字列</dd>
-<dt><code>col_factor(levels, ordered)</code></dt>
-<dd>factor</dd>
-<dt><code>col_date(format='')</code>, <code>col_datetime(format='', tz='UTC')</code></dt>
-<dd>日付</dd>
-</dl>
+<p>基本的には何も指定しなくても数値や文字列を認識していい感じに設定してくれる。
+標準の <code>read.csv()</code> などと違って暗黙のfactor変換はしない。
+明示的に型を指定したい場合は <code>col_types</code> 引数に <code>cols()</code> 関数の値を渡す。
+文字列で <code>'ccdi_'</code> のように省略することも可能。</p>
 
 <pre><code class="language-r">read_csv('mydata.csv', col_types='ccdi_')
 
-read_csv('mydata.csv', col_types=list(
-   length=col_double(),
-   count=col_integer(),
-   misc=col_skip())
+colsp = cols(length=col_double(), count='i', .default='c')
+read_csv('mydata.csv', col_types=colsp)
 </code></pre>
 
+<ul>
+<li><code>[c] col_character()</code>: 文字列</li>
+<li><code>[i] col_integer()</code>: 整数</li>
+<li><code>[n] col_numeric()</code>: 数字以外の文字が含まれていても無視して数字として返す</li>
+<li><code>[d] col_double()</code>: 実数</li>
+<li><code>[l] col_logical()</code>: TRUE or FALSE</li>
+<li><code>[D] col_date(format='')</code>,</li>
+<li><code>[T] col_datetime(format='', tz='UTC')</code>: 日付</li>
+<li><code>[?] col_guess()</code>: 推測</li>
+<li><code>[_] col_skip()</code>: 列を読まない</li>
+<li><code>col_factor(levels, ordered)</code>: factor</li>
+</ul>
+
+<p>指定した列だけ読むには <code>cols(..., .default=col_skip())</code>
+とするか <code>cols_only(...)</code> を使う。</p>
+
 <h2 id="excelファイルを読み込む">Excelファイルを読み込む</h2>
+
+<p><a href="https://github.com/hadley/readxl">https://github.com/hadley/readxl</a></p>
 
 <p>自分のデータは絶対にExcel形式ではなくCSVやTSV形式で保存すべきだが、
 人から受け取ったファイルや論文のサプリデータがExcelだったら仕方がない。
