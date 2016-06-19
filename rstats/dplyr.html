@@ -67,11 +67,11 @@ dplyr — 高速data.frame処理
 <li><a href="http://www.rstudio.com/resources/cheatsheets/">http://www.rstudio.com/resources/cheatsheets/</a></li>
 </ul>
 
-<p>データフレームに特化した版 <a href="/rstats/plyr.html">plyr</a> 。
-<a href="/rstats/tidyr.html">tidyr</a> と一緒に使うとよい。</p>
+<p>前作 <a href="/rstats/plyr.html">plyr</a> のうちdata.frame処理に関する部分を抜き出して強化したパッケージ。
+<a href="/rstats/purrr.html">purrr</a> や <a href="/rstats/tidyr.html">tidyr</a> と一緒に使うとよい。</p>
 
-<p><code>install.packages('dplyr')</code> でインストールし、
-<code>library(dplyr)</code> で読み込んでから使う。</p>
+<p>Rの中で <code>install.packages('dplyr')</code> としてインストールし、
+使う前に <code>library(dplyr)</code> で読み込む。</p>
 
 <h2 id="関数の連結">関数の連結</h2>
 
@@ -111,8 +111,8 @@ iris %&gt;%
 <dd><p>グループごとに区切って次の処理に渡す。 e.g. <code>summarise()</code>, <code>tally()</code>, <code>do()</code> など</p></dd>
 <dt><code>dplyr::rowwise(.data)</code></dt>
 <dd><p>行ごとに区切って次の処理に渡す。
-この方法は非推奨となり、
-<code>purrr</code> パッケージのmap系関数を <code>mutate()</code> に適用していくようになる？</p></dd>
+今後この方法は非推奨となるっぽいので、
+<a href="/rstats/purrr.html"><code>purrr</code></a><code>::by_row()</code>を使ったほうが良い。</p></dd>
 <dt><code>dplyr::do(.data, ...)</code></dt>
 <dd><p>グループごとに処理する。
 <code>{}</code> 内に長い処理を書いてもいいし、関数に渡してもよい。
@@ -121,7 +121,8 @@ iris %&gt;%
 <code>Error: Results are not data frames at positions: 1</code>
 のように怒られるが、
 <code>do(dummy=func(.))</code> のように名前付きにすると
-<code>data.frame</code> に入らないような型でも大丈夫になる。</p></dd>
+<code>data.frame</code> に入らないような型でも大丈夫になる。
+今後は<a href="/rstats/purrr.html"><code>purrr</code></a><code>::by_slice()</code>を使ったほうが良さそう。</p></dd>
 </dl>
 
 <h2 id="コア関数-verb">コア関数 (verb)</h2>
@@ -298,6 +299,7 @@ iris %&gt;% dplyr::mutate(ln_sepal_length = log(Sepal.Length))
 <li><a href="/rstats/programming.html">RプログラミングTips</a></li>
 <li><a href="/rstats/ggplot2.html">ggplot2</a></li>
 <li class="active"><a href="/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/rstats/purrr.html">purrr</a></li>
 <li><a href="/rstats/tidyr.html">tidyr</a></li>
 <li><a href="/rstats/readr.html">readr</a></li>
 <li><a href="/rstats/stringr.html">stringr</a></li>

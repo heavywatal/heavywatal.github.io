@@ -11,7 +11,7 @@
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="icon" href="/favicon-192x192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/favicon-192x192.png" sizes="192x192">
-<title>topGO: Bioconductor でenrichment解析 - Watal M. Iwasaki</title>
+<title>purrr: apply系関数の究極形 - Watal M. Iwasaki</title>
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
   displayAlign: "left",
@@ -50,124 +50,126 @@ Watal M. Iwasaki
 <main>
 <article>
 <header><h1><a href="">
-topGO — Bioconductor でenrichment解析
+purrr — apply系関数の究極形
 </a></h1>
 <ul class="tags">
 <li><a href="/tags/r">r</a></li>
-<li><a href="/tags/bioconductor">bioconductor</a></li>
+<li><a href="/tags/hadley">hadley</a></li>
 </ul>
 </header>
 
 
 
-<p><a href="http://www.bioconductor.org/packages/release/bioc/html/topGO.html">http://www.bioconductor.org/packages/release/bioc/html/topGO.html</a></p>
+<p><a href="https://github.com/hadley/purrr">https://github.com/hadley/purrr</a></p>
 
-<p>Rの中からインストール</p>
+<p>標準のapply族や<a href="/rstats/plyr.html">plyr</a>の関数に引導を渡すべく再設計されたようなパッケージ。
+<a href="/rstats/dplyr.html">dplyr</a> や <a href="/rstats/tidyr.html">tidyr</a> と組み合わせて真価を発揮する。
+purererのように読むらしい。</p>
 
-<pre><code class="language-r">source(&quot;http://bioconductor.org/biocLite.R&quot;)
-biocLite('topGO')
+<p>Rの中で <code>install.packages('purrr')</code> としてインストールし、
+使う前に <code>library(purrr)</code> で読み込む。</p>
+
+<p>パイプ演算子 <code>%&gt;%</code> については<a href="/rstats/dplyr.html">dplyr</a>を参照。</p>
+
+<h2 id="list-vector操作">list, vector操作</h2>
+
+<dl>
+<dt><code>purrr::map(.x, .f, ...)</code></dt>
+<dd>listの各要素に関数を適用し、listで返す。
+型の決まったvectorを返す亜種として
+<code>map_lgl()</code>, <code>map_chr()</code>, <code>map_int()</code>, <code>map_dbl()</code>, <code>map_df()</code>
+がある。</dd>
+<dt><code>purrr::map_if(.x, .p, .f, ...)</code></dt>
+<dd><code>.p</code>が<code>TRUE</code>になる要素のみ<code>.f()</code>を適用し、残りはそのまま出力。
+<code>.p</code>はlogical vectorでもいいし、
+<code>.x[[i]]</code>を受け取るpredicate関数でもよい。</dd>
+<dt><code>purrr::map2(.x, .y, .f, ...)</code></dt>
+<dd>2変数バージョン。<code>map2_chr()</code> や <code>map3()</code> なども提供されている。</dd>
+<dt><code>purrr::walk(.x, .f, ...)</code></dt>
+<dd>mapと同じように関数を適用するが、元の値をそのままinvisible返し。</dd>
+<dt><code>purrr::lmap(.x, .f, ...)</code>, <code>lmap_if()</code>, <code>lmap_at()</code></dt>
+<dd>listの各要素に関数を適用し、listで返す。
+<code>.x[[i]]</code>ではなく<code>.x[i]</code>を参照する点で<code>map()</code>と異なる。</dd>
+<dt><code>purrr::reduce()</code></dt>
+<dd>二変数関数を順々に適用して1つの値を返す。
+C++でいう<code>std::accumulate()</code>。</dd>
+<dt><code>purrr::flatten(.x)</code></dt>
+<dd>階層性のあるlistを一段階解消する。
+階層なしlistをvector化するには明示的に型指定できる
+<code>flatten_lgl()</code>, <code>flatten_int()</code>, <code>flatten_dbl()</code>, <code>flatten_chr()</code>, <code>flatten_df()</code>
+のほうが標準の<code>unlist()</code>よりも安心。</dd>
+<dt><code>purrr::keep(.x, .p, ...)</code>, <code>discard()</code>, <code>compact()</code></dt>
+<dd>listやvectorの要素を <code>.p</code> に応じて取捨選択。
+わざわざ関数にするほどでもない気もするが、パイプラインで使いやすい形。</dd>
+<dt><code>purrr::split_by(.x, .f, ...)</code>, <code>order_by()</code>, <code>sort_by()</code></dt>
+<dd>listやvectorを <code>.f</code> に応じて切ったり並べ替えたり。</dd>
+</dl>
+
+<h2 id="data-frame操作">data.frame操作</h2>
+
+<dl>
+<dt><code>purrr::slice_rows(.d, .cols=NULL)</code></dt>
+<dd>指定した列でグループ化して <code>grouped_df</code> を返す。
+<code>dplyr::group_by_(.dots=.cols)</code> と同じ。</dd>
+<dt><code>purrr::by_slice(.d, ..f, ..., .collate=c('list', 'rows', 'cols'), .to='.out', .labels=TRUE)</code></dt>
+<dd><code>grouped_df</code> を受け取ってグループごとに関数を適用する。
+<code>dplyr::do()</code> の改良版。</dd>
+<dt><code>purrr::by_row(.d, ..f, ..., .collate=c('list', 'rows', 'cols'), .to='.out', .labels=TRUE)</code></dt>
+<dd>1行ごとに関数を適用する。
+<code>dplyr::rowwise() %&gt;% dplyr::do()</code>的な処理を一撃で書ける。</dd>
+<dd><code>.collate</code>: 結果列の展開方法。
+とりあえず<code>list</code>にしておいて後で<code>unnest()</code>するのが無難か。</dd>
+<dd><code>.to</code>: 結果listの列名</dd>
+<dd><code>.labels</code>: 元の<code>.d</code>の列をラベルとして結果に残すか</dd>
+</dl>
+
+<pre><code class="language-r">&gt; iris[1:3, 1:2] %&gt;% by_row(~data_frame(x=0:1, y=c('a', 'b')), .collate='list')
+Source: local data frame [3 x 3]
+
+  Sepal.Length Sepal.Width           .out
+         (dbl)       (dbl)          (chr)
+1          5.1         3.5 &lt;tbl_df [2,2]&gt;
+2          4.9         3.0 &lt;tbl_df [2,2]&gt;
+3          4.7         3.2 &lt;tbl_df [2,2]&gt;
+&gt; iris[1:3, 1:2] %&gt;% by_row(~data_frame(x=0:1, y=c('a', 'b')), .collate='rows')
+Source: local data frame [6 x 5]
+
+  Sepal.Length Sepal.Width  .row     x     y
+         (dbl)       (dbl) (int) (int) (chr)
+1          5.1         3.5     1     0     a
+2          5.1         3.5     1     1     b
+3          4.9         3.0     2     0     a
+4          4.9         3.0     2     1     b
+5          4.7         3.2     3     0     a
+6          4.7         3.2     3     1     b
+&gt; iris[1:3, 1:2] %&gt;% by_row(~data_frame(x=0:1, y=c('a', 'b')), .collate='cols')
+Source: local data frame [3 x 6]
+
+  Sepal.Length Sepal.Width    x1    x2    y1    y2
+         (dbl)       (dbl) (int) (int) (chr) (chr)
+1          5.1         3.5     0     1     a     b
+2          4.9         3.0     0     1     a     b
+3          4.7         3.2     0     1     a     b
 </code></pre>
 
-<h2 id="使い方">使い方</h2>
+<h2 id="関数">関数</h2>
 
-<h3 id="topgodata-を作る"><code>topGOdata</code> を作る</h3>
+<dl>
+<dt>無名関数</dt>
+<dd>ラムダ式とも言う。
+チルダとドットで簡単に書ける。</dd>
+</dl>
 
-<pre><code class="language-r">tg_data = new('topGOdata',
-    ontology='BP',
-    allGenes=setNames(score, name),
-    geneSelectionFun=function(x) {x &gt; threshold},
-    nodeSize=10,
-    annotationFun=annFUN.org,
-    mapping='org.Hs.eg.db',
-    ID='entrez')
+<pre><code class="language-r">ord = function(x) {strtoi(charToRaw(x), 16L)}
+letters %&gt;&gt;% map_int(ord)
+letters %&gt;&gt;% map_int(function(x) {strtoi(charToRaw(x), 16L)})
+letters %&gt;&gt;% map_int(~ strtoi(charToRaw(.), 16L))
 </code></pre>
 
 <dl>
-<dt><code>ontology</code></dt>
-<dd><code>BP</code>, <code>CC</code>, <code>MF</code> のどれか</dd>
-<dt><code>description</code> (省略可)</dt>
-<dd>説明string</dd>
-<dt><code>allGenes</code></dt>
-<dd>遺伝子名を名前とするnamed vector。
-値はP-valueとかなんとか、好きなスコア。</dd>
-<dt><code>geneSelectionFun</code></dt>
-<dd><code>allGenes</code> の数値を引数として、
-今回興味のある遺伝子に <code>TRUE</code> を返すような関数。</dd>
-<dt><code>nodeSize</code></dt>
-<dd>1以上の整数。
-これ以下の遺伝子数しかないGO termを結果から除外。</dd>
-<dt><code>annotationFun</code></dt>
-<dd>遺伝子IDとGO termを結びつける関数。
-一般的なデータベースのIDなら <code>annFUN.org</code> で足りるはず。</dd>
-<dt><code>...</code></dt>
-<dd>以降は <code>annotationFun()</code> に渡す引数。</dd>
+<dt><code>purrr::partial()</code></dt>
+<dd>引数を部分的に埋めてある関数を作る。C++でいう <code>std::bind()</code></dd>
 </dl>
-
-<hr>
-
-<p><code>annFUN.org(whichOnto, feasibleGenes, mapping, ID='entrez')</code></p>
-
-<dl>
-<dt><code>mapping</code></dt>
-<dd><a href="/rstats/bioconductor.html">Bioconductor</a> のマッピングパッケージ。
-例えばヒトなら <code>org.Hs.eg.db</code> 。</dd>
-<dt><code>ID</code></dt>
-<dd><code>allGenes</code> に与えた名前の種類。
-<code>entrez</code>, <code>genbank</code>, <code>alias</code>, <code>ensembl</code>,
-<code>symbol</code>, <code>genename</code>, <code>unigene</code></dd>
-</dl>
-
-<h3 id="解析">解析</h3>
-
-<pre><code class="language-r">whichTests()
-whichAlgorithms()
-tg_result = runTest(tg_data, algorithm='classic', statistic='fisher')
-</code></pre>
-
-<dl>
-<dt><code>algorithm</code></dt>
-<dd><code>classic</code>, <code>elim</code>, <code>weight</code>,
-<code>weight01</code>, <code>lea</code>, <code>parentChild</code></dd>
-<dt><code>statistic</code></dt>
-<dd><code>fisher</code>, <code>ks</code>, <code>t</code>, <code>globaltest</code>, <code>sum</code></dd>
-<dt><code>scoreOrder</code></dt>
-<dd>デフォルトはP値を扱うように <code>increasing</code> 。
-興味のある遺伝子で値が高くなるスコアの場合は <code>decreasing</code> を指定。</dd>
-</dl>
-
-<p>結果は <code>topGOresult</code> オブジェクト</p>
-
-<pre><code class="language-r">score(tg_result)
-geneData(tg_result)
-</code></pre>
-
-<h3 id="解釈-描画">解釈・描画</h3>
-
-<p>GO termのOver-representationランキング</p>
-
-<pre><code class="language-r">num_significant = geneData(tg_result)['Significant']
-GenTable(tg_data, classic_fisher=tg_result, topNodes=num_significant)
-</code></pre>
-
-<p><code>runTest()</code> の結果は好きな名前で複数並べることができる。</p>
-
-<hr>
-
-<p><code>Rgraphviz</code> を使ってDAG描画</p>
-
-<pre><code class="language-r">showSigOfNodes(tg_data, score(tg_result), firstSigNodes=10, useInfo='all')
-printGraph(tg_data, tg_result, 20, fn.prefix='go_fisher', pdfSW=TRUE)
-</code></pre>
-
-<p>前者はプロットだけ、後者はPDFに書き出し。
-significant nodeが四角で、赤いほど低いP値。</p>
-
-<h2 id="go-terms">GO terms</h2>
-
-<pre><code class="language-r">BPterms = ls(GOBPTerm)
-MFterms = ls(GOMFTerm)
-CCterms = ls(GOCCTerm)
-</code></pre>
 
 </article>
 </main>
@@ -188,7 +190,7 @@ CCterms = ls(GOCCTerm)
 <li><a href="/rstats/programming.html">RプログラミングTips</a></li>
 <li><a href="/rstats/ggplot2.html">ggplot2</a></li>
 <li><a href="/rstats/dplyr.html">dplyr</a></li>
-<li><a href="/rstats/purrr.html">purrr</a></li>
+<li class="active"><a href="/rstats/purrr.html">purrr</a></li>
 <li><a href="/rstats/tidyr.html">tidyr</a></li>
 <li><a href="/rstats/readr.html">readr</a></li>
 <li><a href="/rstats/stringr.html">stringr</a></li>
@@ -198,7 +200,7 @@ CCterms = ls(GOCCTerm)
 <li><a href="/rstats/biomart.html">biomaRt</a></li>
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
-<li class="active"><a href="/rstats/topgo.html">topGO</a></li>
+<li><a href="/rstats/topgo.html">topGO</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
 <li><a href="/rstats/rjags.html">rjags</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
