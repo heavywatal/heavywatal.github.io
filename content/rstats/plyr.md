@@ -19,11 +19,10 @@ Split, Apply, Combine
 Rの中から `install.packages('plyr')` でインストールし、
 使う前に `library(plyr)` で読み込む。
 
-{{%div class="note"%}}
-`list` 処理ではこれがまだ現役だが、
-`data.frame` に関する処理では改良版の
-[dplyr]({{< relref "dplyr.md" >}}) を使うべし。
-両方使う場合は `dplyr` を後に読み込むほうがいいらしい。
+{{%div class="warning"%}}
+data.frame 処理には [dplyr]({{< relref "dplyr.md" >}})、
+list, vector 処理には [purrr]({{< relref "purrr.md" >}})
+がある今となっては、このパッケージを使うべき場面はもう無さそう。
 {{%/div%}}
 
 ## コア関数

@@ -12,11 +12,11 @@ tags = ["r", "hadley"]
 -   <http://blog.rstudio.org/2014/01/17/introducing-dplyr/>
 -   <http://www.rstudio.com/resources/cheatsheets/>
 
-データフレームに特化した版 [plyr]({{< relref "plyr.md" >}}) 。
-[tidyr]({{< relref "tidyr.md" >}}) と一緒に使うとよい。
+前作 [plyr]({{< relref "plyr.md" >}}) のうちdata.frame処理に関する部分を抜き出して強化したパッケージ。
+[purrr]({{< relref "purrr.md" >}}) や [tidyr]({{< relref "tidyr.md" >}}) と一緒に使うとよい。
 
-`install.packages('dplyr')` でインストールし、
-`library(dplyr)` で読み込んでから使う。
+Rの中で `install.packages('dplyr')` としてインストールし、
+使う前に `library(dplyr)` で読み込む。
 
 ## 関数の連結
 
@@ -56,8 +56,8 @@ iris %>%
 
 `dplyr::rowwise(.data)`
 :   行ごとに区切って次の処理に渡す。
-    この方法は非推奨となり、
-    `purrr` パッケージのmap系関数を `mutate()` に適用していくようになる？
+    今後この方法は非推奨となるっぽいので、
+    [`purrr`]({{< relref "purrr.md" >}})`::by_row()`を使ったほうが良い。
 
 `dplyr::do(.data, ...)`
 :   グループごとに処理する。
@@ -68,6 +68,7 @@ iris %>%
     のように怒られるが、
     `do(dummy=func(.))` のように名前付きにすると
     `data.frame` に入らないような型でも大丈夫になる。
+    今後は[`purrr`]({{< relref "purrr.md" >}})`::by_slice()`を使ったほうが良さそう。
 
 ## コア関数 (verb)
 

@@ -13,7 +13,8 @@ tags = ["r", "hadley"]
 -   `vignette("tidy-data")`
 -   `demo(package="tidyr")`
 
-[dplyr]({{< relref "dplyr.md" >}}) と共に `data.frame` を整形するためのツール。
+[dplyr]({{< relref "dplyr.md" >}}) や [purrr]({{< relref "purrr.md" >}})
+と共に `data.frame` を整形するためのツール。
 [reshape2]({{< relref "reshape2.md" >}}) を置き換えるべく再設計された改良版。
 
 Rの中で `install.packages('tidyr')` としてインストールし、
@@ -189,10 +190,14 @@ Source: local data frame [12 x 5]
 
 ネストされた `data.frame` とは、
 `vector` ではなく `list` の列を持っていて、
-ひとつのセルに複数の値を保持した状態のものを指す。
+ひとつのセルに任意の型の値を保持した状態のものを指す。
 
 `nest()` で `data.frame` を圧縮し、
-`unnest()` で `list` を展開してフラットにする
+`unnest()` で `list` を展開してフラットにする。
+
+なんでもかんでもフラットな`data.frame`に
+[dplyr]({{< relref "dplyr.md" >}})を適用するより、
+ネストしておいて[purrr]({{< relref "purrr.md" >}})を適用するほうが楽チン。
 
 ```r
 iris %>% nest(-Species)

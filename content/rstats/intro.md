@@ -89,6 +89,7 @@ Rの中から下記のようなコマンドでインストールする
 例えば
 [ggplot2]({{< relref "ggplot2.md" >}}),
 [dplyr]({{< relref "dplyr.md" >}}),
+[purrr]({{< relref "purrr.md" >}}),
 [tidyr]({{< relref "tidyr.md" >}}),
 [readr]({{< relref "readr.md" >}}),
 [stringr]({{< relref "stringr.md" >}})
@@ -187,7 +188,7 @@ See [readr]({{< relref "readr.md" >}})
 
 ## データ処理・整形
 
-See [dplyr]({{< relref "dplyr.md" >}}) and [tidyr]({{< relref "tidyr.md" >}})
+See [dplyr]({{< relref "dplyr.md" >}}), [purrr]({{< relref "purrr.md" >}}), and [tidyr]({{< relref "tidyr.md" >}})
 
 ## グラフ作図
 
