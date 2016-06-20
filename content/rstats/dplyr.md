@@ -12,7 +12,8 @@ tags = ["r", "hadley"]
 -   <http://blog.rstudio.org/2014/01/17/introducing-dplyr/>
 -   <http://www.rstudio.com/resources/cheatsheets/>
 
-前作 [plyr]({{< relref "plyr.md" >}}) のうちdata.frame処理に関する部分を抜き出して強化したパッケージ。
+data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(summarise)、ソート(arrange)などの処理を施すためのパッケージ。
+前作 [plyr]({{< relref "plyr.md" >}}) のうちdata.frameに関する部分を抜き出して強化したパッケージ。
 [purrr]({{< relref "purrr.md" >}}) や [tidyr]({{< relref "tidyr.md" >}}) と一緒に使うとよい。
 
 Rの中で `install.packages('dplyr')` としてインストールし、
@@ -20,12 +21,10 @@ Rの中で `install.packages('dplyr')` としてインストールし、
 
 ## 関数の連結
 
-`plyr::ddply()` 的な処理をもっと柔軟に、見やすく書ける
+一時変数を作ったり、関数を何重にも重ねて書いたりすることなく、
+適用する順に処理を記述することができる。
 
 ```r
-## plyr
-plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, Sepal.Length)), petal_area=Petal.Length*Petal.Width*0.5), .(Species), numcolwise(mean))
-
 ## dplyr
 iris %>%
    dplyr::filter(Species != 'setosa') %>%
@@ -33,6 +32,9 @@ iris %>%
    dplyr::mutate(petal_area=Petal.Length * Petal.Width * 0.5) %>%
    dplyr::group_by(Species) %>%
    dplyr::summarise_each(funs(mean))
+
+## plyr で書くと読みにくい
+plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, Sepal.Length)), petal_area=Petal.Length*Petal.Width*0.5), .(Species), numcolwise(mean))
 
 ## どちらも結果は
      Species Petal.Length Petal.Width petal_area
@@ -42,7 +44,7 @@ iris %>%
 
 `%>%`
 :   左の値を右の関数に第一引数として渡す。
-    `.data %>% func(arg1, arg2)` は `func(.data, arg1, arg2)` になる。
+    `.data %>% func(arg1, arg2)` は `func(.data, arg1, arg2)` と等価等価。
     処理する順に書けるので、次々と関数を適用していくときでも読みやすい。
 
     {{%div class="note"%}}
@@ -72,29 +74,6 @@ iris %>%
 
 ## コア関数 (verb)
 
-`dplyr::filter(.data, ...)`
-:   列の値で行を絞る。`base::subset()` と似たようなもの
-
-    ```r
-    > iris %>% dplyr::filter(Sepal.Length<6, Sepal.Width>4)
-      Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-    1          5.7         4.4          1.5         0.4  setosa
-    2          5.2         4.1          1.5         0.1  setosa
-    3          5.5         4.2          1.4         0.2  setosa
-    ```
-
-`dplyr::slice(.data, ...)`
-:   行数を指定して行を絞る。
-    `` `[`(i,) `` の代わりに
-
-    ```r
-    > iris %>% dplyr::slice(2:4)
-      Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-    1          4.9         3.0          1.4         0.2  setosa
-    2          4.7         3.2          1.3         0.2  setosa
-    3          4.6         3.1          1.5         0.2  setosa
-    ```
-
 `dplyr::select(.data, ...)`
 :   使う列を絞る。複数指定, 範囲指定、負の指定、パターン指定が可能\
     `starts_with(x, ignore.case=FALSE)`\
@@ -110,27 +89,46 @@ iris %>%
 
     `.data[, j, drop=TRUE]` のように1列分をベクタで得たいときは二重角括弧か、
     `pipeR` の `%>>%` を通して括弧に流す。
-
     ```r
     iris %>% `[[`('Species')
     iris %>>% (Species)
     ```
 
-`dplyr::rename(.data, ...)`
-:   列の改名
-
+`dplyr::filter(.data, ...)`
+:   列の値で行を絞る。`base::subset()` と似たようなもの
     ```r
-    > iris %>% dplyr::rename(sp=Species)
-      Sepal.Length Sepal.Width Petal.Length Petal.Width     sp
-    1          5.1         3.5          1.4         0.2 setosa
-    2          4.9         3.0          1.4         0.2 setosa
-    3          4.7         3.2          1.3         0.2 setosa
+    > iris %>% dplyr::filter(Sepal.Length<6, Sepal.Width>4)
+      Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+    1          5.7         4.4          1.5         0.4  setosa
+    2          5.2         4.1          1.5         0.1  setosa
+    3          5.5         4.2          1.4         0.2  setosa
+    ```
+
+`dplyr::distinct(.data, ...)`
+:   指定した列に関してユニークな行のみ返す。
+    `filter(!duplicated(.[, ...]))` をよりスマートに。
+    ```r
+    > iris %>% distinct(Species)
+      Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
+    1          5.1         3.5          1.4         0.2     setosa
+    2          7.0         3.2          4.7         1.4 versicolor
+    3          6.3         3.3          6.0         2.5  virginica
+    ```
+
+`dplyr::slice(.data, ...)`
+:   行番号を指定して行を絞る。
+    `` `[`(i,) `` の代わりに
+    ```r
+    > iris %>% dplyr::slice(2:4)
+      Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+    1          4.9         3.0          1.4         0.2  setosa
+    2          4.7         3.2          1.3         0.2  setosa
+    3          4.6         3.1          1.5         0.2  setosa
     ```
 
 `dplyr::mutate(.data, ...)`
 :   既存の列を使って新しい列を作る。
     `base::transform()` とほとんど同じだがそれよりも高速で高機能
-
     ```r
     # modify existing column
     iris %>% dplyr::mutate(Sepal.Length = log(Sepal.Length))
@@ -142,15 +140,15 @@ iris %>%
 `dplyr::transmute(.data, ...)`
 :   指定した列以外を保持しない版の `mutate()`
 
-`dplyr::distinct(.data, ...)`
-:   指定した列に関してユニークな行のみ返す
-
+`dplyr::rename(.data, ...)`
+:   列の改名。
+    `mutate()`と同じようなイメージで `new=old` と指定。
     ```r
-    > iris %>% distinct(Species)
-      Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
-    1          5.1         3.5          1.4         0.2     setosa
-    2          7.0         3.2          4.7         1.4 versicolor
-    3          6.3         3.3          6.0         2.5  virginica
+    > iris %>% dplyr::rename(sp=Species)
+      Sepal.Length Sepal.Width Petal.Length Petal.Width     sp
+    1          5.1         3.5          1.4         0.2 setosa
+    2          4.9         3.0          1.4         0.2 setosa
+    3          4.7         3.2          1.3         0.2 setosa
     ```
 
 `dplyr::arrange(.data, column1, column2, ...)`

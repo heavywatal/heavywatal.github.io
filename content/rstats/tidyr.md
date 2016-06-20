@@ -13,8 +13,9 @@ tags = ["r", "hadley"]
 -   `vignette("tidy-data")`
 -   `demo(package="tidyr")`
 
+data.frameを縦長・横長・入れ子に変形・整形するためのツール。
 [dplyr]({{< relref "dplyr.md" >}}) や [purrr]({{< relref "purrr.md" >}})
-と共に `data.frame` を整形するためのツール。
+と一緒に使うとよい。
 [reshape2]({{< relref "reshape2.md" >}}) を置き換えるべく再設計された改良版。
 
 Rの中で `install.packages('tidyr')` としてインストールし、
@@ -23,8 +24,7 @@ Rの中で `install.packages('tidyr')` としてインストールし、
 下記のコード例で使うデータ
 
 ```r
-iris %>% head(3) %>% add_rownames('id')
-
+> iris %>% head(3) %>% add_rownames('id')
 Source: local data frame [3 x 6]
 
      id Sepal.Length Sepal.Width Petal.Length Petal.Width Species
@@ -37,10 +37,11 @@ Source: local data frame [3 x 6]
 パイプ演算子 `%>%` については[dplyr]({{< relref "dplyr.md" >}})を参照。
 
 
-## `tidyr::gather()`
+## `tidyr::gather()` で縦長にする
 
 複数列にまたがっていた値を、カテゴリ変数と値の2列に変換することで、
-wide-formatな `data.frame` をlong-formatに変形する。
+横長(wide-format)のdata.frameを縦長(long-format)に変形する。
+[ggplot2]({{< relref "ggplot2.md" >}})で使いやすいのはこの縦長。
 `reshape2::melt()` に相当。
 
 `tidyr::gather(data, key, value, ..., na.rm=FALSE, convert=FALSE)`
@@ -58,7 +59,7 @@ e.g., `Species` 以外の列について、
 元の列名を `kagi` 、値を `atai` に格納した縦長の表に変形
 
 ```r
-iris %>% head(3) %>% add_rownames('id') %>%
+> iris %>% head(3) %>% add_rownames('id') %>%
     gather(kagi, atai, -id, -Species)
 
 Source: local data frame [12 x 4]
@@ -79,10 +80,9 @@ Source: local data frame [12 x 4]
 12     3  setosa  Petal.Width   0.2
 ```
 
-## `tidyr::spread()`
+## `tidyr::spread()` で横長にする
 
-`tidyr::gather()` の逆で、
-long-formatの `data.frame` をwide-formatに変形する。
+`tidyr::gather()` の逆で、縦長のdata.frameを横長に変形する。
 `reshape2::dcast()` に相当。
 IDとなるような列がないと `Error: Duplicate identifiers` と怒られる。
 
@@ -109,7 +109,7 @@ IDとなるような列がないと `Error: Duplicate identifiers` と怒られ�
 e.g., `kagi` 内の文字列を新たな列名として横長の表に変形して `atai` を移す
 
 ```r
-iris %>% head(3) %>% add_rownames('id') %>%
+> iris %>% head(3) %>% add_rownames('id') %>%
     gather(kagi, atai, -id, -Species) %>%
     spread(kagi, atai)
 
@@ -122,10 +122,45 @@ Source: local data frame [3 x 6]
 3     3  setosa          4.7         3.2          1.3         0.2
 ```
 
-## `tidyr::separate()`
+## Nested data.frame --- 入れ子構造
 
+### `tidyr::nest(data, ..., .key=data)`
+
+data.frameをネストして(入れ子にして)、list of data.frames のカラムを作る。
+内側のdata.frameに押し込むカラムを `...` に指定するか、
+外側に残すカラムをマイナス指定する。
+
+```r
+iris %>% nest(-Species, .key=NEW_COLUMN)
+Source: local data frame [3 x 2]
+
+     Species      NEW_COLUMN
+      <fctr>          <list>
+1     setosa <tbl_df [50,4]>
+2 versicolor <tbl_df [50,4]>
+3  virginica <tbl_df [50,4]>
+
+# equivalent to
+iris %>% dplyr::group_by(Species) %>% nest()
+iris %>% nest(matches('Length$|Width$'))
+```
+
+なんでもかんでもフラットなdata.frameにして
+[dplyr]({{< relref "dplyr.md" >}})を適用するより、
+ネストしておいて[purrr]({{< relref "purrr.md" >}})を適用するほうが楽チンな場合もある。
+
+### `tidyr::unnest(data, ..., .drop=NA, id=NULL, .sep=NULL)`
+
+ネストされたdata.frameを展開してフラットにする。
+list of data.framesだけでなく、list of vectorsとかでもよい。
+
+
+## その他の便利関数
+
+### `tidyr::separate()`
+
+文字列カラムを任意のセパレータで複数カラムに分割。
 `reshape2::colsplit()` に相当。
-`character` 列を任意のセパレータで複数の列に分割。
 
 `tidyr::separate(data, col, into, sep='[^[:alnum:]]', remove=TRUE, convert=FALSE, extra='warn', fill='warn')`
 
@@ -151,7 +186,8 @@ Source: local data frame [3 x 6]
 :   列数が揃わないときにどうするか: `warn`, `drop`, `merge`
 
 `fill='warn'`
-:   足りない場合にどっちから埋めるか: `warn`, `right`, `left`
+:   足りない場合にどっち側をNAで埋めるか: `warn`, `right`, `left`。
+    つまり、文字を左詰めにするには`right`が正解(紛らわしい)。
 
 `kagi` 列を `part`, `axis` という2列に分割
 
@@ -186,38 +222,12 @@ Source: local data frame [12 x 5]
 名前の似てる `tidyr::extract_numeric(x)` は
 文字列から数字部分を抜き出して `numeric` で返す関数。
 
-## `tidyr::nest()`, `tidyr::unnest()`
-
-ネストされた `data.frame` とは、
-`vector` ではなく `list` の列を持っていて、
-ひとつのセルに任意の型の値を保持した状態のものを指す。
-
-`nest()` で `data.frame` を圧縮し、
-`unnest()` で `list` を展開してフラットにする。
-
-なんでもかんでもフラットな`data.frame`に
-[dplyr]({{< relref "dplyr.md" >}})を適用するより、
-ネストしておいて[purrr]({{< relref "purrr.md" >}})を適用するほうが楽チン。
-
-```r
-iris %>% nest(-Species)
-
-Source: local data frame [3 x 5]
-Groups: <by row>
-
-     Species Sepal.Length Sepal.Width Petal.Length Petal.Width
-      (fctr)        (chr)       (chr)        (chr)       (chr)
-1     setosa    <dbl[50]>   <dbl[50]>    <dbl[50]>   <dbl[50]>
-2 versicolor    <dbl[50]>   <dbl[50]>    <dbl[50]>   <dbl[50]>
-3  virginica    <dbl[50]>   <dbl[50]>    <dbl[50]>   <dbl[50]>
-```
-
-## `tidyr::expand()`
+### `tidyr::expand()`
 
 `base::expand.grid()` のラッパー。
 指定した列の全ての組み合わせが登場するように、欠損値 `NA` の入った行を挿入する。
 
-## `tidyr::replace_na()`
+### `tidyr::replace_na()`
 
 欠損値 `NA` を好きな値で置き換える。
 これまでは `mutate(x= ifelse(is.na(x), 0, x))` のようにしてたところを
@@ -226,7 +236,7 @@ Groups: <by row>
 df %>% replace_na(list(x=0, y='unknown'))
 ```
 
-## `tidyr::complete()`
+### `tidyr::complete()`
 
 指定した列の全ての組み合わせが登場するように、
 他の列を `NA` などにして補完する
@@ -235,7 +245,7 @@ df %>% replace_na(list(x=0, y='unknown'))
 df %>% complete(col1, col2, fill=list(col1=0, col2='-'))
 ```
 
-## `tidyr::fill()`
+### `tidyr::fill()`
 
 `NA` を、その列の直前の `NA` でない値で埋める。
 えくせるでセルの結合とかやってしまって、
