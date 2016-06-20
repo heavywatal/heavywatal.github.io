@@ -70,7 +70,8 @@ dplyr — 高速data.frame処理
 <li><a href="http://www.rstudio.com/resources/cheatsheets/">http://www.rstudio.com/resources/cheatsheets/</a></li>
 </ul>
 
-<p>前作 <a href="/rstats/plyr.html">plyr</a> のうちdata.frame処理に関する部分を抜き出して強化したパッケージ。
+<p>data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(summarise)、ソート(arrange)などの処理を施すためのパッケージ。
+前作 <a href="/rstats/plyr.html">plyr</a> のうちdata.frameに関する部分を抜き出して強化したパッケージ。
 <a href="/rstats/purrr.html">purrr</a> や <a href="/rstats/tidyr.html">tidyr</a> と一緒に使うとよい。</p>
 
 <p>Rの中で <code>install.packages('dplyr')</code> としてインストールし、
@@ -78,18 +79,19 @@ dplyr — 高速data.frame処理
 
 <h2 id="関数の連結">関数の連結</h2>
 
-<p><code>plyr::ddply()</code> 的な処理をもっと柔軟に、見やすく書ける</p>
+<p>一時変数を作ったり、関数を何重にも重ねて書いたりすることなく、
+適用する順に処理を記述することができる。</p>
 
-<pre><code class="language-r">## plyr
-plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, Sepal.Length)), petal_area=Petal.Length*Petal.Width*0.5), .(Species), numcolwise(mean))
-
-## dplyr
+<pre><code class="language-r">## dplyr
 iris %&gt;%
    dplyr::filter(Species != 'setosa') %&gt;%
    dplyr::select(-starts_with('Sepal')) %&gt;%
    dplyr::mutate(petal_area=Petal.Length * Petal.Width * 0.5) %&gt;%
    dplyr::group_by(Species) %&gt;%
    dplyr::summarise_each(funs(mean))
+
+## plyr で書くと読みにくい
+plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, Sepal.Length)), petal_area=Petal.Length*Petal.Width*0.5), .(Species), numcolwise(mean))
 
 ## どちらも結果は
      Species Petal.Length Petal.Width petal_area
@@ -100,7 +102,7 @@ iris %&gt;%
 <dl>
 <dt><code>%&gt;%</code></dt>
 <dd><p>左の値を右の関数に第一引数として渡す。
-<code>.data %&gt;% func(arg1, arg2)</code> は <code>func(.data, arg1, arg2)</code> になる。
+<code>.data %&gt;% func(arg1, arg2)</code> は <code>func(.data, arg1, arg2)</code> と等価等価。
 処理する順に書けるので、次々と関数を適用していくときでも読みやすい。</p>
 
 <div class="note">
@@ -131,25 +133,6 @@ iris %&gt;%
 <h2 id="コア関数-verb">コア関数 (verb)</h2>
 
 <dl>
-<dt><code>dplyr::filter(.data, ...)</code></dt>
-<dd><p>列の値で行を絞る。<code>base::subset()</code> と似たようなもの</p>
-
-<pre><code class="language-r">&gt; iris %&gt;% dplyr::filter(Sepal.Length&lt;6, Sepal.Width&gt;4)
-  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-1          5.7         4.4          1.5         0.4  setosa
-2          5.2         4.1          1.5         0.1  setosa
-3          5.5         4.2          1.4         0.2  setosa
-</code></pre></dd>
-<dt><code>dplyr::slice(.data, ...)</code></dt>
-<dd><p>行数を指定して行を絞る。
-<code>`[`(i,)</code> の代わりに</p>
-
-<pre><code class="language-r">&gt; iris %&gt;% dplyr::slice(2:4)
-  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-1          4.9         3.0          1.4         0.2  setosa
-2          4.7         3.2          1.3         0.2  setosa
-3          4.6         3.1          1.5         0.2  setosa
-</code></pre></dd>
 <dt><code>dplyr::select(.data, ...)</code></dt>
 <dd><p>使う列を絞る。複数指定, 範囲指定、負の指定、パターン指定が可能<br>
 <code>starts_with(x, ignore.case=FALSE)</code><br>
@@ -168,14 +151,34 @@ iris %&gt;% dplyr::select(ends_with('Length'))
 <pre><code class="language-r">iris %&gt;% `[[`('Species')
 iris %&gt;&gt;% (Species)
 </code></pre></dd>
-<dt><code>dplyr::rename(.data, ...)</code></dt>
-<dd><p>列の改名</p>
+<dt><code>dplyr::filter(.data, ...)</code></dt>
+<dd><p>列の値で行を絞る。<code>base::subset()</code> と似たようなもの</p>
 
-<pre><code class="language-r">&gt; iris %&gt;% dplyr::rename(sp=Species)
-  Sepal.Length Sepal.Width Petal.Length Petal.Width     sp
-1          5.1         3.5          1.4         0.2 setosa
-2          4.9         3.0          1.4         0.2 setosa
-3          4.7         3.2          1.3         0.2 setosa
+<pre><code class="language-r">&gt; iris %&gt;% dplyr::filter(Sepal.Length&lt;6, Sepal.Width&gt;4)
+  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+1          5.7         4.4          1.5         0.4  setosa
+2          5.2         4.1          1.5         0.1  setosa
+3          5.5         4.2          1.4         0.2  setosa
+</code></pre></dd>
+<dt><code>dplyr::distinct(.data, ...)</code></dt>
+<dd><p>指定した列に関してユニークな行のみ返す。
+<code>filter(!duplicated(.[, ...]))</code> をよりスマートに。</p>
+
+<pre><code class="language-r">&gt; iris %&gt;% distinct(Species)
+  Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
+1          5.1         3.5          1.4         0.2     setosa
+2          7.0         3.2          4.7         1.4 versicolor
+3          6.3         3.3          6.0         2.5  virginica
+</code></pre></dd>
+<dt><code>dplyr::slice(.data, ...)</code></dt>
+<dd><p>行番号を指定して行を絞る。
+<code>`[`(i,)</code> の代わりに</p>
+
+<pre><code class="language-r">&gt; iris %&gt;% dplyr::slice(2:4)
+  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+1          4.9         3.0          1.4         0.2  setosa
+2          4.7         3.2          1.3         0.2  setosa
+3          4.6         3.1          1.5         0.2  setosa
 </code></pre></dd>
 <dt><code>dplyr::mutate(.data, ...)</code></dt>
 <dd><p>既存の列を使って新しい列を作る。
@@ -189,14 +192,15 @@ iris %&gt;% dplyr::mutate(ln_sepal_length = log(Sepal.Length))
 </code></pre></dd>
 <dt><code>dplyr::transmute(.data, ...)</code></dt>
 <dd><p>指定した列以外を保持しない版の <code>mutate()</code></p></dd>
-<dt><code>dplyr::distinct(.data, ...)</code></dt>
-<dd><p>指定した列に関してユニークな行のみ返す</p>
+<dt><code>dplyr::rename(.data, ...)</code></dt>
+<dd><p>列の改名。
+<code>mutate()</code>と同じようなイメージで <code>new=old</code> と指定。</p>
 
-<pre><code class="language-r">&gt; iris %&gt;% distinct(Species)
-  Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
-1          5.1         3.5          1.4         0.2     setosa
-2          7.0         3.2          4.7         1.4 versicolor
-3          6.3         3.3          6.0         2.5  virginica
+<pre><code class="language-r">&gt; iris %&gt;% dplyr::rename(sp=Species)
+  Sepal.Length Sepal.Width Petal.Length Petal.Width     sp
+1          5.1         3.5          1.4         0.2 setosa
+2          4.9         3.0          1.4         0.2 setosa
+3          4.7         3.2          1.3         0.2 setosa
 </code></pre></dd>
 <dt><code>dplyr::arrange(.data, column1, column2, ...)</code></dt>
 <dd><p>指定した列の昇順で <code>data.frame</code> の行を並べ替える。

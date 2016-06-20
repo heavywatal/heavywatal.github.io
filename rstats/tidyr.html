@@ -71,8 +71,9 @@ tidyr — シンプルなデータ変形ツール
 <li><code>demo(package=&quot;tidyr&quot;)</code></li>
 </ul>
 
-<p><a href="/rstats/dplyr.html">dplyr</a> や <a href="/rstats/purrr.html">purrr</a>
-と共に <code>data.frame</code> を整形するためのツール。
+<p>data.frameを縦長・横長・入れ子に変形・整形するためのツール。
+<a href="/rstats/dplyr.html">dplyr</a> や <a href="/rstats/purrr.html">purrr</a>
+と一緒に使うとよい。
 <a href="/rstats/reshape2.html">reshape2</a> を置き換えるべく再設計された改良版。</p>
 
 <p>Rの中で <code>install.packages('tidyr')</code> としてインストールし、
@@ -80,8 +81,7 @@ tidyr — シンプルなデータ変形ツール
 
 <p>下記のコード例で使うデータ</p>
 
-<pre><code class="language-r">iris %&gt;% head(3) %&gt;% add_rownames('id')
-
+<pre><code class="language-r">&gt; iris %&gt;% head(3) %&gt;% add_rownames('id')
 Source: local data frame [3 x 6]
 
      id Sepal.Length Sepal.Width Petal.Length Petal.Width Species
@@ -93,10 +93,11 @@ Source: local data frame [3 x 6]
 
 <p>パイプ演算子 <code>%&gt;%</code> については<a href="/rstats/dplyr.html">dplyr</a>を参照。</p>
 
-<h2 id="tidyr-gather"><code>tidyr::gather()</code></h2>
+<h2 id="tidyr-gather-で縦長にする"><code>tidyr::gather()</code> で縦長にする</h2>
 
 <p>複数列にまたがっていた値を、カテゴリ変数と値の2列に変換することで、
-wide-formatな <code>data.frame</code> をlong-formatに変形する。
+横長(wide-format)のdata.frameを縦長(long-format)に変形する。
+<a href="/rstats/ggplot2.html">ggplot2</a>で使いやすいのはこの縦長。
 <code>reshape2::melt()</code> に相当。</p>
 
 <p><code>tidyr::gather(data, key, value, ..., na.rm=FALSE, convert=FALSE)</code></p>
@@ -113,7 +114,7 @@ wide-formatな <code>data.frame</code> をlong-formatに変形する。
 <p>e.g., <code>Species</code> 以外の列について、
 元の列名を <code>kagi</code> 、値を <code>atai</code> に格納した縦長の表に変形</p>
 
-<pre><code class="language-r">iris %&gt;% head(3) %&gt;% add_rownames('id') %&gt;%
+<pre><code class="language-r">&gt; iris %&gt;% head(3) %&gt;% add_rownames('id') %&gt;%
     gather(kagi, atai, -id, -Species)
 
 Source: local data frame [12 x 4]
@@ -134,10 +135,9 @@ Source: local data frame [12 x 4]
 12     3  setosa  Petal.Width   0.2
 </code></pre>
 
-<h2 id="tidyr-spread"><code>tidyr::spread()</code></h2>
+<h2 id="tidyr-spread-で横長にする"><code>tidyr::spread()</code> で横長にする</h2>
 
-<p><code>tidyr::gather()</code> の逆で、
-long-formatの <code>data.frame</code> をwide-formatに変形する。
+<p><code>tidyr::gather()</code> の逆で、縦長のdata.frameを横長に変形する。
 <code>reshape2::dcast()</code> に相当。
 IDとなるような列がないと <code>Error: Duplicate identifiers</code> と怒られる。</p>
 
@@ -160,7 +160,7 @@ IDとなるような列がないと <code>Error: Duplicate identifiers</code> �
 
 <p>e.g., <code>kagi</code> 内の文字列を新たな列名として横長の表に変形して <code>atai</code> を移す</p>
 
-<pre><code class="language-r">iris %&gt;% head(3) %&gt;% add_rownames('id') %&gt;%
+<pre><code class="language-r">&gt; iris %&gt;% head(3) %&gt;% add_rownames('id') %&gt;%
     gather(kagi, atai, -id, -Species) %&gt;%
     spread(kagi, atai)
 
@@ -173,10 +173,43 @@ Source: local data frame [3 x 6]
 3     3  setosa          4.7         3.2          1.3         0.2
 </code></pre>
 
-<h2 id="tidyr-separate"><code>tidyr::separate()</code></h2>
+<h2 id="nested-data-frame-入れ子構造">Nested data.frame &mdash; 入れ子構造</h2>
 
-<p><code>reshape2::colsplit()</code> に相当。
-<code>character</code> 列を任意のセパレータで複数の列に分割。</p>
+<h3 id="tidyr-nest-data-key-data"><code>tidyr::nest(data, ..., .key=data)</code></h3>
+
+<p>data.frameをネストして(入れ子にして)、list of data.frames のカラムを作る。
+内側のdata.frameに押し込むカラムを <code>...</code> に指定するか、
+外側に残すカラムをマイナス指定する。</p>
+
+<pre><code class="language-r">iris %&gt;% nest(-Species, .key=NEW_COLUMN)
+Source: local data frame [3 x 2]
+
+     Species      NEW_COLUMN
+      &lt;fctr&gt;          &lt;list&gt;
+1     setosa &lt;tbl_df [50,4]&gt;
+2 versicolor &lt;tbl_df [50,4]&gt;
+3  virginica &lt;tbl_df [50,4]&gt;
+
+# equivalent to
+iris %&gt;% dplyr::group_by(Species) %&gt;% nest()
+iris %&gt;% nest(matches('Length$|Width$'))
+</code></pre>
+
+<p>なんでもかんでもフラットなdata.frameにして
+<a href="/rstats/dplyr.html">dplyr</a>を適用するより、
+ネストしておいて<a href="/rstats/purrr.html">purrr</a>を適用するほうが楽チンな場合もある。</p>
+
+<h3 id="tidyr-unnest-data-drop-na-id-null-sep-null"><code>tidyr::unnest(data, ..., .drop=NA, id=NULL, .sep=NULL)</code></h3>
+
+<p>ネストされたdata.frameを展開してフラットにする。
+list of data.framesだけでなく、list of vectorsとかでもよい。</p>
+
+<h2 id="その他の便利関数">その他の便利関数</h2>
+
+<h3 id="tidyr-separate"><code>tidyr::separate()</code></h3>
+
+<p>文字列カラムを任意のセパレータで複数カラムに分割。
+<code>reshape2::colsplit()</code> に相当。</p>
 
 <p><code>tidyr::separate(data, col, into, sep='[^[:alnum:]]', remove=TRUE, convert=FALSE, extra='warn', fill='warn')</code></p>
 
@@ -196,7 +229,8 @@ Source: local data frame [3 x 6]
 <dt><code>extra='warn'</code></dt>
 <dd>列数が揃わないときにどうするか: <code>warn</code>, <code>drop</code>, <code>merge</code></dd>
 <dt><code>fill='warn'</code></dt>
-<dd>足りない場合にどっちから埋めるか: <code>warn</code>, <code>right</code>, <code>left</code></dd>
+<dd>足りない場合にどっち側をNAで埋めるか: <code>warn</code>, <code>right</code>, <code>left</code>。
+つまり、文字を左詰めにするには<code>right</code>が正解(紛らわしい)。</dd>
 </dl>
 
 <p><code>kagi</code> 列を <code>part</code>, <code>axis</code> という2列に分割</p>
@@ -231,37 +265,12 @@ Source: local data frame [12 x 5]
 <p>名前の似てる <code>tidyr::extract_numeric(x)</code> は
 文字列から数字部分を抜き出して <code>numeric</code> で返す関数。</p>
 
-<h2 id="tidyr-nest-tidyr-unnest"><code>tidyr::nest()</code>, <code>tidyr::unnest()</code></h2>
-
-<p>ネストされた <code>data.frame</code> とは、
-<code>vector</code> ではなく <code>list</code> の列を持っていて、
-ひとつのセルに任意の型の値を保持した状態のものを指す。</p>
-
-<p><code>nest()</code> で <code>data.frame</code> を圧縮し、
-<code>unnest()</code> で <code>list</code> を展開してフラットにする。</p>
-
-<p>なんでもかんでもフラットな<code>data.frame</code>に
-<a href="/rstats/dplyr.html">dplyr</a>を適用するより、
-ネストしておいて<a href="/rstats/purrr.html">purrr</a>を適用するほうが楽チン。</p>
-
-<pre><code class="language-r">iris %&gt;% nest(-Species)
-
-Source: local data frame [3 x 5]
-Groups: &lt;by row&gt;
-
-     Species Sepal.Length Sepal.Width Petal.Length Petal.Width
-      (fctr)        (chr)       (chr)        (chr)       (chr)
-1     setosa    &lt;dbl[50]&gt;   &lt;dbl[50]&gt;    &lt;dbl[50]&gt;   &lt;dbl[50]&gt;
-2 versicolor    &lt;dbl[50]&gt;   &lt;dbl[50]&gt;    &lt;dbl[50]&gt;   &lt;dbl[50]&gt;
-3  virginica    &lt;dbl[50]&gt;   &lt;dbl[50]&gt;    &lt;dbl[50]&gt;   &lt;dbl[50]&gt;
-</code></pre>
-
-<h2 id="tidyr-expand"><code>tidyr::expand()</code></h2>
+<h3 id="tidyr-expand"><code>tidyr::expand()</code></h3>
 
 <p><code>base::expand.grid()</code> のラッパー。
 指定した列の全ての組み合わせが登場するように、欠損値 <code>NA</code> の入った行を挿入する。</p>
 
-<h2 id="tidyr-replace-na"><code>tidyr::replace_na()</code></h2>
+<h3 id="tidyr-replace-na"><code>tidyr::replace_na()</code></h3>
 
 <p>欠損値 <code>NA</code> を好きな値で置き換える。
 これまでは <code>mutate(x= ifelse(is.na(x), 0, x))</code> のようにしてたところを</p>
@@ -269,7 +278,7 @@ Groups: &lt;by row&gt;
 <pre><code class="language-r">df %&gt;% replace_na(list(x=0, y='unknown'))
 </code></pre>
 
-<h2 id="tidyr-complete"><code>tidyr::complete()</code></h2>
+<h3 id="tidyr-complete"><code>tidyr::complete()</code></h3>
 
 <p>指定した列の全ての組み合わせが登場するように、
 他の列を <code>NA</code> などにして補完する</p>
@@ -277,7 +286,7 @@ Groups: &lt;by row&gt;
 <pre><code class="language-r">df %&gt;% complete(col1, col2, fill=list(col1=0, col2='-'))
 </code></pre>
 
-<h2 id="tidyr-fill"><code>tidyr::fill()</code></h2>
+<h3 id="tidyr-fill"><code>tidyr::fill()</code></h3>
 
 <p><code>NA</code> を、その列の直前の <code>NA</code> でない値で埋める。
 えくせるでセルの結合とかやってしまって、
