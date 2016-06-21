@@ -147,6 +147,10 @@ Basic Local Alignment Search Tool
 `-out` (stdout)
 
 `-evalue` (10.0)
+:   これを下回るE値を持つものだけ集める。
+
+`-max_target_seqs` (500)
+:   アラインされた配列をいくつまで保持して報告するか？
 
 `-subject`
 :   データベース化してないFASTAファイルを検索対象として直接指定。
@@ -251,13 +255,3 @@ Nucleotide query vs Nucleotide subject
 `tblastx`
 :   Nucleotide query (translated) vs Nucleotide subject (translated)
     <http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.tblastx_application_options>
-
-## [BioPython]({{< relref "python/biopython.md" >}}) から実行
-
-<http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc84>
-
-<http://biopython.org/DIST/docs/api/Bio.Blast.Applications-module.html>
-
-```py
-from Bio.Blast.Applications import NcbiblastnCommandline
-```
