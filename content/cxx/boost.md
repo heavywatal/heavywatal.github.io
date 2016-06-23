@@ -13,9 +13,9 @@ tags = ["c++"]
 
 ### ソースから
 
-<http://boostjp.github.io/howtobuild.html>
-
-<http://www.boost.org/doc/libs/release/more/getting_started/unix-variants.html>
+- http://www.boost.org/doc/libs/release/more/getting_started/unix-variants.html
+- http://www.boost.org/build/
+- http://boostjp.github.io/howtobuild.html
 
 普通の `configure` と `make` じゃないので混乱するけど、まあまあ相同な手順。
 gccとclangの両方から使える統一ライブラリを作るのは難しいらしいので、
