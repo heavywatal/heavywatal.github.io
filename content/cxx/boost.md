@@ -42,10 +42,13 @@ gccとclangの両方から使える統一ライブラリを作るのは難しい
 
 5.  ヘルプを見る `./b2 --help`
 
-6. `~/user-config.jam` にツールセットを定義:
+6. `~/user-config.jam` に [ツールセットを定義]
+    (http://www.boost.org/build/doc/html/bbv2/reference/tools.html)。
+    `darwin`はMac-gcc用:
     ```
-    using gcc : 14 : g++-6 : <cxxflags>-std=c++14 -stdlib=libstdc++ <linkflags>-stdlib=libstdc++ ;
-    using clang : 14 : clang++ : <cxxflags>-std=c++14 -stdlib=libc++ <linkflags>-stdlib=libc++ ;
+    using gcc : 14 : g++-6 : <compileflags>-fPIC <cxxflags>-std=c++14 -stdlib=libstdc++ <linkflags>-stdlib=libstdc++ ;
+    using darwin : 14 : g++-6 : <compileflags>-fPIC <cxxflags>-std=c++14 -stdlib=libstdc++ <linkflags>-stdlib=libstdc++ ;
+    using clang : 14 : clang++ : <compileflags>-fPIC <cxxflags>-std=c++14 -stdlib=libc++ <linkflags>-stdlib=libc++ ;
     ```
 
 7.  システム標準zlibをリンクしようとしてエラーになることがあるので、
@@ -60,14 +63,15 @@ gccとclangの両方から使える統一ライブラリを作るのは難しい
 
 8.  ツールセットを指定してビルド:
     ```
-    % ./b2 -j2 toolset=gcc-14 link=static runtime-link=shared threading=multi variant=release --layout=system --stagedir=stage_gcc stage 2>&1 | tee stage.log
-    % ./b2 -j2 toolset=clang-14 link=static runtime-link=shared threading=multi variant=release --layout=system --stagedir=stage_clang stage 2>&1 | tee stage.log
+    % ./b2 -j2 toolset=gcc-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=system --build-dir=../b2gcc --stagedir=stage/gcc stage
+    % ./b2 -j2 toolset=darwin-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=system --build-dir=../b2gcc --stagedir=stage/gcc stage
+    % ./b2 -j2 toolset=clang-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=system --build-dir=../b2clang --stagedir=stage/clang stage
     ```
 
 9.  手動でインストール:
     ```
-    % rsync -auv stage_gcc/ ~/local/boost-gcc
-    % rsync -auv stage_clang/ ~/local/boost-clang
+    % rsync -auv stage/gcc/ ~/local/boost-gcc
+    % rsync -auv stage/clang/ ~/local/boost-clang
     % rsync -au boost ~/local/include
     ```
 
