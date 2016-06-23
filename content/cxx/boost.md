@@ -46,8 +46,8 @@ gccとclangの両方から使える統一ライブラリを作るのは難しい
     (http://www.boost.org/build/doc/html/bbv2/reference/tools.html)。
     `darwin`はMac-gcc用:
     ```
-    using gcc : 14 : g++-6 : <compileflags>-fPIC <cxxflags>-std=c++14 -stdlib=libstdc++ <linkflags>-stdlib=libstdc++ ;
-    using darwin : 14 : g++-6 : <compileflags>-fPIC <cxxflags>-std=c++14 -stdlib=libstdc++ <linkflags>-stdlib=libstdc++ ;
+    using gcc : 14 : g++-6 : <compileflags>-fPIC <cxxflags>-std=c++14 ;
+    using darwin : 14 : g++-6 : <compileflags>-fPIC <cxxflags>-std=c++14 ;
     using clang : 14 : clang++ : <compileflags>-fPIC <cxxflags>-std=c++14 -stdlib=libc++ <linkflags>-stdlib=libc++ ;
     ```
 
