@@ -63,30 +63,30 @@ make
 
 
 <ul>
-<li><a href="http://www.gnu.org/software/make/">http://www.gnu.org/software/make/</a></li>
-<li><a href="http://www.gnu.org/software/make/manual/make.html">http://www.gnu.org/software/make/manual/make.html</a></li>
+<li><a href="https://www.gnu.org/software/make/">https://www.gnu.org/software/make/</a></li>
+<li><a href="https://www.gnu.org/software/make/manual/make.html">https://www.gnu.org/software/make/manual/make.html</a></li>
 </ul>
 
 <p>あらかじめコンパイルの命令を <code>Makefile</code> に書いておくことで、
-複雑な <code>gcc</code> コマンドを何度も打つのを避けられる。</p>
+複雑なコマンドを何度も打つのを避けられる。</p>
 
 <h2 id="makefile">Makefile</h2>
 
-<p>cppソースコードと同じディレクトリに入れるだけでいきなり使える
+<p>C++ソースコードと同じディレクトリに入れるだけでいきなり使える
 <code>Makefile</code> の例。</p>
 
-<pre><code class="language-makefile">####### Options
+<pre><code class="language-makefile">## Options
 
 PROGRAM := ./a.out
 CXX := g++
 CC := ${CXX}
-CXXFLAGS := -O3 -std=c++11
-CPPFLAGS := -Wall -Wextra -fno-strict-aliasing -iquote/usr/local/include -iquote${HOME}/local/include ${DBGFLAGS}
+CXXFLAGS := -O3 -std=c++14
+CPPFLAGS := -Wall -Wextra -iquote/usr/local/include -iquote${HOME}/local/include
 LDFLAGS := -L/usr/local/lib -L${HOME}/local/lib
 LDLIBS := -lboost_program_options
 TARGET_ARCH := -m64 -msse -msse2 -msse3 -mfpmath=sse
 
-####### Dependencies
+## Dependencies
 
 SRCS := $(wildcard *.cpp)
 OBJS := $(SRCS:.cpp=.o)
@@ -95,10 +95,10 @@ OBJS := $(SRCS:.cpp=.o)
 Dependfile:
         ${CXX} -MM ${CPPFLAGS} ${CXXFLAGS} ${TARGET_ARCH} ${SRCS} &gt; Dependfile
 
-####### Targets
+## Targets
 
 .DEFAULT_GOAL := all
-.PHONY: all clean run debug
+.PHONY: all clean
 
 all: ${PROGRAM}
         @:
@@ -106,19 +106,11 @@ all: ${PROGRAM}
 clean:
         ${RM} ${OBJS} ${PROGRAM}
 
-run:
-        ${PROGRAM}
-
-debug:
-        ${MAKE} all DBGFLAGS=&quot;-g -DDEBUG&quot;
-
 ${PROGRAM}: ${OBJS}
-        ${LINK.o} $^ ${LOADLIBES} ${LDLIBS} ${OUTPUT_OPTION}
+        ${LINK.cpp} ${OUTPUT_OPTION} $^ ${LDLIBS}
 </code></pre>
 
-<h3 id="automatic-variables">Automatic Variables</h3>
-
-<p><a href="http://www.gnu.org/software/make/manual/make.html#Automatic-Variables">http://www.gnu.org/software/make/manual/make.html#Automatic-Variables</a></p>
+<h3 id="automatic-variables-https-www-gnu-org-software-make-manual-make-html-automatic-variables"><a href="https://www.gnu.org/software/make/manual/make.html#Automatic-Variables">Automatic Variables</a></h3>
 
 <dl>
 <dt><code>$@</code></dt>
@@ -129,11 +121,9 @@ ${PROGRAM}: ${OBJS}
 <dd>必須項目の先頭</dd>
 </dl>
 
-<h3 id="implicit-variables">Implicit Variables</h3>
+<h3 id="implicit-variables-https-www-gnu-org-software-make-manual-make-html-implicit-variables"><a href="https://www.gnu.org/software/make/manual/make.html#Implicit-Variables">Implicit Variables</a></h3>
 
-<p><a href="http://www.gnu.org/software/make/manual/make.html#Name-Index">http://www.gnu.org/software/make/manual/make.html#Name-Index</a></p>
-
-<p><a href="http://www.gnu.org/software/make/manual/make.html#Implicit-Variables">http://www.gnu.org/software/make/manual/make.html#Implicit-Variables</a></p>
+<p><a href="https://www.gnu.org/software/make/manual/make.html#Name-Index">https://www.gnu.org/software/make/manual/make.html#Name-Index</a></p>
 
 <dl>
 <dt><code>CC</code></dt>
@@ -151,97 +141,70 @@ ${PROGRAM}: ${OBJS}
 <dt><code>RM</code></dt>
 <dd><code>rm -f</code></dd>
 <dt><code>CPPFLAGS</code></dt>
-<dd>プリプロセッサ用オプション。 e.g. <code>-Wall -Wextra -fno-strict-aliasing -DNDEBUG -iquote ${HOME}/include</code></dd>
+<dd>プリプロセッサ用オプション。
+e.g., <code>-Wall -Wextra -fno-strict-aliasing -DNDEBUG -iquote ${HOME}/include</code></dd>
 <dt><code>CXXFLAGS</code></dt>
-<dd>C++コンパイラ用オプション。 e.g. <code>-O3 -std=c++11</code></dd>
+<dd>C++コンパイラ用オプション。 e.g., <code>-O3 -std=c++11</code></dd>
 <dt><code>LDFLAGS</code></dt>
-<dd>ライブラリパスを指定する。 e.g. <code>-L/usr/local/lib -L{HOME}/local/lib</code></dd>
-<dt><code>LDLIBS</code>, <code>LOADLIBES</code></dt>
-<dd>リンクするライブラリを指定する。 e.g. <code>-lboost_program_options -lpthread</code></dd>
+<dd>ライブラリパスを指定する。 e.g., <code>-L/usr/local/lib -L{HOME}/local/lib</code></dd>
+<dt><code>LDLIBS</code></dt>
+<dd>リンクするライブラリを指定する。
+昔は<code>LOADLIBES</code>も同じ機能だったが非推奨。
+e.g., <code>-lboost_program_options -lz</code></dd>
 <dt><code>TARGET_ARCH</code></dt>
-<dd>マシン依存なオプションを指定する。 e.g. <code>-march=core2 -m64 -msse -msse2 -msse3 -mfpmath=sse</code></dd>
+<dd>マシン依存なオプションを指定する。
+e.g., <code>-march=native -m64 -msse -msse2 -msse3 -mfpmath=sse</code></dd>
 </dl>
 
-<h3 id="functions">Functions</h3>
-
-<p><a href="http://www.gnu.org/software/make/manual/make.html#Functions">http://www.gnu.org/software/make/manual/make.html#Functions</a></p>
+<h3 id="functions-https-www-gnu-org-software-make-manual-make-html-functions"><a href="https://www.gnu.org/software/make/manual/make.html#Functions">Functions</a></h3>
 
 <dl>
-<dt>文字列関連 <a href="http://www.gnu.org/software/make/manual/make.html#Text-Functions">http://www.gnu.org/software/make/manual/make.html#Text-Functions</a></dt>
-<dd><p><code>$(subst {from},{to},{text})</code></p>
+<dt><a href="https://www.gnu.org/software/make/manual/make.html#Text-Functions">文字列関連</a></dt>
+<dd><code>$(subst FROM,TO,TEXT)</code></dd>
+<dd><code>$(findstring FIND,IN)</code></dd>
+<dd><code>$(filter PATTERN...,TEXT)</code></dd>
+<dt><a href="https://www.gnu.org/software/make/manual/make.html#File-Name-Functions">ファイル名</a></dt>
+<dd><code>$(dir NAMES...)</code></dd>
+<dd><code>$(notdir NAMES...)</code></dd>
+<dd><code>$(basename NAMES...)</code></dd>
+<dd><code>$(addprefix PREFIX,NAMES...)</code></dd>
+<dd><code>$(wildcard PATTERN)</code></dd>
+<dd><code>$(abspath NAMES...)</code></dd>
+<dt><a href="https://www.gnu.org/software/make/manual/make.html#Conditional-Functions">条件分岐</a></dt>
+<dd><p><code>$(if CONDITION,THEN,ELSE)</code></p>
 
-<p><code>$(findstring {find},{in})</code></p>
-
-<p><code>$(filter {pattern...},{text})</code></p></dd>
-<dt>ファイル名 <a href="http://www.gnu.org/software/make/manual/make.html#File-Name-Functions">http://www.gnu.org/software/make/manual/make.html#File-Name-Functions</a></dt>
-<dd><p><code>$(dir {names...})</code></p>
-
-<p><code>$(notdir {names...})</code></p>
-
-<p><code>$(basename {names...})</code></p>
-
-<p><code>$(addprefix {prefix},{names...})</code></p>
-
-<p><code>$(wildcard {pattern})</code></p>
-
-<p><code>$(abspath {names...})</code></p></dd>
-<dt>条件分岐 <a href="http://www.gnu.org/software/make/manual/make.html#Conditional-Functions">http://www.gnu.org/software/make/manual/make.html#Conditional-Functions</a></dt>
-<dd><p><code>$(if {condition},{then},{else})</code></p>
-
-<p>関数じゃない <code>ifeq</code>, <code>ifneq</code>, <code>ifdef</code>, <code>ifndef</code>, <code>else</code>, <code>endif</code>
-もある。
-<a href="http://www.gnu.org/software/make/manual/make.html#Conditional-Syntax">http://www.gnu.org/software/make/manual/make.html#Conditional-Syntax</a></p></dd>
-<dt>その他
-:
-
-<code>$(foreach {var},{list},{text})</code>
-
-<dl>
-<dd><code>{list}</code> の中身をそれぞれ <code>{var}</code> に入れて
-<code>{text}</code> を実行</dd>
-<dt><code>$(file {op} {filename},{text})</code></dt>
-<dd><code>{text}</code> の結果をファイルに書き出す</dd>
-<dt><code>$(call {variable},{params...})</code></dt>
-<dd><code>$(1) $(2)</code> などを使って定義しておいた
-<code>variable</code> を関数のように呼び出す</dd>
-<dt><code>$(origin {variable})</code></dt>
-<dd>変数がどう定義されたかを知れる</dd>
-<dt><code>$(error {text...})</code>, <code>$(warning {text...})</code>, <code>$(info {text...})</code></dt>
-<dd>エラーや警告をプリントする</dd>
-<dt><code>$(shell {command...})</code></dt>
-<dd>シェルを呼び出す</dd>
-</dl></dt>
+<p><a href="https://www.gnu.org/software/make/manual/make.html#Conditional-Syntax">関数じゃない条件分岐</a>
+(<code>ifeq</code>, <code>ifneq</code>, <code>ifdef</code>, <code>ifndef</code>, <code>else</code>, <code>endif</code>) もある。</p></dd>
+<dt>その他</dt>
+<dd><p><code>$(foreach VAR,LIST,TEXT)</code>:
+<code>LIST</code> の中身をそれぞれ <code>VAR</code> に入れて <code>TEXT</code> を実行</p></dd>
+<dd><p><code>$(file op FILENAME,TEXT)</code>:
+<code>text</code> の結果をファイルに書き出す</p></dd>
+<dd><p><code>$(call VARIABLE,PARAMS...)</code>:
+<code>$(1) $(2)</code> などを使って定義しておいた <code>VARIABLE</code> を関数のように呼び出す</p></dd>
+<dd><p><code>$(origin VARIABLE)</code>:
+変数がどう定義されたかを知れる</p></dd>
+<dd><p><code>$(error TEXT...)</code>, <code>$(warning TEXT...)</code>, <code>$(info TEXT...)</code>:
+エラーや警告をプリントする</p></dd>
+<dd><p><code>$(shell COMMAND...)</code>:   シェルを呼び出す</p></dd>
 </dl>
 
-<h3 id="target">Target</h3>
-
-<p><a href="http://www.gnu.org/software/make/manual/make.html#Standard-Targets">http://www.gnu.org/software/make/manual/make.html#Standard-Targets</a></p>
+<h3 id="targets-http-www-gnu-org-software-make-manual-make-html-standard-targets"><a href="http://www.gnu.org/software/make/manual/make.html#Standard-Targets">Targets</a></h3>
 
 <dl>
 <dt><code>all</code></dt>
 <dd>ディレクトリ内のcppソースをコンパイル</dd>
 <dt><code>clean</code></dt>
 <dd>コンパイル済みオブジェクトを一掃</dd>
-<dt><code>run</code></dt>
-<dd>プログラムを走らせてみる</dd>
-<dt><code>debug</code></dt>
-<dd>デバッグモードでコンパイル</dd>
-<dt><code>Dependfile</code></dt>
-<dd>依存関係を読み取って <code>Dependfile</code> に書き出す</dd>
-<dt><code>' '</code></dt>
+<dt><code>_</code></dt>
 <dd>v3.81以降であれば <code>.DEFAULT_GOAL</code> が効くので <code>make all</code> と同じ</dd>
 </dl>
 
-<!-- -->
-
-<pre><code>% make clean
+<pre><code class="language-sh">% make clean
 % make
-% make run
 </code></pre>
 
-<h3 id="option">Option</h3>
-
-<p><a href="http://www.gnu.org/software/make/manual/make.html#Options-Summary">http://www.gnu.org/software/make/manual/make.html#Options-Summary</a></p>
+<h2 id="options-https-www-gnu-org-software-make-manual-make-html-options-summary"><a href="https://www.gnu.org/software/make/manual/make.html#Options-Summary">Options</a></h2>
 
 <dl>
 <dt><code>-f file</code></dt>
