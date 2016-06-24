@@ -1,0 +1,211 @@
++++
+date = "2016-06-23T13:06:06+09:00"
+tags = ["r", "c++"]
+title = "Stan"
+subtitle = "高速MCMCでパラメータ推定"
+
+[menu.main]
+  parent = "rstats"
++++
+
+http://mc-stan.org/
+
+数あるMCMCアルゴリズムの中でも効率的なHMC(Hybrid/Hamiltonian Monte Carlo)を用いてベイズ推定を行うツール。
+[Pythonやコマンドラインなどいろんな形で利用可能](http://mc-stan.org/interfaces/)だが、
+とりあえずRで[RStan](http://mc-stan.org/interfaces/rstan.html)を使ってみる。
+
+## インストール
+
+Rから`install.packages('rstan')`で一発。
+jagsと違ってstan本体も同時に入れてくれる。
+[RStan-Getting-Started](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started)
+を見ると、時代や環境によってはいろいろ難しいかったのかも。
+
+標準的な(Xcode Command Line Tools とか build-essential的な)開発環境はどっちみち必要。
+
+## 基本的な流れ
+
+1. rstanを読み込む
+   ```r
+   library(rstan)
+   rstan_options(auto_write = TRUE)
+   options(mc.cores = parallel::detectCores())
+   ```
+
+1. データを用意する。
+   e.g., 平均10、標準偏差3の正規乱数。
+   ```r
+   .data = list(x=rnorm(10000, 10, 3))
+   .data$n_obs = length(.data$x)
+   ```
+
+1.  Stan言語でモデルを記述する。
+    e.g., 与えられたデータが正規分布から取れてきたとすると、
+    その平均と標準偏差はどれくらいだったか？
+    ```r
+    .stan_code = '
+    data {
+      int n_obs;
+      real[n_obs] x;
+    }
+
+    parameters {
+      real mu;
+      real<lower=0> sigma;
+    }
+
+    model {
+      x ~ normal(mu, sigma);
+    }'
+    ```
+
+1. モデルをC++に変換してコンパイルし、それを使ってMCMCサンプリングする。
+   ```r
+   .model = rstan::stan_model(model_code=.stan_code)
+   .fit = rstan::sampling(.model, data=.data, iter=10000, chains=3)
+   ```
+
+1. 結果を見てみる
+   ```r
+   print(.fit)
+   summary(.fit)
+   plot(.fit)
+   pairs(.fit)
+   rstan::traceplot(.fit)
+   rstan::stan_trace(.fit)
+   rstan::stan_hist(.fit)
+   rstan::stan_dens(.fit)
+   ```
+
+## Stan文法
+
+http://mc-stan.org/documentation/
+PDFしか無くて残念
+
+### ブロック
+
+コード内に登場できるブロックは7種類で、順番はこの通りでなければならない。
+
+`functions {...}`
+: 関数を定義できる。
+
+`data {...}`
+: Rから受け取る定数の宣言。
+
+`transformed data {...}`
+: 定数の宣言と代入。
+  決め打ちのハイパーパラメータとか。
+  決定論的な変換のみ可能。
+
+`parameters {...}`
+: サンプリングされる変数の宣言。
+
+`transformed parameters {...}`
+: 変数の宣言と代入。
+  モデルで使いやすい形にパラメータを変形しておくとか？
+
+`model {...}`
+: 唯一の必須ブロック。
+  サンプルされないローカル変数を宣言してもよいが、制約をかけることはできない。
+
+`generated quantities {...}`
+: サンプリング後の値を使って好きなことをするとこ？
+  `normal_rng()`などによる乱数生成が許される唯一のブロック。
+  rstanならここを使わずRで結果を受け取ってからどうにかするほうが簡単？
+
+### モデリング
+
+あるパラメータにおけるlog probabilityと近傍での傾きを計算し、
+それらを元に次の値にジャンプする、という操作が繰り返される。
+ユーザーが直接触るべきではない隠れ変数`lp__`が存在していて、
+modelブロック内で`increment_log_prob()`によって加算されていく。
+
+サンプリング文(sampling statement)はそれを簡単に記述するためのショートカット。
+名前とは裏腹に、確率分布からのサンプリングが行われるわけではないので紛らわしい。
+例えば以下の表現はほぼ等価。
+(定数の扱い方がうまいとかでサンプリング文のほうが効率的らしいけど)
+
+```nohighlight
+x ~ normal(0.0, 1.0);
+increment_log_prob(normal_log(x, 0.0, 1.0));
+increment_log_prob(-0.5 * square(x));
+```
+
+確率分布としての正規化はうまいことやっといてくれるから気にしなくていいらしい
+(が、`T[,]`によるtruncated distributionではこうやって調整する、
+とかいう記述もあるので、そのへんはまだよく分からない)。
+
+<div>$$\begin{split}
+\log p(x) &\propto -\frac {x^2} 2 \\
+     p(x) &\propto \exp \left(- \frac {x^2} 2 \right)
+\end{split}$$</div>
+
+名のある確率分布はだいたい関数として用意されている。
+形のバリエーションとしては:
+
+- 確率密度関数: `*(...)`, `*_log(...)`
+- 累積分布関数: `*_cdf(...)`, `*_cdf_log(...)`
+- 相補累積分布関数: `*_ccdf_log(...)`
+- 乱数生成: `*_rng(...)`
+
+### 型
+
+整数(`int`)、実数(`real`)、実数ベクトル(`vector`, `row_vector`)、実数行列(`matrix`)。
+内部的に `Eigen::Vector` や `Eigen::Matrix` が使われているので、
+可能な限り`for`文よりも行列演算を使うように心がける。
+配列(array)は `std::vector` で実装されていて、
+整数配列や行列配列など何でも作れるが、行列演算はできない。
+
+宣言時に上限下限を設定できる (constrained integer/real)。
+
+bool型は無くて基本的に整数の1/0。分岐ではnon-zeroがtrue扱い。
+
+```nohighlight
+int i;
+int v[42];
+real x;
+real x[42];
+int<lower=1,upper=6> dice;
+
+vector[3] v;
+row_vector[3] r;
+matrix[3, 3] m;
+
+x * v  // vector[3]
+r * v  // real
+v * r  // matrix[3, 3]
+m * v  // vector[3]
+m * m  // matrix[3, 3]
+m[1]   // row_vector[3]
+```
+
+`ordered`, `positive_ordered`, `simplex`, `unit_vector`,
+`cov_matrix`, `corr_matrix`, `cholesky_factor_cov`, `cholesky_factor_corr`
+
+### Tips
+
+条件分岐するときはなるべく`if`文を避けて三項演算子やステップ関数を使うべし、
+という言語が多いけどStanでは逆に`if`文を素直に書くほうが良いらしい。
+`if_else()`では真値でも両方の引数が評価されちゃうし、
+`step()` や `int_step()` からの掛け算は遅いのだとか。
+
+代入演算子はイコール`=`ではなく矢印`<-`
+
+対数尤度の値を確認したいときは `print("__lp: ", get_lp())`
+
+## トラブル対処
+
+### StanHeaders version is ahead of rstan version
+
+Stanのヘッダーライブラリとrstanは別々のパッケージで提供されていて、
+Stan更新への追従にタイムラグがあるらしい。
+こんなん開発者側でどうにかして欲しいけど、
+とりあえず古い `StanHeaders` を入れてしのぐしかない。
+https://github.com/stan-dev/rstan/wiki/RStan-Transition-Periods
+
+```r
+install.packages("https://cran.r-project.org/src/contrib/Archive/StanHeaders/StanHeaders_2.9.0.tar.gz", repos=NULL, type='source')
+```
+
+https://cran.r-project.org/src/contrib/Archive/StanHeaders/
+
