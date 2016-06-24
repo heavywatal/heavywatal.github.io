@@ -62,74 +62,52 @@ sshfs
 
 
 
-<p>SSH File Transfer Protocol</p>
+<p><a href="https://github.com/libfuse/sshfs">SSH File Transfer Protocol</a></p>
 
-<p>リモートのファイルシステムを <a href="/dev/ssh.html">ssh</a> 経由でローカルにマウントする。
-必要なライブラリや導入方法はOS毎に異なる。
-マウントにはFUSEというライブラリを利用している。</p>
-
-<p><a href="http://fuse.sourceforge.net/sshfs.html"><a href="http://fuse.sourceforge.net/sshfs.html">http://fuse.sourceforge.net/sshfs.html</a></a></p>
+<p>リモートのファイルシステムをssh経由でマウントし、
+Finderとかで普通のディレクトリのように扱えるようにする。
+まずは、公開鍵によるパスワード無し認証、ユーザ名やホスト名のconfigなど、
+<a href="/dev/ssh.html">sshの設定</a> を済ませておく。</p>
 
 <h2 id="gui-mac">GUI: Mac</h2>
 
 <ol>
-<li><a href="http://osxfuse.github.com/">OSXFUSE</a> をインストール</li>
-
-<li><p><a href="http://macfusionapp.org/">Macfusion</a> をインストール
-3.</p>
-
-<p>Macfusion を起動</p>
-
-<dl>
-<dd>1.  左下の[+]からSSHFSを選択
+<li><a href="https://osxfuse.github.io/">OSXFUSE</a> をインストール</li>
+<li><a href="http://macfusionapp.org/">Macfusion</a> をインストール</li>
+<li>Macfusion を起動
 
 <ol>
+<li>左下の[+]からSSHFSを選択</li>
 <li><a href="/dev/ssh.html">ssh</a> のconfigをちゃんとしておけばここでの設定はとりあえずホスト名とかユーザ名だけよい</li>
 <li>圧縮、シムリンク、Mac固有の不可視ファイルなどをどうするかは好みで</li>
 <li>Mount</li>
-</ol></dd>
-</dl></li>
+</ol></li>
 </ol>
 
 <h2 id="cui-linux-mac">CUI: Linux, Mac</h2>
 
 <ol>
-<li><a href="/dev/ssh.html">ssh</a> の設定を済ます
-（公開鍵によるパスワード無し認証、configによるユーザ名やホスト名などの設定）</li>
+<li><p>sshfs をインストール:</p>
 
-<li><p>sshfs をインストール。 (Synaptic でもよい):</p>
-
-<pre><code>% sudo apt-get install sshfs
+<pre><code class="language-sh">% sudo apt-get install sshfs
 or
-% sudo port install sshfs
+% brew cask install sshfs
 </code></pre></li>
 
-<li><p>マウントポイントにする適当なディレクトリを作る。(<code>$ mkdir /mnt/meme</code>)</p></li>
+<li><p>マウントポイントにする適当なディレクトリを作る <code>mkdir ~/tmp/mnt</code></p></li>
 
-<li><p>マウントする。<a href="/dev/ssh.html">ssh</a> のconfigをしちゃんとしとけば下段のように省略できる。:</p>
+<li><p>マウントする:</p>
 
-<pre><code>% sshfs USER@HOST:DIR MOUNTPOINT
-or
-% sshfs meme: /mnt/meme
+<pre><code class="language-sh">% sshfs USER@HOST:DIR MOUNTPOINT
+% sshfs meme: ~/tmp/mnt/
 </code></pre></li>
 
 <li><p>アンマウントする:</p>
 
-<pre><code>% fusermount -u /mnt/meme
+<pre><code class="language-sh">% fusermount -u ~/tmp/mnt/
+or
+% umount ~/tmp/mnt
 </code></pre></li>
-</ol>
-
-<h2 id="windows">Windows</h2>
-
-<p>FUSEのWindows版に相当するのが <a href="http://dokan-dev.net/download/">Dokan</a> 。
-なんか、俺の環境だと遅くてダメだった。</p>
-
-<ol>
-<li>Microsoft Visual C++ 2005 SP1をインストール。(2008ではダメだった)</li>
-<li>Dokanライブラリをインストール。</li>
-<li>Dokan SSHFSをインストール。</li>
-<li>起動して、アドレスや鍵を指定してマウントする。</li>
-<li>タスクバーのアイコンからUnmountしたりExitしたりする。</li>
 </ol>
 
 </article>
