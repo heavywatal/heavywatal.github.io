@@ -11,7 +11,7 @@
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="icon" href="/favicon-192x192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/favicon-192x192.png" sizes="192x192">
-<title>edgeR: リードカウントから発現変動遺伝子を検出 - Watal M. Iwasaki</title>
+<title>Stan: 高速MCMCでパラメータ推定 - Watal M. Iwasaki</title>
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
   displayAlign: "left",
@@ -53,205 +53,213 @@ Watal M. Iwasaki
 <main>
 <article>
 <header><h1><a href="">
-edgeR — リードカウントから発現変動遺伝子を検出
+Stan — 高速MCMCでパラメータ推定
 </a></h1>
 <ul class="tags">
 <li><a href="/tags/r">r</a></li>
-<li><a href="/tags/bioconductor">bioconductor</a></li>
+<li><a href="/tags/c&#43;&#43;">c&#43;&#43;</a></li>
 </ul>
 </header>
 
 
 
-<p><a href="https://bioconductor.org/packages/release/bioc/html/edgeR.html">https://bioconductor.org/packages/release/bioc/html/edgeR.html</a></p>
+<p><a href="http://mc-stan.org/">http://mc-stan.org/</a></p>
 
-<p>Robinson MD, McCarthy DJ, Smyth GK (2010)
-&ldquo;edgeR: a Bioconductor package for differential expression analysis of digital gene expression data.&rdquo;
-<em>Bioinformatics</em> <strong>26</strong> (1):139&ndash;140
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/19910308">http://www.ncbi.nlm.nih.gov/pubmed/19910308</a></p>
+<p>数あるMCMCアルゴリズムの中でも効率的なHMC(Hybrid/Hamiltonian Monte Carlo)を用いてベイズ推定を行うツール。
+<a href="http://mc-stan.org/interfaces/">Pythonやコマンドラインなどいろんな形で利用可能</a>だが、
+とりあえずRで<a href="http://mc-stan.org/interfaces/rstan.html">RStan</a>を使ってみる。</p>
 
-<p><a href="/rstats/bioconductor.html">Bioconductor</a> パッケージとしてインストール</p>
+<h2 id="インストール">インストール</h2>
 
-<pre><code class="language-r">source('http://bioconductor.org/biocLite.R')
-biocLite('edgeR')
-</code></pre>
+<p>Rから<code>install.packages('rstan')</code>で一発。
+jagsと違ってstan本体も同時に入れてくれる。
+<a href="https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started">RStan-Getting-Started</a>
+を見ると、時代や環境によってはいろいろ難しいかったのかも。</p>
 
-<p>ユーザーガイドPDFを開く</p>
+<p>標準的な(Xcode Command Line Tools とか build-essential的な)開発環境はどっちみち必要。</p>
 
-<pre><code class="language-r">edgeRUsersGuide()
-</code></pre>
-
-<p>とても良くできたドキュメントなので必読</p>
-
-<h2 id="使い方">使い方</h2>
+<h2 id="基本的な流れ">基本的な流れ</h2>
 
 <ol>
-<li><code>HTSeq</code> などで遺伝子ごとのリードカウントを用意する</li>
+<li><p>rstanを読み込む</p>
 
-<li><p>Rで読み込む</p>
-
-<pre><code class="language-r">library(edgeR)
-
-targets = data.frame(group=c('control', 'case'),
-                     files=c('control.txt', 'case.txt'))
-dge = readDGE(targets, header=FALSE)
+<pre><code class="language-r">library(rstan)
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
 </code></pre></li>
 
-<li><p>低カウント過ぎる遺伝子を除去</p>
+<li><p>データを用意する。
+e.g., 平均10、標準偏差3の正規乱数。</p>
 
-<pre><code class="language-r">ok_c = (dge$counts &gt; 5) %&gt;% rowSums %&gt;% {. &gt; 0}
-ok_cpm = dge %&gt;% cpm %&gt;% {. &gt; 1} %&gt;% rowSums %&gt;% {. &gt; 0}
-dge = dge[ok_c &amp; ok_cpm, , keep.lib.sizes=FALSE]
+<pre><code class="language-r">.data = list(x=rnorm(10000, 10, 3))
+.data$n_obs = length(.data$x)
 </code></pre></li>
 
-<li><p>正規化係数を計算</p>
+<li><p>Stan言語でモデルを記述する。
+e.g., 与えられたデータが正規分布から取れてきたとすると、
+その平均と標準偏差はどれくらいだったか？</p>
 
-<pre><code class="language-r">dge = calcNormFactors(dge)
-dge$samples
+<pre><code class="language-r">.stan_code = '
+data {
+  int n_obs;
+  real[n_obs] x;
+}
+
+parameters {
+  real mu;
+  real&lt;lower=0&gt; sigma;
+}
+
+model {
+  x ~ normal(mu, sigma);
+}'
 </code></pre></li>
 
-<li><p>モデル</p>
+<li><p>モデルをC++に変換してコンパイルし、それを使ってMCMCサンプリングする。</p>
 
-<pre><code class="language-r">design = model.matrix(~ 0 + group, data=targets)
+<pre><code class="language-r">.model = rstan::stan_model(model_code=.stan_code)
+.fit = rstan::sampling(.model, data=.data, iter=10000, chains=3)
 </code></pre></li>
 
-<li><p>common dispersion, trended dispersion, tagwise dispersionを推定</p>
+<li><p>結果を見てみる</p>
 
-<pre><code class="language-r">dge = estimateDisp(dge, design)
-</code></pre>
-
-<p>ただしこれにはbiological replicatesが必要。
-1グループ1サンプルずつしか無い場合は4つの選択肢がある。</p>
-
-<ol>
-<li>検定を諦めてdescriptive discussion (推奨)</li>
-
-<li><p>経験的な値を適当に入れとく</p>
-
-<pre><code class="language-r">bcv = 0.4  # for human
-bcv = 0.1  # for genetically identical model organisms
-bcv = 0.01 # for technical replicates
-dge$common.dispersion = bcv ^ 2
+<pre><code class="language-r">print(.fit)
+summary(.fit)
+plot(.fit)
+pairs(.fit)
+rstan::traceplot(.fit)
+rstan::stan_trace(.fit)
+rstan::stan_hist(.fit)
+rstan::stan_dens(.fit)
 </code></pre></li>
-
-<li><p>説明変数を減らしたモデルでdispersionを推定し、フルモデルで使う</p>
-
-<pre><code class="language-r">reduced = estimateGLMCommonDisp(dge, reduced.design, method='deviance', robust=TRUE, subset=NULL)
-dge$common.dispersion = reduced$common.dispersion
-</code></pre>
-
-<p>合計カウントが多くてDEGが比較的少ないときに有効。
-当然、1変数2群比較では使えない。</p></li>
-
-<li><p>群間で差がないと考えられるhousekeeping genesから推定。
-100個以上の遺伝子を使うのが望ましい。
-例えばヒトなら</p>
-
-<pre><code class="language-r">system('wget http://www.tau.ac.il/~elieis/HKG/HK_genes.txt')
-hk_genes = read_tsv('HK_genes.txt', col_names=c('gene_symbol', 'refseq'))
-tmp = dge
-tmp$samples$group = 1
-housekeeping = rownames(tmp$counts) %in% hk_genes$gene_symbol
-hk = estimateCommonDisp(tmp[housekeeping,])
-dge$common.dispersion = hk$common.dispersion
-</code></pre></li>
-</ol></li>
-
-<li><p>1変数2群ならシンプルに検定</p>
-
-<pre><code class="language-r">et = exactTest(dge)
-topTags(et, 20, adjust.method='BH', sort.by='PValue')
-</code></pre>
-
-<p>多群ならGLMで尤度比検定</p>
-
-<pre><code class="language-r">fit = glmFit(dge, design)
-lrt = glmLRT(fit, coef=2:3)
-
-lrt_1vs2 = glmLRT(fit, coef=2)
-lrt_1vs3 = glmLRT(fit, coef=3)
-lrt_2vs3 = glmLRT(fit, contrast=c(0, -1, 1))
-</code></pre>
-
-<p>検定結果からDEGを抜き出す</p>
-
-<pre><code class="language-r">min_lfc = 1
-de = decideTestsDGE(et, adjust.method='BH', p.value=0.01, lfc=min_lfc)
-de_tags = rownames(dge)[as.logical(de)]
-</code></pre>
-
-<p>P値とlogFCの両方で切ったほうがいいらしい。</p>
-
-<div class="note">
-<p><code>topTags()</code> や <code>decideTestsDGE()</code>
-で多重検定の補正をするということは、
-<code>et</code> や <code>lrt</code> の <code>PValue</code> は補正前。</p>
-
-</div>
-</li>
-
-<li><p>プロット <code>logFC ~ mean(logCPM)</code> してみる</p>
-
-<pre><code class="language-r">plotSmear(et, de.tags=de_tags)
-abline(h=min_lfc * c(-1, 1), col=&quot;blue&quot;)
-</code></pre></li>
-
-<li><p>Gene Ontology解析</p>
-
-<pre><code class="language-r">go = goana(lrt, species='Hs')
-topGO(go)
-</code></pre>
-
-<p>NCBI RefSeqアノテーションを使うのでIDはEntrez系で</p></li>
 </ol>
 
-<h2 id="appendix">Appendix</h2>
+<h2 id="stan文法">Stan文法</h2>
 
-<p>レプリケート <em>i</em> における遺伝子 <em>g</em> の観察リード数を $y _{gi}$、
-知りたい真の発現fractionを $\pi _{gi}$ とする。</p>
+<p><a href="http://mc-stan.org/documentation/">http://mc-stan.org/documentation/</a>
+PDFしか無くて残念</p>
 
-<div>$$\begin{split}
-\sum _g \pi _{gi} &= 1 \\
-\sqrt {\phi _g} &\equiv \mathrm{CV}[\pi _{gi}]_i
-                = \frac {\mathrm {sd}[\pi _{gi}]_i} {\mathrm{mean}[\pi _{gi}]_i} \\
-N_i \pi _{gi} &\sim \mathrm{Gamma}(\phi _g^{-1}, \mu _{gi} \phi _g) \\
-\mathrm E[N_i \pi _{gi}] &= k\theta = \mu _{gi} \\
-\mathrm{var}[N_i \pi _{gi}] &= k\theta^2 = \mu _{gi}^2 \phi _g \\
-y_{gi} &\sim \mathrm{Poisson}(N_i \pi _{gi}) \\
-       &= \int _0^\infty \mathrm{Poisson}(N_i \pi _{gi})~
-                         \mathrm{Gamma}(\phi _g^{-1}, \mu _{gi} \phi _g)~ \mathrm d N_i \pi _{gi} \\
-       &= \mathrm{NB}(\phi _g^{-1}, \frac {\mu _{gi} \phi _g} {1 + \mu _{gi} \phi _g}) \\
-\mathrm E[y_{gi}] &= \mu _{gi} \\
-\mathrm{var}[y_{gi}] &= \mathrm E \big[\mathrm{var}[y_{gi} \mid \pi _{gi}]_i \big]_\pi
-                      + \mathrm{var} \big[\mathrm E[y_{gi}\mid \pi _{gi}]_i \big]_\pi \\
-                     &= \mathrm E[N_i \pi _{gi}]_\pi + \mathrm{var}[N_i \pi _{gi}]_\pi \\
-                     &= \mu _{gi} + \mu _{gi}^2 \phi _g \\
-\mathrm{CV}^2[y_{gi}] &= 1 / \mu _{gi} + \phi _g \\
-                   &= \mathrm{CV}^2[y_{gi} \mid \pi _{gi}] + \mathrm{CV}^2[\pi _{gi}] \\
-                   &= \mathrm{Technical~CV}^2 + \mathrm{Biological~CV}^2 \\
-\end{split}$$</div>
+<h3 id="ブロック">ブロック</h3>
+
+<p>コード内に登場できるブロックは7種類で、順番はこの通りでなければならない。</p>
 
 <dl>
-<dt>dispersion $\phi _g$</dt>
-<dd>普通は $D = \sigma^2 / \mu$ と定義されるけど、
-ここでは $\mathrm{CV}^2$</dd>
-<dt>BCV $\sqrt{\phi _g}$</dt>
-<dd>biological coefficient of variation.
-こっちは普通と同じように $\mathrm{CV} = \sigma / \mu$ 。
-sequencing depthがどんなに大きくても残るばらつき。</dd>
-<dt>DGE</dt>
-<dd>digital gene expression</dd>
-<dt>CPM</dt>
-<dd>counts per million</dd>
-<dt>logFC</dt>
-<dd>log2-fold-change</dd>
+<dt><code>functions {...}</code></dt>
+<dd>関数を定義できる。</dd>
+<dt><code>data {...}</code></dt>
+<dd>Rから受け取る定数の宣言。</dd>
+<dt><code>transformed data {...}</code></dt>
+<dd>定数の宣言と代入。
+決め打ちのハイパーパラメータとか。
+決定論的な変換のみ可能。</dd>
+<dt><code>parameters {...}</code></dt>
+<dd>サンプリングされる変数の宣言。</dd>
+<dt><code>transformed parameters {...}</code></dt>
+<dd>変数の宣言と代入。
+モデルで使いやすい形にパラメータを変形しておくとか？</dd>
+<dt><code>model {...}</code></dt>
+<dd>唯一の必須ブロック。
+サンプルされないローカル変数を宣言してもよいが、制約をかけることはできない。</dd>
+<dt><code>generated quantities {...}</code></dt>
+<dd>サンプリング後の値を使って好きなことをするとこ？
+<code>normal_rng()</code>などによる乱数生成が許される唯一のブロック。
+rstanならここを使わずRで結果を受け取ってからどうにかするほうが簡単？</dd>
 </dl>
 
-<hr>
+<h3 id="モデリング">モデリング</h3>
 
-<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4621062506/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41aQBFtkgBL._SX160_.jpg" alt="RとBioconductorを用いたバイオインフォマティクス" /></a>
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320057082/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51yBjAPptKL._SX160_.jpg" alt="Rによるバイオインフォマティクスデータ解析 第2版 －Bioconductorを用いたゲノムスケールのデータマイニング－" /></a>
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320123700/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41aoEmhUR0L._SX160_.jpg" alt="トランスクリプトーム解析 (シリーズ Useful R 7)" /></a></p>
+<p>あるパラメータにおけるlog probabilityと近傍での傾きを計算し、
+それらを元に次の値にジャンプする、という操作が繰り返される。
+ユーザーが直接触るべきではない隠れ変数<code>lp__</code>が存在していて、
+modelブロック内で<code>increment_log_prob()</code>によって加算されていく。</p>
+
+<p>サンプリング文(sampling statement)はそれを簡単に記述するためのショートカット。
+名前とは裏腹に、確率分布からのサンプリングが行われるわけではないので紛らわしい。
+例えば以下の表現はほぼ等価。
+(定数の扱い方がうまいとかでサンプリング文のほうが効率的らしいけど)</p>
+
+<pre><code class="language-nohighlight">x ~ normal(0.0, 1.0);
+increment_log_prob(normal_log(x, 0.0, 1.0));
+increment_log_prob(-0.5 * square(x));
+</code></pre>
+
+<p>確率分布としての正規化はうまいことやっといてくれるから気にしなくていいらしい
+(が、<code>T[,]</code>によるtruncated distributionではこうやって調整する、
+とかいう記述もあるので、そのへんはまだよく分からない)。</p>
+
+<div>$$\begin{split}
+\log p(x) &\propto -\frac {x^2} 2 \\
+     p(x) &\propto \exp \left(- \frac {x^2} 2 \right)
+\end{split}$$</div>
+
+<p>名のある確率分布はだいたい関数として用意されている。
+形のバリエーションとしては:</p>
+
+<ul>
+<li>確率密度関数: <code>*(...)</code>, <code>*_log(...)</code></li>
+<li>累積分布関数: <code>*_cdf(...)</code>, <code>*_cdf_log(...)</code></li>
+<li>相補累積分布関数: <code>*_ccdf_log(...)</code></li>
+<li>乱数生成: <code>*_rng(...)</code></li>
+</ul>
+
+<h3 id="型">型</h3>
+
+<p>整数(<code>int</code>)、実数(<code>real</code>)、実数ベクトル(<code>vector</code>, <code>row_vector</code>)、実数行列(<code>matrix</code>)。
+内部的に <code>Eigen::Vector</code> や <code>Eigen::Matrix</code> が使われているので、
+可能な限り<code>for</code>文よりも行列演算を使うように心がける。
+配列(array)は <code>std::vector</code> で実装されていて、
+整数配列や行列配列など何でも作れるが、行列演算はできない。</p>
+
+<p>宣言時に上限下限を設定できる (constrained integer/real)。</p>
+
+<p>bool型は無くて基本的に整数の1/0。分岐ではnon-zeroがtrue扱い。</p>
+
+<pre><code class="language-nohighlight">int i;
+int v[42];
+real x;
+real x[42];
+int&lt;lower=1,upper=6&gt; dice;
+
+vector[3] v;
+row_vector[3] r;
+matrix[3, 3] m;
+
+x * v  // vector[3]
+r * v  // real
+v * r  // matrix[3, 3]
+m * v  // vector[3]
+m * m  // matrix[3, 3]
+m[1]   // row_vector[3]
+</code></pre>
+
+<p><code>ordered</code>, <code>positive_ordered</code>, <code>simplex</code>, <code>unit_vector</code>,
+<code>cov_matrix</code>, <code>corr_matrix</code>, <code>cholesky_factor_cov</code>, <code>cholesky_factor_corr</code></p>
+
+<h3 id="tips">Tips</h3>
+
+<p>条件分岐するときはなるべく<code>if</code>文を避けて三項演算子やステップ関数を使うべし、
+という言語が多いけどStanでは逆に<code>if</code>文を素直に書くほうが良いらしい。
+<code>if_else()</code>では真値でも両方の引数が評価されちゃうし、
+<code>step()</code> や <code>int_step()</code> からの掛け算は遅いのだとか。</p>
+
+<p>代入演算子はイコール<code>=</code>ではなく矢印<code>&lt;-</code></p>
+
+<p>対数尤度の値を確認したいときは <code>print(&quot;__lp: &quot;, get_lp())</code></p>
+
+<h2 id="トラブル対処">トラブル対処</h2>
+
+<h3 id="stanheaders-version-is-ahead-of-rstan-version">StanHeaders version is ahead of rstan version</h3>
+
+<p>Stanのヘッダーライブラリとrstanは別々のパッケージで提供されていて、
+Stan更新への追従にタイムラグがあるらしい。
+こんなん開発者側でどうにかして欲しいけど、
+とりあえず古い <code>StanHeaders</code> を入れてしのぐしかない。
+<a href="https://github.com/stan-dev/rstan/wiki/RStan-Transition-Periods">https://github.com/stan-dev/rstan/wiki/RStan-Transition-Periods</a></p>
+
+<pre><code class="language-r">install.packages(&quot;https://cran.r-project.org/src/contrib/Archive/StanHeaders/StanHeaders_2.9.0.tar.gz&quot;, repos=NULL, type='source')
+</code></pre>
+
+<p><a href="https://cran.r-project.org/src/contrib/Archive/StanHeaders/">https://cran.r-project.org/src/contrib/Archive/StanHeaders/</a></p>
 
 </article>
 </main>
@@ -281,9 +289,9 @@ sequencing depthがどんなに大きくても残るばらつき。</dd>
 <li><a href="/rstats/rtracklayer.html">rtracklayer</a></li>
 <li><a href="/rstats/biomart.html">biomaRt</a></li>
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
-<li class="active"><a href="/rstats/edger.html">edgeR</a></li>
+<li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
+<li class="active"><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
 <li><a href="/rstats/rjags.html">rjags</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
