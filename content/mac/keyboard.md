@@ -40,36 +40,24 @@ JIS配列のほうが優れている点
 右手だけでForward Deleteできる）は、
 以下のように変更すればUS配列でも実現できる。
 
--
-
-    `System Preferences --> Keyboard --> Modifier Keys...`
-    :   -   `Caps Lock` `^ Control`
-
--
-
-    [KeyRemap4MacBook](http://pqrs.org/macosx/keyremap4macbook/)
-    :   -
-
-            Change `Delete` Key
-            :   -   `Option + Delete` to Forward Delete
-                    (あるいは、`Option_R` を `fn` にしてしまってもいいかも)
-
-        -
-
-            For Japanese
-            :   -
-
-                    Change `Command_L` Key
-                    :   -   Change Command\_L to Command\_L (+ When you type Command\_L Only, send EISUU)
-
-                -
-
-                    Change `Command_R` Key
-                    :   -   Change Command\_R to Command\_R (+ When you type Command\_R Only, send KANA)
+`System Preferences --> Keyboard --> Modifier Keys...`
+: `Caps Lock` `^ Control`
 
 そのほか、Cocoaアプリのキーバインドは以下のファイルで定義できる。
 
 -   `${HOME}/Library/KeyBindings/DefaultKeyBinding.dict`
+
+### [Karabiner](https://pqrs.org/osx/karabiner/)
+
+旧KeyRemap4MacBook
+
+-   Change `Delete` Key
+    - `Option+Delete` to Forward Delete
+      (あるいは、`Option_R` を `fn` にしてしまってもいいかも)
+
+-   For Japanese
+    -   左右のコマンドキーを「英数/かな」としても使う
+
 
 ## ウムラウト、アクセント符号
 
