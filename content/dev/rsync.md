@@ -31,6 +31,9 @@ rsync -auv SRC/DIR DST
 rsync -auv SRC/DIR/ DST/DIR/
 ```
 
+[sshの設定]({{< relref "ssh.md" >}})をしておけばリモートホストへの転送も可能。
+その場合は宛先を `remote_machine:~/DST` のようにコロンで指定する。
+
 ## Options
 
 `-a, --archive`

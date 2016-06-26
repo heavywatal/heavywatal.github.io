@@ -55,8 +55,7 @@ tags = ["shell", "communication"]
 
 ## Configuration
 
-<http://www.openbsd.org/cgi-bin/man.cgi?query=ssh_config> (English)
-<http://www.unixuser.org/~euske/doc/openssh/jman/ssh_config.html> (日本語)
+http://man.openbsd.org/OpenBSD-current/man5/ssh_config.5
 
 ### `~/.ssh/config`
 
@@ -118,6 +117,12 @@ tags = ["shell", "communication"]
 どこから `ssh` したか、を取得するには:
 
     % echo $SSH_CONNECTION | awk '{print $1}'
+
+## ファイル転送
+
+ファイルひとつなら`scp`でもいいけどそれ以上なら
+[rsync]({{< relref "rsync.md" >}})を使ったほうがよい。
+
 
 ## 古いMacで新しい OpenSSH + LibreSSL を使う
 
