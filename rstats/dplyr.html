@@ -85,7 +85,7 @@ dplyr — 高速data.frame処理
 <pre><code class="language-r">## dplyr
 iris %&gt;%
    dplyr::filter(Species != 'setosa') %&gt;%
-   dplyr::select(-starts_with('Sepal')) %&gt;%
+   dplyr::select(-dplyr::starts_with('Sepal')) %&gt;%
    dplyr::mutate(petal_area=Petal.Length * Petal.Width * 0.5) %&gt;%
    dplyr::group_by(Species) %&gt;%
    dplyr::summarise_each(funs(mean))
@@ -142,7 +142,7 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
 <code>num_range('x', 1:5, width=2)</code></p>
 
 <pre><code class="language-r">iris %&gt;% dplyr::select(-(Sepal.Width:Petal.Length))
-iris %&gt;% dplyr::select(ends_with('Length'))
+iris %&gt;% dplyr::select(dplyr::ends_with('Length'))
 </code></pre>
 
 <p><code>.data[, j, drop=TRUE]</code> のように1列分をベクタで得たいときは二重角括弧か、
@@ -160,11 +160,12 @@ iris %&gt;&gt;% (Species)
 2          5.2         4.1          1.5         0.1  setosa
 3          5.5         4.2          1.4         0.2  setosa
 </code></pre></dd>
-<dt><code>dplyr::distinct(.data, ...)</code></dt>
+<dt><code>dplyr::distinct(.data, ..., .keep_all=FALSE)</code></dt>
 <dd><p>指定した列に関してユニークな行のみ返す。
-<code>filter(!duplicated(.[, ...]))</code> をよりスマートに。</p>
+<code>filter(!duplicated(.[, ...]))</code> をよりスマートに。
+指定しなかった列も残すには <code>.keep_all=TRUE</code> が必要。</p>
 
-<pre><code class="language-r">&gt; iris %&gt;% distinct(Species)
+<pre><code class="language-r">&gt; iris %&gt;% dplyr::distinct(Species)
   Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
 1          5.1         3.5          1.4         0.2     setosa
 2          7.0         3.2          4.7         1.4 versicolor
@@ -214,16 +215,31 @@ iris %&gt;% dplyr::mutate(ln_sepal_length = log(Sepal.Length))
 <dt><code>dplyr::summarise(.data, ...)</code></dt>
 <dd><p>列に対する関数をグループごとに適用して1行にしたものを <code>rbind()</code> してまとめる</p>
 
-<pre><code class="language-r">&gt; iris %&gt;% group_by(Species) %&gt;% summarise(minpl=min(Petal.Length), maxsw=max(Sepal.Width))
+<pre><code class="language-r">&gt; iris %&gt;% dplyr::group_by(Species) %&gt;%
+    dplyr::summarise(minpl=min(Petal.Length), maxsw=max(Sepal.Width))
      Species minpl maxsw
 1     setosa   1.0   4.4
 2 versicolor   3.0   3.4
 3  virginica   4.5   3.8
 </code></pre></dd>
-<dt><code>dplyr::summarise_each(.data, funs, ...)</code>, <code>dplyr::mutate_each(.data, funs, ...)</code></dt>
-<dd><p>複数の列に複数の関数を適用する(<code>dplyr::funs()</code> と共に)</p>
+<dt><code>dplyr::summarise_all(.data, .funs, ...)</code>, <code>dplyr::mutate_all(.data, .funs, ...)</code></dt>
+<dd><p>グループ化カラム以外の全てのカラムに関数を適用する。</p>
 
-<pre><code class="language-r">iris %&gt;% group_by(Species) %&gt;% summarise_each(funs(min, mean, max), ends_with(&quot;Width&quot;))
+<pre><code class="language-r">iris %&gt;% dplyr::group_by(Species) %&gt;%
+    dplyr::summarise_all(funs(min, mean, max))
+</code></pre></dd>
+<dt><code>dplyr::summarise_at(.data, .cols, .funs, ...)</code>, <code>dplyr::mutate_all(.data, .cols, .funs, ...)</code></dt>
+<dd><p>select補助関数を使って指定したカラムに関数を適用する。
+<code>***_each()</code> は非推奨になった。</p>
+
+<pre><code class="language-r">iris %&gt;% dplyr::group_by(Species) %&gt;%
+    dplyr::summarise_at(vars(dplyr::ends_with(&quot;Width&quot;)), funs(min, mean, max))
+</code></pre></dd>
+<dt><code>dplyr::summarise_if(.data, .predicate, .funs, ...)</code>, <code>dplyr::mutate_if(.data, .predicate, .funs, ...)</code></dt>
+<dd><p><code>.predicate</code>がTRUEになるカラムだけに関数を適用する。</p>
+
+<pre><code class="language-r">iris %&gt;% dplyr::group_by(Species) %&gt;%
+    dplyr::summarise_if(is.numeric, funs(min, mean, max))
 </code></pre></dd>
 </dl>
 
@@ -238,9 +254,7 @@ iris %&gt;% dplyr::mutate(ln_sepal_length = log(Sepal.Length))
 <li>勝手に列名を変えない</li>
 <li>長さ1の変数以外はリサイクルしない</li>
 <li>引数の評価がlazyに行われるので前の列を利用して後の列を作ったりできる</li>
-<li><code>tbl_df</code> クラスを付加</li>
-<li>ただし <code>matrix</code> からの直接変換はサポートしなそう
-<a href="https://github.com/hadley/dplyr/issues/324">https://github.com/hadley/dplyr/issues/324</a></li>
+<li><code>tbl_df</code> クラスを付加 (この部分はtibbleパッケージ)</li>
 </ul></dd>
 <dt><code>dplyr::***_join(x, y, by=NULL, copy=FALSE)</code></dt>
 <dd><p><code>by</code> で指定した列がマッチするように行を合わせて <code>cbind()</code></p>
@@ -255,9 +269,26 @@ iris %&gt;% dplyr::mutate(ln_sepal_length = log(Sepal.Length))
 <p>列名が異なる場合は <code>by</code> を名前付きベクタにすればよい</p></dd>
 <dt><code>dplyr::bind_rows(...)</code>, <code>dplyr::bind_cols(...)</code></dt>
 <dd><p>標準の <code>rbind()</code>, <code>cbind()</code> より効率よく <code>data.frame</code> を結合。
-引数は個別でもリストでもよい。</p></dd>
+引数は個別でもリストでもよい。
+そのほかにも標準の集合関数を置き換えるものが提供されている:
+<code>intersect()</code>, <code>union()</code>, <code>union_all()</code>, <code>setdiff()</code>, <code>setequal()</code></p></dd>
+<dt><code>dplyr::if_else(condition, true, false, missing=NULL)</code></dt>
+<dd><p>標準の<code>ifelse()</code>よりも型に厳しく、高速らしい。
+NAのときにどうするかを指定できるのも大変良い。</p></dd>
+<dt><code>dplyr::coalesce(x, ...)</code></dt>
+<dd><p>最初のvectorでNAだったとこは次のvectorのやつを採用、
+という<code>ifelse(!is.na(x), x, y)</code>的な処理をする。
+基本的には同じ長さのvectorを渡すが、
+2つめに長さ1のを渡して<code>tidyr::replace_na()</code>的に使うのも便利。</p></dd>
+<dt><code>dplyr::na_if(x, y)</code></dt>
+<dd><p><code>x[x == y] = NA; x</code> のショートカット</p></dd>
+<dt><code>dplyr::recode(.x, ..., .default=NULL, .missing=NULL)</code></dt>
+<dd><p>vectorの値を変更する。e.g.,
+ <code>recode(letters, a='A!', c='C!')</code></p></dd>
 <dt><code>dplyr::add_rownames(x, var='rowname')</code></dt>
 <dd><p>1列目に行名として1からの整数を振る。</p></dd>
+<dt><code>dplyr::group_indices(.data, ...)</code></dt>
+<dd><p><code>grouped_df</code> ではなくグループIDとして1からの整数を返す版 <code>group_by()</code></p></dd>
 <dt><code>dplyr::ntile(x, n)</code></dt>
 <dd><p>数値ベクトル <code>x</code> を順位によって <code>n</code> 個のクラスに均等分け</p></dd>
 <dt><code>dplyr::n_distinct(x)</code></dt>
@@ -284,7 +315,11 @@ iris %&gt;% dplyr::mutate(ln_sepal_length = log(Sepal.Length))
 <dt><code>dplyr::count(x, ..., wt=NULL, sort=FALSE)</code></dt>
 <dd><p><code>group_by(...) %&gt;% tally()</code> のショートカット。</p></dd>
 <dt><code>dplyr::between(x, left, right)</code></dt>
-<dd><p><code>left &lt;= x &amp; x &lt;= right</code> に相当</p></dd>
+<dd><p><code>left &lt;= x &amp; x &lt;= right</code> のショートカット。</p></dd>
+<dt><code>dplyr::near(x, y, tol=.Machine$double.eps^0.5)</code></dt>
+<dd><p><code>abs(x - y) &lt; tol</code> のショートカット。</p></dd>
+<dt><code>dplyr::case_when(...)</code></dt>
+<dd><p><code>if {} else if {} else if {} ...</code> のショートカット。</p></dd>
 </dl>
 
 </article>
