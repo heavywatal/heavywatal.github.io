@@ -28,7 +28,7 @@ Rの中で `install.packages('dplyr')` としてインストールし、
 ## dplyr
 iris %>%
    dplyr::filter(Species != 'setosa') %>%
-   dplyr::select(-starts_with('Sepal')) %>%
+   dplyr::select(-dplyr::starts_with('Sepal')) %>%
    dplyr::mutate(petal_area=Petal.Length * Petal.Width * 0.5) %>%
    dplyr::group_by(Species) %>%
    dplyr::summarise_each(funs(mean))
@@ -84,7 +84,7 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
 
     ```r
     iris %>% dplyr::select(-(Sepal.Width:Petal.Length))
-    iris %>% dplyr::select(ends_with('Length'))
+    iris %>% dplyr::select(dplyr::ends_with('Length'))
     ```
 
     `.data[, j, drop=TRUE]` のように1列分をベクタで得たいときは二重角括弧か、
@@ -104,11 +104,12 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
     3          5.5         4.2          1.4         0.2  setosa
     ```
 
-`dplyr::distinct(.data, ...)`
+`dplyr::distinct(.data, ..., .keep_all=FALSE)`
 :   指定した列に関してユニークな行のみ返す。
     `filter(!duplicated(.[, ...]))` をよりスマートに。
+    指定しなかった列も残すには `.keep_all=TRUE` が必要。
     ```r
-    > iris %>% distinct(Species)
+    > iris %>% dplyr::distinct(Species)
       Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
     1          5.1         3.5          1.4         0.2     setosa
     2          7.0         3.2          4.7         1.4 versicolor
@@ -155,7 +156,6 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
 :   指定した列の昇順で `data.frame` の行を並べ替える。
     `arrange(desc(column))` で降順になる。
     `order()` を使うよりもタイピングの繰り返しが少ないし直感的
-
     ```r
     .data[with(.data, order(col_a, col_b)), ]
     # is equivalent to
@@ -164,20 +164,35 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
 
 `dplyr::summarise(.data, ...)`
 :   列に対する関数をグループごとに適用して1行にしたものを `rbind()` してまとめる
-
     ```r
-    > iris %>% group_by(Species) %>% summarise(minpl=min(Petal.Length), maxsw=max(Sepal.Width))
+    > iris %>% dplyr::group_by(Species) %>%
+        dplyr::summarise(minpl=min(Petal.Length), maxsw=max(Sepal.Width))
          Species minpl maxsw
     1     setosa   1.0   4.4
     2 versicolor   3.0   3.4
     3  virginica   4.5   3.8
     ```
 
-`dplyr::summarise_each(.data, funs, ...)`, `dplyr::mutate_each(.data, funs, ...)`
-:   複数の列に複数の関数を適用する(`dplyr::funs()` と共に)
-
+`dplyr::summarise_all(.data, .funs, ...)`, `dplyr::mutate_all(.data, .funs, ...)`
+:   グループ化カラム以外の全てのカラムに関数を適用する。
     ```r
-    iris %>% group_by(Species) %>% summarise_each(funs(min, mean, max), ends_with("Width"))
+    iris %>% dplyr::group_by(Species) %>%
+        dplyr::summarise_all(funs(min, mean, max))
+    ```
+
+`dplyr::summarise_at(.data, .cols, .funs, ...)`, `dplyr::mutate_all(.data, .cols, .funs, ...)`
+:   select補助関数を使って指定したカラムに関数を適用する。
+    `***_each()` は非推奨になった。
+    ```r
+    iris %>% dplyr::group_by(Species) %>%
+        dplyr::summarise_at(vars(dplyr::ends_with("Width")), funs(min, mean, max))
+    ```
+
+`dplyr::summarise_if(.data, .predicate, .funs, ...)`, `dplyr::mutate_if(.data, .predicate, .funs, ...)`
+:   `.predicate`がTRUEになるカラムだけに関数を適用する。
+    ```r
+    iris %>% dplyr::group_by(Species) %>%
+        dplyr::summarise_if(is.numeric, funs(min, mean, max))
     ```
 
 ## その他の関数
@@ -189,9 +204,7 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
     -   勝手に列名を変えない
     -   長さ1の変数以外はリサイクルしない
     -   引数の評価がlazyに行われるので前の列を利用して後の列を作ったりできる
-    -   `tbl_df` クラスを付加
-    -   ただし `matrix` からの直接変換はサポートしなそう
-        <https://github.com/hadley/dplyr/issues/324>
+    -   `tbl_df` クラスを付加 (この部分はtibbleパッケージ)
 
 `dplyr::***_join(x, y, by=NULL, copy=FALSE)`
 :   `by` で指定した列がマッチするように行を合わせて `cbind()`
@@ -208,9 +221,31 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
 `dplyr::bind_rows(...)`, `dplyr::bind_cols(...)`
 :   標準の `rbind()`, `cbind()` より効率よく `data.frame` を結合。
     引数は個別でもリストでもよい。
+    そのほかにも標準の集合関数を置き換えるものが提供されている:
+    `intersect()`, `union()`, `union_all()`, `setdiff()`, `setequal()`
+
+`dplyr::if_else(condition, true, false, missing=NULL)`
+:   標準の`ifelse()`よりも型に厳しく、高速らしい。
+    NAのときにどうするかを指定できるのも大変良い。
+
+`dplyr::coalesce(x, ...)`
+:   最初のvectorでNAだったとこは次のvectorのやつを採用、
+    という`ifelse(!is.na(x), x, y)`的な処理をする。
+    基本的には同じ長さのvectorを渡すが、
+    2つめに長さ1のを渡して`tidyr::replace_na()`的に使うのも便利。
+
+`dplyr::na_if(x, y)`
+:   `x[x == y] = NA; x` のショートカット
+
+`dplyr::recode(.x, ..., .default=NULL, .missing=NULL)`
+:    vectorの値を変更する。e.g.,
+     `recode(letters, a='A!', c='C!')`
 
 `dplyr::add_rownames(x, var='rowname')`
 :   1列目に行名として1からの整数を振る。
+
+`dplyr::group_indices(.data, ...)`
+:   `grouped_df` ではなくグループIDとして1からの整数を返す版 `group_by()`
 
 `dplyr::ntile(x, n)`
 :   数値ベクトル `x` を順位によって `n` 個のクラスに均等分け
@@ -247,4 +282,10 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
 :   `group_by(...) %>% tally()` のショートカット。
 
 `dplyr::between(x, left, right)`
-:   `left <= x & x <= right` に相当
+:   `left <= x & x <= right` のショートカット。
+
+`dplyr::near(x, y, tol=.Machine$double.eps^0.5)`
+:   `abs(x - y) < tol` のショートカット。
+
+`dplyr::case_when(...)`
+:   `if {} else if {} else if {} ...` のショートカット。
