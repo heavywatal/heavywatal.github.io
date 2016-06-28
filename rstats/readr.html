@@ -63,7 +63,7 @@ readr — 高速で柔軟なテーブル読み込みツール
 
 
 
-<p><a href="https://github.com/hadley/readr">https://github.com/hadley/readr</a></p>
+<p><a href="https://cran.r-project.org/package=readr">https://cran.r-project.org/package=readr</a></p>
 
 <p>タブ区切りテキストやCSVファイルを読み込んで <code>data.frame</code> にするツール。
 圧縮された <code>***.tsv.gz</code> なども自動的に展開して読んでくれる。
@@ -157,6 +157,39 @@ read_csv('mydata.csv', col_types=colsp)
 <code>sheet</code> は番号でも名前でもいい。
 それ以降の引数については <code>readr</code> の関数と同じ。</dd>
 </dl>
+
+<h2 id="最新版をソースからインストールする">最新版をソースからインストールする</h2>
+
+<p><a href="https://github.com/hadley/readr">https://github.com/hadley/readr</a></p>
+
+<p>バージョン0.2.2で大きいtsv.gzを読み込もうとするとこのようにエラーが出て止まる:</p>
+
+<pre><code>Error in guess_header_(datasource, tokenizer, locale) :
+  long vectors not supported yet: ../../src/include/Rinlinedfuns.h:138
+</code></pre>
+
+<p><a href="https://github.com/hadley/readr/pull/433">@jimhesterの修正</a>
+で直ったらしいのでmaster HEADからのインストールを試みる。</p>
+
+<pre><code class="language-R">devtools::install_github('hadley/readr')
+# ...
+ld: library not found for -lintl
+</code></pre>
+
+<p>見つからないと言われてる <code>libintl.*</code> はgettextの一部なのでそいつを入れる。
+パス指定で楽をするため、keg-onlyだけど無理矢理シムリンクを張る
+(ホントは良くないかも)。</p>
+
+<pre><code class="language-sh">% brew install gettext
+% brew link gettext --force
+</code></pre>
+
+<p>それをRに見つけさせるため <code>~/.R/Makevars</code> にオプションを書く。</p>
+
+<pre><code>LDFLAGS = -L${HOME}/.homebrew/lib
+</code></pre>
+
+<p>再びRで <code>install_github('hadley/readr')</code> を試みる。</p>
 
 </article>
 </main>
