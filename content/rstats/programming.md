@@ -15,10 +15,10 @@ tags = ["r"]
 ### 関数の種類
 
 `d___(x, ...)`
-:   確率密度関数。 $P[X = x]$
+:   確率密度関数 (PDF)。 $P[X = x]$
 
 `p___(q, ..., lower.tail=TRUE, log.p=FALSE)`
-:   累積分布関数。
+:   累積分布関数 (CDF)。
     デフォルトでは左から $P[X \leq x]$ 。
     `lower.tail=FALSE` とすると右から $P[X > x]$ 。
 
@@ -91,7 +91,7 @@ my_add(13, 29)  # 42
 my_add(3)       # 4   (2つめの引数を省略すると1)
 ```
 
-### 引数の選択肢を指定・チェック (`match.arg()`)
+### 引数の選択肢を指定・チェック `match.arg()`
 
 省略すると先頭の要素が採用される
 
@@ -186,28 +186,12 @@ eval_parse = function(...){
 [1]  1  4  9 16
 ```
 
-## 空の `list`
-
-ある大きさを持った空のリストを作る。意外と難しい。
-
-```r
-> as.list(rep(list(NULL),3))
-[[1]]
-NULL
-
-[[2]]
-NULL
-
-[[3]]
-NULL
-```
-
 ## `attach()` するべからず
 
-データフレーム `some.data` のある要素 `some.item` にアクセスしたいとき、
-普通はダラーを使って `some.data$some.item` のようにする。
-`attach(some.data)` すると、データフレーム内のすべての要素が独立した変数みたいになって、
-`some.item` だけでアクセスできるようになる (`detach()` するまで)。
+データフレーム `some_data` のある要素 `some_item` にアクセスしたいとき、
+普通はダラーを使って `some_data$some_item` のようにする。
+`attach(some_data)` すると、データフレーム内のすべての要素が独立した変数みたいになって、
+`some_item` だけでアクセスできるようになる (`detach()` するまで)。
 でもそうすると、ワークスペースは変数でいっぱいになってしまうし、
 名前の衝突による不具合が起こる危険性がある。
 そこで、範囲限定で一時的に `attach()` 状態を作り出す `with()` を使う。
@@ -244,9 +228,10 @@ with(iris, {
 +        ifelse(vec %% 5, 'fizz', 'fizzbuzz'))
 ```
 
-### `list`, `data.frame`
+### `list`, `data.frame`, `matrix`
 
--   [plyr]({{< relref "dplyr.md" >}}) や [tidyr]({{< relref "tidyr.md" >}}) を介して操作すると楽チンかつ高速。
+-   [dplyr]({{< relref "dplyr.md" >}}), [purrr]({{< relref "purrr.md" >}}),
+    [tidyr]({{< relref "tidyr.md" >}}) を介して操作すると楽チンかつ高速。
 -   基本的に `list` や `data.frame` は遅いので、
     `matrix` で済むもの(数値のみの表など)は `matrix` で。
 
