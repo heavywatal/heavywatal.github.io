@@ -46,7 +46,7 @@ tags = ["mac", "writing"]
 普通、日本語モードのときは全角のスペースが入力される。
 でも、ほとんど使わないし、むしろ半角スペースを入力したい場面のほうが多い。
 ということで、いつでも半角スペースが入力されるように設定する。
-全角スペースを入力したいときは `option + space`:
+全角スペースを入力したいときは <kbd>option-space</kbd>:
 
     % defaults write com.apple.inputmethod.Kotoeri zhsy -dict-add " " -bool false
     % killall Kotoeri

@@ -6,7 +6,7 @@ tags = ["mac"]
 +++
 
 Leopardからの新機能。
-Finder 上で `Space` を押すだけで、
+Finder 上で <kbd>Space</kbd> を押すだけで、
 いろんなファイルを開くことなくチョイ見することができる。
 `/Library/QuickLook/` または `~/Library/QuickLook/`
 以下にプラグインを配置することで、機能を拡張できる。

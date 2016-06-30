@@ -24,9 +24,9 @@ tags = ["editor"]
 
 ## Keybind
 
-`C-` は左手小指の `control`
+<kbd>C-</kbd> は左手小指の <kbd>control</kbd>
 
-`M-` は `ESC` または `C-[`
+<kbd>M-</kbd> は <kbd>esc</kbd> または <kbd>C-[</kbd>
 
     C-g        keyboard-quit    とにかくキャンセル
     C-z        suspend-emacs    とりあえずemacsを抜ける
@@ -78,46 +78,46 @@ tags = ["editor"]
     C-x 5 f    find-file-other-frame
     C-x 5 d    dired-other-frame
 
-### `C-x C-b`: `list-buffers`
+### `list-buffers` <kbd>C-x C-b</kbd>
 
 バッファリストを隣のウィンドウで開く。
 
-`C-u` を頭につけるとファイルを開いてるbufferに限定して。
+<kbd>C-u</kbd> を頭につけるとファイルを開いてるbufferに限定して。
 
 バッファメニューをそのペインで開くコマンドはずばり `buffer-menu`
 
-`?`, ヘルプ\
-`o`, 隣のwindowで開く\
-`f`, そのwindowで開く (`RET`)\
-`k`, 閉じる候補にマーク\
-`s`, 保存候補にマーク\
-`x`, マーク内容の実行\
-`u`, マーク取り消し\
-`q`, list終了
+<kbd>?</kbd> ヘルプ\
+<kbd>o</kbd> 隣のwindowで開く\
+<kbd>f</kbd> そのwindowで開く (`RET`)\
+<kbd>k</kbd> 閉じる候補にマーク\
+<kbd>s</kbd> 保存候補にマーク\
+<kbd>x</kbd> マーク内容の実行\
+<kbd>u</kbd> マーク取り消し\
+<kbd>q</kbd> list終了
 
-### `C-x d`: `dired`
+### `dired` <kbd>C-x d</kbd>
 
 ファイラのようなバッファ。
 コピーや移動もできるけど、まあそれはシェルからやればいい。
 
-`o`, 別バッファで開く\
-`f`, そのバッファで開く (RET)\
-`v`, 見てみる\
-`q`, 終了
+<kbd>o</kbd> 別バッファで開く\
+<kbd>f</kbd> そのバッファで開く <kbd>return</kbd>\
+<kbd>v</kbd> 見てみる\
+<kbd>q</kbd> 終了
 
 ### 繰り返し入力
 
-`C-u N X` あるいは `M N X` で、XをN回入力する。
+<kbd>C-u N X</kbd> あるいは <kbd>M-N X</kbd> で、XをN回入力する。
 
-e.g., `C-u 79 -` と打てば水平線を入力できる。
+e.g., <kbd>C-u 79 -</kbd> と打てば水平線を入力できる。
 
-e.g., `C-u 3 C-_` とすれば3操作分だけ元に戻せる。
+e.g., <kbd>C-u 3 C-_</kbd> とすれば3操作分だけ元に戻せる。
 
 ## モード
 
-`C-c`, モード特有コマンドのprefix\
-`M-;`, モードに従ってコメント記号の自動挿入\
-`M-/`, コード補完
+<kbd>C-c</kbd> モード特有コマンドのprefix\
+<kbd>M-;</kbd> モードに従ってコメント記号の自動挿入\
+<kbd>M-/</kbd> コード補完
 
 `list-faces-display`
 
@@ -125,16 +125,16 @@ e.g., `C-u 3 C-_` とすれば3操作分だけ元に戻せる。
 
 ### Markdown
 
-`C-c C-c p`, preview on browser\
-`C-c C-c m`, preview on buffer\
-`C-c C-c v`, write preview and open in browser\
-`C-c C-c e`, write preview
+<kbd>C-c C-c p</kbd> preview on browser\
+<kbd>C-c C-c m</kbd> preview on buffer\
+<kbd>C-c C-c v</kbd> write preview and open in browser\
+<kbd>C-c C-c e</kbd> write preview
 
 ### R (ESS)
 
-`M-x R`, R起動\
-`C-c C-r`, `ess-eval-region`\
-`C-c C-q`, R終了
+<kbd>M-x R</kbd> R起動\
+<kbd>C-c C-r</kbd> `ess-eval-region`\
+<kbd>C-c C-q</kbd> R終了
 
 ## 設定
 

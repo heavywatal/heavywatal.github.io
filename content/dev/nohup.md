@@ -22,7 +22,7 @@ Activity Monitor
 
     % ./a.out
 
-ここで `control + z` を押すと、プロセスはバックグラウンドで一時停止する:
+ここで <kbd>control-z</kbd> を押すと、プロセスはバックグラウンドで一時停止する:
 
     [1]  + 19310 suspended  a.out
 
@@ -97,7 +97,7 @@ Activity Monitor
     % disown %1
 
 {{%div class="note"%}}
-[tmux]({{< relref "tmux.md" >}})
+See [tmux]({{< relref "tmux.md" >}})
 
 `nohup`, `disown` がプロセス単位で切り離すのに対して、
 `tmux` は端末セッション丸ごと切り離し＆復帰することができる。
