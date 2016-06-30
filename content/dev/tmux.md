@@ -13,10 +13,10 @@ tags = ["job", "shell"]
 
 1つの画面の中でウインドウを追加・分割して複数の端末を開く
 :   GUIのタブが不要になる
-:    1つの `ssh` セッションで複数の端末を持てる
+:    1つのsshセッションで複数の端末を持てる
 
-`ssh` 切断後も端末丸ごと継続され、後でまた繋ぎ直せる
-:   不意の `ssh` 切断でも作業が失われない
+ssh切断後も端末丸ごと継続され、後でまた繋ぎ直せる
+:   不意のssh切断でも作業が失われない
 :   別の端末から接続しても同じ作業を継続できる
 :   `nohup` とかバックグラウンド化とか考えるより楽チン cf. [nohup]({{< relref "nohup.md" >}})
 
@@ -27,57 +27,62 @@ tags = ["job", "shell"]
 
 tmux 内で **prefix key** に続けて特定のキーを送信すると、
 そのキーに応じたさまざまなコマンドを実行できる。
-prefix keyはデフォルトで `C-b` だが
-後述の設定で `C-t` に変更することにする。
-`control + b` を `C-b` のように表記する
-(e.g. `C-t ?` でキーバインドを列挙)。
+prefix keyはデフォルトで <kbd>C-b</kbd> (<kbd>control-b</kbd>の略記)だが
+後述の設定で <kbd>C-t</kbd> に変更することにする。
+(e.g. <kbd>C-t ?</kbd> でキーバインドを列挙)。
 
-```nohighlight
-? 　list-keys
-d 　detach-client
-[ 　copy-mode
-] 　paste-buffer
-c 　new-window
-n 　next-window
-p 　previous-window
-l 　last-window
-, 　rename-window
-" 　split-window
-% 　split-window -h
-↑ 　select-pane -U
-↓ 　select-pane -D
-← 　select-pane -L
-→ 　select-pane -R
-o 　select-pane -t:.+
-: 　command-prompt
-x 　confirm-before kill-pane
-& 　confirm-before kill-window
-```
+key          | command | description
+------------ | ------- | -----------
+<kbd>?</kbd> | `list-keys` |
+<kbd>:</kbd> | `command-prompt` |
+<kbd>d</kbd> | `detach-client` |
+<kbd>[</kbd> | `copy-mode` |
+<kbd>]</kbd> | `paste-buffer` |
+<kbd>c</kbd> | `new-window` |
+<kbd>n</kbd> | `next-window` |
+<kbd>p</kbd> | `previous-window` |
+<kbd>l</kbd> | `last-window` |
+<kbd>,</kbd> | `rename-window` |
+<kbd>"</kbd> | `split-window` | 横長・縦並びに分割
+<kbd>%</kbd> | `split-window -h` | 縦長・横並びに分割
+<kbd>;</kbd> | `last-pane` | 直前のペイン(往復)
+<kbd>↑</kbd> | `select-pane -U` |
+<kbd>↓</kbd> | `select-pane -D` |
+<kbd>←</kbd> | `select-pane -L` |
+<kbd>→</kbd> | `select-pane -R` |
+<kbd>o</kbd> | `select-pane -t:.+` | 番号順にペインを巡回
+<kbd>C-o</kbd> | `rotate-window` | レイアウトを維持してペインを回す
+<kbd>space</kbd> | `next-layout` | レイアウトを変更する
+<kbd>!</kbd> | `break-pane` | ペインを独立したウィンドウにする
+<kbd>x</kbd> | `confirm-before kill-pane` |
+<kbd>&</kbd> | `confirm-before kill-window` |
+
 
 ### コピーモード
 
 上に戻ってスクロールしたり、その内容をコピーしたいときはコピーモードを使う。
 コピーモード中のキー操作はデフォルトでは `emacs` 風になっている。
 
-1.  `<prefix> [` でコピーモードに入る
-2.  `C-space` でコピー開始点をマーク
-3.  `C-w` で終点をマークし、コピーモードを出る
-4.  `<prefix> ]` でペースト
+1.  <kbd>C-t [</kbd> でコピーモードに入る
+2.  <kbd>C-space</kbd> でコピー開始点をマーク
+3.  <kbd>C-w</kbd> で終点をマークし、コピーモードを出る
+4.  <kbd>C-t ]</kbd> でペースト
 
 設定ファイルに
 `bind-key -t emacs-copy C-w copy-pipe "pbcopy"`
-と書いておけばコピー内容がMacのクリップボードにも送られる。
+と書いておけばコピー内容がMacのクリップボードにも送られるので、
+普通に<kbd>cmd-v</kbd>でペーストできる。
 
 ## 設定
 
-設定ファイル： `$HOME/.tmux.conf`
+設定ファイル： `~/.tmux.conf`
 
 <https://github.com/heavywatal/dotfiles/blob/master/.tmux.conf>
 
 prefix 変更
-:   `C-b` はキャレット左移動に使われるべきなので、
-    `zsh` や `emacs` で使わない `C-t` に変更する。
-    tmux の頭文字で覚えやすいし、`b` より若干近い。
+:   <kbd>C-b</kbd> はキャレット左移動に使われるべきなので、
+    `zsh` や `emacs` で使わない <kbd>C-t</kbd> に変更する。
+    tmux の頭文字で覚えやすいし、<kbd>b</kbd> より若干近い。
 
 起動時ウィンドウサイズ変更 `aggressive-resize`
 :   サイズの異なる端末からアクセスしたときに随時ウィンドウサイズ変更
@@ -100,32 +105,32 @@ Mac `open` 問題
 
 2.  ウィンドウを縦に分割し、右ペインでPythonインタプリタを起動:
 
-        <prefix> %
+        C-t %
 
         % python
 
 3.  左ペインにフォーカスを戻し、ファイルを閲覧したり何だり:
 
-        <prefix> o
+        C-t o
 
         % less ~/.ssh/config
 
 4.  新しいウィンドウを作って `root` 仕事をしたり何だり:
 
-        <prefix> c
+        C-t c
 
         % su -
         Password:
 
 5.  ウィンドウを切り替える:
 
-        <prefix> l
-        <prefix> n
-        <prefix> p
+        C-t l
+        C-t n
+        C-t p
 
 6.  このセッションをデタッチし、ログアウトして家に帰る:
 
-        <prefix> d
+        C-t d
 
         % logout
 
