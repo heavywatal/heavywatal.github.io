@@ -27,7 +27,7 @@ http://flight-manual.atom.io/using-atom/sections/basic-customization/
 
 https://github.com/heavywatal/dotfiles/tree/master/.atom
 
-いつもの `cmd-,` キーで設定画面を起動。
+いつもの <kbd>cmd ,</kbd> キーで設定画面を起動。
 
 設定ファイルは `~/.atom/` 以下に置かれる。
 設定画面から"Open Config Folder"ボタンを押すとAtom内でそれらを開くことができる。
@@ -46,8 +46,8 @@ https://github.com/heavywatal/dotfiles/tree/master/.atom
 `styles.less`
 : エディタ本体も含めていろんな部分をCSS的にスタイル設定可能。
 
-`cmd-alt-i` でWeb Inspectorを起動させればあらゆる要素を調べることができる。
-カーソル位置のスコープを知りたいだけなら `cmd-alt-p` が簡便。
+<kbd>cmd-alt-i</kbd> でWeb Inspectorを起動させればあらゆる要素を調べることができる。
+カーソル位置のスコープを知りたいだけなら <kbd>cmd-alt-p</kbd> が簡便。
 
 
 ## パッケージ
@@ -66,11 +66,18 @@ apm uninstall pigments
 apm upgrade
 ```
 
-## 使い方
+## Tips
 
-とりあえず `cmd-shift-p` でコマンドパレットを呼び出してみる。
+とりあえずコマンドパレット
+: <kbd>cmd-shift-p</kbd> で呼び出し、やりたいことを打ち込んでみる
 
 矩形(ブロック)選択
-: `ctrl-shift-down` / `ctrl-shift-up`
+: <kbd>ctrl-shift-down</kbd> / <kbd>ctrl-shift-up</kbd>
 : MacではデフォルトでMission Controlに割り当てられてしまっているので
   システム環境設定からそれを解除しておく。
+
+小文字から大文字へ "Editor: Upper Case"
+: <kbd>command-k-u</kbd>
+
+大文字から小文字へ "Editor: Lower Case"
+: <kbd>command-k-l</kbd>
