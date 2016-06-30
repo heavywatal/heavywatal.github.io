@@ -71,9 +71,9 @@ tmux — 仮想端末でリモート仕事を安全に
 <dl>
 <dt>1つの画面の中でウインドウを追加・分割して複数の端末を開く</dt>
 <dd>GUIのタブが不要になる</dd>
-<dd>1つの <code>ssh</code> セッションで複数の端末を持てる</dd>
-<dt><code>ssh</code> 切断後も端末丸ごと継続され、後でまた繋ぎ直せる</dt>
-<dd>不意の <code>ssh</code> 切断でも作業が失われない</dd>
+<dd>1つのsshセッションで複数の端末を持てる</dd>
+<dt>ssh切断後も端末丸ごと継続され、後でまた繋ぎ直せる</dt>
+<dd>不意のssh切断でも作業が失われない</dd>
 <dd>別の端末から接続しても同じ作業を継続できる</dd>
 <dd><code>nohup</code> とかバックグラウンド化とか考えるより楽チン cf. <a href="/dev/nohup.html">nohup</a></dd>
 </dl>
@@ -85,31 +85,159 @@ tmux — 仮想端末でリモート仕事を安全に
 
 <p>tmux 内で <strong>prefix key</strong> に続けて特定のキーを送信すると、
 そのキーに応じたさまざまなコマンドを実行できる。
-prefix keyはデフォルトで <code>C-b</code> だが
-後述の設定で <code>C-t</code> に変更することにする。
-<code>control + b</code> を <code>C-b</code> のように表記する
-(e.g. <code>C-t ?</code> でキーバインドを列挙)。</p>
+prefix keyはデフォルトで <kbd>C-b</kbd> (<kbd>control-b</kbd>の略記)だが
+後述の設定で <kbd>C-t</kbd> に変更することにする。
+(e.g. <kbd>C-t ?</kbd> でキーバインドを列挙)。</p>
 
-<pre><code class="language-nohighlight">? 　list-keys
-d 　detach-client
-[ 　copy-mode
-] 　paste-buffer
-c 　new-window
-n 　next-window
-p 　previous-window
-l 　last-window
-, 　rename-window
-&quot; 　split-window
-% 　split-window -h
-↑ 　select-pane -U
-↓ 　select-pane -D
-← 　select-pane -L
-→ 　select-pane -R
-o 　select-pane -t:.+
-: 　command-prompt
-x 　confirm-before kill-pane
-&amp; 　confirm-before kill-window
-</code></pre>
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>command</th>
+<th>description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><kbd>?</kbd></td>
+<td><code>list-keys</code></td>
+<td></td>
+</tr>
+
+<tr>
+<td><kbd>:</kbd></td>
+<td><code>command-prompt</code></td>
+<td></td>
+</tr>
+
+<tr>
+<td><kbd>d</kbd></td>
+<td><code>detach-client</code></td>
+<td></td>
+</tr>
+
+<tr>
+<td><kbd>[</kbd></td>
+<td><code>copy-mode</code></td>
+<td></td>
+</tr>
+
+<tr>
+<td><kbd>]</kbd></td>
+<td><code>paste-buffer</code></td>
+<td></td>
+</tr>
+
+<tr>
+<td><kbd>c</kbd></td>
+<td><code>new-window</code></td>
+<td></td>
+</tr>
+
+<tr>
+<td><kbd>n</kbd></td>
+<td><code>next-window</code></td>
+<td></td>
+</tr>
+
+<tr>
+<td><kbd>p</kbd></td>
+<td><code>previous-window</code></td>
+<td></td>
+</tr>
+
+<tr>
+<td><kbd>l</kbd></td>
+<td><code>last-window</code></td>
+<td></td>
+</tr>
+
+<tr>
+<td><kbd>,</kbd></td>
+<td><code>rename-window</code></td>
+<td></td>
+</tr>
+
+<tr>
+<td><kbd>&ldquo;</kbd></td>
+<td><code>split-window</code></td>
+<td>横長・縦並びに分割</td>
+</tr>
+
+<tr>
+<td><kbd>%</kbd></td>
+<td><code>split-window -h</code></td>
+<td>縦長・横並びに分割</td>
+</tr>
+
+<tr>
+<td><kbd>;</kbd></td>
+<td><code>last-pane</code></td>
+<td>直前のペイン(往復)</td>
+</tr>
+
+<tr>
+<td><kbd>↑</kbd></td>
+<td><code>select-pane -U</code></td>
+<td></td>
+</tr>
+
+<tr>
+<td><kbd>↓</kbd></td>
+<td><code>select-pane -D</code></td>
+<td></td>
+</tr>
+
+<tr>
+<td><kbd>←</kbd></td>
+<td><code>select-pane -L</code></td>
+<td></td>
+</tr>
+
+<tr>
+<td><kbd>→</kbd></td>
+<td><code>select-pane -R</code></td>
+<td></td>
+</tr>
+
+<tr>
+<td><kbd>o</kbd></td>
+<td><code>select-pane -t:.+</code></td>
+<td>番号順にペインを巡回</td>
+</tr>
+
+<tr>
+<td><kbd>C-o</kbd></td>
+<td><code>rotate-window</code></td>
+<td>レイアウトを維持してペインを回す</td>
+</tr>
+
+<tr>
+<td><kbd>space</kbd></td>
+<td><code>next-layout</code></td>
+<td>レイアウトを変更する</td>
+</tr>
+
+<tr>
+<td><kbd>!</kbd></td>
+<td><code>break-pane</code></td>
+<td>ペインを独立したウィンドウにする</td>
+</tr>
+
+<tr>
+<td><kbd>x</kbd></td>
+<td><code>confirm-before kill-pane</code></td>
+<td></td>
+</tr>
+
+<tr>
+<td><kbd>&amp;</kbd></td>
+<td><code>confirm-before kill-window</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 
 <h3 id="コピーモード">コピーモード</h3>
 
@@ -117,27 +245,28 @@ x 　confirm-before kill-pane
 コピーモード中のキー操作はデフォルトでは <code>emacs</code> 風になっている。</p>
 
 <ol>
-<li><code>&lt;prefix&gt; [</code> でコピーモードに入る</li>
-<li><code>C-space</code> でコピー開始点をマーク</li>
-<li><code>C-w</code> で終点をマークし、コピーモードを出る</li>
-<li><code>&lt;prefix&gt; ]</code> でペースト</li>
+<li><kbd>C-t [</kbd> でコピーモードに入る</li>
+<li><kbd>C-space</kbd> でコピー開始点をマーク</li>
+<li><kbd>C-w</kbd> で終点をマークし、コピーモードを出る</li>
+<li><kbd>C-t ]</kbd> でペースト</li>
 </ol>
 
 <p>設定ファイルに
 <code>bind-key -t emacs-copy C-w copy-pipe &quot;pbcopy&quot;</code>
-と書いておけばコピー内容がMacのクリップボードにも送られる。</p>
+と書いておけばコピー内容がMacのクリップボードにも送られるので、
+普通に<kbd>cmd-v</kbd>でペーストできる。</p>
 
 <h2 id="設定">設定</h2>
 
-<p>設定ファイル： <code>$HOME/.tmux.conf</code></p>
+<p>設定ファイル： <code>~/.tmux.conf</code></p>
 
 <p><a href="https://github.com/heavywatal/dotfiles/blob/master/.tmux.conf">https://github.com/heavywatal/dotfiles/blob/master/.tmux.conf</a></p>
 
 <dl>
 <dt>prefix 変更</dt>
-<dd><code>C-b</code> はキャレット左移動に使われるべきなので、
-<code>zsh</code> や <code>emacs</code> で使わない <code>C-t</code> に変更する。
-tmux の頭文字で覚えやすいし、<code>b</code> より若干近い。</dd>
+<dd><kbd>C-b</kbd> はキャレット左移動に使われるべきなので、
+<code>zsh</code> や <code>emacs</code> で使わない <kbd>C-t</kbd> に変更する。
+tmux の頭文字で覚えやすいし、<kbd>b</kbd> より若干近い。</dd>
 <dt>起動時ウィンドウサイズ変更 <code>aggressive-resize</code></dt>
 <dd>サイズの異なる端末からアクセスしたときに随時ウィンドウサイズ変更</dd>
 <dt>Mac <code>open</code> 問題</dt>
@@ -161,21 +290,21 @@ tmux の新しいセッションを開始:</p>
 
 <li><p>ウィンドウを縦に分割し、右ペインでPythonインタプリタを起動:</p>
 
-<pre><code>&lt;prefix&gt; %
+<pre><code>C-t %
 
 % python
 </code></pre></li>
 
 <li><p>左ペインにフォーカスを戻し、ファイルを閲覧したり何だり:</p>
 
-<pre><code>&lt;prefix&gt; o
+<pre><code>C-t o
 
 % less ~/.ssh/config
 </code></pre></li>
 
 <li><p>新しいウィンドウを作って <code>root</code> 仕事をしたり何だり:</p>
 
-<pre><code>&lt;prefix&gt; c
+<pre><code>C-t c
 
 % su -
 Password:
@@ -183,14 +312,14 @@ Password:
 
 <li><p>ウィンドウを切り替える:</p>
 
-<pre><code>&lt;prefix&gt; l
-&lt;prefix&gt; n
-&lt;prefix&gt; p
+<pre><code>C-t l
+C-t n
+C-t p
 </code></pre></li>
 
 <li><p>このセッションをデタッチし、ログアウトして家に帰る:</p>
 
-<pre><code>&lt;prefix&gt; d
+<pre><code>C-t d
 
 % logout
 </code></pre></li>
