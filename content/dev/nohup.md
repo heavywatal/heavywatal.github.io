@@ -8,13 +8,38 @@ tags = ["job"]
 
 ## 実行中プロセスを知る
 
-`top`
+`/Applications/Utilities/Activity Monitor.app` を見るのが楽チン。
 
-`ps`
+### `ps`
 
-`jobs`
+OSによって挙動がかなり異なるのでややこしいが、
+LinuxのほうがいくらかBSDに歩み寄ってくれているらしい。
+とりあえず全プロセスを表示するオプション `ax`
+とカラムをたくさん表示するオプション `u`
+をつけて `less` や `grep` に流すのが基本。
 
-Activity Monitor
+ソートの仕方は共通ではない。
+出力形式の調整は共通の `o` オプション。
+
+```sh
+% ps aux | less
+
+## Sort on Mac
+% ps auxm | head  # by Memory
+% ps auxr | head  # by CPU
+
+## Sort on Linux
+% ps auxk -pmem | head  # by Memory
+% ps auxk -pcpu | head  # by CPU
+
+## Output format
+% ps axo user,pid,pcpu,pmem,command
+```
+
+### `top`
+
+### `jobs`
+
 
 ## ジョブコントロール
 
