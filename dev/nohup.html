@@ -64,13 +64,36 @@ Watal M. Iwasaki
 
 <h2 id="実行中プロセスを知る">実行中プロセスを知る</h2>
 
-<p><code>top</code></p>
+<p><code>/Applications/Utilities/Activity Monitor.app</code> を見るのが楽チン。</p>
 
-<p><code>ps</code></p>
+<h3 id="ps"><code>ps</code></h3>
 
-<p><code>jobs</code></p>
+<p>OSによって挙動がかなり異なるのでややこしいが、
+LinuxのほうがいくらかBSDに歩み寄ってくれているらしい。
+とりあえず全プロセスを表示するオプション <code>ax</code>
+とカラムをたくさん表示するオプション <code>u</code>
+をつけて <code>less</code> や <code>grep</code> に流すのが基本。</p>
 
-<p>Activity Monitor</p>
+<p>ソートの仕方は共通ではない。
+出力形式の調整は共通の <code>o</code> オプション。</p>
+
+<pre><code class="language-sh">% ps aux | less
+
+## Sort on Mac
+% ps auxm | head  # by Memory
+% ps auxr | head  # by CPU
+
+## Sort on Linux
+% ps auxk -pmem | head  # by Memory
+% ps auxk -pcpu | head  # by CPU
+
+## Output format
+% ps axo user,pid,pcpu,pmem,command
+</code></pre>
+
+<h3 id="top"><code>top</code></h3>
+
+<h3 id="jobs"><code>jobs</code></h3>
 
 <h2 id="ジョブコントロール">ジョブコントロール</h2>
 
