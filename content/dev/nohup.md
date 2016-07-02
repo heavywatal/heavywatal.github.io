@@ -38,6 +38,18 @@ LinuxのほうがいくらかBSDに歩み寄ってくれているらしい。
 
 ### `top`
 
+一度表示して終わりではなく、<kbd>q</kbd> で閉じるまで一定間隔で更新される。
+起動してからソート項目を切り替えられる。
+プラスで昇順、マイナスで降順。
+
+by     | Linux | Mac
+------ | ----- | ----
+PID    | <kbd>N</kbd> | <kbd>o -pid</kbd>
+CPU    | <kbd>P</kbd> | <kbd>o -cpu</kbd>
+Memory | <kbd>M</kbd> | <kbd>o -mem</kbd>
+Time   | <kbd>T</kbd> | <kbd>o -time</kbd>
+
+
 ### `jobs`
 
 
