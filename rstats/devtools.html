@@ -211,6 +211,52 @@ increment = function(x) {x + 1}
 </ul></li>
 </ul>
 
+<h3 id="c-ソースコード">C++ソースコード</h3>
+
+<ul>
+<li><code>src/</code> 以下に配置</li>
+<li><a href="https://cran.r-project.org/web/packages/Rcpp">Rcpp</a>
+が型変換などをスムーズにしてくれる。</li>
+
+<li><p><code>Rcpp.h</code>のインクルードといくつかのコメントが必要</p>
+
+<pre><code class="language-c++">// [[Rcpp::plugins(cpp14)]]
+#include &lt;Rcpp.h&gt;
+
+//' First example
+//' @param args string vector
+//' @return string
+//' @export
+// [[Rcpp::export]]
+std::string cxx_func(Rcpp::CharacterVector args=Rcpp::CharacterVector::create()) {
+    auto vs_args = Rcpp::as&lt;std::vector&lt;std::string&gt;&gt;(args);
+    return vs_args;
+}
+</code></pre></li>
+
+<li><p>開発者側で指定すべきビルドオプションは <code>src/Makevars</code> に指定</p>
+
+<pre><code>CXX_STD = CXX11
+PKG_CPPFLAGS = -isystem ${HOME}/local/include
+PKG_LIBS = -lmy_great_lib
+</code></pre></li>
+
+<li><p>ユーザ側で指定すべきオプションは <code>~/.R/Makevars</code> に</p>
+
+<pre><code>CFLAGS = -g -Wall -O2 -march=native -mtune=native
+CXXFLAGS = $(CFLAGS)
+CXX1XFLAGS = $(CFLAGS)
+CXX1XSTD = -std=c++14
+LDFLAGS = -L${HOME}/local/lib -L${HOME}/.homebrew/lib
+</code></pre></li>
+
+<li><p><code>DESCRIPTION</code> にいくらか書き足す</p>
+
+<pre><code>LinkingTo: Rcpp
+SystemRequirements: C++14
+</code></pre></li>
+</ul>
+
 <h2 id="devtools"><code>devtools</code></h2>
 
 <p><a href="https://github.com/hadley/devtools">https://github.com/hadley/devtools</a></p>
