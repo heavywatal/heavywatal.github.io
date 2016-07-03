@@ -143,6 +143,50 @@ vignettes/
     -   <http://kbroman.org/pkg_primer/pages/docs.html>
     -   <http://cran.r-project.org/web/packages/roxygen2/vignettes/rd.html>
 
+### C++ソースコード
+
+-   `src/` 以下に配置
+-   [Rcpp](https://cran.r-project.org/web/packages/Rcpp)
+    が型変換などをスムーズにしてくれる。
+-   `Rcpp.h`のインクルードといくつかのコメントが必要
+    ```c++
+    // [[Rcpp::plugins(cpp14)]]
+    #include <Rcpp.h>
+
+    //' First example
+    //' @param args string vector
+    //' @return string
+    //' @export
+    // [[Rcpp::export]]
+    std::string cxx_func(Rcpp::CharacterVector args=Rcpp::CharacterVector::create()) {
+        auto vs_args = Rcpp::as<std::vector<std::string>>(args);
+        return vs_args;
+    }
+    ```
+
+-   開発者側で指定すべきビルドオプションは `src/Makevars` に指定
+    ```
+    CXX_STD = CXX11
+    PKG_CPPFLAGS = -isystem ${HOME}/local/include
+    PKG_LIBS = -lmy_great_lib
+    ```
+
+-   ユーザ側で指定すべきオプションは `~/.R/Makevars` に
+    ```
+    CFLAGS = -g -Wall -O2 -march=native -mtune=native
+    CXXFLAGS = $(CFLAGS)
+    CXX1XFLAGS = $(CFLAGS)
+    CXX1XSTD = -std=c++14
+    LDFLAGS = -L${HOME}/local/lib -L${HOME}/.homebrew/lib
+    ```
+
+-   `DESCRIPTION` にいくらか書き足す
+    ```
+    LinkingTo: Rcpp
+    SystemRequirements: C++14
+    ```
+
+
 ## `devtools`
 
 <https://github.com/hadley/devtools>
