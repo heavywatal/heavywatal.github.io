@@ -72,28 +72,35 @@ Homebrew
 <p><a href="https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/Installation.md">https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/Installation.md</a></p>
 
 <ol>
-<li>Command Line Tools をインストールする。 cf. <a href="/dev/devenv.html">/dev/devenv</a></li>
+<li><p>Command Line Tools をインストールする。
+cf. <a href="/dev/devenv.html">/dev/devenv</a></p></li>
 
-<li><p>公式では <code>/usr/local/</code> へのインストールが推奨されているが、
-個人的にあまり好ましくないのでホームディレクトリに
-<code>~/.homebrew/</code> を作ってインストールする:</p>
+<li><p>ターミナルから下記のコマンドを実行し、指示に従ってパスワードを入力する:</p>
 
-<pre><code>% cd
+<pre><code class="language-sh">/usr/bin/ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;
+</code></pre>
+
+<p>デフォルトの <code>/usr/local/</code> にインストールするのが嫌なら、
+例えばホーム以下の <code>~/.homebrew/</code> にインストールすることもできる:</p>
+
+<pre><code class="language-sh">% cd
 % mkdir .homebrew
-% curl -L https://github.com/mxcl/homebrew/tarball/master | tar xz --strip 1 -C .homebrew
-</code></pre></li>
+% curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C .homebrew
+</code></pre>
 
-<li><p><code>.zshrc</code> を書き換えてシェル環境を整える:</p>
+<p>が、<code>/usr/local/</code> 以外にインストールすると、
+bottle機能を封じられて毎回自前ビルドする仕様になってしまったので、
+非力なラップトップとかでは結構厳しい。</p></li>
 
-<pre><code># パスを通す
-export PATH=$HOME/.homebrew/bin:$PATH
-export MANPATH=$HOME/.homebrew/share/man:$MANPATH
-if [ -d $HOME/.homebrew/share/zsh-completions ]; then
-    fpath=($HOME/.homebrew/share/zsh-completions $fpath)
+<li><p><code>.zshenv</code> (もしくは<code>.zshrc</code>) でパスを通す:</p>
+
+<pre><code class="language-sh">PATH=${HOME}/.homebrew/bin:/usr/local/bin:${PATH}
+brew_prefix=$(brew --prefix 2&gt;/dev/null)
+if [ -n &quot;${brew_prefix}&quot; ]; then
+    MANPATH=${brew_prefix}/share/man:${MANPATH}
+    fpath=(${brew_prefix}/share/zsh-completions ${fpath})
 fi
-
-# お好みでデフォルトコンパイラを変更
-export HOMEBREW_CC=clang
+unset brew_prefix
 </code></pre></li>
 </ol>
 
@@ -181,7 +188,9 @@ zsh-completions
 オプションを付けるとソースからビルドする羽目になるので注意。
 gccやboostなどのデカいやつはとりあえずデフォルトで入れたほうが早い。</p>
 
-<p><code>--force-bottle</code> と <code>--build-from-source</code> で明示的に切り替えられる。</p>
+<p><code>--force-bottle</code> と <code>--build-from-source</code> で明示的に切り替えられる。
+しかしいつの間にか、Homebrewが<code>/usr/local/</code>
+以外にインストールしてあるとbottleを使えない仕様になってしまった。</p>
 
 </div>
 
@@ -191,7 +200,7 @@ gccやboostなどのデカいやつはとりあえずデフォルトで入れた
 などは既存のコマンドとごっちゃにならないよう頭に <code>g</code>
 を付けてインストールしてくれる。
 元の名前でアクセスする方法はいくつかあるが、
-<code>$(brew --prefix)/opt/{{coreutils,gnu-sed,gnu-tar}}/libexec/gnubin</code> に
+<code>$(brew --prefix)/opt/{coreutils,gnu-sed,gnu-tar}/libexec/gnubin</code> に
 <code>PATH</code> を通すのがよい。
 <code>brew unlink coreutils gnu-sed gnu-tar</code> してもそれらのディレクトリは残る。</p>
 
@@ -259,7 +268,8 @@ varscan
 </code></pre></li>
 
 <li><p><code>brew tap homebrew/python</code> - <a href="https://github.com/Homebrew/homebrew-python">https://github.com/Homebrew/homebrew-python</a><br>
-ライブラリ依存性などにより <a href="/python/pip.html">pip</a> からインストールしにくいPythonライブラリ。例えば</p>
+ライブラリ依存性などにより <a href="/python/pip.html">pip</a>
+からインストールしにくいPythonライブラリ。例えば</p>
 
 <pre><code>matplotlib
 numpy
