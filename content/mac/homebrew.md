@@ -13,26 +13,35 @@ Unixツールをパッケージとして手軽にインストールできるMac�
 
 https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/Installation.md
 
-1.  Command Line Tools をインストールする。 cf. [/dev/devenv]({{< relref "dev/devenv.md" >}})
-2.  公式では `/usr/local/` へのインストールが推奨されているが、
-    個人的にあまり好ましくないのでホームディレクトリに
-    `~/.homebrew/` を作ってインストールする:
+1.  Command Line Tools をインストールする。
+    cf. [/dev/devenv]({{< relref "dev/devenv.md" >}})
 
-        % cd
-        % mkdir .homebrew
-        % curl -L https://github.com/mxcl/homebrew/tarball/master | tar xz --strip 1 -C .homebrew
+2.  ターミナルから下記のコマンドを実行し、指示に従ってパスワードを入力する:
+    ```sh
+    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    ```
 
-3.  `.zshrc` を書き換えてシェル環境を整える:
+    デフォルトの `/usr/local/` にインストールするのが嫌なら、
+    例えばホーム以下の `~/.homebrew/` にインストールすることもできる:
+    ```sh
+    % cd
+    % mkdir .homebrew
+    % curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C .homebrew
+    ```
+    が、`/usr/local/` 以外にインストールすると、
+    bottle機能を封じられて毎回自前ビルドする仕様になってしまったので、
+    非力なラップトップとかでは結構厳しい。
 
-        # パスを通す
-        export PATH=$HOME/.homebrew/bin:$PATH
-        export MANPATH=$HOME/.homebrew/share/man:$MANPATH
-        if [ -d $HOME/.homebrew/share/zsh-completions ]; then
-            fpath=($HOME/.homebrew/share/zsh-completions $fpath)
-        fi
-
-        # お好みでデフォルトコンパイラを変更
-        export HOMEBREW_CC=clang
+3.  `.zshenv` (もしくは`.zshrc`) でパスを通す:
+    ```sh
+    PATH=${HOME}/.homebrew/bin:/usr/local/bin:${PATH}
+    brew_prefix=$(brew --prefix 2>/dev/null)
+    if [ -n "${brew_prefix}" ]; then
+        MANPATH=${brew_prefix}/share/man:${MANPATH}
+        fpath=(${brew_prefix}/share/zsh-completions ${fpath})
+    fi
+    unset brew_prefix
+    ```
 
 ## Usage
 
@@ -110,6 +119,8 @@ https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/FAQ.md
 gccやboostなどのデカいやつはとりあえずデフォルトで入れたほうが早い。
 
 `--force-bottle` と `--build-from-source` で明示的に切り替えられる。
+しかしいつの間にか、Homebrewが`/usr/local/`
+以外にインストールしてあるとbottleを使えない仕様になってしまった。
 {{%/div%}}
 
 {{%div class="note"%}}
@@ -117,7 +128,7 @@ gccやboostなどのデカいやつはとりあえずデフォルトで入れた
 などは既存のコマンドとごっちゃにならないよう頭に `g`
 を付けてインストールしてくれる。
 元の名前でアクセスする方法はいくつかあるが、
-`$(brew --prefix)/opt/{{coreutils,gnu-sed,gnu-tar}}/libexec/gnubin` に
+`$(brew --prefix)/opt/{coreutils,gnu-sed,gnu-tar}/libexec/gnubin` に
 `PATH` を通すのがよい。
 `brew unlink coreutils gnu-sed gnu-tar` してもそれらのディレクトリは残る。
 {{%/div%}}
@@ -177,7 +188,8 @@ https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/Interesting-Taps
         varscan
 
 -   `brew tap homebrew/python` - <https://github.com/Homebrew/homebrew-python>\
-    ライブラリ依存性などにより [pip]({{< relref "python/pip.md" >}}) からインストールしにくいPythonライブラリ。例えば
+    ライブラリ依存性などにより [pip]({{< relref "python/pip.md" >}})
+    からインストールしにくいPythonライブラリ。例えば
 
         matplotlib
         numpy
