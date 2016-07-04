@@ -12,7 +12,7 @@ https://github.com/hadley/purrr
 
 標準のapply族や[plyr]({{< relref "plyr.md" >}})の関数に引導を渡すべく再設計されたようなパッケージ。
 [dplyr]({{< relref "dplyr.md" >}}) や [tidyr]({{< relref "tidyr.md" >}}) と組み合わせて真価を発揮する。
-purererのように読むらしい。
+purerのように読むらしい。
 
 Rの中で `install.packages('purrr')` としてインストールし、
 使う前に `library(purrr)` で読み込む。
