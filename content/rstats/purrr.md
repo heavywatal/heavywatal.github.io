@@ -23,9 +23,15 @@ Rの中で `install.packages('purrr')` としてインストールし、
 
 `purrr::map(.x, .f, ...)`
 : listの各要素に関数を適用し、listで返す。
-  型の決まったvectorを返す亜種として
-  `map_lgl()`, `map_chr()`, `map_int()`, `map_dbl()`, `map_df()`
+  `base::lapply()`や`plyr::llply()`の改良版。
+  型の決まったvectorを返す`base::sapply()`や`base::vapply()`の改良版として
+  `map_lgl()`, `map_chr()`, `map_int()`, `map_dbl()`
   がある。
+
+`purrr::map_df(.x, .f, ..., .id=NULL)`
+: listの各要素に関数を適用し、結果を
+  `dplyr::bind_rows()`で結合したdata.frameとして返す。
+  `plyr::ldply()`の改良版。
 
 `purrr::map_if(.x, .p, .f, ...)`
 : `.p`が`TRUE`になる要素のみ`.f()`を適用し、残りはそのまま出力。
@@ -42,7 +48,7 @@ Rの中で `install.packages('purrr')` としてインストールし、
 : listの各要素に関数を適用し、listで返す。
   `.x[[i]]`ではなく`.x[i]`を参照する点で`map()`と異なる。
 
-`purrr::reduce()`
+`purrr::reduce(.x, .f, ..., .init)`
 : 二変数関数を順々に適用して1つの値を返す。
   C++でいう`std::accumulate()`。
 
