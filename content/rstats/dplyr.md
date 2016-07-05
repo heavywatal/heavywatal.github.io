@@ -197,15 +197,6 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
 
 ## その他の関数
 
-`dplyr::data_frame(...)`
-:   より便利でバグの混入しにくい方法で `data.frame` を作る。
-
-    -   勝手に型変換しない (`stringsAsFactors=FALSE`)
-    -   勝手に列名を変えない
-    -   長さ1の変数以外はリサイクルしない
-    -   引数の評価がlazyに行われるので前の列を利用して後の列を作ったりできる
-    -   `tbl_df` クラスを付加 (この部分はtibbleパッケージ)
-
 `dplyr::***_join(x, y, by=NULL, copy=FALSE)`
 :   `by` で指定した列がマッチするように行を合わせて `cbind()`
 
@@ -258,10 +249,6 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
     `x[length(x)]` や `tail(x, 1)` よりも楽チンだが、
     安全性重視の `dplyr::nth()` を内部で呼び出すため遅い。
 
-`dplyr::glimpse(.data, width=getOption('width'))`
-:   データの中身をざっと見る。
-    `print()` とか `str()` のようなもの。
-
 `dplyr::lead(x n=1, default=NA, order_by=NULL)`, `dplyr::lag(...)`
 :   `x` の中身を `n` だけずらして `default` で埋める。
     `lead()` は前に、`lag()` は後ろにずらす
@@ -289,3 +276,74 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
 
 `dplyr::case_when(...)`
 :   `if {} else if {} else if {} ...` のショートカット。
+
+
+## tibble
+
+`tbl_df` クラスが付与された改良版data.frameのことを**tibble**と呼ぶ。
+もともとはdplyrパッケージで扱っていたが、tibbleパッケージとして独立した。
+[readr]({{< relref "readr.md" >}}) で読み込んだデータもこの形式になる。
+
+```r
+> tbl_iris = as_tibble(iris)
+> class(tbl_iris)
+[1] "tbl_df"     "tbl"        "data.frame"
+> class(iris)
+[1] "data.frame"
+```
+
+生のdata.frameとの違いは:
+
+-   うっかり巨大なデータを`print()`しても画面を埋め尽くさない
+-   列名の部分一致で良しとしない。
+    例えば `iris$Spec` は黙ってvectorを返してしまうが、
+    `tbl_iris$Spec` は警告つき `NULL` 。
+-   型に一貫性があり、勝手に`drop=TRUE`しない。
+    例えば `iris[,'Species']` はvectorになってしまうが、
+    `tbl_iris[,'Species']` はtibbleのまま。
+
+### 関数
+
+`tibble::tibble(...)`
+:   tibbleを新規作成。ちょっと昔までは `dplyr::data_frame()` だった。
+:   `base::data.frame()` と違ってバグが混入しにくくて便利:
+    -   勝手に型変換しない (`stringsAsFactors=FALSE`が基本)
+    -   勝手に列名を変えない
+    -   長さ1の変数以外はリサイクルしない
+    -   引数の評価がlazyに行われるので前の列を利用して後の列を作ったりできる
+    -   `tbl_df` クラスを付加
+
+`tibble::as_tibble(x)`
+:   既存のdata.frameやmatrixをtibbleに変換。
+    ちょっと昔までは `dplyr::tbl_df()` とか `dplyr::as_data_frame()` だった。
+
+`tibble::add_row(.data, ...)`
+:   既存のtibbleに新しいデータを1行追加する。
+
+`tibble::glimpse(.data, width=NULL)`
+:   データの中身をざっと見る。
+    `print()` とか `str()` のようなもの。
+
+`tibble::type_sum(x)`
+:   オブジェクトの型
+
+`tibble::obj_sum(x)`
+:   `type_sum`とサイズ e.g., `"data.frame [150 x 5]"`
+
+`tibble::remove_rownames(df)` \
+`tibble::rownames_to_column(df, var='rowname')` \
+`tibble::column_to_rownames(df, var='rowname')`
+
+### 設定
+
+`.Rprofile` に以下のように書くことで、
+大きいtibbleの`print()`で表示される行数を調節することができる。
+デフォルトはどちらも`10L`。
+
+```r
+# Maximum number of rows to print(tbl_df)
+options(tibble.print_max=30L)
+
+# Number of rows to print(tbl_df) if exceeded the maximum
+options(tibble.print_min=30L)
+```

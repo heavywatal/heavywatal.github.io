@@ -18,7 +18,9 @@ https://cran.r-project.org/package=readr
     `stringsAsFactors=FALSE` とイチイチ書かなくて済む
 -   勝手に列名を変更しない
 -   列の名前や型を指定しやすい
--   返ってくるクラスが `c('tbl_df', 'tbl', 'data.frame')`
+-   指定した列だけ読み込むこともできる
+-   生data.frameではなく安全な
+    [tibble]({{< relref "dplyr.md#tibble" >}}) として返してくれる
 
 Rの中から `install.packages('readr')` でインストールし、
 使う前に `library(readr)` でパッケージを読み込む。
