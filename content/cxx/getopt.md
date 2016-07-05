@@ -124,6 +124,7 @@ void func(){
 
 Githubで上位に出てくるこれらもそのうち試したい:
 
-- https://github.com/weisslj/cpp-argparse
+- https://github.com/docopt/docopt.cpp
 - https://github.com/jarro2783/cxxopts
-- https://github.com/hackorama/AnyOption
+- https://github.com/Taywee/args
+- https://github.com/weisslj/cpp-argparse
