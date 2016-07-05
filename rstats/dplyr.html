@@ -246,16 +246,6 @@ iris %&gt;% dplyr::mutate(ln_sepal_length = log(Sepal.Length))
 <h2 id="その他の関数">その他の関数</h2>
 
 <dl>
-<dt><code>dplyr::data_frame(...)</code></dt>
-<dd><p>より便利でバグの混入しにくい方法で <code>data.frame</code> を作る。</p>
-
-<ul>
-<li>勝手に型変換しない (<code>stringsAsFactors=FALSE</code>)</li>
-<li>勝手に列名を変えない</li>
-<li>長さ1の変数以外はリサイクルしない</li>
-<li>引数の評価がlazyに行われるので前の列を利用して後の列を作ったりできる</li>
-<li><code>tbl_df</code> クラスを付加 (この部分はtibbleパッケージ)</li>
-</ul></dd>
 <dt><code>dplyr::***_join(x, y, by=NULL, copy=FALSE)</code></dt>
 <dd><p><code>by</code> で指定した列がマッチするように行を合わせて <code>cbind()</code></p>
 
@@ -297,9 +287,6 @@ NAのときにどうするかを指定できるのも大変良い。</p></dd>
 <dd><p>最後の要素にアクセス。
 <code>x[length(x)]</code> や <code>tail(x, 1)</code> よりも楽チンだが、
 安全性重視の <code>dplyr::nth()</code> を内部で呼び出すため遅い。</p></dd>
-<dt><code>dplyr::glimpse(.data, width=getOption('width'))</code></dt>
-<dd><p>データの中身をざっと見る。
-<code>print()</code> とか <code>str()</code> のようなもの。</p></dd>
 <dt><code>dplyr::lead(x n=1, default=NA, order_by=NULL)</code>, <code>dplyr::lag(...)</code></dt>
 <dd><p><code>x</code> の中身を <code>n</code> だけずらして <code>default</code> で埋める。
 <code>lead()</code> は前に、<code>lag()</code> は後ろにずらす</p>
@@ -321,6 +308,76 @@ NAのときにどうするかを指定できるのも大変良い。</p></dd>
 <dt><code>dplyr::case_when(...)</code></dt>
 <dd><p><code>if {} else if {} else if {} ...</code> のショートカット。</p></dd>
 </dl>
+
+<h2 id="tibble">tibble</h2>
+
+<p><code>tbl_df</code> クラスが付与された改良版data.frameのことを<strong>tibble</strong>と呼ぶ。
+もともとはdplyrパッケージで扱っていたが、tibbleパッケージとして独立した。
+<a href="/rstats/readr.html">readr</a> で読み込んだデータもこの形式になる。</p>
+
+<pre><code class="language-r">&gt; tbl_iris = as_tibble(iris)
+&gt; class(tbl_iris)
+[1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;
+&gt; class(iris)
+[1] &quot;data.frame&quot;
+</code></pre>
+
+<p>生のdata.frameとの違いは:</p>
+
+<ul>
+<li>うっかり巨大なデータを<code>print()</code>しても画面を埋め尽くさない</li>
+<li>列名の部分一致で良しとしない。
+例えば <code>iris$Spec</code> は黙ってvectorを返してしまうが、
+<code>tbl_iris$Spec</code> は警告つき <code>NULL</code> 。</li>
+<li>型に一貫性があり、勝手に<code>drop=TRUE</code>しない。
+例えば <code>iris[,'Species']</code> はvectorになってしまうが、
+<code>tbl_iris[,'Species']</code> はtibbleのまま。</li>
+</ul>
+
+<h3 id="関数">関数</h3>
+
+<dl>
+<dt><code>tibble::tibble(...)</code></dt>
+<dd>tibbleを新規作成。ちょっと昔までは <code>dplyr::data_frame()</code> だった。</dd>
+<dd><code>base::data.frame()</code> と違ってバグが混入しにくくて便利:
+
+<ul>
+<li>勝手に型変換しない (<code>stringsAsFactors=FALSE</code>が基本)</li>
+<li>勝手に列名を変えない</li>
+<li>長さ1の変数以外はリサイクルしない</li>
+<li>引数の評価がlazyに行われるので前の列を利用して後の列を作ったりできる</li>
+<li><code>tbl_df</code> クラスを付加</li>
+</ul></dd>
+<dt><code>tibble::as_tibble(x)</code></dt>
+<dd>既存のdata.frameやmatrixをtibbleに変換。
+ちょっと昔までは <code>dplyr::tbl_df()</code> とか <code>dplyr::as_data_frame()</code> だった。</dd>
+<dt><code>tibble::add_row(.data, ...)</code></dt>
+<dd>既存のtibbleに新しいデータを1行追加する。</dd>
+<dt><code>tibble::glimpse(.data, width=NULL)</code></dt>
+<dd>データの中身をざっと見る。
+<code>print()</code> とか <code>str()</code> のようなもの。</dd>
+<dt><code>tibble::type_sum(x)</code></dt>
+<dd>オブジェクトの型</dd>
+<dt><code>tibble::obj_sum(x)</code></dt>
+<dd><code>type_sum</code>とサイズ e.g., <code>&quot;data.frame [150 x 5]&quot;</code></dd>
+</dl>
+
+<p><code>tibble::remove_rownames(df)</code> <br>
+<code>tibble::rownames_to_column(df, var='rowname')</code> <br>
+<code>tibble::column_to_rownames(df, var='rowname')</code></p>
+
+<h3 id="設定">設定</h3>
+
+<p><code>.Rprofile</code> に以下のように書くことで、
+大きいtibbleの<code>print()</code>で表示される行数を調節することができる。
+デフォルトはどちらも<code>10L</code>。</p>
+
+<pre><code class="language-r"># Maximum number of rows to print(tbl_df)
+options(tibble.print_max=30L)
+
+# Number of rows to print(tbl_df) if exceeded the maximum
+options(tibble.print_min=30L)
+</code></pre>
 
 </article>
 </main>
