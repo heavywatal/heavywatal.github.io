@@ -7,12 +7,12 @@ tags = ["c++"]
 
 ## 理想
 
--   ヘッダ1つの `#include` で使える
+-   インストールが簡単。できればビルド不要でヘッダ1つ。
+-   ヘルプを自動生成してくれる
 -   オプションの管理を `main()` でなくクラスのソースファイルなどに分散できる
 -   オプション定義時に格納先の変数をアドレス渡しで指定できる
--   ファイルや `std::string` からも読み込める
--   ヘルプを自動生成してくれる
--   読み込める形式で全オプションと値を `std::string` あるいはファイルに書き出せる
+-   `(argc, argv)`だけでなくファイルや `std::string` からも読み込める
+-   読み込める形式で全オプションを書き出せる
 -   マクロではなく `template` など真っ当な C++ で書かれている
 
 ## GNU `getopt`
@@ -20,9 +20,9 @@ tags = ["c++"]
 <http://www.gnu.org/s/libc/manual/html_node/Getopt.html>
 
 -   `gcc` ならインストール不要、`#include <getopt.h>` するだけで使える
--   オプションの管理を各ソースファイルに分散できない
 -   ヘルプなど自動生成してくれない
--   使い方がわかりにくい
+-   オプションの管理を各ソースファイルに分散できない
+-   C++というよりCなので使い方がわかりにくい
 
 ## `boost::program_options`
 
@@ -34,7 +34,7 @@ tags = ["c++"]
 -   Boostライブラリのヘッダだけでなくビルドとリンクが必要 cf. [boost]({{< relref "boost.md" >}})
 -   各ソースファイルに分散するには:
     1.  各クラスの `static` メソッドで `options_description` オブジェクトを生成
-    2.  `main()` の `options_description` オブジェクトに `add()` する。
+    2.  メインの `options_description` オブジェクトに `add()` する。
 
 ## `gflags`
 
@@ -42,9 +42,9 @@ tags = ["c++"]
 
 -   テンプレートではなくマクロをふんだんに使って実装されているのでちょっと怖い
 -   `main()` 関数まわりをほとんど変更することなく、 各ソースファイルで自由にオプションを定義できる(しかもたった1行で)
--   格納されるのは頭に `FLAGS_` という接頭辞がついた変数
+-   接頭辞 `FLAGS_` のついた変数が自動的に定義されて、そこに値が格納される
 -   入力可能なファイルを出力することも可能
--   ライブラリのビルドとリンクが必要
+-   要ビルド＆リンク
 
 ### Usage
 
@@ -111,7 +111,7 @@ void func(){
 
 <http://code.google.com/p/getoptpp/>
 
--   `istream` っぽく `>>operator` を使う
+-   `std::istream` っぽく `>>operator` を使う
 -   格納する変数を指定できる
 -   基本的にはライブラリをビルドして使うが、ちょっといじればヘッダの `#include` だけでも使える
 -   ファイルの読み込みやヘルプの生成は一切手伝ってくれない
@@ -124,7 +124,24 @@ void func(){
 
 Githubで上位に出てくるこれらもそのうち試したい:
 
-- https://github.com/docopt/docopt.cpp
-- https://github.com/jarro2783/cxxopts
-- https://github.com/Taywee/args
-- https://github.com/weisslj/cpp-argparse
+https://github.com/docopt/docopt.cpp
+:   ヘルプを自動生成するのではなく、ヘルプからパーサを構築する
+:   元々はPython用に作られ、それから多言語に移植されてる実績
+:   `bool`か`std::string`でゲットするしかないので、手動でキャストして代入
+:   `std::vector<std::string>`から読める
+:   要ビルド＆リンク (header-only化しようとしてる雰囲気はある)
+
+https://github.com/jarro2783/cxxopts
+:   コンストラクタが`(argc, argv)`しかない
+:   `-j3` が `-j 3` じゃなくて `--j3` と解釈されてしまう
+
+https://github.com/Taywee/args
+:   名前空間が`args`という大胆さ
+:   同じ名前を何回も書かなきゃいけないような、少々やぼったいインターフェイス
+:   ショートオプションを定義できないバグ？
+:   ヘッダ1つ、ヘルプ自動生成なのは良い
+
+https://github.com/weisslj/cpp-argparse
+:   名前のとおり Python `argparse` インスパイア系
+:   でもところどころまだ `optparse` の名残が...?
+:   要ビルド＆リンク
