@@ -65,12 +65,12 @@ C&#43;&#43;コマンドライン引数
 <h2 id="理想">理想</h2>
 
 <ul>
-<li>ヘッダ1つの <code>#include</code> で使える</li>
+<li>インストールが簡単。できればビルド不要でヘッダ1つ。</li>
+<li>ヘルプを自動生成してくれる</li>
 <li>オプションの管理を <code>main()</code> でなくクラスのソースファイルなどに分散できる</li>
 <li>オプション定義時に格納先の変数をアドレス渡しで指定できる</li>
-<li>ファイルや <code>std::string</code> からも読み込める</li>
-<li>ヘルプを自動生成してくれる</li>
-<li>読み込める形式で全オプションと値を <code>std::string</code> あるいはファイルに書き出せる</li>
+<li><code>(argc, argv)</code>だけでなくファイルや <code>std::string</code> からも読み込める</li>
+<li>読み込める形式で全オプションを書き出せる</li>
 <li>マクロではなく <code>template</code> など真っ当な C++ で書かれている</li>
 </ul>
 
@@ -80,9 +80,9 @@ C&#43;&#43;コマンドライン引数
 
 <ul>
 <li><code>gcc</code> ならインストール不要、<code>#include &lt;getopt.h&gt;</code> するだけで使える</li>
-<li>オプションの管理を各ソースファイルに分散できない</li>
 <li>ヘルプなど自動生成してくれない</li>
-<li>使い方がわかりにくい</li>
+<li>オプションの管理を各ソースファイルに分散できない</li>
+<li>C++というよりCなので使い方がわかりにくい</li>
 </ul>
 
 <h2 id="boost-program-options"><code>boost::program_options</code></h2>
@@ -98,7 +98,7 @@ C&#43;&#43;コマンドライン引数
 
 <ol>
 <li>各クラスの <code>static</code> メソッドで <code>options_description</code> オブジェクトを生成</li>
-<li><code>main()</code> の <code>options_description</code> オブジェクトに <code>add()</code> する。</li>
+<li>メインの <code>options_description</code> オブジェクトに <code>add()</code> する。</li>
 </ol></li>
 </ul>
 
@@ -109,9 +109,9 @@ C&#43;&#43;コマンドライン引数
 <ul>
 <li>テンプレートではなくマクロをふんだんに使って実装されているのでちょっと怖い</li>
 <li><code>main()</code> 関数まわりをほとんど変更することなく、 各ソースファイルで自由にオプションを定義できる(しかもたった1行で)</li>
-<li>格納されるのは頭に <code>FLAGS_</code> という接頭辞がついた変数</li>
+<li>接頭辞 <code>FLAGS_</code> のついた変数が自動的に定義されて、そこに値が格納される</li>
 <li>入力可能なファイルを出力することも可能</li>
-<li>ライブラリのビルドとリンクが必要</li>
+<li>要ビルド＆リンク</li>
 </ul>
 
 <h3 id="usage">Usage</h3>
@@ -188,7 +188,7 @@ void func(){
 <p><a href="http://code.google.com/p/getoptpp/">http://code.google.com/p/getoptpp/</a></p>
 
 <ul>
-<li><code>istream</code> っぽく <code>&gt;&gt;operator</code> を使う</li>
+<li><code>std::istream</code> っぽく <code>&gt;&gt;operator</code> を使う</li>
 <li>格納する変数を指定できる</li>
 <li>基本的にはライブラリをビルドして使うが、ちょっといじればヘッダの <code>#include</code> だけでも使える</li>
 <li>ファイルの読み込みやヘルプの生成は一切手伝ってくれない</li>
@@ -205,12 +205,26 @@ void func(){
 
 <p>Githubで上位に出てくるこれらもそのうち試したい:</p>
 
-<ul>
-<li><a href="https://github.com/docopt/docopt.cpp">https://github.com/docopt/docopt.cpp</a></li>
-<li><a href="https://github.com/jarro2783/cxxopts">https://github.com/jarro2783/cxxopts</a></li>
-<li><a href="https://github.com/Taywee/args">https://github.com/Taywee/args</a></li>
-<li><a href="https://github.com/weisslj/cpp-argparse">https://github.com/weisslj/cpp-argparse</a></li>
-</ul>
+<dl>
+<dt><a href="https://github.com/docopt/docopt.cpp">https://github.com/docopt/docopt.cpp</a></dt>
+<dd>ヘルプを自動生成するのではなく、ヘルプからパーサを構築する</dd>
+<dd>元々はPython用に作られ、それから多言語に移植されてる実績</dd>
+<dd><code>bool</code>か<code>std::string</code>でゲットするしかないので、手動でキャストして代入</dd>
+<dd><code>std::vector&lt;std::string&gt;</code>から読める</dd>
+<dd>要ビルド＆リンク (header-only化しようとしてる雰囲気はある)</dd>
+<dt><a href="https://github.com/jarro2783/cxxopts">https://github.com/jarro2783/cxxopts</a></dt>
+<dd>コンストラクタが<code>(argc, argv)</code>しかない</dd>
+<dd><code>-j3</code> が <code>-j 3</code> じゃなくて <code>--j3</code> と解釈されてしまう</dd>
+<dt><a href="https://github.com/Taywee/args">https://github.com/Taywee/args</a></dt>
+<dd>名前空間が<code>args</code>という大胆さ</dd>
+<dd>同じ名前を何回も書かなきゃいけないような、少々やぼったいインターフェイス</dd>
+<dd>ショートオプションを定義できないバグ？</dd>
+<dd>ヘッダ1つ、ヘルプ自動生成なのは良い</dd>
+<dt><a href="https://github.com/weisslj/cpp-argparse">https://github.com/weisslj/cpp-argparse</a></dt>
+<dd>名前のとおり Python <code>argparse</code> インスパイア系</dd>
+<dd>でもところどころまだ <code>optparse</code> の名残が&hellip;?</dd>
+<dd>要ビルド＆リンク</dd>
+</dl>
 
 </article>
 </main>
