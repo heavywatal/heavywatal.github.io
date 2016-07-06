@@ -73,14 +73,15 @@ C&#43;&#43;高速化
 <li>学習目的でない限り、車輪の再発明を避ける。
 やろうとしていることはきっと既に誰かが実現し、
 再利用可能な形で公開してくれているはず。
-まずは標準ライブラリとBoostを探してみる。</li>
+まずは標準ライブラリとかBoostを探してみる。
+あとGitHubでスターが多いやつとか。</li>
 </ul>
 
 <h2 id="頑張れコンパイラ">頑張れコンパイラ</h2>
 
 <p>Intelの icc でビルドされたプログラムは速いらしい。
 gcc や clang の最適化技術も着々と進歩しており、
-新しいコンパイラを使うほうがその恩恵を受けられる、はず。</p>
+新しいコンパイラを使うほうがその恩恵を受けられる。</p>
 
 <h3 id="最適化オプション">最適化オプション</h3>
 
@@ -126,8 +127,8 @@ return c * wtl::pow(radius, 3);
 <code>-O3</code> では <code>-finline-functions</code> がオンになる。
 実行ファイルのサイズがデカくなるし、コンパイルは遅くなるので、バランスを考える。</p>
 
-<pre><code class="language-c++">inline double rexp(const double lambda=1.0) {
-    return -log(1.0 - runif()) / lambda;
+<pre><code class="language-c++">inline int pow2(int x) {
+    return x *= x;
 }
 </code></pre>
 
@@ -136,7 +137,7 @@ return c * wtl::pow(radius, 3);
 <p>関数オブジェクトとは、<code>operator()</code> を定義した <code>class</code> または <code>struct</code> のこと。
 <code>std::for_each()</code> や <code>std::transform()</code> の最後の引数に関数を渡す場合など、
 何度も呼び出される小さい関数については、
-普通の関数や関数ポインタで渡すよりも関数オブジェクトを使ったほうが高速。
+普通の関数や関数ポインタで渡すよりも関数オブジェクトを使ったほうがよい。
 インライン展開などコンパイラによる最適化がしやすいらしい。
 あと、メンバ変数として値を保持できるので、
 引数のやり取りやメモリの確保・開放が少なくてすむという場面もありそう。</p>
@@ -166,13 +167,13 @@ std::transform(v.begin(), v.end(), result.begin(),
 <p>普通にプログラムを書くと、思わぬところで余計な一時オブジェクトが作られることになる。
 メモリもcpu時間ももったいないので、なるべく避けよう。</p>
 
-<h3 id="const-参照渡し-or-ポインタ渡し"><code>const</code> 参照渡し or ポインタ渡し</h3>
+<h3 id="const-参照渡し-or-ポインタ渡し"><code>const</code>参照渡し or ポインタ渡し</h3>
 
-<p><code>int</code> とか <code>double</code> のような単純な型の場合は気にしなくてもいいが、
-そうでないオブジェクトの値渡しにはコピーコンストラクタが呼ばれるコストが生じる。
-したがって、<code>std::string</code> とかSTLコンテナとか自作クラスなどは参照渡し
-（そいつのアドレスだけを渡す）のほうが遥かに高速。
-参照渡しされた仮引数の中身を関数内で変更すると、
+<p>オブジェクトの値渡しにはコピーコンストラクタが呼ばれるコストが生じる。
+したがって<code>std::string</code>とかSTLコンテナとか自作クラスなどは参照渡しのほうが高速
+(ただし<code>int</code>とか<code>double</code>のような単純な型の場合はむしろ普通の値渡しがよい)。</p>
+
+<p>参照渡しされた仮引数の中身を関数内で変更すると、
 呼び出し元の実引数の値も変更されることになる。
 変更するつもりがない場合は明示的に <code>const</code> をつけて受け取るようにすると安全</p>
 
@@ -183,7 +184,7 @@ std::transform(v.begin(), v.end(), result.begin(),
 </code></pre>
 
 <p>引数の中身を変更するつもりがある場合はポインタを受け取るようにすると、
-呼び出すときに <code>&amp;</code> が必要となるので意図が伝わりやすい</p>
+呼び出すときに <code>&amp;</code> が必要となるので意図が伝わりやすい。</p>
 
 <pre><code class="language-c++">void do_something(std::vector&lt;int&gt;* huge_array) {
     // コピーせずポインタを受け取る。
@@ -192,6 +193,91 @@ std::transform(v.begin(), v.end(), result.begin(),
 
 do_something(&amp;some_array);  // ああ、この配列は変更されるんだな
 </code></pre>
+
+<h3 id="ムーブセマンティクス-c-11">ムーブセマンティクス (C++11)</h3>
+
+<p>コピーせずにポインタを入れ替えることで値を変化させる、
+という渡し方を簡単に書けるようになった。
+渡した側の状態は不定(あるいは<code>nullptr</code>)になる。</p>
+
+<pre><code class="language-c++">std::string s1 = &quot;alpha&quot;;
+std::string s2 = &quot;beta&quot;;
+s2 = std::move(s1);
+// s2: &quot;alpha&quot;
+// s1:  ?????
+s1.size()    // OK: 値は不定だが変数としては生きてる
+s1 = &quot;gamma&quot; // OK: 再代入可能
+// いずれにせよデストラクタは変数の寿命に伴って呼び出される。
+</code></pre>
+
+<p>関数から値を返すときにムーブ返ししたくなるところだが、
+多くの場合コンパイラがうまいことやってくれるのでわざわざ
+<code>return std::move(output);</code> などと書く必要はない。
+やってしまうと、むしろコンパイラによる最適化を妨げるかもよと警告される。
+ただし、返る変数と関数定義で型が一致せず暗黙の型変換が挟まる場合は、
+明示的にムーブ返しする必要がある。</p>
+
+<p><code>return</code>最適化にはムーブすらしない&rdquo;copy elision&rdquo;とムーブの2種類があって、
+ローカル変数を返す場合は両方を試み、
+引数を返す場合は後者のみを試みるらしい。</p>
+
+<pre><code class="language-c++">std::vector&lt;int&gt; factory(size_t n) {
+    std::vector&lt;int&gt; vec(n);
+    return vec;  // copy elision
+}
+
+std::vector&lt;int&gt; plus1(const std::vector&lt;int&gt;&amp; vec) {
+    std::vector&lt;int&gt; tmp(vec);  // copy ctor
+    tmp[0] += 1;
+    return tmp;  // copy elision
+}
+
+std::vector&lt;int&gt; plus2(std::vector&lt;int&gt; vec) {
+    vec[0] += 2;
+    return vec;  // move ctor
+}
+
+auto vec0 = factory(3);
+auto vec1 = plus1(vec0);             //  lvalue渡し: 1 copy
+auto vec2 = plus1(std::move(vec0));  //  xvalue渡し: 1 copy
+auto vec3 = plus1(factory(3));       // prvalue渡し: 1 copy
+auto vec4 = plus2(vec1);             //  lvalue渡し: 1 copy 1 move
+auto vec5 = plus2(std::move(vec1));  //  xvalue渡し:        2 move
+auto vec6 = plus2(factory(3));       // prvalue渡し:        1 move
+</code></pre>
+
+<p>rvalue渡ししたいときは<code>plus2()</code>のような値受け取り関数がよいが、
+普通のlvalue渡しでは<code>plus1()</code>のようなconst参照受け取り関数がよい。
+しかし同じ処理の関数に違う名前を持たせるのは嫌なので、ぜひオーバーロードしたい。
+この場合はconst lvalue reference型とrvalue reference型の2つを用意する。</p>
+
+<pre><code class="language-c++">// [A]
+std::vector&lt;int&gt; plus3(const std::vector&lt;int&gt;&amp; vec) {
+    std::vector&lt;int&gt; tmp(vec);  // copy ctor
+    tmp[0] += 3;
+    return tmp;  // copy elision
+}
+
+// [B]
+std::vector&lt;int&gt; plus3(std::vector&lt;int&gt;&amp;&amp; vec) {
+    vec[0] += 3;
+    return std::move(vec);  // move ctor
+}
+
+auto vec7 = plus3(vec2);             //  lvalue渡し to [A] 1 copy
+auto vec8 = plus3(std::move(vec2));  //  xvalue渡し to [B]        1 move
+auto vec9 = plus3(factory(3))        // prvalue渡し to [B]        1 move
+</code></pre>
+
+<p><code>[B]</code>に<code>std::move()</code>渡しするときはmove ctorが呼び出されず参照のみ。
+ということで、オーバーロードされた<code>plus3()</code>が最低コスト。</p>
+
+<p>関連記事はたくさん見つかるが、特に読みやすく参考になったのはこちら:</p>
+
+<blockquote>
+<p><a href="http://yohhoy.hatenablog.jp/entry/2012/12/15/120839">本当は怖くないムーブセマンティクス - yohhoyの日記（別館）</a> <br>
+<a href="http://d.hatena.ne.jp/yohhoy/20120524/p1">参照渡し or 値渡し？ - yohhoyの日記</a></p>
+</blockquote>
 
 <h3 id="複合代入演算子">複合代入演算子</h3>
 
@@ -205,8 +291,6 @@ x += b;
 
 <p><code>int</code> や <code>double</code> くらいならそれより可読性を重視したほうがいいかも。</p>
 
-<h3 id="ムーブ-c-11">ムーブ (C++11)</h3>
-
 <h2 id="コンテナ">コンテナ</h2>
 
 <h3 id="用途に合わせる">用途に合わせる</h3>
@@ -216,7 +300,7 @@ x += b;
 <dd>メモリ上に連続した領域を確保する。
 そのため、途中に <code>insert()</code> するのは遅い
 （メモリ領域を別のところに再確保して全部コピーしなければならないので）。
-その代わり、要素へのアクセスは高速で、インデックス <code>[ ]</code> によるランダムアクセスも可能。</dd>
+その代わり、要素へのアクセスは高速で、インデックス<code>[]</code> によるランダムアクセスも可能。</dd>
 <dt><code>std::deque</code></dt>
 <dd><code>vector</code> とほぼ同じだが、<code>reserve()</code> ができない。
 代わりに、<code>push_front()</code> と <code>pop_front()</code> が使える。
@@ -230,9 +314,11 @@ x += b;
 <dd>順序を気にしないぶん <code>std::set</code> や <code>std::map</code> より高速。
 ただしハッシュ関数の準備など多少めんどい。</dd>
 <dt><code>std::valarray</code></dt>
-<dd>要素ごとの四則演算など便利な関数・演算子が定義済みのベクタ亜種。
+<dd>要素ごとの四則演算など関数・演算子が定義済みのベクタ亜種。
+便利なだけでなくきっと最適化もされやすい。
 ただし長さの変更など苦手な点もあるので使い所は限られる。
-本格的なベクタ演算・行列演算がしたければEigenとか使ったほうよさそう。</dd>
+本格的なベクタ演算・行列演算がしたければ
+<a href="http://eigen.tuxfamily.org/">Eigen</a> とかを使ったほうよさそう。</dd>
 </dl>
 
 <h3 id="メモリは一気に確保">メモリは一気に確保</h3>
@@ -246,16 +332,15 @@ x += b;
 
 <pre><code class="language-c++">std::vector&lt;int&gt; v;
 v.reserve(10000);
+// then push_back() many times
 </code></pre>
 
 <h2 id="ループ">ループ</h2>
 
-<p><code>for</code> や <code>while</code> を回すときの継続条件式は回る度に評価されるので、
-そのコストをよく考えなければならない。</p>
-
 <h3 id="継続条件">継続条件</h3>
 
-<p>イテレータで回すときの <code>v.end()</code> も毎回呼び出されるので、
+<p><code>for</code> や <code>while</code> を回すときの継続条件式は回る度に評価されるので意外とコストになるかも。
+イテレータで回すときの <code>v.end()</code> も毎回呼び出されるので、
 ループの中身が軽い処理の場合には無視できない差になるかもしれない。</p>
 
 <pre><code class="language-c++">for (size_t i=0; i&lt;v.size(); ++i) {
@@ -271,16 +356,15 @@ for (vector&lt;int&gt;::iterator it=v.begin(), v_end=v.end(); it!=v_end; ++it) {
 }
 
 for (const auto&amp; x: v) {
-    // コンテナ全体を舐めるなら C++11 range-based for
+    // コンテナ全体を舐めるなら C++11 range-based for が便利
 }
 </code></pre>
 
 <h3 id="前置インクリメント">前置インクリメント</h3>
 
-<p><code>for</code> でカウンタをインクリメントするだけなら
-後置インクリメント <code>i++</code> でも
-前置インクリメント <code>++i</code> でも計算結果は同じになる。
-が、<code>i++</code> だと前の値を記憶してからプラスする（一時オブジェクトを作るという無駄が発生する）ので、
+<p>後置インクリメント <code>i++</code> でも
+前置インクリメント <code>++i</code> でも <code>for</code> ループの結果は変わらない。
+が、<code>i++</code> だと前の値を記憶してからプラスする（一時オブジェクトが作られる）ので、
 <code>++i</code> のほうがいいらしい。特にイテレータのとき。</p>
 
 <pre><code class="language-c++">for (std::vector&lt;int&gt;::iterator it=v.begin(); it!=v.end(); ++it) {
@@ -314,7 +398,7 @@ for (const auto&amp; x: v) {
 <code>std::cin</code> される度に <code>std::flush</code> されてしまうらしいので、
 そうならないように切り離す。</p>
 
-<pre><code class="language-c++">##include &lt;iostream&gt;
+<pre><code class="language-c++">#include &lt;iostream&gt;
 
 int main() {
     std::ios::sync_with_stdio(false);
