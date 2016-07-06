@@ -15,13 +15,14 @@ tags = ["c++"]
 -   学習目的でない限り、車輪の再発明を避ける。
     やろうとしていることはきっと既に誰かが実現し、
     再利用可能な形で公開してくれているはず。
-    まずは標準ライブラリとBoostを探してみる。
+    まずは標準ライブラリとかBoostを探してみる。
+    あとGitHubでスターが多いやつとか。
 
 ## 頑張れコンパイラ
 
 Intelの icc でビルドされたプログラムは速いらしい。
 gcc や clang の最適化技術も着々と進歩しており、
-新しいコンパイラを使うほうがその恩恵を受けられる、はず。
+新しいコンパイラを使うほうがその恩恵を受けられる。
 
 ### 最適化オプション
 
@@ -71,8 +72,8 @@ return c * wtl::pow(radius, 3);
 実行ファイルのサイズがデカくなるし、コンパイルは遅くなるので、バランスを考える。
 
 ```c++
-inline double rexp(const double lambda=1.0) {
-    return -log(1.0 - runif()) / lambda;
+inline int pow2(int x) {
+    return x *= x;
 }
 ```
 
@@ -81,7 +82,7 @@ inline double rexp(const double lambda=1.0) {
 関数オブジェクトとは、`operator()` を定義した `class` または `struct` のこと。
 `std::for_each()` や `std::transform()` の最後の引数に関数を渡す場合など、
 何度も呼び出される小さい関数については、
-普通の関数や関数ポインタで渡すよりも関数オブジェクトを使ったほうが高速。
+普通の関数や関数ポインタで渡すよりも関数オブジェクトを使ったほうがよい。
 インライン展開などコンパイラによる最適化がしやすいらしい。
 あと、メンバ変数として値を保持できるので、
 引数のやり取りやメモリの確保・開放が少なくてすむという場面もありそう。
@@ -105,7 +106,7 @@ C++11からはラムダ式が便利
 ```c++
 const double threshold = 3.14;
 std::transform(v.begin(), v.end(), result.begin(),
-               [threshold](double x) -> bool {return x > threshold});
+               [threshold](double x) -> bool {return x > threshold;});
 ```
 
 ## 余計な一時オブジェクトを作らない
@@ -113,12 +114,12 @@ std::transform(v.begin(), v.end(), result.begin(),
 普通にプログラムを書くと、思わぬところで余計な一時オブジェクトが作られることになる。
 メモリもcpu時間ももったいないので、なるべく避けよう。
 
-### `const` 参照渡し or ポインタ渡し
+### `const`参照渡し or ポインタ渡し
 
-`int` とか `double` のような単純な型の場合は気にしなくてもいいが、
-そうでないオブジェクトの値渡しにはコピーコンストラクタが呼ばれるコストが生じる。
-したがって、`std::string` とかSTLコンテナとか自作クラスなどは参照渡し
-（そいつのアドレスだけを渡す）のほうが遥かに高速。
+オブジェクトの値渡しにはコピーコンストラクタが呼ばれるコストが生じる。
+したがって`std::string`とかSTLコンテナとか自作クラスなどは参照渡しのほうが高速
+(ただし`int`とか`double`のような単純な型の場合はむしろ普通の値渡しがよい)。
+
 参照渡しされた仮引数の中身を関数内で変更すると、
 呼び出し元の実引数の値も変更されることになる。
 変更するつもりがない場合は明示的に `const` をつけて受け取るようにすると安全
@@ -131,7 +132,7 @@ void do_something(const std::vector<int>& huge_array) {
 ```
 
 引数の中身を変更するつもりがある場合はポインタを受け取るようにすると、
-呼び出すときに `&` が必要となるので意図が伝わりやすい
+呼び出すときに `&` が必要となるので意図が伝わりやすい。
 
 ```c++
 void do_something(std::vector<int>* huge_array) {
@@ -141,6 +142,93 @@ void do_something(std::vector<int>* huge_array) {
 
 do_something(&some_array);  // ああ、この配列は変更されるんだな
 ```
+
+
+### ムーブセマンティクス (C++11)
+
+コピーせずにポインタを入れ替えることで値を変化させる、
+という渡し方を簡単に書けるようになった。
+渡した側の状態は不定(あるいは`nullptr`)になる。
+
+```c++
+std::string s1 = "alpha";
+std::string s2 = "beta";
+s2 = std::move(s1);
+// s2: "alpha"
+// s1:  ?????
+s1.size()    // OK: 値は不定だが変数としては生きてる
+s1 = "gamma" // OK: 再代入可能
+// いずれにせよデストラクタは変数の寿命に伴って呼び出される。
+```
+
+関数から値を返すときにムーブ返ししたくなるところだが、
+多くの場合コンパイラがうまいことやってくれるのでわざわざ
+`return std::move(output);` などと書く必要はない。
+やってしまうと、むしろコンパイラによる最適化を妨げるかもよと警告される。
+ただし、返る変数と関数定義で型が一致せず暗黙の型変換が挟まる場合は、
+明示的にムーブ返しする必要がある。
+
+`return`最適化にはムーブすらしない"copy elision"とムーブの2種類があって、
+一時変数やローカル変数を返す場合は両方を試み、
+引数を返す場合は後者のみを試みるらしい。
+
+```c++
+std::vector<int> ones(size_t n) {
+    return std::vector<int>(n, 1);  // copy elision
+}
+
+std::vector<int> times2(const std::vector<int>& vec) {
+    std::vector<int> tmp(vec);  // copy ctor
+    for (auto& x: tmp) {x *= 2;}
+    return tmp;  // copy elision
+}
+
+std::vector<int> times3(std::vector<int> vec) {
+    for (auto& x: vec) {x *= 3;}
+    return vec;  // move ctor
+}
+
+auto vec0 = ones(3);
+auto vec1 = times2(vec0);             //  lvalue渡し: 1 copy
+auto vec2 = times2(std::move(vec0));  //  xvalue渡し: 1 copy
+auto vec3 = times2(ones(3));          // prvalue渡し: 1 copy
+auto vec4 = times3(vec1);             //  lvalue渡し: 1 copy 1 move
+auto vec5 = times3(std::move(vec1));  //  xvalue渡し:        2 move
+auto vec6 = times3(ones(3));          // prvalue渡し:        1 move
+```
+
+普通のlvalue渡しでは`times2()`のような`const T&`型関数が良いが、
+rvalue渡ししたいときは`times3()`のような`T`型関数が良い。
+しかし同じ処理の関数に違う名前を持たせるのは嫌なので、ぜひオーバーロードしたい。
+その場合はconst lvalue reference(`const T&`)型とrvalue reference(`T&&`)型の2つを用意する。
+
+```c++
+// [A]
+std::vector<int> times4(const std::vector<int>& vec) {
+    std::vector<int> tmp(vec);  // copy ctor
+    for (auto& x: tmp) {x *= 4;}
+    return tmp;  // copy elision
+}
+
+// [B]
+std::vector<int> times4(std::vector<int>&& vec) {
+    for (auto& x: vec) {x *= 4;}
+    return std::move(vec);  // move ctor
+}
+
+auto vec7 = times4(vec2);             //  lvalue渡し to [A] 1 copy
+auto vec8 = times4(std::move(vec2));  //  xvalue渡し to [B]        1 move
+auto vec9 = times4(ones(3))           // prvalue渡し to [B]        1 move
+```
+
+`[B]`に`std::move()`渡しするときはmove ctorが呼び出されず参照のみ。
+ということで、オーバーロードされた`times4()`が最低コスト。
+
+関連記事はたくさん見つかるが、特に読みやすく参考になったのはこちら:
+
+> [本当は怖くないムーブセマンティクス - yohhoyの日記（別館）](http://yohhoy.hatenablog.jp/entry/2012/12/15/120839) \
+> [参照渡し or 値渡し？ - yohhoyの日記](http://d.hatena.ne.jp/yohhoy/20120524/p1)
+
 
 ### 複合代入演算子
 
@@ -155,7 +243,6 @@ x += b;
 
 `int` や `double` くらいならそれより可読性を重視したほうがいいかも。
 
-### ムーブ (C++11)
 
 ## コンテナ
 
@@ -165,7 +252,7 @@ x += b;
 :   メモリ上に連続した領域を確保する。
     そのため、途中に `insert()` するのは遅い
     （メモリ領域を別のところに再確保して全部コピーしなければならないので）。
-    その代わり、要素へのアクセスは高速で、インデックス `[ ]` によるランダムアクセスも可能。
+    その代わり、要素へのアクセスは高速で、インデックス`[]` によるランダムアクセスも可能。
 
 `std::deque`
 :   `vector` とほぼ同じだが、`reserve()` ができない。
@@ -183,9 +270,11 @@ x += b;
     ただしハッシュ関数の準備など多少めんどい。
 
 `std::valarray`
-: 要素ごとの四則演算など便利な関数・演算子が定義済みのベクタ亜種。
-  ただし長さの変更など苦手な点もあるので使い所は限られる。
-  本格的なベクタ演算・行列演算がしたければEigenとか使ったほうよさそう。
+:   要素ごとの四則演算など関数・演算子が定義済みのベクタ亜種。
+    便利なだけでなくきっと最適化もされやすい。
+    ただし長さの変更など苦手な点もあるので使い所は限られる。
+    本格的なベクタ演算・行列演算がしたければ
+    [Eigen](http://eigen.tuxfamily.org/) とかを使ったほうよさそう。
 
 
 ### メモリは一気に確保
@@ -200,15 +289,15 @@ x += b;
 ```c++
 std::vector<int> v;
 v.reserve(10000);
+// then push_back() many times
 ```
+
 
 ## ループ
 
-`for` や `while` を回すときの継続条件式は回る度に評価されるので、
-そのコストをよく考えなければならない。
-
 ### 継続条件
 
+`for` や `while` を回すときの継続条件式は回る度に評価されるので意外とコストになるかも。
 イテレータで回すときの `v.end()` も毎回呼び出されるので、
 ループの中身が軽い処理の場合には無視できない差になるかもしれない。
 
@@ -226,16 +315,15 @@ for (vector<int>::iterator it=v.begin(), v_end=v.end(); it!=v_end; ++it) {
 }
 
 for (const auto& x: v) {
-    // コンテナ全体を舐めるなら C++11 range-based for
+    // コンテナ全体を舐めるなら C++11 range-based for が便利
 }
 ```
 
 ### 前置インクリメント
 
-`for` でカウンタをインクリメントするだけなら
 後置インクリメント `i++` でも
-前置インクリメント `++i` でも計算結果は同じになる。
-が、`i++` だと前の値を記憶してからプラスする（一時オブジェクトを作るという無駄が発生する）ので、
+前置インクリメント `++i` でも `for` ループの結果は変わらない。
+が、`i++` だと前の値を記憶してからプラスする（一時オブジェクトが作られる）ので、
 `++i` のほうがいいらしい。特にイテレータのとき。
 
 ```c++
@@ -271,7 +359,7 @@ Cストリーム(`std::printf` とか)とC++ストリーム(`std::cout` とか)
 そうならないように切り離す。
 
 ```c++
-##include <iostream>
+#include <iostream>
 
 int main() {
     std::ios::sync_with_stdio(false);
