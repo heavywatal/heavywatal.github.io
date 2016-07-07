@@ -159,7 +159,7 @@ std::transform(v.begin(), v.end(), result.begin(), isAboveThreshold(3.14));
 
 <pre><code class="language-c++">const double threshold = 3.14;
 std::transform(v.begin(), v.end(), result.begin(),
-               [threshold](double x) -&gt; bool {return x &gt; threshold});
+               [threshold](double x) -&gt; bool {return x &gt; threshold;});
 </code></pre>
 
 <h2 id="余計な一時オブジェクトを作らない">余計な一時オブジェクトを作らない</h2>
@@ -218,59 +218,58 @@ s1 = &quot;gamma&quot; // OK: 再代入可能
 明示的にムーブ返しする必要がある。</p>
 
 <p><code>return</code>最適化にはムーブすらしない&rdquo;copy elision&rdquo;とムーブの2種類があって、
-ローカル変数を返す場合は両方を試み、
+一時変数やローカル変数を返す場合は両方を試み、
 引数を返す場合は後者のみを試みるらしい。</p>
 
-<pre><code class="language-c++">std::vector&lt;int&gt; factory(size_t n) {
-    std::vector&lt;int&gt; vec(n);
-    return vec;  // copy elision
+<pre><code class="language-c++">std::vector&lt;int&gt; ones(size_t n) {
+    return std::vector&lt;int&gt;(n, 1);  // copy elision
 }
 
-std::vector&lt;int&gt; plus1(const std::vector&lt;int&gt;&amp; vec) {
+std::vector&lt;int&gt; times2(const std::vector&lt;int&gt;&amp; vec) {
     std::vector&lt;int&gt; tmp(vec);  // copy ctor
-    tmp[0] += 1;
+    for (auto&amp; x: tmp) {x *= 2;}
     return tmp;  // copy elision
 }
 
-std::vector&lt;int&gt; plus2(std::vector&lt;int&gt; vec) {
-    vec[0] += 2;
+std::vector&lt;int&gt; times3(std::vector&lt;int&gt; vec) {
+    for (auto&amp; x: vec) {x *= 3;}
     return vec;  // move ctor
 }
 
-auto vec0 = factory(3);
-auto vec1 = plus1(vec0);             //  lvalue渡し: 1 copy
-auto vec2 = plus1(std::move(vec0));  //  xvalue渡し: 1 copy
-auto vec3 = plus1(factory(3));       // prvalue渡し: 1 copy
-auto vec4 = plus2(vec1);             //  lvalue渡し: 1 copy 1 move
-auto vec5 = plus2(std::move(vec1));  //  xvalue渡し:        2 move
-auto vec6 = plus2(factory(3));       // prvalue渡し:        1 move
+auto vec0 = ones(3);
+auto vec1 = times2(vec0);             //  lvalue渡し: 1 copy
+auto vec2 = times2(std::move(vec0));  //  xvalue渡し: 1 copy
+auto vec3 = times2(ones(3));          // prvalue渡し: 1 copy
+auto vec4 = times3(vec1);             //  lvalue渡し: 1 copy 1 move
+auto vec5 = times3(std::move(vec1));  //  xvalue渡し:        2 move
+auto vec6 = times3(ones(3));          // prvalue渡し:        1 move
 </code></pre>
 
-<p>rvalue渡ししたいときは<code>plus2()</code>のような値受け取り関数がよいが、
-普通のlvalue渡しでは<code>plus1()</code>のようなconst参照受け取り関数がよい。
+<p>普通のlvalue渡しでは<code>times2()</code>のような<code>const T&amp;</code>型関数が良いが、
+rvalue渡ししたいときは<code>times3()</code>のような<code>T</code>型関数が良い。
 しかし同じ処理の関数に違う名前を持たせるのは嫌なので、ぜひオーバーロードしたい。
-この場合はconst lvalue reference型とrvalue reference型の2つを用意する。</p>
+その場合はconst lvalue reference(<code>const T&amp;</code>)型とrvalue reference(<code>T&amp;&amp;</code>)型の2つを用意する。</p>
 
 <pre><code class="language-c++">// [A]
-std::vector&lt;int&gt; plus3(const std::vector&lt;int&gt;&amp; vec) {
+std::vector&lt;int&gt; times4(const std::vector&lt;int&gt;&amp; vec) {
     std::vector&lt;int&gt; tmp(vec);  // copy ctor
-    tmp[0] += 3;
+    for (auto&amp; x: tmp) {x *= 4;}
     return tmp;  // copy elision
 }
 
 // [B]
-std::vector&lt;int&gt; plus3(std::vector&lt;int&gt;&amp;&amp; vec) {
-    vec[0] += 3;
+std::vector&lt;int&gt; times4(std::vector&lt;int&gt;&amp;&amp; vec) {
+    for (auto&amp; x: vec) {x *= 4;}
     return std::move(vec);  // move ctor
 }
 
-auto vec7 = plus3(vec2);             //  lvalue渡し to [A] 1 copy
-auto vec8 = plus3(std::move(vec2));  //  xvalue渡し to [B]        1 move
-auto vec9 = plus3(factory(3))        // prvalue渡し to [B]        1 move
+auto vec7 = times4(vec2);             //  lvalue渡し to [A] 1 copy
+auto vec8 = times4(std::move(vec2));  //  xvalue渡し to [B]        1 move
+auto vec9 = times4(ones(3))           // prvalue渡し to [B]        1 move
 </code></pre>
 
 <p><code>[B]</code>に<code>std::move()</code>渡しするときはmove ctorが呼び出されず参照のみ。
-ということで、オーバーロードされた<code>plus3()</code>が最低コスト。</p>
+ということで、オーバーロードされた<code>times4()</code>が最低コスト。</p>
 
 <p>関連記事はたくさん見つかるが、特に読みやすく参考になったのはこちら:</p>
 
