@@ -111,7 +111,7 @@ Rの中から `install.packages('readxl')` でインストールし、
 https://github.com/hadley/readr
 
 バージョン0.2.2で大きいtsv.gzを読み込もうとするとこのようにエラーが出て止まる:
-```
+```nohighlight
 Error in guess_header_(datasource, tokenizer, locale) :
   long vectors not supported yet: ../../src/include/Rinlinedfuns.h:138
 ```
@@ -119,7 +119,7 @@ Error in guess_header_(datasource, tokenizer, locale) :
 [@jimhesterの修正](https://github.com/hadley/readr/pull/433)
 で直ったらしいのでmaster HEADからのインストールを試みる。
 
-```R
+```r
 devtools::install_github('hadley/readr')
 # ...
 ld: library not found for -lintl

@@ -28,7 +28,7 @@ JavaScript+WebGLベースの
 
 ## デバイスの起動と終了
 
-```
+```r
 rgl::open3d()  # open new device
 rgl.close()    # close current device
 rgl.quit()     # shutdown rgl device system
@@ -100,7 +100,7 @@ rgl.quit()     # shutdown rgl device system
 
 ### 複数の図をまとめる
 
-```
+```r
 # レイアウトを指定
 mfrow3d(nr, nc, byrow=TRUE, parent=NA, sharedMouse=FALSE, ...)
 layout3d(mat, widths, heights, parent=NA, sharedMouse=FALSE, ...)

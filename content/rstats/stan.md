@@ -125,7 +125,7 @@ modelブロック内で`increment_log_prob()`によって加算されていく�
 例えば以下の表現はほぼ等価。
 (定数の扱い方がうまいとかでサンプリング文のほうが効率的らしいけど)
 
-```nohighlight
+```stan
 x ~ normal(0.0, 1.0);
 increment_log_prob(normal_log(x, 0.0, 1.0));
 increment_log_prob(-0.5 * square(x));
@@ -160,7 +160,7 @@ increment_log_prob(-0.5 * square(x));
 
 bool型は無くて基本的に整数の1/0。分岐ではnon-zeroがtrue扱い。
 
-```nohighlight
+```stan
 int i;
 int v[42];
 real x;

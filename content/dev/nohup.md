@@ -115,7 +115,7 @@ Time   | <kbd>T</kbd> | <kbd>o -time</kbd>
 - 標準エラー出力の書き出し先を指定するには `2>{OUTFILE}`
 - 標準エラー出力を標準出力と同じところに流すには `>{OUTFILE} 2>&1`
 
-```
+```sh
 % nohup COMMAND >out.log 2>err.log &
 ```
 
