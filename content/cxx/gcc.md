@@ -5,7 +5,7 @@ tags = ["c++"]
   parent = "cxx"
 +++
 
-[<http://gcc.gnu.org/>](http://gcc.gnu.org/)
+https://gcc.gnu.org/
 
 ## Usage
 
@@ -22,95 +22,92 @@ tags = ["c++"]
 
 ### Options
 
-<http://gcc.gnu.org/onlinedocs/gcc-4.9.0/gcc/Invoking-GCC.html>
+- https://gcc.gnu.org/onlinedocs/gcc/Invoking-GCC.html
+- https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html
 
-**出力オプション** <http://gcc.gnu.org/onlinedocs/gcc-4.9.0/gcc/Overall-Options.html>
-:
+#### [出力オプション](https://gcc.gnu.org/onlinedocs/gcc/Overall-Options.html)
 
-    `-c`
-    :   コンパイルするだけでリンクしない
+`-c`
+:   コンパイルするだけでリンクしない
 
-    `-o {file}`
-    :   出力先のファイル名を指定
+`-o {file}`
+:   出力先のファイル名を指定
 
-**C/C++オプション** <http://gcc.gnu.org/onlinedocs/gcc-4.9.0/gcc/C-Dialect-Options.html>
-:
+#### [C/C++オプション](https://gcc.gnu.org/onlinedocs/gcc/C-Dialect-Options.html)
 
-    `-std=c++11`
-    :   2011年のISO標準でコンパイルする。
-        早くこれがデフォルトになればいいのに...。
-        2014年予定の新標準も `-std=c++1y` で試験的に有効にできる。
-        <http://gcc.gnu.org/projects/cxx1y.html>
+`-std=c++11`
+:   2011年のISO標準でコンパイルする。
 
-**警告オプション** <http://gcc.gnu.org/onlinedocs/gcc-4.9.0/gcc/Warning-Options.html>
-:
+`-std=c++14`
+:   2014年のISO標準でコンパイルする。
+    g++-6 ではこれのGNU方言である `gnu++14` がデフォルトになった。
 
-    `-Wall`
-    :   基本的な警告
+#### [警告オプション](https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html)
 
-    `-Wextra`
-    :   Wallより厳しい警告
+`-Wall`
+:   基本的な警告
 
-    `-Werror`
-    :   警告をエラー扱いにする
+`-Wextra`
+:   Wallより厳しい警告
 
-**デバッグオプション** <http://gcc.gnu.org/onlinedocs/gcc-4.9.0/gcc/Debugging-Options.html>
-:
+`-Werror`
+:   警告をエラー扱いにする
 
-    `-g`
-    :   gdb で使えるデバッグ情報を埋め込む
+#### [デバッグオプション](https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html)
 
-**最適化オプション** <http://gcc.gnu.org/onlinedocs/gcc-4.9.0/gcc/Optimize-Options.html>
-:
+`-g`
+:   gdb で使えるデバッグ情報を埋め込む
 
-    `-O1`
-    :   軽い最適化
+#### [最適化オプション](https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html)
 
-    `-O2`
-    :   プログラムサイズを大きくしない最適化をすべて実行
+`-O1`
+:   軽い最適化
 
-    `-O3`
-    :   インライン展開なども行う
+`-O2`
+:   プログラムサイズを大きくしない最適化をすべて実行
 
-    `-Os`
-    :   コードサイズが最小になるように
+`-O3`
+:   インライン展開なども行う
 
-**プリプロセッサオプション** <http://gcc.gnu.org/onlinedocs/gcc-4.9.0/gcc/Preprocessor-Options.html>
-:
+`-Os`
+:   コードサイズが最小になるように
 
-    `-D {name}`, `-D {name=definition}`
-    :   ソースコードで `#define` するのと同じようにマクロを定義する
+#### [プリプロセッサオプション](https://gcc.gnu.org/onlinedocs/gcc/Preprocessor-Options.html)
 
-    `-I {dir}`, `-isystem {dir}`
-    :   `#include <***>` のインクルードパスの先頭に `{dir}` を追加。
+`-D {name}`, `-D {name=definition}`
+:   ソースコードで `#define` するのと同じようにマクロを定義する
 
-    `-iquote {dir}`
-    :   `#include "***"` のインクルードパスの先頭に `{dir}` を追加。
+`-I {dir}`, `-isystem {dir}`
+:   `#include <***>` のインクルードパスの先頭に `{dir}` を追加。
 
-    `-M`, `-MM`
-    :   ファイルの依存関係を書き出す。
-        前者はシステムヘッダーを含み、後者は含まない。
+`-iquote {dir}`
+:   `#include "***"` のインクルードパスの先頭に `{dir}` を追加。
 
-**リンクオプション** <http://gcc.gnu.org/onlinedocs/gcc-4.9.0/gcc/Link-Options.html>
-:
+`-M`, `-MM`
+:   ファイルの依存関係を書き出す。
+    前者はシステムヘッダーを含み、後者は含まない。
 
-    `-l {library}`
-    :   リンクするライブラリを指定する。
-        ファイル名が `libsfmt.a` のときは `-lsfmt`
+#### [リンクオプション](https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html)
 
-    `-L {dir}`
-    :   ライブラリのサーチパスを追加する
+`-l {library}`
+:   リンクするライブラリを指定する。
+    ファイル名が `libsfmt.a` のときは `-lsfmt`
+
+`-L {dir}`
+:   ライブラリのサーチパスを追加する
+
 
 ## Installation
 
-<http://gcc.gnu.org/install/>
+https://gcc.gnu.org/install/
 
 ### Mac
 
 Xcode についてくる `gcc-4.2` は
 `gcc` の顔をした `clang` なので、
 本当の `gcc` が欲しいときは別途インストールが必要。
-[Homebrew]({{< relref "mac/homebrew.md" >}})` か `[MacPorts]({{< relref "mac/macports.md" >}}) で入れるのが楽チン:
+[Homebrew]({{< relref "mac/homebrew.md" >}}) か
+[MacPorts]({{< relref "mac/macports.md" >}}) で入れるのが楽チン:
 
     % brew install gcc --without-multilib
 
