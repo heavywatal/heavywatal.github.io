@@ -11,7 +11,7 @@
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="icon" href="/favicon-192x192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/favicon-192x192.png" sizes="192x192">
-<title>DnaSP - Watal M. Iwasaki</title>
+<title> - Watal M. Iwasaki</title>
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
   displayAlign: "left",
@@ -56,126 +56,24 @@ Watal M. Iwasaki
 <main>
 <article>
 <header><h1><a href="">
-DnaSP
+Custom Search
 </a></h1>
-<ul class="tags">
-<li><a href="/tags/genetics">genetics</a></li>
-<li><a href="/tags/mac">mac</a></li>
-<li><a href="/tags/windows">windows</a></li>
-</ul>
 </header>
 
-
-
-<p>DNA Sequence Polymorphism</p>
-
-<p><a href="http://www.ub.es/dnasp/">http://www.ub.es/dnasp/</a></p>
-
-<h2 id="macで使う">Macで使う</h2>
-
-<p>Windowsアプリしかないので、仕方なく
-<a href="/mac/winebottler.html">Wine/WineBottler</a>
-越しに動かす。
-インストール後にActiveXの設定をしないと以下のように怒られて
-強制終了になってしまう（起動はできる）:</p>
-
-<pre><code>Error number: 429
-ActiveX component can't create object
-</code></pre>
-
-<h3 id="はじめに">はじめに</h3>
-
-<ol>
-<li><a href="/mac/winebottler.html">WineBottler</a>およびWineをインストール。</li>
-<li><a href="http://www.ub.es/dnasp/">DnaSP作者のウェブサイト</a> からインストーラ
-<code>dnasp51001.msi</code> をダウンロード。</li>
-<li>微妙に違う2つのやり方があるのでどっちにするか決める。</li>
-</ol>
-
-<h3 id="dnasp-appを作る方法">DnaSP.appを作る方法</h3>
-
-<ol>
-<li>WineBottler を使って <code>/Applications</code> に DnaSP.app を作る。</li>
-<li>DnaSP.app を一度だけ起動して、すぐ終了する。
-<code>~/Library/Application Support/Wine/prefixes/DnaSP</code>
-にPrefixができる。
-WineBottler で“DnaSP”じゃないアプリケーション名を指定して作った人は
-<code>prefixes/</code> の下の名前も変わるので注意。</li>
-
-<li><p>ActiveX の設定をする。</p>
-
-<ol>
-<li><a href="http://www.dll-files.com/">http://www.dll-files.com/</a> らへんから
-<code>scrrun.dll</code> を入手し、
-<code>~/Library/Application\ Support/Wine/prefixes/DnaSP/drive_c/windows/system32/</code>
-にコピー</li>
-
-<li><p>Terminal.app で以下のコマンドを実行:</p>
-
-<pre><code>cd ~/Library/Application\ Support/Wine/prefixes/DnaSP/drive_c/windows/system32
-cp ../../Program\ Files/DnaSP\ v5/mfc40.dll ./
-WINEPREFIX=${HOME}/Library/Application\ Support/Wine/prefixes/DnaSP /Applications/Wine.app/Contents/MacOS/startwine regsvr32.exe scrrun.dll mfc40.dll threed32.ocx
-</code></pre>
-
-<p>wget をインストールしてある人は以下のコマンドで一発のはず:</p>
-
-<pre><code>cd ~/Library/Application\ Support/Wine/prefixes/DnaSP/drive_c/windows/system32
-wget http://www.dll-download-system.com/dlls/scrrun.zip
-unzip scrrun.zip scrrun.dll
-rm scrrun.zip
-cp ../../Program\ Files/DnaSP\ v5/mfc40.dll ./
-WINEPREFIX=${HOME}/Library/Application\ Support/Wine/prefixes/DnaSP /Applications/Wine.app/Contents/MacOS/startwine regsvr32.exe scrrun.dll mfc40.dll threed32.ocx
-</code></pre></li>
-</ol></li>
-
-<li><p>インストールされた DnaSP.app を実行</p></li>
-</ol>
-
-<h3 id="dnasp-appを作らず直接dnasp5-exeを実行する方法">DnaSP.appを作らず直接dnasp5.exeを実行する方法</h3>
-
-<ol>
-<li>Wine でPrefixを <code>~/.wine</code> に設定。
-違う場所にした人はこれ以下を適宜読み替えること。</li>
-<li>インストーラ dnasp51001.msi を実行し、
-Next 連打で普通にインストールする。</li>
-
-<li><p>Terminal を起動して以下のコマンドを入力し、
-ActiveX の設定をする。
-コマンドでの作業が嫌いな人はその下の手順でどうぞ:</p>
-
-<pre><code>cd ~/.wine/drive_c/windows/system32/
-wget http://www.dll-download-system.com/dlls/scrrun.zip
-unzip scrrun.zip scrrun.dll
-rm scrrun.zip
-cp ../../Program\ Files/DnaSP\ v5/mfc40.dll ./
-WINEPREFIX=${HOME}/.wine /Applications/Wine.app/Contents/MacOS/startwine regsvr32.exe scrrun.dll mfc40.dll threed32.ocx
-</code></pre>
-
-<ol>
-<li><code>~/.wine/driver_c/Program Files/DnaSP v5/</code> にある
-<code>mfc40.dll</code> を
-<code>~/.wine/drive_c/windows/system32/</code> にコピー</li>
-<li><a href="http://www.dll-files.com/">http://www.dll-files.com/</a> らへんから
-<code>scrrun.dll</code> をダウンロードし、
-<code>~/.wine/drive_c/windows/system32/</code> にコピー</li>
-
-<li><p>右上メニューバーのワイングラスからDOS Promptを選び、
-出てきた黒い窓に以下のコマンドを1行ずつ入力して実行:</p>
-
-<pre><code>cd windows\system32
-regsvr32 scrrun.dll mfc40.dll threed32.ocx
-</code></pre>
-
-<p>DOS窓が出てこなかった人は Terminal から以下のコマンドを実行する:</p>
-
-<pre><code>cd ~/.wine/drive_c/windows/system32/
-/Applications/Wine.app/Contents/MacOS/startwine regsvr32 scrrun.dll mfc40.dll threed32.ocx
-</code></pre></li>
-</ol></li>
-
-<li><p>インストールされた dnasp5.exe を実行</p></li>
-</ol>
-
+<div class="cse-results">
+<script>
+  (function() {
+    var cx = '002893183080310956056:l56ddnprf-g';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:searchresults-only></gcse:searchresults-only>
+</div>
 </article>
 </main>
 
@@ -239,11 +137,11 @@ regsvr32 scrrun.dll mfc40.dll threed32.ocx
 <li><a href="/cxx/random.html">擬似乱数生成器</a></li>
 </ul>
 
-<input type="checkbox" id="menu-bio" checked>
-<label for="menu-bio" class="active">Biology</label>
+<input type="checkbox" id="menu-bio">
+<label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
-<li class="active"><a href="/bio/dnasp.html">DnaSP</a></li>
+<li><a href="/bio/dnasp.html">DnaSP</a></li>
 <li><a href="/bio/emboss.html">EMBOSS</a></li>
 <li><a href="/bio/ensembl.html">Ensembl</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
