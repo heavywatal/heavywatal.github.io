@@ -258,6 +258,13 @@ LDFLAGS = -L${HOME}/local/lib -L${HOME}/.homebrew/lib
 <pre><code>LinkingTo: Rcpp
 SystemRequirements: C++14
 </code></pre></li>
+
+<li><p><code>@docType package</code> のブロックに <code>@useDynLib</code> でパッケージ名を指定する</p>
+
+<pre><code class="language-R">#' @docType package
+#' @useDynLib namaespace
+NULL
+</code></pre></li>
 </ul>
 
 <h2 id="devtools"><code>devtools</code></h2>
@@ -284,7 +291,7 @@ SystemRequirements: C++14
 <dd><code>testthat</code> を呼び出して <code>test/</code> 以下のテストコードを実行する</dd>
 <dt><code>install(pkg='.', reload=TRUE, quick=FALSE, local=TRUE, ...)</code></dt>
 <dd>ローカルにあるディレクトリからインストール</dd>
-<dt><code>install_github(repo, username=NULL, ref='master', ...)</code></dt>
+<dt><code>install_github(repo, username=NULL, ref='master', subdir=NULL, ...)</code></dt>
 <dd>GitHubリポジトリからインストール</dd>
 </dl>
 
@@ -342,6 +349,9 @@ e.g., <code>@importFrom pipeR %&gt;&gt;%</code></dd>
 <dd><code>NAMESPACE</code> で <code>export()</code> するパッケージを指定。</dd>
 <dt><code>@param arg1 description...</code></dt>
 <dd>関数の引数。型や役割の説明を書く。</dd>
+<dt><code>@inheritParams package::function</code></dt>
+<dd>未<code>@param</code>引数の記述を別の関数から継承する。
+継承の連鎖はしないので、親関数で<code>@param</code>定義されてないものはダメ。</dd>
 <dt><code>@return description</code></dt>
 <dd>関数の返り値。</dd>
 <dt><code>@examples code...</code></dt>
