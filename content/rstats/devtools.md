@@ -186,6 +186,13 @@ vignettes/
     SystemRequirements: C++14
     ```
 
+-   `@docType package` のブロックに `@useDynLib` でパッケージ名を指定する
+    ```R
+    #' @docType package
+    #' @useDynLib namaespace
+    NULL
+    ```
+
 
 ## `devtools`
 
@@ -216,7 +223,7 @@ vignettes/
 `install(pkg='.', reload=TRUE, quick=FALSE, local=TRUE, ...)`
 :   ローカルにあるディレクトリからインストール
 
-`install_github(repo, username=NULL, ref='master', ...)`
+`install_github(repo, username=NULL, ref='master', subdir=NULL, ...)`
 :   GitHubリポジトリからインストール
 
 ### 設定
@@ -275,6 +282,10 @@ Rソースコードのコメントからヘルプを自動生成する。
 
 `@param arg1 description...`
 :   関数の引数。型や役割の説明を書く。
+
+`@inheritParams package::function`
+:   未`@param`引数の記述を別の関数から継承する。
+    継承の連鎖はしないので、親関数で`@param`定義されてないものはダメ。
 
 `@return description`
 :   関数の返り値。
