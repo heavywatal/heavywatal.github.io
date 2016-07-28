@@ -283,60 +283,67 @@ git checkout master
 </code></pre></li>
 </ol>
 
-<h2 id="プルリクエストを送る">プルリクエストを送る</h2>
+<h2 id="pull-request-pr">Pull Request (PR)</h2>
 
 <ul>
-<li>masterブランチは更新取得のためだけに使い、開発は別ブランチで行う。</li>
-<li>大元のリポジトリをupstream、自分のリポジトリをoriginと名付ける。</li>
+<li>大元のリポジトリをupstream、フォークした自分のリポジトリをoriginと名付ける。</li>
+<li>デフォルトブランチ(masterとかdevelopとか)は更新取得のためだけに使い、変更は新規ブランチで行う。</li>
 <li>push済みのcommitをrebaseするとIDが変わっちゃうのでダメ。</li>
 </ul>
 
 <h3 id="基本の流れ">基本の流れ</h3>
 
-<p>例えば <code>user</code> さんの <code>project</code> のドキュメント修正に貢献する場合。</p>
+<p>例えば <code>USER</code> さんの <code>PROJECT</code> のコード修正に貢献する場合。</p>
 
 <ol>
-<li>GitHub上で元のリポジトリから自分のリポジトリにフォークする</li>
+<li><code>github.com/USER/PROJECT</code> のForkボタンで自分のGitHubリポジトリに取り込む</li>
 
-<li><p>forkした自分のリポジトリからローカルにcloneする:</p>
+<li><p>forkした自分のリポジトリからローカルにclone:</p>
 
-<pre><code>git clone git@github.com:heavywatal/project.git
-cd project/
+<pre><code>git clone git@github.com:heavywatal/PROJECT.git
+cd PROJECT/
 </code></pre></li>
 
-<li><p>元のリポジトリにupstreamという名前をつけておく:</p>
+<li><p>大元のリポジトリにupstreamという名前をつけておく:</p>
 
-<pre><code>git remote add upstream git://github.com/user/project.git
+<pre><code>git remote add upstream git://github.com/USER/PROJECT.git
 </code></pre></li>
 
-<li><p>開発用のブランチを切って移動:</p>
+<li><p>PR用のブランチを切って移動:</p>
 
 <pre><code>git checkout -b fix-typo
 </code></pre></li>
 
-<li><p>ソースコードに変更を加える:</p>
+<li><p>コードを変更してcommit:</p>
 
 <pre><code>emacs README.md
-git commit -a -m &quot;fix typo in README.md&quot;
+git diff
+git commit -a -m &quot;Fix typo in README.md&quot;
 </code></pre></li>
 
-<li><p>この間に起こった元リポジトリの更新をmaster越しに取り込む:</p>
+<li><p>この間にupstreamで更新があったら、それをデフォルトブランチ越しに取り込む:</p>
 
 <pre><code>git checkout master
 git fetch upstream
 git merge upstream/master
+git push origin/master
 git checkout fix-typo
 git rebase -i master
 </code></pre></li>
 
 <li><p>自分のリポジトリにpush:</p>
 
-<pre><code>git push origin fix-typo
+<pre><code>git push [-f] origin fix-typo
 </code></pre></li>
 
-<li><p>GitHub上の自分のリポジトリからプルリクエストを送る</p></li>
+<li><p>GitHub上に出現する&rdquo;Compare &amp; pull request&rdquo;ボタンを押す</p></li>
 
-<li><p>修正を求められたらそのブランチで変更して普通にプッシュ</p></li>
+<li><p>差分を確認し、コメント欄を埋めて提出</p></li>
+
+<li><p>修正を求められたらそのブランチで変更し、自分のリポジトリにpushすればPRにも反映される</p></li>
+
+<li><p>マージされたらブランチを消す
+(GitHub PR画面のボタンか、空ブランチ上書き <code>git push origin :fix-typo</code>)</p></li>
 </ol>
 
 <h2 id="問題と対処">問題と対処</h2>
