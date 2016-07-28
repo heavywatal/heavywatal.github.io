@@ -32,7 +32,7 @@ jagsと違ってstan本体も同時に入れてくれる。
    options(mc.cores = parallel::detectCores())
    ```
 
-1. データを用意する。
+1. 名前付きlistとしてデータを用意する。
    e.g., 平均10、標準偏差3の正規乱数。
    ```r
    .data = list(x=rnorm(10000, 10, 3))
@@ -40,6 +40,7 @@ jagsと違ってstan本体も同時に入れてくれる。
    ```
 
 1.  Stan言語でモデルを記述する。
+    別ファイルにしてもいいし、下記のようにR文字列でもいい。
     e.g., 与えられたデータが正規分布から取れてきたとすると、
     その平均と標準偏差はどれくらいだったか？
     ```r
@@ -59,9 +60,16 @@ jagsと違ってstan本体も同時に入れてくれる。
     }'
     ```
 
-1. モデルをC++に変換してコンパイルし、それを使ってMCMCサンプリングする。
+1. モデルをC++に変換してコンパイルする。
+   ファイルから読み込んだ場合は中間ファイル`*.rda`がキャッシュされる。
    ```r
    .model = rstan::stan_model(model_code=.stan_code)
+   # or
+   .model = rstan::stan_model(file='model.stan')
+   ```
+
+1. コンパイル済みモデルを使ってMCMCサンプリング
+   ```r
    .fit = rstan::sampling(.model, data=.data, iter=10000, chains=3)
    ```
 
@@ -213,3 +221,9 @@ install.packages("https://cran.r-project.org/src/contrib/Archive/StanHeaders/Sta
 
 https://cran.r-project.org/src/contrib/Archive/StanHeaders/
 
+### 最新版をGitHubからインストール
+
+リポジトリの構造が標準とはちょっと違う
+```r
+devtools::install_github('stan-dev/rstan', ref='develop', subdir='rstan/rstan')
+```
