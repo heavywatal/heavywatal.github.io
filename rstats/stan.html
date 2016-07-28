@@ -91,7 +91,7 @@ rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
 </code></pre></li>
 
-<li><p>データを用意する。
+<li><p>名前付きlistとしてデータを用意する。
 e.g., 平均10、標準偏差3の正規乱数。</p>
 
 <pre><code class="language-r">.data = list(x=rnorm(10000, 10, 3))
@@ -99,6 +99,7 @@ e.g., 平均10、標準偏差3の正規乱数。</p>
 </code></pre></li>
 
 <li><p>Stan言語でモデルを記述する。
+別ファイルにしてもいいし、下記のようにR文字列でもいい。
 e.g., 与えられたデータが正規分布から取れてきたとすると、
 その平均と標準偏差はどれくらいだったか？</p>
 
@@ -118,10 +119,17 @@ model {
 }'
 </code></pre></li>
 
-<li><p>モデルをC++に変換してコンパイルし、それを使ってMCMCサンプリングする。</p>
+<li><p>モデルをC++に変換してコンパイルする。
+ファイルから読み込んだ場合は中間ファイル<code>*.rda</code>がキャッシュされる。</p>
 
 <pre><code class="language-r">.model = rstan::stan_model(model_code=.stan_code)
-.fit = rstan::sampling(.model, data=.data, iter=10000, chains=3)
+# or
+.model = rstan::stan_model(file='model.stan')
+</code></pre></li>
+
+<li><p>コンパイル済みモデルを使ってMCMCサンプリング</p>
+
+<pre><code class="language-r">.fit = rstan::sampling(.model, data=.data, iter=10000, chains=3)
 </code></pre></li>
 
 <li><p>結果を見てみる</p>
@@ -266,6 +274,13 @@ Stan更新への追従にタイムラグがあるらしい。
 </code></pre>
 
 <p><a href="https://cran.r-project.org/src/contrib/Archive/StanHeaders/">https://cran.r-project.org/src/contrib/Archive/StanHeaders/</a></p>
+
+<h3 id="最新版をgithubからインストール">最新版をGitHubからインストール</h3>
+
+<p>リポジトリの構造が標準とはちょっと違う</p>
+
+<pre><code class="language-r">devtools::install_github('stan-dev/rstan', ref='develop', subdir='rstan/rstan')
+</code></pre>
 
 </article>
 </main>
