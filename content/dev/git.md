@@ -218,49 +218,54 @@ e.g., doxygen生成物を公開
         git submodule add -b gh-pages `git remote -v|grep origin|head -n 1|awk '{print$2}'` html
 
 
-## プルリクエストを送る
+## Pull Request (PR)
 
--   masterブランチは更新取得のためだけに使い、開発は別ブランチで行う。
--   大元のリポジトリをupstream、自分のリポジトリをoriginと名付ける。
+-   大元のリポジトリをupstream、フォークした自分のリポジトリをoriginと名付ける。
+-   デフォルトブランチ(masterとかdevelopとか)は更新取得のためだけに使い、変更は新規ブランチで行う。
 -   push済みのcommitをrebaseするとIDが変わっちゃうのでダメ。
 
 ### 基本の流れ
 
-例えば `user` さんの `project` のドキュメント修正に貢献する場合。
+例えば `USER` さんの `PROJECT` のコード修正に貢献する場合。
 
-1.  GitHub上で元のリポジトリから自分のリポジトリにフォークする
-2.  forkした自分のリポジトリからローカルにcloneする:
+1.  `github.com/USER/PROJECT` のForkボタンで自分のGitHubリポジトリに取り込む
+1.  forkした自分のリポジトリからローカルにclone:
 
-        git clone git@github.com:heavywatal/project.git
-        cd project/
+        git clone git@github.com:heavywatal/PROJECT.git
+        cd PROJECT/
 
-3.  元のリポジトリにupstreamという名前をつけておく:
+1.  大元のリポジトリにupstreamという名前をつけておく:
 
-        git remote add upstream git://github.com/user/project.git
+        git remote add upstream git://github.com/USER/PROJECT.git
 
-4.  開発用のブランチを切って移動:
+1.  PR用のブランチを切って移動:
 
         git checkout -b fix-typo
 
-5.  ソースコードに変更を加える:
+1.  コードを変更してcommit:
 
         emacs README.md
-        git commit -a -m "fix typo in README.md"
+        git diff
+        git commit -a -m "Fix typo in README.md"
 
-6.  この間に起こった元リポジトリの更新をmaster越しに取り込む:
+1.  この間にupstreamで更新があったら、それをデフォルトブランチ越しに取り込む:
 
         git checkout master
         git fetch upstream
         git merge upstream/master
+        git push origin/master
         git checkout fix-typo
         git rebase -i master
 
-7.  自分のリポジトリにpush:
+1.  自分のリポジトリにpush:
 
-        git push origin fix-typo
+        git push [-f] origin fix-typo
 
-8.  GitHub上の自分のリポジトリからプルリクエストを送る
-9.  修正を求められたらそのブランチで変更して普通にプッシュ
+1.  GitHub上に出現する"Compare & pull request"ボタンを押す
+1.  差分を確認し、コメント欄を埋めて提出
+1.  修正を求められたらそのブランチで変更し、自分のリポジトリにpushすればPRにも反映される
+1.  マージされたらブランチを消す
+    (GitHub PR画面のボタンか、空ブランチ上書き `git push origin :fix-typo`)
 
 
 ## 問題と対処

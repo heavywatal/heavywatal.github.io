@@ -6,17 +6,16 @@ tags = ["vcs", "python"]
   parent = "dev"
 +++
 
--   [Official Website](http://mercurial.selenic.com/)
--   [Wiki](http://mercurial.selenic.com/wiki/)
--   [日本語チュートリアル](http://mercurial.selenic.com/wiki/JapaneseTutorial)
+-   [Official Website](https://www.mercurial-scm.org/)
+-   [Wiki](https://www.mercurial-scm.org/wiki/)
+-   [日本語Wiki](https://www.mercurial-scm.org/wiki/JapaneseMercurial)
 -   [The Definitive Guide by Bryan O'Sullivan](http://hgbook.red-bean.com/read/)
--   [Glossary](http://mercurial.selenic.com/wiki/Glossary)
 
 {{%div class="note"%}}
 [GitHub](https://github.com)が確固たる地位を確立し、
 今や[BitBucket](https://bitbucket.org)もGitに対応したので、
 どうしても既存のMercurialリポジトリを使わなきゃいけない場合を除いて、
-基本的にはGitを使うようにしたほうがよい。
+基本的にはGitを使うようにしたほうがよさそう。
 See [Git]({{< relref "git.md" >}}).
 {{%/div%}}
 
