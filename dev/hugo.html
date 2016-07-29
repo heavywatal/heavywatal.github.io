@@ -170,7 +170,30 @@ normal *italic* **bold**
 YAMLやJSONでもいいけど、
 <a href="https://github.com/toml-lang/toml">TOML</a>のほうが将来性ありそう。</p>
 
-<h2 id="github-pages-で公開">GitHub Pages で公開</h2>
+<h2 id="閲覧-公開方法">閲覧・公開方法</h2>
+
+<h3 id="hugo-server">Hugo Server</h3>
+
+<p>付属の簡易サーバーを起動。</p>
+
+<pre><code>% hugo server -D -w -s /path/to/source
+% open http://localhost:1313/
+</code></pre>
+
+<h3 id="localhost-mac">localhost (Mac)</h3>
+
+<p><code>public/</code> 以下に生成されるファイルを <code>~/Sites/</code> に置けば
+<a href="http://localhost">localhost</a> で閲覧できる。</p>
+
+<pre><code class="language-sh">% cd /path/to/source
+% hugo
+% rsync -au --delete --exclude='.git' public/ ~/Sites/
+% open http://localhost/
+</code></pre>
+
+<h3 id="github-pages">GitHub Pages</h3>
+
+<p><code>public/</code> 以下に生成されるファイルをしかるべきrepository/branchに置くだけ。</p>
 
 <p>See <a href="/dev/git.html">Git</a></p>
 
