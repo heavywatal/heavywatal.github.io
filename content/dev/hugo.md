@@ -108,6 +108,29 @@ https://github.com/heavywatal/hugo-theme-nonblog
 YAMLやJSONでもいいけど、
 [TOML](https://github.com/toml-lang/toml)のほうが将来性ありそう。
 
-## GitHub Pages で公開
+## 閲覧・公開方法
+
+### Hugo Server
+
+付属の簡易サーバーを起動。
+```
+% hugo server -D -w -s /path/to/source
+% open http://localhost:1313/
+```
+
+### localhost (Mac)
+
+`public/` 以下に生成されるファイルを `~/Sites/` に置けば
+[localhost](http://localhost) で閲覧できる。
+```sh
+% cd /path/to/source
+% hugo
+% rsync -au --delete --exclude='.git' public/ ~/Sites/
+% open http://localhost/
+```
+
+### GitHub Pages
+
+`public/` 以下に生成されるファイルをしかるべきrepository/branchに置くだけ。
 
 See [Git]({{< relref "git.md" >}})
