@@ -103,6 +103,8 @@ Mathematica/Mapleの使い勝手に似ている。
 カーネルを入れ替えることで他言語サポートが可能になり、
 汎用Notebookとして生まれ変わった。
 
+開発中の[JupyterLab](https://github.com/jupyter/jupyterlab)がさらに良いらしい。
+
 ### 始め方
 
 <http://jupyter-notebook.readthedocs.org/en/latest/examples/Notebook/rstversions/Notebook%20Basics.html>
