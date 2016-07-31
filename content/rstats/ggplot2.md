@@ -435,14 +435,23 @@ ggplotを拡張するための仕組みがversion 2.0から正式に導入され
 関係ない複数の図を1枚に描きたい場合は `grid` や `gtable` の機能を使う必要がある。
 `gridExtra` はそのへんの操作を手軽にできるようにしてくれるパッケージ。
 
+"grob" は "grid graphical object" の略。
+ggplotオブジェクトと同じように `ggsave()` に渡して保存可能。
+
 ```r
 grob = gridExtra::arrangeGrob(p1, p2, nrow=2, ncol=1, bottom='Time')
 grid.newpage()
 grid.draw(grob)
 ```
 
-"grob" は "grid graphical object" の略。
-ggplotオブジェクトと同じように `ggsave()` に渡して保存可能。
+複数ページのPDFに書き出したい場合は
+[purrr]({{< relref "purrr.md" >}}) などを使って list of ggplots を作っておき、
+`marrangeGrob()` に渡す。
+```r
+.grobs = purrr::map(.dataframes, my_ggplot_func)
+.gtable = gridExtra::marrangeGrob(.grobs, nrow=4, ncol=3)
+ggsave('multi_page.pdf', .gtable, width=7, height=9.9)
+```
 
 ### `GGally`
 
