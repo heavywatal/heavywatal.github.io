@@ -476,13 +476,22 @@ quartz.save('plot.png')
 関係ない複数の図を1枚に描きたい場合は <code>grid</code> や <code>gtable</code> の機能を使う必要がある。
 <code>gridExtra</code> はそのへんの操作を手軽にできるようにしてくれるパッケージ。</p>
 
+<p>&ldquo;grob&rdquo; は &ldquo;grid graphical object&rdquo; の略。
+ggplotオブジェクトと同じように <code>ggsave()</code> に渡して保存可能。</p>
+
 <pre><code class="language-r">grob = gridExtra::arrangeGrob(p1, p2, nrow=2, ncol=1, bottom='Time')
 grid.newpage()
 grid.draw(grob)
 </code></pre>
 
-<p>&ldquo;grob&rdquo; は &ldquo;grid graphical object&rdquo; の略。
-ggplotオブジェクトと同じように <code>ggsave()</code> に渡して保存可能。</p>
+<p>複数ページのPDFに書き出したい場合は
+<a href="/rstats/purrr.html">purrr</a> などを使って list of ggplots を作っておき、
+<code>marrangeGrob()</code> に渡す。</p>
+
+<pre><code class="language-r">.grobs = purrr::map(.dataframes, my_ggplot_func)
+.gtable = gridExtra::marrangeGrob(.grobs, nrow=4, ncol=3)
+ggsave('multi_page.pdf', .gtable, width=7, height=9.9)
+</code></pre>
 
 <h3 id="ggally"><code>GGally</code></h3>
 
