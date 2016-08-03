@@ -147,6 +147,13 @@ ggsave("iris_sepal.png", gp)
 :   値を直に指定する\
     `scale_{colour/fill/size/shape/linetype/alpha}_manual(..., values)`
 
+legend/colourbarのタイトルを変更したい場合は上記関数に `name='New Title'` を指定する。
+さらに細かく制御したい場合は
+[`guide_legend()`](http://docs.ggplot2.org/current/guide_legend.html) や
+[`guide_colourbar()`](http://docs.ggplot2.org/current/guide_colourbar.html)
+を引数 `guide` に渡す。
+
+
 ### 内部変数を使う
 
 https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variables
