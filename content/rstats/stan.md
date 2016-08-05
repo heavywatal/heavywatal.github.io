@@ -191,8 +191,14 @@ m * m  // matrix[3, 3]
 m[1]   // row_vector[3]
 ```
 
-`ordered`, `positive_ordered`, `simplex`, `unit_vector`,
-`cov_matrix`, `corr_matrix`, `cholesky_factor_cov`, `cholesky_factor_corr`
+そのほかの特殊な制約つきの型
+
+- `simplex`: 合計が1になる非負実数ベクトル
+- `unit_vector`: 二乗和が1になる実数ベクトル
+- `ordered`, `positive_ordered`:
+  昇順実数ベクトル。降順にしたければ `transformed parameters` ブロックで。
+- `cov_matrix`, `corr_matrix`, `cholesky_factor_cov`, `cholesky_factor_corr`
+
 
 ### Tips
 
