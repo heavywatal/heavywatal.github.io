@@ -53,6 +53,9 @@ Rの中から `install.packages('readr')` でインストールし、
 `read_file(file)`
 :   ファイルの内容まるごと文字列で返す
 
+書き出し用の関数 `write_***()` も一応付いているが、
+まだ圧縮ファイルを書き出せないので微妙。
+
 
 ## 列の型を指定する
 
@@ -109,15 +112,6 @@ Rの中から `install.packages('readxl')` でインストールし、
 ## 最新版をソースからインストールする
 
 https://github.com/hadley/readr
-
-バージョン0.2.2で大きいtsv.gzを読み込もうとするとこのようにエラーが出て止まる:
-```nohighlight
-Error in guess_header_(datasource, tokenizer, locale) :
-  long vectors not supported yet: ../../src/include/Rinlinedfuns.h:138
-```
-
-[@jimhesterの修正](https://github.com/hadley/readr/pull/433)
-で直ったらしいのでmaster HEADからのインストールを試みる。
 
 ```r
 devtools::install_github('hadley/readr')
