@@ -111,6 +111,9 @@ readr — 高速で柔軟なテーブル読み込みツール
 <dd><p>ファイルの内容まるごと文字列で返す</p></dd>
 </dl>
 
+<p>書き出し用の関数 <code>write_***()</code> も一応付いているが、
+まだ圧縮ファイルを書き出せないので微妙。</p>
+
 <h2 id="列の型を指定する">列の型を指定する</h2>
 
 <p><a href="https://cran.r-project.org/web/packages/readr/vignettes/column-types.html">https://cran.r-project.org/web/packages/readr/vignettes/column-types.html</a></p>
@@ -166,15 +169,6 @@ read_csv('mydata.csv', col_types=colsp)
 <h2 id="最新版をソースからインストールする">最新版をソースからインストールする</h2>
 
 <p><a href="https://github.com/hadley/readr">https://github.com/hadley/readr</a></p>
-
-<p>バージョン0.2.2で大きいtsv.gzを読み込もうとするとこのようにエラーが出て止まる:</p>
-
-<pre><code class="language-nohighlight">Error in guess_header_(datasource, tokenizer, locale) :
-  long vectors not supported yet: ../../src/include/Rinlinedfuns.h:138
-</code></pre>
-
-<p><a href="https://github.com/hadley/readr/pull/433">@jimhesterの修正</a>
-で直ったらしいのでmaster HEADからのインストールを試みる。</p>
 
 <pre><code class="language-r">devtools::install_github('hadley/readr')
 # ...
