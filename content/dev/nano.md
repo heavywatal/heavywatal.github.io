@@ -8,7 +8,7 @@ tags = ["editor"]
 
 <http://www.nano-editor.org/>
 
-emacs や vi ほど高機能ではないけど敷居が低い。
+[emacs]({{< relref "emacs.md" >}})や[vi]({{< relref "vi.md" >}})ほど高機能ではないけど敷居が低い。
 
 ## Usage
 
