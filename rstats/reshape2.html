@@ -68,10 +68,10 @@ reshape2 — 柔軟なデータ変形ツール
 
 <div class="warning">
 <p><code>reshape2</code>はもう古い。
-<code>data.frame</code>を処理をするなら、同じ作者が新しく設計しなおした
+data.frameを処理をするなら、同じ作者が新しく設計しなおした
 <a href="/rstats/tidyr.html">tidyr</a> + <a href="/rstats/dplyr.html">dplyr</a>
 のほうがより高速で洗練されているのでそちらを使おう。
-ただし3次元以上の<code>array</code>を扱うにはまだ便利。</p>
+ただし3次元以上のarrayを扱うにはまだ便利。</p>
 
 </div>
 
@@ -85,17 +85,17 @@ reshape2 — 柔軟なデータ変形ツール
 
 <h2 id="melt"><code>melt()</code></h2>
 
-<p><code>data.frame</code> の複数列の値を、カテゴリ変数1列と値1列の組に変換する。
-これにより、変換する列数の分だけ <code>data.frame</code> が縦長(long-format)になる。
+<p>data.frameの複数列の値を、カテゴリ変数1列と値1列の組に変換する。
+これにより、変換する列数の分だけdata.frameが縦長(long-format)になる。
 やや冗長性は増すが、<a href="/rstats/ggplot2.html">ggplot2</a> での作図などさまざまな操作がしやすくなる。</p>
 
 <div class="note">
 <p>この用途ならこれじゃなくて
 <a href="/rstats/tidyr.html">tidyr</a>の<code>gather()</code>を使おう。</p>
 
-<p><code>array</code>対象ならまだ使い道はある。
-例えば3次元<code>array</code>を <code>melt(arr, c('x', 'y', 'z'))</code>
-として3列の<code>matrix</code>に戻せるのは便利。
+<p>array対象ならまだ使い道はある。
+例えば3次元arrayを <code>melt(arr, c('x', 'y', 'z'))</code>
+として3列のmatrixに戻せるのは便利。
 See <code>?reshape2:::melt.array</code>.</p>
 
 </div>
@@ -108,7 +108,7 @@ See <code>?reshape2:::melt.array</code>.</p>
 
 <dl>
 <dt><code>data</code></dt>
-<dd><code>data.frame</code></dd>
+<dd>data.frame</dd>
 <dt><code>id.vars</code></dt>
 <dd>そのまま列として維持したい列名を文字列で指定。
 何も指定しなければ <code>measure.vars</code> 以外のすべて。</dd>
@@ -167,7 +167,7 @@ See <code>?reshape2:::melt.array</code>.</p>
 
 <h2 id="dcast"><code>dcast()</code></h2>
 
-<p>カテゴリ変数を含む <code>data.frame</code> を <code>melt()</code> と逆方向に
+<p>カテゴリ変数を含むdata.frameを <code>melt()</code> と逆方向に
 (long-formatからwide-formatへ)整形する。</p>
 
 <div class="note">
@@ -176,7 +176,7 @@ See <code>?reshape2:::melt.array</code>.</p>
 <code>fun.aggregate</code>のように関数をグループごとに適用したい場合は
 <a href="/rstats/dplyr.html">dplyr</a>の<code>group_by()</code>と<code>summarise()</code>を使う。</p>
 
-<p>3次元以上の<code>array</code>を作りたいときは<code>reshape2::acast()</code>が便利。<br>
+<p>3次元以上のarrayを作りたいときは<code>reshape2::acast()</code>が便利。<br>
 e.g., <code>acast(data, x ~ y ~ z, dplyr::first, value.var='v', fill=0)</code></p>
 
 </div>
@@ -189,7 +189,7 @@ e.g., <code>acast(data, x ~ y ~ z, dplyr::first, value.var='v', fill=0)</code></
 
 <dl>
 <dt><code>data</code></dt>
-<dd><code>melt()</code> されたような形でカテゴリ変数を含む <code>data.frame</code></dd>
+<dd><code>melt()</code> されたような形でカテゴリ変数を含むdata.frame</dd>
 <dt><code>formula</code></dt>
 <dd><code>x_var ~ y_var ~ z_var ~ ...</code> のような形で出力形式を指定</dd>
 <dt><code>fun.aggregate=NULL</code></dt>
@@ -223,7 +223,7 @@ Aggregation function missing: defaulting to length
 3    231     231    231    231    231
 </code></pre>
 
-<p>グループごとの平均値を <code>data.frame</code> で</p>
+<p>グループごとの平均値をdata.frameで</p>
 
 <pre><code class="language-r">&gt; reshape2::dcast(molten, treatment ~ flavor, mean)
   treatment   potato  buttery    grassy   rancid   painty

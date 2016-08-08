@@ -125,11 +125,11 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
 <dd><p>グループごとに処理する。
 <code>{}</code> 内に長い処理を書いてもいいし、関数に渡してもよい。
 グループごとに切りだされた部分は <code>.</code> で参照できる。
-出力が <code>data.frame</code> じゃないと
+出力がdata.frameじゃないと
 <code>Error: Results are not data frames at positions: 1</code>
 のように怒られるが、
 <code>do(dummy=func(.))</code> のように名前付きにすると
-<code>data.frame</code> に入らないような型でも大丈夫になる。
+data.frameに入らないような型でも大丈夫になる。
 今後は<a href="/rstats/purrr.html"><code>purrr</code></a><code>::by_slice()</code>を使ったほうが良さそう。</p></dd>
 </dl>
 
@@ -207,7 +207,7 @@ iris %&gt;% dplyr::mutate(ln_sepal_length = log(Sepal.Length))
 3          4.7         3.2          1.3         0.2 setosa
 </code></pre></dd>
 <dt><code>dplyr::arrange(.data, column1, column2, ...)</code></dt>
-<dd><p>指定した列の昇順で <code>data.frame</code> の行を並べ替える。
+<dd><p>指定した列の昇順でdata.frameの行を並べ替える。
 <code>arrange(desc(column))</code> で降順になる。
 <code>order()</code> を使うよりもタイピングの繰り返しが少ないし直感的</p>
 
@@ -261,7 +261,7 @@ iris %&gt;% dplyr::mutate(ln_sepal_length = log(Sepal.Length))
 
 <p>列名が異なる場合は <code>by</code> を名前付きベクタにすればよい</p></dd>
 <dt><code>dplyr::bind_rows(...)</code>, <code>dplyr::bind_cols(...)</code></dt>
-<dd><p>標準の <code>rbind()</code>, <code>cbind()</code> より効率よく <code>data.frame</code> を結合。
+<dd><p>標準の <code>rbind()</code>, <code>cbind()</code> より効率よくdata.frameを結合。
 引数は個別でもリストでもよい。
 そのほかにも標準の集合関数を置き換えるものが提供されている:
 <code>intersect()</code>, <code>union()</code>, <code>union_all()</code>, <code>setdiff()</code>, <code>setequal()</code></p></dd>

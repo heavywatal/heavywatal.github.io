@@ -100,16 +100,16 @@ list or vector                    laply  ldply  llply  l_ply
 (Call a multi-argument function)  maply  mdply  mlply  m_ply
 </code></pre>
 
-<p>e.g. 複数ファイルを読み込んでひとつの <code>data.frame</code> にまとめる。
-<code>list</code> から <code>data.frame</code> を作るので <code>ldply()</code></p>
+<p>e.g. 複数ファイルを読み込んでひとつのdata.frameにまとめる。
+listからdata.frameを作るので <code>ldply()</code></p>
 
 <pre><code class="language-r">&gt; filenames = list.files(pattern='\\.csv$')
 &gt; large_table = ldply(filenames, read.csv)
 </code></pre>
 
-<p>e.g. <code>data.frame</code> についてある列の値でグループ化し、
+<p>e.g. data.frameについてある列の値でグループ化し、
 グループ毎に数値の列の平均を取る。
-<code>data.frame</code> から <code>data.frame</code> を作るので <code>ddply()</code></p>
+data.frameからdata.frameを作るので <code>ddply()</code></p>
 
 <pre><code class="language-r">&gt; ddply(iris, .(Species), numcolwise(mean))
      Species Sepal.Length Sepal.Width Petal.Length Petal.Width
@@ -135,16 +135,16 @@ list or vector                    laply  ldply  llply  l_ply
 <code>&quot;full&quot;</code>: <code>&quot;left&quot;</code> の結果の下に、<code>y</code> の残りの行を追加</dd>
 </dl></dd>
 <dt><code>plyr::join_all(dfs, by=NULL, type=&quot;left&quot;, match=&quot;all&quot;)</code></dt>
-<dd><p><code>list</code> に入った複数の <code>data.frame</code> を再帰的に <code>join()</code> する。</p></dd>
+<dd><p>listに入った複数のdata.frameを再帰的に <code>join()</code> する。</p></dd>
 <dt><code>plyr::rename(x, replace)</code></dt>
-<dd><p><code>data.frame</code> 列名などを <strong>部分的に</strong> 変更</p>
+<dd><p>data.frame列名などを <strong>部分的に</strong> 変更</p>
 
 <pre><code class="language-r"># replace引数には名前付き文字列vectorを与える
 # 古い名前が名前、新しい名前が値
 plyr::rename(.data, c(col_a = &quot;alpha&quot;, col_b = &quot;beta&quot;))
 </code></pre></dd>
 <dt><code>plyr::count(.data, vars=NULL, wt_var=NULL)</code></dt>
-<dd><p><code>data.frame</code> のなかで <code>vars</code> 列に関してユニークな行数をカウント。
+<dd><p>data.frameのなかで <code>vars</code> 列に関してユニークな行数をカウント。
 重み付けに使う列を <code>wt_var</code> に指定できる。</p></dd>
 <dt><code>plyr::colwise(.fun, .cols=true, ...)</code>,</dt>
 <dd><p>関数を列ごとに適用するものに変換する。
@@ -156,7 +156,7 @@ plyr::rename(.data, c(col_a = &quot;alpha&quot;, col_b = &quot;beta&quot;))
 <dd><p>同じ引数に対して複数の関数を並列に作用させる。 e.g. <code>each(min, max, mean)(1:10)</code>, <code>each(head, tail)(.data, n=10)</code></p></dd>
 <dt><code>plyr::splat(func)</code></dt>
 <dd><p>ひとつのリストや文字列ベクタでまとめて引数を受け取れるような関数に変換する。
-<code>do.call()</code> は <code>list</code> しか取らないがこちらは名前付きベクタも可</p>
+<code>do.call()</code> はlistしか取らないがこちらは名前付きベクタも可</p>
 
 <pre><code class="language-r">&gt; params = c(by=2, length=4)
 &gt; splat(seq)(params)
