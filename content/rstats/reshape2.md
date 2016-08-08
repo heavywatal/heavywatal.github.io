@@ -9,10 +9,10 @@ tags = ["r", "hadley"]
 
 {{%div class="warning"%}}
 `reshape2`はもう古い。
-`data.frame`を処理をするなら、同じ作者が新しく設計しなおした
+data.frameを処理をするなら、同じ作者が新しく設計しなおした
 [tidyr]({{< relref "tidyr.md" >}}) + [dplyr]({{< relref "dplyr.md" >}})
 のほうがより高速で洗練されているのでそちらを使おう。
-ただし3次元以上の`array`を扱うにはまだ便利。
+ただし3次元以上のarrayを扱うにはまだ便利。
 {{%/div%}}
 
 -   <http://had.co.nz/reshape/>
@@ -22,17 +22,17 @@ tags = ["r", "hadley"]
 
 ## `melt()`
 
-`data.frame` の複数列の値を、カテゴリ変数1列と値1列の組に変換する。
-これにより、変換する列数の分だけ `data.frame` が縦長(long-format)になる。
+data.frameの複数列の値を、カテゴリ変数1列と値1列の組に変換する。
+これにより、変換する列数の分だけdata.frameが縦長(long-format)になる。
 やや冗長性は増すが、[ggplot2]({{< relref "ggplot2.md" >}}) での作図などさまざまな操作がしやすくなる。
 
 {{%div class="note"%}}
 この用途ならこれじゃなくて
 [tidyr]({{< relref "tidyr.md" >}})の`gather()`を使おう。
 
-`array`対象ならまだ使い道はある。
-例えば3次元`array`を `melt(arr, c('x', 'y', 'z'))`
-として3列の`matrix`に戻せるのは便利。
+array対象ならまだ使い道はある。
+例えば3次元arrayを `melt(arr, c('x', 'y', 'z'))`
+として3列のmatrixに戻せるのは便利。
 See `?reshape2:::melt.array`.
 {{%/div%}}
 
@@ -43,7 +43,7 @@ reshape2::melt(data, id.vars, measure.vars,
 ```
 
 `data`
-:   `data.frame`
+:   data.frame
 
 `id.vars`
 :   そのまま列として維持したい列名を文字列で指定。
@@ -105,7 +105,7 @@ reshape2::melt(data, id.vars, measure.vars,
 
 ## `dcast()`
 
-カテゴリ変数を含む `data.frame` を `melt()` と逆方向に
+カテゴリ変数を含むdata.frameを `melt()` と逆方向に
 (long-formatからwide-formatへ)整形する。
 
 {{%div class="note"%}}
@@ -114,7 +114,7 @@ reshape2::melt(data, id.vars, measure.vars,
 `fun.aggregate`のように関数をグループごとに適用したい場合は
 [dplyr]({{< relref "dplyr.md" >}})の`group_by()`と`summarise()`を使う。
 
-3次元以上の`array`を作りたいときは`reshape2::acast()`が便利。\
+3次元以上のarrayを作りたいときは`reshape2::acast()`が便利。\
 e.g., `acast(data, x ~ y ~ z, dplyr::first, value.var='v', fill=0)`
 {{%/div%}}
 
@@ -125,7 +125,7 @@ reshape2::dcast(data, formula, fun.aggregate=NULL, ...,
 ```
 
 `data`
-:   `melt()` されたような形でカテゴリ変数を含む `data.frame`
+:   `melt()` されたような形でカテゴリ変数を含むdata.frame
 
 `formula`
 :   `x_var ~ y_var ~ z_var ~ ...` のような形で出力形式を指定
@@ -164,7 +164,7 @@ Aggregation function missing: defaulting to length
 3    231     231    231    231    231
 ```
 
-グループごとの平均値を `data.frame` で
+グループごとの平均値をdata.frameで
 
 ```r
 > reshape2::dcast(molten, treatment ~ flavor, mean)

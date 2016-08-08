@@ -34,17 +34,17 @@ list, vector 処理には [purrr]({{< relref "purrr.md" >}})
     (Replicates evaluation)           raply  rdply  rlply  r_ply
     (Call a multi-argument function)  maply  mdply  mlply  m_ply
 
-e.g. 複数ファイルを読み込んでひとつの `data.frame` にまとめる。
-`list` から `data.frame` を作るので `ldply()`
+e.g. 複数ファイルを読み込んでひとつのdata.frameにまとめる。
+listからdata.frameを作るので `ldply()`
 
 ```r
 > filenames = list.files(pattern='\\.csv$')
 > large_table = ldply(filenames, read.csv)
 ```
 
-e.g. `data.frame` についてある列の値でグループ化し、
+e.g. data.frameについてある列の値でグループ化し、
 グループ毎に数値の列の平均を取る。
-`data.frame` から `data.frame` を作るので `ddply()`
+data.frameからdata.frameを作るので `ddply()`
 
 ```r
 > ddply(iris, .(Species), numcolwise(mean))
@@ -68,10 +68,10 @@ e.g. `data.frame` についてある列の値でグループ化し、
         `"full"`: `"left"` の結果の下に、`y` の残りの行を追加
 
 `plyr::join_all(dfs, by=NULL, type="left", match="all")`
-:   `list` に入った複数の `data.frame` を再帰的に `join()` する。
+:   listに入った複数のdata.frameを再帰的に `join()` する。
 
 `plyr::rename(x, replace)`
-:   `data.frame` 列名などを **部分的に** 変更
+:   data.frame列名などを **部分的に** 変更
 
     ```r
     # replace引数には名前付き文字列vectorを与える
@@ -80,7 +80,7 @@ e.g. `data.frame` についてある列の値でグループ化し、
     ```
 
 `plyr::count(.data, vars=NULL, wt_var=NULL)`
-:   `data.frame` のなかで `vars` 列に関してユニークな行数をカウント。
+:   data.frameのなかで `vars` 列に関してユニークな行数をカウント。
     重み付けに使う列を `wt_var` に指定できる。
 
 `plyr::colwise(.fun, .cols=true, ...)`,
@@ -95,7 +95,7 @@ e.g. `data.frame` についてある列の値でグループ化し、
 
 `plyr::splat(func)`
 :   ひとつのリストや文字列ベクタでまとめて引数を受け取れるような関数に変換する。
-    `do.call()` は `list` しか取らないがこちらは名前付きベクタも可
+    `do.call()` はlistしか取らないがこちらは名前付きベクタも可
 
     ```r
     > params = c(by=2, length=4)

@@ -88,12 +88,12 @@ BioMartからプログラマチックにデータを取得するための [Bioco
     インターフェイスがあまり洗練されてない印象だなぁ...。
 
 `getSequence(chromosome, start, end, id, type, seqType, upstream, downstream, mart)`
-:   Sequencesページのデータをダウンロードすることに特化した `getBM()` ラッパー。 結果は2列(配列とID)の `data.frame`。\
+:   Sequencesページのデータをダウンロードすることに特化した `getBM()` ラッパー。 結果は2列(配列とID)の data.frame。\
     **seqType**: `gene_exon`, `transcript_exon`, `transcript_exon_intron`, `gene_exon_intron`, `cdna`, `coding`, `coding_transcript_flank`, `coding_gene_flank`, `transcript_flank`, `gene_flank`, `peptide`, `3utr`, `5utr`
 
 `getGene(id, type, mart)`
 :   IDを指定して遺伝子情報をダウンロードすることに特化した `getBM()` ラッパー。
-    得られる `data.frame` は9列:
+    得られるdata.frameは9列:
     指定したID, `external_gene_id`, `description`, `chromosome_name`,
     `band`, `strand`, `start_position`, `end_position`, `ensembl_gene_id`
 

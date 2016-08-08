@@ -149,9 +149,9 @@ func = function(x, y, ...){
 }
 ```
 
-## 1列でも `matrix` のまま
+## 1列でもmatrixのまま
 
-`matrix` から添字で1行だけ取ると、自動で `vector` にしてくれる。
+matrixから添字で1行だけ取ると、自動でvectorにしてくれる。
 大抵はそれでいいんだけど、そうしてほしくないときは `drop=FALSE`
 
 ```r
@@ -215,7 +215,7 @@ with(iris, {
 
 -   2.11.0 64bit化
 -   2.14.0 すべての標準パッケージがバイトコンパイルされている
--   2.15.? `data.frame` の操作が劇的に速くなった
+-   2.15.? data.frameの操作が劇的に速くなった
 
 ### ベクトル化されてる関数・演算子を使う
 
@@ -228,12 +228,12 @@ with(iris, {
 +        ifelse(vec %% 5, 'fizz', 'fizzbuzz'))
 ```
 
-### `list`, `data.frame`, `matrix`
+### list, data.frame, matrix
 
 -   [dplyr]({{< relref "dplyr.md" >}}), [purrr]({{< relref "purrr.md" >}}),
     [tidyr]({{< relref "tidyr.md" >}}) を介して操作すると楽チンかつ高速。
--   基本的に `list` や `data.frame` は遅いので、
-    `matrix` で済むもの(数値のみの表など)は `matrix` で。
+-   基本的にlistやdata.frameは遅いので、
+    matrixで済むもの(数値のみの表など)はmatrixで。
 
 ### 並列化
 

@@ -9,7 +9,7 @@ tags = ["r", "hadley"]
 
 https://cran.r-project.org/package=readr
 
-タブ区切りテキストやCSVファイルを読み込んで `data.frame` にするツール。
+タブ区切りテキストやCSVファイルを読み込んでdata.frameにするツール。
 圧縮された `***.tsv.gz` なども自動的に展開して読んでくれる。
 標準でも `read.table()` や `read.csv()` があるけど、それらと違って
 

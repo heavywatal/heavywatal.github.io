@@ -65,11 +65,11 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
 :   グループごとに処理する。
     `{}` 内に長い処理を書いてもいいし、関数に渡してもよい。
     グループごとに切りだされた部分は `.` で参照できる。
-    出力が `data.frame` じゃないと
+    出力がdata.frameじゃないと
     `Error: Results are not data frames at positions: 1`
     のように怒られるが、
     `do(dummy=func(.))` のように名前付きにすると
-    `data.frame` に入らないような型でも大丈夫になる。
+    data.frameに入らないような型でも大丈夫になる。
     今後は[`purrr`]({{< relref "purrr.md" >}})`::by_slice()`を使ったほうが良さそう。
 
 ## コア関数 (verb)
@@ -153,7 +153,7 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
     ```
 
 `dplyr::arrange(.data, column1, column2, ...)`
-:   指定した列の昇順で `data.frame` の行を並べ替える。
+:   指定した列の昇順でdata.frameの行を並べ替える。
     `arrange(desc(column))` で降順になる。
     `order()` を使うよりもタイピングの繰り返しが少ないし直感的
     ```r
@@ -210,7 +210,7 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
     列名が異なる場合は `by` を名前付きベクタにすればよい
 
 `dplyr::bind_rows(...)`, `dplyr::bind_cols(...)`
-:   標準の `rbind()`, `cbind()` より効率よく `data.frame` を結合。
+:   標準の `rbind()`, `cbind()` より効率よくdata.frameを結合。
     引数は個別でもリストでもよい。
     そのほかにも標準の集合関数を置き換えるものが提供されている:
     `intersect()`, `union()`, `union_all()`, `setdiff()`, `setequal()`
