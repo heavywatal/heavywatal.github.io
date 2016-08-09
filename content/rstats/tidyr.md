@@ -149,6 +149,9 @@ iris %>% nest(matches('Length$|Width$'))
 [dplyr]({{< relref "dplyr.md" >}})を適用するより、
 ネストしておいて[purrr]({{< relref "purrr.md" >}})を適用するほうが楽チンな場合もある。
 
+cf. [Hadley Wickham: Managing many models with R (YouTube)](https://www.youtube.com/watch?v=rz3_FDVt9eg)
+
+
 ### `tidyr::unnest(data, ..., .drop=NA, id=NULL, .sep=NULL)`
 
 ネストされたdata.frameを展開してフラットにする。
