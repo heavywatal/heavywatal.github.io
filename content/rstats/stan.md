@@ -211,6 +211,19 @@ m[1]   // row_vector[3]
 
 対数尤度の値を確認したいときは `print("log_prob: ", target())`
 
+## 可視化
+
+http://www.rdocumentation.org/packages/rstan/topics/Plots
+
+```r
+rstan::stan_plot()
+rstan::stan_trace()
+rstan::stan_scat()
+rstan::stan_hist()
+rstan::stan_dens()
+rstan::stan_ac()
+```
+
 ## トラブル対処
 
 ### StanHeaders version is ahead of rstan version
