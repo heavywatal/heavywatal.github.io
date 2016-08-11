@@ -141,7 +141,7 @@ vignettes/
 
     -   <http://r-pkgs.had.co.nz/man.html>
     -   <http://kbroman.org/pkg_primer/pages/docs.html>
-    -   <http://cran.r-project.org/web/packages/roxygen2/vignettes/rd.html>
+    -   <https://cran.r-project.org/web/packages/roxygen2/vignettes/rd.html>
 
 ### C++ソースコード
 

@@ -7,7 +7,7 @@ tags = ["r", "hadley"]
   weight = -60
 +++
 
--   <http://cran.r-project.org/web/packages/stringr/>
+-   <https://cran.r-project.org/web/packages/stringr/>
 -   <https://github.com/hadley/stringr>
 -   <http://www.rdocumentation.org/packages/stringr>
 
@@ -19,10 +19,10 @@ R標準の `base` パッケージが提供する関数とほとんど同じ機�
     -   長さゼロのオブジェクトを引数として与えた場合には長さゼロの結果を返す
     -   引数オブジェクトに `NA` が含まれる場合はその部分の結果を `NA` とする
 -   対象文字列が一貫して第一引数
--   [stringi](http://www.rexamine.com/resources/stringi/) を使って動くため高速
+-   [stringi](http://www.gagolewski.com/software/stringi/) を使って動くため高速
 -   [ICU正規表現](http://userguide.icu-project.org/strings/regexp)
 
-今や `stringr` は [stringi](http://www.rexamine.com/resources/stringi/) のラッパーだし、
+今や `stringr` は [stringi](http://www.gagolewski.com/software/stringi/) のラッパーだし、
 どちらもほぼ同じインターフェイスなので、
 もし前者に不足があれば後者を直接使えばよいが、
 普通に使う分にはそんな場面には出くわさない。

@@ -11,14 +11,14 @@ tags = ["r", "graph"]
 -   [Project Homepage](http://rgl.neoscientists.org/)
 -   [R-tips](http://cse.naro.affrc.go.jp/takezawa/r-tips/r/57.html)
 -   <https://cran.r-project.org/web/packages/rgl/vignettes/rgl.html>
--   <http://cran.r-project.org/web/packages/rgl/>
+-   <https://cran.r-project.org/web/packages/rgl/>
 -   <http://www.rdocumentation.org/packages/rgl>
 
 {{%div class="note"%}}
 なんかAPIもガチャガチャだしドキュメントも結構いい加減なので、
 JavaScript+WebGLベースの
 [plotly](https://plot.ly/r/) や
-[threejs](http://bwlewis.github.io/rthreejs/)
+[threejs](https://bwlewis.github.io/rthreejs/)
 を使ったほうがいいかも。
 科学プロット用のOpenGLラッパーとしてはPythonの[VisPy](http://vispy.org/)が将来有望。
 {{%/div%}}

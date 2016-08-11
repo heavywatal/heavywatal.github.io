@@ -9,7 +9,7 @@ tags = ["r", "hadley"]
 
 -   <https://github.com/hadley/tidyr>
 -   <http://rpubs.com/m_dev/tidyr-intro-and-demos>
--   <http://blog.rstudio.org/2014/07/22/introducing-tidyr/>
+-   <https://blog.rstudio.org/2014/07/22/introducing-tidyr/>
 -   `vignette("tidy-data")`
 -   `demo(package="tidyr")`
 

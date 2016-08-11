@@ -6,11 +6,11 @@ tags = ["r", "bioconductor"]
   weight = -35
 +++
 
-<http://www.bioconductor.org/packages/devel/bioc/html/rtracklayer.html>
+<https://www.bioconductor.org/packages/devel/bioc/html/rtracklayer.html>
 
 ## 読み書き
 
-<http://genome.ucsc.edu/FAQ/FAQformat.html>
+<https://genome.ucsc.edu/FAQ/FAQformat.html>
 
 GFF, BED, bedGraph, BED15, WIG, BigWig, 2bit &lt;---&gt; `GRanges`, `GRangesList`
 

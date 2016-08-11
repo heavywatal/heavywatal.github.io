@@ -8,9 +8,9 @@ tags = ["r"]
 
 ## 確率分布
 
-<http://cran.r-project.org/web/views/Distributions.html>
+<https://cran.r-project.org/web/views/Distributions.html>
 
-<http://en.wikibooks.org/wiki/R_Programming/Probability_Distributions>
+<https://en.wikibooks.org/wiki/R_Programming/Probability_Distributions>
 
 ### 関数の種類
 

@@ -12,7 +12,7 @@ tags = ["r", "bioconductor", "graph"]
 Yin, Cook, and Lawrence (2012)
 ggbio: an R package for extending the grammar of graphics for genomic data.
 *Genome Biology* 13:R77
-<http://www.ncbi.nlm.nih.gov/pubmed/22937822>
+<https://www.ncbi.nlm.nih.gov/pubmed/22937822>
 
 [Bioconductor]({{< relref "bioconductor.md" >}}) を読み込んでインストール
 

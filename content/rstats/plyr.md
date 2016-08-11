@@ -10,7 +10,7 @@ tags = ["r", "hadley"]
 -   <http://plyr.had.co.nz/>
 -   <http://www.jstatsoft.org/v40/i01>
 -   <http://www.rdocumentation.org/packages/plyr>
--   <http://cran.r-project.org/web/packages/plyr/index.html>
+-   <https://cran.r-project.org/web/packages/plyr/index.html>
 
 Split, Apply, Combine
 :   特定の条件でデータを分割し、それぞれに関数を適用し、再びそれを統合する。

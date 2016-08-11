@@ -8,9 +8,9 @@ tags = ["r", "hadley"]
 +++
 
 -   <https://github.com/hadley/dplyr>
--   <http://cran.r-project.org/web/packages/dplyr/vignettes/introduction.html>
--   <http://blog.rstudio.org/2014/01/17/introducing-dplyr/>
--   <http://www.rstudio.com/resources/cheatsheets/>
+-   <https://cran.r-project.org/web/packages/dplyr/vignettes/introduction.html>
+-   <https://blog.rstudio.org/2014/01/17/introducing-dplyr/>
+-   <https://www.rstudio.com/resources/cheatsheets/>
 
 data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(summarise)、ソート(arrange)などの処理を施すためのパッケージ。
 前作 [plyr]({{< relref "plyr.md" >}}) のうちdata.frameに関する部分を抜き出して強化したパッケージ。

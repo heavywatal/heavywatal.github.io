@@ -12,7 +12,7 @@ tags = ["r", "bioconductor"]
 Robinson MD, McCarthy DJ, Smyth GK (2010)
 "edgeR: a Bioconductor package for differential expression analysis of digital gene expression data."
 *Bioinformatics* **26** (1):139--140
-<http://www.ncbi.nlm.nih.gov/pubmed/19910308>
+<https://www.ncbi.nlm.nih.gov/pubmed/19910308>
 
 [Bioconductor]({{< relref "bioconductor.md" >}}) パッケージとしてインストール
 

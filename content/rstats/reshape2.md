@@ -16,7 +16,7 @@ data.frameを処理をするなら、同じ作者が新しく設計しなおし�
 {{%/div%}}
 
 -   <http://had.co.nz/reshape/>
--   <http://cran.r-project.org/web/packages/reshape2/>
+-   <https://cran.r-project.org/web/packages/reshape2/>
 -   <http://www.rdocumentation.org/packages/reshape2>
 -   <http://seananderson.ca/2013/10/19/reshape.html>
 

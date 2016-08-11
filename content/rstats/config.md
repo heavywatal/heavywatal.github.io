@@ -22,7 +22,7 @@ https://cran.r-project.org/doc/manuals/R-admin.html
 ターミナルからリポジトリを追加して
 
 ```sh
-sudo sh -c 'echo "deb http://cran.rstudio.com/bin/linux/ubuntu $(lsb_release -cs)/" > /etc/apt/sources.list.d/cran-mirror.list'
+sudo sh -c 'echo "deb https://cran.rstudio.com/bin/linux/ubuntu $(lsb_release -cs)/" > /etc/apt/sources.list.d/cran-mirror.list'
 gpg --keyserver keyserver.ubuntu.com --recv-key E084DAB9
 gpg -a --export E084DAB9 | sudo apt-key add -
 sudo apt-get --quiet update
@@ -43,11 +43,11 @@ https://cran.r-project.org/doc/manuals/R-intro.html#Invoking-R
 
 https://cran.r-project.org/doc/manuals/R-admin.html#Environment-variable-index
 
-http://stat.ethz.ch/R-manual/R-patched/library/base/html/EnvVar.html
+https://stat.ethz.ch/R-manual/R-patched/library/base/html/EnvVar.html
 
 ## .Renviron
 
-<http://stat.ethz.ch/R-manual/R-patched/library/base/html/Startup.html>
+<https://stat.ethz.ch/R-manual/R-patched/library/base/html/Startup.html>
 
 R起動時に読み込まれ、環境変数を設定するファイル。
 Rスクリプトではなく、シェルスクリプトっぽい代入式で書く。
@@ -80,7 +80,7 @@ Rスクリプトではなく、シェルスクリプトっぽい代入式で書�
 
 https://cran.r-project.org/doc/manuals/R-intro.html#Customizing-the-environment
 
-<http://stat.ethz.ch/R-manual/R-patched/library/base/html/options.html>
+<https://stat.ethz.ch/R-manual/R-patched/library/base/html/options.html>
 
 R起動時に読み込まれるファイル。
 中身はRスクリプトなので、パッケージの読み込みや関数の定義など、Rでできることは何でもできるはず。

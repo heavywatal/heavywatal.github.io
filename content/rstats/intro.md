@@ -10,11 +10,10 @@ tags = ["r"]
 
 -   [R-Tips](http://cse.naro.affrc.go.jp/takezawa/r-tips/r.html)
 -   [RjpWiki](http://www.okada.jp.org/RWiki/)
--   <http://www.google.com/>
 -   <http://seekr.jp/> --- Googleカスタム検索 for R
 -   <http://www.rseek.org/> --- Google Custom Search for R
--   <http://www.r-bloggers.com/>
--   <http://cran.r-project.org/web/views/>
+-   <https://www.r-bloggers.com/>
+-   <https://cran.r-project.org/web/views/>
 -   <http://www.rdocumentation.org/>
 
 ## スクリプトを保存
@@ -96,7 +95,7 @@ Rの中から下記のようなコマンドでインストールする
 などは標準になってもいいくらい便利。
 
 そのほか
-<http://cran.r-project.org/web/views/>
+<https://cran.r-project.org/web/views/>
 で用途別に紹介されている。
 
 ## 作業ディレクトリ

@@ -7,7 +7,7 @@ tags = ["r", "bioconductor"]
   weight = -33
 +++
 
-<http://www.bioconductor.org/packages/release/bioc/html/biomaRt.html>
+<https://www.bioconductor.org/packages/release/bioc/html/biomaRt.html>
 
 <http://qiita.com/yuifu/items/a757629506c1cd98156b>
 

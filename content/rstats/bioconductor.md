@@ -10,7 +10,8 @@ tags = ["r", "bioconductor"]
 <a href="http://www.amazon.co.jp/exec/obidos/ASIN/4621062506/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41aQBFtkgBL._SX160_.jpg" alt="RとBioconductorを用いたバイオインフォマティクス" /></a>
 <a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320057082/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51yBjAPptKL._SX160_.jpg" alt="Rによるバイオインフォマティクスデータ解析 第2版 －Bioconductorを用いたゲノムスケールのデータマイニング－" /></a>
 <a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320123700/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41aoEmhUR0L._SX160_.jpg" alt="トランスクリプトーム解析 (シリーズ Useful R 7)" /></a>
-<http://www.bioconductor.org>
+
+<https://www.bioconductor.org>
 
 <http://blog.hackingisbelieving.org/2010/09/r-package_06.html>
 
@@ -24,9 +25,9 @@ tags = ["r", "bioconductor"]
 
 ### インストール
 
-<http://www.bioconductor.org/install/>
+<https://www.bioconductor.org/install/>
 
-1.  R 本体をインストール <http://cran.rstudio.com/>
+1.  R 本体をインストール <https://cran.rstudio.com/>
 2.  R の中でコマンドを実行
 
     ```r
@@ -57,7 +58,7 @@ RSQLite
 R を立ち上げる度に読み込み＆アップデート
 
 ```r
-source("http://bioconductor.org/biocLite.R")
+source("https://bioconductor.org/biocLite.R")
 biocLite()
 ```
 
@@ -77,12 +78,12 @@ library(ggbio)
 ```
 
 一覧
-:   <http://www.bioconductor.org/packages/release/bioc/>\
-    <http://www.bioconductor.org/packages/release/data/annotation/>\
-    <http://www.bioconductor.org/packages/release/data/experiment/>
+:   <https://www.bioconductor.org/packages/release/bioc/>\
+    <https://www.bioconductor.org/packages/release/data/annotation/>\
+    <https://www.bioconductor.org/packages/release/data/experiment/>
 
 検索
-:   <http://www.bioconductor.org/packages/release/BiocViews.html>
+:   <https://www.bioconductor.org/packages/release/BiocViews.html>
 
 使い方を調べる
 
@@ -93,7 +94,7 @@ browseVignettes(package='Biostrings')
 
 ## `Biostrings`
 
-<http://www.bioconductor.org/packages/release/bioc/html/Biostrings.html>
+<https://www.bioconductor.org/packages/release/bioc/html/Biostrings.html>
 
 ### クラス
 
@@ -203,7 +204,7 @@ bss = readDNAStringSet(.file)
 
 ## `GenomicRanges`
 
-<http://www.bioconductor.org/packages/release/bioc/html/GenomicRanges.html>
+<https://www.bioconductor.org/packages/release/bioc/html/GenomicRanges.html>
 
 <http://qiita.com/yuifu/items/556af5d4d086c96ec783>
 
@@ -284,7 +285,7 @@ bss = readDNAStringSet(.file)
 
 ## `GenomicFeatures`
 
-<http://www.bioconductor.org/packages/release/bioc/html/GenomicFeatures.html>
+<https://www.bioconductor.org/packages/release/bioc/html/GenomicFeatures.html>
 
 <http://qiita.com/yuifu/items/4bab5f713aa75bd18a84>
 
@@ -336,7 +337,7 @@ txdb = TxDb.Scerevisiae.UCSC.sacCer3.sgdGene
 
 ## `BSgenome`
 
-<http://www.bioconductor.org/packages/release/bioc/html/BSgenome.html>
+<https://www.bioconductor.org/packages/release/bioc/html/BSgenome.html>
 
 インストール、利用
 
@@ -418,7 +419,7 @@ bsg[[1]]
 
 ### データパッケージを作る
 
-<http://www.bioconductor.org/packages/release/bioc/vignettes/BSgenome/inst/doc/BSgenomeForge.pdf>
+<https://www.bioconductor.org/packages/release/bioc/vignettes/BSgenome/inst/doc/BSgenomeForge.pdf>
 
 1.  染色体ごとのFASTAファイルを用意する e.g. Ensemblから `*.chromosome.*.fa.gz` をダウンロードして展開
 
@@ -461,7 +462,7 @@ bsg[[1]]
 
 ## `VariantAnnotation`
 
-<http://www.bioconductor.org/packages/release/bioc/html/VariantAnnotation.html>
+<https://www.bioconductor.org/packages/release/bioc/html/VariantAnnotation.html>
 
 ### クラス
 
@@ -508,7 +509,7 @@ bsg[[1]]
 
 `GEOquery`
 
-<http://www.bioconductor.org/packages/release/bioc/html/GEOquery.html>
+<https://www.bioconductor.org/packages/release/bioc/html/GEOquery.html>
 
 ## モチーフ検索
 

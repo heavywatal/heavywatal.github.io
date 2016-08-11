@@ -7,12 +7,12 @@ tags = ["r", "bioconductor"]
   weight = -30
 +++
 
-<http://www.bioconductor.org/packages/release/bioc/html/topGO.html>
+<https://www.bioconductor.org/packages/release/bioc/html/topGO.html>
 
 Rの中からインストール
 
 ```r
-source("http://bioconductor.org/biocLite.R")
+source("https://bioconductor.org/biocLite.R")
 biocLite('topGO')
 ```
 
