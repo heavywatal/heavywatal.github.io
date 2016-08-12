@@ -90,27 +90,26 @@ https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/FAQ.md
     coreutils
     doxygen
     emacs
-    fftw
     findutils
     gcc
     gibo
-    git --without-completions
+    git
     gnu-sed
     gnu-tar
     gnuplot
-    graphviz --with-bindings
+    graphviz
     gsl
-    jags
     lesspipe
     mercurial
     nkf
+    pandoc
     rmtrash
     tmux
     tree
     wakeonlan
     wget
     xz
-    zsh --without-etcdir
+    zsh
     zsh-completions
 
 {{%div class="note"%}}
@@ -181,6 +180,7 @@ https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/Interesting-Taps
         mafft
         paml
         phylip
+        r
         repeatmasker
         samtools
         snpeff
@@ -219,6 +219,6 @@ dia, dropbox, evernote, firefox, gephi,
 google-chrome, google-drive, google-earth, google-japanese-ime,
 inkscape, iterm2, karabiner, kindle, libreoffice,
 macfusion, megasync, mendeley-desktop,
-onyx, openoffice, osxfuse, pandoc, quicksilver,
-r, rstudio, seashore, skim, skitch, skype, spideroakone, sshfs,
+onyx, openoffice, osxfuse, quicksilver,
+rstudio, seashore, skim, skitch, skype, spideroakone, sshfs,
 the-unarchiver, vlc, yujitach-menumeters
