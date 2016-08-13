@@ -180,12 +180,16 @@ https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/Interesting-Taps
         mafft
         paml
         phylip
-        r
         repeatmasker
         samtools
         snpeff
         tophat
         varscan
+
+    {{%div class="note"%}}
+Rもここから入れられるが、
+パッケージ関連の面倒を考えると普通にpkgから入れたほうがよさそう。
+{{%/div%}}
 
 -   `brew tap homebrew/python` - <https://github.com/Homebrew/homebrew-python>\
     ライブラリ依存性などにより [pip]({{< relref "python/pip.md" >}})
