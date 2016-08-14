@@ -6,14 +6,14 @@ tags = ["python"]
   parent = "python"
 +++
 
-<http://www.scipy.org/>
+<https://www.scipy.org/>
 
 ## Installation
 
-<http://www.scipy.org/install.html>\
-<http://www.scipy.org/scipylib/download.html>\
-<http://www.scipy.org/scipylib/building/>\
-<http://docs.scipy.org/doc/numpy/user/install.html>
+<https://www.scipy.org/install.html>\
+<https://www.scipy.org/scipylib/download.html>\
+<https://www.scipy.org/scipylib/building/>\
+<https://docs.scipy.org/doc/numpy/user/install.html>
 
 1.  [Homebrew]({{< relref "mac/homebrew.md" >}}) などで `gfortran` をインストール:
 
@@ -51,11 +51,11 @@ BLAS/LAPACK関連の確認:
 
 <https://pypi.python.org/pypi/numpy>\
 <http://www.numpy.org/>\
-<http://docs.scipy.org/doc/numpy/reference/>
+<https://docs.scipy.org/doc/numpy/reference/>
 
 ### `ndarray` クラス
 
-<http://docs.scipy.org/doc/numpy/reference/arrays.ndarray.html>
+<https://docs.scipy.org/doc/numpy/reference/arrays.ndarray.html>
 
 N次元配列
 
@@ -63,38 +63,38 @@ N次元配列
 
 `numpy.matrix` クラスはそれを2D行列に特殊化したもの
 
-<http://docs.scipy.org/doc/numpy/reference/routines.matlib.html>
+<https://docs.scipy.org/doc/numpy/reference/routines.matlib.html>
 
 ### Universal functions (`ufunc`)
 
-<http://docs.scipy.org/doc/numpy/reference/ufuncs.html#available-ufuncs>
+<https://docs.scipy.org/doc/numpy/reference/ufuncs.html#available-ufuncs>
 
 `ndarray` に対して効率よく element-wise な演算をする関数
 
 ### Routine
 
-<http://docs.scipy.org/doc/numpy/reference/routines.html>
+<https://docs.scipy.org/doc/numpy/reference/routines.html>
 
 `ndarray` を作ったり操作したりする関数全般
 
-<http://docs.scipy.org/doc/numpy/reference/routines.array-creation.html>
+<https://docs.scipy.org/doc/numpy/reference/routines.array-creation.html>
 
-<http://docs.scipy.org/doc/numpy/reference/routines.array-manipulation.html>
+<https://docs.scipy.org/doc/numpy/reference/routines.array-manipulation.html>
 
-<http://docs.scipy.org/doc/numpy/reference/routines.math.html>
+<https://docs.scipy.org/doc/numpy/reference/routines.math.html>
 
-<http://docs.scipy.org/doc/numpy/reference/routines.random.html>
+<https://docs.scipy.org/doc/numpy/reference/routines.random.html>
 
 ## `SciPy`
 
 高度な科学技術計算ライブラリ
 
 <https://pypi.python.org/pypi/scipy>\
-<http://www.scipy.org/scipylib/index.html>\
-<http://docs.scipy.org/doc/scipy/reference/>
+<https://www.scipy.org/scipylib/index.html>\
+<https://docs.scipy.org/doc/scipy/reference/>
 
 ### `scipy.stats`
 
-<http://docs.scipy.org/doc/scipy/reference/tutorial/stats.html>
+<https://docs.scipy.org/doc/scipy/reference/tutorial/stats.html>
 
-<http://docs.scipy.org/doc/scipy/reference/stats.html>
+<https://docs.scipy.org/doc/scipy/reference/stats.html>
