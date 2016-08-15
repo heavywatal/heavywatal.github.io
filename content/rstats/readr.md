@@ -56,6 +56,9 @@ Rの中から `install.packages('readr')` でインストールし、
 書き出し用の関数 `write_***()` も一応付いているが、
 まだ圧縮ファイルを書き出せないので微妙。
 
+`parse_number(x, na=c('', 'NA'), locale=default_locale())`
+:   文字列ベクタから数値を抜き出す。
+
 
 ## 列の型を指定する
 

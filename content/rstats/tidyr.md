@@ -223,12 +223,39 @@ Source: local data frame [12 x 5]
 を使えば正規表現でもっと細かく指定できる。
 
 名前の似てる `tidyr::extract_numeric(x)` は
-文字列から数字部分を抜き出して `numeric` で返す関数。
+文字列から数字部分をnumericとして抜き出す関数だったが今はdeprecatedなので、
+新しい[`readr::parse_number()`]({{< relref "readr.md" >}})を使うべし。
 
-### `tidyr::expand()`
+### `tidyr::complete(data, ..., fill=list())`
 
-`base::expand.grid()` のラッパー。
-指定した列の全ての組み合わせが登場するように、欠損値 `NA` の入った行を挿入する。
+指定した列の全ての組み合わせが登場するように、
+指定しなかった列に欠損値`NA`(あるいは任意の値)を補完した行を挿入する。
+
+```r
+df %>% complete(key1, key2, fill=list(val1=0, val2='-'))
+```
+
+### `tidyr::expand(data, ...)`
+
+指定した列の全ての組み合わせが登場するような新しいdata.frameを作る。
+全ての列を指定すれば`complete()`と同じ効果だが、
+指定しなかった列が消えるという点では異なる。
+
+`crossing(...)`はvectorを引数に取る亜種で、
+tibble版`expand.grid(...)`のようなもの。
+
+`nesting(...)`は存在するユニークな組み合わせのみ残す、
+`nest(data, ...) %>>% dplyr::select(-data)`のショートカット。
+この結果は`expand()`や`complete()`の引数としても使える。
+
+数値vectorの補完には`full_seq(x, period)`が便利。
+
+
+### `tidyr::drop_na(data, ...)`
+
+`complete()`の逆。
+指定した列に`NA`が含まれてる行を削除する。
+何も指定しなければ標準の `data[complete.cases(data),]` と同じ。
 
 ### `tidyr::replace_na()`
 
@@ -239,14 +266,9 @@ Source: local data frame [12 x 5]
 df %>% replace_na(list(x=0, y='unknown'))
 ```
 
-### `tidyr::complete()`
+逆に、特定の値を`NA`にしたい場合は
+[`dplyr::na_if()`]({{< relref "dplyr.md" >}})
 
-指定した列の全ての組み合わせが登場するように、
-他の列を `NA` などにして補完する
-
-```r
-df %>% complete(col1, col2, fill=list(col1=0, col2='-'))
-```
 
 ### `tidyr::fill()`
 
