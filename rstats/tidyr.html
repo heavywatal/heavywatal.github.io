@@ -268,12 +268,37 @@ Source: local data frame [12 x 5]
 を使えば正規表現でもっと細かく指定できる。</p>
 
 <p>名前の似てる <code>tidyr::extract_numeric(x)</code> は
-文字列から数字部分を抜き出して <code>numeric</code> で返す関数。</p>
+文字列から数字部分をnumericとして抜き出す関数だったが今はdeprecatedなので、
+新しい<a href="/rstats/readr.html"><code>readr::parse_number()</code></a>を使うべし。</p>
 
-<h3 id="tidyr-expand"><code>tidyr::expand()</code></h3>
+<h3 id="tidyr-complete-data-fill-list"><code>tidyr::complete(data, ..., fill=list())</code></h3>
 
-<p><code>base::expand.grid()</code> のラッパー。
-指定した列の全ての組み合わせが登場するように、欠損値 <code>NA</code> の入った行を挿入する。</p>
+<p>指定した列の全ての組み合わせが登場するように、
+指定しなかった列に欠損値<code>NA</code>(あるいは任意の値)を補完した行を挿入する。</p>
+
+<pre><code class="language-r">df %&gt;% complete(key1, key2, fill=list(val1=0, val2='-'))
+</code></pre>
+
+<h3 id="tidyr-expand-data"><code>tidyr::expand(data, ...)</code></h3>
+
+<p>指定した列の全ての組み合わせが登場するような新しいdata.frameを作る。
+全ての列を指定すれば<code>complete()</code>と同じ効果だが、
+指定しなかった列が消えるという点では異なる。</p>
+
+<p><code>crossing(...)</code>はvectorを引数に取る亜種で、
+tibble版<code>expand.grid(...)</code>のようなもの。</p>
+
+<p><code>nesting(...)</code>は存在するユニークな組み合わせのみ残す、
+<code>nest(data, ...) %&gt;&gt;% dplyr::select(-data)</code>のショートカット。
+この結果は<code>expand()</code>や<code>complete()</code>の引数としても使える。</p>
+
+<p>数値vectorの補完には<code>full_seq(x, period)</code>が便利。</p>
+
+<h3 id="tidyr-drop-na-data"><code>tidyr::drop_na(data, ...)</code></h3>
+
+<p><code>complete()</code>の逆。
+指定した列に<code>NA</code>が含まれてる行を削除する。
+何も指定しなければ標準の <code>data[complete.cases(data),]</code> と同じ。</p>
 
 <h3 id="tidyr-replace-na"><code>tidyr::replace_na()</code></h3>
 
@@ -283,13 +308,8 @@ Source: local data frame [12 x 5]
 <pre><code class="language-r">df %&gt;% replace_na(list(x=0, y='unknown'))
 </code></pre>
 
-<h3 id="tidyr-complete"><code>tidyr::complete()</code></h3>
-
-<p>指定した列の全ての組み合わせが登場するように、
-他の列を <code>NA</code> などにして補完する</p>
-
-<pre><code class="language-r">df %&gt;% complete(col1, col2, fill=list(col1=0, col2='-'))
-</code></pre>
+<p>逆に、特定の値を<code>NA</code>にしたい場合は
+<a href="/rstats/dplyr.html"><code>dplyr::na_if()</code></a></p>
 
 <h3 id="tidyr-fill"><code>tidyr::fill()</code></h3>
 
