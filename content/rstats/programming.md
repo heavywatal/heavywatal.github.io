@@ -19,12 +19,29 @@ tags = ["r"]
 
 `p___(q, ..., lower.tail=TRUE, log.p=FALSE)`
 :   累積分布関数 (CDF)。
-    デフォルトでは左から $P[X \leq x]$ 。
-    `lower.tail=FALSE` とすると右から $P[X > x]$ 。
+    デフォルトでは左から`q`までの積分 $P[X \leq q]$ 。
+    `lower.tail=FALSE` とすると`q`より右の積分(相補CDF) $P[X > q]$ 。
+:    第一引数やパラメータ`...`はvector処理されるが、
+     後半の論理値引数はvectorを与えても先頭のみが使われる。
 
     {{%div class="warning"%}}
 離散分布の場合は境界の値を含むか含まないかでバー1本分の差が出るので注意。
 ホントは `lower.tail=FALSE` でも境界を含むべきだと思うんだけど。
+    {{%/div%}}
+
+    {{%div class="note"%}}
+`1 - pnorm(...)`や`log(pnorm(...))`のほうが直感的に分かりやすいので、
+`lower.tail=FALSE`や`log.p=TRUE`は不要なようにも思われるが、
+これらの引数で内部処理させたほうが浮動小数点型の限界付近での計算が正確。
+```r
+# complementary
+1 - pnorm(10, 0, 1)                # 0
+pnorm(10, 0, 1, lower.tail=FALSE)  # 7.619853e-24
+
+# log
+log(pnorm(10, 0, 1))               # 0
+pnorm(10, 0, 1, log.p=TRUE)        # -7.619853e-24
+```
     {{%/div%}}
 
 `q___(p, ..., lower.tail=TRUE, log.p=FALSE)`
