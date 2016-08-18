@@ -77,13 +77,32 @@ RプログラミングTips
 <dt><code>d___(x, ...)</code></dt>
 <dd>確率密度関数 (PDF)。 $P[X = x]$</dd>
 <dt><code>p___(q, ..., lower.tail=TRUE, log.p=FALSE)</code></dt>
-<dd><p>累積分布関数 (CDF)。
-デフォルトでは左から $P[X \leq x]$ 。
-<code>lower.tail=FALSE</code> とすると右から $P[X &gt; x]$ 。</p>
+<dd>累積分布関数 (CDF)。
+デフォルトでは左から<code>q</code>までの積分 $P[X \leq q]$ 。
+<code>lower.tail=FALSE</code> とすると<code>q</code>より右の積分(相補CDF) $P[X &gt; q]$ 。</dd>
+<dd><p>第一引数やパラメータ<code>...</code>はvector処理されるが、
+ 後半の論理値引数はvectorを与えても先頭のみが使われる。</p>
 
 <div class="warning">
 <p>離散分布の場合は境界の値を含むか含まないかでバー1本分の差が出るので注意。
 ホントは <code>lower.tail=FALSE</code> でも境界を含むべきだと思うんだけど。</p>
+
+</div>
+
+
+<div class="note">
+<p><code>1 - pnorm(...)</code>や<code>log(pnorm(...))</code>のほうが直感的に分かりやすいので、
+<code>lower.tail=FALSE</code>や<code>log.p=TRUE</code>は不要なようにも思われるが、
+これらの引数で内部処理させたほうが浮動小数点型の限界付近での計算が正確。</p>
+
+<pre><code class="language-r"># complementary
+1 - pnorm(10, 0, 1)                # 0
+pnorm(10, 0, 1, lower.tail=FALSE)  # 7.619853e-24
+
+# log
+log(pnorm(10, 0, 1))               # 0
+pnorm(10, 0, 1, log.p=TRUE)        # -7.619853e-24
+</code></pre>
 
 </div>
 </dd>
