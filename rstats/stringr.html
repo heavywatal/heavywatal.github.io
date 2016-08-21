@@ -149,16 +149,20 @@ stringr — Rの文字列をまともな方法で処理する
 
 <hr>
 
-<p>引数<code>pattern</code>はデフォルトで<a href="http://userguide.icu-project.org/strings/regexp">ICU正規表現</a>。
-以下の関数を通して渡すことでそれを変更できる。</p>
+<p>上記関数の<code>pattern</code>引数は普通に文字列を渡すと正規表現として解釈してくれるが、
+下記の関数を通して渡すことでその挙動を変更することができる。</p>
 
 <dl>
-<dt><code>stringr::fixed(string)</code></dt>
-<dd>そのままの文字としてマッチさせる</dd>
-<dt><code>stringr::ignore.case(string)</code></dt>
-<dd>大文字と小文字の違いを無視してマッチさせる</dd>
-<dt><code>stringr::perl(string)</code></dt>
-<dd>Perl拡張の正規表現として扱う</dd>
+<dt><code>stringr::regex(pattern, ignore_case=FALSE, multiline=FALSE, comments=FALSE, dotall=FALSE, ...)</code></dt>
+<dd>デフォルトの<a href="http://userguide.icu-project.org/strings/regexp">ICU正規表現</a>。
+複数行ファイルに対するマッチではこの関数を通して挙動をいじることになる。</dd>
+<dt><code>stringr::fixed(pattern)</code></dt>
+<dd>正規表現ではなくそのままの文字としてマッチさせる</dd>
+<dt><code>stringr::boundary(type='character', skip_word_none=NA, ...)</code></dt>
+<dd>境界に対するマッチ。
+<code>type</code>の選択肢は <code>character</code>, <code>line_break</code>, <code>sentence</code>, <code>word</code>.</dd>
+<dt><code>stringr::coll(pattern, ignore_case=FALSE, locale=NULL, ...)</code></dt>
+<dd>よくわからないけど非ascii対策？</dd>
 </dl>
 
 <h3 id="formatting">Formatting</h3>
