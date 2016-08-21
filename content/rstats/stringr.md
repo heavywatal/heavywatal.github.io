@@ -88,17 +88,23 @@ Rの中から `install.package('stringr')` でインストールし、
 
 ------------------------------------------------------------------------
 
-引数`pattern`はデフォルトで[ICU正規表現](http://userguide.icu-project.org/strings/regexp)。
-以下の関数を通して渡すことでそれを変更できる。
+上記関数の`pattern`引数は普通に文字列を渡すと正規表現として解釈してくれるが、
+下記の関数を通して渡すことでその挙動を変更することができる。
 
-`stringr::fixed(string)`
-:   そのままの文字としてマッチさせる
+`stringr::regex(pattern, ignore_case=FALSE, multiline=FALSE, comments=FALSE, dotall=FALSE, ...)`
+:   デフォルトの[ICU正規表現](http://userguide.icu-project.org/strings/regexp)。
+    複数行ファイルに対するマッチではこの関数を通して挙動をいじることになる。
 
-`stringr::ignore.case(string)`
-:   大文字と小文字の違いを無視してマッチさせる
+`stringr::fixed(pattern)`
+:   正規表現ではなくそのままの文字としてマッチさせる
 
-`stringr::perl(string)`
-:   Perl拡張の正規表現として扱う
+`stringr::boundary(type='character', skip_word_none=NA, ...)`
+:   境界に対するマッチ。
+    `type`の選択肢は `character`, `line_break`, `sentence`, `word`.
+
+`stringr::coll(pattern, ignore_case=FALSE, locale=NULL, ...)`
+:   よくわからないけど非ascii対策？
+
 
 ### Formatting
 
