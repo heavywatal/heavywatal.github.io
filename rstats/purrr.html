@@ -84,26 +84,50 @@ purerのように読むらしい。</p>
 <dd>listの各要素に関数を適用し、listで返す。
 <code>base::lapply()</code>や<code>plyr::llply()</code>の改良版。
 型の決まったvectorを返す<code>base::sapply()</code>や<code>base::vapply()</code>の改良版として
-<code>map_lgl()</code>, <code>map_chr()</code>, <code>map_int()</code>, <code>map_dbl()</code>
-がある。</dd>
+<code>map_lgl()</code>, <code>map_chr()</code>, <code>map_int()</code>, <code>map_dbl()</code> がある。</dd>
+<dd><code>purrr::walk(.x, .f, ...)</code>は、
+<code>map()</code>同様に関数を適用しつつ元の値をそのままinvisible返しする亜種。</dd>
+<dd><code>purrr::lmap(.x, .f, ...)</code>は、
+<code>.x[[i]]</code>ではなく<code>.x[i]</code>を参照する点で<code>map()</code>と異なる亜種。</dd>
 <dt><code>purrr::map_df(.x, .f, ..., .id=NULL)</code></dt>
 <dd>listの各要素に関数を適用し、結果を
 <code>dplyr::bind_rows()</code>で結合したdata.frameとして返す。
-<code>plyr::ldply()</code>の改良版。</dd>
+<code>plyr::ldply()</code>の改良版として。</dd>
+<dt><code>purrr::map2(.x, .y, .f, ...)</code></dt>
+<dd>2変数バージョン。<code>map2_chr()</code>などの型限定vector版も提供されている。
+3変数以上渡したいときはlistかdata.frameにまとめて下の<code>pmap()</code>を使う。</dd>
+<dt><code>purrr::pmap(.l, .f, ...)</code></dt>
+<dd>listの中身をparallelに処理するmap。
+例えば <code>pmap(list(.x, .y), .f)</code> とすれば <code>map2()</code> と同じ。</dd>
+<dd>data.frameの正体はlist of columnsなので、
+そのまま<code>.l</code>として渡して<code>plyr::mlply()</code>的に使える。
+同様に <code>purrr::pmap_df()</code> は <code>plyr::mdply()</code> として使える。</dd>
+<dd><code>purrr::invoke_rows(.f, .d, ..., .collate, .to, .labels)</code>
+でも似たようなことができるが、
+第一引数が関数になってるところは<code>invoke()</code>っぽくて、
+結果の収納方法を<code>.collate</code>などで調整できるところは<code>by_row()</code>っぽい。</dd>
 <dt><code>purrr::map_if(.x, .p, .f, ...)</code></dt>
 <dd><code>.p</code>が<code>TRUE</code>になる要素のみ<code>.f()</code>を適用し、残りはそのまま出力。
 <code>.p</code>はlogical vectorでもいいし、
 <code>.x[[i]]</code>を受け取るpredicate関数でもよい。</dd>
-<dt><code>purrr::map2(.x, .y, .f, ...)</code></dt>
-<dd>2変数バージョン。<code>map2_chr()</code> や <code>map3()</code> なども提供されている。</dd>
-<dt><code>purrr::walk(.x, .f, ...)</code></dt>
-<dd>mapと同じように関数を適用するが、元の値をそのままinvisible返し。</dd>
-<dt><code>purrr::lmap(.x, .f, ...)</code>, <code>lmap_if()</code>, <code>lmap_at()</code></dt>
-<dd>listの各要素に関数を適用し、listで返す。
-<code>.x[[i]]</code>ではなく<code>.x[i]</code>を参照する点で<code>map()</code>と異なる。</dd>
+<dd>番号か名前で選ぶには<code>purrr::map_at(.x, .at, .f, ...)</code></dd>
 <dt><code>purrr::reduce(.x, .f, ..., .init)</code></dt>
 <dd>二変数関数を順々に適用して1つの値を返す。
 C++でいう<code>std::accumulate()</code>。</dd>
+<dt><code>purrr::accumulate(.x, .f, ..., .init)</code></dt>
+<dd>二変数関数を順々に適用し、過程も含めてvectorで返す。
+例えば <code>accumulate(1:3, sum)</code> の結果は <code>1 3 6</code> 。
+C++でいう<code>std::partial_sum()</code>。</dd>
+<dt><code>purrr::invoke(.f, .x=NULL, ..., .env=NULL)</code></dt>
+<dd>関数に渡す引数があらかじめlistにまとまってるときに使う<code>do.call()</code>の改良版。</dd>
+<dt><code>purrr::invoke_map(.f, .x=list(NULL), ..., .env=NULL)</code></dt>
+<dd>関数listを順々に実行してlistで返す。
+引数<code>.x</code>は同じ長さのlist of listsか、list of a listをリサイクル。</dd>
+<dd>e.g., <code>invoke_map(list(runif, rnorm), list(c(n=3, 0, 1)))</code></dd>
+<dd>返り値がすべて同じ型で、それぞれ長さ1だった場合、
+特定の型のvectorとして返せる亜種がある:
+<code>invoke_map_chr()</code>, <code>invoke_map_dbl()</code>, <code>invoke_map_int()</code>, <code>invoke_map_lgl()</code></dd>
+<dd>data.frameを繋げて返す<code>invoke_map_df()</code>も。</dd>
 <dt><code>purrr::flatten(.x)</code></dt>
 <dd>階層性のあるlistを一段階解消する。
 階層なしlistをvector化するには明示的に型指定できる
@@ -119,19 +143,29 @@ C++でいう<code>std::accumulate()</code>。</dd>
 <h2 id="data-frame操作">data.frame操作</h2>
 
 <dl>
+<dt><code>purrr::dmap(.d, .f, ...)</code></dt>
+<dd>data.frameかgrouped_dfを受け取り、列ごとに<code>.f</code>を適用してdata.frameを返す。
+全列で長さが揃っていれば怒られないので
+<code>dplyr::mutate_all()</code>的にも<code>dplyr::summarise_all()</code>的にも使える。
+ただし<code>.f</code>に渡せるのは単一の関数のみで<code>dplyr::funs()</code>は使えない。
+対象列を選べる<code>dmap_if()</code>と<code>dmap_at()</code>もある。</dd>
 <dt><code>purrr::slice_rows(.d, .cols=NULL)</code></dt>
-<dd>指定した列でグループ化して <code>grouped_df</code> を返す。
+<dd>指定した列でグループ化してgrouped_dfを返す。
 <code>dplyr::group_by_(.dots=.cols)</code> と同じ。</dd>
 <dt><code>purrr::by_slice(.d, ..f, ..., .collate=c('list', 'rows', 'cols'), .to='.out', .labels=TRUE)</code></dt>
-<dd><code>grouped_df</code> を受け取ってグループごとに関数を適用する。
+<dd>grouped_dfを受け取ってグループごとに関数を適用する。
 <code>dplyr::do()</code> の改良版。</dd>
 <dt><code>purrr::by_row(.d, ..f, ..., .collate=c('list', 'rows', 'cols'), .to='.out', .labels=TRUE)</code></dt>
-<dd>1行ごとに関数を適用する。
+<dd>data.frame 1行ごとに関数を適用する。
 <code>dplyr::rowwise() %&gt;% dplyr::do()</code>的な処理を一撃で書ける。</dd>
-<dd><code>.collate</code>: 結果列の展開方法。
-とりあえず<code>list</code>にしておいて後で<code>unnest()</code>するのが無難か。</dd>
 <dd><code>.to</code>: 結果listの列名</dd>
 <dd><code>.labels</code>: 元の<code>.d</code>の列をラベルとして結果に残すか</dd>
+<dd><code>.collate</code>: 結果列の展開方法(下記例)。
+とりあえず<code>list</code>にしておいて後で<code>unnest()</code>するのが無難か。</dd>
+<dd><code>purrr::invoke_rows()</code>はかなり似ているが、
+データと関数の順序が逆になっている点と、
+<code>.f</code>が<code>.d</code>の列名で引数を取るという点で異なる。
+(<code>by_row()</code>では1行のdata.frameとして受け取って<code>.$col</code>のように参照する)</dd>
 </dl>
 
 <pre><code class="language-r">&gt; iris[1:3, 1:2] %&gt;% by_row(~data_frame(x=0:1, y=c('a', 'b')), .collate='list')
@@ -180,6 +214,21 @@ letters %&gt;&gt;% map_int(~ strtoi(charToRaw(.), 16L))
 <dl>
 <dt><code>purrr::partial()</code></dt>
 <dd>引数を部分的に埋めてある関数を作る。C++でいう <code>std::bind()</code></dd>
+</dl>
+
+<h2 id="その他の便利関数">その他の便利関数</h2>
+
+<dl>
+<dt><code>purrr::list_along(x)</code></dt>
+<dd>引数と同じ長さの空listを作る。</dd>
+<dt><code>purrr::set_names(x, nm=x)</code></dt>
+<dd>標準の<code>setNames(x=nm, nm)</code>は第二引数のほうが省略不可という気持ち悪い定義だったが、
+この改良版ではその心配が解消されている。
+長さや型のチェックもしてくれる。</dd>
+<dt><code>purrr::transpose(.l)</code></dt>
+<dd>行列転置関数<code>t()</code>のlist版。
+例えば、pair of lists &lt;=&gt; list of pairs。</dd>
+<dd>data.frameに適用するとlist of rowsが得られる。</dd>
 </dl>
 
 </article>
