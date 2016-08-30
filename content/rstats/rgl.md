@@ -115,8 +115,9 @@ next3d(current=NA, clear=TRUE, reuse=TRUE)
 つまり、関数やループ内に入れるとサイズなどがうまく反映されない。
 {{%/div%}}
 
+## 出力
 
-## ファイルに書き出す
+### ファイルに書き出す
 
 `rgl::snapshot3d(filename, fmt='png', top=TRUE)`
 : PNGのみ。
@@ -131,7 +132,35 @@ next3d(current=NA, clear=TRUE, reuse=TRUE)
     `writeWebGL('.', 'rgl.html')` のように指定する。
     ヘルプには `snapshot` がファイル名も受け取れると書いてあるが嘘で `TRUE/FALSE` のみ。
 
-## アニメーション
+
+### rmarkdown/knitrでHTMLに埋め込む
+
+ライブラリを読み込み、フックを設定しておく:
+
+    ```{r library}
+    library(rgl)
+    rgl::setupKnitr()
+    ```
+
+{{%div class="note"%}}
+`rgl::setupKnitr()`の中身は
+`knitr::knit_hooks$set(webgl=rgl::hook_webgl)` といくつかの初期化コード。
+それらを実行しないと、同じコードでも時によってscriptが正しく埋め込まれず、
+`You must enable Javascript to view this page properly.`
+という的外れなエラーが表示される。
+{{%/div%}}
+
+プロットしたいchunkに`webgl=TRUE`を指定 (PNG静止画にしたい場合は`rgl=TRUE`):
+
+    ```{r plot, webgl=TRUE}
+    rgl::box3d()
+    rgl::title3d('main', 'sub', 'x', 'y', 'z')
+    ```
+
+昔はrglwidgetという別ライブラリが必要だったが今はrglに統合されたので不要。
+
+
+### アニメーション
 
 `rgl::spin3d(axis=c(0, 0, 1), rpm=5)`
 
