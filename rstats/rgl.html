@@ -176,7 +176,9 @@ next3d(current=NA, clear=TRUE, reuse=TRUE)
 </div>
 
 
-<h2 id="ファイルに書き出す">ファイルに書き出す</h2>
+<h2 id="出力">出力</h2>
+
+<h3 id="ファイルに書き出す">ファイルに書き出す</h3>
 
 <dl>
 <dt><code>rgl::snapshot3d(filename, fmt='png', top=TRUE)</code></dt>
@@ -191,7 +193,37 @@ next3d(current=NA, clear=TRUE, reuse=TRUE)
 ヘルプには <code>snapshot</code> がファイル名も受け取れると書いてあるが嘘で <code>TRUE/FALSE</code> のみ。</dd>
 </dl>
 
-<h2 id="アニメーション">アニメーション</h2>
+<h3 id="rmarkdown-knitrでhtmlに埋め込む">rmarkdown/knitrでHTMLに埋め込む</h3>
+
+<p>ライブラリを読み込み、フックを設定しておく:</p>
+
+<pre><code>```{r library}
+library(rgl)
+rgl::setupKnitr()
+```
+</code></pre>
+
+<div class="note">
+<p><code>rgl::setupKnitr()</code>の中身は
+<code>knitr::knit_hooks$set(webgl=rgl::hook_webgl)</code> といくつかの初期化コード。
+それらを実行しないと、同じコードでも時によってscriptが正しく埋め込まれず、
+<code>You must enable Javascript to view this page properly.</code>
+という的外れなエラーが表示される。</p>
+
+</div>
+
+
+<p>プロットしたいchunkに<code>webgl=TRUE</code>を指定 (PNG静止画にしたい場合は<code>rgl=TRUE</code>):</p>
+
+<pre><code>```{r plot, webgl=TRUE}
+rgl::box3d()
+rgl::title3d('main', 'sub', 'x', 'y', 'z')
+```
+</code></pre>
+
+<p>昔はrglwidgetという別ライブラリが必要だったが今はrglに統合されたので不要。</p>
+
+<h3 id="アニメーション">アニメーション</h3>
 
 <p><code>rgl::spin3d(axis=c(0, 0, 1), rpm=5)</code></p>
 
