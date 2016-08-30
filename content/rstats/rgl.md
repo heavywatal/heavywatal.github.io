@@ -20,6 +20,7 @@ JavaScript+WebGLベースの
 [plotly](https://plot.ly/r/) や
 [threejs](https://bwlewis.github.io/rthreejs/)
 を使ったほうがいいかも。
+ただし、WebGLをPNGで保存するには一旦ウェブブラウザで開いてマウスを使う必要がある。
 科学プロット用のOpenGLラッパーとしてはPythonの[VisPy](http://vispy.org/)が将来有望。
 {{%/div%}}
 
