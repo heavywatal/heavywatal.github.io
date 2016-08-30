@@ -14,26 +14,29 @@ tags = ["r", "graph"]
 -   <https://cran.r-project.org/web/packages/rgl/>
 -   <http://www.rdocumentation.org/packages/rgl>
 
-{{%div class="note"%}}
-なんかAPIもガチャガチャだしドキュメントも結構いい加減なので、
-JavaScript+WebGLベースの
+APIもガチャガチャだしドキュメントも結構いい加減なので分かりにくい。
+かといってJavaScript+WebGLベースの
 [plotly](https://plot.ly/r/) や
 [threejs](https://bwlewis.github.io/rthreejs/)
-を使ったほうがいいかも。
-ただし、WebGLをPNGで保存するには一旦ウェブブラウザで開いてマウスを使う必要がある。
-科学プロット用のOpenGLラッパーとしてはPythonの[VisPy](http://vispy.org/)が将来有望。
-{{%/div%}}
+などもPNG保存や陰影などまだそれなりに問題がある。
+科学プロット用のOpenGLラッパーとしてはPythonの[VisPy](http://vispy.org/)
+が将来有望だがまだ開発途上で仕様があまり固まってない。
 
 関数は低水準の`rgl.*()`と高水準の`*3d()`に分かれていて、
 両者を混ぜて使うのは避けたほうがいいらしい。
 
 ## デバイスの起動と終了
 
-```r
-rgl::open3d()  # open new device
-rgl.close()    # close current device
-rgl.quit()     # shutdown rgl device system
-```
+`rgl::open3d(..., params=get3dDefaults(), useNULL=rgl.useNULL())`
+: 明示的に新しいデバイスを開く。
+  何も無い状態で`plot3d()`などが呼ばれたら勝手に開かれる。
+  サイズ指定は`windowRect=c(0, 0, 600, 600)`のような引数で。
+: `useNULL=TRUE`はWebGLを書き出すだけで描画デバイスが必要ないときに。
+  セッション全体に渡ってデバイス不要な(あるいはそもそも無い)場合は、
+  `library(rgl)`の前に`options(rgl.useNULL=TRUE)`するのがよい。
+
+`rgl.close()`
+: デバイスを閉じる。`close3d()`はなぜか存在しない。
 
 `rgl::clear3d(type=c('shapes', 'bboxdeco', 'material'), defaults, subscene=0)`
 
@@ -119,6 +122,9 @@ next3d(current=NA, clear=TRUE, reuse=TRUE)
 
 ### ファイルに書き出す
 
+`rgl::scene3d()`
+: rglネイティブな形での全構成要素リスト。
+
 `rgl::snapshot3d(filename, fmt='png', top=TRUE)`
 : PNGのみ。
   `top=FALSE`にしてはダメ。謎。
@@ -131,6 +137,9 @@ next3d(current=NA, clear=TRUE, reuse=TRUE)
 :   ディレクトリ構造無しの単発HTMLでいい場合は
     `writeWebGL('.', 'rgl.html')` のように指定する。
     ヘルプには `snapshot` がファイル名も受け取れると書いてあるが嘘で `TRUE/FALSE` のみ。
+    rglデバイスが不要なので`open3d(useNULL=TRUE)`としておくと余計なウィンドウを開かずに済む。
+
+`rgl::writeASY()`, `rgl::writeOBJ()`, `rgl::writePLY()`, `rgl::writeSTL()`.
 
 
 ### rmarkdown/knitrでHTMLに埋め込む
@@ -150,14 +159,31 @@ next3d(current=NA, clear=TRUE, reuse=TRUE)
 という的外れなエラーが表示される。
 {{%/div%}}
 
-プロットしたいchunkに`webgl=TRUE`を指定 (PNG静止画にしたい場合は`rgl=TRUE`):
+プロットしたいchunkに`webgl=TRUE`を指定
+(PNG静止画にしたい場合はデバイス有りで`rgl=TRUE`):
 
     ```{r plot, webgl=TRUE}
+    rgl::open3d(useNULL=TRUE)
     rgl::box3d()
     rgl::title3d('main', 'sub', 'x', 'y', 'z')
     ```
 
-昔はrglwidgetという別ライブラリが必要だったが今はrglに統合されたので不要。
+ループで複数描画したいときはまずrglwidgetとしてlistに詰めていき、
+最後に`htmltools::tagList()`に詰め替える。
+このwidget方式の場合は`setupKnitr()`不要。
+
+    ```{r widget}
+    library(rgl)
+    purrr::map(seq_len(3), ~{
+        on.exit(rgl::rgl.close())
+        rgl::open3d(useNULL=TRUE)
+        rgl::box3d()
+        rgl::rglwidget(width=200, height=200)
+    }) %>>% htmltools::tagList()
+    ```
+
+`options(rgl.printRglwidget=TRUE)`
+とすると`rglwidget()`を省略できるが、途中経過も逐一表示されてしまう。
 
 
 ### アニメーション
