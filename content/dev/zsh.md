@@ -46,14 +46,26 @@ tags = ["shell"]
 :   ログアウト時にしてほしいことが万が一あれば
 
 {{%div class="note"%}}
-`$ZDOTDIR` 以下の個人設定ファイルの前にシステム全体の設定ファイルとして
-`/etc/zshenv` や `/etc/zsh/*` などが読み込まれることに注意。
+`$ZDOTDIR/` 以下の個人設定ファイルの前に、
+システム全体の設定ファイルとして `/etc/z*` が読み込まれる。
+これがしばしば問題を起こすので、とりあえず `unsetopt GLOBAL_RCS` で切っとく。
 
-Macでは `path_helper` が `/usr/bin` などの基本的なPATHを設定してくれる。
+例えばMacでは `/usr/libexec/path_helper` が
+`/usr/bin` などの基本的なPATHを設定してくれる。
 Yosemiteまでは `/etc/zshenv` で実行されていたが、
-El Capitanからは `/etc/zprofile` に変更されてしまい、
-`~/.zshenv` の設定がうまく反映されないので
-`sudo mv /etc/zprofile /etc/zshenv` で元に戻すとよい。
+El Capitanからは `/etc/zprofile` に変更されたせいで
+`~/.zshenv` での設定がうまく反映されなくなってしまった。
+これを防ぐには以下のようにする:
+```sh
+# ~/.zshenv
+unsetopt GLOBAL_RCS
+if [ $(uname) = Darwin ]; then
+    PATH=''
+    eval $(/usr/libexec/path_helper -s)
+fi
+PATH=${HOME}/local/bin:${PATH}
+export PATH
+```
 {{%/div%}}
 
 ## `$HOME/.zsh/` 以下にまとめる
