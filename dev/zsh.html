@@ -105,14 +105,26 @@ zsh
 </dl>
 
 <div class="note">
-<p><code>$ZDOTDIR</code> 以下の個人設定ファイルの前にシステム全体の設定ファイルとして
-<code>/etc/zshenv</code> や <code>/etc/zsh/*</code> などが読み込まれることに注意。</p>
+<p><code>$ZDOTDIR/</code> 以下の個人設定ファイルの前に、
+システム全体の設定ファイルとして <code>/etc/z*</code> が読み込まれる。
+これがしばしば問題を起こすので、とりあえず <code>unsetopt GLOBAL_RCS</code> で切っとく。</p>
 
-<p>Macでは <code>path_helper</code> が <code>/usr/bin</code> などの基本的なPATHを設定してくれる。
+<p>例えばMacでは <code>/usr/libexec/path_helper</code> が
+<code>/usr/bin</code> などの基本的なPATHを設定してくれる。
 Yosemiteまでは <code>/etc/zshenv</code> で実行されていたが、
-El Capitanからは <code>/etc/zprofile</code> に変更されてしまい、
-<code>~/.zshenv</code> の設定がうまく反映されないので
-<code>sudo mv /etc/zprofile /etc/zshenv</code> で元に戻すとよい。</p>
+El Capitanからは <code>/etc/zprofile</code> に変更されたせいで
+<code>~/.zshenv</code> での設定がうまく反映されなくなってしまった。
+これを防ぐには以下のようにする:</p>
+
+<pre><code class="language-sh"># ~/.zshenv
+unsetopt GLOBAL_RCS
+if [ $(uname) = Darwin ]; then
+    PATH=''
+    eval $(/usr/libexec/path_helper -s)
+fi
+PATH=${HOME}/local/bin:${PATH}
+export PATH
+</code></pre>
 
 </div>
 
