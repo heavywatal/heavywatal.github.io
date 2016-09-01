@@ -6,26 +6,23 @@ tags = ["genetics"]
   parent = "bio"
 +++
 
-<http://meme.nbcr.net/meme/>
-
-<http://meme.nbcr.net/meme/doc/overview.html>
-
-[Bailey et al. 2009](http://nar.oxfordjournals.org/content/37/suppl_2/W202.abstract)
-
-[Bailey and Elkan 1994](http://www.ncbi.nlm.nih.gov/pubmed/7584402)
+- http://meme-suite.org/
+- http://meme-suite.org/doc/overview.html
+- [Bailey et al. 2009](http://nar.oxfordjournals.org/content/37/suppl_2/W202.abstract)
+- [Bailey and Elkan 1994](http://www.ncbi.nlm.nih.gov/pubmed/7584402)
 
 ## インストール
 
-<http://meme.nbcr.net/meme/doc/meme-install.html>
+http://meme-suite.org/doc/install.html
 
-1.  ソースコードをダウンロードして展開:
+1.  ソースコードを[ダウンロード](http://meme-suite.org/doc/download.html)して展開:
 
-        % wget -O- http://ebi.edu.au/ftp/software/MEME/4.9.1/meme_4.9.1.tar.gz | tar xz
+        % wget -O- http://meme-suite.org/meme-software/4.11.2/meme_4.11.2_1.tar.gz | tar xz
 
 2.  `configure` してビルド:
 
-        % cd meme_4.9.1/
-        % ./configure --prefix=/usr/local/meme --with-url=http://meme.nbcr.net/meme --enable-opt CC=clang
+        % cd meme_4.11.2/
+        % ./configure --prefix=${HOME}/bio/local/meme --with-url=http://meme-suite.org --enable-build-libxml2 --enable-build-libxslt --enable-opt CC=clang
         % make
 
 3.  パスを通す:
@@ -34,13 +31,13 @@ tags = ["genetics"]
 
 ## MEME
 
-<http://meme.nbcr.net/meme/doc/meme.html>
+http://meme-suite.org/doc/meme.html
 
 ### 使い方
 
 複数の配列が含まれるFASTAファイルを渡すだけ:
 
-    % meme sequences.fasta [optional arguments]
+    % meme sequences.fasta [options]
 
 `-h`, `-version`
 :   ヘルプ、バージョン表示
