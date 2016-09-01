@@ -203,6 +203,8 @@ qsub -l debug -b y -shell n -cwd -N test &quot;pwd; sleep 5; ls &gt;ls.txt&quot;
 例えば、24時間以内に終わるものなら <code>-l short</code> や <code>-l debug</code>、
 2か月かかるものなら <code>-l month</code> を指定。
 <code>qstat -g c</code> でキューの一覧とそれぞれの負荷を確認できる。</dd>
+<dd>1スレッドあたりのRAM上限(デフォルト4GB)もこのオプションから
+<code>-l s_vmem=8G -l mem_req=8G</code> のように変更する。</dd>
 <dt><code>-cwd</code></dt>
 <dd>カレントディレクトリでジョブ実行。
 デフォルトでは <code>$HOME</code>。</dd>
@@ -242,7 +244,8 @@ qsub -l debug -b y -shell n -cwd -N test &quot;pwd; sleep 5; ls &gt;ls.txt&quot;
 <dd>環境変数を定義してジョブに引き継ぐ</dd>
 <dt><code>-pe def_slot N</code></dt>
 <dd>parallel environment:
-並列処理で使用するスレッド数を指定</dd>
+並列処理で使用するスレッド数を指定。
+<code>-l mem_req=*G</code> の値は1スレッドあたりなので注意。</dd>
 </dl>
 
 <h3 id="qsub-スクリプト"><code>qsub</code> スクリプト</h3>
@@ -265,7 +268,7 @@ echo HOSTNAME: $HOSTNAME
 echo SGE_TASK_ID: $SGE_TASK_ID
 echo SGE_TASK_FIRST:$SGE_TASK_FIRST
 echo SGE_TASK_LAST: $SGE_TASK_LAST
-echo SGE_TASK_STEPSIZE: `$SGE_TASK_STEPSIZE
+echo SGE_TASK_STEPSIZE: $SGE_TASK_STEPSIZE
 pwd
 ls
 </code></pre>
