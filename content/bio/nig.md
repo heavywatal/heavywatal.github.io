@@ -131,7 +131,9 @@ qsub -l debug -b y -shell n -cwd -N test "pwd; sleep 5; ls >ls.txt"
     実行時間や計算ノードなどの要求を伝える。
     例えば、24時間以内に終わるものなら `-l short` や `-l debug`、
     2か月かかるものなら `-l month` を指定。
-    `qstat -g c` でキューの一覧とそれぞれの負荷を確認できる。
+   `qstat -g c` でキューの一覧とそれぞれの負荷を確認できる。
+:   1スレッドあたりのRAM上限(デフォルト4GB)もこのオプションから
+    `-l s_vmem=8G -l mem_req=8G` のように変更する。
 
 `-cwd`
 :   カレントディレクトリでジョブ実行。
@@ -181,7 +183,8 @@ qsub -l debug -b y -shell n -cwd -N test "pwd; sleep 5; ls >ls.txt"
 
 `-pe def_slot N`
 :   parallel environment:
-    並列処理で使用するスレッド数を指定
+    並列処理で使用するスレッド数を指定。
+    `-l mem_req=*G` の値は1スレッドあたりなので注意。
 
 ### `qsub` スクリプト
 
@@ -204,7 +207,7 @@ echo HOSTNAME: $HOSTNAME
 echo SGE_TASK_ID: $SGE_TASK_ID
 echo SGE_TASK_FIRST:$SGE_TASK_FIRST
 echo SGE_TASK_LAST: $SGE_TASK_LAST
-echo SGE_TASK_STEPSIZE: `$SGE_TASK_STEPSIZE
+echo SGE_TASK_STEPSIZE: $SGE_TASK_STEPSIZE
 pwd
 ls
 ```
