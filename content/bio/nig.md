@@ -190,12 +190,12 @@ qsub -l debug -b y -shell n -cwd -N test "pwd; sleep 5; ls >ls.txt"
 ジョブスクリプト内で参照可能な特殊環境変数をプリントしてみるジョブの例:
 
 ```sh
-##!/bin/sh
-##$ -S /bin/sh
-##$ -l debug
-##$ -cwd
-##$ -t 1-2
-##$ -N test_sh
+#!/bin/sh
+#$ -S /bin/sh
+#$ -l debug
+#$ -cwd
+#$ -t 1-2
+#$ -N test_sh
 echo HOME: $HOME
 echo USER: $USER
 echo JOB_ID: $JOB_ID
@@ -213,12 +213,12 @@ ls
 インタープリタを `-S /usr/bin/env python` で指定できないのは残念。
 
 ```py
-##!/usr/bin/env python
-##$` -S $HOME/.virtualenv/py3/bin/python
-##$ -l debug
-##$ -cwd
-##$ -t 1-2
-##$ -N test_py
+#!/usr/bin/env python
+#$ -S $HOME/.virtualenv/py3/bin/python
+#$ -l debug
+#$ -cwd
+#$ -t 1-2
+#$ -N test_py
 import os
 print("SGE_TASK_ID: " + os.environ["SGE_TASK_ID"])
 ```
