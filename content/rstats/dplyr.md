@@ -232,9 +232,6 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
 :    vectorの値を変更する。e.g.,
      `recode(letters, a='A!', c='C!')`
 
-`dplyr::add_rownames(x, var='rowname')`
-:   1列目に行名として1からの整数を振る。
-
 `dplyr::group_indices(.data, ...)`
 :   `grouped_df` ではなくグループIDとして1からの整数を返す版 `group_by()`
 
@@ -320,6 +317,11 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
 `tibble::add_row(.data, ...)`
 :   既存のtibbleに新しいデータを1行追加する。
 
+`tibble::rownames_to_column(df, var='rowname')`
+:   行の名前(無ければ1からの整数)を1列目の変数する`dplyr::add_rownames()`の改良版。
+:   `tibble::column_to_rownames(df, var='rowname')` はその逆。
+:   `tibble::remove_rownames(df)` は消すだけ。
+
 `tibble::glimpse(.data, width=NULL)`
 :   データの中身をざっと見る。
     `print()` とか `str()` のようなもの。
@@ -330,9 +332,6 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
 `tibble::obj_sum(x)`
 :   `type_sum`とサイズ e.g., `"data.frame [150 x 5]"`
 
-`tibble::remove_rownames(df)` \
-`tibble::rownames_to_column(df, var='rowname')` \
-`tibble::column_to_rownames(df, var='rowname')`
 
 ### 設定
 
