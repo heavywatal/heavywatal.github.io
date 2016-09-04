@@ -220,40 +220,6 @@ bad_func(3)   # 6
 }
 </code></pre>
 
-<h2 id="1列でもmatrixのまま">1列でもmatrixのまま</h2>
-
-<p>matrixから添字で1行だけ取ると、自動でvectorにしてくれる。
-大抵はそれでいいんだけど、そうしてほしくないときは <code>drop=FALSE</code></p>
-
-<pre><code class="language-r">&gt; m = matrix(1:8, 2, 4)
-&gt; m
-     [,1] [,2] [,3] [,4]
-[1,]    1    3    5    7
-[2,]    2    4    6    8
-&gt; m[1, ]
-[1] 1 3 5 7
-&gt; m[1, , drop=FALSE]
-     [,1] [,2] [,3] [,4]
-[1,]    1    3    5    7
-</code></pre>
-
-<h2 id="文字列をrコマンドとして実行">文字列をRコマンドとして実行</h2>
-
-<p>ショートカットとしてこのような関数を用意しておいて</p>
-
-<pre><code class="language-r">eval_parse = function(...){
-    eval.parent(parse(text=paste0(...)))
-}
-</code></pre>
-
-<p>変数や関数を規則的に定義するとか</p>
-
-<pre><code class="language-r">&gt; v = seq_len(4)
-&gt; eval_parse('x', v, ' = ', v ^ 2)
-&gt; c(x1, x2, x3, x4)
-[1]  1  4  9 16
-</code></pre>
-
 <h2 id="attach-するべからず"><code>attach()</code> するべからず</h2>
 
 <p>データフレーム <code>some_data</code> のある要素 <code>some_item</code> にアクセスしたいとき、
@@ -275,6 +241,16 @@ with(iris, {
     half = Sepal.Length / 2
 })
 </code></pre>
+
+<h2 id="オブジェクトをファイルに書き出す-読み込む">オブジェクトをファイルに書き出す、読み込む</h2>
+
+<p>data.frameなら<a href="/rstats/readr.html">readr</a>でCSV/TSV形式、
+listなら<a href="https://cran.r-project.org/web/packages/jsonlite/">jsonlite</a>でJSON形式、
+それ以外のあらゆるオブジェクトはRDS形式で書き出しておくとよい。</p>
+
+<p><code>saveRDS(object, file='', ascii=FALSE, version=NULL, compress=TRUE, refhook=NULL)</code></p>
+
+<p><code>readRDS(file, refhook=NULL)</code></p>
 
 <h2 id="最適化-高速化">最適化・高速化</h2>
 
