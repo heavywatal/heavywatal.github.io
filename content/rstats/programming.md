@@ -166,43 +166,6 @@ func = function(x, y, ...){
 }
 ```
 
-## 1列でもmatrixのまま
-
-matrixから添字で1行だけ取ると、自動でvectorにしてくれる。
-大抵はそれでいいんだけど、そうしてほしくないときは `drop=FALSE`
-
-```r
-> m = matrix(1:8, 2, 4)
-> m
-     [,1] [,2] [,3] [,4]
-[1,]    1    3    5    7
-[2,]    2    4    6    8
-> m[1, ]
-[1] 1 3 5 7
-> m[1, , drop=FALSE]
-     [,1] [,2] [,3] [,4]
-[1,]    1    3    5    7
-```
-
-## 文字列をRコマンドとして実行
-
-ショートカットとしてこのような関数を用意しておいて
-
-```r
-eval_parse = function(...){
-    eval.parent(parse(text=paste0(...)))
-}
-```
-
-変数や関数を規則的に定義するとか
-
-```r
-> v = seq_len(4)
-> eval_parse('x', v, ' = ', v ^ 2)
-> c(x1, x2, x3, x4)
-[1]  1  4  9 16
-```
-
 ## `attach()` するべからず
 
 データフレーム `some_data` のある要素 `some_item` にアクセスしたいとき、
@@ -225,6 +188,17 @@ with(iris, {
     half = Sepal.Length / 2
 })
 ```
+
+## オブジェクトをファイルに書き出す、読み込む
+
+data.frameなら[readr]({{< relref "readr.md" >}})でCSV/TSV形式、
+listなら[jsonlite](https://cran.r-project.org/web/packages/jsonlite/)でJSON形式、
+それ以外のあらゆるオブジェクトはRDS形式で書き出しておくとよい。
+
+`saveRDS(object, file='', ascii=FALSE, version=NULL, compress=TRUE, refhook=NULL)`
+
+`readRDS(file, refhook=NULL)`
+
 
 ## 最適化・高速化
 

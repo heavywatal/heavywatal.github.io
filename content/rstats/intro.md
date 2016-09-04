@@ -191,7 +191,9 @@ See [dplyr]({{< relref "dplyr.md" >}}), [purrr]({{< relref "purrr.md" >}}), and 
 
 ## グラフ作図
 
-See [ggplot2]({{< relref "ggplot2.md" >}})
+2D: See [ggplot2]({{< relref "ggplot2.md" >}})
+
+3D: See [rgl]({{< relref "rgl.md" >}})
 
 ## 参考図書
 
