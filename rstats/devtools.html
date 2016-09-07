@@ -187,6 +187,8 @@ vignettes/
 
 <ul>
 <li><code>R/</code> 以下に配置</li>
+<li><code>NAMESPACE</code> や <code>man/*.Rd</code> を自動生成してもらえるように
+<a href="#roxygen2">後述のroxygen</a>形式でコメントを書く</li>
 <li>ファイルの数や名前は何でもいいので、開発者が分かりやすいようにしとく。
 例えば、似たような関数をひとつのファイルにまとめ、同名の<code>@rdname</code>を指定し、
 <code>man/</code>と同じ構造にするのがちょうどいいのではなかろうか。</li>
@@ -194,24 +196,9 @@ vignettes/
 必要なパッケージは <code>DESCRIPTION</code> の <code>Imports</code> に書き、
 <code>名前空間::関数()</code> のようにして使う。
 どうしても名前空間を省略したいものだけ <code>@importFrom</code> を指定する。</li>
-
-<li><p><code>NAMESPACE</code> や <code>man/*.Rd</code> を自動生成してもらえるように
-roxygen形式でコメントを書く</p>
-
-<pre><code class="language-r">#' A simple function to add 1
-#' @export
-#' @param x A numeric vector
-#' @return A numeric vector
-#' @examples
-#' increment(42)
-increment = function(x) {x + 1}
-</code></pre>
-
-<ul>
-<li><a href="http://r-pkgs.had.co.nz/man.html">http://r-pkgs.had.co.nz/man.html</a></li>
-<li><a href="http://kbroman.org/pkg_primer/pages/docs.html">http://kbroman.org/pkg_primer/pages/docs.html</a></li>
-<li><a href="https://cran.r-project.org/web/packages/roxygen2/vignettes/rd.html">https://cran.r-project.org/web/packages/roxygen2/vignettes/rd.html</a></li>
-</ul></li>
+<li>パッケージ読み込み時などに実行される特殊関数
+<code>.onLoad(...)</code>, <code>.onAttach(...)</code>, <code>.onUnload(...)</code>
+は慣習的に<code>zzz.R</code>というファイルに記述する。</li>
 </ul>
 
 <h3 id="c-ソースコード">C++ソースコード</h3>
@@ -310,17 +297,30 @@ options(devtools.desc.license='MIT')
 
 <h2 id="roxygen2"><code>roxygen2</code></h2>
 
-<p>Rソースコードのコメントからヘルプを自動生成する。</p>
+<p>Rソースコードのコメントから<code>NAMESPACE</code>とヘルプ(<code>man/*.Rd</code>)を自動生成する。</p>
 
-<p><a href="http://cran.r-project.org/web/packages/roxygen2/">http://cran.r-project.org/web/packages/roxygen2/</a></p>
-
-<p><a href="https://github.com/klutometis/roxygen">https://github.com/klutometis/roxygen</a></p>
+<ul>
+<li><a href="http://cran.r-project.org/web/packages/roxygen2/">http://cran.r-project.org/web/packages/roxygen2/</a></li>
+<li><a href="https://github.com/klutometis/roxygen">https://github.com/klutometis/roxygen</a></li>
+<li><a href="http://r-pkgs.had.co.nz/man.html">http://r-pkgs.had.co.nz/man.html</a></li>
+<li><a href="http://kbroman.org/pkg_primer/pages/docs.html">http://kbroman.org/pkg_primer/pages/docs.html</a></li>
+<li><a href="https://cran.r-project.org/web/packages/roxygen2/vignettes/rd.html">https://cran.r-project.org/web/packages/roxygen2/vignettes/rd.html</a></li>
+</ul>
 
 <p><code>roxygen2::roxygenise(package.dir='.', ..., clean=FALSE)</code>
 を直接呼んでもよいが、
 基本的には <code>devtools::document()</code> を使って間接的に利用する。</p>
 
 <h3 id="使い方">使い方</h3>
+
+<pre><code class="language-r">#' A simple function to add 1
+#' @export
+#' @param x A numeric vector
+#' @return A numeric vector
+#' @examples
+#' increment(42)
+increment = function(x) {x + 1}
+</code></pre>
 
 <ul>
 <li><code>#'</code> から始まる行がroxygenコメントとして扱われる。</li>
