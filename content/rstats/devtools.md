@@ -119,6 +119,8 @@ vignettes/
 ### Rソースコード
 
 -   `R/` 以下に配置
+-   `NAMESPACE` や `man/*.Rd` を自動生成してもらえるように
+    [後述のroxygen](#roxygen2)形式でコメントを書く
 -   ファイルの数や名前は何でもいいので、開発者が分かりやすいようにしとく。
     例えば、似たような関数をひとつのファイルにまとめ、同名の`@rdname`を指定し、
     `man/`と同じ構造にするのがちょうどいいのではなかろうか。
@@ -126,22 +128,9 @@ vignettes/
     必要なパッケージは `DESCRIPTION` の `Imports` に書き、
     `名前空間::関数()` のようにして使う。
     どうしても名前空間を省略したいものだけ `@importFrom` を指定する。
--   `NAMESPACE` や `man/*.Rd` を自動生成してもらえるように
-    roxygen形式でコメントを書く
-
-    ```r
-    #' A simple function to add 1
-    #' @export
-    #' @param x A numeric vector
-    #' @return A numeric vector
-    #' @examples
-    #' increment(42)
-    increment = function(x) {x + 1}
-    ```
-
-    -   <http://r-pkgs.had.co.nz/man.html>
-    -   <http://kbroman.org/pkg_primer/pages/docs.html>
-    -   <https://cran.r-project.org/web/packages/roxygen2/vignettes/rd.html>
+-   パッケージ読み込み時などに実行される特殊関数
+    `.onLoad(...)`, `.onAttach(...)`, `.onUnload(...)`
+    は慣習的に`zzz.R`というファイルに記述する。
 
 ### C++ソースコード
 
@@ -243,17 +232,29 @@ options(devtools.desc.license='MIT')
 
 ## `roxygen2`
 
-Rソースコードのコメントからヘルプを自動生成する。
+Rソースコードのコメントから`NAMESPACE`とヘルプ(`man/*.Rd`)を自動生成する。
 
-<http://cran.r-project.org/web/packages/roxygen2/>
-
-<https://github.com/klutometis/roxygen>
+- <http://cran.r-project.org/web/packages/roxygen2/>
+- <https://github.com/klutometis/roxygen>
+- <http://r-pkgs.had.co.nz/man.html>
+- <http://kbroman.org/pkg_primer/pages/docs.html>
+- <https://cran.r-project.org/web/packages/roxygen2/vignettes/rd.html>
 
 `roxygen2::roxygenise(package.dir='.', ..., clean=FALSE)`
 を直接呼んでもよいが、
 基本的には `devtools::document()` を使って間接的に利用する。
 
 ### 使い方
+
+```r
+#' A simple function to add 1
+#' @export
+#' @param x A numeric vector
+#' @return A numeric vector
+#' @examples
+#' increment(42)
+increment = function(x) {x + 1}
+```
 
 -   `#'` から始まる行がroxygenコメントとして扱われる。
 -   タグは `@` で始まる。
