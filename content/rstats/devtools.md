@@ -182,6 +182,11 @@ vignettes/
     NULL
     ```
 
+その他の注意点
+
+- `std::abort()` や `std::exit()` は呼び出したRセッションまで殺してしまう。
+  例外は投げっぱなしで拾わなくても大丈夫で、
+  `std::exception`の派生クラスなら`what()`まで表示してもらえる。
 
 ## `devtools`
 
