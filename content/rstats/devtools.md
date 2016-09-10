@@ -48,7 +48,7 @@ GitHubに公開しておけば誰でも使えるようになるので、
         Description=paste0(title_desc, '.'),
         `Authors@R`="person('Watal M.', 'Iwasaki', email='user@example.com', role=c('aut', 'cre'))",
         License='MIT',
-        Suggests='readr, tidyr, dplyr, ggplot2',
+        Suggests='dplyr, ggplot2, purrr, readr, tidyr',
         Imports='devtools, stringr',
         URL=github_repo,
         BugReports=paste0(github_repo, '/issues'))
@@ -201,15 +201,13 @@ vignettes/
     `path` が既に存在している場合は先に進めないので、
     やり直すときは `system('rm -rf path')` などとして一旦消す必要がある。
 
-`load_all(pkg='.', reset=TRUE, recompile=FALSE, export_all=TRUE, quiet=FALSE)`
-:   リロード
-
-`check(pkg='.', document=TRUE, cleanup=TRUE, cran=TRUE, check_version=FALSE, ...)`
-:   パッケージとしての整合性を確認
-
 `document(pkg='.', ...)`
 :   `roxygen2` を呼び出してソースコードから
     `NAMESPACE` や `man/*.Rd` を自動生成する
+
+`check(pkg='.', document=TRUE, cleanup=TRUE, cran=TRUE, check_version=FALSE, ...)`
+:   パッケージとしての整合性を確認。
+    `document()`も呼ばれる。
 
 `test(pkg='.', filter=NULL, ...)`
 :   `testthat` を呼び出して `test/` 以下のテストコードを実行する
@@ -219,6 +217,15 @@ vignettes/
 
 `install_github(repo, username=NULL, ref='master', subdir=NULL, ...)`
 :   GitHubリポジトリからインストール
+
+`unload(pkg='.')`
+:   `datach('package:XXX')` とか `unloadNamespace(XXX)`
+    よりもちゃんとまっさらにパッケージを外す。
+
+`load_all(pkg='.', reset=TRUE, recompile=FALSE, export_all=TRUE, quiet=FALSE)`
+:   `install()` せずファイルから直接 `library()` する。
+    ロード済みでもまず `unload()` が呼ばれるので安心。
+
 
 ### 設定
 
