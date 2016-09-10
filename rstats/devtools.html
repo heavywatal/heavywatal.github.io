@@ -108,7 +108,7 @@ devtools::create(pkgname, description=list(
     Description=paste0(title_desc, '.'),
     `Authors@R`=&quot;person('Watal M.', 'Iwasaki', email='user@example.com', role=c('aut', 'cre'))&quot;,
     License='MIT',
-    Suggests='readr, tidyr, dplyr, ggplot2',
+    Suggests='dplyr, ggplot2, purrr, readr, tidyr',
     Imports='devtools, stringr',
     URL=github_repo,
     BugReports=paste0(github_repo, '/issues'))
@@ -275,19 +275,24 @@ NULL
 <dd>まっさらな状態から骨組みを作る。
 <code>path</code> が既に存在している場合は先に進めないので、
 やり直すときは <code>system('rm -rf path')</code> などとして一旦消す必要がある。</dd>
-<dt><code>load_all(pkg='.', reset=TRUE, recompile=FALSE, export_all=TRUE, quiet=FALSE)</code></dt>
-<dd>リロード</dd>
-<dt><code>check(pkg='.', document=TRUE, cleanup=TRUE, cran=TRUE, check_version=FALSE, ...)</code></dt>
-<dd>パッケージとしての整合性を確認</dd>
 <dt><code>document(pkg='.', ...)</code></dt>
 <dd><code>roxygen2</code> を呼び出してソースコードから
 <code>NAMESPACE</code> や <code>man/*.Rd</code> を自動生成する</dd>
+<dt><code>check(pkg='.', document=TRUE, cleanup=TRUE, cran=TRUE, check_version=FALSE, ...)</code></dt>
+<dd>パッケージとしての整合性を確認。
+<code>document()</code>も呼ばれる。</dd>
 <dt><code>test(pkg='.', filter=NULL, ...)</code></dt>
 <dd><code>testthat</code> を呼び出して <code>test/</code> 以下のテストコードを実行する</dd>
 <dt><code>install(pkg='.', reload=TRUE, quick=FALSE, local=TRUE, ...)</code></dt>
 <dd>ローカルにあるディレクトリからインストール</dd>
 <dt><code>install_github(repo, username=NULL, ref='master', subdir=NULL, ...)</code></dt>
 <dd>GitHubリポジトリからインストール</dd>
+<dt><code>unload(pkg='.')</code></dt>
+<dd><code>datach('package:XXX')</code> とか <code>unloadNamespace(XXX)</code>
+よりもちゃんとまっさらにパッケージを外す。</dd>
+<dt><code>load_all(pkg='.', reset=TRUE, recompile=FALSE, export_all=TRUE, quiet=FALSE)</code></dt>
+<dd><code>install()</code> せずファイルから直接 <code>library()</code> する。
+ロード済みでもまず <code>unload()</code> が呼ばれるので安心。</dd>
 </dl>
 
 <h3 id="設定">設定</h3>
