@@ -17,7 +17,7 @@ ggbio: an R package for extending the grammar of graphics for genomic data.
 [Bioconductor]({{< relref "bioconductor.md" >}}) を読み込んでインストール
 
 ```r
-source("http://bioconductor.org/biocLite.R")
+source("https://bioconductor.org/biocLite.R")
 biocLite('ggbio')
 library(ggbio)
 ```
@@ -112,7 +112,7 @@ library(ggbio)
 
 ## `biovizBase`
 
-<http://master.bioconductor.org/packages/release/bioc/html/biovizBase.html>
+<https://master.bioconductor.org/packages/release/bioc/html/biovizBase.html>
 
 ------------------------------------------------------------------------
 

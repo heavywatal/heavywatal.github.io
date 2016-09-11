@@ -31,8 +31,8 @@ tags = ["r", "bioconductor"]
 2.  R の中でコマンドを実行
 
     ```r
-    options(BioC_mirror="http://bioconductor.jp/")
-    source("http://bioconductor.org/biocLite.R")
+    options(BioC_mirror="https://bioconductor.org/")
+    source("https://bioconductor.org/biocLite.R")
     biocLite()
     ```
 
