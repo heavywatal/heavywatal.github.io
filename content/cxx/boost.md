@@ -34,7 +34,7 @@ gccとclangの両方から使える統一ライブラリを作るのは難しい
 
 4.  適当なオプションを与えて `bootstrap.sh` を実行:
     ```sh
-    % ./bootstrap.sh --without-icu --with-libraries=filesystem,graph,iostreams,program_options,serialization,system,test
+    % ./bootstrap.sh --without-icu --with-libraries=coroutine2,filesystem,graph,iostreams,program_options,serialization,system,test
     ```
 
     `b2` がビルドされ、
