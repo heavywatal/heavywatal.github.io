@@ -79,24 +79,26 @@ Error: could not find function "stepAIC"
 ### Contributed Packages
 
 数千ものパッケージが有志により開発され、CRANにまとめて公開されている。
-Rの中から下記のようなコマンドでインストールする
 
-```r
-> install.packages('ggplot2')
-```
-
-例えば
+特にHadley Wickhamらによる
+[tidyverse](https://github.com/hadley/tidyverse) パッケージ群 (例えば
 [ggplot2]({{< relref "ggplot2.md" >}}),
 [dplyr]({{< relref "dplyr.md" >}}),
 [purrr]({{< relref "purrr.md" >}}),
 [tidyr]({{< relref "tidyr.md" >}}),
 [readr]({{< relref "readr.md" >}}),
-[stringr]({{< relref "stringr.md" >}})
-などは標準になってもいいくらい便利。
+[stringr]({{< relref "stringr.md" >}})など)
+はどんな解析にも有用で、標準になってもいいくらい便利。
+Rの中から下記のようなコマンドで一括インストールできる。
+
+```r
+> install.packages('tidyverse')
+```
 
 そのほか
 <https://cran.r-project.org/web/views/>
 で用途別に紹介されている。
+
 
 ## 作業ディレクトリ
 

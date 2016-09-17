@@ -1,7 +1,7 @@
 +++
 title = 'readr'
 subtitle = "高速で柔軟なテーブル読み込みツール"
-tags = ["r", "hadley"]
+tags = ["r", "tidyverse"]
 [menu.main]
   parent = "rstats"
   weight = -65
@@ -22,8 +22,9 @@ https://cran.r-project.org/package=readr
 -   生data.frameではなく安全な
     [tibble]({{< relref "dplyr.md#tibble" >}}) として返してくれる
 
-Rの中から `install.packages('readr')` でインストールし、
-使う前に `library(readr)` でパッケージを読み込む。
+[tidyverse](https://github.com/hadley/tidyverse) に含まれているので、
+`install.packages('tidyverse')` で一括インストール、
+`library(tidyverse)` で一括ロード。
 
 
 ## 主な関数

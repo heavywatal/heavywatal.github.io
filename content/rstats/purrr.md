@@ -1,6 +1,6 @@
 +++
 date = "2016-05-27T18:31:56+09:00"
-tags = ["r", "hadley"]
+tags = ["r", "tidyverse"]
 title = "purrr"
 subtitle = "apply系関数の究極形"
 [menu.main]
@@ -14,8 +14,9 @@ https://github.com/hadley/purrr
 [dplyr]({{< relref "dplyr.md" >}}) や [tidyr]({{< relref "tidyr.md" >}}) と組み合わせて真価を発揮する。
 purerのように読むらしい。
 
-Rの中で `install.packages('purrr')` としてインストールし、
-使う前に `library(purrr)` で読み込む。
+[tidyverse](https://github.com/hadley/tidyverse) に含まれているので、
+`install.packages('tidyverse')` で一括インストール、
+`library(tidyverse)` で一括ロード。
 
 パイプ演算子 `%>%` については[dplyr]({{< relref "dplyr.md" >}})を参照。
 

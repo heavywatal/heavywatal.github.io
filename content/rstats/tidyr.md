@@ -1,7 +1,7 @@
 +++
 title = 'tidyr'
 subtitle = "シンプルなデータ変形ツール"
-tags = ["r", "hadley"]
+tags = ["r", "tidyverse"]
 [menu.main]
   parent = "rstats"
   weight = -70
@@ -18,8 +18,9 @@ data.frameを縦長・横長・入れ子に変形・整形するためのツー�
 と一緒に使うとよい。
 [reshape2]({{< relref "reshape2.md" >}}) を置き換えるべく再設計された改良版。
 
-Rの中で `install.packages('tidyr')` としてインストールし、
-使う前に `library(tidyr)` で読み込む。
+[tidyverse](https://github.com/hadley/tidyverse) に含まれているので、
+`install.packages('tidyverse')` で一括インストール、
+`library(tidyverse)` で一括ロード。
 
 下記のコード例で使うデータ
 

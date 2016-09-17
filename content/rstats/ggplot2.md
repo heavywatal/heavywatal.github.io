@@ -1,7 +1,7 @@
 +++
 title = 'ggplot2'
 subtitle = "きれいなグラフを簡単に合理的に"
-tags = ["r", "graph", "hadley"]
+tags = ["r", "graph", "tidyverse"]
 [menu.main]
   parent = "rstats"
   weight = -79
@@ -13,7 +13,9 @@ tags = ["r", "graph", "hadley"]
 - <http://www.rdocumentation.org/packages/ggplot2>
 - <https://github.com/hadley/ggplot2-book>
 
-R で `install.packages("ggplot2")` を実行してインストール
+[tidyverse](https://github.com/hadley/tidyverse) に含まれているので、
+`install.packages('tidyverse')` で一括インストール、
+`library(tidyverse)` で一括ロード。
 
 ## 基本的な使い方
 
@@ -21,7 +23,7 @@ R に入ってるお馴染みサンプルデータ `iris` を使って
 
 ```r
 ## ライブラリの読み込み
-library(ggplot2)
+library(tidyverse)
 
 ## データと全体設定を持ったggplotオブジェクトを作る
 gp = ggplot(iris, aes(x=Sepal.Width, y=Sepal.Length, colour=Species))

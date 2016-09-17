@@ -221,8 +221,9 @@ listなら[jsonlite](https://cran.r-project.org/web/packages/jsonlite/)でJSON�
 
 ### list, data.frame, matrix
 
--   [dplyr]({{< relref "dplyr.md" >}}), [purrr]({{< relref "purrr.md" >}}),
-    [tidyr]({{< relref "tidyr.md" >}}) を介して操作すると楽チンかつ高速。
+-   [tidyverse](https://github.com/hadley/tidyverse) パッケージ群
+    ([dplyr]({{< relref "dplyr.md" >}}), [purrr]({{< relref "purrr.md" >}}),
+    [tidyr]({{< relref "tidyr.md" >}})など) を介して操作すると楽チンかつ高速。
 -   基本的にlistやdata.frameは遅いので、
     matrixで済むもの(数値のみの表など)はmatrixで。
 

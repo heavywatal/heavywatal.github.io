@@ -1,7 +1,7 @@
 +++
 title = 'dplyr'
 subtitle = "高速data.frame処理"
-tags = ["r", "hadley"]
+tags = ["r", "tidyverse"]
 [menu.main]
   parent = "rstats"
   weight = -75
@@ -16,8 +16,9 @@ data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(
 前作 [plyr]({{< relref "plyr.md" >}}) のうちdata.frameに関する部分を抜き出して強化したパッケージ。
 [purrr]({{< relref "purrr.md" >}}) や [tidyr]({{< relref "tidyr.md" >}}) と一緒に使うとよい。
 
-Rの中で `install.packages('dplyr')` としてインストールし、
-使う前に `library(dplyr)` で読み込む。
+[tidyverse](https://github.com/hadley/tidyverse) に含まれているので、
+`install.packages('tidyverse')` で一括インストール、
+`library(tidyverse)` で一括ロード。
 
 ## 関数の連結
 
