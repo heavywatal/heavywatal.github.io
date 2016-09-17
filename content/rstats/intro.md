@@ -37,6 +37,8 @@ R開発チームが公式に作ってるものから、
 
 ### Standard Packages
 
+https://stat.ethz.ch/R-manual/R-devel/doc/html/packages.html
+
 R の標準機能。
 何もしなくても使用可能な状態になっているので、
 パッケージであることはあまり意識しなくてもいい。
@@ -74,7 +76,7 @@ Error: could not find function "stepAIC"
 ほかに
 `boot`, `class`, `cluster`, `codetools`,
 `foreign`, `KernSmooth`, `lattice`, `Matrix`,
-`mgcv`, `nlmennet`, `rpart`, `spatial`, `survival`
+`mgcv`, `nlme`, `nnet`, `rpart`, `spatial`, `survival`
 
 ### Contributed Packages
 
@@ -89,10 +91,11 @@ Error: could not find function "stepAIC"
 [readr]({{< relref "readr.md" >}}),
 [stringr]({{< relref "stringr.md" >}})など)
 はどんな解析にも有用で、標準になってもいいくらい便利。
-Rの中から下記のようなコマンドで一括インストールできる。
+Rの中から下記のようなコマンドで一括インストール・読み込みできる。
 
 ```r
 > install.packages('tidyverse')
+> library(tidyverse)
 ```
 
 そのほか
