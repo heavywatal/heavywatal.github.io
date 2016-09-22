@@ -89,6 +89,8 @@ readr — 高速で柔軟なテーブル読み込みツール
 
 <h2 id="主な関数">主な関数</h2>
 
+<h3 id="ファイル読み込み">ファイル読み込み</h3>
+
 <dl>
 <dt><code>read_csv(file, col_names=TRUE, col_types=NULL, locale=default_locale(), na=c('', 'NA'), comment='', trim_ws=TRUE, skip=0, n_max=-1, progress=interactive())</code></dt>
 <dd>カンマ区切りテキスト</dd>
@@ -115,10 +117,24 @@ readr — 高速で柔軟なテーブル読み込みツール
 <p>書き出し用の関数 <code>write_***()</code> も一応付いているが、
 まだ圧縮ファイルを書き出せないので微妙。</p>
 
+<h3 id="文字列から別の型へ">文字列から別の型へ</h3>
+
 <dl>
 <dt><code>parse_number(x, na=c('', 'NA'), locale=default_locale())</code></dt>
-<dd>文字列ベクタから数値を抜き出す。</dd>
+<dd>文字列で最初に登場する数値を抜き出す。
+あるカラムでは末尾に単位が付いちゃってる、みたいな状況でのみ使う。
+それ以外の複雑な判断はしないので、例えば <code>'6e23'</code> は単に6になる。</dd>
+<dt><code>parse_double(x, ...)</code>, <code>parse_int(x, ...)</code></dt>
+<dd>文字列をdouble/intの数値として解釈して返す。
+<code>'6e23'</code> のような指数形式も大丈夫。
+異物が混じっていた場合は警告してくれる。</dd>
+<dt><code>parse_logical(x, ...)</code></dt>
+<dd>1/0/T/F/TRUE/FALSE を大文字小文字問わずlogicalに変換。</dd>
 </dl>
+
+<p><code>parse_factor(x, levels, ordered=FALSE, ...)</code></p>
+
+<p><code>parse_date(x, format='', ...)</code>, <code>parse_datetime(x, format='', ...)</code>, <code>parse_time(x, format='', ...)</code></p>
 
 <h2 id="列の型を指定する">列の型を指定する</h2>
 
@@ -138,11 +154,12 @@ read_csv('mydata.csv', col_types=colsp)
 <ul>
 <li><code>[c] col_character()</code>: 文字列</li>
 <li><code>[i] col_integer()</code>: 整数</li>
-<li><code>[n] col_numeric()</code>: 数字以外の文字が含まれていても無視して数字として返す</li>
 <li><code>[d] col_double()</code>: 実数</li>
 <li><code>[l] col_logical()</code>: TRUE or FALSE</li>
-<li><code>[D] col_date(format='')</code>,</li>
-<li><code>[T] col_datetime(format='', tz='UTC')</code>: 日付</li>
+<li><code>[D] col_date(format='')</code>: 日付</li>
+<li><code>[t] col_time(format='')</code>: 時間</li>
+<li><code>[T] col_datetime(format='')</code>: 日付</li>
+<li><code>[n] col_number()</code>: 数字以外の文字が含まれていても無視して数字として返す</li>
 <li><code>[?] col_guess()</code>: 推測</li>
 <li><code>[_] col_skip()</code>: 列を読まない</li>
 <li><code>col_factor(levels, ordered)</code>: factor</li>
@@ -189,7 +206,8 @@ ld: library not found for -lintl
 % brew link gettext --force
 </code></pre>
 
-<p>それをRに見つけさせるため <code>~/.R/Makevars</code> にオプションを書く。</p>
+<p>Homebrewを<code>/usr/local/</code>以外に入れている場合は、
+それをRに見つけさせるため <code>~/.R/Makevars</code> にオプションを書く。</p>
 
 <pre><code>LDFLAGS = -L${HOME}/.homebrew/lib
 </code></pre>
