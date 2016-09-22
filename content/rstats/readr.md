@@ -29,6 +29,8 @@ https://cran.r-project.org/package=readr
 
 ## 主な関数
 
+### ファイル読み込み
+
 `read_csv(file, col_names=TRUE, col_types=NULL, locale=default_locale(), na=c('', 'NA'), comment='', trim_ws=TRUE, skip=0, n_max=-1, progress=interactive())`
 :   カンマ区切りテキスト
 
@@ -57,8 +59,25 @@ https://cran.r-project.org/package=readr
 書き出し用の関数 `write_***()` も一応付いているが、
 まだ圧縮ファイルを書き出せないので微妙。
 
+
+### 文字列から別の型へ
+
 `parse_number(x, na=c('', 'NA'), locale=default_locale())`
-:   文字列ベクタから数値を抜き出す。
+:   文字列で最初に登場する数値を抜き出す。
+    あるカラムでは末尾に単位が付いちゃってる、みたいな状況でのみ使う。
+    それ以外の複雑な判断はしないので、例えば `'6e23'` は単に6になる。
+
+`parse_double(x, ...)`, `parse_int(x, ...)`
+:   文字列をdouble/intの数値として解釈して返す。
+    `'6e23'` のような指数形式も大丈夫。
+    異物が混じっていた場合は警告してくれる。
+
+`parse_logical(x, ...)`
+:   1/0/T/F/TRUE/FALSE を大文字小文字問わずlogicalに変換。
+
+`parse_factor(x, levels, ordered=FALSE, ...)`
+
+`parse_date(x, format='', ...)`, `parse_datetime(x, format='', ...)`, `parse_time(x, format='', ...)`
 
 
 ## 列の型を指定する
@@ -79,11 +98,12 @@ read_csv('mydata.csv', col_types=colsp)
 
 - `[c] col_character()`: 文字列
 - `[i] col_integer()`: 整数
-- `[n] col_numeric()`: 数字以外の文字が含まれていても無視して数字として返す
 - `[d] col_double()`: 実数
 - `[l] col_logical()`: TRUE or FALSE
-- `[D] col_date(format='')`,
-- `[T] col_datetime(format='', tz='UTC')`: 日付
+- `[D] col_date(format='')`: 日付
+- `[t] col_time(format='')`: 時間
+- `[T] col_datetime(format='')`: 日付
+- `[n] col_number()`: 数字以外の文字が含まれていても無視して数字として返す
 - `[?] col_guess()`: 推測
 - `[_] col_skip()`: 列を読まない
 - `col_factor(levels, ordered)`: factor
@@ -132,6 +152,7 @@ ld: library not found for -lintl
 % brew link gettext --force
 ```
 
+Homebrewを`/usr/local/`以外に入れている場合は、
 それをRに見つけさせるため `~/.R/Makevars` にオプションを書く。
 
 ```
