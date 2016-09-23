@@ -264,7 +264,7 @@ listなら<a href="https://cran.r-project.org/web/packages/jsonlite/">jsonlite</
 
 <h3 id="ベクトル化されてる関数-演算子を使う">ベクトル化されてる関数・演算子を使う</h3>
 
-<p>ナマの <code>for</code> 文や <code>if</code> 文を避けるのと同義</p>
+<p>ナマの<code>for</code>ループや<code>if</code>文を避けるのと同義</p>
 
 <pre><code class="language-r">&gt; vec = seq_len(1000000)
 &gt; ifelse(vec %% 3,
@@ -286,19 +286,75 @@ matrixで済むもの(数値のみの表など)はmatrixで。</li>
 
 <p><a href="http://cran.r-project.org/web/views/HighPerformanceComputing.html">http://cran.r-project.org/web/views/HighPerformanceComputing.html</a></p>
 
-<p><code>snow</code> とか <code>multicore</code> が使われてきたが、
-バージョン2.14から <code>parallel</code> が標準ライブラリに入った。</p>
+<p><code>snow</code> とか <code>multicore</code> が使われてきたが、バージョン2.14からいいとこ取りの
+<a href="https://stat.ethz.ch/R-manual/R-patched/library/parallel/html/"><code>parallel</code></a>
+が標準ライブラリに入った。
+直接触るのは難しいので、ループを便利に書くための汎用ライブラリ
+<a href="https://cran.r-project.org/web/packages/foreach/"><code>foreach</code></a>
+(とその橋渡しライブラリ
+<a href="https://cran.r-project.org/web/packages/doParallel/"><code>doParallel</code></a>)
+を介して使う。
+それでもちょっと面倒なところをぜーんぶ自動でやってもらいたい場合は
+<a href="https://github.com/hoxo-m/pforeach"><code>pforeach</code></a>。</p>
 
-<p><a href="http://www.rdocumentation.org/packages/parallel">http://www.rdocumentation.org/packages/parallel</a></p>
+<p><a href="/rstats/plyr.html"><code>plyr</code></a> にも <code>apply()</code> 的な処理を簡単に並列化する機能がある。</p>
 
-<p>CPUコア数を取得する</p>
+<p>CPUコア数を取得: <code>parallel::detectCores(logical=FALSE)</code></p>
 
-<pre><code class="language-r">&gt; library(parallel)
-&gt; parallel::detectCores()
-[1] 4
+<pre><code class="language-r">library(doParallel)
+cluster = makeCluster(4)
+registerDoParallel(cluster)
+foreach (i=seq_len(12), .combine=c, .multicombine=TRUE) %dopar% {
+    rnorm(1, i)
+}
+stopCluster(cluster)
 </code></pre>
 
-<p><a href="/rstats/plyr.html">plyr</a> にも <code>apply()</code> 的な処理を簡単に並列化する機能がある。</p>
+<dl>
+<dt><code>foreach()</code>のオプション(とデフォルト値)</dt>
+<dd><code>.combine (list)</code>: 型が既知でvectorが欲しい場合に <code>c</code> にするなど</dd>
+<dd><code>.multicombine (FALSE)</code>: 結果が出る度に二値関数で結合していくか、まとめてか</dd>
+<dd><code>.maxcombine (100)</code>: まとめる場合の最大個数</dd>
+<dd><code>.export (NULL)</code>: 処理ブロック内から見えてなかったけど使いたいオブジェクト</dd>
+<dd><code>.packages (NULL)</code>: 処理ブロック内で名前空間省略で使いたいパッケージ</dd>
+<dd><code>.inorder (TRUE)</code>: 並列化する場合、順序を保持したいか</dd>
+<dd><code>.init</code>, <code>.final</code>, <code>.noexport</code>, <code>.verbose</code></dd>
+</dl>
+
+<h3 id="イテレータ">イテレータ</h3>
+
+<p>大抵はメモリを一気に確保してしまう方が速いが、
+データがRAMを超えるほど大きいときはそうも言ってられない。
+最大要求メモリを減らしたり、
+並列<code>foreach</code>のノード間通信を減らすためには
+<a href="https://cran.r-project.org/web/packages/iterators/"><code>iterators</code></a>
+を利用する。</p>
+
+<dl>
+<dt><code>nextElem(it, ...)</code></dt>
+<dd>イテレータを進めて値を得る。
+デバッグ時にとりあえず全部見たいときは <code>as.list(it)</code> が便利。</dd>
+<dt><code>icount(n)</code></dt>
+<dd>イテレータ版 <code>seq_len()</code></dd>
+<dt><code>icountn(vn)</code></dt>
+<dd>自然数限定イテレータ版 <code>expand.grid()</code></dd>
+<dt><code>iter(obj, by=c('column', 'row'))</code></dt>
+<dd>イテレータ版 <code>purrr::by_row()</code> のようなもので、
+並列<code>foreach</code>で各ノードに巨大data.frameを送りたくない場合に有用。
+data.frame以外も適用可。
+e.g., <code>iter(iris, by='row')</code></dd>
+<dt><code>isplit(x, f, drop=FALSE, ...)</code></dt>
+<dd>イテレータ版 <code>purrr::slice_rows()</code> のようなもので、
+<code>f</code>は列名じゃなくてfactor。
+data.frame以外も適用可。
+e.g., <code>isplit(iris, iris$Species)</code></dd>
+<dt><code>iread.table(file, ..., verbose=FALSE)</code>, <code>ireadLines(con, n=1, ...)</code></dt>
+<dd>ファイルを1行ずつ読み込む</dd>
+<dt><code>irbinom(..., count)</code>, <code>irnbinom()</code>, <code>irnorm()</code>, <code>irpois()</code>, <code>irunif()</code></dt>
+<dd>乱数</dd>
+<dt><code>idiv(n, ..., chunks, chunkSize)</code></dt>
+<dd>整数<code>n</code>をいい感じに振り分ける。</dd>
+</dl>
 
 <h3 id="ボトルネックを知る">ボトルネックを知る</h3>
 
