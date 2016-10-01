@@ -11,15 +11,11 @@ tags = ["r", "bioconductor"]
 <a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320057082/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51yBjAPptKL._SX160_.jpg" alt="Rによるバイオインフォマティクスデータ解析 第2版 －Bioconductorを用いたゲノムスケールのデータマイニング－" /></a>
 <a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320123700/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41aoEmhUR0L._SX160_.jpg" alt="トランスクリプトーム解析 (シリーズ Useful R 7)" /></a>
 
-<https://www.bioconductor.org>
-
-<http://blog.hackingisbelieving.org/2010/09/r-package_06.html>
-
-<http://qiita.com/tags/bioconductor>
-
-<http://manuals.bioinformatics.ucr.edu/home/R_BioCondManual>
-
-<http://search.bioconductor.jp/>
+- <https://www.bioconductor.org>
+- <http://blog.hackingisbelieving.org/2010/09/r-package_06.html>
+- <http://qiita.com/tags/bioconductor>
+- <http://manuals.bioinformatics.ucr.edu/home/R_BioCondManual>
+- <http://search.bioconductor.jp/>
 
 ## 基本操作
 
@@ -507,9 +503,7 @@ bsg[[1]]
 
 [biomart]({{< relref "biomart.md" >}})
 
-`GEOquery`
-
-<https://www.bioconductor.org/packages/release/bioc/html/GEOquery.html>
+[GEOquery](https://www.bioconductor.org/packages/release/bioc/html/GEOquery.html)
 
 ## モチーフ検索
 
