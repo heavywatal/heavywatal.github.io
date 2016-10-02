@@ -472,6 +472,32 @@ ggplotを学術論文向けにカスタマイズしやすくする。
 `theme_cowplot()` はシンプルで良いが、
 `library(cowplot)` と同時に勝手にセットされるはお行儀が悪い。
 
+主な利用目的はgridExtraと同じでggplotを並べる機能。
+ラベル(e.g., A, B, C)をオプションで簡単に付けられるのが良い。
+
+```r
+plot_grid(..., plotlist=NULL,
+    align=c('none', 'h', 'v', 'hv'),
+    nrow=NULL, ncol=NULL,
+    scale=1, rel_widths=1, rel_heights=1,
+    labels=NULL, label_size=14,
+    hjust=-0.5, vjust=1.5,
+    cols=NULL, rows=NULL)
+```
+
+`draw_figure_label()`
+`draw_grob()`
+`draw_label()`
+`draw_line()`
+`drar_plot()`
+`draw_plot_label()`
+`draw_text()`
+
+`ggdraw()`
+`ggsave()`
+
+`background_brid(major='xy', minor='none')`
+
 
 ### `GGally`
 
