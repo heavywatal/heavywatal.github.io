@@ -462,6 +462,17 @@ grid.draw(grob)
 ggsave('multi_page.pdf', .gtable, width=7, height=9.9)
 ```
 
+### `cowplot`
+
+- https://github.com/wilkelab/cowplot
+- https://cran.r-project.org/web/packages/cowplot
+
+ggplotを学術論文向けにカスタマイズしやすくする。
+
+`theme_cowplot()` はシンプルで良いが、
+`library(cowplot)` と同時に勝手にセットされるはお行儀が悪い。
+
+
 ### `GGally`
 
 <http://cran.r-project.org/web/packages/GGally/>
