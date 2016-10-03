@@ -312,14 +312,16 @@ stat前に適用される <code>scale_x_*</code> とかとはちょいと違う�
 
 <p>引数として <code>base_family</code> に&rdquo;Helvetica Neue&rdquo;などのフォントを指定できる。
 Macなら&rdquo;HiraKakuProN-W3&rdquo;を指定すれば日本語でも文字化けしなくなるはず。
-この設定はテーマを構成する <code>axis.text</code> などには引き継がれるが
-<code>geom_text()</code> などプロット内部の要素には引き継がれない。</p>
+(<code>grDevices::quartzFonts()</code> などを <code>.Rprofile</code> に書いてフォントを登録するには
+<a href="/rstats/config.html#rprofile">config</a> を参照)</p>
+
+<p>ほかにもいろんなテーマが
+<a href="https://cran.r-project.org/web/packages/ggthemes/vignettes/ggthemes.html">ggthemes</a>
+というパッケージで提供されている。</p>
 
 <div class="note">
-<p><a href="/rstats/config.html">config</a></p>
-
-<p><code>.Rprofile</code> で <code>grDevices::quartzFonts()</code> を登録しておけば
-その名前でも指定できる。</p>
+<p>この設定はテーマを構成する <code>axis.text</code> などには引き継がれるが
+<code>geom_text()</code> などプロット内部の要素には引き継がれない。</p>
 
 </div>
 
@@ -508,35 +510,49 @@ ggsave('multi_page.pdf', .gtable, width=7, height=9.9)
 <li><a href="https://cran.r-project.org/web/packages/cowplot">https://cran.r-project.org/web/packages/cowplot</a></li>
 </ul>
 
-<p>ggplotを学術論文向けにカスタマイズしやすくする。</p>
-
-<p><code>theme_cowplot()</code> はシンプルで良いが、
-<code>library(cowplot)</code> と同時に勝手にセットされるはお行儀が悪い。</p>
-
-<p>主な利用目的はgridExtraと同じでggplotを並べる機能。
+<p>ggplotを学術論文向けにカスタマイズしやすくする。
+主な利用目的はgridExtraと同じでggplotを並べる機能。
 ラベル(e.g., A, B, C)をオプションで簡単に付けられるのが良い。</p>
 
-<pre><code class="language-r">plot_grid(..., plotlist=NULL,
+<div class="warning">
+<p><code>library(cowplot)</code> せずに <code>loadNamespace('cowplot')</code>
+して常に名前空間つきで呼んだほうが安全。</p>
+
+<ul>
+<li><code>cowplot::ggsave()</code>が定義されてて<code>ggplot2</code>と衝突するのが気持ち悪い。</li>
+<li><code>.onAttach()</code> で基本テーマが勝手に変更されるのが気持ち悪い。
+<code>theme_cowplot()</code> そのものはシンプルで良くできているが、
+カスタマイズのベースとするには扱いにくい
+(<code>rect</code>に変なデフォルト値が設定されてしまう、など)。</li>
+</ul>
+
+</div>
+
+
+<dl>
+<dt><code>cowplot::plot_grid()</code></dt>
+<dd><p><code>facet_wrap()</code>のように、ざっと並べるのに便利。</p>
+
+<pre><code class="language-r">corplot::plot_grid(..., plotlist=NULL,
     align=c('none', 'h', 'v', 'hv'),
     nrow=NULL, ncol=NULL,
     scale=1, rel_widths=1, rel_heights=1,
     labels=NULL, label_size=14,
-    hjust=-0.5, vjust=1.5,
-    cols=NULL, rows=NULL)
+    hjust=-0.5, vjust=1.5)
 </code></pre>
+
+<p>さらに細やかな制御をしたいときは以下の関数を個別に重ねていく。</p></dd>
+<dt><code>cowplot::ggdraw(plot=NULL, xlim=c(0, 1), ylim=c(0, 1))</code></dt>
+<dd><p>これの後ろに <code>+</code> 演算子で <code>draw_***()</code> を足していく。</p></dd>
+</dl>
 
 <p><code>draw_figure_label()</code>
 <code>draw_grob()</code>
 <code>draw_label()</code>
 <code>draw_line()</code>
-<code>drar_plot()</code>
+<code>draw_plot()</code>
 <code>draw_plot_label()</code>
 <code>draw_text()</code></p>
-
-<p><code>ggdraw()</code>
-<code>ggsave()</code></p>
-
-<p><code>background_brid(major='xy', minor='none')</code></p>
 
 <h3 id="ggally"><code>GGally</code></h3>
 
