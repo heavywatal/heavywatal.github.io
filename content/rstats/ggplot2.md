@@ -266,15 +266,18 @@ ggplot内部で `stat_*()` を通して行われる。
 
 引数として `base_family` に"Helvetica Neue"などのフォントを指定できる。
 Macなら"HiraKakuProN-W3"を指定すれば日本語でも文字化けしなくなるはず。
-この設定はテーマを構成する `axis.text` などには引き継がれるが
-`geom_text()` などプロット内部の要素には引き継がれない。
+(`grDevices::quartzFonts()` などを `.Rprofile` に書いてフォントを登録するには
+[config]({{< relref "config.md#rprofile" >}}) を参照)
+
+ほかにもいろんなテーマが
+[ggthemes](https://cran.r-project.org/web/packages/ggthemes/vignettes/ggthemes.html)
+というパッケージで提供されている。
 
 {{%div class="note"%}}
-[config]({{< relref "config.md" >}})
-
-`.Rprofile` で `grDevices::quartzFonts()` を登録しておけば
-その名前でも指定できる。
+この設定はテーマを構成する `axis.text` などには引き継がれるが
+`geom_text()` などプロット内部の要素には引き継がれない。
 {{%/div%}}
+
 
 ### 設定項目
 
@@ -468,12 +471,16 @@ ggsave('multi_page.pdf', .gtable, width=7, height=9.9)
 - https://cran.r-project.org/web/packages/cowplot
 
 ggplotを学術論文向けにカスタマイズしやすくする。
-
-`theme_cowplot()` はシンプルで良いが、
-`library(cowplot)` と同時に勝手にセットされるはお行儀が悪い。
-
 主な利用目的はgridExtraと同じでggplotを並べる機能。
 ラベル(e.g., A, B, C)をオプションで簡単に付けられるのが良い。
+
+{{%div class="warning"%}}
+`library(cowplot)` と同時に基本テーマが勝手に変更されることに注意。
+`theme_cowplot()` そのものはシンプルで良くできているが、
+カスタマイズのベースとするには扱いにくい
+(`rect`に変なデフォルト値が設定されてしまうとことか)。
+`theme_set(theme_bw())` などとして設定しなおしたほうが安全。
+{{%/div%}}
 
 ```r
 plot_grid(..., plotlist=NULL,
@@ -481,8 +488,7 @@ plot_grid(..., plotlist=NULL,
     nrow=NULL, ncol=NULL,
     scale=1, rel_widths=1, rel_heights=1,
     labels=NULL, label_size=14,
-    hjust=-0.5, vjust=1.5,
-    cols=NULL, rows=NULL)
+    hjust=-0.5, vjust=1.5)
 ```
 
 `draw_figure_label()`
