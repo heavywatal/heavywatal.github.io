@@ -475,34 +475,39 @@ ggplotを学術論文向けにカスタマイズしやすくする。
 ラベル(e.g., A, B, C)をオプションで簡単に付けられるのが良い。
 
 {{%div class="warning"%}}
-`library(cowplot)` と同時に基本テーマが勝手に変更されることに注意。
-`theme_cowplot()` そのものはシンプルで良くできているが、
-カスタマイズのベースとするには扱いにくい
-(`rect`に変なデフォルト値が設定されてしまうとことか)。
-`theme_set(theme_bw())` などとして設定しなおしたほうが安全。
+`library(cowplot)` せずに `loadNamespace('cowplot')`
+して常に名前空間つきで呼んだほうが安全。
+
+-   `cowplot::ggsave()`が定義されてて`ggplot2`と衝突するのが気持ち悪い。
+-   `.onAttach()` で基本テーマが勝手に変更されるのが気持ち悪い。
+    `theme_cowplot()` そのものはシンプルで良くできているが、
+    カスタマイズのベースとするには扱いにくい
+    (`rect`に変なデフォルト値が設定されてしまう、など)。
 {{%/div%}}
 
-```r
-plot_grid(..., plotlist=NULL,
-    align=c('none', 'h', 'v', 'hv'),
-    nrow=NULL, ncol=NULL,
-    scale=1, rel_widths=1, rel_heights=1,
-    labels=NULL, label_size=14,
-    hjust=-0.5, vjust=1.5)
-```
+`cowplot::plot_grid()`
+:   `facet_wrap()`のように、ざっと並べるのに便利。
+
+    ```r
+    corplot::plot_grid(..., plotlist=NULL,
+        align=c('none', 'h', 'v', 'hv'),
+        nrow=NULL, ncol=NULL,
+        scale=1, rel_widths=1, rel_heights=1,
+        labels=NULL, label_size=14,
+        hjust=-0.5, vjust=1.5)
+    ```
+    さらに細やかな制御をしたいときは以下の関数を個別に重ねていく。
+
+`cowplot::ggdraw(plot=NULL, xlim=c(0, 1), ylim=c(0, 1))`
+:  これの後ろに `+` 演算子で `draw_***()` を足していく。
 
 `draw_figure_label()`
 `draw_grob()`
 `draw_label()`
 `draw_line()`
-`drar_plot()`
+`draw_plot()`
 `draw_plot_label()`
 `draw_text()`
-
-`ggdraw()`
-`ggsave()`
-
-`background_brid(major='xy', minor='none')`
 
 
 ### `GGally`
