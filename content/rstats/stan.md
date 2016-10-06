@@ -216,13 +216,21 @@ m[1]   // row_vector[3]
 http://www.rdocumentation.org/packages/rstan/topics/Plots
 
 ```r
-rstan::stan_plot()
-rstan::stan_trace()
-rstan::stan_scat()
-rstan::stan_hist()
-rstan::stan_dens()
-rstan::stan_ac()
+stan_plot()
+stan_trace()
+stan_scat()
+stan_hist()
+stan_dens()
+stan_ac()
+
+# S3 method
+pairs()
+print()
 ```
+
+`stanfit` クラスのmethodとして `plot()` や `traceplot()` が定義されているが、
+いくつかのチェックとともに `stan_plot()` 系の関数を呼び出すだけで大きな違いは無さそう。
+
 
 ## トラブル対処
 
