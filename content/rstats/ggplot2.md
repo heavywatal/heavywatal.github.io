@@ -50,7 +50,9 @@ ggsave("iris_sepal.png", gp)
 [dplyr]({{< relref "dplyr.md" >}}) と [tidyr]({{< relref "tidyr.md" >}}) を使う。
 {{%/div%}}
 
-## プロット
+## プロットの種類
+
+[version 2.0での変更点](https://blog.rstudio.org/2015/12/21/ggplot2-2-0-0/)
 
 [散布図](http://docs.ggplot2.org/current/geom_point.html)
 :   `gp + geom_point(size=2, alpha=0.3)`
@@ -61,13 +63,14 @@ ggsave("iris_sepal.png", gp)
     `gp + geom_step()` 階段状に結ぶ
 
 [ヒストグラム、密度曲線](http://docs.ggplot2.org/current/geom_histogram.html)
-:   `gp + geom_histogram()` --- 棒グラフ
+:   `gp + geom_histogram()` --- 棒グラフ with binning
+:   `gp + geom_bar()` --- 棒グラフ without binning
 :   `gp + geom_freqpoly()` --- 折れ線
 :   `gp + geom_density()` --- 密度推定されたスムーズな線
 
 [棒グラフ](http://docs.ggplot2.org/current/geom_bar.html)
 :   `gp + geom_bar(stat='identity')`\
-    stat を指定しないとヒストグラムになってしまう。
+    statを指定しない場合はヒストグラムもどき(binning無しの生カウント)になる。
     `position='dodge'` にすると横並び (デフォルト: `'stack'`)。
 
 [箱ひげ図](http://docs.ggplot2.org/current/geom_boxplot.html)
