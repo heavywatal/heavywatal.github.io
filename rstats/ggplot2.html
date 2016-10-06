@@ -113,7 +113,9 @@ ggsave(&quot;iris_sepal.png&quot;, gp)
 </div>
 
 
-<h2 id="プロット">プロット</h2>
+<h2 id="プロットの種類">プロットの種類</h2>
+
+<p><a href="https://blog.rstudio.org/2015/12/21/ggplot2-2-0-0/">version 2.0での変更点</a></p>
 
 <dl>
 <dt><a href="http://docs.ggplot2.org/current/geom_point.html">散布図</a></dt>
@@ -123,12 +125,13 @@ ggsave(&quot;iris_sepal.png&quot;, gp)
 <code>gp + geom_line()</code> x軸上の順で結ぶ<br>
 <code>gp + geom_step()</code> 階段状に結ぶ</dd>
 <dt><a href="http://docs.ggplot2.org/current/geom_histogram.html">ヒストグラム、密度曲線</a></dt>
-<dd><code>gp + geom_histogram()</code> &mdash; 棒グラフ</dd>
+<dd><code>gp + geom_histogram()</code> &mdash; 棒グラフ with binning</dd>
+<dd><code>gp + geom_bar()</code> &mdash; 棒グラフ without binning</dd>
 <dd><code>gp + geom_freqpoly()</code> &mdash; 折れ線</dd>
 <dd><code>gp + geom_density()</code> &mdash; 密度推定されたスムーズな線</dd>
 <dt><a href="http://docs.ggplot2.org/current/geom_bar.html">棒グラフ</a></dt>
 <dd><code>gp + geom_bar(stat='identity')</code><br>
-stat を指定しないとヒストグラムになってしまう。
+statを指定しない場合はヒストグラムもどき(binning無しの生カウント)になる。
 <code>position='dodge'</code> にすると横並び (デフォルト: <code>'stack'</code>)。</dd>
 <dt><a href="http://docs.ggplot2.org/current/geom_boxplot.html">箱ひげ図</a></dt>
 <dd><code>gp + geom_boxplot()</code><br>
