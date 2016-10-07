@@ -262,6 +262,41 @@ NULL
 <code>std::exception</code>の派生クラスなら<code>what()</code>まで表示してもらえる。</li>
 </ul>
 
+<h3 id="vignettes">vignettes</h3>
+
+<p><a href="http://r-pkgs.had.co.nz/vignettes.html">http://r-pkgs.had.co.nz/vignettes.html</a></p>
+
+<p>個々の関数の使用例はRソースファイルの <code>@examples</code> に書くとして、
+複数の関数を組み合わせてどう使うかとか、
+パッケージ全体の使い方とかを説明するのが<code>vignettes/</code>の役割。
+Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。</p>
+
+<p><code>build()</code>や<code>check()</code>がデフォルトで<code>vignette=TRUE</code>かつ処理がやや重いので、
+毎回その重さを受け入れるか、わざわざ<code>FALSE</code>指定するかというのは悩みどころ。</p>
+
+<p><code>pandoc</code> と <code>pandoc-citeproc</code> が必要なので
+<a href="/mac/homebrew.html">Homebrew</a> とかでインストールしておく。</p>
+
+<h3 id="demo">demo</h3>
+
+<p><a href="http://r-pkgs.had.co.nz/misc.html">http://r-pkgs.had.co.nz/misc.html</a></p>
+
+<p>vignettesに取って代わられた古い機能。
+ソースコード<code>*.R</code>を置いておくと<code>demo()</code>関数で呼び出せるというだけ。</p>
+
+<p><code>check()</code>でソースコードの中身は参照されないが、
+<code>demo/00Index</code> というファイルの整合性が取れてないと警告される。
+「デモの名前 + スペース3つ以上かタブ + 適当な説明」という形式。
+ファイル名から拡張子を取り除いたものがデモの名前になる。</p>
+
+<pre><code>mydemo1    Description of demo 1
+mydemo2    Description of demo 2
+</code></pre>
+
+<p>人に見せたり<code>tests/</code>に入れたりするほどのもんでもないし、
+毎回<code>check()</code>されなくてもいいけど、
+試しに書いたコードを一応取っとく、くらいの用途にはいいかな？</p>
+
 <h2 id="devtools"><code>devtools</code></h2>
 
 <p><a href="https://github.com/hadley/devtools">https://github.com/hadley/devtools</a></p>
