@@ -188,6 +188,43 @@ vignettes/
   例外は投げっぱなしで拾わなくても大丈夫で、
   `std::exception`の派生クラスなら`what()`まで表示してもらえる。
 
+### vignettes
+
+<http://r-pkgs.had.co.nz/vignettes.html>
+
+個々の関数の使用例はRソースファイルの `@examples` に書くとして、
+複数の関数を組み合わせてどう使うかとか、
+パッケージ全体の使い方とかを説明するのが`vignettes/`の役割。
+Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
+
+`build()`や`check()`がデフォルトで`vignette=TRUE`かつ処理がやや重いので、
+毎回その重さを受け入れるか、わざわざ`FALSE`指定するかというのは悩みどころ。
+
+`pandoc` と `pandoc-citeproc` が必要なので
+[Homebrew]({{< relref "homebrew.md" >}}) とかでインストールしておく。
+
+### demo
+
+<http://r-pkgs.had.co.nz/misc.html>
+
+vignettesに取って代わられた古い機能。
+ソースコード`*.R`を置いておくと`demo()`関数で呼び出せるというだけ。
+
+`check()`でソースコードの中身は参照されないが、
+`demo/00Index` というファイルの整合性が取れてないと警告される。
+「デモの名前 + スペース3つ以上かタブ + 適当な説明」という形式。
+ファイル名から拡張子を取り除いたものがデモの名前になる。
+```
+mydemo1    Description of demo 1
+mydemo2    Description of demo 2
+```
+
+人に見せたり`tests/`に入れたりするほどのもんでもないし、
+毎回`check()`されなくてもいいけど、
+試しに書いたコードを一応取っとく、くらいの用途にはいいかな？
+
+
+
 ## `devtools`
 
 <https://github.com/hadley/devtools>
