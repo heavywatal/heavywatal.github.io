@@ -220,6 +220,31 @@ bad_func(3)   # 6
 }
 </code></pre>
 
+<h3 id="引数を中身ではなく名前として評価">引数を中身ではなく名前として評価</h3>
+
+<pre><code class="language-r">value = 42
+fun1 = function(x) x
+fun2 = function(x) substitute(x)
+fun3 = function(x) deparse(substitute(x))
+
+&gt; fun1(value)
+[1] 42
+&gt; fun1(quote(value))
+value
+&gt; fun2(value)
+value
+&gt; fun3(value)
+[1] &quot;value&quot;
+</code></pre>
+
+<p>詳しくは non-standard expression (NSE) で調べる:</p>
+
+<ul>
+<li><a href="http://adv-r.had.co.nz/Computing-on-the-language.html">http://adv-r.had.co.nz/Computing-on-the-language.html</a></li>
+<li><a href="https://cran.r-project.org/web/packages/dplyr/vignettes/nse.html">https://cran.r-project.org/web/packages/dplyr/vignettes/nse.html</a></li>
+<li><a href="https://github.com/hadley/lazyeval">https://github.com/hadley/lazyeval</a></li>
+</ul>
+
 <h2 id="attach-するべからず"><code>attach()</code> するべからず</h2>
 
 <p>データフレーム <code>some_data</code> のある要素 <code>some_item</code> にアクセスしたいとき、
