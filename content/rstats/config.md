@@ -31,12 +31,13 @@ sudo apt-get install r-base
 
 ## 起動オプション
 
+ターミナルから `R --help` を見るか
 https://cran.r-project.org/doc/manuals/R-intro.html#Invoking-R
 
-あるいはターミナルから
+例えば以下のようなエイリアスを `.zshrc` で設定する。
 
 ```sh
-% R --help
+alias R='R --quiet --no-save --no-restore-data'
 ```
 
 ## 環境変数
@@ -44,6 +45,11 @@ https://cran.r-project.org/doc/manuals/R-intro.html#Invoking-R
 https://cran.r-project.org/doc/manuals/R-admin.html#Environment-variable-index
 
 https://stat.ethz.ch/R-manual/R-patched/library/base/html/EnvVar.html
+
+```r
+Sys.getenv()
+```
+
 
 ## .Renviron
 
