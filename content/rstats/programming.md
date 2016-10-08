@@ -166,6 +166,31 @@ func = function(x, y, ...){
 }
 ```
 
+### 引数を中身ではなく名前として評価
+
+```r
+value = 42
+fun1 = function(x) x
+fun2 = function(x) substitute(x)
+fun3 = function(x) deparse(substitute(x))
+
+> fun1(value)
+[1] 42
+> fun1(quote(value))
+value
+> fun2(value)
+value
+> fun3(value)
+[1] "value"
+```
+
+詳しくは non-standard expression (NSE) で調べる:
+
+- http://adv-r.had.co.nz/Computing-on-the-language.html
+- https://cran.r-project.org/web/packages/dplyr/vignettes/nse.html
+- https://github.com/hadley/lazyeval
+
+
 ## `attach()` するべからず
 
 データフレーム `some_data` のある要素 `some_item` にアクセスしたいとき、
