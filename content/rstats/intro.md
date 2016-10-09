@@ -16,6 +16,13 @@ tags = ["r"]
 -   <https://cran.r-project.org/web/views/>
 -   <http://www.rdocumentation.org/>
 
+## RStudioを使う
+
+Rの実行方法はいくつかあるが、これから始めるひとは
+[RStudio](https://www.rstudio.com/) を使うとよい。
+
+<a href="https://www.amazon.co.jp/RStudio%E3%81%A7%E3%81%AF%E3%81%98%E3%82%81%E3%82%8BR%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E5%85%A5%E9%96%80-Garrett-Grolemund/dp/4873117151/ref=as_li_ss_il?ie=UTF8&qid=1476023192&sr=8-3&keywords=r&linkCode=li2&tag=heavywatal-22&linkId=75dc85d4a9065e5d4a5f9b5c1a0ad198" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873117151&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a>
+
 ## スクリプトを保存
 
 R のコンソールにコマンドを打ち込むと、即座に結果が返ってくる。

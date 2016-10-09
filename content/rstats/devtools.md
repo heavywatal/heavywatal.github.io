@@ -362,3 +362,8 @@ increment = function(x) {x + 1}
 
 `@name name`
 :   パッケージやデータはこのタグで明示的に設定する必要がある。
+
+
+----
+
+<a href="https://www.amazon.co.jp/R-Packages-Hadley-Wickham-ebook/dp/B00VAYCHL0/ref=as_li_ss_il?s=english-books&ie=UTF8&qid=1476024269&sr=1-2&keywords=r+hadley&linkCode=li3&tag=heavywatal-22&linkId=144231d9deecd85ae13c4edb2ee75bed" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B00VAYCHL0&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a>
