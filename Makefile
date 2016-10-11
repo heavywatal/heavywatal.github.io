@@ -3,6 +3,7 @@ DEPLOYDIR := ~/Sites
 
 all:
 	$(MAKE) build
+	sed -i -e 's/index.html//' ${BUILDDIR}/sitemap.xml
 	$(MAKE) install
 
 build:
