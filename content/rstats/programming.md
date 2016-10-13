@@ -193,10 +193,10 @@ value
 
 ## `attach()` するべからず
 
-データフレーム `some_data` のある要素 `some_item` にアクセスしたいとき、
-普通はダラーを使って `some_data$some_item` のようにする。
-`attach(some_data)` すると、データフレーム内のすべての要素が独立した変数みたいになって、
-`some_item` だけでアクセスできるようになる (`detach()` するまで)。
+あるdata.frameの `column_a` というカラムにアクセスしたいとき、
+普通はダラー`$`を使って `some_data$column_a` のようにする。
+`attach(some_data)` すると、data.frame内のすべてのカラムが独立した変数のように扱われて、
+`column_a` だけでアクセスできるようになる (`detach()` するまで)。
 でもそうすると、ワークスペースは変数でいっぱいになってしまうし、
 名前の衝突による不具合が起こる危険性がある。
 そこで、範囲限定で一時的に `attach()` 状態を作り出す `with()` を使う。
@@ -235,13 +235,17 @@ listなら[jsonlite](https://cran.r-project.org/web/packages/jsonlite/)でJSON�
 
 ### ベクトル化されてる関数・演算子を使う
 
-ナマの`for`ループや`if`文を避けるのと同義
+Rのナマの`for`ループは絶望的に遅い。
+四則演算のみならず様々な処理がベクトルのまま行えるようになっているので、そっちを使う。
 
 ```r
-> vec = seq_len(1000000)
-> ifelse(vec %% 3,
-+        ifelse(vec %% 5, vec, 'buzz'),
-+        ifelse(vec %% 5, 'fizz', 'fizzbuzz'))
+vec = seq_len(60)
+vec + vec
+vec * 2
+
+ifelse(vec %% 3,
+       ifelse(vec %% 5, vec, 'buzz'),
+       ifelse(vec %% 5, 'fizz', 'fizzbuzz'))
 ```
 
 ### list, data.frame, matrix
@@ -254,83 +258,11 @@ listなら[jsonlite](https://cran.r-project.org/web/packages/jsonlite/)でJSON�
 
 ### 並列化
 
-<http://cran.r-project.org/web/views/HighPerformanceComputing.html>
+See [foreach #parallel]({{< relref "foreach.md#parallel" >}})
 
-`snow` とか `multicore` が使われてきたが、バージョン2.14からいいとこ取りの
-[`parallel`](https://stat.ethz.ch/R-manual/R-patched/library/parallel/html/)
-が標準ライブラリに入った。
-直接触るのは難しいので、ループを便利に書くための汎用ライブラリ
-[`foreach`](https://cran.r-project.org/web/packages/foreach/)
-(とその橋渡しライブラリ
-[`doParallel`](https://cran.r-project.org/web/packages/doParallel/))
-を介して使う。
-それでもちょっと面倒なところをぜーんぶ自動でやってもらいたい場合は
-[`pforeach`](https://github.com/hoxo-m/pforeach)。
+### イテレータでメモリ節約
 
-[`plyr`]({{< relref "plyr.md" >}}) にも `apply()` 的な処理を簡単に並列化する機能がある。
-
-CPUコア数を取得: `parallel::detectCores(logical=FALSE)`
-
-```r
-library(doParallel)
-cluster = makeCluster(4)
-registerDoParallel(cluster)
-foreach (i=seq_len(12), .combine=c, .multicombine=TRUE) %dopar% {
-    rnorm(1, i)
-}
-stopCluster(cluster)
-```
-
-`foreach()`のオプション(とデフォルト値)
-: `.combine (list)`: 型が既知でvectorが欲しい場合に `c` にするなど
-: `.multicombine (FALSE)`: 結果が出る度に二値関数で結合していくか、まとめてか
-: `.maxcombine (100)`: まとめる場合の最大個数
-: `.export (NULL)`: 処理ブロック内から見えてなかったけど使いたいオブジェクト
-: `.packages (NULL)`: 処理ブロック内で名前空間省略で使いたいパッケージ
-: `.inorder (TRUE)`: 並列化する場合、順序を保持したいか
-: `.init`, `.final`, `.noexport`, `.verbose`
-
-
-### イテレータ
-
-大抵はメモリを一気に確保してしまう方が速いが、
-データがRAMを超えるほど大きいときはそうも言ってられない。
-最大要求メモリを減らしたり、
-並列`foreach`のノード間通信を減らすためには
-[`iterators`](https://cran.r-project.org/web/packages/iterators/)
-を利用する。
-
-`nextElem(it, ...)`
-: イテレータを進めて値を得る。
-  デバッグ時にとりあえず全部見たいときは `as.list(it)` が便利。
-
-`icount(n)`
-: イテレータ版 `seq_len()`
-
-`icountn(vn)`
-: 自然数限定イテレータ版 `expand.grid()`
-
-`iter(obj, by=c('column', 'row'))`
-: イテレータ版 `purrr::by_row()` のようなもので、
-  並列`foreach`で各ノードに巨大data.frameを送りたくない場合に有用。
-  data.frame以外も適用可。
-  e.g., `iter(iris, by='row')`
-
-`isplit(x, f, drop=FALSE, ...)`
-: イテレータ版 `purrr::slice_rows()` のようなもので、
-  `f`は列名じゃなくてfactor。
-  data.frame以外も適用可。
-  e.g., `isplit(iris, iris$Species)`
-
-`iread.table(file, ..., verbose=FALSE)`, `ireadLines(con, n=1, ...)`
-: ファイルを1行ずつ読み込む
-
-`irbinom(..., count)`, `irnbinom()`, `irnorm()`, `irpois()`, `irunif()`
-: 乱数
-
-`idiv(n, ..., chunks, chunkSize)`
-: 整数`n`をいい感じに振り分ける。
-
+See [foreach #iterators]({{< relref "foreach.md#iterators" >}})
 
 ### ボトルネックを知る
 
@@ -345,15 +277,6 @@ stopCluster(cluster)
 
 ```r
 > system.time(測定したいコマンド)
-```
-
-### バイトコンパイル
-
-より機械語に近い、構文解析を済ませた形まで関数を変換させておく (2.13以降)
-
-```r
-library(compiler)
-cfun = compiler::cmpfun(my_func)
 ```
 
 ------------------------------------------------------------------------
