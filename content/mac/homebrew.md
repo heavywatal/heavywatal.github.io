@@ -53,7 +53,7 @@ https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/FAQ.md
 
 - `outdated` なものを全てアップグレード:
 
-        % brew upgrade --all
+        % brew upgrade
 
 - パッケージのバージョンを固定し、`brew upgrade --all` の適用外にする。
   頻繁に更新され、やたらCPUを使うやつらに。
@@ -99,14 +99,12 @@ https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/FAQ.md
     gnuplot
     graphviz
     gsl
-    lesspipe
     mercurial
     nkf
     pandoc
     rmtrash
     tmux
     tree
-    wakeonlan
     wget
     xz
     zsh
@@ -218,7 +216,7 @@ GUIアプリケーションもHomebrewで管理してしまおうという野心
 アプリ側でアップデートを実行するとCask内でのバージョンと食い違っちゃうけど使用上は問題ないらしい。
 
 alfred, amazon-cloud-drive, atom, audacity,
-basictex, bibdesk, caffeine,
+basictex, bibdesk, boostnote, caffeine,
 dia, dropbox, evernote, firefox, gephi,
 google-chrome, google-drive, google-earth, google-japanese-ime,
 inkscape, iterm2, karabiner, kindle, libreoffice,
