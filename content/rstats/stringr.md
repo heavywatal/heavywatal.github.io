@@ -18,9 +18,12 @@ R標準の `base` パッケージが提供する関数とほとんど同じ機�
 -   引数オブジェクトの各要素の名前や位置を保持する
     -   長さゼロのオブジェクトを引数として与えた場合には長さゼロの結果を返す
     -   引数オブジェクトに `NA` が含まれる場合はその部分の結果を `NA` とする
--   対象文字列が一貫して第一引数
--   [stringi](http://www.gagolewski.com/software/stringi/) を使って動くため高速
--   [ICU正規表現](http://userguide.icu-project.org/strings/regexp)
+-   対象文字列が一貫して第一引数で、パターンが二番目
+-   何をやる関数なのか名前から分かりやすい\
+    (標準が覚えにくすぎ: `grep`, `grepl`, `regexpr`, `gregexpr`, `regexec`)
+-   [ICU4C](http://site.icu-project.org/)
+    (via [stringi](http://www.gagolewski.com/software/stringi/)) を使って動くため高速
+-   [ICU正規表現](http://userguide.icu-project.org/strings/regexp) の仕様が明確
 
 今や `stringr` は [stringi](http://www.gagolewski.com/software/stringi/) のラッパーだし、
 どちらもほぼ同じインターフェイスなので、
@@ -63,19 +66,23 @@ Rの中から `install.package('tidyverse')` でインストールし、
 
 ### Pattern Matching
 
-`str_detect(string, pattern)`
-:   マッチする箇所があるかどうか `logical` を返す。
-    `base::grepl(pattern, x)` と相同。
-
 `str_count(string, pattern)`
 :   マッチする箇所の数を返す。
 
-`str_locate(string, pattern)`
-:   マッチする最初の箇所の `start`, `end` 位置を行列で返す。
+`str_detect(string, pattern)`
+:   マッチするかどうか `logical` を返す。
+    `base::grepl(pattern, x)` と相同。
 
 `str_extract(string, pattern)`, `str_extract_all(string, pattern)`
 :   マッチした部分文字列を取り出す。しなかった要素には `NA`。
     `base::grep(pattern, x, value=TRUE)` はマッチする要素のみ、元の形で返す。
+
+`str_subset(string, pattern)`
+:   `x[str_detect(x, pattern)]` のショートカット。
+    マッチする要素だけ返すので `str_extract()` とは異なる。
+
+`str_locate(string, pattern)`
+:   マッチする最初の箇所の `start`, `end` 位置を行列で返す。
 
 `str_match(string, pattern)`, `str_match_all(string, pattern)`
 :   マッチした部分文字列を取り出し、後方参照を含む行列を返す。
@@ -109,13 +116,26 @@ Rの中から `install.package('tidyverse')` でインストールし、
 
 ### Formatting
 
-`str_trim(string, side="both")`
-:   空白文字を除去する。
-    Python でいうところの `str.strip()`。
+`str_to_upper()`, `str_to_lower()`, `str_to_title()`
+:   大文字・小文字の変換
+
+`str_interp(string, env=parent.frame())`
+:   `sprintf()` と相同。
+    文字列の中の `$[format]{expr}` がR表現として評価される。
+    formatは`sprintf()`と同じ形式で、省略可。
+    `env` はlistやdata.frameでもよい。
+:   e.g., `stringr::str_interp('Mean sepal width is $[.3f]{mean(Sepal.Width)}.', iris)`
 
 `str_pad(string, width, side="left", pad=" ")`
 :   余白を作る。
     幅を `width` に伸ばして `side` に寄せて空白を `pad` で埋める。
+
+`str_trim(string, side="both")`
+:   空白文字を除去する。
+    Python でいうところの `str.strip()`。
+
+`str_trunc(string, width, side=c('right', 'left', 'center'), ellipsis='...')`
+:   一定の長さを超えたら捨てて `...` にする。
 
 `str_wrap(string, width=80, indent=0, exdent=0)`
 :   指定した幅で折り返す。
