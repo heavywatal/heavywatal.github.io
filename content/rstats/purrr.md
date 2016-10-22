@@ -14,7 +14,7 @@ https://github.com/hadley/purrr
 [dplyr]({{< relref "dplyr.md" >}}) や [tidyr]({{< relref "tidyr.md" >}}) と組み合わせて真価を発揮する。
 purerのように読むらしい。
 
-[tidyverse](https://github.com/hadley/tidyverse) に含まれているので、
+[tidyverse](https://github.com/tidyverse/tidyverse) に含まれているので、
 `install.packages('tidyverse')` で一括インストール、
 `library(tidyverse)` で一括ロード。
 

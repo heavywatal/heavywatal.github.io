@@ -8,7 +8,7 @@ tags = ["r", "tidyverse"]
 +++
 
 -   <https://cran.r-project.org/web/packages/stringr/>
--   <https://github.com/hadley/stringr>
+-   <https://github.com/tidyverse/stringr>
 -   <http://www.rdocumentation.org/packages/stringr>
 
 R標準の `base` パッケージが提供する関数とほとんど同じ機能のように見えるものもあるが、

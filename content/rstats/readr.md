@@ -19,10 +19,9 @@ https://cran.r-project.org/package=readr
 -   勝手に列名を変更しない
 -   列の名前や型を指定しやすい
 -   指定した列だけ読み込むこともできる
--   生data.frameではなく安全な
-    [tibble]({{< relref "dplyr.md#tibble" >}}) として返してくれる
+-   生data.frameではなく安全な [tibble](#tibble) として返してくれる
 
-[tidyverse](https://github.com/hadley/tidyverse) に含まれているので、
+[tidyverse](https://github.com/tidyverse/tidyverse) に含まれているので、
 `install.packages('tidyverse')` で一括インストール、
 `library(tidyverse)` で一括ロード。
 
@@ -135,10 +134,10 @@ Rの中から `install.packages('readxl')` でインストールし、
 
 ## 最新版をソースからインストールする
 
-https://github.com/hadley/readr
+https://github.com/tidyverse/readr
 
 ```r
-devtools::install_github('hadley/readr')
+devtools::install_github('tidyverse/readr')
 # ...
 ld: library not found for -lintl
 ```
@@ -159,4 +158,101 @@ Homebrewを`/usr/local/`以外に入れている場合は、
 LDFLAGS = -L${HOME}/.homebrew/lib
 ```
 
-再びRで `install_github('hadley/readr')` を試みる。
+再びRで `install_github('tidyverse/readr')` を試みる。
+
+
+
+
+## tibble
+
+`tbl_df` クラスが付与された改良版data.frameのことを**tibble**と呼ぶ。
+もともとは [dplyr]({{< relref "dplyr.md" >}}) パッケージで扱っていたが、独立パッケージになった。
+[readr]({{< relref "readr.md" >}}) で読み込んだデータもこの形式になる。
+
+```r
+> tbl_iris = as_tibble(iris)
+> class(tbl_iris)
+[1] "tbl_df"     "tbl"        "data.frame"
+> class(iris)
+[1] "data.frame"
+```
+
+生のdata.frameとの違いは:
+
+-   巨大なデータをうっかり`print()`しても画面を埋め尽くさない。
+    (逆に全体を見たい場合は工夫が必要。後述)
+-   列名の部分一致で良しとしない。
+    例えば `iris$Spec` は黙ってvectorを返してしまうが、
+    `tbl_iris$Spec` は警告つき `NULL` 。
+-   型に一貫性があり、勝手に`drop=TRUE`しない。
+    例えば `iris[,'Species']` はvectorになってしまうが、
+    `tbl_iris[,'Species']` はtibbleのまま。
+
+### 関数
+
+`tibble::tibble(...)`
+:   tibbleを新規作成。ちょっと昔までは `dplyr::data_frame()` だった。
+:   `base::data.frame()` と違ってバグが混入しにくくて便利:
+    -   勝手に型変換しない (`stringsAsFactors=FALSE`が基本)
+    -   勝手に列名を変えない
+    -   長さ1の変数以外はリサイクルしない
+    -   引数の評価がlazyに行われるので前の列を利用して後の列を作ったりできる
+    -   `tbl_df` クラスを付加
+
+`tibble::as_tibble(x)`
+:   既存のdata.frameやmatrixをtibbleに変換。
+    ちょっと昔までは `dplyr::tbl_df()` とか `dplyr::as_data_frame()` だった。
+
+`tibble::add_row(.data, ...)`
+:   既存のtibbleに新しいデータを1行追加する。
+
+`tibble::rownames_to_column(df, var='rowname')`
+:   行の名前(無ければ1からの整数)を1列目の変数する`dplyr::add_rownames()`の改良版。
+:   `tibble::column_to_rownames(df, var='rowname')` はその逆。
+:   `tibble::remove_rownames(df)` は消すだけ。
+
+`tibble::glimpse(.data, width=NULL)`
+:   データの中身をざっと見る。
+    `print()` とか `str()` のようなもの。
+
+`tibble::type_sum(x)`
+:   オブジェクトの型
+
+`tibble::obj_sum(x)`
+:   `type_sum`とサイズ e.g., `"data.frame [150 x 5]"`
+
+
+### 設定
+
+`.Rprofile` に以下のように書くことで、
+大きいtibbleの`print()`で表示される行数を調節することができる。
+デフォルトはどちらも`10L`。
+
+```r
+# Maximum number of rows to print(tbl_df)
+options(tibble.print_max=30L)
+
+# Number of rows to print(tbl_df) if exceeded the maximum
+options(tibble.print_min=30L)
+```
+
+### PAGERで全体を表示する
+
+巨大テーブルをコンパクトに表示してくれるのは助かるけど、逆に全体を見渡したい場合もある。
+一時的に最大表示行数を拡大してPAGERに流し込むような関数を書いておくと良い。
+普通のdata.frameを見るのにも便利。
+
+```r
+less = function(x, method=c('print', 'dput'), max.print=getOption('max.print'), ...) {
+    opts = options(max.print=max.print,
+            tibble.print_max=max.print,
+            tibble.print_min=max.print)
+    on.exit(options(opts))
+    utils::page(x, match.arg(method), ...)
+}
+
+less(iris)
+less(as_tibble(iris))
+```
+
+

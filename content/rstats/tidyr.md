@@ -18,7 +18,7 @@ data.frameを縦長・横長・入れ子に変形・整形するためのツー�
 と一緒に使うとよい。
 [reshape2]({{< relref "reshape2.md" >}}) を置き換えるべく再設計された改良版。
 
-[tidyverse](https://github.com/hadley/tidyverse) に含まれているので、
+[tidyverse](https://github.com/tidyverse/tidyverse) に含まれているので、
 `install.packages('tidyverse')` で一括インストール、
 `library(tidyverse)` で一括ロード。
 

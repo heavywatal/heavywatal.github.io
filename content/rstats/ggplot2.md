@@ -13,7 +13,7 @@ tags = ["r", "graph", "tidyverse"]
 - <http://www.rdocumentation.org/packages/ggplot2>
 - <https://github.com/hadley/ggplot2-book>
 
-[tidyverse](https://github.com/hadley/tidyverse) に含まれているので、
+[tidyverse](https://github.com/tidyverse/tidyverse) に含まれているので、
 `install.packages('tidyverse')` で一括インストール、
 `library(tidyverse)` で一括ロード。
 

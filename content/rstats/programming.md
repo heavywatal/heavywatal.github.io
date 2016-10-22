@@ -250,7 +250,7 @@ ifelse(vec %% 3,
 
 ### list, data.frame, matrix
 
--   [tidyverse](https://github.com/hadley/tidyverse) パッケージ群
+-   [tidyverse](https://github.com/tidyverse/tidyverse) パッケージ群
     ([dplyr]({{< relref "dplyr.md" >}}), [purrr]({{< relref "purrr.md" >}}),
     [tidyr]({{< relref "tidyr.md" >}})など) を介して操作すると楽チンかつ高速。
 -   基本的にlistやdata.frameは遅いので、

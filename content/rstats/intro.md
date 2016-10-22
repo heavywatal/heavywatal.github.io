@@ -90,7 +90,7 @@ Error: could not find function "stepAIC"
 数千ものパッケージが有志により開発され、CRANにまとめて公開されている。
 
 特にHadley Wickhamらによる
-[tidyverse](https://github.com/hadley/tidyverse) パッケージ群 (例えば
+[tidyverse](https://github.com/tidyverse/tidyverse) パッケージ群 (例えば
 [ggplot2]({{< relref "ggplot2.md" >}}),
 [dplyr]({{< relref "dplyr.md" >}}),
 [purrr]({{< relref "purrr.md" >}}),
