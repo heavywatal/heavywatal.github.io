@@ -1,5 +1,5 @@
 +++
-title = 'foreach'
+title = 'foreach/parallel'
 tags = ["r"]
 [menu.main]
   parent = "rstats"
@@ -68,6 +68,9 @@ stopCluster(cluster)
 
 クラスタの生成や破棄などをぜーんぶ自動でやってもらいたい場合は
 [`hoxo-m/pforeach`](https://github.com/hoxo-m/pforeach)。
+
+[`purrr::map()`]({{< relref "purrr.md" >}})的な使い勝手の
+[`map_par()` を書いてみた](https://github.com/heavywatal/rwtl/blob/master/R/parallel.R)。
 
 ### `makeCluster()`
 
