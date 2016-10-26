@@ -221,6 +221,6 @@ dia, dropbox, evernote, firefox, gephi,
 google-chrome, google-drive, google-earth, google-japanese-ime,
 inkscape, iterm2, karabiner, kindle, libreoffice,
 macfusion, megasync, mendeley-desktop,
-onyx, openoffice, osxfuse, quicksilver,
-rstudio, seashore, skim, skitch, skype, spideroakone, sshfs,
+onyx, openoffice, osxfuse, quicksilver, rstudio,
+seashore, skim, skitch, skyfonts, skype, spideroakone, sshfs,
 the-unarchiver, vlc, yujitach-menumeters

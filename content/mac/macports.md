@@ -6,9 +6,7 @@ tags = ["mac", "package"]
 +++
 
 {{%div class="note"%}}
-[homebrew]({{< relref "homebrew.md" >}})
-
-最近は [Homebrew]({{< relref "mac/homebrew.md" >}}) ばっかり使っててこっちの情報は更新してない
+今は [Homebrew]({{< relref "homebrew.md" >}}) を使ってるのでこっちの情報は更新してない
 {{%/div%}}
 
 ## Package Manager for Mac OS X
