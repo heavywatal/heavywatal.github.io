@@ -207,8 +207,7 @@ See [dplyr]({{< relref "dplyr.md" >}}), [purrr]({{< relref "purrr.md" >}}), and 
 
 3D: See [rgl]({{< relref "rgl.md" >}})
 
-## 参考図書
+## 関連書籍
 
 <a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320018575/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41dIXM4egfL._SX160_.jpg" alt="統計学:Rを用いた入門書" /></a>
 <a href="http://www.amazon.co.jp/exec/obidos/ASIN/400006973X/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51wEV2xJA1L._SX160_.jpg" alt="データ解析のための統計モデリング入門――一般化線形モデル・階層ベイズモデル・MCMC (確率と情報の科学)" /></a>
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4274067831/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41PFcUnw4aL._SX160_.jpg" alt="The R Tips―データ解析環境Rの基本技・グラフィックス活用集" /></a>
