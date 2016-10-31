@@ -16,7 +16,6 @@ tags = ["r", "tidyverse"]
     パッケージ内で定義されている変数や関数は `ls()` で出てこないのでスッキリ
 -   既存のオブジェクトと名前が衝突するような場合でも、
     `mypackage::func1` のように名前空間を明示的に指定して呼び出せる
--   バイトコンパイルされる分だけ関数がちょっと速くなるかも
 
 CRANに上げる程ではないとしても、
 GitHubに公開しておけば誰でも使えるようになるので、
@@ -38,7 +37,6 @@ GitHubに公開しておけば誰でも使えるようになるので、
 
     ```r
     setwd('~/tmp/')
-    library(devtools)
     pkgname = 'namaespace'
     title_desc = 'Utility to create dummy R packages for namespace'
     github_repo = sprintf('https://github.com/heavywatal/%s', pkgname)
@@ -48,7 +46,7 @@ GitHubに公開しておけば誰でも使えるようになるので、
         Description=paste0(title_desc, '.'),
         `Authors@R`="person('Watal M.', 'Iwasaki', email='user@example.com', role=c('aut', 'cre'))",
         License='MIT',
-        Suggests='dplyr, ggplot2, purrr, readr, tidyr',
+        Suggests='tidyverse',
         Imports='devtools, stringr',
         URL=github_repo,
         BugReports=paste0(github_repo, '/issues'))
@@ -92,7 +90,7 @@ README.md    # 全体の説明を簡単に
 R/           # Rソースコード
 data/        # サンプルデータなど
 man/         # ヘルプファイル.Rd
-src/         # C++
+src/         # C++ソースコード
 tests/
 vignettes/
 ```
@@ -100,10 +98,10 @@ vignettes/
 ### `DESCRIPTION`
 
 -   どうでも良さそうなファイル名とは裏腹に、ちゃんと書かないと動かない
--   始めは `devtools::create()` で自動生成し、それから修正していく
--   `Imports` に列挙したパッケージは同時にインストールされる。
+-   始めは `devtools::create()` で自動生成し、それから他のパッケージを参考にしつつ修正していく
+-   `Imports` に列挙したものは依存パッケージとして同時にインストールされる。
     しかし `library()` 時に同時に読み込まれるわけではない。
--   `Title` はピリオドを含まず、Descriptionはピリオドを含むようにする
+-   `Title` はピリオドを含まず、 `Description` はピリオドを含むようにする
 -   ライセンスを別ファイルにする場合は `License: file LICENSE` と書く
 -   `Authors@R` のとこは後でRで評価されるので変な形
 
@@ -122,8 +120,8 @@ vignettes/
 -   `NAMESPACE` や `man/*.Rd` を自動生成してもらえるように
     [後述のroxygen](#roxygen2)形式でコメントを書く
 -   ファイルの数や名前は何でもいいので、開発者が分かりやすいようにしとく。
-    例えば、似たような関数をひとつのファイルにまとめ、同名の`@rdname`を指定し、
-    `man/`と同じ構造にするのがちょうどいいのではなかろうか。
+    例えば、似たような関数をひとつのファイルにまとめ、
+    同名の`@rdname`を指定して`man/`と同じ構造にするとか。
 -   `library()` や `require()` を書かない。
     必要なパッケージは `DESCRIPTION` の `Imports` に書き、
     `名前空間::関数()` のようにして使う。
@@ -210,7 +208,7 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 vignettesに取って代わられた古い機能。
 ソースコード`*.R`を置いておくと`demo()`関数で呼び出せるというだけ。
 
-`check()`でソースコードの中身は参照されないが、
+`check()`でソースコードの中身は実行されないが、
 `demo/00Index` というファイルの整合性が取れてないと警告される。
 「デモの名前 + スペース3つ以上かタブ + 適当な説明」という形式。
 ファイル名から拡張子を取り除いたものがデモの名前になる。
