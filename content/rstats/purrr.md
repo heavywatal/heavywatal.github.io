@@ -152,21 +152,32 @@ Source: local data frame [3 x 6]
 3          4.7         3.2     0     1     a     b
 ```
 
-## 関数
+## 無名関数
 
-無名関数
-: ラムダ式とも言う。
-  チルダとドットで簡単に書ける。
+ラムダ式とも言う。
+チルダで始まる `~ a + b` のようなものはRではformulaという形式になるが、
+`purrr`のmap系関数はそれを引数`.f`として受け取ることができる。
+formula内部では、第一引数を`.x`または`.`として、第二引数を`.y`として参照する。
 
 ```r
+# with named function
 ord = function(x) {strtoi(charToRaw(x), 16L)}
 letters %>>% map_int(ord)
+
+# with unnamed function
 letters %>>% map_int(function(x) {strtoi(charToRaw(x), 16L)})
-letters %>>% map_int(~ strtoi(charToRaw(.), 16L))
+
+# with formula
+letters %>>% map_int(~ strtoi(charToRaw(.x), 16L))
 ```
 
-`purrr::partial()`
+`purrr::as_function(.f, ...)`
+: 上記の機能を担う重要な関数で、`map()`内部でも使われている。
+  formulaを`function (.x, .y, . = .x)`という無名関数に変換する。
+
+`purrr::partial(...f, ..., .env, .lazy, .first)`
 : 引数を部分的に埋めてある関数を作る。C++でいう `std::bind()`
+
 
 ## その他の便利関数
 
