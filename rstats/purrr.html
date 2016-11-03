@@ -198,22 +198,29 @@ Source: local data frame [3 x 6]
 3          4.7         3.2     0     1     a     b
 </code></pre>
 
-<h2 id="関数">関数</h2>
+<h2 id="無名関数">無名関数</h2>
 
-<dl>
-<dt>無名関数</dt>
-<dd>ラムダ式とも言う。
-チルダとドットで簡単に書ける。</dd>
-</dl>
+<p>ラムダ式とも言う。
+チルダで始まる <code>~ a + b</code> のようなものはRではformulaという形式になるが、
+<code>purrr</code>のmap系関数はそれを引数<code>.f</code>として受け取ることができる。
+formula内部では、第一引数を<code>.x</code>または<code>.</code>として、第二引数を<code>.y</code>として参照する。</p>
 
-<pre><code class="language-r">ord = function(x) {strtoi(charToRaw(x), 16L)}
+<pre><code class="language-r"># with named function
+ord = function(x) {strtoi(charToRaw(x), 16L)}
 letters %&gt;&gt;% map_int(ord)
+
+# with unnamed function
 letters %&gt;&gt;% map_int(function(x) {strtoi(charToRaw(x), 16L)})
-letters %&gt;&gt;% map_int(~ strtoi(charToRaw(.), 16L))
+
+# with formula
+letters %&gt;&gt;% map_int(~ strtoi(charToRaw(.x), 16L))
 </code></pre>
 
 <dl>
-<dt><code>purrr::partial()</code></dt>
+<dt><code>purrr::as_function(.f, ...)</code></dt>
+<dd>上記の機能を担う重要な関数で、<code>map()</code>内部でも使われている。
+formulaを<code>function (.x, .y, . = .x)</code>という無名関数に変換する。</dd>
+<dt><code>purrr::partial(...f, ..., .env, .lazy, .first)</code></dt>
 <dd>引数を部分的に埋めてある関数を作る。C++でいう <code>std::bind()</code></dd>
 </dl>
 
