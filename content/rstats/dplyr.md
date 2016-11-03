@@ -32,7 +32,7 @@ iris %>%
    dplyr::select(-dplyr::starts_with('Sepal')) %>%
    dplyr::mutate(petal_area=Petal.Length * Petal.Width * 0.5) %>%
    dplyr::group_by(Species) %>%
-   dplyr::summarise_each(funs(mean))
+   dplyr::summarise_all(funs(mean))
 
 ## plyr で書くと読みにくい
 plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, Sepal.Length)), petal_area=Petal.Length*Petal.Width*0.5), .(Species), numcolwise(mean))
@@ -176,6 +176,7 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
 
 `dplyr::summarise_all(.data, .funs, ...)`, `dplyr::mutate_all(.data, .funs, ...)`
 :   グループ化カラム以外の全てのカラムに関数を適用する。
+    `***_each()` は非推奨になった。
     ```r
     iris %>% dplyr::group_by(Species) %>%
         dplyr::summarise_all(funs(min, mean, max))
@@ -183,7 +184,6 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
 
 `dplyr::summarise_at(.data, .cols, .funs, ...)`, `dplyr::mutate_all(.data, .cols, .funs, ...)`
 :   select補助関数を使って指定したカラムに関数を適用する。
-    `***_each()` は非推奨になった。
     ```r
     iris %>% dplyr::group_by(Species) %>%
         dplyr::summarise_at(vars(dplyr::ends_with("Width")), funs(min, mean, max))
