@@ -92,7 +92,7 @@ iris %&gt;%
    dplyr::select(-dplyr::starts_with('Sepal')) %&gt;%
    dplyr::mutate(petal_area=Petal.Length * Petal.Width * 0.5) %&gt;%
    dplyr::group_by(Species) %&gt;%
-   dplyr::summarise_each(funs(mean))
+   dplyr::summarise_all(funs(mean))
 
 ## plyr で書くと読みにくい
 plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, Sepal.Length)), petal_area=Petal.Length*Petal.Width*0.5), .(Species), numcolwise(mean))
@@ -227,14 +227,14 @@ iris %&gt;% dplyr::mutate(ln_sepal_length = log(Sepal.Length))
 3  virginica   4.5   3.8
 </code></pre></dd>
 <dt><code>dplyr::summarise_all(.data, .funs, ...)</code>, <code>dplyr::mutate_all(.data, .funs, ...)</code></dt>
-<dd><p>グループ化カラム以外の全てのカラムに関数を適用する。</p>
+<dd><p>グループ化カラム以外の全てのカラムに関数を適用する。
+<code>***_each()</code> は非推奨になった。</p>
 
 <pre><code class="language-r">iris %&gt;% dplyr::group_by(Species) %&gt;%
     dplyr::summarise_all(funs(min, mean, max))
 </code></pre></dd>
 <dt><code>dplyr::summarise_at(.data, .cols, .funs, ...)</code>, <code>dplyr::mutate_all(.data, .cols, .funs, ...)</code></dt>
-<dd><p>select補助関数を使って指定したカラムに関数を適用する。
-<code>***_each()</code> は非推奨になった。</p>
+<dd><p>select補助関数を使って指定したカラムに関数を適用する。</p>
 
 <pre><code class="language-r">iris %&gt;% dplyr::group_by(Species) %&gt;%
     dplyr::summarise_at(vars(dplyr::ends_with(&quot;Width&quot;)), funs(min, mean, max))
