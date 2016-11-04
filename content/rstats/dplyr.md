@@ -111,10 +111,10 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
     指定しなかった列も残すには `.keep_all=TRUE` が必要。
     ```r
     > iris %>% dplyr::distinct(Species)
-      Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
-    1          5.1         3.5          1.4         0.2     setosa
-    2          7.0         3.2          4.7         1.4 versicolor
-    3          6.3         3.3          6.0         2.5  virginica
+         Species
+    1     setosa
+    2 versicolor
+    3  virginica
     ```
 
 `dplyr::slice(.data, ...)`
@@ -140,7 +140,8 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
     ```
 
 `dplyr::transmute(.data, ...)`
-:   指定した列以外を保持しない版の `mutate()`
+:   指定した列以外を保持しない版の `mutate()` 。
+    言い換えると、変更を許す `select()` 。
 
 `dplyr::rename(.data, ...)`
 :   列の改名。

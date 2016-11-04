@@ -43,7 +43,10 @@ purerのように読むらしい。
 
 `purrr::pmap(.l, .f, ...)`
 : listの中身をparallelに処理するmap。
-  例えば `pmap(list(.x, .y), .f)` とすれば `map2()` と同じ。
+  `.f`の引数はlistの要素名と一致させる。
+  e.g., `pmap(list(a=1:3, b=4:6), function(a, b) {a * b})` 。
+  名前無し2要素までなら`map2()`などと同様に`.x`や`.y`を使ったformulaが利用可能。
+  e.g., `pmap(list(1:3, 4:6), ~ .x * .y)` 。
 : data.frameの正体はlist of columnsなので、
   そのまま`.l`として渡して`plyr::mlply()`的に使える。
   同様に `purrr::pmap_df()` は `plyr::mdply()` として使える。
