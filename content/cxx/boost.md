@@ -24,8 +24,8 @@ gccとclangの両方から使える統一ライブラリを作るのは難しい
 1.  <http://sourceforge.net/projects/boost/> から最新ソースを入手して展開。
     とりあえず `boost-jam` とか `boost-build` とかは無視して `boost` 本体のみで結構:
     ```
-    % wget -O- http://downloads.sourceforge.net/boost/boost_1_61_0.tar.bz2 | tar xj
-    % cd boost_1_61_0/
+    % wget -O- http://downloads.sourceforge.net/boost/boost_1_62_0.tar.bz2 | tar xj
+    % cd boost_1_62_0/
     ```
 
 2.  ヘルプを見る `./bootstrap.sh --help`
@@ -54,7 +54,7 @@ gccとclangの両方から使える統一ライブラリを作るのは難しい
 7.  システム標準zlibをリンクしようとしてエラーになることがあるので、
     [zlib公式](http://zlib.net/)からソースを落として展開し、
     [一緒にビルドされるように]
-    (http://www.boost.org/doc/libs/1_61_0/libs/iostreams/doc/installation.html)
+    (http://www.boost.org/doc/libs/release/libs/iostreams/doc/installation.html)
     `ZLIB_SOURCE`をフルパス指定する。
     ```
     % wget -O- http://zlib.net/zlib-1.2.8.tar.gz | tar xz -C ${HOME}/tmp/build
