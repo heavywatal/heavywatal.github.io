@@ -7,7 +7,7 @@ tags = ["r", "graph", "tidyverse"]
   weight = -79
 +++
 
-- <http://ggplot2.org/>
+- <http://r4ds.had.co.nz/data-visualisation.html>
 - <http://docs.ggplot2.org/>
 - <http://www.cookbook-r.com/Graphs/>
 - <http://www.rdocumentation.org/packages/ggplot2>
@@ -169,9 +169,6 @@ ggplot内部で `stat_*()` を通して行われる。
 `..count..` や `..density..` みたいに
 ピリオドで囲まれた特殊な名前で参照することができる。
 
-```r
-
-```
 
 ### パネルの分割
 

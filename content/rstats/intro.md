@@ -8,13 +8,11 @@ tags = ["r"]
 
 ## インターネットで調べる
 
--   [R-Tips](http://cse.naro.affrc.go.jp/takezawa/r-tips/r.html)
--   [RjpWiki](http://www.okada.jp.org/RWiki/)
 -   <http://seekr.jp/> --- Googleカスタム検索 for R
--   <http://www.rseek.org/> --- Google Custom Search for R
--   <https://www.r-bloggers.com/>
--   <https://cran.r-project.org/web/views/>
+-   <http://rseek.org/> --- Google Custom Search for R
 -   <http://www.rdocumentation.org/>
+-   <http://r4ds.had.co.nz/> --- R for Data Science (体系的に学びたい人はぜひ通読を)
+-   <https://www.r-bloggers.com/>
 
 ## RStudioを使う
 
@@ -208,6 +206,8 @@ See [dplyr]({{< relref "dplyr.md" >}}), [purrr]({{< relref "purrr.md" >}}), and 
 3D: See [rgl]({{< relref "rgl.md" >}})
 
 ## 関連書籍
+
+古典的な仮説検定から一般化線形モデル・階層ベイズモデルまでならこのへんで:
 
 <a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320018575/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41dIXM4egfL._SX160_.jpg" alt="統計学:Rを用いた入門書" /></a>
 <a href="http://www.amazon.co.jp/exec/obidos/ASIN/400006973X/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51wEV2xJA1L._SX160_.jpg" alt="データ解析のための統計モデリング入門――一般化線形モデル・階層ベイズモデル・MCMC (確率と情報の科学)" /></a>

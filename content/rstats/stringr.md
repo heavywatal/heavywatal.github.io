@@ -7,6 +7,7 @@ tags = ["r", "tidyverse"]
   weight = -60
 +++
 
+-   <http://r4ds.had.co.nz/strings.html>
 -   <https://cran.r-project.org/web/packages/stringr/>
 -   <https://github.com/tidyverse/stringr>
 -   <http://www.rdocumentation.org/packages/stringr>

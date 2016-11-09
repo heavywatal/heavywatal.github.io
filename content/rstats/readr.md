@@ -7,7 +7,8 @@ tags = ["r", "tidyverse"]
   weight = -65
 +++
 
-https://cran.r-project.org/package=readr
+-   http://r4ds.had.co.nz/data-import.html
+-   https://cran.r-project.org/package=readr
 
 タブ区切りテキストやCSVファイルを読み込んでdata.frameにするツール。
 圧縮された `***.tsv.gz` なども自動的に展開して読んでくれる。
@@ -164,6 +165,8 @@ LDFLAGS = -L${HOME}/.homebrew/lib
 
 
 ## tibble
+
+http://r4ds.had.co.nz/tibbles.html
 
 `tbl_df` クラスが付与された改良版data.frameのことを**tibble**と呼ぶ。
 もともとは [dplyr]({{< relref "dplyr.md" >}}) パッケージで扱っていたが、独立パッケージになった。

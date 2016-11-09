@@ -7,9 +7,8 @@ tags = ["r", "tidyverse"]
   weight = -70
 +++
 
+-   <http://r4ds.had.co.nz/tidy-data.html>
 -   <https://github.com/hadley/tidyr>
--   <http://rpubs.com/m_dev/tidyr-intro-and-demos>
--   <https://blog.rstudio.org/2014/07/22/introducing-tidyr/>
 -   `vignette("tidy-data")`
 -   `demo(package="tidyr")`
 

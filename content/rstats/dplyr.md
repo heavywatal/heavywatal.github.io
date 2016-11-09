@@ -7,10 +7,9 @@ tags = ["r", "tidyverse"]
   weight = -75
 +++
 
+-   <http://r4ds.had.co.nz/transform.html>
 -   <https://github.com/hadley/dplyr>
 -   <https://cran.r-project.org/web/packages/dplyr/vignettes/introduction.html>
--   <https://blog.rstudio.org/2014/01/17/introducing-dplyr/>
--   <https://www.rstudio.com/resources/cheatsheets/>
 
 data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(summarise)、ソート(arrange)などの処理を施すためのパッケージ。
 前作 [plyr]({{< relref "plyr.md" >}}) のうちdata.frameに関する部分を抜き出して強化したパッケージ。
