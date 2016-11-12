@@ -142,7 +142,40 @@ e.g., <kbd>C-u 3 C-_</kbd> とすれば3操作分だけ元に戻せる。
 
 <https://github.com/heavywatal/dotfiles/blob/master/.emacs.d/init.el>
 
-## Caskでパッケージ管理
+### package.el でパッケージ管理
+
+Emacs 24で標準入りしたので、基本的にこれを使うのが良さそう。
+まず`init.el`の先頭でこのように宣言
+
+```el
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+```
+
+あとは使いたいパッケージを以下のように列挙。
+
+```el
+(package-install 'flycheck)
+(package-install 'auto-complete)
+(package-install 'markdown-mode)
+```
+
+`package-refresh-contents` は起動時に毎回やるには重すぎるので、
+気が向いたときに手動で。
+
+
+### Caskでパッケージ管理
+
+{{%div class="note"%}}
+最近は上記のpackage.elを使っているので下記の情報は古いかも。
+{{%/div%}}
 
 -   <https://github.com/cask/cask>
 -   <http://cask.readthedocs.org/>
@@ -155,7 +188,7 @@ Emacs 24以上じゃないと動かない (=CentOS 6.5ではダメ)
 それ以外の場所で実行するときは `--path ~/.emacs.d/`
 のようなオプションを付ける。
 
-### セットアップ
+#### セットアップ
 
 <http://cask.readthedocs.org/en/latest/guide/installation.html>
 
@@ -177,7 +210,7 @@ Emacs 24以上じゃないと動かない (=CentOS 6.5ではダメ)
         (require 'cask "~/.cask/cask.el")
         (cask-initialize)
 
-### メンテナンス
+#### メンテナンス
 
 パッケージをアップデート:
 
