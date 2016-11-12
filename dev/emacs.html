@@ -200,7 +200,39 @@ C-x 5 d    dired-other-frame
 
 <p><a href="https://github.com/heavywatal/dotfiles/blob/master/.emacs.d/init.el">https://github.com/heavywatal/dotfiles/blob/master/.emacs.d/init.el</a></p>
 
-<h2 id="caskでパッケージ管理">Caskでパッケージ管理</h2>
+<h3 id="package-el-でパッケージ管理">package.el でパッケージ管理</h3>
+
+<p>Emacs 24で標準入りしたので、基本的にこれを使うのが良さそう。
+まず<code>init.el</code>の先頭でこのように宣言</p>
+
+<pre><code class="language-el">(require 'package)
+(add-to-list 'package-archives '(&quot;melpa&quot; . &quot;https://melpa.org/packages/&quot;))
+(add-to-list 'package-archives '(&quot;marmalade&quot; . &quot;https://marmalade-repo.org/packages/&quot;))
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+</code></pre>
+
+<p>あとは使いたいパッケージを以下のように列挙。</p>
+
+<pre><code class="language-el">(package-install 'flycheck)
+(package-install 'auto-complete)
+(package-install 'markdown-mode)
+</code></pre>
+
+<p><code>package-refresh-contents</code> は起動時に毎回やるには重すぎるので、
+気が向いたときに手動で。</p>
+
+<h3 id="caskでパッケージ管理">Caskでパッケージ管理</h3>
+
+<div class="note">
+<p>最近は上記のpackage.elを使っているので下記の情報は古いかも。</p>
+
+</div>
+
 
 <ul>
 <li><a href="https://github.com/cask/cask">https://github.com/cask/cask</a></li>
@@ -215,7 +247,7 @@ C-x 5 d    dired-other-frame
 それ以外の場所で実行するときは <code>--path ~/.emacs.d/</code>
 のようなオプションを付ける。</p>
 
-<h3 id="セットアップ">セットアップ</h3>
+<h4 id="セットアップ">セットアップ</h4>
 
 <p><a href="http://cask.readthedocs.org/en/latest/guide/installation.html">http://cask.readthedocs.org/en/latest/guide/installation.html</a></p>
 
@@ -243,7 +275,7 @@ C-x 5 d    dired-other-frame
 </code></pre></li>
 </ol>
 
-<h3 id="メンテナンス">メンテナンス</h3>
+<h4 id="メンテナンス">メンテナンス</h4>
 
 <p>パッケージをアップデート:</p>
 
