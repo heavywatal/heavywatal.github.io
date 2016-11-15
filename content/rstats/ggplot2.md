@@ -63,15 +63,16 @@ ggsave("iris_sepal.png", gp)
     `gp + geom_step()` 階段状に結ぶ
 
 [ヒストグラム、密度曲線](http://docs.ggplot2.org/current/geom_histogram.html)
-:   `gp + geom_histogram()` --- 棒グラフ with binning
-:   `gp + geom_bar()` --- 棒グラフ without binning
+:   `gp + geom_histogram()` --- 棒グラフ(連続値を`stat_bin()` で切って)
+:   `gp + geom_bar()` --- 棒グラフ(離散値を`stat_count()`で数えて)
 :   `gp + geom_freqpoly()` --- 折れ線
 :   `gp + geom_density()` --- 密度推定されたスムーズな線
 
 [棒グラフ](http://docs.ggplot2.org/current/geom_bar.html)
-:   `gp + geom_bar(stat='identity')`\
-    statを指定しない場合はヒストグラムもどき(binning無しの生カウント)になる。
-    `position='dodge'` にすると横並び (デフォルト: `'stack'`)。
+:   `gp + geom_col()`\
+    同じxに対して複数グループのyが存在するとき、
+    `position='dodge'` にすると横並び
+    (デフォルトは縦積みの`'stack'`)。
 
 [箱ひげ図](http://docs.ggplot2.org/current/geom_boxplot.html)
 :   `gp + geom_boxplot()`\
@@ -179,7 +180,8 @@ ggplot内部で `stat_*()` を通して行われる。
     ```r
     facet_wrap(facets, nrow=NULL, ncol=NULL, scales='fixed',
                shrink=TRUE, labeller='label_value',
-               as.table=TRUE, switch=NULL, drop=TRUE)
+               as.table=TRUE, switch=NULL, drop=TRUE,
+               dir='h', strip.position='top')
 
     ggplot(iris, aes(Petal.Length, Sepal.Length))+geom_point()+
         facet_wrap(~Species, nrow=2)
@@ -210,6 +212,8 @@ ggplot内部で `stat_*()` を通して行われる。
     `gp + scale_y_log10("Beer consumption")`\
     オプション: name, breaks, labels, na.value, limits, trans, expand\
     デフォルトでは値域よりも少し余裕を持たせてあるが、 `geom_tile()` などでピッタリにしたいときは軸ごとに `expand=c(0, 0)` とか。
+    `position='right'`とかで軸の位置を変更できる。
+    `sec.axis`オプションで反対側に別の軸を追加できる。
 
 [描画する範囲を指定](http://docs.ggplot2.org/current/coord_cartesian.html)
 :   `gp + ylim(0, 42) + xlim("b", "c", "d")`\
@@ -302,26 +306,24 @@ gp = gp + theme(plot.background=element_rect(fill="transparent"))
 : `rect`: (`element_rect`)
 : `text`: (`element_text`)
 : `title`: (`element_text`; inherits from `text`)
+: `aspect.ratio`:
 
 軸タイトル、軸ラベル、目盛
-: `axis.title`: (`element_text`; inherits from `text`)
-: `axis.title.x`: (`element_text`; inherits from `axis.title`)
-: `axis.title.y`: (`element_text`; inherits from `axis.title`)
-: `axis.text`: (`element_text`; inherits from `text`)
-: `axis.text.x`: (`element_text`; inherits from `axis.text`)
-: `axis.text.y`: (`element_text`; inherits from `axis.text`)
-: `axis.ticks`: (`element_line`; inherits from `line`)
-: `axis.ticks.x`: (`element_line`; inherits from `axis.ticks`)
-: `axis.ticks.y`: (`element_line`; inherits from `axis.ticks`)
+: `axis.title`: (`element_text`; inherits from `text`)\\
+  &emsp;`__.x`, `__.x.top`, `__.y`, `__.y.right`
+: `axis.text`: (`element_text`; inherits from `text`)\\
+  &emsp;`__.x`, `__.x.top`, `__.y`, `__.y.right`
+: `axis.ticks`: (`element_line`; inherits from `line`)\\
+  &emsp;`__.x`, `__.y`
 : `axis.ticks.length`: (`unit`)
-: `axis.ticks.margin`: (`unit`)
-: `axis.line`: (`element_line`; inherits from `line`)
-: `axis.line.x`: (`element_line`; inherits from `axis.line`)
-: `axis.line.y`: (`element_line`; inherits from `axis.line`)
+: `axis.line`: (`element_line`; inherits from `line`)\\
+  &emsp;`__.x`, `__.y`
 
 凡例
 : `legend.background`: (`element_rect`; inherits from `rect`)
-: `legend.margin`: (`unit`)
+: `legend.margin`: (`margin`)
+: `legend.spacing`:(`unit`)\\
+   &emsp;`__.x`, `__.y`
 : `legend.key`: (`element_rect`; inherits from `rect`)
 : `legend.key.size`: (`unit`)
 : `legend.key.height`: (`unit`; inherits from `legend.key.size`)
@@ -330,42 +332,51 @@ gp = gp + theme(plot.background=element_rect(fill="transparent"))
 : `legend.text.align`: (number from `0` (left) to `1` (right))
 : `legend.title`: (`element_text`; inherits from `title`)
 : `legend.title.align`: (number from `0` (left) to `1` (right))
-: `legend.position`: (`"left"`, `"right"`, `"bottom"`, `"top"`, `"none"` `c(0, 1)`
+: `legend.position`: (`"left"`, `"right"`, `"bottom"`, `"top"`, `"none"` `c(0, 1)`)
 : `legend.direction`: (`"horizontal"` or `"vertical"`)
 : `legend.justification`: (`"center"` or `c(0, 1)` のような数値でアンカー位置を指定)
 : `legend.box`: (`"horizontal"` or `"vertical"`)
 : `legend.box.just`: (`"top"`, `"bottom"`, `"left"`, or `"right"`)
+: `legend.box.margin`: (`margin`)
+: `legend.box.background: (`element_rect`; inherits from `rect`)
+: `legend.box.spacing`:(`unit`)
 
 プロット領域の背景、余白、格子
 : `panel.background`: (`element_rect`; inherits from `rect`)
 : `panel.border`: (`element_rect`; inherits from `rect`; should be used with `fill=NA`)
-: `panel.margin`: (`unit`; `facet_*` の間隔)
+: `panel.spacing`: (`unit`; `facet_*` の間隔)\\
+  &emsp;`__.x`, `__.y`
 : `panel.grid`: (`element_line`; inherits from `line`)
-: `panel.grid.major`: (`element_line`; inherits from `panel.grid`)
-: `panel.grid.minor`: (`element_line`; inherits from `panel.grid`)
-: `panel.grid.major.x`: (`element_line`; inherits from `panel.grid.major`)
-: `panel.grid.major.y`: (`element_line`; inherits from `panel.grid.major`)
-: `panel.grid.minor.x`: (`element_line`; inherits from `panel.grid.minor`)
-: `panel.grid.minor.y`: (`element_line`; inherits from `panel.grid.minor`)
+: `panel.grid.major`: (`element_line`; inherits from `panel.grid`)\\
+  &emsp;`__.x`, `__.y`
+: `panel.grid.minor`: (`element_line`; inherits from `panel.grid`)\\
+  &emsp;`__.x`, `__.y`
 
 全体の背景、タイトル、余白
 : `plot.background`: (`element_rect`; inherits from `rect`)
 : `plot.title`: (`element_text`; inherits from `title`)
+: `plot.subtitle`: (`element_text`; inherits from `title`)
+: `plot.caption`: (`element_text`; inherits from `title`)
 : `plot.margin`: (`unit` with the sizes of the top, right, bottom, and left margins)
 
 `facet` したときのラベル
 : `strip.background`: (`element_rect`; inherits from `rect`)
-: `strip.text`: (`element_text`; inherits from `text`)
-: `strip.text.x`: (`element_text`; inherits from `strip.text`)
-: `strip.text.y`: (`element_text`; inherits from `strip.text`)
+: `strip.placement`: ('inside', 'outside')
+: `strip.text`: (`element_text`; inherits from `text`)\\
+  &emsp;`__.x`, `__.y`
+
+その他
+: `complete`: 部分的な変更か、完全なテーマか (`FALSE`)
+: `validate`: 毎回チェックするか (`TRUE`)
+
 
 ### エレメント
 
-`element_line(colour, size, linetype, lineend)` --- 直線
-
-`element_rect(fill, colour, size, linetype)` --- 長方形
+`element_rect(fill, colour, size, linetype, inherit.blank)` --- 長方形
 :   `fill`: 塗りつぶしの色\
     `colour`: 枠の色
+
+`element_line(colour, size, linetype, lineend, arrow, inherit.blank)` --- 直線
 
 `element_text(family, face, colour, size, hjust, vjust, angle, lineheight, margin)` --- 文字
 :   `family`: フォントファミリー。 空なら `theme_bw(base_family=...)` などの指定を継承。\
@@ -388,6 +399,12 @@ gp = gp + theme(plot.background=element_rect(fill="transparent"))
 :   こちらは絶対指定。`grid` パッケージに入ってる。
     units で使いそうなのは
     `cm`, `mm`, `inches`, `points`, `lines`, `native`
+
+`grid::arrow(angle, length, ends, type)`
+:   `axis.line` の `element_line()` にこれを与えて軸を矢印にするとか。
+
+`margin(t=0, r=0, b=0, l=0, unit='pt')`
+:   marginクラス
 
 `calc_element(element, theme, verbose=FALSE)`
 :   継承などを考慮した上でelementがどんな値にセットされるか確かめる。
