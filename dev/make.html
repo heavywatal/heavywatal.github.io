@@ -79,13 +79,13 @@ make
 
 <pre><code class="language-makefile">## Options
 
-PROGRAM := ./a.out
-CXX := g++
-CC := ${CXX}
+PROGRAM := a.out
+CXX := clang++
+CC := clang
 CXXFLAGS := -O3 -std=c++14
-CPPFLAGS := -Wall -Wextra -iquote/usr/local/include -iquote${HOME}/local/include
+CPPFLAGS := -Wall -Wextra -I/usr/local/include -I${HOME}/local/include
 LDFLAGS := -L/usr/local/lib -L${HOME}/local/lib
-LDLIBS := -lboost_program_options
+#LDLIBS := -lboost_program_options
 TARGET_ARCH := -m64 -msse -msse2 -msse3 -mfpmath=sse
 
 ## Dependencies
@@ -105,23 +105,37 @@ Dependfile:
 all: ${PROGRAM}
         @:
 
-clean:
-        ${RM} ${OBJS} ${PROGRAM}
-
 ${PROGRAM}: ${OBJS}
         ${LINK.cpp} ${OUTPUT_OPTION} $^ ${LDLIBS}
+
+clean:
+        ${RM} ${OBJS} ${PROGRAM}
 </code></pre>
 
-<h3 id="automatic-variables-https-www-gnu-org-software-make-manual-make-html-automatic-variables"><a href="https://www.gnu.org/software/make/manual/make.html#Automatic-Variables">Automatic Variables</a></h3>
+<h3 id="rule-https-www-gnu-org-software-make-manual-make-html-rules"><a href="https://www.gnu.org/software/make/manual/make.html#Rules">Rule</a></h3>
 
-<dl>
-<dt><code>$@</code></dt>
-<dd>ターゲット</dd>
-<dt><code>$^</code></dt>
-<dd>必須項目のスペース区切り</dd>
-<dt><code>$&lt;</code></dt>
-<dd>必須項目の先頭</dd>
-</dl>
+<p>コロンとタブを使って以下のような形式でルールを書くのが基本。
+この<code>Makefile</code>があるところでターミナルから <code>make TARGET</code> と打つと、
+ターゲットよりもソースファイルが新しい場合にコマンドが実行される。</p>
+
+<pre><code class="language-make">TARGET : SOURCE1 SOURCE2
+        COMMAND
+
+a.out : main.cpp sub.cpp
+        g++ -O2 main.cpp sub.cpp
+</code></pre>
+
+<p>下記のようなパターンルールが予め定義されている。
+(see <a href="https://www.gnu.org/software/make/manual/make.html#Pattern-Rules">Pattern Rule</a>)</p>
+
+<pre><code class="language-make">%.o : %.c
+        $(CC) $(CPPFLAGS) $(CFLAGS) -c $&lt; -o $@
+%.o : %.cpp
+        $(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $&lt; -o $@
+</code></pre>
+
+<p>以下に紹介するように、ほかにも様々な変数や関数が用意されていて、
+個別のファイル名などをいちいち入力しなくても済むようになっている。</p>
 
 <h3 id="implicit-variables-https-www-gnu-org-software-make-manual-make-html-implicit-variables"><a href="https://www.gnu.org/software/make/manual/make.html#Implicit-Variables">Implicit Variables</a></h3>
 
@@ -144,9 +158,9 @@ ${PROGRAM}: ${OBJS}
 <dd><code>rm -f</code></dd>
 <dt><code>CPPFLAGS</code></dt>
 <dd>プリプロセッサ用オプション。
-e.g., <code>-Wall -Wextra -fno-strict-aliasing -DNDEBUG -iquote ${HOME}/include</code></dd>
+e.g., <code>-Wall -Wextra -DNDEBUG -I${HOME}/local/include</code></dd>
 <dt><code>CXXFLAGS</code></dt>
-<dd>C++コンパイラ用オプション。 e.g., <code>-O3 -std=c++11</code></dd>
+<dd>C++コンパイラ用オプション。 e.g., <code>-O3 -std=c++14</code></dd>
 <dt><code>LDFLAGS</code></dt>
 <dd>ライブラリパスを指定する。 e.g., <code>-L/usr/local/lib -L{HOME}/local/lib</code></dd>
 <dt><code>LDLIBS</code></dt>
@@ -156,6 +170,19 @@ e.g., <code>-lboost_program_options -lz</code></dd>
 <dt><code>TARGET_ARCH</code></dt>
 <dd>マシン依存なオプションを指定する。
 e.g., <code>-march=native -m64 -msse -msse2 -msse3 -mfpmath=sse</code></dd>
+</dl>
+
+<h3 id="automatic-variables-https-www-gnu-org-software-make-manual-make-html-automatic-variables"><a href="https://www.gnu.org/software/make/manual/make.html#Automatic-Variables">Automatic Variables</a></h3>
+
+<dl>
+<dt><code>$@</code></dt>
+<dd>ターゲット</dd>
+<dt><code>$&lt;</code></dt>
+<dd>必須項目の先頭</dd>
+<dt><code>$^</code></dt>
+<dd>必須項目のスペース区切り</dd>
+<dd>重複してても削らずそのまま欲しい場合は <code>$+</code></dd>
+<dd>新しく更新があったファイルだけ欲しい場合は <code>$?</code></dd>
 </dl>
 
 <h3 id="functions-https-www-gnu-org-software-make-manual-make-html-functions"><a href="https://www.gnu.org/software/make/manual/make.html#Functions">Functions</a></h3>
