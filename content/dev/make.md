@@ -19,13 +19,13 @@ C++ソースコードと同じディレクトリに入れるだけでいきな�
 ```makefile
 ## Options
 
-PROGRAM := ./a.out
-CXX := g++
-CC := ${CXX}
+PROGRAM := a.out
+CXX := clang++
+CC := clang
 CXXFLAGS := -O3 -std=c++14
-CPPFLAGS := -Wall -Wextra -iquote/usr/local/include -iquote${HOME}/local/include
+CPPFLAGS := -Wall -Wextra -I/usr/local/include -I${HOME}/local/include
 LDFLAGS := -L/usr/local/lib -L${HOME}/local/lib
-LDLIBS := -lboost_program_options
+#LDLIBS := -lboost_program_options
 TARGET_ARCH := -m64 -msse -msse2 -msse3 -mfpmath=sse
 
 ## Dependencies
@@ -45,23 +45,41 @@ Dependfile:
 all: ${PROGRAM}
         @:
 
-clean:
-        ${RM} ${OBJS} ${PROGRAM}
-
 ${PROGRAM}: ${OBJS}
         ${LINK.cpp} ${OUTPUT_OPTION} $^ ${LDLIBS}
+
+clean:
+        ${RM} ${OBJS} ${PROGRAM}
 ```
 
-### [Automatic Variables](https://www.gnu.org/software/make/manual/make.html#Automatic-Variables)
 
-`$@`
-:   ターゲット
+### [Rule](https://www.gnu.org/software/make/manual/make.html#Rules)
 
-`$^`
-:   必須項目のスペース区切り
+コロンとタブを使って以下のような形式でルールを書くのが基本。
+この`Makefile`があるところでターミナルから `make TARGET` と打つと、
+ターゲットよりもソースファイルが新しい場合にコマンドが実行される。
 
-`$<`
-:   必須項目の先頭
+```make
+TARGET : SOURCE1 SOURCE2
+        COMMAND
+
+a.out : main.cpp sub.cpp
+        g++ -O2 main.cpp sub.cpp
+```
+
+下記のようなパターンルールが予め定義されている。
+(see [Pattern Rule](https://www.gnu.org/software/make/manual/make.html#Pattern-Rules))
+
+```make
+%.o : %.c
+        $(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+%.o : %.cpp
+        $(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+```
+
+以下に紹介するように、ほかにも様々な変数や関数が用意されていて、
+個別のファイル名などをいちいち入力しなくても済むようになっている。
+
 
 ### [Implicit Variables](https://www.gnu.org/software/make/manual/make.html#Implicit-Variables)
 
@@ -90,10 +108,10 @@ ${PROGRAM}: ${OBJS}
 
 `CPPFLAGS`
 :   プリプロセッサ用オプション。
-    e.g., `-Wall -Wextra -fno-strict-aliasing -DNDEBUG -iquote ${HOME}/include`
+    e.g., `-Wall -Wextra -DNDEBUG -I${HOME}/local/include`
 
 `CXXFLAGS`
-:   C++コンパイラ用オプション。 e.g., `-O3 -std=c++11`
+:   C++コンパイラ用オプション。 e.g., `-O3 -std=c++14`
 
 `LDFLAGS`
 :   ライブラリパスを指定する。 e.g., `-L/usr/local/lib -L{HOME}/local/lib`
@@ -106,6 +124,21 @@ ${PROGRAM}: ${OBJS}
 `TARGET_ARCH`
 :   マシン依存なオプションを指定する。
     e.g., `-march=native -m64 -msse -msse2 -msse3 -mfpmath=sse`
+
+
+### [Automatic Variables](https://www.gnu.org/software/make/manual/make.html#Automatic-Variables)
+
+`$@`
+:   ターゲット
+
+`$<`
+:   必須項目の先頭
+
+`$^`
+:   必須項目のスペース区切り
+:   重複してても削らずそのまま欲しい場合は `$+`
+:   新しく更新があったファイルだけ欲しい場合は `$?`
+
 
 ### [Functions](https://www.gnu.org/software/make/manual/make.html#Functions)
 
