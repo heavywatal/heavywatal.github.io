@@ -22,8 +22,8 @@ C++ソースコードと同じディレクトリに入れるだけでいきな�
 PROGRAM := a.out
 CXX := clang++
 CC := clang
-CXXFLAGS := -O3 -std=c++14
-CPPFLAGS := -Wall -Wextra -I/usr/local/include -I${HOME}/local/include
+CXXFLAGS := -Wall -Wextra -O3 -std=c++14
+CPPFLAGS := -I/usr/local/include -I${HOME}/local/include
 LDFLAGS := -L/usr/local/lib -L${HOME}/local/lib
 #LDLIBS := -lboost_program_options
 TARGET_ARCH := -m64 -msse -msse2 -msse3 -mfpmath=sse
@@ -108,10 +108,10 @@ a.out : main.cpp sub.cpp
 
 `CPPFLAGS`
 :   プリプロセッサ用オプション。
-    e.g., `-Wall -Wextra -DNDEBUG -I${HOME}/local/include`
+    e.g., `-DNDEBUG -I${HOME}/local/include`
 
 `CXXFLAGS`
-:   C++コンパイラ用オプション。 e.g., `-O3 -std=c++14`
+:   C++コンパイラ用オプション。 e.g., `-Wall -Wextra -O3 -std=c++14`
 
 `LDFLAGS`
 :   ライブラリパスを指定する。 e.g., `-L/usr/local/lib -L{HOME}/local/lib`
