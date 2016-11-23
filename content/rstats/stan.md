@@ -8,11 +8,11 @@ subtitle = "高速MCMCでパラメータ推定"
   parent = "rstats"
 +++
 
-http://mc-stan.org/
-
 数あるMCMCアルゴリズムの中でも効率的なHMC(Hybrid/Hamiltonian Monte Carlo)を用いてベイズ推定を行うツール。
 [Pythonやコマンドラインなどいろんな形で利用可能](http://mc-stan.org/interfaces/)だが、
 とりあえずRで[RStan](http://mc-stan.org/interfaces/rstan.html)を使ってみる。
+
+http://mc-stan.org/
 
 ## インストール
 

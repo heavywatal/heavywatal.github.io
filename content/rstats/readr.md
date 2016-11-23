@@ -1,14 +1,11 @@
 +++
 title = 'readr'
-subtitle = "高速で柔軟なテーブル読み込みツール"
+subtitle = "高速で柔軟なテーブル読み込み"
 tags = ["r", "tidyverse"]
 [menu.main]
   parent = "rstats"
   weight = -65
 +++
-
--   http://r4ds.had.co.nz/data-import.html
--   https://cran.r-project.org/package=readr
 
 タブ区切りテキストやCSVファイルを読み込んでdata.frameにするツール。
 圧縮された `***.tsv.gz` なども自動的に展開して読んでくれる。
@@ -26,6 +23,8 @@ tags = ["r", "tidyverse"]
 `install.packages('tidyverse')` で一括インストール、
 `library(tidyverse)` で一括ロード。
 
+-   http://r4ds.had.co.nz/data-import.html
+-   https://cran.r-project.org/package=readr
 
 ## 主な関数
 

@@ -2,23 +2,25 @@
 date = "2016-05-27T18:31:56+09:00"
 tags = ["r", "tidyverse"]
 title = "purrr"
-subtitle = "apply系関数の究極形"
+subtitle = "ループ処理やapply系関数の決定版"
 [menu.main]
   parent = "rstats"
   weight = -73
 +++
 
-https://github.com/hadley/purrr
-
 標準のapply族や[plyr]({{< relref "plyr.md" >}})の関数に引導を渡すべく再設計されたようなパッケージ。
 [dplyr]({{< relref "dplyr.md" >}}) や [tidyr]({{< relref "tidyr.md" >}}) と組み合わせて真価を発揮する。
 purerのように読むらしい。
+いまのところ並列化する機能はないので、そういうときは
+[foreachとparallel]({{< relref "foreach.md" >}}) を使う。
 
 [tidyverse](https://github.com/tidyverse/tidyverse) に含まれているので、
 `install.packages('tidyverse')` で一括インストール、
 `library(tidyverse)` で一括ロード。
 
 パイプ演算子 `%>%` については[dplyr]({{< relref "dplyr.md" >}})を参照。
+
+https://github.com/hadley/purrr
 
 ## list, vector操作
 

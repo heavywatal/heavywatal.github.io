@@ -7,11 +7,6 @@ tags = ["r"]
   weight = 99
 +++
 
--   <http://plyr.had.co.nz/>
--   <http://www.jstatsoft.org/v40/i01>
--   <http://www.rdocumentation.org/packages/plyr>
--   <https://cran.r-project.org/web/packages/plyr/index.html>
-
 Split, Apply, Combine
 :   特定の条件でデータを分割し、それぞれに関数を適用し、再びそれを統合する。
     R標準 `apply` 系の関数よりも直感的な使い方ができ、処理も高速。
@@ -24,6 +19,11 @@ data.frame 処理には [dplyr]({{< relref "dplyr.md" >}})、
 list, vector 処理には [purrr]({{< relref "purrr.md" >}})
 がある今となっては、このパッケージを使うべき場面はもう無さそう。
 {{%/div%}}
+
+-   <http://plyr.had.co.nz/>
+-   <http://www.jstatsoft.org/v40/i01>
+-   <http://www.rdocumentation.org/packages/plyr>
+-   <https://cran.r-project.org/web/packages/plyr/index.html>
 
 ## コア関数
 

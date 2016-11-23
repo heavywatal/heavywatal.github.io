@@ -7,17 +7,17 @@ tags = ["r", "tidyverse"]
   weight = -75
 +++
 
--   <http://r4ds.had.co.nz/transform.html>
--   <https://github.com/hadley/dplyr>
--   <https://cran.r-project.org/web/packages/dplyr/vignettes/introduction.html>
-
 data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(summarise)、ソート(arrange)などの処理を施すためのパッケージ。
-前作 [plyr]({{< relref "plyr.md" >}}) のうちdata.frameに関する部分を抜き出して強化したパッケージ。
+前作 [plyr]({{< relref "plyr.md" >}}) のうちdata.frameに関する部分が強化されている。
 [purrr]({{< relref "purrr.md" >}}) や [tidyr]({{< relref "tidyr.md" >}}) と一緒に使うとよい。
 
 [tidyverse](https://github.com/tidyverse/tidyverse) に含まれているので、
 `install.packages('tidyverse')` で一括インストール、
 `library(tidyverse)` で一括ロード。
+
+-   <http://r4ds.had.co.nz/transform.html>
+-   <https://github.com/hadley/dplyr>
+-   <https://cran.r-project.org/web/packages/dplyr/vignettes/introduction.html>
 
 ## 関数の連結
 

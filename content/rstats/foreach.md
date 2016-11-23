@@ -8,8 +8,6 @@ tags = ["r"]
 
 ## foreach
 
-https://CRAN.R-project.org/package=foreach
-
 カウンター無しでループを書けるようにするパッケージ。
 普段は [`purrr::map()`]({{< relref "purrr.md" >}}) とかのほうが使いやすいけど、
 [後述の並列化](#parallel) の場面ではお世話になる。
@@ -19,6 +17,8 @@ foreach (mu = seq_len(8), .combine=c) %do% {
     rnorm(1, mu)
 }
 ```
+
+https://CRAN.R-project.org/package=foreach
 
 ### `foreach()`
 

@@ -7,15 +7,20 @@ tags = ["r", "graph", "tidyverse"]
   weight = -79
 +++
 
+Rのグラフ描画システムには`graphics`と`grid`の2つが存在しており、
+R標準の`plot()`などは前者の上に、
+本項で扱う`ggplot2`は後者の上に成り立っている。
+使い方が全く異なるので、前者のことを知る必要はない。
+
+[tidyverse](https://github.com/tidyverse/tidyverse) に含まれているので、
+`install.packages('tidyverse')` で一括インストール、
+`library(tidyverse)` で一括ロード。
+
 - <http://r4ds.had.co.nz/data-visualisation.html>
 - <http://docs.ggplot2.org/>
 - <http://www.cookbook-r.com/Graphs/>
 - <http://www.rdocumentation.org/packages/ggplot2>
 - <https://github.com/hadley/ggplot2-book>
-
-[tidyverse](https://github.com/tidyverse/tidyverse) に含まれているので、
-`install.packages('tidyverse')` で一括インストール、
-`library(tidyverse)` で一括ロード。
 
 ## 基本的な使い方
 

@@ -7,11 +7,6 @@ tags = ["r", "tidyverse"]
   weight = -70
 +++
 
--   <http://r4ds.had.co.nz/tidy-data.html>
--   <https://github.com/hadley/tidyr>
--   `vignette("tidy-data")`
--   `demo(package="tidyr")`
-
 data.frameを縦長・横長・入れ子に変形・整形するためのツール。
 [dplyr]({{< relref "dplyr.md" >}}) や [purrr]({{< relref "purrr.md" >}})
 と一緒に使うとよい。
@@ -20,6 +15,11 @@ data.frameを縦長・横長・入れ子に変形・整形するためのツー�
 [tidyverse](https://github.com/tidyverse/tidyverse) に含まれているので、
 `install.packages('tidyverse')` で一括インストール、
 `library(tidyverse)` で一括ロード。
+
+-   <http://r4ds.had.co.nz/tidy-data.html>
+-   <https://github.com/hadley/tidyr>
+-   `vignette("tidy-data")`
+-   `demo(package="tidyr")`
 
 下記のコード例で使うデータ
 

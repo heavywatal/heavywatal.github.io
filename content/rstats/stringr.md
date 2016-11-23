@@ -7,13 +7,8 @@ tags = ["r", "tidyverse"]
   weight = -60
 +++
 
--   <http://r4ds.had.co.nz/strings.html>
--   <https://cran.r-project.org/web/packages/stringr/>
--   <https://github.com/tidyverse/stringr>
--   <http://www.rdocumentation.org/packages/stringr>
-
-R標準の `base` パッケージが提供する関数とほとんど同じ機能のように見えるものもあるが、
-統一的なインターフェイスに合理的な挙動なのでプログラムの中で使いやすい。
+R標準の`base`パッケージが提供する関数でも文字列処理は可能だが、
+`stringr`のほうが統一的なインターフェイスに合理的な挙動で使いやすい。
 
 -   `factor` と `character` を同じように扱う
 -   引数オブジェクトの各要素の名前や位置を保持する
@@ -37,6 +32,11 @@ R標準の `base` パッケージが提供する関数とほとんど同じ機�
 Rの中から `install.package('tidyverse')` でインストールし、
 使う前に `library(stringr)` でパッケージを読み込む。
 (`library(tidyverse)`の一括ロードには今のところ含まれていない。)
+
+-   <http://r4ds.had.co.nz/strings.html>
+-   <https://cran.r-project.org/web/packages/stringr/>
+-   <https://github.com/tidyverse/stringr>
+-   <http://www.rdocumentation.org/packages/stringr>
 
 ## Functions
 
