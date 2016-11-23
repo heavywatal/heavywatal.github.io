@@ -56,7 +56,7 @@ ID同士の組み合わせの数だけ結果が膨れてしまう...?
 
 イトヨの例
 
-1.  MySQL 環境を整える cf. [/dev/mysql]({{< relref "dev/mysql.md" >}})
+1.  MySQL 環境を整える
 2.  データをダウンロードする:
 
         % x=gasterosteus_aculeatus_core_57_1j
