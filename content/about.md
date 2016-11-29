@@ -28,8 +28,8 @@ Email:
 
 Find me on
 : <a rel="me" href="https://github.com/heavywatal">GitHub</a>,
-  <a rel="me" href="http://www.facebook.com/heavy.watal">Facebook</a>,
-  <a rel="me" href="http://twitter.com/heavy_watal">Twitter</a>,
+  <a rel="me" href="https://www.facebook.com/heavy.watal">Facebook</a>,
+  <a rel="me" href="https://twitter.com/heavy_watal">Twitter</a>,
   <a rel="me" href="https://plus.google.com/u/0/+WatalMIwasaki">Google+</a>,
   <a rel="me" href="skype:heavy.watal?userinfo">Skype</a>
 
@@ -60,7 +60,7 @@ July 2010 - March 2013
 -   Takahiro Yamanoi and **Watal M. Iwasaki**. 2015
     Origami Bird Simulator: a teaching resource linking natural selection and speciation.
     *Evolution: Education and Outreach* **8**:14
-    [Open Access] <http://dx.doi.org/10.1186/s12052-015-0043-6>
+    [Open Access] <https://dx.doi.org/10.1186/s12052-015-0043-6>
 -   Hajime Wakasa, Antonio Cádiz, Lázaro M. Echenique-Díaz, **Watal M. Iwasaki**, Namiko Kamiyama, Yuki Nishimura, Hitoshi Yokoyama, Koji Tamura, and Masakado Kawata. 2015.
     Developmental stages for the divergence of relative limb length between a twig and a trunk-ground *Anolis* lizard species.
     *Journal of Experimental Zoology Part B: Molecular and Developmental Evolution* **324** 5: 410--423
@@ -68,19 +68,19 @@ July 2010 - March 2013
 -   Tezuka, A., S. Kasagi, C. van Oosterhout, M. McMullan, **W. M. Iwasaki**, D. Kasai, M. Yamamichi, H. Innan, S. Kawamura, and M. Kawata. 2014.
     Divergent selection on opsin gene variation in guppy (*Poecilia reticulata*) populations of Trinidad and Tobago.
     *Heredity* **113**: 381--389
-    <http://dx.doi.org/10.1038/hdy.2014.35>
+    <https://dx.doi.org/10.1038/hdy.2014.35>
 -   **Watal M. Iwasaki**, Masaki E. Tsuda, Masakado Kawata. 2013.
     Genetic and environmental factors affecting cryptic variations in gene regulatory networks.
     *BMC Evol. Biol.* **13**:91
-    [Open Access] <http://dx.doi.org/10.1186/1471-2148-13-91>
+    [Open Access] <https://dx.doi.org/10.1186/1471-2148-13-91>
 
 **Book Chapters**
 
 -   小林武彦(編)
-    「[ゲノムを司るインターメア --- 非コードDNAの新たな展開](http://www.amazon.co.jp/gp/product/4759817247/ref=as_li_ss_tl?ie=UTF8&camp=247&creative=7399&creativeASIN=4759817247&linkCode=as2&tag=heavywatal-22)」
+    「[ゲノムを司るインターメア --- 非コードDNAの新たな展開](http://amzn.to/2gBXjFb)」
     化学同人 (2015.11) 第3章 ゲノム進化メカニズムと情報学的解析
 -   東北大学生態適応GCOEチームPEM
-    「[社会的責任学入門—環境危機時代に適応する7つの教養](http://www.amazon.co.jp/gp/product/4861631734/ref=as_li_ss_tl?ie=UTF8&camp=247&creative=7399&creativeASIN=4861631734&linkCode=as2&tag=heavywatal-22) 」
+    「[社会的責任学入門—環境危機時代に適応する7つの教養](http://amzn.to/2g1q62j) 」
     東北大学出版会 (2011.06) 第6章担当
 
 ## Presentations
