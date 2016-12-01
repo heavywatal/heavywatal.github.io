@@ -85,7 +85,7 @@ APIもガチャガチャだしドキュメントも結構いい加減なので�
 
 `rgl::par3d()`
 
-[`rgl::material3d(...)`](http://www.inside-r.org/packages/cran/rgl/docs/material3d)
+[`rgl::material3d(...)`](https://www.rdocumentation.org/packages/rgl/topics/rgl.material)
 : プロットに渡せるオプション(`color`など)はここで確認
 
 ### 軸
