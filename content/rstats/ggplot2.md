@@ -109,7 +109,7 @@ ggsave("iris_sepal.png", gp)
 [始点と終点で曲線や矢印を描く](http://docs.ggplot2.org/current/geom_segment.html)
 :   `gp + geom_curve(aes(x, y, xend, yend), curvature = -0.2)`\
     `gp + geom_segment(aes(x, y, xend, yend), arrow=arrow())`\
-    矢印の調整は [grid::arrow()](http://www.inside-r.org/r-doc/grid/arrow)
+    矢印の調整は [grid::arrow()](https://www.rdocumentation.org/packages/grid/topics/arrow)
 
 [文字列や図形を書き加える](http://docs.ggplot2.org/current/annotate.html)
 :   `gp + geom_text(aes(y=y_val+10), label=y_val)`\
@@ -140,7 +140,7 @@ ggsave("iris_sepal.png", gp)
 
 <http://docs.ggplot2.org/current/scale_brewer.html>
 :   [Colorbrewer](http://colorbrewer2.org/) で定義されているパレットを使う。 色盲対策もできるし、原色も出てこないのでオススメ。\
-    cf. [RColorBrewer](http://www.inside-r.org/packages/cran/RColorBrewer/docs/ColorBrewer)\
+    cf. [RColorBrewer](https://www.rdocumentation.org/packages/RColorBrewer/topics/ColorBrewer)\
     `scale_{colour/fill}_brewer(..., type='seq', palette=1, direction=1)`: 離散値\
     `scale_{colour/fill}_distiller(...)`: 連続値
 
