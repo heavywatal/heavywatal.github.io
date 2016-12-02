@@ -26,7 +26,7 @@ gcc や clang の最適化技術も着々と進歩しており、
 
 ### 最適化オプション
 
-<http://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html>
+<https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html>
 
 ```sh
 % g++ -O3 main.cpp
@@ -274,7 +274,8 @@ x += b;
     便利なだけでなくきっと最適化もされやすい。
     ただし長さの変更など苦手な点もあるので使い所は限られる。
     本格的なベクタ演算・行列演算がしたければ
-    [Eigen](http://eigen.tuxfamily.org/) とかを使ったほうよさそう。
+    [Eigen](http://eigen.tuxfamily.org/) や
+    [Armadillo](http://arma.sourceforge.net/) とかを使ったほうよさそう。
 
 
 ### メモリは一気に確保

@@ -15,16 +15,16 @@ tags = ["c++"]
 
 - http://www.boost.org/doc/libs/release/more/getting_started/unix-variants.html
 - http://www.boost.org/build/
-- http://boostjp.github.io/howtobuild.html
+- https://boostjp.github.io/howtobuild.html
 
 普通の `configure` と `make` じゃないので混乱するけど、まあまあ相同な手順。
 gccとclangの両方から使える統一ライブラリを作るのは難しいらしいので、
 それぞれのコンパイラで別々にビルドしてインストールする。
 
-1.  <http://sourceforge.net/projects/boost/> から最新ソースを入手して展開。
+1.  <https://sourceforge.net/projects/boost/> から最新ソースを入手して展開。
     とりあえず `boost-jam` とか `boost-build` とかは無視して `boost` 本体のみで結構:
     ```
-    % wget -O- http://downloads.sourceforge.net/boost/boost_1_62_0.tar.bz2 | tar xj
+    % wget -O- https://downloads.sourceforge.net/boost/boost_1_62_0.tar.bz2 | tar xj
     % cd boost_1_62_0/
     ```
 
