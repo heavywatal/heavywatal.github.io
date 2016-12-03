@@ -272,6 +272,23 @@ XeTeXでは不要っぽい。
 `graphicx` がおかしくなってPNG図が空白になる、謎。
 <http://qiita.com/zr_tex8r/items/442b75b452b11bee8049>
 
+### フォントの一時的変更
+
+https://en.wikibooks.org/wiki/LaTeX/Fonts
+
+```tex
+\emph{emphasis}
+\textit{italic}
+\textbf{bold}
+\texttt{monospace}
+normal {\huge huge} normal
+```
+
+`\tiny`, `\scriptsize`, `\footnotesize`, `\small`,
+`\normalsize`,
+`\large`, `\Large`, `\LARGE`, `\huge`, `\Huge`
+
+
 ## Tips
 
 ### ダメな使い方を警告してもらう
