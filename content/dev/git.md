@@ -59,12 +59,12 @@ working directory
 ### 用語
 
 blob
-: git内部で1つのファイルを指すオブジェクトで、add時に作られる。
+: git内部で1つのファイルを指すオブジェクトで、`add`時に作られる。
   ファイル名などのメタデータは持たず、
   ファイルの内容にのみ依存したハッシュIDを持つ。
 
 tree
-: git内部で1つのディレクトリを指すオブジェクトで、commit時に作られる。
+: git内部で1つのディレクトリを指すオブジェクトで、`commit`した時に作られる。
   blobやファイル名などのメタデータに依存したハッシュIDを持ち、
   その変化は親に伝播する。
 
@@ -79,8 +79,8 @@ repository
 
 `origin`
 : remoteリポジトリの典型的なshortname。
-  clone時に自動的に追加され、
-  push先やfetch元を省略したときにデフォルトで使われる。
+  `clone`時に自動的に追加され、
+  `push`先や`fetch`元を省略したときにデフォルトで使われる。
   `git remote -v` で確認。
 
 `master`
@@ -88,7 +88,7 @@ repository
 
 `HEAD`
 : 現在checkoutしているbranch/commitを指すポインタ。
-  基本的にはmasterの最新コミットを指していることが多い。
+  基本的には`master`の最新コミットを指していることが多い。
   ひとつ前は`HEAD^`、ふたつ前は`HEAD^^`。
 
 
@@ -144,14 +144,14 @@ git submodule add -b gitsubmodule_https https://github.com/heavywatal/x18n.git
 ```
 
 {{%div class="note"%}}
-gh-pagesで公開する場合は参照プロトコルを
+`gh-pages`で公開する場合は参照プロトコルを
 `git://` ではなく `https://` にする必要がある。
 {{%/div%}}
 
 
 ### submoduleを含むメインリポジトリを使い始めるとき
 
-最初にclone/fetchしてきた時submoduleたちは空なのでまず:
+最初に`clone`/`fetch`してきた時submoduleたちは空なのでまず:
 
     git submodule update --init
 
@@ -181,10 +181,12 @@ gh-pagesで公開する場合は参照プロトコルを
 
 ## GitHub Pages
 
+https://help.github.com/articles/user-organization-and-project-pages/
+
 ### ユーザーサイトを作る
 
 1. `USERNAME.github.io` という名前のリポジトリをGitHub上で作成
-2. 公開したいウェブサイトをmasterブランチとしてpush
+2. 公開したいウェブサイトを`master`ブランチとして`push`
 3. `https://USERNAME.github.io` にアクセスしてみる。
 
 例えば本ウェブサイトは
@@ -196,45 +198,35 @@ gh-pagesで公開する場合は参照プロトコルを
 
 ### プロジェクトサイトを作る
 
-`gh-pages` ブランチの内容が
-`https://USERNAME.github.io/PROJECT/` で公開される。
+https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/
 
-e.g., doxygen生成物を公開
+リポジトリの内容を `https://USERNAME.github.io/PROJECT/` に公開することができる。
+方法は複数あり、リポジトリの設定画面から選択できる。
 
-1.  メインリポジトリで `git checkout --orphan gh-pages`
-2.  index.html など必要なファイルを用意して最初のコミット:
+1. `gh-pages` ブランチの内容を公開 (古い方法)
+1. `master` ブランチの内容を公開
+1. `master` ブランチの `/docs` ディレクトリのみを公開
 
-        git add --all
-        git commit -a
-
-3.  `git push origin gh-pages`
-4.  メインリポジトリに戻る:
-
-        git fetch
-        git checkout master
-
-5.  doxygenの出力先(e.g., html)をサブモジュールにする:
-
-        git submodule add -b gh-pages `git remote -v|grep origin|head -n 1|awk '{print$2}'` html
-
+前は1番の方法しかなくてブランチの扱いがやや面倒だったが、
+今では`master`だけで簡単に済ませられるようになった。
 
 ## Pull Request (PR)
 
--   大元のリポジトリをupstream、フォークした自分のリポジトリをoriginと名付ける。
--   デフォルトブランチ(masterとかdevelopとか)は更新取得のためだけに使い、変更は新規ブランチで行う。
--   push済みのcommitをrebaseするとIDが変わっちゃうのでダメ。
+-   大元のリポジトリを`upstream`、フォークした自分のリポジトリを`origin`と名付ける。
+-   デフォルトブランチ(`master`とか`develop`とか)は更新取得のためだけに使い、変更は新規ブランチで行う。
+-   `push`済みのcommitを`rebase`するとIDが変わっちゃうのでダメ。
 
 ### 基本の流れ
 
 例えば `USER` さんの `PROJECT` のコード修正に貢献する場合。
 
 1.  `github.com/USER/PROJECT` のForkボタンで自分のGitHubリポジトリに取り込む
-1.  forkした自分のリポジトリからローカルにclone:
+1.  forkした自分のリポジトリからローカルに`clone`:
 
         git clone git@github.com:heavywatal/PROJECT.git
         cd PROJECT/
 
-1.  大元のリポジトリにupstreamという名前をつけておく:
+1.  大元のリポジトリに`upstream`という名前をつけておく:
 
         git remote add upstream git://github.com/USER/PROJECT.git
 
@@ -242,13 +234,13 @@ e.g., doxygen生成物を公開
 
         git checkout -b fix-typo
 
-1.  コードを変更してcommit:
+1.  コードを変更して`commit`:
 
         emacs README.md
         git diff
         git commit -a -m "Fix typo in README.md"
 
-1.  この間にupstreamで更新があったら、それをデフォルトブランチ越しに取り込む:
+1.  この間に`upstream`で更新があったら、それをデフォルトブランチ越しに取り込む:
 
         git checkout master
         git fetch upstream
@@ -257,13 +249,13 @@ e.g., doxygen生成物を公開
         git checkout fix-typo
         git rebase -i master
 
-1.  自分のリポジトリにpush:
+1.  自分のリポジトリに`push`:
 
         git push [-f] origin fix-typo
 
 1.  GitHub上に出現する"Compare & pull request"ボタンを押す
 1.  差分を確認し、コメント欄を埋めて提出
-1.  修正を求められたらそのブランチで変更し、自分のリポジトリにpushすればPRにも反映される
+1.  修正を求められたらそのブランチで変更し、自分のリポジトリに`push`すればPRにも反映される
 1.  マージされたらブランチを消す
     (GitHub PR画面のボタンか、空ブランチ上書き `git push origin :fix-typo`)
 
@@ -273,9 +265,9 @@ e.g., doxygen生成物を公開
 ### detached HEAD からの復帰
 
 submoduleなどをいじってると意図せずdetached HEAD状態になることがある。
-その状態でcommitしてしまった変更をmasterに反映したい。
+その状態でcommitしてしまった変更を`master`に反映したい。
 
-1. pushしようとして怒られて気付く
+1. `push`しようとして怒られて気付く
    ```
    % git push
    fatal: You are not currently on a branch
@@ -283,7 +275,7 @@ submoduleなどをいじってると意図せずdetached HEAD状態になるこ�
    HEAD detached from *******
    ```
 
-2. masterに戻ると道筋を示してくれる:
+2. `master`に戻ると道筋を示してくれる:
    ```
    % git checkout master
    Warning: you are leaving 2 comits behind, not connected to
@@ -294,7 +286,7 @@ submoduleなどをいじってると意図せずdetached HEAD状態になるこ�
     git branch <new-branch-name> *******
    ```
 
-3. 言われたとおりbranchを作ってmerge
+3. 言われたとおりbranchを作って`merge`
    ```
    % git branch detached *******
    % git merge detached
