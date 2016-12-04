@@ -29,11 +29,8 @@ Basic Local Alignment Search Tool
 
 ### Mac (Homebrew)
 
-そのままだといろいろ余計なプログラムに依存してしまうので外しつつ:
-
     % brew tap homebrew/science
-    % brew info blast
-    % brew install blast --without-check --without-jpeg --without-libpng --without-pcre
+    % brew install blast
 
 ### Mac (source)
 
