@@ -8,28 +8,21 @@ tags = ["python"]
 
 <https://www.python.org/downloads/>
 
-## Ubuntu
+## Installer
 
-`/usr/bin/python` が既にインストールされている。
-他のバージョンも Synaptic や `apt-get` で簡単に入れられる。
-標準より新しいや古いのが欲しい場合はソースからビルドするか
-[ppa:fkrull/deadsnakes](https://launchpad.net/~fkrull/+archive/deadsnakes)
-などのリポジトリを利用するとよい。
-```sh
-% sudo add-apt-repository ppa:fkrull/deadsnakes
-% sudo apt-get update
-% sudo apt-get install python2.7
-```
+MacやLinuxならシステムの一部として
+`/usr/bin/python` が既にインストールされているので基本的にはそれを使えばよい。
+Scientificな用途で使いたい場合は
+[Numpy/Scipy]({{< relref "scipy.md" >}})
+などの主要パッケージもまとめて面倒みてくれる
+[Anaconda](https://docs.continuum.io/anaconda/)
+で最新版を入れると良い。
+GUIもあってかなり親切だが、
+`PATH`上でシステムコマンド(`curl`など)を上書きしちゃうヤンチャな面もあるので、
+それが気になる人は
+[pyenv](https://github.com/yyuu/pyenv)
+越しに入れることで汚染を防げる。
 
-## Mac
-
-`/usr/bin/python` が既にインストールされている。
-他のバージョンも [Homebrew]({{< relref "mac/homebrew.md" >}}) や
-[MacPorts]({{< relref "mac/macports.md" >}})
-などのパッケージマネージャで簡単に入れられる。
-```sh
-% brew install python3
-```
 
 ## Source
 
