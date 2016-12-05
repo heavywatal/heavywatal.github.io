@@ -119,9 +119,18 @@ BasicTeXの場合は最小限のパッケージしか含まれていないので
     `split` 環境では全体でラベルが1つ、
     `align` 環境では行ごとにラベルが生成されるので、
     用途が少し違う。
-
     古い `eqnarray` 環境でも似たようなことはできるが、
     スペースとかに問題あるらしく非推奨。
+
+-   場合分け
+    ```tex
+    \begin{equation}
+      H(x) = \begin{cases}
+        & 0 \text{if $x \le 0$} \\
+        & 1 \text{if $x > 0$}
+      \end{cases}
+    \end{equation}
+    ```
 
 -   記号:
     <http://www.ctan.org/tex-archive/info/symbols/comprehensive/>
