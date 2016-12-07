@@ -146,7 +146,7 @@ rsync -auv SRC/DIR/ DST/DIR/
 <p>先に記述したものほど優先される。</p>
 
 <ol>
-<li><p>いつでも除外したいものを <code>$HOME/.rsync/exclude</code> の中に記述する:</p>
+<li><p>いつでも除外したいものを適当なファイル(<code>~/.config/rsync-exclude</code>)に記述する:</p>
 
 <pre><code>._*
 .DS_Store
@@ -167,7 +167,7 @@ known_hosts
 <li><p><code>--exclude-from</code> オプションでそのファイルを読ませる。
 例えば <code>.zshrc</code> にこう書く:</p>
 
-<pre><code>alias rsync='rsync --exclude-from=$HOME/.rsync/exclude'
+<pre><code>alias rsync='rsync --exclude-from=${HOME}/.config/rsync-exclude'
 </code></pre></li>
 
 <li><p>そのほかで除外したいものは <code>--exclude</code> オプションで個別に指定</p></li>

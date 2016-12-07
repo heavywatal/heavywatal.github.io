@@ -93,7 +93,7 @@ zsh
 
 <dl>
 <dt><code>ZDOTDIR</code></dt>
-<dd>設定ファイルを読み込むディレクトリ。デフォルトは <code>$HOME</code></dd>
+<dd>設定ファイルを読み込むディレクトリ。デフォルトは <code>${HOME}</code></dd>
 <dt><code>ZSH_VERSION</code></dt>
 <dd><code>.zshrc</code> とかで条件分岐するのに使える</dd>
 <dt><code>fpath</code></dt>
@@ -146,20 +146,20 @@ export PATH
 </div>
 
 
-<h2 id="home-zsh-以下にまとめる"><code>$HOME/.zsh/</code> 以下にまとめる</h2>
+<h2 id="zsh-以下にまとめる"><code>~/.zsh/</code> 以下にまとめる</h2>
 
 <ol>
 <li><p>ディレクトリを作ってその中に設定ファイルを入れる:</p>
 
-<pre><code>% mkdir $HOME/.zsh
+<pre><code>% mkdir ~/.zsh
 </code></pre></li>
 
-<li><p><code>$HOME/.zsh/.zshenv</code> に以下の内容を記述して <code>ZDOTDIR</code> を設定:</p>
+<li><p><code>~/.zsh/.zshenv</code> に以下の内容を記述して <code>ZDOTDIR</code> を設定:</p>
 
-<pre><code>export ZDOTDIR=$HOME/.zsh
+<pre><code>export ZDOTDIR=${HOME}/.zsh
 </code></pre></li>
 
-<li><p><code>$HOME/.zshenv</code> から <code>$HOME</code> にシンボリックリンクを張る:</p>
+<li><p><code>~/.zshenv</code> にシンボリックリンクを張る:</p>
 
 <pre><code>% cd
 % ln -s .zsh/.zshenv
@@ -169,7 +169,7 @@ export PATH
 
 <ol>
 <li><code>~/.zshenv -&gt; ~/.zsh/.zshenv</code> が読み込まれる</li>
-<li><code>ZDOTDIR=$HOME/.zsh</code> が設定される</li>
+<li><code>ZDOTDIR=${HOME}/.zsh</code> が設定される</li>
 <li><code>$ZDOTDIR</code> 以下の設定ファイルが読み込まれる</li>
 </ol></li>
 </ol>

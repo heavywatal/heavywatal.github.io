@@ -155,8 +155,7 @@ Wine がインストールされてないMacでも動くアプリケーション
 </ol></li>
 
 <li><p>アプリケーションの名前と置く場所を聞かれるので、
-<code>/Applications</code> などの適当な場所に <code>適当な名前.app</code> を指定して
-Save</p></li>
+<code>/Applications</code> などの適当な場所に <code>適当な名前.app</code> を指定してSave</p></li>
 
 <li><p>Windowsっぽいインストーラが立ち上がったら基本的に全部Yesで進む。</p></li>
 
@@ -167,17 +166,17 @@ Save</p></li>
 </ol>
 
 <p>この方法で作ったアプリケーションを一度起動すると、
-<code>${HOME}/Library/Application\ Support/Wine/prefixes/</code>
+<code>~/Library/Application\ Support/Wine/prefixes/</code>
 以下にアプリケーションと同名のPrefixが作られ、
 以後そのアプリケーションはそのPrefix環境で実行される。
 (e.g. Notepad.app を立ち上げると
-<code>${HOME}/Library/Application\ Support/Wine/prefixes/Notepad</code>
+<code>~/Library/Application\ Support/Wine/prefixes/Notepad</code>
 というPrefixが作られ、その環境で実行される)</p>
 
 <h2 id="execute-application-exe-on-one-prefix">execute Application.exe on One Prefix</h2>
 
 <p>実行環境としてPrefixをひとつ作っておき、<code>Windowsアプリ.exe</code> を直接実行する方法。
-Prefixは複数作れるが、ひとつだけ <code>${HOME}/.wine</code> というPrefixを作って
+Prefixは複数作れるが、ひとつだけ <code>~/.wine</code> というPrefixを作って
 常にそれを使うのが分かりやすい。（LinuxにおけるWineの動作）</p>
 
 <h3 id="prefix">Prefix</h3>
@@ -234,7 +233,7 @@ Run directly in [&hellip;] でPrefixを指定してGo</p>
 <li>X11 (または XQuartz) というウィンドウシステムを使って
 Windowsアプリを表示するので、Wineが動いてるうちはそれらが起動した状態になる。
 （何か変なの起動したとか思わないように）</li>
-<li>PrefixはLinuxに倣って <code>${HOME}/.wine</code> とするのがおすすめだけど、
+<li>PrefixはLinuxに倣って <code>~/.wine</code> とするのがおすすめだけど、
 これだと不可視ファイルになってしまうので混乱する人も出てきそう。
 Finderで開くには2つの方法がある
 
@@ -273,7 +272,7 @@ fi
 
 <li><p>シェル変数 <code>WINEPREFIX</code> によって
 wine コマンドが実行されるPrefixを指定できる。
-相対パスではなく絶対パスで。デフォルトは <code>${HOME}/.wine</code>:</p>
+相対パスではなく絶対パスで。デフォルトは <code>~/.wine</code>:</p>
 
 <pre><code>% WINEPREFIX=${HOME}/Wine wine notepad
 </code></pre></li>
