@@ -165,7 +165,8 @@ LDFLAGS = -L${HOME}/.homebrew/lib
 
 ## tibble
 
-http://r4ds.had.co.nz/tibbles.html
+- http://r4ds.had.co.nz/tibbles.html
+- https://github.com/tidyverse/tibble
 
 `tbl_df` クラスが付与された改良版data.frameのことを**tibble**と呼ぶ。
 もともとは [dplyr]({{< relref "dplyr.md" >}}) パッケージで扱っていたが、独立パッケージになった。

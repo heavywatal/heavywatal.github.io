@@ -17,7 +17,7 @@ data.frameを縦長・横長・入れ子に変形・整形するためのツー�
 `library(tidyverse)` で一括ロード。
 
 -   <http://r4ds.had.co.nz/tidy-data.html>
--   <https://github.com/hadley/tidyr>
+-   <https://github.com/tidyverse/tidyr>
 -   `vignette("tidy-data")`
 -   `demo(package="tidyr")`
 
