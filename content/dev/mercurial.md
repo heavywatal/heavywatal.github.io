@@ -47,9 +47,9 @@ Working directoryにおける変更をRepositoryに反映させる。
 
 ssh越しでRepositoryをやり取り。
 ディレクトリの指定方法が `scp` とはちょっと違う。
-スラッシュ1つだと `$HOME/` 、
+スラッシュ1つだと `~/` 、
 スラッシュ2つだとルートからの絶対パス。
-`$HOME/.ssh/config` などでちゃんと設定しとけばURLは簡略化可能。
+`~/.ssh/config` などでちゃんと設定しとけばURLは簡略化可能。
 cf. [ssh]({{< relref "ssh.md" >}}):
 
     % hg push ssh://username@example.com//home/username/the_project
@@ -175,10 +175,10 @@ cf. [ssh]({{< relref "ssh.md" >}}):
     <install-root>/etc/mercurial/hgrc
     /etc/mercurial/hgrc.d/*.rc
     /etc/mercurial/hgrc
-    $HOME/.hgrc
+    ~/.hgrc
     <repo>/.hg/hgrc
 
-ユーザー設定は `$HOME/.hgrc` で。
+ユーザー設定は `~/.hgrc` で。
 `username` は `commit` するときに使われる:
 
     [ui]

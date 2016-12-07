@@ -22,7 +22,7 @@ Virtual Network Computing
         Verify:
         % vncserver -kill :1
 
-3.  設定ファイル `$HOME/.vnc/xstartup` を書き換える:
+3.  設定ファイル `~/.vnc/xstartup` を書き換える:
 
         #!/bin/sh
 
@@ -32,7 +32,7 @@ Virtual Network Computing
         gnome-session --session=ubuntu-2d &
 
         [ -x /etc/vnc/xstartup ] && exec /etc/vnc/xstartup
-        [ -r $HOME/.Xresources ] && xrdb $HOME/.Xresources
+        [ -r ${HOME}/.Xresources ] && xrdb ${HOME}/.Xresources
         xsetroot -solid grey
         vncconfig -iconic &
         #x-terminal-emulator -geometry 80x24+10+10 -ls -title "$VNCDESKTOP Desktop" &

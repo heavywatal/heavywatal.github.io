@@ -63,25 +63,24 @@ Windowsアプリ.exe またはその インストーラ.msi から
     8.  Install ボタンを押す。
 
 3.  アプリケーションの名前と置く場所を聞かれるので、
-    `/Applications` などの適当な場所に `適当な名前.app` を指定して
-    Save
+    `/Applications` などの適当な場所に `適当な名前.app` を指定してSave
 4.  Windowsっぽいインストーラが立ち上がったら基本的に全部Yesで進む。
 5.  Select Startfile と言われたら、
     `Program Files/` 以下にインストールされた目的のアプリを指定してOK
 6.  できあがったアプリケーションをダブルクリックして実行
 
 この方法で作ったアプリケーションを一度起動すると、
-`${HOME}/Library/Application\ Support/Wine/prefixes/`
+`~/Library/Application\ Support/Wine/prefixes/`
 以下にアプリケーションと同名のPrefixが作られ、
 以後そのアプリケーションはそのPrefix環境で実行される。
 (e.g. Notepad.app を立ち上げると
-`${HOME}/Library/Application\ Support/Wine/prefixes/Notepad`
+`~/Library/Application\ Support/Wine/prefixes/Notepad`
 というPrefixが作られ、その環境で実行される)
 
 ## execute Application.exe on One Prefix
 
 実行環境としてPrefixをひとつ作っておき、`Windowsアプリ.exe` を直接実行する方法。
-Prefixは複数作れるが、ひとつだけ `${HOME}/.wine` というPrefixを作って
+Prefixは複数作れるが、ひとつだけ `~/.wine` というPrefixを作って
 常にそれを使うのが分かりやすい。（LinuxにおけるWineの動作）
 
 ### Prefix
@@ -119,7 +118,7 @@ Prefixは複数作れるが、ひとつだけ `${HOME}/.wine` というPrefixを
 -   X11 (または XQuartz) というウィンドウシステムを使って
     Windowsアプリを表示するので、Wineが動いてるうちはそれらが起動した状態になる。
     （何か変なの起動したとか思わないように）
--   PrefixはLinuxに倣って `${HOME}/.wine` とするのがおすすめだけど、
+-   PrefixはLinuxに倣って `~/.wine` とするのがおすすめだけど、
     これだと不可視ファイルになってしまうので混乱する人も出てきそう。
     Finderで開くには2つの方法がある
     -   右上の `ワイングラス --> Change Prefix... --> 右端の虫眼鏡アイコン`
@@ -151,6 +150,6 @@ Prefixは複数作れるが、ひとつだけ `${HOME}/.wine` というPrefixを
 
 -   シェル変数 `WINEPREFIX` によって
     wine コマンドが実行されるPrefixを指定できる。
-    相対パスではなく絶対パスで。デフォルトは `${HOME}/.wine`:
+    相対パスではなく絶対パスで。デフォルトは `~/.wine`:
 
         % WINEPREFIX=${HOME}/Wine wine notepad

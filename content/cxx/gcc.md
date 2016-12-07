@@ -168,7 +168,7 @@ Xcode についてくる `gcc-4.2` は
 
         % sudo ln -s /usr/lib/x86_64-linux-gnu /usr/lib64
 
-6.  インストール。の前に `make DESTDIR=$HOME/tmp/gcc-test install`
+6.  インストール。の前に `make DESTDIR=${HOME}/tmp/gcc-test install`
     などとしてテストするといいらしい。 :
 
         % sudo make install

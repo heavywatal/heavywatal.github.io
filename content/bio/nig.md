@@ -137,7 +137,7 @@ qsub -l debug -b y -shell n -cwd -N test "pwd; sleep 5; ls >ls.txt"
 
 `-cwd`
 :   カレントディレクトリでジョブ実行。
-    デフォルトでは `$HOME`。
+    デフォルトでは `${HOME}`。
 
 `-N ***`
 :   ジョブに名前をつける。

@@ -109,7 +109,7 @@ Time   | <kbd>T</kbd> | <kbd>o -time</kbd>
     % nohup COMMAND [ARGUMENTS] &
 
 標準出力と標準エラー出力は指定しなければ `nohup.out`
-または `$HOME/nohup.out` に追記モードでリダイレクトされる。
+または `~/nohup.out` に追記モードでリダイレクトされる。
 
 - 標準出力の書き出し先を指定するには `>{OUTFILE}`
 - 標準エラー出力の書き出し先を指定するには `2>{OUTFILE}`

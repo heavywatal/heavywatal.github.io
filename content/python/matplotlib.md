@@ -332,7 +332,7 @@ ax_ltop = plt.subplot(gsl[0])
 
 <http://matplotlib.org/faq/environment_variables_faq.html>
 
-`$HOME/.matplotlib/matplotlibrc` が読まれる。
+`~/.matplotlib/matplotlibrc` が読まれる。
 
 `site-packages/matplotlib/mpl-data/matplotlibrc` にテンプレートがある。
 

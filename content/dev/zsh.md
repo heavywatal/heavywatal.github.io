@@ -13,7 +13,7 @@ tags = ["shell"]
 ## Environmental variables
 
 `ZDOTDIR`
-:   設定ファイルを読み込むディレクトリ。デフォルトは `$HOME`
+:   設定ファイルを読み込むディレクトリ。デフォルトは `${HOME}`
 
 `ZSH_VERSION`
 :   `.zshrc` とかで条件分岐するのに使える
@@ -68,24 +68,24 @@ export PATH
 ```
 {{%/div%}}
 
-## `$HOME/.zsh/` 以下にまとめる
+## `~/.zsh/` 以下にまとめる
 
 1.  ディレクトリを作ってその中に設定ファイルを入れる:
 
-        % mkdir $HOME/.zsh
+        % mkdir ~/.zsh
 
-2.  `$HOME/.zsh/.zshenv` に以下の内容を記述して `ZDOTDIR` を設定:
+2.  `~/.zsh/.zshenv` に以下の内容を記述して `ZDOTDIR` を設定:
 
-        export ZDOTDIR=$HOME/.zsh
+        export ZDOTDIR=${HOME}/.zsh
 
-3.  `$HOME/.zshenv` から `$HOME` にシンボリックリンクを張る:
+3.  `~/.zshenv` にシンボリックリンクを張る:
 
         % cd
         % ln -s .zsh/.zshenv
 
 4.  `zsh` 起動
     1.  `~/.zshenv -> ~/.zsh/.zshenv` が読み込まれる
-    2.  `ZDOTDIR=$HOME/.zsh` が設定される
+    2.  `ZDOTDIR=${HOME}/.zsh` が設定される
     3.  `$ZDOTDIR` 以下の設定ファイルが読み込まれる
 
 ## Installation

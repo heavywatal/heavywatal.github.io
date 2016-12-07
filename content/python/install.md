@@ -99,18 +99,18 @@ See [pip]({{< relref "pip.md" >}})
 
 自分で書いたプログラムをいつでも `import` できるようにする。
 
--   ファイルはまとめて `$HOME/local/lib/python/` 以下に置く
+-   ファイルはまとめて `~/local/lib/python/` 以下に置く
 -   環境変数 `PYTHONPATH` にそのディレクトリを指定する。
     例えば `.zshenv` に以下のように記述するとか:
 
-        export PYTHONPATH=$HOME/local/lib/python
+        export PYTHONPATH=${HOME}/local/lib/python
 
 ### `PYTHONSTARTUP`
 
 インタラクティブモードで起動するときに読み込むファイルを指定する環境変数。
 例えば `.zshrc` に:
 
-    export PYTHONSTARTUP=$HOME/local/lib/python/pythonstartup.py
+    export PYTHONSTARTUP=${HOME}/local/lib/python/pythonstartup.py
 
 以下のようなものを書いておくと、`tab` とか `^i` で補完できるようになる。:
 
