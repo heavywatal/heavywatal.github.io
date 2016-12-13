@@ -112,7 +112,10 @@ https://github.com/hadley/purrr
 
 `purrr::by_slice(.d, ..f, ..., .collate=c('list', 'rows', 'cols'), .to='.out', .labels=TRUE)`
 : grouped_dfを受け取ってグループごとに関数を適用する。
-  `dplyr::do()` の改良版。
+  `dplyr::do()` とほぼ同じ役割で、一長一短。
+  こちらは出力形式をより柔軟に指定できるが、
+  中の関数からgrouping variableを参照できないという弱点を持つ。
+  `tidyr::nest() %>% dplyr::mutate()` とかのほうがスマートかも。
 
 `purrr::by_row(.d, ..f, ..., .collate=c('list', 'rows', 'cols'), .to='.out', .labels=TRUE)`
 : data.frame 1行ごとに関数を適用する。
