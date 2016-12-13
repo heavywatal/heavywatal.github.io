@@ -177,7 +177,10 @@ C++でいう<code>std::partial_sum()</code>。</dd>
 <code>dplyr::group_by_(.dots=.cols)</code> と同じ。</dd>
 <dt><code>purrr::by_slice(.d, ..f, ..., .collate=c('list', 'rows', 'cols'), .to='.out', .labels=TRUE)</code></dt>
 <dd>grouped_dfを受け取ってグループごとに関数を適用する。
-<code>dplyr::do()</code> の改良版。</dd>
+<code>dplyr::do()</code> とほぼ同じ役割で、一長一短。
+こちらは出力形式をより柔軟に指定できるが、
+中の関数からgrouping variableを参照できないという弱点を持つ。
+<code>tidyr::nest() %&gt;% dplyr::mutate()</code> とかのほうがスマートかも。</dd>
 <dt><code>purrr::by_row(.d, ..f, ..., .collate=c('list', 'rows', 'cols'), .to='.out', .labels=TRUE)</code></dt>
 <dd>data.frame 1行ごとに関数を適用する。
 <code>dplyr::rowwise() %&gt;% dplyr::do()</code>的な処理を一撃で書ける。</dd>
