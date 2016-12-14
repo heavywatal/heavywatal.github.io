@@ -8,7 +8,7 @@
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="icon" href="/favicon-192x192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/favicon-192x192.png" sizes="192x192">
-<title>pip: パッケージ管理 - Watal M. Iwasaki</title>
+<title>concurrent.futures: 並列処理 in Python - Watal M. Iwasaki</title>
 <meta name="author" content="Watal M. Iwasaki">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://avatars.githubusercontent.com/heavywatal">
@@ -44,8 +44,8 @@ MathJax.Hub.Queue(function() {
  {"@type": "ListItem",
   "position": 2,
   "item": {
-   "@id": "https://heavywatal.github.io/python/pip.html",
-   "name": "pip"}}
+   "@id": "https://heavywatal.github.io/python/concurrent.html",
+   "name": "concurrent.futures"}}
 ]}</script>
 
 
@@ -73,188 +73,118 @@ Watal M. Iwasaki
 <main>
 <article>
 <header><h1><a href=".">
-pip — パッケージ管理
+concurrent.futures — 並列処理 in Python
 </a></h1>
 <ul class="tags">
 <li><a href="/tags/python">python</a></li>
+<li><a href="/tags/concurrent">concurrent</a></li>
 </ul>
 </header>
 
 
 
-<p>Python 2 (3.2以下) ではパッケージ管理のために
-外部ツールを別途インストールする必要がある(結構多くて複雑&hellip;)。
-Python 3.4 以降では <code>venv</code> と <code>ensurepip</code>
-が標準ライブラリに入るため楽チン。</p>
+<p>標準ライブラリの <code>concurrent.futures</code> で簡単に並列化できる。</p>
 
-<h2 id="installation-python-2">Installation (Python 2)</h2>
+<pre><code class="language-py">import time
+import random
 
-<ol>
-<li><p>ベースのPythonインタープリタをひとつ決め
-(例えばOSに標準装備されてる <code>/usr/bin/python</code>)、
-それを使って <code>setuptools</code> をインストール:</p>
-
-<pre><code>% curl -O https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py
-% /usr/bin/python ez_setup.py --user
-</code></pre></li>
-
-<li><p>続いて <code>pip</code> をインストール:</p>
-
-<pre><code>% curl -O https://bootstrap.pypa.io/get-pip.py
-% /usr/bin/python get-pip.py --user
-</code></pre></li>
-
-<li><p>Macなら <code>~/Library/Python/2.7/</code> 以下に、
-Linuxなら <code>~/.local/</code> 以下に上記のライブラリがインストールされるので、
-その中にある <code>bin</code> を <code>PATH</code> に追加する。</p></li>
-
-<li><p><code>pip</code> を使って <code>virtualenv</code> をインストール:</p>
-
-<pre><code>% pip install --user virtualenv
-</code></pre></li>
-</ol>
-
-<h2 id="usage">Usage</h2>
-
-<h3 id="venv-virtualenv"><code>venv</code> / <code>virtualenv</code></h3>
-
-<dl>
-<dt>Doc</dt>
-<dd><a href="http://www.virtualenv.org/">http://www.virtualenv.org/</a></dd>
-<dt>PyPI</dt>
-<dd><a href="http://pypi.python.org/pypi/virtualenv">http://pypi.python.org/pypi/virtualenv</a></dd>
-<dt>Python3</dt>
-<dd><a href="http://docs.python.org/3/library/venv">http://docs.python.org/3/library/venv</a></dd>
-</dl>
-
-<p>Python実行環境を仮想化するパッケージ。
-これで作った仮想環境内で <code>pip</code> を使ってパッケージ管理する。
-Python 3.3 以降では <code>venv</code> が標準ライブラリ入りしたので
-<code>virtualenv</code> は不要になった。</p>
-
-<ul>
-<li><p>仮想環境を作る:</p>
-
-<pre><code>% python3.4 -m venv [OPTIONS] /path/to/projectx
-% pyvenv3.4         [OPTIONS] /path/to/projectx
-% virtualenv        [OPTIONS] /path/to/projectx
-</code></pre></li>
-
-<li><p>仮想環境に入る、から出る:</p>
-
-<pre><code>% source /path/to/projectx/bin/activate
-(projectx) % deactivate
-</code></pre></li>
-
-<li><p>Pythonを更新したりするとシムリンクが壊れるので一旦消して張り直す:</p>
-
-<pre><code>% find /path/to/projectx/ -type l
-% find /path/to/projectx/ -type l -delete
-% find /path/to/projectx/ -type l
-% virtualenv /path/to/projectx
-</code></pre></li>
-</ul>
-
-<h3 id="ensurepip"><code>ensurepip</code></h3>
-
-<dl>
-<dt>Python3</dt>
-<dd><a href="http://docs.python.org/3/library/ensurepip">http://docs.python.org/3/library/ensurepip</a></dd>
-</dl>
-
-<p><code>pip</code> を自動インストールするための公式ライブラリ。
-手動でも使える:</p>
-
-<pre><code>% python3.4 -m ensurepip -h
-% python3.4 -m ensurepip --upgrade
+def target_func(x):
+    time.sleep(random.uniform(0, 1))
+    return x + 1
 </code></pre>
 
-<h3 id="pip"><code>pip</code></h3>
+<h2 id="threading"><code>threading</code></h2>
 
-<dl>
-<dt>Doc</dt>
-<dd><a href="https://pip.pypa.io/">https://pip.pypa.io/</a></dd>
-<dt>PyPI</dt>
-<dd><a href="http://pypi.python.org/pypi/pip">http://pypi.python.org/pypi/pip</a></dd>
-</dl>
+<p><a href="https://docs.python.org/3/library/threading.html">https://docs.python.org/3/library/threading.html</a></p>
 
-<p><a href="http://pypi.python.org">PyPI</a> からのパッケージのダウンロード、ビルド、インストールを
-簡単にできるようにするツール。
-アンインストール機能の無い easy_install に取って代わり、
-現在では公式推奨となっている。
-Python 3.4 以降では標準ライブラリの <code>ensurepip</code>
-によって自動的にインストールされる。
-<code>setuptools</code> に依存している。</p>
+<p><strong>Global Interpreter Lock (GIL)</strong> の制約により、
+1つのインタープリタでは同時に1つのスレッドしかコードを実行できない。
+したがってCPUバウンドなピュアPythonコードをマルチスレッド化しても速くならない。
+外部プログラムやI/OなどGIL外の処理を待つ場合には有効。</p>
 
-<ul>
-<li><code>pip</code> コマンド
+<p><code>target</code> を指定して作った <code>Thread</code> インスタンスで <code>start()</code> するのが基本。</p>
 
-<ul>
-<li><code>install</code>: Install packages.</li>
-<li><code>uninstall</code>: Uninstall packages.</li>
-<li><code>freeze</code>: Output installed packages in requirements format.</li>
-<li><code>list</code>: List installed packages.</li>
-<li><code>show</code>: Show information about installed packages.</li>
-<li><code>search</code>: Search PyPI for packages.</li>
-<li><code>help</code>: Show help for commands.</li>
-</ul></li>
+<pre><code class="language-py">import threading
 
-<li><p>全体のヘルプ、コマンド毎の詳細ヘルプ:</p>
+threads = []
+for i in range(8):
+    th = threading.Thread(target=target_func, args=[i])
+    th.start()
+    threads.append(th)
+for th in threads:
+    th.join()
+</code></pre>
 
-<pre><code>% pip help
-% pip install --help
-</code></pre></li>
+<p>返り値を得たい場合などはクラスを継承していじる必要がある。
+その場合は必ず <code>run()</code> メソッドをoverrideする。</p>
 
-<li><p><code>setup.py</code> にオプションを渡す:</p>
+<pre><code class="language-py">class Worker(threading.Thread):
+    def __init__(self, target, name=None, args=(), kwargs={}):
+        threading.Thread.__init__(self, None, target, name, args, kwargs)
+        self._return = None
+    def run(self):
+        self._return = self._target(*self._args, **self._kwargs)
+    def get(self, timeout=None):
+        self.join(timeout)
+        return self._return
 
-<pre><code>% pip install --install-option=&quot;--prefix=/usr/local&quot; numpy
-</code></pre></li>
+threads = []
+for i in range(8):
+    th = Worker(target=target_func, args=[i])
+    th.start()
+    threads.append(th)
+for th in threads:
+    print(th.get())
+</code></pre>
 
-<li><p>よく使うコマンド:</p>
+<p>このモジュールには <code>multiprocessing.Pool</code> のような機能が含まれていないので、
+スレッド数の上限値を設けたい場合は
+<code>threading.Semaphore</code> でうまくロックしてやる必要がある。</p>
 
-<pre><code>% pip list &amp;&amp; pip list --outdated
-% pip search numpy
-% pip install --upgrade numpy
-</code></pre></li>
+<h2 id="multiprocessing"><code>multiprocessing</code></h2>
 
-<li><p>設定ファイルは <code>~/.pip/pip.conf</code> :</p>
+<p><a href="https://docs.python.org/3/library/multiprocessing.html">https://docs.python.org/3/library/multiprocessing.html</a></p>
 
-<pre><code>[global]
-download-cache = ~/.pip/cache
-</code></pre></li>
-</ul>
+<p><code>os.fork()</code> を使って新しいインタプリタを立ち上げるので、
+CPUバウンドなPythonコードもGILに邪魔されず並列処理できる。
+ただし通信のため関数や返り値がpicklableでなければならない。</p>
 
-<h3 id="setuptools"><code>setuptools</code></h3>
+<p><code>threading.Thread</code> とほぼ同じインターフェイスの
+<code>Process</code> クラスも用意されているが、
+<code>Pool</code> を使ったほうが楽チン。</p>
 
-<p>パッケージ管理の基本となるライブラリ。
-コマンドラインツール easy_install
-はこれの一部として含まれているが、直接使うことはない。
-(<code>pip</code> を使う)</p>
+<pre><code class="language-py">import multiprocessing as mp
 
-<dl>
-<dt>Website</dt>
-<dd><a href="http://pythonhosted.org/setuptools/">http://pythonhosted.org/setuptools/</a></dd>
-<dt>PyPI</dt>
-<dd><a href="https://pypi.python.org/pypi/setuptools/">https://pypi.python.org/pypi/setuptools/</a></dd>
-</dl>
+with mp.Pool(processes=mp.cpu_count()) as pool:
+    results = [pool.apply_async(target_func, [x]) for x in range(8)]
+    for res in results:
+        print(res.get())
+</code></pre>
 
-<h3 id="distribute"><code>distribute</code></h3>
+<h2 id="concurrent-futures-since-3-2"><code>concurrent.futures</code> (since 3.2)</h2>
 
-<p><code>setuptools</code> の改良版としてしばらく利用されていたが、
-その成果が <code>setuptools</code> にマージされたのでもう使われない。</p>
+<p><a href="https://docs.python.org/3/library/concurrent.futures.html">https://docs.python.org/3/library/concurrent.futures.html</a></p>
 
-<dl>
-<dt>Website</dt>
-<dd><a href="http://packages.python.org/distribute">http://packages.python.org/distribute</a></dd>
-<dt>PyPI</dt>
-<dd><a href="http://pypi.python.org/pypi/distribute">http://pypi.python.org/pypi/distribute</a></dd>
-</dl>
+<p>上記のライブラリを直感的に使いやすくラップした高級インターフェイス。
+立ち上げ方も簡単だし、 <code>as_completed()</code> で待てるのが特に便利。</p>
 
-<h2 id="書籍">書籍</h2>
+<pre><code class="language-py">import concurrent.futures as confu
 
-<p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4797371595/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51uQpDtF%2BdL._SX160_.jpg" alt="みんなのPython 第3版" /></a>
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4798032948/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41bZDMzzeTL._SX160_.jpg" alt="Pythonプロフェッショナルプログラミング" /></a>
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4048686291/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51wSTTIQtgL._SX160_.jpg" alt="エキスパートPythonプログラミング" /></a></p>
+with confu.ThreadPoolExecutor(max_workers=4) as executor:
+    futures = [executor.submit(target_func, x) for x in range(8)]
+    (done, notdone) = confu.wait(futures)
+    for future in futures:
+        print(future.result())
+
+with confu.ThreadPoolExecutor(max_workers=4) as executor:
+    futures = [executor.submit(target_func, x) for x in range(8)]
+    for future in confu.as_completed(futures):
+        print(future.result())
+</code></pre>
+
+<p><code>ProcessPoolExecutor</code> もある。</p>
+
+<p><code>concurrent.futures.process.multiprocessing.cpu_count()</code> もある。</p>
 
 </article>
 </main>
@@ -297,12 +227,12 @@ download-cache = ~/.pip/cache
 <label for="menu-python" class="active">Python</label>
 <ul>
 <li><a href="/python/install.html">Installation</a></li>
-<li class="active"><a href="/python/pip.html">pip</a></li>
+<li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
 <li><a href="/python/scipy.html">NumPy, SciPy</a></li>
 <li><a href="/python/pyqt.html">PyQt</a></li>
-<li><a href="/python/concurrent.html">concurrent.futures</a></li>
+<li class="active"><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
 </ul>
