@@ -1,6 +1,6 @@
 +++
 title = 'foreach/parallel'
-tags = ["r"]
+tags = ["r", "concurrent"]
 [menu.main]
   parent = "rstats"
   weight = -55

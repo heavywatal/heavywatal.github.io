@@ -1,6 +1,6 @@
 +++
 title = 'TORQUE'
-tags = ["job"]
+tags = ["job", "concurrent"]
 [menu.main]
   parent = "dev"
 +++
