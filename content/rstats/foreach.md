@@ -1,5 +1,6 @@
 +++
 title = 'foreach/parallel'
+subtitle = "並行処理 in R"
 tags = ["r", "concurrent"]
 [menu.main]
   parent = "rstats"
