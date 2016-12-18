@@ -101,14 +101,12 @@ tidyr — シンプルなデータ変形ツール
 
 <p>下記のコード例で使うデータ</p>
 
-<pre><code class="language-r">&gt; iris %&gt;% head(3) %&gt;% add_rownames('id')
-Source: local data frame [3 x 6]
+<pre><code class="language-r">&gt; iris %&gt;% head(3L) %&gt;% rownames_to_column('id')
 
-     id Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-  (chr)        (dbl)       (dbl)        (dbl)       (dbl)  (fctr)
-1     1          5.1         3.5          1.4         0.2  setosa
-2     2          4.9         3.0          1.4         0.2  setosa
-3     3          4.7         3.2          1.3         0.2  setosa
+  id Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+1  1          5.1         3.5          1.4         0.2  setosa
+2  2          4.9         3.0          1.4         0.2  setosa
+3  3          4.7         3.2          1.3         0.2  setosa
 </code></pre>
 
 <p>パイプ演算子 <code>%&gt;%</code> については<a href="/rstats/dplyr.html">dplyr</a>を参照。</p>
@@ -134,25 +132,22 @@ Source: local data frame [3 x 6]
 <p>e.g., <code>Species</code> 以外の列について、
 元の列名を <code>kagi</code> 、値を <code>atai</code> に格納した縦長の表に変形</p>
 
-<pre><code class="language-r">&gt; iris %&gt;% head(3) %&gt;% add_rownames('id') %&gt;%
+<pre><code class="language-r">&gt; iris %&gt;% head(3L) %&gt;% rownames_to_column('id') %&gt;%
     gather(kagi, atai, -id, -Species)
 
-Source: local data frame [12 x 4]
-
-      id Species         kagi  atai
-   (chr)  (fctr)       (fctr) (dbl)
-1      1  setosa Sepal.Length   5.1
-2      2  setosa Sepal.Length   4.9
-3      3  setosa Sepal.Length   4.7
-4      1  setosa  Sepal.Width   3.5
-5      2  setosa  Sepal.Width   3.0
-6      3  setosa  Sepal.Width   3.2
-7      1  setosa Petal.Length   1.4
-8      2  setosa Petal.Length   1.4
-9      3  setosa Petal.Length   1.3
-10     1  setosa  Petal.Width   0.2
-11     2  setosa  Petal.Width   0.2
-12     3  setosa  Petal.Width   0.2
+   id Species         kagi atai
+1   1  setosa Sepal.Length  5.1
+2   2  setosa Sepal.Length  4.9
+3   3  setosa Sepal.Length  4.7
+4   1  setosa  Sepal.Width  3.5
+5   2  setosa  Sepal.Width  3.0
+6   3  setosa  Sepal.Width  3.2
+7   1  setosa Petal.Length  1.4
+8   2  setosa Petal.Length  1.4
+9   3  setosa Petal.Length  1.3
+10  1  setosa  Petal.Width  0.2
+11  2  setosa  Petal.Width  0.2
+12  3  setosa  Petal.Width  0.2
 </code></pre>
 
 <h2 id="tidyr-spread-で横長にする"><code>tidyr::spread()</code> で横長にする</h2>
@@ -180,17 +175,14 @@ IDとなるような列がないと <code>Error: Duplicate identifiers</code> �
 
 <p>e.g., <code>kagi</code> 内の文字列を新たな列名として横長の表に変形して <code>atai</code> を移す</p>
 
-<pre><code class="language-r">&gt; iris %&gt;% head(3) %&gt;% add_rownames('id') %&gt;%
+<pre><code class="language-r">&gt; iris %&gt;% head(3L) %&gt;% rownames_to_column('id') %&gt;%
     gather(kagi, atai, -id, -Species) %&gt;%
     spread(kagi, atai)
 
-Source: local data frame [3 x 6]
-
-     id Species Sepal.Length Sepal.Width Petal.Length Petal.Width
-  (chr)  (fctr)        (dbl)       (dbl)        (dbl)       (dbl)
-1     1  setosa          5.1         3.5          1.4         0.2
-2     2  setosa          4.9         3.0          1.4         0.2
-3     3  setosa          4.7         3.2          1.3         0.2
+  id Species Petal.Length Petal.Width Sepal.Length Sepal.Width
+1  1  setosa          1.4         0.2          5.1         3.5
+2  2  setosa          1.4         0.2          4.9         3.0
+3  3  setosa          1.3         0.2          4.7         3.2
 </code></pre>
 
 <h2 id="nested-data-frame-入れ子構造">Nested data.frame &mdash; 入れ子構造</h2>
@@ -202,13 +194,12 @@ Source: local data frame [3 x 6]
 外側に残すカラムをマイナス指定する。</p>
 
 <pre><code class="language-r">iris %&gt;% nest(-Species, .key=NEW_COLUMN)
-Source: local data frame [3 x 2]
-
-     Species      NEW_COLUMN
-      &lt;fctr&gt;          &lt;list&gt;
-1     setosa &lt;tbl_df [50,4]&gt;
-2 versicolor &lt;tbl_df [50,4]&gt;
-3  virginica &lt;tbl_df [50,4]&gt;
+# A tibble: 3 × 2
+     Species        NEW_COLUMN
+      &lt;fctr&gt;            &lt;list&gt;
+1     setosa &lt;tibble [50 × 4]&gt;
+2 versicolor &lt;tibble [50 × 4]&gt;
+3  virginica &lt;tibble [50 × 4]&gt;
 
 # equivalent to
 iris %&gt;% dplyr::group_by(Species) %&gt;% nest()
@@ -257,26 +248,23 @@ list of data.framesだけでなく、list of vectorsとかでもよい。</p>
 
 <p><code>kagi</code> 列を <code>part</code>, <code>axis</code> という2列に分割</p>
 
-<pre><code class="language-r">iris %&gt;% head(3) %&gt;% add_rownames('id') %&gt;%
-   gather(kagi, atai, -id, -Species) %&gt;%
-   separate(kagi, c('part', 'axis'))
+<pre><code class="language-r">&gt; iris %&gt;% head(3L) %&gt;% rownames_to_column('id') %&gt;%
+    gather(kagi, atai, -id, -Species) %&gt;%
+    separate(kagi, c('part', 'axis'))
 
-Source: local data frame [12 x 5]
-
-      id Species  part   axis  atai
-   (chr)  (fctr) (chr)  (chr) (dbl)
-1      1  setosa Sepal Length   5.1
-2      2  setosa Sepal Length   4.9
-3      3  setosa Sepal Length   4.7
-4      1  setosa Sepal  Width   3.5
-5      2  setosa Sepal  Width   3.0
-6      3  setosa Sepal  Width   3.2
-7      1  setosa Petal Length   1.4
-8      2  setosa Petal Length   1.4
-9      3  setosa Petal Length   1.3
-10     1  setosa Petal  Width   0.2
-11     2  setosa Petal  Width   0.2
-12     3  setosa Petal  Width   0.2
+   id Species  part   axis atai
+1   1  setosa Sepal Length  5.1
+2   2  setosa Sepal Length  4.9
+3   3  setosa Sepal Length  4.7
+4   1  setosa Sepal  Width  3.5
+5   2  setosa Sepal  Width  3.0
+6   3  setosa Sepal  Width  3.2
+7   1  setosa Petal Length  1.4
+8   2  setosa Petal Length  1.4
+9   3  setosa Petal Length  1.3
+10  1  setosa Petal  Width  0.2
+11  2  setosa Petal  Width  0.2
+12  3  setosa Petal  Width  0.2
 </code></pre>
 
 <p>逆をやるのが <code>tidyr::unite(data, col, ..., sep='_', remove=TRUE)</code> 。</p>
@@ -306,7 +294,7 @@ Source: local data frame [12 x 5]
 tibble版<code>expand.grid(...)</code>のようなもの。</p>
 
 <p><code>nesting(...)</code>は存在するユニークな組み合わせのみ残す、
-<code>nest(data, ...) %&gt;&gt;% dplyr::select(-data)</code>のショートカット。
+<code>nest(data, ...) %&gt;% dplyr::select(-data)</code>のショートカット。
 この結果は<code>expand()</code>や<code>complete()</code>の引数としても使える。</p>
 
 <p>数値vectorの補完には<code>full_seq(x, period)</code>が便利。</p>

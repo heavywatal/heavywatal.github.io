@@ -157,6 +157,9 @@ stringr — Rの文字列をまともな方法で処理する
 <dt><code>str_extract(string, pattern)</code>, <code>str_extract_all(string, pattern)</code></dt>
 <dd>マッチした部分文字列を取り出す。しなかった要素には <code>NA</code>。
 <code>base::grep(pattern, x, value=TRUE)</code> はマッチする要素のみ、元の形で返す。</dd>
+<dd>数値＋単位のような文字列から数値部分だけを抜き出すには
+<a href="/rstats/readr.html#parse">readr::parse_number()</a>
+が便利。</dd>
 <dt><code>str_subset(string, pattern)</code></dt>
 <dd><code>x[str_detect(x, pattern)]</code> のショートカット。
 マッチする要素だけ返すので <code>str_extract()</code> とは異なる。</dd>
@@ -214,6 +217,11 @@ Python でいうところの <code>str.strip()</code>。</dd>
 <code>indent</code> は先頭行の左余白。
 <code>exdent</code> はそれ以外の行の左余白。</dd>
 </dl>
+
+<p>文字列と数値の型変換はstringrの管轄外なので、標準の
+<code>as.character()</code> や <code>as.double()</code> などを使うか、
+<a href="/rstats/readr.html#parse"><code>readr::parse_*()</code>系の関数</a>
+を使う。</p>
 
 </article>
 </main>
