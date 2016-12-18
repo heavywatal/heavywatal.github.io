@@ -24,14 +24,12 @@ data.frameを縦長・横長・入れ子に変形・整形するためのツー�
 下記のコード例で使うデータ
 
 ```r
-> iris %>% head(3) %>% add_rownames('id')
-Source: local data frame [3 x 6]
+> iris %>% head(3L) %>% rownames_to_column('id')
 
-     id Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-  (chr)        (dbl)       (dbl)        (dbl)       (dbl)  (fctr)
-1     1          5.1         3.5          1.4         0.2  setosa
-2     2          4.9         3.0          1.4         0.2  setosa
-3     3          4.7         3.2          1.3         0.2  setosa
+  id Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+1  1          5.1         3.5          1.4         0.2  setosa
+2  2          4.9         3.0          1.4         0.2  setosa
+3  3          4.7         3.2          1.3         0.2  setosa
 ```
 
 パイプ演算子 `%>%` については[dplyr]({{< relref "dplyr.md" >}})を参照。
@@ -59,25 +57,22 @@ e.g., `Species` 以外の列について、
 元の列名を `kagi` 、値を `atai` に格納した縦長の表に変形
 
 ```r
-> iris %>% head(3) %>% add_rownames('id') %>%
+> iris %>% head(3L) %>% rownames_to_column('id') %>%
     gather(kagi, atai, -id, -Species)
 
-Source: local data frame [12 x 4]
-
-      id Species         kagi  atai
-   (chr)  (fctr)       (fctr) (dbl)
-1      1  setosa Sepal.Length   5.1
-2      2  setosa Sepal.Length   4.9
-3      3  setosa Sepal.Length   4.7
-4      1  setosa  Sepal.Width   3.5
-5      2  setosa  Sepal.Width   3.0
-6      3  setosa  Sepal.Width   3.2
-7      1  setosa Petal.Length   1.4
-8      2  setosa Petal.Length   1.4
-9      3  setosa Petal.Length   1.3
-10     1  setosa  Petal.Width   0.2
-11     2  setosa  Petal.Width   0.2
-12     3  setosa  Petal.Width   0.2
+   id Species         kagi atai
+1   1  setosa Sepal.Length  5.1
+2   2  setosa Sepal.Length  4.9
+3   3  setosa Sepal.Length  4.7
+4   1  setosa  Sepal.Width  3.5
+5   2  setosa  Sepal.Width  3.0
+6   3  setosa  Sepal.Width  3.2
+7   1  setosa Petal.Length  1.4
+8   2  setosa Petal.Length  1.4
+9   3  setosa Petal.Length  1.3
+10  1  setosa  Petal.Width  0.2
+11  2  setosa  Petal.Width  0.2
+12  3  setosa  Petal.Width  0.2
 ```
 
 ## `tidyr::spread()` で横長にする
@@ -109,17 +104,14 @@ IDとなるような列がないと `Error: Duplicate identifiers` と怒られ�
 e.g., `kagi` 内の文字列を新たな列名として横長の表に変形して `atai` を移す
 
 ```r
-> iris %>% head(3) %>% add_rownames('id') %>%
+> iris %>% head(3L) %>% rownames_to_column('id') %>%
     gather(kagi, atai, -id, -Species) %>%
     spread(kagi, atai)
 
-Source: local data frame [3 x 6]
-
-     id Species Sepal.Length Sepal.Width Petal.Length Petal.Width
-  (chr)  (fctr)        (dbl)       (dbl)        (dbl)       (dbl)
-1     1  setosa          5.1         3.5          1.4         0.2
-2     2  setosa          4.9         3.0          1.4         0.2
-3     3  setosa          4.7         3.2          1.3         0.2
+  id Species Petal.Length Petal.Width Sepal.Length Sepal.Width
+1  1  setosa          1.4         0.2          5.1         3.5
+2  2  setosa          1.4         0.2          4.9         3.0
+3  3  setosa          1.3         0.2          4.7         3.2
 ```
 
 ## Nested data.frame --- 入れ子構造
@@ -132,13 +124,12 @@ data.frameをネストして(入れ子にして)、list of data.frames のカ�
 
 ```r
 iris %>% nest(-Species, .key=NEW_COLUMN)
-Source: local data frame [3 x 2]
-
-     Species      NEW_COLUMN
-      <fctr>          <list>
-1     setosa <tbl_df [50,4]>
-2 versicolor <tbl_df [50,4]>
-3  virginica <tbl_df [50,4]>
+# A tibble: 3 × 2
+     Species        NEW_COLUMN
+      <fctr>            <list>
+1     setosa <tibble [50 × 4]>
+2 versicolor <tibble [50 × 4]>
+3  virginica <tibble [50 × 4]>
 
 # equivalent to
 iris %>% dplyr::group_by(Species) %>% nest()
@@ -195,26 +186,23 @@ list of data.framesだけでなく、list of vectorsとかでもよい。
 `kagi` 列を `part`, `axis` という2列に分割
 
 ```r
-iris %>% head(3) %>% add_rownames('id') %>%
-   gather(kagi, atai, -id, -Species) %>%
-   separate(kagi, c('part', 'axis'))
+> iris %>% head(3L) %>% rownames_to_column('id') %>%
+    gather(kagi, atai, -id, -Species) %>%
+    separate(kagi, c('part', 'axis'))
 
-Source: local data frame [12 x 5]
-
-      id Species  part   axis  atai
-   (chr)  (fctr) (chr)  (chr) (dbl)
-1      1  setosa Sepal Length   5.1
-2      2  setosa Sepal Length   4.9
-3      3  setosa Sepal Length   4.7
-4      1  setosa Sepal  Width   3.5
-5      2  setosa Sepal  Width   3.0
-6      3  setosa Sepal  Width   3.2
-7      1  setosa Petal Length   1.4
-8      2  setosa Petal Length   1.4
-9      3  setosa Petal Length   1.3
-10     1  setosa Petal  Width   0.2
-11     2  setosa Petal  Width   0.2
-12     3  setosa Petal  Width   0.2
+   id Species  part   axis atai
+1   1  setosa Sepal Length  5.1
+2   2  setosa Sepal Length  4.9
+3   3  setosa Sepal Length  4.7
+4   1  setosa Sepal  Width  3.5
+5   2  setosa Sepal  Width  3.0
+6   3  setosa Sepal  Width  3.2
+7   1  setosa Petal Length  1.4
+8   2  setosa Petal Length  1.4
+9   3  setosa Petal Length  1.3
+10  1  setosa Petal  Width  0.2
+11  2  setosa Petal  Width  0.2
+12  3  setosa Petal  Width  0.2
 ```
 
 逆をやるのが `tidyr::unite(data, col, ..., sep='_', remove=TRUE)` 。
@@ -245,7 +233,7 @@ df %>% complete(key1, key2, fill=list(val1=0, val2='-'))
 tibble版`expand.grid(...)`のようなもの。
 
 `nesting(...)`は存在するユニークな組み合わせのみ残す、
-`nest(data, ...) %>>% dplyr::select(-data)`のショートカット。
+`nest(data, ...) %>% dplyr::select(-data)`のショートカット。
 この結果は`expand()`や`complete()`の引数としても使える。
 
 数値vectorの補完には`full_seq(x, period)`が便利。

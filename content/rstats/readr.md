@@ -58,8 +58,7 @@ tags = ["r", "tidyverse"]
 書き出し用の関数 `write_***()` も一応付いているが、
 まだ圧縮ファイルを書き出せないので微妙。
 
-
-### 文字列から別の型へ
+### 文字列から別の型へ <a name="parse"></a>
 
 `parse_number(x, na=c('', 'NA'), locale=default_locale())`
 :   文字列で最初に登場する数値を抜き出す。
@@ -70,6 +69,7 @@ tags = ["r", "tidyverse"]
 :   文字列をdouble/intの数値として解釈して返す。
     `'6e23'` のような指数形式も大丈夫。
     異物が混じっていた場合は警告してくれる。
+    (標準の`as.integer()`とかは黙って小数点以下を切り捨てたりする)
 
 `parse_logical(x, ...)`
 :   1/0/T/F/TRUE/FALSE を大文字小文字問わずlogicalに変換。

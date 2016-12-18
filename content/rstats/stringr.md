@@ -77,6 +77,9 @@ Rの中から `install.package('tidyverse')` でインストールし、
 `str_extract(string, pattern)`, `str_extract_all(string, pattern)`
 :   マッチした部分文字列を取り出す。しなかった要素には `NA`。
     `base::grep(pattern, x, value=TRUE)` はマッチする要素のみ、元の形で返す。
+:   数値＋単位のような文字列から数値部分だけを抜き出すには
+    [readr::parse_number()]({{< relref "readr.md#parse" >}})
+    が便利。
 
 `str_subset(string, pattern)`
 :   `x[str_detect(x, pattern)]` のショートカット。
@@ -142,3 +145,8 @@ Rの中から `install.package('tidyverse')` でインストールし、
 :   指定した幅で折り返す。
     `indent` は先頭行の左余白。
     `exdent` はそれ以外の行の左余白。
+
+文字列と数値の型変換はstringrの管轄外なので、標準の
+`as.character()` や `as.double()` などを使うか、
+[`readr::parse_*()`系の関数]({{< relref "readr.md#parse" >}})
+を使う。
