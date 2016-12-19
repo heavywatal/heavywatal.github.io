@@ -21,10 +21,10 @@ tags = ["c++"]
 
 -   <http://www.cplusplus.com/reference/random/>
 -   <http://en.cppreference.com/w/cpp/numeric/random>
--   <https://sites.google.com/site/cpprefjp/reference/random>
+-   <https://cpprefjp.github.io/reference/random.html>
 
 C++11 ではまともに使える乱数ライブラリが追加された。
-乱数生成エンジンと分布生成器を組み合わせて使う。
+乱数生成エンジンと分布関数オブジェクトを組み合わせて使う。
 
 ```c++
 #include <iostream>
@@ -57,7 +57,8 @@ int main() {
 <http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt.html>
 
 松本眞と西村拓士によって開発された高速・高品質な擬似乱数生成器。
-標準の `<random>` にも `std::mt19937` として組み込まれている。
+標準の `<random>` でも利用可能になっており、
+パラメータ定義済みの `std::mt19937` がよく使われる。
 
 ### SFMT
 
@@ -78,14 +79,12 @@ v2.1からは整数も出力可能。
 
 ### インストール方法、使い方
 
+<https://github.com/heavywatal/sfmt-class/>
+
 SFMTやdSFMTを簡単に導入するためのインストーラを作って公開した。
-<https://github.com/heavywatal/sfmt-installer/>
-
-標準の `std::mt19937` と同じように使えるようにしたラッパー
+C++標準 `<random>` の `std::mt19937`
+と同じように使えるようにしたラッパークラス
 (`wtl::sfmt19937`) も書いた。
-[cxxwtils](https://github.com/heavywatal/cxxwtils/) の
-`prandom.hpp` で定義してある。
-
 
 ## Xorshift
 

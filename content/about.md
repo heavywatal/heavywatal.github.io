@@ -144,7 +144,7 @@ July 2010 - March 2013
 
 -   [Genetic Drift Simulator](https://heavywatal.github.io/driftr.js/)
 -   [Origami Bird Simulator](https://github.com/heavywatal/oribir)
--   [SFMT installer](https://github.com/heavywatal/sfmt-installer)
+-   [SFMT installer and wrapper class for C++](https://github.com/heavywatal/sfmt-class)
 -   [`ms` installer and `sample_stats++`](https://github.com/heavywatal/msutils)
 -   [`namaespace`](https://github.com/heavywatal/namaespace):
     utility to create dummy R packages for namespace
