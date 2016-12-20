@@ -139,9 +139,8 @@ R_ENVIRON_USER=${R_USER}/.Renviron
 R_PROFILE_USER=${R_USER}/.Rprofile
 R_HISTFILE=${R_USER}/.Rhistory
 R_HISTSIZE=65535
-LANG=en_US.UTF-8
-LANGUAGE=en_US.UTF-8
-LC_ALL=en_US.UTF-8
+LANG=C
+LC_CTYPE=en_US.UTF-8
 </code></pre>
 
 <p>読み込まれる順序はだいたい以下のとおりなので、ホームディレクトリにシムリンクを張っておけば読み込まれる。</p>
@@ -205,6 +204,15 @@ LC_ALL=en_US.UTF-8
 警告が発生するごとに警告文を表示する(<code>warn=1</code>)か、
 エラー扱いにして計算をストップするようにしておく(<code>warn=2</code>)ことでそれを回避すべし。
 ちなみに負数だと警告無視。</dd>
+<dt><code>warnPartialMatchAttr</code>, <code>warnPartialMatchDollar</code></dt>
+<dd>listやdata.frameなどの要素を抜き出すとき、
+対象が一意に定まる範囲で変数名の省略が許されてしまう (e.g., <code>iris$Sp</code>)。
+これは危険なので、せめて警告がでるように設定する。
+<a href="/rstats/readr.html#tibble">tibble</a> ではエラーにしてくれるので、より安全。</dd>
+<dt><code>warnPartialMatchArgs</code></dt>
+<dd>関数の引数名の省略に関する警告。
+自分のコーディングに関しては<code>TRUE</code>にしておきたいけど、
+結構いろんなパッケージが警告を発してうるさいので仕方なく<code>FALSE</code>。</dd>
 <dt><code>showWarnCalls=TRUE</code>, <code>showErrorCalls=TRUE</code></dt>
 <dd>警告やエラーの出処をたどって表示する。
 Pythonほどわかりやすくないが、ちょっとはマシになる。</dd>
