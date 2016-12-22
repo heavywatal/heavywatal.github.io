@@ -63,9 +63,9 @@ gccとclangの両方から使える統一ライブラリを作るのは難しい
 
 8.  ツールセットを指定してビルド:
     ```
-    % ./b2 -j2 toolset=gcc-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=system --build-dir=../b2gcc --stagedir=stage/gcc stage
-    % ./b2 -j2 toolset=darwin-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=system --build-dir=../b2gcc --stagedir=stage/gcc stage
-    % ./b2 -j2 toolset=clang-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=system --build-dir=../b2clang --stagedir=stage/clang stage
+    % ./b2 -j2 toolset=gcc-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2gcc --stagedir=stage/gcc stage
+    % ./b2 -j2 toolset=darwin-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2gcc --stagedir=stage/gcc stage
+    % ./b2 -j2 toolset=clang-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2clang --stagedir=stage/clang stage
     ```
 
 9.  手動でインストール:
