@@ -6,14 +6,14 @@ tags = ["job", "shell"]
   parent = "dev"
 +++
 
-<http://tmux.github.io/>
+<https://tmux.github.io/>
 
-[GNU screen](http://www.gnu.org/software/screen/)
+[GNU screen](https://www.gnu.org/software/screen/)
 の後を継ぐ端末多重化ソフト(terminal multiplexer)。
 
 1つの画面の中でウインドウを追加・分割して複数の端末を開く
-:   GUIのタブが不要になる
-:    1つのsshセッションで複数の端末を持てる
+:   GUIアプリのタブ代わりに。
+:   1つのsshセッションで複数の端末を持てる。
 
 ssh切断後も端末丸ごと継続され、後でまた繋ぎ直せる
 :   不意のssh切断でも作業が失われない
@@ -100,25 +100,22 @@ Mac `open` 問題
 1.  リモートサーバーに ssh ログインし、
     tmux の新しいセッションを開始:
 
-        % ssh charles
+        % ssh remote.sample.com
         % tmux -2u
 
 2.  ウィンドウを縦に分割し、右ペインでPythonインタプリタを起動:
 
-        C-t %
-
+        [C-t %]
         % python
 
 3.  左ペインにフォーカスを戻し、ファイルを閲覧したり何だり:
 
-        C-t o
-
-        % less ~/.ssh/config
+        [C-t o]
+        % less ~/.tmux.conf
 
 4.  新しいウィンドウを作って `root` 仕事をしたり何だり:
 
-        C-t c
-
+        [C-t c]
         % su -
         Password:
 
@@ -130,14 +127,13 @@ Mac `open` 問題
 
 6.  このセッションをデタッチし、ログアウトして家に帰る:
 
-        C-t d
-
+        [C-t d]
         % logout
 
 7.  家からサーバーに再び ssh ログインして、
     さっきの tmux セッションをアタッチして作業を再開:
 
-        % ssh charles
+        % ssh remote.sample.com
         % tmux attach -d
 
 ### 備忘
@@ -171,7 +167,7 @@ fi
 さらに `.zshrc` に `compdef sshmux=ssh`
 と書いておけば補完もいい感じになる。
 
-## 書籍
+## 関連書籍
 
-<a href="http://www.amazon.co.jp/gp/product/B00A4I3ZVY/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=B00A4I3ZVY&linkCode=as2&tag=heavywatal-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B00A4I3ZVY&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=as2&o=9&a=B00A4I3ZVY" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+<a href="https://www.amazon.co.jp/dp/B01N9HBR3D/ref=as_li_ss_il?ie=UTF8&qid=1482495704&sr=8-1&keywords=tmux&linkCode=li2&tag=heavywatal-22&linkId=2268fb4c546ca41cbc2e83ff73aa983e" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B01N9HBR3D&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li2&o=9&a=B01N9HBR3D" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 <a href="http://www.amazon.co.jp/gp/product/178398516X/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=178398516X&linkCode=as2&tag=heavywatal-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=178398516X&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=as2&o=9&a=178398516X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
