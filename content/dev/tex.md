@@ -297,6 +297,9 @@ normal {\huge huge} normal
 `\normalsize`,
 `\large`, `\Large`, `\LARGE`, `\huge`, `\Huge`
 
+underline や strikethrough が欲しいときはプリアンブルで
+`\usepackage[normalem]{ulem}` と宣言して `\uline{...}` や `\sout{...}` を使う。
+`normalem`オプションを付けないと `\emph` が下線に変更されてしまうので注意。
 
 ## Tips
 
