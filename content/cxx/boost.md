@@ -24,8 +24,8 @@ gccとclangの両方から使える統一ライブラリを作るのは難しい
 1.  <https://sourceforge.net/projects/boost/> から最新ソースを入手して展開。
     とりあえず `boost-jam` とか `boost-build` とかは無視して `boost` 本体のみで結構:
     ```
-    % wget -O- https://downloads.sourceforge.net/boost/boost_1_62_0.tar.bz2 | tar xj
-    % cd boost_1_62_0/
+    % wget -O- https://downloads.sourceforge.net/boost/boost_1_63_0.tar.bz2 | tar xj
+    % cd boost_1_63_0/
     ```
 
 2.  ヘルプを見る `./bootstrap.sh --help`
