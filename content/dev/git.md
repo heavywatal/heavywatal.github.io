@@ -25,6 +25,18 @@ Gitでなければ得られない恩恵が大きくなってきている。
 
 ## 基本
 
+### 準備
+
+- ローカルマシンにGitをインストールする。
+  MacならCommand Line Toolsに付属のを使うか、[Homebrew]({{< relref "mac/homebrew.md" >}})で新しいのを入れる。
+  Linuxなら初めから入ってるのを使うか、Linuxbrewで新しいのを入れる。
+- GitHubに個人アカウントを作る。
+- [SSH公開鍵を作って]({{< relref "ssh.md" >}})マシンとGitHubに登録する。
+  https://help.github.com/articles/connecting-to-github-with-ssh/
+- `~/.gitconfig` にユーザ名やアドレスを登録する。
+  https://git-scm.com/docs/git-config
+
+
 ### 手元の変更を外に伝える
 
 working directory (working tree)
