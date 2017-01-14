@@ -8,17 +8,17 @@ subtitle = "最強のテキストエディタ"
   parent = "dev"
 +++
 
-https://atom.io
-
-http://flight-manual.atom.io/
-
 Githubが開発したオープンソースのGUIテキストエディタ。
-ChromiumとNode.js(を用いたElectronフレームワーク)でできている。
+ChromiumとNode.js(を用いたElectronフレームワーク)でできており、
+どのOSでも同じように動作する。
 コミュニティの力により現在も急速に成長中。
 当然[Git]({{< relref "git.md" >}})によるバージョン管理とも相性が良い。
 
+- https://atom.io
+- https://flight-manual.atom.io/
+
 ```sh
-brew cask install atom
+% brew cask install atom
 ```
 
 ## 環境設定
