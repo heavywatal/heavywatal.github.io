@@ -177,6 +177,13 @@ XeTeXでは不要っぽい。
 [caption](https://www.ctan.org/pkg/caption)
 の `\captionsetup{...}` を用いる。
 
+`\usepackage{epstopdf}` でEPSを取り込もうとすると(e.g., PLOS)、
+ファイルもパッケージも揃ってるはずなのに
+`! Package pdftex.def Error: File '*-eps-converted-to.pdf' not found.`
+というエラーが出る。
+変換プログラム本体である `ghostscript` をHomebrewか何かで入れる必要がある。
+
+
 ### 表
 
 <https://en.wikibooks.org/wiki/LaTeX/Tables>
