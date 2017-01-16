@@ -31,7 +31,8 @@ Find me on
   <a rel="me" href="https://www.facebook.com/heavy.watal">Facebook</a>,
   <a rel="me" href="https://twitter.com/heavy_watal">Twitter</a>,
   <a rel="me" href="https://plus.google.com/u/0/+WatalMIwasaki">Google+</a>,
-  <a rel="me" href="skype:heavy.watal?userinfo">Skype</a>
+  <a rel="me" href="skype:heavy.watal?userinfo">Skype</a>,
+  [Amazonほしい物リスト](https://www.amazon.co.jp/wishlist/Z62OJBP7VCNP)
 
 <!--more-->
 
@@ -144,8 +145,9 @@ July 2010 - March 2013
 
 -   [Genetic Drift Simulator](https://heavywatal.github.io/driftr.js/)
 -   [Origami Bird Simulator](https://github.com/heavywatal/oribir)
--   [SFMT installer and wrapper class for C++](https://github.com/heavywatal/sfmt-class)
 -   [`ms` installer and `sample_stats++`](https://github.com/heavywatal/msutils)
+-   [`sfmt-class`](https://github.com/heavywatal/sfmt-class):
+    SFMT installer and wrapper class for C++
 -   [`namaespace`](https://github.com/heavywatal/namaespace):
     utility to create dummy R packages for namespace
 -   [Hugo theme for non-blog websites](https://github.com/heavywatal/hugo-theme-nonblog)
