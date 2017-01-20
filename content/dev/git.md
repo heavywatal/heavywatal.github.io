@@ -98,10 +98,12 @@ repository
 `master`
 : デフォルトのブランチの典型的な名前。
 
-`HEAD`
+`HEAD`, `@`
 : 現在checkoutしているbranch/commitを指すポインタ。
-  基本的には`master`の最新コミットを指していることが多い。
-  ひとつ前は`HEAD^`、ふたつ前は`HEAD^^`。
+  基本的には`master`の最新commitを指していることが多い。
+  1つ前は `HEAD^` か `HEAD~`、
+  2つ前は `HEAD^^` か `HEAD~~` か `HEAD~2`。
+  (`HEAD^2` は `merge` で複数の親がある場合の2番目)
 
 
 ## よく忘れるコマンド
@@ -118,12 +120,15 @@ repository
     # 直前のaddを取り消す (workingはそのまま)
     git reset --mixed HEAD
 
-    # working directoryの変更を取り消す, DANGEROUS!
+    # working directoryの変更を取り消す (DANGEROUS!)
     git reset --hard HEAD
     # それでもuntrackedは残るので、消したければ git clean
 
     # 直前のresetを取り消す
     git reset --hard ORIG_HEAD
+
+    # divergedになってしまった手元のbranchを破棄 (DANGEROUS!)
+    git reset --hard origin/master
 
 tracking対象から外して忘れさせる(手元のファイルはそのまま):
 
@@ -142,6 +147,10 @@ tracking対象から外して忘れさせる(手元のファイルはそのま�
 
     # 最新コミットの変更点
     git diff HEAD^ HEAD
+
+zshの`EXTENDED_GLOB`が有効になってる場合は
+`HEAD^` がパターン扱いされてエラーになるので、
+`HEAD\^` のようにエスケープするか `unsetopt NOMATCH` しておく必要がある。
 
 
 ## Submodule
