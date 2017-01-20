@@ -167,10 +167,12 @@ root treeのハッシュID、著者、コメントなどの情報を持つ。
 <code>git remote -v</code> で確認。</dd>
 <dt><code>master</code></dt>
 <dd>デフォルトのブランチの典型的な名前。</dd>
-<dt><code>HEAD</code></dt>
+<dt><code>HEAD</code>, <code>@</code></dt>
 <dd>現在checkoutしているbranch/commitを指すポインタ。
-基本的には<code>master</code>の最新コミットを指していることが多い。
-ひとつ前は<code>HEAD^</code>、ふたつ前は<code>HEAD^^</code>。</dd>
+基本的には<code>master</code>の最新commitを指していることが多い。
+1つ前は <code>HEAD^</code> か <code>HEAD~</code>、
+2つ前は <code>HEAD^^</code> か <code>HEAD~~</code> か <code>HEAD~2</code>。
+(<code>HEAD^2</code> は <code>merge</code> で複数の親がある場合の2番目)</dd>
 </dl>
 
 <h2 id="よく忘れるコマンド">よく忘れるコマンド</h2>
@@ -188,12 +190,15 @@ git reset --soft HEAD^
 # 直前のaddを取り消す (workingはそのまま)
 git reset --mixed HEAD
 
-# working directoryの変更を取り消す, DANGEROUS!
+# working directoryの変更を取り消す (DANGEROUS!)
 git reset --hard HEAD
 # それでもuntrackedは残るので、消したければ git clean
 
 # 直前のresetを取り消す
 git reset --hard ORIG_HEAD
+
+# divergedになってしまった手元のbranchを破棄 (DANGEROUS!)
+git reset --hard origin/master
 </code></pre>
 
 <p>tracking対象から外して忘れさせる(手元のファイルはそのまま):</p>
@@ -215,6 +220,10 @@ git diff HEAD
 # 最新コミットの変更点
 git diff HEAD^ HEAD
 </code></pre>
+
+<p>zshの<code>EXTENDED_GLOB</code>が有効になってる場合は
+<code>HEAD^</code> がパターン扱いされてエラーになるので、
+<code>HEAD\^</code> のようにエスケープするか <code>unsetopt NOMATCH</code> しておく必要がある。</p>
 
 <h2 id="submodule">Submodule</h2>
 
