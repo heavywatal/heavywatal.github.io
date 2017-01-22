@@ -11,7 +11,7 @@ Unixツールをパッケージとして手軽にインストールできるMac�
 
 ## Installation
 
-https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/Installation.md
+<http://docs.brew.sh/Installation.html>
 
 1.  Command Line Tools をインストールする。
     cf. [/dev/devenv]({{< relref "dev/devenv.md" >}})
@@ -45,7 +45,7 @@ https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/Installation.md
 
 ## Usage
 
-https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/FAQ.md
+http://docs.brew.sh/FAQ.html
 
 - Homebrew本体とカタログをアップデートし、アップグレード可能なパッケージを表示:
 
@@ -132,9 +132,8 @@ gccやboostなどのデカいやつはとりあえずデフォルトで入れた
 
 ## brew tap
 
-https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/brew-tap.md
-
-https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/Interesting-Taps-&-Branches.md
+- http://docs.brew.sh/brew-tap.html
+- http://docs.brew.sh/Interesting-Taps-&-Forks.html
 
 非公式フォーミュラを公開しているリポジトリを追加する:
 
