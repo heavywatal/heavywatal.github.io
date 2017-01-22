@@ -46,8 +46,8 @@ tags = ["writing"]
 [Linux Libertine](http://www.linuxlibertine.org)
 :   印刷に耐えうるクオリティを目指して開発されたカッコいいセリフ体。
 :   近代LaTeXのスタンダード的な。
-:   兄弟の Linux Biolinum も半セリフみたいな感じでカッコいい。
-:   ひとまわり小さいのでほかのフォントとバランスとるのが難しい。
+:   ただしひとまわり小さいので和文フォントとバランスをとるのが難しい。
+:   兄弟の Linux Biolinum は Optima 似の非均等サンセリフ。
 
 [TeX Gyre Pagella](https://www.ctan.org/pkg/tex-gyre-pagella)
 :   個人的に一番好きなセリフフォント*Palatino*
@@ -113,6 +113,10 @@ tags = ["writing"]
 </tr>
 <tr style="font-family: 'Palatino', sans-serif">
   <td>Palatino</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
+</tr>
+<tr style="font-family: 'TeX Gyre Pagella', sans-serif">
+  <td>TeX Gyre Pagella</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
 </tr>
 <tr style="font-family: 'Linux Libertine', sans-serif">
@@ -189,6 +193,10 @@ tags = ["writing"]
 </tr>
 <tr style="font-family: 'Linux Biolinum', serif">
   <td>Linux Biolinum</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
+</tr>
+<tr style="font-family: 'Optima', serif">
+  <td>Optima</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
 </tr>
 </table>
