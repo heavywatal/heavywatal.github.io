@@ -41,38 +41,6 @@ tags = ["mac"]
 
     % osascript ${HOME}/Library/Scripts/Applications/Bibdesk/exportOOXML.scpt
 
-## mi.app で選択中の文字列をターミナルやR.appで実行
-
-1.  下記のスクリプトを Script Editor.app にコピペ
-2.  スクリプトとして保存(e.g. `mi2R.scpt`)
-3.  `~/Library/Application Support/mi/mode/*/tool/`
-    以下に置く
-    (\*印に入るのは、RとかNormalとか、miの何モードでRスクリプトを書いているかによる）
-4.  mi.app の「モード設定」の「ツール」で「フォルダから再構成」
-5.  コマンドショートカットで `command + R` とかに割り当てて使おう
-
-```applescript
-tell application "mi"
-        tell document 1
-                set CommandLines to selection
-        end tell
-end tell
-
-tell application "Terminal"
-        activate
-        ignoring application responses
-                do script with command CommandLines in window 1
-        end ignoring
-end tell
-
-tell application "R"
-        activate
-        ignoring application responses
-                cmd CommandLines
-        end ignoring
-end tell
-```
-
 ## Bibdesk からGroupとTemplateを指定してExport
 
 出力先、グループ名、テンプレートを最初の３行で指定し、Exportしたいライブラリを開いた状態で実行:
