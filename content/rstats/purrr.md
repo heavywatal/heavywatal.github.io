@@ -201,3 +201,8 @@ letters %>>% map_int(~ strtoi(charToRaw(.x), 16L))
 : 行列転置関数`t()`のlist版。
   例えば、pair of lists <=> list of pairs。
 : data.frameに適用するとlist of rowsが得られる。
+
+
+## 関連書籍
+
+<a href="https://www.amazon.co.jp/Data-Science-Transform-Visualize-Model/dp/1491910399/ref=as_li_ss_il?_encoding=UTF8&qid=1485613345&sr=1-1-catcorr&linkCode=li3&tag=heavywatal-22&linkId=6133a1fd9babbf590e304ee9f670fa4a" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1491910399&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=1491910399" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
