@@ -216,6 +216,11 @@ https://help.github.com/articles/user-organization-and-project-pages/
 [Hugo]({{< relref "hugo.md" >}})
 で変換・生成したHTMLファイルを`master`ブランチに書き出している。
 
+{{%div class="note"%}}
+GitHubが勝手にJekyll処理しようとすることがあるので、
+`.nojekyll` という空ファイルを作っておく。
+{{%/div%}}
+
 
 ### プロジェクトサイトを作る
 
