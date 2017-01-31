@@ -5,8 +5,12 @@ tags = ["package"]
   parent = "dev"
 +++
 
--   <http://www.gnu.org/software/autoconf/>
--   <http://www.gnu.org/software/automake/>
+環境に合わせて [Makefile]({{< relref "make.md" >}}) を作る仕組み。
+以下の3つのツールを組み合わせて使う。
+
+- <https://www.gnu.org/software/autoconf/>
+- <https://www.gnu.org/software/automake/>
+- <https://www.gnu.org/software/libtool/>
 
 ## Commands
 
@@ -54,14 +58,14 @@ tags = ["package"]
 
 ## `configure.ac`
 
-<http://www.gnu.org/software/autoconf/manual/html_node/>
+<https://www.gnu.org/software/autoconf/manual/html_node/>
 
 -   `configure.ac` の基本構造:
-    <http://www.gnu.org/software/autoconf/manual/html_node/Autoconf-Input-Layout.html>
+    <https://www.gnu.org/software/autoconf/manual/html_node/Autoconf-Input-Layout.html>
 -   標準マクロ:
-    <http://www.gnu.org/software/autoconf/manual/html_node/Autoconf-Macro-Index.html>
+    <https://www.gnu.org/software/autoconf/manual/html_node/Autoconf-Macro-Index.html>
 -   M4マクロ:
-    <http://www.gnu.org/software/autoconf/manual/html_node/M4-Macro-Index.html>
+    <https://www.gnu.org/software/autoconf/manual/html_node/M4-Macro-Index.html>
 
 Gitのタグをバージョン番号として取り込む:
 
@@ -69,12 +73,12 @@ Gitのタグをバージョン番号として取り込む:
 
 ## `Makefile.am`
 
-<http://www.gnu.org/software/automake/manual/html_node/>
+<https://www.gnu.org/software/automake/manual/html_node/>
 
 -   マクロ:
-    <http://www.gnu.org/software/automake/manual/html_node/Macro-Index.html>
+    <https://www.gnu.org/software/automake/manual/html_node/Macro-Index.html>
 -   変数:
-    <http://www.gnu.org/software/automake/manual/html_node/Variable-Index.html>
+    <https://www.gnu.org/software/automake/manual/html_node/Variable-Index.html>
 
 インストールするファイルと場所を指定する変数:
 
@@ -101,4 +105,4 @@ Gitのタグをバージョン番号として取り込む:
 `beer_CPPFLAGS` や `AM_CPPFLAGS` を上書きせず、
 後ろに並べて使用される。
 
-<http://www.gnu.org/software/automake/manual/html_node/Flag-Variables-Ordering.html>
+<https://www.gnu.org/software/automake/manual/html_node/Flag-Variables-Ordering.html>
