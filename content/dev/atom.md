@@ -21,11 +21,54 @@ ChromiumとNode.js(を用いたElectronフレームワーク)でできており�
 % brew cask install atom
 ```
 
+## Tips
+
+とりあえずコマンドパレット
+: <kbd>command-shift-p</kbd> で呼び出し、やりたいことを打ち込んでみる
+
+矩形(ブロック)選択
+: <kbd>ctrl-shift-down</kbd> / <kbd>ctrl-shift-up</kbd>
+: MacではデフォルトでMission Controlに割り当てられてしまっているので
+  システム環境設定からそれを解除しておく。
+
+選択範囲を掴んで移動
+: <kbd>ctrl-command-***</kbd>
+
+コメントアウト、解除
+: <kbd>command /</kbd> `editor:toggle`
+
+閉じタグを挿入
+: <kbd>command-alt .</kbd> `bracket-matcher:close-tag`
+
+小文字から大文字へ
+: <kbd>command-k-u</kbd> `editor:upper-case`
+
+大文字から小文字へ
+: <kbd>command-k-l</kbd> `editor:lower-case`
+
+プロジェクト内検索
+: <kbd>command-shift-f</kbd> `project-find:show`
+
+### Tree view
+
+key  | command
+---- | ----
+<kbd>ctrl-0</kbd> | tree-view:toggle-focus
+<kbd>m</kbd> | tree-view:move
+<kbd>d</kbd> | tree-view:duplicate
+<kbd>a</kbd> | tree-view:add-file
+<kbd>shift-a</kbd> | tree-view:add-folder
+
+矢印キーはそのものでもEmacs/Vim系でも想像通りの挙動
+
+プロジェクト内のファイルを開きたいだけなら
+<kbd>command-t</kbd> でインクリメントサーチする癖をつけるほうが早い。
+
+
 ## 環境設定
 
-http://flight-manual.atom.io/using-atom/sections/basic-customization/
-
-https://github.com/heavywatal/dotfiles/tree/master/.atom
+- http://flight-manual.atom.io/using-atom/sections/basic-customization/
+- https://github.com/heavywatal/dotfiles/tree/master/.atom
 
 いつもの <kbd>command ,</kbd> キーで設定画面を起動。
 
@@ -53,9 +96,8 @@ https://github.com/heavywatal/dotfiles/tree/master/.atom
 
 ## パッケージ
 
-https://atom.io/packages
-
-https://atom.io/users/heavywatal/stars
+- https://atom.io/packages
+- https://atom.io/users/heavywatal/stars
 
 環境設定のInstallメニューからインストールし、
 Packagesメニューで管理する。
@@ -66,44 +108,3 @@ apm install pigments
 apm uninstall pigments
 apm upgrade
 ```
-
-## Tips
-
-とりあえずコマンドパレット
-: <kbd>command-shift-p</kbd> で呼び出し、やりたいことを打ち込んでみる
-
-矩形(ブロック)選択
-: <kbd>ctrl-shift-down</kbd> / <kbd>ctrl-shift-up</kbd>
-: MacではデフォルトでMission Controlに割り当てられてしまっているので
-  システム環境設定からそれを解除しておく。
-
-選択範囲を掴んで移動
-: <kbd>ctrl-command-***</kbd>
-
-コメントアウト、解除 editor:toggle
-: <kbd>command /</kbd>
-
-閉じタグを挿入 bracket-matcher:close-tag
-: <kbd>command-alt .</kbd>
-
-小文字から大文字へ "Editor: Upper Case"
-: <kbd>command-k-u</kbd>
-
-大文字から小文字へ "Editor: Lower Case"
-: <kbd>command-k-l</kbd>
-
-
-### Tree view
-
-key  | command
----- | ----
-<kbd>ctrl-0</kbd> | tree-view:toggle-focus
-<kbd>m</kbd> | tree-view:move
-<kbd>d</kbd> | tree-view:duplicate
-<kbd>a</kbd> | tree-view:add-file
-<kbd>shift-a</kbd> | tree-view:add-folder
-
-矢印キーはそのものでもEmacs/Vim系でも想像通りの挙動
-
-プロジェクト内のファイルを開きたいだけなら
-<kbd>command-t</kbd> でインクリメントサーチする癖をつけるほうが早い。
