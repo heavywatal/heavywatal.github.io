@@ -1,47 +1,81 @@
 +++
-title = 'Mac Command'
+title = 'Mac固有コマンド'
 tags = ["mac"]
 [menu.main]
   parent = "mac"
 +++
 
-## `open`
+## 簡単・便利
+
+### `open`
 
 Finder でダブルクリックするのと同じように、
 Terminal から一発でファイルを開くことができる。
 
 ```sh
-#### 関連付けられたデフォルトのアプリケーションで開く
+# 関連付けられたデフォルトのアプリケーションで開く
 % open hudson1992g.pdf
 
-#### アプリケーションを指定して開く
+# アプリケーションを指定して開く
 % open -a Skim hudson1992g.pdf
 
-#### TextEdit.app で開く
-% open -e README
-
-#### デフォルトのテキストエディタで開く
-% open -t README
-
-#### カレントディレクトリをFinderで開く
+# カレントディレクトリをFinderで開く
 % open .
 ```
 
-## `defaults`
+### `pbcopy`, `pbpaste`
 
-`/Library/Preferences/` 以下にある各種.plistを編集し、
-いろいろな設定を変更するコマンド。
+ターミナルからクリップボード(pasteboard)を操作する。
+
+```sh
+% pwd | pbcopy
+% pbpaste | wc
+```
+
+[tmux内で使うにはreattach-to-user-namespaceが必要。]({{< relref "tmux.md" >}})
+
+
+### `say` 音声読み上げ
+
+```sh
+% say hello world
+% pbpaste | say
+```
+
+声は環境設定の Accessibility > Speech で変更可能。
+
+
+### `killall`
+
+Finder や Dock など、GUIから終了させにくいアプリケーションを再起動する。
+アプリケーションの動作が不安定になったとき、設定変更を反映させたいとき、
+メモリを開放したいときなどに使える。:
+
+```sh
+% killall Finder
+% killall Dock
+% killall Kotoeri
+```
+
+
+## 設定関連
+
+### `defaults`
+
+`/Library/Preferences/` 以下にある各種設定ファイル.plistを編集する。
 `true` に設定した項目を元に戻すには、
 項目自体を `delete` するか、`false` に設定する。
 
-    % defaults [write/delete] DOMAIN KEY -TYPE VALUE
+```sh
+% defaults [write/delete] DOMAIN KEY -TYPE VALUE
 
-    ### Finderで隠しファイルを見えるようにする。
-    % defaults write com.apple.finder AppleShowAllFiles -bool true
+# Quicklook上でコピペできるようにする
+% defaults write com.apple.finder QLEnableTextSelection -bool true
 
-    ### 元に戻すには下のいずれか
-    % defaults write com.apple.finder AppleShowAllFiles -bool false
-    % defaults delete com.apple.finder AppleShowAllFiles
+# 元に戻すには下のいずれか
+% defaults write com.apple.finder QLEnableTextSelection -bool false
+% defaults delete com.apple.finder QLEnableTextSelection
+```
 
 とは言え
 [Onyx](http://www.titanium.free.fr) や
@@ -51,17 +85,13 @@ Terminal から一発でファイルを開くことができる。
 iTerm2のタブの横幅を広くする
 :   `defaults write com.googlecode.iterm2 OptimumTabWidth -int 360`
 
-## `killall`
 
-Finder や Dock など、GUIから終了させにくいアプリケーションを再起動する。
-アプリケーションの動作が不安定になったとき、設定変更を反映させたいとき、
-メモリを開放したいときなどに使える。:
+### `launchctl`
 
-    % killall Finder
-    % killall Dock
-    % killall Kotoeri
+サービスの起動、終了
 
-## `lsregister`
+
+### `lsregister`
 
 Open with で表示されるアプリケーションが重複しまくったときなど、
 ファイルとアプリケーションの関連付けに関する古い情報を消して再構築。
@@ -71,7 +101,7 @@ Open with で表示されるアプリケーションが重複しまくったと�
 
 設定ファイルは `~/Library/Preferences/com.apple.LaunchServices.plist`
 
-## インストール関連
+### インストールなど
 
 `.dmg` のマウント、`.pkg` からのインストール、
 システムのソフトウェア・アップデートなどを
@@ -81,11 +111,11 @@ Open with で表示されるアプリケーションが重複しまくったと�
     % sudo installer -pkg SomePackage.pkg -target /
     % sudo softwareupdate -i -a
 
-## アカウント管理: `niutil`, `nidump`
+## Obsolete
 
-{{%div class="note"%}}
-Leopard以前の古いOSでしか使えない
-{{%/div%}}
+### アカウント管理: `niutil`, `nidump`
+
+Leopard以前
 
 項目をリストアップ:
 
