@@ -8,7 +8,7 @@
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="icon" href="/favicon-192x192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/favicon-192x192.png" sizes="192x192">
-<title>Mac Command - Heavy Watal</title>
+<title>Mac固有コマンド - Heavy Watal</title>
 <meta name="author" content="Watal M. Iwasaki">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://avatars.githubusercontent.com/heavywatal">
@@ -45,7 +45,7 @@ MathJax.Hub.Queue(function() {
   "position": 2,
   "item": {
    "@id": "https://heavywatal.github.io/mac/command.html",
-   "name": "Mac Command"}}
+   "name": "Mac固有コマンド"}}
 ]}</script>
 
 
@@ -73,7 +73,7 @@ Heavy Watal
 <main>
 <article>
 <header><h1><a href=".">
-Mac Command
+Mac固有コマンド
 </a></h1>
 <ul class="tags">
 <li><a href="/tags/mac">mac</a></li>
@@ -82,42 +82,68 @@ Mac Command
 
 
 
-<h2 id="open"><code>open</code></h2>
+<h2 id="簡単-便利">簡単・便利</h2>
+
+<h3 id="open"><code>open</code></h3>
 
 <p>Finder でダブルクリックするのと同じように、
 Terminal から一発でファイルを開くことができる。</p>
 
-<pre><code class="language-sh">#### 関連付けられたデフォルトのアプリケーションで開く
+<pre><code class="language-sh"># 関連付けられたデフォルトのアプリケーションで開く
 % open hudson1992g.pdf
 
-#### アプリケーションを指定して開く
+# アプリケーションを指定して開く
 % open -a Skim hudson1992g.pdf
 
-#### TextEdit.app で開く
-% open -e README
-
-#### デフォルトのテキストエディタで開く
-% open -t README
-
-#### カレントディレクトリをFinderで開く
+# カレントディレクトリをFinderで開く
 % open .
 </code></pre>
 
-<h2 id="defaults"><code>defaults</code></h2>
+<h3 id="pbcopy-pbpaste"><code>pbcopy</code>, <code>pbpaste</code></h3>
 
-<p><code>/Library/Preferences/</code> 以下にある各種.plistを編集し、
-いろいろな設定を変更するコマンド。
+<p>ターミナルからクリップボード(pasteboard)を操作する。</p>
+
+<pre><code class="language-sh">% pwd | pbcopy
+% pbpaste | wc
+</code></pre>
+
+<p><a href="/dev/tmux.html">tmux内で使うにはreattach-to-user-namespaceが必要。</a></p>
+
+<h3 id="say-音声読み上げ"><code>say</code> 音声読み上げ</h3>
+
+<pre><code class="language-sh">% say hello world
+% pbpaste | say
+</code></pre>
+
+<p>声は環境設定の Accessibility &gt; Speech で変更可能。</p>
+
+<h3 id="killall"><code>killall</code></h3>
+
+<p>Finder や Dock など、GUIから終了させにくいアプリケーションを再起動する。
+アプリケーションの動作が不安定になったとき、設定変更を反映させたいとき、
+メモリを開放したいときなどに使える。:</p>
+
+<pre><code class="language-sh">% killall Finder
+% killall Dock
+% killall Kotoeri
+</code></pre>
+
+<h2 id="設定関連">設定関連</h2>
+
+<h3 id="defaults"><code>defaults</code></h3>
+
+<p><code>/Library/Preferences/</code> 以下にある各種設定ファイル.plistを編集する。
 <code>true</code> に設定した項目を元に戻すには、
 項目自体を <code>delete</code> するか、<code>false</code> に設定する。</p>
 
-<pre><code>% defaults [write/delete] DOMAIN KEY -TYPE VALUE
+<pre><code class="language-sh">% defaults [write/delete] DOMAIN KEY -TYPE VALUE
 
-### Finderで隠しファイルを見えるようにする。
-% defaults write com.apple.finder AppleShowAllFiles -bool true
+# Quicklook上でコピペできるようにする
+% defaults write com.apple.finder QLEnableTextSelection -bool true
 
-### 元に戻すには下のいずれか
-% defaults write com.apple.finder AppleShowAllFiles -bool false
-% defaults delete com.apple.finder AppleShowAllFiles
+# 元に戻すには下のいずれか
+% defaults write com.apple.finder QLEnableTextSelection -bool false
+% defaults delete com.apple.finder QLEnableTextSelection
 </code></pre>
 
 <p>とは言え
@@ -130,18 +156,11 @@ Terminal から一発でファイルを開くことができる。</p>
 <dd><code>defaults write com.googlecode.iterm2 OptimumTabWidth -int 360</code></dd>
 </dl>
 
-<h2 id="killall"><code>killall</code></h2>
+<h3 id="launchctl"><code>launchctl</code></h3>
 
-<p>Finder や Dock など、GUIから終了させにくいアプリケーションを再起動する。
-アプリケーションの動作が不安定になったとき、設定変更を反映させたいとき、
-メモリを開放したいときなどに使える。:</p>
+<p>サービスの起動、終了</p>
 
-<pre><code>% killall Finder
-% killall Dock
-% killall Kotoeri
-</code></pre>
-
-<h2 id="lsregister"><code>lsregister</code></h2>
+<h3 id="lsregister"><code>lsregister</code></h3>
 
 <p>Open with で表示されるアプリケーションが重複しまくったときなど、
 ファイルとアプリケーションの関連付けに関する古い情報を消して再構築。
@@ -152,7 +171,7 @@ Terminal から一発でファイルを開くことができる。</p>
 
 <p>設定ファイルは <code>~/Library/Preferences/com.apple.LaunchServices.plist</code></p>
 
-<h2 id="インストール関連">インストール関連</h2>
+<h3 id="インストールなど">インストールなど</h3>
 
 <p><code>.dmg</code> のマウント、<code>.pkg</code> からのインストール、
 システムのソフトウェア・アップデートなどを
@@ -163,13 +182,11 @@ Terminal から一発でファイルを開くことができる。</p>
 % sudo softwareupdate -i -a
 </code></pre>
 
-<h2 id="アカウント管理-niutil-nidump">アカウント管理: <code>niutil</code>, <code>nidump</code></h2>
+<h2 id="obsolete">Obsolete</h2>
 
-<div class="note">
-<p>Leopard以前の古いOSでしか使えない</p>
+<h3 id="アカウント管理-niutil-nidump">アカウント管理: <code>niutil</code>, <code>nidump</code></h3>
 
-</div>
-
+<p>Leopard以前</p>
 
 <p>項目をリストアップ:</p>
 
@@ -328,8 +345,8 @@ Terminal から一発でファイルを開くことができる。</p>
 <li><a href="/mac/applescript.html">AppleScript</a></li>
 <li><a href="/mac/homebrew.html">Homebrew</a></li>
 <li><a href="/mac/keyboard.html">Keyboard</a></li>
-<li class="active"><a href="/mac/command.html">Mac Command</a></li>
 <li><a href="/mac/macports.html">MacPorts</a></li>
+<li class="active"><a href="/mac/command.html">Mac固有コマンド</a></li>
 <li><a href="/mac/quicklook.html">QuickLook</a></li>
 <li><a href="/mac/spotlight.html">Spotlight</a></li>
 <li><a href="/mac/winebottler.html">WineBottler</a></li>
