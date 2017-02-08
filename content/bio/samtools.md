@@ -209,7 +209,7 @@ phase
 
 ### pysam
 
-<https://pysam.readthedocs.org/>
+<https://pysam.readthedocs.io/>
 
 <http://bi.biopapyrus.net/python/modules/pysam.html>
 

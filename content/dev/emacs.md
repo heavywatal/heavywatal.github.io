@@ -178,7 +178,7 @@ Emacs 24で標準入りしたので、基本的にこれを使うのが良さそ
 {{%/div%}}
 
 -   <https://github.com/cask/cask>
--   <http://cask.readthedocs.org/>
+-   <https://cask.readthedocs.io/>
 
 Emacs 24以上じゃないと動かない (=CentOS 6.5ではダメ)
 
@@ -190,7 +190,7 @@ Emacs 24以上じゃないと動かない (=CentOS 6.5ではダメ)
 
 #### セットアップ
 
-<http://cask.readthedocs.org/en/latest/guide/installation.html>
+<https://cask.readthedocs.io/en/latest/guide/installation.html>
 
 1.  Cask本体を `~/.cask` にインストール:
 
