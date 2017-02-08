@@ -7,11 +7,9 @@ tags = ["python"]
   weight = -90
 +++
 
-<http://ipython.org/>
-
-<http://ipython.readthedocs.org/>
-
-`pip install ipython jupyter` でインストール
+- <https://ipython.org/>
+- <https://ipython.readthedocs.io/>
+- `pip install ipython jupyter` でインストール
 
 ## 対話型実行環境
 
@@ -40,8 +38,8 @@ tags = ["python"]
 ### 履歴
 
 -   上下キーで単純に遡る
--   途中まで入力して `control + p` で前方一致する履歴のみ遡る
--   `control + r` から部分一致する履歴を検索
+-   途中まで入力して <kbd>control + p</kbd> で前方一致する履歴のみ遡る
+-   <kbd>control + r</kbd> から部分一致する履歴を検索
 -   `%hist`
 -   input cache: `_i`, `_ii`, `_iii`, `_ih[n]`, `_i<n>`
 -   output cache: `_`, `__`, `___`, `_oh[n]`, `_<n>`
@@ -49,7 +47,7 @@ tags = ["python"]
 
 ### Object introspection
 
-<http://ipython.readthedocs.org/en/stable/interactive/reference.html#dynamic-object-information>
+<https://ipython.readthedocs.io/en/stable/interactive/reference.html#dynamic-object-information>
 
 関数がどんな引数をとるか、
 クラスがどんなメンバを持っているか、
@@ -75,7 +73,7 @@ tags = ["python"]
 
 ### マジックコマンド
 
-<http://ipython.readthedocs.org/en/stable/interactive/magics.html>
+<https://ipython.readthedocs.io/en/stable/interactive/magics.html>
 
 一行単位の line magic は `%` で始める。
 
@@ -85,11 +83,9 @@ tags = ["python"]
 
 ## Jupyter Notebook
 
-<http://jupyter.org/>
-
-<http://jupyter.readthedocs.org/>
-
-<http://jupyter-notebook.readthedocs.org/>
+- <https://jupyter.org/>
+- <https://jupyter.readthedocs.io/>
+- <https://jupyter-notebook.readthedocs.io/>
 
 ウェブブラウザ上で動く対話的実行環境。
 Markdown/LaTeX記法による見出し・コメント・数式とともに
@@ -98,6 +94,7 @@ Markdown/LaTeX記法による見出し・コメント・数式とともに
 Rでいうknitr + Rmarkdownのような位置づけだが、
 インプットとアウトプットの近さという点で
 Mathematica/Mapleの使い勝手に似ている。
+文書をGitでバージョン管理するという観点ではつかいにくい形式。
 
 元はIPython Notebookだったが、
 カーネルを入れ替えることで他言語サポートが可能になり、
@@ -107,7 +104,7 @@ Mathematica/Mapleの使い勝手に似ている。
 
 ### 始め方
 
-<http://jupyter-notebook.readthedocs.org/en/latest/examples/Notebook/rstversions/Notebook%20Basics.html>
+<https://jupyter-notebook.readthedocs.io/en/latest/examples/Notebook/rstversions/Notebook%20Basics.html>
 
 1.  `IPython` とともにインストール
 2.  ターミナルから起動:
@@ -118,15 +115,14 @@ Mathematica/Mapleの使い勝手に似ている。
 4.  右上の New から適当なNotebookカーネル
     (e.g., Python 3) を選択
 5.  In [ ]: の右の箱に適当なPythonコマンドを入れて
-    `shift + return`
+    <kbd>shift + return</kbd>
 6.  左上の File から適当に保存してブラウザを閉じる
-7.  ターミナルから `control + c` で終了
+7.  ターミナルから <kbd>control + c</kbd> で終了
 
 ### 設定
 
-<http://jupyter-notebook.readthedocs.org/en/latest/config.html>
-
-<http://jupyter-notebook.readthedocs.org/en/latest/frontend_config.html>
+- <https://jupyter-notebook.readthedocs.io/en/latest/config.html>
+- <https://jupyter-notebook.readthedocs.io/en/latest/frontend_config.html>
 
 
 ## 書籍
