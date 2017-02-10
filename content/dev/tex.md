@@ -272,41 +272,45 @@ XeTeXでは不要っぽい。
 
 適切な `Makefile` を書いて自動化するべし。
 
-### 文字色
+### 文字の修飾
 
-<https://en.wikibooks.org/wiki/LaTeX/Colors>
-
-```tex
-\usepackage{color}
-%%%
-
-\textcolor{red}{colored text}
-{\text{red} colored text}
-```
-
-ドライバを指定して `\usepackage[dvipdfmx]{color}` としないと
-`graphicx` がおかしくなってPNG図が空白になる、謎。
-<http://qiita.com/zr_tex8r/items/442b75b452b11bee8049>
-
-### フォントの一時的変更
-
-https://en.wikibooks.org/wiki/LaTeX/Fonts
+- <https://en.wikibooks.org/wiki/LaTeX/Fonts#Font_styles>
+- <https://en.wikibooks.org/wiki/LaTeX/Colors>
 
 ```tex
 \emph{emphasis}
 \textit{italic}
 \textbf{bold}
 \texttt{monospace}
-normal {\huge huge} normal
+{\huge huge text}
 ```
 
 `\tiny`, `\scriptsize`, `\footnotesize`, `\small`,
 `\normalsize`,
 `\large`, `\Large`, `\LARGE`, `\huge`, `\Huge`
 
-underline や strikethrough が欲しいときはプリアンブルで
-`\usepackage[normalem]{ulem}` と宣言して `\uline{...}` や `\sout{...}` を使う。
-`normalem`オプションを付けないと `\emph` が下線に変更されてしまうので注意。
+```tex
+\usepackage[normalem]{ulem}  % \uline{}, \sout{}
+\usepackage{color}           % \textcolor{}
+\usepackage{soul}            % \hl{}
+%%%
+
+\uline{underlined text}
+\sout{strikethrough}
+
+\textcolor{red}{colored text}
+{\text{red} colored text}
+
+\hl{highlighted text}
+```
+
+`{ulem}` パッケージは `[normalem]` オプションを付けて読まないと
+`\emph` が下線に変更されてしまうので注意。
+
+ドライバを指定して `\usepackage[dvipdfmx]{color}` としないと
+`graphicx` がおかしくなってPNG図が空白になる、謎。
+<http://qiita.com/zr_tex8r/items/442b75b452b11bee8049>
+
 
 ## Tips
 
