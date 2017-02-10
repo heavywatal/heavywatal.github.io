@@ -357,39 +357,44 @@ e.g., <code>mybibdata.bib</code></li>
 
 <p>適切な <code>Makefile</code> を書いて自動化するべし。</p>
 
-<h3 id="文字色">文字色</h3>
+<h3 id="文字の修飾">文字の修飾</h3>
 
-<p><a href="https://en.wikibooks.org/wiki/LaTeX/Colors">https://en.wikibooks.org/wiki/LaTeX/Colors</a></p>
-
-<pre><code class="language-tex">\usepackage{color}
-%%%
-
-\textcolor{red}{colored text}
-{\text{red} colored text}
-</code></pre>
-
-<p>ドライバを指定して <code>\usepackage[dvipdfmx]{color}</code> としないと
-<code>graphicx</code> がおかしくなってPNG図が空白になる、謎。
-<a href="http://qiita.com/zr_tex8r/items/442b75b452b11bee8049">http://qiita.com/zr_tex8r/items/442b75b452b11bee8049</a></p>
-
-<h3 id="フォントの一時的変更">フォントの一時的変更</h3>
-
-<p><a href="https://en.wikibooks.org/wiki/LaTeX/Fonts">https://en.wikibooks.org/wiki/LaTeX/Fonts</a></p>
+<ul>
+<li><a href="https://en.wikibooks.org/wiki/LaTeX/Fonts#Font_styles">https://en.wikibooks.org/wiki/LaTeX/Fonts#Font_styles</a></li>
+<li><a href="https://en.wikibooks.org/wiki/LaTeX/Colors">https://en.wikibooks.org/wiki/LaTeX/Colors</a></li>
+</ul>
 
 <pre><code class="language-tex">\emph{emphasis}
 \textit{italic}
 \textbf{bold}
 \texttt{monospace}
-normal {\huge huge} normal
+{\huge huge text}
 </code></pre>
 
 <p><code>\tiny</code>, <code>\scriptsize</code>, <code>\footnotesize</code>, <code>\small</code>,
 <code>\normalsize</code>,
 <code>\large</code>, <code>\Large</code>, <code>\LARGE</code>, <code>\huge</code>, <code>\Huge</code></p>
 
-<p>underline や strikethrough が欲しいときはプリアンブルで
-<code>\usepackage[normalem]{ulem}</code> と宣言して <code>\uline{...}</code> や <code>\sout{...}</code> を使う。
-<code>normalem</code>オプションを付けないと <code>\emph</code> が下線に変更されてしまうので注意。</p>
+<pre><code class="language-tex">\usepackage[normalem]{ulem}  % \uline{}, \sout{}
+\usepackage{color}           % \textcolor{}
+\usepackage{soul}            % \hl{}
+%%%
+
+\uline{underlined text}
+\sout{strikethrough}
+
+\textcolor{red}{colored text}
+{\text{red} colored text}
+
+\hl{highlighted text}
+</code></pre>
+
+<p><code>{ulem}</code> パッケージは <code>[normalem]</code> オプションを付けて読まないと
+<code>\emph</code> が下線に変更されてしまうので注意。</p>
+
+<p>ドライバを指定して <code>\usepackage[dvipdfmx]{color}</code> としないと
+<code>graphicx</code> がおかしくなってPNG図が空白になる、謎。
+<a href="http://qiita.com/zr_tex8r/items/442b75b452b11bee8049">http://qiita.com/zr_tex8r/items/442b75b452b11bee8049</a></p>
 
 <h2 id="tips">Tips</h2>
 
