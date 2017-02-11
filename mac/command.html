@@ -136,25 +136,21 @@ Terminal から一発でファイルを開くことができる。</p>
 <code>true</code> に設定した項目を元に戻すには、
 項目自体を <code>delete</code> するか、<code>false</code> に設定する。</p>
 
-<pre><code class="language-sh">% defaults [write/delete] DOMAIN KEY -TYPE VALUE
+<pre><code class="language-sh">defaults [write/delete] DOMAIN KEY -TYPE VALUE
+
+# Finderのタイトルバーにフルパスを表示
+defaults write com.apple.finder _FXShowPosixPathInTitle -boolean true
 
 # Quicklook上でコピペできるようにする
-% defaults write com.apple.finder QLEnableTextSelection -bool true
+defaults write com.apple.finder QLEnableTextSelection -bool true
 
-# 元に戻すには下のいずれか
-% defaults write com.apple.finder QLEnableTextSelection -bool false
-% defaults delete com.apple.finder QLEnableTextSelection
+# iTerm2のタブの横幅を広くする
+defaults write com.googlecode.iterm2 OptimumTabWidth -int 360
 </code></pre>
 
-<p>とは言え
-<a href="http://www.titanium.free.fr">Onyx</a> や
+<p><a href="http://www.titanium.free.fr">Onyx</a> や
 <a href="http://www.bresink.com/osx/TinkerTool.html">Tinkertool</a>
 などのGUIアプリを使うほうが簡単で安心かも</p>
-
-<dl>
-<dt>iTerm2のタブの横幅を広くする</dt>
-<dd><code>defaults write com.googlecode.iterm2 OptimumTabWidth -int 360</code></dd>
-</dl>
 
 <h3 id="launchctl"><code>launchctl</code></h3>
 
