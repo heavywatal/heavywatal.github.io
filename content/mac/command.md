@@ -67,23 +67,21 @@ Finder や Dock など、GUIから終了させにくいアプリケーション�
 項目自体を `delete` するか、`false` に設定する。
 
 ```sh
-% defaults [write/delete] DOMAIN KEY -TYPE VALUE
+defaults [write/delete] DOMAIN KEY -TYPE VALUE
+
+# Finderのタイトルバーにフルパスを表示
+defaults write com.apple.finder _FXShowPosixPathInTitle -boolean true
 
 # Quicklook上でコピペできるようにする
-% defaults write com.apple.finder QLEnableTextSelection -bool true
+defaults write com.apple.finder QLEnableTextSelection -bool true
 
-# 元に戻すには下のいずれか
-% defaults write com.apple.finder QLEnableTextSelection -bool false
-% defaults delete com.apple.finder QLEnableTextSelection
+# iTerm2のタブの横幅を広くする
+defaults write com.googlecode.iterm2 OptimumTabWidth -int 360
 ```
 
-とは言え
 [Onyx](http://www.titanium.free.fr) や
 [Tinkertool](http://www.bresink.com/osx/TinkerTool.html)
 などのGUIアプリを使うほうが簡単で安心かも
-
-iTerm2のタブの横幅を広くする
-:   `defaults write com.googlecode.iterm2 OptimumTabWidth -int 360`
 
 
 ### `launchctl`
