@@ -134,9 +134,8 @@ BasicTeXの場合は最小限のパッケージしか含まれていないので
 
 -   記号:
     <http://www.ctan.org/tex-archive/info/symbols/comprehensive/>
-    に網羅されてるけど、だいたい
-    Short Math Guide for LaTeX\_
-    にまとめられてるやつで足りるはず。
+    に網羅されてるけど、
+    だいたい Short Math Guide for LaTeX にまとめられてるやつで足りるはず。
     -   "given that" を示す縦棒はパイプ記号 `|` ではなく
         `\mid` を使うのが正しいし適度なスペースが入って読みやすい。
     -   カッコの大きさを変えたいときは `\left(` と `\right)` を使っておけば、
@@ -439,7 +438,7 @@ Computer Modern
     数式も Times にする。
     既にメンテナンスは放棄されている。
 
-`\usepackage{newtxtext,newtxmath}`
+[`newtx`](https://www.ctan.org/pkg/newtx)
 :   `txfonts` の後継で現役。
     本文と数式を別々に指定できる。
     `\usepackage[libertine]{newtxmath}` とすると Libertine を数式に使える。
@@ -447,16 +446,14 @@ Computer Modern
     `txfonts` と `boondox` も入れないと
     `Unable to find TFM file` と怒られる。
 
-`\usepackage{newpxtext,newpxmath}`
-:   Palatino版 `newtx` 。
-    `palatino`, `pxfonts`, `tex-gyre` も必要
+[`newpx`](https://www.ctan.org/pkg/newpx)
+:   `newtx`と同等の機能を美しいPalatinoで。
+    `palatino`, `pxfonts`,
+    [`tex-gyre-pagella`](https://www.ctan.org/pkg/tex-gyre-pagella),
+    [`tex-gyre-math-pagella`](https://www.ctan.org/pkg/tex-gyre-math-pagella) も入れておく。
+    **TeX Gyre Pagella** はOpenType志向のPalatinoクローン。
 
-TeX Gyre Pagella
-:   OpenType志向のPalatinoクローン。
-    `newpx` や `unicode-math` 越しに使う。
-    `tex-gyre`, `tex-gyre-math`
-
-`\usepackage{libertine}` --- Linux Libertine
+[`libertine`](https://www.ctan.org/pkg/libertine) --- Linux Libertine
 :   印刷用途でも通用するよう作られた美しいフリーフォント。
     `fontaxes` もインストールする必要がある。
 
@@ -466,10 +463,12 @@ XeTeX なら OS のフォントをフルネームで指定して使える
 \usepackage{amsthm, amsmath} % must be called ahead of mathspec
 \usepackage[all, warning]{onlyamsmath}
 \ifxetex
-  \usepackage[libertine,bigdelims,cmintegrals]{newtxmath} % calls amsmath
+  \usepackage[libertine]{newtxmath}
+  \usepackage[scr=rsfso]{mathalfa}  % for \mathrm
+  \usepackage{bm}                   % for \mathbf
   \usepackage{mathspec} % must be called ahead of fontspec
-  \setmathrm{Linux Libertine O} % newtxmath lacks roman
-  \usepackage{fontspec}
+  \usepackage[math-style=TeX,bold-style=TeX]{unicode-math}
+  \usepackage[no-math]{fontspec}
   \usepackage{libertine}
   \usepackage{xeCJK}
   \setCJKmainfont[Scale=0.9,BoldFont=Hiragino Mincho ProN W6]
@@ -482,8 +481,8 @@ XeTeX なら OS のフォントをフルネームで指定して使える
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{libertine}
-  \usepackage[libertine,bigdelims,cmintegrals]{newtxmath}
-  %\usepackage[uplatex,deluxe,jis2004]{otf}
+  \usepackage[libertine]{newtxmath}
+  \usepackage[uplatex,deluxe,jis2004]{otf}
   \usepackage{textcomp}
 \fi
 ```
