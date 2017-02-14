@@ -215,9 +215,8 @@ Hello, World!
 
 <li><p>記号:
 <a href="http://www.ctan.org/tex-archive/info/symbols/comprehensive/">http://www.ctan.org/tex-archive/info/symbols/comprehensive/</a>
-に網羅されてるけど、だいたい
-Short Math Guide for LaTeX_
-にまとめられてるやつで足りるはず。</p>
+に網羅されてるけど、
+だいたい Short Math Guide for LaTeX にまとめられてるやつで足りるはず。</p>
 
 <ul>
 <li>&ldquo;given that&rdquo; を示す縦棒はパイプ記号 <code>|</code> ではなく
@@ -536,21 +535,20 @@ luaotfload が更新されないと結局使えない。
 <dd><code>times</code> の改良版？
 数式も Times にする。
 既にメンテナンスは放棄されている。</dd>
-<dt><code>\usepackage{newtxtext,newtxmath}</code></dt>
+<dt><a href="https://www.ctan.org/pkg/newtx"><code>newtx</code></a></dt>
 <dd><code>txfonts</code> の後継で現役。
 本文と数式を別々に指定できる。
 <code>\usepackage[libertine]{newtxmath}</code> とすると Libertine を数式に使える。
 インストールするときは <code>newtx</code> だけでなく
 <code>txfonts</code> と <code>boondox</code> も入れないと
 <code>Unable to find TFM file</code> と怒られる。</dd>
-<dt><code>\usepackage{newpxtext,newpxmath}</code></dt>
-<dd>Palatino版 <code>newtx</code> 。
-<code>palatino</code>, <code>pxfonts</code>, <code>tex-gyre</code> も必要</dd>
-<dt>TeX Gyre Pagella</dt>
-<dd>OpenType志向のPalatinoクローン。
-<code>newpx</code> や <code>unicode-math</code> 越しに使う。
-<code>tex-gyre</code>, <code>tex-gyre-math</code></dd>
-<dt><code>\usepackage{libertine}</code> &mdash; Linux Libertine</dt>
+<dt><a href="https://www.ctan.org/pkg/newpx"><code>newpx</code></a></dt>
+<dd><code>newtx</code>と同等の機能を美しいPalatinoで。
+<code>palatino</code>, <code>pxfonts</code>,
+<a href="https://www.ctan.org/pkg/tex-gyre-pagella"><code>tex-gyre-pagella</code></a>,
+<a href="https://www.ctan.org/pkg/tex-gyre-math-pagella"><code>tex-gyre-math-pagella</code></a> も入れておく。
+<strong>TeX Gyre Pagella</strong> はOpenType志向のPalatinoクローン。</dd>
+<dt><a href="https://www.ctan.org/pkg/libertine"><code>libertine</code></a> &mdash; Linux Libertine</dt>
 <dd>印刷用途でも通用するよう作られた美しいフリーフォント。
 <code>fontaxes</code> もインストールする必要がある。</dd>
 </dl>
@@ -560,10 +558,12 @@ luaotfload が更新されないと結局使えない。
 <pre><code class="language-tex">\usepackage{amsthm, amsmath} % must be called ahead of mathspec
 \usepackage[all, warning]{onlyamsmath}
 \ifxetex
-  \usepackage[libertine,bigdelims,cmintegrals]{newtxmath} % calls amsmath
+  \usepackage[libertine]{newtxmath}
+  \usepackage[scr=rsfso]{mathalfa}  % for \mathrm
+  \usepackage{bm}                   % for \mathbf
   \usepackage{mathspec} % must be called ahead of fontspec
-  \setmathrm{Linux Libertine O} % newtxmath lacks roman
-  \usepackage{fontspec}
+  \usepackage[math-style=TeX,bold-style=TeX]{unicode-math}
+  \usepackage[no-math]{fontspec}
   \usepackage{libertine}
   \usepackage{xeCJK}
   \setCJKmainfont[Scale=0.9,BoldFont=Hiragino Mincho ProN W6]
@@ -576,8 +576,8 @@ luaotfload が更新されないと結局使えない。
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{libertine}
-  \usepackage[libertine,bigdelims,cmintegrals]{newtxmath}
-  %\usepackage[uplatex,deluxe,jis2004]{otf}
+  \usepackage[libertine]{newtxmath}
+  \usepackage[uplatex,deluxe,jis2004]{otf}
   \usepackage{textcomp}
 \fi
 </code></pre>
