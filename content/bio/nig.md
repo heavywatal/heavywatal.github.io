@@ -46,12 +46,16 @@ Phase 2ゲートウェイから
 
 ## 環境整備
 
-<https://sc.ddbj.nig.ac.jp/index.php/system-software-config>
+- [ハードウェア構成](https://sc.ddbj.nig.ac.jp/index.php/systemconfig)
+- [ソフトウェア構成](https://sc.ddbj.nig.ac.jp/index.php/system-software-config)
+  (Phase 2: Red Hat Enterprise Linux 6.4)
+    - [プログラミング環境](https://sc.ddbj.nig.ac.jp/index.php/programming)
+    - [OSSライブラリ](https://sc.ddbj.nig.ac.jp/index.php/ja-avail-oss)
+      `/usr/local/pkg/`
+    - [データベース](https://sc.ddbj.nig.ac.jp/index.php/ja-availavle-dbs)
+      `/usr/local/seq/`
 
-Phase 1 Red Hat Enterprise Linux 6.1\
-Phase 2 Red Hat Enterprise Linux 6.4
-
-Linuxbrewで環境を整える。
+何か自分で入れる必要があれば、なるべくLinuxbrewで環境を整える。
 cf. [/dev/devenv]({{< relref "dev/devenv.md" >}})
 
 {{%div class="note"%}}
@@ -105,13 +109,10 @@ make install
 
 ## ジョブ投入、管理
 
-<https://sc.ddbj.nig.ac.jp/index.php/ja-howtouse>
-
-<https://sc.ddbj.nig.ac.jp/index.php/ja-uge-additional>
-
-[Univa Grid Engine (UGE)](http://www.univa.com/products/grid-engine)
-
-<http://gridengine.eu/grid-engine-documentation>
+- <https://sc.ddbj.nig.ac.jp/index.php/ja-howtouse>
+- <https://sc.ddbj.nig.ac.jp/index.php/ja-uge-additional>
+- [Univa Grid Engine (UGE)](http://www.univa.com/products/grid-engine)
+- <http://gridengine.eu/grid-engine-documentation>
 
 ### `qsub`
 
