@@ -7,10 +7,16 @@ tags = ["python"]
   weight = -95
 +++
 
-Python 2 (3.2以下) ではパッケージ管理のために
-外部ツールを別途インストールする必要がある(結構多くて複雑...)。
-Python 3.4 以降では `venv` と `ensurepip`
-が標準ライブラリに入るため楽チン。
+古いPython (3.2以下) ではパッケージ管理のために
+外部ツールを別途インストールする必要があった(結構多くて複雑...)。
+Python 3.4 以降では `venv` と `ensurepip` が標準ライブラリに入って少しマシに。
+
+{{%div class="note"%}}
+最近では、Python本体のインストールからパッケージ管理までぜーんぶ
+[Anaconda](https://docs.continuum.io/) に任せるのが主流になりつつある。
+その場合、本記事は無視して構わない。
+{{%/div%}}
+
 
 ## Installation (Python 2)
 
