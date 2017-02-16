@@ -72,23 +72,16 @@ Macの [Homebrew]({{< relref "mac/homebrew.md" >}}) をLinuxに移植したパ�
 ### Command Line Tools
 
 コンパイラや `make` などはOSに付いてこないので別途インストールが必要。
+<https://developer.apple.com/downloads/> からダウンロードするか、
 ターミナルから以下のコマンドを実行:
 
     % xcode-select --install
 
-あるいは <https://developer.apple.com/downloads/> からダウンロード。
+総合開発環境 Xcode をインストールしたければ、App Store から [Xcode](https://itunes.apple.com/jp/app/xcode/id497799835) を選択。
+Xcode上での補完のためのindexingが重いらしいので切っとく:
+`defaults write com.apple.dt.Xcode IDEIndexDisable 1`
 
-{{%div class="note"%}}
-総合開発環境 Xcode をインストールしたければ
 
-1.  App Store から
-    [Xcode](https://itunes.apple.com/jp/app/xcode/id497799835)
-    を選択
-2.  Xcode 上での補完のためのindexingが重いらしいので切っとく:
-
-        defaults write com.apple.dt.Xcode IDEIndexDisable 1
-
-{{%/div%}}
 ### パッケージ管理ツール
 
 -   [/mac/homebrew]({{< relref "mac/homebrew.md" >}})
@@ -116,21 +109,17 @@ Macの [Homebrew]({{< relref "mac/homebrew.md" >}}) をLinuxに移植したパ�
 
 ### Python
 
-[/python/install]({{< relref "python/install.md" >}})
+- [install]({{< relref "python/install.md" >}})
+- [pip]({{< relref "python/pip.md" >}})
+- `Pillow` をインストールする前に:
 
-[/python/pip]({{< relref "python/pip.md" >}})
-
-`Pillow` をインストールする前に:
-
-    % sudo apt-get install libtiff5-dev libwebp-dev libfreetype6-dev liblcms2-dev libopenjpeg-dev
+      % sudo apt-get install libtiff5-dev libwebp-dev libfreetype6-dev liblcms2-dev libopenjpeg-dev
 
 ### C++
 
-[/cxx/gcc]({{< relref "cxx/gcc.md" >}})
-
-[/cxx/boost]({{< relref "cxx/boost.md" >}})
-
-[SFMT]({{< relref "cxx/random.md" >}})
+- [gcc]({{< relref "cxx/gcc.md" >}})
+- [boost]({{< relref "cxx/boost.md" >}})
+- [SFMT]({{< relref "cxx/random.md" >}})
 
 ### R
 
@@ -138,11 +127,9 @@ Macの [Homebrew]({{< relref "mac/homebrew.md" >}}) をLinuxに移植したパ�
 
 ### エディタ
 
-[/dev/emacs]({{< relref "dev/atom.md" >}})
-
-[/dev/emacs]({{< relref "dev/emacs.md" >}})
-
-[/dev/nano]({{< relref "dev/nano.md" >}})
+- [atom]({{< relref "dev/atom.md" >}})
+- [emacs]({{< relref "dev/emacs.md" >}})
+- [nano]({{< relref "dev/nano.md" >}})
 
 ### Trash
 
