@@ -1,7 +1,7 @@
 +++
 title = 'devtools'
 subtitle = "Rパッケージ作成支援"
-tags = ["r", "tidyverse"]
+tags = ["r", "tidyverse", "package"]
 [menu.main]
   parent = "rstats"
   weight = -50
