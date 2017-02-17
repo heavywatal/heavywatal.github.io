@@ -145,8 +145,9 @@ tracking対象から外して忘れさせる(手元のファイルはそのま�
     # HEAD vs working+index (commit前の全ファイルが対象)
     git diff HEAD
 
-    # 最新コミットの変更点
-    git diff HEAD^ HEAD
+    # 特定コミットの変更点 (diffじゃない...)
+    git show [revision]
+
 
 zshの`EXTENDED_GLOB`が有効になってる場合は
 `HEAD^` がパターン扱いされてエラーになるので、
