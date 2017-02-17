@@ -119,7 +119,7 @@ Hello, World!
 
 <li><p>ターミナルからコンパイル:</p>
 
-<pre><code>% xelatex hello.tex
+<pre><code>% pdflatex hello.tex
 % open hello.pdf
 </code></pre></li>
 </ol>
@@ -354,7 +354,8 @@ e.g., <code>mybibdata.bib</code></li>
 <li><p>さらにもう1回コンパイルして完成</p></li>
 </ol>
 
-<p>適切な <code>Makefile</code> を書いて自動化するべし。</p>
+<p><a href="https://www.ctan.org/pkg/latexmk"><code>latexmk</code></a> を利用するか、
+適切な <code>Makefile</code> を書いて自動化するべし。</p>
 
 <h3 id="文字の修飾">文字の修飾</h3>
 
@@ -429,61 +430,39 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 <h3 id="lualatex">LuaLaTeX</h3>
 
 <ul>
-<li>pdfTeXの後継として、今後のスタンダード</li>
+<li>pdfTeXの後継として、今後のスタンダードと目される</li>
+<li>かなり動作が遅い</li>
+<li><a href="https://www.ctan.org/pkg/luatexja"><code>luatexja</code></a> が精力的に開発されている</li>
 
-<li><p><code>luatexja</code> で日本語を利用可能にする</p>
+<li><p>最初にフォント関連の問題に遭遇するかも</p>
 
 <ul>
-<li>依存: <code>ctablestack</code>, <code>cjk-gs-integrate</code>, <code>jfontmaps</code></li>
-
-<li><p>フォント関連:</p>
-
-<pre><code>% rm -rf ~/Library/texlive/2015basic/texmf-var/luatex-cache/
-% luaotfload-tool -u -v
-</code></pre></li>
+<li>依存パッケージ:
+<code>luaotfload</code>, <code>adobemapping</code>, <code>ctablestack</code>, <code>ipaex</code></li>
 
 <li><p><code>bad argument #1 to 'open'</code> などと怒られる問題は、
-必要な CMap が LuaTeX から見えていないのが原因で、
-<code>adobemapping</code> をインストールして解決。
-確認するには:</p>
+必要な CMap が LuaTeX から見えていないのが原因
+```sh</p>
 
-<pre><code>% kpsewhich -format=cmap UniJIS2004-UTF32-H
-/usr/local/texlive/2015basic/texmf-dist/fonts/cmap/adobemapping/aj16/CMap/UniJIS2004-UTF32-V
-% kpsewhich -format=cmap UniJIS2004-UTF32-V
-/usr/local/texlive/2015basic/texmf-dist/fonts/cmap/adobemapping/aj16/CMap/UniJIS2004-UTF32-V
-% kpsewhich -format=cmap Adobe-Japan1-UCS2
-/usr/local/texlive/2015basic/texmf-dist/fonts/cmap/adobemapping/ToUnicode/Adobe-Japan1-UCS2
-</code></pre></li>
-</ul></li>
+<h2 id="キャッシュを再構築">キャッシュを再構築</h2>
 
-<li><p>El Capitanにおけるヒラギノまわりの更新:</p>
+<p>% rm -rf ~/Library/texlive/2016basic/texmf-var/luatex-cache/
+% luaotfload-tool -u -v</p></li>
+</ul>
 
-<pre><code>% sudo tlmgr install cjk-gs-integrate jfontmaps
-% sudo cjk-gs-integrate --link-texmf --force
-% sudo mktexlsr
-% updmap --setoption kanjiEmbed hiragino-elcapitan-pron
-% kanji-config-updmap hiragino-elcapitan-pron
-</code></pre>
-
-<div class="warning">
-<p>上記の更新をしても、肝心の LuaLaTeX 本体と
-luaotfload が更新されないと結局使えない。
-パンピー使えるようになるのは2016以降になるらしいので、
-しばらく我慢してIPAフォントを使うほかない。</p>
-
-</div>
-</li>
+<p>## 見えてるか確認
+  % kpsewhich -format=cmap UniJIS2004-UTF32-H
+  % kpsewhich -format=cmap UniJIS2004-UTF32-V
+  % kpsewhich -format=cmap Adobe-Japan1-UCS2
+  ```</p></li>
 </ul>
 
 <h3 id="xelatex">XeLaTeX</h3>
 
-<p><a href="http://zrbabbler.sp.land.to/xelatex.html">http://zrbabbler.sp.land.to/xelatex.html</a></p>
-
 <ul>
 <li>BasicTeX に含まれているのでそのまま使える</li>
 <li>OS上にあるOTFやTTFなどのフォントがそのまま使える</li>
-<li>El Capitanでも問題なし</li>
-<li>日本語に特化した pLaTeX 用のツールが使えない</li>
+<li>日本語に特化したツールは開発されていない</li>
 </ul>
 
 <h3 id="uplatex">upLaTeX</h3>
