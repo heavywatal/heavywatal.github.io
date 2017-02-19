@@ -8,7 +8,7 @@
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="icon" href="/favicon-192x192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/favicon-192x192.png" sizes="192x192">
-<title>Boost: ほぼ標準C&#43;&#43;ライブラリ - Heavy Watal</title>
+<title>setuptools: Pythonパッケージ作成 - Heavy Watal</title>
 <meta name="author" content="Watal M. Iwasaki">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://avatars.githubusercontent.com/heavywatal">
@@ -39,13 +39,13 @@ MathJax.Hub.Queue(function() {
  {"@type": "ListItem",
   "position": 1,
   "item": {
-   "@id": "https://heavywatal.github.io/cxx.html",
-   "name": "cxx"}},
+   "@id": "https://heavywatal.github.io/python.html",
+   "name": "python"}},
  {"@type": "ListItem",
   "position": 2,
   "item": {
-   "@id": "https://heavywatal.github.io/cxx/boost.html",
-   "name": "Boost"}}
+   "@id": "https://heavywatal.github.io/python/setuptools.html",
+   "name": "setuptools"}}
 ]}</script>
 
 
@@ -73,105 +73,102 @@ Heavy Watal
 <main>
 <article>
 <header><h1><a href=".">
-Boost — ほぼ標準C&#43;&#43;ライブラリ
+setuptools — Pythonパッケージ作成
 </a></h1>
 <ul class="tags">
-<li><a href="/tags/c&#43;&#43;">c&#43;&#43;</a></li>
+<li><a href="/tags/python">python</a></li>
+<li><a href="/tags/package">package</a></li>
 </ul>
 </header>
 
 
 
 <ul>
-<li><a href="http://www.boost.org/">http://www.boost.org/</a></li>
-<li><a href="http://www.boost.org/doc/libs/release/">http://www.boost.org/doc/libs/release/</a></li>
+<li><a href="https://packaging.python.org/">https://packaging.python.org/</a></li>
+<li><a href="https://setuptools.readthedocs.io/">https://setuptools.readthedocs.io/</a></li>
 </ul>
 
-<h2 id="installation">Installation</h2>
+<h2 id="ファイル構成">ファイル構成</h2>
 
-<h3 id="ソースから">ソースから</h3>
+<p>GitHubから <code>pip</code> で直接インストールできるようにしたい。</p>
 
-<ul>
-<li><a href="http://www.boost.org/doc/libs/release/more/getting_started/unix-variants.html">http://www.boost.org/doc/libs/release/more/getting_started/unix-variants.html</a></li>
-<li><a href="http://www.boost.org/build/">http://www.boost.org/build/</a></li>
-<li><a href="https://boostjp.github.io/howtobuild.html">https://boostjp.github.io/howtobuild.html</a></li>
-</ul>
-
-<p>普通の <code>configure</code> と <code>make</code> じゃないので混乱するけど、まあまあ相同な手順。
-gccとclangの両方から使える統一ライブラリを作るのは難しいらしいので、
-それぞれのコンパイラで別々にビルドしてインストールする。</p>
-
-<ol>
-<li><p><a href="https://sourceforge.net/projects/boost/">https://sourceforge.net/projects/boost/</a> から最新ソースを入手して展開。
-とりあえず <code>boost-jam</code> とか <code>boost-build</code> とかは無視して <code>boost</code> 本体のみで結構:</p>
-
-<pre><code>% wget -O- https://downloads.sourceforge.net/boost/boost_1_63_0.tar.bz2 | tar xj
-% cd boost_1_63_0/
-</code></pre></li>
-
-<li><p>ヘルプを見る <code>./bootstrap.sh --help</code></p></li>
-
-<li><p>ビルドすべきライブラリを考える <code>./bootstrap.sh --show-libraries</code></p></li>
-
-<li><p>適当なオプションを与えて <code>bootstrap.sh</code> を実行:</p>
-
-<pre><code class="language-sh">% ./bootstrap.sh --without-icu --with-libraries=coroutine2,filesystem,graph,iostreams,program_options,serialization,system,test
+<pre><code class="language-sh">% pip install git+https://github.com/heavywatal/pywtl.git
+% python -c 'import wtl; wtl.hello()'
 </code></pre>
 
-<p><code>b2</code> がビルドされ、
-<code>b2</code> に渡すオプションが書かれた <code>project-config.jam</code> が生成される。</p></li>
-
-<li><p>ヘルプを見る <code>./b2 --help</code></p></li>
-
-<li><p><code>~/user-config.jam</code> に <a href="http://www.boost.org/build/doc/html/bbv2/reference/tools.html">ツールセットを定義</a>。
-<code>darwin</code>はMac-gcc用:</p>
-
-<pre><code>using gcc : 14 : g++-6 : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++14 ;
-using darwin : 14 : g++-6 : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++14 ;
-using clang : 14 : clang++ : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++14 -stdlib=libc++ &lt;linkflags&gt;-stdlib=libc++ ;
-</code></pre></li>
-
-<li><p>システム標準zlibをリンクしようとしてエラーになることがあるので、
-<a href="http://zlib.net/">zlib公式</a>からソースを落として展開し、
-<a href="http://www.boost.org/doc/libs/release/libs/iostreams/doc/installation.html">一緒にビルドされるように</a>
-<code>ZLIB_SOURCE</code>をフルパス指定する。</p>
-
-<pre><code>% wget -O- http://zlib.net/zlib-1.2.8.tar.gz | tar xz -C ${HOME}/tmp/build
-% export ZLIB_SOURCE=${HOME}/tmp/build/zlib-1.2.8
-</code></pre></li>
-
-<li><p>ツールセットを指定してビルド:</p>
-
-<pre><code>% ./b2 -j2 toolset=gcc-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2gcc --stagedir=stage/gcc stage
-% ./b2 -j2 toolset=darwin-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2gcc --stagedir=stage/gcc stage
-% ./b2 -j2 toolset=clang-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2clang --stagedir=stage/clang stage
-</code></pre></li>
-
-<li><p>手動でインストール:</p>
-
-<pre><code>% rsync -auv stage/gcc/ ~/local/boost-gcc
-% rsync -auv stage/clang/ ~/local/boost-clang
-% rsync -au boost ~/local/include
-</code></pre></li>
-</ol>
-
-<h3 id="パッケージマネージャで簡単インストール">パッケージマネージャで簡単インストール</h3>
-
-<p>Macなら <a href="/mac/homebrew.html">Homebrew</a> でもインストールできる:</p>
-
-<pre><code>% brew install boost --c++11 --without-single
+<pre><code class="language-sh">pywtl/
+├── LICENSE
+├── README.md
+├── setup.cfg
+├── setup.py
+└── wtl/
+    ├── __init__.py
+    ├── module1.py
+    └── module2.py
 </code></pre>
 
-<p>ただし <code>--layout=tagged</code> になっているため、
-リンクするときは末尾に <code>-mt</code> が必要になる。
-基本的にはclangからのみ利用可能。</p>
+<p>リポジトリ名(<code>pywtl</code>)とパッケージ名(<code>wtl</code>)は必ずしも一致してなくてもよい。</p>
 
-<p>Ubuntuなら <a href="https://launchpad.net/~boost-latest/+archive/ppa">ppa:boost-latest/ppa</a>
-リポジトリを加えて <code>libboost*-dev</code> を適当にインストール:</p>
+<h3 id="setup-py"><code>setup.py</code></h3>
 
-<pre><code>% sudo add-apt-repository ppa:boost-latest/ppa
-% sudo apt-get update
-% apt-cache search libboost.*-all-dev
+<p>新しいsetuptoolsでは <code>setup.cfg</code> の設定を読み込んでくれるので、
+<code>setup()</code> の引数にいろいろ渡す必要は無くなった。</p>
+
+<pre><code class="language-py">from setuptools import setup
+setup()
+</code></pre>
+
+<h3 id="setup-cfg"><code>setup.cfg</code></h3>
+
+<p><a href="https://setuptools.readthedocs.io/en/latest/setuptools.html#configuring-setup-using-setup-cfg-files">https://setuptools.readthedocs.io/en/latest/setuptools.html#configuring-setup-using-setup-cfg-files</a></p>
+
+<pre><code class="language-ini">[metadata]
+name = wtl
+version = 0.1
+url = https://github.com/heavywatal/pywtl
+author = Watal M. Iwasaki
+author_email = heavy.watalあgmail.com
+license = MIT
+description = wtl: Personal Python package
+
+[options]
+zip_safe = False
+packages = find:
+</code></pre>
+
+<p><code>license = file: LICENSE</code> や <code>long_description = file: README.md</code>
+のように外部ファイルを参照することも可能。</p>
+
+<h3 id="ソースコード">ソースコード</h3>
+
+<p><code>wtl/__init__.py</code></p>
+
+<pre><code class="language-py">def hello():
+    print('Hello, world!')
+</code></pre>
+
+<h3 id="manifest-in"><code>MANIFEST.in</code></h3>
+
+<p>Pythonモジュール以外で配布物に含めたいもの、除外したいものがあれば
+<code>include</code>, <code>recursive-include</code>, <code>exclude</code>
+で指定する。</p>
+
+<h2 id="setuptools">setuptools</h2>
+
+<p><a href="https://setuptools.readthedocs.io/en/latest/setuptools.html#command-reference">Command Reference</a></p>
+
+<pre><code class="language-sh">python setup.py --help
+python setup.py --help-commands
+python setup.py ^i  # zsh completion
+
+# 開発中に使う
+python setup.py build
+python setup.py clean
+python setup.py check
+
+# 配布できる形に固める
+python setup.py sdist
+python setup.py bdist_wheel
 </code></pre>
 
 </article>
@@ -211,8 +208,8 @@ using clang : 14 : clang++ : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++1
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
 
-<input type="checkbox" id="menu-python">
-<label for="menu-python">Python</label>
+<input type="checkbox" id="menu-python" checked>
+<label for="menu-python" class="active">Python</label>
 <ul>
 <li><a href="/python/install.html">Installation</a></li>
 <li><a href="/python/pip.html">pip</a></li>
@@ -223,13 +220,13 @@ using clang : 14 : clang++ : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++1
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
-<li><a href="/python/setuptools.html">setuptools</a></li>
+<li class="active"><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
-<input type="checkbox" id="menu-cxx" checked>
-<label for="menu-cxx" class="active">C&#43;&#43;</label>
+<input type="checkbox" id="menu-cxx">
+<label for="menu-cxx">C&#43;&#43;</label>
 <ul>
-<li class="active"><a href="/cxx/boost.html">Boost</a></li>
+<li><a href="/cxx/boost.html">Boost</a></li>
 <li><a href="/cxx/getopt.html">C&#43;&#43;コマンドライン引数</a></li>
 <li><a href="/cxx/speed.html">C&#43;&#43;高速化</a></li>
 <li><a href="/cxx/clang.html">clang / llvm</a></li>
