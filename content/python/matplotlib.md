@@ -6,21 +6,22 @@ tags = ["python", "graph"]
   parent = "python"
 +++
 
-<http://matplotlib.org/>
+- <http://matplotlib.org/>
+- <https://seaborn.pydata.org/>
 
 行列を含む数値計算やグラフ描画を行うためのソフトウェアとしては
-有償の [MATLAB](http://www.mathworks.com/products/matlab/) が広く利用されているが、
+有償のMATLABが広く利用されているが、
 Python にいくつかのモジュールを導入することで
 同等かそれ以上のことを無料で実現することができる。
 
--   `numpy`: 配列演算や基本的な数学関数
--   `scipy`: 高度な科学技術計算
--   `matplotlib`: グラフ描画
--   `ipython`: 高機能なシェル環境
--   `pylab`: これらを組み合わせてMATLABっぽいインターフェイスにする(不要)
+- `numpy`: 配列演算や基本的な数学関数
+- `scipy`: 高度な科学技術計算
+- `matplotlib`: グラフ描画
+- `ipython`: 高機能なシェル環境
+- `pylab`: これらを組み合わせてMATLABっぽいインターフェイスにする(不要)
 
 直接 `matplotlib` を触るのは大変なので、
-`seaborn` というラッパーを介して使う。
+[`seaborn`](https://seaborn.pydata.org/) というラッパーを介して使う。
 ただし `matplotlib` を全く知らずに `seaborn` を使うのは無理っぽい。
 [ggplot2]({{< relref "rstats/ggplot2.md" >}}) は `grid` を知らなくても使えるのに。。。
 
@@ -57,7 +58,7 @@ fig.savefig('example.png')
 
 ## Style
 
-<http://stanford.edu/~mwaskom/software/seaborn/tutorial/aesthetics.html>
+<https://seaborn.pydata.org/tutorial/aesthetics.html>
 
 背景色や補助線などの設定。
 
@@ -112,7 +113,7 @@ fig.savefig('example.png')
 
 ## Context
 
-<http://stanford.edu/~mwaskom/software/seaborn/tutorial/aesthetics.html#scaling-plot-elements-with-plotting-context-and-set-context>
+<https://seaborn.pydata.org/tutorial/aesthetics.html#scaling-plot-elements-with-plotting-context-and-set-context>
 
 ラベルや点・線などのスケール調整。
 
@@ -152,7 +153,7 @@ fig.savefig('example.png')
 
 ## Color
 
-<http://stanford.edu/~mwaskom/software/seaborn/tutorial/color_palettes.html>
+<https://seaborn.pydata.org/tutorial/color_palettes.html>
 
 個々の描画関数の `palette` や `cmap` に指定するか、
 `with sns.color_palette():` のブロック内で描画するか、
@@ -181,11 +182,11 @@ fig.savefig('example.png')
 
 ## Plot
 
--   <http://stanford.edu/~mwaskom/software/seaborn/tutorial/regression.html>
--   <http://stanford.edu/~mwaskom/software/seaborn/tutorial/distributions.html>
--   <http://stanford.edu/~mwaskom/software/seaborn/tutorial/categorical.html>
--   <http://stanford.edu/~mwaskom/software/seaborn/examples/index.html>
--   <http://matplotlib.org/users/screenshots.html>
+- <https://seaborn.pydata.org/tutorial/regression.html>
+- <https://seaborn.pydata.org/tutorial/distributions.html>
+- <https://seaborn.pydata.org/tutorial/categorical.html>
+- <https://seaborn.pydata.org/examples/index.html>
+- <http://matplotlib.org/users/screenshots.html>
 
 ### Axes-level plot
 
@@ -241,7 +242,7 @@ Grid に Axes-level plot を乗せて返す高レベル関数。
 
 ## Grid
 
-<http://stanford.edu/~mwaskom/software/seaborn/tutorial/axis_grids.html>
+<https://seaborn.pydata.org/tutorial/axis_grids.html>
 
 ### `sns.FacetGrid(data, row, col, hue, col_wrap, sharex, sharey, ...)`
 
@@ -326,11 +327,9 @@ ax_ltop = plt.subplot(gsl[0])
 
 ### 設定
 
-<http://matplotlib.org/users/customizing.html>
-
-<http://matplotlib.org/faq/troubleshooting_faq.html>
-
-<http://matplotlib.org/faq/environment_variables_faq.html>
+- <http://matplotlib.org/users/customizing.html>
+- <http://matplotlib.org/faq/troubleshooting_faq.html>
+- <http://matplotlib.org/faq/environment_variables_faq.html>
 
 `~/.matplotlib/matplotlibrc` が読まれる。
 
@@ -363,7 +362,7 @@ Macで非Frameworkとしてインストールした自前Pythonを使うと怒�
 
 ### ラッパー
 
--   `seaborn`: <http://stanford.edu/~mwaskom/software/seaborn/>
+-   `seaborn`: <https://seaborn.pydata.org/>
 -   easyplot: <https://github.com/HamsterHuey/easyplot>
 -   prettyplotlib: <http://blog.olgabotvinnik.com/prettyplotlib/>
 -   uglyplotlib: <https://gitlab.com/padawanphysicist/uglyplotlib>
