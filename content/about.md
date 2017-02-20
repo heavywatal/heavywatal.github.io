@@ -58,22 +58,28 @@ July 2010 - March 2013
 
 **Papers**
 
--   Takahiro Yamanoi and **Watal M. Iwasaki**. 2015
-    Origami Bird Simulator: a teaching resource linking natural selection and speciation.
-    *Evolution: Education and Outreach* **8**:14
-    [Open Access] <https://dx.doi.org/10.1186/s12052-015-0043-6>
--   Hajime Wakasa, Antonio Cádiz, Lázaro M. Echenique-Díaz, **Watal M. Iwasaki**, Namiko Kamiyama, Yuki Nishimura, Hitoshi Yokoyama, Koji Tamura, and Masakado Kawata. 2015.
-    Developmental stages for the divergence of relative limb length between a twig and a trunk-ground *Anolis* lizard species.
-    *Journal of Experimental Zoology Part B: Molecular and Developmental Evolution* **324** 5: 410--423
-    <http://dx.doi.org/10.1002/jez.b.22627>
--   Tezuka, A., S. Kasagi, C. van Oosterhout, M. McMullan, **W. M. Iwasaki**, D. Kasai, M. Yamamichi, H. Innan, S. Kawamura, and M. Kawata. 2014.
-    Divergent selection on opsin gene variation in guppy (*Poecilia reticulata*) populations of Trinidad and Tobago.
-    *Heredity* **113**: 381--389
-    <https://dx.doi.org/10.1038/hdy.2014.35>
--   **Watal M. Iwasaki**, Masaki E. Tsuda, Masakado Kawata. 2013.
-    Genetic and environmental factors affecting cryptic variations in gene regulatory networks.
-    *BMC Evol. Biol.* **13**:91
-    [Open Access] <https://dx.doi.org/10.1186/1471-2148-13-91>
+- **Watal M. Iwasaki** and Hideki Innan. 2017.
+  Simulation Framework for Generating Intratumor Heterogeneity Patterns in a Cancer Cell Population.
+  [*bioRxiv preprint*](https://doi.org/10.1101/109801)
+- Satoshi Tamate\*, **Watal M. Iwasaki**\* (equally contributed), Kenneth L. Krysko, Brian Composano, Hideaki Mori, Ryo Funayama, Keiko Nakayama, Takashi Makino and Masakado Kawata. 2017.
+  The evolutionary responses of *Anolis carolinensis* introduced into Ogasawara archipelago during 50 years.
+  (*submitted*)
+- Takahiro Yamanoi and **Watal M. Iwasaki**. 2015.
+  Origami Bird Simulator: a teaching resource linking natural selection and speciation.
+  *Evolution: Education and Outreach* **8**:14
+  [Open Access] <https://dx.doi.org/10.1186/s12052-015-0043-6>
+- Hajime Wakasa, Antonio Cádiz, Lázaro M. Echenique-Díaz, **Watal M. Iwasaki**, Namiko Kamiyama, Yuki Nishimura, Hitoshi Yokoyama, Koji Tamura, and Masakado Kawata. 2015.
+  Developmental stages for the divergence of relative limb length between a twig and a trunk-ground *Anolis* lizard species.
+  *Journal of Experimental Zoology Part B: Molecular and Developmental Evolution* **324** 5: 410--423
+  <http://dx.doi.org/10.1002/jez.b.22627>
+- Tezuka, A., S. Kasagi, C. van Oosterhout, M. McMullan, **W. M. Iwasaki**, D. Kasai, M. Yamamichi, H. Innan, S. Kawamura, and M. Kawata. 2014.
+  Divergent selection on opsin gene variation in guppy (*Poecilia reticulata*) populations of Trinidad and Tobago.
+  *Heredity* **113**: 381--389
+  <https://dx.doi.org/10.1038/hdy.2014.35>
+- **Watal M. Iwasaki**, Masaki E. Tsuda, Masakado Kawata. 2013.
+  Genetic and environmental factors affecting cryptic variations in gene regulatory networks.
+  *BMC Evol. Biol.* **13**:91
+  [Open Access] <https://dx.doi.org/10.1186/1471-2148-13-91>
 
 **Book Chapters**
 
