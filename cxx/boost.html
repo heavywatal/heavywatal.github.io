@@ -131,40 +131,44 @@ using darwin : 14 : g++-6 : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++14
 using clang : 14 : clang++ : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++14 -stdlib=libc++ &lt;linkflags&gt;-stdlib=libc++ ;
 </code></pre></li>
 
-<li><p>システム標準zlibをリンクしようとしてエラーになることがあるので、
+<li><p>システム標準zlibをリンクしようとしてエラーになるような場合は、
 <a href="http://zlib.net/">zlib公式</a>からソースを落として展開し、
 <a href="http://www.boost.org/doc/libs/release/libs/iostreams/doc/installation.html">一緒にビルドされるように</a>
 <code>ZLIB_SOURCE</code>をフルパス指定する。</p>
 
-<pre><code>% wget -O- http://zlib.net/zlib-1.2.8.tar.gz | tar xz -C ${HOME}/tmp/build
+<pre><code class="language-sh">% wget -O- http://zlib.net/zlib-1.2.8.tar.gz | tar xz -C ${HOME}/tmp/build
 % export ZLIB_SOURCE=${HOME}/tmp/build/zlib-1.2.8
 </code></pre></li>
 
 <li><p>ツールセットを指定してビルド:</p>
 
-<pre><code>% ./b2 -j2 toolset=gcc-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2gcc --stagedir=stage/gcc stage
+<pre><code class="language-sh">% ./b2 -j2 toolset=gcc-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2gcc --stagedir=stage/gcc stage
 % ./b2 -j2 toolset=darwin-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2gcc --stagedir=stage/gcc stage
 % ./b2 -j2 toolset=clang-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2clang --stagedir=stage/clang stage
 </code></pre></li>
 
-<li><p>手動でインストール:</p>
+<li><p>prefixを指定してインストール:</p>
 
-<pre><code>% rsync -auv stage/gcc/ ~/local/boost-gcc
+<pre><code class="language-sh">% ./b2 -j2 toolset=gcc-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2gcc --stagedir=stage/gcc --prefix=${HOME}/local install
+</code></pre>
+
+<p>あるいは手動でインストール:</p>
+
+<pre><code class="language-sh">% rsync -auv stage/gcc/ ~/local/boost-gcc
 % rsync -auv stage/clang/ ~/local/boost-clang
-% rsync -au boost ~/local/include
+% rsync -auv boost ~/local/include
 </code></pre></li>
 </ol>
 
 <h3 id="パッケージマネージャで簡単インストール">パッケージマネージャで簡単インストール</h3>
 
-<p>Macなら <a href="/mac/homebrew.html">Homebrew</a> でもインストールできる:</p>
+<p><a href="/mac/homebrew.html">Homebrew</a>/Linuxbrew でもインストールできる:</p>
 
 <pre><code>% brew install boost --c++11 --without-single
 </code></pre>
 
 <p>ただし <code>--layout=tagged</code> になっているため、
-リンクするときは末尾に <code>-mt</code> が必要になる。
-基本的にはclangからのみ利用可能。</p>
+リンクするときは末尾に <code>-mt</code> が必要になる。</p>
 
 <p>Ubuntuなら <a href="https://launchpad.net/~boost-latest/+archive/ppa">ppa:boost-latest/ppa</a>
 リポジトリを加えて <code>libboost*-dev</code> を適当にインストール:</p>
