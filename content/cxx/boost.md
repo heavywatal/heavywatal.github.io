@@ -51,39 +51,42 @@ gccとclangの両方から使える統一ライブラリを作るのは難しい
     using clang : 14 : clang++ : <compileflags>-fPIC <cxxflags>-std=c++14 -stdlib=libc++ <linkflags>-stdlib=libc++ ;
     ```
 
-7.  システム標準zlibをリンクしようとしてエラーになることがあるので、
+7.  システム標準zlibをリンクしようとしてエラーになるような場合は、
     [zlib公式](http://zlib.net/)からソースを落として展開し、
     [一緒にビルドされるように]
     (http://www.boost.org/doc/libs/release/libs/iostreams/doc/installation.html)
     `ZLIB_SOURCE`をフルパス指定する。
-    ```
+    ```sh
     % wget -O- http://zlib.net/zlib-1.2.8.tar.gz | tar xz -C ${HOME}/tmp/build
     % export ZLIB_SOURCE=${HOME}/tmp/build/zlib-1.2.8
     ```
 
 8.  ツールセットを指定してビルド:
-    ```
+    ```sh
     % ./b2 -j2 toolset=gcc-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2gcc --stagedir=stage/gcc stage
     % ./b2 -j2 toolset=darwin-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2gcc --stagedir=stage/gcc stage
     % ./b2 -j2 toolset=clang-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2clang --stagedir=stage/clang stage
     ```
 
-9.  手動でインストール:
+9.  prefixを指定してインストール:
+    ```sh
+    % ./b2 -j2 toolset=gcc-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2gcc --stagedir=stage/gcc --prefix=${HOME}/local install
     ```
+    あるいは手動でインストール:
+    ```sh
     % rsync -auv stage/gcc/ ~/local/boost-gcc
     % rsync -auv stage/clang/ ~/local/boost-clang
-    % rsync -au boost ~/local/include
+    % rsync -auv boost ~/local/include
     ```
 
 ### パッケージマネージャで簡単インストール
 
-Macなら [Homebrew]({{< relref "mac/homebrew.md" >}}) でもインストールできる:
+[Homebrew]({{< relref "mac/homebrew.md" >}})/Linuxbrew でもインストールできる:
 
     % brew install boost --c++11 --without-single
 
 ただし `--layout=tagged` になっているため、
 リンクするときは末尾に `-mt` が必要になる。
-基本的にはclangからのみ利用可能。
 
 Ubuntuなら [ppa:boost-latest/ppa](https://launchpad.net/~boost-latest/+archive/ppa)
 リポジトリを加えて `libboost*-dev` を適当にインストール:
