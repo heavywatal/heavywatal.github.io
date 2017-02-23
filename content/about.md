@@ -29,7 +29,7 @@ Email:
 Find me on
 : <a rel="me" href="https://github.com/heavywatal">GitHub</a>,
   <a rel="me" href="https://www.facebook.com/heavy.watal">Facebook</a>,
-  <a rel="me" href="https://twitter.com/heavy_watal">Twitter</a>,
+  <a rel="me" href="https://twitter.com/heavywatal">Twitter</a>,
   <a rel="me" href="https://plus.google.com/u/0/+WatalMIwasaki">Google+</a>,
   <a rel="me" href="skype:heavy.watal?userinfo">Skype</a>,
   [Amazonほしい物リスト](https://www.amazon.co.jp/wishlist/Z62OJBP7VCNP)
