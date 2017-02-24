@@ -97,3 +97,8 @@ Macなら `system_profiler` 。でもたぶんIntelとPPCは書き方が違う�
 && CORES=$(grep cpuid /proc/cpuinfo | wc -l)
 || CORES=system_profiler | grep Cores | awk '{print $5}'
 ```
+
+
+## 関連書籍
+
+<a href="https://www.amazon.co.jp/%E6%96%B0%E3%81%97%E3%81%84Linux%E3%81%AE%E6%95%99%E7%A7%91%E6%9B%B8-%E5%A4%A7%E8%A7%92-%E7%A5%90%E4%BB%8B/dp/4797380942/ref=as_li_ss_il?ie=UTF8&qid=1487931139&sr=8-2&keywords=linux&linkCode=li3&tag=heavywatal-22&linkId=2c6b6bd4a39dec96e1c6caed3bc52116" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4797380942&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4797380942" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
