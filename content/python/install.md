@@ -1,17 +1,23 @@
 +++
-title = 'Installation'
+title = 'Pythonインストール'
 tags = ["python"]
 [menu.main]
   parent = "python"
   weight = -99
 +++
 
-<https://www.python.org/downloads/>
-
-## Installer
+## 標準・公式
 
 MacやLinuxならシステムの一部として
-`/usr/bin/python` が既にインストールされているので基本的にはそれを使えばよい。
+`/usr/bin/python` が既にインストールされているので、
+何もしなくても使える。
+違うバージョンを使いたければ
+[python.org公式のインストーラ](https://www.python.org/downloads/)
+で入れるのも悪くない。
+
+
+## Anaconda
+
 Scientificな用途で使いたい場合は
 [Numpy/Scipy]({{< relref "scipy.md" >}})
 などの主要パッケージもまとめて面倒みてくれる
@@ -22,9 +28,27 @@ GUIもあってかなり親切だが、
 それが気になる人は
 [pyenv](https://github.com/yyuu/pyenv)
 越しに入れることで汚染を防げる。
+全部入りに抵抗がある場合はMinicondaで小さくスタートすることも可能。
+
+例えば Homebrew + pyenv + Miniconda で基本的な環境を整える手順:
+
+```sh
+% brew install pyenv
+% exec ${SHELL} -l
+% pyenv install -l | less
+% pyenv install miniconda3-latest
+% pyenv global minoconda3-latest
+% exec ${SHELL} -l
+% python --version
+% conda install seaborn biopython flake8
+```
+
+その後のパッケージ管理も `conda` で。
 
 
 ## Source
+
+万がいちソースコードからビルドしたい場合の手順
 
 1.  必要なパッケージをインストールしておく:
 
@@ -46,11 +70,11 @@ GUIもあってかなり親切だが、
 
 2.  ダウンロードして展開:
 
-        % wget -O- https://www.python.org/ftp/python/3.5.1/Python-3.5.1.tar.xz | tar xJ
+        % wget -O- https://www.python.org/ftp/python/3.5.3/Python-3.5.3.tar.xz | tar xJ
 
 3.  configure してビルド:
     ```sh
-    % cd Python-3.5.1/
+    % cd Python-3.5.3/
     % ./configure --help
     % ./configure --prefix=${HOME}/.virtualenv/Python
     % make
@@ -128,7 +152,7 @@ See [pip]({{< relref "pip.md" >}})
 対話モードをさらに便利にするには [IPython]({{< relref "ipython.md" >}}) を使う。
 
 
-## 書籍
+## 関連書籍
 
 <a href="https://www.amazon.co.jp/dp/479738946X/ref=as_li_ss_il?ie=UTF8&qid=1485612008&sr=8-6&keywords=python&linkCode=li3&tag=heavywatal-22&linkId=5ea5e48ecc83b9439f21406b6f57c062" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=479738946X&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=479738946X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 <a href="https://www.amazon.co.jp/IPython%E3%83%87%E3%83%BC%E3%82%BF%E3%82%B5%E3%82%A4%E3%82%A8%E3%83%B3%E3%82%B9%E3%82%AF%E3%83%83%E3%82%AF%E3%83%96%E3%83%83%E3%82%AF-%E5%AF%BE%E8%A9%B1%E5%9E%8B%E3%82%B3%E3%83%B3%E3%83%94%E3%83%A5%E3%83%BC%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%A8%E5%8F%AF%E8%A6%96%E5%8C%96%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AE%E3%83%AC%E3%82%B7%E3%83%94%E9%9B%86-Cyrille-Rossant/dp/4873117488/ref=as_li_ss_il?_encoding=UTF8&psc=1&refRID=X16VFSS3W75RMTG7VGCH&linkCode=li3&tag=heavywatal-22&linkId=b79e2290571289b02621392257a4ac1c" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873117488&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4873117488" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
