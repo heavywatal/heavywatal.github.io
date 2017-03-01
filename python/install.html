@@ -111,13 +111,18 @@ GUIもあってかなり親切だが、
 % exec ${SHELL} -l
 % pyenv install -l | less
 % pyenv install miniconda3-latest
-% pyenv global minoconda3-latest
-% exec ${SHELL} -l
+% pyenv global miniconda3-latest
+% eval &quot;$(pyenv init -)&quot;
 % python --version
 % conda install seaborn biopython flake8
 </code></pre>
 
-<p>その後のパッケージ管理も <code>conda</code> で。</p>
+<p>その後のパッケージ管理も <code>conda</code> で。
+<code>eval &quot;$(pyenv init -)&quot;</code> をシェル起動時に自動で行うために、
+<code>~/.zshrc</code> 的なファイルに下のようなコマンドを追加しておく。</p>
+
+<pre><code class="language-sh">if which pyenv &gt;/dev/null; then eval &quot;$(pyenv init -)&quot;; fi
+</code></pre>
 
 <h2 id="source">Source</h2>
 
