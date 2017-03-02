@@ -92,7 +92,8 @@ https://github.com/hadley/purrr
 
 `purrr::keep(.x, .p, ...)`, `discard()`, `compact()`
 : listやvectorの要素を `.p` に応じて取捨選択。
-  わざわざ関数にするほどでもない気もするが、パイプラインで使いやすい形。
+  `.p` に関数を渡した場合の挙動は
+  `.x[.p(.x)]` じゃなくて `.x[map_lgl(.x, .p, ...)]` となることに注意。
 
 `purrr::split_by(.x, .f, ...)`, `order_by()`, `sort_by()`
 : listやvectorを `.f` に応じて切ったり並べ替えたり。
