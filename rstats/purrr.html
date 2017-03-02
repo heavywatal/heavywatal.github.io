@@ -158,7 +158,8 @@ C++でいう<code>std::partial_sum()</code>。</dd>
 のほうが標準の<code>unlist()</code>よりも安心。</dd>
 <dt><code>purrr::keep(.x, .p, ...)</code>, <code>discard()</code>, <code>compact()</code></dt>
 <dd>listやvectorの要素を <code>.p</code> に応じて取捨選択。
-わざわざ関数にするほどでもない気もするが、パイプラインで使いやすい形。</dd>
+<code>.p</code> に関数を渡した場合の挙動は
+<code>.x[.p(.x)]</code> じゃなくて <code>.x[map_lgl(.x, .p, ...)]</code> となることに注意。</dd>
 <dt><code>purrr::split_by(.x, .f, ...)</code>, <code>order_by()</code>, <code>sort_by()</code></dt>
 <dd>listやvectorを <code>.f</code> に応じて切ったり並べ替えたり。</dd>
 </dl>
