@@ -106,8 +106,9 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
 
 `dplyr::distinct(.data, ..., .keep_all=FALSE)`
 :   指定した列に関してユニークな行のみ返す。
-    `filter(!duplicated(.[, ...]))` をよりスマートに。
-    指定しなかった列も残すには `.keep_all=TRUE` が必要。
+    `base::unique.data.frame()` よりも高速で、
+    `filter(!duplicated(.[, ...]))` よりスマートで柔軟。
+    指定しなかった列を残すには `.keep_all=TRUE` とする。
     ```r
     > iris %>% dplyr::distinct(Species)
          Species
