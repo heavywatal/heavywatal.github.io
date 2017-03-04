@@ -356,6 +356,7 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
       `luaotfload`, `adobemapping`, `ctablestack`, `ipaex`
     - `bad argument #1 to 'open'` などと怒られる問題は、
       必要な CMap が LuaTeX から見えていないのが原因
+
       ```sh
       ## キャッシュを再構築
       % rm -rf ~/Library/texlive/2016basic/texmf-var/luatex-cache/
