@@ -439,22 +439,19 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 <ul>
 <li>依存パッケージ:
 <code>luaotfload</code>, <code>adobemapping</code>, <code>ctablestack</code>, <code>ipaex</code></li>
-
-<li><p><code>bad argument #1 to 'open'</code> などと怒られる問題は、
-必要な CMap が LuaTeX から見えていないのが原因
-```sh</p>
-
-<h2 id="キャッシュを再構築">キャッシュを再構築</h2>
-
-<p>% rm -rf ~/Library/texlive/2016basic/texmf-var/luatex-cache/
-% luaotfload-tool -u -v</p></li>
+<li><code>bad argument #1 to 'open'</code> などと怒られる問題は、
+必要な CMap が LuaTeX から見えていないのが原因</li>
 </ul>
 
-<p>## 見えてるか確認
+<pre><code class="language-sh">  ## キャッシュを再構築
+  % rm -rf ~/Library/texlive/2016basic/texmf-var/luatex-cache/
+  % luaotfload-tool -u -v
+
+  ## 見えてるか確認
   % kpsewhich -format=cmap UniJIS2004-UTF32-H
   % kpsewhich -format=cmap UniJIS2004-UTF32-V
   % kpsewhich -format=cmap Adobe-Japan1-UCS2
-  ```</p></li>
+</code></pre></li>
 </ul>
 
 <h3 id="xelatex">XeLaTeX</h3>
