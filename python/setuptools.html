@@ -99,12 +99,12 @@ setuptools — Pythonパッケージ作成
 <pre><code class="language-sh">pywtl/
 ├── LICENSE
 ├── README.md
+├── entry_points.cfg
 ├── setup.cfg
 ├── setup.py
 └── wtl/
     ├── __init__.py
-    ├── module1.py
-    └── module2.py
+    └── hello.py
 </code></pre>
 
 <p>リポジトリ名(<code>pywtl</code>)とパッケージ名(<code>wtl</code>)は必ずしも一致してなくてもよい。</p>
@@ -130,20 +130,46 @@ author = Watal M. Iwasaki
 author_email = heavy.watalあgmail.com
 license = MIT
 description = wtl: Personal Python package
+long_description = file: README.md
 
 [options]
 zip_safe = False
 packages = find:
+entry_points = file: entry_points.cfg
 </code></pre>
 
-<p><code>license = file: LICENSE</code> や <code>long_description = file: README.md</code>
-のように外部ファイルを参照することも可能。</p>
+<p><code>license = file: LICENSE</code> のように外部ファイルを参照することも可能。</p>
+
+<h3 id="entry-points"><code>entry_points</code></h3>
+
+<ul>
+<li><a href="https://setuptools.readthedocs.io/en/latest/setuptools.html#automatic-script-creation">https://setuptools.readthedocs.io/en/latest/setuptools.html#automatic-script-creation</a></li>
+<li><a href="https://packaging.python.org/distributing/#entry-points">https://packaging.python.org/distributing/#entry-points</a></li>
+</ul>
+
+<p>用途はいろいろあるけど
+<code>${prefix}/bin/</code> に実行可能スクリプトを配置するのによく使われる。
+設定は下記のように別ファイル <code>entry_points.cfg</code> として
+<code>setup.cfg</code> から読ませるのが楽チン。</p>
+
+<pre><code class="language-ini">[console_scripts]
+hello.py = wtl.hello:main
+</code></pre>
+
+<p>引数を取らない関数のみ利用可能。
+コマンドライン引数を処理したい場合は <code>argparse</code> が有効。</p>
 
 <h3 id="ソースコード">ソースコード</h3>
 
-<p><code>wtl/__init__.py</code></p>
+<dl>
+<dt><code>wtl/__init__.py</code></dt>
+<dd>このディレクトリがひとつのパッケージであることを示すファイル。
+空でもいいし、初期化処理やオブジェクトを記述してもよい。</dd>
+</dl>
 
-<pre><code class="language-py">def hello():
+<p><code>wtl/hello.py</code></p>
+
+<pre><code class="language-py">def main():
     print('Hello, world!')
 </code></pre>
 
