@@ -22,12 +22,12 @@ GitHubから `pip` で直接インストールできるようにしたい。
 pywtl/
 ├── LICENSE
 ├── README.md
+├── entry_points.cfg
 ├── setup.cfg
 ├── setup.py
 └── wtl/
     ├── __init__.py
-    ├── module1.py
-    └── module2.py
+    └── hello.py
 ```
 
 リポジトリ名(`pywtl`)とパッケージ名(`wtl`)は必ずしも一致してなくてもよい。
@@ -56,22 +56,44 @@ author = Watal M. Iwasaki
 author_email = heavy.watalあgmail.com
 license = MIT
 description = wtl: Personal Python package
+long_description = file: README.md
 
 [options]
 zip_safe = False
 packages = find:
+entry_points = file: entry_points.cfg
 ```
 
-`license = file: LICENSE` や `long_description = file: README.md`
-のように外部ファイルを参照することも可能。
+`license = file: LICENSE` のように外部ファイルを参照することも可能。
+
+### `entry_points`
+
+- https://setuptools.readthedocs.io/en/latest/setuptools.html#automatic-script-creation
+- https://packaging.python.org/distributing/#entry-points
+
+用途はいろいろあるけど
+`${prefix}/bin/` に実行可能スクリプトを配置するのによく使われる。
+設定は下記のように別ファイル `entry_points.cfg` として
+`setup.cfg` から読ませるのが楽チン。
+
+```ini
+[console_scripts]
+hello.py = wtl.hello:main
+```
+
+引数を取らない関数のみ利用可能。
+コマンドライン引数を処理したい場合は `argparse` が有効。
 
 
 ### ソースコード
 
 `wtl/__init__.py`
+: このディレクトリがひとつのパッケージであることを示すファイル。
+  空でもいいし、初期化処理やオブジェクトを記述してもよい。
 
+`wtl/hello.py`
 ```py
-def hello():
+def main():
     print('Hello, world!')
 ```
 
