@@ -11,12 +11,7 @@ tags = ["python", "package"]
 
 ## ファイル構成
 
-GitHubから `pip` で直接インストールできるようにしたい。
-
-```sh
-% pip install git+https://github.com/heavywatal/pywtl.git
-% python -c 'import wtl; wtl.hello()'
-```
+GitHubやローカルの開発環境から `pip` で直接インストールできる形。
 
 ```sh
 pywtl/
@@ -31,6 +26,14 @@ pywtl/
 ```
 
 リポジトリ名(`pywtl`)とパッケージ名(`wtl`)は必ずしも一致してなくてもよい。
+ローカルからのインストールは `-e,--editable`
+オプションを付けることで余計なコピーを減らせるっぽい。
+
+```sh
+% pip install -v -e ~/git/pywtl/
+% pip install -v git+https://github.com/heavywatal/pywtl.git
+% python -m wtl.hello
+```
 
 
 ### `setup.py`
@@ -72,7 +75,7 @@ entry_points = file: entry_points.cfg
 - https://packaging.python.org/distributing/#entry-points
 
 用途はいろいろあるけど
-`${prefix}/bin/` に実行可能スクリプトを配置するのによく使われる。
+`${prefix}/bin/` に実行可能ファイルを配置するのによく使われる。
 設定は下記のように別ファイル `entry_points.cfg` として
 `setup.cfg` から読ませるのが楽チン。
 
@@ -82,7 +85,8 @@ hello.py = wtl.hello:main
 ```
 
 引数を取らない関数のみ利用可能。
-コマンドライン引数を処理したい場合は `argparse` が有効。
+コマンドライン引数を処理したい場合は標準の
+[`argparse`](https://docs.python.org/3/library/argparse.html) が有効。
 
 
 ### ソースコード
@@ -90,12 +94,27 @@ hello.py = wtl.hello:main
 `wtl/__init__.py`
 : このディレクトリがひとつのパッケージであることを示すファイル。
   空でもいいし、初期化処理やオブジェクトを記述してもよい。
+  `__version__` 変数を定義すべしという記述も見かけるが、
+  `setup.cfg` との兼ね合いも考えると、どうしたもんか悩ましい。
 
 `wtl/hello.py`
 ```py
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+Sample module
+"""
+
+
 def main():
-    print('Hello, world!')
+    import getpass
+    print('Hello, ' + getpass.getuser() + '!')
+
+
+if __name__ == '__main__':
+    main()
 ```
+
 
 ### `MANIFEST.in`
 
