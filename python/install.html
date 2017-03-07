@@ -197,37 +197,40 @@ Homebrewで入れたライブラリを利用する場合は明示的に位置指
 </code></pre></li>
 </ol>
 
-<h2 id="環境設定">環境設定</h2>
+<h2 id="環境変数">環境変数</h2>
 
-<h3 id="パッケージ管理">パッケージ管理</h3>
+<p><a href="https://docs.python.org/3/using/cmdline.html#environment-variables">https://docs.python.org/3/using/cmdline.html#environment-variables</a></p>
 
-<p>See <a href="/python/pip.html">pip</a></p>
+<p>シェルの設定ファイル(<code>~/.zshrc</code> とか)で <code>export</code> しておく。
+一時的に無効したいときは <code>python -E</code> で起動。</p>
 
 <h3 id="pythonpath"><code>PYTHONPATH</code></h3>
 
-<p>自分で書いたプログラムをいつでも <code>import</code> できるようにする。</p>
+<p><code>import</code> の探索パス (<code>sys.path</code>) の先頭付近に場所を追加できる。
+例えば自分で書いたモジュールやパッケージの置き場所を指定しておけば、
+いつでも優先的に <code>import</code> できるようになる。</p>
 
-<ul>
-<li>ファイルはまとめて <code>~/local/lib/python/</code> 以下に置く</li>
+<h3 id="pythonuserbase"><code>PYTHONUSERBASE</code></h3>
 
-<li><p>環境変数 <code>PYTHONPATH</code> にそのディレクトリを指定する。
-例えば <code>.zshenv</code> に以下のように記述するとか:</p>
+<p><a href="/python/pip.html"><code>pip install</code></a> や <code>setup.py install</code> における
+<code>--user</code> オプションの目的地を指定できる。
+デフォルトでは <code>~/.local</code> とか <code>~/Library</code> 。</p>
 
-<pre><code>export PYTHONPATH=${HOME}/local/lib/python
-</code></pre></li>
-</ul>
+<p>現在の設定は
+<a href="https://docs.python.org/3/library/site.html#site.USER_BASE"><code>site.USER_BASE</code></a>
+で確認できる。
+<a href="https://docs.python.org/3/library/site.html#site.USER_SITE"><code>site.USER_SITE</code></a>
+はその下の <code>{BASE}/lib/python{MAJOR}.{MINOR}/site-packages</code> に配置され、
+<code>sys.path</code> に含まれる。
+除外したいときは <code>PYTHONNOUSERSITE</code> をセットするか <code>python -s</code> で起動。</p>
 
 <h3 id="pythonstartup"><code>PYTHONSTARTUP</code></h3>
 
-<p>インタラクティブモードで起動するときに読み込むファイルを指定する環境変数。
-例えば <code>.zshrc</code> に:</p>
+<p>インタラクティブモードで起動するときに読み込むファイルを指定できる。
+例えば以下のようなものを書いておくと、
+<code>tab</code> とか <code>^i</code> で補完できるようになる。:</p>
 
-<pre><code>export PYTHONSTARTUP=${HOME}/local/lib/python/pythonstartup.py
-</code></pre>
-
-<p>以下のようなものを書いておくと、<code>tab</code> とか <code>^i</code> で補完できるようになる。:</p>
-
-<pre><code>try:
+<pre><code class="language-py">try:
     import readline
 except ImportError:
     print(&quot;Module readline not available.&quot;)
