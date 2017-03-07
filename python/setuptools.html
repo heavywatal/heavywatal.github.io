@@ -90,11 +90,7 @@ setuptools — Pythonパッケージ作成
 
 <h2 id="ファイル構成">ファイル構成</h2>
 
-<p>GitHubから <code>pip</code> で直接インストールできるようにしたい。</p>
-
-<pre><code class="language-sh">% pip install git+https://github.com/heavywatal/pywtl.git
-% python -c 'import wtl; wtl.hello()'
-</code></pre>
+<p>GitHubやローカルの開発環境から <code>pip</code> で直接インストールできる形。</p>
 
 <pre><code class="language-sh">pywtl/
 ├── LICENSE
@@ -107,7 +103,14 @@ setuptools — Pythonパッケージ作成
     └── hello.py
 </code></pre>
 
-<p>リポジトリ名(<code>pywtl</code>)とパッケージ名(<code>wtl</code>)は必ずしも一致してなくてもよい。</p>
+<p>リポジトリ名(<code>pywtl</code>)とパッケージ名(<code>wtl</code>)は必ずしも一致してなくてもよい。
+ローカルからのインストールは <code>-e,--editable</code>
+オプションを付けることで余計なコピーを減らせるっぽい。</p>
+
+<pre><code class="language-sh">% pip install -v -e ~/git/pywtl/
+% pip install -v git+https://github.com/heavywatal/pywtl.git
+% python -m wtl.hello
+</code></pre>
 
 <h3 id="setup-py"><code>setup.py</code></h3>
 
@@ -148,7 +151,7 @@ entry_points = file: entry_points.cfg
 </ul>
 
 <p>用途はいろいろあるけど
-<code>${prefix}/bin/</code> に実行可能スクリプトを配置するのによく使われる。
+<code>${prefix}/bin/</code> に実行可能ファイルを配置するのによく使われる。
 設定は下記のように別ファイル <code>entry_points.cfg</code> として
 <code>setup.cfg</code> から読ませるのが楽チン。</p>
 
@@ -157,20 +160,35 @@ hello.py = wtl.hello:main
 </code></pre>
 
 <p>引数を取らない関数のみ利用可能。
-コマンドライン引数を処理したい場合は <code>argparse</code> が有効。</p>
+コマンドライン引数を処理したい場合は標準の
+<a href="https://docs.python.org/3/library/argparse.html"><code>argparse</code></a> が有効。</p>
 
 <h3 id="ソースコード">ソースコード</h3>
 
 <dl>
 <dt><code>wtl/__init__.py</code></dt>
 <dd>このディレクトリがひとつのパッケージであることを示すファイル。
-空でもいいし、初期化処理やオブジェクトを記述してもよい。</dd>
+空でもいいし、初期化処理やオブジェクトを記述してもよい。
+<code>__version__</code> 変数を定義すべしという記述も見かけるが、
+<code>setup.cfg</code> との兼ね合いも考えると、どうしたもんか悩ましい。</dd>
 </dl>
 
 <p><code>wtl/hello.py</code></p>
 
-<pre><code class="language-py">def main():
-    print('Hello, world!')
+<pre><code class="language-py">#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+&quot;&quot;&quot;
+Sample module
+&quot;&quot;&quot;
+
+
+def main():
+    import getpass
+    print('Hello, ' + getpass.getuser() + '!')
+
+
+if __name__ == '__main__':
+    main()
 </code></pre>
 
 <h3 id="manifest-in"><code>MANIFEST.in</code></h3>
