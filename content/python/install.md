@@ -118,41 +118,53 @@ DST=${HOME}/.virtualenv
         % make altinstall
 
 
-## 環境設定
+## 環境変数
 
-### パッケージ管理
+https://docs.python.org/3/using/cmdline.html#environment-variables
 
-See [pip]({{< relref "pip.md" >}})
+シェルの設定ファイル(`~/.zshrc` とか)で `export` しておく。
+一時的に無効したいときは `python -E` で起動。
 
 ### `PYTHONPATH`
 
-自分で書いたプログラムをいつでも `import` できるようにする。
+`import` の探索パス (`sys.path`) の先頭付近に場所を追加できる。
+例えば自分で書いたモジュールやパッケージの置き場所を指定しておけば、
+いつでも優先的に `import` できるようになる。
 
--   ファイルはまとめて `~/local/lib/python/` 以下に置く
--   環境変数 `PYTHONPATH` にそのディレクトリを指定する。
-    例えば `.zshenv` に以下のように記述するとか:
 
-        export PYTHONPATH=${HOME}/local/lib/python
+### `PYTHONUSERBASE`
+
+[`pip install`]({{< relref "pip.md" >}}) や `setup.py install` における
+`--user` オプションの目的地を指定できる。
+デフォルトでは `~/.local` とか `~/Library` 。
+
+現在の設定は
+[`site.USER_BASE`](https://docs.python.org/3/library/site.html#site.USER_BASE)
+で確認できる。
+[`site.USER_SITE`](https://docs.python.org/3/library/site.html#site.USER_SITE)
+はその下の `{BASE}/lib/python{MAJOR}.{MINOR}/site-packages` に配置され、
+`sys.path` に含まれる。
+除外したいときは `PYTHONNOUSERSITE` をセットするか `python -s` で起動。
+
 
 ### `PYTHONSTARTUP`
 
-インタラクティブモードで起動するときに読み込むファイルを指定する環境変数。
-例えば `.zshrc` に:
+インタラクティブモードで起動するときに読み込むファイルを指定できる。
+例えば以下のようなものを書いておくと、
+`tab` とか `^i` で補完できるようになる。:
 
-    export PYTHONSTARTUP=${HOME}/local/lib/python/pythonstartup.py
-
-以下のようなものを書いておくと、`tab` とか `^i` で補完できるようになる。:
-
-    try:
-        import readline
-    except ImportError:
-        print("Module readline not available.")
+```py
+try:
+    import readline
+except ImportError:
+    print("Module readline not available.")
+else:
+    import rlcompleter
+    if 'libedit' in readline.__doc__:
+        readline.parse_and_bind("bind ^I rl_complete")
     else:
-        import rlcompleter
-        if 'libedit' in readline.__doc__:
-            readline.parse_and_bind("bind ^I rl_complete")
-        else:
-            readline.parse_and_bind("tab: complete")
+        readline.parse_and_bind("tab: complete")
+```
 
 対話モードをさらに便利にするには [IPython]({{< relref "ipython.md" >}}) を使う。
 
