@@ -14,16 +14,16 @@ tags = ["python", "graph"]
 Python にいくつかのモジュールを導入することで
 同等かそれ以上のことを無料で実現することができる。
 
-- `numpy`: 配列演算や基本的な数学関数
-- `scipy`: 高度な科学技術計算
 - `matplotlib`: グラフ描画
-- `ipython`: 高機能なシェル環境
-- `pylab`: これらを組み合わせてMATLABっぽいインターフェイスにする(不要)
+- [`numpy`]({{< relref "scipy.md" >}}): 配列演算や基本的な数学関数
+- [`scipy`]({{< relref "scipy.md#scipy" >}}): 高度な科学技術計算
+- [`ipython`]({{< relref "ipython.md" >}}): 高機能なシェル環境
 
 直接 `matplotlib` を触るのは大変なので、
 [`seaborn`](https://seaborn.pydata.org/) というラッパーを介して使う。
 ただし `matplotlib` を全く知らずに `seaborn` を使うのは無理っぽい。
 [ggplot2]({{< relref "rstats/ggplot2.md" >}}) は `grid` を知らなくても使えるのに。。。
+
 
 ## 基本
 
@@ -40,12 +40,24 @@ import seaborn as sns
 
 iris = sns.load_dataset('iris')
 
-fig, ax = plt.subplots(figsize=(7, 7))
+gs = plt.GridSpec(1, 1)
+fig = plt.figure()
+ax = fig.add_subplot(gs[0])
+
 sns.regplot('sepal_width', 'sepal_length', data=iris, ax=ax)
 
-plt.show()  # opens a window
+fig.show()
 fig.savefig('example.png')
 ```
+
+`from matplotlib.pylab import *`
+は単にMATLABっぽいインターフェイスにするための乱暴な手段で、
+名前空間が汚れるので使用しない。
+
+`pyplot` も同様にあまり使いたくない `import` 主体のモジュールだが、
+こちらはbackendのお世話などもしてくれているらしいので、
+使わずに済ませるのは難しそう。
+例えば `pyplot.figure()` から生成したやつじゃないと `fig.show()` できない、とか。
 
 
 ### Figure, Axes
@@ -70,7 +82,7 @@ fig.savefig('example.png')
 `rc`:
 :   see below
 
-```python
+```py
 >>> sns.axes_style(style='darkgrid', rc=None)
 {'axes.axisbelow': True,
  'axes.edgecolor': 'white',
@@ -125,7 +137,7 @@ fig.savefig('example.png')
 `rc`:
 :   see below
 
-```python
+```py
 >>> sns.plotting_context(context='notebook', font_scale=1, rc=None)
 {'axes.labelsize': 11,
  'axes.titlesize': 12,
@@ -293,37 +305,35 @@ sns.regplot('x', 'y', d, ax=axes[0, 0])
 fig.tight_layout()
 ```
 
-### `sns.gridspec.GridSpec(nrows, ncols, ...)`
+### `mpl.gridspec.GridSpec(nrows, ncols, ...)`
 
 e.g., 2x2分割して "品" みたいな配置にする:
 ```py
-gs = sns.gridspec.GridSpec(2, 2)
+gs = plt.GridSpec(2, 2)
 ax_top = plt.subplot(gs[0, :])
 ax_bottom_l = plt.subplot(gs[1, 0])
 ax_bottom_r = plt.subplot(gs[1, 1])
 ```
 
-### `sns.gridspec,GridSpecFromSubplotSpec(nrows, ncols, subplot_spec, ...)`
+### `mpl.gridspec.GridSpecFromSubplotSpec(nrows, ncols, subplot_spec, ...)`
 
 入れ子で分割。
 e.g., 左右に分け、それぞれをさらに3段に分ける:
 ```py
-gs = sns.gridspec.GridSpec(1, 2)
-gsl = sns.gridspec.GridSpecFromSubplotSpec(3, 1, gs[0])
-gsr = sns.gridspec.GridSpecFromSubplotSpec(3, 1, gs[1])
+gs = plt.GridSpec(1, 2)
+gsl = mpl.gridspec.GridSpecFromSubplotSpec(3, 1, gs[0])
+gsr = mpl.gridspec.GridSpecFromSubplotSpec(3, 1, gs[1])
 ax_ltop = plt.subplot(gsl[0])
 ```
 
 ## その他
 
-### インストール
+### [インストール](http://matplotlib.org/faq/installing_faq.html)
 
-<http://matplotlib.org/faq/installing_faq.html>
-
-[pip]({{< relref "pip.md" >}}) 一発でいけるはず:
-
-    % pip install numpy scipy pandas
-    % pip install matplotlib seaborn
+[Anaconda]({{< relref "install.md#anaconda" >}})
+には最初から含まれているので楽チン。
+Minicondaなら `conda install seaborn` で一発。
+そうじゃなくても `pip install seaborn` でいけるはず。
 
 ### 設定
 
@@ -360,9 +370,8 @@ Macで非Frameworkとしてインストールした自前Pythonを使うと怒�
 
 <http://matplotlib.org/faq/usage_faq.html#what-is-a-backend>
 
-### ラッパー
+### その他のラッパー
 
--   `seaborn`: <https://seaborn.pydata.org/>
 -   easyplot: <https://github.com/HamsterHuey/easyplot>
 -   prettyplotlib: <http://blog.olgabotvinnik.com/prettyplotlib/>
 -   uglyplotlib: <https://gitlab.com/padawanphysicist/uglyplotlib>
