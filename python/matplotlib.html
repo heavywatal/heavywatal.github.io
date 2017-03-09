@@ -94,11 +94,10 @@ Python にいくつかのモジュールを導入することで
 同等かそれ以上のことを無料で実現することができる。</p>
 
 <ul>
-<li><code>numpy</code>: 配列演算や基本的な数学関数</li>
-<li><code>scipy</code>: 高度な科学技術計算</li>
 <li><code>matplotlib</code>: グラフ描画</li>
-<li><code>ipython</code>: 高機能なシェル環境</li>
-<li><code>pylab</code>: これらを組み合わせてMATLABっぽいインターフェイスにする(不要)</li>
+<li><a href="/python/scipy.html"><code>numpy</code></a>: 配列演算や基本的な数学関数</li>
+<li><a href="/python/scipy.html#scipy"><code>scipy</code></a>: 高度な科学技術計算</li>
+<li><a href="/python/ipython.html"><code>ipython</code></a>: 高機能なシェル環境</li>
 </ul>
 
 <p>直接 <code>matplotlib</code> を触るのは大変なので、
@@ -122,12 +121,24 @@ import seaborn as sns
 
 iris = sns.load_dataset('iris')
 
-fig, ax = plt.subplots(figsize=(7, 7))
+gs = plt.GridSpec(1, 1)
+fig = plt.figure()
+ax = fig.add_subplot(gs[0])
+
 sns.regplot('sepal_width', 'sepal_length', data=iris, ax=ax)
 
-plt.show()  # opens a window
+fig.show()
 fig.savefig('example.png')
 </code></pre>
+
+<p><code>from matplotlib.pylab import *</code>
+は単にMATLABっぽいインターフェイスにするための乱暴な手段で、
+名前空間が汚れるので使用しない。</p>
+
+<p><code>pyplot</code> も同様にあまり使いたくない <code>import</code> 主体のモジュールだが、
+こちらはbackendのお世話などもしてくれているらしいので、
+使わずに済ませるのは難しそう。
+例えば <code>pyplot.figure()</code> から生成したやつじゃないと <code>fig.show()</code> できない、とか。</p>
 
 <h3 id="figure-axes">Figure, Axes</h3>
 
@@ -152,7 +163,7 @@ fig.savefig('example.png')
 <dd>see below</dd>
 </dl>
 
-<pre><code class="language-python">&gt;&gt;&gt; sns.axes_style(style='darkgrid', rc=None)
+<pre><code class="language-py">&gt;&gt;&gt; sns.axes_style(style='darkgrid', rc=None)
 {'axes.axisbelow': True,
  'axes.edgecolor': 'white',
  'axes.facecolor': '#EAEAF2',
@@ -210,7 +221,7 @@ fig.savefig('example.png')
 <dd>see below</dd>
 </dl>
 
-<pre><code class="language-python">&gt;&gt;&gt; sns.plotting_context(context='notebook', font_scale=1, rc=None)
+<pre><code class="language-py">&gt;&gt;&gt; sns.plotting_context(context='notebook', font_scale=1, rc=None)
 {'axes.labelsize': 11,
  'axes.titlesize': 12,
  'figure.figsize': array([ 8. ,  5.5]),
@@ -376,38 +387,35 @@ sns.regplot('x', 'y', d, ax=axes[0, 0])
 fig.tight_layout()
 </code></pre>
 
-<h3 id="sns-gridspec-gridspec-nrows-ncols"><code>sns.gridspec.GridSpec(nrows, ncols, ...)</code></h3>
+<h3 id="mpl-gridspec-gridspec-nrows-ncols"><code>mpl.gridspec.GridSpec(nrows, ncols, ...)</code></h3>
 
 <p>e.g., 2x2分割して &ldquo;品&rdquo; みたいな配置にする:</p>
 
-<pre><code class="language-py">gs = sns.gridspec.GridSpec(2, 2)
+<pre><code class="language-py">gs = plt.GridSpec(2, 2)
 ax_top = plt.subplot(gs[0, :])
 ax_bottom_l = plt.subplot(gs[1, 0])
 ax_bottom_r = plt.subplot(gs[1, 1])
 </code></pre>
 
-<h3 id="sns-gridspec-gridspecfromsubplotspec-nrows-ncols-subplot-spec"><code>sns.gridspec,GridSpecFromSubplotSpec(nrows, ncols, subplot_spec, ...)</code></h3>
+<h3 id="mpl-gridspec-gridspecfromsubplotspec-nrows-ncols-subplot-spec"><code>mpl.gridspec.GridSpecFromSubplotSpec(nrows, ncols, subplot_spec, ...)</code></h3>
 
 <p>入れ子で分割。
 e.g., 左右に分け、それぞれをさらに3段に分ける:</p>
 
-<pre><code class="language-py">gs = sns.gridspec.GridSpec(1, 2)
-gsl = sns.gridspec.GridSpecFromSubplotSpec(3, 1, gs[0])
-gsr = sns.gridspec.GridSpecFromSubplotSpec(3, 1, gs[1])
+<pre><code class="language-py">gs = plt.GridSpec(1, 2)
+gsl = mpl.gridspec.GridSpecFromSubplotSpec(3, 1, gs[0])
+gsr = mpl.gridspec.GridSpecFromSubplotSpec(3, 1, gs[1])
 ax_ltop = plt.subplot(gsl[0])
 </code></pre>
 
 <h2 id="その他">その他</h2>
 
-<h3 id="インストール">インストール</h3>
+<h3 id="インストール-http-matplotlib-org-faq-installing-faq-html"><a href="http://matplotlib.org/faq/installing_faq.html">インストール</a></h3>
 
-<p><a href="http://matplotlib.org/faq/installing_faq.html">http://matplotlib.org/faq/installing_faq.html</a></p>
-
-<p><a href="/python/pip.html">pip</a> 一発でいけるはず:</p>
-
-<pre><code>% pip install numpy scipy pandas
-% pip install matplotlib seaborn
-</code></pre>
+<p><a href="/python/install.html#anaconda">Anaconda</a>
+には最初から含まれているので楽チン。
+Minicondaなら <code>conda install seaborn</code> で一発。
+そうじゃなくても <code>pip install seaborn</code> でいけるはず。</p>
 
 <h3 id="設定">設定</h3>
 
@@ -450,10 +458,9 @@ ax_ltop = plt.subplot(gsl[0])
 
 <p><a href="http://matplotlib.org/faq/usage_faq.html#what-is-a-backend">http://matplotlib.org/faq/usage_faq.html#what-is-a-backend</a></p>
 
-<h3 id="ラッパー">ラッパー</h3>
+<h3 id="その他のラッパー">その他のラッパー</h3>
 
 <ul>
-<li><code>seaborn</code>: <a href="https://seaborn.pydata.org/">https://seaborn.pydata.org/</a></li>
 <li>easyplot: <a href="https://github.com/HamsterHuey/easyplot">https://github.com/HamsterHuey/easyplot</a></li>
 <li>prettyplotlib: <a href="http://blog.olgabotvinnik.com/prettyplotlib/">http://blog.olgabotvinnik.com/prettyplotlib/</a></li>
 <li>uglyplotlib: <a href="https://gitlab.com/padawanphysicist/uglyplotlib">https://gitlab.com/padawanphysicist/uglyplotlib</a></li>
