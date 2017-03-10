@@ -93,14 +93,13 @@ def target_func(x):
     return x + 1
 </code></pre>
 
-<h2 id="threading"><code>threading</code></h2>
-
-<p><a href="https://docs.python.org/3/library/threading.html">https://docs.python.org/3/library/threading.html</a></p>
+<h2 id="threading-https-docs-python-org-3-library-threading-html"><a href="https://docs.python.org/3/library/threading.html"><code>threading</code></a></h2>
 
 <p><strong>Global Interpreter Lock (GIL)</strong> の制約により、
 1つのインタープリタでは同時に1つのスレッドしかコードを実行できない。
 したがってCPUバウンドなピュアPythonコードをマルチスレッド化しても速くならない。
-外部プログラムやI/OなどGIL外の処理を待つ場合には有効。</p>
+<a href="https://docs.python.org/3/library/subprocess.html"><code>subprocess</code></a>
+による外部プログラム実行やI/OなどGIL外の処理を待つ場合には有効。</p>
 
 <p><code>target</code> を指定して作った <code>Thread</code> インスタンスで <code>start()</code> するのが基本。</p>
 
@@ -141,9 +140,7 @@ for th in threads:
 スレッド数の上限値を設けたい場合は
 <code>threading.Semaphore</code> でうまくロックしてやる必要がある。</p>
 
-<h2 id="multiprocessing"><code>multiprocessing</code></h2>
-
-<p><a href="https://docs.python.org/3/library/multiprocessing.html">https://docs.python.org/3/library/multiprocessing.html</a></p>
+<h2 id="multiprocessing-https-docs-python-org-3-library-multiprocessing-html"><a href="https://docs.python.org/3/library/multiprocessing.html"><code>multiprocessing</code></a></h2>
 
 <p><code>os.fork()</code> を使って新しいインタプリタを立ち上げるので、
 CPUバウンドなPythonコードもGILに邪魔されず並列処理できる。
@@ -161,11 +158,10 @@ with mp.Pool(processes=mp.cpu_count()) as pool:
         print(res.get())
 </code></pre>
 
-<h2 id="concurrent-futures-since-3-2"><code>concurrent.futures</code> (since 3.2)</h2>
+<h2 id="concurrent-futures-https-docs-python-org-3-library-concurrent-futures-html"><a href="https://docs.python.org/3/library/concurrent.futures.html"><code>concurrent.futures</code></a></h2>
 
-<p><a href="https://docs.python.org/3/library/concurrent.futures.html">https://docs.python.org/3/library/concurrent.futures.html</a></p>
-
-<p>上記のライブラリを直感的に使いやすくラップした高級インターフェイス。
+<p>(since 3.2)
+上記のライブラリを直感的に使いやすくラップした高級インターフェイス。
 立ち上げ方も簡単だし、 <code>as_completed()</code> で待てるのが特に便利。</p>
 
 <pre><code class="language-py">import concurrent.futures as confu
@@ -182,9 +178,10 @@ with confu.ThreadPoolExecutor(max_workers=4) as executor:
         print(future.result())
 </code></pre>
 
-<p><code>ProcessPoolExecutor</code> もある。</p>
+<p>デフォルトの <code>max_workers=None</code> では <code>5 * mp.cpu_count()</code> になるらしい。</p>
 
-<p><code>concurrent.futures.process.multiprocessing.cpu_count()</code> もある。</p>
+<p><code>ProcessPoolExecutor</code> も使い方は同じ。
+こちらは <code>mp.cpu_count()</code> がデフォルト。</p>
 
 </article>
 </main>
