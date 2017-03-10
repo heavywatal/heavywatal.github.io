@@ -58,13 +58,11 @@ Macの [Homebrew]({{< relref "mac/homebrew.md" >}}) をLinuxに移植したパ�
         % brew install tmux
 
         git
-        mercurial
         zsh --without-etcdir
         tmux
         gcc
-        python3
-        llvm --with-clang --with-libcxx --with-compiler-rt --with-rtti
         boost --with-c++11
+        nano
         emacs
 
 ## Mac
@@ -137,15 +135,18 @@ Xcode上での補完のためのindexingが重いらしいので切っとく:
 間違って消してしまっても基本的には元に戻せない。
 以下のような対策によりその危険が少しは減るかも。
 
-`alias rm='rm -i'`
-:   `rm` コマンドそのものを少しだけ安全にしておくため、
-    `.zshrc` でエイリアス設定しておく。
-    するとファイルごとにホントに消していいかどうか確認してくれるようになる:
+`alias rmi='rm -i'`
+:   ホントに消していいかどうか確認してくれるようなオプションつきのエイリアスを
+    `.zshrc` に設定しておく。
 
-        % rm .DS_Store
+        % rmi .DS_Store
         rm: remove regular file '.DS_Store'?
 
-    でも結局ろくすっぽ確認せず `y` を押す癖がついてしまうという...
+    エイリアス名を `rm` そのものにしてしまうと、
+    結局ろくすっぽ確認せず `y` を押す癖や、
+    いちいち確認されないように `rm -rf` する癖がつくので逆に危険。
+    普段は `rmi` を使う癖をつけ、必要なときたまに `rm` を使い、
+    `-f` はよほどのことが無い限り使わないようにする。
 
 `trash-cli`
 :   Python製なので [pip]({{< relref "python/pip.md" >}}) で
