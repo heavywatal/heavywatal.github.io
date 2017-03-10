@@ -18,14 +18,13 @@ def target_func(x):
     return x + 1
 ```
 
-## `threading`
-
-https://docs.python.org/3/library/threading.html
+## [`threading`](https://docs.python.org/3/library/threading.html)
 
 **Global Interpreter Lock (GIL)** の制約により、
 1つのインタープリタでは同時に1つのスレッドしかコードを実行できない。
 したがってCPUバウンドなピュアPythonコードをマルチスレッド化しても速くならない。
-外部プログラムやI/OなどGIL外の処理を待つ場合には有効。
+[`subprocess`](https://docs.python.org/3/library/subprocess.html)
+による外部プログラム実行やI/OなどGIL外の処理を待つ場合には有効。
 
 `target` を指定して作った `Thread` インスタンスで `start()` するのが基本。
 
@@ -69,9 +68,7 @@ for th in threads:
 `threading.Semaphore` でうまくロックしてやる必要がある。
 
 
-## `multiprocessing`
-
-https://docs.python.org/3/library/multiprocessing.html
+## [`multiprocessing`](https://docs.python.org/3/library/multiprocessing.html)
 
 `os.fork()` を使って新しいインタプリタを立ち上げるので、
 CPUバウンドなPythonコードもGILに邪魔されず並列処理できる。
@@ -91,10 +88,9 @@ with mp.Pool(processes=mp.cpu_count()) as pool:
 ```
 
 
-## `concurrent.futures` (since 3.2)
+## [`concurrent.futures`](https://docs.python.org/3/library/concurrent.futures.html)
 
-https://docs.python.org/3/library/concurrent.futures.html
-
+(since 3.2)
 上記のライブラリを直感的に使いやすくラップした高級インターフェイス。
 立ち上げ方も簡単だし、 `as_completed()` で待てるのが特に便利。
 
@@ -113,6 +109,7 @@ with confu.ThreadPoolExecutor(max_workers=4) as executor:
         print(future.result())
 ```
 
-`ProcessPoolExecutor` もある。
+デフォルトの `max_workers=None` では `5 * mp.cpu_count()` になるらしい。
 
-`concurrent.futures.process.multiprocessing.cpu_count()` もある。
+`ProcessPoolExecutor` も使い方は同じ。
+こちらは `mp.cpu_count()` がデフォルト。
