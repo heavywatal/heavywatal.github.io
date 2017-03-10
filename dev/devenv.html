@@ -140,13 +140,11 @@ mercurial
 <pre><code>% brew install tmux
 
 git
-mercurial
 zsh --without-etcdir
 tmux
 gcc
-python3
-llvm --with-clang --with-libcxx --with-compiler-rt --with-rtti
 boost --with-c++11
+nano
 emacs
 </code></pre></li>
 </ol>
@@ -234,16 +232,19 @@ fi
 以下のような対策によりその危険が少しは減るかも。</p>
 
 <dl>
-<dt><code>alias rm='rm -i'</code></dt>
-<dd><p><code>rm</code> コマンドそのものを少しだけ安全にしておくため、
-<code>.zshrc</code> でエイリアス設定しておく。
-するとファイルごとにホントに消していいかどうか確認してくれるようになる:</p>
+<dt><code>alias rmi='rm -i'</code></dt>
+<dd><p>ホントに消していいかどうか確認してくれるようなオプションつきのエイリアスを
+<code>.zshrc</code> に設定しておく。</p>
 
-<pre><code>% rm .DS_Store
+<pre><code>% rmi .DS_Store
 rm: remove regular file '.DS_Store'?
 </code></pre>
 
-<p>でも結局ろくすっぽ確認せず <code>y</code> を押す癖がついてしまうという&hellip;</p></dd>
+<p>エイリアス名を <code>rm</code> そのものにしてしまうと、
+結局ろくすっぽ確認せず <code>y</code> を押す癖や、
+いちいち確認されないように <code>rm -rf</code> する癖がつくので逆に危険。
+普段は <code>rmi</code> を使う癖をつけ、必要なときたまに <code>rm</code> を使い、
+<code>-f</code> はよほどのことが無い限り使わないようにする。</p></dd>
 <dt><code>trash-cli</code></dt>
 <dd><p>Python製なので <a href="/python/pip.html">pip</a> で
 <code>pip install trash-cli</code> して入れる。
