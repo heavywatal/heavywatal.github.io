@@ -6,6 +6,8 @@ tags = ["python", "package"]
   parent = "python"
 +++
 
+- https://docs.python.org/3/tutorial/modules.html
+- https://docs.python.org/3/reference/import.html
 - https://packaging.python.org/
 - https://setuptools.readthedocs.io/
 
