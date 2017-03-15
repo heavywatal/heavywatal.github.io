@@ -95,12 +95,17 @@ https://github.com/heavywatal/hugo-theme-nonblog
 [CommonMark](http://spec.commonmark.org/)
 : 標準仕様決定に向けて議論中。
 
-[GitHub Flavored Markdown (GFM)](https://help.github.com/articles/basic-writing-and-formatting-syntax/)
-: いま最もよく書かれているのはこれかな？ Atomでも標準サポート。
+[GitHub Flavored Markdown (GFM)](https://github.github.com/gfm/)
+: いま最もよく書かれているのはこれかな？
+  [Atom]({{< relref "atom.md" >}})でも標準サポート。
+  基本的な書き方は[GitHub Helpのページ](https://help.github.com/articles/basic-writing-and-formatting-syntax/)が読みやすい。
+  CommonMarkに準拠することが[2017年に発表された](https://githubengineering.com/a-formal-spec-for-github-markdown/)。
 
 [Blackfriday](https://github.com/russross/blackfriday)
 : HugoのMarkdownエンジンはこれ。
-  残念ながら上記2つとも微妙に違う。
+  残念ながら上記2つとも微妙に違うが、
+  開発中のv2ではCommonMark準拠の流れもあるっぽい。
+
 
 ### [Front matter](https://gohugo.io/content/front-matter/)
 
