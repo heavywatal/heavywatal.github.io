@@ -143,7 +143,7 @@ for th in threads:
 
 <h2 id="multiprocessing-https-docs-python-org-3-library-multiprocessing-html"><a href="https://docs.python.org/3/library/multiprocessing.html"><code>multiprocessing</code></a></h2>
 
-<p><code>os.fork()</code> を使って新しいインタプリタを立ち上げるので、
+<p>新しいインタプリタを <code>os.fork()</code> で立ち上げるので、
 CPUバウンドなPythonコードもGILに邪魔されず並列処理できる。
 ただし通信のため関数や返り値がpicklableでなければならない。</p>
 
@@ -159,21 +159,34 @@ with mp.Pool(processes=mp.cpu_count()) as pool:
         print(res.get())
 </code></pre>
 
+<h3 id="mp-cpu-count"><code>mp.cpu_count()</code></h3>
+
+<p>このためだけに <code>multiprocessing</code> をimportするのは億劫だったが、
+3.4で <code>os.cpu_count()</code> が追加された。</p>
+
+<p>Hyper-Threading (HT)が有効な場合は論理コア数が返ってくることに注意。
+CPUを100%使い続ける数値計算とかだとそんなに並列化しても意味がない。
+物理コア数を取得したい場合は
+<a href="https://github.com/giampaolo/psutil"><code>psutil</code></a>
+の <code>psutil.cpu_count(logical=False)</code> を使う。
+標準ライブラリではないが、広く使われてるらしい。</p>
+
 <h2 id="concurrent-futures-https-docs-python-org-3-library-concurrent-futures-html"><a href="https://docs.python.org/3/library/concurrent.futures.html"><code>concurrent.futures</code></a></h2>
 
 <p>(since 3.2)
 上記のライブラリを直感的に使いやすくラップした高級インターフェイス。
 立ち上げ方も簡単だし、 <code>as_completed()</code> で待てるのが特に便利。</p>
 
-<pre><code class="language-py">import concurrent.futures as confu
+<pre><code class="language-py">import os
+import concurrent.futures as confu
 
-with confu.ThreadPoolExecutor(max_workers=4) as executor:
+with confu.ThreadPoolExecutor(max_workers=os.cpu_count()) as executor:
     futures = [executor.submit(target_func, x) for x in range(8)]
     (done, notdone) = confu.wait(futures)
     for future in futures:
         print(future.result())
 
-with confu.ThreadPoolExecutor(max_workers=4) as executor:
+with confu.ThreadPoolExecutor(max_workers=os.cpu_count()) as executor:
     futures = [executor.submit(target_func, x) for x in range(8)]
     for future in confu.as_completed(futures):
         print(future.result())
