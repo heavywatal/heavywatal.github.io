@@ -70,7 +70,7 @@ for th in threads:
 
 ## [`multiprocessing`](https://docs.python.org/3/library/multiprocessing.html)
 
-`os.fork()` を使って新しいインタプリタを立ち上げるので、
+新しいインタプリタを `os.fork()` で立ち上げるので、
 CPUバウンドなPythonコードもGILに邪魔されず並列処理できる。
 ただし通信のため関数や返り値がpicklableでなければならない。
 
@@ -87,6 +87,18 @@ with mp.Pool(processes=mp.cpu_count()) as pool:
         print(res.get())
 ```
 
+### `mp.cpu_count()`
+
+このためだけに `multiprocessing` をimportするのは億劫だったが、
+3.4で `os.cpu_count()` が追加された。
+
+Hyper-Threading (HT)が有効な場合は論理コア数が返ってくることに注意。
+CPUを100%使い続ける数値計算とかだとそんなに並列化しても意味がない。
+物理コア数を取得したい場合は
+[`psutil`](https://github.com/giampaolo/psutil)
+の `psutil.cpu_count(logical=False)` を使う。
+標準ライブラリではないが、広く使われてるらしい。
+
 
 ## [`concurrent.futures`](https://docs.python.org/3/library/concurrent.futures.html)
 
@@ -95,15 +107,16 @@ with mp.Pool(processes=mp.cpu_count()) as pool:
 立ち上げ方も簡単だし、 `as_completed()` で待てるのが特に便利。
 
 ```py
+import os
 import concurrent.futures as confu
 
-with confu.ThreadPoolExecutor(max_workers=4) as executor:
+with confu.ThreadPoolExecutor(max_workers=os.cpu_count()) as executor:
     futures = [executor.submit(target_func, x) for x in range(8)]
     (done, notdone) = confu.wait(futures)
     for future in futures:
         print(future.result())
 
-with confu.ThreadPoolExecutor(max_workers=4) as executor:
+with confu.ThreadPoolExecutor(max_workers=os.cpu_count()) as executor:
     futures = [executor.submit(target_func, x) for x in range(8)]
     for future in confu.as_completed(futures):
         print(future.result())
