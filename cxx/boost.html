@@ -90,6 +90,18 @@ Boost — ほぼ標準C&#43;&#43;ライブラリ
 
 <h2 id="installation">Installation</h2>
 
+<h3 id="パッケージマネージャで">パッケージマネージャで</h3>
+
+<p><a href="/mac/homebrew.html">Homebrew</a>/Linuxbrew
+で最新版を簡単にインストールできる。
+オプションは適当に:</p>
+
+<pre><code>% brew install boost --c++11 --without-single
+</code></pre>
+
+<p><code>--layout=tagged</code> でビルドされるため、
+リンクするときは末尾に <code>-mt</code> が必要になる。</p>
+
 <h3 id="ソースから">ソースから</h3>
 
 <ul>
@@ -98,31 +110,23 @@ Boost — ほぼ標準C&#43;&#43;ライブラリ
 <li><a href="https://boostjp.github.io/howtobuild.html">https://boostjp.github.io/howtobuild.html</a></li>
 </ul>
 
-<p>普通の <code>configure</code> と <code>make</code> じゃないので混乱するけど、まあまあ相同な手順。
-gccとclangの両方から使える統一ライブラリを作るのは難しいらしいので、
-それぞれのコンパイラで別々にビルドしてインストールする。</p>
-
 <ol>
-<li><p><a href="https://sourceforge.net/projects/boost/">https://sourceforge.net/projects/boost/</a> から最新ソースを入手して展開。
-とりあえず <code>boost-jam</code> とか <code>boost-build</code> とかは無視して <code>boost</code> 本体のみで結構:</p>
+<li><p><a href="http://www.boost.org/users/download/">http://www.boost.org/users/download/</a> から最新ソースを入手して展開。</p>
 
 <pre><code>% wget -O- https://downloads.sourceforge.net/boost/boost_1_63_0.tar.bz2 | tar xj
 % cd boost_1_63_0/
 </code></pre></li>
 
-<li><p>ヘルプを見る <code>./bootstrap.sh --help</code></p></li>
-
 <li><p>ビルドすべきライブラリを考える <code>./bootstrap.sh --show-libraries</code></p></li>
 
 <li><p>適当なオプションを与えて <code>bootstrap.sh</code> を実行:</p>
 
-<pre><code class="language-sh">% ./bootstrap.sh --without-icu --with-libraries=coroutine2,filesystem,graph,iostreams,program_options,serialization,system,test
+<pre><code class="language-sh">% ./bootstrap.sh --help
+% ./bootstrap.sh --without-icu --with-libraries=coroutine2,filesystem,graph,iostreams,program_options,serialization,system,test
 </code></pre>
 
-<p><code>b2</code> がビルドされ、
-<code>b2</code> に渡すオプションが書かれた <code>project-config.jam</code> が生成される。</p></li>
-
-<li><p>ヘルプを見る <code>./b2 --help</code></p></li>
+<p>設定が <code>project-config.jam</code> に書き出され、
+<code>b2</code> がビルドされる。 <code>./b2 --help</code></p></li>
 
 <li><p><code>~/user-config.jam</code> に <a href="http://www.boost.org/build/doc/html/bbv2/reference/tools.html">ツールセットを定義</a>。
 <code>darwin</code>はMac-gcc用:</p>
@@ -130,7 +134,10 @@ gccとclangの両方から使える統一ライブラリを作るのは難しい
 <pre><code>using gcc : 14 : g++-6 : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++14 ;
 using darwin : 14 : g++-6 : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++14 ;
 using clang : 14 : clang++ : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++14 -stdlib=libc++ &lt;linkflags&gt;-stdlib=libc++ ;
-</code></pre></li>
+</code></pre>
+
+<p>gccとclangの両方から使える統一ライブラリを作るのは難しいらしいので、
+それぞれのコンパイラで別々にビルドしてインストールする。</p></li>
 
 <li><p>システム標準zlibをリンクしようとしてエラーになるような場合は、
 <a href="http://zlib.net/">zlib公式</a>からソースを落として展開し、
@@ -160,24 +167,6 @@ using clang : 14 : clang++ : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++1
 % rsync -auv boost ~/local/include
 </code></pre></li>
 </ol>
-
-<h3 id="パッケージマネージャで簡単インストール">パッケージマネージャで簡単インストール</h3>
-
-<p><a href="/mac/homebrew.html">Homebrew</a>/Linuxbrew でもインストールできる:</p>
-
-<pre><code>% brew install boost --c++11 --without-single
-</code></pre>
-
-<p>ただし <code>--layout=tagged</code> になっているため、
-リンクするときは末尾に <code>-mt</code> が必要になる。</p>
-
-<p>Ubuntuなら <a href="https://launchpad.net/~boost-latest/+archive/ppa">ppa:boost-latest/ppa</a>
-リポジトリを加えて <code>libboost*-dev</code> を適当にインストール:</p>
-
-<pre><code>% sudo add-apt-repository ppa:boost-latest/ppa
-% sudo apt-get update
-% apt-cache search libboost.*-all-dev
-</code></pre>
 
 </article>
 </main>
