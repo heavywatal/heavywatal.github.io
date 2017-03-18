@@ -11,38 +11,41 @@ tags = ["c++"]
 
 ## Installation
 
+### パッケージマネージャで
+
+[Homebrew]({{< relref "mac/homebrew.md" >}})/Linuxbrew
+で最新版を簡単にインストールできる。
+オプションは適当に:
+
+    % brew install boost --c++11 --without-single
+
+`--layout=tagged` でビルドされるため、
+リンクするときは末尾に `-mt` が必要になる。
+
+
 ### ソースから
 
 - http://www.boost.org/doc/libs/release/more/getting_started/unix-variants.html
 - http://www.boost.org/build/
 - https://boostjp.github.io/howtobuild.html
 
-普通の `configure` と `make` じゃないので混乱するけど、まあまあ相同な手順。
-gccとclangの両方から使える統一ライブラリを作るのは難しいらしいので、
-それぞれのコンパイラで別々にビルドしてインストールする。
-
-1.  <https://sourceforge.net/projects/boost/> から最新ソースを入手して展開。
-    とりあえず `boost-jam` とか `boost-build` とかは無視して `boost` 本体のみで結構:
+1.  <http://www.boost.org/users/download/> から最新ソースを入手して展開。
     ```
     % wget -O- https://downloads.sourceforge.net/boost/boost_1_63_0.tar.bz2 | tar xj
     % cd boost_1_63_0/
     ```
 
-2.  ヘルプを見る `./bootstrap.sh --help`
+1.  ビルドすべきライブラリを考える `./bootstrap.sh --show-libraries`
 
-3.  ビルドすべきライブラリを考える `./bootstrap.sh --show-libraries`
-
-4.  適当なオプションを与えて `bootstrap.sh` を実行:
+1.  適当なオプションを与えて `bootstrap.sh` を実行:
     ```sh
+    % ./bootstrap.sh --help
     % ./bootstrap.sh --without-icu --with-libraries=coroutine2,filesystem,graph,iostreams,program_options,serialization,system,test
     ```
+    設定が `project-config.jam` に書き出され、
+    `b2` がビルドされる。 `./b2 --help`
 
-    `b2` がビルドされ、
-    `b2` に渡すオプションが書かれた `project-config.jam` が生成される。
-
-5.  ヘルプを見る `./b2 --help`
-
-6. `~/user-config.jam` に [ツールセットを定義]
+1. `~/user-config.jam` に [ツールセットを定義]
     (http://www.boost.org/build/doc/html/bbv2/reference/tools.html)。
     `darwin`はMac-gcc用:
     ```
@@ -50,8 +53,10 @@ gccとclangの両方から使える統一ライブラリを作るのは難しい
     using darwin : 14 : g++-6 : <compileflags>-fPIC <cxxflags>-std=c++14 ;
     using clang : 14 : clang++ : <compileflags>-fPIC <cxxflags>-std=c++14 -stdlib=libc++ <linkflags>-stdlib=libc++ ;
     ```
+    gccとclangの両方から使える統一ライブラリを作るのは難しいらしいので、
+    それぞれのコンパイラで別々にビルドしてインストールする。
 
-7.  システム標準zlibをリンクしようとしてエラーになるような場合は、
+1.  システム標準zlibをリンクしようとしてエラーになるような場合は、
     [zlib公式](http://zlib.net/)からソースを落として展開し、
     [一緒にビルドされるように]
     (http://www.boost.org/doc/libs/release/libs/iostreams/doc/installation.html)
@@ -61,14 +66,14 @@ gccとclangの両方から使える統一ライブラリを作るのは難しい
     % export ZLIB_SOURCE=${HOME}/tmp/build/zlib-1.2.8
     ```
 
-8.  ツールセットを指定してビルド:
+1.  ツールセットを指定してビルド:
     ```sh
     % ./b2 -j2 toolset=gcc-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2gcc --stagedir=stage/gcc stage
     % ./b2 -j2 toolset=darwin-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2gcc --stagedir=stage/gcc stage
     % ./b2 -j2 toolset=clang-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2clang --stagedir=stage/clang stage
     ```
 
-9.  prefixを指定してインストール:
+1.  prefixを指定してインストール:
     ```sh
     % ./b2 -j2 toolset=gcc-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2gcc --stagedir=stage/gcc --prefix=${HOME}/local install
     ```
@@ -78,19 +83,3 @@ gccとclangの両方から使える統一ライブラリを作るのは難しい
     % rsync -auv stage/clang/ ~/local/boost-clang
     % rsync -auv boost ~/local/include
     ```
-
-### パッケージマネージャで簡単インストール
-
-[Homebrew]({{< relref "mac/homebrew.md" >}})/Linuxbrew でもインストールできる:
-
-    % brew install boost --c++11 --without-single
-
-ただし `--layout=tagged` になっているため、
-リンクするときは末尾に `-mt` が必要になる。
-
-Ubuntuなら [ppa:boost-latest/ppa](https://launchpad.net/~boost-latest/+archive/ppa)
-リポジトリを加えて `libboost*-dev` を適当にインストール:
-
-    % sudo add-apt-repository ppa:boost-latest/ppa
-    % sudo apt-get update
-    % apt-cache search libboost.*-all-dev
