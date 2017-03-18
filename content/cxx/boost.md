@@ -83,3 +83,127 @@ tags = ["c++"]
     % rsync -auv stage/clang/ ~/local/boost-clang
     % rsync -auv boost ~/local/include
     ```
+
+### 使うとき
+
+インストールした場所とリンクするライブラリをコンパイラに伝える必要がある。
+コマンドを直打ちするなら:
+```sh
+clang++ -I${HOME}/local/include -L${HOME}/local/lib mysource.cpp -lboost_iostreams-mt -o a.out
+```
+
+Makefileの変数でいうと:
+```make
+CPPFLAGS = -I${HOME}/local/include
+LDFLAGS = -L${HOME}/local/lib
+LDLIBS = -lboost_iostreams-mt
+```
+
+
+## [math](http://www.boost.org/doc/libs/release/libs/math/doc/html/)
+
+### [distribution](http://www.boost.org/doc/libs/release/libs/math/doc/html/dist.html)
+
+確率分布に従った乱数生成はC++11から `<random>` でサポートされるようになったが、
+確率密度関数(PDF)や累積密度関数(CDF)はまだ標準入りしてない。
+
+```c++
+// #include <boost/math/distributions.hpp>
+#include <boost/math/distributions/normal.hpp>
+#include <boost/math/distributions/poisson.hpp>
+#include <boost/math/distributions/binomial.hpp>
+#include <boost/math/distributions/chi_squared.hpp>
+
+namespace bmath = boost::math;
+
+bmath::normal_distribution<> dist(mean, sd);
+
+bmath::mean(dist);
+bmath::median(dist);
+bmath::standard_deviation(dist);
+
+bmath::pdf(dist, x);
+bmath::cdf(dist, x);
+bmath::quantile(dist, p);
+```
+
+{{%div class="warning"%}}
+右側の裾が欲しいときは精度を保つために `complement()` を使う。
+(Rでいう `lower.tail=FALSE`)
+
+```c++
+// good
+bmath::quantile(bmath::complement(dist, p));
+// bad
+bmath::quantile(dist, 1.0 - p)
+
+// good
+bmath::cdf(bmath::complement(dist, x));
+// bad
+1.0 - bmath::cdf(dist, x);
+```
+{{%/div%}}
+
+
+## [iostreams](http://www.boost.org/doc/libs/release/libs/iostreams/doc/)
+
+要ビルド＆リンク `-lboost_iostreams-mt`
+
+### gzip 圧縮と展開
+
+https://github.com/heavywatal/cxxwtils/blob/master/zfstream.hpp
+
+```c++
+#include <iostream>
+#include <string>
+#include <boost/iostreams/filtering_stream.hpp>
+#include <boost/iostreams/filter/gzip.hpp>
+#include <boost/iostreams/device/file_descriptor.hpp>
+
+int main() {
+    namespace bios = boost::iostreams;
+    {
+        bios::filtering_ostream ost;
+        ost.push(bios::gzip_compressor());
+        ost.push(bios::file_descriptor_sink("hello.txt.gz"));
+        ost << "Hello world!";
+    }
+    {
+        bios::filtering_istream ist;
+        ist.push(bios::gzip_decompressor());
+        ist.push(bios::file_descriptor_source("hello.txt.gz"));
+        std::string buffer;
+        std::getline(ist, buffer, '\0');
+        std::cout << buffer << std::endl;
+    }
+}
+```
+
+- gzipフィルタはコンストラクタで渡してもよい。
+- `file_descriptor` はfailビットが立つとすぐ例外を投げて
+  "No such file or directory" などを知らせてくれるので便利。
+  標準streamのような沈黙を求める場合は代わりに
+  `std::ifstream` などを `push()` することも可能。
+
+
+## [program_options](http://www.boost.org/doc/libs/release/doc/html/program_options.html)
+
+要ビルド＆リンク `-lboost_program_options-mt`
+
+
+## [coroutine2](http://www.boost.org/doc/libs/release/libs/coroutine2/doc/html/)
+
+要ビルド＆リンク `-lboost_context-mt`
+
+Pythonの`yield`みたいなことをC++でもできるようになる。
+
+[Fibonacci generator on gist](https://gist.github.com/heavywatal/e9c4d705b5617e4fc6ea32452db18860)
+
+{{%div class="warning"%}}
+オブジェクトの寿命に注意。
+
+- `yield`返しはmoveなので、
+  次の処理で再利用するつもりならコピーコンストラクタ越しに新品を返す。
+- generator的なものを返す関数を作ると、
+  それを抜ける時に寿命を迎えるオブジェクトがあることに注意。
+{{%/div%}}
