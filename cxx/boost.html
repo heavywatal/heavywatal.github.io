@@ -168,6 +168,131 @@ using clang : 14 : clang++ : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++1
 </code></pre></li>
 </ol>
 
+<h3 id="使うとき">使うとき</h3>
+
+<p>インストールした場所とリンクするライブラリをコンパイラに伝える必要がある。
+コマンドを直打ちするなら:</p>
+
+<pre><code class="language-sh">clang++ -I${HOME}/local/include -L${HOME}/local/lib mysource.cpp -lboost_iostreams-mt -o a.out
+</code></pre>
+
+<p>Makefileの変数でいうと:</p>
+
+<pre><code class="language-make">CPPFLAGS = -I${HOME}/local/include
+LDFLAGS = -L${HOME}/local/lib
+LDLIBS = -lboost_iostreams-mt
+</code></pre>
+
+<h2 id="math-http-www-boost-org-doc-libs-release-libs-math-doc-html"><a href="http://www.boost.org/doc/libs/release/libs/math/doc/html/">math</a></h2>
+
+<h3 id="distribution-http-www-boost-org-doc-libs-release-libs-math-doc-html-dist-html"><a href="http://www.boost.org/doc/libs/release/libs/math/doc/html/dist.html">distribution</a></h3>
+
+<p>確率分布に従った乱数生成はC++11から <code>&lt;random&gt;</code> でサポートされるようになったが、
+確率密度関数(PDF)や累積密度関数(CDF)はまだ標準入りしてない。</p>
+
+<pre><code class="language-c++">// #include &lt;boost/math/distributions.hpp&gt;
+#include &lt;boost/math/distributions/normal.hpp&gt;
+#include &lt;boost/math/distributions/poisson.hpp&gt;
+#include &lt;boost/math/distributions/binomial.hpp&gt;
+#include &lt;boost/math/distributions/chi_squared.hpp&gt;
+
+namespace bmath = boost::math;
+
+bmath::normal_distribution&lt;&gt; dist(mean, sd);
+
+bmath::mean(dist);
+bmath::median(dist);
+bmath::standard_deviation(dist);
+
+bmath::pdf(dist, x);
+bmath::cdf(dist, x);
+bmath::quantile(dist, p);
+</code></pre>
+
+<div class="warning">
+<p>右側の裾が欲しいときは精度を保つために <code>complement()</code> を使う。
+(Rでいう <code>lower.tail=FALSE</code>)</p>
+
+<pre><code class="language-c++">// good
+bmath::quantile(bmath::complement(dist, p));
+// bad
+bmath::quantile(dist, 1.0 - p)
+
+// good
+bmath::cdf(bmath::complement(dist, x));
+// bad
+1.0 - bmath::cdf(dist, x);
+</code></pre>
+
+</div>
+
+
+<h2 id="iostreams-http-www-boost-org-doc-libs-release-libs-iostreams-doc"><a href="http://www.boost.org/doc/libs/release/libs/iostreams/doc/">iostreams</a></h2>
+
+<p>要ビルド＆リンク <code>-lboost_iostreams-mt</code></p>
+
+<h3 id="gzip-圧縮と展開">gzip 圧縮と展開</h3>
+
+<p><a href="https://github.com/heavywatal/cxxwtils/blob/master/zfstream.hpp">https://github.com/heavywatal/cxxwtils/blob/master/zfstream.hpp</a></p>
+
+<pre><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;boost/iostreams/filtering_stream.hpp&gt;
+#include &lt;boost/iostreams/filter/gzip.hpp&gt;
+#include &lt;boost/iostreams/device/file_descriptor.hpp&gt;
+
+int main() {
+    namespace bios = boost::iostreams;
+    {
+        bios::filtering_ostream ost;
+        ost.push(bios::gzip_compressor());
+        ost.push(bios::file_descriptor_sink(&quot;hello.txt.gz&quot;));
+        ost &lt;&lt; &quot;Hello world!&quot;;
+    }
+    {
+        bios::filtering_istream ist;
+        ist.push(bios::gzip_decompressor());
+        ist.push(bios::file_descriptor_source(&quot;hello.txt.gz&quot;));
+        std::string buffer;
+        std::getline(ist, buffer, '\0');
+        std::cout &lt;&lt; buffer &lt;&lt; std::endl;
+    }
+}
+</code></pre>
+
+<ul>
+<li>gzipフィルタはコンストラクタで渡してもよい。</li>
+<li><code>file_descriptor</code> はfailビットが立つとすぐ例外を投げて
+&ldquo;No such file or directory&rdquo; などを知らせてくれるので便利。
+標準streamのような沈黙を求める場合は代わりに
+<code>std::ifstream</code> などを <code>push()</code> することも可能。</li>
+</ul>
+
+<h2 id="program-options-http-www-boost-org-doc-libs-release-doc-html-program-options-html"><a href="http://www.boost.org/doc/libs/release/doc/html/program_options.html">program_options</a></h2>
+
+<p>要ビルド＆リンク <code>-lboost_program_options-mt</code></p>
+
+<h2 id="coroutine2-http-www-boost-org-doc-libs-release-libs-coroutine2-doc-html"><a href="http://www.boost.org/doc/libs/release/libs/coroutine2/doc/html/">coroutine2</a></h2>
+
+<p>要ビルド＆リンク <code>-lboost_context-mt</code></p>
+
+<p>Pythonの<code>yield</code>みたいなことをC++でもできるようになる。</p>
+
+<p><a href="https://gist.github.com/heavywatal/e9c4d705b5617e4fc6ea32452db18860">Fibonacci generator on gist</a></p>
+
+<div class="warning">
+<p>オブジェクトの寿命に注意。</p>
+
+<ul>
+<li><code>yield</code>返しはmoveなので、
+次の処理で再利用するつもりならコピーコンストラクタ越しに新品を返す。</li>
+<li>generator的なものを返す関数を作ると、
+それを抜ける時に寿命を迎えるオブジェクトがあることに注意。</li>
+</ul>
+
+</div>
+
+
 </article>
 </main>
 
