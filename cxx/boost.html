@@ -261,11 +261,13 @@ int main() {
 </code></pre>
 
 <ul>
-<li>gzipフィルタはコンストラクタで渡してもよい。</li>
+<li>deviceを <code>push()</code> した時点でchain completeになるので、
+先にfilterを <code>push()</code> する必要がある。
+コンストラクタにfilterを渡してもよい。</li>
 <li><code>file_descriptor</code> はfailビットが立つとすぐ例外を投げて
 &ldquo;No such file or directory&rdquo; などを知らせてくれるので便利。
 標準streamのような沈黙を求める場合は代わりに
-<code>std::ifstream</code> などを <code>push()</code> することも可能。</li>
+<code>std::ifstream</code> などを <code>push()</code> する。</li>
 </ul>
 
 <h2 id="program-options-http-www-boost-org-doc-libs-release-doc-html-program-options-html"><a href="http://www.boost.org/doc/libs/release/doc/html/program_options.html">program_options</a></h2>
