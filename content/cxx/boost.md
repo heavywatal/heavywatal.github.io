@@ -179,11 +179,13 @@ int main() {
 }
 ```
 
-- gzipフィルタはコンストラクタで渡してもよい。
+- deviceを `push()` した時点でchain completeになるので、
+  先にfilterを `push()` する必要がある。
+  コンストラクタにfilterを渡してもよい。
 - `file_descriptor` はfailビットが立つとすぐ例外を投げて
   "No such file or directory" などを知らせてくれるので便利。
   標準streamのような沈黙を求める場合は代わりに
-  `std::ifstream` などを `push()` することも可能。
+  `std::ifstream` などを `push()` する。
 
 
 ## [program_options](http://www.boost.org/doc/libs/release/doc/html/program_options.html)
