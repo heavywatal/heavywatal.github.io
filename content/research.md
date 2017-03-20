@@ -1,6 +1,7 @@
 +++
 title = 'Research Interests'
 menu = "main"
+weight = 3
 +++
 
 ## 生物多様性と複雑性の源泉

@@ -4,6 +4,7 @@ subtitle = "3Dグラフ描画"
 tags = ["r", "graph"]
 [menu.main]
   parent = "rstats"
+  weight = 1
 +++
 
 3D visualization device system (OpenGL).
