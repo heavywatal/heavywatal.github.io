@@ -85,8 +85,8 @@ readr — 高速で柔軟なテーブル読み込み
 
 
 <p>タブ区切りテキストやCSVファイルを読み込んでdata.frameにするツール。
-圧縮された <code>***.tsv.gz</code> なども自動的に展開して読んでくれる。
-標準でも <code>read.table()</code> や <code>read.csv()</code> があるけど、それらと違って</p>
+<code>.gz</code> や <code>.xz</code> などの圧縮ファイルも透過的に読み書き可能。
+標準でも <code>read.table()</code> や <code>read.csv()</code> があるけど、それらと比べて</p>
 
 <ul>
 <li>場合により10倍ほど高速</li>
@@ -100,7 +100,13 @@ readr — 高速で柔軟なテーブル読み込み
 
 <p><a href="https://github.com/tidyverse/tidyverse">tidyverse</a> に含まれているので、
 <code>install.packages('tidyverse')</code> で一括インストール、
-<code>library(tidyverse)</code> で一括ロード。</p>
+<code>library(tidyverse)</code> で一括ロード。
+例えば:</p>
+
+<pre><code class="language-r">library(tidyverse)
+write_tsv(iris, 'iris.tsv.gz')
+read_tsv('iris.tsv.gz')
+</code></pre>
 
 <ul>
 <li><a href="http://r4ds.had.co.nz/data-import.html">http://r4ds.had.co.nz/data-import.html</a></li>
@@ -111,11 +117,27 @@ readr — 高速で柔軟なテーブル読み込み
 
 <h3 id="ファイル読み込み">ファイル読み込み</h3>
 
+<pre><code class="language-r">read_delim(file, delim,
+  quote = '&quot;',
+  escape_backslash = FALSE,
+  escape_double = TRUE,
+  col_names = TRUE,
+  col_types = NULL,
+  locale = default_locale(),
+  na = c('', 'NA'),
+  quoted_na = TRUE,
+  comment = '',
+  trim_ws = FALSE,
+  skip = 0,
+  n_max = Inf,
+  guess_max = min(1000, n_max),
+  progress = show_progress())
+</code></pre>
+
+<p><strong><code>read_csv(...)</code></strong> や <strong><code>read_tsv(...)</code></strong>
+は区切り文字 <code>delim=</code> 指定済みのショートカット。</p>
+
 <dl>
-<dt><code>read_csv(file, col_names=TRUE, col_types=NULL, locale=default_locale(), na=c('', 'NA'), comment='', trim_ws=TRUE, skip=0, n_max=-1, progress=interactive())</code></dt>
-<dd>カンマ区切りテキスト</dd>
-<dt><code>read_tsv(...)</code></dt>
-<dd>タブ区切りテキスト</dd>
 <dt><code>read_table(...)</code></dt>
 <dd>連続する空白文字をひとつの区切りと見なして処理</dd>
 <dt><code>read_fwf(file, col_positions, ...)</code></dt>
@@ -126,16 +148,30 @@ readr — 高速で柔軟なテーブル読み込み
 <li><code>fwf_widths(widths, col_names=NULL)</code> で幅指定</li>
 <li><code>fwf_positions(start, end, col_names=NULL)</code> で開始・終了位置指定</li>
 </ol></dd>
-<dt><code>read_delim(file, delim, quote='&quot;', escape_backslash=FALSE, ...)</code></dt>
-<dd><p>区切り文字など自分で細かく指定</p></dd>
 <dt><code>read_lines(file, skip=0, n_max=-1L, ...)</code>, <code>read_lines_raw(...)</code></dt>
-<dd><p>1行を1要素とした文字列ベクタを返す</p></dd>
+<dd><p>1行を1要素とした文字列ベクタとして読み込む</p></dd>
 <dt><code>read_file(file)</code></dt>
 <dd><p>ファイルの内容まるごと文字列で返す</p></dd>
 </dl>
 
-<p>書き出し用の関数 <code>write_***()</code> も一応付いているが、
-まだ圧縮ファイルを書き出せないので微妙。</p>
+<h3 id="ファイル書き出し">ファイル書き出し</h3>
+
+<pre><code class="language-r">write_delim(x, path,
+  delim = ' ',
+  na = 'NA',
+  append = FALSE,
+  col_names = !append)
+</code></pre>
+
+<p><strong><code>write_csv(...)</code></strong> や <strong><code>write_tsv(...)</code></strong>
+は区切り文字 <code>delim=</code> 指定済みのショートカット。</p>
+
+<dl>
+<dt><code>write_lines(x, path, na='NA', append=FALSE)</code></dt>
+<dd>vectorやlistを1行ずつ書き出す。</dd>
+<dt><code>write_file(x, path, append=FALSE)</code></dt>
+<dd>文字列をそのまま書き出す。</dd>
+</dl>
 
 <h3 id="文字列から別の型へ-a-name-parse-a">文字列から別の型へ <a name="parse"></a></h3>
 
