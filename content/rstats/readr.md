@@ -8,8 +8,8 @@ tags = ["r", "tidyverse"]
 +++
 
 タブ区切りテキストやCSVファイルを読み込んでdata.frameにするツール。
-圧縮された `***.tsv.gz` なども自動的に展開して読んでくれる。
-標準でも `read.table()` や `read.csv()` があるけど、それらと違って
+`.gz` や `.xz` などの圧縮ファイルも透過的に読み書き可能。
+標準でも `read.table()` や `read.csv()` があるけど、それらと比べて
 
 -   場合により10倍ほど高速
 -   文字列を勝手にfactor扱いしたりしないので
@@ -22,6 +22,12 @@ tags = ["r", "tidyverse"]
 [tidyverse](https://github.com/tidyverse/tidyverse) に含まれているので、
 `install.packages('tidyverse')` で一括インストール、
 `library(tidyverse)` で一括ロード。
+例えば:
+```r
+library(tidyverse)
+write_tsv(iris, 'iris.tsv.gz')
+read_tsv('iris.tsv.gz')
+```
 
 -   http://r4ds.had.co.nz/data-import.html
 -   https://cran.r-project.org/package=readr
@@ -30,11 +36,26 @@ tags = ["r", "tidyverse"]
 
 ### ファイル読み込み
 
-`read_csv(file, col_names=TRUE, col_types=NULL, locale=default_locale(), na=c('', 'NA'), comment='', trim_ws=TRUE, skip=0, n_max=-1, progress=interactive())`
-:   カンマ区切りテキスト
+```r
+read_delim(file, delim,
+  quote = '"',
+  escape_backslash = FALSE,
+  escape_double = TRUE,
+  col_names = TRUE,
+  col_types = NULL,
+  locale = default_locale(),
+  na = c('', 'NA'),
+  quoted_na = TRUE,
+  comment = '',
+  trim_ws = FALSE,
+  skip = 0,
+  n_max = Inf,
+  guess_max = min(1000, n_max),
+  progress = show_progress())
+```
 
-`read_tsv(...)`
-:   タブ区切りテキスト
+**`read_csv(...)`** や **`read_tsv(...)`**
+は区切り文字 `delim=` 指定済みのショートカット。
 
 `read_table(...)`
 :   連続する空白文字をひとつの区切りと見なして処理
@@ -46,17 +67,32 @@ tags = ["r", "tidyverse"]
     2.  `fwf_widths(widths, col_names=NULL)` で幅指定
     3.  `fwf_positions(start, end, col_names=NULL)` で開始・終了位置指定
 
-`read_delim(file, delim, quote='"', escape_backslash=FALSE, ...)`
-:   区切り文字など自分で細かく指定
-
 `read_lines(file, skip=0, n_max=-1L, ...)`, `read_lines_raw(...)`
-:   1行を1要素とした文字列ベクタを返す
+:   1行を1要素とした文字列ベクタとして読み込む
 
 `read_file(file)`
 :   ファイルの内容まるごと文字列で返す
 
-書き出し用の関数 `write_***()` も一応付いているが、
-まだ圧縮ファイルを書き出せないので微妙。
+
+### ファイル書き出し
+
+```r
+write_delim(x, path,
+  delim = ' ',
+  na = 'NA',
+  append = FALSE,
+  col_names = !append)
+```
+
+**`write_csv(...)`** や **`write_tsv(...)`**
+は区切り文字 `delim=` 指定済みのショートカット。
+
+`write_lines(x, path, na='NA', append=FALSE)`
+: vectorやlistを1行ずつ書き出す。
+
+`write_file(x, path, append=FALSE)`
+: 文字列をそのまま書き出す。
+
 
 ### 文字列から別の型へ <a name="parse"></a>
 
