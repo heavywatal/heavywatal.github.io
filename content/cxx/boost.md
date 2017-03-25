@@ -151,8 +151,6 @@ bmath::cdf(bmath::complement(dist, x));
 
 ### gzip 圧縮と展開
 
-https://github.com/heavywatal/cxxwtils/blob/master/zfstream.hpp
-
 ```c++
 #include <iostream>
 #include <string>
@@ -186,6 +184,9 @@ int main() {
   "No such file or directory" などを知らせてくれるので便利。
   標準streamのような沈黙を求める場合は代わりに
   `std::ifstream` などを `push()` する。
+- ファイル名に応じてフィルタを切り替えるようなクラスを定義しておけば、
+  透過的に読み書きできる。e.g.,
+  [`zfstream`](https://github.com/heavywatal/cxxwtl/blob/master/zfstream.hpp)
 
 
 ## [program_options](http://www.boost.org/doc/libs/release/doc/html/program_options.html)
