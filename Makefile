@@ -13,7 +13,7 @@ install:
 	rsync -au --delete --exclude='.git' ${BUILDDIR}/ ${DEPLOYDIR}/
 
 clean:
-	rm -rf ${BUILDDIR}
+	rm -r ${BUILDDIR}
 
 server:
 	hugo server -D -w
