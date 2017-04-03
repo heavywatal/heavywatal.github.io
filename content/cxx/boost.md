@@ -6,8 +6,9 @@ tags = ["c++"]
   parent = "cxx"
 +++
 
--   <http://www.boost.org/>
--   <http://www.boost.org/doc/libs/release/>
+- http://www.boost.org/
+- http://www.boost.org/doc/libs/release/
+- https://boostjp.github.io/
 
 ## Installation
 
@@ -210,3 +211,9 @@ Pythonの`yield`みたいなことをC++でもできるようになる。
 - generator的なものを返す関数を作ると、
   それを抜ける時に寿命を迎えるオブジェクトがあることに注意。
 {{%/div%}}
+
+## そのほか
+
+[`<boost/multiprecision/cpp_int.hpp>`](http://www.boost.org/libs/multiprecision)
+
+[`<boost/dynamic_bitset.hpp>`](http://www.boost.org/libs/dynamic_bitset)
