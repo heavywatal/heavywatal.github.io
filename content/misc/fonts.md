@@ -13,18 +13,18 @@ tags = ["writing"]
 :   "No tofu" を目指してGoogleが開発している多言語対応フォント。
 :   Noto Serif はそこまで美しくはないが、
     ディスプレイ上での視認性や和文フォントとのサイズバランスも良くて便利。
-:   [Noto Sans CJK](https://www.google.com/get/noto/help/cjk/)
-    はAdobeと共同開発で、ほぼ同じものを違う名前で公開している。
+:   [Noto Sans/Serif CJK](https://www.google.com/get/noto/help/cjk/)
+    はAdobeと共同開発の和文フォントで、ほぼ同じものを違う名前で公開している。
     英数字がNoto SansではなくSource Sans Proなのはなぜ？
 
 [Source Sans Pro](https://github.com/adobe-fonts/source-sans-pro)
 :   小文字の l が曲がってて良いけど全体的に狭苦しい。
 :   Googleと共同開発の
-    [Source Han Sans](https://github.com/adobe-fonts/source-han-sans)
-    (源ノ角ゴシック)は素晴らしい日本語フォント。
-    ウェイトもたくさんある。
-:   ダウンロードの選択肢がありすぎて迷うが、
-    "Region-specific Subset" のSourceHanSansJPを入れればオッケー。
+    [Source Han Sans (源ノ角ゴシック)](https://github.com/adobe-fonts/source-han-sans) と
+    [Source Han Serif (源ノ明朝)](https://github.com/adobe-fonts/source-han-serif)
+    はコンセプトも内容も素晴らしい日本語フォント。ウェイトもたくさんある。
+    ダウンロードの選択肢がありすぎて迷うが、
+    "Region-specific Subset" のSourceHanSansJPが軽くて良さそう。
 :   Source Han Code JP は普通の固定幅フォントよりも幅広で、
     和文と欧文の幅が3:2になるよう調整されている。
     俺は2:1のUbuntu Monoのほうが好き。
@@ -34,12 +34,12 @@ tags = ["writing"]
     個性的でありながら見やすい。
 :   エルの小文字 l が曲がってて良い。
 :   Ubuntu Mono は特にプログラミング用のフォントとして最適。
-:   普通の欧文 `monospace` よりもひとまわり小さく、
+    普通の欧文 `monospace` よりもひとまわり小さく、
     Osaka-Mono など日本語の半角文字と同じ幅になるのもポイント。
 
 [Open Sans](https://www.google.com/fonts/specimen/Open+Sans)
 :   すっきりゆったりニュートラルで見やすい。
-:   ヒラギノとの相性も抜群。
+    ヒラギノとの相性も抜群。
 :   ファイルサイズも小さいのでウェブフォントとして使いやすい。
 
 [Linux Libertine](http://www.linuxlibertine.org)
@@ -278,6 +278,10 @@ tags = ["writing"]
 </tr>
 <tr style="font-family: 'YuMincho', sans-serif">
   <td>YuMincho</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
+</tr>
+<tr style="font-family: 'Source Han Serif JP', sans-serif">
+  <td>Source Han Serif JP</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
 </tr>
 <tr style="font-family: 'TakaoExMincho', sans-serif">
