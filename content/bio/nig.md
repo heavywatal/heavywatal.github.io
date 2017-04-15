@@ -235,8 +235,13 @@ print("SGE_TASK_ID: " + os.environ["SGE_TASK_ID"])
 `qstat -g c`
 :   クラスタで定義されているキューの一覧と、それぞれの負荷を表示
 
-`qstat -f`
+`qstat -f | less`
 :   全ノードの状況をfullに表示
+
+`qstat -u '*' | less`
+:   全ユーザのジョブを表示。
+    `-s p` でpending中のみに絞ったり、
+    `-l medium` でキューの種類を絞ったりできる。
 
 `qstat -j JOBID`
 :   ジョブの詳細表示
