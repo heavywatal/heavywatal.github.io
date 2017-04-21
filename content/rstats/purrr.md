@@ -20,7 +20,7 @@ purerのように読むらしい。
 
 パイプ演算子 `%>%` については[dplyr]({{< relref "dplyr.md" >}})を参照。
 
-https://github.com/hadley/purrr
+https://github.com/tidyverse/purrr
 
 ## list, vector操作
 

@@ -16,7 +16,7 @@ data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(
 `library(tidyverse)` で一括ロード。
 
 -   <http://r4ds.had.co.nz/transform.html>
--   <https://github.com/hadley/dplyr>
+-   <https://github.com/tidyverse/dplyr>
 -   <https://cran.r-project.org/web/packages/dplyr/vignettes/introduction.html>
 
 ## 関数の連結

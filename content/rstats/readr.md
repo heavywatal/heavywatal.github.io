@@ -149,7 +149,7 @@ read_csv('mydata.csv', col_types=colsp)
 
 ## Excelファイルを読み込む
 
-https://github.com/hadley/readxl
+https://github.com/tidyverse/readxl
 
 自分のデータは絶対にExcel形式ではなくCSVやTSV形式で保存すべきだが、
 人から受け取ったファイルや論文のサプリデータがExcelだったら仕方がない。
