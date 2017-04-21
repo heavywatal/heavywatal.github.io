@@ -36,6 +36,16 @@ Gitでなければ得られない恩恵が大きくなってきている。
 - `~/.gitconfig` にユーザ名やアドレスを登録する。
   https://git-scm.com/docs/git-config
 
+    ```sh
+    % git config --global user.name "Watal M. Iwasaki"
+    % git config --global user.email "heavy.watalあmail.com"
+    % less ~/.gitconfig
+    ```
+- ついでに `pushinsteadof` の設定をしておく。
+  httpsで高速にclone/fetch/pullして、
+  sshでパスワード無しでpushする、というのが楽ちん。
+- 設定例: [`heavywatal/dotfiles/.gitconfig`](https://github.com/heavywatal/dotfiles/blob/master/.gitconfig)
+
 
 ### 手元の変更を外に伝える
 
