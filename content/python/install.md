@@ -23,13 +23,18 @@ Scientificな用途で使いたい場合は
 などの主要パッケージもまとめて面倒みてくれる
 [Anaconda](https://docs.continuum.io/anaconda/)
 で最新版を入れると良い。
-GUIもあってかなり親切だが、
-`PATH`上でシステムコマンド(`curl`など)を上書きしちゃうヤンチャな面もあるので、
+GUIのインストーラでもいいし、Homebrewでもいける:
+
+```sh
+% brew cask install anaconda
+% export PATH=/usr/local/anaconda3/bin:"$PATH"
+```
+
+ただし`PATH`上でシステムコマンド(`curl`など)を上書きしちゃうヤンチャな面もあるので、
 それが気になる人は
 [pyenv](https://github.com/yyuu/pyenv)
 越しに入れることで汚染を防げる。
 全部入りに抵抗がある場合はMinicondaで小さくスタートすることも可能。
-
 例えば Homebrew + pyenv + Miniconda で基本的な環境を整える手順:
 
 ```sh
@@ -40,7 +45,7 @@ GUIもあってかなり親切だが、
 % pyenv global miniconda3-latest
 % eval "$(pyenv init -)"
 % python --version
-% conda install seaborn biopython flake8
+% conda install biopython flake8
 ```
 
 その後のパッケージ管理も `conda` で。
