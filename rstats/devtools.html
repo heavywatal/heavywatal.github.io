@@ -245,17 +245,18 @@ std::string cxx_func(Rcpp::CharacterVector args=Rcpp::CharacterVector::create())
 
 <li><p>開発者側で指定すべきビルドオプションは <code>src/Makevars</code> に指定</p>
 
-<pre><code>CXX_STD = CXX11
+<pre><code>CXX_STD = CXX14
 PKG_CPPFLAGS = -isystem ${HOME}/local/include
 PKG_LIBS = -lmy_great_lib
-</code></pre></li>
+</code></pre>
+
+<p>R 3.4.0 から <code>CXX_STD = CXX14</code> をサポート</p></li>
 
 <li><p>ユーザ側で指定すべきオプションは <code>~/.R/Makevars</code> に</p>
 
 <pre><code>CFLAGS = -g -Wall -O2 -march=native -mtune=native
 CXXFLAGS = $(CFLAGS)
 CXX1XFLAGS = $(CFLAGS)
-CXX1XSTD = -std=c++14
 LDFLAGS = -L${HOME}/local/lib -L${HOME}/.homebrew/lib
 </code></pre></li>
 
