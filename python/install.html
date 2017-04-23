@@ -101,14 +101,18 @@ Pythonインストール
 などの主要パッケージもまとめて面倒みてくれる
 <a href="https://docs.continuum.io/anaconda/">Anaconda</a>
 で最新版を入れると良い。
-GUIもあってかなり親切だが、
-<code>PATH</code>上でシステムコマンド(<code>curl</code>など)を上書きしちゃうヤンチャな面もあるので、
+GUIのインストーラでもいいし、Homebrewでもいける:</p>
+
+<pre><code class="language-sh">% brew cask install anaconda
+% export PATH=/usr/local/anaconda3/bin:&quot;$PATH&quot;
+</code></pre>
+
+<p>ただし<code>PATH</code>上でシステムコマンド(<code>curl</code>など)を上書きしちゃうヤンチャな面もあるので、
 それが気になる人は
 <a href="https://github.com/yyuu/pyenv">pyenv</a>
 越しに入れることで汚染を防げる。
-全部入りに抵抗がある場合はMinicondaで小さくスタートすることも可能。</p>
-
-<p>例えば Homebrew + pyenv + Miniconda で基本的な環境を整える手順:</p>
+全部入りに抵抗がある場合はMinicondaで小さくスタートすることも可能。
+例えば Homebrew + pyenv + Miniconda で基本的な環境を整える手順:</p>
 
 <pre><code class="language-sh">% brew install pyenv
 % exec ${SHELL} -l
@@ -117,7 +121,7 @@ GUIもあってかなり親切だが、
 % pyenv global miniconda3-latest
 % eval &quot;$(pyenv init -)&quot;
 % python --version
-% conda install seaborn biopython flake8
+% conda install biopython flake8
 </code></pre>
 
 <p>その後のパッケージ管理も <code>conda</code> で。
