@@ -153,17 +153,17 @@ vignettes/
 
 -   開発者側で指定すべきビルドオプションは `src/Makevars` に指定
     ```
-    CXX_STD = CXX11
+    CXX_STD = CXX14
     PKG_CPPFLAGS = -isystem ${HOME}/local/include
     PKG_LIBS = -lmy_great_lib
     ```
+    R 3.4.0 から `CXX_STD = CXX14` をサポート
 
 -   ユーザ側で指定すべきオプションは `~/.R/Makevars` に
     ```
     CFLAGS = -g -Wall -O2 -march=native -mtune=native
     CXXFLAGS = $(CFLAGS)
     CXX1XFLAGS = $(CFLAGS)
-    CXX1XSTD = -std=c++14
     LDFLAGS = -L${HOME}/local/lib -L${HOME}/.homebrew/lib
     ```
 
