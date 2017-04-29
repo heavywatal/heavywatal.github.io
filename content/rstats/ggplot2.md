@@ -16,8 +16,9 @@ R標準の`plot()`などは前者の上に、
 `install.packages('tidyverse')` で一括インストール、
 `library(tidyverse)` で一括ロード。
 
+- <http://ggplot2.tidyverse.org>
 - <http://r4ds.had.co.nz/data-visualisation.html>
-- <http://docs.ggplot2.org/>
+- <http://r4ds.had.co.nz/graphics-for-communication.html>
 - <http://www.cookbook-r.com/Graphs/>
 - <http://www.rdocumentation.org/packages/ggplot2>
 - <https://github.com/hadley/ggplot2-book>
@@ -59,59 +60,59 @@ ggsave("iris_sepal.png", gp)
 
 [version 2.0での変更点](https://blog.rstudio.org/2015/12/21/ggplot2-2-0-0/)
 
-[散布図](http://docs.ggplot2.org/current/geom_point.html)
+[散布図](http://ggplot2.tidyverse.org/reference/geom_point.html)
 :   `gp + geom_point(size=2, alpha=0.3)`
 
-[折れ線グラフ](http://docs.ggplot2.org/current/geom_path.html)
+[折れ線グラフ](http://ggplot2.tidyverse.org/reference/geom_path.html)
 :   `gp + geom_path(size=2, linetype="dashed")` データ順に結ぶ\
     `gp + geom_line()` x軸上の順で結ぶ\
     `gp + geom_step()` 階段状に結ぶ
 
-[ヒストグラム、密度曲線](http://docs.ggplot2.org/current/geom_histogram.html)
+[ヒストグラム、密度曲線](http://ggplot2.tidyverse.org/reference/geom_histogram.html)
 :   `gp + geom_histogram()` --- 棒グラフ(連続値を`stat_bin()` で切って)
 :   `gp + geom_bar()` --- 棒グラフ(離散値を`stat_count()`で数えて)
 :   `gp + geom_freqpoly()` --- 折れ線
 :   `gp + geom_density()` --- 密度推定されたスムーズな線
 
-[棒グラフ](http://docs.ggplot2.org/current/geom_bar.html)
+[棒グラフ](http://ggplot2.tidyverse.org/reference/geom_bar.html)
 :   `gp + geom_col()`\
     同じxに対して複数グループのyが存在するとき、
     `position='dodge'` にすると横並び
     (デフォルトは縦積みの`'stack'`)。
 
-[箱ひげ図](http://docs.ggplot2.org/current/geom_boxplot.html)
+[箱ひげ図](http://ggplot2.tidyverse.org/reference/geom_boxplot.html)
 :   `gp + geom_boxplot()`\
     `gp + geom_violin()`
 
-[ヒートマップ](http://docs.ggplot2.org/current/geom_tile.html)
+[ヒートマップ](http://ggplot2.tidyverse.org/reference/geom_tile.html)
 :   `gp + geom_tile(aes(fill=z))`\
     `gp + geom_raster(aes(fill=z))`\
     後者は各タイルの大きさがすべて同じ場合の特殊ケースで、高速。
 
-[エラーバー](http://docs.ggplot2.org/current/geom_linerange.html)
+[エラーバー](http://ggplot2.tidyverse.org/reference/geom_linerange.html)
 :   `limits = aes(ymax=height+se, ymin=height-se)`\
     `gp + geom_errorbar(limits, width=0.1)`\
     `gp + geom_pointrange(limits)`\
     `gp + geom_crossbar(limits, width=0.2)`
 
-[関数](http://docs.ggplot2.org/current/stat_function.html)
+[関数](http://ggplot2.tidyverse.org/reference/stat_function.html)
 :   `ggplot(data.frame(x=c(-4, 4)), aes(x)) + stat_function(fun=dnorm, args=c(0, 1), n=200)`
 
 ------------------------------------------------------------------------
 
-[回帰曲線](http://docs.ggplot2.org/current/geom_smooth.html)
+[回帰曲線](http://ggplot2.tidyverse.org/reference/geom_smooth.html)
 :   `gp + geom_smooth(method=glm, family=poisson, se=FALSE)`
 
-[切片と傾きで直線を描く](http://docs.ggplot2.org/current/geom_abline.html)
+[切片と傾きで直線を描く](http://ggplot2.tidyverse.org/reference/geom_abline.html)
 :   `gp + geom_abline(intercept=3, slope=5)`\
     `gp + geom_hline(yintercept=7) + geom_vline(xintercept=11)`
 
-[始点と終点で曲線や矢印を描く](http://docs.ggplot2.org/current/geom_segment.html)
+[始点と終点で曲線や矢印を描く](http://ggplot2.tidyverse.org/reference/geom_segment.html)
 :   `gp + geom_curve(aes(x, y, xend, yend), curvature = -0.2)`\
     `gp + geom_segment(aes(x, y, xend, yend), arrow=arrow())`\
     矢印の調整は [grid::arrow()](https://www.rdocumentation.org/packages/grid/topics/arrow)
 
-[文字列や図形を書き加える](http://docs.ggplot2.org/current/annotate.html)
+[文字列や図形を書き加える](http://ggplot2.tidyverse.org/reference/annotate.html)
 :   `gp + geom_text(aes(y=y_val+10), label=y_val)`\
     `gp + annotate("text", x=1:4, y=4:1, label=sprintf("x = %d", 1:4))`\
     テーマの `base_family` は引き継がれないので `family=` で指定すべし。\
@@ -121,12 +122,14 @@ ggsave("iris_sepal.png", gp)
 
 ### データによって色やサイズを変える
 
+http://ggplot2.tidyverse.org/articles/ggplot2-specs.html
+
 `colour`: 点や線の色\
 `fill`: 塗りつぶしの色\
-`size`: 点や線のサイズ <http://docs.ggplot2.org/current/scale_size.html>\
-`shape`: 点の形 <http://docs.ggplot2.org/current/scale_shape.html>\
-`linetype`: 線 <http://docs.ggplot2.org/current/scale_linetype.html>\
-`alpha`: 不透明度 (0が透明、1が不透明) <http://docs.ggplot2.org/current/scale_alpha.html>
+`size`: 点や線のサイズ <http://ggplot2.tidyverse.org/reference/scale_size.html>\
+`shape`: 点の形 <http://ggplot2.tidyverse.org/reference/scale_shape.html>\
+`linetype`: 線 <http://ggplot2.tidyverse.org/reference/scale_linetype.html>\
+`alpha`: 不透明度 (0が透明、1が不透明) <http://ggplot2.tidyverse.org/reference/scale_alpha.html>
 
 `aes()` の中にはデータによって描き分けたい列名を指定し、
 外にはデータによらない値を指定する:
@@ -138,30 +141,30 @@ ggsave("iris_sepal.png", gp)
     # 色は常に赤、サイズは frequency という列の値に比例
     geom_point(aes(size=frequency), colour='red')
 
-<http://docs.ggplot2.org/current/scale_brewer.html>
+<http://ggplot2.tidyverse.org/reference/scale_brewer.html>
 :   [Colorbrewer](http://colorbrewer2.org/) で定義されているパレットを使う。 色盲対策もできるし、原色も出てこないのでオススメ。\
     cf. [RColorBrewer](https://www.rdocumentation.org/packages/RColorBrewer/topics/ColorBrewer)\
     `scale_{colour/fill}_brewer(..., type='seq', palette=1, direction=1)`: 離散値\
     `scale_{colour/fill}_distiller(...)`: 連続値
 
-<http://docs.ggplot2.org/current/scale_gradient.html>
+<http://ggplot2.tidyverse.org/reference/scale_gradient.html>
 :   グラデーションの基準色を指定する。\
     `scale_{colour/fill}_gradient(..., low, high, ...)`: 普通の連続値に\
     `scale_{colour/fill}_gradient2(..., low, mid, high, midpoint=0, ...)`: ある中央値を挟んで上下に分けたいとき\
     `scale_{colour/fill}_gradientn(..., colours, ...)`: 多色のヒートマップなどに e.g., `colours=c('#000000', '#0000FF', '#00FFFF', '#00FF00', '#FFFF00', '#FF0000')`
 
-<http://docs.ggplot2.org/current/scale_identity.html>
+<http://ggplot2.tidyverse.org/reference/scale_identity.html>
 :   データフレームに入ってる値をそのまま使う\
     `scale_{colour/fill/size/shape/linetype/alpha}_identity(..., guide='none')`
 
-<http://docs.ggplot2.org/current/scale_manual.html>
+<http://ggplot2.tidyverse.org/reference/scale_manual.html>
 :   値を直に指定する\
     `scale_{colour/fill/size/shape/linetype/alpha}_manual(..., values)`
 
 legend/colourbarのタイトルを変更したい場合は上記関数に `name='New Title'` を指定する。
 さらに細かく制御したい場合は
-[`guide_legend()`](http://docs.ggplot2.org/current/guide_legend.html) や
-[`guide_colourbar()`](http://docs.ggplot2.org/current/guide_colourbar.html)
+[`guide_legend()`](http://ggplot2.tidyverse.org/reference/guide_legend.html) や
+[`guide_colourbar()`](http://ggplot2.tidyverse.org/reference/guide_colourbar.html)
 を引数 `guide` に渡す。
 
 
@@ -180,7 +183,7 @@ ggplot内部で `stat_*()` を通して行われる。
 
 年ごとや種ごとに傾向を見たいときなど、データに応じてパネルを分割して並べる。
 
-[`facet_wrap()`](http://docs.ggplot2.org/current/facet_wrap.html)
+[`facet_wrap()`](http://ggplot2.tidyverse.org/reference/facet_wrap.html)
 :   1変数で分割して並べる
     ```r
     facet_wrap(facets, nrow=NULL, ncol=NULL, scales='fixed',
@@ -192,7 +195,7 @@ ggplot内部で `stat_*()` を通して行われる。
         facet_wrap(~Species, nrow=2)
     ```
 
-[`facet_grid()`](http://docs.ggplot2.org/current/facet_grid.html)
+[`facet_grid()`](http://ggplot2.tidyverse.org/reference/facet_grid.html)
 :   2変数で分割して縦横に並べる
     ```r
     facet_grid(facets, margins=FALSE, scales='fixed', space='fixed',
@@ -205,14 +208,14 @@ ggplot内部で `stat_*()` を通して行われる。
 
     1変数でいい場合は片方をドット `.` で固定できる。
 
-[ファセットラベルの調整](http://docs.ggplot2.org/current/labellers.html)
+[ファセットラベルの調整](http://ggplot2.tidyverse.org/reference/labellers.html)
 :   デフォルトでは値だけがfacetラベルに表示されるが、
     変数名を同時に表示するなど細かい調整も可能。
 
 
 ### 軸やタイトルを変更
 
-[軸の区切りを変更したり対数にしたり](http://docs.ggplot2.org/current/scale_continuous.html)
+[軸の区切りを変更したり対数にしたり](http://ggplot2.tidyverse.org/reference/scale_continuous.html)
 :   `gp + scale_x_continuous(breaks=seq(10, 100, by=10))`\
     `gp + scale_y_log10("Beer consumption")`\
     オプション: name, breaks, labels, na.value, limits, trans, expand\
@@ -220,32 +223,32 @@ ggplot内部で `stat_*()` を通して行われる。
     `position='right'`とかで軸の位置を変更できる。
     `sec.axis`オプションで反対側に別の軸を追加できる。
 
-[描画する範囲を指定](http://docs.ggplot2.org/current/coord_cartesian.html)
+[描画する範囲を指定](http://ggplot2.tidyverse.org/reference/coord_cartesian.html)
 :   `gp + ylim(0, 42) + xlim("b", "c", "d")`\
     `gp + coord_cartesian(xlim = NULL, ylim = NULL)`\
     前者はデータそのものを切るが、後者はデータを変えずに描画領域だけズームする
 
-[X軸とY軸の比率を固定](http://docs.ggplot2.org/current/coord_fixed.html)
+[X軸とY軸の比率を固定](http://ggplot2.tidyverse.org/reference/coord_fixed.html)
 :   `gp + coord_fixed(ratio=1)`
 
-[XY軸の反転](http://docs.ggplot2.org/current/coord_flip.html)
+[XY軸の反転](http://ggplot2.tidyverse.org/reference/coord_flip.html)
 :   `gp + coord_flip()`
 
-[極座標](http://docs.ggplot2.org/current/coord_polar.html)
+[極座標](http://ggplot2.tidyverse.org/reference/coord_polar.html)
 :   パイチャートも作れるらしい
 
-[座標変換](http://docs.ggplot2.org/current/coord_trans.html)
+[座標変換](http://ggplot2.tidyverse.org/reference/coord_trans.html)
 :   `gp + coord_trans(x='log10', y='sqrt')`\
     表示の座標だけ変更する。
     stat前に適用される `scale_x_*` とかとはちょいと違う。
 
-[軸ラベルとタイトル](http://docs.ggplot2.org/current/labs.html)
+[軸ラベルとタイトル](http://ggplot2.tidyverse.org/reference/labs.html)
 :   `gp + labs(x="time", y="weight", title="growth")`\
     `gp + xlab("time") + ylab("weight") + ggtitle("growth")`
 
 ## `theme`: 背景やラベルの調整
 
-<http://docs.ggplot2.org/current/ggtheme.html>
+<http://ggplot2.tidyverse.org/reference/ggtheme.html>
 
 ### 既成テーマ
 
@@ -290,7 +293,7 @@ Macなら"HiraKakuProN-W3"を指定すれば日本語でも文字化けしなく
 
 ### 設定項目
 
-<http://docs.ggplot2.org/current/theme.html>
+<http://ggplot2.tidyverse.org/reference/theme.html>
 
 <http://docs.ggplot2.org/dev/vignettes/themes.html>
 
@@ -455,10 +458,11 @@ quartz.save('plot.png')
 
 ## Extensions
 
+- <http://ggplot2.tidyverse.org/articles/extending-ggplot2.html>
+- <http://www.ggplot2-exts.org/>
+
 ggplotを拡張するための仕組みがversion 2.0から正式に導入され、
 ユーザーが独自の stats や geom を作って登録することが容易になった。
-
-<http://www.ggplot2-exts.org/>
 
 ### `gridExtra`
 
