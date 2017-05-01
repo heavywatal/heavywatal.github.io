@@ -76,14 +76,19 @@ Rの中から `install.package('tidyverse')` でインストールし、
 
 `str_extract(string, pattern)`, `str_extract_all(string, pattern)`
 :   マッチした部分文字列を取り出す。しなかった要素には `NA`。
-    `base::grep(pattern, x, value=TRUE)` はマッチする要素のみ、元の形で返す。
 :   数値＋単位のような文字列から数値部分だけを抜き出すには
     [readr::parse_number()]({{< relref "readr.md#parse" >}})
     が便利。
 
 `str_subset(string, pattern)`
 :   `x[str_detect(x, pattern)]` のショートカット。
-    マッチする要素だけ返すので `str_extract()` とは異なる。
+    マッチする要素だけ元の形で返すので
+    `str_extract()` より `base::grep(pattern, x, value=TRUE)` に近い。
+
+`str_which()`
+:   マッチする要素のインデックスを整数で返す
+    `which(str_detect(x, pattern))` のショートカット。
+    `base::grep(pattern, x)` と相同。
 
 `str_locate(string, pattern)`
 :   マッチする最初の箇所の `start`, `end` 位置を行列で返す。
