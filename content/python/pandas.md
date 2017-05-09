@@ -60,11 +60,6 @@ df.loc[0,'Sepal.Width']
 df.iloc[0]
 df.iloc[0,1]
 
-# versatile (label or integer)
-df.ix[0]
-df.ix[0,'Sepal.Width']
-df.ix[0,1]
-
 # fast scalar lookup
 df.at[0,'Sepal.Width']
 df.iat[0,1]
@@ -72,6 +67,9 @@ df.iat[0,1]
 
 `df.Species` のような attribute access
 は既存のメソッド名(e.g., `min`)と被るとダメなので基本的には使わないほうが良さそう。
+
+番号でもラベルでもアクセスできる `df.ix[]` もあったが、
+曖昧で危険なのでdeprecated.
 
 
 ## 設定
