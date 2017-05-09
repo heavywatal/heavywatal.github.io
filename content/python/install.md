@@ -45,7 +45,7 @@ GUIのインストーラでもいいし、Homebrewでもいける:
 % pyenv global miniconda3-latest
 % eval "$(pyenv init -)"
 % python --version
-% conda install biopython flake8
+% conda install seaborn biopython flake8
 ```
 
 その後のパッケージ管理も `conda` で。
