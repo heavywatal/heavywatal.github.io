@@ -150,6 +150,10 @@ July 2010 - March 2013
 
 ## Software
 
+-   [`tumopp`](https://github.com/heavywatal/tumopp):
+    Tumor growth simulator in C++
+-   [`tumorr`](https://github.com/heavywatal/tumorr):
+    R wrapper of `tumopp`
 -   [Genetic Drift Simulator](https://heavywatal.github.io/driftr.js/)
 -   [Origami Bird Simulator](https://github.com/heavywatal/oribir)
 -   [`ms` installer and `sample_stats++`](https://github.com/heavywatal/msutils)
@@ -158,41 +162,3 @@ July 2010 - March 2013
 -   [`namaespace`](https://github.com/heavywatal/namaespace):
     utility to create dummy R packages for namespace
 -   [Hugo theme for non-blog websites](https://github.com/heavywatal/hugo-theme-nonblog)
-
-## Biography
-
-1986.01
-:   仙台市太白区長町に生まれる
-
-1992.03
-:   長町幼稚園を卒園
-
-1998.03
-:   仙台市立長町小学校を卒業
-
-2001.03
-:   仙台市立長町中学校を卒業
-
-2004.03
-:   宮城県仙台第一高等学校を卒業
-
-2004.04
-:   東北大学工学部材料科学総合学科に入学
-
-2005.10
-:   東北大学理学部生物学科に転学部
-
-2008.03
-:   東北大学理学部生物学科を卒業
-
-2008.04
-:   東北大学大学院生命科学研究科に入学
-
-2010.03
-:   東北大学大学院生命科学研究科 博士課程前期修了
-
-2013.09
-:   東北大学大学院生命科学研究科 博士課程後期修了
-
-Present
-:   総合研究大学院大学 先導科学研究科 特別研究員
