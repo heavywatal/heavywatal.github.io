@@ -294,10 +294,47 @@ https://help.github.com/articles/configuring-a-publishing-source-for-github-page
 1.  差分を確認し、コメント欄を埋めて提出
 1.  修正を求められたらそのブランチで変更し、自分のリポジトリに`push`すればPRにも反映される
 1.  マージされたらブランチを消す
-    (GitHub PR画面のボタンか、空ブランチ上書き `git push origin :fix-typo`)
 
 
 ## 問題と対処
+
+### 用済みブランチの掃除
+
+PRマージ済みのリモートブランチを消したい。
+明示的に消すオプションを付けるか、空ブランチをpushするか:
+
+```sh
+% git push --delete origin issue-42
+% git push origin :issue-42
+```
+
+別のマシンやGitHub PR画面のボタンから消したりすると、
+消したはずのリモートブランチの記録が手元のリポジトリに残ることがある。
+まず確認:
+
+```sh
+% git branch -a
+% git remote show origin
+```
+
+こうしたstaleなブランチを刈り取る方法には二通りある:
+
+```sh
+% git fetch --prune
+% git remote prune origin
+```
+
+それでも消えないローカルブランチは手動で消す:
+
+```sh
+% git branch -d issue-666
+error: The branch 'issue-666' is not fully merged.
+If you are sure you want to delete it, run 'git branch -D issue-666'.
+```
+
+マージ済みのブランチじゃないと上記のように怒ってくれる。
+消してもいい確信があればオプションを大文字 `-D` にして強制削除。
+
 
 ### detached HEAD からの復帰
 
