@@ -391,11 +391,43 @@ git rebase -i master
 
 <li><p>修正を求められたらそのブランチで変更し、自分のリポジトリに<code>push</code>すればPRにも反映される</p></li>
 
-<li><p>マージされたらブランチを消す
-(GitHub PR画面のボタンか、空ブランチ上書き <code>git push origin :fix-typo</code>)</p></li>
+<li><p>マージされたらブランチを消す</p></li>
 </ol>
 
 <h2 id="問題と対処">問題と対処</h2>
+
+<h3 id="用済みブランチの掃除">用済みブランチの掃除</h3>
+
+<p>PRマージ済みのリモートブランチを消したい。
+明示的に消すオプションを付けるか、空ブランチをpushするか:</p>
+
+<pre><code class="language-sh">% git push --delete origin issue-42
+% git push origin :issue-42
+</code></pre>
+
+<p>別のマシンやGitHub PR画面のボタンから消したりすると、
+消したはずのリモートブランチの記録が手元のリポジトリに残ることがある。
+まず確認:</p>
+
+<pre><code class="language-sh">% git branch -a
+% git remote show origin
+</code></pre>
+
+<p>こうしたstaleなブランチを刈り取る方法には二通りある:</p>
+
+<pre><code class="language-sh">% git fetch --prune
+% git remote prune origin
+</code></pre>
+
+<p>それでも消えないローカルブランチは手動で消す:</p>
+
+<pre><code class="language-sh">% git branch -d issue-666
+error: The branch 'issue-666' is not fully merged.
+If you are sure you want to delete it, run 'git branch -D issue-666'.
+</code></pre>
+
+<p>マージ済みのブランチじゃないと上記のように怒ってくれる。
+消してもいい確信があればオプションを大文字 <code>-D</code> にして強制削除。</p>
 
 <h3 id="detached-head-からの復帰">detached HEAD からの復帰</h3>
 
