@@ -142,17 +142,36 @@ letters %>>% map_int(~ strtoi(charToRaw(.x), 16L))
 
 data.frame を引数にとるものは purrr 0.2.2.1 から切り離され、
 [purrrlyr](https://github.com/hadley/purrrlyr) に移動された。
-これらは今のところまだdeprecatedというほどではないが、
-近いうちにそうなるので早くほかのアプローチに移行せよ、とのことらしい。
-
+**これらは今のところdeprecatedではないが、
+近いうちにそうなるので早くほかのアプローチに移行せよ** 、とのこと。
 https://github.com/hadley/purrrlyr/blob/master/NEWS.md
+
+[`tidyr`]({{< relref "tidyr.md" >}}) でネストして、
+[`purrr`]({{< relref "purrr.md" >}}) でその list of data.frames に処理を施し、
+[`dplyr`]({{< relref "dplyr.md" >}}) でその変更を元の data.frame に適用する、
+というのがtidyverse流のモダンなやり方らしい。
+
+```r
+## OLD
+iris %>%
+  purrrlyr::slice_rows('Species') %>%
+  purrrlyr::by_slice(head, .collate='rows')
+
+## NEW
+iris %>%
+  tidyr::nest(-Species) %>%
+  dplyr::mutate(data= purrr::map(data, head)) %>%
+  tidyr::unnest()
+```
+
 
 `purrrlyr::dmap(.d, .f, ...)`
 : data.frameかgrouped_dfを受け取り、列ごとに`.f`を適用してdata.frameを返す。
+  対象列を選べる`dmap_if()`と`dmap_at()`もある。
   全列で長さが揃っていれば怒られないので
   `dplyr::mutate_all()`的にも`dplyr::summarise_all()`的にも使える。
   ただし`.f`に渡せるのは単一の関数のみで`dplyr::funs()`は使えない。
-  対象列を選べる`dmap_if()`と`dmap_at()`もある。
+  パッケージ作者は `dplyr` の `mutate_*()` や `summarise_*()` の利用を推奨。
 
 `purrrlyr::slice_rows(.d, .cols=NULL)`
 : 指定した列でグループ化してgrouped_dfを返す。
@@ -163,7 +182,6 @@ https://github.com/hadley/purrrlyr/blob/master/NEWS.md
   `dplyr::do()` とほぼ同じ役割で、一長一短。
   こちらは出力形式をより柔軟に指定できるが、
   中の関数からgrouping variableを参照できないという弱点を持つ。
-  `tidyr::nest() %>% dplyr::mutate()` とかのほうがスマートかも。
 
 `purrrlyr::by_row(.d, ..f, ..., .collate=c('list', 'rows', 'cols'), .to='.out', .labels=TRUE)`
 : data.frame 1行ごとに関数を適用する。

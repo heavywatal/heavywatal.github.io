@@ -44,7 +44,7 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
 
 `%>%`
 :   左の値を右の関数に第一引数として渡す。
-    `.data %>% func(arg1, arg2)` は `func(.data, arg1, arg2)` と等価等価。
+    `.data %>% func(arg1, arg2)` は `func(.data, arg1, arg2)` と等価。
     処理する順に書けるので、次々と関数を適用していくときでも読みやすい。
 
     {{%div class="note"%}}
@@ -52,25 +52,6 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
 `pipeR` パッケージの `%>>%` のほうが柔軟で高速。
 <http://renkun.me/pipeR-tutorial/>
     {{%/div%}}
-
-`dplyr::group_by(.data, col1, col2, ..., add=FALSE)`
-:   グループごとに区切って次の処理に渡す。 e.g. `summarise()`, `tally()`, `do()` など
-
-`dplyr::rowwise(.data)`
-:   行ごとに区切って次の処理に渡す。
-    今後この方法は非推奨となるっぽいので、
-    [`purrr`]({{< relref "purrr.md" >}})`::by_row()`を使ったほうが良い。
-
-`dplyr::do(.data, ...)`
-:   グループごとに処理する。
-    `{}` 内に長い処理を書いてもいいし、関数に渡してもよい。
-    グループごとに切りだされた部分は `.` で参照できる。
-    出力がdata.frameじゃないと
-    `Error: Results are not data frames at positions: 1`
-    のように怒られるが、
-    `do(dummy=func(.))` のように名前付きにすると
-    data.frameに入らないような型でも大丈夫になる。
-    今後は[`purrr`]({{< relref "purrr.md" >}})`::by_slice()`を使ったほうが良さそう。
 
 ## コア関数 (verb)
 
@@ -275,6 +256,45 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
 
 `dplyr::case_when(...)`
 :   `if {} else if {} else if {} ...` のショートカット。
+
+
+## グループ化
+
+`dplyr` だけでグループ化してグループ毎処理するアプローチは今後廃れる見込み。
+[`tidyr`]({{< relref "tidyr.md" >}}) でネストして、
+[`purrr`]({{< relref "purrr.md" >}}) でその list of data.frames に処理を施し、
+[`dplyr`]({{< relref "dplyr.md" >}}) でその変更を元の data.frame に適用する、
+というのがtidyverse流のモダンなやり方らしい。
+
+```r
+## OLD
+iris %>%
+  dplyr::group_by(Species) %>%
+  dplyr::do(head(.))
+
+## NEW
+iris %>%
+  tidyr::nest(-Species) %>%
+  dplyr::mutate(data= purrr::map(data, head)) %>%
+  tidyr::unnest()
+```
+
+`dplyr::group_by(.data, col1, col2, ..., add=FALSE)`
+:   グループごとに区切って次の処理に渡す。
+    e.g. `summarise()`, `tally()`, `do()` など
+
+`dplyr::rowwise(.data)`
+:   行ごとに区切って次の処理に渡す。
+
+`dplyr::do(.data, ...)`
+:   グループごとに処理する。
+    `{}` 内に長い処理を書いてもいいし、関数に渡してもよい。
+    グループごとに切りだされた部分は `.` で参照できる。
+    出力がdata.frameじゃないと
+    `Error: Results are not data frames at positions: 1`
+    のように怒られるが、
+    `do(dummy=func(.))` のように名前付きにすると
+    data.frameに入らないような型でも大丈夫になる。
 
 
 ## 関連書籍
