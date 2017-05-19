@@ -128,10 +128,6 @@ e.g., <code>pmap(list(1:3, 4:6), ~ .x * .y)</code> 。</dd>
 <dd>data.frameの正体はlist of columnsなので、
 そのまま<code>.l</code>として渡して<code>plyr::mlply()</code>的に使える。
 同様に <code>purrr::pmap_df()</code> は <code>plyr::mdply()</code> として使える。</dd>
-<dd><code>purrr::invoke_rows(.f, .d, ..., .collate, .to, .labels)</code>
-でも似たようなことができるが、
-第一引数が関数になってるところは<code>invoke()</code>っぽくて、
-結果の収納方法を<code>.collate</code>などで調整できるところは<code>by_row()</code>っぽい。</dd>
 <dt><code>purrr::map_if(.x, .p, .f, ...)</code></dt>
 <dd><code>.p</code>が<code>TRUE</code>になる要素のみ<code>.f()</code>を適用し、残りはそのまま出力。
 <code>.p</code>はlogical vectorでもいいし、
@@ -166,66 +162,6 @@ C++でいう<code>std::partial_sum()</code>。</dd>
 <dt><code>purrr::split_by(.x, .f, ...)</code>, <code>order_by()</code>, <code>sort_by()</code></dt>
 <dd>listやvectorを <code>.f</code> に応じて切ったり並べ替えたり。</dd>
 </dl>
-
-<h2 id="data-frame操作">data.frame操作</h2>
-
-<dl>
-<dt><code>purrr::dmap(.d, .f, ...)</code></dt>
-<dd>data.frameかgrouped_dfを受け取り、列ごとに<code>.f</code>を適用してdata.frameを返す。
-全列で長さが揃っていれば怒られないので
-<code>dplyr::mutate_all()</code>的にも<code>dplyr::summarise_all()</code>的にも使える。
-ただし<code>.f</code>に渡せるのは単一の関数のみで<code>dplyr::funs()</code>は使えない。
-対象列を選べる<code>dmap_if()</code>と<code>dmap_at()</code>もある。</dd>
-<dt><code>purrr::slice_rows(.d, .cols=NULL)</code></dt>
-<dd>指定した列でグループ化してgrouped_dfを返す。
-<code>dplyr::group_by_(.dots=.cols)</code> と同じ。</dd>
-<dt><code>purrr::by_slice(.d, ..f, ..., .collate=c('list', 'rows', 'cols'), .to='.out', .labels=TRUE)</code></dt>
-<dd>grouped_dfを受け取ってグループごとに関数を適用する。
-<code>dplyr::do()</code> とほぼ同じ役割で、一長一短。
-こちらは出力形式をより柔軟に指定できるが、
-中の関数からgrouping variableを参照できないという弱点を持つ。
-<code>tidyr::nest() %&gt;% dplyr::mutate()</code> とかのほうがスマートかも。</dd>
-<dt><code>purrr::by_row(.d, ..f, ..., .collate=c('list', 'rows', 'cols'), .to='.out', .labels=TRUE)</code></dt>
-<dd>data.frame 1行ごとに関数を適用する。
-<code>dplyr::rowwise() %&gt;% dplyr::do()</code>的な処理を一撃で書ける。</dd>
-<dd><code>.to</code>: 結果listの列名</dd>
-<dd><code>.labels</code>: 元の<code>.d</code>の列をラベルとして結果に残すか</dd>
-<dd><code>.collate</code>: 結果列の展開方法(下記例)。
-とりあえず<code>list</code>にしておいて後で<code>unnest()</code>するのが無難か。</dd>
-<dd><code>purrr::invoke_rows()</code>はかなり似ているが、
-データと関数の順序が逆になっている点と、
-<code>.f</code>が<code>.d</code>の列名で引数を取るという点で異なる。
-(<code>by_row()</code>では1行のdata.frameとして受け取って<code>.$col</code>のように参照する)</dd>
-</dl>
-
-<pre><code class="language-r">&gt; iris[1:3, 1:2] %&gt;% by_row(~data_frame(x=0:1, y=c('a', 'b')), .collate='list')
-Source: local data frame [3 x 3]
-
-  Sepal.Length Sepal.Width           .out
-         (dbl)       (dbl)          (chr)
-1          5.1         3.5 &lt;tbl_df [2,2]&gt;
-2          4.9         3.0 &lt;tbl_df [2,2]&gt;
-3          4.7         3.2 &lt;tbl_df [2,2]&gt;
-&gt; iris[1:3, 1:2] %&gt;% by_row(~data_frame(x=0:1, y=c('a', 'b')), .collate='rows')
-Source: local data frame [6 x 5]
-
-  Sepal.Length Sepal.Width  .row     x     y
-         (dbl)       (dbl) (int) (int) (chr)
-1          5.1         3.5     1     0     a
-2          5.1         3.5     1     1     b
-3          4.9         3.0     2     0     a
-4          4.9         3.0     2     1     b
-5          4.7         3.2     3     0     a
-6          4.7         3.2     3     1     b
-&gt; iris[1:3, 1:2] %&gt;% by_row(~data_frame(x=0:1, y=c('a', 'b')), .collate='cols')
-Source: local data frame [3 x 6]
-
-  Sepal.Length Sepal.Width    x1    x2    y1    y2
-         (dbl)       (dbl) (int) (int) (chr) (chr)
-1          5.1         3.5     0     1     a     b
-2          4.9         3.0     0     1     a     b
-3          4.7         3.2     0     1     a     b
-</code></pre>
 
 <h2 id="無名関数">無名関数</h2>
 
@@ -267,6 +203,76 @@ formulaを<code>function (.x, .y, . = .x)</code>という無名関数に変換�
 例えば、pair of lists &lt;=&gt; list of pairs。</dd>
 <dd>data.frameに適用するとlist of rowsが得られる。</dd>
 </dl>
+
+<h2 id="purrrlyr"><code>purrrlyr</code></h2>
+
+<p>data.frame を引数にとるものは purrr 0.2.2.1 から切り離され、
+<a href="https://github.com/hadley/purrrlyr">purrrlyr</a> に移動された。
+これらは今のところまだdeprecatedというほどではないが、
+近いうちにそうなるので早くほかのアプローチに移行せよ、とのことらしい。</p>
+
+<p><a href="https://github.com/hadley/purrrlyr/blob/master/NEWS.md">https://github.com/hadley/purrrlyr/blob/master/NEWS.md</a></p>
+
+<dl>
+<dt><code>purrrlyr::dmap(.d, .f, ...)</code></dt>
+<dd>data.frameかgrouped_dfを受け取り、列ごとに<code>.f</code>を適用してdata.frameを返す。
+全列で長さが揃っていれば怒られないので
+<code>dplyr::mutate_all()</code>的にも<code>dplyr::summarise_all()</code>的にも使える。
+ただし<code>.f</code>に渡せるのは単一の関数のみで<code>dplyr::funs()</code>は使えない。
+対象列を選べる<code>dmap_if()</code>と<code>dmap_at()</code>もある。</dd>
+<dt><code>purrrlyr::slice_rows(.d, .cols=NULL)</code></dt>
+<dd>指定した列でグループ化してgrouped_dfを返す。
+<code>dplyr::group_by_(.dots=.cols)</code> と同じ。</dd>
+<dt><code>purrrlyr::by_slice(.d, ..f, ..., .collate=c('list', 'rows', 'cols'), .to='.out', .labels=TRUE)</code></dt>
+<dd>grouped_dfを受け取ってグループごとに関数を適用する。
+<code>dplyr::do()</code> とほぼ同じ役割で、一長一短。
+こちらは出力形式をより柔軟に指定できるが、
+中の関数からgrouping variableを参照できないという弱点を持つ。
+<code>tidyr::nest() %&gt;% dplyr::mutate()</code> とかのほうがスマートかも。</dd>
+<dt><code>purrrlyr::by_row(.d, ..f, ..., .collate=c('list', 'rows', 'cols'), .to='.out', .labels=TRUE)</code></dt>
+<dd>data.frame 1行ごとに関数を適用する。
+<code>dplyr::rowwise() %&gt;% dplyr::do()</code>的な処理を一撃で書ける。</dd>
+<dd><code>.to</code>: 結果listの列名</dd>
+<dd><code>.labels</code>: 元の<code>.d</code>の列をラベルとして結果に残すか</dd>
+<dd><code>.collate</code>: 結果列の展開方法(下記例)。
+とりあえず<code>list</code>にしておいて後で<code>unnest()</code>するのが無難か。</dd>
+<dd><code>purrrlyr::invoke_rows()</code>はかなり似ているが、
+データと関数の順序が逆になっている点と、
+<code>.f</code>が<code>.d</code>の列名で引数を取るという点で異なる。
+(<code>by_row()</code>では1行のdata.frameとして受け取って<code>.$col</code>のように参照する)</dd>
+<dt><code>purrrlyr::invoke_rows(.f, .d, ..., .collate, .to, .labels)</code></dt>
+<dd>第一引数が関数になってるところは<code>invoke()</code>っぽくて、
+結果の収納方法を<code>.collate</code>などで調整できるところは<code>by_row()</code>っぽい。</dd>
+</dl>
+
+<pre><code class="language-r">&gt; iris[1:3, 1:2] %&gt;% by_row(~data_frame(x=0:1, y=c('a', 'b')), .collate='list')
+Source: local data frame [3 x 3]
+
+  Sepal.Length Sepal.Width           .out
+         (dbl)       (dbl)          (chr)
+1          5.1         3.5 &lt;tbl_df [2,2]&gt;
+2          4.9         3.0 &lt;tbl_df [2,2]&gt;
+3          4.7         3.2 &lt;tbl_df [2,2]&gt;
+&gt; iris[1:3, 1:2] %&gt;% by_row(~data_frame(x=0:1, y=c('a', 'b')), .collate='rows')
+Source: local data frame [6 x 5]
+
+  Sepal.Length Sepal.Width  .row     x     y
+         (dbl)       (dbl) (int) (int) (chr)
+1          5.1         3.5     1     0     a
+2          5.1         3.5     1     1     b
+3          4.9         3.0     2     0     a
+4          4.9         3.0     2     1     b
+5          4.7         3.2     3     0     a
+6          4.7         3.2     3     1     b
+&gt; iris[1:3, 1:2] %&gt;% by_row(~data_frame(x=0:1, y=c('a', 'b')), .collate='cols')
+Source: local data frame [3 x 6]
+
+  Sepal.Length Sepal.Width    x1    x2    y1    y2
+         (dbl)       (dbl) (int) (int) (chr) (chr)
+1          5.1         3.5     0     1     a     b
+2          4.9         3.0     0     1     a     b
+3          4.7         3.2     0     1     a     b
+</code></pre>
 
 <h2 id="関連書籍">関連書籍</h2>
 
