@@ -41,7 +41,7 @@ gp = gp + geom_point(size=3, alpha=0.7)
 print(gp)
 
 ## さらにグラフを重ねたり、タイトルやテーマの設定をしたり
-gp = gp + geom_smooth(method=glm, family=gaussian)
+gp = gp + geom_smooth(method=glm, method.args=list(family=gaussian))
 gp = gp + labs(title="Iris Sepal")
 gp = gp + theme_bw()
 gp = gp + theme(panel.grid.minor=element_blank())
@@ -101,7 +101,7 @@ ggsave("iris_sepal.png", gp)
 ------------------------------------------------------------------------
 
 [回帰曲線](http://ggplot2.tidyverse.org/reference/geom_smooth.html)
-:   `gp + geom_smooth(method=glm, family=poisson, se=FALSE)`
+:   `gp + geom_smooth(method=glm, method.args=list(family=poisson), se=FALSE)`
 
 [切片と傾きで直線を描く](http://ggplot2.tidyverse.org/reference/geom_abline.html)
 :   `gp + geom_abline(intercept=3, slope=5)`\
