@@ -208,18 +208,35 @@ formulaを<code>function (.x, .y, . = .x)</code>という無名関数に変換�
 
 <p>data.frame を引数にとるものは purrr 0.2.2.1 から切り離され、
 <a href="https://github.com/hadley/purrrlyr">purrrlyr</a> に移動された。
-これらは今のところまだdeprecatedというほどではないが、
-近いうちにそうなるので早くほかのアプローチに移行せよ、とのことらしい。</p>
+<strong>これらは今のところdeprecatedではないが、
+近いうちにそうなるので早くほかのアプローチに移行せよ</strong> 、とのこと。
+<a href="https://github.com/hadley/purrrlyr/blob/master/NEWS.md">https://github.com/hadley/purrrlyr/blob/master/NEWS.md</a></p>
 
-<p><a href="https://github.com/hadley/purrrlyr/blob/master/NEWS.md">https://github.com/hadley/purrrlyr/blob/master/NEWS.md</a></p>
+<p><a href="/rstats/tidyr.html"><code>tidyr</code></a> でネストして、
+<a href="/rstats/purrr.html"><code>purrr</code></a> でその list of data.frames に処理を施し、
+<a href="/rstats/dplyr.html"><code>dplyr</code></a> でその変更を元の data.frame に適用する、
+というのがtidyverse流のモダンなやり方らしい。</p>
+
+<pre><code class="language-r">## OLD
+iris %&gt;%
+  purrrlyr::slice_rows('Species') %&gt;%
+  purrrlyr::by_slice(head, .collate='rows')
+
+## NEW
+iris %&gt;%
+  tidyr::nest(-Species) %&gt;%
+  dplyr::mutate(data= purrr::map(data, head)) %&gt;%
+  tidyr::unnest()
+</code></pre>
 
 <dl>
 <dt><code>purrrlyr::dmap(.d, .f, ...)</code></dt>
 <dd>data.frameかgrouped_dfを受け取り、列ごとに<code>.f</code>を適用してdata.frameを返す。
+対象列を選べる<code>dmap_if()</code>と<code>dmap_at()</code>もある。
 全列で長さが揃っていれば怒られないので
 <code>dplyr::mutate_all()</code>的にも<code>dplyr::summarise_all()</code>的にも使える。
 ただし<code>.f</code>に渡せるのは単一の関数のみで<code>dplyr::funs()</code>は使えない。
-対象列を選べる<code>dmap_if()</code>と<code>dmap_at()</code>もある。</dd>
+パッケージ作者は <code>dplyr</code> の <code>mutate_*()</code> や <code>summarise_*()</code> の利用を推奨。</dd>
 <dt><code>purrrlyr::slice_rows(.d, .cols=NULL)</code></dt>
 <dd>指定した列でグループ化してgrouped_dfを返す。
 <code>dplyr::group_by_(.dots=.cols)</code> と同じ。</dd>
@@ -227,8 +244,7 @@ formulaを<code>function (.x, .y, . = .x)</code>という無名関数に変換�
 <dd>grouped_dfを受け取ってグループごとに関数を適用する。
 <code>dplyr::do()</code> とほぼ同じ役割で、一長一短。
 こちらは出力形式をより柔軟に指定できるが、
-中の関数からgrouping variableを参照できないという弱点を持つ。
-<code>tidyr::nest() %&gt;% dplyr::mutate()</code> とかのほうがスマートかも。</dd>
+中の関数からgrouping variableを参照できないという弱点を持つ。</dd>
 <dt><code>purrrlyr::by_row(.d, ..f, ..., .collate=c('list', 'rows', 'cols'), .to='.out', .labels=TRUE)</code></dt>
 <dd>data.frame 1行ごとに関数を適用する。
 <code>dplyr::rowwise() %&gt;% dplyr::do()</code>的な処理を一撃で書ける。</dd>
