@@ -137,8 +137,9 @@ iris %>% nest(matches('Length$|Width$'))
 ```
 
 なんでもかんでもフラットなdata.frameにして
-[dplyr]({{< relref "dplyr.md" >}})を適用するより、
-ネストしておいて[purrr]({{< relref "purrr.md" >}})を適用するほうが楽チンな場合もある。
+[dplyr]({{< relref "dplyr.md" >}})を駆使する時代は終わり、
+ネストしておいて[purrr]({{< relref "purrr.md" >}})を適用するのが
+tidyverse時代のクールなやり方らしい。
 
 cf. [Hadley Wickham: Managing many models with R (YouTube)](https://www.youtube.com/watch?v=rz3_FDVt9eg)
 
