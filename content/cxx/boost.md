@@ -194,6 +194,8 @@ int main() {
 
 要ビルド＆リンク `-lboost_program_options-mt`
 
+cf. [getopt]({{< relref "getopt.md" >}})
+
 
 ## [coroutine2](http://www.boost.org/doc/libs/release/libs/coroutine2/doc/html/)
 
