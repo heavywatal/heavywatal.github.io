@@ -105,13 +105,13 @@ formula内部では、第一引数を`.x`または`.`として、第二引数を
 ```r
 # with named function
 ord = function(x) {strtoi(charToRaw(x), 16L)}
-letters %>>% map_int(ord)
+letters %>% map_int(ord)
 
 # with unnamed function
-letters %>>% map_int(function(x) {strtoi(charToRaw(x), 16L)})
+letters %>% map_int(function(x) {strtoi(charToRaw(x), 16L)})
 
 # with formula
-letters %>>% map_int(~ strtoi(charToRaw(.x), 16L))
+letters %>% map_int(~ strtoi(charToRaw(.x), 16L))
 ```
 
 `purrr::as_function(.f, ...)`

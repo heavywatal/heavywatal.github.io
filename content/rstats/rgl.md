@@ -188,7 +188,7 @@ next3d(current=NA, clear=TRUE, reuse=TRUE)
         rgl::open3d(useNULL=TRUE)
         rgl::box3d()
         rgl::rglwidget(width=200, height=200)
-    }) %>>% htmltools::tagList()
+    }) %>% htmltools::tagList()
     ```
 
 `options(rgl.printRglwidget=TRUE)`
