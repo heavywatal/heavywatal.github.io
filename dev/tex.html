@@ -142,8 +142,11 @@ Hello, World!
 % tlmgr search --global japanese
 % tlmgr search --global --file zxxrl7z
 % tlmgr info --list newtx
-% sudo tlmgr install ptex
+% sudo tlmgr install chktex
 </code></pre>
+
+<p>管理者権限不要の <code>--usermode</code> も用意されているが、
+必要に迫られない限り素直に <code>sudo</code> したほうがよい。</p>
 
 <div class="warning">
 <p>パッケージをアンインストールしようと思って
@@ -460,9 +463,10 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 <h3 id="xelatex">XeLaTeX</h3>
 
 <ul>
+<li>とにかく日本語入りでコンパイルできればいい、というのであればこれが一番楽</li>
 <li>BasicTeX に含まれているのでそのまま使える</li>
 <li>OS上にあるOTFやTTFなどのフォントがそのまま使える</li>
-<li>日本語に特化したツールは開発されていない</li>
+<li>日本語に特化したツールは開発されていないので細かい制御がイマイチらしい</li>
 </ul>
 
 <h3 id="uplatex">upLaTeX</h3>
@@ -561,11 +565,7 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 \fi
 </code></pre>
 
-<p>フォント関連のものをインストールしたあとは以下のようなコマンドで読み込み直す:</p>
-
-<pre><code>% updmap
-## もしくは sudo updmap-sys
-</code></pre>
+<p>フォント関連をいじったあと明示的にマップを更新するには <code>sudo updmap-sys</code></p>
 
 </article>
 </main>
