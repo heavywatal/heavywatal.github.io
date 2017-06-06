@@ -58,7 +58,10 @@ BasicTeXの場合は最小限のパッケージしか含まれていないので
     % tlmgr search --global japanese
     % tlmgr search --global --file zxxrl7z
     % tlmgr info --list newtx
-    % sudo tlmgr install ptex
+    % sudo tlmgr install chktex
+
+管理者権限不要の `--usermode` も用意されているが、
+必要に迫られない限り素直に `sudo` したほうがよい。
 
 {{%div class="warning"%}}
 パッケージをアンインストールしようと思って
@@ -370,9 +373,10 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 
 ### XeLaTeX
 
+-   とにかく日本語入りでコンパイルできればいい、というのであればこれが一番楽
 -   BasicTeX に含まれているのでそのまま使える
 -   OS上にあるOTFやTTFなどのフォントがそのまま使える
--   日本語に特化したツールは開発されていない
+-   日本語に特化したツールは開発されていないので細かい制御がイマイチらしい
 
 
 ### upLaTeX
@@ -472,7 +476,4 @@ XeTeX なら OS のフォントをフルネームで指定して使える
 \fi
 ```
 
-フォント関連のものをインストールしたあとは以下のようなコマンドで読み込み直す:
-
-    % updmap
-    ## もしくは sudo updmap-sys
+フォント関連をいじったあと明示的にマップを更新するには `sudo updmap-sys`
