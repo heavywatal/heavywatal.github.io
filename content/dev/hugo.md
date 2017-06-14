@@ -11,7 +11,7 @@ Markdown記法のテキストをHTMLに変換する、静的ウェブサイト�
 
 - https://gohugo.io/overview/introduction/
 - https://discuss.gohugo.io/
-- https://github.com/spf13/hugo
+- https://github.com/gohugoio/hugo
 
 高速さとシンプルさに惹かれてSphinxから移行し、
 本サイトもHugoでビルドしている。
@@ -31,7 +31,7 @@ http://gohugo.io/overview/quickstart/
     ```sh
     export GOPATH=${HOME}/.go
     export PATH=${PATH}:${GOPATH}/bin
-    go get -v github.com/spf13/hugo
+    go get -v github.com/gohugoio/hugo
     ```
 
 * 骨組みを作る
@@ -58,7 +58,7 @@ http://gohugo.io/overview/quickstart/
 
 * テーマをとりあえず全部インストール
     ```sh
-    git clone --depth 1 --recursive https://github.com/spf13/hugoThemes.git themes
+    git clone --depth 1 --recursive https://github.com/gohugoio/hugoThemes.git themes
     ```
 
 * ウェブサーバーを走らせる
@@ -125,10 +125,17 @@ YAMLやJSONでもいいけど、
 
 ### localhost (Mac)
 
-`public/` 以下に生成されるファイルを `~/Sites/` に置けば
+`public/` 以下に生成されるファイルを
+`/Library/WebServer/Documents` にコピーすれば
 [localhost](http://localhost) で閲覧できる。
+ユーザーの `~/Sites/` をドキュメントルートにする方法でもいいが、
+単にシンボリックリンクを張るほうが楽ちん。
+
 ```sh
-% cd /path/to/source
+% cd /Library/WebServer/
+% sudo mv Documents Documents.orig
+% sudo ln -s ~/Sites Documents
+% cd /path/to/site-source
 % hugo
 % rsync -au --delete --exclude='.git' public/ ~/Sites/
 % open http://localhost/
