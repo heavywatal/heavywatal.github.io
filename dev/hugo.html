@@ -91,7 +91,7 @@ Hugo — 静的サイトを高速生成
 <ul>
 <li><a href="https://gohugo.io/overview/introduction/">https://gohugo.io/overview/introduction/</a></li>
 <li><a href="https://discuss.gohugo.io/">https://discuss.gohugo.io/</a></li>
-<li><a href="https://github.com/spf13/hugo">https://github.com/spf13/hugo</a></li>
+<li><a href="https://github.com/gohugoio/hugo">https://github.com/gohugoio/hugo</a></li>
 </ul>
 
 <p>高速さとシンプルさに惹かれてSphinxから移行し、
@@ -114,7 +114,7 @@ githubをフォローして最新版を入れたほうがいいかも
 
 <pre><code class="language-sh">export GOPATH=${HOME}/.go
 export PATH=${PATH}:${GOPATH}/bin
-go get -v github.com/spf13/hugo
+go get -v github.com/gohugoio/hugo
 </code></pre></li>
 
 <li><p>骨組みを作る</p>
@@ -140,7 +140,7 @@ normal *italic* **bold**
 
 <li><p>テーマをとりあえず全部インストール</p>
 
-<pre><code class="language-sh">git clone --depth 1 --recursive https://github.com/spf13/hugoThemes.git themes
+<pre><code class="language-sh">git clone --depth 1 --recursive https://github.com/gohugoio/hugoThemes.git themes
 </code></pre></li>
 
 <li><p>ウェブサーバーを走らせる</p>
@@ -206,10 +206,16 @@ YAMLやJSONでもいいけど、
 
 <h3 id="localhost-mac">localhost (Mac)</h3>
 
-<p><code>public/</code> 以下に生成されるファイルを <code>~/Sites/</code> に置けば
-<a href="http://localhost">localhost</a> で閲覧できる。</p>
+<p><code>public/</code> 以下に生成されるファイルを
+<code>/Library/WebServer/Documents</code> にコピーすれば
+<a href="http://localhost">localhost</a> で閲覧できる。
+ユーザーの <code>~/Sites/</code> をドキュメントルートにする方法でもいいが、
+単にシンボリックリンクを張るほうが楽ちん。</p>
 
-<pre><code class="language-sh">% cd /path/to/source
+<pre><code class="language-sh">% cd /Library/WebServer/
+% sudo mv Documents Documents.orig
+% sudo ln -s ~/Sites Documents
+% cd /path/to/site-source
 % hugo
 % rsync -au --delete --exclude='.git' public/ ~/Sites/
 % open http://localhost/
