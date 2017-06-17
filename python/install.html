@@ -109,13 +109,13 @@ GUIのインストーラでもいいし、Homebrewでもいける:</p>
 
 <p>ただし<code>PATH</code>上でシステムコマンド(<code>curl</code>など)を上書きしちゃうヤンチャな面もあるので、
 それが気になる人は
-<a href="https://github.com/yyuu/pyenv">pyenv</a>
+<a href="https://github.com/pyenv/pyenv">pyenv</a>
 越しに入れることで汚染を防げる。
 全部入りに抵抗がある場合はMinicondaで小さくスタートすることも可能。
 例えば Homebrew + pyenv + Miniconda で基本的な環境を整える手順:</p>
 
 <pre><code class="language-sh">% brew install pyenv
-% exec ${SHELL} -l
+% exec $SHELL -l
 % pyenv install -l | less
 % pyenv install miniconda3-latest
 % pyenv global miniconda3-latest
@@ -163,20 +163,9 @@ GUIのインストーラでもいいし、Homebrewでもいける:</p>
 
 <pre><code class="language-sh">% cd Python-3.5.3/
 % ./configure --help
-% ./configure --prefix=${HOME}/.virtualenv/Python
+% ./configure --prefix=${HOME}/Python
 % make
 </code></pre>
-
-<div class="note">
-<p>ユニコードにはバイト幅の異なる UCS-4 と UCS-2 という2種類があり、
-Python 2の configure のデフォルトは UCS-2。
-<code>sys.maxunicode</code> で確認できる。
-Python 3.3以降ではUCS-4のみ。
-Python 2をucs4でビルドするには
-<code>./configure --with-threads --enable-unicode=ucs4</code></p>
-
-</div>
-
 
 <div class="note">
 <p>モジュールをビルドするのに必要なヘッダファイルが見つからなかったとかで
@@ -190,9 +179,20 @@ Python 2をucs4でビルドするには
 Homebrewで入れたライブラリを利用する場合は明示的に位置指定が必要。
 (特に readline, sqlite, openssl/libressl は keg-only なので注意):</p>
 
-<pre><code class="language-sh">DST=${HOME}/.virtualenv
+<pre><code class="language-sh">DST=${HOME}/Python
 ./configure --enable-framework=${DST} --prefix=${DST} CPPFLAGS=&quot;-I$(brew --prefix)/include -I$(brew --prefix)/opt/readline/include -I$(brew --prefix)/opt/sqlite/include -I$(brew --prefix)/opt/libressl/include&quot; LDFLAGS=&quot;-L$(brew --prefix)/lib -L$(brew --prefix)/opt/readline/lib -L$(brew --prefix)/opt/sqlite/lib -L$(brew --prefix)/opt/libressl/lib&quot;
 </code></pre>
+
+</div>
+
+
+<div class="note">
+<p>ユニコードにはバイト幅の異なる UCS-4 と UCS-2 という2種類があり、
+Python 2の configure のデフォルトは UCS-2。
+<code>sys.maxunicode</code> で確認できる。
+Python 3.3以降ではUCS-4のみ。
+Python 2をucs4でビルドするには
+<code>./configure --with-threads --enable-unicode=ucs4</code></p>
 
 </div>
 </li>
@@ -227,7 +227,7 @@ Homebrewで入れたライブラリを利用する場合は明示的に位置指
 <a href="https://docs.python.org/3/library/site.html#site.USER_BASE"><code>site.USER_BASE</code></a>
 で確認できる。
 <a href="https://docs.python.org/3/library/site.html#site.USER_SITE"><code>site.USER_SITE</code></a>
-はその下の <code>{BASE}/lib/python{MAJOR}.{MINOR}/site-packages</code> に配置され、
+はその下の <code>{BASE}/lib/python*.*/site-packages</code> に配置され、
 <code>sys.path</code> に含まれる。
 除外したいときは <code>PYTHONNOUSERSITE</code> をセットするか <code>python -s</code> で起動。</p>
 
@@ -235,18 +235,18 @@ Homebrewで入れたライブラリを利用する場合は明示的に位置指
 
 <p>インタラクティブモードで起動するときに読み込むファイルを指定できる。
 例えば以下のようなものを書いておくと、
-<code>tab</code> とか <code>^i</code> で補完できるようになる。:</p>
+3.4未満の古いPythonでも <code>tab</code> とか <code>^i</code> で補完できるようになる:</p>
 
-<pre><code class="language-py">try:
-    import readline
-except ImportError:
-    print(&quot;Module readline not available.&quot;)
-else:
+<pre><code class="language-py">import sys
+
+if sys.version_info &lt; (3, 4):
     import rlcompleter
+    import readline
     if 'libedit' in readline.__doc__:
         readline.parse_and_bind(&quot;bind ^I rl_complete&quot;)
     else:
         readline.parse_and_bind(&quot;tab: complete&quot;)
+    del readline, rlcompleter
 </code></pre>
 
 <p>対話モードをさらに便利にするには <a href="/python/ipython.html">IPython</a> を使う。</p>
