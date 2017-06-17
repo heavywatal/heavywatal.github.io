@@ -32,14 +32,14 @@ GUIのインストーラでもいいし、Homebrewでもいける:
 
 ただし`PATH`上でシステムコマンド(`curl`など)を上書きしちゃうヤンチャな面もあるので、
 それが気になる人は
-[pyenv](https://github.com/yyuu/pyenv)
+[pyenv](https://github.com/pyenv/pyenv)
 越しに入れることで汚染を防げる。
 全部入りに抵抗がある場合はMinicondaで小さくスタートすることも可能。
 例えば Homebrew + pyenv + Miniconda で基本的な環境を整える手順:
 
 ```sh
 % brew install pyenv
-% exec ${SHELL} -l
+% exec $SHELL -l
 % pyenv install -l | less
 % pyenv install miniconda3-latest
 % pyenv global miniconda3-latest
@@ -86,18 +86,9 @@ if which pyenv >/dev/null; then eval "$(pyenv init -)"; fi
     ```sh
     % cd Python-3.5.3/
     % ./configure --help
-    % ./configure --prefix=${HOME}/.virtualenv/Python
+    % ./configure --prefix=${HOME}/Python
     % make
     ```
-
-    {{%div class="note"%}}
-ユニコードにはバイト幅の異なる UCS-4 と UCS-2 という2種類があり、
-Python 2の configure のデフォルトは UCS-2。
-`sys.maxunicode` で確認できる。
-Python 3.3以降ではUCS-4のみ。
-Python 2をucs4でビルドするには
-`./configure --with-threads --enable-unicode=ucs4`
-    {{%/div%}}
 
     {{%div class="note"%}}
 モジュールをビルドするのに必要なヘッダファイルが見つからなかったとかで
@@ -112,9 +103,19 @@ Homebrewで入れたライブラリを利用する場合は明示的に位置指
 (特に readline, sqlite, openssl/libressl は keg-only なので注意):
 
 ```sh
-DST=${HOME}/.virtualenv
+DST=${HOME}/Python
 ./configure --enable-framework=${DST} --prefix=${DST} CPPFLAGS="-I$(brew --prefix)/include -I$(brew --prefix)/opt/readline/include -I$(brew --prefix)/opt/sqlite/include -I$(brew --prefix)/opt/libressl/include" LDFLAGS="-L$(brew --prefix)/lib -L$(brew --prefix)/opt/readline/lib -L$(brew --prefix)/opt/sqlite/lib -L$(brew --prefix)/opt/libressl/lib"
 ```
+    {{%/div%}}
+
+
+    {{%div class="note"%}}
+ユニコードにはバイト幅の異なる UCS-4 と UCS-2 という2種類があり、
+Python 2の configure のデフォルトは UCS-2。
+`sys.maxunicode` で確認できる。
+Python 3.3以降ではUCS-4のみ。
+Python 2をucs4でビルドするには
+`./configure --with-threads --enable-unicode=ucs4`
     {{%/div%}}
 
 4.  インストール
@@ -147,7 +148,7 @@ https://docs.python.org/3/using/cmdline.html#environment-variables
 [`site.USER_BASE`](https://docs.python.org/3/library/site.html#site.USER_BASE)
 で確認できる。
 [`site.USER_SITE`](https://docs.python.org/3/library/site.html#site.USER_SITE)
-はその下の `{BASE}/lib/python{MAJOR}.{MINOR}/site-packages` に配置され、
+はその下の `{BASE}/lib/python*.*/site-packages` に配置され、
 `sys.path` に含まれる。
 除外したいときは `PYTHONNOUSERSITE` をセットするか `python -s` で起動。
 
@@ -156,19 +157,19 @@ https://docs.python.org/3/using/cmdline.html#environment-variables
 
 インタラクティブモードで起動するときに読み込むファイルを指定できる。
 例えば以下のようなものを書いておくと、
-`tab` とか `^i` で補完できるようになる。:
+3.4未満の古いPythonでも `tab` とか `^i` で補完できるようになる:
 
 ```py
-try:
-    import readline
-except ImportError:
-    print("Module readline not available.")
-else:
+import sys
+
+if sys.version_info < (3, 4):
     import rlcompleter
+    import readline
     if 'libedit' in readline.__doc__:
         readline.parse_and_bind("bind ^I rl_complete")
     else:
         readline.parse_and_bind("tab: complete")
+    del readline, rlcompleter
 ```
 
 対話モードをさらに便利にするには [IPython]({{< relref "ipython.md" >}}) を使う。
