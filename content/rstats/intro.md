@@ -89,6 +89,10 @@ Error: could not find function "stepAIC"
 
 ### Contributed Packages
 
+<a href="http://tidyverse.tidyverse.org/">
+<img src="http://tidyverse.tidyverse.org/logo.png" align="right">
+</a>
+
 数千ものパッケージが有志により開発され、CRANにまとめて公開されている。
 
 例えば [rstudio.com/products/rpackages](https://www.rstudio.com/products/rpackages/)

@@ -8,6 +8,10 @@ subtitle = "ループ処理やapply系関数の決定版"
   weight = -73
 +++
 
+<a href="http://purrr.tidyverse.org/">
+<img src="http://purrr.tidyverse.org/logo.png" align="right">
+</a>
+
 標準のapply族や[plyr]({{< relref "plyr.md" >}})の関数に引導を渡すべく再設計されたようなパッケージ。
 [dplyr]({{< relref "dplyr.md" >}}) や [tidyr]({{< relref "tidyr.md" >}}) と組み合わせて真価を発揮する。
 purerのように読むらしい。

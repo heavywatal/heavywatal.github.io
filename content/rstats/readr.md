@@ -7,6 +7,10 @@ tags = ["r", "tidyverse"]
   weight = -65
 +++
 
+<a href="http://readr.tidyverse.org/">
+<img src="http://readr.tidyverse.org/logo.png" align="right">
+</a>
+
 タブ区切りテキストやCSVファイルを読み込んでdata.frameにするツール。
 `.gz` や `.xz` などの圧縮ファイルも透過的に読み書き可能。
 標準でも `read.table()` や `read.csv()` があるけど、それらと比べて
@@ -149,6 +153,10 @@ read_csv('mydata.csv', col_types=colsp)
 
 ## Excelファイルを読み込む
 
+<a href="http://readxl.tidyverse.org/">
+<img src="http://readxl.tidyverse.org/logo.png" align="right">
+</a>
+
 https://github.com/tidyverse/readxl
 
 自分のデータは絶対にExcel形式ではなくCSVやTSV形式で保存すべきだが、
@@ -200,6 +208,10 @@ LDFLAGS = -L${HOME}/.homebrew/lib
 
 
 ## tibble
+
+<a href="http://tibble.tidyverse.org/">
+<img src="http://tibble.tidyverse.org/logo.png" align="right">
+</a>
 
 - http://r4ds.had.co.nz/tibbles.html
 - https://github.com/tidyverse/tibble

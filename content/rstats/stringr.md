@@ -7,6 +7,10 @@ tags = ["r", "tidyverse"]
   weight = -60
 +++
 
+<a href="http://stringr.tidyverse.org/">
+<img src="http://stringr.tidyverse.org/logo.png" align="right">
+</a>
+
 R標準の`base`パッケージが提供する関数でも文字列処理は可能だが、
 `stringr`のほうが統一的なインターフェイスに合理的な挙動で使いやすい。
 

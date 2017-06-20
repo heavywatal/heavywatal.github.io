@@ -7,6 +7,10 @@ tags = ["r", "tidyverse"]
   weight = -75
 +++
 
+<a href="http://dplyr.tidyverse.org/">
+<img src="http://dplyr.tidyverse.org/logo.png" align="right">
+</a>
+
 data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(summarise)、ソート(arrange)などの処理を施すためのパッケージ。
 前作 [plyr]({{< relref "plyr.md" >}}) のうちdata.frameに関する部分が強化されている。
 [purrr]({{< relref "purrr.md" >}}) や [tidyr]({{< relref "tidyr.md" >}}) と一緒に使うとよい。
@@ -42,6 +46,10 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
 2  virginica        5.552       2.026     5.6481
 ```
 
+<a href="http://magrittr.tidyverse.org/">
+<img src="http://magrittr.tidyverse.org/logo.png" align="right">
+</a>
+
 `%>%`
 :   左の値を右の関数に第一引数として渡す。
     `.data %>% func(arg1, arg2)` は `func(.data, arg1, arg2)` と等価。
@@ -49,7 +57,7 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
 
     {{%div class="note"%}}
 現状 `dplyr` は `magrittr` パッケージのものを採用しているが、
-`pipeR` パッケージの `%>>%` のほうが柔軟で高速。
+`pipeR` パッケージの `%>>%` のほうが高速らしい。
 <http://renkun.me/pipeR-tutorial/>
     {{%/div%}}
 

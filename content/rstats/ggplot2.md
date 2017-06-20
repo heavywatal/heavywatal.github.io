@@ -7,6 +7,10 @@ tags = ["r", "graph", "tidyverse"]
   weight = -79
 +++
 
+<a href="http://ggplot2.tidyverse.org/">
+<img src="http://ggplot2.tidyverse.org/logo.png" align="right">
+</a>
+
 Rのグラフ描画システムには`graphics`と`grid`の2つが存在しており、
 R標準の`plot()`などは前者の上に、
 本項で扱う`ggplot2`は後者の上に成り立っている。

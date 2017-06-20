@@ -7,6 +7,10 @@ tags = ["r", "tidyverse"]
   weight = -70
 +++
 
+<a href="http://tidyr.tidyverse.org/">
+<img src="http://tidyr.tidyverse.org/logo.png" align="right">
+</a>
+
 data.frameを縦長・横長・入れ子に変形・整形するためのツール。
 [dplyr]({{< relref "dplyr.md" >}}) や [purrr]({{< relref "purrr.md" >}})
 と一緒に使うとよい。
