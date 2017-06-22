@@ -84,25 +84,33 @@ http://docs.brew.sh/FAQ.html
 
     aspell
     autoconf
+    automake
     binutils
     boost
+    cmake
     colordiff
     coreutils
+    diffutils
     doxygen
+    eigen
     emacs
     findutils
     gcc
     gibo
     git
+    go
     gnu-sed
     gnu-tar
-    gnuplot
-    graphviz
-    gsl
+    grep --with-default-names
+    imagemagick
+    make --with-default-names
     mercurial
+    nano
     nkf
     pandoc
+    pyenv
     rmtrash
+    rsync
     tmux
     tree
     wget
@@ -144,20 +152,6 @@ gccやboostなどのデカいやつはとりあえずデフォルトで入れた
 
     % brew install homebrew/science/samtools
 
--   `brew tap homebrew/dupes` - <https://github.com/Homebrew/homebrew-dupes>\
-    システムに既にあるものと重複してでも新しいのを持っておきたいツール群。例えば
-
-        diffutils
-        grep --with-default-names
-        make
-        nano
-        rsync
-
--   `brew tap homebrew/versions` - <https://github.com/Homebrew/homebrew-versions>\
-    既に存在しているパッケージのバージョン違いを提供してくれている。例えば
-
-        gcc5
-
 -   `brew tap homebrew/science` - <https://github.com/Homebrew/homebrew-science>\
     バイオインフォマティクスなど科学計算のツール群。例えば
 
@@ -184,18 +178,11 @@ gccやboostなどのデカいやつはとりあえずデフォルトで入れた
         varscan
 
     {{%div class="note"%}}
-Rもここから入れられるが、
-パッケージ関連の面倒を考えると普通にpkgから入れたほうがよさそう。
+Rをここからインストールするとバイナリ版のパッケージが利用できず、
+毎回ソースからビルドすることになるので、
+普通に公式ページからpkgから入れたほうがよさそう。
 {{%/div%}}
 
--   `brew tap homebrew/python` - <https://github.com/Homebrew/homebrew-python>\
-    ライブラリ依存性などにより [pip]({{< relref "python/pip.md" >}})
-    からインストールしにくいPythonライブラリ。例えば
-
-        matplotlib
-        numpy
-        pillow
-        scipy
 
 ## Cask
 
@@ -214,12 +201,12 @@ GUIアプリケーションもHomebrewで管理してしまおうという野心
 
 アプリ側でアップデートを実行するとCask内でのバージョンと食い違っちゃうけど使用上は問題ないらしい。
 
-alfred, amazon-cloud-drive, atom, audacity,
-basictex, bibdesk, boostnote, caffeine,
-dia, dropbox, evernote, firefox, gephi,
+alfred, amazon-drive, amazon-music, atom,
+basictex, bibdesk, boostnote, caffeine, cmd-eikana
+dia, dropbox, firefox, gephi, gitter,
 google-chrome, google-drive, google-earth, google-japanese-ime,
-inkscape, iterm2, karabiner, kindle, libreoffice,
-macfusion, megasync, mendeley-desktop,
-onyx, openoffice, osxfuse, quicksilver, rstudio,
-seashore, skim, skitch, skyfonts, skype, spideroakone, sshfs,
-the-unarchiver, vlc, yujitach-menumeters
+inkscape, iterm2, kindle, libreoffice,
+megasync, mendeley-desktop, openoffice, rstudio,
+skim, skyfonts, skype, slack, spideroakone, sshfs,
+the-unarchiver, virtualbox, vlc,
+whatsapp, xquartz, yujitach-menumeters
