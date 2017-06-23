@@ -167,15 +167,18 @@ fig.savefig('example.png')
 
 <https://seaborn.pydata.org/tutorial/color_palettes.html>
 
-個々の描画関数の `palette` や `cmap` に指定するか、
-`with sns.color_palette():` のブロック内で描画するか、
-`sns.set_palette()` でデフォルトを指定する。
+いくつかの方法で指定できる:
+
+- 個々の描画関数の `palette` や `cmap` に指定
+- `with sns.color_palette():` のブロック内で描画
+- `sns.set_palette()` でデフォルトを指定
+
+
+パレットもいくつかある:
 
 -   [ColorBrewer](http://colorbrewer2.org/) の名前で指定。
-    e.g., `sns.color_palette('RdBu', n_colors=7)`
-
     `_r` をつけると逆に、`_d` をつけると暗めになる。
-
+    e.g., `sns.color_palette('RdBu_r', n_colors=7)`
 -   [xkcd](http://xkcd.com/color/rgb/) の名前リストを
     `sns.xkcd_palette()` に渡す
 -   `cubehelix_palette()` はgrayscaleでもいい感じで印刷できる
@@ -183,6 +186,7 @@ fig.savefig('example.png')
     `sns.hls_palette()`, `sns.husl_palette()`,
     `sns.light_palette()`, `sns.dark_palette()`,
     `sns.diverging_palette()`
+
 
 ## Text, Annotation, Legend
 
