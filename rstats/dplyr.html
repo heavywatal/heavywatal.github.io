@@ -160,11 +160,17 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
 iris %&gt;% dplyr::select(dplyr::ends_with('Length'))
 </code></pre>
 
-<p><code>.data[, j, drop=TRUE]</code> のように1列分をベクタで得たいときは二重角括弧か、
-<code>pipeR</code> の <code>%&gt;&gt;%</code> を通して括弧に流す。</p>
+<p><code>iris %&gt;% dplyr::select(Species)</code> は <code>iris[,'Species']</code> と違い、
+残るのが1列だけでも勝手にvectorにすることはない。
+パイプラインの最後に1列のvectorだけが欲しいときは:</p>
 
-<pre><code class="language-r">iris %&gt;% `[[`('Species')
-iris %&gt;&gt;% (Species)
+<pre><code class="language-r">iris %&gt;% sample_n(3) %&gt;% {.$Species}
+iris %&gt;% sample_n(3) %&gt;% {.[['Species']]}
+iris %&gt;% sample_n(3) %&gt;% `[[`('Species')
+{iris %&gt;% sample_n(3)}$Species
+
+library(pipeR)
+iris %&gt;&gt;% sample_n(3) %&gt;&gt;% (Species)
 </code></pre></dd>
 <dt><code>dplyr::filter(.data, ...)</code></dt>
 <dd><p>列の値で行を絞る。<code>base::subset()</code> と似たようなもの</p>
