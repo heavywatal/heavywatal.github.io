@@ -76,11 +76,17 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
     iris %>% dplyr::select(dplyr::ends_with('Length'))
     ```
 
-    `.data[, j, drop=TRUE]` のように1列分をベクタで得たいときは二重角括弧か、
-    `pipeR` の `%>>%` を通して括弧に流す。
+    `iris %>% dplyr::select(Species)` は `iris[,'Species']` と違い、
+    残るのが1列だけでも勝手にvectorにすることはない。
+    パイプラインの最後に1列のvectorだけが欲しいときは:
     ```r
-    iris %>% `[[`('Species')
-    iris %>>% (Species)
+    iris %>% sample_n(3) %>% {.$Species}
+    iris %>% sample_n(3) %>% {.[['Species']]}
+    iris %>% sample_n(3) %>% `[[`('Species')
+    {iris %>% sample_n(3)}$Species
+
+    library(pipeR)
+    iris %>>% sample_n(3) %>>% (Species)
     ```
 
 `dplyr::filter(.data, ...)`
