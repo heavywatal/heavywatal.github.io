@@ -6,6 +6,36 @@ tags = ["r"]
   weight = -90
 +++
 
+## 整然データを意識して[tidyverse](http://tidyverse.org/)パッケージ群を使う
+
+<a href="https://www.amazon.co.jp/Data-Science-Transform-Visualize-Model/dp/1491910399/ref=as_li_ss_il?s=english-books&ie=UTF8&qid=1498493958&sr=1-1&keywords=r+for+data+science&linkCode=li2&tag=heavywatal-22&linkId=09f030942ec3fe963597727fddde8032" target="_blank"><img align="right" border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1491910399&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" style="position: relative; z-index: 1;" ></a><img align="right" src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li2&o=9&a=1491910399" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+- わかりやすいスライド: [整然データってなに？ --- @f_nishihara](https://speakerdeck.com/fnshr/zheng-ran-detatutenani)
+- 詳しい解説: [整然データとは何か --- @f_nishihara](http://id.fnshr.info/2017/01/09/tidy-data-intro/)
+- 原著: [Tidy Data --- @hadley](http://dx.doi.org/10.18637/jss.v059.i10)
+
+>   *tidy datasets are all alike but every messy dataset is messy in its own way*\
+>   --- *Hadley Wickham*
+
+<a href="http://tidyverse.org/">
+<img src="http://tidyverse.tidyverse.org/logo.png" align="right">
+</a>
+
+[tidyverse](http://tidyverse.org/)
+はそういう思想に基いて互いに連携するようデザインされたパッケージ群で、
+R標準の関数よりも遥かに分かりやすく安全で高機能なものを提供してくれている。
+
+- グラフ描画には [ggplot2]({{< relref "ggplot2.md" >}})
+- data.frame内の計算・要約・抽出には [dplyr]({{< relref "dplyr.md" >}})
+- data.frameの変形・ネストには [tidyr]({{< relref "tidyr.md" >}})
+- リストなどに対するループ処理には [purrr]({{< relref "purrr.md" >}})
+- 文字列処理には [stringr]({{< relref "stringr.md" >}})
+- data.frame <=> CSV/TSV の読み書きには [readr]({{< relref "readr.md" >}})
+- list <=> json の読み書きには [jsonlite](https://cran.r-project.org/web/packages/jsonlite/)
+
+[紙の本](http://amzn.to/2tbRmVc)でも[公開オンライン版](http://r4ds.had.co.nz/)でもいいのでとにかく **R for Data Science** を読むのが一番。
+
+
 ## 確率分布
 
 <https://cran.r-project.org/web/views/Distributions.html>
@@ -214,17 +244,6 @@ with(iris, {
 })
 ```
 
-## オブジェクトをファイルに書き出す、読み込む
-
-data.frameなら[readr]({{< relref "readr.md" >}})でCSV/TSV形式、
-listなら[jsonlite](https://cran.r-project.org/web/packages/jsonlite/)でJSON形式、
-それ以外のあらゆるオブジェクトはRDS形式で書き出しておくとよい。
-
-`saveRDS(object, file='', ascii=FALSE, version=NULL, compress=TRUE, refhook=NULL)`
-
-`readRDS(file, refhook=NULL)`
-
-
 ## 最適化・高速化
 
 ### 最新の R を使う
@@ -282,6 +301,8 @@ See [foreach #iterators]({{< relref "foreach.md#iterators" >}})
 
 ## 関連書籍
 
-<a href="https://www.amazon.co.jp/Data-Science-Transform-Visualize-Model/dp/1491910399/ref=as_li_ss_il?_encoding=UTF8&qid=1485613345&sr=1-1-catcorr&linkCode=li3&tag=heavywatal-22&linkId=6133a1fd9babbf590e304ee9f670fa4a" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1491910399&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=1491910399" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+統計解析やグラフ描画ではなく、
+プログラミング言語としてのRを学びたいときに:
+
 <a href="https://www.amazon.co.jp/RStudio%E3%81%A7%E3%81%AF%E3%81%98%E3%82%81%E3%82%8BR%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E5%85%A5%E9%96%80-Garrett-Grolemund/dp/4873117151/ref=as_li_ss_il?ie=UTF8&qid=1489745137&sr=8-1&keywords=rstudio&linkCode=li3&tag=heavywatal-22&linkId=59bf9fd2a28700d591c1bb951fcf6bd4" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873117151&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4873117151" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 <a href="https://www.amazon.co.jp/%E3%82%A2%E3%83%BC%E3%83%88%E3%83%BB%E3%82%AA%E3%83%96%E3%83%BBR%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0-Norman-Matloff/dp/4873115795/ref=as_li_ss_il?ie=UTF8&qid=1485613704&sr=8-1&keywords=%E3%82%A2%E3%83%BC%E3%83%88%E3%82%AA%E3%83%96r&linkCode=li3&tag=heavywatal-22&linkId=b322dc8f7f7dc364e861086b0d53a10b" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873115795&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4873115795" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />

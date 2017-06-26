@@ -10,35 +10,28 @@ https://cran.r-project.org/manuals.html
 
 ## インストール
 
-https://cran.r-project.org/doc/manuals/R-admin.html
-
-### Mac
-
-- [R本体](https://cran.rstudio.com/bin/macosx/)
+- [R本体](https://cran.rstudio.com/)
 - [Rstudio (任意)](https://www.rstudio.com/products/rstudio/download/)
 
-### Ubuntu
+[Homebrew]({{< relref "homebrew.md" >}}) からも入れられるけど、
+バイナリ版パッケージが使えなくて毎回ソースからビルドすることになるので注意。
 
-ターミナルからリポジトリを追加して
+https://cran.r-project.org/doc/manuals/R-admin.html
 
-```sh
-sudo sh -c 'echo "deb https://cran.rstudio.com/bin/linux/ubuntu $(lsb_release -cs)/" > /etc/apt/sources.list.d/cran-mirror.list'
-gpg --keyserver keyserver.ubuntu.com --recv-key E084DAB9
-gpg -a --export E084DAB9 | sudo apt-key add -
-sudo apt-get --quiet update
-sudo apt-get install r-base
-```
 
 ## 起動オプション
 
-ターミナルから `R --help` を見るか
-https://cran.r-project.org/doc/manuals/R-intro.html#Invoking-R
-
-例えば以下のようなエイリアスを `.zshrc` で設定する。
+ワークスペースの自動保存や自動復帰は危険なので切っておく。
+R.app や Rstudio から使う場合はメニューから環境設定みたいなやつを開く。
+シェルから使う場合は例えば以下のようなエイリアスを設定する。
 
 ```sh
-alias R='R --quiet --no-save --no-restore-data'
+alias r='R --quiet --no-save --no-restore-data'
 ```
+
+詳しくは `R --help` または
+https://cran.r-project.org/doc/manuals/R-intro.html#Invoking-R
+
 
 ## 環境変数
 

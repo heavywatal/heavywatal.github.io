@@ -89,7 +89,7 @@ Error: could not find function "stepAIC"
 
 ### Contributed Packages
 
-<a href="http://tidyverse.tidyverse.org/">
+<a href="http://tidyverse.org/">
 <img src="http://tidyverse.tidyverse.org/logo.png" align="right">
 </a>
 
@@ -97,7 +97,7 @@ Error: could not find function "stepAIC"
 
 例えば [rstudio.com/products/rpackages](https://www.rstudio.com/products/rpackages/)
 で紹介されているもの、特にHadley Wickhamらによる
-[tidyverse](https://github.com/tidyverse/tidyverse) パッケージ群
+[tidyverse](http://tidyverse.org/) パッケージ群
 ([ggplot2]({{< relref "ggplot2.md" >}}),
 [dplyr]({{< relref "dplyr.md" >}}),
 [purrr]({{< relref "purrr.md" >}}),
@@ -117,6 +117,8 @@ Rの中から下記のようなコマンドで一括インストール・読み�
 <https://cran.r-project.org/web/views/>
 で用途別に紹介されている。
 
+パッケージを作るには [devtools]({{< relref "devtools.md" >}}) を使う。
+
 
 ## 作業ディレクトリ
 
@@ -133,9 +135,7 @@ R がファイルを探すのはこの作業ディレクトリである。
     ```r
     > getwd()
     [1] /Users/watal
-
     > setwd("~/Desktop")
-
     > getwd()
     [1] /Users/watal/Desktop
     ```
