@@ -32,8 +32,8 @@ tags = ["c++"]
 
 1.  <http://www.boost.org/users/download/> から最新ソースを入手して展開。
     ```
-    % wget -O- https://downloads.sourceforge.net/boost/boost_1_63_0.tar.bz2 | tar xj
-    % cd boost_1_63_0/
+    % wget -O- https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.bz2 | tar xj
+    % cd boost_1_64_0/
     ```
 
 1.  ビルドすべきライブラリを考える `./bootstrap.sh --show-libraries`
@@ -98,6 +98,11 @@ Makefileの変数でいうと:
 CPPFLAGS = -I${HOME}/local/include
 LDFLAGS = -L${HOME}/local/lib
 LDLIBS = -lboost_iostreams-mt
+```
+
+CMakeでは `BOOST_ROOT` にprefixを指定:
+```sh
+cmake -DBOOST_ROOT=${HOME}/local ..
 ```
 
 
