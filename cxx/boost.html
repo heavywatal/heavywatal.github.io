@@ -116,8 +116,8 @@ Boost — ほぼ標準C&#43;&#43;ライブラリ
 <ol>
 <li><p><a href="http://www.boost.org/users/download/">http://www.boost.org/users/download/</a> から最新ソースを入手して展開。</p>
 
-<pre><code>% wget -O- https://downloads.sourceforge.net/boost/boost_1_63_0.tar.bz2 | tar xj
-% cd boost_1_63_0/
+<pre><code>% wget -O- https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.bz2 | tar xj
+% cd boost_1_64_0/
 </code></pre></li>
 
 <li><p>ビルドすべきライブラリを考える <code>./bootstrap.sh --show-libraries</code></p></li>
@@ -184,6 +184,11 @@ using clang : 14 : clang++ : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++1
 <pre><code class="language-make">CPPFLAGS = -I${HOME}/local/include
 LDFLAGS = -L${HOME}/local/lib
 LDLIBS = -lboost_iostreams-mt
+</code></pre>
+
+<p>CMakeでは <code>BOOST_ROOT</code> にprefixを指定:</p>
+
+<pre><code class="language-sh">% cmake -DBOOST_ROOT=${HOME}/local ..
 </code></pre>
 
 <h2 id="math-http-www-boost-org-doc-libs-release-libs-math-doc-html"><a href="http://www.boost.org/doc/libs/release/libs/math/doc/html/">math</a></h2>
