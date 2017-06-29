@@ -132,9 +132,12 @@ Median filter
 
 [imager](http://dahtah.github.io/imager/)
 : R。新しめでドキュメントも充実。内部でCImgを利用。
+  CairoやX11に依存しているので、
+  LinuxbrewのRで使おうとすると膨大なxorg関連ライブラリを入れる羽目になる。
 
 [mmand](https://github.com/jonclayden/mmand)
-: R。READMEは良さげ。
+: R。READMEは良さげ。内部はRcpp。
+  ほとんど他のライブラリに依存していないのでインストールしやすい。
 
 [Morpho](https://github.com/zarquon42b/Morpho)
 : R。ドキュメント不足。
