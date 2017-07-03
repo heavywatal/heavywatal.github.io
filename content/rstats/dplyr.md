@@ -21,15 +21,26 @@ data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(
 
 -   <http://r4ds.had.co.nz/transform.html>
 -   <https://github.com/tidyverse/dplyr>
--   <https://cran.r-project.org/web/packages/dplyr/vignettes/introduction.html>
 
-## 関数の連結
+## 関数の連結 %>%
 
-一時変数を作ったり、関数を何重にも重ねて書いたりすることなく、
-適用する順に処理を記述することができる。
+<a href="http://magrittr.tidyverse.org/">
+<img src="http://magrittr.tidyverse.org/logo.png" align="right">
+</a>
+
+dplyrではなく[magrittr](http://magrittr.tidyverse.org/)の機能。
+
+`x %>% f(a, b)`
+:   これは `f(x, a, b)` と等価。
+    左の値 `x` を第一引数として右の関数 `f()` に渡す。
+    一時変数を作ったり、関数を何重にも重ねたりすることなく、
+    適用する順に次々と処理を記述することができるようになる。
+    慣れれば書きやすく読みやすい。
 
 ```r
-## dplyr
+library(tidyverse)
+
+## with piping
 iris %>%
    dplyr::filter(Species != 'setosa') %>%
    dplyr::select(-dplyr::starts_with('Sepal')) %>%
@@ -37,62 +48,89 @@ iris %>%
    dplyr::group_by(Species) %>%
    dplyr::summarise_all(funs(mean))
 
-## plyr で書くと読みにくい
-plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, Sepal.Length)), petal_area=Petal.Length*Petal.Width*0.5), .(Species), numcolwise(mean))
+## with a temporary variable
+x = iris
+x = dplyr::filter(x, Species != 'setosa')
+x = dplyr::select(x, -dplyr::starts_with('Sepal'))
+x = dplyr::mutate(x, petal_area=Petal.Length * Petal.Width * 0.5)
+x = dplyr::group_by(x, Species)
+x = dplyr::summarise_all(x, funs(mean))
 
-## どちらも結果は
+## with nested functions
+dplyr::summarise_all(
+  dplyr::group_by(
+    dplyr::mutate(
+      dplyr::select(
+        dplyr::filter(iris, Species != 'setosa'),
+        -dplyr::starts_with('Sepal')),
+      petal_area=Petal.Length * Petal.Width * 0.5),
+    Species),
+  funs(mean))
+
+## result
      Species Petal.Length Petal.Width petal_area
 1 versicolor        4.260       1.326     2.8602
 2  virginica        5.552       2.026     5.6481
 ```
 
-<a href="http://magrittr.tidyverse.org/">
-<img src="http://magrittr.tidyverse.org/logo.png" align="right">
-</a>
-
-`%>%`
-:   左の値を右の関数に第一引数として渡す。
-    `.data %>% func(arg1, arg2)` は `func(.data, arg1, arg2)` と等価。
-    処理する順に書けるので、次々と関数を適用していくときでも読みやすい。
-
-    {{%div class="note"%}}
-現状 `dplyr` は `magrittr` パッケージのものを採用しているが、
+現状では `magrittr` パッケージの `%>%` が広く採用されているが、
 `pipeR` パッケージの `%>>%` のほうが高速らしい。
 <http://renkun.me/pipeR-tutorial/>
-    {{%/div%}}
 
-## コア関数 (verb)
+
+## 抽出・絞り込み
+
+### 列
 
 `dplyr::select(.data, ...)`
-:   使う列を絞る。複数指定, 範囲指定、負の指定、パターン指定が可能\
-    `starts_with(x, ignore.case=FALSE)`\
-    `ends_width(x, ignore.case=FALSE)`\
-    `contains(x, ignore.case=FALSE)`\
-    `matches(x, ignore.case=FALSE)`\
-    `num_range('x', 1:5, width=2)`
+:   列を絞る。複数指定、範囲指定、負の指定が可能。
+    [select helper](http://dplyr.tidyverse.org/reference/select_helpers.html)
+    によるパターン指定も便利。
+    残るのが1列だけでも勝手にvectorにはならずdata.frameのまま。
 
     ```r
-    iris %>% dplyr::select(-(Sepal.Width:Petal.Length))
-    iris %>% dplyr::select(dplyr::ends_with('Length'))
+    iris %>% dplyr::select(Petal.Width, Species)
+    iris %>% dplyr::select('Petal.Width', 'Species')
+    iris %>% dplyr::select(c('Petal.Width', 'Species'))
+    iris %>% dplyr::select(4:5)
+    iris %>% dplyr::select(-c(1:3))
+    iris %>% dplyr::select(-(Sepal.Length:Petal.Length))
+    iris %>% dplyr::select(matches('^Petal\\.Width$|^Species$'))
     ```
 
-    `iris %>% dplyr::select(Species)` は `iris[,'Species']` と違い、
-    残るのが1列だけでも勝手にvectorにすることはない。
-    パイプラインの最後に1列のvectorだけが欲しいときは:
+    文字列変数で指定しようとすると意図が曖昧になるので、
+    [unquoting](http://dplyr.tidyverse.org/articles/programming.html#unquoting)
+    やpronounで明確に:
     ```r
-    iris %>% sample_n(3) %>% {.$Species}
-    iris %>% sample_n(3) %>% {.[['Species']]}
-    iris %>% sample_n(3) %>% `[[`('Species')
-    {iris %>% sample_n(3)}$Species
-
-    library(pipeR)
-    iris %>>% sample_n(3) %>>% (Species)
+    Sepal.Length = c('Petal.Width', 'Species')
+    iris %>% dplyr::select(Sepal.Length))      # ambiguous!
+    iris %>% dplyr::select(UQ(Sepal.Length))   # unquote => Petal.Width, Species
+    iris %>% dplyr::select(!!Sepal.Length)     # unquote => Petal.Width, Species
+    iris %>% dplyr::select(.data$Sepal.Length) # pronoun => Sepal.Length
     ```
+
+
+`dplyr::pull(.data, var=-1)`
+:   指定した1列をvector(またはlist)としてdata.frameから抜き出す。
+
+    ```r
+    iris %>% head() %>% dplyr::pull(Species)
+    iris %>% head() %>% dplyr::pull('Species')
+    iris %>% head() %>% dplyr::pull(5)
+    iris %>% head() %>% dplyr::pull(-1)
+    iris %>% head() %>% `[[`('Species')
+    iris %>% head() %>% {.[['Species']]}
+    iris %>% head() %>% {.$Species}
+    {iris %>% head()}$Species
+    ```
+
+### 行
 
 `dplyr::filter(.data, ...)`
-:   列の値で行を絞る。`base::subset()` と似たようなもの
+:   条件を満たす行だけを返す。`base::subset()` と似たようなもの。
+
     ```r
-    > iris %>% dplyr::filter(Sepal.Length<6, Sepal.Width>4)
+    iris %>% dplyr::filter(Sepal.Length<6, Sepal.Width>4)
       Sepal.Length Sepal.Width Petal.Length Petal.Width Species
     1          5.7         4.4          1.5         0.4  setosa
     2          5.2         4.1          1.5         0.1  setosa
@@ -104,8 +142,9 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
     `base::unique.data.frame()` よりも高速で、
     `filter(!duplicated(.[, ...]))` よりスマートで柔軟。
     指定しなかった列を残すには `.keep_all=TRUE` とする。
+
     ```r
-    > iris %>% dplyr::distinct(Species)
+    iris %>% dplyr::distinct(Species)
          Species
     1     setosa
     2 versicolor
@@ -114,18 +153,26 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
 
 `dplyr::slice(.data, ...)`
 :   行番号を指定して行を絞る。
-    `` `[`(i,) `` の代わりに
+    `` `[`(i,) `` の代わりに。
+
     ```r
-    > iris %>% dplyr::slice(2:4)
+    iris %>% dplyr::slice(2:4)
       Sepal.Length Sepal.Width Petal.Length Petal.Width Species
     1          4.9         3.0          1.4         0.2  setosa
     2          4.7         3.2          1.3         0.2  setosa
     3          4.6         3.1          1.5         0.2  setosa
     ```
 
+`dplyr::sample_n(tbl, size, replace=FALSE, weight=NULL)`
+:   指定した行数だけランダムサンプルする。
+    割合指定の `sample_frac()` もある。
+
+
+## 列の変更・追加
+
 `dplyr::mutate(.data, ...)`
-:   既存の列を使って新しい列を作る。
-    `base::transform()` とほとんど同じだがそれよりも高速で高機能
+:   既存の列を変更したり、新しい列を作ったり。
+    `base::transform()` の改良版。
     ```r
     # modify existing column
     iris %>% dplyr::mutate(Sepal.Length = log(Sepal.Length))
@@ -134,20 +181,86 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
     iris %>% dplyr::mutate(ln_sepal_length = log(Sepal.Length))
     ```
 
+    変数に入った文字列を変更先の列名に指定したい場合は
+    [unquoting用の代入演算子 `:=`](http://dplyr.tidyverse.org/articles/programming.html#setting-variable-names)
+    を使う:
+    ```r
+    new_column = 'ln_sepal_length'
+
+    # normal
+    iris %>% dplyr::mutate(new_column = log(Sepal.Length)) %>% head(2)
+      Sepal.Length Sepal.Width Petal.Length Petal.Width Species new_column
+    1          5.1         3.5          1.4         0.2  setosa   1.629241
+    2          4.9         3.0          1.4         0.2  setosa   1.589235
+
+    # unquoting
+    iris %>% dplyr::mutate(!!new_column := log(Sepal.Length)) %>% head(2)
+      Sepal.Length Sepal.Width Petal.Length Petal.Width Species ln_sepal_length
+    1          5.1         3.5          1.4         0.2  setosa        1.629241
+    2          4.9         3.0          1.4         0.2  setosa        1.589235
+    ```
+
 `dplyr::transmute(.data, ...)`
-:   指定した列以外を保持しない版の `mutate()` 。
-    言い換えると、変更を許す `select()` 。
+:   指定した列以外を保持しない版 `mutate()` 。
+    言い換えると、列の中身の変更もできる版 `select()` 。
 
 `dplyr::rename(.data, ...)`
 :   列の改名。
     `mutate()`と同じようなイメージで `new=old` と指定。
     ```r
-    > iris %>% dplyr::rename(sp=Species)
+    iris %>% dplyr::rename(sp=Species) %>% head(2)
       Sepal.Length Sepal.Width Petal.Length Petal.Width     sp
     1          5.1         3.5          1.4         0.2 setosa
     2          4.9         3.0          1.4         0.2 setosa
-    3          4.7         3.2          1.3         0.2 setosa
     ```
+
+
+## data.frameの要約・集計・整列
+
+`dplyr::summarise(.data, ...)`
+:   指定した列に関数を適用して1行のdata.frameにまとめる。
+    グループ化されていたらグループごとに適用して `bind_rows()` する。
+
+    ```r
+    iris %>% dplyr::group_by(Species) %>%
+        dplyr::summarise(minpl=min(Petal.Length), maxsw=max(Sepal.Width))
+         Species minpl maxsw
+    1     setosa   1.0   4.4
+    2 versicolor   3.0   3.4
+    3  virginica   4.5   3.8
+    ```
+
+`dplyr::summarise_all(.data, .funs, ...)`
+:   全てのカラムに関数を適用する。
+    `***_each()` は非推奨になった。
+
+    ```r
+    iris %>% dplyr::group_by(Species) %>%
+        dplyr::summarise_all(funs(min, max))
+    ```
+
+`dplyr::summarise_at(.data, .cols, .funs, ...)`
+:   select補助関数を使って指定したカラムに関数を適用する。
+
+    ```r
+    iris %>% dplyr::group_by(Species) %>%
+        dplyr::summarise_at(vars(dplyr::ends_with("Width")), funs(min, max))
+    ```
+
+`dplyr::summarise_if(.data, .predicate, .funs, ...)`
+:   `.predicate`がTRUEになるカラムだけに関数を適用する。
+
+    ```r
+    iris %>% dplyr::group_by(Species) %>%
+        dplyr::summarise_if(is.numeric, funs(min, max))
+    ```
+
+`dplyr::tally(x, wt, sort=FALSE)`
+:   `summarise(x, n=n())` のショートカット。
+    `wt` にカラムを指定して重み付けすることもできる。
+
+`dplyr::count(x, ..., wt=NULL, sort=FALSE)`
+:   `group_by(...) %>% tally()` のショートカット。
 
 `dplyr::arrange(.data, column1, column2, ...)`
 :   指定した列の昇順でdata.frameの行を並べ替える。
@@ -159,40 +272,11 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
     .data %>% dplyr::arrange(col_a, col_b)
     ```
 
-`dplyr::summarise(.data, ...)`
-:   列に対する関数をグループごとに適用して1行にしたものを `rbind()` してまとめる
-    ```r
-    > iris %>% dplyr::group_by(Species) %>%
-        dplyr::summarise(minpl=min(Petal.Length), maxsw=max(Sepal.Width))
-         Species minpl maxsw
-    1     setosa   1.0   4.4
-    2 versicolor   3.0   3.4
-    3  virginica   4.5   3.8
-    ```
+`dplyr::top_n(.data, n, wt=NULL)`
+:   `.data %>% arrange(wt) %>% head(n)` を一撃で、グループごとに。
 
-`dplyr::summarise_all(.data, .funs, ...)`, `dplyr::mutate_all(.data, .funs, ...)`
-:   グループ化カラム以外の全てのカラムに関数を適用する。
-    `***_each()` は非推奨になった。
-    ```r
-    iris %>% dplyr::group_by(Species) %>%
-        dplyr::summarise_all(funs(min, mean, max))
-    ```
 
-`dplyr::summarise_at(.data, .cols, .funs, ...)`, `dplyr::mutate_all(.data, .cols, .funs, ...)`
-:   select補助関数を使って指定したカラムに関数を適用する。
-    ```r
-    iris %>% dplyr::group_by(Species) %>%
-        dplyr::summarise_at(vars(dplyr::ends_with("Width")), funs(min, mean, max))
-    ```
-
-`dplyr::summarise_if(.data, .predicate, .funs, ...)`, `dplyr::mutate_if(.data, .predicate, .funs, ...)`
-:   `.predicate`がTRUEになるカラムだけに関数を適用する。
-    ```r
-    iris %>% dplyr::group_by(Species) %>%
-        dplyr::summarise_if(is.numeric, funs(min, mean, max))
-    ```
-
-## その他の関数
+## data.frameを結合
 
 `dplyr::***_join(x, y, by=NULL, copy=FALSE)`
 :   `by` で指定した列がマッチするように行を合わせて `cbind()`
@@ -212,6 +296,11 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
     そのほかにも標準の集合関数を置き換えるものが提供されている:
     `intersect()`, `union()`, `union_all()`, `setdiff()`, `setequal()`
 
+
+## その他の関数
+
+主に`mutate()`や`filter()`を補助するもの
+
 `dplyr::if_else(condition, true, false, missing=NULL)`
 :   標準の`ifelse()`よりも型に厳しく、高速らしい。
     NAのときにどうするかを指定できるのも大変良い。
@@ -228,9 +317,6 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
 `dplyr::recode(.x, ..., .default=NULL, .missing=NULL)`
 :    vectorの値を変更する。e.g.,
      `recode(letters, a='A!', c='C!')`
-
-`dplyr::group_indices(.data, ...)`
-:   `grouped_df` ではなくグループIDとして1からの整数を返す版 `group_by()`
 
 `dplyr::ntile(x, n)`
 :   数値ベクトル `x` を順位によって `n` 個のクラスに均等分け
@@ -251,16 +337,6 @@ plyr::ddply(plyr::mutate(subset(iris, Species!='setosa', select=-c(Sepal.Width, 
     > lag(seq_len(5), 2)
     [1] NA NA 1 2 3
     ```
-
-`dplyr::top_n(.data, n, wt=NULL)`
-:   `.data %>% arrange(wt) %>% head(n)` を一撃で、グループごとに。
-
-`dplyr::tally(x, wt, sort=FALSE)`
-:   `summarise(x, n=n())` のショートカット。
-    `wt` にカラムを指定して重み付けすることもできる。
-
-`dplyr::count(x, ..., wt=NULL, sort=FALSE)`
-:   `group_by(...) %>% tally()` のショートカット。
 
 `dplyr::between(x, left, right)`
 :   `left <= x & x <= right` のショートカット。
@@ -296,6 +372,9 @@ iris %>%
 `dplyr::group_by(.data, col1, col2, ..., add=FALSE)`
 :   グループごとに区切って次の処理に渡す。
     e.g. `summarise()`, `tally()`, `do()` など
+
+`dplyr::group_indices(.data, ...)`
+:   `grouped_df` ではなくグループIDとして1からの整数を返す版 `group_by()`
 
 `dplyr::rowwise(.data)`
 :   行ごとに区切って次の処理に渡す。
