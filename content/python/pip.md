@@ -7,60 +7,74 @@ tags = ["python", "package"]
   weight = -95
 +++
 
-古いPython (3.2以下) ではパッケージ管理のために
-外部ツールを別途インストールする必要があった(結構多くて複雑...)。
+古いPythonではパッケージ管理のためにツールを別途インストールする必要があった。
 Python 3.4 以降では `venv` と `ensurepip` が標準ライブラリに入って少しマシに。
 
-{{%div class="note"%}}
-最近では、Python本体のインストールからパッケージ管理までぜーんぶ
-[Anaconda]({{< relref "install.md#anaconda" >}}) に任せるのが主流になりつつある。
-そのため本記事はほぼ無用に。
-{{%/div%}}
+科学技術系の利用だけなら、Python本体のインストールからパッケージ管理までぜーんぶ
+[Anaconda]({{< relref "install.md#anaconda" >}}) に任せるのが楽ちん。
+その場合、本記事はほぼ無用。
 
 
-## Installation (Python 2)
+## [`pip`](https://pip.pypa.io/)
 
-1.  ベースのPythonインタープリタをひとつ決め
-    (例えばOSに標準装備されてる `/usr/bin/python`)、
-    それを使って `setuptools` をインストール:
+[PyPI](http://pypi.python.org)
+からの簡単にパッケージをインストールできるようにするツール。
+アンインストール機能の無い `easy_install` に取って代わり、
+現在では公式に推奨されている。
+Python 2.7.9以降、3.4以降では標準ライブラリの
+[`ensurepip`](https://docs.python.org/3/library/ensurepip.html)
+によって自動的にインストールされる。
 
-        % curl -O https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py
-        % /usr/bin/python ez_setup.py --user
-
-2.  続いて `pip` をインストール:
-
-        % curl -O https://bootstrap.pypa.io/get-pip.py
-        % /usr/bin/python get-pip.py --user
-
-3.  Macなら `~/Library/Python/2.7/` 以下に、
+-   古い環境に手動インストール:
+    ```sh
+    % curl -O https://bootstrap.pypa.io/get-pip.py
+    % /usr/bin/python get-pip.py --user
+    ```
+    Macなら `~/Library/Python/2.7/` 以下に、
     Linuxなら `~/.local/` 以下に上記のライブラリがインストールされるので、
     その中にある `bin` を `PATH` に追加する。
-4.  `pip` を使って `virtualenv` をインストール:
 
-        % pip install --user virtualenv
+-   `pip` コマンド
+    -   `install`: Install packages.
+    -   `uninstall`: Uninstall packages.
+    -   `freeze`: Output installed packages in requirements format.
+    -   `list`: List installed packages.
+    -   `show`: Show information about installed packages.
+    -   `search`: Search PyPI for packages.
+    -   `help`: Show help for commands.
 
-## Usage
+-   全体のヘルプ、コマンド毎の詳細ヘルプ:
 
-### `venv` / `virtualenv`
+        % pip help
+        % pip install --help
 
-Doc
-:   <http://www.virtualenv.org/>
+-   `setup.py` にオプションを渡す:
 
-PyPI
-:   <http://pypi.python.org/pypi/virtualenv>
+        % pip install --install-option="--prefix=/usr/local" numpy
 
-Python3
-:   <http://docs.python.org/3/library/venv>
+-   よく使うコマンド:
+
+        % pip list && pip list --outdated
+        % pip search psutil
+        % pip install --upgrade setuptools
+
+-   設定ファイルは `~/.pip/pip.conf` :
+
+        [global]
+        download-cache = ~/.pip/cache
+
+
+## [`venv`](https://docs.python.org/3/library/venv.html) / `virtualenv`
 
 Python実行環境を仮想化するパッケージ。
 これで作った仮想環境内で `pip` を使ってパッケージ管理する。
 Python 3.3 以降では `venv` が標準ライブラリ入りしたので
-`virtualenv` は不要になった。
+[`virtualenv`](https://virtualenv.pypa.io/)
+の個別インストールは不要になった。
 
 -   仮想環境を作る:
 
-        % python3.4 -m venv [OPTIONS] /path/to/projectx
-        % pyvenv3.4         [OPTIONS] /path/to/projectx
+        % python3.6 -m venv [OPTIONS] /path/to/projectx
         % virtualenv        [OPTIONS] /path/to/projectx
 
 -   仮想環境に入る、から出る:
@@ -75,62 +89,8 @@ Python 3.3 以降では `venv` が標準ライブラリ入りしたので
         % find /path/to/projectx/ -type l
         % virtualenv /path/to/projectx
 
-### `ensurepip`
 
-Python3
-:   <http://docs.python.org/3/library/ensurepip>
-
-`pip` を自動インストールするための公式ライブラリ。
-手動でも使える:
-
-    % python3.4 -m ensurepip -h
-    % python3.4 -m ensurepip --upgrade
-
-### `pip`
-
-Doc
-:   <https://pip.pypa.io/>
-
-PyPI
-:   <http://pypi.python.org/pypi/pip>
-
-[PyPI](http://pypi.python.org) からのパッケージのダウンロード、ビルド、インストールを
-簡単にできるようにするツール。
-アンインストール機能の無い easy\_install に取って代わり、
-現在では公式推奨となっている。
-Python 3.4 以降では標準ライブラリの `ensurepip`
-によって自動的にインストールされる。
-`setuptools` に依存している。
-
--   `pip` コマンド
-    -   `install`: Install packages.
-    -   `uninstall`: Uninstall packages.
-    -   `freeze`: Output installed packages in requirements format.
-    -   `list`: List installed packages.
-    -   `show`: Show information about installed packages.
-    -   `search`: Search PyPI for packages.
-    -   `help`: Show help for commands.
--   全体のヘルプ、コマンド毎の詳細ヘルプ:
-
-        % pip help
-        % pip install --help
-
--   `setup.py` にオプションを渡す:
-
-        % pip install --install-option="--prefix=/usr/local" numpy
-
--   よく使うコマンド:
-
-        % pip list && pip list --outdated
-        % pip search numpy
-        % pip install --upgrade numpy
-
--   設定ファイルは `~/.pip/pip.conf` :
-
-        [global]
-        download-cache = ~/.pip/cache
-
-### `setuptools`
+## [`setuptools`](https://github.com/pypa/setuptools)
 
 パッケージ管理・作成の基本となるライブラリ。
 コマンドラインツール `easy_install`
@@ -139,22 +99,8 @@ Python 3.4 以降では標準ライブラリの `ensurepip`
 
 See also ["setuptools --- Pythonパッケージ作成"]({{< relref "setuptools.md" >}})
 
-Website
-:   <http://pythonhosted.org/setuptools/>
-
-PyPI
-:   <https://pypi.python.org/pypi/setuptools/>
-
-### `distribute`
-
-`setuptools` の改良版としてしばらく利用されていたが、
-その成果が `setuptools` にマージされたのでもう使われない。
-
-Website
-:   <http://packages.python.org/distribute>
-
-PyPI
-:   <http://pypi.python.org/pypi/distribute>
+`setuptools` の改良版としてしばらく `distribute` も利用されていたが、
+その成果が `setuptools` にマージされたので忘れていい。
 
 
 ## 関連書籍
