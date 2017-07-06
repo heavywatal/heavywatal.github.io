@@ -86,119 +86,35 @@ pip — パッケージ管理
 
 
 
-<p>古いPython (3.2以下) ではパッケージ管理のために
-外部ツールを別途インストールする必要があった(結構多くて複雑&hellip;)。
+<p>古いPythonではパッケージ管理のためにツールを別途インストールする必要があった。
 Python 3.4 以降では <code>venv</code> と <code>ensurepip</code> が標準ライブラリに入って少しマシに。</p>
 
-<div class="note">
-<p>最近では、Python本体のインストールからパッケージ管理までぜーんぶ
-<a href="/python/install.html#anaconda">Anaconda</a> に任せるのが主流になりつつある。
-そのため本記事はほぼ無用に。</p>
+<p>科学技術系の利用だけなら、Python本体のインストールからパッケージ管理までぜーんぶ
+<a href="/python/install.html#anaconda">Anaconda</a> に任せるのが楽ちん。
+その場合、本記事はほぼ無用。</p>
 
-</div>
+<h2 id="pip-https-pip-pypa-io"><a href="https://pip.pypa.io/"><code>pip</code></a></h2>
 
+<p><a href="http://pypi.python.org">PyPI</a>
+からの簡単にパッケージをインストールできるようにするツール。
+アンインストール機能の無い <code>easy_install</code> に取って代わり、
+現在では公式に推奨されている。
+Python 2.7.9以降、3.4以降では標準ライブラリの
+<a href="https://docs.python.org/3/library/ensurepip.html"><code>ensurepip</code></a>
+によって自動的にインストールされる。</p>
 
-<h2 id="installation-python-2">Installation (Python 2)</h2>
+<ul>
+<li><p>古い環境に手動インストール:</p>
 
-<ol>
-<li><p>ベースのPythonインタープリタをひとつ決め
-(例えばOSに標準装備されてる <code>/usr/bin/python</code>)、
-それを使って <code>setuptools</code> をインストール:</p>
-
-<pre><code>% curl -O https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py
-% /usr/bin/python ez_setup.py --user
-</code></pre></li>
-
-<li><p>続いて <code>pip</code> をインストール:</p>
-
-<pre><code>% curl -O https://bootstrap.pypa.io/get-pip.py
+<pre><code class="language-sh">% curl -O https://bootstrap.pypa.io/get-pip.py
 % /usr/bin/python get-pip.py --user
-</code></pre></li>
+</code></pre>
 
-<li><p>Macなら <code>~/Library/Python/2.7/</code> 以下に、
+<p>Macなら <code>~/Library/Python/2.7/</code> 以下に、
 Linuxなら <code>~/.local/</code> 以下に上記のライブラリがインストールされるので、
 その中にある <code>bin</code> を <code>PATH</code> に追加する。</p></li>
 
-<li><p><code>pip</code> を使って <code>virtualenv</code> をインストール:</p>
-
-<pre><code>% pip install --user virtualenv
-</code></pre></li>
-</ol>
-
-<h2 id="usage">Usage</h2>
-
-<h3 id="venv-virtualenv"><code>venv</code> / <code>virtualenv</code></h3>
-
-<dl>
-<dt>Doc</dt>
-<dd><a href="http://www.virtualenv.org/">http://www.virtualenv.org/</a></dd>
-<dt>PyPI</dt>
-<dd><a href="http://pypi.python.org/pypi/virtualenv">http://pypi.python.org/pypi/virtualenv</a></dd>
-<dt>Python3</dt>
-<dd><a href="http://docs.python.org/3/library/venv">http://docs.python.org/3/library/venv</a></dd>
-</dl>
-
-<p>Python実行環境を仮想化するパッケージ。
-これで作った仮想環境内で <code>pip</code> を使ってパッケージ管理する。
-Python 3.3 以降では <code>venv</code> が標準ライブラリ入りしたので
-<code>virtualenv</code> は不要になった。</p>
-
-<ul>
-<li><p>仮想環境を作る:</p>
-
-<pre><code>% python3.4 -m venv [OPTIONS] /path/to/projectx
-% pyvenv3.4         [OPTIONS] /path/to/projectx
-% virtualenv        [OPTIONS] /path/to/projectx
-</code></pre></li>
-
-<li><p>仮想環境に入る、から出る:</p>
-
-<pre><code>% source /path/to/projectx/bin/activate
-(projectx) % deactivate
-</code></pre></li>
-
-<li><p>Pythonを更新したりするとシムリンクが壊れるので一旦消して張り直す:</p>
-
-<pre><code>% find /path/to/projectx/ -type l
-% find /path/to/projectx/ -type l -delete
-% find /path/to/projectx/ -type l
-% virtualenv /path/to/projectx
-</code></pre></li>
-</ul>
-
-<h3 id="ensurepip"><code>ensurepip</code></h3>
-
-<dl>
-<dt>Python3</dt>
-<dd><a href="http://docs.python.org/3/library/ensurepip">http://docs.python.org/3/library/ensurepip</a></dd>
-</dl>
-
-<p><code>pip</code> を自動インストールするための公式ライブラリ。
-手動でも使える:</p>
-
-<pre><code>% python3.4 -m ensurepip -h
-% python3.4 -m ensurepip --upgrade
-</code></pre>
-
-<h3 id="pip"><code>pip</code></h3>
-
-<dl>
-<dt>Doc</dt>
-<dd><a href="https://pip.pypa.io/">https://pip.pypa.io/</a></dd>
-<dt>PyPI</dt>
-<dd><a href="http://pypi.python.org/pypi/pip">http://pypi.python.org/pypi/pip</a></dd>
-</dl>
-
-<p><a href="http://pypi.python.org">PyPI</a> からのパッケージのダウンロード、ビルド、インストールを
-簡単にできるようにするツール。
-アンインストール機能の無い easy_install に取って代わり、
-現在では公式推奨となっている。
-Python 3.4 以降では標準ライブラリの <code>ensurepip</code>
-によって自動的にインストールされる。
-<code>setuptools</code> に依存している。</p>
-
-<ul>
-<li><code>pip</code> コマンド
+<li><p><code>pip</code> コマンド</p>
 
 <ul>
 <li><code>install</code>: Install packages.</li>
@@ -224,8 +140,8 @@ Python 3.4 以降では標準ライブラリの <code>ensurepip</code>
 <li><p>よく使うコマンド:</p>
 
 <pre><code>% pip list &amp;&amp; pip list --outdated
-% pip search numpy
-% pip install --upgrade numpy
+% pip search psutil
+% pip install --upgrade setuptools
 </code></pre></li>
 
 <li><p>設定ファイルは <code>~/.pip/pip.conf</code> :</p>
@@ -235,7 +151,37 @@ download-cache = ~/.pip/cache
 </code></pre></li>
 </ul>
 
-<h3 id="setuptools"><code>setuptools</code></h3>
+<h2 id="venv-https-docs-python-org-3-library-venv-html-virtualenv"><a href="https://docs.python.org/3/library/venv.html"><code>venv</code></a> / <code>virtualenv</code></h2>
+
+<p>Python実行環境を仮想化するパッケージ。
+これで作った仮想環境内で <code>pip</code> を使ってパッケージ管理する。
+Python 3.3 以降では <code>venv</code> が標準ライブラリ入りしたので
+<a href="https://virtualenv.pypa.io/"><code>virtualenv</code></a>
+の個別インストールは不要になった。</p>
+
+<ul>
+<li><p>仮想環境を作る:</p>
+
+<pre><code>% python3.6 -m venv [OPTIONS] /path/to/projectx
+% virtualenv        [OPTIONS] /path/to/projectx
+</code></pre></li>
+
+<li><p>仮想環境に入る、から出る:</p>
+
+<pre><code>% source /path/to/projectx/bin/activate
+(projectx) % deactivate
+</code></pre></li>
+
+<li><p>Pythonを更新したりするとシムリンクが壊れるので一旦消して張り直す:</p>
+
+<pre><code>% find /path/to/projectx/ -type l
+% find /path/to/projectx/ -type l -delete
+% find /path/to/projectx/ -type l
+% virtualenv /path/to/projectx
+</code></pre></li>
+</ul>
+
+<h2 id="setuptools-https-github-com-pypa-setuptools"><a href="https://github.com/pypa/setuptools"><code>setuptools</code></a></h2>
 
 <p>パッケージ管理・作成の基本となるライブラリ。
 コマンドラインツール <code>easy_install</code>
@@ -244,24 +190,8 @@ download-cache = ~/.pip/cache
 
 <p>See also <a href="/python/setuptools.html">&ldquo;setuptools &mdash; Pythonパッケージ作成&rdquo;</a></p>
 
-<dl>
-<dt>Website</dt>
-<dd><a href="http://pythonhosted.org/setuptools/">http://pythonhosted.org/setuptools/</a></dd>
-<dt>PyPI</dt>
-<dd><a href="https://pypi.python.org/pypi/setuptools/">https://pypi.python.org/pypi/setuptools/</a></dd>
-</dl>
-
-<h3 id="distribute"><code>distribute</code></h3>
-
-<p><code>setuptools</code> の改良版としてしばらく利用されていたが、
-その成果が <code>setuptools</code> にマージされたのでもう使われない。</p>
-
-<dl>
-<dt>Website</dt>
-<dd><a href="http://packages.python.org/distribute">http://packages.python.org/distribute</a></dd>
-<dt>PyPI</dt>
-<dd><a href="http://pypi.python.org/pypi/distribute">http://pypi.python.org/pypi/distribute</a></dd>
-</dl>
+<p><code>setuptools</code> の改良版としてしばらく <code>distribute</code> も利用されていたが、
+その成果が <code>setuptools</code> にマージされたので忘れていい。</p>
 
 <h2 id="関連書籍">関連書籍</h2>
 
