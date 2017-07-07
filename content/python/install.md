@@ -142,13 +142,13 @@ https://docs.python.org/3/using/cmdline.html#environment-variables
 
 [`pip install`]({{< relref "pip.md" >}}) や `setup.py install` における
 `--user` オプションの目的地を指定できる。
-デフォルトでは `~/.local` とか `~/Library` 。
+デフォルトでは `${HOME}/.local` 。
+MacのFramework buildでは `${HOME}/Library/Python/2.7` とかになる。
 
 現在の設定は
-[`site.USER_BASE`](https://docs.python.org/3/library/site.html#site.USER_BASE)
-で確認できる。
-[`site.USER_SITE`](https://docs.python.org/3/library/site.html#site.USER_SITE)
-はその下の `{BASE}/lib/python*.*/site-packages` に配置され、
+[`site`](https://docs.python.org/3/library/site.html)
+の `USER_BASE` で確認できる (`python -m site`)。
+`USER_SITE` はその下の `{BASE}/lib/python*.*/site-packages` に配置され、
 `sys.path` に含まれる。
 除外したいときは `PYTHONNOUSERSITE` をセットするか `python -s` で起動。
 

@@ -25,14 +25,18 @@ Python 2.7.9以降、3.4以降では標準ライブラリの
 [`ensurepip`](https://docs.python.org/3/library/ensurepip.html)
 によって自動的にインストールされる。
 
--   古い環境に手動インストール:
+-   手動インストール:
     ```sh
+    % python -m ensurepip --user
+    または
     % curl -O https://bootstrap.pypa.io/get-pip.py
-    % /usr/bin/python get-pip.py --user
+    % python get-pip.py --user
     ```
-    Macなら `~/Library/Python/2.7/` 以下に、
-    Linuxなら `~/.local/` 以下に上記のライブラリがインストールされるので、
-    その中にある `bin` を `PATH` に追加する。
+    `--user` を付けた場合のインストール先は環境変数
+    [`PYTHONUSERBASE`]({{< relref "install.md#pythonuserbase" >}})
+    で指定できる。
+    その中の `bin/` を `PATH` に追加するか、
+    絶対パスで `pip` コマンドを使う。
 
 -   `pip` コマンド
     -   `install`: Install packages.
