@@ -221,13 +221,13 @@ Python 2をucs4でビルドするには
 
 <p><a href="/python/pip.html"><code>pip install</code></a> や <code>setup.py install</code> における
 <code>--user</code> オプションの目的地を指定できる。
-デフォルトでは <code>~/.local</code> とか <code>~/Library</code> 。</p>
+デフォルトでは <code>${HOME}/.local</code> 。
+MacのFramework buildでは <code>${HOME}/Library/Python/2.7</code> とかになる。</p>
 
 <p>現在の設定は
-<a href="https://docs.python.org/3/library/site.html#site.USER_BASE"><code>site.USER_BASE</code></a>
-で確認できる。
-<a href="https://docs.python.org/3/library/site.html#site.USER_SITE"><code>site.USER_SITE</code></a>
-はその下の <code>{BASE}/lib/python*.*/site-packages</code> に配置され、
+<a href="https://docs.python.org/3/library/site.html"><code>site</code></a>
+の <code>USER_BASE</code> で確認できる (<code>python -m site</code>)。
+<code>USER_SITE</code> はその下の <code>{BASE}/lib/python*.*/site-packages</code> に配置され、
 <code>sys.path</code> に含まれる。
 除外したいときは <code>PYTHONNOUSERSITE</code> をセットするか <code>python -s</code> で起動。</p>
 
