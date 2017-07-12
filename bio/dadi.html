@@ -93,49 +93,35 @@ dadi
 <p><a href="https://bitbucket.org/gutenkunstlab/dadi/wiki/Installation">https://bitbucket.org/gutenkunstlab/dadi/wiki/Installation</a></p>
 
 <ol>
-<li><p>Python 2.7 で <code>dadi</code> 用の <code>virtualenv</code> を作って、中に入る:</p>
+<li><p>macOS 標準 Python 2.7 に
+<a href="/python/pip.html">pip と virtualenv</a> を入れる:</p>
 
-<pre><code>% virtualenv ~/.virtualenv/dadi
+<pre><code>% /usr/bin/python -m ensurepip -v --user
+% ~/Library/Python/2.7/bin/pip install -U setuptools pip virtualenv
+</code></pre></li>
+
+<li><p>dadi専用のvirtualenvを作って、その中に依存パッケージをインストール:</p>
+
+<pre><code>% ~/Library/Python/2.7/bin/virtualenv ~/.virtualenv/dadi
 % source ~/.virtualenv/dadi/bin/activate
+(dadi) % pip install -U setuptools pip flake8
+(dadi) % pip install -U numpy scipy matplotlib
 </code></pre></li>
 
-<li><p>依存パッケージをインストール:</p>
+<li><p>リポジトリのクローンを取得し、リリース版をチェックアウトしてインストール:</p>
 
-<pre><code>% pip install -U numpy==1.9.2 scipy matplotlib
-</code></pre>
-
-<div class="note">
-<p><code>numpy==1.10.0</code> だと
-<code>ValueError: Cannot operate with a folded Spectrum and an unfolded one.</code>
-というエラーが出て使えなかったのでとりあえず
-<code>numpy==1.9.2</code> を使うべし。</p>
-
-</div>
-</li>
-
-<li><p><code>git</code> でリポジトリのクローンを取得:</p>
-
-<pre><code>% git clone git@bitbucket.org:RyanGutenkunst/dadi.git
-</code></pre></li>
-
-<li><p>リリース版をチェックアウト:</p>
-
-<pre><code>% cd dadi/
-% git tag
-% git checkout 1.7.0
-</code></pre></li>
-
-<li><p>インストール:</p>
-
-<pre><code>% python setup.py build
-% python setup.py install
+<pre><code>(dadi) % git clone https://bitbucket.org/gutenkunstlab/dadi.git
+(dadi) % cd dadi/
+(dadi) % git tag
+(dadi) % git checkout 1.7.0
+(dadi) % python setup.py install
 </code></pre></li>
 
 <li><p>テスト:</p>
 
-<pre><code>% cd tests/
-% python run_tests.py
-% cd ..
+<pre><code>(dadi) % cd tests/
+(dadi) % python run_tests.py
+(dadi) % cd ..
 </code></pre></li>
 
 <li><p><code>doc/</code> 以下に結構詳しいドキュメントが入ってるので読む (これもウェブで公開してくれたらいいのに)</p></li>
