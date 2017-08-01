@@ -17,3 +17,6 @@ clean:
 
 server:
 	hugo server -D -w
+
+sass:
+	node-sass --output-style expanded -o themes/nonblog/static/css themes/nonblog/src/theme.scss
