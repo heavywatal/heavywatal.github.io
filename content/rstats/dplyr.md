@@ -137,6 +137,13 @@ dplyr::summarise_all(
     3          5.5         4.2          1.4         0.2  setosa
     ```
 
+    {{%div class="warning"%}}
+評価結果が `NA` となる行は除去される。
+特に不等号を使うときやや直感に反するので要注意。
+e.g., `filter(gene != 'TP53')`
+{{%/div%}}
+
+
 `dplyr::distinct(.data, ..., .keep_all=FALSE)`
 :   指定した列に関してユニークな行のみ返す。
     `base::unique.data.frame()` よりも高速で、
