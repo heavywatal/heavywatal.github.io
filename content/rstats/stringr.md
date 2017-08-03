@@ -58,12 +58,14 @@ Rの中から `install.package('tidyverse')` でインストールし、
 :   文字列を結合する。
     デフォルトの `sep` がスペースじゃないので `base::paste0()` に近い。
 
-`str_split(string, pattern, n=Inf)`
-:   文字列を分割する。
+`str_split(string, pattern, n=Inf, simplify=FALSE)`
+:   文字列を分割してlistを返す。
     `base::strsplit(x, split)` と相同だが、
     最大 `n` 個に分割するということを指定できる。
-    空文字で帳尻合わせしてちょうど `n` 個にする `str_split_fixed()` もある。
+    空文字で帳尻合わせしてちょうど `n` 個にするショートカットが
+    `str_split_fixed(string, pattern, n)` 。
     `string` と `pattern` の要素数が噛み合わないときにちゃんと警告が出る。
+    `simplify=TRUE` とするとmatrixで返す。
 
 `str_dup(string, times)`
 :   指定した回数だけ文字列を繰り返して結合。
