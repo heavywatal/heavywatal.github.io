@@ -142,12 +142,14 @@ stringr — Rの文字列をまともな方法で処理する
 <dt><code>str_c(..., sep='', collapse=NULL)</code></dt>
 <dd>文字列を結合する。
 デフォルトの <code>sep</code> がスペースじゃないので <code>base::paste0()</code> に近い。</dd>
-<dt><code>str_split(string, pattern, n=Inf)</code></dt>
-<dd>文字列を分割する。
+<dt><code>str_split(string, pattern, n=Inf, simplify=FALSE)</code></dt>
+<dd>文字列を分割してlistを返す。
 <code>base::strsplit(x, split)</code> と相同だが、
 最大 <code>n</code> 個に分割するということを指定できる。
-空文字で帳尻合わせしてちょうど <code>n</code> 個にする <code>str_split_fixed()</code> もある。
-<code>string</code> と <code>pattern</code> の要素数が噛み合わないときにちゃんと警告が出る。</dd>
+空文字で帳尻合わせしてちょうど <code>n</code> 個にするショートカットが
+<code>str_split_fixed(string, pattern, n)</code> 。
+<code>string</code> と <code>pattern</code> の要素数が噛み合わないときにちゃんと警告が出る。
+<code>simplify=TRUE</code> とするとmatrixで返す。</dd>
 <dt><code>str_dup(string, times)</code></dt>
 <dd>指定した回数だけ文字列を繰り返して結合。
 <code>str_dup('#', 79)</code> とかで結果出力に区切りを入れたり。</dd>
