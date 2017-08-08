@@ -166,11 +166,10 @@ Hello, World!
 (PDF)を読むべし。</p>
 
 <ul>
-<li><p>基本的に <code>amsmath</code> を使う。
+<li><p>基本的に <a href="http://www.ams.org/publications/authors/tex/amslatex">{amsmath}</a> を使う。
 数式環境のデファクトスタンダード。
 アメリカ数学会(AMS)が開発したらしいが、
-ガチ数学じゃなくても数式を書く場合はこれらしい。
-<a href="http://www.ams.org/publications/authors/tex/amslatex">http://www.ams.org/publications/authors/tex/amslatex</a></p>
+ガチ数学じゃなくても数式を書く場合はこれらしい。</p>
 
 <pre><code class="language-tex">\usepackage{amsmath}
 \usepackage[all, warning]{onlyamsmath}
@@ -179,18 +178,23 @@ Hello, World!
 <li><p>Inline math:</p>
 
 <pre><code class="language-tex">if $N_e u \ll 1$, then the population is monomorphic most of the time,
-</code></pre></li>
+</code></pre>
 
-<li><p>Display math</p>
+<p><code>$...$</code> はTeXの古いやり方で、
+新しいLaTeXでは <code>\(...\)</code> を用いるべし、という流れもある。
+けどダラーのほうが書きやすいし読みやすいので、
+しばらくは <code>chktex -n46</code> で様子を見る。</p></li>
 
-<pre><code class="language-tex">\begin{equation*}
+<li><p>Display math:</p>
+
+<pre><code class="language-tex">\begin{equation*}\label{eq:growth}
   N_t = N_0 e^{rt}
 \end{equation*}
 </code></pre></li>
 
 <li><p>改行を含む数式を等号で揃える</p>
 
-<pre><code class="language-tex">\begin{equation}
+<pre><code class="language-tex">\begin{equation}\label{eq:growth}
 \begin{split}
   N_t &amp;= N_0 e^{rt} \\
       &amp;= N_0 \lambda^t
@@ -198,8 +202,8 @@ Hello, World!
 \end{equation}
 
 \begin{align}
-  S &amp;= 4 \pi r^2 \\
-  V &amp;= \frac {4 \pi r^3} 3 \\
+  S &amp;= 4 \pi r^2\label{surface}\\
+  V &amp;= \frac {4 \pi r^3} 3\label{volume}\\
 \end{align}
 </code></pre>
 
@@ -211,7 +215,7 @@ Hello, World!
 
 <li><p>場合分け</p>
 
-<pre><code class="language-tex">\begin{equation}
+<pre><code class="language-tex">\begin{equation}\label{eq:heaviside}
   H(x) = \begin{cases}
     &amp; 0 \text{if $x \le 0$} \\
     &amp; 1 \text{if $x &gt; 0$}
@@ -243,8 +247,8 @@ XeTeXでは不要っぽい。</p>
 
 <pre><code class="language-tex">\begin{figure}[htbp]
 \includegraphics[width=100mm]{great.pdf}
-\caption{some description}
-\label{fig:great}
+\caption{some description
+}\label{fig:great}
 \end{figure}
 </code></pre>
 
@@ -259,12 +263,15 @@ XeTeXでは不要っぽい。</p>
 <code>p</code> float page: 図だけを含む独立したページに</p>
 
 <p>ひとつの領域に複数の図を貼るには
-<a href="https://www.ctan.org/pkg/subfig">subfig</a>
+<a href="https://www.ctan.org/pkg/subfig">{subfig}</a>
 の <code>\subfloat[caption]{filename}</code> を用いる。</p>
 
 <p>キャプションをカスタマイズするには
-<a href="https://www.ctan.org/pkg/caption">caption</a>
+<a href="https://www.ctan.org/pkg/caption">{caption}</a>
 の <code>\captionsetup{...}</code> を用いる。</p>
+
+<p>ラベル <code>\label{}</code> は <code>\caption{}</code> 直後が良いらしく、
+スペースさえもchktex警告対象なので波カッコ前で改行するという苦肉の策。</p>
 
 <p><code>\usepackage{epstopdf}</code> でEPSを取り込もうとすると(e.g., PLOS)、
 ファイルもパッケージも揃ってるはずなのに
@@ -280,24 +287,30 @@ XeTeXでは不要っぽい。</p>
 表本体が <code>tabular</code> 環境</p>
 
 <pre><code class="language-tex">\begin{table}
-  \caption{Parameters}
-  \label{parameters}
-  \begin{tabular}{rl}
-    Symbol &amp; Description \\
-    \hline
-    $\mu$ &amp; mutation rate per division \\
-    $N_0$ &amp; initial population size \\
-  \end{tabular}
+\caption{Parameters
+}\label{table:parameters}
+\begin{tabular}{rl}
+  \toprule
+  Symbol &amp; Description \\
+  \midrule
+  $\mu$ &amp; mutation rate per division \\
+  $N_0$ &amp; initial population size \\
+  \bottomrule
+\end{tabular}
 \end{table}
 </code></pre>
 
-<p>ページに合わせて幅をうまいことやるには <code>\usepackage{tabulary}</code> 。</p>
+<p>罫線は標準の <code>\hline</code> だと上下スペースが狭苦しいので、
+<a href="https://www.ctan.org/pkg/booktabs">{booktabs}</a>
+の <code>toprule</code>, <code>midrule</code>, <code>bottomrule</code> を使う。</p>
 
-<p>複数ページにまたがる表を作るには標準 <code>\begin{longtable}</code> やその派生。</p>
+<p>ページに合わせて幅をうまいことやるには <a href="https://www.ctan.org/pkg/tabulary">{tabulary}</a> 。</p>
+
+<p>複数ページにまたがる表を作るには標準 <a href="https://www.ctan.org/pkg/longtable">{longtable}</a> やその派生。</p>
 
 <h3 id="箇条書き">箇条書き</h3>
 
-<p><a href="https://www.ctan.org/pkg/enumitem">enumitem</a>
+<p><a href="https://www.ctan.org/pkg/enumitem">{enumitem}</a>
 を使うといろいろなオプションが設定可能になる。</p>
 
 <pre><code class="language-tex">\usepackage{enumitem}
@@ -415,6 +428,11 @@ e.g., <code>mybibdata.bib</code></li>
 
 \documentclass{article}  % これよりも前
 </code></pre>
+
+<p><code>chktex</code> コマンドを使えばコンパイルよりも手軽にチェックできる。
+<a href="/dev/atom.html">Atom</a> に
+<a href="https://atom.io/packages/linter-chktex">linter-chktex</a>
+を入れれば編集中のファイルの警告箇所を随時ハイライトしてもらえる。</p>
 
 <h3 id="ligature問題">ligature問題</h3>
 
