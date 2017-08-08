@@ -78,11 +78,10 @@ BasicTeXの場合は最小限のパッケージしか含まれていないので
 [Short Math Guide for LaTeX](ftp://ftp.ams.org/pub/tex/doc/amsmath/short-math-guide.pdf)
 (PDF)を読むべし。
 
--   基本的に `amsmath` を使う。
+-   基本的に [{amsmath}](http://www.ams.org/publications/authors/tex/amslatex) を使う。
     数式環境のデファクトスタンダード。
     アメリカ数学会(AMS)が開発したらしいが、
     ガチ数学じゃなくても数式を書く場合はこれらしい。
-    <http://www.ams.org/publications/authors/tex/amslatex>
 
     ```tex
     \usepackage{amsmath}
@@ -95,10 +94,15 @@ BasicTeXの場合は最小限のパッケージしか含まれていないので
     if $N_e u \ll 1$, then the population is monomorphic most of the time,
     ```
 
--   Display math
+    `$...$` はTeXの古いやり方で、
+    新しいLaTeXでは `\(...\)` を用いるべし、という流れもある。
+    けどダラーのほうが書きやすいし読みやすいので、
+    しばらくは `chktex -n46` で様子を見る。
+
+-   Display math:
 
     ```tex
-    \begin{equation*}
+    \begin{equation*}\label{eq:growth}
       N_t = N_0 e^{rt}
     \end{equation*}
     ```
@@ -106,7 +110,7 @@ BasicTeXの場合は最小限のパッケージしか含まれていないので
 -   改行を含む数式を等号で揃える
 
     ```tex
-    \begin{equation}
+    \begin{equation}\label{eq:growth}
     \begin{split}
       N_t &= N_0 e^{rt} \\
           &= N_0 \lambda^t
@@ -114,8 +118,8 @@ BasicTeXの場合は最小限のパッケージしか含まれていないので
     \end{equation}
 
     \begin{align}
-      S &= 4 \pi r^2 \\
-      V &= \frac {4 \pi r^3} 3 \\
+      S &= 4 \pi r^2\label{surface}\\
+      V &= \frac {4 \pi r^3} 3\label{volume}\\
     \end{align}
     ```
 
@@ -127,7 +131,7 @@ BasicTeXの場合は最小限のパッケージしか含まれていないので
 
 -   場合分け
     ```tex
-    \begin{equation}
+    \begin{equation}\label{eq:heaviside}
       H(x) = \begin{cases}
         & 0 \text{if $x \le 0$} \\
         & 1 \text{if $x > 0$}
@@ -156,8 +160,8 @@ XeTeXでは不要っぽい。
 ```tex
 \begin{figure}[htbp]
 \includegraphics[width=100mm]{great.pdf}
-\caption{some description}
-\label{fig:great}
+\caption{some description
+}\label{fig:great}
 \end{figure}
 ```
 
@@ -172,12 +176,15 @@ XeTeXでは不要っぽい。
 `p` float page: 図だけを含む独立したページに
 
 ひとつの領域に複数の図を貼るには
-[subfig](https://www.ctan.org/pkg/subfig)
+[{subfig}](https://www.ctan.org/pkg/subfig)
 の `\subfloat[caption]{filename}` を用いる。
 
 キャプションをカスタマイズするには
-[caption](https://www.ctan.org/pkg/caption)
+[{caption}](https://www.ctan.org/pkg/caption)
 の `\captionsetup{...}` を用いる。
+
+ラベル `\label{}` は `\caption{}` 直後が良いらしく、
+スペースさえもchktex警告対象なので波カッコ前で改行するという苦肉の策。
 
 `\usepackage{epstopdf}` でEPSを取り込もうとすると(e.g., PLOS)、
 ファイルもパッケージも揃ってるはずなのに
@@ -195,24 +202,31 @@ XeTeXでは不要っぽい。
 
 ```tex
 \begin{table}
-  \caption{Parameters}
-  \label{parameters}
-  \begin{tabular}{rl}
-    Symbol & Description \\
-    \hline
-    $\mu$ & mutation rate per division \\
-    $N_0$ & initial population size \\
-  \end{tabular}
+\caption{Parameters
+}\label{table:parameters}
+\begin{tabular}{rl}
+  \toprule
+  Symbol & Description \\
+  \midrule
+  $\mu$ & mutation rate per division \\
+  $N_0$ & initial population size \\
+  \bottomrule
+\end{tabular}
 \end{table}
 ```
 
-ページに合わせて幅をうまいことやるには `\usepackage{tabulary}` 。
+罫線は標準の `\hline` だと上下スペースが狭苦しいので、
+[{booktabs}](https://www.ctan.org/pkg/booktabs)
+の `toprule`, `midrule`, `bottomrule` を使う。
 
-複数ページにまたがる表を作るには標準 `\begin{longtable}` やその派生。
+ページに合わせて幅をうまいことやるには [{tabulary}](https://www.ctan.org/pkg/tabulary) 。
+
+複数ページにまたがる表を作るには標準 [{longtable}](https://www.ctan.org/pkg/longtable) やその派生。
+
 
 ### 箇条書き
 
-[enumitem](https://www.ctan.org/pkg/enumitem)
+[{enumitem}](https://www.ctan.org/pkg/enumitem)
 を使うといろいろなオプションが設定可能になる。
 
 ```tex
@@ -330,6 +344,12 @@ XeTeXでは不要っぽい。
 
 \documentclass{article}  % これよりも前
 ```
+
+`chktex` コマンドを使えばコンパイルよりも手軽にチェックできる。
+[Atom]({{< relref "atom.md" >}}) に
+[linter-chktex](https://atom.io/packages/linter-chktex)
+を入れれば編集中のファイルの警告箇所を随時ハイライトしてもらえる。
+
 
 ### ligature問題
 
