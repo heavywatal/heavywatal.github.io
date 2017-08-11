@@ -123,11 +123,11 @@ C++11を使えない場合でも、
 定数同士の四則演算などはまとめておけばコンパイラが計算してくれるはず。</p>
 
 <pre><code class="language-c++">// 掛け算も割り算も毎回計算
-return 4.0 * M_PI * wtl::pow(radius, 3) / 3.0;
+return 4.0 * M_PI * std::pow(radius, 3) / 3.0;
 
 // コンパイル時定数を掛けるだけ
 constexpr double c = 4.0 * M_PI / 3.0;
-return c * wtl::pow(radius, 3);
+return c * std::pow(radius, 3);
 </code></pre>
 
 <p>また、四則演算の中でも割り算は特に遅いらしいので、
@@ -317,31 +317,39 @@ x += b;
 
 <h3 id="用途に合わせる">用途に合わせる</h3>
 
+<p><a href="http://en.cppreference.com/w/cpp/container">http://en.cppreference.com/w/cpp/container</a></p>
+
 <dl>
+<dt><code>std::array</code></dt>
+<dd>Cの配列に便利なメンバ関数を持たせたようなクラス。
+長さはコンパイル時に固定で、
+メモリ上に連続した領域を確保する。
+要素へのアクセスは高速で、
+インデックス<code>[]</code> によるランダムアクセスも可能。</dd>
 <dt><code>std::vector</code></dt>
-<dd>メモリ上に連続した領域を確保する。
-そのため、途中に <code>insert()</code> するのは遅い
-（メモリ領域を別のところに再確保して全部コピーしなければならないので）。
-その代わり、要素へのアクセスは高速で、インデックス<code>[]</code> によるランダムアクセスも可能。</dd>
+<dd>可変長にした <code>array</code> 、つまり実行時に伸長・縮小可能。
+C++で配列作るならとりあえずこれ。
+途中に <code>insert()</code> するのは遅い
+（メモリ領域を別のところに再確保して全部コピーしなければならないので）。</dd>
+<dt><code>std::valarray</code></dt>
+<dd>要素ごとの四則演算など関数・演算子が定義済みの <code>vector</code> 亜種。
+便利なだけでなくきっと最適化もされやすい。
+ただし長さの変更など苦手な点もあるので使い所は限られる。
+本格的なベクタ演算・行列演算がしたければ
+<a href="http://eigen.tuxfamily.org/">Eigen</a> や
+<a href="http://arma.sourceforge.net/">Armadillo</a> とかを使ったほうよさそう。</dd>
 <dt><code>std::deque</code></dt>
 <dd><code>vector</code> とほぼ同じだが、<code>reserve()</code> ができない。
 代わりに、<code>push_front()</code> と <code>pop_front()</code> が使える。
 つまり、先頭に対する追加・削除が必要な場合だけ使うコンテナ。</dd>
 <dt><code>std::list</code></dt>
-<dd>上記２つとは違って、飛び飛びの領域にまたがって存在できる。
+<dd>飛び飛びのメモリ領域に散らばって存在できる配列クラス。
 これは、各要素の値とともに前後の要素を示すイテレータを格納することで実現されている。
 そのため、途中への <code>insert()</code> はイテレータを書き換えるだけなので高速。
 ただし、その分メモリは余分に食うし、ランダムアクセスできないし、イテレータで総なめするのも遅い。</dd>
 <dt><code>std::unordered_set</code>, <code>std::unordered_map</code></dt>
 <dd>順序を気にしないぶん <code>std::set</code> や <code>std::map</code> より高速。
 ただしハッシュ関数の準備など多少めんどい。</dd>
-<dt><code>std::valarray</code></dt>
-<dd>要素ごとの四則演算など関数・演算子が定義済みのベクタ亜種。
-便利なだけでなくきっと最適化もされやすい。
-ただし長さの変更など苦手な点もあるので使い所は限られる。
-本格的なベクタ演算・行列演算がしたければ
-<a href="http://eigen.tuxfamily.org/">Eigen</a> や
-<a href="http://arma.sourceforge.net/">Armadillo</a> とかを使ったほうよさそう。</dd>
 </dl>
 
 <h3 id="メモリは一気に確保">メモリは一気に確保</h3>
