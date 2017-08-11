@@ -11,7 +11,7 @@
 <link rel="manifest" href="/manifest.json">
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#e08010">
 <meta name="theme-color" content="#e08010">
-<title>C&#43;&#43;コマンドライン引数 - Heavy Watal</title>
+<title>ビット演算: Bitwise operation - Heavy Watal</title>
 <meta name="author" content="Watal M. Iwasaki">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://avatars.githubusercontent.com/heavywatal">
@@ -47,8 +47,8 @@ MathJax.Hub.Queue(function() {
  {"@type": "ListItem",
   "position": 2,
   "item": {
-   "@id": "https://heavywatal.github.io/cxx/getopt.html",
-   "name": "C++コマンドライン引数"}}
+   "@id": "https://heavywatal.github.io/cxx/bitwise.html",
+   "name": "ビット演算"}}
 ]}</script>
 
 
@@ -76,7 +76,7 @@ Heavy Watal
 <main>
 <article>
 <header><h1><a href=".">
-C&#43;&#43;コマンドライン引数
+ビット演算 — Bitwise operation
 </a></h1>
 <ul class="tags">
 <li><a href="/tags/c&#43;&#43;.html">c&#43;&#43;</a></li>
@@ -85,169 +85,123 @@ C&#43;&#43;コマンドライン引数
 
 
 
-<h2 id="理想">理想</h2>
+<h2 id="基本">基本</h2>
+
+<h3 id="型">型</h3>
+
+<p>きっちりサイズが定義されているものと、
+下限だけが定義されてて環境依存のものがある。</p>
 
 <ul>
-<li>インストールが簡単。できればビルド不要でヘッダ1つ。</li>
-<li>ヘルプを自動生成してくれる</li>
-<li>オプションの管理を <code>main()</code> でなくクラスのソースファイルなどに分散できる</li>
-<li>オプション定義時に格納先の変数をアドレス渡しで指定できる</li>
-<li><code>(argc, argv)</code>だけでなくファイルや <code>std::string</code> からも読み込める</li>
-<li>読み込める形式で全オプションを書き出せる</li>
-<li>マクロではなく <code>template</code> など真っ当な C++ で書かれている</li>
+<li>1byte == 8bits</li>
+<li><code>sizeof(char)</code> == 1</li>
+<li><code>sizeof(bool)</code> &gt;= 1</li>
+<li><code>sizeof(int)</code> &gt;= 4</li>
+<li><code>sizeof(uint32_t)</code> == 4
+<a href="http://en.cppreference.com/w/cpp/header/cstdint"><code>&lt;cstdint&gt;</code></a></li>
+<li><code>sizeof(uint128_t)</code> == 16
+<a href="https://boostjp.github.io/tips/multiprec-int.html"><code>&lt;boost/multiprecision/cpp_int.hpp&gt;</code></a></li>
 </ul>
 
-<h2 id="gnu-getopt">GNU <code>getopt</code></h2>
+<p>符号あり(signed)型の場合、左端のビットが符号を司る。</p>
 
-<p><a href="http://www.gnu.org/s/libc/manual/html_node/Getopt.html">http://www.gnu.org/s/libc/manual/html_node/Getopt.html</a></p>
+<pre><code class="language-c++">// uint8_t
+0b00000000 //    0
+0b10000000 //  128
+0b11111111 //  255
 
-<ul>
-<li><code>gcc</code> ならインストール不要、<code>#include &lt;getopt.h&gt;</code> するだけで使える</li>
-<li>ヘルプなど自動生成してくれない</li>
-<li>オプションの管理を各ソースファイルに分散できない</li>
-<li>C++というよりCなので使い方がわかりにくい</li>
-</ul>
-
-<h2 id="boost-program-options"><code>boost::program_options</code></h2>
-
-<p><a href="http://www.boost.org/doc/html/program_options.html">http://www.boost.org/doc/html/program_options.html</a></p>
-
-<ul>
-<li>格納する変数のアドレスを渡せる</li>
-<li>ファイルから読み込みをサポート</li>
-<li>読み込み可能なファイルの出力方法は用意されてないので自分で書く必要がある</li>
-<li>Boostライブラリのヘッダだけでなくビルドとリンクが必要 cf. <a href="/cxx/boost.html">boost</a></li>
-<li>各ソースファイルに分散するには:
-
-<ol>
-<li>各クラスの <code>static</code> メソッドで <code>options_description</code> オブジェクトを生成</li>
-<li>メインの <code>options_description</code> オブジェクトに <code>add()</code> する。</li>
-</ol></li>
-</ul>
-
-<h2 id="gflags"><code>gflags</code></h2>
-
-<p><a href="https://gflags.github.io/gflags/">https://gflags.github.io/gflags/</a></p>
-
-<ul>
-<li>テンプレートではなくマクロをふんだんに使って実装されているのでちょっと怖い</li>
-<li><code>main()</code> 関数まわりをほとんど変更することなく、 各ソースファイルで自由にオプションを定義できる(しかもたった1行で)</li>
-<li>接頭辞 <code>FLAGS_</code> のついた変数が自動的に定義されて、そこに値が格納される</li>
-<li>入力可能なファイルを出力することも可能</li>
-<li>要ビルド＆リンク</li>
-</ul>
-
-<h3 id="usage">Usage</h3>
-
-<p><code>main()</code> 関数に書く必要があるのはこれだけ</p>
-
-<pre><code class="language-c++">#include &lt;gflags/gflags.h&gt;
-
-int main(int argc, char* argv[]) {
-    gflags::SetUsageMessage(&quot;This is a program to test gflags&quot;);
-    gflags::ParseCommandLineFlags(&amp;argc, &amp;argv, true);
-    // do something
-    return 0;
-}
+// int8_t
+0b01111111 //  127
+0b10000000 // -128
+0b10000001 // -127
+0b10000010 // -126
+//
+0b11111101 //   -3
+0b11111110 //   -2
+0b11111111 //   -1
 </code></pre>
 
-<p>あとは個々のソースファイルでオプションを追加。<code>namespace</code> にも入れられる。</p>
+<p><code>0b</code> は
+<a href="http://en.cppreference.com/w/cpp/language/integer_literal">binary literal</a>
+(C++14) の接頭辞</p>
 
-<pre><code class="language-c++">#include &lt;gflags/gflags.h&gt;
+<h3 id="演算子-operator">演算子 operator</h3>
 
-namespace tapiola {
-    DEFINE_uint64(sibelius, 0, &quot;string that is displayed with --help flag&quot;);
-}
+<pre><code class="language-c++">// AND, OR, XOR
+x &amp; y
+x | y
+x ^ y
 
-void func(){
-    std::cout &lt;&lt; tapiola::FLAGS_sibelius &lt;&lt; std::endl;
-}
+// NOT, complement of 1
+~ x
+
+// negation, complement of 2, (~x | 1)
+- x
+
+// shift
+x &lt;&lt; n
+x &gt;&gt; n
+x &gt;&gt;&gt; n
 </code></pre>
 
-<h2 id="cmdline">cmdline</h2>
-
-<p><a href="https://github.com/tanakh/cmdline">https://github.com/tanakh/cmdline</a><br>
-<a href="http://d.hatena.ne.jp/tanakh/20091028">http://d.hatena.ne.jp/tanakh/20091028</a></p>
-
-<ul>
-<li>たった1つのヘッダファイルで構成されてるのでインストールもビルドも楽チン</li>
-<li>直感的でC++らしいデザインなので分かりやすい</li>
-<li>ファイルの読み取りはサポートしていないが <code>std::string</code> は読める</li>
-<li>変数に直接格納することはできず、パーサのメソッドで値を取得:
-<code>template &lt;class T&gt; const T &amp;parser::get(const std::string &amp;name)</code></li>
-<li>各ソースファイルに分散できるっちゃできる？
-
-<ol>
-<li><code>main()</code> あたりで <code>parser</code> オブジェクトを定義</li>
-<li>それを各クラスの <code>static</code> メソッドに渡し、中で <code>parser::add()</code></li>
-<li><code>main()</code> で <code>parser::parse(argc, argv)</code></li>
-<li>再び各クラスの <code>static</code> メソッドを呼んで <code>parser::get()</code> から変数に代入</li>
-</ol></li>
-</ul>
-
-<h2 id="tclap">TCLAP</h2>
-
-<p><a href="http://tclap.sourceforge.net/">http://tclap.sourceforge.net/</a></p>
+<pre><code class="language-c++">// int8_t
+x = 5   // 0b00000101
+x &amp; 1   // 0b00000001 =  1
+x | 2   // 0b00000111 =  7
+x ^ 3   // 0b00000110 =  6
+~ x     // 0b11111010 = -6
+- x     // 0b11111011 = -5
+x &lt;&lt; 1  // 0b00001010 = 10
+x &gt;&gt; 1  // 0b00000010 =  2
+x &gt;&gt;&gt; 1 // 0b00000010 =  2
+</code></pre>
 
 <ul>
-<li>&ldquo;Templatized C++ Command Line Parser Library&rdquo;の名のとおり
-<code>template</code> で書かれておりヘッダだけで構成される</li>
-<li>が、<code>configure</code> と <code>make install</code> というインストール手順を踏む</li>
-<li>ファイルの読み取りはサポートしていないが、<code>std::string</code> からパース可能</li>
-<li>読み込めるファイルの出力は用意されていないが、自分で書くのは簡単そう</li>
-<li>格納する変数は指定できず、<code>*Arg</code> オブジェクトの <code>getValue()</code> メソッドで値を取得</li>
-<li>各ソースファイルに分散するには:
-
-<ol>
-<li><code>main()</code> あたりで <code>CmdLine</code> オブジェクトを定義</li>
-<li>それを各クラスの <code>static</code> メソッドに渡し、中で <code>*Arg</code> オブジェクトを生成</li>
-<li><code>main()</code> で <code>CmdLine::parse(argc, argv)</code></li>
-<li>各 <code>*Args</code> オブジェクトに格納されている値を <code>getValue()</code> メソッドで取得</li>
-</ol></li>
+<li><code>&lt;&lt;</code> は右から0を詰めて左端を捨てる</li>
+<li><code>&gt;&gt;</code> は左端をコピーして右端を捨てる</li>
+<li><code>&gt;&gt;&gt;</code> は左から0を詰めて右端を捨てる</li>
 </ul>
 
-<h2 id="getoptpp">getoptpp</h2>
+<h2 id="応用">応用</h2>
 
-<p><a href="http://code.google.com/p/getoptpp/">http://code.google.com/p/getoptpp/</a></p>
+<p>符号反転 <code>-x</code> は、全ビット反転して1加えることに相当する (~x | 1) 。
+つまり、符号反転して全ビット反転すると、1加えるのと同じ。</p>
+
+<pre><code class="language-c++">x = x + 1
+x += 1
+++x
+x = -~x
+</code></pre>
+
+<h3 id="std-vector-bool"><code>std::vector&lt;bool&gt;</code></h3>
 
 <ul>
-<li><code>std::istream</code> っぽく <code>&gt;&gt;operator</code> を使う</li>
-<li>格納する変数を指定できる</li>
-<li>基本的にはライブラリをビルドして使うが、ちょっといじればヘッダの <code>#include</code> だけでも使える</li>
-<li>ファイルの読み込みやヘルプの生成は一切手伝ってくれない</li>
-<li>各ソースファイルに分散するには:
-
-<ol>
-<li><code>main()</code> あたりで <code>(argc, argv)</code> を引数に <code>GetOpt_pp</code> オブジェクトを生成</li>
-<li>それを各クラスの <code>static</code> メソッドに渡し、中で値を取得:
-<code>args &gt;&gt; Option('i', &quot;long_option&quot;, var)</code></li>
-</ol></li>
+<li>特殊化されているため普通のSTL vectorではない</li>
+<li>省メモリ</li>
+<li>イテレータあり e.g., <code>std::next_permutation()</code></li>
+<li><code>data()</code> メンバが無い。つまりナマのビット列としてアクセスできない？</li>
 </ul>
 
-<h2 id="そのほか">そのほか</h2>
+<h3 id="std-bitset-n"><code>std::bitset&lt;N&gt;</code></h3>
 
-<p>Githubで上位に出てくるこれらもそのうち試したい:</p>
+<ul>
+<li><a href="http://en.cppreference.com/w/cpp/utility/bitset">http://en.cppreference.com/w/cpp/utility/bitset</a></li>
+<li><a href="http://www.cplusplus.com/reference/bitset/bitset/">http://www.cplusplus.com/reference/bitset/bitset/</a></li>
+<li><a href="https://cpprefjp.github.io/reference/bitset.html">https://cpprefjp.github.io/reference/bitset.html</a></li>
+</ul>
 
-<dl>
-<dt><a href="https://github.com/docopt/docopt.cpp">https://github.com/docopt/docopt.cpp</a></dt>
-<dd>ヘルプを自動生成するのではなく、ヘルプからパーサを構築する</dd>
-<dd>元々はPython用に作られ、それから多言語に移植されてる実績</dd>
-<dd><code>bool</code>か<code>std::string</code>でゲットするしかないので、手動でキャストして代入</dd>
-<dd><code>std::vector&lt;std::string&gt;</code>から読める</dd>
-<dd>要ビルド＆リンク (header-only化しようとしてる雰囲気はある)</dd>
-<dt><a href="https://github.com/jarro2783/cxxopts">https://github.com/jarro2783/cxxopts</a></dt>
-<dd>コンストラクタが<code>(argc, argv)</code>しかない</dd>
-<dd><code>-j3</code> が <code>-j 3</code> じゃなくて <code>--j3</code> と解釈されてしまう</dd>
-<dt><a href="https://github.com/Taywee/args">https://github.com/Taywee/args</a></dt>
-<dd>名前空間が<code>args</code>という大胆さ</dd>
-<dd>同じ名前を何回も書かなきゃいけないような、少々やぼったいインターフェイス</dd>
-<dd>ショートオプションを定義できないバグ？</dd>
-<dd>ヘッダ1つ、ヘルプ自動生成なのは良い</dd>
-<dt><a href="https://github.com/weisslj/cpp-argparse">https://github.com/weisslj/cpp-argparse</a></dt>
-<dd>名前のとおり Python <code>argparse</code> インスパイア系</dd>
-<dd>でもところどころまだ <code>optparse</code> の名残が&hellip;?</dd>
-<dd>要ビルド＆リンク</dd>
-</dl>
+<p>ビット数がコンパイル時定数</p>
+
+<h3 id="boost-dynamic-bitset"><code>boost::dynamic_bitset&lt;&gt;</code></h3>
+
+<p><a href="http://www.boost.org/doc/libs/release/libs/dynamic_bitset/dynamic_bitset.html">http://www.boost.org/doc/libs/release/libs/dynamic_bitset/dynamic_bitset.html</a></p>
+
+<p>可変サイズ版bitset</p>
+
+<p><code>find_first()</code>, <code>find_next()</code>, <code>is_subset_of()</code>
+など便利な補助関数もあるが、速度的な最適化はされてないっぽいので、
+実行速度がシビアな場面では普通に <code>operator[]</code> で自前ループを書いたほうがいいかも。
+<code>operator&amp;</code> とかも意外と遅い。</p>
 
 </article>
 </main>
@@ -306,11 +260,11 @@ void func(){
 <label for="menu-cxx" class="active">C&#43;&#43;</label>
 <ul>
 <li><a href="/cxx/boost.html">Boost</a></li>
-<li class="active"><a href="/cxx/getopt.html">C&#43;&#43;コマンドライン引数</a></li>
+<li><a href="/cxx/getopt.html">C&#43;&#43;コマンドライン引数</a></li>
 <li><a href="/cxx/speed.html">C&#43;&#43;高速化</a></li>
 <li><a href="/cxx/clang.html">clang / llvm</a></li>
 <li><a href="/cxx/gcc.html">gcc</a></li>
-<li><a href="/cxx/bitwise.html">ビット演算</a></li>
+<li class="active"><a href="/cxx/bitwise.html">ビット演算</a></li>
 <li><a href="/cxx/random.html">擬似乱数生成器</a></li>
 </ul>
 
