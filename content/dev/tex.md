@@ -310,7 +310,7 @@ XeTeXでは不要っぽい。
 ```tex
 \usepackage[normalem]{ulem}  % \uline{}, \sout{}
 \usepackage{color}           % \textcolor{}
-\usepackage{soul}            % \hl{}
+\usepackage{soul}            % \hl{} using {color}
 %%%
 
 \uline{underlined text}
@@ -322,12 +322,17 @@ XeTeXでは不要っぽい。
 \hl{highlighted text}
 ```
 
-`{ulem}` パッケージは `[normalem]` オプションを付けて読まないと
+[{ulem}](https://www.ctan.org/pkg/ulem) は
+`[normalem]` オプションを付けて読まないと
 `\emph` が下線に変更されてしまうので注意。
 
 ドライバを指定して `\usepackage[dvipdfmx]{color}` としないと
 `graphicx` がおかしくなってPNG図が空白になる、謎。
 <http://qiita.com/zr_tex8r/items/442b75b452b11bee8049>
+
+[{soul}](https://www.ctan.org/pkg/soul) のドキュメントによれば
+`\hl{環境}` に `$数式$` を入れられるはずだが
+"Extra }, or forgotten $" というエラーで弾かれる。
 
 
 ## Tips
