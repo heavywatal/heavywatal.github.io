@@ -33,12 +33,18 @@ https://github.com/tidyverse/purrr
   `base::lapply()`や`plyr::llply()`の改良版。
   型の決まったvectorを返す`base::sapply()`や`base::vapply()`の改良版として
   `map_lgl()`, `map_chr()`, `map_int()`, `map_dbl()` がある。
-: `purrr::walk(.x, .f, ...)`は、
+: `purrr::walk(.x, .f, ...)` は、
   `map()`同様に関数を適用しつつ元の値をそのままinvisible返しする亜種。
-: `purrr::lmap(.x, .f, ...)`は、
+: `purrr::lmap(.x, .f, ...)` は、
   `.x[[i]]`ではなく`.x[i]`を参照する点で`map()`と異なる亜種。
+: `purrr::imap(.x, .f, ...)` は、
+  名前や整数インデックスを第二引数で受け取れる亜種。
+  `iwalk()` などの派生もある。
+: `purrr::modify(.x, .f, ...)` は、
+  入力と同じ型で出力する亜種。
+  つまりtibbleを入れたらlistじゃなくてtibbleが出てくる。
 
-`purrr::map_df(.x, .f, ..., .id=NULL)`
+`purrr::map_dfr(.x, .f, ..., .id=NULL)`
 : listの各要素に関数を適用し、結果を
   `dplyr::bind_rows()`で結合したdata.frameとして返す。
   `plyr::ldply()`の改良版として。
@@ -55,7 +61,7 @@ https://github.com/tidyverse/purrr
   e.g., `pmap(list(1:3, 4:6), ~ .x * .y)` 。
 : data.frameの正体はlist of columnsなので、
   そのまま`.l`として渡して`plyr::mlply()`的に使える。
-  同様に `purrr::pmap_df()` は `plyr::mdply()` として使える。
+  同様に `purrr::pmap_dfr()` は `plyr::mdply()` として使える。
 
 `purrr::map_if(.x, .p, .f, ...)`
 : `.p`が`TRUE`になる要素のみ`.f()`を適用し、残りはそのまま出力。
@@ -66,6 +72,7 @@ https://github.com/tidyverse/purrr
 `purrr::reduce(.x, .f, ..., .init)`
 : 二変数関数を順々に適用して1つの値を返す。
   C++でいう`std::accumulate()`。
+  例えば <code>1:3 %>% reduce(\`+\`)</code> の結果は6
 
 `purrr::accumulate(.x, .f, ..., .init)`
 : 二変数関数を順々に適用し、過程も含めてvectorで返す。
@@ -82,12 +89,12 @@ https://github.com/tidyverse/purrr
 : 返り値がすべて同じ型で、それぞれ長さ1だった場合、
   特定の型のvectorとして返せる亜種がある:
   `invoke_map_chr()`, `invoke_map_dbl()`, `invoke_map_int()`, `invoke_map_lgl()`
-: data.frameを繋げて返す`invoke_map_df()`も。
+: data.frameを繋げて返す`invoke_map_dfr()`も。
 
 `purrr::flatten(.x)`
 : 階層性のあるlistを一段階解消する。
   階層なしlistをvector化するには明示的に型指定できる
-  `flatten_lgl()`, `flatten_int()`, `flatten_dbl()`, `flatten_chr()`, `flatten_df()`
+  `flatten_lgl()`, `flatten_int()`, `flatten_dbl()`, `flatten_chr()`, `flatten_dfr()`
   のほうが標準の`unlist()`よりも安心。
 
 `purrr::keep(.x, .p, ...)`, `discard()`, `compact()`
@@ -95,8 +102,8 @@ https://github.com/tidyverse/purrr
   `.p` に関数を渡した場合の挙動は
   `.x[.p(.x)]` じゃなくて `.x[map_lgl(.x, .p, ...)]` となることに注意。
 
-`purrr::split_by(.x, .f, ...)`, `order_by()`, `sort_by()`
-: listやvectorを `.f` に応じて切ったり並べ替えたり。
+`purrr::has_element(.x, .y)`
+: list `.x` は要素 `.y` を持っている。
 
 
 ## 無名関数
@@ -105,6 +112,7 @@ https://github.com/tidyverse/purrr
 チルダで始まる `~ a + b` のようなものはRではformulaという形式になるが、
 `purrr`のmap系関数はそれを引数`.f`として受け取ることができる。
 formula内部では、第一引数を`.x`または`.`として、第二引数を`.y`として参照する。
+最新版では `..1`, `..2`, `..3` のような形で三つめ以降も受け取れる。
 
 ```r
 # with named function
@@ -118,15 +126,21 @@ letters %>% map_int(function(x) {strtoi(charToRaw(x), 16L)})
 letters %>% map_int(~ strtoi(charToRaw(.x), 16L))
 ```
 
-`purrr::as_function(.f, ...)`
+`purrr::as_mapper(.f, ...)`
 : 上記の機能を担う重要な関数で、`map()`内部でも使われている。
-  formulaを`function (.x, .y, . = .x)`という無名関数に変換する。
+  formulaを `function (.x, .y, . = .x)` という無名関数に変換する。
 
 `purrr::partial(...f, ..., .env, .lazy, .first)`
 : 引数を部分的に埋めてある関数を作る。C++でいう `std::bind()`
 
 
 ## その他の便利関数
+
+`purrr::pluck(.x, ..., .default=NULL)`
+: オブジェクト `.x` 内の要素を引っ張り出す `[[` の強力版。
+  `...` には整数、文字列、関数、listで複数指定できる。
+  例えば `accessor(x[[1]])$foo` だと読む順が左右に振られるが、
+  `x %>% pluck(1, accessor, "foo")` だと左から右に読み流せる。
 
 `purrr::list_along(x)`
 : 引数と同じ長さの空listを作る。
