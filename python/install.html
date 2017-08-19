@@ -94,13 +94,41 @@ Pythonインストール
 <a href="https://www.python.org/downloads/">python.org公式のインストーラ</a>
 で入れるのも悪くない。</p>
 
+<h2 id="pyenv">pyenv</h2>
+
+<p>管理者権限なしでホーム以下にインストールするには
+<a href="https://github.com/pyenv/pyenv">pyenv</a>
+が便利。</p>
+
+<pre><code class="language-sh">% brew install pyenv
+% exec $SHELL -l
+% pyenv install -l | less
+% pyenv install 3.6.2
+% pyenv global 3.6.2
+% eval &quot;$(pyenv init -)&quot;
+% python --version
+</code></pre>
+
+<p><code>eval &quot;$(pyenv init -)&quot;</code> をシェル起動時に自動で行うために、
+<code>~/.zshrc</code> 的なファイルに下のようなコマンドを追加しておく。</p>
+
+<pre><code class="language-sh">if which pyenv &gt;/dev/null; then eval &quot;$(pyenv init -)&quot;; fi
+</code></pre>
+
+<p>あとは <a href="/python/pip.html">pip</a> でパッケージを入れる。</p>
+
+<pre><code class="language-sh">% pip install -U setuptools
+% pip install -U seaborn biopython
+% pip install -U flake8 psutil
+</code></pre>
+
 <h2 id="anaconda">Anaconda</h2>
 
 <p>Scientificな用途で使いたい場合は
 <a href="/python/scipy.html">Numpy/Scipy</a>
 などの主要パッケージもまとめて面倒みてくれる
 <a href="https://docs.continuum.io/anaconda/">Anaconda</a>
-で最新版を入れると良い。
+で最新版を入れるという選択肢もある。
 GUIのインストーラでもいいし、Homebrewでもいける:</p>
 
 <pre><code class="language-sh">% brew cask install anaconda
@@ -108,28 +136,11 @@ GUIのインストーラでもいいし、Homebrewでもいける:</p>
 </code></pre>
 
 <p>ただし<code>PATH</code>上でシステムコマンド(<code>curl</code>など)を上書きしちゃうヤンチャな面もあるので、
-それが気になる人は
-<a href="https://github.com/pyenv/pyenv">pyenv</a>
-越しに入れることで汚染を防げる。
-全部入りに抵抗がある場合はMinicondaで小さくスタートすることも可能。
-例えば Homebrew + pyenv + Miniconda で基本的な環境を整える手順:</p>
-
-<pre><code class="language-sh">% brew install pyenv
-% exec $SHELL -l
-% pyenv install -l | less
-% pyenv install miniconda3-latest
-% pyenv global miniconda3-latest
-% eval &quot;$(pyenv init -)&quot;
-% python --version
-% conda install seaborn biopython flake8
-</code></pre>
-
-<p>その後のパッケージ管理も <code>conda</code> で。
-<code>eval &quot;$(pyenv init -)&quot;</code> をシェル起動時に自動で行うために、
-<code>~/.zshrc</code> 的なファイルに下のようなコマンドを追加しておく。</p>
-
-<pre><code class="language-sh">if which pyenv &gt;/dev/null; then eval &quot;$(pyenv init -)&quot;; fi
-</code></pre>
+それが気になる人はpyenv越しに入れることで汚染を防げる。
+全部入りに抵抗がある場合は
+<code>pyenv install miniconda3-latest</code>
+から小さくスタートすることも可能。
+パッケージ管理では <code>pip</code> の代わりに非公式の <code>conda</code> を使うことになる。</p>
 
 <h2 id="source">Source</h2>
 
