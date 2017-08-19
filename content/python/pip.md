@@ -67,6 +67,11 @@ Python 2.7.9以降、3.4以降では標準ライブラリの
         [global]
         download-cache = ~/.pip/cache
 
+-   環境内のパッケージを引き継ぐには:
+
+        & pip freeze --local >requirements.txt
+        % pip install -r requirements.txt
+
 
 ## [`venv`](https://docs.python.org/3/library/venv.html) / `virtualenv`
 

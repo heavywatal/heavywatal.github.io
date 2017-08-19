@@ -16,13 +16,45 @@ MacやLinuxならシステムの一部として
 で入れるのも悪くない。
 
 
+## pyenv
+
+管理者権限なしでホーム以下にインストールするには
+[pyenv](https://github.com/pyenv/pyenv)
+が便利。
+
+```sh
+% brew install pyenv
+% exec $SHELL -l
+% pyenv install -l | less
+% pyenv install 3.6.2
+% pyenv global 3.6.2
+% eval "$(pyenv init -)"
+% python --version
+```
+
+`eval "$(pyenv init -)"` をシェル起動時に自動で行うために、
+`~/.zshrc` 的なファイルに下のようなコマンドを追加しておく。
+
+```sh
+if which pyenv >/dev/null; then eval "$(pyenv init -)"; fi
+```
+
+あとは [pip]({{< relref "pip.md" >}}) でパッケージを入れる。
+
+```sh
+% pip install -U setuptools
+% pip install -U seaborn biopython
+% pip install -U flake8 psutil
+```
+
+
 ## Anaconda
 
 Scientificな用途で使いたい場合は
 [Numpy/Scipy]({{< relref "scipy.md" >}})
 などの主要パッケージもまとめて面倒みてくれる
 [Anaconda](https://docs.continuum.io/anaconda/)
-で最新版を入れると良い。
+で最新版を入れるという選択肢もある。
 GUIのインストーラでもいいし、Homebrewでもいける:
 
 ```sh
@@ -31,30 +63,12 @@ GUIのインストーラでもいいし、Homebrewでもいける:
 ```
 
 ただし`PATH`上でシステムコマンド(`curl`など)を上書きしちゃうヤンチャな面もあるので、
-それが気になる人は
-[pyenv](https://github.com/pyenv/pyenv)
-越しに入れることで汚染を防げる。
-全部入りに抵抗がある場合はMinicondaで小さくスタートすることも可能。
-例えば Homebrew + pyenv + Miniconda で基本的な環境を整える手順:
+それが気になる人はpyenv越しに入れることで汚染を防げる。
+全部入りに抵抗がある場合は
+`pyenv install miniconda3-latest`
+から小さくスタートすることも可能。
+パッケージ管理では `pip` の代わりに非公式の `conda` を使うことになる。
 
-```sh
-% brew install pyenv
-% exec $SHELL -l
-% pyenv install -l | less
-% pyenv install miniconda3-latest
-% pyenv global miniconda3-latest
-% eval "$(pyenv init -)"
-% python --version
-% conda install seaborn biopython flake8
-```
-
-その後のパッケージ管理も `conda` で。
-`eval "$(pyenv init -)"` をシェル起動時に自動で行うために、
-`~/.zshrc` 的なファイルに下のようなコマンドを追加しておく。
-
-```sh
-if which pyenv >/dev/null; then eval "$(pyenv init -)"; fi
-```
 
 ## Source
 
