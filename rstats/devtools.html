@@ -173,13 +173,15 @@ NAMESPACE    # 見せるオブジェクトを列挙
 README.md    # 全体の説明を簡単に
 R/           # Rソースコード
 data/        # サンプルデータなど
+exec/        # 実行ファイル
+inst/        # CITATION
 man/         # ヘルプファイル.Rd
 src/         # C++ソースコード
 tests/
 vignettes/
 </code></pre>
 
-<h3 id="description"><code>DESCRIPTION</code></h3>
+<h3 id="description-http-r-pkgs-had-co-nz-description-html"><a href="http://r-pkgs.had.co.nz/description.html"><code>DESCRIPTION</code></a></h3>
 
 <ul>
 <li>どうでも良さそうなファイル名とは裏腹に、ちゃんと書かないと動かない</li>
@@ -191,21 +193,20 @@ vignettes/
 <li><code>Authors@R</code> のとこは後でRで評価されるので変な形</li>
 </ul>
 
-<h3 id="namespace"><code>NAMESPACE</code></h3>
+<h3 id="namespace-http-r-pkgs-had-co-nz-namespace-html"><a href="http://r-pkgs.had.co.nz/namespace.html"><code>NAMESPACE</code></a></h3>
 
 <ul>
 <li><code>roxygen2</code> (下記) がソースコードから自動生成するので<strong>直接触らない</strong></li>
 <li>ここで <code>export()</code> された関数だけがユーザーから見える</li>
 <li>ここで <code>import()</code> された関数はパッケージ内でattachされた状態になるが、
 そうしないで毎回 <code>名前空間::</code> 越しにアクセスしたほうがよい。
-<code>magrittr::%&gt;%</code> とか <code>pipeR::%&gt;&gt;%</code> のような演算子は仕方がないので
+<code>magrittr::%&gt;%</code> のような演算子は仕方がないので
 <code>importFrom()</code> で個別指定する。</li>
 </ul>
 
-<h3 id="rソースコード">Rソースコード</h3>
+<h3 id="r-ソースコード-http-r-pkgs-had-co-nz-r-html"><a href="http://r-pkgs.had.co.nz/r.html"><code>R/</code> ソースコード</a></h3>
 
 <ul>
-<li><code>R/</code> 以下に配置</li>
 <li><code>NAMESPACE</code> や <code>man/*.Rd</code> を自動生成してもらえるように
 <a href="#roxygen2">後述のroxygen</a>形式でコメントを書く</li>
 <li>ファイルの数や名前は何でもいいので、開発者が分かりやすいようにしとく。
@@ -220,10 +221,9 @@ vignettes/
 は慣習的に<code>zzz.R</code>というファイルに記述する。</li>
 </ul>
 
-<h3 id="c-ソースコード">C++ソースコード</h3>
+<h3 id="src-c-ソースコード-http-r-pkgs-had-co-nz-src-html"><a href="http://r-pkgs.had.co.nz/src.html"><code>src/</code> C++ソースコード</a></h3>
 
 <ul>
-<li><code>src/</code> 以下に配置</li>
 <li><a href="https://cran.r-project.org/web/packages/Rcpp">Rcpp</a>
 が型変換などをスムーズにしてくれる。</li>
 
@@ -282,9 +282,7 @@ NULL
 <code>std::exception</code>の派生クラスなら<code>what()</code>まで表示してもらえる。</li>
 </ul>
 
-<h3 id="vignettes">vignettes</h3>
-
-<p><a href="http://r-pkgs.had.co.nz/vignettes.html">http://r-pkgs.had.co.nz/vignettes.html</a></p>
+<h3 id="vignettes-http-r-pkgs-had-co-nz-vignettes-html"><a href="http://r-pkgs.had.co.nz/vignettes.html"><code>vignettes/</code></a></h3>
 
 <p>個々の関数の使用例はRソースファイルの <code>@examples</code> に書くとして、
 複数の関数を組み合わせてどう使うかとか、
@@ -297,9 +295,14 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。<
 <p><code>pandoc</code> と <code>pandoc-citeproc</code> が必要なので
 <a href="/mac/homebrew.html">Homebrew</a> とかでインストールしておく。</p>
 
-<h3 id="demo">demo</h3>
+<h3 id="inst-http-r-pkgs-had-co-nz-inst-html"><a href="http://r-pkgs.had.co.nz/inst.html"><code>inst/</code></a></h3>
 
-<p><a href="http://r-pkgs.had.co.nz/misc.html">http://r-pkgs.had.co.nz/misc.html</a></p>
+<p>ここに入ってるものはインストール先でトップディレクトリに移される謎仕様。</p>
+
+<p>論文で引用されることを想定している場合は <code>inst/CITATION</code> を作る。
+<code>citation('ggplot2')</code> のように参照できるようになる。</p>
+
+<h3 id="demo-http-r-pkgs-had-co-nz-misc-html"><a href="http://r-pkgs.had.co.nz/misc.html"><code>demo/</code></a></h3>
 
 <p>vignettesに取って代わられた古い機能。
 ソースコード<code>*.R</code>を置いておくと<code>demo()</code>関数で呼び出せるというだけ。</p>
