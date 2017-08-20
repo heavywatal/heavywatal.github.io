@@ -89,13 +89,15 @@ NAMESPACE    # 見せるオブジェクトを列挙
 README.md    # 全体の説明を簡単に
 R/           # Rソースコード
 data/        # サンプルデータなど
+exec/        # 実行ファイル
+inst/        # CITATION
 man/         # ヘルプファイル.Rd
 src/         # C++ソースコード
 tests/
 vignettes/
 ```
 
-### `DESCRIPTION`
+### [`DESCRIPTION`](http://r-pkgs.had.co.nz/description.html)
 
 -   どうでも良さそうなファイル名とは裏腹に、ちゃんと書かないと動かない
 -   始めは `devtools::create()` で自動生成し、それから他のパッケージを参考にしつつ修正していく
@@ -105,18 +107,17 @@ vignettes/
 -   ライセンスを別ファイルにする場合は `License: file LICENSE` と書く
 -   `Authors@R` のとこは後でRで評価されるので変な形
 
-### `NAMESPACE`
+### [`NAMESPACE`](http://r-pkgs.had.co.nz/namespace.html)
 
 -   `roxygen2` (下記) がソースコードから自動生成するので**直接触らない**
 -   ここで `export()` された関数だけがユーザーから見える
 -   ここで `import()` された関数はパッケージ内でattachされた状態になるが、
     そうしないで毎回 `名前空間::` 越しにアクセスしたほうがよい。
-    `magrittr::%>%` とか `pipeR::%>>%` のような演算子は仕方がないので
+    `magrittr::%>%` のような演算子は仕方がないので
     `importFrom()` で個別指定する。
 
-### Rソースコード
+### [`R/` ソースコード](http://r-pkgs.had.co.nz/r.html)
 
--   `R/` 以下に配置
 -   `NAMESPACE` や `man/*.Rd` を自動生成してもらえるように
     [後述のroxygen](#roxygen2)形式でコメントを書く
 -   ファイルの数や名前は何でもいいので、開発者が分かりやすいようにしとく。
@@ -130,9 +131,8 @@ vignettes/
     `.onLoad(...)`, `.onAttach(...)`, `.onUnload(...)`
     は慣習的に`zzz.R`というファイルに記述する。
 
-### C++ソースコード
+### [`src/` C++ソースコード](http://r-pkgs.had.co.nz/src.html)
 
--   `src/` 以下に配置
 -   [Rcpp](https://cran.r-project.org/web/packages/Rcpp)
     が型変換などをスムーズにしてくれる。
 -   `Rcpp.h`のインクルードといくつかのコメントが必要
@@ -186,9 +186,7 @@ vignettes/
   例外は投げっぱなしで拾わなくても大丈夫で、
   `std::exception`の派生クラスなら`what()`まで表示してもらえる。
 
-### vignettes
-
-<http://r-pkgs.had.co.nz/vignettes.html>
+### [`vignettes/`](http://r-pkgs.had.co.nz/vignettes.html)
 
 個々の関数の使用例はRソースファイルの `@examples` に書くとして、
 複数の関数を組み合わせてどう使うかとか、
@@ -201,9 +199,14 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 `pandoc` と `pandoc-citeproc` が必要なので
 [Homebrew]({{< relref "homebrew.md" >}}) とかでインストールしておく。
 
-### demo
+### [`inst/`](http://r-pkgs.had.co.nz/inst.html)
 
-<http://r-pkgs.had.co.nz/misc.html>
+ここに入ってるものはインストール先でトップディレクトリに移される謎仕様。
+
+論文で引用されることを想定している場合は `inst/CITATION` を作る。
+`citation('ggplot2')` のように参照できるようになる。
+
+### [`demo/`](http://r-pkgs.had.co.nz/misc.html)
 
 vignettesに取って代わられた古い機能。
 ソースコード`*.R`を置いておくと`demo()`関数で呼び出せるというだけ。
