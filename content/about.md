@@ -61,6 +61,7 @@ July 2010 - March 2013
 
 - **Watal M. Iwasaki** and Hideki Innan. 2017.
   Simulation Framework for Generating Intratumor Heterogeneity Patterns in a Cancer Cell Population.
+  *PLOS ONE* (in press);
   [*bioRxiv preprint*](https://doi.org/10.1101/109801)
 - Satoshi Tamate\*, **Watal M. Iwasaki**\* (equally contributed), Kenneth L. Krysko, Brian Composano, Hideaki Mori, Ryo Funayama, Keiko Nakayama, Takashi Makino and Masakado Kawata. 2017.
   The evolutionary responses of *Anolis carolinensis* introduced into Ogasawara archipelago during 50 years.
