@@ -98,13 +98,13 @@ IPython — 強力な対話型Python実行環境
 <p>ターミナルから <code>ipython</code> を実行するか、
 普通の対話Pythonから:</p>
 
-<pre><code>import IPython
+<pre><code class="language-py">import IPython
 IPython.start_ipython(argv=[])
 </code></pre>
 
 <p>とりあえずドキュメントを読む:</p>
 
-<pre><code>?
+<pre><code class="language-py">?
 %quickref
 </code></pre>
 
@@ -113,7 +113,7 @@ IPython.start_ipython(argv=[])
 <p>定義済み変数などはある程度 <code>rlcompleter</code> でも補完できるが、
 <code>IPython</code> はさらに文脈を考慮して賢い補完をしてくれる:</p>
 
-<pre><code>import o[TAB]
+<pre><code class="language-py">import o[TAB]
 import os.[TAB]
 open('~/.[TAB]')
 </code></pre>
@@ -122,17 +122,15 @@ open('~/.[TAB]')
 
 <ul>
 <li>上下キーで単純に遡る</li>
-<li>途中まで入力して <kbd>control + p</kbd> で前方一致する履歴のみ遡る</li>
-<li><kbd>control + r</kbd> から部分一致する履歴を検索</li>
+<li>途中まで入力して <kbd>control-p</kbd> で前方一致する履歴のみ遡る</li>
+<li><kbd>control-r</kbd> から部分一致する履歴を検索</li>
 <li><code>%hist</code></li>
 <li>input cache: <code>_i</code>, <code>_ii</code>, <code>_iii</code>, <code>_ih[n]</code>, <code>_i&lt;n&gt;</code></li>
 <li>output cache: <code>_</code>, <code>__</code>, <code>___</code>, <code>_oh[n]</code>, <code>_&lt;n&gt;</code></li>
 <li>directory: <code>_dh</code></li>
 </ul>
 
-<h3 id="object-introspection">Object introspection</h3>
-
-<p><a href="https://ipython.readthedocs.io/en/stable/interactive/reference.html#dynamic-object-information">https://ipython.readthedocs.io/en/stable/interactive/reference.html#dynamic-object-information</a></p>
+<h3 id="object-introspection-https-ipython-readthedocs-io-en-stable-interactive-reference-html-dynamic-object-information"><a href="https://ipython.readthedocs.io/en/stable/interactive/reference.html#dynamic-object-information">Object introspection</a></h3>
 
 <p>関数がどんな引数をとるか、
 クラスがどんなメンバを持っているか、
@@ -141,7 +139,7 @@ open('~/.[TAB]')
 
 <p>先頭(か末尾)にクエスチョンをつけるだけ:</p>
 
-<pre><code>?os
+<pre><code class="language-py">?os
 ??os
 </code></pre>
 
@@ -156,13 +154,11 @@ open('~/.[TAB]')
 
 <p>頭にエクスクラメーションをつけるだけ:</p>
 
-<pre><code>!pwd
+<pre><code class="language-py">!pwd
 files = !ls
 </code></pre>
 
-<h3 id="マジックコマンド">マジックコマンド</h3>
-
-<p><a href="https://ipython.readthedocs.io/en/stable/interactive/magics.html">https://ipython.readthedocs.io/en/stable/interactive/magics.html</a></p>
+<h3 id="マジックコマンド-https-ipython-readthedocs-io-en-stable-interactive-magics-html"><a href="https://ipython.readthedocs.io/en/stable/interactive/magics.html">マジックコマンド</a></h3>
 
 <p>一行単位の line magic は <code>%</code> で始める。</p>
 
@@ -179,51 +175,92 @@ files = !ls
 </ul>
 
 <p>ウェブブラウザ上で動く対話的実行環境。
-Markdown/LaTeX記法による見出し・コメント・数式とともに
-プログラムと実行結果をひと括りに保存しておけるので、
-研究ノートや共同研究者へのレポートとして便利。
-Rでいうknitr + Rmarkdownのような位置づけだが、
-インプットとアウトプットの近さという点で
-Mathematica/Mapleの使い勝手に似ている。
-文書をGitでバージョン管理するという観点ではつかいにくい形式。</p>
-
-<p>元はIPython Notebookだったが、
+元はIPython Notebookだったが、
 カーネルを入れ替えることで他言語サポートが可能になり、
 汎用Notebookとして生まれ変わった。</p>
 
-<p>開発中の<a href="https://github.com/jupyter/jupyterlab">JupyterLab</a>がさらに良いらしい。</p>
+<p>Markdown/LaTeX記法による見出し・コメント・数式とともに
+ソースコードと実行結果をひと括りに保存しておけるので、
+研究ノートのような使い方に向いている。
+Mathematica/Mapleの使い勝手に似ている。
+<a href="http://blog.jupyter.org/2015/05/07/rendering-notebooks-on-github/">ノートブック形式 <code>.ipynb</code> がGitHub上で直接閲覧できるようになった</a>のも便利。</p>
 
-<h3 id="始め方">始め方</h3>
+<p>ソースコードがインプット・アウトプット混在の複雑なテキストになるので、
+<strong>コマンドラインやGit上での取り回しが悪いのは致命的な欠点。</strong>
+ターミナルやテキストエディタに馴染みのない非プログラマ向けの道具という印象。
+同じ用途なら Rmarkdown のほうが好みだし将来性があるように思う。</p>
 
-<p><a href="https://jupyter-notebook.readthedocs.io/en/latest/examples/Notebook/rstversions/Notebook%20Basics.html">https://jupyter-notebook.readthedocs.io/en/latest/examples/Notebook/rstversions/Notebook%20Basics.html</a></p>
+<h3 id="始め方-https-jupyter-notebook-readthedocs-io-en-stable-examples-notebook-notebook-20basics-html"><a href="https://jupyter-notebook.readthedocs.io/en/stable/examples/Notebook/Notebook%20Basics.html">始め方</a></h3>
 
 <ol>
 <li><code>IPython</code> とともにインストール</li>
-
-<li><p>ターミナルから起動:</p>
-
-<pre><code>% jupyter-notebook [file or directory]
-</code></pre></li>
-
-<li><p>ウェブブラウザで <code>http://localhost:8888/tree</code> が立ち上がる</p></li>
-
-<li><p>右上の New から適当なNotebookカーネル
-(e.g., Python 3) を選択</p></li>
-
-<li><p>In [ ]: の右の箱に適当なPythonコマンドを入れて
-<kbd>shift + return</kbd></p></li>
-
-<li><p>左上の File から適当に保存してブラウザを閉じる</p></li>
-
-<li><p>ターミナルから <kbd>control + c</kbd> で終了</p></li>
+<li>ターミナルから起動: <code>jupyter notebook [file or directory]</code></li>
+<li>ウェブブラウザで <code>http://localhost:8888/tree</code> が立ち上がる</li>
+<li>右上の New から適当なNotebookカーネル
+(e.g., Python 3) を選択</li>
+<li>In [ ]: の右の箱に適当なPythonコマンドを入れて
+<kbd>shift-return</kbd></li>
+<li>左上の File から適当に保存してブラウザを閉じる</li>
+<li>ターミナルから <kbd>control-c</kbd> で終了</li>
 </ol>
 
-<h3 id="設定">設定</h3>
+<h3 id="キーボードショートカット">キーボードショートカット</h3>
 
-<ul>
-<li><a href="https://jupyter-notebook.readthedocs.io/en/latest/config.html">https://jupyter-notebook.readthedocs.io/en/latest/config.html</a></li>
-<li><a href="https://jupyter-notebook.readthedocs.io/en/latest/frontend_config.html">https://jupyter-notebook.readthedocs.io/en/latest/frontend_config.html</a></li>
-</ul>
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>action</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><kbd>esc</kbd></td>
+<td>enter command mode</td>
+</tr>
+
+<tr>
+<td><kbd>enter</kbd></td>
+<td>enter edit mode</td>
+</tr>
+
+<tr>
+<td><kbd>h</kbd></td>
+<td>show keyboard shortcuts</td>
+</tr>
+
+<tr>
+<td><kbd>y</kbd></td>
+<td>to code</td>
+</tr>
+
+<tr>
+<td><kbd>m</kbd></td>
+<td>to markdown</td>
+</tr>
+
+<tr>
+<td><kbd>a</kbd></td>
+<td>insert cell above</td>
+</tr>
+
+<tr>
+<td><kbd>b</kbd></td>
+<td>insert cell bellow</td>
+</tr>
+
+<tr>
+<td><kbd>dd</kbd></td>
+<td>delete selected cells</td>
+</tr>
+
+<tr>
+<td><kbd>ctrl-return</kbd></td>
+<td>run selected cells</td>
+</tr>
+</tbody>
+</table>
 
 <h2 id="書籍">書籍</h2>
 
