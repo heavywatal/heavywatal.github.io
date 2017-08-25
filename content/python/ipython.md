@@ -17,37 +17,38 @@ tags = ["python"]
 
 ターミナルから `ipython` を実行するか、
 普通の対話Pythonから:
-
-    import IPython
-    IPython.start_ipython(argv=[])
+```py
+import IPython
+IPython.start_ipython(argv=[])
+```
 
 とりあえずドキュメントを読む:
-
-    ?
-    %quickref
+```py
+?
+%quickref
+```
 
 ### 文脈を考慮したタブ補完
 
 定義済み変数などはある程度 `rlcompleter` でも補完できるが、
 `IPython` はさらに文脈を考慮して賢い補完をしてくれる:
-
-    import o[TAB]
-    import os.[TAB]
-    open('~/.[TAB]')
+```py
+import o[TAB]
+import os.[TAB]
+open('~/.[TAB]')
+```
 
 ### 履歴
 
 -   上下キーで単純に遡る
--   途中まで入力して <kbd>control + p</kbd> で前方一致する履歴のみ遡る
--   <kbd>control + r</kbd> から部分一致する履歴を検索
+-   途中まで入力して <kbd>control-p</kbd> で前方一致する履歴のみ遡る
+-   <kbd>control-r</kbd> から部分一致する履歴を検索
 -   `%hist`
 -   input cache: `_i`, `_ii`, `_iii`, `_ih[n]`, `_i<n>`
 -   output cache: `_`, `__`, `___`, `_oh[n]`, `_<n>`
 -   directory: `_dh`
 
-### Object introspection
-
-<https://ipython.readthedocs.io/en/stable/interactive/reference.html#dynamic-object-information>
+### [Object introspection] (https://ipython.readthedocs.io/en/stable/interactive/reference.html#dynamic-object-information)
 
 関数がどんな引数をとるか、
 クラスがどんなメンバを持っているか、
@@ -55,9 +56,10 @@ tags = ["python"]
 `help()` コマンドの強力版。
 
 先頭(か末尾)にクエスチョンをつけるだけ:
-
-    ?os
-    ??os
+```py
+?os
+??os
+```
 
 -   `%pdoc <object>`: docstring
 -   `%pdef <object>`: ?
@@ -67,19 +69,19 @@ tags = ["python"]
 ### システムコマンド実行
 
 頭にエクスクラメーションをつけるだけ:
+```py
+!pwd
+files = !ls
+```
 
-    !pwd
-    files = !ls
-
-### マジックコマンド
-
-<https://ipython.readthedocs.io/en/stable/interactive/magics.html>
+### [マジックコマンド](https://ipython.readthedocs.io/en/stable/interactive/magics.html)
 
 一行単位の line magic は `%` で始める。
 
 複数行うけつける cell magic は `%%` で始める。
 
 しかしautomagic設定により省略可能。
+
 
 ## Jupyter Notebook
 
@@ -88,41 +90,49 @@ tags = ["python"]
 - <https://jupyter-notebook.readthedocs.io/>
 
 ウェブブラウザ上で動く対話的実行環境。
-Markdown/LaTeX記法による見出し・コメント・数式とともに
-プログラムと実行結果をひと括りに保存しておけるので、
-研究ノートや共同研究者へのレポートとして便利。
-Rでいうknitr + Rmarkdownのような位置づけだが、
-インプットとアウトプットの近さという点で
-Mathematica/Mapleの使い勝手に似ている。
-文書をGitでバージョン管理するという観点ではつかいにくい形式。
-
 元はIPython Notebookだったが、
 カーネルを入れ替えることで他言語サポートが可能になり、
 汎用Notebookとして生まれ変わった。
 
-開発中の[JupyterLab](https://github.com/jupyter/jupyterlab)がさらに良いらしい。
+Markdown/LaTeX記法による見出し・コメント・数式とともに
+ソースコードと実行結果をひと括りに保存しておけるので、
+研究ノートのような使い方に向いている。
+Mathematica/Mapleの使い勝手に似ている。
+[ノートブック形式 `.ipynb` がGitHub上で直接閲覧できるようになった]
+(http://blog.jupyter.org/2015/05/07/rendering-notebooks-on-github/)のも便利。
 
-### 始め方
+ソースコードがインプット・アウトプット混在の複雑なテキストになるので、
+**コマンドラインやGit上での取り回しが悪いのは致命的な欠点。**
+ターミナルやテキストエディタに馴染みのない非プログラマ向けの道具という印象。
+同じ用途なら Rmarkdown のほうが好みだし将来性があるように思う。
 
-<https://jupyter-notebook.readthedocs.io/en/latest/examples/Notebook/rstversions/Notebook%20Basics.html>
+
+### [始め方](https://jupyter-notebook.readthedocs.io/en/stable/examples/Notebook/Notebook%20Basics.html)
 
 1.  `IPython` とともにインストール
-2.  ターミナルから起動:
-
-        % jupyter-notebook [file or directory]
-
+2.  ターミナルから起動: `jupyter notebook [file or directory]`
 3.  ウェブブラウザで `http://localhost:8888/tree` が立ち上がる
 4.  右上の New から適当なNotebookカーネル
     (e.g., Python 3) を選択
 5.  In [ ]: の右の箱に適当なPythonコマンドを入れて
-    <kbd>shift + return</kbd>
+    <kbd>shift-return</kbd>
 6.  左上の File から適当に保存してブラウザを閉じる
-7.  ターミナルから <kbd>control + c</kbd> で終了
+7.  ターミナルから <kbd>control-c</kbd> で終了
 
-### 設定
 
-- <https://jupyter-notebook.readthedocs.io/en/latest/config.html>
-- <https://jupyter-notebook.readthedocs.io/en/latest/frontend_config.html>
+### キーボードショートカット
+
+key                     | action
+----------------------- | ----
+<kbd>esc</kbd>          | enter command mode
+<kbd>enter</kbd>        | enter edit mode
+<kbd>h</kbd>            | show keyboard shortcuts
+<kbd>y</kbd>            | to code
+<kbd>m</kbd>            | to markdown
+<kbd>a</kbd>            | insert cell above
+<kbd>b</kbd>            | insert cell bellow
+<kbd>dd</kbd>           | delete selected cells
+<kbd>ctrl-return</kbd>  | run selected cells
 
 
 ## 書籍
