@@ -190,7 +190,13 @@ root treeのハッシュID、著者、コメントなどの情報を持つ。
 (<code>HEAD^2</code> は <code>merge</code> で複数の親がある場合の2番目)</dd>
 </dl>
 
+<p>zshの<code>EXTENDED_GLOB</code>が有効になってる場合は
+<code>HEAD^</code> がパターン扱いされてエラーになるので、
+<code>HEAD\^</code> のようにエスケープするか <code>unsetopt NOMATCH</code> しておいたほうがいい。</p>
+
 <h2 id="よく使うコマンド">よく使うコマンド</h2>
+
+<h3 id="reset">reset</h3>
 
 <p><code>git reset &lt;DESTINATION&gt;</code> は <code>HEAD</code> の位置を戻す処理で、
 オプションによってindexとworing treeもそこに合わせるように変更される。
@@ -217,10 +223,7 @@ git reset --hard origin/master
 
 <p>直前のcommitをちょっと修正したいだけなら <code>git commit --amend</code> が簡単。</p>
 
-<p>tracking対象から外して忘れさせる(手元のファイルはそのまま):</p>
-
-<pre><code class="language-sh">git rm --cached &lt;file&gt;
-</code></pre>
+<h3 id="diff">diff</h3>
 
 <p>差分を表示:</p>
 
@@ -237,9 +240,19 @@ git diff HEAD
 git show [revision]
 </code></pre>
 
-<p>zshの<code>EXTENDED_GLOB</code>が有効になってる場合は
-<code>HEAD^</code> がパターン扱いされてエラーになるので、
-<code>HEAD\^</code> のようにエスケープするか <code>unsetopt NOMATCH</code> しておく必要がある。</p>
+<h3 id="rm-clean">rm, clean</h3>
+
+<p>tracking対象から外して忘れさせる(手元のファイルはそのまま):</p>
+
+<pre><code class="language-sh">git rm --cached &lt;file&gt;
+</code></pre>
+
+<p><code>.gitignore</code> で無視されてるuntrackedファイルを消す:</p>
+
+<pre><code class="language-sh">git clean -fdX
+</code></pre>
+
+<p>無視されていないuntrackedファイルも消したい場合は小文字の <code>-fdx</code> (危険)。</p>
 
 <h2 id="submodule">Submodule</h2>
 
