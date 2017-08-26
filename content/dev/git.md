@@ -115,8 +115,14 @@ repository
   2つ前は `HEAD^^` か `HEAD~~` か `HEAD~2`。
   (`HEAD^2` は `merge` で複数の親がある場合の2番目)
 
+zshの`EXTENDED_GLOB`が有効になってる場合は
+`HEAD^` がパターン扱いされてエラーになるので、
+`HEAD\^` のようにエスケープするか `unsetopt NOMATCH` しておいたほうがいい。
+
 
 ## よく使うコマンド
+
+### reset
 
 `git reset <DESTINATION>` は `HEAD` の位置を戻す処理で、
 オプションによってindexとworing treeもそこに合わせるように変更される。
@@ -143,10 +149,8 @@ git reset --hard origin/master
 
 直前のcommitをちょっと修正したいだけなら `git commit --amend` が簡単。
 
-tracking対象から外して忘れさせる(手元のファイルはそのまま):
-```sh
-git rm --cached <file>
-```
+
+### diff
 
 差分を表示:
 ```sh
@@ -163,9 +167,18 @@ git diff HEAD
 git show [revision]
 ```
 
-zshの`EXTENDED_GLOB`が有効になってる場合は
-`HEAD^` がパターン扱いされてエラーになるので、
-`HEAD\^` のようにエスケープするか `unsetopt NOMATCH` しておく必要がある。
+### rm, clean
+
+tracking対象から外して忘れさせる(手元のファイルはそのまま):
+```sh
+git rm --cached <file>
+```
+
+`.gitignore` で無視されてるuntrackedファイルを消す:
+```sh
+git clean -fdX
+```
+無視されていないuntrackedファイルも消したい場合は小文字の `-fdx` (危険)。
 
 
 ## Submodule
