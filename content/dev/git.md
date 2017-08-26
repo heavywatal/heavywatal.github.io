@@ -116,48 +116,52 @@ repository
   (`HEAD^2` は `merge` で複数の親がある場合の2番目)
 
 
-## よく忘れるコマンド
+## よく使うコマンド
 
-直前のcommitを修正・上書き (コメント修正やファイルの追加忘れに有用):
+`git reset <DESTINATION>` は `HEAD` の位置を戻す処理で、
+オプションによってindexとworing treeもそこに合わせるように変更される。
+`--soft` なら `HEAD` 移動のみ。
+`--mixed` なら移動した `HEAD` にindexも合わせる。
+`--hard` なら移動した `HEAD` にindexとworiking treeも合わせる。
+直前の動作を取り消す用途に絞って使うのが無難:
+```sh
+# commit直後、それを取り消す (indexとworkingはそのまま)
+git reset --soft HEAD^
 
-    git commit --amend
+# add直後、それを取り消す (workingとHEADはそのまま)
+git reset --mixed HEAD
 
-直前の動作を取り消す:
+# 変更したファイルをHEADの状態に戻す (DANGEROUS!)
+git reset --hard HEAD
 
-    # 直前のcommitを取り消す (indexとworkingはそのまま)
-    git reset --soft HEAD^
+# reset直後、それを取り消す
+git reset --hard ORIG_HEAD
 
-    # 直前のaddを取り消す (workingはそのまま)
-    git reset --mixed HEAD
+# divergedになってしまった手元のbranchを破棄 (DANGEROUS!)
+git reset --hard origin/master
+```
 
-    # working directoryの変更を取り消す (DANGEROUS!)
-    git reset --hard HEAD
-    # それでもuntrackedは残るので、消したければ git clean
-
-    # 直前のresetを取り消す
-    git reset --hard ORIG_HEAD
-
-    # divergedになってしまった手元のbranchを破棄 (DANGEROUS!)
-    git reset --hard origin/master
+直前のcommitをちょっと修正したいだけなら `git commit --amend` が簡単。
 
 tracking対象から外して忘れさせる(手元のファイルはそのまま):
-
-    git rm --cached <file>
+```sh
+git rm --cached <file>
+```
 
 差分を表示:
+```sh
+# HEAD vs working (staging前のファイルが対象)
+git diff
 
-    # HEAD vs working (staging前のファイルが対象)
-    git diff
+# HEAD vs index (staging済みcommit前のファイルが対象)
+git diff --staged
 
-    # HEAD vs index (staging済みcommit前のファイルが対象)
-    git diff --staged
+# HEAD vs working+index (commit前の全ファイルが対象)
+git diff HEAD
 
-    # HEAD vs working+index (commit前の全ファイルが対象)
-    git diff HEAD
-
-    # 特定コミットの変更点 (diffじゃない...)
-    git show [revision]
-
+# 特定コミットの変更点 (diffじゃない...)
+git show [revision]
+```
 
 zshの`EXTENDED_GLOB`が有効になってる場合は
 `HEAD^` がパターン扱いされてエラーになるので、
