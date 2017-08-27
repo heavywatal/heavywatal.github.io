@@ -6,9 +6,13 @@ tags = ["r"]
   weight = -90
 +++
 
-## 整然データを意識して[tidyverse](http://tidyverse.org/)パッケージ群を使う
+## [tidyverse](http://tidyverse.org/)
 
-<a href="https://www.amazon.co.jp/Data-Science-Transform-Visualize-Model/dp/1491910399/ref=as_li_ss_il?s=english-books&ie=UTF8&qid=1498493958&sr=1-1&keywords=r+for+data+science&linkCode=li2&tag=heavywatal-22&linkId=09f030942ec3fe963597727fddde8032" target="_blank"><img align="right" border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1491910399&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" style="position: relative; z-index: 1;" ></a><img align="right" src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li2&o=9&a=1491910399" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+<a href="http://tidyverse.org/">
+<img src="http://tidyverse.tidyverse.org/logo.png" align="right">
+</a>
+
+解析も作図も**整然データ**を用意するところから始まる。
 
 - わかりやすいスライド: [整然データってなに？ --- @f_nishihara](https://speakerdeck.com/fnshr/zheng-ran-detatutenani)
 - 詳しい解説: [整然データとは何か --- @f_nishihara](http://id.fnshr.info/2017/01/09/tidy-data-intro/)
@@ -17,13 +21,11 @@ tags = ["r"]
 >   *tidy datasets are all alike but every messy dataset is messy in its own way*\
 >   --- *Hadley Wickham*
 
-<a href="http://tidyverse.org/">
-<img src="http://tidyverse.tidyverse.org/logo.png" align="right">
-</a>
-
 [tidyverse](http://tidyverse.org/)
 はそういう思想に基いて互いに連携するようデザインされたパッケージ群で、
 R標準の関数よりも遥かに分かりやすく安全で高機能なものを提供してくれている。
+
+<a href="https://www.amazon.co.jp/Data-Science-Transform-Visualize-Model/dp/1491910399/ref=as_li_ss_il?s=english-books&ie=UTF8&qid=1498493958&sr=1-1&keywords=r+for+data+science&linkCode=li2&tag=heavywatal-22&linkId=09f030942ec3fe963597727fddde8032" target="_blank"><img align="right" border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1491910399&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" style="position: relative; z-index: 1;" ></a><img align="right" src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li2&o=9&a=1491910399" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 
 - グラフ描画には [ggplot2]({{< relref "ggplot2.md" >}})
 - data.frame内の計算・要約・抽出には [dplyr]({{< relref "dplyr.md" >}})

@@ -56,8 +56,8 @@ ggsave("iris_sepal.png", gp)
 ```
 
 {{%div class="note"%}}
-`ggplot()` に渡すデータを整形するには
-[dplyr]({{< relref "dplyr.md" >}}) と [tidyr]({{< relref "tidyr.md" >}}) を使う。
+`ggplot()` に渡すデータは、1行が1観測、1列が1変数という形の
+[**整然データ**]({{< relref "programming.md#tidyverse" >}})
 {{%/div%}}
 
 ## プロットの種類
