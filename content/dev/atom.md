@@ -51,7 +51,7 @@ ChromiumとNode.js(を用いたElectronフレームワーク)でできており�
 : <kbd>ctrl-cmd-down</kbd>
 
 コメントアウト、解除
-: <kbd>cmd /</kbd> `editor:toggle`
+: <kbd>cmd /</kbd> `editor:toggle-line-comments`
 
 閉じタグを挿入
 : <kbd>cmd-alt .</kbd> `bracket-matcher:close-tag`
@@ -122,3 +122,11 @@ apm install pigments
 apm uninstall pigments
 apm upgrade
 ```
+
+### 開発版を使う
+
+`~/.atom/packages/` か `~/.atom/dev/packages/` にリポジトリを置けばよい。
+後者は開発モードで起動した場合のみ読み込まれる。
+別のところに置いといて
+`apm link [--dev] path/to/local/repo`
+でシムリンクを張る方法もある。
