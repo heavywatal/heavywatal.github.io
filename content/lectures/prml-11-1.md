@@ -54,37 +54,37 @@ Materials
 
 $\color{blue}{f(\textbf{z})}$ の期待値は (**式11.1**)
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 \mathbb E[f] = \int f(\mathbf z) p(\mathbf z) \mathrm d \mathbf z
-\end{split}$$</div>
+\end{split}\]</div>
 
 みたいな感じで表せるが、だいたいは複雑過ぎて解析的に解けないので、そういうときどうしようかという話。
 
 $\color{red}{p(\mathbf z)}$ の分布から $L$ 個サンプリングしてきた
 $\mathbf{z}_l$ をそれぞれ $f$ に放り込んで平均を取ってみよう (**式11.2**)。
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 \hat f = \frac 1 L \sum^L_{l=1} f(\mathbf z_l)
-\end{split}$$</div>
+\end{split}\]</div>
 
 その推定値の期待値は (**Exercise 11.1**)
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 \mathbb E[\hat f] &= \mathbb E \left[\frac 1 L \sum^L_{l=1} f(\mathbf z_l) \right] \\
                   &= \frac 1 L \sum^L_{l=1} \int f(\mathbf z_l) p(\mathbf z_l) \mathrm d \mathbf z_l \\
                   &= \frac 1 L \sum^L_{l=1} \mathbb E[f] \\
                   &= \mathbb E[f]
-\end{split}$$</div>
+\end{split}\]</div>
 
 で真の期待値と同じになる。
 この推定値の分散は (**Exercise 11.1**, **式 11.3**)
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 \mathrm{var}[\hat f] &= \mathrm{var} \left[\frac 1 L \sum^L_{l=1} f(\mathbf z_l) \right] \\
                      &= \frac 1 {L^2} \sum^L_{l=1} \mathrm{var}[f(\mathbf z)] \\
                      &= \frac 1 L \mathrm{var}[f] \\
                      &= \frac 1 L \mathbb E[(f - \mathbb E[f])^2]
-\end{split}$$</div>
+\end{split}\]</div>
 
 となる。注意すべき点としては:
 
@@ -110,9 +110,9 @@ $p(x_1)p(x_2)p(x_3)p(x_4 \mid x_1,x_2,x_3)p(x_5 \mid x_1,x_3)p(x_6 \mid x_4)p(x_
 依存関係の親となるほうから順に条件付き確率で生成 (*ancestral sampling* **伝承サンプリング**)
 していくことにすると、同時確率は一般的に (**式 11.4**)
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 p(\mathbf z) = \prod_{i=1}^M p(\mathbf z_i \mid \mathrm{pa}_i)
-\end{split}$$</div>
+\end{split}\]</div>
 
 というふうに書ける。
 変数の一部が観測可能な場合は *logic sampling*
@@ -147,17 +147,17 @@ Unix/Linux系OSが提供する乱数
 変数 $z$ が $(0,1)$ の一様乱数だとして、
 適当な関数をかけて $y = f(z)$ とするとその分布は (**式 11.5**)
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 p(y) = p(z) \left| \frac {\mathrm dz} {\mathrm dy} \right|
-\end{split}$$</div>
+\end{split}\]</div>
 
 となる。
 変換後の乱数 $y$ が任意の形の分布 $\color{red}{p(y)}$ に従うようにするにはどうしたらいいか。
 $\color{red}{p(y)}$ の不定積分を (**式 11.6**)
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 z = h(y) \equiv \int _{-\infty}^y p(\hat y) \mathrm d\hat y
-\end{split}$$</div>
+\end{split}\]</div>
 
 のように $\color{blue}{h(y)}$ として定義してみると **図 11.2** のような関係になる。
 
@@ -172,7 +172,7 @@ z = h(y) \equiv \int _{-\infty}^y p(\hat y) \mathrm d\hat y
 
 例えば指数分布だと (**式 11.7**)
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 p(y) &= \lambda \exp(-\lambda y) \\
 z = h(y) &= \int_0^y \lambda \exp(-\lambda \hat y) \mathrm d \hat y \\
          &= \left[-\exp(-\lambda \hat y) \right]_0^y \\
@@ -180,7 +180,7 @@ z = h(y) &= \int_0^y \lambda \exp(-\lambda \hat y) \mathrm d \hat y \\
 \exp(-\lambda y) &= 1 - z \\
      -\lambda y  &= \ln(1 - z) \\
                y &= -\frac {\ln(1 - z)} \lambda
-\end{split}$$</div>
+\end{split}\]</div>
 
 となるので、$y = -\lambda^{-1} \ln(1 - z)$ とすれば $y$ は指数分布に従う乱数となる。
 
@@ -188,7 +188,7 @@ z = h(y) &= \int_0^y \lambda \exp(-\lambda \hat y) \mathrm d \hat y \\
 
 別の例としてコーシー分布も同じように変換できる (**式 11.8**, **Exercise 11.3**)
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 p(y) &= \frac 1 \pi \frac 1 {1 + y^2} \\
 z = h(y) &= \int_{-\infty}^y \frac 1 \pi \frac 1 {1 + \hat y^2} \mathrm d \hat y \\
          &= \frac 1 \pi \left[\arctan(\hat y) \right]_{-\infty}^y \\
@@ -196,16 +196,16 @@ z = h(y) &= \int_{-\infty}^y \frac 1 \pi \frac 1 {1 + \hat y^2} \mathrm d \hat y
          &= \frac {\arctan(y)} \pi + \frac 1 2 \\
 \arctan(y) &= \pi(z - \frac 1 2) \\
          y &= \tan\left[\pi(z - \frac 1 2)\right]
-\end{split}$$</div>
+\end{split}\]</div>
 
 ------------------------------------------------------------------------
 
 多変量の場合はヤコビアンを使えばよい
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 p(y_1, ..., y_M) = p(z_1, ..., z_M) \left| \frac {\partial (z_1, ..., z_M)}
                                                 {\partial (y_1, ..., y_M)} \right|
-\end{split}$$</div>
+\end{split}\]</div>
 
 例として2系統の独立な正規乱数を生成する *Box-Muller* 法を見てみる。
 まず $(-1,1)$ の一様乱数をふたつ $z_1, z_2$ として取ってきて、
@@ -220,18 +220,18 @@ $z_1^2 + z_2^2 \leq 1$ を満たさなければ捨てる。
 
 $r^2 = z_1^2 + z_2^2$ として (**式 11.10**, **式 11.11**)
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 y_1 &= z_1 \left(\frac {-2\ln r^2} {r^2}\right)^{1/2}\\
 y_2 &= z_2 \left(\frac {-2\ln r^2} {r^2}\right)^{1/2}
-\end{split}$$</div>
+\end{split}\]</div>
 
 のように変換すると $y_1$ と $y_2$ の同時分布は
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 p(y_1, y_2) &= p(z_1, z_2) \left| \frac{\partial(z_1, z_2)} {\partial(y_1, y_2)} \right|\\
             &= \left[\frac 1 {\sqrt{2\pi}} \exp(-\frac {y_1^2} 2) \right]
                \left[\frac 1 {\sqrt{2\pi}} \exp(-\frac {y_2^2} 2) \right]
-\end{split}$$</div>
+\end{split}\]</div>
 
 のように表され、それぞれ独立な標準正規乱数になっていることがわかる。
 平均と分散を変えたければ、$y = \mu + \sigma z$ のように標準偏差をかけて平均を足せばよい。
@@ -246,14 +246,14 @@ C++11 の `std::normal_distribution` や GSL の `gsl_ran_gaussian` でも使わ
 これは対称行列に特化したLU分解で、$\mathbf L$ は下三角行列になる。
 変換後の平均と分散を確かめてみる (**Excersize 11.5**)
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 \mathbb E[\mathbf y] &= \mathbb E[\mathbf \mu + \mathbf{Lz}] = \mathbf \mu + \mathbf 0 \\
 \mathrm{cov}[\mathbf y]
    &= \mathbb E\left[(\mathbf y - \mathbb E[\mathbf y])(\mathbf y - \mathbb E[\mathbf y])^\mathrm T \right] \\
    &= \mathbb E[(\mathbf \mu + \mathbf{Lz} - \mathbf \mu)(\mathbf \mu + \mathbf{Lz} - \mathbf \mu)^\mathrm T] \\
    &= \mathbb E[\mathbf{Lz}(\mathbf{Lz})^\mathrm T] \\
    &= \mathbf{LL}^\mathrm T = \mathbf \Sigma\\
-\end{split}$$</div>
+\end{split}\]</div>
 
 ただし一様乱数 $\mathbf z$ については $\mathbb E[\mathbf z] = \mathbf 0$ かつ $\mathbb E[\mathbf{zz}^\mathrm T] = \mathbf I$ 。
 

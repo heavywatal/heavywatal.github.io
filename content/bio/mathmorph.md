@@ -27,15 +27,15 @@ voxel
 
 ### Translation 平行移動
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 X_b = \{x + b \mid x \in X\}
-\end{split}$$</div>
+\end{split}\]</div>
 
 ### Dilation 膨張
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 X \oplus B = \bigcup_{b \in B} X_b
-\end{split}$$</div>
+\end{split}\]</div>
 
 *X* と *B* のMinkowski和。
 *X* を *B* の範囲でずらしながらunionを取ったもの。
@@ -43,9 +43,9 @@ X \oplus B = \bigcup_{b \in B} X_b
 
 ### Erosion 浸食
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 X \ominus B = \bigcap_{b \in B} X_b
-\end{split}$$</div>
+\end{split}\]</div>
 
 *X* と *B* のMinkowski差。
 *X* を *B* の範囲でずらしながらintersectを取ったもの。
@@ -53,9 +53,9 @@ SEを消しゴムとして *X* の外周上を走らせ、削るイメージ。
 
 ### Opening
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 X \circ B = (X \ominus B) \oplus B
-\end{split}$$</div>
+\end{split}\]</div>
 
 浸食してから膨張する。
 *X* からハミ出ないようにSEを滑らせた軌跡に相当する。
@@ -67,9 +67,9 @@ X \circ B = (X \ominus B) \oplus B
 
 ### Closing
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 X \bullet B = (X \oplus B) \ominus B
-\end{split}$$</div>
+\end{split}\]</div>
 
 膨張してから浸食する。
 *X* の外部をOpeningすることと同義。
@@ -90,9 +90,9 @@ Openingで削れた部分の面積を記録していく。
 
 ### Morphological gradient
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 (X \oplus B) - (X \ominus B)
-\end{split}$$</div>
+\end{split}\]</div>
 
 dilationとerosionの差。
 エッジ検出法のひとつ。

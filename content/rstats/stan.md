@@ -145,10 +145,10 @@ target += -0.5 * square(x);
 (が、`T[,]`によるtruncated distributionではこうやって調整する、
 とかいう記述もあるので、そのへんはまだよく分からない)。
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 \log p(x) &\propto -\frac {x^2} 2 \\
      p(x) &\propto \exp \left(- \frac {x^2} 2 \right)
-\end{split}$$</div>
+\end{split}\]</div>
 
 名のある確率分布はだいたい関数として用意されている。
 形のバリエーションとしては:
