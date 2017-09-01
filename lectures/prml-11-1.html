@@ -18,18 +18,13 @@
 <meta name="generator" content="Hugo 0.27-DEV" />
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
+  showProcessingMessages: false,
+  messageStyle: "none",
   displayAlign: "left",
   displayIndent: "2em",
   tex2jax: {
     inlineMath: [['$','$']],
-    displayMath: [['$$','$$']],
-    processEnvironments: false
-  }
-});
-MathJax.Hub.Queue(function() {
-  var all = MathJax.Hub.getAllJax(), i;
-  for(i = 0; i < all.length; i += 1) {
-    all[i].SourceElement().parentNode.classList.add('has-jax');
+    displayMath: [['\\[', '\\]']]
   }
 });
 </script>
@@ -136,37 +131,37 @@ PRML輪読会 11章1節
 
 <p>$\color{blue}{f(\textbf{z})}$ の期待値は (<strong>式11.1</strong>)</p>
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 \mathbb E[f] = \int f(\mathbf z) p(\mathbf z) \mathrm d \mathbf z
-\end{split}$$</div>
+\end{split}\]</div>
 
 <p>みたいな感じで表せるが、だいたいは複雑過ぎて解析的に解けないので、そういうときどうしようかという話。</p>
 
 <p>$\color{red}{p(\mathbf z)}$ の分布から $L$ 個サンプリングしてきた
 $\mathbf{z}_l$ をそれぞれ $f$ に放り込んで平均を取ってみよう (<strong>式11.2</strong>)。</p>
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 \hat f = \frac 1 L \sum^L_{l=1} f(\mathbf z_l)
-\end{split}$$</div>
+\end{split}\]</div>
 
 <p>その推定値の期待値は (<strong>Exercise 11.1</strong>)</p>
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 \mathbb E[\hat f] &= \mathbb E \left[\frac 1 L \sum^L_{l=1} f(\mathbf z_l) \right] \\
                   &= \frac 1 L \sum^L_{l=1} \int f(\mathbf z_l) p(\mathbf z_l) \mathrm d \mathbf z_l \\
                   &= \frac 1 L \sum^L_{l=1} \mathbb E[f] \\
                   &= \mathbb E[f]
-\end{split}$$</div>
+\end{split}\]</div>
 
 <p>で真の期待値と同じになる。
 この推定値の分散は (<strong>Exercise 11.1</strong>, <strong>式 11.3</strong>)</p>
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 \mathrm{var}[\hat f] &= \mathrm{var} \left[\frac 1 L \sum^L_{l=1} f(\mathbf z_l) \right] \\
                      &= \frac 1 {L^2} \sum^L_{l=1} \mathrm{var}[f(\mathbf z)] \\
                      &= \frac 1 L \mathrm{var}[f] \\
                      &= \frac 1 L \mathbb E[(f - \mathbb E[f])^2]
-\end{split}$$</div>
+\end{split}\]</div>
 
 <p>となる。注意すべき点としては:</p>
 
@@ -196,9 +191,9 @@ $p(x_1)p(x_2)p(x_3)p(x_4 \mid x_1,x_2,x_3)p(x_5 \mid x_1,x_3)p(x_6 \mid x_4)p(x_
 <p>依存関係の親となるほうから順に条件付き確率で生成 (<em>ancestral sampling</em> <strong>伝承サンプリング</strong>)
 していくことにすると、同時確率は一般的に (<strong>式 11.4</strong>)</p>
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 p(\mathbf z) = \prod_{i=1}^M p(\mathbf z_i \mid \mathrm{pa}_i)
-\end{split}$$</div>
+\end{split}\]</div>
 
 <p>というふうに書ける。
 変数の一部が観測可能な場合は <em>logic sampling</em>
@@ -237,17 +232,17 @@ $z_1$ から $z_M$ まで一周するだけでは求まらず、
 <p>変数 $z$ が $(0,1)$ の一様乱数だとして、
 適当な関数をかけて $y = f(z)$ とするとその分布は (<strong>式 11.5</strong>)</p>
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 p(y) = p(z) \left| \frac {\mathrm dz} {\mathrm dy} \right|
-\end{split}$$</div>
+\end{split}\]</div>
 
 <p>となる。
 変換後の乱数 $y$ が任意の形の分布 $\color{red}{p(y)}$ に従うようにするにはどうしたらいいか。
 $\color{red}{p(y)}$ の不定積分を (<strong>式 11.6</strong>)</p>
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 z = h(y) \equiv \int _{-\infty}^y p(\hat y) \mathrm d\hat y
-\end{split}$$</div>
+\end{split}\]</div>
 
 <p>のように $\color{blue}{h(y)}$ として定義してみると <strong>図 11.2</strong> のような関係になる。</p>
 
@@ -264,7 +259,7 @@ z = h(y) \equiv \int _{-\infty}^y p(\hat y) \mathrm d\hat y
 
 <p>例えば指数分布だと (<strong>式 11.7</strong>)</p>
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 p(y) &= \lambda \exp(-\lambda y) \\
 z = h(y) &= \int_0^y \lambda \exp(-\lambda \hat y) \mathrm d \hat y \\
          &= \left[-\exp(-\lambda \hat y) \right]_0^y \\
@@ -272,7 +267,7 @@ z = h(y) &= \int_0^y \lambda \exp(-\lambda \hat y) \mathrm d \hat y \\
 \exp(-\lambda y) &= 1 - z \\
      -\lambda y  &= \ln(1 - z) \\
                y &= -\frac {\ln(1 - z)} \lambda
-\end{split}$$</div>
+\end{split}\]</div>
 
 <p>となるので、$y = -\lambda^{-1} \ln(1 - z)$ とすれば $y$ は指数分布に従う乱数となる。</p>
 
@@ -280,7 +275,7 @@ z = h(y) &= \int_0^y \lambda \exp(-\lambda \hat y) \mathrm d \hat y \\
 
 <p>別の例としてコーシー分布も同じように変換できる (<strong>式 11.8</strong>, <strong>Exercise 11.3</strong>)</p>
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 p(y) &= \frac 1 \pi \frac 1 {1 + y^2} \\
 z = h(y) &= \int_{-\infty}^y \frac 1 \pi \frac 1 {1 + \hat y^2} \mathrm d \hat y \\
          &= \frac 1 \pi \left[\arctan(\hat y) \right]_{-\infty}^y \\
@@ -288,16 +283,16 @@ z = h(y) &= \int_{-\infty}^y \frac 1 \pi \frac 1 {1 + \hat y^2} \mathrm d \hat y
          &= \frac {\arctan(y)} \pi + \frac 1 2 \\
 \arctan(y) &= \pi(z - \frac 1 2) \\
          y &= \tan\left[\pi(z - \frac 1 2)\right]
-\end{split}$$</div>
+\end{split}\]</div>
 
 <hr>
 
 <p>多変量の場合はヤコビアンを使えばよい</p>
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 p(y_1, ..., y_M) = p(z_1, ..., z_M) \left| \frac {\partial (z_1, ..., z_M)}
                                                 {\partial (y_1, ..., y_M)} \right|
-\end{split}$$</div>
+\end{split}\]</div>
 
 <p>例として2系統の独立な正規乱数を生成する <em>Box-Muller</em> 法を見てみる。
 まず $(-1,1)$ の一様乱数をふたつ $z_1, z_2$ として取ってきて、
@@ -314,18 +309,18 @@ $z_1^2 + z_2^2 \leq 1$ を満たさなければ捨てる。
 
 <p>$r^2 = z_1^2 + z_2^2$ として (<strong>式 11.10</strong>, <strong>式 11.11</strong>)</p>
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 y_1 &= z_1 \left(\frac {-2\ln r^2} {r^2}\right)^{1/2}\\
 y_2 &= z_2 \left(\frac {-2\ln r^2} {r^2}\right)^{1/2}
-\end{split}$$</div>
+\end{split}\]</div>
 
 <p>のように変換すると $y_1$ と $y_2$ の同時分布は</p>
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 p(y_1, y_2) &= p(z_1, z_2) \left| \frac{\partial(z_1, z_2)} {\partial(y_1, y_2)} \right|\\
             &= \left[\frac 1 {\sqrt{2\pi}} \exp(-\frac {y_1^2} 2) \right]
                \left[\frac 1 {\sqrt{2\pi}} \exp(-\frac {y_2^2} 2) \right]
-\end{split}$$</div>
+\end{split}\]</div>
 
 <p>のように表され、それぞれ独立な標準正規乱数になっていることがわかる。
 平均と分散を変えたければ、$y = \mu + \sigma z$ のように標準偏差をかけて平均を足せばよい。</p>
@@ -342,14 +337,14 @@ p(y_1, y_2) &= p(z_1, z_2) \left| \frac{\partial(z_1, z_2)} {\partial(y_1, y_2)}
 これは対称行列に特化したLU分解で、$\mathbf L$ は下三角行列になる。
 変換後の平均と分散を確かめてみる (<strong>Excersize 11.5</strong>)</p>
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 \mathbb E[\mathbf y] &= \mathbb E[\mathbf \mu + \mathbf{Lz}] = \mathbf \mu + \mathbf 0 \\
 \mathrm{cov}[\mathbf y]
    &= \mathbb E\left[(\mathbf y - \mathbb E[\mathbf y])(\mathbf y - \mathbb E[\mathbf y])^\mathrm T \right] \\
    &= \mathbb E[(\mathbf \mu + \mathbf{Lz} - \mathbf \mu)(\mathbf \mu + \mathbf{Lz} - \mathbf \mu)^\mathrm T] \\
    &= \mathbb E[\mathbf{Lz}(\mathbf{Lz})^\mathrm T] \\
    &= \mathbf{LL}^\mathrm T = \mathbf \Sigma\\
-\end{split}$$</div>
+\end{split}\]</div>
 
 <p>ただし一様乱数 $\mathbf z$ については $\mathbb E[\mathbf z] = \mathbf 0$ かつ $\mathbb E[\mathbf{zz}^\mathrm T] = \mathbf I$ 。</p>
 

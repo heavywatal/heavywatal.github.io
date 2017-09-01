@@ -18,18 +18,13 @@
 <meta name="generator" content="Hugo 0.27-DEV" />
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
+  showProcessingMessages: false,
+  messageStyle: "none",
   displayAlign: "left",
   displayIndent: "2em",
   tex2jax: {
     inlineMath: [['$','$']],
-    displayMath: [['$$','$$']],
-    processEnvironments: false
-  }
-});
-MathJax.Hub.Queue(function() {
-  var all = MathJax.Hub.getAllJax(), i;
-  for(i = 0; i < all.length; i += 1) {
-    all[i].SourceElement().parentNode.classList.add('has-jax');
+    displayMath: [['\\[', '\\]']]
   }
 });
 </script>
@@ -125,10 +120,10 @@ PRML輪読会 3章4節
 
 <p>モデルの不確実さを確率で表し、加法定理・乗法定理を駆使して評価しよう</p>
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 p(X)   &= \sum^Y p(X,Y) \\
 p(X,Y) &= p(Y \mid X) P(X)
-\end{split}$$</div>
+\end{split}\]</div>
 
 <div class="note">
 <p>変数</p>
@@ -155,10 +150,10 @@ p(X,Y) &= p(Y \mid X) P(X)
 
 <p>の積に比例する (<strong>式 3.66</strong>)。</p>
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 p(\mathcal M _i \mid \mathcal D)
    \propto p(\mathcal M _i) p(\mathcal D \mid \mathcal M _i)
-\end{split}$$</div>
+\end{split}\]</div>
 
 <p>これを評価したいんだけど、
 モデルの事前分布なんてだいたい分からないので、重要なのは後者のevidence。</p>
@@ -180,11 +175,11 @@ $\frac {p(\mathcal D \mid \mathcal M _i)} {p(\mathcal D \mid \mathcal M _j)}$</p
 (新しい $\mathbf x$ に対して $t$ がどんな値となるか)
 も加法定理と乗法定理より導かれる (<strong>式 3.67</strong>)</p>
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 p(t \mid \mathbf x, \mathcal D)
    &= \sum _{i=1} ^L p(t, \mathcal M _i \mid \mathbf x, \mathcal D) \\
    &= \sum _{i=1} ^L {p(t \mid \mathbf x, \mathcal M _i, \mathcal D) p(\mathcal M _i \mid \mathcal D)}
-\end{split}$$</div>
+\end{split}\]</div>
 
 <p>これは、それぞれのモデルでの予測分布(入力に対してどういう出力になりそうか)を
 事後分布(どのモデルっぽいか)で重み付けした平均した、混合分布。</p>
@@ -200,11 +195,11 @@ p(t \mid \mathbf x, \mathcal D)
 <p>パラメータセット $w$ を持つモデル $\mathcal M_i$
 のevidenceをまた加法定理と乗法定理でばらしてみると (<strong>式 3.68</strong>)</p>
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 p(\mathcal D \mid \mathcal M _i)
    &= \int p(\mathcal D, \mathbf w \mid \mathcal M _i) \mathrm d \mathbf w \\
    &= \int p(\mathcal D \mid \mathbf w, \mathcal M _i) p(\mathbf w \mid \mathcal M _i) \mathrm d \mathbf w
-\end{split}$$</div>
+\end{split}\]</div>
 
 <p>パラメータセットの尤度をその確率分布で重み付けして積分したもの、
 ってことで周辺尤度と呼ばれるのが納得できる。
@@ -216,11 +211,11 @@ p(\mathcal D \mid \mathcal M _i)
 <div class="note">
 <p>積分の中身からすると、パラメータの事後分布を求める式の正規化項になる (<strong>式 3.69</strong>)</p>
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 p(\mathbf w \mid \mathcal D, \mathcal M _i)
    = \frac {p(\mathcal D \mid \mathbf w, \mathcal M _i) p(\mathbf w \mid \mathcal M _i)}
            {p(\mathcal D \mid \mathcal M _i)}
-\end{split}$$</div>
+\end{split}\]</div>
 
 </div>
 
@@ -240,7 +235,7 @@ MAP推定値らへんで長方形に分布してるものとして近似。</p>
 <p><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure3.12.png">Figure 3.12</a> のように近似すると式3.68の積分をただの掛け算で書き変えられる
 (モデル依存の表記を省略, <strong>式 3.70, 3.71</strong>)。</p>
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 p(\mathcal D)
    &= \int p(\mathcal D \mid w) p (w) \mathrm dw \\
    &\simeq \frac 1 {\Delta w _\mathrm{prior}} \int p(\mathcal D \mid w) \mathrm dw \\
@@ -251,7 +246,7 @@ p(\mathcal D)
 \ln p(\mathcal D)
    &\simeq \ln p(\mathcal D \mid w _\mathrm{MAP})
          + \ln \left( \frac {\Delta w _\mathrm{posterior}} {\Delta w _\mathrm{prior}} \right)
-\end{split}$$</div>
+\end{split}\]</div>
 
 <p>第一項は一番いいパラメータの当てはまりの良さ、
 第二項はモデルの複雑性によるペナルティ
@@ -260,14 +255,14 @@ p(\mathcal D)
 <p>$M$ 個のパラメータを持つモデルを考える。
 事前分布と事後分布の幅の比が全てのパラメータで等しいとすると (<strong>式 3.72</strong>)</p>
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 p(\mathcal D)
    &= p(\mathcal D \mid w _\mathrm{MAP}) \left(\frac {\Delta w _\mathrm{posterior}}
                                                      {\Delta w _\mathrm{prior}} \right)^M \\
 \ln p(\mathcal D)
    &\simeq \ln p(\mathcal D \mid w _\mathrm{MAP})
          + M \ln \left( \frac {\Delta w _\mathrm{posterior}} {\Delta w _\mathrm{prior}} \right)
-\end{split}$$</div>
+\end{split}\]</div>
 
 <p>パラメータが増える(モデルの複雑性が増す)ごとに第一項は大きくなっていくかもしれないが、
 第二項のペナルティも大きな負になっていく。
@@ -304,11 +299,11 @@ $\mathcal M _2$ が一番大きいevidenceを持つことになる。</p>
 正しくない $\mathcal M_2$ とかで大きくなる場合もあるが、
 真の分布の上でを平均すると (<strong>式 3.73</strong>)</p>
 
-<div>$$\begin{split}
+<div>\[\begin{split}
 \int p(\mathcal D \mid \mathcal M _1)
     \ln \frac {p(\mathcal D \mid \mathcal M _1)}
               {p(\mathcal D \mid \mathcal M _2)} \mathrm d \mathcal D
-\end{split}$$</div>
+\end{split}\]</div>
 
 <p>で <em>Kullback-Leibler divergence</em> (Section 1.6.1 <strong>式 1.113</strong>)
 と同じ形になり（対数の中身と符号を入れ替え）、
