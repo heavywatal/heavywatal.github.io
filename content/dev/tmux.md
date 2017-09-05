@@ -36,27 +36,24 @@ key          | command | description
 <kbd>?</kbd> | `list-keys` |
 <kbd>:</kbd> | `command-prompt` |
 <kbd>d</kbd> | `detach-client` |
-<kbd>[</kbd> | `copy-mode` |
-<kbd>]</kbd> | `paste-buffer` |
 <kbd>c</kbd> | `new-window` |
 <kbd>n</kbd> | `next-window` |
 <kbd>p</kbd> | `previous-window` |
 <kbd>l</kbd> | `last-window` |
 <kbd>,</kbd> | `rename-window` |
-<kbd>"</kbd> | `split-window` | 横長・縦並びに分割
-<kbd>%</kbd> | `split-window -h` | 縦長・横並びに分割
+<kbd>.</kbd> | `move-window` |
+<kbd>0 1 2 3</kbd> | `select-window -t :=N` |
+<kbd>"</kbd> | `split-window` | 横長・縦並びに分割: 日
+<kbd>%</kbd> | `split-window -h` | 縦長・横並びに分割: Φ
 <kbd>;</kbd> | `last-pane` | 直前のペイン(往復)
-<kbd>↑</kbd> | `select-pane -U` |
-<kbd>↓</kbd> | `select-pane -D` |
-<kbd>←</kbd> | `select-pane -L` |
-<kbd>→</kbd> | `select-pane -R` |
 <kbd>o</kbd> | `select-pane -t:.+` | 番号順にペインを巡回
+<kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> | `select-pane -U` |
+<kbd>C-↑</kbd><kbd>C-↓</kbd> | `resize-pane -U` | ペインサイズ変更
 <kbd>C-o</kbd> | `rotate-window` | レイアウトを維持してペインを回す
 <kbd>space</kbd> | `next-layout` | レイアウトを変更する
 <kbd>!</kbd> | `break-pane` | ペインを独立したウィンドウにする
-<kbd>x</kbd> | `confirm-before kill-pane` |
-<kbd>&</kbd> | `confirm-before kill-window` |
-
+<kbd>[</kbd> | `copy-mode` |
+<kbd>]</kbd> | `paste-buffer` |
 
 ### コピーモード
 
@@ -138,9 +135,8 @@ Mac `open` 問題
 
 ### 備忘
 
-デタッチ後しばらくしてシェルを起動すると
-既に存在しているセッションを忘れがちなので、
-以下のようなものを `.zshrc` とかに書いておく。
+デタッチ後しばらくしてシェルを起動すると残存セッションを忘れがちなので、
+以下のようなものを `.zshrc` とかに書いておけば表示で気付ける。
 
 ```sh
 tmux has-session >/dev/null 2>&1 && if [ -z "${TMUX}" ]; then
