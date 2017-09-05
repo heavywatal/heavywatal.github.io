@@ -136,18 +136,6 @@ prefix keyはデフォルトで <kbd>C-b</kbd> (<kbd>control-b</kbd>の略記)�
 </tr>
 
 <tr>
-<td><kbd>[</kbd></td>
-<td><code>copy-mode</code></td>
-<td></td>
-</tr>
-
-<tr>
-<td><kbd>]</kbd></td>
-<td><code>paste-buffer</code></td>
-<td></td>
-</tr>
-
-<tr>
 <td><kbd>c</kbd></td>
 <td><code>new-window</code></td>
 <td></td>
@@ -178,15 +166,27 @@ prefix keyはデフォルトで <kbd>C-b</kbd> (<kbd>control-b</kbd>の略記)�
 </tr>
 
 <tr>
+<td><kbd>.</kbd></td>
+<td><code>move-window</code></td>
+<td></td>
+</tr>
+
+<tr>
+<td><kbd>0 1 2 3</kbd></td>
+<td><code>select-window -t :=N</code></td>
+<td></td>
+</tr>
+
+<tr>
 <td><kbd>&ldquo;</kbd></td>
 <td><code>split-window</code></td>
-<td>横長・縦並びに分割</td>
+<td>横長・縦並びに分割: 日</td>
 </tr>
 
 <tr>
 <td><kbd>%</kbd></td>
 <td><code>split-window -h</code></td>
-<td>縦長・横並びに分割</td>
+<td>縦長・横並びに分割: Φ</td>
 </tr>
 
 <tr>
@@ -196,33 +196,21 @@ prefix keyはデフォルトで <kbd>C-b</kbd> (<kbd>control-b</kbd>の略記)�
 </tr>
 
 <tr>
-<td><kbd>↑</kbd></td>
+<td><kbd>o</kbd></td>
+<td><code>select-pane -t:.+</code></td>
+<td>番号順にペインを巡回</td>
+</tr>
+
+<tr>
+<td><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd></td>
 <td><code>select-pane -U</code></td>
 <td></td>
 </tr>
 
 <tr>
-<td><kbd>↓</kbd></td>
-<td><code>select-pane -D</code></td>
-<td></td>
-</tr>
-
-<tr>
-<td><kbd>←</kbd></td>
-<td><code>select-pane -L</code></td>
-<td></td>
-</tr>
-
-<tr>
-<td><kbd>→</kbd></td>
-<td><code>select-pane -R</code></td>
-<td></td>
-</tr>
-
-<tr>
-<td><kbd>o</kbd></td>
-<td><code>select-pane -t:.+</code></td>
-<td>番号順にペインを巡回</td>
+<td><kbd>C-↑</kbd><kbd>C-↓</kbd></td>
+<td><code>resize-pane -U</code></td>
+<td>ペインサイズ変更</td>
 </tr>
 
 <tr>
@@ -244,14 +232,14 @@ prefix keyはデフォルトで <kbd>C-b</kbd> (<kbd>control-b</kbd>の略記)�
 </tr>
 
 <tr>
-<td><kbd>x</kbd></td>
-<td><code>confirm-before kill-pane</code></td>
+<td><kbd>[</kbd></td>
+<td><code>copy-mode</code></td>
 <td></td>
 </tr>
 
 <tr>
-<td><kbd>&amp;</kbd></td>
-<td><code>confirm-before kill-window</code></td>
+<td><kbd>]</kbd></td>
+<td><code>paste-buffer</code></td>
 <td></td>
 </tr>
 </tbody>
@@ -348,9 +336,8 @@ C-t p
 
 <h3 id="備忘">備忘</h3>
 
-<p>デタッチ後しばらくしてシェルを起動すると
-既に存在しているセッションを忘れがちなので、
-以下のようなものを <code>.zshrc</code> とかに書いておく。</p>
+<p>デタッチ後しばらくしてシェルを起動すると残存セッションを忘れがちなので、
+以下のようなものを <code>.zshrc</code> とかに書いておけば表示で気付ける。</p>
 
 <pre><code class="language-sh">tmux has-session &gt;/dev/null 2&gt;&amp;1 &amp;&amp; if [ -z &quot;${TMUX}&quot; ]; then
     echo '% tmux list-sessions'
