@@ -50,38 +50,31 @@ Master of Life Sciences, 2010.03
 Bachelor of Science, 2008.03
 :   Biological Institute, Faculty of Science, Tohoku University
 
-## Grants and Fellowships
-
-July 2010 - March 2013
-:   JSPS Research Fellow (DC1)
-
 ## Publications
 
 **Papers**
 
 - **Watal M. Iwasaki** and Hideki Innan. 2017.
   Simulation Framework for Generating Intratumor Heterogeneity Patterns in a Cancer Cell Population.
-  *PLOS ONE* (in press);
-  [*bioRxiv preprint*](https://doi.org/10.1101/109801)
+  [*PLOS ONE* 12(9): e0184229](https://doi.org/10.1371/journal.pone.0184229) (open access)
 - Satoshi Tamate\*, **Watal M. Iwasaki**\* (equally contributed), Kenneth L. Krysko, Brian Composano, Hideaki Mori, Ryo Funayama, Keiko Nakayama, Takashi Makino and Masakado Kawata. 2017.
   The evolutionary responses of *Anolis carolinensis* introduced into Ogasawara archipelago during 50 years.
   (*submitted*)
 - Takahiro Yamanoi and **Watal M. Iwasaki**. 2015.
   Origami Bird Simulator: a teaching resource linking natural selection and speciation.
-  *Evolution: Education and Outreach* **8**:14
-  [Open Access] <https://dx.doi.org/10.1186/s12052-015-0043-6>
+  [*Evolution: Education and Outreach* **8**:14](https://dx.doi.org/10.1186/s12052-015-0043-6)
+  (open access)
 - Hajime Wakasa, Antonio Cádiz, Lázaro M. Echenique-Díaz, **Watal M. Iwasaki**, Namiko Kamiyama, Yuki Nishimura, Hitoshi Yokoyama, Koji Tamura, and Masakado Kawata. 2015.
   Developmental stages for the divergence of relative limb length between a twig and a trunk-ground *Anolis* lizard species.
-  *Journal of Experimental Zoology Part B: Molecular and Developmental Evolution* **324** 5: 410--423
-  <http://dx.doi.org/10.1002/jez.b.22627>
+  [*Journal of Experimental Zoology Part B: Molecular and Developmental Evolution* **324** 5: 410--423]
+  (http://dx.doi.org/10.1002/jez.b.22627)
 - Tezuka, A., S. Kasagi, C. van Oosterhout, M. McMullan, **W. M. Iwasaki**, D. Kasai, M. Yamamichi, H. Innan, S. Kawamura, and M. Kawata. 2014.
   Divergent selection on opsin gene variation in guppy (*Poecilia reticulata*) populations of Trinidad and Tobago.
-  *Heredity* **113**: 381--389
-  <https://dx.doi.org/10.1038/hdy.2014.35>
+  [*Heredity* **113**: 381--389](https://dx.doi.org/10.1038/hdy.2014.35)
 - **Watal M. Iwasaki**, Masaki E. Tsuda, Masakado Kawata. 2013.
   Genetic and environmental factors affecting cryptic variations in gene regulatory networks.
-  *BMC Evol. Biol.* **13**:91
-  [Open Access] <https://dx.doi.org/10.1186/1471-2148-13-91>
+  [*BMC Evol. Biol.* **13**:91](https://dx.doi.org/10.1186/1471-2148-13-91)
+  (open access)
 
 **Book Chapters**
 
@@ -109,6 +102,8 @@ July 2010 - March 2013
 
 **Oral**
 
+-   岩嵜航・印南秀樹「tumopp: 腫瘍内不均一性の進化シミュレーション」
+    [日本遺伝学会 第89回大会](http://taikaitm.net/) (2017.09) 岡山大学
 -   岩嵜航・河田雅圭「隠蔽変異を介して相互に促進される生命システムの複雑化と多様化」 [日本進化学会第15回年会](https://sites.google.com/site/tsukubacce/) (2013.08) 筑波大学
 -   岩嵜航・津田真樹・河田雅圭「遺伝子制御ネットワークの隠れた変異がもたらす表現型可塑性の多型」 [日本進化学会第11回年会](http://genome.ist.hokudai.ac.jp/shinka2009/) (2009.09) 北海道大学
 
@@ -135,19 +130,10 @@ July 2010 - March 2013
 -   環境機関コンソーシアム アカデミア部門ポスター賞([トロン](http://www.google.co.jp/search?q=%E4%B8%AD%E9%9D%99%E9%80%8F) 賞) (2010.03)
 -   東北大学生命科学研究科 生命科学会長賞 (2010.02)
 
-## Academic Societies
+## Grants and Fellowships
 
--   [日本進化学会](http://wwwsoc.nii.ac.jp/sesj2/)
-    / Society of Evolutionary Studies, Japan
--   [日本生態学会](http://www.esj.ne.jp/esj/) (退会中)
-    / [Ecological Society of Japan](http://www.esj.ne.jp/esj/index-e.html)
--   個体群生態学会 (退会中)
-    / [The Society of Population Ecology](http://www.populationecology.org/)
--   [Evo-Devo青年の会](http://evo-devo.net/)
-
-## Review
-
--   [Journal of Molecular Evolution](http://link.springer.com/journal/239)
+July 2010 - March 2013
+:   JSPS Research Fellow (DC1)
 
 ## Software
 
@@ -163,3 +149,18 @@ July 2010 - March 2013
 -   [`namaespace`](https://github.com/heavywatal/namaespace):
     utility to create dummy R packages for namespace
 -   [Hugo theme for non-blog websites](https://github.com/heavywatal/hugo-theme-nonblog)
+
+## Academic Societies
+
+-   [日本遺伝学会](http://gsj3.jp/)
+-   [日本進化学会](http://wwwsoc.nii.ac.jp/sesj2/)
+    / Society of Evolutionary Studies, Japan
+-   [日本生態学会](http://www.esj.ne.jp/esj/) (退会中)
+    / [Ecological Society of Japan](http://www.esj.ne.jp/esj/index-e.html)
+-   個体群生態学会 (退会中)
+    / [The Society of Population Ecology](http://www.populationecology.org/)
+-   [Evo-Devo青年の会](http://evo-devo.net/)
+
+## Review
+
+-   [Journal of Molecular Evolution](http://link.springer.com/journal/239)
