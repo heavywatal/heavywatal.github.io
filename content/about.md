@@ -14,7 +14,7 @@ weight = 1
 Watal M. Iwasaki, PhD
 :   Postdoctoral fellow in [Innan Laboratory](http://www.sendou.soken.ac.jp/esb/innan/InnanLab/),\
     Department of Evolutionary Studies of Biosystems,\
-    SOKENDAI (Graduate University for Advanced Studies)
+    SOKENDAI (The Graduate University for Advanced Studies)
 
 Address:
 :   School of Advanced Sciences, SOKENDAI,
@@ -153,6 +153,7 @@ July 2010 - March 2013
 ## Academic Societies
 
 -   [日本遺伝学会](http://gsj3.jp/)
+    / The Genetics Society of Japan
 -   [日本進化学会](http://wwwsoc.nii.ac.jp/sesj2/)
     / Society of Evolutionary Studies, Japan
 -   [日本生態学会](http://www.esj.ne.jp/esj/) (退会中)
