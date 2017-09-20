@@ -170,27 +170,41 @@ XeTeXでは不要っぽい。
 デフォルトは `[tbp]`。
 複数指定した場合、どの順序で書いても下記の順に優先される。
 
-`h` here: ソースと同じ位置に\
-`t` top: 上部に\
-`b` bottom: 下部に\
-`p` float page: 図だけを含む独立したページに
+- `h` here: ソースと同じ位置に
+- `t` top: 上部に
+- `b` bottom: 下部に
+- `p` float page: 図だけを含む独立したページに
 
-ひとつの領域に複数の図を貼るには
-[{subfig}](https://www.ctan.org/pkg/subfig)
-の `\subfloat[caption]{filename}` を用いる。
+ラベル `\label{}` は `\caption{}` 直後が良いらしく、
+スペースさえもchktex警告対象なので波カッコ前で改行するという苦肉の策。
 
 キャプションをカスタマイズするには
 [{caption}](https://www.ctan.org/pkg/caption)
 の `\captionsetup{...}` を用いる。
 
-ラベル `\label{}` は `\caption{}` 直後が良いらしく、
-スペースさえもchktex警告対象なので波カッコ前で改行するという苦肉の策。
+ひとつの領域に複数の図を貼るには
+[{subfig}](https://www.ctan.org/pkg/subfig)
+の `\subfloat[caption]{filename}` を用いる。
 
-`\usepackage{epstopdf}` でEPSを取り込もうとすると(e.g., PLOS)、
+[{epstopdf}](https://www.ctan.org/pkg/epstopdf)
+でEPSを取り込もうとすると(e.g., PLOS)、
 ファイルもパッケージも揃ってるはずなのに
 `! Package pdftex.def Error: File '*-eps-converted-to.pdf' not found.`
 というエラーが出る。
 変換プログラム本体である `ghostscript` をHomebrewか何かで入れる必要がある。
+
+GIFアニメをそのまま埋め込むことはできないので、
+[{animate}](https://www.ctan.org/pkg/animate)で連番PNGを読み込む。
+
+```tex
+% sudo tlmgr install animate media9 ocgx2
+\usepackage[autoplay,final,controls=all,type=png]{animate}
+
+\begin{document}
+% \animategraphics[options]{frame rate}{file basename}{first}{last}
+\animategraphics[scale=0.5]{10}{dir/basename_}{1}{9}
+\end{document}
+```
 
 
 ### 表
@@ -475,29 +489,27 @@ XeTeX なら OS のフォントをフルネームで指定して使える
 
 ```tex
 \usepackage{amsthm, amsmath} % must be called ahead of mathspec
-\usepackage[all, warning]{onlyamsmath}
+\usepackage[all,warning]{onlyamsmath}
 \ifxetex
-  \usepackage[libertine]{newtxmath}
-  \usepackage[scr=rsfso]{mathalfa}  % for \mathrm
-  \usepackage{bm}                   % for \mathbf
   \usepackage{mathspec} % must be called ahead of fontspec
   \usepackage[math-style=TeX,bold-style=TeX]{unicode-math}
   \usepackage[no-math]{fontspec}
-  \usepackage{libertine}
-  \usepackage{xeCJK}
-  \setCJKmainfont[Scale=0.9,BoldFont=Hiragino Mincho ProN W6]
-                                    {Hiragino Mincho ProN W3}
-  \setCJKsansfont[Scale=0.9,BoldFont=Hiragino Kaku Gothic ProN W6]
-                                    {Hiragino Kaku Gothic ProN W3}
-  \setCJKmonofont[Scale=0.9,BoldFont=Hiragino Kaku Gothic ProN W6]
-                                    {Hiragino Kaku Gothic ProN W3}
+  \setmainfont{TeXGyrePagellaX}
+  \setmathfont{texgyrepagella-math.otf}
+  % \usepackage{xeCJK}
+  % \setCJKmainfont[Scale=0.9,BoldFont=Hiragino Mincho ProN W6]
+  %                                   {Hiragino Mincho ProN W3}
+  % \setCJKsansfont[Scale=0.9,BoldFont=Hiragino Kaku Gothic ProN W6]
+  %                                   {Hiragino Kaku Gothic ProN W3}
+  % \setCJKmonofont[Scale=0.9,BoldFont=Hiragino Kaku Gothic ProN W6]
+  %                                   {Hiragino Kaku Gothic ProN W3}
 \else
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
-  \usepackage{libertine}
-  \usepackage[libertine]{newtxmath}
-  \usepackage[uplatex,deluxe,jis2004]{otf}
+  \usepackage{newpxtext}
+  \usepackage{newpxmath}
   \usepackage{textcomp}
+  % \usepackage[uplatex,deluxe,jis2004]{otf}
 \fi
 ```
 
