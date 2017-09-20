@@ -252,27 +252,42 @@ XeTeXでは不要っぽい。</p>
 デフォルトは <code>[tbp]</code>。
 複数指定した場合、どの順序で書いても下記の順に優先される。</p>
 
-<p><code>h</code> here: ソースと同じ位置に<br>
-<code>t</code> top: 上部に<br>
-<code>b</code> bottom: 下部に<br>
-<code>p</code> float page: 図だけを含む独立したページに</p>
+<ul>
+<li><code>h</code> here: ソースと同じ位置に</li>
+<li><code>t</code> top: 上部に</li>
+<li><code>b</code> bottom: 下部に</li>
+<li><code>p</code> float page: 図だけを含む独立したページに</li>
+</ul>
 
-<p>ひとつの領域に複数の図を貼るには
-<a href="https://www.ctan.org/pkg/subfig">{subfig}</a>
-の <code>\subfloat[caption]{filename}</code> を用いる。</p>
+<p>ラベル <code>\label{}</code> は <code>\caption{}</code> 直後が良いらしく、
+スペースさえもchktex警告対象なので波カッコ前で改行するという苦肉の策。</p>
 
 <p>キャプションをカスタマイズするには
 <a href="https://www.ctan.org/pkg/caption">{caption}</a>
 の <code>\captionsetup{...}</code> を用いる。</p>
 
-<p>ラベル <code>\label{}</code> は <code>\caption{}</code> 直後が良いらしく、
-スペースさえもchktex警告対象なので波カッコ前で改行するという苦肉の策。</p>
+<p>ひとつの領域に複数の図を貼るには
+<a href="https://www.ctan.org/pkg/subfig">{subfig}</a>
+の <code>\subfloat[caption]{filename}</code> を用いる。</p>
 
-<p><code>\usepackage{epstopdf}</code> でEPSを取り込もうとすると(e.g., PLOS)、
+<p><a href="https://www.ctan.org/pkg/epstopdf">{epstopdf}</a>
+でEPSを取り込もうとすると(e.g., PLOS)、
 ファイルもパッケージも揃ってるはずなのに
 <code>! Package pdftex.def Error: File '*-eps-converted-to.pdf' not found.</code>
 というエラーが出る。
 変換プログラム本体である <code>ghostscript</code> をHomebrewか何かで入れる必要がある。</p>
+
+<p>GIFアニメをそのまま埋め込むことはできないので、
+<a href="https://www.ctan.org/pkg/animate">{animate}</a>で連番PNGを読み込む。</p>
+
+<pre><code class="language-tex">% sudo tlmgr install animate media9 ocgx2
+\usepackage[autoplay,final,controls=all,type=png]{animate}
+
+\begin{document}
+% \animategraphics[options]{frame rate}{file basename}{first}{last}
+\animategraphics[scale=0.5]{10}{dir/basename_}{1}{9}
+\end{document}
+</code></pre>
 
 <h3 id="表">表</h3>
 
@@ -557,29 +572,27 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 <p>XeTeX なら OS のフォントをフルネームで指定して使える</p>
 
 <pre><code class="language-tex">\usepackage{amsthm, amsmath} % must be called ahead of mathspec
-\usepackage[all, warning]{onlyamsmath}
+\usepackage[all,warning]{onlyamsmath}
 \ifxetex
-  \usepackage[libertine]{newtxmath}
-  \usepackage[scr=rsfso]{mathalfa}  % for \mathrm
-  \usepackage{bm}                   % for \mathbf
   \usepackage{mathspec} % must be called ahead of fontspec
   \usepackage[math-style=TeX,bold-style=TeX]{unicode-math}
   \usepackage[no-math]{fontspec}
-  \usepackage{libertine}
-  \usepackage{xeCJK}
-  \setCJKmainfont[Scale=0.9,BoldFont=Hiragino Mincho ProN W6]
-                                    {Hiragino Mincho ProN W3}
-  \setCJKsansfont[Scale=0.9,BoldFont=Hiragino Kaku Gothic ProN W6]
-                                    {Hiragino Kaku Gothic ProN W3}
-  \setCJKmonofont[Scale=0.9,BoldFont=Hiragino Kaku Gothic ProN W6]
-                                    {Hiragino Kaku Gothic ProN W3}
+  \setmainfont{TeXGyrePagellaX}
+  \setmathfont{texgyrepagella-math.otf}
+  % \usepackage{xeCJK}
+  % \setCJKmainfont[Scale=0.9,BoldFont=Hiragino Mincho ProN W6]
+  %                                   {Hiragino Mincho ProN W3}
+  % \setCJKsansfont[Scale=0.9,BoldFont=Hiragino Kaku Gothic ProN W6]
+  %                                   {Hiragino Kaku Gothic ProN W3}
+  % \setCJKmonofont[Scale=0.9,BoldFont=Hiragino Kaku Gothic ProN W6]
+  %                                   {Hiragino Kaku Gothic ProN W3}
 \else
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
-  \usepackage{libertine}
-  \usepackage[libertine]{newtxmath}
-  \usepackage[uplatex,deluxe,jis2004]{otf}
+  \usepackage{newpxtext}
+  \usepackage{newpxmath}
   \usepackage{textcomp}
+  % \usepackage[uplatex,deluxe,jis2004]{otf}
 \fi
 </code></pre>
 
