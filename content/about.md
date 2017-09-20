@@ -54,27 +54,29 @@ Bachelor of Science, 2008.03
 
 **Papers**
 
-- **Watal M. Iwasaki** and Hideki Innan. 2017.
-  Simulation Framework for Generating Intratumor Heterogeneity Patterns in a Cancer Cell Population.
-  [*PLOS ONE* 12(9): e0184229](https://doi.org/10.1371/journal.pone.0184229) (open access)
-- Satoshi Tamate\*, **Watal M. Iwasaki**\* (equally contributed), Kenneth L. Krysko, Brian Composano, Hideaki Mori, Ryo Funayama, Keiko Nakayama, Takashi Makino and Masakado Kawata. 2017.
+<!--
+- Yusuke Okamoto, **Watal M. Iwasaki**, Kazuto Kugou, Kazuki Takahashi, Arisa Oda, Koichi Sato, Wataru Kobayashi, Hidehiko Kawai, Ryo Sakasai, Akifumi Takaori-Kondo, Takashi Yamamoto, Masato T. Kanemaki, Masato Taoka, Toshiaki Isobe, Hitoshi Kurumizaka, Hideki Innan, Kunihiro Ohta, Masamichi Ishiai, Minoru Takata.
+  (*submitted*);
+  Replication stress induces R-loop-dependent accumulation of FANCD2 at large fragile genes.
+-->
+- Satoshi Tamate\*, **Watal M. Iwasaki**\* (equally contributed), Kenneth L. Krysko, Brian Composano, Hideaki Mori, Ryo Funayama, Keiko Nakayama, Takashi Makino and Masakado Kawata.
+  (*submitted*);
   The evolutionary responses of *Anolis carolinensis* introduced into Ogasawara archipelago during 50 years.
-  (*submitted*)
-- Takahiro Yamanoi and **Watal M. Iwasaki**. 2015.
+- **Watal M. Iwasaki** and Hideki Innan. (2017)
+  [*PLOS ONE* 12(9): e0184229](https://doi.org/10.1371/journal.pone.0184229);
+  Simulation Framework for Generating Intratumor Heterogeneity Patterns in a Cancer Cell Population.
+- Takahiro Yamanoi and **Watal M. Iwasaki**. (2015)
+  [*Evolution: Education and Outreach* **8**:14](https://dx.doi.org/10.1186/s12052-015-0043-6);
   Origami Bird Simulator: a teaching resource linking natural selection and speciation.
-  [*Evolution: Education and Outreach* **8**:14](https://dx.doi.org/10.1186/s12052-015-0043-6)
-  (open access)
-- Hajime Wakasa, Antonio Cádiz, Lázaro M. Echenique-Díaz, **Watal M. Iwasaki**, Namiko Kamiyama, Yuki Nishimura, Hitoshi Yokoyama, Koji Tamura, and Masakado Kawata. 2015.
+- Hajime Wakasa, Antonio Cádiz, Lázaro M. Echenique-Díaz, **Watal M. Iwasaki**, Namiko Kamiyama, Yuki Nishimura, Hitoshi Yokoyama, Koji Tamura, and Masakado Kawata. (2015)
+  [*J. Exp. Zool. B Mol. Dev. Evol.* **324** 5: 410--423](http://dx.doi.org/10.1002/jez.b.22627);
   Developmental stages for the divergence of relative limb length between a twig and a trunk-ground *Anolis* lizard species.
-  [*Journal of Experimental Zoology Part B: Molecular and Developmental Evolution* **324** 5: 410--423]
-  (http://dx.doi.org/10.1002/jez.b.22627)
-- Tezuka, A., S. Kasagi, C. van Oosterhout, M. McMullan, **W. M. Iwasaki**, D. Kasai, M. Yamamichi, H. Innan, S. Kawamura, and M. Kawata. 2014.
+- Tezuka, A., S. Kasagi, C. van Oosterhout, M. McMullan, **W. M. Iwasaki**, D. Kasai, M. Yamamichi, H. Innan, S. Kawamura, and M. Kawata. (2014)
+  [*Heredity* **113**: 381--389](https://dx.doi.org/10.1038/hdy.2014.35);
   Divergent selection on opsin gene variation in guppy (*Poecilia reticulata*) populations of Trinidad and Tobago.
-  [*Heredity* **113**: 381--389](https://dx.doi.org/10.1038/hdy.2014.35)
-- **Watal M. Iwasaki**, Masaki E. Tsuda, Masakado Kawata. 2013.
+- **Watal M. Iwasaki**, Masaki E. Tsuda, Masakado Kawata. (2013)
+  [*BMC Evol. Biol.* **13**:91](https://dx.doi.org/10.1186/1471-2148-13-91);
   Genetic and environmental factors affecting cryptic variations in gene regulatory networks.
-  [*BMC Evol. Biol.* **13**:91](https://dx.doi.org/10.1186/1471-2148-13-91)
-  (open access)
 
 **Book Chapters**
 
