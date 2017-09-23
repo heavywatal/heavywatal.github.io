@@ -16,10 +16,6 @@ tags = ["package"]
 
 ### すぐ入れるパッケージ
 
-[/linux/apt]({{< relref "linux/apt.md" >}})
-
-[/linux/centos]({{< relref "linux/centos.md" >}})
-
 `sudo apt-get install`:
 
     build-essential
