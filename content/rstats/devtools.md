@@ -324,6 +324,10 @@ increment = function(x) {x + 1}
     省略するとタイトルが流用される。
 -   空行だけでは切れ目として扱ってくれないので、
     データやパッケージのドキュメントを書く場合は `NULL` を入れる。
+-   dplyrなどで列名を直に指定すると
+    undefined global variables という警告が出るので、
+    どこかで `@importFrom rlang .data` した上で
+    `iris %>% dplyr::filter(.data$Species == 'setosa')` のようにする。
 
 ### タグ
 
@@ -333,7 +337,7 @@ increment = function(x) {x + 1}
 
 `@importFrom pkg func`
 :   `NAMESPACE` で `importFrom()` するパッケージを指定。
-    e.g., `@importFrom pipeR %>>%`
+    e.g., `@importFrom magrittr %>%`
 
 `@export`
 :   `NAMESPACE` で `export()` するパッケージを指定。
