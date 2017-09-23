@@ -406,6 +406,10 @@ increment = function(x) {x + 1}
 省略するとタイトルが流用される。</li>
 <li>空行だけでは切れ目として扱ってくれないので、
 データやパッケージのドキュメントを書く場合は <code>NULL</code> を入れる。</li>
+<li>dplyrなどで列名を直に指定すると
+undefined global variables という警告が出るので、
+どこかで <code>@importFrom rlang .data</code> した上で
+<code>iris %&gt;% dplyr::filter(.data$Species == 'setosa')</code> のようにする。</li>
 </ul>
 
 <h3 id="タグ">タグ</h3>
@@ -416,7 +420,7 @@ increment = function(x) {x + 1}
 名前の衝突が怖いので基本的に使わない。</dd>
 <dt><code>@importFrom pkg func</code></dt>
 <dd><code>NAMESPACE</code> で <code>importFrom()</code> するパッケージを指定。
-e.g., <code>@importFrom pipeR %&gt;&gt;%</code></dd>
+e.g., <code>@importFrom magrittr %&gt;%</code></dd>
 <dt><code>@export</code></dt>
 <dd><code>NAMESPACE</code> で <code>export()</code> するパッケージを指定。</dd>
 <dt><code>@param arg1 description...</code></dt>
