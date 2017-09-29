@@ -48,17 +48,6 @@ System Preferences > Keyboard > Modifier Keys...
 
 -   `~/Library/KeyBindings/DefaultKeyBinding.dict`
 
-### [Karabiner](https://pqrs.org/osx/karabiner/)
-
-旧KeyRemap4MacBook
-
--   Change <kbd>Delete</kbd> Key
-    - <kbd>Option+Delete</kbd> to Forward Delete
-      (あるいは、<kbd>Option_R</kbd> を <kbd>fn</kbd> にしてしまってもいいかも)
-
--   For Japanese
-    -   左右のコマンドキーを「英数/かな」としても使う
-
 
 ## ウムラウト、アクセント符号
 
