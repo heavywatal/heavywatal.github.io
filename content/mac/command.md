@@ -77,6 +77,9 @@ defaults write com.apple.finder QLEnableTextSelection -bool true
 
 # iTerm2のタブの横幅を広くする
 defaults write com.googlecode.iterm2 OptimumTabWidth -int 360
+
+# Launchpadの並び順をリセット
+defaults write com.apple.dock ResetLaunchPad -bool true; killall Dock
 ```
 
 [Onyx](http://www.titanium.free.fr) や
