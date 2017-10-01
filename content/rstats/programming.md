@@ -3,7 +3,7 @@ title = 'RプログラミングTips'
 tags = ["r"]
 [menu.main]
   parent = "rstats"
-  weight = -90
+  weight = -97
 +++
 
 ## [tidyverse](http://tidyverse.org/)
