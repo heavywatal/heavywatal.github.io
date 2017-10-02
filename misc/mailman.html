@@ -132,17 +132,16 @@ Command Line Tools をインストール</li>
 </code></pre></li>
 
 <li><p><code>/etc/apache2/extra/httpd_mailman.conf</code> を作る</p>
-
-<pre><code class="language-apache">ScriptAlias /mailman/ &quot;/usr/local/mailman/cgi-bin/&quot;
-Alias /pipermail/ &quot;/usr/local/mailman/archives/public/&quot;
-Alias /icons/ &quot;/usr/local/mailman/icons/&quot;
-&lt;Directory &quot;/usr/local/mailman/archives/public/&quot;&gt;
-    Options FollowSymLinks MultiViews Indexes
-    AllowOverride None
-    Order allow,deny
-    Allow from all
-&lt;/Directory&gt;
-</code></pre></li>
+<div class="highlight"><pre class="chroma"><code class="language-apache" data-lang="apache"><span class="nb">ScriptAlias</span><span class=""> </span><span class="sx">/mailman/</span><span class=""> </span><span class="s2">&#34;/usr/local/mailman/cgi-bin/&#34;</span><span class="">
+</span><span class=""></span><span class="nb">Alias</span><span class=""> </span><span class="sx">/pipermail/</span><span class=""> </span><span class="s2">&#34;/usr/local/mailman/archives/public/&#34;</span><span class="">
+</span><span class=""></span><span class="nb">Alias</span><span class=""> </span><span class="sx">/icons/</span><span class=""> </span><span class="s2">&#34;/usr/local/mailman/icons/&#34;</span><span class="">
+</span><span class=""></span><span class="nt">&lt;Directory</span><span class=""> </span><span class="s">&#34;/usr/local/mailman/archives/public/&#34;</span><span class="nt">&gt;</span><span class="">
+</span><span class="">    </span><span class="nb">Options</span><span class=""> FollowSymLinks MultiViews Indexes
+</span><span class="">    </span><span class="nb">AllowOverride</span><span class=""> </span><span class="k">None</span><span class="">
+</span><span class="">    </span><span class="nb">Order</span><span class=""> allow,deny
+</span><span class="">    </span><span class="nb">Allow</span><span class=""> from </span><span class="k">all</span><span class="">
+</span><span class=""></span><span class="nt">&lt;/Directory</span><span class=""></span><span class="s"></span><span class="nt">&gt;</span></code></pre>
+</div></li>
 
 <li><p><code>/Library/Server/Web/Config/apache2/httpd_server_app.conf</code> を編集する。
 550行目らへん、SSL/TLSのコメントのすぐ上あたりに下記の行を追加:</p>
@@ -201,34 +200,33 @@ Alias /icons/ &quot;/usr/local/mailman/icons/&quot;
 
 <li><p><code>/System/Library/LaunchDaemons/org.list.mailmanctl.plist</code>
 を作り、システム起動後に自動的に始まるようにする</p>
-
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;!DOCTYPE plist PUBLIC &quot;-//Apple Computer//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
-&lt;plist version=&quot;1.0&quot;&gt;
-&lt;dict&gt;
-    &lt;key&gt;Debug&lt;/key&gt;
-    &lt;true/&gt;
-    &lt;key&gt;Disabled&lt;/key&gt;
-    &lt;false/&gt;
-    &lt;key&gt;Label&lt;/key&gt;
-    &lt;string&gt;org.list.mailmanctl&lt;/string&gt;
-    &lt;key&gt;Program&lt;/key&gt;
-    &lt;string&gt;/usr/local/mailman/bin/mailmanctl&lt;/string&gt;
-    &lt;key&gt;ProgramArguments&lt;/key&gt;
-    &lt;array&gt;
-        &lt;string&gt;mailmanctl&lt;/string&gt;
-        &lt;string&gt;-s&lt;/string&gt;
-        &lt;string&gt;start&lt;/string&gt;
-    &lt;/array&gt;
-    &lt;key&gt;KeepAlive&lt;/key&gt;
-    &lt;false/&gt;
-    &lt;key&gt;RunAtLoad&lt;/key&gt;
-    &lt;true/&gt;
-    &lt;key&gt;AbandonProcessGroup&lt;/key&gt;
-    &lt;true/&gt;
-&lt;/dict&gt;
-&lt;/plist&gt;
-</code></pre></li>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span><span class="">
+</span><span class=""></span><span class="cp">&lt;!DOCTYPE plist PUBLIC &#34;-//Apple Computer//DTD PLIST 1.0//EN&#34; &#34;http://www.apple.com/DTDs/PropertyList-1.0.dtd&#34;&gt;</span><span class="">
+</span><span class=""></span><span class="nt">&lt;plist</span><span class=""> </span><span class="na">version=</span><span class="s">&#34;1.0&#34;</span><span class="nt">&gt;</span><span class="">
+</span><span class=""></span><span class="nt">&lt;dict&gt;</span><span class="">
+</span><span class="">    </span><span class="nt">&lt;key&gt;</span><span class="">Debug</span><span class="nt">&lt;/key&gt;</span><span class="">
+</span><span class="">    </span><span class="nt">&lt;true/&gt;</span><span class="">
+</span><span class="">    </span><span class="nt">&lt;key&gt;</span><span class="">Disabled</span><span class="nt">&lt;/key&gt;</span><span class="">
+</span><span class="">    </span><span class="nt">&lt;false/&gt;</span><span class="">
+</span><span class="">    </span><span class="nt">&lt;key&gt;</span><span class="">Label</span><span class="nt">&lt;/key&gt;</span><span class="">
+</span><span class="">    </span><span class="nt">&lt;string&gt;</span><span class="">org.list.mailmanctl</span><span class="nt">&lt;/string&gt;</span><span class="">
+</span><span class="">    </span><span class="nt">&lt;key&gt;</span><span class="">Program</span><span class="nt">&lt;/key&gt;</span><span class="">
+</span><span class="">    </span><span class="nt">&lt;string&gt;</span><span class="">/usr/local/mailman/bin/mailmanctl</span><span class="nt">&lt;/string&gt;</span><span class="">
+</span><span class="">    </span><span class="nt">&lt;key&gt;</span><span class="">ProgramArguments</span><span class="nt">&lt;/key&gt;</span><span class="">
+</span><span class="">    </span><span class="nt">&lt;array&gt;</span><span class="">
+</span><span class="">        </span><span class="nt">&lt;string&gt;</span><span class="">mailmanctl</span><span class="nt">&lt;/string&gt;</span><span class="">
+</span><span class="">        </span><span class="nt">&lt;string&gt;</span><span class="">-s</span><span class="nt">&lt;/string&gt;</span><span class="">
+</span><span class="">        </span><span class="nt">&lt;string&gt;</span><span class="">start</span><span class="nt">&lt;/string&gt;</span><span class="">
+</span><span class="">    </span><span class="nt">&lt;/array&gt;</span><span class="">
+</span><span class="">    </span><span class="nt">&lt;key&gt;</span><span class="">KeepAlive</span><span class="nt">&lt;/key&gt;</span><span class="">
+</span><span class="">    </span><span class="nt">&lt;false/&gt;</span><span class="">
+</span><span class="">    </span><span class="nt">&lt;key&gt;</span><span class="">RunAtLoad</span><span class="nt">&lt;/key&gt;</span><span class="">
+</span><span class="">    </span><span class="nt">&lt;true/&gt;</span><span class="">
+</span><span class="">    </span><span class="nt">&lt;key&gt;</span><span class="">AbandonProcessGroup</span><span class="nt">&lt;/key&gt;</span><span class="">
+</span><span class="">    </span><span class="nt">&lt;true/&gt;</span><span class="">
+</span><span class=""></span><span class="nt">&lt;/dict&gt;</span><span class="">
+</span><span class=""></span><span class="nt">&lt;/plist&gt;</span></code></pre>
+</div></li>
 
 <li><p>リストを引き継ぐには <code>mailman/</code> ディレクトリの
 <code>lists/</code> と <code>archives/</code> をコピーすれば良い。
@@ -397,11 +395,6 @@ Alias /icons/ &quot;/usr/local/mailman/icons/&quot;
 </nav>
 
 <footer>(ɔ) 2008 岩嵜航 Watal M. Iwasaki</footer>
-<script src="/js/highlight.pack.js"></script>
-<script>
-hljs.initHighlightingOnLoad();
-</script>
-
 </body>
 </html>
 

@@ -92,64 +92,58 @@ make
 
 <p>C++ソースコードと同じディレクトリに入れるだけでいきなり使える
 <code>Makefile</code> の例。</p>
-
-<pre><code class="language-makefile">## Options
-
-PROGRAM := a.out
-CXX := clang++
-CC := clang
-CXXFLAGS := -Wall -Wextra -O3 -std=c++14
-CPPFLAGS := -I/usr/local/include -I${HOME}/local/include
-LDFLAGS := -L/usr/local/lib -L${HOME}/local/lib
-#LDLIBS := -lboost_program_options
-TARGET_ARCH := -m64 -msse -msse2 -msse3 -mfpmath=sse
-
-## Dependencies
-
-SRCS := $(wildcard *.cpp)
-OBJS := $(SRCS:.cpp=.o)
-
--include Dependfile
-Dependfile:
-        ${CXX} -MM ${CPPFLAGS} ${CXXFLAGS} ${TARGET_ARCH} ${SRCS} &gt; Dependfile
-
-## Targets
-
-.DEFAULT_GOAL := all
-.PHONY: all clean
-
-all: ${PROGRAM}
-        @:
-
-${PROGRAM}: ${OBJS}
-        ${LINK.cpp} ${OUTPUT_OPTION} $^ ${LDLIBS}
-
-clean:
-        ${RM} ${OBJS} ${PROGRAM}
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-makefile" data-lang="makefile"><span class="c">## Options
+</span><span class="c"></span><span class="">
+</span><span class=""></span><span class="nv">PROGRAM</span><span class=""> </span><span class="o">:=</span><span class=""> a.out
+</span><span class=""></span><span class="nv">CXX</span><span class=""> </span><span class="o">:=</span><span class=""> clang++
+</span><span class=""></span><span class="nv">CC</span><span class=""> </span><span class="o">:=</span><span class=""> clang
+</span><span class=""></span><span class="nv">CXXFLAGS</span><span class=""> </span><span class="o">:=</span><span class=""> -Wall -Wextra -O3 -std</span><span class="o">=</span><span class="">c++14
+</span><span class=""></span><span class="nv">CPPFLAGS</span><span class=""> </span><span class="o">:=</span><span class=""> -I/usr/local/include -I</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="">/local/include
+</span><span class=""></span><span class="nv">LDFLAGS</span><span class=""> </span><span class="o">:=</span><span class=""> -L/usr/local/lib -L</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="">/local/lib
+</span><span class=""></span><span class="c">#LDLIBS := -lboost_program_options
+</span><span class="c"></span><span class="nv">TARGET_ARCH</span><span class=""> </span><span class="o">:=</span><span class=""> -m64 -msse -msse2 -msse3 -mfpmath</span><span class="o">=</span><span class="">sse
+</span><span class="">
+</span><span class=""></span><span class="c">## Dependencies
+</span><span class="c"></span><span class="">
+</span><span class=""></span><span class="nv">SRCS</span><span class=""> </span><span class="o">:=</span><span class=""> </span><span class="k">$(</span><span class="">wildcard *.cpp</span><span class="k">)</span><span class="">
+</span><span class=""></span><span class="nv">OBJS</span><span class=""> </span><span class="o">:=</span><span class=""> </span><span class="k">$(</span><span class="">SRCS:.cpp</span><span class="o">=</span><span class="">.o</span><span class="k">)</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="err">-include</span><span class=""> Dependfile
+</span><span class=""></span><span class="nf">Dependfile</span><span class="o">:</span><span class="">
+</span><span class="">        </span><span class="si">${</span><span class="nv">CXX</span><span class="si">}</span><span class=""> -MM </span><span class="si">${</span><span class="nv">CPPFLAGS</span><span class="si">}</span><span class=""> </span><span class="si">${</span><span class="nv">CXXFLAGS</span><span class="si">}</span><span class=""> </span><span class="si">${</span><span class="nv">TARGET_ARCH</span><span class="si">}</span><span class=""> </span><span class="si">${</span><span class="nv">SRCS</span><span class="si">}</span><span class=""> &gt; Dependfile
+</span><span class="">
+</span><span class=""></span><span class="c">## Targets
+</span><span class="c"></span><span class="">
+</span><span class=""></span><span class="nv">.DEFAULT_GOAL</span><span class=""> </span><span class="o">:=</span><span class=""> all
+</span><span class=""></span><span class="nf">.PHONY</span><span class="o">:</span><span class=""> </span><span class="n">all</span><span class=""> </span><span class="n">clean</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="nf">all</span><span class="o">:</span><span class=""> ${</span><span class="n">PROGRAM</span><span class="">}
+</span><span class="">        @:
+</span><span class="">
+</span><span class=""></span><span class="nf">${PROGRAM}</span><span class="o">:</span><span class=""> ${</span><span class="n">OBJS</span><span class="">}
+</span><span class="">        </span><span class="si">${</span><span class="nv">LINK</span><span class="p">.cpp</span><span class="si">}</span><span class=""> </span><span class="si">${</span><span class="nv">OUTPUT_OPTION</span><span class="si">}</span><span class=""> $^ </span><span class="si">${</span><span class="nv">LDLIBS</span><span class="si">}</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="nf">clean</span><span class="o">:</span><span class="">
+</span><span class="">        </span><span class="err">${RM}</span><span class=""> </span><span class="err">${OBJS}</span><span class=""> </span><span class="err">${PROGRAM}</span></code></pre>
+</div>
 <h3 id="rule-https-www-gnu-org-software-make-manual-make-html-rules"><a href="https://www.gnu.org/software/make/manual/make.html#Rules">Rule</a></h3>
 
 <p>コロンとタブを使って以下のような形式でルールを書くのが基本。
 この<code>Makefile</code>があるところでターミナルから <code>make TARGET</code> と打つと、
 ターゲットよりもソースファイルが新しい場合にコマンドが実行される。</p>
-
-<pre><code class="language-make">TARGET : SOURCE1 SOURCE2
-        COMMAND
-
-a.out : main.cpp sub.cpp
-        g++ -O2 main.cpp sub.cpp
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-make" data-lang="make"><span class="nf">TARGET </span><span class="o">:</span><span class=""> </span><span class="n">SOURCE</span><span class="">1 </span><span class="n">SOURCE</span><span class="">2
+</span><span class="">        COMMAND
+</span><span class="">
+</span><span class=""></span><span class="nf">a.out </span><span class="o">:</span><span class=""> </span><span class="n">main</span><span class="">.</span><span class="n">cpp</span><span class=""> </span><span class="n">sub</span><span class="">.</span><span class="n">cpp</span><span class="">
+</span><span class="">        </span><span class="err">g++</span><span class=""> </span><span class="err">-O2</span><span class=""> </span><span class="err">main.cpp</span><span class=""> </span><span class="err">sub.cpp</span></code></pre>
+</div>
 <p>下記のようなパターンルールが予め定義されている。
 (see <a href="https://www.gnu.org/software/make/manual/make.html#Pattern-Rules">Pattern Rule</a>)</p>
-
-<pre><code class="language-make">%.o : %.c
-        $(CC) $(CPPFLAGS) $(CFLAGS) -c $&lt; -o $@
-%.o : %.cpp
-        $(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $&lt; -o $@
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-make" data-lang="make"><span class="nf">%.o </span><span class="o">:</span><span class=""> %.</span><span class="n">c</span><span class="">
+</span><span class="">        </span><span class="k">$(</span><span class="">CC</span><span class="k">)</span><span class=""> </span><span class="k">$(</span><span class="">CPPFLAGS</span><span class="k">)</span><span class=""> </span><span class="k">$(</span><span class="">CFLAGS</span><span class="k">)</span><span class=""> -c $&lt; -o </span><span class="nv">$@</span><span class="">
+</span><span class=""></span><span class="nf">%.o </span><span class="o">:</span><span class=""> %.</span><span class="n">cpp</span><span class="">
+</span><span class="">        </span><span class="k">$(</span><span class="nv">CXX</span><span class="k">)</span><span class=""> </span><span class="k">$(</span><span class="nv">CPPFLAGS</span><span class="k">)</span><span class=""> </span><span class="k">$(</span><span class="nv">CXXFLAGS</span><span class="k">)</span><span class=""> </span><span class="err">-c</span><span class=""> </span><span class="k">$&lt;</span><span class=""> </span><span class="err">-o</span><span class=""> </span><span class="k">$@</span></code></pre>
+</div>
 <p>以下に紹介するように、ほかにも様々な変数や関数が用意されていて、
 個別のファイル名などをいちいち入力しなくても済むようになっている。</p>
 
@@ -244,11 +238,9 @@ e.g., <code>-march=native -m64 -msse -msse2 -msse3 -mfpmath=sse</code></dd>
 <dt><code>_</code></dt>
 <dd>v3.81以降であれば <code>.DEFAULT_GOAL</code> が効くので <code>make all</code> と同じ</dd>
 </dl>
-
-<pre><code class="language-sh">% make clean
-% make
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% make clean
+</span><span class="">% make</span></code></pre>
+</div>
 <h2 id="options-https-www-gnu-org-software-make-manual-make-html-options-summary"><a href="https://www.gnu.org/software/make/manual/make.html#Options-Summary">Options</a></h2>
 
 <dl>
@@ -410,11 +402,6 @@ e.g., <code>-march=native -m64 -msse -msse2 -msse3 -mfpmath=sse</code></dd>
 </nav>
 
 <footer>(ɔ) 2008 岩嵜航 Watal M. Iwasaki</footer>
-<script src="/js/highlight.pack.js"></script>
-<script>
-hljs.initHighlightingOnLoad();
-</script>
-
 </body>
 </html>
 

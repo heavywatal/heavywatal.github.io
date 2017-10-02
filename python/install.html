@@ -94,29 +94,23 @@ Pythonインストール
 <p>管理者権限なしでホーム以下にインストールするには
 <a href="https://github.com/pyenv/pyenv">pyenv</a>
 が便利。</p>
-
-<pre><code class="language-sh">% brew install pyenv
-% exec $SHELL -l
-% pyenv install -l | less
-% pyenv install 3.6.2
-% pyenv global 3.6.2
-% eval &quot;$(pyenv init -)&quot;
-% python --version
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% brew install pyenv
+</span><span class="">% </span><span class="nb">exec</span><span class=""> </span><span class="nv">$SHELL</span><span class=""> -l
+</span><span class="">% pyenv install -l </span><span class="p">|</span><span class=""> less
+</span><span class="">% pyenv install </span><span class="m">3</span><span class="">.6.2
+</span><span class="">% pyenv global </span><span class="m">3</span><span class="">.6.2
+</span><span class="">% </span><span class="nb">eval</span><span class=""> </span><span class="s2">&#34;</span><span class="k">$(</span><span class="">pyenv init -</span><span class="k">)</span><span class="s2">&#34;</span><span class="">
+</span><span class="">% python --version</span></code></pre>
+</div>
 <p><code>eval &quot;$(pyenv init -)&quot;</code> をシェル起動時に自動で行うために、
 <code>~/.zshrc</code> 的なファイルに下のようなコマンドを追加しておく。</p>
-
-<pre><code class="language-sh">if which pyenv &gt;/dev/null; then eval &quot;$(pyenv init -)&quot;; fi
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="k">if</span><span class=""> which pyenv &gt;/dev/null</span><span class="p">;</span><span class=""> </span><span class="k">then</span><span class=""> </span><span class="nb">eval</span><span class=""> </span><span class="s2">&#34;</span><span class="k">$(</span><span class="">pyenv init -</span><span class="k">)</span><span class="s2">&#34;</span><span class="p">;</span><span class=""> </span><span class="k">fi</span><span class=""></span></code></pre>
+</div>
 <p>あとは <a href="/python/pip.html">pip</a> でパッケージを入れる。</p>
-
-<pre><code class="language-sh">% pip install -U setuptools
-% pip install -U seaborn biopython
-% pip install -U flake8 psutil
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% pip install -U setuptools
+</span><span class="">% pip install -U seaborn biopython
+</span><span class="">% pip install -U flake8 psutil</span></code></pre>
+</div>
 <h2 id="anaconda">Anaconda</h2>
 
 <p>Scientificな用途で使いたい場合は
@@ -125,11 +119,9 @@ Pythonインストール
 <a href="https://docs.continuum.io/anaconda/">Anaconda</a>
 で最新版を入れるという選択肢もある。
 GUIのインストーラでもいいし、Homebrewでもいける:</p>
-
-<pre><code class="language-sh">% brew cask install anaconda
-% export PATH=/usr/local/anaconda3/bin:&quot;$PATH&quot;
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% brew cask install anaconda
+</span><span class="">% </span><span class="nb">export</span><span class=""> </span><span class="nv">PATH</span><span class=""></span><span class="o">=</span><span class="">/usr/local/anaconda3/bin:</span><span class="s2">&#34;</span><span class="nv">$PATH</span><span class="s2">&#34;</span></code></pre>
+</div>
 <p>ただし<code>PATH</code>上でシステムコマンド(<code>curl</code>など)を上書きしちゃうヤンチャな面もあるので、
 それが気になる人はpyenv越しに入れることで汚染を防げる。
 全部入りに抵抗がある場合は
@@ -145,20 +137,15 @@ GUIのインストーラでもいいし、Homebrewでもいける:</p>
 <li><p>必要なパッケージをインストールしておく:</p>
 
 <p>Ubuntuなら</p>
-
-<pre><code class="language-sh">% sudo apt-get install build-essential libreadline6-dev libsqlite3-dev libgdbm-dev zlib1g-dev libbz2-dev liblzma-dev
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% sudo apt-get install build-essential libreadline6-dev libsqlite3-dev libgdbm-dev zlib1g-dev libbz2-dev liblzma-dev</span></code></pre>
+</div>
 <p>CentOSなら</p>
-
-<pre><code class="language-sh">% sudo yum groupinstall &quot;Development Tools&quot;
-% sudo yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel gdbm-devel xz-devel
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% sudo yum groupinstall </span><span class="s2">&#34;Development Tools&#34;</span><span class="">
+</span><span class="">% sudo yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel gdbm-devel xz-devel</span></code></pre>
+</div>
 <p>Macなら</p>
-
-<pre><code class="language-sh">% brew install gdbm libressl readline sqlite xz
-</code></pre></li>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% brew install gdbm libressl readline sqlite xz</span></code></pre>
+</div></li>
 
 <li><p>ダウンロードして展開:</p>
 
@@ -166,13 +153,11 @@ GUIのインストーラでもいいし、Homebrewでもいける:</p>
 </code></pre></li>
 
 <li><p>configure してビルド:</p>
-
-<pre><code class="language-sh">% cd Python-3.5.3/
-% ./configure --help
-% ./configure --prefix=${HOME}/Python
-% make
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% </span><span class="nb">cd</span><span class=""> Python-3.5.3/
+</span><span class="">% ./configure --help
+</span><span class="">% ./configure --prefix</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="">/Python
+</span><span class="">% make</span></code></pre>
+</div>
 <div class="note">
 <p>モジュールをビルドするのに必要なヘッダファイルが見つからなかったとかで
 警告メッセージが表示されるが、だいたい問題ない。
@@ -184,11 +169,9 @@ GUIのインストーラでもいいし、Homebrewでもいける:</p>
 を付けてビルドしておかないと使えないモジュールが出てくるので注意。
 Homebrewで入れたライブラリを利用する場合は明示的に位置指定が必要。
 (特に readline, sqlite, openssl/libressl は keg-only なので注意):</p>
-
-<pre><code class="language-sh">DST=${HOME}/Python
-./configure --enable-framework=${DST} --prefix=${DST} CPPFLAGS=&quot;-I$(brew --prefix)/include -I$(brew --prefix)/opt/readline/include -I$(brew --prefix)/opt/sqlite/include -I$(brew --prefix)/opt/libressl/include&quot; LDFLAGS=&quot;-L$(brew --prefix)/lib -L$(brew --prefix)/opt/readline/lib -L$(brew --prefix)/opt/sqlite/lib -L$(brew --prefix)/opt/libressl/lib&quot;
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">DST</span><span class=""></span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="">/Python
+</span><span class="">./configure --enable-framework</span><span class="o">=</span><span class="si">${</span><span class="nv">DST</span><span class="si">}</span><span class=""> --prefix</span><span class="o">=</span><span class="si">${</span><span class="nv">DST</span><span class="si">}</span><span class=""> </span><span class="nv">CPPFLAGS</span><span class=""></span><span class="o">=</span><span class="s2">&#34;-I</span><span class="k">$(</span><span class="">brew --prefix</span><span class="k">)</span><span class="s2">/include -I</span><span class="k">$(</span><span class="">brew --prefix</span><span class="k">)</span><span class="s2">/opt/readline/include -I</span><span class="k">$(</span><span class="">brew --prefix</span><span class="k">)</span><span class="s2">/opt/sqlite/include -I</span><span class="k">$(</span><span class="">brew --prefix</span><span class="k">)</span><span class="s2">/opt/libressl/include&#34;</span><span class=""> </span><span class="nv">LDFLAGS</span><span class=""></span><span class="o">=</span><span class="s2">&#34;-L</span><span class="k">$(</span><span class="">brew --prefix</span><span class="k">)</span><span class="s2">/lib -L</span><span class="k">$(</span><span class="">brew --prefix</span><span class="k">)</span><span class="s2">/opt/readline/lib -L</span><span class="k">$(</span><span class="">brew --prefix</span><span class="k">)</span><span class="s2">/opt/sqlite/lib -L</span><span class="k">$(</span><span class="">brew --prefix</span><span class="k">)</span><span class="s2">/opt/libressl/lib&#34;</span></code></pre>
+</div>
 </div>
 
 
@@ -242,19 +225,17 @@ MacのFramework buildでは <code>${HOME}/Library/Python/2.7</code> とかにな
 <p>インタラクティブモードで起動するときに読み込むファイルを指定できる。
 例えば以下のようなものを書いておくと、
 3.4未満の古いPythonでも <code>tab</code> とか <code>^i</code> で補完できるようになる:</p>
-
-<pre><code class="language-py">import sys
-
-if sys.version_info &lt; (3, 4):
-    import rlcompleter
-    import readline
-    if 'libedit' in readline.__doc__:
-        readline.parse_and_bind(&quot;bind ^I rl_complete&quot;)
-    else:
-        readline.parse_and_bind(&quot;tab: complete&quot;)
-    del readline, rlcompleter
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="kn">import</span><span class=""> </span><span class="nn">sys</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="k">if</span><span class=""> </span><span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class=""> </span><span class="o">&lt;</span><span class=""> </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class=""> </span><span class="mi">4</span><span class="p">):</span><span class="">
+</span><span class="">    </span><span class="kn">import</span><span class=""> </span><span class="nn">rlcompleter</span><span class="">
+</span><span class="">    </span><span class="kn">import</span><span class=""> </span><span class="nn">readline</span><span class="">
+</span><span class="">    </span><span class="k">if</span><span class=""> </span><span class="sa"></span><span class="s1">&#39;libedit&#39;</span><span class=""> </span><span class="ow">in</span><span class=""> </span><span class="n">readline</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">:</span><span class="">
+</span><span class="">        </span><span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;bind ^I rl_complete&#34;</span><span class="p">)</span><span class="">
+</span><span class="">    </span><span class="k">else</span><span class="p">:</span><span class="">
+</span><span class="">        </span><span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;tab: complete&#34;</span><span class="p">)</span><span class="">
+</span><span class="">    </span><span class="k">del</span><span class=""> </span><span class="n">readline</span><span class="p">,</span><span class=""> </span><span class="n">rlcompleter</span></code></pre>
+</div>
 <p>対話モードをさらに便利にするには <a href="/python/ipython.html">IPython</a> を使う。</p>
 
 <h2 id="関連書籍">関連書籍</h2>
@@ -410,11 +391,6 @@ if sys.version_info &lt; (3, 4):
 </nav>
 
 <footer>(ɔ) 2008 岩嵜航 Watal M. Iwasaki</footer>
-<script src="/js/highlight.pack.js"></script>
-<script>
-hljs.initHighlightingOnLoad();
-</script>
-
 </body>
 </html>
 

@@ -104,10 +104,8 @@ gcc や clang の最適化技術も着々と進歩しており、
 <h3 id="最適化オプション">最適化オプション</h3>
 
 <p><a href="https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html">https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html</a></p>
-
-<pre><code class="language-sh">% g++ -O3 main.cpp
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% g++ -O3 main.cpp</span></code></pre>
+</div>
 <h3 id="コンパイル時定数-constexpr">コンパイル時定数 <code>constexpr</code></h3>
 
 <p>コンパイル時に計算できるものを予め計算して定数にしておくことで、
@@ -116,15 +114,13 @@ C++11では明示的に <code>constexpr</code> 修飾することができるの
 テンプレートメタプログラミングという手もある。
 C++11を使えない場合でも、
 定数同士の四則演算などはまとめておけばコンパイラが計算してくれるはず。</p>
-
-<pre><code class="language-c++">// 掛け算も割り算も毎回計算
-return 4.0 * M_PI * std::pow(radius, 3) / 3.0;
-
-// コンパイル時定数を掛けるだけ
-constexpr double c = 4.0 * M_PI / 3.0;
-return c * std::pow(radius, 3);
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// 掛け算も割り算も毎回計算
+</span><span class="c1"></span><span class="k">return</span><span class=""> </span><span class="mf">4.0</span><span class=""> </span><span class="o">*</span><span class=""> </span><span class="n">M_PI</span><span class=""> </span><span class="o">*</span><span class=""> </span><span class="n">std</span><span class="o">::</span><span class="n">pow</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">)</span><span class=""> </span><span class="o">/</span><span class=""> </span><span class="mf">3.0</span><span class="p">;</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="c1">// コンパイル時定数を掛けるだけ
+</span><span class="c1"></span><span class="k">constexpr</span><span class=""> </span><span class="kt">double</span><span class=""> </span><span class="n">c</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mf">4.0</span><span class=""> </span><span class="o">*</span><span class=""> </span><span class="n">M_PI</span><span class=""> </span><span class="o">/</span><span class=""> </span><span class="mf">3.0</span><span class="p">;</span><span class="">
+</span><span class=""></span><span class="k">return</span><span class=""> </span><span class="n">c</span><span class=""> </span><span class="o">*</span><span class=""> </span><span class="n">std</span><span class="o">::</span><span class="n">pow</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">);</span></code></pre>
+</div>
 <p>また、四則演算の中でも割り算は特に遅いらしいので、
 逆数のかけ算になるような書き方のほうが高速になるかもしれない。</p>
 
@@ -144,12 +140,10 @@ return c * std::pow(radius, 3);
 <p><code>-O2</code> では <code>-finline-small-functions</code> がオンになり、
 <code>-O3</code> では <code>-finline-functions</code> がオンになる。
 実行ファイルのサイズがデカくなるし、コンパイルは遅くなるので、バランスを考える。</p>
-
-<pre><code class="language-c++">inline int pow2(int x) {
-    return x *= x;
-}
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="kr">inline</span><span class=""> </span><span class="kt">int</span><span class=""> </span><span class="nf">pow2</span><span class="p">(</span><span class="kt">int</span><span class=""> </span><span class="n">x</span><span class="p">)</span><span class=""> </span><span class="p">{</span><span class="">
+</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="n">x</span><span class=""> </span><span class="o">*=</span><span class=""> </span><span class="n">x</span><span class="p">;</span><span class="">
+</span><span class=""></span><span class="p">}</span></code></pre>
+</div>
 <h3 id="関数オブジェクト">関数オブジェクト</h3>
 
 <p>関数オブジェクトとは、<code>operator()</code> を定義した <code>class</code> または <code>struct</code> のこと。
@@ -159,27 +153,23 @@ return c * std::pow(radius, 3);
 インライン展開などコンパイラによる最適化がしやすいらしい。
 あと、メンバ変数として値を保持できるので、
 引数のやり取りやメモリの確保・開放が少なくてすむという場面もありそう。</p>
-
-<pre><code class="language-c++">class isAboveThreshold {
-  public:
-    isAboveThreshold(const double t): threshold_(t);
-    bool operator()(const double x) const {
-        return x &gt; threshold_;
-    }
-  private:
-    const double threshold_;
-};
-
-std::transform(v.begin(), v.end(), result.begin(), isAboveThreshold(3.14));
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">class</span><span class=""> </span><span class="nc">isAboveThreshold</span><span class=""> </span><span class="p">{</span><span class="">
+</span><span class="">  </span><span class="k">public</span><span class="o">:</span><span class="">
+</span><span class="">    </span><span class="n">isAboveThreshold</span><span class="p">(</span><span class="k">const</span><span class=""> </span><span class="kt">double</span><span class=""> </span><span class="n">t</span><span class="p">)</span><span class="o">:</span><span class=""> </span><span class="n">threshold_</span><span class="p">(</span><span class="n">t</span><span class="p">);</span><span class="">
+</span><span class="">    </span><span class="kt">bool</span><span class=""> </span><span class="nf">operator</span><span class="p">()(</span><span class="k">const</span><span class=""> </span><span class="kt">double</span><span class=""> </span><span class="n">x</span><span class="p">)</span><span class=""> </span><span class="k">const</span><span class=""> </span><span class="p">{</span><span class="">
+</span><span class="">        </span><span class="k">return</span><span class=""> </span><span class="n">x</span><span class=""> </span><span class="o">&gt;</span><span class=""> </span><span class="n">threshold_</span><span class="p">;</span><span class="">
+</span><span class="">    </span><span class="p">}</span><span class="">
+</span><span class="">  </span><span class="k">private</span><span class="o">:</span><span class="">
+</span><span class="">    </span><span class="k">const</span><span class=""> </span><span class="kt">double</span><span class=""> </span><span class="n">threshold_</span><span class="p">;</span><span class="">
+</span><span class=""></span><span class="p">};</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="n">std</span><span class="o">::</span><span class="n">transform</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class=""> </span><span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span><span class=""> </span><span class="n">result</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class=""> </span><span class="n">isAboveThreshold</span><span class="p">(</span><span class="mf">3.14</span><span class="p">));</span></code></pre>
+</div>
 <p>C++11からはラムダ式が便利</p>
-
-<pre><code class="language-c++">const double threshold = 3.14;
-std::transform(v.begin(), v.end(), result.begin(),
-               [threshold](double x) -&gt; bool {return x &gt; threshold;});
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">const</span><span class=""> </span><span class="kt">double</span><span class=""> </span><span class="n">threshold</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mf">3.14</span><span class="p">;</span><span class="">
+</span><span class=""></span><span class="n">std</span><span class="o">::</span><span class="n">transform</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class=""> </span><span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span><span class=""> </span><span class="n">result</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="">
+</span><span class="">               </span><span class="p">[</span><span class="n">threshold</span><span class="p">](</span><span class="kt">double</span><span class=""> </span><span class="n">x</span><span class="p">)</span><span class=""> </span><span class="o">-&gt;</span><span class=""> </span><span class="kt">bool</span><span class=""> </span><span class="p">{</span><span class="k">return</span><span class=""> </span><span class="n">x</span><span class=""> </span><span class="o">&gt;</span><span class=""> </span><span class="n">threshold</span><span class="p">;});</span></code></pre>
+</div>
 <h2 id="余計な一時オブジェクトを作らない">余計な一時オブジェクトを作らない</h2>
 
 <p>普通にプログラムを書くと、思わぬところで余計な一時オブジェクトが作られることになる。
@@ -194,40 +184,34 @@ std::transform(v.begin(), v.end(), result.begin(),
 <p>参照渡しされた仮引数の中身を関数内で変更すると、
 呼び出し元の実引数の値も変更されることになる。
 変更するつもりがない場合は明示的に <code>const</code> をつけて受け取るようにすると安全</p>
-
-<pre><code class="language-c++">void do_something(const std::vector&lt;int&gt;&amp; huge_array) {
-    // コピーせず本体への参照のみ受け取る。
-    // constがついているので、変更しようとするとコンパイルエラー
-}
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="kt">void</span><span class=""> </span><span class="nf">do_something</span><span class="p">(</span><span class="k">const</span><span class=""> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span><span class=""> </span><span class="n">huge_array</span><span class="p">)</span><span class=""> </span><span class="p">{</span><span class="">
+</span><span class="">    </span><span class="c1">// コピーせず本体への参照のみ受け取る。
+</span><span class="c1"></span><span class="">    </span><span class="c1">// constがついているので、変更しようとするとコンパイルエラー
+</span><span class="c1"></span><span class="p">}</span></code></pre>
+</div>
 <p>引数の中身を変更するつもりがある場合はポインタを受け取るようにすると、
 呼び出すときに <code>&amp;</code> が必要となるので意図が伝わりやすい。</p>
-
-<pre><code class="language-c++">void do_something(std::vector&lt;int&gt;* huge_array) {
-    // コピーせずポインタを受け取る。
-    // huge_arrayの変更は呼び出し元にも影響する。
-}
-
-do_something(&amp;some_array);  // ああ、この配列は変更されるんだな
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="kt">void</span><span class=""> </span><span class="nf">do_something</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;*</span><span class=""> </span><span class="n">huge_array</span><span class="p">)</span><span class=""> </span><span class="p">{</span><span class="">
+</span><span class="">    </span><span class="c1">// コピーせずポインタを受け取る。
+</span><span class="c1"></span><span class="">    </span><span class="c1">// huge_arrayの変更は呼び出し元にも影響する。
+</span><span class="c1"></span><span class="p">}</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="n">do_something</span><span class="p">(</span><span class="o">&amp;</span><span class="n">some_array</span><span class="p">);</span><span class="">  </span><span class="o">//</span><span class=""> </span><span class="err">ああ、この配列は変更されるんだな</span></code></pre>
+</div>
 <h3 id="ムーブセマンティクス-c-11">ムーブセマンティクス (C++11)</h3>
 
 <p>コピーせずにポインタを入れ替えることで値を変化させる、
 という渡し方を簡単に書けるようになった。
 渡した側の状態は不定(あるいは<code>nullptr</code>)になる。</p>
-
-<pre><code class="language-c++">std::string s1 = &quot;alpha&quot;;
-std::string s2 = &quot;beta&quot;;
-s2 = std::move(s1);
-// s2: &quot;alpha&quot;
-// s1:  ?????
-s1.size()    // OK: 値は不定だが変数としては生きてる
-s1 = &quot;gamma&quot; // OK: 再代入可能
-// いずれにせよデストラクタは変数の寿命に伴って呼び出される。
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class=""> </span><span class="n">s1</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="sa"></span><span class="s">&#34;alpha&#34;</span><span class="p">;</span><span class="">
+</span><span class=""></span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class=""> </span><span class="n">s2</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="sa"></span><span class="s">&#34;beta&#34;</span><span class="p">;</span><span class="">
+</span><span class=""></span><span class="n">s2</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">s1</span><span class="p">);</span><span class="">
+</span><span class=""></span><span class="c1">// s2: &#34;alpha&#34;
+</span><span class="c1">// s1:  ?????
+</span><span class="c1"></span><span class="n">s1</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="">    </span><span class="c1">// OK: 値は不定だが変数としては生きてる
+</span><span class="c1"></span><span class="n">s1</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="sa"></span><span class="s">&#34;gamma&#34;</span><span class=""> </span><span class="c1">// OK: 再代入可能
+</span><span class="c1"></span><span class="o">//</span><span class=""> </span><span class="err">いずれにせよデストラクタは変数の寿命に伴って呼び出される。</span></code></pre>
+</div>
 <p>関数から値を返すときにムーブ返ししたくなるところだが、
 多くの場合コンパイラがうまいことやってくれるのでわざわざ
 <code>return std::move(output);</code> などと書く必要はない。
@@ -238,54 +222,50 @@ s1 = &quot;gamma&quot; // OK: 再代入可能
 <p><code>return</code>最適化にはムーブすらしない&rdquo;copy elision&rdquo;とムーブの2種類があって、
 一時変数やローカル変数を返す場合は両方を試み、
 引数を返す場合は後者のみを試みるらしい。</p>
-
-<pre><code class="language-c++">std::vector&lt;int&gt; ones(size_t n) {
-    return std::vector&lt;int&gt;(n, 1);  // copy elision
-}
-
-std::vector&lt;int&gt; times2(const std::vector&lt;int&gt;&amp; vec) {
-    std::vector&lt;int&gt; tmp(vec);  // copy ctor
-    for (auto&amp; x: tmp) {x *= 2;}
-    return tmp;  // copy elision
-}
-
-std::vector&lt;int&gt; times3(std::vector&lt;int&gt; vec) {
-    for (auto&amp; x: vec) {x *= 3;}
-    return vec;  // move ctor
-}
-
-auto vec0 = ones(3);
-auto vec1 = times2(vec0);             //  lvalue渡し: 1 copy
-auto vec2 = times2(std::move(vec0));  //  xvalue渡し: 1 copy
-auto vec3 = times2(ones(3));          // prvalue渡し: 1 copy
-auto vec4 = times3(vec1);             //  lvalue渡し: 1 copy 1 move
-auto vec5 = times3(std::move(vec1));  //  xvalue渡し:        2 move
-auto vec6 = times3(ones(3));          // prvalue渡し:        1 move
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class=""> </span><span class="n">ones</span><span class="p">(</span><span class="n">size_t</span><span class=""> </span><span class="n">n</span><span class="p">)</span><span class=""> </span><span class="p">{</span><span class="">
+</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class=""> </span><span class="mi">1</span><span class="p">);</span><span class="">  </span><span class="c1">// copy elision
+</span><span class="c1"></span><span class="p">}</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class=""> </span><span class="n">times2</span><span class="p">(</span><span class="k">const</span><span class=""> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span><span class=""> </span><span class="n">vec</span><span class="p">)</span><span class=""> </span><span class="p">{</span><span class="">
+</span><span class="">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class=""> </span><span class="n">tmp</span><span class="p">(</span><span class="n">vec</span><span class="p">);</span><span class="">  </span><span class="c1">// copy ctor
+</span><span class="c1"></span><span class="">    </span><span class="k">for</span><span class=""> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class=""> </span><span class="nl">x</span><span class=""></span><span class="p">:</span><span class=""> </span><span class="n">tmp</span><span class="p">)</span><span class=""> </span><span class="p">{</span><span class="n">x</span><span class=""> </span><span class="o">*=</span><span class=""> </span><span class="mi">2</span><span class="p">;}</span><span class="">
+</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="n">tmp</span><span class="p">;</span><span class="">  </span><span class="c1">// copy elision
+</span><span class="c1"></span><span class="p">}</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class=""> </span><span class="n">times3</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class=""> </span><span class="n">vec</span><span class="p">)</span><span class=""> </span><span class="p">{</span><span class="">
+</span><span class="">    </span><span class="k">for</span><span class=""> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class=""> </span><span class="nl">x</span><span class=""></span><span class="p">:</span><span class=""> </span><span class="n">vec</span><span class="p">)</span><span class=""> </span><span class="p">{</span><span class="n">x</span><span class=""> </span><span class="o">*=</span><span class=""> </span><span class="mi">3</span><span class="p">;}</span><span class="">
+</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="n">vec</span><span class="p">;</span><span class="">  </span><span class="c1">// move ctor
+</span><span class="c1"></span><span class="p">}</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="k">auto</span><span class=""> </span><span class="n">vec0</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span><span class="">
+</span><span class=""></span><span class="k">auto</span><span class=""> </span><span class="n">vec1</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">times2</span><span class="p">(</span><span class="n">vec0</span><span class="p">);</span><span class="">             </span><span class="c1">//  lvalue渡し: 1 copy
+</span><span class="c1"></span><span class="k">auto</span><span class=""> </span><span class="n">vec2</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">times2</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">vec0</span><span class="p">));</span><span class="">  </span><span class="c1">//  xvalue渡し: 1 copy
+</span><span class="c1"></span><span class="k">auto</span><span class=""> </span><span class="n">vec3</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">times2</span><span class="p">(</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">));</span><span class="">          </span><span class="c1">// prvalue渡し: 1 copy
+</span><span class="c1"></span><span class="k">auto</span><span class=""> </span><span class="n">vec4</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">times3</span><span class="p">(</span><span class="n">vec1</span><span class="p">);</span><span class="">             </span><span class="c1">//  lvalue渡し: 1 copy 1 move
+</span><span class="c1"></span><span class="k">auto</span><span class=""> </span><span class="n">vec5</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">times3</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">vec1</span><span class="p">));</span><span class="">  </span><span class="c1">//  xvalue渡し:        2 move
+</span><span class="c1"></span><span class="k">auto</span><span class=""> </span><span class="n">vec6</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">times3</span><span class="p">(</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">));</span><span class="">          </span><span class="o">//</span><span class=""> </span><span class="nl">prvalue渡し</span><span class=""></span><span class="p">:</span><span class="">        </span><span class="mi">1</span><span class=""> </span><span class="n">move</span></code></pre>
+</div>
 <p>普通のlvalue渡しでは<code>times2()</code>のような<code>const T&amp;</code>型関数が良いが、
 rvalue渡ししたいときは<code>times3()</code>のような<code>T</code>型関数が良い。
 しかし同じ処理の関数に違う名前を持たせるのは嫌なので、ぜひオーバーロードしたい。
 その場合はconst lvalue reference(<code>const T&amp;</code>)型とrvalue reference(<code>T&amp;&amp;</code>)型の2つを用意する。</p>
-
-<pre><code class="language-c++">// [A]
-std::vector&lt;int&gt; times4(const std::vector&lt;int&gt;&amp; vec) {
-    std::vector&lt;int&gt; tmp(vec);  // copy ctor
-    for (auto&amp; x: tmp) {x *= 4;}
-    return tmp;  // copy elision
-}
-
-// [B]
-std::vector&lt;int&gt; times4(std::vector&lt;int&gt;&amp;&amp; vec) {
-    for (auto&amp; x: vec) {x *= 4;}
-    return std::move(vec);  // move ctor
-}
-
-auto vec7 = times4(vec2);             //  lvalue渡し to [A] 1 copy
-auto vec8 = times4(std::move(vec2));  //  xvalue渡し to [B]        1 move
-auto vec9 = times4(ones(3))           // prvalue渡し to [B]        1 move
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// [A]
+</span><span class="c1"></span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class=""> </span><span class="n">times4</span><span class="p">(</span><span class="k">const</span><span class=""> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span><span class=""> </span><span class="n">vec</span><span class="p">)</span><span class=""> </span><span class="p">{</span><span class="">
+</span><span class="">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class=""> </span><span class="n">tmp</span><span class="p">(</span><span class="n">vec</span><span class="p">);</span><span class="">  </span><span class="c1">// copy ctor
+</span><span class="c1"></span><span class="">    </span><span class="k">for</span><span class=""> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class=""> </span><span class="nl">x</span><span class=""></span><span class="p">:</span><span class=""> </span><span class="n">tmp</span><span class="p">)</span><span class=""> </span><span class="p">{</span><span class="n">x</span><span class=""> </span><span class="o">*=</span><span class=""> </span><span class="mi">4</span><span class="p">;}</span><span class="">
+</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="n">tmp</span><span class="p">;</span><span class="">  </span><span class="c1">// copy elision
+</span><span class="c1"></span><span class="p">}</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="c1">// [B]
+</span><span class="c1"></span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class=""> </span><span class="n">times4</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;&amp;</span><span class=""> </span><span class="n">vec</span><span class="p">)</span><span class=""> </span><span class="p">{</span><span class="">
+</span><span class="">    </span><span class="k">for</span><span class=""> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class=""> </span><span class="nl">x</span><span class=""></span><span class="p">:</span><span class=""> </span><span class="n">vec</span><span class="p">)</span><span class=""> </span><span class="p">{</span><span class="n">x</span><span class=""> </span><span class="o">*=</span><span class=""> </span><span class="mi">4</span><span class="p">;}</span><span class="">
+</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">vec</span><span class="p">);</span><span class="">  </span><span class="c1">// move ctor
+</span><span class="c1"></span><span class="p">}</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="k">auto</span><span class=""> </span><span class="n">vec7</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">times4</span><span class="p">(</span><span class="n">vec2</span><span class="p">);</span><span class="">             </span><span class="c1">//  lvalue渡し to [A] 1 copy
+</span><span class="c1"></span><span class="k">auto</span><span class=""> </span><span class="n">vec8</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">times4</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">vec2</span><span class="p">));</span><span class="">  </span><span class="c1">//  xvalue渡し to [B]        1 move
+</span><span class="c1"></span><span class="k">auto</span><span class=""> </span><span class="n">vec9</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">times4</span><span class="p">(</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="">           </span><span class="o">//</span><span class=""> </span><span class="n">prvalue渡し</span><span class=""> </span><span class="n">to</span><span class=""> </span><span class="p">[</span><span class="n">B</span><span class="p">]</span><span class="">        </span><span class="mi">1</span><span class=""> </span><span class="n">move</span></code></pre>
+</div>
 <p><code>[B]</code>に<code>std::move()</code>渡しするときはmove ctorが呼び出されず参照のみ。
 ということで、オーバーロードされた<code>times4()</code>が最低コスト。</p>
 
@@ -297,15 +277,13 @@ auto vec9 = times4(ones(3))           // prvalue渡し to [B]        1 move
 </blockquote>
 
 <h3 id="複合代入演算子">複合代入演算子</h3>
-
-<pre><code class="language-c++">// (a+b)の結果を持つ一時オブジェクトが作られ、xに代入される。
-int x = a + b;
-
-// xをaで初期化して、bを足す。一時オブジェクトは作られない。
-int x = a;
-x += b;
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// (a+b)の結果を持つ一時オブジェクトが作られ、xに代入される。
+</span><span class="c1"></span><span class="kt">int</span><span class=""> </span><span class="n">x</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">a</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="n">b</span><span class="p">;</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="c1">// xをaで初期化して、bを足す。一時オブジェクトは作られない。
+</span><span class="c1"></span><span class="kt">int</span><span class=""> </span><span class="n">x</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">a</span><span class="p">;</span><span class="">
+</span><span class=""></span><span class="n">x</span><span class=""> </span><span class="o">+=</span><span class=""> </span><span class="n">b</span><span class="p">;</span></code></pre>
+</div>
 <p><code>int</code> や <code>double</code> くらいならそれより可読性を重視したほうがいいかも。</p>
 
 <h2 id="コンテナ">コンテナ</h2>
@@ -355,12 +333,10 @@ C++で配列作るならとりあえずこれ。
 という処理をすることによって行われる。
 始め1、次2、4、8、16、、、という具合に。
 なので、10000個の要素を格納すると分かっている場合には、始めからそれだけ確保しておくと速い。</p>
-
-<pre><code class="language-c++">std::vector&lt;int&gt; v;
-v.reserve(10000);
-// then push_back() many times
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class=""> </span><span class="n">v</span><span class="p">;</span><span class="">
+</span><span class=""></span><span class="n">v</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="mi">10000</span><span class="p">);</span><span class="">
+</span><span class=""></span><span class="o">//</span><span class=""> </span><span class="n">then</span><span class=""> </span><span class="n">push_back</span><span class="p">()</span><span class=""> </span><span class="n">many</span><span class=""> </span><span class="n">times</span></code></pre>
+</div>
 <h2 id="ループ">ループ</h2>
 
 <h3 id="継続条件">継続条件</h3>
@@ -368,36 +344,32 @@ v.reserve(10000);
 <p><code>for</code> や <code>while</code> を回すときの継続条件式は回る度に評価されるので意外とコストになるかも。
 イテレータで回すときの <code>v.end()</code> も毎回呼び出されるので、
 ループの中身が軽い処理の場合には無視できない差になるかもしれない。</p>
-
-<pre><code class="language-c++">for (size_t i=0; i&lt;v.size(); ++i) {
-    // このv.size()は毎回呼び出されてしまう。
-}
-
-for (size_t i=0, n=v.size(); i&lt;n; ++i) {
-    // size()の呼び出しは一度だけで済み、nの名前はforの中しか汚さない。
-}
-
-for (vector&lt;int&gt;::iterator it=v.begin(), v_end=v.end(); it!=v_end; ++it) {
-    // これも、end()の呼び出しは一度きり。
-}
-
-for (const auto&amp; x: v) {
-    // コンテナ全体を舐めるなら C++11 range-based for が便利
-}
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">for</span><span class=""> </span><span class="p">(</span><span class="n">size_t</span><span class=""> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class=""> </span><span class="n">i</span><span class="o">&lt;</span><span class="n">v</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class=""> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class=""> </span><span class="p">{</span><span class="">
+</span><span class="">    </span><span class="c1">// このv.size()は毎回呼び出されてしまう。
+</span><span class="c1"></span><span class="p">}</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="k">for</span><span class=""> </span><span class="p">(</span><span class="n">size_t</span><span class=""> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class=""> </span><span class="n">n</span><span class="o">=</span><span class="n">v</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class=""> </span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class=""> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class=""> </span><span class="p">{</span><span class="">
+</span><span class="">    </span><span class="c1">// size()の呼び出しは一度だけで済み、nの名前はforの中しか汚さない。
+</span><span class="c1"></span><span class="p">}</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="k">for</span><span class=""> </span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span><span class=""> </span><span class="n">it</span><span class="o">=</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class=""> </span><span class="n">v_end</span><span class="o">=</span><span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">();</span><span class=""> </span><span class="n">it</span><span class="o">!=</span><span class="n">v_end</span><span class="p">;</span><span class=""> </span><span class="o">++</span><span class="n">it</span><span class="p">)</span><span class=""> </span><span class="p">{</span><span class="">
+</span><span class="">    </span><span class="c1">// これも、end()の呼び出しは一度きり。
+</span><span class="c1"></span><span class="p">}</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="k">for</span><span class=""> </span><span class="p">(</span><span class="k">const</span><span class=""> </span><span class="k">auto</span><span class="o">&amp;</span><span class=""> </span><span class="nl">x</span><span class=""></span><span class="p">:</span><span class=""> </span><span class="n">v</span><span class="p">)</span><span class=""> </span><span class="p">{</span><span class="">
+</span><span class="">    </span><span class="c1">// コンテナ全体を舐めるなら C++11 range-based for が便利
+</span><span class="c1"></span><span class="p">}</span></code></pre>
+</div>
 <h3 id="前置インクリメント">前置インクリメント</h3>
 
 <p>後置インクリメント <code>i++</code> でも
 前置インクリメント <code>++i</code> でも <code>for</code> ループの結果は変わらない。
 が、<code>i++</code> だと前の値を記憶してからプラスする（一時オブジェクトが作られる）ので、
 <code>++i</code> のほうがいいらしい。特にイテレータのとき。</p>
-
-<pre><code class="language-c++">for (std::vector&lt;int&gt;::iterator it=v.begin(); it!=v.end(); ++it) {
-    // do something
-}
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">for</span><span class=""> </span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span><span class=""> </span><span class="n">it</span><span class="o">=</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span><span class=""> </span><span class="n">it</span><span class="o">!=</span><span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">();</span><span class=""> </span><span class="o">++</span><span class="n">it</span><span class="p">)</span><span class=""> </span><span class="p">{</span><span class="">
+</span><span class="">    </span><span class="c1">// do something
+</span><span class="c1"></span><span class="p">}</span></code></pre>
+</div>
 <h3 id="出来る限り外で処理">出来る限り外で処理</h3>
 
 <p><code>if-else</code> や <code>try-catch</code> のブロックをループの外で大きく取れないか、
@@ -423,15 +395,13 @@ for (const auto&amp; x: v) {
 <p><code>std::cin</code> はデフォルトで <code>std::cout</code> に結びつけられてて、
 <code>std::cin</code> される度に <code>std::flush</code> されてしまうらしいので、
 そうならないように切り離す。</p>
-
-<pre><code class="language-c++">#include &lt;iostream&gt;
-
-int main() {
-    std::ios::sync_with_stdio(false);
-    std::cin.tie(0);
-}
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span><span class=""> </span><span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span><span class="cp"></span><span class="">
+</span><span class=""></span><span class="kt">int</span><span class=""> </span><span class="nf">main</span><span class="p">()</span><span class=""> </span><span class="p">{</span><span class="">
+</span><span class="">    </span><span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span><span class="">
+</span><span class="">    </span><span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="">
+</span><span class=""></span><span class="p">}</span></code></pre>
+</div>
 <h2 id="関連書籍">関連書籍</h2>
 
 <p><a href="https://www.amazon.co.jp/Effective-Modern-_C-11-14%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%A0%E3%82%92%E9%80%B2%E5%8C%96%E3%81%95%E3%81%9B%E3%82%8B42%E9%A0%85%E7%9B%AE/dp/4873117364/ref=as_li_ss_il?_encoding=UTF8&psc=1&refRID=2W1SJD1QE3Z43HGNHQPV&linkCode=li2&tag=heavywatal-22&linkId=b5ae72d9c28f98283a01af1b110e1c8c" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873117364&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li2&o=9&a=4873117364" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
@@ -587,11 +557,6 @@ int main() {
 </nav>
 
 <footer>(ɔ) 2008 岩嵜航 Watal M. Iwasaki</footer>
-<script src="/js/highlight.pack.js"></script>
-<script>
-hljs.initHighlightingOnLoad();
-</script>
-
 </body>
 </html>
 

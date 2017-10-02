@@ -184,15 +184,13 @@ rgl — 3Dグラフ描画
 </dl>
 
 <h3 id="複数の図をまとめる">複数の図をまとめる</h3>
-
-<pre><code class="language-r"># レイアウトを指定
-mfrow3d(nr, nc, byrow=TRUE, parent=NA, sharedMouse=FALSE, ...)
-layout3d(mat, widths, heights, parent=NA, sharedMouse=FALSE, ...)
-
-# 次のsubsceneに移動
-next3d(current=NA, clear=TRUE, reuse=TRUE)
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># レイアウトを指定</span><span class="">
+</span><span class="">mfrow3d</span><span class="p">(</span><span class="">nr</span><span class="p">,</span><span class=""> nc</span><span class="p">,</span><span class=""> byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span><span class=""> parent</span><span class="o">=</span><span class="kc">NA</span><span class="p">,</span><span class=""> sharedMouse</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span><span class=""> </span><span class="kc">...</span><span class="p">)</span><span class="">
+</span><span class="">layout3d</span><span class="p">(</span><span class="">mat</span><span class="p">,</span><span class=""> widths</span><span class="p">,</span><span class=""> heights</span><span class="p">,</span><span class=""> parent</span><span class="o">=</span><span class="kc">NA</span><span class="p">,</span><span class=""> sharedMouse</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span><span class=""> </span><span class="kc">...</span><span class="p">)</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="c1"># 次のsubsceneに移動</span><span class="">
+</span><span class="">next3d</span><span class="p">(</span><span class="">current</span><span class="o">=</span><span class="kc">NA</span><span class="p">,</span><span class=""> clear</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span><span class=""> reuse</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span></code></pre>
+</div>
 <div class="warning">
 <p>これらはなぜかグローバルスコープでしか動作しない。
 つまり、関数やループ内に入れるとサイズなどがうまく反映されない。</p>
@@ -279,23 +277,21 @@ purrr::map(seq_len(3), ~{
 <p><code>rgl::play3d(f, duration=Inf, ...)</code></p>
 
 <p><code>rgl::movie3d(f, duration, ..., fps=10, movie=&quot;movie&quot;, frames=movie, dir=tempdir(), ...)</code></p>
-
-<pre><code class="language-r">## 角度をセット
-rgl::view3d(-25, 15, 40)
-
-## 最前面に持ってくる
-rgl.bringtotop()
-
-## アニメーション関数を作る
-.anime = rgl::spin3d(axis=c(0, 1, 0), rpm=15)
-
-## X11で再生
-rgl::play3d(.anime)
-
-## GIFアニメとして保存
-rgl::movie3d(.anime, duration=4, fps=16, movie=&quot;basename&quot;, dir=&quot;~/tmp&quot;)
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">## 角度をセット</span><span class="">
+</span><span class="">rgl</span><span class="o">::</span><span class="">view3d</span><span class="p">(</span><span class="m">-25</span><span class="p">,</span><span class=""> </span><span class="m">15</span><span class="p">,</span><span class=""> </span><span class="m">40</span><span class="p">)</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="c1">## 最前面に持ってくる</span><span class="">
+</span><span class="">rgl.bringtotop</span><span class="p">()</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="c1">## アニメーション関数を作る</span><span class="">
+</span><span class=""></span><span class="m">.</span><span class="">anime </span><span class="o">=</span><span class=""> rgl</span><span class="o">::</span><span class="">spin3d</span><span class="p">(</span><span class="">axis</span><span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class=""> </span><span class="m">1</span><span class="p">,</span><span class=""> </span><span class="m">0</span><span class="p">),</span><span class=""> rpm</span><span class="o">=</span><span class="m">15</span><span class="p">)</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="c1">## X11で再生</span><span class="">
+</span><span class="">rgl</span><span class="o">::</span><span class="">play3d</span><span class="p">(</span><span class="m">.</span><span class="">anime</span><span class="p">)</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="c1">## GIFアニメとして保存</span><span class="">
+</span><span class="">rgl</span><span class="o">::</span><span class="">movie3d</span><span class="p">(</span><span class="m">.</span><span class="">anime</span><span class="p">,</span><span class=""> duration</span><span class="o">=</span><span class="m">4</span><span class="p">,</span><span class=""> fps</span><span class="o">=</span><span class="m">16</span><span class="p">,</span><span class=""> movie</span><span class="o">=</span><span class="s">&#34;basename&#34;</span><span class="p">,</span><span class=""> dir</span><span class="o">=</span><span class="s">&#34;~/tmp&#34;</span><span class="p">)</span></code></pre>
+</div>
 </article>
 </main>
 
@@ -444,11 +440,6 @@ rgl::movie3d(.anime, duration=4, fps=16, movie=&quot;basename&quot;, dir=&quot;~
 </nav>
 
 <footer>(ɔ) 2008 岩嵜航 Watal M. Iwasaki</footer>
-<script src="/js/highlight.pack.js"></script>
-<script>
-hljs.initHighlightingOnLoad();
-</script>
-
 </body>
 </html>
 

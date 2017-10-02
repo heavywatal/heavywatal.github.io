@@ -107,30 +107,28 @@ R標準の<code>plot()</code>などは前者の上に、
 <h2 id="基本的な使い方">基本的な使い方</h2>
 
 <p>R に入ってるお馴染みサンプルデータ <code>iris</code> を使って</p>
-
-<pre><code class="language-r">## ライブラリの読み込み
-library(tidyverse)
-
-## データと全体設定を持ったggplotオブジェクトを作る
-gp = ggplot(iris, aes(x=Sepal.Width, y=Sepal.Length, colour=Species))
-
-## グラフのレイヤーを重ねる
-gp = gp + geom_point(size=3, alpha=0.7)
-
-## 描画してみる
-print(gp)
-
-## さらにグラフを重ねたり、タイトルやテーマの設定をしたり
-gp = gp + geom_smooth(method=glm, method.args=list(family=gaussian))
-gp = gp + labs(title=&quot;Iris Sepal&quot;)
-gp = gp + theme_bw()
-gp = gp + theme(panel.grid.minor=element_blank())
-print(gp)
-
-## ファイルに保存
-ggsave(&quot;iris_sepal.png&quot;, gp)
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">## ライブラリの読み込み</span><span class="">
+</span><span class=""></span><span class="kn">library</span><span class="p">(</span><span class="">tidyverse</span><span class="p">)</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="c1">## データと全体設定を持ったggplotオブジェクトを作る</span><span class="">
+</span><span class="">gp </span><span class="o">=</span><span class=""> ggplot</span><span class="p">(</span><span class="">iris</span><span class="p">,</span><span class=""> aes</span><span class="p">(</span><span class="">x</span><span class="o">=</span><span class="">Sepal.Width</span><span class="p">,</span><span class=""> y</span><span class="o">=</span><span class="">Sepal.Length</span><span class="p">,</span><span class=""> colour</span><span class="o">=</span><span class="">Species</span><span class="p">))</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="c1">## グラフのレイヤーを重ねる</span><span class="">
+</span><span class="">gp </span><span class="o">=</span><span class=""> gp </span><span class="o">+</span><span class=""> geom_point</span><span class="p">(</span><span class="">size</span><span class="o">=</span><span class="m">3</span><span class="p">,</span><span class=""> alpha</span><span class="o">=</span><span class="m">0.7</span><span class="p">)</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="c1">## 描画してみる</span><span class="">
+</span><span class=""></span><span class="kp">print</span><span class="p">(</span><span class="">gp</span><span class="p">)</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="c1">## さらにグラフを重ねたり、タイトルやテーマの設定をしたり</span><span class="">
+</span><span class="">gp </span><span class="o">=</span><span class=""> gp </span><span class="o">+</span><span class=""> geom_smooth</span><span class="p">(</span><span class="">method</span><span class="o">=</span><span class="">glm</span><span class="p">,</span><span class=""> method.args</span><span class="o">=</span><span class="kt">list</span><span class="p">(</span><span class="">family</span><span class="o">=</span><span class="">gaussian</span><span class="p">))</span><span class="">
+</span><span class="">gp </span><span class="o">=</span><span class=""> gp </span><span class="o">+</span><span class=""> labs</span><span class="p">(</span><span class="">title</span><span class="o">=</span><span class="s">&#34;Iris Sepal&#34;</span><span class="p">)</span><span class="">
+</span><span class="">gp </span><span class="o">=</span><span class=""> gp </span><span class="o">+</span><span class=""> theme_bw</span><span class="p">()</span><span class="">
+</span><span class="">gp </span><span class="o">=</span><span class=""> gp </span><span class="o">+</span><span class=""> theme</span><span class="p">(</span><span class="">panel.grid.minor</span><span class="o">=</span><span class="">element_blank</span><span class="p">())</span><span class="">
+</span><span class=""></span><span class="kp">print</span><span class="p">(</span><span class="">gp</span><span class="p">)</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="c1">## ファイルに保存</span><span class="">
+</span><span class="">ggsave</span><span class="p">(</span><span class="s">&#34;iris_sepal.png&#34;</span><span class="p">,</span><span class=""> gp</span><span class="p">)</span></code></pre>
+</div>
 <div class="note">
 <p><code>ggplot()</code> に渡すデータは、1行が1観測、1列が1変数という形の
 <a href="/rstats/programming.html#tidyverse"><strong>整然データ</strong></a></p>
@@ -260,26 +258,23 @@ ggplot内部で <code>stat_*()</code> を通して行われる。
 <dl>
 <dt><a href="http://ggplot2.tidyverse.org/reference/facet_wrap.html"><code>facet_wrap()</code></a></dt>
 <dd><p>1変数で分割して並べる</p>
-
-<pre><code class="language-r">facet_wrap(facets, nrow=NULL, ncol=NULL, scales='fixed',
-           shrink=TRUE, labeller='label_value',
-           as.table=TRUE, switch=NULL, drop=TRUE,
-           dir='h', strip.position='top')
-
-ggplot(iris, aes(Petal.Length, Sepal.Length))+geom_point()+
-    facet_wrap(~Species, nrow=2)
-</code></pre></dd>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">facet_wrap</span><span class="p">(</span><span class="">facets</span><span class="p">,</span><span class=""> nrow</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span><span class=""> ncol</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span><span class=""> scales</span><span class="o">=</span><span class="s">&#39;fixed&#39;</span><span class="p">,</span><span class="">
+</span><span class="">           shrink</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span><span class=""> labeller</span><span class="o">=</span><span class="s">&#39;label_value&#39;</span><span class="p">,</span><span class="">
+</span><span class="">           as.table</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span><span class=""> </span><span class="kr">switch</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span><span class=""> drop</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span><span class="">
+</span><span class="">           dir</span><span class="o">=</span><span class="s">&#39;h&#39;</span><span class="p">,</span><span class=""> strip.position</span><span class="o">=</span><span class="s">&#39;top&#39;</span><span class="p">)</span><span class="">
+</span><span class="">
+</span><span class="">ggplot</span><span class="p">(</span><span class="">iris</span><span class="p">,</span><span class=""> aes</span><span class="p">(</span><span class="">Petal.Length</span><span class="p">,</span><span class=""> Sepal.Length</span><span class="p">))</span><span class="o">+</span><span class="">geom_point</span><span class="p">()</span><span class="o">+</span><span class="">
+</span><span class="">    facet_wrap</span><span class="p">(</span><span class="o">~</span><span class="">Species</span><span class="p">,</span><span class=""> nrow</span><span class="o">=</span><span class="m">2</span><span class="p">)</span></code></pre>
+</div></dd>
 <dt><a href="http://ggplot2.tidyverse.org/reference/facet_grid.html"><code>facet_grid()</code></a></dt>
 <dd><p>2変数で分割して縦横に並べる</p>
-
-<pre><code class="language-r">facet_grid(facets, margins=FALSE, scales='fixed', space='fixed',
-           shrink=TRUE, labeller='label_value',
-           as.table=TRUE, switch=NULL, drop=TRUE)
-
-ggplot(iris, aes(Petal.Length, Sepal.Length))+geom_point()+
-    facet_grid(. ~ Species)
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">facet_grid</span><span class="p">(</span><span class="">facets</span><span class="p">,</span><span class=""> margins</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span><span class=""> scales</span><span class="o">=</span><span class="s">&#39;fixed&#39;</span><span class="p">,</span><span class=""> space</span><span class="o">=</span><span class="s">&#39;fixed&#39;</span><span class="p">,</span><span class="">
+</span><span class="">           shrink</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span><span class=""> labeller</span><span class="o">=</span><span class="s">&#39;label_value&#39;</span><span class="p">,</span><span class="">
+</span><span class="">           as.table</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span><span class=""> </span><span class="kr">switch</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span><span class=""> drop</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span><span class="">
+</span><span class="">
+</span><span class="">ggplot</span><span class="p">(</span><span class="">iris</span><span class="p">,</span><span class=""> aes</span><span class="p">(</span><span class="">Petal.Length</span><span class="p">,</span><span class=""> Sepal.Length</span><span class="p">))</span><span class="o">+</span><span class="">geom_point</span><span class="p">()</span><span class="o">+</span><span class="">
+</span><span class="">    facet_grid</span><span class="p">(</span><span class="m">.</span><span class=""> </span><span class="o">~</span><span class=""> Species</span><span class="p">)</span></code></pre>
+</div>
 <p>1変数でいい場合は片方をドット <code>.</code> で固定できる。</p></dd>
 <dt><a href="http://ggplot2.tidyverse.org/reference/labellers.html">ファセットラベルの調整</a></dt>
 <dd><p>デフォルトでは値だけがfacetラベルに表示されるが、
@@ -367,13 +362,11 @@ Macなら&rdquo;HiraKakuProN-W3&rdquo;を指定すれば日本語でも文字化
 ほかのレイヤーと同じようにどんどん足しながら変更していく。
 テーマは直線、長方形、文字の3種類のエレメントからなり、
 それらの性質を変更する場合は <code>element_***()</code> を介して行う</p>
-
-<pre><code class="language-r">## ベースとなるテーマを先に適用してから
-gp = gp + theme_bw(base_family='HiraKakuProN-W3')
-gp = gp + theme(legend.position='bottom')
-gp = gp + theme(plot.background=element_rect(fill=&quot;transparent&quot;))
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">## ベースとなるテーマを先に適用してから</span><span class="">
+</span><span class="">gp </span><span class="o">=</span><span class=""> gp </span><span class="o">+</span><span class=""> theme_bw</span><span class="p">(</span><span class="">base_family</span><span class="o">=</span><span class="s">&#39;HiraKakuProN-W3&#39;</span><span class="p">)</span><span class="">
+</span><span class="">gp </span><span class="o">=</span><span class=""> gp </span><span class="o">+</span><span class=""> theme</span><span class="p">(</span><span class="">legend.position</span><span class="o">=</span><span class="s">&#39;bottom&#39;</span><span class="p">)</span><span class="">
+</span><span class="">gp </span><span class="o">=</span><span class=""> gp </span><span class="o">+</span><span class=""> theme</span><span class="p">(</span><span class="">plot.background</span><span class="o">=</span><span class="">element_rect</span><span class="p">(</span><span class="">fill</span><span class="o">=</span><span class="s">&#34;transparent&#34;</span><span class="p">))</span></code></pre>
+</div>
 <dl>
 <dt>全体</dt>
 <dd><code>line</code>: (<code>element_line</code>)</dd>
@@ -484,13 +477,11 @@ units で使いそうなのは
 </dl>
 
 <h2 id="ファイルに書き出す">ファイルに書き出す</h2>
-
-<pre><code class="language-r">ggsave(filename = default_name(plot), plot = last_plot(),
-    device = default_device(filename), path = NULL, scale = 1,
-    width = par(&quot;din&quot;)[1], height = par(&quot;din&quot;)[2],
-    units = c(&quot;in&quot;, &quot;cm&quot;, &quot;mm&quot;), dpi = 300, limitsize = TRUE, ...)
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">ggsave</span><span class="p">(</span><span class="">filename </span><span class="o">=</span><span class=""> default_name</span><span class="p">(</span><span class="">plot</span><span class="p">),</span><span class=""> plot </span><span class="o">=</span><span class=""> last_plot</span><span class="p">(),</span><span class="">
+</span><span class="">    device </span><span class="o">=</span><span class=""> default_device</span><span class="p">(</span><span class="">filename</span><span class="p">),</span><span class=""> path </span><span class="o">=</span><span class=""> </span><span class="kc">NULL</span><span class="p">,</span><span class=""> scale </span><span class="o">=</span><span class=""> </span><span class="m">1</span><span class="p">,</span><span class="">
+</span><span class="">    width </span><span class="o">=</span><span class=""> par</span><span class="p">(</span><span class="s">&#34;din&#34;</span><span class="p">)[</span><span class="m">1</span><span class="p">],</span><span class=""> height </span><span class="o">=</span><span class=""> par</span><span class="p">(</span><span class="s">&#34;din&#34;</span><span class="p">)[</span><span class="m">2</span><span class="p">],</span><span class="">
+</span><span class="">    units </span><span class="o">=</span><span class=""> </span><span class="kt">c</span><span class="p">(</span><span class="s">&#34;in&#34;</span><span class="p">,</span><span class=""> </span><span class="s">&#34;cm&#34;</span><span class="p">,</span><span class=""> </span><span class="s">&#34;mm&#34;</span><span class="p">),</span><span class=""> dpi </span><span class="o">=</span><span class=""> </span><span class="m">300</span><span class="p">,</span><span class=""> limitsize </span><span class="o">=</span><span class=""> </span><span class="kc">TRUE</span><span class="p">,</span><span class=""> </span><span class="kc">...</span><span class="p">)</span></code></pre>
+</div>
 <p>サイズを変えるには scale, width, height, units, dpi をいじる。
 デフォルトはそれぞれ 1, 7, 7, &lsquo;in&rsquo;, 300 で、1辺177.8mmの正方形に2100x2100ピクセル並べるイメージ。
 A4 PDFにするなら <code>ggsave('fig1.pdf', gp, width=8.27, height=11.7)</code> とか
@@ -506,13 +497,11 @@ Rscript から実行してるのに白いQuartzウィンドウが出現したり
 
 
 <p>MacのQuartzで調整して、そこで見たままを保存したい場合は</p>
-
-<pre><code class="language-r">dev.off()
-quartz(width=9.9, height=7)
-print(gp)
-quartz.save('plot.png')
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">dev.off</span><span class="p">()</span><span class="">
+</span><span class="">quartz</span><span class="p">(</span><span class="">width</span><span class="o">=</span><span class="m">9.9</span><span class="p">,</span><span class=""> height</span><span class="o">=</span><span class="m">7</span><span class="p">)</span><span class="">
+</span><span class=""></span><span class="kp">print</span><span class="p">(</span><span class="">gp</span><span class="p">)</span><span class="">
+</span><span class="">quartz.save</span><span class="p">(</span><span class="s">&#39;plot.png&#39;</span><span class="p">)</span></code></pre>
+</div>
 <h2 id="extensions">Extensions</h2>
 
 <ul>
@@ -534,21 +523,17 @@ quartz.save('plot.png')
 
 <p>&ldquo;grob&rdquo; は &ldquo;grid graphical object&rdquo; の略。
 ggplotオブジェクトと同じように <code>ggsave()</code> に渡して保存可能。</p>
-
-<pre><code class="language-r">grob = gridExtra::arrangeGrob(p1, p2, nrow=2, ncol=1, bottom='Time')
-grid.newpage()
-grid.draw(grob)
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">grob </span><span class="o">=</span><span class=""> gridExtra</span><span class="o">::</span><span class="">arrangeGrob</span><span class="p">(</span><span class="">p1</span><span class="p">,</span><span class=""> p2</span><span class="p">,</span><span class=""> nrow</span><span class="o">=</span><span class="m">2</span><span class="p">,</span><span class=""> ncol</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class=""> bottom</span><span class="o">=</span><span class="s">&#39;Time&#39;</span><span class="p">)</span><span class="">
+</span><span class="">grid.newpage</span><span class="p">()</span><span class="">
+</span><span class="">grid.draw</span><span class="p">(</span><span class="">grob</span><span class="p">)</span></code></pre>
+</div>
 <p>複数ページのPDFに書き出したい場合は
 <a href="/rstats/purrr.html">purrr</a> などを使って list of ggplots を作っておき、
 <code>marrangeGrob()</code> に渡す。</p>
-
-<pre><code class="language-r">.grobs = purrr::map(.dataframes, my_ggplot_func)
-.gtable = gridExtra::marrangeGrob(.grobs, nrow=4, ncol=3)
-ggsave('multi_page.pdf', .gtable, width=7, height=9.9)
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="m">.</span><span class="">grobs </span><span class="o">=</span><span class=""> purrr</span><span class="o">::</span><span class="">map</span><span class="p">(</span><span class="m">.</span><span class="">dataframes</span><span class="p">,</span><span class=""> my_ggplot_func</span><span class="p">)</span><span class="">
+</span><span class=""></span><span class="m">.</span><span class="">gtable </span><span class="o">=</span><span class=""> gridExtra</span><span class="o">::</span><span class="">marrangeGrob</span><span class="p">(</span><span class="m">.</span><span class="">grobs</span><span class="p">,</span><span class=""> nrow</span><span class="o">=</span><span class="m">4</span><span class="p">,</span><span class=""> ncol</span><span class="o">=</span><span class="m">3</span><span class="p">)</span><span class="">
+</span><span class="">ggsave</span><span class="p">(</span><span class="s">&#39;multi_page.pdf&#39;</span><span class="p">,</span><span class=""> </span><span class="m">.</span><span class="">gtable</span><span class="p">,</span><span class=""> width</span><span class="o">=</span><span class="m">7</span><span class="p">,</span><span class=""> height</span><span class="o">=</span><span class="m">9.9</span><span class="p">)</span></code></pre>
+</div>
 <h3 id="cowplot"><code>cowplot</code></h3>
 
 <ul>
@@ -578,15 +563,13 @@ ggsave('multi_page.pdf', .gtable, width=7, height=9.9)
 <dl>
 <dt><code>cowplot::plot_grid()</code></dt>
 <dd><p><code>facet_wrap()</code>のように、ざっと並べるのに便利。</p>
-
-<pre><code class="language-r">corplot::plot_grid(..., plotlist=NULL,
-    align=c('none', 'h', 'v', 'hv'),
-    nrow=NULL, ncol=NULL,
-    scale=1, rel_widths=1, rel_heights=1,
-    labels=NULL, label_size=14,
-    hjust=-0.5, vjust=1.5)
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">corplot</span><span class="o">::</span><span class="">plot_grid</span><span class="p">(</span><span class="kc">...</span><span class="p">,</span><span class=""> plotlist</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span><span class="">
+</span><span class="">    align</span><span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="s">&#39;none&#39;</span><span class="p">,</span><span class=""> </span><span class="s">&#39;h&#39;</span><span class="p">,</span><span class=""> </span><span class="s">&#39;v&#39;</span><span class="p">,</span><span class=""> </span><span class="s">&#39;hv&#39;</span><span class="p">),</span><span class="">
+</span><span class="">    nrow</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span><span class=""> ncol</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span><span class="">
+</span><span class="">    scale</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class=""> rel_widths</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class=""> rel_heights</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="">
+</span><span class="">    labels</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span><span class=""> label_size</span><span class="o">=</span><span class="m">14</span><span class="p">,</span><span class="">
+</span><span class="">    hjust</span><span class="o">=</span><span class="m">-0.5</span><span class="p">,</span><span class=""> vjust</span><span class="o">=</span><span class="m">1.5</span><span class="p">)</span></code></pre>
+</div>
 <p>さらに細やかな制御をしたいときは以下の関数を個別に重ねていく。</p></dd>
 <dt><code>cowplot::ggdraw(plot=NULL, xlim=c(0, 1), ylim=c(0, 1))</code></dt>
 <dd><p>これの後ろに <code>+</code> 演算子で <code>draw_***()</code> を足していく。</p></dd>
@@ -610,12 +593,10 @@ ggsave('multi_page.pdf', .gtable, width=7, height=9.9)
 <code>ggplot2</code> である恩恵はそこまでない。
 でもまあ <code>pairs(iris)</code> よりは <code>ggpairs(iris, colour=Species)</code>
 のほうが見やすいのは確か。</p>
-
-<pre><code class="language-r">GGally::ggpairs(data, columns=1:ncol(data), title='',
-    upper=list(), lower=list(), diag=list(), params=NULL, ...,
-    axisLabels='internal', legends=FALSE, verbose=FALSE)
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">GGally</span><span class="o">::</span><span class="">ggpairs</span><span class="p">(</span><span class="">data</span><span class="p">,</span><span class=""> columns</span><span class="o">=</span><span class="m">1</span><span class="o">:</span><span class="kp">ncol</span><span class="p">(</span><span class="">data</span><span class="p">),</span><span class=""> title</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span><span class="">
+</span><span class="">    upper</span><span class="o">=</span><span class="kt">list</span><span class="p">(),</span><span class=""> lower</span><span class="o">=</span><span class="kt">list</span><span class="p">(),</span><span class=""> diag</span><span class="o">=</span><span class="kt">list</span><span class="p">(),</span><span class=""> params</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span><span class=""> </span><span class="kc">...</span><span class="p">,</span><span class="">
+</span><span class="">    axisLabels</span><span class="o">=</span><span class="s">&#39;internal&#39;</span><span class="p">,</span><span class=""> legends</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span><span class=""> verbose</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span></code></pre>
+</div>
 <h2 id="関連書籍">関連書籍</h2>
 
 <p><a href="https://www.amazon.co.jp/R%E3%82%B0%E3%83%A9%E3%83%95%E3%82%A3%E3%83%83%E3%82%AF%E3%82%B9%E3%82%AF%E3%83%83%E3%82%AF%E3%83%96%E3%83%83%E3%82%AF-_ggplot2%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B0%E3%83%A9%E3%83%95%E4%BD%9C%E6%88%90%E3%81%AE%E3%83%AC%E3%82%B7%E3%83%94%E9%9B%86-Winston-Chang/dp/4873116538/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=911c7022439b7b328c58e0168e4c66e7" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873116538&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4873116538" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
@@ -769,11 +750,6 @@ ggsave('multi_page.pdf', .gtable, width=7, height=9.9)
 </nav>
 
 <footer>(ɔ) 2008 岩嵜航 Watal M. Iwasaki</footer>
-<script src="/js/highlight.pack.js"></script>
-<script>
-hljs.initHighlightingOnLoad();
-</script>
-
 </body>
 </html>
 

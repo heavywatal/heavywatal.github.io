@@ -114,12 +114,10 @@ See <code>?reshape2:::melt.array</code>.</p>
 
 </div>
 
-
-<pre><code class="language-r">reshape2::melt(data, id.vars, measure.vars,
-               variable.name=&quot;variable&quot;, value.name=&quot;value&quot;,
-               na.rm=FALSE, factorsAsStrings=TRUE, ...)
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">reshape2</span><span class="o">::</span><span class="">melt</span><span class="p">(</span><span class="">data</span><span class="p">,</span><span class=""> id.vars</span><span class="p">,</span><span class=""> measure.vars</span><span class="p">,</span><span class="">
+</span><span class="">               variable.name</span><span class="o">=</span><span class="s">&#34;variable&#34;</span><span class="p">,</span><span class=""> value.name</span><span class="o">=</span><span class="s">&#34;value&#34;</span><span class="p">,</span><span class="">
+</span><span class="">               na.rm</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span><span class=""> factorsAsStrings</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span><span class=""> </span><span class="kc">...</span><span class="p">)</span></code></pre>
+</div>
 <dl>
 <dt><code>data</code></dt>
 <dd>data.frame</dd>
@@ -141,42 +139,39 @@ See <code>?reshape2:::melt.array</code>.</p>
 
 <ol>
 <li><p>ライブラリを読み込んでサンプルデータを見てみる(wide-format)</p>
-
-<pre><code class="language-r">&gt; library(reshape2)
-&gt; head(reshape2::french_fries)
-   time treatment subject rep potato buttery grassy rancid painty
-61    1         1       3   1    2.9     0.0    0.0    0.0    5.5
-25    1         1       3   2   14.0     0.0    0.0    1.1    0.0
-62    1         1      10   1   11.0     6.4    0.0    0.0    0.0
-26    1         1      10   2    9.9     5.9    2.9    2.2    0.0
-63    1         1      15   1    1.2     0.1    0.0    1.1    5.1
-27    1         1      15   2    8.8     3.0    3.6    1.5    2.3
-</code></pre></li>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span><span class=""> </span><span class="kn">library</span><span class="p">(</span><span class="">reshape2</span><span class="p">)</span><span class="">
+</span><span class=""></span><span class="o">&gt;</span><span class=""> </span><span class="kp">head</span><span class="p">(</span><span class="">reshape2</span><span class="o">::</span><span class="">french_fries</span><span class="p">)</span><span class="">
+</span><span class="">   time treatment subject rep potato buttery grassy rancid painty
+</span><span class=""></span><span class="m">61</span><span class="">    </span><span class="m">1</span><span class="">         </span><span class="m">1</span><span class="">       </span><span class="m">3</span><span class="">   </span><span class="m">1</span><span class="">    </span><span class="m">2.9</span><span class="">     </span><span class="m">0.0</span><span class="">    </span><span class="m">0.0</span><span class="">    </span><span class="m">0.0</span><span class="">    </span><span class="m">5.5</span><span class="">
+</span><span class=""></span><span class="m">25</span><span class="">    </span><span class="m">1</span><span class="">         </span><span class="m">1</span><span class="">       </span><span class="m">3</span><span class="">   </span><span class="m">2</span><span class="">   </span><span class="m">14.0</span><span class="">     </span><span class="m">0.0</span><span class="">    </span><span class="m">0.0</span><span class="">    </span><span class="m">1.1</span><span class="">    </span><span class="m">0.0</span><span class="">
+</span><span class=""></span><span class="m">62</span><span class="">    </span><span class="m">1</span><span class="">         </span><span class="m">1</span><span class="">      </span><span class="m">10</span><span class="">   </span><span class="m">1</span><span class="">   </span><span class="m">11.0</span><span class="">     </span><span class="m">6.4</span><span class="">    </span><span class="m">0.0</span><span class="">    </span><span class="m">0.0</span><span class="">    </span><span class="m">0.0</span><span class="">
+</span><span class=""></span><span class="m">26</span><span class="">    </span><span class="m">1</span><span class="">         </span><span class="m">1</span><span class="">      </span><span class="m">10</span><span class="">   </span><span class="m">2</span><span class="">    </span><span class="m">9.9</span><span class="">     </span><span class="m">5.9</span><span class="">    </span><span class="m">2.9</span><span class="">    </span><span class="m">2.2</span><span class="">    </span><span class="m">0.0</span><span class="">
+</span><span class=""></span><span class="m">63</span><span class="">    </span><span class="m">1</span><span class="">         </span><span class="m">1</span><span class="">      </span><span class="m">15</span><span class="">   </span><span class="m">1</span><span class="">    </span><span class="m">1.2</span><span class="">     </span><span class="m">0.1</span><span class="">    </span><span class="m">0.0</span><span class="">    </span><span class="m">1.1</span><span class="">    </span><span class="m">5.1</span><span class="">
+</span><span class=""></span><span class="m">27</span><span class="">    </span><span class="m">1</span><span class="">         </span><span class="m">1</span><span class="">      </span><span class="m">15</span><span class="">   </span><span class="m">2</span><span class="">    </span><span class="m">8.8</span><span class="">     </span><span class="m">3.0</span><span class="">    </span><span class="m">3.6</span><span class="">    </span><span class="m">1.5</span><span class="">    </span><span class="m">2.3</span></code></pre>
+</div></li>
 
 <li><p>データをlong-formatに整形</p>
-
-<pre><code class="language-r">&gt; molten = reshape2::melt(reshape2::french_fries,
-                         id.vars=c(&quot;time&quot;, &quot;treatment&quot;, &quot;subject&quot;, &quot;rep&quot;),
-                         variable.name=&quot;flavor&quot;, na.rm=TRUE)
-&gt; head(molten)
- time treatment subject rep flavor value
-1    1         1       3   1 potato   2.9
-2    1         1       3   2 potato  14.0
-3    1         1      10   1 potato  11.0
-4    1         1      10   2 potato   9.9
-5    1         1      15   1 potato   1.2
-6    1         1      15   2 potato   8.8
-</code></pre></li>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span><span class=""> molten </span><span class="o">=</span><span class=""> reshape2</span><span class="o">::</span><span class="">melt</span><span class="p">(</span><span class="">reshape2</span><span class="o">::</span><span class="">french_fries</span><span class="p">,</span><span class="">
+</span><span class="">                         id.vars</span><span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="s">&#34;time&#34;</span><span class="p">,</span><span class=""> </span><span class="s">&#34;treatment&#34;</span><span class="p">,</span><span class=""> </span><span class="s">&#34;subject&#34;</span><span class="p">,</span><span class=""> </span><span class="s">&#34;rep&#34;</span><span class="p">),</span><span class="">
+</span><span class="">                         variable.name</span><span class="o">=</span><span class="s">&#34;flavor&#34;</span><span class="p">,</span><span class=""> na.rm</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span><span class="">
+</span><span class=""></span><span class="o">&gt;</span><span class=""> </span><span class="kp">head</span><span class="p">(</span><span class="">molten</span><span class="p">)</span><span class="">
+</span><span class=""> time treatment subject rep flavor value
+</span><span class=""></span><span class="m">1</span><span class="">    </span><span class="m">1</span><span class="">         </span><span class="m">1</span><span class="">       </span><span class="m">3</span><span class="">   </span><span class="m">1</span><span class=""> potato   </span><span class="m">2.9</span><span class="">
+</span><span class=""></span><span class="m">2</span><span class="">    </span><span class="m">1</span><span class="">         </span><span class="m">1</span><span class="">       </span><span class="m">3</span><span class="">   </span><span class="m">2</span><span class=""> potato  </span><span class="m">14.0</span><span class="">
+</span><span class=""></span><span class="m">3</span><span class="">    </span><span class="m">1</span><span class="">         </span><span class="m">1</span><span class="">      </span><span class="m">10</span><span class="">   </span><span class="m">1</span><span class=""> potato  </span><span class="m">11.0</span><span class="">
+</span><span class=""></span><span class="m">4</span><span class="">    </span><span class="m">1</span><span class="">         </span><span class="m">1</span><span class="">      </span><span class="m">10</span><span class="">   </span><span class="m">2</span><span class=""> potato   </span><span class="m">9.9</span><span class="">
+</span><span class=""></span><span class="m">5</span><span class="">    </span><span class="m">1</span><span class="">         </span><span class="m">1</span><span class="">      </span><span class="m">15</span><span class="">   </span><span class="m">1</span><span class=""> potato   </span><span class="m">1.2</span><span class="">
+</span><span class=""></span><span class="m">6</span><span class="">    </span><span class="m">1</span><span class="">         </span><span class="m">1</span><span class="">      </span><span class="m">15</span><span class="">   </span><span class="m">2</span><span class=""> potato   </span><span class="m">8.8</span></code></pre>
+</div></li>
 
 <li><p><a href="/rstats/ggplot2.html">ggplot2</a> で作図</p>
-
-<pre><code class="language-r">&gt; library(ggplot2)
-&gt; gp = ggplot(molten, aes(x=time, y=value, colour=treatment, shape=as.factor(rep)))
-&gt; gp = gp + geom_point(alpha=0.3)
-&gt; gp = gp + geom_smooth(aes(group=treatment), method=loess, se=FALSE)
-&gt; gp = gp + facet_grid(flavor ~ subject)
-&gt; gp
-</code></pre></li>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span><span class=""> </span><span class="kn">library</span><span class="p">(</span><span class="">ggplot2</span><span class="p">)</span><span class="">
+</span><span class=""></span><span class="o">&gt;</span><span class=""> gp </span><span class="o">=</span><span class=""> ggplot</span><span class="p">(</span><span class="">molten</span><span class="p">,</span><span class=""> aes</span><span class="p">(</span><span class="">x</span><span class="o">=</span><span class="">time</span><span class="p">,</span><span class=""> y</span><span class="o">=</span><span class="">value</span><span class="p">,</span><span class=""> colour</span><span class="o">=</span><span class="">treatment</span><span class="p">,</span><span class=""> shape</span><span class="o">=</span><span class="kp">as.factor</span><span class="p">(</span><span class="kp">rep</span><span class="p">)))</span><span class="">
+</span><span class=""></span><span class="o">&gt;</span><span class=""> gp </span><span class="o">=</span><span class=""> gp </span><span class="o">+</span><span class=""> geom_point</span><span class="p">(</span><span class="">alpha</span><span class="o">=</span><span class="m">0.3</span><span class="p">)</span><span class="">
+</span><span class=""></span><span class="o">&gt;</span><span class=""> gp </span><span class="o">=</span><span class=""> gp </span><span class="o">+</span><span class=""> geom_smooth</span><span class="p">(</span><span class="">aes</span><span class="p">(</span><span class="">group</span><span class="o">=</span><span class="">treatment</span><span class="p">),</span><span class=""> method</span><span class="o">=</span><span class="">loess</span><span class="p">,</span><span class=""> se</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span><span class="">
+</span><span class=""></span><span class="o">&gt;</span><span class=""> gp </span><span class="o">=</span><span class=""> gp </span><span class="o">+</span><span class=""> facet_grid</span><span class="p">(</span><span class="">flavor </span><span class="o">~</span><span class=""> subject</span><span class="p">)</span><span class="">
+</span><span class=""></span><span class="o">&gt;</span><span class=""> gp</span></code></pre>
+</div></li>
 </ol>
 
 <h2 id="dcast"><code>dcast()</code></h2>
@@ -195,12 +190,10 @@ e.g., <code>acast(data, x ~ y ~ z, dplyr::first, value.var='v', fill=0)</code></
 
 </div>
 
-
-<pre><code class="language-r">reshape2::dcast(data, formula, fun.aggregate=NULL, ...,
-          margins=NULL, subset=NULL, fill=NULL, drop=TRUE,
-          value.var=guess_value(data))
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">reshape2</span><span class="o">::</span><span class="">dcast</span><span class="p">(</span><span class="">data</span><span class="p">,</span><span class=""> formula</span><span class="p">,</span><span class=""> fun.aggregate</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span><span class=""> </span><span class="kc">...</span><span class="p">,</span><span class="">
+</span><span class="">          margins</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span><span class=""> subset</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span><span class=""> fill</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span><span class=""> drop</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span><span class="">
+</span><span class="">          value.var</span><span class="o">=</span><span class="">guess_value</span><span class="p">(</span><span class="">data</span><span class="p">))</span></code></pre>
+</div>
 <dl>
 <dt><code>data</code></dt>
 <dd><code>melt()</code> されたような形でカテゴリ変数を含むdata.frame</dd>
@@ -228,51 +221,43 @@ e.g., <code>acast(data, x ~ y ~ z, dplyr::first, value.var='v', fill=0)</code></
 <p>データは上の <code>melt()</code> の例で作った <code>molten</code>。</p>
 
 <p><code>fun.aggregate</code> を省略すると <code>length</code> が適用されて要素数が分かる</p>
-
-<pre><code class="language-r">&gt; reshape2::acast(molten, treatment ~ flavor)
-Aggregation function missing: defaulting to length
-  potato buttery grassy rancid painty
-1    232     231    232    232    232
-2    232     230    232    232    231
-3    231     231    231    231    231
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span><span class=""> reshape2</span><span class="o">::</span><span class="">acast</span><span class="p">(</span><span class="">molten</span><span class="p">,</span><span class=""> treatment </span><span class="o">~</span><span class=""> flavor</span><span class="p">)</span><span class="">
+</span><span class="">Aggregation </span><span class="kr">function</span><span class=""> </span><span class="kp">missing</span><span class="o">:</span><span class=""> defaulting to </span><span class="kp">length</span><span class="">
+</span><span class="">  potato buttery grassy rancid painty
+</span><span class=""></span><span class="m">1</span><span class="">    </span><span class="m">232</span><span class="">     </span><span class="m">231</span><span class="">    </span><span class="m">232</span><span class="">    </span><span class="m">232</span><span class="">    </span><span class="m">232</span><span class="">
+</span><span class=""></span><span class="m">2</span><span class="">    </span><span class="m">232</span><span class="">     </span><span class="m">230</span><span class="">    </span><span class="m">232</span><span class="">    </span><span class="m">232</span><span class="">    </span><span class="m">231</span><span class="">
+</span><span class=""></span><span class="m">3</span><span class="">    </span><span class="m">231</span><span class="">     </span><span class="m">231</span><span class="">    </span><span class="m">231</span><span class="">    </span><span class="m">231</span><span class="">    </span><span class="m">231</span></code></pre>
+</div>
 <p>グループごとの平均値をdata.frameで</p>
-
-<pre><code class="language-r">&gt; reshape2::dcast(molten, treatment ~ flavor, mean)
-  treatment   potato  buttery    grassy   rancid   painty
-1         1 6.887931 1.780087 0.6491379 4.065517 2.583621
-2         2 7.001724 1.973913 0.6629310 3.624569 2.455844
-3         3 6.967965 1.717749 0.6805195 3.866667 2.525541
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span><span class=""> reshape2</span><span class="o">::</span><span class="">dcast</span><span class="p">(</span><span class="">molten</span><span class="p">,</span><span class=""> treatment </span><span class="o">~</span><span class=""> flavor</span><span class="p">,</span><span class=""> </span><span class="kp">mean</span><span class="p">)</span><span class="">
+</span><span class="">  treatment   potato  buttery    grassy   rancid   painty
+</span><span class=""></span><span class="m">1</span><span class="">         </span><span class="m">1</span><span class=""> </span><span class="m">6.887931</span><span class=""> </span><span class="m">1.780087</span><span class=""> </span><span class="m">0.6491379</span><span class=""> </span><span class="m">4.065517</span><span class=""> </span><span class="m">2.583621</span><span class="">
+</span><span class=""></span><span class="m">2</span><span class="">         </span><span class="m">2</span><span class=""> </span><span class="m">7.001724</span><span class=""> </span><span class="m">1.973913</span><span class=""> </span><span class="m">0.6629310</span><span class=""> </span><span class="m">3.624569</span><span class=""> </span><span class="m">2.455844</span><span class="">
+</span><span class=""></span><span class="m">3</span><span class="">         </span><span class="m">3</span><span class=""> </span><span class="m">6.967965</span><span class=""> </span><span class="m">1.717749</span><span class=""> </span><span class="m">0.6805195</span><span class=""> </span><span class="m">3.866667</span><span class=""> </span><span class="m">2.525541</span></code></pre>
+</div>
 <p>足し算すると辞書式に並ぶ</p>
-
-<pre><code class="language-r">&gt; reshape2::acast(molten, treatment ~ flavor + rep, mean)
-  potato_1 potato_2 buttery_1 buttery_2  grassy_1  grassy_2 rancid_1 rancid_2 painty_1 painty_2
-1 6.772414 7.003448  1.797391  1.762931 0.4456897 0.8525862 4.283621 3.847414 2.727586 2.439655
-2 7.158621 6.844828  1.989474  1.958621 0.6905172 0.6353448 3.712069 3.537069 2.315517 2.597391
-3 6.937391 6.998276  1.805217  1.631034 0.5895652 0.7706897 3.752174 3.980172 2.038261 3.008621
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span><span class=""> reshape2</span><span class="o">::</span><span class="">acast</span><span class="p">(</span><span class="">molten</span><span class="p">,</span><span class=""> treatment </span><span class="o">~</span><span class=""> flavor </span><span class="o">+</span><span class=""> </span><span class="kp">rep</span><span class="p">,</span><span class=""> </span><span class="kp">mean</span><span class="p">)</span><span class="">
+</span><span class="">  potato_1 potato_2 buttery_1 buttery_2  grassy_1  grassy_2 rancid_1 rancid_2 painty_1 painty_2
+</span><span class=""></span><span class="m">1</span><span class=""> </span><span class="m">6.772414</span><span class=""> </span><span class="m">7.003448</span><span class="">  </span><span class="m">1.797391</span><span class="">  </span><span class="m">1.762931</span><span class=""> </span><span class="m">0.4456897</span><span class=""> </span><span class="m">0.8525862</span><span class=""> </span><span class="m">4.283621</span><span class=""> </span><span class="m">3.847414</span><span class=""> </span><span class="m">2.727586</span><span class=""> </span><span class="m">2.439655</span><span class="">
+</span><span class=""></span><span class="m">2</span><span class=""> </span><span class="m">7.158621</span><span class=""> </span><span class="m">6.844828</span><span class="">  </span><span class="m">1.989474</span><span class="">  </span><span class="m">1.958621</span><span class=""> </span><span class="m">0.6905172</span><span class=""> </span><span class="m">0.6353448</span><span class=""> </span><span class="m">3.712069</span><span class=""> </span><span class="m">3.537069</span><span class=""> </span><span class="m">2.315517</span><span class=""> </span><span class="m">2.597391</span><span class="">
+</span><span class=""></span><span class="m">3</span><span class=""> </span><span class="m">6.937391</span><span class=""> </span><span class="m">6.998276</span><span class="">  </span><span class="m">1.805217</span><span class="">  </span><span class="m">1.631034</span><span class=""> </span><span class="m">0.5895652</span><span class=""> </span><span class="m">0.7706897</span><span class=""> </span><span class="m">3.752174</span><span class=""> </span><span class="m">3.980172</span><span class=""> </span><span class="m">2.038261</span><span class=""> </span><span class="m">3.008621</span></code></pre>
+</div>
 <p>チルダで繋ぐと1次元増える</p>
-
-<pre><code class="language-r">&gt; reshape2::acast(molten, treatment ~ flavor ~ rep, mean)
-, , 1
-
-    potato  buttery    grassy   rancid   painty
-1 6.772414 1.797391 0.4456897 4.283621 2.727586
-2 7.158621 1.989474 0.6905172 3.712069 2.315517
-3 6.937391 1.805217 0.5895652 3.752174 2.038261
-
-, , 2
-
-    potato  buttery    grassy   rancid   painty
-1 7.003448 1.762931 0.8525862 3.847414 2.439655
-2 6.844828 1.958621 0.6353448 3.537069 2.597391
-3 6.998276 1.631034 0.7706897 3.980172 3.008621
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span><span class=""> reshape2</span><span class="o">::</span><span class="">acast</span><span class="p">(</span><span class="">molten</span><span class="p">,</span><span class=""> treatment </span><span class="o">~</span><span class=""> flavor </span><span class="o">~</span><span class=""> </span><span class="kp">rep</span><span class="p">,</span><span class=""> </span><span class="kp">mean</span><span class="p">)</span><span class="">
+</span><span class=""></span><span class="p">,</span><span class=""> </span><span class="p">,</span><span class=""> </span><span class="m">1</span><span class="">
+</span><span class="">
+</span><span class="">    potato  buttery    grassy   rancid   painty
+</span><span class=""></span><span class="m">1</span><span class=""> </span><span class="m">6.772414</span><span class=""> </span><span class="m">1.797391</span><span class=""> </span><span class="m">0.4456897</span><span class=""> </span><span class="m">4.283621</span><span class=""> </span><span class="m">2.727586</span><span class="">
+</span><span class=""></span><span class="m">2</span><span class=""> </span><span class="m">7.158621</span><span class=""> </span><span class="m">1.989474</span><span class=""> </span><span class="m">0.6905172</span><span class=""> </span><span class="m">3.712069</span><span class=""> </span><span class="m">2.315517</span><span class="">
+</span><span class=""></span><span class="m">3</span><span class=""> </span><span class="m">6.937391</span><span class=""> </span><span class="m">1.805217</span><span class=""> </span><span class="m">0.5895652</span><span class=""> </span><span class="m">3.752174</span><span class=""> </span><span class="m">2.038261</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="p">,</span><span class=""> </span><span class="p">,</span><span class=""> </span><span class="m">2</span><span class="">
+</span><span class="">
+</span><span class="">    potato  buttery    grassy   rancid   painty
+</span><span class=""></span><span class="m">1</span><span class=""> </span><span class="m">7.003448</span><span class=""> </span><span class="m">1.762931</span><span class=""> </span><span class="m">0.8525862</span><span class=""> </span><span class="m">3.847414</span><span class=""> </span><span class="m">2.439655</span><span class="">
+</span><span class=""></span><span class="m">2</span><span class=""> </span><span class="m">6.844828</span><span class=""> </span><span class="m">1.958621</span><span class=""> </span><span class="m">0.6353448</span><span class=""> </span><span class="m">3.537069</span><span class=""> </span><span class="m">2.597391</span><span class="">
+</span><span class=""></span><span class="m">3</span><span class=""> </span><span class="m">6.998276</span><span class=""> </span><span class="m">1.631034</span><span class=""> </span><span class="m">0.7706897</span><span class=""> </span><span class="m">3.980172</span><span class=""> </span><span class="m">3.008621</span></code></pre>
+</div>
 </article>
 </main>
 
@@ -421,11 +406,6 @@ Aggregation function missing: defaulting to length
 </nav>
 
 <footer>(ɔ) 2008 岩嵜航 Watal M. Iwasaki</footer>
-<script src="/js/highlight.pack.js"></script>
-<script>
-hljs.initHighlightingOnLoad();
-</script>
-
 </body>
 </html>
 

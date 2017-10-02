@@ -338,27 +338,23 @@ C-t p
 
 <p>デタッチ後しばらくしてシェルを起動すると残存セッションを忘れがちなので、
 以下のようなものを <code>.zshrc</code> とかに書いておけば表示で気付ける。</p>
-
-<pre><code class="language-sh">tmux has-session &gt;/dev/null 2&gt;&amp;1 &amp;&amp; if [ -z &quot;${TMUX}&quot; ]; then
-    echo '% tmux list-sessions'
-    tmux list-sessions
-    echo '% tmux list-windows -a'
-    tmux list-windows -a
-fi
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">tmux has-session &gt;/dev/null </span><span class="m">2</span><span class="">&gt;</span><span class="p">&amp;</span><span class="m">1</span><span class=""> </span><span class="o">&amp;&amp;</span><span class=""> </span><span class="k">if</span><span class=""> </span><span class="o">[</span><span class=""> -z </span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">TMUX</span><span class="si">}</span><span class="s2">&#34;</span><span class=""> </span><span class="o">]</span><span class="p">;</span><span class=""> </span><span class="k">then</span><span class="">
+</span><span class="">    </span><span class="nb">echo</span><span class=""> </span><span class="s1">&#39;% tmux list-sessions&#39;</span><span class="">
+</span><span class="">    tmux list-sessions
+</span><span class="">    </span><span class="nb">echo</span><span class=""> </span><span class="s1">&#39;% tmux list-windows -a&#39;</span><span class="">
+</span><span class="">    tmux list-windows -a
+</span><span class=""></span><span class="k">fi</span><span class=""></span></code></pre>
+</div>
 <h3 id="ssh-先で即-tmux"><code>ssh</code> 先で即 <code>tmux</code></h3>
 
 <p>以下の様なzsh関数を <code>sshmux</code> とかいう名前で定義する</p>
-
-<pre><code class="language-sh">if [ -n &quot;$1&quot; ]; then
-    ssh -t $* &quot;tmux -2u attach -d || tmux -2u&quot;
-else
-    echo &quot;$0: missing hostname&quot;
-    return 1
-fi
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="k">if</span><span class=""> </span><span class="o">[</span><span class=""> -n </span><span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span><span class=""> </span><span class="o">]</span><span class="p">;</span><span class=""> </span><span class="k">then</span><span class="">
+</span><span class="">    ssh -t </span><span class="nv">$*</span><span class=""> </span><span class="s2">&#34;tmux -2u attach -d || tmux -2u&#34;</span><span class="">
+</span><span class=""></span><span class="k">else</span><span class="">
+</span><span class="">    </span><span class="nb">echo</span><span class=""> </span><span class="s2">&#34;</span><span class="nv">$0</span><span class="s2">: missing hostname&#34;</span><span class="">
+</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="m">1</span><span class="">
+</span><span class=""></span><span class="k">fi</span><span class=""></span></code></pre>
+</div>
 <p>さらに <code>.zshrc</code> に <code>compdef sshmux=ssh</code>
 と書いておけば補完もいい感じになる。</p>
 
@@ -515,11 +511,6 @@ fi
 </nav>
 
 <footer>(ɔ) 2008 岩嵜航 Watal M. Iwasaki</footer>
-<script src="/js/highlight.pack.js"></script>
-<script>
-hljs.initHighlightingOnLoad();
-</script>
-
 </body>
 </html>
 

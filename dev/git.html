@@ -111,11 +111,10 @@ Linuxなら初めから入ってるのを使うか、Linuxbrewで新しいのを
 
 <li><p><code>~/.gitconfig</code> にユーザ名やアドレスを登録する。
 <a href="https://git-scm.com/docs/git-config">https://git-scm.com/docs/git-config</a></p>
-
-<pre><code class="language-sh">% git config --global user.name &quot;Watal M. Iwasaki&quot;
-% git config --global user.email &quot;heavy.watalあmail.com&quot;
-% less ~/.gitconfig
-</code></pre></li>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% git config --global user.name </span><span class="s2">&#34;Watal M. Iwasaki&#34;</span><span class="">
+</span><span class="">% git config --global user.email </span><span class="s2">&#34;heavy.watalあmail.com&#34;</span><span class="">
+</span><span class="">% less ~/.gitconfig</span></code></pre>
+</div></li>
 
 <li><p>ついでに <code>pushinsteadof</code> の設定をしておく。
 httpsで高速にclone/fetch/pullして、
@@ -199,66 +198,56 @@ root treeのハッシュID、著者、コメントなどの情報を持つ。
 <code>--mixed</code> なら移動した <code>HEAD</code> にindexも合わせる。
 <code>--hard</code> なら移動した <code>HEAD</code> にindexとworiking treeも合わせる。
 直前の動作を取り消す用途に絞って使うのが無難:</p>
-
-<pre><code class="language-sh"># commit直後、それを取り消す (indexとworkingはそのまま)
-git reset --soft HEAD^
-
-# add直後、それを取り消す (workingとHEADはそのまま)
-git reset --mixed HEAD
-
-# 変更したファイルをHEADの状態に戻す (DANGEROUS!)
-git reset --hard HEAD
-
-# reset直後、それを取り消す
-git reset --hard ORIG_HEAD
-
-# divergedになってしまった手元のbranchを破棄 (DANGEROUS!)
-git reset --hard origin/master
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># commit直後、それを取り消す (indexとworkingはそのまま)
+</span><span class="c1"></span><span class="">git reset --soft HEAD^
+</span><span class="">
+</span><span class=""></span><span class="c1"># add直後、それを取り消す (workingとHEADはそのまま)
+</span><span class="c1"></span><span class="">git reset --mixed HEAD
+</span><span class="">
+</span><span class=""></span><span class="c1"># 変更したファイルをHEADの状態に戻す (DANGEROUS!)
+</span><span class="c1"></span><span class="">git reset --hard HEAD
+</span><span class="">
+</span><span class=""></span><span class="c1"># reset直後、それを取り消す
+</span><span class="c1"></span><span class="">git reset --hard ORIG_HEAD
+</span><span class="">
+</span><span class=""></span><span class="c1"># divergedになってしまった手元のbranchを破棄 (DANGEROUS!)
+</span><span class="c1"></span><span class="">git reset --hard origin/master</span></code></pre>
+</div>
 <p>直前のcommitをちょっと修正したいだけなら <code>git commit --amend</code> が簡単。</p>
 
 <h3 id="diff">diff</h3>
 
 <p>差分を表示:</p>
-
-<pre><code class="language-sh"># HEAD vs working (staging前のファイルが対象)
-git diff
-
-# HEAD vs index (staging済みcommit前のファイルが対象)
-git diff --staged
-
-# HEAD vs working+index (commit前の全ファイルが対象)
-git diff HEAD
-
-# 特定コミットの変更点 (diffじゃない...)
-git show [revision]
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># HEAD vs working (staging前のファイルが対象)
+</span><span class="c1"></span><span class="">git diff
+</span><span class="">
+</span><span class=""></span><span class="c1"># HEAD vs index (staging済みcommit前のファイルが対象)
+</span><span class="c1"></span><span class="">git diff --staged
+</span><span class="">
+</span><span class=""></span><span class="c1"># HEAD vs working+index (commit前の全ファイルが対象)
+</span><span class="c1"></span><span class="">git diff HEAD
+</span><span class="">
+</span><span class=""></span><span class="c1"># 特定コミットの変更点 (diffじゃない...)
+</span><span class="c1"></span><span class="">git show </span><span class="o">[</span><span class="">revision</span><span class="o">]</span></code></pre>
+</div>
 <h3 id="rm-clean">rm, clean</h3>
 
 <p>tracking対象から外して忘れさせる(手元のファイルはそのまま):</p>
-
-<pre><code class="language-sh">git rm --cached &lt;file&gt;
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">git rm --cached &lt;file&gt;</span></code></pre>
+</div>
 <p><code>.gitignore</code> で無視されてるuntrackedファイルを消す:</p>
-
-<pre><code class="language-sh">git clean -fdX
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">git clean -fdX</span></code></pre>
+</div>
 <p>無視されていないuntrackedファイルも消したい場合は小文字の <code>-fdx</code> (危険)。</p>
 
 <h2 id="submodule">Submodule</h2>
 
 <h3 id="既存のリポジトリをsubmoduleとして追加する">既存のリポジトリをsubmoduleとして追加する</h3>
-
-<pre><code class="language-sh">git submodule add https://github.com/mbostock/d3.git
-
-# ブランチを指定する場合:
-git submodule add -b gitsubmodule_https https://github.com/heavywatal/x18n.git
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">git submodule add https://github.com/mbostock/d3.git
+</span><span class="">
+</span><span class=""></span><span class="c1"># ブランチを指定する場合:
+</span><span class="c1"></span><span class="">git submodule add -b gitsubmodule_https https://github.com/heavywatal/x18n.git</span></code></pre>
+</div>
 <div class="note">
 <p><code>gh-pages</code>で公開する場合は参照プロトコルを
 <code>git://</code> ではなく <code>https://</code> にする必要がある。</p>
@@ -409,32 +398,24 @@ git rebase -i master
 
 <p>PRマージ済みのリモートブランチを消したい。
 明示的に消すオプションを付けるか、空ブランチをpushするか:</p>
-
-<pre><code class="language-sh">% git push --delete origin issue-42
-% git push origin :issue-42
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% git push --delete origin issue-42
+</span><span class="">% git push origin :issue-42</span></code></pre>
+</div>
 <p>別のマシンやGitHub PR画面のボタンから消したりすると、
 消したはずのリモートブランチの記録が手元のリポジトリに残ることがある。
 まず確認:</p>
-
-<pre><code class="language-sh">% git branch -a
-% git remote show origin
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% git branch -a
+</span><span class="">% git remote show origin</span></code></pre>
+</div>
 <p>こうしたstaleなブランチを刈り取る方法には二通りある:</p>
-
-<pre><code class="language-sh">% git fetch --prune
-% git remote prune origin
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% git fetch --prune
+</span><span class="">% git remote prune origin</span></code></pre>
+</div>
 <p>それでも消えないローカルブランチは手動で消す:</p>
-
-<pre><code class="language-sh">% git branch -d issue-666
-error: The branch 'issue-666' is not fully merged.
-If you are sure you want to delete it, run 'git branch -D issue-666'.
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% git branch -d issue-666
+</span><span class="">error: The branch </span><span class="s1">&#39;issue-666&#39;</span><span class=""> is not fully merged.
+</span><span class="">If you are sure you want to delete it, run </span><span class="s1">&#39;git branch -D issue-666&#39;</span><span class="">.</span></code></pre>
+</div>
 <p>マージ済みのブランチじゃないと上記のように怒ってくれる。
 消してもいい確信があればオプションを大文字 <code>-D</code> にして強制削除。</p>
 
@@ -623,11 +604,6 @@ git branch &lt;new-branch-name&gt; *******
 </nav>
 
 <footer>(ɔ) 2008 岩嵜航 Watal M. Iwasaki</footer>
-<script src="/js/highlight.pack.js"></script>
-<script>
-hljs.initHighlightingOnLoad();
-</script>
-
 </body>
 </html>
 

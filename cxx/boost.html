@@ -118,11 +118,9 @@ Boost — ほぼ標準C&#43;&#43;ライブラリ
 <li><p>ビルドすべきライブラリを考える <code>./bootstrap.sh --show-libraries</code></p></li>
 
 <li><p>適当なオプションを与えて <code>bootstrap.sh</code> を実行:</p>
-
-<pre><code class="language-sh">% ./bootstrap.sh --help
-% ./bootstrap.sh --without-icu --with-libraries=coroutine2,filesystem,graph,iostreams,program_options,serialization,system,test
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% ./bootstrap.sh --help
+</span><span class="">% ./bootstrap.sh --without-icu --with-libraries</span><span class="o">=</span><span class="">coroutine2,filesystem,graph,iostreams,program_options,serialization,system,test</span></code></pre>
+</div>
 <p>設定が <code>project-config.jam</code> に書き出され、
 <code>b2</code> がビルドされる。 <code>./b2 --help</code></p></li>
 
@@ -141,92 +139,77 @@ using clang : 14 : clang++ : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++1
 <a href="http://zlib.net/">zlib公式</a>からソースを落として展開し、
 <a href="http://www.boost.org/doc/libs/release/libs/iostreams/doc/installation.html">一緒にビルドされるように</a>
 <code>ZLIB_SOURCE</code>をフルパス指定する。</p>
-
-<pre><code class="language-sh">% wget -O- http://zlib.net/zlib-1.2.8.tar.gz | tar xz -C ${HOME}/tmp/build
-% export ZLIB_SOURCE=${HOME}/tmp/build/zlib-1.2.8
-</code></pre></li>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% wget -O- http://zlib.net/zlib-1.2.8.tar.gz </span><span class="p">|</span><span class=""> tar xz -C </span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="">/tmp/build
+</span><span class="">% </span><span class="nb">export</span><span class=""> </span><span class="nv">ZLIB_SOURCE</span><span class=""></span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="">/tmp/build/zlib-1.2.8</span></code></pre>
+</div></li>
 
 <li><p>ツールセットを指定してビルド:</p>
-
-<pre><code class="language-sh">% ./b2 -j2 toolset=gcc-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2gcc --stagedir=stage/gcc stage
-% ./b2 -j2 toolset=darwin-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2gcc --stagedir=stage/gcc stage
-% ./b2 -j2 toolset=clang-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2clang --stagedir=stage/clang stage
-</code></pre></li>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% ./b2 -j2 </span><span class="nv">toolset</span><span class=""></span><span class="o">=</span><span class="">gcc-14 </span><span class="nv">link</span><span class=""></span><span class="o">=</span><span class="">static,shared runtime-link</span><span class="o">=</span><span class="">shared </span><span class="nv">threading</span><span class=""></span><span class="o">=</span><span class="">multi </span><span class="nv">variant</span><span class=""></span><span class="o">=</span><span class="">release --layout</span><span class="o">=</span><span class="">tagged --build-dir</span><span class="o">=</span><span class="">../b2gcc --stagedir</span><span class="o">=</span><span class="">stage/gcc stage
+</span><span class="">% ./b2 -j2 </span><span class="nv">toolset</span><span class=""></span><span class="o">=</span><span class="">darwin-14 </span><span class="nv">link</span><span class=""></span><span class="o">=</span><span class="">static,shared runtime-link</span><span class="o">=</span><span class="">shared </span><span class="nv">threading</span><span class=""></span><span class="o">=</span><span class="">multi </span><span class="nv">variant</span><span class=""></span><span class="o">=</span><span class="">release --layout</span><span class="o">=</span><span class="">tagged --build-dir</span><span class="o">=</span><span class="">../b2gcc --stagedir</span><span class="o">=</span><span class="">stage/gcc stage
+</span><span class="">% ./b2 -j2 </span><span class="nv">toolset</span><span class=""></span><span class="o">=</span><span class="">clang-14 </span><span class="nv">link</span><span class=""></span><span class="o">=</span><span class="">static,shared runtime-link</span><span class="o">=</span><span class="">shared </span><span class="nv">threading</span><span class=""></span><span class="o">=</span><span class="">multi </span><span class="nv">variant</span><span class=""></span><span class="o">=</span><span class="">release --layout</span><span class="o">=</span><span class="">tagged --build-dir</span><span class="o">=</span><span class="">../b2clang --stagedir</span><span class="o">=</span><span class="">stage/clang stage</span></code></pre>
+</div></li>
 
 <li><p>prefixを指定してインストール:</p>
-
-<pre><code class="language-sh">% ./b2 -j2 toolset=gcc-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2gcc --stagedir=stage/gcc --prefix=${HOME}/local install
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% ./b2 -j2 </span><span class="nv">toolset</span><span class=""></span><span class="o">=</span><span class="">gcc-14 </span><span class="nv">link</span><span class=""></span><span class="o">=</span><span class="">static,shared runtime-link</span><span class="o">=</span><span class="">shared </span><span class="nv">threading</span><span class=""></span><span class="o">=</span><span class="">multi </span><span class="nv">variant</span><span class=""></span><span class="o">=</span><span class="">release --layout</span><span class="o">=</span><span class="">tagged --build-dir</span><span class="o">=</span><span class="">../b2gcc --stagedir</span><span class="o">=</span><span class="">stage/gcc --prefix</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="">/local install</span></code></pre>
+</div>
 <p>あるいは手動でインストール:</p>
-
-<pre><code class="language-sh">% rsync -auv stage/gcc/ ~/local/boost-gcc
-% rsync -auv stage/clang/ ~/local/boost-clang
-% rsync -auv boost ~/local/include
-</code></pre></li>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% rsync -auv stage/gcc/ ~/local/boost-gcc
+</span><span class="">% rsync -auv stage/clang/ ~/local/boost-clang
+</span><span class="">% rsync -auv boost ~/local/include</span></code></pre>
+</div></li>
 </ol>
 
 <h3 id="使うとき">使うとき</h3>
 
 <p>インストールした場所とリンクするライブラリをコンパイラに伝える必要がある。
 コマンドを直打ちするなら:</p>
-
-<pre><code class="language-sh">clang++ -I${HOME}/local/include -L${HOME}/local/lib mysource.cpp -lboost_iostreams-mt -o a.out
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">clang++ -I</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="">/local/include -L</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="">/local/lib mysource.cpp -lboost_iostreams-mt -o a.out</span></code></pre>
+</div>
 <p>Makefileの変数でいうと:</p>
-
-<pre><code class="language-make">CPPFLAGS = -I${HOME}/local/include
-LDFLAGS = -L${HOME}/local/lib
-LDLIBS = -lboost_iostreams-mt
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-make" data-lang="make"><span class="nv">CPPFLAGS</span><span class=""> </span><span class="o">=</span><span class=""> -I</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="">/local/include
+</span><span class=""></span><span class="nv">LDFLAGS</span><span class=""> </span><span class="o">=</span><span class=""> -L</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="">/local/lib
+</span><span class=""></span><span class="err">LDLIBS</span><span class=""> </span><span class="err">=</span><span class=""> </span><span class="err">-lboost_iostreams-mt</span></code></pre>
+</div>
 <p>CMakeでは <code>BOOST_ROOT</code> にprefixを指定:</p>
-
-<pre><code class="language-sh">cmake -DBOOST_ROOT=${HOME}/local ..
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">cmake -DBOOST_ROOT</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="">/local ..</span></code></pre>
+</div>
 <h2 id="math-http-www-boost-org-doc-libs-release-libs-math-doc-html"><a href="http://www.boost.org/doc/libs/release/libs/math/doc/html/">math</a></h2>
 
 <h3 id="distribution-http-www-boost-org-doc-libs-release-libs-math-doc-html-dist-html"><a href="http://www.boost.org/doc/libs/release/libs/math/doc/html/dist.html">distribution</a></h3>
 
 <p>確率分布に従った乱数生成はC++11から <code>&lt;random&gt;</code> でサポートされるようになったが、
 確率密度関数(PDF)や累積密度関数(CDF)はまだ標準入りしてない。</p>
-
-<pre><code class="language-c++">// #include &lt;boost/math/distributions.hpp&gt;
-#include &lt;boost/math/distributions/normal.hpp&gt;
-#include &lt;boost/math/distributions/poisson.hpp&gt;
-#include &lt;boost/math/distributions/binomial.hpp&gt;
-#include &lt;boost/math/distributions/chi_squared.hpp&gt;
-
-namespace bmath = boost::math;
-
-bmath::normal_distribution&lt;&gt; dist(mean, sd);
-
-bmath::mean(dist);
-bmath::median(dist);
-bmath::standard_deviation(dist);
-
-bmath::pdf(dist, x);
-bmath::cdf(dist, x);
-bmath::quantile(dist, p);
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// #include &lt;boost/math/distributions.hpp&gt;
+</span><span class="c1"></span><span class="cp">#include</span><span class=""> </span><span class="cpf">&lt;boost/math/distributions/normal.hpp&gt;</span><span class="cp">
+</span><span class="cp">#include</span><span class=""> </span><span class="cpf">&lt;boost/math/distributions/poisson.hpp&gt;</span><span class="cp">
+</span><span class="cp">#include</span><span class=""> </span><span class="cpf">&lt;boost/math/distributions/binomial.hpp&gt;</span><span class="cp">
+</span><span class="cp">#include</span><span class=""> </span><span class="cpf">&lt;boost/math/distributions/chi_squared.hpp&gt;</span><span class="cp">
+</span><span class="cp"></span><span class="">
+</span><span class=""></span><span class="k">namespace</span><span class=""> </span><span class="n">bmath</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">boost</span><span class="o">::</span><span class="n">math</span><span class="p">;</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="n">bmath</span><span class="o">::</span><span class="n">normal_distribution</span><span class="o">&lt;&gt;</span><span class=""> </span><span class="n">dist</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span><span class=""> </span><span class="n">sd</span><span class="p">);</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="n">bmath</span><span class="o">::</span><span class="n">mean</span><span class="p">(</span><span class="n">dist</span><span class="p">);</span><span class="">
+</span><span class=""></span><span class="n">bmath</span><span class="o">::</span><span class="n">median</span><span class="p">(</span><span class="n">dist</span><span class="p">);</span><span class="">
+</span><span class=""></span><span class="n">bmath</span><span class="o">::</span><span class="n">standard_deviation</span><span class="p">(</span><span class="n">dist</span><span class="p">);</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="n">bmath</span><span class="o">::</span><span class="n">pdf</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span><span class=""> </span><span class="n">x</span><span class="p">);</span><span class="">
+</span><span class=""></span><span class="n">bmath</span><span class="o">::</span><span class="n">cdf</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span><span class=""> </span><span class="n">x</span><span class="p">);</span><span class="">
+</span><span class=""></span><span class="n">bmath</span><span class="o">::</span><span class="n">quantile</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span><span class=""> </span><span class="n">p</span><span class="p">);</span></code></pre>
+</div>
 <div class="warning">
 <p>右側の裾が欲しいときは精度を保つために <code>complement()</code> を使う。
 (Rでいう <code>lower.tail=FALSE</code>)</p>
-
-<pre><code class="language-c++">// good
-bmath::quantile(bmath::complement(dist, p));
-// bad
-bmath::quantile(dist, 1.0 - p)
-
-// good
-bmath::cdf(bmath::complement(dist, x));
-// bad
-1.0 - bmath::cdf(dist, x);
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// good
+</span><span class="c1"></span><span class="n">bmath</span><span class="o">::</span><span class="n">quantile</span><span class="p">(</span><span class="n">bmath</span><span class="o">::</span><span class="n">complement</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span><span class=""> </span><span class="n">p</span><span class="p">));</span><span class="">
+</span><span class=""></span><span class="c1">// bad
+</span><span class="c1"></span><span class="n">bmath</span><span class="o">::</span><span class="n">quantile</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span><span class=""> </span><span class="mf">1.0</span><span class=""> </span><span class="o">-</span><span class=""> </span><span class="n">p</span><span class="p">)</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="c1">// good
+</span><span class="c1"></span><span class="n">bmath</span><span class="o">::</span><span class="n">cdf</span><span class="p">(</span><span class="n">bmath</span><span class="o">::</span><span class="n">complement</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span><span class=""> </span><span class="n">x</span><span class="p">));</span><span class="">
+</span><span class=""></span><span class="c1">// bad
+</span><span class="c1"></span><span class="mf">1.0</span><span class=""> </span><span class="o">-</span><span class=""> </span><span class="n">bmath</span><span class="o">::</span><span class="n">cdf</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span><span class=""> </span><span class="n">x</span><span class="p">);</span></code></pre>
+</div>
 </div>
 
 
@@ -235,32 +218,30 @@ bmath::cdf(bmath::complement(dist, x));
 <p>要ビルド＆リンク <code>-lboost_iostreams-mt</code></p>
 
 <h3 id="gzip-圧縮と展開">gzip 圧縮と展開</h3>
-
-<pre><code class="language-c++">#include &lt;iostream&gt;
-#include &lt;string&gt;
-#include &lt;boost/iostreams/filtering_stream.hpp&gt;
-#include &lt;boost/iostreams/filter/gzip.hpp&gt;
-#include &lt;boost/iostreams/device/file_descriptor.hpp&gt;
-
-int main() {
-    namespace bios = boost::iostreams;
-    {
-        bios::filtering_ostream ost;
-        ost.push(bios::gzip_compressor());
-        ost.push(bios::file_descriptor_sink(&quot;hello.txt.gz&quot;));
-        ost &lt;&lt; &quot;Hello world!&quot;;
-    }
-    {
-        bios::filtering_istream ist;
-        ist.push(bios::gzip_decompressor());
-        ist.push(bios::file_descriptor_source(&quot;hello.txt.gz&quot;));
-        std::string buffer;
-        std::getline(ist, buffer, '\0');
-        std::cout &lt;&lt; buffer &lt;&lt; std::endl;
-    }
-}
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span><span class=""> </span><span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span><span class="cp">#include</span><span class=""> </span><span class="cpf">&lt;string&gt;</span><span class="cp">
+</span><span class="cp">#include</span><span class=""> </span><span class="cpf">&lt;boost/iostreams/filtering_stream.hpp&gt;</span><span class="cp">
+</span><span class="cp">#include</span><span class=""> </span><span class="cpf">&lt;boost/iostreams/filter/gzip.hpp&gt;</span><span class="cp">
+</span><span class="cp">#include</span><span class=""> </span><span class="cpf">&lt;boost/iostreams/device/file_descriptor.hpp&gt;</span><span class="cp">
+</span><span class="cp"></span><span class="">
+</span><span class=""></span><span class="kt">int</span><span class=""> </span><span class="nf">main</span><span class="p">()</span><span class=""> </span><span class="p">{</span><span class="">
+</span><span class="">    </span><span class="k">namespace</span><span class=""> </span><span class="n">bios</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">boost</span><span class="o">::</span><span class="n">iostreams</span><span class="p">;</span><span class="">
+</span><span class="">    </span><span class="p">{</span><span class="">
+</span><span class="">        </span><span class="n">bios</span><span class="o">::</span><span class="n">filtering_ostream</span><span class=""> </span><span class="n">ost</span><span class="p">;</span><span class="">
+</span><span class="">        </span><span class="n">ost</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">bios</span><span class="o">::</span><span class="n">gzip_compressor</span><span class="p">());</span><span class="">
+</span><span class="">        </span><span class="n">ost</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">bios</span><span class="o">::</span><span class="n">file_descriptor_sink</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;hello.txt.gz&#34;</span><span class="p">));</span><span class="">
+</span><span class="">        </span><span class="n">ost</span><span class=""> </span><span class="o">&lt;&lt;</span><span class=""> </span><span class="sa"></span><span class="s">&#34;Hello world!&#34;</span><span class="p">;</span><span class="">
+</span><span class="">    </span><span class="p">}</span><span class="">
+</span><span class="">    </span><span class="p">{</span><span class="">
+</span><span class="">        </span><span class="n">bios</span><span class="o">::</span><span class="n">filtering_istream</span><span class=""> </span><span class="n">ist</span><span class="p">;</span><span class="">
+</span><span class="">        </span><span class="n">ist</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">bios</span><span class="o">::</span><span class="n">gzip_decompressor</span><span class="p">());</span><span class="">
+</span><span class="">        </span><span class="n">ist</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">bios</span><span class="o">::</span><span class="n">file_descriptor_source</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;hello.txt.gz&#34;</span><span class="p">));</span><span class="">
+</span><span class="">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class=""> </span><span class="n">buffer</span><span class="p">;</span><span class="">
+</span><span class="">        </span><span class="n">std</span><span class="o">::</span><span class="n">getline</span><span class="p">(</span><span class="n">ist</span><span class="p">,</span><span class=""> </span><span class="n">buffer</span><span class="p">,</span><span class=""> </span><span class="sa"></span><span class="sc">&#39;\0&#39;</span><span class="p">);</span><span class="">
+</span><span class="">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class=""> </span><span class="o">&lt;&lt;</span><span class=""> </span><span class="n">buffer</span><span class=""> </span><span class="o">&lt;&lt;</span><span class=""> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span><span class="">
+</span><span class="">    </span><span class="p">}</span><span class="">
+</span><span class=""></span><span class="p">}</span></code></pre>
+</div>
 <ul>
 <li>deviceを <code>push()</code> した時点でchain completeになるので、
 先にfilterを <code>push()</code> する必要がある。
@@ -455,11 +436,6 @@ int main() {
 </nav>
 
 <footer>(ɔ) 2008 岩嵜航 Watal M. Iwasaki</footer>
-<script src="/js/highlight.pack.js"></script>
-<script>
-hljs.initHighlightingOnLoad();
-</script>
-
 </body>
 </html>
 

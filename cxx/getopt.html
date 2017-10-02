@@ -135,30 +135,26 @@ C&#43;&#43;コマンドライン引数
 <h3 id="usage">Usage</h3>
 
 <p><code>main()</code> 関数に書く必要があるのはこれだけ</p>
-
-<pre><code class="language-c++">#include &lt;gflags/gflags.h&gt;
-
-int main(int argc, char* argv[]) {
-    gflags::SetUsageMessage(&quot;This is a program to test gflags&quot;);
-    gflags::ParseCommandLineFlags(&amp;argc, &amp;argv, true);
-    // do something
-    return 0;
-}
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span><span class=""> </span><span class="cpf">&lt;gflags/gflags.h&gt;</span><span class="cp">
+</span><span class="cp"></span><span class="">
+</span><span class=""></span><span class="kt">int</span><span class=""> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class=""> </span><span class="n">argc</span><span class="p">,</span><span class=""> </span><span class="kt">char</span><span class="o">*</span><span class=""> </span><span class="n">argv</span><span class="p">[])</span><span class=""> </span><span class="p">{</span><span class="">
+</span><span class="">    </span><span class="n">gflags</span><span class="o">::</span><span class="n">SetUsageMessage</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;This is a program to test gflags&#34;</span><span class="p">);</span><span class="">
+</span><span class="">    </span><span class="n">gflags</span><span class="o">::</span><span class="n">ParseCommandLineFlags</span><span class="p">(</span><span class="o">&amp;</span><span class="n">argc</span><span class="p">,</span><span class=""> </span><span class="o">&amp;</span><span class="n">argv</span><span class="p">,</span><span class=""> </span><span class="nb">true</span><span class="p">);</span><span class="">
+</span><span class="">    </span><span class="c1">// do something
+</span><span class="c1"></span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="mi">0</span><span class="p">;</span><span class="">
+</span><span class=""></span><span class="p">}</span></code></pre>
+</div>
 <p>あとは個々のソースファイルでオプションを追加。<code>namespace</code> にも入れられる。</p>
-
-<pre><code class="language-c++">#include &lt;gflags/gflags.h&gt;
-
-namespace tapiola {
-    DEFINE_uint64(sibelius, 0, &quot;string that is displayed with --help flag&quot;);
-}
-
-void func(){
-    std::cout &lt;&lt; tapiola::FLAGS_sibelius &lt;&lt; std::endl;
-}
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span><span class=""> </span><span class="cpf">&lt;gflags/gflags.h&gt;</span><span class="cp">
+</span><span class="cp"></span><span class="">
+</span><span class=""></span><span class="k">namespace</span><span class=""> </span><span class="n">tapiola</span><span class=""> </span><span class="p">{</span><span class="">
+</span><span class="">    </span><span class="n">DEFINE_uint64</span><span class="p">(</span><span class="n">sibelius</span><span class="p">,</span><span class=""> </span><span class="mi">0</span><span class="p">,</span><span class=""> </span><span class="sa"></span><span class="s">&#34;string that is displayed with --help flag&#34;</span><span class="p">);</span><span class="">
+</span><span class=""></span><span class="p">}</span><span class="">
+</span><span class="">
+</span><span class=""></span><span class="kt">void</span><span class=""> </span><span class="n">func</span><span class="p">(){</span><span class="">
+</span><span class="">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class=""> </span><span class="o">&lt;&lt;</span><span class=""> </span><span class="n">tapiola</span><span class="o">::</span><span class="n">FLAGS_sibelius</span><span class=""> </span><span class="o">&lt;&lt;</span><span class=""> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span><span class="">
+</span><span class=""></span><span class="p">}</span></code></pre>
+</div>
 <h2 id="cmdline">cmdline</h2>
 
 <p><a href="https://github.com/tanakh/cmdline">https://github.com/tanakh/cmdline</a><br>
@@ -392,11 +388,6 @@ void func(){
 </nav>
 
 <footer>(ɔ) 2008 岩嵜航 Watal M. Iwasaki</footer>
-<script src="/js/highlight.pack.js"></script>
-<script>
-hljs.initHighlightingOnLoad();
-</script>
-
 </body>
 </html>
 
