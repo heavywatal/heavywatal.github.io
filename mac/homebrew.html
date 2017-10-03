@@ -94,27 +94,24 @@ Homebrew
 cf. <a href="/dev/devenv.html">/dev/devenv</a></p></li>
 
 <li><p>ターミナルから下記のコマンドを実行し、指示に従ってパスワードを入力する:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">/usr/bin/ruby -e </span><span class="s2">&#34;</span><span class="k">$(</span><span class="">curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install</span><span class="k">)</span><span class="s2">&#34;</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">/usr/bin/ruby -e <span class="s2">&#34;</span><span class="k">$(</span>curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install<span class="k">)</span><span class="s2">&#34;</span></code></pre></div>
 <p>デフォルトの <code>/usr/local/</code> にインストールするのが嫌なら、
 例えばホーム以下の <code>~/.homebrew/</code> にインストールすることもできる:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% </span><span class="nb">cd</span><span class="">
-</span><span class="">% mkdir .homebrew
-</span><span class="">% curl -L https://github.com/Homebrew/brew/tarball/master </span><span class="p">|</span><span class=""> tar xz --strip </span><span class="m">1</span><span class=""> -C .homebrew</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% <span class="nb">cd</span>
+% mkdir .homebrew
+% curl -L https://github.com/Homebrew/brew/tarball/master <span class="p">|</span> tar xz --strip <span class="m">1</span> -C .homebrew</code></pre></div>
 <p>が、<code>/usr/local/</code> 以外にインストールすると、
 bottle機能を封じられて毎回自前ビルドする仕様になってしまったので、
 非力なラップトップとかでは結構厳しい。</p></li>
 
 <li><p><code>.zshenv</code> (もしくは<code>.zshrc</code>) でパスを通す:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">PATH</span><span class=""></span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="">/.homebrew/bin:/usr/local/bin:</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="">
-</span><span class=""></span><span class="nv">brew_prefix</span><span class=""></span><span class="o">=</span><span class="k">$(</span><span class="">brew --prefix </span><span class="m">2</span><span class="">&gt;/dev/null</span><span class="k">)</span><span class="">
-</span><span class=""></span><span class="k">if</span><span class=""> </span><span class="o">[</span><span class=""> -n </span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">brew_prefix</span><span class="si">}</span><span class="s2">&#34;</span><span class=""> </span><span class="o">]</span><span class="p">;</span><span class=""> </span><span class="k">then</span><span class="">
-</span><span class="">    </span><span class="nv">MANPATH</span><span class=""></span><span class="o">=</span><span class="si">${</span><span class="nv">brew_prefix</span><span class="si">}</span><span class="">/share/man:</span><span class="si">${</span><span class="nv">MANPATH</span><span class="si">}</span><span class="">
-</span><span class="">    </span><span class="nv">fpath</span><span class=""></span><span class="o">=(</span><span class="si">${</span><span class="nv">brew_prefix</span><span class="si">}</span><span class="">/share/zsh-completions </span><span class="si">${</span><span class="nv">fpath</span><span class="si">}</span><span class="o">)</span><span class="">
-</span><span class=""></span><span class="k">fi</span><span class="">
-</span><span class=""></span><span class="nb">unset</span><span class=""> brew_prefix</span></code></pre>
-</div></li>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.homebrew/bin:/usr/local/bin:<span class="si">${</span><span class="nv">PATH</span><span class="si">}</span>
+<span class="nv">brew_prefix</span><span class="o">=</span><span class="k">$(</span>brew --prefix <span class="m">2</span>&gt;/dev/null<span class="k">)</span>
+<span class="k">if</span> <span class="o">[</span> -n <span class="s2">&#34;</span><span class="si">${</span><span class="nv">brew_prefix</span><span class="si">}</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="nv">MANPATH</span><span class="o">=</span><span class="si">${</span><span class="nv">brew_prefix</span><span class="si">}</span>/share/man:<span class="si">${</span><span class="nv">MANPATH</span><span class="si">}</span>
+    <span class="nv">fpath</span><span class="o">=(</span><span class="si">${</span><span class="nv">brew_prefix</span><span class="si">}</span>/share/zsh-completions <span class="si">${</span><span class="nv">fpath</span><span class="si">}</span><span class="o">)</span>
+<span class="k">fi</span>
+<span class="nb">unset</span> brew_prefix</code></pre></div></li>
 </ol>
 
 <h2 id="usage">Usage</h2>

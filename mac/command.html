@@ -87,26 +87,23 @@ Mac固有コマンド
 <p>Finder でダブルクリックするのと同じように、
 Terminal から一発でファイルを開くことができる。</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 関連付けられたデフォルトのアプリケーションで開く
-</span><span class="c1"></span><span class="">% open hudson1992g.pdf
-</span><span class="">
-</span><span class=""></span><span class="c1"># アプリケーションを指定して開く
-</span><span class="c1"></span><span class="">% open -a Skim hudson1992g.pdf
-</span><span class="">
-</span><span class=""></span><span class="c1"># カレントディレクトリをFinderで開く
-</span><span class="c1"></span><span class="">% open .</span></code></pre>
-</div>
+</span><span class="c1"></span>% open hudson1992g.pdf
+
+<span class="c1"># アプリケーションを指定して開く
+</span><span class="c1"></span>% open -a Skim hudson1992g.pdf
+
+<span class="c1"># カレントディレクトリをFinderで開く
+</span><span class="c1"></span>% open .</code></pre></div>
 <h3 id="pbcopy-pbpaste"><code>pbcopy</code>, <code>pbpaste</code></h3>
 
 <p>ターミナルからクリップボード(pasteboard)を操作する。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% </span><span class="nb">pwd</span><span class=""> </span><span class="p">|</span><span class=""> pbcopy
-</span><span class="">% pbpaste </span><span class="p">|</span><span class=""> wc</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% <span class="nb">pwd</span> <span class="p">|</span> pbcopy
+% pbpaste <span class="p">|</span> wc</code></pre></div>
 <p><a href="/dev/tmux.html">tmux内で使うにはreattach-to-user-namespaceが必要。</a></p>
 
 <h3 id="say-音声読み上げ"><code>say</code> 音声読み上げ</h3>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% say hello world
-</span><span class="">% pbpaste </span><span class="p">|</span><span class=""> say</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% say hello world
+% pbpaste <span class="p">|</span> say</code></pre></div>
 <p>声は環境設定の Accessibility &gt; Speech で変更可能。</p>
 
 <h3 id="killall"><code>killall</code></h3>
@@ -114,10 +111,9 @@ Terminal から一発でファイルを開くことができる。</p>
 <p>Finder や Dock など、GUIから終了させにくいアプリケーションを再起動する。
 アプリケーションの動作が不安定になったとき、設定変更を反映させたいとき、
 メモリを開放したいときなどに使える。:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% killall Finder
-</span><span class="">% killall Dock
-</span><span class="">% killall Kotoeri</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% killall Finder
+% killall Dock
+% killall Kotoeri</code></pre></div>
 <h2 id="設定関連">設定関連</h2>
 
 <h3 id="defaults"><code>defaults</code></h3>
@@ -125,20 +121,19 @@ Terminal から一発でファイルを開くことができる。</p>
 <p><code>/Library/Preferences/</code> 以下にある各種設定ファイル.plistを編集する。
 <code>true</code> に設定した項目を元に戻すには、
 項目自体を <code>delete</code> するか、<code>false</code> に設定する。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">defaults </span><span class="o">[</span><span class="">write/delete</span><span class="o">]</span><span class=""> DOMAIN KEY -TYPE VALUE
-</span><span class="">
-</span><span class=""></span><span class="c1"># Finderのタイトルバーにフルパスを表示
-</span><span class="c1"></span><span class="">defaults write com.apple.finder _FXShowPosixPathInTitle -boolean </span><span class="nb">true</span><span class="">
-</span><span class="">
-</span><span class=""></span><span class="c1"># Quicklook上でコピペできるようにする
-</span><span class="c1"></span><span class="">defaults write com.apple.finder QLEnableTextSelection -bool </span><span class="nb">true</span><span class="">
-</span><span class="">
-</span><span class=""></span><span class="c1"># iTerm2のタブの横幅を広くする
-</span><span class="c1"></span><span class="">defaults write com.googlecode.iterm2 OptimumTabWidth -int </span><span class="m">360</span><span class="">
-</span><span class="">
-</span><span class=""></span><span class="c1"># Launchpadの並び順をリセット
-</span><span class="c1"></span><span class="">defaults write com.apple.dock ResetLaunchPad -bool true</span><span class="p">;</span><span class=""> killall Dock</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">defaults <span class="o">[</span>write/delete<span class="o">]</span> DOMAIN KEY -TYPE VALUE
+
+<span class="c1"># Finderのタイトルバーにフルパスを表示
+</span><span class="c1"></span>defaults write com.apple.finder _FXShowPosixPathInTitle -boolean <span class="nb">true</span>
+
+<span class="c1"># Quicklook上でコピペできるようにする
+</span><span class="c1"></span>defaults write com.apple.finder QLEnableTextSelection -bool <span class="nb">true</span>
+
+<span class="c1"># iTerm2のタブの横幅を広くする
+</span><span class="c1"></span>defaults write com.googlecode.iterm2 OptimumTabWidth -int <span class="m">360</span>
+
+<span class="c1"># Launchpadの並び順をリセット
+</span><span class="c1"></span>defaults write com.apple.dock ResetLaunchPad -bool true<span class="p">;</span> killall Dock</code></pre></div>
 <p><a href="http://www.titanium.free.fr">Onyx</a> や
 <a href="http://www.bresink.com/osx/TinkerTool.html">Tinkertool</a>
 などのGUIアプリを使うほうが簡単で安心かも</p>

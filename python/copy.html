@@ -89,30 +89,27 @@ copy
 特に代入・参照・コピー・mutable/immutableらへんの理解に苦しんでる人のメモ。</p>
 
 <h2 id="pythonの代入は基本的に参照渡し">Pythonの代入は基本的に参照渡し</h2>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">l</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">2</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">]</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">m</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">l</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mi">0</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">m</span><span class="">
-</span><span class=""></span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">0</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">]</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">m</span> <span class="o">=</span> <span class="n">l</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">m</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span></code></pre></div>
 <p><code>m</code> に渡るのは <code>l</code> と同じ実体に対する参照。
 <code>l[1] = 0</code> は <code>l</code> を変更しているのではなく、<code>l</code> を通してその実体を変更してる。
 その変更は <code>m</code> を通して見ても同じ。</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">l</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">2</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">]</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">l</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">m</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">l</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class=""> </span><span class="mi">6</span><span class="p">,</span><span class=""> </span><span class="mi">6</span><span class="p">]</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">m</span><span class="">
-</span><span class=""></span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">2</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">]</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">l</span> <span class="o">=</span> <span class="n">m</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">m</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span></code></pre></div>
 <p><code>l = [6, 6, 6]</code> は新しい実体への参照を <code>l</code> に与える。
 <code>l</code> が参照していた実体に対する変更ではないので、
 <code>m</code> から見える実体にも変化は無い。</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">x</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mi">0</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">y</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">x</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">x</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mi">1</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">y</span><span class="">
-</span><span class=""></span><span class="mi">0</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span> <span class="o">=</span> <span class="n">x</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span>
+<span class="mi">0</span></code></pre></div>
 <p>これも同様。<code>y</code> には <code>x</code> と同じ <code>0</code> への参照が渡る。
 <code>x = 1</code> は <code>x</code> を通した <code>0</code> への変更ではなく
 <code>x</code> の参照先を <code>1</code> に変えるだけなので、<code>y</code> の指す値に変更は無い。</p>
@@ -132,45 +129,42 @@ copy
 
 <p>immutableなオブジェクトを変えることはできない。
 immutableなオブジェクトを参照していた変数に別のオブジェクトの参照を渡すことはできる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">t</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">2</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mi">0</span><span class="">
-</span><span class=""></span><span class="n">Traceback</span><span class=""> </span><span class="p">(</span><span class="n">most</span><span class=""> </span><span class="n">recent</span><span class=""> </span><span class="n">call</span><span class=""> </span><span class="n">last</span><span class="p">):</span><span class="">
-</span><span class="">  </span><span class="n">File</span><span class=""> </span><span class="sa"></span><span class="s2">&#34;&lt;stdin&gt;&#34;</span><span class="p">,</span><span class=""> </span><span class="n">line</span><span class=""> </span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="ow">in</span><span class=""> </span><span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span><span class="">
-</span><span class=""></span><span class="ne">TypeError</span><span class="p">:</span><span class=""> </span><span class="sa"></span><span class="s1">&#39;tuple&#39;</span><span class=""> </span><span class="nb">object</span><span class=""> </span><span class="n">does</span><span class=""> </span><span class="ow">not</span><span class=""> </span><span class="n">support</span><span class=""> </span><span class="n">item</span><span class=""> </span><span class="n">assignment</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">t</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class=""> </span><span class="mi">0</span><span class="p">,</span><span class=""> </span><span class="mi">0</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">t</span><span class="">
-</span><span class=""></span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class=""> </span><span class="mi">0</span><span class="p">,</span><span class=""> </span><span class="mi">0</span><span class="p">)</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
+  <span class="n">File</span> <span class="sa"></span><span class="s2">&#34;&lt;stdin&gt;&#34;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">TypeError</span><span class="p">:</span> <span class="sa"></span><span class="s1">&#39;tuple&#39;</span> <span class="nb">object</span> <span class="n">does</span> <span class="ow">not</span> <span class="n">support</span> <span class="n">item</span> <span class="n">assignment</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">t</span>
+<span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></code></pre></div>
 <p>文字列や数字も考え方は同じ。</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">s</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="sa"></span><span class="s2">&#34;abc&#34;</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="sa"></span><span class="s2">&#34;z&#34;</span><span class="">
-</span><span class=""></span><span class="n">Traceback</span><span class=""> </span><span class="p">(</span><span class="n">most</span><span class=""> </span><span class="n">recent</span><span class=""> </span><span class="n">call</span><span class=""> </span><span class="n">last</span><span class="p">):</span><span class="">
-</span><span class="">  </span><span class="n">File</span><span class=""> </span><span class="sa"></span><span class="s2">&#34;&lt;stdin&gt;&#34;</span><span class="p">,</span><span class=""> </span><span class="n">line</span><span class=""> </span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="ow">in</span><span class=""> </span><span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span><span class="">
-</span><span class=""></span><span class="ne">TypeError</span><span class="p">:</span><span class=""> </span><span class="sa"></span><span class="s1">&#39;str&#39;</span><span class=""> </span><span class="nb">object</span><span class=""> </span><span class="n">does</span><span class=""> </span><span class="ow">not</span><span class=""> </span><span class="n">support</span><span class=""> </span><span class="n">item</span><span class=""> </span><span class="n">assignment</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">s</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="sa"></span><span class="s2">&#34;xyz&#34;</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">s</span><span class="">
-</span><span class=""></span><span class="sa"></span><span class="s1">&#39;xyz&#39;</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="mi">0</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mi">1</span><span class="">
-</span><span class="">  </span><span class="n">File</span><span class=""> </span><span class="sa"></span><span class="s2">&#34;&lt;stdin&gt;&#34;</span><span class="p">,</span><span class=""> </span><span class="n">line</span><span class=""> </span><span class="mi">1</span><span class="">
-</span><span class=""></span><span class="ne">SyntaxError</span><span class="p">:</span><span class=""> </span><span class="n">can</span><span class="sa"></span><span class="s1">&#39;t assign to literal</span><span class="err">
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="n">s</span> <span class="o">=</span> <span class="sa"></span><span class="s2">&#34;abc&#34;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="sa"></span><span class="s2">&#34;z&#34;</span>
+<span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
+  <span class="n">File</span> <span class="sa"></span><span class="s2">&#34;&lt;stdin&gt;&#34;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">TypeError</span><span class="p">:</span> <span class="sa"></span><span class="s1">&#39;str&#39;</span> <span class="nb">object</span> <span class="n">does</span> <span class="ow">not</span> <span class="n">support</span> <span class="n">item</span> <span class="n">assignment</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">s</span> <span class="o">=</span> <span class="sa"></span><span class="s2">&#34;xyz&#34;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">s</span>
+<span class="sa"></span><span class="s1">&#39;xyz&#39;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="mi">0</span> <span class="o">=</span> <span class="mi">1</span>
+  <span class="n">File</span> <span class="sa"></span><span class="s2">&#34;&lt;stdin&gt;&#34;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">SyntaxError</span><span class="p">:</span> <span class="n">can</span><span class="sa"></span><span class="s1">&#39;t assign to literal</span><span class="err">
 </span><span class="err"></span><span class="s1">&gt;&gt;&gt; x = 0</span><span class="err">
 </span><span class="err"></span><span class="s1">&gt;&gt;&gt; x = 1</span><span class="err">
 </span><span class="err"></span><span class="s1">&gt;&gt;&gt; x</span><span class="err">
-</span><span class="err"></span><span class="s1">1</span></code></pre>
-</div>
+</span><span class="err"></span><span class="s1">1</span></code></pre></div>
 <p>immutableなオブジェクトで変更できないのは「何を参照しているか」という情報。
 参照先の実体がmutableなオブジェクトならそいつは変更できる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">l</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">2</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">]</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">t</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class=""> </span><span class="n">l</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">t</span><span class="">
-</span><span class=""></span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">2</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">],</span><span class=""> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">2</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">])</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mi">0</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">t</span><span class="">
-</span><span class=""></span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">0</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">],</span><span class=""> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">0</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">])</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mi">0</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">l</span><span class="">
-</span><span class=""></span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">0</span><span class="p">,</span><span class=""> </span><span class="mi">0</span><span class="p">]</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">t</span>
+<span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">t</span>
+<span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">l</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span></code></pre></div>
 <p><code>t</code> が参照しているのは、<code>l</code> が指す実体へのimmutableな参照を持つ <code>tuple</code> 。
 「その <code>tuple</code> が <code>[0]</code> 番目で何を参照しているか」を変更することはできないが、
 参照している実体はmutableな <code>list</code> なので <code>l</code> や <code>t[0]</code> を通して変更できる。
@@ -178,40 +172,38 @@ immutableなオブジェクトを参照していた変数に別のオブジェ�
 <code>int* const</code> なポインタを格納した固定長配列みたいなもの？</p>
 
 <h2 id="copy-1">copy</h2>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="kn">import</span><span class=""> </span><span class="nn">copy</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">l</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">2</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">]</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">m</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mi">0</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">l</span><span class="">
-</span><span class=""></span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">0</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">]</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">m</span><span class="">
-</span><span class=""></span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">2</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">]</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">copy</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">m</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">l</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">m</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span></code></pre></div>
 <p><code>copy.copy()</code> によって <code>l</code> と同じ中身の新しい <code>list</code> 実体が作られ、
 それへの参照が <code>m</code> に渡される。<code>l</code> を通した古い <code>list</code> への変更は <code>m</code> から見える <code>list</code> には影響しない。
 中身がすべてimmutableな一重のコンテナならこれでいいが、
 そうじゃない場合「<code>l</code> と同じ中身」というのが問題になる。
 C++で言えば、メンバ変数としてポインタを持つクラスを
 デフォルトのコピーコンストラクタでコピーしたような状態になる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="kn">import</span><span class=""> </span><span class="nn">copy</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">l</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">2</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">]</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">m</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class=""> </span><span class="n">l</span><span class="p">]</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">x</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">m</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">y</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">z</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">m</span><span class="">
-</span><span class=""></span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">2</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">],</span><span class=""> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">2</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">]]</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mi">0</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mi">0</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">x</span><span class="">
-</span><span class=""></span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">0</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">],</span><span class=""> </span><span class="mi">0</span><span class="p">]</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">y</span><span class="">
-</span><span class=""></span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">0</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">],</span><span class=""> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">0</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">]]</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">z</span><span class="">
-</span><span class=""></span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">2</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">],</span><span class=""> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">2</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">]]</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">copy</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">m</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="p">,</span> <span class="n">l</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">m</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">z</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">m</span>
+<span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span>
+<span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span>
+<span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">z</span>
+<span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]]</span></code></pre></div>
 <ul>
 <li><code>x</code> はただの代入によって <code>m</code> と同じ実体への参照を受け取ったので、
 <code>m</code> を通して行った変更はすべて共有している。</li>
@@ -227,43 +219,42 @@ C++で言えば、メンバ変数としてポインタを持つクラスを
 <code>z</code> の中にある <code>[1, 2, 3]</code> は <code>l</code> とは異なる実体であり、
 <code>l</code> や <code>m</code> などを通して行われた変更は全く影響しない。</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="kn">import</span><span class=""> </span><span class="nn">copy</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="k">class</span><span class=""> </span><span class="nc">CopyTest</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span><span class="">
-</span><span class=""></span><span class="o">...</span><span class="">     </span><span class="k">def</span><span class=""> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span><span class="">
-</span><span class=""></span><span class="o">...</span><span class="">         </span><span class="bp">self</span><span class="o">.</span><span class="n">l</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span><span class="">
-</span><span class=""></span><span class="o">...</span><span class="">         </span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="sa"></span><span class="s2">&#34;xyz&#34;</span><span class="">
-</span><span class=""></span><span class="o">...</span><span class="">     </span><span class="k">def</span><span class=""> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span><span class="">
-</span><span class=""></span><span class="o">...</span><span class="">         </span><span class="k">return</span><span class=""> </span><span class="nb">str</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">l</span><span class="p">,</span><span class=""> </span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">])</span><span class="">
-</span><span class=""></span><span class="o">...</span><span class="">     </span><span class="k">def</span><span class=""> </span><span class="nf">self_copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span><span class="">
-</span><span class=""></span><span class="o">...</span><span class="">         </span><span class="bp">self</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="o">...</span><span class="">     </span><span class="k">def</span><span class=""> </span><span class="nf">self_deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span><span class="">
-</span><span class=""></span><span class="o">...</span><span class="">         </span><span class="bp">self</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="o">...</span><span class="">     </span><span class="k">def</span><span class=""> </span><span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span><span class="">
-</span><span class=""></span><span class="o">...</span><span class="">         </span><span class="k">return</span><span class=""> </span><span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="o">...</span><span class="">     </span><span class="k">def</span><span class=""> </span><span class="nf">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span><span class="">
-</span><span class=""></span><span class="o">...</span><span class="">         </span><span class="k">return</span><span class=""> </span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="o">...</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">a</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">CopyTest</span><span class="p">()</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">b</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">a</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">b</span><span class="o">.</span><span class="n">self_copy</span><span class="p">()</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">c</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">a</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">c</span><span class="o">.</span><span class="n">self_deepcopy</span><span class="p">()</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">d</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">a</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">e</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">a</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">()</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">a</span><span class="o">.</span><span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mi">0</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">a</span><span class="o">.</span><span class="n">s</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="sa"></span><span class="s2">&#34;---&#34;</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">a</span><span class="">
-</span><span class=""></span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">0</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">],</span><span class=""> </span><span class="sa"></span><span class="s1">&#39;---&#39;</span><span class="p">]</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">b</span><span class="">
-</span><span class=""></span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">0</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">],</span><span class=""> </span><span class="sa"></span><span class="s1">&#39;---&#39;</span><span class="p">]</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">c</span><span class="">
-</span><span class=""></span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">0</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">],</span><span class=""> </span><span class="sa"></span><span class="s1">&#39;---&#39;</span><span class="p">]</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">d</span><span class="">
-</span><span class=""></span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">0</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">],</span><span class=""> </span><span class="sa"></span><span class="s1">&#39;xyz&#39;</span><span class="p">]</span><span class="">
-</span><span class=""></span><span class="o">&gt;&gt;&gt;</span><span class=""> </span><span class="n">e</span><span class="">
-</span><span class=""></span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class=""> </span><span class="mi">2</span><span class="p">,</span><span class=""> </span><span class="mi">3</span><span class="p">],</span><span class=""> </span><span class="sa"></span><span class="s1">&#39;xyz&#39;</span><span class="p">]</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">copy</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">class</span> <span class="nc">CopyTest</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="o">...</span>     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="o">...</span>         <span class="bp">self</span><span class="o">.</span><span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="o">...</span>         <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="sa"></span><span class="s2">&#34;xyz&#34;</span>
+<span class="o">...</span>     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="o">...</span>         <span class="k">return</span> <span class="nb">str</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">l</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">])</span>
+<span class="o">...</span>     <span class="k">def</span> <span class="nf">self_copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="o">...</span>         <span class="bp">self</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+<span class="o">...</span>     <span class="k">def</span> <span class="nf">self_deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="o">...</span>         <span class="bp">self</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+<span class="o">...</span>     <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="o">...</span>         <span class="k">return</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+<span class="o">...</span>     <span class="k">def</span> <span class="nf">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="o">...</span>         <span class="k">return</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">a</span> <span class="o">=</span> <span class="n">CopyTest</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span> <span class="o">=</span> <span class="n">a</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span><span class="o">.</span><span class="n">self_copy</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">a</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">self_deepcopy</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">d</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">a</span><span class="o">.</span><span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">a</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="sa"></span><span class="s2">&#34;---&#34;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">a</span>
+<span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="sa"></span><span class="s1">&#39;---&#39;</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span>
+<span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="sa"></span><span class="s1">&#39;---&#39;</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span>
+<span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="sa"></span><span class="s1">&#39;---&#39;</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">d</span>
+<span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="sa"></span><span class="s1">&#39;xyz&#39;</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">e</span>
+<span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="sa"></span><span class="s1">&#39;xyz&#39;</span><span class="p">]</span></code></pre></div>
 <p><code>self = copy.copy(self)</code> なメソッドは成功しないらしい。</p>
 
 </article>

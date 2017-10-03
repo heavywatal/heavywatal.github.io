@@ -89,12 +89,10 @@ edgeR — リードカウントから発現変動遺伝子を検出
 <a href="https://www.ncbi.nlm.nih.gov/pubmed/19910308">https://www.ncbi.nlm.nih.gov/pubmed/19910308</a></p>
 
 <p><a href="/rstats/bioconductor.html">Bioconductor</a> パッケージとしてインストール</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kn">source</span><span class="p">(</span><span class="s">&#39;https://bioconductor.org/biocLite.R&#39;</span><span class="p">)</span><span class="">
-</span><span class="">biocLite</span><span class="p">(</span><span class="s">&#39;edgeR&#39;</span><span class="p">)</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kn">source</span><span class="p">(</span><span class="s">&#39;https://bioconductor.org/biocLite.R&#39;</span><span class="p">)</span>
+biocLite<span class="p">(</span><span class="s">&#39;edgeR&#39;</span><span class="p">)</span></code></pre></div>
 <p>ユーザーガイドPDFを開く</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">edgeRUsersGuide</span><span class="p">()</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">edgeRUsersGuide<span class="p">()</span></code></pre></div>
 <p>とても良くできたドキュメントなので必読</p>
 
 <h2 id="使い方">使い方</h2>
@@ -103,31 +101,26 @@ edgeR — リードカウントから発現変動遺伝子を検出
 <li><code>HTSeq</code> などで遺伝子ごとのリードカウントを用意する</li>
 
 <li><p>Rで読み込む</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span><span class="">edgeR</span><span class="p">)</span><span class="">
-</span><span class="">
-</span><span class="">targets </span><span class="o">=</span><span class=""> </span><span class="kt">data.frame</span><span class="p">(</span><span class="">group</span><span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="s">&#39;control&#39;</span><span class="p">,</span><span class=""> </span><span class="s">&#39;case&#39;</span><span class="p">),</span><span class="">
-</span><span class="">                     files</span><span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="s">&#39;control.txt&#39;</span><span class="p">,</span><span class=""> </span><span class="s">&#39;case.txt&#39;</span><span class="p">))</span><span class="">
-</span><span class="">dge </span><span class="o">=</span><span class=""> readDGE</span><span class="p">(</span><span class="">targets</span><span class="p">,</span><span class=""> header</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span></code></pre>
-</div></li>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span>edgeR<span class="p">)</span>
+
+targets <span class="o">=</span> <span class="kt">data.frame</span><span class="p">(</span>group<span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="s">&#39;control&#39;</span><span class="p">,</span> <span class="s">&#39;case&#39;</span><span class="p">),</span>
+                     files<span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="s">&#39;control.txt&#39;</span><span class="p">,</span> <span class="s">&#39;case.txt&#39;</span><span class="p">))</span>
+dge <span class="o">=</span> readDGE<span class="p">(</span>targets<span class="p">,</span> header<span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span></code></pre></div></li>
 
 <li><p>低カウント過ぎる遺伝子を除去</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">ok_c </span><span class="o">=</span><span class=""> </span><span class="p">(</span><span class="">dge</span><span class="o">$</span><span class="">counts </span><span class="o">&gt;</span><span class=""> </span><span class="m">5</span><span class="p">)</span><span class=""> </span><span class="o">%&gt;%</span><span class=""> rowSums </span><span class="o">%&gt;%</span><span class=""> </span><span class="p">{</span><span class="m">.</span><span class=""> </span><span class="o">&gt;</span><span class=""> </span><span class="m">0</span><span class="p">}</span><span class="">
-</span><span class="">ok_cpm </span><span class="o">=</span><span class=""> dge </span><span class="o">%&gt;%</span><span class=""> cpm </span><span class="o">%&gt;%</span><span class=""> </span><span class="p">{</span><span class="m">.</span><span class=""> </span><span class="o">&gt;</span><span class=""> </span><span class="m">1</span><span class="p">}</span><span class=""> </span><span class="o">%&gt;%</span><span class=""> rowSums </span><span class="o">%&gt;%</span><span class=""> </span><span class="p">{</span><span class="m">.</span><span class=""> </span><span class="o">&gt;</span><span class=""> </span><span class="m">0</span><span class="p">}</span><span class="">
-</span><span class="">dge </span><span class="o">=</span><span class=""> dge</span><span class="p">[</span><span class="">ok_c </span><span class="o">&amp;</span><span class=""> ok_cpm</span><span class="p">,</span><span class=""> </span><span class="p">,</span><span class=""> keep.lib.sizes</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">]</span></code></pre>
-</div></li>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">ok_c <span class="o">=</span> <span class="p">(</span>dge<span class="o">$</span>counts <span class="o">&gt;</span> <span class="m">5</span><span class="p">)</span> <span class="o">%&gt;%</span> rowSums <span class="o">%&gt;%</span> <span class="p">{</span><span class="m">.</span> <span class="o">&gt;</span> <span class="m">0</span><span class="p">}</span>
+ok_cpm <span class="o">=</span> dge <span class="o">%&gt;%</span> cpm <span class="o">%&gt;%</span> <span class="p">{</span><span class="m">.</span> <span class="o">&gt;</span> <span class="m">1</span><span class="p">}</span> <span class="o">%&gt;%</span> rowSums <span class="o">%&gt;%</span> <span class="p">{</span><span class="m">.</span> <span class="o">&gt;</span> <span class="m">0</span><span class="p">}</span>
+dge <span class="o">=</span> dge<span class="p">[</span>ok_c <span class="o">&amp;</span> ok_cpm<span class="p">,</span> <span class="p">,</span> keep.lib.sizes<span class="o">=</span><span class="kc">FALSE</span><span class="p">]</span></code></pre></div></li>
 
 <li><p>正規化係数を計算</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">dge </span><span class="o">=</span><span class=""> calcNormFactors</span><span class="p">(</span><span class="">dge</span><span class="p">)</span><span class="">
-</span><span class="">dge</span><span class="o">$</span><span class="">samples</span></code></pre>
-</div></li>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">dge <span class="o">=</span> calcNormFactors<span class="p">(</span>dge<span class="p">)</span>
+dge<span class="o">$</span>samples</code></pre></div></li>
 
 <li><p>モデル</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">design </span><span class="o">=</span><span class=""> model.matrix</span><span class="p">(</span><span class="o">~</span><span class=""> </span><span class="m">0</span><span class=""> </span><span class="o">+</span><span class=""> group</span><span class="p">,</span><span class=""> data</span><span class="o">=</span><span class="">targets</span><span class="p">)</span></code></pre>
-</div></li>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">design <span class="o">=</span> model.matrix<span class="p">(</span><span class="o">~</span> <span class="m">0</span> <span class="o">+</span> group<span class="p">,</span> data<span class="o">=</span>targets<span class="p">)</span></code></pre></div></li>
 
 <li><p>common dispersion, trended dispersion, tagwise dispersionを推定</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">dge </span><span class="o">=</span><span class=""> estimateDisp</span><span class="p">(</span><span class="">dge</span><span class="p">,</span><span class=""> design</span><span class="p">)</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">dge <span class="o">=</span> estimateDisp<span class="p">(</span>dge<span class="p">,</span> design<span class="p">)</span></code></pre></div>
 <p>ただしこれにはbiological replicatesが必要。
 1グループ1サンプルずつしか無い場合は4つの選択肢がある。</p>
 
@@ -135,49 +128,43 @@ edgeR — リードカウントから発現変動遺伝子を検出
 <li>検定を諦めてdescriptive discussion (推奨)</li>
 
 <li><p>経験的な値を適当に入れとく</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">bcv </span><span class="o">=</span><span class=""> </span><span class="m">0.4</span><span class="">  </span><span class="c1"># for human</span><span class="">
-</span><span class="">bcv </span><span class="o">=</span><span class=""> </span><span class="m">0.1</span><span class="">  </span><span class="c1"># for genetically identical model organisms</span><span class="">
-</span><span class="">bcv </span><span class="o">=</span><span class=""> </span><span class="m">0.01</span><span class=""> </span><span class="c1"># for technical replicates</span><span class="">
-</span><span class="">dge</span><span class="o">$</span><span class="">common.dispersion </span><span class="o">=</span><span class=""> bcv </span><span class="o">^</span><span class=""> </span><span class="m">2</span></code></pre>
-</div></li>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">bcv <span class="o">=</span> <span class="m">0.4</span>  <span class="c1"># for human</span>
+bcv <span class="o">=</span> <span class="m">0.1</span>  <span class="c1"># for genetically identical model organisms</span>
+bcv <span class="o">=</span> <span class="m">0.01</span> <span class="c1"># for technical replicates</span>
+dge<span class="o">$</span>common.dispersion <span class="o">=</span> bcv <span class="o">^</span> <span class="m">2</span></code></pre></div></li>
 
 <li><p>説明変数を減らしたモデルでdispersionを推定し、フルモデルで使う</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">reduced </span><span class="o">=</span><span class=""> estimateGLMCommonDisp</span><span class="p">(</span><span class="">dge</span><span class="p">,</span><span class=""> reduced.design</span><span class="p">,</span><span class=""> method</span><span class="o">=</span><span class="s">&#39;deviance&#39;</span><span class="p">,</span><span class=""> robust</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span><span class=""> subset</span><span class="o">=</span><span class="kc">NULL</span><span class="p">)</span><span class="">
-</span><span class="">dge</span><span class="o">$</span><span class="">common.dispersion </span><span class="o">=</span><span class=""> reduced</span><span class="o">$</span><span class="">common.dispersion</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">reduced <span class="o">=</span> estimateGLMCommonDisp<span class="p">(</span>dge<span class="p">,</span> reduced.design<span class="p">,</span> method<span class="o">=</span><span class="s">&#39;deviance&#39;</span><span class="p">,</span> robust<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> subset<span class="o">=</span><span class="kc">NULL</span><span class="p">)</span>
+dge<span class="o">$</span>common.dispersion <span class="o">=</span> reduced<span class="o">$</span>common.dispersion</code></pre></div>
 <p>合計カウントが多くてDEGが比較的少ないときに有効。
 当然、1変数2群比較では使えない。</p></li>
 
 <li><p>群間で差がないと考えられるhousekeeping genesから推定。
 100個以上の遺伝子を使うのが望ましい。
 例えばヒトなら</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kp">system</span><span class="p">(</span><span class="s">&#39;wget http://www.tau.ac.il/~elieis/HKG/HK_genes.txt&#39;</span><span class="p">)</span><span class="">
-</span><span class="">hk_genes </span><span class="o">=</span><span class=""> read_tsv</span><span class="p">(</span><span class="s">&#39;HK_genes.txt&#39;</span><span class="p">,</span><span class=""> col_names</span><span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="s">&#39;gene_symbol&#39;</span><span class="p">,</span><span class=""> </span><span class="s">&#39;refseq&#39;</span><span class="p">))</span><span class="">
-</span><span class="">tmp </span><span class="o">=</span><span class=""> dge
-</span><span class="">tmp</span><span class="o">$</span><span class="">samples</span><span class="o">$</span><span class="">group </span><span class="o">=</span><span class=""> </span><span class="m">1</span><span class="">
-</span><span class="">housekeeping </span><span class="o">=</span><span class=""> </span><span class="kp">rownames</span><span class="p">(</span><span class="">tmp</span><span class="o">$</span><span class="">counts</span><span class="p">)</span><span class=""> </span><span class="o">%in%</span><span class=""> hk_genes</span><span class="o">$</span><span class="">gene_symbol
-</span><span class="">hk </span><span class="o">=</span><span class=""> estimateCommonDisp</span><span class="p">(</span><span class="">tmp</span><span class="p">[</span><span class="">housekeeping</span><span class="p">,])</span><span class="">
-</span><span class="">dge</span><span class="o">$</span><span class="">common.dispersion </span><span class="o">=</span><span class=""> hk</span><span class="o">$</span><span class="">common.dispersion</span></code></pre>
-</div></li>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kp">system</span><span class="p">(</span><span class="s">&#39;wget http://www.tau.ac.il/~elieis/HKG/HK_genes.txt&#39;</span><span class="p">)</span>
+hk_genes <span class="o">=</span> read_tsv<span class="p">(</span><span class="s">&#39;HK_genes.txt&#39;</span><span class="p">,</span> col_names<span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="s">&#39;gene_symbol&#39;</span><span class="p">,</span> <span class="s">&#39;refseq&#39;</span><span class="p">))</span>
+tmp <span class="o">=</span> dge
+tmp<span class="o">$</span>samples<span class="o">$</span>group <span class="o">=</span> <span class="m">1</span>
+housekeeping <span class="o">=</span> <span class="kp">rownames</span><span class="p">(</span>tmp<span class="o">$</span>counts<span class="p">)</span> <span class="o">%in%</span> hk_genes<span class="o">$</span>gene_symbol
+hk <span class="o">=</span> estimateCommonDisp<span class="p">(</span>tmp<span class="p">[</span>housekeeping<span class="p">,])</span>
+dge<span class="o">$</span>common.dispersion <span class="o">=</span> hk<span class="o">$</span>common.dispersion</code></pre></div></li>
 </ol></li>
 
 <li><p>1変数2群ならシンプルに検定</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">et </span><span class="o">=</span><span class=""> exactTest</span><span class="p">(</span><span class="">dge</span><span class="p">)</span><span class="">
-</span><span class="">topTags</span><span class="p">(</span><span class="">et</span><span class="p">,</span><span class=""> </span><span class="m">20</span><span class="p">,</span><span class=""> adjust.method</span><span class="o">=</span><span class="s">&#39;BH&#39;</span><span class="p">,</span><span class=""> sort.by</span><span class="o">=</span><span class="s">&#39;PValue&#39;</span><span class="p">)</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">et <span class="o">=</span> exactTest<span class="p">(</span>dge<span class="p">)</span>
+topTags<span class="p">(</span>et<span class="p">,</span> <span class="m">20</span><span class="p">,</span> adjust.method<span class="o">=</span><span class="s">&#39;BH&#39;</span><span class="p">,</span> sort.by<span class="o">=</span><span class="s">&#39;PValue&#39;</span><span class="p">)</span></code></pre></div>
 <p>多群ならGLMで尤度比検定</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">fit </span><span class="o">=</span><span class=""> glmFit</span><span class="p">(</span><span class="">dge</span><span class="p">,</span><span class=""> design</span><span class="p">)</span><span class="">
-</span><span class="">lrt </span><span class="o">=</span><span class=""> glmLRT</span><span class="p">(</span><span class="">fit</span><span class="p">,</span><span class=""> coef</span><span class="o">=</span><span class="m">2</span><span class="o">:</span><span class="m">3</span><span class="p">)</span><span class="">
-</span><span class="">
-</span><span class="">lrt_1vs2 </span><span class="o">=</span><span class=""> glmLRT</span><span class="p">(</span><span class="">fit</span><span class="p">,</span><span class=""> coef</span><span class="o">=</span><span class="m">2</span><span class="p">)</span><span class="">
-</span><span class="">lrt_1vs3 </span><span class="o">=</span><span class=""> glmLRT</span><span class="p">(</span><span class="">fit</span><span class="p">,</span><span class=""> coef</span><span class="o">=</span><span class="m">3</span><span class="p">)</span><span class="">
-</span><span class="">lrt_2vs3 </span><span class="o">=</span><span class=""> glmLRT</span><span class="p">(</span><span class="">fit</span><span class="p">,</span><span class=""> contrast</span><span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class=""> </span><span class="m">-1</span><span class="p">,</span><span class=""> </span><span class="m">1</span><span class="p">))</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">fit <span class="o">=</span> glmFit<span class="p">(</span>dge<span class="p">,</span> design<span class="p">)</span>
+lrt <span class="o">=</span> glmLRT<span class="p">(</span>fit<span class="p">,</span> coef<span class="o">=</span><span class="m">2</span><span class="o">:</span><span class="m">3</span><span class="p">)</span>
+
+lrt_1vs2 <span class="o">=</span> glmLRT<span class="p">(</span>fit<span class="p">,</span> coef<span class="o">=</span><span class="m">2</span><span class="p">)</span>
+lrt_1vs3 <span class="o">=</span> glmLRT<span class="p">(</span>fit<span class="p">,</span> coef<span class="o">=</span><span class="m">3</span><span class="p">)</span>
+lrt_2vs3 <span class="o">=</span> glmLRT<span class="p">(</span>fit<span class="p">,</span> contrast<span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">-1</span><span class="p">,</span> <span class="m">1</span><span class="p">))</span></code></pre></div>
 <p>検定結果からDEGを抜き出す</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">min_lfc </span><span class="o">=</span><span class=""> </span><span class="m">1</span><span class="">
-</span><span class="">de </span><span class="o">=</span><span class=""> decideTestsDGE</span><span class="p">(</span><span class="">et</span><span class="p">,</span><span class=""> adjust.method</span><span class="o">=</span><span class="s">&#39;BH&#39;</span><span class="p">,</span><span class=""> p.value</span><span class="o">=</span><span class="m">0.01</span><span class="p">,</span><span class=""> lfc</span><span class="o">=</span><span class="">min_lfc</span><span class="p">)</span><span class="">
-</span><span class="">de_tags </span><span class="o">=</span><span class=""> </span><span class="kp">rownames</span><span class="p">(</span><span class="">dge</span><span class="p">)[</span><span class="kp">as.logical</span><span class="p">(</span><span class="">de</span><span class="p">)]</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">min_lfc <span class="o">=</span> <span class="m">1</span>
+de <span class="o">=</span> decideTestsDGE<span class="p">(</span>et<span class="p">,</span> adjust.method<span class="o">=</span><span class="s">&#39;BH&#39;</span><span class="p">,</span> p.value<span class="o">=</span><span class="m">0.01</span><span class="p">,</span> lfc<span class="o">=</span>min_lfc<span class="p">)</span>
+de_tags <span class="o">=</span> <span class="kp">rownames</span><span class="p">(</span>dge<span class="p">)[</span><span class="kp">as.logical</span><span class="p">(</span>de<span class="p">)]</span></code></pre></div>
 <p>P値とlogFCの両方で切ったほうがいいらしい。</p>
 
 <div class="note">
@@ -189,14 +176,12 @@ edgeR — リードカウントから発現変動遺伝子を検出
 </li>
 
 <li><p>プロット <code>logFC ~ mean(logCPM)</code> してみる</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">plotSmear</span><span class="p">(</span><span class="">et</span><span class="p">,</span><span class=""> de.tags</span><span class="o">=</span><span class="">de_tags</span><span class="p">)</span><span class="">
-</span><span class="">abline</span><span class="p">(</span><span class="">h</span><span class="o">=</span><span class="">min_lfc </span><span class="o">*</span><span class=""> </span><span class="kt">c</span><span class="p">(</span><span class="m">-1</span><span class="p">,</span><span class=""> </span><span class="m">1</span><span class="p">),</span><span class=""> col</span><span class="o">=</span><span class="s">&#34;blue&#34;</span><span class="p">)</span></code></pre>
-</div></li>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">plotSmear<span class="p">(</span>et<span class="p">,</span> de.tags<span class="o">=</span>de_tags<span class="p">)</span>
+abline<span class="p">(</span>h<span class="o">=</span>min_lfc <span class="o">*</span> <span class="kt">c</span><span class="p">(</span><span class="m">-1</span><span class="p">,</span> <span class="m">1</span><span class="p">),</span> col<span class="o">=</span><span class="s">&#34;blue&#34;</span><span class="p">)</span></code></pre></div></li>
 
 <li><p>Gene Ontology解析</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">go </span><span class="o">=</span><span class=""> goana</span><span class="p">(</span><span class="">lrt</span><span class="p">,</span><span class=""> species</span><span class="o">=</span><span class="s">&#39;Hs&#39;</span><span class="p">)</span><span class="">
-</span><span class="">topGO</span><span class="p">(</span><span class="">go</span><span class="p">)</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">go <span class="o">=</span> goana<span class="p">(</span>lrt<span class="p">,</span> species<span class="o">=</span><span class="s">&#39;Hs&#39;</span><span class="p">)</span>
+topGO<span class="p">(</span>go<span class="p">)</span></code></pre></div>
 <p>NCBI RefSeqアノテーションを使うのでIDはEntrez系で</p></li>
 </ol>
 

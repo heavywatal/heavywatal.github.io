@@ -114,40 +114,39 @@ dplyr — 高速data.frame処理
 適用する順に次々と処理を記述することができるようになる。
 慣れれば書きやすく読みやすい。</dd>
 </dl>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span><span class="">tidyverse</span><span class="p">)</span><span class="">
-</span><span class="">
-</span><span class=""></span><span class="c1">## with piping</span><span class="">
-</span><span class="">iris </span><span class="o">%&gt;%</span><span class="">
-</span><span class="">   dplyr</span><span class="o">::</span><span class="">filter</span><span class="p">(</span><span class="">Species </span><span class="o">!=</span><span class=""> </span><span class="s">&#39;setosa&#39;</span><span class="p">)</span><span class=""> </span><span class="o">%&gt;%</span><span class="">
-</span><span class="">   dplyr</span><span class="o">::</span><span class="">select</span><span class="p">(</span><span class="o">-</span><span class="">dplyr</span><span class="o">::</span><span class="">starts_with</span><span class="p">(</span><span class="s">&#39;Sepal&#39;</span><span class="p">))</span><span class=""> </span><span class="o">%&gt;%</span><span class="">
-</span><span class="">   dplyr</span><span class="o">::</span><span class="">mutate</span><span class="p">(</span><span class="">petal_area</span><span class="o">=</span><span class="">Petal.Length </span><span class="o">*</span><span class=""> Petal.Width </span><span class="o">*</span><span class=""> </span><span class="m">0.5</span><span class="p">)</span><span class=""> </span><span class="o">%&gt;%</span><span class="">
-</span><span class="">   dplyr</span><span class="o">::</span><span class="">group_by</span><span class="p">(</span><span class="">Species</span><span class="p">)</span><span class=""> </span><span class="o">%&gt;%</span><span class="">
-</span><span class="">   dplyr</span><span class="o">::</span><span class="">summarise_all</span><span class="p">(</span><span class="">funs</span><span class="p">(</span><span class="kp">mean</span><span class="p">))</span><span class="">
-</span><span class="">
-</span><span class=""></span><span class="c1">## with a temporary variable</span><span class="">
-</span><span class="">x </span><span class="o">=</span><span class=""> iris
-</span><span class="">x </span><span class="o">=</span><span class=""> dplyr</span><span class="o">::</span><span class="">filter</span><span class="p">(</span><span class="">x</span><span class="p">,</span><span class=""> Species </span><span class="o">!=</span><span class=""> </span><span class="s">&#39;setosa&#39;</span><span class="p">)</span><span class="">
-</span><span class="">x </span><span class="o">=</span><span class=""> dplyr</span><span class="o">::</span><span class="">select</span><span class="p">(</span><span class="">x</span><span class="p">,</span><span class=""> </span><span class="o">-</span><span class="">dplyr</span><span class="o">::</span><span class="">starts_with</span><span class="p">(</span><span class="s">&#39;Sepal&#39;</span><span class="p">))</span><span class="">
-</span><span class="">x </span><span class="o">=</span><span class=""> dplyr</span><span class="o">::</span><span class="">mutate</span><span class="p">(</span><span class="">x</span><span class="p">,</span><span class=""> petal_area</span><span class="o">=</span><span class="">Petal.Length </span><span class="o">*</span><span class=""> Petal.Width </span><span class="o">*</span><span class=""> </span><span class="m">0.5</span><span class="p">)</span><span class="">
-</span><span class="">x </span><span class="o">=</span><span class=""> dplyr</span><span class="o">::</span><span class="">group_by</span><span class="p">(</span><span class="">x</span><span class="p">,</span><span class=""> Species</span><span class="p">)</span><span class="">
-</span><span class="">x </span><span class="o">=</span><span class=""> dplyr</span><span class="o">::</span><span class="">summarise_all</span><span class="p">(</span><span class="">x</span><span class="p">,</span><span class=""> funs</span><span class="p">(</span><span class="kp">mean</span><span class="p">))</span><span class="">
-</span><span class="">
-</span><span class=""></span><span class="c1">## with nested functions</span><span class="">
-</span><span class="">dplyr</span><span class="o">::</span><span class="">summarise_all</span><span class="p">(</span><span class="">
-</span><span class="">  dplyr</span><span class="o">::</span><span class="">group_by</span><span class="p">(</span><span class="">
-</span><span class="">    dplyr</span><span class="o">::</span><span class="">mutate</span><span class="p">(</span><span class="">
-</span><span class="">      dplyr</span><span class="o">::</span><span class="">select</span><span class="p">(</span><span class="">
-</span><span class="">        dplyr</span><span class="o">::</span><span class="">filter</span><span class="p">(</span><span class="">iris</span><span class="p">,</span><span class=""> Species </span><span class="o">!=</span><span class=""> </span><span class="s">&#39;setosa&#39;</span><span class="p">),</span><span class="">
-</span><span class="">        </span><span class="o">-</span><span class="">dplyr</span><span class="o">::</span><span class="">starts_with</span><span class="p">(</span><span class="s">&#39;Sepal&#39;</span><span class="p">)),</span><span class="">
-</span><span class="">      petal_area</span><span class="o">=</span><span class="">Petal.Length </span><span class="o">*</span><span class=""> Petal.Width </span><span class="o">*</span><span class=""> </span><span class="m">0.5</span><span class="p">),</span><span class="">
-</span><span class="">    Species</span><span class="p">),</span><span class="">
-</span><span class="">  funs</span><span class="p">(</span><span class="kp">mean</span><span class="p">))</span><span class="">
-</span><span class="">
-</span><span class=""></span><span class="c1">## result</span><span class="">
-</span><span class="">     Species Petal.Length Petal.Width petal_area
-</span><span class=""></span><span class="m">1</span><span class=""> versicolor        </span><span class="m">4.260</span><span class="">       </span><span class="m">1.326</span><span class="">     </span><span class="m">2.8602</span><span class="">
-</span><span class=""></span><span class="m">2</span><span class="">  virginica        </span><span class="m">5.552</span><span class="">       </span><span class="m">2.026</span><span class="">     </span><span class="m">5.6481</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span>tidyverse<span class="p">)</span>
+
+<span class="c1">## with piping</span>
+iris <span class="o">%&gt;%</span>
+   dplyr<span class="o">::</span>filter<span class="p">(</span>Species <span class="o">!=</span> <span class="s">&#39;setosa&#39;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+   dplyr<span class="o">::</span>select<span class="p">(</span><span class="o">-</span>dplyr<span class="o">::</span>starts_with<span class="p">(</span><span class="s">&#39;Sepal&#39;</span><span class="p">))</span> <span class="o">%&gt;%</span>
+   dplyr<span class="o">::</span>mutate<span class="p">(</span>petal_area<span class="o">=</span>Petal.Length <span class="o">*</span> Petal.Width <span class="o">*</span> <span class="m">0.5</span><span class="p">)</span> <span class="o">%&gt;%</span>
+   dplyr<span class="o">::</span>group_by<span class="p">(</span>Species<span class="p">)</span> <span class="o">%&gt;%</span>
+   dplyr<span class="o">::</span>summarise_all<span class="p">(</span>funs<span class="p">(</span><span class="kp">mean</span><span class="p">))</span>
+
+<span class="c1">## with a temporary variable</span>
+x <span class="o">=</span> iris
+x <span class="o">=</span> dplyr<span class="o">::</span>filter<span class="p">(</span>x<span class="p">,</span> Species <span class="o">!=</span> <span class="s">&#39;setosa&#39;</span><span class="p">)</span>
+x <span class="o">=</span> dplyr<span class="o">::</span>select<span class="p">(</span>x<span class="p">,</span> <span class="o">-</span>dplyr<span class="o">::</span>starts_with<span class="p">(</span><span class="s">&#39;Sepal&#39;</span><span class="p">))</span>
+x <span class="o">=</span> dplyr<span class="o">::</span>mutate<span class="p">(</span>x<span class="p">,</span> petal_area<span class="o">=</span>Petal.Length <span class="o">*</span> Petal.Width <span class="o">*</span> <span class="m">0.5</span><span class="p">)</span>
+x <span class="o">=</span> dplyr<span class="o">::</span>group_by<span class="p">(</span>x<span class="p">,</span> Species<span class="p">)</span>
+x <span class="o">=</span> dplyr<span class="o">::</span>summarise_all<span class="p">(</span>x<span class="p">,</span> funs<span class="p">(</span><span class="kp">mean</span><span class="p">))</span>
+
+<span class="c1">## with nested functions</span>
+dplyr<span class="o">::</span>summarise_all<span class="p">(</span>
+  dplyr<span class="o">::</span>group_by<span class="p">(</span>
+    dplyr<span class="o">::</span>mutate<span class="p">(</span>
+      dplyr<span class="o">::</span>select<span class="p">(</span>
+        dplyr<span class="o">::</span>filter<span class="p">(</span>iris<span class="p">,</span> Species <span class="o">!=</span> <span class="s">&#39;setosa&#39;</span><span class="p">),</span>
+        <span class="o">-</span>dplyr<span class="o">::</span>starts_with<span class="p">(</span><span class="s">&#39;Sepal&#39;</span><span class="p">)),</span>
+      petal_area<span class="o">=</span>Petal.Length <span class="o">*</span> Petal.Width <span class="o">*</span> <span class="m">0.5</span><span class="p">),</span>
+    Species<span class="p">),</span>
+  funs<span class="p">(</span><span class="kp">mean</span><span class="p">))</span>
+
+<span class="c1">## result</span>
+     Species Petal.Length Petal.Width petal_area
+<span class="m">1</span> versicolor        <span class="m">4.260</span>       <span class="m">1.326</span>     <span class="m">2.8602</span>
+<span class="m">2</span>  virginica        <span class="m">5.552</span>       <span class="m">2.026</span>     <span class="m">5.6481</span></code></pre></div>
 <p>現状では <code>magrittr</code> パッケージの <code>%&gt;%</code> が広く採用されているが、
 <code>pipeR</code> パッケージの <code>%&gt;&gt;%</code> のほうが高速らしい。
 <a href="http://renkun.me/pipeR-tutorial/">http://renkun.me/pipeR-tutorial/</a></p>
@@ -162,34 +161,31 @@ dplyr — 高速data.frame処理
 <a href="http://dplyr.tidyverse.org/reference/select_helpers.html">select helper</a>
 によるパターン指定も便利。
 残るのが1列だけでも勝手にvectorにはならずdata.frameのまま。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">iris </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">select</span><span class="p">(</span><span class="">Petal.Width</span><span class="p">,</span><span class=""> Species</span><span class="p">)</span><span class="">
-</span><span class="">iris </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">select</span><span class="p">(</span><span class="s">&#39;Petal.Width&#39;</span><span class="p">,</span><span class=""> </span><span class="s">&#39;Species&#39;</span><span class="p">)</span><span class="">
-</span><span class="">iris </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">select</span><span class="p">(</span><span class="kt">c</span><span class="p">(</span><span class="s">&#39;Petal.Width&#39;</span><span class="p">,</span><span class=""> </span><span class="s">&#39;Species&#39;</span><span class="p">))</span><span class="">
-</span><span class="">iris </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">select</span><span class="p">(</span><span class="m">4</span><span class="o">:</span><span class="m">5</span><span class="p">)</span><span class="">
-</span><span class="">iris </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">select</span><span class="p">(</span><span class="o">-</span><span class="kt">c</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">))</span><span class="">
-</span><span class="">iris </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">select</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="">Sepal.Length</span><span class="o">:</span><span class="">Petal.Length</span><span class="p">))</span><span class="">
-</span><span class="">iris </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">select</span><span class="p">(</span><span class="">matches</span><span class="p">(</span><span class="s">&#39;^Petal\\.Width$|^Species$&#39;</span><span class="p">))</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span>Petal.Width<span class="p">,</span> Species<span class="p">)</span>
+iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span><span class="s">&#39;Petal.Width&#39;</span><span class="p">,</span> <span class="s">&#39;Species&#39;</span><span class="p">)</span>
+iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span><span class="kt">c</span><span class="p">(</span><span class="s">&#39;Petal.Width&#39;</span><span class="p">,</span> <span class="s">&#39;Species&#39;</span><span class="p">))</span>
+iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span><span class="m">4</span><span class="o">:</span><span class="m">5</span><span class="p">)</span>
+iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span><span class="o">-</span><span class="kt">c</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">))</span>
+iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span><span class="o">-</span><span class="p">(</span>Sepal.Length<span class="o">:</span>Petal.Length<span class="p">))</span>
+iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span>matches<span class="p">(</span><span class="s">&#39;^Petal\\.Width$|^Species$&#39;</span><span class="p">))</span></code></pre></div>
 <p>文字列変数で指定しようとすると意図が曖昧になるので、
 <a href="http://dplyr.tidyverse.org/articles/programming.html#unquoting">unquoting</a>
 やpronounで明確に:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">Sepal.Length </span><span class="o">=</span><span class=""> </span><span class="kt">c</span><span class="p">(</span><span class="s">&#39;Petal.Width&#39;</span><span class="p">,</span><span class=""> </span><span class="s">&#39;Species&#39;</span><span class="p">)</span><span class="">
-</span><span class="">iris </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">select</span><span class="p">(</span><span class="">Sepal.Length</span><span class="p">))</span><span class="">      </span><span class="c1"># ambiguous!</span><span class="">
-</span><span class="">iris </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">select</span><span class="p">(</span><span class="">UQ</span><span class="p">(</span><span class="">Sepal.Length</span><span class="p">))</span><span class="">   </span><span class="c1"># unquote =&gt; Petal.Width, Species</span><span class="">
-</span><span class="">iris </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">select</span><span class="p">(</span><span class="o">!!</span><span class="">Sepal.Length</span><span class="p">)</span><span class="">     </span><span class="c1"># unquote =&gt; Petal.Width, Species</span><span class="">
-</span><span class="">iris </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">select</span><span class="p">(</span><span class="m">.</span><span class="">data</span><span class="o">$</span><span class="">Sepal.Length</span><span class="p">)</span><span class=""> </span><span class="c1"># pronoun =&gt; Sepal.Length</span></code></pre>
-</div></dd>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">Sepal.Length <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;Petal.Width&#39;</span><span class="p">,</span> <span class="s">&#39;Species&#39;</span><span class="p">)</span>
+iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span>Sepal.Length<span class="p">))</span>      <span class="c1"># ambiguous!</span>
+iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span>UQ<span class="p">(</span>Sepal.Length<span class="p">))</span>   <span class="c1"># unquote =&gt; Petal.Width, Species</span>
+iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span><span class="o">!!</span>Sepal.Length<span class="p">)</span>     <span class="c1"># unquote =&gt; Petal.Width, Species</span>
+iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span><span class="m">.</span>data<span class="o">$</span>Sepal.Length<span class="p">)</span> <span class="c1"># pronoun =&gt; Sepal.Length</span></code></pre></div></dd>
 <dt><code>dplyr::pull(.data, var=-1)</code></dt>
 <dd><p>指定した1列をvector(またはlist)としてdata.frameから抜き出す。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">iris </span><span class="o">%&gt;%</span><span class=""> </span><span class="kp">head</span><span class="p">()</span><span class=""> </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">pull</span><span class="p">(</span><span class="">Species</span><span class="p">)</span><span class="">
-</span><span class="">iris </span><span class="o">%&gt;%</span><span class=""> </span><span class="kp">head</span><span class="p">()</span><span class=""> </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">pull</span><span class="p">(</span><span class="s">&#39;Species&#39;</span><span class="p">)</span><span class="">
-</span><span class="">iris </span><span class="o">%&gt;%</span><span class=""> </span><span class="kp">head</span><span class="p">()</span><span class=""> </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">pull</span><span class="p">(</span><span class="m">5</span><span class="p">)</span><span class="">
-</span><span class="">iris </span><span class="o">%&gt;%</span><span class=""> </span><span class="kp">head</span><span class="p">()</span><span class=""> </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">pull</span><span class="p">(</span><span class="m">-1</span><span class="p">)</span><span class="">
-</span><span class="">iris </span><span class="o">%&gt;%</span><span class=""> </span><span class="kp">head</span><span class="p">()</span><span class=""> </span><span class="o">%&gt;%</span><span class=""> </span><span class="sb">`[[`</span><span class="p">(</span><span class="s">&#39;Species&#39;</span><span class="p">)</span><span class="">
-</span><span class="">iris </span><span class="o">%&gt;%</span><span class=""> </span><span class="kp">head</span><span class="p">()</span><span class=""> </span><span class="o">%&gt;%</span><span class=""> </span><span class="p">{</span><span class="m">.</span><span class="p">[[</span><span class="s">&#39;Species&#39;</span><span class="p">]]}</span><span class="">
-</span><span class="">iris </span><span class="o">%&gt;%</span><span class=""> </span><span class="kp">head</span><span class="p">()</span><span class=""> </span><span class="o">%&gt;%</span><span class=""> </span><span class="p">{</span><span class="m">.</span><span class="o">$</span><span class="">Species</span><span class="p">}</span><span class="">
-</span><span class=""></span><span class="p">{</span><span class="">iris </span><span class="o">%&gt;%</span><span class=""> </span><span class="kp">head</span><span class="p">()}</span><span class="o">$</span><span class="">Species</span></code></pre>
-</div></dd>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">()</span> <span class="o">%&gt;%</span> dplyr<span class="o">::</span>pull<span class="p">(</span>Species<span class="p">)</span>
+iris <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">()</span> <span class="o">%&gt;%</span> dplyr<span class="o">::</span>pull<span class="p">(</span><span class="s">&#39;Species&#39;</span><span class="p">)</span>
+iris <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">()</span> <span class="o">%&gt;%</span> dplyr<span class="o">::</span>pull<span class="p">(</span><span class="m">5</span><span class="p">)</span>
+iris <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">()</span> <span class="o">%&gt;%</span> dplyr<span class="o">::</span>pull<span class="p">(</span><span class="m">-1</span><span class="p">)</span>
+iris <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">()</span> <span class="o">%&gt;%</span> <span class="sb">`[[`</span><span class="p">(</span><span class="s">&#39;Species&#39;</span><span class="p">)</span>
+iris <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">()</span> <span class="o">%&gt;%</span> <span class="p">{</span><span class="m">.</span><span class="p">[[</span><span class="s">&#39;Species&#39;</span><span class="p">]]}</span>
+iris <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">()</span> <span class="o">%&gt;%</span> <span class="p">{</span><span class="m">.</span><span class="o">$</span>Species<span class="p">}</span>
+<span class="p">{</span>iris <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">()}</span><span class="o">$</span>Species</code></pre></div></dd>
 </dl>
 
 <h3 id="行">行</h3>
@@ -197,12 +193,11 @@ dplyr — 高速data.frame処理
 <dl>
 <dt><code>dplyr::filter(.data, ...)</code></dt>
 <dd><p>条件を満たす行だけを返す。<code>base::subset()</code> と似たようなもの。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">iris </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">filter</span><span class="p">(</span><span class="">Sepal.Length</span><span class="o">&lt;</span><span class="m">6</span><span class="p">,</span><span class=""> Sepal.Width</span><span class="o">&gt;</span><span class="m">4</span><span class="p">)</span><span class="">
-</span><span class="">  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-</span><span class=""></span><span class="m">1</span><span class="">          </span><span class="m">5.7</span><span class="">         </span><span class="m">4.4</span><span class="">          </span><span class="m">1.5</span><span class="">         </span><span class="m">0.4</span><span class="">  setosa
-</span><span class=""></span><span class="m">2</span><span class="">          </span><span class="m">5.2</span><span class="">         </span><span class="m">4.1</span><span class="">          </span><span class="m">1.5</span><span class="">         </span><span class="m">0.1</span><span class="">  setosa
-</span><span class=""></span><span class="m">3</span><span class="">          </span><span class="m">5.5</span><span class="">         </span><span class="m">4.2</span><span class="">          </span><span class="m">1.4</span><span class="">         </span><span class="m">0.2</span><span class="">  setosa</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>filter<span class="p">(</span>Sepal.Length<span class="o">&lt;</span><span class="m">6</span><span class="p">,</span> Sepal.Width<span class="o">&gt;</span><span class="m">4</span><span class="p">)</span>
+  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+<span class="m">1</span>          <span class="m">5.7</span>         <span class="m">4.4</span>          <span class="m">1.5</span>         <span class="m">0.4</span>  setosa
+<span class="m">2</span>          <span class="m">5.2</span>         <span class="m">4.1</span>          <span class="m">1.5</span>         <span class="m">0.1</span>  setosa
+<span class="m">3</span>          <span class="m">5.5</span>         <span class="m">4.2</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  setosa</code></pre></div>
 <div class="warning">
 <p>評価結果が <code>NA</code> となる行は除去される。
 特に不等号を使うときやや直感に反するので要注意。
@@ -215,21 +210,19 @@ e.g., <code>filter(gene != 'TP53')</code></p>
 <code>base::unique.data.frame()</code> よりも高速で、
 <code>filter(!duplicated(.[, ...]))</code> よりスマートで柔軟。
 指定しなかった列を残すには <code>.keep_all=TRUE</code> とする。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">iris </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">distinct</span><span class="p">(</span><span class="">Species</span><span class="p">)</span><span class="">
-</span><span class="">     Species
-</span><span class=""></span><span class="m">1</span><span class="">     setosa
-</span><span class=""></span><span class="m">2</span><span class=""> versicolor
-</span><span class=""></span><span class="m">3</span><span class="">  virginica</span></code></pre>
-</div></dd>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>distinct<span class="p">(</span>Species<span class="p">)</span>
+     Species
+<span class="m">1</span>     setosa
+<span class="m">2</span> versicolor
+<span class="m">3</span>  virginica</code></pre></div></dd>
 <dt><code>dplyr::slice(.data, ...)</code></dt>
 <dd><p>行番号を指定して行を絞る。
 <code>`[`(i,)</code> の代わりに。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">iris </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">slice</span><span class="p">(</span><span class="m">2</span><span class="o">:</span><span class="m">4</span><span class="p">)</span><span class="">
-</span><span class="">  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-</span><span class=""></span><span class="m">1</span><span class="">          </span><span class="m">4.9</span><span class="">         </span><span class="m">3.0</span><span class="">          </span><span class="m">1.4</span><span class="">         </span><span class="m">0.2</span><span class="">  setosa
-</span><span class=""></span><span class="m">2</span><span class="">          </span><span class="m">4.7</span><span class="">         </span><span class="m">3.2</span><span class="">          </span><span class="m">1.3</span><span class="">         </span><span class="m">0.2</span><span class="">  setosa
-</span><span class=""></span><span class="m">3</span><span class="">          </span><span class="m">4.6</span><span class="">         </span><span class="m">3.1</span><span class="">          </span><span class="m">1.5</span><span class="">         </span><span class="m">0.2</span><span class="">  setosa</span></code></pre>
-</div></dd>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>slice<span class="p">(</span><span class="m">2</span><span class="o">:</span><span class="m">4</span><span class="p">)</span>
+  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+<span class="m">1</span>          <span class="m">4.9</span>         <span class="m">3.0</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  setosa
+<span class="m">2</span>          <span class="m">4.7</span>         <span class="m">3.2</span>          <span class="m">1.3</span>         <span class="m">0.2</span>  setosa
+<span class="m">3</span>          <span class="m">4.6</span>         <span class="m">3.1</span>          <span class="m">1.5</span>         <span class="m">0.2</span>  setosa</code></pre></div></dd>
 <dt><code>dplyr::sample_n(tbl, size, replace=FALSE, weight=NULL)</code></dt>
 <dd><p>指定した行数だけランダムサンプルする。
 割合指定の <code>sample_frac()</code> もある。</p></dd>
@@ -241,40 +234,37 @@ e.g., <code>filter(gene != 'TP53')</code></p>
 <dt><code>dplyr::mutate(.data, ...)</code></dt>
 <dd><p>既存の列を変更したり、新しい列を作ったり。
 <code>base::transform()</code> の改良版。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># modify existing column</span><span class="">
-</span><span class="">iris </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">mutate</span><span class="p">(</span><span class="">Sepal.Length </span><span class="o">=</span><span class=""> </span><span class="kp">log</span><span class="p">(</span><span class="">Sepal.Length</span><span class="p">))</span><span class="">
-</span><span class="">
-</span><span class=""></span><span class="c1"># create new column</span><span class="">
-</span><span class="">iris </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">mutate</span><span class="p">(</span><span class="">ln_sepal_length </span><span class="o">=</span><span class=""> </span><span class="kp">log</span><span class="p">(</span><span class="">Sepal.Length</span><span class="p">))</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># modify existing column</span>
+iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>mutate<span class="p">(</span>Sepal.Length <span class="o">=</span> <span class="kp">log</span><span class="p">(</span>Sepal.Length<span class="p">))</span>
+
+<span class="c1"># create new column</span>
+iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>mutate<span class="p">(</span>ln_sepal_length <span class="o">=</span> <span class="kp">log</span><span class="p">(</span>Sepal.Length<span class="p">))</span></code></pre></div>
 <p>変数に入った文字列を変更先の列名に指定したい場合は
 <a href="http://dplyr.tidyverse.org/articles/programming.html#setting-variable-names">unquoting用の代入演算子 <code>:=</code></a>
 を使う:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">new_column </span><span class="o">=</span><span class=""> </span><span class="s">&#39;ln_sepal_length&#39;</span><span class="">
-</span><span class="">
-</span><span class=""></span><span class="c1"># normal</span><span class="">
-</span><span class="">iris </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">mutate</span><span class="p">(</span><span class="">new_column </span><span class="o">=</span><span class=""> </span><span class="kp">log</span><span class="p">(</span><span class="">Sepal.Length</span><span class="p">))</span><span class=""> </span><span class="o">%&gt;%</span><span class=""> </span><span class="kp">head</span><span class="p">(</span><span class="m">2</span><span class="p">)</span><span class="">
-</span><span class="">  Sepal.Length Sepal.Width Petal.Length Petal.Width Species new_column
-</span><span class=""></span><span class="m">1</span><span class="">          </span><span class="m">5.1</span><span class="">         </span><span class="m">3.5</span><span class="">          </span><span class="m">1.4</span><span class="">         </span><span class="m">0.2</span><span class="">  setosa   </span><span class="m">1.629241</span><span class="">
-</span><span class=""></span><span class="m">2</span><span class="">          </span><span class="m">4.9</span><span class="">         </span><span class="m">3.0</span><span class="">          </span><span class="m">1.4</span><span class="">         </span><span class="m">0.2</span><span class="">  setosa   </span><span class="m">1.589235</span><span class="">
-</span><span class="">
-</span><span class=""></span><span class="c1"># unquoting</span><span class="">
-</span><span class="">iris </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">mutate</span><span class="p">(</span><span class="o">!!</span><span class="">new_column </span><span class="o">:=</span><span class=""> </span><span class="kp">log</span><span class="p">(</span><span class="">Sepal.Length</span><span class="p">))</span><span class=""> </span><span class="o">%&gt;%</span><span class=""> </span><span class="kp">head</span><span class="p">(</span><span class="m">2</span><span class="p">)</span><span class="">
-</span><span class="">  Sepal.Length Sepal.Width Petal.Length Petal.Width Species ln_sepal_length
-</span><span class=""></span><span class="m">1</span><span class="">          </span><span class="m">5.1</span><span class="">         </span><span class="m">3.5</span><span class="">          </span><span class="m">1.4</span><span class="">         </span><span class="m">0.2</span><span class="">  setosa        </span><span class="m">1.629241</span><span class="">
-</span><span class=""></span><span class="m">2</span><span class="">          </span><span class="m">4.9</span><span class="">         </span><span class="m">3.0</span><span class="">          </span><span class="m">1.4</span><span class="">         </span><span class="m">0.2</span><span class="">  setosa        </span><span class="m">1.589235</span></code></pre>
-</div></dd>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">new_column <span class="o">=</span> <span class="s">&#39;ln_sepal_length&#39;</span>
+
+<span class="c1"># normal</span>
+iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>mutate<span class="p">(</span>new_column <span class="o">=</span> <span class="kp">log</span><span class="p">(</span>Sepal.Length<span class="p">))</span> <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+  Sepal.Length Sepal.Width Petal.Length Petal.Width Species new_column
+<span class="m">1</span>          <span class="m">5.1</span>         <span class="m">3.5</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  setosa   <span class="m">1.629241</span>
+<span class="m">2</span>          <span class="m">4.9</span>         <span class="m">3.0</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  setosa   <span class="m">1.589235</span>
+
+<span class="c1"># unquoting</span>
+iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>mutate<span class="p">(</span><span class="o">!!</span>new_column <span class="o">:=</span> <span class="kp">log</span><span class="p">(</span>Sepal.Length<span class="p">))</span> <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+  Sepal.Length Sepal.Width Petal.Length Petal.Width Species ln_sepal_length
+<span class="m">1</span>          <span class="m">5.1</span>         <span class="m">3.5</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  setosa        <span class="m">1.629241</span>
+<span class="m">2</span>          <span class="m">4.9</span>         <span class="m">3.0</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  setosa        <span class="m">1.589235</span></code></pre></div></dd>
 <dt><code>dplyr::transmute(.data, ...)</code></dt>
 <dd><p>指定した列以外を保持しない版 <code>mutate()</code> 。
 言い換えると、列の中身の変更もできる版 <code>select()</code> 。</p></dd>
 <dt><code>dplyr::rename(.data, ...)</code></dt>
 <dd><p>列の改名。
 <code>mutate()</code>と同じようなイメージで <code>new=old</code> と指定。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">iris </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">rename</span><span class="p">(</span><span class="">sp</span><span class="o">=</span><span class="">Species</span><span class="p">)</span><span class=""> </span><span class="o">%&gt;%</span><span class=""> </span><span class="kp">head</span><span class="p">(</span><span class="m">2</span><span class="p">)</span><span class="">
-</span><span class="">  Sepal.Length Sepal.Width Petal.Length Petal.Width     sp
-</span><span class=""></span><span class="m">1</span><span class="">          </span><span class="m">5.1</span><span class="">         </span><span class="m">3.5</span><span class="">          </span><span class="m">1.4</span><span class="">         </span><span class="m">0.2</span><span class=""> setosa
-</span><span class=""></span><span class="m">2</span><span class="">          </span><span class="m">4.9</span><span class="">         </span><span class="m">3.0</span><span class="">          </span><span class="m">1.4</span><span class="">         </span><span class="m">0.2</span><span class=""> setosa</span></code></pre>
-</div></dd>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>rename<span class="p">(</span>sp<span class="o">=</span>Species<span class="p">)</span> <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+  Sepal.Length Sepal.Width Petal.Length Petal.Width     sp
+<span class="m">1</span>          <span class="m">5.1</span>         <span class="m">3.5</span>          <span class="m">1.4</span>         <span class="m">0.2</span> setosa
+<span class="m">2</span>          <span class="m">4.9</span>         <span class="m">3.0</span>          <span class="m">1.4</span>         <span class="m">0.2</span> setosa</code></pre></div></dd>
 </dl>
 
 <h2 id="data-frameの要約-集計-整列">data.frameの要約・集計・整列</h2>
@@ -283,29 +273,25 @@ e.g., <code>filter(gene != 'TP53')</code></p>
 <dt><code>dplyr::summarise(.data, ...)</code></dt>
 <dd><p>指定した列に関数を適用して1行のdata.frameにまとめる。
 グループ化されていたらグループごとに適用して <code>bind_rows()</code> する。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">iris </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">group_by</span><span class="p">(</span><span class="">Species</span><span class="p">)</span><span class=""> </span><span class="o">%&gt;%</span><span class="">
-</span><span class="">    dplyr</span><span class="o">::</span><span class="">summarise</span><span class="p">(</span><span class="">minpl</span><span class="o">=</span><span class="kp">min</span><span class="p">(</span><span class="">Petal.Length</span><span class="p">),</span><span class=""> maxsw</span><span class="o">=</span><span class="kp">max</span><span class="p">(</span><span class="">Sepal.Width</span><span class="p">))</span><span class="">
-</span><span class="">     Species minpl maxsw
-</span><span class=""></span><span class="m">1</span><span class="">     setosa   </span><span class="m">1.0</span><span class="">   </span><span class="m">4.4</span><span class="">
-</span><span class=""></span><span class="m">2</span><span class=""> versicolor   </span><span class="m">3.0</span><span class="">   </span><span class="m">3.4</span><span class="">
-</span><span class=""></span><span class="m">3</span><span class="">  virginica   </span><span class="m">4.5</span><span class="">   </span><span class="m">3.8</span></code></pre>
-</div></dd>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>group_by<span class="p">(</span>Species<span class="p">)</span> <span class="o">%&gt;%</span>
+    dplyr<span class="o">::</span>summarise<span class="p">(</span>minpl<span class="o">=</span><span class="kp">min</span><span class="p">(</span>Petal.Length<span class="p">),</span> maxsw<span class="o">=</span><span class="kp">max</span><span class="p">(</span>Sepal.Width<span class="p">))</span>
+     Species minpl maxsw
+<span class="m">1</span>     setosa   <span class="m">1.0</span>   <span class="m">4.4</span>
+<span class="m">2</span> versicolor   <span class="m">3.0</span>   <span class="m">3.4</span>
+<span class="m">3</span>  virginica   <span class="m">4.5</span>   <span class="m">3.8</span></code></pre></div></dd>
 <dt><code>dplyr::summarise_all(.data, .funs, ...)</code></dt>
 <dd><p>全てのカラムに関数を適用する。
 <code>***_each()</code> は非推奨になった。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">iris </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">group_by</span><span class="p">(</span><span class="">Species</span><span class="p">)</span><span class=""> </span><span class="o">%&gt;%</span><span class="">
-</span><span class="">    dplyr</span><span class="o">::</span><span class="">summarise_all</span><span class="p">(</span><span class="">funs</span><span class="p">(</span><span class="kp">min</span><span class="p">,</span><span class=""> </span><span class="kp">max</span><span class="p">))</span></code></pre>
-</div></dd>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>group_by<span class="p">(</span>Species<span class="p">)</span> <span class="o">%&gt;%</span>
+    dplyr<span class="o">::</span>summarise_all<span class="p">(</span>funs<span class="p">(</span><span class="kp">min</span><span class="p">,</span> <span class="kp">max</span><span class="p">))</span></code></pre></div></dd>
 <dt><code>dplyr::summarise_at(.data, .cols, .funs, ...)</code></dt>
 <dd><p>select補助関数を使って指定したカラムに関数を適用する。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">iris </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">group_by</span><span class="p">(</span><span class="">Species</span><span class="p">)</span><span class=""> </span><span class="o">%&gt;%</span><span class="">
-</span><span class="">    dplyr</span><span class="o">::</span><span class="">summarise_at</span><span class="p">(</span><span class="">vars</span><span class="p">(</span><span class="">dplyr</span><span class="o">::</span><span class="">ends_with</span><span class="p">(</span><span class="s">&#34;Width&#34;</span><span class="p">)),</span><span class=""> funs</span><span class="p">(</span><span class="kp">min</span><span class="p">,</span><span class=""> </span><span class="kp">max</span><span class="p">))</span></code></pre>
-</div></dd>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>group_by<span class="p">(</span>Species<span class="p">)</span> <span class="o">%&gt;%</span>
+    dplyr<span class="o">::</span>summarise_at<span class="p">(</span>vars<span class="p">(</span>dplyr<span class="o">::</span>ends_with<span class="p">(</span><span class="s">&#34;Width&#34;</span><span class="p">)),</span> funs<span class="p">(</span><span class="kp">min</span><span class="p">,</span> <span class="kp">max</span><span class="p">))</span></code></pre></div></dd>
 <dt><code>dplyr::summarise_if(.data, .predicate, .funs, ...)</code></dt>
 <dd><p><code>.predicate</code>がTRUEになるカラムだけに関数を適用する。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">iris </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">group_by</span><span class="p">(</span><span class="">Species</span><span class="p">)</span><span class=""> </span><span class="o">%&gt;%</span><span class="">
-</span><span class="">    dplyr</span><span class="o">::</span><span class="">summarise_if</span><span class="p">(</span><span class="kp">is.numeric</span><span class="p">,</span><span class=""> funs</span><span class="p">(</span><span class="kp">min</span><span class="p">,</span><span class=""> </span><span class="kp">max</span><span class="p">))</span></code></pre>
-</div></dd>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>group_by<span class="p">(</span>Species<span class="p">)</span> <span class="o">%&gt;%</span>
+    dplyr<span class="o">::</span>summarise_if<span class="p">(</span><span class="kp">is.numeric</span><span class="p">,</span> funs<span class="p">(</span><span class="kp">min</span><span class="p">,</span> <span class="kp">max</span><span class="p">))</span></code></pre></div></dd>
 <dt><code>dplyr::tally(x, wt, sort=FALSE)</code></dt>
 <dd><p><code>summarise(x, n=n())</code> のショートカット。
 <code>wt</code> にカラムを指定して重み付けすることもできる。</p></dd>
@@ -315,10 +301,9 @@ e.g., <code>filter(gene != 'TP53')</code></p>
 <dd><p>指定した列の昇順でdata.frameの行を並べ替える。
 <code>arrange(desc(column))</code> で降順になる。
 <code>order()</code> を使うよりもタイピングの繰り返しが少ないし直感的</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="m">.</span><span class="">data</span><span class="p">[</span><span class="kp">with</span><span class="p">(</span><span class="m">.</span><span class="">data</span><span class="p">,</span><span class=""> </span><span class="kp">order</span><span class="p">(</span><span class="">col_a</span><span class="p">,</span><span class=""> col_b</span><span class="p">)),</span><span class=""> </span><span class="p">]</span><span class="">
-</span><span class=""></span><span class="c1"># is equivalent to</span><span class="">
-</span><span class=""></span><span class="m">.</span><span class="">data </span><span class="o">%&gt;%</span><span class=""> dplyr</span><span class="o">::</span><span class="">arrange</span><span class="p">(</span><span class="">col_a</span><span class="p">,</span><span class=""> col_b</span><span class="p">)</span></code></pre>
-</div></dd>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="m">.</span>data<span class="p">[</span><span class="kp">with</span><span class="p">(</span><span class="m">.</span>data<span class="p">,</span> <span class="kp">order</span><span class="p">(</span>col_a<span class="p">,</span> col_b<span class="p">)),</span> <span class="p">]</span>
+<span class="c1"># is equivalent to</span>
+<span class="m">.</span>data <span class="o">%&gt;%</span> dplyr<span class="o">::</span>arrange<span class="p">(</span>col_a<span class="p">,</span> col_b<span class="p">)</span></code></pre></div></dd>
 <dt><code>dplyr::top_n(.data, n, wt=NULL)</code></dt>
 <dd><p><code>.data %&gt;% arrange(wt) %&gt;% head(n)</code> を一撃で、グループごとに。</p></dd>
 </dl>
@@ -373,9 +358,8 @@ NAのときにどうするかを指定できるのも大変良い。</dd>
 <dt><code>dplyr::lead(x n=1, default=NA, order_by=NULL)</code>, <code>dplyr::lag(...)</code></dt>
 <dd><p><code>x</code> の中身を <code>n</code> だけずらして <code>default</code> で埋める。
 <code>lead()</code> は前に、<code>lag()</code> は後ろにずらす</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span><span class=""> lag</span><span class="p">(</span><span class="kp">seq_len</span><span class="p">(</span><span class="m">5</span><span class="p">),</span><span class=""> </span><span class="m">2</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class=""> </span><span class="kc">NA</span><span class=""> </span><span class="kc">NA</span><span class=""> </span><span class="m">1</span><span class=""> </span><span class="m">2</span><span class=""> </span><span class="m">3</span></code></pre>
-</div></dd>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> lag<span class="p">(</span><span class="kp">seq_len</span><span class="p">(</span><span class="m">5</span><span class="p">),</span> <span class="m">2</span><span class="p">)</span>
+<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="kc">NA</span> <span class="kc">NA</span> <span class="m">1</span> <span class="m">2</span> <span class="m">3</span></code></pre></div></dd>
 <dt><code>dplyr::between(x, left, right)</code></dt>
 <dd><p><code>left &lt;= x &amp; x &lt;= right</code> のショートカット。</p></dd>
 <dt><code>dplyr::near(x, y, tol=.Machine$double.eps^0.5)</code></dt>
@@ -391,17 +375,16 @@ NAのときにどうするかを指定できるのも大変良い。</dd>
 <a href="/rstats/purrr.html"><code>purrr</code></a> でその list of data.frames に処理を施し、
 <a href="/rstats/dplyr.html"><code>dplyr</code></a> でその変更を元の data.frame に適用する、
 というのがtidyverse流のモダンなやり方らしい。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">## OLD</span><span class="">
-</span><span class="">iris </span><span class="o">%&gt;%</span><span class="">
-</span><span class="">  dplyr</span><span class="o">::</span><span class="">group_by</span><span class="p">(</span><span class="">Species</span><span class="p">)</span><span class=""> </span><span class="o">%&gt;%</span><span class="">
-</span><span class="">  dplyr</span><span class="o">::</span><span class="">do</span><span class="p">(</span><span class="kp">head</span><span class="p">(</span><span class="m">.</span><span class="p">))</span><span class="">
-</span><span class="">
-</span><span class=""></span><span class="c1">## NEW</span><span class="">
-</span><span class="">iris </span><span class="o">%&gt;%</span><span class="">
-</span><span class="">  tidyr</span><span class="o">::</span><span class="">nest</span><span class="p">(</span><span class="o">-</span><span class="">Species</span><span class="p">)</span><span class=""> </span><span class="o">%&gt;%</span><span class="">
-</span><span class="">  dplyr</span><span class="o">::</span><span class="">mutate</span><span class="p">(</span><span class="">data</span><span class="o">=</span><span class=""> purrr</span><span class="o">::</span><span class="">map</span><span class="p">(</span><span class="">data</span><span class="p">,</span><span class=""> </span><span class="kp">head</span><span class="p">))</span><span class=""> </span><span class="o">%&gt;%</span><span class="">
-</span><span class="">  tidyr</span><span class="o">::</span><span class="">unnest</span><span class="p">()</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">## OLD</span>
+iris <span class="o">%&gt;%</span>
+  dplyr<span class="o">::</span>group_by<span class="p">(</span>Species<span class="p">)</span> <span class="o">%&gt;%</span>
+  dplyr<span class="o">::</span>do<span class="p">(</span><span class="kp">head</span><span class="p">(</span><span class="m">.</span><span class="p">))</span>
+
+<span class="c1">## NEW</span>
+iris <span class="o">%&gt;%</span>
+  tidyr<span class="o">::</span>nest<span class="p">(</span><span class="o">-</span>Species<span class="p">)</span> <span class="o">%&gt;%</span>
+  dplyr<span class="o">::</span>mutate<span class="p">(</span>data<span class="o">=</span> purrr<span class="o">::</span>map<span class="p">(</span>data<span class="p">,</span> <span class="kp">head</span><span class="p">))</span> <span class="o">%&gt;%</span>
+  tidyr<span class="o">::</span>unnest<span class="p">()</span></code></pre></div>
 <dl>
 <dt><code>dplyr::group_by(.data, col1, col2, ..., add=FALSE)</code></dt>
 <dd>グループごとに区切って次の処理に渡す。

@@ -189,13 +189,12 @@ alias zmux='SHELL=$(brew --prefix)/bin/zsh tmux'
 依存関係について、何が必要十分なのかまでは検証していないが、
 いくつかのライブラリは新しいものをLinuxbrewで入れておく必要がある。
 e.g., gcc, binutils, bzip2</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">wget -O- https://cran.r-project.org/src/base/R-3/R-3.3.0.tar.gz </span><span class="p">|</span><span class=""> tar xz
-</span><span class=""></span><span class="nb">cd</span><span class=""> R-3.3.0/
-</span><span class="">./configure -h </span><span class="p">|</span><span class=""> less
-</span><span class="">./configure </span><span class="nv">LIBS</span><span class=""></span><span class="o">=</span><span class="s2">&#34;-lpthread&#34;</span><span class=""> --prefix</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="">/R --disable-openmp --disable-java
-</span><span class="">make
-</span><span class="">make install</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">wget -O- https://cran.r-project.org/src/base/R-3/R-3.3.0.tar.gz <span class="p">|</span> tar xz
+<span class="nb">cd</span> R-3.3.0/
+./configure -h <span class="p">|</span> less
+./configure <span class="nv">LIBS</span><span class="o">=</span><span class="s2">&#34;-lpthread&#34;</span> --prefix<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/R --disable-openmp --disable-java
+make
+make install</code></pre></div>
 <h2 id="ジョブ投入-管理">ジョブ投入、管理</h2>
 
 <ul>
@@ -210,11 +209,10 @@ e.g., gcc, binutils, bzip2</p>
 <p>遺伝研ウェブサイトにはスクリプトを書いてから渡す方法しか書いてないが、
 コマンド引数として直接渡すほうが圧倒的に楽チン。</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1">## スクリプトを書いてから渡す
-</span><span class="c1"></span><span class="">qsub test.sh
-</span><span class="">
-</span><span class=""></span><span class="c1">## コマンドライン引数として直接渡す
-</span><span class="c1"></span><span class="">qsub -l debug -b y -shell n -cwd -N </span><span class="nb">test</span><span class=""> </span><span class="s2">&#34;pwd; sleep 5; ls &gt;ls.txt&#34;</span></code></pre>
-</div>
+</span><span class="c1"></span>qsub test.sh
+
+<span class="c1">## コマンドライン引数として直接渡す
+</span><span class="c1"></span>qsub -l debug -b y -shell n -cwd -N <span class="nb">test</span> <span class="s2">&#34;pwd; sleep 5; ls &gt;ls.txt&#34;</span></code></pre></div>
 <dl>
 <dt><code>-l ***</code></dt>
 <dd>管理者が定義したキューから選んで指定し、
@@ -278,29 +276,27 @@ e.g., gcc, binutils, bzip2</p>
 </span><span class="c1">#$ -cwd
 </span><span class="c1">#$ -t 1-2
 </span><span class="c1">#$ -N test_sh
-</span><span class="c1"></span><span class="nb">echo</span><span class=""> HOME: </span><span class="nv">$HOME</span><span class="">
-</span><span class=""></span><span class="nb">echo</span><span class=""> USER: </span><span class="nv">$USER</span><span class="">
-</span><span class=""></span><span class="nb">echo</span><span class=""> JOB_ID: </span><span class="nv">$JOB_ID</span><span class="">
-</span><span class=""></span><span class="nb">echo</span><span class=""> JOB_NAME: </span><span class="nv">$JOB_NAME</span><span class="">
-</span><span class=""></span><span class="nb">echo</span><span class=""> HOSTNAME: </span><span class="nv">$HOSTNAME</span><span class="">
-</span><span class=""></span><span class="nb">echo</span><span class=""> SGE_TASK_ID: </span><span class="nv">$SGE_TASK_ID</span><span class="">
-</span><span class=""></span><span class="nb">echo</span><span class=""> SGE_TASK_FIRST:</span><span class="nv">$SGE_TASK_FIRST</span><span class="">
-</span><span class=""></span><span class="nb">echo</span><span class=""> SGE_TASK_LAST: </span><span class="nv">$SGE_TASK_LAST</span><span class="">
-</span><span class=""></span><span class="nb">echo</span><span class=""> SGE_TASK_STEPSIZE: </span><span class="nv">$SGE_TASK_STEPSIZE</span><span class="">
-</span><span class=""></span><span class="nb">pwd</span><span class="">
-</span><span class="">ls</span></code></pre>
-</div>
+</span><span class="c1"></span><span class="nb">echo</span> HOME: <span class="nv">$HOME</span>
+<span class="nb">echo</span> USER: <span class="nv">$USER</span>
+<span class="nb">echo</span> JOB_ID: <span class="nv">$JOB_ID</span>
+<span class="nb">echo</span> JOB_NAME: <span class="nv">$JOB_NAME</span>
+<span class="nb">echo</span> HOSTNAME: <span class="nv">$HOSTNAME</span>
+<span class="nb">echo</span> SGE_TASK_ID: <span class="nv">$SGE_TASK_ID</span>
+<span class="nb">echo</span> SGE_TASK_FIRST:<span class="nv">$SGE_TASK_FIRST</span>
+<span class="nb">echo</span> SGE_TASK_LAST: <span class="nv">$SGE_TASK_LAST</span>
+<span class="nb">echo</span> SGE_TASK_STEPSIZE: <span class="nv">$SGE_TASK_STEPSIZE</span>
+<span class="nb">pwd</span>
+ls</code></pre></div>
 <p>スクリプトはPythonでもいい。
 インタープリタを <code>-S /usr/bin/env python</code> で指定できないのは残念。</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span><span class="">
-</span><span class=""></span><span class="c1">#$ -S $HOME/.virtualenv/py3/bin/python</span><span class="">
-</span><span class=""></span><span class="c1">#$ -l debug</span><span class="">
-</span><span class=""></span><span class="c1">#$ -cwd</span><span class="">
-</span><span class=""></span><span class="c1">#$ -t 1-2</span><span class="">
-</span><span class=""></span><span class="c1">#$ -N test_py</span><span class="">
-</span><span class=""></span><span class="kn">import</span><span class=""> </span><span class="nn">os</span><span class="">
-</span><span class=""></span><span class="k">print</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;SGE_TASK_ID: &#34;</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="sa"></span><span class="s2">&#34;SGE_TASK_ID&#34;</span><span class="p">])</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span>
+<span class="c1">#$ -S $HOME/.virtualenv/py3/bin/python</span>
+<span class="c1">#$ -l debug</span>
+<span class="c1">#$ -cwd</span>
+<span class="c1">#$ -t 1-2</span>
+<span class="c1">#$ -N test_py</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="k">print</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;SGE_TASK_ID: &#34;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="sa"></span><span class="s2">&#34;SGE_TASK_ID&#34;</span><span class="p">])</span></code></pre></div>
 <h3 id="補助コマンド">補助コマンド</h3>
 
 <dl>

@@ -103,10 +103,9 @@ readr — 高速で柔軟なテーブル読み込み
 <code>install.packages('tidyverse')</code> で一括インストール、
 <code>library(tidyverse)</code> で一括ロード。
 例えば:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span><span class="">tidyverse</span><span class="p">)</span><span class="">
-</span><span class="">write_tsv</span><span class="p">(</span><span class="">iris</span><span class="p">,</span><span class=""> </span><span class="s">&#39;iris.tsv.gz&#39;</span><span class="p">)</span><span class="">
-</span><span class="">read_tsv</span><span class="p">(</span><span class="s">&#39;iris.tsv.gz&#39;</span><span class="p">)</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span>tidyverse<span class="p">)</span>
+write_tsv<span class="p">(</span>iris<span class="p">,</span> <span class="s">&#39;iris.tsv.gz&#39;</span><span class="p">)</span>
+read_tsv<span class="p">(</span><span class="s">&#39;iris.tsv.gz&#39;</span><span class="p">)</span></code></pre></div>
 <ul>
 <li><a href="http://r4ds.had.co.nz/data-import.html">http://r4ds.had.co.nz/data-import.html</a></li>
 <li><a href="https://cran.r-project.org/package=readr">https://cran.r-project.org/package=readr</a></li>
@@ -115,22 +114,21 @@ readr — 高速で柔軟なテーブル読み込み
 <h2 id="主な関数">主な関数</h2>
 
 <h3 id="ファイル読み込み">ファイル読み込み</h3>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">read_delim</span><span class="p">(</span><span class="kp">file</span><span class="p">,</span><span class=""> delim</span><span class="p">,</span><span class="">
-</span><span class="">  quote </span><span class="o">=</span><span class=""> </span><span class="s">&#39;&#34;&#39;</span><span class="p">,</span><span class="">
-</span><span class="">  escape_backslash </span><span class="o">=</span><span class=""> </span><span class="kc">FALSE</span><span class="p">,</span><span class="">
-</span><span class="">  escape_double </span><span class="o">=</span><span class=""> </span><span class="kc">TRUE</span><span class="p">,</span><span class="">
-</span><span class="">  col_names </span><span class="o">=</span><span class=""> </span><span class="kc">TRUE</span><span class="p">,</span><span class="">
-</span><span class="">  col_types </span><span class="o">=</span><span class=""> </span><span class="kc">NULL</span><span class="p">,</span><span class="">
-</span><span class="">  locale </span><span class="o">=</span><span class=""> default_locale</span><span class="p">(),</span><span class="">
-</span><span class="">  na </span><span class="o">=</span><span class=""> </span><span class="kt">c</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span><span class=""> </span><span class="s">&#39;NA&#39;</span><span class="p">),</span><span class="">
-</span><span class="">  quoted_na </span><span class="o">=</span><span class=""> </span><span class="kc">TRUE</span><span class="p">,</span><span class="">
-</span><span class="">  comment </span><span class="o">=</span><span class=""> </span><span class="s">&#39;&#39;</span><span class="p">,</span><span class="">
-</span><span class="">  trim_ws </span><span class="o">=</span><span class=""> </span><span class="kc">FALSE</span><span class="p">,</span><span class="">
-</span><span class="">  skip </span><span class="o">=</span><span class=""> </span><span class="m">0</span><span class="p">,</span><span class="">
-</span><span class="">  n_max </span><span class="o">=</span><span class=""> </span><span class="kc">Inf</span><span class="p">,</span><span class="">
-</span><span class="">  guess_max </span><span class="o">=</span><span class=""> </span><span class="kp">min</span><span class="p">(</span><span class="m">1000</span><span class="p">,</span><span class=""> n_max</span><span class="p">),</span><span class="">
-</span><span class="">  progress </span><span class="o">=</span><span class=""> show_progress</span><span class="p">())</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">read_delim<span class="p">(</span><span class="kp">file</span><span class="p">,</span> delim<span class="p">,</span>
+  quote <span class="o">=</span> <span class="s">&#39;&#34;&#39;</span><span class="p">,</span>
+  escape_backslash <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
+  escape_double <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
+  col_names <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
+  col_types <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span>
+  locale <span class="o">=</span> default_locale<span class="p">(),</span>
+  na <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;NA&#39;</span><span class="p">),</span>
+  quoted_na <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
+  comment <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+  trim_ws <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
+  skip <span class="o">=</span> <span class="m">0</span><span class="p">,</span>
+  n_max <span class="o">=</span> <span class="kc">Inf</span><span class="p">,</span>
+  guess_max <span class="o">=</span> <span class="kp">min</span><span class="p">(</span><span class="m">1000</span><span class="p">,</span> n_max<span class="p">),</span>
+  progress <span class="o">=</span> show_progress<span class="p">())</span></code></pre></div>
 <p><strong><code>read_csv(...)</code></strong> や <strong><code>read_tsv(...)</code></strong>
 は区切り文字 <code>delim=</code> 指定済みのショートカット。</p>
 
@@ -152,12 +150,11 @@ readr — 高速で柔軟なテーブル読み込み
 </dl>
 
 <h3 id="ファイル書き出し">ファイル書き出し</h3>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">write_delim</span><span class="p">(</span><span class="">x</span><span class="p">,</span><span class=""> path</span><span class="p">,</span><span class="">
-</span><span class="">  delim </span><span class="o">=</span><span class=""> </span><span class="s">&#39; &#39;</span><span class="p">,</span><span class="">
-</span><span class="">  na </span><span class="o">=</span><span class=""> </span><span class="s">&#39;NA&#39;</span><span class="p">,</span><span class="">
-</span><span class="">  append </span><span class="o">=</span><span class=""> </span><span class="kc">FALSE</span><span class="p">,</span><span class="">
-</span><span class="">  col_names </span><span class="o">=</span><span class=""> </span><span class="o">!</span><span class="kp">append</span><span class="p">)</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">write_delim<span class="p">(</span>x<span class="p">,</span> path<span class="p">,</span>
+  delim <span class="o">=</span> <span class="s">&#39; &#39;</span><span class="p">,</span>
+  na <span class="o">=</span> <span class="s">&#39;NA&#39;</span><span class="p">,</span>
+  append <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
+  col_names <span class="o">=</span> <span class="o">!</span><span class="kp">append</span><span class="p">)</span></code></pre></div>
 <p><strong><code>write_csv(...)</code></strong> や <strong><code>write_tsv(...)</code></strong>
 は区切り文字 <code>delim=</code> 指定済みのショートカット。</p>
 
@@ -196,11 +193,10 @@ readr — 高速で柔軟なテーブル読み込み
 標準の <code>read.csv()</code> などと違って暗黙のfactor変換はしない。
 明示的に型を指定したい場合は <code>col_types</code> 引数に <code>cols()</code> 関数の値を渡す。
 文字列で <code>'ccdi_'</code> のように省略することも可能。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">read_csv</span><span class="p">(</span><span class="s">&#39;mydata.csv&#39;</span><span class="p">,</span><span class=""> col_types</span><span class="o">=</span><span class="s">&#39;ccdi_&#39;</span><span class="p">)</span><span class="">
-</span><span class="">
-</span><span class="">colsp </span><span class="o">=</span><span class=""> cols</span><span class="p">(</span><span class="">length</span><span class="o">=</span><span class="">col_double</span><span class="p">(),</span><span class=""> count</span><span class="o">=</span><span class="s">&#39;i&#39;</span><span class="p">,</span><span class=""> </span><span class="m">.</span><span class="">default</span><span class="o">=</span><span class="s">&#39;c&#39;</span><span class="p">)</span><span class="">
-</span><span class="">read_csv</span><span class="p">(</span><span class="s">&#39;mydata.csv&#39;</span><span class="p">,</span><span class=""> col_types</span><span class="o">=</span><span class="">colsp</span><span class="p">)</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">read_csv<span class="p">(</span><span class="s">&#39;mydata.csv&#39;</span><span class="p">,</span> col_types<span class="o">=</span><span class="s">&#39;ccdi_&#39;</span><span class="p">)</span>
+
+colsp <span class="o">=</span> cols<span class="p">(</span>length<span class="o">=</span>col_double<span class="p">(),</span> count<span class="o">=</span><span class="s">&#39;i&#39;</span><span class="p">,</span> <span class="m">.</span>default<span class="o">=</span><span class="s">&#39;c&#39;</span><span class="p">)</span>
+read_csv<span class="p">(</span><span class="s">&#39;mydata.csv&#39;</span><span class="p">,</span> col_types<span class="o">=</span>colsp<span class="p">)</span></code></pre></div>
 <ul>
 <li><code>[c] col_character()</code>: 文字列</li>
 <li><code>[i] col_integer()</code>: 整数</li>
@@ -246,16 +242,14 @@ readr — 高速で柔軟なテーブル読み込み
 <h2 id="最新版をソースからインストールする">最新版をソースからインストールする</h2>
 
 <p><a href="https://github.com/tidyverse/readr">https://github.com/tidyverse/readr</a></p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">devtools</span><span class="o">::</span><span class="">install_github</span><span class="p">(</span><span class="s">&#39;tidyverse/readr&#39;</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="c1"># ...</span><span class="">
-</span><span class="">ld</span><span class="o">:</span><span class=""> </span><span class="kn">library</span><span class=""> not found </span><span class="kr">for</span><span class=""> </span><span class="o">-</span><span class="">lintl</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">devtools<span class="o">::</span>install_github<span class="p">(</span><span class="s">&#39;tidyverse/readr&#39;</span><span class="p">)</span>
+<span class="c1"># ...</span>
+ld<span class="o">:</span> <span class="kn">library</span> not found <span class="kr">for</span> <span class="o">-</span>lintl</code></pre></div>
 <p>見つからないと言われてる <code>libintl.*</code> はgettextの一部なのでそいつを入れる。
 パス指定で楽をするため、keg-onlyだけど無理矢理シムリンクを張る
 (ホントは良くないかも)。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% brew install gettext
-</span><span class="">% brew link gettext --force</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% brew install gettext
+% brew link gettext --force</code></pre></div>
 <p>Homebrewを<code>/usr/local/</code>以外に入れている場合は、
 それをRに見つけさせるため <code>~/.R/Makevars</code> にオプションを書く。</p>
 
@@ -278,12 +272,11 @@ readr — 高速で柔軟なテーブル読み込み
 <p><code>tbl_df</code> クラスが付与された改良版data.frameのことを<strong>tibble</strong>と呼ぶ。
 もともとは <a href="/rstats/dplyr.html">dplyr</a> パッケージで扱っていたが、独立パッケージになった。
 <a href="/rstats/readr.html">readr</a> で読み込んだデータもこの形式になる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span><span class=""> tbl_iris </span><span class="o">=</span><span class=""> as_tibble</span><span class="p">(</span><span class="">iris</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="o">&gt;</span><span class=""> </span><span class="kp">class</span><span class="p">(</span><span class="">tbl_iris</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class=""> </span><span class="s">&#34;tbl_df&#34;</span><span class="">     </span><span class="s">&#34;tbl&#34;</span><span class="">        </span><span class="s">&#34;data.frame&#34;</span><span class="">
-</span><span class=""></span><span class="o">&gt;</span><span class=""> </span><span class="kp">class</span><span class="p">(</span><span class="">iris</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class=""> </span><span class="s">&#34;data.frame&#34;</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> tbl_iris <span class="o">=</span> as_tibble<span class="p">(</span>iris<span class="p">)</span>
+<span class="o">&gt;</span> <span class="kp">class</span><span class="p">(</span>tbl_iris<span class="p">)</span>
+<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="s">&#34;tbl_df&#34;</span>     <span class="s">&#34;tbl&#34;</span>        <span class="s">&#34;data.frame&#34;</span>
+<span class="o">&gt;</span> <span class="kp">class</span><span class="p">(</span>iris<span class="p">)</span>
+<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="s">&#34;data.frame&#34;</span></code></pre></div>
 <p>生のdata.frameとの違いは:</p>
 
 <ul>
@@ -334,28 +327,26 @@ readr — 高速で柔軟なテーブル読み込み
 <p><code>.Rprofile</code> に以下のように書くことで、
 大きいtibbleの<code>print()</code>で表示される行数を調節することができる。
 デフォルトはどちらも<code>10L</code>。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># Maximum number of rows to print(tbl_df)</span><span class="">
-</span><span class=""></span><span class="kp">options</span><span class="p">(</span><span class="">tibble.print_max</span><span class="o">=</span><span class="m">30L</span><span class="p">)</span><span class="">
-</span><span class="">
-</span><span class=""></span><span class="c1"># Number of rows to print(tbl_df) if exceeded the maximum</span><span class="">
-</span><span class=""></span><span class="kp">options</span><span class="p">(</span><span class="">tibble.print_min</span><span class="o">=</span><span class="m">30L</span><span class="p">)</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># Maximum number of rows to print(tbl_df)</span>
+<span class="kp">options</span><span class="p">(</span>tibble.print_max<span class="o">=</span><span class="m">30L</span><span class="p">)</span>
+
+<span class="c1"># Number of rows to print(tbl_df) if exceeded the maximum</span>
+<span class="kp">options</span><span class="p">(</span>tibble.print_min<span class="o">=</span><span class="m">30L</span><span class="p">)</span></code></pre></div>
 <h3 id="pagerで全体を表示する">PAGERで全体を表示する</h3>
 
 <p>巨大テーブルをコンパクトに表示してくれるのは助かるけど、逆に全体を見渡したい場合もある。
 一時的に最大表示行数を拡大してPAGERに流し込むような関数を書いておくと良い。
 普通のdata.frameを見るのにも便利。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">less </span><span class="o">=</span><span class=""> </span><span class="kr">function</span><span class="p">(</span><span class="">x</span><span class="p">,</span><span class=""> method</span><span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="s">&#39;print&#39;</span><span class="p">,</span><span class=""> </span><span class="s">&#39;dput&#39;</span><span class="p">),</span><span class=""> max.print</span><span class="o">=</span><span class="kp">getOption</span><span class="p">(</span><span class="s">&#39;max.print&#39;</span><span class="p">),</span><span class=""> </span><span class="kc">...</span><span class="p">)</span><span class=""> </span><span class="p">{</span><span class="">
-</span><span class="">    opts </span><span class="o">=</span><span class=""> </span><span class="kp">options</span><span class="p">(</span><span class="">max.print</span><span class="o">=</span><span class="">max.print</span><span class="p">,</span><span class="">
-</span><span class="">            tibble.print_max</span><span class="o">=</span><span class="">max.print</span><span class="p">,</span><span class="">
-</span><span class="">            tibble.print_min</span><span class="o">=</span><span class="">max.print</span><span class="p">)</span><span class="">
-</span><span class="">    </span><span class="kp">on.exit</span><span class="p">(</span><span class="kp">options</span><span class="p">(</span><span class="">opts</span><span class="p">))</span><span class="">
-</span><span class="">    utils</span><span class="o">::</span><span class="">page</span><span class="p">(</span><span class="">x</span><span class="p">,</span><span class=""> </span><span class="kp">match.arg</span><span class="p">(</span><span class="">method</span><span class="p">),</span><span class=""> </span><span class="kc">...</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="p">}</span><span class="">
-</span><span class="">
-</span><span class="">less</span><span class="p">(</span><span class="">iris</span><span class="p">)</span><span class="">
-</span><span class="">less</span><span class="p">(</span><span class="">as_tibble</span><span class="p">(</span><span class="">iris</span><span class="p">))</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">less <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">,</span> method<span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="s">&#39;print&#39;</span><span class="p">,</span> <span class="s">&#39;dput&#39;</span><span class="p">),</span> max.print<span class="o">=</span><span class="kp">getOption</span><span class="p">(</span><span class="s">&#39;max.print&#39;</span><span class="p">),</span> <span class="kc">...</span><span class="p">)</span> <span class="p">{</span>
+    opts <span class="o">=</span> <span class="kp">options</span><span class="p">(</span>max.print<span class="o">=</span>max.print<span class="p">,</span>
+            tibble.print_max<span class="o">=</span>max.print<span class="p">,</span>
+            tibble.print_min<span class="o">=</span>max.print<span class="p">)</span>
+    <span class="kp">on.exit</span><span class="p">(</span><span class="kp">options</span><span class="p">(</span>opts<span class="p">))</span>
+    utils<span class="o">::</span>page<span class="p">(</span>x<span class="p">,</span> <span class="kp">match.arg</span><span class="p">(</span>method<span class="p">),</span> <span class="kc">...</span><span class="p">)</span>
+<span class="p">}</span>
+
+less<span class="p">(</span>iris<span class="p">)</span>
+less<span class="p">(</span>as_tibble<span class="p">(</span>iris<span class="p">))</span></code></pre></div>
 <h2 id="関連書籍">関連書籍</h2>
 
 <p><a href="https://www.amazon.co.jp/Data-Science-Transform-Visualize-Model/dp/1491910399/ref=as_li_ss_il?_encoding=UTF8&qid=1485613345&sr=1-1-catcorr&linkCode=li3&tag=heavywatal-22&linkId=6133a1fd9babbf590e304ee9f670fa4a" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1491910399&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=1491910399" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>

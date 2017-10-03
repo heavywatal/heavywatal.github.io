@@ -107,30 +107,29 @@ Heavy Watal
 
 <p>C++11 ではまともに使える乱数ライブラリが追加された。
 乱数生成エンジンと分布関数オブジェクトを組み合わせて使う。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span><span class=""> </span><span class="cpf">&lt;iostream&gt;</span><span class="cp">
-</span><span class="cp">#include</span><span class=""> </span><span class="cpf">&lt;random&gt;</span><span class="cp">
-</span><span class="cp"></span><span class="">
-</span><span class=""></span><span class="kt">int</span><span class=""> </span><span class="nf">main</span><span class="p">()</span><span class=""> </span><span class="p">{</span><span class="">
-</span><span class="">    </span><span class="c1">// seed
-</span><span class="c1"></span><span class="">    </span><span class="n">std</span><span class="o">::</span><span class="n">random_device</span><span class=""> </span><span class="n">rd</span><span class="p">;</span><span class="">
-</span><span class="">    </span><span class="k">const</span><span class=""> </span><span class="k">auto</span><span class=""> </span><span class="n">seed</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">rd</span><span class="p">();</span><span class="">
-</span><span class="">
-</span><span class="">    </span><span class="c1">// engine
-</span><span class="c1"></span><span class="">    </span><span class="n">std</span><span class="o">::</span><span class="n">mt19937</span><span class=""> </span><span class="n">rng</span><span class="p">(</span><span class="n">seed</span><span class="p">);</span><span class="">
-</span><span class="">
-</span><span class="">    </span><span class="c1">// probability density distribution
-</span><span class="c1"></span><span class="">    </span><span class="k">const</span><span class=""> </span><span class="kt">double</span><span class=""> </span><span class="n">mean</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mf">0.0</span><span class="p">;</span><span class="">
-</span><span class="">    </span><span class="k">const</span><span class=""> </span><span class="kt">double</span><span class=""> </span><span class="n">sd</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mf">1.0</span><span class="p">;</span><span class="">
-</span><span class="">    </span><span class="n">std</span><span class="o">::</span><span class="n">normal_distribution</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class=""> </span><span class="n">dist</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span><span class=""> </span><span class="n">sd</span><span class="p">);</span><span class="">
-</span><span class="">
-</span><span class="">    </span><span class="c1">// generate!
-</span><span class="c1"></span><span class="">    </span><span class="k">for</span><span class=""> </span><span class="p">(</span><span class="n">size_t</span><span class=""> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class=""> </span><span class="n">i</span><span class="o">&lt;</span><span class="mi">8</span><span class="p">;</span><span class=""> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class=""> </span><span class="p">{</span><span class="">
-</span><span class="">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class=""> </span><span class="o">&lt;&lt;</span><span class=""> </span><span class="n">dist</span><span class="p">(</span><span class="n">rng</span><span class="p">)</span><span class=""> </span><span class="o">&lt;&lt;</span><span class=""> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span><span class="">
-</span><span class="">    </span><span class="p">}</span><span class="">
-</span><span class="">
-</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="mi">0</span><span class="p">;</span><span class="">
-</span><span class=""></span><span class="p">}</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;random&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// seed
+</span><span class="c1"></span>    <span class="n">std</span><span class="o">::</span><span class="n">random_device</span> <span class="n">rd</span><span class="p">;</span>
+    <span class="k">const</span> <span class="k">auto</span> <span class="n">seed</span> <span class="o">=</span> <span class="n">rd</span><span class="p">();</span>
+
+    <span class="c1">// engine
+</span><span class="c1"></span>    <span class="n">std</span><span class="o">::</span><span class="n">mt19937</span> <span class="n">rng</span><span class="p">(</span><span class="n">seed</span><span class="p">);</span>
+
+    <span class="c1">// probability density distribution
+</span><span class="c1"></span>    <span class="k">const</span> <span class="kt">double</span> <span class="n">mean</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">double</span> <span class="n">sd</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">normal_distribution</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">dist</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">sd</span><span class="p">);</span>
+
+    <span class="c1">// generate!
+</span><span class="c1"></span>    <span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">8</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">dist</span><span class="p">(</span><span class="n">rng</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div>
 <h2 id="mersenne-twister">Mersenne Twister</h2>
 
 <p><a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt.html">http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt.html</a></p>
@@ -172,21 +171,20 @@ C++標準 <code>&lt;random&gt;</code> の <code>std::mt19937</code>
 <p>周期が $2^{128}$ でSFMTほど良質ではないらしいが、生成は超高速で、
 何より実装が簡単</p>
 <div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// シードは４要素の配列。どっかで一度適当に定義すること。
-</span><span class="c1"></span><span class="k">extern</span><span class=""> </span><span class="kt">unsigned</span><span class=""> </span><span class="kt">int</span><span class=""> </span><span class="n">seed128</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span><span class="">
-</span><span class="">
-</span><span class=""></span><span class="c1">// シードを与える関数
-</span><span class="c1"></span><span class="kr">inline</span><span class=""> </span><span class="kt">void</span><span class=""> </span><span class="nf">init_xorshift</span><span class="p">(</span><span class="kt">unsigned</span><span class=""> </span><span class="kt">int</span><span class=""> </span><span class="n">s</span><span class="p">){</span><span class="">
-</span><span class="">    </span><span class="k">for</span><span class=""> </span><span class="p">(</span><span class="kt">unsigned</span><span class=""> </span><span class="kt">int</span><span class=""> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class=""> </span><span class="n">i</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">;</span><span class=""> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class=""> </span><span class="n">seed128</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">s</span><span class="o">=</span><span class="mi">1812433253U</span><span class="o">*</span><span class="p">(</span><span class="n">s</span><span class="o">^</span><span class="p">(</span><span class="n">s</span><span class="o">&gt;&gt;</span><span class="mi">30</span><span class="p">))</span><span class="o">+</span><span class="n">i</span><span class="p">;</span><span class="">
-</span><span class=""></span><span class="p">}</span><span class="">
-</span><span class="">
-</span><span class=""></span><span class="c1">// 32bitの整数乱数を生成
-</span><span class="c1"></span><span class="kr">inline</span><span class=""> </span><span class="kt">unsigned</span><span class=""> </span><span class="kt">int</span><span class=""> </span><span class="nf">xorshift128</span><span class="p">(){</span><span class="">
-</span><span class="">    </span><span class="kt">unsigned</span><span class=""> </span><span class="kt">int</span><span class=""> </span><span class="o">*</span><span class="n">a</span><span class="p">(</span><span class="n">seed128</span><span class="p">);</span><span class="">
-</span><span class="">    </span><span class="kt">unsigned</span><span class=""> </span><span class="kt">int</span><span class="">  </span><span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">^</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;&lt;</span><span class="mi">11</span><span class="p">));</span><span class="">
-</span><span class="">    </span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span><span class=""> </span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span><span class=""> </span><span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span><span class="">
-</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">^</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">&gt;&gt;</span><span class="mi">19</span><span class="p">))</span><span class="o">^</span><span class="p">(</span><span class="n">t</span><span class="o">^</span><span class="p">(</span><span class="n">t</span><span class="o">&gt;&gt;</span><span class="mi">8</span><span class="p">));</span><span class="">
-</span><span class=""></span><span class="p">}</span></code></pre>
-</div>
+</span><span class="c1"></span><span class="k">extern</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">seed128</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+
+<span class="c1">// シードを与える関数
+</span><span class="c1"></span><span class="kr">inline</span> <span class="kt">void</span> <span class="nf">init_xorshift</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">s</span><span class="p">){</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">seed128</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">s</span><span class="o">=</span><span class="mi">1812433253U</span><span class="o">*</span><span class="p">(</span><span class="n">s</span><span class="o">^</span><span class="p">(</span><span class="n">s</span><span class="o">&gt;&gt;</span><span class="mi">30</span><span class="p">))</span><span class="o">+</span><span class="n">i</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// 32bitの整数乱数を生成
+</span><span class="c1"></span><span class="kr">inline</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="nf">xorshift128</span><span class="p">(){</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="o">*</span><span class="n">a</span><span class="p">(</span><span class="n">seed128</span><span class="p">);</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span>  <span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">^</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;&lt;</span><span class="mi">11</span><span class="p">));</span>
+    <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+    <span class="k">return</span> <span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">^</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">&gt;&gt;</span><span class="mi">19</span><span class="p">))</span><span class="o">^</span><span class="p">(</span><span class="n">t</span><span class="o">^</span><span class="p">(</span><span class="n">t</span><span class="o">&gt;&gt;</span><span class="mi">8</span><span class="p">));</span>
+<span class="p">}</span></code></pre></div>
 <h2 id="seed">Seed</h2>
 
 <h3 id="dev-urandom"><code>/dev/urandom</code></h3>
@@ -198,26 +196,24 @@ C++標準 <code>&lt;random&gt;</code> の <code>std::mt19937</code>
 そのために <code>/dev/random</code> ほど安全ではない。
 長期に渡って使われる暗号鍵の生成以外の目的では
 <code>/dev/urandom</code> の利用が推奨されている。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span><span class=""> </span><span class="cpf">&lt;fstream&gt;</span><span class="cp">
-</span><span class="cp"></span><span class="">
-</span><span class=""></span><span class="kt">unsigned</span><span class=""> </span><span class="kt">int</span><span class=""> </span><span class="nf">dev_urandom</span><span class="p">()</span><span class=""> </span><span class="p">{</span><span class="">
-</span><span class="">    </span><span class="kt">unsigned</span><span class=""> </span><span class="kt">int</span><span class=""> </span><span class="n">x</span><span class="p">;</span><span class="">
-</span><span class="">    </span><span class="k">try</span><span class=""> </span><span class="p">{</span><span class="">
-</span><span class="">        </span><span class="n">std</span><span class="o">::</span><span class="n">ifstream</span><span class=""> </span><span class="n">fin</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;/dev/urandom&#34;</span><span class="p">,</span><span class=""> </span><span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">binary</span><span class=""> </span><span class="o">|</span><span class=""> </span><span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">in</span><span class="p">);</span><span class="">
-</span><span class="">        </span><span class="n">fin</span><span class="p">.</span><span class="n">exceptions</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">failbit</span><span class="p">);</span><span class="">
-</span><span class="">        </span><span class="n">fin</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">x</span><span class="p">),</span><span class=""> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">unsigned</span><span class=""> </span><span class="kt">int</span><span class="p">));</span><span class="">
-</span><span class="">    </span><span class="p">}</span><span class="">
-</span><span class="">    </span><span class="k">catch</span><span class=""> </span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">failure</span><span class="o">&amp;</span><span class=""> </span><span class="n">e</span><span class="p">)</span><span class=""> </span><span class="p">{</span><span class="k">throw</span><span class=""> </span><span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">failure</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;/dev/urandom&#34;</span><span class="p">);}</span><span class="">
-</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="n">x</span><span class="p">;</span><span class="">
-</span><span class=""></span><span class="p">}</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;fstream&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="kt">unsigned</span> <span class="kt">int</span> <span class="nf">dev_urandom</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+    <span class="k">try</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">ifstream</span> <span class="n">fin</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;/dev/urandom&#34;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">binary</span> <span class="o">|</span> <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">in</span><span class="p">);</span>
+        <span class="n">fin</span><span class="p">.</span><span class="n">exceptions</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">failbit</span><span class="p">);</span>
+        <span class="n">fin</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">x</span><span class="p">),</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="k">catch</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">failure</span><span class="o">&amp;</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span><span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">failure</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;/dev/urandom&#34;</span><span class="p">);}</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div>
 <h3 id="std-random-device"><code>std::random_device</code></h3>
 
 <p>C++11ではそのための関数が <code>&lt;random&gt;</code> に用意されている。
 これも基本的には <code>/dev/urandom</code> から生成するらしい</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="n">std</span><span class="o">::</span><span class="n">random_device</span><span class=""> </span><span class="n">rd</span><span class="p">;</span><span class="">
-</span><span class=""></span><span class="k">const</span><span class=""> </span><span class="n">std</span><span class="o">::</span><span class="n">random_device</span><span class="o">::</span><span class="n">result_type</span><span class=""> </span><span class="n">seed</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">rd</span><span class="p">();</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="n">std</span><span class="o">::</span><span class="n">random_device</span> <span class="n">rd</span><span class="p">;</span>
+<span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">random_device</span><span class="o">::</span><span class="n">result_type</span> <span class="n">seed</span> <span class="o">=</span> <span class="n">rd</span><span class="p">();</span></code></pre></div>
 </article>
 </main>
 

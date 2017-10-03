@@ -105,26 +105,24 @@ GitHubに公開しておけば誰でも使えるようになるので、
 
 <ol>
 <li><p>Rを起動して <code>devtools</code> をインストールする</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">install.packages</span><span class="p">(</span><span class="s">&#39;devtools&#39;</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="kn">library</span><span class="p">(</span><span class="">devtools</span><span class="p">)</span></code></pre>
-</div></li>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">install.packages<span class="p">(</span><span class="s">&#39;devtools&#39;</span><span class="p">)</span>
+<span class="kn">library</span><span class="p">(</span>devtools<span class="p">)</span></code></pre></div></li>
 
 <li><p><code>devtools::create()</code> で骨組みを作る</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kp">setwd</span><span class="p">(</span><span class="s">&#39;~/tmp/&#39;</span><span class="p">)</span><span class="">
-</span><span class="">pkgname </span><span class="o">=</span><span class=""> </span><span class="s">&#39;namaespace&#39;</span><span class="">
-</span><span class="">title_desc </span><span class="o">=</span><span class=""> </span><span class="s">&#39;Utility to create dummy R packages for namespace&#39;</span><span class="">
-</span><span class="">github_repo </span><span class="o">=</span><span class=""> </span><span class="kp">sprintf</span><span class="p">(</span><span class="s">&#39;https://github.com/heavywatal/%s&#39;</span><span class="p">,</span><span class=""> pkgname</span><span class="p">)</span><span class="">
-</span><span class="">devtools</span><span class="o">::</span><span class="">create</span><span class="p">(</span><span class="">pkgname</span><span class="p">,</span><span class=""> description</span><span class="o">=</span><span class="kt">list</span><span class="p">(</span><span class="">
-</span><span class="">    Package</span><span class="o">=</span><span class="">pkgname</span><span class="p">,</span><span class="">
-</span><span class="">    Title</span><span class="o">=</span><span class="">title_desc</span><span class="p">,</span><span class="">
-</span><span class="">    Description</span><span class="o">=</span><span class="kp">paste0</span><span class="p">(</span><span class="">title_desc</span><span class="p">,</span><span class=""> </span><span class="s">&#39;.&#39;</span><span class="p">),</span><span class="">
-</span><span class="">    </span><span class="sb">`Authors@R`</span><span class="o">=</span><span class="s">&#34;person(&#39;Watal M.&#39;, &#39;Iwasaki&#39;, email=&#39;user@example.com&#39;, role=c(&#39;aut&#39;, &#39;cre&#39;))&#34;</span><span class="p">,</span><span class="">
-</span><span class="">    License</span><span class="o">=</span><span class="s">&#39;MIT&#39;</span><span class="p">,</span><span class="">
-</span><span class="">    Suggests</span><span class="o">=</span><span class="s">&#39;tidyverse&#39;</span><span class="p">,</span><span class="">
-</span><span class="">    Imports</span><span class="o">=</span><span class="s">&#39;devtools, stringr&#39;</span><span class="p">,</span><span class="">
-</span><span class="">    URL</span><span class="o">=</span><span class="">github_repo</span><span class="p">,</span><span class="">
-</span><span class="">    BugReports</span><span class="o">=</span><span class="kp">paste0</span><span class="p">(</span><span class="">github_repo</span><span class="p">,</span><span class=""> </span><span class="s">&#39;/issues&#39;</span><span class="p">))</span></code></pre>
-</div></li>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kp">setwd</span><span class="p">(</span><span class="s">&#39;~/tmp/&#39;</span><span class="p">)</span>
+pkgname <span class="o">=</span> <span class="s">&#39;namaespace&#39;</span>
+title_desc <span class="o">=</span> <span class="s">&#39;Utility to create dummy R packages for namespace&#39;</span>
+github_repo <span class="o">=</span> <span class="kp">sprintf</span><span class="p">(</span><span class="s">&#39;https://github.com/heavywatal/%s&#39;</span><span class="p">,</span> pkgname<span class="p">)</span>
+devtools<span class="o">::</span>create<span class="p">(</span>pkgname<span class="p">,</span> description<span class="o">=</span><span class="kt">list</span><span class="p">(</span>
+    Package<span class="o">=</span>pkgname<span class="p">,</span>
+    Title<span class="o">=</span>title_desc<span class="p">,</span>
+    Description<span class="o">=</span><span class="kp">paste0</span><span class="p">(</span>title_desc<span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">),</span>
+    <span class="sb">`Authors@R`</span><span class="o">=</span><span class="s">&#34;person(&#39;Watal M.&#39;, &#39;Iwasaki&#39;, email=&#39;user@example.com&#39;, role=c(&#39;aut&#39;, &#39;cre&#39;))&#34;</span><span class="p">,</span>
+    License<span class="o">=</span><span class="s">&#39;MIT&#39;</span><span class="p">,</span>
+    Suggests<span class="o">=</span><span class="s">&#39;tidyverse&#39;</span><span class="p">,</span>
+    Imports<span class="o">=</span><span class="s">&#39;devtools, stringr&#39;</span><span class="p">,</span>
+    URL<span class="o">=</span>github_repo<span class="p">,</span>
+    BugReports<span class="o">=</span><span class="kp">paste0</span><span class="p">(</span>github_repo<span class="p">,</span> <span class="s">&#39;/issues&#39;</span><span class="p">))</span></code></pre></div></li>
 
 <li><p><code>devtools::check(pkgname)</code> で様子を見てみる</p>
 
@@ -143,33 +141,30 @@ GitHubに公開しておけば誰でも使えるようになるので、
 </ul></li>
 
 <li><p>コミットしてプッシュ</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% git init
-</span><span class="">% git add --all
-</span><span class="">% git commit -m </span><span class="s2">&#34;first commit&#34;</span><span class="">
-</span><span class="">% git remote add origin git@github.com:heavywatal/namaespace.git
-</span><span class="">% git push -u origin master</span></code></pre>
-</div></li>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% git init
+% git add --all
+% git commit -m <span class="s2">&#34;first commit&#34;</span>
+% git remote add origin git@github.com:heavywatal/namaespace.git
+% git push -u origin master</code></pre></div></li>
 
 <li><p>とりあえず誰でもインストール可能なパッケージができたはず</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">install_github</span><span class="p">(</span><span class="s">&#39;heavywatal/namaespace&#39;</span><span class="p">)</span></code></pre>
-</div></li>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">install_github<span class="p">(</span><span class="s">&#39;heavywatal/namaespace&#39;</span><span class="p">)</span></code></pre></div></li>
 
 <li><p>あとは <code>R/</code> にソースコードを置いたり <code>README.md</code> を書いたり</p></li>
 </ol>
 
 <h3 id="構造">構造</h3>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">DESCRIPTION  </span><span class="c1"># 一番大事
-</span><span class="c1"></span><span class="">NAMESPACE    </span><span class="c1"># 見せるオブジェクトを列挙
-</span><span class="c1"></span><span class="">README.md    </span><span class="c1"># 全体の説明を簡単に
-</span><span class="c1"></span><span class="">R/           </span><span class="c1"># Rソースコード
-</span><span class="c1"></span><span class="">data/        </span><span class="c1"># サンプルデータなど
-</span><span class="c1"></span><span class="">exec/        </span><span class="c1"># 実行ファイル
-</span><span class="c1"></span><span class="">inst/        </span><span class="c1"># CITATION
-</span><span class="c1"></span><span class="">man/         </span><span class="c1"># ヘルプファイル.Rd
-</span><span class="c1"></span><span class="">src/         </span><span class="c1"># C++ソースコード
-</span><span class="c1"></span><span class="">tests/
-</span><span class="">vignettes/</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">DESCRIPTION  <span class="c1"># 一番大事
+</span><span class="c1"></span>NAMESPACE    <span class="c1"># 見せるオブジェクトを列挙
+</span><span class="c1"></span>README.md    <span class="c1"># 全体の説明を簡単に
+</span><span class="c1"></span>R/           <span class="c1"># Rソースコード
+</span><span class="c1"></span>data/        <span class="c1"># サンプルデータなど
+</span><span class="c1"></span>exec/        <span class="c1"># 実行ファイル
+</span><span class="c1"></span>inst/        <span class="c1"># CITATION
+</span><span class="c1"></span>man/         <span class="c1"># ヘルプファイル.Rd
+</span><span class="c1"></span>src/         <span class="c1"># C++ソースコード
+</span><span class="c1"></span>tests/
+vignettes/</code></pre></div>
 <h3 id="description-http-r-pkgs-had-co-nz-description-html"><a href="http://r-pkgs.had.co.nz/description.html"><code>DESCRIPTION</code></a></h3>
 
 <ul>
@@ -218,18 +213,17 @@ GitHubに公開しておけば誰でも使えるようになるので、
 
 <li><p><code>Rcpp.h</code>のインクルードといくつかのコメントが必要</p>
 <div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// [[Rcpp::plugins(cpp14)]]
-</span><span class="c1"></span><span class="cp">#include</span><span class=""> </span><span class="cpf">&lt;Rcpp.h&gt;</span><span class="cp">
-</span><span class="cp"></span><span class="">
-</span><span class=""></span><span class="c1">//&#39; First example
+</span><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;Rcpp.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="c1">//&#39; First example
 </span><span class="c1">//&#39; @param args string vector
 </span><span class="c1">//&#39; @return string
 </span><span class="c1">//&#39; @export
 </span><span class="c1">// [[Rcpp::export]]
-</span><span class="c1"></span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class=""> </span><span class="n">cxx_func</span><span class="p">(</span><span class="n">Rcpp</span><span class="o">::</span><span class="n">CharacterVector</span><span class=""> </span><span class="n">args</span><span class="o">=</span><span class="n">Rcpp</span><span class="o">::</span><span class="n">CharacterVector</span><span class="o">::</span><span class="n">create</span><span class="p">())</span><span class=""> </span><span class="p">{</span><span class="">
-</span><span class="">    </span><span class="k">auto</span><span class=""> </span><span class="n">vs_args</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="n">Rcpp</span><span class="o">::</span><span class="n">as</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">);</span><span class="">
-</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="n">vs_args</span><span class="p">;</span><span class="">
-</span><span class=""></span><span class="p">}</span></code></pre>
-</div></li>
+</span><span class="c1"></span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">cxx_func</span><span class="p">(</span><span class="n">Rcpp</span><span class="o">::</span><span class="n">CharacterVector</span> <span class="n">args</span><span class="o">=</span><span class="n">Rcpp</span><span class="o">::</span><span class="n">CharacterVector</span><span class="o">::</span><span class="n">create</span><span class="p">())</span> <span class="p">{</span>
+    <span class="k">auto</span> <span class="n">vs_args</span> <span class="o">=</span> <span class="n">Rcpp</span><span class="o">::</span><span class="n">as</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">vs_args</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div></li>
 
 <li><p>開発者側で指定すべきビルドオプションは <code>src/Makevars</code> に指定</p>
 
@@ -258,10 +252,9 @@ SystemRequirements: C++14
 </code></pre></li>
 
 <li><p><code>@docType package</code> のブロックに <code>@useDynLib</code> でパッケージ名を指定する</p>
-<div class="highlight"><pre class="chroma"><code class="language-R" data-lang="R"><span class="c1">#&#39; @docType package</span><span class="">
-</span><span class=""></span><span class="c1">#&#39; @useDynLib namaespace</span><span class="">
-</span><span class=""></span><span class="kc">NULL</span></code></pre>
-</div></li>
+<div class="highlight"><pre class="chroma"><code class="language-R" data-lang="R"><span class="c1">#&#39; @docType package</span>
+<span class="c1">#&#39; @useDynLib namaespace</span>
+<span class="kc">NULL</span></code></pre></div></li>
 </ul>
 
 <p>その他の注意点</p>
@@ -349,12 +342,10 @@ mydemo2    Description of demo 2
 <h3 id="設定">設定</h3>
 
 <p>項目の説明を読む</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">?</span><span class="">devtools</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">?</span>devtools</code></pre></div>
 <p>例えば <code>.Rprofile</code> に</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kp">options</span><span class="p">(</span><span class="">devtools.desc.author</span><span class="o">=</span><span class="s">&#39;Watal M. Iwasaki &lt;user@example.com&gt; [aut, cre]&#39;</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="kp">options</span><span class="p">(</span><span class="">devtools.desc.license</span><span class="o">=</span><span class="s">&#39;MIT&#39;</span><span class="p">)</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kp">options</span><span class="p">(</span>devtools.desc.author<span class="o">=</span><span class="s">&#39;Watal M. Iwasaki &lt;user@example.com&gt; [aut, cre]&#39;</span><span class="p">)</span>
+<span class="kp">options</span><span class="p">(</span>devtools.desc.license<span class="o">=</span><span class="s">&#39;MIT&#39;</span><span class="p">)</span></code></pre></div>
 <h2 id="roxygen2"><code>roxygen2</code></h2>
 
 <p>Rソースコードのコメントから<code>NAMESPACE</code>とヘルプ(<code>man/*.Rd</code>)を自動生成する。</p>
@@ -372,14 +363,13 @@ mydemo2    Description of demo 2
 基本的には <code>devtools::document()</code> を使って間接的に利用する。</p>
 
 <h3 id="使い方">使い方</h3>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#&#39; A simple function to add 1</span><span class="">
-</span><span class=""></span><span class="c1">#&#39; @export</span><span class="">
-</span><span class=""></span><span class="c1">#&#39; @param x A numeric vector</span><span class="">
-</span><span class=""></span><span class="c1">#&#39; @return A numeric vector</span><span class="">
-</span><span class=""></span><span class="c1">#&#39; @examples</span><span class="">
-</span><span class=""></span><span class="c1">#&#39; increment(42)</span><span class="">
-</span><span class="">increment </span><span class="o">=</span><span class=""> </span><span class="kr">function</span><span class="p">(</span><span class="">x</span><span class="p">)</span><span class=""> </span><span class="p">{</span><span class="">x </span><span class="o">+</span><span class=""> </span><span class="m">1</span><span class="p">}</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#&#39; A simple function to add 1</span>
+<span class="c1">#&#39; @export</span>
+<span class="c1">#&#39; @param x A numeric vector</span>
+<span class="c1">#&#39; @return A numeric vector</span>
+<span class="c1">#&#39; @examples</span>
+<span class="c1">#&#39; increment(42)</span>
+increment <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> <span class="p">{</span>x <span class="o">+</span> <span class="m">1</span><span class="p">}</span></code></pre></div>
 <ul>
 <li><code>#'</code> から始まる行がroxygenコメントとして扱われる。</li>
 <li>タグは <code>@</code> で始まる。

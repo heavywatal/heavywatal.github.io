@@ -99,40 +99,33 @@ Hugo — 静的サイトを高速生成
 
 <ul>
 <li><p>インストール</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% brew install hugo</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% brew install hugo</code></pre></div>
 <p>まだまだ開発途上で機能追加や不具合修正も活発なので
 githubをフォローして最新版を入れたほうがいいかも
 <a href="https://gohugo.io/overview/installing/">https://gohugo.io/overview/installing/</a></p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">export</span><span class=""> </span><span class="nv">GOPATH</span><span class=""></span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="">/.go
-</span><span class=""></span><span class="nb">export</span><span class=""> </span><span class="nv">PATH</span><span class=""></span><span class="o">=</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="">:</span><span class="si">${</span><span class="nv">GOPATH</span><span class="si">}</span><span class="">/bin
-</span><span class="">go get -v github.com/gohugoio/hugo</span></code></pre>
-</div></li>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">export</span> <span class="nv">GOPATH</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.go
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span>:<span class="si">${</span><span class="nv">GOPATH</span><span class="si">}</span>/bin
+go get -v github.com/gohugoio/hugo</code></pre></div></li>
 
 <li><p>骨組みを作る</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span><span class=""> path/to/site
-</span><span class="">hugo new site .</span></code></pre>
-</div></li>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> path/to/site
+hugo new site .</code></pre></div></li>
 
 <li><p>ページをMarkdownで書く</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">hugo new about.md</span></code></pre>
-</div><div class="highlight"><pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="">+++</span><span class="err">
-</span><span class="err"></span><span class="">date = &#34;2016-02-26T19:10:22+09:00&#34;</span><span class="err">
-</span><span class="err"></span><span class="">title = &#34;About&#34;</span><span class="err">
-</span><span class="err"></span><span class="">+++</span><span class="err">
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">hugo new about.md</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-markdown" data-lang="markdown">+++<span class="err">
+</span><span class="err"></span>date = &#34;2016-02-26T19:10:22+09:00&#34;<span class="err">
+</span><span class="err"></span>title = &#34;About&#34;<span class="err">
+</span><span class="err"></span>+++<span class="err">
 </span><span class="err">
-</span><span class="err"></span><span class="gu">##</span><span class=""> Heading
-</span><span class=""></span><span class="err">
-</span><span class="err"></span><span class="">normal </span><span class="ge">*italic*</span><span class=""> **bold**</span></code></pre>
-</div></li>
+</span><span class="err"></span><span class="gu">##</span> Heading
+<span class="err">
+</span><span class="err"></span>normal <span class="ge">*italic*</span> **bold**</code></pre></div></li>
 
 <li><p>テーマをとりあえず全部インストール</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">git clone --depth </span><span class="m">1</span><span class=""> --recursive https://github.com/gohugoio/hugoThemes.git themes</span></code></pre>
-</div></li>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git clone --depth <span class="m">1</span> --recursive https://github.com/gohugoio/hugoThemes.git themes</code></pre></div></li>
 
 <li><p>ウェブサーバーを走らせる</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">hugo server -w D -t hyde</span></code></pre>
-</div></li>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">hugo server -w D -t hyde</code></pre></div></li>
 
 <li><p>ブラウザから <a href="http://localhost:1313/about">http://localhost:1313/about</a> にアクセスしてみる。
 監視オプション <code>-w</code> を付けておけば、ファイルの変更がすぐに反映される。</p></li>
@@ -197,14 +190,13 @@ YAMLやJSONでもいいけど、
 <a href="http://localhost">localhost</a> で閲覧できる。
 ユーザーの <code>~/Sites/</code> をドキュメントルートにする方法でもいいが、
 単にシンボリックリンクを張るほうが楽ちん。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% </span><span class="nb">cd</span><span class=""> /Library/WebServer/
-</span><span class="">% sudo mv Documents Documents.orig
-</span><span class="">% sudo ln -s ~/Sites Documents
-</span><span class="">% </span><span class="nb">cd</span><span class=""> /path/to/site-source
-</span><span class="">% hugo
-</span><span class="">% rsync -au --delete --exclude</span><span class="o">=</span><span class="s1">&#39;.git&#39;</span><span class=""> public/ ~/Sites/
-</span><span class="">% open http://localhost/</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% <span class="nb">cd</span> /Library/WebServer/
+% sudo mv Documents Documents.orig
+% sudo ln -s ~/Sites Documents
+% <span class="nb">cd</span> /path/to/site-source
+% hugo
+% rsync -au --delete --exclude<span class="o">=</span><span class="s1">&#39;.git&#39;</span> public/ ~/Sites/
+% open http://localhost/</code></pre></div>
 <h3 id="github-pages">GitHub Pages</h3>
 
 <p><code>public/</code> 以下に生成されるファイルをしかるべきrepository/branchに置くだけ。</p>

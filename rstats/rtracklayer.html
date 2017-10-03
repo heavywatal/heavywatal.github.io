@@ -107,22 +107,19 @@ rtracklayer
 <p><a href="https://genome.ucsc.edu/cgi-bin/hgTables">https://genome.ucsc.edu/cgi-bin/hgTables</a></p>
 
 <p>ゲノム、トラック、テーブルの指定方法が独特</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">session </span><span class="o">=</span><span class=""> browserSession</span><span class="p">()</span><span class="">
-</span><span class="">genome</span><span class="p">(</span><span class="">session</span><span class="p">)</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="s">&#39;hg19&#39;</span><span class="">
-</span><span class="">query </span><span class="o">=</span><span class=""> ucscTableQuery</span><span class="p">(</span><span class="">session</span><span class="p">,</span><span class=""> </span><span class="s">&#39;knownGene&#39;</span><span class="p">)</span><span class="">
-</span><span class="">tableName</span><span class="p">(</span><span class="">query</span><span class="p">)</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="s">&#39;kgXref&#39;</span><span class="">
-</span><span class="">kgXref </span><span class="o">=</span><span class=""> getTable</span><span class="p">(</span><span class="">query</span><span class="p">)</span><span class="">  </span><span class="c1"># data.frame</span><span class="">
-</span><span class="">
-</span><span class="">query </span><span class="o">=</span><span class=""> ucscTableQuery</span><span class="p">(</span><span class="">session</span><span class="p">,</span><span class=""> </span><span class="s">&#39;knownGene&#39;</span><span class="p">,</span><span class=""> </span><span class="s">&#39;hg19&#39;</span><span class="p">,</span><span class=""> </span><span class="s">&#39;kgXref&#39;</span><span class="p">)</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">session <span class="o">=</span> browserSession<span class="p">()</span>
+genome<span class="p">(</span>session<span class="p">)</span> <span class="o">=</span> <span class="s">&#39;hg19&#39;</span>
+query <span class="o">=</span> ucscTableQuery<span class="p">(</span>session<span class="p">,</span> <span class="s">&#39;knownGene&#39;</span><span class="p">)</span>
+tableName<span class="p">(</span>query<span class="p">)</span> <span class="o">=</span> <span class="s">&#39;kgXref&#39;</span>
+kgXref <span class="o">=</span> getTable<span class="p">(</span>query<span class="p">)</span>  <span class="c1"># data.frame</span>
+
+query <span class="o">=</span> ucscTableQuery<span class="p">(</span>session<span class="p">,</span> <span class="s">&#39;knownGene&#39;</span><span class="p">,</span> <span class="s">&#39;hg19&#39;</span><span class="p">,</span> <span class="s">&#39;kgXref&#39;</span><span class="p">)</span></code></pre></div>
 <p>テーブルを指定しなければ先頭が使われる</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">query </span><span class="o">=</span><span class=""> ucscTableQuery</span><span class="p">(</span><span class="">session</span><span class="p">,</span><span class=""> </span><span class="s">&#39;cytoBand&#39;</span><span class="p">,</span><span class=""> </span><span class="s">&#39;hg19&#39;</span><span class="p">)</span><span class="">
-</span><span class="">cytoBand </span><span class="o">=</span><span class=""> track</span><span class="p">(</span><span class="">query</span><span class="p">)</span><span class="">  </span><span class="c1"># GRanges</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">query <span class="o">=</span> ucscTableQuery<span class="p">(</span>session<span class="p">,</span> <span class="s">&#39;cytoBand&#39;</span><span class="p">,</span> <span class="s">&#39;hg19&#39;</span><span class="p">)</span>
+cytoBand <span class="o">=</span> track<span class="p">(</span>query<span class="p">)</span>  <span class="c1"># GRanges</span></code></pre></div>
 <p>トラックやテーブルの名前を閲覧</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">trackNames</span><span class="p">(</span><span class="">session</span><span class="p">)</span><span class="">
-</span><span class="">tableNames</span><span class="p">(</span><span class="">query</span><span class="p">)</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">trackNames<span class="p">(</span>session<span class="p">)</span>
+tableNames<span class="p">(</span>query<span class="p">)</span></code></pre></div>
 </article>
 </main>
 

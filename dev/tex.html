@@ -108,11 +108,10 @@ TeX
 
 <ol>
 <li><p>ソースコードを書く</p>
-<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="">\documentclass{article}
-</span><span class="">\begin{document}
-</span><span class="">Hello, World!
-</span><span class="">\end{document}</span></code></pre>
-</div></li>
+<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex">\documentclass{article}
+\begin{document}
+Hello, World!
+\end{document}</code></pre></div></li>
 
 <li><p>ターミナルからコンパイル:</p>
 
@@ -164,37 +163,33 @@ TeX
 数式環境のデファクトスタンダード。
 アメリカ数学会(AMS)が開発したらしいが、
 ガチ数学じゃなくても数式を書く場合はこれらしい。</p>
-<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="">\usepackage{amsmath}
-</span><span class="">\usepackage[all, warning]{onlyamsmath}</span></code></pre>
-</div></li>
+<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex">\usepackage{amsmath}
+\usepackage[all, warning]{onlyamsmath}</code></pre></div></li>
 
 <li><p>Inline math:</p>
-<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="">if $N_e u \ll 1$, then the population is monomorphic most of the time,</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex">if $N_e u \ll 1$, then the population is monomorphic most of the time,</code></pre></div>
 <p><code>$...$</code> はTeXの古いやり方で、
 新しいLaTeXでは <code>\(...\)</code> を用いるべし、という流れもある。
 けどダラーのほうが書きやすいし読みやすいので、
 しばらくは <code>chktex -n46</code> で様子を見る。</p></li>
 
 <li><p>Display math:</p>
-<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="">\begin{equation*}\label{eq:growth}
-</span><span class="">  N_t = N_0 e^{rt}
-</span><span class="">\end{equation*}</span></code></pre>
-</div></li>
+<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex">\begin{equation*}\label{eq:growth}
+  N_t = N_0 e^{rt}
+\end{equation*}</code></pre></div></li>
 
 <li><p>改行を含む数式を等号で揃える</p>
-<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="">\begin{equation}\label{eq:growth}
-</span><span class="">\begin{split}
-</span><span class="">  N_t &amp;= N_0 e^{rt} \\
-</span><span class="">      &amp;= N_0 \lambda^t
-</span><span class="">\end{split}
-</span><span class="">\end{equation}
-</span><span class="">
-</span><span class="">\begin{align}
-</span><span class="">  S &amp;= 4 \pi r^2\label{surface}\\
-</span><span class="">  V &amp;= \frac {4 \pi r^3} 3\label{volume}\\
-</span><span class="">\end{align}</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex">\begin{equation}\label{eq:growth}
+\begin{split}
+  N_t &amp;= N_0 e^{rt} \\
+      &amp;= N_0 \lambda^t
+\end{split}
+\end{equation}
+
+\begin{align}
+  S &amp;= 4 \pi r^2\label{surface}\\
+  V &amp;= \frac {4 \pi r^3} 3\label{volume}\\
+\end{align}</code></pre></div>
 <p><code>split</code> 環境では全体でラベルが1つ、
 <code>align</code> 環境では行ごとにラベルが生成されるので、
 用途が少し違う。
@@ -202,13 +197,12 @@ TeX
 スペースとかに問題あるらしく非推奨。</p></li>
 
 <li><p>場合分け</p>
-<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="">\begin{equation}\label{eq:heaviside}
-</span><span class="">  H(x) = \begin{cases}
-</span><span class="">    &amp; 0 \text{if $x \le 0$} \\
-</span><span class="">    &amp; 1 \text{if $x &gt; 0$}
-</span><span class="">  \end{cases}
-</span><span class="">\end{equation}</span></code></pre>
-</div></li>
+<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex">\begin{equation}\label{eq:heaviside}
+  H(x) = \begin{cases}
+    &amp; 0 \text{if $x \le 0$} \\
+    &amp; 1 \text{if $x &gt; 0$}
+  \end{cases}
+\end{equation}</code></pre></div></li>
 
 <li><p>記号:
 <a href="http://www.ctan.org/tex-archive/info/symbols/comprehensive/">http://www.ctan.org/tex-archive/info/symbols/comprehensive/</a>
@@ -231,12 +225,11 @@ e.g., 分数を挟むとか、カッコの入れ子とか</li>
 
 <p>通常LaTeXではプリアンブルで <code>\usepackage[dvipdfmx,final]{graphicx}</code> と宣言。
 XeTeXでは不要っぽい。</p>
-<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="">\begin{figure}[htbp]
-</span><span class="">\includegraphics[width=100mm]{great.pdf}
-</span><span class="">\caption{some description
-</span><span class="">}\label{fig:great}
-</span><span class="">\end{figure}</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex">\begin{figure}[htbp]
+\includegraphics[width=100mm]{great.pdf}
+\caption{some description
+}\label{fig:great}
+\end{figure}</code></pre></div>
 <p><code>[hb]</code> のようにして場所を指定できるが、
 結局はいろんな兼ね合いでコンパイラが位置を決める。
 デフォルトは <code>[tbp]</code>。
@@ -269,33 +262,31 @@ XeTeXでは不要っぽい。</p>
 
 <p>GIFアニメをそのまま埋め込むことはできないので、
 <a href="https://www.ctan.org/pkg/animate">{animate}</a>で連番PNGを読み込む。</p>
-<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="">% sudo tlmgr install animate media9 ocgx2
-</span><span class="">\usepackage[autoplay,final,controls=all,type=png]{animate}
-</span><span class="">
-</span><span class="">\begin{document}
-</span><span class="">% \animategraphics[options]{frame rate}{file basename}{first}{last}
-</span><span class="">\animategraphics[scale=0.5]{10}{dir/basename_}{1}{9}
-</span><span class="">\end{document}</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex">% sudo tlmgr install animate media9 ocgx2
+\usepackage[autoplay,final,controls=all,type=png]{animate}
+
+\begin{document}
+% \animategraphics[options]{frame rate}{file basename}{first}{last}
+\animategraphics[scale=0.5]{10}{dir/basename_}{1}{9}
+\end{document}</code></pre></div>
 <h3 id="表">表</h3>
 
 <p><a href="https://en.wikibooks.org/wiki/LaTeX/Tables">https://en.wikibooks.org/wiki/LaTeX/Tables</a></p>
 
 <p>キャプションやラベルなどをまとめるのが <code>table</code> 環境、
 表本体が <code>tabular</code> 環境</p>
-<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="">\begin{table}
-</span><span class="">\caption{Parameters
-</span><span class="">}\label{table:parameters}
-</span><span class="">\begin{tabular}{rl}
-</span><span class="">  \toprule
-</span><span class="">  Symbol &amp; Description \\
-</span><span class="">  \midrule
-</span><span class="">  $\mu$ &amp; mutation rate per division \\
-</span><span class="">  $N_0$ &amp; initial population size \\
-</span><span class="">  \bottomrule
-</span><span class="">\end{tabular}
-</span><span class="">\end{table}</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex">\begin{table}
+\caption{Parameters
+}\label{table:parameters}
+\begin{tabular}{rl}
+  \toprule
+  Symbol &amp; Description \\
+  \midrule
+  $\mu$ &amp; mutation rate per division \\
+  $N_0$ &amp; initial population size \\
+  \bottomrule
+\end{tabular}
+\end{table}</code></pre></div>
 <p>罫線は標準の <code>\hline</code> だと上下スペースが狭苦しいので、
 <a href="https://www.ctan.org/pkg/booktabs">{booktabs}</a>
 の <code>toprule</code>, <code>midrule</code>, <code>bottomrule</code> を使う。</p>
@@ -308,24 +299,23 @@ XeTeXでは不要っぽい。</p>
 
 <p><a href="https://www.ctan.org/pkg/enumitem">{enumitem}</a>
 を使うといろいろなオプションが設定可能になる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="">\usepackage{enumitem}
-</span><span class="">%%%
-</span><span class="">
-</span><span class="">\begin{itemize}
-</span><span class="">  \item Judas Priest
-</span><span class="">  \item Iron Maiden
-</span><span class="">\end{itemize}
-</span><span class="">
-</span><span class="">\begin{enumerate}[nosep,leftmargin=*]
-</span><span class="">  \item Judas Priest
-</span><span class="">  \item Iron Maiden
-</span><span class="">\end{enumerate}
-</span><span class="">
-</span><span class="">\begin{description}[nextline]
-</span><span class="">  \item[key1] value1
-</span><span class="">  \item[key2] value2
-</span><span class="">\end{description}</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex">\usepackage{enumitem}
+%%%
+
+\begin{itemize}
+  \item Judas Priest
+  \item Iron Maiden
+\end{itemize}
+
+\begin{enumerate}[nosep,leftmargin=*]
+  \item Judas Priest
+  \item Iron Maiden
+\end{enumerate}
+
+\begin{description}[nextline]
+  \item[key1] value1
+  \item[key2] value2
+\end{description}</code></pre></div>
 <p><a href="http://konoyonohana.blog.fc2.com/blog-entry-58.html">http://konoyonohana.blog.fc2.com/blog-entry-58.html</a></p>
 
 <h3 id="引用">引用</h3>
@@ -339,20 +329,18 @@ e.g., <code>mybibdata.bib</code></li>
 
 <li><p>コマンドにcite keyを入れて本文に挿入。
 このとき標準の <code>\cite</code> ではなく <code>{natbib}</code> のものを使う。</p>
-<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="">\usepackage[authoryear,round,sort&amp;compress]{natbib}
-</span><span class="">%%%
-</span><span class="">
-</span><span class="">\citet{hudson1987g}         # Hudson et al. (1987)
-</span><span class="">\citep{hudson1987g}         # (Hudson et al. 1987)
-</span><span class="">\citep*{hudson1987g}        # (Hudson, Kreitman and Aguadé, 1987)
-</span><span class="">\citep[eq. 5]{hudson1987g}  # (Hudson et al. 1987, eq. 5)
-</span><span class="">\citep[see][]{hudson1987g}  # (see Hudson et al. 1987)</span></code></pre>
-</div></li>
+<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex">\usepackage[authoryear,round,sort&amp;compress]{natbib}
+%%%
+
+\citet{hudson1987g}         # Hudson et al. (1987)
+\citep{hudson1987g}         # (Hudson et al. 1987)
+\citep*{hudson1987g}        # (Hudson, Kreitman and Aguadé, 1987)
+\citep[eq. 5]{hudson1987g}  # (Hudson et al. 1987, eq. 5)
+\citep[see][]{hudson1987g}  # (see Hudson et al. 1987)</code></pre></div></li>
 
 <li><p>最後の方に文献リストを挿入</p>
-<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="">\bibliographystyle{abbrvnat}
-</span><span class="">\bibliography{mybibdata}</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex">\bibliographystyle{abbrvnat}
+\bibliography{mybibdata}</code></pre></div>
 <p>スタイルを規定するのは <code>bst</code> ファイル</p></li>
 
 <li><p>元の <code>tex</code> をコンパイルして <code>aux</code> を生成</p></li>
@@ -373,28 +361,26 @@ e.g., <code>mybibdata.bib</code></li>
 <li><a href="https://en.wikibooks.org/wiki/LaTeX/Fonts#Font_styles">https://en.wikibooks.org/wiki/LaTeX/Fonts#Font_styles</a></li>
 <li><a href="https://en.wikibooks.org/wiki/LaTeX/Colors">https://en.wikibooks.org/wiki/LaTeX/Colors</a></li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="">\emph{emphasis}
-</span><span class="">\textit{italic}
-</span><span class="">\textbf{bold}
-</span><span class="">\texttt{monospace}
-</span><span class="">{\huge huge text}</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex">\emph{emphasis}
+\textit{italic}
+\textbf{bold}
+\texttt{monospace}
+{\huge huge text}</code></pre></div>
 <p><code>\tiny</code>, <code>\scriptsize</code>, <code>\footnotesize</code>, <code>\small</code>,
 <code>\normalsize</code>,
 <code>\large</code>, <code>\Large</code>, <code>\LARGE</code>, <code>\huge</code>, <code>\Huge</code></p>
-<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="">\usepackage[normalem]{ulem}  % \uline{}, \sout{}
-</span><span class="">\usepackage{color}           % \textcolor{}
-</span><span class="">\usepackage{soul}            % \hl{} using {color}
-</span><span class="">%%%
-</span><span class="">
-</span><span class="">\uline{underlined text}
-</span><span class="">\sout{strikethrough}
-</span><span class="">
-</span><span class="">\textcolor{red}{colored text}
-</span><span class="">{\text{red} colored text}
-</span><span class="">
-</span><span class="">\hl{highlighted text}</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex">\usepackage[normalem]{ulem}  % \uline{}, \sout{}
+\usepackage{color}           % \textcolor{}
+\usepackage{soul}            % \hl{} using {color}
+%%%
+
+\uline{underlined text}
+\sout{strikethrough}
+
+\textcolor{red}{colored text}
+{\text{red} colored text}
+
+\hl{highlighted text}</code></pre></div>
 <p><a href="https://www.ctan.org/pkg/ulem">{ulem}</a> は
 <code>[normalem]</code> オプションを付けて読まないと
 <code>\emph</code> が下線に変更されてしまうので注意。</p>
@@ -415,10 +401,9 @@ e.g., <code>mybibdata.bib</code></li>
 中には古すぎたりするため避けたほうがよいものもある。
 ファイルの先頭で <code>nag</code> を読み込むことで、
 コンパイル時にそういうのを警告してもらえる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="">\RequirePackage[l2tabu, orthodox]{nag}
-</span><span class="">
-</span><span class="">\documentclass{article}  % これよりも前</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex">\RequirePackage[l2tabu, orthodox]{nag}
+
+\documentclass{article}  % これよりも前</code></pre></div>
 <p><code>chktex</code> コマンドを使えばコンパイルよりも手軽にチェックできる。
 <a href="/dev/atom.html">Atom</a> に
 <a href="https://atom.io/packages/linter-chktex">linter-chktex</a>
@@ -432,11 +417,10 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 <code>definition</code> をコピペすると <code>de nition</code> になってしまう。</p>
 
 <p>次のコードをプリアンブルの頭の方に記述するといいらしいが、うまく機能しない。。。</p>
-<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="">\input{glyphtounicode.tex}
-</span><span class="">\pdfgentounicode=1
-</span><span class="">% あるいは
-</span><span class="">\usepackage{mmap}</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex">\input{glyphtounicode.tex}
+\pdfgentounicode=1
+% あるいは
+\usepackage{mmap}</code></pre></div>
 <h2 id="日本語を使う">日本語を使う</h2>
 
 <h3 id="lualatex">LuaLaTeX</h3>
@@ -454,15 +438,14 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 <li><code>bad argument #1 to 'open'</code> などと怒られる問題は、
 必要な CMap が LuaTeX から見えていないのが原因</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">  </span><span class="c1">## キャッシュを再構築
-</span><span class="c1"></span><span class="">  % rm -rf ~/Library/texlive/2016basic/texmf-var/luatex-cache/
-</span><span class="">  % luaotfload-tool -u -v
-</span><span class="">
-</span><span class="">  </span><span class="c1">## 見えてるか確認
-</span><span class="c1"></span><span class="">  % kpsewhich -format</span><span class="o">=</span><span class="">cmap UniJIS2004-UTF32-H
-</span><span class="">  % kpsewhich -format</span><span class="o">=</span><span class="">cmap UniJIS2004-UTF32-V
-</span><span class="">  % kpsewhich -format</span><span class="o">=</span><span class="">cmap Adobe-Japan1-UCS2</span></code></pre>
-</div></li>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">  <span class="c1">## キャッシュを再構築
+</span><span class="c1"></span>  % rm -rf ~/Library/texlive/2016basic/texmf-var/luatex-cache/
+  % luaotfload-tool -u -v
+
+  <span class="c1">## 見えてるか確認
+</span><span class="c1"></span>  % kpsewhich -format<span class="o">=</span>cmap UniJIS2004-UTF32-H
+  % kpsewhich -format<span class="o">=</span>cmap UniJIS2004-UTF32-V
+  % kpsewhich -format<span class="o">=</span>cmap Adobe-Japan1-UCS2</code></pre></div></li>
 </ul>
 
 <h3 id="xelatex">XeLaTeX</h3>
@@ -542,30 +525,29 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 </dl>
 
 <p>XeTeX なら OS のフォントをフルネームで指定して使える</p>
-<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="">\usepackage{amsthm, amsmath} % must be called ahead of mathspec
-</span><span class="">\usepackage[all,warning]{onlyamsmath}
-</span><span class="">\ifxetex
-</span><span class="">  \usepackage{mathspec} % must be called ahead of fontspec
-</span><span class="">  \usepackage[math-style=TeX,bold-style=TeX]{unicode-math}
-</span><span class="">  \usepackage[no-math]{fontspec}
-</span><span class="">  \setmainfont{TeXGyrePagellaX}
-</span><span class="">  \setmathfont{texgyrepagella-math.otf}
-</span><span class="">  % \usepackage{xeCJK}
-</span><span class="">  % \setCJKmainfont[Scale=0.9,BoldFont=Hiragino Mincho ProN W6]
-</span><span class="">  %                                   {Hiragino Mincho ProN W3}
-</span><span class="">  % \setCJKsansfont[Scale=0.9,BoldFont=Hiragino Kaku Gothic ProN W6]
-</span><span class="">  %                                   {Hiragino Kaku Gothic ProN W3}
-</span><span class="">  % \setCJKmonofont[Scale=0.9,BoldFont=Hiragino Kaku Gothic ProN W6]
-</span><span class="">  %                                   {Hiragino Kaku Gothic ProN W3}
-</span><span class="">\else
-</span><span class="">  \usepackage[T1]{fontenc}
-</span><span class="">  \usepackage[utf8]{inputenc}
-</span><span class="">  \usepackage{newpxtext}
-</span><span class="">  \usepackage{newpxmath}
-</span><span class="">  \usepackage{textcomp}
-</span><span class="">  % \usepackage[uplatex,deluxe,jis2004]{otf}
-</span><span class="">\fi</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex">\usepackage{amsthm, amsmath} % must be called ahead of mathspec
+\usepackage[all,warning]{onlyamsmath}
+\ifxetex
+  \usepackage{mathspec} % must be called ahead of fontspec
+  \usepackage[math-style=TeX,bold-style=TeX]{unicode-math}
+  \usepackage[no-math]{fontspec}
+  \setmainfont{TeXGyrePagellaX}
+  \setmathfont{texgyrepagella-math.otf}
+  % \usepackage{xeCJK}
+  % \setCJKmainfont[Scale=0.9,BoldFont=Hiragino Mincho ProN W6]
+  %                                   {Hiragino Mincho ProN W3}
+  % \setCJKsansfont[Scale=0.9,BoldFont=Hiragino Kaku Gothic ProN W6]
+  %                                   {Hiragino Kaku Gothic ProN W3}
+  % \setCJKmonofont[Scale=0.9,BoldFont=Hiragino Kaku Gothic ProN W6]
+  %                                   {Hiragino Kaku Gothic ProN W3}
+\else
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{newpxtext}
+  \usepackage{newpxmath}
+  \usepackage{textcomp}
+  % \usepackage[uplatex,deluxe,jis2004]{otf}
+\fi</code></pre></div>
 <p>フォント関連をいじったあと明示的にマップを更新するには <code>sudo updmap-sys</code></p>
 
 </article>

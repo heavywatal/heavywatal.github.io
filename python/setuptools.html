@@ -91,48 +91,44 @@ setuptools — Pythonパッケージ作成
 <h2 id="ファイル構成">ファイル構成</h2>
 
 <p>GitHubやローカルの開発環境から <code>pip</code> で直接インストールできる形。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">pywtl/
-</span><span class="">├── LICENSE
-</span><span class="">├── README.md
-</span><span class="">├── entry_points.cfg
-</span><span class="">├── setup.cfg
-</span><span class="">├── setup.py
-</span><span class="">└── wtl/
-</span><span class="">    ├── __init__.py
-</span><span class="">    └── hello.py</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">pywtl/
+├── LICENSE
+├── README.md
+├── entry_points.cfg
+├── setup.cfg
+├── setup.py
+└── wtl/
+    ├── __init__.py
+    └── hello.py</code></pre></div>
 <p>リポジトリ名(<code>pywtl</code>)とパッケージ名(<code>wtl</code>)は必ずしも一致してなくてもよい。
 ローカルからのインストールは <code>-e,--editable</code>
 オプションを付けることで余計なコピーを減らせるっぽい。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">% pip install -v -e ~/git/pywtl/
-</span><span class="">% pip install -v git+https://github.com/heavywatal/pywtl.git
-</span><span class="">% python -m wtl.hello</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% pip install -v -e ~/git/pywtl/
+% pip install -v git+https://github.com/heavywatal/pywtl.git
+% python -m wtl.hello</code></pre></div>
 <h3 id="setup-py"><code>setup.py</code></h3>
 
 <p>新しいsetuptoolsでは <code>setup.cfg</code> の設定を読み込んでくれるので、
 <code>setup()</code> の引数にいろいろ渡す必要は無くなった。</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="kn">from</span><span class=""> </span><span class="nn">setuptools</span><span class=""> </span><span class="kn">import</span><span class=""> </span><span class="n">setup</span><span class="">
-</span><span class=""></span><span class="n">setup</span><span class="p">()</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
+<span class="n">setup</span><span class="p">()</span></code></pre></div>
 <h3 id="setup-cfg"><code>setup.cfg</code></h3>
 
 <p><a href="https://setuptools.readthedocs.io/en/latest/setuptools.html#configuring-setup-using-setup-cfg-files">https://setuptools.readthedocs.io/en/latest/setuptools.html#configuring-setup-using-setup-cfg-files</a></p>
-<div class="highlight"><pre class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[metadata]</span><span class="">
-</span><span class=""></span><span class="na">name</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="s">wtl</span><span class="">
-</span><span class=""></span><span class="na">version</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="s">0.1</span><span class="">
-</span><span class=""></span><span class="na">url</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="s">https://github.com/heavywatal/pywtl</span><span class="">
-</span><span class=""></span><span class="na">author</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="s">Watal M. Iwasaki</span><span class="">
-</span><span class=""></span><span class="na">author_email</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="s">heavy.watalあgmail.com</span><span class="">
-</span><span class=""></span><span class="na">license</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="s">MIT</span><span class="">
-</span><span class=""></span><span class="na">description</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="s">wtl: Personal Python package</span><span class="">
-</span><span class=""></span><span class="na">long_description</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="s">file: README.md</span><span class="">
-</span><span class="">
-</span><span class=""></span><span class="k">[options]</span><span class="">
-</span><span class=""></span><span class="na">zip_safe</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="s">False</span><span class="">
-</span><span class=""></span><span class="na">packages</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="s">find:</span><span class="">
-</span><span class=""></span><span class="na">entry_points</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="s">file: entry_points.cfg</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[metadata]</span>
+<span class="na">name</span> <span class="o">=</span> <span class="s">wtl</span>
+<span class="na">version</span> <span class="o">=</span> <span class="s">0.1</span>
+<span class="na">url</span> <span class="o">=</span> <span class="s">https://github.com/heavywatal/pywtl</span>
+<span class="na">author</span> <span class="o">=</span> <span class="s">Watal M. Iwasaki</span>
+<span class="na">author_email</span> <span class="o">=</span> <span class="s">heavy.watalあgmail.com</span>
+<span class="na">license</span> <span class="o">=</span> <span class="s">MIT</span>
+<span class="na">description</span> <span class="o">=</span> <span class="s">wtl: Personal Python package</span>
+<span class="na">long_description</span> <span class="o">=</span> <span class="s">file: README.md</span>
+
+<span class="k">[options]</span>
+<span class="na">zip_safe</span> <span class="o">=</span> <span class="s">False</span>
+<span class="na">packages</span> <span class="o">=</span> <span class="s">find:</span>
+<span class="na">entry_points</span> <span class="o">=</span> <span class="s">file: entry_points.cfg</span></code></pre></div>
 <p><code>license = file: LICENSE</code> のように外部ファイルを参照することも可能。</p>
 
 <h3 id="entry-points"><code>entry_points</code></h3>
@@ -146,9 +142,8 @@ setuptools — Pythonパッケージ作成
 <code>${prefix}/bin/</code> に実行可能ファイルを配置するのによく使われる。
 設定は下記のように別ファイル <code>entry_points.cfg</code> として
 <code>setup.cfg</code> から読ませるのが楽チン。</p>
-<div class="highlight"><pre class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[console_scripts]</span><span class="">
-</span><span class=""></span><span class="na">hello.py</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="s">wtl.hello:main</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[console_scripts]</span>
+<span class="na">hello.py</span> <span class="o">=</span> <span class="s">wtl.hello:main</span></code></pre></div>
 <p>引数を取らない関数のみ利用可能。
 コマンドライン引数を処理したい場合は標準の
 <a href="https://docs.python.org/3/library/argparse.html"><code>argparse</code></a> が有効。</p>
@@ -164,21 +159,20 @@ setuptools — Pythonパッケージ作成
 </dl>
 
 <p><code>wtl/hello.py</code></p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span><span class="">
-</span><span class=""></span><span class="c1"># -*- coding: utf-8 -*-</span><span class="">
-</span><span class=""></span><span class="sa"></span><span class="s2">&#34;&#34;&#34;
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sa"></span><span class="s2">&#34;&#34;&#34;
 </span><span class="s2">Sample module
-</span><span class="s2">&#34;&#34;&#34;</span><span class="">
-</span><span class="">
-</span><span class="">
-</span><span class=""></span><span class="k">def</span><span class=""> </span><span class="nf">main</span><span class="p">():</span><span class="">
-</span><span class="">    </span><span class="kn">import</span><span class=""> </span><span class="nn">getpass</span><span class="">
-</span><span class="">    </span><span class="k">print</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;Hello, &#39;</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="n">getpass</span><span class="o">.</span><span class="n">getuser</span><span class="p">()</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="sa"></span><span class="s1">&#39;!&#39;</span><span class="p">)</span><span class="">
-</span><span class="">
-</span><span class="">
-</span><span class=""></span><span class="k">if</span><span class=""> </span><span class="vm">__name__</span><span class=""> </span><span class="o">==</span><span class=""> </span><span class="sa"></span><span class="s1">&#39;__main__&#39;</span><span class="p">:</span><span class="">
-</span><span class="">    </span><span class="n">main</span><span class="p">()</span></code></pre>
-</div>
+</span><span class="s2">&#34;&#34;&#34;</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="kn">import</span> <span class="nn">getpass</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;Hello, &#39;</span> <span class="o">+</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getuser</span><span class="p">()</span> <span class="o">+</span> <span class="sa"></span><span class="s1">&#39;!&#39;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="sa"></span><span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span></code></pre></div>
 <h3 id="manifest-in"><code>MANIFEST.in</code></h3>
 
 <p>Pythonモジュール以外で配布物に含めたいもの、除外したいものがあれば
@@ -188,19 +182,18 @@ setuptools — Pythonパッケージ作成
 <h2 id="setuptools">setuptools</h2>
 
 <p><a href="https://setuptools.readthedocs.io/en/latest/setuptools.html#command-reference">Command Reference</a></p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="">python setup.py --help
-</span><span class="">python setup.py --help-commands
-</span><span class="">python setup.py ^i  </span><span class="c1"># zsh completion
-</span><span class="c1"></span><span class="">
-</span><span class=""></span><span class="c1"># 開発中に使う
-</span><span class="c1"></span><span class="">python setup.py build
-</span><span class="">python setup.py clean
-</span><span class="">python setup.py check
-</span><span class="">
-</span><span class=""></span><span class="c1"># 配布できる形に固める
-</span><span class="c1"></span><span class="">python setup.py sdist
-</span><span class="">python setup.py bdist_wheel</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">python setup.py --help
+python setup.py --help-commands
+python setup.py ^i  <span class="c1"># zsh completion
+</span><span class="c1"></span>
+<span class="c1"># 開発中に使う
+</span><span class="c1"></span>python setup.py build
+python setup.py clean
+python setup.py check
+
+<span class="c1"># 配布できる形に固める
+</span><span class="c1"></span>python setup.py sdist
+python setup.py bdist_wheel</code></pre></div>
 </article>
 </main>
 

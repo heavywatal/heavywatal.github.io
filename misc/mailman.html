@@ -132,16 +132,15 @@ Command Line Tools をインストール</li>
 </code></pre></li>
 
 <li><p><code>/etc/apache2/extra/httpd_mailman.conf</code> を作る</p>
-<div class="highlight"><pre class="chroma"><code class="language-apache" data-lang="apache"><span class="nb">ScriptAlias</span><span class=""> </span><span class="sx">/mailman/</span><span class=""> </span><span class="s2">&#34;/usr/local/mailman/cgi-bin/&#34;</span><span class="">
-</span><span class=""></span><span class="nb">Alias</span><span class=""> </span><span class="sx">/pipermail/</span><span class=""> </span><span class="s2">&#34;/usr/local/mailman/archives/public/&#34;</span><span class="">
-</span><span class=""></span><span class="nb">Alias</span><span class=""> </span><span class="sx">/icons/</span><span class=""> </span><span class="s2">&#34;/usr/local/mailman/icons/&#34;</span><span class="">
-</span><span class=""></span><span class="nt">&lt;Directory</span><span class=""> </span><span class="s">&#34;/usr/local/mailman/archives/public/&#34;</span><span class="nt">&gt;</span><span class="">
-</span><span class="">    </span><span class="nb">Options</span><span class=""> FollowSymLinks MultiViews Indexes
-</span><span class="">    </span><span class="nb">AllowOverride</span><span class=""> </span><span class="k">None</span><span class="">
-</span><span class="">    </span><span class="nb">Order</span><span class=""> allow,deny
-</span><span class="">    </span><span class="nb">Allow</span><span class=""> from </span><span class="k">all</span><span class="">
-</span><span class=""></span><span class="nt">&lt;/Directory</span><span class=""></span><span class="s"></span><span class="nt">&gt;</span></code></pre>
-</div></li>
+<div class="highlight"><pre class="chroma"><code class="language-apache" data-lang="apache"><span class="nb">ScriptAlias</span> <span class="sx">/mailman/</span> <span class="s2">&#34;/usr/local/mailman/cgi-bin/&#34;</span>
+<span class="nb">Alias</span> <span class="sx">/pipermail/</span> <span class="s2">&#34;/usr/local/mailman/archives/public/&#34;</span>
+<span class="nb">Alias</span> <span class="sx">/icons/</span> <span class="s2">&#34;/usr/local/mailman/icons/&#34;</span>
+<span class="nt">&lt;Directory</span> <span class="s">&#34;/usr/local/mailman/archives/public/&#34;</span><span class="nt">&gt;</span>
+    <span class="nb">Options</span> FollowSymLinks MultiViews Indexes
+    <span class="nb">AllowOverride</span> <span class="k">None</span>
+    <span class="nb">Order</span> allow,deny
+    <span class="nb">Allow</span> from <span class="k">all</span>
+<span class="nt">&lt;/Directory</span><span class="s"></span><span class="nt">&gt;</span></code></pre></div></li>
 
 <li><p><code>/Library/Server/Web/Config/apache2/httpd_server_app.conf</code> を編集する。
 550行目らへん、SSL/TLSのコメントのすぐ上あたりに下記の行を追加:</p>
@@ -200,33 +199,32 @@ Command Line Tools をインストール</li>
 
 <li><p><code>/System/Library/LaunchDaemons/org.list.mailmanctl.plist</code>
 を作り、システム起動後に自動的に始まるようにする</p>
-<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span><span class="">
-</span><span class=""></span><span class="cp">&lt;!DOCTYPE plist PUBLIC &#34;-//Apple Computer//DTD PLIST 1.0//EN&#34; &#34;http://www.apple.com/DTDs/PropertyList-1.0.dtd&#34;&gt;</span><span class="">
-</span><span class=""></span><span class="nt">&lt;plist</span><span class=""> </span><span class="na">version=</span><span class="s">&#34;1.0&#34;</span><span class="nt">&gt;</span><span class="">
-</span><span class=""></span><span class="nt">&lt;dict&gt;</span><span class="">
-</span><span class="">    </span><span class="nt">&lt;key&gt;</span><span class="">Debug</span><span class="nt">&lt;/key&gt;</span><span class="">
-</span><span class="">    </span><span class="nt">&lt;true/&gt;</span><span class="">
-</span><span class="">    </span><span class="nt">&lt;key&gt;</span><span class="">Disabled</span><span class="nt">&lt;/key&gt;</span><span class="">
-</span><span class="">    </span><span class="nt">&lt;false/&gt;</span><span class="">
-</span><span class="">    </span><span class="nt">&lt;key&gt;</span><span class="">Label</span><span class="nt">&lt;/key&gt;</span><span class="">
-</span><span class="">    </span><span class="nt">&lt;string&gt;</span><span class="">org.list.mailmanctl</span><span class="nt">&lt;/string&gt;</span><span class="">
-</span><span class="">    </span><span class="nt">&lt;key&gt;</span><span class="">Program</span><span class="nt">&lt;/key&gt;</span><span class="">
-</span><span class="">    </span><span class="nt">&lt;string&gt;</span><span class="">/usr/local/mailman/bin/mailmanctl</span><span class="nt">&lt;/string&gt;</span><span class="">
-</span><span class="">    </span><span class="nt">&lt;key&gt;</span><span class="">ProgramArguments</span><span class="nt">&lt;/key&gt;</span><span class="">
-</span><span class="">    </span><span class="nt">&lt;array&gt;</span><span class="">
-</span><span class="">        </span><span class="nt">&lt;string&gt;</span><span class="">mailmanctl</span><span class="nt">&lt;/string&gt;</span><span class="">
-</span><span class="">        </span><span class="nt">&lt;string&gt;</span><span class="">-s</span><span class="nt">&lt;/string&gt;</span><span class="">
-</span><span class="">        </span><span class="nt">&lt;string&gt;</span><span class="">start</span><span class="nt">&lt;/string&gt;</span><span class="">
-</span><span class="">    </span><span class="nt">&lt;/array&gt;</span><span class="">
-</span><span class="">    </span><span class="nt">&lt;key&gt;</span><span class="">KeepAlive</span><span class="nt">&lt;/key&gt;</span><span class="">
-</span><span class="">    </span><span class="nt">&lt;false/&gt;</span><span class="">
-</span><span class="">    </span><span class="nt">&lt;key&gt;</span><span class="">RunAtLoad</span><span class="nt">&lt;/key&gt;</span><span class="">
-</span><span class="">    </span><span class="nt">&lt;true/&gt;</span><span class="">
-</span><span class="">    </span><span class="nt">&lt;key&gt;</span><span class="">AbandonProcessGroup</span><span class="nt">&lt;/key&gt;</span><span class="">
-</span><span class="">    </span><span class="nt">&lt;true/&gt;</span><span class="">
-</span><span class=""></span><span class="nt">&lt;/dict&gt;</span><span class="">
-</span><span class=""></span><span class="nt">&lt;/plist&gt;</span></code></pre>
-</div></li>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+<span class="cp">&lt;!DOCTYPE plist PUBLIC &#34;-//Apple Computer//DTD PLIST 1.0//EN&#34; &#34;http://www.apple.com/DTDs/PropertyList-1.0.dtd&#34;&gt;</span>
+<span class="nt">&lt;plist</span> <span class="na">version=</span><span class="s">&#34;1.0&#34;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;dict&gt;</span>
+    <span class="nt">&lt;key&gt;</span>Debug<span class="nt">&lt;/key&gt;</span>
+    <span class="nt">&lt;true/&gt;</span>
+    <span class="nt">&lt;key&gt;</span>Disabled<span class="nt">&lt;/key&gt;</span>
+    <span class="nt">&lt;false/&gt;</span>
+    <span class="nt">&lt;key&gt;</span>Label<span class="nt">&lt;/key&gt;</span>
+    <span class="nt">&lt;string&gt;</span>org.list.mailmanctl<span class="nt">&lt;/string&gt;</span>
+    <span class="nt">&lt;key&gt;</span>Program<span class="nt">&lt;/key&gt;</span>
+    <span class="nt">&lt;string&gt;</span>/usr/local/mailman/bin/mailmanctl<span class="nt">&lt;/string&gt;</span>
+    <span class="nt">&lt;key&gt;</span>ProgramArguments<span class="nt">&lt;/key&gt;</span>
+    <span class="nt">&lt;array&gt;</span>
+        <span class="nt">&lt;string&gt;</span>mailmanctl<span class="nt">&lt;/string&gt;</span>
+        <span class="nt">&lt;string&gt;</span>-s<span class="nt">&lt;/string&gt;</span>
+        <span class="nt">&lt;string&gt;</span>start<span class="nt">&lt;/string&gt;</span>
+    <span class="nt">&lt;/array&gt;</span>
+    <span class="nt">&lt;key&gt;</span>KeepAlive<span class="nt">&lt;/key&gt;</span>
+    <span class="nt">&lt;false/&gt;</span>
+    <span class="nt">&lt;key&gt;</span>RunAtLoad<span class="nt">&lt;/key&gt;</span>
+    <span class="nt">&lt;true/&gt;</span>
+    <span class="nt">&lt;key&gt;</span>AbandonProcessGroup<span class="nt">&lt;/key&gt;</span>
+    <span class="nt">&lt;true/&gt;</span>
+<span class="nt">&lt;/dict&gt;</span>
+<span class="nt">&lt;/plist&gt;</span></code></pre></div></li>
 
 <li><p>リストを引き継ぐには <code>mailman/</code> ディレクトリの
 <code>lists/</code> と <code>archives/</code> をコピーすれば良い。

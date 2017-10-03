@@ -146,14 +146,13 @@ R標準の関数よりも遥かに分かりやすく安全で高機能なもの�
 <p><code>1 - pnorm(...)</code>や<code>log(pnorm(...))</code>のほうが直感的に分かりやすいので、
 <code>lower.tail=FALSE</code>や<code>log.p=TRUE</code>は不要なようにも思われるが、
 これらの引数で内部処理させたほうが浮動小数点型の限界付近での計算が正確。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># complementary</span><span class="">
-</span><span class=""></span><span class="m">1</span><span class=""> </span><span class="o">-</span><span class=""> pnorm</span><span class="p">(</span><span class="m">10</span><span class="p">,</span><span class=""> </span><span class="m">0</span><span class="p">,</span><span class=""> </span><span class="m">1</span><span class="p">)</span><span class="">                </span><span class="c1"># 0</span><span class="">
-</span><span class="">pnorm</span><span class="p">(</span><span class="m">10</span><span class="p">,</span><span class=""> </span><span class="m">0</span><span class="p">,</span><span class=""> </span><span class="m">1</span><span class="p">,</span><span class=""> lower.tail</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span><span class="">  </span><span class="c1"># 7.619853e-24</span><span class="">
-</span><span class="">
-</span><span class=""></span><span class="c1"># log</span><span class="">
-</span><span class=""></span><span class="kp">log</span><span class="p">(</span><span class="">pnorm</span><span class="p">(</span><span class="m">10</span><span class="p">,</span><span class=""> </span><span class="m">0</span><span class="p">,</span><span class=""> </span><span class="m">1</span><span class="p">))</span><span class="">               </span><span class="c1"># 0</span><span class="">
-</span><span class="">pnorm</span><span class="p">(</span><span class="m">10</span><span class="p">,</span><span class=""> </span><span class="m">0</span><span class="p">,</span><span class=""> </span><span class="m">1</span><span class="p">,</span><span class=""> log.p</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span><span class="">        </span><span class="c1"># -7.619853e-24</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># complementary</span>
+<span class="m">1</span> <span class="o">-</span> pnorm<span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>                <span class="c1"># 0</span>
+pnorm<span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> lower.tail<span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>  <span class="c1"># 7.619853e-24</span>
+
+<span class="c1"># log</span>
+<span class="kp">log</span><span class="p">(</span>pnorm<span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">))</span>               <span class="c1"># 0</span>
+pnorm<span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> log.p<span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>        <span class="c1"># -7.619853e-24</span></code></pre></div>
 </div>
 </dd>
 <dt><code>q___(p, ..., lower.tail=TRUE, log.p=FALSE)</code></dt>
@@ -164,111 +163,102 @@ R標準の関数よりも遥かに分かりやすく安全で高機能なもの�
 <dt><code>r___(n, ...)</code></dt>
 <dd><p>乱数を <code>n</code> 個生成する</p></dd>
 </dl>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span><span class=""> dnorm</span><span class="p">(</span><span class="kt">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class=""> </span><span class="m">1.96</span><span class="p">))</span><span class="">
-</span><span class=""></span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class=""> </span><span class="m">0.39894228</span><span class=""> </span><span class="m">0.05844094</span><span class="">
-</span><span class=""></span><span class="o">&gt;</span><span class=""> pnorm</span><span class="p">(</span><span class="kt">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class=""> </span><span class="m">1.96</span><span class="p">))</span><span class="">
-</span><span class=""></span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class=""> </span><span class="m">0.5000000</span><span class=""> </span><span class="m">0.9750021</span><span class="">
-</span><span class=""></span><span class="o">&gt;</span><span class=""> qnorm</span><span class="p">(</span><span class="kt">c</span><span class="p">(</span><span class="m">0.5</span><span class="p">,</span><span class=""> </span><span class="m">0.975</span><span class="p">))</span><span class="">
-</span><span class=""></span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class=""> </span><span class="m">0.000000</span><span class=""> </span><span class="m">1.959964</span><span class="">
-</span><span class=""></span><span class="o">&gt;</span><span class=""> rnorm</span><span class="p">(</span><span class="m">4</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class=""> </span><span class="m">-1.77327259</span><span class="">  </span><span class="m">0.95713346</span><span class="">  </span><span class="m">0.27941121</span><span class="">  </span><span class="m">0.08387267</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> dnorm<span class="p">(</span><span class="kt">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1.96</span><span class="p">))</span>
+<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="m">0.39894228</span> <span class="m">0.05844094</span>
+<span class="o">&gt;</span> pnorm<span class="p">(</span><span class="kt">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1.96</span><span class="p">))</span>
+<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="m">0.5000000</span> <span class="m">0.9750021</span>
+<span class="o">&gt;</span> qnorm<span class="p">(</span><span class="kt">c</span><span class="p">(</span><span class="m">0.5</span><span class="p">,</span> <span class="m">0.975</span><span class="p">))</span>
+<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="m">0.000000</span> <span class="m">1.959964</span>
+<span class="o">&gt;</span> rnorm<span class="p">(</span><span class="m">4</span><span class="p">)</span>
+<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="m">-1.77327259</span>  <span class="m">0.95713346</span>  <span class="m">0.27941121</span>  <span class="m">0.08387267</span></code></pre></div>
 <h3 id="分布の種類">分布の種類</h3>
 
 <p>離散</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">_binom</span><span class="p">(</span><span class="">size</span><span class="p">,</span><span class=""> prob</span><span class="p">)</span><span class="">
-</span><span class="">_geom</span><span class="p">(</span><span class="">prob</span><span class="p">)</span><span class="">
-</span><span class="">_hyper</span><span class="p">(</span><span class="">m</span><span class="p">,</span><span class=""> n</span><span class="p">,</span><span class=""> k</span><span class="p">)</span><span class="">
-</span><span class="">_nbinom</span><span class="p">(</span><span class="">size</span><span class="p">,</span><span class=""> prob</span><span class="p">,</span><span class=""> mu</span><span class="p">)</span><span class="">
-</span><span class="">_pois</span><span class="p">(</span><span class="">lambda</span><span class="p">)</span><span class="">
-</span><span class="">_signrank</span><span class="p">(</span><span class="">n</span><span class="p">)</span><span class="">
-</span><span class="">_wilcox</span><span class="p">(</span><span class="">m</span><span class="p">,</span><span class=""> n</span><span class="p">)</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">_binom<span class="p">(</span>size<span class="p">,</span> prob<span class="p">)</span>
+_geom<span class="p">(</span>prob<span class="p">)</span>
+_hyper<span class="p">(</span>m<span class="p">,</span> n<span class="p">,</span> k<span class="p">)</span>
+_nbinom<span class="p">(</span>size<span class="p">,</span> prob<span class="p">,</span> mu<span class="p">)</span>
+_pois<span class="p">(</span>lambda<span class="p">)</span>
+_signrank<span class="p">(</span>n<span class="p">)</span>
+_wilcox<span class="p">(</span>m<span class="p">,</span> n<span class="p">)</span></code></pre></div>
 <p>連続</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">_</span><span class="kp">beta</span><span class="p">(</span><span class="">shape1</span><span class="p">,</span><span class=""> shape2</span><span class="p">)</span><span class="">
-</span><span class="">_cauchy</span><span class="p">(</span><span class="">location</span><span class="o">=</span><span class="m">0</span><span class="p">,</span><span class=""> scale</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="">
-</span><span class="">_chisq</span><span class="p">(</span><span class="">df</span><span class="p">)</span><span class="">
-</span><span class="">_</span><span class="kp">exp</span><span class="p">(</span><span class="">rate</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="">
-</span><span class="">_f</span><span class="p">(</span><span class="">df1</span><span class="p">,</span><span class=""> df2</span><span class="p">)</span><span class="">
-</span><span class="">_</span><span class="kp">gamma</span><span class="p">(</span><span class="">shape</span><span class="p">,</span><span class=""> rate</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class=""> scale</span><span class="o">=</span><span class="m">1</span><span class="o">/</span><span class="">rate</span><span class="p">)</span><span class="">
-</span><span class="">_lnorm</span><span class="p">(</span><span class="">meanlog</span><span class="o">=</span><span class="m">0</span><span class="p">,</span><span class=""> sdlog</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="">
-</span><span class="">_logis</span><span class="p">(</span><span class="">location</span><span class="o">=</span><span class="m">0</span><span class="p">,</span><span class=""> scale</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="">
-</span><span class="">_</span><span class="kp">norm</span><span class="p">(</span><span class="">mean</span><span class="o">=</span><span class="m">0</span><span class="p">,</span><span class=""> sd</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="">
-</span><span class="">_</span><span class="kp">t</span><span class="p">(</span><span class="">df</span><span class="p">)</span><span class="">
-</span><span class="">_unif</span><span class="p">(</span><span class="">min</span><span class="o">=</span><span class="m">0</span><span class="p">,</span><span class=""> max</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="">
-</span><span class="">_weibull</span><span class="p">(</span><span class="">shape</span><span class="p">,</span><span class=""> scale</span><span class="o">=</span><span class="m">1</span><span class="p">)</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">_<span class="kp">beta</span><span class="p">(</span>shape1<span class="p">,</span> shape2<span class="p">)</span>
+_cauchy<span class="p">(</span>location<span class="o">=</span><span class="m">0</span><span class="p">,</span> scale<span class="o">=</span><span class="m">1</span><span class="p">)</span>
+_chisq<span class="p">(</span>df<span class="p">)</span>
+_<span class="kp">exp</span><span class="p">(</span>rate<span class="o">=</span><span class="m">1</span><span class="p">)</span>
+_f<span class="p">(</span>df1<span class="p">,</span> df2<span class="p">)</span>
+_<span class="kp">gamma</span><span class="p">(</span>shape<span class="p">,</span> rate<span class="o">=</span><span class="m">1</span><span class="p">,</span> scale<span class="o">=</span><span class="m">1</span><span class="o">/</span>rate<span class="p">)</span>
+_lnorm<span class="p">(</span>meanlog<span class="o">=</span><span class="m">0</span><span class="p">,</span> sdlog<span class="o">=</span><span class="m">1</span><span class="p">)</span>
+_logis<span class="p">(</span>location<span class="o">=</span><span class="m">0</span><span class="p">,</span> scale<span class="o">=</span><span class="m">1</span><span class="p">)</span>
+_<span class="kp">norm</span><span class="p">(</span>mean<span class="o">=</span><span class="m">0</span><span class="p">,</span> sd<span class="o">=</span><span class="m">1</span><span class="p">)</span>
+_<span class="kp">t</span><span class="p">(</span>df<span class="p">)</span>
+_unif<span class="p">(</span>min<span class="o">=</span><span class="m">0</span><span class="p">,</span> max<span class="o">=</span><span class="m">1</span><span class="p">)</span>
+_weibull<span class="p">(</span>shape<span class="p">,</span> scale<span class="o">=</span><span class="m">1</span><span class="p">)</span></code></pre></div>
 <h2 id="関数を作る">関数を作る</h2>
 
 <p>基本</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">my_add </span><span class="o">=</span><span class=""> </span><span class="kr">function</span><span class="p">(</span><span class="">x</span><span class="p">,</span><span class=""> y</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class=""> </span><span class="p">{</span><span class="">
-</span><span class="">   x </span><span class="o">+</span><span class=""> y
-</span><span class=""></span><span class="p">}</span><span class="">
-</span><span class="">
-</span><span class="">my_add</span><span class="p">(</span><span class="m">13</span><span class="p">,</span><span class=""> </span><span class="m">29</span><span class="p">)</span><span class="">  </span><span class="c1"># 42</span><span class="">
-</span><span class="">my_add</span><span class="p">(</span><span class="m">3</span><span class="p">)</span><span class="">       </span><span class="c1"># 4   (2つめの引数を省略すると1)</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">my_add <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">,</span> y<span class="o">=</span><span class="m">1</span><span class="p">)</span> <span class="p">{</span>
+   x <span class="o">+</span> y
+<span class="p">}</span>
+
+my_add<span class="p">(</span><span class="m">13</span><span class="p">,</span> <span class="m">29</span><span class="p">)</span>  <span class="c1"># 42</span>
+my_add<span class="p">(</span><span class="m">3</span><span class="p">)</span>       <span class="c1"># 4   (2つめの引数を省略すると1)</span></code></pre></div>
 <h3 id="引数の選択肢を指定-チェック-match-arg">引数の選択肢を指定・チェック <code>match.arg()</code></h3>
 
 <p>省略すると先頭の要素が採用される</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">great_scott </span><span class="o">=</span><span class=""> </span><span class="kr">function</span><span class="p">(</span><span class="">name</span><span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="s">&#39;Marty&#39;</span><span class="p">,</span><span class=""> </span><span class="s">&#39;Emmett&#39;</span><span class="p">,</span><span class=""> </span><span class="s">&#39;Biff&#39;</span><span class="p">))</span><span class=""> </span><span class="p">{</span><span class="">
-</span><span class="">    name </span><span class="o">=</span><span class=""> </span><span class="kp">match.arg</span><span class="p">(</span><span class="">name</span><span class="p">)</span><span class="">
-</span><span class="">    </span><span class="kp">print</span><span class="p">(</span><span class="kp">sprintf</span><span class="p">(</span><span class="s">&#39;I am %s.&#39;</span><span class="p">,</span><span class=""> name</span><span class="p">))</span><span class="">
-</span><span class=""></span><span class="p">}</span><span class="">
-</span><span class="">great_scott</span><span class="p">(</span><span class="s">&#39;Marty&#39;</span><span class="p">)</span><span class="">     </span><span class="c1"># OK</span><span class="">
-</span><span class="">great_scott</span><span class="p">(</span><span class="s">&#39;DeLorean&#39;</span><span class="p">)</span><span class="">  </span><span class="c1"># Error</span><span class="">
-</span><span class="">great_scott</span><span class="p">()</span><span class="">            </span><span class="c1"># OK, Marty</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">great_scott <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>name<span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="s">&#39;Marty&#39;</span><span class="p">,</span> <span class="s">&#39;Emmett&#39;</span><span class="p">,</span> <span class="s">&#39;Biff&#39;</span><span class="p">))</span> <span class="p">{</span>
+    name <span class="o">=</span> <span class="kp">match.arg</span><span class="p">(</span>name<span class="p">)</span>
+    <span class="kp">print</span><span class="p">(</span><span class="kp">sprintf</span><span class="p">(</span><span class="s">&#39;I am %s.&#39;</span><span class="p">,</span> name<span class="p">))</span>
+<span class="p">}</span>
+great_scott<span class="p">(</span><span class="s">&#39;Marty&#39;</span><span class="p">)</span>     <span class="c1"># OK</span>
+great_scott<span class="p">(</span><span class="s">&#39;DeLorean&#39;</span><span class="p">)</span>  <span class="c1"># Error</span>
+great_scott<span class="p">()</span>            <span class="c1"># OK, Marty</span></code></pre></div>
 <h3 id="引数の有無をチェック">引数の有無をチェック</h3>
 
 <p>困ったことに、引数不足で呼び出した瞬間にはエラーを出してくれず、
 関数の中でその引数の中身を参照しようとしたところで初めてエラーが出て止まる</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">my_func </span><span class="o">=</span><span class=""> </span><span class="kr">function</span><span class="p">(</span><span class="">x</span><span class="p">)</span><span class=""> </span><span class="p">{</span><span class="">
-</span><span class="">    </span><span class="kp">print</span><span class="p">(</span><span class="s">&#39;WTF! This line is printed anyway.&#39;</span><span class="p">)</span><span class="">
-</span><span class="">    </span><span class="kp">print</span><span class="p">(</span><span class="">x</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="p">}</span><span class="">
-</span><span class="">my_func</span><span class="p">()</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">my_func <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> <span class="p">{</span>
+    <span class="kp">print</span><span class="p">(</span><span class="s">&#39;WTF! This line is printed anyway.&#39;</span><span class="p">)</span>
+    <span class="kp">print</span><span class="p">(</span>x<span class="p">)</span>
+<span class="p">}</span>
+my_func<span class="p">()</span></code></pre></div>
 <p>関数の中で <code>missing()</code> を使えばエラーを出さずに有無をチェックできる。
 これを利用して引数省略可能な関数を作ることもできるが、
 それなら素直にデフォルト引数を使ったほうがシンプルだし、
 利用者は引数を見るだけで意図を読み取れる</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">good_func </span><span class="o">=</span><span class=""> </span><span class="kr">function</span><span class="p">(</span><span class="">x</span><span class="p">,</span><span class=""> y</span><span class="o">=</span><span class="">x</span><span class="p">)</span><span class=""> </span><span class="p">{</span><span class="">
-</span><span class="">    x </span><span class="o">+</span><span class=""> y
-</span><span class=""></span><span class="p">}</span><span class="">
-</span><span class="">
-</span><span class="">bad_func </span><span class="o">=</span><span class=""> </span><span class="kr">function</span><span class="p">(</span><span class="">x</span><span class="p">,</span><span class=""> y</span><span class="p">)</span><span class=""> </span><span class="p">{</span><span class="">
-</span><span class="">    </span><span class="kr">if</span><span class=""> </span><span class="p">(</span><span class="kp">missing</span><span class="p">(</span><span class="">y</span><span class="p">))</span><span class=""> </span><span class="p">{</span><span class="">y </span><span class="o">=</span><span class=""> x</span><span class="p">}</span><span class="">
-</span><span class="">    x </span><span class="o">+</span><span class=""> y
-</span><span class=""></span><span class="p">}</span><span class="">
-</span><span class="">
-</span><span class="">good_func</span><span class="p">(</span><span class="m">3</span><span class="p">)</span><span class="">  </span><span class="c1"># 6</span><span class="">
-</span><span class="">bad_func</span><span class="p">(</span><span class="m">3</span><span class="p">)</span><span class="">   </span><span class="c1"># 6</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">good_func <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">,</span> y<span class="o">=</span>x<span class="p">)</span> <span class="p">{</span>
+    x <span class="o">+</span> y
+<span class="p">}</span>
+
+bad_func <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">,</span> y<span class="p">)</span> <span class="p">{</span>
+    <span class="kr">if</span> <span class="p">(</span><span class="kp">missing</span><span class="p">(</span>y<span class="p">))</span> <span class="p">{</span>y <span class="o">=</span> x<span class="p">}</span>
+    x <span class="o">+</span> y
+<span class="p">}</span>
+
+good_func<span class="p">(</span><span class="m">3</span><span class="p">)</span>  <span class="c1"># 6</span>
+bad_func<span class="p">(</span><span class="m">3</span><span class="p">)</span>   <span class="c1"># 6</span></code></pre></div>
 <h3 id="可変長引数">可変長引数 (<code>...</code>)</h3>
 
 <p>最後の引数をピリオド３つにし、<code>list(...)</code> か <code>c(...)</code> で受け取る</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">func </span><span class="o">=</span><span class=""> </span><span class="kr">function</span><span class="p">(</span><span class="">x</span><span class="p">,</span><span class=""> y</span><span class="p">,</span><span class=""> </span><span class="kc">...</span><span class="p">){</span><span class="">
-</span><span class="">    </span><span class="kr">for</span><span class=""> </span><span class="p">(</span><span class="">i </span><span class="kr">in</span><span class=""> </span><span class="kt">c</span><span class="p">(</span><span class="kc">...</span><span class="p">))</span><span class=""> </span><span class="p">{</span><span class="">
-</span><span class="">        </span><span class="kp">cat</span><span class="p">(</span><span class="">i</span><span class="p">,</span><span class=""> </span><span class="s">&#34;\n&#34;</span><span class="p">)</span><span class="">
-</span><span class="">    </span><span class="p">}</span><span class="">
-</span><span class=""></span><span class="p">}</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">func <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">,</span> y<span class="p">,</span> <span class="kc">...</span><span class="p">){</span>
+    <span class="kr">for</span> <span class="p">(</span>i <span class="kr">in</span> <span class="kt">c</span><span class="p">(</span><span class="kc">...</span><span class="p">))</span> <span class="p">{</span>
+        <span class="kp">cat</span><span class="p">(</span>i<span class="p">,</span> <span class="s">&#34;\n&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></div>
 <h3 id="引数を中身ではなく名前として評価">引数を中身ではなく名前として評価</h3>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">value </span><span class="o">=</span><span class=""> </span><span class="m">42</span><span class="">
-</span><span class="">fun1 </span><span class="o">=</span><span class=""> </span><span class="kr">function</span><span class="p">(</span><span class="">x</span><span class="p">)</span><span class=""> x
-</span><span class="">fun2 </span><span class="o">=</span><span class=""> </span><span class="kr">function</span><span class="p">(</span><span class="">x</span><span class="p">)</span><span class=""> </span><span class="kp">substitute</span><span class="p">(</span><span class="">x</span><span class="p">)</span><span class="">
-</span><span class="">fun3 </span><span class="o">=</span><span class=""> </span><span class="kr">function</span><span class="p">(</span><span class="">x</span><span class="p">)</span><span class=""> </span><span class="kp">deparse</span><span class="p">(</span><span class="kp">substitute</span><span class="p">(</span><span class="">x</span><span class="p">))</span><span class="">
-</span><span class="">
-</span><span class=""></span><span class="o">&gt;</span><span class=""> fun1</span><span class="p">(</span><span class="">value</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class=""> </span><span class="m">42</span><span class="">
-</span><span class=""></span><span class="o">&gt;</span><span class=""> fun1</span><span class="p">(</span><span class="kp">quote</span><span class="p">(</span><span class="">value</span><span class="p">))</span><span class="">
-</span><span class="">value
-</span><span class=""></span><span class="o">&gt;</span><span class=""> fun2</span><span class="p">(</span><span class="">value</span><span class="p">)</span><span class="">
-</span><span class="">value
-</span><span class=""></span><span class="o">&gt;</span><span class=""> fun3</span><span class="p">(</span><span class="">value</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class=""> </span><span class="s">&#34;value&#34;</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">value <span class="o">=</span> <span class="m">42</span>
+fun1 <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> x
+fun2 <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> <span class="kp">substitute</span><span class="p">(</span>x<span class="p">)</span>
+fun3 <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> <span class="kp">deparse</span><span class="p">(</span><span class="kp">substitute</span><span class="p">(</span>x<span class="p">))</span>
+
+<span class="o">&gt;</span> fun1<span class="p">(</span>value<span class="p">)</span>
+<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="m">42</span>
+<span class="o">&gt;</span> fun1<span class="p">(</span><span class="kp">quote</span><span class="p">(</span>value<span class="p">))</span>
+value
+<span class="o">&gt;</span> fun2<span class="p">(</span>value<span class="p">)</span>
+value
+<span class="o">&gt;</span> fun3<span class="p">(</span>value<span class="p">)</span>
+<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="s">&#34;value&#34;</span></code></pre></div>
 <p>詳しくは non-standard expression (NSE) で調べる:</p>
 
 <ul>
@@ -287,16 +277,15 @@ R標準の関数よりも遥かに分かりやすく安全で高機能なもの�
 名前の衝突による不具合が起こる危険性がある。
 そこで、範囲限定で一時的に <code>attach()</code> 状態を作り出す <code>with()</code> を使う。
 安全で楽チン。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">half </span><span class="o">=</span><span class=""> iris</span><span class="o">$</span><span class="">Sepal.Length </span><span class="o">/</span><span class=""> </span><span class="m">2</span><span class="">
-</span><span class="">
-</span><span class=""></span><span class="kp">with</span><span class="p">(</span><span class="">iris</span><span class="p">,</span><span class=""> </span><span class="p">{</span><span class="">
-</span><span class="">    </span><span class="c1">## このブレースの中では</span><span class="">
-</span><span class="">    </span><span class="c1">## attach(iris)されたのと同じように、</span><span class="">
-</span><span class="">    </span><span class="c1">## 列の名前でダイレクトにアクセスできる。</span><span class="">
-</span><span class="">
-</span><span class="">    half </span><span class="o">=</span><span class=""> Sepal.Length </span><span class="o">/</span><span class=""> </span><span class="m">2</span><span class="">
-</span><span class=""></span><span class="p">})</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">half <span class="o">=</span> iris<span class="o">$</span>Sepal.Length <span class="o">/</span> <span class="m">2</span>
+
+<span class="kp">with</span><span class="p">(</span>iris<span class="p">,</span> <span class="p">{</span>
+    <span class="c1">## このブレースの中では</span>
+    <span class="c1">## attach(iris)されたのと同じように、</span>
+    <span class="c1">## 列の名前でダイレクトにアクセスできる。</span>
+
+    half <span class="o">=</span> Sepal.Length <span class="o">/</span> <span class="m">2</span>
+<span class="p">})</span></code></pre></div>
 <h2 id="最適化-高速化">最適化・高速化</h2>
 
 <h3 id="最新の-r-を使う">最新の R を使う</h3>
@@ -311,14 +300,13 @@ R標準の関数よりも遥かに分かりやすく安全で高機能なもの�
 
 <p>Rのナマの<code>for</code>ループは絶望的に遅い。
 四則演算のみならず様々な処理がベクトルのまま行えるようになっているので、そっちを使う。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">vec </span><span class="o">=</span><span class=""> </span><span class="kp">seq_len</span><span class="p">(</span><span class="m">60</span><span class="p">)</span><span class="">
-</span><span class="">vec </span><span class="o">+</span><span class=""> vec
-</span><span class="">vec </span><span class="o">*</span><span class=""> </span><span class="m">2</span><span class="">
-</span><span class="">
-</span><span class=""></span><span class="kp">ifelse</span><span class="p">(</span><span class="">vec </span><span class="o">%%</span><span class=""> </span><span class="m">3</span><span class="p">,</span><span class="">
-</span><span class="">       </span><span class="kp">ifelse</span><span class="p">(</span><span class="">vec </span><span class="o">%%</span><span class=""> </span><span class="m">5</span><span class="p">,</span><span class=""> vec</span><span class="p">,</span><span class=""> </span><span class="s">&#39;buzz&#39;</span><span class="p">),</span><span class="">
-</span><span class="">       </span><span class="kp">ifelse</span><span class="p">(</span><span class="">vec </span><span class="o">%%</span><span class=""> </span><span class="m">5</span><span class="p">,</span><span class=""> </span><span class="s">&#39;fizz&#39;</span><span class="p">,</span><span class=""> </span><span class="s">&#39;fizzbuzz&#39;</span><span class="p">))</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">vec <span class="o">=</span> <span class="kp">seq_len</span><span class="p">(</span><span class="m">60</span><span class="p">)</span>
+vec <span class="o">+</span> vec
+vec <span class="o">*</span> <span class="m">2</span>
+
+<span class="kp">ifelse</span><span class="p">(</span>vec <span class="o">%%</span> <span class="m">3</span><span class="p">,</span>
+       <span class="kp">ifelse</span><span class="p">(</span>vec <span class="o">%%</span> <span class="m">5</span><span class="p">,</span> vec<span class="p">,</span> <span class="s">&#39;buzz&#39;</span><span class="p">),</span>
+       <span class="kp">ifelse</span><span class="p">(</span>vec <span class="o">%%</span> <span class="m">5</span><span class="p">,</span> <span class="s">&#39;fizz&#39;</span><span class="p">,</span> <span class="s">&#39;fizzbuzz&#39;</span><span class="p">))</span></code></pre></div>
 <h3 id="list-data-frame-matrix">list, data.frame, matrix</h3>
 
 <ul>
@@ -338,14 +326,12 @@ matrixで済むもの(数値のみの表など)はmatrixで。</li>
 <p>See <a href="/rstats/foreach.html#iterators">foreach #iterators</a></p>
 
 <h3 id="ボトルネックを知る">ボトルネックを知る</h3>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span><span class=""> Rprof</span><span class="p">()</span><span class="">           </span><span class="c1"># start profiling</span><span class="">
-</span><span class=""></span><span class="o">&gt;</span><span class=""> some_hard_work</span><span class="p">()</span><span class="">
-</span><span class=""></span><span class="o">&gt;</span><span class=""> Rprof</span><span class="p">(</span><span class="kc">NULL</span><span class="p">)</span><span class="">       </span><span class="c1"># end profiling</span><span class="">
-</span><span class=""></span><span class="o">&gt;</span><span class=""> summaryRprof</span><span class="p">()</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> Rprof<span class="p">()</span>           <span class="c1"># start profiling</span>
+<span class="o">&gt;</span> some_hard_work<span class="p">()</span>
+<span class="o">&gt;</span> Rprof<span class="p">(</span><span class="kc">NULL</span><span class="p">)</span>       <span class="c1"># end profiling</span>
+<span class="o">&gt;</span> summaryRprof<span class="p">()</span></code></pre></div>
 <h3 id="実行時間の計測">実行時間の計測</h3>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span><span class=""> </span><span class="kp">system.time</span><span class="p">(</span><span class="">測定したいコマンド</span><span class="p">)</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="kp">system.time</span><span class="p">(</span>測定したいコマンド<span class="p">)</span></code></pre></div>
 <h2 id="関連書籍">関連書籍</h2>
 
 <p>統計解析やグラフ描画ではなく、

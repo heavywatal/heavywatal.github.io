@@ -116,18 +116,16 @@ list or vector                    laply  ldply  llply  l_ply
 
 <p>e.g. 複数ファイルを読み込んでひとつのdata.frameにまとめる。
 listからdata.frameを作るので <code>ldply()</code></p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span><span class=""> filenames </span><span class="o">=</span><span class=""> </span><span class="kp">list.files</span><span class="p">(</span><span class="">pattern</span><span class="o">=</span><span class="s">&#39;\\.csv$&#39;</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="o">&gt;</span><span class=""> large_table </span><span class="o">=</span><span class=""> ldply</span><span class="p">(</span><span class="">filenames</span><span class="p">,</span><span class=""> read.csv</span><span class="p">)</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> filenames <span class="o">=</span> <span class="kp">list.files</span><span class="p">(</span>pattern<span class="o">=</span><span class="s">&#39;\\.csv$&#39;</span><span class="p">)</span>
+<span class="o">&gt;</span> large_table <span class="o">=</span> ldply<span class="p">(</span>filenames<span class="p">,</span> read.csv<span class="p">)</span></code></pre></div>
 <p>e.g. data.frameについてある列の値でグループ化し、
 グループ毎に数値の列の平均を取る。
 data.frameからdata.frameを作るので <code>ddply()</code></p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span><span class=""> ddply</span><span class="p">(</span><span class="">iris</span><span class="p">,</span><span class=""> </span><span class="m">.</span><span class="p">(</span><span class="">Species</span><span class="p">),</span><span class=""> numcolwise</span><span class="p">(</span><span class="kp">mean</span><span class="p">))</span><span class="">
-</span><span class="">     Species Sepal.Length Sepal.Width Petal.Length Petal.Width
-</span><span class=""></span><span class="m">1</span><span class="">     setosa        </span><span class="m">5.006</span><span class="">       </span><span class="m">3.428</span><span class="">        </span><span class="m">1.462</span><span class="">       </span><span class="m">0.246</span><span class="">
-</span><span class=""></span><span class="m">2</span><span class=""> versicolor        </span><span class="m">5.936</span><span class="">       </span><span class="m">2.770</span><span class="">        </span><span class="m">4.260</span><span class="">       </span><span class="m">1.326</span><span class="">
-</span><span class=""></span><span class="m">3</span><span class="">  virginica        </span><span class="m">6.588</span><span class="">       </span><span class="m">2.974</span><span class="">        </span><span class="m">5.552</span><span class="">       </span><span class="m">2.026</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> ddply<span class="p">(</span>iris<span class="p">,</span> <span class="m">.</span><span class="p">(</span>Species<span class="p">),</span> numcolwise<span class="p">(</span><span class="kp">mean</span><span class="p">))</span>
+     Species Sepal.Length Sepal.Width Petal.Length Petal.Width
+<span class="m">1</span>     setosa        <span class="m">5.006</span>       <span class="m">3.428</span>        <span class="m">1.462</span>       <span class="m">0.246</span>
+<span class="m">2</span> versicolor        <span class="m">5.936</span>       <span class="m">2.770</span>        <span class="m">4.260</span>       <span class="m">1.326</span>
+<span class="m">3</span>  virginica        <span class="m">6.588</span>       <span class="m">2.974</span>        <span class="m">5.552</span>       <span class="m">2.026</span></code></pre></div>
 <h2 id="ヘルパー関数">ヘルパー関数</h2>
 
 <dl>
@@ -148,10 +146,9 @@ data.frameからdata.frameを作るので <code>ddply()</code></p>
 <dd><p>listに入った複数のdata.frameを再帰的に <code>join()</code> する。</p></dd>
 <dt><code>plyr::rename(x, replace)</code></dt>
 <dd><p>data.frame列名などを <strong>部分的に</strong> 変更</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># replace引数には名前付き文字列vectorを与える</span><span class="">
-</span><span class=""></span><span class="c1"># 古い名前が名前、新しい名前が値</span><span class="">
-</span><span class="">plyr</span><span class="o">::</span><span class="">rename</span><span class="p">(</span><span class="m">.</span><span class="">data</span><span class="p">,</span><span class=""> </span><span class="kt">c</span><span class="p">(</span><span class="">col_a </span><span class="o">=</span><span class=""> </span><span class="s">&#34;alpha&#34;</span><span class="p">,</span><span class=""> col_b </span><span class="o">=</span><span class=""> </span><span class="s">&#34;beta&#34;</span><span class="p">))</span></code></pre>
-</div></dd>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># replace引数には名前付き文字列vectorを与える</span>
+<span class="c1"># 古い名前が名前、新しい名前が値</span>
+plyr<span class="o">::</span>rename<span class="p">(</span><span class="m">.</span>data<span class="p">,</span> <span class="kt">c</span><span class="p">(</span>col_a <span class="o">=</span> <span class="s">&#34;alpha&#34;</span><span class="p">,</span> col_b <span class="o">=</span> <span class="s">&#34;beta&#34;</span><span class="p">))</span></code></pre></div></dd>
 <dt><code>plyr::count(.data, vars=NULL, wt_var=NULL)</code></dt>
 <dd><p>data.frameのなかで <code>vars</code> 列に関してユニークな行数をカウント。
 重み付けに使う列を <code>wt_var</code> に指定できる。</p></dd>
@@ -166,23 +163,21 @@ data.frameからdata.frameを作るので <code>ddply()</code></p>
 <dt><code>plyr::splat(func)</code></dt>
 <dd><p>ひとつのリストや文字列ベクタでまとめて引数を受け取れるような関数に変換する。
 <code>do.call()</code> はlistしか取らないがこちらは名前付きベクタも可</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span><span class=""> params </span><span class="o">=</span><span class=""> </span><span class="kt">c</span><span class="p">(</span><span class="">by</span><span class="o">=</span><span class="m">2</span><span class="p">,</span><span class=""> length</span><span class="o">=</span><span class="m">4</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="o">&gt;</span><span class=""> splat</span><span class="p">(</span><span class="kp">seq</span><span class="p">)(</span><span class="">params</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class=""> </span><span class="m">1</span><span class=""> </span><span class="m">3</span><span class=""> </span><span class="m">5</span><span class=""> </span><span class="m">7</span><span class="">
-</span><span class=""></span><span class="o">&gt;</span><span class=""> </span><span class="kp">do.call</span><span class="p">(</span><span class="kp">seq</span><span class="p">,</span><span class=""> </span><span class="kp">as.list</span><span class="p">(</span><span class="">params</span><span class="p">))</span><span class="">
-</span><span class=""></span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class=""> </span><span class="m">1</span><span class=""> </span><span class="m">3</span><span class=""> </span><span class="m">5</span><span class=""> </span><span class="m">7</span></code></pre>
-</div></dd>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> params <span class="o">=</span> <span class="kt">c</span><span class="p">(</span>by<span class="o">=</span><span class="m">2</span><span class="p">,</span> length<span class="o">=</span><span class="m">4</span><span class="p">)</span>
+<span class="o">&gt;</span> splat<span class="p">(</span><span class="kp">seq</span><span class="p">)(</span>params<span class="p">)</span>
+<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="m">1</span> <span class="m">3</span> <span class="m">5</span> <span class="m">7</span>
+<span class="o">&gt;</span> <span class="kp">do.call</span><span class="p">(</span><span class="kp">seq</span><span class="p">,</span> <span class="kp">as.list</span><span class="p">(</span>params<span class="p">))</span>
+<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="m">1</span> <span class="m">3</span> <span class="m">5</span> <span class="m">7</span></code></pre></div></dd>
 </dl>
 
 <h2 id="並列化">並列化</h2>
 
 <p><code>doMC</code> 越しに <code>foreach</code> をバックエンドとして使用する</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">install.packages</span><span class="p">(</span><span class="s">&#34;doMC&#34;</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="kn">library</span><span class="p">(</span><span class="">doMC</span><span class="p">)</span><span class="">
-</span><span class="">doMC</span><span class="o">::</span><span class="">registerDoMC</span><span class="p">(</span><span class="">parallel</span><span class="o">::</span><span class="">detectCores</span><span class="p">())</span><span class="">
-</span><span class="">
-</span><span class=""></span><span class="m">.</span><span class="">data </span><span class="o">=</span><span class=""> plyr</span><span class="o">::</span><span class="">ldply</span><span class="p">(</span><span class="">lst</span><span class="p">,</span><span class=""> func</span><span class="p">,</span><span class=""> </span><span class="m">.</span><span class="">parallel</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">install.packages<span class="p">(</span><span class="s">&#34;doMC&#34;</span><span class="p">)</span>
+<span class="kn">library</span><span class="p">(</span>doMC<span class="p">)</span>
+doMC<span class="o">::</span>registerDoMC<span class="p">(</span>parallel<span class="o">::</span>detectCores<span class="p">())</span>
+
+<span class="m">.</span>data <span class="o">=</span> plyr<span class="o">::</span>ldply<span class="p">(</span>lst<span class="p">,</span> func<span class="p">,</span> <span class="m">.</span>parallel<span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span></code></pre></div>
 </article>
 </main>
 

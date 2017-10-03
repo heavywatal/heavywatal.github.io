@@ -86,10 +86,9 @@ foreach/parallel — 並行処理 in R
 <p>カウンター無しでループを書けるようにするパッケージ。
 普段は <a href="/rstats/purrr.html"><code>purrr::map()</code></a> とかのほうが使いやすいけど、
 <a href="#parallel">後述の並列化</a> の場面ではお世話になる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">foreach </span><span class="p">(</span><span class="">mu </span><span class="o">=</span><span class=""> </span><span class="kp">seq_len</span><span class="p">(</span><span class="m">8</span><span class="p">),</span><span class=""> </span><span class="m">.</span><span class="">combine</span><span class="o">=</span><span class="kt">c</span><span class="p">)</span><span class=""> </span><span class="o">%do%</span><span class=""> </span><span class="p">{</span><span class="">
-</span><span class="">    rnorm</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class=""> mu</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="p">}</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">foreach <span class="p">(</span>mu <span class="o">=</span> <span class="kp">seq_len</span><span class="p">(</span><span class="m">8</span><span class="p">),</span> <span class="m">.</span>combine<span class="o">=</span><span class="kt">c</span><span class="p">)</span> <span class="o">%do%</span> <span class="p">{</span>
+    rnorm<span class="p">(</span><span class="m">1</span><span class="p">,</span> mu<span class="p">)</span>
+<span class="p">}</span></code></pre></div>
 <p><a href="https://CRAN.R-project.org/package=foreach">https://CRAN.R-project.org/package=foreach</a></p>
 
 <h3 id="foreach-1"><code>foreach()</code></h3>
@@ -124,15 +123,14 @@ foreach/parallel — 並行処理 in R
 直接触るのは難しいので、<code>foreach</code>(とその橋渡しライブラリ
 <a href="https://CRAN.R-project.org/package=doParallel"><code>doParallel</code></a>)
 を介して使う。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span><span class="">doParallel</span><span class="p">)</span><span class="">
-</span><span class="">cores </span><span class="o">=</span><span class=""> detectCores</span><span class="p">(</span><span class="kt">logical</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span><span class="">
-</span><span class="">cluster </span><span class="o">=</span><span class=""> makeCluster</span><span class="p">(</span><span class="">cores</span><span class="p">,</span><span class=""> </span><span class="s">&#39;FORK&#39;</span><span class="p">)</span><span class="">
-</span><span class="">registerDoParallel</span><span class="p">(</span><span class="">cluster</span><span class="p">)</span><span class="">
-</span><span class="">foreach </span><span class="p">(</span><span class="">mu </span><span class="o">=</span><span class=""> </span><span class="kp">seq_len</span><span class="p">(</span><span class="m">8</span><span class="p">),</span><span class=""> </span><span class="m">.</span><span class="">combine</span><span class="o">=</span><span class="kt">c</span><span class="p">)</span><span class=""> </span><span class="o">%dopar%</span><span class=""> </span><span class="p">{</span><span class="">
-</span><span class="">    rnorm</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class=""> mu</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="p">}</span><span class="">
-</span><span class="">stopCluster</span><span class="p">(</span><span class="">cluster</span><span class="p">)</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span>doParallel<span class="p">)</span>
+cores <span class="o">=</span> detectCores<span class="p">(</span><span class="kt">logical</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+cluster <span class="o">=</span> makeCluster<span class="p">(</span>cores<span class="p">,</span> <span class="s">&#39;FORK&#39;</span><span class="p">)</span>
+registerDoParallel<span class="p">(</span>cluster<span class="p">)</span>
+foreach <span class="p">(</span>mu <span class="o">=</span> <span class="kp">seq_len</span><span class="p">(</span><span class="m">8</span><span class="p">),</span> <span class="m">.</span>combine<span class="o">=</span><span class="kt">c</span><span class="p">)</span> <span class="o">%dopar%</span> <span class="p">{</span>
+    rnorm<span class="p">(</span><span class="m">1</span><span class="p">,</span> mu<span class="p">)</span>
+<span class="p">}</span>
+stopCluster<span class="p">(</span>cluster<span class="p">)</span></code></pre></div>
 <p>クラスタの生成や破棄などをぜーんぶ自動でやってもらいたい場合は
 <a href="https://github.com/hoxo-m/pforeach"><code>hoxo-m/pforeach</code></a>。</p>
 

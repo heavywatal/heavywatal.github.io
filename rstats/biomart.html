@@ -188,107 +188,99 @@ keytype(フィルター)は1つしか使えない。
 <h3 id="ensembl">Ensembl</h3>
 
 <p>マートとデータセットの決定</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span><span class="">biomaRt</span><span class="p">)</span><span class="">
-</span><span class="">ensembl </span><span class="o">=</span><span class=""> useMart</span><span class="p">(</span><span class="s">&#39;ensembl&#39;</span><span class="p">,</span><span class=""> </span><span class="s">&#39;scerevisiae_gene_ensembl&#39;</span><span class="p">)</span><span class="">
-</span><span class="">
-</span><span class=""></span><span class="c1">## あるいは</span><span class="">
-</span><span class="">listMarts</span><span class="p">()</span><span class="">
-</span><span class="">ensembl </span><span class="o">=</span><span class=""> useMart</span><span class="p">(</span><span class="s">&#39;ensembl&#39;</span><span class="p">)</span><span class="">
-</span><span class="">listDatasets</span><span class="p">(</span><span class="">ensembl</span><span class="p">)</span><span class="">
-</span><span class="">ensembl </span><span class="o">=</span><span class=""> useDataset</span><span class="p">(</span><span class="s">&#39;scerevisiae_gene_ensembl&#39;</span><span class="p">,</span><span class=""> ensembl</span><span class="p">)</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span>biomaRt<span class="p">)</span>
+ensembl <span class="o">=</span> useMart<span class="p">(</span><span class="s">&#39;ensembl&#39;</span><span class="p">,</span> <span class="s">&#39;scerevisiae_gene_ensembl&#39;</span><span class="p">)</span>
+
+<span class="c1">## あるいは</span>
+listMarts<span class="p">()</span>
+ensembl <span class="o">=</span> useMart<span class="p">(</span><span class="s">&#39;ensembl&#39;</span><span class="p">)</span>
+listDatasets<span class="p">(</span>ensembl<span class="p">)</span>
+ensembl <span class="o">=</span> useDataset<span class="p">(</span><span class="s">&#39;scerevisiae_gene_ensembl&#39;</span><span class="p">,</span> ensembl<span class="p">)</span></code></pre></div>
 <p>どんなデータやフィルタが利用可能か調べる</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">attributePages</span><span class="p">(</span><span class="">ensembl</span><span class="p">)</span><span class="">
-</span><span class="">listAttributes</span><span class="p">(</span><span class="">ensembl</span><span class="p">,</span><span class=""> </span><span class="s">&#39;feature_page&#39;</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="kp">subset</span><span class="p">(</span><span class="">ensembl</span><span class="o">@</span><span class="">filters</span><span class="p">,</span><span class=""> select</span><span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="">name</span><span class="p">,</span><span class=""> description</span><span class="p">,</span><span class=""> type</span><span class="p">,</span><span class=""> operation</span><span class="p">))</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">attributePages<span class="p">(</span>ensembl<span class="p">)</span>
+listAttributes<span class="p">(</span>ensembl<span class="p">,</span> <span class="s">&#39;feature_page&#39;</span><span class="p">)</span>
+<span class="kp">subset</span><span class="p">(</span>ensembl<span class="o">@</span>filters<span class="p">,</span> select<span class="o">=</span><span class="kt">c</span><span class="p">(</span>name<span class="p">,</span> description<span class="p">,</span> type<span class="p">,</span> operation<span class="p">))</span></code></pre></div>
 <p>フィルタの選択肢を調べる</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span><span class=""> </span><span class="kp">subset</span><span class="p">(</span><span class="">ensembl</span><span class="o">@</span><span class="">filters</span><span class="p">,</span><span class=""> name</span><span class="o">==</span><span class="s">&#39;biotype&#39;</span><span class="p">)</span><span class="o">$</span><span class="kp">options</span><span class="">
-</span><span class=""></span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class=""> </span><span class="s">&#34;[ncRNA,protein_coding,pseudogene,rRNA,snoRNA,snRNA,tRNA]&#34;</span><span class="">
-</span><span class=""></span><span class="o">&gt;</span><span class=""> keys</span><span class="p">(</span><span class="">ensembl</span><span class="p">,</span><span class=""> </span><span class="s">&#39;biotype&#39;</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class=""> </span><span class="s">&#34;ncRNA&#34;</span><span class=""> </span><span class="s">&#34;protein_coding&#34;</span><span class=""> </span><span class="s">&#34;pseudogene&#34;</span><span class=""> </span><span class="s">&#34;rRNA&#34;</span><span class=""> </span><span class="s">&#34;snoRNA&#34;</span><span class=""> </span><span class="s">&#34;snRNA&#34;</span><span class=""> </span><span class="s">&#34;tRNA&#34;</span><span class="">
-</span><span class=""></span><span class="o">&gt;</span><span class=""> keys</span><span class="p">(</span><span class="">ensembl</span><span class="p">,</span><span class=""> </span><span class="s">&#39;go_evidence_code&#39;</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class=""> </span><span class="s">&#34;IBA&#34;</span><span class=""> </span><span class="s">&#34;IC&#34;</span><span class="">  </span><span class="s">&#34;IDA&#34;</span><span class=""> </span><span class="s">&#34;IEA&#34;</span><span class=""> </span><span class="s">&#34;IEP&#34;</span><span class=""> </span><span class="s">&#34;IGI&#34;</span><span class=""> </span><span class="s">&#34;IMP&#34;</span><span class=""> </span><span class="s">&#34;IPI&#34;</span><span class=""> </span><span class="s">&#34;ISA&#34;</span><span class=""> </span><span class="s">&#34;ISM&#34;</span><span class=""> </span><span class="s">&#34;ISS&#34;</span><span class=""> </span><span class="s">&#34;NAS&#34;</span><span class=""> </span><span class="s">&#34;ND&#34;</span><span class="">  </span><span class="s">&#34;TAS&#34;</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="kp">subset</span><span class="p">(</span>ensembl<span class="o">@</span>filters<span class="p">,</span> name<span class="o">==</span><span class="s">&#39;biotype&#39;</span><span class="p">)</span><span class="o">$</span><span class="kp">options</span>
+<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="s">&#34;[ncRNA,protein_coding,pseudogene,rRNA,snoRNA,snRNA,tRNA]&#34;</span>
+<span class="o">&gt;</span> keys<span class="p">(</span>ensembl<span class="p">,</span> <span class="s">&#39;biotype&#39;</span><span class="p">)</span>
+<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="s">&#34;ncRNA&#34;</span> <span class="s">&#34;protein_coding&#34;</span> <span class="s">&#34;pseudogene&#34;</span> <span class="s">&#34;rRNA&#34;</span> <span class="s">&#34;snoRNA&#34;</span> <span class="s">&#34;snRNA&#34;</span> <span class="s">&#34;tRNA&#34;</span>
+<span class="o">&gt;</span> keys<span class="p">(</span>ensembl<span class="p">,</span> <span class="s">&#39;go_evidence_code&#39;</span><span class="p">)</span>
+<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="s">&#34;IBA&#34;</span> <span class="s">&#34;IC&#34;</span>  <span class="s">&#34;IDA&#34;</span> <span class="s">&#34;IEA&#34;</span> <span class="s">&#34;IEP&#34;</span> <span class="s">&#34;IGI&#34;</span> <span class="s">&#34;IMP&#34;</span> <span class="s">&#34;IPI&#34;</span> <span class="s">&#34;ISA&#34;</span> <span class="s">&#34;ISM&#34;</span> <span class="s">&#34;ISS&#34;</span> <span class="s">&#34;NAS&#34;</span> <span class="s">&#34;ND&#34;</span>  <span class="s">&#34;TAS&#34;</span></code></pre></div>
 <p>近いミラーを使う</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span><span class=""> listMarts</span><span class="p">(</span><span class="">host</span><span class="o">=</span><span class="s">&#39;asia.ensembl.org&#39;</span><span class="p">)</span><span class="">
-</span><span class="">               biomart               </span><span class="kp">version</span><span class="">
-</span><span class=""></span><span class="m">1</span><span class=""> ENSEMBL_MART_ENSEMBL      Ensembl Genes </span><span class="m">75</span><span class="">
-</span><span class=""></span><span class="m">2</span><span class="">     ENSEMBL_MART_SNP  Ensembl Variation </span><span class="m">75</span><span class="">
-</span><span class=""></span><span class="m">3</span><span class=""> ENSEMBL_MART_FUNCGEN Ensembl Regulation </span><span class="m">75</span><span class="">
-</span><span class=""></span><span class="m">4</span><span class="">    ENSEMBL_MART_VEGA               Vega </span><span class="m">55</span><span class="">
-</span><span class=""></span><span class="m">5</span><span class="">                pride        PRIDE </span><span class="p">(</span><span class="">EBI UK</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="o">&gt;</span><span class=""> ensembl </span><span class="o">=</span><span class=""> useMart</span><span class="p">(</span><span class="s">&#39;ENSEMBL_MART_SNP&#39;</span><span class="p">,</span><span class=""> </span><span class="s">&#39;scerevisiae_snp&#39;</span><span class="p">,</span><span class=""> host</span><span class="o">=</span><span class="s">&#39;asia.ensembl.org&#39;</span><span class="p">)</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> listMarts<span class="p">(</span>host<span class="o">=</span><span class="s">&#39;asia.ensembl.org&#39;</span><span class="p">)</span>
+               biomart               <span class="kp">version</span>
+<span class="m">1</span> ENSEMBL_MART_ENSEMBL      Ensembl Genes <span class="m">75</span>
+<span class="m">2</span>     ENSEMBL_MART_SNP  Ensembl Variation <span class="m">75</span>
+<span class="m">3</span> ENSEMBL_MART_FUNCGEN Ensembl Regulation <span class="m">75</span>
+<span class="m">4</span>    ENSEMBL_MART_VEGA               Vega <span class="m">55</span>
+<span class="m">5</span>                pride        PRIDE <span class="p">(</span>EBI UK<span class="p">)</span>
+<span class="o">&gt;</span> ensembl <span class="o">=</span> useMart<span class="p">(</span><span class="s">&#39;ENSEMBL_MART_SNP&#39;</span><span class="p">,</span> <span class="s">&#39;scerevisiae_snp&#39;</span><span class="p">,</span> host<span class="o">=</span><span class="s">&#39;asia.ensembl.org&#39;</span><span class="p">)</span></code></pre></div>
 <h3 id="uniprot-http-www-uniprot-org"><a href="http://www.uniprot.org/">UniProt</a></h3>
 
 <p>フィルタ列挙</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span><span class=""> unimart </span><span class="o">=</span><span class=""> useMart</span><span class="p">(</span><span class="s">&#39;unimart&#39;</span><span class="p">,</span><span class=""> </span><span class="s">&#39;uniprot&#39;</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="o">&gt;</span><span class=""> </span><span class="kp">subset</span><span class="p">(</span><span class="">unimart</span><span class="o">@</span><span class="">filters</span><span class="p">,</span><span class=""> select</span><span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="">name</span><span class="p">,</span><span class=""> description</span><span class="p">,</span><span class=""> type</span><span class="p">,</span><span class=""> operation</span><span class="p">))</span><span class="">
-</span><span class="">               name       description    type operation
-</span><span class=""></span><span class="m">1</span><span class="">  superregnum_name  Superregnum name    </span><span class="kt">list</span><span class="">         </span><span class="o">=</span><span class="">
-</span><span class=""></span><span class="m">2</span><span class="">     proteome_name Complete proteome    </span><span class="kt">list</span><span class="">         </span><span class="o">=</span><span class="">
-</span><span class=""></span><span class="m">3</span><span class="">         accession         Accession    text         </span><span class="o">=</span><span class="">
-</span><span class=""></span><span class="m">4</span><span class="">      protein_name           Protein    text         </span><span class="o">=</span><span class="">
-</span><span class=""></span><span class="m">5</span><span class="">    length_greater          Length </span><span class="o">&gt;</span><span class="">    text         </span><span class="o">&gt;</span><span class="">
-</span><span class=""></span><span class="m">6</span><span class="">    length_smaller          Length </span><span class="o">&lt;</span><span class="">    text         </span><span class="o">&lt;</span><span class="">
-</span><span class=""></span><span class="m">7</span><span class="">  protein_evidence Protein existence    </span><span class="kt">list</span><span class="">         </span><span class="o">=</span><span class="">
-</span><span class=""></span><span class="m">8</span><span class="">           embl_id          EMBL IDs id_list      </span><span class="o">=</span><span class="p">,</span><span class="kp">in</span><span class="">
-</span><span class=""></span><span class="m">9</span><span class="">   arrayexpress_id  ArrayExpress IDs id_list      </span><span class="o">=</span><span class="p">,</span><span class="kp">in</span><span class="">
-</span><span class=""></span><span class="m">10</span><span class="">       ensembl_id       Ensembl IDs id_list      </span><span class="o">=</span><span class="p">,</span><span class="kp">in</span><span class="">
-</span><span class=""></span><span class="m">11</span><span class="">        pdbsum_id        PDBSum IDs id_list      </span><span class="o">=</span><span class="p">,</span><span class="kp">in</span><span class="">
-</span><span class=""></span><span class="m">12</span><span class="">        intact_id        IntAct IDs id_list      </span><span class="o">=</span><span class="p">,</span><span class="kp">in</span><span class="">
-</span><span class=""></span><span class="m">13</span><span class="">      interpro_id      InterPro IDs id_list      </span><span class="o">=</span><span class="p">,</span><span class="kp">in</span><span class="">
-</span><span class=""></span><span class="m">14</span><span class="">            go_id Gene Ontology IDs id_list      </span><span class="o">=</span><span class="p">,</span><span class="kp">in</span><span class="">
-</span><span class=""></span><span class="m">15</span><span class="">        gene_name         Gene name    text         </span><span class="o">=</span><span class="">
-</span><span class=""></span><span class="m">16</span><span class="">       entry_type        Entry type    </span><span class="kt">list</span><span class="">         </span><span class="o">=</span><span class="">
-</span><span class=""></span><span class="m">17</span><span class="">        organelle         organelle    </span><span class="kt">list</span><span class="">         </span><span class="o">=</span><span class="">
-</span><span class=""></span><span class="m">18</span><span class="">        plasmid_f           Plasmid    text         </span><span class="o">=</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> unimart <span class="o">=</span> useMart<span class="p">(</span><span class="s">&#39;unimart&#39;</span><span class="p">,</span> <span class="s">&#39;uniprot&#39;</span><span class="p">)</span>
+<span class="o">&gt;</span> <span class="kp">subset</span><span class="p">(</span>unimart<span class="o">@</span>filters<span class="p">,</span> select<span class="o">=</span><span class="kt">c</span><span class="p">(</span>name<span class="p">,</span> description<span class="p">,</span> type<span class="p">,</span> operation<span class="p">))</span>
+               name       description    type operation
+<span class="m">1</span>  superregnum_name  Superregnum name    <span class="kt">list</span>         <span class="o">=</span>
+<span class="m">2</span>     proteome_name Complete proteome    <span class="kt">list</span>         <span class="o">=</span>
+<span class="m">3</span>         accession         Accession    text         <span class="o">=</span>
+<span class="m">4</span>      protein_name           Protein    text         <span class="o">=</span>
+<span class="m">5</span>    length_greater          Length <span class="o">&gt;</span>    text         <span class="o">&gt;</span>
+<span class="m">6</span>    length_smaller          Length <span class="o">&lt;</span>    text         <span class="o">&lt;</span>
+<span class="m">7</span>  protein_evidence Protein existence    <span class="kt">list</span>         <span class="o">=</span>
+<span class="m">8</span>           embl_id          EMBL IDs id_list      <span class="o">=</span><span class="p">,</span><span class="kp">in</span>
+<span class="m">9</span>   arrayexpress_id  ArrayExpress IDs id_list      <span class="o">=</span><span class="p">,</span><span class="kp">in</span>
+<span class="m">10</span>       ensembl_id       Ensembl IDs id_list      <span class="o">=</span><span class="p">,</span><span class="kp">in</span>
+<span class="m">11</span>        pdbsum_id        PDBSum IDs id_list      <span class="o">=</span><span class="p">,</span><span class="kp">in</span>
+<span class="m">12</span>        intact_id        IntAct IDs id_list      <span class="o">=</span><span class="p">,</span><span class="kp">in</span>
+<span class="m">13</span>      interpro_id      InterPro IDs id_list      <span class="o">=</span><span class="p">,</span><span class="kp">in</span>
+<span class="m">14</span>            go_id Gene Ontology IDs id_list      <span class="o">=</span><span class="p">,</span><span class="kp">in</span>
+<span class="m">15</span>        gene_name         Gene name    text         <span class="o">=</span>
+<span class="m">16</span>       entry_type        Entry type    <span class="kt">list</span>         <span class="o">=</span>
+<span class="m">17</span>        organelle         organelle    <span class="kt">list</span>         <span class="o">=</span>
+<span class="m">18</span>        plasmid_f           Plasmid    text         <span class="o">=</span></code></pre></div>
 <p>フィルタの選択肢</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span><span class=""> </span><span class="kp">subset</span><span class="p">(</span><span class="">unimart</span><span class="o">@</span><span class="">filters</span><span class="p">,</span><span class=""> </span><span class="m">3</span><span class=""> </span><span class="o">&lt;</span><span class=""> </span><span class="kp">nchar</span><span class="p">(</span><span class="kp">options</span><span class="p">)</span><span class=""> </span><span class="o">&amp;</span><span class=""> </span><span class="kp">nchar</span><span class="p">(</span><span class="kp">options</span><span class="p">)</span><span class=""> </span><span class="o">&lt;</span><span class=""> </span><span class="m">120</span><span class="p">,</span><span class=""> select</span><span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="">name</span><span class="p">,</span><span class=""> </span><span class="kp">options</span><span class="p">))</span><span class="">
-</span><span class="">               name                                                                                                            </span><span class="kp">options</span><span class="">
-</span><span class=""></span><span class="m">1</span><span class="">  superregnum_name                                                                               </span><span class="p">[</span><span class="">Eukaryota</span><span class="p">,</span><span class="">Bacteria</span><span class="p">,</span><span class="">Archaea</span><span class="p">,</span><span class="">Viruses</span><span class="p">]</span><span class="">
-</span><span class=""></span><span class="m">7</span><span class="">  protein_evidence </span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class=""> Evidence at protein level</span><span class="p">,</span><span class="m">2</span><span class="o">:</span><span class=""> Evidence at transcript level</span><span class="p">,</span><span class="m">3</span><span class="o">:</span><span class=""> Inferred from homology</span><span class="p">,</span><span class="m">4</span><span class="o">:</span><span class=""> Predicted</span><span class="p">,</span><span class="m">5</span><span class="o">:</span><span class=""> Uncertain</span><span class="p">]</span><span class="">
-</span><span class=""></span><span class="m">16</span><span class="">       entry_type                                                                                                </span><span class="p">[</span><span class="">Swiss</span><span class="o">-</span><span class="">Prot</span><span class="p">,</span><span class="">TrEMBL</span><span class="p">]</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="kp">subset</span><span class="p">(</span>unimart<span class="o">@</span>filters<span class="p">,</span> <span class="m">3</span> <span class="o">&lt;</span> <span class="kp">nchar</span><span class="p">(</span><span class="kp">options</span><span class="p">)</span> <span class="o">&amp;</span> <span class="kp">nchar</span><span class="p">(</span><span class="kp">options</span><span class="p">)</span> <span class="o">&lt;</span> <span class="m">120</span><span class="p">,</span> select<span class="o">=</span><span class="kt">c</span><span class="p">(</span>name<span class="p">,</span> <span class="kp">options</span><span class="p">))</span>
+               name                                                                                                            <span class="kp">options</span>
+<span class="m">1</span>  superregnum_name                                                                               <span class="p">[</span>Eukaryota<span class="p">,</span>Bacteria<span class="p">,</span>Archaea<span class="p">,</span>Viruses<span class="p">]</span>
+<span class="m">7</span>  protein_evidence <span class="p">[</span><span class="m">1</span><span class="o">:</span> Evidence at protein level<span class="p">,</span><span class="m">2</span><span class="o">:</span> Evidence at transcript level<span class="p">,</span><span class="m">3</span><span class="o">:</span> Inferred from homology<span class="p">,</span><span class="m">4</span><span class="o">:</span> Predicted<span class="p">,</span><span class="m">5</span><span class="o">:</span> Uncertain<span class="p">]</span>
+<span class="m">16</span>       entry_type                                                                                                <span class="p">[</span>Swiss<span class="o">-</span>Prot<span class="p">,</span>TrEMBL<span class="p">]</span></code></pre></div>
 <p>&ldquo;Complete proteome&rdquo; の選択肢(すげえ長い)を抜き出す</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="">proteome_name </span><span class="o">=</span><span class=""> biomaRt</span><span class="o">::</span><span class="">keys</span><span class="p">(</span><span class="">unimart</span><span class="p">,</span><span class=""> </span><span class="s">&#39;proteome_name&#39;</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;Sac.* cer.*&#39;</span><span class="p">,</span><span class=""> proteome_name</span><span class="p">,</span><span class=""> value</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">proteome_name <span class="o">=</span> biomaRt<span class="o">::</span>keys<span class="p">(</span>unimart<span class="p">,</span> <span class="s">&#39;proteome_name&#39;</span><span class="p">)</span>
+<span class="kp">grep</span><span class="p">(</span><span class="s">&#39;Sac.* cer.*&#39;</span><span class="p">,</span> proteome_name<span class="p">,</span> value<span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span></code></pre></div>
 <p>アトリビュート列挙
 (ただし <code>embl_id</code> 以降の項目はほとんど使えない)</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span><span class=""> listAttributes</span><span class="p">(</span><span class="">unimart</span><span class="p">)</span><span class="">
-</span><span class="">                      name       description
-</span><span class=""></span><span class="m">1</span><span class="">                accession         Accession
-</span><span class=""></span><span class="m">2</span><span class="">                     name        Entry name
-</span><span class=""></span><span class="m">3</span><span class="">             protein_name      Protein name
-</span><span class=""></span><span class="m">4</span><span class="">                gene_name         Gene name
-</span><span class=""></span><span class="m">5</span><span class="">                 organism          Organism
-</span><span class=""></span><span class="m">6</span><span class="">         protein_evidence Protein existence
-</span><span class=""></span><span class="m">7</span><span class="">               entry_type            Status
-</span><span class=""></span><span class="m">8</span><span class="">                    go_id             GO ID
-</span><span class=""></span><span class="m">9</span><span class="">                  go_name           GO name
-</span><span class=""></span><span class="m">10</span><span class="">  db2go_p__dm_primary_id          GO ID</span><span class="p">(</span><span class="">p</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="m">11</span><span class=""> db2go_p__dm_description           GO name
-</span><span class=""></span><span class="m">12</span><span class=""> db2go_f__dm_description       GO name </span><span class="p">(</span><span class="bp">F</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="m">13</span><span class="">  db2go_f__dm_primary_id         GO ID </span><span class="p">(</span><span class="bp">F</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="m">14</span><span class="">  db2go_c__dm_primary_id         GO ID </span><span class="p">(</span><span class="">C</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="m">15</span><span class=""> db2go_c__dm_description       GO name </span><span class="p">(</span><span class="">C</span><span class="p">)</span><span class="">
-</span><span class=""></span><span class="m">16</span><span class="">                 embl_id          EMBL IDs
-</span><span class=""></span><span class="m">17</span><span class="">              ensembl_id       Ensembl IDs
-</span><span class=""></span><span class="m">18</span><span class="">             interpro_id      InterPro IDs
-</span><span class=""></span><span class="m">19</span><span class="">               pdbsum_id        PDBSum IDs
-</span><span class=""></span><span class="m">20</span><span class="">                  pdb_id           PDB IDs
-</span><span class=""></span><span class="m">21</span><span class="">            arrayexpress  ArrayExpress IDs
-</span><span class=""></span><span class="m">22</span><span class="">                pride_id         PRIDE IDs
-</span><span class=""></span><span class="m">23</span><span class="">             interact_id        IntAct IDs
-</span><span class=""></span><span class="m">24</span><span class="">                comments          Comments
-</span><span class=""></span><span class="m">25</span><span class="">               ec_number         Ec number
-</span><span class=""></span><span class="m">26</span><span class="">                 keyword           Keyword
-</span><span class=""></span><span class="m">27</span><span class="">            plasmid_name      Plasmid name
-</span><span class=""></span><span class="m">28</span><span class="">          organelle_name    organelle name</span></code></pre>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> listAttributes<span class="p">(</span>unimart<span class="p">)</span>
+                      name       description
+<span class="m">1</span>                accession         Accession
+<span class="m">2</span>                     name        Entry name
+<span class="m">3</span>             protein_name      Protein name
+<span class="m">4</span>                gene_name         Gene name
+<span class="m">5</span>                 organism          Organism
+<span class="m">6</span>         protein_evidence Protein existence
+<span class="m">7</span>               entry_type            Status
+<span class="m">8</span>                    go_id             GO ID
+<span class="m">9</span>                  go_name           GO name
+<span class="m">10</span>  db2go_p__dm_primary_id          GO ID<span class="p">(</span>p<span class="p">)</span>
+<span class="m">11</span> db2go_p__dm_description           GO name
+<span class="m">12</span> db2go_f__dm_description       GO name <span class="p">(</span><span class="bp">F</span><span class="p">)</span>
+<span class="m">13</span>  db2go_f__dm_primary_id         GO ID <span class="p">(</span><span class="bp">F</span><span class="p">)</span>
+<span class="m">14</span>  db2go_c__dm_primary_id         GO ID <span class="p">(</span>C<span class="p">)</span>
+<span class="m">15</span> db2go_c__dm_description       GO name <span class="p">(</span>C<span class="p">)</span>
+<span class="m">16</span>                 embl_id          EMBL IDs
+<span class="m">17</span>              ensembl_id       Ensembl IDs
+<span class="m">18</span>             interpro_id      InterPro IDs
+<span class="m">19</span>               pdbsum_id        PDBSum IDs
+<span class="m">20</span>                  pdb_id           PDB IDs
+<span class="m">21</span>            arrayexpress  ArrayExpress IDs
+<span class="m">22</span>                pride_id         PRIDE IDs
+<span class="m">23</span>             interact_id        IntAct IDs
+<span class="m">24</span>                comments          Comments
+<span class="m">25</span>               ec_number         Ec number
+<span class="m">26</span>                 keyword           Keyword
+<span class="m">27</span>            plasmid_name      Plasmid name
+<span class="m">28</span>          organelle_name    organelle name</code></pre></div>
 <hr>
 
 <p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4621062506/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41aQBFtkgBL._SX160_.jpg" alt="RとBioconductorを用いたバイオインフォマティクス" /></a>
