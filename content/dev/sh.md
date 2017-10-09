@@ -1,5 +1,5 @@
 +++
-title = 'Shell Script'
+title = 'シェルスクリプト'
 tags = ["shell"]
 [menu.main]
   parent = "dev"
