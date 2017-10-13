@@ -43,8 +43,10 @@ data.frameを縦長・横長・入れ子に変形・整形するためのツー�
 
 複数列にまたがっていた値を、カテゴリ変数と値の2列に変換することで、
 横長(wide-format)のdata.frameを縦長(long-format)に変形する。
-[ggplot2]({{< relref "ggplot2.md" >}})で使いやすいのはこの縦長。
 `reshape2::melt()` に相当。
+[ggplot2]({{< relref "ggplot2.md" >}})などで使いやすい
+[**整然データ**]({{< relref "programming.md#tidyverse" >}})
+というのはこの縦長の形。
 
 `tidyr::gather(data, key, value, ..., na.rm=FALSE, convert=FALSE)`
 

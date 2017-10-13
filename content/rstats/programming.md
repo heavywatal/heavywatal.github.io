@@ -6,13 +6,13 @@ tags = ["r"]
   weight = -97
 +++
 
-## [tidyverse](http://tidyverse.org/)
+## tidyverse
 
 <a href="http://tidyverse.org/">
 <img src="http://tidyverse.tidyverse.org/logo.png" align="right">
 </a>
 
-解析も作図も**整然データ**を用意するところから始まる。
+解析も作図も**整然データ (tidy data)**を用意するところから始まる。
 
 - わかりやすいスライド: [整然データってなに？ --- @f_nishihara](https://speakerdeck.com/fnshr/zheng-ran-detatutenani)
 - 詳しい解説: [整然データとは何か --- @f_nishihara](http://id.fnshr.info/2017/01/09/tidy-data-intro/)
