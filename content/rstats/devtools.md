@@ -289,6 +289,10 @@ options(devtools.desc.license='MIT')
 
 ## `roxygen2`
 
+<a href="https://CRAN.R-project.org/package=roxygen2">
+<img src="https://raw.githubusercontent.com/klutometis/roxygen/master/man/figures/logo.png" align="right">
+</a>
+
 Rソースコードのコメントから`NAMESPACE`とヘルプ(`man/*.Rd`)を自動生成する。
 
 - <http://cran.r-project.org/web/packages/roxygen2/>
