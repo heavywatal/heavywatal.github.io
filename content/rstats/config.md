@@ -13,8 +13,9 @@ https://cran.r-project.org/manuals.html
 - [R本体](https://cran.rstudio.com/)
 - [Rstudio (任意)](https://www.rstudio.com/products/rstudio/download/)
 
-[Homebrew]({{< relref "homebrew.md" >}}) からも入れられるけど、
-バイナリ版パッケージが使えなくて毎回ソースからビルドすることになるので注意。
+Macなら [Homebrew]({{< relref "homebrew.md" >}}) で
+`brew cask install r-app rstudio` のように入れるのが楽チン。
+`brew install r` のほうだとバイナリ版パッケージが使えなくて毎回ソースからビルドさせられるので注意。
 
 https://cran.r-project.org/doc/manuals/R-admin.html
 
