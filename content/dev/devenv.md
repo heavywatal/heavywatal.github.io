@@ -72,8 +72,6 @@ Macの [Homebrew]({{< relref "mac/homebrew.md" >}}) をLinuxに移植したパ�
     % xcode-select --install
 
 総合開発環境 Xcode をインストールしたければ、App Store から [Xcode](https://itunes.apple.com/jp/app/xcode/id497799835) を選択。
-Xcode上での補完のためのindexingが重いらしいので切っとく:
-`defaults write com.apple.dt.Xcode IDEIndexDisable 1`
 
 
 ### パッケージ管理ツール
@@ -83,23 +81,22 @@ Xcode上での補完のためのindexingが重いらしいので切っとく:
 
 ### その他のプログラム
 
--   Activity Monitor --- OS標準
--   OS X Server
-    --- [App Store](https://itunes.apple.com/jp/app/os-x-server/id537441259)
--   MenuMeters --- <http://www.ragingmenace.com/software/menumeters/>
+-   [MenuMeters](https://member.ipmu.jp/yuji.tachikawa/MenuMetersElCapitan/)
+-   [QuickLook plugins]({{< relref "mac/quicklook.md" >}})
+-   [`defaults`コマンドで各種設定]({{< relref "mac/command.md#defaults" >}})
 
 ### リソースフォークを無視
 
 `tar` などでリソースフォークを無視:
 
-    if [ $(uname) = Darwin ]; then
-            export COPYFILE_DISABLE=true
-            export COPY_EXTENDED_ATTRIBUTES_DISABLE=true
-    fi
+```sh
+if [ $(uname) = Darwin ]; then
+    export COPYFILE_DISABLE=true
+    export COPY_EXTENDED_ATTRIBUTES_DISABLE=true
+fi
+```
 
 ## 共通
-
-[/dev/etc]({{< relref "dev/etc.md" >}})
 
 ### Python
 
@@ -111,7 +108,6 @@ Xcode上での補完のためのindexingが重いらしいので切っとく:
 
 ### C++
 
-- [gcc]({{< relref "cxx/gcc.md" >}})
 - [boost]({{< relref "cxx/boost.md" >}})
 - [SFMT]({{< relref "cxx/random.md" >}})
 
