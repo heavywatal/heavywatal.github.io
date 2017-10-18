@@ -25,7 +25,8 @@ tags = ["r"]
 はそういう思想に基いて互いに連携するようデザインされたパッケージ群で、
 R標準の関数よりも遥かに分かりやすく安全で高機能なものを提供してくれている。
 
-<a href="https://www.amazon.co.jp/Data-Science-Transform-Visualize-Model/dp/1491910399/ref=as_li_ss_il?s=english-books&ie=UTF8&qid=1498493958&sr=1-1&keywords=r+for+data+science&linkCode=li2&tag=heavywatal-22&linkId=09f030942ec3fe963597727fddde8032" target="_blank"><img align="right" border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1491910399&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" style="position: relative; z-index: 1;" ></a><img align="right" src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li2&o=9&a=1491910399" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+<a href="https://www.amazon.co.jp/Data-Science-Transform-Visualize-Model/dp/1491910399/ref=as_li_ss_il?s=books&ie=UTF8&qid=1508340700&sr=1-3&linkCode=li1&tag=heavywatal-22&linkId=c21926e67c143d462d77fc8995212796" target="_blank"><img align="right" border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1491910399&Format=_SL110_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img align="right" src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li1&o=9&a=1491910399" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+<a href="https://www.amazon.co.jp/R%E3%81%A7%E3%81%AF%E3%81%98%E3%82%81%E3%82%8B%E3%83%87%E3%83%BC%E3%82%BF%E3%82%B5%E3%82%A4%E3%82%A8%E3%83%B3%E3%82%B9-Hadley-Wickham/dp/487311814X/ref=as_li_ss_il?ie=UTF8&qid=1508340144&sr=8-1&keywords=r&linkCode=li1&tag=heavywatal-22&linkId=f08ff14b91c2edb1a0b323a3f9460e34" target="_blank"><img align="right" border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=487311814X&Format=_SL110_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img align="right" src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li1&o=9&a=487311814X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 
 - グラフ描画には [ggplot2]({{< relref "ggplot2.md" >}})
 - data.frame内の計算・要約・抽出には [dplyr]({{< relref "dplyr.md" >}})
@@ -35,8 +36,7 @@ R標準の関数よりも遥かに分かりやすく安全で高機能なもの�
 - data.frame <=> CSV/TSV の読み書きには [readr]({{< relref "readr.md" >}})
 - list <=> json の読み書きには [jsonlite](https://cran.r-project.org/web/packages/jsonlite/)
 
-[紙の本](http://amzn.to/2tbRmVc)でも[公開オンライン版](http://r4ds.had.co.nz/)でもいいのでとにかく **R for Data Science** を読むのが一番。
-
+[日本語版](http://amzn.to/2yyFRKt)でも[英語版](http://amzn.to/2tbRmVc)でも[公開オンライン版](http://r4ds.had.co.nz/)でもいいのでとにかく **R for Data Science (r4ds)** を読むのが一番。
 
 ## 確率分布
 
