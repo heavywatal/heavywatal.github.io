@@ -222,10 +222,9 @@ e.g., 分数を挟むとか、カッコの入れ子とか</li>
 </ul>
 
 <h3 id="図">図</h3>
-
-<p>通常LaTeXではプリアンブルで <code>\usepackage[dvipdfmx,final]{graphicx}</code> と宣言。
-XeTeXでは不要っぽい。</p>
-<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex">\begin{figure}[htbp]
+<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex">\usepackage[final]{graphicx}
+%%%
+\begin{figure}[htbp]
 \includegraphics[width=100mm]{great.pdf}
 \caption{some description
 }\label{fig:great}
@@ -338,22 +337,24 @@ e.g., <code>mybibdata.bib</code></li>
 \citep[eq. 5]{hudson1987g}  # (Hudson et al. 1987, eq. 5)
 \citep[see][]{hudson1987g}  # (see Hudson et al. 1987)</code></pre></div></li>
 
-<li><p>最後の方に文献リストを挿入</p>
+<li><p>最後の方に文献リストを挿入:</p>
 <div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex">\bibliographystyle{abbrvnat}
 \bibliography{mybibdata}</code></pre></div>
-<p>スタイルを規定するのは <code>bst</code> ファイル</p></li>
+<p>スタイルを規定する <code>bst</code> ファイルはだいたい各Journalで提供してくれる。</p></li>
 
 <li><p>元の <code>tex</code> をコンパイルして <code>aux</code> を生成</p></li>
 
 <li><p><code>bibtex</code> に <code>aux</code> を渡して <code>bbl</code> を生成</p></li>
 
-<li><p>再び <code>tex</code> をコンパイルすると <code>bbl</code> が取り込まれて文献リストができる (でもまだなぜか引用部分がハテナ?のまま)</p></li>
+<li><p>再び <code>tex</code> をコンパイルすると <code>bbl</code> を踏まえて <code>aux</code> が更新される。
+(このときPDF出力すると、文献リストはできるけど引用部分はハテナ?になる)</p></li>
 
 <li><p>さらにもう1回コンパイルして完成</p></li>
 </ol>
 
-<p><a href="https://www.ctan.org/pkg/latexmk"><code>latexmk</code></a> を利用するか、
-適切な <code>Makefile</code> を書いて自動化するべし。</p>
+<p>最初の2回は <code>pdflatex -draftmode</code> としてPDF出力を省略すると早い。
+適切な <code>Makefile</code> を書いて自動化するべし。
+<a href="https://www.ctan.org/pkg/latexmk"><code>latexmk</code></a> を使うともっと楽ちん。</p>
 
 <h3 id="文字の修飾">文字の修飾</h3>
 
@@ -384,10 +385,6 @@ e.g., <code>mybibdata.bib</code></li>
 <p><a href="https://www.ctan.org/pkg/ulem">{ulem}</a> は
 <code>[normalem]</code> オプションを付けて読まないと
 <code>\emph</code> が下線に変更されてしまうので注意。</p>
-
-<p>ドライバを指定して <code>\usepackage[dvipdfmx]{color}</code> としないと
-<code>graphicx</code> がおかしくなってPNG図が空白になる、謎。
-<a href="http://qiita.com/zr_tex8r/items/442b75b452b11bee8049">http://qiita.com/zr_tex8r/items/442b75b452b11bee8049</a></p>
 
 <p><a href="https://www.ctan.org/pkg/soul">{soul}</a> のドキュメントによれば
 <code>\hl{環境}</code> に <code>$数式$</code> を入れられるはずだが
