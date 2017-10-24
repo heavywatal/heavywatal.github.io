@@ -82,14 +82,12 @@ BasicTeXの場合は最小限のパッケージしか含まれていないので
     数式環境のデファクトスタンダード。
     アメリカ数学会(AMS)が開発したらしいが、
     ガチ数学じゃなくても数式を書く場合はこれらしい。
-
     ```tex
     \usepackage{amsmath}
     \usepackage[all, warning]{onlyamsmath}
     ```
 
 -   Inline math:
-
     ```tex
     if $N_e u \ll 1$, then the population is monomorphic most of the time,
     ```
@@ -100,7 +98,6 @@ BasicTeXの場合は最小限のパッケージしか含まれていないので
     しばらくは `chktex -n46` で様子を見る。
 
 -   Display math:
-
     ```tex
     \begin{equation*}\label{eq:growth}
       N_t = N_0 e^{rt}
@@ -154,10 +151,9 @@ BasicTeXの場合は最小限のパッケージしか含まれていないので
 
 ### 図
 
-通常LaTeXではプリアンブルで `\usepackage[dvipdfmx,final]{graphicx}` と宣言。
-XeTeXでは不要っぽい。
-
 ```tex
+\usepackage[final]{graphicx}
+%%%
 \begin{figure}[htbp]
 \includegraphics[width=100mm]{great.pdf}
 \caption{some description
@@ -274,7 +270,6 @@ GIFアニメをそのまま埋め込むことはできないので、
     e.g., `mybibdata.bib`
 2.  コマンドにcite keyを入れて本文に挿入。
     このとき標準の `\cite` ではなく `{natbib}` のものを使う。
-
     ```tex
     \usepackage[authoryear,round,sort&compress]{natbib}
     %%%
@@ -286,22 +281,23 @@ GIFアニメをそのまま埋め込むことはできないので、
     \citep[see][]{hudson1987g}  # (see Hudson et al. 1987)
     ```
 
-3.  最後の方に文献リストを挿入
-
+3.  最後の方に文献リストを挿入:
     ```tex
     \bibliographystyle{abbrvnat}
     \bibliography{mybibdata}
     ```
 
-    スタイルを規定するのは `bst` ファイル
+    スタイルを規定する `bst` ファイルはだいたい各Journalで提供してくれる。
 
 4.  元の `tex` をコンパイルして `aux` を生成
 5.  `bibtex` に `aux` を渡して `bbl` を生成
-6.  再び `tex` をコンパイルすると `bbl` が取り込まれて文献リストができる (でもまだなぜか引用部分がハテナ?のまま)
+6.  再び `tex` をコンパイルすると `bbl` を踏まえて `aux` が更新される。
+    (このときPDF出力すると、文献リストはできるけど引用部分はハテナ?になる)
 7.  さらにもう1回コンパイルして完成
 
-[`latexmk`](https://www.ctan.org/pkg/latexmk) を利用するか、
+最初の2回は `pdflatex -draftmode` としてPDF出力を省略すると早い。
 適切な `Makefile` を書いて自動化するべし。
+[`latexmk`](https://www.ctan.org/pkg/latexmk) を使うともっと楽ちん。
 
 
 ### 文字の修飾
@@ -339,10 +335,6 @@ GIFアニメをそのまま埋め込むことはできないので、
 [{ulem}](https://www.ctan.org/pkg/ulem) は
 `[normalem]` オプションを付けて読まないと
 `\emph` が下線に変更されてしまうので注意。
-
-ドライバを指定して `\usepackage[dvipdfmx]{color}` としないと
-`graphicx` がおかしくなってPNG図が空白になる、謎。
-<http://qiita.com/zr_tex8r/items/442b75b452b11bee8049>
 
 [{soul}](https://www.ctan.org/pkg/soul) のドキュメントによれば
 `\hl{環境}` に `$数式$` を入れられるはずだが
