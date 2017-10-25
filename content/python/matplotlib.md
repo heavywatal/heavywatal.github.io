@@ -59,6 +59,9 @@ fig.savefig('example.png')
 使わずに済ませるのは難しそう。
 例えば `pyplot.figure()` から生成したやつじゃないと `fig.show()` できない、とか。
 
+渡すデータは生のlistとかではなく
+[`pandas.DataFrame`]({{< relref "pandas.md" >}}) に整えておく。
+
 
 ### Figure, Axes
 
