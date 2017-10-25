@@ -6,24 +6,10 @@ tags = ["python", "graph"]
   parent = "python"
 +++
 
-- <http://matplotlib.org/>
-- <https://seaborn.pydata.org/>
-
-行列を含む数値計算やグラフ描画を行うためのソフトウェアとしては
-有償のMATLABが広く利用されているが、
-Python にいくつかのモジュールを導入することで
-同等かそれ以上のことを無料で実現することができる。
-
-- `matplotlib`: グラフ描画
-- [`numpy`]({{< relref "scipy.md" >}}): 配列演算や基本的な数学関数
-- [`scipy`]({{< relref "scipy.md#scipy" >}}): 高度な科学技術計算
-- [`ipython`]({{< relref "ipython.md" >}}): 高機能なシェル環境
-
-直接 `matplotlib` を触るのは大変なので、
-[`seaborn`](https://seaborn.pydata.org/) というラッパーを介して使う。
-ただし `matplotlib` を全く知らずに `seaborn` を使うのは無理っぽい。
+[`matplotlib`](http://matplotlib.org/) はPythonにおけるデータ可視化のデファクトスタンダード。
+でも直接触るのはしんどいので [`seaborn`](https://seaborn.pydata.org/) というラッパーを介して使う。
+ただし前者を全く知らずに後者だけを使うのは無理っぽい。
 [ggplot2]({{< relref "rstats/ggplot2.md" >}}) は `grid` を知らなくても使えるのに。。。
-
 
 ## 基本
 
@@ -40,8 +26,8 @@ import seaborn as sns
 
 iris = sns.load_dataset('iris')
 
-gs = plt.GridSpec(1, 1)
 fig = plt.figure()
+gs = plt.GridSpec(1, 1)
 ax = fig.add_subplot(gs[0])
 
 sns.regplot('sepal_width', 'sepal_length', data=iris, ax=ax)
@@ -52,24 +38,171 @@ fig.savefig('example.png')
 
 `from matplotlib.pylab import *`
 は単にMATLABっぽいインターフェイスにするための乱暴な手段で、
-名前空間が汚れるので使用しない。
+例としてよく見かけるけど公式に非推奨とされている。
 
 `pyplot` も同様にあまり使いたくない `import` 主体のモジュールだが、
 こちらはbackendのお世話などもしてくれているらしいので、
 使わずに済ませるのは難しそう。
 例えば `pyplot.figure()` から生成したやつじゃないと `fig.show()` できない、とか。
 
-渡すデータは生のlistとかではなく
-[`pandas.DataFrame`]({{< relref "pandas.md" >}}) に整えておく。
+渡すデータは生のlistとかではなくtidyな
+[`pandas.DataFrame`]({{< relref "pandas.md" >}})型にしておく。
 
 
 ### Figure, Axes
 
-<http://matplotlib.org/faq/usage_faq.html#general-concepts>
+- <http://matplotlib.org/faq/usage_faq.html>
+- <http://matplotlib.org/api/figure_api.html>
+- <http://matplotlib.org/api/axes_api.html>
 
-<http://matplotlib.org/api/figure_api.html>
 
-<http://matplotlib.org/api/axes_api.html>
+## Axes-level plot
+
+Axesを受け取ってそこに描画してAxesを返す低級関数。
+
+- <https://seaborn.pydata.org/examples>
+- <http://matplotlib.org/users/screenshots.html>
+
+### [Regression plots](https://seaborn.pydata.org/tutorial/regression.html)
+
+`sns.regplot(x, y, data, ..., fit_reg=True, ci=95, ..., ax)`
+:   散布図。`fit_reg=False` しないと勝手に回帰線が引かれる。
+
+### [Distribution plots](https://seaborn.pydata.org/tutorial/distributions.html)
+
+`sns.distplot(a, bins, hist=True, kde=True, rug=False, fit=None, ..., ax)`
+:   ヒストグラム、カーネル密度推定、ラグプロットなど分布全般
+
+`sns.kdeplot(data, ..., ax)`
+:   Kernel Density Esimate
+
+`sns.heatmap(data, vmin, vmax, cmap, center, ..., square, mask, ax)`
+:   ヒートマップ。入力データはtidyじゃなくて行列の形。
+
+### [Categorical plots](https://seaborn.pydata.org/tutorial/categorical.html)
+
+`sns.boxplot(x, y, hue, data, order, ..., ax)`
+:   箱ひげ図
+
+`sns.violinplot(x, y, hue, data, order, ..., ax)`
+:   バイオリンプロット
+
+`sns.stripplot(x, y, hue, data, order, ..., ax)`
+:   片軸がカテゴリカル変数の散布図
+
+`sns.pointplot(x, y, hue, data, order, ..., ax)`
+:   点推定値(平均値とか)の折れ線グラフ + エラーバー
+
+`sns.barplot(x, y, hue, data, order, ..., ax)`
+:   平均値の棒グラフ + エラーバー
+
+`sns.countplot(x, y, hue, data, order, ..., ax)`
+:   カテゴリカル変数の頻度棒グラフ
+
+## [Axis Grid](https://seaborn.pydata.org/tutorial/axis_grids.html)
+
+FigureとAxisをいい感じに初期化して、関連するデータを縦・横・色の方向に並べる土台を作る。
+これにAxis-level plotを乗せるところまでショートカットする高級関数がFigure-level plot。
+できあがったGridオブジェクトの`.set()`系メソッドとか`.fig`プロパティを通じていろいろ調整できる。
+
+### [`sns.FacetGrid`](https://seaborn.pydata.org/generated/seaborn.FacetGrid.html)
+
+`(data, row, col, hue, col_wrap, sharex, sharey, ...)`
+
+カテゴリカル変数でプロットを分ける:
+```py
+grid = sns.FacetGrid(iris, col='species', col_wrap=2)
+grid.map(sns.regplot, 'sepal_width', 'sepal_length')
+```
+
+色分けもこれの仕事:
+```py
+grid = sns.FacetGrid(iris, hue='species')
+grid.map(sns.regplot, 'sepal_width', 'sepal_length')
+```
+
+`sns.lmplot(x, y, data, hue, col, row, ...)`
+:   `regplot()` + `FacetGrid()` のショートカット。
+
+`sns.factorplot(x, y, hue, data, row, col, ..., kind, ...)`
+:   Categorical plot + `FacetGrid()` のショートカット。
+:   `kind`: {`point`, `bar`, `count`, `box`, `violin`, `strip`}
+
+### [`sns.PairGrid`](https://seaborn.pydata.org/generated/seaborn.PairGrid.html)
+
+`(data, hue, ..., vars, x_vars, y_vars, ...)`
+
+ペアワイズ散布図 + 対角線ヒストグラム
+```py
+grid = sns.PairGrid(iris)
+grid = grid.map_offdiag(sns.regplot)
+grid = grid.map_diag(sns.distplot)
+```
+
+`sns.pairplot(data, hue, hue_order, palette, vars, x_vars, y_vars, kind, diag_kind, ...)`
+:   `PairGrid()` のショートカット。
+:   `kind`: {`scatter`, `reg`}
+:   `diag_kind`: {`hist`, `kde`}
+
+### [`sns.JointGrid`](https://seaborn.pydata.org/generated/seaborn.JointGrid.html)
+
+`(x, y, data, size, ratio, space, dropna, xlim, ylim)`
+
+散布図 + 周辺分布:
+```py
+grid = sns.JointGrid('sepal_width', 'sepal_length', iris)
+grid = grid.plot_joint(sns.regplot)
+grid = grid.plot_marginals(sns.distplot, kde=False)
+```
+
+`sns.jointplot(x, y, data, kind, stat_func, ...)`
+:   `JointGrid()` のショートカット。
+:   `kind`: {`scatter`, `reg`, `resid`, `kde`, `hex`}
+
+### `sns.ClusterGrid()`
+
+`sns.clustermap(data, ...)`
+:   `heatmap()` + `ClusterGrid()`
+
+
+## 関係ない複数の図を並べる
+
+- <http://matplotlib.org/users/gridspec.html>
+- <http://matplotlib.org/users/tight_layout_guide.html>
+
+### `plt.subplots(nrows, ncols, sharex, sharey, ...)`
+
+等サイズに分割:
+```py
+fig, axes = plt.subplots(2, 2)
+sns.regplot('x', 'y', d, ax=axes[0, 0])
+fig.tight_layout()
+```
+
+### `mpl.gridspec.GridSpec(nrows, ncols, ...)`
+
+e.g., 2x2分割して "品" みたいな配置にする:
+```py
+fig = plt.figure()
+gs = plt.GridSpec(2, 2)
+ax_top = fig.add_subplot(gs[0, :])
+ax_bottom_l = fig.add_subplot(gs[1, 0])
+ax_bottom_r = fig.add_subplot(gs[1, 1])
+```
+
+### `mpl.gridspec.GridSpecFromSubplotSpec(nrows, ncols, subplot_spec, ...)`
+
+入れ子で分割。
+e.g., 左右に分け、それぞれをさらに3段に分ける:
+```py
+fig = plt.figure()
+gs = plt.GridSpec(1, 2)
+gsl = sns.mpl.gridspec.GridSpecFromSubplotSpec(3, 1, gs[0])
+gsr = sns.mpl.gridspec.GridSpecFromSubplotSpec(3, 1, gs[1])
+
+ax_ltop = fig.add_subplot(gsl[0])
+```
+
 
 ## Style
 
@@ -199,148 +332,13 @@ fig.savefig('example.png')
 
 <http://matplotlib.org/users/legend_guide.html>
 
-## Plot
-
-- <https://seaborn.pydata.org/tutorial/regression.html>
-- <https://seaborn.pydata.org/tutorial/distributions.html>
-- <https://seaborn.pydata.org/tutorial/categorical.html>
-- <https://seaborn.pydata.org/examples/index.html>
-- <http://matplotlib.org/users/screenshots.html>
-
-### Axes-level plot
-
-`ax` を受け取ってそこに描画して `ax` を返す。
-
-`sns.regplot(x, y, data, ..., fit_reg=True, ci=95, ..., ax)`
-:   散布図。`fit_reg=False` しないと勝手に回帰線が引かれる。
-
-`sns.distplot(a, bins, hist=True, kde=True, rug=False, fit=None, ..., ax)`
-:   ヒストグラム、カーネル密度推定、ラグプロットなど分布全般
-
-`sns.boxplot(x, y, hue, data, order, ..., ax)`
-:   箱ひげ図
-
-`sns.violinplot(x, y, hue, data, order, ..., ax)`
-:   バイオリンプロット
-
-`sns.stripplot(x, y, hue, data, order, ..., ax)`
-:   片軸がカテゴリカル変数の散布図
-
-`sns.pointplot(x, y, hue, data, order, ..., ax)`
-:   平均値の折れ線グラフ + エラーバー
-
-`sns.barplot(x, y, hue, data, order, ..., ax)`
-:   平均値の棒グラフ + エラーバー
-
-`sns.countplot(x, y, hue, data, order, ..., ax)`
-:   カテゴリカル変数の頻度棒グラフ
-
-`sns.heatmap(data, vmin, vmax, cmap, center, ..., square, mask, ax)`
-:   ヒートマップ
-
-### Figure-level plot
-
-Grid に Axes-level plot を乗せて返す高レベル関数。
-
-`sns.lmplot(x, y, data, hue, col, row, ...)`
-:   `regplot()` + `FacetGrid()`
-
-`sns.jointplot(x, y, data, kind, stat_func, ...)`
-:   散布図 + 周辺ヒストグラム with `JointGrid()`.\
-    `kind`: {`scatter`, `reg`, `resid`, `kde`, `hex`}
-
-`sns.pairplot(data, hue, hue_order, palette, vars, x_vars, y_vars, kind, diag_kind, ...)`
-:   ペアワイズ散布図 with `PairGrid()`
-
-`sns.clustermap(data, ...)`
-:   `heatmap()` + `ClusterGrid()`
-
-`sns.factorplot(x, y, hue, data, row, col, ..., kind, ...)`
-:   カテゴリカル変数全般.\
-    `kind`: {`point`, `bar`, `count`, `box`, `violin`, `strip`}
-
-## Grid
-
-<https://seaborn.pydata.org/tutorial/axis_grids.html>
-
-### `sns.FacetGrid(data, row, col, hue, col_wrap, sharex, sharey, ...)`
-
-カテゴリカル変数でプロットを分ける:
-```py
-grid = sns.FacetGrid(iris, col='species', col_wrap=2)
-grid.map(sns.regplot, 'sepal_width', 'sepal_length')
-```
-
-色分けもこれの仕事:
-```py
-grid = sns.FacetGrid(iris, hue='species')
-grid.map(sns.regplot, 'sepal_width', 'sepal_length')
-```
-
-### `sns.PairGrid(data, ..., vars, x_vars, y_vars, ...)`
-
-ペアワイズ散布図 + ヒストグラム
-```py
-grid = sns.PairGrid(iris)
-grid = grid.map_diag(sns.distplot)
-grid = grid.map_offdiag(sns.regplot)
-```
-
-### `sns.JointGrid(x, y, data, ...)`
-
-散布図 + 周辺分布:
-```py
-grid = sns.JointGrid('sepal_width', 'sepal_length', iris)
-grid = grid.plot_joint(sns.regplot)
-grid = grid.plot_marginals(sns.distplot, kde=False)
-```
-
-------------------------------------------------------------------------
-
-<http://matplotlib.org/users/gridspec.html>
-
-<http://matplotlib.org/users/tight_layout_guide.html>
-
-データに関係なく複数の図を並べる。
-
-### `plt.subplots(nrows, ncols, sharex, sharey, ...)`
-
-等サイズに分割:
-```py
-fig, axes = plt.subplots(2, 2)
-sns.regplot('x', 'y', d, ax=axes[0, 0])
-fig.tight_layout()
-```
-
-### `mpl.gridspec.GridSpec(nrows, ncols, ...)`
-
-e.g., 2x2分割して "品" みたいな配置にする:
-```py
-gs = plt.GridSpec(2, 2)
-ax_top = plt.subplot(gs[0, :])
-ax_bottom_l = plt.subplot(gs[1, 0])
-ax_bottom_r = plt.subplot(gs[1, 1])
-```
-
-### `mpl.gridspec.GridSpecFromSubplotSpec(nrows, ncols, subplot_spec, ...)`
-
-入れ子で分割。
-e.g., 左右に分け、それぞれをさらに3段に分ける:
-```py
-gs = plt.GridSpec(1, 2)
-gsl = mpl.gridspec.GridSpecFromSubplotSpec(3, 1, gs[0])
-gsr = mpl.gridspec.GridSpecFromSubplotSpec(3, 1, gs[1])
-ax_ltop = plt.subplot(gsl[0])
-```
 
 ## その他
 
-### [インストール](http://matplotlib.org/faq/installing_faq.html)
+### インストール
 
-[Anaconda]({{< relref "install.md#anaconda" >}})
-には最初から含まれているので楽チン。
-Minicondaなら `conda install seaborn` で一発。
-そうじゃなくても `pip install seaborn` でいけるはず。
+[pyenvか何かで最新のPython3系をインストールして]({{< relref "install.md" >}})、
+`pip install seaborn` を実行。
 
 ### 設定
 
@@ -376,12 +374,6 @@ Macで非Frameworkとしてインストールした自前Pythonを使うと怒�
 <http://qiita.com/katryo/items/918667f28301fdec89ba>
 
 <http://matplotlib.org/faq/usage_faq.html#what-is-a-backend>
-
-### その他のラッパー
-
--   easyplot: <https://github.com/HamsterHuey/easyplot>
--   prettyplotlib: <http://blog.olgabotvinnik.com/prettyplotlib/>
--   uglyplotlib: <https://gitlab.com/padawanphysicist/uglyplotlib>
 
 
 ## 書籍
