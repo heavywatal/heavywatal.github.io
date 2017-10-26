@@ -140,8 +140,7 @@ Heavy Watal
 
 <span class="c1">// shift
 </span><span class="c1"></span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="n">n</span>
-<span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">n</span>
-<span class="n">x</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">n</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// int8_t
+<span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">n</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// uint8_t
 </span><span class="c1"></span><span class="n">x</span> <span class="o">=</span> <span class="mi">5</span>   <span class="c1">// 0b00000101
 </span><span class="c1"></span><span class="n">x</span> <span class="o">&amp;</span> <span class="mi">1</span>   <span class="c1">// 0b00000001 =  1
 </span><span class="c1"></span><span class="n">x</span> <span class="o">|</span> <span class="mi">2</span>   <span class="c1">// 0b00000111 =  7
@@ -149,12 +148,11 @@ Heavy Watal
 </span><span class="c1"></span><span class="o">~</span> <span class="n">x</span>     <span class="c1">// 0b11111010 = -6
 </span><span class="c1"></span><span class="o">-</span> <span class="n">x</span>     <span class="c1">// 0b11111011 = -5
 </span><span class="c1"></span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span>  <span class="c1">// 0b00001010 = 10
-</span><span class="c1"></span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span>  <span class="c1">// 0b00000010 =  2
-</span><span class="c1"></span><span class="n">x</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">1</span> <span class="o">//</span> <span class="mi">0</span><span class="n">b00000010</span> <span class="o">=</span>  <span class="mi">2</span></code></pre></div>
+</span><span class="c1"></span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span>  <span class="o">//</span> <span class="mi">0</span><span class="n">b00000010</span> <span class="o">=</span>  <span class="mi">2</span></code></pre></div>
 <ul>
 <li><code>&lt;&lt;</code> は右から0を詰めて左端を捨てる</li>
-<li><code>&gt;&gt;</code> は左端をコピーして右端を捨てる</li>
-<li><code>&gt;&gt;&gt;</code> は左から0を詰めて右端を捨てる</li>
+<li><code>unsigned</code> に対する <code>&gt;&gt;</code> は左から0を詰めて右端を捨てる</li>
+<li><code>signed</code> の負数に対する <code>&gt;&gt;</code> は未定義だが、だいたい左端をコピーして右端を捨てる(i.e., 符号を維持しつつ2で割る)</li>
 </ul>
 
 <h2 id="応用">応用</h2>
