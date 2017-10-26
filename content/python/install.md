@@ -22,6 +22,11 @@ MacやLinuxならシステムの一部として
 [pyenv](https://github.com/pyenv/pyenv)
 が便利。
 
+[matplotlib]({{< relref "matplotlib.md" >}}) で
+`macosx` backend を使いたい場合などは環境変数
+`PYTHON_CONFIGURE_OPTS="--enable-framework"`
+をセットしてFramework型でビルドする。
+
 ```sh
 % brew install pyenv
 % exec $SHELL -l
@@ -43,7 +48,7 @@ if which pyenv >/dev/null; then eval "$(pyenv init -)"; fi
 
 ```sh
 % pip install -U setuptools
-% pip install -U seaborn biopython
+% pip install -U seaborn ipython biopython
 % pip install -U flake8 psutil
 ```
 

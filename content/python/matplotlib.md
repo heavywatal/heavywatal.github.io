@@ -350,6 +350,17 @@ ax_ltop = fig.add_subplot(gsl[0])
 
 `site-packages/matplotlib/mpl-data/matplotlibrc` にテンプレートがある。
 
+### [バックエンド問題](http://matplotlib.org/faq/usage_faq.html#what-is-a-backend)
+
+Macで非Frameworkとしてインストールした自前Pythonを使うと怒られる:
+
+    RuntimeError: Python is not installed as a framework. The Mac OS X backend will not be able to function correctly if Python is not installed as a framework. See the Python documentation for more information on installing Python as a framework on Mac OS X. Please either reinstall Python as a framework, or try one of the other backends.
+
+`~/.matplotlib/matplotlibrc` に
+`backend: tkagg` などと書いて
+`macosx` 以外に変更すればとりあえずOK。
+[Frameworkでインストールする]({{< relref "install.md" >}})ほうがいいとは思うけど。
+
 ### キャッシュ問題
 
 使用するPythonを変更すると以下のようなランタイムエラーが出ることがある:
@@ -359,21 +370,6 @@ ax_ltop = fig.add_subplot(gsl[0])
 そういうときはキャッシュを削除してみるとよい:
 
     % rm -rf ~/.matplotlib/fontList.cache
-
-### バックエンド問題
-
-Macで非Frameworkとしてインストールした自前Pythonを使うと怒られる:
-
-    RuntimeError: Python is not installed as a framework. The Mac OS X backend will not be able to function correctly if Python is not installed as a framework. See the Python documentation for more information on installing Python as a framework on Mac OS X. Please either reinstall Python as a framework, or try one of the other backends.
-
-`~/.matplotlib/matplotlibrc`
-でバックエンドを `MacOSX` 以外に変更すればとりあえずOK:
-
-    backend: TkAgg
-
-<http://qiita.com/katryo/items/918667f28301fdec89ba>
-
-<http://matplotlib.org/faq/usage_faq.html#what-is-a-backend>
 
 
 ## 書籍
