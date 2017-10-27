@@ -89,21 +89,13 @@ Heavy Watal
 
 
 
-<div class="warning">
 <ul>
-<li><code>&lt;cstdlib&gt;</code> の <code>std::rand()</code> は乱数の質も悪く、速度も遅いので非推奨。</li>
+<li><code>&lt;cstdlib&gt;</code> の <code>std::rand()</code> は乱数の質も悪く、速度も遅いので非推奨。
+C++11 から標準ライブラリに追加された <code>&lt;random&gt;</code> を使う。</li>
 <li><code>&lt;algorithm&gt;</code> の <code>std::random_shuffle()</code> は引数省略で
-<code>std::rand()</code> が使われてしまうので非推奨。</li>
-</ul>
-
-</div>
-
-
-<ul>
-<li>外部の生成器としてはSFMTやdSFMTが高速で高品質。</li>
-<li>C++11 からは新しい <code>&lt;random&gt;</code> が標準ライブラリに追加され、まともに使える。</li>
-<li>C++11 の <code>&lt;algorithm&gt;</code> の <code>std::shuffle()</code>
-は生成器を明示的に渡す必要があるので安全。</li>
+<code>std::rand()</code> が使われてしまうので非推奨。
+C++11 で追加された <code>std::shuffle()</code> に生成器を明示的に渡して使う。</li>
+<li>非標準の生成器としてはSFMTやdSFMTが高速で高品質。Xorshift系とPCGの動向にも注目。</li>
 </ul>
 
 <h2 id="random"><code>&lt;random&gt;</code></h2>
@@ -152,7 +144,7 @@ Heavy Watal
 <p><a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/">http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/</a></p>
 
 <p>Mersenne Twisterを松本眞と斎藤睦夫がさらに改良したもの。
-2倍速く、より均等な分布になってるらしい。整数乱数。
+SIMD命令を利用して、速度も品質も向上したらしい。
 標準には含まれず、ソースからのビルドが必要。</p>
 
 <h3 id="dsfmt">dSFMT</h3>
@@ -175,25 +167,19 @@ C++標準 <code>&lt;random&gt;</code> の <code>std::mt19937</code>
 
 <h2 id="xorshift">Xorshift</h2>
 
-<p><a href="http://www.jstatsoft.org/v08/i14"><a href="http://www.jstatsoft.org/v08/i14">http://www.jstatsoft.org/v08/i14</a></a></p>
+<p><a href="https://www.jstatsoft.org/article/view/v008i14">Marsaglia (2003)</a>
+から始まって、いくつかの改良版が派生している。
+省メモリで高速。
+周期は $2^{128}$ ほどでMTに比べれば短いけど、大概はこれで十分。
+最新情報は
+<a href="http://xoroshiro.di.unimi.it/">xoroshiro.di.unimi.it</a>
+で追えば良さそう。</p>
 
-<p>周期が $2^{128}$ でSFMTほど良質ではないらしいが、生成は超高速で、
-何より実装が簡単</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// シードは４要素の配列。どっかで一度適当に定義すること。
-</span><span class="c1"></span><span class="k">extern</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">seed128</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+<h2 id="pcg">PCG</h2>
 
-<span class="c1">// シードを与える関数
-</span><span class="c1"></span><span class="kr">inline</span> <span class="kt">void</span> <span class="nf">init_xorshift</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">s</span><span class="p">){</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">seed128</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">s</span><span class="o">=</span><span class="mi">1812433253U</span><span class="o">*</span><span class="p">(</span><span class="n">s</span><span class="o">^</span><span class="p">(</span><span class="n">s</span><span class="o">&gt;&gt;</span><span class="mi">30</span><span class="p">))</span><span class="o">+</span><span class="n">i</span><span class="p">;</span>
-<span class="p">}</span>
+<p>線形合同法(LCG)の出力をpermutationした<a href="http://www.pcg-random.org/">PCG</a>も良さそう。
+作者O&rsquo;Neillのブログは読み応えがあっておもしろい。</p>
 
-<span class="c1">// 32bitの整数乱数を生成
-</span><span class="c1"></span><span class="kr">inline</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="nf">xorshift128</span><span class="p">(){</span>
-    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="o">*</span><span class="n">a</span><span class="p">(</span><span class="n">seed128</span><span class="p">);</span>
-    <span class="kt">unsigned</span> <span class="kt">int</span>  <span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">^</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;&lt;</span><span class="mi">11</span><span class="p">));</span>
-    <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
-    <span class="k">return</span> <span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">^</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">&gt;&gt;</span><span class="mi">19</span><span class="p">))</span><span class="o">^</span><span class="p">(</span><span class="n">t</span><span class="o">^</span><span class="p">(</span><span class="n">t</span><span class="o">&gt;&gt;</span><span class="mi">8</span><span class="p">));</span>
-<span class="p">}</span></code></pre></div>
 <h2 id="seed">Seed</h2>
 
 <h3 id="dev-urandom"><code>/dev/urandom</code></h3>
@@ -220,9 +206,12 @@ C++標準 <code>&lt;random&gt;</code> の <code>std::mt19937</code>
 <h3 id="std-random-device"><code>std::random_device</code></h3>
 
 <p>C++11ではそのための関数が <code>&lt;random&gt;</code> に用意されている。
-これも基本的には <code>/dev/urandom</code> から生成するらしい</p>
+これも基本的には <code>/dev/urandom</code> から生成するらしい。</p>
 <div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="n">std</span><span class="o">::</span><span class="n">random_device</span> <span class="n">rd</span><span class="p">;</span>
 <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">random_device</span><span class="o">::</span><span class="n">result_type</span> <span class="n">seed</span> <span class="o">=</span> <span class="n">rd</span><span class="p">();</span></code></pre></div>
+<p>大量のシミュレーションを回すときなど、
+エントロピーがもっと必要な場合は <code>std::seed_seq</code> を利用する。</p>
+
 </article>
 </main>
 
