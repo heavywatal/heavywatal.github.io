@@ -218,33 +218,10 @@ value
 
 詳しくは non-standard expression (NSE) で調べる:
 
-- http://adv-r.had.co.nz/Computing-on-the-language.html
-- https://cran.r-project.org/web/packages/dplyr/vignettes/nse.html
-- https://github.com/hadley/lazyeval
+- https://adv-r.hadley.nz/meta
+- https://cran.r-project.org/web/packages/dplyr/vignettes/programming.html
+- http://rlang.tidyverse.org/articles/tidy-evaluation.html
 
-
-## `attach()` するべからず
-
-あるdata.frameの `column_a` というカラムにアクセスしたいとき、
-普通はダラー`$`を使って `some_data$column_a` のようにする。
-`attach(some_data)` すると、data.frame内のすべてのカラムが独立した変数のように扱われて、
-`column_a` だけでアクセスできるようになる (`detach()` するまで)。
-でもそうすると、ワークスペースは変数でいっぱいになってしまうし、
-名前の衝突による不具合が起こる危険性がある。
-そこで、範囲限定で一時的に `attach()` 状態を作り出す `with()` を使う。
-安全で楽チン。
-
-```r
-half = iris$Sepal.Length / 2
-
-with(iris, {
-    ## このブレースの中では
-    ## attach(iris)されたのと同じように、
-    ## 列の名前でダイレクトにアクセスできる。
-
-    half = Sepal.Length / 2
-})
-```
 
 ## 最適化・高速化
 
