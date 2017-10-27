@@ -272,30 +272,11 @@ value
 <p>詳しくは non-standard expression (NSE) で調べる:</p>
 
 <ul>
-<li><a href="http://adv-r.had.co.nz/Computing-on-the-language.html">http://adv-r.had.co.nz/Computing-on-the-language.html</a></li>
-<li><a href="https://cran.r-project.org/web/packages/dplyr/vignettes/nse.html">https://cran.r-project.org/web/packages/dplyr/vignettes/nse.html</a></li>
-<li><a href="https://github.com/hadley/lazyeval">https://github.com/hadley/lazyeval</a></li>
+<li><a href="https://adv-r.hadley.nz/meta">https://adv-r.hadley.nz/meta</a></li>
+<li><a href="https://cran.r-project.org/web/packages/dplyr/vignettes/programming.html">https://cran.r-project.org/web/packages/dplyr/vignettes/programming.html</a></li>
+<li><a href="http://rlang.tidyverse.org/articles/tidy-evaluation.html">http://rlang.tidyverse.org/articles/tidy-evaluation.html</a></li>
 </ul>
 
-<h2 id="attach-するべからず"><code>attach()</code> するべからず</h2>
-
-<p>あるdata.frameの <code>column_a</code> というカラムにアクセスしたいとき、
-普通はダラー<code>$</code>を使って <code>some_data$column_a</code> のようにする。
-<code>attach(some_data)</code> すると、data.frame内のすべてのカラムが独立した変数のように扱われて、
-<code>column_a</code> だけでアクセスできるようになる (<code>detach()</code> するまで)。
-でもそうすると、ワークスペースは変数でいっぱいになってしまうし、
-名前の衝突による不具合が起こる危険性がある。
-そこで、範囲限定で一時的に <code>attach()</code> 状態を作り出す <code>with()</code> を使う。
-安全で楽チン。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">half <span class="o">=</span> iris<span class="o">$</span>Sepal.Length <span class="o">/</span> <span class="m">2</span>
-
-<span class="kp">with</span><span class="p">(</span>iris<span class="p">,</span> <span class="p">{</span>
-    <span class="c1">## このブレースの中では</span>
-    <span class="c1">## attach(iris)されたのと同じように、</span>
-    <span class="c1">## 列の名前でダイレクトにアクセスできる。</span>
-
-    half <span class="o">=</span> Sepal.Length <span class="o">/</span> <span class="m">2</span>
-<span class="p">})</span></code></pre></div>
 <h2 id="最適化-高速化">最適化・高速化</h2>
 
 <h3 id="最新の-r-を使う">最新の R を使う</h3>
