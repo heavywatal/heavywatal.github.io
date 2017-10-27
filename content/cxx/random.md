@@ -5,16 +5,12 @@ tags = ["c++"]
   parent = "cxx"
 +++
 
-{{%div class="warning"%}}
 -   `<cstdlib>` の `std::rand()` は乱数の質も悪く、速度も遅いので非推奨。
+    C++11 から標準ライブラリに追加された `<random>` を使う。
 -   `<algorithm>` の `std::random_shuffle()` は引数省略で
     `std::rand()` が使われてしまうので非推奨。
-{{%/div%}}
-
--   外部の生成器としてはSFMTやdSFMTが高速で高品質。
--   C++11 からは新しい `<random>` が標準ライブラリに追加され、まともに使える。
--   C++11 の `<algorithm>` の `std::shuffle()`
-    は生成器を明示的に渡す必要があるので安全。
+    C++11 で追加された `std::shuffle()` に生成器を明示的に渡して使う。
+-   非標準の生成器としてはSFMTやdSFMTが高速で高品質。Xorshift系とPCGの動向にも注目。
 
 
 ## `<random>`
@@ -65,7 +61,7 @@ int main() {
 <http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/>
 
 Mersenne Twisterを松本眞と斎藤睦夫がさらに改良したもの。
-2倍速く、より均等な分布になってるらしい。整数乱数。
+SIMD命令を利用して、速度も品質も向上したらしい。
 標準には含まれず、ソースからのビルドが必要。
 
 ### dSFMT
@@ -88,28 +84,19 @@ C++標準 `<random>` の `std::mt19937`
 
 ## Xorshift
 
-[<http://www.jstatsoft.org/v08/i14>](http://www.jstatsoft.org/v08/i14)
+[Marsaglia (2003)](https://www.jstatsoft.org/article/view/v008i14)
+から始まって、いくつかの改良版が派生している。
+省メモリで高速。
+周期は $2^{128}$ ほどでMTに比べれば短いけど、大概はこれで十分。
+最新情報は
+[xoroshiro.di.unimi.it](http://xoroshiro.di.unimi.it/)
+で追えば良さそう。
 
-周期が $2^{128}$ でSFMTほど良質ではないらしいが、生成は超高速で、
-何より実装が簡単
+## PCG
 
-```c++
-// シードは４要素の配列。どっかで一度適当に定義すること。
-extern unsigned int seed128[4];
+線形合同法(LCG)の出力をpermutationした[PCG](http://www.pcg-random.org/)も良さそう。
+作者O'Neillのブログは読み応えがあっておもしろい。
 
-// シードを与える関数
-inline void init_xorshift(unsigned int s){
-    for (unsigned int i=0; i<4; ++i) seed128[i]=s=1812433253U*(s^(s>>30))+i;
-}
-
-// 32bitの整数乱数を生成
-inline unsigned int xorshift128(){
-    unsigned int *a(seed128);
-    unsigned int  t(a[0]^(a[0]<<11));
-    a[0] = a[1]; a[1] = a[2]; a[2] = a[3];
-    return a[3]=(a[3]^(a[3]>>19))^(t^(t>>8));
-}
-```
 
 ## Seed
 
@@ -141,9 +128,12 @@ unsigned int dev_urandom() {
 ### `std::random_device`
 
 C++11ではそのための関数が `<random>` に用意されている。
-これも基本的には `/dev/urandom` から生成するらしい
+これも基本的には `/dev/urandom` から生成するらしい。
 
 ```c++
 std::random_device rd;
 const std::random_device::result_type seed = rd();
 ```
+
+大量のシミュレーションを回すときなど、
+エントロピーがもっと必要な場合は `std::seed_seq` を利用する。
