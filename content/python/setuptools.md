@@ -71,6 +71,19 @@ entry_points = file: entry_points.cfg
 
 `license = file: LICENSE` のように外部ファイルを参照することも可能。
 
+`install_requires = flake8; psutil`
+のようにセミコロン区切りで依存パッケージを列挙できる。
+それらは `pip install` で自動的にインストールされ、
+その後アンインストールするとそれを使わないモジュールでさえ
+`distribution was not found and is required`
+などと言って動いてくれなくなるくらい強制力が強い。
+
+`requirements.txt` はsetuptoolsではなくpipの機能で、
+能動的に `pip install -r requirements.txt`
+を打たなきゃインストールされないし、
+そこに列挙されたパッケージが無くても動くモジュールは動かせる。
+
+
 ### `entry_points`
 
 - https://setuptools.readthedocs.io/en/latest/setuptools.html#automatic-script-creation
