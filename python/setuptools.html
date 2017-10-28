@@ -140,6 +140,18 @@ setuptools — Pythonパッケージ作成
 <span class="na">entry_points</span> <span class="o">=</span> <span class="s">file: entry_points.cfg</span></code></pre></div>
 <p><code>license = file: LICENSE</code> のように外部ファイルを参照することも可能。</p>
 
+<p><code>install_requires = flake8; psutil</code>
+のようにセミコロン区切りで依存パッケージを列挙できる。
+それらは <code>pip install</code> で自動的にインストールされ、
+その後アンインストールするとそれを使わないモジュールでさえ
+<code>distribution was not found and is required</code>
+などと言って動いてくれなくなるくらい強制力が強い。</p>
+
+<p><code>requirements.txt</code> はsetuptoolsではなくpipの機能で、
+能動的に <code>pip install -r requirements.txt</code>
+を打たなきゃインストールされないし、
+そこに列挙されたパッケージが無くても動くモジュールは動かせる。</p>
+
 <h3 id="entry-points"><code>entry_points</code></h3>
 
 <ul>
