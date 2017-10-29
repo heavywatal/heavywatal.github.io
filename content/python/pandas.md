@@ -62,18 +62,19 @@ df.tail()
 http://pandas.pydata.org/pandas-docs/stable/indexing.html
 
 ```python
-df['species']
-df.species
+df[['species']]  # DataFrame with 1 column
+df['species']    # Series
+df.species       # Series (not recommended)
 
 # label-based
 df.loc[0]
-df.loc[0,'sepal_width']
+df.loc[:,'sepal_width']
 
 # integer-based
 df.iloc[0]
-df.iloc[0,1]
+df.iloc[:,1]
 
-# fast scalar lookup
+# fast scalar (single value) lookup
 df.at[0,'sepal_width']
 df.iat[0,1]
 ```
@@ -83,6 +84,23 @@ df.iat[0,1]
 
 番号でもラベルでもアクセスできる `df.ix[]` もあったが、
 曖昧で危険なのでdeprecated.
+
+### method chaining
+
+DataFrameを何回も再帰代入するより、メソッドを繋いだほうが書きやすいし読みやすい。
+カッコかバックスラッシュを使えばドット前に改行やスペースを入れて整形可能。
+
+```py
+(iris.query('species != "setosa"')
+     .filter(regex='^(?!sepal)')
+     .assign(petal_area=lambda x: x['petal_length'] * x['petal_width'] * 0.5)
+     .groupby('species')
+     .aggregate(np.mean)
+     .sort_values(['petal_length'], ascending=False)
+)
+```
+
+See also [dplyr + magrittr on R]({{< relref "dplyr.md" >}})
 
 ## 変形
 
