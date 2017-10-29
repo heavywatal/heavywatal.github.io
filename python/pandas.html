@@ -135,18 +135,19 @@ Pandas — data.frame in Python
 <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="n">df</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span></code></pre></div>
 <p><a href="http://pandas.pydata.org/pandas-docs/stable/indexing.html">http://pandas.pydata.org/pandas-docs/stable/indexing.html</a></p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;species&#39;</span><span class="p">]</span>
-<span class="n">df</span><span class="o">.</span><span class="n">species</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[[</span><span class="sa"></span><span class="s1">&#39;species&#39;</span><span class="p">]]</span>  <span class="c1"># DataFrame with 1 column</span>
+<span class="n">df</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;species&#39;</span><span class="p">]</span>    <span class="c1"># Series</span>
+<span class="n">df</span><span class="o">.</span><span class="n">species</span>       <span class="c1"># Series (not recommended)</span>
 
 <span class="c1"># label-based</span>
 <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="sa"></span><span class="s1">&#39;sepal_width&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="sa"></span><span class="s1">&#39;sepal_width&#39;</span><span class="p">]</span>
 
 <span class="c1"># integer-based</span>
 <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
 
-<span class="c1"># fast scalar lookup</span>
+<span class="c1"># fast scalar (single value) lookup</span>
 <span class="n">df</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="sa"></span><span class="s1">&#39;sepal_width&#39;</span><span class="p">]</span>
 <span class="n">df</span><span class="o">.</span><span class="n">iat</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span></code></pre></div>
 <p><code>df.species</code> のような attribute access
@@ -154,6 +155,19 @@ Pandas — data.frame in Python
 
 <p>番号でもラベルでもアクセスできる <code>df.ix[]</code> もあったが、
 曖昧で危険なのでdeprecated.</p>
+
+<h3 id="method-chaining">method chaining</h3>
+
+<p>DataFrameを何回も再帰代入するより、メソッドを繋いだほうが書きやすいし読みやすい。
+カッコかバックスラッシュを使えばドット前に改行やスペースを入れて整形可能。</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="p">(</span><span class="n">iris</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;species != &#34;setosa&#34;&#39;</span><span class="p">)</span>
+     <span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;^(?!sepal)&#39;</span><span class="p">)</span>
+     <span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">petal_area</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;petal_length&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;petal_width&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">)</span>
+     <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;species&#39;</span><span class="p">)</span>
+     <span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
+     <span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="sa"></span><span class="s1">&#39;petal_length&#39;</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="p">)</span></code></pre></div>
+<p>See also <a href="/rstats/dplyr.html">dplyr + magrittr on R</a></p>
 
 <h2 id="変形">変形</h2>
 
