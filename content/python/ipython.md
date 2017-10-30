@@ -83,6 +83,29 @@ files = !ls
 しかしautomagic設定により省略可能。
 
 
+## [Hydrogen](https://atom.io/packages/hydrogen)
+
+[Atom]({{< relref "atom.md" >}}) エディタ内で実行結果を確認できるようにする拡張。
+普通の `.py` ファイルだけでなく `.md` 内のコードブロックでも使える。
+
+```sh
+% pip install ipykernel
+% python -m ipykenel install --user
+% apm install hydrogen
+```
+
+key                          | action
+---------------------------- | ----
+<kbd>cmd-enter</kbd>         | `hydrogen:run`
+<kbd>alt-cmd-enter</kbd>     | `hydrogen:run-cell`
+<kbd>shift-enter</kbd>       | `hydrogen:run-and-move-down`
+<kbd>alt-shift-enter</kbd>   | `hydrogen:run-cell-and-move-down`
+<kbd>ctrl-cmd-enter</kbd>    | `hydrogen:run-all`
+<kbd>alt-cmd-backspace</kbd> | `hydrogen:clear-results`
+
+`# %%` でcellを区切れる。
+
+
 ## Jupyter Notebook
 
 - <https://jupyter.org/>
@@ -109,15 +132,14 @@ Mathematica/Mapleの使い勝手に似ている。
 
 ### [始め方](https://jupyter-notebook.readthedocs.io/en/stable/examples/Notebook/Notebook%20Basics.html)
 
-1.  `IPython` とともにインストール
-2.  ターミナルから起動: `jupyter notebook [file or directory]`
-3.  ウェブブラウザで `http://localhost:8888/tree` が立ち上がる
-4.  右上の New から適当なNotebookカーネル
+1.  ターミナルから起動: `jupyter notebook [file or directory]`
+1.  ウェブブラウザで `http://localhost:8888/tree` が立ち上がる
+1.  右上の New から適当なNotebookカーネル
     (e.g., Python 3) を選択
-5.  In [ ]: の右の箱に適当なPythonコマンドを入れて
+1.  `In [ ]:` の右の箱に適当なPythonコマンドを入れて
     <kbd>shift-return</kbd>
-6.  左上の File から適当に保存してブラウザを閉じる
-7.  ターミナルから <kbd>control-c</kbd> で終了
+1.  左上の File から適当に保存してブラウザを閉じる
+1.  ターミナルから <kbd>control-c</kbd> で終了
 
 
 ### キーボードショートカット
