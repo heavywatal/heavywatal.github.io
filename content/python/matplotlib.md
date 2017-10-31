@@ -7,14 +7,13 @@ tags = ["python", "graph"]
 +++
 
 [`matplotlib`](http://matplotlib.org/) はPythonにおけるデータ可視化のデファクトスタンダード。
-でも直接触るのはしんどいので [`seaborn`](https://seaborn.pydata.org/) というラッパーを介して使う。
-ただし前者を全く知らずに後者だけを使うのは無理っぽい。
-[ggplot2]({{< relref "rstats/ggplot2.md" >}}) は `grid` を知らなくても使えるのに。。。
+基本的には何でもできるけど、基本的な機能しか提供していないので、
+いくらかの便利機能を [`seaborn`](https://seaborn.pydata.org/) で補う。
 
 ## 基本
 
 -   <http://matplotlib.org/faq/usage_faq.html>
--   <http://matplotlib.org/users/pyplot_tutorial.html>
+-   <http://matplotlib.org/users/>
 -   <http://matplotlib.org/faq/howto_faq.html>
 -   <http://www.scipy-lectures.org/intro/matplotlib/matplotlib.html>
 
@@ -26,13 +25,20 @@ import seaborn as sns
 
 iris = sns.load_dataset('iris')
 
+# Create an empty Figure
 fig = plt.figure()
-gs = plt.GridSpec(1, 1)
-ax = fig.add_subplot(gs[0])
 
-sns.regplot('sepal_width', 'sepal_length', data=iris, ax=ax)
+# Add an Axes to this fig
+ax = fig.subplots()
 
+# Plot on this ax
+ax.scatter('sepal_width', 'sepal_length', data=iris)
+
+# Open/Close a window
 fig.show()
+plt.close(fig)
+
+# Write to a file
 fig.savefig('example.png')
 ```
 
@@ -40,46 +46,144 @@ fig.savefig('example.png')
 は単にMATLABっぽいインターフェイスにするための乱暴な手段で、
 例としてよく見かけるけど公式に非推奨とされている。
 
-`pyplot` も同様にあまり使いたくない `import` 主体のモジュールだが、
-こちらはbackendのお世話などもしてくれているらしいので、
-使わずに済ませるのは難しそう。
-例えば `pyplot.figure()` から生成したやつじゃないと `fig.show()` できない、とか。
-
 渡すデータは生のlistとかではなくtidyな
 [`pandas.DataFrame`]({{< relref "pandas.md" >}})型にしておく。
 
 
-### Figure, Axes
+### [pyplot](http://matplotlib.org/api/pyplot_summary.html)
 
-- <http://matplotlib.org/faq/usage_faq.html>
-- <http://matplotlib.org/api/figure_api.html>
-- <http://matplotlib.org/api/axes_api.html>
+最上位のモジュール。
+Figure, Axesオブジェクトを明示的に操作するスタイルでは、
+最初にFigureを作るくらいしか出番が無いはず。
+
+`plt.figure(num=None, figsize=None, dpi=None, facecolor=None, edgecolor=None, ...)`
+: Backendなどを設定してFigureインスタンスを作る
+
+`plt.close(*args)`
+: Figureウィンドウを閉じる。
+  backend関係も切るっぽいので再び `fig.show()` しても開けない。
 
 
-## Axes-level plot
+### [Figure](http://matplotlib.org/api/figure_api.html)
 
-Axesを受け取ってそこに描画してAxesを返す低級関数。
+ウィンドウを表示したり画像ファイルを保存したりする単位となるクラス。
+コンストラクタを直接呼ぶのではなく
+`plt` や `sns` に作らせるのが普通。
+複数の子Axesを保持できる。
 
-- <https://seaborn.pydata.org/examples>
-- <http://matplotlib.org/users/screenshots.html>
+`fig.subplots(nrows=1, ncols=1, sharex=False, sharey=False, ...)`
+: 子Axesをタイル状に並べて作る。
+  デフォルトでは単体のAxesを返す。
 
-### [Regression plots](https://seaborn.pydata.org/tutorial/regression.html)
+`fig.add_subplot(*args, **kwargs)`
+: 指定した位置に子Axesを作る。
+  少し複雑な配置にしたいときはこれに `GridSpec` を渡すのが便利。
 
-`sns.regplot(x, y, data, ..., fit_reg=True, ci=95, ..., ax)`
-:   散布図。`fit_reg=False` しないと勝手に回帰線が引かれる。
+`fig.clear()`
+: `fig.axes` を空っぽにする。
+  backend関係は切れないので子Axesを追加して再描画可能。
 
-### [Distribution plots](https://seaborn.pydata.org/tutorial/distributions.html)
+`fig.savefig(fname, dpi=None, facecolor='w', edgecolor='w', **kwargs)`
+: 拡張子から画像形式を推定してくれるので `format=` は省略可能。
 
-`sns.distplot(a, bins, hist=True, kde=True, rug=False, fit=None, ..., ax)`
-:   ヒストグラム、カーネル密度推定、ラグプロットなど分布全般
+`fig.show()`
+: Windowを開く。インラインモードでは使わない。
 
-`sns.kdeplot(data, ..., ax)`
-:   Kernel Density Esimate
+`fig.axes`
+: 子Axesへの参照
 
-`sns.heatmap(data, vmin, vmax, cmap, center, ..., square, mask, ax)`
-:   ヒートマップ。入力データはtidyじゃなくて行列の形。
 
-### [Categorical plots](https://seaborn.pydata.org/tutorial/categorical.html)
+### [Axes](http://matplotlib.org/api/axes_api.html)
+
+軸やラベルを持ったひとつのプロットの単位となるオブジェクト。
+
+描画のためのメソッドが
+`ax.plot()`, `ax.scatter()`, `ax.hist()`
+などたくさんある。
+[pandas.DataFrame]({{< relref "pandas.md" >}}) のメソッドとして呼び出すのもあり:
+```py
+# Axes method with data
+ax.scatter('sepal_width', 'sepal_length', data=iris)
+
+# DataFrame method with ax
+iris.plot.scatter('sepal_width', 'sepal_length', ax=ax)
+```
+
+設定のためのメソッドも
+`ax.set_title()`, `ax.set_xlim()` などたくさん。
+`ax.set(**kwargs)` でまとめて設定することもできる。
+
+`ax.clear()`
+: プロットしたものを消す。親Figureへの参照は残る。
+
+`ax.figure`
+: 親Figureへの参照
+
+
+### 複数のAxesを配置する
+
+- <http://matplotlib.org/users/gridspec.html>
+- <http://matplotlib.org/users/tight_layout_guide.html>
+
+`plt.subplots(nrows, ncols, sharex, sharey, ...)`
+:   等サイズに分割:
+
+    ```py
+    fig = plt.figure()
+    axes = fig.subplots(2, 2)
+    sns.regplot('x', 'y', d, ax=axes[0, 0])
+    fig.tight_layout()
+    ```
+
+`mpl.gridspec.GridSpec(nrows, ncols, ...)`
+:   e.g., 2x2分割して "品" みたいな配置にする:
+
+    ```py
+    fig = plt.figure()
+    gs = plt.GridSpec(2, 2)
+    ax_top = fig.add_subplot(gs[0, :])
+    ax_bottom_l = fig.add_subplot(gs[1, 0])
+    ax_bottom_r = fig.add_subplot(gs[1, 1])
+    ```
+
+`mpl.gridspec.GridSpecFromSubplotSpec(nrows, ncols, subplot_spec, ...)`
+:   入れ子で分割。
+    e.g., 左右に分け、それぞれをさらに3段に分ける:
+
+    ```py
+    fig = plt.figure()
+    gs = plt.GridSpec(1, 2)
+    gsl = sns.mpl.gridspec.GridSpecFromSubplotSpec(3, 1, gs[0])
+    gsr = sns.mpl.gridspec.GridSpecFromSubplotSpec(3, 1, gs[1])
+
+    ax_ltop = fig.add_subplot(gsl[0])
+    ```
+
+### Text, Annotation, Legend
+
+<http://matplotlib.org/users/text_intro.html>
+
+<http://matplotlib.org/users/annotations_guide.html>
+
+<http://matplotlib.org/users/legend_guide.html>
+
+
+
+## Seaborn
+
+### Axes-level plot
+
+色分けや推定値の追加など、生のmatplotlibでやるにはちょっと大変なことがseabornの関数で簡単にできる。
+Axesを受け取ってそこに描画するという単純な構造なので、何か自分で作ってもいい:
+```py
+def my_scatter(x, y, data, ax):
+    ax.scatter(x, y, data=data)
+    return ax
+```
+
+<https://seaborn.pydata.org/examples>
+
+#### [Categorical plots](https://seaborn.pydata.org/tutorial/categorical.html)
 
 `sns.boxplot(x, y, hue, data, order, ..., ax)`
 :   箱ひげ図
@@ -99,27 +203,46 @@ Axesを受け取ってそこに描画してAxesを返す低級関数。
 `sns.countplot(x, y, hue, data, order, ..., ax)`
 :   カテゴリカル変数の頻度棒グラフ
 
-## [Axis Grid](https://seaborn.pydata.org/tutorial/axis_grids.html)
+#### [Distribution plots](https://seaborn.pydata.org/tutorial/distributions.html)
 
-FigureとAxisをいい感じに初期化して、関連するデータを縦・横・色の方向に並べる土台を作る。
+`sns.distplot(a, bins, hist=True, kde=True, rug=False, fit=None, ..., ax)`
+:   `ax.hist()` + `sns.kdeplot()` + `sns.rugplot()`
+
+`sns.kdeplot(data, data2=None, shade=False, ..., ax)`
+:   カーネル密度推定。
+
+`sns.heatmap(data, vmin, vmax, cmap, center, ..., square, mask, ax)`
+:   ヒートマップ。入力データはtidyじゃなくて行列の形。
+
+#### [Regression plots](https://seaborn.pydata.org/tutorial/regression.html)
+
+`sns.regplot(x, y, data, ..., fit_reg=True, ci=95, ..., ax)`
+:   散布図 + 回帰線。
+
+### [Axis Grid](https://seaborn.pydata.org/tutorial/axis_grids.html)
+
+FigureとAxisをいい感じに初期化して、関連するデータを縦・横・色の方向に並べる土台。
 これにAxis-level plotを乗せるところまでショートカットする高級関数がFigure-level plot。
 できあがったGridオブジェクトの`.set()`系メソッドとか`.fig`プロパティを通じていろいろ調整できる。
+これをまた別のグリッドに埋め込むというRのglobのような操作はたぶんできない。
 
-### [`sns.FacetGrid`](https://seaborn.pydata.org/generated/seaborn.FacetGrid.html)
+#### [`sns.FacetGrid`](https://seaborn.pydata.org/generated/seaborn.FacetGrid.html)
 
 `(data, row, col, hue, col_wrap, sharex, sharey, ...)`
 
-カテゴリカル変数でプロットを分ける:
+カテゴリカル変数でプロットを分けて並べる:
 ```py
 grid = sns.FacetGrid(iris, col='species', col_wrap=2)
 grid.map(sns.regplot, 'sepal_width', 'sepal_length')
 ```
 
-色分けもこれの仕事:
+変数によって色分けする:
 ```py
 grid = sns.FacetGrid(iris, hue='species')
-grid.map(sns.regplot, 'sepal_width', 'sepal_length')
+grid.map(plt.scatter, 'sepal_width', 'sepal_length')
 ```
+
+`map()` メソッドには `plt.scatter` など生のmatplotlib関数も渡せる。
 
 `sns.lmplot(x, y, data, hue, col, row, ...)`
 :   `regplot()` + `FacetGrid()` のショートカット。
@@ -128,7 +251,7 @@ grid.map(sns.regplot, 'sepal_width', 'sepal_length')
 :   Categorical plot + `FacetGrid()` のショートカット。
 :   `kind`: {`point`, `bar`, `count`, `box`, `violin`, `strip`}
 
-### [`sns.PairGrid`](https://seaborn.pydata.org/generated/seaborn.PairGrid.html)
+#### [`sns.PairGrid`](https://seaborn.pydata.org/generated/seaborn.PairGrid.html)
 
 `(data, hue, ..., vars, x_vars, y_vars, ...)`
 
@@ -144,7 +267,7 @@ grid = grid.map_diag(sns.distplot)
 :   `kind`: {`scatter`, `reg`}
 :   `diag_kind`: {`hist`, `kde`}
 
-### [`sns.JointGrid`](https://seaborn.pydata.org/generated/seaborn.JointGrid.html)
+#### [`sns.JointGrid`](https://seaborn.pydata.org/generated/seaborn.JointGrid.html)
 
 `(x, y, data, size, ratio, space, dropna, xlim, ylim)`
 
@@ -159,52 +282,13 @@ grid = grid.plot_marginals(sns.distplot, kde=False)
 :   `JointGrid()` のショートカット。
 :   `kind`: {`scatter`, `reg`, `resid`, `kde`, `hex`}
 
-### `sns.ClusterGrid()`
+#### `sns.ClusterGrid()`
 
 `sns.clustermap(data, ...)`
 :   `heatmap()` + `ClusterGrid()`
 
 
-## 関係ない複数の図を並べる
-
-- <http://matplotlib.org/users/gridspec.html>
-- <http://matplotlib.org/users/tight_layout_guide.html>
-
-### `plt.subplots(nrows, ncols, sharex, sharey, ...)`
-
-等サイズに分割:
-```py
-fig, axes = plt.subplots(2, 2)
-sns.regplot('x', 'y', d, ax=axes[0, 0])
-fig.tight_layout()
-```
-
-### `mpl.gridspec.GridSpec(nrows, ncols, ...)`
-
-e.g., 2x2分割して "品" みたいな配置にする:
-```py
-fig = plt.figure()
-gs = plt.GridSpec(2, 2)
-ax_top = fig.add_subplot(gs[0, :])
-ax_bottom_l = fig.add_subplot(gs[1, 0])
-ax_bottom_r = fig.add_subplot(gs[1, 1])
-```
-
-### `mpl.gridspec.GridSpecFromSubplotSpec(nrows, ncols, subplot_spec, ...)`
-
-入れ子で分割。
-e.g., 左右に分け、それぞれをさらに3段に分ける:
-```py
-fig = plt.figure()
-gs = plt.GridSpec(1, 2)
-gsl = sns.mpl.gridspec.GridSpecFromSubplotSpec(3, 1, gs[0])
-gsr = sns.mpl.gridspec.GridSpecFromSubplotSpec(3, 1, gs[1])
-
-ax_ltop = fig.add_subplot(gsl[0])
-```
-
-
-## Style
+### Style
 
 <https://seaborn.pydata.org/tutorial/aesthetics.html>
 
@@ -259,7 +343,7 @@ ax_ltop = fig.add_subplot(gsl[0])
 :   指定した枠線を消す。
     生の `matplotlib` だと `ax.spines['top'].set_visible(False)`
 
-## Context
+### Context
 
 <https://seaborn.pydata.org/tutorial/aesthetics.html#scaling-plot-elements-with-plotting-context-and-set-context>
 
@@ -301,7 +385,8 @@ ax_ltop = fig.add_subplot(gsl[0])
 
 ## Color
 
-<https://seaborn.pydata.org/tutorial/color_palettes.html>
+- <https://matplotlib.org/users/colormaps.html>
+- <https://seaborn.pydata.org/tutorial/color_palettes.html>
 
 いくつかの方法で指定できる:
 
@@ -323,14 +408,6 @@ ax_ltop = fig.add_subplot(gsl[0])
     `sns.light_palette()`, `sns.dark_palette()`,
     `sns.diverging_palette()`
 
-
-## Text, Annotation, Legend
-
-<http://matplotlib.org/users/text_intro.html>
-
-<http://matplotlib.org/users/annotations_guide.html>
-
-<http://matplotlib.org/users/legend_guide.html>
 
 
 ## その他
