@@ -91,15 +91,14 @@ matplotlib &#43; seaborn — Pythonでグラフ描画
 
 
 <p><a href="http://matplotlib.org/"><code>matplotlib</code></a> はPythonにおけるデータ可視化のデファクトスタンダード。
-でも直接触るのはしんどいので <a href="https://seaborn.pydata.org/"><code>seaborn</code></a> というラッパーを介して使う。
-ただし前者を全く知らずに後者だけを使うのは無理っぽい。
-<a href="/rstats/ggplot2.html">ggplot2</a> は <code>grid</code> を知らなくても使えるのに。。。</p>
+基本的には何でもできるけど、基本的な機能しか提供していないので、
+いくらかの便利機能を <a href="https://seaborn.pydata.org/"><code>seaborn</code></a> で補う。</p>
 
 <h2 id="基本">基本</h2>
 
 <ul>
 <li><a href="http://matplotlib.org/faq/usage_faq.html">http://matplotlib.org/faq/usage_faq.html</a></li>
-<li><a href="http://matplotlib.org/users/pyplot_tutorial.html">http://matplotlib.org/users/pyplot_tutorial.html</a></li>
+<li><a href="http://matplotlib.org/users/">http://matplotlib.org/users/</a></li>
 <li><a href="http://matplotlib.org/faq/howto_faq.html">http://matplotlib.org/faq/howto_faq.html</a></li>
 <li><a href="http://www.scipy-lectures.org/intro/matplotlib/matplotlib.html">http://www.scipy-lectures.org/intro/matplotlib/matplotlib.html</a></li>
 </ul>
@@ -110,62 +109,143 @@ matplotlib &#43; seaborn — Pythonでグラフ描画
 
 <span class="n">iris</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;iris&#39;</span><span class="p">)</span>
 
+<span class="c1"># Create an empty Figure</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">gs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;sepal_width&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;sepal_length&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">iris</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="c1"># Add an Axes to this fig</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
 
+<span class="c1"># Plot on this ax</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;sepal_width&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;sepal_length&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">iris</span><span class="p">)</span>
+
+<span class="c1"># Open/Close a window</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+
+<span class="c1"># Write to a file</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;example.png&#39;</span><span class="p">)</span></code></pre></div>
 <p><code>from matplotlib.pylab import *</code>
 は単にMATLABっぽいインターフェイスにするための乱暴な手段で、
 例としてよく見かけるけど公式に非推奨とされている。</p>
 
-<p><code>pyplot</code> も同様にあまり使いたくない <code>import</code> 主体のモジュールだが、
-こちらはbackendのお世話などもしてくれているらしいので、
-使わずに済ませるのは難しそう。
-例えば <code>pyplot.figure()</code> から生成したやつじゃないと <code>fig.show()</code> できない、とか。</p>
-
 <p>渡すデータは生のlistとかではなくtidyな
 <a href="/python/pandas.html"><code>pandas.DataFrame</code></a>型にしておく。</p>
 
-<h3 id="figure-axes">Figure, Axes</h3>
+<h3 id="pyplot-http-matplotlib-org-api-pyplot-summary-html"><a href="http://matplotlib.org/api/pyplot_summary.html">pyplot</a></h3>
 
-<ul>
-<li><a href="http://matplotlib.org/faq/usage_faq.html">http://matplotlib.org/faq/usage_faq.html</a></li>
-<li><a href="http://matplotlib.org/api/figure_api.html">http://matplotlib.org/api/figure_api.html</a></li>
-<li><a href="http://matplotlib.org/api/axes_api.html">http://matplotlib.org/api/axes_api.html</a></li>
-</ul>
-
-<h2 id="axes-level-plot">Axes-level plot</h2>
-
-<p>Axesを受け取ってそこに描画してAxesを返す低級関数。</p>
-
-<ul>
-<li><a href="https://seaborn.pydata.org/examples">https://seaborn.pydata.org/examples</a></li>
-<li><a href="http://matplotlib.org/users/screenshots.html">http://matplotlib.org/users/screenshots.html</a></li>
-</ul>
-
-<h3 id="regression-plots-https-seaborn-pydata-org-tutorial-regression-html"><a href="https://seaborn.pydata.org/tutorial/regression.html">Regression plots</a></h3>
+<p>最上位のモジュール。
+Figure, Axesオブジェクトを明示的に操作するスタイルでは、
+最初にFigureを作るくらいしか出番が無いはず。</p>
 
 <dl>
-<dt><code>sns.regplot(x, y, data, ..., fit_reg=True, ci=95, ..., ax)</code></dt>
-<dd>散布図。<code>fit_reg=False</code> しないと勝手に回帰線が引かれる。</dd>
+<dt><code>plt.figure(num=None, figsize=None, dpi=None, facecolor=None, edgecolor=None, ...)</code></dt>
+<dd>Backendなどを設定してFigureインスタンスを作る</dd>
+<dt><code>plt.close(*args)</code></dt>
+<dd>Figureウィンドウを閉じる。
+backend関係も切るっぽいので再び <code>fig.show()</code> しても開けない。</dd>
 </dl>
 
-<h3 id="distribution-plots-https-seaborn-pydata-org-tutorial-distributions-html"><a href="https://seaborn.pydata.org/tutorial/distributions.html">Distribution plots</a></h3>
+<h3 id="figure-http-matplotlib-org-api-figure-api-html"><a href="http://matplotlib.org/api/figure_api.html">Figure</a></h3>
+
+<p>ウィンドウを表示したり画像ファイルを保存したりする単位となるクラス。
+コンストラクタを直接呼ぶのではなく
+<code>plt</code> や <code>sns</code> に作らせるのが普通。
+複数の子Axesを保持できる。</p>
 
 <dl>
-<dt><code>sns.distplot(a, bins, hist=True, kde=True, rug=False, fit=None, ..., ax)</code></dt>
-<dd>ヒストグラム、カーネル密度推定、ラグプロットなど分布全般</dd>
-<dt><code>sns.kdeplot(data, ..., ax)</code></dt>
-<dd>Kernel Density Esimate</dd>
-<dt><code>sns.heatmap(data, vmin, vmax, cmap, center, ..., square, mask, ax)</code></dt>
-<dd>ヒートマップ。入力データはtidyじゃなくて行列の形。</dd>
+<dt><code>fig.subplots(nrows=1, ncols=1, sharex=False, sharey=False, ...)</code></dt>
+<dd>子Axesをタイル状に並べて作る。
+デフォルトでは単体のAxesを返す。</dd>
+<dt><code>fig.add_subplot(*args, **kwargs)</code></dt>
+<dd>指定した位置に子Axesを作る。
+少し複雑な配置にしたいときはこれに <code>GridSpec</code> を渡すのが便利。</dd>
+<dt><code>fig.clear()</code></dt>
+<dd><code>fig.axes</code> を空っぽにする。
+backend関係は切れないので子Axesを追加して再描画可能。</dd>
+<dt><code>fig.savefig(fname, dpi=None, facecolor='w', edgecolor='w', **kwargs)</code></dt>
+<dd>拡張子から画像形式を推定してくれるので <code>format=</code> は省略可能。</dd>
+<dt><code>fig.show()</code></dt>
+<dd>Windowを開く。インラインモードでは使わない。</dd>
+<dt><code>fig.axes</code></dt>
+<dd>子Axesへの参照</dd>
 </dl>
 
-<h3 id="categorical-plots-https-seaborn-pydata-org-tutorial-categorical-html"><a href="https://seaborn.pydata.org/tutorial/categorical.html">Categorical plots</a></h3>
+<h3 id="axes-http-matplotlib-org-api-axes-api-html"><a href="http://matplotlib.org/api/axes_api.html">Axes</a></h3>
+
+<p>軸やラベルを持ったひとつのプロットの単位となるオブジェクト。</p>
+
+<p>描画のためのメソッドが
+<code>ax.plot()</code>, <code>ax.scatter()</code>, <code>ax.hist()</code>
+などたくさんある。
+<a href="/python/pandas.html">pandas.DataFrame</a> のメソッドとして呼び出すのもあり:</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="c1"># Axes method with data</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;sepal_width&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;sepal_length&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">iris</span><span class="p">)</span>
+
+<span class="c1"># DataFrame method with ax</span>
+<span class="n">iris</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;sepal_width&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;sepal_length&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span></code></pre></div>
+<p>設定のためのメソッドも
+<code>ax.set_title()</code>, <code>ax.set_xlim()</code> などたくさん。
+<code>ax.set(**kwargs)</code> でまとめて設定することもできる。</p>
+
+<dl>
+<dt><code>ax.clear()</code></dt>
+<dd>プロットしたものを消す。親Figureへの参照は残る。</dd>
+<dt><code>ax.figure</code></dt>
+<dd>親Figureへの参照</dd>
+</dl>
+
+<h3 id="複数のaxesを配置する">複数のAxesを配置する</h3>
+
+<ul>
+<li><a href="http://matplotlib.org/users/gridspec.html">http://matplotlib.org/users/gridspec.html</a></li>
+<li><a href="http://matplotlib.org/users/tight_layout_guide.html">http://matplotlib.org/users/tight_layout_guide.html</a></li>
+</ul>
+
+<dl>
+<dt><code>plt.subplots(nrows, ncols, sharex, sharey, ...)</code></dt>
+<dd><p>等サイズに分割:</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">axes</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span></code></pre></div></dd>
+<dt><code>mpl.gridspec.GridSpec(nrows, ncols, ...)</code></dt>
+<dd><p>e.g., 2x2分割して &ldquo;品&rdquo; みたいな配置にする:</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">gs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">ax_top</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:])</span>
+<span class="n">ax_bottom_l</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">ax_bottom_r</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span></code></pre></div></dd>
+<dt><code>mpl.gridspec.GridSpecFromSubplotSpec(nrows, ncols, subplot_spec, ...)</code></dt>
+<dd><p>入れ子で分割。
+e.g., 左右に分け、それぞれをさらに3段に分ける:</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">gs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">gsl</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">gridspec</span><span class="o">.</span><span class="n">GridSpecFromSubplotSpec</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">gsr</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">gridspec</span><span class="o">.</span><span class="n">GridSpecFromSubplotSpec</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="n">ax_ltop</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gsl</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></code></pre></div></dd>
+</dl>
+
+<h3 id="text-annotation-legend">Text, Annotation, Legend</h3>
+
+<p><a href="http://matplotlib.org/users/text_intro.html">http://matplotlib.org/users/text_intro.html</a></p>
+
+<p><a href="http://matplotlib.org/users/annotations_guide.html">http://matplotlib.org/users/annotations_guide.html</a></p>
+
+<p><a href="http://matplotlib.org/users/legend_guide.html">http://matplotlib.org/users/legend_guide.html</a></p>
+
+<h2 id="seaborn">Seaborn</h2>
+
+<h3 id="axes-level-plot">Axes-level plot</h3>
+
+<p>色分けや推定値の追加など、生のmatplotlibでやるにはちょっと大変なことがseabornの関数で簡単にできる。
+Axesを受け取ってそこに描画するという単純な構造なので、何か自分で作ってもいい:</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">def</span> <span class="nf">my_scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ax</span></code></pre></div>
+<p><a href="https://seaborn.pydata.org/examples">https://seaborn.pydata.org/examples</a></p>
+
+<h4 id="categorical-plots-https-seaborn-pydata-org-tutorial-categorical-html"><a href="https://seaborn.pydata.org/tutorial/categorical.html">Categorical plots</a></h4>
 
 <dl>
 <dt><code>sns.boxplot(x, y, hue, data, order, ..., ax)</code></dt>
@@ -182,22 +262,43 @@ matplotlib &#43; seaborn — Pythonでグラフ描画
 <dd>カテゴリカル変数の頻度棒グラフ</dd>
 </dl>
 
-<h2 id="axis-grid-https-seaborn-pydata-org-tutorial-axis-grids-html"><a href="https://seaborn.pydata.org/tutorial/axis_grids.html">Axis Grid</a></h2>
+<h4 id="distribution-plots-https-seaborn-pydata-org-tutorial-distributions-html"><a href="https://seaborn.pydata.org/tutorial/distributions.html">Distribution plots</a></h4>
 
-<p>FigureとAxisをいい感じに初期化して、関連するデータを縦・横・色の方向に並べる土台を作る。
+<dl>
+<dt><code>sns.distplot(a, bins, hist=True, kde=True, rug=False, fit=None, ..., ax)</code></dt>
+<dd><code>ax.hist()</code> + <code>sns.kdeplot()</code> + <code>sns.rugplot()</code></dd>
+<dt><code>sns.kdeplot(data, data2=None, shade=False, ..., ax)</code></dt>
+<dd>カーネル密度推定。</dd>
+<dt><code>sns.heatmap(data, vmin, vmax, cmap, center, ..., square, mask, ax)</code></dt>
+<dd>ヒートマップ。入力データはtidyじゃなくて行列の形。</dd>
+</dl>
+
+<h4 id="regression-plots-https-seaborn-pydata-org-tutorial-regression-html"><a href="https://seaborn.pydata.org/tutorial/regression.html">Regression plots</a></h4>
+
+<dl>
+<dt><code>sns.regplot(x, y, data, ..., fit_reg=True, ci=95, ..., ax)</code></dt>
+<dd>散布図 + 回帰線。</dd>
+</dl>
+
+<h3 id="axis-grid-https-seaborn-pydata-org-tutorial-axis-grids-html"><a href="https://seaborn.pydata.org/tutorial/axis_grids.html">Axis Grid</a></h3>
+
+<p>FigureとAxisをいい感じに初期化して、関連するデータを縦・横・色の方向に並べる土台。
 これにAxis-level plotを乗せるところまでショートカットする高級関数がFigure-level plot。
-できあがったGridオブジェクトの<code>.set()</code>系メソッドとか<code>.fig</code>プロパティを通じていろいろ調整できる。</p>
+できあがったGridオブジェクトの<code>.set()</code>系メソッドとか<code>.fig</code>プロパティを通じていろいろ調整できる。
+これをまた別のグリッドに埋め込むというRのglobのような操作はたぶんできない。</p>
 
-<h3 id="sns-facetgrid-https-seaborn-pydata-org-generated-seaborn-facetgrid-html"><a href="https://seaborn.pydata.org/generated/seaborn.FacetGrid.html"><code>sns.FacetGrid</code></a></h3>
+<h4 id="sns-facetgrid-https-seaborn-pydata-org-generated-seaborn-facetgrid-html"><a href="https://seaborn.pydata.org/generated/seaborn.FacetGrid.html"><code>sns.FacetGrid</code></a></h4>
 
 <p><code>(data, row, col, hue, col_wrap, sharex, sharey, ...)</code></p>
 
-<p>カテゴリカル変数でプロットを分ける:</p>
+<p>カテゴリカル変数でプロットを分けて並べる:</p>
 <div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="n">grid</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">FacetGrid</span><span class="p">(</span><span class="n">iris</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;species&#39;</span><span class="p">,</span> <span class="n">col_wrap</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">grid</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;sepal_width&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;sepal_length&#39;</span><span class="p">)</span></code></pre></div>
-<p>色分けもこれの仕事:</p>
+<p>変数によって色分けする:</p>
 <div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="n">grid</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">FacetGrid</span><span class="p">(</span><span class="n">iris</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;species&#39;</span><span class="p">)</span>
-<span class="n">grid</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;sepal_width&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;sepal_length&#39;</span><span class="p">)</span></code></pre></div>
+<span class="n">grid</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;sepal_width&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;sepal_length&#39;</span><span class="p">)</span></code></pre></div>
+<p><code>map()</code> メソッドには <code>plt.scatter</code> など生のmatplotlib関数も渡せる。</p>
+
 <dl>
 <dt><code>sns.lmplot(x, y, data, hue, col, row, ...)</code></dt>
 <dd><code>regplot()</code> + <code>FacetGrid()</code> のショートカット。</dd>
@@ -206,7 +307,7 @@ matplotlib &#43; seaborn — Pythonでグラフ描画
 <dd><code>kind</code>: {<code>point</code>, <code>bar</code>, <code>count</code>, <code>box</code>, <code>violin</code>, <code>strip</code>}</dd>
 </dl>
 
-<h3 id="sns-pairgrid-https-seaborn-pydata-org-generated-seaborn-pairgrid-html"><a href="https://seaborn.pydata.org/generated/seaborn.PairGrid.html"><code>sns.PairGrid</code></a></h3>
+<h4 id="sns-pairgrid-https-seaborn-pydata-org-generated-seaborn-pairgrid-html"><a href="https://seaborn.pydata.org/generated/seaborn.PairGrid.html"><code>sns.PairGrid</code></a></h4>
 
 <p><code>(data, hue, ..., vars, x_vars, y_vars, ...)</code></p>
 
@@ -221,7 +322,7 @@ matplotlib &#43; seaborn — Pythonでグラフ描画
 <dd><code>diag_kind</code>: {<code>hist</code>, <code>kde</code>}</dd>
 </dl>
 
-<h3 id="sns-jointgrid-https-seaborn-pydata-org-generated-seaborn-jointgrid-html"><a href="https://seaborn.pydata.org/generated/seaborn.JointGrid.html"><code>sns.JointGrid</code></a></h3>
+<h4 id="sns-jointgrid-https-seaborn-pydata-org-generated-seaborn-jointgrid-html"><a href="https://seaborn.pydata.org/generated/seaborn.JointGrid.html"><code>sns.JointGrid</code></a></h4>
 
 <p><code>(x, y, data, size, ratio, space, dropna, xlim, ylim)</code></p>
 
@@ -235,45 +336,14 @@ matplotlib &#43; seaborn — Pythonでグラフ描画
 <dd><code>kind</code>: {<code>scatter</code>, <code>reg</code>, <code>resid</code>, <code>kde</code>, <code>hex</code>}</dd>
 </dl>
 
-<h3 id="sns-clustergrid"><code>sns.ClusterGrid()</code></h3>
+<h4 id="sns-clustergrid"><code>sns.ClusterGrid()</code></h4>
 
 <dl>
 <dt><code>sns.clustermap(data, ...)</code></dt>
 <dd><code>heatmap()</code> + <code>ClusterGrid()</code></dd>
 </dl>
 
-<h2 id="関係ない複数の図を並べる">関係ない複数の図を並べる</h2>
-
-<ul>
-<li><a href="http://matplotlib.org/users/gridspec.html">http://matplotlib.org/users/gridspec.html</a></li>
-<li><a href="http://matplotlib.org/users/tight_layout_guide.html">http://matplotlib.org/users/tight_layout_guide.html</a></li>
-</ul>
-
-<h3 id="plt-subplots-nrows-ncols-sharex-sharey"><code>plt.subplots(nrows, ncols, sharex, sharey, ...)</code></h3>
-
-<p>等サイズに分割:</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span></code></pre></div>
-<h3 id="mpl-gridspec-gridspec-nrows-ncols"><code>mpl.gridspec.GridSpec(nrows, ncols, ...)</code></h3>
-
-<p>e.g., 2x2分割して &ldquo;品&rdquo; みたいな配置にする:</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">gs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">ax_top</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:])</span>
-<span class="n">ax_bottom_l</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-<span class="n">ax_bottom_r</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span></code></pre></div>
-<h3 id="mpl-gridspec-gridspecfromsubplotspec-nrows-ncols-subplot-spec"><code>mpl.gridspec.GridSpecFromSubplotSpec(nrows, ncols, subplot_spec, ...)</code></h3>
-
-<p>入れ子で分割。
-e.g., 左右に分け、それぞれをさらに3段に分ける:</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">gs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">gsl</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">gridspec</span><span class="o">.</span><span class="n">GridSpecFromSubplotSpec</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">gsr</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">gridspec</span><span class="o">.</span><span class="n">GridSpecFromSubplotSpec</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-
-<span class="n">ax_ltop</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gsl</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></code></pre></div>
-<h2 id="style">Style</h2>
+<h3 id="style">Style</h3>
 
 <p><a href="https://seaborn.pydata.org/tutorial/aesthetics.html">https://seaborn.pydata.org/tutorial/aesthetics.html</a></p>
 
@@ -328,7 +398,7 @@ e.g., 左右に分け、それぞれをさらに3段に分ける:</p>
 生の <code>matplotlib</code> だと <code>ax.spines['top'].set_visible(False)</code></dd>
 </dl>
 
-<h2 id="context">Context</h2>
+<h3 id="context">Context</h3>
 
 <p><a href="https://seaborn.pydata.org/tutorial/aesthetics.html#scaling-plot-elements-with-plotting-context-and-set-context">https://seaborn.pydata.org/tutorial/aesthetics.html#scaling-plot-elements-with-plotting-context-and-set-context</a></p>
 
@@ -368,7 +438,10 @@ e.g., 左右に分け、それぞれをさらに3段に分ける:</p>
 
 <h2 id="color">Color</h2>
 
-<p><a href="https://seaborn.pydata.org/tutorial/color_palettes.html">https://seaborn.pydata.org/tutorial/color_palettes.html</a></p>
+<ul>
+<li><a href="https://matplotlib.org/users/colormaps.html">https://matplotlib.org/users/colormaps.html</a></li>
+<li><a href="https://seaborn.pydata.org/tutorial/color_palettes.html">https://seaborn.pydata.org/tutorial/color_palettes.html</a></li>
+</ul>
 
 <p>いくつかの方法で指定できる:</p>
 
@@ -392,14 +465,6 @@ e.g., <code>sns.color_palette('RdBu_r', n_colors=7)</code></li>
 <code>sns.light_palette()</code>, <code>sns.dark_palette()</code>,
 <code>sns.diverging_palette()</code></li>
 </ul>
-
-<h2 id="text-annotation-legend">Text, Annotation, Legend</h2>
-
-<p><a href="http://matplotlib.org/users/text_intro.html">http://matplotlib.org/users/text_intro.html</a></p>
-
-<p><a href="http://matplotlib.org/users/annotations_guide.html">http://matplotlib.org/users/annotations_guide.html</a></p>
-
-<p><a href="http://matplotlib.org/users/legend_guide.html">http://matplotlib.org/users/legend_guide.html</a></p>
 
 <h2 id="その他">その他</h2>
 
