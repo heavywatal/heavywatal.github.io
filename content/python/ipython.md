@@ -76,11 +76,27 @@ files = !ls
 
 ### [マジックコマンド](https://ipython.readthedocs.io/en/stable/interactive/magics.html)
 
-一行単位の line magic は `%` で始める。
+- 一行単位の line magic は `%` で始める。
+- 複数行うけつける cell magic は `%%` で始める。
+- デフォルトの `automagic = True` では `%` が省略可能で怖い。
 
-複数行うけつける cell magic は `%%` で始める。
+### [環境設定](http://ipython.readthedocs.io/en/stable/config/intro.html)
 
-しかしautomagic設定により省略可能。
+```sh
+% ipython help profile
+% ipython profile create [name]
+% ipython profile list
+% ipython profile locate
+% ipython --profile=<name>
+```
+
+[`~/.ipython/profile_default/ipython_config.py`](https://github.com/heavywatal/dotfiles/blob/master/.ipython/profile_default/ipython_config.py)
+
+起動時に自動的に
+[pandas]({{< relref "pandas.md" >}}) や
+[matplotlib]({{< relref "matplotlib.md" >}})
+を読み込むとか。
+automagicを切るとか。
 
 
 ## [Hydrogen](https://atom.io/packages/hydrogen)
