@@ -137,9 +137,10 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 `str_interp(string, env=parent.frame())`
 :   `sprintf()` と相同。
     文字列の中の `$[format]{expr}` がR表現として評価される。
-    formatは`sprintf()`と同じ形式で、省略可。
+    `[format]`部分は`sprintf()`と同じ形式で、省略可。
     `env` はlistやdata.frameでもよい。
 :   e.g., `stringr::str_interp('Mean sepal width is $[.3f]{mean(Sepal.Width)}.', iris)`
+:   新しい [`library(glue)`](http://glue.tidyverse.org/) も良さそう。
 
 `str_pad(string, width, side="left", pad=" ")`
 :   余白を作る。
