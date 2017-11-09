@@ -33,9 +33,9 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 `str_*` のほうが `stri_*` よりも1文字短いので、
 基本的には `stringr` を使っとけばよい。
 
-Rの中から `install.package('tidyverse')` でインストールし、
-使う前に `library(stringr)` でパッケージを読み込む。
-(`library(tidyverse)`の一括ロードには今のところ含まれていない。)
+[tidyverse](https://github.com/tidyverse/tidyverse) に含まれているので、
+`install.packages('tidyverse')` で一括インストール、
+`library(tidyverse)` で一括ロード。
 
 -   <http://r4ds.had.co.nz/strings.html>
 -   <https://cran.r-project.org/web/packages/stringr/>
