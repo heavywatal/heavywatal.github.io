@@ -34,8 +34,8 @@ ax = fig.subplots()
 # Plot on this ax
 ax.scatter('sepal_width', 'sepal_length', data=iris)
 
-# Show figure (in Jupyter, Hydrogen, or other inline environments)
-fig
+# Show figure (in Jupyter, Hydrogen, or other inline IPython environments)
+display(fig)
 
 # Show figure in a new window (with non-inline backends)
 fig.show()
@@ -93,8 +93,8 @@ Figure, Axesインスタンスを明示的に操作するスタイルでは、
 
 `fig.show()`
 : Windowを開いてFigureを表示する。
-  JupyterやHydrogenなどのインライン環境ではこれじゃなくて
-  `fig` そのものを評価することで表示する。
+  JupyterやHydrogenなどの[IPython]({{< relref "ipython.md" >}})環境では
+  `display(fig)` を使う。
 
 `fig.axes`
 : 子Axesへの参照
