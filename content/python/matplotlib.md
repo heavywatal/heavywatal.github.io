@@ -34,7 +34,10 @@ ax = fig.subplots()
 # Plot on this ax
 ax.scatter('sepal_width', 'sepal_length', data=iris)
 
-# Open/Close a window
+# Show figure (in Jupyter, Hydrogen, or other inline environments)
+fig
+
+# Show figure in a new window (with non-inline backends)
 fig.show()
 plt.close(fig)
 
@@ -42,18 +45,20 @@ plt.close(fig)
 fig.savefig('example.png')
 ```
 
+渡すデータは生のlistとかではなくtidyな
+[`pandas.DataFrame`]({{< relref "pandas.md" >}})型にしておく。
+
 `from matplotlib.pylab import *`
 は単にMATLABっぽいインターフェイスにするための乱暴な手段で、
 例としてよく見かけるけど公式に非推奨とされている。
 
-渡すデータは生のlistとかではなくtidyな
-[`pandas.DataFrame`]({{< relref "pandas.md" >}})型にしておく。
+FigureやAxesを意識せず `plt.plot()` などを使うスタイルは分かりにくいので不採用。
 
 
 ### [pyplot](http://matplotlib.org/api/pyplot_summary.html)
 
 最上位のモジュール。
-Figure, Axesオブジェクトを明示的に操作するスタイルでは、
+Figure, Axesインスタンスを明示的に操作するスタイルでは、
 最初にFigureを作るくらいしか出番が無いはず。
 
 `plt.figure(num=None, figsize=None, dpi=None, facecolor=None, edgecolor=None, ...)`
@@ -87,7 +92,9 @@ Figure, Axesオブジェクトを明示的に操作するスタイルでは、
 : 拡張子から画像形式を推定してくれるので `format=` は省略可能。
 
 `fig.show()`
-: Windowを開く。インラインモードでは使わない。
+: Windowを開いてFigureを表示する。
+  JupyterやHydrogenなどのインライン環境ではこれじゃなくて
+  `fig` そのものを評価することで表示する。
 
 `fig.axes`
 : 子Axesへの参照
@@ -95,7 +102,7 @@ Figure, Axesオブジェクトを明示的に操作するスタイルでは、
 
 ### [Axes](http://matplotlib.org/api/axes_api.html)
 
-軸やラベルを持ったひとつのプロットの単位となるオブジェクト。
+軸やラベルを持ったひとつのプロットの単位となるクラス。
 
 描画のためのメソッドが
 `ax.plot()`, `ax.scatter()`, `ax.hist()`
@@ -223,7 +230,7 @@ def my_scatter(x, y, data, ax):
 
 FigureとAxisをいい感じに初期化して、関連するデータを縦・横・色の方向に並べる土台。
 これにAxis-level plotを乗せるところまでショートカットする高級関数がFigure-level plot。
-できあがったGridオブジェクトの`.set()`系メソッドとか`.fig`プロパティを通じていろいろ調整できる。
+できあがったGridクラスの`.set()`系メソッドとか`.fig`プロパティを通じていろいろ調整できる。
 これをまた別のグリッドに埋め込むというRのglobのような操作はたぶんできない。
 
 #### [`sns.FacetGrid`](https://seaborn.pydata.org/generated/seaborn.FacetGrid.html)
