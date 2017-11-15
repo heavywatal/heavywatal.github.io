@@ -118,23 +118,28 @@ matplotlib &#43; seaborn — Pythonでグラフ描画
 <span class="c1"># Plot on this ax</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;sepal_width&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;sepal_length&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">iris</span><span class="p">)</span>
 
-<span class="c1"># Open/Close a window</span>
+<span class="c1"># Show figure (in Jupyter, Hydrogen, or other inline environments)</span>
+<span class="n">fig</span>
+
+<span class="c1"># Show figure in a new window (with non-inline backends)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
 
 <span class="c1"># Write to a file</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;example.png&#39;</span><span class="p">)</span></code></pre></div>
+<p>渡すデータは生のlistとかではなくtidyな
+<a href="/python/pandas.html"><code>pandas.DataFrame</code></a>型にしておく。</p>
+
 <p><code>from matplotlib.pylab import *</code>
 は単にMATLABっぽいインターフェイスにするための乱暴な手段で、
 例としてよく見かけるけど公式に非推奨とされている。</p>
 
-<p>渡すデータは生のlistとかではなくtidyな
-<a href="/python/pandas.html"><code>pandas.DataFrame</code></a>型にしておく。</p>
+<p>FigureやAxesを意識せず <code>plt.plot()</code> などを使うスタイルは分かりにくいので不採用。</p>
 
 <h3 id="pyplot-http-matplotlib-org-api-pyplot-summary-html"><a href="http://matplotlib.org/api/pyplot_summary.html">pyplot</a></h3>
 
 <p>最上位のモジュール。
-Figure, Axesオブジェクトを明示的に操作するスタイルでは、
+Figure, Axesインスタンスを明示的に操作するスタイルでは、
 最初にFigureを作るくらいしか出番が無いはず。</p>
 
 <dl>
@@ -165,14 +170,16 @@ backend関係は切れないので子Axesを追加して再描画可能。</dd>
 <dt><code>fig.savefig(fname, dpi=None, facecolor='w', edgecolor='w', **kwargs)</code></dt>
 <dd>拡張子から画像形式を推定してくれるので <code>format=</code> は省略可能。</dd>
 <dt><code>fig.show()</code></dt>
-<dd>Windowを開く。インラインモードでは使わない。</dd>
+<dd>Windowを開いてFigureを表示する。
+JupyterやHydrogenなどのインライン環境ではこれじゃなくて
+<code>fig</code> そのものを評価することで表示する。</dd>
 <dt><code>fig.axes</code></dt>
 <dd>子Axesへの参照</dd>
 </dl>
 
 <h3 id="axes-http-matplotlib-org-api-axes-api-html"><a href="http://matplotlib.org/api/axes_api.html">Axes</a></h3>
 
-<p>軸やラベルを持ったひとつのプロットの単位となるオブジェクト。</p>
+<p>軸やラベルを持ったひとつのプロットの単位となるクラス。</p>
 
 <p>描画のためのメソッドが
 <code>ax.plot()</code>, <code>ax.scatter()</code>, <code>ax.hist()</code>
@@ -284,7 +291,7 @@ Axesを受け取ってそこに描画するという単純な構造なので、�
 
 <p>FigureとAxisをいい感じに初期化して、関連するデータを縦・横・色の方向に並べる土台。
 これにAxis-level plotを乗せるところまでショートカットする高級関数がFigure-level plot。
-できあがったGridオブジェクトの<code>.set()</code>系メソッドとか<code>.fig</code>プロパティを通じていろいろ調整できる。
+できあがったGridクラスの<code>.set()</code>系メソッドとか<code>.fig</code>プロパティを通じていろいろ調整できる。
 これをまた別のグリッドに埋め込むというRのglobのような操作はたぶんできない。</p>
 
 <h4 id="sns-facetgrid-https-seaborn-pydata-org-generated-seaborn-facetgrid-html"><a href="https://seaborn.pydata.org/generated/seaborn.FacetGrid.html"><code>sns.FacetGrid</code></a></h4>
