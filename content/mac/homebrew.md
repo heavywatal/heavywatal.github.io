@@ -88,21 +88,19 @@ http://docs.brew.sh/FAQ.html
     binutils
     boost
     cmake
-    colordiff
     coreutils
     diffutils
     doxygen
     eigen
     emacs
     findutils
-    gcc
-    gibo
     git
     gnu-sed
     gnu-tar
     go
     grep --with-default-names
     imagemagick
+    less
     make --with-default-names
     mercurial
     nano
@@ -202,11 +200,11 @@ GUIアプリケーションもHomebrewで管理してしまおうという野心
 アプリ側でアップデートを実行するとCask内でのバージョンと食い違っちゃうけど使用上は問題ないらしい。
 
 alfred, amazon-drive, amazon-music, atom,
-basictex, betterzipql, bibdesk, boostnote, caffeine, cmd-eikana
+basictex, betterzipql, bibdesk, boostnote, caffeine, cmd-eikana,
 dia, dropbox, firefox, gephi, gitter,
-google-chrome, google-backup-and-sync, google-earth, google-japanese-ime,
-inkscape, iterm2, kindle, libreoffice,
-megasync, openoffice, qlstephen, quicklook-csv, r-app, rstudio,
+google-backup-and-sync, google-chrome, google-earth, google-japanese-ime,
+inkscape, iterm2, kindle, libreoffice, megasync,
+openoffice, osxfuxe, qlstephen, quicklook-csv, r-app, rstudio,
 skim, skyfonts, skype, slack, spideroakone, sshfs,
 the-unarchiver, virtualbox, vlc,
 whatsapp, xquartz, yujitach-menumeters
