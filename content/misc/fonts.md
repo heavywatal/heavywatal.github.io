@@ -136,7 +136,15 @@ tags = ["writing"]
 
 ### sans-serif
 
-<table><col bgcolor="#eeeeee"><col><tr style="font-family: 'Helvetica Neue', serif">
+<table><col bgcolor="#eeeeee"><col><tr style="font-family: '-apple-system', serif">
+  <td>-apple-system</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
+</tr>
+<tr style="font-family: 'BlinkMacSystemFont', serif">
+  <td>BlinkMacSystemFont</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
+</tr>
+<tr style="font-family: 'Helvetica Neue', serif">
   <td>Helvetica Neue</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
 </tr>
