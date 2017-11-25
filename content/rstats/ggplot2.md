@@ -8,7 +8,7 @@ tags = ["r", "graph", "tidyverse"]
 +++
 
 <a href="http://ggplot2.tidyverse.org/">
-<img src="http://ggplot2.tidyverse.org/logo.png" align="right">
+<img src="http://ggplot2.tidyverse.org/logo.png" align="right" width="120" height="139">
 </a>
 
 Rのグラフ描画システムには`graphics`と`grid`の2つが存在しており、

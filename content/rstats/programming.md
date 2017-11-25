@@ -9,7 +9,7 @@ tags = ["r"]
 ## tidyverse
 
 <a href="http://tidyverse.org/">
-<img src="http://tidyverse.tidyverse.org/logo.png" align="right">
+<img src="http://tidyverse.tidyverse.org/logo.png" align="right" width="120" height="139">
 </a>
 
 解析も作図も**整然データ (tidy data)**を用意するところから始まる。

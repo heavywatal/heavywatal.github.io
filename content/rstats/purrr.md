@@ -9,7 +9,7 @@ subtitle = "ループ処理やapply系関数の決定版"
 +++
 
 <a href="http://purrr.tidyverse.org/">
-<img src="http://purrr.tidyverse.org/logo.png" align="right">
+<img src="http://purrr.tidyverse.org/logo.png" align="right" width="120" height="139">
 </a>
 
 標準のapply族や[plyr]({{< relref "plyr.md" >}})の関数に引導を渡すべく再設計されたようなパッケージ。

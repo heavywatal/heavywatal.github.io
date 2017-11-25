@@ -8,7 +8,7 @@ tags = ["r", "tidyverse"]
 +++
 
 <a href="http://tidyr.tidyverse.org/">
-<img src="http://tidyr.tidyverse.org/logo.png" align="right">
+<img src="http://tidyr.tidyverse.org/logo.png" align="right" width="120" height="139">
 </a>
 
 data.frameを縦長・横長・入れ子に変形・整形するためのツール。
