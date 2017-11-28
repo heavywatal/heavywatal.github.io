@@ -148,6 +148,7 @@ git reset --hard origin/master
 ```
 
 直前のcommitをちょっと修正したいだけなら `git commit --amend` が簡単。
+それより前のを修正するには `git rebase -i HEAD~3` とかで戻ってrewordやedit。
 
 
 ### diff
