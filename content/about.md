@@ -60,8 +60,8 @@ Bachelor of Science, 2008.03
   Replication stress induces R-loop-dependent accumulation of FANCD2 at large fragile genes.
 -->
 - Satoshi Tamate\*, **Watal M. Iwasaki**\* (equally contributed), Kenneth L. Krysko, Brian Composano, Hideaki Mori, Ryo Funayama, Keiko Nakayama, Takashi Makino and Masakado Kawata.
-  (*submitted*);
-  The evolutionary responses of *Anolis carolinensis* introduced into Ogasawara archipelago during 50 years.
+  [*Sci. Rep.* (*in press*)](https://www.nature.com/srep/);
+  Inferring evolutionary responses of *Anolis carolinensis* introduced into the Ogasawara archipelago using whole genome sequence data
 - **Watal M. Iwasaki** and Hideki Innan. (2017)
   [*PLOS ONE* 12(9): e0184229](https://doi.org/10.1371/journal.pone.0184229);
   Simulation Framework for Generating Intratumor Heterogeneity Patterns in a Cancer Cell Population.
