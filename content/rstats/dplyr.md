@@ -274,13 +274,15 @@ e.g., `filter(gene != 'TP53')`
     `arrange(desc(column))` で降順になる。
     `order()` を使うよりもタイピングの繰り返しが少ないし直感的
     ```r
-    .data[with(.data, order(col_a, col_b)), ]
+    .data[order(.data$col_a, .data$col_b),]
     # is equivalent to
     .data %>% dplyr::arrange(col_a, col_b)
     ```
 
-`dplyr::top_n(.data, n, wt=NULL)`
-:   `.data %>% arrange(wt) %>% head(n)` を一撃で、グループごとに。
+`dplyr::top_n(.data, n, wt)`
+:   `.data %>% arrange(desc(wt)) %>% head(n)` を一撃で、グループごとに。
+    デフォルト降順で `arrange()` と逆なことに注意。
+    昇順で取りたいときは `n` にマイナス指定か `wt` に `desc(x)` (昇順なのに！)。
 
 
 ## data.frameを結合
