@@ -309,11 +309,13 @@ iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>mutate<span cla
 <dd><p>指定した列の昇順でdata.frameの行を並べ替える。
 <code>arrange(desc(column))</code> で降順になる。
 <code>order()</code> を使うよりもタイピングの繰り返しが少ないし直感的</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="m">.</span>data<span class="p">[</span><span class="kp">with</span><span class="p">(</span><span class="m">.</span>data<span class="p">,</span> <span class="kp">order</span><span class="p">(</span>col_a<span class="p">,</span> col_b<span class="p">)),</span> <span class="p">]</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="m">.</span>data<span class="p">[</span><span class="kp">order</span><span class="p">(</span><span class="m">.</span>data<span class="o">$</span>col_a<span class="p">,</span> <span class="m">.</span>data<span class="o">$</span>col_b<span class="p">),]</span>
 <span class="c1"># is equivalent to</span>
 <span class="m">.</span>data <span class="o">%&gt;%</span> dplyr<span class="o">::</span>arrange<span class="p">(</span>col_a<span class="p">,</span> col_b<span class="p">)</span></code></pre></div></dd>
-<dt><code>dplyr::top_n(.data, n, wt=NULL)</code></dt>
-<dd><p><code>.data %&gt;% arrange(wt) %&gt;% head(n)</code> を一撃で、グループごとに。</p></dd>
+<dt><code>dplyr::top_n(.data, n, wt)</code></dt>
+<dd><p><code>.data %&gt;% arrange(desc(wt)) %&gt;% head(n)</code> を一撃で、グループごとに。
+デフォルト降順で <code>arrange()</code> と逆なことに注意。
+昇順で取りたいときは <code>n</code> にマイナス指定か <code>wt</code> に <code>desc(x)</code> (昇順なのに！)。</p></dd>
 </dl>
 
 <h2 id="data-frameを結合">data.frameを結合</h2>
