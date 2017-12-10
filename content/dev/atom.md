@@ -1,5 +1,5 @@
 +++
-date = "2016-04-25T17:03:29+09:00"
+date = 2016-04-25T17:03:29+09:00
 tags = ["editor", "writing"]
 title = "Atom"
 subtitle = "最強のテキストエディタ"

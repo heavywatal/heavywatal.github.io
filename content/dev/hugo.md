@@ -47,7 +47,7 @@ http://gohugo.io/overview/quickstart/
 
     ```markdown
     +++
-    date = "2016-02-26T19:10:22+09:00"
+    date = 2016-02-26T19:10:22+09:00
     title = "About"
     +++
 

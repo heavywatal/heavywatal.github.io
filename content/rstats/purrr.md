@@ -1,5 +1,5 @@
 +++
-date = "2016-05-27T18:31:56+09:00"
+date = 2016-05-27T18:31:56+09:00
 tags = ["r", "tidyverse"]
 title = "purrr"
 subtitle = "ループ処理やapply系関数の決定版"

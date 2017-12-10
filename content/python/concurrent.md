@@ -1,5 +1,5 @@
 +++
-date = "2016-12-14T18:22:07+09:00"
+date = 2016-12-14T18:22:07+09:00
 title = "concurrent.futures"
 subtitle = "並行処理 in Python"
 tags = ["python", "concurrent"]

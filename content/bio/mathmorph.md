@@ -1,5 +1,5 @@
 +++
-date = "2016-05-23T17:51:48+09:00"
+date = 2016-05-23T17:51:48+09:00
 tags = ["math", "graph"]
 title = "数理形態学"
 subtitle = "Mathematical morphology"
