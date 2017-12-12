@@ -22,7 +22,8 @@ GitHubに公開しておけば誰でも使えるようになるので、
 
 ## Rパッケージ
 
-<http://r-pkgs.had.co.nz/>
+- <http://r-pkgs.had.co.nz/>
+- [How to develop good R packages (for open science)](http://www.masalmon.eu/2017/12/11/goodrpackages/)
 
 ### 最低限の作成手順
 
@@ -244,11 +245,11 @@ mydemo2    Description of demo 2
 
 `document(pkg='.', ...)`
 :   `roxygen2` を呼び出してソースコードから
-    `NAMESPACE` や `man/*.Rd` を自動生成する
+    `NAMESPACE` や `man/*.Rd` を自動生成する。
 
 `check(pkg='.', document=TRUE, cleanup=TRUE, cran=TRUE, check_version=FALSE, ...)`
 :   パッケージとしての整合性を確認。
-    `document()`も呼ばれる。
+    ついでに`document()`は実行できるけど`spell_check()`はできないので手動で。
 
 `test(pkg='.', filter=NULL, ...)`
 :   `testthat` を呼び出して `test/` 以下のテストコードを実行する
