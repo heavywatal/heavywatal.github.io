@@ -93,21 +93,10 @@ ssh
 
 <h2 id="公開鍵によるパスワード無しの認証">公開鍵によるパスワード無しの認証</h2>
 
-<dl>
-<dt>プロトコル</dt>
-<dd>RSA2</dd>
-<dt>鍵の長さ</dt>
-<dd>2048 bit</dd>
-<dt>場所</dt>
-<dd>デフォルトの <code>~/.ssh/</code></dd>
-<dt>パスフレーズ</dt>
-<dd>無し</dd>
-</dl>
-
 <ol>
-<li><p>まず、鍵ペア (秘密鍵 <code>id_rsa</code> と公開鍵 <code>id_rsa.pub</code>) を作る:</p>
+<li><p>パスフレーズ無しで鍵ペア (秘密鍵 <code>id_rsa</code> と公開鍵 <code>id_rsa.pub</code>) を作る:</p>
 
-<pre><code>% ssh-keygen -b 2048 -t rsa
+<pre><code>% ssh-keygen -t rsa -b 4096 -C &quot;your_email@example.com&quot;
 Generating public/private rsa key pair.
 Enter file in which to save the key ($HOME/.ssh/id_rsa): ＃そのままリターン
 Created directory '$HOME/.ssh'.
@@ -141,6 +130,13 @@ Your public key has been saved in $HOME/.ssh/id_rsa.pub.
 秘密鍵を持っているホストから公開鍵を持っているホストにパスワード無しで
 <code>ssh</code>, <code>scp</code> できるようになる。</p></li>
 </ol>
+
+<div class="note">
+<p>古い環境を考慮しなくていい場合はRSAより高性能なEd25519を使い、
+鍵ファイルの名前も適宜読み替える。</p>
+
+</div>
+
 
 <h2 id="configuration">Configuration</h2>
 
@@ -218,50 +214,6 @@ UsePAM no
 
 <p>ファイルひとつなら<code>scp</code>でもいいけどそれ以上なら
 <a href="/dev/rsync.html">rsync</a>を使ったほうがよい。</p>
-
-<h2 id="古いmacで新しい-openssh-libressl-を使う">古いMacで新しい OpenSSH + LibreSSL を使う</h2>
-
-<ol>
-<li><a href="/mac/homebrew.html">Homebrew</a> を <code>/usr/local/</code> にインストール</li>
-
-<li><p>それを使って OpenSSH をインストール:</p>
-
-<pre><code>% brew install homebrew/dupes/openssh --with-libressl --without-openssl
-</code></pre></li>
-
-<li><p>sshdを切る:</p>
-
-<pre><code>% sudo launchctl unload -w /System/Library/LaunchAgents/org.openbsd.ssh-agent.plist
-% sudo launchctl unload -w /System/Library/LaunchDaemons/ssh.plist
-</code></pre></li>
-
-<li><p><code>/System/Library/LaunchAgents/org.ssh-agent.plist</code> を書き変え:</p>
-
-<pre><code>/usr/bin/ssh-agent  --&gt;  /usr/local/bin/ssh-agent
-</code></pre></li>
-
-<li><p><code>/System/Library/LaunchDaemons/ssh.plist</code> を書き変え:</p>
-
-<pre><code>/usr/libexec/sshd-keygen-wrapper  --&gt;  /usr/local/sbin/sshd
-/usr/sbin/sshd  --&gt;  /usr/local/sbin/sshd
-</code></pre></li>
-
-<li><p>sshdを起動:</p>
-
-<pre><code>% sudo launchctl load -w /System/Library/LaunchAgents/org.openbsd.ssh-agent.plist
-% sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist
-</code></pre></li>
-
-<li><p>確認:</p>
-
-<pre><code>% telnet localhost 22
-</code></pre></li>
-
-<li><p>設定ファイル <code>/usr/local/etc/sshd_config</code> を見直す。</p>
-
-<p>e.g., sandbox系のエラーでconnection closedになる問題が発生したので、
-<code>UsePrivilegeSeparation sandbox</code> を <code>yes</code> に変更した。</p></li>
-</ol>
 
 </article>
 </main>
