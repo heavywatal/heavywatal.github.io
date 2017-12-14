@@ -9,21 +9,9 @@ tags = ["shell", "communication"]
 
 ## 公開鍵によるパスワード無しの認証
 
-プロトコル
-:   RSA2
+1.  パスフレーズ無しで鍵ペア (秘密鍵 `id_rsa` と公開鍵 `id_rsa.pub`) を作る:
 
-鍵の長さ
-:   2048 bit
-
-場所
-:   デフォルトの `~/.ssh/`
-
-パスフレーズ
-:   無し
-
-1.  まず、鍵ペア (秘密鍵 `id_rsa` と公開鍵 `id_rsa.pub`) を作る:
-
-        % ssh-keygen -b 2048 -t rsa
+        % ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
         Generating public/private rsa key pair.
         Enter file in which to save the key ($HOME/.ssh/id_rsa): ＃そのままリターン
         Created directory '$HOME/.ssh'.
@@ -52,6 +40,12 @@ tags = ["shell", "communication"]
 4.  リモートホスト・ローカルホストの `~/.ssh/` に鍵を適宜配置する。
     秘密鍵を持っているホストから公開鍵を持っているホストにパスワード無しで
     `ssh`, `scp` できるようになる。
+
+{{%div class="note"%}}
+古い環境を考慮しなくていい場合はRSAより高性能なEd25519を使い、
+鍵ファイルの名前も適宜読み替える。
+{{%/div%}}
+
 
 ## Configuration
 
@@ -122,39 +116,3 @@ http://man.openbsd.org/OpenBSD-current/man5/ssh_config.5
 
 ファイルひとつなら`scp`でもいいけどそれ以上なら
 [rsync]({{< relref "rsync.md" >}})を使ったほうがよい。
-
-
-## 古いMacで新しい OpenSSH + LibreSSL を使う
-
-1.  [Homebrew]({{< relref "mac/homebrew.md" >}}) を `/usr/local/` にインストール
-2.  それを使って OpenSSH をインストール:
-
-        % brew install homebrew/dupes/openssh --with-libressl --without-openssl
-
-3.  sshdを切る:
-
-        % sudo launchctl unload -w /System/Library/LaunchAgents/org.openbsd.ssh-agent.plist
-        % sudo launchctl unload -w /System/Library/LaunchDaemons/ssh.plist
-
-4.  `/System/Library/LaunchAgents/org.ssh-agent.plist` を書き変え:
-
-        /usr/bin/ssh-agent  -->  /usr/local/bin/ssh-agent
-
-5.  `/System/Library/LaunchDaemons/ssh.plist` を書き変え:
-
-        /usr/libexec/sshd-keygen-wrapper  -->  /usr/local/sbin/sshd
-        /usr/sbin/sshd  -->  /usr/local/sbin/sshd
-
-6.  sshdを起動:
-
-        % sudo launchctl load -w /System/Library/LaunchAgents/org.openbsd.ssh-agent.plist
-        % sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist
-
-7.  確認:
-
-        % telnet localhost 22
-
-8.  設定ファイル `/usr/local/etc/sshd_config` を見直す。
-
-    e.g., sandbox系のエラーでconnection closedになる問題が発生したので、
-    `UsePrivilegeSeparation sandbox` を `yes` に変更した。
