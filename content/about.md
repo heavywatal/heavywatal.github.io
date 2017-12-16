@@ -31,8 +31,6 @@ Find me on
 : <a rel="me" href="https://github.com/heavywatal" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>,
   <a rel="me" href="https://www.facebook.com/heavy.watal"><i class="fa fa-fw fa-facebook-official"></i>Facebook</a>,
   <a rel="me" href="https://twitter.com/heavywatal"><i class="fa fa-fw fa-twitter"></i>Twitter</a>,
-  <a rel="me" href="https://plus.google.com/u/0/+WatalMIwasaki"><i class="fa fa-fw fa-google-plus-official"></i>Google+</a>,
-  <a rel="me" href="skype:heavy.watal?userinfo"><i class="fa fa-fw fa-skype"></i>Skype</a>,
   [<i class="fa fa-fw fa-amazon"></i>ほしい物リスト](https://www.amazon.co.jp/wishlist/Z62OJBP7VCNP)
 
 <!--more-->
