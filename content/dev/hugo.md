@@ -86,6 +86,18 @@ http://themes.gohugo.io/
 
 https://github.com/heavywatal/hugo-theme-nonblog
 
+### Performance
+
+https://gohugo.io/troubleshooting/build-performance/
+
+ページによって内容が変わらないテンプレートは `partial` の代わりに
+[`partialCached`](https://gohugo.io/functions/partialcached/)
+を使う。
+ビルドするときに
+`--templateMetrics --templateMetricsHints`
+オプションを付けるとどのへんを変えたら良いか教えてくれる。
+
+
 ## Content
 
 ### Markdown
