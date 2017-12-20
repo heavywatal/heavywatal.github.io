@@ -18,7 +18,7 @@ tags = ["c++"]
 で最新版を簡単にインストールできる。
 オプションは適当に:
 
-    % brew install boost --c++11 --without-single
+    % brew install boost
 
 `--layout=tagged` でビルドされるため、
 リンクするときは末尾に `-mt` が必要になる。

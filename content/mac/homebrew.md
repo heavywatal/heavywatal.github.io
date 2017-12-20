@@ -113,6 +113,7 @@ http://docs.brew.sh/FAQ.html
     tree
     wget
     xz
+    zopfli
     zsh
     zsh-completions
 
@@ -124,6 +125,12 @@ gccやboostなどのデカいやつはとりあえずデフォルトで入れた
 `--force-bottle` と `--build-from-source` で明示的に切り替えられる。
 しかしいつの間にか、Homebrewが`/usr/local/`
 以外にインストールしてあるとbottleを使えない仕様になってしまった。
+{{%/div%}}
+
+{{%div class="note"%}}
+Rをここからインストールするとバイナリ版のパッケージが利用できず、
+毎回ソースからビルドすることになるので、
+後述のcaskで `r-app` を入れるほうが簡単。
 {{%/div%}}
 
 {{%div class="note"%}}
@@ -139,47 +146,20 @@ gccやboostなどのデカいやつはとりあえずデフォルトで入れた
 ## brew tap
 
 - http://docs.brew.sh/brew-tap.html
-- http://docs.brew.sh/Interesting-Taps-&-Forks.html
+- http://docs.brew.sh/Interesting-Taps-and-Forks.html
 
 非公式フォーミュラを公開しているリポジトリを追加する:
 
     % brew tap homebrew/science
-    % brew install samtools
+    % brew install libsequence
 
 `brew tap` せずに直接インストールも可能:
 
-    % brew install homebrew/science/samtools
+    % brew install homebrew/science/libsequence
 
--   `brew tap homebrew/science` - <https://github.com/Homebrew/homebrew-science>\
-    バイオインフォマティクスなど科学計算のツール群。例えば
-
-        bcftools
-        blast
-        bowtie2
-        bwa
-        cd-hit
-        clustal-w
-        cufflinks
-        emboss
-        fastqc
-        fwdpp
-        igv
-        igvtools
-        libsequence
-        mafft
-        paml
-        phylip
-        repeatmasker
-        samtools
-        snpeff
-        tophat
-        varscan
-
-    {{%div class="note"%}}
-Rをここからインストールするとバイナリ版のパッケージが利用できず、
-毎回ソースからビルドすることになるので、
-普通に公式ページからpkgから入れたほうがよさそう。
-{{%/div%}}
+[`homebrew/science`](https://github.com/Homebrew/homebrew-science)
+はバイオインフォマティクスなど科学計算のツール群を扱っていたが、
+主要なものをcoreに移動したあとdeprecatedになるらしい。
 
 
 ## Cask
