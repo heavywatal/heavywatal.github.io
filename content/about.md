@@ -55,10 +55,10 @@ Bachelor of Science, 2008.03
 <!--
 - Yusuke Okamoto, **Watal M. Iwasaki**, Kazuto Kugou, Kazuki Takahashi, Arisa Oda, Koichi Sato, Wataru Kobayashi, Hidehiko Kawai, Ryo Sakasai, Akifumi Takaori-Kondo, Takashi Yamamoto, Masato T. Kanemaki, Masato Taoka, Toshiaki Isobe, Hitoshi Kurumizaka, Hideki Innan, Kunihiro Ohta, Masamichi Ishiai, Minoru Takata.
   (*submitted*);
-  Replication stress induces R-loop-dependent accumulation of FANCD2 at large fragile genes.
+  Replication stress induces accumulation of FANCD2 at middle intronic region of large fragile genes.
 -->
-- Satoshi Tamate\*, **Watal M. Iwasaki**\* (equally contributed), Kenneth L. Krysko, Brian Composano, Hideaki Mori, Ryo Funayama, Keiko Nakayama, Takashi Makino and Masakado Kawata.
-  [*Sci. Rep.* (*in press*)](https://www.nature.com/srep/);
+- Satoshi Tamate\*, **Watal M. Iwasaki**\* (equally contributed), Kenneth L. Krysko, Brian Composano, Hideaki Mori, Ryo Funayama, Keiko Nakayama, Takashi Makino and Masakado Kawata. (2017)
+  [*Sci. Rep.* **7**(18008)](https://doi.org/10.1038/s41598-017-17852-7);
   Inferring evolutionary responses of *Anolis carolinensis* introduced into the Ogasawara archipelago using whole genome sequence data
 - **Watal M. Iwasaki** and Hideki Innan. (2017)
   [*PLOS ONE* 12(9): e0184229](https://doi.org/10.1371/journal.pone.0184229);
@@ -69,7 +69,7 @@ Bachelor of Science, 2008.03
 - Hajime Wakasa, Antonio Cádiz, Lázaro M. Echenique-Díaz, **Watal M. Iwasaki**, Namiko Kamiyama, Yuki Nishimura, Hitoshi Yokoyama, Koji Tamura, and Masakado Kawata. (2015)
   [*J. Exp. Zool. B Mol. Dev. Evol.* **324** 5: 410--423](http://dx.doi.org/10.1002/jez.b.22627);
   Developmental stages for the divergence of relative limb length between a twig and a trunk-ground *Anolis* lizard species.
-- Tezuka, A., S. Kasagi, C. van Oosterhout, M. McMullan, **W. M. Iwasaki**, D. Kasai, M. Yamamichi, H. Innan, S. Kawamura, and M. Kawata. (2014)
+- Tezuka, A., S. Kasagi, C. van Oosterhout, M. McMullan, **Watal M. Iwasaki**, D. Kasai, M. Yamamichi, H. Innan, S. Kawamura, and M. Kawata. (2014)
   [*Heredity* **113**: 381--389](https://dx.doi.org/10.1038/hdy.2014.35);
   Divergent selection on opsin gene variation in guppy (*Poecilia reticulata*) populations of Trinidad and Tobago.
 - **Watal M. Iwasaki**, Masaki E. Tsuda, Masakado Kawata. (2013)
