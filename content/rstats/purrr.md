@@ -105,6 +105,12 @@ https://github.com/tidyverse/purrr
 `purrr::has_element(.x, .y)`
 : list `.x` は要素 `.y` を持っている。
 
+`purrr::cross2(.x, .y, .filter=NULL)`
+: listの各要素の組み合わせを作る。
+  `.filter` に渡した関数が `TRUE` となるものは除外される。
+  名前付きlistを渡す `purrr::cross()` や `purrr::cross_df()` のほうが便利かも。
+  vectorなら [`tidyr::crossing()` とか `tidyr::expand()`]({{< relref "tidyr.md" >}}) が使える。
+
 
 ## 無名関数
 
