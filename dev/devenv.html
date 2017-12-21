@@ -114,40 +114,44 @@ mercurial
 
 <h3 id="linuxbrew">Linuxbrew</h3>
 
-<p><a href="https://github.com/Linuxbrew/linuxbrew">https://github.com/Linuxbrew/linuxbrew</a></p>
+<p><a href="http://linuxbrew.sh/">http://linuxbrew.sh/</a></p>
 
-<p>Macの <a href="/mac/homebrew.html">Homebrew</a> をLinuxに移植したパッケージマネージャ。
-使い勝手はほぼ一緒だけど依存関係の処理などがやや甘い。</p>
+<p>Macの <a href="/mac/homebrew.html">Homebrew</a> をLinuxに移植したパッケージマネージャ。</p>
 
 <ol>
 <li><p><code>git --version</code> を確認して 1.7.12 未満だったら
 <a href="https://github.com/git/git/releases">最新版</a>をソースコードからインストール:</p>
-
-<pre><code>% wget -O- https://github.com/git/git/archive/v2.8.3.tar.gz | tar xz
-% cd git-2.8.3/
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% wget -O- https://github.com/git/git/archive/v2.15.0.tar.gz <span class="p">|</span> tar xz
+% <span class="nb">cd</span> git-2.15.0/
 % autoreconf -i
-% ./configure --prefix=${HOME}/local
+% ./configure --prefix<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local
 % make
-% make install
-</code></pre></li>
+% make install</code></pre></div></li>
 
-<li><p>Linuxbrewをインストール:</p>
+<li><p>Linuxbrewを <code>~/.linuxbrew</code> にインストール:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sh -c <span class="s2">&#34;</span><span class="k">$(</span>curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh<span class="k">)</span><span class="s2">&#34;</span></code></pre></div></li>
 
-<pre><code>% git clone https://github.com/Linuxbrew/linuxbrew.git ~/.homebrew
-</code></pre></li>
+<li><p>gccをインストール:
+<code>brew install gcc</code></p>
+
+<p>OS標準のgccやglibcが古すぎて
+<code>glibc cannot be built with any available compilers</code> と怒られる場合は、
+まずglibc抜きでgccをインストールし、そのgccでglibcをビルドして、
+gccを入れ直す、という手間が必要:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">HOMEBREW_BUILD_FROM_SOURCE</span><span class="o">=</span><span class="m">1</span> brew install gcc --without-glibc
+brew install glibc
+brew remove gcc
+brew install gcc</code></pre></div>
+<p>OS標準のcurlで <code>SSL connect error</code> と出る場合は
+<code>brew install curl</code> もやっておいたほうがよい。</p></li>
 
 <li><p>必要なもろもろをインストール:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% brew install tmux
 
-<pre><code>% brew install tmux
-
-git
 zsh --without-etcdir
 tmux
-gcc
-boost --with-c++11
-nano
-emacs
-</code></pre></li>
+pyenv
+boost</code></pre></div></li>
 </ol>
 
 <h2 id="mac">Mac</h2>
