@@ -30,36 +30,51 @@ tags = ["package"]
 
 ### Linuxbrew
 
-<https://github.com/Linuxbrew/linuxbrew>
+<http://linuxbrew.sh/>
 
 Macの [Homebrew]({{< relref "mac/homebrew.md" >}}) をLinuxに移植したパッケージマネージャ。
-使い勝手はほぼ一緒だけど依存関係の処理などがやや甘い。
 
 1.  `git --version` を確認して 1.7.12 未満だったら
     [最新版](https://github.com/git/git/releases)をソースコードからインストール:
+    ```sh
+    % wget -O- https://github.com/git/git/archive/v2.15.0.tar.gz | tar xz
+    % cd git-2.15.0/
+    % autoreconf -i
+    % ./configure --prefix=${HOME}/local
+    % make
+    % make install
+    ```
 
-        % wget -O- https://github.com/git/git/archive/v2.8.3.tar.gz | tar xz
-        % cd git-2.8.3/
-        % autoreconf -i
-        % ./configure --prefix=${HOME}/local
-        % make
-        % make install
+1.  Linuxbrewを `~/.linuxbrew` にインストール:
+    ```sh
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+    ```
 
-2.  Linuxbrewをインストール:
+1.  gccをインストール:
+    `brew install gcc`
 
-        % git clone https://github.com/Linuxbrew/linuxbrew.git ~/.homebrew
+    OS標準のgccやglibcが古すぎて
+    `glibc cannot be built with any available compilers` と怒られる場合は、
+    まずglibc抜きでgccをインストールし、そのgccでglibcをビルドして、
+    gccを入れ直す、という手間が必要:
+    ```sh
+    HOMEBREW_BUILD_FROM_SOURCE=1 brew install gcc --without-glibc
+    brew install glibc
+    brew remove gcc
+    brew install gcc
+    ```
+    OS標準のcurlで `SSL connect error` と出る場合は
+    `brew install curl` もやっておいたほうがよい。
 
-3.  必要なもろもろをインストール:
+1.  必要なもろもろをインストール:
+    ```sh
+    % brew install tmux
 
-        % brew install tmux
-
-        git
-        zsh --without-etcdir
-        tmux
-        gcc
-        boost --with-c++11
-        nano
-        emacs
+    zsh --without-etcdir
+    tmux
+    pyenv
+    boost
+    ```
 
 ## Mac
 

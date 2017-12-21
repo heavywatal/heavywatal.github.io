@@ -55,13 +55,15 @@ Phase 2ゲートウェイから
     - [データベース](https://sc.ddbj.nig.ac.jp/index.php/ja-availavle-dbs)
       `/usr/local/seq/`
 
-何か自分で入れる必要があれば、なるべくLinuxbrewで環境を整える。
-cf. [/dev/devenv]({{< relref "dev/devenv.md" >}})
+### Linuxbrew
+
+コマンドラインのプログラムをインストールするにはLinuxbrewが便利。
+ただしOS標準のコンパイラやライブラリが古すぎるので、
+最初のセットアップにひと手間必要。
+cf. [/dev/開発環境]({{< relref "dev/devenv.md" >}})
 
 {{%div class="note"%}}
-mercurialはインストールできてもglibcらへんの関係でうまく動かない。
 emacsは `User *** has no home directory` という謎のエラーを吐く。
-clang/boostは要調整。
 {{%/div%}}
 
 ### ログインシェルをzshに変更(しないで対処)
