@@ -220,6 +220,26 @@ e.g., `filter(gene != 'TP53')`
     1          5.1         3.5          1.4         0.2 setosa
     2          4.9         3.0          1.4         0.2 setosa
     ```
+    変数に入った文字列を使う場合も`mutate()`と同様にunquotingで:
+    ```r
+    old_name = 'Species'
+    new_name = toupper(old_name)
+    iris %>% dplyr::rename(!!new_name := !!old_name) %>% head(2)
+      Sepal.Length Sepal.Width Petal.Length Petal.Width SPECIES
+    1          5.1         3.5          1.4         0.2  setosa
+    2          4.9         3.0          1.4         0.2  setosa
+    ```
+    名前付きベクターと
+    [Unquote-splicing](http://dplyr.tidyverse.org/articles/programming.html#unquote-splicing)
+    を使えば一括指定できる:
+    ```r
+    old_names = names(iris)
+    names(old_names) = toupper(old_names)
+    iris %>% dplyr::rename(!!!old_names) %>% head(2)
+      SEPAL.LENGTH SEPAL.WIDTH PETAL.LENGTH PETAL.WIDTH SPECIES
+    1          5.1         3.5          1.4         0.2  setosa
+    2          4.9         3.0          1.4         0.2  setosa
+    ```
 
 
 ## data.frameの要約・集計・整列
