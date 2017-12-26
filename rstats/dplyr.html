@@ -271,7 +271,23 @@ iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>mutate<span cla
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>rename<span class="p">(</span>sp<span class="o">=</span>Species<span class="p">)</span> <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
   Sepal.Length Sepal.Width Petal.Length Petal.Width     sp
 <span class="m">1</span>          <span class="m">5.1</span>         <span class="m">3.5</span>          <span class="m">1.4</span>         <span class="m">0.2</span> setosa
-<span class="m">2</span>          <span class="m">4.9</span>         <span class="m">3.0</span>          <span class="m">1.4</span>         <span class="m">0.2</span> setosa</code></pre></div></dd>
+<span class="m">2</span>          <span class="m">4.9</span>         <span class="m">3.0</span>          <span class="m">1.4</span>         <span class="m">0.2</span> setosa</code></pre></div>
+<p>変数に入った文字列を使う場合も<code>mutate()</code>と同様にunquotingで:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">old_name <span class="o">=</span> <span class="s">&#39;Species&#39;</span>
+new_name <span class="o">=</span> <span class="kp">toupper</span><span class="p">(</span>old_name<span class="p">)</span>
+iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>rename<span class="p">(</span><span class="o">!!</span>new_name <span class="o">:=</span> <span class="o">!!</span>old_name<span class="p">)</span> <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+  Sepal.Length Sepal.Width Petal.Length Petal.Width SPECIES
+<span class="m">1</span>          <span class="m">5.1</span>         <span class="m">3.5</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  setosa
+<span class="m">2</span>          <span class="m">4.9</span>         <span class="m">3.0</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  setosa</code></pre></div>
+<p>名前付きベクターと
+<a href="http://dplyr.tidyverse.org/articles/programming.html#unquote-splicing">Unquote-splicing</a>
+を使えば一括指定できる:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">old_names <span class="o">=</span> <span class="kp">names</span><span class="p">(</span>iris<span class="p">)</span>
+<span class="kp">names</span><span class="p">(</span>old_names<span class="p">)</span> <span class="o">=</span> <span class="kp">toupper</span><span class="p">(</span>old_names<span class="p">)</span>
+iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>rename<span class="p">(</span><span class="o">!!!</span>old_names<span class="p">)</span> <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+  SEPAL.LENGTH SEPAL.WIDTH PETAL.LENGTH PETAL.WIDTH SPECIES
+<span class="m">1</span>          <span class="m">5.1</span>         <span class="m">3.5</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  setosa
+<span class="m">2</span>          <span class="m">4.9</span>         <span class="m">3.0</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  setosa</code></pre></div></dd>
 </dl>
 
 <h2 id="data-frameの要約-集計-整列">data.frameの要約・集計・整列</h2>
