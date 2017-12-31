@@ -167,8 +167,10 @@ Emacs 24で標準入りしたので、基本的にこれを使うのが良さそ
 (package-install 'markdown-mode)
 ```
 
-`package-refresh-contents` は起動時に毎回やるには重すぎるので、
-気が向いたときに手動で。
+initialize後に
+`(package-refresh-contents)` を入れておくとパッケージ情報を最新に保てるが、
+結構遅いので気が向いたときに手動でやったほうがいい:
+<kbd>M-x</kbd> `package-list-packages` <kbd>U</kbd> <kbd>x</kbd>
 
 
 ### Caskでパッケージ管理
