@@ -26,6 +26,7 @@ R標準の`plot()`などは前者の上に、
 - <http://www.cookbook-r.com/Graphs/>
 - <http://www.rdocumentation.org/packages/ggplot2>
 - <https://github.com/hadley/ggplot2-book>
+- [version 2.0での変更点](https://blog.rstudio.org/2015/12/21/ggplot2-2-0-0/)
 
 ## 基本的な使い方
 
@@ -60,9 +61,8 @@ ggsave("iris_sepal.png", gp)
 [**整然データ**]({{< relref "programming.md#tidyverse" >}})
 {{%/div%}}
 
-## プロットの種類
 
-[version 2.0での変更点](https://blog.rstudio.org/2015/12/21/ggplot2-2-0-0/)
+## プロットの種類
 
 [散布図](http://ggplot2.tidyverse.org/reference/geom_point.html)
 :   `gp + geom_point(size=2, alpha=0.3)`
@@ -80,9 +80,8 @@ ggsave("iris_sepal.png", gp)
 
 [棒グラフ](http://ggplot2.tidyverse.org/reference/geom_bar.html)
 :   `gp + geom_col()`
-:    同じxに対して複数グループのyが存在するとき、
-    `position='dodge'` にすると横並び
-    (デフォルトは縦積みの`'stack'`)。
+:   グループ分けする場合、デフォルトでは縦積みの `'stack'` で、
+    `position='dodge'` にすると横並び。
 
 [箱ひげ図](http://ggplot2.tidyverse.org/reference/geom_boxplot.html)
 :   `gp + geom_boxplot()`
@@ -122,68 +121,110 @@ ggsave("iris_sepal.png", gp)
 :   テーマの `base_family` は引き継がれないので `family=` で指定すべし。
 :   数式を使う場合は文字列 `label='italic(N[t])'` のような文字列で渡して `parse=TRUE`。
 
-## プロットの調整
+## [変数によってグループ分け](http://ggplot2.tidyverse.org/reference/aes_group_order.html)
 
-### データによって色やサイズを変える
+`aes(colour = Species)` のように列を指定して `ggplot()` や `geom_*()` に渡す。
+`aes()` の外で指定するとデータによらず全体に反映される:
 
-http://ggplot2.tidyverse.org/articles/ggplot2-specs.html
+```r
+# サイズは常に3、色は species という列のデータによって変える
+gp + geom_point(aes(colour = species), size = 3)
 
-- `colour`: 点や線の色
-- `fill`: 塗りつぶしの色
-- [`size`](http://ggplot2.tidyverse.org/reference/scale_size.html): 点や線のサイズ
-- [`shape`](http://ggplot2.tidyverse.org/reference/scale_shape.html): 点の形
-- [`linetype`](http://ggplot2.tidyverse.org/reference/scale_linetype.html): 線
-- [`alpha`](http://ggplot2.tidyverse.org/reference/scale_alpha.html): 不透明度 (0が透明、1が不透明)
+# 色は常に赤、サイズは frequency という列の値に比例
+gp + geom_point(aes(size = frequency), colour = "red")
+```
 
-`aes()` の中にはデータによって描き分けたい列名を指定し、
-外にはデータによらない値を指定する:
+- [色・透明度を変える](http://ggplot2.tidyverse.org/reference/aes_colour_fill_alpha.html)
+  - `colour`: 点や線の色
+  - `fill`: 塗りつぶしの色
+  - [`alpha`](http://ggplot2.tidyverse.org/reference/scale_alpha.html): 不透明度 (0が透明、1が不透明)
+- [大きさ・形を変える](http://ggplot2.tidyverse.org/reference/aes_linetype_size_shape.html)
+  - [`size`](http://ggplot2.tidyverse.org/reference/scale_size.html): 点や線のサイズ
+  - [`shape`](http://ggplot2.tidyverse.org/reference/scale_shape.html): 点の形
+  - [`linetype`](http://ggplot2.tidyverse.org/reference/scale_linetype.html): 線
+- 単にグループ分けする
+  - `group`: 色や形はそのままにグループ分け。反復試行の折れ線グラフなどに。
 
-    # サイズは常に3、色は species という列のデータによって変える
-    geom_point(aes(colour=species), size=3)+
-    scale_colour_brewer(palette='Set1')
 
-    # 色は常に赤、サイズは frequency という列の値に比例
-    geom_point(aes(size=frequency), colour='red')
+### `scale_*()` 関数で調整
+
+変数をどうやって色やサイズに反映させるか、
+各項目に対応する `scale_*()` 関数で調整する。
+
+```r
+gp + geom_point(aes(colour = species)) +
+  scale_colour_brewer(palette = "Spectral")
+```
 
 [`scale_*_brewer`](http://ggplot2.tidyverse.org/reference/scale_brewer.html)
+:   for `colour`, `fill`
 :   [Colorbrewer](http://colorbrewer2.org/) で定義されているパレットを使う。 色盲対策もできるし、原色も出てこないのでオススメ。
-:   cf. [RColorBrewer](https://www.rdocumentation.org/packages/RColorBrewer/topics/ColorBrewer)
-:   `scale_{colour/fill}_brewer(..., type='seq', palette=1, direction=1)`: 離散値
-:   `scale_{colour/fill}_distiller(...)`: 連続値
+    cf. [RColorBrewer](https://www.rdocumentation.org/packages/RColorBrewer/topics/ColorBrewer)
+:   `scale_*_brewer(..., type='seq', palette=1, direction=1)`: 離散値
+:   `scale_*_distiller(...)`: 連続値
 
 [`scale_*_gradient`](http://ggplot2.tidyverse.org/reference/scale_gradient.html)
-:   グラデーションの基準色を指定する。
-:   `scale_{colour/fill}_gradient(..., low, high, ...)`: 普通の連続値に
-:   `scale_{colour/fill}_gradient2(..., low, mid, high, midpoint=0, ...)`: ある中央値を挟んで上下に分けたいとき
-:   `scale_{colour/fill}_gradientn(..., colours, ...)`: 多色のヒートマップなどに e.g., `colours=c('#000000', '#0000FF', '#00FFFF', '#00FF00', '#FFFF00', '#FF0000')`
+:   for `colour`, `fill`
+:   グラデーションの基準となる色を指定する。
+:   `scale_*_gradient(..., low, high, ...)`: 普通の連続値に
+:   `scale_*_gradient2(..., low, mid, high, midpoint=0, ...)`: ある中央値を挟んで上下に分けたいとき
+:   `scale_*_gradientn(..., colours, values=NULL, ...)`: 多色のヒートマップなどに e.g., `colours=c('#000000', '#0000FF', '#00FFFF', '#00FF00', '#FFFF00', '#FF0000')`
 
 [`scale_*_identity`](http://ggplot2.tidyverse.org/reference/scale_identity.html)
-:   データフレームに入ってる値をそのまま使う
-:   `scale_{colour/fill/size/shape/linetype/alpha}_identity(..., guide='none')`
+:   for `colour`, `fill`, `size`, `shape`, `linetype`, `alpha`
+:   色の名前やサイズなどを示す列が予めデータに含まれている場合にそのまま使う。
+    使えるパラメータは http://ggplot2.tidyverse.org/articles/ggplot2-specs.html 参照
 
 [`scale_*_manual`](http://ggplot2.tidyverse.org/reference/scale_manual.html)
-:   値を直に指定する
-:   `scale_{colour/fill/size/shape/linetype/alpha}_manual(..., values)`
+:   for `colour`, `fill`, `size`, `shape`, `linetype`, `alpha`
+:   対応関係を引数で直に指定する。
 
-legend/colourbarのタイトルを変更したい場合は上記関数に `name='New Title'` を指定する。
-さらに細かく制御したい場合は
-[`guide_legend()`](http://ggplot2.tidyverse.org/reference/guide_legend.html) や
-[`guide_colourbar()`](http://ggplot2.tidyverse.org/reference/guide_colourbar.html)
-を引数 `guide` に渡す。
+[`scale_size`](http://ggplot2.tidyverse.org/reference/scale_size.html)
+:   デフォルトではpointの面積を値にほぼ比例させるが、面積0にはならない。
+    値0に面積0を対応させるには `scale_size_area()` を使う。
+    半径を比例させるには `scale_radius()` があるけど要注意。
 
-
-### 内部変数を使う
-
-https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variables
-
-ヒストグラムや箱ヒゲなどの表示に必要な計算は
-ggplot内部で `stat_*()` を通して行われる。
-そうした値 (computed variables) の一部は
-`..count..` や `..density..` みたいに
-ピリオドで囲まれた特殊な名前で参照することができる。
+[`scale_alpha(..., range=c(0.1, 1))`](http://ggplot2.tidyverse.org/reference/scale_alpha.html)\
+[`scale_linetype`](http://ggplot2.tidyverse.org/reference/scale_linetype.html)\
+[`scale_shape`](http://ggplot2.tidyverse.org/reference/scale_shape.html)
 
 
-### パネルの分割
+### スケール共通オプション
+
+legend/colourbarの見せ方を変更するには
+`scale_*()` 関数に以下のオプションを指定する。
+[連続値の場合](http://ggplot2.tidyverse.org/reference/continuous_scale.html) と
+[離散値の場合](http://ggplot2.tidyverse.org/reference/discrete_scale.html)
+で微妙に意味が変わるけどだいたいこんな感じ:
+
+- `name`: 凡例のタイトル。複数スケールで同じ名前にすると凡例が統合される。
+- `breaks`: 目盛りや凡例に登場させる値。
+- `labels`: breaksの値に対応する文字列。デフォルトはbreaksそのまま。
+- `na.value`: 欠損値のときどうするか
+- `limits`: 連続値なら最大値と最小値のvector。離散値なら取りうるすべての値。
+- `guide`: 文字列で `"legend"` か `"colourbar"`。
+  さらに細かく制御したい場合は
+  [`guide_legend()`](http://ggplot2.tidyverse.org/reference/guide_legend.html) や
+  [`guide_colourbar()`](http://ggplot2.tidyverse.org/reference/guide_colourbar.html)
+  で。
+
+
+### グループ間の位置を調整する
+
+- [`position_dodge(width=NULL, preserve=c('total', 'single')`](http://ggplot2.tidyverse.org/reference/position_dodge.html):
+  横に並べる。棒グラフなどでよく使う。
+- [`position_stack(vjust=1, reverse=FALSE)`](http://ggplot2.tidyverse.org/reference/position_stack.html):
+  積み重ねる。棒グラフや`geom_area()`に。
+  高さを1に揃えて割合を示すには `position_fill()` を使う。
+- [`position_nudge(x=0, y=0)`](http://ggplot2.tidyverse.org/reference/position_nudge.html):
+  平行移動。文字を添えるのに便利。
+- [`position_jitter(width=NULL, height=NULL)`](http://ggplot2.tidyverse.org/reference/position_jitter.html)
+  ランダムにばらかす。
+  [`geom_jitter()`](http://ggplot2.tidyverse.org/reference/geom_jitter.html)
+  はこれを使ったショートカット。
+
+
+### 変数によってパネルを分割する
 
 年ごとや種ごとに傾向を見たいときなど、データに応じてパネルを分割して並べる。
 
@@ -217,15 +258,29 @@ ggplot内部で `stat_*()` を通して行われる。
     変数名を同時に表示するなど細かい調整も可能。
 
 
-### 軸やタイトルを変更
+### 内部変数を使う
+
+https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variables
+
+ヒストグラムや箱ヒゲなどの表示に必要な計算は
+ggplot内部で `stat_*()` を通して行われる。
+そうした値 (computed variables) の一部は
+`..count..` や `..density..` みたいに
+ピリオドで囲まれた特殊な名前で参照することができる。
+
+
+## 軸やタイトルを変更
 
 [軸の区切りを変更したり対数にしたり](http://ggplot2.tidyverse.org/reference/scale_continuous.html)
 :   `gp + scale_x_continuous(breaks=seq(10, 100, by=10))`
 :   `gp + scale_y_log10("Beer consumption")`
-:   オプション: name, breaks, labels, na.value, limits, trans, expand
-:   デフォルトでは値域よりも少し余裕を持たせてあるが、 `geom_tile()` などでピッタリにしたいときは軸ごとに `expand=c(0, 0)` とか。
-    `position='right'`とかで軸の位置を変更できる。
-    `sec.axis`オプションで反対側に別の軸を追加できる。
+:   `gp + scale_y_reverse()`
+:   上記の<a href="#スケール共通オプション">スケール共通オプション</a>に加えて:
+    - `expand`: デフォルトでは値域よりも少し余裕を持たせてあるが
+      `c(0, 0)` を与えるとピッタリになる。`geom_tile()`を使うときなどに。
+    - `trans`: 値の変換。exp, identity, log, log10, reciprocal, reverse など。
+    - `position`: top, bottom, left, right
+    - `sec.axis`: 第二軸
 
 [描画する範囲を指定](http://ggplot2.tidyverse.org/reference/coord_cartesian.html)
 :   `gp + ylim(0, 42) + xlim("b", "c", "d")`
@@ -249,6 +304,7 @@ ggplot内部で `stat_*()` を通して行われる。
 [軸ラベルとタイトル](http://ggplot2.tidyverse.org/reference/labs.html)
 :   `gp + labs(x="time", y="weight", title="growth")`
 :   `gp + xlab("time") + ylab("weight") + ggtitle("growth")`
+
 
 ## `theme`: 背景やラベルの調整
 
