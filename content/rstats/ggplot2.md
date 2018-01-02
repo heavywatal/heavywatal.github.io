@@ -68,9 +68,9 @@ ggsave("iris_sepal.png", gp)
 :   `gp + geom_point(size=2, alpha=0.3)`
 
 [折れ線グラフ](http://ggplot2.tidyverse.org/reference/geom_path.html)
-:   `gp + geom_path(size=2, linetype="dashed")` データ順に結ぶ\
-    `gp + geom_line()` x軸上の順で結ぶ\
-    `gp + geom_step()` 階段状に結ぶ
+:   `gp + geom_path(size=2, linetype="dashed")` データ順に結ぶ
+:   `gp + geom_line()` x軸上の順で結ぶ
+:   `gp + geom_step()` 階段状に結ぶ
 
 [ヒストグラム、密度曲線](http://ggplot2.tidyverse.org/reference/geom_histogram.html)
 :   `gp + geom_histogram()` --- 棒グラフ(連続値を`stat_bin()` で切って)
@@ -79,25 +79,25 @@ ggsave("iris_sepal.png", gp)
 :   `gp + geom_density()` --- 密度推定されたスムーズな線
 
 [棒グラフ](http://ggplot2.tidyverse.org/reference/geom_bar.html)
-:   `gp + geom_col()`\
-    同じxに対して複数グループのyが存在するとき、
+:   `gp + geom_col()`
+:    同じxに対して複数グループのyが存在するとき、
     `position='dodge'` にすると横並び
     (デフォルトは縦積みの`'stack'`)。
 
 [箱ひげ図](http://ggplot2.tidyverse.org/reference/geom_boxplot.html)
-:   `gp + geom_boxplot()`\
-    `gp + geom_violin()`
+:   `gp + geom_boxplot()`
+:   `gp + geom_violin()`
 
 [ヒートマップ](http://ggplot2.tidyverse.org/reference/geom_tile.html)
-:   `gp + geom_tile(aes(fill=z))`\
-    `gp + geom_raster(aes(fill=z))`\
-    後者は各タイルの大きさがすべて同じ場合の特殊ケースで、高速。
+:   `gp + geom_tile(aes(fill=z))`
+:   `gp + geom_raster(aes(fill=z))`
+:   後者は各タイルの大きさがすべて同じ場合の特殊ケースで、高速。
 
 [エラーバー](http://ggplot2.tidyverse.org/reference/geom_linerange.html)
-:   `limits = aes(ymax=height+se, ymin=height-se)`\
-    `gp + geom_errorbar(limits, width=0.1)`\
-    `gp + geom_pointrange(limits)`\
-    `gp + geom_crossbar(limits, width=0.2)`
+:   `limits = aes(ymax=height+se, ymin=height-se)`
+:   `gp + geom_errorbar(limits, width=0.1)`
+:   `gp + geom_pointrange(limits)`
+:   `gp + geom_crossbar(limits, width=0.2)`
 
 [関数](http://ggplot2.tidyverse.org/reference/stat_function.html)
 :   `ggplot(data.frame(x=c(-4, 4)), aes(x)) + stat_function(fun=dnorm, args=c(0, 1), n=200)`
@@ -108,19 +108,19 @@ ggsave("iris_sepal.png", gp)
 :   `gp + geom_smooth(method=glm, method.args=list(family=poisson), se=FALSE)`
 
 [切片と傾きで直線を描く](http://ggplot2.tidyverse.org/reference/geom_abline.html)
-:   `gp + geom_abline(intercept=3, slope=5)`\
-    `gp + geom_hline(yintercept=7) + geom_vline(xintercept=11)`
+:   `gp + geom_abline(intercept=3, slope=5)`
+:   `gp + geom_hline(yintercept=7) + geom_vline(xintercept=11)`
 
 [始点と終点で曲線や矢印を描く](http://ggplot2.tidyverse.org/reference/geom_segment.html)
-:   `gp + geom_curve(aes(x, y, xend, yend), curvature = -0.2)`\
-    `gp + geom_segment(aes(x, y, xend, yend), arrow=arrow())`\
-    矢印の調整は [grid::arrow()](https://www.rdocumentation.org/packages/grid/topics/arrow)
+:   `gp + geom_curve(aes(x, y, xend, yend), curvature = -0.2)`
+:   `gp + geom_segment(aes(x, y, xend, yend), arrow=arrow())`
+:   矢印の調整は [grid::arrow()](https://www.rdocumentation.org/packages/grid/topics/arrow)
 
 [文字列や図形を書き加える](http://ggplot2.tidyverse.org/reference/annotate.html)
-:   `gp + geom_text(aes(y=y_val+10), label=y_val)`\
-    `gp + annotate("text", x=1:4, y=4:1, label=sprintf("x = %d", 1:4))`\
-    テーマの `base_family` は引き継がれないので `family=` で指定すべし。\
-    数式を使う場合は文字列 `label='italic(N[t])'` のような文字列で渡して `parse=TRUE`。
+:   `gp + geom_text(aes(y=y_val+10), label=y_val)`
+:   `gp + annotate("text", x=1:4, y=4:1, label=sprintf("x = %d", 1:4))`
+:   テーマの `base_family` は引き継がれないので `family=` で指定すべし。
+:   数式を使う場合は文字列 `label='italic(N[t])'` のような文字列で渡して `parse=TRUE`。
 
 ## プロットの調整
 
@@ -128,12 +128,12 @@ ggsave("iris_sepal.png", gp)
 
 http://ggplot2.tidyverse.org/articles/ggplot2-specs.html
 
-`colour`: 点や線の色\
-`fill`: 塗りつぶしの色\
-`size`: 点や線のサイズ <http://ggplot2.tidyverse.org/reference/scale_size.html>\
-`shape`: 点の形 <http://ggplot2.tidyverse.org/reference/scale_shape.html>\
-`linetype`: 線 <http://ggplot2.tidyverse.org/reference/scale_linetype.html>\
-`alpha`: 不透明度 (0が透明、1が不透明) <http://ggplot2.tidyverse.org/reference/scale_alpha.html>
+- `colour`: 点や線の色
+- `fill`: 塗りつぶしの色
+- [`size`](http://ggplot2.tidyverse.org/reference/scale_size.html): 点や線のサイズ
+- [`shape`](http://ggplot2.tidyverse.org/reference/scale_shape.html): 点の形
+- [`linetype`](http://ggplot2.tidyverse.org/reference/scale_linetype.html): 線
+- [`alpha`](http://ggplot2.tidyverse.org/reference/scale_alpha.html): 不透明度 (0が透明、1が不透明)
 
 `aes()` の中にはデータによって描き分けたい列名を指定し、
 外にはデータによらない値を指定する:
@@ -145,25 +145,25 @@ http://ggplot2.tidyverse.org/articles/ggplot2-specs.html
     # 色は常に赤、サイズは frequency という列の値に比例
     geom_point(aes(size=frequency), colour='red')
 
-<http://ggplot2.tidyverse.org/reference/scale_brewer.html>
-:   [Colorbrewer](http://colorbrewer2.org/) で定義されているパレットを使う。 色盲対策もできるし、原色も出てこないのでオススメ。\
-    cf. [RColorBrewer](https://www.rdocumentation.org/packages/RColorBrewer/topics/ColorBrewer)\
-    `scale_{colour/fill}_brewer(..., type='seq', palette=1, direction=1)`: 離散値\
-    `scale_{colour/fill}_distiller(...)`: 連続値
+[`scale_*_brewer`](http://ggplot2.tidyverse.org/reference/scale_brewer.html)
+:   [Colorbrewer](http://colorbrewer2.org/) で定義されているパレットを使う。 色盲対策もできるし、原色も出てこないのでオススメ。
+:   cf. [RColorBrewer](https://www.rdocumentation.org/packages/RColorBrewer/topics/ColorBrewer)
+:   `scale_{colour/fill}_brewer(..., type='seq', palette=1, direction=1)`: 離散値
+:   `scale_{colour/fill}_distiller(...)`: 連続値
 
-<http://ggplot2.tidyverse.org/reference/scale_gradient.html>
-:   グラデーションの基準色を指定する。\
-    `scale_{colour/fill}_gradient(..., low, high, ...)`: 普通の連続値に\
-    `scale_{colour/fill}_gradient2(..., low, mid, high, midpoint=0, ...)`: ある中央値を挟んで上下に分けたいとき\
-    `scale_{colour/fill}_gradientn(..., colours, ...)`: 多色のヒートマップなどに e.g., `colours=c('#000000', '#0000FF', '#00FFFF', '#00FF00', '#FFFF00', '#FF0000')`
+[`scale_*_gradient`](http://ggplot2.tidyverse.org/reference/scale_gradient.html)
+:   グラデーションの基準色を指定する。
+:   `scale_{colour/fill}_gradient(..., low, high, ...)`: 普通の連続値に
+:   `scale_{colour/fill}_gradient2(..., low, mid, high, midpoint=0, ...)`: ある中央値を挟んで上下に分けたいとき
+:   `scale_{colour/fill}_gradientn(..., colours, ...)`: 多色のヒートマップなどに e.g., `colours=c('#000000', '#0000FF', '#00FFFF', '#00FF00', '#FFFF00', '#FF0000')`
 
-<http://ggplot2.tidyverse.org/reference/scale_identity.html>
-:   データフレームに入ってる値をそのまま使う\
-    `scale_{colour/fill/size/shape/linetype/alpha}_identity(..., guide='none')`
+[`scale_*_identity`](http://ggplot2.tidyverse.org/reference/scale_identity.html)
+:   データフレームに入ってる値をそのまま使う
+:   `scale_{colour/fill/size/shape/linetype/alpha}_identity(..., guide='none')`
 
-<http://ggplot2.tidyverse.org/reference/scale_manual.html>
-:   値を直に指定する\
-    `scale_{colour/fill/size/shape/linetype/alpha}_manual(..., values)`
+[`scale_*_manual`](http://ggplot2.tidyverse.org/reference/scale_manual.html)
+:   値を直に指定する
+:   `scale_{colour/fill/size/shape/linetype/alpha}_manual(..., values)`
 
 legend/colourbarのタイトルを変更したい場合は上記関数に `name='New Title'` を指定する。
 さらに細かく制御したい場合は
@@ -220,17 +220,17 @@ ggplot内部で `stat_*()` を通して行われる。
 ### 軸やタイトルを変更
 
 [軸の区切りを変更したり対数にしたり](http://ggplot2.tidyverse.org/reference/scale_continuous.html)
-:   `gp + scale_x_continuous(breaks=seq(10, 100, by=10))`\
-    `gp + scale_y_log10("Beer consumption")`\
-    オプション: name, breaks, labels, na.value, limits, trans, expand\
-    デフォルトでは値域よりも少し余裕を持たせてあるが、 `geom_tile()` などでピッタリにしたいときは軸ごとに `expand=c(0, 0)` とか。
+:   `gp + scale_x_continuous(breaks=seq(10, 100, by=10))`
+:   `gp + scale_y_log10("Beer consumption")`
+:   オプション: name, breaks, labels, na.value, limits, trans, expand
+:   デフォルトでは値域よりも少し余裕を持たせてあるが、 `geom_tile()` などでピッタリにしたいときは軸ごとに `expand=c(0, 0)` とか。
     `position='right'`とかで軸の位置を変更できる。
     `sec.axis`オプションで反対側に別の軸を追加できる。
 
 [描画する範囲を指定](http://ggplot2.tidyverse.org/reference/coord_cartesian.html)
-:   `gp + ylim(0, 42) + xlim("b", "c", "d")`\
-    `gp + coord_cartesian(xlim = NULL, ylim = NULL)`\
-    前者はデータそのものを切るが、後者はデータを変えずに描画領域だけズームする
+:   `gp + ylim(0, 42) + xlim("b", "c", "d")`
+:   `gp + coord_cartesian(xlim = NULL, ylim = NULL)`
+:   前者はデータそのものを切るが、後者はデータを変えずに描画領域だけズームする
 
 [X軸とY軸の比率を固定](http://ggplot2.tidyverse.org/reference/coord_fixed.html)
 :   `gp + coord_fixed(ratio=1)`
@@ -242,13 +242,13 @@ ggplot内部で `stat_*()` を通して行われる。
 :   パイチャートも作れるらしい
 
 [座標変換](http://ggplot2.tidyverse.org/reference/coord_trans.html)
-:   `gp + coord_trans(x='log10', y='sqrt')`\
-    表示の座標だけ変更する。
-    stat前に適用される `scale_x_*` とかとはちょいと違う。
+:   `gp + coord_trans(x='log10', y='sqrt')`
+:    表示の座標だけ変更する。
+     stat前に適用される `scale_x_*` とかとはちょいと違う。
 
 [軸ラベルとタイトル](http://ggplot2.tidyverse.org/reference/labs.html)
-:   `gp + labs(x="time", y="weight", title="growth")`\
-    `gp + xlab("time") + ylab("weight") + ggtitle("growth")`
+:   `gp + labs(x="time", y="weight", title="growth")`
+:   `gp + xlab("time") + ylab("weight") + ggtitle("growth")`
 
 ## `theme`: 背景やラベルの調整
 
@@ -297,9 +297,8 @@ Macなら"HiraKakuProN-W3"を指定すれば日本語でも文字化けしなく
 
 ### 設定項目
 
-<http://ggplot2.tidyverse.org/reference/theme.html>
-
-<http://docs.ggplot2.org/dev/vignettes/themes.html>
+- <http://ggplot2.tidyverse.org/reference/theme.html>
+- <http://docs.ggplot2.org/dev/vignettes/themes.html>
 
 `theme()` 関数に項目と値を指定したものを、
 ほかのレイヤーと同じようにどんどん足しながら変更していく。
@@ -321,20 +320,20 @@ gp = gp + theme(plot.background=element_rect(fill="transparent"))
 : `aspect.ratio`:
 
 軸タイトル、軸ラベル、目盛
-: `axis.title`: (`element_text`; inherits from `text`)\\
+: `axis.title`: (`element_text`; inherits from `text`)\
   &emsp;`__.x`, `__.x.top`, `__.y`, `__.y.right`
-: `axis.text`: (`element_text`; inherits from `text`)\\
+: `axis.text`: (`element_text`; inherits from `text`)\
   &emsp;`__.x`, `__.x.top`, `__.y`, `__.y.right`
-: `axis.ticks`: (`element_line`; inherits from `line`)\\
+: `axis.ticks`: (`element_line`; inherits from `line`)\
   &emsp;`__.x`, `__.y`
 : `axis.ticks.length`: (`unit`)
-: `axis.line`: (`element_line`; inherits from `line`)\\
+: `axis.line`: (`element_line`; inherits from `line`)\
   &emsp;`__.x`, `__.y`
 
 凡例
 : `legend.background`: (`element_rect`; inherits from `rect`)
 : `legend.margin`: (`margin`)
-: `legend.spacing`:(`unit`)\\
+: `legend.spacing`:(`unit`)\
    &emsp;`__.x`, `__.y`
 : `legend.key`: (`element_rect`; inherits from `rect`)
 : `legend.key.size`: (`unit`)
@@ -356,12 +355,12 @@ gp = gp + theme(plot.background=element_rect(fill="transparent"))
 プロット領域の背景、余白、格子
 : `panel.background`: (`element_rect`; inherits from `rect`)
 : `panel.border`: (`element_rect`; inherits from `rect`; should be used with `fill=NA`)
-: `panel.spacing`: (`unit`; `facet_*` の間隔)\\
+: `panel.spacing`: (`unit`; `facet_*` の間隔)\
   &emsp;`__.x`, `__.y`
 : `panel.grid`: (`element_line`; inherits from `line`)
-: `panel.grid.major`: (`element_line`; inherits from `panel.grid`)\\
+: `panel.grid.major`: (`element_line`; inherits from `panel.grid`)\
   &emsp;`__.x`, `__.y`
-: `panel.grid.minor`: (`element_line`; inherits from `panel.grid`)\\
+: `panel.grid.minor`: (`element_line`; inherits from `panel.grid`)\
   &emsp;`__.x`, `__.y`
 
 全体の背景、タイトル、余白
@@ -374,7 +373,7 @@ gp = gp + theme(plot.background=element_rect(fill="transparent"))
 `facet` したときのラベル
 : `strip.background`: (`element_rect`; inherits from `rect`)
 : `strip.placement`: ('inside', 'outside')
-: `strip.text`: (`element_text`; inherits from `text`)\\
+: `strip.text`: (`element_text`; inherits from `text`)\
   &emsp;`__.x`, `__.y`
 
 その他
@@ -385,17 +384,17 @@ gp = gp + theme(plot.background=element_rect(fill="transparent"))
 ### エレメント
 
 `element_rect(fill, colour, size, linetype, inherit.blank)` --- 長方形
-:   `fill`: 塗りつぶしの色\
-    `colour`: 枠の色
+:   `fill`: 塗りつぶしの色
+:   `colour`: 枠の色
 
 `element_line(colour, size, linetype, lineend, arrow, inherit.blank)` --- 直線
 
 `element_text(family, face, colour, size, hjust, vjust, angle, lineheight, margin)` --- 文字
-:   `family`: フォントファミリー。 空なら `theme_bw(base_family=...)` などの指定を継承。\
-    `face`: (`'plain'`, `'italic'`, `'bold'`, `'bold.italic'`)\
-    `hjust`, `vjust`: 水平位置と垂直位置の寄せ方をそれぞれ `[0, 1]` の実数で。\
-    `angle`: 角度 `[0, 360]`\
-    `margin`: スペース調整を関数 `margin(top, right, bottom, left)` 越しに。
+:   `family`: フォントファミリー。 空なら `theme_bw(base_family=...)` などの指定を継承。
+:   `face`: (`'plain'`, `'italic'`, `'bold'`, `'bold.italic'`)
+:   `hjust`, `vjust`: 水平位置と垂直位置の寄せ方をそれぞれ `[0, 1]` の実数で。
+:   `angle`: 角度 `[0, 360]`
+:   `margin`: スペース調整を関数 `margin(top, right, bottom, left)` 越しに。
 
 `element_blank()` --- 空
 :   消したい要素にはこれを指定する
@@ -422,13 +421,8 @@ gp = gp + theme(plot.background=element_rect(fill="transparent"))
 :   継承などを考慮した上でelementがどんな値にセットされるか確かめる。
 
 [線の種類](http://www.cookbook-r.com/Graphs/Shapes_and_line_types/) --- `linetype=`
-:   `0`: `'blank'`\
-    `1`: `'solid'`\
-    `2`: `'dashed'`\
-    `3`: `'dotted'`\
-    `4`: `'dotdash'`\
-    `5`: `'longdash'`\
-    `6`: `'twodash'`
+: 0: `blank`, 1: `solid`, 2: `dashed`, 3: `dotted`, 4: `dotdash`, 5: `longdash`, 6: `twodash`
+
 
 ## ファイルに書き出す
 
