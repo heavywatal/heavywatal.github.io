@@ -109,6 +109,7 @@ R標準の<code>plot()</code>などは前者の上に、
 <li><a href="http://www.cookbook-r.com/Graphs/">http://www.cookbook-r.com/Graphs/</a></li>
 <li><a href="http://www.rdocumentation.org/packages/ggplot2">http://www.rdocumentation.org/packages/ggplot2</a></li>
 <li><a href="https://github.com/hadley/ggplot2-book">https://github.com/hadley/ggplot2-book</a></li>
+<li><a href="https://blog.rstudio.org/2015/12/21/ggplot2-2-0-0/">version 2.0での変更点</a></li>
 </ul>
 
 <h2 id="基本的な使い方">基本的な使い方</h2>
@@ -144,8 +145,6 @@ ggsave<span class="p">(</span><span class="s">&#34;iris_sepal.png&#34;</span><sp
 
 <h2 id="プロットの種類">プロットの種類</h2>
 
-<p><a href="https://blog.rstudio.org/2015/12/21/ggplot2-2-0-0/">version 2.0での変更点</a></p>
-
 <dl>
 <dt><a href="http://ggplot2.tidyverse.org/reference/geom_point.html">散布図</a></dt>
 <dd><code>gp + geom_point(size=2, alpha=0.3)</code></dd>
@@ -160,9 +159,8 @@ ggsave<span class="p">(</span><span class="s">&#34;iris_sepal.png&#34;</span><sp
 <dd><code>gp + geom_density()</code> &mdash; 密度推定されたスムーズな線</dd>
 <dt><a href="http://ggplot2.tidyverse.org/reference/geom_bar.html">棒グラフ</a></dt>
 <dd><code>gp + geom_col()</code></dd>
-<dd>同じxに対して複数グループのyが存在するとき、
-<code>position='dodge'</code> にすると横並び
-(デフォルトは縦積みの<code>'stack'</code>)。</dd>
+<dd>グループ分けする場合、デフォルトでは縦積みの <code>'stack'</code> で、
+<code>position='dodge'</code> にすると横並び。</dd>
 <dt><a href="http://ggplot2.tidyverse.org/reference/geom_boxplot.html">箱ひげ図</a></dt>
 <dd><code>gp + geom_boxplot()</code></dd>
 <dd><code>gp + geom_violin()</code></dd>
@@ -198,68 +196,111 @@ ggsave<span class="p">(</span><span class="s">&#34;iris_sepal.png&#34;</span><sp
 <dd>数式を使う場合は文字列 <code>label='italic(N[t])'</code> のような文字列で渡して <code>parse=TRUE</code>。</dd>
 </dl>
 
-<h2 id="プロットの調整">プロットの調整</h2>
+<h2 id="変数によってグループ分け-http-ggplot2-tidyverse-org-reference-aes-group-order-html"><a href="http://ggplot2.tidyverse.org/reference/aes_group_order.html">変数によってグループ分け</a></h2>
 
-<h3 id="データによって色やサイズを変える">データによって色やサイズを変える</h3>
+<p><code>aes(colour = Species)</code> のように列を指定して <code>ggplot()</code> や <code>geom_*()</code> に渡す。
+<code>aes()</code> の外で指定するとデータによらず全体に反映される:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># サイズは常に3、色は species という列のデータによって変える</span>
+gp <span class="o">+</span> geom_point<span class="p">(</span>aes<span class="p">(</span>colour <span class="o">=</span> species<span class="p">),</span> size <span class="o">=</span> <span class="m">3</span><span class="p">)</span>
 
-<p><a href="http://ggplot2.tidyverse.org/articles/ggplot2-specs.html">http://ggplot2.tidyverse.org/articles/ggplot2-specs.html</a></p>
+<span class="c1"># 色は常に赤、サイズは frequency という列の値に比例</span>
+gp <span class="o">+</span> geom_point<span class="p">(</span>aes<span class="p">(</span>size <span class="o">=</span> frequency<span class="p">),</span> colour <span class="o">=</span> <span class="s">&#34;red&#34;</span><span class="p">)</span></code></pre></div>
+<ul>
+<li><a href="http://ggplot2.tidyverse.org/reference/aes_colour_fill_alpha.html">色・透明度を変える</a>
 
 <ul>
 <li><code>colour</code>: 点や線の色</li>
 <li><code>fill</code>: 塗りつぶしの色</li>
+<li><a href="http://ggplot2.tidyverse.org/reference/scale_alpha.html"><code>alpha</code></a>: 不透明度 (0が透明、1が不透明)</li>
+</ul></li>
+<li><a href="http://ggplot2.tidyverse.org/reference/aes_linetype_size_shape.html">大きさ・形を変える</a>
+
+<ul>
 <li><a href="http://ggplot2.tidyverse.org/reference/scale_size.html"><code>size</code></a>: 点や線のサイズ</li>
 <li><a href="http://ggplot2.tidyverse.org/reference/scale_shape.html"><code>shape</code></a>: 点の形</li>
 <li><a href="http://ggplot2.tidyverse.org/reference/scale_linetype.html"><code>linetype</code></a>: 線</li>
-<li><a href="http://ggplot2.tidyverse.org/reference/scale_alpha.html"><code>alpha</code></a>: 不透明度 (0が透明、1が不透明)</li>
+</ul></li>
+<li>単にグループ分けする
+
+<ul>
+<li><code>group</code>: 色や形はそのままにグループ分け。反復試行の折れ線グラフなどに。</li>
+</ul></li>
 </ul>
 
-<p><code>aes()</code> の中にはデータによって描き分けたい列名を指定し、
-外にはデータによらない値を指定する:</p>
+<h3 id="scale-関数で調整"><code>scale_*()</code> 関数で調整</h3>
 
-<pre><code># サイズは常に3、色は species という列のデータによって変える
-geom_point(aes(colour=species), size=3)+
-scale_colour_brewer(palette='Set1')
-
-# 色は常に赤、サイズは frequency という列の値に比例
-geom_point(aes(size=frequency), colour='red')
-</code></pre>
-
+<p>変数をどうやって色やサイズに反映させるか、
+各項目に対応する <code>scale_*()</code> 関数で調整する。</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">gp <span class="o">+</span> geom_point<span class="p">(</span>aes<span class="p">(</span>colour <span class="o">=</span> species<span class="p">))</span> <span class="o">+</span>
+  scale_colour_brewer<span class="p">(</span>palette <span class="o">=</span> <span class="s">&#34;Spectral&#34;</span><span class="p">)</span></code></pre></div>
 <dl>
 <dt><a href="http://ggplot2.tidyverse.org/reference/scale_brewer.html"><code>scale_*_brewer</code></a></dt>
-<dd><a href="http://colorbrewer2.org/">Colorbrewer</a> で定義されているパレットを使う。 色盲対策もできるし、原色も出てこないのでオススメ。</dd>
-<dd>cf. <a href="https://www.rdocumentation.org/packages/RColorBrewer/topics/ColorBrewer">RColorBrewer</a></dd>
-<dd><code>scale_{colour/fill}_brewer(..., type='seq', palette=1, direction=1)</code>: 離散値</dd>
-<dd><code>scale_{colour/fill}_distiller(...)</code>: 連続値</dd>
+<dd>for <code>colour</code>, <code>fill</code></dd>
+<dd><a href="http://colorbrewer2.org/">Colorbrewer</a> で定義されているパレットを使う。 色盲対策もできるし、原色も出てこないのでオススメ。
+cf. <a href="https://www.rdocumentation.org/packages/RColorBrewer/topics/ColorBrewer">RColorBrewer</a></dd>
+<dd><code>scale_*_brewer(..., type='seq', palette=1, direction=1)</code>: 離散値</dd>
+<dd><code>scale_*_distiller(...)</code>: 連続値</dd>
 <dt><a href="http://ggplot2.tidyverse.org/reference/scale_gradient.html"><code>scale_*_gradient</code></a></dt>
-<dd>グラデーションの基準色を指定する。</dd>
-<dd><code>scale_{colour/fill}_gradient(..., low, high, ...)</code>: 普通の連続値に</dd>
-<dd><code>scale_{colour/fill}_gradient2(..., low, mid, high, midpoint=0, ...)</code>: ある中央値を挟んで上下に分けたいとき</dd>
-<dd><code>scale_{colour/fill}_gradientn(..., colours, ...)</code>: 多色のヒートマップなどに e.g., <code>colours=c('#000000', '#0000FF', '#00FFFF', '#00FF00', '#FFFF00', '#FF0000')</code></dd>
+<dd>for <code>colour</code>, <code>fill</code></dd>
+<dd>グラデーションの基準となる色を指定する。</dd>
+<dd><code>scale_*_gradient(..., low, high, ...)</code>: 普通の連続値に</dd>
+<dd><code>scale_*_gradient2(..., low, mid, high, midpoint=0, ...)</code>: ある中央値を挟んで上下に分けたいとき</dd>
+<dd><code>scale_*_gradientn(..., colours, values=NULL, ...)</code>: 多色のヒートマップなどに e.g., <code>colours=c('#000000', '#0000FF', '#00FFFF', '#00FF00', '#FFFF00', '#FF0000')</code></dd>
 <dt><a href="http://ggplot2.tidyverse.org/reference/scale_identity.html"><code>scale_*_identity</code></a></dt>
-<dd>データフレームに入ってる値をそのまま使う</dd>
-<dd><code>scale_{colour/fill/size/shape/linetype/alpha}_identity(..., guide='none')</code></dd>
+<dd>for <code>colour</code>, <code>fill</code>, <code>size</code>, <code>shape</code>, <code>linetype</code>, <code>alpha</code></dd>
+<dd>色の名前やサイズなどを示す列が予めデータに含まれている場合にそのまま使う。
+使えるパラメータは <a href="http://ggplot2.tidyverse.org/articles/ggplot2-specs.html">http://ggplot2.tidyverse.org/articles/ggplot2-specs.html</a> 参照</dd>
 <dt><a href="http://ggplot2.tidyverse.org/reference/scale_manual.html"><code>scale_*_manual</code></a></dt>
-<dd>値を直に指定する</dd>
-<dd><code>scale_{colour/fill/size/shape/linetype/alpha}_manual(..., values)</code></dd>
+<dd>for <code>colour</code>, <code>fill</code>, <code>size</code>, <code>shape</code>, <code>linetype</code>, <code>alpha</code></dd>
+<dd>対応関係を引数で直に指定する。</dd>
+<dt><a href="http://ggplot2.tidyverse.org/reference/scale_size.html"><code>scale_size</code></a></dt>
+<dd>デフォルトではpointの面積を値にほぼ比例させるが、面積0にはならない。
+値0に面積0を対応させるには <code>scale_size_area()</code> を使う。
+半径を比例させるには <code>scale_radius()</code> があるけど要注意。</dd>
 </dl>
 
-<p>legend/colourbarのタイトルを変更したい場合は上記関数に <code>name='New Title'</code> を指定する。
+<p><a href="http://ggplot2.tidyverse.org/reference/scale_alpha.html"><code>scale_alpha(..., range=c(0.1, 1))</code></a><br>
+<a href="http://ggplot2.tidyverse.org/reference/scale_linetype.html"><code>scale_linetype</code></a><br>
+<a href="http://ggplot2.tidyverse.org/reference/scale_shape.html"><code>scale_shape</code></a></p>
+
+<h3 id="スケール共通オプション">スケール共通オプション</h3>
+
+<p>legend/colourbarの見せ方を変更するには
+<code>scale_*()</code> 関数に以下のオプションを指定する。
+<a href="http://ggplot2.tidyverse.org/reference/continuous_scale.html">連続値の場合</a> と
+<a href="http://ggplot2.tidyverse.org/reference/discrete_scale.html">離散値の場合</a>
+で微妙に意味が変わるけどだいたいこんな感じ:</p>
+
+<ul>
+<li><code>name</code>: 凡例のタイトル。複数スケールで同じ名前にすると凡例が統合される。</li>
+<li><code>breaks</code>: 目盛りや凡例に登場させる値。</li>
+<li><code>labels</code>: breaksの値に対応する文字列。デフォルトはbreaksそのまま。</li>
+<li><code>na.value</code>: 欠損値のときどうするか</li>
+<li><code>limits</code>: 連続値なら最大値と最小値のvector。離散値なら取りうるすべての値。</li>
+<li><code>guide</code>: 文字列で <code>&quot;legend&quot;</code> か <code>&quot;colourbar&quot;</code>。
 さらに細かく制御したい場合は
 <a href="http://ggplot2.tidyverse.org/reference/guide_legend.html"><code>guide_legend()</code></a> や
 <a href="http://ggplot2.tidyverse.org/reference/guide_colourbar.html"><code>guide_colourbar()</code></a>
-を引数 <code>guide</code> に渡す。</p>
+で。</li>
+</ul>
 
-<h3 id="内部変数を使う">内部変数を使う</h3>
+<h3 id="グループ間の位置を調整する">グループ間の位置を調整する</h3>
 
-<p><a href="https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variables">https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variables</a></p>
+<ul>
+<li><a href="http://ggplot2.tidyverse.org/reference/position_dodge.html"><code>position_dodge(width=NULL, preserve=c('total', 'single')</code></a>:
+横に並べる。棒グラフなどでよく使う。</li>
+<li><a href="http://ggplot2.tidyverse.org/reference/position_stack.html"><code>position_stack(vjust=1, reverse=FALSE)</code></a>:
+積み重ねる。棒グラフや<code>geom_area()</code>に。
+高さを1に揃えて割合を示すには <code>position_fill()</code> を使う。</li>
+<li><a href="http://ggplot2.tidyverse.org/reference/position_nudge.html"><code>position_nudge(x=0, y=0)</code></a>:
+平行移動。文字を添えるのに便利。</li>
+<li><a href="http://ggplot2.tidyverse.org/reference/position_jitter.html"><code>position_jitter(width=NULL, height=NULL)</code></a>
+ランダムにばらかす。
+<a href="http://ggplot2.tidyverse.org/reference/geom_jitter.html"><code>geom_jitter()</code></a>
+はこれを使ったショートカット。</li>
+</ul>
 
-<p>ヒストグラムや箱ヒゲなどの表示に必要な計算は
-ggplot内部で <code>stat_*()</code> を通して行われる。
-そうした値 (computed variables) の一部は
-<code>..count..</code> や <code>..density..</code> みたいに
-ピリオドで囲まれた特殊な名前で参照することができる。</p>
-
-<h3 id="パネルの分割">パネルの分割</h3>
+<h3 id="変数によってパネルを分割する">変数によってパネルを分割する</h3>
 
 <p>年ごとや種ごとに傾向を見たいときなど、データに応じてパネルを分割して並べる。</p>
 
@@ -287,16 +328,32 @@ ggplot<span class="p">(</span>iris<span class="p">,</span> aes<span class="p">(<
 変数名を同時に表示するなど細かい調整も可能。</p></dd>
 </dl>
 
-<h3 id="軸やタイトルを変更">軸やタイトルを変更</h3>
+<h3 id="内部変数を使う">内部変数を使う</h3>
+
+<p><a href="https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variables">https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variables</a></p>
+
+<p>ヒストグラムや箱ヒゲなどの表示に必要な計算は
+ggplot内部で <code>stat_*()</code> を通して行われる。
+そうした値 (computed variables) の一部は
+<code>..count..</code> や <code>..density..</code> みたいに
+ピリオドで囲まれた特殊な名前で参照することができる。</p>
+
+<h2 id="軸やタイトルを変更">軸やタイトルを変更</h2>
 
 <dl>
 <dt><a href="http://ggplot2.tidyverse.org/reference/scale_continuous.html">軸の区切りを変更したり対数にしたり</a></dt>
 <dd><code>gp + scale_x_continuous(breaks=seq(10, 100, by=10))</code></dd>
 <dd><code>gp + scale_y_log10(&quot;Beer consumption&quot;)</code></dd>
-<dd>オプション: name, breaks, labels, na.value, limits, trans, expand</dd>
-<dd>デフォルトでは値域よりも少し余裕を持たせてあるが、 <code>geom_tile()</code> などでピッタリにしたいときは軸ごとに <code>expand=c(0, 0)</code> とか。
-<code>position='right'</code>とかで軸の位置を変更できる。
-<code>sec.axis</code>オプションで反対側に別の軸を追加できる。</dd>
+<dd><code>gp + scale_y_reverse()</code></dd>
+<dd>上記の<a href="#スケール共通オプション">スケール共通オプション</a>に加えて:
+
+<ul>
+<li><code>expand</code>: デフォルトでは値域よりも少し余裕を持たせてあるが
+<code>c(0, 0)</code> を与えるとピッタリになる。<code>geom_tile()</code>を使うときなどに。</li>
+<li><code>trans</code>: 値の変換。exp, identity, log, log10, reciprocal, reverse など。</li>
+<li><code>position</code>: top, bottom, left, right</li>
+<li><code>sec.axis</code>: 第二軸</li>
+</ul></dd>
 <dt><a href="http://ggplot2.tidyverse.org/reference/coord_cartesian.html">描画する範囲を指定</a></dt>
 <dd><code>gp + ylim(0, 42) + xlim(&quot;b&quot;, &quot;c&quot;, &quot;d&quot;)</code></dd>
 <dd><code>gp + coord_cartesian(xlim = NULL, ylim = NULL)</code></dd>
