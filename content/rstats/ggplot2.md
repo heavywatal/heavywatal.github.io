@@ -66,22 +66,34 @@ ggsave("iris_sepal.png", gp)
 
 [散布図](http://ggplot2.tidyverse.org/reference/geom_point.html)
 :   `gp + geom_point(size=2, alpha=0.3)`
+:   重なった点をランダムにばらかしたいときは
+    [`geom_jitter()`](http://ggplot2.tidyverse.org/reference/geom_jitter.html)
 
 [折れ線グラフ](http://ggplot2.tidyverse.org/reference/geom_path.html)
 :   `gp + geom_path(size=2, linetype="dashed")` データ順に結ぶ
 :   `gp + geom_line()` x軸上の順で結ぶ
 :   `gp + geom_step()` 階段状に結ぶ
 
+[面グラフ](http://ggplot2.tidyverse.org/reference/geom_ribbon.html)
+:   `gp + geom_ribbon()` --- yminからymaxの面
+:   `gp + geom_area()` --- 0からyの面
+
 [ヒストグラム、密度曲線](http://ggplot2.tidyverse.org/reference/geom_histogram.html)
-:   `gp + geom_histogram()` --- 棒グラフ(連続値を`stat_bin()` で切って)
+:   `gp + geom_histogram()` --- 棒グラフ(連続値を`stat_bin()` で区切って)
 :   `gp + geom_bar()` --- 棒グラフ(離散値を`stat_count()`で数えて)
 :   `gp + geom_freqpoly()` --- 折れ線
 :   `gp + geom_density()` --- 密度推定されたスムーズな線
+:   `gp + geom_bin2d()` --- 二次元ヒストグラム
+:   `gp + geom_hex()` --- 六角形版二次元ヒストグラム
 
 [棒グラフ](http://ggplot2.tidyverse.org/reference/geom_bar.html)
 :   `gp + geom_col()`
-:   グループ分けする場合、デフォルトでは縦積みの `'stack'` で、
-    `position='dodge'` にすると横並び。
+:   グループ分けする場合のオプション:
+    - [`position='stack'`](http://ggplot2.tidyverse.org/reference/position_stack.html):
+      縦に積み重ねる (デフォルト)
+    - [`position='dodge'`](http://ggplot2.tidyverse.org/reference/position_dodge.html):
+      横に並べる
+    - `position='fill'`: 縦に積み重ね、高さを1に揃えて割合を示す
 
 [箱ひげ図](http://ggplot2.tidyverse.org/reference/geom_boxplot.html)
 :   `gp + geom_boxplot()`
@@ -89,14 +101,12 @@ ggsave("iris_sepal.png", gp)
 
 [ヒートマップ](http://ggplot2.tidyverse.org/reference/geom_tile.html)
 :   `gp + geom_tile(aes(fill=z))`
-:   `gp + geom_raster(aes(fill=z))`
-:   後者は各タイルの大きさがすべて同じ場合の特殊ケースで、高速。
+:   `gp + geom_raster(aes(fill=z))` --- 各タイルの大きさがすべて等しい制約のため高速
 
 [エラーバー](http://ggplot2.tidyverse.org/reference/geom_linerange.html)
-:   `limits = aes(ymax=height+se, ymin=height-se)`
-:   `gp + geom_errorbar(limits, width=0.1)`
-:   `gp + geom_pointrange(limits)`
-:   `gp + geom_crossbar(limits, width=0.2)`
+:   `gp + geom_errorbar(aes(ymax = y + se, ymin = y - se), width = 0.1)`
+:   `gp + geom_linerange(...)`
+:   `gp + geom_pointrange(...)`
 
 [関数](http://ggplot2.tidyverse.org/reference/stat_function.html)
 :   `ggplot(data.frame(x=c(-4, 4)), aes(x)) + stat_function(fun=dnorm, args=c(0, 1), n=200)`
@@ -116,10 +126,16 @@ ggsave("iris_sepal.png", gp)
 :   矢印の調整は [grid::arrow()](https://www.rdocumentation.org/packages/grid/topics/arrow)
 
 [文字列や図形を書き加える](http://ggplot2.tidyverse.org/reference/annotate.html)
-:   `gp + geom_text(aes(y=y_val+10), label=y_val)`
 :   `gp + annotate("text", x=1:4, y=4:1, label=sprintf("x = %d", 1:4))`
 :   テーマの `base_family` は引き継がれないので `family=` で指定すべし。
-:   数式を使う場合は文字列 `label='italic(N[t])'` のような文字列で渡して `parse=TRUE`。
+:   数式を表示するには `label="italic(N[t])"` のような文字列で渡して `parse=TRUE`。
+:   データ点に対応する文字列を添えるには
+    `gp + geom_text(aes(label=foo))` のほうが適している。
+    オプションで `nudge_x=2, nudge_y=2` などとすれば点と重ならないようにずらせる。
+    [`position_nudge()`](http://ggplot2.tidyverse.org/reference/position_nudge.html)
+
+
+
 
 ## [変数によってグループ分け](http://ggplot2.tidyverse.org/reference/aes_group_order.html)
 
@@ -207,21 +223,6 @@ legend/colourbarの見せ方を変更するには
   [`guide_legend()`](http://ggplot2.tidyverse.org/reference/guide_legend.html) や
   [`guide_colourbar()`](http://ggplot2.tidyverse.org/reference/guide_colourbar.html)
   で。
-
-
-### グループ間の位置を調整する
-
-- [`position_dodge(width=NULL, preserve=c('total', 'single')`](http://ggplot2.tidyverse.org/reference/position_dodge.html):
-  横に並べる。棒グラフなどでよく使う。
-- [`position_stack(vjust=1, reverse=FALSE)`](http://ggplot2.tidyverse.org/reference/position_stack.html):
-  積み重ねる。棒グラフや`geom_area()`に。
-  高さを1に揃えて割合を示すには `position_fill()` を使う。
-- [`position_nudge(x=0, y=0)`](http://ggplot2.tidyverse.org/reference/position_nudge.html):
-  平行移動。文字を添えるのに便利。
-- [`position_jitter(width=NULL, height=NULL)`](http://ggplot2.tidyverse.org/reference/position_jitter.html)
-  ランダムにばらかす。
-  [`geom_jitter()`](http://ggplot2.tidyverse.org/reference/geom_jitter.html)
-  はこれを使ったショートカット。
 
 
 ### 変数によってパネルを分割する
