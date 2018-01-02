@@ -148,31 +148,43 @@ ggsave<span class="p">(</span><span class="s">&#34;iris_sepal.png&#34;</span><sp
 <dl>
 <dt><a href="http://ggplot2.tidyverse.org/reference/geom_point.html">散布図</a></dt>
 <dd><code>gp + geom_point(size=2, alpha=0.3)</code></dd>
+<dd>重なった点をランダムにばらかしたいときは
+<a href="http://ggplot2.tidyverse.org/reference/geom_jitter.html"><code>geom_jitter()</code></a></dd>
 <dt><a href="http://ggplot2.tidyverse.org/reference/geom_path.html">折れ線グラフ</a></dt>
 <dd><code>gp + geom_path(size=2, linetype=&quot;dashed&quot;)</code> データ順に結ぶ</dd>
 <dd><code>gp + geom_line()</code> x軸上の順で結ぶ</dd>
 <dd><code>gp + geom_step()</code> 階段状に結ぶ</dd>
+<dt><a href="http://ggplot2.tidyverse.org/reference/geom_ribbon.html">面グラフ</a></dt>
+<dd><code>gp + geom_ribbon()</code> &mdash; yminからymaxの面</dd>
+<dd><code>gp + geom_area()</code> &mdash; 0からyの面</dd>
 <dt><a href="http://ggplot2.tidyverse.org/reference/geom_histogram.html">ヒストグラム、密度曲線</a></dt>
-<dd><code>gp + geom_histogram()</code> &mdash; 棒グラフ(連続値を<code>stat_bin()</code> で切って)</dd>
+<dd><code>gp + geom_histogram()</code> &mdash; 棒グラフ(連続値を<code>stat_bin()</code> で区切って)</dd>
 <dd><code>gp + geom_bar()</code> &mdash; 棒グラフ(離散値を<code>stat_count()</code>で数えて)</dd>
 <dd><code>gp + geom_freqpoly()</code> &mdash; 折れ線</dd>
 <dd><code>gp + geom_density()</code> &mdash; 密度推定されたスムーズな線</dd>
+<dd><code>gp + geom_bin2d()</code> &mdash; 二次元ヒストグラム</dd>
+<dd><code>gp + geom_hex()</code> &mdash; 六角形版二次元ヒストグラム</dd>
 <dt><a href="http://ggplot2.tidyverse.org/reference/geom_bar.html">棒グラフ</a></dt>
 <dd><code>gp + geom_col()</code></dd>
-<dd>グループ分けする場合、デフォルトでは縦積みの <code>'stack'</code> で、
-<code>position='dodge'</code> にすると横並び。</dd>
+<dd>グループ分けする場合のオプション:
+
+<ul>
+<li><a href="http://ggplot2.tidyverse.org/reference/position_stack.html"><code>position='stack'</code></a>:
+縦に積み重ねる (デフォルト)</li>
+<li><a href="http://ggplot2.tidyverse.org/reference/position_dodge.html"><code>position='dodge'</code></a>:
+横に並べる</li>
+<li><code>position='fill'</code>: 縦に積み重ね、高さを1に揃えて割合を示す</li>
+</ul></dd>
 <dt><a href="http://ggplot2.tidyverse.org/reference/geom_boxplot.html">箱ひげ図</a></dt>
 <dd><code>gp + geom_boxplot()</code></dd>
 <dd><code>gp + geom_violin()</code></dd>
 <dt><a href="http://ggplot2.tidyverse.org/reference/geom_tile.html">ヒートマップ</a></dt>
 <dd><code>gp + geom_tile(aes(fill=z))</code></dd>
-<dd><code>gp + geom_raster(aes(fill=z))</code></dd>
-<dd>後者は各タイルの大きさがすべて同じ場合の特殊ケースで、高速。</dd>
+<dd><code>gp + geom_raster(aes(fill=z))</code> &mdash; 各タイルの大きさがすべて等しい制約のため高速</dd>
 <dt><a href="http://ggplot2.tidyverse.org/reference/geom_linerange.html">エラーバー</a></dt>
-<dd><code>limits = aes(ymax=height+se, ymin=height-se)</code></dd>
-<dd><code>gp + geom_errorbar(limits, width=0.1)</code></dd>
-<dd><code>gp + geom_pointrange(limits)</code></dd>
-<dd><code>gp + geom_crossbar(limits, width=0.2)</code></dd>
+<dd><code>gp + geom_errorbar(aes(ymax = y + se, ymin = y - se), width = 0.1)</code></dd>
+<dd><code>gp + geom_linerange(...)</code></dd>
+<dd><code>gp + geom_pointrange(...)</code></dd>
 <dt><a href="http://ggplot2.tidyverse.org/reference/stat_function.html">関数</a></dt>
 <dd><code>ggplot(data.frame(x=c(-4, 4)), aes(x)) + stat_function(fun=dnorm, args=c(0, 1), n=200)</code></dd>
 </dl>
@@ -190,10 +202,13 @@ ggsave<span class="p">(</span><span class="s">&#34;iris_sepal.png&#34;</span><sp
 <dd><code>gp + geom_segment(aes(x, y, xend, yend), arrow=arrow())</code></dd>
 <dd>矢印の調整は <a href="https://www.rdocumentation.org/packages/grid/topics/arrow">grid::arrow()</a></dd>
 <dt><a href="http://ggplot2.tidyverse.org/reference/annotate.html">文字列や図形を書き加える</a></dt>
-<dd><code>gp + geom_text(aes(y=y_val+10), label=y_val)</code></dd>
 <dd><code>gp + annotate(&quot;text&quot;, x=1:4, y=4:1, label=sprintf(&quot;x = %d&quot;, 1:4))</code></dd>
 <dd>テーマの <code>base_family</code> は引き継がれないので <code>family=</code> で指定すべし。</dd>
-<dd>数式を使う場合は文字列 <code>label='italic(N[t])'</code> のような文字列で渡して <code>parse=TRUE</code>。</dd>
+<dd>数式を表示するには <code>label=&quot;italic(N[t])&quot;</code> のような文字列で渡して <code>parse=TRUE</code>。</dd>
+<dd>データ点に対応する文字列を添えるには
+<code>gp + geom_text(aes(label=foo))</code> のほうが適している。
+オプションで <code>nudge_x=2, nudge_y=2</code> などとすれば点と重ならないようにずらせる。
+<a href="http://ggplot2.tidyverse.org/reference/position_nudge.html"><code>position_nudge()</code></a></dd>
 </dl>
 
 <h2 id="変数によってグループ分け-http-ggplot2-tidyverse-org-reference-aes-group-order-html"><a href="http://ggplot2.tidyverse.org/reference/aes_group_order.html">変数によってグループ分け</a></h2>
@@ -282,22 +297,6 @@ cf. <a href="https://www.rdocumentation.org/packages/RColorBrewer/topics/ColorBr
 <a href="http://ggplot2.tidyverse.org/reference/guide_legend.html"><code>guide_legend()</code></a> や
 <a href="http://ggplot2.tidyverse.org/reference/guide_colourbar.html"><code>guide_colourbar()</code></a>
 で。</li>
-</ul>
-
-<h3 id="グループ間の位置を調整する">グループ間の位置を調整する</h3>
-
-<ul>
-<li><a href="http://ggplot2.tidyverse.org/reference/position_dodge.html"><code>position_dodge(width=NULL, preserve=c('total', 'single')</code></a>:
-横に並べる。棒グラフなどでよく使う。</li>
-<li><a href="http://ggplot2.tidyverse.org/reference/position_stack.html"><code>position_stack(vjust=1, reverse=FALSE)</code></a>:
-積み重ねる。棒グラフや<code>geom_area()</code>に。
-高さを1に揃えて割合を示すには <code>position_fill()</code> を使う。</li>
-<li><a href="http://ggplot2.tidyverse.org/reference/position_nudge.html"><code>position_nudge(x=0, y=0)</code></a>:
-平行移動。文字を添えるのに便利。</li>
-<li><a href="http://ggplot2.tidyverse.org/reference/position_jitter.html"><code>position_jitter(width=NULL, height=NULL)</code></a>
-ランダムにばらかす。
-<a href="http://ggplot2.tidyverse.org/reference/geom_jitter.html"><code>geom_jitter()</code></a>
-はこれを使ったショートカット。</li>
 </ul>
 
 <h3 id="変数によってパネルを分割する">変数によってパネルを分割する</h3>
