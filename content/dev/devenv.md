@@ -84,10 +84,17 @@ Macの [Homebrew]({{< relref "mac/homebrew.md" >}}) をLinuxに移植したパ�
 <https://developer.apple.com/downloads/> からダウンロードするか、
 ターミナルから以下のコマンドを実行:
 
-    % xcode-select --install
+```sh
+% xcode-select --install
+```
+
+インストールされているバージョンなどを確認するには:
+```sh
+% pkgutil --pkg-info=com.apple.pkg.CLTools_Executables
+% clang -v
+```
 
 総合開発環境 Xcode をインストールしたければ、App Store から [Xcode](https://itunes.apple.com/jp/app/xcode/id497799835) を選択。
-
 
 ### パッケージ管理ツール
 
