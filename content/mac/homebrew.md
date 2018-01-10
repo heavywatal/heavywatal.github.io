@@ -148,18 +148,42 @@ Rをここからインストールするとバイナリ版のパッケージが�
 - http://docs.brew.sh/brew-tap.html
 - http://docs.brew.sh/Interesting-Taps-and-Forks.html
 
-非公式フォーミュラを公開しているリポジトリを追加する:
+明示的にリポジトリを追加する:
 
-    % brew tap homebrew/science
+    % brew tap brewsci/science
     % brew install libsequence
 
-`brew tap` せずに直接インストールも可能:
+暗黙に `brew tap` しつつ直接インストールも可能:
 
-    % brew install homebrew/science/libsequence
+    % brew install brewsci/science/libsequence
 
+バイオインフォマティクスなど科学計算のツール群はHomebrew公式タップ
 [`homebrew/science`](https://github.com/Homebrew/homebrew-science)
-はバイオインフォマティクスなど科学計算のツール群を扱っていたが、
-主要なものをcoreに移動したあとdeprecatedになるらしい。
+に収録されていたが、主要なものをcoreに移したあとdeprecatedになった。
+今後は[brewsci](https://brewsci.github.io/homebrew-science/)がそれを引き継ぐらしい。
+
+
+### Tapを作る
+
+https://docs.brew.sh/How-to-Create-and-Maintain-a-Tap.html
+
+GitHubに `homebrew-nicetap` のような名前のリポジトリを作成し、
+ルート直下の `Formula/` に `goodtool.rb` のようなファイルを置くだけ。
+使うときは `brew install <username>/nicetap/goodtool`
+のようにリポジトリ名から `homebrew-` を削った形で指定する。
+
+
+### Formulaを作る
+
+https://docs.brew.sh/Formula-Cookbook.html
+
+新規作成するには `brew create <URL>` コマンドが便利。
+例えばGitHubリポジトリのバージョン付きアーカイブを指定してやると、
+自動的にいろいろ設定してくれる。
+
+特定のバージョンではなくGitHubリポジトリを参照するhead-onlyのフォーミュラも可能。
+ただし `brew upgrade` ではHEADの更新をチェックしてくれないので要注意。
+`brew reinstall` するしかないのかな？
 
 
 ## Cask
