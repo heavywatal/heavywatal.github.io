@@ -243,20 +243,42 @@ gccやboostなどのデカいやつはとりあえずデフォルトで入れた
 <li><a href="http://docs.brew.sh/Interesting-Taps-and-Forks.html">http://docs.brew.sh/Interesting-Taps-and-Forks.html</a></li>
 </ul>
 
-<p>非公式フォーミュラを公開しているリポジトリを追加する:</p>
+<p>明示的にリポジトリを追加する:</p>
 
-<pre><code>% brew tap homebrew/science
+<pre><code>% brew tap brewsci/science
 % brew install libsequence
 </code></pre>
 
-<p><code>brew tap</code> せずに直接インストールも可能:</p>
+<p>暗黙に <code>brew tap</code> しつつ直接インストールも可能:</p>
 
-<pre><code>% brew install homebrew/science/libsequence
+<pre><code>% brew install brewsci/science/libsequence
 </code></pre>
 
-<p><a href="https://github.com/Homebrew/homebrew-science"><code>homebrew/science</code></a>
-はバイオインフォマティクスなど科学計算のツール群を扱っていたが、
-主要なものをcoreに移動したあとdeprecatedになるらしい。</p>
+<p>バイオインフォマティクスなど科学計算のツール群はHomebrew公式タップ
+<a href="https://github.com/Homebrew/homebrew-science"><code>homebrew/science</code></a>
+に収録されていたが、主要なものをcoreに移したあとdeprecatedになった。
+今後は<a href="https://brewsci.github.io/homebrew-science/">brewsci</a>がそれを引き継ぐらしい。</p>
+
+<h3 id="tapを作る">Tapを作る</h3>
+
+<p><a href="https://docs.brew.sh/How-to-Create-and-Maintain-a-Tap.html">https://docs.brew.sh/How-to-Create-and-Maintain-a-Tap.html</a></p>
+
+<p>GitHubに <code>homebrew-nicetap</code> のような名前のリポジトリを作成し、
+ルート直下の <code>Formula/</code> に <code>goodtool.rb</code> のようなファイルを置くだけ。
+使うときは <code>brew install &lt;username&gt;/nicetap/goodtool</code>
+のようにリポジトリ名から <code>homebrew-</code> を削った形で指定する。</p>
+
+<h3 id="formulaを作る">Formulaを作る</h3>
+
+<p><a href="https://docs.brew.sh/Formula-Cookbook.html">https://docs.brew.sh/Formula-Cookbook.html</a></p>
+
+<p>新規作成するには <code>brew create &lt;URL&gt;</code> コマンドが便利。
+例えばGitHubリポジトリのバージョン付きアーカイブを指定してやると、
+自動的にいろいろ設定してくれる。</p>
+
+<p>特定のバージョンではなくGitHubリポジトリを参照するhead-onlyのフォーミュラも可能。
+ただし <code>brew upgrade</code> ではHEADの更新をチェックしてくれないので要注意。
+<code>brew reinstall</code> するしかないのかな？</p>
 
 <h2 id="cask">Cask</h2>
 
