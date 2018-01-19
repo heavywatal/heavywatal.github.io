@@ -52,14 +52,12 @@ Bachelor of Science, 2008.03
 
 **Papers**
 
-<!--
-- Yusuke Okamoto, **Watal M. Iwasaki**, Kazuto Kugou, Kazuki Takahashi, Arisa Oda, Koichi Sato, Wataru Kobayashi, Hidehiko Kawai, Ryo Sakasai, Akifumi Takaori-Kondo, Takashi Yamamoto, Masato T. Kanemaki, Masato Taoka, Toshiaki Isobe, Hitoshi Kurumizaka, Hideki Innan, Kunihiro Ohta, Masamichi Ishiai, Minoru Takata.
-  (*submitted*);
-  Replication stress induces accumulation of FANCD2 at middle intronic region of large fragile genes.
--->
+- Yusuke Okamoto, **Watal M. Iwasaki**, Kazuto Kugou, Kazuki Takahashi, Arisa Oda, Koichi Sato, Wataru Kobayashi, Hidehiko Kawai, Ryo Sakasai, Akifumi Takaori-Kondo, Takashi Yamamoto, Masato T. Kanemaki, Masato Taoka, Toshiaki Isobe, Hitoshi Kurumizaka, Hideki Innan, Kunihiro Ohta, Masamichi Ishiai, Minoru Takata. (2018)
+  *Nucleic Acids Research* (*in press*);
+  Replication stress induces accumulation of FANCD2 at central region of large fragile genes.
 - Satoshi Tamate\*, **Watal M. Iwasaki**\* (equally contributed), Kenneth L. Krysko, Brian Composano, Hideaki Mori, Ryo Funayama, Keiko Nakayama, Takashi Makino and Masakado Kawata. (2017)
   [*Sci. Rep.* **7**(18008)](https://doi.org/10.1038/s41598-017-17852-7);
-  Inferring evolutionary responses of *Anolis carolinensis* introduced into the Ogasawara archipelago using whole genome sequence data
+  Inferring evolutionary responses of *Anolis carolinensis* introduced into the Ogasawara archipelago using whole genome sequence data.
 - **Watal M. Iwasaki** and Hideki Innan. (2017)
   [*PLOS ONE* 12(9): e0184229](https://doi.org/10.1371/journal.pone.0184229);
   Simulation Framework for Generating Intratumor Heterogeneity Patterns in a Cancer Cell Population.
