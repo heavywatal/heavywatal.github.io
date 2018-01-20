@@ -6,6 +6,72 @@ tags = ["shell"]
 +++
 
 
+## if-then
+
+```sh
+# basic
+if test -e ~; then
+  echo 'test -e ~'
+fi
+
+# alias
+if [ -e ~ ]; then
+  echo '[ -e ~ ]'
+fi
+
+# bash/zsh extention; not POSIX
+if [[ -e ~ ]]; then
+  echo '[[ -e ~ ]]'
+fi
+
+# shortcut with exit status
+test -e ~ && echo 'test -e ~ && echo' || echo 'not printed'
+[ -e ~ ] && echo '[ -e ~ ] && echo' || echo 'not printed'
+[[ -e ~ ]] && echo '[[ -e ~ ]] && echo' || echo 'not printed'
+[[ ! -e ~ ]] && echo 'not printed' || echo '[[ ! -e ~ ]] || echo'
+```
+
+AND/OR
+```sh
+[ -e ~ -a -d ~ ] && echo '[-e ~ -a -d ~]'
+[ -e ~ -o -f ~ ] && echo '[-e ~ -o -f ~]'
+[ -e ~ ] && [ -d ~ ] && echo '[ -e ~ ] && [ -d ~ ]'
+[[ -e ~ && -d ~ ]] && echo '[[ -e ~ && -d ~ ]]'
+[[ -e ~ || -f ~ ]] && echo '[[ -e ~ || -f ~ ]]'
+```
+
+文字列
+```sh
+EMPTY=''
+NOTEMPTY='CONTENT'
+[ -z "$EMPTY" ] && echo '-z "$EMPTY"'
+[ -n "$NOTEMPTY" ] && echo '-n "$NOTEMPTY"'
+[ "$NOTEMPTY" != "$EMPTY" ] && echo '"$NOTEMPTY" != "$EMPTY"'
+[ "$NOTEMPTY" = "CONTENT" ] && echo '"$NOTEMPTY" = "CONTENT"'
+```
+
+ファイル、ディレクトリ
+```sh
+[ -e ~ ] && echo '-e ~'
+[ -d ~ ] && echo '-d ~'
+[ -f ~/.bashrc ] && echo '-f ~/.bashrc'
+[ -L ~/.bashrc ] && echo '-L ~/.bashrc'
+[ -r ~/.bashrc ] && echo '-r ~/.bashrc'
+[ -w ~/.bashrc ] && echo '-w ~/.bashrc'
+[ -x /bin/sh ] && echo '-x /bin/sh'
+```
+
+数値比較
+```sh
+one=1
+two=2
+[ $one -eq 1 ] && echo '$one -eq 1'
+[ $one -ne $two ] && echo '$one -ne $two'
+[ $one -lt $two ] && echo '$one -lt $two'
+[ $one -le $two ] && echo '$one -le $two'
+[ $two -gt $one ] && echo '$two -gt $one'
+[ $two -ge $one ] && echo '$two -ge $one'
+```
 
 ## [Parameter Expansion](https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html)
 
@@ -118,7 +184,7 @@ $!        # シェルが最後に起動したバックグラウンドプロセ�
 $?        # 最後に実行したコマンドのexit値
 ```
 
-## Misc
+## Misc.
 
 ### Command
 
@@ -129,17 +195,6 @@ $?        # 最後に実行したコマンドのexit値
 ### Arithmetic
 
 足し算くらいなら `$((expression))` で
-
-### コア数の取得
-
-Linuxなら `/proc/cpuinfo`、
-Macなら `system_profiler` 。でもたぶんIntelとPPCは書き方が違う。
-
-```sh
-[[ -r /proc/cpuinfo ]] \
-&& CORES=$(grep cpuid /proc/cpuinfo | wc -l)
-|| CORES=system_profiler | grep Cores | awk '{print $5}'
-```
 
 
 ## 関連書籍
