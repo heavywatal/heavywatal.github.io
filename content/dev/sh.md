@@ -5,37 +5,28 @@ tags = ["shell"]
   parent = "dev"
 +++
 
-<https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html>
 
-## Parameter Expansion
 
-```sh
-string=0123456789abcdef
-array=(0 1 2 3 4 5 6 7 8 9 a b c d e f)
-echo ${string[1]}  # 0
-echo ${array[1]}   # 0
-echo ${string[-1]} # f
-echo ${array[-1]}  # f
-echo ${#string}    # 16
-echo ${#array}     # 16
-```
-
-### Special Parameters
+## [Parameter Expansion](https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html)
 
 ```sh
-$0        # The full path of the script
-$1        # First argument
-$#        # The number of arguments ($0 is not included)
-$*        # 全ての引数。"$*" はひと括り: "$1 $2 $3"
-$@        # 全ての引数。"$@" は個別括り: "$1" "$2" "$3"
-$@[2,-1]  # 2つ目以降の引数(zshのみ？)
-$-        # シェルの起動時のフラグ、setコマンドを使って設定したフラグの一覧
-$$        # シェル自身のプロセスID
-$!        # シェルが最後に起動したバックグラウンドプロセスのプロセスID
-$?        # 最後に実行したコマンドのexit値
+string=abcdef
+echo ${string}   # abcdef
+echo ${#string}  # 6
 ```
 
-### Character String
+### 部分列
+
+```sh
+# ${parameter:offset}
+# ${parameter:offset:length}
+echo ${string:0:3}  # abc
+echo ${string:1:3}  # bcd
+echo ${string:2}    # cdef
+echo ${string: -2}  # ef
+```
+
+### 置換
 
 文字列の置換には正規表現を使える `sed` が便利。
 でもパスや拡張子のちょっとした操作なら、
@@ -45,34 +36,86 @@ $?        # 最後に実行したコマンドのexit値
 -   `$@` や `$*` に対しては、個々の要素に対して実行されてリストが返される。
 
 ```sh
-${STR#pattern}        # sed -e "s/^pattern//")     shortest
-${STR##pattern}       # sed -e "s/^pattern//")     longest
-${STR%pattern}        # sed -e "s/pattern$//")     shortest
-${STR%%pattern}       # sed -e "s/pattern$//")     longest
-${STR/pattern/repl}   # sed -e "s/pattern/repl/")
-${STR//pattern/repl}  # sed -e "s/pattern/repl/g")
-${STR/#pattern/repl}  # sed -e "s/^pattern/repl/")
-${STR/%pattern/repl}  # sed -e "s/pattern$/repl/")
+# ${STR#pattern}        # sed -e "s/^pattern//")     shortest
+# ${STR##pattern}       # sed -e "s/^pattern//")     longest
+# ${STR%pattern}        # sed -e "s/pattern$//")     shortest
+# ${STR%%pattern}       # sed -e "s/pattern$//")     longest
+# ${STR/pattern/repl}   # sed -e "s/pattern/repl/")  longest
+# ${STR//pattern/repl}  # sed -e "s/pattern/repl/g") longest
+# ${STR/#pattern/repl}  # sed -e "s/^pattern/repl/") longest
+# ${STR/%pattern/repl}  # sed -e "s/pattern$/repl/") longest
 
-BASENAME=${PATH##*/}
-DIRNAME=${PATH%/*}
-EXTENTION=${PATH##*.}
-BASENAME=${FILENAME%.jpg}
+FILEPATH=/root/dir/file.tar.gz
+echo ${FILEPATH##*/}       # file.tar.gz
+echo ${FILEPATH##*.}       # gz
+echo ${FILEPATH#*.}        # tar.gz
+echo ${FILEPATH%/*}        # /root/dir
+echo ${FILEPATH%.*}        # /root/dir/file.tar
+echo ${FILEPATH%%.*}       # /root/dir/file
+echo ${FILEPATH/%.*/.zip}  # /root/dir/file.zip
 ```
 
-### Other
-
+変数が設定されていない場合にどうするか
 ```sh
-## expression  # if VAR is null
+              # if VAR is null, then
 ${VAR:-WORD}  # return WORD; VAR remains null
-${VAR:=WORD}  # return WORD; VAR is assigned WORD
+${VAR:=WORD}  # return WORD; WORD is assigned to VAR
 ${VAR:?WORD}  # display error and exit
 ${VAR:+WORD}  # nothing occurs; otherwise return WORD
 ```
 
+
+## [Arrays](https://www.gnu.org/software/bash/manual/html_node/Arrays.html)
+
+bashとzshで添字の挙動が異なる。
 ```sh
-${!PREFIX*}  # the names of variables begins with PREFIX
-${!PREFIX@}
+array=(a b c d e f)  # bash        | zsh
+echo ${array}        # a           | a b c d e f
+echo ${array[0]}     # a           |
+echo ${array[1]}     # b           | a
+echo ${array[-1]}    # (error)     | f
+echo ${array[@]}     # a b c d e f | a b c d e f
+echo ${#array}       # 1           | 6
+echo ${#array[@]}    # 6           | 6
+```
+
+文字列と同様にコロンを使う方法ならzshでもゼロ基準なので安全。
+```sh
+echo ${array[@]:0:3}  # a b c
+echo ${array[@]:1:3}  # b c d
+echo ${array[@]:2}    # c d e f
+echo ${array[@]: -2}  # e f
+```
+
+`array[*]` と`array[@]` はクオートで括られる挙動が異なる。
+前者はひと括り、後者はそれぞれ括られる。
+```sh
+for x in "${array[*]:3}"; do
+  echo $x
+done
+# d e f
+
+for x in "${array[@]:3}"; do
+  echo $x
+done
+# d
+# e
+# f
+```
+
+
+## [Special Parameters](https://www.gnu.org/software/bash/manual/html_node/Special-Parameters.html)
+
+```sh
+$0        # The full path of the script
+$1        # First argument
+$#        # The number of arguments ($0 is not included)
+$*        # 全ての引数。"$*" はひと括り: "$1 $2 $3"
+$@        # 全ての引数。"$@" は個別括り: "$1" "$2" "$3"
+$-        # シェルの起動時のフラグ、setコマンドを使って設定したフラグの一覧
+$$        # シェル自身のプロセスID
+$!        # シェルが最後に起動したバックグラウンドプロセスのプロセスID
+$?        # 最後に実行したコマンドのexit値
 ```
 
 ## Misc
