@@ -14,7 +14,7 @@ if test -e ~; then
   echo 'test -e ~'
 fi
 
-# alias
+# popular
 if [ -e ~ ]; then
   echo '[ -e ~ ]'
 fi
@@ -43,11 +43,12 @@ AND/OR
 文字列
 ```sh
 EMPTY=''
-NOTEMPTY='CONTENT'
+NOTEMPTY='content'
 [ -z "$EMPTY" ] && echo '-z "$EMPTY"'
 [ -n "$NOTEMPTY" ] && echo '-n "$NOTEMPTY"'
 [ "$NOTEMPTY" != "$EMPTY" ] && echo '"$NOTEMPTY" != "$EMPTY"'
-[ "$NOTEMPTY" = "CONTENT" ] && echo '"$NOTEMPTY" = "CONTENT"'
+[ "$NOTEMPTY" = "content" ] && echo '"$NOTEMPTY" = "content"'
+[[ "$NOTEMPTY" =~ "tent$" ]] && echo '"$NOTEMPTY" =~ "tent$"'
 ```
 
 ファイル、ディレクトリ
