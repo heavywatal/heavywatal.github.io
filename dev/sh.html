@@ -93,7 +93,7 @@ Heavy Watal
   <span class="nb">echo</span> <span class="s1">&#39;test -e ~&#39;</span>
 <span class="k">fi</span>
 
-<span class="c1"># alias
+<span class="c1"># popular
 </span><span class="c1"></span><span class="k">if</span> <span class="o">[</span> -e ~ <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
   <span class="nb">echo</span> <span class="s1">&#39;[ -e ~ ]&#39;</span>
 <span class="k">fi</span>
@@ -116,11 +116,12 @@ Heavy Watal
 <span class="o">[[</span> -e ~ <span class="o">||</span> -f ~ <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;[[ -e ~ || -f ~ ]]&#39;</span></code></pre></div>
 <p>文字列</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">EMPTY</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
-<span class="nv">NOTEMPTY</span><span class="o">=</span><span class="s1">&#39;CONTENT&#39;</span>
+<span class="nv">NOTEMPTY</span><span class="o">=</span><span class="s1">&#39;content&#39;</span>
 <span class="o">[</span> -z <span class="s2">&#34;</span><span class="nv">$EMPTY</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;-z &#34;$EMPTY&#34;&#39;</span>
 <span class="o">[</span> -n <span class="s2">&#34;</span><span class="nv">$NOTEMPTY</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;-n &#34;$NOTEMPTY&#34;&#39;</span>
 <span class="o">[</span> <span class="s2">&#34;</span><span class="nv">$NOTEMPTY</span><span class="s2">&#34;</span> !<span class="o">=</span> <span class="s2">&#34;</span><span class="nv">$EMPTY</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;&#34;$NOTEMPTY&#34; != &#34;$EMPTY&#34;&#39;</span>
-<span class="o">[</span> <span class="s2">&#34;</span><span class="nv">$NOTEMPTY</span><span class="s2">&#34;</span> <span class="o">=</span> <span class="s2">&#34;CONTENT&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;&#34;$NOTEMPTY&#34; = &#34;CONTENT&#34;&#39;</span></code></pre></div>
+<span class="o">[</span> <span class="s2">&#34;</span><span class="nv">$NOTEMPTY</span><span class="s2">&#34;</span> <span class="o">=</span> <span class="s2">&#34;content&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;&#34;$NOTEMPTY&#34; = &#34;content&#34;&#39;</span>
+<span class="o">[[</span> <span class="s2">&#34;</span><span class="nv">$NOTEMPTY</span><span class="s2">&#34;</span> <span class="o">=</span>~ <span class="s2">&#34;tent</span>$<span class="s2">&#34;</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;&#34;$NOTEMPTY&#34; =~ &#34;tent$&#34;&#39;</span></code></pre></div>
 <p>ファイル、ディレクトリ</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span> -e ~ <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;-e ~&#39;</span>
 <span class="o">[</span> -d ~ <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;-d ~&#39;</span>
