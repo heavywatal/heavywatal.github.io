@@ -97,10 +97,9 @@ gcc
 </code></pre>
 
 <div class="note">
-<p><a href="/dev/make.html">/dev/make</a></p>
-
-<p>コンパイルの度にオプションとかファイルを打ち込むのは面倒なので
-<code>Makefile</code> にルールを記述しといて <code>make</code> コマンドでビルドする。</p>
+<p><a href="/dev/make.html">make</a> や <a href="/dev/cmake.html">CMake</a>
+などのツールを使ってビルドすることが多く、
+ターミナルからコンパイラを直接実行することはほぼ無い。</p>
 
 </div>
 
@@ -198,7 +197,7 @@ g++-6 ではこれのGNU方言である <code>gnu++14</code> がデフォルト�
 <a href="/mac/homebrew.html">Homebrew</a> か
 <a href="/mac/macports.html">MacPorts</a> で入れるのが楽チン:</p>
 
-<pre><code>% brew install gcc --without-multilib
+<pre><code>% brew install gcc
 </code></pre>
 
 <h3 id="ubuntu">Ubuntu</h3>
@@ -216,19 +215,8 @@ g++-6 ではこれのGNU方言である <code>gnu++14</code> がデフォルト�
 <pre><code>% sudo apt-get install zlib1g-dev
 </code></pre></li>
 
-<li><p>システムに既に入ってる <code>gcc</code> の <code>configure</code> オプションを見る:</p>
-
-<pre><code>% gcc -v
-Using built-in specs.
-COLLECT_GCC=gcc
-COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/4.8/lto-wrapper
-Target: x86_64-linux-gnu
-Configured with: ../src/configure -v --with-pkgversion='Ubuntu 4.8.2-19ubuntu1' --with-bugurl=file:///usr/share/doc/gcc-4.8/README.Bugs --enable-languages=c,c++,java,go,d,fortran,objc,obj-c++ --prefix=/usr --program-suffix=-4.8 --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --with-gxx-include-dir=/usr/include/c++/4.8 --libdir=/usr/lib --enable-nls --with-sysroot=/ --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --enable-gnu-unique-object --disable-libmudflap --enable-plugin --with-system-zlib --disable-browser-plugin --enable-java-awt=gtk --enable-gtk-cairo --with-java-home=/usr/lib/jvm/java-1.5.0-gcj-4.8-amd64/jre --enable-java-home --with-jvm-root-dir=/usr/lib/jvm/java-1.5.0-gcj-4.8-amd64 --with-jvm-jar-dir=/usr/lib/jvm-exports/java-1.5.0-gcj-4.8-amd64 --with-arch-directory=amd64 --with-ecj-jar=/usr/share/java/eclipse-ecj.jar --enable-objc-gc --enable-multiarch --disable-werror --with-arch-32=i686 --with-abi=m64 --with-multilib-list=m32,m64,mx32 --with-tune=generic --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu
-Thread model: posix
-gcc version 4.8.2 (Ubuntu 4.8.2-19ubuntu1)
-</code></pre></li>
-
-<li><p>それを参考にして <code>configure</code></p>
+<li><p>システムに既に入ってるやつの <code>configure</code> オプションを
+<code>gcc -v</code> 見るでみて、それを参考に <code>configure</code></p>
 
 <ul>
 <li><code>--enable-languages</code> は使う言語だけに</li>
@@ -241,8 +229,6 @@ gcc version 4.8.2 (Ubuntu 4.8.2-19ubuntu1)
 などと怒られて止まる</li>
 </ul>
 
-<!-- -->
-
 <pre><code>% wget -O- http://ftp.gnu.org/gnu/gcc/gcc-4.9.1/gcc-4.9.1.tar.bz2 | tar xj
 % mkdir build
 % cd build/
@@ -251,7 +237,7 @@ gcc version 4.8.2 (Ubuntu 4.8.2-19ubuntu1)
 
 <li><p>コンパイル。ただしデフォルトではコンパイラオプションが <code>-g O2</code>
 となっていて膨大なデバッグシンボルがついた状態で出来上がってしまうらしいので、
-オプションを上書きしてそれを回避する。:</p>
+オプションを上書きしてそれを回避する:</p>
 
 <pre><code>% make BOOT_CFLAGS=&quot;-O2&quot; CFLAGS=&quot;-O2&quot; CXXFLAGS=&quot;-O2&quot; bootstrap
 </code></pre>
@@ -268,14 +254,11 @@ gcc version 4.8.2 (Ubuntu 4.8.2-19ubuntu1)
 <pre><code>% sudo ln -s /usr/lib/x86_64-linux-gnu /usr/lib64
 </code></pre></li>
 
-<li><p>インストール。の前に <code>make DESTDIR=${HOME}/tmp/gcc-test install</code>
-などとしてテストするといいらしい。 :</p>
-
-<pre><code>% sudo make install
-
-# ディスクレスクラスタの場合、子ノードにもインストール
-% sudo make DESTDIR=/nfsroot install
-</code></pre></li>
+<li><p><code>sudo make install</code> でインストール。の前に
+<code>make DESTDIR=${HOME}/tmp/gcc-test install</code>
+などとしてテストするといいらしい。
+ディスクレスクラスタの場合、子ノードにもインストール:
+<code>sudo make DESTDIR=/nfsroot install</code></p></li>
 </ol>
 
 </article>
@@ -363,6 +346,7 @@ gcc version 4.8.2 (Ubuntu 4.8.2-19ubuntu1)
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>

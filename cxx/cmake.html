@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="ja">
+<head prefix="og: http://ogp.me/ns#">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<title>CMake: Cross-platform Make - Heavy Watal</title>
+<link rel="stylesheet" href="/css/theme.css">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#e08010">
+<meta name="theme-color" content="#e08010">
+<meta name="author" content="Watal M. Iwasaki">
+<meta property="og:title" content="CMake: Cross-platform Make">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://heavywatal.github.io/cxx/cmake.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/heavywatal">
+<meta property="og:description" content="">
+<meta property="og:site_name" content="Heavy Watal">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@heavywatal">
+<meta name="twitter:creator" content="@heavywatal">
+<meta name="generator" content="Hugo 0.37-DEV" />
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  showProcessingMessages: false,
+  messageStyle: "none",
+  displayAlign: "left",
+  displayIndent: "2em",
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['\\[', '\\]']]
+  }
+});
+</script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script type="application/ld+json">{
+"@context": "http://schema.org",
+"@type": "BreadcrumbList",
+"itemListElement": [
+ {"@type": "ListItem",
+  "position": 1,
+  "item": {
+   "@id": "https://heavywatal.github.io/cxx.html",
+   "name": "cxx"}},
+ {"@type": "ListItem",
+  "position": 2,
+  "item": {
+   "@id": "https://heavywatal.github.io/cxx/cmake.html",
+   "name": "CMake"}}
+]}</script>
+
+<script src="https://use.fontawesome.com/releases/v5.0.6/js/brands.js"></script>
+<script src="https://use.fontawesome.com/releases/v5.0.6/js/solid.js"></script>
+<script src="https://use.fontawesome.com/releases/v5.0.6/js/fontawesome.js"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-41178626-2', 'auto');
+ga('send', 'pageview');
+</script>
+
+</head>
+<body>
+<header><h1><a href="/">
+<img class="logo" src="/heavywatal.svg" alt="岩嵜航">
+Heavy Watal
+</a></h1>
+<form class="cse-search-box" action="/search.html">
+<label><i class="fas fa-fw fa-search"></i><input type="text" name="q" aria-label="cse-search-box"></label>
+</form>
+</header>
+
+<main>
+<article>
+<header><h1><a href="/cxx/cmake.html">
+CMake — Cross-platform Make
+</a></h1>
+<nav class="tags"><ul>
+<li><i class="fas fa-tag"></i> <a href="/tags/package.html">package</a></li>
+<li><i class="fas fa-tag"></i> <a href="/tags/c&#43;&#43;.html">c&#43;&#43;</a></li>
+</ul></nav>
+</header>
+
+
+
+<p>autotools の <code>configure</code> 的な位置づけ。</p>
+
+<p><a href="https://cmake.org/cmake/help/latest/">https://cmake.org/cmake/help/latest/</a></p>
+
+<h2 id="cmakelists-txt"><code>CMakeLists.txt</code></h2>
+
+<p>ディレクトリ毎に配置して、階層的に制御するのが好まれる。
+プロジェクトのトップに置くものは、以下のようなコマンドで始める必要がある。</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.1</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">project</span><span class="p">(</span><span class="s">helloworld</span> <span class="s">CXX</span><span class="p">)</span></code></pre></div>
+<p><code>add_*()</code> でビルドターゲットを作成し、
+<code>target_*()</code> でそれらの設定を整えて、
+<code>install()</code> でインストールする対象や行き先を指定する、というのが基本の流れ。</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">add_executable</span><span class="p">(</span><span class="s">a.out</span> <span class="s">hello.cpp</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="s">a.out</span> <span class="s">PRIVATE</span> <span class="s">-DNDEBUG</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">target_compile_options</span><span class="p">(</span><span class="s">a.out</span> <span class="s">PRIVATE</span> <span class="s">-Wall</span> <span class="s">-Wextra</span> <span class="s">-Wpedantic</span> <span class="s">-O3</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">install</span><span class="p">(</span><span class="s">TARGETS</span> <span class="s">a.out</span>
+  <span class="s">RUNTIME</span> <span class="s">DESTINATION</span> <span class="s">bin</span>
+<span class="p">)</span></code></pre></div>
+<h2 id="commands-https-cmake-org-cmake-help-latest-manual-cmake-commands-7-html"><a href="https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html">Commands</a></h2>
+
+<h3 id="scripting-commands">Scripting commands</h3>
+
+<ul>
+<li><code>foreach()</code></li>
+<li><code>include(GNUInstallDirs)</code></li>
+<li><code>macro()</code></li>
+<li><code>message(STATUS Hello world)</code></li>
+<li><code>option()</code></li>
+<li><code>set(name value)</code></li>
+<li><code>file(GLOB srcfiles *.cpp)</code>:
+グロブにマッチするファイルを列挙して変数に格納</li>
+</ul>
+
+<h3 id="project-commands-https-cmake-org-cmake-help-latest-manual-cmake-commands-7-html-id4"><a href="https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html#id4">Project commands</a></h3>
+
+<p>サブディレクトリを利用する:</p>
+
+<ul>
+<li><code>add_subdirectory(source_dir [binary_dir] [EXCLUDE_FROM_ALL])</code></li>
+<li><code>aux_source_directory(&lt;dir&gt; VAR)</code></li>
+</ul>
+
+<p>ターゲットを定義する:</p>
+
+<ul>
+<li><a href="https://cmake.org/cmake/help/latest/command/add_executable.html"><code>add_executable(&lt;name&gt; [EXCLUDE_FROM_ALL] ...)</code></a></li>
+<li><a href="https://cmake.org/cmake/help/latest/command/add_library.html"><code>add_library(&lt;name&gt; [STATIC|SHARED|OBJECT] [EXCLUDE_FROM_ALL|IMPORTED] ...)</code></a></li>
+</ul>
+
+<p>ターゲットのプロパティを追加する:</p>
+
+<ul>
+<li><a href="https://cmake.org/cmake/help/latest/command/target_compile_definitions.html"><code>target_compile_definitions(&lt;target&gt; &lt;INTERFACE|PRIVATE|PUBLIC&gt; ...)</code></a></li>
+<li><a href="https://cmake.org/cmake/help/latest/command/target_compile_options.html"><code>target_compile_options(&lt;target&gt; [BEFORE] &lt;I|P|P&gt; ...)</code></a></li>
+<li><a href="https://cmake.org/cmake/help/latest/command/target_include_directories.html"><code>target_include_directories(&lt;target&gt; [SYSTEM] [BEFORE] &lt;I|P|P&gt; ...)</code></a></li>
+<li><a href="https://cmake.org/cmake/help/latest/command/target_link_libraries.html"><code>target_link_libraries(&lt;target&gt; &lt;I|P|P&gt; ...)</code></a></li>
+<li>ターゲットなしの <code>include_directories()</code> <code>link_directories()</code> <code>link_libraries()</code>
+などは全体に影響が及ぶ亜種。</li>
+</ul>
+
+<p><a href="https://cmake.org/cmake/help/latest/command/install.html">インストールするものや宛先を指定する。</a></p>
+
+<ul>
+<li><code>install(TARGETS)</code></li>
+<li><code>install(&lt;FILES|PROGRAMS&gt;)</code></li>
+<li><code>install(DIRECTORY)</code></li>
+<li><code>install(EXPORT)</code>: 外部のCMakeから使いやすくするためのconfigをインストールする。
+似て非なる <code>export()</code> はビルドツリーにあるものを使わせるための謎コマンド。</li>
+</ul>
+
+<h3 id="オプション">オプション</h3>
+
+<dl>
+<dt><code>PRIVATE</code></dt>
+<dd>このターゲットをビルドするときだけ使い、これを利用するときには参照させない。
+例えば、このプロジェクトのライブラリをビルドするにはBoostが必要だけど、
+これを利用するときにそれらのパスを知る必要はない、とか。</dd>
+<dt><code>INTERFACE</code></dt>
+<dd>このターゲットでは使わないけど、これを利用するときには参照させる。
+例えば、ヘッダーライブラリを作る場合とか。</dd>
+<dt><code>PUBLIC</code></dt>
+<dd>このターゲットにもこれを利用するターゲットにも使う。使う場面あるかな？</dd>
+<dt><code>EXCLUDE_FROM_ALL</code></dt>
+<dd><code>make [all]</code> から外れて、明示的なターゲット指定でのみビルドされるようになる。</dd>
+</dl>
+
+<h2 id="variables-https-cmake-org-cmake-help-latest-manual-cmake-variables-7-html"><a href="https://cmake.org/cmake/help/latest/manual/cmake-variables.7.html">Variables</a></h2>
+
+<h3 id="variables-that-provide-information">Variables that Provide Information</h3>
+
+<ul>
+<li><code>CMAKE_BINARY_DIR</code>: ビルドツリーの最上階。</li>
+<li><code>CMAKE_COMMAND</code>: フルパス<code>cmake</code></li>
+<li><code>CMAKE_CURRENT_*_DIR</code>: <code>add_subdirectory()</code> の先で使う。</li>
+<li><code>CMAKE_PROJECT_NAME</code>: <code>project()</code> で設定したやつ。</li>
+<li><code>CMAKE_SKIP_RPATH</code></li>
+<li><code>CMAKE_SOURCE_DIR</code>: 最上階の<code>CMakeLists.txt</code>があるとこ。</li>
+<li><code>CMAKE_VERBOSE_MAKEFILE</code>: とりあえず <code>TRUE</code></li>
+</ul>
+
+<h3 id="variables-that-change-behavior">Variables that Change Behavior</h3>
+
+<ul>
+<li><code>CMAKE_BUILD_TYPE</code>: Debug, Release, RelWithDebInfo, MinSizeRel.</li>
+<li><code>CMAKE_INSTALL_PREFIX</code>: configureでの<code>--prefix</code>に相当</li>
+<li><code>CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT</code></li>
+<li><code>CMAKE_PREFIX_PATH</code>: パッケージやファイル探索 <code>find_*()</code> の候補パスを追加する</li>
+</ul>
+
+<h3 id="variables-that-describe-the-system">Variables that Describe the System</h3>
+
+<p><code>APPLE</code>, <code>UNIX</code>, <code>WIN32</code></p>
+
+<h3 id="variables-that-control-the-build">Variables that Control the Build</h3>
+
+<ul>
+<li><code>CMAKE_BUILD_RPATH</code></li>
+<li><code>CMAKE_BUILD_WITH_INSTALL_NAME_DIR</code></li>
+<li><code>CMAKE_BUILD_WITH_INSTALL_RPATH</code></li>
+<li><code>CMAKE_INSTALL_NAME_DIR</code></li>
+<li><code>CMAKE_INSTALL_RPATH</code></li>
+<li><code>CMAKE_INSTALL_RPATH_USE_LINK_PATH</code></li>
+<li><code>CMAKE_MACOSX_RPATH</code></li>
+</ul>
+
+<h3 id="c">C++</h3>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD</span> <span class="s">14</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD_REQUIRED</span> <span class="s">TRUE</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_EXTENSIONS</span> <span class="s">FALSE</span><span class="p">)</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="nb">if</span><span class="p">(</span><span class="s">CMAKE_BUILD_TYPE</span> <span class="s">MATCHES</span> <span class="s">Debug</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>  <span class="nb">add_compile_options</span><span class="p">(</span><span class="s">-g</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">else</span><span class="p">()</span><span class="err">
+</span><span class="err"></span>  <span class="nb">add_definitions</span><span class="p">(</span><span class="s">-DNDEBUG</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">add_compile_options</span><span class="p">(</span><span class="s">-O3</span> <span class="s">-march=native</span> <span class="s">-Wall</span> <span class="s">-Wextra</span> <span class="s">-Wpedantic</span><span class="p">)</span></code></pre></div>
+<ul>
+<li><code>CMAKE_CXX_COMPILER</code></li>
+</ul>
+
+<h2 id="modules">Modules</h2>
+
+<p><a href="https://cmake.org/cmake/help/latest/module/ExternalProject.html">ExternalProject</a></p>
+
+<h3 id="boost-https-cmake-org-cmake-help-latest-module-findboost-html"><a href="https://cmake.org/cmake/help/latest/module/FindBoost.html">Boost</a></h3>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">set</span><span class="p">(</span><span class="s">Boost_NO_BOOST_CMAKE</span> <span class="s">TRUE</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">find_package</span><span class="p">(</span><span class="s">Boost</span> <span class="s">REQUIRED</span> <span class="s">COMPONENTS</span> <span class="s">program_options</span> <span class="s">iostreams</span> <span class="s">filesystem</span> <span class="s">system</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">message</span><span class="p">(</span><span class="s2">&#34;Boost_INCLUDE_DIRS: ${Boost_INCLUDE_DIRS}&#34;</span><span class="p">)</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">mytarget</span> <span class="o">${</span><span class="nv">Boost_LIBRARIES</span><span class="o">}</span><span class="p">)</span></code></pre></div>
+<dl>
+<dt><code>BOOST_ROOT</code></dt>
+<dd>探索パス。e.g. <code>$(brew --prefix)</code>, <code>${HOME}/local</code></dd>
+</dl>
+
+<h3 id="ctest-https-cmake-org-cmake-help-latest-module-ctest-html"><a href="https://cmake.org/cmake/help/latest/module/CTest.html">CTest</a></h3>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">include</span><span class="p">(</span><span class="s">CTest</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">if</span><span class="p">(</span><span class="s">BUILD_TESTING</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>  <span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">test</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">endif</span><span class="p">()</span></code></pre></div>
+<p><code>enable_testing()</code> と書くほうが短いけど
+<code>BUILD_TESTING=TRUE</code> 固定なのでオプションで切れない。</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="c"># test/CMakeLists.txt
+</span><span class="c"></span><span class="nb">add_executable</span><span class="p">(</span><span class="s">test-gene</span> <span class="s">gene.cpp</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">add_test</span><span class="p">(</span><span class="s">NAME</span> <span class="s">gene</span> <span class="s">COMMAND</span> <span class="o">$&lt;</span><span class="nv">TARGET_FILE:test-gene</span><span class="o">&gt;</span><span class="p">)</span></code></pre></div>
+<p><code>ctest -V</code> で実行。
+一部のテストのみ実行したいときは <code>-R &lt;pattern&gt;</code> で絞る。</p>
+
+<h2 id="cli">CLI</h2>
+
+<h3 id="cmake-https-cmake-org-cmake-help-latest-manual-cmake-1-html"><a href="https://cmake.org/cmake/help/latest/manual/cmake.1.html"><code>cmake</code></a></h3>
+
+<p>いろんな中間ファイルができる上に <code>cmake clean</code> は無いので、
+ビルド用の空ディレクトリを外に作って out-of-source で実行するのが基本。
+やり直したいときは、そのディレクトリごと消す。</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mkdir build
+<span class="nb">cd</span> build/
+cmake -DCMAKE_INSTALL_PREFIX<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local -DCMAKE_BUILD_TYPE<span class="o">=</span>Debug /path/to/project</code></pre></div>
+<p>デフォルトでは <code>Makefile</code> が書き出されるので
+<code>make &amp;&amp; make install</code> のように実行してもいいけど、
+<code>cmake</code> からそれを実行することもできる:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">cmake --build . -- -j2
+cmake --build . --target install</code></pre></div>
+<p>オプション</p>
+
+<dl>
+<dt><code>-DCMAKE_XXX=YYY</code></dt>
+<dd>コマンドラインから変数を設定する。</dd>
+<dt><code>-G &lt;generator-name&gt;</code></dt>
+<dd>Makefile, Ninja, Xcode, etc.</dd>
+<dt><code>-E &lt;subcommand&gt;</code></dt>
+<dd><code>chdir &lt;dir&gt; &lt;cmd&gt;</code></dd>
+<dd><code>make_directory &lt;dir&gt;</code></dd>
+<dt><code>-H &lt;dir&gt;</code> (<em>undocumented</em>)</dt>
+<dd>ソースツリーを指定する。</dd>
+<dt><code>-B &lt;dir&gt;</code> (<em>undocumented</em>)</dt>
+<dd>ビルドツリーを指定する。</dd>
+<dt><code>-L</code></dt>
+<dd>キャッシュされている変数をリストアップ。
+<code>H</code> をつけると説明文も。
+<code>A</code> をつけるとadvancedな変数も。
+見るだけなら <code>-N</code> オプションと共に。</dd>
+</dl>
+
+</article>
+</main>
+
+<nav class="menu">
+
+<div><a href="/about.html">About</a></div>
+
+<div><a href="/research.html">Research Interests</a></div>
+
+<input type="checkbox" id="menu-rstats">
+<label for="menu-rstats">R stats</label>
+<ul>
+<li><a href="/rstats/intro.html">R自学自習の基礎知識</a></li>
+<li><a href="/rstats/programming.html">RプログラミングTips</a></li>
+<li><a href="/rstats/config.html">R環境設定</a></li>
+<li><a href="/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/rstats/purrr.html">purrr</a></li>
+<li><a href="/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/rstats/readr.html">readr</a></li>
+<li><a href="/rstats/stringr.html">stringr</a></li>
+<li><a href="/rstats/foreach.html">foreach/parallel</a></li>
+<li><a href="/rstats/devtools.html">devtools</a></li>
+<li><a href="/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/rstats/edger.html">edgeR</a></li>
+<li><a href="/rstats/topgo.html">topGO</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
+<li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/plyr.html">plyr</a></li>
+<li><a href="/rstats/reshape2.html">reshape2</a></li>
+</ul>
+
+<input type="checkbox" id="menu-python">
+<label for="menu-python">Python</label>
+<ul>
+<li><a href="/python/install.html">Pythonインストール</a></li>
+<li><a href="/python/pip.html">pip</a></li>
+<li><a href="/python/ipython.html">IPython</a></li>
+<li><a href="/python/biopython.html">BioPython</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
+<li><a href="/python/pyqt.html">PyQt</a></li>
+<li><a href="/python/concurrent.html">concurrent.futures</a></li>
+<li><a href="/python/copy.html">copy</a></li>
+<li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/setuptools.html">setuptools</a></li>
+</ul>
+
+<input type="checkbox" id="menu-cxx" checked>
+<label for="menu-cxx" class="active">C&#43;&#43;</label>
+<ul>
+<li><a href="/cxx/boost.html">Boost</a></li>
+<li><a href="/cxx/getopt.html">C&#43;&#43;コマンドライン引数</a></li>
+<li><a href="/cxx/speed.html">C&#43;&#43;高速化</a></li>
+<li class="active"><a href="/cxx/cmake.html">CMake</a></li>
+<li><a href="/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/cxx/gcc.html">gcc</a></li>
+<li><a href="/cxx/bitwise.html">ビット演算</a></li>
+<li><a href="/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="menu-bio">
+<label for="menu-bio">Biology</label>
+<ul>
+<li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/bio/meme.html">MEME</a></li>
+<li><a href="/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/bio/samtools.html">SAMtools</a></li>
+<li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
+<li><a href="/bio/mathmorph.html">数理形態学</a></li>
+<li><a href="/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="menu-dev">
+<label for="menu-dev">Developer Tools</label>
+<ul>
+<li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/emacs.html">Emacs</a></li>
+<li><a href="/dev/git.html">Git</a></li>
+<li><a href="/dev/hugo.html">Hugo</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
+<li><a href="/dev/tex.html">TeX</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/cxx/make.html">make</a></li>
+<li><a href="/dev/mount.html">mount</a></li>
+<li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/rsync.html">rsync</a></li>
+<li><a href="/dev/ssh.html">ssh</a></li>
+<li><a href="/dev/sshfs.html">sshfs</a></li>
+<li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/vi.html">vi</a></li>
+<li><a href="/dev/zsh.html">zsh</a></li>
+<li><a href="/dev/sh.html">シェルスクリプト</a></li>
+<li><a href="/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="menu-mac">
+<label for="menu-mac">Mac</label>
+<ul>
+<li><a href="/mac/applescript.html">AppleScript</a></li>
+<li><a href="/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/mac/macports.html">MacPorts</a></li>
+<li><a href="/mac/command.html">Mac固有コマンド</a></li>
+<li><a href="/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="menu-lectures">
+<label for="menu-lectures">Lectures</label>
+<ul>
+<li><a href="/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="menu-misc">
+<label for="menu-misc">Miscellaneous</label>
+<ul>
+<li><a href="/misc/fonts.html">Fonts</a></li>
+<li><a href="/misc/mailman.html">Mailman</a></li>
+<li><a href="/misc/vnc.html">VNCによる画面共有</a></li>
+<li><a href="/misc/virtualbox.html">VirtualBox</a></li>
+</ul>
+
+<div><a href="/tags.html">Tags</a></div>
+</nav>
+
+<footer><small>(ɔ) 2008 岩嵜航 Watal M. Iwasaki</small></footer>
+</body>
+</html>
+
