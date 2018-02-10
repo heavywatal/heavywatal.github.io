@@ -1,24 +1,26 @@
 +++
 title = 'make'
-tags = ["c++"]
+tags = ["package", "c++"]
 [menu.main]
   parent = "dev"
 +++
 
-- https://www.gnu.org/software/make/
-- https://www.gnu.org/software/make/manual/make.html
+https://www.gnu.org/software/make/manual/make.html
 
 あらかじめコンパイルの命令を `Makefile` に書いておくことで、
-複雑なコマンドを何度も打つのを避けられる。
+ターミナルに長いコマンドを何度も打ち込むのを避けられる。
+クロスプラットフォームで依存関係を解決しつつビルドするような
+`Makefile` を自分で書くのは難しいので、
+[CMake]({{< relref "cmake.md" >}}) や [autotools]({{< relref "autotools.md" >}})
+を使って自動生成する。
+
 
 ## Makefile
 
-C++ソースコードと同じディレクトリに入れるだけでいきなり使える
-`Makefile` の例。
+C++ソースコードと同じディレクトリに入れるだけでとりあえず使える例:
 
 ```makefile
 ## Options
-
 PROGRAM := a.out
 CXX := clang++
 CC := clang
@@ -26,10 +28,9 @@ CXXFLAGS := -Wall -Wextra -O3 -std=c++14
 CPPFLAGS := -I/usr/local/include -I${HOME}/local/include
 LDFLAGS := -L/usr/local/lib -L${HOME}/local/lib
 #LDLIBS := -lboost_program_options
-TARGET_ARCH := -m64 -msse -msse2 -msse3 -mfpmath=sse
+TARGET_ARCH := -march=native
 
 ## Dependencies
-
 SRCS := $(wildcard *.cpp)
 OBJS := $(SRCS:.cpp=.o)
 
@@ -38,7 +39,6 @@ Dependfile:
         ${CXX} -MM ${CPPFLAGS} ${CXXFLAGS} ${TARGET_ARCH} ${SRCS} > Dependfile
 
 ## Targets
-
 .DEFAULT_GOAL := all
 .PHONY: all clean
 

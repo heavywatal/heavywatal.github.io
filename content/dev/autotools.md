@@ -12,6 +12,9 @@ tags = ["package"]
 - <https://www.gnu.org/software/automake/>
 - <https://www.gnu.org/software/libtool/>
 
+[CMake]({{< relref "cmake.md" >}}) のほうがモダンで高速。
+
+
 ## Commands
 
 `autoscan`
