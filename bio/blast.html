@@ -93,7 +93,9 @@ BLAST
 
 <h2 id="blast-のインストール">blast+ のインストール</h2>
 
-<p><code>/usr/local/ncbi/blast/bin</code> にパスを通して使うことにする。</p>
+<p><a href="/mac/homebrew.html">Homebrew/Linuxbrew</a> を使って
+<code>brew install blast</code> するのが楽チン。
+以下に紹介するのはそれ以外の茨の道。</p>
 
 <h3 id="linux-mac-binary">Linux, Mac (binary)</h3>
 
@@ -109,15 +111,11 @@ BLAST
 <li><p>しかるべきところに移動してシムリンク:</p>
 
 <pre><code>% sudo mv ncbi-blast-2.2.30+ /usr/local/
-% sudo ln -s /usr/local/ncbi-blast-2.2.30+ /usr/local/ncbi/blast
-</code></pre></li>
-</ol>
-
-<h3 id="mac-homebrew">Mac (Homebrew)</h3>
-
-<pre><code>% brew tap homebrew/science
-% brew install blast
+% sudo ln -s /usr/local/ncbi-blast-2.2.30+ /usr/local/ncbi-blast
 </code></pre>
+
+<p>あとは <code>/usr/local/ncbi-blast/bin</code> にパスを通して使う。</p></li>
+</ol>
 
 <h3 id="mac-source">Mac (source)</h3>
 
@@ -144,7 +142,7 @@ BLAST
 <li><p><code>ncbi-blast-*-universal-macosx.tar.gz</code> に入ってる
 <code>ncbi_package_info</code> を参考に <code>configure</code> して <code>make</code>:</p>
 
-<pre><code>% ./configure --without-debug --with-strip --without-pcre --with-mt --with-flat-makefile --with-64 --with-ncbi-public --without-ccache --without-caution --without-makefile-auto-update --with-projects=scripts/projects/blast/project.lst --with-internal --prefix=/usr/local/ncbi/blast --with-boost=/usr/local/boost-gcc CC=gcc-4.9 CXX=g++-4.9
+<pre><code>% ./configure --without-debug --with-strip --without-pcre --with-mt --with-flat-makefile --with-64 --with-ncbi-public --without-ccache --without-caution --without-makefile-auto-update --with-projects=scripts/projects/blast/project.lst --with-internal --prefix=/usr/local/ncbi-blast --with-boost=/usr/local/boost-gcc CC=gcc-4.9 CXX=g++-4.9
 </code></pre>
 
 <div class="note">
@@ -173,7 +171,7 @@ BLAST
 <ol>
 <li><p><code>.zshenv</code> 等でプログラムとデータベースのパスを設定:</p>
 
-<pre><code>export PATH=/usr/local/ncbi/blast/bin:${PATH}
+<pre><code>export PATH=/usr/local/ncbi-blast/bin:${PATH}
 export BLASTDB=${HOME}/db/blast
 </code></pre>
 
