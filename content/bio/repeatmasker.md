@@ -10,7 +10,7 @@ tags = ["genetics"]
 ## 前準備
 
 [Homebrew]({{< relref "mac/homebrew.md" >}}) を使う。
-`brew tap homebrew/science` しておく。
+`brew tap brewsci/science brewsci/bio` しておく。
 
 ### プログラム
 

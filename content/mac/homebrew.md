@@ -150,17 +150,20 @@ Rをここからインストールするとバイナリ版のパッケージが�
 
 明示的にリポジトリを追加する:
 
-    % brew tap brewsci/science
+    % brew tap brewsci/bio
     % brew install libsequence
 
 暗黙に `brew tap` しつつ直接インストールも可能:
 
-    % brew install brewsci/science/libsequence
+    % brew install brewsci/bio/libsequence
 
 バイオインフォマティクスなど科学計算のツール群はHomebrew公式タップ
 [`homebrew/science`](https://github.com/Homebrew/homebrew-science)
-に収録されていたが、主要なものをcoreに移したあとdeprecatedになった。
-今後は[brewsci](https://brewsci.github.io/homebrew-science/)がそれを引き継ぐらしい。
+に収録されていたがdeprecatedになった。
+[`brewsci/science`](https://brewsci.github.io/homebrew-bio/)
+がフォーミュラを一旦引き継いで、 `homebrew/core` と
+[`brewsci/bio`](https://brewsci.github.io/homebrew-bio/)
+に振り分けて移行を進めている。
 
 
 ### Tapを作る

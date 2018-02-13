@@ -11,7 +11,9 @@ Basic Local Alignment Search Tool
 
 ## blast+ のインストール
 
-`/usr/local/ncbi/blast/bin` にパスを通して使うことにする。
+[Homebrew/Linuxbrew]({{< relref "homebrew.md" >}}) を使って
+`brew install blast` するのが楽チン。
+以下に紹介するのはそれ以外の茨の道。
 
 ### Linux, Mac (binary)
 
@@ -25,12 +27,10 @@ Basic Local Alignment Search Tool
 2.  しかるべきところに移動してシムリンク:
 
         % sudo mv ncbi-blast-2.2.30+ /usr/local/
-        % sudo ln -s /usr/local/ncbi-blast-2.2.30+ /usr/local/ncbi/blast
+        % sudo ln -s /usr/local/ncbi-blast-2.2.30+ /usr/local/ncbi-blast
 
-### Mac (Homebrew)
+    あとは `/usr/local/ncbi-blast/bin` にパスを通して使う。
 
-    % brew tap homebrew/science
-    % brew install blast
 
 ### Mac (source)
 
@@ -54,7 +54,7 @@ Basic Local Alignment Search Tool
 4.  `ncbi-blast-*-universal-macosx.tar.gz` に入ってる
     `ncbi_package_info` を参考に `configure` して `make`:
 
-        % ./configure --without-debug --with-strip --without-pcre --with-mt --with-flat-makefile --with-64 --with-ncbi-public --without-ccache --without-caution --without-makefile-auto-update --with-projects=scripts/projects/blast/project.lst --with-internal --prefix=/usr/local/ncbi/blast --with-boost=/usr/local/boost-gcc CC=gcc-4.9 CXX=g++-4.9
+        % ./configure --without-debug --with-strip --without-pcre --with-mt --with-flat-makefile --with-64 --with-ncbi-public --without-ccache --without-caution --without-makefile-auto-update --with-projects=scripts/projects/blast/project.lst --with-internal --prefix=/usr/local/ncbi-blast --with-boost=/usr/local/boost-gcc CC=gcc-4.9 CXX=g++-4.9
 
     {{%div class="note"%}}
 `clang` (および Xcode のニセ `gcc`)
@@ -76,7 +76,7 @@ Basic Local Alignment Search Tool
 
 1.  `.zshenv` 等でプログラムとデータベースのパスを設定:
 
-        export PATH=/usr/local/ncbi/blast/bin:${PATH}
+        export PATH=/usr/local/ncbi-blast/bin:${PATH}
         export BLASTDB=${HOME}/db/blast
 
     {{%div class="note"%}}
