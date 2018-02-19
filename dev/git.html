@@ -454,6 +454,36 @@ git branch &lt;new-branch-name&gt; *******
 </code></pre></li>
 </ol>
 
+<h3 id="別のリポジトリをサブディレクトリとして取り込む">別のリポジトリをサブディレクトリとして取り込む</h3>
+
+<p><a href="https://git-scm.com/book/tr/v2/Git-Tools-Advanced-Merging#_subtree_merge">Subtree Merging</a></p>
+
+<p>オプション <code>-X subtree=${subdir}</code> を利用してサブディレクトリに入れると、
+全体の <code>git log</code> では統合されてるように見えるけど、
+各ファイルの履歴は途絶えてしまって
+<code>git log --follow ${subdir}/hello.cpp</code>
+などとしても統合前までは辿れない。
+予め全ファイルをサブディレクトリに動かすだけのcommitをしておいて、
+ルート同士でmergeすると <code>--follow</code> が効く状態で取り込める。</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% <span class="nb">cd</span> /path/to/<span class="si">${</span><span class="nv">subrepo</span><span class="si">}</span>/
+% mkdir <span class="si">${</span><span class="nv">subdir</span><span class="si">}</span>
+% git mv <span class="k">$(</span>git ls-tree --name-only master<span class="k">)</span> <span class="si">${</span><span class="nv">subdir</span><span class="si">}</span>/
+% git commit -m <span class="s2">&#34;:construction: Move all to </span><span class="si">${</span><span class="nv">subdir</span><span class="si">}</span><span class="s2">/ for integration&#34;</span>
+
+% <span class="nb">cd</span> /path/to/<span class="si">${</span><span class="nv">mainrepo</span><span class="si">}</span>/
+% git remote add <span class="si">${</span><span class="nv">subrepo</span><span class="si">}</span> /path/to/<span class="si">${</span><span class="nv">subrepo</span><span class="si">}</span>
+% git fetch <span class="si">${</span><span class="nv">subrepo</span><span class="si">}</span>
+% git merge --no-commit --allow-unrelated-histories <span class="si">${</span><span class="nv">subrepo</span><span class="si">}</span>/master
+% git commit</code></pre></div>
+<ul>
+<li><p>fetchせずにmergeしようとするとブランチ情報が無くて怒られる:
+<code>not something we can merge</code></p></li>
+
+<li><p>異なる起源をもつリポジトリのmergeは危険なので
+<code>--allow-unrelated-histories</code> を明示しないと拒否される:
+<code>fatal: refusing to merge unrelated histories</code></p></li>
+</ul>
+
 </article>
 </main>
 
