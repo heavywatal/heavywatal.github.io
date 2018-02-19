@@ -389,3 +389,35 @@ submoduleなどをいじってると意図せずdetached HEAD状態になるこ�
    % git branch -d detached
    ```
 
+
+### 別のリポジトリをサブディレクトリとして取り込む
+
+[Subtree Merging](https://git-scm.com/book/tr/v2/Git-Tools-Advanced-Merging#_subtree_merge)
+
+オプション `-X subtree=${subdir}` を利用してサブディレクトリに入れると、
+全体の `git log` では統合されてるように見えるけど、
+各ファイルの履歴は途絶えてしまって
+`git log --follow ${subdir}/hello.cpp`
+などとしても統合前までは辿れない。
+予め全ファイルをサブディレクトリに動かすだけのcommitをしておいて、
+ルート同士でmergeすると `--follow` が効く状態で取り込める。
+
+```sh
+% cd /path/to/${subrepo}/
+% mkdir ${subdir}
+% git mv $(git ls-tree --name-only master) ${subdir}/
+% git commit -m ":construction: Move all to ${subdir}/ for integration"
+
+% cd /path/to/${mainrepo}/
+% git remote add ${subrepo} /path/to/${subrepo}
+% git fetch ${subrepo}
+% git merge --no-commit --allow-unrelated-histories ${subrepo}/master
+% git commit
+```
+
+- fetchせずにmergeしようとするとブランチ情報が無くて怒られる:
+  `not something we can merge`
+
+- 異なる起源をもつリポジトリのmergeは危険なので
+  `--allow-unrelated-histories` を明示しないと拒否される:
+  `fatal: refusing to merge unrelated histories`
