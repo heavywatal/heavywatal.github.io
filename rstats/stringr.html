@@ -140,9 +140,12 @@ stringr — Rの文字列をまともな方法で処理する
 <code>base::nchar(x)</code> と相同だが、<code>NA</code> に対して <code>2</code> ではなく <code>NA</code> を返す。</dd>
 <dt><code>str_sub(string, start=1, end=-1)</code></dt>
 <dd>文字列を部分的に参照・変更する。
-<code>base::substr()</code> と相同だが、負数で末尾からの位置を指定できる。</dd>
+<code>base::substr()</code> と相同だが、負数で末尾からの位置を指定できる。
+<code>str_sub&lt;-</code> が定義されているので置換にも使える。</dd>
+<dt><code>str_flatten(string, collapse=&quot;&quot;)</code></dt>
+<dd>文字列vectorを1つの文字列に結合する。</dd>
 <dt><code>str_c(..., sep='', collapse=NULL)</code></dt>
-<dd>文字列を結合する。
+<dd>複数の引数で与えた文字列を結合する。
 デフォルトの <code>sep</code> がスペースじゃないので <code>base::paste0()</code> に近い。</dd>
 <dt><code>str_split(string, pattern, n=Inf, simplify=FALSE)</code></dt>
 <dd>文字列を分割してlistを返す。
@@ -187,7 +190,8 @@ stringr — Rの文字列をまともな方法で処理する
 <dt><code>str_replace(string, pattern, replacement)</code></dt>
 <dd>マッチしなかった部分をそのままに、マッチした部分を置換する。
 <code>base::sub(pattern, replacement, x)</code> と相同。
-<code>base::gsub()</code> のように全てのマッチを置換するには <code>str_replace_all()</code> 。</dd>
+<code>base::gsub()</code> のように全てのマッチを置換するには <code>str_replace_all()</code> 。
+<code>str_remove()</code> はマッチした部分を消すためのショートカット。</dd>
 </dl>
 
 <hr>
@@ -219,13 +223,16 @@ stringr — Rの文字列をまともな方法で処理する
 <code>[format]</code>部分は<code>sprintf()</code>と同じ形式で、省略可。
 <code>env</code> はlistやdata.frameでもよい。</dd>
 <dd>e.g., <code>stringr::str_interp('Mean sepal width is $[.3f]{mean(Sepal.Width)}.', iris)</code></dd>
-<dd>新しい <a href="http://glue.tidyverse.org/"><code>library(glue)</code></a> も良さそう。</dd>
+<dt><code>str_glue(..., .sep=&quot;&quot;, .envir=parent.frame())</code></dt>
+<dd><a href="http://glue.tidyverse.org/"><code>library(glue)</code></a> しなくても使えるように。</dd>
 <dt><code>str_pad(string, width, side=&quot;left&quot;, pad=&quot; &quot;)</code></dt>
 <dd>余白を作る。
 幅を <code>width</code> に伸ばして <code>side</code> に寄せて空白を <code>pad</code> で埋める。</dd>
 <dt><code>str_trim(string, side=&quot;both&quot;)</code></dt>
 <dd>空白文字を除去する。
-Python でいうところの <code>str.strip()</code>。</dd>
+Python でいうところの <code>str.strip()</code>。
+両端から空白文字を除去して、連続する空白文字を1つに縮める
+<code>str_squish()</code> もある。</dd>
 <dt><code>str_trunc(string, width, side=c('right', 'left', 'center'), ellipsis='...')</code></dt>
 <dd>一定の長さを超えたら捨てて <code>...</code> にする。</dd>
 <dt><code>str_wrap(string, width=80, indent=0, exdent=0)</code></dt>
