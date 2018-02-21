@@ -53,9 +53,13 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 `str_sub(string, start=1, end=-1)`
 :   文字列を部分的に参照・変更する。
     `base::substr()` と相同だが、負数で末尾からの位置を指定できる。
+    `str_sub<-` が定義されているので置換にも使える。
+
+`str_flatten(string, collapse="")`
+:   文字列vectorを1つの文字列に結合する。
 
 `str_c(..., sep='', collapse=NULL)`
-:   文字列を結合する。
+:   複数の引数で与えた文字列を結合する。
     デフォルトの `sep` がスペースじゃないので `base::paste0()` に近い。
 
 `str_split(string, pattern, n=Inf, simplify=FALSE)`
@@ -108,6 +112,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 :   マッチしなかった部分をそのままに、マッチした部分を置換する。
     `base::sub(pattern, replacement, x)` と相同。
     `base::gsub()` のように全てのマッチを置換するには `str_replace_all()` 。
+    `str_remove()` はマッチした部分を消すためのショートカット。
 
 ------------------------------------------------------------------------
 
@@ -140,7 +145,9 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
     `[format]`部分は`sprintf()`と同じ形式で、省略可。
     `env` はlistやdata.frameでもよい。
 :   e.g., `stringr::str_interp('Mean sepal width is $[.3f]{mean(Sepal.Width)}.', iris)`
-:   新しい [`library(glue)`](http://glue.tidyverse.org/) も良さそう。
+
+`str_glue(..., .sep="", .envir=parent.frame())`
+:   [`library(glue)`](http://glue.tidyverse.org/) しなくても使えるように。
 
 `str_pad(string, width, side="left", pad=" ")`
 :   余白を作る。
@@ -149,6 +156,8 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 `str_trim(string, side="both")`
 :   空白文字を除去する。
     Python でいうところの `str.strip()`。
+    両端から空白文字を除去して、連続する空白文字を1つに縮める
+    `str_squish()` もある。
 
 `str_trunc(string, width, side=c('right', 'left', 'center'), ellipsis='...')`
 :   一定の長さを超えたら捨てて `...` にする。
