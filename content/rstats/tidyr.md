@@ -150,10 +150,13 @@ tidyverse時代のクールなやり方らしい。
 cf. [Hadley Wickham: Managing many models with R (YouTube)](https://www.youtube.com/watch?v=rz3_FDVt9eg)
 
 
-### `tidyr::unnest(data, ..., .drop=NA, id=NULL, .sep=NULL)`
+### `tidyr::unnest(data, ..., .drop=NA, id=NULL, .sep=NULL, .preserve=NULL)`
 
 ネストされたdata.frameを展開してフラットにする。
 list of data.framesだけでなく、list of vectorsとかでもよい。
+
+ネストされた列が複数ある場合は
+`.preserve` オプションを使って1列ずつ開いていける。
 
 
 ## その他の便利関数
