@@ -219,16 +219,54 @@ CMake — Cross-platform Make
 <div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD</span> <span class="s">14</span><span class="p">)</span><span class="err">
 </span><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD_REQUIRED</span> <span class="s">TRUE</span><span class="p">)</span><span class="err">
 </span><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_EXTENSIONS</span> <span class="s">FALSE</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">add_compile_options</span><span class="p">(</span><span class="s">-march=native</span> <span class="s">-Wall</span> <span class="s">-Wextra</span> <span class="s">-Wpedantic</span><span class="p">)</span><span class="err">
 </span><span class="err">
-</span><span class="err"></span><span class="nb">if</span><span class="p">(</span><span class="s">CMAKE_BUILD_TYPE</span> <span class="s">MATCHES</span> <span class="s">Debug</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>  <span class="nb">add_compile_options</span><span class="p">(</span><span class="s">-g</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">else</span><span class="p">()</span><span class="err">
-</span><span class="err"></span>  <span class="nb">add_definitions</span><span class="p">(</span><span class="s">-DNDEBUG</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">if</span> <span class="p">(</span><span class="s">NOT</span> <span class="s">CMAKE_BUILD_TYPE</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>  <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_BUILD_TYPE</span> <span class="s">Release</span><span class="p">)</span><span class="err">
 </span><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">add_compile_options</span><span class="p">(</span><span class="s">-O3</span> <span class="s">-march=native</span> <span class="s">-Wall</span> <span class="s">-Wextra</span> <span class="s">-Wpedantic</span><span class="p">)</span></code></pre></div>
-<ul>
-<li><code>CMAKE_CXX_COMPILER</code></li>
-</ul>
+</span><span class="err"></span><span class="nb">message</span><span class="p">(</span><span class="s">STATUS</span> <span class="s2">&#34;CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}&#34;</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_FLAGS_DEV</span> <span class="s2">&#34;-O2 -g&#34;</span><span class="p">)</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Predefined variable</th>
+<th>default</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>CMAKE_CXX_FLAGS</code></td>
+<td></td>
+</tr>
+
+<tr>
+<td><code>CMAKE_CXX_FLAGS_DEBUG</code></td>
+<td><code>-g</code></td>
+</tr>
+
+<tr>
+<td><code>CMAKE_CXX_FLAGS_MINSIZEREL</code></td>
+<td><code>-Os -DNDEBUG</code></td>
+</tr>
+
+<tr>
+<td><code>CMAKE_CXX_FLAGS_RELEASE</code></td>
+<td><code>-O3 -DNDEBUG</code></td>
+</tr>
+
+<tr>
+<td><code>CMAKE_CXX_FLAGS_RELWITHDEBINFO</code></td>
+<td><code>-O2 -g -DNDEBUG</code></td>
+</tr>
+</tbody>
+</table>
+
+<p><code>#ifndef NDEBUG</code> なコードを残しつつ、
+そこそこ速くコンパイル＆実行したい、
+という組み合わせ <code>-O2 -g</code> は用意されていないので自分で定義する。
+<code>CMAKE_CXX_FLAGS_???</code> を適当に作れば
+<code>-DCMAKE_BUILD_TYPE=???</code> をcase-insensitiveに解釈してもらえる。</p>
 
 <h2 id="modules">Modules</h2>
 
