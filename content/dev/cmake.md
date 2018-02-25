@@ -144,16 +144,29 @@ install(TARGETS a.out
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(CMAKE_CXX_EXTENSIONS FALSE)
+add_compile_options(-march=native -Wall -Wextra -Wpedantic)
 
-if(CMAKE_BUILD_TYPE MATCHES Debug)
-  add_compile_options(-g)
-else()
-  add_definitions(-DNDEBUG)
+if (NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
 endif()
-add_compile_options(-O3 -march=native -Wall -Wextra -Wpedantic)
+message(STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
+set(CMAKE_CXX_FLAGS_DEV "-O2 -g")
 ```
 
-- `CMAKE_CXX_COMPILER`
+Predefined variable              | default
+---------------------------------|----
+`CMAKE_CXX_FLAGS`                |
+`CMAKE_CXX_FLAGS_DEBUG`          | `-g`
+`CMAKE_CXX_FLAGS_MINSIZEREL`     | `-Os -DNDEBUG`
+`CMAKE_CXX_FLAGS_RELEASE`        | `-O3 -DNDEBUG`
+`CMAKE_CXX_FLAGS_RELWITHDEBINFO` | `-O2 -g -DNDEBUG`
+
+`#ifndef NDEBUG` なコードを残しつつ、
+そこそこ速くコンパイル＆実行したい、
+という組み合わせ `-O2 -g` は用意されていないので自分で定義する。
+`CMAKE_CXX_FLAGS_???` を適当に作れば
+`-DCMAKE_BUILD_TYPE=???` をcase-insensitiveに解釈してもらえる。
+
 
 ## Modules
 
