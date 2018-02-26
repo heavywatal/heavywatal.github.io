@@ -87,12 +87,16 @@ Heavy Watal
 
 
 
+<p><a href="https://github.com/heavywatal/sketchbook/blob/master/c%2B%2B/bitwise.cpp">https://github.com/heavywatal/sketchbook/blob/master/c%2B%2B/bitwise.cpp</a></p>
+
 <h2 id="基本">基本</h2>
 
 <h3 id="型">型</h3>
 
 <p>きっちりサイズが定義されているものと、
 下限だけが定義されてて環境依存のものがある。</p>
+
+<p><a href="https://github.com/heavywatal/sketchbook/blob/master/c%2B%2B/sizeof.cpp">https://github.com/heavywatal/sketchbook/blob/master/c%2B%2B/sizeof.cpp</a></p>
 
 <ul>
 <li>1byte == 8bits</li>
@@ -138,19 +142,22 @@ Heavy Watal
 
 <span class="c1">// shift
 </span><span class="c1"></span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="n">n</span>
-<span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">n</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// uint8_t
+<span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">n</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// assuming 8-bit
 </span><span class="c1"></span><span class="n">x</span> <span class="o">=</span> <span class="mi">5</span>   <span class="c1">// 0b00000101
 </span><span class="c1"></span><span class="n">x</span> <span class="o">&amp;</span> <span class="mi">1</span>   <span class="c1">// 0b00000001 =  1
 </span><span class="c1"></span><span class="n">x</span> <span class="o">|</span> <span class="mi">2</span>   <span class="c1">// 0b00000111 =  7
 </span><span class="c1"></span><span class="n">x</span> <span class="o">^</span> <span class="mi">3</span>   <span class="c1">// 0b00000110 =  6
-</span><span class="c1"></span><span class="o">~</span> <span class="n">x</span>     <span class="c1">// 0b11111010 = -6
-</span><span class="c1"></span><span class="o">-</span> <span class="n">x</span>     <span class="c1">// 0b11111011 = -5
+</span><span class="c1"></span><span class="o">~</span> <span class="n">x</span>     <span class="c1">// 0b11111010 = -6 or 250u
+</span><span class="c1"></span><span class="o">-</span> <span class="n">x</span>     <span class="c1">// 0b11111011 = -5 or 251u
 </span><span class="c1"></span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span>  <span class="c1">// 0b00001010 = 10
 </span><span class="c1"></span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span>  <span class="o">//</span> <span class="mi">0</span><span class="n">b00000010</span> <span class="o">=</span>  <span class="mi">2</span></code></pre></div>
 <ul>
 <li><code>&lt;&lt;</code> は右から0を詰めて左端を捨てる</li>
 <li><code>unsigned</code> に対する <code>&gt;&gt;</code> は左から0を詰めて右端を捨てる</li>
 <li><code>signed</code> の負数に対する <code>&gt;&gt;</code> は未定義だが、だいたい左端をコピーして右端を捨てる(i.e., 符号を維持しつつ2で割る)</li>
+<li>8-bit型に対する操作が必ずしも8-bitで返ってくるとは限らないし、
+暗黙の整数型は大概32-bitとかなので、両辺とも明示的に型を指定するほうが安心。
+特に上位ビットも変化する <code>~</code> や <code>-</code> を使って比較するときは要注意。</li>
 </ul>
 
 <h2 id="応用">応用</h2>
