@@ -104,7 +104,6 @@ dplyr::summarise_all(
     ```r
     Sepal.Length = c('Petal.Width', 'Species')
     iris %>% dplyr::select(Sepal.Length))      # ambiguous!
-    iris %>% dplyr::select(UQ(Sepal.Length))   # unquote => Petal.Width, Species
     iris %>% dplyr::select(!!Sepal.Length)     # unquote => Petal.Width, Species
     iris %>% dplyr::select(.data$Sepal.Length) # pronoun => Sepal.Length
     ```
