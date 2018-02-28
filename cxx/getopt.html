@@ -20,7 +20,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.37-DEV" />
+<meta name="generator" content="Hugo 0.38-DEV" />
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
   showProcessingMessages: false,
@@ -144,12 +144,16 @@ C&#43;&#43;コマンドライン引数
 <p><code>main()</code> 関数に書く必要があるのはこれだけ</p>
 <div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;gflags/gflags.h&gt;</span><span class="cp">
 </span><span class="cp"></span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+<span class="kt">int</span> 
+<span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+ 
+<span class="p">{</span>
     <span class="n">gflags</span><span class="o">::</span><span class="n">SetUsageMessage</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;This is a program to test gflags&#34;</span><span class="p">);</span>
     <span class="n">gflags</span><span class="o">::</span><span class="n">ParseCommandLineFlags</span><span class="p">(</span><span class="o">&amp;</span><span class="n">argc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">argv</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
     <span class="c1">// do something
 </span><span class="c1"></span>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span>
+</code></pre></div>
 <p>あとは個々のソースファイルでオプションを追加。<code>namespace</code> にも入れられる。</p>
 <div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;gflags/gflags.h&gt;</span><span class="cp">
 </span><span class="cp"></span>
@@ -159,7 +163,8 @@ C&#43;&#43;コマンドライン引数
 
 <span class="kt">void</span> <span class="n">func</span><span class="p">(){</span>
     <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">tapiola</span><span class="o">::</span><span class="n">FLAGS_sibelius</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span>
+</code></pre></div>
 <h2 id="cmdline">cmdline</h2>
 
 <p><a href="https://github.com/tanakh/cmdline">https://github.com/tanakh/cmdline</a><br>
