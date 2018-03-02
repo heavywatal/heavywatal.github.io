@@ -28,10 +28,14 @@ Email:
 :   heavy.watalあgmail.com
 
 Find me on
-: <a rel="me" href="https://github.com/heavywatal" title="GitHub"><i class="fab fa-fw fa-github"></i>GitHub</a>,
-  <a rel="me" href="https://www.facebook.com/heavy.watal"><i class="fab fa-fw fa-facebook"></i>Facebook</a>,
-  <a rel="me" href="https://twitter.com/heavywatal"><i class="fab fa-fw fa-twitter"></i>Twitter</a>,
-  [<i class="fab fa-fw fa-amazon"></i>ほしい物リスト](https://www.amazon.co.jp/wishlist/Z62OJBP7VCNP)
+: <a rel="me" href="https://github.com/heavywatal" class="github" title="GitHub">
+  <i class="fab fa-fw fa-lg fa-github"></i></a>
+  <a rel="me" href="https://www.facebook.com/heavy.watal" class="facebook" title="Facebook">
+  <i class="fab fa-fw fa-lg fa-facebook"></i></a>
+  <a rel="me" href="https://twitter.com/heavywatal" class="twitter" title="Twitter">
+  <i class="fab fa-fw fa-lg fa-twitter"></i></a>
+  <a href="https://www.amazon.co.jp/wishlist/Z62OJBP7VCNP" class="amazon" title="ほしい物">
+  <i class="fab fa-fw fa-lg fa-amazon"></i></a>
 
 <!--more-->
 
@@ -65,7 +69,7 @@ Bachelor of Science, 2008.03
   [*Evolution: Education and Outreach* **8**:14](https://dx.doi.org/10.1186/s12052-015-0043-6);
   Origami Bird Simulator: a teaching resource linking natural selection and speciation.
 - Hajime Wakasa, Antonio Cádiz, Lázaro M. Echenique-Díaz, **Watal M. Iwasaki**, Namiko Kamiyama, Yuki Nishimura, Hitoshi Yokoyama, Koji Tamura, and Masakado Kawata. (2015)
-  [*J. Exp. Zool. B Mol. Dev. Evol.* **324** 5: 410--423](http://dx.doi.org/10.1002/jez.b.22627);
+  [*J. Exp. Zool. B Mol. Dev. Evol.* **324** 5: 410--423](https://dx.doi.org/10.1002/jez.b.22627);
   Developmental stages for the divergence of relative limb length between a twig and a trunk-ground *Anolis* lizard species.
 - Tezuka, A., S. Kasagi, C. van Oosterhout, M. McMullan, **Watal M. Iwasaki**, D. Kasai, M. Yamamichi, H. Innan, S. Kawamura, and M. Kawata. (2014)
   [*Heredity* **113**: 381--389](https://dx.doi.org/10.1038/hdy.2014.35);
@@ -77,10 +81,10 @@ Bachelor of Science, 2008.03
 **Book Chapters**
 
 -   小林武彦(編)
-    「[ゲノムを司るインターメア --- 非コードDNAの新たな展開](http://amzn.to/2gBXjFb)」
+    「[ゲノムを司るインターメア --- 非コードDNAの新たな展開](https://amzn.to/2gBXjFb)」
     化学同人 (2015.11) 第3章 ゲノム進化メカニズムと情報学的解析
 -   東北大学生態適応GCOEチームPEM
-    「[社会的責任学入門—環境危機時代に適応する7つの教養](http://amzn.to/2g1q62j) 」
+    「[社会的責任学入門—環境危機時代に適応する7つの教養](https://amzn.to/2g1q62j) 」
     東北大学出版会 (2011.06) 第6章担当
 
 ## Presentations
@@ -123,10 +127,10 @@ Bachelor of Science, 2008.03
 
 ## Awards/Honors
 
--   環境機関コンソーシアム ポスター賞([サラヤ](http://www.saraya.com/) 賞) (2012.03)
+-   環境機関コンソーシアム ポスター賞([サラヤ](https://www.saraya.com/)賞) (2012.03)
 -   日本生態学会第58回大会 ポスター優秀賞 (2011.03)
 -   日本生態学会第58回大会 エコカップ ほのぼのMVP (2011.03)
--   環境機関コンソーシアム アカデミア部門ポスター賞([トロン](http://www.google.co.jp/search?q=%E4%B8%AD%E9%9D%99%E9%80%8F) 賞) (2010.03)
+-   環境機関コンソーシアム アカデミア部門ポスター賞([トロン](https://www.google.co.jp/search?q=%E4%B8%AD%E9%9D%99%E9%80%8F)賞) (2010.03)
 -   東北大学生命科学研究科 生命科学会長賞 (2010.02)
 
 ## Grants and Fellowships
@@ -137,9 +141,7 @@ July 2010 - March 2013
 ## Software
 
 -   [`tumopp`](https://github.com/heavywatal/tumopp):
-    Tumor growth simulator in C++
--   [`tumorr`](https://github.com/heavywatal/tumorr):
-    R wrapper of `tumopp`
+    Tumor growth simulator in C++/R
 -   [Genetic Drift Simulator](https://heavywatal.github.io/driftr.js/)
 -   [Origami Bird Simulator](https://github.com/heavywatal/oribir)
 -   [`ms` installer and `sample_stats++`](https://github.com/heavywatal/msutils)
@@ -163,4 +165,4 @@ July 2010 - March 2013
 
 ## Review
 
--   [Journal of Molecular Evolution](http://link.springer.com/journal/239)
+-   [Journal of Molecular Evolution](https://link.springer.com/journal/239)
