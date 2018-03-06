@@ -174,10 +174,15 @@ gp + geom_point(aes(colour = species)) +
 
 [`scale_*_brewer`](http://ggplot2.tidyverse.org/reference/scale_brewer.html)
 :   for `colour`, `fill`
-:   [Colorbrewer](http://colorbrewer2.org/) で定義されているパレットを使う。 色盲対策もできるし、原色も出てこないのでオススメ。
-    cf. [RColorBrewer](https://www.rdocumentation.org/packages/RColorBrewer/topics/ColorBrewer)
-:   `scale_*_brewer(..., type='seq', palette=1, direction=1)`: 離散値
-:   `scale_*_distiller(...)`: 連続値
+:   いい感じに考えられたパレット [Colorbrewer](http://colorbrewer2.org/)
+    から選んで指定するだけなので楽ちん。
+    利用可能なパレットは `RColorBrewer::display.brewer.all()` でも一覧できる。
+:   `scale_*_brewer(..., palette='Blues', direction=1)`: 離散値
+:   `scale_*_distiller(..., palette='Blues', direction=-1)`: 連続値
+:   色覚多様性への対応をさらに強化するなら
+    [`library(viridis)`](https://github.com/sjmgarnier/viridis) の
+    `viridis::scale_*_viridis(..., direction=1, discrete=FALSE, options="viridis")`
+    を使うのがよさそう。
 
 [`scale_*_gradient`](http://ggplot2.tidyverse.org/reference/scale_gradient.html)
 :   for `colour`, `fill`
