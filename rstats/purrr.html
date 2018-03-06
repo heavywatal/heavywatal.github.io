@@ -110,10 +110,15 @@ purerのように読むらしい。
 
 <dl>
 <dt><code>purrr::map(.x, .f, ...)</code></dt>
-<dd>listの各要素に関数を適用し、listで返す。
+<dd>list <code>.x</code> の各要素に関数 <code>.f</code> を適用し、listで返す。
 <code>base::lapply()</code>や<code>plyr::llply()</code>の改良版。
-型の決まったvectorを返す<code>base::sapply()</code>や<code>base::vapply()</code>の改良版として
-<code>map_lgl()</code>, <code>map_chr()</code>, <code>map_int()</code>, <code>map_dbl()</code> がある。</dd>
+<code>.f</code> には<a href="#無名関数">後述の無名関数/ラムダ式</a>を渡すのが便利。
+数値や文字列を渡すとインデックスのように扱われる。
+例えば <code>map(l, 1L)</code> と書けば <code>map(l, ~.x[[1L]])</code> のように働く。
+存在しないときの値は <code>.default</code> で指定できる。</dd>
+<dd><code>map_lgl()</code>, <code>map_chr()</code>, <code>map_int()</code>, <code>map_dbl()</code>
+は型の決まったvectorを返す亜種で、
+<code>base::sapply()</code>や<code>base::vapply()</code>の改良版。</dd>
 <dd><code>purrr::walk(.x, .f, ...)</code> は、
 <code>map()</code>同様に関数を適用しつつ元の値をそのままinvisible返しする亜種。</dd>
 <dd><code>purrr::lmap(.x, .f, ...)</code> は、
@@ -133,7 +138,7 @@ purerのように読むらしい。
 3変数以上渡したいときはlistかdata.frameにまとめて下の<code>pmap()</code>を使う。</dd>
 <dt><code>purrr::pmap(.l, .f, ...)</code></dt>
 <dd>listの中身をparallelに処理するmap。
-<code>.f</code>の引数はlistの要素名と一致させる。
+関数 <code>.f</code>の引数はlistの要素名と一致させるか <code>...</code> で受け流す必要がある。
 e.g., <code>pmap(list(a=1:3, b=4:6), function(a, b) {a * b})</code> 。
 名前無し2要素までなら<code>map2()</code>などと同様に<code>.x</code>や<code>.y</code>を使ったformulaが利用可能。
 e.g., <code>pmap(list(1:3, 4:6), ~ .x * .y)</code> 。</dd>
@@ -195,7 +200,7 @@ ord <span class="o">=</span> <span class="kr">function</span><span class="p">(</
 <span class="c1"># with unnamed function</span>
 <span class="kc">letters</span> <span class="o">%&gt;%</span> map_int<span class="p">(</span><span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> <span class="p">{</span><span class="kp">strtoi</span><span class="p">(</span><span class="kp">charToRaw</span><span class="p">(</span>x<span class="p">),</span> <span class="m">16L</span><span class="p">)})</span>
 
-<span class="c1"># with formula</span>
+<span class="c1"># with formula/lambda</span>
 <span class="kc">letters</span> <span class="o">%&gt;%</span> map_int<span class="p">(</span><span class="o">~</span> <span class="kp">strtoi</span><span class="p">(</span><span class="kp">charToRaw</span><span class="p">(</span><span class="m">.</span>x<span class="p">),</span> <span class="m">16L</span><span class="p">))</span></code></pre></div>
 <dl>
 <dt><code>purrr::as_mapper(.f, ...)</code></dt>
