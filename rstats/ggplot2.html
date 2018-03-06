@@ -251,10 +251,15 @@ gp <span class="o">+</span> geom_point<span class="p">(</span>aes<span class="p"
 <dl>
 <dt><a href="http://ggplot2.tidyverse.org/reference/scale_brewer.html"><code>scale_*_brewer</code></a></dt>
 <dd>for <code>colour</code>, <code>fill</code></dd>
-<dd><a href="http://colorbrewer2.org/">Colorbrewer</a> で定義されているパレットを使う。 色盲対策もできるし、原色も出てこないのでオススメ。
-cf. <a href="https://www.rdocumentation.org/packages/RColorBrewer/topics/ColorBrewer">RColorBrewer</a></dd>
-<dd><code>scale_*_brewer(..., type='seq', palette=1, direction=1)</code>: 離散値</dd>
-<dd><code>scale_*_distiller(...)</code>: 連続値</dd>
+<dd>いい感じに考えられたパレット <a href="http://colorbrewer2.org/">Colorbrewer</a>
+から選んで指定するだけなので楽ちん。
+利用可能なパレットは <code>RColorBrewer::display.brewer.all()</code> でも一覧できる。</dd>
+<dd><code>scale_*_brewer(..., palette='Blues', direction=1)</code>: 離散値</dd>
+<dd><code>scale_*_distiller(..., palette='Blues', direction=-1)</code>: 連続値</dd>
+<dd>色覚多様性への対応をさらに強化するなら
+<a href="https://github.com/sjmgarnier/viridis"><code>library(viridis)</code></a> の
+<code>viridis::scale_*_viridis(..., direction=1, discrete=FALSE, options=&quot;viridis&quot;)</code>
+を使うのがよさそう。</dd>
 <dt><a href="http://ggplot2.tidyverse.org/reference/scale_gradient.html"><code>scale_*_gradient</code></a></dt>
 <dd>for <code>colour</code>, <code>fill</code></dd>
 <dd>グラデーションの基準となる色を指定する。</dd>
