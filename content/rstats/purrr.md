@@ -29,10 +29,15 @@ https://github.com/tidyverse/purrr
 ## list, vector操作
 
 `purrr::map(.x, .f, ...)`
-: listの各要素に関数を適用し、listで返す。
+: list `.x` の各要素に関数 `.f` を適用し、listで返す。
   `base::lapply()`や`plyr::llply()`の改良版。
-  型の決まったvectorを返す`base::sapply()`や`base::vapply()`の改良版として
-  `map_lgl()`, `map_chr()`, `map_int()`, `map_dbl()` がある。
+  `.f` には[後述の無名関数/ラムダ式](#無名関数)を渡すのが便利。
+  数値や文字列を渡すとインデックスのように扱われる。
+  例えば `map(l, 1L)` と書けば `map(l, ~.x[[1L]])` のように働く。
+  存在しないときの値は `.default` で指定できる。
+: `map_lgl()`, `map_chr()`, `map_int()`, `map_dbl()`
+  は型の決まったvectorを返す亜種で、
+  `base::sapply()`や`base::vapply()`の改良版。
 : `purrr::walk(.x, .f, ...)` は、
   `map()`同様に関数を適用しつつ元の値をそのままinvisible返しする亜種。
 : `purrr::lmap(.x, .f, ...)` は、
@@ -55,7 +60,7 @@ https://github.com/tidyverse/purrr
 
 `purrr::pmap(.l, .f, ...)`
 : listの中身をparallelに処理するmap。
-  `.f`の引数はlistの要素名と一致させる。
+  関数 `.f`の引数はlistの要素名と一致させるか `...` で受け流す必要がある。
   e.g., `pmap(list(a=1:3, b=4:6), function(a, b) {a * b})` 。
   名前無し2要素までなら`map2()`などと同様に`.x`や`.y`を使ったformulaが利用可能。
   e.g., `pmap(list(1:3, 4:6), ~ .x * .y)` 。
@@ -128,7 +133,7 @@ letters %>% map_int(ord)
 # with unnamed function
 letters %>% map_int(function(x) {strtoi(charToRaw(x), 16L)})
 
-# with formula
+# with formula/lambda
 letters %>% map_int(~ strtoi(charToRaw(.x), 16L))
 ```
 
