@@ -152,6 +152,8 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 `str_pad(string, width, side="left", pad=" ")`
 :   余白を作る。
     幅を `width` に伸ばして `side` に寄せて空白を `pad` で埋める。
+    数字の文字列の左に0を埋めるのにも便利。
+    例えば `str_pad('7', 3L, '0')` で `007` になる。
 
 `str_trim(string, side="both")`
 :   空白文字を除去する。
