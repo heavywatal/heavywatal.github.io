@@ -225,11 +225,10 @@ stringr — Rの文字列をまともな方法で処理する
 <dd>e.g., <code>stringr::str_interp('Mean sepal width is $[.3f]{mean(Sepal.Width)}.', iris)</code></dd>
 <dt><code>str_glue(..., .sep=&quot;&quot;, .envir=parent.frame())</code></dt>
 <dd><a href="http://glue.tidyverse.org/"><code>library(glue)</code></a> しなくても使えるように。</dd>
-<dt><code>str_pad(string, width, side=&quot;left&quot;, pad=&quot; &quot;)</code></dt>
-<dd>余白を作る。
-幅を <code>width</code> に伸ばして <code>side</code> に寄せて空白を <code>pad</code> で埋める。
-数字の文字列の左に0を埋めるのにも便利。
-例えば <code>str_pad('7', 3L, '0')</code> で <code>007</code> になる。</dd>
+<dt><code>str_pad(string, width, side=c(&quot;left&quot;, &quot;right&quot;, &quot;both&quot;), pad=&quot; &quot;)</code></dt>
+<dd>文字列の幅を <code>width</code> に伸ばして <code>side</code> 側を <code>pad</code> で埋める。
+例えば <code>&quot;009&quot; &quot;010&quot;</code> のように数字の左を0で埋めて長さを揃えるのにも使える:
+<code>str_pad(c('9', '10'), 3L, '0')</code></dd>
 <dt><code>str_trim(string, side=&quot;both&quot;)</code></dt>
 <dd>空白文字を除去する。
 Python でいうところの <code>str.strip()</code>。
