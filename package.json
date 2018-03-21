@@ -2,11 +2,14 @@
   "name": "heavywatal.github.io",
   "version": "1.0.0",
   "scripts": {
-    "stop": "ls -d public/* | grep -v .git | xargs rm -r",
-    "build": "hugo -D",
-    "watch-content": "hugo -D -w",
-    "watch-theme": "cd themes/nonblog/ && npm start",
-    "start": "npm-run-all --parallel watch-theme watch-content"
+    "stop": "ls -d public/* | grep -Ev '.git|offline|slides' | xargs rm -r",
+    "build:theme": "cd themes/nonblog/ && npm run build",
+    "watch:theme": "cd themes/nonblog/ && npm start",
+    "build:content": "hugo -D",
+    "watch:content": "hugo -D -w",
+    "build": "run-s build:theme build:content",
+    "rebuild": "run-s stop build",
+    "start": "run-p watch:*"
   },
   "devDependencies": {
     "npm-run-all": "^4.1.2"
