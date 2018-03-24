@@ -146,10 +146,7 @@ C++11を使えない場合でも、
 <p><code>-O2</code> では <code>-finline-small-functions</code> がオンになり、
 <code>-O3</code> では <code>-finline-functions</code> がオンになる。
 実行ファイルのサイズがデカくなるし、コンパイルは遅くなるので、バランスを考える。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="kr">inline</span> <span class="kt">int</span> 
-<span class="nf">pow2</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span>
- 
-<span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="kr">inline</span> <span class="kt">int</span> <span class="nf">pow2</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">*=</span> <span class="n">x</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -165,10 +162,7 @@ C++11を使えない場合でも、
 <div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">class</span> <span class="nc">isAboveThreshold</span> <span class="p">{</span>
   <span class="k">public</span><span class="o">:</span>
     <span class="n">isAboveThreshold</span><span class="p">(</span><span class="k">const</span> <span class="kt">double</span> <span class="n">t</span><span class="p">)</span><span class="o">:</span> <span class="n">threshold_</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
-    <span class="kt">bool</span> 
-<span class="nf">operator</span><span class="p">()</span>
-<span class="p">(</span><span class="k">const</span> <span class="kt">double</span> <span class="n">x</span><span class="p">)</span> <span class="k">const</span> 
-<span class="p">{</span>
+    <span class="kt">bool</span> <span class="nf">operator</span><span class="p">()(</span><span class="k">const</span> <span class="kt">double</span> <span class="n">x</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
         <span class="k">return</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">threshold_</span><span class="p">;</span>
     <span class="p">}</span>
   <span class="k">private</span><span class="o">:</span>
@@ -196,20 +190,14 @@ C++11を使えない場合でも、
 <p>参照渡しされた仮引数の中身を関数内で変更すると、
 呼び出し元の実引数の値も変更されることになる。
 変更するつもりがない場合は明示的に <code>const</code> をつけて受け取るようにすると安全</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="kt">void</span> 
-<span class="nf">do_something</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">huge_array</span><span class="p">)</span>
- 
-<span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="kt">void</span> <span class="nf">do_something</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">huge_array</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// コピーせず本体への参照のみ受け取る。
 </span><span class="c1"></span>    <span class="c1">// constがついているので、変更しようとするとコンパイルエラー
 </span><span class="c1"></span><span class="p">}</span>
 </code></pre></div>
 <p>引数の中身を変更するつもりがある場合はポインタを受け取るようにすると、
 呼び出すときに <code>&amp;</code> が必要となるので意図が伝わりやすい。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="kt">void</span> 
-<span class="nf">do_something</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;*</span> <span class="n">huge_array</span><span class="p">)</span>
- 
-<span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="kt">void</span> <span class="nf">do_something</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;*</span> <span class="n">huge_array</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// コピーせずポインタを受け取る。
 </span><span class="c1"></span>    <span class="c1">// huge_arrayの変更は呼び出し元にも影響する。
 </span><span class="c1"></span><span class="p">}</span>
@@ -221,13 +209,13 @@ C++11を使えない場合でも、
 <p>コピーせずにポインタを入れ替えることで値を変化させる、
 という渡し方を簡単に書けるようになった。
 渡した側の状態は不定(あるいは<code>nullptr</code>)になる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">s1</span> <span class="o">=</span> <span class="sa"></span><span class="s">&#34;alpha&#34;</span><span class="p">;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">s2</span> <span class="o">=</span> <span class="sa"></span><span class="s">&#34;beta&#34;</span><span class="p">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">s1</span> <span class="o">=</span> <span class="s">&#34;alpha&#34;</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">s2</span> <span class="o">=</span> <span class="s">&#34;beta&#34;</span><span class="p">;</span>
 <span class="n">s2</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">s1</span><span class="p">);</span>
 <span class="c1">// s2: &#34;alpha&#34;
 </span><span class="c1">// s1:  ?????
 </span><span class="c1"></span><span class="n">s1</span><span class="p">.</span><span class="n">size</span><span class="p">()</span>    <span class="c1">// OK: 値は不定だが変数としては生きてる
-</span><span class="c1"></span><span class="n">s1</span> <span class="o">=</span> <span class="sa"></span><span class="s">&#34;gamma&#34;</span> <span class="c1">// OK: 再代入可能
+</span><span class="c1"></span><span class="n">s1</span> <span class="o">=</span> <span class="s">&#34;gamma&#34;</span> <span class="c1">// OK: 再代入可能
 </span><span class="c1">// いずれにせよデストラクタは変数の寿命に伴って呼び出される。
 </span><span class="c1"></span></code></pre></div>
 <p>関数から値を返すときにムーブ返ししたくなるところだが、
@@ -415,10 +403,7 @@ C++で配列作るならとりあえずこれ。
 そうならないように切り離す。</p>
 <div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
 </span><span class="cp"></span>
-<span class="kt">int</span> 
-<span class="nf">main</span><span class="p">()</span>
- 
-<span class="p">{</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
     <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
     <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 <span class="p">}</span>

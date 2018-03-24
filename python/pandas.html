@@ -93,7 +93,7 @@ Pandas — data.frame in Python
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="kn">as</span> <span class="nn">sns</span>
 
-<span class="n">iris</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;iris&#39;</span><span class="p">)</span></code></pre></div>
+<span class="n">iris</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;iris&#39;</span><span class="p">)</span></code></pre></div>
 <h2 id="型">型</h2>
 
 <p><a href="http://pandas.pydata.org/pandas-docs/stable/dsintro.html">http://pandas.pydata.org/pandas-docs/stable/dsintro.html</a></p>
@@ -133,20 +133,20 @@ Pandas — data.frame in Python
 <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="n">df</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span></code></pre></div>
 <p><a href="http://pandas.pydata.org/pandas-docs/stable/indexing.html">http://pandas.pydata.org/pandas-docs/stable/indexing.html</a></p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[[</span><span class="sa"></span><span class="s1">&#39;species&#39;</span><span class="p">]]</span>  <span class="c1"># DataFrame with 1 column</span>
-<span class="n">df</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;species&#39;</span><span class="p">]</span>    <span class="c1"># Series</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;species&#39;</span><span class="p">]]</span>  <span class="c1"># DataFrame with 1 column</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;species&#39;</span><span class="p">]</span>    <span class="c1"># Series</span>
 <span class="n">df</span><span class="o">.</span><span class="n">species</span>       <span class="c1"># Series (not recommended)</span>
 
 <span class="c1"># label-based</span>
 <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="sa"></span><span class="s1">&#39;sepal_width&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;sepal_width&#39;</span><span class="p">]</span>
 
 <span class="c1"># integer-based</span>
 <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
 
 <span class="c1"># fast scalar (single value) lookup</span>
-<span class="n">df</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="sa"></span><span class="s1">&#39;sepal_width&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;sepal_width&#39;</span><span class="p">]</span>
 <span class="n">df</span><span class="o">.</span><span class="n">iat</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span></code></pre></div>
 <p><code>df.species</code> のような attribute access
 は既存のメソッド名(e.g., <code>min</code>)と被るとダメなので基本的には使わないほうが良さそう。</p>
@@ -158,12 +158,12 @@ Pandas — data.frame in Python
 
 <p>DataFrameを何回も再帰代入するより、メソッドを繋いだほうが書きやすいし読みやすい。
 カッコかバックスラッシュを使えばドット前に改行やスペースを入れて整形可能。</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="p">(</span><span class="n">iris</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;species != &#34;setosa&#34;&#39;</span><span class="p">)</span>
-     <span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;^(?!sepal)&#39;</span><span class="p">)</span>
-     <span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">petal_area</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;petal_length&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;petal_width&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">)</span>
-     <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;species&#39;</span><span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="p">(</span><span class="n">iris</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;species != &#34;setosa&#34;&#39;</span><span class="p">)</span>
+     <span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="s1">&#39;^(?!sepal)&#39;</span><span class="p">)</span>
+     <span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">petal_area</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;petal_length&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;petal_width&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">)</span>
+     <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;species&#39;</span><span class="p">)</span>
      <span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
-     <span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="sa"></span><span class="s1">&#39;petal_length&#39;</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+     <span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s1">&#39;petal_length&#39;</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="p">)</span></code></pre></div>
 <p>See also <a href="/rstats/dplyr.html">dplyr + magrittr on R</a></p>
 
@@ -204,9 +204,9 @@ e.g., <code>iris.melt('species', var_name='variable', value_name='value')</code>
 <code>reshape2::dcast()</code> のように複数の値をaggregationできる亜種として
 <code>df.pivot_table()</code> があるけどまあ使わないのが無難か。</dd>
 </dl>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="n">molten</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">melt</span><span class="p">([</span><span class="sa"></span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;species&#39;</span><span class="p">])</span>
-<span class="n">molten</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;variable&#39;</span><span class="p">)</span>           <span class="c1"># species columns are redundant</span>
-<span class="n">molten</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;variable&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;value&#39;</span><span class="p">)</span>  <span class="c1"># species column is removed</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="n">molten</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">melt</span><span class="p">([</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;species&#39;</span><span class="p">])</span>
+<span class="n">molten</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;variable&#39;</span><span class="p">)</span>           <span class="c1"># species columns are redundant</span>
+<span class="n">molten</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;variable&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)</span>  <span class="c1"># species column is removed</span></code></pre></div>
 <h3 id="stack-unstack">stack, unstack</h3>
 
 <p>MultiIndexを中心に考える。
@@ -224,16 +224,16 @@ nested tibble的なイメージ？</p>
 <dd>横長に変形。
 展開するindexの階層を指定できる(デフォルトの<code>-1</code>は最内側)。</dd>
 </dl>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="n">stacked</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="sa"></span><span class="s1">&#39;species&#39;</span><span class="p">],</span> <span class="n">append</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">stack</span><span class="p">()</span>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="n">stacked</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s1">&#39;species&#39;</span><span class="p">],</span> <span class="n">append</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">stack</span><span class="p">()</span>
 <span class="n">stacked</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span>
 
 <span class="c1"># more explicitly</span>
-<span class="n">stacked</span><span class="o">.</span><span class="n">rename_axis</span><span class="p">([</span><span class="sa"></span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;species&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;variable&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">unstack</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;variable&#39;</span><span class="p">)</span></code></pre></div>
+<span class="n">stacked</span><span class="o">.</span><span class="n">rename_axis</span><span class="p">([</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;species&#39;</span><span class="p">,</span> <span class="s1">&#39;variable&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">unstack</span><span class="p">(</span><span class="s1">&#39;variable&#39;</span><span class="p">)</span></code></pre></div>
 <h2 id="設定">設定</h2>
 
 <p><a href="http://pandas.pydata.org/pandas-docs/stable/options.html">http://pandas.pydata.org/pandas-docs/stable/options.html</a></p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;display.max_rows&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;display.width&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.max_rows&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.width&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span></code></pre></div>
 <p>ディスプレイ幅は <code>os.get_terminal_size().columns</code> で明示的に取得してもいい。</p>
 
 <h2 id="書籍">書籍</h2>

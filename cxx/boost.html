@@ -224,23 +224,20 @@ using clang : 14 : clang++ : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++1
 </span><span class="cp">#include</span> <span class="cpf">&lt;boost/iostreams/filter/gzip.hpp&gt;</span><span class="cp">
 </span><span class="cp">#include</span> <span class="cpf">&lt;boost/iostreams/device/file_descriptor.hpp&gt;</span><span class="cp">
 </span><span class="cp"></span>
-<span class="kt">int</span> 
-<span class="nf">main</span><span class="p">()</span>
- 
-<span class="p">{</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">namespace</span> <span class="n">bios</span> <span class="o">=</span> <span class="n">boost</span><span class="o">::</span><span class="n">iostreams</span><span class="p">;</span>
     <span class="p">{</span>
         <span class="n">bios</span><span class="o">::</span><span class="n">filtering_ostream</span> <span class="n">ost</span><span class="p">;</span>
         <span class="n">ost</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">bios</span><span class="o">::</span><span class="n">gzip_compressor</span><span class="p">());</span>
-        <span class="n">ost</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">bios</span><span class="o">::</span><span class="n">file_descriptor_sink</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;hello.txt.gz&#34;</span><span class="p">));</span>
-        <span class="n">ost</span> <span class="o">&lt;&lt;</span> <span class="sa"></span><span class="s">&#34;Hello world!&#34;</span><span class="p">;</span>
+        <span class="n">ost</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">bios</span><span class="o">::</span><span class="n">file_descriptor_sink</span><span class="p">(</span><span class="s">&#34;hello.txt.gz&#34;</span><span class="p">));</span>
+        <span class="n">ost</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Hello world!&#34;</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="p">{</span>
         <span class="n">bios</span><span class="o">::</span><span class="n">filtering_istream</span> <span class="n">ist</span><span class="p">;</span>
         <span class="n">ist</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">bios</span><span class="o">::</span><span class="n">gzip_decompressor</span><span class="p">());</span>
-        <span class="n">ist</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">bios</span><span class="o">::</span><span class="n">file_descriptor_source</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;hello.txt.gz&#34;</span><span class="p">));</span>
+        <span class="n">ist</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">bios</span><span class="o">::</span><span class="n">file_descriptor_source</span><span class="p">(</span><span class="s">&#34;hello.txt.gz&#34;</span><span class="p">));</span>
         <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">buffer</span><span class="p">;</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">getline</span><span class="p">(</span><span class="n">ist</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="sa"></span><span class="sc">&#39;\0&#39;</span><span class="p">);</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">getline</span><span class="p">(</span><span class="n">ist</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="sc">&#39;\0&#39;</span><span class="p">);</span>
         <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">buffer</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
     <span class="p">}</span>
 <span class="p">}</span>
