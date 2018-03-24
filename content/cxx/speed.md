@@ -83,8 +83,8 @@ inline int pow2(int x) {
 `std::for_each()` や `std::transform()` の最後の引数に関数を渡す場合など、
 何度も呼び出される小さい関数については、
 普通の関数や関数ポインタで渡すよりも関数オブジェクトを使ったほうがよい。
-インライン展開などコンパイラによる最適化がしやすいらしい。
-あと、メンバ変数として値を保持できるので、
+コンパイラによる最適化がしやすいらしい。
+メンバ変数として値を保持できるので、
 引数のやり取りやメモリの確保・開放が少なくてすむという場面もありそう。
 
 ```c++
@@ -116,9 +116,10 @@ std::transform(v.begin(), v.end(), result.begin(),
 
 ### `const`参照渡し or ポインタ渡し
 
-オブジェクトの値渡しにはコピーコンストラクタが呼ばれるコストが生じる。
-したがって`std::string`とかSTLコンテナとか自作クラスなどは参照渡しのほうが高速
-(ただし`int`とか`double`のような単純な型の場合はむしろ普通の値渡しがよい)。
+オブジェクトの値渡しにはコピーのコストが生じるので、
+STLコンテナや自作クラスなどは参照渡しのほうが高速。
+ただし参照を解決するコストも無いわけではないので、
+`int`や`double`のような単純な型はむしろ普通の値渡しがよい。
 
 参照渡しされた仮引数の中身を関数内で変更すると、
 呼び出し元の実引数の値も変更されることになる。
@@ -146,20 +147,33 @@ do_something(&some_array);  // ああ、この配列は変更されるんだな
 
 ### ムーブセマンティクス (C++11)
 
-コピーせずにポインタを入れ替えることで値を変化させる、
-という渡し方を簡単に書けるようになった。
-渡した側の状態は不定(あるいは`nullptr`)になる。
+受け取ったものを関数の中で変更して返すような関数を作るとき、
+引数の渡し方も受け取り方も3パターンずつ考えられる。
 
-```c++
-std::string s1 = "alpha";
-std::string s2 = "beta";
-s2 = std::move(s1);
-// s2: "alpha"
-// s1:  ?????
-s1.size()    // OK: 値は不定だが変数としては生きてる
-s1 = "gamma" // OK: 再代入可能
-// いずれにせよデストラクタは変数の寿命に伴って呼び出される。
-```
+- 渡し方
+    - lvalue (`vec0`)
+    - xvalue (`std::move(vec0)`)
+    - prvalue (`Vector{}`)
+- 受け取り方
+    - const lvalue参照 (`const Vector&`)
+    - lvalue値 (`Vector`)
+    - const lvalue参照 (`const Vector&`) とrvalue参照 (`Vector&&`) のオーバーロード
+
+[それぞれの組み合わせでコピーとムーブが何回起こるかテストするコード]
+(https://github.com/heavywatal/sketchbook/blob/master/c%2B%2B/move.cpp)
+
+const lvalue参照で受け取ったものを変更するためにはコピーが必要になるので、
+普通のlvalue渡しでは問題ないけどrvalue渡しには適さない。
+rvalue参照受け取りでオーバーロードすると、
+コピーせず1回のムーブで済ませられる。
+ただし引数が増えると手に負えなくなる。
+lvalue値受け取りの関数はrvalueを受け取るときにはコピーを生じない。
+オーバーロードの場合と比べてムーブが余計に1回生じるが、
+そのコストと定義の手軽さを天秤に掛けて考慮する価値はある。
+
+`return`最適化にはムーブすらしない"copy elision"とムーブの2種類があって、
+ローカル変数やprvalueを返す場合は両方を試み、
+引数を返す場合は後者のみを試みるらしい。
 
 関数から値を返すときにムーブ返ししたくなるところだが、
 多くの場合コンパイラがうまいことやってくれるのでわざわざ
@@ -168,80 +182,10 @@ s1 = "gamma" // OK: 再代入可能
 ただし、返る変数と関数定義で型が一致せず暗黙の型変換が挟まる場合は、
 明示的にムーブ返しする必要がある。
 
-`return`最適化にはムーブすらしない"copy elision"とムーブの2種類があって、
-一時変数やローカル変数を返す場合は両方を試み、
-引数を返す場合は後者のみを試みるらしい。
-
-```c++
-std::vector<int> ones(size_t n) {
-    return std::vector<int>(n, 1);  // copy elision
-}
-
-std::vector<int> times2(const std::vector<int>& vec) {
-    std::vector<int> tmp(vec);  // copy ctor
-    for (auto& x: tmp) {x *= 2;}
-    return tmp;  // copy elision
-}
-
-std::vector<int> times3(std::vector<int> vec) {
-    for (auto& x: vec) {x *= 3;}
-    return vec;  // move ctor
-}
-
-auto vec0 = ones(3);
-auto vec1 = times2(vec0);             //  lvalue渡し: 1 copy
-auto vec2 = times2(std::move(vec0));  //  xvalue渡し: 1 copy
-auto vec3 = times2(ones(3));          // prvalue渡し: 1 copy
-auto vec4 = times3(vec1);             //  lvalue渡し: 1 copy 1 move
-auto vec5 = times3(std::move(vec1));  //  xvalue渡し:        2 move
-auto vec6 = times3(ones(3));          // prvalue渡し:        1 move
-```
-
-普通のlvalue渡しでは`times2()`のような`const T&`型関数が良いが、
-rvalue渡ししたいときは`times3()`のような`T`型関数が良い。
-しかし同じ処理の関数に違う名前を持たせるのは嫌なので、ぜひオーバーロードしたい。
-その場合はconst lvalue reference(`const T&`)型とrvalue reference(`T&&`)型の2つを用意する。
-
-```c++
-// [A]
-std::vector<int> times4(const std::vector<int>& vec) {
-    std::vector<int> tmp(vec);  // copy ctor
-    for (auto& x: tmp) {x *= 4;}
-    return tmp;  // copy elision
-}
-
-// [B]
-std::vector<int> times4(std::vector<int>&& vec) {
-    for (auto& x: vec) {x *= 4;}
-    return std::move(vec);  // move ctor
-}
-
-auto vec7 = times4(vec2);             //  lvalue渡し to [A] 1 copy
-auto vec8 = times4(std::move(vec2));  //  xvalue渡し to [B]        1 move
-auto vec9 = times4(ones(3))           // prvalue渡し to [B]        1 move
-```
-
-`[B]`に`std::move()`渡しするときはmove ctorが呼び出されず参照のみ。
-ということで、オーバーロードされた`times4()`が最低コスト。
-
 関連記事はたくさん見つかるが、特に読みやすく参考になったのはこちら:
 
 > [本当は怖くないムーブセマンティクス - yohhoyの日記（別館）](http://yohhoy.hatenablog.jp/entry/2012/12/15/120839) \
 > [参照渡し or 値渡し？ - yohhoyの日記](http://d.hatena.ne.jp/yohhoy/20120524/p1)
-
-
-### 複合代入演算子
-
-```c++
-// (a+b)の結果を持つ一時オブジェクトが作られ、xに代入される。
-int x = a + b;
-
-// xをaで初期化して、bを足す。一時オブジェクトは作られない。
-int x = a;
-x += b;
-```
-
-`int` や `double` くらいならそれより可読性を重視したほうがいいかも。
 
 
 ## コンテナ
@@ -269,7 +213,7 @@ http://en.cppreference.com/w/cpp/container
     ただし長さの変更など苦手な点もあるので使い所は限られる。
     本格的なベクタ演算・行列演算がしたければ
     [Eigen](http://eigen.tuxfamily.org/) や
-    [Armadillo](http://arma.sourceforge.net/) とかを使ったほうよさそう。
+    [Armadillo](http://arma.sourceforge.net/) などを使ったほうよさそう。
 
 `std::deque`
 :   `vector` とほぼ同じだが、`reserve()` ができない。
@@ -312,20 +256,20 @@ v.reserve(10000);
 ループの中身が軽い処理の場合には無視できない差になるかもしれない。
 
 ```c++
-for (size_t i=0; i<v.size(); ++i) {
-    // このv.size()は毎回呼び出されてしまう。
+for (size_t i=0; i < v.size(); ++i) {
+    // v.size() many times!
 }
 
 for (size_t i=0, n=v.size(); i<n; ++i) {
-    // size()の呼び出しは一度だけで済み、nの名前はforの中しか汚さない。
+    // v.size() only once
 }
 
 for (vector<int>::iterator it=v.begin(), v_end=v.end(); it!=v_end; ++it) {
-    // これも、end()の呼び出しは一度きり。
+    // v.end() only once
 }
 
 for (const auto& x: v) {
-    // コンテナ全体を舐めるなら C++11 range-based for が便利
+    // C++11 range-based for
 }
 ```
 
@@ -348,14 +292,6 @@ for (std::vector<int>::iterator it=v.begin(); it!=v.end(); ++it) {
 一時変数の定義や演算などをループの外で予めやっておけないか、確認すべし。
 
 ## 入出力
-
-### まとめて書き出す
-
-ディスクレスクラスタで計算させる場合などは
-特に通信やディスク書き込みのオーバーヘッドが大きい。
-ファイルに逐次追記していくのではなく、
-`std::ostringstream` や `std::vector<std::string>`
-などでメモリ上にためておき、最後の最後でまとめて書き出すほうがいい。
 
 ### 標準入出力
 
