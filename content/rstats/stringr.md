@@ -7,8 +7,8 @@ tags = ["r", "tidyverse"]
   weight = -60
 +++
 
-<a href="http://stringr.tidyverse.org/">
-<img src="http://stringr.tidyverse.org/logo.png" align="right" width="120" height="139">
+<a href="https://stringr.tidyverse.org/">
+<img src="https://stringr.tidyverse.org/logo.png" align="right" width="120" height="139">
 </a>
 
 R標準の`base`パッケージが提供する関数でも文字列処理は可能だが、
@@ -33,14 +33,14 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 `str_*` のほうが `stri_*` よりも1文字短いので、
 基本的には `stringr` を使っとけばよい。
 
-[tidyverse](https://github.com/tidyverse/tidyverse) に含まれているので、
+[tidyverse](https://tidyverse.tidyverse.org/) に含まれているので、
 `install.packages('tidyverse')` で一括インストール、
 `library(tidyverse)` で一括ロード。
 
 -   <http://r4ds.had.co.nz/strings.html>
 -   <https://cran.r-project.org/web/packages/stringr/>
 -   <https://github.com/tidyverse/stringr>
--   <http://www.rdocumentation.org/packages/stringr>
+-   <https://www.rdocumentation.org/packages/stringr>
 
 ## Functions
 
@@ -147,7 +147,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 :   e.g., `stringr::str_interp('Mean sepal width is $[.3f]{mean(Sepal.Width)}.', iris)`
 
 `str_glue(..., .sep="", .envir=parent.frame())`
-:   [`library(glue)`](http://glue.tidyverse.org/) しなくても使えるように。
+:   [`library(glue)`](https://glue.tidyverse.org/) しなくても使えるように。
 
 `str_pad(string, width, side=c("left", "right", "both"), pad=" ")`
 :   文字列の幅を `width` に伸ばして `side` 側を `pad` で埋める。

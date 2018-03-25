@@ -7,15 +7,15 @@ tags = ["r", "tidyverse"]
   weight = -75
 +++
 
-<a href="http://dplyr.tidyverse.org/">
-<img src="http://dplyr.tidyverse.org/logo.png" align="right" width="120" height="139">
+<a href="https://dplyr.tidyverse.org/">
+<img src="https://dplyr.tidyverse.org/logo.png" align="right" width="120" height="139">
 </a>
 
 data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(summarise)、ソート(arrange)などの処理を施すためのパッケージ。
 前作 [plyr]({{< relref "plyr.md" >}}) のうちdata.frameに関する部分が強化されている。
 [purrr]({{< relref "purrr.md" >}}) や [tidyr]({{< relref "tidyr.md" >}}) と一緒に使うとよい。
 
-[tidyverse](https://github.com/tidyverse/tidyverse) に含まれているので、
+[tidyverse](https://tidyverse.tidyverse.org/) に含まれているので、
 `install.packages('tidyverse')` で一括インストール、
 `library(tidyverse)` で一括ロード。
 
@@ -24,11 +24,11 @@ data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(
 
 ## 関数の連結 %>%
 
-<a href="http://magrittr.tidyverse.org/">
-<img src="http://magrittr.tidyverse.org/logo.png" align="right" width="120" height="139">
+<a href="https://magrittr.tidyverse.org/">
+<img src="https://magrittr.tidyverse.org/logo.png" align="right" width="120" height="139">
 </a>
 
-dplyrではなく[magrittr](http://magrittr.tidyverse.org/)の機能。
+dplyrではなく[magrittr](https://magrittr.tidyverse.org/)の機能。
 
 `x %>% f(a, b)`
 :   これは `f(x, a, b)` と等価。
@@ -75,7 +75,7 @@ dplyr::summarise_all(
 
 現状では `magrittr` パッケージの `%>%` が広く採用されているが、
 `pipeR` パッケージの `%>>%` のほうが高速らしい。
-<http://renkun.me/pipeR-tutorial/>
+<https://renkun-ken.github.io/pipeR-tutorial/>
 
 
 ## 抽出・絞り込み
@@ -84,7 +84,7 @@ dplyr::summarise_all(
 
 `dplyr::select(.data, ...)`
 :   列を絞る。複数指定、範囲指定、負の指定が可能。
-    [select helper](http://dplyr.tidyverse.org/reference/select_helpers.html)
+    [select helper](https://dplyr.tidyverse.org/reference/select_helpers.html)
     によるパターン指定も便利。
     残るのが1列だけでも勝手にvectorにはならずdata.frameのまま。
 
@@ -99,7 +99,7 @@ dplyr::summarise_all(
     ```
 
     文字列変数で指定しようとすると意図が曖昧になるので、
-    [unquoting](http://dplyr.tidyverse.org/articles/programming.html#unquoting)
+    [unquoting](https://dplyr.tidyverse.org/articles/programming.html#unquoting)
     やpronounで明確に:
     ```r
     Sepal.Length = c('Petal.Width', 'Species')
@@ -188,7 +188,7 @@ e.g., `filter(gene != 'TP53')`
     ```
 
     変数に入った文字列を変更先の列名に指定したい場合は
-    [unquoting用の代入演算子 `:=`](http://dplyr.tidyverse.org/articles/programming.html#setting-variable-names)
+    [unquoting用の代入演算子 `:=`](https://dplyr.tidyverse.org/articles/programming.html#setting-variable-names)
     を使う:
     ```r
     new_column = 'ln_sepal_length'
@@ -229,7 +229,7 @@ e.g., `filter(gene != 'TP53')`
     2          4.9         3.0          1.4         0.2  setosa
     ```
     名前付きベクターと
-    [Unquote-splicing](http://dplyr.tidyverse.org/articles/programming.html#unquote-splicing)
+    [Unquote-splicing](https://dplyr.tidyverse.org/articles/programming.html#unquote-splicing)
     を使えば一括指定できる:
     ```r
     old_names = names(iris)

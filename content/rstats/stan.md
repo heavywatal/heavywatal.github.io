@@ -214,7 +214,7 @@ m[1]   // row_vector[3]
 
 ## 可視化
 
-http://www.rdocumentation.org/packages/rstan/topics/Plots
+https://www.rdocumentation.org/packages/rstan/topics/Plots
 
 ```r
 stan_plot()

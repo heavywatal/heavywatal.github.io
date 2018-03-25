@@ -296,7 +296,7 @@ options(devtools.desc.license='MIT')
 
 Rソースコードのコメントから`NAMESPACE`とヘルプ(`man/*.Rd`)を自動生成する。
 
-- <http://cran.r-project.org/web/packages/roxygen2/>
+- <https://cran.r-project.org/web/packages/roxygen2/>
 - <https://github.com/klutometis/roxygen>
 - <http://r-pkgs.had.co.nz/man.html>
 - <http://kbroman.org/pkg_primer/pages/docs.html>

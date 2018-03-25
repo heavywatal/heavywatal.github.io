@@ -7,8 +7,8 @@ tags = ["r", "tidyverse"]
   weight = -65
 +++
 
-<a href="http://readr.tidyverse.org/">
-<img src="http://readr.tidyverse.org/logo.png" align="right" width="120" height="139">
+<a href="https://readr.tidyverse.org/">
+<img src="https://readr.tidyverse.org/logo.png" align="right" width="120" height="139">
 </a>
 
 タブ区切りテキストやCSVファイルを読み込んでdata.frameにするツール。
@@ -23,7 +23,7 @@ tags = ["r", "tidyverse"]
 -   指定した列だけ読み込むこともできる
 -   生data.frameではなく安全な [tibble](#tibble) として返してくれる
 
-[tidyverse](https://github.com/tidyverse/tidyverse) に含まれているので、
+[tidyverse](https://tidyverse.tidyverse.org/) に含まれているので、
 `install.packages('tidyverse')` で一括インストール、
 `library(tidyverse)` で一括ロード。
 例えば:
@@ -153,8 +153,8 @@ read_csv('mydata.csv', col_types=colsp)
 
 ## Excelファイルを読み込む
 
-<a href="http://readxl.tidyverse.org/">
-<img src="http://readxl.tidyverse.org/logo.png" align="right" width="120" height="139">
+<a href="https://readxl.tidyverse.org/">
+<img src="https://readxl.tidyverse.org/logo.png" align="right" width="120" height="139">
 </a>
 
 https://github.com/tidyverse/readxl
@@ -209,8 +209,8 @@ LDFLAGS = -L${HOME}/.homebrew/lib
 
 ## tibble
 
-<a href="http://tibble.tidyverse.org/">
-<img src="http://tibble.tidyverse.org/logo.png" align="right" width="120" height="139">
+<a href="https://tibble.tidyverse.org/">
+<img src="https://tibble.tidyverse.org/logo.png" align="right" width="120" height="139">
 </a>
 
 - http://r4ds.had.co.nz/tibbles.html

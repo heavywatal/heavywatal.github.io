@@ -8,8 +8,8 @@ subtitle = "ループ処理やapply系関数の決定版"
   weight = -73
 +++
 
-<a href="http://purrr.tidyverse.org/">
-<img src="http://purrr.tidyverse.org/logo.png" align="right" width="120" height="139">
+<a href="https://purrr.tidyverse.org/">
+<img src="https://purrr.tidyverse.org/logo.png" align="right" width="120" height="139">
 </a>
 
 標準のapply族や[plyr]({{< relref "plyr.md" >}})の関数に引導を渡すべく再設計されたようなパッケージ。
@@ -18,7 +18,7 @@ purerのように読むらしい。
 いまのところ並列化する機能はないので、そういうときは
 [foreachとparallel]({{< relref "foreach.md" >}}) を使う。
 
-[tidyverse](https://github.com/tidyverse/tidyverse) に含まれているので、
+[tidyverse](https://tidyverse.tidyverse.org/) に含まれているので、
 `install.packages('tidyverse')` で一括インストール、
 `library(tidyverse)` で一括ロード。
 

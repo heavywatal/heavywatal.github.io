@@ -8,20 +8,20 @@ tags = ["r"]
 
 ## tidyverse
 
-<a href="http://tidyverse.org/">
-<img src="http://tidyverse.tidyverse.org/logo.png" align="right" width="120" height="139">
+<a href="https://tidyverse.org/">
+<img src="https://tidyverse.tidyverse.org/logo.png" align="right" width="120" height="139">
 </a>
 
 解析も作図も**整然データ (tidy data)**を用意するところから始まる。
 
 - わかりやすいスライド: [整然データってなに？ --- @f_nishihara](https://speakerdeck.com/fnshr/zheng-ran-detatutenani)
 - 詳しい解説: [整然データとは何か --- @f_nishihara](http://id.fnshr.info/2017/01/09/tidy-data-intro/)
-- 原著: [Tidy Data --- @hadley](http://dx.doi.org/10.18637/jss.v059.i10)
+- 原著: [Tidy Data --- @hadley](https://dx.doi.org/10.18637/jss.v059.i10)
 
 >   *tidy datasets are all alike but every messy dataset is messy in its own way*\
 >   --- *Hadley Wickham*
 
-[tidyverse](http://tidyverse.org/)
+[tidyverse](https://www.tidyverse.org/)
 はそういう思想に基いて互いに連携するようデザインされたパッケージ群で、
 R標準の関数よりも遥かに分かりやすく安全で高機能なものを提供してくれている。
 
@@ -36,7 +36,7 @@ R標準の関数よりも遥かに分かりやすく安全で高機能なもの�
 - data.frame <=> CSV/TSV の読み書きには [readr]({{< relref "readr.md" >}})
 - list <=> json の読み書きには [jsonlite](https://cran.r-project.org/web/packages/jsonlite/)
 
-[日本語版](http://amzn.to/2yyFRKt)でも[英語版](http://amzn.to/2tbRmVc)でも[公開オンライン版](http://r4ds.had.co.nz/)でもいいのでとにかく **R for Data Science (r4ds)** を読むのが一番。
+[日本語版](https://amzn.to/2yyFRKt)でも[英語版](https://amzn.to/2tbRmVc)でも[公開オンライン版](https://r4ds.had.co.nz/)でもいいのでとにかく **R for Data Science (r4ds)** を読むのが一番。
 
 ## 確率分布
 
@@ -220,7 +220,7 @@ value
 
 - https://adv-r.hadley.nz/meta
 - https://cran.r-project.org/web/packages/dplyr/vignettes/programming.html
-- http://rlang.tidyverse.org/articles/tidy-evaluation.html
+- https://rlang.tidyverse.org/articles/tidy-evaluation.html
 
 
 ## 最適化・高速化
@@ -248,7 +248,7 @@ ifelse(vec %% 3,
 
 ### list, data.frame, matrix
 
--   [tidyverse](https://github.com/tidyverse/tidyverse) パッケージ群
+-   [tidyverse](https://tidyverse.tidyverse.org/) パッケージ群
     ([dplyr]({{< relref "dplyr.md" >}}), [purrr]({{< relref "purrr.md" >}}),
     [tidyr]({{< relref "tidyr.md" >}})など) を介して操作すると楽チンかつ高速。
 -   基本的にlistやdata.frameは遅いので、

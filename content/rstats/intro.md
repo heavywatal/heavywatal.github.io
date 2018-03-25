@@ -10,7 +10,7 @@ tags = ["r"]
 
 -   <http://seekr.jp/> --- Googleカスタム検索 for R
 -   <http://rseek.org/> --- Google Custom Search for R
--   <http://www.rdocumentation.org/>
+-   <https://www.rdocumentation.org/>
 -   <http://r4ds.had.co.nz/> --- R for Data Science (体系的に学びたい人はぜひ通読を)
 -   <https://www.r-bloggers.com/>
 
@@ -29,7 +29,7 @@ R のコンソールにコマンドを打ち込むと、即座に結果が返っ
 一連の処理をまとめてスクリプト(テキストファイル)に書き出しておくとよい。
 ファイルの拡張子は `.txt` でも何でもいいが `.R` にすることが多い。
 
-[R Markdown](http://rmarkdown.rstudio.com/)
+[R Markdown](https://rmarkdown.rstudio.com/)
 を使えばコードと解析結果の図表を同時に保存・プレゼンすることができる。
 
 
@@ -89,15 +89,15 @@ Error: could not find function "stepAIC"
 
 ### Contributed Packages
 
-<a href="http://tidyverse.org/">
-<img src="http://tidyverse.tidyverse.org/logo.png" align="right" width="120" height="139">
+<a href="https://tidyverse.tidyverse.org/">
+<img src="https://tidyverse.tidyverse.org/logo.png" align="right" width="120" height="139">
 </a>
 
 数千ものパッケージが有志により開発され、CRANにまとめて公開されている。
 
 例えば [rstudio.com/products/rpackages](https://www.rstudio.com/products/rpackages/)
 で紹介されているもの、特にHadley Wickhamらによる
-[tidyverse](http://tidyverse.org/) パッケージ群
+[tidyverse](https://www.tidyverse.org/) パッケージ群
 ([ggplot2]({{< relref "ggplot2.md" >}}),
 [dplyr]({{< relref "dplyr.md" >}}),
 [purrr]({{< relref "purrr.md" >}}),

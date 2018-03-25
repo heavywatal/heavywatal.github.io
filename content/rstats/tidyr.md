@@ -7,8 +7,8 @@ tags = ["r", "tidyverse"]
   weight = -70
 +++
 
-<a href="http://tidyr.tidyverse.org/">
-<img src="http://tidyr.tidyverse.org/logo.png" align="right" width="120" height="139">
+<a href="https://tidyr.tidyverse.org/">
+<img src="https://tidyr.tidyverse.org/logo.png" align="right" width="120" height="139">
 </a>
 
 data.frameを縦長・横長・入れ子に変形・整形するためのツール。
@@ -16,7 +16,7 @@ data.frameを縦長・横長・入れ子に変形・整形するためのツー�
 と一緒に使うとよい。
 [reshape2]({{< relref "reshape2.md" >}}) を置き換えるべく再設計された改良版。
 
-[tidyverse](https://github.com/tidyverse/tidyverse) に含まれているので、
+[tidyverse](https://tidyverse.tidyverse.org/) に含まれているので、
 `install.packages('tidyverse')` で一括インストール、
 `library(tidyverse)` で一括ロード。
 

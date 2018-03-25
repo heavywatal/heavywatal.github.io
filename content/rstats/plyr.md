@@ -22,7 +22,7 @@ list, vector 処理には [purrr]({{< relref "purrr.md" >}})
 
 -   <http://plyr.had.co.nz/>
 -   <http://www.jstatsoft.org/v40/i01>
--   <http://www.rdocumentation.org/packages/plyr>
+-   <https://www.rdocumentation.org/packages/plyr>
 -   <https://cran.r-project.org/web/packages/plyr/index.html>
 
 ## コア関数

@@ -7,13 +7,13 @@ tags = ["r", "bioconductor"]
   weight = -40
 +++
 
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4621062506/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41aQBFtkgBL._SX160_.jpg" alt="RとBioconductorを用いたバイオインフォマティクス" /></a>
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320057082/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51yBjAPptKL._SX160_.jpg" alt="Rによるバイオインフォマティクスデータ解析 第2版 －Bioconductorを用いたゲノムスケールのデータマイニング－" /></a>
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320123700/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41aoEmhUR0L._SX160_.jpg" alt="トランスクリプトーム解析 (シリーズ Useful R 7)" /></a>
+<a href="https://www.amazon.co.jp/dp/4621062506//ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=c58e6e9dc365558cc336d9ea0a2c8a12" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4621062506&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4621062506" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+<a href="https://www.amazon.co.jp/dp/4320057082//ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=b0a0cf1dfe769f34f7544db70a0f6711" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4320057082&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4320057082" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+<a href="https://www.amazon.co.jp/dp/4320123700//ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=f7d9a9e5ba94b0fa7da4a582b70da85a" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4320123700&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4320123700" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 
 - <https://www.bioconductor.org>
 - <http://blog.hackingisbelieving.org/2010/09/r-package_06.html>
-- <http://qiita.com/tags/bioconductor>
+- <https://qiita.com/tags/bioconductor>
 - <http://manuals.bioinformatics.ucr.edu/home/R_BioCondManual>
 - <http://search.bioconductor.jp/>
 
@@ -202,7 +202,7 @@ bss = readDNAStringSet(.file)
 
 <https://www.bioconductor.org/packages/release/bioc/html/GenomicRanges.html>
 
-<http://qiita.com/yuifu/items/556af5d4d086c96ec783>
+<https://qiita.com/yuifu/items/556af5d4d086c96ec783>
 
 ### クラス
 
@@ -246,7 +246,7 @@ bss = readDNAStringSet(.file)
     `metadata(gr)`
 
 区間の集合を操作 (デフォルトではstrand毎に)
-:   <http://qiita.com/wakuteka/items/9634e5ed96db3536756f>
+:   <https://qiita.com/wakuteka/items/9634e5ed96db3536756f>
 
     `range(gr, ..., ignore.strand=FALSE, na.rm=FALSE)`\
        端から端まで1つの区間として返す
@@ -273,7 +273,7 @@ bss = readDNAStringSet(.file)
     `restrict(gr, start=NA, end=NA, ...)`\
     `trim(gr, ...)`
 
-重なり <http://qiita.com/wakuteka/items/10027edccc6c2e244cd2>
+重なり <https://qiita.com/wakuteka/items/10027edccc6c2e244cd2>
 :   `findOverlaps(query, subject, ...)`\
     `countOverlaps(query, subject, ...)`\
     `overlapsAny(query, subject, ...)`\
@@ -283,7 +283,7 @@ bss = readDNAStringSet(.file)
 
 <https://www.bioconductor.org/packages/release/bioc/html/GenomicFeatures.html>
 
-<http://qiita.com/yuifu/items/4bab5f713aa75bd18a84>
+<https://qiita.com/yuifu/items/4bab5f713aa75bd18a84>
 
 `TranscriptDB` からいろんな条件で絞り込み、
 該当する区間を `GRanges` または `GRangesList` で返す。
@@ -517,6 +517,6 @@ bsg[[1]]
 
 <http://blog.hackingisbelieving.org/2012/02/r.html>
 
-<http://qiita.com/wakuteka/items/a99d5fb9f24367f55461>
+<https://qiita.com/wakuteka/items/a99d5fb9f24367f55461>
 
 [ggbio]({{< relref "ggbio.md" >}})
