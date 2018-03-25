@@ -88,15 +88,15 @@ dplyr — 高速data.frame処理
 
 
 
-<p><a href="http://dplyr.tidyverse.org/">
-<img src="http://dplyr.tidyverse.org/logo.png" align="right" width="120" height="139">
+<p><a href="https://dplyr.tidyverse.org/">
+<img src="https://dplyr.tidyverse.org/logo.png" align="right" width="120" height="139">
 </a></p>
 
 <p>data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(summarise)、ソート(arrange)などの処理を施すためのパッケージ。
 前作 <a href="/rstats/plyr.html">plyr</a> のうちdata.frameに関する部分が強化されている。
 <a href="/rstats/purrr.html">purrr</a> や <a href="/rstats/tidyr.html">tidyr</a> と一緒に使うとよい。</p>
 
-<p><a href="https://github.com/tidyverse/tidyverse">tidyverse</a> に含まれているので、
+<p><a href="https://tidyverse.tidyverse.org/">tidyverse</a> に含まれているので、
 <code>install.packages('tidyverse')</code> で一括インストール、
 <code>library(tidyverse)</code> で一括ロード。</p>
 
@@ -107,11 +107,11 @@ dplyr — 高速data.frame処理
 
 <h2 id="関数の連結">関数の連結 %&gt;%</h2>
 
-<p><a href="http://magrittr.tidyverse.org/">
-<img src="http://magrittr.tidyverse.org/logo.png" align="right" width="120" height="139">
+<p><a href="https://magrittr.tidyverse.org/">
+<img src="https://magrittr.tidyverse.org/logo.png" align="right" width="120" height="139">
 </a></p>
 
-<p>dplyrではなく<a href="http://magrittr.tidyverse.org/">magrittr</a>の機能。</p>
+<p>dplyrではなく<a href="https://magrittr.tidyverse.org/">magrittr</a>の機能。</p>
 
 <dl>
 <dt><code>x %&gt;% f(a, b)</code></dt>
@@ -156,7 +156,7 @@ dplyr<span class="o">::</span>summarise_all<span class="p">(</span>
 <span class="m">2</span>  virginica        <span class="m">5.552</span>       <span class="m">2.026</span>     <span class="m">5.6481</span></code></pre></div>
 <p>現状では <code>magrittr</code> パッケージの <code>%&gt;%</code> が広く採用されているが、
 <code>pipeR</code> パッケージの <code>%&gt;&gt;%</code> のほうが高速らしい。
-<a href="http://renkun.me/pipeR-tutorial/">http://renkun.me/pipeR-tutorial/</a></p>
+<a href="https://renkun-ken.github.io/pipeR-tutorial/">https://renkun-ken.github.io/pipeR-tutorial/</a></p>
 
 <h2 id="抽出-絞り込み">抽出・絞り込み</h2>
 
@@ -165,7 +165,7 @@ dplyr<span class="o">::</span>summarise_all<span class="p">(</span>
 <dl>
 <dt><code>dplyr::select(.data, ...)</code></dt>
 <dd><p>列を絞る。複数指定、範囲指定、負の指定が可能。
-<a href="http://dplyr.tidyverse.org/reference/select_helpers.html">select helper</a>
+<a href="https://dplyr.tidyverse.org/reference/select_helpers.html">select helper</a>
 によるパターン指定も便利。
 残るのが1列だけでも勝手にvectorにはならずdata.frameのまま。</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span>Petal.Width<span class="p">,</span> Species<span class="p">)</span>
@@ -176,7 +176,7 @@ iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span cla
 iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span><span class="o">-</span><span class="p">(</span>Sepal.Length<span class="o">:</span>Petal.Length<span class="p">))</span>
 iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span>matches<span class="p">(</span><span class="s">&#39;^Petal\\.Width$|^Species$&#39;</span><span class="p">))</span></code></pre></div>
 <p>文字列変数で指定しようとすると意図が曖昧になるので、
-<a href="http://dplyr.tidyverse.org/articles/programming.html#unquoting">unquoting</a>
+<a href="https://dplyr.tidyverse.org/articles/programming.html#unquoting">unquoting</a>
 やpronounで明確に:</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">Sepal.Length <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;Petal.Width&#39;</span><span class="p">,</span> <span class="s">&#39;Species&#39;</span><span class="p">)</span>
 iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span>Sepal.Length<span class="p">))</span>      <span class="c1"># ambiguous!</span>
@@ -246,7 +246,7 @@ iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>mutate<span cla
 <span class="c1"># create new column</span>
 iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>mutate<span class="p">(</span>ln_sepal_length <span class="o">=</span> <span class="kp">log</span><span class="p">(</span>Sepal.Length<span class="p">))</span></code></pre></div>
 <p>変数に入った文字列を変更先の列名に指定したい場合は
-<a href="http://dplyr.tidyverse.org/articles/programming.html#setting-variable-names">unquoting用の代入演算子 <code>:=</code></a>
+<a href="https://dplyr.tidyverse.org/articles/programming.html#setting-variable-names">unquoting用の代入演算子 <code>:=</code></a>
 を使う:</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">new_column <span class="o">=</span> <span class="s">&#39;ln_sepal_length&#39;</span>
 
@@ -279,7 +279,7 @@ iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>rename<span cla
 <span class="m">1</span>          <span class="m">5.1</span>         <span class="m">3.5</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  setosa
 <span class="m">2</span>          <span class="m">4.9</span>         <span class="m">3.0</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  setosa</code></pre></div>
 <p>名前付きベクターと
-<a href="http://dplyr.tidyverse.org/articles/programming.html#unquote-splicing">Unquote-splicing</a>
+<a href="https://dplyr.tidyverse.org/articles/programming.html#unquote-splicing">Unquote-splicing</a>
 を使えば一括指定できる:</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">old_names <span class="o">=</span> <span class="kp">names</span><span class="p">(</span>iris<span class="p">)</span>
 <span class="kp">names</span><span class="p">(</span>old_names<span class="p">)</span> <span class="o">=</span> <span class="kp">toupper</span><span class="p">(</span>old_names<span class="p">)</span>
