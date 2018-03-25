@@ -24,8 +24,6 @@ R標準の`plot()`などは前者の上に、
 - <http://r4ds.had.co.nz/data-visualisation.html>
 - <http://r4ds.had.co.nz/graphics-for-communication.html>
 - <http://www.cookbook-r.com/Graphs/>
-- <https://www.rdocumentation.org/packages/ggplot2>
-- <https://github.com/hadley/ggplot2-book>
 - [version 2.0での変更点](https://blog.rstudio.org/2015/12/21/ggplot2-2-0-0/)
 
 ## 基本的な使い方
@@ -39,14 +37,14 @@ library(tidyverse)
 ## データと全体設定を持ったggplotオブジェクトを作る
 gp = ggplot(iris, aes(x=Sepal.Width, y=Sepal.Length, colour=Species))
 
-## グラフのレイヤーを重ねる
+## 散布図のレイヤーを重ねる
 gp = gp + geom_point(size=3, alpha=0.7)
 
 ## 描画してみる
 print(gp)
 
-## さらにグラフを重ねたり、タイトルやテーマの設定をしたり
-gp = gp + geom_smooth(method=glm, method.args=list(family=gaussian))
+## 回帰曲線を重ねたり、タイトルやテーマの設定をしたり
+gp = gp + stat_smooth(method=glm, method.args=list(family=gaussian))
 gp = gp + labs(title="Iris Sepal")
 gp = gp + theme_bw()
 gp = gp + theme(panel.grid.minor=element_blank())
@@ -56,10 +54,8 @@ print(gp)
 ggsave("iris_sepal.png", gp)
 ```
 
-{{%div class="note"%}}
 `ggplot()` に渡すデータは、1行が1観測、1列が1変数という形の
 [**整然データ**]({{< relref "programming.md#tidyverse" >}})
-{{%/div%}}
 
 
 ## プロットの種類
@@ -68,11 +64,13 @@ ggsave("iris_sepal.png", gp)
 :   `gp + geom_point(size=2, alpha=0.3)`
 :   重なった点をランダムにばらかしたいときは
     [`geom_jitter()`](https://ggplot2.tidyverse.org/reference/geom_jitter.html)
+:   [点の形(shape)一覧](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html#sec:shape-spec)
 
 [折れ線グラフ](https://ggplot2.tidyverse.org/reference/geom_path.html)
 :   `gp + geom_path(size=2, linetype="dashed")` データ順に結ぶ
 :   `gp + geom_line()` x軸上の順で結ぶ
 :   `gp + geom_step()` 階段状に結ぶ
+:   [線の種類(linetype)一覧](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html#sec:line-type-spec)
 
 [面グラフ](https://ggplot2.tidyverse.org/reference/geom_ribbon.html)
 :   `gp + geom_ribbon()` --- yminからymaxの面
@@ -101,7 +99,7 @@ ggsave("iris_sepal.png", gp)
 
 [ヒートマップ](https://ggplot2.tidyverse.org/reference/geom_tile.html)
 :   `gp + geom_tile(aes(fill=z))`
-:   `gp + geom_raster(aes(fill=z))` --- 各タイルの大きさがすべて等しい制約のため高速
+:   `gp + geom_raster(aes(fill=z))` --- 各タイルの大きさを揃える制約のため高速
 
 [エラーバー](https://ggplot2.tidyverse.org/reference/geom_linerange.html)
 :   `gp + geom_errorbar(aes(ymax = y + se, ymin = y - se), width = 0.1)`
@@ -123,7 +121,7 @@ ggsave("iris_sepal.png", gp)
 [始点と終点で曲線や矢印を描く](https://ggplot2.tidyverse.org/reference/geom_segment.html)
 :   `gp + geom_curve(aes(x, y, xend, yend), curvature = -0.2)`
 :   `gp + geom_segment(aes(x, y, xend, yend), arrow=arrow())`
-:   矢印の調整は [grid::arrow()](https://www.rdocumentation.org/packages/grid/topics/arrow)
+:   矢印の調整は [`grid::arrow()`](https://www.rdocumentation.org/packages/grid/topics/arrow)
 
 [文字列や図形を書き加える](https://ggplot2.tidyverse.org/reference/annotate.html)
 :   `gp + annotate("text", x=1:4, y=4:1, label=sprintf("x = %d", 1:4))`
@@ -139,7 +137,9 @@ ggsave("iris_sepal.png", gp)
 
 ## [変数によってグループ分け](https://ggplot2.tidyverse.org/reference/aes_group_order.html)
 
-`aes(colour = Species)` のように列を指定して `ggplot()` や `geom_*()` に渡す。
+`aes(colour = Species)` のように `aes()` 内で列名を指定すると、
+その変数に応じて色やサイズなどを変えることができる。
+言い換えると、データの値を色やサイズに変換する(スケールする)ことに相当する。
 `aes()` の外で指定するとデータによらず全体に反映される:
 
 ```r
@@ -212,8 +212,8 @@ gp + geom_point(aes(colour = species)) +
 
 ### スケール共通オプション
 
-legend/colourbarの見せ方を変更するには
-`scale_*()` 関数に以下のオプションを指定する。
+値と見え方の対応関係が凡例(legend/colourbar)として表示される。
+`scale_*()` 関数に以下のオプションを指定することで設定を変えられる。
 [連続値の場合](https://ggplot2.tidyverse.org/reference/continuous_scale.html) と
 [離散値の場合](https://ggplot2.tidyverse.org/reference/discrete_scale.html)
 で微妙に意味が変わるけどだいたいこんな感じ:
@@ -228,6 +228,7 @@ legend/colourbarの見せ方を変更するには
   [`guide_legend()`](https://ggplot2.tidyverse.org/reference/guide_legend.html) や
   [`guide_colourbar()`](https://ggplot2.tidyverse.org/reference/guide_colourbar.html)
   で。
+  消したい場合は `"none"` か `FALSE` を渡せる。
 
 
 ### 変数によってパネルを分割する
@@ -242,8 +243,8 @@ legend/colourbarの見せ方を変更するには
                as.table=TRUE, switch=NULL, drop=TRUE,
                dir='h', strip.position='top')
 
-    ggplot(iris, aes(Petal.Length, Sepal.Length))+geom_point()+
-        facet_wrap(~Species, nrow=2)
+    ggplot(iris, aes(Petal.Length, Sepal.Length)) + geom_point() +
+      facet_wrap(~Species, nrow=2)
     ```
 
 [`facet_grid()`](https://ggplot2.tidyverse.org/reference/facet_grid.html)
@@ -253,8 +254,8 @@ legend/colourbarの見せ方を変更するには
                shrink=TRUE, labeller='label_value',
                as.table=TRUE, switch=NULL, drop=TRUE)
 
-    ggplot(iris, aes(Petal.Length, Sepal.Length))+geom_point()+
-        facet_grid(. ~ Species)
+    ggplot(iris, aes(Petal.Length, Sepal.Length)) + geom_point() +
+      facet_grid(. ~ Species)
     ```
 
     1変数でいい場合は片方をドット `.` で固定できる。
@@ -481,9 +482,6 @@ gp = gp + theme(plot.background=element_rect(fill="transparent"))
 `calc_element(element, theme, verbose=FALSE)`
 :   継承などを考慮した上でelementがどんな値にセットされるか確かめる。
 
-[線の種類](http://www.cookbook-r.com/Graphs/Shapes_and_line_types/) --- `linetype=`
-: 0: `blank`, 1: `solid`, 2: `dashed`, 3: `dotted`, 4: `dotdash`, 5: `longdash`, 6: `twodash`
-
 
 ## ファイルに書き出す
 
@@ -595,25 +593,8 @@ ggplotを学術論文向けにカスタマイズしやすくする。
 `draw_text()`
 
 
-### `GGally`
-
-<https://cran.r-project.org/web/packages/GGally/>
-
-`graphics::pairs()` のような plot matrix を `ggplot2` で作るためのパッケージ。
-そもそもデータをザッと俯瞰するためのものであり、
-レイヤーを重ねて変更を加えていくようなものでもないので、
-`ggplot2` である恩恵はそこまでない。
-でもまあ `pairs(iris)` よりは `ggpairs(iris, colour=Species)`
-のほうが見やすいのは確か。
-
-```r
-GGally::ggpairs(data, columns=1:ncol(data), title='',
-    upper=list(), lower=list(), diag=list(), params=NULL, ...,
-    axisLabels='internal', legends=FALSE, verbose=FALSE)
-```
-
 ## 関連書籍
 
-<a href="https://www.amazon.co.jp/ggplot2-Elegant-Graphics-Data-Analysis/dp/331924275X/ref=as_li_ss_il?ie=UTF8&qid=1508463669&sr=8-2&keywords=ggplot2&linkCode=li3&tag=heavywatal-22&linkId=4880b062b674960adf66dab4707eed01" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=331924275X&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=331924275X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
-<a href="https://www.amazon.co.jp/R%E3%82%B0%E3%83%A9%E3%83%95%E3%82%A3%E3%83%83%E3%82%AF%E3%82%B9%E3%82%AF%E3%83%83%E3%82%AF%E3%83%96%E3%83%83%E3%82%AF-_ggplot2%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B0%E3%83%A9%E3%83%95%E4%BD%9C%E6%88%90%E3%81%AE%E3%83%AC%E3%82%B7%E3%83%94%E9%9B%86-Winston-Chang/dp/4873116538/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=27fae9b2fd078aeba62baef727299bdd" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873116538&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4873116538" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
-<a href="https://www.amazon.co.jp/R%E3%81%A7%E3%81%AF%E3%81%98%E3%82%81%E3%82%8B%E3%83%87%E3%83%BC%E3%82%BF%E3%82%B5%E3%82%A4%E3%82%A8%E3%83%B3%E3%82%B9-Hadley-Wickham/dp/487311814X/ref=as_li_ss_il?ie=UTF8&qid=1508340144&sr=8-1&keywords=r&linkCode=li3&tag=heavywatal-22&linkId=4137d3d3351f8ccab5a93cefdc28fdec" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=487311814X&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=487311814X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+<a href="https://www.amazon.co.jp/dp/331924275X/ref=as_li_ss_il?ie=UTF8&qid=1508463669&sr=8-2&keywords=ggplot2&linkCode=li3&tag=heavywatal-22&linkId=4880b062b674960adf66dab4707eed01" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=331924275X&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=331924275X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+<a href="https://www.amazon.co.jp/dp/4873116538/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=27fae9b2fd078aeba62baef727299bdd" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873116538&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4873116538" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+<a href="https://www.amazon.co.jp/dp/487311814X/ref=as_li_ss_il?ie=UTF8&qid=1508340144&sr=8-1&keywords=r&linkCode=li3&tag=heavywatal-22&linkId=4137d3d3351f8ccab5a93cefdc28fdec" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=487311814X&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=487311814X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
