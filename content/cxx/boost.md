@@ -192,7 +192,7 @@ int main() {
   `std::ifstream` などを `push()` する。
 - ファイル名に応じてフィルタを切り替えるようなクラスを定義しておけば、
   透過的に読み書きできる。e.g.,
-  [`zfstream`](https://github.com/heavywatal/cxxwtl/blob/master/zfstream.hpp)
+  [`wtl::zfstream`](https://github.com/heavywatal/cxxwtl/blob/master/zfstream.hpp)
 
 
 ## [program_options](http://www.boost.org/doc/libs/release/doc/html/program_options.html)
@@ -208,7 +208,7 @@ cf. [getopt]({{< relref "getopt.md" >}})
 
 Pythonの`yield`みたいなことをC++でもできるようになる。
 
-[Fibonacci generator on gist](https://gist.github.com/heavywatal/e9c4d705b5617e4fc6ea32452db18860)
+[example of Fibonacci generator](https://github.com/heavywatal/sketchbook/blob/master/c%2B%2B/boost_coroutine2.cpp)
 
 {{%div class="warning"%}}
 オブジェクトの寿命に注意。
