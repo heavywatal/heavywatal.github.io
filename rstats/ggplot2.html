@@ -294,7 +294,8 @@ gp <span class="o">+</span> geom_point<span class="p">(</span>aes<span class="p"
 <li><code>breaks</code>: 目盛りや凡例に登場させる値。</li>
 <li><code>labels</code>: breaksの値に対応する文字列。デフォルトはbreaksそのまま。</li>
 <li><code>na.value</code>: 欠損値のときどうするか</li>
-<li><code>limits</code>: 連続値なら最大値と最小値のvector。離散値なら取りうるすべての値。</li>
+<li><code>limits</code>: 数値なら最大値と最小値のvector。
+文字列なら表示したいすべての値(順序も反映される)。</li>
 <li><code>guide</code>: 文字列で <code>&quot;legend&quot;</code> か <code>&quot;colourbar&quot;</code>。
 さらに細かく制御したい場合は
 <a href="https://ggplot2.tidyverse.org/reference/guide_legend.html"><code>guide_legend()</code></a> や
@@ -353,7 +354,8 @@ ggplot内部で <code>stat_*()</code> を通して行われる。
 <ul>
 <li><code>expand</code>: デフォルトでは値域よりも少し余裕を持たせてあるが
 <code>c(0, 0)</code> を与えるとピッタリになる。<code>geom_tile()</code>を使うときなどに。</li>
-<li><code>trans</code>: 値の変換。exp, identity, log, log10, reciprocal, reverse など。</li>
+<li><code>trans</code>: 数値の変換。exp, identity, log, log10, reciprocal, reverse など。
+文字列変数の順序を変えたい場合は <code>limits</code> のほうを使う。</li>
 <li><code>position</code>: top, bottom, left, right</li>
 <li><code>sec.axis</code>: 第二軸</li>
 </ul></dd>
@@ -369,7 +371,7 @@ ggplot内部で <code>stat_*()</code> を通して行われる。
 <dd>パイチャートも作れるらしい</dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/coord_trans.html">座標変換</a></dt>
 <dd><code>gp + coord_trans(x='log10', y='sqrt')</code></dd>
-<dd>表示の座標だけ変更する。
+<dd>表示する座標を変換する。
  stat前に適用される <code>scale_x_*</code> とかとはちょいと違う。</dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/labs.html">軸ラベルとタイトル</a></dt>
 <dd><code>gp + labs(x=&quot;time&quot;, y=&quot;weight&quot;, title=&quot;growth&quot;)</code></dd>
