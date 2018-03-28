@@ -222,7 +222,8 @@ gp + geom_point(aes(colour = species)) +
 - `breaks`: 目盛りや凡例に登場させる値。
 - `labels`: breaksの値に対応する文字列。デフォルトはbreaksそのまま。
 - `na.value`: 欠損値のときどうするか
-- `limits`: 連続値なら最大値と最小値のvector。離散値なら取りうるすべての値。
+- `limits`: 数値なら最大値と最小値のvector。
+  文字列なら表示したいすべての値(順序も反映される)。
 - `guide`: 文字列で `"legend"` か `"colourbar"`。
   さらに細かく制御したい場合は
   [`guide_legend()`](https://ggplot2.tidyverse.org/reference/guide_legend.html) や
@@ -285,7 +286,8 @@ ggplot内部で `stat_*()` を通して行われる。
 :   上記の<a href="#スケール共通オプション">スケール共通オプション</a>に加えて:
     - `expand`: デフォルトでは値域よりも少し余裕を持たせてあるが
       `c(0, 0)` を与えるとピッタリになる。`geom_tile()`を使うときなどに。
-    - `trans`: 値の変換。exp, identity, log, log10, reciprocal, reverse など。
+    - `trans`: 数値の変換。exp, identity, log, log10, reciprocal, reverse など。
+      文字列変数の順序を変えたい場合は `limits` のほうを使う。
     - `position`: top, bottom, left, right
     - `sec.axis`: 第二軸
 
@@ -305,7 +307,7 @@ ggplot内部で `stat_*()` を通して行われる。
 
 [座標変換](https://ggplot2.tidyverse.org/reference/coord_trans.html)
 :   `gp + coord_trans(x='log10', y='sqrt')`
-:    表示の座標だけ変更する。
+:    表示する座標を変換する。
      stat前に適用される `scale_x_*` とかとはちょいと違う。
 
 [軸ラベルとタイトル](https://ggplot2.tidyverse.org/reference/labs.html)
