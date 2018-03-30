@@ -188,6 +188,28 @@ lvalue値受け取りの関数はrvalueを受け取るときにはコピーを�
 > [参照渡し or 値渡し？ - yohhoyの日記](http://d.hatena.ne.jp/yohhoy/20120524/p1)
 
 
+### `noexcept`
+
+クラスに自前のデストラクタやコピーコンストラクタを書くと、
+暗黙のムーブコンストラクタが作られなくなり、
+ただ移動したいときにもコピーが行われてしまう。
+自前のムーブコンストラクタを書いても、
+`noexcept` が添えられていないと `std::move_if_noexcept()` による移動
+(例えば `std::vector` のリアロケーション) ではコピーされてしまう。
+
+[ムーブコンストラクタの定義の仕方でコピー・ムーブのされ方が変わることを確かめるコード]
+(https://github.com/heavywatal/sketchbook/blob/master/c%2B%2B/move_if_noexcept.cpp)
+
+コンストラクタ類を必要に応じて書き足していくと忘れそうなので、
+`Cls (Cls&&) noexcept = default;`
+のような明示的default/deleteを最初に全部書いてしまうほうがいいかも。
+さらに `static_assert()` でコンパイル時に
+`std::is_nothrow_move_constructible` などをチェックしておくと安心。
+
+それ以外の部分でも「この関数は例外を投げない」
+と宣言したほうがコンパイラにとって最適化しやすくなる。
+
+
 ## コンテナ
 
 ### 用途に合わせる
