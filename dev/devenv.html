@@ -105,7 +105,6 @@ Heavy Watal
 zsh
 tmux
 git
-mercurial
 </code></pre>
 
 <p>これらシステム標準のものが古すぎたり、
@@ -119,20 +118,30 @@ mercurial
 <p>Macの <a href="/mac/homebrew.html">Homebrew</a> をLinuxに移植したパッケージマネージャ。</p>
 
 <ol>
+<li><p>RHEL/CentOS 6系の場合まずlibcurlが古すぎるので、
+<a href="https://curl.haxx.se/download.html">最新のcurl</a>をソースコードからインストール:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% wget -O- https://curl.haxx.se/download/curl-7.59.0.tar.gz <span class="p">|</span> tar xz
+% <span class="nb">cd</span> curl-7.59.0/
+% ./configure --prefix<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/opt/local
+% make -j4</code></pre></div></li>
+
 <li><p><code>git --version</code> を確認して 1.7.12 未満だったら
-<a href="https://github.com/git/git/releases">最新版</a>をソースコードからインストール:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% wget -O- https://github.com/git/git/archive/v2.15.0.tar.gz <span class="p">|</span> tar xz
-% <span class="nb">cd</span> git-2.15.0/
+<a href="https://github.com/git/git/releases">最新のgit</a>をソースコードからインストール:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% wget -O- https://github.com/git/git/archive/v2.16.3.tar.gz <span class="p">|</span> tar xz
+% <span class="nb">cd</span> git-2.16.3/
 % autoreconf -i
-% ./configure --prefix<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local
-% make
+% ./configure --prefix<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/opt/local --with-curl<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/opt/local
+% make -j4
 % make install</code></pre></div></li>
+
+<li><p>上記の自前curl/gitを利用するために環境変数をセット:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/opt/local/bin:<span class="nv">$PATH</span>
+<span class="nb">export</span> <span class="nv">HOMEBREW_NO_ENV_FILTERING</span><span class="o">=</span><span class="m">1</span></code></pre></div></li>
 
 <li><p>Linuxbrewを <code>~/.linuxbrew</code> にインストール:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sh -c <span class="s2">&#34;</span><span class="k">$(</span>curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh<span class="k">)</span><span class="s2">&#34;</span></code></pre></div></li>
 
-<li><p>gccをインストール:
-<code>brew install gcc</code></p>
+<li><p>gccをインストール: <code>brew install gcc</code></p>
 
 <p>OS標準のgccやglibcが古すぎて
 <code>glibc cannot be built with any available compilers</code> と怒られる場合は、
@@ -142,16 +151,17 @@ gccを入れ直す、という手間が必要:</p>
 brew install glibc
 brew remove gcc
 brew install gcc</code></pre></div>
-<p>OS標準のcurlで <code>SSL connect error</code> と出る場合は
-<code>brew install curl</code> もやっておいたほうがよい。</p></li>
+<p>それでもうまくいかないときは
+<code>HOMEBREW_NO_ENV_FILTERING=1 brew install --force-bottle glibc</code>
+とかでいいのか&hellip;</p></li>
 
-<li><p>必要なもろもろをインストール:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% brew install tmux
+<li><p>あとは欲しいものを <code>brew install ___</code></p>
 
-zsh --without-etcdir
+<pre><code>zsh --without-etcdir
 tmux
 pyenv
-boost</code></pre></div></li>
+boost
+</code></pre></li>
 </ol>
 
 <h2 id="mac">Mac</h2>
