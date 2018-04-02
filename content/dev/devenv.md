@@ -22,7 +22,6 @@ tags = ["package"]
     zsh
     tmux
     git
-    mercurial
 
 これらシステム標準のものが古すぎたり、
 管理者権限がなくて自由にインストールできない場合は
@@ -34,15 +33,30 @@ tags = ["package"]
 
 Macの [Homebrew]({{< relref "mac/homebrew.md" >}}) をLinuxに移植したパッケージマネージャ。
 
-1.  `git --version` を確認して 1.7.12 未満だったら
-    [最新版](https://github.com/git/git/releases)をソースコードからインストール:
+1.  RHEL/CentOS 6系の場合まずlibcurlが古すぎるので、
+    [最新のcurl](https://curl.haxx.se/download.html)をソースコードからインストール:
     ```sh
-    % wget -O- https://github.com/git/git/archive/v2.15.0.tar.gz | tar xz
-    % cd git-2.15.0/
+    % wget -O- https://curl.haxx.se/download/curl-7.59.0.tar.gz | tar xz
+    % cd curl-7.59.0/
+    % ./configure --prefix=${HOME}/opt/local
+    % make -j4
+    ```
+
+1.  `git --version` を確認して 1.7.12 未満だったら
+    [最新のgit](https://github.com/git/git/releases)をソースコードからインストール:
+    ```sh
+    % wget -O- https://github.com/git/git/archive/v2.16.3.tar.gz | tar xz
+    % cd git-2.16.3/
     % autoreconf -i
-    % ./configure --prefix=${HOME}/local
-    % make
+    % ./configure --prefix=${HOME}/opt/local --with-curl=${HOME}/opt/local
+    % make -j4
     % make install
+    ```
+
+1.  上記の自前curl/gitを利用するために環境変数をセット:
+    ```sh
+    export PATH=${HOME}/opt/local/bin:$PATH
+    export HOMEBREW_NO_ENV_FILTERING=1
     ```
 
 1.  Linuxbrewを `~/.linuxbrew` にインストール:
@@ -50,8 +64,7 @@ Macの [Homebrew]({{< relref "mac/homebrew.md" >}}) をLinuxに移植したパ�
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
     ```
 
-1.  gccをインストール:
-    `brew install gcc`
+1.  gccをインストール: `brew install gcc`
 
     OS標準のgccやglibcが古すぎて
     `glibc cannot be built with any available compilers` と怒られる場合は、
@@ -63,13 +76,12 @@ Macの [Homebrew]({{< relref "mac/homebrew.md" >}}) をLinuxに移植したパ�
     brew remove gcc
     brew install gcc
     ```
-    OS標準のcurlで `SSL connect error` と出る場合は
-    `brew install curl` もやっておいたほうがよい。
+    それでもうまくいかないときは
+    `HOMEBREW_NO_ENV_FILTERING=1 brew install --force-bottle glibc`
+    とかでいいのか...
 
-1.  必要なもろもろをインストール:
-    ```sh
-    % brew install tmux
-
+1.  あとは欲しいものを `brew install ___`
+    ```
     zsh --without-etcdir
     tmux
     pyenv
