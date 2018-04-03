@@ -239,6 +239,15 @@ LDFLAGS = -L${HOME}/.homebrew/lib
     例えば `iris[,'Species']` はvectorになってしまうが、
     `tbl_iris[,'Species']` はtibbleのまま。
 
+{{%div class="note"%}}
+新しいtibble 1.4以降では
+[pillar](https://github.com/r-lib/pillar/)
+というパッケージが裏で表示形式をイジるようになった。
+見やすくない上にかなり遅いので、しばらく1.3.4で様子を見る。
+`devtools::install_version('tibble', '1.3.4')`
+{{%/div%}}
+
+
 ### 関数
 
 `tibble::tibble(...)`
