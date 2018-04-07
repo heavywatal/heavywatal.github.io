@@ -181,6 +181,22 @@ git clean -fdX
 ```
 無視されていないuntrackedファイルも消したい場合は小文字の `-fdx` (危険)。
 
+### tag
+
+特定のコミット(省略すると`HEAD`)にタグ付けする。
+lightweightとannotatedの2種類が存在し、後者にはメッセージなどが紐付く。
+```sh
+git tag v0.1.0 [revision]
+git tag -a v0.1.0 -m "Message!"
+```
+
+GitHubリポジトリに `git push --tags` するとアーカイブが作られ、
+Releasesページに反映される。
+annotated tagであれば `git push --follow-tags`
+でcommitとtagを同時にpushできる。
+
+https://git-scm.com/book/en/Git-Basics-Tagging
+
 
 ## Submodule
 

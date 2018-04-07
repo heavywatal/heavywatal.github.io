@@ -181,10 +181,11 @@ GitHubに `homebrew-nicetap` のような名前のリポジトリを作成し、
 https://docs.brew.sh/Formula-Cookbook.html
 
 新規作成するには `brew create <URL>` コマンドが便利。
-例えばGitHubリポジトリのバージョン付きアーカイブを指定してやると、
-自動的にいろいろ設定してくれる。
 
-特定のバージョンではなくGitHubリポジトリを参照するhead-onlyのフォーミュラも可能。
+`url` には [`git tag`]({{< relref "git.md#tag" >}})
+でGitHubに作られるバージョン付きアーカイブを指定してやるのが楽ちん。
+
+`head` にリポジトリを登録してバージョン無しで運用することも可能。
 ただし `brew upgrade` ではHEADの更新をチェックしてくれないので要注意。
 `brew reinstall` するしかないのかな？
 
