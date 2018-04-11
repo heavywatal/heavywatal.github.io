@@ -208,7 +208,7 @@ cf. [getopt]({{< relref "getopt.md" >}})
 
 Pythonの`yield`みたいなことをC++でもできるようになる。
 
-[example of Fibonacci generator](https://github.com/heavywatal/sketchbook/blob/master/c%2B%2B/boost_coroutine2.cpp)
+[example of Fibonacci generator](https://github.com/heavywatal/scribble/blob/master/cxx/boost_coroutine2.cpp)
 
 {{%div class="warning"%}}
 オブジェクトの寿命に注意。

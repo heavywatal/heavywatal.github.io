@@ -6,7 +6,7 @@ tags = ["c++"]
   parent = "cxx"
 +++
 
-https://github.com/heavywatal/sketchbook/blob/master/c%2B%2B/bitwise.cpp
+https://github.com/heavywatal/scribble/blob/master/cxx/bitwise.cpp
 
 ## 基本
 
@@ -15,7 +15,7 @@ https://github.com/heavywatal/sketchbook/blob/master/c%2B%2B/bitwise.cpp
 きっちりサイズが定義されているものと、
 下限だけが定義されてて環境依存のものがある。
 
-https://github.com/heavywatal/sketchbook/blob/master/c%2B%2B/sizeof.cpp
+https://github.com/heavywatal/scribble/blob/master/cxx/sizeof.cpp
 
 - 1byte == 8bits
 - `sizeof(char)` == 1
