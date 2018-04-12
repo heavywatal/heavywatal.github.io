@@ -103,10 +103,16 @@ dplyr::summarise_all(
     やpronounで明確に:
     ```r
     Sepal.Length = c('Petal.Width', 'Species')
-    iris %>% dplyr::select(Sepal.Length))      # ambiguous!
-    iris %>% dplyr::select(!!Sepal.Length)     # unquote => Petal.Width, Species
+    iris %>% dplyr::select(Sepal.Length)       # ambiguous!
     iris %>% dplyr::select(.data$Sepal.Length) # pronoun => Sepal.Length
+    iris %>% dplyr::select(!!Sepal.Length)     # unquote => Petal.Width, Species
+    iris %>% dplyr::select(!!!rlang::syms(Sepal.Length))  # Petal.Width, Species
     ```
+    文字列を受け取れない `distinct()` や `group_by()`
+    のような関数には普通のunquoteは通用しない。
+    最後の例のように `rlang::syms()` でシンボル化して
+    [unquote-splicing](https://dplyr.tidyverse.org/articles/programming.html#unquote-splicing)
+    して渡す必要がある。
 
 
 `dplyr::pull(.data, var=-1)`
@@ -229,7 +235,7 @@ e.g., `filter(gene != 'TP53')`
     2          4.9         3.0          1.4         0.2  setosa
     ```
     名前付きベクターと
-    [Unquote-splicing](https://dplyr.tidyverse.org/articles/programming.html#unquote-splicing)
+    [unquote-splicing](https://dplyr.tidyverse.org/articles/programming.html#unquote-splicing)
     を使えば一括指定できる:
     ```r
     old_names = names(iris)
@@ -398,7 +404,7 @@ iris %>%
   tidyr::unnest()
 ```
 
-`dplyr::group_by(.data, col1, col2, ..., add=FALSE)`
+`dplyr::group_by(.data, ..., add=FALSE)`
 :   グループごとに区切って次の処理に渡す。
     e.g. `summarise()`, `tally()`, `do()` など
 
