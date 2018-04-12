@@ -179,9 +179,15 @@ iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span cla
 <a href="https://dplyr.tidyverse.org/articles/programming.html#unquoting">unquoting</a>
 やpronounで明確に:</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">Sepal.Length <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;Petal.Width&#39;</span><span class="p">,</span> <span class="s">&#39;Species&#39;</span><span class="p">)</span>
-iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span>Sepal.Length<span class="p">))</span>      <span class="c1"># ambiguous!</span>
+iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span>Sepal.Length<span class="p">)</span>       <span class="c1"># ambiguous!</span>
+iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span><span class="m">.</span>data<span class="o">$</span>Sepal.Length<span class="p">)</span> <span class="c1"># pronoun =&gt; Sepal.Length</span>
 iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span><span class="o">!!</span>Sepal.Length<span class="p">)</span>     <span class="c1"># unquote =&gt; Petal.Width, Species</span>
-iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span><span class="m">.</span>data<span class="o">$</span>Sepal.Length<span class="p">)</span> <span class="c1"># pronoun =&gt; Sepal.Length</span></code></pre></div></dd>
+iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span><span class="o">!!!</span>rlang<span class="o">::</span>syms<span class="p">(</span>Sepal.Length<span class="p">))</span>  <span class="c1"># Petal.Width, Species</span></code></pre></div>
+<p>文字列を受け取れない <code>distinct()</code> や <code>group_by()</code>
+のような関数には普通のunquoteは通用しない。
+最後の例のように <code>rlang::syms()</code> でシンボル化して
+<a href="https://dplyr.tidyverse.org/articles/programming.html#unquote-splicing">unquote-splicing</a>
+して渡す必要がある。</p></dd>
 <dt><code>dplyr::pull(.data, var=-1)</code></dt>
 <dd><p>指定した1列をvector(またはlist)としてdata.frameから抜き出す。</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">()</span> <span class="o">%&gt;%</span> dplyr<span class="o">::</span>pull<span class="p">(</span>Species<span class="p">)</span>
@@ -279,7 +285,7 @@ iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>rename<span cla
 <span class="m">1</span>          <span class="m">5.1</span>         <span class="m">3.5</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  setosa
 <span class="m">2</span>          <span class="m">4.9</span>         <span class="m">3.0</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  setosa</code></pre></div>
 <p>名前付きベクターと
-<a href="https://dplyr.tidyverse.org/articles/programming.html#unquote-splicing">Unquote-splicing</a>
+<a href="https://dplyr.tidyverse.org/articles/programming.html#unquote-splicing">unquote-splicing</a>
 を使えば一括指定できる:</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">old_names <span class="o">=</span> <span class="kp">names</span><span class="p">(</span>iris<span class="p">)</span>
 <span class="kp">names</span><span class="p">(</span>old_names<span class="p">)</span> <span class="o">=</span> <span class="kp">toupper</span><span class="p">(</span>old_names<span class="p">)</span>
@@ -411,7 +417,7 @@ iris <span class="o">%&gt;%</span>
   dplyr<span class="o">::</span>mutate<span class="p">(</span>data<span class="o">=</span> purrr<span class="o">::</span>map<span class="p">(</span>data<span class="p">,</span> <span class="kp">head</span><span class="p">))</span> <span class="o">%&gt;%</span>
   tidyr<span class="o">::</span>unnest<span class="p">()</span></code></pre></div>
 <dl>
-<dt><code>dplyr::group_by(.data, col1, col2, ..., add=FALSE)</code></dt>
+<dt><code>dplyr::group_by(.data, ..., add=FALSE)</code></dt>
 <dd>グループごとに区切って次の処理に渡す。
 e.g. <code>summarise()</code>, <code>tally()</code>, <code>do()</code> など</dd>
 <dt><code>dplyr::group_indices(.data, ...)</code></dt>
