@@ -112,12 +112,15 @@ Bachelor of Science, 2008.03
 
 **Poster**
 
+-   Watal M. Iwasaki, Hideki Innan
+    "Simulation of Intratumor Heterogeneity and its Medical Implication"
+    POB-093, [SMBE2018](http://smbe2018.jp/) (2018.07) Yokohama, Japan
 -   岩嵜航・津田真樹・河田雅圭「遺伝子制御ネットワークの進化と隠蔽変異の蓄積に対する生息環境の効果」
     [日本進化学会第14回年会](http://evolgen.biol.se.tmu.ac.jp/sesj2012/) (2012.08) 首都大学東京
 -   山野井貴浩、岩嵜航、武村政春、佐倉統「進化の仕組みを学べる補助教材: 架空生物オリガミバード [シミュレータ実演]」
     東北大学生態適応GCOE環境機関コンソーシアム (2012.03) 仙台国際センター
 -   岩嵜航・津田真樹・河田雅圭「Evolutionary Model of Cryptic Variations in Gene Regulatory Networks」 [日本進化学会第13回年会](http://zoo.zool.kyoto-u.ac.jp/zsys/SESJ2011/) (2011.07) 京都大学
--   Watal M. Iwasaki, Masaki Tsuda, Masakado Kawata "Evolutionary Model of Cryptic Variations in Gene Regulatory Networks" [Annual Meeting of Society for Molecular Biology and Evolution](http://smbe2011.com/) (2011.07) Kyoto University, Japan
+-   Watal M. Iwasaki, Masaki Tsuda, Masakado Kawata "Evolutionary Model of Cryptic Variations in Gene Regulatory Networks" [Annual Meeting of Society for Molecular Biology and Evolution (SMBE2011)](http://smbe2011.com/) (2011.07) Kyoto University, Japan
 -   岩嵜航・津田真樹・河田雅圭「環境変化で出現する新奇形質：遺伝子制御ネットワークの隠蔽変異が適応進化を促進」 [日本生態学会第58回大会](http://www.esj.ne.jp/meeting/58/) (2011.03) 札幌
 -   岩嵜航・津田真樹・河田雅圭「隠蔽変異を介した表現型多様性創出における選択圧の影響：遺伝子制御ネットワークの個体ベースモデル」 [日本進化学会第12回年会](http://www.evolution.bio.titech.ac.jp/sesj2010/sesj_index.html) (2010.08) 東京工業大学
 -   岩嵜航・津田真樹・河田雅圭「隠れた変異の蓄積と顕在化に与える環境変動の影響：遺伝子制御ネットワークの個体ベースモデル」 [日本生態学会第57回大会](http://www.esj.ne.jp/meeting/57/) (2010.03) 東京大学
