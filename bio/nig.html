@@ -87,7 +87,7 @@ Heavy Watal
 
 
 
-<p><a href="https://sc.ddbj.nig.ac.jp/">Homepage</a></p>
+<p><a href="https://sc.ddbj.nig.ac.jp/">https://sc.ddbj.nig.ac.jp/</a></p>
 
 <h2 id="利用開始">利用開始</h2>
 
@@ -97,7 +97,7 @@ Heavy Watal
 <li><a href="https://sc.ddbj.nig.ac.jp/index.php/ja-new-application">新規ユーザ登録申請</a></li>
 <li>責任者にメールが届くので、それに従って誓約書PDFを管理者に送信</li>
 <li>アカウント登録証が手元に届く</li>
-<li>Homepage_ でログイン</li>
+<li><a href="https://sc.ddbj.nig.ac.jp/">https://sc.ddbj.nig.ac.jp/</a> でログイン</li>
 <li><a href="https://sc.ddbj.nig.ac.jp/index.php/2014-09-17-05-42-33">SSH公開鍵登録</a> (パスワード認証ではSSHできない)</li>
 
 <li><p><code>~/.ssh/config</code> に設定を追加:</p>
@@ -109,11 +109,7 @@ Heavy Watal
 
 <p>sshコマンドでユーザ名と <code>-t</code> オプションを省略できるようになる。</p></li>
 
-<li><p>システム内ノード間SSHのパスワード認証を省くために
-非公開鍵も送っておく(いいのかな？):</p>
-
-<pre><code>% rsync -auv ~/.ssh/id_rsa gw2.ddbj.nig.ac.jp:~/.ssh/
-</code></pre></li>
+<li><p>システム内ノード間通信のパスワード認証を省くために<a href="/dev/ssh.html">SSH鍵ペアを設定する</a>。</p></li>
 
 <li><p>ゲートウェイノードにSSH接続してログインノードに <code>qlogin</code>:</p>
 
@@ -155,6 +151,7 @@ Phase 2ゲートウェイから
 <p>コマンドラインのプログラムをインストールするにはLinuxbrewが便利。
 ただしOS標準のコンパイラやライブラリが古すぎるので、
 最初のセットアップにひと手間必要。
+特に最近はcurlがSSL認証でコケるのでお手上げ。。。
 cf. <a href="/dev/devenv.html">/dev/開発環境</a></p>
 
 <div class="note">
@@ -299,7 +296,7 @@ ls</code></pre></div>
 <p>スクリプトはPythonでもいい。
 インタープリタを <code>-S /usr/bin/env python</code> で指定できないのは残念。</p>
 <div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span>
-<span class="c1">#$ -S $HOME/.virtualenv/py3/bin/python</span>
+<span class="c1">#$ -S $HOME/.pyenv/shims/python</span>
 <span class="c1">#$ -l debug</span>
 <span class="c1">#$ -cwd</span>
 <span class="c1">#$ -t 1-2</span>
@@ -428,7 +425,6 @@ ls</code></pre></div>
 <li><a href="/dev/nano.html">nano</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
-<li><a href="/dev/sshfs.html">sshfs</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>

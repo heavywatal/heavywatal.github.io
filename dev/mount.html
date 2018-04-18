@@ -223,6 +223,32 @@ valid users = %S
 <li>Server Address に <code>afp://***.***.***.***</code> という形でIPアドレスを入力してConnect</li>
 </ol>
 
+<h2 id="sshfs">sshfs</h2>
+
+<p><a href="https://github.com/libfuse/sshfs">https://github.com/libfuse/sshfs</a></p>
+
+<p>リモートのファイルシステムを<a href="/dev/ssh.html">ssh</a>経由でマウントし、
+Finderとかで普通のディレクトリのように扱えるようにする。
+マウントされる側はsshでログインできさえすればいいので、
+手元のマシンに必要な準備をする。</p>
+
+<ol>
+<li><p>Macなら<a href="https://osxfuse.github.io/">FUSE for macOS</a>を、
+Linuxなら<a href="https://github.com/libfuse/libfuse">libfuse</a>をインストール</p></li>
+
+<li><p>sshfsをインストール:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% brew install sshfs</code></pre></div></li>
+
+<li><p>マウントポイントにする適当なディレクトリを作る。
+e.g., <code>mkdir ~/mnt</code></p></li>
+
+<li><p>マウントする:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% sshfs watal@example.com:/home/watal ~/mnt</code></pre></div></li>
+
+<li><p>アンマウントする:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% umount ~/mnt</code></pre></div></li>
+</ol>
+
 </article>
 </main>
 
@@ -322,7 +348,6 @@ valid users = %S
 <li><a href="/dev/nano.html">nano</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
-<li><a href="/dev/sshfs.html">sshfs</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>

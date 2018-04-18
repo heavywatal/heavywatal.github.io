@@ -92,52 +92,43 @@ ssh
 
 <h2 id="公開鍵によるパスワード無しの認証">公開鍵によるパスワード無しの認証</h2>
 
+<p>秘密鍵のあるホストから公開鍵のあるホストにパスワード無しでログインできるようにする。</p>
+
 <ol>
-<li><p>パスフレーズ無しで鍵ペア (秘密鍵 <code>id_rsa</code> と公開鍵 <code>id_rsa.pub</code>) を作る:</p>
+<li><p>ローカルホストで鍵ペア (秘密鍵 <code>id_ed25519</code> と公開鍵 <code>id_ed25519.pub</code>) を作成:</p>
 
-<pre><code>% ssh-keygen -t rsa -b 4096 -C &quot;your_email@example.com&quot;
-Generating public/private rsa key pair.
-Enter file in which to save the key ($HOME/.ssh/id_rsa): ＃そのままリターン
-Created directory '$HOME/.ssh'.
-Enter passphrase (empty for no passphrase): ＃そのままリターン
-Enter same passphrase again: ＃そのままリターン
-Your identification has been saved in $HOME/.ssh/id_rsa.
-Your public key has been saved in $HOME/.ssh/id_rsa.pub.
+<pre><code>% ssh-keygen -t ed25519
+Generating public/private ed25519 key pair.
+Enter file in which to save the key (~/.ssh/id_ed25519): ＃そのままリターン
+Enter passphrase (empty for no passphrase):              ＃そのままリターン
+Enter same passphrase again:                             ＃そのままリターン
+Your identification has been saved in ~/.ssh/id_ed25519.
+Your public key has been saved in ~/.ssh/id_ed25519.pub.
 </code></pre></li>
 
-<li><p>できあがった公開鍵を <code>authorized_keys</code> にリネームまたは追加。
-公開されるのはこの <code>authorized_keys</code>:</p>
+<li><p>できあがった公開鍵をリモートホストの <code>~/.ssh/authorized_keys</code> に追加:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% ssh-copy-id -i ~/.ssh/id_ed25519.pub watal@example.com
+  <span class="c1"># or
+</span><span class="c1"></span>% ssh watal@example.com <span class="s2">&#34;mkdir ~/.ssh; touch ~/.ssh/authorized_keys&#34;</span>
+% cat id_ed25519.pub <span class="p">|</span> ssh watal@example.com <span class="s2">&#34;cat &gt;&gt; ~/.ssh/authorized_keys&#34;</span></code></pre></div></li>
 
-<pre><code>% cd ~/.ssh/
-% mv id_rsa.pub authorized_keys
-</code></pre>
-
-<p>既に存在する <code>authorized_keys</code> に追記する場合は↓:</p>
-
-<pre><code>% cat id_rsa.pub &gt;&gt; authorized_keys
-% rm id_rsa.pub
-</code></pre></li>
-
-<li><p>パーミッションを設定:</p>
-
-<pre><code>% chmod 700 ~/.ssh
-% chmod 600 ~/.ssh/id_rsa
-% chmod 600 ~/.ssh/authorized_keys
-</code></pre></li>
-
-<li><p>リモートホスト・ローカルホストの <code>~/.ssh/</code> に鍵を適宜配置する。
-秘密鍵を持っているホストから公開鍵を持っているホストにパスワード無しで
-<code>ssh</code>, <code>scp</code> できるようになる。</p></li>
+<li><p>ユーザー本人だけが読み書きできるパーミッションに設定されていることを確認:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% ls -l ~/.ssh
+% ssh watal@example.com <span class="s2">&#34;ls -l ~/.ssh&#34;</span>
+  <span class="c1"># if necessary
+</span><span class="c1"></span>% chmod <span class="m">700</span> ~/.ssh
+% chmod <span class="m">600</span> ~/.ssh/id_ed25519
+% chmod <span class="m">600</span> ~/.ssh/authorized_keys</code></pre></div></li>
 </ol>
 
 <div class="note">
-<p>古い環境を考慮しなくていい場合はRSAより高性能なEd25519を使い、
-鍵ファイルの名前も適宜読み替える。</p>
+<p>古い環境を考慮しなければいけない場合はRSAを使う:
+<code>ssh-keygen -t rsa -b 4096</code></p>
 
 </div>
 
 
-<h2 id="configuration">Configuration</h2>
+<h2 id="設定">設定</h2>
 
 <p><a href="http://man.openbsd.org/OpenBSD-current/man5/ssh_config.5">http://man.openbsd.org/OpenBSD-current/man5/ssh_config.5</a></p>
 
@@ -147,33 +138,22 @@ Your public key has been saved in $HOME/.ssh/id_rsa.pub.
 ユーザー名やアドレスをセットにしてニックネームをつけることで、入力を省略できる。
 先に書いたものが優先されるので、一般設定は最後に:</p>
 
-<pre><code>Host finlandia
-  Hostname 192.168.0.26
-Host tapiola
-  Hostname 192.168.0.112
-Host beast
+<pre><code>Host beast
   Hostname 192.168.6.66
-  User ironmaiden
+  User eddie
+Host *.ddbj.nig.ac.jp
+  User heavywatal
+  RequestTTY yes
 Host *
-  User sibelius
   Protocol 2
-  GSSAPIAuthentication no
+  User watal
   StrictHostKeyChecking no
 </code></pre>
 
-<p>上の設定を <code>~/.ssh/config</code> に書いておけば以下の２つは等価:</p>
+<p>例えば上のような設定を <code>~/.ssh/config</code> に書いておけば以下の２つは等価:</p>
 
-<pre><code>% ssh -2 sibelius@192.168.0.112
-% ssh tapiola
-</code></pre>
-
-<p>「ローカル - 中継機 - 計算機」でローカルから計算機へ一気に多段 <code>ssh</code>
-をキメる(<code>ssh keisanki1</code>)には以下のように書いておく。
-でも一旦中継機にログインしてから計算機に何かしたいとき（少なくない）には余計な感じになってしまう。
-「中継機にいないときは」みたいな条件文を書ければ最高なんだけど:</p>
-
-<pre><code>Host keisanki1 keisanki2
-  ProxyCommand nohup ssh chuukeiki nc %h %p
+<pre><code>% ssh -2 eddie@192.168.6.66
+% ssh beast
 </code></pre>
 
 <h3 id="etc-ssh-config"><code>/etc/ssh_config</code>:</h3>
@@ -198,21 +178,20 @@ GSSAPIAuthentication no
 UsePAM no
 </code></pre>
 
-<h2 id="environmental-variables">Environmental variables</h2>
+<h2 id="ファイル転送">ファイル転送</h2>
+
+<p>ファイルひとつなら<code>scp</code>でもいいけどそれ以上なら
+<a href="/dev/rsync.html">rsync</a> を使ったほうがよい。
+あるいは<a href="/dev/mount.html#sshfs">sshfsでマウント</a>してしまうのも楽ちん。</p>
+
+<h2 id="環境変数">環境変数</h2>
 
 <pre><code>% echo $SSH_CONNECTION
 [client IP] [client port] [server IP] [server port]
 </code></pre>
 
-<p>どこから <code>ssh</code> したか、を取得するには:</p>
-
-<pre><code>% echo $SSH_CONNECTION | awk '{print $1}'
-</code></pre>
-
-<h2 id="ファイル転送">ファイル転送</h2>
-
-<p>ファイルひとつなら<code>scp</code>でもいいけどそれ以上なら
-<a href="/dev/rsync.html">rsync</a>を使ったほうがよい。</p>
+<p>どこから <code>ssh</code> したか、を取得するには
+<code>echo $SSH_CONNECTION | awk '{print $1}'</code></p>
 
 </article>
 </main>
@@ -313,7 +292,6 @@ UsePAM no
 <li><a href="/dev/nano.html">nano</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li class="active"><a href="/dev/ssh.html">ssh</a></li>
-<li><a href="/dev/sshfs.html">sshfs</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
