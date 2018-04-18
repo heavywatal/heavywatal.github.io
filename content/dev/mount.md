@@ -126,3 +126,34 @@ tags = ["communication"]
 1.  Finderをアクティブにして `command + k`
     (あるいはメニューバーから `Go --> Connect to Server...`)
 2.  Server Address に `afp://***.***.***.***` という形でIPアドレスを入力してConnect
+
+
+## sshfs
+
+https://github.com/libfuse/sshfs
+
+リモートのファイルシステムを[ssh]({{< relref "ssh.md" >}})経由でマウントし、
+Finderとかで普通のディレクトリのように扱えるようにする。
+マウントされる側はsshでログインできさえすればいいので、
+手元のマシンに必要な準備をする。
+
+1.  Macなら[FUSE for macOS](https://osxfuse.github.io/)を、
+    Linuxなら[libfuse](https://github.com/libfuse/libfuse)をインストール
+
+1.  sshfsをインストール:
+    ```sh
+    % brew install sshfs
+    ```
+
+1.  マウントポイントにする適当なディレクトリを作る。
+    e.g., `mkdir ~/mnt`
+
+1.  マウントする:
+    ```sh
+    % sshfs watal@example.com:/home/watal ~/mnt
+    ```
+
+1.  アンマウントする:
+    ```sh
+    % umount ~/mnt
+    ```

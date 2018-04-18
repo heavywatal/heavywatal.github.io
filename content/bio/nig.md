@@ -5,7 +5,7 @@ tags = ["job"]
   parent = "bio"
 +++
 
-[Homepage](https://sc.ddbj.nig.ac.jp/)
+https://sc.ddbj.nig.ac.jp/
 
 ## 利用開始
 
@@ -14,7 +14,7 @@ tags = ["job"]
 1.  [新規ユーザ登録申請](https://sc.ddbj.nig.ac.jp/index.php/ja-new-application)
 2.  責任者にメールが届くので、それに従って誓約書PDFを管理者に送信
 3.  アカウント登録証が手元に届く
-4.  Homepage\_ でログイン
+4.  https://sc.ddbj.nig.ac.jp/ でログイン
 5.  [SSH公開鍵登録](https://sc.ddbj.nig.ac.jp/index.php/2014-09-17-05-42-33) (パスワード認証ではSSHできない)
 6.  `~/.ssh/config` に設定を追加:
 
@@ -24,10 +24,7 @@ tags = ["job"]
 
     sshコマンドでユーザ名と `-t` オプションを省略できるようになる。
 
-7.  システム内ノード間SSHのパスワード認証を省くために
-    非公開鍵も送っておく(いいのかな？):
-
-        % rsync -auv ~/.ssh/id_rsa gw2.ddbj.nig.ac.jp:~/.ssh/
+7.  システム内ノード間通信のパスワード認証を省くために[SSH鍵ペアを設定する]({{< relref "ssh.md" >}})。
 
 8.  ゲートウェイノードにSSH接続してログインノードに `qlogin`:
 
@@ -60,6 +57,7 @@ Phase 2ゲートウェイから
 コマンドラインのプログラムをインストールするにはLinuxbrewが便利。
 ただしOS標準のコンパイラやライブラリが古すぎるので、
 最初のセットアップにひと手間必要。
+特に最近はcurlがSSL認証でコケるのでお手上げ。。。
 cf. [/dev/開発環境]({{< relref "dev/devenv.md" >}})
 
 {{%div class="note"%}}
@@ -220,7 +218,7 @@ ls
 
 ```py
 #!/usr/bin/env python
-#$ -S $HOME/.virtualenv/py3/bin/python
+#$ -S $HOME/.pyenv/shims/python
 #$ -l debug
 #$ -cwd
 #$ -t 1-2
