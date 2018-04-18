@@ -9,20 +9,22 @@ tags = ["shell", "communication"]
 
 ## 公開鍵によるパスワード無しの認証
 
-秘密鍵のあるホストから公開鍵のあるホストにパスワード無しでログインできるようにする。
+秘密鍵 `~/.ssh/id_ed25519` を持つホストから、
+公開鍵 `~/.ssh/authorized_keys` を持つホストに、
+パスワード無しでログインできるようにする。
 
 1.  ローカルホストで鍵ペア (秘密鍵 `id_ed25519` と公開鍵 `id_ed25519.pub`) を作成:
     ```
-    % ssh-keygen -t ed25519
+    % ssh-keygen -t ed25519 -N ''
     Generating public/private ed25519 key pair.
     Enter file in which to save the key (~/.ssh/id_ed25519): ＃そのままリターン
-    Enter passphrase (empty for no passphrase):              ＃そのままリターン
-    Enter same passphrase again:                             ＃そのままリターン
     Your identification has been saved in ~/.ssh/id_ed25519.
     Your public key has been saved in ~/.ssh/id_ed25519.pub.
     ```
+    Ed25519を使えない古い環境ではRSA (`-t rsa -b 4096`)
+    やECDSA (`-t ecdsa -b 521`) を使う。
 
-2.  できあがった公開鍵をリモートホストの `~/.ssh/authorized_keys` に追加:
+1.  できあがった公開鍵をリモートホストの `~/.ssh/authorized_keys` に追加:
     ```sh
     % ssh-copy-id -i ~/.ssh/id_ed25519.pub watal@example.com
       # or
@@ -30,7 +32,7 @@ tags = ["shell", "communication"]
     % cat id_ed25519.pub | ssh watal@example.com "cat >> ~/.ssh/authorized_keys"
     ```
 
-3.  ユーザー本人だけが読み書きできるパーミッションに設定されていることを確認:
+1.  ユーザー本人だけが読み書きできるパーミッションに設定されていることを確認:
     ```sh
     % ls -l ~/.ssh
     % ssh watal@example.com "ls -l ~/.ssh"
@@ -39,11 +41,6 @@ tags = ["shell", "communication"]
     % chmod 600 ~/.ssh/id_ed25519
     % chmod 600 ~/.ssh/authorized_keys
     ```
-
-{{%div class="note"%}}
-古い環境を考慮しなければいけない場合はRSAを使う:
-`ssh-keygen -t rsa -b 4096`
-{{%/div%}}
 
 
 ## 設定
@@ -65,8 +62,9 @@ Host *.ddbj.nig.ac.jp
   RequestTTY yes
 Host *
   Protocol 2
-  User watal
+  GSSAPIAuthentication no
   StrictHostKeyChecking no
+  VisualHostKey yes
 ```
 
 例えば上のような設定を `~/.ssh/config` に書いておけば以下の２つは等価:
