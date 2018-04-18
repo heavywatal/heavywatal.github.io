@@ -92,19 +92,22 @@ ssh
 
 <h2 id="公開鍵によるパスワード無しの認証">公開鍵によるパスワード無しの認証</h2>
 
-<p>秘密鍵のあるホストから公開鍵のあるホストにパスワード無しでログインできるようにする。</p>
+<p>秘密鍵 <code>~/.ssh/id_ed25519</code> を持つホストから、
+公開鍵 <code>~/.ssh/authorized_keys</code> を持つホストに、
+パスワード無しでログインできるようにする。</p>
 
 <ol>
 <li><p>ローカルホストで鍵ペア (秘密鍵 <code>id_ed25519</code> と公開鍵 <code>id_ed25519.pub</code>) を作成:</p>
 
-<pre><code>% ssh-keygen -t ed25519
+<pre><code>% ssh-keygen -t ed25519 -N ''
 Generating public/private ed25519 key pair.
 Enter file in which to save the key (~/.ssh/id_ed25519): ＃そのままリターン
-Enter passphrase (empty for no passphrase):              ＃そのままリターン
-Enter same passphrase again:                             ＃そのままリターン
 Your identification has been saved in ~/.ssh/id_ed25519.
 Your public key has been saved in ~/.ssh/id_ed25519.pub.
-</code></pre></li>
+</code></pre>
+
+<p>Ed25519を使えない古い環境ではRSA (<code>-t rsa -b 4096</code>)
+やECDSA (<code>-t ecdsa -b 521</code>) を使う。</p></li>
 
 <li><p>できあがった公開鍵をリモートホストの <code>~/.ssh/authorized_keys</code> に追加:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% ssh-copy-id -i ~/.ssh/id_ed25519.pub watal@example.com
@@ -120,13 +123,6 @@ Your public key has been saved in ~/.ssh/id_ed25519.pub.
 % chmod <span class="m">600</span> ~/.ssh/id_ed25519
 % chmod <span class="m">600</span> ~/.ssh/authorized_keys</code></pre></div></li>
 </ol>
-
-<div class="note">
-<p>古い環境を考慮しなければいけない場合はRSAを使う:
-<code>ssh-keygen -t rsa -b 4096</code></p>
-
-</div>
-
 
 <h2 id="設定">設定</h2>
 
@@ -146,8 +142,9 @@ Host *.ddbj.nig.ac.jp
   RequestTTY yes
 Host *
   Protocol 2
-  User watal
+  GSSAPIAuthentication no
   StrictHostKeyChecking no
+  VisualHostKey yes
 </code></pre>
 
 <p>例えば上のような設定を <code>~/.ssh/config</code> に書いておけば以下の２つは等価:</p>
