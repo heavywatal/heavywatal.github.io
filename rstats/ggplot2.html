@@ -133,7 +133,7 @@ gp <span class="o">=</span> gp <span class="o">+</span> theme<span class="p">(</
 <span class="kp">print</span><span class="p">(</span>gp<span class="p">)</span>
 
 <span class="c1">## ファイルに保存</span>
-ggsave<span class="p">(</span><span class="s">&#34;iris_sepal.png&#34;</span><span class="p">,</span> gp<span class="p">)</span></code></pre></div>
+ggsave<span class="p">(</span><span class="s">&#34;iris_sepal.png&#34;</span><span class="p">,</span> gp<span class="p">,</span> width <span class="o">=</span> <span class="m">4</span><span class="p">,</span> height <span class="o">=</span> <span class="m">4</span><span class="p">)</span></code></pre></div>
 <p><code>ggplot()</code> に渡すデータは、1行が1観測、1列が1変数という形の
 <a href="/rstats/programming.html#tidyverse"><strong>整然データ</strong></a></p>
 
@@ -267,10 +267,10 @@ gp <span class="o">+</span> geom_point<span class="p">(</span>aes<span class="p"
 <dt><a href="https://ggplot2.tidyverse.org/reference/scale_identity.html"><code>scale_*_identity</code></a></dt>
 <dd>for <code>colour</code>, <code>fill</code>, <code>size</code>, <code>shape</code>, <code>linetype</code>, <code>alpha</code></dd>
 <dd>色の名前やサイズなどを示す列が予めデータに含まれている場合にそのまま使う。
-使えるパラメータは <a href="https://ggplot2.tidyverse.org/articles/ggplot2-specs.html">https://ggplot2.tidyverse.org/articles/ggplot2-specs.html</a> 参照</dd>
+<a href="https://ggplot2.tidyverse.org/articles/ggplot2-specs.html">点や線の種類</a></dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html"><code>scale_*_manual</code></a></dt>
 <dd>for <code>colour</code>, <code>fill</code>, <code>size</code>, <code>shape</code>, <code>linetype</code>, <code>alpha</code></dd>
-<dd>対応関係を引数で直に指定する。</dd>
+<dd>対応関係を <code>values</code> 引数で直に指定する。</dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/scale_size.html"><code>scale_size</code></a></dt>
 <dd>デフォルトではpointの面積を値にほぼ比例させるが、面積0にはならない。
 値0に面積0を対応させるには <code>scale_size_area()</code> を使う。
@@ -329,7 +329,8 @@ ggplot<span class="p">(</span>iris<span class="p">,</span> aes<span class="p">(<
 <p>1変数でいい場合は片方をドット <code>.</code> で固定できる。</p></dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/labellers.html">ファセットラベルの調整</a></dt>
 <dd><p>デフォルトでは値だけがfacetラベルに表示されるが、
-変数名を同時に表示するなど細かい調整も可能。</p></dd>
+変数名を同時に表示したり、数式を表示したりもできる。
+見た目の調整はテーマの <code>strip.*</code> で。</p></dd>
 </dl>
 
 <h3 id="内部変数を使う">内部変数を使う</h3>
@@ -362,7 +363,7 @@ ggplot内部で <code>stat_*()</code> を通して行われる。
 <dt><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html">描画する範囲を指定</a></dt>
 <dd><code>gp + ylim(0, 42) + xlim(&quot;b&quot;, &quot;c&quot;, &quot;d&quot;)</code></dd>
 <dd><code>gp + coord_cartesian(xlim = NULL, ylim = NULL)</code></dd>
-<dd>前者はデータそのものを切るが、後者はデータを変えずに描画領域だけズームする</dd>
+<dd>前者はデータそのものを切るが、後者はデータを変えずに描画領域だけ切る</dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html">X軸とY軸の比率を固定</a></dt>
 <dd><code>gp + coord_fixed(ratio=1)</code></dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">XY軸の反転</a></dt>
@@ -372,7 +373,7 @@ ggplot内部で <code>stat_*()</code> を通して行われる。
 <dt><a href="https://ggplot2.tidyverse.org/reference/coord_trans.html">座標変換</a></dt>
 <dd><code>gp + coord_trans(x='log10', y='sqrt')</code></dd>
 <dd>表示する座標を変換する。
- stat前に適用される <code>scale_x_*</code> とかとはちょいと違う。</dd>
+ stat前に適用される <code>scale_x_*</code> とは微妙に違う。</dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/labs.html">軸ラベルとタイトル</a></dt>
 <dd><code>gp + labs(x=&quot;time&quot;, y=&quot;weight&quot;, title=&quot;growth&quot;)</code></dd>
 <dd><code>gp + xlab(&quot;time&quot;) + ylab(&quot;weight&quot;) + ggtitle(&quot;growth&quot;)</code></dd>
@@ -385,19 +386,20 @@ ggplot内部で <code>stat_*()</code> を通して行われる。
 <h3 id="既成テーマ">既成テーマ</h3>
 
 <dl>
-<dt><code>theme_grey(base_size=12, base_family='')</code>, <code>theme_gray(...)</code></dt>
-<dd>灰色背景に白い格子。<code>ggplot</code> らしいデフォルト。</dd>
-<dt><code>theme_bw(...)</code></dt>
+<dt><code>theme_grey(base_size=11, base_family='')</code>, <code>theme_gray(...)</code></dt>
+<dd>灰色背景に白い格子。
+ggplotらしいデフォルトだが、論文には使いにくい。</dd>
+<dt><code>theme_bw(base_size=11, base_family='')</code></dt>
 <dd>黒枠白背景にうっすら灰色格子</dd>
-<dt><code>theme_linedraw(...)</code></dt>
+<dt><code>theme_linedraw(base_size=11, base_family='')</code></dt>
 <dd>細いけど濃い色の <code>panel.grid</code></dd>
-<dt><code>theme_light(...)</code></dt>
+<dt><code>theme_light(base_size=11, base_family='')</code></dt>
 <dd>それを薄くした感じ</dd>
-<dt><code>theme_minimal(...)</code></dt>
+<dt><code>theme_minimal(base_size=11, base_family='')</code></dt>
 <dd>外枠なしの <code>theme_bw</code></dd>
-<dt><code>theme_classic(...)</code></dt>
+<dt><code>theme_classic(base_size=11, base_family='')</code></dt>
 <dd>xy軸がL字に描かれているだけで枠もグリッドも無し</dd>
-<dt><code>theme_void(...)</code></dt>
+<dt><code>theme_void(base_size=11, base_family='')</code></dt>
 <dd>完全に枠なし</dd>
 </dl>
 
@@ -406,19 +408,12 @@ ggplot内部で <code>stat_*()</code> を通して行われる。
 
 <p>引数として <code>base_family</code> に&rdquo;Helvetica Neue&rdquo;などのフォントを指定できる。
 Macなら&rdquo;HiraKakuProN-W3&rdquo;を指定すれば日本語でも文字化けしなくなるはず。
-(<code>grDevices::quartzFonts()</code> などを <code>.Rprofile</code> に書いてフォントを登録するには
-<a href="/rstats/config.html#rprofile">config</a> を参照)</p>
+テーマを構成する <code>axis.text</code> などはこの設定を継承するが、
+<code>geom_text()</code> などプロット内部の要素には引き継がれないことに注意。</p>
 
 <p>ほかにもいろんなテーマが
 <a href="https://cran.r-project.org/web/packages/ggthemes/vignettes/ggthemes.html">ggthemes</a>
 というパッケージで提供されている。</p>
-
-<div class="note">
-<p>この設定はテーマを構成する <code>axis.text</code> などには引き継がれるが
-<code>geom_text()</code> などプロット内部の要素には引き継がれない。</p>
-
-</div>
-
 
 <h3 id="設定項目">設定項目</h3>
 
@@ -429,7 +424,7 @@ Macなら&rdquo;HiraKakuProN-W3&rdquo;を指定すれば日本語でも文字化
 テーマは直線、長方形、文字の3種類のエレメントからなり、
 それらの性質を変更する場合は <code>element_***()</code> を介して行う</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">## ベースとなるテーマを先に適用してから</span>
-gp <span class="o">=</span> gp <span class="o">+</span> theme_bw<span class="p">(</span>base_family<span class="o">=</span><span class="s">&#39;HiraKakuProN-W3&#39;</span><span class="p">)</span>
+gp <span class="o">=</span> gp <span class="o">+</span> theme_bw<span class="p">(</span>base_family<span class="o">=</span><span class="s">&#39;HiraKakuProN-W3&#39;</span><span class="p">,</span> base_size<span class="o">=</span><span class="m">14</span><span class="p">)</span>
 gp <span class="o">=</span> gp <span class="o">+</span> theme<span class="p">(</span>legend.position<span class="o">=</span><span class="s">&#39;bottom&#39;</span><span class="p">)</span>
 gp <span class="o">=</span> gp <span class="o">+</span> theme<span class="p">(</span>plot.background<span class="o">=</span>element_rect<span class="p">(</span>fill<span class="o">=</span><span class="s">&#34;transparent&#34;</span><span class="p">))</span></code></pre></div>
 <dl>
@@ -514,49 +509,52 @@ gp <span class="o">=</span> gp <span class="o">+</span> theme<span class="p">(</
 <dd><code>angle</code>: 角度 <code>[0, 360]</code></dd>
 <dd><code>margin</code>: スペース調整を関数 <code>margin(top, right, bottom, left)</code> 越しに。</dd>
 <dt><code>element_blank()</code> &mdash; 空</dt>
-<dd>消したい要素にはこれを指定する
-<code>r
-gp = gp + theme(axis.title=element_blank())
-gp = gp + theme(panel.grid=element_blank())
-</code></dd>
+<dd><p>消したい要素にはこれを指定する</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">gp <span class="o">=</span> gp <span class="o">+</span> theme<span class="p">(</span>axis.ticks<span class="o">=</span>element_blank<span class="p">())</span>
+gp <span class="o">=</span> gp <span class="o">+</span> theme<span class="p">(</span>panel.grid<span class="o">=</span>element_blank<span class="p">())</span></code></pre></div></dd>
 <dt><code>rel(x)</code></dt>
-<dd>デフォルトからの相対値で <code>size</code> 引数を指定したいときに。</dd>
+<dd><p>デフォルトからの相対値で <code>size</code> 引数を指定したいときに。</p></dd>
 <dt><code>grid::unit(x, units, data=NULL)</code></dt>
-<dd>こちらは絶対指定。<code>grid</code> パッケージに入ってる。
+<dd><p>こちらは絶対指定。<code>grid</code> パッケージに入ってる。
 units で使いそうなのは
-<code>cm</code>, <code>mm</code>, <code>inches</code>, <code>points</code>, <code>lines</code>, <code>native</code></dd>
+<code>cm</code>, <code>mm</code>, <code>inches</code>, <code>points</code>, <code>lines</code>, <code>native</code></p></dd>
 <dt><code>grid::arrow(angle, length, ends, type)</code></dt>
-<dd><code>axis.line</code> の <code>element_line()</code> にこれを与えて軸を矢印にするとか。</dd>
+<dd><p><code>axis.line</code> の <code>element_line()</code> にこれを与えて軸を矢印にするとか。</p></dd>
 <dt><code>margin(t=0, r=0, b=0, l=0, unit='pt')</code></dt>
-<dd>marginクラス</dd>
+<dd><p>marginクラス</p></dd>
 <dt><code>calc_element(element, theme, verbose=FALSE)</code></dt>
-<dd>継承などを考慮した上でelementがどんな値にセットされるか確かめる。</dd>
+<dd><p>継承などを考慮した上でelementがどんな値にセットされるか確かめる。</p></dd>
 </dl>
 
 <h2 id="ファイルに書き出す">ファイルに書き出す</h2>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">ggsave<span class="p">(</span>filename <span class="o">=</span> default_name<span class="p">(</span>plot<span class="p">),</span> plot <span class="o">=</span> last_plot<span class="p">(),</span>
-    device <span class="o">=</span> default_device<span class="p">(</span>filename<span class="p">),</span> path <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> scale <span class="o">=</span> <span class="m">1</span><span class="p">,</span>
-    width <span class="o">=</span> par<span class="p">(</span><span class="s">&#34;din&#34;</span><span class="p">)[</span><span class="m">1</span><span class="p">],</span> height <span class="o">=</span> par<span class="p">(</span><span class="s">&#34;din&#34;</span><span class="p">)[</span><span class="m">2</span><span class="p">],</span>
-    units <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#34;in&#34;</span><span class="p">,</span> <span class="s">&#34;cm&#34;</span><span class="p">,</span> <span class="s">&#34;mm&#34;</span><span class="p">),</span> dpi <span class="o">=</span> <span class="m">300</span><span class="p">,</span> limitsize <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="kc">...</span><span class="p">)</span></code></pre></div>
-<p>サイズを変えるには scale, width, height, units, dpi をいじる。
-デフォルトはそれぞれ 1, 7, 7, &lsquo;in&rsquo;, 300 で、1辺177.8mmの正方形に2100x2100ピクセル並べるイメージ。
-A4 PDFにするなら <code>ggsave('fig1.pdf', gp, width=8.27, height=11.7)</code> とか
-<code>ggsave('fig1.pdf', gp, width=210, height=297, units='mm')</code> とか。
-画像形式はファイル名の拡張子から自動的に判別される。</p>
 
-<div class="note">
-<p><code>width</code> と <code>height</code> が省略されると <code>par(&quot;din&quot;)</code> が呼び出される。
-Rscript から実行してるのに白いQuartzウィンドウが出現したり、
-空の <code>Rplots.pdf</code> ができたりするのはこのせい。</p>
+<p>RStudioやQuartzの保存ダイアログを利用して書き出すこともできるけど、
+それだとサイズ調整やファイル名入力を手作業でやることになってしまう。
+<code>ggsave()</code> をスクリプトに書いておけば何回でも同じ設定で出力できる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">ggsave<span class="p">(</span>filename<span class="p">,</span> plot <span class="o">=</span> last_plot<span class="p">(),</span> device <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> path <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span>
+       scale <span class="o">=</span> <span class="m">1</span><span class="p">,</span>  width <span class="o">=</span> <span class="kc">NA</span><span class="p">,</span> height <span class="o">=</span> <span class="kc">NA</span><span class="p">,</span>
+       units <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#34;in&#34;</span><span class="p">,</span> <span class="s">&#34;cm&#34;</span><span class="p">,</span> <span class="s">&#34;mm&#34;</span><span class="p">),</span> dpi <span class="o">=</span> <span class="m">300</span><span class="p">,</span> limitsize <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="kc">...</span><span class="p">)</span></code></pre></div>
+<ul>
+<li>画像形式はファイル名の拡張子から自動的に判別される
+(e.g., <code>iris.png</code>, <code>iris.pdf</code>)。</li>
+<li><code>width</code>や<code>height</code>を小さくするほど、文字・点・線などの要素が相対的に大きくなる。</li>
+<li><code>dpi</code>を変えることで、見た目のバランスを保ったまま解像度を変えられる。
+(これはPNGなどラスタ形式だけの話。PDFなどのベクタ形式なら気にしなくていい)</li>
+<li>タイトルや軸ラベルの文字サイズを変えたいときはテーマの
+<code>theme_bw(base_size = 42)</code> や各要素の <code>element_text(size = 42)</code> を使う。</li>
+<li>scaleやunitsを使うのは慣れてからで十分。</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># 7inch x 300dpi = 2100 ピクセル四方 (デフォルト)</span>
+ggsave<span class="p">(</span><span class="s">&#39;iris1.png&#39;</span><span class="p">,</span> gp<span class="p">)</span> <span class="c1"># width = 7, height = 7, dpi = 300</span>
 
-</div>
+<span class="c1"># 4inch x 300dpi = 1200 ピクセル四方</span>
+ggsave<span class="p">(</span><span class="s">&#39;iris2.png&#39;</span><span class="p">,</span> gp<span class="p">,</span> width <span class="o">=</span> <span class="m">4</span><span class="p">,</span> height <span class="o">=</span> <span class="m">4</span><span class="p">)</span> <span class="c1"># dpi = 300</span>
 
+<span class="c1"># 同じ1200ピクセル四方で、軸ラベルなどの文字だけ大きく</span>
+ggsave<span class="p">(</span><span class="s">&#39;iris3.png&#39;</span><span class="p">,</span> gp <span class="o">+</span> theme_bw<span class="p">(</span>base_size <span class="o">=</span> <span class="m">22</span><span class="p">),</span> width <span class="o">=</span> <span class="m">4</span><span class="p">,</span> height <span class="o">=</span> <span class="m">4</span><span class="p">)</span>
 
-<p>MacのQuartzで調整して、そこで見たままを保存したい場合は</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">dev.off<span class="p">()</span>
-quartz<span class="p">(</span>width<span class="o">=</span><span class="m">9.9</span><span class="p">,</span> height<span class="o">=</span><span class="m">7</span><span class="p">)</span>
-<span class="kp">print</span><span class="p">(</span>gp<span class="p">)</span>
-quartz.save<span class="p">(</span><span class="s">&#39;plot.png&#39;</span><span class="p">)</span></code></pre></div>
+<span class="c1"># 同じ1200ピクセル四方で、点や線なども大きく</span>
+ggsave<span class="p">(</span><span class="s">&#39;iris4.png&#39;</span><span class="p">,</span> gp<span class="p">,</span> width <span class="o">=</span> <span class="m">2</span><span class="p">,</span> height <span class="o">=</span> <span class="m">2</span><span class="p">,</span> dpi <span class="o">=</span> <span class="m">600</span><span class="p">)</span></code></pre></div>
 <h2 id="extensions">Extensions</h2>
 
 <ul>
@@ -596,27 +594,13 @@ ggsave<span class="p">(</span><span class="s">&#39;multi_page.pdf&#39;</span><sp
 
 <p>ggplotを学術論文向けにカスタマイズしやすくする。
 主な利用目的はgridExtraと同じでggplotを並べる機能。
-ラベル(e.g., A, B, C)をオプションで簡単に付けられるのが良い。</p>
-
-<div class="warning">
-<p><code>library(cowplot)</code> せずに <code>loadNamespace('cowplot')</code>
-して常に名前空間つきで呼んだほうが安全。</p>
-
-<ul>
-<li><code>cowplot::ggsave()</code>が定義されてて<code>ggplot2</code>と衝突するのが気持ち悪い。</li>
-<li><code>.onAttach()</code> で基本テーマが勝手に変更されるのが気持ち悪い。
-<code>theme_cowplot()</code> そのものはシンプルで良くできているが、
-カスタマイズのベースとするには扱いにくい
-(<code>rect</code>に変なデフォルト値が設定されてしまう、など)。</li>
-</ul>
-
-</div>
-
+ABCのようなラベルをオプションで簡単に付けられるのが良い。</p>
 
 <dl>
 <dt><code>cowplot::plot_grid()</code></dt>
-<dd><p><code>facet_wrap()</code>のように、ざっと並べるのに便利。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">corplot<span class="o">::</span>plot_grid<span class="p">(</span><span class="kc">...</span><span class="p">,</span> plotlist<span class="o">=</span><span class="kc">NULL</span><span class="p">,</span>
+<dd><p><code>facet_wrap()</code>のように、ざっと並べるのに便利。
+もちろん入れ子も可能。</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">cowplot<span class="o">::</span>plot_grid<span class="p">(</span><span class="kc">...</span><span class="p">,</span> plotlist<span class="o">=</span><span class="kc">NULL</span><span class="p">,</span>
     align<span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="s">&#39;none&#39;</span><span class="p">,</span> <span class="s">&#39;h&#39;</span><span class="p">,</span> <span class="s">&#39;v&#39;</span><span class="p">,</span> <span class="s">&#39;hv&#39;</span><span class="p">),</span>
     nrow<span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> ncol<span class="o">=</span><span class="kc">NULL</span><span class="p">,</span>
     scale<span class="o">=</span><span class="m">1</span><span class="p">,</span> rel_widths<span class="o">=</span><span class="m">1</span><span class="p">,</span> rel_heights<span class="o">=</span><span class="m">1</span><span class="p">,</span>
@@ -625,6 +609,8 @@ ggsave<span class="p">(</span><span class="s">&#39;multi_page.pdf&#39;</span><sp
 <p>さらに細やかな制御をしたいときは以下の関数を個別に重ねていく。</p></dd>
 <dt><code>cowplot::ggdraw(plot=NULL, xlim=c(0, 1), ylim=c(0, 1))</code></dt>
 <dd><p>これの後ろに <code>+</code> 演算子で <code>draw_***()</code> を足していく。</p></dd>
+<dt><code>cowplot::get_legend(plot)</code></dt>
+<dd><p>凡例が共通する図を並べるとき、代表のやつをこれで取っておいてあとで並べる。</p></dd>
 </dl>
 
 <p><code>draw_figure_label()</code>
@@ -634,6 +620,12 @@ ggsave<span class="p">(</span><span class="s">&#39;multi_page.pdf&#39;</span><sp
 <code>draw_plot()</code>
 <code>draw_plot_label()</code>
 <code>draw_text()</code></p>
+
+<p><code>theme_cowplot()</code>
+<code>ggsave2()</code></p>
+
+<p>パッケージ読み込みと同時に勝手にテーマを変更したり、
+<code>ggsave()</code> 関数を上書きしたりという問題が過去にはあったが、今は大丈夫。</p>
 
 <h2 id="関連書籍">関連書籍</h2>
 
