@@ -51,7 +51,7 @@ gp = gp + theme(panel.grid.minor=element_blank())
 print(gp)
 
 ## ファイルに保存
-ggsave("iris_sepal.png", gp)
+ggsave("iris_sepal.png", gp, width = 4, height = 4)
 ```
 
 `ggplot()` に渡すデータは、1行が1観測、1列が1変数という形の
@@ -194,11 +194,11 @@ gp + geom_point(aes(colour = species)) +
 [`scale_*_identity`](https://ggplot2.tidyverse.org/reference/scale_identity.html)
 :   for `colour`, `fill`, `size`, `shape`, `linetype`, `alpha`
 :   色の名前やサイズなどを示す列が予めデータに含まれている場合にそのまま使う。
-    使えるパラメータは https://ggplot2.tidyverse.org/articles/ggplot2-specs.html 参照
+    [点や線の種類](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html)
 
 [`scale_*_manual`](https://ggplot2.tidyverse.org/reference/scale_manual.html)
 :   for `colour`, `fill`, `size`, `shape`, `linetype`, `alpha`
-:   対応関係を引数で直に指定する。
+:   対応関係を `values` 引数で直に指定する。
 
 [`scale_size`](https://ggplot2.tidyverse.org/reference/scale_size.html)
 :   デフォルトではpointの面積を値にほぼ比例させるが、面積0にはならない。
@@ -263,7 +263,8 @@ gp + geom_point(aes(colour = species)) +
 
 [ファセットラベルの調整](https://ggplot2.tidyverse.org/reference/labellers.html)
 :   デフォルトでは値だけがfacetラベルに表示されるが、
-    変数名を同時に表示するなど細かい調整も可能。
+    変数名を同時に表示したり、数式を表示したりもできる。
+    見た目の調整はテーマの `strip.*` で。
 
 
 ### 内部変数を使う
@@ -294,7 +295,7 @@ ggplot内部で `stat_*()` を通して行われる。
 [描画する範囲を指定](https://ggplot2.tidyverse.org/reference/coord_cartesian.html)
 :   `gp + ylim(0, 42) + xlim("b", "c", "d")`
 :   `gp + coord_cartesian(xlim = NULL, ylim = NULL)`
-:   前者はデータそのものを切るが、後者はデータを変えずに描画領域だけズームする
+:   前者はデータそのものを切るが、後者はデータを変えずに描画領域だけ切る
 
 [X軸とY軸の比率を固定](https://ggplot2.tidyverse.org/reference/coord_fixed.html)
 :   `gp + coord_fixed(ratio=1)`
@@ -308,7 +309,7 @@ ggplot内部で `stat_*()` を通して行われる。
 [座標変換](https://ggplot2.tidyverse.org/reference/coord_trans.html)
 :   `gp + coord_trans(x='log10', y='sqrt')`
 :    表示する座標を変換する。
-     stat前に適用される `scale_x_*` とかとはちょいと違う。
+     stat前に適用される `scale_x_*` とは微妙に違う。
 
 [軸ラベルとタイトル](https://ggplot2.tidyverse.org/reference/labs.html)
 :   `gp + labs(x="time", y="weight", title="growth")`
@@ -321,25 +322,26 @@ ggplot内部で `stat_*()` を通して行われる。
 
 ### 既成テーマ
 
-`theme_grey(base_size=12, base_family='')`, `theme_gray(...)`
-:   灰色背景に白い格子。`ggplot` らしいデフォルト。
+`theme_grey(base_size=11, base_family='')`, `theme_gray(...)`
+:   灰色背景に白い格子。
+    ggplotらしいデフォルトだが、論文には使いにくい。
 
-`theme_bw(...)`
+`theme_bw(base_size=11, base_family='')`
 :   黒枠白背景にうっすら灰色格子
 
-`theme_linedraw(...)`
+`theme_linedraw(base_size=11, base_family='')`
 :   細いけど濃い色の `panel.grid`
 
-`theme_light(...)`
+`theme_light(base_size=11, base_family='')`
 :   それを薄くした感じ
 
-`theme_minimal(...)`
+`theme_minimal(base_size=11, base_family='')`
 :   外枠なしの `theme_bw`
 
-`theme_classic(...)`
+`theme_classic(base_size=11, base_family='')`
 :   xy軸がL字に描かれているだけで枠もグリッドも無し
 
-`theme_void(...)`
+`theme_void(base_size=11, base_family='')`
 :   完全に枠なし
 
 これらをカッコ無しでコンソールに打ち込むと、
@@ -347,17 +349,12 @@ ggplot内部で `stat_*()` を通して行われる。
 
 引数として `base_family` に"Helvetica Neue"などのフォントを指定できる。
 Macなら"HiraKakuProN-W3"を指定すれば日本語でも文字化けしなくなるはず。
-(`grDevices::quartzFonts()` などを `.Rprofile` に書いてフォントを登録するには
-[config]({{< relref "config.md#rprofile" >}}) を参照)
+テーマを構成する `axis.text` などはこの設定を継承するが、
+`geom_text()` などプロット内部の要素には引き継がれないことに注意。
 
 ほかにもいろんなテーマが
 [ggthemes](https://cran.r-project.org/web/packages/ggthemes/vignettes/ggthemes.html)
 というパッケージで提供されている。
-
-{{%div class="note"%}}
-この設定はテーマを構成する `axis.text` などには引き継がれるが
-`geom_text()` などプロット内部の要素には引き継がれない。
-{{%/div%}}
 
 
 ### 設定項目
@@ -371,7 +368,7 @@ Macなら"HiraKakuProN-W3"を指定すれば日本語でも文字化けしなく
 
 ```r
 ## ベースとなるテーマを先に適用してから
-gp = gp + theme_bw(base_family='HiraKakuProN-W3')
+gp = gp + theme_bw(base_family='HiraKakuProN-W3', base_size=14)
 gp = gp + theme(legend.position='bottom')
 gp = gp + theme(plot.background=element_rect(fill="transparent"))
 ```
@@ -462,8 +459,9 @@ gp = gp + theme(plot.background=element_rect(fill="transparent"))
 
 `element_blank()` --- 空
 :   消したい要素にはこれを指定する
+
     ```r
-    gp = gp + theme(axis.title=element_blank())
+    gp = gp + theme(axis.ticks=element_blank())
     gp = gp + theme(panel.grid=element_blank())
     ```
 
@@ -487,33 +485,39 @@ gp = gp + theme(plot.background=element_rect(fill="transparent"))
 
 ## ファイルに書き出す
 
-```r
-ggsave(filename = default_name(plot), plot = last_plot(),
-    device = default_device(filename), path = NULL, scale = 1,
-    width = par("din")[1], height = par("din")[2],
-    units = c("in", "cm", "mm"), dpi = 300, limitsize = TRUE, ...)
-```
-
-サイズを変えるには scale, width, height, units, dpi をいじる。
-デフォルトはそれぞれ 1, 7, 7, 'in', 300 で、1辺177.8mmの正方形に2100x2100ピクセル並べるイメージ。
-A4 PDFにするなら `ggsave('fig1.pdf', gp, width=8.27, height=11.7)` とか
-`ggsave('fig1.pdf', gp, width=210, height=297, units='mm')` とか。
-画像形式はファイル名の拡張子から自動的に判別される。
-
-{{%div class="note"%}}
-`width` と `height` が省略されると `par("din")` が呼び出される。
-Rscript から実行してるのに白いQuartzウィンドウが出現したり、
-空の `Rplots.pdf` ができたりするのはこのせい。
-{{%/div%}}
-
-MacのQuartzで調整して、そこで見たままを保存したい場合は
+RStudioやQuartzの保存ダイアログを利用して書き出すこともできるけど、
+それだとサイズ調整やファイル名入力を手作業でやることになってしまう。
+`ggsave()` をスクリプトに書いておけば何回でも同じ設定で出力できる。
 
 ```r
-dev.off()
-quartz(width=9.9, height=7)
-print(gp)
-quartz.save('plot.png')
+ggsave(filename, plot = last_plot(), device = NULL, path = NULL,
+       scale = 1,  width = NA, height = NA,
+       units = c("in", "cm", "mm"), dpi = 300, limitsize = TRUE, ...)
 ```
+
+- 画像形式はファイル名の拡張子から自動的に判別される
+  (e.g., `iris.png`, `iris.pdf`)。
+- `width`や`height`を小さくするほど、文字・点・線などの要素が相対的に大きくなる。
+- `dpi`を変えることで、見た目のバランスを保ったまま解像度を変えられる。
+  (これはPNGなどラスタ形式だけの話。PDFなどのベクタ形式なら気にしなくていい)
+- タイトルや軸ラベルの文字サイズを変えたいときはテーマの
+  `theme_bw(base_size = 42)` や各要素の `element_text(size = 42)` を使う。
+- scaleやunitsを使うのは慣れてからで十分。
+
+```r
+# 7inch x 300dpi = 2100 ピクセル四方 (デフォルト)
+ggsave('iris1.png', gp) # width = 7, height = 7, dpi = 300
+
+# 4inch x 300dpi = 1200 ピクセル四方
+ggsave('iris2.png', gp, width = 4, height = 4) # dpi = 300
+
+# 同じ1200ピクセル四方で、軸ラベルなどの文字だけ大きく
+ggsave('iris3.png', gp + theme_bw(base_size = 22), width = 4, height = 4)
+
+# 同じ1200ピクセル四方で、点や線なども大きく
+ggsave('iris4.png', gp, width = 2, height = 2, dpi = 600)
+```
+
 
 ## Extensions
 
@@ -557,24 +561,14 @@ ggsave('multi_page.pdf', .gtable, width=7, height=9.9)
 
 ggplotを学術論文向けにカスタマイズしやすくする。
 主な利用目的はgridExtraと同じでggplotを並べる機能。
-ラベル(e.g., A, B, C)をオプションで簡単に付けられるのが良い。
-
-{{%div class="warning"%}}
-`library(cowplot)` せずに `loadNamespace('cowplot')`
-して常に名前空間つきで呼んだほうが安全。
-
--   `cowplot::ggsave()`が定義されてて`ggplot2`と衝突するのが気持ち悪い。
--   `.onAttach()` で基本テーマが勝手に変更されるのが気持ち悪い。
-    `theme_cowplot()` そのものはシンプルで良くできているが、
-    カスタマイズのベースとするには扱いにくい
-    (`rect`に変なデフォルト値が設定されてしまう、など)。
-{{%/div%}}
+ABCのようなラベルをオプションで簡単に付けられるのが良い。
 
 `cowplot::plot_grid()`
 :   `facet_wrap()`のように、ざっと並べるのに便利。
+    もちろん入れ子も可能。
 
     ```r
-    corplot::plot_grid(..., plotlist=NULL,
+    cowplot::plot_grid(..., plotlist=NULL,
         align=c('none', 'h', 'v', 'hv'),
         nrow=NULL, ncol=NULL,
         scale=1, rel_widths=1, rel_heights=1,
@@ -586,6 +580,9 @@ ggplotを学術論文向けにカスタマイズしやすくする。
 `cowplot::ggdraw(plot=NULL, xlim=c(0, 1), ylim=c(0, 1))`
 :  これの後ろに `+` 演算子で `draw_***()` を足していく。
 
+`cowplot::get_legend(plot)`
+:  凡例が共通する図を並べるとき、代表のやつをこれで取っておいてあとで並べる。
+
 `draw_figure_label()`
 `draw_grob()`
 `draw_label()`
@@ -593,6 +590,12 @@ ggplotを学術論文向けにカスタマイズしやすくする。
 `draw_plot()`
 `draw_plot_label()`
 `draw_text()`
+
+`theme_cowplot()`
+`ggsave2()`
+
+パッケージ読み込みと同時に勝手にテーマを変更したり、
+`ggsave()` 関数を上書きしたりという問題が過去にはあったが、今は大丈夫。
 
 
 ## 関連書籍
