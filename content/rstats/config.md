@@ -51,7 +51,7 @@ Sys.getenv()
 
 R起動時に読み込まれ、環境変数を設定するファイル。
 Rスクリプトではなく、シェルスクリプトっぽい代入式で書く。
-例 (<https://github.com/heavywatal/rwtl/blob/master/.R/.Renviron>):
+例 (<https://github.com/heavywatal/dotfiles/blob/master/.R/.Renviron>):
 
     R_USER=${HOME}/.R
     R_LIBS_USER=${R_USER}/library
@@ -83,7 +83,7 @@ https://cran.r-project.org/doc/manuals/R-intro.html#Customizing-the-environment
 
 R起動時に読み込まれるファイル。
 中身はRスクリプトなので、パッケージの読み込みや関数の定義など、Rでできることは何でもできるはず。
-例: <https://github.com/heavywatal/rwtl/blob/master/.R/.Rprofile>
+例: <https://github.com/heavywatal/dotfiles/blob/master/.R/.Rprofile>
 
 読み込まれる順序はだいたい以下のとおり。
 `.Renviron` のほうが先に読み込まれるので、
