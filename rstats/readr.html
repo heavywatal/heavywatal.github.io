@@ -300,9 +300,15 @@ ld<span class="o">:</span> <span class="kn">library</span> not found <span class
 <div class="note">
 <p>新しいtibble 1.4以降では
 <a href="https://github.com/r-lib/pillar/">pillar</a>
-というパッケージが裏で表示形式をイジるようになった。
-見やすくない上にかなり遅いので、しばらく1.3.4で様子を見る。
-<code>devtools::install_version('tibble', '1.3.4')</code></p>
+というパッケージが有効数字や欠損値などの表示形式を勝手にイジるようになってしまった。
+見やすくない上にかなり遅いので <code>print.tbl_df()</code> 関数を上書きする。
+標準の <code>print.data.frame()</code> でもいいけど、
+<a href="https://CRAN.R-project.org/package=data.table">data.table</a>
+1.11 以降をインストールしてある場合は <code>print.data.table()</code> が使いやすい。</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># ~/.Rprofile</span>
+<span class="kp">assign</span><span class="p">(</span><span class="s">&#34;print.tbl_df&#34;</span><span class="p">,</span> data.table<span class="o">:::</span>print.data.table<span class="p">,</span> envir <span class="o">=</span> <span class="m">.</span>GlobalEnv<span class="p">)</span>
+<span class="c1">#assign(&#34;print.tbl_df&#34;, print.data.frame, envir = .GlobalEnv)</span></code></pre></div>
+<p>古き良きtibbleを <code>devtools::install_version('tibble', '1.3.4')</code> で入れる手もある。</p>
 
 </div>
 
@@ -320,6 +326,7 @@ ld<span class="o">:</span> <span class="kn">library</span> not found <span class
 <li>長さ1の変数以外はリサイクルしない</li>
 <li>引数の評価がlazyに行われるので前の列を利用して後の列を作ったりできる</li>
 <li><code>tbl_df</code> クラスを付加</li>
+<li>ただし1.4以降のバージョンでは表示が遅くて見にくい</li>
 </ul></dd>
 <dt><code>tibble::as_tibble(x)</code></dt>
 <dd>既存のdata.frameやmatrixをtibbleに変換。
@@ -341,29 +348,44 @@ ld<span class="o">:</span> <span class="kn">library</span> not found <span class
 
 <h3 id="設定">設定</h3>
 
-<p><code>.Rprofile</code> に以下のように書くことで、
-大きいtibbleの<code>print()</code>で表示される行数を調節することができる。
-デフォルトはどちらも<code>10L</code>。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># Maximum number of rows to print(tbl_df)</span>
-<span class="kp">options</span><span class="p">(</span>tibble.print_max<span class="o">=</span><span class="m">30L</span><span class="p">)</span>
+<p>表示される行数や幅を調節する項目には以下のようなものがある。
+<code>~/.Rprofile</code> に書いておけば起動時に勝手に設定される。</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">height <span class="o">=</span> <span class="m">30L</span>  <span class="c1"># for example</span>
+width <span class="o">=</span> <span class="m">160L</span>
+<span class="kp">options</span><span class="p">(</span>
+  tibble.print_max <span class="o">=</span> height<span class="p">,</span>
+  tibble.print_min <span class="o">=</span> height<span class="p">,</span>
+  tibble.width <span class="o">=</span> width<span class="p">,</span>
+  pillar.neg <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
+  pillar.sigfig <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
+  pillar.subtle <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
+  datatable.print.class <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
+  datatable.print.colnames <span class="o">=</span> <span class="s">&#34;top&#34;</span><span class="p">,</span>
+  datatable.print.nrows <span class="o">=</span> height<span class="p">,</span>
+  datatable.print.topn <span class="o">=</span> height <span class="o">%/%</span> <span class="m">2L</span><span class="p">,</span>
+  width <span class="o">=</span> <span class="kp">min</span><span class="p">(</span>width<span class="p">,</span> <span class="m">10000L</span><span class="p">)</span>
+<span class="p">)</span></code></pre></div>
+<ul>
+<li><a href="https://github.com/tidyverse/tibble/blob/master/R/tibble-package.R">https://github.com/tidyverse/tibble/blob/master/R/tibble-package.R</a></li>
+<li><a href="https://github.com/r-lib/pillar/blob/master/R/pillar-package.R">https://github.com/r-lib/pillar/blob/master/R/pillar-package.R</a></li>
+<li><a href="https://github.com/Rdatatable/data.table/blob/master/R/onLoad.R">https://github.com/Rdatatable/data.table/blob/master/R/onLoad.R</a></li>
+</ul>
 
-<span class="c1"># Number of rows to print(tbl_df) if exceeded the maximum</span>
-<span class="kp">options</span><span class="p">(</span>tibble.print_min<span class="o">=</span><span class="m">30L</span><span class="p">)</span></code></pre></div>
 <h3 id="pagerで全体を表示する">PAGERで全体を表示する</h3>
 
-<p>巨大テーブルをコンパクトに表示してくれるのは助かるけど、逆に全体を見渡したい場合もある。
-一時的に最大表示行数を拡大してPAGERに流し込むような関数を書いておくと良い。
-普通のdata.frameを見るのにも便利。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">less <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">,</span> method<span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="s">&#39;print&#39;</span><span class="p">,</span> <span class="s">&#39;dput&#39;</span><span class="p">),</span> max.print<span class="o">=</span><span class="kp">getOption</span><span class="p">(</span><span class="s">&#39;max.print&#39;</span><span class="p">),</span> <span class="kc">...</span><span class="p">)</span> <span class="p">{</span>
-    opts <span class="o">=</span> <span class="kp">options</span><span class="p">(</span>max.print<span class="o">=</span>max.print<span class="p">,</span>
-            tibble.print_max<span class="o">=</span>max.print<span class="p">,</span>
-            tibble.print_min<span class="o">=</span>max.print<span class="p">)</span>
-    <span class="kp">on.exit</span><span class="p">(</span><span class="kp">options</span><span class="p">(</span>opts<span class="p">))</span>
-    utils<span class="o">::</span>page<span class="p">(</span>x<span class="p">,</span> <span class="kp">match.arg</span><span class="p">(</span>method<span class="p">),</span> <span class="kc">...</span><span class="p">)</span>
-<span class="p">}</span>
+<p>tibbleの全体を表示したい場合は <code>print()</code> 関数に指定が必要。
+lessのようなPAGERで見たい場合は <code>utils::page()</code> が便利。</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># tibble:::print.tbl_df をそのまま使う場合</span>
+as_tibble<span class="p">(</span>iris<span class="p">)</span> <span class="o">%&gt;%</span> <span class="kp">print</span><span class="p">(</span>n <span class="o">=</span> <span class="kp">nrow</span><span class="p">(</span><span class="m">.</span><span class="p">),</span> width <span class="o">=</span> <span class="m">10000L</span><span class="p">)</span>
 
-less<span class="p">(</span>iris<span class="p">)</span>
-less<span class="p">(</span>as_tibble<span class="p">(</span>iris<span class="p">))</span></code></pre></div>
+<span class="c1"># data.table:::print.data.table で上書きした場合</span>
+as_tibble<span class="p">(</span>iris<span class="p">)</span> <span class="o">%&gt;%</span> <span class="kp">print</span><span class="p">(</span>nrows <span class="o">=</span> <span class="kp">nrow</span><span class="p">(</span><span class="m">.</span><span class="p">))</span>
+
+iris <span class="o">%&gt;%</span> page<span class="p">(</span><span class="s">&#39;print&#39;</span><span class="p">)</span></code></pre></div>
+<p>オプションをいちいち設定しなくて済むように
+<a href="https://github.com/heavywatal/rwtl/blob/master/R/utils.R"><code>less()</code></a>
+のような関数を定義しておくのもよい。</p>
+
 <h2 id="関連書籍">関連書籍</h2>
 
 <p><a href="https://www.amazon.co.jp/Data-Science-Transform-Visualize-Model/dp/1491910399/ref=as_li_ss_il?s=books&ie=UTF8&qid=1508340700&sr=1-3&linkCode=li3&tag=heavywatal-22&linkId=6a53371cc80e2d6d7fc50fae5d8b862d" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1491910399&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=1491910399" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
