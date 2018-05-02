@@ -242,9 +242,18 @@ LDFLAGS = -L${HOME}/.homebrew/lib
 {{%div class="note"%}}
 新しいtibble 1.4以降では
 [pillar](https://github.com/r-lib/pillar/)
-というパッケージが裏で表示形式をイジるようになった。
-見やすくない上にかなり遅いので、しばらく1.3.4で様子を見る。
-`devtools::install_version('tibble', '1.3.4')`
+というパッケージが有効数字や欠損値などの表示形式を勝手にイジるようになってしまった。
+見やすくない上にかなり遅いので `print.tbl_df()` 関数を上書きする。
+標準の `print.data.frame()` でもいいけど、
+[data.table](https://CRAN.R-project.org/package=data.table)
+1.11 以降をインストールしてある場合は `print.data.table()` が使いやすい。
+```r
+# ~/.Rprofile
+assign("print.tbl_df", data.table:::print.data.table, envir = .GlobalEnv)
+#assign("print.tbl_df", print.data.frame, envir = .GlobalEnv)
+```
+
+古き良きtibbleを `devtools::install_version('tibble', '1.3.4')` で入れる手もある。
 {{%/div%}}
 
 
@@ -258,6 +267,7 @@ LDFLAGS = -L${HOME}/.homebrew/lib
     -   長さ1の変数以外はリサイクルしない
     -   引数の評価がlazyに行われるので前の列を利用して後の列を作ったりできる
     -   `tbl_df` クラスを付加
+    -   ただし1.4以降のバージョンでは表示が遅くて見にくい
 
 `tibble::as_tibble(x)`
 :   既存のdata.frameやmatrixをtibbleに変換。
@@ -284,36 +294,49 @@ LDFLAGS = -L${HOME}/.homebrew/lib
 
 ### 設定
 
-`.Rprofile` に以下のように書くことで、
-大きいtibbleの`print()`で表示される行数を調節することができる。
-デフォルトはどちらも`10L`。
+表示される行数や幅を調節する項目には以下のようなものがある。
+`~/.Rprofile` に書いておけば起動時に勝手に設定される。
 
 ```r
-# Maximum number of rows to print(tbl_df)
-options(tibble.print_max=30L)
-
-# Number of rows to print(tbl_df) if exceeded the maximum
-options(tibble.print_min=30L)
+height = 30L  # for example
+width = 160L
+options(
+  tibble.print_max = height,
+  tibble.print_min = height,
+  tibble.width = width,
+  pillar.neg = FALSE,
+  pillar.sigfig = FALSE,
+  pillar.subtle = FALSE,
+  datatable.print.class = TRUE,
+  datatable.print.colnames = "top",
+  datatable.print.nrows = height,
+  datatable.print.topn = height %/% 2L,
+  width = min(width, 10000L)
+)
 ```
+
+- https://github.com/tidyverse/tibble/blob/master/R/tibble-package.R
+- https://github.com/r-lib/pillar/blob/master/R/pillar-package.R
+- https://github.com/Rdatatable/data.table/blob/master/R/onLoad.R
 
 ### PAGERで全体を表示する
 
-巨大テーブルをコンパクトに表示してくれるのは助かるけど、逆に全体を見渡したい場合もある。
-一時的に最大表示行数を拡大してPAGERに流し込むような関数を書いておくと良い。
-普通のdata.frameを見るのにも便利。
+tibbleの全体を表示したい場合は `print()` 関数に指定が必要。
+lessのようなPAGERで見たい場合は `utils::page()` が便利。
 
 ```r
-less = function(x, method=c('print', 'dput'), max.print=getOption('max.print'), ...) {
-    opts = options(max.print=max.print,
-            tibble.print_max=max.print,
-            tibble.print_min=max.print)
-    on.exit(options(opts))
-    utils::page(x, match.arg(method), ...)
-}
+# tibble:::print.tbl_df をそのまま使う場合
+as_tibble(iris) %>% print(n = nrow(.), width = 10000L)
 
-less(iris)
-less(as_tibble(iris))
+# data.table:::print.data.table で上書きした場合
+as_tibble(iris) %>% print(nrows = nrow(.))
+
+iris %>% page('print')
 ```
+
+オプションをいちいち設定しなくて済むように
+[`less()`](https://github.com/heavywatal/rwtl/blob/master/R/utils.R)
+のような関数を定義しておくのもよい。
 
 
 ## 関連書籍
