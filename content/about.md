@@ -56,14 +56,17 @@ Bachelor of Science, 2008.03
 
 **Papers**
 
+- Atsushi Niida, **Watal M. Iwasaki**, Hideki Innan. (2018)
+  [*Mol. Biol. Evol.* (in press)](https://doi.org/10.1093/molbev/msy091);
+  Neutral Theory in Cancer Cell Population Genetics.
 - Yusuke Okamoto, **Watal M. Iwasaki**, Kazuto Kugou, Kazuki Takahashi, Arisa Oda, Koichi Sato, Wataru Kobayashi, Hidehiko Kawai, Ryo Sakasai, Akifumi Takaori-Kondo, Takashi Yamamoto, Masato T. Kanemaki, Masato Taoka, Toshiaki Isobe, Hitoshi Kurumizaka, Hideki Innan, Kunihiro Ohta, Masamichi Ishiai, Minoru Takata. (2018)
-  [*Nucleic Acids Research* (*in press*)](https://doi.org/10.1093/nar/gky058);
+  [*Nucleic Acids Research* **46**(6) 2932--2944](https://doi.org/10.1093/nar/gky058);
   Replication stress induces accumulation of FANCD2 at central region of large fragile genes.
 - Satoshi Tamate\*, **Watal M. Iwasaki**\* (equally contributed), Kenneth L. Krysko, Brian Composano, Hideaki Mori, Ryo Funayama, Keiko Nakayama, Takashi Makino and Masakado Kawata. (2017)
   [*Sci. Rep.* **7**(18008)](https://doi.org/10.1038/s41598-017-17852-7);
   Inferring evolutionary responses of *Anolis carolinensis* introduced into the Ogasawara archipelago using whole genome sequence data.
 - **Watal M. Iwasaki** and Hideki Innan. (2017)
-  [*PLOS ONE* 12(9): e0184229](https://doi.org/10.1371/journal.pone.0184229);
+  [*PLOS ONE* **12**(9): e0184229](https://doi.org/10.1371/journal.pone.0184229);
   Simulation Framework for Generating Intratumor Heterogeneity Patterns in a Cancer Cell Population.
 - Takahiro Yamanoi and **Watal M. Iwasaki**. (2015)
   [*Evolution: Education and Outreach* **8**:14](https://dx.doi.org/10.1186/s12052-015-0043-6);
@@ -169,4 +172,5 @@ July 2010 - March 2013
 
 ## Review
 
+-   [Mathematical Biosciences](https://www.journals.elsevier.com/mathematical-biosciences/)
 -   [Journal of Molecular Evolution](https://link.springer.com/journal/239)
