@@ -218,6 +218,8 @@ list of data.framesだけでなく、list of vectorsとかでもよい。
 
 逆をやるのが `tidyr::unite(data, col, ..., sep='_', remove=TRUE)` 。
 
+行方向に分割する `tidyr::separate_rows(data, ..., sep, convert)` もある。
+
 `tidyr::extract(data, col, into, regex, ...)`
 を使えば正規表現でもっと細かく指定できる。
 
@@ -247,7 +249,7 @@ tibble版`expand.grid(...)`のようなもの。
 `nest(data, ...) %>% dplyr::select(-data)`のショートカット。
 この結果は`expand()`や`complete()`の引数としても使える。
 
-数値vectorの補完には`full_seq(x, period)`が便利。
+数値vectorの補完には`full_seq(x, period, tol=1e-6)`が便利。
 
 
 ### `tidyr::drop_na(data, ...)`
