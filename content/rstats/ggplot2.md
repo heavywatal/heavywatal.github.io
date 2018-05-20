@@ -20,6 +20,7 @@ R標準の`plot()`などは前者の上に、
 `install.packages('tidyverse')` で一括インストール、
 `library(tidyverse)` で一括ロード。
 
+- [初学者向け講義資料2018](/slides/nagoya2018/2-ggplot.html)
 - <https://ggplot2.tidyverse.org>
 - <http://r4ds.had.co.nz/data-visualisation.html>
 - <http://r4ds.had.co.nz/graphics-for-communication.html>

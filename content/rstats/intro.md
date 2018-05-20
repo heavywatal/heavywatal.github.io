@@ -6,13 +6,22 @@ tags = ["r"]
   weight = -99
 +++
 
-## インターネットで調べる
+## 初学者向け講義資料
 
--   <http://seekr.jp/> --- Googleカスタム検索 for R
--   <http://rseek.org/> --- Google Custom Search for R
--   <https://www.rdocumentation.org/>
--   <http://r4ds.had.co.nz/> --- R for Data Science (体系的に学びたい人はぜひ通読を)
--   <https://www.r-bloggers.com/>
+<ol start="0">
+<li><a href="/slides/nagoya2018/0-why-r.html">どうしてRを使うの？</a> (12分)
+<li><a href="/slides/nagoya2018/1-basic-r.html">Rの基本</a> (15分)
+<li><a href="/slides/nagoya2018/2-ggplot.html">R + ggplot2 — きれいなグラフを簡単に合理的に</a> (25分)
+<li><a href="/slides/nagoya2018/3-tidy-data.html">R + tidyverse — 使える形にデータを整える</a> (30分)
+</ol>
+
+## インターネットで調べる・尋ねる
+
+- <https://www.rdocumentation.org/>
+- <http://r4ds.had.co.nz/> --- R for Data Science (体系的に学びたい人はぜひ通読を)
+- [Stack Overflow](https://stackoverflow.com/questions/tagged/r)
+- [r-wakalang](https://github.com/tokyor/r-wakalang) --- Slack上の日本語コミュニティ
+
 
 ## RStudioを使う
 
