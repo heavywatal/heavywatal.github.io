@@ -15,9 +15,9 @@ tags = ["r"]
 解析も作図も**整然データ (tidy data)**を用意するところから始まる。
 
 - [初学者向け講義資料2018](http://localhost/slides/nagoya2018/3-tidy-data.html)
-- わかりやすいスライド: [整然データってなに？ --- @f_nishihara](https://speakerdeck.com/fnshr/zheng-ran-detatutenani)
-- 詳しい解説: [整然データとは何か --- @f_nishihara](http://id.fnshr.info/2017/01/09/tidy-data-intro/)
-- 原著: [Tidy Data --- @hadley](https://dx.doi.org/10.18637/jss.v059.i10)
+- わかりやすいスライド: [整然データってなに？ by @f_nisihara](https://speakerdeck.com/fnshr/zheng-ran-detatutenani)
+- 詳しい解説: [整然データとは何か by @f_nisihara](http://id.fnshr.info/2017/01/09/tidy-data-intro/)
+- 原著: [Tidy Data by @hadley](https://dx.doi.org/10.18637/jss.v059.i10)
 
 >   *tidy datasets are all alike but every messy dataset is messy in its own way*\
 >   --- *Hadley Wickham*
