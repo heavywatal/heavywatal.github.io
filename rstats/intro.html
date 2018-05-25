@@ -104,10 +104,18 @@ R自学自習の基礎知識
 <li><a href="https://github.com/tokyor/r-wakalang">r-wakalang</a> &mdash; Slack上の日本語コミュニティ</li>
 </ul>
 
-<h2 id="rstudioを使う">RStudioを使う</h2>
+<h2 id="r環境のインストール">R環境のインストール</h2>
 
-<p>Rの実行方法はいくつかあるが、これから始めるひとは
-<a href="https://www.rstudio.com/">RStudio</a> を使うとよい。</p>
+<dl>
+<dt>R本体</dt>
+<dd>コマンドを解釈して実行するコア部分</dd>
+<dd>よく使われる関数なども標準パッケージとして同梱</dd>
+<dd><a href="https://cran.rstudio.com/">https://cran.rstudio.com/</a> からダウンロードしてインストール</dd>
+<dt>RStudio Desktop</dt>
+<dd>Rをより快適に使うための総合開発環境(IDE)</dd>
+<dd>必須ではないけど、結構みんな使ってるらしい</dd>
+<dd><a href="https://www.rstudio.com/">https://www.rstudio.com/</a> からダウンロードしてインストール</dd>
+</dl>
 
 <h2 id="スクリプトを保存">スクリプトを保存</h2>
 
@@ -189,8 +197,9 @@ Error<span class="o">:</span> could not find <span class="kr">function</span> <s
 はどんな解析にも有用で、標準になってもいいくらい便利。
 というより、tidyverseなき裸のRは使う気が起きない。
 Rの中から下記のようなコマンドで一括インストール・読み込みできる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> install.packages<span class="p">(</span><span class="s">&#39;tidyverse&#39;</span><span class="p">)</span>
-<span class="o">&gt;</span> <span class="kn">library</span><span class="p">(</span>tidyverse<span class="p">)</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">install.packages<span class="p">(</span><span class="s">&#34;readr&#34;</span><span class="p">)</span>  <span class="c1"># 一度やればOK</span>
+<span class="kn">library</span><span class="p">(</span>readr<span class="p">)</span>             <span class="c1"># 読み込みはRを起動するたびに必要</span>
+update.packages<span class="p">()</span>          <span class="c1"># たまには更新しよう</span></code></pre></div>
 <p>そのほか
 <a href="https://cran.r-project.org/web/views/">https://cran.r-project.org/web/views/</a>
 で用途別に紹介されている。</p>
@@ -199,16 +208,20 @@ Rの中から下記のようなコマンドで一括インストール・読み�
 
 <h2 id="作業ディレクトリ">作業ディレクトリ</h2>
 
-<p>R ではどこかのディレクトリ (= フォルダ) に身をおいて作業する。
-<a href="/rstats/readr.html">ファイルを開く</a>ときなどに
-R がファイルを探すのはこの作業ディレクトリである。
+<p>Rではどこかのディレクトリ(=フォルダ)に身をおいて作業する。
+<a href="/rstats/readr.html">データファイルを読み込む</a>ときなどに
+Rがファイルを探すのはこの作業ディレクトリである。
 <code>No such file or directory</code> と怒られる場合は、
 作業ディレクトリとファイルの場所が合っていないかったり、
 ファイル名のタイプミスだったりすることが多い。</p>
 
+<p>作業ディレクトリは解析の途中でホイホイ移動せず、
+プロジェクトの最上階などに固定しておいて、
+そこからの相対パスでファイルを読み書きするのが分かりやすくて安全。</p>
+
 <dl>
 <dt><code>getwd()</code>, <code>setwd()</code></dt>
-<dd><p>現在地の working directory を get/set する関数</p>
+<dd><p>現在地の <strong>w</strong>orking <strong>d</strong>irectory をget/setする関数。</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="kp">getwd</span><span class="p">()</span>
 <span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="o">/</span>Users<span class="o">/</span>watal
 <span class="o">&gt;</span> <span class="kp">setwd</span><span class="p">(</span><span class="s">&#34;~/Desktop&#34;</span><span class="p">)</span>
@@ -236,7 +249,7 @@ Error <span class="kr">in</span> <span class="kp">file</span><span class="p">(</
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> help<span class="p">(</span><span class="kp">sum</span><span class="p">)</span>
 <span class="o">&gt;</span> <span class="o">?</span><span class="kp">sum</span></code></pre></div></dd>
 <dt><code>help.start()</code></dt>
-<dd><p>組み込みヘルプをウェブブラウザで開く。
+<dd><p>組み込みヘルプをブラウザで開く。
 インストール済みパッケージのヘルプも Packages のリンクから見られる。</p></dd>
 <dt><code>attributes(obj)</code>, <code>str(obj)</code></dt>
 <dd><p>オブジェクトの属性や構造を調べる。

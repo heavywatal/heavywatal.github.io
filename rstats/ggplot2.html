@@ -92,10 +92,13 @@ ggplot2 — きれいなグラフを簡単に合理的に
 <img src="https://ggplot2.tidyverse.org/logo.png" align="right" width="120" height="139">
 </a></p>
 
+<p>&ldquo;The <strong>G</strong>rammer of <strong>G</strong>raphics&rdquo; という体系に基づいて設計されたパッケージ。
+単にいろんなグラフを「描ける」だけじゃなく「一貫性のある文法で合理的に描ける」。</p>
+
 <p>Rのグラフ描画システムには<code>graphics</code>と<code>grid</code>の2つが存在しており、
-R標準の<code>plot()</code>などは前者の上に、
+R標準の<code>boxplot()</code>や<code>hist()</code>などは前者の上に、
 本項で扱う<code>ggplot2</code>は後者の上に成り立っている。
-使い方が全く異なるので、前者のことを知る必要はない。</p>
+使い方が全く異なるので、前者を知らずにいきなりggplot2から始めても大丈夫。</p>
 
 <p><a href="https://tidyverse.tidyverse.org/">tidyverse</a> に含まれているので、
 <code>install.packages('tidyverse')</code> で一括インストール、
@@ -110,114 +113,45 @@ R標準の<code>plot()</code>などは前者の上に、
 <li><a href="https://blog.rstudio.org/2015/12/21/ggplot2-2-0-0/">version 2.0での変更点</a></li>
 </ul>
 
-<h2 id="基本的な使い方">基本的な使い方</h2>
-
-<p>R に入ってるお馴染みサンプルデータ <code>iris</code> を使って</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">## ライブラリの読み込み</span>
-<span class="kn">library</span><span class="p">(</span>tidyverse<span class="p">)</span>
-
-<span class="c1">## データと全体設定を持ったggplotオブジェクトを作る</span>
-gp <span class="o">=</span> ggplot<span class="p">(</span>iris<span class="p">,</span> aes<span class="p">(</span>x<span class="o">=</span>Sepal.Width<span class="p">,</span> y<span class="o">=</span>Sepal.Length<span class="p">,</span> colour<span class="o">=</span>Species<span class="p">))</span>
-
-<span class="c1">## 散布図のレイヤーを重ねる</span>
-gp <span class="o">=</span> gp <span class="o">+</span> geom_point<span class="p">(</span>size<span class="o">=</span><span class="m">3</span><span class="p">,</span> alpha<span class="o">=</span><span class="m">0.7</span><span class="p">)</span>
-
-<span class="c1">## 描画してみる</span>
-<span class="kp">print</span><span class="p">(</span>gp<span class="p">)</span>
-
-<span class="c1">## 回帰曲線を重ねたり、タイトルやテーマの設定をしたり</span>
-gp <span class="o">=</span> gp <span class="o">+</span> stat_smooth<span class="p">(</span>method<span class="o">=</span>glm<span class="p">,</span> method.args<span class="o">=</span><span class="kt">list</span><span class="p">(</span>family<span class="o">=</span>gaussian<span class="p">))</span>
-gp <span class="o">=</span> gp <span class="o">+</span> labs<span class="p">(</span>title<span class="o">=</span><span class="s">&#34;Iris Sepal&#34;</span><span class="p">)</span>
-gp <span class="o">=</span> gp <span class="o">+</span> theme_bw<span class="p">()</span>
-gp <span class="o">=</span> gp <span class="o">+</span> theme<span class="p">(</span>panel.grid.minor<span class="o">=</span>element_blank<span class="p">())</span>
-<span class="kp">print</span><span class="p">(</span>gp<span class="p">)</span>
-
-<span class="c1">## ファイルに保存</span>
-ggsave<span class="p">(</span><span class="s">&#34;iris_sepal.png&#34;</span><span class="p">,</span> gp<span class="p">,</span> width <span class="o">=</span> <span class="m">4</span><span class="p">,</span> height <span class="o">=</span> <span class="m">4</span><span class="p">)</span></code></pre></div>
-<p><code>ggplot()</code> に渡すデータは、1行が1観測、1列が1変数という形の
-<a href="/rstats/programming.html#tidyverse"><strong>整然データ</strong></a></p>
-
-<h2 id="プロットの種類">プロットの種類</h2>
-
-<dl>
-<dt><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">散布図</a></dt>
-<dd><code>gp + geom_point(size=2, alpha=0.3)</code></dd>
-<dd>重なった点をランダムにばらかしたいときは
-<a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html"><code>geom_jitter()</code></a></dd>
-<dd><a href="https://ggplot2.tidyverse.org/articles/ggplot2-specs.html#sec:shape-spec">点の形(shape)一覧</a></dd>
-<dt><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">折れ線グラフ</a></dt>
-<dd><code>gp + geom_path(size=2, linetype=&quot;dashed&quot;)</code> データ順に結ぶ</dd>
-<dd><code>gp + geom_line()</code> x軸上の順で結ぶ</dd>
-<dd><code>gp + geom_step()</code> 階段状に結ぶ</dd>
-<dd><a href="https://ggplot2.tidyverse.org/articles/ggplot2-specs.html#sec:line-type-spec">線の種類(linetype)一覧</a></dd>
-<dt><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">面グラフ</a></dt>
-<dd><code>gp + geom_ribbon()</code> &mdash; yminからymaxの面</dd>
-<dd><code>gp + geom_area()</code> &mdash; 0からyの面</dd>
-<dt><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">ヒストグラム、密度曲線</a></dt>
-<dd><code>gp + geom_histogram()</code> &mdash; 棒グラフ(連続値を<code>stat_bin()</code> で区切って)</dd>
-<dd><code>gp + geom_bar()</code> &mdash; 棒グラフ(離散値を<code>stat_count()</code>で数えて)</dd>
-<dd><code>gp + geom_freqpoly()</code> &mdash; 折れ線</dd>
-<dd><code>gp + geom_density()</code> &mdash; 密度推定されたスムーズな線</dd>
-<dd><code>gp + geom_bin2d()</code> &mdash; 二次元ヒストグラム</dd>
-<dd><code>gp + geom_hex()</code> &mdash; 六角形版二次元ヒストグラム</dd>
-<dt><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">棒グラフ</a></dt>
-<dd><code>gp + geom_col()</code></dd>
-<dd>グループ分けする場合のオプション:
+<h2 id="基本的な使い方-指示を-していく">基本的な使い方: 指示を <code>+</code> していく</h2>
 
 <ul>
-<li><a href="https://ggplot2.tidyverse.org/reference/position_stack.html"><code>position='stack'</code></a>:
-縦に積み重ねる (デフォルト)</li>
-<li><a href="https://ggplot2.tidyverse.org/reference/position_dodge.html"><code>position='dodge'</code></a>:
-横に並べる</li>
-<li><code>position='fill'</code>: 縦に積み重ね、高さを1に揃えて割合を示す</li>
-</ul></dd>
-<dt><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">箱ひげ図</a></dt>
-<dd><code>gp + geom_boxplot()</code></dd>
-<dd><code>gp + geom_violin()</code></dd>
-<dt><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html">ヒートマップ</a></dt>
-<dd><code>gp + geom_tile(aes(fill=z))</code></dd>
-<dd><code>gp + geom_raster(aes(fill=z))</code> &mdash; 各タイルの大きさを揃える制約のため高速</dd>
-<dt><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">エラーバー</a></dt>
-<dd><code>gp + geom_errorbar(aes(ymax = y + se, ymin = y - se), width = 0.1)</code></dd>
-<dd><code>gp + geom_linerange(...)</code></dd>
-<dd><code>gp + geom_pointrange(...)</code></dd>
-<dt><a href="https://ggplot2.tidyverse.org/reference/stat_function.html">関数</a></dt>
-<dd><code>ggplot(data.frame(x=c(-4, 4)), aes(x)) + stat_function(fun=dnorm, args=c(0, 1), n=200)</code></dd>
-</dl>
+<li><code>ggplot()</code> このデータでよろしく</li>
+<li><code>geom_*()</code> 点や線をよろしく</li>
+<li><code>theme_*()</code> 軸とか背景の見た目をよろしく</li>
+</ul>
 
-<hr>
+<p>ggplot2についてくる<code>mpg</code>データを例に:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span>tidyverse<span class="p">)</span>
+ggplot<span class="p">(</span>data <span class="o">=</span> mpg<span class="p">)</span> <span class="o">+</span>
+  geom_point<span class="p">(</span>mapping <span class="o">=</span> aes<span class="p">(</span>x <span class="o">=</span> displ<span class="p">,</span> y <span class="o">=</span> cty<span class="p">))</span> <span class="o">+</span>
+  theme_classic<span class="p">(</span>base_size <span class="o">=</span> <span class="m">20</span><span class="p">,</span> base_family <span class="o">=</span> <span class="s">&#34;Helvetica&#34;</span><span class="p">)</span></code></pre></div>
+<p>途中経過をオブジェクトとして取っておける:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">p0 <span class="o">=</span> ggplot<span class="p">(</span>mpg<span class="p">,</span> aes<span class="p">(</span>x <span class="o">=</span> displ<span class="p">,</span> y <span class="o">=</span> cty<span class="p">))</span>
+p1 <span class="o">=</span> p0 <span class="o">+</span> geom_point<span class="p">()</span>
+p2 <span class="o">=</span> p1 <span class="o">+</span> theme_classic<span class="p">(</span>base_size <span class="o">=</span> <span class="m">20</span><span class="p">,</span> base_family <span class="o">=</span> <span class="s">&#34;Helvetica&#34;</span><span class="p">)</span>
+p3 <span class="o">=</span> p2 <span class="o">+</span> stat_smooth<span class="p">(</span>method <span class="o">=</span> lm<span class="p">,</span> formula <span class="o">=</span> y <span class="o">~</span> <span class="kp">log</span><span class="p">(</span>x<span class="p">))</span>
+<span class="kp">print</span><span class="p">(</span>p3<span class="p">)</span></code></pre></div>
+<p>画像ファイルに保存するところまできっちり書く:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">ggsave<span class="p">(</span><span class="s">&#34;mpg-displ-cty.png&#34;</span><span class="p">,</span> p3<span class="p">,</span> width <span class="o">=</span> <span class="m">4</span><span class="p">,</span> height <span class="o">=</span> <span class="m">4</span><span class="p">,</span> dpi<span class="o">=</span><span class="m">300</span><span class="p">)</span></code></pre></div>
+<p><code>ggplot()</code> に渡すデータは、1行が1観測、1列が1変数という形の
+<a href="/rstats/programming.html#tidyverse"><strong>整然データ</strong></a>。<br>
+例: <code>mpg</code>, <code>mtcars</code>, <code>diamonds</code></p>
 
-<dl>
-<dt><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">回帰曲線</a></dt>
-<dd><code>gp + geom_smooth(method=glm, method.args=list(family=poisson), se=FALSE)</code></dd>
-<dt><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">切片と傾きで直線を描く</a></dt>
-<dd><code>gp + geom_abline(intercept=3, slope=5)</code></dd>
-<dd><code>gp + geom_hline(yintercept=7) + geom_vline(xintercept=11)</code></dd>
-<dt><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html">始点と終点で曲線や矢印を描く</a></dt>
-<dd><code>gp + geom_curve(aes(x, y, xend, yend), curvature = -0.2)</code></dd>
-<dd><code>gp + geom_segment(aes(x, y, xend, yend), arrow=arrow())</code></dd>
-<dd>矢印の調整は <a href="https://www.rdocumentation.org/packages/grid/topics/arrow"><code>grid::arrow()</code></a></dd>
-<dt><a href="https://ggplot2.tidyverse.org/reference/annotate.html">文字列や図形を書き加える</a></dt>
-<dd><code>gp + annotate(&quot;text&quot;, x=1:4, y=4:1, label=sprintf(&quot;x = %d&quot;, 1:4))</code></dd>
-<dd>テーマの <code>base_family</code> は引き継がれないので <code>family=</code> で指定すべし。</dd>
-<dd>数式を表示するには <code>label=&quot;italic(N[t])&quot;</code> のような文字列で渡して <code>parse=TRUE</code>。</dd>
-<dd>データ点に対応する文字列を添えるには
-<code>gp + geom_text(aes(label=foo))</code> のほうが適している。
-オプションで <code>nudge_x=2, nudge_y=2</code> などとすれば点と重ならないようにずらせる。
-<a href="https://ggplot2.tidyverse.org/reference/position_nudge.html"><code>position_nudge()</code></a></dd>
-</dl>
+<h2 id="aesthetic-mapping-https-ggplot2-tidyverse-org-reference-aes-group-order-html"><a href="https://ggplot2.tidyverse.org/reference/aes_group_order.html">Aesthetic mapping</a></h2>
 
-<h2 id="変数によってグループ分け-https-ggplot2-tidyverse-org-reference-aes-group-order-html"><a href="https://ggplot2.tidyverse.org/reference/aes_group_order.html">変数によってグループ分け</a></h2>
-
-<p><code>aes(colour = Species)</code> のように <code>aes()</code> 内で列名を指定すると、
+<p>データと見せ方を紐付ける。
+<code>aes(colour = Species)</code> のように <code>aes()</code> 内で列名を指定すると、
 その変数に応じて色やサイズなどを変えることができる。
 言い換えると、データの値を色やサイズに変換する(スケールする)ことに相当する。
 <code>aes()</code> の外で指定するとデータによらず全体に反映される:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># サイズは常に3、色は species という列のデータによって変える</span>
-gp <span class="o">+</span> geom_point<span class="p">(</span>aes<span class="p">(</span>colour <span class="o">=</span> species<span class="p">),</span> size <span class="o">=</span> <span class="m">3</span><span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># データによって点のサイズ・色・形を変える</span>
+p0 <span class="o">+</span> geom_point<span class="p">(</span>mapping <span class="o">=</span> aes<span class="p">(</span>x <span class="o">=</span> displ<span class="p">,</span> y <span class="o">=</span> cty<span class="p">,</span> size <span class="o">=</span> cyl<span class="p">,</span>
+                              colour <span class="o">=</span> <span class="kp">class</span><span class="p">,</span> shape <span class="o">=</span> drv<span class="p">))</span>
 
-<span class="c1"># 色は常に赤、サイズは frequency という列の値に比例</span>
-gp <span class="o">+</span> geom_point<span class="p">(</span>aes<span class="p">(</span>size <span class="o">=</span> frequency<span class="p">),</span> colour <span class="o">=</span> <span class="s">&#34;red&#34;</span><span class="p">)</span></code></pre></div>
+<span class="c1"># サイズは常に6、色はオレンジ、不透明度は0.4</span>
+p0 <span class="o">+</span> geom_point<span class="p">(</span>mapping <span class="o">=</span> aes<span class="p">(</span>x <span class="o">=</span> displ<span class="p">,</span> y <span class="o">=</span> cty<span class="p">),</span>
+                size <span class="o">=</span> <span class="m">6</span><span class="p">,</span> colour <span class="o">=</span> <span class="s">&#34;darkorange&#34;</span><span class="p">,</span> alpha <span class="o">=</span> <span class="m">0.4</span><span class="p">)</span></code></pre></div>
 <ul>
 <li><a href="https://ggplot2.tidyverse.org/reference/aes_colour_fill_alpha.html">色・透明度を変える</a>
 
@@ -244,7 +178,7 @@ gp <span class="o">+</span> geom_point<span class="p">(</span>aes<span class="p"
 
 <p>変数をどうやって色やサイズに反映させるか、
 各項目に対応する <code>scale_*()</code> 関数で調整する。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">gp <span class="o">+</span> geom_point<span class="p">(</span>aes<span class="p">(</span>colour <span class="o">=</span> species<span class="p">))</span> <span class="o">+</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">p0 <span class="o">+</span> geom_point<span class="p">(</span>aes<span class="p">(</span>x <span class="o">=</span> displ<span class="p">,</span> y <span class="o">=</span> cty<span class="p">,</span> colour <span class="o">=</span> <span class="kp">class</span><span class="p">))</span> <span class="o">+</span>
   scale_colour_brewer<span class="p">(</span>palette <span class="o">=</span> <span class="s">&#34;Spectral&#34;</span><span class="p">)</span></code></pre></div>
 <dl>
 <dt><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html"><code>scale_*_brewer</code></a></dt>
@@ -306,7 +240,8 @@ gp <span class="o">+</span> geom_point<span class="p">(</span>aes<span class="p"
 
 <h3 id="変数によってパネルを分割する">変数によってパネルを分割する</h3>
 
-<p>年ごとや種ごとに傾向を見たいときなど、データに応じてパネルを分割して並べる。</p>
+<p>多変量データを俯瞰するには、データに応じたパネル分割も便利。
+色・サイズなどと合わせれば、x軸y軸プラス3次元程度はパッと可視化できることになる。</p>
 
 <dl>
 <dt><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html"><code>facet_wrap()</code></a></dt>
@@ -316,17 +251,16 @@ gp <span class="o">+</span> geom_point<span class="p">(</span>aes<span class="p"
            as.table<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> <span class="kr">switch</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> drop<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span>
            dir<span class="o">=</span><span class="s">&#39;h&#39;</span><span class="p">,</span> strip.position<span class="o">=</span><span class="s">&#39;top&#39;</span><span class="p">)</span>
 
-ggplot<span class="p">(</span>iris<span class="p">,</span> aes<span class="p">(</span>Petal.Length<span class="p">,</span> Sepal.Length<span class="p">))</span> <span class="o">+</span> geom_point<span class="p">()</span> <span class="o">+</span>
-  facet_wrap<span class="p">(</span><span class="o">~</span>Species<span class="p">,</span> nrow<span class="o">=</span><span class="m">2</span><span class="p">)</span></code></pre></div></dd>
+p1 <span class="o">+</span> facet_wrap<span class="p">(</span><span class="o">~</span> <span class="kp">class</span><span class="p">,</span> ncol <span class="o">=</span> <span class="m">4L</span><span class="p">)</span></code></pre></div></dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html"><code>facet_grid()</code></a></dt>
 <dd><p>2変数で分割して縦横に並べる</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">facet_grid<span class="p">(</span>facets<span class="p">,</span> margins<span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span> scales<span class="o">=</span><span class="s">&#39;fixed&#39;</span><span class="p">,</span> space<span class="o">=</span><span class="s">&#39;fixed&#39;</span><span class="p">,</span>
            shrink<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> labeller<span class="o">=</span><span class="s">&#39;label_value&#39;</span><span class="p">,</span>
            as.table<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> <span class="kr">switch</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> drop<span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
 
-ggplot<span class="p">(</span>iris<span class="p">,</span> aes<span class="p">(</span>Petal.Length<span class="p">,</span> Sepal.Length<span class="p">))</span> <span class="o">+</span> geom_point<span class="p">()</span> <span class="o">+</span>
-  facet_grid<span class="p">(</span><span class="m">.</span> <span class="o">~</span> Species<span class="p">)</span></code></pre></div>
-<p>1変数でいい場合は片方をドット <code>.</code> で固定できる。</p></dd>
+p1 <span class="o">+</span> facet_grid<span class="p">(</span>cyl <span class="o">~</span> <span class="kp">class</span><span class="p">)</span></code></pre></div>
+<p>3変数以上にしたい場合は <code>+</code> で追加できる。
+1変数でいい場合は <code>. ~ class</code> のように片方をドットにする。</p></dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/labellers.html">ファセットラベルの調整</a></dt>
 <dd><p>デフォルトでは値だけがfacetラベルに表示されるが、
 変数名を同時に表示したり、数式を表示したりもできる。
@@ -343,7 +277,7 @@ ggplot内部で <code>stat_*()</code> を通して行われる。
 <code>..count..</code> や <code>..density..</code> みたいに
 ピリオドで囲まれた特殊な名前で参照することができる。</p>
 
-<h2 id="軸やタイトルを変更">軸やタイトルを変更</h2>
+<h2 id="座標軸やタイトルを変更">座標軸やタイトルを変更</h2>
 
 <dl>
 <dt><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">軸の区切りを変更したり対数にしたり</a></dt>
@@ -544,17 +478,95 @@ units で使いそうなのは
 <code>theme_bw(base_size = 42)</code> や各要素の <code>element_text(size = 42)</code> を使う。</li>
 <li>scaleやunitsを使うのは慣れてからで十分。</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># 7inch x 300dpi = 2100 ピクセル四方 (デフォルト)</span>
-ggsave<span class="p">(</span><span class="s">&#39;iris1.png&#39;</span><span class="p">,</span> gp<span class="p">)</span> <span class="c1"># width = 7, height = 7, dpi = 300</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># 7inch x 300dpi = 2100px四方 (デフォルト)</span>
+ggsave<span class="p">(</span><span class="s">&#34;mpg1.png&#34;</span><span class="p">,</span> p1<span class="p">)</span> <span class="c1"># width = 7, height = 7, dpi = 300</span>
 
-<span class="c1"># 4inch x 300dpi = 1200 ピクセル四方</span>
-ggsave<span class="p">(</span><span class="s">&#39;iris2.png&#39;</span><span class="p">,</span> gp<span class="p">,</span> width <span class="o">=</span> <span class="m">4</span><span class="p">,</span> height <span class="o">=</span> <span class="m">4</span><span class="p">)</span> <span class="c1"># dpi = 300</span>
+<span class="c1"># 4     x 300    = 1200  全体7/4倍ズーム</span>
+ggsave<span class="p">(</span><span class="s">&#34;mpg2.png&#34;</span><span class="p">,</span> p1<span class="p">,</span> width <span class="o">=</span> <span class="m">4</span><span class="p">,</span> height <span class="o">=</span> <span class="m">4</span><span class="p">)</span> <span class="c1"># dpi = 300</span>
 
-<span class="c1"># 同じ1200ピクセル四方で、軸ラベルなどの文字だけ大きく</span>
-ggsave<span class="p">(</span><span class="s">&#39;iris3.png&#39;</span><span class="p">,</span> gp <span class="o">+</span> theme_bw<span class="p">(</span>base_size <span class="o">=</span> <span class="m">22</span><span class="p">),</span> width <span class="o">=</span> <span class="m">4</span><span class="p">,</span> height <span class="o">=</span> <span class="m">4</span><span class="p">)</span>
+<span class="c1"># 2     x 600    = 1200  全体をさらに2倍ズーム</span>
+ggsave<span class="p">(</span><span class="s">&#34;mpg3.png&#34;</span><span class="p">,</span> p1<span class="p">,</span> width <span class="o">=</span> <span class="m">2</span><span class="p">,</span> height <span class="o">=</span> <span class="m">2</span><span class="p">,</span> dpi <span class="o">=</span> <span class="m">600</span><span class="p">)</span>
 
-<span class="c1"># 同じ1200ピクセル四方で、点や線なども大きく</span>
-ggsave<span class="p">(</span><span class="s">&#39;iris4.png&#39;</span><span class="p">,</span> gp<span class="p">,</span> width <span class="o">=</span> <span class="m">2</span><span class="p">,</span> height <span class="o">=</span> <span class="m">2</span><span class="p">,</span> dpi <span class="o">=</span> <span class="m">600</span><span class="p">)</span></code></pre></div>
+<span class="c1"># 4     x 300    = 1200  テーマを使って文字だけ拡大</span>
+ggsave<span class="p">(</span><span class="s">&#34;mpg4.png&#34;</span><span class="p">,</span> p1 <span class="o">+</span> theme_bw<span class="p">(</span>base_size <span class="o">=</span> <span class="m">22</span><span class="p">),</span> width <span class="o">=</span> <span class="m">4</span><span class="p">,</span> height <span class="o">=</span> <span class="m">4</span><span class="p">)</span>
+<span class="c1"># 7inch x 300dpi = 2100px四方 (デフォルト)</span>
+ggsave<span class="p">(</span><span class="s">&#34;mpg1.png&#34;</span><span class="p">,</span> p1<span class="p">)</span> <span class="c1"># width = 7, height = 7, dpi = 300</span>
+<span class="c1"># 4     x 300    = 1200  全体7/4倍ズーム</span>
+ggsave<span class="p">(</span><span class="s">&#34;mpg2.png&#34;</span><span class="p">,</span> p1<span class="p">,</span> width <span class="o">=</span> <span class="m">4</span><span class="p">,</span> height <span class="o">=</span> <span class="m">4</span><span class="p">)</span> <span class="c1"># dpi = 300</span>
+<span class="c1"># 2     x 600    = 1200  全体をさらに2倍ズーム</span>
+ggsave<span class="p">(</span><span class="s">&#34;mpg3.png&#34;</span><span class="p">,</span> p1<span class="p">,</span> width <span class="o">=</span> <span class="m">2</span><span class="p">,</span> height <span class="o">=</span> <span class="m">2</span><span class="p">,</span> dpi <span class="o">=</span> <span class="m">600</span><span class="p">)</span>
+<span class="c1"># 4     x 300    = 1200  テーマを使って文字だけ拡大</span>
+ggsave<span class="p">(</span><span class="s">&#34;mpg4.png&#34;</span><span class="p">,</span> p1 <span class="o">+</span> theme_bw<span class="p">(</span>base_size <span class="o">=</span> <span class="m">22</span><span class="p">),</span> width <span class="o">=</span> <span class="m">4</span><span class="p">,</span> height <span class="o">=</span> <span class="m">4</span><span class="p">)</span></code></pre></div>
+<h2 id="プロットの種類">プロットの種類</h2>
+
+<dl>
+<dt><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">散布図</a></dt>
+<dd><code>gp + geom_point(size=2, alpha=0.3)</code></dd>
+<dd>重なった点をランダムにばらかしたいときは
+<a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html"><code>geom_jitter()</code></a></dd>
+<dd><a href="https://ggplot2.tidyverse.org/articles/ggplot2-specs.html#sec:shape-spec">点の形(shape)一覧</a></dd>
+<dt><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">折れ線グラフ</a></dt>
+<dd><code>gp + geom_path(size=2, linetype=&quot;dashed&quot;)</code> データ順に結ぶ</dd>
+<dd><code>gp + geom_line()</code> x軸上の順で結ぶ</dd>
+<dd><code>gp + geom_step()</code> 階段状に結ぶ</dd>
+<dd><a href="https://ggplot2.tidyverse.org/articles/ggplot2-specs.html#sec:line-type-spec">線の種類(linetype)一覧</a></dd>
+<dt><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">面グラフ</a></dt>
+<dd><code>gp + geom_ribbon()</code> &mdash; yminからymaxの面</dd>
+<dd><code>gp + geom_area()</code> &mdash; 0からyの面</dd>
+<dt><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">ヒストグラム、密度曲線</a></dt>
+<dd><code>gp + geom_histogram()</code> &mdash; 棒グラフ(連続値を<code>stat_bin()</code> で区切って)</dd>
+<dd><code>gp + geom_bar()</code> &mdash; 棒グラフ(離散値を<code>stat_count()</code>で数えて)</dd>
+<dd><code>gp + geom_freqpoly()</code> &mdash; 折れ線</dd>
+<dd><code>gp + geom_density()</code> &mdash; 密度推定されたスムーズな線</dd>
+<dd><code>gp + geom_bin2d()</code> &mdash; 二次元ヒストグラム</dd>
+<dd><code>gp + geom_hex()</code> &mdash; 六角形版二次元ヒストグラム</dd>
+<dt><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">棒グラフ</a></dt>
+<dd><code>gp + geom_col()</code></dd>
+<dd>グループ分けする場合のオプション:
+
+<ul>
+<li><a href="https://ggplot2.tidyverse.org/reference/position_stack.html"><code>position='stack'</code></a>:
+縦に積み重ねる (デフォルト)</li>
+<li><a href="https://ggplot2.tidyverse.org/reference/position_dodge.html"><code>position='dodge'</code></a>:
+横に並べる</li>
+<li><code>position='fill'</code>: 縦に積み重ね、高さを1に揃えて割合を示す</li>
+</ul></dd>
+<dt><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">箱ひげ図</a></dt>
+<dd><code>gp + geom_boxplot()</code></dd>
+<dd><code>gp + geom_violin()</code></dd>
+<dt><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html">ヒートマップ</a></dt>
+<dd><code>gp + geom_tile(aes(fill=z))</code></dd>
+<dd><code>gp + geom_raster(aes(fill=z))</code> &mdash; 各タイルの大きさを揃える制約のため高速</dd>
+<dt><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">エラーバー</a></dt>
+<dd><code>gp + geom_errorbar(aes(ymax = y + se, ymin = y - se), width = 0.1)</code></dd>
+<dd><code>gp + geom_linerange(...)</code></dd>
+<dd><code>gp + geom_pointrange(...)</code></dd>
+<dt><a href="https://ggplot2.tidyverse.org/reference/stat_function.html">関数</a></dt>
+<dd><code>ggplot(data.frame(x=c(-4, 4)), aes(x)) + stat_function(fun=dnorm, args=c(0, 1), n=200)</code></dd>
+</dl>
+
+<hr>
+
+<dl>
+<dt><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">回帰曲線</a></dt>
+<dd><code>gp + geom_smooth(method=glm, method.args=list(family=poisson), se=FALSE)</code></dd>
+<dt><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">切片と傾きで直線を描く</a></dt>
+<dd><code>gp + geom_abline(intercept=3, slope=5)</code></dd>
+<dd><code>gp + geom_hline(yintercept=7) + geom_vline(xintercept=11)</code></dd>
+<dt><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html">始点と終点で曲線や矢印を描く</a></dt>
+<dd><code>gp + geom_curve(aes(x, y, xend, yend), curvature = -0.2)</code></dd>
+<dd><code>gp + geom_segment(aes(x, y, xend, yend), arrow=arrow())</code></dd>
+<dd>矢印の調整は <a href="https://www.rdocumentation.org/packages/grid/topics/arrow"><code>grid::arrow()</code></a></dd>
+<dt><a href="https://ggplot2.tidyverse.org/reference/annotate.html">文字列や図形を書き加える</a></dt>
+<dd><code>gp + annotate(&quot;text&quot;, x=1:4, y=4:1, label=sprintf(&quot;x = %d&quot;, 1:4))</code></dd>
+<dd>テーマの <code>base_family</code> は引き継がれないので <code>family=</code> で指定すべし。</dd>
+<dd>数式を表示するには <code>label=&quot;italic(N[t])&quot;</code> のような文字列で渡して <code>parse=TRUE</code>。</dd>
+<dd>データ点に対応する文字列を添えるには
+<code>gp + geom_text(aes(label=foo))</code> のほうが適している。
+オプションで <code>nudge_x=2, nudge_y=2</code> などとすれば点と重ならないようにずらせる。
+<a href="https://ggplot2.tidyverse.org/reference/position_nudge.html"><code>position_nudge()</code></a></dd>
+</dl>
+
 <h2 id="extensions">Extensions</h2>
 
 <ul>
@@ -594,7 +606,7 @@ ggsave<span class="p">(</span><span class="s">&#39;multi_page.pdf&#39;</span><sp
 
 <p>ggplotを学術論文向けにカスタマイズしやすくする。
 主な利用目的はgridExtraと同じでggplotを並べる機能。
-ABCのようなラベルをオプションで簡単に付けられるのが良い。</p>
+論文figureのようなA, B, Cラベルをオプションで簡単に付けられるのが良い。</p>
 
 <dl>
 <dt><code>cowplot::plot_grid()</code></dt>
@@ -626,6 +638,11 @@ ABCのようなラベルをオプションで簡単に付けられるのが良�
 
 <p>パッケージ読み込みと同時に勝手にテーマを変更したり、
 <code>ggsave()</code> 関数を上書きしたりという問題が過去にはあったが、今は大丈夫。</p>
+
+<p>できあがった図を並べるための新しいパッケージとして
+<a href="https://github.com/thomasp85/patchwork">patchwork</a>
+がすごくエレガントで期待大。
+ただし、演算子を多用するスタイルは忘れやすく検索しにくい諸刃の剣。</p>
 
 <h2 id="関連書籍">関連書籍</h2>
 
