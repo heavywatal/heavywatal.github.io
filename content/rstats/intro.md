@@ -22,12 +22,17 @@ tags = ["r"]
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/r)
 - [r-wakalang](https://github.com/tokyor/r-wakalang) --- Slack上の日本語コミュニティ
 
+## R環境のインストール
 
-## RStudioを使う
+R本体
+: コマンドを解釈して実行するコア部分
+: よく使われる関数なども標準パッケージとして同梱
+: https://cran.rstudio.com/ からダウンロードしてインストール
 
-Rの実行方法はいくつかあるが、これから始めるひとは
-[RStudio](https://www.rstudio.com/) を使うとよい。
-
+RStudio Desktop
+: Rをより快適に使うための総合開発環境(IDE)
+: 必須ではないけど、結構みんな使ってるらしい
+: https://www.rstudio.com/ からダウンロードしてインストール
 
 ## スクリプトを保存
 
@@ -118,8 +123,9 @@ Error: could not find function "stepAIC"
 Rの中から下記のようなコマンドで一括インストール・読み込みできる。
 
 ```r
-> install.packages('tidyverse')
-> library(tidyverse)
+install.packages("readr")  # 一度やればOK
+library(readr)             # 読み込みはRを起動するたびに必要
+update.packages()          # たまには更新しよう
 ```
 
 そのほか
@@ -131,15 +137,19 @@ Rの中から下記のようなコマンドで一括インストール・読み�
 
 ## 作業ディレクトリ
 
-R ではどこかのディレクトリ (= フォルダ) に身をおいて作業する。
-[ファイルを開く]({{< relref "readr.md" >}})ときなどに
-R がファイルを探すのはこの作業ディレクトリである。
+Rではどこかのディレクトリ(=フォルダ)に身をおいて作業する。
+[データファイルを読み込む]({{< relref "readr.md" >}})ときなどに
+Rがファイルを探すのはこの作業ディレクトリである。
 `No such file or directory` と怒られる場合は、
 作業ディレクトリとファイルの場所が合っていないかったり、
 ファイル名のタイプミスだったりすることが多い。
 
+作業ディレクトリは解析の途中でホイホイ移動せず、
+プロジェクトの最上階などに固定しておいて、
+そこからの相対パスでファイルを読み書きするのが分かりやすくて安全。
+
 `getwd()`, `setwd()`
-:   現在地の working directory を get/set する関数
+:   現在地の **w**orking **d**irectory をget/setする関数。
 
     ```r
     > getwd()
@@ -176,7 +186,7 @@ R がファイルを探すのはこの作業ディレクトリである。
     ```
 
 `help.start()`
-:   組み込みヘルプをウェブブラウザで開く。
+:   組み込みヘルプをブラウザで開く。
     インストール済みパッケージのヘルプも Packages のリンクから見られる。
 
 `attributes(obj)`, `str(obj)`
