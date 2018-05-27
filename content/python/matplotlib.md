@@ -231,7 +231,7 @@ def my_scatter(x, y, data, ax):
 FigureとAxisをいい感じに初期化して、関連するデータを縦・横・色の方向に並べる土台。
 これにAxis-level plotを乗せるところまでショートカットする高級関数がFigure-level plot。
 できあがったGridクラスの`.set()`系メソッドとか`.fig`プロパティを通じていろいろ調整できる。
-これをまた別のグリッドに埋め込むというRのglobのような操作はたぶんできない。
+これをまた別のグリッドに埋め込むというRのgrobのような操作はたぶんできない。
 
 #### [`sns.FacetGrid`](https://seaborn.pydata.org/generated/seaborn.FacetGrid.html)
 
