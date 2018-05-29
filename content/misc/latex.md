@@ -1,8 +1,9 @@
 +++
-title = 'TeX'
+title = 'LaTeX'
 tags = ["writing"]
+aliases = ["/dev/tex.html"]
 [menu.main]
-  parent = "dev"
+  parent = "misc"
 +++
 
 ## 基本操作
