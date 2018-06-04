@@ -111,12 +111,11 @@ tidyr — シンプルなデータ変形ツール
 </ul>
 
 <p>下記のコード例で使うデータ</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> iris <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">(</span><span class="m">3L</span><span class="p">)</span> <span class="o">%&gt;%</span> rownames_to_column<span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">)</span>
-
-  id Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-<span class="m">1</span>  <span class="m">1</span>          <span class="m">5.1</span>         <span class="m">3.5</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  setosa
-<span class="m">2</span>  <span class="m">2</span>          <span class="m">4.9</span>         <span class="m">3.0</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  setosa
-<span class="m">3</span>  <span class="m">3</span>          <span class="m">4.7</span>         <span class="m">3.2</span>          <span class="m">1.3</span>         <span class="m">0.2</span>  setosa</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">(</span><span class="m">3L</span><span class="p">)</span> <span class="o">%&gt;%</span> rownames_to_column<span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">)</span>
+<span class="c1">##   id Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
+<span class="c1">## 1  1          5.1         3.5          1.4         0.2  setosa</span>
+<span class="c1">## 2  2          4.9         3.0          1.4         0.2  setosa</span>
+<span class="c1">## 3  3          4.7         3.2          1.3         0.2  setosa</span></code></pre></div>
 <p>パイプ演算子 <code>%&gt;%</code> については<a href="/rstats/dplyr.html">dplyr</a>を参照。</p>
 
 <h2 id="tidyr-gather-で縦長にする"><code>tidyr::gather()</code> で縦長にする</h2>
@@ -141,22 +140,21 @@ tidyr — シンプルなデータ変形ツール
 
 <p>e.g., <code>Species</code> 以外の列について、
 元の列名を <code>kagi</code> 、値を <code>atai</code> に格納した縦長の表に変形</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> iris <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">(</span><span class="m">3L</span><span class="p">)</span> <span class="o">%&gt;%</span> rownames_to_column<span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">)</span> <span class="o">%&gt;%</span>
-    gather<span class="p">(</span>kagi<span class="p">,</span> atai<span class="p">,</span> <span class="o">-</span>id<span class="p">,</span> <span class="o">-</span>Species<span class="p">)</span>
-
-   id Species         kagi atai
-<span class="m">1</span>   <span class="m">1</span>  setosa Sepal.Length  <span class="m">5.1</span>
-<span class="m">2</span>   <span class="m">2</span>  setosa Sepal.Length  <span class="m">4.9</span>
-<span class="m">3</span>   <span class="m">3</span>  setosa Sepal.Length  <span class="m">4.7</span>
-<span class="m">4</span>   <span class="m">1</span>  setosa  Sepal.Width  <span class="m">3.5</span>
-<span class="m">5</span>   <span class="m">2</span>  setosa  Sepal.Width  <span class="m">3.0</span>
-<span class="m">6</span>   <span class="m">3</span>  setosa  Sepal.Width  <span class="m">3.2</span>
-<span class="m">7</span>   <span class="m">1</span>  setosa Petal.Length  <span class="m">1.4</span>
-<span class="m">8</span>   <span class="m">2</span>  setosa Petal.Length  <span class="m">1.4</span>
-<span class="m">9</span>   <span class="m">3</span>  setosa Petal.Length  <span class="m">1.3</span>
-<span class="m">10</span>  <span class="m">1</span>  setosa  Petal.Width  <span class="m">0.2</span>
-<span class="m">11</span>  <span class="m">2</span>  setosa  Petal.Width  <span class="m">0.2</span>
-<span class="m">12</span>  <span class="m">3</span>  setosa  Petal.Width  <span class="m">0.2</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">(</span><span class="m">3L</span><span class="p">)</span> <span class="o">%&gt;%</span> rownames_to_column<span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  gather<span class="p">(</span>kagi<span class="p">,</span> atai<span class="p">,</span> <span class="o">-</span>id<span class="p">,</span> <span class="o">-</span>Species<span class="p">)</span>
+<span class="c1">##    id Species         kagi atai</span>
+<span class="c1">## 1   1  setosa Sepal.Length  5.1</span>
+<span class="c1">## 2   2  setosa Sepal.Length  4.9</span>
+<span class="c1">## 3   3  setosa Sepal.Length  4.7</span>
+<span class="c1">## 4   1  setosa  Sepal.Width  3.5</span>
+<span class="c1">## 5   2  setosa  Sepal.Width  3.0</span>
+<span class="c1">## 6   3  setosa  Sepal.Width  3.2</span>
+<span class="c1">## 7   1  setosa Petal.Length  1.4</span>
+<span class="c1">## 8   2  setosa Petal.Length  1.4</span>
+<span class="c1">## 9   3  setosa Petal.Length  1.3</span>
+<span class="c1">## 10  1  setosa  Petal.Width  0.2</span>
+<span class="c1">## 11  2  setosa  Petal.Width  0.2</span>
+<span class="c1">## 12  3  setosa  Petal.Width  0.2</span></code></pre></div>
 <h2 id="tidyr-spread-で横長にする"><code>tidyr::spread()</code> で横長にする</h2>
 
 <p><code>tidyr::gather()</code> の逆で、縦長のdata.frameを横長に変形する。
@@ -181,14 +179,13 @@ IDとなるような列がないと <code>Error: Duplicate identifiers</code> �
 </dl>
 
 <p>e.g., <code>kagi</code> 内の文字列を新たな列名として横長の表に変形して <code>atai</code> を移す</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> iris <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">(</span><span class="m">3L</span><span class="p">)</span> <span class="o">%&gt;%</span> rownames_to_column<span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">)</span> <span class="o">%&gt;%</span>
-    gather<span class="p">(</span>kagi<span class="p">,</span> atai<span class="p">,</span> <span class="o">-</span>id<span class="p">,</span> <span class="o">-</span>Species<span class="p">)</span> <span class="o">%&gt;%</span>
-    spread<span class="p">(</span>kagi<span class="p">,</span> atai<span class="p">)</span>
-
-  id Species Petal.Length Petal.Width Sepal.Length Sepal.Width
-<span class="m">1</span>  <span class="m">1</span>  setosa          <span class="m">1.4</span>         <span class="m">0.2</span>          <span class="m">5.1</span>         <span class="m">3.5</span>
-<span class="m">2</span>  <span class="m">2</span>  setosa          <span class="m">1.4</span>         <span class="m">0.2</span>          <span class="m">4.9</span>         <span class="m">3.0</span>
-<span class="m">3</span>  <span class="m">3</span>  setosa          <span class="m">1.3</span>         <span class="m">0.2</span>          <span class="m">4.7</span>         <span class="m">3.2</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">(</span><span class="m">3L</span><span class="p">)</span> <span class="o">%&gt;%</span> rownames_to_column<span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  gather<span class="p">(</span>kagi<span class="p">,</span> atai<span class="p">,</span> <span class="o">-</span>id<span class="p">,</span> <span class="o">-</span>Species<span class="p">)</span> <span class="o">%&gt;%</span>
+  spread<span class="p">(</span>kagi<span class="p">,</span> atai<span class="p">)</span>
+<span class="c1">##   id Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span>
+<span class="c1">## 1  1  setosa          1.4         0.2          5.1         3.5</span>
+<span class="c1">## 2  2  setosa          1.4         0.2          4.9         3.0</span>
+<span class="c1">## 3  3  setosa          1.3         0.2          4.7         3.2</span></code></pre></div>
 <h2 id="nested-data-frame-入れ子構造">Nested data.frame &mdash; 入れ子構造</h2>
 
 <h3 id="tidyr-nest-data-key-data"><code>tidyr::nest(data, ..., .key=data)</code></h3>
@@ -253,23 +250,22 @@ list of data.framesだけでなく、list of vectorsとかでもよい。</p>
 </dl>
 
 <p><code>kagi</code> 列を <code>part</code>, <code>axis</code> という2列に分割</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> iris <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">(</span><span class="m">3L</span><span class="p">)</span> <span class="o">%&gt;%</span> rownames_to_column<span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">)</span> <span class="o">%&gt;%</span>
-    gather<span class="p">(</span>kagi<span class="p">,</span> atai<span class="p">,</span> <span class="o">-</span>id<span class="p">,</span> <span class="o">-</span>Species<span class="p">)</span> <span class="o">%&gt;%</span>
-    separate<span class="p">(</span>kagi<span class="p">,</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;part&#39;</span><span class="p">,</span> <span class="s">&#39;axis&#39;</span><span class="p">))</span>
-
-   id Species  part   axis atai
-<span class="m">1</span>   <span class="m">1</span>  setosa Sepal Length  <span class="m">5.1</span>
-<span class="m">2</span>   <span class="m">2</span>  setosa Sepal Length  <span class="m">4.9</span>
-<span class="m">3</span>   <span class="m">3</span>  setosa Sepal Length  <span class="m">4.7</span>
-<span class="m">4</span>   <span class="m">1</span>  setosa Sepal  Width  <span class="m">3.5</span>
-<span class="m">5</span>   <span class="m">2</span>  setosa Sepal  Width  <span class="m">3.0</span>
-<span class="m">6</span>   <span class="m">3</span>  setosa Sepal  Width  <span class="m">3.2</span>
-<span class="m">7</span>   <span class="m">1</span>  setosa Petal Length  <span class="m">1.4</span>
-<span class="m">8</span>   <span class="m">2</span>  setosa Petal Length  <span class="m">1.4</span>
-<span class="m">9</span>   <span class="m">3</span>  setosa Petal Length  <span class="m">1.3</span>
-<span class="m">10</span>  <span class="m">1</span>  setosa Petal  Width  <span class="m">0.2</span>
-<span class="m">11</span>  <span class="m">2</span>  setosa Petal  Width  <span class="m">0.2</span>
-<span class="m">12</span>  <span class="m">3</span>  setosa Petal  Width  <span class="m">0.2</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">(</span><span class="m">3L</span><span class="p">)</span> <span class="o">%&gt;%</span> rownames_to_column<span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  gather<span class="p">(</span>kagi<span class="p">,</span> atai<span class="p">,</span> <span class="o">-</span>id<span class="p">,</span> <span class="o">-</span>Species<span class="p">)</span> <span class="o">%&gt;%</span>
+  separate<span class="p">(</span>kagi<span class="p">,</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;part&#39;</span><span class="p">,</span> <span class="s">&#39;axis&#39;</span><span class="p">))</span>
+<span class="c1">##    id Species  part   axis atai</span>
+<span class="c1">## 1   1  setosa Sepal Length  5.1</span>
+<span class="c1">## 2   2  setosa Sepal Length  4.9</span>
+<span class="c1">## 3   3  setosa Sepal Length  4.7</span>
+<span class="c1">## 4   1  setosa Sepal  Width  3.5</span>
+<span class="c1">## 5   2  setosa Sepal  Width  3.0</span>
+<span class="c1">## 6   3  setosa Sepal  Width  3.2</span>
+<span class="c1">## 7   1  setosa Petal Length  1.4</span>
+<span class="c1">## 8   2  setosa Petal Length  1.4</span>
+<span class="c1">## 9   3  setosa Petal Length  1.3</span>
+<span class="c1">## 10  1  setosa Petal  Width  0.2</span>
+<span class="c1">## 11  2  setosa Petal  Width  0.2</span>
+<span class="c1">## 12  3  setosa Petal  Width  0.2</span></code></pre></div>
 <p>逆をやるのが <code>tidyr::unite(data, col, ..., sep='_', remove=TRUE)</code> 。</p>
 
 <p>行方向に分割する <code>tidyr::separate_rows(data, ..., sep, convert)</code> もある。</p>

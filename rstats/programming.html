@@ -174,14 +174,14 @@ pnorm<span class="p">(</span><span class="m">10</span><span class="p">,</span> <
 <dt><code>r___(n, ...)</code></dt>
 <dd><p>乱数を <code>n</code> 個生成する</p></dd>
 </dl>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> dnorm<span class="p">(</span><span class="kt">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1.96</span><span class="p">))</span>
-<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="m">0.39894228</span> <span class="m">0.05844094</span>
-<span class="o">&gt;</span> pnorm<span class="p">(</span><span class="kt">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1.96</span><span class="p">))</span>
-<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="m">0.5000000</span> <span class="m">0.9750021</span>
-<span class="o">&gt;</span> qnorm<span class="p">(</span><span class="kt">c</span><span class="p">(</span><span class="m">0.5</span><span class="p">,</span> <span class="m">0.975</span><span class="p">))</span>
-<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="m">0.000000</span> <span class="m">1.959964</span>
-<span class="o">&gt;</span> rnorm<span class="p">(</span><span class="m">4</span><span class="p">)</span>
-<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="m">-1.77327259</span>  <span class="m">0.95713346</span>  <span class="m">0.27941121</span>  <span class="m">0.08387267</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">dnorm<span class="p">(</span><span class="kt">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1.96</span><span class="p">))</span>
+<span class="c1">## [1] 0.39894228 0.05844094</span>
+pnorm<span class="p">(</span><span class="kt">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1.96</span><span class="p">))</span>
+<span class="c1">## [1] 0.5000000 0.9750021</span>
+qnorm<span class="p">(</span><span class="kt">c</span><span class="p">(</span><span class="m">0.5</span><span class="p">,</span> <span class="m">0.975</span><span class="p">))</span>
+<span class="c1">## [1] 0.000000 1.959964</span>
+rnorm<span class="p">(</span><span class="m">4</span><span class="p">)</span>
+<span class="c1">## [1] -1.77327259  0.95713346  0.27941121  0.08387267</span></code></pre></div>
 <h3 id="分布の種類">分布の種類</h3>
 
 <p>離散</p>
@@ -262,14 +262,14 @@ fun1 <span class="o">=</span> <span class="kr">function</span><span class="p">(<
 fun2 <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> <span class="kp">substitute</span><span class="p">(</span>x<span class="p">)</span>
 fun3 <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> <span class="kp">deparse</span><span class="p">(</span><span class="kp">substitute</span><span class="p">(</span>x<span class="p">))</span>
 
-<span class="o">&gt;</span> fun1<span class="p">(</span>value<span class="p">)</span>
-<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="m">42</span>
-<span class="o">&gt;</span> fun1<span class="p">(</span><span class="kp">quote</span><span class="p">(</span>value<span class="p">))</span>
-value
-<span class="o">&gt;</span> fun2<span class="p">(</span>value<span class="p">)</span>
-value
-<span class="o">&gt;</span> fun3<span class="p">(</span>value<span class="p">)</span>
-<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="s">&#34;value&#34;</span></code></pre></div>
+fun1<span class="p">(</span>value<span class="p">)</span>
+<span class="c1">## [1] 42</span>
+fun1<span class="p">(</span><span class="kp">quote</span><span class="p">(</span>value<span class="p">))</span>
+<span class="c1">## value</span>
+fun2<span class="p">(</span>value<span class="p">)</span>
+<span class="c1">## value</span>
+fun3<span class="p">(</span>value<span class="p">)</span>
+<span class="c1">## [1] &#34;value&#34;</span></code></pre></div>
 <p>詳しくは non-standard expression (NSE) で調べる:</p>
 
 <ul>
@@ -318,12 +318,12 @@ matrixで済むもの(数値のみの表など)はmatrixで。</li>
 <p>See <a href="/rstats/foreach.html#iterators">foreach #iterators</a></p>
 
 <h3 id="ボトルネックを知る">ボトルネックを知る</h3>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> Rprof<span class="p">()</span>           <span class="c1"># start profiling</span>
-<span class="o">&gt;</span> some_hard_work<span class="p">()</span>
-<span class="o">&gt;</span> Rprof<span class="p">(</span><span class="kc">NULL</span><span class="p">)</span>       <span class="c1"># end profiling</span>
-<span class="o">&gt;</span> summaryRprof<span class="p">()</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">Rprof<span class="p">()</span>           <span class="c1"># start profiling</span>
+some_hard_work<span class="p">()</span>
+Rprof<span class="p">(</span><span class="kc">NULL</span><span class="p">)</span>       <span class="c1"># end profiling</span>
+summaryRprof<span class="p">()</span></code></pre></div>
 <h3 id="実行時間の計測">実行時間の計測</h3>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="kp">system.time</span><span class="p">(</span>測定したいコマンド<span class="p">)</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kp">system.time</span><span class="p">(</span>測定したいコマンド<span class="p">)</span></code></pre></div>
 <h2 id="関連書籍">関連書籍</h2>
 
 <p>統計解析やグラフ描画ではなく、
