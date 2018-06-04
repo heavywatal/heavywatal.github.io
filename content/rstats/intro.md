@@ -90,10 +90,10 @@ R と一緒にインストールされるが、
 例えば `MASS` に入ってる `stepAIC()` を使うには
 
 ```r
-> stepAIC(model)
-Error: could not find function "stepAIC"
-> library(MASS)
-> stepAIC(model)  # OK
+stepAIC(model)
+## Error: could not find function "stepAIC"
+library(MASS)
+stepAIC(model)  # OK
 ```
 
 ほかに
@@ -152,11 +152,11 @@ Rがファイルを探すのはこの作業ディレクトリである。
 :   現在地の **w**orking **d**irectory をget/setする関数。
 
     ```r
-    > getwd()
-    [1] /Users/watal
-    > setwd("~/Desktop")
-    > getwd()
-    [1] /Users/watal/Desktop
+    getwd()
+    ## [1] /Users/watal
+    setwd("~/Desktop")
+    getwd()
+    ## [1] /Users/watal/Desktop
     ```
 
 `list.files(path = ".", ...)` または `dir(path = ".", ...)`
@@ -164,13 +164,12 @@ Rがファイルを探すのはこの作業ディレクトリである。
     path を省略するとワーキングディレクトリが対象となる
 
     ```r
-    > read.table("mydata.txt", header=TRUE)
-    Warning in file(file, "rt") :
-      cannot open file 'mydata.txt': No such file or directory
-    Error in file(file, "rt") : cannot open the connection
-    > list.files()
-    [1] mydate.txt
-    # ファイル名が微妙に違う!!
+    read.table("mydata.txt", header=TRUE)
+    ## Warning in file(file, "rt") :
+    ##   cannot open file 'mydata.txt': No such file or directory
+    ## Error in file(file, "rt") : cannot open the connection
+    list.files()
+    ## [1] mydate.txt   ファイル名が微妙に違う!!
     ```
 
 ## R で調べる
@@ -181,8 +180,8 @@ Rがファイルを探すのはこの作業ディレクトリである。
     以下の2つは等価
 
     ```r
-    > help(sum)
-    > ?sum
+    help(sum)
+    ?sum
     ```
 
 `help.start()`
@@ -194,30 +193,27 @@ Rがファイルを探すのはこの作業ディレクトリである。
     `$names` に列挙されてる属性はダラー `$` を挟んで取り出せる
 
     ```r
-    > x = rnorm(100)
-    > y = rnorm(100)
-    > mymodel = lm(y ~ x)
-    > attributes(mymodel)
-    $names
-     [1] "coefficients"  "residuals"     "effects"       "rank"
-     [5] "fitted.values" "assign"        "qr"            "df.residual"
-     [9] "xlevels"       "call"          "terms"         "model"
-
-    $class
-    [1] "lm"
-    >
-    > mymodel$coefficients
-    (Intercept)           x
-     -0.1494812   0.1218096
-    >
-    > str(mymodel)
-    List of 12
-     $ coefficients : Named num [1:2] -0.171 -0.198
-      ..- attr(*, "names")= chr [1:2] "(Intercept)" "x"
-     $ residuals    : Named num [1:100] -0.5143 -1.3148 0.1954 1.6039 -0.0875 ...
-      ..- attr(*, "names")= chr [1:100] "1" "2" "3" "4" ...
-     $ effects      : Named num [1:100] 1.2027 2.0571 0.1179 1.8384 -0.0946 ...
-      ..- attr(*, "names")= chr [1:100] "(Intercept)" "x" "" "" ...
+    x = rnorm(100)
+    y = rnorm(100)
+    mymodel = lm(y ~ x)
+    attributes(mymodel)
+    ## $names
+    ##  [1] "coefficients"  "residuals"     "effects"       "rank"
+    ##  [5] "fitted.values" "assign"        "qr"            "df.residual"
+    ##  [9] "xlevels"       "call"          "terms"         "model"
+    ## $class
+    ## [1] "lm"
+    mymodel$coefficients
+    ## (Intercept)           x
+    ##  -0.1494812   0.1218096
+    str(mymodel)
+    ## List of 12
+    ##  $ coefficients : Named num [1:2] -0.171 -0.198
+    ##   ..- attr(*, "names")= chr [1:2] "(Intercept)" "x"
+    ##  $ residuals    : Named num [1:100] -0.5143 -1.3148 0.1954 1.6039 -0.0875 ...
+    ##   ..- attr(*, "names")= chr [1:100] "1" "2" "3" "4" ...
+    ##  $ effects      : Named num [1:100] 1.2027 2.0571 0.1179 1.8384 -0.0946 ...
+    ##   ..- attr(*, "names")= chr [1:100] "(Intercept)" "x" "" "" ...
     ```
 
 ## データ読み込み

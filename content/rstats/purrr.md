@@ -230,33 +230,33 @@ iris %>%
 
 
 ```r
-> iris[1:3, 1:2] %>% by_row(~data_frame(x=0:1, y=c('a', 'b')), .collate='list')
-Source: local data frame [3 x 3]
-
-  Sepal.Length Sepal.Width           .out
-         (dbl)       (dbl)          (chr)
-1          5.1         3.5 <tbl_df [2,2]>
-2          4.9         3.0 <tbl_df [2,2]>
-3          4.7         3.2 <tbl_df [2,2]>
-> iris[1:3, 1:2] %>% by_row(~data_frame(x=0:1, y=c('a', 'b')), .collate='rows')
-Source: local data frame [6 x 5]
-
-  Sepal.Length Sepal.Width  .row     x     y
-         (dbl)       (dbl) (int) (int) (chr)
-1          5.1         3.5     1     0     a
-2          5.1         3.5     1     1     b
-3          4.9         3.0     2     0     a
-4          4.9         3.0     2     1     b
-5          4.7         3.2     3     0     a
-6          4.7         3.2     3     1     b
-> iris[1:3, 1:2] %>% by_row(~data_frame(x=0:1, y=c('a', 'b')), .collate='cols')
-Source: local data frame [3 x 6]
-
-  Sepal.Length Sepal.Width    x1    x2    y1    y2
-         (dbl)       (dbl) (int) (int) (chr) (chr)
-1          5.1         3.5     0     1     a     b
-2          4.9         3.0     0     1     a     b
-3          4.7         3.2     0     1     a     b
+iris[1:3, 1:2] %>% by_row(~data_frame(x=0:1, y=c('a', 'b')), .collate='list')
+## Source: local data frame [3 x 3]
+##
+##   Sepal.Length Sepal.Width           .out
+##          (dbl)       (dbl)          (chr)
+## 1          5.1         3.5 <tbl_df [2,2]>
+## 2          4.9         3.0 <tbl_df [2,2]>
+## 3          4.7         3.2 <tbl_df [2,2]>
+iris[1:3, 1:2] %>% by_row(~data_frame(x=0:1, y=c('a', 'b')), .collate='rows')
+## Source: local data frame [6 x 5]
+##
+##   Sepal.Length Sepal.Width  .row     x     y
+##          (dbl)       (dbl) (int) (int) (chr)
+## 1          5.1         3.5     1     0     a
+## 2          5.1         3.5     1     1     b
+## 3          4.9         3.0     2     0     a
+## 4          4.9         3.0     2     1     b
+## 5          4.7         3.2     3     0     a
+## 6          4.7         3.2     3     1     b
+iris[1:3, 1:2] %>% by_row(~data_frame(x=0:1, y=c('a', 'b')), .collate='cols')
+## Source: local data frame [3 x 6]
+##
+##   Sepal.Length Sepal.Width    x1    x2    y1    y2
+##          (dbl)       (dbl) (int) (int) (chr) (chr)
+## 1          5.1         3.5     0     1     a     b
+## 2          4.9         3.0     0     1     a     b
+## 3          4.7         3.2     0     1     a     b
 ```
 
 

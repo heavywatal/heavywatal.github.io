@@ -369,8 +369,8 @@ e.g., `filter(gene != 'TP53')`
     `lead()` は前に、`lag()` は後ろにずらす
 
     ```r
-    > lag(seq_len(5), 2)
-    [1] NA NA 1 2 3
+    lag(seq_len(5), 2)
+    ## [1] NA NA 1 2 3
     ```
 
 `dplyr::between(x, left, right)`

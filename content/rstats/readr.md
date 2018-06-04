@@ -221,11 +221,11 @@ LDFLAGS = -L${HOME}/.homebrew/lib
 [readr]({{< relref "readr.md" >}}) で読み込んだデータもこの形式になる。
 
 ```r
-> tbl_iris = as_tibble(iris)
-> class(tbl_iris)
-[1] "tbl_df"     "tbl"        "data.frame"
-> class(iris)
-[1] "data.frame"
+tbl_iris = as_tibble(iris)
+class(tbl_iris)
+## [1] "tbl_df"     "tbl"        "data.frame"
+class(iris)
+## [1] "data.frame"
 ```
 
 生のdata.frameとの違いは:

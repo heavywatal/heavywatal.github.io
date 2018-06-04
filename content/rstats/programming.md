@@ -87,14 +87,14 @@ pnorm(10, 0, 1, log.p=TRUE)        # -7.619853e-24
 :   乱数を `n` 個生成する
 
 ```r
-> dnorm(c(0, 1.96))
-[1] 0.39894228 0.05844094
-> pnorm(c(0, 1.96))
-[1] 0.5000000 0.9750021
-> qnorm(c(0.5, 0.975))
-[1] 0.000000 1.959964
-> rnorm(4)
-[1] -1.77327259  0.95713346  0.27941121  0.08387267
+dnorm(c(0, 1.96))
+## [1] 0.39894228 0.05844094
+pnorm(c(0, 1.96))
+## [1] 0.5000000 0.9750021
+qnorm(c(0.5, 0.975))
+## [1] 0.000000 1.959964
+rnorm(4)
+## [1] -1.77327259  0.95713346  0.27941121  0.08387267
 ```
 
 ### 分布の種類
@@ -207,14 +207,14 @@ fun1 = function(x) x
 fun2 = function(x) substitute(x)
 fun3 = function(x) deparse(substitute(x))
 
-> fun1(value)
-[1] 42
-> fun1(quote(value))
-value
-> fun2(value)
-value
-> fun3(value)
-[1] "value"
+fun1(value)
+## [1] 42
+fun1(quote(value))
+## value
+fun2(value)
+## value
+fun3(value)
+## [1] "value"
 ```
 
 詳しくは non-standard expression (NSE) で調べる:
@@ -266,16 +266,16 @@ See [foreach #iterators]({{< relref "foreach.md#iterators" >}})
 ### ボトルネックを知る
 
 ```r
-> Rprof()           # start profiling
-> some_hard_work()
-> Rprof(NULL)       # end profiling
-> summaryRprof()
+Rprof()           # start profiling
+some_hard_work()
+Rprof(NULL)       # end profiling
+summaryRprof()
 ```
 
 ### 実行時間の計測
 
 ```r
-> system.time(測定したいコマンド)
+system.time(測定したいコマンド)
 ```
 
 
