@@ -140,3 +140,27 @@ R起動時に読み込まれるファイル。
 
 https://cran.r-project.org/doc/manuals/R-admin.html#Add_002don-packages
 
+### `~/.R/Makevars`
+
+パッケージをソースコードからビルドするときの設定。
+大概はビルド済みのものを入れるので不要だけど、たまに必要になる。
+
+例えば、素のmacOSでOpenMP依存のパッケージをビルドしようとすると
+`clang: error: unsupported option '-fopenmp'`
+などと怒られる。
+[Homebrew]({{< relref "homebrew.md" >}})で
+`gcc` か `llvm` をインストールし、
+そっちを使ってビルドするように `~/.R/Makevars` で指定する:
+```
+# gcc
+CC=/usr/local/bin/gcc-8
+CXX=/usr/local/bin/g++-8
+
+# llvm
+CC=/usr/local/opt/llvm/bin/clang
+CXX=/usr/local/opt/llvm/bin/clang++
+```
+
+`CPPFLAGS`, `CFLAGS`, `CXXFLAGS`, `LDFLAGS` なども設定可能。
+
+https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-Makevars
