@@ -213,6 +213,31 @@ Pythonほどわかりやすくないが、ちょっとはマシになる。</dd>
 
 <p><a href="https://cran.r-project.org/doc/manuals/R-admin.html#Add_002don-packages">https://cran.r-project.org/doc/manuals/R-admin.html#Add_002don-packages</a></p>
 
+<h3 id="r-makevars"><code>~/.R/Makevars</code></h3>
+
+<p>パッケージをソースコードからビルドするときの設定。
+大概はビルド済みのものを入れるので不要だけど、たまに必要になる。</p>
+
+<p>例えば、素のmacOSでOpenMP依存のパッケージをビルドしようとすると
+<code>clang: error: unsupported option '-fopenmp'</code>
+などと怒られる。
+<a href="/mac/homebrew.html">Homebrew</a>で
+<code>gcc</code> か <code>llvm</code> をインストールし、
+そっちを使ってビルドするように <code>~/.R/Makevars</code> で指定する:</p>
+
+<pre><code># gcc
+CC=/usr/local/bin/gcc-8
+CXX=/usr/local/bin/g++-8
+
+# llvm
+CC=/usr/local/opt/llvm/bin/clang
+CXX=/usr/local/opt/llvm/bin/clang++
+</code></pre>
+
+<p><code>CPPFLAGS</code>, <code>CFLAGS</code>, <code>CXXFLAGS</code>, <code>LDFLAGS</code> なども設定可能。</p>
+
+<p><a href="https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-Makevars">https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-Makevars</a></p>
+
 </article>
 </main>
 
