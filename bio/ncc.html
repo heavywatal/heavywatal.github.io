@@ -3,7 +3,7 @@
 <head prefix="og: http://ogp.me/ns#">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
-<title>ggbio: Bioconductor データを ggplot2 的に描画 - Heavy Watal</title>
+<title>HGCスパコン: SHIROKANE - Heavy Watal</title>
 <link rel="stylesheet" href="/css/theme.css">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
@@ -11,9 +11,9 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#e08010">
 <meta name="theme-color" content="#e08010">
 <meta name="author" content="Watal M. Iwasaki">
-<meta property="og:title" content="ggbio: Bioconductor データを ggplot2 的に描画">
+<meta property="og:title" content="HGCスパコン: SHIROKANE">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://heavywatal.github.io/rstats/ggbio.html">
+<meta property="og:url" content="https://heavywatal.github.io/bio/ncc.html">
 <meta property="og:image" content="https://avatars.githubusercontent.com/heavywatal">
 <meta property="og:description" content="">
 <meta property="og:site_name" content="Heavy Watal">
@@ -41,13 +41,13 @@ MathJax.Hub.Config({
  {"@type": "ListItem",
   "position": 1,
   "item": {
-   "@id": "https://heavywatal.github.io/rstats.html",
-   "name": "rstats"}},
+   "@id": "https://heavywatal.github.io/bio.html",
+   "name": "bio"}},
  {"@type": "ListItem",
   "position": 2,
   "item": {
-   "@id": "https://heavywatal.github.io/rstats/ggbio.html",
-   "name": "ggbio"}}
+   "@id": "https://heavywatal.github.io/bio/ncc.html",
+   "name": "HGCスパコン"}}
 ]}</script>
 
 <script src="https://use.fontawesome.com/releases/v5.0.13/js/brands.js"></script>
@@ -79,130 +79,126 @@ Heavy Watal
 </header>
 <main>
 <article>
-<header><h1><a href="/rstats/ggbio.html">
-ggbio — Bioconductor データを ggplot2 的に描画
+<header><h1><a href="/bio/ncc.html">
+HGCスパコン — SHIROKANE
 </a></h1>
 <nav class="tags"><ul>
-<li><i class="fas fa-tag"></i> <a href="/tags/r.html">r</a></li>
-<li><i class="fas fa-tag"></i> <a href="/tags/bioconductor.html">bioconductor</a></li>
-<li><i class="fas fa-tag"></i> <a href="/tags/graph.html">graph</a></li>
+<li><i class="fas fa-tag"></i> <a href="/tags/job.html">job</a></li>
 </ul></nav>
 </header>
 
 
 
-<p><a href="http://www.tengfei.name/ggbio/">http://www.tengfei.name/ggbio/</a></p>
+<p><a href="https://supcom.hgc.jp/">https://supcom.hgc.jp/</a></p>
 
-<p>Yin, Cook, and Lawrence (2012)
-ggbio: an R package for extending the grammar of graphics for genomic data.
-<em>Genome Biology</em> 13:R77
-<a href="https://www.ncbi.nlm.nih.gov/pubmed/22937822">https://www.ncbi.nlm.nih.gov/pubmed/22937822</a></p>
+<h2 id="利用開始">利用開始</h2>
 
-<p><a href="/rstats/bioconductor.html">Bioconductor</a> を読み込んでインストール</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kn">source</span><span class="p">(</span><span class="s">&#34;https://bioconductor.org/biocLite.R&#34;</span><span class="p">)</span>
-biocLite<span class="p">(</span><span class="s">&#39;ggbio&#39;</span><span class="p">)</span>
-<span class="kn">library</span><span class="p">(</span>ggbio<span class="p">)</span></code></pre></div>
-<h2 id="使い方">使い方</h2>
+<p>えくせる、ハンコ、郵送。</p>
 
-<p><a href="http://www.tengfei.name/ggbio/docs/man/">http://www.tengfei.name/ggbio/docs/man/</a></p>
+<h2 id="環境整備">環境整備</h2>
 
-<dl>
-<dt><code>autoplot(gr, ...)</code></dt>
-<dd><code>xlab, ylab, main</code><br>
-<code>trancate.gaps=FALSE</code><br>
-<code>truncate.fun=NULL</code><br>
-<code>ratio=0.0025</code><br>
-<code>space.skip=0.1</code><br>
-<code>legend=TRUE</code><br>
-<code>geom=NULL</code><br>
-<code>stat=NULL</code><br>
-<code>coord=c('default', 'genome', 'truncate_gaps')</code><br>
-<code>layout=c('linear', 'karyogram', 'circle')</code></dd>
-</dl>
+<ul>
+<li><a href="https://supcom.hgc.jp/japanese/sys_const/system-main.html">ハードウェア</a></li>
+<li><a href="https://supcom.hgc.jp/internal/cgi/version_up_s3/select.cgi">ソフトウェア</a>
 
-<p><code>plotSingleChrom()</code>, <code>plotIdeogram()</code>, <code>Ideogram()</code></p>
+<ul>
+<li>RHEL 6.9</li>
+<li><code>/usr/local/bin/cmake</code> 3.8.1</li>
+<li><code>/usr/local/bin/gcc</code> 4.9.3</li>
+<li><code>/usr/local/bin/git</code> 1.7.7.1</li>
+<li><code>/usr/local/package/boost/1.64.0/</code> (ただしC++11未満でビルドされているため使えない)</li>
+<li><code>/usr/local/package/gcc/7.3.0/</code></li>
+<li><code>/usr/local/package/python/3.6.4/</code></li>
+<li><code>/usr/local/package/r/3.5.0/</code> (ただしC++14未満でビルドされているため使えない)</li>
+</ul></li>
+</ul>
 
-<p><code>plotStackedOverview()</code>, <code>plotKaryogram()</code></p>
+<h3 id="linuxbrew">Linuxbrew</h3>
 
-<p><code>plotGrandLinear()</code></p>
+<p><a href="https://github.com/Linuxbrew/brew/wiki/CentOS6">https://github.com/Linuxbrew/brew/wiki/CentOS6</a></p>
 
-<hr>
+<p>まず <code>mpfr</code> インストール時の <code>make check</code> でコケるが、
+<code>brew edit mpfr</code> で該当箇所をコメントアウトして対処。</p>
 
-<p><code>geom_alignment()</code></p>
+<p>しかし結局 <code>gcc</code> のインストールがうまく行かず頓挫。
+<code>LIBRARY_PATH</code> や <code>LD_LIBRARY_PATH</code> をいじっても
+<code>libiconv.so.2</code> を見つけてもらえない:</p>
 
-<p><code>geon_arch()</code></p>
+<pre><code>HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_BUILD_FROM_SOURCE=1 brew install gcc --without-glibc
+==&gt; Installing gcc --without-glibc
+==&gt; Downloading https://ftp.gnu.org/gnu/gcc/gcc-5.5.0/gcc-5.5.0.tar.xz
+############################################################################################################################################################ 100.0$
+==&gt; ../configure --with-isl=/yshare1/home/watal/.linuxbrew/opt/isl@0.18 --with-bugurl=https://github.com/Linuxbrew/homebrew-core/issues --prefix=/yshare1/home/wat$
+==&gt; make
+Last 15 lines from /home/watal/.cache/Homebrew/Logs/gcc/02.make:
+/tmp/gcc-20180614-19441-uv2cp4/gcc-5.5.0/build/./gcc/xgcc -B/tmp/gcc-20180614-19441-uv2cp4/gcc-5.5.0/build/./gcc/ -dumpspecs &gt; tmp-specs
+/tmp/gcc-20180614-19441-uv2cp4/gcc-5.5.0/build/./gcc/xgcc: error while loading shared libraries: libiconv.so.2: cannot open shared object file: No such file or di$ectory
+make[3]: *** [specs] Error 127
+make[3]: *** Waiting for unfinished jobs....
+/bin/sh ../../gcc/../move-if-change tmp-attrtab.c    insn-attrtab.c
+/bin/sh ../../gcc/../move-if-change tmp-dfatab.c     insn-dfatab.c
+/bin/sh ../../gcc/../move-if-change tmp-latencytab.c insn-latencytab.c
+echo timestamp &gt; s-attrtab
+rm gcc.pod
+make[3]: Leaving directory `/tmp/gcc-20180614-19441-uv2cp4/gcc-5.5.0/build/gcc'
+make[2]: *** [all-stage1-gcc] Error 2
+make[2]: Leaving directory `/tmp/gcc-20180614-19441-uv2cp4/gcc-5.5.0/build'
+make[1]: *** [stage1-bubble] Error 2
+make[1]: Leaving directory `/tmp/gcc-20180614-19441-uv2cp4/gcc-5.5.0/build'
+make: *** [all] Error 2
+</code></pre>
 
-<p><code>geom_arrow()</code></p>
+<h3 id="tumopp">tumopp</h3>
 
-<p><code>geom_arrowrect()</code></p>
+<p>提供されている <code>/usr/local/package/gcc/7.3.0</code> を使い、
+依存ライブラリをほぼすべて手動で <code>~/local/</code> にインストールする。</p>
 
-<p><code>geom_bar()</code></p>
+<ol>
+<li><p><code>~/user-config.jam</code> を作成:</p>
 
-<p><code>geom_chevron()</code></p>
+<pre><code>using gcc : 14 : /usr/local/package/gcc/7.3.0/bin/g++ : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++14 ;
+</code></pre></li>
 
-<p><code>geom_rect()</code></p>
+<li><p>最新の<a href="/cxx/boost.html">Boost</a>をソースコードからビルドしてインストールする</p></li>
 
-<p><code>geom_segment()</code></p>
+<li><p><code>~/.bachrc</code> などで以下のような環境変数を定義する:</p>
 
-<hr>
+<pre><code>PATH=${HOME}/local/bin:$PATH
+GCC_PREFIX=/usr/local/package/gcc/7.3.0
+export CC=${GCC_PREFIX}/bin/gcc
+export CXX=${GCC_PREFIX}/bin/g++
+</code></pre>
 
-<p><code>layout_karyogram(data, ...)</code></p>
+<p>シェルを再起動してこれを反映: <code>exec $SHELL -l</code> 。<br>
+以下のステップで <code>-DCMAKE_CXX_COMPILER=...</code> を省略できる。</p></li>
 
-<p><code>layout_circle()</code></p>
+<li><p>各種C++ライブラリをインストール:</p>
 
-<hr>
+<ul>
+<li><a href="https://github.com/heavywatal/sfmt-class">sfmt-class</a></li>
+<li><a href="https://github.com/heavywatal/cxxwtl">cxxwtl</a></li>
+<li><a href="https://github.com/heavywatal/tumopp">tumopp</a></li>
+</ul>
 
-<p><code>stat_aggregate</code>
-<code>stat_bin</code>
-<code>stat_coverage</code>
-<code>stat_gene</code>
-<code>stat_identity</code>
-<code>stat_mismatch</code>
-<code>stat_reduce</code>
-<code>stat_slice</code>
-<code>stat_stepping</code>
-<code>stat_table</code></p>
+<p><code>cmake</code> コマンドには次のようなオプションを渡す:</p>
 
-<hr>
+<pre><code>-DCMAKE_PREFIX_PATH=${HOME}/local -DCMAKE_INSTALL_PREFIX=${HOME}/local
+</code></pre></li>
 
-<p><code>theme_alignment</code>
-<code>theme_clear</code>
-<code>theme_genome</code>
-<code>theme_noexpand</code>
-<code>theme_null</code>
-<code>theme_pack_panels</code>
-<code>theme_tracks_sunset</code></p>
+<li><p>Rをソースコードからビルドしてインストール
+(configureオプションは <code>/usr/local/package/r/3.5.0/lib64/R/etc/Makeconf</code> を参考に):</p>
 
-<hr>
+<pre><code>wget -O- https://cran.r-project.org/src/base/R-3/R-3.5.0.tar.gz | tar xz
+cd R-3.5.0/
+./configure --prefix=${HOME}/local '--enable-R-shlib' '--enable-shared' '--enable-memory-profiling' '--with-tcl-config=/usr/local/lib/tclConfig.sh' '--with-tk-config=/usr/local/lib/tkConfig.sh' 'CC=/usr/local/package/gcc/7.3.0/bin/gcc' 'CXX=/usr/local/package/gcc/7.3.0/bin/g++' 'CPPFLAGS=-I/usr/local/package/gcc/7.3.0/include -I/usr/local/include' 'LDFLAGS=-L/usr/local/package/gcc/7.3.0/lib64 -L/usr/local/package/gcc/7.3.0/lib -L/usr/local/lib64 -L/usr/local/lib' 'F77=/usr/local/package/gcc/7.3.0/bin/gfortran' 'FC=/usr/local/package/gcc/7.3.0/bin/gfortran' 'JAVA_HOME=/usr/local/package/java/jdk1.8.0_162_64' 'PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/usr/lib64/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig'
+make -j4
+make install
+</code></pre></li>
 
-<dl>
-<dt><code>tracks(...)</code></dt>
-<dd>複数のトラックをひとつの図にまとめる<br>
-<code>heights</code>, <code>xlim</code>,<br>
-<code>xlab</code>, <code>main</code>, <code>title</code>, <code>theme</code>,<br>
-<code>track.plot.color</code>, <code>track.bg.color</code>,<br>
-<code>main.height=unit(1.5, 'lines')</code>,<br>
-<code>scale.height=unit(1, 'lines')</code>,<br>
-<code>xlab.height=unit(1.5, 'lines')</code>,<br>
-<code>padding=unit(-1, 'lines')</code>,<br>
-<code>label.bg.color='white'</code>, <code>label.bg.fill='gray80'</code>,<br>
-<code>label.text.color='black'</code>, <code>label.text.cex=1</code>,<br>
-<code>label.width=unit(2.5, 'lines')</code></dd>
-</dl>
-
-<p><code>zoom()</code>, <code>zoom_in()</code>, <code>zoom_out()</code></p>
-
-<p><code>nextView()</code> , <code>prevView()</code></p>
-
-<h2 id="biovizbase"><code>biovizBase</code></h2>
-
-<p><a href="https://master.bioconductor.org/packages/release/bioc/html/biovizBase.html">https://master.bioconductor.org/packages/release/bioc/html/biovizBase.html</a></p>
-
-<hr>
-
-<p><a href="https://www.amazon.co.jp/dp/4621062506//ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=c58e6e9dc365558cc336d9ea0a2c8a12" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4621062506&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4621062506" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
-<a href="https://www.amazon.co.jp/dp/4320057082//ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=b0a0cf1dfe769f34f7544db70a0f6711" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4320057082&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4320057082" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
-<a href="https://www.amazon.co.jp/dp/4320123700//ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=f7d9a9e5ba94b0fa7da4a582b70da85a" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4320123700&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4320123700" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
+<li><p>インストールしたRを起動し、パッケージをインストール:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">install.packages<span class="p">(</span><span class="s">&#34;devtools&#34;</span><span class="p">)</span>
+devtools<span class="o">::</span>install_github<span class="p">(</span><span class="s">&#34;heavywatal/tumopp/r&#34;</span><span class="p">)</span></code></pre></div></li>
+</ol>
 
 </article>
 </main>
@@ -213,8 +209,8 @@ biocLite<span class="p">(</span><span class="s">&#39;ggbio&#39;</span><span clas
 
 <div><a href="/research.html">Research Interests</a></div>
 
-<input type="checkbox" id="menu-rstats" checked>
-<label for="menu-rstats" class="active">R stats</label>
+<input type="checkbox" id="menu-rstats">
+<label for="menu-rstats">R stats</label>
 <ul>
 <li><a href="/rstats/intro.html">R自学自習の基礎知識</a></li>
 <li><a href="/rstats/programming.html">RプログラミングTips</a></li>
@@ -230,7 +226,7 @@ biocLite<span class="p">(</span><span class="s">&#39;ggbio&#39;</span><span clas
 <li><a href="/rstats/bioconductor.html">Bioconductor</a></li>
 <li><a href="/rstats/rtracklayer.html">rtracklayer</a></li>
 <li><a href="/rstats/biomart.html">biomaRt</a></li>
-<li class="active"><a href="/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
 <li><a href="/rstats/stan.html">Stan</a></li>
@@ -267,16 +263,16 @@ biocLite<span class="p">(</span><span class="s">&#39;ggbio&#39;</span><span clas
 <li><a href="/cxx/random.html">擬似乱数生成器</a></li>
 </ul>
 
-<input type="checkbox" id="menu-bio">
-<label for="menu-bio">Biology</label>
+<input type="checkbox" id="menu-bio" checked>
+<label for="menu-bio" class="active">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
+<li class="active"><a href="/bio/ncc.html">HGCスパコン</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
 <li><a href="/bio/repeatmasker.html">RepeatMasker</a></li>
 <li><a href="/bio/samtools.html">SAMtools</a></li>
-<li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
 <li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
