@@ -32,8 +32,8 @@ tags = ["c++"]
 
 1.  <http://www.boost.org/users/download/> から最新ソースを入手して展開。
     ```
-    % wget -O- https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.bz2 | tar xj
-    % cd boost_1_64_0/
+    % wget -O- https://dl.bintray.com/boostorg/release/1.67.0/source/boost_1_67_0.tar.bz2 | tar xj
+    % cd boost_1_67_0/
     ```
 
 1.  ビルドすべきライブラリを考える `./bootstrap.sh --show-libraries`
@@ -41,7 +41,7 @@ tags = ["c++"]
 1.  適当なオプションを与えて `bootstrap.sh` を実行:
     ```sh
     % ./bootstrap.sh --help
-    % ./bootstrap.sh --without-icu --with-libraries=coroutine2,filesystem,graph,iostreams,program_options,serialization,system,test
+    % ./bootstrap.sh --without-icu --with-libraries=context,filesystem,graph,iostreams,program_options,serialization,system,test
     ```
     設定が `project-config.jam` に書き出され、
     `b2` がビルドされる。 `./b2 --help`
@@ -50,8 +50,8 @@ tags = ["c++"]
     (http://www.boost.org/build/doc/html/bbv2/reference/tools.html)。
     `darwin`はMac-gcc用:
     ```
-    using gcc : 14 : g++-6 : <compileflags>-fPIC <cxxflags>-std=c++14 ;
-    using darwin : 14 : g++-6 : <compileflags>-fPIC <cxxflags>-std=c++14 ;
+    using gcc : 14 : g++-8 : <compileflags>-fPIC <cxxflags>-std=c++14 ;
+    using darwin : 14 : g++-8 : <compileflags>-fPIC <cxxflags>-std=c++14 ;
     using clang : 14 : clang++ : <compileflags>-fPIC <cxxflags>-std=c++14 -stdlib=libc++ <linkflags>-stdlib=libc++ ;
     ```
     gccとclangの両方から使える統一ライブラリを作るのは難しいらしいので、
@@ -93,14 +93,14 @@ tags = ["c++"]
 clang++ -I${HOME}/local/include -L${HOME}/local/lib mysource.cpp -lboost_iostreams-mt -o a.out
 ```
 
-Makefileの変数でいうと:
+[Makefile]({{< relref "make.md" >}})の変数でいうと:
 ```make
 CPPFLAGS = -I${HOME}/local/include
 LDFLAGS = -L${HOME}/local/lib
 LDLIBS = -lboost_iostreams-mt
 ```
 
-CMakeでは `BOOST_ROOT` にprefixを指定:
+[CMake]({{< relref "cmake.md" >}})では `BOOST_ROOT` にprefixを指定:
 ```sh
 cmake -DBOOST_ROOT=${HOME}/local ..
 ```
