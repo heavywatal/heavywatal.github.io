@@ -97,6 +97,7 @@ make: *** [all] Error 2
     ```
     -DCMAKE_PREFIX_PATH=${HOME}/local -DCMAKE_INSTALL_PREFIX=${HOME}/local
     ```
+    その後アップデートするときは `git pull` して再ビルド・再インストール。
 
 1.  Rをソースコードからビルドしてインストール
     (configureオプションは `/usr/local/package/r/3.5.0/lib64/R/etc/Makeconf` を参考に):
