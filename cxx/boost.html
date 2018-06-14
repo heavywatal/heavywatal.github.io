@@ -120,23 +120,23 @@ Boost — ほぼ標準C&#43;&#43;ライブラリ
 <ol>
 <li><p><a href="http://www.boost.org/users/download/">http://www.boost.org/users/download/</a> から最新ソースを入手して展開。</p>
 
-<pre><code>% wget -O- https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.bz2 | tar xj
-% cd boost_1_64_0/
+<pre><code>% wget -O- https://dl.bintray.com/boostorg/release/1.67.0/source/boost_1_67_0.tar.bz2 | tar xj
+% cd boost_1_67_0/
 </code></pre></li>
 
 <li><p>ビルドすべきライブラリを考える <code>./bootstrap.sh --show-libraries</code></p></li>
 
 <li><p>適当なオプションを与えて <code>bootstrap.sh</code> を実行:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% ./bootstrap.sh --help
-% ./bootstrap.sh --without-icu --with-libraries<span class="o">=</span>coroutine2,filesystem,graph,iostreams,program_options,serialization,system,test</code></pre></div>
+% ./bootstrap.sh --without-icu --with-libraries<span class="o">=</span>context,filesystem,graph,iostreams,program_options,serialization,system,test</code></pre></div>
 <p>設定が <code>project-config.jam</code> に書き出され、
 <code>b2</code> がビルドされる。 <code>./b2 --help</code></p></li>
 
 <li><p><code>~/user-config.jam</code> に <a href="http://www.boost.org/build/doc/html/bbv2/reference/tools.html">ツールセットを定義</a>。
 <code>darwin</code>はMac-gcc用:</p>
 
-<pre><code>using gcc : 14 : g++-6 : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++14 ;
-using darwin : 14 : g++-6 : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++14 ;
+<pre><code>using gcc : 14 : g++-8 : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++14 ;
+using darwin : 14 : g++-8 : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++14 ;
 using clang : 14 : clang++ : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++14 -stdlib=libc++ &lt;linkflags&gt;-stdlib=libc++ ;
 </code></pre>
 
@@ -168,12 +168,12 @@ using clang : 14 : clang++ : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++1
 <p>インストールした場所とリンクするライブラリをコンパイラに伝える必要がある。
 コマンドを直打ちするなら:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">clang++ -I<span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local/include -L<span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local/lib mysource.cpp -lboost_iostreams-mt -o a.out</code></pre></div>
-<p>Makefileの変数でいうと:</p>
+<p><a href="/dev/make.html">Makefile</a>の変数でいうと:</p>
 <div class="highlight"><pre class="chroma"><code class="language-make" data-lang="make"><span class="nv">CPPFLAGS</span> <span class="o">=</span> -I<span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local/include
 <span class="nv">LDFLAGS</span> <span class="o">=</span> -L<span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local/lib
 <span class="nv">LDLIBS</span> <span class="o">=</span> -lboost_iostreams-mt
 </code></pre></div>
-<p>CMakeでは <code>BOOST_ROOT</code> にprefixを指定:</p>
+<p><a href="/dev/cmake.html">CMake</a>では <code>BOOST_ROOT</code> にprefixを指定:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">cmake -DBOOST_ROOT<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local ..</code></pre></div>
 <h2 id="math-http-www-boost-org-doc-libs-release-libs-math-doc-html"><a href="http://www.boost.org/doc/libs/release/libs/math/doc/html/">math</a></h2>
 
