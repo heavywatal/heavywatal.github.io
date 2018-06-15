@@ -113,5 +113,5 @@ make: *** [all] Error 2
 1.  インストールしたRを起動し、パッケージをインストール:
     ```r
     install.packages("devtools")
-    devtools::install_github("heavywatal/tumopp/r")
+    devtools::install_github("heavywatal/rtumopp")
     ```
