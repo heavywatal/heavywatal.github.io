@@ -84,6 +84,7 @@ make: *** [all] Error 2
     GCC_PREFIX=/usr/local/package/gcc/7.3.0
     export CC=${GCC_PREFIX}/bin/gcc
     export CXX=${GCC_PREFIX}/bin/g++
+    export LD_LIBRARY_PATH=${GCC_PREFIX}/lib64:$LD_LIBRARY_PATH
     ```
     シェルを再起動してこれを反映: `exec $SHELL -l` 。<br>
     以下のステップで `-DCMAKE_CXX_COMPILER=...` を省略できる。
