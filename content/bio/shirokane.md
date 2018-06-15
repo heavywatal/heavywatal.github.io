@@ -78,7 +78,7 @@ make: *** [all] Error 2
 
 1.  最新の[Boost]({{< relref "boost.md" >}})をソースコードからビルドしてインストールする
 
-1.  `~/.bachrc` などで以下のような環境変数を定義する:
+1.  `~/.bashrc` などで以下のような環境変数を定義する:
     ```
     PATH=${HOME}/local/bin:$PATH
     GCC_PREFIX=/usr/local/package/gcc/7.3.0
