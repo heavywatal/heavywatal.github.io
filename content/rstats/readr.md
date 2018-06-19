@@ -276,8 +276,11 @@ assign("print.tbl_df", data.table:::print.data.table, envir = .GlobalEnv)
 `tibble::add_row(.data, ...)`
 :   既存のtibbleに新しいデータを1行追加する。
 
+`tibble::rowid_to_column(df, var='rowid')`
+:   行番号をinteger型で1列目の変数にする。
+
 `tibble::rownames_to_column(df, var='rowname')`
-:   行の名前(無ければ1からの整数)を1列目の変数する`dplyr::add_rownames()`の改良版。
+:   行の名前をcharacter型で1列目の変数にする。`dplyr::add_rownames()`の後継。
 :   `tibble::column_to_rownames(df, var='rowname')` はその逆。
 :   `tibble::remove_rownames(df)` は消すだけ。
 
