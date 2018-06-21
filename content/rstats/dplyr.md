@@ -350,8 +350,12 @@ e.g., `filter(gene != 'TP53')`
 :   `x[x == y] = NA; x` のショートカット
 
 `dplyr::recode(.x, ..., .default=NULL, .missing=NULL)`
-:    vectorの値を変更する。e.g.,
-     `recode(letters, a='A!', c='C!')`
+:   vectorの値を変更する。e.g.,
+    `recode(letters, a='A!', c='C!')`
+
+`dplyr::row_number(x)`
+:   `rank(x, ties.method = "first", na.last = "keep")` のショートカット。
+    グループ毎に連番を振るのに便利。
 
 `dplyr::ntile(x, n)`
 :   数値ベクトル `x` を順位によって `n` 個のクラスに均等分け
