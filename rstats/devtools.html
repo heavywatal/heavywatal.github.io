@@ -115,6 +115,8 @@ GitHubに公開しておけば誰でも使えるようになるので、
 
 <h3 id="最低限の作成手順">最低限の作成手順</h3>
 
+<p>TODO: 新しい<a href="https://github.com/r-lib/usethis">usethis</a>を使ったほうが楽かも。</p>
+
 <ol>
 <li><p>Rを起動して <code>devtools</code> をインストールする</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">install.packages<span class="p">(</span><span class="s">&#39;devtools&#39;</span><span class="p">)</span>
@@ -122,19 +124,25 @@ GitHubに公開しておけば誰でも使えるようになるので、
 
 <li><p><code>devtools::create()</code> で骨組みを作る</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kp">setwd</span><span class="p">(</span><span class="s">&#39;~/tmp/&#39;</span><span class="p">)</span>
-pkgname <span class="o">=</span> <span class="s">&#39;namaespace&#39;</span>
-title_desc <span class="o">=</span> <span class="s">&#39;Utility to create dummy R packages for namespace&#39;</span>
+pkgname <span class="o">=</span> <span class="s">&#39;hello&#39;</span>
+title_desc <span class="o">=</span> <span class="s">&#39;Example package to say hello&#39;</span>
 github_repo <span class="o">=</span> <span class="kp">sprintf</span><span class="p">(</span><span class="s">&#39;https://github.com/heavywatal/%s&#39;</span><span class="p">,</span> pkgname<span class="p">)</span>
-devtools<span class="o">::</span>create<span class="p">(</span>pkgname<span class="p">,</span> description<span class="o">=</span><span class="kt">list</span><span class="p">(</span>
-    Package<span class="o">=</span>pkgname<span class="p">,</span>
-    Title<span class="o">=</span>title_desc<span class="p">,</span>
-    Description<span class="o">=</span><span class="kp">paste0</span><span class="p">(</span>title_desc<span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">),</span>
-    <span class="sb">`Authors@R`</span><span class="o">=</span><span class="s">&#34;person(&#39;Watal M.&#39;, &#39;Iwasaki&#39;, email=&#39;user@example.com&#39;, role=c(&#39;aut&#39;, &#39;cre&#39;))&#34;</span><span class="p">,</span>
-    License<span class="o">=</span><span class="s">&#39;MIT&#39;</span><span class="p">,</span>
-    Suggests<span class="o">=</span><span class="s">&#39;tidyverse&#39;</span><span class="p">,</span>
-    Imports<span class="o">=</span><span class="s">&#39;devtools, stringr&#39;</span><span class="p">,</span>
-    URL<span class="o">=</span>github_repo<span class="p">,</span>
-    BugReports<span class="o">=</span><span class="kp">paste0</span><span class="p">(</span>github_repo<span class="p">,</span> <span class="s">&#39;/issues&#39;</span><span class="p">))</span></code></pre></div></li>
+devtools<span class="o">::</span>create<span class="p">(</span>
+  pkgname<span class="p">,</span>
+  description <span class="o">=</span> <span class="kt">list</span><span class="p">(</span>
+    Package <span class="o">=</span> pkgname<span class="p">,</span>
+    Title <span class="o">=</span> title_desc<span class="p">,</span>
+    Description <span class="o">=</span> <span class="kp">paste0</span><span class="p">(</span>title_desc<span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">),</span>
+    <span class="sb">`Authors@R`</span> <span class="o">=</span> <span class="s">&#34;person(&#39;Watal M.&#39;, &#39;Iwasaki&#39;, email=&#39;user@example.com&#39;, role=c(&#39;aut&#39;, &#39;cre&#39;))&#34;</span><span class="p">,</span>
+    License <span class="o">=</span> <span class="s">&#39;MIT&#39;</span><span class="p">,</span>
+    Suggests <span class="o">=</span> <span class="s">&#39;tidyverse&#39;</span><span class="p">,</span>
+    Imports <span class="o">=</span> <span class="s">&#39;magrittr, rlang, stringr&#39;</span><span class="p">,</span>
+    URL <span class="o">=</span> github_repo<span class="p">,</span>
+    BugReports <span class="o">=</span> <span class="kp">paste0</span><span class="p">(</span>github_repo<span class="p">,</span> <span class="s">&#39;/issues&#39;</span><span class="p">)),</span>
+  check <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
+  rstudio <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
+  quiet <span class="o">=</span> <span class="kc">FALSE</span>
+<span class="p">)</span></code></pre></div></li>
 
 <li><p><code>devtools::check(pkgname)</code> で様子を見てみる</p>
 
@@ -156,11 +164,11 @@ devtools<span class="o">::</span>create<span class="p">(</span>pkgname<span clas
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% git init
 % git add --all
 % git commit -m <span class="s2">&#34;first commit&#34;</span>
-% git remote add origin git@github.com:heavywatal/namaespace.git
+% git remote add origin https::/github.com/heavywatal/rhello.git
 % git push -u origin master</code></pre></div></li>
 
 <li><p>とりあえず誰でもインストール可能なパッケージができたはず</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">install_github<span class="p">(</span><span class="s">&#39;heavywatal/namaespace&#39;</span><span class="p">)</span></code></pre></div></li>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">install_github<span class="p">(</span><span class="s">&#39;heavywatal/rhello&#39;</span><span class="p">)</span></code></pre></div></li>
 
 <li><p>あとは <code>R/</code> にソースコードを置いたり <code>README.md</code> を書いたり</p></li>
 </ol>
@@ -181,10 +189,11 @@ vignettes/</code></pre></div>
 
 <ul>
 <li>どうでも良さそうなファイル名とは裏腹に、ちゃんと書かないと動かない</li>
-<li>始めは <code>devtools::create()</code> で自動生成し、それから他のパッケージを参考にしつつ修正していく</li>
+<li>始めは <code>devtools::create()</code> などで自動生成し、それから他のパッケージを参考にしつつ修正していく</li>
 <li><code>Imports</code> に列挙したものは依存パッケージとして同時にインストールされる。
 しかし <code>library()</code> 時に同時に読み込まれるわけではない。</li>
-<li><code>Title</code> はピリオドを含まず、 <code>Description</code> はピリオドを含むようにする</li>
+<li><code>Title</code> はピリオドを含まない一文。
+<code>Description</code> はピリオドを含む文章。</li>
 <li>ライセンスを別ファイルにする場合は <code>License: file LICENSE</code> と書く</li>
 <li><code>Authors@R</code> のとこは後でRで評価されるので変な形</li>
 </ul>
@@ -195,7 +204,7 @@ vignettes/</code></pre></div>
 <li><code>roxygen2</code> (下記) がソースコードから自動生成するので<strong>直接触らない</strong></li>
 <li>ここで <code>export()</code> された関数だけがユーザーから見える</li>
 <li>ここで <code>import()</code> された関数はパッケージ内でattachされた状態になるが、
-そうしないで毎回 <code>名前空間::</code> 越しにアクセスしたほうがよい。
+そうしないで毎回 <code>名前空間::</code> 越しにアクセスしたほうが安心。
 <code>magrittr::%&gt;%</code> のような演算子は仕方がないので
 <code>importFrom()</code> で個別指定する。</li>
 </ul>
@@ -264,10 +273,9 @@ LDFLAGS = -L${HOME}/local/lib -L${HOME}/.linuxbrew/lib
 SystemRequirements: C++14
 </code></pre></li>
 
-<li><p><code>@docType package</code> のブロックに <code>@useDynLib</code> でパッケージ名を指定する</p>
-<div class="highlight"><pre class="chroma"><code class="language-R" data-lang="R"><span class="c1">#&#39; @docType package</span>
-<span class="c1">#&#39; @useDynLib namaespace</span>
-<span class="kc">NULL</span></code></pre></div></li>
+<li><p><code>R/</code> の適当なとこで <code>@useDynLib</code> にパッケージ名を指定する</p>
+<div class="highlight"><pre class="chroma"><code class="language-R" data-lang="R"><span class="c1">#&#39; @useDynLib hello</span>
+<span class="s">&#34;_PACKAGE&#34;</span></code></pre></div></li>
 </ul>
 
 <p>その他の注意点</p>
@@ -381,9 +389,9 @@ mydemo2    Description of demo 2
 
 <h3 id="使い方">使い方</h3>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#&#39; A simple function to add 1</span>
-<span class="c1">#&#39; @export</span>
 <span class="c1">#&#39; @param x A numeric vector</span>
 <span class="c1">#&#39; @return A numeric vector</span>
+<span class="c1">#&#39; @export</span>
 <span class="c1">#&#39; @examples</span>
 <span class="c1">#&#39; increment(42)</span>
 increment <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> <span class="p">{</span>x <span class="o">+</span> <span class="m">1</span><span class="p">}</span></code></pre></div>
@@ -397,12 +405,23 @@ increment <span class="o">=</span> <span class="kr">function</span><span class="
 関数ごとにユニークなタイトルをつけろと怒られる。</li>
 <li>2段落目は <code>@description</code> 扱いされる。
 省略するとタイトルが流用される。</li>
-<li>空行だけでは切れ目として扱ってくれないので、
-データやパッケージのドキュメントを書く場合は <code>NULL</code> を入れる。</li>
+<li>空行だけでは切れ目として扱われないので <code>NULL</code> などを置いたりする。</li>
 <li>dplyrなどで列名を直に指定すると
 undefined global variables という警告が出るので、
 どこかで <code>@importFrom rlang .data</code> した上で
 <code>iris %&gt;% dplyr::filter(.data$Species == 'setosa')</code> のようにする。</li>
+<li>Markdownを使うためには
+<code>Roxygen: list(markdown = TRUE)</code> を <code>DESCRIPTION</code> に加える。</li>
+
+<li><p><code>&quot;_PACKAGE&quot;</code> という文字列の上に書かれたブロックは、
+パッケージそのものに対応するヘルプ <code>*-package.Rd</code> になる。
+<code>@useDynLib</code> や <code>@importFrom</code> など全体に関わる設定はここで。</p>
+<div class="highlight"><pre class="chroma"><code class="language-R" data-lang="R"><span class="c1">#&#39; Example package to say hello</span>
+<span class="c1">#&#39; @aliases NULL hello-package</span>
+<span class="c1">#&#39; @useDynLib hello, .registration = TRUE</span>
+<span class="c1">#&#39; @importFrom magrittr %&gt;%</span>
+<span class="c1">#&#39; @importFrom rlang .data</span>
+<span class="s">&#34;_PACKAGE&#34;</span></code></pre></div></li>
 </ul>
 
 <h3 id="タグ">タグ</h3>
@@ -426,6 +445,7 @@ e.g., <code>@importFrom magrittr %&gt;%</code></dd>
 <dt><code>@examples code...</code></dt>
 <dd>例となるコードを記述する。
 exportしないやつには書いてはいけない。
+<code>\dontrun{}</code> に入れるとチェックから除外される。
 単数形の <code>@example</code> は外部ファイルのパスを受け取る</dd>
 <dt><code>@rdname basename</code></dt>
 <dd><code>man/</code>に書き出すRdファイルの名前。
@@ -434,10 +454,8 @@ exportしないやつには書いてはいけない。
 同じ名前のものはどこかで1度だけ記述する。
 逆に言えば、中身が違うものに同じ名前をつけてはいけないし、
 引数や機能がほとんど重ならない関数をまとめると分かりにくくなる。</dd>
-<dt><code>@docType</code></dt>
-<dd>関数やクラスには不要だが <code>data</code> か <code>package</code> の場合はここで指定。</dd>
-<dt><code>@name name</code></dt>
-<dd>パッケージやデータはこのタグで明示的に設定する必要がある。</dd>
+<dt><code>@docType</code>, <code>@name</code></dt>
+<dd>パッケージやデータを記述するのに必要だったが今では不要っぽい。</dd>
 </dl>
 
 <h2 id="関連書籍">関連書籍</h2>
