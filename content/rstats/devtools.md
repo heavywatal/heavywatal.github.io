@@ -27,6 +27,8 @@ GitHubに公開しておけば誰でも使えるようになるので、
 
 ### 最低限の作成手順
 
+TODO: 新しい[usethis](https://github.com/r-lib/usethis)を使ったほうが楽かも。
+
 1.  Rを起動して `devtools` をインストールする
 
     ```r
@@ -34,53 +36,60 @@ GitHubに公開しておけば誰でも使えるようになるので、
     library(devtools)
     ```
 
-2.  `devtools::create()` で骨組みを作る
+1.  `devtools::create()` で骨組みを作る
 
     ```r
     setwd('~/tmp/')
-    pkgname = 'namaespace'
-    title_desc = 'Utility to create dummy R packages for namespace'
+    pkgname = 'hello'
+    title_desc = 'Example package to say hello'
     github_repo = sprintf('https://github.com/heavywatal/%s', pkgname)
-    devtools::create(pkgname, description=list(
-        Package=pkgname,
-        Title=title_desc,
-        Description=paste0(title_desc, '.'),
-        `Authors@R`="person('Watal M.', 'Iwasaki', email='user@example.com', role=c('aut', 'cre'))",
-        License='MIT',
-        Suggests='tidyverse',
-        Imports='devtools, stringr',
-        URL=github_repo,
-        BugReports=paste0(github_repo, '/issues'))
+    devtools::create(
+      pkgname,
+      description = list(
+        Package = pkgname,
+        Title = title_desc,
+        Description = paste0(title_desc, '.'),
+        `Authors@R` = "person('Watal M.', 'Iwasaki', email='user@example.com', role=c('aut', 'cre'))",
+        License = 'MIT',
+        Suggests = 'tidyverse',
+        Imports = 'magrittr, rlang, stringr',
+        URL = github_repo,
+        BugReports = paste0(github_repo, '/issues')),
+      check = FALSE,
+      rstudio = FALSE,
+      quiet = FALSE
+    )
     ```
 
-3.  `devtools::check(pkgname)` で様子を見てみる
+1.  `devtools::check(pkgname)` で様子を見てみる
 
     {{%div class="note"%}}
 LaTeX 関連で怒られたら足りないパッケージを入れる:
 `sudo tlmgr install inconsolata helvetic`
     {{%/div%}}
 
-4.  GitHubに空のリポジトリを作る
+1.  GitHubに空のリポジトリを作る
     -   パッケージと同名でなくてもよい
     -   `README` や `LICENSE` は後から作る
 
-5.  コミットしてプッシュ
+1.  コミットしてプッシュ
 
     ```sh
     % git init
     % git add --all
     % git commit -m "first commit"
-    % git remote add origin git@github.com:heavywatal/namaespace.git
+    % git remote add origin https::/github.com/heavywatal/rhello.git
     % git push -u origin master
     ```
 
-6.  とりあえず誰でもインストール可能なパッケージができたはず
+1.  とりあえず誰でもインストール可能なパッケージができたはず
 
     ```r
-    install_github('heavywatal/namaespace')
+    install_github('heavywatal/rhello')
     ```
 
-7.  あとは `R/` にソースコードを置いたり `README.md` を書いたり
+1.  あとは `R/` にソースコードを置いたり `README.md` を書いたり
+
 
 ### 構造
 
@@ -101,10 +110,11 @@ vignettes/
 ### [`DESCRIPTION`](http://r-pkgs.had.co.nz/description.html)
 
 -   どうでも良さそうなファイル名とは裏腹に、ちゃんと書かないと動かない
--   始めは `devtools::create()` で自動生成し、それから他のパッケージを参考にしつつ修正していく
+-   始めは `devtools::create()` などで自動生成し、それから他のパッケージを参考にしつつ修正していく
 -   `Imports` に列挙したものは依存パッケージとして同時にインストールされる。
     しかし `library()` 時に同時に読み込まれるわけではない。
--   `Title` はピリオドを含まず、 `Description` はピリオドを含むようにする
+-   `Title` はピリオドを含まない一文。
+    `Description` はピリオドを含む文章。
 -   ライセンスを別ファイルにする場合は `License: file LICENSE` と書く
 -   `Authors@R` のとこは後でRで評価されるので変な形
 
@@ -113,7 +123,7 @@ vignettes/
 -   `roxygen2` (下記) がソースコードから自動生成するので**直接触らない**
 -   ここで `export()` された関数だけがユーザーから見える
 -   ここで `import()` された関数はパッケージ内でattachされた状態になるが、
-    そうしないで毎回 `名前空間::` 越しにアクセスしたほうがよい。
+    そうしないで毎回 `名前空間::` 越しにアクセスしたほうが安心。
     `magrittr::%>%` のような演算子は仕方がないので
     `importFrom()` で個別指定する。
 
@@ -177,11 +187,11 @@ vignettes/
     SystemRequirements: C++14
     ```
 
--   `@docType package` のブロックに `@useDynLib` でパッケージ名を指定する
+-   `R/` の適当なとこで `@useDynLib` にパッケージ名を指定する
+
     ```R
-    #' @docType package
-    #' @useDynLib namaespace
-    NULL
+    #' @useDynLib hello
+    "_PACKAGE"
     ```
 
 その他の注意点
@@ -310,15 +320,15 @@ Rソースコードのコメントから`NAMESPACE`とヘルプ(`man/*.Rd`)を�
 
 ```r
 #' A simple function to add 1
-#' @export
 #' @param x A numeric vector
 #' @return A numeric vector
+#' @export
 #' @examples
 #' increment(42)
 increment = function(x) {x + 1}
 ```
 
--   `#'` から始まる行がroxygenコメントとして扱われる。
+-   `#' ` から始まる行がroxygenコメントとして扱われる。
 -   タグは `@` で始まる。
     `@` そのものを入力したいときは重ねて `@@` とする。
 -   1行目には必ずタイトルを書く。
@@ -327,12 +337,26 @@ increment = function(x) {x + 1}
     関数ごとにユニークなタイトルをつけろと怒られる。
 -   2段落目は `@description` 扱いされる。
     省略するとタイトルが流用される。
--   空行だけでは切れ目として扱ってくれないので、
-    データやパッケージのドキュメントを書く場合は `NULL` を入れる。
+-   空行だけでは切れ目として扱われないので `NULL` などを置いたりする。
 -   dplyrなどで列名を直に指定すると
     undefined global variables という警告が出るので、
     どこかで `@importFrom rlang .data` した上で
     `iris %>% dplyr::filter(.data$Species == 'setosa')` のようにする。
+-   Markdownを使うためには
+    `Roxygen: list(markdown = TRUE)` を `DESCRIPTION` に加える。
+-   `"_PACKAGE"` という文字列の上に書かれたブロックは、
+    パッケージそのものに対応するヘルプ `*-package.Rd` になる。
+    `@useDynLib` や `@importFrom` など全体に関わる設定はここで。
+
+    ```R
+    #' Example package to say hello
+    #' @aliases NULL hello-package
+    #' @useDynLib hello, .registration = TRUE
+    #' @importFrom magrittr %>%
+    #' @importFrom rlang .data
+    "_PACKAGE"
+    ```
+
 
 ### タグ
 
@@ -360,6 +384,7 @@ increment = function(x) {x + 1}
 `@examples code...`
 :   例となるコードを記述する。
     exportしないやつには書いてはいけない。
+    `\dontrun{}` に入れるとチェックから除外される。
     単数形の `@example` は外部ファイルのパスを受け取る
 
 `@rdname basename`
@@ -370,11 +395,8 @@ increment = function(x) {x + 1}
     逆に言えば、中身が違うものに同じ名前をつけてはいけないし、
     引数や機能がほとんど重ならない関数をまとめると分かりにくくなる。
 
-`@docType`
-:   関数やクラスには不要だが `data` か `package` の場合はここで指定。
-
-`@name name`
-:   パッケージやデータはこのタグで明示的に設定する必要がある。
+`@docType`, `@name`
+:   パッケージやデータを記述するのに必要だったが今では不要っぽい。
 
 
 ## 関連書籍
