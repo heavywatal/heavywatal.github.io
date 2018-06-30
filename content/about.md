@@ -100,7 +100,8 @@ Bachelor of Science, 2008.03
 
 **Invited**
 
--   岩嵜航「[Rにやらせて楽しよう --- データの可視化と下ごしらえ](/slides/nagoya2018/)」[アドバンス生命理学特論](http://www.bio.nagoya-u.ac.jp/seminar/) ([ポスター](http://www.bio.nagoya-u.ac.jp/files/event/454/180518_Iwasaki.pdf)) (2018.05) 名古屋大
+-   Watal M. Iwasaki "Writing an R package interface to C++ libraries with Rcpp" [Tokyo.R 71](https://tokyor.connpass.com/event/92522/) (2018.07) Tokyo
+-   岩嵜航「[Rにやらせて楽しよう --- データの可視化と下ごしらえ](/slides/nagoya2018/)」[アドバンス生命理学特論](http://www.bio.nagoya-u.ac.jp/seminar/) ([告知ポスター](http://www.bio.nagoya-u.ac.jp/files/event/454/180518_Iwasaki.pdf)) (2018.05) 名古屋大
 -   岩嵜航「[それもRにやらせよう --- 整然データの下ごしらえ](/slides/esj65)」(自由集会[「データ解析で出会う統計的問題: R の新しい作図・作表」粕谷英一・久保拓弥](http://hosho.ees.hokudai.ac.jp/~kubo/ce/EcoSj2018.html) 日本生態学会[第65回大会](http://www.esj.ne.jp/meeting/65/) (2018.03) 札幌
 -   岩嵜航「隠蔽変異を介して相互に促進される生命システムの複雑化と多様化」 [第6回Evo-Devo青年の会 --- 新奇性の生まれるとき](http://evo-devo.net/Events/6th/events_6th.html) (2013.07) 東京大学三崎臨海実習所
 -   岩嵜航・津田真樹・河田雅圭「環境と発生システムの相互作用が制限または増進する進化可能性」(自由集会「[esj60w]({{< relref "esj60w.md" >}})」嶋田正和・三浦徹) [日本生態学会第60回大会](http://www.esj.ne.jp/meeting/60/) (2013.03) 静岡
