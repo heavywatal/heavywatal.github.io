@@ -57,7 +57,7 @@ Bachelor of Science, 2008.03
 **Papers**
 
 - Atsushi Niida, **Watal M. Iwasaki**, Hideki Innan. (2018)
-  [*Mol. Biol. Evol.* (in press)](https://doi.org/10.1093/molbev/msy091);
+  [*Mol. Biol. Evol.* **35**(6) 1316--1321](https://doi.org/10.1093/molbev/msy091);
   Neutral Theory in Cancer Cell Population Genetics.
 - Yusuke Okamoto, **Watal M. Iwasaki**, Kazuto Kugou, Kazuki Takahashi, Arisa Oda, Koichi Sato, Wataru Kobayashi, Hidehiko Kawai, Ryo Sakasai, Akifumi Takaori-Kondo, Takashi Yamamoto, Masato T. Kanemaki, Masato Taoka, Toshiaki Isobe, Hitoshi Kurumizaka, Hideki Innan, Kunihiro Ohta, Masamichi Ishiai, Minoru Takata. (2018)
   [*Nucleic Acids Research* **46**(6) 2932--2944](https://doi.org/10.1093/nar/gky058);
