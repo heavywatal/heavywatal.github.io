@@ -230,7 +230,11 @@ print("SGE_TASK_ID: " + os.environ["SGE_TASK_ID"])
 ### 補助コマンド
 
 `qstat`
-:   現在実行中のジョブ一覧
+:   現在実行中のジョブ一覧。
+    ステータスは1文字に省略されて
+    E(rror), r(unning), R(estarted), s(uspended)
+    のように表示される。
+    詳しくは `man qstat` を参照。
 
 `qstat -g c`
 :   クラスタで定義されているキューの一覧と、それぞれの負荷を表示
