@@ -153,7 +153,6 @@ vignettes/
 
     //' First example
     //' @param args string vector
-    //' @return string
     //' @export
     // [[Rcpp::export]]
     std::string cxx_func(Rcpp::CharacterVector args=Rcpp::CharacterVector::create()) {
@@ -161,36 +160,37 @@ vignettes/
         return vs_args;
     }
     ```
+-   開発者側で指定すべきビルドオプションは `src/Makevars` に指定:
+    ```
+    CXX_STD=CXX14
+    PKG_CPPFLAGS=-DSTRICT_R_HEADERS
+    PKG_LIBS=-lmy_great_lib
+    ```
+    `STRICT_R_HEADERS` を定義しておくことで余計なマクロ定義を防げる。
+    `configure` を使って `src/Makevars.in` から生成する手もある。
 
--   開発者側で指定すべきビルドオプションは `src/Makevars` に指定
+-   ユーザ側で指定すべきオプションがある場合は `~/.R/Makevars` に:
     ```
-    CXX_STD = CXX14
-    PKG_CPPFLAGS = -DSTRICT_R_HEADERS
-    PKG_LIBS = -lmy_great_lib
+    LLVM_LOC=/usr/local/opt/llvm
+    CC=$(LLVM_LOC)/bin/clang
+    CXX=$(LLVM_LOC)/bin/clang++
+    # CFLAGS=-g -Wall -O2 -march=native -mtune=native
+    # CXXFLAGS=$(CFLAGS)
+    # CPPFLAGS=-I${HOME}/local/include -I${HOME}/.linuxbrew/include
+    # LDFLAGS=-L${HOME}/local/lib -L${HOME}/.linuxbrew/lib
     ```
-    `STRICT_R_HEADERS` を定義しておくことで余計なマクロ定義を防げる
-
--   ユーザ側で指定すべきオプションは `~/.R/Makevars` に
-    ```
-    CFLAGS = -g -Wall -O2 -march=native -mtune=native
-    CXXFLAGS = $(CFLAGS)
-    CXX11FLAGS = $(CXXFLAGS)
-    CXX14FLAGS = $(CXXFLAGS)
-    CXX17FLAGS = $(CXXFLAGS)
-    CPPFLAGS = -I${HOME}/local/include -I${HOME}/.linuxbrew/include
-    LDFLAGS = -L${HOME}/local/lib -L${HOME}/.linuxbrew/lib
-    ```
-
--   `DESCRIPTION` にいくらか書き足す
+    例えばMPI依存パッケージをmacOSでビルドでしようとすると
+    `clang: error: unsupported option '-fopenmp'`
+    と怒られるので `brew install llvm`
+    で別のコンパイラを入れて上記のように指定する。
+-   `DESCRIPTION` にいくらか書き足す:
     ```
     LinkingTo: Rcpp
     SystemRequirements: C++14
     ```
-
--   `R/` の適当なとこで `@useDynLib` にパッケージ名を指定する
-
+-   `R/` の適当なとこに `@useDynLib` の指定が必要 (roxygenについては後述):
     ```R
-    #' @useDynLib hello
+    #' @useDynLib hello, .registration = TRUE
     "_PACKAGE"
     ```
 
