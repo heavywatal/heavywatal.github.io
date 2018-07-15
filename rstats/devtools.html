@@ -238,7 +238,6 @@ vignettes/</code></pre></div>
 </span><span class="cp"></span>
 <span class="c1">//&#39; First example
 </span><span class="c1">//&#39; @param args string vector
-</span><span class="c1">//&#39; @return string
 </span><span class="c1">//&#39; @export
 </span><span class="c1">// [[Rcpp::export]]
 </span><span class="c1"></span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">cxx_func</span><span class="p">(</span><span class="n">Rcpp</span><span class="o">::</span><span class="n">CharacterVector</span> <span class="n">args</span><span class="o">=</span><span class="n">Rcpp</span><span class="o">::</span><span class="n">CharacterVector</span><span class="o">::</span><span class="n">create</span><span class="p">())</span> <span class="p">{</span>
@@ -247,34 +246,40 @@ vignettes/</code></pre></div>
 <span class="p">}</span>
 </code></pre></div></li>
 
-<li><p>開発者側で指定すべきビルドオプションは <code>src/Makevars</code> に指定</p>
+<li><p>開発者側で指定すべきビルドオプションは <code>src/Makevars</code> に指定:</p>
 
-<pre><code>CXX_STD = CXX14
-PKG_CPPFLAGS = -DSTRICT_R_HEADERS
-PKG_LIBS = -lmy_great_lib
+<pre><code>CXX_STD=CXX14
+PKG_CPPFLAGS=-DSTRICT_R_HEADERS
+PKG_LIBS=-lmy_great_lib
 </code></pre>
 
-<p><code>STRICT_R_HEADERS</code> を定義しておくことで余計なマクロ定義を防げる</p></li>
+<p><code>STRICT_R_HEADERS</code> を定義しておくことで余計なマクロ定義を防げる。
+<code>configure</code> を使って <code>src/Makevars.in</code> から生成する手もある。</p></li>
 
-<li><p>ユーザ側で指定すべきオプションは <code>~/.R/Makevars</code> に</p>
+<li><p>ユーザ側で指定すべきオプションがある場合は <code>~/.R/Makevars</code> に:</p>
 
-<pre><code>CFLAGS = -g -Wall -O2 -march=native -mtune=native
-CXXFLAGS = $(CFLAGS)
-CXX11FLAGS = $(CXXFLAGS)
-CXX14FLAGS = $(CXXFLAGS)
-CXX17FLAGS = $(CXXFLAGS)
-CPPFLAGS = -I${HOME}/local/include -I${HOME}/.linuxbrew/include
-LDFLAGS = -L${HOME}/local/lib -L${HOME}/.linuxbrew/lib
-</code></pre></li>
+<pre><code>LLVM_LOC=/usr/local/opt/llvm
+CC=$(LLVM_LOC)/bin/clang
+CXX=$(LLVM_LOC)/bin/clang++
+# CFLAGS=-g -Wall -O2 -march=native -mtune=native
+# CXXFLAGS=$(CFLAGS)
+# CPPFLAGS=-I${HOME}/local/include -I${HOME}/.linuxbrew/include
+# LDFLAGS=-L${HOME}/local/lib -L${HOME}/.linuxbrew/lib
+</code></pre>
 
-<li><p><code>DESCRIPTION</code> にいくらか書き足す</p>
+<p>例えばMPI依存パッケージをmacOSでビルドでしようとすると
+<code>clang: error: unsupported option '-fopenmp'</code>
+と怒られるので <code>brew install llvm</code>
+で別のコンパイラを入れて上記のように指定する。</p></li>
+
+<li><p><code>DESCRIPTION</code> にいくらか書き足す:</p>
 
 <pre><code>LinkingTo: Rcpp
 SystemRequirements: C++14
 </code></pre></li>
 
-<li><p><code>R/</code> の適当なとこで <code>@useDynLib</code> にパッケージ名を指定する</p>
-<div class="highlight"><pre class="chroma"><code class="language-R" data-lang="R"><span class="c1">#&#39; @useDynLib hello</span>
+<li><p><code>R/</code> の適当なとこに <code>@useDynLib</code> の指定が必要 (roxygenについては後述):</p>
+<div class="highlight"><pre class="chroma"><code class="language-R" data-lang="R"><span class="c1">#&#39; @useDynLib hello, .registration = TRUE</span>
 <span class="s">&#34;_PACKAGE&#34;</span></code></pre></div></li>
 </ul>
 
