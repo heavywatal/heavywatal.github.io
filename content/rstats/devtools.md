@@ -160,14 +160,16 @@ vignettes/
         return vs_args;
     }
     ```
--   開発者側で指定すべきビルドオプションは `src/Makevars` に指定:
+-   外部ライブラリのリンクに関する設定など、
+    開発者側で指定すべきビルドオプションは `src/Makevars` に指定:
     ```
     CXX_STD=CXX14
-    PKG_CPPFLAGS=-DSTRICT_R_HEADERS
-    PKG_LIBS=-lmy_great_lib
+    PKG_CPPFLAGS=-DSTRICT_R_HEADERS -I/usr/local/include
+    PKG_LIBS=-L/usr/local/lib -Wl,-rpath,/usr/local/lib -lhello
     ```
     `STRICT_R_HEADERS` を定義しておくことで余計なマクロ定義を防げる。
-    `configure` を使って `src/Makevars.in` から生成する手もある。
+    `configure` や [CMake]({{< relref "cmake.md" >}}) を使って
+    `src/Makevars.in` から生成する手もある。
 
 -   ユーザ側で指定すべきオプションがある場合は `~/.R/Makevars` に:
     ```
@@ -192,7 +194,12 @@ vignettes/
     ```R
     #' @useDynLib hello, .registration = TRUE
     "_PACKAGE"
+
+    .onUnload = function(libpath) {
+      library.dynam.unload("hello", libpath)
+    }
     ```
+    `.onUnload` は定義しなくても動くけど、あったほうがより丁寧で安全らしい。
 
 その他の注意点
 
