@@ -26,7 +26,7 @@ Linux にも Mac にも最初からインストールされている。
 ただMac付属の `/usr/bin/nano` は古いし
 色設定ファイルも含まれていないので
 パッケージマネージャーで新しいのを入れる。
-cf. [/mac/homebrew]({{< relref "mac/homebrew.md" >}}) :
+cf. [/mac/homebrew]({{< relref "homebrew.md" >}}) :
 
     % brew install nano
 

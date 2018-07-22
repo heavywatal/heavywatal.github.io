@@ -43,7 +43,7 @@ Basic Local Alignment Search Tool
 
 1.  Boost ライブラリをインストールする。このとき
     `regex`, `spirit`, `system`, `filesystem`, `test`, `thread`
-    をビルド対象に含める。 cf. [Boost]({{< relref "cxx/boost.md" >}})
+    をビルド対象に含める。 cf. [Boost]({{< relref "boost.md" >}})
 2.  <ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST>
     から最新版の `ncbi-blast-*-src.tar.gz` をダウンロード
 3.  展開して移動:
@@ -59,7 +59,7 @@ Basic Local Alignment Search Tool
     {{%div class="note"%}}
 `clang` (および Xcode のニセ `gcc`)
 では `configure` が通らないので本物の `gcc` を
-[Homebrew]({{< relref "mac/homebrew.md" >}}) などでインストールしておく。
+[Homebrew]({{< relref "homebrew.md" >}}) などでインストールしておく。
     {{%/div%}}
 
 5.  そのまま `make` してもダメらしいので

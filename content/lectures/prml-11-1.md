@@ -139,7 +139,7 @@ Unix/Linux系OSが提供する乱数
 {{%/div%}}
 
 {{%div class="note"%}}
-[/cxx/random]({{< relref "cxx/random.md" >}})
+[/cxx/random]({{< relref "random.md" >}})
 {{%/div%}}
 
 #### 11.1.1 Standard distributions

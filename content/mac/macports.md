@@ -23,7 +23,7 @@ port は `/opt/local/` 以下にインストールされる。
 
 ## Installation
 
-1.  Command Line Tools をインストールする。 cf. [/dev/devenv]({{< relref "dev/devenv.md" >}})
+1.  Command Line Tools をインストールする。 cf. [/dev/devenv]({{< relref "devenv.md" >}})
 2.  [公式サイト](http://www.macports.org/) から
     OSに合ったディスクイメージ `MacPorts-***.dmg` をダウンロード
 3.  それをマウントしてインストーラを実行
@@ -185,7 +185,7 @@ xzは最も圧縮率が高く、圧縮にはbzip2よりも時間がかかる一�
 Macには元から入ってるし、ソースからインストールするのも簡単だけど、
 port コマンドを補完できるvariantがあるのでこれを使う。
 ログインシェルにするにはひと手間必要。
-その後の設定は [こちらのページ参照]({{< relref "dev/zsh.md" >}}) 。:
+その後の設定は [こちらのページ参照]({{< relref "zsh.md" >}}) 。:
 
     % sudo port install zsh-devel +mp_completion +doc +examples
     % sudo emacs -nw /etc/shells # 末尾に/opt/local/bin/zshを追加

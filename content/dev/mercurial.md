@@ -236,12 +236,12 @@ cf. <http://mercurial.selenic.com/wiki/.hgignore> :
 ## インストール
 
 PyPIに登録されてるPythonパッケージなので
-[pip]({{< relref "python/pip.md" >}}) でインストールできる:
+[pip]({{< relref "pip.md" >}}) でインストールできる:
 
     % pip install mercurial
 
 でもPythonから `import` して使うことは無いので、
-Macなら [Homebrew]({{< relref "mac/homebrew.md" >}}) で入れちゃうほうが管理が楽チン:
+Macなら [Homebrew]({{< relref "homebrew.md" >}}) で入れちゃうほうが管理が楽チン:
 
     % brew install mercurial
 

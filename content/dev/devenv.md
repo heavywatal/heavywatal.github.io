@@ -31,7 +31,7 @@ tags = ["package"]
 
 <http://linuxbrew.sh/>
 
-Macの [Homebrew]({{< relref "mac/homebrew.md" >}}) をLinuxに移植したパッケージマネージャ。
+Macの [Homebrew]({{< relref "homebrew.md" >}}) をLinuxに移植したパッケージマネージャ。
 
 1.  RHEL/CentOS 6系の場合まずlibcurlが古すぎるので、
     [最新のcurl](https://curl.haxx.se/download.html)をソースコードからインストール:
@@ -110,14 +110,14 @@ Macの [Homebrew]({{< relref "mac/homebrew.md" >}}) をLinuxに移植したパ�
 
 ### パッケージ管理ツール
 
--   [/mac/homebrew]({{< relref "mac/homebrew.md" >}})
--   [/mac/macports]({{< relref "mac/macports.md" >}})
+-   [/mac/homebrew]({{< relref "homebrew.md" >}})
+-   [/mac/macports]({{< relref "macports.md" >}})
 
 ### その他のプログラム
 
 -   [MenuMeters](https://member.ipmu.jp/yuji.tachikawa/MenuMetersElCapitan/)
--   [QuickLook plugins]({{< relref "mac/quicklook.md" >}})
--   [`defaults`コマンドで各種設定]({{< relref "mac/command.md#defaults" >}})
+-   [QuickLook plugins]({{< relref "quicklook.md" >}})
+-   [`defaults`コマンドで各種設定]({{< relref "command.md#defaults" >}})
 
 ### リソースフォークを無視
 
@@ -134,26 +134,26 @@ fi
 
 ### Python
 
-- [install]({{< relref "python/install.md" >}})
-- [pip]({{< relref "python/pip.md" >}})
+- [install]({{< relref "/python/install.md" >}})
+- [pip]({{< relref "pip.md" >}})
 - `Pillow` をインストールする前に:
 
       % sudo apt-get install libtiff5-dev libwebp-dev libfreetype6-dev liblcms2-dev libopenjpeg-dev
 
 ### C++
 
-- [boost]({{< relref "cxx/boost.md" >}})
-- [SFMT]({{< relref "cxx/random.md" >}})
+- [boost]({{< relref "boost.md" >}})
+- [SFMT]({{< relref "random.md" >}})
 
 ### R
 
-[/rstats/config]({{< relref "rstats/config.md" >}})
+[/rstats/config]({{< relref "/rstats/config.md" >}})
 
 ### エディタ
 
-- [atom]({{< relref "dev/atom.md" >}})
-- [emacs]({{< relref "dev/emacs.md" >}})
-- [nano]({{< relref "dev/nano.md" >}})
+- [atom]({{< relref "atom.md" >}})
+- [emacs]({{< relref "emacs.md" >}})
+- [nano]({{< relref "nano.md" >}})
 
 ### Trash
 
@@ -175,7 +175,7 @@ fi
     `-f` はよほどのことが無い限り使わないようにする。
 
 `trash-cli`
-:   Python製なので [pip]({{< relref "python/pip.md" >}}) で
+:   Python製なので [pip]({{< relref "pip.md" >}}) で
     `pip install trash-cli` して入れる。
     すると以下のようなコマンドがインストールされる:
 
@@ -192,6 +192,6 @@ fi
 :   Macでも `trash-cli` を使えないことはないが、
     ゴミ箱のパスがMac標準の `~/.Trash` ではなく
     Linuxのものになってしまうので
-    [Homebrew]({{< relref "mac/homebrew.md" >}}) で `rmtrash` を入れる:
+    [Homebrew]({{< relref "homebrew.md" >}}) で `rmtrash` を入れる:
 
         % brew install rmtrash

@@ -90,7 +90,7 @@ export PATH
 
 ## Installation
 
-Macでは [Homebrew]({{< relref "mac/homebrew.md" >}})` (あるいは `[MacPorts]({{< relref "mac/macports.md" >}})) を使うと良い:
+Macでは [Homebrew]({{< relref "homebrew.md" >}})` (あるいは `[MacPorts]({{< relref "macports.md" >}})) を使うと良い:
 
     % brew install zsh --without-etcdir
     % brew install zsh-completions

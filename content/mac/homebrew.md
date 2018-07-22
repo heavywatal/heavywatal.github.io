@@ -14,7 +14,7 @@ Unixツールをパッケージとして手軽にインストールできるMac�
 <http://docs.brew.sh/Installation.html>
 
 1.  Command Line Tools をインストールする。
-    cf. [/dev/devenv]({{< relref "dev/devenv.md" >}})
+    cf. [/dev/devenv]({{< relref "devenv.md" >}})
 
 2.  ターミナルから下記のコマンドを実行し、指示に従ってパスワードを入力する:
     ```sh

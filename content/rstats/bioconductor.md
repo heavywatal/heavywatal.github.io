@@ -509,7 +509,7 @@ bsg[[1]]
 
 <http://blog.hackingisbelieving.org/2012/02/dna-bioconductor.html>
 
-[/bio/motif]({{< relref "bio/motif.md" >}})
+[/bio/motif]({{< relref "motif.md" >}})
 
 ## 作図
 

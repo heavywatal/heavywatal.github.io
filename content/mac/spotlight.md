@@ -14,7 +14,7 @@ tags = ["mac"]
 -   `System Preferences... --> Spotlight --> Privacy --> "+"`
     or Finder からD&D
 
-[Homebrew]({{< relref "mac/homebrew.md" >}})` や `[MacPorts]({{< relref "mac/macports.md" >}})
+[Homebrew]({{< relref "homebrew.md" >}})` や `[MacPorts]({{< relref "macports.md" >}})
 などのパッケージ管理ツールを入れている人は
 それらのルートディレクトリ(`/opt` など)を除外しといたほうがいい。
 普通は表示されてないので、以下のコマンドで

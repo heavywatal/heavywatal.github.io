@@ -58,7 +58,7 @@ Phase 2ゲートウェイから
 ただしOS標準のコンパイラやライブラリが古すぎるので、
 最初のセットアップにひと手間必要。
 特に最近はcurlがSSL認証でコケるのでお手上げ。。。
-cf. [/dev/開発環境]({{< relref "dev/devenv.md" >}})
+cf. [/dev/開発環境]({{< relref "devenv.md" >}})
 
 {{%div class="note"%}}
 emacsは `User *** has no home directory` という謎のエラーを吐く。

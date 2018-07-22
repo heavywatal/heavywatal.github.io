@@ -105,8 +105,8 @@ https://gcc.gnu.org/install/
 Xcode についてくる `gcc-4.2` は
 `gcc` の顔をした `clang` なので、
 本当の `gcc` が欲しいときは別途インストールが必要。
-[Homebrew]({{< relref "mac/homebrew.md" >}}) か
-[MacPorts]({{< relref "mac/macports.md" >}}) で入れるのが楽チン:
+[Homebrew]({{< relref "homebrew.md" >}}) か
+[MacPorts]({{< relref "macports.md" >}}) で入れるのが楽チン:
 
     % brew install gcc
 

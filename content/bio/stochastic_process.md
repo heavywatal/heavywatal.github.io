@@ -110,7 +110,7 @@ f(x; k, \theta) &= \frac {x^{k-1} \exp[-\frac x \theta]} {\theta^k \Gamma(k)} \\
 rate parameter $\lambda = \frac 1 \theta$ を使った形だと導出もイメージしやすい。
 時間当たり *λ* 回起こるPoisson過程で *k* 回起こるまでの待ち時間の分布、
 すなわち指数分布を *k* 個畳み込んだ分布。
-cf. [/lectures/wakeley-2-2]({{< relref "lectures/wakeley-2-2.md" >}})
+cf. [/lectures/wakeley-2-2]({{< relref "wakeley-2-2.md" >}})
 
 <div>\[\begin{split}
 f(t; k, \lambda) &= \lambda e^{-\lambda t}
