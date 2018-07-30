@@ -193,12 +193,17 @@ vignettes/
 -   `R/` の適当なとこに `@useDynLib` の指定が必要 (roxygenについては後述):
     ```R
     #' @useDynLib hello, .registration = TRUE
+    #' @importFrom Rcpp sourceCpp
     "_PACKAGE"
 
     .onUnload = function(libpath) {
       library.dynam.unload("hello", libpath)
     }
     ```
+    `@importFrom Rcpp sourceCpp` を省くと、パッケージ利用時に
+    `'enterRNGScope' not provided by package 'Rcpp'`
+    のようなエラーが出る場合がある
+    (明示的に `library(Rcpp)` するなどして既にRcppロード済みの環境では動く)。
     `.onUnload` は定義しなくても動くけど、あったほうがより丁寧で安全らしい。
 
 その他の注意点
