@@ -282,12 +282,17 @@ SystemRequirements: C++14
 
 <li><p><code>R/</code> の適当なとこに <code>@useDynLib</code> の指定が必要 (roxygenについては後述):</p>
 <div class="highlight"><pre class="chroma"><code class="language-R" data-lang="R"><span class="c1">#&#39; @useDynLib hello, .registration = TRUE</span>
+<span class="c1">#&#39; @importFrom Rcpp sourceCpp</span>
 <span class="s">&#34;_PACKAGE&#34;</span>
 
 <span class="m">.</span>onUnload <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>libpath<span class="p">)</span> <span class="p">{</span>
   <span class="kp">library.dynam.unload</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">,</span> libpath<span class="p">)</span>
 <span class="p">}</span></code></pre></div>
-<p><code>.onUnload</code> は定義しなくても動くけど、あったほうがより丁寧で安全らしい。</p></li>
+<p><code>@importFrom Rcpp sourceCpp</code> を省くと、パッケージ利用時に
+<code>'enterRNGScope' not provided by package 'Rcpp'</code>
+のようなエラーが出る場合がある
+(明示的に <code>library(Rcpp)</code> するなどして既にRcppロード済みの環境では動く)。
+<code>.onUnload</code> は定義しなくても動くけど、あったほうがより丁寧で安全らしい。</p></li>
 </ul>
 
 <p>その他の注意点</p>
