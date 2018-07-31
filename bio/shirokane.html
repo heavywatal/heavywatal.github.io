@@ -122,7 +122,7 @@ SHIROKANE — HGCスパコン
 <p>まず <code>mpfr</code> インストール時の <code>make check</code> でコケるが、
 <code>brew edit mpfr</code> で該当箇所をコメントアウトして対処。</p>
 
-<p>しかし結局 <code>gcc</code> のインストールがうまく行かず頓挫。
+<p>しかし <code>glibc</code>/<code>gcc</code> のインストールがうまく行かない。
 <code>LIBRARY_PATH</code> や <code>LD_LIBRARY_PATH</code> をいじっても
 <code>libiconv.so.2</code> を見つけてもらえない:</p>
 
@@ -150,30 +150,37 @@ make[1]: Leaving directory `/tmp/gcc-20180614-19441-uv2cp4/gcc-5.5.0/build'
 make: *** [all] Error 2
 </code></pre>
 
+<p>シムリンクを張ることで一応通るようになる:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> ~/.linuxbrew/lib/
+ln -s /usr/local/lib/libiconv.so.2
+<span class="nb">cd</span> ~/.linuxbrew/include/
+ln -s /usr/local/include/gd.h
+ln -s /usr/local/include/gdfontl.h
+ln -s /usr/local/include/gdfonts.h</code></pre></div>
+<p>が、このglibcを使うと随所で不具合が&hellip;</p>
+
 <h3 id="tumopp">tumopp</h3>
 
 <p>提供されている <code>/usr/local/package/gcc/7.3.0</code> を使い、
 依存ライブラリをほぼすべて手動で <code>~/local/</code> にインストールする。</p>
 
 <ol>
+<li><p><code>~/.bashrc</code> などで以下のように環境変数を設定する:</p>
+
+<pre><code>module unload intel_env
+module unload gcc
+module load /usr/local/package/gcc/modulefiles/gcc/7.3.0
+</code></pre>
+
+<p>シェルを再起動してこれを反映: <code>exec $SHELL -l</code> 。<br>
+以下のステップで <code>-DCMAKE_CXX_COMPILER=...</code> を省略できる。</p></li>
+
 <li><p><code>~/user-config.jam</code> を作成:</p>
 
 <pre><code>using gcc : 14 : /usr/local/package/gcc/7.3.0/bin/g++ : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++14 ;
 </code></pre></li>
 
 <li><p>最新の<a href="/cxx/boost.html">Boost</a>をソースコードからビルドしてインストールする</p></li>
-
-<li><p><code>~/.bashrc</code> などで以下のような環境変数を定義する:</p>
-
-<pre><code>PATH=${HOME}/local/bin:$PATH
-GCC_PREFIX=/usr/local/package/gcc/7.3.0
-export CC=${GCC_PREFIX}/bin/gcc
-export CXX=${GCC_PREFIX}/bin/g++
-export LD_LIBRARY_PATH=${GCC_PREFIX}/lib64:$LD_LIBRARY_PATH
-</code></pre>
-
-<p>シェルを再起動してこれを反映: <code>exec $SHELL -l</code> 。<br>
-以下のステップで <code>-DCMAKE_CXX_COMPILER=...</code> を省略できる。</p></li>
 
 <li><p>各種C++ライブラリをインストール:</p>
 
@@ -191,13 +198,11 @@ export LD_LIBRARY_PATH=${GCC_PREFIX}/lib64:$LD_LIBRARY_PATH
 <p>その後アップデートするときは <code>git pull</code> して再ビルド・再インストール。</p></li>
 
 <li><p>Rをソースコードからビルドしてインストール
-(configureオプションは <code>/usr/local/package/r/3.5.0/lib64/R/etc/Makeconf</code> を参考に):</p>
+(configureオプションは <code>/usr/local/package/r/3.5.1/lib64/R/etc/Makeconf</code> を参考に):</p>
 
-<pre><code>wget -O- https://cran.r-project.org/src/base/R-3/R-3.5.0.tar.gz | tar xz
-cd R-3.5.0/
-./configure --prefix=${HOME}/local '--enable-R-shlib' '--enable-shared' '--enable-memory-profiling' '--with-tcl-config=/usr/local/lib/tclConfig.sh' '--with-tk-config=/usr/local/lib/tkConfig.sh' 'CC=/usr/local/package/gcc/7.3.0/bin/gcc' 'CXX=/usr/local/package/gcc/7.3.0/bin/g++' 'CPPFLAGS=-I/usr/local/package/gcc/7.3.0/include -I/usr/local/include' 'LDFLAGS=-L/usr/local/package/gcc/7.3.0/lib64 -L/usr/local/package/gcc/7.3.0/lib -L/usr/local/lib64 -L/usr/local/lib' 'F77=/usr/local/package/gcc/7.3.0/bin/gfortran' 'FC=/usr/local/package/gcc/7.3.0/bin/gfortran' 'JAVA_HOME=/usr/local/package/java/jdk1.8.0_162_64' 'PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/usr/lib64/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig'
-make -j4
-make install
+<pre><code>wget -O- https://cran.r-project.org/src/base/R-3/R-3.5.1.tar.gz | tar xz
+cd R-3.5.1/
+./configure --prefix=${HOME}/local &quot;--enable-R-shlib&quot; &quot;--enable-shared&quot; &quot;--enable-memory-profiling&quot; &quot;--with-tcl-config=/usr/local/lib/tclConfig.sh&quot; &quot;--with-tk-config=/usr/local/lib/tkConfig.sh&quot; &quot;CC=${GCC_PREFIX}/bin/gcc&quot; &quot;CXX=${GCC_PREFIX}/bin/g++&quot; &quot;CPPFLAGS=-I${GCC_PREFIX}/include -I/usr/local/include -I/usr/include&quot; &quot;LDFLAGS=-L${GCC_PREFIX}/lib64 -L${GCC_PREFIX}/lib -L/usr/local/lib64 -L/usr/local/lib&quot; &quot;F77=${GCC_PREFIX}/bin/gfortran&quot; &quot;FC=${GCC_PREFIX}/bin/gfortran&quot; &quot;JAVA_HOME=/usr/local/package/java/jdk1.8.0_162_64&quot; &quot;PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/usr/lib64/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig&quot;
 </code></pre></li>
 
 <li><p>インストールしたRを起動し、パッケージをインストール:</p>
