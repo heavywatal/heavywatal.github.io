@@ -92,13 +92,15 @@ C&#43;&#43;コマンドライン引数
 <h2 id="理想">理想</h2>
 
 <ul>
-<li>インストールが簡単。できればビルド不要でヘッダ1つ。</li>
+<li>ビルド不要でヘッダ1つ</li>
+<li>標準ライブラリのみに依存していてポータブル</li>
 <li>ヘルプを自動生成してくれる</li>
-<li>オプションの管理を <code>main()</code> でなくクラスのソースファイルなどに分散できる</li>
-<li>オプション定義時に格納先の変数をアドレス渡しで指定できる</li>
-<li><code>(argc, argv)</code>だけでなくファイルや <code>std::string</code> からも読み込める</li>
-<li>読み込める形式で全オプションを書き出せる</li>
-<li>マクロではなく <code>template</code> など真っ当な C++ で書かれている</li>
+<li>オプション定義時に格納先の変数を紐付けできる</li>
+<li><code>(argc, argv)</code> だけでなく <code>std::string</code> とかからも読み込める</li>
+<li>読み込める形式で全ての値を書き出せる</li>
+<li>クラスのソースファイルなどに分散できる</li>
+<li>マクロではなくtemplateやlambdaなど真っ当なC++
+(できればC++11以降の簡潔なスタイル) で書ける</li>
 </ul>
 
 <h2 id="gnu-getopt">GNU <code>getopt</code></h2>
@@ -106,10 +108,9 @@ C&#43;&#43;コマンドライン引数
 <p><a href="http://www.gnu.org/s/libc/manual/html_node/Getopt.html">http://www.gnu.org/s/libc/manual/html_node/Getopt.html</a></p>
 
 <ul>
-<li><code>gcc</code> ならインストール不要、<code>#include &lt;getopt.h&gt;</code> するだけで使える</li>
+<li>UNIX的な環境ならインストール不要だがC/C++標準ではない</li>
 <li>ヘルプなど自動生成してくれない</li>
-<li>オプションの管理を各ソースファイルに分散できない</li>
-<li>C++というよりCなので使い方がわかりにくい</li>
+<li>C++というよりCなので手作業が多い</li>
 </ul>
 
 <h2 id="boost-program-options"><code>boost::program_options</code></h2>
@@ -117,10 +118,10 @@ C&#43;&#43;コマンドライン引数
 <p><a href="http://www.boost.org/doc/html/program_options.html">http://www.boost.org/doc/html/program_options.html</a></p>
 
 <ul>
-<li>格納する変数のアドレスを渡せる</li>
-<li>ファイルから読み込みをサポート</li>
+<li>格納先の変数を紐付け可能</li>
+<li>ファイルからも読み込める</li>
 <li>読み込み可能なファイルの出力方法は用意されてないので自分で書く必要がある</li>
-<li>Boostライブラリのヘッダだけでなくビルドとリンクが必要 cf. <a href="/cxx/boost.html">boost</a></li>
+<li>ビルドとリンクが必要で大掛かり cf. <a href="/cxx/boost.html">boost</a></li>
 <li>各ソースファイルに分散するには:
 
 <ol>
@@ -170,9 +171,10 @@ C&#43;&#43;コマンドライン引数
 <a href="http://d.hatena.ne.jp/tanakh/20091028">http://d.hatena.ne.jp/tanakh/20091028</a></p>
 
 <ul>
-<li>たった1つのヘッダファイルで構成されてるのでインストールもビルドも楽チン</li>
+<li>ヘッダファイル1つ</li>
 <li>直感的でC++らしいデザインなので分かりやすい</li>
-<li>ファイルの読み取りはサポートしていないが <code>std::string</code> は読める</li>
+<li>demangle機能のためにポータビリティが犠牲に</li>
+<li><code>std::string</code> から読める</li>
 <li>変数に直接格納することはできず、パーサのメソッドで値を取得:
 <code>template &lt;class T&gt; const T &amp;parser::get(const std::string &amp;name)</code></li>
 <li>各ソースファイルに分散できるっちゃできる？
@@ -193,8 +195,7 @@ C&#43;&#43;コマンドライン引数
 <li>&ldquo;Templatized C++ Command Line Parser Library&rdquo;の名のとおり
 <code>template</code> で書かれておりヘッダだけで構成される</li>
 <li>が、<code>configure</code> と <code>make install</code> というインストール手順を踏む</li>
-<li>ファイルの読み取りはサポートしていないが、<code>std::string</code> からパース可能</li>
-<li>読み込めるファイルの出力は用意されていないが、自分で書くのは簡単そう</li>
+<li><code>std::string</code> からパース可能</li>
 <li>格納する変数は指定できず、<code>*Arg</code> オブジェクトの <code>getValue()</code> メソッドで値を取得</li>
 <li>各ソースファイルに分散するには:
 
@@ -236,17 +237,18 @@ C&#43;&#43;コマンドライン引数
 <dd><code>std::vector&lt;std::string&gt;</code>から読める</dd>
 <dd>要ビルド＆リンク (header-only化しようとしてる雰囲気はある)</dd>
 <dt><a href="https://github.com/jarro2783/cxxopts">https://github.com/jarro2783/cxxopts</a></dt>
-<dd>コンストラクタが<code>(argc, argv)</code>しかない</dd>
-<dd><code>-j3</code> が <code>-j 3</code> じゃなくて <code>--j3</code> と解釈されてしまう</dd>
+<dd>Lightweight C++ command line option parser</dd>
+<dd><code>parse(argc, argv)</code> だけ</dd>
 <dt><a href="https://github.com/Taywee/args">https://github.com/Taywee/args</a></dt>
-<dd>名前空間が<code>args</code>という大胆さ</dd>
+<dd>名前空間が <code>args</code> という大胆さ</dd>
 <dd>同じ名前を何回も書かなきゃいけないような、少々やぼったいインターフェイス</dd>
-<dd>ショートオプションを定義できないバグ？</dd>
 <dd>ヘッダ1つ、ヘルプ自動生成なのは良い</dd>
-<dt><a href="https://github.com/weisslj/cpp-argparse">https://github.com/weisslj/cpp-argparse</a></dt>
-<dd>名前のとおり Python <code>argparse</code> インスパイア系</dd>
-<dd>でもところどころまだ <code>optparse</code> の名残が&hellip;?</dd>
-<dd>要ビルド＆リンク</dd>
+<dt><a href="https://github.com/muellan/clipp">https://github.com/muellan/clipp</a></dt>
+<dd>理念がしっかりしてて有望。</dd>
+<dd>パッと見た感じ、ほぼ理想通りの使い方ができそう。</dd>
+<dt><a href="https://github.com/adishavit/argh">https://github.com/adishavit/argh</a></dt>
+<dd>A minimalist argument handler.</dd>
+<dd>ハイフンの数を区別できないし、ヘルプ自動生成も無い。</dd>
 </dl>
 
 </article>
