@@ -7,31 +7,32 @@ tags = ["c++"]
 
 ## 理想
 
--   インストールが簡単。できればビルド不要でヘッダ1つ。
+-   ビルド不要でヘッダ1つ
+-   標準ライブラリのみに依存していてポータブル
 -   ヘルプを自動生成してくれる
--   オプションの管理を `main()` でなくクラスのソースファイルなどに分散できる
--   オプション定義時に格納先の変数をアドレス渡しで指定できる
--   `(argc, argv)`だけでなくファイルや `std::string` からも読み込める
--   読み込める形式で全オプションを書き出せる
--   マクロではなく `template` など真っ当な C++ で書かれている
+-   オプション定義時に格納先の変数を紐付けできる
+-   `(argc, argv)` だけでなく `std::string` とかからも読み込める
+-   読み込める形式で全ての値を書き出せる
+-   クラスのソースファイルなどに分散できる
+-   マクロではなくtemplateやlambdaなど真っ当なC++
+    (できればC++11以降の簡潔なスタイル) で書ける
 
 ## GNU `getopt`
 
 <http://www.gnu.org/s/libc/manual/html_node/Getopt.html>
 
--   `gcc` ならインストール不要、`#include <getopt.h>` するだけで使える
+-   UNIX的な環境ならインストール不要だがC/C++標準ではない
 -   ヘルプなど自動生成してくれない
--   オプションの管理を各ソースファイルに分散できない
--   C++というよりCなので使い方がわかりにくい
+-   C++というよりCなので手作業が多い
 
 ## `boost::program_options`
 
 <http://www.boost.org/doc/html/program_options.html>
 
--   格納する変数のアドレスを渡せる
--   ファイルから読み込みをサポート
+-   格納先の変数を紐付け可能
+-   ファイルからも読み込める
 -   読み込み可能なファイルの出力方法は用意されてないので自分で書く必要がある
--   Boostライブラリのヘッダだけでなくビルドとリンクが必要 cf. [boost]({{< relref "boost.md" >}})
+-   ビルドとリンクが必要で大掛かり cf. [boost]({{< relref "boost.md" >}})
 -   各ソースファイルに分散するには:
     1.  各クラスの `static` メソッドで `options_description` オブジェクトを生成
     2.  メインの `options_description` オブジェクトに `add()` する。
@@ -80,9 +81,10 @@ void func(){
 <https://github.com/tanakh/cmdline>\
 <http://d.hatena.ne.jp/tanakh/20091028>
 
--   たった1つのヘッダファイルで構成されてるのでインストールもビルドも楽チン
+-   ヘッダファイル1つ
 -   直感的でC++らしいデザインなので分かりやすい
--   ファイルの読み取りはサポートしていないが `std::string` は読める
+-   demangle機能のためにポータビリティが犠牲に
+-   `std::string` から読める
 -   変数に直接格納することはできず、パーサのメソッドで値を取得:
     `template <class T> const T &parser::get(const std::string &name)`
 -   各ソースファイルに分散できるっちゃできる？
@@ -98,8 +100,7 @@ void func(){
 -   "Templatized C++ Command Line Parser Library"の名のとおり
     `template` で書かれておりヘッダだけで構成される
 -   が、`configure` と `make install` というインストール手順を踏む
--   ファイルの読み取りはサポートしていないが、`std::string` からパース可能
--   読み込めるファイルの出力は用意されていないが、自分で書くのは簡単そう
+-   `std::string` からパース可能
 -   格納する変数は指定できず、`*Arg` オブジェクトの `getValue()` メソッドで値を取得
 -   各ソースファイルに分散するには:
     1.  `main()` あたりで `CmdLine` オブジェクトを定義
@@ -132,16 +133,18 @@ https://github.com/docopt/docopt.cpp
 :   要ビルド＆リンク (header-only化しようとしてる雰囲気はある)
 
 https://github.com/jarro2783/cxxopts
-:   コンストラクタが`(argc, argv)`しかない
-:   `-j3` が `-j 3` じゃなくて `--j3` と解釈されてしまう
+:   Lightweight C++ command line option parser
+:   `parse(argc, argv)` だけ
 
 https://github.com/Taywee/args
-:   名前空間が`args`という大胆さ
+:   名前空間が `args` という大胆さ
 :   同じ名前を何回も書かなきゃいけないような、少々やぼったいインターフェイス
-:   ショートオプションを定義できないバグ？
 :   ヘッダ1つ、ヘルプ自動生成なのは良い
 
-https://github.com/weisslj/cpp-argparse
-:   名前のとおり Python `argparse` インスパイア系
-:   でもところどころまだ `optparse` の名残が...?
-:   要ビルド＆リンク
+https://github.com/muellan/clipp
+:   理念がしっかりしてて有望。
+:   パッと見た感じ、ほぼ理想通りの使い方ができそう。
+
+https://github.com/adishavit/argh
+:   A minimalist argument handler.
+:   ハイフンの数を区別できないし、ヘルプ自動生成も無い。
