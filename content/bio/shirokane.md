@@ -37,7 +37,7 @@ https://github.com/Linuxbrew/brew/wiki/CentOS6
 まず `mpfr` インストール時の `make check` でコケるが、
 `brew edit mpfr` で該当箇所をコメントアウトして対処。
 
-しかし結局 `gcc` のインストールがうまく行かず頓挫。
+しかし `glibc`/`gcc` のインストールがうまく行かない。
 `LIBRARY_PATH` や `LD_LIBRARY_PATH` をいじっても
 `libiconv.so.2` を見つけてもらえない:
 ```
@@ -65,11 +65,32 @@ make[1]: Leaving directory `/tmp/gcc-20180614-19441-uv2cp4/gcc-5.5.0/build'
 make: *** [all] Error 2
 ```
 
+シムリンクを張ることで一応通るようになる:
+```sh
+cd ~/.linuxbrew/lib/
+ln -s /usr/local/lib/libiconv.so.2
+cd ~/.linuxbrew/include/
+ln -s /usr/local/include/gd.h
+ln -s /usr/local/include/gdfontl.h
+ln -s /usr/local/include/gdfonts.h
+```
+
+が、このglibcを使うと随所で不具合が...
+
 
 ### tumopp
 
 提供されている `/usr/local/package/gcc/7.3.0` を使い、
 依存ライブラリをほぼすべて手動で `~/local/` にインストールする。
+
+1.  `~/.bashrc` などで以下のように環境変数を設定する:
+    ```
+    module unload intel_env
+    module unload gcc
+    module load /usr/local/package/gcc/modulefiles/gcc/7.3.0
+    ```
+    シェルを再起動してこれを反映: `exec $SHELL -l` 。<br>
+    以下のステップで `-DCMAKE_CXX_COMPILER=...` を省略できる。
 
 1.  `~/user-config.jam` を作成:
     ```
@@ -77,17 +98,6 @@ make: *** [all] Error 2
     ```
 
 1.  最新の[Boost]({{< relref "boost.md" >}})をソースコードからビルドしてインストールする
-
-1.  `~/.bashrc` などで以下のような環境変数を定義する:
-    ```
-    PATH=${HOME}/local/bin:$PATH
-    GCC_PREFIX=/usr/local/package/gcc/7.3.0
-    export CC=${GCC_PREFIX}/bin/gcc
-    export CXX=${GCC_PREFIX}/bin/g++
-    export LD_LIBRARY_PATH=${GCC_PREFIX}/lib64:$LD_LIBRARY_PATH
-    ```
-    シェルを再起動してこれを反映: `exec $SHELL -l` 。<br>
-    以下のステップで `-DCMAKE_CXX_COMPILER=...` を省略できる。
 
 1.  各種C++ライブラリをインストール:
     - [sfmt-class](https://github.com/heavywatal/sfmt-class)
@@ -101,13 +111,11 @@ make: *** [all] Error 2
     その後アップデートするときは `git pull` して再ビルド・再インストール。
 
 1.  Rをソースコードからビルドしてインストール
-    (configureオプションは `/usr/local/package/r/3.5.0/lib64/R/etc/Makeconf` を参考に):
+    (configureオプションは `/usr/local/package/r/3.5.1/lib64/R/etc/Makeconf` を参考に):
     ```
-    wget -O- https://cran.r-project.org/src/base/R-3/R-3.5.0.tar.gz | tar xz
-    cd R-3.5.0/
-    ./configure --prefix=${HOME}/local '--enable-R-shlib' '--enable-shared' '--enable-memory-profiling' '--with-tcl-config=/usr/local/lib/tclConfig.sh' '--with-tk-config=/usr/local/lib/tkConfig.sh' 'CC=/usr/local/package/gcc/7.3.0/bin/gcc' 'CXX=/usr/local/package/gcc/7.3.0/bin/g++' 'CPPFLAGS=-I/usr/local/package/gcc/7.3.0/include -I/usr/local/include' 'LDFLAGS=-L/usr/local/package/gcc/7.3.0/lib64 -L/usr/local/package/gcc/7.3.0/lib -L/usr/local/lib64 -L/usr/local/lib' 'F77=/usr/local/package/gcc/7.3.0/bin/gfortran' 'FC=/usr/local/package/gcc/7.3.0/bin/gfortran' 'JAVA_HOME=/usr/local/package/java/jdk1.8.0_162_64' 'PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/usr/lib64/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig'
-    make -j4
-    make install
+    wget -O- https://cran.r-project.org/src/base/R-3/R-3.5.1.tar.gz | tar xz
+    cd R-3.5.1/
+    ./configure --prefix=${HOME}/local "--enable-R-shlib" "--enable-shared" "--enable-memory-profiling" "--with-tcl-config=/usr/local/lib/tclConfig.sh" "--with-tk-config=/usr/local/lib/tkConfig.sh" "CC=${GCC_PREFIX}/bin/gcc" "CXX=${GCC_PREFIX}/bin/g++" "CPPFLAGS=-I${GCC_PREFIX}/include -I/usr/local/include -I/usr/include" "LDFLAGS=-L${GCC_PREFIX}/lib64 -L${GCC_PREFIX}/lib -L/usr/local/lib64 -L/usr/local/lib" "F77=${GCC_PREFIX}/bin/gfortran" "FC=${GCC_PREFIX}/bin/gfortran" "JAVA_HOME=/usr/local/package/java/jdk1.8.0_162_64" "PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/usr/lib64/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig"
     ```
 
 1.  インストールしたRを起動し、パッケージをインストール:
