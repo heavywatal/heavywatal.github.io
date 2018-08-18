@@ -115,62 +115,32 @@ GitHubに公開しておけば誰でも使えるようになるので、
 
 <h3 id="最低限の作成手順">最低限の作成手順</h3>
 
-<p>TODO: 新しい<a href="https://github.com/r-lib/usethis">usethis</a>を使ったほうが楽かも。</p>
-
 <ol>
-<li><p>Rを起動して <code>devtools</code> をインストールする</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">install.packages<span class="p">(</span><span class="s">&#39;devtools&#39;</span><span class="p">)</span>
-<span class="kn">library</span><span class="p">(</span>devtools<span class="p">)</span></code></pre></div></li>
+<li><p>開発支援パッケージをインストールする:
+<code>install.packages(c(&quot;devtools&quot;, &quot;usethis&quot;))</code></p></li>
 
-<li><p><code>devtools::create()</code> で骨組みを作る</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kp">setwd</span><span class="p">(</span><span class="s">&#39;~/tmp/&#39;</span><span class="p">)</span>
-pkgname <span class="o">=</span> <span class="s">&#39;hello&#39;</span>
-title_desc <span class="o">=</span> <span class="s">&#39;Example package to say hello&#39;</span>
-github_repo <span class="o">=</span> <span class="kp">sprintf</span><span class="p">(</span><span class="s">&#39;https://github.com/heavywatal/%s&#39;</span><span class="p">,</span> pkgname<span class="p">)</span>
-devtools<span class="o">::</span>create<span class="p">(</span>
-  pkgname<span class="p">,</span>
-  description <span class="o">=</span> <span class="kt">list</span><span class="p">(</span>
-    Package <span class="o">=</span> pkgname<span class="p">,</span>
-    Title <span class="o">=</span> title_desc<span class="p">,</span>
-    Description <span class="o">=</span> <span class="kp">paste0</span><span class="p">(</span>title_desc<span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">),</span>
-    <span class="sb">`Authors@R`</span> <span class="o">=</span> <span class="s">&#34;person(&#39;Watal M.&#39;, &#39;Iwasaki&#39;, email=&#39;user@example.com&#39;, role=c(&#39;aut&#39;, &#39;cre&#39;))&#34;</span><span class="p">,</span>
-    License <span class="o">=</span> <span class="s">&#39;MIT&#39;</span><span class="p">,</span>
-    Suggests <span class="o">=</span> <span class="s">&#39;tidyverse&#39;</span><span class="p">,</span>
-    Imports <span class="o">=</span> <span class="s">&#39;magrittr, rlang, stringr&#39;</span><span class="p">,</span>
-    URL <span class="o">=</span> github_repo<span class="p">,</span>
-    BugReports <span class="o">=</span> <span class="kp">paste0</span><span class="p">(</span>github_repo<span class="p">,</span> <span class="s">&#39;/issues&#39;</span><span class="p">)),</span>
-  check <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
-  rstudio <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
-  quiet <span class="o">=</span> <span class="kc">FALSE</span>
-<span class="p">)</span></code></pre></div></li>
+<li><p><a href="http://usethis.r-lib.org/">usethis</a> の関数をいくつか使って骨組みを作る:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">usethis<span class="o">::</span>create_package<span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">)</span>
+usethis<span class="o">::</span>use_mit_license<span class="p">()</span>
+usethis<span class="o">::</span>use_roxygen_md<span class="p">()</span>
+usethis<span class="o">::</span>use_package_doc<span class="p">()</span></code></pre></div></li>
 
-<li><p><code>devtools::check(pkgname)</code> で様子を見てみる</p>
+<li><p><code>devtools::check()</code> で様子を見てみる。
+LaTeX 関連で怒られたら足りないパッケージを入れる:
+<code>sudo tlmgr install inconsolata helvetic</code></p></li>
 
-<div class="note">
-<p>LaTeX 関連で怒られたら足りないパッケージを入れる:
-<code>sudo tlmgr install inconsolata helvetic</code></p>
+<li><p>ローカルgitリポジトリを作って最初のコミットをする:
+<code>usethis::use_git()</code></p></li>
 
-</div>
-</li>
+<li><p>GitHubかどこかに空のリポジトリを作る。
+パッケージと同名でなくてもよい。</p></li>
 
-<li><p>GitHubに空のリポジトリを作る</p>
+<li><p>そのリモートリポジトリにプッシュ:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git remote add origin https::/github.com/heavywatal/rhello.git
+git push -u origin master</code></pre></div></li>
 
-<ul>
-<li>パッケージと同名でなくてもよい</li>
-<li><code>README</code> や <code>LICENSE</code> は後から作る</li>
-</ul></li>
-
-<li><p>コミットしてプッシュ</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% git init
-% git add --all
-% git commit -m <span class="s2">&#34;first commit&#34;</span>
-% git remote add origin https::/github.com/heavywatal/rhello.git
-% git push -u origin master</code></pre></div></li>
-
-<li><p>とりあえず誰でもインストール可能なパッケージができたはず</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">install_github<span class="p">(</span><span class="s">&#39;heavywatal/rhello&#39;</span><span class="p">)</span></code></pre></div></li>
-
-<li><p>あとは <code>R/</code> にソースコードを置いたり <code>README.md</code> を書いたり</p></li>
+<li><p>とりあえず誰でもインストール可能なパッケージができたはず:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">devtools<span class="o">::</span>install_github<span class="p">(</span><span class="s">&#39;heavywatal/rhello&#39;</span><span class="p">)</span></code></pre></div></li>
 </ol>
 
 <h3 id="構造">構造</h3>
@@ -188,25 +158,24 @@ vignettes/</code></pre></div>
 <h3 id="description-http-r-pkgs-had-co-nz-description-html"><a href="http://r-pkgs.had.co.nz/description.html"><code>DESCRIPTION</code></a></h3>
 
 <ul>
-<li>どうでも良さそうなファイル名とは裏腹に、ちゃんと書かないと動かない</li>
-<li>始めは <code>devtools::create()</code> などで自動生成し、それから他のパッケージを参考にしつつ修正していく</li>
+<li>どうでも良さそうなファイル名とは裏腹に、ちゃんと書かないと動かない。</li>
+<li>始めはusethisとかに生成してもらい、他のパッケージを参考にしつつ修正していく。</li>
 <li><code>Imports</code> に列挙したものは依存パッケージとして同時にインストールされる。
 しかし <code>library()</code> 時に同時に読み込まれるわけではない。</li>
 <li><code>Title</code> はピリオドを含まない一文。
 <code>Description</code> はピリオドを含む文章。</li>
 <li>ライセンスを別ファイルにする場合は <code>License: file LICENSE</code> と書く</li>
-<li><code>Authors@R</code> のとこは後でRで評価されるので変な形</li>
+<li><code>Authors@R</code> のとこは後でRで評価されるので変な形。</li>
 </ul>
 
 <h3 id="namespace-http-r-pkgs-had-co-nz-namespace-html"><a href="http://r-pkgs.had.co.nz/namespace.html"><code>NAMESPACE</code></a></h3>
 
 <ul>
-<li><code>roxygen2</code> (下記) がソースコードから自動生成するので<strong>直接触らない</strong></li>
-<li>ここで <code>export()</code> された関数だけがユーザーから見える</li>
-<li>ここで <code>import()</code> された関数はパッケージ内でattachされた状態になるが、
-そうしないで毎回 <code>名前空間::</code> 越しにアクセスしたほうが安心。
-<code>magrittr::%&gt;%</code> のような演算子は仕方がないので
-<code>importFrom()</code> で個別指定する。</li>
+<li><a href="#roxygen2">後述のroxygen2</a>がソースコードから自動生成するので<strong>直接触らない</strong>。</li>
+<li>ここで <code>export()</code> された関数だけがユーザーから見える。</li>
+<li>外部パッケージから <code>importFrom(package, function)</code>
+された関数はattachされてパッケージ内で利用可能になる。
+<code>import(package)</code> で全ての関数をまとめて処理できるけど名前の衝突が怖い。</li>
 </ul>
 
 <h3 id="r-ソースコード-http-r-pkgs-had-co-nz-r-html"><a href="http://r-pkgs.had.co.nz/r.html"><code>R/</code> ソースコード</a></h3>
@@ -229,10 +198,8 @@ vignettes/</code></pre></div>
 <h3 id="src-c-ソースコード-http-r-pkgs-had-co-nz-src-html"><a href="http://r-pkgs.had.co.nz/src.html"><code>src/</code> C++ソースコード</a></h3>
 
 <ul>
-<li><a href="https://cran.r-project.org/web/packages/Rcpp">Rcpp</a>
-が型変換などをスムーズにしてくれる。</li>
-
-<li><p><code>Rcpp.h</code>のインクルードといくつかのコメントが必要</p>
+<li><p><a href="https://cran.r-project.org/web/packages/Rcpp">Rcpp</a>
+が型変換などをスムーズにしてくれる:</p>
 <div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// [[Rcpp::plugins(cpp14)]]
 </span><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;Rcpp.h&gt;</span><span class="cp">
 </span><span class="cp"></span>
@@ -240,18 +207,37 @@ vignettes/</code></pre></div>
 </span><span class="c1">//&#39; @param args string vector
 </span><span class="c1">//&#39; @export
 </span><span class="c1">// [[Rcpp::export]]
-</span><span class="c1"></span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">cxx_func</span><span class="p">(</span><span class="n">Rcpp</span><span class="o">::</span><span class="n">CharacterVector</span> <span class="n">args</span><span class="o">=</span><span class="n">Rcpp</span><span class="o">::</span><span class="n">CharacterVector</span><span class="o">::</span><span class="n">create</span><span class="p">())</span> <span class="p">{</span>
-    <span class="k">auto</span> <span class="n">vs_args</span> <span class="o">=</span> <span class="n">Rcpp</span><span class="o">::</span><span class="n">as</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">vs_args</span><span class="p">;</span>
+</span><span class="c1"></span><span class="n">Rcpp</span><span class="o">::</span><span class="n">IntegerVector</span> <span class="n">len</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">{</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">size</span><span class="p">())};</span>
 <span class="p">}</span>
 </code></pre></div></li>
+
+<li><p>とりあえず <code>usethis::use_rcpp()</code> で設定を整える。
+<code>DESCRIPTION</code> や <code>src/.gitignore</code> などが書き換えられる。</p></li>
+
+<li><p><code>R/***-package.R</code> など適当なとこに <code>@useDynLib</code> の設定を追加:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#&#39; @useDynLib hello, .registration = TRUE</span>
+<span class="c1">#&#39; @importFrom Rcpp sourceCpp</span>
+<span class="c1">#&#39; @keywords internal</span>
+<span class="s">&#34;_PACKAGE&#34;</span></code></pre></div>
+<p><code>@importFrom Rcpp sourceCpp</code> を省くと、パッケージ利用時に
+<code>'enterRNGScope' not provided by package 'Rcpp'</code>
+のようなエラーが出る場合がある
+(明示的に <code>library(Rcpp)</code> するなどして既にRcppロード済みの環境では動く)。</p></li>
+
+<li><p>同じところに <code>.onUnload</code> も定義しておく:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="m">.</span>onUnload <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>libpath<span class="p">)</span> <span class="p">{</span>
+  <span class="kp">library.dynam.unload</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">,</span> libpath<span class="p">)</span>
+<span class="p">}</span></code></pre></div>
+<p>すると <code>unloadNamespace(&quot;hello&quot;)</code> したときに共有ライブラリもちゃんと外れるようになる。
+ちなみに <code>devtools::unload()</code> はこれを省略してもちゃんとリロードしてくれる。</p></li>
 
 <li><p>外部ライブラリのリンクに関する設定など、
 開発者側で指定すべきビルドオプションは <code>src/Makevars</code> に指定:</p>
 
 <pre><code>CXX_STD=CXX14
 PKG_CPPFLAGS=-DSTRICT_R_HEADERS -I/usr/local/include
-PKG_LIBS=-L/usr/local/lib -Wl,-rpath,/usr/local/lib -lhello
+PKG_LIBS=-L/usr/local/lib -Wl,-rpath,/usr/local/lib -lthankyou
 </code></pre>
 
 <p><code>STRICT_R_HEADERS</code> を定義しておくことで余計なマクロ定義を防げる。
@@ -273,26 +259,6 @@ CXX=$(LLVM_LOC)/bin/clang++
 <code>clang: error: unsupported option '-fopenmp'</code>
 と怒られるので <code>brew install llvm</code>
 で別のコンパイラを入れて上記のように指定する。</p></li>
-
-<li><p><code>DESCRIPTION</code> にいくらか書き足す:</p>
-
-<pre><code>LinkingTo: Rcpp
-SystemRequirements: C++14
-</code></pre></li>
-
-<li><p><code>R/</code> の適当なとこに <code>@useDynLib</code> の指定が必要 (roxygenについては後述):</p>
-<div class="highlight"><pre class="chroma"><code class="language-R" data-lang="R"><span class="c1">#&#39; @useDynLib hello, .registration = TRUE</span>
-<span class="c1">#&#39; @importFrom Rcpp sourceCpp</span>
-<span class="s">&#34;_PACKAGE&#34;</span>
-
-<span class="m">.</span>onUnload <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>libpath<span class="p">)</span> <span class="p">{</span>
-  <span class="kp">library.dynam.unload</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">,</span> libpath<span class="p">)</span>
-<span class="p">}</span></code></pre></div>
-<p><code>@importFrom Rcpp sourceCpp</code> を省くと、パッケージ利用時に
-<code>'enterRNGScope' not provided by package 'Rcpp'</code>
-のようなエラーが出る場合がある
-(明示的に <code>library(Rcpp)</code> するなどして既にRcppロード済みの環境では動く)。
-<code>.onUnload</code> は定義しなくても動くけど、あったほうがより丁寧で安全らしい。</p></li>
 </ul>
 
 <p>その他の注意点</p>
@@ -301,6 +267,8 @@ SystemRequirements: C++14
 <li><code>std::abort()</code> や <code>std::exit()</code> は呼び出したRセッションまで殺してしまう。
 例外は投げっぱなしで拾わなくても大丈夫で、
 <code>std::exception</code>の派生クラスなら<code>what()</code>まで表示してもらえる。</li>
+<li>グローバル変数やクラスのstaticメンバは <code>dyn.unload()</code> されるまで生き続ける。
+<code>parallel::mclapply()</code> とかでフォークした先での変更は子同士にも親にも影響しない。</li>
 </ul>
 
 <h3 id="vignettes-http-r-pkgs-had-co-nz-vignettes-html"><a href="http://r-pkgs.had.co.nz/vignettes.html"><code>vignettes/</code></a></h3>
@@ -310,11 +278,13 @@ SystemRequirements: C++14
 パッケージ全体の使い方とかを説明するのが<code>vignettes/</code>の役割。
 Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。</p>
 
-<p><code>build()</code>や<code>check()</code>がデフォルトで<code>vignette=TRUE</code>かつ処理がやや重いので、
-毎回その重さを受け入れるか、わざわざ<code>FALSE</code>指定するかというのは悩みどころ。</p>
+<p><code>usethis::use_vignette('hello')</code> で雛形を作ってもらうのが楽。</p>
 
 <p><code>pandoc</code> と <code>pandoc-citeproc</code> が必要なので
 <a href="/mac/homebrew.html">Homebrew</a> とかでインストールしておく。</p>
+
+<p><code>check()</code>がデフォルトで<code>vignette=TRUE</code>かつ処理がやや重いので、
+毎回その重さを受け入れるか、わざわざ<code>FALSE</code>指定するかというのは悩みどころ。</p>
 
 <h3 id="inst-http-r-pkgs-had-co-nz-inst-html"><a href="http://r-pkgs.had.co.nz/inst.html"><code>inst/</code></a></h3>
 
@@ -343,17 +313,15 @@ mydemo2    Description of demo 2
 
 <h2 id="devtools"><code>devtools</code></h2>
 
-<p><a href="https://github.com/hadley/devtools">https://github.com/hadley/devtools</a></p>
+<p><a href="https://devtools.r-lib.org/">
+<img src="https://devtools.r-lib.org/reference/figures/logo.svg" align="right" width="120" height="139">
+</a></p>
 
 <p>骨組みを作るとこからCRANにデプロイするとこまでお世話してくれる。</p>
 
-<h3 id="関数">関数</h3>
+<h3 id="主な関数">主な関数</h3>
 
 <dl>
-<dt><code>create(path, description=getOption('devtools.desc'), check=FALSE, rstudio=TRUE)</code></dt>
-<dd>まっさらな状態から骨組みを作る。
-<code>path</code> が既に存在している場合は先に進めないので、
-やり直すときは <code>system('rm -rf path')</code> などとして一旦消す必要がある。</dd>
 <dt><code>document(pkg='.', ...)</code></dt>
 <dd><code>roxygen2</code> を呼び出してソースコードから
 <code>NAMESPACE</code> や <code>man/*.Rd</code> を自動生成する。</dd>
@@ -407,7 +375,6 @@ mydemo2    Description of demo 2
 <h3 id="使い方">使い方</h3>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#&#39; A simple function to add 1</span>
 <span class="c1">#&#39; @param x A numeric vector</span>
-<span class="c1">#&#39; @return A numeric vector</span>
 <span class="c1">#&#39; @export</span>
 <span class="c1">#&#39; @examples</span>
 <span class="c1">#&#39; increment(42)</span>
@@ -424,20 +391,27 @@ increment <span class="o">=</span> <span class="kr">function</span><span class="
 省略するとタイトルが流用される。</li>
 <li>空行だけでは切れ目として扱われないので <code>NULL</code> などを置いたりする。</li>
 <li>dplyrなどで列名を直に指定すると
-undefined global variables という警告が出るので、
-どこかで <code>@importFrom rlang .data</code> した上で
-<code>iris %&gt;% dplyr::filter(.data$Species == 'setosa')</code> のようにする。</li>
+<code>undefined global variables</code>
+という警告が出るので
+<code>dplyr::filter(iris, .data$Species == 'setosa')</code>
+のように pronoun を使って抑える。
+どこかに <code>#' @importFrom rlang .data</code> を書いておく。
+ただし <code>$</code> によるアクセスがやや遅いので、
+<code>group_by()</code> などで多数のグループを処理するときなど気になる場合は
+<code>!!as.name(&quot;carat&quot;)</code> のようにしたほうが速い。</li>
 <li>Markdownを使うためには
 <code>Roxygen: list(markdown = TRUE)</code> を <code>DESCRIPTION</code> に加える。</li>
 
 <li><p><code>&quot;_PACKAGE&quot;</code> という文字列の上に書かれたブロックは、
 パッケージそのものに対応するヘルプ <code>*-package.Rd</code> になる。
 <code>@useDynLib</code> や <code>@importFrom</code> など全体に関わる設定はここで。</p>
-<div class="highlight"><pre class="chroma"><code class="language-R" data-lang="R"><span class="c1">#&#39; Example package to say hello</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#&#39; Example package to say hello</span>
 <span class="c1">#&#39; @aliases NULL hello-package</span>
 <span class="c1">#&#39; @useDynLib hello, .registration = TRUE</span>
+<span class="c1">#&#39; @importFrom Rcpp sourceCpp</span>
 <span class="c1">#&#39; @importFrom magrittr %&gt;%</span>
 <span class="c1">#&#39; @importFrom rlang .data</span>
+<span class="c1">#&#39; @keywords internal</span>
 <span class="s">&#34;_PACKAGE&#34;</span></code></pre></div></li>
 </ul>
 
@@ -448,15 +422,14 @@ undefined global variables という警告が出るので、
 <dd><code>NAMESPACE</code> で <code>import()</code> するパッケージを指定。
 名前の衝突が怖いので基本的に使わない。</dd>
 <dt><code>@importFrom pkg func</code></dt>
-<dd><code>NAMESPACE</code> で <code>importFrom()</code> するパッケージを指定。
+<dd><code>NAMESPACE</code> で <code>importFrom()</code> するパッケージと関数を指定。
 e.g., <code>@importFrom magrittr %&gt;%</code></dd>
 <dt><code>@export</code></dt>
-<dd><code>NAMESPACE</code> で <code>export()</code> するパッケージを指定。</dd>
+<dd><code>NAMESPACE</code> で <code>export()</code> する関数を指定。</dd>
 <dt><code>@param arg1 description...</code></dt>
 <dd>関数の引数。型や役割の説明を書く。</dd>
 <dt><code>@inheritParams package::function</code></dt>
-<dd>未<code>@param</code>引数の記述を別の関数から継承する。
-継承の連鎖はしないので、親関数で<code>@param</code>定義されてないものはダメ。</dd>
+<dd>未<code>@param</code>引数の記述を別の関数から継承する。</dd>
 <dt><code>@return description</code></dt>
 <dd>関数の返り値。</dd>
 <dt><code>@examples code...</code></dt>
