@@ -27,68 +27,39 @@ GitHubに公開しておけば誰でも使えるようになるので、
 
 ### 最低限の作成手順
 
-TODO: 新しい[usethis](https://github.com/r-lib/usethis)を使ったほうが楽かも。
+1.  開発支援パッケージをインストールする:
+    `install.packages(c("devtools", "usethis"))`
 
-1.  Rを起動して `devtools` をインストールする
-
-    ```r
-    install.packages('devtools')
-    library(devtools)
-    ```
-
-1.  `devtools::create()` で骨組みを作る
+1.  [usethis](http://usethis.r-lib.org/) の関数をいくつか使って骨組みを作る:
 
     ```r
-    setwd('~/tmp/')
-    pkgname = 'hello'
-    title_desc = 'Example package to say hello'
-    github_repo = sprintf('https://github.com/heavywatal/%s', pkgname)
-    devtools::create(
-      pkgname,
-      description = list(
-        Package = pkgname,
-        Title = title_desc,
-        Description = paste0(title_desc, '.'),
-        `Authors@R` = "person('Watal M.', 'Iwasaki', email='user@example.com', role=c('aut', 'cre'))",
-        License = 'MIT',
-        Suggests = 'tidyverse',
-        Imports = 'magrittr, rlang, stringr',
-        URL = github_repo,
-        BugReports = paste0(github_repo, '/issues')),
-      check = FALSE,
-      rstudio = FALSE,
-      quiet = FALSE
-    )
+    usethis::create_package("hello")
+    usethis::use_mit_license()
+    usethis::use_roxygen_md()
+    usethis::use_package_doc()
     ```
 
-1.  `devtools::check(pkgname)` で様子を見てみる
+1.  `devtools::check()` で様子を見てみる。
+    LaTeX 関連で怒られたら足りないパッケージを入れる:
+    `sudo tlmgr install inconsolata helvetic`
 
-    {{%div class="note"%}}
-LaTeX 関連で怒られたら足りないパッケージを入れる:
-`sudo tlmgr install inconsolata helvetic`
-    {{%/div%}}
+1.  ローカルgitリポジトリを作って最初のコミットをする:
+    `usethis::use_git()`
 
-1.  GitHubに空のリポジトリを作る
-    -   パッケージと同名でなくてもよい
-    -   `README` や `LICENSE` は後から作る
+1.  GitHubかどこかに空のリポジトリを作る。
+    パッケージと同名でなくてもよい。
 
-1.  コミットしてプッシュ
+1.  そのリモートリポジトリにプッシュ:
 
     ```sh
-    % git init
-    % git add --all
-    % git commit -m "first commit"
-    % git remote add origin https::/github.com/heavywatal/rhello.git
-    % git push -u origin master
+    git remote add origin https::/github.com/heavywatal/rhello.git
+    git push -u origin master
     ```
 
-1.  とりあえず誰でもインストール可能なパッケージができたはず
-
+1.  とりあえず誰でもインストール可能なパッケージができたはず:
     ```r
-    install_github('heavywatal/rhello')
+    devtools::install_github('heavywatal/rhello')
     ```
-
-1.  あとは `R/` にソースコードを置いたり `README.md` を書いたり
 
 
 ### 構造
@@ -109,23 +80,22 @@ vignettes/
 
 ### [`DESCRIPTION`](http://r-pkgs.had.co.nz/description.html)
 
--   どうでも良さそうなファイル名とは裏腹に、ちゃんと書かないと動かない
--   始めは `devtools::create()` などで自動生成し、それから他のパッケージを参考にしつつ修正していく
+-   どうでも良さそうなファイル名とは裏腹に、ちゃんと書かないと動かない。
+-   始めはusethisとかに生成してもらい、他のパッケージを参考にしつつ修正していく。
 -   `Imports` に列挙したものは依存パッケージとして同時にインストールされる。
     しかし `library()` 時に同時に読み込まれるわけではない。
 -   `Title` はピリオドを含まない一文。
     `Description` はピリオドを含む文章。
 -   ライセンスを別ファイルにする場合は `License: file LICENSE` と書く
--   `Authors@R` のとこは後でRで評価されるので変な形
+-   `Authors@R` のとこは後でRで評価されるので変な形。
 
 ### [`NAMESPACE`](http://r-pkgs.had.co.nz/namespace.html)
 
--   `roxygen2` (下記) がソースコードから自動生成するので**直接触らない**
--   ここで `export()` された関数だけがユーザーから見える
--   ここで `import()` された関数はパッケージ内でattachされた状態になるが、
-    そうしないで毎回 `名前空間::` 越しにアクセスしたほうが安心。
-    `magrittr::%>%` のような演算子は仕方がないので
-    `importFrom()` で個別指定する。
+-   [後述のroxygen2](#roxygen2)がソースコードから自動生成するので**直接触らない**。
+-   ここで `export()` された関数だけがユーザーから見える。
+-   外部パッケージから `importFrom(package, function)`
+    された関数はattachされてパッケージ内で利用可能になる。
+    `import(package)` で全ての関数をまとめて処理できるけど名前の衝突が怖い。
 
 ### [`R/` ソースコード](http://r-pkgs.had.co.nz/r.html)
 
@@ -145,8 +115,7 @@ vignettes/
 ### [`src/` C++ソースコード](http://r-pkgs.had.co.nz/src.html)
 
 -   [Rcpp](https://cran.r-project.org/web/packages/Rcpp)
-    が型変換などをスムーズにしてくれる。
--   `Rcpp.h`のインクルードといくつかのコメントが必要
+    が型変換などをスムーズにしてくれる:
     ```c++
     // [[Rcpp::plugins(cpp14)]]
     #include <Rcpp.h>
@@ -155,17 +124,38 @@ vignettes/
     //' @param args string vector
     //' @export
     // [[Rcpp::export]]
-    std::string cxx_func(Rcpp::CharacterVector args=Rcpp::CharacterVector::create()) {
-        auto vs_args = Rcpp::as<std::vector<std::string>>(args);
-        return vs_args;
+    Rcpp::IntegerVector len(const std::vector<std::string>& args) {
+        return {static_cast<int>(args.size())};
     }
     ```
+-   とりあえず `usethis::use_rcpp()` で設定を整える。
+    `DESCRIPTION` や `src/.gitignore` などが書き換えられる。
+-   `R/***-package.R` など適当なとこに `@useDynLib` の設定を追加:
+
+    ```r
+    #' @useDynLib hello, .registration = TRUE
+    #' @importFrom Rcpp sourceCpp
+    #' @keywords internal
+    "_PACKAGE"
+    ```
+    `@importFrom Rcpp sourceCpp` を省くと、パッケージ利用時に
+    `'enterRNGScope' not provided by package 'Rcpp'`
+    のようなエラーが出る場合がある
+    (明示的に `library(Rcpp)` するなどして既にRcppロード済みの環境では動く)。
+-   同じところに `.onUnload` も定義しておく:
+    ```r
+    .onUnload = function(libpath) {
+      library.dynam.unload("hello", libpath)
+    }
+    ```
+    すると `unloadNamespace("hello")` したときに共有ライブラリもちゃんと外れるようになる。
+    ちなみに `devtools::unload()` はこれを省略してもちゃんとリロードしてくれる。
 -   外部ライブラリのリンクに関する設定など、
     開発者側で指定すべきビルドオプションは `src/Makevars` に指定:
     ```
     CXX_STD=CXX14
     PKG_CPPFLAGS=-DSTRICT_R_HEADERS -I/usr/local/include
-    PKG_LIBS=-L/usr/local/lib -Wl,-rpath,/usr/local/lib -lhello
+    PKG_LIBS=-L/usr/local/lib -Wl,-rpath,/usr/local/lib -lthankyou
     ```
     `STRICT_R_HEADERS` を定義しておくことで余計なマクロ定義を防げる。
     `configure` や [CMake]({{< relref "cmake.md" >}}) を使って
@@ -185,32 +175,14 @@ vignettes/
     `clang: error: unsupported option '-fopenmp'`
     と怒られるので `brew install llvm`
     で別のコンパイラを入れて上記のように指定する。
--   `DESCRIPTION` にいくらか書き足す:
-    ```
-    LinkingTo: Rcpp
-    SystemRequirements: C++14
-    ```
--   `R/` の適当なとこに `@useDynLib` の指定が必要 (roxygenについては後述):
-    ```R
-    #' @useDynLib hello, .registration = TRUE
-    #' @importFrom Rcpp sourceCpp
-    "_PACKAGE"
-
-    .onUnload = function(libpath) {
-      library.dynam.unload("hello", libpath)
-    }
-    ```
-    `@importFrom Rcpp sourceCpp` を省くと、パッケージ利用時に
-    `'enterRNGScope' not provided by package 'Rcpp'`
-    のようなエラーが出る場合がある
-    (明示的に `library(Rcpp)` するなどして既にRcppロード済みの環境では動く)。
-    `.onUnload` は定義しなくても動くけど、あったほうがより丁寧で安全らしい。
 
 その他の注意点
 
 - `std::abort()` や `std::exit()` は呼び出したRセッションまで殺してしまう。
   例外は投げっぱなしで拾わなくても大丈夫で、
   `std::exception`の派生クラスなら`what()`まで表示してもらえる。
+- グローバル変数やクラスのstaticメンバは `dyn.unload()` されるまで生き続ける。
+  `parallel::mclapply()` とかでフォークした先での変更は子同士にも親にも影響しない。
 
 ### [`vignettes/`](http://r-pkgs.had.co.nz/vignettes.html)
 
@@ -219,11 +191,14 @@ vignettes/
 パッケージ全体の使い方とかを説明するのが`vignettes/`の役割。
 Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 
-`build()`や`check()`がデフォルトで`vignette=TRUE`かつ処理がやや重いので、
-毎回その重さを受け入れるか、わざわざ`FALSE`指定するかというのは悩みどころ。
+`usethis::use_vignette('hello')` で雛形を作ってもらうのが楽。
 
 `pandoc` と `pandoc-citeproc` が必要なので
 [Homebrew]({{< relref "homebrew.md" >}}) とかでインストールしておく。
+
+`check()`がデフォルトで`vignette=TRUE`かつ処理がやや重いので、
+毎回その重さを受け入れるか、わざわざ`FALSE`指定するかというのは悩みどころ。
+
 
 ### [`inst/`](http://r-pkgs.had.co.nz/inst.html)
 
@@ -254,16 +229,13 @@ mydemo2    Description of demo 2
 
 ## `devtools`
 
-<https://github.com/hadley/devtools>
+<a href="https://devtools.r-lib.org/">
+<img src="https://devtools.r-lib.org/reference/figures/logo.svg" align="right" width="120" height="139">
+</a>
 
 骨組みを作るとこからCRANにデプロイするとこまでお世話してくれる。
 
-### 関数
-
-`create(path, description=getOption('devtools.desc'), check=FALSE, rstudio=TRUE)`
-:   まっさらな状態から骨組みを作る。
-    `path` が既に存在している場合は先に進めないので、
-    やり直すときは `system('rm -rf path')` などとして一旦消す必要がある。
+### 主な関数
 
 `document(pkg='.', ...)`
 :   `roxygen2` を呼び出してソースコードから
@@ -333,7 +305,6 @@ Rソースコードのコメントから`NAMESPACE`とヘルプ(`man/*.Rd`)を�
 ```r
 #' A simple function to add 1
 #' @param x A numeric vector
-#' @return A numeric vector
 #' @export
 #' @examples
 #' increment(42)
@@ -351,21 +322,28 @@ increment = function(x) {x + 1}
     省略するとタイトルが流用される。
 -   空行だけでは切れ目として扱われないので `NULL` などを置いたりする。
 -   dplyrなどで列名を直に指定すると
-    undefined global variables という警告が出るので、
-    どこかで `@importFrom rlang .data` した上で
-    `iris %>% dplyr::filter(.data$Species == 'setosa')` のようにする。
+    `undefined global variables`
+    という警告が出るので
+    `dplyr::filter(iris, .data$Species == 'setosa')`
+    のように pronoun を使って抑える。
+    どこかに `#' @importFrom rlang .data` を書いておく。
+    ただし `$` によるアクセスがやや遅いので、
+    `group_by()` などで多数のグループを処理するときなど気になる場合は
+    `!!as.name("carat")` のようにしたほうが速い。
 -   Markdownを使うためには
     `Roxygen: list(markdown = TRUE)` を `DESCRIPTION` に加える。
 -   `"_PACKAGE"` という文字列の上に書かれたブロックは、
     パッケージそのものに対応するヘルプ `*-package.Rd` になる。
     `@useDynLib` や `@importFrom` など全体に関わる設定はここで。
 
-    ```R
+    ```r
     #' Example package to say hello
     #' @aliases NULL hello-package
     #' @useDynLib hello, .registration = TRUE
+    #' @importFrom Rcpp sourceCpp
     #' @importFrom magrittr %>%
     #' @importFrom rlang .data
+    #' @keywords internal
     "_PACKAGE"
     ```
 
@@ -377,18 +355,17 @@ increment = function(x) {x + 1}
     名前の衝突が怖いので基本的に使わない。
 
 `@importFrom pkg func`
-:   `NAMESPACE` で `importFrom()` するパッケージを指定。
+:   `NAMESPACE` で `importFrom()` するパッケージと関数を指定。
     e.g., `@importFrom magrittr %>%`
 
 `@export`
-:   `NAMESPACE` で `export()` するパッケージを指定。
+:   `NAMESPACE` で `export()` する関数を指定。
 
 `@param arg1 description...`
 :   関数の引数。型や役割の説明を書く。
 
 `@inheritParams package::function`
 :   未`@param`引数の記述を別の関数から継承する。
-    継承の連鎖はしないので、親関数で`@param`定義されてないものはダメ。
 
 `@return description`
 :   関数の返り値。
