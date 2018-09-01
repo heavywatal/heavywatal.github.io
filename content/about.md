@@ -30,7 +30,7 @@ Email:
 Find me on
 : <a rel="me" href="https://github.com/heavywatal" class="github" title="GitHub">
   <i class="fab fa-fw fa-lg fa-github"></i></a>
-  <a rel="me" href="https://www.facebook.com/heavy.watal" class="facebook" title="Facebook">
+  <a rel="me" href="https://www.facebook.com/profile.php?id=100002135628677" class="facebook" title="Facebook">
   <i class="fab fa-fw fa-lg fa-facebook"></i></a>
   <a rel="me" href="https://twitter.com/heavywatal" class="twitter" title="Twitter">
   <i class="fab fa-fw fa-lg fa-twitter"></i></a>
@@ -44,9 +44,6 @@ Find me on
 [東北大学 生命科学研究科 河田研究室](http://meme.biology.tohoku.ac.jp/klabo-wiki/)
 
 Doctor of Life Sciences, 2013.09
-:   Graduate School of Life Sciences, Tohoku University
-
-Master of Life Sciences, 2010.03
 :   Graduate School of Life Sciences, Tohoku University
 
 Bachelor of Science, 2008.03
@@ -180,5 +177,6 @@ July 2010 - March 2013
 
 ## Review
 
+-   [Journal of Theoretical Biology](https://ees.elsevier.com/jtb/)
 -   [Mathematical Biosciences](https://www.journals.elsevier.com/mathematical-biosciences/)
 -   [Journal of Molecular Evolution](https://link.springer.com/journal/239)
