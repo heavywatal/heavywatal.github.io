@@ -13,7 +13,6 @@ tags = ["c++"]
 -   オプション定義時に格納先の変数を紐付けできる
 -   `(argc, argv)` だけでなく `std::string` とかからも読み込める
 -   読み込める形式で全ての値を書き出せる
--   クラスのソースファイルなどに分散できる
 -   マクロではなくtemplateやlambdaなど真っ当なC++
     (できればC++11以降の簡潔なスタイル) で書ける
 
@@ -33,9 +32,6 @@ tags = ["c++"]
 -   ファイルからも読み込める
 -   読み込み可能なファイルの出力方法は用意されてないので自分で書く必要がある
 -   ビルドとリンクが必要で大掛かり cf. [boost]({{< relref "boost.md" >}})
--   各ソースファイルに分散するには:
-    1.  各クラスの `static` メソッドで `options_description` オブジェクトを生成
-    2.  メインの `options_description` オブジェクトに `add()` する。
 
 ## `gflags`
 
@@ -87,11 +83,6 @@ void func(){
 -   `std::string` から読める
 -   変数に直接格納することはできず、パーサのメソッドで値を取得:
     `template <class T> const T &parser::get(const std::string &name)`
--   各ソースファイルに分散できるっちゃできる？
-    1.  `main()` あたりで `parser` オブジェクトを定義
-    2.  それを各クラスの `static` メソッドに渡し、中で `parser::add()`
-    3.  `main()` で `parser::parse(argc, argv)`
-    4.  再び各クラスの `static` メソッドを呼んで `parser::get()` から変数に代入
 
 ## TCLAP
 
@@ -102,11 +93,6 @@ void func(){
 -   が、`configure` と `make install` というインストール手順を踏む
 -   `std::string` からパース可能
 -   格納する変数は指定できず、`*Arg` オブジェクトの `getValue()` メソッドで値を取得
--   各ソースファイルに分散するには:
-    1.  `main()` あたりで `CmdLine` オブジェクトを定義
-    2.  それを各クラスの `static` メソッドに渡し、中で `*Arg` オブジェクトを生成
-    3.  `main()` で `CmdLine::parse(argc, argv)`
-    4.  各 `*Args` オブジェクトに格納されている値を `getValue()` メソッドで取得
 
 ## getoptpp
 
@@ -116,10 +102,19 @@ void func(){
 -   格納する変数を指定できる
 -   基本的にはライブラリをビルドして使うが、ちょっといじればヘッダの `#include` だけでも使える
 -   ファイルの読み込みやヘルプの生成は一切手伝ってくれない
--   各ソースファイルに分散するには:
-    1.  `main()` あたりで `(argc, argv)` を引数に `GetOpt_pp` オブジェクトを生成
-    2.  それを各クラスの `static` メソッドに渡し、中で値を取得:
-        `args >> Option('i', "long_option", var)`
+
+## clipp
+
+<https://github.com/muellan/clipp>
+
+:   理念がしっかりしていて、かなり柔軟に使える。
+:   そのまま使うには少し難しかったり、
+    値を一括して取得する機能が欠けたりという問題はある。
+:   [nlohmann/json](https://github.com/nlohmann/json)
+    を使ってそのへんをうまくやる補助ライブラリ
+    [clippson](https://github.com/heavywatal/clippson)
+    を作って利用中。
+
 
 ## そのほか
 
@@ -140,10 +135,6 @@ https://github.com/Taywee/args
 :   名前空間が `args` という大胆さ
 :   同じ名前を何回も書かなきゃいけないような、少々やぼったいインターフェイス
 :   ヘッダ1つ、ヘルプ自動生成なのは良い
-
-https://github.com/muellan/clipp
-:   理念がしっかりしてて有望。
-:   パッと見た感じ、ほぼ理想通りの使い方ができそう。
 
 https://github.com/adishavit/argh
 :   A minimalist argument handler.
