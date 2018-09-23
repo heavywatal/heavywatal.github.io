@@ -97,7 +97,6 @@ C&#43;&#43;コマンドライン引数
 <li>オプション定義時に格納先の変数を紐付けできる</li>
 <li><code>(argc, argv)</code> だけでなく <code>std::string</code> とかからも読み込める</li>
 <li>読み込める形式で全ての値を書き出せる</li>
-<li>クラスのソースファイルなどに分散できる</li>
 <li>マクロではなくtemplateやlambdaなど真っ当なC++
 (できればC++11以降の簡潔なスタイル) で書ける</li>
 </ul>
@@ -121,12 +120,6 @@ C&#43;&#43;コマンドライン引数
 <li>ファイルからも読み込める</li>
 <li>読み込み可能なファイルの出力方法は用意されてないので自分で書く必要がある</li>
 <li>ビルドとリンクが必要で大掛かり cf. <a href="/cxx/boost.html">boost</a></li>
-<li>各ソースファイルに分散するには:
-
-<ol>
-<li>各クラスの <code>static</code> メソッドで <code>options_description</code> オブジェクトを生成</li>
-<li>メインの <code>options_description</code> オブジェクトに <code>add()</code> する。</li>
-</ol></li>
 </ul>
 
 <h2 id="gflags"><code>gflags</code></h2>
@@ -176,14 +169,6 @@ C&#43;&#43;コマンドライン引数
 <li><code>std::string</code> から読める</li>
 <li>変数に直接格納することはできず、パーサのメソッドで値を取得:
 <code>template &lt;class T&gt; const T &amp;parser::get(const std::string &amp;name)</code></li>
-<li>各ソースファイルに分散できるっちゃできる？
-
-<ol>
-<li><code>main()</code> あたりで <code>parser</code> オブジェクトを定義</li>
-<li>それを各クラスの <code>static</code> メソッドに渡し、中で <code>parser::add()</code></li>
-<li><code>main()</code> で <code>parser::parse(argc, argv)</code></li>
-<li>再び各クラスの <code>static</code> メソッドを呼んで <code>parser::get()</code> から変数に代入</li>
-</ol></li>
 </ul>
 
 <h2 id="tclap">TCLAP</h2>
@@ -196,14 +181,6 @@ C&#43;&#43;コマンドライン引数
 <li>が、<code>configure</code> と <code>make install</code> というインストール手順を踏む</li>
 <li><code>std::string</code> からパース可能</li>
 <li>格納する変数は指定できず、<code>*Arg</code> オブジェクトの <code>getValue()</code> メソッドで値を取得</li>
-<li>各ソースファイルに分散するには:
-
-<ol>
-<li><code>main()</code> あたりで <code>CmdLine</code> オブジェクトを定義</li>
-<li>それを各クラスの <code>static</code> メソッドに渡し、中で <code>*Arg</code> オブジェクトを生成</li>
-<li><code>main()</code> で <code>CmdLine::parse(argc, argv)</code></li>
-<li>各 <code>*Args</code> オブジェクトに格納されている値を <code>getValue()</code> メソッドで取得</li>
-</ol></li>
 </ul>
 
 <h2 id="getoptpp">getoptpp</h2>
@@ -215,14 +192,20 @@ C&#43;&#43;コマンドライン引数
 <li>格納する変数を指定できる</li>
 <li>基本的にはライブラリをビルドして使うが、ちょっといじればヘッダの <code>#include</code> だけでも使える</li>
 <li>ファイルの読み込みやヘルプの生成は一切手伝ってくれない</li>
-<li>各ソースファイルに分散するには:
-
-<ol>
-<li><code>main()</code> あたりで <code>(argc, argv)</code> を引数に <code>GetOpt_pp</code> オブジェクトを生成</li>
-<li>それを各クラスの <code>static</code> メソッドに渡し、中で値を取得:
-<code>args &gt;&gt; Option('i', &quot;long_option&quot;, var)</code></li>
-</ol></li>
 </ul>
+
+<h2 id="clipp">clipp</h2>
+
+<dl>
+<dt><a href="https://github.com/muellan/clipp">https://github.com/muellan/clipp</a></dt>
+<dd><p>理念がしっかりしていて、かなり柔軟に使える。</p></dd>
+<dd><p>そのまま使うには少し難しかったり、
+値を一括して取得する機能が欠けたりという問題はある。</p></dd>
+<dd><p><a href="https://github.com/nlohmann/json">nlohmann/json</a>
+を使ってそのへんをうまくやる補助ライブラリ
+<a href="https://github.com/heavywatal/clippson">clippson</a>
+を作って利用中。</p></dd>
+</dl>
 
 <h2 id="そのほか">そのほか</h2>
 
@@ -242,9 +225,6 @@ C&#43;&#43;コマンドライン引数
 <dd>名前空間が <code>args</code> という大胆さ</dd>
 <dd>同じ名前を何回も書かなきゃいけないような、少々やぼったいインターフェイス</dd>
 <dd>ヘッダ1つ、ヘルプ自動生成なのは良い</dd>
-<dt><a href="https://github.com/muellan/clipp">https://github.com/muellan/clipp</a></dt>
-<dd>理念がしっかりしてて有望。</dd>
-<dd>パッと見た感じ、ほぼ理想通りの使い方ができそう。</dd>
 <dt><a href="https://github.com/adishavit/argh">https://github.com/adishavit/argh</a></dt>
 <dd>A minimalist argument handler.</dd>
 <dd>ハイフンの数を区別できないし、ヘルプ自動生成も無い。</dd>
