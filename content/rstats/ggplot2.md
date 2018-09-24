@@ -28,7 +28,8 @@ R標準の`boxplot()`や`hist()`などは前者の上に、
 - <http://r4ds.had.co.nz/data-visualisation.html>
 - <http://r4ds.had.co.nz/graphics-for-communication.html>
 - <http://www.cookbook-r.com/Graphs/>
-- [version 2.0での変更点](https://blog.rstudio.org/2015/12/21/ggplot2-2-0-0/)
+- [version 2.0での変更点](https://blog.rstudio.com/2015/12/21/ggplot2-2-0-0/)
+- [version 3.0での変更点](https://www.tidyverse.org/articles/2018/07/ggplot2-3-0-0/)
 
 ## 基本的な使い方: 指示を `+` していく
 
@@ -99,21 +100,27 @@ p0 + geom_point(mapping = aes(x = displ, y = cty),
 各項目に対応する `scale_*()` 関数で調整する。
 
 ```r
-p0 + geom_point(aes(x = displ, y = cty, colour = class)) +
+ggplot(mpg) +
+  geom_point(aes(x = displ, y = cty, colour = class)) +
   scale_colour_brewer(palette = "Spectral")
 ```
+
+[`scale_*_viridis_c`](https://ggplot2.tidyverse.org/reference/scale_viridis.html)
+:   for `color`, `fill`
+:   色覚多様性が考慮されたパレットなので、連続値ならまずこれを使う。
+    元は[別パッケージ](https://github.com/sjmgarnier/viridis)が必要だったけど
+    ggplot2 v3.0 から標準装備になった。
+:   `option=`: `viridis`, `magma`, `inferno`, `plasma`
+:   連続値には `_c`、離散値には `_d`。
 
 [`scale_*_brewer`](https://ggplot2.tidyverse.org/reference/scale_brewer.html)
 :   for `colour`, `fill`
 :   いい感じに考えられたパレット [Colorbrewer](http://colorbrewer2.org/)
     から選んで指定するだけなので楽ちん。
+    特に離散値でお世話になる。
     利用可能なパレットは `RColorBrewer::display.brewer.all()` でも一覧できる。
 :   `scale_*_brewer(..., palette='Blues', direction=1)`: 離散値
 :   `scale_*_distiller(..., palette='Blues', direction=-1)`: 連続値
-:   色覚多様性への対応をさらに強化するなら
-    [`library(viridis)`](https://github.com/sjmgarnier/viridis) の
-    `viridis::scale_*_viridis(..., direction=1, discrete=FALSE, options="viridis")`
-    を使うのがよさそう。
 
 [`scale_*_gradient`](https://ggplot2.tidyverse.org/reference/scale_gradient.html)
 :   for `colour`, `fill`
@@ -242,7 +249,7 @@ ggplot内部で `stat_*()` を通して行われる。
      stat前に適用される `scale_x_*` とは微妙に違う。
 
 [軸ラベルとタイトル](https://ggplot2.tidyverse.org/reference/labs.html)
-:   `gp + labs(x="time", y="weight", title="growth")`
+:   `gp + labs(x="time", y="weight", title="growth", tag="A")`
 :   `gp + xlab("time") + ylab("weight") + ggtitle("growth")`
 
 
