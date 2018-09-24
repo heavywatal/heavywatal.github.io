@@ -112,7 +112,8 @@ R標準の<code>boxplot()</code>や<code>hist()</code>などは前者の上に�
 <li><a href="http://r4ds.had.co.nz/data-visualisation.html">http://r4ds.had.co.nz/data-visualisation.html</a></li>
 <li><a href="http://r4ds.had.co.nz/graphics-for-communication.html">http://r4ds.had.co.nz/graphics-for-communication.html</a></li>
 <li><a href="http://www.cookbook-r.com/Graphs/">http://www.cookbook-r.com/Graphs/</a></li>
-<li><a href="https://blog.rstudio.org/2015/12/21/ggplot2-2-0-0/">version 2.0での変更点</a></li>
+<li><a href="https://blog.rstudio.com/2015/12/21/ggplot2-2-0-0/">version 2.0での変更点</a></li>
+<li><a href="https://www.tidyverse.org/articles/2018/07/ggplot2-3-0-0/">version 3.0での変更点</a></li>
 </ul>
 
 <h2 id="基本的な使い方-指示を-していく">基本的な使い方: 指示を <code>+</code> していく</h2>
@@ -180,20 +181,25 @@ p0 <span class="o">+</span> geom_point<span class="p">(</span>mapping <span clas
 
 <p>変数をどうやって色やサイズに反映させるか、
 各項目に対応する <code>scale_*()</code> 関数で調整する。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">p0 <span class="o">+</span> geom_point<span class="p">(</span>aes<span class="p">(</span>x <span class="o">=</span> displ<span class="p">,</span> y <span class="o">=</span> cty<span class="p">,</span> colour <span class="o">=</span> <span class="kp">class</span><span class="p">))</span> <span class="o">+</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">ggplot<span class="p">(</span>mpg<span class="p">)</span> <span class="o">+</span>
+  geom_point<span class="p">(</span>aes<span class="p">(</span>x <span class="o">=</span> displ<span class="p">,</span> y <span class="o">=</span> cty<span class="p">,</span> colour <span class="o">=</span> <span class="kp">class</span><span class="p">))</span> <span class="o">+</span>
   scale_colour_brewer<span class="p">(</span>palette <span class="o">=</span> <span class="s">&#34;Spectral&#34;</span><span class="p">)</span></code></pre></div>
 <dl>
+<dt><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html"><code>scale_*_viridis_c</code></a></dt>
+<dd>for <code>color</code>, <code>fill</code></dd>
+<dd>色覚多様性が考慮されたパレットなので、連続値ならまずこれを使う。
+元は<a href="https://github.com/sjmgarnier/viridis">別パッケージ</a>が必要だったけど
+ggplot2 v3.0 から標準装備になった。</dd>
+<dd><code>option=</code>: <code>viridis</code>, <code>magma</code>, <code>inferno</code>, <code>plasma</code></dd>
+<dd>連続値には <code>_c</code>、離散値には <code>_d</code>。</dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html"><code>scale_*_brewer</code></a></dt>
 <dd>for <code>colour</code>, <code>fill</code></dd>
 <dd>いい感じに考えられたパレット <a href="http://colorbrewer2.org/">Colorbrewer</a>
 から選んで指定するだけなので楽ちん。
+特に離散値でお世話になる。
 利用可能なパレットは <code>RColorBrewer::display.brewer.all()</code> でも一覧できる。</dd>
 <dd><code>scale_*_brewer(..., palette='Blues', direction=1)</code>: 離散値</dd>
 <dd><code>scale_*_distiller(..., palette='Blues', direction=-1)</code>: 連続値</dd>
-<dd>色覚多様性への対応をさらに強化するなら
-<a href="https://github.com/sjmgarnier/viridis"><code>library(viridis)</code></a> の
-<code>viridis::scale_*_viridis(..., direction=1, discrete=FALSE, options=&quot;viridis&quot;)</code>
-を使うのがよさそう。</dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html"><code>scale_*_gradient</code></a></dt>
 <dd>for <code>colour</code>, <code>fill</code></dd>
 <dd>グラデーションの基準となる色を指定する。</dd>
@@ -311,7 +317,7 @@ ggplot内部で <code>stat_*()</code> を通して行われる。
 <dd>表示する座標を変換する。
  stat前に適用される <code>scale_x_*</code> とは微妙に違う。</dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/labs.html">軸ラベルとタイトル</a></dt>
-<dd><code>gp + labs(x=&quot;time&quot;, y=&quot;weight&quot;, title=&quot;growth&quot;)</code></dd>
+<dd><code>gp + labs(x=&quot;time&quot;, y=&quot;weight&quot;, title=&quot;growth&quot;, tag=&quot;A&quot;)</code></dd>
 <dd><code>gp + xlab(&quot;time&quot;) + ylab(&quot;weight&quot;) + ggtitle(&quot;growth&quot;)</code></dd>
 </dl>
 
