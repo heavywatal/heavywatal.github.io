@@ -78,7 +78,7 @@ ln -s /usr/local/include/gdfonts.h
 が、このglibcを使うと随所で不具合が...
 
 
-### tumopp
+## tumopp
 
 提供されている `/usr/local/package/gcc/7.3.0` を使い、
 依存ライブラリをほぼすべて手動で `~/local/` にインストールする。
@@ -92,15 +92,9 @@ ln -s /usr/local/include/gdfonts.h
     シェルを再起動してこれを反映: `exec $SHELL -l` 。<br>
     以下のステップで `-DCMAKE_CXX_COMPILER=...` を省略できる。
 
-1.  `~/user-config.jam` を作成:
-    ```
-    using gcc : 14 : /usr/local/package/gcc/7.3.0/bin/g++ : <compileflags>-fPIC <cxxflags>-std=c++14 ;
-    ```
-
-1.  最新の[Boost]({{< relref "boost.md" >}})をソースコードからビルドしてインストールする
-
 1.  各種C++ライブラリをインストール:
     - [sfmt-class](https://github.com/heavywatal/sfmt-class)
+    - [clippson](https://github.com/heavywatal/clippson)
     - [cxxwtl](https://github.com/heavywatal/cxxwtl)
     - [tumopp](https://github.com/heavywatal/tumopp)
 
