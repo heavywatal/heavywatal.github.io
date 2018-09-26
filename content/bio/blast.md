@@ -148,6 +148,7 @@ Basic Local Alignment Search Tool
 
 `-max_target_seqs` (500)
 :   アラインされた配列をいくつまで保持して報告するか？
+    [これを1にして得られる結果がベストヒットとは限らないことに注意。](https://doi.org/10.1093/bioinformatics/bty833)
 
 `-subject`
 :   データベース化してないFASTAファイルを検索対象として直接指定。
