@@ -94,34 +94,37 @@ CMake — Cross-platform Make
 
 <p><a href="https://cmake.org/cmake/help/latest/">https://cmake.org/cmake/help/latest/</a></p>
 
-<h2 id="cmakelists-txt"><code>CMakeLists.txt</code></h2>
+<h2 id="基本">基本</h2>
 
-<p>ディレクトリ毎に配置して、階層的に制御するのが好まれる。
+<p><code>CMakeLists.txt</code> を各ディレクトリに配置して、階層的に管理する。
 プロジェクトのトップに置くものは、以下のようなコマンドで始める必要がある。</p>
 <div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.1</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">project</span><span class="p">(</span><span class="s">helloworld</span> <span class="s">CXX</span><span class="p">)</span></code></pre></div>
-<p><code>add_*()</code> でビルドターゲットを作成し、
+</span><span class="err"></span><span class="nb">project</span><span class="p">(</span><span class="s">helloworld</span>
+  <span class="s">VERSION</span> <span class="s">0.1.0</span>
+  <span class="s">LANGUAGES</span> <span class="s">CXX</span><span class="p">)</span></code></pre></div>
+<p><code>add_executable()</code> や <code>add_library()</code> でビルドターゲットを作成し、
 <code>target_*()</code> でそれらの設定を整えて、
 <code>install()</code> でインストールする対象や行き先を指定する、というのが基本の流れ。</p>
 <div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">add_executable</span><span class="p">(</span><span class="s">a.out</span> <span class="s">hello.cpp</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="s">a.out</span> <span class="s">PRIVATE</span> <span class="s">-DNDEBUG</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">target_compile_options</span><span class="p">(</span><span class="s">a.out</span> <span class="s">PRIVATE</span> <span class="s">-Wall</span> <span class="s">-Wextra</span> <span class="s">-Wpedantic</span> <span class="s">-O3</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">target_compile_options</span><span class="p">(</span><span class="s">a.out</span> <span class="s">PRIVATE</span> <span class="s">-Wall</span> <span class="s">-Wextra</span> <span class="s">-Wpedantic</span><span class="p">)</span><span class="err">
 </span><span class="err"></span><span class="nb">install</span><span class="p">(</span><span class="s">TARGETS</span> <span class="s">a.out</span>
   <span class="s">RUNTIME</span> <span class="s">DESTINATION</span> <span class="s">bin</span>
 <span class="p">)</span></code></pre></div>
+<p><a href="#cli"><code>cmake</code> コマンドの使い方は後述</a></p>
+
 <h2 id="commands-https-cmake-org-cmake-help-latest-manual-cmake-commands-7-html"><a href="https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html">Commands</a></h2>
 
 <h3 id="scripting-commands">Scripting commands</h3>
 
 <ul>
-<li><code>foreach()</code></li>
-<li><code>include(GNUInstallDirs)</code></li>
-<li><code>macro()</code></li>
-<li><code>message(STATUS Hello world)</code></li>
-<li><code>option()</code></li>
-<li><code>set(name value)</code></li>
-<li><code>file(GLOB srcfiles *.cpp)</code>:
-グロブにマッチするファイルを列挙して変数に格納</li>
+<li><code>configure_file(&lt;input&gt; &lt;output&gt; [COPYONLY] [@ONLY])</code>:
+ファイルの一部を置換しつつ複製する。
+例えば <code>@PROJECT_VERSION@</code> などを含む <code>config.hpp.in</code> に値を埋め込むとか。</li>
+<li><code>function(&lt;name&gt; [args...])</code></li>
+<li><code>foreach(var IN LISTS list)</code></li>
+<li><code>message(STATUS &quot;Hello world!&quot;)</code></li>
+<li><code>option(VARIABLE &quot;Message&quot; ON)</code></li>
+<li><code>set(VARIABLE value)</code></li>
 </ul>
 
 <h3 id="project-commands-https-cmake-org-cmake-help-latest-manual-cmake-commands-7-html-id4"><a href="https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html#id4">Project commands</a></h3>
@@ -129,8 +132,7 @@ CMake — Cross-platform Make
 <p>サブディレクトリを利用する:</p>
 
 <ul>
-<li><code>add_subdirectory(source_dir [binary_dir] [EXCLUDE_FROM_ALL])</code></li>
-<li><code>aux_source_directory(&lt;dir&gt; VAR)</code></li>
+<li><a href="https://cmake.org/cmake/help/latest/command/add_subdirectory.html"><code>add_subdirectory(source_dir [binary_dir] [EXCLUDE_FROM_ALL])</code></a></li>
 </ul>
 
 <p>ターゲットを定義する:</p>
@@ -143,12 +145,17 @@ CMake — Cross-platform Make
 <p>ターゲットのプロパティを追加する:</p>
 
 <ul>
+<li><a href="https://cmake.org/cmake/help/latest/command/set_target_properties.html"><code>set_target_properties(&lt;target&gt; PROPERTIES p1 v1 p2 v2 ...)</code></a></li>
 <li><a href="https://cmake.org/cmake/help/latest/command/target_compile_definitions.html"><code>target_compile_definitions(&lt;target&gt; &lt;INTERFACE|PRIVATE|PUBLIC&gt; ...)</code></a></li>
+<li><a href="https://cmake.org/cmake/help/latest/command/target_compile_features.html"><code>target_compile_features(&lt;target&gt; &lt;P|P|I&gt; ...)</code></a></li>
 <li><a href="https://cmake.org/cmake/help/latest/command/target_compile_options.html"><code>target_compile_options(&lt;target&gt; [BEFORE] &lt;I|P|P&gt; ...)</code></a></li>
+<li><a href="https://cmake.org/cmake/help/latest/command/target_sources.html"><code>target_sources(&lt;target&gt; &lt;I|P|P&gt; ...)</code></a></li>
 <li><a href="https://cmake.org/cmake/help/latest/command/target_include_directories.html"><code>target_include_directories(&lt;target&gt; [SYSTEM] [BEFORE] &lt;I|P|P&gt; ...)</code></a></li>
-<li><a href="https://cmake.org/cmake/help/latest/command/target_link_libraries.html"><code>target_link_libraries(&lt;target&gt; &lt;I|P|P&gt; ...)</code></a></li>
+<li><a href="https://cmake.org/cmake/help/latest/command/target_link_libraries.html"><code>target_link_libraries(&lt;target&gt; &lt;I|P|P&gt; ...)</code></a>:
+この関数でターゲット間の依存関係を繋げていくのがCMakeの肝。
+単に共有ライブラリのリンクを指定するためだけの関数ではない。</li>
 <li>ターゲットなしの <code>include_directories()</code> <code>link_directories()</code> <code>link_libraries()</code>
-などは全体に影響が及ぶ亜種。</li>
+などはディレクトリ単位で影響が及ぶ亜種で、非推奨。</li>
 </ul>
 
 <p><a href="https://cmake.org/cmake/help/latest/command/install.html">インストールするものや宛先を指定する。</a></p>
@@ -182,18 +189,24 @@ CMake — Cross-platform Make
 <h3 id="variables-that-provide-information">Variables that Provide Information</h3>
 
 <ul>
-<li><code>CMAKE_BINARY_DIR</code>: ビルドツリーの最上階。</li>
-<li><code>CMAKE_COMMAND</code>: フルパス<code>cmake</code></li>
-<li><code>CMAKE_CURRENT_*_DIR</code>: <code>add_subdirectory()</code> の先で使う。</li>
-<li><code>CMAKE_PROJECT_NAME</code>: <code>project()</code> で設定したやつ。</li>
+<li><code>PROJECT_SOURCE_DIR</code>, <code>PROJECT_BINARY_DIR</code>:
+直近の <code>project()</code> におけるソースツリー、ビルドツリーの最上階。</li>
+<li><code>CMAKE_SOURCE_DIR</code>, <code>CMAKE_BINARY_DIR</code>:
+ソースツリー、ビルドツリーの最上階。
+他のプロジェクトから <code>add_subdirectory()</code> で使われる場合、
+<code>PROJECT_*</code> よりも上になる。</li>
+<li><code>CMAKE_CURRENT_SOURCE_DIR</code>, <code>CMAKE_CURRENT_BUILD_DIR</code>:
+ソースツリー、ビルドツリーにおける現在地。</li>
+<li><code>PROJECT_NAME</code>, <code>PROJECT_VERSION</code>: <code>project()</code> で設定したやつ。</li>
 <li><code>CMAKE_SKIP_RPATH</code></li>
-<li><code>CMAKE_SOURCE_DIR</code>: 最上階の<code>CMakeLists.txt</code>があるとこ。</li>
-<li><code>CMAKE_VERBOSE_MAKEFILE</code>: とりあえず <code>TRUE</code></li>
+<li><code>CMAKE_VERBOSE_MAKEFILE</code>: とりあえず <code>ON</code></li>
 </ul>
 
 <h3 id="variables-that-change-behavior">Variables that Change Behavior</h3>
 
 <ul>
+<li><code>BUILD_SHARED_LIBS</code>:
+STATIC/SHAREDが明示されていない <code>add_library()</code> でどっちをビルドするか。</li>
 <li><code>CMAKE_BUILD_TYPE</code>: Debug, Release, RelWithDebInfo, MinSizeRel.</li>
 <li><code>CMAKE_INSTALL_PREFIX</code>: configureでの<code>--prefix</code>に相当</li>
 <li><code>CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT</code></li>
@@ -218,8 +231,8 @@ CMake — Cross-platform Make
 
 <h3 id="c">C++</h3>
 <div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD</span> <span class="s">14</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD_REQUIRED</span> <span class="s">TRUE</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_EXTENSIONS</span> <span class="s">FALSE</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD_REQUIRED</span> <span class="s">ON</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_EXTENSIONS</span> <span class="s">OFF</span><span class="p">)</span><span class="err">
 </span><span class="err"></span><span class="nb">add_compile_options</span><span class="p">(</span><span class="s">-march=native</span> <span class="s">-Wall</span> <span class="s">-Wextra</span> <span class="s">-Wpedantic</span><span class="p">)</span><span class="err">
 </span><span class="err">
 </span><span class="err"></span><span class="nb">if</span> <span class="p">(</span><span class="s">NOT</span> <span class="s">CMAKE_BUILD_TYPE</span><span class="p">)</span><span class="err">
@@ -269,20 +282,129 @@ CMake — Cross-platform Make
 <code>CMAKE_CXX_FLAGS_???</code> を適当に作れば
 <code>-DCMAKE_BUILD_TYPE=???</code> をcase-insensitiveに解釈してもらえる。</p>
 
-<h2 id="modules">Modules</h2>
+<h2 id="generator-expressions-https-cmake-org-cmake-help-latest-manual-cmake-generator-expressions-7-html"><a href="https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html">Generator expressions</a></h2>
 
-<p><a href="https://cmake.org/cmake/help/latest/module/ExternalProject.html">ExternalProject</a></p>
+<p>文脈に応じて変数を評価する仕組み。</p>
 
-<h3 id="boost-https-cmake-org-cmake-help-latest-module-findboost-html"><a href="https://cmake.org/cmake/help/latest/module/FindBoost.html">Boost</a></h3>
-<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">set</span><span class="p">(</span><span class="s">Boost_NO_BOOST_CMAKE</span> <span class="s">TRUE</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">find_package</span><span class="p">(</span><span class="s">Boost</span> <span class="s">REQUIRED</span> <span class="s">COMPONENTS</span> <span class="s">program_options</span> <span class="s">iostreams</span> <span class="s">filesystem</span> <span class="s">system</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">message</span><span class="p">(</span><span class="s2">&#34;Boost_INCLUDE_DIRS: ${Boost_INCLUDE_DIRS}&#34;</span><span class="p">)</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">mytarget</span> <span class="o">${</span><span class="nv">Boost_LIBRARIES</span><span class="o">}</span><span class="p">)</span></code></pre></div>
-<dl>
-<dt><code>BOOST_ROOT</code></dt>
-<dd>探索パス。e.g. <code>$(brew --prefix)</code>, <code>${HOME}/local</code></dd>
-</dl>
+<p>プロジェクト内のビルド時と、外部パッケージとして利用される時とで、
+インクルードパスを使い分ける。</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">target_include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">INTERFACE</span>
+  <span class="o">$&lt;</span><span class="nv">BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include</span><span class="o">&gt;</span>
+  <span class="o">$&lt;</span><span class="nv">INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}</span><span class="o">&gt;</span>
+<span class="p">)</span></code></pre></div>
+<h2 id="modules-https-cmake-org-cmake-help-latest-manual-cmake-modules-7-html"><a href="https://cmake.org/cmake/help/latest/manual/cmake-modules.7.html">Modules</a></h2>
+
+<p><code>include()</code> や <code>find_package()</code> から使う。</p>
+
+<h3 id="gnuinstalldirs-https-cmake-org-cmake-help-latest-module-gnuinstalldirs-html"><a href="https://cmake.org/cmake/help/latest/module/GNUInstallDirs.html">GNUInstallDirs</a></h3>
+
+<p>インストール先のディレクトリを指定するときの標準的な値を決めてくれる。</p>
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>CMAKE_INSTALL_BINDIR</code></td>
+<td><code>bin</code></td>
+</tr>
+
+<tr>
+<td><code>CMAKE_INSTALL_INCLUDEDIR</code></td>
+<td><code>include</code></td>
+</tr>
+
+<tr>
+<td><code>CMAKE_INSTALL_LIBDIR</code></td>
+<td><code>lib</code>, <code>lib64</code></td>
+</tr>
+
+<tr>
+<td><code>CMAKE_INSTALL_DATADIR</code></td>
+<td><code>share</code></td>
+</tr>
+
+<tr>
+<td><code>CMAKE_INSTALL_FULL_&lt;dir&gt;</code></td>
+<td><code>${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_&lt;dir&gt;}</code></td>
+</tr>
+</tbody>
+</table>
+
+<p>Linuxでは <code>lib64</code> が標準的だが、Linuxbrewで使うには <code>lib</code> にする必要がある。</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">if</span><span class="p">(</span><span class="o">${</span><span class="nv">CMAKE_INSTALL_PREFIX</span><span class="o">}</span> <span class="s">MATCHES</span> <span class="s">linuxbrew</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>  <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_INSTALL_LIBDIR</span> <span class="s">lib</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">endif</span><span class="p">()</span></code></pre></div>
+<h3 id="cmakepackageconfighelpers-https-cmake-org-cmake-help-latest-module-cmakepackageconfighelpers-html"><a href="https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html">CMakePackageConfigHelpers</a></h3>
+
+<p>他のプロジェクトから以下のように利用されるライブラリを作りたい。
+外部プロジェクトであることを明確にするため
+<code>名前空間::ターゲット</code> という形でリンクするのが筋:</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">project</span><span class="p">(</span><span class="s">otherproject</span> <span class="s">CXX</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">find_package</span><span class="p">(</span><span class="s">mylib</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="c"># add_subdirectory(mylib)
+</span><span class="c"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">othertarget</span> <span class="s">PRIVATE</span> <span class="s">mylib::mylib</span><span class="p">)</span></code></pre></div>
+<p><code>${CMAKE_INSTALL_PREFIX}/share/</code> らへんにconfigファイルを送り込む必要がある。
+<code>install(TARGETS)</code> の中で <code>EXPORT</code> のためのターゲット定義し、
+<code>install(EXPORT)</code> でその設定を行う:</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">project</span><span class="p">(</span><span class="s">mylib</span>
+  <span class="s">VERSION</span> <span class="s">0.1.0</span>
+  <span class="s">LANGUAGES</span> <span class="s">CXX</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="c"># ...
+</span><span class="c"></span><span class="nb">install</span><span class="p">(</span><span class="s">TARGETS</span> <span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
+  <span class="s">EXPORT</span> <span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="s">-config</span>
+  <span class="s">LIBRARY</span> <span class="s">DESTINATION</span> <span class="o">${</span><span class="nv">CMAKE_INSTALL_LIBDIR</span><span class="o">}</span>
+<span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">install</span><span class="p">(</span><span class="s">EXPORT</span> <span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="s">-config</span>
+  <span class="s">DESTINATION</span> <span class="o">${</span><span class="nv">CMAKE_INSTALL_DATADIR</span><span class="o">}</span><span class="s">/</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
+  <span class="s">NAMESPACE</span> <span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="s">::</span>
+<span class="p">)</span></code></pre></div>
+<p>バージョン情報も同じところに送り込む:</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">set</span><span class="p">(</span><span class="s">VERSION_CONFIG</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="s">-config-version.cmake</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">include</span><span class="p">(</span><span class="s">CMakePackageConfigHelpers</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">write_basic_package_version_file</span><span class="p">(</span>
+  <span class="o">${</span><span class="nv">VERSION_CONFIG</span><span class="o">}</span> <span class="s">COMPATIBILITY</span> <span class="s">AnyNewerVersion</span>
+<span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">install</span><span class="p">(</span><span class="s">FILES</span> <span class="o">${</span><span class="nv">VERSION_CONFIG</span><span class="o">}</span>
+  <span class="s">DESTINATION</span> <span class="o">${</span><span class="nv">CMAKE_INSTALL_DATADIR</span><span class="o">}</span><span class="s">/</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
+<span class="p">)</span></code></pre></div>
+<p><code>find_package()</code> から使うにはここまでの設定で十分だが、
+<code>add_subdirectory()</code> からでも同じ形で使えるようにするため、
+<code>ALIAS</code> を設定しておいたほうがいい:</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">add_library</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">SHARED</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">add_library</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="s">::</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">ALIAS</span> <span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="p">)</span></code></pre></div>
+<h3 id="fetchcontent-https-cmake-org-cmake-help-latest-module-fetchcontent-html"><a href="https://cmake.org/cmake/help/latest/module/FetchContent.html">FetchContent</a></h3>
+
+<p>外部ライブラリを取ってきて配置する。
+前からあった
+<a href="https://cmake.org/cmake/help/latest/module/ExternalProject.html">ExternalProject</a>
+はビルド時に実行されるため
+<code>add_subdirectory()</code> の対象にできないなどの問題があったが、
+こちらはコンフィグ時に実行される。</p>
+
+<p>CMake 3.11 からの新機能なので、もう少し普及するまでお預け。
+当面は <code>execute_process()</code> で凌ぐ:</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">find_package</span><span class="p">(</span><span class="s">Git</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">execute_process</span><span class="p">(</span><span class="s">COMMAND</span>
+  <span class="o">${</span><span class="nv">GIT_EXECUTABLE</span><span class="o">}</span> <span class="s">clone</span> <span class="s">--recursive</span> <span class="s">--depth=1</span> <span class="s">--branch=master</span> <span class="s">https://github.com/USER/REPO.git</span> <span class="o">${</span><span class="nv">SUBDIR</span><span class="o">}</span>
+  <span class="s">WORKING_DIRECTORY</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span>
+<span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="o">${</span><span class="nv">SUBDIR</span><span class="o">}</span> <span class="s">EXCLUDE_FROM_ALL</span><span class="p">)</span></code></pre></div>
+<h3 id="findthreads-https-cmake-org-cmake-help-latest-module-findthreads-html"><a href="https://cmake.org/cmake/help/latest/module/FindThreads.html">FindThreads</a></h3>
+
+<p><code>-lpthread</code> とか自分で書かない。</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">find_package</span><span class="p">(</span><span class="s">Threads</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">mytarget</span> <span class="s">PRIVATE</span> <span class="s">Threads::Threads</span><span class="p">)</span></code></pre></div>
+<h3 id="findboost-https-cmake-org-cmake-help-latest-module-findboost-html"><a href="https://cmake.org/cmake/help/latest/module/FindBoost.html">FindBoost</a></h3>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">set</span><span class="p">(</span><span class="s">Boost_NO_BOOST_CMAKE</span> <span class="s">ON</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">find_package</span><span class="p">(</span><span class="s">Boost</span> <span class="s">REQUIRED</span> <span class="s">COMPONENTS</span> <span class="s">filesystem</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">mytarget</span> <span class="s">PRIVATE</span> <span class="s">Boost::filesystem</span><span class="p">)</span></code></pre></div>
+<p>探索パスを追加するには <code>BOOST_ROOT</code> を設定する。</p>
 
 <h3 id="ctest-https-cmake-org-cmake-help-latest-module-ctest-html"><a href="https://cmake.org/cmake/help/latest/module/CTest.html">CTest</a></h3>
 <div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">include</span><span class="p">(</span><span class="s">CTest</span><span class="p">)</span><span class="err">
@@ -290,7 +412,7 @@ CMake — Cross-platform Make
 </span><span class="err"></span>  <span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">test</span><span class="p">)</span><span class="err">
 </span><span class="err"></span><span class="nb">endif</span><span class="p">()</span></code></pre></div>
 <p><code>enable_testing()</code> と書くほうが短いけど
-<code>BUILD_TESTING=TRUE</code> 固定なのでオプションで切れない。</p>
+<code>BUILD_TESTING=ON</code> 固定なのでオプションで切れない。</p>
 <div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="c"># test/CMakeLists.txt
 </span><span class="c"></span><span class="nb">add_executable</span><span class="p">(</span><span class="s">test-gene</span> <span class="s">gene.cpp</span><span class="p">)</span><span class="err">
 </span><span class="err"></span><span class="nb">add_test</span><span class="p">(</span><span class="s">NAME</span> <span class="s">gene</span> <span class="s">COMMAND</span> <span class="o">$&lt;</span><span class="nv">TARGET_FILE:test-gene</span><span class="o">&gt;</span><span class="p">)</span></code></pre></div>
