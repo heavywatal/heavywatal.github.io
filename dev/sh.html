@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.49-DEV" />
+<meta name="generator" content="Hugo 0.50-DEV" />
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
   showProcessingMessages: false,
@@ -89,23 +89,23 @@ Heavy Watal
 
 
 <h2 id="if-then">if-then</h2>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># basic
-</span><span class="c1"></span><span class="k">if</span> <span class="nb">test</span> -e ~<span class="p">;</span> <span class="k">then</span>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># basic</span>
+<span class="k">if</span> <span class="nb">test</span> -e ~<span class="p">;</span> <span class="k">then</span>
   <span class="nb">echo</span> <span class="s1">&#39;test -e ~&#39;</span>
 <span class="k">fi</span>
 
-<span class="c1"># popular
-</span><span class="c1"></span><span class="k">if</span> <span class="o">[</span> -e ~ <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+<span class="c1"># popular</span>
+<span class="k">if</span> <span class="o">[</span> -e ~ <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
   <span class="nb">echo</span> <span class="s1">&#39;[ -e ~ ]&#39;</span>
 <span class="k">fi</span>
 
-<span class="c1"># bash/zsh extention; not POSIX
-</span><span class="c1"></span><span class="k">if</span> <span class="o">[[</span> -e ~ <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+<span class="c1"># bash/zsh extention; not POSIX</span>
+<span class="k">if</span> <span class="o">[[</span> -e ~ <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
   <span class="nb">echo</span> <span class="s1">&#39;[[ -e ~ ]]&#39;</span>
 <span class="k">fi</span>
 
-<span class="c1"># shortcut with exit status
-</span><span class="c1"></span><span class="nb">test</span> -e ~ <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;test -e ~ &amp;&amp; echo&#39;</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s1">&#39;not printed&#39;</span>
+<span class="c1"># shortcut with exit status</span>
+<span class="nb">test</span> -e ~ <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;test -e ~ &amp;&amp; echo&#39;</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s1">&#39;not printed&#39;</span>
 <span class="o">[</span> -e ~ <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;[ -e ~ ] &amp;&amp; echo&#39;</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s1">&#39;not printed&#39;</span>
 <span class="o">[[</span> -e ~ <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;[[ -e ~ ]] &amp;&amp; echo&#39;</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s1">&#39;not printed&#39;</span>
 <span class="o">[[</span> ! -e ~ <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;not printed&#39;</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s1">&#39;[[ ! -e ~ ]] || echo&#39;</span></code></pre></div>
@@ -142,15 +142,15 @@ Heavy Watal
 <span class="o">[</span> <span class="nv">$two</span> -ge <span class="nv">$one</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;$two -ge $one&#39;</span></code></pre></div>
 <h2 id="parameter-expansion-https-www-gnu-org-software-bash-manual-html-node-shell-parameter-expansion-html"><a href="https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html">Parameter Expansion</a></h2>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">string</span><span class="o">=</span>abcdef
-<span class="nb">echo</span> <span class="si">${</span><span class="nv">string</span><span class="si">}</span>   <span class="c1"># abcdef
-</span><span class="c1"></span><span class="nb">echo</span> <span class="si">${#</span><span class="nv">string</span><span class="si">}</span>  # <span class="m">6</span></code></pre></div>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">string</span><span class="si">}</span>   <span class="c1"># abcdef</span>
+<span class="nb">echo</span> <span class="si">${#</span><span class="nv">string</span><span class="si">}</span>  <span class="c1"># 6</span></code></pre></div>
 <h3 id="部分列">部分列</h3>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># ${parameter:offset}
-</span><span class="c1"># ${parameter:offset:length}
-</span><span class="c1"></span><span class="nb">echo</span> <span class="si">${</span><span class="nv">string</span><span class="p">:</span><span class="nv">0</span><span class="p">:</span><span class="nv">3</span><span class="si">}</span>  <span class="c1"># abc
-</span><span class="c1"></span><span class="nb">echo</span> <span class="si">${</span><span class="nv">string</span><span class="p">:</span><span class="nv">1</span><span class="p">:</span><span class="nv">3</span><span class="si">}</span>  <span class="c1"># bcd
-</span><span class="c1"></span><span class="nb">echo</span> <span class="si">${</span><span class="nv">string</span><span class="p">:</span><span class="nv">2</span><span class="si">}</span>    <span class="c1"># cdef
-</span><span class="c1"></span><span class="nb">echo</span> <span class="si">${</span><span class="nv">string</span><span class="p">: -2</span><span class="si">}</span>  # ef</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># ${parameter:offset}</span>
+<span class="c1"># ${parameter:offset:length}</span>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">string</span><span class="p">:</span><span class="nv">0</span><span class="p">:</span><span class="nv">3</span><span class="si">}</span>  <span class="c1"># abc</span>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">string</span><span class="p">:</span><span class="nv">1</span><span class="p">:</span><span class="nv">3</span><span class="si">}</span>  <span class="c1"># bcd</span>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">string</span><span class="p">:</span><span class="nv">2</span><span class="si">}</span>    <span class="c1"># cdef</span>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">string</span><span class="p">: -2</span><span class="si">}</span>  <span class="c1"># ef</span></code></pre></div>
 <h3 id="置換">置換</h3>
 
 <p>文字列の置換には正規表現を使える <code>sed</code> が便利。
@@ -161,68 +161,68 @@ Heavy Watal
 <li><code>*</code> グロブの最短マッチか最長マッチが使える。（正規表現は使えない）</li>
 <li><code>$@</code> や <code>$*</code> に対しては、個々の要素に対して実行されてリストが返される。</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># ${STR#pattern}        # sed -e &#34;s/^pattern//&#34;)     shortest
-</span><span class="c1"># ${STR##pattern}       # sed -e &#34;s/^pattern//&#34;)     longest
-</span><span class="c1"># ${STR%pattern}        # sed -e &#34;s/pattern$//&#34;)     shortest
-</span><span class="c1"># ${STR%%pattern}       # sed -e &#34;s/pattern$//&#34;)     longest
-</span><span class="c1"># ${STR/pattern/repl}   # sed -e &#34;s/pattern/repl/&#34;)  longest
-</span><span class="c1"># ${STR//pattern/repl}  # sed -e &#34;s/pattern/repl/g&#34;) longest
-</span><span class="c1"># ${STR/#pattern/repl}  # sed -e &#34;s/^pattern/repl/&#34;) longest
-</span><span class="c1"># ${STR/%pattern/repl}  # sed -e &#34;s/pattern$/repl/&#34;) longest
-</span><span class="c1"></span>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># ${STR#pattern}        # sed -e &#34;s/^pattern//&#34;)     shortest</span>
+<span class="c1"># ${STR##pattern}       # sed -e &#34;s/^pattern//&#34;)     longest</span>
+<span class="c1"># ${STR%pattern}        # sed -e &#34;s/pattern$//&#34;)     shortest</span>
+<span class="c1"># ${STR%%pattern}       # sed -e &#34;s/pattern$//&#34;)     longest</span>
+<span class="c1"># ${STR/pattern/repl}   # sed -e &#34;s/pattern/repl/&#34;)  longest</span>
+<span class="c1"># ${STR//pattern/repl}  # sed -e &#34;s/pattern/repl/g&#34;) longest</span>
+<span class="c1"># ${STR/#pattern/repl}  # sed -e &#34;s/^pattern/repl/&#34;) longest</span>
+<span class="c1"># ${STR/%pattern/repl}  # sed -e &#34;s/pattern$/repl/&#34;) longest</span>
+
 <span class="nv">FILEPATH</span><span class="o">=</span>/root/dir/file.tar.gz
-<span class="nb">echo</span> <span class="si">${</span><span class="nv">FILEPATH</span><span class="p">##*/</span><span class="si">}</span>       <span class="c1"># file.tar.gz
-</span><span class="c1"></span><span class="nb">echo</span> <span class="si">${</span><span class="nv">FILEPATH</span><span class="p">##*.</span><span class="si">}</span>       <span class="c1"># gz
-</span><span class="c1"></span><span class="nb">echo</span> <span class="si">${</span><span class="nv">FILEPATH</span><span class="p">#*.</span><span class="si">}</span>        <span class="c1"># tar.gz
-</span><span class="c1"></span><span class="nb">echo</span> <span class="si">${</span><span class="nv">FILEPATH</span><span class="p">%/*</span><span class="si">}</span>        <span class="c1"># /root/dir
-</span><span class="c1"></span><span class="nb">echo</span> <span class="si">${</span><span class="nv">FILEPATH</span><span class="p">%.*</span><span class="si">}</span>        <span class="c1"># /root/dir/file.tar
-</span><span class="c1"></span><span class="nb">echo</span> <span class="si">${</span><span class="nv">FILEPATH</span><span class="p">%%.*</span><span class="si">}</span>       <span class="c1"># /root/dir/file
-</span><span class="c1"></span><span class="nb">echo</span> <span class="si">${</span><span class="nv">FILEPATH</span><span class="p">/%.*/.zip</span><span class="si">}</span>  # /root/dir/file.zip</code></pre></div>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">FILEPATH</span><span class="p">##*/</span><span class="si">}</span>       <span class="c1"># file.tar.gz</span>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">FILEPATH</span><span class="p">##*.</span><span class="si">}</span>       <span class="c1"># gz</span>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">FILEPATH</span><span class="p">#*.</span><span class="si">}</span>        <span class="c1"># tar.gz</span>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">FILEPATH</span><span class="p">%/*</span><span class="si">}</span>        <span class="c1"># /root/dir</span>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">FILEPATH</span><span class="p">%.*</span><span class="si">}</span>        <span class="c1"># /root/dir/file.tar</span>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">FILEPATH</span><span class="p">%%.*</span><span class="si">}</span>       <span class="c1"># /root/dir/file</span>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">FILEPATH</span><span class="p">/%.*/.zip</span><span class="si">}</span>  <span class="c1"># /root/dir/file.zip</span></code></pre></div>
 <p>変数が設定されていない場合にどうするか</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">              <span class="c1"># if VAR is null, then
-</span><span class="c1"></span><span class="si">${</span><span class="nv">VAR</span><span class="k">:-</span><span class="nv">WORD</span><span class="si">}</span>  <span class="c1"># return WORD; VAR remains null
-</span><span class="c1"></span><span class="si">${</span><span class="nv">VAR</span><span class="p">:=WORD</span><span class="si">}</span>  <span class="c1"># return WORD; WORD is assigned to VAR
-</span><span class="c1"></span><span class="si">${</span><span class="nv">VAR</span><span class="p">:?WORD</span><span class="si">}</span>  <span class="c1"># display error and exit
-</span><span class="c1"></span><span class="si">${</span><span class="nv">VAR</span><span class="p">:+WORD</span><span class="si">}</span>  # nothing occurs<span class="p">;</span> otherwise <span class="k">return</span> WORD</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">              <span class="c1"># if VAR is null, then</span>
+<span class="si">${</span><span class="nv">VAR</span><span class="k">:-</span><span class="nv">WORD</span><span class="si">}</span>  <span class="c1"># return WORD; VAR remains null</span>
+<span class="si">${</span><span class="nv">VAR</span><span class="p">:=WORD</span><span class="si">}</span>  <span class="c1"># return WORD; WORD is assigned to VAR</span>
+<span class="si">${</span><span class="nv">VAR</span><span class="p">:?WORD</span><span class="si">}</span>  <span class="c1"># display error and exit</span>
+<span class="si">${</span><span class="nv">VAR</span><span class="p">:+WORD</span><span class="si">}</span>  <span class="c1"># nothing occurs; otherwise return WORD</span></code></pre></div>
 <h2 id="arrays-https-www-gnu-org-software-bash-manual-html-node-arrays-html"><a href="https://www.gnu.org/software/bash/manual/html_node/Arrays.html">Arrays</a></h2>
 
 <p>bashとzshで添字の挙動が異なる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">array</span><span class="o">=(</span>a b c d e f<span class="o">)</span>  <span class="c1"># bash        | zsh
-</span><span class="c1"></span><span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="si">}</span>        <span class="c1"># a           | a b c d e f
-</span><span class="c1"></span><span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[0]</span><span class="si">}</span>     <span class="c1"># a           |
-</span><span class="c1"></span><span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[1]</span><span class="si">}</span>     <span class="c1"># b           | a
-</span><span class="c1"></span><span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[-1]</span><span class="si">}</span>    <span class="c1"># (error)     | f
-</span><span class="c1"></span><span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[@]</span><span class="si">}</span>     <span class="c1"># a b c d e f | a b c d e f
-</span><span class="c1"></span><span class="nb">echo</span> <span class="si">${#</span><span class="nv">array</span><span class="si">}</span>       <span class="c1"># 1           | 6
-</span><span class="c1"></span><span class="nb">echo</span> <span class="si">${#</span><span class="nv">array</span><span class="p">[@]</span><span class="si">}</span>    # <span class="m">6</span>           <span class="p">|</span> <span class="m">6</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">array</span><span class="o">=(</span>a b c d e f<span class="o">)</span>  <span class="c1"># bash        | zsh</span>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="si">}</span>        <span class="c1"># a           | a b c d e f</span>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[0]</span><span class="si">}</span>     <span class="c1"># a           |</span>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[1]</span><span class="si">}</span>     <span class="c1"># b           | a</span>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[-1]</span><span class="si">}</span>    <span class="c1"># (error)     | f</span>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[@]</span><span class="si">}</span>     <span class="c1"># a b c d e f | a b c d e f</span>
+<span class="nb">echo</span> <span class="si">${#</span><span class="nv">array</span><span class="si">}</span>       <span class="c1"># 1           | 6</span>
+<span class="nb">echo</span> <span class="si">${#</span><span class="nv">array</span><span class="p">[@]</span><span class="si">}</span>    <span class="c1"># 6           | 6</span></code></pre></div>
 <p>文字列と同様にコロンを使う方法ならzshでもゼロ基準なので安全。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[@]:</span><span class="nv">0</span><span class="p">:</span><span class="nv">3</span><span class="si">}</span>  <span class="c1"># a b c
-</span><span class="c1"></span><span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[@]:</span><span class="nv">1</span><span class="p">:</span><span class="nv">3</span><span class="si">}</span>  <span class="c1"># b c d
-</span><span class="c1"></span><span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[@]:</span><span class="nv">2</span><span class="si">}</span>    <span class="c1"># c d e f
-</span><span class="c1"></span><span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[@]: -2</span><span class="si">}</span>  # e f</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[@]:</span><span class="nv">0</span><span class="p">:</span><span class="nv">3</span><span class="si">}</span>  <span class="c1"># a b c</span>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[@]:</span><span class="nv">1</span><span class="p">:</span><span class="nv">3</span><span class="si">}</span>  <span class="c1"># b c d</span>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[@]:</span><span class="nv">2</span><span class="si">}</span>    <span class="c1"># c d e f</span>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[@]: -2</span><span class="si">}</span>  <span class="c1"># e f</span></code></pre></div>
 <p><code>array[*]</code> と<code>array[@]</code> はクオートで括られる挙動が異なる。
 前者はひと括り、後者はそれぞれ括られる。</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="k">for</span> x in <span class="s2">&#34;</span><span class="si">${</span><span class="nv">array</span><span class="p">[*]:</span><span class="nv">3</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">;</span> <span class="k">do</span>
   <span class="nb">echo</span> <span class="nv">$x</span>
 <span class="k">done</span>
-<span class="c1"># d e f
-</span><span class="c1"></span>
+<span class="c1"># d e f</span>
+
 <span class="k">for</span> x in <span class="s2">&#34;</span><span class="si">${</span><span class="nv">array</span><span class="p">[@]:</span><span class="nv">3</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">;</span> <span class="k">do</span>
   <span class="nb">echo</span> <span class="nv">$x</span>
 <span class="k">done</span>
-<span class="c1"># d
-</span><span class="c1"># e
-</span><span class="c1"></span># f</code></pre></div>
+<span class="c1"># d</span>
+<span class="c1"># e</span>
+<span class="c1"># f</span></code></pre></div>
 <h2 id="special-parameters-https-www-gnu-org-software-bash-manual-html-node-special-parameters-html"><a href="https://www.gnu.org/software/bash/manual/html_node/Special-Parameters.html">Special Parameters</a></h2>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">$0</span>        <span class="c1"># The full path of the script
-</span><span class="c1"></span><span class="nv">$1</span>        <span class="c1"># First argument
-</span><span class="c1"></span><span class="nv">$#</span>        <span class="c1"># The number of arguments ($0 is not included)
-</span><span class="c1"></span><span class="nv">$*</span>        <span class="c1"># 全ての引数。&#34;$*&#34; はひと括り: &#34;$1 $2 $3&#34;
-</span><span class="c1"></span><span class="nv">$@</span>        <span class="c1"># 全ての引数。&#34;$@&#34; は個別括り: &#34;$1&#34; &#34;$2&#34; &#34;$3&#34;
-</span><span class="c1"></span><span class="nv">$-</span>        <span class="c1"># シェルの起動時のフラグ、setコマンドを使って設定したフラグの一覧
-</span><span class="c1"></span><span class="nv">$$</span>        <span class="c1"># シェル自身のプロセスID
-</span><span class="c1"></span><span class="nv">$!</span>        <span class="c1"># シェルが最後に起動したバックグラウンドプロセスのプロセスID
-</span><span class="c1"></span><span class="nv">$?</span>        # 最後に実行したコマンドのexit値</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">$0</span>        <span class="c1"># The full path of the script</span>
+<span class="nv">$1</span>        <span class="c1"># First argument</span>
+<span class="nv">$#</span>        <span class="c1"># The number of arguments ($0 is not included)</span>
+<span class="nv">$*</span>        <span class="c1"># 全ての引数。&#34;$*&#34; はひと括り: &#34;$1 $2 $3&#34;</span>
+<span class="nv">$@</span>        <span class="c1"># 全ての引数。&#34;$@&#34; は個別括り: &#34;$1&#34; &#34;$2&#34; &#34;$3&#34;</span>
+<span class="nv">$-</span>        <span class="c1"># シェルの起動時のフラグ、setコマンドを使って設定したフラグの一覧</span>
+<span class="nv">$$</span>        <span class="c1"># シェル自身のプロセスID</span>
+<span class="nv">$!</span>        <span class="c1"># シェルが最後に起動したバックグラウンドプロセスのプロセスID</span>
+<span class="nv">$?</span>        <span class="c1"># 最後に実行したコマンドのexit値</span></code></pre></div>
 <h2 id="misc">Misc.</h2>
 
 <h3 id="command">Command</h3>

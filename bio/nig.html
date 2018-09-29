@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.49-DEV" />
+<meta name="generator" content="Hugo 0.50-DEV" />
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
   showProcessingMessages: false,
@@ -215,11 +215,11 @@ make install</code></pre></div>
 
 <p>遺伝研ウェブサイトにはスクリプトを書いてから渡す方法しか書いてないが、
 コマンド引数として直接渡すほうが圧倒的に楽チン。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1">## スクリプトを書いてから渡す
-</span><span class="c1"></span>qsub test.sh
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1">## スクリプトを書いてから渡す</span>
+qsub test.sh
 
-<span class="c1">## コマンドライン引数として直接渡す
-</span><span class="c1"></span>qsub -l debug -b y -shell n -cwd -N <span class="nb">test</span> <span class="s2">&#34;pwd; sleep 5; ls &gt;ls.txt&#34;</span></code></pre></div>
+<span class="c1">## コマンドライン引数として直接渡す</span>
+qsub -l debug -b y -shell n -cwd -N <span class="nb">test</span> <span class="s2">&#34;pwd; sleep 5; ls &gt;ls.txt&#34;</span></code></pre></div>
 <dl>
 <dt><code>-l ***</code></dt>
 <dd>管理者が定義したキューから選んで指定し、
@@ -278,12 +278,12 @@ make install</code></pre></div>
 
 <p>ジョブスクリプト内で参照可能な特殊環境変数をプリントしてみるジョブの例:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="cp">#!/bin/sh
-</span><span class="cp"></span><span class="c1">#$ -S /bin/sh
-</span><span class="c1">#$ -l debug
-</span><span class="c1">#$ -cwd
-</span><span class="c1">#$ -t 1-2
-</span><span class="c1">#$ -N test_sh
-</span><span class="c1"></span><span class="nb">echo</span> HOME: <span class="nv">$HOME</span>
+</span><span class="cp"></span><span class="c1">#$ -S /bin/sh</span>
+<span class="c1">#$ -l debug</span>
+<span class="c1">#$ -cwd</span>
+<span class="c1">#$ -t 1-2</span>
+<span class="c1">#$ -N test_sh</span>
+<span class="nb">echo</span> HOME: <span class="nv">$HOME</span>
 <span class="nb">echo</span> USER: <span class="nv">$USER</span>
 <span class="nb">echo</span> JOB_ID: <span class="nv">$JOB_ID</span>
 <span class="nb">echo</span> JOB_NAME: <span class="nv">$JOB_NAME</span>
