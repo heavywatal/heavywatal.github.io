@@ -30,6 +30,50 @@ https://supcom.hgc.jp/
     - `/usr/local/package/r/3.5.0/` (ただしC++14不可)
 
 
+## tumopp on R
+
+http://heavywatal.github.io/rtumopp/
+
+提供されている R-3.5 はバージョンとしては十分に新しいが、
+古いコンパイラでビルドされているためC++14のライブラリを使えない。
+そのため `/usr/local/package/gcc/7.3.0`
+を使ってRをビルドするところから始める必要がある。
+
+Linuxbrewでインストールした `cmake`, `gcc`, `glibc`
+などがあると干渉してエラーを起こすので、
+アンインストールするかPATHから外すなどしておく。
+
+1.  `~/.bashrc` などで以下のように環境変数を設定する:
+    ```
+    module unload intel_env
+    module unload gcc
+    module load /usr/local/package/gcc/modulefiles/gcc/7.3.0
+    export PATH=${HOME}/local/bin:${PATH}
+    ```
+
+1.  シェルを再起動してこれを反映: `exec $SHELL -l` 。
+    `g++ -v` で `gcc version 7.3.0` が表示されることを確認。
+
+1.  Rをソースコードからビルドしてインストール
+    (configureオプションは `/usr/local/package/r/3.5.1/lib64/R/etc/Makeconf` を参考に):
+    ```
+    export GCC_PREFIX=/usr/local/package/gcc/7.3.0
+    wget -O- https://cran.r-project.org/src/base/R-3/R-3.5.1.tar.gz | tar xz
+    cd R-3.5.1/
+    ./configure --prefix=${HOME}/local --enable-R-shlib --enable-shared --enable-memory-profiling --with-tcl-config=/usr/local/lib/tclConfig.sh --with-tk-config=/usr/local/lib/tkConfig.sh CC=${GCC_PREFIX}/bin/gcc CXX=${GCC_PREFIX}/bin/g++ CPPFLAGS="-I${GCC_PREFIX}/include -I/usr/local/include -I/usr/include" LDFLAGS="-L${GCC_PREFIX}/lib64 -L${GCC_PREFIX}/lib -L/usr/local/lib64 -L/usr/local/lib" F77=${GCC_PREFIX}/bin/gfortran FC=${GCC_PREFIX}/bin/gfortran JAVA_HOME=/usr/local/package/java/jdk1.8.0_162_64 PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/usr/lib64/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig
+    make -j4
+    make install
+    ```
+    NEWS.pdfが無い云々と怒られたら適当に `touch doc/NEWS.pdf` などして凌ぐ。
+
+1.  インストールしたRを起動し、パッケージをインストール:
+    ```r
+    install.packages("devtools")
+    devtools::install_github("heavywatal/rtumopp")
+    ```
+    最新版にアップデートするのもこのコマンド。
+
+
 ### Linuxbrew
 
 https://github.com/Linuxbrew/brew/wiki/CentOS6
@@ -77,43 +121,3 @@ ln -s /usr/local/include/gdfonts.h
 
 が、このglibcを使うと随所で不具合が...
 
-
-## tumopp
-
-提供されている `/usr/local/package/gcc/7.3.0` を使い、
-依存ライブラリをほぼすべて手動で `~/local/` にインストールする。
-
-1.  `~/.bashrc` などで以下のように環境変数を設定する:
-    ```
-    module unload intel_env
-    module unload gcc
-    module load /usr/local/package/gcc/modulefiles/gcc/7.3.0
-    ```
-    シェルを再起動してこれを反映: `exec $SHELL -l` 。<br>
-    以下のステップで `-DCMAKE_CXX_COMPILER=...` を省略できる。
-
-1.  各種C++ライブラリをインストール:
-    - [sfmt-class](https://github.com/heavywatal/sfmt-class)
-    - [clippson](https://github.com/heavywatal/clippson)
-    - [cxxwtl](https://github.com/heavywatal/cxxwtl)
-    - [tumopp](https://github.com/heavywatal/tumopp)
-
-    `cmake` コマンドには次のようなオプションを渡す:
-    ```
-    -DCMAKE_PREFIX_PATH=${HOME}/local -DCMAKE_INSTALL_PREFIX=${HOME}/local
-    ```
-    その後アップデートするときは `git pull` して再ビルド・再インストール。
-
-1.  Rをソースコードからビルドしてインストール
-    (configureオプションは `/usr/local/package/r/3.5.1/lib64/R/etc/Makeconf` を参考に):
-    ```
-    wget -O- https://cran.r-project.org/src/base/R-3/R-3.5.1.tar.gz | tar xz
-    cd R-3.5.1/
-    ./configure --prefix=${HOME}/local "--enable-R-shlib" "--enable-shared" "--enable-memory-profiling" "--with-tcl-config=/usr/local/lib/tclConfig.sh" "--with-tk-config=/usr/local/lib/tkConfig.sh" "CC=${GCC_PREFIX}/bin/gcc" "CXX=${GCC_PREFIX}/bin/g++" "CPPFLAGS=-I${GCC_PREFIX}/include -I/usr/local/include -I/usr/include" "LDFLAGS=-L${GCC_PREFIX}/lib64 -L${GCC_PREFIX}/lib -L/usr/local/lib64 -L/usr/local/lib" "F77=${GCC_PREFIX}/bin/gfortran" "FC=${GCC_PREFIX}/bin/gfortran" "JAVA_HOME=/usr/local/package/java/jdk1.8.0_162_64" "PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/usr/lib64/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig"
-    ```
-
-1.  インストールしたRを起動し、パッケージをインストール:
-    ```r
-    install.packages("devtools")
-    devtools::install_github("heavywatal/rtumopp")
-    ```
