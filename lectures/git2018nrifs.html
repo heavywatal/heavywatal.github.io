@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="ja">
+<head prefix="og: http://ogp.me/ns#">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<title>Git入門2018 - Heavy Watal</title>
+<link rel="stylesheet" href="/css/theme.css">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#e08010">
+<meta name="author" content="Watal M. Iwasaki">
+<meta property="og:title" content="Git入門2018">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://heavywatal.github.io/lectures/git2018nrifs.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/heavywatal">
+<meta property="og:description" content="">
+<meta property="og:site_name" content="Heavy Watal">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@heavywatal">
+<meta name="twitter:creator" content="@heavywatal">
+<meta name="generator" content="Hugo 0.50-DEV" />
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  showProcessingMessages: false,
+  messageStyle: "none",
+  displayAlign: "left",
+  displayIndent: "2em",
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['\\[', '\\]']]
+  }
+});
+</script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script type="application/ld+json">{
+"@context": "http://schema.org",
+"@type": "BreadcrumbList",
+"itemListElement": [
+ {"@type": "ListItem",
+  "position": 1,
+  "item": {
+   "@id": "https://heavywatal.github.io/lectures.html",
+   "name": "lectures"}},
+ {"@type": "ListItem",
+  "position": 2,
+  "item": {
+   "@id": "https://heavywatal.github.io/lectures/git2018nrifs.html",
+   "name": "Git入門2018"}}
+]}</script>
+
+<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/brands.js"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/solid.js"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/fontawesome.js"></script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-41178626-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+</head>
+<body>
+<header><h1><a href="/">
+<img class="logo" src="/heavywatal.svg" alt="岩嵜航">
+Heavy Watal
+</a></h1>
+<form class="cse-search-box" action="/search.html">
+<label><i class="fas fa-fw fa-search"></i><input type="text" name="q" aria-label="cse-search-box"></label>
+</form>
+</header>
+<main>
+<article>
+<header><h1><a href="/lectures/git2018nrifs.html">
+Git入門2018
+</a></h1>
+<nav class="tags"><ul>
+<li><i class="fas fa-tag"></i> <a href="/tags/vcs.html">vcs</a></li>
+<li><i class="fas fa-tag"></i> <a href="/tags/writing.html">writing</a></li>
+</ul></nav>
+</header>
+
+
+
+<p>2018-10-15 中央水産研究所？</p>
+
+<h2 id="gitが無い世界の風景">Gitが無い世界の風景</h2>
+
+<p>バージョン違いのファイルがフォルダを埋め尽くす。</p>
+
+<pre><code>% ls
+analysis.R
+analysis2.R
+analysis-20180129.R
+analysis-20180129改良版.R
+analysis-20180210.R
+analysis-20180210バグ？.R
+analysis佐藤edit.R
+analysis佐藤edit田中.R
+analysis完全版.R
+analysis最終.R
+analysis最終改.R
+analysis決定版！.R
+analysis真・最終.R
+plot.R
+plot2.R
+plot最終.R
+plot論文.R
+</code></pre>
+
+<h2 id="オンラインストレージやバックアップ機能では不十分">オンラインストレージやバックアップ機能では不十分</h2>
+
+<ul>
+<li><a href="https://dropbox.com">Dropbox<i class="fab fa-fw fa-dropbox"></i></a> とか
+<a href="https://drive.google.com/">Google Drive<i class="fab fa-fw fa-google-drive"></i></a>
+では、保存のたびに履歴が残る。</li>
+<li>Time Machine<i class="fas fa-fw fa-clock"></i>では、一定時間間隔で履歴が残る。</li>
+</ul>
+
+<p>でも、バージョン管理や共同作業のためのツールじゃないから&hellip;</p>
+
+<ul>
+<li>いつまでも履歴を保持してもらえるとは限らない。</li>
+<li>いつのバージョンに戻したらいいのか、日時以外の手掛かりが無い。</li>
+<li>共有ファイルにおける更新の衝突に対処しにくい。</li>
+</ul>
+
+<h2 id="git-githubを使うのが楽ちん">Git+GitHubを使うのが楽ちん</h2>
+
+<p>例: <a href="https://github.com/heavywatal/clippson">https://github.com/heavywatal/clippson</a></p>
+
+<ul>
+<li>履歴を残すタイミングは任意 = 手動。</li>
+<li>バージョン(リビジョン)ごとにメッセージを残せる。</li>
+<li>差分を簡単に見られる。</li>
+<li>共同作業のための機能がちゃんとある。</li>
+</ul>
+
+<h2 id="git-and-github-i-class-fab-fa-fw-fa-github-i">Git and GitHub<i class="fab fa-fw fa-github"></i></h2>
+
+<p><a href="https://git-scm.com/">Git</a>は分散型バージョン管理システムの代表格。
+プログラムのソースコードはもちろんのこと、
+研究ノートや論文の原稿などあらゆるテキストの管理に使える。
+各自のコンピュータにインストールして使うのはこっち。</p>
+
+<p><a href="https://github.com">GitHub<i class="fab fa-fw fa-github"></i></a>はGitをより便利に使うためのオンラインサービス。
+個人的なリポジトリ置き場としてはもちろんのこと、
+ほかの人と共有・協力してプロジェクトを進めるプラットフォームとしても使える。</p>
+
+<h2 id="類似ツール">類似ツール</h2>
+
+<ul>
+<li>Version Control System (VCS)
+
+<ul>
+<li><a href="https://git-scm.com/">Git <code>git</code></a></li>
+<li><a href="https://www.mercurial-scm.org/">Mercurial <code>hg</code></a></li>
+<li>その他 svn, cvs, rcs など。</li>
+</ul></li>
+<li>Hosting Service
+
+<ul>
+<li><a href="https://github.com">GitHub<i class="fab fa-fw fa-github"></i></a>:
+公開リポジトリは無料。情報も連携も豊富。</li>
+<li><a href="https://bitbucket.org/">Bitbucket<i class="fab fa-fw fa-bitbucket"></i></a>:
+非公開リポジトリも無料。</li>
+<li><a href="https://about.gitlab.com/">GitLab<i class="fab fa-fw fa-gitlab"></i></a>:
+非公開リポジトリも無料。ローカル版もあり。</li>
+<li><a href="https://gitea.io/en-us/">Gitea</a>:
+ローカル版のみ。</li>
+<li>その他 SourceForge, Google Code など。</li>
+</ul></li>
+</ul>
+
+<p>VCSは基本的にGit一択。<br>
+ホスティングサービスは、使い方や予算に応じて選択。</p>
+
+<h2 id="基本的な構造と操作">基本的な構造と操作</h2>
+
+<h3 id="手元の変更を外に伝える">手元の変更を外に伝える</h3>
+
+<dl>
+<dt><i class="fas fa-fw fa-folder"></i> working directory (working tree)</dt>
+<dd>手元のファイルの変更はまだリポジトリに登録されていない</dd>
+<dd>↓ <code>git add</code></dd>
+<dt><i class="fas fa-fw fa-check"></i> staging area (index)</dt>
+<dd>次のコミットに含めるファイルをマークする段階</dd>
+<dd>↓ <code>git commit</code></dd>
+<dt><i class="fas fa-fw fa-code-branch"></i> local repository</dt>
+<dd>変更履歴が <code>.git/</code> 内に記録されている</dd>
+<dd>↓ <code>git push</code></dd>
+<dt><i class="fab fa-fw fa-github"></i> remote repository</dt>
+<dd>GitHubなど別マシンのリポジトリに反映</dd>
+</dl>
+
+<h3 id="外部の変更を手元に取り込む">外部の変更を手元に取り込む</h3>
+
+<dl>
+<dt><i class="fab fa-fw fa-github"></i> remote repository</dt>
+<dd>↓ <code>git fetch</code></dd>
+<dt><i class="fas fa-fw fa-code-branch"></i> local repository</dt>
+<dd>変更が <code>.git/</code> に取り込まれたが、見えてるファイルには反映されてない</dd>
+<dd>↓ <code>git checkout</code> or <code>git merge</code></dd>
+<dt><i class="fas fa-fw fa-folder"></i> working directory</dt>
+<dd>手元のファイルが最新版に同期されている</dd>
+</dl>
+
+<h2 id="用語">用語</h2>
+
+<dl>
+<dt>repository</dt>
+<dd>commitの履歴を保持する拠点。
+<code>git init</code> で手元に新規作成するか、<code>git clone</code> でリモートから複製する。</dd>
+<dt>commit</dt>
+<dd>git内部でroot treeのsnapshotを指すオブジェクト。
+root treeのハッシュID、著者、コメントなどの情報を持つ。
+動詞としては、staging areaの情報をひとつのcommitとしてリポジトリに登録することを指す。</dd>
+<dt>tree</dt>
+<dd>git内部で1つのディレクトリを指すオブジェクトで、<code>commit</code>した時に作られる。
+blobやファイル名などのメタデータに依存したハッシュIDを持ち、
+その変化は親に伝播する。</dd>
+<dt>blob</dt>
+<dd>git内部で1つのファイルを指すオブジェクトで、<code>add</code>時に作られる。
+ファイル名などのメタデータは持たず、
+ファイルの内容にのみ依存したハッシュIDを持つ。</dd>
+<dt><code>origin</code></dt>
+<dd>remoteリポジトリの典型的なshortname。
+<code>clone</code>時に自動的に追加され、
+<code>push</code>先や<code>fetch</code>元を省略したときにデフォルトで使われる。
+<code>git remote -v</code> で確認。</dd>
+<dt><code>master</code></dt>
+<dd>デフォルトのブランチの典型的な名前。</dd>
+<dt><code>HEAD</code>, <code>@</code></dt>
+<dd>現在checkoutしているbranch/commitを指すポインタ。
+基本的には<code>master</code>の最新commitを指していることが多い。
+1つ前は <code>HEAD^</code> か <code>HEAD~</code>、
+2つ前は <code>HEAD^^</code> か <code>HEAD~~</code> か <code>HEAD~2</code>。
+(<code>HEAD^2</code> は <code>merge</code> で複数の親がある場合の2番目)</dd>
+</dl>
+
+<p>zshの<code>EXTENDED_GLOB</code>が有効になってる場合は
+<code>HEAD^</code> がパターン扱いされてエラーになるので、
+<code>HEAD\^</code> のようにエスケープするか <code>unsetopt NOMATCH</code> しておいたほうがいい。</p>
+
+<h2 id="下準備">下準備</h2>
+
+<ul>
+<li>ローカルマシンにGitをインストールする。
+MacならCommand Line Toolsに付属。
+Linuxなら <code>apt</code> や <code>yum</code> で入れられる。
+<a href="https://brew.sh/">Homebrew</a>/<a href="http://linuxbrew.sh/">Linux</a>などで最新版を入れるのも良い。</li>
+<li><a href="https://github.com">GitHub<i class="fab fa-fw fa-github"></i></a>に個人アカウントを作る。</li>
+<li><a href="/dev/ssh.html">SSH公開鍵を作って</a>マシンとGitHubに登録する。
+<a href="https://help.github.com/articles/connecting-to-github-with-ssh/">https://help.github.com/articles/connecting-to-github-with-ssh/</a></li>
+
+<li><p><code>~/.gitconfig</code> にユーザ名やアドレスを登録する。
+<a href="https://git-scm.com/docs/git-config">https://git-scm.com/docs/git-config</a></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git config --global user.name <span class="s2">&#34;Watal M. Iwasaki&#34;</span>
+git config --global user.email <span class="s2">&#34;heavy.watalあmail.com&#34;</span>
+cat ~/.gitconfig</code></pre></div></li>
+
+<li><p>ついでに <code>pushinsteadof</code> の設定をしておく。
+httpsで高速にclone/fetch/pullして、
+sshでパスワード無しでpushする、というのが楽ちん。</p></li>
+
+<li><p>設定例: <a href="https://github.com/heavywatal/dotfiles/blob/master/.gitconfig"><code>heavywatal/dotfiles/.gitconfig</code></a></p></li>
+</ul>
+
+<h2 id="gitの基本">Gitの基本</h2>
+
+<h3 id="新しいリポジトリを作る">新しいリポジトリを作る</h3>
+
+<ol>
+<li>GitHubの右上の &ldquo;+&rdquo; から &ldquo;New repository&rdquo; を選択。</li>
+<li>適当に空欄を埋めて &ldquo;Create repository&rdquo; を押す。
+いくつかのファイル (<code>README.md</code>, <code>LICENSE</code>, <code>.gitignore</code>)
+をここで作ることもできるけど、今回はとりあえず空っぽのリポジトリを作る。</li>
+
+<li><p>手元のマシンにローカルリポジトリを作る:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mkdir YOUR_REPO
+<span class="nb">cd</span> YOUR_REPO/
+git init
+git commit --allow-empty -m <span class="s2">&#34;:beer: Create repository&#34;</span></code></pre></div></li>
+
+<li><p>先程作ったリモートリポジトリを紐付けて、プッシュしてみる:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git remote add origin https://github.com/YOUR_NAME/YOUR_REPO.git
+git push -u origin master</code></pre></div></li>
+</ol>
+
+<h3 id="既存のリポジトリを取ってくる">既存のリポジトリを取ってくる</h3>
+
+<h3 id="手元の変更をリモートに">手元の変更をリモートに</h3>
+
+<h3 id="リモートの変更を手元に">リモートの変更を手元に</h3>
+
+<h2 id="その他よく使うコマンド">その他よく使うコマンド</h2>
+
+<h3 id="diff">diff</h3>
+
+<p>差分を表示:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># HEAD vs working (staging前のファイルが対象)</span>
+git diff
+
+<span class="c1"># HEAD vs index (staging済みcommit前のファイルが対象)</span>
+git diff --staged
+
+<span class="c1"># HEAD vs working+index (commit前の全ファイルが対象)</span>
+git diff HEAD
+
+<span class="c1"># 特定コミットの変更点 (diffじゃない...)</span>
+git show <span class="o">[</span>revision<span class="o">]</span></code></pre></div>
+<h3 id="rm-clean">rm, clean</h3>
+
+<p>tracking対象から外して忘れさせる(手元のファイルはそのまま):</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git rm --cached &lt;file&gt;</code></pre></div>
+<p><code>.gitignore</code> で無視されてるuntrackedファイルを消す:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git clean -fdX</code></pre></div>
+<p>無視されていないuntrackedファイルも消したい場合は小文字の <code>-fdx</code> (危険)。</p>
+
+<h3 id="tag">tag</h3>
+
+<p>特定のコミット(省略すると<code>HEAD</code>)にタグ付けする。
+lightweightとannotatedの2種類が存在し、後者にはメッセージなどが紐付く。</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git tag v0.1.0 <span class="o">[</span>revision<span class="o">]</span>
+git tag -a v0.1.0 -m <span class="s2">&#34;Message!&#34;</span></code></pre></div>
+<p>GitHubリポジトリに <code>git push --tags</code> するとアーカイブが作られ、
+Releasesページに反映される。
+annotated tagであれば <code>git push --follow-tags</code>
+でcommitとtagを同時にpushできる。</p>
+
+<p><a href="https://git-scm.com/book/en/Git-Basics-Tagging">https://git-scm.com/book/en/Git-Basics-Tagging</a></p>
+
+<h3 id="reset">reset</h3>
+
+<p><code>git reset &lt;DESTINATION&gt;</code> は <code>HEAD</code> の位置を戻す処理で、
+オプションによってindexとworing treeもそこに合わせるように変更される。
+<code>--soft</code> なら <code>HEAD</code> 移動のみ。
+<code>--mixed</code> なら移動した <code>HEAD</code> にindexも合わせる。
+<code>--hard</code> なら移動した <code>HEAD</code> にindexとworiking treeも合わせる。
+直前の動作を取り消す用途に絞って使うのが無難:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># commit直後、それを取り消す (indexとworkingはそのまま)</span>
+git reset --soft HEAD^
+
+<span class="c1"># add直後、それを取り消す (workingとHEADはそのまま)</span>
+git reset --mixed HEAD
+
+<span class="c1"># 変更したファイルをHEADの状態に戻す (DANGEROUS!)</span>
+git reset --hard HEAD
+
+<span class="c1"># reset直後、それを取り消す</span>
+git reset --hard ORIG_HEAD
+
+<span class="c1"># divergedになってしまった手元のbranchを破棄 (DANGEROUS!)</span>
+git reset --hard origin/master</code></pre></div>
+<p>直前のcommitをちょっと修正したいだけなら <code>git commit --amend</code> が簡単。
+それより前のを修正するには <code>git rebase -i HEAD~3</code> とかで戻ってrewordやedit。</p>
+
+<h2 id="チーム作業">チーム作業</h2>
+
+<ul>
+<li>基本的に、自分のリモートリポジトリにpushできるのは自分だけ。</li>
+<li>コラボレータを設定して、権限を与えることも可能。
+(&ldquo;Settings &gt; Collaborators&rdquo;)</li>
+<li>でも権限を持つ人が増えすぎると更新の衝突など管理リスクも増える。</li>
+<li>権限を持たない人はforkからPull Requestを送り、
+権限を持つ少数の人がそれをレビューしてmergeするスタイルが安全。</li>
+</ul>
+
+<h2 id="pull-request-pr">Pull Request (PR)</h2>
+
+<p>他人のリポジトリに貢献するためのGitHubの機能。</p>
+
+<p>例: <a href="https://github.com/Rdatatable/data.table/pull/2807">https://github.com/Rdatatable/data.table/pull/2807</a></p>
+
+<h3 id="2人1組でprとmergeを体験">2人1組でPRとmergeを体験</h3>
+
+<ul>
+<li>MANAGER: リポジトリの管理権限を持つ人</li>
+<li>PLAYER: 権限を持たず、PRを送る人</li>
+</ul>
+
+<p>(できれば横に並んで相手の画面も見えるように)</p>
+
+<ol>
+<li>MANAGER: GitHubで新しいリポジトリを作成</li>
+<li>MANAGER: 何かtypoを含む <code>README.md</code> を作ってpush</li>
+<li>PLAYER: 相手のGitHubリポジトリでその <code>README.md</code> が見えることを確認</li>
+<li>PLAYER: 右上のForkボタンで自分のGitHubリポジトリに取り込む</li>
+
+<li><p>PLAYER: forkした自分のリポジトリからローカルに<code>clone</code>:</p>
+
+<pre><code>git clone https://github.com/{PLAYER}/PROJECT.git
+cd PROJECT/
+</code></pre></li>
+
+<li><p>PLAYER: 大元のリポジトリに<code>upstream</code>という名前をつけておく:</p>
+
+<pre><code>git remote add upstream https://github.com/{MANAGER}/PROJECT.git
+git remote -v
+</code></pre>
+
+<p>ちなみに自分のリポジトリには自動的に <code>origin</code> という名前がついている。</p></li>
+
+<li><p>PLAYER: PR用のブランチを切って移動:</p>
+
+<pre><code>git checkout -b fix-typo
+</code></pre></li>
+
+<li><p>PLAYER: コードを変更して <code>commit</code>:</p>
+
+<pre><code>emacs README.md
+git diff
+git commit -a -m &quot;Fix typo in README.md&quot;
+</code></pre></li>
+
+<li><p>PLAYER: この間に<code>upstream</code>で更新が無いかどうか確認:</p>
+
+<pre><code>git fetch upstream
+</code></pre>
+
+<p>もしあったら、それをデフォルトブランチ(<code>master</code>)越しに取り込む:</p>
+
+<pre><code>git checkout master
+git merge upstream/master
+git push origin/master
+git checkout fix-typo
+git rebase -i master
+</code></pre></li>
+
+<li><p>PLAYER: 自分のリポジトリに<code>push</code>:</p>
+
+<pre><code>git push origin fix-typo
+</code></pre></li>
+
+<li><p>PLAYER: GitHub上に出現する &ldquo;Compare &amp; pull request&rdquo; ボタンを押す。</p></li>
+
+<li><p>PLAYER: 差分を確認し、コメント欄を埋めて提出。</p></li>
+
+<li><p>MANAGER: 受け取ったPRを確認。必要に応じて修正を要求したり、自分で修正したり。</p></li>
+
+<li><p>PLAYER: 修正を求められたらそのブランチに続けてcommitしてまたpush。</p></li>
+
+<li><p>MANAGER: 問題が無ければmergeする。</p></li>
+
+<li><p>PLAYER: 無事マージされたら作業ブランチを消す。</p></li>
+</ol>
+
+<h2 id="githubのその他の便利機能">GitHubのその他の便利機能</h2>
+
+<ul>
+<li><p>Issues:
+バグ報告に用いられる。
+チームの課題を列挙するのにも使える。
+例: <a href="https://github.com/tidyverse/ggplot2/issues">https://github.com/tidyverse/ggplot2/issues</a></p></li>
+
+<li><p>Projects:
+プロジェクトのタスク管理のためのツール。
+もちろんissueとも連携可能。
+例: <a href="https://github.com/r-lib/pillar/projects/1">https://github.com/r-lib/pillar/projects/1</a></p></li>
+
+<li><p>Wiki:
+チーム内のちょっとした情報共有などに。
+でもできればそういう文書もちゃんとGitで管理したほうがいい。
+例: <a href="https://github.com/gnab/remark/wiki">https://github.com/gnab/remark/wiki</a></p></li>
+</ul>
+
+<h2 id="github-pages">GitHub Pages</h2>
+
+<p><a href="https://help.github.com/articles/user-organization-and-project-pages/">https://help.github.com/articles/user-organization-and-project-pages/</a></p>
+
+<h3 id="ユーザーサイトを作る">ユーザーサイトを作る</h3>
+
+<ol>
+<li><code>USERNAME.github.io</code> という名前のリポジトリをGitHub上で作成</li>
+<li>公開したいウェブサイトを<code>master</code>ブランチとして<code>push</code></li>
+<li><code>https://USERNAME.github.io</code> にアクセスしてみる。</li>
+</ol>
+
+<p>例えば本ウェブサイトは
+<code>heavywatal.github.io</code> というリポジトリの
+<code>source</code>ブランチでMarkdownテキストを書き、
+<a href="https://gohugo.io/">Hugo</a>
+で変換・生成したHTMLファイルを<code>master</code>ブランチに書き出している。</p>
+
+<p>GitHubが勝手にJekyll処理しようとすることがあるので、
+<code>.nojekyll</code> という空ファイルを作っておく。</p>
+
+<h3 id="プロジェクトサイトを作る">プロジェクトサイトを作る</h3>
+
+<p><a href="https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/">https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/</a></p>
+
+<p>リポジトリの内容を <code>https://USERNAME.github.io/PROJECT/</code> に公開することができる。
+方法は複数あり、リポジトリの設定画面から選択できる。</p>
+
+<ol>
+<li><code>gh-pages</code> ブランチの内容を公開 (古い方法)</li>
+<li><code>master</code> ブランチの内容を公開</li>
+<li><code>master</code> ブランチの <code>/docs</code> ディレクトリのみを公開</li>
+</ol>
+
+<p>前は1番の方法しかなくてブランチの扱いがやや面倒だったが、
+今では<code>master</code>だけで簡単に済ませられるようになった。</p>
+
+<h2 id="開発環境">開発環境</h2>
+
+<p>最近のテキストエディタはGit+GitHubとの連携機能が付いてたりする。
+これらを使えば、ターミナルからコマンドを打たなくても済む。</p>
+
+<ul>
+<li><a href="https://atom.io/">Atom</a>: GitHub製</li>
+<li><a href="https://code.visualstudio.com/">VS Code</a>: Microsoft製</li>
+<li><a href="https://www.rstudio.com/">RStudio</a>: RStudio製</li>
+</ul>
+
+</article>
+</main>
+
+<nav class="menu">
+
+<div><a href="/about.html">About</a></div>
+
+<div><a href="/research.html">Research Interests</a></div>
+
+<input type="checkbox" id="menu-rstats">
+<label for="menu-rstats">R stats</label>
+<ul>
+<li><a href="/rstats/intro.html">R自学自習の基礎知識</a></li>
+<li><a href="/rstats/programming.html">RプログラミングTips</a></li>
+<li><a href="/rstats/config.html">R環境設定</a></li>
+<li><a href="/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/rstats/purrr.html">purrr</a></li>
+<li><a href="/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/rstats/readr.html">readr</a></li>
+<li><a href="/rstats/stringr.html">stringr</a></li>
+<li><a href="/rstats/foreach.html">foreach/parallel</a></li>
+<li><a href="/rstats/devtools.html">devtools</a></li>
+<li><a href="/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/rstats/edger.html">edgeR</a></li>
+<li><a href="/rstats/topgo.html">topGO</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
+<li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/plyr.html">plyr</a></li>
+<li><a href="/rstats/reshape2.html">reshape2</a></li>
+</ul>
+
+<input type="checkbox" id="menu-python">
+<label for="menu-python">Python</label>
+<ul>
+<li><a href="/python/install.html">Pythonインストール</a></li>
+<li><a href="/python/pip.html">pip</a></li>
+<li><a href="/python/ipython.html">IPython</a></li>
+<li><a href="/python/biopython.html">BioPython</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
+<li><a href="/python/pyqt.html">PyQt</a></li>
+<li><a href="/python/concurrent.html">concurrent.futures</a></li>
+<li><a href="/python/copy.html">copy</a></li>
+<li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/setuptools.html">setuptools</a></li>
+</ul>
+
+<input type="checkbox" id="menu-cxx">
+<label for="menu-cxx">C&#43;&#43;</label>
+<ul>
+<li><a href="/cxx/boost.html">Boost</a></li>
+<li><a href="/cxx/getopt.html">C&#43;&#43;コマンドライン引数</a></li>
+<li><a href="/cxx/speed.html">C&#43;&#43;高速化</a></li>
+<li><a href="/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/cxx/gcc.html">gcc</a></li>
+<li><a href="/cxx/bitwise.html">ビット演算</a></li>
+<li><a href="/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="menu-bio">
+<label for="menu-bio">Biology</label>
+<ul>
+<li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/bio/meme.html">MEME</a></li>
+<li><a href="/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/bio/samtools.html">SAMtools</a></li>
+<li><a href="/bio/shirokane.html">SHIROKANE</a></li>
+<li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
+<li><a href="/bio/mathmorph.html">数理形態学</a></li>
+<li><a href="/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="menu-dev">
+<label for="menu-dev">Developer Tools</label>
+<ul>
+<li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/cmake.html">CMake</a></li>
+<li><a href="/dev/emacs.html">Emacs</a></li>
+<li><a href="/dev/git.html">Git</a></li>
+<li><a href="/dev/hugo.html">Hugo</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mount.html">mount</a></li>
+<li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/rsync.html">rsync</a></li>
+<li><a href="/dev/ssh.html">ssh</a></li>
+<li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/vi.html">vi</a></li>
+<li><a href="/dev/zsh.html">zsh</a></li>
+<li><a href="/dev/sh.html">シェルスクリプト</a></li>
+<li><a href="/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="menu-mac">
+<label for="menu-mac">Mac</label>
+<ul>
+<li><a href="/mac/applescript.html">AppleScript</a></li>
+<li><a href="/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/mac/macports.html">MacPorts</a></li>
+<li><a href="/mac/command.html">Mac固有コマンド</a></li>
+<li><a href="/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="menu-lectures" checked>
+<label for="menu-lectures" class="active">Lectures</label>
+<ul>
+<li><a href="/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li class="active"><a href="/lectures/git2018nrifs.html">Git入門2018</a></li>
+<li><a href="/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="menu-misc">
+<label for="menu-misc">Miscellaneous</label>
+<ul>
+<li><a href="/misc/fonts.html">Fonts</a></li>
+<li><a href="/misc/latex.html">LaTeX</a></li>
+</ul>
+
+<div><a href="/tags.html">Tags</a></div>
+</nav>
+<footer><small>(ɔ) 2008 岩嵜航 Watal M. Iwasaki</small></footer>
+</body>
+</html>
