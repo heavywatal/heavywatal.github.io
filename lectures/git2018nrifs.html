@@ -86,14 +86,85 @@ Git入門2018
 <li><i class="fas fa-tag"></i> <a href="/tags/writing.html">writing</a></li>
 </ul></nav>
 </header>
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#事前準備">事前準備</a>
+<ul>
+<li><a href="#os別">OS別</a></li>
+<li><a href="#os共通">OS共通</a></li>
+<li><a href="#sshの設定-任意">SSHの設定 (任意)</a></li>
+</ul></li>
+<li><a href="#gitが無い世界の風景">Gitが無い世界の風景</a></li>
+<li><a href="#オンラインストレージやバックアップ機能では不十分">オンラインストレージやバックアップ機能では不十分</a></li>
+<li><a href="#git-i-class-fas-fa-fw-fa-share-alt-square-i-and-github-i-class-fab-fa-fw-fa-github-i">Git<i class="fas fa-fw fa-share-alt-square"></i> and GitHub<i class="fab fa-fw fa-github"></i></a>
+<ul>
+<li><a href="#それらはどういう関係">それらはどういう関係？</a></li>
+<li><a href="#類似ツール">類似ツール</a></li>
+<li><a href="#github-i-class-fab-fa-fw-fa-github-i-の使いみち">GitHub<i class="fab fa-fw fa-github"></i>の使いみち</a></li>
+</ul></li>
+<li><a href="#構造と操作の概要">構造と操作の概要</a>
+<ul>
+<li><a href="#手元の変更を外に伝える">手元の変更を外に伝える</a></li>
+<li><a href="#外部の変更を手元に取り込む">外部の変更を手元に取り込む</a></li>
+</ul></li>
+<li><a href="#用語">用語</a></li>
+<li><a href="#基本操作を実践">基本操作を実践</a>
+<ul>
+<li><a href="#既存のリポジトリを取ってくる-clone">既存のリポジトリを取ってくる <code>clone</code></a></li>
+<li><a href="#新しいリポジトリを作る-init">新しいリポジトリを作る <code>init</code></a></li>
+<li><a href="#手元の変更をリモートに-push">手元の変更をリモートに <code>push</code></a></li>
+<li><a href="#リモートの変更を手元に-fetch">リモートの変更を手元に <code>fetch</code></a></li>
+</ul></li>
+<li><a href="#その他よく使うコマンド">その他よく使うコマンド</a>
+<ul>
+<li><a href="#diff">diff</a></li>
+<li><a href="#rm-clean">rm, clean</a></li>
+<li><a href="#reset">reset</a></li>
+</ul></li>
+<li><a href="#チーム作業">チーム作業</a>
+<ul>
+<li><a href="#pull-request-pr">Pull Request (PR)</a></li>
+<li><a href="#2人1組でprとmergeを体験">2人1組でPRとmergeを体験</a></li>
+</ul></li>
+<li><a href="#further-reading">Further reading</a></li>
+</ul></li>
+</ul>
+</nav>
 
 
+<style>
+.fa-git-square, .fa-share-alt-square {
+  transform: rotate(45deg);
+}
+.fa-git, .fa-git-square, .fa-share-alt-square {
+  color: #f03c2e;
+}
+.fa-github {
+  color: #000;
+}
+.fa-bitbucket {
+  color: #2e87fb;
+}
+.fa-gitlab {
+  color: #e04432;
+}
+.fa-tint {
+  color: #949494;
+}
+.fa-coffee {
+  color: #62982f;
+}
+</style>
 
 <p>2018-10-15 中央水産研究所？</p>
 
 <h2 id="事前準備">事前準備</h2>
 
-<h3 id="os">OS</h3>
+<h3 id="os別">OS別</h3>
+
+<p>新しめのUNIX系OSが好ましい。</p>
 
 <ul>
 <li>macOS
@@ -101,70 +172,88 @@ Git入門2018
 <ul>
 <li>10.13 High Sierra以降</li>
 <li>Command Line Tools</li>
+<li>Gitは標準装備のやつで大丈夫</li>
 </ul></li>
 <li>Linux
 
 <ul>
 <li>Ubuntu 16.04以降 or CentOS 7以降</li>
 <li>build-essential とか &ldquo;Development Tools&rdquo; 的なもの</li>
-<li><code>yum</code> で普通に入るGitはたぶん古いので、どうにかしてv2以降を入れる</li>
+<li>普通にaptやyumで入るGitが古いv1系だったら、どうにかしてv2以降を入れる</li>
 </ul></li>
-<li>Windows
+
+<li><p>Windows</p>
 
 <ul>
-<li>10 (1803以降?)</li>
-<li>Ubuntu on Windows?</li>
-<li>Git?</li>
-</ul></li>
-</ul>
+<li>10 (1803以降)</li>
+<li><a href="https://git-scm.com/download/">Git本体およびGit Bashを公式から入れる</a>。
+インストール途中でいろいろ選択肢あるけどとりあえずデフォルトでよいのでは。</li>
+<li><a href="https://www.rstudio.com/">RStudio</a>のターミナルのシェルとしてGit Bashを設定。
+&ldquo;Tools &gt; Global Options &gt; Terminal &gt; Shell&rdquo;</li>
+<li>RStudioで新しいTerminalを立ち上げて最低限のコマンド操作に慣れる。
+e.g.,  <code>pwd</code>, <code>ls</code>, <code>cd</code>, <code>mkdir</code></li>
 
-<h3 id="共通">共通</h3>
-
-<ul>
-<li><a href="https://github.com">GitHub<i class="fab fa-fw fa-github"></i></a>に個人アカウントを作る。</li>
-
-<li><p><code>~/.gitconfig</code> にユーザ名やアドレスを登録する。
-<a href="https://git-scm.com/docs/git-config">https://git-scm.com/docs/git-config</a></p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git config --global user.name <span class="s2">&#34;Watal M. Iwasaki&#34;</span>
-git config --global user.email <span class="s2">&#34;heavy.watalあmail.com&#34;</span>
-cat ~/.gitconfig</code></pre></div></li>
-</ul>
-
-<h3 id="sshの設定-advanced-optional">SSHの設定 (Advanced/Optional)</h3>
-
-<ul>
-<li>GitHubとの通信にはHTTPS方式とSSH方式がある。
-
-<ul>
-<li>HTTPS: 設定不要で高速だが、操作によってパスワード入力が必要</li>
-<li>SSH: 一旦ちゃんと設定すればパスワードなしで快適</li>
-</ul></li>
-<li>ダウンロード操作(clone/fetch/pull)は高速なHTTPSで、
-アップロード操作(push)はパスワード無しのSSHで、というのが楽ちん。
-
-<ul>
-<li><a href="/dev/ssh.html">SSH公開鍵を作って</a>マシンとGitHubに登録する。</li>
-<li><code>pushinsteadof</code> の設定をする。
-設定例: <a href="https://github.com/heavywatal/dotfiles/blob/master/.gitconfig"><code>heavywatal/dotfiles/.gitconfig</code></a></li>
-<li><a href="https://help.github.com/articles/connecting-to-github-with-ssh/">https://help.github.com/articles/connecting-to-github-with-ssh/</a></li>
+<li><p>Git Bashにおける <code>HOME</code> がRStudioにおけるそれと異なることに注意。</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1">### Git Bash</span>
+<span class="nb">echo</span> <span class="nv">$HOME</span>
+<span class="c1"># /c/Users/watal</span>
+<span class="nb">echo</span> ~
+<span class="c1"># /c/Users/watal</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">### R</span>
+<span class="kp">normalizePath</span><span class="p">(</span><span class="s">&#34;~&#34;</span><span class="p">)</span>
+<span class="c1"># &#34;C:\\Users\\watal\\Documents&#34;</span></code></pre></div></li>
 </ul></li>
 </ul>
 
-<h3 id="開発環境">開発環境</h3>
+<h3 id="os共通">OS共通</h3>
 
-<p>最近のテキストエディタはGit+GitHubとの連携機能が付いてたりする。
-これらを使えば、ターミナルからコマンドを打たなくても済む。
-そしてどのOSでも動く。</p>
+<ul>
+<li><p>適当なテキストエディタ(開発環境)を入れておく。
+Git/GitHubとの連携機能が付いていて、
+変更箇所を色付けしてくれたりコマンド入力を肩代わりしてくれたりするのが便利。</p>
 
 <ul>
 <li><a href="https://atom.io/">Atom</a>: GitHub製</li>
 <li><a href="https://code.visualstudio.com/">VS Code</a>: Microsoft製</li>
 <li><a href="https://www.rstudio.com/">RStudio</a>: RStudio製</li>
+</ul></li>
+
+<li><p><a href="https://github.com">GitHub<i class="fab fa-fw fa-github"></i></a>に個人アカウントを作る。</p></li>
+
+<li><p>Git<i class="fas fa-fw fa-share-alt-square"></i>の初期設定をターミナルから行う:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git --version  <span class="c1"># 2.0以上であることを確認</span>
+git config --global user.name <span class="s2">&#34;Watal M. Iwasaki&#34;</span>
+git config --global user.email <span class="s2">&#34;heavywatalあmail.com&#34;</span>
+git config --global push.default simple
+cat ~/.gitconfig</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[user]</span>
+  <span class="na">name</span> <span class="o">=</span> <span class="s">Watal M. Iwasaki
+</span><span class="s">  email = heavywatalあmail.com</span>
+<span class="k">[push]</span>
+  <span class="na">default</span> <span class="o">=</span> <span class="s">simple</span></code></pre></div></li>
+</ul>
+
+<h3 id="sshの設定-任意">SSHの設定 (任意)</h3>
+
+<ul>
+<li>GitHubとの通信に2つの方式がある。
+
+<ul>
+<li>HTTPS: 設定不要で高速だが、操作によってパスワード入力が必要</li>
+<li>SSH: 一旦ちゃんと設定すればパスワードなしで快適</li>
+</ul></li>
+<li>ダウンロード操作(clone/fetch/pull)は高速なHTTPSで、<br>
+アップロード操作(push)はパスワード無しのSSHで、というのが楽ちん。</li>
+<li><a href="/dev/ssh.html">SSH公開鍵を作って</a>ローカルマシンとGitHubに登録する。</li>
+
+<li><p>設定ファイル <code>~/.gitconfig</code> に <code>pushinsteadof</code> の設定を追加:</p>
+<div class="highlight"><pre class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[url &#34;git@github.com:&#34;]</span>
+  <span class="na">pushinsteadof</span> <span class="o">=</span> <span class="s">https://github.com/</span></code></pre></div></li>
 </ul>
 
 <hr>
 
-<hr>
+<p>以下、本編。</p>
+
+<p>🚧 UNDER CONSTRUCTION 🚧</p>
 
 <h2 id="gitが無い世界の風景">Gitが無い世界の風景</h2>
 
@@ -202,25 +291,28 @@ plot論文.R
 <p>でも、バージョン管理や共同作業のためのツールじゃないから&hellip;</p>
 
 <ul>
-<li>いつまでも履歴を保持してもらえるとは限らない。</li>
+<li>いつまでも履歴を保持してもらえるとは限らない。<br>
+(ここでDropboxの履歴を例示しようと思ったらエラーで使えなかった)</li>
+<li>オフラインだったりバッテリー駆動だったりすると保存漏れが起きる。</li>
 <li>いつのバージョンに戻したらいいのか、日時以外の手掛かりが無い。</li>
 <li>共有ファイルにおける更新の衝突に対処しにくい。</li>
 </ul>
 
-<h2 id="git-githubを使うのが楽ちん">Git+GitHubを使うのが楽ちん</h2>
-
-<p>例: <a href="https://github.com/heavywatal/clippson">https://github.com/heavywatal/clippson</a></p>
+<h2 id="git-i-class-fas-fa-fw-fa-share-alt-square-i-and-github-i-class-fab-fa-fw-fa-github-i">Git<i class="fas fa-fw fa-share-alt-square"></i> and GitHub<i class="fab fa-fw fa-github"></i></h2>
 
 <ul>
 <li>履歴を残すタイミングは任意 = 手動。</li>
+<li>オフラインでも作業できる。</li>
 <li>バージョン(リビジョン)ごとにメッセージを残せる。</li>
 <li>差分を簡単に見られる。</li>
 <li>共同作業のための機能がちゃんとある。</li>
 </ul>
 
-<h2 id="git-and-github-i-class-fab-fa-fw-fa-github-i">Git and GitHub<i class="fab fa-fw fa-github"></i></h2>
+<p>e.g., <a href="https://github.com/tidyverse/stringr/commits/master">https://github.com/tidyverse/stringr/commits/master</a></p>
 
-<p><a href="https://git-scm.com/">Git</a>は分散型バージョン管理システムの代表格。
+<h3 id="それらはどういう関係">それらはどういう関係？</h3>
+
+<p><a href="https://git-scm.com/">Git<i class="fas fa-fw fa-share-alt-square"></i></a>は分散型バージョン管理システムの代表格。
 プログラムのソースコードはもちろんのこと、
 研究ノートや論文の原稿などあらゆるテキストの管理に使える。
 各自のコンピュータにインストールして使うのはこっち。</p>
@@ -229,14 +321,14 @@ plot論文.R
 個人的なリポジトリ置き場としてはもちろんのこと、
 ほかの人と共有・協力してプロジェクトを進めるプラットフォームとしても使える。</p>
 
-<h2 id="類似ツール">類似ツール</h2>
+<h3 id="類似ツール">類似ツール</h3>
 
 <ul>
 <li>Version Control System (VCS)
 
 <ul>
-<li><a href="https://git-scm.com/">Git <code>git</code></a></li>
-<li><a href="https://www.mercurial-scm.org/">Mercurial <code>hg</code></a></li>
+<li><a href="https://git-scm.com/">Git<i class="fas fa-fw fa-share-alt-square"></i> <code>git</code></a></li>
+<li><a href="https://www.mercurial-scm.org/">Mercurial<i class="fas fa-fw fa-tint"></i> <code>hg</code></a></li>
 <li>その他 svn, cvs, rcs など。</li>
 </ul></li>
 <li>Hosting Service
@@ -248,7 +340,7 @@ plot論文.R
 非公開リポジトリも無料。</li>
 <li><a href="https://about.gitlab.com/">GitLab<i class="fab fa-fw fa-gitlab"></i></a>:
 非公開リポジトリも無料。ローカル版もあり。</li>
-<li><a href="https://gitea.io/en-us/">Gitea</a>:
+<li><a href="https://gitea.io/en-us/">Gitea<i class="fas fa-fw fa-coffee"></i></a>:
 ローカル版のみ。</li>
 <li>その他 SourceForge, Google Code など。</li>
 </ul></li>
@@ -257,7 +349,39 @@ plot論文.R
 <p>VCSは基本的にGit一択。<br>
 ホスティングサービスは、使い方や予算に応じて選択。</p>
 
-<h2 id="基本的な構造と操作">基本的な構造と操作</h2>
+<h3 id="github-i-class-fab-fa-fw-fa-github-i-の使いみち">GitHub<i class="fab fa-fw fa-github"></i>の使いみち</h3>
+
+<ul>
+<li><p>基本: ファイルのバージョン管理<i class="fas fa-fw fa-share-alt-square"></i></p>
+
+<ul>
+<li>プログラムのソースコード:
+e.g., <a href="https://github.com/tidyverse/ggplot2">ggplot2</a>, <a href="https://github.com/stan-dev/rstan">rstan</a></li>
+<li>論文や本の原稿、サプリ:
+e.g., <a href="https://github.com/hadley/r4ds">R4DS</a>, <a href="https://github.com/hadley/adv-r/">Advanced R programming</a></li>
+</ul></li>
+
+<li><p>Issues:
+バグ報告や機能要望に用いられる。
+チームの課題を列挙するのにも使える。<br>
+e.g., <a href="https://github.com/tidyverse/ggplot2/issues">https://github.com/tidyverse/ggplot2/issues</a></p></li>
+
+<li><p>Projects:
+プロジェクトのタスク管理のためのツール。
+もちろんissueとも連携可能。<br>
+e.g., <a href="https://github.com/r-lib/pillar/projects/1">https://github.com/r-lib/pillar/projects/1</a></p></li>
+
+<li><p>Wiki:
+チーム内のちょっとした情報共有などに。
+でもできればそういう文書もちゃんとGitで管理したほうがいい。<br>
+e.g., <a href="https://github.com/gnab/remark/wiki">https://github.com/gnab/remark/wiki</a></p></li>
+
+<li><p>GitHub Pages:
+リポジトリの内容をウェブサイトとして公開できる。<br>
+e.g., <a href="https://kazutan.github.io/kazutanR/">https://kazutan.github.io/kazutanR/</a></p></li>
+</ul>
+
+<h2 id="構造と操作の概要">構造と操作の概要</h2>
 
 <h3 id="手元の変更を外に伝える">手元の変更を外に伝える</h3>
 
@@ -289,9 +413,12 @@ plot論文.R
 
 <h2 id="用語">用語</h2>
 
+<p><a href="https://help.github.com/articles/github-glossary/">https://help.github.com/articles/github-glossary/</a></p>
+
 <dl>
 <dt>repository</dt>
 <dd>commitの履歴を保持する拠点。
+「ひとつのRパッケージ」とか「1冊の本の原稿」のような単位で作る。
 <code>git init</code> で手元に新規作成するか、<code>git clone</code> でリモートから複製する。</dd>
 <dt>commit</dt>
 <dd>git内部でroot treeのsnapshotを指すオブジェクト。
@@ -324,32 +451,115 @@ blobやファイル名などのメタデータに依存したハッシュIDを�
 <code>HEAD^</code> がパターン扱いされてエラーになるので、
 <code>HEAD\^</code> のようにエスケープするか <code>unsetopt NOMATCH</code> しておいたほうがいい。</p>
 
-<h2 id="gitの基本">Gitの基本</h2>
+<h2 id="基本操作を実践">基本操作を実践</h2>
 
-<h3 id="新しいリポジトリを作る">新しいリポジトリを作る</h3>
+<h3 id="既存のリポジトリを取ってくる-clone">既存のリポジトリを取ってくる <code>clone</code></h3>
+
+<ol>
+<li>GitHub上の適当なリポジトリをひとつ選ぶ。
+(e.g., <a href="https://github.com/heavywatal/clippson">https://github.com/heavywatal/clippson</a>)</li>
+<li>右の方の緑の &ldquo;Clone or download&rdquo; ボタンを押す。</li>
+<li>SSHではなくHTTPSを選択し、URLをコピー。</li>
+<li>ターミナルにコマンドを入力:<br>
+<code>git clone https://github.com/heavywatal/clippson.git</code></li>
+
+<li><p>中身を眺めてみる:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> clippson/
+ls -al
+git log
+git remove -v</code></pre></div></li>
+</ol>
+
+<h3 id="新しいリポジトリを作る-init">新しいリポジトリを作る <code>init</code></h3>
 
 <ol>
 <li>GitHubの右上の &ldquo;+&rdquo; から &ldquo;New repository&rdquo; を選択。</li>
-<li>適当に空欄を埋めて &ldquo;Create repository&rdquo; を押す。
+<li>Repository name を例えば <code>helloworld</code> として &ldquo;Create repository&rdquo; を押す。
 いくつかのファイル (<code>README.md</code>, <code>LICENSE</code>, <code>.gitignore</code>)
 をここで作ることもできるけど、今回はとりあえず空っぽのリポジトリを作る。</li>
 
 <li><p>手元のマシンにローカルリポジトリを作る:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mkdir YOUR_REPO
-<span class="nb">cd</span> YOUR_REPO/
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mkdir helloworld
+<span class="nb">cd</span> helloworld/
 git init
-git commit --allow-empty -m <span class="s2">&#34;:beer: Create repository&#34;</span></code></pre></div></li>
+ls -al</code></pre></div>
+<p>リポジトリの本体 <code>.git/</code> が作成されたことを確認。</p></li>
 
-<li><p>先程作ったリモートリポジトリを紐付けて、プッシュしてみる:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git remote add origin https://github.com/YOUR_NAME/YOUR_REPO.git
-git push -u origin master</code></pre></div></li>
+<li><p>空っぽのコミットを作る:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git status
+git commit --allow-empty -m <span class="s2">&#34;:beer: Create repository&#34;</span>
+git status
+git log</code></pre></div>
+<p>事あるごとに <code>git status</code> や <code>git log</code> を確認すると安心。</p></li>
+
+<li><p>先程作ったリモートリポジトリを紐付けて、pushしてみる:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git remote -v
+git remote add origin https://github.com/YOUR_NAME/helloworld.git
+git remote -v
+git push -u origin master
+git status</code></pre></div></li>
+
+<li><p>GitHubで履歴を閲覧し、 <code>git log</code> と同じになってることを確認。</p></li>
 </ol>
 
-<h3 id="既存のリポジトリを取ってくる">既存のリポジトリを取ってくる</h3>
+<h3 id="手元の変更をリモートに-push">手元の変更をリモートに <code>push</code></h3>
 
-<h3 id="手元の変更をリモートに">手元の変更をリモートに</h3>
+<ol>
+<li><p>上で作ったリポジトリに、適当なファイルを追加:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">echo</span> <span class="s2">&#34;# Hello, world!&#34;</span> &gt; README.md
+cat README.md
+git status</code></pre></div></li>
 
-<h3 id="リモートの変更を手元に">リモートの変更を手元に</h3>
+<li><p>作ったファイルをstaging areaに追加:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git add README.md
+git status
+git diff --staged</code></pre></div></li>
+
+<li><p>この変更をcommit:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git commit -m <span class="s2">&#34;:memo: Create README.md&#34;</span>
+git status
+git log
+git show</code></pre></div></li>
+
+<li><p>リモートにpush:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git push
+git status
+git log</code></pre></div></li>
+</ol>
+
+<h3 id="リモートの変更を手元に-fetch">リモートの変更を手元に <code>fetch</code></h3>
+
+<ol>
+<li><p>上のリポジトリでそのまま <code>git fetch</code> してみる。
+ローカルとリモートは同じ状態なので当然何も起こらない。</p></li>
+
+<li><p>練習のためGitHub上で <code>LICENSE</code> ファイルを作成する。</p>
+
+<ol>
+<li>GitHub上のリポジトリのトップページを開き
+&ldquo;Create new file&rdquo; ボタンを押す。</li>
+<li>ファイル名に <code>LICENSE</code> と入力。</li>
+<li>右に現れる &ldquo;Choose a license template&rdquo; というボタンを押す。</li>
+<li>とりあえず &ldquo;MIT License&rdquo; を選択。</li>
+<li>YearとNameを適当に埋めて &ldquo;Review and submit&rdquo;。</li>
+<li>&ldquo;Commit directly to the <code>master</code> branch&rdquo; を選択して &ldquo;Commit new file&rdquo;</li>
+</ol></li>
+
+<li><p>その変更をローカルリポジトリに取り寄せる:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git fetch
+git status
+git log --all
+ls -al</code></pre></div>
+<p>リポジトリ内部 <code>.git/</code> の <code>origin/master</code> は更新されたが、
+working directoryにはまだ反映されていない。</p></li>
+
+<li><p><code>origin/master</code> の内容を手元のファイルに反映する:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git merge
+git status
+git log
+git show
+ls -al</code></pre></div></li>
+</ol>
 
 <h2 id="その他よく使うコマンド">その他よく使うコマンド</h2>
 
@@ -374,19 +584,6 @@ git show <span class="o">[</span>revision<span class="o">]</span></code></pre></
 <p><code>.gitignore</code> で無視されてるuntrackedファイルを消す:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git clean -fdX</code></pre></div>
 <p>無視されていないuntrackedファイルも消したい場合は小文字の <code>-fdx</code> (危険)。</p>
-
-<h3 id="tag">tag</h3>
-
-<p>特定のコミット(省略すると<code>HEAD</code>)にタグ付けする。
-lightweightとannotatedの2種類が存在し、後者にはメッセージなどが紐付く。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git tag v0.1.0 <span class="o">[</span>revision<span class="o">]</span>
-git tag -a v0.1.0 -m <span class="s2">&#34;Message!&#34;</span></code></pre></div>
-<p>GitHubリポジトリに <code>git push --tags</code> するとアーカイブが作られ、
-Releasesページに反映される。
-annotated tagであれば <code>git push --follow-tags</code>
-でcommitとtagを同時にpushできる。</p>
-
-<p><a href="https://git-scm.com/book/en/Git-Basics-Tagging">https://git-scm.com/book/en/Git-Basics-Tagging</a></p>
 
 <h3 id="reset">reset</h3>
 
@@ -413,6 +610,8 @@ git reset --hard origin/master</code></pre></div>
 <p>直前のcommitをちょっと修正したいだけなら <code>git commit --amend</code> が簡単。
 それより前のを修正するには <code>git rebase -i HEAD~3</code> とかで戻ってrewordやedit。</p>
 
+<p>push済みのものは改変しちゃダメ！</p>
+
 <h2 id="チーム作業">チーム作業</h2>
 
 <ul>
@@ -424,11 +623,11 @@ git reset --hard origin/master</code></pre></div>
 権限を持つ少数の人がそれをレビューしてmergeするスタイルが安全。</li>
 </ul>
 
-<h2 id="pull-request-pr">Pull Request (PR)</h2>
+<h3 id="pull-request-pr">Pull Request (PR)</h3>
 
 <p>他人のリポジトリに貢献するためのGitHubの機能。</p>
 
-<p>例: <a href="https://github.com/Rdatatable/data.table/pull/2807">https://github.com/Rdatatable/data.table/pull/2807</a></p>
+<p>e.g., <a href="https://github.com/Rdatatable/data.table/pull/2807">https://github.com/Rdatatable/data.table/pull/2807</a></p>
 
 <h3 id="2人1組でprとmergeを体験">2人1組でPRとmergeを体験</h3>
 
@@ -464,10 +663,9 @@ git remote -v
 <pre><code>git checkout -b fix-typo
 </code></pre></li>
 
-<li><p>PLAYER: コードを変更して <code>commit</code>:</p>
+<li><p>PLAYER: <code>README.md</code> をテキストエディタで変更して <code>commit</code>:</p>
 
-<pre><code>emacs README.md
-git diff
+<pre><code>git diff
 git commit -a -m &quot;Fix typo in README.md&quot;
 </code></pre></li>
 
@@ -503,61 +701,12 @@ git rebase -i master
 <li><p>PLAYER: 無事マージされたら作業ブランチを消す。</p></li>
 </ol>
 
-<h2 id="githubのその他の便利機能">GitHubのその他の便利機能</h2>
+<h2 id="further-reading">Further reading</h2>
 
 <ul>
-<li><p>Issues:
-バグ報告に用いられる。
-チームの課題を列挙するのにも使える。
-例: <a href="https://github.com/tidyverse/ggplot2/issues">https://github.com/tidyverse/ggplot2/issues</a></p></li>
-
-<li><p>Projects:
-プロジェクトのタスク管理のためのツール。
-もちろんissueとも連携可能。
-例: <a href="https://github.com/r-lib/pillar/projects/1">https://github.com/r-lib/pillar/projects/1</a></p></li>
-
-<li><p>Wiki:
-チーム内のちょっとした情報共有などに。
-でもできればそういう文書もちゃんとGitで管理したほうがいい。
-例: <a href="https://github.com/gnab/remark/wiki">https://github.com/gnab/remark/wiki</a></p></li>
+<li><a href="https://git-scm.com/book/en/v2">Pro Git book</a></li>
+<li><a href="https://lab.github.com/">GitHub Learning Lab</a></li>
 </ul>
-
-<h2 id="github-pages">GitHub Pages</h2>
-
-<p><a href="https://help.github.com/articles/user-organization-and-project-pages/">https://help.github.com/articles/user-organization-and-project-pages/</a></p>
-
-<h3 id="ユーザーサイトを作る">ユーザーサイトを作る</h3>
-
-<ol>
-<li><code>USERNAME.github.io</code> という名前のリポジトリをGitHub上で作成</li>
-<li>公開したいウェブサイトを<code>master</code>ブランチとして<code>push</code></li>
-<li><code>https://USERNAME.github.io</code> にアクセスしてみる。</li>
-</ol>
-
-<p>例えば本ウェブサイトは
-<code>heavywatal.github.io</code> というリポジトリの
-<code>source</code>ブランチでMarkdownテキストを書き、
-<a href="https://gohugo.io/">Hugo</a>
-で変換・生成したHTMLファイルを<code>master</code>ブランチに書き出している。</p>
-
-<p>GitHubが勝手にJekyll処理しようとすることがあるので、
-<code>.nojekyll</code> という空ファイルを作っておく。</p>
-
-<h3 id="プロジェクトサイトを作る">プロジェクトサイトを作る</h3>
-
-<p><a href="https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/">https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/</a></p>
-
-<p>リポジトリの内容を <code>https://USERNAME.github.io/PROJECT/</code> に公開することができる。
-方法は複数あり、リポジトリの設定画面から選択できる。</p>
-
-<ol>
-<li><code>gh-pages</code> ブランチの内容を公開 (古い方法)</li>
-<li><code>master</code> ブランチの内容を公開</li>
-<li><code>master</code> ブランチの <code>/docs</code> ディレクトリのみを公開</li>
-</ol>
-
-<p>前は1番の方法しかなくてブランチの扱いがやや面倒だったが、
-今では<code>master</code>だけで簡単に済ませられるようになった。</p>
 
 </article>
 </main>
