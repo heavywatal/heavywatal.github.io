@@ -91,6 +91,81 @@ Git入門2018
 
 <p>2018-10-15 中央水産研究所？</p>
 
+<h2 id="事前準備">事前準備</h2>
+
+<h3 id="os">OS</h3>
+
+<ul>
+<li>macOS
+
+<ul>
+<li>10.13 High Sierra以降</li>
+<li>Command Line Tools</li>
+</ul></li>
+<li>Linux
+
+<ul>
+<li>Ubuntu 16.04以降 or CentOS 7以降</li>
+<li>build-essential とか &ldquo;Development Tools&rdquo; 的なもの</li>
+<li><code>yum</code> で普通に入るGitはたぶん古いので、どうにかしてv2以降を入れる</li>
+</ul></li>
+<li>Windows
+
+<ul>
+<li>10 (1803以降?)</li>
+<li>Ubuntu on Windows?</li>
+<li>Git?</li>
+</ul></li>
+</ul>
+
+<h3 id="共通">共通</h3>
+
+<ul>
+<li><a href="https://github.com">GitHub<i class="fab fa-fw fa-github"></i></a>に個人アカウントを作る。</li>
+
+<li><p><code>~/.gitconfig</code> にユーザ名やアドレスを登録する。
+<a href="https://git-scm.com/docs/git-config">https://git-scm.com/docs/git-config</a></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git config --global user.name <span class="s2">&#34;Watal M. Iwasaki&#34;</span>
+git config --global user.email <span class="s2">&#34;heavy.watalあmail.com&#34;</span>
+cat ~/.gitconfig</code></pre></div></li>
+</ul>
+
+<h3 id="sshの設定-advanced-optional">SSHの設定 (Advanced/Optional)</h3>
+
+<ul>
+<li>GitHubとの通信にはHTTPS方式とSSH方式がある。
+
+<ul>
+<li>HTTPS: 設定不要で高速だが、操作によってパスワード入力が必要</li>
+<li>SSH: 一旦ちゃんと設定すればパスワードなしで快適</li>
+</ul></li>
+<li>ダウンロード操作(clone/fetch/pull)は高速なHTTPSで、
+アップロード操作(push)はパスワード無しのSSHで、というのが楽ちん。
+
+<ul>
+<li><a href="/dev/ssh.html">SSH公開鍵を作って</a>マシンとGitHubに登録する。</li>
+<li><code>pushinsteadof</code> の設定をする。
+設定例: <a href="https://github.com/heavywatal/dotfiles/blob/master/.gitconfig"><code>heavywatal/dotfiles/.gitconfig</code></a></li>
+<li><a href="https://help.github.com/articles/connecting-to-github-with-ssh/">https://help.github.com/articles/connecting-to-github-with-ssh/</a></li>
+</ul></li>
+</ul>
+
+<h3 id="開発環境">開発環境</h3>
+
+<p>最近のテキストエディタはGit+GitHubとの連携機能が付いてたりする。
+これらを使えば、ターミナルからコマンドを打たなくても済む。
+そしてどのOSでも動く。</p>
+
+<ul>
+<li><a href="https://atom.io/">Atom</a>: GitHub製</li>
+<li><a href="https://code.visualstudio.com/">VS Code</a>: Microsoft製</li>
+<li><a href="https://www.rstudio.com/">RStudio</a>: RStudio製</li>
+</ul>
+
+<hr>
+
+<hr>
+
 <h2 id="gitが無い世界の風景">Gitが無い世界の風景</h2>
 
 <p>バージョン違いのファイルがフォルダを埋め尽くす。</p>
@@ -248,30 +323,6 @@ blobやファイル名などのメタデータに依存したハッシュIDを�
 <p>zshの<code>EXTENDED_GLOB</code>が有効になってる場合は
 <code>HEAD^</code> がパターン扱いされてエラーになるので、
 <code>HEAD\^</code> のようにエスケープするか <code>unsetopt NOMATCH</code> しておいたほうがいい。</p>
-
-<h2 id="下準備">下準備</h2>
-
-<ul>
-<li>ローカルマシンにGitをインストールする。
-MacならCommand Line Toolsに付属。
-Linuxなら <code>apt</code> や <code>yum</code> で入れられる。
-<a href="https://brew.sh/">Homebrew</a>/<a href="http://linuxbrew.sh/">Linux</a>などで最新版を入れるのも良い。</li>
-<li><a href="https://github.com">GitHub<i class="fab fa-fw fa-github"></i></a>に個人アカウントを作る。</li>
-<li><a href="/dev/ssh.html">SSH公開鍵を作って</a>マシンとGitHubに登録する。
-<a href="https://help.github.com/articles/connecting-to-github-with-ssh/">https://help.github.com/articles/connecting-to-github-with-ssh/</a></li>
-
-<li><p><code>~/.gitconfig</code> にユーザ名やアドレスを登録する。
-<a href="https://git-scm.com/docs/git-config">https://git-scm.com/docs/git-config</a></p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git config --global user.name <span class="s2">&#34;Watal M. Iwasaki&#34;</span>
-git config --global user.email <span class="s2">&#34;heavy.watalあmail.com&#34;</span>
-cat ~/.gitconfig</code></pre></div></li>
-
-<li><p>ついでに <code>pushinsteadof</code> の設定をしておく。
-httpsで高速にclone/fetch/pullして、
-sshでパスワード無しでpushする、というのが楽ちん。</p></li>
-
-<li><p>設定例: <a href="https://github.com/heavywatal/dotfiles/blob/master/.gitconfig"><code>heavywatal/dotfiles/.gitconfig</code></a></p></li>
-</ul>
 
 <h2 id="gitの基本">Gitの基本</h2>
 
@@ -507,17 +558,6 @@ git rebase -i master
 
 <p>前は1番の方法しかなくてブランチの扱いがやや面倒だったが、
 今では<code>master</code>だけで簡単に済ませられるようになった。</p>
-
-<h2 id="開発環境">開発環境</h2>
-
-<p>最近のテキストエディタはGit+GitHubとの連携機能が付いてたりする。
-これらを使えば、ターミナルからコマンドを打たなくても済む。</p>
-
-<ul>
-<li><a href="https://atom.io/">Atom</a>: GitHub製</li>
-<li><a href="https://code.visualstudio.com/">VS Code</a>: Microsoft製</li>
-<li><a href="https://www.rstudio.com/">RStudio</a>: RStudio製</li>
-</ul>
 
 </article>
 </main>
