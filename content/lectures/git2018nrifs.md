@@ -41,7 +41,7 @@ tags = ["vcs", "writing"]
 新しめのUNIX系OSが好ましい。
 
 - macOS
-    -   10.13 High Sierra以降
+    -   10.12 Sierra以降
     -   Command Line Tools
     -   Gitは標準装備のやつで大丈夫
 - Linux
@@ -147,12 +147,18 @@ plot最終.R
 plot論文.R
 ```
 
-## オンラインストレージやバックアップ機能では不十分
+ファイルの中にも、いつか使うかもしれなくて消せないコードがたくさん。
+
+ジャンクコードまみれになって、開発効率は低下、バグ混入リスクは上昇。
+
+
+### オンラインストレージやバックアップ機能では不十分
 
 - [Dropbox<i class="fab fa-fw fa-dropbox"></i>](https://dropbox.com) とか
   [Google Drive<i class="fab fa-fw fa-google-drive"></i>](https://drive.google.com/)
   では、保存のたびに履歴が残る。
-- Time Machine<i class="fas fa-fw fa-clock"></i>では、一定時間間隔で履歴が残る。
+- [Time Machine<i class="fas fa-fw fa-clock"></i>](https://support.apple.com/HT201250)
+  では、一定時間間隔で履歴が残る。
 
 でも、バージョン管理や共同作業のためのツールじゃないから...
 
@@ -160,29 +166,33 @@ plot論文.R
   (ここでDropboxの履歴を例示しようと思ったらエラーで使えなかった)
 - オフラインだったりバッテリー駆動だったりすると保存漏れが起きる。
 - いつのバージョンに戻したらいいのか、日時以外の手掛かりが無い。
-- 共有ファイルにおける更新の衝突に対処しにくい。
+- ファイル変更の衝突に対処しにくい。
 
 
 ## Git<i class="fas fa-fw fa-share-alt-square"></i> and GitHub<i class="fab fa-fw fa-github"></i>
 
-- 履歴を残すタイミングは任意 = 手動。
-- オフラインでも作業できる。
-- バージョン(リビジョン)ごとにメッセージを残せる。
-- 差分を簡単に見られる。
-- 共同作業のための機能がちゃんとある。
+- いつでも好きなところに戻れる安心感
+    - 履歴を残すタイミングは任意 = 手動。
+    - バージョン(リビジョン)ごとにメッセージを残せる。
+    - 差分を簡単に見られる。
+- 複数マシンや複数人での並列作業にも使える
+    - オフラインでも作業できる。
+    - ブランチを作ることで衝突の影響を抑えられる。
+    - もし衝突が起きてもうまく対処する機能がある。
+    - 課題を管理する機能もある。
 
 e.g., https://github.com/tidyverse/stringr/commits/master
 
-### それらはどういう関係？
+### 両者はどういう関係？
 
-[Git<i class="fas fa-fw fa-share-alt-square"></i>](https://git-scm.com/)は分散型バージョン管理システムの代表格。
-プログラムのソースコードはもちろんのこと、
-研究ノートや論文の原稿などあらゆるテキストの管理に使える。
-各自のコンピュータにインストールして使うのはこっち。
+[Git<i class="fas fa-fw fa-share-alt-square"></i>](https://git-scm.com/)
+は分散型バージョン管理システムとして最も広く使われるオープンソース・ソフトウェア。
+手元のコンピュータ上でこれを操作して、変更履歴を記録・閲覧したり送受信したりする。
 
-[GitHub<i class="fab fa-fw fa-github"></i>](https://github.com)はGitをより便利に使うためのオンラインサービス。
+[GitHub<i class="fab fa-fw fa-github"></i>](https://github.com)
+はGitをより便利に使うためのオンラインサービスであり、それを運営する会社の名前でもある。
 個人的なリポジトリ置き場としてはもちろんのこと、
-ほかの人と共有・協力してプロジェクトを進めるプラットフォームとしても使える。
+多人数で共有・協力してプロジェクトを進めるプラットフォームとしても使える。
 
 ### 類似ツール
 
@@ -202,21 +212,21 @@ e.g., https://github.com/tidyverse/stringr/commits/master
     - その他 SourceForge, Google Code など。
 
 VCSは基本的にGit一択。<br>
-ホスティングサービスは、使い方や予算に応じて選択。
+ホスティングサービスは、使い方や予算などに応じて選択。
 
 
 ### GitHub<i class="fab fa-fw fa-github"></i>の使いみち
 
-- 基本: ファイルのバージョン管理<i class="fas fa-fw fa-share-alt-square"></i>
+- 基本: プレーンテキストのバージョン管理<i class="fas fa-fw fa-share-alt-square"></i>
     - プログラムのソースコード:
       e.g., [ggplot2](https://github.com/tidyverse/ggplot2), [rstan](https://github.com/stan-dev/rstan)
     - 論文や本の原稿、サプリ:
       e.g., [R4DS](https://github.com/hadley/r4ds), [Advanced R programming](https://github.com/hadley/adv-r/)
 
 - Issues:
-  バグ報告や機能要望に用いられる。
-  チームの課題を列挙するのにも使える。<br>
-  e.g., https://github.com/tidyverse/ggplot2/issues
+  バグ報告、機能要望、課題の列挙などに使われる。
+  タグを付けたり、特定の人にassignすることもできる。<br>
+  e.g., https://github.com/gohugoio/hugo/issues, https://github.com/nlohmann/json/issues
 
 - Projects:
   プロジェクトのタスク管理のためのツール。
@@ -241,7 +251,7 @@ VCSは基本的にGit一択。<br>
 : 手元のファイルの変更はまだリポジトリに登録されていない
 : ↓ `git add`
 
-<i class="fas fa-fw fa-check"></i> staging area (index)
+<i class="fas fa-fw fa-folder-plus"></i> staging area (index)
 : 次のコミットに含めるファイルをマークする段階
 : ↓ `git commit`
 
@@ -441,6 +451,10 @@ zshの`EXTENDED_GLOB`が有効になってる場合は
     ls -al
     ```
 
+`git fetch` と `git merge` を一気にやってくれる `git pull` というコマンドもあり、
+普段の一人作業ではよく使う。
+
+
 ## その他よく使うコマンド
 
 ### diff
@@ -547,10 +561,14 @@ e.g., https://github.com/Rdatatable/data.table/pull/2807
 
         git checkout -b fix-typo
 
-1.  PLAYER: `README.md` をテキストエディタで変更して `commit`:
+1.  PLAYER: `README.md` をテキストエディタで編集して `commit`:
 
         git diff
-        git commit -a -m "Fix typo in README.md"
+        git commit -a -m ":memo: Fix typo in README.md"
+
+    Git連携機能のあるエディタを使っている場合、
+    そこからdiffやcommitをやってみてもよい。
+    コードの追加・変更・削除による色分けの便利さも体感しよう。
 
 1.  PLAYER: この間に`upstream`で更新が無いかどうか確認:
 
@@ -574,6 +592,22 @@ e.g., https://github.com/Rdatatable/data.table/pull/2807
 1.  PLAYER: 修正を求められたらそのブランチに続けてcommitしてまたpush。
 1.  MANAGER: 問題が無ければmergeする。
 1.  PLAYER: 無事マージされたら作業ブランチを消す。
+
+## Tips
+
+-   習うより慣れる。
+    最初はコマンドが多くて難しそう・面倒くさそうに感じるけど、
+    だんだん意識しなくても使えるようになる。
+-   `git status` やエラー文をちゃんと読む。
+    どうすればいいかだいたい書いてくれてるし、
+    そのままウェブ検索すればだいたい解決策が見つかる。
+-   `--force` とか `-f` のような強制オプションは、
+    間違えると取り返しがつかなくなるので基本的に使わない。
+-   コミットを簡潔に要約するメッセージを書く。
+    [好ましいスタイルについては諸説ある](https://www.google.co.jp/search?q=commit+message+best+practices)けど、
+    とりあえず大文字で始まる命令形の一文を書くところから始めたらよいのでは。
+    コミットの内容に応じた分類で[先頭に絵文字を入れるスタイル](https://github.com/carloscuesta/gitmoji/)も人気になりつつある。
+
 
 ## Further reading
 
