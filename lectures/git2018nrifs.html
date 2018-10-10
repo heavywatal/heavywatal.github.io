@@ -96,11 +96,13 @@ Git入門2018
 <li><a href="#os共通">OS共通</a></li>
 <li><a href="#sshの設定-任意">SSHの設定 (任意)</a></li>
 </ul></li>
-<li><a href="#gitが無い世界の風景">Gitが無い世界の風景</a></li>
+<li><a href="#gitが無い世界の風景">Gitが無い世界の風景</a>
+<ul>
 <li><a href="#オンラインストレージやバックアップ機能では不十分">オンラインストレージやバックアップ機能では不十分</a></li>
+</ul></li>
 <li><a href="#git-i-class-fas-fa-fw-fa-share-alt-square-i-and-github-i-class-fab-fa-fw-fa-github-i">Git<i class="fas fa-fw fa-share-alt-square"></i> and GitHub<i class="fab fa-fw fa-github"></i></a>
 <ul>
-<li><a href="#それらはどういう関係">それらはどういう関係？</a></li>
+<li><a href="#両者はどういう関係">両者はどういう関係？</a></li>
 <li><a href="#類似ツール">類似ツール</a></li>
 <li><a href="#github-i-class-fab-fa-fw-fa-github-i-の使いみち">GitHub<i class="fab fa-fw fa-github"></i>の使いみち</a></li>
 </ul></li>
@@ -128,6 +130,7 @@ Git入門2018
 <li><a href="#pull-request-pr">Pull Request (PR)</a></li>
 <li><a href="#2人1組でprとmergeを体験">2人1組でPRとmergeを体験</a></li>
 </ul></li>
+<li><a href="#tips">Tips</a></li>
 <li><a href="#further-reading">Further reading</a></li>
 </ul></li>
 </ul>
@@ -170,7 +173,7 @@ Git入門2018
 <li>macOS
 
 <ul>
-<li>10.13 High Sierra以降</li>
+<li>10.12 Sierra以降</li>
 <li>Command Line Tools</li>
 <li>Gitは標準装備のやつで大丈夫</li>
 </ul></li>
@@ -279,13 +282,18 @@ plot最終.R
 plot論文.R
 </code></pre>
 
-<h2 id="オンラインストレージやバックアップ機能では不十分">オンラインストレージやバックアップ機能では不十分</h2>
+<p>ファイルの中にも、いつか使うかもしれなくて消せないコードがたくさん。</p>
+
+<p>ジャンクコードまみれになって、開発効率は低下、バグ混入リスクは上昇。</p>
+
+<h3 id="オンラインストレージやバックアップ機能では不十分">オンラインストレージやバックアップ機能では不十分</h3>
 
 <ul>
 <li><a href="https://dropbox.com">Dropbox<i class="fab fa-fw fa-dropbox"></i></a> とか
 <a href="https://drive.google.com/">Google Drive<i class="fab fa-fw fa-google-drive"></i></a>
 では、保存のたびに履歴が残る。</li>
-<li>Time Machine<i class="fas fa-fw fa-clock"></i>では、一定時間間隔で履歴が残る。</li>
+<li><a href="https://support.apple.com/HT201250">Time Machine<i class="fas fa-fw fa-clock"></i></a>
+では、一定時間間隔で履歴が残る。</li>
 </ul>
 
 <p>でも、バージョン管理や共同作業のためのツールじゃないから&hellip;</p>
@@ -295,31 +303,41 @@ plot論文.R
 (ここでDropboxの履歴を例示しようと思ったらエラーで使えなかった)</li>
 <li>オフラインだったりバッテリー駆動だったりすると保存漏れが起きる。</li>
 <li>いつのバージョンに戻したらいいのか、日時以外の手掛かりが無い。</li>
-<li>共有ファイルにおける更新の衝突に対処しにくい。</li>
+<li>ファイル変更の衝突に対処しにくい。</li>
 </ul>
 
 <h2 id="git-i-class-fas-fa-fw-fa-share-alt-square-i-and-github-i-class-fab-fa-fw-fa-github-i">Git<i class="fas fa-fw fa-share-alt-square"></i> and GitHub<i class="fab fa-fw fa-github"></i></h2>
 
 <ul>
+<li>いつでも好きなところに戻れる安心感
+
+<ul>
 <li>履歴を残すタイミングは任意 = 手動。</li>
-<li>オフラインでも作業できる。</li>
 <li>バージョン(リビジョン)ごとにメッセージを残せる。</li>
 <li>差分を簡単に見られる。</li>
-<li>共同作業のための機能がちゃんとある。</li>
+</ul></li>
+<li>複数マシンや複数人での並列作業にも使える
+
+<ul>
+<li>オフラインでも作業できる。</li>
+<li>ブランチを作ることで衝突の影響を抑えられる。</li>
+<li>もし衝突が起きてもうまく対処する機能がある。</li>
+<li>課題を管理する機能もある。</li>
+</ul></li>
 </ul>
 
 <p>e.g., <a href="https://github.com/tidyverse/stringr/commits/master">https://github.com/tidyverse/stringr/commits/master</a></p>
 
-<h3 id="それらはどういう関係">それらはどういう関係？</h3>
+<h3 id="両者はどういう関係">両者はどういう関係？</h3>
 
-<p><a href="https://git-scm.com/">Git<i class="fas fa-fw fa-share-alt-square"></i></a>は分散型バージョン管理システムの代表格。
-プログラムのソースコードはもちろんのこと、
-研究ノートや論文の原稿などあらゆるテキストの管理に使える。
-各自のコンピュータにインストールして使うのはこっち。</p>
+<p><a href="https://git-scm.com/">Git<i class="fas fa-fw fa-share-alt-square"></i></a>
+は分散型バージョン管理システムとして最も広く使われるオープンソース・ソフトウェア。
+手元のコンピュータ上でこれを操作して、変更履歴を記録・閲覧したり送受信したりする。</p>
 
-<p><a href="https://github.com">GitHub<i class="fab fa-fw fa-github"></i></a>はGitをより便利に使うためのオンラインサービス。
+<p><a href="https://github.com">GitHub<i class="fab fa-fw fa-github"></i></a>
+はGitをより便利に使うためのオンラインサービスであり、それを運営する会社の名前でもある。
 個人的なリポジトリ置き場としてはもちろんのこと、
-ほかの人と共有・協力してプロジェクトを進めるプラットフォームとしても使える。</p>
+多人数で共有・協力してプロジェクトを進めるプラットフォームとしても使える。</p>
 
 <h3 id="類似ツール">類似ツール</h3>
 
@@ -347,12 +365,12 @@ plot論文.R
 </ul>
 
 <p>VCSは基本的にGit一択。<br>
-ホスティングサービスは、使い方や予算に応じて選択。</p>
+ホスティングサービスは、使い方や予算などに応じて選択。</p>
 
 <h3 id="github-i-class-fab-fa-fw-fa-github-i-の使いみち">GitHub<i class="fab fa-fw fa-github"></i>の使いみち</h3>
 
 <ul>
-<li><p>基本: ファイルのバージョン管理<i class="fas fa-fw fa-share-alt-square"></i></p>
+<li><p>基本: プレーンテキストのバージョン管理<i class="fas fa-fw fa-share-alt-square"></i></p>
 
 <ul>
 <li>プログラムのソースコード:
@@ -362,9 +380,9 @@ e.g., <a href="https://github.com/hadley/r4ds">R4DS</a>, <a href="https://github
 </ul></li>
 
 <li><p>Issues:
-バグ報告や機能要望に用いられる。
-チームの課題を列挙するのにも使える。<br>
-e.g., <a href="https://github.com/tidyverse/ggplot2/issues">https://github.com/tidyverse/ggplot2/issues</a></p></li>
+バグ報告、機能要望、課題の列挙などに使われる。
+タグを付けたり、特定の人にassignすることもできる。<br>
+e.g., <a href="https://github.com/gohugoio/hugo/issues">https://github.com/gohugoio/hugo/issues</a>, <a href="https://github.com/nlohmann/json/issues">https://github.com/nlohmann/json/issues</a></p></li>
 
 <li><p>Projects:
 プロジェクトのタスク管理のためのツール。
@@ -389,7 +407,7 @@ e.g., <a href="https://kazutan.github.io/kazutanR/">https://kazutan.github.io/ka
 <dt><i class="fas fa-fw fa-folder"></i> working directory (working tree)</dt>
 <dd>手元のファイルの変更はまだリポジトリに登録されていない</dd>
 <dd>↓ <code>git add</code></dd>
-<dt><i class="fas fa-fw fa-check"></i> staging area (index)</dt>
+<dt><i class="fas fa-fw fa-folder-plus"></i> staging area (index)</dt>
 <dd>次のコミットに含めるファイルをマークする段階</dd>
 <dd>↓ <code>git commit</code></dd>
 <dt><i class="fas fa-fw fa-code-branch"></i> local repository</dt>
@@ -561,6 +579,9 @@ git show
 ls -al</code></pre></div></li>
 </ol>
 
+<p><code>git fetch</code> と <code>git merge</code> を一気にやってくれる <code>git pull</code> というコマンドもあり、
+普段の一人作業ではよく使う。</p>
+
 <h2 id="その他よく使うコマンド">その他よく使うコマンド</h2>
 
 <h3 id="diff">diff</h3>
@@ -663,11 +684,15 @@ git remote -v
 <pre><code>git checkout -b fix-typo
 </code></pre></li>
 
-<li><p>PLAYER: <code>README.md</code> をテキストエディタで変更して <code>commit</code>:</p>
+<li><p>PLAYER: <code>README.md</code> をテキストエディタで編集して <code>commit</code>:</p>
 
 <pre><code>git diff
-git commit -a -m &quot;Fix typo in README.md&quot;
-</code></pre></li>
+git commit -a -m &quot;:memo: Fix typo in README.md&quot;
+</code></pre>
+
+<p>Git連携機能のあるエディタを使っている場合、
+そこからdiffやcommitをやってみてもよい。
+コードの追加・変更・削除による色分けの便利さも体感しよう。</p></li>
 
 <li><p>PLAYER: この間に<code>upstream</code>で更新が無いかどうか確認:</p>
 
@@ -700,6 +725,23 @@ git rebase -i master
 
 <li><p>PLAYER: 無事マージされたら作業ブランチを消す。</p></li>
 </ol>
+
+<h2 id="tips">Tips</h2>
+
+<ul>
+<li>習うより慣れる。
+最初はコマンドが多くて難しそう・面倒くさそうに感じるけど、
+だんだん意識しなくても使えるようになる。</li>
+<li><code>git status</code> やエラー文をちゃんと読む。
+どうすればいいかだいたい書いてくれてるし、
+そのままウェブ検索すればだいたい解決策が見つかる。</li>
+<li><code>--force</code> とか <code>-f</code> のような強制オプションは、
+間違えると取り返しがつかなくなるので基本的に使わない。</li>
+<li>コミットを簡潔に要約するメッセージを書く。
+<a href="https://www.google.co.jp/search?q=commit+message+best+practices">好ましいスタイルについては諸説ある</a>けど、
+とりあえず大文字で始まる命令形の一文を書くところから始めたらよいのでは。
+コミットの内容に応じた分類で<a href="https://github.com/carloscuesta/gitmoji/">先頭に絵文字を入れるスタイル</a>も人気になりつつある。</li>
+</ul>
 
 <h2 id="further-reading">Further reading</h2>
 
