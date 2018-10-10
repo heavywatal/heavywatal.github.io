@@ -9,6 +9,60 @@ tags = ["vcs", "writing"]
 
 2018-10-15 中央水産研究所？
 
+## 事前準備
+
+### OS
+
+- macOS
+    -   10.13 High Sierra以降
+    -   Command Line Tools
+- Linux
+    -   Ubuntu 16.04以降 or CentOS 7以降
+    -   build-essential とか "Development Tools" 的なもの
+    -   `yum` で普通に入るGitはたぶん古いので、どうにかしてv2以降を入れる
+- Windows
+    -   10 (1803以降?)
+    -   Ubuntu on Windows?
+    -   Git?
+
+### 共通
+
+-   [GitHub<i class="fab fa-fw fa-github"></i>](https://github.com)に個人アカウントを作る。
+-   `~/.gitconfig` にユーザ名やアドレスを登録する。
+    https://git-scm.com/docs/git-config
+
+    ```sh
+    git config --global user.name "Watal M. Iwasaki"
+    git config --global user.email "heavy.watalあmail.com"
+    cat ~/.gitconfig
+    ```
+
+### SSHの設定 (Advanced/Optional)
+
+- GitHubとの通信にはHTTPS方式とSSH方式がある。
+    - HTTPS: 設定不要で高速だが、操作によってパスワード入力が必要
+    - SSH: 一旦ちゃんと設定すればパスワードなしで快適
+- ダウンロード操作(clone/fetch/pull)は高速なHTTPSで、
+  アップロード操作(push)はパスワード無しのSSHで、というのが楽ちん。
+    - [SSH公開鍵を作って]({{< relref "ssh.md" >}})マシンとGitHubに登録する。
+    - `pushinsteadof` の設定をする。
+      設定例: [`heavywatal/dotfiles/.gitconfig`](https://github.com/heavywatal/dotfiles/blob/master/.gitconfig)
+    - https://help.github.com/articles/connecting-to-github-with-ssh/
+
+
+### 開発環境
+
+最近のテキストエディタはGit+GitHubとの連携機能が付いてたりする。
+これらを使えば、ターミナルからコマンドを打たなくても済む。
+そしてどのOSでも動く。
+
+- [Atom](https://atom.io/): GitHub製
+- [VS Code](https://code.visualstudio.com/): Microsoft製
+- [RStudio](https://www.rstudio.com/): RStudio製
+
+----
+
+----
 
 ## Gitが無い世界の風景
 
@@ -165,28 +219,6 @@ zshの`EXTENDED_GLOB`が有効になってる場合は
 `HEAD^` がパターン扱いされてエラーになるので、
 `HEAD\^` のようにエスケープするか `unsetopt NOMATCH` しておいたほうがいい。
 
-
-## 下準備
-
-- ローカルマシンにGitをインストールする。
-  MacならCommand Line Toolsに付属。
-  Linuxなら `apt` や `yum` で入れられる。
-  [Homebrew](https://brew.sh/)/[Linux](http://linuxbrew.sh/)などで最新版を入れるのも良い。
-- [GitHub<i class="fab fa-fw fa-github"></i>](https://github.com)に個人アカウントを作る。
-- [SSH公開鍵を作って](/dev/ssh.html)マシンとGitHubに登録する。
-  https://help.github.com/articles/connecting-to-github-with-ssh/
-- `~/.gitconfig` にユーザ名やアドレスを登録する。
-  https://git-scm.com/docs/git-config
-
-    ```sh
-    git config --global user.name "Watal M. Iwasaki"
-    git config --global user.email "heavy.watalあmail.com"
-    cat ~/.gitconfig
-    ```
-- ついでに `pushinsteadof` の設定をしておく。
-  httpsで高速にclone/fetch/pullして、
-  sshでパスワード無しでpushする、というのが楽ちん。
-- 設定例: [`heavywatal/dotfiles/.gitconfig`](https://github.com/heavywatal/dotfiles/blob/master/.gitconfig)
 
 ## Gitの基本
 
@@ -421,13 +453,3 @@ https://help.github.com/articles/configuring-a-publishing-source-for-github-page
 
 前は1番の方法しかなくてブランチの扱いがやや面倒だったが、
 今では`master`だけで簡単に済ませられるようになった。
-
-
-## 開発環境
-
-最近のテキストエディタはGit+GitHubとの連携機能が付いてたりする。
-これらを使えば、ターミナルからコマンドを打たなくても済む。
-
-- [Atom](https://atom.io/): GitHub製
-- [VS Code](https://code.visualstudio.com/): Microsoft製
-- [RStudio](https://www.rstudio.com/): RStudio製
