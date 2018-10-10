@@ -15,31 +15,37 @@ tags = ["shell", "communication"]
 
 1.  ローカルホストで鍵ペア (秘密鍵 `id_ed25519` と公開鍵 `id_ed25519.pub`) を作成:
     ```
-    % ssh-keygen -t ed25519 -N ''
-    Generating public/private ed25519 key pair.
-    Enter file in which to save the key (~/.ssh/id_ed25519): ＃そのままリターン
-    Your identification has been saved in ~/.ssh/id_ed25519.
-    Your public key has been saved in ~/.ssh/id_ed25519.pub.
+    ssh-keygen -t ed25519 -N ''
+    # Generating public/private ed25519 key pair.
+    # Enter file in which to save the key (~/.ssh/id_ed25519): ＃そのままリターン
+    # Your identification has been saved in ~/.ssh/id_ed25519.
+    # Your public key has been saved in ~/.ssh/id_ed25519.pub.
     ```
     Ed25519を使えない古い環境ではRSA (`-t rsa -b 4096`)
     やECDSA (`-t ecdsa -b 521`) を使う。
 
-1.  できあがった公開鍵をリモートホストの `~/.ssh/authorized_keys` に追加:
+1.  できあがった公開鍵 `id_ed25519.pub` をリモートホストに登録する。
+    やり方は場合によって異なる。
+
+    ウェブブラウザからアップロードする方法。
+    (e.g., [GitHub > Settings](https://github.com/settings/keys))。
+
+    ターミナルから `~/.ssh/authorized_keys` に追加する方法:
     ```sh
-    % ssh-copy-id -i ~/.ssh/id_ed25519.pub watal@example.com
-      # or
-    % ssh watal@example.com "mkdir ~/.ssh; touch ~/.ssh/authorized_keys"
-    % cat id_ed25519.pub | ssh watal@example.com "cat >> ~/.ssh/authorized_keys"
+    ssh-copy-id -i ~/.ssh/id_ed25519.pub watal@example.com
+    # or
+    ssh watal@example.com "mkdir ~/.ssh; touch ~/.ssh/authorized_keys"
+    cat id_ed25519.pub | ssh watal@example.com "cat >> ~/.ssh/authorized_keys"
     ```
 
 1.  ユーザー本人だけが読み書きできるパーミッションに設定されていることを確認:
     ```sh
-    % ls -l ~/.ssh
-    % ssh watal@example.com "ls -l ~/.ssh"
-      # if necessary
-    % chmod 700 ~/.ssh
-    % chmod 600 ~/.ssh/id_ed25519
-    % chmod 600 ~/.ssh/authorized_keys
+    ls -l ~/.ssh
+    ssh watal@example.com "ls -l ~/.ssh"
+    # if necessary
+    chmod 700 ~/.ssh
+    chmod 600 ~/.ssh/id_ed25519
+    chmod 600 ~/.ssh/authorized_keys
     ```
 
 
