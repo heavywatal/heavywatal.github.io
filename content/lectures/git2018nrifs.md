@@ -32,7 +32,7 @@ tags = ["vcs", "writing"]
 }
 </style>
 
-2018-10-15 中央水産研究所？
+2018-10-15 中央水産研究所
 
 ## 事前準備
 
@@ -70,11 +70,14 @@ tags = ["vcs", "writing"]
         normalizePath("~")
         # "C:\\Users\\watal\\Documents"
         ```
+   -    UNIX派が仕方なくWindowsを使う場合は
+        [MSYS2](https://www.msys2.org/)の `pacman` で環境を構築するのが良さそう...?
+
 
 ### OS共通
 
 -   適当なテキストエディタ(開発環境)を入れておく。
-    Git/GitHubとの連携機能が付いていて、
+    初期状態でもGit/GitHubとの連携機能が付いていて、
     変更箇所を色付けしてくれたりコマンド入力を肩代わりしてくれたりするのが便利。
     - [Atom](https://atom.io/): GitHub製
     - [VS Code](https://code.visualstudio.com/): Microsoft製
@@ -321,7 +324,7 @@ zshの`EXTENDED_GLOB`が有効になってる場合は
 `HEAD\^` のようにエスケープするか `unsetopt NOMATCH` しておいたほうがいい。
 
 
-## 基本操作を実践
+## 基本操作の実践
 
 ### 既存のリポジトリを取ってくる `clone`
 
@@ -339,6 +342,11 @@ zshの`EXTENDED_GLOB`が有効になってる場合は
     git log
     git remove -v
     ```
+
+最新版のスナップショットだけでなく、
+履歴もごっそり複製するので、
+このあとはオフラインでもいろいろ操作できる。
+
 
 ### 新しいリポジトリを作る `init`
 
@@ -515,7 +523,7 @@ git reset --hard origin/master
 直前のcommitをちょっと修正したいだけなら `git commit --amend` が簡単。
 それより前のを修正するには `git rebase -i HEAD~3` とかで戻ってrewordやedit。
 
-push済みのものは改変しちゃダメ！
+**リモートにpush済みのものは改変しちゃダメ！**
 
 
 ## チーム作業
@@ -530,9 +538,16 @@ push済みのものは改変しちゃダメ！
 
 ### Pull Request (PR)
 
-他人のリポジトリに貢献するためのGitHubの機能。
-
+他人のリポジトリに貢献するためのGitHubの機能。<br>
 e.g., https://github.com/Rdatatable/data.table/pull/2807
+
+1.  貢献したいリポジトリをForkして自分のGitHubアカウントに追加。
+1.  Forkした自分のリポジトリを手元にclone。
+1.  PR用のブランチを作って、そこでソースコードを編集。
+1.  コミットして、ひとまず自分のGitHubアカウントにpush。
+1.  GitHub上で大元のリポジトリにPRを送る。
+1.  取り込んでもらえたら、用済みのブランチを削除。
+
 
 ### 2人1組でPRとmergeを体験
 
@@ -607,9 +622,13 @@ e.g., https://github.com/Rdatatable/data.table/pull/2807
     [好ましいスタイルについては諸説ある](https://www.google.co.jp/search?q=commit+message+best+practices)けど、
     とりあえず大文字で始まる命令形の一文を書くところから始めたらよいのでは。
     コミットの内容に応じた分類で[先頭に絵文字を入れるスタイル](https://github.com/carloscuesta/gitmoji/)も人気になりつつある。
+-   GitHubにpushされたら自動的に
+    [Slack](https://slack.com/)や[Twitter](https://twitter.com/)に投稿、
+    というような連携が可能。
 
 
 ## Further reading
 
 - [Pro Git book](https://git-scm.com/book/en/v2)
-- [GitHub Learning Lab](https://lab.github.com/)
+- [GitHub Learning Lab](https://lab.github.com/):
+  公式ボットが手取り足取り教えてくれるらしい。
