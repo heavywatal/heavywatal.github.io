@@ -112,7 +112,7 @@ Git入門2018
 <li><a href="#外部の変更を手元に取り込む">外部の変更を手元に取り込む</a></li>
 </ul></li>
 <li><a href="#用語">用語</a></li>
-<li><a href="#基本操作を実践">基本操作を実践</a>
+<li><a href="#基本操作の実践">基本操作の実践</a>
 <ul>
 <li><a href="#既存のリポジトリを取ってくる-clone">既存のリポジトリを取ってくる <code>clone</code></a></li>
 <li><a href="#新しいリポジトリを作る-init">新しいリポジトリを作る <code>init</code></a></li>
@@ -161,7 +161,7 @@ Git入門2018
 }
 </style>
 
-<p>2018-10-15 中央水産研究所？</p>
+<p>2018-10-15 中央水産研究所</p>
 
 <h2 id="事前準備">事前準備</h2>
 
@@ -204,6 +204,9 @@ e.g.,  <code>pwd</code>, <code>ls</code>, <code>cd</code>, <code>mkdir</code></l
 <span class="c1"># /c/Users/watal</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">### R</span>
 <span class="kp">normalizePath</span><span class="p">(</span><span class="s">&#34;~&#34;</span><span class="p">)</span>
 <span class="c1"># &#34;C:\\Users\\watal\\Documents&#34;</span></code></pre></div></li>
+
+<li><p>UNIX派が仕方なくWindowsを使う場合は
+<a href="https://www.msys2.org/">MSYS2</a>の <code>pacman</code> で環境を構築するのが良さそう&hellip;?</p></li>
 </ul></li>
 </ul>
 
@@ -211,7 +214,7 @@ e.g.,  <code>pwd</code>, <code>ls</code>, <code>cd</code>, <code>mkdir</code></l
 
 <ul>
 <li><p>適当なテキストエディタ(開発環境)を入れておく。
-Git/GitHubとの連携機能が付いていて、
+初期状態でもGit/GitHubとの連携機能が付いていて、
 変更箇所を色付けしてくれたりコマンド入力を肩代わりしてくれたりするのが便利。</p>
 
 <ul>
@@ -469,7 +472,7 @@ blobやファイル名などのメタデータに依存したハッシュIDを�
 <code>HEAD^</code> がパターン扱いされてエラーになるので、
 <code>HEAD\^</code> のようにエスケープするか <code>unsetopt NOMATCH</code> しておいたほうがいい。</p>
 
-<h2 id="基本操作を実践">基本操作を実践</h2>
+<h2 id="基本操作の実践">基本操作の実践</h2>
 
 <h3 id="既存のリポジトリを取ってくる-clone">既存のリポジトリを取ってくる <code>clone</code></h3>
 
@@ -487,6 +490,10 @@ ls -al
 git log
 git remove -v</code></pre></div></li>
 </ol>
+
+<p>最新版のスナップショットだけでなく、
+履歴もごっそり複製するので、
+このあとはオフラインでもいろいろ操作できる。</p>
 
 <h3 id="新しいリポジトリを作る-init">新しいリポジトリを作る <code>init</code></h3>
 
@@ -631,7 +638,7 @@ git reset --hard origin/master</code></pre></div>
 <p>直前のcommitをちょっと修正したいだけなら <code>git commit --amend</code> が簡単。
 それより前のを修正するには <code>git rebase -i HEAD~3</code> とかで戻ってrewordやedit。</p>
 
-<p>push済みのものは改変しちゃダメ！</p>
+<p><strong>リモートにpush済みのものは改変しちゃダメ！</strong></p>
 
 <h2 id="チーム作業">チーム作業</h2>
 
@@ -646,9 +653,17 @@ git reset --hard origin/master</code></pre></div>
 
 <h3 id="pull-request-pr">Pull Request (PR)</h3>
 
-<p>他人のリポジトリに貢献するためのGitHubの機能。</p>
+<p>他人のリポジトリに貢献するためのGitHubの機能。<br>
+e.g., <a href="https://github.com/Rdatatable/data.table/pull/2807">https://github.com/Rdatatable/data.table/pull/2807</a></p>
 
-<p>e.g., <a href="https://github.com/Rdatatable/data.table/pull/2807">https://github.com/Rdatatable/data.table/pull/2807</a></p>
+<ol>
+<li>貢献したいリポジトリをForkして自分のGitHubアカウントに追加。</li>
+<li>Forkした自分のリポジトリを手元にclone。</li>
+<li>PR用のブランチを作って、そこでソースコードを編集。</li>
+<li>コミットして、ひとまず自分のGitHubアカウントにpush。</li>
+<li>GitHub上で大元のリポジトリにPRを送る。</li>
+<li>取り込んでもらえたら、用済みのブランチを削除。</li>
+</ol>
 
 <h3 id="2人1組でprとmergeを体験">2人1組でPRとmergeを体験</h3>
 
@@ -741,13 +756,17 @@ git rebase -i master
 <a href="https://www.google.co.jp/search?q=commit+message+best+practices">好ましいスタイルについては諸説ある</a>けど、
 とりあえず大文字で始まる命令形の一文を書くところから始めたらよいのでは。
 コミットの内容に応じた分類で<a href="https://github.com/carloscuesta/gitmoji/">先頭に絵文字を入れるスタイル</a>も人気になりつつある。</li>
+<li>GitHubにpushされたら自動的に
+<a href="https://slack.com/">Slack</a>や<a href="https://twitter.com/">Twitter</a>に投稿、
+というような連携が可能。</li>
 </ul>
 
 <h2 id="further-reading">Further reading</h2>
 
 <ul>
 <li><a href="https://git-scm.com/book/en/v2">Pro Git book</a></li>
-<li><a href="https://lab.github.com/">GitHub Learning Lab</a></li>
+<li><a href="https://lab.github.com/">GitHub Learning Lab</a>:
+公式ボットが手取り足取り教えてくれるらしい。</li>
 </ul>
 
 </article>
