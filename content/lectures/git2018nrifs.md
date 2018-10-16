@@ -122,8 +122,6 @@ tags = ["vcs", "writing"]
 
 以下、本編。
 
-🚧 UNDER CONSTRUCTION 🚧
-
 
 ## Gitが無い世界の風景
 
@@ -169,7 +167,7 @@ plot論文.R
   (ここでDropboxの履歴を例示しようと思ったらエラーで使えなかった)
 - オフラインだったりバッテリー駆動だったりすると保存漏れが起きる。
 - いつのバージョンに戻したらいいのか、日時以外の手掛かりが無い。
-- ファイル変更の衝突に対処しにくい。
+- ファイル変更の競合・衝突に対処しにくい。
 
 
 ## Git<i class="fas fa-fw fa-share-alt-square"></i> and GitHub<i class="fab fa-fw fa-github"></i>
@@ -180,9 +178,10 @@ plot論文.R
     - 差分を簡単に見られる。
 - 複数マシンや複数人での並列作業にも使える
     - オフラインでも作業できる。
-    - ブランチを作ることで衝突の影響を抑えられる。
-    - もし衝突が起きてもうまく対処する機能がある。
+    - ブランチを作ることで競合・衝突の影響を抑えられる。
+    - もし競合・衝突が起きてもうまく対処する機能がある。
     - 課題を管理する機能もある。
+- 読み方はギット、ギットハブ。(ちなみに画像のGIFはジフ)
 
 e.g., https://github.com/tidyverse/stringr/commits/master
 
@@ -340,7 +339,7 @@ zshの`EXTENDED_GLOB`が有効になってる場合は
     cd clippson/
     ls -al
     git log
-    git remove -v
+    git remote -v
     ```
 
 最新版のスナップショットだけでなく、
@@ -531,7 +530,7 @@ git reset --hard origin/master
 - 基本的に、自分のリモートリポジトリにpushできるのは自分だけ。
 - コラボレータを設定して、権限を与えることも可能。
   ("Settings > Collaborators")
-- でも権限を持つ人が増えすぎると更新の衝突など管理リスクも増える。
+- でも権限を持つ人が増えすぎると競合・衝突など管理リスクも増える。
 - 権限を持たない人はforkからPull Requestを送り、
   権限を持つ少数の人がそれをレビューしてmergeするスタイルが安全。
 
@@ -606,6 +605,7 @@ e.g., https://github.com/Rdatatable/data.table/pull/2807
 1.  MANAGER: 受け取ったPRを確認。必要に応じて修正を要求したり、自分で修正したり。
 1.  PLAYER: 修正を求められたらそのブランチに続けてcommitしてまたpush。
 1.  MANAGER: 問題が無ければmergeする。
+1.  MANAGER: 自分のローカルリポジトリに pull (fetch+merge) する。
 1.  PLAYER: 無事マージされたら作業ブランチを消す。
 
 ## Tips
@@ -625,10 +625,13 @@ e.g., https://github.com/Rdatatable/data.table/pull/2807
 -   GitHubにpushされたら自動的に
     [Slack](https://slack.com/)や[Twitter](https://twitter.com/)に投稿、
     というような連携が可能。
+-   RStudioでもディレクトリを"Project"として扱うことでGitを活用できる。
 
 
 ## Further reading
 
-- [Pro Git book](https://git-scm.com/book/en/v2)
+- [GitHub](https://github.com/): 他人のGit活用事例が見放題。
 - [GitHub Learning Lab](https://lab.github.com/):
   公式ボットが手取り足取り教えてくれるらしい。
+- [Pro Git book](https://git-scm.com/book/en/v2): Gitの公式？本。
+- [Bookdown](https://bookdown.org/): R Markdownで本を書く。
