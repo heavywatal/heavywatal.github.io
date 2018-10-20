@@ -28,13 +28,13 @@ Email:
 :   heavy.watalあgmail.com
 
 Find me on
-: <a rel="me" href="https://github.com/heavywatal" class="github" title="GitHub">
+: <a rel="me" href="https://github.com/heavywatal" title="GitHub">
   <i class="fab fa-fw fa-lg fa-github"></i></a>
-  <a rel="me" href="https://www.facebook.com/profile.php?id=100002135628677" class="facebook" title="Facebook">
+  <a rel="me" href="https://www.facebook.com/profile.php?id=100002135628677" title="Facebook">
   <i class="fab fa-fw fa-lg fa-facebook"></i></a>
-  <a rel="me" href="https://twitter.com/heavywatal" class="twitter" title="Twitter">
+  <a rel="me" href="https://twitter.com/heavywatal" title="Twitter">
   <i class="fab fa-fw fa-lg fa-twitter"></i></a>
-  <a href="https://www.amazon.co.jp/wishlist/Z62OJBP7VCNP" class="amazon" title="ほしい物">
+  <a href="https://www.amazon.co.jp/wishlist/Z62OJBP7VCNP" title="ほしい物">
   <i class="fab fa-fw fa-lg fa-amazon"></i></a>
 
 <!--more-->

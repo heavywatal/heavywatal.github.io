@@ -9,20 +9,9 @@ tags = ["vcs", "writing"]
 +++
 
 <style>
-.fa-git-square, .fa-share-alt-square {
-  transform: rotate(45deg);
-}
-.fa-git, .fa-git-square, .fa-share-alt-square {
+.fa-share-alt-square {
   color: #f03c2e;
-}
-.fa-github {
-  color: #000;
-}
-.fa-bitbucket {
-  color: #2e87fb;
-}
-.fa-gitlab {
-  color: #e04432;
+  transform: rotate(45deg);
 }
 .fa-tint {
   color: #949494;
