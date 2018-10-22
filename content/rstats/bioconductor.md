@@ -23,54 +23,41 @@ tags = ["r", "bioconductor"]
 
 <https://www.bioconductor.org/install/>
 
-1.  R 本体をインストール <https://cran.rstudio.com/>
-2.  R の中でコマンドを実行
+Bioconductor 3.8 から
+[BiocManager](https://cran.r-project.org/package=BiocManager)
+を使う方法に変わった。
+`source()` や `BiocLite()` はもう使わない。
+
+1.  [R本体をインストール]({{< relref "intro.md" >}})
+1.  Rの中でコマンドを実行:
 
     ```r
-    options(BioC_mirror="https://bioconductor.org/")
-    source("https://bioconductor.org/biocLite.R")
-    biocLite()
+    install.packages("BiocManager")
+    BiocManager::install(c("Biostrings", "GenomicRanges", "rtracklayer"))
     ```
-
-すると基本パッケージがインストールされる:
-Biobase
-IRanges
-AnnotationDbi
-BiocGenerics
-GenomeINfoDb
-DBI
-RSQLite
-
-{{%div class="note"%}}
-アップデートしようとして `biocLite("BiocUpgrade")` すると
-`Error: Bioconductor version 3.2 cannot be upgraded with R version 3.3.0`
-などと怒られることがあるので、その場合は一度ターミナルから
-`R CMD REMOVE BiocInstaller` してからインストールしなおす。
-{{%/div%}}
-
-
-### 起動
-
-R を立ち上げる度に読み込み＆アップデート
-
-```r
-source("https://bioconductor.org/biocLite.R")
-biocLite()
-```
 
 ### パッケージ管理
 
-`install.packages()` じゃなくて `biocLite()` を使う
+標準の関数ではなく
+[BiocManager](https://cran.r-project.org/package=BiocManager)
+を使う:
 
 ```r
-biocLite('ggbio')
-biocLite(all_group())
+# バージョンなどを確認
+BiocManager::valid()
+
+# インストール済みのものを更新
+BiocManager::install()
+
+# 使いたいパッケージを入れる
+BiocManager::install("edgeR")
+BiocManager::install("VariantAnnotation")
 ```
 
-インストールしたものを使うときには普通と同じく
+インストールしたものを使うときには普通と同じように読み込む:
 
 ```r
-library(ggbio)
+library(edgeR)
 ```
 
 一覧
@@ -325,7 +312,7 @@ bss = readDNAStringSet(.file)
 データのインストールと読み込み
 
 ```r
-biocLite("TxDb.Scerevisiae.UCSC.sacCer3.sgdGene")
+BiocManager::install("TxDb.Scerevisiae.UCSC.sacCer3.sgdGene")
 
 library("TxDb.Scerevisiae.UCSC.sacCer3.sgdGene")
 txdb = TxDb.Scerevisiae.UCSC.sacCer3.sgdGene
@@ -338,10 +325,10 @@ txdb = TxDb.Scerevisiae.UCSC.sacCer3.sgdGene
 インストール、利用
 
 ```r
-> biocLite("BSgenome.Scerevisiae.UCSC.sacCer3")
+BiocManager::install("BSgenome.Scerevisiae.UCSC.sacCer3")
 
-> library("BSgenome.Scerevisiae.UCSC.sacCer3")
-> bsg = BSgenome.Scerevisiae.UCSC.sacCer3
+library("BSgenome.Scerevisiae.UCSC.sacCer3")
+bsg = BSgenome.Scerevisiae.UCSC.sacCer3
 ```
 
 ### クラス
