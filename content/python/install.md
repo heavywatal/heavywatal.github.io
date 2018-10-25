@@ -28,28 +28,35 @@ MacやLinuxならシステムの一部として
 をセットしてFramework型でビルドする。
 
 ```sh
-% brew install pyenv
-% exec $SHELL -l
-% pyenv install -l | less
-% pyenv install 3.6.2
-% pyenv global 3.6.2
-% eval "$(pyenv init -)"
-% python --version
+git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+~/.pyenv/bin/pyenv install -l | less
+~/.pyenv/bin/pyenv install 3.7.1
+~/.pyenv/bin/pyenv global 3.7.1
 ```
 
-`eval "$(pyenv init -)"` をシェル起動時に自動で行うために、
-`~/.zshrc` 的なファイルに下のようなコマンドを追加しておく。
+シェルのPATHを設定する。
+Pythonのバージョンを頻繁に切り替える場合は、
+[公式の説明](https://github.com/pyenv/pyenv#installation)どおりに
+`eval "$(pyenv init -)"`
+を設定してshimsを使う方法のほうがいいかもしれないけど、
+そうでなければ以下のようにPATHだけ設定するほうが単純:
 
 ```sh
-if which pyenv >/dev/null; then eval "$(pyenv init -)"; fi
+export PYENV_ROOT=${HOME}/.pyenv
+if [ -d $PYENV_ROOT ]; then
+  PATH=${PYENV_ROOT}/bin:$PATH
+  PATH=${PYENV_ROOT}/versions/$(pyenv global)/bin:$PATH
+fi
+export PATH
 ```
 
-あとは [pip]({{< relref "pip.md" >}}) でパッケージを入れる。
+シェルを再起動して [pip]({{< relref "pip.md" >}}) でパッケージを入れる:
 
 ```sh
-% pip install -U setuptools
-% pip install -U seaborn ipython biopython
-% pip install -U flake8 psutil
+exec $SHELL -l
+pip install -U setuptools pip wheel
+pip install -U flake8 psutil requests
+pip install -U seaborn ipython biopython
 ```
 
 
@@ -63,8 +70,8 @@ Scientificな用途で使いたい場合は
 GUIのインストーラでもいいし、Homebrewでもいける:
 
 ```sh
-% brew cask install anaconda
-% export PATH=/usr/local/anaconda3/bin:"$PATH"
+brew cask install anaconda
+export PATH=/usr/local/anaconda3/bin:"$PATH"
 ```
 
 ただし`PATH`上でシステムコマンド(`curl`など)を上書きしちゃうヤンチャな面もあるので、
@@ -83,30 +90,30 @@ GUIのインストーラでもいいし、Homebrewでもいける:
 
     Ubuntuなら
     ```sh
-    % sudo apt-get install build-essential libreadline6-dev libsqlite3-dev libgdbm-dev zlib1g-dev libbz2-dev liblzma-dev
+    sudo apt install build-essential libreadline6-dev libsqlite3-dev libgdbm-dev zlib1g-dev libbz2-dev liblzma-dev
     ```
 
     CentOSなら
     ```sh
-    % sudo yum groupinstall "Development Tools"
-    % sudo yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel gdbm-devel xz-devel
+    sudo yum groupinstall "Development Tools"
+    sudo yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel gdbm-devel xz-devel
     ```
 
     Macなら
     ```sh
-    % brew install gdbm libressl readline sqlite xz
+    brew install gdbm libressl readline sqlite xz
     ```
 
 2.  ダウンロードして展開:
 
-        % wget -O- https://www.python.org/ftp/python/3.5.3/Python-3.5.3.tar.xz | tar xJ
+        wget -O- https://www.python.org/ftp/python/3.5.3/Python-3.5.3.tar.xz | tar xJ
 
 3.  configure してビルド:
     ```sh
-    % cd Python-3.5.3/
-    % ./configure --help
-    % ./configure --prefix=${HOME}/Python
-    % make
+    cd Python-3.5.3/
+    ./configure --help
+    ./configure --prefix=${HOME}/Python
+    make -j2
     ```
 
     {{%div class="note"%}}
@@ -140,7 +147,7 @@ Python 2をucs4でビルドするには
 4.  インストール
     (古いバージョンに上書きせず共存させるため `altinstall`):
 
-        % make altinstall
+        make altinstall
 
 
 ## 環境変数
@@ -184,11 +191,14 @@ import sys
 if sys.version_info < (3, 4):
     import rlcompleter
     import readline
+    rlcompleter.__name__  # suppress F401
     if 'libedit' in readline.__doc__:
         readline.parse_and_bind("bind ^I rl_complete")
     else:
         readline.parse_and_bind("tab: complete")
     del readline, rlcompleter
+else:
+    del sys
 ```
 
 対話モードをさらに便利にするには [IPython]({{< relref "ipython.md" >}}) を使う。
