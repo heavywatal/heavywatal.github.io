@@ -107,20 +107,27 @@ Pythonインストール
 <code>macosx</code> backend を使いたい場合などは環境変数
 <code>PYTHON_CONFIGURE_OPTS=&quot;--enable-framework&quot;</code>
 をセットしてFramework型でビルドする。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% brew install pyenv
-% <span class="nb">exec</span> <span class="nv">$SHELL</span> -l
-% pyenv install -l <span class="p">|</span> less
-% pyenv install <span class="m">3</span>.6.2
-% pyenv global <span class="m">3</span>.6.2
-% <span class="nb">eval</span> <span class="s2">&#34;</span><span class="k">$(</span>pyenv init -<span class="k">)</span><span class="s2">&#34;</span>
-% python --version</code></pre></div>
-<p><code>eval &quot;$(pyenv init -)&quot;</code> をシェル起動時に自動で行うために、
-<code>~/.zshrc</code> 的なファイルに下のようなコマンドを追加しておく。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="k">if</span> which pyenv &gt;/dev/null<span class="p">;</span> <span class="k">then</span> <span class="nb">eval</span> <span class="s2">&#34;</span><span class="k">$(</span>pyenv init -<span class="k">)</span><span class="s2">&#34;</span><span class="p">;</span> <span class="k">fi</span></code></pre></div>
-<p>あとは <a href="/python/pip.html">pip</a> でパッケージを入れる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% pip install -U setuptools
-% pip install -U seaborn ipython biopython
-% pip install -U flake8 psutil</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+~/.pyenv/bin/pyenv install -l <span class="p">|</span> less
+~/.pyenv/bin/pyenv install <span class="m">3</span>.7.1
+~/.pyenv/bin/pyenv global <span class="m">3</span>.7.1</code></pre></div>
+<p>シェルのPATHを設定する。
+Pythonのバージョンを頻繁に切り替える場合は、
+<a href="https://github.com/pyenv/pyenv#installation">公式の説明</a>どおりに
+<code>eval &quot;$(pyenv init -)&quot;</code>
+を設定してshimsを使う方法のほうがいいかもしれないけど、
+そうでなければ以下のようにPATHだけ設定するほうが単純:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">export</span> <span class="nv">PYENV_ROOT</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.pyenv
+<span class="k">if</span> <span class="o">[</span> -d <span class="nv">$PYENV_ROOT</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+  <span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PYENV_ROOT</span><span class="si">}</span>/bin:<span class="nv">$PATH</span>
+  <span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PYENV_ROOT</span><span class="si">}</span>/versions/<span class="k">$(</span>pyenv global<span class="k">)</span>/bin:<span class="nv">$PATH</span>
+<span class="k">fi</span>
+<span class="nb">export</span> PATH</code></pre></div>
+<p>シェルを再起動して <a href="/python/pip.html">pip</a> でパッケージを入れる:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">exec</span> <span class="nv">$SHELL</span> -l
+pip install -U setuptools pip wheel
+pip install -U flake8 psutil requests
+pip install -U seaborn ipython biopython</code></pre></div>
 <h2 id="anaconda">Anaconda</h2>
 
 <p>Scientificな用途で使いたい場合は
@@ -129,8 +136,8 @@ Pythonインストール
 <a href="https://docs.continuum.io/anaconda/">Anaconda</a>
 で最新版を入れるという選択肢もある。
 GUIのインストーラでもいいし、Homebrewでもいける:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% brew cask install anaconda
-% <span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span>/usr/local/anaconda3/bin:<span class="s2">&#34;</span><span class="nv">$PATH</span><span class="s2">&#34;</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew cask install anaconda
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span>/usr/local/anaconda3/bin:<span class="s2">&#34;</span><span class="nv">$PATH</span><span class="s2">&#34;</span></code></pre></div>
 <p>ただし<code>PATH</code>上でシステムコマンド(<code>curl</code>など)を上書きしちゃうヤンチャな面もあるので、
 それが気になる人はpyenv越しに入れることで汚染を防げる。
 全部入りに抵抗がある場合は
@@ -146,23 +153,23 @@ GUIのインストーラでもいいし、Homebrewでもいける:</p>
 <li><p>必要なパッケージをインストールしておく:</p>
 
 <p>Ubuntuなら</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% sudo apt-get install build-essential libreadline6-dev libsqlite3-dev libgdbm-dev zlib1g-dev libbz2-dev liblzma-dev</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo apt install build-essential libreadline6-dev libsqlite3-dev libgdbm-dev zlib1g-dev libbz2-dev liblzma-dev</code></pre></div>
 <p>CentOSなら</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% sudo yum groupinstall <span class="s2">&#34;Development Tools&#34;</span>
-% sudo yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel gdbm-devel xz-devel</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo yum groupinstall <span class="s2">&#34;Development Tools&#34;</span>
+sudo yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel gdbm-devel xz-devel</code></pre></div>
 <p>Macなら</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% brew install gdbm libressl readline sqlite xz</code></pre></div></li>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew install gdbm libressl readline sqlite xz</code></pre></div></li>
 
 <li><p>ダウンロードして展開:</p>
 
-<pre><code>% wget -O- https://www.python.org/ftp/python/3.5.3/Python-3.5.3.tar.xz | tar xJ
+<pre><code>wget -O- https://www.python.org/ftp/python/3.5.3/Python-3.5.3.tar.xz | tar xJ
 </code></pre></li>
 
 <li><p>configure してビルド:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% <span class="nb">cd</span> Python-3.5.3/
-% ./configure --help
-% ./configure --prefix<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/Python
-% make</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> Python-3.5.3/
+./configure --help
+./configure --prefix<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/Python
+make -j2</code></pre></div>
 <div class="note">
 <p>モジュールをビルドするのに必要なヘッダファイルが見つからなかったとかで
 警告メッセージが表示されるが、だいたい問題ない。
@@ -193,7 +200,7 @@ Python 2をucs4でビルドするには
 <li><p>インストール
 (古いバージョンに上書きせず共存させるため <code>altinstall</code>):</p>
 
-<pre><code>% make altinstall
+<pre><code>make altinstall
 </code></pre></li>
 </ol>
 
@@ -234,11 +241,14 @@ MacのFramework buildでは <code>${HOME}/Library/Python/2.7</code> とかにな
 <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
     <span class="kn">import</span> <span class="nn">rlcompleter</span>
     <span class="kn">import</span> <span class="nn">readline</span>
+    <span class="n">rlcompleter</span><span class="o">.</span><span class="vm">__name__</span>  <span class="c1"># suppress F401</span>
     <span class="k">if</span> <span class="s1">&#39;libedit&#39;</span> <span class="ow">in</span> <span class="n">readline</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">:</span>
         <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s2">&#34;bind ^I rl_complete&#34;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s2">&#34;tab: complete&#34;</span><span class="p">)</span>
-    <span class="k">del</span> <span class="n">readline</span><span class="p">,</span> <span class="n">rlcompleter</span></code></pre></div>
+    <span class="k">del</span> <span class="n">readline</span><span class="p">,</span> <span class="n">rlcompleter</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">del</span> <span class="n">sys</span></code></pre></div>
 <p>対話モードをさらに便利にするには <a href="/python/ipython.html">IPython</a> を使う。</p>
 
 <h2 id="関連書籍">関連書籍</h2>
