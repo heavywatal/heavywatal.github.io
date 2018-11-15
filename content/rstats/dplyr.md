@@ -42,11 +42,11 @@ library(tidyverse)
 
 ## with piping
 iris %>%
-   dplyr::filter(Species != 'setosa') %>%
-   dplyr::select(-dplyr::starts_with('Sepal')) %>%
-   dplyr::mutate(petal_area=Petal.Length * Petal.Width * 0.5) %>%
-   dplyr::group_by(Species) %>%
-   dplyr::summarise_all(funs(mean))
+  dplyr::filter(Species != 'setosa') %>%
+  dplyr::select(-dplyr::starts_with('Sepal')) %>%
+  dplyr::mutate(petal_area=Petal.Length * Petal.Width * 0.5) %>%
+  dplyr::group_by(Species) %>%
+  dplyr::summarise_all(funs(mean))
 
 ## with a temporary variable
 x = iris
@@ -108,12 +108,19 @@ dplyr::summarise_all(
     iris %>% dplyr::select(!!Sepal.Length)     # unquote => Petal.Width, Species
     iris %>% dplyr::select(!!!rlang::syms(Sepal.Length))  # Petal.Width, Species
     ```
-    文字列を受け取れない `distinct()` や `group_by()`
-    のような関数には普通のunquoteは通用しない。
+    これらの指定方法は `rename()` や `pull()` でも有効。
+    一方、文字列を受け取れない `distinct()` や `group_by()`
+    などの関数には普通のunquoteは通用しない。
     最後の例のように `rlang::syms()` でシンボル化して
     [unquote-splicing](https://dplyr.tidyverse.org/articles/programming.html#unquote-splicing)
     して渡す必要がある。
-
+    ```r
+    columns = c('Petal.Width', 'Species')
+    iris %>% distinct(!!as.name(columns[1L]))
+    iris %>% distinct(!!!rlang::syms(columns))
+    ```
+    詳しくは[宇宙本](https://amzn.to/2u0hmTs)第3章のコラム
+    「selectのセマンティクスとmutateのセマンティクス、tidyeval」を参照。
 
 `dplyr::pull(.data, var=-1)`
 :   指定した1列をvector(またはlist)としてdata.frameから抜き出す。
@@ -193,23 +200,24 @@ e.g., `filter(gene != 'TP53')`
     iris %>% dplyr::mutate(ln_sepal_length = log(Sepal.Length))
     ```
 
-    変数に入った文字列を変更先の列名に指定したい場合は
+    変数に入った文字列を列名として使いたい場合は `!!` と
     [unquoting用の代入演算子 `:=`](https://dplyr.tidyverse.org/articles/programming.html#setting-variable-names)
     を使う:
     ```r
-    new_column = 'ln_sepal_length'
+    y = 'new_column'
+    x = "Sepal.Length"
 
-    # normal
-    iris %>% dplyr::mutate(new_column = log(Sepal.Length)) %>% head(2)
+    # unquoting only right hand side
+    iris %>% dplyr::mutate(y = log(!!as.name(x))) %>% head(2)
+      Sepal.Length Sepal.Width Petal.Length Petal.Width Species        y
+    1          5.1         3.5          1.4         0.2  setosa 1.629241
+    2          4.9         3.0          1.4         0.2  setosa 1.589235
+
+    # unquoting both sides
+    iris %>% dplyr::mutate(!!y := log(!!as.name(x))) %>% head(2)
       Sepal.Length Sepal.Width Petal.Length Petal.Width Species new_column
     1          5.1         3.5          1.4         0.2  setosa   1.629241
     2          4.9         3.0          1.4         0.2  setosa   1.589235
-
-    # unquoting
-    iris %>% dplyr::mutate(!!new_column := log(Sepal.Length)) %>% head(2)
-      Sepal.Length Sepal.Width Petal.Length Petal.Width Species ln_sepal_length
-    1          5.1         3.5          1.4         0.2  setosa        1.629241
-    2          4.9         3.0          1.4         0.2  setosa        1.589235
     ```
 
 `dplyr::transmute(.data, ...)`
