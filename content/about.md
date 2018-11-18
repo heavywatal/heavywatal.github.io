@@ -97,6 +97,9 @@ Bachelor of Science, 2008.03
 
 **Invited**
 
+-   Watal M. Iwasaki and Hideki Innan
+    "Comprehensive Framework for Evolutionary Simulation of Intratumor Heterogeneity"
+    [International Workshop for Systems Genetics 2018 (IWSG2018)](http://iwsg2018.hgc.jp/) (2018.11) Tokyo
 -   Watal M. Iwasaki "[Writing an R package interface to C++ libraries with Rcpp](https://heavywatal.github.io/slides/tokyor71/)"
     [Tokyo.R 71](https://tokyor.connpass.com/event/92522/) (2018.07) Tokyo
 -   岩嵜航「[Rにやらせて楽しよう --- データの可視化と下ごしらえ](/slides/nagoya2018/)」[アドバンス生命理学特論](http://www.bio.nagoya-u.ac.jp/seminar/) ([告知ポスター](http://www.bio.nagoya-u.ac.jp/files/event/454/180518_Iwasaki.pdf)) (2018.05) 名古屋大
