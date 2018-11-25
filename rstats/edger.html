@@ -20,19 +20,30 @@
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
 <meta name="generator" content="Hugo 0.52-DEV" />
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-  showProcessingMessages: false,
-  messageStyle: "none",
-  displayAlign: "left",
-  displayIndent: "2em",
-  tex2jax: {
-    inlineMath: [['$','$']],
-    displayMath: [['\\[', '\\]']]
-  }
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: "\\[", right: "\\]", display: true},
+      {left: "$", right: "$", display: false}
+    ]
+  });
 });
 </script>
-<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML"></script>
+<style>
+.katex {
+  font-size: 1.12em;
+}
+
+.katex-display > .katex {
+  text-align: left;
+  padding-left: 2rem;
+}
+</style>
 <script type="application/ld+json">{
 "@context": "http://schema.org",
 "@type": "BreadcrumbList",
@@ -198,34 +209,34 @@ topGO<span class="p">(</span>go<span class="p">)</span></code></pre></div>
 <p>レプリケート <em>i</em> における遺伝子 <em>g</em> の観察リード数を $y _{gi}$、
 知りたい真の発現fractionを $\pi _{gi}$ とする。</p>
 
-<div>\[\begin{split}
+<div>\[\begin{aligned}
 \sum _g \pi _{gi} &= 1 \\
-\sqrt {\phi _g} &\equiv \mathrm{CV}[\pi _{gi}]_i
-                = \frac {\mathrm {sd}[\pi _{gi}]_i} {\mathrm{mean}[\pi _{gi}]_i} \\
-N_i \pi _{gi} &\sim \mathrm{Gamma}(\phi _g^{-1}, \mu _{gi} \phi _g) \\
+\sqrt {\phi _g} &\equiv \text{CV}[\pi _{gi}]_i
+                = \frac {\text{sd}[\pi _{gi}]_i} {\text{mean}[\pi _{gi}]_i} \\
+N_i \pi _{gi} &\sim \text{Gamma}(\phi _g^{-1}, \mu _{gi} \phi _g) \\
 \mathrm E[N_i \pi _{gi}] &= k\theta = \mu _{gi} \\
-\mathrm{var}[N_i \pi _{gi}] &= k\theta^2 = \mu _{gi}^2 \phi _g \\
-y_{gi} &\sim \mathrm{Poisson}(N_i \pi _{gi}) \\
-       &= \int _0^\infty \mathrm{Poisson}(N_i \pi _{gi})~
-                         \mathrm{Gamma}(\phi _g^{-1}, \mu _{gi} \phi _g)~ \mathrm d N_i \pi _{gi} \\
-       &= \mathrm{NB}(\phi _g^{-1}, \frac {\mu _{gi} \phi _g} {1 + \mu _{gi} \phi _g}) \\
+\text{var}[N_i \pi _{gi}] &= k\theta^2 = \mu _{gi}^2 \phi _g \\
+y_{gi} &\sim \text{Poisson}(N_i \pi _{gi}) \\
+       &= \int _0^\infty \text{Poisson}(N_i \pi _{gi})~
+                         \text{Gamma}(\phi _g^{-1}, \mu _{gi} \phi _g)~ \mathrm d N_i \pi _{gi} \\
+       &= \text{NB}(\phi _g^{-1}, \frac {\mu _{gi} \phi _g} {1 + \mu _{gi} \phi _g}) \\
 \mathrm E[y_{gi}] &= \mu _{gi} \\
-\mathrm{var}[y_{gi}] &= \mathrm E \big[\mathrm{var}[y_{gi} \mid \pi _{gi}]_i \big]_\pi
-                      + \mathrm{var} \big[\mathrm E[y_{gi}\mid \pi _{gi}]_i \big]_\pi \\
-                     &= \mathrm E[N_i \pi _{gi}]_\pi + \mathrm{var}[N_i \pi _{gi}]_\pi \\
+\text{var}[y_{gi}] &= \mathrm E \big[\text{var}[y_{gi} \mid \pi _{gi}]_i \big]_\pi
+                      + \text{var} \big[\mathrm E[y_{gi}\mid \pi _{gi}]_i \big]_\pi \\
+                     &= \mathrm E[N _i \pi _{gi}] _\pi + \text{var}[N _i \pi _{gi}] _\pi \\
                      &= \mu _{gi} + \mu _{gi}^2 \phi _g \\
-\mathrm{CV}^2[y_{gi}] &= 1 / \mu _{gi} + \phi _g \\
-                   &= \mathrm{CV}^2[y_{gi} \mid \pi _{gi}] + \mathrm{CV}^2[\pi _{gi}] \\
-                   &= \mathrm{Technical~CV}^2 + \mathrm{Biological~CV}^2 \\
-\end{split}\]</div>
+\text{CV}^2[y_{gi}] &= 1 / \mu _{gi} + \phi _g \\
+                   &= \text{CV}^2[y_{gi} \mid \pi _{gi}] + \text{CV}^2[\pi _{gi}] \\
+                   &= \text{Technical~CV}^2 + \text{Biological~CV}^2 \\
+\end{aligned}\]</div>
 
 <dl>
 <dt>dispersion $\phi _g$</dt>
 <dd>普通は $D = \sigma^2 / \mu$ と定義されるけど、
-ここでは $\mathrm{CV}^2$</dd>
+ここでは $\text{CV}^2$</dd>
 <dt>BCV $\sqrt{\phi _g}$</dt>
 <dd>biological coefficient of variation.
-こっちは普通と同じように $\mathrm{CV} = \sigma / \mu$ 。
+こっちは普通と同じように $\text{CV} = \sigma / \mu$ 。
 sequencing depthがどんなに大きくても残るばらつき。</dd>
 <dt>DGE</dt>
 <dd>digital gene expression</dd>

@@ -20,19 +20,30 @@
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
 <meta name="generator" content="Hugo 0.52-DEV" />
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-  showProcessingMessages: false,
-  messageStyle: "none",
-  displayAlign: "left",
-  displayIndent: "2em",
-  tex2jax: {
-    inlineMath: [['$','$']],
-    displayMath: [['\\[', '\\]']]
-  }
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: "\\[", right: "\\]", display: true},
+      {left: "$", right: "$", display: false}
+    ]
+  });
 });
 </script>
-<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML"></script>
+<style>
+.katex {
+  font-size: 1.12em;
+}
+
+.katex-display > .katex {
+  text-align: left;
+  padding-left: 2rem;
+}
+</style>
 <script type="application/ld+json">{
 "@context": "http://schema.org",
 "@type": "BreadcrumbList",
@@ -108,15 +119,15 @@ $b \in B$</dd>
 
 <h3 id="translation-平行移動">Translation 平行移動</h3>
 
-<div>\[\begin{split}
+<div>\[
 X_b = \{x + b \mid x \in X\}
-\end{split}\]</div>
+\]</div>
 
 <h3 id="dilation-膨張">Dilation 膨張</h3>
 
-<div>\[\begin{split}
+<div>\[
 X \oplus B = \bigcup_{b \in B} X_b
-\end{split}\]</div>
+\]</div>
 
 <p><em>X</em> と <em>B</em> のMinkowski和。
 <em>X</em> を <em>B</em> の範囲でずらしながらunionを取ったもの。
@@ -124,9 +135,9 @@ X \oplus B = \bigcup_{b \in B} X_b
 
 <h3 id="erosion-浸食">Erosion 浸食</h3>
 
-<div>\[\begin{split}
+<div>\[
 X \ominus B = \bigcap_{b \in B} X_b
-\end{split}\]</div>
+\]</div>
 
 <p><em>X</em> と <em>B</em> のMinkowski差。
 <em>X</em> を <em>B</em> の範囲でずらしながらintersectを取ったもの。
@@ -134,9 +145,9 @@ SEを消しゴムとして <em>X</em> の外周上を走らせ、削るイメー
 
 <h3 id="opening">Opening</h3>
 
-<div>\[\begin{split}
+<div>\[
 X \circ B = (X \ominus B) \oplus B
-\end{split}\]</div>
+\]</div>
 
 <p>浸食してから膨張する。
 <em>X</em> からハミ出ないようにSEを滑らせた軌跡に相当する。
@@ -148,9 +159,9 @@ X \circ B = (X \ominus B) \oplus B
 
 <h3 id="closing">Closing</h3>
 
-<div>\[\begin{split}
+<div>\[
 X \bullet B = (X \oplus B) \ominus B
-\end{split}\]</div>
+\]</div>
 
 <p>膨張してから浸食する。
 <em>X</em> の外部をOpeningすることと同義。
@@ -171,9 +182,9 @@ Openingで削れた部分の面積を記録していく。
 
 <h3 id="morphological-gradient">Morphological gradient</h3>
 
-<div>\[\begin{split}
+<div>\[
 (X \oplus B) - (X \ominus B)
-\end{split}\]</div>
+\]</div>
 
 <p>dilationとerosionの差。
 エッジ検出法のひとつ。
