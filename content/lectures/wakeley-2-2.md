@@ -47,10 +47,10 @@ Exponential distribution
 
 The poisson process is a counting process.
 
-<div>\[\begin{split}
+<div>\[\begin{aligned}
 P[K(t) = 1]   &= \lambda t + o(t) \\
 P[K(t) \ge 2] &= o(t)
-\end{split}\]</div>
+\end{aligned}\]</div>
 
 where
 :   $K(t)$ is the number of observed events before $t$. $K(0) = 0$\
@@ -65,17 +65,17 @@ The number of events over time 0 to $t$
 (or from arbitrary starting time $s$ to $s + t$) is Poisson distributed,
 for $k = 0, 1, 2, ...$,
 
-<div>\[\begin{split}
+<div>\[\begin{aligned}
 P[K(t) = k]          \;&=\; \frac {(\lambda t)^k} {k!} e^{-\lambda t} \\
 P[K(t+s) - K(s) = k] \;&=\; P[K(t) = k]
-\end{split}\]</div>
+\end{aligned}\]</div>
 
 (Eq. 2.53)
 Waiting time to the first event is exponentially distiributed,
 
-<div>\[\begin{split}
+<div>\[
 f_T(t) = \lambda e^{-\lambda t}
-\end{split}\]</div>
+\]</div>
 
 *memoryless* (**無記憶性**)
 :   The number of coin-tosses required to observe the next heads is independent of previous results.\
@@ -88,7 +88,7 @@ The waiting time $W$ until the $n$ th event
 (= the sum of $n$ *i.i.d.* wating times)
 can be derived by $n - 1$ successive convolutions:
 
-<div>\[\begin{split}
+<div>\[\begin{aligned}
 f_{W,1}(t) &= f_T(t) = \lambda e^{-\lambda t} \\
 f_{W,2}(t) &= \int _0^t \lambda e^{-\lambda (t-t')} \; \lambda e^{-\lambda t'} dt' \\
            &= \lambda ^2 e^{-\lambda t} \Big[1\Big]_0^t \\
@@ -97,21 +97,21 @@ f_{W,3}(t) &= \int _0^t \lambda e^{-\lambda (t-t')} \; f_2(t') dt' \\
            &= \frac {t^2 \lambda^3 e^{-\lambda t}} {2!} \\
            &\;\vdots \\
 f_{W,n}(t) &= \lambda e^{-\lambda t} \frac{(\lambda t)^{n-1}} {(n - 1)!}
-\end{split}\]</div>
+\end{aligned}\]</div>
 
 This is the **gamma distribution**.
 
 (Eq. 2.55)
 The mean and the variance are
 
-<div>\[\begin{split}
+<div>\[\begin{aligned}
 \mathrm{E}[W] &= \sum^n \mathrm{E}[T] \\
               &= \sum^n \frac 1 \lambda \\
               &= \frac n \lambda \\
-\mathrm{Var}[W] &= \sum^n \mathrm{Var}[T] \\
-                &= \sum^n \frac 1 {\lambda^2} \\
-                &= \frac n {\lambda^2}
-\end{split}\]</div>
+\text{Var}[W] &= \sum^n \text{Var}[T] \\
+              &= \sum^n \frac 1 {\lambda^2} \\
+              &= \frac n {\lambda^2}
+\end{aligned}\]</div>
 
 These hold even when $n$ is not an integer
 if we replace the factorial $(n - 1)!$ with *gamma function*,
@@ -140,7 +140,7 @@ Two independent Poisson random variables:
 (Eq. 2.58)
 The distribution of $Y = X_1 + X_2$ can be obtained by convolution:
 
-<div>\[\begin{split}
+<div>\[\begin{aligned}
 P[Y=k] \;&=\; \sum _{i=0}^k P[X_1=i] \; P[X_2=k-i] \\
          &=\; \sum _{i=0}^k \frac {\lambda _1^i} {i!} e^{-\lambda _1}
                             \frac {\lambda _2^{k-i}} {(k-i)!} e^{-\lambda _2} \\
@@ -151,7 +151,7 @@ P[Y=k] \;&=\; \sum _{i=0}^k P[X_1=i] \; P[X_2=k-i] \\
               \sum _{i=0}^k {k \choose i} \lambda _1^i \lambda _2^{k-i} \\
          &=\; \frac {e^{-(\lambda _1 + \lambda _2)}} {k!} (\lambda _1 + \lambda _2)^k \\
          &=\; \text{Poisson distribution with occurrence rate } \lambda _1 + \lambda _2
-\end{split}\]</div>
+\end{aligned}\]</div>
 
 The sum of independent Poisson processes is another Poisson process.
 
@@ -162,37 +162,37 @@ The probability that $X_1$ is observed before $X_2$
 is given simply by the relative rate of the event
 (i.e., as a fraction of the total rate):
 
-<div>\[\begin{split}
+<div>\[\begin{aligned}
 P[T_1 < T_2]
-   &= \int _0^\infty P[T_2>t]\; f_{T_1}(t) dt \\
-   &= \int _0^\infty \left(e^{-\lambda _2 t} \right)_\text{Eq. 2.59}\;
+   &= \int _0^\infty P[T_2>t]\; f _{T_1}(t) dt \\
+   &= \int _0^\infty \left(e^{-\lambda _2 t} \right) _\text{Eq. 2.59}\;
                      \lambda _1 e^{-\lambda _1 t} dt \\
    &= \lambda _1 \int _0^\infty e^{-(\lambda _1 + \lambda _2) t} dt \\
    &= \lambda _1 \left[-\frac {e^{-(\lambda _1 + \lambda _2)t}}
                              {\lambda _1 + \lambda _2} \right]_0^\infty \\
    &= \frac {\lambda _1} {\lambda _1 + \lambda _2},
-\end{split}\]</div>
+\end{aligned}\]</div>
 
 using (Eq 2.59)
 
-<div>\[\begin{split}
+<div>\[\begin{aligned}
 P[T>t] \;&=\; \int _t^\infty \lambda e^{-\lambda t} dt \\
          &=\; \left[-e^{-\lambda t} \right]_t^\infty \\
          &=\; e^{-\lambda t}.
-\end{split}\]</div>
+\end{aligned}\]</div>
 
 ##### The Time to the First Event among Independent Poissons
 
 (Eq. 2.61)
 The distribution of $T = \min(T_1, T_2)$
 
-<div>\[\begin{split}
+<div>\[\begin{aligned}
 P[T>t] \;&=\; P[\min(T_1, T_2) > t] \\
          &=\; P[T_1 > t \;\cap\; T_2 > t] \\
          &=\; P[T_1 > t]\; P[T_2 > t] \\
          &=\; e^{-\lambda _1 t} e^{-\lambda _2 t} \\
          &=\; e^{-(\lambda _1 + \lambda _2) t}
-\end{split}\]</div>
+\end{aligned}\]</div>
 
 Therefore, $f_ {\min(T_1, T_2)}(t) = (\lambda _1 + \lambda _2) e^{-(\lambda _2 + \lambda _1)t}$
 
@@ -206,12 +206,12 @@ $X_2, X_2, X_2, ..., X_2, \boldsymbol{X_1}$, ...
 How many $X_2$ (e.g., mutation events) occur
 before $X_1$ (e.g., common ancector event)?
 
-<div>\[\begin{split}
+<div>\[\begin{aligned}
 P[K=k] \;&=\; P[\text{First }X_1\text{ occurs at }K\text{th trial}] \\
          &=\; P[X_2\text{ occurs }k - 1\text{ times first, then }X_1\text{ occurs}] \\
          &=\; \left(\frac {\lambda _2} {\lambda _1 + \lambda _2} \right)^{k-1}
                     \frac {\lambda _1} {\lambda _1 + \lambda _2}
-\end{split}\]</div>
+\end{aligned}\]</div>
 
 This is the *geometric distribution* with the rate
 $p = \frac {\lambda _1} {\lambda _1 + \lambda _2}$.
@@ -224,7 +224,7 @@ $p = \frac {\lambda _1} {\lambda _1 + \lambda _2}$.
 Reinterpret $f_T(t)$ with the sum rule and product rule
 (see Eq. 2.7, 2.8).
 
-<div>\[\begin{split}
+<div>\[\begin{aligned}
 f_T(t)\; &=\; \sum _{k=1}^\infty f_T(t \mid K=k)\; P[K=k] \\
          &=\; \sum _{k=1}^\infty (\text{Eq. }2.54) (\text{Eq. }2.62) \\
          &=\; \sum _{k=1}^\infty
@@ -238,15 +238,15 @@ f_T(t)\; &=\; \sum _{k=1}^\infty f_T(t \mid K=k)\; P[K=k] \\
               \sum _{k=0}^\infty \frac {(\lambda _2 t)^k} {k!} \\
          &=\; \lambda _1 e^{-(\lambda _1 + \lambda _2)t}\; e^{\lambda _2 t} \\
          &=\; \lambda _1 e^{-\lambda _1 t}
-\end{split}\]</div>
+\end{aligned}\]</div>
 
 {{%div class="note"%}}
 Taylor series of $e^x$
 
-<div>\[\begin{split}
+<div>\[\begin{aligned}
 e^x \;&=\; 1 + \frac x 1 + \frac {x^2} {2!} + \frac {x^3} {3!} + \cdots \\
       &=\; \sum _{k=0}^\infty \frac {x^k} {k!}
-\end{split}\]</div>
+\end{aligned}\]</div>
 {{%/div%}}
 
 Filtered Poisson process = Poisson process with rate $\lambda p\; (=\lambda _1)$
@@ -265,7 +265,7 @@ If the rate changes with each event ($\lambda _i \neq \lambda _j \text{ for } i 
 :   (e.g., in the study of genealogies, the rate of coalescence changes every time a coalescent event occurs)\
     → obtained by successive convolution of exponential distribution (Eq. 2.63, 2.64)
 
-<div>\[\begin{split}
+<div>\[\begin{aligned}
 f_{T_1 + T_2}(t)
    &= \int _0^t f_{T_1}(s)\; f_{T_2}(t-s)ds \\
    &= \int _0^t \lambda _1 e^{-\lambda _1 s}\; \lambda _2 e^{-\lambda _2 (t-s)}ds \\
@@ -276,8 +276,8 @@ f_{T_1 + T_2}(t)
       \left(1 - e^{-(\lambda _1 -\lambda _2)t} \right) \\
    &= \frac {\lambda _1} {\lambda _1 - \lambda _2} \lambda _2 e^{-\lambda _2 t} +
       \frac {\lambda _2} {\lambda _2 - \lambda _1} \lambda _1 e^{-\lambda _1 t} \\
-   &= \frac {\lambda _1} {\lambda _1 - \lambda _2} f_{T_2}(t) +
-      \frac {\lambda _2} {\lambda _2 - \lambda _1} f_{T_1}(t) \\
+   &= \frac {\lambda _1} {\lambda _1 - \lambda _2} f _{T_2}(t) +
+      \frac {\lambda _2} {\lambda _2 - \lambda _1} f _{T_1}(t) \\
   (&= \text{weighted sum of the original distributions})\\[1ex]
 f_{T_1 + T_2 + T_3}(t)
    &= \int _0^t f_{T_1 + T_2}(s)\; f_{T_3}(t-s)ds \\
@@ -292,7 +292,7 @@ f_{T_1 + T_2 + T_3 + T_4}(t) &= \cdots \\
 f_{\sum _{i=1}^n T_i}(t)
    &= \sum_{i=1}^n \lambda _i e^{-\lambda _i t}
       \prod _{j=1,\;j \neq i} \frac {\lambda _j} {\lambda _j - \lambda _i}
-\end{split}\]</div>
+\end{aligned}\]</div>
 
 We will use this to obtain the distribution of the total waiting time
 to the MRCA of the entire samples (Eq. 3.27)

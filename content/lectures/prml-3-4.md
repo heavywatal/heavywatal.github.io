@@ -45,10 +45,10 @@ Materials
 
 モデルの不確実さを確率で表し、加法定理・乗法定理を駆使して評価しよう
 
-<div>\[\begin{split}
+<div>\[\begin{aligned}
 p(X)   &= \sum^Y p(X,Y) \\
 p(X,Y) &= p(Y \mid X) P(X)
-\end{split}\]</div>
+\end{aligned}\]</div>
 
 {{%div class="note"%}}
 変数
@@ -71,10 +71,10 @@ p(X,Y) &= p(Y \mid X) P(X)
 
 の積に比例する (**式 3.66**)。
 
-<div>\[\begin{split}
+<div>\[
 p(\mathcal M _i \mid \mathcal D)
    \propto p(\mathcal M _i) p(\mathcal D \mid \mathcal M _i)
-\end{split}\]</div>
+\]</div>
 
 これを評価したいんだけど、
 モデルの事前分布なんてだいたい分からないので、重要なのは後者のevidence。
@@ -94,11 +94,11 @@ $\frac {p(\mathcal D \mid \mathcal M _i)} {p(\mathcal D \mid \mathcal M _j)}$
 (新しい $\mathbf x$ に対して $t$ がどんな値となるか)
 も加法定理と乗法定理より導かれる (**式 3.67**)
 
-<div>\[\begin{split}
+<div>\[\begin{aligned}
 p(t \mid \mathbf x, \mathcal D)
    &= \sum _{i=1} ^L p(t, \mathcal M _i \mid \mathbf x, \mathcal D) \\
    &= \sum _{i=1} ^L {p(t \mid \mathbf x, \mathcal M _i, \mathcal D) p(\mathcal M _i \mid \mathcal D)}
-\end{split}\]</div>
+\end{aligned}\]</div>
 
 これは、それぞれのモデルでの予測分布(入力に対してどういう出力になりそうか)を
 事後分布(どのモデルっぽいか)で重み付けした平均した、混合分布。
@@ -114,11 +114,11 @@ p(t \mid \mathbf x, \mathcal D)
 パラメータセット $w$ を持つモデル $\mathcal M_i$
 のevidenceをまた加法定理と乗法定理でばらしてみると (**式 3.68**)
 
-<div>\[\begin{split}
+<div>\[\begin{aligned}
 p(\mathcal D \mid \mathcal M _i)
    &= \int p(\mathcal D, \mathbf w \mid \mathcal M _i) \mathrm d \mathbf w \\
    &= \int p(\mathcal D \mid \mathbf w, \mathcal M _i) p(\mathbf w \mid \mathcal M _i) \mathrm d \mathbf w
-\end{split}\]</div>
+\end{aligned}\]</div>
 
 パラメータセットの尤度をその確率分布で重み付けして積分したもの、
 ってことで周辺尤度と呼ばれるのが納得できる。
@@ -130,11 +130,11 @@ p(\mathcal D \mid \mathcal M _i)
 {{%div class="note"%}}
 積分の中身からすると、パラメータの事後分布を求める式の正規化項になる (**式 3.69**)
 
-<div>\[\begin{split}
+<div>\[
 p(\mathbf w \mid \mathcal D, \mathcal M _i)
    = \frac {p(\mathcal D \mid \mathbf w, \mathcal M _i) p(\mathbf w \mid \mathcal M _i)}
            {p(\mathcal D \mid \mathcal M _i)}
-\end{split}\]</div>
+\]</div>
 {{%/div%}}
 
 あるひとつのパラメータ $w$ を持つモデルを考える。
@@ -150,18 +150,18 @@ MAP推定値らへんで長方形に分布してるものとして近似。
 [Figure 3.12](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure3.12.png) のように近似すると式3.68の積分をただの掛け算で書き変えられる
 (モデル依存の表記を省略, **式 3.70, 3.71**)。
 
-<div>\[\begin{split}
+<div>\[\begin{aligned}
 p(\mathcal D)
    &= \int p(\mathcal D \mid w) p (w) \mathrm dw \\
-   &\simeq \frac 1 {\Delta w _\mathrm{prior}} \int p(\mathcal D \mid w) \mathrm dw \\
-   &\simeq \frac 1 {\Delta w _\mathrm{prior}}
-           p(\mathcal D \mid w _\mathrm{MAP}) \Delta w _\mathrm{posterior} \\
-   &= p(\mathcal D \mid w _\mathrm{MAP}) \frac {\Delta w _\mathrm{posterior}}
-                                                {\Delta w _\mathrm{prior}} \\
+   &\simeq \frac 1 {\Delta w _\text{prior}} \int p(\mathcal D \mid w) \mathrm dw \\
+   &\simeq \frac 1 {\Delta w _\text{prior}}
+           p(\mathcal D \mid w _\text{MAP}) \Delta w _\text{posterior} \\
+   &= p(\mathcal D \mid w _\text{MAP}) \frac {\Delta w _\text{posterior}}
+                                             {\Delta w _\text{prior}} \\
 \ln p(\mathcal D)
-   &\simeq \ln p(\mathcal D \mid w _\mathrm{MAP})
-         + \ln \left( \frac {\Delta w _\mathrm{posterior}} {\Delta w _\mathrm{prior}} \right)
-\end{split}\]</div>
+   &\simeq \ln p(\mathcal D \mid w _\text{MAP})
+         + \ln \left( \frac {\Delta w _\text{posterior}} {\Delta w _\text{prior}} \right)
+\end{aligned}\]</div>
 
 第一項は一番いいパラメータの当てはまりの良さ、
 第二項はモデルの複雑性によるペナルティ
@@ -170,14 +170,14 @@ p(\mathcal D)
 $M$ 個のパラメータを持つモデルを考える。
 事前分布と事後分布の幅の比が全てのパラメータで等しいとすると (**式 3.72**)
 
-<div>\[\begin{split}
+<div>\[\begin{aligned}
 p(\mathcal D)
-   &= p(\mathcal D \mid w _\mathrm{MAP}) \left(\frac {\Delta w _\mathrm{posterior}}
-                                                     {\Delta w _\mathrm{prior}} \right)^M \\
+   &= p(\mathcal D \mid w _\text{MAP}) \left(\frac {\Delta w _\text{posterior}}
+                                                   {\Delta w _\text{prior}} \right)^M \\
 \ln p(\mathcal D)
-   &\simeq \ln p(\mathcal D \mid w _\mathrm{MAP})
-         + M \ln \left( \frac {\Delta w _\mathrm{posterior}} {\Delta w _\mathrm{prior}} \right)
-\end{split}\]</div>
+   &\simeq \ln p(\mathcal D \mid w _\text{MAP})
+         + M \ln \left( \frac {\Delta w _\text{posterior}} {\Delta w _\text{prior}} \right)
+\end{aligned}\]</div>
 
 パラメータが増える(モデルの複雑性が増す)ごとに第一項は大きくなっていくかもしれないが、
 第二項のペナルティも大きな負になっていく。
@@ -210,11 +210,11 @@ $\mathcal M_1$ が真のモデルだとする。
 正しくない $\mathcal M_2$ とかで大きくなる場合もあるが、
 真の分布の上でを平均すると (**式 3.73**)
 
-<div>\[\begin{split}
+<div>\[
 \int p(\mathcal D \mid \mathcal M _1)
     \ln \frac {p(\mathcal D \mid \mathcal M _1)}
               {p(\mathcal D \mid \mathcal M _2)} \mathrm d \mathcal D
-\end{split}\]</div>
+\]</div>
 
 で *Kullback-Leibler divergence* (Section 1.6.1 **式 1.113**)
 と同じ形になり（対数の中身と符号を入れ替え）、

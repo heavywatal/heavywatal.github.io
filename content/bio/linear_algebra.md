@@ -27,25 +27,25 @@ tags = ["math"]
 
 ------------------------------------------------------------------------
 
-**行列式 (determinant)** $\mathrm{det}\, A, |A|$
+**行列式 (determinant)** $\text{det}\, A, |A|$
 :   正方行列による変換の体積拡大率。
     行列式が0 ⇔ 写像がぺちゃんこになる ⇔ 逆行列が存在しない。
     固有値の積と等しい。
 
-**跡 (trace)** $\mathrm{tr}\, A$
+**跡 (trace)** $\text{tr}\, A$
 :   正方行列の対角成分の和。
     固有値の和と等しい。
 
-**核 (kernel)** $\mathrm{Ker}\, A$
+**核 (kernel)** $\text{Ker}\, A$
 :   $A\mathbf{x} = \mathbf{o}$ で原点に移るような
     $\mathbf{x}$ の集合。 核が原点だけ(0次元) ⇔ ランク＝元の次元数 ⇔ 写像は **単射**。
 
-**像 (image)** $\mathrm{Im}\, A$
+**像 (image)** $\text{Im}\, A$
 :   $\mathbf{x}$ を目一杯いろいろ動かしたときの
     $\mathbf{y} = A\mathbf{x}$ の集合。
     像が行き先の全空間 ⇔ ランク＝行き先の次元数 ⇔ 写像は **全射**。
 
-**ランク (rank)** $\mathrm{rank}\, A$
+**ランク (rank)** $\text{rank}\, A$
 :   像の次元数。
 
 ## 行列のべき乗
@@ -55,14 +55,14 @@ tags = ["math"]
 ベクトル $\mathbf{x}$ に正方行列 $A$ を
 $t$ 回かけたらどうなるか知りたい。
 
-<div>\[\begin{split}
+<div>\[
 \mathbf{x}(t) = A\mathbf{x}(t-1) = A^t\mathbf{x}(0)
-\end{split}\]</div>
+\]</div>
 
 そのまま行列計算をするのではなく、適当な正則行列で
 $\mathbf{x}(t) = P\mathbf{y}(t)$ という変数変換をしてみると
 
-<div>\[\begin{split}
+<div>\[\begin{aligned}
 \mathbf{y}(t) &= P^{-1}\mathbf{x}(t) \\
               &= P^{-1}A\mathbf{x}(t-1) \\
               &= P^{-1}AP\mathbf{y}(t-1) \\
@@ -71,30 +71,30 @@ $\mathbf{x}(t) = P\mathbf{y}(t)$ という変数変換をしてみると
 \mathbf{x}(t) &= P\mathbf{y}(t) \\
               &= P\Lambda^t\mathbf{y}(0) \\
               &= P\Lambda^tP^{-1}\mathbf{x}(0)
-\end{split}\]</div>
+\end{aligned}\]</div>
 
 このとき $\Lambda = P^{-1}AP$ が対角行列になってくれてると
 $t$ 乗する計算がすごく楽チン。
 
-<div>\[\begin{split}
-\Lambda^t &= \mathrm{diag}(\lambda _1, ..., \lambda _n)^t \\
-          &= \mathrm{diag}(\lambda _1^t, ..., \lambda _n^t)
-\end{split}\]</div>
+<div>\[\begin{aligned}
+\Lambda^t &= \text{diag}(\lambda _1, ..., \lambda _n)^t \\
+          &= \text{diag}(\lambda _1^t, ..., \lambda _n^t)
+\end{aligned}\]</div>
 
 この **対角化 (diagonalization)** をもたらす変換行列 $P$ とはどういうものか
 
-<div>\[\begin{split}
-P^{-1}AP &= \mathrm{diag}(\lambda _1, ..., \lambda _n) \\
-      AP &= P \mathrm{diag}(\lambda _1, ..., \lambda _n)
-\end{split}\]</div>
+<div>\[\begin{aligned}
+P^{-1}AP &= \text{diag}(\lambda _1, ..., \lambda _n) \\
+      AP &= P \text{diag}(\lambda _1, ..., \lambda _n)
+\end{aligned}\]</div>
 
 $P = (\mathbf{p}_1, ..., \mathbf{p}_n)$ として列ごとに見ると
 
-<div>\[\begin{split}
+<div>\[\begin{aligned}
 A\mathbf{p}_1 &= \lambda_1 \mathbf{p}_1 \\
 \vdots \\
 A\mathbf{p}_n &= \lambda_n \mathbf{p}_n
-\end{split}\]</div>
+\end{aligned}\]</div>
 
 $A$ をかけても長さが変わるだけで方向は変わらない。
 この伸縮率 $\lambda$ が **固有値 (eigenvalue)** で、それぞれに対応する
@@ -106,7 +106,7 @@ $\Lambda$ は対角成分に $A$ の固有値を並べたもの。
 $\mathbf{x}$ を $A$ の固有ベクトルの線形結合として表し、
 $A$ をかけても方向が変わらないように変数変換しておくということに相当する。
 
-<div>\[\begin{split}
+<div>\[\begin{aligned}
 A^t\mathbf{x} &= A^t P \mathbf{y} \\
               &= A^t (y_1\mathbf{p_1} + ... + y_n\mathbf{p_n}) \\
               &= y_1 A^t \mathbf{p_1} + ... + y_n A^t \mathbf{p_n} \\
@@ -116,7 +116,7 @@ A^t\mathbf{x} &= A^t P \mathbf{y} \\
                    + ... + y_k \mathbf{p_k}
                    + ... + y_n \left(\frac {\lambda _n} {\lambda _k}\right) ^t \mathbf{p_n}) \\
               &\sim y_k \lambda_k ^t \mathbf{p_k}
-\end{split}\]</div>
+\end{aligned}\]</div>
 
 $t$ が大きくなるにつれて最大の固有値 $\lambda_k$
 に対応する固有ベクトル $\mathbf{p_k}$ の向きに近づいていく。

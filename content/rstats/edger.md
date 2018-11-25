@@ -161,34 +161,34 @@ edgeRUsersGuide()
 レプリケート *i* における遺伝子 *g* の観察リード数を $y _{gi}$、
 知りたい真の発現fractionを $\pi _{gi}$ とする。
 
-<div>\[\begin{split}
+<div>\[\begin{aligned}
 \sum _g \pi _{gi} &= 1 \\
-\sqrt {\phi _g} &\equiv \mathrm{CV}[\pi _{gi}]_i
-                = \frac {\mathrm {sd}[\pi _{gi}]_i} {\mathrm{mean}[\pi _{gi}]_i} \\
-N_i \pi _{gi} &\sim \mathrm{Gamma}(\phi _g^{-1}, \mu _{gi} \phi _g) \\
+\sqrt {\phi _g} &\equiv \text{CV}[\pi _{gi}]_i
+                = \frac {\text{sd}[\pi _{gi}]_i} {\text{mean}[\pi _{gi}]_i} \\
+N_i \pi _{gi} &\sim \text{Gamma}(\phi _g^{-1}, \mu _{gi} \phi _g) \\
 \mathrm E[N_i \pi _{gi}] &= k\theta = \mu _{gi} \\
-\mathrm{var}[N_i \pi _{gi}] &= k\theta^2 = \mu _{gi}^2 \phi _g \\
-y_{gi} &\sim \mathrm{Poisson}(N_i \pi _{gi}) \\
-       &= \int _0^\infty \mathrm{Poisson}(N_i \pi _{gi})~
-                         \mathrm{Gamma}(\phi _g^{-1}, \mu _{gi} \phi _g)~ \mathrm d N_i \pi _{gi} \\
-       &= \mathrm{NB}(\phi _g^{-1}, \frac {\mu _{gi} \phi _g} {1 + \mu _{gi} \phi _g}) \\
+\text{var}[N_i \pi _{gi}] &= k\theta^2 = \mu _{gi}^2 \phi _g \\
+y_{gi} &\sim \text{Poisson}(N_i \pi _{gi}) \\
+       &= \int _0^\infty \text{Poisson}(N_i \pi _{gi})~
+                         \text{Gamma}(\phi _g^{-1}, \mu _{gi} \phi _g)~ \mathrm d N_i \pi _{gi} \\
+       &= \text{NB}(\phi _g^{-1}, \frac {\mu _{gi} \phi _g} {1 + \mu _{gi} \phi _g}) \\
 \mathrm E[y_{gi}] &= \mu _{gi} \\
-\mathrm{var}[y_{gi}] &= \mathrm E \big[\mathrm{var}[y_{gi} \mid \pi _{gi}]_i \big]_\pi
-                      + \mathrm{var} \big[\mathrm E[y_{gi}\mid \pi _{gi}]_i \big]_\pi \\
-                     &= \mathrm E[N_i \pi _{gi}]_\pi + \mathrm{var}[N_i \pi _{gi}]_\pi \\
+\text{var}[y_{gi}] &= \mathrm E \big[\text{var}[y_{gi} \mid \pi _{gi}]_i \big]_\pi
+                      + \text{var} \big[\mathrm E[y_{gi}\mid \pi _{gi}]_i \big]_\pi \\
+                     &= \mathrm E[N _i \pi _{gi}] _\pi + \text{var}[N _i \pi _{gi}] _\pi \\
                      &= \mu _{gi} + \mu _{gi}^2 \phi _g \\
-\mathrm{CV}^2[y_{gi}] &= 1 / \mu _{gi} + \phi _g \\
-                   &= \mathrm{CV}^2[y_{gi} \mid \pi _{gi}] + \mathrm{CV}^2[\pi _{gi}] \\
-                   &= \mathrm{Technical~CV}^2 + \mathrm{Biological~CV}^2 \\
-\end{split}\]</div>
+\text{CV}^2[y_{gi}] &= 1 / \mu _{gi} + \phi _g \\
+                   &= \text{CV}^2[y_{gi} \mid \pi _{gi}] + \text{CV}^2[\pi _{gi}] \\
+                   &= \text{Technical~CV}^2 + \text{Biological~CV}^2 \\
+\end{aligned}\]</div>
 
 dispersion $\phi _g$
 :   普通は $D = \sigma^2 / \mu$ と定義されるけど、
-    ここでは $\mathrm{CV}^2$
+    ここでは $\text{CV}^2$
 
 BCV $\sqrt{\phi _g}$
 :   biological coefficient of variation.
-    こっちは普通と同じように $\mathrm{CV} = \sigma / \mu$ 。
+    こっちは普通と同じように $\text{CV} = \sigma / \mu$ 。
     sequencing depthがどんなに大きくても残るばらつき。
 
 DGE

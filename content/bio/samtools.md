@@ -171,7 +171,7 @@ phase
 3.  `RNAME`: 参照配列・染色体の名前
 4.  `POS`: 位置
 5.  `MAPQ`: マッピングクオリティ
-    = round($-10\log_{10}\mathrm{Pr[mapping~is~wrong]}$)
+    = round($-10\log_{10}\text{Pr[mapping~is~wrong]}$)
 
     マッパーによって微妙に違うらしい。
     例えばTopHatでは:

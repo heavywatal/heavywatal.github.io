@@ -53,18 +53,18 @@ tags = ["genetics"]
 
     **Watterson (1975)**: $S$ から推定
 
-    <div>\[\begin{split}
+    <div>\[\begin{aligned}
     a_1  &= 1 + \frac 1 2 + \frac 1 3 + ... + \frac 1{n-1}\\
-    \mbox E[S] &= \theta L a_1\\
+    \mathrm{E}[S] &= \theta L a_1\\
     \theta_w &= \frac{S}{L a_1}
-\end{split}\]</div>
+\end{aligned}\]</div>
 
     **Tajima (1983)**: $\pi$ から推定
 
-    <div>\[\begin{split}
-    \mbox E[\pi] &= \theta L\\
+    <div>\[\begin{aligned}
+    \mathrm{E}[\pi] &= \theta L\\
     \theta_\pi   &= \frac \pi L
-\end{split}\]</div>
+\end{aligned}\]</div>
 
 ## Selection
 
