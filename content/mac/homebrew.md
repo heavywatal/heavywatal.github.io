@@ -106,7 +106,6 @@ http://docs.brew.sh/FAQ.html
     nano
     nkf
     pandoc
-    pyenv
     rmtrash
     rsync
     tmux
@@ -160,7 +159,7 @@ Rをここからインストールするとバイナリ版のパッケージが�
 バイオインフォマティクスなど科学計算のツール群はHomebrew公式タップ
 [`homebrew/science`](https://github.com/Homebrew/homebrew-science)
 に収録されていたがdeprecatedになった。
-[`brewsci/science`](https://brewsci.github.io/homebrew-bio/)
+[`brewsci/science`](https://github.com/brewsci/homebrew-science)
 がフォーミュラを一旦引き継いで、 `homebrew/core` と
 [`brewsci/bio`](https://brewsci.github.io/homebrew-bio/)
 に振り分けて移行を進めている。
@@ -208,11 +207,12 @@ GUIアプリケーションもHomebrewで管理してしまおうという野心
 アプリ側でアップデートを実行するとCask内でのバージョンと食い違っちゃうけど使用上は問題ないらしい。
 
 alfred, amazon-drive, amazon-music, atom,
-basictex, betterzipql, bibdesk, boostnote, caffeine, cmd-eikana,
-dia, dropbox, firefox, gephi, gitter,
+basictex, bibdesk, cmd-eikana,
+discord, docker, dropbox, eqmac, firefox, gephi, gimp, gitter,
 google-backup-and-sync, google-chrome, google-earth, google-japanese-ime,
-inkscape, iterm2, kindle, libreoffice, megasync,
-openoffice, osxfuxe, qlstephen, quicklook-csv, r-app, rstudio,
+inkscape, iterm2, julia, kindle, libreoffice,
+marshallofsound-google-play-music-player, megasync,
+osxfuxe, qlstephen, quicklook-csv, r-app, rstudio,
 skim, skyfonts, skype, slack, spideroakone, sshfs,
-the-unarchiver, virtualbox, vlc,
+the-unarchiver, virtualbox, visual-studio-code, vlc,
 whatsapp, xquartz, yujitach-menumeters
