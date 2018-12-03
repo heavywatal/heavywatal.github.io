@@ -161,6 +161,8 @@ vignettes/
     `configure` や [CMake]({{< relref "cmake.md" >}}) を使って
     `src/Makevars.in` から生成する手もある。
 
+    参考: [Japan.R 2018 LT "Rcppパッケージで外部C++ライブラリを使う"](https://heavywatal.github.io/slides/japanr2018/)
+
 -   ユーザ側で指定すべきオプションがある場合は `~/.R/Makevars` に:
     ```
     LLVM_LOC=/usr/local/opt/llvm
