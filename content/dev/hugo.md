@@ -21,26 +21,26 @@ Markdown記法のテキストをHTMLに変換する、静的ウェブサイト�
 
 http://gohugo.io/overview/quickstart/
 
-* インストール
-    ```sh
-    % brew install hugo
-    ```
-  まだまだ開発途上で機能追加や不具合修正も活発なので
-  githubをフォローして最新版を入れたほうがいいかも
-  https://gohugo.io/overview/installing/
+-   [インストール方法はいろいろ用意されてる](https://gohugo.io/getting-started/installing)。
+    例えばMacなら[Homebrew]({{< relref "homebrew.md" >}})で一発:
+    `brew install hugo`
+
+    私は `HTML_USE_XHTML` をオフにするためソースコードを落として改変:
     ```sh
     export GOPATH=${HOME}/.go
     export PATH=${PATH}:${GOPATH}/bin
-    go get -v github.com/gohugoio/hugo
+    go get -u -v github.com/gohugoio/hugo
+    go get -v -tags extended github.com/gohugoio/hugo
     ```
+    `-tags extended` はSASS/SCSS対応版をコンパイルするオプション。
 
-* 骨組みを作る
+-   骨組みを作る:
     ```sh
     cd path/to/site
     hugo new site .
     ```
 
-* ページをMarkdownで書く
+-   ページをMarkdownで書く:
     ```sh
     hugo new about.md
     ```
@@ -56,18 +56,18 @@ http://gohugo.io/overview/quickstart/
     normal *italic* **bold**
     ```
 
-* テーマをとりあえず全部インストール
+-   テーマをとりあえず全部インストール:
     ```sh
     git clone --depth 1 --recursive https://github.com/gohugoio/hugoThemes.git themes
     ```
 
-* ウェブサーバーを走らせる
+-   ウェブサーバーを走らせる:
     ```sh
     hugo server -w D -t hyde
     ```
 
-* ブラウザから http://localhost:1313/about にアクセスしてみる。
-  監視オプション `-w` を付けておけば、ファイルの変更がすぐに反映される。
+-   ブラウザから http://localhost:1313/about にアクセスしてみる。
+    監視オプション `-w` を付けておけば、ファイルの変更がすぐに反映される。
 
 
 ## 設定
