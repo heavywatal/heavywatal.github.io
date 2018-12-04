@@ -261,20 +261,21 @@ read_csv<span class="p">(</span><span class="s">&#39;mydata.csv&#39;</span><span
 <h2 id="最新版をソースからインストールする">最新版をソースからインストールする</h2>
 
 <p><a href="https://github.com/tidyverse/readr">https://github.com/tidyverse/readr</a></p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">devtools<span class="o">::</span>install_github<span class="p">(</span><span class="s">&#39;tidyverse/readr&#39;</span><span class="p">)</span>
-<span class="c1"># ...</span>
-ld<span class="o">:</span> <span class="kn">library</span> not found <span class="kr">for</span> <span class="o">-</span>lintl</code></pre></div>
+
+<pre><code>devtools::install_github('tidyverse/readr')
+# ...
+ld: library not found for -lintl
+</code></pre>
+
 <p>見つからないと言われてる <code>libintl.*</code> はgettextの一部なのでそいつを入れる。
 パス指定で楽をするため、keg-onlyだけど無理矢理シムリンクを張る
 (ホントは良くないかも)。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% brew install gettext
-% brew link gettext --force</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew install gettext
+brew link gettext --force</code></pre></div>
 <p>Homebrewを<code>/usr/local/</code>以外に入れている場合は、
 それをRに見つけさせるため <code>~/.R/Makevars</code> にオプションを書く。</p>
-
-<pre><code>LDFLAGS = -L${HOME}/.homebrew/lib
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-makefile" data-lang="makefile"><span class="nv">LDFLAGS</span><span class="o">=</span>-L<span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.homebrew/lib
+</code></pre></div>
 <p>再びRで <code>install_github('tidyverse/readr')</code> を試みる。</p>
 
 <h2 id="tibble">tibble</h2>
@@ -316,19 +317,20 @@ ld<span class="o">:</span> <span class="kn">library</span> not found <span class
 見やすくない上にかなり遅いので <code>print.tbl_df()</code> 関数を上書きする。
 標準の <code>print.data.frame()</code> でもいいけど、
 <a href="https://CRAN.R-project.org/package=data.table">data.table</a>
-1.11 以降をインストールしてある場合は <code>print.data.table()</code> が使いやすい。</p>
+1.11 以降がインストールしてある場合は <code>print.data.table()</code> が使いやすい。</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># ~/.Rprofile</span>
-<span class="kp">assign</span><span class="p">(</span><span class="s">&#34;print.tbl_df&#34;</span><span class="p">,</span> data.table<span class="o">:::</span>print.data.table<span class="p">,</span> envir <span class="o">=</span> <span class="m">.</span>GlobalEnv<span class="p">)</span>
-<span class="c1">#assign(&#34;print.tbl_df&#34;, print.data.frame, envir = .GlobalEnv)</span></code></pre></div>
-<p>古き良きtibbleを <code>devtools::install_version('tibble', '1.3.4')</code> で入れる手もある。</p>
-
+<span class="kp">setHook</span><span class="p">(</span><span class="kp">packageEvent</span><span class="p">(</span><span class="s">&#34;tibble&#34;</span><span class="p">,</span> <span class="s">&#34;attach&#34;</span><span class="p">),</span> <span class="kr">function</span><span class="p">(</span><span class="kc">...</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kp">try</span><span class="p">({</span>
+    <span class="kp">registerS3method</span><span class="p">(</span><span class="s">&#34;print&#34;</span><span class="p">,</span> <span class="s">&#34;tbl_df&#34;</span><span class="p">,</span> data.table<span class="o">:::</span>print.data.table<span class="p">)</span>
+  <span class="p">})</span>
+<span class="p">})</span></code></pre></div>
 </div>
 
 
 <h3 id="関数">関数</h3>
 
 <dl>
-<dt><code>tibble::tibble(...)</code></dt>
+<dt><a href="https://tibble.tidyverse.org/reference/tibble.html"><code>tibble::tibble(...)</code></a></dt>
 <dd>tibbleを新規作成。ちょっと昔までは <code>dplyr::data_frame()</code> だった。</dd>
 <dd><code>base::data.frame()</code> と違ってバグが混入しにくくて便利:
 
@@ -340,23 +342,31 @@ ld<span class="o">:</span> <span class="kn">library</span> not found <span class
 <li><code>tbl_df</code> クラスを付加</li>
 <li>ただし1.4以降のバージョンでは表示が遅くて見にくい</li>
 </ul></dd>
-<dt><code>tibble::as_tibble(x)</code></dt>
+<dt><a href="https://tibble.tidyverse.org/reference/as_tibble.html"><code>tibble::as_tibble(x)</code></a></dt>
 <dd>既存のdata.frameやmatrixをtibbleに変換。
-ちょっと昔までは <code>dplyr::tbl_df()</code> とか <code>dplyr::as_data_frame()</code> だった。</dd>
-<dt><code>tibble::add_row(.data, ...)</code></dt>
+ちょっと昔までは <code>dplyr::tbl_df()</code> とか <code>dplyr::as_data_frame()</code> だった。
+v2.0からは列名がちゃんとついてないとエラーになる。</dd>
+<dt><a href="https://tibble.tidyverse.org/reference/new_tibble.html"><code>tibble::new_tibble(x, ..., nrow, class = NULL)</code></a></dt>
+<dd>tibbleのサブクラスを扱う開発者向け <code>as_tibble()</code> 。
+検証なし、<code>nrow</code> 必須の代わりに高速。
+クラスを先頭に追加できるのも便利。</dd>
+<dt><a href="https://tibble.tidyverse.org/reference/enframe.html"><code>tibble::enframe(x, name = &quot;name&quot;, value = &quot;value&quot;)</code></a></dt>
+<dd>名前付きvectorとかlistを2列のtibbleに変換する。
+<code>tibble::deframe(x)</code> はその逆。
+<code>c(a=1, b=2) %&gt;% enframe() %&gt;% deframe()</code></dd>
+<dt><a href="https://tibble.tidyverse.org/reference/add_row.html"><code>tibble::add_row(.data, ..., .before=NULL, .after=NULL)</code></a></dt>
 <dd>既存のtibbleに新しいデータを1行追加する。</dd>
-<dt><code>tibble::rowid_to_column(df, var='rowid')</code></dt>
-<dd>行番号をinteger型で1列目の変数にする。</dd>
-<dt><code>tibble::rownames_to_column(df, var='rowname')</code></dt>
+<dt><a href="https://tibble.tidyverse.org/reference/rownames.html"><code>tibble::rownames_to_column(df, var='rowname')</code></a></dt>
 <dd>行の名前をcharacter型で1列目の変数にする。<code>dplyr::add_rownames()</code>の後継。</dd>
+<dd><code>tibble::rowid_to_column(df, var='rowid')</code> はそれを整数で。</dd>
 <dd><code>tibble::column_to_rownames(df, var='rowname')</code> はその逆。</dd>
 <dd><code>tibble::remove_rownames(df)</code> は消すだけ。</dd>
 <dt><code>tibble::glimpse(.data, width=NULL)</code></dt>
 <dd>データの中身をざっと見る。
 <code>print()</code> とか <code>str()</code> のようなもの。</dd>
-<dt><code>tibble::type_sum(x)</code></dt>
+<dt><code>pillar::type_sum(x)</code></dt>
 <dd>オブジェクトの型</dd>
-<dt><code>tibble::obj_sum(x)</code></dt>
+<dt><code>pillar::obj_sum(x)</code></dt>
 <dd><code>type_sum</code>とサイズ e.g., <code>&quot;data.frame [150 x 5]&quot;</code></dd>
 </dl>
 
@@ -367,16 +377,15 @@ ld<span class="o">:</span> <span class="kn">library</span> not found <span class
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">height <span class="o">=</span> <span class="m">30L</span>  <span class="c1"># for example</span>
 width <span class="o">=</span> <span class="m">160L</span>
 <span class="kp">options</span><span class="p">(</span>
-  tibble.print_max <span class="o">=</span> height<span class="p">,</span>
-  tibble.print_min <span class="o">=</span> height<span class="p">,</span>
-  tibble.width <span class="o">=</span> width<span class="p">,</span>
   pillar.neg <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
-  pillar.sigfig <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
   pillar.subtle <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
   datatable.print.class <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
   datatable.print.colnames <span class="o">=</span> <span class="s">&#34;top&#34;</span><span class="p">,</span>
   datatable.print.nrows <span class="o">=</span> height<span class="p">,</span>
   datatable.print.topn <span class="o">=</span> height <span class="o">%/%</span> <span class="m">2L</span><span class="p">,</span>
+  tibble.print_max <span class="o">=</span> height<span class="p">,</span>
+  tibble.print_min <span class="o">=</span> height<span class="p">,</span>
+  tibble.width <span class="o">=</span> width<span class="p">,</span>
   width <span class="o">=</span> <span class="kp">min</span><span class="p">(</span>width<span class="p">,</span> <span class="m">10000L</span><span class="p">)</span>
 <span class="p">)</span></code></pre></div>
 <ul>
@@ -397,7 +406,7 @@ as_tibble<span class="p">(</span>iris<span class="p">)</span> <span class="o">%&
 
 iris <span class="o">%&gt;%</span> page<span class="p">(</span><span class="s">&#39;print&#39;</span><span class="p">)</span></code></pre></div>
 <p>オプションをいちいち設定しなくて済むように
-<a href="https://github.com/heavywatal/rwtl/blob/master/R/utils.R"><code>less()</code></a>
+<a href="https://github.com/heavywatal/rwtl/blob/master/R/print.R"><code>less()</code></a>
 のような関数を定義しておくのもよい。</p>
 
 <h2 id="関連書籍">関連書籍</h2>
