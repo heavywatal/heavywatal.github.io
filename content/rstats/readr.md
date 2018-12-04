@@ -180,7 +180,7 @@ Rの中から `install.packages('readxl')` でインストールし、
 
 https://github.com/tidyverse/readr
 
-```r
+```
 devtools::install_github('tidyverse/readr')
 # ...
 ld: library not found for -lintl
@@ -191,15 +191,15 @@ ld: library not found for -lintl
 (ホントは良くないかも)。
 
 ```sh
-% brew install gettext
-% brew link gettext --force
+brew install gettext
+brew link gettext --force
 ```
 
 Homebrewを`/usr/local/`以外に入れている場合は、
 それをRに見つけさせるため `~/.R/Makevars` にオプションを書く。
 
-```
-LDFLAGS = -L${HOME}/.homebrew/lib
+```makefile
+LDFLAGS=-L${HOME}/.homebrew/lib
 ```
 
 再びRで `install_github('tidyverse/readr')` を試みる。
@@ -246,20 +246,21 @@ class(iris)
 見やすくない上にかなり遅いので `print.tbl_df()` 関数を上書きする。
 標準の `print.data.frame()` でもいいけど、
 [data.table](https://CRAN.R-project.org/package=data.table)
-1.11 以降をインストールしてある場合は `print.data.table()` が使いやすい。
+1.11 以降がインストールしてある場合は `print.data.table()` が使いやすい。
 ```r
 # ~/.Rprofile
-assign("print.tbl_df", data.table:::print.data.table, envir = .GlobalEnv)
-#assign("print.tbl_df", print.data.frame, envir = .GlobalEnv)
+setHook(packageEvent("tibble", "attach"), function(...) {
+  try({
+    registerS3method("print", "tbl_df", data.table:::print.data.table)
+  })
+})
 ```
-
-古き良きtibbleを `devtools::install_version('tibble', '1.3.4')` で入れる手もある。
 {{%/div%}}
 
 
 ### 関数
 
-`tibble::tibble(...)`
+[`tibble::tibble(...)`](https://tibble.tidyverse.org/reference/tibble.html)
 :   tibbleを新規作成。ちょっと昔までは `dplyr::data_frame()` だった。
 :   `base::data.frame()` と違ってバグが混入しにくくて便利:
     -   勝手に型変換しない (`stringsAsFactors=FALSE`が基本)
@@ -269,18 +270,27 @@ assign("print.tbl_df", data.table:::print.data.table, envir = .GlobalEnv)
     -   `tbl_df` クラスを付加
     -   ただし1.4以降のバージョンでは表示が遅くて見にくい
 
-`tibble::as_tibble(x)`
+[`tibble::as_tibble(x)`](https://tibble.tidyverse.org/reference/as_tibble.html)
 :   既存のdata.frameやmatrixをtibbleに変換。
     ちょっと昔までは `dplyr::tbl_df()` とか `dplyr::as_data_frame()` だった。
+    v2.0からは列名がちゃんとついてないとエラーになる。
 
-`tibble::add_row(.data, ...)`
+[`tibble::new_tibble(x, ..., nrow, class = NULL)`](https://tibble.tidyverse.org/reference/new_tibble.html)
+:   tibbleのサブクラスを扱う開発者向け `as_tibble()` 。
+    検証なし、`nrow` 必須の代わりに高速。
+    クラスを先頭に追加できるのも便利。
+
+[`tibble::enframe(x, name = "name", value = "value")`](https://tibble.tidyverse.org/reference/enframe.html)
+:   名前付きvectorとかlistを2列のtibbleに変換する。
+    `tibble::deframe(x)` はその逆。
+    `c(a=1, b=2) %>% enframe() %>% deframe()`
+
+[`tibble::add_row(.data, ..., .before=NULL, .after=NULL)`](https://tibble.tidyverse.org/reference/add_row.html)
 :   既存のtibbleに新しいデータを1行追加する。
 
-`tibble::rowid_to_column(df, var='rowid')`
-:   行番号をinteger型で1列目の変数にする。
-
-`tibble::rownames_to_column(df, var='rowname')`
+[`tibble::rownames_to_column(df, var='rowname')`](https://tibble.tidyverse.org/reference/rownames.html)
 :   行の名前をcharacter型で1列目の変数にする。`dplyr::add_rownames()`の後継。
+:   `tibble::rowid_to_column(df, var='rowid')` はそれを整数で。
 :   `tibble::column_to_rownames(df, var='rowname')` はその逆。
 :   `tibble::remove_rownames(df)` は消すだけ。
 
@@ -288,10 +298,10 @@ assign("print.tbl_df", data.table:::print.data.table, envir = .GlobalEnv)
 :   データの中身をざっと見る。
     `print()` とか `str()` のようなもの。
 
-`tibble::type_sum(x)`
+`pillar::type_sum(x)`
 :   オブジェクトの型
 
-`tibble::obj_sum(x)`
+`pillar::obj_sum(x)`
 :   `type_sum`とサイズ e.g., `"data.frame [150 x 5]"`
 
 
@@ -304,16 +314,15 @@ assign("print.tbl_df", data.table:::print.data.table, envir = .GlobalEnv)
 height = 30L  # for example
 width = 160L
 options(
-  tibble.print_max = height,
-  tibble.print_min = height,
-  tibble.width = width,
   pillar.neg = FALSE,
-  pillar.sigfig = FALSE,
   pillar.subtle = FALSE,
   datatable.print.class = TRUE,
   datatable.print.colnames = "top",
   datatable.print.nrows = height,
   datatable.print.topn = height %/% 2L,
+  tibble.print_max = height,
+  tibble.print_min = height,
+  tibble.width = width,
   width = min(width, 10000L)
 )
 ```
@@ -338,7 +347,7 @@ iris %>% page('print')
 ```
 
 オプションをいちいち設定しなくて済むように
-[`less()`](https://github.com/heavywatal/rwtl/blob/master/R/utils.R)
+[`less()`](https://github.com/heavywatal/rwtl/blob/master/R/print.R)
 のような関数を定義しておくのもよい。
 
 
