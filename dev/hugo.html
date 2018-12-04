@@ -117,20 +117,22 @@ Hugo — 静的サイトを高速生成
 <p><a href="http://gohugo.io/overview/quickstart/">http://gohugo.io/overview/quickstart/</a></p>
 
 <ul>
-<li><p>インストール</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% brew install hugo</code></pre></div>
-<p>まだまだ開発途上で機能追加や不具合修正も活発なので
-githubをフォローして最新版を入れたほうがいいかも
-<a href="https://gohugo.io/overview/installing/">https://gohugo.io/overview/installing/</a></p>
+<li><p><a href="https://gohugo.io/getting-started/installing">インストール方法はいろいろ用意されてる</a>。
+例えばMacなら<a href="/mac/homebrew.html">Homebrew</a>で一発:
+<code>brew install hugo</code></p>
+
+<p>私は <code>HTML_USE_XHTML</code> をオフにするためソースコードを落として改変:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">export</span> <span class="nv">GOPATH</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.go
 <span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span>:<span class="si">${</span><span class="nv">GOPATH</span><span class="si">}</span>/bin
-go get -v github.com/gohugoio/hugo</code></pre></div></li>
+go get -u -v github.com/gohugoio/hugo
+go get -v -tags extended github.com/gohugoio/hugo</code></pre></div>
+<p><code>-tags extended</code> はSASS/SCSS対応版をコンパイルするオプション。</p></li>
 
-<li><p>骨組みを作る</p>
+<li><p>骨組みを作る:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> path/to/site
 hugo new site .</code></pre></div></li>
 
-<li><p>ページをMarkdownで書く</p>
+<li><p>ページをMarkdownで書く:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">hugo new about.md</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-markdown" data-lang="markdown">+++<span class="err">
 </span><span class="err"></span>date = 2016-02-26T19:10:22+09:00<span class="err">
 </span><span class="err"></span>title = &#34;About&#34;<span class="err">
@@ -140,10 +142,10 @@ hugo new site .</code></pre></div></li>
 <span class="err">
 </span><span class="err"></span>normal <span class="ge">*italic*</span> **bold**</code></pre></div></li>
 
-<li><p>テーマをとりあえず全部インストール</p>
+<li><p>テーマをとりあえず全部インストール:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git clone --depth <span class="m">1</span> --recursive https://github.com/gohugoio/hugoThemes.git themes</code></pre></div></li>
 
-<li><p>ウェブサーバーを走らせる</p>
+<li><p>ウェブサーバーを走らせる:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">hugo server -w D -t hyde</code></pre></div></li>
 
 <li><p>ブラウザから <a href="http://localhost:1313/about">http://localhost:1313/about</a> にアクセスしてみる。
