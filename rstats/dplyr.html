@@ -186,8 +186,8 @@ iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span cla
 iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span><span class="m">4</span><span class="o">:</span><span class="m">5</span><span class="p">)</span>
 iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span><span class="o">-</span><span class="kt">c</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">))</span>
 iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span><span class="o">-</span><span class="p">(</span>Sepal.Length<span class="o">:</span>Petal.Length<span class="p">))</span>
-iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span>matches<span class="p">(</span><span class="s">&#39;^Petal\\.Width$|^Species$&#39;</span><span class="p">))</span></code></pre></div>
-<p>文字列変数で指定しようとすると意図が曖昧になるので、
+iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>select<span class="p">(</span>matches<span class="p">(</span><span class="s">&#39;^Petal\\.Width$|^Species$&#39;</span><span class="p">))</span></code></pre></div></dd>
+<dd><p>文字列変数で指定しようとすると意図が曖昧になるので、
 <a href="https://dplyr.tidyverse.org/articles/programming.html#unquoting">unquoting</a>
 やpronounで明確に:</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">Sepal.Length <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;Petal.Width&#39;</span><span class="p">,</span> <span class="s">&#39;Species&#39;</span><span class="p">)</span>
@@ -206,6 +206,33 @@ iris <span class="o">%&gt;%</span> distinct<span class="p">(</span><span class="
 iris <span class="o">%&gt;%</span> distinct<span class="p">(</span><span class="o">!!!</span>rlang<span class="o">::</span>syms<span class="p">(</span>columns<span class="p">))</span></code></pre></div>
 <p>詳しくは<a href="https://amzn.to/2u0hmTs">宇宙本</a>第3章のコラム
 「selectのセマンティクスとmutateのセマンティクス、tidyeval」を参照。</p></dd>
+<dd><p>列の値によって選べる亜種 <code>dplyr::select_if(.tbl, .predicate, ...)</code> もある。</p></dd>
+<dt><code>dplyr::rename(.data, ...)</code></dt>
+<dd><p>列の改名。
+<code>mutate()</code>と同じようなイメージで <code>new=old</code> と指定。</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>rename<span class="p">(</span>sp<span class="o">=</span>Species<span class="p">)</span> <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+  Sepal.Length Sepal.Width Petal.Length Petal.Width     sp
+<span class="m">1</span>          <span class="m">5.1</span>         <span class="m">3.5</span>          <span class="m">1.4</span>         <span class="m">0.2</span> setosa
+<span class="m">2</span>          <span class="m">4.9</span>         <span class="m">3.0</span>          <span class="m">1.4</span>         <span class="m">0.2</span> setosa</code></pre></div>
+<p>変数に入った文字列を使う場合も<code>mutate()</code>と同様にunquotingで:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">old_name <span class="o">=</span> <span class="s">&#39;Species&#39;</span>
+new_name <span class="o">=</span> <span class="kp">toupper</span><span class="p">(</span>old_name<span class="p">)</span>
+iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>rename<span class="p">(</span><span class="o">!!</span>new_name <span class="o">:=</span> <span class="o">!!</span>old_name<span class="p">)</span> <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+  Sepal.Length Sepal.Width Petal.Length Petal.Width SPECIES
+<span class="m">1</span>          <span class="m">5.1</span>         <span class="m">3.5</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  setosa
+<span class="m">2</span>          <span class="m">4.9</span>         <span class="m">3.0</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  setosa</code></pre></div>
+<p>名前付きベクターと
+<a href="https://dplyr.tidyverse.org/articles/programming.html#unquote-splicing">unquote-splicing</a>
+を使えば一括指定できる:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">named_vec <span class="o">=</span> setNames<span class="p">(</span><span class="kp">names</span><span class="p">(</span>iris<span class="p">),</span> <span class="kc">LETTERS</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">5</span><span class="p">])</span>
+iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>rename<span class="p">(</span><span class="o">!!!</span>named_vec<span class="p">)</span> <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">(</span><span class="m">2L</span><span class="p">)</span>
+    A   B   C   D      E
+<span class="m">1</span> <span class="m">5.1</span> <span class="m">3.5</span> <span class="m">1.4</span> <span class="m">0.2</span> setosa
+<span class="m">2</span> <span class="m">4.9</span> <span class="m">3.0</span> <span class="m">1.4</span> <span class="m">0.2</span> setosa</code></pre></div></dd>
+<dd><p>リネーム関数を渡せる亜種:<br>
+<code>rename_all(.tbl, .funs = list(), ...)</code><br>
+<code>rename_at(.tbl, .vars, .funs = list(), ...)</code><br>
+<code>rename_if(.tbl, .predicate, .funs = list(), ...)</code><br></p></dd>
 <dt><code>dplyr::pull(.data, var=-1)</code></dt>
 <dd><p>指定した1列をvector(またはlist)としてdata.frameから抜き出す。</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">()</span> <span class="o">%&gt;%</span> dplyr<span class="o">::</span>pull<span class="p">(</span>Species<span class="p">)</span>
@@ -235,6 +262,10 @@ e.g., <code>filter(gene != 'TP53')</code></p>
 
 </div>
 </dd>
+<dd><p>複数列で評価する亜種:<br>
+<code>filter_all(.tbl, .vars_predicate)</code><br>
+<code>filter_if(.tbl, .predicate, .vars_predicate)</code><br>
+<code>filter_at(.tbl, .vars, .vars_predicate)</code><br></p></dd>
 <dt><code>dplyr::distinct(.data, ..., .keep_all=FALSE)</code></dt>
 <dd><p>指定した列に関してユニークな行のみ返す。
 <code>base::unique.data.frame()</code> よりも高速で、
@@ -286,32 +317,18 @@ iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>mutate<span cla
   Sepal.Length Sepal.Width Petal.Length Petal.Width Species new_column
 <span class="m">1</span>          <span class="m">5.1</span>         <span class="m">3.5</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  setosa   <span class="m">1.629241</span>
 <span class="m">2</span>          <span class="m">4.9</span>         <span class="m">3.0</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  setosa   <span class="m">1.589235</span></code></pre></div></dd>
+<dd><p>複数列を変更する亜種:<br>
+<code>mutate_all(.tbl, .funs, ...)</code><br>
+<code>mutate_at(.tbl, .vars, .funs, ..., .cols = NULL)</code><br>
+<code>mutate_each(.tbl, .funs, ...)</code><br>
+<code>mutate_if(.tbl, .predicate, .funs, ...)</code><br></p></dd>
 <dt><code>dplyr::transmute(.data, ...)</code></dt>
 <dd><p>指定した列以外を保持しない版 <code>mutate()</code> 。
 言い換えると、列の中身の変更もできる版 <code>select()</code> 。</p></dd>
-<dt><code>dplyr::rename(.data, ...)</code></dt>
-<dd><p>列の改名。
-<code>mutate()</code>と同じようなイメージで <code>new=old</code> と指定。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>rename<span class="p">(</span>sp<span class="o">=</span>Species<span class="p">)</span> <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
-  Sepal.Length Sepal.Width Petal.Length Petal.Width     sp
-<span class="m">1</span>          <span class="m">5.1</span>         <span class="m">3.5</span>          <span class="m">1.4</span>         <span class="m">0.2</span> setosa
-<span class="m">2</span>          <span class="m">4.9</span>         <span class="m">3.0</span>          <span class="m">1.4</span>         <span class="m">0.2</span> setosa</code></pre></div>
-<p>変数に入った文字列を使う場合も<code>mutate()</code>と同様にunquotingで:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">old_name <span class="o">=</span> <span class="s">&#39;Species&#39;</span>
-new_name <span class="o">=</span> <span class="kp">toupper</span><span class="p">(</span>old_name<span class="p">)</span>
-iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>rename<span class="p">(</span><span class="o">!!</span>new_name <span class="o">:=</span> <span class="o">!!</span>old_name<span class="p">)</span> <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
-  Sepal.Length Sepal.Width Petal.Length Petal.Width SPECIES
-<span class="m">1</span>          <span class="m">5.1</span>         <span class="m">3.5</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  setosa
-<span class="m">2</span>          <span class="m">4.9</span>         <span class="m">3.0</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  setosa</code></pre></div>
-<p>名前付きベクターと
-<a href="https://dplyr.tidyverse.org/articles/programming.html#unquote-splicing">unquote-splicing</a>
-を使えば一括指定できる:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">old_names <span class="o">=</span> <span class="kp">names</span><span class="p">(</span>iris<span class="p">)</span>
-<span class="kp">names</span><span class="p">(</span>old_names<span class="p">)</span> <span class="o">=</span> <span class="kp">toupper</span><span class="p">(</span>old_names<span class="p">)</span>
-iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>rename<span class="p">(</span><span class="o">!!!</span>old_names<span class="p">)</span> <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
-  SEPAL.LENGTH SEPAL.WIDTH PETAL.LENGTH PETAL.WIDTH SPECIES
-<span class="m">1</span>          <span class="m">5.1</span>         <span class="m">3.5</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  setosa
-<span class="m">2</span>          <span class="m">4.9</span>         <span class="m">3.0</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  setosa</code></pre></div></dd>
+<dd><p>複数列を変更する亜種:<br>
+<code>transmute_all(.tbl, .funs, ...)</code><br>
+<code>transmute_at(.tbl, .vars, .funs, ..., .cols = NULL)</code><br>
+<code>transmute_if(.tbl, .predicate, .funs, ...)</code><br></p></dd>
 </dl>
 
 <h2 id="data-frameの要約-集計-整列">data.frameの要約・集計・整列</h2>
@@ -342,8 +359,10 @@ iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>rename<span cla
 <dt><code>dplyr::tally(x, wt, sort=FALSE)</code></dt>
 <dd><p><code>summarise(x, n=n())</code> のショートカット。
 <code>wt</code> にカラムを指定して重み付けすることもできる。</p></dd>
+<dd><p><code>dplyr::add_tally()</code> は元の形を維持したままカウント列を追加。</p></dd>
 <dt><code>dplyr::count(x, ..., wt=NULL, sort=FALSE)</code></dt>
 <dd><p><code>group_by(...) %&gt;% tally()</code> のショートカット。</p></dd>
+<dd><p><code>dplyr::add_count()</code> は元の形を維持したままカウント列を追加。</p></dd>
 <dt><code>dplyr::arrange(.data, column1, column2, ...)</code></dt>
 <dd><p>指定した列の昇順でdata.frameの行を並べ替える。
 <code>arrange(desc(column))</code> で降順になる。
@@ -386,7 +405,8 @@ iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>rename<span cla
 <dl>
 <dt><code>dplyr::if_else(condition, true, false, missing=NULL)</code></dt>
 <dd>標準の<code>ifelse()</code>よりも型に厳しく、高速らしい。
-NAのときにどうするかを指定できるのも大変良い。</dd>
+NAのときにどうするかを指定できるのも大変良い。
+ネストせずにスッキリ書ける <code>dplyr::case_when()</code> も便利。</dd>
 <dt><code>dplyr::coalesce(x, ...)</code></dt>
 <dd>最初のvectorでNAだったとこは次のvectorのやつを採用、
 という<code>ifelse(!is.na(x), x, y)</code>的な処理をする。
@@ -404,6 +424,8 @@ NAのときにどうするかを指定できるのも大変良い。</dd>
 <dd>数値ベクトル <code>x</code> を順位によって <code>n</code> 個のクラスに均等分け</dd>
 <dt><code>dplyr::n_distinct(x)</code></dt>
 <dd>高速で簡潔な <code>length(unique(x))</code></dd>
+<dt><code>dplyr::n_groups(x)</code></dt>
+<dd>グループ数。</dd>
 <dt><code>dplyr::last(x, order_by=NULL, default=default_missing(x))</code></dt>
 <dd>最後の要素にアクセス。
 <code>x[length(x)]</code> や <code>tail(x, 1)</code> よりも楽チンだが、
@@ -423,38 +445,45 @@ NAのときにどうするかを指定できるのも大変良い。</dd>
 
 <h2 id="グループ化">グループ化</h2>
 
-<p><code>dplyr</code> だけでグループ化してグループ毎処理するアプローチは今後廃れる見込み。
-<a href="/rstats/tidyr.html"><code>tidyr</code></a> でネストして、
+<p><a href="/rstats/tidyr.html"><code>tidyr</code></a> でネストして、
 <a href="/rstats/purrr.html"><code>purrr</code></a> でその list of data.frames に処理を施し、
 <a href="/rstats/dplyr.html"><code>dplyr</code></a> でその変更を元の data.frame に適用する、
 というのがtidyverse流のモダンなやり方らしい。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">## OLD</span>
-iris <span class="o">%&gt;%</span>
-  dplyr<span class="o">::</span>group_by<span class="p">(</span>Species<span class="p">)</span> <span class="o">%&gt;%</span>
-  dplyr<span class="o">::</span>do<span class="p">(</span><span class="kp">head</span><span class="p">(</span><span class="m">.</span><span class="p">))</span>
-
-<span class="c1">## NEW</span>
-iris <span class="o">%&gt;%</span>
-  tidyr<span class="o">::</span>nest<span class="p">(</span><span class="o">-</span>Species<span class="p">)</span> <span class="o">%&gt;%</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span>
+  dplyr<span class="o">::</span>group_nest<span class="p">(</span>Species<span class="p">)</span> <span class="o">%&gt;%</span>
   dplyr<span class="o">::</span>mutate<span class="p">(</span>data<span class="o">=</span> purrr<span class="o">::</span>map<span class="p">(</span>data<span class="p">,</span> <span class="kp">head</span><span class="p">))</span> <span class="o">%&gt;%</span>
   tidyr<span class="o">::</span>unnest<span class="p">()</span></code></pre></div>
 <dl>
 <dt><code>dplyr::group_by(.data, ..., add=FALSE)</code></dt>
 <dd>グループごとに区切って次の処理に渡す。
 e.g. <code>summarise()</code>, <code>tally()</code>, <code>do()</code> など</dd>
+<dt><code>dplyr::group_nest(.tbl, ..., .key = &quot;data&quot;, keep = FALSE)</code></dt>
+<dd>入れ子 data.frame を作る。
+<code>group_by(...) %&gt;% tidyr::nest()</code> のショートカット。</dd>
+<dt><code>dplyr::group_split(.tbl, ..., keep = FALSE)</code></dt>
+<dd>list of data.frames に分割する。</dd>
+<dt><code>dplyr::group_data(.data)</code></dt>
+<dd>1グループにつき1行のtibbleにまとめる。
+左側にはグループの鍵となる列 <code>dplyr::group_keys(.data)</code> 、
+右端には行番号のlist <code>dplyr::group_rows(.data)</code> という形。</dd>
+<dt><code>dplyr::group_keys(.tbl, ...)</code></dt>
+<dd>グループの鍵になってる列だけ</dd>
 <dt><code>dplyr::group_indices(.data, ...)</code></dt>
 <dd><code>grouped_df</code> ではなくグループIDとして1からの整数を返す版 <code>group_by()</code></dd>
 <dt><code>dplyr::rowwise(.data)</code></dt>
 <dd>行ごとに区切って次の処理に渡す。</dd>
 <dt><code>dplyr::do(.data, ...)</code></dt>
-<dd>グループごとに処理する。
+<dd><p><strong>廃止予定？</strong> グループごとに処理する。
 <code>{}</code> 内に長い処理を書いてもいいし、関数に渡してもよい。
 グループごとに切りだされた部分は <code>.</code> で参照できる。
 出力がdata.frameじゃないと
 <code>Error: Results are not data frames at positions: 1</code>
 のように怒られるが、
 <code>do(dummy=func(.))</code> のように名前付きにすると
-data.frameに入らないような型でも大丈夫になる。</dd>
+data.frameに入らないような型でも大丈夫になる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span>
+  dplyr<span class="o">::</span>group_by<span class="p">(</span>Species<span class="p">)</span> <span class="o">%&gt;%</span>
+  dplyr<span class="o">::</span>do<span class="p">(</span><span class="kp">head</span><span class="p">(</span><span class="m">.</span><span class="p">))</span></code></pre></div></dd>
 </dl>
 
 <h2 id="関連書籍">関連書籍</h2>
