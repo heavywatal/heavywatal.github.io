@@ -98,7 +98,7 @@ dplyr::summarise_all(
     iris %>% dplyr::select(matches('^Petal\\.Width$|^Species$'))
     ```
 
-    文字列変数で指定しようとすると意図が曖昧になるので、
+:   文字列変数で指定しようとすると意図が曖昧になるので、
     [unquoting](https://dplyr.tidyverse.org/articles/programming.html#unquoting)
     やpronounで明確に:
     ```r
@@ -122,6 +122,43 @@ dplyr::summarise_all(
     詳しくは[宇宙本](https://amzn.to/2u0hmTs)第3章のコラム
     「selectのセマンティクスとmutateのセマンティクス、tidyeval」を参照。
 
+:   列の値によって選べる亜種 `dplyr::select_if(.tbl, .predicate, ...)` もある。
+
+
+`dplyr::rename(.data, ...)`
+:   列の改名。
+    `mutate()`と同じようなイメージで `new=old` と指定。
+    ```r
+    iris %>% dplyr::rename(sp=Species) %>% head(2)
+      Sepal.Length Sepal.Width Petal.Length Petal.Width     sp
+    1          5.1         3.5          1.4         0.2 setosa
+    2          4.9         3.0          1.4         0.2 setosa
+    ```
+    変数に入った文字列を使う場合も`mutate()`と同様にunquotingで:
+    ```r
+    old_name = 'Species'
+    new_name = toupper(old_name)
+    iris %>% dplyr::rename(!!new_name := !!old_name) %>% head(2)
+      Sepal.Length Sepal.Width Petal.Length Petal.Width SPECIES
+    1          5.1         3.5          1.4         0.2  setosa
+    2          4.9         3.0          1.4         0.2  setosa
+    ```
+    名前付きベクターと
+    [unquote-splicing](https://dplyr.tidyverse.org/articles/programming.html#unquote-splicing)
+    を使えば一括指定できる:
+    ```r
+    named_vec = setNames(names(iris), LETTERS[1:5])
+    iris %>% dplyr::rename(!!!named_vec) %>% head(2L)
+        A   B   C   D      E
+    1 5.1 3.5 1.4 0.2 setosa
+    2 4.9 3.0 1.4 0.2 setosa
+    ```
+
+:   リネーム関数を渡せる亜種:<br>
+    `rename_all(.tbl, .funs = list(), ...)`<br>
+    `rename_at(.tbl, .vars, .funs = list(), ...)`<br>
+    `rename_if(.tbl, .predicate, .funs = list(), ...)`<br>
+
 `dplyr::pull(.data, var=-1)`
 :   指定した1列をvector(またはlist)としてdata.frameから抜き出す。
 
@@ -135,6 +172,7 @@ dplyr::summarise_all(
     iris %>% head() %>% {.$Species}
     {iris %>% head()}$Species
     ```
+
 
 ### 行
 
@@ -154,6 +192,11 @@ dplyr::summarise_all(
 特に不等号を使うときやや直感に反するので要注意。
 e.g., `filter(gene != 'TP53')`
 {{%/div%}}
+
+:   複数列で評価する亜種:<br>
+    `filter_all(.tbl, .vars_predicate)`<br>
+    `filter_if(.tbl, .predicate, .vars_predicate)`<br>
+    `filter_at(.tbl, .vars, .vars_predicate)`<br>
 
 
 `dplyr::distinct(.data, ..., .keep_all=FALSE)`
@@ -219,40 +262,19 @@ e.g., `filter(gene != 'TP53')`
     1          5.1         3.5          1.4         0.2  setosa   1.629241
     2          4.9         3.0          1.4         0.2  setosa   1.589235
     ```
+:   複数列を変更する亜種:<br>
+    `mutate_all(.tbl, .funs, ...)`<br>
+    `mutate_at(.tbl, .vars, .funs, ..., .cols = NULL)`<br>
+    `mutate_each(.tbl, .funs, ...)`<br>
+    `mutate_if(.tbl, .predicate, .funs, ...)`<br>
 
 `dplyr::transmute(.data, ...)`
 :   指定した列以外を保持しない版 `mutate()` 。
     言い換えると、列の中身の変更もできる版 `select()` 。
-
-`dplyr::rename(.data, ...)`
-:   列の改名。
-    `mutate()`と同じようなイメージで `new=old` と指定。
-    ```r
-    iris %>% dplyr::rename(sp=Species) %>% head(2)
-      Sepal.Length Sepal.Width Petal.Length Petal.Width     sp
-    1          5.1         3.5          1.4         0.2 setosa
-    2          4.9         3.0          1.4         0.2 setosa
-    ```
-    変数に入った文字列を使う場合も`mutate()`と同様にunquotingで:
-    ```r
-    old_name = 'Species'
-    new_name = toupper(old_name)
-    iris %>% dplyr::rename(!!new_name := !!old_name) %>% head(2)
-      Sepal.Length Sepal.Width Petal.Length Petal.Width SPECIES
-    1          5.1         3.5          1.4         0.2  setosa
-    2          4.9         3.0          1.4         0.2  setosa
-    ```
-    名前付きベクターと
-    [unquote-splicing](https://dplyr.tidyverse.org/articles/programming.html#unquote-splicing)
-    を使えば一括指定できる:
-    ```r
-    old_names = names(iris)
-    names(old_names) = toupper(old_names)
-    iris %>% dplyr::rename(!!!old_names) %>% head(2)
-      SEPAL.LENGTH SEPAL.WIDTH PETAL.LENGTH PETAL.WIDTH SPECIES
-    1          5.1         3.5          1.4         0.2  setosa
-    2          4.9         3.0          1.4         0.2  setosa
-    ```
+:   複数列を変更する亜種:<br>
+    `transmute_all(.tbl, .funs, ...)`<br>
+    `transmute_at(.tbl, .vars, .funs, ..., .cols = NULL)`<br>
+    `transmute_if(.tbl, .predicate, .funs, ...)`<br>
 
 
 ## data.frameの要約・集計・整列
@@ -298,9 +320,11 @@ e.g., `filter(gene != 'TP53')`
 `dplyr::tally(x, wt, sort=FALSE)`
 :   `summarise(x, n=n())` のショートカット。
     `wt` にカラムを指定して重み付けすることもできる。
+:   `dplyr::add_tally()` は元の形を維持したままカウント列を追加。
 
 `dplyr::count(x, ..., wt=NULL, sort=FALSE)`
 :   `group_by(...) %>% tally()` のショートカット。
+:   `dplyr::add_count()` は元の形を維持したままカウント列を追加。
 
 `dplyr::arrange(.data, column1, column2, ...)`
 :   指定した列の昇順でdata.frameの行を並べ替える。
@@ -347,6 +371,7 @@ e.g., `filter(gene != 'TP53')`
 `dplyr::if_else(condition, true, false, missing=NULL)`
 :   標準の`ifelse()`よりも型に厳しく、高速らしい。
     NAのときにどうするかを指定できるのも大変良い。
+    ネストせずにスッキリ書ける `dplyr::case_when()` も便利。
 
 `dplyr::coalesce(x, ...)`
 :   最初のvectorでNAだったとこは次のvectorのやつを採用、
@@ -370,6 +395,9 @@ e.g., `filter(gene != 'TP53')`
 
 `dplyr::n_distinct(x)`
 :   高速で簡潔な `length(unique(x))`
+
+`dplyr::n_groups(x)`
+:   グループ数。
 
 `dplyr::last(x, order_by=NULL, default=default_missing(x))`
 :   最後の要素にアクセス。
@@ -397,21 +425,14 @@ e.g., `filter(gene != 'TP53')`
 
 ## グループ化
 
-`dplyr` だけでグループ化してグループ毎処理するアプローチは今後廃れる見込み。
 [`tidyr`]({{< relref "tidyr.md" >}}) でネストして、
 [`purrr`]({{< relref "purrr.md" >}}) でその list of data.frames に処理を施し、
 [`dplyr`]({{< relref "dplyr.md" >}}) でその変更を元の data.frame に適用する、
 というのがtidyverse流のモダンなやり方らしい。
 
 ```r
-## OLD
 iris %>%
-  dplyr::group_by(Species) %>%
-  dplyr::do(head(.))
-
-## NEW
-iris %>%
-  tidyr::nest(-Species) %>%
+  dplyr::group_nest(Species) %>%
   dplyr::mutate(data= purrr::map(data, head)) %>%
   tidyr::unnest()
 ```
@@ -420,6 +441,21 @@ iris %>%
 :   グループごとに区切って次の処理に渡す。
     e.g. `summarise()`, `tally()`, `do()` など
 
+`dplyr::group_nest(.tbl, ..., .key = "data", keep = FALSE)`
+:   入れ子 data.frame を作る。
+    `group_by(...) %>% tidyr::nest()` のショートカット。
+
+`dplyr::group_split(.tbl, ..., keep = FALSE)`
+:   list of data.frames に分割する。
+
+`dplyr::group_data(.data)`
+:   1グループにつき1行のtibbleにまとめる。
+    左側にはグループの鍵となる列 `dplyr::group_keys(.data)` 、
+    右端には行番号のlist `dplyr::group_rows(.data)` という形。
+
+`dplyr::group_keys(.tbl, ...)`
+:   グループの鍵になってる列だけ
+
 `dplyr::group_indices(.data, ...)`
 :   `grouped_df` ではなくグループIDとして1からの整数を返す版 `group_by()`
 
@@ -427,7 +463,7 @@ iris %>%
 :   行ごとに区切って次の処理に渡す。
 
 `dplyr::do(.data, ...)`
-:   グループごとに処理する。
+:   **廃止予定？** グループごとに処理する。
     `{}` 内に長い処理を書いてもいいし、関数に渡してもよい。
     グループごとに切りだされた部分は `.` で参照できる。
     出力がdata.frameじゃないと
@@ -435,6 +471,12 @@ iris %>%
     のように怒られるが、
     `do(dummy=func(.))` のように名前付きにすると
     data.frameに入らないような型でも大丈夫になる。
+
+    ```r
+    iris %>%
+      dplyr::group_by(Species) %>%
+      dplyr::do(head(.))
+    ```
 
 
 ## 関連書籍
