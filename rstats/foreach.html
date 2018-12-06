@@ -104,7 +104,7 @@ foreach/parallel — 並行処理 in R
 
 <p>カウンター無しでループを書けるようにするパッケージ。
 普段は <a href="/rstats/purrr.html"><code>purrr::map()</code></a> とかのほうが使いやすいけど、
-<a href="#parallel">後述の並列化</a> の場面ではお世話になる。</p>
+<a href="#parallel">後述の並列化</a>の場面ではお世話になる。</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">foreach <span class="p">(</span>mu <span class="o">=</span> <span class="kp">seq_len</span><span class="p">(</span><span class="m">8</span><span class="p">),</span> <span class="m">.</span>combine<span class="o">=</span><span class="kt">c</span><span class="p">)</span> <span class="o">%do%</span> <span class="p">{</span>
     rnorm<span class="p">(</span><span class="m">1</span><span class="p">,</span> mu<span class="p">)</span>
 <span class="p">}</span></code></pre></div>
@@ -146,15 +146,20 @@ foreach/parallel — 並行処理 in R
 cores <span class="o">=</span> detectCores<span class="p">(</span><span class="kt">logical</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
 cluster <span class="o">=</span> makeCluster<span class="p">(</span>cores<span class="p">,</span> <span class="s">&#39;FORK&#39;</span><span class="p">)</span>
 registerDoParallel<span class="p">(</span>cluster<span class="p">)</span>
-foreach <span class="p">(</span>mu <span class="o">=</span> <span class="kp">seq_len</span><span class="p">(</span><span class="m">8</span><span class="p">),</span> <span class="m">.</span>combine<span class="o">=</span><span class="kt">c</span><span class="p">)</span> <span class="o">%dopar%</span> <span class="p">{</span>
-    rnorm<span class="p">(</span><span class="m">1</span><span class="p">,</span> mu<span class="p">)</span>
+foreach <span class="p">(</span>mu <span class="o">=</span> <span class="kp">seq_len</span><span class="p">(</span><span class="m">8L</span><span class="p">))</span> <span class="o">%dopar%</span> <span class="p">{</span>
+    rnorm<span class="p">(</span><span class="m">3L</span><span class="p">,</span> mu<span class="p">)</span>
 <span class="p">}</span>
 stopCluster<span class="p">(</span>cluster<span class="p">)</span></code></pre></div>
-<p>クラスタの生成や破棄などをぜーんぶ自動でやってもらいたい場合は
-<a href="https://github.com/hoxo-m/pforeach"><code>hoxo-m/pforeach</code></a>。</p>
-
-<p><a href="/rstats/purrr.html"><code>purrr::map()</code></a>的な使い勝手の
-<a href="https://github.com/heavywatal/rwtl/blob/master/R/parallel.R"><code>map_par()</code> を書いてみた</a>。</p>
+<p><code>mclapply()</code> は <code>lapply()</code> の並列化バージョンで、
+クラスタの生成や破棄などもぜーんぶ自動でやってくれるので便利
+(ただし <code>type=&quot;FORK&quot;</code> 固定なのでWindows不可):</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">mclapply<span class="p">(</span>X<span class="p">,</span> FUN<span class="p">,</span> <span class="kc">...</span><span class="p">,</span>
+         mc.preschedule <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> mc.set.seed <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
+         mc.silent <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span> mc.cores <span class="o">=</span> <span class="kp">getOption</span><span class="p">(</span><span class="s">&#34;mc.cores&#34;</span><span class="p">,</span> <span class="m">2L</span><span class="p">),</span>
+         mc.cleanup <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> mc.allow.recursive <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> affinity.list <span class="o">=</span> <span class="kc">NULL</span><span class="p">)</span></code></pre></div>
+<p><a href="/rstats/purrr.html"><code>purrr::map()</code></a>のように無名関数を渡せる
+<a href="https://github.com/heavywatal/rwtl/blob/master/R/parallel.R">ラッパー関数 <code>mcmap()</code> を書いてみた</a>。
+<code>map_par()</code> のほうはFORK以外も指定できるforeachラッパー。</p>
 
 <h3 id="makecluster"><code>makeCluster()</code></h3>
 
