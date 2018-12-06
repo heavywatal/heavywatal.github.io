@@ -11,7 +11,7 @@ tags = ["r", "concurrent"]
 
 カウンター無しでループを書けるようにするパッケージ。
 普段は [`purrr::map()`]({{< relref "purrr.md" >}}) とかのほうが使いやすいけど、
-[後述の並列化](#parallel) の場面ではお世話になる。
+[後述の並列化](#parallel)の場面ではお世話になる。
 
 ```r
 foreach (mu = seq_len(8), .combine=c) %do% {
@@ -61,17 +61,27 @@ library(doParallel)
 cores = detectCores(logical=FALSE)
 cluster = makeCluster(cores, 'FORK')
 registerDoParallel(cluster)
-foreach (mu = seq_len(8), .combine=c) %dopar% {
-    rnorm(1, mu)
+foreach (mu = seq_len(8L)) %dopar% {
+    rnorm(3L, mu)
 }
 stopCluster(cluster)
 ```
 
-クラスタの生成や破棄などをぜーんぶ自動でやってもらいたい場合は
-[`hoxo-m/pforeach`](https://github.com/hoxo-m/pforeach)。
+`mclapply()` は `lapply()` の並列化バージョンで、
+クラスタの生成や破棄などもぜーんぶ自動でやってくれるので便利
+(ただし `type="FORK"` 固定なのでWindows不可):
 
-[`purrr::map()`]({{< relref "purrr.md" >}})的な使い勝手の
-[`map_par()` を書いてみた](https://github.com/heavywatal/rwtl/blob/master/R/parallel.R)。
+```r
+mclapply(X, FUN, ...,
+         mc.preschedule = TRUE, mc.set.seed = TRUE,
+         mc.silent = FALSE, mc.cores = getOption("mc.cores", 2L),
+         mc.cleanup = TRUE, mc.allow.recursive = TRUE, affinity.list = NULL)
+```
+
+[`purrr::map()`]({{< relref "purrr.md" >}})のように無名関数を渡せる
+[ラッパー関数 `mcmap()` を書いてみた](https://github.com/heavywatal/rwtl/blob/master/R/parallel.R)。
+`map_par()` のほうはFORK以外も指定できるforeachラッパー。
+
 
 ### `makeCluster()`
 
