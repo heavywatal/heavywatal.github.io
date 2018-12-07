@@ -15,7 +15,7 @@ https://bitbucket.org/gutenkunstlab/dadi/wiki/Installation
     [pip と virtualenv]({{< relref "pip.md" >}}) を入れる:
 
         % /usr/bin/python -m ensurepip -v --user
-        % ~/Library/Python/2.7/bin/pip install -U setuptools pip virtualenv
+        % ~/Library/Python/2.7/bin/pip install --user -U setuptools pip virtualenv
 
 1.  dadi専用のvirtualenvを作って、その中に依存パッケージをインストール:
 
