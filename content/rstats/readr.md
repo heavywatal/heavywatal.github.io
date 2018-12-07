@@ -22,6 +22,7 @@ tags = ["r", "tidyverse"]
 -   列の名前や型を指定しやすい
 -   指定した列だけ読み込むこともできる
 -   生data.frameではなく安全な [tibble](#tibble) として返してくれる
+-   空白行を勝手にスキップする (1.2から)
 
 [tidyverse](https://tidyverse.tidyverse.org/) に含まれているので、
 `install.packages('tidyverse')` で一括インストール、
@@ -123,8 +124,10 @@ write_delim(x, path,
 
 https://cran.r-project.org/web/packages/readr/vignettes/column-types.html
 
-基本的には何も指定しなくても数値や文字列を認識していい感じに設定してくれる。
+基本的には何も指定しなくても数値などを認識していい感じに設定してくれる。
 標準の `read.csv()` などと違って暗黙のfactor変換はしない。
+整数と実数は区別せずnumeric型で読む(1.2から)。
+
 明示的に型を指定したい場合は `col_types` 引数に `cols()` 関数の値を渡す。
 文字列で `'ccdi_'` のように省略することも可能。
 
