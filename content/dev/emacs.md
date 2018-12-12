@@ -28,55 +28,58 @@ tags = ["editor"]
 
 <kbd>M-</kbd> は <kbd>esc</kbd> または <kbd>C-[</kbd>
 
-    C-g        keyboard-quit    とにかくキャンセル
-    C-z        suspend-emacs    とりあえずemacsを抜ける
-    C-x u      advertised-undo  元に戻す
-    C-_        advertised-undo  元に戻す
-    C-/        advertised-undo  元に戻す
-
-    M-h        help    ヘルプ
-    M-x                ミニバッファをコマンド受付状態にする
-    M-!                ミニバッファをシェルコマンド受付状態にする
-
-    C-x C-f    find-file                 開く
-    C-x C-s    save-file                 上書き保存
-    C-x C-w    write-file                別名で保存
-    C-x C-c    save-buffers-kill-emacs   終了
-    C-x d      dired                     directory edit に突入 (下記)
-
-    C-s        isearch-forward     下に検索
-    C-r        isearch-backward    上に検索
-    M-%                            置換
-
-    C-Space    set-mark-command    開始位置をマーク
-    C-w        kill-region         マークから現在地までカット
-    M-w        copy-region-as-kill マークから現在地までコピー
-    C-y        yank                貼り付け
-
-    C-x r k    kill-rectangle    矩形にカット
-    C-x r y    yank-rectangle    矩形にペースト
-    C-x r o    open-rectangle    矩形にスペース
-
-    C-q TAB                      タブコード \t 入力
-    C-x TAB    indent-rigidly    選択された領域を左右キーで手動インデント
-
-    C-x k      kill-buffer       バッファを消す = ファイルを閉じる
-    C-x b      switch-to-buffer  バッファを切り替える
-    C-x C-b    list-buffers      バッファリストを開く(下記)
-
-    C-x 0      このwindowを閉じて分割解除
-    C-x 1      分割解除してこのwindowを最大化
-    C-x 2      上下分割
-    C-x 3      左右分割
-    C-x o      other (next) windowにフォーカスを移す
-
-    C-x 5 0    delete-frame
-    C-x 5 1    delete-other-frame
-    C-x 5 2    make-frame-command
-    C-x 5 o    other-frame
-    C-x 5 b    switch-tobuffer-other-frame
-    C-x 5 f    find-file-other-frame
-    C-x 5 d    dired-other-frame
+key              | command           | action
+---------------- | ----------------- | ------------------
+<kbd>C-g</kbd>   | `keyboard-quit`   | とにかくキャンセル
+<kbd>C-z</kbd>   | `suspend-emacs`   | とりあえずemacsを抜ける
+<kbd>C-x u</kbd> | `advertised-undo` | 元に戻す
+<kbd>C-_</kbd>   | `advertised-undo` | 元に戻す
+<kbd>C-/</kbd>   | `advertised-undo` | 元に戻す
+ | |
+<kbd>M-h</kbd>   | `help` | ヘルプ
+<kbd>M-x</kbd>   |        | ミニバッファをコマンド受付状態にする
+<kbd>M-!</kbd>   |        | ミニバッファをシェルコマンド受付状態にする
+ | |
+<kbd>C-x C-f     | `find-file`               | 開く
+<kbd>C-x C-s     | `save-file`               | 上書き保存
+<kbd>C-x C-w     | `write-file`              | 別名で保存
+<kbd>C-x C-c     | `save-buffers-kill-emacs` | 終了
+<kbd>C-x d       | `dired`                   | directory edit に突入 (下記)
+ | |
+<kbd>C-s</kbd>   | `isearch-forward`     | 下に検索
+<kbd>C-r</kbd>   | `isearch-backward`    | 上に検索
+<kbd>M-%</kbd>   |                       | 置換
+ | |
+<kbd>C-@</kbd>   | `set-mark-command`    | 開始位置をマーク
+<kbd>C-SPC</kbd> | `set-mark-command`    | (IME切り替え)
+<kbd>C-w</kbd>   | `kill-region`         | マークから現在地までカット
+<kbd>M-w</kbd>   | `copy-region-as-kill` | マークから現在地までコピー
+<kbd>C-y</kbd>   | `yank`                | 貼り付け
+ | |
+<kbd>C-x r k</kbd> | `kill-rectangle` | 矩形にカット
+<kbd>C-x r y</kbd> | `yank-rectangle` | 矩形にペースト
+<kbd>C-x r o</kbd> | `open-rectangle` | 矩形にスペース
+ | |
+<kbd>C-q TAB</kbd> |                  | タブコード \t 入力
+<kbd>C-x TAB</kbd> | `indent-rigidly` | 選択された領域を左右キーで手動インデント
+ | |
+<kbd>C-x k</kbd>   | `kill-buffer`      | バッファを消す = ファイルを閉じる
+<kbd>C-x b</kbd>   | `switch-to-buffer` | バッファを切り替える
+<kbd>C-x C-b</kbd> | `list-buffers`     | バッファリストを開く(下記)
+ | |
+<kbd>C-x 0</kbd>   | | このwindowを閉じて分割解除
+<kbd>C-x 1</kbd>   | | 分割解除してこのwindowを最大化
+<kbd>C-x 2</kbd>   | | 上下分割
+<kbd>C-x 3</kbd>   | | 左右分割
+<kbd>C-x o</kbd>   | | other (next) windowにフォーカスを移す
+ | |
+<kbd>C-x 5 0</kbd> | | delete-frame
+<kbd>C-x 5 1</kbd> | | delete-other-frame
+<kbd>C-x 5 2</kbd> | | make-frame-command
+<kbd>C-x 5 o</kbd> | | other-frame
+<kbd>C-x 5 b</kbd> | | switch-tobuffer-other-frame
+<kbd>C-x 5 f</kbd> | | find-file-other-frame
+<kbd>C-x 5 d</kbd> | | dired-other-frame
 
 ### `list-buffers` <kbd>C-x C-b</kbd>
 
