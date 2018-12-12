@@ -439,7 +439,21 @@ iris %>%
 
 `dplyr::group_by(.data, ..., add=FALSE)`
 :   グループごとに区切って次の処理に渡す。
-    e.g. `summarise()`, `tally()`, `do()` など
+    e.g. `summarise()`, `tally()` など
+
+`dplyr::group_data(.data)`
+:   グループ情報を参照:
+    ```r
+    iris %>% group_by(Species) %>% group_data()
+    #       Species                       .rows
+    #        <fctr>                      <list>
+    # 1:     setosa             1,2,3,4,5,6,...
+    # 2: versicolor       51,52,53,54,55,56,...
+    # 3:  virginica 101,102,103,104,105,106,...
+    ```
+
+    左側のキー列だけ欲しければ `dplyr::group_keys()` 、<br>
+    右端の行番号だけ欲しければ `dplyr::group_rows()` 。
 
 `dplyr::group_nest(.tbl, ..., .key = "data", keep = FALSE)`
 :   入れ子 data.frame を作る。
@@ -448,16 +462,8 @@ iris %>%
 `dplyr::group_split(.tbl, ..., keep = FALSE)`
 :   list of data.frames に分割する。
 
-`dplyr::group_data(.data)`
-:   1グループにつき1行のtibbleにまとめる。
-    左側にはグループの鍵となる列 `dplyr::group_keys(.data)` 、
-    右端には行番号のlist `dplyr::group_rows(.data)` という形。
-
-`dplyr::group_keys(.tbl, ...)`
-:   グループの鍵になってる列だけ
-
 `dplyr::group_indices(.data, ...)`
-:   `grouped_df` ではなくグループIDとして1からの整数を返す版 `group_by()`
+:   `grouped_df` ではなくグループIDとして1からの整数列を返す版 `group_by()`
 
 `dplyr::rowwise(.data)`
 :   行ごとに区切って次の処理に渡す。
