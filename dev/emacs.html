@@ -120,56 +120,317 @@ Emacs
 
 <p><kbd>M-</kbd> は <kbd>esc</kbd> または <kbd>C-[</kbd></p>
 
-<pre><code>C-g        keyboard-quit    とにかくキャンセル
-C-z        suspend-emacs    とりあえずemacsを抜ける
-C-x u      advertised-undo  元に戻す
-C-_        advertised-undo  元に戻す
-C-/        advertised-undo  元に戻す
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>command</th>
+<th>action</th>
+</tr>
+</thead>
 
-M-h        help    ヘルプ
-M-x                ミニバッファをコマンド受付状態にする
-M-!                ミニバッファをシェルコマンド受付状態にする
+<tbody>
+<tr>
+<td><kbd>C-g</kbd></td>
+<td><code>keyboard-quit</code></td>
+<td>とにかくキャンセル</td>
+</tr>
 
-C-x C-f    find-file                 開く
-C-x C-s    save-file                 上書き保存
-C-x C-w    write-file                別名で保存
-C-x C-c    save-buffers-kill-emacs   終了
-C-x d      dired                     directory edit に突入 (下記)
+<tr>
+<td><kbd>C-z</kbd></td>
+<td><code>suspend-emacs</code></td>
+<td>とりあえずemacsを抜ける</td>
+</tr>
 
-C-s        isearch-forward     下に検索
-C-r        isearch-backward    上に検索
-M-%                            置換
+<tr>
+<td><kbd>C-x u</kbd></td>
+<td><code>advertised-undo</code></td>
+<td>元に戻す</td>
+</tr>
 
-C-Space    set-mark-command    開始位置をマーク
-C-w        kill-region         マークから現在地までカット
-M-w        copy-region-as-kill マークから現在地までコピー
-C-y        yank                貼り付け
+<tr>
+<td><kbd>C-_</kbd></td>
+<td><code>advertised-undo</code></td>
+<td>元に戻す</td>
+</tr>
 
-C-x r k    kill-rectangle    矩形にカット
-C-x r y    yank-rectangle    矩形にペースト
-C-x r o    open-rectangle    矩形にスペース
+<tr>
+<td><kbd>C-/</kbd></td>
+<td><code>advertised-undo</code></td>
+<td>元に戻す</td>
+</tr>
 
-C-q TAB                      タブコード \t 入力
-C-x TAB    indent-rigidly    選択された領域を左右キーで手動インデント
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
 
-C-x k      kill-buffer       バッファを消す = ファイルを閉じる
-C-x b      switch-to-buffer  バッファを切り替える
-C-x C-b    list-buffers      バッファリストを開く(下記)
+<tr>
+<td><kbd>M-h</kbd></td>
+<td><code>help</code></td>
+<td>ヘルプ</td>
+</tr>
 
-C-x 0      このwindowを閉じて分割解除
-C-x 1      分割解除してこのwindowを最大化
-C-x 2      上下分割
-C-x 3      左右分割
-C-x o      other (next) windowにフォーカスを移す
+<tr>
+<td><kbd>M-x</kbd></td>
+<td></td>
+<td>ミニバッファをコマンド受付状態にする</td>
+</tr>
 
-C-x 5 0    delete-frame
-C-x 5 1    delete-other-frame
-C-x 5 2    make-frame-command
-C-x 5 o    other-frame
-C-x 5 b    switch-tobuffer-other-frame
-C-x 5 f    find-file-other-frame
-C-x 5 d    dired-other-frame
-</code></pre>
+<tr>
+<td><kbd>M-!</kbd></td>
+<td></td>
+<td>ミニバッファをシェルコマンド受付状態にする</td>
+</tr>
+
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td><kbd>C-x C-f</td>
+<td><code>find-file</code></td>
+<td>開く</td>
+</tr>
+
+<tr>
+<td><kbd>C-x C-s</td>
+<td><code>save-file</code></td>
+<td>上書き保存</td>
+</tr>
+
+<tr>
+<td><kbd>C-x C-w</td>
+<td><code>write-file</code></td>
+<td>別名で保存</td>
+</tr>
+
+<tr>
+<td><kbd>C-x C-c</td>
+<td><code>save-buffers-kill-emacs</code></td>
+<td>終了</td>
+</tr>
+
+<tr>
+<td><kbd>C-x d</td>
+<td><code>dired</code></td>
+<td>directory edit に突入 (下記)</td>
+</tr>
+
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td><kbd>C-s</kbd></td>
+<td><code>isearch-forward</code></td>
+<td>下に検索</td>
+</tr>
+
+<tr>
+<td><kbd>C-r</kbd></td>
+<td><code>isearch-backward</code></td>
+<td>上に検索</td>
+</tr>
+
+<tr>
+<td><kbd>M-%</kbd></td>
+<td></td>
+<td>置換</td>
+</tr>
+
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td><kbd>C-@</kbd></td>
+<td><code>set-mark-command</code></td>
+<td>開始位置をマーク</td>
+</tr>
+
+<tr>
+<td><kbd>C-SPC</kbd></td>
+<td><code>set-mark-command</code></td>
+<td>(IME切り替え)</td>
+</tr>
+
+<tr>
+<td><kbd>C-w</kbd></td>
+<td><code>kill-region</code></td>
+<td>マークから現在地までカット</td>
+</tr>
+
+<tr>
+<td><kbd>M-w</kbd></td>
+<td><code>copy-region-as-kill</code></td>
+<td>マークから現在地までコピー</td>
+</tr>
+
+<tr>
+<td><kbd>C-y</kbd></td>
+<td><code>yank</code></td>
+<td>貼り付け</td>
+</tr>
+
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td><kbd>C-x r k</kbd></td>
+<td><code>kill-rectangle</code></td>
+<td>矩形にカット</td>
+</tr>
+
+<tr>
+<td><kbd>C-x r y</kbd></td>
+<td><code>yank-rectangle</code></td>
+<td>矩形にペースト</td>
+</tr>
+
+<tr>
+<td><kbd>C-x r o</kbd></td>
+<td><code>open-rectangle</code></td>
+<td>矩形にスペース</td>
+</tr>
+
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td><kbd>C-q TAB</kbd></td>
+<td></td>
+<td>タブコード \t 入力</td>
+</tr>
+
+<tr>
+<td><kbd>C-x TAB</kbd></td>
+<td><code>indent-rigidly</code></td>
+<td>選択された領域を左右キーで手動インデント</td>
+</tr>
+
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td><kbd>C-x k</kbd></td>
+<td><code>kill-buffer</code></td>
+<td>バッファを消す = ファイルを閉じる</td>
+</tr>
+
+<tr>
+<td><kbd>C-x b</kbd></td>
+<td><code>switch-to-buffer</code></td>
+<td>バッファを切り替える</td>
+</tr>
+
+<tr>
+<td><kbd>C-x C-b</kbd></td>
+<td><code>list-buffers</code></td>
+<td>バッファリストを開く(下記)</td>
+</tr>
+
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td><kbd>C-x 0</kbd></td>
+<td></td>
+<td>このwindowを閉じて分割解除</td>
+</tr>
+
+<tr>
+<td><kbd>C-x 1</kbd></td>
+<td></td>
+<td>分割解除してこのwindowを最大化</td>
+</tr>
+
+<tr>
+<td><kbd>C-x 2</kbd></td>
+<td></td>
+<td>上下分割</td>
+</tr>
+
+<tr>
+<td><kbd>C-x 3</kbd></td>
+<td></td>
+<td>左右分割</td>
+</tr>
+
+<tr>
+<td><kbd>C-x o</kbd></td>
+<td></td>
+<td>other (next) windowにフォーカスを移す</td>
+</tr>
+
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td><kbd>C-x 5 0</kbd></td>
+<td></td>
+<td>delete-frame</td>
+</tr>
+
+<tr>
+<td><kbd>C-x 5 1</kbd></td>
+<td></td>
+<td>delete-other-frame</td>
+</tr>
+
+<tr>
+<td><kbd>C-x 5 2</kbd></td>
+<td></td>
+<td>make-frame-command</td>
+</tr>
+
+<tr>
+<td><kbd>C-x 5 o</kbd></td>
+<td></td>
+<td>other-frame</td>
+</tr>
+
+<tr>
+<td><kbd>C-x 5 b</kbd></td>
+<td></td>
+<td>switch-tobuffer-other-frame</td>
+</tr>
+
+<tr>
+<td><kbd>C-x 5 f</kbd></td>
+<td></td>
+<td>find-file-other-frame</td>
+</tr>
+
+<tr>
+<td><kbd>C-x 5 d</kbd></td>
+<td></td>
+<td>dired-other-frame</td>
+</tr>
+</tbody>
+</table>
 
 <h3 id="list-buffers-kbd-c-x-c-b-kbd"><code>list-buffers</code> <kbd>C-x C-b</kbd></h3>
 
