@@ -305,7 +305,10 @@ Rソースコードのコメントから`NAMESPACE`とヘルプ(`man/*.Rd`)を�
 ### 使い方
 
 ```r
-#' A simple function to add 1
+#' Title of the simple function to add 1
+#'
+#' The second paragraph is recognized as the description.
+#' It is not recommended to use @title and @description explicitly.
 #' @param x A numeric vector
 #' @export
 #' @examples
@@ -316,12 +319,10 @@ increment = function(x) {x + 1}
 -   `#' ` から始まる行がroxygenコメントとして扱われる。
 -   タグは `@` で始まる。
     `@` そのものを入力したいときは重ねて `@@` とする。
--   1行目には必ずタイトルを書く。
-    タグ `@title` は省略可能。
-    とりあえずコピペして全部同じタイトルにしようとすると、
-    関数ごとにユニークなタイトルをつけろと怒られる。
--   2段落目は `@description` 扱いされる。
-    省略するとタイトルが流用される。
+-   1行目にタイトル。1行あけて2段落目に説明文を書く。
+    明示的に `@title`, `@description` タグを使うことも可能だが非推奨らしい。
+    タイトルをコピペして全部同じにすると怒られる。
+    2段落目を省略するとタイトルが流用される。
 -   空行だけでは切れ目として扱われないので `NULL` などを置いたりする。
 -   dplyrなどで列名を直に指定すると
     `undefined global variables`
