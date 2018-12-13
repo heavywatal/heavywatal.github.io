@@ -385,7 +385,10 @@ mydemo2    Description of demo 2
 基本的には <code>devtools::document()</code> を使って間接的に利用する。</p>
 
 <h3 id="使い方">使い方</h3>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#&#39; A simple function to add 1</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#&#39; Title of the simple function to add 1</span>
+<span class="c1">#&#39;</span>
+<span class="c1">#&#39; The second paragraph is recognized as the description.</span>
+<span class="c1">#&#39; It is not recommended to use @title and @description explicitly.</span>
 <span class="c1">#&#39; @param x A numeric vector</span>
 <span class="c1">#&#39; @export</span>
 <span class="c1">#&#39; @examples</span>
@@ -395,12 +398,10 @@ increment <span class="o">=</span> <span class="kr">function</span><span class="
 <li><code>#'</code> から始まる行がroxygenコメントとして扱われる。</li>
 <li>タグは <code>@</code> で始まる。
 <code>@</code> そのものを入力したいときは重ねて <code>@@</code> とする。</li>
-<li>1行目には必ずタイトルを書く。
-タグ <code>@title</code> は省略可能。
-とりあえずコピペして全部同じタイトルにしようとすると、
-関数ごとにユニークなタイトルをつけろと怒られる。</li>
-<li>2段落目は <code>@description</code> 扱いされる。
-省略するとタイトルが流用される。</li>
+<li>1行目にタイトル。1行あけて2段落目に説明文を書く。
+明示的に <code>@title</code>, <code>@description</code> タグを使うことも可能だが非推奨らしい。
+タイトルをコピペして全部同じにすると怒られる。
+2段落目を省略するとタイトルが流用される。</li>
 <li>空行だけでは切れ目として扱われないので <code>NULL</code> などを置いたりする。</li>
 <li>dplyrなどで列名を直に指定すると
 <code>undefined global variables</code>
