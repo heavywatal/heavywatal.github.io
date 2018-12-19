@@ -53,52 +53,56 @@ R起動時に読み込まれ、環境変数を設定するファイル。
 Rスクリプトではなく、シェルスクリプトっぽい代入式で書く。
 例 (<https://github.com/heavywatal/dotfiles/blob/master/.R/.Renviron>):
 
-    R_USER=${HOME}/.R
-    R_LIBS_USER=${R_USER}/library
-    R_ENVIRON_USER=${R_USER}/.Renviron
-    R_PROFILE_USER=${R_USER}/.Rprofile
-    R_HISTFILE=${R_USER}/.Rhistory
-    R_HISTSIZE=65535
-    LANG=C
-    LC_CTYPE=en_US.UTF-8
-
-読み込まれる順序はだいたい以下のとおりなので、ホームディレクトリにシムリンクを張っておけば読み込まれる。
-
-1.  `$R_ENVIRON`
-2.  `$R_HOME/etc/Renviron.site`
-3.  `$R_ENVIRON_USER`
-4.  `./.Renviron`
-5.  `~/.Renviron`
-
 ```sh
-% cd
-% ln -s .R/.Renviron
+R_USER=${HOME}/.R
+R_LIBS_USER=${R_USER}/library
+R_ENVIRON_USER=${R_USER}/.Renviron
+R_PROFILE_USER=${R_USER}/.Rprofile
+R_HISTFILE=${R_USER}/.Rhistory
+R_HISTSIZE=65535
+LANG=C
+LC_CTYPE=en_US.UTF-8
 ```
+
+探される・読み込まれる順序はだいたい以下のとおり:
+
+1. `$R_ENVIRON`
+1. `$R_HOME/etc/Renviron.site`
+1. `$R_ENVIRON_USER`
+1. `./.Renviron`
+1. `~/.Renviron`
+
+読み込ませたくないときは `--no-environ` オプション。
+
 
 ## .Rprofile
 
 https://cran.r-project.org/doc/manuals/R-intro.html#Customizing-the-environment
 
-<https://stat.ethz.ch/R-manual/R-patched/library/base/html/options.html>
-
 R起動時に読み込まれるファイル。
 中身はRスクリプトなので、パッケージの読み込みや関数の定義など、Rでできることは何でもできるはず。
 例: <https://github.com/heavywatal/dotfiles/blob/master/.R/.Rprofile>
+
+`.First()` と `.Last()` はそれぞれ起動時と終了時に実行される関数。
+これらが原因で `R CMD` やパッケージ関連の操作が失敗することもあるので、
+普通の対話環境でのみ有効になるよう `if (interactive())` などとしておいたほうが安心。
 
 読み込まれる順序はだいたい以下のとおり。
 `.Renviron` のほうが先に読み込まれるので、
 上記のように `R_PROFILE_USER` を定義しておいて、そこに置いとけば読み込まれる。
 
-1.  `$R_PROFILE`
-2.  `$R_HOME/etc/Rprofile.site`
-3.  `$R_PROFILE_USER`
-4.  `./.Rprofile`
-5.  `~/.Rprofile`
+1. `$R_PROFILE`
+1. `$R_HOME/etc/Rprofile.site`
+1. `$R_PROFILE_USER`
+1. `./.Rprofile`
+1. `~/.Rprofile`
 
-`.First()` と `.Last()` はそれぞれ起動時と終了時に実行される関数。
-これらが原因で `install.packages()` がエラーを引き起こすこともあるので注意。
+読み込ませたくないときは `--no-init-file` オプション。
+
 
 ### `options()`
+
+<https://stat.ethz.ch/R-manual/R-patched/library/base/html/options.html>
 
 `?options` で項目の一覧を見られる。
 
@@ -151,7 +155,8 @@ https://cran.r-project.org/doc/manuals/R-admin.html#Add_002don-packages
 [Homebrew]({{< relref "homebrew.md" >}})で
 `gcc` か `llvm` をインストールし、
 そっちを使ってビルドするように `~/.R/Makevars` で指定する:
-```
+
+```make
 # gcc
 CC=/usr/local/bin/gcc-8
 CXX=/usr/local/bin/g++-8
