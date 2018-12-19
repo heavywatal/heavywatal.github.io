@@ -136,18 +136,15 @@ R.app や Rstudio から使う場合はメニューから環境設定みたい�
 <p>R起動時に読み込まれ、環境変数を設定するファイル。
 Rスクリプトではなく、シェルスクリプトっぽい代入式で書く。
 例 (<a href="https://github.com/heavywatal/dotfiles/blob/master/.R/.Renviron">https://github.com/heavywatal/dotfiles/blob/master/.R/.Renviron</a>):</p>
-
-<pre><code>R_USER=${HOME}/.R
-R_LIBS_USER=${R_USER}/library
-R_ENVIRON_USER=${R_USER}/.Renviron
-R_PROFILE_USER=${R_USER}/.Rprofile
-R_HISTFILE=${R_USER}/.Rhistory
-R_HISTSIZE=65535
-LANG=C
-LC_CTYPE=en_US.UTF-8
-</code></pre>
-
-<p>読み込まれる順序はだいたい以下のとおりなので、ホームディレクトリにシムリンクを張っておけば読み込まれる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">R_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.R
+<span class="nv">R_LIBS_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">R_USER</span><span class="si">}</span>/library
+<span class="nv">R_ENVIRON_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">R_USER</span><span class="si">}</span>/.Renviron
+<span class="nv">R_PROFILE_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">R_USER</span><span class="si">}</span>/.Rprofile
+<span class="nv">R_HISTFILE</span><span class="o">=</span><span class="si">${</span><span class="nv">R_USER</span><span class="si">}</span>/.Rhistory
+<span class="nv">R_HISTSIZE</span><span class="o">=</span><span class="m">65535</span>
+<span class="nv">LANG</span><span class="o">=</span>C
+<span class="nv">LC_CTYPE</span><span class="o">=</span>en_US.UTF-8</code></pre></div>
+<p>探される・読み込まれる順序はだいたい以下のとおり:</p>
 
 <ol>
 <li><code>$R_ENVIRON</code></li>
@@ -156,17 +153,20 @@ LC_CTYPE=en_US.UTF-8
 <li><code>./.Renviron</code></li>
 <li><code>~/.Renviron</code></li>
 </ol>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% <span class="nb">cd</span>
-% ln -s .R/.Renviron</code></pre></div>
+
+<p>読み込ませたくないときは <code>--no-environ</code> オプション。</p>
+
 <h2 id="rprofile">.Rprofile</h2>
 
 <p><a href="https://cran.r-project.org/doc/manuals/R-intro.html#Customizing-the-environment">https://cran.r-project.org/doc/manuals/R-intro.html#Customizing-the-environment</a></p>
 
-<p><a href="https://stat.ethz.ch/R-manual/R-patched/library/base/html/options.html">https://stat.ethz.ch/R-manual/R-patched/library/base/html/options.html</a></p>
-
 <p>R起動時に読み込まれるファイル。
 中身はRスクリプトなので、パッケージの読み込みや関数の定義など、Rでできることは何でもできるはず。
 例: <a href="https://github.com/heavywatal/dotfiles/blob/master/.R/.Rprofile">https://github.com/heavywatal/dotfiles/blob/master/.R/.Rprofile</a></p>
+
+<p><code>.First()</code> と <code>.Last()</code> はそれぞれ起動時と終了時に実行される関数。
+これらが原因で <code>R CMD</code> やパッケージ関連の操作が失敗することもあるので、
+普通の対話環境でのみ有効になるよう <code>if (interactive())</code> などとしておいたほうが安心。</p>
 
 <p>読み込まれる順序はだいたい以下のとおり。
 <code>.Renviron</code> のほうが先に読み込まれるので、
@@ -180,10 +180,11 @@ LC_CTYPE=en_US.UTF-8
 <li><code>~/.Rprofile</code></li>
 </ol>
 
-<p><code>.First()</code> と <code>.Last()</code> はそれぞれ起動時と終了時に実行される関数。
-これらが原因で <code>install.packages()</code> がエラーを引き起こすこともあるので注意。</p>
+<p>読み込ませたくないときは <code>--no-init-file</code> オプション。</p>
 
 <h3 id="options"><code>options()</code></h3>
+
+<p><a href="https://stat.ethz.ch/R-manual/R-patched/library/base/html/options.html">https://stat.ethz.ch/R-manual/R-patched/library/base/html/options.html</a></p>
 
 <p><code>?options</code> で項目の一覧を見られる。</p>
 
@@ -234,16 +235,14 @@ Pythonほどわかりやすくないが、ちょっとはマシになる。</dd>
 <a href="/mac/homebrew.html">Homebrew</a>で
 <code>gcc</code> か <code>llvm</code> をインストールし、
 そっちを使ってビルドするように <code>~/.R/Makevars</code> で指定する:</p>
+<div class="highlight"><pre class="chroma"><code class="language-make" data-lang="make"><span class="c"># gcc
+</span><span class="c"></span><span class="nv">CC</span><span class="o">=</span>/usr/local/bin/gcc-8
+<span class="nv">CXX</span><span class="o">=</span>/usr/local/bin/g++-8
 
-<pre><code># gcc
-CC=/usr/local/bin/gcc-8
-CXX=/usr/local/bin/g++-8
-
-# llvm
-CC=/usr/local/opt/llvm/bin/clang
-CXX=/usr/local/opt/llvm/bin/clang++
-</code></pre>
-
+<span class="c"># llvm
+</span><span class="c"></span><span class="nv">CC</span><span class="o">=</span>/usr/local/opt/llvm/bin/clang
+<span class="nv">CXX</span><span class="o">=</span>/usr/local/opt/llvm/bin/clang++
+</code></pre></div>
 <p><code>CPPFLAGS</code>, <code>CFLAGS</code>, <code>CXXFLAGS</code>, <code>LDFLAGS</code> なども設定可能。</p>
 
 <p><a href="https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-Makevars">https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-Makevars</a></p>
