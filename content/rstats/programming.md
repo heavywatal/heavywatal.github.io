@@ -273,17 +273,62 @@ Rprof(NULL)       # end profiling
 summaryRprof()
 ```
 
-### 実行時間の計測
+### 実行時間の計測・比較
 
 ```r
-system.time(測定したいコマンド)
+r_for = function(n) {
+  s = 0; for (i in seq_len(n)) {s = s + 1 / i}; s
+}
+r_vec = function(n) sum(1 / seq_len(n))
+
+Rcpp::cppFunction("double rcpp(int n) {
+  double s = 0; for (int i = 1; i <= n; ++i) {s += 1.0 / i;} return s;
+}")  # Compilation takes a few seconds here
+
+n = 1000000L
+system.time(r_for(n))
+system.time(r_vec(n))
+system.time(rcpp(n))
 ```
 
+ちょっとした比較には
+[rbenchmark](https://cran.r-project.org/package=rbenchmark)
+がお手軽:
+```r
+rbenchmark::benchmark(r_for(n), r_vec(n), rcpp(n))[,1:4]
+#       test replications elapsed relative
+# 1 r_for(n)          100   3.968   29.835
+# 2 r_vec(n)          100   0.473    3.556
+# 3  rcpp(n)          100   0.133    1.000
+```
+
+もっと詳しく見たい場合は
+[microbenchmark](https://github.com/joshuaulrich/microbenchmark/)
+の出力が扱いやすい:
+```r
+df = microbenchmark::microbenchmark(r_for(n), r_vec(n), rcpp(n), times = 100L)
+df
+# Unit: milliseconds
+#      expr       min        lq      mean    median        uq       max neval
+#  r_for(n) 35.716909 36.131130 37.406180 36.791894 38.330989 42.605700   100
+#  r_vec(n)  2.630786  3.251540  4.285222  3.412421  5.573207  8.180405   100
+#   rcpp(n)  1.216385  1.222994  1.270488  1.231115  1.304536  1.515532   100
+str(df)
+# Classes ‘microbenchmark’ and 'data.frame':      300 obs. of  2 variables:
+#  $ expr: Factor w/ 3 levels "r_for(n)","r_vec(n)",..: 2 1 1 1 2 2 1 1 1 2 ...
+#  $ time: num  4722392 42474783 38625124 38819035 3888012 ...
+ggplot(df, aes(expr, time)) +
+  stat_summary(fun.y = mean, geom = "bar") +
+  geom_jitter(height = 0, alpha = 0.5)
+```
 
 ## 関連書籍
 
 統計解析やグラフ描画ではなく、
 プログラミング言語としてのRを学びたいときに:
 
-<a href="https://www.amazon.co.jp/RStudio%E3%81%A7%E3%81%AF%E3%81%98%E3%82%81%E3%82%8BR%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E5%85%A5%E9%96%80-Garrett-Grolemund/dp/4873117151/ref=as_li_ss_il?ie=UTF8&qid=1489745137&sr=8-1&keywords=rstudio&linkCode=li3&tag=heavywatal-22&linkId=59bf9fd2a28700d591c1bb951fcf6bd4" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873117151&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4873117151" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
-<a href="https://www.amazon.co.jp/%E3%82%A2%E3%83%BC%E3%83%88%E3%83%BB%E3%82%AA%E3%83%96%E3%83%BBR%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0-Norman-Matloff/dp/4873115795/ref=as_li_ss_il?ie=UTF8&qid=1485613704&sr=8-1&keywords=%E3%82%A2%E3%83%BC%E3%83%88%E3%82%AA%E3%83%96r&linkCode=li3&tag=heavywatal-22&linkId=b322dc8f7f7dc364e861086b0d53a10b" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873115795&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4873115795" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+<a href="https://www.amazon.co.jp/dp/432012393X/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=15c50d7e6387ac0519680dea589c3ebc&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=432012393X&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=432012393X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+<a href="https://www.amazon.co.jp/dp/4873117151/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=b538c2dbecbc5ce7e09be4fafeb99ff7&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873117151&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=4873117151" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+<a href="https://www.amazon.co.jp/dp/4873115795/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=21ebf4fefc4890ca976d313ae873fe2c&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873115795&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=4873115795" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+http://adv-r.had.co.nz/
