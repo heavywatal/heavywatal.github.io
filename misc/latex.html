@@ -101,27 +101,30 @@ LaTeX
 
 <h2 id="基本操作">基本操作</h2>
 
-<h3 id="mac-os-x-にインストール">Mac OS X にインストール</h3>
+<h3 id="tex-live-をmacにインストール">TeX Live をMacにインストール</h3>
 
 <p>とにかく動く環境が欲しい人は、素直にフルのMacTeXをインストールするだけ。
-ただし2GB以上の大きなインストーラをダウンロードする必要があるので注意。</p>
-
-<p>BibDesk, LaTeXiT, TeX Live Utility, TeXShop などのGUIアプリが不要で、
+ただし2GB以上の大きなインストーラをダウンロードする必要があるので注意。
+BibDesk, LaTeXiT, TeX Live Utility, TeXShop などのGUIアプリが不要で、
 必要なパッケージをコマンドラインからインストールできる人は下記の手順で小さくインストールできる。</p>
 
 <ol>
 <li><p><a href="http://www.tug.org/mactex/">http://www.tug.org/mactex/</a> から
-<code>BasicTeX.pkg (mactex-basic.pkg)</code> をダウンロードしてインストール。
-あるいは:</p>
-
-<pre><code>% brew cask install basictex
-</code></pre></li>
+<code>BasicTeX.pkg</code> を入手してインストール。
+あるいは
+<code>brew cask install basictex</code></p></li>
 
 <li><p><code>/Library/TeX/texbin/</code> にパスを通す。
 基本的には <code>/etc/paths.d/TeX</code> 越しに自動的に設定されるはず。</p></li>
 
-<li><p><code>sudo tlmgr update --self --all</code> で諸々アップデート</p></li>
+<li><p>今後の <code>tlmgr</code> 操作で管理者権限を使わなくて済むようにパーミッション設定:
+<code>sudo chown -R $(whoami):wheel /usr/local/texlive/</code></p></li>
+
+<li><p><code>tlmgr update --self --all</code> で諸々アップデート。</p></li>
 </ol>
+
+<p>TeX Liveの新パージョンが年1回リリースされるので、そのときはインストールからやり直す。
+(<code>tlmgr update</code> では更新できない)</p>
 
 <h3 id="texをpdfにコンパイル">TeXをPDFにコンパイル</h3>
 
@@ -133,10 +136,8 @@ Hello, World!
 <span class="k">\end</span><span class="nb">{</span>document<span class="nb">}</span></code></pre></div></li>
 
 <li><p>ターミナルからコンパイル:</p>
-
-<pre><code>% pdflatex hello.tex
-% open hello.pdf
-</code></pre></li>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">pdflatex hello.tex
+open hello.pdf</code></pre></div></li>
 </ol>
 
 <p>MacTeXに含まれるTeXShopというアプリを使えば、
@@ -149,16 +150,13 @@ Hello, World!
 大抵いくつか別途インストールする必要がある。
 &ldquo;By default, installing a package ensures that all dependencies of this package are fulfilled&rdquo;
 と言っているが嘘で、実際には依存パッケージも手動でインストールする必要がある。</p>
-
-<pre><code>% sudo tlmgr update --self --all
-% tlmgr search --global japanese
-% tlmgr search --global --file zxxrl7z
-% tlmgr info --list newtx
-% sudo tlmgr install chktex
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">tlmgr update --self --all
+tlmgr search --global japanese
+tlmgr search --global --file zxxrl7z
+tlmgr info --list newtx
+tlmgr install chktex</code></pre></div>
 <p>管理者権限不要の <code>--usermode</code> も用意されているが、
-必要に迫られない限り素直に <code>sudo</code> したほうがよい。</p>
+なんかうまくいかないので必要に迫られない限り使わないほうがよい。</p>
 
 <div class="warning">
 <p>パッケージをアンインストールしようと思って
@@ -280,7 +278,7 @@ e.g., 分数を挟むとか、カッコの入れ子とか</li>
 
 <p>GIFアニメをそのまま埋め込むことはできないので、
 <a href="https://www.ctan.org/pkg/animate">{animate}</a>で連番PNGを読み込む。</p>
-<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="c">% sudo tlmgr install animate media9 ocgx2
+<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="c">% tlmgr install animate media9 ocgx2
 </span><span class="c"></span><span class="k">\usepackage</span><span class="na">[autoplay,final,controls=all,type=png]</span><span class="nb">{</span>animate<span class="nb">}</span>
 
 <span class="k">\begin</span><span class="nb">{</span>document<span class="nb">}</span>
@@ -564,7 +562,7 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
   <span class="k">\usepackage</span><span class="nb">{</span>textcomp<span class="nb">}</span>
   <span class="c">% \usepackage[uplatex,deluxe,jis2004]{otf}
 </span><span class="c"></span><span class="k">\fi</span></code></pre></div>
-<p>フォント関連をいじったあと明示的にマップを更新するには <code>sudo updmap-sys</code></p>
+<p>フォント関連をいじったあと明示的にマップを更新するには <code>updmap-sys</code></p>
 
 </article>
 </main>
