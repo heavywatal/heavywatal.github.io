@@ -8,24 +8,29 @@ aliases = ["/dev/tex.html"]
 
 ## 基本操作
 
-### Mac OS X にインストール
+### TeX Live をMacにインストール
 
 とにかく動く環境が欲しい人は、素直にフルのMacTeXをインストールするだけ。
 ただし2GB以上の大きなインストーラをダウンロードする必要があるので注意。
-
 BibDesk, LaTeXiT, TeX Live Utility, TeXShop などのGUIアプリが不要で、
 必要なパッケージをコマンドラインからインストールできる人は下記の手順で小さくインストールできる。
 
 1.  <http://www.tug.org/mactex/> から
-    `BasicTeX.pkg (mactex-basic.pkg)` をダウンロードしてインストール。
-    あるいは:
-
-        % brew cask install basictex
+    `BasicTeX.pkg` を入手してインストール。
+    あるいは
+    `brew cask install basictex`
 
 2.  `/Library/TeX/texbin/` にパスを通す。
     基本的には `/etc/paths.d/TeX` 越しに自動的に設定されるはず。
 
-3.  `sudo tlmgr update --self --all` で諸々アップデート
+3.  今後の `tlmgr` 操作で管理者権限を使わなくて済むようにパーミッション設定:
+    `sudo chown -R $(whoami):wheel /usr/local/texlive/`
+
+4.  `tlmgr update --self --all` で諸々アップデート。
+
+TeX Liveの新パージョンが年1回リリースされるので、そのときはインストールからやり直す。
+(`tlmgr update` では更新できない)
+
 
 ### TeXをPDFにコンパイル
 
@@ -40,8 +45,10 @@ BibDesk, LaTeXiT, TeX Live Utility, TeXShop などのGUIアプリが不要で、
 
 2.  ターミナルからコンパイル:
 
-        % pdflatex hello.tex
-        % open hello.pdf
+    ```sh
+    pdflatex hello.tex
+    open hello.pdf
+    ```
 
    MacTeXに含まれるTeXShopというアプリを使えば、
    原稿書きからコンパイルまで面倒を見てもらえるので、
@@ -55,14 +62,16 @@ BasicTeXの場合は最小限のパッケージしか含まれていないので
 "By default, installing a package ensures that all dependencies of this package are fulfilled"
 と言っているが嘘で、実際には依存パッケージも手動でインストールする必要がある。
 
-    % sudo tlmgr update --self --all
-    % tlmgr search --global japanese
-    % tlmgr search --global --file zxxrl7z
-    % tlmgr info --list newtx
-    % sudo tlmgr install chktex
+```sh
+tlmgr update --self --all
+tlmgr search --global japanese
+tlmgr search --global --file zxxrl7z
+tlmgr info --list newtx
+tlmgr install chktex
+```
 
 管理者権限不要の `--usermode` も用意されているが、
-必要に迫られない限り素直に `sudo` したほうがよい。
+なんかうまくいかないので必要に迫られない限り使わないほうがよい。
 
 {{%div class="warning"%}}
 パッケージをアンインストールしようと思って
@@ -194,7 +203,7 @@ GIFアニメをそのまま埋め込むことはできないので、
 [{animate}](https://www.ctan.org/pkg/animate)で連番PNGを読み込む。
 
 ```tex
-% sudo tlmgr install animate media9 ocgx2
+% tlmgr install animate media9 ocgx2
 \usepackage[autoplay,final,controls=all,type=png]{animate}
 
 \begin{document}
@@ -506,4 +515,4 @@ XeTeX なら OS のフォントをフルネームで指定して使える
 \fi
 ```
 
-フォント関連をいじったあと明示的にマップを更新するには `sudo updmap-sys`
+フォント関連をいじったあと明示的にマップを更新するには `updmap-sys`
