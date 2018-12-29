@@ -27,11 +27,14 @@ MacやLinuxならシステムの一部として
 `PYTHON_CONFIGURE_OPTS="--enable-framework"`
 をセットしてFramework型でビルドする。
 
+[Mojaveで "zlib not available" と怒られる問題](https://github.com/pyenv/pyenv/issues/1219)は
+`CFLAGS="-I$(xcrun --show-sdk-path)/usr/include"` を定義して回避。
+
 ```sh
 git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 ~/.pyenv/bin/pyenv install -l | less
-~/.pyenv/bin/pyenv install 3.7.1
-~/.pyenv/bin/pyenv global 3.7.1
+~/.pyenv/bin/pyenv install 3.7.2
+~/.pyenv/bin/pyenv global 3.7.2
 ```
 
 シェルのPATHを設定する。
