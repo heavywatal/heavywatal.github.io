@@ -32,8 +32,6 @@ pwd | pbcopy
 pbpaste | wc
 ```
 
-[tmux内で使うにはreattach-to-user-namespaceが必要。]({{< relref "tmux.md" >}})
-
 
 ### `say` 音声読み上げ
 

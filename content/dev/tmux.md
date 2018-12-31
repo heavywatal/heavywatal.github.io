@@ -84,12 +84,9 @@ prefix 変更
 起動時ウィンドウサイズ変更 `aggressive-resize`
 :   サイズの異なる端末からアクセスしたときに随時ウィンドウサイズ変更
 
-Mac `open` 問題
-:   `tmux` 内だと `open` がうまく働かないのでそれを回避するために
-    [reattach-to-user-namespace](https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard)
-    をインストールして挟む:
-
-        brew install reattach-to-user-namespace
+`open` や `pbcopy` などがうまく働かなくて
+[reattach-to-user-namespace](https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard)
+が必要になる問題は既に解消された。
 
 
 ## 利用例
