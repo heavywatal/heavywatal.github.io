@@ -106,23 +106,23 @@ Mac固有コマンド
 <p>Finder でダブルクリックするのと同じように、
 Terminal から一発でファイルを開くことができる。</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 関連付けられたデフォルトのアプリケーションで開く</span>
-% open hudson1992g.pdf
+open hudson1992g.pdf
 
 <span class="c1"># アプリケーションを指定して開く</span>
-% open -a Skim hudson1992g.pdf
+open -a Skim hudson1992g.pdf
 
 <span class="c1"># カレントディレクトリをFinderで開く</span>
-% open .</code></pre></div>
+open .</code></pre></div>
 <h3 id="pbcopy-pbpaste"><code>pbcopy</code>, <code>pbpaste</code></h3>
 
 <p>ターミナルからクリップボード(pasteboard)を操作する。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% <span class="nb">pwd</span> <span class="p">|</span> pbcopy
-% pbpaste <span class="p">|</span> wc</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">pwd</span> <span class="p">|</span> pbcopy
+pbpaste <span class="p">|</span> wc</code></pre></div>
 <p><a href="/dev/tmux.html">tmux内で使うにはreattach-to-user-namespaceが必要。</a></p>
 
 <h3 id="say-音声読み上げ"><code>say</code> 音声読み上げ</h3>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% say hello world
-% pbpaste <span class="p">|</span> say</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">say hello world
+pbpaste <span class="p">|</span> say</code></pre></div>
 <p>声は環境設定の Accessibility &gt; Speech で変更可能。</p>
 
 <h3 id="killall"><code>killall</code></h3>
@@ -130,9 +130,9 @@ Terminal から一発でファイルを開くことができる。</p>
 <p>Finder や Dock など、GUIから終了させにくいアプリケーションを再起動する。
 アプリケーションの動作が不安定になったとき、設定変更を反映させたいとき、
 メモリを開放したいときなどに使える。:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% killall Finder
-% killall Dock
-% killall Kotoeri</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">killall Finder
+killall Dock
+killall Kotoeri</code></pre></div>
 <h2 id="設定関連">設定関連</h2>
 
 <h3 id="defaults"><code>defaults</code></h3>
@@ -170,7 +170,7 @@ defaults write com.apple.finder QLEnableTextSelection -bool true</code></pre></d
 ファイルとアプリケーションの関連付けに関する古い情報を消して再構築。
 まっさらに戻るわけではない。:</p>
 
-<pre><code>% /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
+<pre><code>/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
 </code></pre>
 
 <p>設定ファイルは <code>~/Library/Preferences/com.apple.LaunchServices.plist</code></p>
@@ -181,9 +181,9 @@ defaults write com.apple.finder QLEnableTextSelection -bool true</code></pre></d
 システムのソフトウェア・アップデートなどを
 <code>ssh</code> 越しにやらねばならぬときもある:</p>
 
-<pre><code>% hdiutil mount SomeDiskImage.dmg
-% sudo installer -pkg SomePackage.pkg -target /
-% sudo softwareupdate -i -a
+<pre><code>hdiutil mount SomeDiskImage.dmg
+sudo installer -pkg SomePackage.pkg -target /
+sudo softwareupdate -i -a
 </code></pre>
 
 <h2 id="obsolete">Obsolete</h2>
@@ -194,33 +194,33 @@ defaults write com.apple.finder QLEnableTextSelection -bool true</code></pre></d
 
 <p>項目をリストアップ:</p>
 
-<pre><code>% niutil -list . /
-% niutil -list . /users
-% niutil -list . /groups
+<pre><code>niutil -list . /
+niutil -list . /users
+niutil -list . /groups
 </code></pre>
 
 <p>中身を見る:</p>
 
-<pre><code>% niutil -read . /users/iwasaki
-% niutil -read . /groups/admin
+<pre><code>niutil -read . /users/iwasaki
+niutil -read . /groups/admin
 </code></pre>
 
 <p>一覧で一気に:</p>
 
-<pre><code>% nidump passwd . /
-% nidump group . /
+<pre><code>nidump passwd . /
+nidump group . /
 </code></pre>
 
 <p>新規ユーザーの追加:</p>
 
-<pre><code>% niutil -create / /users/hoge
-% niutil -createprop / /users/hoge shell /bin/zsh
-% niutil -createprop / /users/hoge uid 1050
-% niutil -createprop / /users/hoge gid 20
-% niutil -createprop / /users/hoge home /Users/hoge
-% niutil -createprop / /users/hoge _shadow_passwd
-% passwd hoge
-% niutil -appendprop / /groups/staff users hoge
+<pre><code>niutil -create / /users/hoge
+niutil -createprop / /users/hoge shell /bin/zsh
+niutil -createprop / /users/hoge uid 1050
+niutil -createprop / /users/hoge gid 20
+niutil -createprop / /users/hoge home /Users/hoge
+niutil -createprop / /users/hoge _shadow_passwd
+passwd hoge
+niutil -appendprop / /groups/staff users hoge
 </code></pre>
 
 </article>

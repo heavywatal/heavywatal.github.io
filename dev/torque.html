@@ -129,7 +129,7 @@ TORQUE
 <ol>
 <li><p><code>torque-mom</code> と <code>torque-client</code> をインストール:</p>
 
-<pre><code>% sudo apt-get install torque-mom torque-client
+<pre><code>sudo apt-get install torque-mom torque-client
 </code></pre></li>
 
 <li><p><code>/etc/hosts</code> を確認。
@@ -143,10 +143,10 @@ TORQUE
 そうしないと <code>qsub</code> でキューを出しても実行されず、
 以下のような警告が静かに書き出される:</p>
 
-<pre><code>% sudo momctl -d3
+<pre><code>sudo momctl -d3
 WARNING: invalid attempt to connect from server 192.168.0.254:1022  (server not authorized)
 
-% less /var/spool/torque/mom_logs/2012xxxx
+less /var/spool/torque/mom_logs/2012xxxx
 pbs_mom;Job;process_request;request type QueueJob from host charles rejected (host not authorized)
 pbs_mom;Req;req_reject;Reject reply code=15008(Access from host not allowed, or unknown host MSG=request not authorized), aux=0, type=QueueJob, from PBS_Server@charles
 </code></pre></li>
@@ -167,7 +167,7 @@ pbs_mom;Req;req_reject;Reject reply code=15008(Access from host not allowed, or 
 
 <li><p><code>pbs_mom</code> を再起動:</p>
 
-<pre><code>% sudo service torque-mom restart
+<pre><code>sudo service torque-mom restart
 </code></pre></li>
 </ol>
 
@@ -176,12 +176,12 @@ pbs_mom;Req;req_reject;Reject reply code=15008(Access from host not allowed, or 
 <ol>
 <li><p><code>torque-server</code> をインストール:</p>
 
-<pre><code>% sudo apt-get install torque-server
+<pre><code>sudo apt-get install torque-server
 </code></pre></li>
 
 <li><p><code>pbs_server</code> が動いてしまっていたら <code>kill</code>:</p>
 
-<pre><code>% ps aux | grep pbs
+<pre><code>ps aux | grep pbs
 </code></pre></li>
 
 <li><p><code>/etc/hosts</code> を確認。
@@ -209,68 +209,68 @@ node03 np=4
 
 <li><p><code>/var/spool/torque/spool</code> のパーミションを設定:</p>
 
-<pre><code>% sudo chmod 777 /var/spool/torque/spool/
-% sudo chmod o+t /var/spool/torque/spool/
+<pre><code>sudo chmod 777 /var/spool/torque/spool/
+sudo chmod o+t /var/spool/torque/spool/
 </code></pre></li>
 
 <li><p><code>pbs_server</code> を新規作成:</p>
 
-<pre><code>% sudo pbs_server -t create
+<pre><code>sudo pbs_server -t create
 </code></pre></li>
 
 <li><p><code>pbs_server</code> の設定 (ref. <a href="http://www.adaptivecomputing.com/resources/docs/torque/2-5-9/a.bserverparameters.php">Server Parameters</a>):</p>
 
-<pre><code>% sudo qmgr -c &quot;create queue batch queue_type=execution&quot;
-% sudo qmgr -c &quot;set queue batch priority=0&quot;
-% sudo qmgr -c &quot;set queue batch resources_default.nodes=1&quot;
-% sudo qmgr -c &quot;set queue batch resources_default.ncpus=1&quot;
-% sudo qmgr -c &quot;set queue batch resources_default.walltime=96:00:00&quot;
-% sudo qmgr -c &quot;set queue batch keep_completed=3600&quot;
-% sudo qmgr -c &quot;set queue batch enabled=true&quot;
-% sudo qmgr -c &quot;set queue batch started=true&quot;
+<pre><code>sudo qmgr -c &quot;create queue batch queue_type=execution&quot;
+sudo qmgr -c &quot;set queue batch priority=0&quot;
+sudo qmgr -c &quot;set queue batch resources_default.nodes=1&quot;
+sudo qmgr -c &quot;set queue batch resources_default.ncpus=1&quot;
+sudo qmgr -c &quot;set queue batch resources_default.walltime=96:00:00&quot;
+sudo qmgr -c &quot;set queue batch keep_completed=3600&quot;
+sudo qmgr -c &quot;set queue batch enabled=true&quot;
+sudo qmgr -c &quot;set queue batch started=true&quot;
 
-% sudo qmgr -c &quot;create queue low queue_type=execution&quot;
-% sudo qmgr -c &quot;set queue low priority=-255&quot;
-% sudo qmgr -c &quot;set queue low resources_default.nodes=1&quot;
-% sudo qmgr -c &quot;set queue low resources_default.ncpus=1&quot;
-% sudo qmgr -c &quot;set queue low resources_default.walltime=96:00:00&quot;
-% sudo qmgr -c &quot;set queue low keep_completed=3600&quot;
-% sudo qmgr -c &quot;set queue low enabled=true&quot;
-% sudo qmgr -c &quot;set queue low started=true&quot;
+sudo qmgr -c &quot;create queue low queue_type=execution&quot;
+sudo qmgr -c &quot;set queue low priority=-255&quot;
+sudo qmgr -c &quot;set queue low resources_default.nodes=1&quot;
+sudo qmgr -c &quot;set queue low resources_default.ncpus=1&quot;
+sudo qmgr -c &quot;set queue low resources_default.walltime=96:00:00&quot;
+sudo qmgr -c &quot;set queue low keep_completed=3600&quot;
+sudo qmgr -c &quot;set queue low enabled=true&quot;
+sudo qmgr -c &quot;set queue low started=true&quot;
 
-% sudo qmgr -c &quot;create queue high queue_type=execution&quot;
-% sudo qmgr -c &quot;set queue high priority=255&quot;
-% sudo qmgr -c &quot;set queue high resources_default.nodes=1&quot;
-% sudo qmgr -c &quot;set queue high resources_default.ncpus=1&quot;
-% sudo qmgr -c &quot;set queue high resources_default.walltime=96:00:00&quot;
-% sudo qmgr -c &quot;set queue high keep_completed=3600&quot;
-% sudo qmgr -c &quot;set queue high enabled=true&quot;
-% sudo qmgr -c &quot;set queue high started=true&quot;
+sudo qmgr -c &quot;create queue high queue_type=execution&quot;
+sudo qmgr -c &quot;set queue high priority=255&quot;
+sudo qmgr -c &quot;set queue high resources_default.nodes=1&quot;
+sudo qmgr -c &quot;set queue high resources_default.ncpus=1&quot;
+sudo qmgr -c &quot;set queue high resources_default.walltime=96:00:00&quot;
+sudo qmgr -c &quot;set queue high keep_completed=3600&quot;
+sudo qmgr -c &quot;set queue high enabled=true&quot;
+sudo qmgr -c &quot;set queue high started=true&quot;
 
-% sudo qmgr -c &quot;set server default_queue=batch&quot;
-% sudo qmgr -c &quot;set server scheduling=true&quot;
-% sudo qmgr -c &quot;set server allow_node_submit = True&quot;
+sudo qmgr -c &quot;set server default_queue=batch&quot;
+sudo qmgr -c &quot;set server scheduling=true&quot;
+sudo qmgr -c &quot;set server allow_node_submit = True&quot;
 </code></pre></li>
 
 <li><p><code>pbs_server</code> を再起動:</p>
 
-<pre><code>% sudo service torque-server restart
-% sudo service torque-scheduler restart
+<pre><code>sudo service torque-server restart
+sudo service torque-scheduler restart
 </code></pre></li>
 
 <li><p>計算ノードの認識を確認 (<code>state = free</code>):</p>
 
-<pre><code>% pbsnodes -a
+<pre><code>pbsnodes -a
 </code></pre></li>
 
 <li><p>試しにジョブを投入:</p>
 
-<pre><code>% echo &quot;sleep 30&quot; | qsub
+<pre><code>echo &quot;sleep 30&quot; | qsub
 </code></pre></li>
 
 <li><p>実行されているか確認 (<code>S</code> の下が <code>R</code> なら走ってる):</p>
 
-<pre><code>% qstat
+<pre><code>qstat
 </code></pre></li>
 </ol>
 
@@ -280,52 +280,52 @@ node03 np=4
 
 <p>設定確認:</p>
 
-<pre><code>% qmgr -c 'p s'
+<pre><code>qmgr -c 'p s'
 </code></pre>
 
 <p>計算ノードの認識を確認:</p>
 
-<pre><code>% pbsnodes -a
+<pre><code>pbsnodes -a
 </code></pre>
 
 <p>投入したジョブの状態を確認:</p>
 
-<pre><code>% qstat
-% qstat -q
+<pre><code>qstat
+qstat -q
 </code></pre>
 
 <p>ログを見る:</p>
 
-<pre><code>% less /var/spool/torque/server_logs/2012xxxx
-% less /var/spool/torque/sched_logs/2012xxxx
+<pre><code>less /var/spool/torque/server_logs/2012xxxx
+less /var/spool/torque/sched_logs/2012xxxx
 </code></pre>
 
 <p>サービス再起動:</p>
 
-<pre><code>% sudo service torque-server restart
-% sudo service torque-sched restart
+<pre><code>sudo service torque-server restart
+sudo service torque-sched restart
 </code></pre>
 
 <p>計算ノードが落ちたあと <code>qstat</code> リストに残ってしまうジョブを消す:</p>
 
-<pre><code>% sudo qdel -p
+<pre><code>sudo qdel -p
 </code></pre>
 
 <h3 id="compute-node-1">Compute node</h3>
 
 <p>状態確認:</p>
 
-<pre><code>% sudo momctl -d3
+<pre><code>sudo momctl -d3
 </code></pre>
 
 <p>ログを見る:</p>
 
-<pre><code>% less /var/spool/torque/mom_logs/2012xxxx
+<pre><code>less /var/spool/torque/mom_logs/2012xxxx
 </code></pre>
 
 <p>サービス再起動:</p>
 
-<pre><code>% sudo service torque-mom restart
+<pre><code>sudo service torque-mom restart
 </code></pre>
 
 </article>

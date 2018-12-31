@@ -126,16 +126,16 @@ See <a href="/dev/git.html">Git</a>.</p>
 無いファイルを全部 <code>hg rm</code> する。
 これらの変更は <code>hg commit</code> するまでRepositoryには反映されない:</p>
 
-<pre><code>% hg add [FILE]...
-% hg rm FILE
-% hg mv SOURCE... DEST
-% hg cp SOURCE... DEST
-% hg addremove
+<pre><code>hg add [FILE]...
+hg rm FILE
+hg mv SOURCE... DEST
+hg cp SOURCE... DEST
+hg addremove
 </code></pre>
 
 <p>Working directoryにおける（まだ <code>hg commit</code> されてない）変更を確認:</p>
 
-<pre><code>% hg status
+<pre><code>hg status
 </code></pre>
 
 <p>Working directoryにおける変更をRepositoryに反映させる。
@@ -143,7 +143,7 @@ See <a href="/dev/git.html">Git</a>.</p>
 <code>-m</code> オプションでメッセージを指定しない場合は
 <code>$EDITOR</code> が起動してコメントを求められるので、何か書いて保存、終了:</p>
 
-<pre><code>% hg commit -m &quot;a message that describes the modifications you made&quot;
+<pre><code>hg commit -m &quot;a message that describes the modifications you made&quot;
 </code></pre>
 
 <p>ssh越しでRepositoryをやり取り。
@@ -153,16 +153,16 @@ See <a href="/dev/git.html">Git</a>.</p>
 <code>~/.ssh/config</code> などでちゃんと設定しとけばURLは簡略化可能。
 cf. <a href="/dev/ssh.html">ssh</a>:</p>
 
-<pre><code>% hg push ssh://username@example.com//home/username/the_project
-% hg push ssh://username@example.com/the_project
-% hg pull ssh://username@example.com/the_project
+<pre><code>hg push ssh://username@example.com//home/username/the_project
+hg push ssh://username@example.com/the_project
+hg pull ssh://username@example.com/the_project
 </code></pre>
 
 <p><code>hg push</code> や <code>hg pull</code> はRepositoryの情報を送受信するだけで、
 受け手のWorking directoryを変更しない。
 受け取った側が <code>hg update</code> した時点で変更が適用される:</p>
 
-<pre><code>% hg update
+<pre><code>hg update
 </code></pre>
 
 <h2 id="プロジェクト開始">プロジェクト開始</h2>
@@ -171,10 +171,10 @@ cf. <a href="/dev/ssh.html">ssh</a>:</p>
 
 <p>既にあるプロジェクトを取ってくる。<code>DEST</code> 省略時は元と同じ名前でディレクトリが作られる:</p>
 
-<pre><code>% hg clone [OPTION]... SOURCE [DEST]
-% hg clone http://selenic.com/hg mercurial-repo
-% cd mercurial-repo
-% hg parents
+<pre><code>hg clone [OPTION]... SOURCE [DEST]
+hg clone http://selenic.com/hg mercurial-repo
+cd mercurial-repo
+hg parents
 </code></pre>
 
 <p>新しいMercurialプロジェクトを開始する</p>
@@ -182,9 +182,9 @@ cf. <a href="/dev/ssh.html">ssh</a>:</p>
 <ol>
 <li><p>プロジェクトのルートディレクトリ（無ければ <code>mkdir</code> するなどして）に入って初期化:</p>
 
-<pre><code>% cd the_project/
-% hg init
-% ls -a
+<pre><code>cd the_project/
+hg init
+ls -a
 ./ ../ .hg/
 </code></pre></li>
 
@@ -200,15 +200,15 @@ default = ssh://username@example.com/the_project
 
 <li><p>除外設定が正しく効いてるか確認:</p>
 
-<pre><code>% hg status
+<pre><code>hg status
 </code></pre></li>
 
 <li><p>リポジトリにファイルを追加してコミット、確認。
 <code>add</code> は個別にファイルを指定できて、省略すると全部。:</p>
 
-<pre><code>% hg add
-% hg commit -m &quot;first commit&quot;
-% hg parents
+<pre><code>hg add
+hg commit -m &quot;first commit&quot;
+hg parents
 </code></pre></li>
 </ol>
 
@@ -216,36 +216,36 @@ default = ssh://username@example.com/the_project
 
 <p>あのrevisionではどんな変更したっけ？:</p>
 
-<pre><code>% hg diff -c 42
+<pre><code>hg diff -c 42
 </code></pre>
 
 <p>あのrevisionから今までにどこが変わった？:</p>
 
-<pre><code>% hg diff -r 42
+<pre><code>hg diff -r 42
 </code></pre>
 
 <p>いろいろやってみたけど今回の変更を全部無かったことにする
 (<code>hg commit</code> する前):</p>
 
-<pre><code>% hg revert --all --no-backup
+<pre><code>hg revert --all --no-backup
 </code></pre>
 
 <p>直前の <code>hg commit</code> を取り消す
 (<code>hg push</code> する前の1回分のみ有効):</p>
 
-<pre><code>% hg rollback
+<pre><code>hg rollback
 </code></pre>
 
 <p><code>hg push</code> 済みあるいは複数回 <code>hg commit</code> してしまった後、変更を取り消す:</p>
 
-<pre><code>% hg backout -r 42
-% hg commit
+<pre><code>hg backout -r 42
+hg commit
 </code></pre>
 
 <p>管理対象外のファイルを確認・削除する (<code>purge</code> extentionを有効にして):</p>
 
-<pre><code>% hg clean -p
-% hg clean
+<pre><code>hg clean -p
+hg clean
 </code></pre>
 
 <h2 id="merge">Merge</h2>
@@ -285,13 +285,13 @@ merge = internal:merge
 
 <li><p>解決の必要なファイルを確認:</p>
 
-<pre><code>% hg resolve -a
+<pre><code>hg resolve -a
 </code></pre></li>
 
 <li><p>解決済みであることをマークしてコミット:</p>
 
-<pre><code>% hg resolve -m some_source.py
-% hg commit
+<pre><code>hg resolve -m some_source.py
+hg commit
 </code></pre></li>
 </ol>
 
@@ -374,21 +374,21 @@ syntax: glob
 <p>PyPIに登録されてるPythonパッケージなので
 <a href="/python/pip.html">pip</a> でインストールできる:</p>
 
-<pre><code>% pip install mercurial
+<pre><code>pip install mercurial
 </code></pre>
 
 <p>でもPythonから <code>import</code> して使うことは無いので、
 Macなら <a href="/mac/homebrew.html">Homebrew</a> で入れちゃうほうが管理が楽チン:</p>
 
-<pre><code>% brew install mercurial
+<pre><code>brew install mercurial
 </code></pre>
 
 <p>Linuxでソースからインストールしたい場合は
 <code>python-devel</code> 的なパッケージを入れた上で:</p>
 
-<pre><code>% wget -O- http://mercurial.selenic.com/release/mercurial-3.0.tar.gz | tar xz
-% cd mercurial-2.9.2/
-% sudo make install-bin
+<pre><code>wget -O- http://mercurial.selenic.com/release/mercurial-3.0.tar.gz | tar xz
+cd mercurial-2.9.2/
+sudo make install-bin
 </code></pre>
 
 <p><code>apt-get</code> や <code>yum</code> でもインストールできるが
@@ -401,25 +401,25 @@ Macなら <a href="/mac/homebrew.html">Homebrew</a> で入れちゃうほうが�
 <ol>
 <li><p><code>fast-export</code> をダウンロード:</p>
 
-<pre><code>% git clone https://github.com/frej/fast-export.git
+<pre><code>git clone https://github.com/frej/fast-export.git
 </code></pre></li>
 
 <li><p>移行先のローカルリポジトリを作成:</p>
 
-<pre><code>% mkdir dst_git
-% cd dst_git
-% git init
+<pre><code>mkdir dst_git
+cd dst_git
+git init
 </code></pre></li>
 
 <li><p>実行:</p>
 
-<pre><code>% path/to/fast-export/hg-fast-export.sh -r path/to/src_hg
+<pre><code>path/to/fast-export/hg-fast-export.sh -r path/to/src_hg
 </code></pre></li>
 
 <li><p>作業ディレクトリに反映:</p>
 
-<pre><code>% git status
-% git checkout master
+<pre><code>git status
+git checkout master
 </code></pre></li>
 </ol>
 

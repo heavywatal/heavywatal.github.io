@@ -105,17 +105,17 @@ mount
 
 <p>予め作っておいた空のディレクトリ <code>dir</code> に <code>device</code> をマウントする:</p>
 
-<pre><code>% [sudo] mount [-t type] [-o option[,option]...] device dir
+<pre><code>[sudo] mount [-t type] [-o option[,option]...] device dir
 </code></pre>
 
 <p>マウントを解除する:</p>
 
-<pre><code>% [sudo] umount dir
+<pre><code>[sudo] umount dir
 </code></pre>
 
 <p>既にマウントされているものを列挙:</p>
 
-<pre><code>% mount -l
+<pre><code>mount -l
 </code></pre>
 
 <h3 id="主な-o-オプション">主な <code>-o</code> オプション</h3>
@@ -154,7 +154,7 @@ mount
 <ol>
 <li><p>cifs-utils をインストール:</p>
 
-<pre><code>% sudo apt-get install cifs-utils
+<pre><code>sudo apt-get install cifs-utils
 </code></pre></li>
 
 <li><p>パスワードをコマンド履歴や <code>/etc/fstab</code> に残さなくて済むように
@@ -166,7 +166,7 @@ password=******
 
 <li><p><code>mount</code> コマンドでマウント:</p>
 
-<pre><code>% sudo mount -t cifs -o defaults,iocharset=utf8,nounix,uid=$(id -u),gid=$(id -g),credentials=$HOME/.cifs //ADDRESS/VOLUME ~/mnt
+<pre><code>sudo mount -t cifs -o defaults,iocharset=utf8,nounix,uid=$(id -u),gid=$(id -g),credentials=$HOME/.cifs //ADDRESS/VOLUME ~/mnt
 </code></pre></li>
 
 <li><p>起動時に自動でマウントさせるには <code>/etc/fstab</code> に追記:</p>
@@ -180,7 +180,7 @@ password=******
 <ol>
 <li><p>samba をインストール:</p>
 
-<pre><code>% sudo apt-get install samba
+<pre><code>sudo apt-get install samba
 </code></pre></li>
 
 <li><p><code>/etc/samba/smb.conf</code> の一部を編集:</p>
@@ -198,7 +198,7 @@ valid users = %S
 
 <li><p>サービスを再起動:</p>
 
-<pre><code>% sudo service smbd restart
+<pre><code>sudo service smbd restart
 </code></pre></li>
 </ol>
 
@@ -209,13 +209,13 @@ valid users = %S
 <ol>
 <li><p>afpfs-ng-utils をダウンロードしてインストール:</p>
 
-<pre><code>% wget http://launchpadlibrarian.net/90192653/afpfs-ng-utils_0.8.1-2_amd64.deb
-% sudo dpkg -i afpfs-ng-utils_0.8.1-2_amd64.deb
+<pre><code>wget http://launchpadlibrarian.net/90192653/afpfs-ng-utils_0.8.1-2_amd64.deb
+sudo dpkg -i afpfs-ng-utils_0.8.1-2_amd64.deb
 </code></pre></li>
 
 <li><p>以下のようなコマンドでマウント。できなかった:</p>
 
-<pre><code>% mount_afp 'afp://user:password@address/volume/' ~/mnt
+<pre><code>mount_afp 'afp://user:password@address/volume/' ~/mnt
 </code></pre></li>
 </ol>
 
@@ -249,16 +249,16 @@ Finderとかで普通のディレクトリのように扱えるようにする�
 Linuxなら<a href="https://github.com/libfuse/libfuse">libfuse</a>をインストール</p></li>
 
 <li><p>sshfsをインストール:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% brew install sshfs</code></pre></div></li>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew install sshfs</code></pre></div></li>
 
 <li><p>マウントポイントにする適当なディレクトリを作る。
 e.g., <code>mkdir ~/mnt</code></p></li>
 
 <li><p>マウントする:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% sshfs watal@example.com:/home/watal ~/mnt</code></pre></div></li>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sshfs watal@example.com:/home/watal ~/mnt</code></pre></div></li>
 
 <li><p>アンマウントする:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% umount ~/mnt</code></pre></div></li>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">umount ~/mnt</code></pre></div></li>
 </ol>
 
 </article>

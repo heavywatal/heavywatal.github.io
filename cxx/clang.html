@@ -109,27 +109,21 @@ clang / llvm
 
 <h3 id="mac">Mac</h3>
 
-<p>Xcode の Command Line Tools にほぼ最新版が含まれている:</p>
-
-<pre><code>% clang -v
-Apple LLVM version 5.1 (clang-503.0.40) (based on LLVM 3.4svn)
-Target: x86_64-apple-darwin13.1.0
-Thread model: posix
-</code></pre>
+<p>Xcode の Command Line Tools にほぼ最新版が含まれている: <code>clang -v</code></p>
 
 <h3 id="ubuntu-12-04-binary">Ubuntu 12.04 (Binary)</h3>
 
 <ol>
 <li><p>ダウンロードして展開:</p>
 
-<pre><code>% wget -O- http://llvm.org/releases/3.3/clang+llvm-3.3-amd64-Ubuntu-12.04.2.tar.gz | tar xz
+<pre><code>wget -O- http://llvm.org/releases/3.3/clang+llvm-3.3-amd64-Ubuntu-12.04.2.tar.gz | tar xz
 </code></pre></li>
 
 <li><p>適当なところに置いてパスを通す:</p>
 
-<pre><code>% sudo mv clang+llvm-3.3-amd64-Ubuntu-12.04.2 /usr/local/llvm-3.3
-% sudo ln -s llvm-3.3 /usr/local/llvm
-% export PATH=/usr/local/llvm/bin:$PATH
+<pre><code>sudo mv clang+llvm-3.3-amd64-Ubuntu-12.04.2 /usr/local/llvm-3.3
+sudo ln -s llvm-3.3 /usr/local/llvm
+export PATH=/usr/local/llvm/bin:$PATH
 </code></pre></li>
 
 <li><p><a href="#libc">libc++をインストールする</a></p></li>
@@ -140,41 +134,41 @@ Thread model: posix
 <ol>
 <li><p>必要な道具を揃える (<a href="http://llvm.org/docs/GettingStarted.html#requirements">Requirements</a>):</p>
 
-<pre><code>% sudo apt-get install build-essential subversion texinfo
+<pre><code>sudo apt-get install build-essential subversion texinfo
 </code></pre>
 
 <p><code>llvm/test/</code> のテストを実行したい場合は:</p>
 
-<pre><code>% sudo apt-get install dejagnu tcl expect
+<pre><code>sudo apt-get install dejagnu tcl expect
 </code></pre></li>
 
 <li><p>LLVM をダウンロード:</p>
 
-<pre><code>% svn checkout http://llvm.org/svn/llvm-project/llvm/tags/RELEASE_33/final/ llvm
+<pre><code>svn checkout http://llvm.org/svn/llvm-project/llvm/tags/RELEASE_33/final/ llvm
 </code></pre></li>
 
 <li><p>その中の <code>tools/</code> に Clang を、
 <code>projects/</code> に Compiler-RT をダウンロード:</p>
 
-<pre><code>% cd llvm/tools/
-% svn checkout http://llvm.org/svn/llvm-project/cfe/tags/RELEASE_33/final/ clang
-% cd ../projects/
-% svn checkout http://llvm.org/svn/llvm-project/compiler-rt/tags/RELEASE_33/final/ compiler-rt
+<pre><code>cd llvm/tools/
+svn checkout http://llvm.org/svn/llvm-project/cfe/tags/RELEASE_33/final/ clang
+cd ../projects/
+svn checkout http://llvm.org/svn/llvm-project/compiler-rt/tags/RELEASE_33/final/ compiler-rt
 </code></pre></li>
 
 <li><p>外に <code>build</code> ディレクトリを作って、そこに入る:</p>
 
-<pre><code>% cd ../..
-% mkdir build
-% cd build
+<pre><code>cd ../..
+mkdir build
+cd build
 </code></pre></li>
 
 <li><p>オプションを確認してビルド:</p>
 
-<pre><code>% ../llvm/configure --help
-% ../llvm/configure --enable-optimized --disable-assertions --enable-targets=x86_64 --enable-shared --enable-libffi
-% make
-% sudo make install
+<pre><code>../llvm/configure --help
+../llvm/configure --enable-optimized --disable-assertions --enable-targets=x86_64 --enable-shared --enable-libffi
+make
+sudo make install
 </code></pre>
 
 <div class="note">
@@ -193,21 +187,21 @@ Thread model: posix
 <ol>
 <li><p><code>libsupc++</code> の位置を確認:</p>
 
-<pre><code>% echo | g++-4.8 -Wp,-v -x c++ - -fsyntax-only
+<pre><code>echo | g++-4.8 -Wp,-v -x c++ - -fsyntax-only
 </code></pre></li>
 
 <li><p><code>libcxx</code> をダウンロード:</p>
 
-<pre><code>% svn checkout http://llvm.org/svn/llvm-project/libcxx/tags/RELEASE_33/final/ libcxx
+<pre><code>svn checkout http://llvm.org/svn/llvm-project/libcxx/tags/RELEASE_33/final/ libcxx
 </code></pre></li>
 
 <li><p>一時ディレクトリに移ってビルド:</p>
 
-<pre><code>% mkdir build-libcxx
-% cd build-libcxx
-% CC=clang CXX=clang++ cmake -G &quot;Unix Makefiles&quot; -DLIBCXX_CXX_ABI=libsupc++ -DLIBCXX_LIBSUPCXX_INCLUDE_PATHS=&quot;/usr/local/include/c++/4.8.1/;/usr/local/include/c++/4.8.1/x86_64-linux-gnu/&quot; -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local ../libcxx
-% make
-% sudo make install
+<pre><code>mkdir build-libcxx
+cd build-libcxx
+CC=clang CXX=clang++ cmake -G &quot;Unix Makefiles&quot; -DLIBCXX_CXX_ABI=libsupc++ -DLIBCXX_LIBSUPCXX_INCLUDE_PATHS=&quot;/usr/local/include/c++/4.8.1/;/usr/local/include/c++/4.8.1/x86_64-linux-gnu/&quot; -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local ../libcxx
+make
+sudo make install
 </code></pre></li>
 
 <li><p><code>Makefile</code> で以下のようなオプションと共に使う:</p>

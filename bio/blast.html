@@ -117,13 +117,13 @@ BLAST
 あるいは <code>ncbi-blast-*-universal-macosx.tar.gz</code>
 をダウンロードして展開:</p>
 
-<pre><code>% wget -O- ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.2.30+-x64-linux.tar.gz | tar xz
+<pre><code>wget -O- ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.2.30+-x64-linux.tar.gz | tar xz
 </code></pre></li>
 
 <li><p>しかるべきところに移動してシムリンク:</p>
 
-<pre><code>% sudo mv ncbi-blast-2.2.30+ /usr/local/
-% sudo ln -s /usr/local/ncbi-blast-2.2.30+ /usr/local/ncbi-blast
+<pre><code>sudo mv ncbi-blast-2.2.30+ /usr/local/
+sudo ln -s /usr/local/ncbi-blast-2.2.30+ /usr/local/ncbi-blast
 </code></pre>
 
 <p>あとは <code>/usr/local/ncbi-blast/bin</code> にパスを通して使う。</p></li>
@@ -147,14 +147,14 @@ BLAST
 
 <li><p>展開して移動:</p>
 
-<pre><code>% tar xzf ncbi-blast-2.2.30+-src.tar.gz
-% cd ncbi-blast-2.2.30+-src/c++/
+<pre><code>tar xzf ncbi-blast-2.2.30+-src.tar.gz
+cd ncbi-blast-2.2.30+-src/c++/
 </code></pre></li>
 
 <li><p><code>ncbi-blast-*-universal-macosx.tar.gz</code> に入ってる
 <code>ncbi_package_info</code> を参考に <code>configure</code> して <code>make</code>:</p>
 
-<pre><code>% ./configure --without-debug --with-strip --without-pcre --with-mt --with-flat-makefile --with-64 --with-ncbi-public --without-ccache --without-caution --without-makefile-auto-update --with-projects=scripts/projects/blast/project.lst --with-internal --prefix=/usr/local/ncbi-blast --with-boost=/usr/local/boost-gcc CC=gcc-4.9 CXX=g++-4.9
+<pre><code>./configure --without-debug --with-strip --without-pcre --with-mt --with-flat-makefile --with-64 --with-ncbi-public --without-ccache --without-caution --without-makefile-auto-update --with-projects=scripts/projects/blast/project.lst --with-internal --prefix=/usr/local/ncbi-blast --with-boost=/usr/local/boost-gcc CC=gcc-4.9 CXX=g++-4.9
 </code></pre>
 
 <div class="note">
@@ -168,13 +168,13 @@ BLAST
 <li><p>そのまま <code>make</code> してもダメらしいので
 <code>Makefile.mk</code> の <code>-std=gnu++11</code> を消す:</p>
 
-<pre><code>% sed -i.orig -e 's/-std=[a-z0-9+]\+//' ReleaseMT/build/Makefile.mk
+<pre><code>sed -i.orig -e 's/-std=[a-z0-9+]\+//' ReleaseMT/build/Makefile.mk
 </code></pre></li>
 
 <li><p>ビルドしてインストール:</p>
 
-<pre><code>% make
-% sudo make install
+<pre><code>make
+sudo make install
 </code></pre></li>
 </ol>
 
@@ -197,8 +197,8 @@ export BLASTDB=${HOME}/db/blast
 
 <li><p>確認:</p>
 
-<pre><code>% rehash
-% blastn -version
+<pre><code>rehash
+blastn -version
 </code></pre></li>
 </ol>
 
@@ -216,14 +216,14 @@ export BLASTDB=${HOME}/db/blast
 
 <li><p><code>makeblastdb</code> コマンドでBLASTデータベース形式に変換:</p>
 
-<pre><code>% makeblastdb -in yeast.nt -out ${BLASTDB}/yeast.nt -dbtype nucl -parse_seqids -hash_index
-% makeblastdb -in yeast.aa -out ${BLASTDB}/yeast.aa -dbtype prot -parse_seqids -hash_index
+<pre><code>makeblastdb -in yeast.nt -out ${BLASTDB}/yeast.nt -dbtype nucl -parse_seqids -hash_index
+makeblastdb -in yeast.aa -out ${BLASTDB}/yeast.aa -dbtype prot -parse_seqids -hash_index
 </code></pre>
 
 <p>圧縮ファイルは直接読めないので、展開して標準入力に流し込む。
 このとき <code>-title</code> と <code>-out</code> は必須の引数になる:</p>
 
-<pre><code>% gunzip -c mydata.fa.gz | makeblastdb -in - -title mydata -out ${BLASTDB}/mydata -dbtype nucl -hash_index
+<pre><code>gunzip -c mydata.fa.gz | makeblastdb -in - -title mydata -out ${BLASTDB}/mydata -dbtype nucl -hash_index
 </code></pre></li>
 </ol>
 

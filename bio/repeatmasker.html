@@ -109,10 +109,7 @@ RepeatMasker
 <h3 id="プログラム">プログラム</h3>
 
 <ul>
-<li><p>Perl 5.8 以上:</p>
-
-<pre><code>% perl --version
-</code></pre></li>
+<li><p>Perl 5.8 以上: <code>perl --version</code></p></li>
 
 <li><p>検索エンジンをどれか1つ以上</p>
 
@@ -128,30 +125,24 @@ Homebrewでもできるけどビルドに時間かかるのでバイナリで。
 
 <li><p>RMBlastをインストールし、元のBLASTの <code>bin</code> 内にシムリンクを張る:</p>
 
-<pre><code>% brew install rmblast --without-blast
-% brew list rmblast
-% sudo ln -s $(brew --prefix)/bin/rmblastn /usr/local/ncbi/blast/bin/
+<pre><code>brew install rmblast --without-blast
+brew list rmblast
+sudo ln -s $(brew --prefix)/bin/rmblastn /usr/local/ncbi/blast/bin/
 </code></pre></li>
 </ul></li>
 
 <li><p><a href="http://www.advbiocomp.com/blast.html">AB-BLAST</a> (有料)</p></li>
 
-<li><p><a href="http://hmmer.janelia.org/">HMMER</a> &amp; DFAM (human only):</p>
-
-<pre><code>% brew install hmmer
-</code></pre></li>
+<li><p><a href="http://hmmer.janelia.org/">HMMER</a> &amp; DFAM (human only): <code>brew install hmmer</code></p></li>
 </ol></li>
 
-<li><p><a href="http://tandem.bu.edu/trf/trf.html">Tandem Repeat Finder</a> :</p>
-
-<pre><code>% brew install trf
-</code></pre></li>
+<li><p><a href="http://tandem.bu.edu/trf/trf.html">Tandem Repeat Finder</a>: <code>brew install trf</code></p></li>
 
 <li><p>RepeatMasker 本体
 (どこでもいいけど今回は <code>/usr/local/</code> に入れる):</p>
 
-<pre><code>% wget -O- http://www.repeatmasker.org/RepeatMasker-open-4-0-5.tar.gz | tar xz
-% sudo mv RepeatMasker /usr/local/
+<pre><code>wget -O- http://www.repeatmasker.org/RepeatMasker-open-4-0-5.tar.gz | tar xz
+sudo mv RepeatMasker /usr/local/
 </code></pre>
 
 <p>Homebrewで入れる場合は <code>--without-configure</code> をつけて、
@@ -172,25 +163,25 @@ Homebrewでもできるけどビルドに時間かかるのでバイナリで。
 <li><p><code>/usr/local/RepeatMasker/Libraries/</code> 直下に格納
 (念のためフォルダごと取っといてシムリンク。古いやつは適当に保持):</p>
 
-<pre><code>% cd /usr/local/RepeatMasker/Libraries/
-% wget -O- --http-user=&quot;USERNAME&quot; --http-password=&quot;PASSWORD&quot; http://www.girinst.org/server/archive/RepBase20.04/protected/repeatmaskerlibraries/repeatmaskerlibraries-20140131.tar.gz | tar xz
-% mv Libraries repeatmaskerlibraries-20140131
-% mv RepeatMaskerLib.embl RepeatMaskerLib.embl.orig
-% ln -s repeatmaskerlibraries-20140131/RepeatMaskerLib.embl
+<pre><code>cd /usr/local/RepeatMasker/Libraries/
+wget -O- --http-user=&quot;USERNAME&quot; --http-password=&quot;PASSWORD&quot; http://www.girinst.org/server/archive/RepBase20.04/protected/repeatmaskerlibraries/repeatmaskerlibraries-20140131.tar.gz | tar xz
+mv Libraries repeatmaskerlibraries-20140131
+mv RepeatMaskerLib.embl RepeatMaskerLib.embl.orig
+ln -s repeatmaskerlibraries-20140131/RepeatMaskerLib.embl
 </code></pre></li>
 
 <li><p><a href="http://www.dfam.org/">Dfam</a> のアップデートがあれば
 <code>Libraries/Dfam.hmm</code> ファイルを入れ替え:</p>
 
-<pre><code>% mv Dfam.hmm Dfam.hmm.orig
-% wget ftp://selab.janelia.org/pub/dfam/Release/Dfam_1.4/Dfam.hmm.gz
-% gunzip Dfam.hmm.gz
+<pre><code>mv Dfam.hmm Dfam.hmm.orig
+wget ftp://selab.janelia.org/pub/dfam/Release/Dfam_1.4/Dfam.hmm.gz
+gunzip Dfam.hmm.gz
 </code></pre></li>
 
 <li><p><code>configure</code> スクリプト実行:</p>
 
-<pre><code>% cd ..
-% ./configure &lt;~/bio/RepeatMasker.conf
+<pre><code>cd ..
+./configure &lt;~/bio/RepeatMasker.conf
 </code></pre>
 
 <p>標準入力は毎回同じなのでファイルにしてしまったほうが楽チン</p></li>
@@ -198,7 +189,7 @@ Homebrewでもできるけどビルドに時間かかるのでバイナリで。
 
 <p>FASTA形式の反復配列を分類群単位で入手することもできる:</p>
 
-<pre><code>% wget -o- --http-user=&quot;USERNAME&quot; --http-password=&quot;PASSWORD&quot; http://www.girinst.org/server/RepBase/protected/RepBase20.04.fasta/fngrep.ref
+<pre><code>wget -o- --http-user=&quot;USERNAME&quot; --http-password=&quot;PASSWORD&quot; http://www.girinst.org/server/RepBase/protected/RepBase20.04.fasta/fngrep.ref
 </code></pre>
 
 <h2 id="使用方法">使用方法</h2>
@@ -209,8 +200,8 @@ Homebrewでもできるけどビルドに時間かかるのでバイナリで。
 
 <p><a href="http://www.animalgenome.org/bioinfo/resources/manuals/RepeatMasker.html">http://www.animalgenome.org/bioinfo/resources/manuals/RepeatMasker.html</a> :</p>
 
-<pre><code>% /usr/local/RepeatMasker/RepeatMasker -h | less
-% less /usr/local/RepeatMasker/repeatmasker.help
+<pre><code>/usr/local/RepeatMasker/RepeatMasker -h | less
+less /usr/local/RepeatMasker/repeatmasker.help
 </code></pre>
 
 <p><code>-engine [crossmatch|wublast|abblast|ncbi|hmmer|decypher]</code></p>
@@ -279,22 +270,22 @@ TSVではなく固定幅に近い表で、例外も多くて使いにくい。</
 <ol>
 <li><p>RepeatScout本体をインストール:</p>
 
-<pre><code>% brew install repeatscout --with-trf
+<pre><code>brew install repeatscout --with-trf
 </code></pre></li>
 
 <li><p>L-mer の頻度テーブルをつくる:</p>
 
-<pre><code>% build_lmer_table -l 14 -sequence myseq.fa -freq lmer_table
+<pre><code>build_lmer_table -l 14 -sequence myseq.fa -freq lmer_table
 </code></pre></li>
 
 <li><p>そのテーブルと配列から反復配列のFASTAを作る:</p>
 
-<pre><code>% RepeatScout -sequence myseq.fa -output rs_output.fa -freq lmer_table -l 14
+<pre><code>RepeatScout -sequence myseq.fa -output rs_output.fa -freq lmer_table -l 14
 </code></pre></li>
 
 <li><p>TRFとNSEGを呼び出して &gt;50% low-complexity なものを除外:</p>
 
-<pre><code>% cat rs_output.fa | filter-stage-1.prl &gt;rs_filtered1.fa
+<pre><code>cat rs_output.fa | filter-stage-1.prl &gt;rs_filtered1.fa
 </code></pre>
 
 <div class="note">
@@ -306,17 +297,17 @@ TSVではなく固定幅に近い表で、例外も多くて使いにくい。</
 
 <li><p>RepeatMaskerで位置と登場回数を調べる:</p>
 
-<pre><code>% RepeatMasker -parallel 4 -dir . -lib rs_filtered1.fa myseq.fa
+<pre><code>RepeatMasker -parallel 4 -dir . -lib rs_filtered1.fa myseq.fa
 </code></pre></li>
 
 <li><p>一定回数に満たないものを除外:</p>
 
-<pre><code>% cat rs_filtered1.fa | filter-stage-2.prl --thresh=10 --cat=myseq.fa.out &gt;rs_filtered2.fa
+<pre><code>cat rs_filtered1.fa | filter-stage-2.prl --thresh=10 --cat=myseq.fa.out &gt;rs_filtered2.fa
 </code></pre></li>
 
 <li><p>遺伝子領域のGFFなどを与え、mobile elementっぽくないものを除去:</p>
 
-<pre><code>% compare-out-to-gff.prl --gff=known_genes.gff --cat=myseq.fa.out --f=rs_filtered2.fa &gt;lib.ref
+<pre><code>compare-out-to-gff.prl --gff=known_genes.gff --cat=myseq.fa.out --f=rs_filtered2.fa &gt;lib.ref
 </code></pre></li>
 </ol>
 
@@ -340,19 +331,19 @@ TSVではなく固定幅に近い表で、例外も多くて使いにくい。</
 
 <li><p>RECON:</p>
 
-<pre><code>% brew install recon
+<pre><code>brew install recon
 </code></pre></li>
 
 <li><p>RepeatModeler 本体:</p>
 
-<pre><code>% wget -O- http://www.repeatmasker.org/RepeatModeler-open-1-0-8.tar.gz | tar xz
-% sudo mv RepeatModeler /usr/local/
+<pre><code>wget -O- http://www.repeatmasker.org/RepeatModeler-open-1-0-8.tar.gz | tar xz
+sudo mv RepeatModeler /usr/local/
 </code></pre>
 
 <p>例によって <code>configure</code> も実行:</p>
 
-<pre><code>% cd /usr/local/RepeatModeler
-% perl configure &lt;~/bio/RepeatModeler.conf
+<pre><code>cd /usr/local/RepeatModeler
+perl configure &lt;~/bio/RepeatModeler.conf
 </code></pre></li>
 </ul>
 
@@ -361,19 +352,19 @@ TSVではなく固定幅に近い表で、例外も多くて使いにくい。</
 <ol>
 <li><p>カレントディレクトリにBLASTデータベースを構築:</p>
 
-<pre><code>% BuilDatabase -name Colletotrichum_orbiculare -engine ncbi path/to/Colletotrichum_orbiculare.fa
+<pre><code>BuilDatabase -name Colletotrichum_orbiculare -engine ncbi path/to/Colletotrichum_orbiculare.fa
 </code></pre></li>
 
 <li><p>本体を実行(かなり時間がかかる):</p>
 
-<pre><code>% RepeatModeler -engine ncbi -pa 4 -database Colletotrichum_orbiculare &gt;run.out
+<pre><code>RepeatModeler -engine ncbi -pa 4 -database Colletotrichum_orbiculare &gt;run.out
 </code></pre>
 
 <p><code>RM_[PID].[DATE]/</code> に結果が書き出される。</p></li>
 
 <li><p>できあがった <code>consensi.fa.classified</code> をライブラリとして RepeatMasker を実行:</p>
 
-<pre><code>% RepeatMasker -lib consensi.fa.classified some_sequence.fa
+<pre><code>RepeatMasker -lib consensi.fa.classified some_sequence.fa
 </code></pre></li>
 </ol>
 
@@ -389,29 +380,26 @@ TSVではなく固定幅に近い表で、例外も多くて使いにくい。</
 <ol>
 <li><p>本体をダウンロード:</p>
 
-<pre><code>% wget -O- http://www.compgen.uni-muenster.de/tools/teclass/download/TEclass-2.1.3.tar.gz | tar xz
-% cd TEclass-2.1.3/
-% less README
+<pre><code>wget -O- http://www.compgen.uni-muenster.de/tools/teclass/download/TEclass-2.1.3.tar.gz | tar xz
+cd TEclass-2.1.3/
+less README
 </code></pre></li>
 
 <li><p>周辺ライブラリを整備。
 でもとりあえず分類したいだけならblastclustなどは不要らしい:</p>
 
-<pre><code>% ./Download_dependencies.sh
-% ./Compile_dependencies.sh
-% ./Configure.pl
+<pre><code>./Download_dependencies.sh
+./Compile_dependencies.sh
+./Configure.pl
 </code></pre></li>
 
 <li><p>pre-built classifiers (&gt;400MB) をダウンロード:</p>
 
-<pre><code>% cd path/to/TEclass/classifiers/
-% wget -O- http://www.compgen.uni-muenster.de/tools/teclass/download/classifiers.tar.gz | tar xz
+<pre><code>cd path/to/TEclass/classifiers/
+wget -O- http://www.compgen.uni-muenster.de/tools/teclass/download/classifiers.tar.gz | tar xz
 </code></pre></li>
 
-<li><p>実行:</p>
-
-<pre><code>% ./TEclassTest.pl file.fa
-</code></pre></li>
+<li><p>実行: <code>./TEclassTest.pl file.fa</code></p></li>
 
 <li><p>結果はひとつのディレクトリにまとめて書き出される</p>
 

@@ -116,9 +116,9 @@ cf. <a href="/dev/devenv.html">/dev/devenv</a></p></li>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">/usr/bin/ruby -e <span class="s2">&#34;</span><span class="k">$(</span>curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install<span class="k">)</span><span class="s2">&#34;</span></code></pre></div>
 <p>デフォルトの <code>/usr/local/</code> にインストールするのが嫌なら、
 例えばホーム以下の <code>~/.homebrew/</code> にインストールすることもできる:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% <span class="nb">cd</span>
-% mkdir .homebrew
-% curl -L https://github.com/Homebrew/brew/tarball/master <span class="p">|</span> tar xz --strip <span class="m">1</span> -C .homebrew</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span>
+mkdir .homebrew
+curl -L https://github.com/Homebrew/brew/tarball/master <span class="p">|</span> tar xz --strip <span class="m">1</span> -C .homebrew</code></pre></div>
 <p>が、<code>/usr/local/</code> 以外にインストールすると、
 bottle機能を封じられて毎回自前ビルドする仕様になってしまったので、
 非力なラップトップとかでは結構厳しい。</p></li>
@@ -140,39 +140,39 @@ bottle機能を封じられて毎回自前ビルドする仕様になってし�
 <ul>
 <li><p>Homebrew本体とカタログをアップデートし、アップグレード可能なパッケージを表示:</p>
 
-<pre><code>% brew update &amp;&amp; brew outdated
+<pre><code>brew update &amp;&amp; brew outdated
 </code></pre></li>
 
 <li><p><code>outdated</code> なものを全てアップグレード:</p>
 
-<pre><code>% brew upgrade
+<pre><code>brew upgrade
 </code></pre></li>
 
 <li><p>パッケージのバージョンを固定し、<code>brew upgrade --all</code> の適用外にする。
 頻繁に更新され、やたらCPUを使うやつらに。</p>
 
-<pre><code>% brew pin imagemagick
+<pre><code>brew pin imagemagick
 </code></pre></li>
 
 <li><p>パッケージ検索:</p>
 
-<pre><code>% brew search text
+<pre><code>brew search text
 </code></pre></li>
 
 <li><p>パッケージ情報の表示:</p>
 
-<pre><code>% brew info formula
+<pre><code>brew info formula
 </code></pre></li>
 
 <li><p>パッケージのインストール・アンインストール:</p>
 
-<pre><code>% brew install formula
-% brew uninstall formula
+<pre><code>brew install formula
+brew uninstall formula
 </code></pre></li>
 
 <li><p>インストール済みパッケージ、またはパッケージ内ファイルの一覧:</p>
 
-<pre><code>% brew list [formula]
+<pre><code>brew list [formula]
 </code></pre></li>
 </ul>
 
@@ -255,15 +255,10 @@ gccやboostなどのデカいやつはとりあえずデフォルトで入れた
 </ul>
 
 <p>明示的にリポジトリを追加する:</p>
-
-<pre><code>% brew tap brewsci/bio
-% brew install libsequence
-</code></pre>
-
-<p>暗黙に <code>brew tap</code> しつつ直接インストールも可能:</p>
-
-<pre><code>% brew install brewsci/bio/libsequence
-</code></pre>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew tap brewsci/bio
+brew install libsequence</code></pre></div>
+<p>暗黙に <code>brew tap</code> しつつ直接インストールも可能:
+<code>brew install brewsci/bio/libsequence</code></p>
 
 <p>バイオインフォマティクスなど科学計算のツール群はHomebrew公式タップ
 <a href="https://github.com/Homebrew/homebrew-science"><code>homebrew/science</code></a>
@@ -301,17 +296,10 @@ gccやboostなどのデカいやつはとりあえずデフォルトで入れた
 
 <p>GUIアプリケーションもHomebrewで管理してしまおうという野心的な拡張機能。</p>
 
-<p>インストールは1行:</p>
-
-<pre><code>% brew tap caskroom/cask
-</code></pre>
-
-<p>使うときは普通の <code>brew</code> コマンドに <code>cask</code> を挟むだけ:</p>
-
-<pre><code>% brew cask install libreoffice
-% brew cask list
-</code></pre>
-
+<p><code>brew tap caskroom/cask</code> でインストール。
+使うときは普通の <code>brew</code> コマンドに <code>cask</code> を挟むだけ:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew cask install libreoffice
+brew cask list</code></pre></div>
 <p>アプリ側でアップデートを実行するとCask内でのバージョンと食い違っちゃうけど使用上は問題ないらしい。</p>
 
 <p>alfred, amazon-drive, amazon-music, atom,

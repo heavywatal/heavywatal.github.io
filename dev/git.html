@@ -130,9 +130,9 @@ Linuxなら初めから入ってるのを使うか、Linuxbrewで新しいのを
 
 <li><p><code>~/.gitconfig</code> にユーザ名やアドレスを登録する。
 <a href="https://git-scm.com/docs/git-config">https://git-scm.com/docs/git-config</a></p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% git config --global user.name <span class="s2">&#34;Watal M. Iwasaki&#34;</span>
-% git config --global user.email <span class="s2">&#34;heavy.watalあmail.com&#34;</span>
-% less ~/.gitconfig</code></pre></div></li>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git config --global user.name <span class="s2">&#34;Watal M. Iwasaki&#34;</span>
+git config --global user.email <span class="s2">&#34;heavy.watalあmail.com&#34;</span>
+less ~/.gitconfig</code></pre></div></li>
 
 <li><p>ついでに <code>pushinsteadof</code> の設定をしておく。
 httpsで高速にclone/fetch/pullして、
@@ -425,18 +425,18 @@ git rebase -i master
 
 <p>PRマージ済みのリモートブランチを消したい。
 明示的に消すオプションを付けるか、空ブランチをpushするか:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% git push --delete origin issue-42
-% git push origin :issue-42</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git push --delete origin issue-42
+git push origin :issue-42</code></pre></div>
 <p>別のマシンやGitHub PR画面のボタンから消したりすると、
 消したはずのリモートブランチの記録が手元のリポジトリに残ることがある。
 まず確認:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% git branch -a
-% git remote show origin</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git branch -a
+git remote show origin</code></pre></div>
 <p>こうしたstaleなブランチを刈り取る方法には二通りある:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% git fetch --prune
-% git remote prune origin</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git fetch --prune
+git remote prune origin</code></pre></div>
 <p>それでも消えないローカルブランチは手動で消す:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% git branch -d issue-666
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git branch -d issue-666
 error: The branch <span class="s1">&#39;issue-666&#39;</span> is not fully merged.
 If you are sure you want to delete it, run <span class="s1">&#39;git branch -D issue-666&#39;</span>.</code></pre></div>
 <p>マージ済みのブランチじゃないと上記のように怒ってくれる。
@@ -450,15 +450,15 @@ If you are sure you want to delete it, run <span class="s1">&#39;git branch -D i
 <ol>
 <li><p><code>push</code>しようとして怒られて気付く</p>
 
-<pre><code>% git push
+<pre><code>git push
 fatal: You are not currently on a branch
-% git status
+git status
 HEAD detached from *******
 </code></pre></li>
 
 <li><p><code>master</code>に戻ると道筋を示してくれる:</p>
 
-<pre><code>% git checkout master
+<pre><code>git checkout master
 Warning: you are leaving 2 comits behind, not connected to
 any of your branches
 If you want to keep them by creating a new branch, this may be a good time
@@ -469,13 +469,13 @@ git branch &lt;new-branch-name&gt; *******
 
 <li><p>言われたとおりbranchを作って<code>merge</code></p>
 
-<pre><code>% git branch detached *******
-% git merge detached
+<pre><code>git branch detached *******
+git merge detached
 </code></pre></li>
 
 <li><p>不要になったbranchを消す</p>
 
-<pre><code>% git branch -d detached
+<pre><code>git branch -d detached
 </code></pre></li>
 </ol>
 
@@ -490,16 +490,16 @@ git branch &lt;new-branch-name&gt; *******
 などとしても統合前までは辿れない。
 予め全ファイルをサブディレクトリに動かすだけのcommitをしておいて、
 ルート同士でmergeすると <code>--follow</code> が効く状態で取り込める。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% <span class="nb">cd</span> /path/to/<span class="si">${</span><span class="nv">subrepo</span><span class="si">}</span>/
-% mkdir <span class="si">${</span><span class="nv">subdir</span><span class="si">}</span>
-% git mv <span class="k">$(</span>git ls-tree --name-only master<span class="k">)</span> <span class="si">${</span><span class="nv">subdir</span><span class="si">}</span>/
-% git commit -m <span class="s2">&#34;:construction: Move all to </span><span class="si">${</span><span class="nv">subdir</span><span class="si">}</span><span class="s2">/ for integration&#34;</span>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> /path/to/<span class="si">${</span><span class="nv">subrepo</span><span class="si">}</span>/
+mkdir <span class="si">${</span><span class="nv">subdir</span><span class="si">}</span>
+git mv <span class="k">$(</span>git ls-tree --name-only master<span class="k">)</span> <span class="si">${</span><span class="nv">subdir</span><span class="si">}</span>/
+git commit -m <span class="s2">&#34;:construction: Move all to </span><span class="si">${</span><span class="nv">subdir</span><span class="si">}</span><span class="s2">/ for integration&#34;</span>
 
-% <span class="nb">cd</span> /path/to/<span class="si">${</span><span class="nv">mainrepo</span><span class="si">}</span>/
-% git remote add <span class="si">${</span><span class="nv">subrepo</span><span class="si">}</span> /path/to/<span class="si">${</span><span class="nv">subrepo</span><span class="si">}</span>
-% git fetch <span class="si">${</span><span class="nv">subrepo</span><span class="si">}</span>
-% git merge --no-commit --allow-unrelated-histories <span class="si">${</span><span class="nv">subrepo</span><span class="si">}</span>/master
-% git commit</code></pre></div>
+<span class="nb">cd</span> /path/to/<span class="si">${</span><span class="nv">mainrepo</span><span class="si">}</span>/
+git remote add <span class="si">${</span><span class="nv">subrepo</span><span class="si">}</span> /path/to/<span class="si">${</span><span class="nv">subrepo</span><span class="si">}</span>
+git fetch <span class="si">${</span><span class="nv">subrepo</span><span class="si">}</span>
+git merge --no-commit --allow-unrelated-histories <span class="si">${</span><span class="nv">subrepo</span><span class="si">}</span>/master
+git commit</code></pre></div>
 <ul>
 <li><p>fetchせずにmergeしようとするとブランチ情報が無くて怒られる:
 <code>not something we can merge</code></p></li>

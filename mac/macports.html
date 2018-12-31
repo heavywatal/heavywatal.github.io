@@ -135,7 +135,7 @@ OSに合ったディスクイメージ <code>MacPorts-***.dmg</code> をダウ�
 <li><p>Terminal を開いて
 MacPorts 本体とportカタログをアップデート:</p>
 
-<pre><code>% sudo port selfupdate
+<pre><code>sudo port selfupdate
 </code></pre></li>
 </ol>
 
@@ -146,59 +146,59 @@ MacPorts 本体とportカタログをアップデート:</p>
 <ul>
 <li><p>欲しいportを検索:</p>
 
-<pre><code>% port search bio
+<pre><code>port search bio
 </code></pre></li>
 
 <li><p>気になったportの詳細を表示:</p>
 
-<pre><code>% port info [port]
+<pre><code>port info [port]
 </code></pre></li>
 
 <li><p>portをインストールする時に選択できるオプションを表示。:</p>
 
-<pre><code>% port variants [port]
+<pre><code>port variants [port]
 </code></pre></li>
 
 <li><p>そのportを入れるために必要な（依存している）portを表示。
 下はrecursive版で、<code>--full</code> オプションでフル表示できる。:</p>
 
-<pre><code>% port deps [port]
-% port rdeps [port]
+<pre><code>port deps [port]
+port rdeps [port]
 </code></pre></li>
 
 <li><p>そのportに依存しているやつらを表示。:</p>
 
-<pre><code>% port dependents [port]
-% port rdependents [port]
+<pre><code>port dependents [port]
+port rdependents [port]
 </code></pre></li>
 
 <li><p>portのインストール/アンインストール。
 そいつが依存しているほかのportも自動的にインストールされる。:</p>
 
-<pre><code>% sudo port install [port] [+variant]
-% sudo port uninstall [port]
+<pre><code>sudo port install [port] [+variant]
+sudo port uninstall [port]
 </code></pre></li>
 
 <li><p>インストール済みのportを一覧表示:</p>
 
-<pre><code>% port installed
+<pre><code>port installed
 </code></pre></li>
 
 <li><p>MacPorts 本体とportカタログをアップデートし、
 アップデート可能なものを一覧表示:</p>
 
-<pre><code>% sudo port selfupdate &amp;&amp; port outdated
+<pre><code>sudo port selfupdate &amp;&amp; port outdated
 </code></pre></li>
 
 <li><p>アップデート可能なものをすべてアップデート。
 古いものを自動でアンインストールするには <code>-u</code> オプションを付ける。:</p>
 
-<pre><code>% sudo port upgrade outdated
+<pre><code>sudo port upgrade outdated
 </code></pre></li>
 
 <li><p>インストール済みのportを再インストール:</p>
 
-<pre><code>% sudo port -n upgrade --force [port]
+<pre><code>sudo port -n upgrade --force [port]
 </code></pre></li>
 </ul>
 
@@ -206,13 +206,13 @@ MacPorts 本体とportカタログをアップデート:</p>
 
 <pre><code>過去のバージョンのportをインストール
 :   1.  &lt;http://trac.macports.org/browser/trunk/dports&gt; から目的のportのページを開く
-    2.  右上の&quot;Revision Log&quot;からお目当てのバージョンのリビジョン番号を確認
-    3.  以下のような svn コマンドで
+    1.  右上の&quot;Revision Log&quot;からお目当てのバージョンのリビジョン番号を確認
+    1.  以下のような svn コマンドで
         `Portfile` をダウンロードし、インストール:
 
-            % svn checkout -r 74577 http://svn.macports.org/repository/macports/trunk/dports/shells/zsh-devel zsh-devel-4.3.11
-            % cd zsh-devel-4.3.11
-            % sudo port install +mp_completion +doc +examples
+            svn checkout -r 74577 http://svn.macports.org/repository/macports/trunk/dports/shells/zsh-devel zsh-devel-4.3.11
+            cd zsh-devel-4.3.11
+            sudo port install +mp_completion +doc +examples
 </code></pre>
 
 <h3 id="pseudo-portnames">pseudo-portnames</h3>
@@ -220,8 +220,8 @@ MacPorts 本体とportカタログをアップデート:</p>
 <p>各コマンドの対象となるportを、実名だけでなく状態によってまとめて指定できる。
 e.g.:</p>
 
-<pre><code>% port list leaves
-% sudo port uninstall $(port echo inactive)
+<pre><code>port list leaves
+sudo port uninstall $(port echo inactive)
 </code></pre>
 
 <dl>
@@ -268,8 +268,8 @@ variantとして <code>+with_default_names</code> を指定してインストー
 必要なものを <code>/usr/local/bin/</code> にシムリンク張るか、
 <code>.zshrc</code> などにエイリアスを定義して使う。:</p>
 
-<pre><code>% sudo port install coreutils
-% sudo ln -s /opt/local/bin/gls /usr/local/bin/ls
+<pre><code>sudo port install coreutils
+sudo ln -s /opt/local/bin/gls /usr/local/bin/ls
 
 alias ls=&quot;gls -vF --show-control-chars --color=auto&quot;
 </code></pre>
@@ -285,8 +285,8 @@ xzは最も圧縮率が高く、圧縮にはbzip2よりも時間がかかる一�
 ということで、多くのユーザーに配布・展開されるようなファイルの圧縮に効果的。
 あるいは、書き換える予定は無いが長期保存しておかなければいけないデカいファイルとか。:</p>
 
-<pre><code>% sudo port install xz gnutar
-% tar cJf archive.tar.xz archive/
+<pre><code>sudo port install xz gnutar
+tar cJf archive.tar.xz archive/
 </code></pre>
 
 <h3 id="zsh">zsh</h3>
@@ -296,10 +296,10 @@ port コマンドを補完できるvariantがあるのでこれを使う。
 ログインシェルにするにはひと手間必要。
 その後の設定は <a href="/dev/zsh.html">こちらのページ参照</a> 。:</p>
 
-<pre><code>% sudo port install zsh-devel +mp_completion +doc +examples
-% sudo emacs -nw /etc/shells # 末尾に/opt/local/bin/zshを追加
-% chsh -s /opt/local/bin/zsh
-% exit
+<pre><code>sudo port install zsh-devel +mp_completion +doc +examples
+sudo emacs -nw /etc/shells # 末尾に/opt/local/bin/zshを追加
+chsh -s /opt/local/bin/zsh
+exit
 </code></pre>
 
 <h3 id="misc">misc.</h3>

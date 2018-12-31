@@ -132,19 +132,19 @@ git
 <ol>
 <li><p>RHEL/CentOS 6系の場合まずlibcurlが古すぎるので、
 <a href="https://curl.haxx.se/download.html">最新のcurl</a>をソースコードからインストール:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% wget -O- https://curl.haxx.se/download/curl-7.59.0.tar.gz <span class="p">|</span> tar xz
-% <span class="nb">cd</span> curl-7.59.0/
-% ./configure --prefix<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/opt/local
-% make -j4</code></pre></div></li>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">wget -O- https://curl.haxx.se/download/curl-7.59.0.tar.gz <span class="p">|</span> tar xz
+<span class="nb">cd</span> curl-7.59.0/
+./configure --prefix<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/opt/local
+make -j4</code></pre></div></li>
 
 <li><p><code>git --version</code> を確認して 1.7.12 未満だったら
 <a href="https://github.com/git/git/releases">最新のgit</a>をソースコードからインストール:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% wget -O- https://github.com/git/git/archive/v2.16.3.tar.gz <span class="p">|</span> tar xz
-% <span class="nb">cd</span> git-2.16.3/
-% autoreconf -i
-% ./configure --prefix<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/opt/local --with-curl<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/opt/local
-% make -j4
-% make install</code></pre></div></li>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">wget -O- https://github.com/git/git/archive/v2.16.3.tar.gz <span class="p">|</span> tar xz
+<span class="nb">cd</span> git-2.16.3/
+autoreconf -i
+./configure --prefix<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/opt/local --with-curl<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/opt/local
+make -j4
+make install</code></pre></div></li>
 
 <li><p>上記の自前curl/gitを利用するために環境変数をセット:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/opt/local/bin:<span class="nv">$PATH</span>
@@ -183,10 +183,11 @@ boost
 <p>コンパイラや <code>make</code> などはOSに付いてこないので別途インストールが必要。
 <a href="https://developer.apple.com/downloads/">https://developer.apple.com/downloads/</a> からダウンロードするか、
 ターミナルから以下のコマンドを実行:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% xcode-select --install</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">xcode-select -p
+xcode-select --install</code></pre></div>
 <p>インストールされているバージョンなどを確認するには:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% pkgutil --pkg-info<span class="o">=</span>com.apple.pkg.CLTools_Executables
-% clang -v</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">pkgutil --pkg-info<span class="o">=</span>com.apple.pkg.CLTools_Executables
+clang -v</code></pre></div>
 <p>総合開発環境 Xcode をインストールしたければ、App Store から <a href="https://itunes.apple.com/jp/app/xcode/id497799835">Xcode</a> を選択。</p>
 
 <h3 id="パッケージ管理ツール">パッケージ管理ツール</h3>
@@ -221,7 +222,7 @@ boost
 
 <li><p><code>Pillow</code> をインストールする前に:</p>
 
-<p>% sudo apt-get install libtiff5-dev libwebp-dev libfreetype6-dev liblcms2-dev libopenjpeg-dev</p></li>
+<p>sudo apt-get install libtiff5-dev libwebp-dev libfreetype6-dev liblcms2-dev libopenjpeg-dev</p></li>
 </ul>
 
 <h3 id="c">C++</h3>
@@ -254,7 +255,7 @@ boost
 <dd><p>ホントに消していいかどうか確認してくれるようなオプションつきのエイリアスを
 <code>.zshrc</code> に設定しておく。</p>
 
-<pre><code>% rmi .DS_Store
+<pre><code>rmi .DS_Store
 rm: remove regular file '.DS_Store'?
 </code></pre>
 
@@ -283,7 +284,7 @@ trash-rm
 Linuxのものになってしまうので
 <a href="/mac/homebrew.html">Homebrew</a> で <code>rmtrash</code> を入れる:</p>
 
-<pre><code>% brew install rmtrash
+<pre><code>brew install rmtrash
 </code></pre></dd>
 </dl>
 

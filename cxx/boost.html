@@ -113,7 +113,7 @@ Boost — ほぼ標準C&#43;&#43;ライブラリ
 で最新版を簡単にインストールできる。
 オプションは適当に:</p>
 
-<pre><code>% brew install boost
+<pre><code>brew install boost
 </code></pre>
 
 <p><code>--layout=tagged</code> でビルドされるため、
@@ -130,15 +130,15 @@ Boost — ほぼ標準C&#43;&#43;ライブラリ
 <ol>
 <li><p><a href="http://www.boost.org/users/download/">http://www.boost.org/users/download/</a> から最新ソースを入手して展開。</p>
 
-<pre><code>% wget -O- https://dl.bintray.com/boostorg/release/1.67.0/source/boost_1_67_0.tar.bz2 | tar xj
-% cd boost_1_67_0/
+<pre><code>wget -O- https://dl.bintray.com/boostorg/release/1.67.0/source/boost_1_67_0.tar.bz2 | tar xj
+cd boost_1_67_0/
 </code></pre></li>
 
 <li><p>ビルドすべきライブラリを考える <code>./bootstrap.sh --show-libraries</code></p></li>
 
 <li><p>適当なオプションを与えて <code>bootstrap.sh</code> を実行:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% ./bootstrap.sh --help
-% ./bootstrap.sh --without-icu --with-libraries<span class="o">=</span>context,filesystem,graph,iostreams,program_options,serialization,system,test</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">./bootstrap.sh --help
+./bootstrap.sh --without-icu --with-libraries<span class="o">=</span>context,filesystem,graph,iostreams,program_options,serialization,system,test</code></pre></div>
 <p>設定が <code>project-config.jam</code> に書き出され、
 <code>b2</code> がビルドされる。 <code>./b2 --help</code></p></li>
 
@@ -157,20 +157,20 @@ using clang : 14 : clang++ : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++1
 <a href="http://zlib.net/">zlib公式</a>からソースを落として展開し、
 <a href="http://www.boost.org/doc/libs/release/libs/iostreams/doc/installation.html">一緒にビルドされるように</a>
 <code>ZLIB_SOURCE</code>をフルパス指定する。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% wget -O- http://zlib.net/zlib-1.2.8.tar.gz <span class="p">|</span> tar xz -C <span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/tmp/build
-% <span class="nb">export</span> <span class="nv">ZLIB_SOURCE</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/tmp/build/zlib-1.2.8</code></pre></div></li>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">wget -O- http://zlib.net/zlib-1.2.8.tar.gz <span class="p">|</span> tar xz -C <span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/tmp/build
+<span class="nb">export</span> <span class="nv">ZLIB_SOURCE</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/tmp/build/zlib-1.2.8</code></pre></div></li>
 
 <li><p>ツールセットを指定してビルド:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% ./b2 -j2 <span class="nv">toolset</span><span class="o">=</span>gcc-14 <span class="nv">link</span><span class="o">=</span>static,shared runtime-link<span class="o">=</span>shared <span class="nv">threading</span><span class="o">=</span>multi <span class="nv">variant</span><span class="o">=</span>release --layout<span class="o">=</span>tagged --build-dir<span class="o">=</span>../b2gcc --stagedir<span class="o">=</span>stage/gcc stage
-% ./b2 -j2 <span class="nv">toolset</span><span class="o">=</span>darwin-14 <span class="nv">link</span><span class="o">=</span>static,shared runtime-link<span class="o">=</span>shared <span class="nv">threading</span><span class="o">=</span>multi <span class="nv">variant</span><span class="o">=</span>release --layout<span class="o">=</span>tagged --build-dir<span class="o">=</span>../b2gcc --stagedir<span class="o">=</span>stage/gcc stage
-% ./b2 -j2 <span class="nv">toolset</span><span class="o">=</span>clang-14 <span class="nv">link</span><span class="o">=</span>static,shared runtime-link<span class="o">=</span>shared <span class="nv">threading</span><span class="o">=</span>multi <span class="nv">variant</span><span class="o">=</span>release --layout<span class="o">=</span>tagged --build-dir<span class="o">=</span>../b2clang --stagedir<span class="o">=</span>stage/clang stage</code></pre></div></li>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">./b2 -j2 <span class="nv">toolset</span><span class="o">=</span>gcc-14 <span class="nv">link</span><span class="o">=</span>static,shared runtime-link<span class="o">=</span>shared <span class="nv">threading</span><span class="o">=</span>multi <span class="nv">variant</span><span class="o">=</span>release --layout<span class="o">=</span>tagged --build-dir<span class="o">=</span>../b2gcc --stagedir<span class="o">=</span>stage/gcc stage
+./b2 -j2 <span class="nv">toolset</span><span class="o">=</span>darwin-14 <span class="nv">link</span><span class="o">=</span>static,shared runtime-link<span class="o">=</span>shared <span class="nv">threading</span><span class="o">=</span>multi <span class="nv">variant</span><span class="o">=</span>release --layout<span class="o">=</span>tagged --build-dir<span class="o">=</span>../b2gcc --stagedir<span class="o">=</span>stage/gcc stage
+./b2 -j2 <span class="nv">toolset</span><span class="o">=</span>clang-14 <span class="nv">link</span><span class="o">=</span>static,shared runtime-link<span class="o">=</span>shared <span class="nv">threading</span><span class="o">=</span>multi <span class="nv">variant</span><span class="o">=</span>release --layout<span class="o">=</span>tagged --build-dir<span class="o">=</span>../b2clang --stagedir<span class="o">=</span>stage/clang stage</code></pre></div></li>
 
 <li><p>prefixを指定してインストール:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% ./b2 -j2 <span class="nv">toolset</span><span class="o">=</span>gcc-14 <span class="nv">link</span><span class="o">=</span>static,shared runtime-link<span class="o">=</span>shared <span class="nv">threading</span><span class="o">=</span>multi <span class="nv">variant</span><span class="o">=</span>release --layout<span class="o">=</span>tagged --build-dir<span class="o">=</span>../b2gcc --stagedir<span class="o">=</span>stage/gcc --prefix<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local install</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">./b2 -j2 <span class="nv">toolset</span><span class="o">=</span>gcc-14 <span class="nv">link</span><span class="o">=</span>static,shared runtime-link<span class="o">=</span>shared <span class="nv">threading</span><span class="o">=</span>multi <span class="nv">variant</span><span class="o">=</span>release --layout<span class="o">=</span>tagged --build-dir<span class="o">=</span>../b2gcc --stagedir<span class="o">=</span>stage/gcc --prefix<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local install</code></pre></div>
 <p>あるいは手動でインストール:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">% rsync -auv stage/gcc/ ~/local/boost-gcc
-% rsync -auv stage/clang/ ~/local/boost-clang
-% rsync -auv boost ~/local/include</code></pre></div></li>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">rsync -auv stage/gcc/ ~/local/boost-gcc
+rsync -auv stage/clang/ ~/local/boost-clang
+rsync -auv boost ~/local/include</code></pre></div></li>
 </ol>
 
 <h3 id="使うとき">使うとき</h3>
