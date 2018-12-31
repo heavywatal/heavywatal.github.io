@@ -63,34 +63,17 @@ if [ $(uname) = Darwin ]; then
     PATH=''
     eval $(/usr/libexec/path_helper -s)
 fi
-PATH=${HOME}/local/bin:${PATH}
 export PATH
 ```
 {{%/div%}}
 
-## `~/.zsh/` 以下にまとめる
-
-1.  ディレクトリを作ってその中に設定ファイルを入れる:
-
-        mkdir ~/.zsh
-
-1.  `~/.zsh/.zshenv` に以下の内容を記述して `ZDOTDIR` を設定:
-
-        export ZDOTDIR=${HOME}/.zsh
-
-1.  `~/.zshenv` にシンボリックリンクを張る:
-
-        cd
-        ln -s .zsh/.zshenv
-
-1.  `zsh` 起動
-    1.  `~/.zshenv -> ~/.zsh/.zshenv` が読み込まれる
-    1.  `ZDOTDIR=${HOME}/.zsh` が設定される
-    1.  `$ZDOTDIR` 以下の設定ファイルが読み込まれる
 
 ## Installation
 
-Macでは [Homebrew]({{< relref "homebrew.md" >}})` (あるいは `[MacPorts]({{< relref "macports.md" >}})) を使うと良い:
+基本的にはOSに入ってる `/bin/zsh` を使う。
+新しいのを入れるなら[Homebrew]({{< relref "homebrew.md" >}})を使うのが楽:
 
-    brew install zsh --without-etcdir
-    brew install zsh-completions
+```sh
+brew install zsh --without-etcdir
+brew install zsh-completions
+```
