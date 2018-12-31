@@ -77,7 +77,7 @@ reshape2::melt(data, id.vars, measure.vars,
     27    1         1      15   2    8.8     3.0    3.6    1.5    2.3
     ```
 
-2. データをlong-formatに整形
+1. データをlong-formatに整形
    ```r
    > molten = reshape2::melt(reshape2::french_fries,
                              id.vars=c("time", "treatment", "subject", "rep"),
@@ -92,7 +92,7 @@ reshape2::melt(data, id.vars, measure.vars,
    6    1         1      15   2 potato   8.8
    ```
 
-3.  [ggplot2]({{< relref "ggplot2.md" >}}) で作図
+1.  [ggplot2]({{< relref "ggplot2.md" >}}) で作図
 
     ```r
     > library(ggplot2)

@@ -37,9 +37,9 @@ Gitでなければ得られない恩恵が大きくなってきている。
   https://git-scm.com/docs/git-config
 
     ```sh
-    % git config --global user.name "Watal M. Iwasaki"
-    % git config --global user.email "heavy.watalあmail.com"
-    % less ~/.gitconfig
+    git config --global user.name "Watal M. Iwasaki"
+    git config --global user.email "heavy.watalあmail.com"
+    less ~/.gitconfig
     ```
 - ついでに `pushinsteadof` の設定をしておく。
   httpsで高速にclone/fetch/pullして、
@@ -233,12 +233,12 @@ git submodule add -b gitsubmodule_https https://github.com/heavywatal/x18n.git
 
         git submodule foreach git fetch
 
-2.  好きなとこまでチェックアウト:
+1.  好きなとこまでチェックアウト:
 
         cd d3/
         git checkout v3.5.6
 
-3.  メインリポジトリでその変更をコミット:
+1.  メインリポジトリでその変更をコミット:
 
         cd ..
         git commit
@@ -252,8 +252,8 @@ https://help.github.com/articles/user-organization-and-project-pages/
 ### ユーザーサイトを作る
 
 1. `USERNAME.github.io` という名前のリポジトリをGitHub上で作成
-2. 公開したいウェブサイトを`master`ブランチとして`push`
-3. `https://USERNAME.github.io` にアクセスしてみる。
+1. 公開したいウェブサイトを`master`ブランチとして`push`
+1. `https://USERNAME.github.io` にアクセスしてみる。
 
 例えば本ウェブサイトは
 `heavywatal.github.io` というリポジトリの
@@ -338,8 +338,8 @@ PRマージ済みのリモートブランチを消したい。
 明示的に消すオプションを付けるか、空ブランチをpushするか:
 
 ```sh
-% git push --delete origin issue-42
-% git push origin :issue-42
+git push --delete origin issue-42
+git push origin :issue-42
 ```
 
 別のマシンやGitHub PR画面のボタンから消したりすると、
@@ -347,21 +347,21 @@ PRマージ済みのリモートブランチを消したい。
 まず確認:
 
 ```sh
-% git branch -a
-% git remote show origin
+git branch -a
+git remote show origin
 ```
 
 こうしたstaleなブランチを刈り取る方法には二通りある:
 
 ```sh
-% git fetch --prune
-% git remote prune origin
+git fetch --prune
+git remote prune origin
 ```
 
 それでも消えないローカルブランチは手動で消す:
 
 ```sh
-% git branch -d issue-666
+git branch -d issue-666
 error: The branch 'issue-666' is not fully merged.
 If you are sure you want to delete it, run 'git branch -D issue-666'.
 ```
@@ -377,15 +377,15 @@ submoduleなどをいじってると意図せずdetached HEAD状態になるこ�
 
 1. `push`しようとして怒られて気付く
    ```
-   % git push
+   git push
    fatal: You are not currently on a branch
-   % git status
+   git status
    HEAD detached from *******
    ```
 
-2. `master`に戻ると道筋を示してくれる:
+1. `master`に戻ると道筋を示してくれる:
    ```
-   % git checkout master
+   git checkout master
    Warning: you are leaving 2 comits behind, not connected to
    any of your branches
    If you want to keep them by creating a new branch, this may be a good time
@@ -394,15 +394,15 @@ submoduleなどをいじってると意図せずdetached HEAD状態になるこ�
     git branch <new-branch-name> *******
    ```
 
-3. 言われたとおりbranchを作って`merge`
+1. 言われたとおりbranchを作って`merge`
    ```
-   % git branch detached *******
-   % git merge detached
+   git branch detached *******
+   git merge detached
    ```
 
-4. 不要になったbranchを消す
+1. 不要になったbranchを消す
    ```
-   % git branch -d detached
+   git branch -d detached
    ```
 
 
@@ -419,16 +419,16 @@ submoduleなどをいじってると意図せずdetached HEAD状態になるこ�
 ルート同士でmergeすると `--follow` が効く状態で取り込める。
 
 ```sh
-% cd /path/to/${subrepo}/
-% mkdir ${subdir}
-% git mv $(git ls-tree --name-only master) ${subdir}/
-% git commit -m ":construction: Move all to ${subdir}/ for integration"
+cd /path/to/${subrepo}/
+mkdir ${subdir}
+git mv $(git ls-tree --name-only master) ${subdir}/
+git commit -m ":construction: Move all to ${subdir}/ for integration"
 
-% cd /path/to/${mainrepo}/
-% git remote add ${subrepo} /path/to/${subrepo}
-% git fetch ${subrepo}
-% git merge --no-commit --allow-unrelated-histories ${subrepo}/master
-% git commit
+cd /path/to/${mainrepo}/
+git remote add ${subrepo} /path/to/${subrepo}
+git fetch ${subrepo}
+git merge --no-commit --allow-unrelated-histories ${subrepo}/master
+git commit
 ```
 
 - fetchせずにmergeしようとするとブランチ情報が無くて怒られる:

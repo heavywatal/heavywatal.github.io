@@ -20,13 +20,13 @@ BibDesk, LaTeXiT, TeX Live Utility, TeXShop などのGUIアプリが不要で、
     あるいは
     `brew cask install basictex`
 
-2.  `/Library/TeX/texbin/` にパスを通す。
+1.  `/Library/TeX/texbin/` にパスを通す。
     基本的には `/etc/paths.d/TeX` 越しに自動的に設定されるはず。
 
-3.  今後の `tlmgr` 操作で管理者権限を使わなくて済むようにパーミッション設定:
+1.  今後の `tlmgr` 操作で管理者権限を使わなくて済むようにパーミッション設定:
     `sudo chown -R $(whoami):wheel /usr/local/texlive/`
 
-4.  `tlmgr update --self --all` で諸々アップデート。
+1.  `tlmgr update --self --all` で諸々アップデート。
 
 TeX Liveの新パージョンが年1回リリースされるので、そのときはインストールからやり直す。
 (`tlmgr update` では更新できない)
@@ -43,7 +43,7 @@ TeX Liveの新パージョンが年1回リリースされるので、そのと�
     \end{document}
     ```
 
-2.  ターミナルからコンパイル:
+1.  ターミナルからコンパイル:
 
     ```sh
     pdflatex hello.tex
@@ -278,7 +278,7 @@ GIFアニメをそのまま埋め込むことはできないので、
 1.  [Bibdesk](http://bibdesk.sourceforge.net/)
     などの文献管理アプリでbibtex形式の文献リストを作る。
     e.g., `mybibdata.bib`
-2.  コマンドにcite keyを入れて本文に挿入。
+1.  コマンドにcite keyを入れて本文に挿入。
     このとき標準の `\cite` ではなく `{natbib}` のものを使う。
     ```tex
     \usepackage[authoryear,round,sort&compress]{natbib}
@@ -291,7 +291,7 @@ GIFアニメをそのまま埋め込むことはできないので、
     \citep[see][]{hudson1987g}  # (see Hudson et al. 1987)
     ```
 
-3.  最後の方に文献リストを挿入:
+1.  最後の方に文献リストを挿入:
     ```tex
     \bibliographystyle{abbrvnat}
     \bibliography{mybibdata}
@@ -299,11 +299,11 @@ GIFアニメをそのまま埋め込むことはできないので、
 
     スタイルを規定する `bst` ファイルはだいたい各Journalで提供してくれる。
 
-4.  元の `tex` をコンパイルして `aux` を生成
-5.  `bibtex` に `aux` を渡して `bbl` を生成
-6.  再び `tex` をコンパイルすると `bbl` を踏まえて `aux` が更新される。
+1.  元の `tex` をコンパイルして `aux` を生成
+1.  `bibtex` に `aux` を渡して `bbl` を生成
+1.  再び `tex` をコンパイルすると `bbl` を踏まえて `aux` が更新される。
     (このときPDF出力すると、文献リストはできるけど引用部分はハテナ?になる)
-7.  さらにもう1回コンパイルして完成
+1.  さらにもう1回コンパイルして完成
 
 最初の2回は `pdflatex -draftmode` としてPDF出力を省略すると早い。
 適切な `Makefile` を書いて自動化するべし。

@@ -75,8 +75,8 @@ Host *
 
 例えば上のような設定を `~/.ssh/config` に書いておけば以下の２つは等価:
 ```
-% ssh -2 eddie@192.168.6.66
-% ssh beast
+ssh -2 eddie@192.168.6.66
+ssh beast
 ```
 
 ### `/etc/ssh_config`:
@@ -113,7 +113,7 @@ UsePAM no
 ## 環境変数
 
 ```
-% echo $SSH_CONNECTION
+echo $SSH_CONNECTION
 [client IP] [client port] [server IP] [server port]
 ```
 

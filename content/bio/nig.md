@@ -12,11 +12,11 @@ https://sc.ddbj.nig.ac.jp/
 <https://sc.ddbj.nig.ac.jp/index.php/ja-howtouse>
 
 1.  [新規ユーザ登録申請](https://sc.ddbj.nig.ac.jp/index.php/ja-new-application)
-2.  責任者にメールが届くので、それに従って誓約書PDFを管理者に送信
-3.  アカウント登録証が手元に届く
-4.  https://sc.ddbj.nig.ac.jp/ でログイン
-5.  [SSH公開鍵登録](https://sc.ddbj.nig.ac.jp/index.php/2014-09-17-05-42-33) (パスワード認証ではSSHできない)
-6.  `~/.ssh/config` に設定を追加:
+1.  責任者にメールが届くので、それに従って誓約書PDFを管理者に送信
+1.  アカウント登録証が手元に届く
+1.  https://sc.ddbj.nig.ac.jp/ でログイン
+1.  [SSH公開鍵登録](https://sc.ddbj.nig.ac.jp/index.php/2014-09-17-05-42-33) (パスワード認証ではSSHできない)
+1.  `~/.ssh/config` に設定を追加:
 
         Host *.ddbj.nig.ac.jp
           User heavywatal
@@ -24,11 +24,11 @@ https://sc.ddbj.nig.ac.jp/
 
     sshコマンドでユーザ名と `-t` オプションを省略できるようになる。
 
-7.  システム内ノード間通信のパスワード認証を省くために[SSH鍵ペアを設定する]({{< relref "ssh.md" >}})。
+1.  システム内ノード間通信のパスワード認証を省くために[SSH鍵ペアを設定する]({{< relref "ssh.md" >}})。
 
-8.  ゲートウェイノードにSSH接続してログインノードに `qlogin`:
+1.  ゲートウェイノードにSSH接続してログインノードに `qlogin`:
 
-        % ssh gw2.ddbj.nig.ac.jp qlogin
+        ssh gw2.ddbj.nig.ac.jp qlogin
 
 {{%div class="note"%}}
 Phase 1 と Phase 2 という異なるシステムが存在しているが、
@@ -70,7 +70,7 @@ emacsは `User *** has no home directory` という謎のエラーを吐く。
 
 LDAPで管理されているので `chsh` は効かない:
 
-    % ldapmodify -x -D uid=heavywatal,ou=people,dc=nig,dc=ac,dc=jp -W
+    ldapmodify -x -D uid=heavywatal,ou=people,dc=nig,dc=ac,dc=jp -W
     Enter LDAP Password: ********
     dn: uid=heavywatal,ou=people,dc=nig,dc=ac,dc=jp
     changetype:modify

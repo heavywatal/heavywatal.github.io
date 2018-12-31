@@ -179,14 +179,14 @@ YMF
 EM (expectation maximization) algorithm
 :   1.  *w* 行のPWM $\theta$ を適当に作る
         (位置 *j* が塩基 *a* である確率は $\theta_{ja}$)
-    2.  配列が *n* 本あり、それらの部分配列 *S* が
+    1.  配列が *n* 本あり、それらの部分配列 *S* が
         $\theta$ から生成される確率(すなわち尤度)は
 
         <div>\[
         L(\theta) = P(S_1, ..., S_n|\theta) = \prod_i^n \prod_j^w \theta_{i, S_{i j}}
 \]</div>
 
-    3.  部分配列がモチーフ $\theta$ から生成された場合と、
+    1.  部分配列がモチーフ $\theta$ から生成された場合と、
         そうじゃないただのバックグラウンド $\theta_0$ から生成された場合を
 
         <div>\[\begin{aligned}
@@ -201,7 +201,7 @@ EM (expectation maximization) algorithm
         \prod_i^n [z_i P(S_i|\theta) + (1 - z_i)P(S_i|\theta^0)]
 \]</div>
 
-    4.  EMアルゴリズムでは以下の平均対数尤度を使う。
+    1.  EMアルゴリズムでは以下の平均対数尤度を使う。
 
         <div>\[
         \log \tilde{L}(z, \theta, \theta^0) =
@@ -215,11 +215,11 @@ EM (expectation maximization) algorithm
         q(z_i = 0) &\sim P(z_i = 0) P(S_i|\theta_0)
 \end{aligned}\]</div>
 
-    5.  E (Expectation) ステップ:
+    1.  E (Expectation) ステップ:
         $\theta$ を使って $q(z_i)$ を更新
-    6.  M (Maximization) ステップ:
+    1.  M (Maximization) ステップ:
         $q(z_i)$ を使って、尤度最大となるよう $\theta$ を更新
-    7.  EMステップを繰り返す
+    1.  EMステップを繰り返す
 
     [MEME]({{< relref "meme.md" >}}) では各配列が持つモチーフの数が1以外の場合も扱えるのと、
     最初のPWMの作り方を工夫して大域最適解に行きやすくなっているという点で
@@ -232,11 +232,11 @@ Gibbs sampling
     MotifSampler
 
     1.  *N* 本の各配列のモチーフ位置の初期値をランダムに与える
-    2.  ランダムに配列をひとつ選び、それ以外の配列のモチーフを並べてPWMを計算
-    3.  先に選んだ配列の上でPWMをスライドさせつつスコア
+    1.  ランダムに配列をひとつ選び、それ以外の配列のモチーフを並べてPWMを計算
+    1.  先に選んだ配列の上でPWMをスライドさせつつスコア
         (*l*-merがPWMから生成される確率など) を計算
-    4.  スコアに比例した確率で新しいモチーフ位置を決める
-    5.  各配列のモチーフ位置が安定するまで2–4を繰り返す
+    1.  スコアに比例した確率で新しいモチーフ位置を決める
+    1.  各配列のモチーフ位置が安定するまで2–4を繰り返す
 
     {{%div class="note"%}}
 スコアには生の生成確率ではなく、
@@ -259,8 +259,8 @@ EMD
     1.  配列 *N* 本のデータセットに対し
         *M* 個の異なるアルゴリズムをそれぞれ
         *R* 回ずつ走らせて *K* 個の予測サイトを得る
-    2.  配列毎・アルゴリズム毎に予測サイトを集めてグループ化する
-    3.  配列毎に全アルゴリズムの予測スコアを足しあわせて
+    1.  配列毎・アルゴリズム毎に予測サイトを集めてグループ化する
+    1.  配列毎に全アルゴリズムの予測スコアを足しあわせて
         voting, smoothing, extracting
 
 ### PF: Phylogenetic Footprinting

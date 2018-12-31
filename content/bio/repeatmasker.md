@@ -14,36 +14,30 @@ tags = ["genetics"]
 
 ### プログラム
 
--   Perl 5.8 以上:
-
-        % perl --version
+-   Perl 5.8 以上: `perl --version`
 
 -   検索エンジンをどれか1つ以上
     1.  [CrossMatch](http://www.phrap.org/)
-    2.  [RMBlast](http://www.repeatmasker.org/RMBlast.html)
+    1.  [RMBlast](http://www.repeatmasker.org/RMBlast.html)
         (NCBI BLASTを RepeatMasker で使えるようにするためのラッパー)
         -   まず普通の [NCBI BLAST+]({{< relref "blast.md" >}}) をインストール。
             Homebrewでもできるけどビルドに時間かかるのでバイナリで。
         -   RMBlastをインストールし、元のBLASTの `bin` 内にシムリンクを張る:
 
-                % brew install rmblast --without-blast
-                % brew list rmblast
-                % sudo ln -s $(brew --prefix)/bin/rmblastn /usr/local/ncbi/blast/bin/
+                brew install rmblast --without-blast
+                brew list rmblast
+                sudo ln -s $(brew --prefix)/bin/rmblastn /usr/local/ncbi/blast/bin/
 
-    3.  [AB-BLAST](http://www.advbiocomp.com/blast.html) (有料)
-    4.  [HMMER](http://hmmer.janelia.org/) & DFAM (human only):
+    1.  [AB-BLAST](http://www.advbiocomp.com/blast.html) (有料)
+    1.  [HMMER](http://hmmer.janelia.org/) & DFAM (human only): `brew install hmmer`
 
-            % brew install hmmer
-
--   [Tandem Repeat Finder](http://tandem.bu.edu/trf/trf.html) :
-
-        % brew install trf
+-   [Tandem Repeat Finder](http://tandem.bu.edu/trf/trf.html): `brew install trf`
 
 -   RepeatMasker 本体
     (どこでもいいけど今回は `/usr/local/` に入れる):
 
-        % wget -O- http://www.repeatmasker.org/RepeatMasker-open-4-0-5.tar.gz | tar xz
-        % sudo mv RepeatMasker /usr/local/
+        wget -O- http://www.repeatmasker.org/RepeatMasker-open-4-0-5.tar.gz | tar xz
+        sudo mv RepeatMasker /usr/local/
 
     Homebrewで入れる場合は `--without-configure` をつけて、
     後から自分で `./configure` する。
@@ -61,29 +55,29 @@ RepeatMasker 用に加工された
 1.  `/usr/local/RepeatMasker/Libraries/` 直下に格納
     (念のためフォルダごと取っといてシムリンク。古いやつは適当に保持):
 
-        % cd /usr/local/RepeatMasker/Libraries/
-        % wget -O- --http-user="USERNAME" --http-password="PASSWORD" http://www.girinst.org/server/archive/RepBase20.04/protected/repeatmaskerlibraries/repeatmaskerlibraries-20140131.tar.gz | tar xz
-        % mv Libraries repeatmaskerlibraries-20140131
-        % mv RepeatMaskerLib.embl RepeatMaskerLib.embl.orig
-        % ln -s repeatmaskerlibraries-20140131/RepeatMaskerLib.embl
+        cd /usr/local/RepeatMasker/Libraries/
+        wget -O- --http-user="USERNAME" --http-password="PASSWORD" http://www.girinst.org/server/archive/RepBase20.04/protected/repeatmaskerlibraries/repeatmaskerlibraries-20140131.tar.gz | tar xz
+        mv Libraries repeatmaskerlibraries-20140131
+        mv RepeatMaskerLib.embl RepeatMaskerLib.embl.orig
+        ln -s repeatmaskerlibraries-20140131/RepeatMaskerLib.embl
 
-2.  [Dfam](http://www.dfam.org/) のアップデートがあれば
+1.  [Dfam](http://www.dfam.org/) のアップデートがあれば
     `Libraries/Dfam.hmm` ファイルを入れ替え:
 
-        % mv Dfam.hmm Dfam.hmm.orig
-        % wget ftp://selab.janelia.org/pub/dfam/Release/Dfam_1.4/Dfam.hmm.gz
-        % gunzip Dfam.hmm.gz
+        mv Dfam.hmm Dfam.hmm.orig
+        wget ftp://selab.janelia.org/pub/dfam/Release/Dfam_1.4/Dfam.hmm.gz
+        gunzip Dfam.hmm.gz
 
-3.  `configure` スクリプト実行:
+1.  `configure` スクリプト実行:
 
-        % cd ..
-        % ./configure <~/bio/RepeatMasker.conf
+        cd ..
+        ./configure <~/bio/RepeatMasker.conf
 
     標準入力は毎回同じなのでファイルにしてしまったほうが楽チン
 
 FASTA形式の反復配列を分類群単位で入手することもできる:
 
-    % wget -o- --http-user="USERNAME" --http-password="PASSWORD" http://www.girinst.org/server/RepBase/protected/RepBase20.04.fasta/fngrep.ref
+    wget -o- --http-user="USERNAME" --http-password="PASSWORD" http://www.girinst.org/server/RepBase/protected/RepBase20.04.fasta/fngrep.ref
 
 ## 使用方法
 
@@ -93,8 +87,8 @@ FASTA形式の反復配列を分類群単位で入手することもできる:
 
 <http://www.animalgenome.org/bioinfo/resources/manuals/RepeatMasker.html> :
 
-    % /usr/local/RepeatMasker/RepeatMasker -h | less
-    % less /usr/local/RepeatMasker/repeatmasker.help
+    /usr/local/RepeatMasker/RepeatMasker -h | less
+    less /usr/local/RepeatMasker/repeatmasker.help
 
 `-engine [crossmatch|wublast|abblast|ncbi|hmmer|decypher]`
 
@@ -165,36 +159,36 @@ FASTA形式の反復配列を分類群単位で入手することもできる:
 
 1.  RepeatScout本体をインストール:
 
-        % brew install repeatscout --with-trf
+        brew install repeatscout --with-trf
 
-2.  L-mer の頻度テーブルをつくる:
+1.  L-mer の頻度テーブルをつくる:
 
-        % build_lmer_table -l 14 -sequence myseq.fa -freq lmer_table
+        build_lmer_table -l 14 -sequence myseq.fa -freq lmer_table
 
-3.  そのテーブルと配列から反復配列のFASTAを作る:
+1.  そのテーブルと配列から反復配列のFASTAを作る:
 
-        % RepeatScout -sequence myseq.fa -output rs_output.fa -freq lmer_table -l 14
+        RepeatScout -sequence myseq.fa -output rs_output.fa -freq lmer_table -l 14
 
-4.  TRFとNSEGを呼び出して &gt;50% low-complexity なものを除外:
+1.  TRFとNSEGを呼び出して &gt;50% low-complexity なものを除外:
 
-        % cat rs_output.fa | filter-stage-1.prl >rs_filtered1.fa
+        cat rs_output.fa | filter-stage-1.prl >rs_filtered1.fa
 
     {{%div class="note"%}}
 [NSEG](ftp://ftp.ncbi.nih.gov/pub/seg/nseg/) はビルド不可能なので
 `filter-stage-1.prl` を適当に書き換える必要がある。
     {{%/div%}}
 
-5.  RepeatMaskerで位置と登場回数を調べる:
+1.  RepeatMaskerで位置と登場回数を調べる:
 
-        % RepeatMasker -parallel 4 -dir . -lib rs_filtered1.fa myseq.fa
+        RepeatMasker -parallel 4 -dir . -lib rs_filtered1.fa myseq.fa
 
-6.  一定回数に満たないものを除外:
+1.  一定回数に満たないものを除外:
 
-        % cat rs_filtered1.fa | filter-stage-2.prl --thresh=10 --cat=myseq.fa.out >rs_filtered2.fa
+        cat rs_filtered1.fa | filter-stage-2.prl --thresh=10 --cat=myseq.fa.out >rs_filtered2.fa
 
-7.  遺伝子領域のGFFなどを与え、mobile elementっぽくないものを除去:
+1.  遺伝子領域のGFFなどを与え、mobile elementっぽくないものを除去:
 
-        % compare-out-to-gff.prl --gff=known_genes.gff --cat=myseq.fa.out --f=rs_filtered2.fa >lib.ref
+        compare-out-to-gff.prl --gff=known_genes.gff --cat=myseq.fa.out --f=rs_filtered2.fa >lib.ref
 
 ## RepeatModeler
 
@@ -212,33 +206,33 @@ FASTA形式の反復配列を分類群単位で入手することもできる:
 -   RepeatScout: 上記
 -   RECON:
 
-        % brew install recon
+        brew install recon
 
 -   RepeatModeler 本体:
 
-        % wget -O- http://www.repeatmasker.org/RepeatModeler-open-1-0-8.tar.gz | tar xz
-        % sudo mv RepeatModeler /usr/local/
+        wget -O- http://www.repeatmasker.org/RepeatModeler-open-1-0-8.tar.gz | tar xz
+        sudo mv RepeatModeler /usr/local/
 
     例によって `configure` も実行:
 
-        % cd /usr/local/RepeatModeler
-        % perl configure <~/bio/RepeatModeler.conf
+        cd /usr/local/RepeatModeler
+        perl configure <~/bio/RepeatModeler.conf
 
 ### 使い方
 
 1.  カレントディレクトリにBLASTデータベースを構築:
 
-        % BuilDatabase -name Colletotrichum_orbiculare -engine ncbi path/to/Colletotrichum_orbiculare.fa
+        BuilDatabase -name Colletotrichum_orbiculare -engine ncbi path/to/Colletotrichum_orbiculare.fa
 
-2.  本体を実行(かなり時間がかかる):
+1.  本体を実行(かなり時間がかかる):
 
-        % RepeatModeler -engine ncbi -pa 4 -database Colletotrichum_orbiculare >run.out
+        RepeatModeler -engine ncbi -pa 4 -database Colletotrichum_orbiculare >run.out
 
     `RM_[PID].[DATE]/` に結果が書き出される。
 
-3.  できあがった `consensi.fa.classified` をライブラリとして RepeatMasker を実行:
+1.  できあがった `consensi.fa.classified` をライブラリとして RepeatMasker を実行:
 
-        % RepeatMasker -lib consensi.fa.classified some_sequence.fa
+        RepeatMasker -lib consensi.fa.classified some_sequence.fa
 
 ## TEclass
 
@@ -251,27 +245,25 @@ FASTA形式の反復配列を分類群単位で入手することもできる:
 
 1.  本体をダウンロード:
 
-        % wget -O- http://www.compgen.uni-muenster.de/tools/teclass/download/TEclass-2.1.3.tar.gz | tar xz
-        % cd TEclass-2.1.3/
-        % less README
+        wget -O- http://www.compgen.uni-muenster.de/tools/teclass/download/TEclass-2.1.3.tar.gz | tar xz
+        cd TEclass-2.1.3/
+        less README
 
-2.  周辺ライブラリを整備。
+1.  周辺ライブラリを整備。
     でもとりあえず分類したいだけならblastclustなどは不要らしい:
 
-        % ./Download_dependencies.sh
-        % ./Compile_dependencies.sh
-        % ./Configure.pl
+        ./Download_dependencies.sh
+        ./Compile_dependencies.sh
+        ./Configure.pl
 
-3.  pre-built classifiers (&gt;400MB) をダウンロード:
+1.  pre-built classifiers (&gt;400MB) をダウンロード:
 
-        % cd path/to/TEclass/classifiers/
-        % wget -O- http://www.compgen.uni-muenster.de/tools/teclass/download/classifiers.tar.gz | tar xz
+        cd path/to/TEclass/classifiers/
+        wget -O- http://www.compgen.uni-muenster.de/tools/teclass/download/classifiers.tar.gz | tar xz
 
-4.  実行:
+1.  実行: `./TEclassTest.pl file.fa`
 
-        % ./TEclassTest.pl file.fa
-
-5.  結果はひとつのディレクトリにまとめて書き出される
+1.  結果はひとつのディレクトリにまとめて書き出される
     -   `file.fa`: 元ファイルからTEだけ抜き出したもの？
     -   `file.fa.html`: 一覧
     -   `file.fa.lib`: RepeatMasker用？

@@ -14,13 +14,13 @@ Terminal から一発でファイルを開くことができる。
 
 ```sh
 # 関連付けられたデフォルトのアプリケーションで開く
-% open hudson1992g.pdf
+open hudson1992g.pdf
 
 # アプリケーションを指定して開く
-% open -a Skim hudson1992g.pdf
+open -a Skim hudson1992g.pdf
 
 # カレントディレクトリをFinderで開く
-% open .
+open .
 ```
 
 ### `pbcopy`, `pbpaste`
@@ -28,8 +28,8 @@ Terminal から一発でファイルを開くことができる。
 ターミナルからクリップボード(pasteboard)を操作する。
 
 ```sh
-% pwd | pbcopy
-% pbpaste | wc
+pwd | pbcopy
+pbpaste | wc
 ```
 
 [tmux内で使うにはreattach-to-user-namespaceが必要。]({{< relref "tmux.md" >}})
@@ -38,8 +38,8 @@ Terminal から一発でファイルを開くことができる。
 ### `say` 音声読み上げ
 
 ```sh
-% say hello world
-% pbpaste | say
+say hello world
+pbpaste | say
 ```
 
 声は環境設定の Accessibility > Speech で変更可能。
@@ -52,9 +52,9 @@ Finder や Dock など、GUIから終了させにくいアプリケーション�
 メモリを開放したいときなどに使える。:
 
 ```sh
-% killall Finder
-% killall Dock
-% killall Kotoeri
+killall Finder
+killall Dock
+killall Kotoeri
 ```
 
 
@@ -101,7 +101,7 @@ Open with で表示されるアプリケーションが重複しまくったと�
 ファイルとアプリケーションの関連付けに関する古い情報を消して再構築。
 まっさらに戻るわけではない。:
 
-    % /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
+    /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
 
 設定ファイルは `~/Library/Preferences/com.apple.LaunchServices.plist`
 
@@ -111,9 +111,9 @@ Open with で表示されるアプリケーションが重複しまくったと�
 システムのソフトウェア・アップデートなどを
 `ssh` 越しにやらねばならぬときもある:
 
-    % hdiutil mount SomeDiskImage.dmg
-    % sudo installer -pkg SomePackage.pkg -target /
-    % sudo softwareupdate -i -a
+    hdiutil mount SomeDiskImage.dmg
+    sudo installer -pkg SomePackage.pkg -target /
+    sudo softwareupdate -i -a
 
 ## Obsolete
 
@@ -123,27 +123,27 @@ Leopard以前
 
 項目をリストアップ:
 
-    % niutil -list . /
-    % niutil -list . /users
-    % niutil -list . /groups
+    niutil -list . /
+    niutil -list . /users
+    niutil -list . /groups
 
 中身を見る:
 
-    % niutil -read . /users/iwasaki
-    % niutil -read . /groups/admin
+    niutil -read . /users/iwasaki
+    niutil -read . /groups/admin
 
 一覧で一気に:
 
-    % nidump passwd . /
-    % nidump group . /
+    nidump passwd . /
+    nidump group . /
 
 新規ユーザーの追加:
 
-    % niutil -create / /users/hoge
-    % niutil -createprop / /users/hoge shell /bin/zsh
-    % niutil -createprop / /users/hoge uid 1050
-    % niutil -createprop / /users/hoge gid 20
-    % niutil -createprop / /users/hoge home /Users/hoge
-    % niutil -createprop / /users/hoge _shadow_passwd
-    % passwd hoge
-    % niutil -appendprop / /groups/staff users hoge
+    niutil -create / /users/hoge
+    niutil -createprop / /users/hoge shell /bin/zsh
+    niutil -createprop / /users/hoge uid 1050
+    niutil -createprop / /users/hoge gid 20
+    niutil -createprop / /users/hoge home /Users/hoge
+    niutil -createprop / /users/hoge _shadow_passwd
+    passwd hoge
+    niutil -appendprop / /groups/staff users hoge

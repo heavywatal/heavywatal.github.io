@@ -61,9 +61,9 @@ key          | command | description
 コピーモード中のキー操作はデフォルトでは `emacs` 風になっている。
 
 1.  <kbd>C-t [</kbd> でコピーモードに入る
-2.  <kbd>C-space</kbd> でコピー開始点をマーク
-3.  <kbd>C-w</kbd> で終点をマークし、コピーモードを出る
-4.  <kbd>C-t ]</kbd> でペースト
+1.  <kbd>C-space</kbd> でコピー開始点をマーク
+1.  <kbd>C-w</kbd> で終点をマークし、コピーモードを出る
+1.  <kbd>C-t ]</kbd> でペースト
 
 設定ファイルに
 `bind-key -t emacs-copy C-w copy-pipe "pbcopy"`
@@ -89,7 +89,7 @@ Mac `open` 問題
     [reattach-to-user-namespace](https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard)
     をインストールして挟む:
 
-        % brew install reattach-to-user-namespace
+        brew install reattach-to-user-namespace
 
 
 ## 利用例
@@ -97,41 +97,40 @@ Mac `open` 問題
 1.  リモートサーバーに ssh ログインし、
     tmux の新しいセッションを開始:
 
-        % ssh remote.sample.com
-        % tmux -2u
+        ssh remote.sample.com
+        tmux -2u
 
-2.  ウィンドウを縦に分割し、右ペインでPythonインタプリタを起動:
+1.  ウィンドウを縦に分割し、右ペインでPythonインタプリタを起動:
 
         [C-t %]
-        % python
+        python
 
-3.  左ペインにフォーカスを戻し、ファイルを閲覧したり何だり:
+1.  左ペインにフォーカスを戻し、ファイルを閲覧したり何だり:
 
         [C-t o]
-        % less ~/.tmux.conf
+        less ~/.tmux.conf
 
-4.  新しいウィンドウを作って `root` 仕事をしたり何だり:
+1.  新しいウィンドウを作って `root` 仕事をしたり何だり:
 
         [C-t c]
-        % su -
-        Password:
+        su -
 
-5.  ウィンドウを切り替える:
+1.  ウィンドウを切り替える:
 
         C-t l
         C-t n
         C-t p
 
-6.  このセッションをデタッチし、ログアウトして家に帰る:
+1.  このセッションをデタッチし、ログアウトして家に帰る:
 
         [C-t d]
-        % logout
+        logout
 
-7.  家からサーバーに再び ssh ログインして、
+1.  家からサーバーに再び ssh ログインして、
     さっきの tmux セッションをアタッチして作業を再開:
 
-        % ssh remote.sample.com
-        % tmux attach -d
+        ssh remote.sample.com
+        tmux attach -d
 
 ### 備忘
 

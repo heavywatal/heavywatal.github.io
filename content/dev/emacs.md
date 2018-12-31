@@ -199,18 +199,18 @@ Emacs 24以上じゃないと動かない (=CentOS 6.5ではダメ)
 
 1.  Cask本体を `~/.cask` にインストール:
 
-        % curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python
+        curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python
 
     実行ファイルは `~/.cask/bin/` に置かれるので、
     `.zshrc` などで `PATH` を設定するか、
     既に通ってるところにシムリンクを張るか、フルパスで使う。
 
-2.  `~/.emacs.d/Cask` を書く。 cf. <https://github.com/heavywatal/dotfiles/blob/master/.emacs.d/Cask>
-3.  `~/.emacs.d/Cask` に書かれたパッケージをインストール:
+1.  `~/.emacs.d/Cask` を書く。 cf. <https://github.com/heavywatal/dotfiles/blob/master/.emacs.d/Cask>
+1.  `~/.emacs.d/Cask` に書かれたパッケージをインストール:
 
-        % cask install --path ~/.emacs.d/
+        cask install --path ~/.emacs.d/
 
-4.  `~/.emacs.d/init.el` に設定を書く:
+1.  `~/.emacs.d/init.el` に設定を書く:
 
         (require 'cask "~/.cask/cask.el")
         (cask-initialize)
@@ -219,8 +219,8 @@ Emacs 24以上じゃないと動かない (=CentOS 6.5ではダメ)
 
 パッケージをアップデート:
 
-    % cask update --path ~/.emacs.d/
+    cask update --path ~/.emacs.d/
 
 Cask本体をアップデート:
 
-    % cask upgrade
+    cask upgrade

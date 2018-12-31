@@ -22,18 +22,18 @@ LinuxのほうがいくらかBSDに歩み寄ってくれているらしい。
 出力形式の調整は共通の `o` オプション。
 
 ```sh
-% ps aux | less
+ps aux | less
 
 ## Sort on Mac
-% ps auxm | head  # by Memory
-% ps auxr | head  # by CPU
+ps auxm | head  # by Memory
+ps auxr | head  # by CPU
 
 ## Sort on Linux
-% ps auxk -pmem | head  # by Memory
-% ps auxk -pcpu | head  # by CPU
+ps auxk -pmem | head  # by Memory
+ps auxk -pcpu | head  # by CPU
 
 ## Output format
-% ps axo user,pid,pcpu,pmem,command
+ps axo user,pid,pcpu,pmem,command
 ```
 
 ### `top`
@@ -62,7 +62,7 @@ Time   | <kbd>T</kbd> | <kbd>o -time</kbd>
 
 何らかのプログラムを実行:
 
-    % top
+    top
 
 ここで <kbd>ctrl-z</kbd> を押すと、プロセスはバックグラウンドで一時停止する:
 
@@ -71,7 +71,7 @@ Time   | <kbd>T</kbd> | <kbd>o -time</kbd>
 バックグラウンドのプロセスを確認するには `jobs` コマンド。
 左からジョブ番号、カレントジョブか否か、状態、コマンド内容:
 
-    % jobs
+    jobs
     [1]  + suspended  top
 
 フォアグラウンドで再開するには `fg` コマンド。
@@ -81,17 +81,17 @@ Time   | <kbd>T</kbd> | <kbd>o -time</kbd>
 引数を省略すると、`jobs` で `+` がついてるカレントジョブが選択される。
 :
 
-    % fg %1
+    fg %1
     [1]  + 19310 continued  top
 
 再び一時停止して、今度はバックグラウンドで再開する。コマンドは `bg`:
 
     [1]  + 19310 suspended  top
-    % bg %top
+    bg %top
 
 始めからバックグラウンドで走らせるなら末尾にアンド:
 
-    % top &
+    top &
 
 中止させるには `kill` コマンドで `SIGTERM` シグナルを送る。
 指定するのはジョブ番号でも生のプロセスIDでもよい。
@@ -100,10 +100,10 @@ Time   | <kbd>T</kbd> | <kbd>o -time</kbd>
 `killall` は指定した文字列と前方一致するプロセスを
 すべて `kill` するショートカット。
 
-    % kill %1
-    % kill -9 %a.out
-    % kill 19310
-    % killall a.out
+    kill %1
+    kill -9 %a.out
+    kill 19310
+    killall a.out
 
 
 ## ログアウト後も継続
@@ -113,7 +113,7 @@ Time   | <kbd>T</kbd> | <kbd>o -time</kbd>
 これを無視して実行し続けるようにプログラムを起動するのが `nohup`。
 バックグランド化までは面倒見てくれないので末尾の `&` を忘れずに:
 
-    % nohup COMMAND [ARGUMENTS] &
+    nohup COMMAND [ARGUMENTS] &
 
 標準出力と標準エラー出力は指定しなければ `nohup.out`
 または `~/nohup.out` に追記モードでリダイレクトされる。
@@ -123,22 +123,24 @@ Time   | <kbd>T</kbd> | <kbd>o -time</kbd>
 - 標準エラー出力を標準出力と同じところに流すには `>{OUTFILE} 2>&1`
 
 ```sh
-% nohup COMMAND >out.log 2>err.log &
+nohup COMMAND >out.log 2>err.log &
 ```
 
 [ssh]({{< relref "ssh.md" >}}) 接続先のサーバーで `nohup` ジョブを走らせるときは
 標準入出力をすべて切っておかないと期待通りにsshを抜けられない:
 
-    % nohup COMMAND >/dev/null 2>&1 </dev/null &
+```sh
+nohup COMMAND >/dev/null 2>&1 </dev/null &
+```
 
 うっかり普通に開始してしまったプロセスを後から `nohup` 状態にするには、
 一時停止して、バックグラウンドで再開して、`disown` に渡す:
 
-    % ./a.out  # control + z
+    ./a.out  # control + z
     [1]  + 19310 suspended  a.out
-    % bg %1
+    bg %1
     [1]  + 19310 continued  a.out
-    % disown %1
+    disown %1
 
 {{%div class="note"%}}
 See [tmux]({{< relref "tmux.md" >}})

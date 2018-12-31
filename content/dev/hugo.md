@@ -131,8 +131,8 @@ YAMLやJSONでもいいけど、
 
 付属の簡易サーバーを起動。
 ```
-% hugo server -D -w -s /path/to/source
-% open http://localhost:1313/
+hugo server -D -w -s /path/to/source
+open http://localhost:1313/
 ```
 
 ### localhost (Mac)
@@ -144,13 +144,13 @@ YAMLやJSONでもいいけど、
 単にシンボリックリンクを張るほうが楽ちん。
 
 ```sh
-% cd /Library/WebServer/
-% sudo mv Documents Documents.orig
-% sudo ln -s ~/Sites Documents
-% cd /path/to/site-source
-% hugo
-% rsync -au --delete --exclude='.git' public/ ~/Sites/
-% open http://localhost/
+cd /Library/WebServer/
+sudo mv Documents Documents.orig
+sudo ln -s ~/Sites Documents
+cd /path/to/site-source
+hugo
+rsync -au --delete --exclude='.git' public/ ~/Sites/
+open http://localhost/
 ```
 
 ### GitHub Pages

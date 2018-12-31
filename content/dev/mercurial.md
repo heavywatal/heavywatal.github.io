@@ -28,22 +28,22 @@ See [Git]({{< relref "git.md" >}}).
 無いファイルを全部 `hg rm` する。
 これらの変更は `hg commit` するまでRepositoryには反映されない:
 
-    % hg add [FILE]...
-    % hg rm FILE
-    % hg mv SOURCE... DEST
-    % hg cp SOURCE... DEST
-    % hg addremove
+    hg add [FILE]...
+    hg rm FILE
+    hg mv SOURCE... DEST
+    hg cp SOURCE... DEST
+    hg addremove
 
 Working directoryにおける（まだ `hg commit` されてない）変更を確認:
 
-    % hg status
+    hg status
 
 Working directoryにおける変更をRepositoryに反映させる。
 引数でファイルを指定できて、省略すると全部。
 `-m` オプションでメッセージを指定しない場合は
 `$EDITOR` が起動してコメントを求められるので、何か書いて保存、終了:
 
-    % hg commit -m "a message that describes the modifications you made"
+    hg commit -m "a message that describes the modifications you made"
 
 ssh越しでRepositoryをやり取り。
 ディレクトリの指定方法が `scp` とはちょっと違う。
@@ -52,15 +52,15 @@ ssh越しでRepositoryをやり取り。
 `~/.ssh/config` などでちゃんと設定しとけばURLは簡略化可能。
 cf. [ssh]({{< relref "ssh.md" >}}):
 
-    % hg push ssh://username@example.com//home/username/the_project
-    % hg push ssh://username@example.com/the_project
-    % hg pull ssh://username@example.com/the_project
+    hg push ssh://username@example.com//home/username/the_project
+    hg push ssh://username@example.com/the_project
+    hg pull ssh://username@example.com/the_project
 
 `hg push` や `hg pull` はRepositoryの情報を送受信するだけで、
 受け手のWorking directoryを変更しない。
 受け取った側が `hg update` した時点で変更が適用される:
 
-    % hg update
+    hg update
 
 ## プロジェクト開始
 
@@ -68,73 +68,73 @@ cf. [ssh]({{< relref "ssh.md" >}}):
 
 既にあるプロジェクトを取ってくる。`DEST` 省略時は元と同じ名前でディレクトリが作られる:
 
-    % hg clone [OPTION]... SOURCE [DEST]
-    % hg clone http://selenic.com/hg mercurial-repo
-    % cd mercurial-repo
-    % hg parents
+    hg clone [OPTION]... SOURCE [DEST]
+    hg clone http://selenic.com/hg mercurial-repo
+    cd mercurial-repo
+    hg parents
 
 新しいMercurialプロジェクトを開始する
 
 1.  プロジェクトのルートディレクトリ（無ければ `mkdir` するなどして）に入って初期化:
 
-        % cd the_project/
-        % hg init
-        % ls -a
+        cd the_project/
+        hg init
+        ls -a
         ./ ../ .hg/
 
-2.  プロジェクト固有の設定を `the_project/.hg/hgrc` に記述。
+1.  プロジェクト固有の設定を `the_project/.hg/hgrc` に記述。
     例えば以下のように書いておけば `pull/push` の対象を省略できる。:
 
         [paths]
         default = ssh://username@example.com/the_project
 
-3.  一時ファイルやバイナリファイルを無視するように、
+1.  一時ファイルやバイナリファイルを無視するように、
     除外設定を `the_project/.hgignore` に記述
-4.  除外設定が正しく効いてるか確認:
+1.  除外設定が正しく効いてるか確認:
 
-        % hg status
+        hg status
 
-5.  リポジトリにファイルを追加してコミット、確認。
+1.  リポジトリにファイルを追加してコミット、確認。
     `add` は個別にファイルを指定できて、省略すると全部。:
 
-        % hg add
-        % hg commit -m "first commit"
-        % hg parents
+        hg add
+        hg commit -m "first commit"
+        hg parents
 
 ## よく使うコマンド
 
 あのrevisionではどんな変更したっけ？:
 
-    % hg diff -c 42
+    hg diff -c 42
 
 あのrevisionから今までにどこが変わった？:
 
-    % hg diff -r 42
+    hg diff -r 42
 
 いろいろやってみたけど今回の変更を全部無かったことにする
 (`hg commit` する前):
 
-    % hg revert --all --no-backup
+    hg revert --all --no-backup
 
 直前の `hg commit` を取り消す
 (`hg push` する前の1回分のみ有効):
 
-    % hg rollback
+    hg rollback
 
 `hg push` 済みあるいは複数回 `hg commit` してしまった後、変更を取り消す:
 
-    % hg backout -r 42
-    % hg commit
+    hg backout -r 42
+    hg commit
 
 管理対象外のファイルを確認・削除する (`purge` extentionを有効にして):
 
-    % hg clean -p
-    % hg clean
+    hg clean -p
+    hg clean
 
 ## Merge
 
 1.  `hg heads` でマージすべき2つの頭を確認
-2.  `hg merge` でマージ実行
+1.  `hg merge` でマージ実行
     -   これだけで解決できたら次のステップに
     -   conflictが生じた場合の挙動は設定によって大きく異る。
         以下のような設定にしておくと:
@@ -156,14 +156,14 @@ cf. [ssh]({{< relref "ssh.md" >}}):
             を押してどっちの版を採用するか決めていく。
         -   `wc` して結果を書き込む
 
-3.  解決の必要なファイルを確認:
+1.  解決の必要なファイルを確認:
 
-        % hg resolve -a
+        hg resolve -a
 
-4.  解決済みであることをマークしてコミット:
+1.  解決済みであることをマークしてコミット:
 
-        % hg resolve -m some_source.py
-        % hg commit
+        hg resolve -m some_source.py
+        hg commit
 
 ## 設定
 
@@ -238,19 +238,19 @@ cf. <http://mercurial.selenic.com/wiki/.hgignore> :
 PyPIに登録されてるPythonパッケージなので
 [pip]({{< relref "pip.md" >}}) でインストールできる:
 
-    % pip install mercurial
+    pip install mercurial
 
 でもPythonから `import` して使うことは無いので、
 Macなら [Homebrew]({{< relref "homebrew.md" >}}) で入れちゃうほうが管理が楽チン:
 
-    % brew install mercurial
+    brew install mercurial
 
 Linuxでソースからインストールしたい場合は
 `python-devel` 的なパッケージを入れた上で:
 
-    % wget -O- http://mercurial.selenic.com/release/mercurial-3.0.tar.gz | tar xz
-    % cd mercurial-2.9.2/
-    % sudo make install-bin
+    wget -O- http://mercurial.selenic.com/release/mercurial-3.0.tar.gz | tar xz
+    cd mercurial-2.9.2/
+    sudo make install-bin
 
 `apt-get` や `yum` でもインストールできるが
 たいてい公式リポジトリのやつはバージョンが古すぎてダメ。
@@ -261,19 +261,19 @@ Linuxでソースからインストールしたい場合は
 
 1.  `fast-export` をダウンロード:
 
-        % git clone https://github.com/frej/fast-export.git
+        git clone https://github.com/frej/fast-export.git
 
-2.  移行先のローカルリポジトリを作成:
+1.  移行先のローカルリポジトリを作成:
 
-        % mkdir dst_git
-        % cd dst_git
-        % git init
+        mkdir dst_git
+        cd dst_git
+        git init
 
-3.  実行:
+1.  実行:
 
-        % path/to/fast-export/hg-fast-export.sh -r path/to/src_hg
+        path/to/fast-export/hg-fast-export.sh -r path/to/src_hg
 
-4.  作業ディレクトリに反映:
+1.  作業ディレクトリに反映:
 
-        % git status
-        % git checkout master
+        git status
+        git checkout master

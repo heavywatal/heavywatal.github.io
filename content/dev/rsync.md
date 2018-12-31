@@ -90,9 +90,9 @@ rsync -auv SRC/DIR/ DST/DIR/
         *.zhistory
         known_hosts
 
-2.  `--exclude-from` オプションでそのファイルを読ませる。
+1.  `--exclude-from` オプションでそのファイルを読ませる。
     例えば `.zshrc` にこう書く:
 
         alias rsync='rsync --exclude-from=${HOME}/.config/rsync-exclude'
 
-3.  そのほかで除外したいものは `--exclude` オプションで個別に指定
+1.  そのほかで除外したいものは `--exclude` オプションで個別に指定

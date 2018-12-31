@@ -107,11 +107,11 @@ export PATH=/usr/local/anaconda3/bin:"$PATH"
     brew install gdbm libressl readline sqlite xz
     ```
 
-2.  ダウンロードして展開:
+1.  ダウンロードして展開:
 
         wget -O- https://www.python.org/ftp/python/3.5.3/Python-3.5.3.tar.xz | tar xJ
 
-3.  configure してビルド:
+1.  configure してビルド:
     ```sh
     cd Python-3.5.3/
     ./configure --help

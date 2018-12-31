@@ -71,5 +71,5 @@ Tilde (ã õ ñ)
 ## Entering Unicode Text and Symbols
 
 1.  `System Preferences --> Language & Text --> Input Sources` で Unicode Hex Input にチェック
-2.  <kbd>⌘command-space</kbd> で Unicode Hex Input を選択
-3.  <kbd>⌥option</kbd> を押しつつ番号を入力 (e.g. <kbd>⌥option + 2318</kbd> で ⌘ が入力される)
+1.  <kbd>⌘command-space</kbd> で Unicode Hex Input を選択
+1.  <kbd>⌥option</kbd> を押しつつ番号を入力 (e.g. <kbd>⌥option + 2318</kbd> で ⌘ が入力される)

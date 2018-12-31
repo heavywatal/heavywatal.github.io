@@ -83,11 +83,11 @@ files = !ls
 ### [環境設定](http://ipython.readthedocs.io/en/stable/config/intro.html)
 
 ```sh
-% ipython help profile
-% ipython profile create [name]
-% ipython profile list
-% ipython profile locate
-% ipython --profile=<name>
+ipython help profile
+ipython profile create [name]
+ipython profile list
+ipython profile locate
+ipython --profile=<name>
 ```
 
 [`~/.ipython/profile_default/ipython_config.py`](https://github.com/heavywatal/dotfiles/blob/master/.ipython/profile_default/ipython_config.py)
@@ -105,9 +105,9 @@ automagicを切るとか。
 普通の `.py` ファイルだけでなく `.md` 内のコードブロックでも使える。
 
 ```sh
-% pip install ipykernel
-% python -m ipykenel install --user
-% apm install hydrogen
+pip install ipykernel
+python -m ipykenel install --user
+apm install hydrogen
 ```
 
 key                          | action

@@ -11,7 +11,7 @@ https://gcc.gnu.org/
 
 直接コマンドを実行するなら:
 
-    % g++ -g -Wall -Wextra -O3 main.cpp -o a.out
+    g++ -g -Wall -Wextra -O3 main.cpp -o a.out
 
 {{%div class="note"%}}
 [make]({{< relref "make.md" >}}) や [CMake]({{< relref "cmake.md" >}})
@@ -108,7 +108,7 @@ Xcode についてくる `gcc-4.2` は
 [Homebrew]({{< relref "homebrew.md" >}}) か
 [MacPorts]({{< relref "macports.md" >}}) で入れるのが楽チン:
 
-    % brew install gcc
+    brew install gcc
 
 ### Ubuntu
 
@@ -116,11 +116,11 @@ Xcode についてくる `gcc-4.2` は
 
 1.  gmp, mpfr, mpc をインストール:
 
-        % sudo apt-get install libgmp-dev libmpfr-dev libmpc-dev
+        sudo apt-get install libgmp-dev libmpfr-dev libmpc-dev
 
 1.  `--with-system-zlib` でビルドするには zlib が必要:
 
-        % sudo apt-get install zlib1g-dev
+        sudo apt-get install zlib1g-dev
 
 1.  システムに既に入ってるやつの `configure` オプションを
     `gcc -v` 見るでみて、それを参考に `configure`
@@ -135,27 +135,27 @@ Xcode についてくる `gcc-4.2` は
         などと怒られて止まる
 
     ```
-    % wget -O- http://ftp.gnu.org/gnu/gcc/gcc-4.9.1/gcc-4.9.1.tar.bz2 | tar xj
-    % mkdir build
-    % cd build/
-    % ../gcc-4.9.1/configure --enable-languages=c,c++,go,fortran --prefix=/usr/local --program-suffix=-4.9 --enable-shared --enable-linker-build-id --without-included-gettext --enable-threads=posix --disable-nls --with-sysroot=/ --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --enable-gnu-unique-object --disable-libmudflap --enable-plugin --with-system-zlib --disable-browser-plugin --enable-gtk-cairo --with-arch-directory=amd64 --enable-multiarch --disable-werror --with-abi=m64 --disable-multilib --with-tune=core2 --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu
+    get -O- http://ftp.gnu.org/gnu/gcc/gcc-4.9.1/gcc-4.9.1.tar.bz2 | tar xj
+    kdir build
+    d build/
+    ./gcc-4.9.1/configure --enable-languages=c,c++,go,fortran --prefix=/usr/local --program-suffix=-4.9 --enable-shared --enable-linker-build-id --without-included-gettext --enable-threads=posix --disable-nls --with-sysroot=/ --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --enable-gnu-unique-object --disable-libmudflap --enable-plugin --with-system-zlib --disable-browser-plugin --enable-gtk-cairo --with-arch-directory=amd64 --enable-multiarch --disable-werror --with-abi=m64 --disable-multilib --with-tune=core2 --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu
     ```
 
 1.  コンパイル。ただしデフォルトではコンパイラオプションが `-g O2`
     となっていて膨大なデバッグシンボルがついた状態で出来上がってしまうらしいので、
     オプションを上書きしてそれを回避する:
 
-        % make BOOT_CFLAGS="-O2" CFLAGS="-O2" CXXFLAGS="-O2" bootstrap
+        make BOOT_CFLAGS="-O2" CFLAGS="-O2" CXXFLAGS="-O2" bootstrap
 
     `fatal error: bits/predefs.h: No such file or directory`
     って怒られたら:
 
-        % sudo apt-get install libc6-dev-i386
+        sudo apt-get install libc6-dev-i386
 
     `/usr/bin/ld: cannot find crti.o: No such file or directory`
     って怒られたら:
 
-        % sudo ln -s /usr/lib/x86_64-linux-gnu /usr/lib64
+        sudo ln -s /usr/lib/x86_64-linux-gnu /usr/lib64
 
 1.  `sudo make install` でインストール。の前に
     `make DESTDIR=${HOME}/tmp/gcc-test install`

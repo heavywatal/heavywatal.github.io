@@ -11,15 +11,15 @@ tags = ["communication"]
 
 予め作っておいた空のディレクトリ `dir` に `device` をマウントする:
 
-    % [sudo] mount [-t type] [-o option[,option]...] device dir
+    [sudo] mount [-t type] [-o option[,option]...] device dir
 
 マウントを解除する:
 
-    % [sudo] umount dir
+    [sudo] umount dir
 
 既にマウントされているものを列挙:
 
-    % mount -l
+    mount -l
 
 ### 主な `-o` オプション
 
@@ -64,19 +64,19 @@ tags = ["communication"]
 
 1.  cifs-utils をインストール:
 
-        % sudo apt-get install cifs-utils
+        sudo apt-get install cifs-utils
 
-2.  パスワードをコマンド履歴や `/etc/fstab` に残さなくて済むように
+1.  パスワードをコマンド履歴や `/etc/fstab` に残さなくて済むように
     `~/.cifs` のようなファイルを作っておく:
 
         username=iwasaki
         password=******
 
-3.  `mount` コマンドでマウント:
+1.  `mount` コマンドでマウント:
 
-        % sudo mount -t cifs -o defaults,iocharset=utf8,nounix,uid=$(id -u),gid=$(id -g),credentials=$HOME/.cifs //ADDRESS/VOLUME ~/mnt
+        sudo mount -t cifs -o defaults,iocharset=utf8,nounix,uid=$(id -u),gid=$(id -g),credentials=$HOME/.cifs //ADDRESS/VOLUME ~/mnt
 
-4.  起動時に自動でマウントさせるには `/etc/fstab` に追記:
+1.  起動時に自動でマウントさせるには `/etc/fstab` に追記:
 
         //ADDRESS/VOLUME /home/iwasaki/mnt cifs credentials=/home/iwasaki/.cifs,uid=iwasaki,gid=iwasaki,nounix,iocharset=utf8,defaults 0 0
 
@@ -84,9 +84,9 @@ tags = ["communication"]
 
 1.  samba をインストール:
 
-        % sudo apt-get install samba
+        sudo apt-get install samba
 
-2.  `/etc/samba/smb.conf` の一部を編集:
+1.  `/etc/samba/smb.conf` の一部を編集:
 
         [homes]
         comment = Home Directories
@@ -98,9 +98,9 @@ tags = ["communication"]
 
         valid users = %S
 
-3.  サービスを再起動:
+1.  サービスを再起動:
 
-        % sudo service smbd restart
+        sudo service smbd restart
 
 ## afp
 
@@ -108,24 +108,24 @@ tags = ["communication"]
 
 1.  afpfs-ng-utils をダウンロードしてインストール:
 
-        % wget http://launchpadlibrarian.net/90192653/afpfs-ng-utils_0.8.1-2_amd64.deb
-        % sudo dpkg -i afpfs-ng-utils_0.8.1-2_amd64.deb
+        wget http://launchpadlibrarian.net/90192653/afpfs-ng-utils_0.8.1-2_amd64.deb
+        sudo dpkg -i afpfs-ng-utils_0.8.1-2_amd64.deb
 
-2.  以下のようなコマンドでマウント。できなかった:
+1.  以下のようなコマンドでマウント。できなかった:
 
-        % mount_afp 'afp://user:password@address/volume/' ~/mnt
+        mount_afp 'afp://user:password@address/volume/' ~/mnt
 
 ### Ubuntu 12.04 の Nautilus から afp でマウント
 
 1.  Nautilusをアクティブにして `control + l`
     (あるいはメニューバーから `Go --> Location...`）
-2.  Location に `afp://***.***.***.***` という形でIPアドレスを入力してConnect
+1.  Location に `afp://***.***.***.***` という形でIPアドレスを入力してConnect
 
 ### Mac の Finder からマウント
 
 1.  Finderをアクティブにして `command + k`
     (あるいはメニューバーから `Go --> Connect to Server...`)
-2.  Server Address に `afp://***.***.***.***` という形でIPアドレスを入力してConnect
+1.  Server Address に `afp://***.***.***.***` という形でIPアドレスを入力してConnect
 
 
 ## sshfs
@@ -142,7 +142,7 @@ Finderとかで普通のディレクトリのように扱えるようにする�
 
 1.  sshfsをインストール:
     ```sh
-    % brew install sshfs
+    brew install sshfs
     ```
 
 1.  マウントポイントにする適当なディレクトリを作る。
@@ -150,10 +150,10 @@ Finderとかで普通のディレクトリのように扱えるようにする�
 
 1.  マウントする:
     ```sh
-    % sshfs watal@example.com:/home/watal ~/mnt
+    sshfs watal@example.com:/home/watal ~/mnt
     ```
 
 1.  アンマウントする:
     ```sh
-    % umount ~/mnt
+    umount ~/mnt
     ```

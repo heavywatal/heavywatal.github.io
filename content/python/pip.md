@@ -27,10 +27,10 @@ Python 2.7.9以降、3.4以降では標準ライブラリの
 
 -   手動インストール:
     ```sh
-    % python -m ensurepip --user
-    または
-    % curl -O https://bootstrap.pypa.io/get-pip.py
-    % python get-pip.py --user
+    python -m ensurepip --user
+    # または
+    curl -O https://bootstrap.pypa.io/get-pip.py
+    python get-pip.py --user
     ```
     `--user` を付けた場合のインストール先は環境変数
     [`PYTHONUSERBASE`]({{< relref "install.md#pythonuserbase" >}})
@@ -49,18 +49,18 @@ Python 2.7.9以降、3.4以降では標準ライブラリの
 
 -   全体のヘルプ、コマンド毎の詳細ヘルプ:
 
-        % pip help
-        % pip install --help
+        pip help
+        pip install --help
 
 -   `setup.py` にオプションを渡す:
 
-        % pip install --install-option="--prefix=/usr/local" numpy
+        pip install --install-option="--prefix=/usr/local" numpy
 
 -   よく使うコマンド:
 
-        % pip list && pip list --outdated
-        % pip search psutil
-        % pip install --upgrade setuptools
+        pip list && pip list --outdated
+        pip search psutil
+        pip install --upgrade setuptools
 
 -   設定ファイルは `~/.pip/pip.conf` :
 
@@ -69,8 +69,8 @@ Python 2.7.9以降、3.4以降では標準ライブラリの
 
 -   環境内のパッケージを引き継ぐには:
 
-        & pip freeze --local >requirements.txt
-        % pip install -r requirements.txt
+        pip freeze --local >requirements.txt
+        pip install -r requirements.txt
 
 
 ## [`venv`](https://docs.python.org/3/library/venv.html) / `virtualenv`
@@ -83,20 +83,20 @@ Python 3.3 以降では `venv` が標準ライブラリ入りしたので
 
 -   仮想環境を作る:
 
-        % python3.6 -m venv [OPTIONS] /path/to/projectx
-        % virtualenv        [OPTIONS] /path/to/projectx
+        python3.6 -m venv [OPTIONS] /path/to/projectx
+        virtualenv        [OPTIONS] /path/to/projectx
 
 -   仮想環境に入る、から出る:
 
-        % source /path/to/projectx/bin/activate
-        (projectx) % deactivate
+        source /path/to/projectx/bin/activate
+        deactivate
 
 -   Pythonを更新したりするとシムリンクが壊れるので一旦消して張り直す:
 
-        % find /path/to/projectx/ -type l
-        % find /path/to/projectx/ -type l -delete
-        % find /path/to/projectx/ -type l
-        % virtualenv /path/to/projectx
+        find /path/to/projectx/ -type l
+        find /path/to/projectx/ -type l -delete
+        find /path/to/projectx/ -type l
+        virtualenv /path/to/projectx
 
 
 ## [`setuptools`](https://github.com/pypa/setuptools)

@@ -36,21 +36,21 @@ Macの [Homebrew]({{< relref "homebrew.md" >}}) をLinuxに移植したパッケ
 1.  RHEL/CentOS 6系の場合まずlibcurlが古すぎるので、
     [最新のcurl](https://curl.haxx.se/download.html)をソースコードからインストール:
     ```sh
-    % wget -O- https://curl.haxx.se/download/curl-7.59.0.tar.gz | tar xz
-    % cd curl-7.59.0/
-    % ./configure --prefix=${HOME}/opt/local
-    % make -j4
+    wget -O- https://curl.haxx.se/download/curl-7.59.0.tar.gz | tar xz
+    cd curl-7.59.0/
+    ./configure --prefix=${HOME}/opt/local
+    make -j4
     ```
 
 1.  `git --version` を確認して 1.7.12 未満だったら
     [最新のgit](https://github.com/git/git/releases)をソースコードからインストール:
     ```sh
-    % wget -O- https://github.com/git/git/archive/v2.16.3.tar.gz | tar xz
-    % cd git-2.16.3/
-    % autoreconf -i
-    % ./configure --prefix=${HOME}/opt/local --with-curl=${HOME}/opt/local
-    % make -j4
-    % make install
+    wget -O- https://github.com/git/git/archive/v2.16.3.tar.gz | tar xz
+    cd git-2.16.3/
+    autoreconf -i
+    ./configure --prefix=${HOME}/opt/local --with-curl=${HOME}/opt/local
+    make -j4
+    make install
     ```
 
 1.  上記の自前curl/gitを利用するために環境変数をセット:
@@ -97,13 +97,14 @@ Macの [Homebrew]({{< relref "homebrew.md" >}}) をLinuxに移植したパッケ
 ターミナルから以下のコマンドを実行:
 
 ```sh
-% xcode-select --install
+xcode-select -p
+xcode-select --install
 ```
 
 インストールされているバージョンなどを確認するには:
 ```sh
-% pkgutil --pkg-info=com.apple.pkg.CLTools_Executables
-% clang -v
+pkgutil --pkg-info=com.apple.pkg.CLTools_Executables
+clang -v
 ```
 
 総合開発環境 Xcode をインストールしたければ、App Store から [Xcode](https://itunes.apple.com/jp/app/xcode/id497799835) を選択。
@@ -138,7 +139,7 @@ fi
 - [pip]({{< relref "pip.md" >}})
 - `Pillow` をインストールする前に:
 
-      % sudo apt-get install libtiff5-dev libwebp-dev libfreetype6-dev liblcms2-dev libopenjpeg-dev
+      sudo apt-get install libtiff5-dev libwebp-dev libfreetype6-dev liblcms2-dev libopenjpeg-dev
 
 ### C++
 
@@ -165,7 +166,7 @@ fi
 :   ホントに消していいかどうか確認してくれるようなオプションつきのエイリアスを
     `.zshrc` に設定しておく。
 
-        % rmi .DS_Store
+        rmi .DS_Store
         rm: remove regular file '.DS_Store'?
 
     エイリアス名を `rm` そのものにしてしまうと、
@@ -194,4 +195,4 @@ fi
     Linuxのものになってしまうので
     [Homebrew]({{< relref "homebrew.md" >}}) で `rmtrash` を入れる:
 
-        % brew install rmtrash
+        brew install rmtrash

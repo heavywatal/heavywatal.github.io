@@ -18,7 +18,7 @@ tags = ["c++"]
 で最新版を簡単にインストールできる。
 オプションは適当に:
 
-    % brew install boost
+    brew install boost
 
 `--layout=tagged` でビルドされるため、
 リンクするときは末尾に `-mt` が必要になる。
@@ -32,16 +32,16 @@ tags = ["c++"]
 
 1.  <http://www.boost.org/users/download/> から最新ソースを入手して展開。
     ```
-    % wget -O- https://dl.bintray.com/boostorg/release/1.67.0/source/boost_1_67_0.tar.bz2 | tar xj
-    % cd boost_1_67_0/
+    wget -O- https://dl.bintray.com/boostorg/release/1.67.0/source/boost_1_67_0.tar.bz2 | tar xj
+    cd boost_1_67_0/
     ```
 
 1.  ビルドすべきライブラリを考える `./bootstrap.sh --show-libraries`
 
 1.  適当なオプションを与えて `bootstrap.sh` を実行:
     ```sh
-    % ./bootstrap.sh --help
-    % ./bootstrap.sh --without-icu --with-libraries=context,filesystem,graph,iostreams,program_options,serialization,system,test
+    ./bootstrap.sh --help
+    ./bootstrap.sh --without-icu --with-libraries=context,filesystem,graph,iostreams,program_options,serialization,system,test
     ```
     設定が `project-config.jam` に書き出され、
     `b2` がビルドされる。 `./b2 --help`
@@ -63,26 +63,26 @@ tags = ["c++"]
     (http://www.boost.org/doc/libs/release/libs/iostreams/doc/installation.html)
     `ZLIB_SOURCE`をフルパス指定する。
     ```sh
-    % wget -O- http://zlib.net/zlib-1.2.8.tar.gz | tar xz -C ${HOME}/tmp/build
-    % export ZLIB_SOURCE=${HOME}/tmp/build/zlib-1.2.8
+    wget -O- http://zlib.net/zlib-1.2.8.tar.gz | tar xz -C ${HOME}/tmp/build
+    export ZLIB_SOURCE=${HOME}/tmp/build/zlib-1.2.8
     ```
 
 1.  ツールセットを指定してビルド:
     ```sh
-    % ./b2 -j2 toolset=gcc-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2gcc --stagedir=stage/gcc stage
-    % ./b2 -j2 toolset=darwin-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2gcc --stagedir=stage/gcc stage
-    % ./b2 -j2 toolset=clang-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2clang --stagedir=stage/clang stage
+    ./b2 -j2 toolset=gcc-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2gcc --stagedir=stage/gcc stage
+    ./b2 -j2 toolset=darwin-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2gcc --stagedir=stage/gcc stage
+    ./b2 -j2 toolset=clang-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2clang --stagedir=stage/clang stage
     ```
 
 1.  prefixを指定してインストール:
     ```sh
-    % ./b2 -j2 toolset=gcc-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2gcc --stagedir=stage/gcc --prefix=${HOME}/local install
+    ./b2 -j2 toolset=gcc-14 link=static,shared runtime-link=shared threading=multi variant=release --layout=tagged --build-dir=../b2gcc --stagedir=stage/gcc --prefix=${HOME}/local install
     ```
     あるいは手動でインストール:
     ```sh
-    % rsync -auv stage/gcc/ ~/local/boost-gcc
-    % rsync -auv stage/clang/ ~/local/boost-clang
-    % rsync -auv boost ~/local/include
+    rsync -auv stage/gcc/ ~/local/boost-gcc
+    rsync -auv stage/clang/ ~/local/boost-clang
+    rsync -auv boost ~/local/include
     ```
 
 ### 使うとき

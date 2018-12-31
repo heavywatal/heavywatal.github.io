@@ -186,8 +186,8 @@ a.out : main.cpp sub.cpp
 :   v3.81以降であれば `.DEFAULT_GOAL` が効くので `make all` と同じ
 
 ```sh
-% make clean
-% make
+make clean
+make
 ```
 
 ## [Options](https://www.gnu.org/software/make/manual/make.html#Options-Summary)

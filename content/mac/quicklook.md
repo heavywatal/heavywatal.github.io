@@ -35,8 +35,8 @@ Finder 上で <kbd>Space</kbd> を押すだけで、
 
 -   キャッシュ削除してプラグイン再読込:
 
-        % qlmanage -r cache && qlmanage -r
+        qlmanage -r cache && qlmanage -r
 
 -   認識されているプラグインを一覧表示:
 
-        % qlmanage -m
+        qlmanage -m

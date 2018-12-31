@@ -39,7 +39,7 @@ tags = ["mac"]
 
 スクリプトを置いたディレクトリにパスを通せれば楽なんだけど。できるのかな？:
 
-    % osascript ${HOME}/Library/Scripts/Applications/Bibdesk/exportOOXML.scpt
+    osascript ${HOME}/Library/Scripts/Applications/Bibdesk/exportOOXML.scpt
 
 ## Bibdesk からGroupとTemplateを指定してExport
 

@@ -16,7 +16,7 @@ Unixツールをパッケージとして手軽にインストールできるMac�
 1.  Command Line Tools をインストールする。
     cf. [/dev/devenv]({{< relref "devenv.md" >}})
 
-2.  ターミナルから下記のコマンドを実行し、指示に従ってパスワードを入力する:
+1.  ターミナルから下記のコマンドを実行し、指示に従ってパスワードを入力する:
     ```sh
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     ```
@@ -24,15 +24,15 @@ Unixツールをパッケージとして手軽にインストールできるMac�
     デフォルトの `/usr/local/` にインストールするのが嫌なら、
     例えばホーム以下の `~/.homebrew/` にインストールすることもできる:
     ```sh
-    % cd
-    % mkdir .homebrew
-    % curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C .homebrew
+    cd
+    mkdir .homebrew
+    curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C .homebrew
     ```
     が、`/usr/local/` 以外にインストールすると、
     bottle機能を封じられて毎回自前ビルドする仕様になってしまったので、
     非力なラップトップとかでは結構厳しい。
 
-3.  `.zshenv` (もしくは`.zshrc`) でパスを通す:
+1.  `.zshenv` (もしくは`.zshrc`) でパスを通す:
     ```sh
     PATH=${HOME}/.homebrew/bin:/usr/local/bin:${PATH}
     brew_prefix=$(brew --prefix 2>/dev/null)
@@ -49,33 +49,33 @@ http://docs.brew.sh/FAQ.html
 
 - Homebrew本体とカタログをアップデートし、アップグレード可能なパッケージを表示:
 
-        % brew update && brew outdated
+        brew update && brew outdated
 
 - `outdated` なものを全てアップグレード:
 
-        % brew upgrade
+        brew upgrade
 
 - パッケージのバージョンを固定し、`brew upgrade --all` の適用外にする。
   頻繁に更新され、やたらCPUを使うやつらに。
 
-        % brew pin imagemagick
+        brew pin imagemagick
 
 - パッケージ検索:
 
-        % brew search text
+        brew search text
 
 - パッケージ情報の表示:
 
-        % brew info formula
+        brew info formula
 
 - パッケージのインストール・アンインストール:
 
-        % brew install formula
-        % brew uninstall formula
+        brew install formula
+        brew uninstall formula
 
 - インストール済みパッケージ、またはパッケージ内ファイルの一覧:
 
-        % brew list [formula]
+        brew list [formula]
 
 
 ## brew install
@@ -149,12 +149,13 @@ Rをここからインストールするとバイナリ版のパッケージが�
 
 明示的にリポジトリを追加する:
 
-    % brew tap brewsci/bio
-    % brew install libsequence
+```sh
+brew tap brewsci/bio
+brew install libsequence
+```
 
 暗黙に `brew tap` しつつ直接インストールも可能:
-
-    % brew install brewsci/bio/libsequence
+`brew install brewsci/bio/libsequence`
 
 バイオインフォマティクスなど科学計算のツール群はHomebrew公式タップ
 [`homebrew/science`](https://github.com/Homebrew/homebrew-science)
@@ -195,14 +196,13 @@ https://docs.brew.sh/Formula-Cookbook.html
 
 GUIアプリケーションもHomebrewで管理してしまおうという野心的な拡張機能。
 
-インストールは1行:
-
-    % brew tap caskroom/cask
-
+`brew tap caskroom/cask` でインストール。
 使うときは普通の `brew` コマンドに `cask` を挟むだけ:
 
-    % brew cask install libreoffice
-    % brew cask list
+```sh
+brew cask install libreoffice
+brew cask list
+```
 
 アプリ側でアップデートを実行するとCask内でのバージョンと食い違っちゃうけど使用上は問題ないらしい。
 

@@ -38,7 +38,7 @@ WineBottlerはMac OS XでWineを使うための環境構築を手伝ってくれ
 
 1.  [作者のウェブサイト](http://winebottler.kronenberg.org/) から
     `WineBottlerCombo_*.dmg` をダウンロード
-2.  それを開いて、Wine.app と WineBottler.app を
+1.  それを開いて、Wine.app と WineBottler.app を
     `/Applications/` 以下にコピー
 
 ## make Mac Application.app from Windows Application.exe
@@ -47,27 +47,27 @@ Windowsアプリ.exe またはその インストーラ.msi から
 単独の Macアプリ.app を作る方法
 
 1.  WineBottler.app を起動
-2.  左サイドバーから `Create Custom Prefixes` を選択
+1.  左サイドバーから `Create Custom Prefixes` を選択
     1.  Install File [\_\_\_\_] に元となるWindowsアプリまたはそのインストーラを入力。
         (Select File...) から選んでもよい。
-    2.  それがインストーラではなく単体で動くアプリケーションの場合は
+    1.  それがインストーラではなく単体で動くアプリケーションの場合は
         その下の [\_] Copy only. にチェック
-    3.  prefix template は new prefix のままで
-    4.  Winetricks はここでは無視。ランタイム環境が必要な場合はここで指定しとくのかな？
-    5.  Self-contained [\_] にチェックすると、
+    1.  prefix template は new prefix のままで
+    1.  Winetricks はここでは無視。ランタイム環境が必要な場合はここで指定しとくのかな？
+    1.  Self-contained [\_] にチェックすると、
         Wine がインストールされてないMacでも動くアプリケーションを作れる。
         が、200MBくらい大きくなるので、自分のMacで使うだけならチェックしないほうがいい。
-    6.  その下の3つはとりあえず無視。
-    7.  Runtime Version [\_\_\_\_] に元のWindowsアプリのバージョンを入力。
+    1.  その下の3つはとりあえず無視。
+    1.  Runtime Version [\_\_\_\_] に元のWindowsアプリのバージョンを入力。
         分からなきゃそのまま1.0で。
-    8.  Install ボタンを押す。
+    1.  Install ボタンを押す。
 
-3.  アプリケーションの名前と置く場所を聞かれるので、
+1.  アプリケーションの名前と置く場所を聞かれるので、
     `/Applications` などの適当な場所に `適当な名前.app` を指定してSave
-4.  Windowsっぽいインストーラが立ち上がったら基本的に全部Yesで進む。
-5.  Select Startfile と言われたら、
+1.  Windowsっぽいインストーラが立ち上がったら基本的に全部Yesで進む。
+1.  Select Startfile と言われたら、
     `Program Files/` 以下にインストールされた目的のアプリを指定してOK
-6.  できあがったアプリケーションをダブルクリックして実行
+1.  できあがったアプリケーションをダブルクリックして実行
 
 この方法で作ったアプリケーションを一度起動すると、
 `~/Library/Application\ Support/Wine/prefixes/`
@@ -86,29 +86,29 @@ Prefixは複数作れるが、ひとつだけ `~/.wine` というPrefixを作っ
 ### Prefix
 
 1.  Wine.app を起動
-2.  画面右上にある `ワイングラスのメニュー --> Change Prefix...`
+1.  画面右上にある `ワイングラスのメニュー --> Change Prefix...`
     -   Add... ホーム以下の適当な場所に適当な名前で作る
         (ホーム直下に `.wine` という名前で作ることを推奨)
     -   間違って作ったPrefixなどはマイナスアイコンで消せる
     -   虫眼鏡アイコンをクリックするとそのPrefixがどこにできたかFinderで確認できる
     -   設定したいPrefixを選択してOK
 
-3.  右上ワイングラスのメニューで current prefix がちゃんと設定されてるか確認
+1.  右上ワイングラスのメニューで current prefix がちゃんと設定されてるか確認
 
 ### Execution
 
 1.  上記の手順で目的のPrefixに設定されてることを確認。
-2.  FinderなどからWindowsアプリ
+1.  FinderなどからWindowsアプリ
     (notepad.exe とか setup.msi とか) を実行
     -   普通はダブルクリックで行ける
     -   ダメなら右クリックから Wine.app を指定
 
-3.  Wineダイアログが出てきたら、
+1.  Wineダイアログが出てきたら、
     Run directly in [...] でPrefixを指定してGo
     -   Don’t show this dialog again
         にチェックすれば次回からこのステップを飛ばせる
 
-4.  そのアプリがインストーラなら、手順に従ってインストールする
+1.  そのアプリがインストーラなら、手順に従ってインストールする
     -   全部Yesで進むと大概 `C:\\Program Files\\` 以下にインストールすることになるが、
         それらはMac上では `<Prefix>/drive_c/Program Files` に相当する。
 
@@ -129,7 +129,7 @@ Prefixは複数作れるが、ひとつだけ `~/.wine` というPrefixを作っ
     Finder で `command + alt` + drag-and-drop するか、
     コマンドで以下のようにする。:
 
-        % ln -s ~/.wine/drive_c/Program\ Files /Applications/
+        ln -s ~/.wine/drive_c/Program\ Files /Applications/
 
 -   wine コマンドは
     `/Applications/Wine.app/Contents/Resources/bin/wine` にあるが、
@@ -146,10 +146,10 @@ Prefixは複数作れるが、ひとつだけ `~/.wine` というPrefixを作っ
     ちなみに `<Prefix>/drive_c/windows/system32/` 以下にある
     実行ファイルにはパスが通っており、拡張子.exeも省略可能:
 
-        % wine notepad
+        wine notepad
 
 -   シェル変数 `WINEPREFIX` によって
     wine コマンドが実行されるPrefixを指定できる。
     相対パスではなく絶対パスで。デフォルトは `~/.wine`:
 
-        % WINEPREFIX=${HOME}/Wine wine notepad
+        WINEPREFIX=${HOME}/Wine wine notepad

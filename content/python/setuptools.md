@@ -32,9 +32,9 @@ pywtl/
 オプションを付けることで余計なコピーを減らせるっぽい。
 
 ```sh
-% pip install -v -e ~/git/pywtl/
-% pip install -v git+https://github.com/heavywatal/pywtl.git
-% python -m wtl.hello
+pip install -v -e ~/git/pywtl/
+pip install -v git+https://github.com/heavywatal/pywtl.git
+python -m wtl.hello
 ```
 
 

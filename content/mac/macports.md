@@ -24,18 +24,18 @@ port は `/opt/local/` 以下にインストールされる。
 ## Installation
 
 1.  Command Line Tools をインストールする。 cf. [/dev/devenv]({{< relref "devenv.md" >}})
-2.  [公式サイト](http://www.macports.org/) から
+1.  [公式サイト](http://www.macports.org/) から
     OSに合ったディスクイメージ `MacPorts-***.dmg` をダウンロード
-3.  それをマウントしてインストーラを実行
-4.  コマンドがインストールされる `/opt/local/bin` にパスを通す。
+1.  それをマウントしてインストーラを実行
+1.  コマンドがインストールされる `/opt/local/bin` にパスを通す。
     例えば `.zshenv` や `.bashrc` に以下のように記述。:
 
         export PATH=/opt/local/bin:/opt/local/sbin:${PATH}
 
-5.  Terminal を開いて
+1.  Terminal を開いて
     MacPorts 本体とportカタログをアップデート:
 
-        % sudo port selfupdate
+        sudo port selfupdate
 
 ## Usage
 
@@ -43,70 +43,70 @@ port は `/opt/local/` 以下にインストールされる。
 
 -   欲しいportを検索:
 
-        % port search bio
+        port search bio
 
 -   気になったportの詳細を表示:
 
-        % port info [port]
+        port info [port]
 
 -   portをインストールする時に選択できるオプションを表示。:
 
-        % port variants [port]
+        port variants [port]
 
 -   そのportを入れるために必要な（依存している）portを表示。
     下はrecursive版で、`--full` オプションでフル表示できる。:
 
-        % port deps [port]
-        % port rdeps [port]
+        port deps [port]
+        port rdeps [port]
 
 -   そのportに依存しているやつらを表示。:
 
-        % port dependents [port]
-        % port rdependents [port]
+        port dependents [port]
+        port rdependents [port]
 
 -   portのインストール/アンインストール。
     そいつが依存しているほかのportも自動的にインストールされる。:
 
-        % sudo port install [port] [+variant]
-        % sudo port uninstall [port]
+        sudo port install [port] [+variant]
+        sudo port uninstall [port]
 
 -   インストール済みのportを一覧表示:
 
-        % port installed
+        port installed
 
 -   MacPorts 本体とportカタログをアップデートし、
     アップデート可能なものを一覧表示:
 
-        % sudo port selfupdate && port outdated
+        sudo port selfupdate && port outdated
 
 -   アップデート可能なものをすべてアップデート。
     古いものを自動でアンインストールするには `-u` オプションを付ける。:
 
-        % sudo port upgrade outdated
+        sudo port upgrade outdated
 
 -   インストール済みのportを再インストール:
 
-        % sudo port -n upgrade --force [port]
+        sudo port -n upgrade --force [port]
 
 -
 
     過去のバージョンのportをインストール
     :   1.  <http://trac.macports.org/browser/trunk/dports> から目的のportのページを開く
-        2.  右上の"Revision Log"からお目当てのバージョンのリビジョン番号を確認
-        3.  以下のような svn コマンドで
+        1.  右上の"Revision Log"からお目当てのバージョンのリビジョン番号を確認
+        1.  以下のような svn コマンドで
             `Portfile` をダウンロードし、インストール:
 
-                % svn checkout -r 74577 http://svn.macports.org/repository/macports/trunk/dports/shells/zsh-devel zsh-devel-4.3.11
-                % cd zsh-devel-4.3.11
-                % sudo port install +mp_completion +doc +examples
+                svn checkout -r 74577 http://svn.macports.org/repository/macports/trunk/dports/shells/zsh-devel zsh-devel-4.3.11
+                cd zsh-devel-4.3.11
+                sudo port install +mp_completion +doc +examples
 
 ### pseudo-portnames
 
 各コマンドの対象となるportを、実名だけでなく状態によってまとめて指定できる。
 e.g.:
 
-    % port list leaves
-    % sudo port uninstall $(port echo inactive)
+    port list leaves
+    sudo port uninstall $(port echo inactive)
 
 `all`
 :   all the ports in each ports tree listed in sources.conf
@@ -161,8 +161,8 @@ variantとして `+with_default_names` を指定してインストールすれ�
 必要なものを `/usr/local/bin/` にシムリンク張るか、
 `.zshrc` などにエイリアスを定義して使う。:
 
-    % sudo port install coreutils
-    % sudo ln -s /opt/local/bin/gls /usr/local/bin/ls
+    sudo port install coreutils
+    sudo ln -s /opt/local/bin/gls /usr/local/bin/ls
 
     alias ls="gls -vF --show-control-chars --color=auto"
 
@@ -177,8 +177,8 @@ xzは最も圧縮率が高く、圧縮にはbzip2よりも時間がかかる一�
 ということで、多くのユーザーに配布・展開されるようなファイルの圧縮に効果的。
 あるいは、書き換える予定は無いが長期保存しておかなければいけないデカいファイルとか。:
 
-    % sudo port install xz gnutar
-    % tar cJf archive.tar.xz archive/
+    sudo port install xz gnutar
+    tar cJf archive.tar.xz archive/
 
 ### zsh
 
@@ -187,10 +187,10 @@ port コマンドを補完できるvariantがあるのでこれを使う。
 ログインシェルにするにはひと手間必要。
 その後の設定は [こちらのページ参照]({{< relref "zsh.md" >}}) 。:
 
-    % sudo port install zsh-devel +mp_completion +doc +examples
-    % sudo emacs -nw /etc/shells # 末尾に/opt/local/bin/zshを追加
-    % chsh -s /opt/local/bin/zsh
-    % exit
+    sudo port install zsh-devel +mp_completion +doc +examples
+    sudo emacs -nw /etc/shells # 末尾に/opt/local/bin/zshを追加
+    chsh -s /opt/local/bin/zsh
+    exit
 
 ### misc.
 

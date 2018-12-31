@@ -18,7 +18,7 @@ ChromiumとNode.js(を用いたElectronフレームワーク)でできており�
 - https://flight-manual.atom.io/
 
 ```sh
-% brew cask install atom
+brew cask install atom
 ```
 
 ## Tips

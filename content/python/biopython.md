@@ -100,8 +100,6 @@ tags = ["python"]
 -   [NCBI ESerch Utility](http://www.ncbi.nlm.nih.gov/entrez/query/static/esearch_help.html)
 -   <http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc93>
 
-<!-- -->
-
     >>> from Bio import Entrez
     >>> handle = Entrez.esearch(db="nucleotide", retmax=10, term="Opuntia")
     >>> record = Entrez.read(handle)
@@ -134,7 +132,7 @@ tags = ["python"]
 
 [pip]({{< relref "pip.md" >}}) で一発:
 
-    % pip install biopython
+    pip install biopython
 
 
 ## 書籍

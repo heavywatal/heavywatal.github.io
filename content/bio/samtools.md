@@ -15,11 +15,11 @@ tags = ["genetics"]
 
 -   適当な条件でフィルタリング:
 
-        % samtools view -hb -f3 -q2 aln.bam -o filtered.bam
+        samtools view -hb -f3 -q2 aln.bam -o filtered.bam
 
 -   ソート:
 
-        % samtools sort -T tmpsam -@2 -o sorted.bam aln.bam
+        samtools sort -T tmpsam -@2 -o sorted.bam aln.bam
 
     一時ファイルの名前なんか適当にユニークに決めてくれたらいいのに、
     `-T {PREFIX}` を指定しないと使えない。
@@ -29,24 +29,24 @@ tags = ["genetics"]
 
 -   標準入力stdinからパイプする場合は `-` を引数に:
 
-        % samtools view -hb -f3 aln.bam | samtools sort -T tmpsam -@2 -o piped.bam
+        samtools view -hb -f3 aln.bam | samtools sort -T tmpsam -@2 -o piped.bam
 
 -   BAMインデックス作成:
 
-        % samtools index aln.bam
+        samtools index aln.bam
 
     `aln.bam.bai` が書き出される
 
 -   参照配列インデックス作成:
 
-        % samtools faidx ref.fa
+        samtools faidx ref.fa
 
     `tview` や `pileup` などで必要になる
     `ref.fa.fai` が書き出される
 
 -   PCR duplicatesを除去:
 
-        % samtools rmdup aln.bam unique.bam
+        samtools rmdup aln.bam unique.bam
 
 fixmate
 
@@ -54,13 +54,13 @@ fixmate
 
 -   生のSAMを `less` で閲覧:
 
-        % samtools view -h aln.bam | less
+        samtools view -h aln.bam | less
 
     `-o out.sam` とすればファイルに書き出せる。
 
 -   マッピングされた形で閲覧:
 
-        % samtools tview aln.bam [ref.fa]
+        samtools tview aln.bam [ref.fa]
 
     参照配列を与えると表示方法に選択肢が増える。
     予めインデックスを作っておかなくても初回実行時に
@@ -75,7 +75,7 @@ fixmate
 
 -   インデックス作成済みBAMの統計量を表示:
 
-        % samtools idxstats aln.bam
+        samtools idxstats aln.bam
         chr1    249250621       6343976 0
         chr10   135534747       2407204 0
         chr11   135006516       3773511 0
@@ -86,7 +86,7 @@ fixmate
 
 -   フラグの要約統計:
 
-        % samtools flagstat aln.bam
+        samtools flagstat aln.bam
         65182282 + 0 in total (QC-passed reads + QC-failed reads)
         6895859 + 0 secondary
         0 + 0 supplementary
@@ -103,7 +103,7 @@ fixmate
 
 -   サイトごとのdepthをタブ区切りで:
 
-        % samtools depth aln.bam
+        samtools depth aln.bam
         chr1 12345 1
         chr1 12346 1
         ...
@@ -112,7 +112,7 @@ fixmate
 
 VCF/BCFを書き出す:
 
-    % samtools mpileup -uv aln.bam
+    samtools mpileup -uv aln.bam
     chr1 12345
 
 `-f ref.fa`
@@ -138,7 +138,7 @@ phase
 <https://samtools.github.io/hts-specs/>
 
 1.  `QNAME`: リード名
-2.  `FLAG`: マッピングの状況をビット表現:
+1.  `FLAG`: マッピングの状況をビット表現:
 
         0x001     1  paired in sequencing
         0x002     2  mapped in proper pair
@@ -168,9 +168,9 @@ phase
     strandも場合分けして詳細に数え上げた例:
     <https://ppotato.wordpress.com/2010/08/25/samtool-bitwise-flag-paired-reads/>
 
-3.  `RNAME`: 参照配列・染色体の名前
-4.  `POS`: 位置
-5.  `MAPQ`: マッピングクオリティ
+1.  `RNAME`: 参照配列・染色体の名前
+1.  `POS`: 位置
+1.  `MAPQ`: マッピングクオリティ
     = round($-10\log_{10}\text{Pr[mapping~is~wrong]}$)
 
     マッパーによって微妙に違うらしい。
@@ -182,7 +182,7 @@ phase
          1: 4–9 locations
          0: >10 locations
 
-6.  `CIGAR`: マッピング状況とその長さ
+1.  `CIGAR`: マッピング状況とその長さ
     e.g., `101M`, `18M200I83M`, `65M36S`
     :
 
@@ -194,15 +194,15 @@ phase
         H: hard clipping = 部分マッチで無視された部分
         X: sequence mismatch
 
-7.  `RNEXT`: paired-endの他方が張り付いた染色体。
+1.  `RNEXT`: paired-endの他方が張り付いた染色体。
     同じときは `=` で不明なときは `*`
-8.  `PNEXT`: paired-endの他方が張り付いた位置
-9.  `TLEN`: inferred Template LENgth。
+1.  `PNEXT`: paired-endの他方が張り付いた位置
+1.  `TLEN`: inferred Template LENgth。
     左腕の左端から右腕の右端までの距離。
     左腕なら正、右腕なら負、single-endなら0。
-10. `SEQ`: 塩基配列
-11. `QUAL`: 塩基クオリティ
-12. それ以降はマッパー依存。
+1. `SEQ`: 塩基配列
+1. `QUAL`: 塩基クオリティ
+1. それ以降はマッパー依存。
     形式は `TAG:VTYPE:VALUE`
 
 ## Binding

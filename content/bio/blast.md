@@ -22,12 +22,12 @@ Basic Local Alignment Search Tool
     あるいは `ncbi-blast-*-universal-macosx.tar.gz`
     をダウンロードして展開:
 
-        % wget -O- ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.2.30+-x64-linux.tar.gz | tar xz
+        wget -O- ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.2.30+-x64-linux.tar.gz | tar xz
 
-2.  しかるべきところに移動してシムリンク:
+1.  しかるべきところに移動してシムリンク:
 
-        % sudo mv ncbi-blast-2.2.30+ /usr/local/
-        % sudo ln -s /usr/local/ncbi-blast-2.2.30+ /usr/local/ncbi-blast
+        sudo mv ncbi-blast-2.2.30+ /usr/local/
+        sudo ln -s /usr/local/ncbi-blast-2.2.30+ /usr/local/ncbi-blast
 
     あとは `/usr/local/ncbi-blast/bin` にパスを通して使う。
 
@@ -44,17 +44,17 @@ Basic Local Alignment Search Tool
 1.  Boost ライブラリをインストールする。このとき
     `regex`, `spirit`, `system`, `filesystem`, `test`, `thread`
     をビルド対象に含める。 cf. [Boost]({{< relref "boost.md" >}})
-2.  <ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST>
+1.  <ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST>
     から最新版の `ncbi-blast-*-src.tar.gz` をダウンロード
-3.  展開して移動:
+1.  展開して移動:
 
-        % tar xzf ncbi-blast-2.2.30+-src.tar.gz
-        % cd ncbi-blast-2.2.30+-src/c++/
+        tar xzf ncbi-blast-2.2.30+-src.tar.gz
+        cd ncbi-blast-2.2.30+-src/c++/
 
-4.  `ncbi-blast-*-universal-macosx.tar.gz` に入ってる
+1.  `ncbi-blast-*-universal-macosx.tar.gz` に入ってる
     `ncbi_package_info` を参考に `configure` して `make`:
 
-        % ./configure --without-debug --with-strip --without-pcre --with-mt --with-flat-makefile --with-64 --with-ncbi-public --without-ccache --without-caution --without-makefile-auto-update --with-projects=scripts/projects/blast/project.lst --with-internal --prefix=/usr/local/ncbi-blast --with-boost=/usr/local/boost-gcc CC=gcc-4.9 CXX=g++-4.9
+        ./configure --without-debug --with-strip --without-pcre --with-mt --with-flat-makefile --with-64 --with-ncbi-public --without-ccache --without-caution --without-makefile-auto-update --with-projects=scripts/projects/blast/project.lst --with-internal --prefix=/usr/local/ncbi-blast --with-boost=/usr/local/boost-gcc CC=gcc-4.9 CXX=g++-4.9
 
     {{%div class="note"%}}
 `clang` (および Xcode のニセ `gcc`)
@@ -62,15 +62,15 @@ Basic Local Alignment Search Tool
 [Homebrew]({{< relref "homebrew.md" >}}) などでインストールしておく。
     {{%/div%}}
 
-5.  そのまま `make` してもダメらしいので
+1.  そのまま `make` してもダメらしいので
     `Makefile.mk` の `-std=gnu++11` を消す:
 
-        % sed -i.orig -e 's/-std=[a-z0-9+]\+//' ReleaseMT/build/Makefile.mk
+        sed -i.orig -e 's/-std=[a-z0-9+]\+//' ReleaseMT/build/Makefile.mk
 
-6.  ビルドしてインストール:
+1.  ビルドしてインストール:
 
-        % make
-        % sudo make install
+        make
+        sudo make install
 
 ### 共通設定
 
@@ -85,10 +85,10 @@ Basic Local Alignment Search Tool
 `makeblastdb` の出力先として参照できるので便利。
     {{%/div%}}
 
-2.  確認:
+1.  確認:
 
-        % rehash
-        % blastn -version
+        rehash
+        blastn -version
 
 ## ローカルデータベース構築
 
@@ -99,16 +99,16 @@ Basic Local Alignment Search Tool
 
 1.  データベースの置き場所をひとつ決め (e.g. `~/db/blast`)、
     上記のように環境変数 `BLASTDB` を設定しておく。
-2.  FASTA形式の配列データを用意する (e.g. <ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/> から `yeast.aa.gz`)
-3.  `makeblastdb` コマンドでBLASTデータベース形式に変換:
+1.  FASTA形式の配列データを用意する (e.g. <ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/> から `yeast.aa.gz`)
+1.  `makeblastdb` コマンドでBLASTデータベース形式に変換:
 
-        % makeblastdb -in yeast.nt -out ${BLASTDB}/yeast.nt -dbtype nucl -parse_seqids -hash_index
-        % makeblastdb -in yeast.aa -out ${BLASTDB}/yeast.aa -dbtype prot -parse_seqids -hash_index
+        makeblastdb -in yeast.nt -out ${BLASTDB}/yeast.nt -dbtype nucl -parse_seqids -hash_index
+        makeblastdb -in yeast.aa -out ${BLASTDB}/yeast.aa -dbtype prot -parse_seqids -hash_index
 
     圧縮ファイルは直接読めないので、展開して標準入力に流し込む。
     このとき `-title` と `-out` は必須の引数になる:
 
-        % gunzip -c mydata.fa.gz | makeblastdb -in - -title mydata -out ${BLASTDB}/mydata -dbtype nucl -hash_index
+        gunzip -c mydata.fa.gz | makeblastdb -in - -title mydata -out ${BLASTDB}/mydata -dbtype nucl -hash_index
 
 `-in` (stdin)
 

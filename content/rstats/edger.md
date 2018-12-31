@@ -32,7 +32,7 @@ edgeRUsersGuide()
 ## 使い方
 
 1.  `HTSeq` などで遺伝子ごとのリードカウントを用意する
-2.  Rで読み込む
+1.  Rで読み込む
 
     ```r
     library(edgeR)
@@ -42,7 +42,7 @@ edgeRUsersGuide()
     dge = readDGE(targets, header=FALSE)
     ```
 
-3.  低カウント過ぎる遺伝子を除去
+1.  低カウント過ぎる遺伝子を除去
 
     ```r
     ok_c = (dge$counts > 5) %>% rowSums %>% {. > 0}
@@ -50,20 +50,20 @@ edgeRUsersGuide()
     dge = dge[ok_c & ok_cpm, , keep.lib.sizes=FALSE]
     ```
 
-4.  正規化係数を計算
+1.  正規化係数を計算
 
     ```r
     dge = calcNormFactors(dge)
     dge$samples
     ```
 
-5.  モデル
+1.  モデル
 
     ```r
     design = model.matrix(~ 0 + group, data=targets)
     ```
 
-6.  common dispersion, trended dispersion, tagwise dispersionを推定
+1.  common dispersion, trended dispersion, tagwise dispersionを推定
 
     ```r
     dge = estimateDisp(dge, design)
@@ -73,7 +73,7 @@ edgeRUsersGuide()
     1グループ1サンプルずつしか無い場合は4つの選択肢がある。
 
     1.  検定を諦めてdescriptive discussion (推奨)
-    2.  経験的な値を適当に入れとく
+    1.  経験的な値を適当に入れとく
 
         ```r
         bcv = 0.4  # for human
@@ -82,7 +82,7 @@ edgeRUsersGuide()
         dge$common.dispersion = bcv ^ 2
         ```
 
-    3.  説明変数を減らしたモデルでdispersionを推定し、フルモデルで使う
+    1.  説明変数を減らしたモデルでdispersionを推定し、フルモデルで使う
 
         ```r
         reduced = estimateGLMCommonDisp(dge, reduced.design, method='deviance', robust=TRUE, subset=NULL)
@@ -92,7 +92,7 @@ edgeRUsersGuide()
         合計カウントが多くてDEGが比較的少ないときに有効。
         当然、1変数2群比較では使えない。
 
-    4.  群間で差がないと考えられるhousekeeping genesから推定。
+    1.  群間で差がないと考えられるhousekeeping genesから推定。
         100個以上の遺伝子を使うのが望ましい。
         例えばヒトなら
 
@@ -106,7 +106,7 @@ edgeRUsersGuide()
         dge$common.dispersion = hk$common.dispersion
         ```
 
-7.  1変数2群ならシンプルに検定
+1.  1変数2群ならシンプルに検定
 
     ```r
     et = exactTest(dge)
@@ -140,14 +140,14 @@ edgeRUsersGuide()
 `et` や `lrt` の `PValue` は補正前。
     {{%/div%}}
 
-8.  プロット `logFC ~ mean(logCPM)` してみる
+1.  プロット `logFC ~ mean(logCPM)` してみる
 
     ```r
     plotSmear(et, de.tags=de_tags)
     abline(h=min_lfc * c(-1, 1), col="blue")
     ```
 
-9.  Gene Ontology解析
+1.  Gene Ontology解析
 
     ```r
     go = goana(lrt, species='Hs')

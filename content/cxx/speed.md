@@ -29,7 +29,7 @@ gcc や clang の最適化技術も着々と進歩しており、
 <https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html>
 
 ```sh
-% g++ -O3 main.cpp
+g++ -O3 main.cpp
 ```
 
 ### コンパイル時定数 `constexpr`

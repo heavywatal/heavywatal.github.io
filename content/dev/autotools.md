@@ -41,22 +41,22 @@ tags = ["package"]
 1.  `configure.scan` の雛形を自動生成し、
     `configure.ac` に名前変更:
 
-        % autoscan
-        % mv configure.scan configure.ac
+        autoscan
+        mv configure.scan configure.ac
 
-2.  `configure.ac` を適宜編集
-3.  `Makefile.am` を作る
-4.  その2つのファイルから、自動的にその他のファイルを生成:
+1.  `configure.ac` を適宜編集
+1.  `Makefile.am` を作る
+1.  その2つのファイルから、自動的にその他のファイルを生成:
 
-        % autoreconf --install
+        autoreconf --install
 
-5.  できあがった `configure` ファイルを試してみる:
+1.  できあがった `configure` ファイルを試してみる:
 
-        % ./configure --help
-        % ./configure
-        % make
+        ./configure --help
+        ./configure
+        make
 
-6.  `configure.ac` や `Makefile.am` を変更したら
+1.  `configure.ac` や `Makefile.am` を変更したら
     `autoreconf` で反映させる、を繰り返す
 
 ## `configure.ac`

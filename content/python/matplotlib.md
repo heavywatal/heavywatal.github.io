@@ -453,7 +453,7 @@ Macで非Frameworkとしてインストールした自前Pythonを使うと怒�
 
 そういうときはキャッシュを削除してみるとよい:
 
-    % rm -rf ~/.matplotlib/fontList.cache
+    rm -rf ~/.matplotlib/fontList.cache
 
 
 ## 書籍

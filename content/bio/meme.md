@@ -17,15 +17,15 @@ http://meme-suite.org/doc/install.html
 
 1.  ソースコードを[ダウンロード](http://meme-suite.org/doc/download.html)して展開:
 
-        % wget -O- http://meme-suite.org/meme-software/4.11.2/meme_4.11.2_1.tar.gz | tar xz
+        wget -O- http://meme-suite.org/meme-software/4.11.2/meme_4.11.2_1.tar.gz | tar xz
 
-2.  `configure` してビルド:
+1.  `configure` してビルド:
 
-        % cd meme_4.11.2/
-        % ./configure --prefix=${HOME}/bio/local/meme --with-url=http://meme-suite.org --enable-build-libxml2 --enable-build-libxslt --enable-opt CC=clang
-        % make
+        cd meme_4.11.2/
+        ./configure --prefix=${HOME}/bio/local/meme --with-url=http://meme-suite.org --enable-build-libxml2 --enable-build-libxslt --enable-opt CC=clang
+        make
 
-3.  パスを通す:
+1.  パスを通す:
 
         export PATH=${PATH}:/usr/local/meme/bin
 
@@ -37,7 +37,7 @@ http://meme-suite.org/doc/meme.html
 
 複数の配列が含まれるFASTAファイルを渡すだけ:
 
-    % meme sequences.fasta [options]
+    meme sequences.fasta [options]
 
 `-h`, `-version`
 :   ヘルプ、バージョン表示

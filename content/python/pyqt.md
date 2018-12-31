@@ -21,13 +21,13 @@ tags = ["python"]
 Linuxなら `apt-get` を使ってもよい。
 
 1.  `Qt` Library をインストール
-2.  SIP をインストール <http://www.riverbankcomputing.co.uk/software/sip/download>:
+1.  SIP をインストール <http://www.riverbankcomputing.co.uk/software/sip/download>:
 
-        % tar xzf sip-4.13.2.tar.gz
-        % cd sip-4.13.2/
-        % /usr/local/bin/python2.7 configure.py --arch=x86_64
-        % make
-        % sudo make install
+        tar xzf sip-4.13.2.tar.gz
+        cd sip-4.13.2/
+        /usr/local/bin/python2.7 configure.py --arch=x86_64
+        make
+        sudo make install
 
     Macで `--enable-framework` を付けずにビルドして使いたい場合は、
     `sipconfig.py` と `siputils.py` にある以下の行をコメントアウトする:
@@ -35,13 +35,13 @@ Linuxなら `apt-get` を使ってもよい。
         #            if "Python.framework" not in dl:
         #                error("SIP requires Python to be built as a framework")
 
-3.  `PyQt` をインストール <http://www.riverbankcomputing.co.uk/software/pyqt/download>:
+1.  `PyQt` をインストール <http://www.riverbankcomputing.co.uk/software/pyqt/download>:
 
-        % tar xzf PyQt-mac-gpl-4.9.1.tar.gz
-        % cd PyQt-mac-gpl-4.9.1/
-        % /usr/local/bin/python2.7 configure.py --use-arch=x86_64
-        % make
-        % sudo make install
+        tar xzf PyQt-mac-gpl-4.9.1.tar.gz
+        cd PyQt-mac-gpl-4.9.1/
+        /usr/local/bin/python2.7 configure.py --use-arch=x86_64
+        make
+        sudo make install
 
 ## Example
 
@@ -110,24 +110,24 @@ Linuxなら `apt-get` を使ってもよい。
 
         self.tr("Gene")
 
-2.  プロジェクトファイル(.pro)を作り、ソースファイルと言語ファイルを指定:
+1.  プロジェクトファイル(.pro)を作り、ソースファイルと言語ファイルを指定:
 
         SOURCES = gui.py
         TRANSLATIONS = translations/ja_JP.ts
 
-3.  プロジェクトファイルに書かれたソースから翻訳対象を抜き出して
+1.  プロジェクトファイルに書かれたソースから翻訳対象を抜き出して
     `ts` ファイルを生成:
 
-        % pylupdate4-2.7 pyqt4.pro
+        pylupdate4-2.7 pyqt4.pro
 
-4.  Qt Linguist で `ts` ファイルを開き、翻訳。
+1.  Qt Linguist で `ts` ファイルを開き、翻訳。
     ただのXMLなのでテキストエディタで直接編集しても良い
-5.  `ts` ファイルをコンパイルして `qm` ファイルを作る
+1.  `ts` ファイルをコンパイルして `qm` ファイルを作る
     (Linguist のメニューからもできる):
 
-        % lrelease translations/ja_JP.ts
+        lrelease translations/ja_JP.ts
 
-6.  `qrc` ファイルに `qm` ファイルを登録する:
+1.  `qrc` ファイルに `qm` ファイルを登録する:
 
         <!DOCTYPE RCC><RCC version="1.0">
         <qresource>
@@ -135,11 +135,11 @@ Linuxなら `apt-get` を使ってもよい。
         </qresource>
         </RCC>
 
-7.  `qrc` ファイルを `py` モジュールに変換する:
+1.  `qrc` ファイルを `py` モジュールに変換する:
 
-        % pyrcc4-2.7 translations.qrc -o translations.py
+        pyrcc4-2.7 translations.qrc -o translations.py
 
-8.  ソースファイルで `py` モジュールを `import` し、
+1.  ソースファイルで `py` モジュールを `import` し、
     ファイル名をリソースとして記述。
     実際にはシステムあるいは環境変数のロケールを反映するために
     `QtCore.QLocale().system().name()` などを使うと良い。:
@@ -176,15 +176,15 @@ Linuxなら `apt-get` を使ってもよい。
 Macなら公式サイトからインストーラ `pyside-*.pkg`
 をダウンロードしてコマンドから実行:
 
-    % cd ~/Downloads/
-    % sudo installer -pkg pyside-0.4.1-qt47-py26apple.pkg -target "/"
+    cd ~/Downloads/
+    sudo installer -pkg pyside-0.4.1-qt47-py26apple.pkg -target "/"
 
 Ubuntuなら [PPA](https://launchpad.net/~pyside/+archive/ppa)
 からインストール:
 
-    % sudo add-apt-repository ppa:pyside
-    % sudo apt-get update
-    % sudo apt-get install python-pyside
+    sudo add-apt-repository ppa:pyside
+    sudo apt-get update
+    sudo apt-get install python-pyside
 
 ## `PyInstaller`
 
@@ -199,8 +199,8 @@ Linux, Mac, Windowsに対応。
 
 [pip]({{< relref "pip.md" >}}) で一撃インストール:
 
-    % pip install pyinstaller
+    pip install pyinstaller
 
 使う時もコマンドひとつ:
 
-    % pyinstaller --windowed myqtapp.py
+    pyinstaller --windowed myqtapp.py

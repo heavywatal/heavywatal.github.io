@@ -12,10 +12,10 @@ tags = ["python"]
 
 <https://www.scipy.org/install.html>
 
-`wheel` のおかげで `pip` いっぱつ
+`wheel` のおかげで `pip` いっぱつ:
 
 ```sh
-% pip install numpy scipy
+pip install numpy scipy
 ```
 
 [Anaconda]({{< relref "install.md" >}}) なら最初からMKL付きで入ってる。
@@ -24,14 +24,14 @@ tags = ["python"]
 
 `nose` というパッケージが必要:
 ```py
->>> import numpy
->>> numpy.test()
+import numpy
+numpy.test()
 ```
 
 BLAS/LAPACK関連の確認:
 ```py
->>> import numpy
->>> numpy.show_config()
+import numpy
+numpy.show_config()
 ```
 
 ## `NumPy`

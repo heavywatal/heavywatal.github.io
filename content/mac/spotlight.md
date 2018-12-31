@@ -20,7 +20,7 @@ tags = ["mac"]
 普通は表示されてないので、以下のコマンドで
 Finder に表示させてから、D&Dで放り込む:
 
-    % open /opt
+    open /opt
 
 ## `mds`, `mdworker`
 

@@ -411,7 +411,7 @@ bsg[[1]]
 しかもgzipのままでは読めない残念な仕様なので展開しておく。 e.g. `IV.fa`
     {{%/div%}}
 
-2.  既存の `BSgenome` のやつを参考に適当にseedファイルを作る:
+1.  既存の `BSgenome` のやつを参考に適当にseedファイルを作る:
 
         Package: BSgenome.Scerevisiae.EF4.74.ensembl
         Title: BSgenome.Scerevisiae.EF4.74.ensembl
@@ -437,11 +437,11 @@ bsg[[1]]
 パッケージ名に使える文字は結構限られてるので注意
     {{%/div%}}
 
-3.  R で `forgeBSgenomeDataPkg(seedfile)` を実行
-4.  できあがったパッケージディレクトリをビルドしてインストール:
+1.  R で `forgeBSgenomeDataPkg(seedfile)` を実行
+1.  できあがったパッケージディレクトリをビルドしてインストール:
 
-        % R CMD build BSgenome.Scerevisiae.EF4.74.ensembl
-        % R CMD INSTALL BSgenome.Scerevisiae.EF4.74.ensembl
+        R CMD build BSgenome.Scerevisiae.EF4.74.ensembl
+        R CMD INSTALL BSgenome.Scerevisiae.EF4.74.ensembl
 
 ## `VariantAnnotation`
 

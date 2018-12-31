@@ -69,8 +69,8 @@ read_delim(file, delim,
 :   fixed width file. 第二引数の指定方法は
 
     1.  `fwf_empty(infile, skip=0, col_names=NULL)` で自動推定
-    2.  `fwf_widths(widths, col_names=NULL)` で幅指定
-    3.  `fwf_positions(start, end, col_names=NULL)` で開始・終了位置指定
+    1.  `fwf_widths(widths, col_names=NULL)` で幅指定
+    1.  `fwf_positions(start, end, col_names=NULL)` で開始・終了位置指定
 
 `read_lines(file, skip=0, n_max=-1L, ...)`, `read_lines_raw(...)`
 :   1行を1要素とした文字列ベクタとして読み込む
