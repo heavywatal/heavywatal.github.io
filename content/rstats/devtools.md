@@ -114,77 +114,8 @@ vignettes/
 
 ### [`src/` C++ソースコード](http://r-pkgs.had.co.nz/src.html)
 
--   [Rcpp](https://cran.r-project.org/web/packages/Rcpp)
-    が型変換などをスムーズにしてくれる:
-    ```c++
-    // [[Rcpp::plugins(cpp14)]]
-    #include <Rcpp.h>
+[Rcppページの"Rパッケージで使う"セクション]({{< relref "rcpp.md#Rパッケージで使う" >}})を参照
 
-    //' First example
-    //' @param args string vector
-    //' @export
-    // [[Rcpp::export]]
-    Rcpp::IntegerVector len(const std::vector<std::string>& args) {
-        return {static_cast<int>(args.size())};
-    }
-    ```
--   とりあえず `usethis::use_rcpp()` で設定を整える。
-    `DESCRIPTION` や `src/.gitignore` などが書き換えられる。
--   `R/***-package.R` など適当なとこに `@useDynLib` の設定を追加:
-
-    ```r
-    #' @useDynLib hello, .registration = TRUE
-    #' @importFrom Rcpp sourceCpp
-    #' @keywords internal
-    "_PACKAGE"
-    ```
-    `@importFrom Rcpp sourceCpp` を省くと、パッケージ利用時に
-    `'enterRNGScope' not provided by package 'Rcpp'`
-    のようなエラーが出る場合がある
-    (明示的に `library(Rcpp)` するなどして既にRcppロード済みの環境では動く)。
--   同じところに `.onUnload` も定義しておく:
-    ```r
-    .onUnload = function(libpath) {
-      library.dynam.unload("hello", libpath)
-    }
-    ```
-    すると `unloadNamespace("hello")` したときに共有ライブラリもちゃんと外れるようになる。
-    ちなみに `devtools::unload()` はこれを省略してもちゃんとリロードしてくれる。
--   外部ライブラリのリンクに関する設定など、
-    開発者側で指定すべきビルドオプションは `src/Makevars` に指定:
-    ```
-    CXX_STD=CXX14
-    PKG_CPPFLAGS=-DSTRICT_R_HEADERS -I/usr/local/include
-    PKG_LIBS=-L/usr/local/lib -Wl,-rpath,/usr/local/lib -lthankyou
-    ```
-    `STRICT_R_HEADERS` を定義しておくことで余計なマクロ定義を防げる。
-    `configure` や [CMake]({{< relref "cmake.md" >}}) を使って
-    `src/Makevars.in` から生成する手もある。
-
-    参考: [Japan.R 2018 LT "Rcppパッケージで外部C++ライブラリを使う"](https://heavywatal.github.io/slides/japanr2018/)
-
--   ユーザ側で指定すべきオプションがある場合は `~/.R/Makevars` に:
-    ```
-    LLVM_LOC=/usr/local/opt/llvm
-    CC=$(LLVM_LOC)/bin/clang
-    CXX=$(LLVM_LOC)/bin/clang++
-    # CFLAGS=-g -Wall -O2 -march=native -mtune=native
-    # CXXFLAGS=$(CFLAGS)
-    # CPPFLAGS=-I${HOME}/local/include -I${HOME}/.linuxbrew/include
-    # LDFLAGS=-L${HOME}/local/lib -L${HOME}/.linuxbrew/lib
-    ```
-    例えばMPI依存パッケージをmacOSでビルドでしようとすると
-    `clang: error: unsupported option '-fopenmp'`
-    と怒られるので `brew install llvm`
-    で別のコンパイラを入れて上記のように指定する。
-
-その他の注意点
-
-- `std::abort()` や `std::exit()` は呼び出したRセッションまで殺してしまう。
-  例外は投げっぱなしで拾わなくても大丈夫で、
-  `std::exception`の派生クラスなら`what()`まで表示してもらえる。
-- グローバル変数やクラスのstaticメンバは `dyn.unload()` されるまで生き続ける。
-  `parallel::mclapply()` とかでフォークした先での変更は子同士にも親にも影響しない。
 
 ### [`vignettes/`](http://r-pkgs.had.co.nz/vignettes.html)
 
@@ -337,7 +268,7 @@ increment = function(x) {x + 1}
     `Roxygen: list(markdown = TRUE)` を `DESCRIPTION` に加える。
 -   `"_PACKAGE"` という文字列の上に書かれたブロックは、
     パッケージそのものに対応するヘルプ `*-package.Rd` になる。
-    `@useDynLib` や `@importFrom` など全体に関わる設定はここで。
+    `@useDynLib` など全体に関わる設定はここで。
 
     ```r
     #' Example package to say hello
@@ -359,6 +290,7 @@ increment = function(x) {x + 1}
 
 `@importFrom pkg func`
 :   `NAMESPACE` で `importFrom()` するパッケージと関数を指定。
+    パッケージ内で何回書いても `NAMESPACE` は汚れないっぽい。
     e.g., `@importFrom magrittr %>%`
 
 `@export`
@@ -393,5 +325,5 @@ increment = function(x) {x + 1}
 
 ## 関連書籍
 
-<a href="https://www.amazon.co.jp/Packages-Organize-Test-Document-Share-ebook/dp/B00VAYCHL0/ref=as_li_ss_il?ie=UTF8&qid=1477817362&sr=8-1&keywords=r+package&linkCode=li3&tag=heavywatal-22&linkId=c760a9619f6d31273f668389360b687d" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B00VAYCHL0&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=B00VAYCHL0" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
-<a href="https://www.amazon.co.jp/R%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E9%96%8B%E7%99%BA%E5%85%A5%E9%96%80-_%E3%83%86%E3%82%B9%E3%83%88%E3%80%81%E6%96%87%E6%9B%B8%E5%8C%96%E3%80%81%E3%82%B3%E3%83%BC%E3%83%89%E5%85%B1%E6%9C%89%E3%81%AE%E6%89%8B%E6%B3%95%E3%82%92%E5%AD%A6%E3%81%B6-Hadley-Wickham/dp/4873117593/ref=as_li_ss_il?ie=UTF8&qid=1477817362&sr=8-6&keywords=r+package&linkCode=li3&tag=heavywatal-22&linkId=f322b7223574d738364d6675a58a9de9" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873117593&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4873117593" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+<a href="https://www.amazon.co.jp/dp/1491910399/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=2ac4a1dea2487eff5b1034acbbad7ddb&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1491910399&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=1491910399" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+<a href="https://www.amazon.co.jp/dp/4873117593/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=68d0ffbb02a546eca75795f147bd54e2&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873117593&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=4873117593" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
