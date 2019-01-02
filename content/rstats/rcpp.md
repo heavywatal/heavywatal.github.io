@@ -1,7 +1,7 @@
 +++
 title = 'Rcpp'
 subtitle = "RからC++を使う"
-tags = ["r", "package"]
+tags = ["r", "c++", "package"]
 [menu.main]
   parent = "rstats"
   weight = -45
@@ -12,18 +12,20 @@ tags = ["r", "package"]
 - <span class="fragment" data-fragment-index="1">
   [みんなのRcpp](https://teuder.github.io/rcpp4everyone_ja/) and
   [Rcpp for everyone](https://teuder.github.io/rcpp4everyone_en/)
-  by **津駄@teuder** さん
+  by 津駄@teuderさん
   </span>
 
+プログラムの書き方によって速度やメモリ効率は大きく変わる。
+Rでは大抵、生のforループを避けて、R標準のベクトル演算やちゃんとしたパッケージの関数を使っていれば大丈夫。
+でも、どうしても、さらに速度を追い求めたい場合にはRcppが有用となる。
 
-### ベンチマークの一例
-
-長さnの調和級数:
+長さnの調和級数を求める例:
 
 ```r
 r_for = function(n) {
   s = 0; for (i in seq_len(n)) {s = s + 1 / i}; s
 }
+
 r_vec = function(n) sum(1 / seq_len(n))
 
 Rcpp::cppFunction("double rcpp(int n) {
@@ -39,22 +41,19 @@ rbenchmark::benchmark(r_for(n), r_vec(n), rcpp(n))[,1:4]
 # 3  rcpp(n)          100   0.133    1.000
 ```
 
-多くの場合、生のforループを避け、R標準のベクトル演算やちゃんとしたパッケージの関数を使うことで十分な速度が出る。
-それよりもさらに速度や省メモリを追い求めたい場面で、Rcppが有用となる。
 
-
-## 使い捨てコードで使う
+## Rスクリプトの途中で使う
 
 ファイルあるいは文字列をコンパイルして使う:
 ```r
-# Rcpp::sourceCpp("fibonacci.cpp")
+Rcpp::sourceCpp("fibonacci.cpp")
 
 Rcpp::sourceCpp(code='
   #include <Rcpp.h>
   // [[Rcpp::plugins(cpp14)]]
   // [[Rcpp::export]]
   int fibonacci(const int x) {
-    if (x == 0) return 0;
+    if (x < 1) return 0;
     if (x == 1) return 1;
     return fibonacci(x - 1) + fibonacci(x - 2);
   }
@@ -67,7 +66,7 @@ fibonacci(9L)
 ```r
 Rcpp::cppFunction(plugins = c("cpp14"), '
   int fibonacci(const int x) {
-    if (x == 0) return 0;
+    if (x < 1) return 0;
     if (x == 1) return 1;
     return fibonacci(x - 1) + fibonacci(x - 2);
   }
@@ -77,7 +76,7 @@ fibonacci(9L)
 ```
 
 
-## 自作パッケージで使う
+## Rパッケージで使う
 
 - [Rcpp-package.pdf](http://dirk.eddelbuettel.com/code/rcpp/Rcpp-package.pdf) by Dirk Eddelbuettel and Romain François
 - [Compiled code (`src/`) - R packages](http://r-pkgs.had.co.nz/src.html) by Hadley Wickham
@@ -152,8 +151,8 @@ fibonacci(9L)
     //' @param args string vector
     //' @export
     // [[Rcpp::export]]
-    Rcpp::IntegerVector len(const std::vector<std::string>& args) {
-        return {static_cast<int>(args.size())};
+    int len(const std::vector<std::string>& args) {
+        return args.size();
     }
     ```
 
@@ -164,3 +163,9 @@ fibonacci(9L)
   `std::exception`の派生クラスなら`what()`まで表示してもらえる。
 - グローバル変数やクラスのstaticメンバは `dyn.unload()` されるまで生き続ける。
   `parallel::mclapply()` とかでフォークした先での変更は子同士にも親にも影響しない。
+
+
+## 関連書籍
+
+<a href="https://www.amazon.co.jp/dp/1461468671/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=ba6c791d1fab3179e6a351c2347bbdc9&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1461468671&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=1461468671" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+<a href="https://www.amazon.co.jp/dp/B0748CFJL3/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=2a5507d53af7170cbd1a42f540f72351&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0748CFJL3&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=B0748CFJL3" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
