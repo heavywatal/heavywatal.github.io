@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="ja">
+<head prefix="og: http://ogp.me/ns#">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<title>Rcpp: RからC&#43;&#43;を使う - Heavy Watal</title>
+<link rel="stylesheet" href="/css/theme.css">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#e08010">
+<meta name="author" content="Watal M. Iwasaki">
+<meta property="og:title" content="Rcpp: RからC&#43;&#43;を使う">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://heavywatal.github.io/rstats/rcpp.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/heavywatal">
+<meta property="og:description" content="">
+<meta property="og:site_name" content="Heavy Watal">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@heavywatal">
+<meta name="twitter:creator" content="@heavywatal">
+<meta name="generator" content="Hugo 0.54-DEV" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: "\\[", right: "\\]", display: true},
+      {left: "$", right: "$", display: false}
+    ]
+  });
+});
+</script>
+<style>
+.katex {
+  font-size: 1.12em;
+}
+
+.katex-display > .katex {
+  text-align: left;
+  padding-left: 2rem;
+}
+</style>
+<script type="application/ld+json">{
+"@context": "http://schema.org",
+"@type": "BreadcrumbList",
+"itemListElement": [
+ {"@type": "ListItem",
+  "position": 1,
+  "item": {
+   "@id": "https://heavywatal.github.io/rstats.html",
+   "name": "rstats"}},
+ {"@type": "ListItem",
+  "position": 2,
+  "item": {
+   "@id": "https://heavywatal.github.io/rstats/rcpp.html",
+   "name": "Rcpp"}}
+]}</script>
+
+<script defer src="https://use.fontawesome.com/releases/v5.6.1/js/brands.js"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.6.1/js/solid.js"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.6.1/js/fontawesome.js"></script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-41178626-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+</head>
+<body>
+<header><h1><a href="/">
+<img class="logo" src="/heavywatal.svg" alt="岩嵜航">
+Heavy Watal
+</a></h1>
+<form class="cse-search-box" action="/search.html">
+<label><i class="fas fa-fw fa-search"></i><input type="text" name="q" aria-label="cse-search-box"></label>
+</form>
+</header>
+<main>
+<article>
+<header><h1><a href="/rstats/rcpp.html">
+Rcpp — RからC&#43;&#43;を使う
+</a></h1>
+<nav class="tags"><ul>
+<li><i class="fas fa-tag"></i> <a href="/tags/r.html">r</a></li>
+<li><i class="fas fa-tag"></i> <a href="/tags/package.html">package</a></li>
+</ul></nav>
+</header>
+
+
+
+<ul>
+<li><a href="https://cran.r-project.org/package=rcpp">https://cran.r-project.org/package=rcpp</a></li>
+<li><a href="http://www.rcpp.org/">http://www.rcpp.org/</a></li>
+<li><span class="fragment" data-fragment-index="1">
+<a href="https://teuder.github.io/rcpp4everyone_ja/">みんなのRcpp</a> and
+<a href="https://teuder.github.io/rcpp4everyone_en/">Rcpp for everyone</a>
+by <strong>津駄@teuder</strong> さん
+</span></li>
+</ul>
+
+<h3 id="ベンチマークの一例">ベンチマークの一例</h3>
+
+<p>長さnの調和級数:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">r_for <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>n<span class="p">)</span> <span class="p">{</span>
+  s <span class="o">=</span> <span class="m">0</span><span class="p">;</span> <span class="kr">for</span> <span class="p">(</span>i <span class="kr">in</span> <span class="kp">seq_len</span><span class="p">(</span>n<span class="p">))</span> <span class="p">{</span>s <span class="o">=</span> s <span class="o">+</span> <span class="m">1</span> <span class="o">/</span> i<span class="p">};</span> s
+<span class="p">}</span>
+r_vec <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>n<span class="p">)</span> <span class="kp">sum</span><span class="p">(</span><span class="m">1</span> <span class="o">/</span> <span class="kp">seq_len</span><span class="p">(</span>n<span class="p">))</span>
+
+Rcpp<span class="o">::</span>cppFunction<span class="p">(</span><span class="s">&#34;double rcpp(int n) {
+</span><span class="s">  double s = 0; for (int i = 1; i &lt;= n; ++i) {s += 1.0 / i;} return s;
+</span><span class="s">}&#34;</span><span class="p">)</span>  <span class="c1"># Compilation takes a few seconds here</span>
+
+n <span class="o">=</span> <span class="m">1000000L</span>
+rbenchmark<span class="o">::</span>benchmark<span class="p">(</span>r_for<span class="p">(</span>n<span class="p">),</span> r_vec<span class="p">(</span>n<span class="p">),</span> rcpp<span class="p">(</span>n<span class="p">))[,</span><span class="m">1</span><span class="o">:</span><span class="m">4</span><span class="p">]</span>
+
+<span class="c1">#       test replications elapsed relative</span>
+<span class="c1"># 1 r_for(n)          100   3.968   29.835</span>
+<span class="c1"># 2 r_vec(n)          100   0.473    3.556</span>
+<span class="c1"># 3  rcpp(n)          100   0.133    1.000</span></code></pre></div>
+<p>多くの場合、生のforループを避け、R標準のベクトル演算やちゃんとしたパッケージの関数を使うことで十分な速度が出る。
+それよりもさらに速度や省メモリを追い求めたい場面で、Rcppが有用となる。</p>
+
+<h2 id="使い捨てコードで使う">使い捨てコードで使う</h2>
+
+<p>ファイルあるいは文字列をコンパイルして使う:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># Rcpp::sourceCpp(&#34;fibonacci.cpp&#34;)</span>
+
+Rcpp<span class="o">::</span>sourceCpp<span class="p">(</span>code<span class="o">=</span><span class="s">&#39;
+</span><span class="s">  #include &lt;Rcpp.h&gt;
+</span><span class="s">  // [[Rcpp::plugins(cpp14)]]
+</span><span class="s">  // [[Rcpp::export]]
+</span><span class="s">  int fibonacci(const int x) {
+</span><span class="s">    if (x == 0) return 0;
+</span><span class="s">    if (x == 1) return 1;
+</span><span class="s">    return fibonacci(x - 1) + fibonacci(x - 2);
+</span><span class="s">  }
+</span><span class="s">&#39;</span><span class="p">)</span>
+fibonacci<span class="p">(</span><span class="m">9L</span><span class="p">)</span>
+<span class="c1"># [1] 34</span></code></pre></div>
+<p>いろいろな準備を任せて、関数をひとつだけ定義するショートカット:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">Rcpp<span class="o">::</span>cppFunction<span class="p">(</span>plugins <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#34;cpp14&#34;</span><span class="p">),</span> <span class="s">&#39;
+</span><span class="s">  int fibonacci(const int x) {
+</span><span class="s">    if (x == 0) return 0;
+</span><span class="s">    if (x == 1) return 1;
+</span><span class="s">    return fibonacci(x - 1) + fibonacci(x - 2);
+</span><span class="s">  }
+</span><span class="s">&#39;</span><span class="p">)</span>
+fibonacci<span class="p">(</span><span class="m">9L</span><span class="p">)</span>
+<span class="c1"># [1] 34</span></code></pre></div>
+<h2 id="自作パッケージで使う">自作パッケージで使う</h2>
+
+<ul>
+<li><a href="http://dirk.eddelbuettel.com/code/rcpp/Rcpp-package.pdf">Rcpp-package.pdf</a> by Dirk Eddelbuettel and Romain François</li>
+<li><a href="http://r-pkgs.had.co.nz/src.html">Compiled code (<code>src/</code>) - R packages</a> by Hadley Wickham</li>
+</ul>
+
+<h3 id="準備手順">準備手順</h3>
+
+<ul>
+<li><p>まずRcppコード以外の部分を作っておく。
+<a href="/rstats/devtools.html">devtoolsページを参照</a>。</p></li>
+
+<li><p><code>usethis::use_rcpp()</code> を実行して設定を整える。
+<code>DESCRIPTION</code> や <code>src/.gitignore</code> などが書き換えられる。</p></li>
+
+<li><p><code>R/***-package.R</code> など適当なとこに <code>@useDynLib</code> の設定を追加:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#&#39; @useDynLib hello, .registration = TRUE</span>
+<span class="c1">#&#39; @importFrom Rcpp sourceCpp</span>
+<span class="c1">#&#39; @keywords internal</span>
+<span class="s">&#34;_PACKAGE&#34;</span></code></pre></div>
+<p><code>@importFrom Rcpp sourceCpp</code> を省くと、パッケージ利用時に
+<code>'enterRNGScope' not provided by package 'Rcpp'</code>
+のようなエラーが出る場合がある
+(明示的に <code>library(Rcpp)</code> するなどして既にRcppロード済みの環境では動く)。</p></li>
+
+<li><p>同じところに <code>.onUnload</code> も定義しておく:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="m">.</span>onUnload <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>libpath<span class="p">)</span> <span class="p">{</span>
+  <span class="kp">library.dynam.unload</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">,</span> libpath<span class="p">)</span>
+<span class="p">}</span></code></pre></div>
+<p>すると <code>unloadNamespace(&quot;hello&quot;)</code> したときに共有ライブラリもちゃんと外れるようになる。
+ちなみに <code>devtools::unload()</code> はこれを省略してもちゃんとリロードしてくれる。</p></li>
+
+<li><p>外部ライブラリのリンクに関する設定など、
+開発者側で指定すべきビルドオプションは <code>src/Makevars</code> に指定:</p>
+
+<pre><code>CXX_STD=CXX14
+PKG_CPPFLAGS=-DSTRICT_R_HEADERS -I/usr/local/include
+PKG_LIBS=-L/usr/local/lib -Wl,-rpath,/usr/local/lib -lthankyou
+</code></pre>
+
+<p><code>STRICT_R_HEADERS</code> を定義しておくことで余計なマクロ定義を防げる。
+<code>configure</code> や <a href="/dev/cmake.html">CMake</a> を使って
+<code>src/Makevars.in</code> から生成する手もある。</p>
+
+<p>参考: <a href="https://heavywatal.github.io/slides/japanr2018/">Japan.R 2018 LT &ldquo;Rcppパッケージで外部C++ライブラリを使う&rdquo;</a></p></li>
+
+<li><p>どうしてもユーザ側で指定すべきオプションがある場合は
+<code>~/.R/Makevars</code> に書いてもらう。
+例えばMPI依存パッケージをmacOSでビルドでしようとすると
+<code>clang: error: unsupported option '-fopenmp'</code>
+と怒られるので <code>brew install llvm</code>
+で別のコンパイラを入れて下記のように指定する:</p>
+
+<pre><code>LLVM_LOC=/usr/local/opt/llvm
+CC=$(LLVM_LOC)/bin/clang
+CXX=$(LLVM_LOC)/bin/clang++
+</code></pre></li>
+
+<li><p><code>src/</code> 以下にソースコードを書く。</p></li>
+</ul>
+
+<h3 id="ソースコード-src-cpp">ソースコード <code>src/*.cpp</code></h3>
+
+<ul>
+<li><p><a href="https://cran.r-project.org/web/packages/Rcpp">Rcpp</a>
+が型変換などをスムーズにしてくれる:</p>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// [[Rcpp::plugins(cpp14)]]
+</span><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;Rcpp.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="c1">//&#39; First example
+</span><span class="c1">//&#39; @param args string vector
+</span><span class="c1">//&#39; @export
+</span><span class="c1">// [[Rcpp::export]]
+</span><span class="c1"></span><span class="n">Rcpp</span><span class="o">::</span><span class="n">IntegerVector</span> <span class="n">len</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">{</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">size</span><span class="p">())};</span>
+<span class="p">}</span>
+</code></pre></div></li>
+</ul>
+
+<p>その他の注意点</p>
+
+<ul>
+<li><code>std::abort()</code> や <code>std::exit()</code> は呼び出したRセッションまで殺してしまう。
+例外は投げっぱなしで拾わなくても大丈夫で、
+<code>std::exception</code>の派生クラスなら<code>what()</code>まで表示してもらえる。</li>
+<li>グローバル変数やクラスのstaticメンバは <code>dyn.unload()</code> されるまで生き続ける。
+<code>parallel::mclapply()</code> とかでフォークした先での変更は子同士にも親にも影響しない。</li>
+</ul>
+
+</article>
+</main>
+
+<nav class="menu">
+
+<div><a href="/about.html">About</a></div>
+
+<div><a href="/research.html">Research Interests</a></div>
+
+<input type="checkbox" id="menu-rstats" checked>
+<label for="menu-rstats" class="active">R stats</label>
+<ul>
+<li><a href="/rstats/intro.html">R自学自習の基礎知識</a></li>
+<li><a href="/rstats/programming.html">RプログラミングTips</a></li>
+<li><a href="/rstats/config.html">R環境設定</a></li>
+<li><a href="/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/rstats/purrr.html">purrr</a></li>
+<li><a href="/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/rstats/readr.html">readr</a></li>
+<li><a href="/rstats/stringr.html">stringr</a></li>
+<li><a href="/rstats/foreach.html">foreach/parallel</a></li>
+<li><a href="/rstats/devtools.html">devtools</a></li>
+<li class="active"><a href="/rstats/rcpp.html">Rcpp</a></li>
+<li><a href="/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/rstats/ggbio.html">ggbio</a></li>
+<li><a href="/rstats/edger.html">edgeR</a></li>
+<li><a href="/rstats/topgo.html">topGO</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
+<li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/plyr.html">plyr</a></li>
+<li><a href="/rstats/reshape2.html">reshape2</a></li>
+</ul>
+
+<input type="checkbox" id="menu-python">
+<label for="menu-python">Python</label>
+<ul>
+<li><a href="/python/install.html">Pythonインストール</a></li>
+<li><a href="/python/pip.html">pip</a></li>
+<li><a href="/python/ipython.html">IPython</a></li>
+<li><a href="/python/biopython.html">BioPython</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
+<li><a href="/python/pyqt.html">PyQt</a></li>
+<li><a href="/python/concurrent.html">concurrent.futures</a></li>
+<li><a href="/python/copy.html">copy</a></li>
+<li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/setuptools.html">setuptools</a></li>
+</ul>
+
+<input type="checkbox" id="menu-cxx">
+<label for="menu-cxx">C&#43;&#43;</label>
+<ul>
+<li><a href="/cxx/boost.html">Boost</a></li>
+<li><a href="/cxx/getopt.html">C&#43;&#43;コマンドライン引数</a></li>
+<li><a href="/cxx/speed.html">C&#43;&#43;高速化</a></li>
+<li><a href="/cxx/clang.html">clang / llvm</a></li>
+<li><a href="/cxx/gcc.html">gcc</a></li>
+<li><a href="/cxx/bitwise.html">ビット演算</a></li>
+<li><a href="/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="menu-bio">
+<label for="menu-bio">Biology</label>
+<ul>
+<li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/bio/meme.html">MEME</a></li>
+<li><a href="/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/bio/samtools.html">SAMtools</a></li>
+<li><a href="/bio/shirokane.html">SHIROKANE</a></li>
+<li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
+<li><a href="/bio/mathmorph.html">数理形態学</a></li>
+<li><a href="/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="menu-dev">
+<label for="menu-dev">Developer Tools</label>
+<ul>
+<li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/cmake.html">CMake</a></li>
+<li><a href="/dev/emacs.html">Emacs</a></li>
+<li><a href="/dev/git.html">Git</a></li>
+<li><a href="/dev/hugo.html">Hugo</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mount.html">mount</a></li>
+<li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/rsync.html">rsync</a></li>
+<li><a href="/dev/ssh.html">ssh</a></li>
+<li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/vi.html">vi</a></li>
+<li><a href="/dev/zsh.html">zsh</a></li>
+<li><a href="/dev/sh.html">シェルスクリプト</a></li>
+<li><a href="/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="menu-mac">
+<label for="menu-mac">Mac</label>
+<ul>
+<li><a href="/mac/applescript.html">AppleScript</a></li>
+<li><a href="/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/mac/macports.html">MacPorts</a></li>
+<li><a href="/mac/command.html">Mac固有コマンド</a></li>
+<li><a href="/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/mac/spotlight.html">Spotlight</a></li>
+<li><a href="/mac/winebottler.html">WineBottler</a></li>
+<li><a href="/mac/kotoeri.html">ことえり</a></li>
+</ul>
+
+<input type="checkbox" id="menu-lectures">
+<label for="menu-lectures">Lectures</label>
+<ul>
+<li><a href="/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/lectures/git2018nrifs.html">Git入門2018</a></li>
+<li><a href="/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="menu-misc">
+<label for="menu-misc">Miscellaneous</label>
+<ul>
+<li><a href="/misc/fonts.html">Fonts</a></li>
+<li><a href="/misc/latex.html">LaTeX</a></li>
+</ul>
+
+<div><a href="/tags.html">Tags</a></div>
+</nav>
+<footer><small>(ɔ) 2008 岩嵜航 Watal M. Iwasaki</small></footer>
+</body>
+</html>
