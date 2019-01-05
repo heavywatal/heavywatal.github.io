@@ -666,39 +666,48 @@ e.g., <a href="https://github.com/Rdatatable/data.table/pull/2807">https://githu
 
 <h3 id="2人1組でprとmergeを体験">2人1組でPRとmergeを体験</h3>
 
+<style>
+.fa-chess-king {
+  color: #990000;
+}
+.fa-chess-pawn {
+  color: #000099;
+}
+</style>
+
 <ul>
-<li>MANAGER: リポジトリの管理権限を持つ人</li>
-<li>PLAYER: 権限を持たず、PRを送る人</li>
+<li><i class="fas fa-fw fa-chess-king"></i> KING: リポジトリの管理権限を持つ人</li>
+<li><i class="fas fa-fw fa-chess-pawn"></i> PAWN: 権限を持たず、PRを送る人</li>
 </ul>
 
 <p>(できれば横に並んで相手の画面も見えるように)</p>
 
 <ol>
-<li>MANAGER: GitHubで新しいリポジトリを作成</li>
-<li>MANAGER: 何かtypoを含む <code>README.md</code> を作ってpush</li>
-<li>PLAYER: 相手のGitHubリポジトリでその <code>README.md</code> が見えることを確認</li>
-<li>PLAYER: 右上のForkボタンで自分のGitHubリポジトリに取り込む</li>
+<li><i class="fas fa-fw fa-chess-king"></i> GitHubで新しいリポジトリを作成</li>
+<li><i class="fas fa-fw fa-chess-king"></i> 何かtypoを含む <code>README.md</code> を作ってpush</li>
+<li><i class="fas fa-fw fa-chess-pawn"></i> 相手のGitHubリポジトリでその <code>README.md</code> が見えることを確認</li>
+<li><i class="fas fa-fw fa-chess-pawn"></i> 右上のForkボタンで自分のGitHubリポジトリに取り込む</li>
 
-<li><p>PLAYER: forkした自分のリポジトリからローカルに<code>clone</code>:</p>
+<li><p><i class="fas fa-fw fa-chess-pawn"></i> forkした自分のリポジトリからローカルに<code>clone</code>:</p>
 
-<pre><code>git clone https://github.com/{PLAYER}/PROJECT.git
+<pre><code>git clone https://github.com/{PAWN}/PROJECT.git
 cd PROJECT/
 </code></pre></li>
 
-<li><p>PLAYER: 大元のリポジトリに<code>upstream</code>という名前をつけておく:</p>
+<li><p><i class="fas fa-fw fa-chess-pawn"></i> 大元のリポジトリに<code>upstream</code>という名前をつけておく:</p>
 
-<pre><code>git remote add upstream https://github.com/{MANAGER}/PROJECT.git
+<pre><code>git remote add upstream https://github.com/{KING}/PROJECT.git
 git remote -v
 </code></pre>
 
 <p>ちなみに自分のリポジトリには自動的に <code>origin</code> という名前がついている。</p></li>
 
-<li><p>PLAYER: PR用のブランチを切って移動:</p>
+<li><p><i class="fas fa-fw fa-chess-pawn"></i> PR用のブランチを切って移動:</p>
 
 <pre><code>git checkout -b fix-typo
 </code></pre></li>
 
-<li><p>PLAYER: <code>README.md</code> をテキストエディタで編集して <code>commit</code>:</p>
+<li><p><i class="fas fa-fw fa-chess-pawn"></i> <code>README.md</code> をテキストエディタで編集して <code>commit</code>:</p>
 
 <pre><code>git diff
 git commit -a -m &quot;:memo: Fix typo in README.md&quot;
@@ -708,7 +717,7 @@ git commit -a -m &quot;:memo: Fix typo in README.md&quot;
 そこからdiffやcommitをやってみてもよい。
 コードの追加・変更・削除による色分けの便利さも体感しよう。</p></li>
 
-<li><p>PLAYER: この間に<code>upstream</code>で更新が無いかどうか確認:</p>
+<li><p><i class="fas fa-fw fa-chess-pawn"></i> この間に<code>upstream</code>で更新が無いかどうか確認:</p>
 
 <pre><code>git fetch upstream
 </code></pre>
@@ -722,24 +731,24 @@ git checkout fix-typo
 git rebase -i master
 </code></pre></li>
 
-<li><p>PLAYER: 自分のリポジトリに<code>push</code>:</p>
+<li><p><i class="fas fa-fw fa-chess-pawn"></i> 自分のリポジトリに<code>push</code>:</p>
 
 <pre><code>git push origin fix-typo
 </code></pre></li>
 
-<li><p>PLAYER: GitHub上に出現する &ldquo;Compare &amp; pull request&rdquo; ボタンを押す。</p></li>
+<li><p><i class="fas fa-fw fa-chess-pawn"></i> GitHub上に出現する &ldquo;Compare &amp; pull request&rdquo; ボタンを押す。</p></li>
 
-<li><p>PLAYER: 差分を確認し、コメント欄を埋めて提出。</p></li>
+<li><p><i class="fas fa-fw fa-chess-pawn"></i> 差分を確認し、コメント欄を埋めて提出。</p></li>
 
-<li><p>MANAGER: 受け取ったPRを確認。必要に応じて修正を要求したり、自分で修正したり。</p></li>
+<li><p><i class="fas fa-fw fa-chess-king"></i> 受け取ったPRを確認。必要に応じて修正を要求したり、自分で修正したり。</p></li>
 
-<li><p>PLAYER: 修正を求められたらそのブランチに続けてcommitしてまたpush。</p></li>
+<li><p><i class="fas fa-fw fa-chess-pawn"></i> 修正を求められたらそのブランチに続けてcommitしてまたpush。</p></li>
 
-<li><p>MANAGER: 問題が無ければmergeする。</p></li>
+<li><p><i class="fas fa-fw fa-chess-king"></i> 問題が無ければmergeする。</p></li>
 
-<li><p>MANAGER: 自分のローカルリポジトリに pull (fetch+merge) する。</p></li>
+<li><p><i class="fas fa-fw fa-chess-king"></i> 自分のローカルリポジトリに pull (fetch+merge) する。</p></li>
 
-<li><p>PLAYER: 無事マージされたら作業ブランチを消す。</p></li>
+<li><p><i class="fas fa-fw fa-chess-pawn"></i> 無事マージされたら作業ブランチを消す。</p></li>
 </ol>
 
 <h2 id="tips">Tips</h2>
