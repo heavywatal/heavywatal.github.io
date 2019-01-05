@@ -539,32 +539,41 @@ e.g., https://github.com/Rdatatable/data.table/pull/2807
 
 ### 2人1組でPRとmergeを体験
 
-- MANAGER: リポジトリの管理権限を持つ人
-- PLAYER: 権限を持たず、PRを送る人
+<style>
+.fa-chess-king {
+  color: #990000;
+}
+.fa-chess-pawn {
+  color: #000099;
+}
+</style>
+
+- <i class="fas fa-fw fa-chess-king"></i> KING: リポジトリの管理権限を持つ人
+- <i class="fas fa-fw fa-chess-pawn"></i> PAWN: 権限を持たず、PRを送る人
 
 (できれば横に並んで相手の画面も見えるように)
 
-1.  MANAGER: GitHubで新しいリポジトリを作成
-1.  MANAGER: 何かtypoを含む `README.md` を作ってpush
-1.  PLAYER: 相手のGitHubリポジトリでその `README.md` が見えることを確認
-1.  PLAYER: 右上のForkボタンで自分のGitHubリポジトリに取り込む
-1.  PLAYER: forkした自分のリポジトリからローカルに`clone`:
+1.  <i class="fas fa-fw fa-chess-king"></i> GitHubで新しいリポジトリを作成
+1.  <i class="fas fa-fw fa-chess-king"></i> 何かtypoを含む `README.md` を作ってpush
+1.  <i class="fas fa-fw fa-chess-pawn"></i> 相手のGitHubリポジトリでその `README.md` が見えることを確認
+1.  <i class="fas fa-fw fa-chess-pawn"></i> 右上のForkボタンで自分のGitHubリポジトリに取り込む
+1.  <i class="fas fa-fw fa-chess-pawn"></i> forkした自分のリポジトリからローカルに`clone`:
 
-        git clone https://github.com/{PLAYER}/PROJECT.git
+        git clone https://github.com/{PAWN}/PROJECT.git
         cd PROJECT/
 
-1.  PLAYER: 大元のリポジトリに`upstream`という名前をつけておく:
+1.  <i class="fas fa-fw fa-chess-pawn"></i> 大元のリポジトリに`upstream`という名前をつけておく:
 
-        git remote add upstream https://github.com/{MANAGER}/PROJECT.git
+        git remote add upstream https://github.com/{KING}/PROJECT.git
         git remote -v
 
     ちなみに自分のリポジトリには自動的に `origin` という名前がついている。
 
-1.  PLAYER: PR用のブランチを切って移動:
+1.  <i class="fas fa-fw fa-chess-pawn"></i> PR用のブランチを切って移動:
 
         git checkout -b fix-typo
 
-1.  PLAYER: `README.md` をテキストエディタで編集して `commit`:
+1.  <i class="fas fa-fw fa-chess-pawn"></i> `README.md` をテキストエディタで編集して `commit`:
 
         git diff
         git commit -a -m ":memo: Fix typo in README.md"
@@ -573,7 +582,7 @@ e.g., https://github.com/Rdatatable/data.table/pull/2807
     そこからdiffやcommitをやってみてもよい。
     コードの追加・変更・削除による色分けの便利さも体感しよう。
 
-1.  PLAYER: この間に`upstream`で更新が無いかどうか確認:
+1.  <i class="fas fa-fw fa-chess-pawn"></i> この間に`upstream`で更新が無いかどうか確認:
 
         git fetch upstream
 
@@ -585,17 +594,17 @@ e.g., https://github.com/Rdatatable/data.table/pull/2807
         git checkout fix-typo
         git rebase -i master
 
-1.  PLAYER: 自分のリポジトリに`push`:
+1.  <i class="fas fa-fw fa-chess-pawn"></i> 自分のリポジトリに`push`:
 
         git push origin fix-typo
 
-1.  PLAYER: GitHub上に出現する "Compare & pull request" ボタンを押す。
-1.  PLAYER: 差分を確認し、コメント欄を埋めて提出。
-1.  MANAGER: 受け取ったPRを確認。必要に応じて修正を要求したり、自分で修正したり。
-1.  PLAYER: 修正を求められたらそのブランチに続けてcommitしてまたpush。
-1.  MANAGER: 問題が無ければmergeする。
-1.  MANAGER: 自分のローカルリポジトリに pull (fetch+merge) する。
-1.  PLAYER: 無事マージされたら作業ブランチを消す。
+1.  <i class="fas fa-fw fa-chess-pawn"></i> GitHub上に出現する "Compare & pull request" ボタンを押す。
+1.  <i class="fas fa-fw fa-chess-pawn"></i> 差分を確認し、コメント欄を埋めて提出。
+1.  <i class="fas fa-fw fa-chess-king"></i> 受け取ったPRを確認。必要に応じて修正を要求したり、自分で修正したり。
+1.  <i class="fas fa-fw fa-chess-pawn"></i> 修正を求められたらそのブランチに続けてcommitしてまたpush。
+1.  <i class="fas fa-fw fa-chess-king"></i> 問題が無ければmergeする。
+1.  <i class="fas fa-fw fa-chess-king"></i> 自分のローカルリポジトリに pull (fetch+merge) する。
+1.  <i class="fas fa-fw fa-chess-pawn"></i> 無事マージされたら作業ブランチを消す。
 
 ## Tips
 
