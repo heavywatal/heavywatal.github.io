@@ -59,7 +59,8 @@ export PATH
 exec $SHELL -l
 pip install -U setuptools pip wheel
 pip install -U flake8 psutil requests
-pip install -U seaborn ipython biopython
+pip install -U seaborn scikit-learn pydataset
+pip install -U biopython ipython
 ```
 
 
