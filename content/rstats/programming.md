@@ -235,26 +235,30 @@ fun3(value)
 
 ### ベクトル化されてる関数・演算子を使う
 
-Rのナマの`for`ループは絶望的に遅い。
-四則演算のみならず様々な処理がベクトルのまま行えるようになっているので、そっちを使う。
+Rの数値や文字列は1個の値でもベクトル扱い。
+同じ長さ(または長さ1)の相手との計算はベクトルのまま行える。
+自分で `for` 文を書くよりこれを利用するほうが楽チンで高速。
 
 ```r
-vec = seq_len(60)
-vec + vec
-vec * 2
+x = c(1, 2, 3)  # 長さ3の数値ベクトル
+x + x           # 同じ長さ同士の計算
+# [1] 2 4 6
 
-ifelse(vec %% 3,
-       ifelse(vec %% 5, vec, 'buzz'),
-       ifelse(vec %% 5, 'fizz', 'fizzbuzz'))
+y = 42          # 長さ1の数値ベクトル
+x + y           # 長さ3 + 長さ1 = 長さ3 (それぞれ足し算)
+# [1] 43 44 45
+
+# 自分でforを書く悪い例。
+# コードが無駄に長くなる上に実行速度も遅い。
+z = c(0, 0, 0)
+for (i in seq_len(3)) {
+  z[i] = x[i] + y
+}
 ```
 
-### list, data.frame, matrix
+四則演算のみならず様々な処理がベクトルのまま行えるようになっている。
+e.g., `log()`, `sqrt()`, `ifelse()`, `paste()`
 
--   [tidyverse](https://tidyverse.tidyverse.org/) パッケージ群
-    ([dplyr]({{< relref "dplyr.md" >}}), [purrr]({{< relref "purrr.md" >}}),
-    [tidyr]({{< relref "tidyr.md" >}})など) を介して操作すると楽チンかつ高速。
--   基本的にlistやdata.frameは遅いので、
-    matrixで済むもの(数値のみの表など)はmatrixで。
 
 ### 並列化
 
