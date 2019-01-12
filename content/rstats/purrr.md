@@ -12,61 +12,66 @@ subtitle = "ループ処理やapply系関数の決定版"
 <img src="https://purrr.tidyverse.org/logo.png" align="right" width="120" height="139">
 </a>
 
-標準のapply族や[plyr]({{< relref "plyr.md" >}})の関数に引導を渡すべく再設計されたようなパッケージ。
-[dplyr]({{< relref "dplyr.md" >}}) や [tidyr]({{< relref "tidyr.md" >}}) と組み合わせて真価を発揮する。
-purerのように読むらしい。
-いまのところ並列化する機能はないので、そういうときは
-[foreachとparallel]({{< relref "foreach.md" >}}) を使う。
+forループやlistの処理などをより簡潔に書けるようにしてくれるパッケージ。
+標準のapply系関数よりも覚えやすく読みやすい。
+[dplyr]({{< relref "dplyr.md" >}}) や [tidyr]({{< relref "tidyr.md" >}}) と組み合わせて使う。
+いまのところ並列化する機能はないので、
+それに関しては[foreach/parallel]({{< relref "foreach.md" >}})ページを参照。
 
 [tidyverse](https://tidyverse.tidyverse.org/) に含まれているので、
 `install.packages('tidyverse')` で一括インストール、
 `library(tidyverse)` で一括ロード。
 
-パイプ演算子 `%>%` については[dplyr]({{< relref "dplyr.md" >}})を参照。
-
-https://github.com/tidyverse/purrr
-
 ## list, vector操作
 
+### 各要素に関数を適用するapply系関数
+
+```r
+v = list(1, 2L, "3")
+check_class = function(x) {paste0(x, " is ", class(x))}
+
+# 自分でfor文を書くと結構大変
+results = vector("list", length(v))
+for (i in seq_along(v)) {
+  results[[i]] = check_class(v[[i]])
+}
+
+# 1行で簡潔に記述でき、意図も明確
+results = lapply(v, check_class)
+results = purrr::map(v, check_class)
+results = purrr::map(v, function(x) {paste0(x, " is ", class(x))})
+results = purrr::map(v, ~ {paste0(.x, " is ", class(.x))})
+```
+
 `purrr::map(.x, .f, ...)`
-: list `.x` の各要素に関数 `.f` を適用し、listで返す。
-  `base::lapply()`や`plyr::llply()`の改良版。
-  `.f` には[後述の無名関数/ラムダ式](#無名関数)を渡すのが便利。
-  数値や文字列を渡すとインデックスのように扱われる。
-  例えば `map(l, 1L)` と書けば `map(l, ~.x[[1L]])` のように働く。
-  存在しないときの値は `.default` で指定できる。
-: `map_lgl()`, `map_chr()`, `map_int()`, `map_dbl()`
-  は型の決まったvectorを返す亜種で、
-  `base::sapply()`や`base::vapply()`の改良版。
-: `purrr::walk(.x, .f, ...)` は、
-  `map()`同様に関数を適用しつつ元の値をそのままinvisible返しする亜種。
-: `purrr::lmap(.x, .f, ...)` は、
-  `.x[[i]]`ではなく`.x[i]`を参照する点で`map()`と異なる亜種。
-: `purrr::imap(.x, .f, ...)` は、
-  名前や整数インデックスを第二引数で受け取れる亜種。
-  `iwalk()` などの派生もある。
-: `purrr::modify(.x, .f, ...)` は、
-  入力と同じ型で出力する亜種。
-  つまりtibbleを入れたらlistじゃなくてtibbleが出てくる。
+: list/vector `.x` の各要素に関数 `.f` を適用した結果をlistに詰めて返す。
+  `base::lapply()`とほぼ同義。
+: `.f` にformulaや数値などを渡すと[関数に変換した上で処理してくれる。(後述)](#無名関数)
+
+`purrr::map_lgl()`, `map_int()`, `map_dbl()`, `map_chr()`
+: 型の決まったvectorを返すmap亜種。
+  `base::sapply()`や`base::vapply()`よりも覚えやすく読みやすい。
 
 `purrr::map_dfr(.x, .f, ..., .id=NULL)`
-: listの各要素に関数を適用し、結果を
-  `dplyr::bind_rows()`で結合したdata.frameとして返す。
-  `plyr::ldply()`の改良版として。
+: 結果を`dplyr::bind_rows()`で結合したdata.frameとして返すmap亜種。
+  例えば、同じ形式のCSVファイルを一気に読んで結合、みたいなときに便利:
+
+```r
+files = fs::dir_ls("path/to/data/", glob = "*.csv")
+combined_df = purrr::map_dfr(files, readr::read_csv)
+```
 
 `purrr::map2(.x, .y, .f, ...)`
-: 2変数バージョン。`map2_chr()`などの型限定vector版も提供されている。
-  3変数以上渡したいときはlistかdata.frameにまとめて下の`pmap()`を使う。
+: 2変数バージョン。`map2_int()`などの型指定vector版もある。
+  3変数以上渡したいときはlistかdata.frameにまとめて次の`pmap()`を使う。
 
 `purrr::pmap(.l, .f, ...)`
 : listの中身をparallelに処理するmap。
   関数 `.f`の引数はlistの要素名と一致させるか `...` で受け流す必要がある。
   e.g., `pmap(list(a=1:3, b=4:6), function(a, b) {a * b})` 。
-  名前無し2要素までなら`map2()`などと同様に`.x`や`.y`を使ったformulaが利用可能。
-  e.g., `pmap(list(1:3, 4:6), ~ .x * .y)` 。
 : data.frameの正体はlist of columnsなので、
-  そのまま`.l`として渡して`plyr::mlply()`的に使える。
-  同様に `purrr::pmap_dfr()` は `plyr::mdply()` として使える。
+  そのまま`.l`として渡せる。
+: `pmap_int` など出力型指定の亜種もある。
 
 `purrr::map_if(.x, .p, .f, ...)`
 : `.p`が`TRUE`になる要素のみ`.f()`を適用し、残りはそのまま出力。
@@ -74,27 +79,36 @@ https://github.com/tidyverse/purrr
   `.x[[i]]`を受け取るpredicate関数でもよい。
 : 番号か名前で選ぶには`purrr::map_at(.x, .at, .f, ...)`
 
+`purrr::walk(.x, .f, ...)`
+: `map()`同様に関数を適用しつつ元の値をそのままinvisible返しする亜種。
+
+`purrr::lmap(.x, .f, ...)`
+: `.x[[i]]`ではなく`.x[i]`を参照する亜種。
+
+`purrr::imap(.x, .f, ...)`
+:  名前や整数インデックスを第二引数で受け取れる亜種。
+  `iwalk()` などの派生もある。
+
+`purrr::modify(.x, .f, ...)`
+: 入力と同じ型で出力する亜種。
+  つまりdata.frameを入れたらlistじゃなくてdata.frameが出てくる。
+  e.g., `modify_if(iris, is.numeric, round)`
+
 `purrr::reduce(.x, .f, ..., .init)`
 : 二変数関数を順々に適用して1つの値を返す。
   C++でいう`std::accumulate()`。
-  例えば <code>1:3 %>% reduce(\`+\`)</code> の結果は6
+  例えば <code>reduce(1:3, \`+\`)</code> の結果は6。
 
 `purrr::accumulate(.x, .f, ..., .init)`
 : 二変数関数を順々に適用し、過程も含めてvectorで返す。
-  例えば `accumulate(1:3, sum)` の結果は `1 3 6` 。
   C++でいう`std::partial_sum()`。
+  例えば `accumulate(1:3, sum)` の結果は `1 3 6` 。
 
-`purrr::invoke(.f, .x=NULL, ..., .env=NULL)`
-: 関数に渡す引数があらかじめlistにまとまってるときに使う`do.call()`の改良版。
 
-`purrr::invoke_map(.f, .x=list(NULL), ..., .env=NULL)`
-: 関数listを順々に実行してlistで返す。
-  引数`.x`は同じ長さのlist of listsか、list of a listをリサイクル。
-: e.g., `invoke_map(list(runif, rnorm), list(c(n=3, 0, 1)))`
-: 返り値がすべて同じ型で、それぞれ長さ1だった場合、
-  特定の型のvectorとして返せる亜種がある:
-  `invoke_map_chr()`, `invoke_map_dbl()`, `invoke_map_int()`, `invoke_map_lgl()`
-: data.frameを繋げて返す`invoke_map_dfr()`も。
+### list作成・変形・解体
+
+`purrr::list_along(x)`
+: `x` と同じ長さの空listを作る `vector("list", length(x))` のショートカット。
 
 `purrr::flatten(.x)`
 : 階層性のあるlistを一段階解消する。
@@ -107,8 +121,11 @@ https://github.com/tidyverse/purrr
   `.p` に関数を渡した場合の挙動は
   `.x[.p(.x)]` じゃなくて `.x[map_lgl(.x, .p, ...)]` となることに注意。
 
-`purrr::has_element(.x, .y)`
-: list `.x` は要素 `.y` を持っている。
+`purrr::pluck(.x, ..., .default=NULL)`
+: オブジェクト `.x` 内の要素を引っ張り出す `[[` の強力版。
+  `...` には整数、文字列、関数、listで複数指定できる。
+  例えば `accessor(x[[1]])$foo` だと読む順が左右に振られるが、
+  `pluck(x, 1, accessor, "foo")` だと左から右に読み流せる。
 
 `purrr::cross2(.x, .y, .filter=NULL)`
 : listの各要素の組み合わせを作る。
@@ -116,55 +133,73 @@ https://github.com/tidyverse/purrr
   名前付きlistを渡す `purrr::cross()` や `purrr::cross_df()` のほうが便利かも。
   vectorなら [`tidyr::crossing()` とか `tidyr::expand()`]({{< relref "tidyr.md" >}}) が使える。
 
+`purrr::transpose(.l)`
+: 行列転置関数`t()`のlist版。
+  例えば、pair of lists <=> list of pairs。
+: data.frameに適用するとlist of rowsが得られる。
 
-## 無名関数
 
-ラムダ式とも言う。
-チルダで始まる `~ a + b` のようなものはRではformulaという形式になるが、
-`purrr`のmap系関数はそれを引数`.f`として受け取ることができる。
-formula内部では、第一引数を`.x`または`.`として、第二引数を`.y`として参照する。
-最新版では `..1`, `..2`, `..3` のような形で三つめ以降も受け取れる。
+### その他
+
+`purrr::invoke(.f, .x=NULL, ..., .env=NULL)`
+: list `.x` の中身を引数として関数 `.f` を呼び出す。
+: 関数に渡す引数があらかじめlistにまとまってるときに使う`do.call()`の改良版。
 
 ```r
-# with named function
-ord = function(x) {strtoi(charToRaw(x), 16L)}
-letters %>% map_int(ord)
-
-# with unnamed function
-letters %>% map_int(function(x) {strtoi(charToRaw(x), 16L)})
-
-# with formula/lambda
-letters %>% map_int(~ strtoi(charToRaw(.x), 16L))
+params = list(n = 6L, size = 10L, replace = TRUE)
+purrr::invoke(sample.int, params)
 ```
 
-`purrr::as_mapper(.f, ...)`
-: 上記の機能を担う重要な関数で、`map()`内部でも使われている。
-  formulaを `function (.x, .y, . = .x)` という無名関数に変換する。
+`purrr::invoke_map(.f, .x=list(NULL), ..., .env=NULL)`
+: 関数listを順々に実行してlistで返す。
+  引数`.x`は同じ長さのlist of listsか、list of a listをリサイクル。
+: e.g., `invoke_map(list(runif, rnorm), list(c(n=3, 0, 1)))`
 
-`purrr::partial(...f, ..., .env, .lazy, .first)`
-: 引数を部分的に埋めてある関数を作る。C++でいう `std::bind()`
-
-
-## その他の便利関数
-
-`purrr::pluck(.x, ..., .default=NULL)`
-: オブジェクト `.x` 内の要素を引っ張り出す `[[` の強力版。
-  `...` には整数、文字列、関数、listで複数指定できる。
-  例えば `accessor(x[[1]])$foo` だと読む順が左右に振られるが、
-  `x %>% pluck(1, accessor, "foo")` だと左から右に読み流せる。
-
-`purrr::list_along(x)`
-: 引数と同じ長さの空listを作る。
+`purrr::has_element(.x, .y)`
+: list `.x` は要素 `.y` を持っている。
 
 `purrr::set_names(x, nm=x)`
 : 標準の`setNames(x=nm, nm)`は第二引数のほうが省略不可という気持ち悪い定義だったが、
   この改良版ではその心配が解消されている。
   長さや型のチェックもしてくれる。
 
-`purrr::transpose(.l)`
-: 行列転置関数`t()`のlist版。
-  例えば、pair of lists <=> list of pairs。
-: data.frameに適用するとlist of rowsが得られる。
+
+## 無名関数
+
+apply/map系関数は、名前のついた関数だけでなく、その場で定義された無名関数も受け取れる。
+ごく短い関数や一度しか使わない関数に名前をつけずに済むので便利。
+さらにpurrrのmap系関数はformula
+(チルダで始まる `~ x + y` のようなもの)
+や数値を受け取って関数として処理してくれる。
+
+```r
+# named function
+ord = function(x) {strtoi(charToRaw(x), 16L)}
+map_int(letters, ord)
+
+# unnamed function
+map_int(letters, function(x) {strtoi(charToRaw(x), 16L)})
+
+# formula
+map_int(letters, ~ strtoi(charToRaw(.x), 16L))
+
+# integer/character
+li = list(lower = letters, upper = LETTERS)
+map_chr(li, 3L)
+map_chr(li, function(x) {x[[3L]]})
+```
+
+formula内部では、第一引数を`.x`または`.`として、第二引数を`.y`として参照する。
+`..1`, `..2`, `..3` のような形で三つめ以降も参照できる。
+
+`purrr::as_mapper(.f, ...)`
+: `map()` 内部で関数への変換機能を担っている関数。
+: formulaを受け取ると `function (.x, .y, . = .x)` のような関数に変換する。
+: 数値や文字列を受け取ると `[[` による抽出関数に変換する。
+  参照先が存在しない場合の値はmap関数の `.default` 引数で指定できる。
+
+`purrr::partial(...f, ..., .env, .lazy, .first)`
+: 引数を部分的に埋めてある関数を作る。C++でいう `std::bind()`
 
 
 ## `purrrlyr`
@@ -179,6 +214,8 @@ https://github.com/hadley/purrrlyr/blob/master/NEWS.md
 [`purrr`]({{< relref "purrr.md" >}}) でその list of data.frames に処理を施し、
 [`dplyr`]({{< relref "dplyr.md" >}}) でその変更を元の data.frame に適用する、
 というのがtidyverse流のモダンなやり方らしい。
+
+パイプ演算子 `%>%` については[dplyr]({{< relref "dplyr.md" >}})を参照。
 
 ```r
 ## OLD
