@@ -104,82 +104,89 @@ purrr — ループ処理やapply系関数の決定版
 <img src="https://purrr.tidyverse.org/logo.png" align="right" width="120" height="139">
 </a></p>
 
-<p>標準のapply族や<a href="/rstats/plyr.html">plyr</a>の関数に引導を渡すべく再設計されたようなパッケージ。
-<a href="/rstats/dplyr.html">dplyr</a> や <a href="/rstats/tidyr.html">tidyr</a> と組み合わせて真価を発揮する。
-purerのように読むらしい。
-いまのところ並列化する機能はないので、そういうときは
-<a href="/rstats/foreach.html">foreachとparallel</a> を使う。</p>
+<p>forループやlistの処理などをより簡潔に書けるようにしてくれるパッケージ。
+標準のapply系関数よりも覚えやすく読みやすい。
+<a href="/rstats/dplyr.html">dplyr</a> や <a href="/rstats/tidyr.html">tidyr</a> と組み合わせて使う。
+いまのところ並列化する機能はないので、
+それに関しては<a href="/rstats/foreach.html">foreach/parallel</a>ページを参照。</p>
 
 <p><a href="https://tidyverse.tidyverse.org/">tidyverse</a> に含まれているので、
 <code>install.packages('tidyverse')</code> で一括インストール、
 <code>library(tidyverse)</code> で一括ロード。</p>
 
-<p>パイプ演算子 <code>%&gt;%</code> については<a href="/rstats/dplyr.html">dplyr</a>を参照。</p>
-
-<p><a href="https://github.com/tidyverse/purrr">https://github.com/tidyverse/purrr</a></p>
-
 <h2 id="list-vector操作">list, vector操作</h2>
 
+<h3 id="各要素に関数を適用するapply系関数">各要素に関数を適用するapply系関数</h3>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">v <span class="o">=</span> <span class="kt">list</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2L</span><span class="p">,</span> <span class="s">&#34;3&#34;</span><span class="p">)</span>
+check_class <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> <span class="p">{</span><span class="kp">paste0</span><span class="p">(</span>x<span class="p">,</span> <span class="s">&#34; is &#34;</span><span class="p">,</span> <span class="kp">class</span><span class="p">(</span>x<span class="p">))}</span>
+
+<span class="c1"># 自分でfor文を書くと結構大変</span>
+results <span class="o">=</span> <span class="kt">vector</span><span class="p">(</span><span class="s">&#34;list&#34;</span><span class="p">,</span> <span class="kp">length</span><span class="p">(</span>v<span class="p">))</span>
+<span class="kr">for</span> <span class="p">(</span>i <span class="kr">in</span> <span class="kp">seq_along</span><span class="p">(</span>v<span class="p">))</span> <span class="p">{</span>
+  results<span class="p">[[</span>i<span class="p">]]</span> <span class="o">=</span> check_class<span class="p">(</span>v<span class="p">[[</span>i<span class="p">]])</span>
+<span class="p">}</span>
+
+<span class="c1"># 1行で簡潔に記述でき、意図も明確</span>
+results <span class="o">=</span> <span class="kp">lapply</span><span class="p">(</span>v<span class="p">,</span> check_class<span class="p">)</span>
+results <span class="o">=</span> purrr<span class="o">::</span>map<span class="p">(</span>v<span class="p">,</span> check_class<span class="p">)</span>
+results <span class="o">=</span> purrr<span class="o">::</span>map<span class="p">(</span>v<span class="p">,</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> <span class="p">{</span><span class="kp">paste0</span><span class="p">(</span>x<span class="p">,</span> <span class="s">&#34; is &#34;</span><span class="p">,</span> <span class="kp">class</span><span class="p">(</span>x<span class="p">))})</span>
+results <span class="o">=</span> purrr<span class="o">::</span>map<span class="p">(</span>v<span class="p">,</span> <span class="o">~</span> <span class="p">{</span><span class="kp">paste0</span><span class="p">(</span><span class="m">.</span>x<span class="p">,</span> <span class="s">&#34; is &#34;</span><span class="p">,</span> <span class="kp">class</span><span class="p">(</span><span class="m">.</span>x<span class="p">))})</span></code></pre></div>
 <dl>
 <dt><code>purrr::map(.x, .f, ...)</code></dt>
-<dd>list <code>.x</code> の各要素に関数 <code>.f</code> を適用し、listで返す。
-<code>base::lapply()</code>や<code>plyr::llply()</code>の改良版。
-<code>.f</code> には<a href="#無名関数">後述の無名関数/ラムダ式</a>を渡すのが便利。
-数値や文字列を渡すとインデックスのように扱われる。
-例えば <code>map(l, 1L)</code> と書けば <code>map(l, ~.x[[1L]])</code> のように働く。
-存在しないときの値は <code>.default</code> で指定できる。</dd>
-<dd><code>map_lgl()</code>, <code>map_chr()</code>, <code>map_int()</code>, <code>map_dbl()</code>
-は型の決まったvectorを返す亜種で、
-<code>base::sapply()</code>や<code>base::vapply()</code>の改良版。</dd>
-<dd><code>purrr::walk(.x, .f, ...)</code> は、
-<code>map()</code>同様に関数を適用しつつ元の値をそのままinvisible返しする亜種。</dd>
-<dd><code>purrr::lmap(.x, .f, ...)</code> は、
-<code>.x[[i]]</code>ではなく<code>.x[i]</code>を参照する点で<code>map()</code>と異なる亜種。</dd>
-<dd><code>purrr::imap(.x, .f, ...)</code> は、
-名前や整数インデックスを第二引数で受け取れる亜種。
-<code>iwalk()</code> などの派生もある。</dd>
-<dd><code>purrr::modify(.x, .f, ...)</code> は、
-入力と同じ型で出力する亜種。
-つまりtibbleを入れたらlistじゃなくてtibbleが出てくる。</dd>
+<dd>list/vector <code>.x</code> の各要素に関数 <code>.f</code> を適用した結果をlistに詰めて返す。
+<code>base::lapply()</code>とほぼ同義。</dd>
+<dd><code>.f</code> にformulaや数値などを渡すと<a href="#無名関数">関数に変換した上で処理してくれる。(後述)</a></dd>
+<dt><code>purrr::map_lgl()</code>, <code>map_int()</code>, <code>map_dbl()</code>, <code>map_chr()</code></dt>
+<dd>型の決まったvectorを返すmap亜種。
+<code>base::sapply()</code>や<code>base::vapply()</code>よりも覚えやすく読みやすい。</dd>
 <dt><code>purrr::map_dfr(.x, .f, ..., .id=NULL)</code></dt>
-<dd>listの各要素に関数を適用し、結果を
-<code>dplyr::bind_rows()</code>で結合したdata.frameとして返す。
-<code>plyr::ldply()</code>の改良版として。</dd>
+<dd>結果を<code>dplyr::bind_rows()</code>で結合したdata.frameとして返すmap亜種。
+例えば、同じ形式のCSVファイルを一気に読んで結合、みたいなときに便利:</dd>
+</dl>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">files <span class="o">=</span> fs<span class="o">::</span>dir_ls<span class="p">(</span><span class="s">&#34;path/to/data/&#34;</span><span class="p">,</span> glob <span class="o">=</span> <span class="s">&#34;*.csv&#34;</span><span class="p">)</span>
+combined_df <span class="o">=</span> purrr<span class="o">::</span>map_dfr<span class="p">(</span>files<span class="p">,</span> readr<span class="o">::</span>read_csv<span class="p">)</span></code></pre></div>
+<dl>
 <dt><code>purrr::map2(.x, .y, .f, ...)</code></dt>
-<dd>2変数バージョン。<code>map2_chr()</code>などの型限定vector版も提供されている。
-3変数以上渡したいときはlistかdata.frameにまとめて下の<code>pmap()</code>を使う。</dd>
+<dd>2変数バージョン。<code>map2_int()</code>などの型指定vector版もある。
+3変数以上渡したいときはlistかdata.frameにまとめて次の<code>pmap()</code>を使う。</dd>
 <dt><code>purrr::pmap(.l, .f, ...)</code></dt>
 <dd>listの中身をparallelに処理するmap。
 関数 <code>.f</code>の引数はlistの要素名と一致させるか <code>...</code> で受け流す必要がある。
-e.g., <code>pmap(list(a=1:3, b=4:6), function(a, b) {a * b})</code> 。
-名前無し2要素までなら<code>map2()</code>などと同様に<code>.x</code>や<code>.y</code>を使ったformulaが利用可能。
-e.g., <code>pmap(list(1:3, 4:6), ~ .x * .y)</code> 。</dd>
+e.g., <code>pmap(list(a=1:3, b=4:6), function(a, b) {a * b})</code> 。</dd>
 <dd>data.frameの正体はlist of columnsなので、
-そのまま<code>.l</code>として渡して<code>plyr::mlply()</code>的に使える。
-同様に <code>purrr::pmap_dfr()</code> は <code>plyr::mdply()</code> として使える。</dd>
+そのまま<code>.l</code>として渡せる。</dd>
+<dd><code>pmap_int</code> など出力型指定の亜種もある。</dd>
 <dt><code>purrr::map_if(.x, .p, .f, ...)</code></dt>
 <dd><code>.p</code>が<code>TRUE</code>になる要素のみ<code>.f()</code>を適用し、残りはそのまま出力。
 <code>.p</code>はlogical vectorでもいいし、
 <code>.x[[i]]</code>を受け取るpredicate関数でもよい。</dd>
 <dd>番号か名前で選ぶには<code>purrr::map_at(.x, .at, .f, ...)</code></dd>
+<dt><code>purrr::walk(.x, .f, ...)</code></dt>
+<dd><code>map()</code>同様に関数を適用しつつ元の値をそのままinvisible返しする亜種。</dd>
+<dt><code>purrr::lmap(.x, .f, ...)</code></dt>
+<dd><code>.x[[i]]</code>ではなく<code>.x[i]</code>を参照する亜種。</dd>
+<dt><code>purrr::imap(.x, .f, ...)</code></dt>
+<dd>名前や整数インデックスを第二引数で受け取れる亜種。
+<code>iwalk()</code> などの派生もある。</dd>
+<dt><code>purrr::modify(.x, .f, ...)</code></dt>
+<dd>入力と同じ型で出力する亜種。
+つまりdata.frameを入れたらlistじゃなくてdata.frameが出てくる。
+e.g., <code>modify_if(iris, is.numeric, round)</code></dd>
 <dt><code>purrr::reduce(.x, .f, ..., .init)</code></dt>
 <dd>二変数関数を順々に適用して1つの値を返す。
 C++でいう<code>std::accumulate()</code>。
-例えば <code>1:3 %&gt;% reduce(`+`)</code> の結果は6</dd>
+例えば <code>reduce(1:3, `+`)</code> の結果は6。</dd>
 <dt><code>purrr::accumulate(.x, .f, ..., .init)</code></dt>
 <dd>二変数関数を順々に適用し、過程も含めてvectorで返す。
-例えば <code>accumulate(1:3, sum)</code> の結果は <code>1 3 6</code> 。
-C++でいう<code>std::partial_sum()</code>。</dd>
-<dt><code>purrr::invoke(.f, .x=NULL, ..., .env=NULL)</code></dt>
-<dd>関数に渡す引数があらかじめlistにまとまってるときに使う<code>do.call()</code>の改良版。</dd>
-<dt><code>purrr::invoke_map(.f, .x=list(NULL), ..., .env=NULL)</code></dt>
-<dd>関数listを順々に実行してlistで返す。
-引数<code>.x</code>は同じ長さのlist of listsか、list of a listをリサイクル。</dd>
-<dd>e.g., <code>invoke_map(list(runif, rnorm), list(c(n=3, 0, 1)))</code></dd>
-<dd>返り値がすべて同じ型で、それぞれ長さ1だった場合、
-特定の型のvectorとして返せる亜種がある:
-<code>invoke_map_chr()</code>, <code>invoke_map_dbl()</code>, <code>invoke_map_int()</code>, <code>invoke_map_lgl()</code></dd>
-<dd>data.frameを繋げて返す<code>invoke_map_dfr()</code>も。</dd>
+C++でいう<code>std::partial_sum()</code>。
+例えば <code>accumulate(1:3, sum)</code> の結果は <code>1 3 6</code> 。</dd>
+</dl>
+
+<h3 id="list作成-変形-解体">list作成・変形・解体</h3>
+
+<dl>
+<dt><code>purrr::list_along(x)</code></dt>
+<dd><code>x</code> と同じ長さの空listを作る <code>vector(&quot;list&quot;, length(x))</code> のショートカット。</dd>
 <dt><code>purrr::flatten(.x)</code></dt>
 <dd>階層性のあるlistを一段階解消する。
 階層なしlistをvector化するには明示的に型指定できる
@@ -189,57 +196,76 @@ C++でいう<code>std::partial_sum()</code>。</dd>
 <dd>listやvectorの要素を <code>.p</code> に応じて取捨選択。
 <code>.p</code> に関数を渡した場合の挙動は
 <code>.x[.p(.x)]</code> じゃなくて <code>.x[map_lgl(.x, .p, ...)]</code> となることに注意。</dd>
-<dt><code>purrr::has_element(.x, .y)</code></dt>
-<dd>list <code>.x</code> は要素 <code>.y</code> を持っている。</dd>
+<dt><code>purrr::pluck(.x, ..., .default=NULL)</code></dt>
+<dd>オブジェクト <code>.x</code> 内の要素を引っ張り出す <code>[[</code> の強力版。
+<code>...</code> には整数、文字列、関数、listで複数指定できる。
+例えば <code>accessor(x[[1]])$foo</code> だと読む順が左右に振られるが、
+<code>pluck(x, 1, accessor, &quot;foo&quot;)</code> だと左から右に読み流せる。</dd>
 <dt><code>purrr::cross2(.x, .y, .filter=NULL)</code></dt>
 <dd>listの各要素の組み合わせを作る。
 <code>.filter</code> に渡した関数が <code>TRUE</code> となるものは除外される。
 名前付きlistを渡す <code>purrr::cross()</code> や <code>purrr::cross_df()</code> のほうが便利かも。
 vectorなら <a href="/rstats/tidyr.html"><code>tidyr::crossing()</code> とか <code>tidyr::expand()</code></a> が使える。</dd>
-</dl>
-
-<h2 id="無名関数">無名関数</h2>
-
-<p>ラムダ式とも言う。
-チルダで始まる <code>~ a + b</code> のようなものはRではformulaという形式になるが、
-<code>purrr</code>のmap系関数はそれを引数<code>.f</code>として受け取ることができる。
-formula内部では、第一引数を<code>.x</code>または<code>.</code>として、第二引数を<code>.y</code>として参照する。
-最新版では <code>..1</code>, <code>..2</code>, <code>..3</code> のような形で三つめ以降も受け取れる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># with named function</span>
-ord <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> <span class="p">{</span><span class="kp">strtoi</span><span class="p">(</span><span class="kp">charToRaw</span><span class="p">(</span>x<span class="p">),</span> <span class="m">16L</span><span class="p">)}</span>
-<span class="kc">letters</span> <span class="o">%&gt;%</span> map_int<span class="p">(</span>ord<span class="p">)</span>
-
-<span class="c1"># with unnamed function</span>
-<span class="kc">letters</span> <span class="o">%&gt;%</span> map_int<span class="p">(</span><span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> <span class="p">{</span><span class="kp">strtoi</span><span class="p">(</span><span class="kp">charToRaw</span><span class="p">(</span>x<span class="p">),</span> <span class="m">16L</span><span class="p">)})</span>
-
-<span class="c1"># with formula/lambda</span>
-<span class="kc">letters</span> <span class="o">%&gt;%</span> map_int<span class="p">(</span><span class="o">~</span> <span class="kp">strtoi</span><span class="p">(</span><span class="kp">charToRaw</span><span class="p">(</span><span class="m">.</span>x<span class="p">),</span> <span class="m">16L</span><span class="p">))</span></code></pre></div>
-<dl>
-<dt><code>purrr::as_mapper(.f, ...)</code></dt>
-<dd>上記の機能を担う重要な関数で、<code>map()</code>内部でも使われている。
-formulaを <code>function (.x, .y, . = .x)</code> という無名関数に変換する。</dd>
-<dt><code>purrr::partial(...f, ..., .env, .lazy, .first)</code></dt>
-<dd>引数を部分的に埋めてある関数を作る。C++でいう <code>std::bind()</code></dd>
-</dl>
-
-<h2 id="その他の便利関数">その他の便利関数</h2>
-
-<dl>
-<dt><code>purrr::pluck(.x, ..., .default=NULL)</code></dt>
-<dd>オブジェクト <code>.x</code> 内の要素を引っ張り出す <code>[[</code> の強力版。
-<code>...</code> には整数、文字列、関数、listで複数指定できる。
-例えば <code>accessor(x[[1]])$foo</code> だと読む順が左右に振られるが、
-<code>x %&gt;% pluck(1, accessor, &quot;foo&quot;)</code> だと左から右に読み流せる。</dd>
-<dt><code>purrr::list_along(x)</code></dt>
-<dd>引数と同じ長さの空listを作る。</dd>
-<dt><code>purrr::set_names(x, nm=x)</code></dt>
-<dd>標準の<code>setNames(x=nm, nm)</code>は第二引数のほうが省略不可という気持ち悪い定義だったが、
-この改良版ではその心配が解消されている。
-長さや型のチェックもしてくれる。</dd>
 <dt><code>purrr::transpose(.l)</code></dt>
 <dd>行列転置関数<code>t()</code>のlist版。
 例えば、pair of lists &lt;=&gt; list of pairs。</dd>
 <dd>data.frameに適用するとlist of rowsが得られる。</dd>
+</dl>
+
+<h3 id="その他">その他</h3>
+
+<dl>
+<dt><code>purrr::invoke(.f, .x=NULL, ..., .env=NULL)</code></dt>
+<dd>list <code>.x</code> の中身を引数として関数 <code>.f</code> を呼び出す。</dd>
+<dd>関数に渡す引数があらかじめlistにまとまってるときに使う<code>do.call()</code>の改良版。</dd>
+</dl>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">params <span class="o">=</span> <span class="kt">list</span><span class="p">(</span>n <span class="o">=</span> <span class="m">6L</span><span class="p">,</span> size <span class="o">=</span> <span class="m">10L</span><span class="p">,</span> replace <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
+purrr<span class="o">::</span>invoke<span class="p">(</span><span class="kp">sample.int</span><span class="p">,</span> params<span class="p">)</span></code></pre></div>
+<dl>
+<dt><code>purrr::invoke_map(.f, .x=list(NULL), ..., .env=NULL)</code></dt>
+<dd>関数listを順々に実行してlistで返す。
+引数<code>.x</code>は同じ長さのlist of listsか、list of a listをリサイクル。</dd>
+<dd>e.g., <code>invoke_map(list(runif, rnorm), list(c(n=3, 0, 1)))</code></dd>
+<dt><code>purrr::has_element(.x, .y)</code></dt>
+<dd>list <code>.x</code> は要素 <code>.y</code> を持っている。</dd>
+<dt><code>purrr::set_names(x, nm=x)</code></dt>
+<dd>標準の<code>setNames(x=nm, nm)</code>は第二引数のほうが省略不可という気持ち悪い定義だったが、
+この改良版ではその心配が解消されている。
+長さや型のチェックもしてくれる。</dd>
+</dl>
+
+<h2 id="無名関数">無名関数</h2>
+
+<p>apply/map系関数は、名前のついた関数だけでなく、その場で定義された無名関数も受け取れる。
+ごく短い関数や一度しか使わない関数に名前をつけずに済むので便利。
+さらにpurrrのmap系関数はformula
+(チルダで始まる <code>~ x + y</code> のようなもの)
+や数値を受け取って関数として処理してくれる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># named function</span>
+ord <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> <span class="p">{</span><span class="kp">strtoi</span><span class="p">(</span><span class="kp">charToRaw</span><span class="p">(</span>x<span class="p">),</span> <span class="m">16L</span><span class="p">)}</span>
+map_int<span class="p">(</span><span class="kc">letters</span><span class="p">,</span> ord<span class="p">)</span>
+
+<span class="c1"># unnamed function</span>
+map_int<span class="p">(</span><span class="kc">letters</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> <span class="p">{</span><span class="kp">strtoi</span><span class="p">(</span><span class="kp">charToRaw</span><span class="p">(</span>x<span class="p">),</span> <span class="m">16L</span><span class="p">)})</span>
+
+<span class="c1"># formula</span>
+map_int<span class="p">(</span><span class="kc">letters</span><span class="p">,</span> <span class="o">~</span> <span class="kp">strtoi</span><span class="p">(</span><span class="kp">charToRaw</span><span class="p">(</span><span class="m">.</span>x<span class="p">),</span> <span class="m">16L</span><span class="p">))</span>
+
+<span class="c1"># integer/character</span>
+li <span class="o">=</span> <span class="kt">list</span><span class="p">(</span>lower <span class="o">=</span> <span class="kc">letters</span><span class="p">,</span> upper <span class="o">=</span> <span class="kc">LETTERS</span><span class="p">)</span>
+map_chr<span class="p">(</span>li<span class="p">,</span> <span class="m">3L</span><span class="p">)</span>
+map_chr<span class="p">(</span>li<span class="p">,</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> <span class="p">{</span>x<span class="p">[[</span><span class="m">3L</span><span class="p">]]})</span></code></pre></div>
+<p>formula内部では、第一引数を<code>.x</code>または<code>.</code>として、第二引数を<code>.y</code>として参照する。
+<code>..1</code>, <code>..2</code>, <code>..3</code> のような形で三つめ以降も参照できる。</p>
+
+<dl>
+<dt><code>purrr::as_mapper(.f, ...)</code></dt>
+<dd><code>map()</code> 内部で関数への変換機能を担っている関数。</dd>
+<dd>formulaを受け取ると <code>function (.x, .y, . = .x)</code> のような関数に変換する。</dd>
+<dd>数値や文字列を受け取ると <code>[[</code> による抽出関数に変換する。
+参照先が存在しない場合の値はmap関数の <code>.default</code> 引数で指定できる。</dd>
+<dt><code>purrr::partial(...f, ..., .env, .lazy, .first)</code></dt>
+<dd>引数を部分的に埋めてある関数を作る。C++でいう <code>std::bind()</code></dd>
 </dl>
 
 <h2 id="purrrlyr"><code>purrrlyr</code></h2>
@@ -254,6 +280,8 @@ formulaを <code>function (.x, .y, . = .x)</code> という無名関数に変換
 <a href="/rstats/purrr.html"><code>purrr</code></a> でその list of data.frames に処理を施し、
 <a href="/rstats/dplyr.html"><code>dplyr</code></a> でその変更を元の data.frame に適用する、
 というのがtidyverse流のモダンなやり方らしい。</p>
+
+<p>パイプ演算子 <code>%&gt;%</code> については<a href="/rstats/dplyr.html">dplyr</a>を参照。</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">## OLD</span>
 iris <span class="o">%&gt;%</span>
   purrrlyr<span class="o">::</span>slice_rows<span class="p">(</span><span class="s">&#39;Species&#39;</span><span class="p">)</span> <span class="o">%&gt;%</span>
