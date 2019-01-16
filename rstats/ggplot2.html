@@ -127,42 +127,52 @@ R標準の<code>boxplot()</code>や<code>hist()</code>などは前者の上に�
 <li><a href="https://www.tidyverse.org/articles/2018/07/ggplot2-3-0-0/">version 3.0での変更点</a></li>
 </ul>
 
-<h2 id="基本的な使い方-指示を-していく">基本的な使い方: 指示を <code>+</code> していく</h2>
+<h2 id="基本的な使い方">基本的な使い方</h2>
+
+<p>まずは手元のデータを整形して、1行が1観測、1列が1変数という形の
+<a href="/rstats/programming.html#tidyverse"><strong>整然データ</strong></a>
+を用意することが重要。
+言い換えると「この列がx軸、この列がy軸、この列によって色を変える」というように指示できる形。
+例えばggplot2に付属の<code>mpg</code>データ:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span>tidyverse<span class="p">)</span>
+mpg
+<span class="c1">#      manufacturer  model displ  year   cyl      trans    drv   cty   hwy     fl   class</span>
+<span class="c1">#            &lt;char&gt; &lt;char&gt; &lt;num&gt; &lt;int&gt; &lt;int&gt;     &lt;char&gt; &lt;char&gt; &lt;int&gt; &lt;int&gt; &lt;char&gt;  &lt;char&gt;</span>
+<span class="c1">#   1:         audi     a4   1.8  1999     4   auto(l5)      f    18    29      p compact</span>
+<span class="c1">#   2:         audi     a4   1.8  1999     4 manual(m5)      f    21    29      p compact</span>
+<span class="c1">#  ---</span>
+<span class="c1"># 233:   volkswagen passat   2.8  1999     6 manual(m5)      f    18    26      p midsize</span>
+<span class="c1"># 234:   volkswagen passat   3.6  2008     6   auto(s6)      f    17    26      p midsize</span></code></pre></div>
+<p>このようなデータを渡して、指示をどんどん <code>+</code> していく:</p>
 
 <ul>
 <li><code>ggplot()</code> このデータでよろしく</li>
 <li><code>geom_*()</code> 点や線をよろしく</li>
 <li><code>theme_*()</code> 軸とか背景の見た目をよろしく</li>
 </ul>
-
-<p>ggplot2についてくる<code>mpg</code>データを例に:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span>tidyverse<span class="p">)</span>
-ggplot<span class="p">(</span>data <span class="o">=</span> mpg<span class="p">)</span> <span class="o">+</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">ggplot<span class="p">(</span>data <span class="o">=</span> mpg<span class="p">)</span> <span class="o">+</span>
   geom_point<span class="p">(</span>mapping <span class="o">=</span> aes<span class="p">(</span>x <span class="o">=</span> displ<span class="p">,</span> y <span class="o">=</span> cty<span class="p">))</span> <span class="o">+</span>
   theme_classic<span class="p">(</span>base_size <span class="o">=</span> <span class="m">20</span><span class="p">,</span> base_family <span class="o">=</span> <span class="s">&#34;Helvetica&#34;</span><span class="p">)</span></code></pre></div>
 <p>途中経過をオブジェクトとして取っておける:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">p0 <span class="o">=</span> ggplot<span class="p">(</span>mpg<span class="p">,</span> aes<span class="p">(</span>x <span class="o">=</span> displ<span class="p">,</span> y <span class="o">=</span> cty<span class="p">))</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">p0 <span class="o">=</span> ggplot<span class="p">(</span>data <span class="o">=</span> mpg<span class="p">,</span> aes<span class="p">(</span>x <span class="o">=</span> displ<span class="p">,</span> y <span class="o">=</span> cty<span class="p">))</span>
 p1 <span class="o">=</span> p0 <span class="o">+</span> geom_point<span class="p">()</span>
 p2 <span class="o">=</span> p1 <span class="o">+</span> theme_classic<span class="p">(</span>base_size <span class="o">=</span> <span class="m">20</span><span class="p">,</span> base_family <span class="o">=</span> <span class="s">&#34;Helvetica&#34;</span><span class="p">)</span>
 p3 <span class="o">=</span> p2 <span class="o">+</span> stat_smooth<span class="p">(</span>method <span class="o">=</span> lm<span class="p">,</span> formula <span class="o">=</span> y <span class="o">~</span> <span class="kp">log</span><span class="p">(</span>x<span class="p">))</span>
-<span class="kp">print</span><span class="p">(</span>p3<span class="p">)</span></code></pre></div>
+p4 <span class="o">=</span> p3 <span class="o">+</span> facet_grid<span class="p">(</span>drv <span class="o">~</span> fl<span class="p">)</span>
+<span class="kp">print</span><span class="p">(</span>p4<span class="p">)</span></code></pre></div>
 <p>画像ファイルに保存するところまできっちり書く:</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">ggsave<span class="p">(</span><span class="s">&#34;mpg-displ-cty.png&#34;</span><span class="p">,</span> p3<span class="p">,</span> width <span class="o">=</span> <span class="m">4</span><span class="p">,</span> height <span class="o">=</span> <span class="m">4</span><span class="p">,</span> dpi<span class="o">=</span><span class="m">300</span><span class="p">)</span></code></pre></div>
-<p><code>ggplot()</code> に渡すデータは、1行が1観測、1列が1変数という形の
-<a href="/rstats/programming.html#tidyverse"><strong>整然データ</strong></a>。<br>
-例: <code>mpg</code>, <code>mtcars</code>, <code>diamonds</code></p>
-
 <h2 id="aesthetic-mapping-https-ggplot2-tidyverse-org-reference-aes-group-order-html"><a href="https://ggplot2.tidyverse.org/reference/aes_group_order.html">Aesthetic mapping</a></h2>
 
 <p>データと見せ方を紐付ける。
 <code>aes(colour = Species)</code> のように <code>aes()</code> 内で列名を指定すると、
 その変数に応じて色やサイズなどを変えることができる。
-言い換えると、データの値を色やサイズに変換する(スケールする)ことに相当する。
-<code>aes()</code> の外で指定するとデータによらず全体に反映される:</p>
+言い換えると、データの値を色やサイズに変換する(スケールする)ことに相当する。</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># データによって点のサイズ・色・形を変える</span>
 p0 <span class="o">+</span> geom_point<span class="p">(</span>mapping <span class="o">=</span> aes<span class="p">(</span>x <span class="o">=</span> displ<span class="p">,</span> y <span class="o">=</span> cty<span class="p">,</span> size <span class="o">=</span> cyl<span class="p">,</span>
                               colour <span class="o">=</span> <span class="kp">class</span><span class="p">,</span> shape <span class="o">=</span> drv<span class="p">))</span>
 
+<span class="c1"># aes() の外で指定するとデータによらず全体に反映。</span>
 <span class="c1"># サイズは常に6、色はオレンジ、不透明度は0.4</span>
 p0 <span class="o">+</span> geom_point<span class="p">(</span>mapping <span class="o">=</span> aes<span class="p">(</span>x <span class="o">=</span> displ<span class="p">,</span> y <span class="o">=</span> cty<span class="p">),</span>
                 size <span class="o">=</span> <span class="m">6</span><span class="p">,</span> colour <span class="o">=</span> <span class="s">&#34;darkorange&#34;</span><span class="p">,</span> alpha <span class="o">=</span> <span class="m">0.4</span><span class="p">)</span></code></pre></div>
