@@ -31,15 +31,33 @@ R標準の`boxplot()`や`hist()`などは前者の上に、
 - [version 2.0での変更点](https://blog.rstudio.com/2015/12/21/ggplot2-2-0-0/)
 - [version 3.0での変更点](https://www.tidyverse.org/articles/2018/07/ggplot2-3-0-0/)
 
-## 基本的な使い方: 指示を `+` していく
+## 基本的な使い方
+
+まずは手元のデータを整形して、1行が1観測、1列が1変数という形の
+[**整然データ**]({{< relref "programming.md#tidyverse" >}})
+を用意することが重要。
+言い換えると「この列がx軸、この列がy軸、この列によって色を変える」というように指示できる形。
+例えばggplot2に付属の`mpg`データ:
+
+```r
+library(tidyverse)
+mpg
+#      manufacturer  model displ  year   cyl      trans    drv   cty   hwy     fl   class
+#            <char> <char> <num> <int> <int>     <char> <char> <int> <int> <char>  <char>
+#   1:         audi     a4   1.8  1999     4   auto(l5)      f    18    29      p compact
+#   2:         audi     a4   1.8  1999     4 manual(m5)      f    21    29      p compact
+#  ---
+# 233:   volkswagen passat   2.8  1999     6 manual(m5)      f    18    26      p midsize
+# 234:   volkswagen passat   3.6  2008     6   auto(s6)      f    17    26      p midsize
+```
+
+このようなデータを渡して、指示をどんどん `+` していく:
 
 - `ggplot()` このデータでよろしく
 - `geom_*()` 点や線をよろしく
 - `theme_*()` 軸とか背景の見た目をよろしく
 
-ggplot2についてくる`mpg`データを例に:
 ```r
-library(tidyverse)
 ggplot(data = mpg) +
   geom_point(mapping = aes(x = displ, y = cty)) +
   theme_classic(base_size = 20, base_family = "Helvetica")
@@ -47,11 +65,12 @@ ggplot(data = mpg) +
 
 途中経過をオブジェクトとして取っておける:
 ```r
-p0 = ggplot(mpg, aes(x = displ, y = cty))
+p0 = ggplot(data = mpg, aes(x = displ, y = cty))
 p1 = p0 + geom_point()
 p2 = p1 + theme_classic(base_size = 20, base_family = "Helvetica")
 p3 = p2 + stat_smooth(method = lm, formula = y ~ log(x))
-print(p3)
+p4 = p3 + facet_grid(drv ~ fl)
+print(p4)
 ```
 
 画像ファイルに保存するところまできっちり書く:
@@ -59,24 +78,19 @@ print(p3)
 ggsave("mpg-displ-cty.png", p3, width = 4, height = 4, dpi=300)
 ```
 
-`ggplot()` に渡すデータは、1行が1観測、1列が1変数という形の
-[**整然データ**]({{< relref "programming.md#tidyverse" >}})。<br>
-例: `mpg`, `mtcars`, `diamonds`
-
-
 ## [Aesthetic mapping](https://ggplot2.tidyverse.org/reference/aes_group_order.html)
 
 データと見せ方を紐付ける。
 `aes(colour = Species)` のように `aes()` 内で列名を指定すると、
 その変数に応じて色やサイズなどを変えることができる。
 言い換えると、データの値を色やサイズに変換する(スケールする)ことに相当する。
-`aes()` の外で指定するとデータによらず全体に反映される:
 
 ```r
 # データによって点のサイズ・色・形を変える
 p0 + geom_point(mapping = aes(x = displ, y = cty, size = cyl,
                               colour = class, shape = drv))
 
+# aes() の外で指定するとデータによらず全体に反映。
 # サイズは常に6、色はオレンジ、不透明度は0.4
 p0 + geom_point(mapping = aes(x = displ, y = cty),
                 size = 6, colour = "darkorange", alpha = 0.4)
