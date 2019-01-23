@@ -49,7 +49,7 @@ rsync -auv SRC/DIR/ DST/DIR/
 :   実際に送受信を行わず試してみる
 
 `-z, --compress`
-:   通信量を減らしたければ
+:   圧縮・展開のCPUコストはかかるけど通信量は減る
 
 `--delete`
 :   SRC側に存在しないものがDST側にあったとき削除
@@ -59,6 +59,16 @@ rsync -auv SRC/DIR/ DST/DIR/
 
 `--ignore-existing`
 :   受信側に存在していたら無視
+
+`--iconv`
+:   文字コードを変換する。
+    異なるOS/FS間でウムラウトや日本語を含むファイルを送受信するときに使う。
+    リモート側だけ指定すれば十分だけどローカルも明示的に指定できる。
+    その場合、pushかpullかによらず `={LOCAL},{REMOTE}` の順番で。
+    例えばローカルのLinuxマシンとリモートの古いMacでやり取りする場合は
+    `--iconv=utf8-mac` or `--iconv=utf8,utf8-mac` 。
+    新しいMacのAPFSはLinuxと同じ `utf8` と見なしておけば良さそう...?
+
 
 ## Exclude and include
 
