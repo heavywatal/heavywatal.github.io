@@ -295,9 +295,22 @@ system.time(r_vec(n))
 system.time(rcpp(n))
 ```
 
+計測にはr-libチームによる[bench](https://bench.r-lib.org/)が便利。
+時間だけでなくメモリや実行結果までチェックした上、可視化までお世話してくれる:
+```r
+df = bench::mark(r_for(n), r_vec(n), rcpp(n))
+df
+#    expression          min         mean       median          max  itr/sec     mem_alloc  n_gc n_itr   total_time   result     memory                                             time       gc
+#        <char> <bench_time> <bench_time> <bench_time> <bench_time>    <num> <bench_bytes> <num> <int> <bench_time>   <list>     <list>                                           <list>   <list>
+# 1:   r_for(n)      30.49ms      31.14ms      31.11ms      32.82ms  32.1107        3.89MB     0    17        529ms 14.39273 <Rprofmem> 1: 30.7ms,30.7ms,30.8ms,31.9ms,31.1ms,31.2ms,... <tbl_df>
+# 2:   r_vec(n)       2.25ms       2.85ms       2.74ms       7.87ms 350.2935       11.44MB    35    81        231ms 14.39273 <Rprofmem> 2:  7.87ms,6.67ms,6.73ms,7.65ms,2.81ms,2.8ms,... <tbl_df>
+# 3:    rcpp(n)          1ms       1.02ms          1ms       1.79ms 977.6923        2.49KB     0   489        500ms 14.39273 <Rprofmem> 3: 1.79ms,1.05ms,1.04ms,1.04ms,1.03ms,1.03ms,... <tbl_df>
+plot(df)
+```
+
 ちょっとした比較には
 [rbenchmark](https://cran.r-project.org/package=rbenchmark)
-がお手軽:
+の表示がシンプルで見やすい:
 ```r
 rbenchmark::benchmark(r_for(n), r_vec(n), rcpp(n))[,1:4]
 #       test replications elapsed relative
@@ -306,9 +319,9 @@ rbenchmark::benchmark(r_for(n), r_vec(n), rcpp(n))[,1:4]
 # 3  rcpp(n)          100   0.133    1.000
 ```
 
-もっと詳しく見たい場合は
+もうちょっと詳しく見たい場合は
 [microbenchmark](https://github.com/joshuaulrich/microbenchmark/)
-の出力が扱いやすい:
+の出力も扱いやすい:
 ```r
 df = microbenchmark::microbenchmark(r_for(n), r_vec(n), rcpp(n), times = 100L)
 df
