@@ -348,17 +348,27 @@ n <span class="o">=</span> <span class="m">1000000L</span>
 <span class="kp">system.time</span><span class="p">(</span>r_for<span class="p">(</span>n<span class="p">))</span>
 <span class="kp">system.time</span><span class="p">(</span>r_vec<span class="p">(</span>n<span class="p">))</span>
 <span class="kp">system.time</span><span class="p">(</span>rcpp<span class="p">(</span>n<span class="p">))</span></code></pre></div>
+<p>計測にはr-libチームによる<a href="https://bench.r-lib.org/">bench</a>が便利。
+時間だけでなくメモリや実行結果までチェックした上、可視化までお世話してくれる:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">df <span class="o">=</span> bench<span class="o">::</span>mark<span class="p">(</span>r_for<span class="p">(</span>n<span class="p">),</span> r_vec<span class="p">(</span>n<span class="p">),</span> rcpp<span class="p">(</span>n<span class="p">))</span>
+df
+<span class="c1">#    expression          min         mean       median          max  itr/sec     mem_alloc  n_gc n_itr   total_time   result     memory                                             time       gc</span>
+<span class="c1">#        &lt;char&gt; &lt;bench_time&gt; &lt;bench_time&gt; &lt;bench_time&gt; &lt;bench_time&gt;    &lt;num&gt; &lt;bench_bytes&gt; &lt;num&gt; &lt;int&gt; &lt;bench_time&gt;   &lt;list&gt;     &lt;list&gt;                                           &lt;list&gt;   &lt;list&gt;</span>
+<span class="c1"># 1:   r_for(n)      30.49ms      31.14ms      31.11ms      32.82ms  32.1107        3.89MB     0    17        529ms 14.39273 &lt;Rprofmem&gt; 1: 30.7ms,30.7ms,30.8ms,31.9ms,31.1ms,31.2ms,... &lt;tbl_df&gt;</span>
+<span class="c1"># 2:   r_vec(n)       2.25ms       2.85ms       2.74ms       7.87ms 350.2935       11.44MB    35    81        231ms 14.39273 &lt;Rprofmem&gt; 2:  7.87ms,6.67ms,6.73ms,7.65ms,2.81ms,2.8ms,... &lt;tbl_df&gt;</span>
+<span class="c1"># 3:    rcpp(n)          1ms       1.02ms          1ms       1.79ms 977.6923        2.49KB     0   489        500ms 14.39273 &lt;Rprofmem&gt; 3: 1.79ms,1.05ms,1.04ms,1.04ms,1.03ms,1.03ms,... &lt;tbl_df&gt;</span>
+plot<span class="p">(</span>df<span class="p">)</span></code></pre></div>
 <p>ちょっとした比較には
 <a href="https://cran.r-project.org/package=rbenchmark">rbenchmark</a>
-がお手軽:</p>
+の表示がシンプルで見やすい:</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">rbenchmark<span class="o">::</span>benchmark<span class="p">(</span>r_for<span class="p">(</span>n<span class="p">),</span> r_vec<span class="p">(</span>n<span class="p">),</span> rcpp<span class="p">(</span>n<span class="p">))[,</span><span class="m">1</span><span class="o">:</span><span class="m">4</span><span class="p">]</span>
 <span class="c1">#       test replications elapsed relative</span>
 <span class="c1"># 1 r_for(n)          100   3.968   29.835</span>
 <span class="c1"># 2 r_vec(n)          100   0.473    3.556</span>
 <span class="c1"># 3  rcpp(n)          100   0.133    1.000</span></code></pre></div>
-<p>もっと詳しく見たい場合は
+<p>もうちょっと詳しく見たい場合は
 <a href="https://github.com/joshuaulrich/microbenchmark/">microbenchmark</a>
-の出力が扱いやすい:</p>
+の出力も扱いやすい:</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">df <span class="o">=</span> microbenchmark<span class="o">::</span>microbenchmark<span class="p">(</span>r_for<span class="p">(</span>n<span class="p">),</span> r_vec<span class="p">(</span>n<span class="p">),</span> rcpp<span class="p">(</span>n<span class="p">),</span> times <span class="o">=</span> <span class="m">100L</span><span class="p">)</span>
 df
 <span class="c1"># Unit: milliseconds</span>
