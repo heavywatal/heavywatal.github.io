@@ -55,33 +55,39 @@ https://setuptools.readthedocs.io/en/latest/setuptools.html#configuring-setup-us
 ```ini
 [metadata]
 name = wtl
-version = 0.1
+version = attr: wtl.__version__
 url = https://github.com/heavywatal/pywtl
 author = Watal M. Iwasaki
-author_email = heavy.watalあgmail.com
-license = MIT
+author_email = heavy.watal@gmail.com
+license_file = LICENSE
 description = wtl: Personal Python package
 long_description = file: README.md
 
 [options]
 zip_safe = False
 packages = find:
+install_requires =
+  psutil
+  requests
 entry_points = file: entry_points.cfg
 ```
 
-`license = file: LICENSE` のように外部ファイルを参照することも可能。
+`version` を書くべき場所が複数あって悩ましかったけど
+`attr:` や `file:` がサポートされて一括管理可能になった。
+(Thanks, [@sgryjp](https://twitter.com/sgryjp)-san!)
 
-`install_requires = flake8; psutil`
-のようにセミコロン区切りで依存パッケージを列挙できる。
+`license = MIT` のように文字列で済ませることも可能。
+
+依存パッケージを列挙する `install_requires` はセミコロン区切りで1行に収めることも可能。
 それらは `pip install` で自動的にインストールされ、
 その後アンインストールするとそれを使わないモジュールでさえ
 `distribution was not found and is required`
-などと言って動いてくれなくなるくらい強制力が強い。
+などと怒って動いてくれなくなるくらい強制力が強い。
 
 `requirements.txt` はsetuptoolsではなくpipの機能で、
 能動的に `pip install -r requirements.txt`
 を打たなきゃインストールされないし、
-そこに列挙されたパッケージが無くても動くモジュールは動かせる。
+そこに列挙されたパッケージが本当に必要になるまで怒られない。
 
 
 ### `entry_points`
@@ -100,8 +106,9 @@ hello.py = wtl.hello:main
 ```
 
 引数を取らない関数のみ利用可能。
-コマンドライン引数を処理したい場合は標準の
-[`argparse`](https://docs.python.org/3/library/argparse.html) が有効。
+コマンドライン引数を受け取りたい場合はその関数の中で標準の
+[`argparse`](https://docs.python.org/3/library/argparse.html)
+を使って処理する。
 
 
 ### ソースコード
@@ -109,8 +116,9 @@ hello.py = wtl.hello:main
 `wtl/__init__.py`
 : このディレクトリがひとつのパッケージであることを示すファイル。
   空でもいいし、初期化処理やオブジェクトを記述してもよい。
-  `__version__` 変数を定義すべしという記述も見かけるが、
-  `setup.cfg` との兼ね合いも考えると、どうしたもんか悩ましい。
+  文字列変数 `__version__ = '0.1.2'` を定義して
+  `wtl.__verison__` のように参照できるようにしておくのが慣例。
+  それを `setup.cfg` から参照することで冗長性を抑えられる。
 
 `wtl/hello.py`
 ```py
