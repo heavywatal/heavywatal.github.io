@@ -136,31 +136,37 @@ python -m wtl.hello</code></pre></div>
 <p><a href="https://setuptools.readthedocs.io/en/latest/setuptools.html#configuring-setup-using-setup-cfg-files">https://setuptools.readthedocs.io/en/latest/setuptools.html#configuring-setup-using-setup-cfg-files</a></p>
 <div class="highlight"><pre class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[metadata]</span>
 <span class="na">name</span> <span class="o">=</span> <span class="s">wtl</span>
-<span class="na">version</span> <span class="o">=</span> <span class="s">0.1</span>
+<span class="na">version</span> <span class="o">=</span> <span class="s">attr: wtl.__version__</span>
 <span class="na">url</span> <span class="o">=</span> <span class="s">https://github.com/heavywatal/pywtl</span>
 <span class="na">author</span> <span class="o">=</span> <span class="s">Watal M. Iwasaki</span>
-<span class="na">author_email</span> <span class="o">=</span> <span class="s">heavy.watalあgmail.com</span>
-<span class="na">license</span> <span class="o">=</span> <span class="s">MIT</span>
+<span class="na">author_email</span> <span class="o">=</span> <span class="s">heavy.watal@gmail.com</span>
+<span class="na">license_file</span> <span class="o">=</span> <span class="s">LICENSE</span>
 <span class="na">description</span> <span class="o">=</span> <span class="s">wtl: Personal Python package</span>
 <span class="na">long_description</span> <span class="o">=</span> <span class="s">file: README.md</span>
 
 <span class="k">[options]</span>
 <span class="na">zip_safe</span> <span class="o">=</span> <span class="s">False</span>
 <span class="na">packages</span> <span class="o">=</span> <span class="s">find:</span>
+<span class="na">install_requires</span> <span class="o">=</span><span class="s">
+</span><span class="s">  psutil
+</span><span class="s">  requests</span>
 <span class="na">entry_points</span> <span class="o">=</span> <span class="s">file: entry_points.cfg</span></code></pre></div>
-<p><code>license = file: LICENSE</code> のように外部ファイルを参照することも可能。</p>
+<p><code>version</code> を書くべき場所が複数あって悩ましかったけど
+<code>attr:</code> や <code>file:</code> がサポートされて一括管理可能になった。
+(Thanks, <a href="https://twitter.com/sgryjp">@sgryjp</a>-san!)</p>
 
-<p><code>install_requires = flake8; psutil</code>
-のようにセミコロン区切りで依存パッケージを列挙できる。
+<p><code>license = MIT</code> のように文字列で済ませることも可能。</p>
+
+<p>依存パッケージを列挙する <code>install_requires</code> はセミコロン区切りで1行に収めることも可能。
 それらは <code>pip install</code> で自動的にインストールされ、
 その後アンインストールするとそれを使わないモジュールでさえ
 <code>distribution was not found and is required</code>
-などと言って動いてくれなくなるくらい強制力が強い。</p>
+などと怒って動いてくれなくなるくらい強制力が強い。</p>
 
 <p><code>requirements.txt</code> はsetuptoolsではなくpipの機能で、
 能動的に <code>pip install -r requirements.txt</code>
 を打たなきゃインストールされないし、
-そこに列挙されたパッケージが無くても動くモジュールは動かせる。</p>
+そこに列挙されたパッケージが本当に必要になるまで怒られない。</p>
 
 <h3 id="entry-points"><code>entry_points</code></h3>
 
@@ -176,8 +182,9 @@ python -m wtl.hello</code></pre></div>
 <div class="highlight"><pre class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[console_scripts]</span>
 <span class="na">hello.py</span> <span class="o">=</span> <span class="s">wtl.hello:main</span></code></pre></div>
 <p>引数を取らない関数のみ利用可能。
-コマンドライン引数を処理したい場合は標準の
-<a href="https://docs.python.org/3/library/argparse.html"><code>argparse</code></a> が有効。</p>
+コマンドライン引数を受け取りたい場合はその関数の中で標準の
+<a href="https://docs.python.org/3/library/argparse.html"><code>argparse</code></a>
+を使って処理する。</p>
 
 <h3 id="ソースコード">ソースコード</h3>
 
@@ -185,8 +192,9 @@ python -m wtl.hello</code></pre></div>
 <dt><code>wtl/__init__.py</code></dt>
 <dd>このディレクトリがひとつのパッケージであることを示すファイル。
 空でもいいし、初期化処理やオブジェクトを記述してもよい。
-<code>__version__</code> 変数を定義すべしという記述も見かけるが、
-<code>setup.cfg</code> との兼ね合いも考えると、どうしたもんか悩ましい。</dd>
+文字列変数 <code>__version__ = '0.1.2'</code> を定義して
+<code>wtl.__verison__</code> のように参照できるようにしておくのが慣例。
+それを <code>setup.cfg</code> から参照することで冗長性を抑えられる。</dd>
 </dl>
 
 <p><code>wtl/hello.py</code></p>
