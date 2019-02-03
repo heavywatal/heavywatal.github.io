@@ -7,14 +7,6 @@ tags = ["r", "c++", "package"]
   weight = -45
 +++
 
-- https://cran.r-project.org/package=rcpp
-- http://www.rcpp.org/
-- <span class="fragment" data-fragment-index="1">
-  [みんなのRcpp](https://teuder.github.io/rcpp4everyone_ja/) and
-  [Rcpp for everyone](https://teuder.github.io/rcpp4everyone_en/)
-  by 津駄@teuderさん
-  </span>
-
 プログラムの書き方によって速度やメモリ効率は大きく変わる。
 Rでは大抵、生のforループを避けて、R標準のベクトル演算やちゃんとしたパッケージの関数を使っていれば大丈夫。
 でも、どうしても、さらに速度を追い求めたい場合にはRcppが有用となる。
@@ -41,6 +33,36 @@ rbenchmark::benchmark(r_for(n), r_vec(n), rcpp(n))[,1:4]
 # 3  rcpp(n)          100   0.133    1.000
 ```
 
+## Documentation
+
+- Project Home: http://www.rcpp.org/
+- CRAN: https://cran.r-project.org/package=Rcpp
+    - [Rcpp-JSS-2011.pdf](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-jss-2011.pdf):
+      原典。
+    - [Rcpp-introduction.pdf](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-introduction.pdf):
+      なぜRcppを使うのか。
+    - [Rcpp-attributes.pdf](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-attributes.pdf)
+      現在主流となっているRcppの使い方全般。
+      それに "Rcpp Attributes" という名前がついていて、
+      "inline" という古いパッケージのやり方を置き換えたらしい。
+    - [Rcpp-modules.pdf](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-modules.pdf):
+      関数やclassをRにexportする。
+    - [Rcpp-package.pdf](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-package.pdf):
+      自作RパッケージでRcppを使う。
+    - [Rcpp-extending.pdf](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-extending.pdf):
+      自作classをRcppで扱う。
+    - [Rcpp-sugar.pdf](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-sugar.pdf):
+      ベクトル化とlazy評価が効くRの記法をC++側で使う。
+    - [Rcpp-quickref.pdf](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-quickref.pdf)
+    - [Rcpp-FAQ.pdf](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-FAQ.pdf)
+- API: http://dirk.eddelbuettel.com/code/rcpp/html/
+- GitHub: https://github.com/RcppCore/Rcpp
+- Advanced R: [Rewriting R code in C++](https://adv-r.hadley.nz/rcpp.html)
+- <span class="fragment" data-fragment-index="1">
+  [みんなのRcpp](https://teuder.github.io/rcpp4everyone_ja/) and
+  [Rcpp for everyone](https://teuder.github.io/rcpp4everyone_en/)
+  by 津駄@teuderさん
+  </span>
 
 ## Rスクリプトの途中で使う
 
@@ -163,6 +185,68 @@ fibonacci(9L)
   `std::exception`の派生クラスなら`what()`まで表示してもらえる。
 - グローバル変数やクラスのstaticメンバは `dyn.unload()` されるまで生き続ける。
   `parallel::mclapply()` とかでフォークした先での変更は子同士にも親にも影響しない。
+
+
+## 詳細
+
+アタリがついてる場合は
+[namespace Rcpp](http://dirk.eddelbuettel.com/code/rcpp/html/namespaceRcpp.html)
+とかからブラウザのページ内検索で探すのが早い。
+
+
+### 型
+
+`SEXP`
+: S Expression. Rのあらゆるオブジェクトを表す型。
+
+[`Rcpp::RObject`](http://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1RObjectMethods.html)
+: Rcpp基本クラスであり `SEXP` の thin wrapper。
+  明示的に `PROTECT`/`UNPROTECT` を書かずにRAIIで済ませられる。
+
+
+[`Rcpp::Vector<T>`](http://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1Vector.html)
+:   [`vector/instantiation.h`](http://dirk.eddelbuettel.com/code/rcpp/html/instantiation_8h_source.html)
+    抜粋:
+
+    ```c++
+    typedef Vector<LGLSXP>  LogicalVector;
+    typedef Vector<INTSXP>  IntegerVector;
+    typedef Vector<REALSXP> NumericVector; // DoubleVector
+    typedef Vector<STRSXP>  StringVector;  // CharacterVector
+    typedef Vector<VECSXP>  List;          // GenericVector
+    ```
+
+## 自作C/C++クラスをRで使う
+
+http://gallery.rcpp.org/articles/custom-templated-wrap-and-as-for-seamingless-interfaces/
+
+1.  `#include <RcppCommon.h>`
+1.  `Rcpp::as<MyClass>()` と `Rcpp::wrap<MyClass>()` の特殊化を定義。
+    自分で書かず `RCPP_EXPOSED_*()` マクロにやらせるのが楽ちん。
+    `src/{packagename}_types.h` のような名前のファイルに書いておけば
+    `RcppExports.cpp` のほうでも勝手に読んでくれる。
+1.  `#include <Rcpp.h>`
+1.  `RCPP_MODULE()` マクロでコンストラクタや関数をexposeする。
+1.  `{packagename}-package.R` に `Rcpp::loadModule("{modulename}", TRUE)` を書く。
+
+パッケージを読み込むと Reference Class (RC) として利用可能になってるはず。
+
+
+### マクロ
+
+http://dirk.eddelbuettel.com/code/rcpp/html/module_8h.html
+
+`RCPP_EXPOSED_AS(MyClass)`
+: `as<MyClass>` を定義してくれるマクロ。参照型やポインタ型もやってくれる。
+
+`RCPP_EXPOSED_WRAP(MyClass)`
+: `wrap<MyClass>` を定義してくれるマクロ。
+
+`RCPP_EXPOSED_CLASS_NODECL(MyClass)`
+: 上の2つを同時にやってくれるショートカット。
+
+`RCPP_EXPOSED_CLASS(MyClass)`
+: それらの前にさらに `class MyClass;` の前方宣言もする。
 
 
 ## 関連書籍
