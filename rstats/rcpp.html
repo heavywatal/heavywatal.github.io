@@ -101,16 +101,6 @@ Rcpp — RからC&#43;&#43;を使う
 
 
 
-<ul>
-<li><a href="https://cran.r-project.org/package=rcpp">https://cran.r-project.org/package=rcpp</a></li>
-<li><a href="http://www.rcpp.org/">http://www.rcpp.org/</a></li>
-<li><span class="fragment" data-fragment-index="1">
-<a href="https://teuder.github.io/rcpp4everyone_ja/">みんなのRcpp</a> and
-<a href="https://teuder.github.io/rcpp4everyone_en/">Rcpp for everyone</a>
-by 津駄@teuderさん
-</span></li>
-</ul>
-
 <p>プログラムの書き方によって速度やメモリ効率は大きく変わる。
 Rでは大抵、生のforループを避けて、R標準のベクトル演算やちゃんとしたパッケージの関数を使っていれば大丈夫。
 でも、どうしても、さらに速度を追い求めたい場合にはRcppが有用となる。</p>
@@ -133,6 +123,42 @@ rbenchmark<span class="o">::</span>benchmark<span class="p">(</span>r_for<span c
 <span class="c1"># 1 r_for(n)          100   3.968   29.835</span>
 <span class="c1"># 2 r_vec(n)          100   0.473    3.556</span>
 <span class="c1"># 3  rcpp(n)          100   0.133    1.000</span></code></pre></div>
+<h2 id="documentation">Documentation</h2>
+
+<ul>
+<li>Project Home: <a href="http://www.rcpp.org/">http://www.rcpp.org/</a></li>
+<li>CRAN: <a href="https://cran.r-project.org/package=Rcpp">https://cran.r-project.org/package=Rcpp</a>
+
+<ul>
+<li><a href="https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-jss-2011.pdf">Rcpp-JSS-2011.pdf</a>:
+原典。</li>
+<li><a href="https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-introduction.pdf">Rcpp-introduction.pdf</a>:
+なぜRcppを使うのか。</li>
+<li><a href="https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-attributes.pdf">Rcpp-attributes.pdf</a>
+現在主流となっているRcppの使い方全般。
+それに &ldquo;Rcpp Attributes&rdquo; という名前がついていて、
+&ldquo;inline&rdquo; という古いパッケージのやり方を置き換えたらしい。</li>
+<li><a href="https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-modules.pdf">Rcpp-modules.pdf</a>:
+関数やclassをRにexportする。</li>
+<li><a href="https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-package.pdf">Rcpp-package.pdf</a>:
+自作RパッケージでRcppを使う。</li>
+<li><a href="https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-extending.pdf">Rcpp-extending.pdf</a>:
+自作classをRcppで扱う。</li>
+<li><a href="https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-sugar.pdf">Rcpp-sugar.pdf</a>:
+ベクトル化とlazy評価が効くRの記法をC++側で使う。</li>
+<li><a href="https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-quickref.pdf">Rcpp-quickref.pdf</a></li>
+<li><a href="https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-FAQ.pdf">Rcpp-FAQ.pdf</a></li>
+</ul></li>
+<li>API: <a href="http://dirk.eddelbuettel.com/code/rcpp/html/">http://dirk.eddelbuettel.com/code/rcpp/html/</a></li>
+<li>GitHub: <a href="https://github.com/RcppCore/Rcpp">https://github.com/RcppCore/Rcpp</a></li>
+<li>Advanced R: <a href="https://adv-r.hadley.nz/rcpp.html">Rewriting R code in C++</a></li>
+<li><span class="fragment" data-fragment-index="1">
+<a href="https://teuder.github.io/rcpp4everyone_ja/">みんなのRcpp</a> and
+<a href="https://teuder.github.io/rcpp4everyone_en/">Rcpp for everyone</a>
+by 津駄@teuderさん
+</span></li>
+</ul>
+
 <h2 id="rスクリプトの途中で使う">Rスクリプトの途中で使う</h2>
 
 <p>ファイルあるいは文字列をコンパイルして使う:</p>
@@ -249,6 +275,63 @@ CXX=$(LLVM_LOC)/bin/clang++
 <li>グローバル変数やクラスのstaticメンバは <code>dyn.unload()</code> されるまで生き続ける。
 <code>parallel::mclapply()</code> とかでフォークした先での変更は子同士にも親にも影響しない。</li>
 </ul>
+
+<h2 id="詳細">詳細</h2>
+
+<p>アタリがついてる場合は
+<a href="http://dirk.eddelbuettel.com/code/rcpp/html/namespaceRcpp.html">namespace Rcpp</a>
+とかからブラウザのページ内検索で探すのが早い。</p>
+
+<h3 id="型">型</h3>
+
+<dl>
+<dt><code>SEXP</code></dt>
+<dd>S Expression. Rのあらゆるオブジェクトを表す型。</dd>
+<dt><a href="http://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1RObjectMethods.html"><code>Rcpp::RObject</code></a></dt>
+<dd>Rcpp基本クラスであり <code>SEXP</code> の thin wrapper。
+明示的に <code>PROTECT</code>/<code>UNPROTECT</code> を書かずにRAIIで済ませられる。</dd>
+<dt><a href="http://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1Vector.html"><code>Rcpp::Vector&lt;T&gt;</code></a></dt>
+<dd><p><a href="http://dirk.eddelbuettel.com/code/rcpp/html/instantiation_8h_source.html"><code>vector/instantiation.h</code></a>
+抜粋:</p>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">typedef</span> <span class="n">Vector</span><span class="o">&lt;</span><span class="n">LGLSXP</span><span class="o">&gt;</span>  <span class="n">LogicalVector</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="n">Vector</span><span class="o">&lt;</span><span class="n">INTSXP</span><span class="o">&gt;</span>  <span class="n">IntegerVector</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="n">Vector</span><span class="o">&lt;</span><span class="n">REALSXP</span><span class="o">&gt;</span> <span class="n">NumericVector</span><span class="p">;</span> <span class="c1">// DoubleVector
+</span><span class="c1"></span><span class="k">typedef</span> <span class="n">Vector</span><span class="o">&lt;</span><span class="n">STRSXP</span><span class="o">&gt;</span>  <span class="n">StringVector</span><span class="p">;</span>  <span class="c1">// CharacterVector
+</span><span class="c1"></span><span class="k">typedef</span> <span class="n">Vector</span><span class="o">&lt;</span><span class="n">VECSXP</span><span class="o">&gt;</span>  <span class="n">List</span><span class="p">;</span>          <span class="c1">// GenericVector
+</span></code></pre></div></dd>
+</dl>
+
+<h2 id="自作c-c-クラスをrで使う">自作C/C++クラスをRで使う</h2>
+
+<p><a href="http://gallery.rcpp.org/articles/custom-templated-wrap-and-as-for-seamingless-interfaces/">http://gallery.rcpp.org/articles/custom-templated-wrap-and-as-for-seamingless-interfaces/</a></p>
+
+<ol>
+<li><code>#include &lt;RcppCommon.h&gt;</code></li>
+<li><code>Rcpp::as&lt;MyClass&gt;()</code> と <code>Rcpp::wrap&lt;MyClass&gt;()</code> の特殊化を定義。
+自分で書かず <code>RCPP_EXPOSED_*()</code> マクロにやらせるのが楽ちん。
+<code>src/{packagename}_types.h</code> のような名前のファイルに書いておけば
+<code>RcppExports.cpp</code> のほうでも勝手に読んでくれる。</li>
+<li><code>#include &lt;Rcpp.h&gt;</code></li>
+<li><code>RCPP_MODULE()</code> マクロでコンストラクタや関数をexposeする。</li>
+<li><code>{packagename}-package.R</code> に <code>Rcpp::loadModule(&quot;{modulename}&quot;, TRUE)</code> を書く。</li>
+</ol>
+
+<p>パッケージを読み込むと Reference Class (RC) として利用可能になってるはず。</p>
+
+<h3 id="マクロ">マクロ</h3>
+
+<p><a href="http://dirk.eddelbuettel.com/code/rcpp/html/module_8h.html">http://dirk.eddelbuettel.com/code/rcpp/html/module_8h.html</a></p>
+
+<dl>
+<dt><code>RCPP_EXPOSED_AS(MyClass)</code></dt>
+<dd><code>as&lt;MyClass&gt;</code> を定義してくれるマクロ。参照型やポインタ型もやってくれる。</dd>
+<dt><code>RCPP_EXPOSED_WRAP(MyClass)</code></dt>
+<dd><code>wrap&lt;MyClass&gt;</code> を定義してくれるマクロ。</dd>
+<dt><code>RCPP_EXPOSED_CLASS_NODECL(MyClass)</code></dt>
+<dd>上の2つを同時にやってくれるショートカット。</dd>
+<dt><code>RCPP_EXPOSED_CLASS(MyClass)</code></dt>
+<dd>それらの前にさらに <code>class MyClass;</code> の前方宣言もする。</dd>
+</dl>
 
 <h2 id="関連書籍">関連書籍</h2>
 
