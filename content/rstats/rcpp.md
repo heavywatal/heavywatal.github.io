@@ -55,8 +55,13 @@ rbenchmark::benchmark(r_for(n), r_vec(n), rcpp(n))[,1:4]
       ベクトル化とlazy評価が効くRの記法をC++側で使う。
     - [Rcpp-quickref.pdf](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-quickref.pdf)
     - [Rcpp-FAQ.pdf](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-FAQ.pdf)
-- API: http://dirk.eddelbuettel.com/code/rcpp/html/
 - GitHub: https://github.com/RcppCore/Rcpp
+    - 上のPDFは分量が多いわりに意外と網羅的ではない。
+      ざっくり読んでなんとなく分かってきたら、
+      さらなるドキュメントを求めてネットの海を彷徨うよりソースコードに当たったほうが早い。特に
+      [`inst/unitTests`](https://github.com/RcppCore/Rcpp/tree/master/inst/unitTests)
+      はかなり参考になる。
+- API: http://dirk.eddelbuettel.com/code/rcpp/html/
 - Advanced R: [Rewriting R code in C++](https://adv-r.hadley.nz/rcpp.html)
 - <span class="fragment" data-fragment-index="1">
   [みんなのRcpp](https://teuder.github.io/rcpp4everyone_ja/) and
@@ -163,22 +168,18 @@ fibonacci(9L)
 
 ### ソースコード `src/*.cpp`
 
--   [Rcpp](https://cran.r-project.org/web/packages/Rcpp)
-    が型変換などをスムーズにしてくれる:
-    ```c++
-    // [[Rcpp::plugins(cpp14)]]
-    #include <Rcpp.h>
+```c++
+// [[Rcpp::plugins(cpp14)]]
+#include <Rcpp.h>
 
-    //' First example
-    //' @param args string vector
-    //' @export
-    // [[Rcpp::export]]
-    int len(const std::vector<std::string>& args) {
-        return args.size();
-    }
-    ```
-
-その他の注意点
+//' First example
+//' @param args string vector
+//' @export
+// [[Rcpp::export]]
+int len(const std::vector<std::string>& args) {
+    return args.size();
+}
+```
 
 - `std::abort()` や `std::exit()` は呼び出したRセッションまで殺してしまう。
   例外は投げっぱなしで拾わなくても大丈夫で、
@@ -193,15 +194,22 @@ fibonacci(9L)
 [namespace Rcpp](http://dirk.eddelbuettel.com/code/rcpp/html/namespaceRcpp.html)
 とかからブラウザのページ内検索で探すのが早い。
 
+Rcppで楽ができるとはいえ、R本体の内部情報もいずれ知ることになる。。。
+
+- https://github.com/hadley/r-internals
+- https://cran.r-project.org/doc/manuals/r-release/R-ints.html
+- https://github.com/wch/r-source/blob/trunk/src/include/Rinternals.h
+
 
 ### 型
 
-`SEXP`
-: S Expression. Rのあらゆるオブジェクトを表す型。
+`SEXP`: S Expression
+:   Rのあらゆるオブジェクトを表すC言語上の型。
+    これの扱いは Rcpp が肩代わりしてくれるので基本的には直接触らない。
 
 [`Rcpp::RObject`](http://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1RObjectMethods.html)
-: Rcpp基本クラスであり `SEXP` の thin wrapper。
-  明示的に `PROTECT`/`UNPROTECT` を書かずにRAIIで済ませられる。
+:   `SEXP` の thin wrapper であり Rcpp から R の変数を扱う際の基本クラス。
+    明示的に `PROTECT`/`UNPROTECT` を書かずにRAIIで済ませられる。
 
 
 [`Rcpp::Vector<T>`](http://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1Vector.html)
@@ -216,20 +224,138 @@ fibonacci(9L)
     typedef Vector<VECSXP>  List;          // GenericVector
     ```
 
-## 自作C/C++クラスをRで使う
+    クラスのメンバとして生の配列ではなくそこへの参照を保持する。
+    しかし `std::vector` とは異なり、
+    このオブジェクトをコピーしてもメモリ上の中身はコピーされず、
+    ふたつとも同じ生配列を参照する。
 
-http://gallery.rcpp.org/articles/custom-templated-wrap-and-as-for-seamingless-interfaces/
+    C++関数がRから呼ばれるとき
+    `Rcpp::Vector<>` 受け取りの場合はうまく参照渡しになるが、
+    `const std::vector<>&` 受け取りの場合はコピーが発生する。
 
-1.  `#include <RcppCommon.h>`
-1.  `Rcpp::as<MyClass>()` と `Rcpp::wrap<MyClass>()` の特殊化を定義。
-    自分で書かず `RCPP_EXPOSED_*()` マクロにやらせるのが楽ちん。
-    `src/{packagename}_types.h` のような名前のファイルに書いておけば
-    `RcppExports.cpp` のほうでも勝手に読んでくれる。
-1.  `#include <Rcpp.h>`
-1.  `RCPP_MODULE()` マクロでコンストラクタや関数をexposeする。
-1.  `{packagename}-package.R` に `Rcpp::loadModule("{modulename}", TRUE)` を書く。
 
-パッケージを読み込むと Reference Class (RC) として利用可能になってるはず。
+[`Rcpp::DataFrame`](http://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1DataFrame__Impl.html)
+:   Rの上では強力だけどC++内では扱いにくい。
+    出力として使うだけに留めるのが無難。
+
+
+関数オーバーロードもテンプレートもそのままRにexportすることはできない。
+実行時の型情報で振り分ける関数で包んでexportする必要がある。
+http://gallery.rcpp.org/articles/rcpp-return-macros/
+
+### タグ
+
+`[[Rcpp::export]]`
+:   これがついてる関数は `RcppExport.cpp` を介してライブラリに登録され、
+    <code>.Call(`_{PACKAGE}_{FUNCTION}`)</code>
+    のような形でRから呼び出せる様になる。
+    それを元の名前で行えるような関数も `RcppExport.R` に自動で定義してもらえる。
+:   `[[Rcpp::export(".new_name_here")]]`
+    のように名前を変更することもできる。
+    ドットで始まる名前にしておけば
+    `load_all(export_all=TRUE)`
+    の状態での名前空間汚染を多少調整できる。
+:   Rパッケージの `NAMESPACE` における `export()` とは別物。
+
+`[[Rcpp::plugins(cpp14)]]`
+:   `Makevars` に `CXX_STD=CXX14` を書くのとどう違う？
+    ほかにどんなプラグインが利用可能？
+
+`[[Rcpp::depends(RcppArmadillo)]]`
+:   ほかのパッケージへの依存性を宣言。
+    たぶんビルド時のオプションをうまくやってくれる。
+    `#include` は自分で。
+
+`[[Rcpp::interfaces(r,cpp)]]`
+:   `Rcpp::export` するとき、どの言語向けにいろいろ生成するか。
+    何も指定しなければ `r` のみ。
+    `cpp` を指定すると、ほかのパッケージから
+    `Rcpp::depends` できるようにヘッダーを用意してくれたりするらしい。
+
+`[[Rcpp::init]]`
+
+`[[Rcpp::internal]]`
+
+`[[Rcpp::register]]`
+
+
+## 自作C/C++クラスをRで使えるようにする
+
+"Rcpp Modules" の機能を使う。
+
+1.  `RcppExports.cpp` に自動的に読み込んでもらえるヘッダー
+    (e.g., `src/{packagename}_types.h`)
+    で自作クラスの宣言と
+    `Rcpp::as<MyClass>()` / `Rcpp::wrap<MyClass>()` の特殊化を行う。
+
+    ```c++
+    #include <RcppCommon.h>
+
+    RCPP_EXPOSED_CLASS();
+    // これでRcpp::as<MyClass>() と Rcpp::wrap<MyClass>()` の特殊化が定義される
+    // 必ず #include <Rcpp.h> より前に来るように
+
+    #include "myclass.hpp"
+    // 自作クラスの宣言
+    ```
+
+
+1.  どこかのソースファイルでモジュールを定義
+
+    ```c++
+    #include <Rcpp.h>`
+
+    RCPP_MODULE(mymodule) {
+      Rcpp::class_<MyClass>("MyClass")
+        .constructor<int>()
+        .const_method("get_x", &MyClass::get_x)
+      ;
+    }
+    ```
+
+1.  `{packagename}-package.R` でモジュールを読み込む。
+    関数やクラスを全てそのまま公開するか、
+    `Module` オブジェクト越しにアクセスさせるようにするか。
+
+     ```r
+     Rcpp::loadModule("mymodule", TRUE)`
+     # obj = MyClass$new(42L)
+
+     modulename = Rcpp::Module("mymodule")
+     # obj = mymodule$MyClass$new(42L)
+     ```
+
+パッケージを読み込むといくつかのRC/S4クラスが定義される。
+
+`Rcpp_MyClass`
+:   `C++Object` を継承した Reference Class (RC)。
+
+`C++Object`
+:   R上でC++オブジェクトを扱うための親S4クラス。
+    Rコンソール上での表示はこれの `show()` メソッドがデフォルトで利用される。
+
+`C++Class`
+:   コンストラクタをR側にexposeするためのクラスで、
+    `MyClass$new(...)` のようにして新規オブジェクトを生成する。
+    ただしデフォルト引数を扱えないのでファクトリ関数を普通に
+    `[[Rcpp::Export]]` したほうが簡単かも。
+:   staticメソッドも同様に扱えれば一貫性があったんだけど今のところ無理そう。
+    `C++Function` としてならexposeできる。
+
+`C++Function`
+:   わざわざModule機能でexposeした関数を扱うS4。
+    普通に `[[Rcpp::Export]]` する場合と比べたメリットは？
+
+`Module`
+:   `environment` を継承したS4。
+    モジュール機能を使ってexposeした関数を
+    `Rcpp::Module()` を使って明示的にコンストラクタ
+
+RC/S4関連文献
+
+- `?setRefClass` or https://stat.ethz.ch/R-manual/R-devel/library/methods/html/refClass.html
+- https://adv-r.hadley.nz/s4.html
+- http://adv-r.had.co.nz/OO-essentials.html#rc
 
 
 ### マクロ
@@ -247,6 +373,8 @@ http://dirk.eddelbuettel.com/code/rcpp/html/module_8h.html
 
 `RCPP_EXPOSED_CLASS(MyClass)`
 : それらの前にさらに `class MyClass;` の前方宣言もする。
+
+
 
 
 ## 関連書籍
