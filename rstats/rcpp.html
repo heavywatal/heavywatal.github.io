@@ -149,8 +149,16 @@ rbenchmark<span class="o">::</span>benchmark<span class="p">(</span>r_for<span c
 <li><a href="https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-quickref.pdf">Rcpp-quickref.pdf</a></li>
 <li><a href="https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-FAQ.pdf">Rcpp-FAQ.pdf</a></li>
 </ul></li>
+<li>GitHub: <a href="https://github.com/RcppCore/Rcpp">https://github.com/RcppCore/Rcpp</a>
+
+<ul>
+<li>上のPDFは分量が多いわりに意外と網羅的ではない。
+ざっくり読んでなんとなく分かってきたら、
+さらなるドキュメントを求めてネットの海を彷徨うよりソースコードに当たったほうが早い。特に
+<a href="https://github.com/RcppCore/Rcpp/tree/master/inst/unitTests"><code>inst/unitTests</code></a>
+はかなり参考になる。</li>
+</ul></li>
 <li>API: <a href="http://dirk.eddelbuettel.com/code/rcpp/html/">http://dirk.eddelbuettel.com/code/rcpp/html/</a></li>
-<li>GitHub: <a href="https://github.com/RcppCore/Rcpp">https://github.com/RcppCore/Rcpp</a></li>
 <li>Advanced R: <a href="https://adv-r.hadley.nz/rcpp.html">Rewriting R code in C++</a></li>
 <li><span class="fragment" data-fragment-index="1">
 <a href="https://teuder.github.io/rcpp4everyone_ja/">みんなのRcpp</a> and
@@ -249,10 +257,6 @@ CXX=$(LLVM_LOC)/bin/clang++
 </ul>
 
 <h3 id="ソースコード-src-cpp">ソースコード <code>src/*.cpp</code></h3>
-
-<ul>
-<li><p><a href="https://cran.r-project.org/web/packages/Rcpp">Rcpp</a>
-が型変換などをスムーズにしてくれる:</p>
 <div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// [[Rcpp::plugins(cpp14)]]
 </span><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;Rcpp.h&gt;</span><span class="cp">
 </span><span class="cp"></span>
@@ -263,11 +267,7 @@ CXX=$(LLVM_LOC)/bin/clang++
 </span><span class="c1"></span><span class="kt">int</span> <span class="nf">len</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="n">args</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div></li>
-</ul>
-
-<p>その他の注意点</p>
-
+</code></pre></div>
 <ul>
 <li><code>std::abort()</code> や <code>std::exit()</code> は呼び出したRセッションまで殺してしまう。
 例外は投げっぱなしで拾わなくても大丈夫で、
@@ -282,13 +282,22 @@ CXX=$(LLVM_LOC)/bin/clang++
 <a href="http://dirk.eddelbuettel.com/code/rcpp/html/namespaceRcpp.html">namespace Rcpp</a>
 とかからブラウザのページ内検索で探すのが早い。</p>
 
+<p>Rcppで楽ができるとはいえ、R本体の内部情報もいずれ知ることになる。。。</p>
+
+<ul>
+<li><a href="https://github.com/hadley/r-internals">https://github.com/hadley/r-internals</a></li>
+<li><a href="https://cran.r-project.org/doc/manuals/r-release/R-ints.html">https://cran.r-project.org/doc/manuals/r-release/R-ints.html</a></li>
+<li><a href="https://github.com/wch/r-source/blob/trunk/src/include/Rinternals.h">https://github.com/wch/r-source/blob/trunk/src/include/Rinternals.h</a></li>
+</ul>
+
 <h3 id="型">型</h3>
 
 <dl>
-<dt><code>SEXP</code></dt>
-<dd>S Expression. Rのあらゆるオブジェクトを表す型。</dd>
+<dt><code>SEXP</code>: S Expression</dt>
+<dd>Rのあらゆるオブジェクトを表すC言語上の型。
+これの扱いは Rcpp が肩代わりしてくれるので基本的には直接触らない。</dd>
 <dt><a href="http://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1RObjectMethods.html"><code>Rcpp::RObject</code></a></dt>
-<dd>Rcpp基本クラスであり <code>SEXP</code> の thin wrapper。
+<dd><code>SEXP</code> の thin wrapper であり Rcpp から R の変数を扱う際の基本クラス。
 明示的に <code>PROTECT</code>/<code>UNPROTECT</code> を書かずにRAIIで済ませられる。</dd>
 <dt><a href="http://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1Vector.html"><code>Rcpp::Vector&lt;T&gt;</code></a></dt>
 <dd><p><a href="http://dirk.eddelbuettel.com/code/rcpp/html/instantiation_8h_source.html"><code>vector/instantiation.h</code></a>
@@ -298,25 +307,129 @@ CXX=$(LLVM_LOC)/bin/clang++
 <span class="k">typedef</span> <span class="n">Vector</span><span class="o">&lt;</span><span class="n">REALSXP</span><span class="o">&gt;</span> <span class="n">NumericVector</span><span class="p">;</span> <span class="c1">// DoubleVector
 </span><span class="c1"></span><span class="k">typedef</span> <span class="n">Vector</span><span class="o">&lt;</span><span class="n">STRSXP</span><span class="o">&gt;</span>  <span class="n">StringVector</span><span class="p">;</span>  <span class="c1">// CharacterVector
 </span><span class="c1"></span><span class="k">typedef</span> <span class="n">Vector</span><span class="o">&lt;</span><span class="n">VECSXP</span><span class="o">&gt;</span>  <span class="n">List</span><span class="p">;</span>          <span class="c1">// GenericVector
-</span></code></pre></div></dd>
+</span></code></pre></div>
+<p>クラスのメンバとして生の配列ではなくそこへの参照を保持する。
+しかし <code>std::vector</code> とは異なり、
+このオブジェクトをコピーしてもメモリ上の中身はコピーされず、
+ふたつとも同じ生配列を参照する。</p>
+
+<p>C++関数がRから呼ばれるとき
+<code>Rcpp::Vector&lt;&gt;</code> 受け取りの場合はうまく参照渡しになるが、
+<code>const std::vector&lt;&gt;&amp;</code> 受け取りの場合はコピーが発生する。</p></dd>
+<dt><a href="http://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1DataFrame__Impl.html"><code>Rcpp::DataFrame</code></a></dt>
+<dd><p>Rの上では強力だけどC++内では扱いにくい。
+出力として使うだけに留めるのが無難。</p></dd>
 </dl>
 
-<h2 id="自作c-c-クラスをrで使う">自作C/C++クラスをRで使う</h2>
+<p>関数オーバーロードもテンプレートもそのままRにexportすることはできない。
+実行時の型情報で振り分ける関数で包んでexportする必要がある。
+<a href="http://gallery.rcpp.org/articles/rcpp-return-macros/">http://gallery.rcpp.org/articles/rcpp-return-macros/</a></p>
 
-<p><a href="http://gallery.rcpp.org/articles/custom-templated-wrap-and-as-for-seamingless-interfaces/">http://gallery.rcpp.org/articles/custom-templated-wrap-and-as-for-seamingless-interfaces/</a></p>
+<h3 id="タグ">タグ</h3>
+
+<dl>
+<dt><code>[[Rcpp::export]]</code></dt>
+<dd>これがついてる関数は <code>RcppExport.cpp</code> を介してライブラリに登録され、
+<code>.Call(<code>_{PACKAGE}_{FUNCTION}</code>)</code>
+のような形でRから呼び出せる様になる。
+それを元の名前で行えるような関数も <code>RcppExport.R</code> に自動で定義してもらえる。</dd>
+<dd><code>[[Rcpp::export(&quot;.new_name_here&quot;)]]</code>
+のように名前を変更することもできる。
+ドットで始まる名前にしておけば
+<code>load_all(export_all=TRUE)</code>
+の状態での名前空間汚染を多少調整できる。</dd>
+<dd>Rパッケージの <code>NAMESPACE</code> における <code>export()</code> とは別物。</dd>
+<dt><code>[[Rcpp::plugins(cpp14)]]</code></dt>
+<dd><code>Makevars</code> に <code>CXX_STD=CXX14</code> を書くのとどう違う？
+ほかにどんなプラグインが利用可能？</dd>
+<dt><code>[[Rcpp::depends(RcppArmadillo)]]</code></dt>
+<dd>ほかのパッケージへの依存性を宣言。
+たぶんビルド時のオプションをうまくやってくれる。
+<code>#include</code> は自分で。</dd>
+<dt><code>[[Rcpp::interfaces(r,cpp)]]</code></dt>
+<dd><code>Rcpp::export</code> するとき、どの言語向けにいろいろ生成するか。
+何も指定しなければ <code>r</code> のみ。
+<code>cpp</code> を指定すると、ほかのパッケージから
+<code>Rcpp::depends</code> できるようにヘッダーを用意してくれたりするらしい。</dd>
+</dl>
+
+<p><code>[[Rcpp::init]]</code></p>
+
+<p><code>[[Rcpp::internal]]</code></p>
+
+<p><code>[[Rcpp::register]]</code></p>
+
+<h2 id="自作c-c-クラスをrで使えるようにする">自作C/C++クラスをRで使えるようにする</h2>
+
+<p>&ldquo;Rcpp Modules&rdquo; の機能を使う。</p>
 
 <ol>
-<li><code>#include &lt;RcppCommon.h&gt;</code></li>
-<li><code>Rcpp::as&lt;MyClass&gt;()</code> と <code>Rcpp::wrap&lt;MyClass&gt;()</code> の特殊化を定義。
-自分で書かず <code>RCPP_EXPOSED_*()</code> マクロにやらせるのが楽ちん。
-<code>src/{packagename}_types.h</code> のような名前のファイルに書いておけば
-<code>RcppExports.cpp</code> のほうでも勝手に読んでくれる。</li>
-<li><code>#include &lt;Rcpp.h&gt;</code></li>
-<li><code>RCPP_MODULE()</code> マクロでコンストラクタや関数をexposeする。</li>
-<li><code>{packagename}-package.R</code> に <code>Rcpp::loadModule(&quot;{modulename}&quot;, TRUE)</code> を書く。</li>
+<li><p><code>RcppExports.cpp</code> に自動的に読み込んでもらえるヘッダー
+(e.g., <code>src/{packagename}_types.h</code>)
+で自作クラスの宣言と
+<code>Rcpp::as&lt;MyClass&gt;()</code> / <code>Rcpp::wrap&lt;MyClass&gt;()</code> の特殊化を行う。</p>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;RcppCommon.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="n">RCPP_EXPOSED_CLASS</span><span class="p">();</span>
+<span class="c1">// これでRcpp::as&lt;MyClass&gt;() と Rcpp::wrap&lt;MyClass&gt;()` の特殊化が定義される
+</span><span class="c1">// 必ず #include &lt;Rcpp.h&gt; より前に来るように
+</span><span class="c1"></span>
+<span class="cp">#include</span> <span class="cpf">&#34;myclass.hpp&#34;</span><span class="cp">
+</span><span class="cp"></span><span class="c1">// 自作クラスの宣言
+</span></code></pre></div></li>
+
+<li><p>どこかのソースファイルでモジュールを定義</p>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;Rcpp.h&gt;`</span><span class="cp">
+</span><span class="cp"></span>
+<span class="n">RCPP_MODULE</span><span class="p">(</span><span class="n">mymodule</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">Rcpp</span><span class="o">::</span><span class="n">class_</span><span class="o">&lt;</span><span class="n">MyClass</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&#34;MyClass&#34;</span><span class="p">)</span>
+    <span class="p">.</span><span class="n">constructor</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">()</span>
+    <span class="p">.</span><span class="n">const_method</span><span class="p">(</span><span class="s">&#34;get_x&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">MyClass</span><span class="o">::</span><span class="n">get_x</span><span class="p">)</span>
+  <span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></li>
+
+<li><p><code>{packagename}-package.R</code> でモジュールを読み込む。
+関数やクラスを全てそのまま公開するか、
+<code>Module</code> オブジェクト越しにアクセスさせるようにするか。</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"> Rcpp<span class="o">::</span>loadModule<span class="p">(</span><span class="s">&#34;mymodule&#34;</span><span class="p">,</span> <span class="kc">TRUE</span><span class="p">)</span>`
+ <span class="c1"># obj = MyClass$new(42L)</span>
+
+ modulename <span class="o">=</span> Rcpp<span class="o">::</span>Module<span class="p">(</span><span class="s">&#34;mymodule&#34;</span><span class="p">)</span>
+ <span class="c1"># obj = mymodule$MyClass$new(42L)</span></code></pre></div></li>
 </ol>
 
-<p>パッケージを読み込むと Reference Class (RC) として利用可能になってるはず。</p>
+<p>パッケージを読み込むといくつかのRC/S4クラスが定義される。</p>
+
+<dl>
+<dt><code>Rcpp_MyClass</code></dt>
+<dd><code>C++Object</code> を継承した Reference Class (RC)。</dd>
+<dt><code>C++Object</code></dt>
+<dd>R上でC++オブジェクトを扱うための親S4クラス。
+Rコンソール上での表示はこれの <code>show()</code> メソッドがデフォルトで利用される。</dd>
+<dt><code>C++Class</code></dt>
+<dd>コンストラクタをR側にexposeするためのクラスで、
+<code>MyClass$new(...)</code> のようにして新規オブジェクトを生成する。
+ただしデフォルト引数を扱えないのでファクトリ関数を普通に
+<code>[[Rcpp::Export]]</code> したほうが簡単かも。</dd>
+<dd>staticメソッドも同様に扱えれば一貫性があったんだけど今のところ無理そう。
+<code>C++Function</code> としてならexposeできる。</dd>
+<dt><code>C++Function</code></dt>
+<dd>わざわざModule機能でexposeした関数を扱うS4。
+普通に <code>[[Rcpp::Export]]</code> する場合と比べたメリットは？</dd>
+<dt><code>Module</code></dt>
+<dd><code>environment</code> を継承したS4。
+モジュール機能を使ってexposeした関数を
+<code>Rcpp::Module()</code> を使って明示的にコンストラクタ</dd>
+</dl>
+
+<p>RC/S4関連文献</p>
+
+<ul>
+<li><code>?setRefClass</code> or <a href="https://stat.ethz.ch/R-manual/R-devel/library/methods/html/refClass.html">https://stat.ethz.ch/R-manual/R-devel/library/methods/html/refClass.html</a></li>
+<li><a href="https://adv-r.hadley.nz/s4.html">https://adv-r.hadley.nz/s4.html</a></li>
+<li><a href="http://adv-r.had.co.nz/OO-essentials.html#rc">http://adv-r.had.co.nz/OO-essentials.html#rc</a></li>
+</ul>
 
 <h3 id="マクロ">マクロ</h3>
 
