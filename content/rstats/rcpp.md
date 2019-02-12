@@ -291,8 +291,8 @@ http://gallery.rcpp.org/articles/rcpp-return-macros/
     ```c++
     #include <RcppCommon.h>
 
-    RCPP_EXPOSED_CLASS();
-    // これでRcpp::as<MyClass>() と Rcpp::wrap<MyClass>()` の特殊化が定義される
+    RCPP_EXPOSED_CLASS(MyClass);
+    // これで as<MyClass> / wrap<MyClass> の特殊化が定義される
     // 必ず #include <Rcpp.h> より前に来るように
 
     #include "myclass.hpp"
@@ -348,8 +348,6 @@ http://gallery.rcpp.org/articles/rcpp-return-macros/
 
 `Module`
 :   `environment` を継承したS4。
-    モジュール機能を使ってexposeした関数を
-    `Rcpp::Module()` を使って明示的にコンストラクタ
 
 RC/S4関連文献
 
