@@ -370,8 +370,8 @@ CXX=$(LLVM_LOC)/bin/clang++
 <code>Rcpp::as&lt;MyClass&gt;()</code> / <code>Rcpp::wrap&lt;MyClass&gt;()</code> の特殊化を行う。</p>
 <div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;RcppCommon.h&gt;</span><span class="cp">
 </span><span class="cp"></span>
-<span class="n">RCPP_EXPOSED_CLASS</span><span class="p">();</span>
-<span class="c1">// これでRcpp::as&lt;MyClass&gt;() と Rcpp::wrap&lt;MyClass&gt;()` の特殊化が定義される
+<span class="n">RCPP_EXPOSED_CLASS</span><span class="p">(</span><span class="n">MyClass</span><span class="p">);</span>
+<span class="c1">// これで as&lt;MyClass&gt; / wrap&lt;MyClass&gt; の特殊化が定義される
 </span><span class="c1">// 必ず #include &lt;Rcpp.h&gt; より前に来るように
 </span><span class="c1"></span>
 <span class="cp">#include</span> <span class="cpf">&#34;myclass.hpp&#34;</span><span class="cp">
@@ -418,9 +418,7 @@ Rコンソール上での表示はこれの <code>show()</code> メソッドが�
 <dd>わざわざModule機能でexposeした関数を扱うS4。
 普通に <code>[[Rcpp::Export]]</code> する場合と比べたメリットは？</dd>
 <dt><code>Module</code></dt>
-<dd><code>environment</code> を継承したS4。
-モジュール機能を使ってexposeした関数を
-<code>Rcpp::Module()</code> を使って明示的にコンストラクタ</dd>
+<dd><code>environment</code> を継承したS4。</dd>
 </dl>
 
 <p>RC/S4関連文献</p>
