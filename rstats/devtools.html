@@ -119,6 +119,7 @@ GitHubに公開しておけば誰でも使えるようになるので、
 <h2 id="rパッケージ">Rパッケージ</h2>
 
 <ul>
+<li><a href="https://r-pkgs.org/">https://r-pkgs.org/</a></li>
 <li><a href="http://r-pkgs.had.co.nz/">http://r-pkgs.had.co.nz/</a></li>
 <li><a href="http://www.masalmon.eu/2017/12/11/goodrpackages/">How to develop good R packages (for open science)</a></li>
 </ul>
@@ -159,26 +160,25 @@ NAMESPACE    <span class="c1"># 見せるオブジェクトを列挙</span>
 README.md    <span class="c1"># 全体の説明を簡単に</span>
 R/           <span class="c1"># Rソースコード</span>
 data/        <span class="c1"># サンプルデータなど</span>
-exec/        <span class="c1"># 実行ファイル</span>
 inst/        <span class="c1"># CITATION</span>
 man/         <span class="c1"># ヘルプファイル.Rd</span>
 src/         <span class="c1"># C++ソースコード</span>
 tests/
 vignettes/</code></pre></div>
-<h3 id="description-http-r-pkgs-had-co-nz-description-html"><a href="http://r-pkgs.had.co.nz/description.html"><code>DESCRIPTION</code></a></h3>
+<h3 id="description-https-r-pkgs-org-description-html"><a href="https://r-pkgs.org/description.html"><code>DESCRIPTION</code></a></h3>
 
 <ul>
 <li>どうでも良さそうなファイル名とは裏腹に、ちゃんと書かないと動かない。</li>
 <li>始めはusethisとかに生成してもらい、他のパッケージを参考にしつつ修正していく。</li>
 <li><code>Imports</code> に列挙したものは依存パッケージとして同時にインストールされる。
 しかし <code>library()</code> 時に同時に読み込まれるわけではない。</li>
-<li><code>Title</code> はピリオドを含まない一文。
-<code>Description</code> はピリオドを含む文章。</li>
+<li><code>Title</code> はピリオドを含まない一文でタイトルケース。
+<code>Description</code> はピリオドを含む一段落。</li>
 <li>ライセンスを別ファイルにする場合は <code>License: file LICENSE</code> と書く</li>
 <li><code>Authors@R</code> のとこは後でRで評価されるので変な形。</li>
 </ul>
 
-<h3 id="namespace-http-r-pkgs-had-co-nz-namespace-html"><a href="http://r-pkgs.had.co.nz/namespace.html"><code>NAMESPACE</code></a></h3>
+<h3 id="namespace-https-r-pkgs-org-namespace-html"><a href="https://r-pkgs.org/namespace.html"><code>NAMESPACE</code></a></h3>
 
 <ul>
 <li><a href="#roxygen2">後述のroxygen2</a>がソースコードから自動生成するので<strong>直接触らない</strong>。</li>
@@ -188,7 +188,7 @@ vignettes/</code></pre></div>
 <code>import(package)</code> で全ての関数をまとめて処理できるけど名前の衝突が怖い。</li>
 </ul>
 
-<h3 id="r-ソースコード-http-r-pkgs-had-co-nz-r-html"><a href="http://r-pkgs.had.co.nz/r.html"><code>R/</code> ソースコード</a></h3>
+<h3 id="r-ソースコード-https-r-pkgs-org-r-html"><a href="https://r-pkgs.org/r.html"><code>R/</code> ソースコード</a></h3>
 
 <ul>
 <li><code>NAMESPACE</code> や <code>man/*.Rd</code> を自動生成してもらえるように
@@ -205,11 +205,11 @@ vignettes/</code></pre></div>
 は慣習的に<code>zzz.R</code>というファイルに記述する。</li>
 </ul>
 
-<h3 id="src-c-ソースコード-http-r-pkgs-had-co-nz-src-html"><a href="http://r-pkgs.had.co.nz/src.html"><code>src/</code> C++ソースコード</a></h3>
+<h3 id="src-c-ソースコード-https-r-pkgs-org-src-html"><a href="https://r-pkgs.org/src.html"><code>src/</code> C++ソースコード</a></h3>
 
 <p><a href="/rstats/rcpp.html#Rパッケージで使う">Rcppページの&rdquo;Rパッケージで使う&rdquo;セクション</a>を参照</p>
 
-<h3 id="vignettes-http-r-pkgs-had-co-nz-vignettes-html"><a href="http://r-pkgs.had.co.nz/vignettes.html"><code>vignettes/</code></a></h3>
+<h3 id="vignettes-https-r-pkgs-org-vignettes-html"><a href="https://r-pkgs.org/vignettes.html"><code>vignettes/</code></a></h3>
 
 <p>個々の関数の使用例はRソースファイルの <code>@examples</code> に書くとして、
 複数の関数を組み合わせてどう使うかとか、
@@ -224,30 +224,44 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。<
 <p><code>check()</code>がデフォルトで<code>vignette=TRUE</code>かつ処理がやや重いので、
 毎回その重さを受け入れるか、わざわざ<code>FALSE</code>指定するかというのは悩みどころ。</p>
 
-<h3 id="inst-http-r-pkgs-had-co-nz-inst-html"><a href="http://r-pkgs.had.co.nz/inst.html"><code>inst/</code></a></h3>
+<h3 id="inst-https-r-pkgs-org-inst-html"><a href="https://r-pkgs.org/inst.html"><code>inst/</code></a></h3>
 
 <p>ここに入ってるものはインストール先でトップディレクトリに移される謎仕様。</p>
 
 <p>論文で引用されることを想定している場合は <code>inst/CITATION</code> を作る。
 <code>citation('ggplot2')</code> のように参照できるようになる。</p>
 
-<h3 id="demo-http-r-pkgs-had-co-nz-misc-html"><a href="http://r-pkgs.had.co.nz/misc.html"><code>demo/</code></a></h3>
+<h3 id="tests-https-r-pkgs-org-tests-html"><a href="https://r-pkgs.org/tests.html"><code>tests/</code></a></h3>
 
-<p>vignettesに取って代わられた古い機能。
-ソースコード<code>*.R</code>を置いておくと<code>demo()</code>関数で呼び出せるというだけ。</p>
+<p><a href="http://testthat.r-lib.org">testthat</a>パッケージを使うのがデファクトスタンダード。</p>
 
-<p><code>check()</code>でソースコードの中身は実行されないが、
-<code>demo/00Index</code> というファイルの整合性が取れてないと警告される。
+<p><code>use_testthat()</code> で初期設定して
+<code>use_test(&quot;somefunction&quot;)</code> のようにテストファイルを追加する。</p>
+
+<p>さらに<a href="https://covr.r-lib.org/">covr</a>パッケージを使って、
+ソースコードのうちどれくらいがテストでカバーされてるかを可視化する。</p>
+
+<h3 id="その他-http-r-pkgs-org-misc-html"><a href="http://r-pkgs.org/misc.html">その他</a></h3>
+
+<dl>
+<dt><code>demo/</code></dt>
+<dd><p>vignettesに取って代わられた古い機能。
+ソースコード<code>*.R</code>を置いておくと<code>demo()</code>関数で呼び出せるというだけ。
+:<code>check()</code>でソースコードの中身は実行されないが、
+<code>demo/00Index</code> というファイルとの整合性が取れてないと警告される。
 「デモの名前 + スペース3つ以上かタブ + 適当な説明」という形式。
 ファイル名から拡張子を取り除いたものがデモの名前になる。</p>
 
 <pre><code>mydemo1    Description of demo 1
 mydemo2    Description of demo 2
-</code></pre>
-
-<p>人に見せたり<code>tests/</code>に入れたりするほどのもんでもないし、
-毎回<code>check()</code>されなくてもいいけど、
-試しに書いたコードを一応取っとく、くらいの用途にはいいかな？</p>
+</code></pre></dd>
+<dt><code>tools/</code></dt>
+<dd><p>たぶん何を入れても一切チェックされない自由なディレクトリ。
+人に見せたり <code>tests/</code> に入れたりするほどのもんでもないお試しコードを一応取っとく、</p></dd>
+<dt><code>.Rbuildignore</code></dt>
+<dd><p>Rパッケージらしからぬ変なファイルやディレクトリがあると怒られるので、
+そういうやつをこのファイルに列挙して無視してもらう。</p></dd>
+</dl>
 
 <h2 id="devtools"><code>devtools</code></h2>
 
@@ -255,7 +269,8 @@ mydemo2    Description of demo 2
 <img src="https://devtools.r-lib.org/reference/figures/logo.svg" align="right" width="120" height="139">
 </a></p>
 
-<p>骨組みを作るとこからCRANにデプロイするとこまでお世話してくれる。</p>
+<p>骨組みを作るとこからCRANにデプロイするとこまでお世話してくれる。
+いろんな専門パッケージの集合体。</p>
 
 <h3 id="主な関数">主な関数</h3>
 
@@ -301,7 +316,7 @@ mydemo2    Description of demo 2
 <ul>
 <li><a href="https://cran.r-project.org/web/packages/roxygen2/">https://cran.r-project.org/web/packages/roxygen2/</a></li>
 <li><a href="https://github.com/klutometis/roxygen">https://github.com/klutometis/roxygen</a></li>
-<li><a href="http://r-pkgs.had.co.nz/man.html">http://r-pkgs.had.co.nz/man.html</a></li>
+<li><a href="https://r-pkgs.org/man.html">https://r-pkgs.org/man.html</a></li>
 <li><a href="http://kbroman.org/pkg_primer/pages/docs.html">http://kbroman.org/pkg_primer/pages/docs.html</a></li>
 <li><a href="https://cran.r-project.org/web/packages/roxygen2/vignettes/rd.html">https://cran.r-project.org/web/packages/roxygen2/vignettes/rd.html</a></li>
 </ul>
