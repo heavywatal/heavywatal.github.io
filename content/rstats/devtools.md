@@ -22,6 +22,7 @@ GitHubに公開しておけば誰でも使えるようになるので、
 
 ## Rパッケージ
 
+- https://r-pkgs.org/
 - <http://r-pkgs.had.co.nz/>
 - [How to develop good R packages (for open science)](http://www.masalmon.eu/2017/12/11/goodrpackages/)
 
@@ -70,7 +71,6 @@ NAMESPACE    # 見せるオブジェクトを列挙
 README.md    # 全体の説明を簡単に
 R/           # Rソースコード
 data/        # サンプルデータなど
-exec/        # 実行ファイル
 inst/        # CITATION
 man/         # ヘルプファイル.Rd
 src/         # C++ソースコード
@@ -78,18 +78,18 @@ tests/
 vignettes/
 ```
 
-### [`DESCRIPTION`](http://r-pkgs.had.co.nz/description.html)
+### [`DESCRIPTION`](https://r-pkgs.org/description.html)
 
 -   どうでも良さそうなファイル名とは裏腹に、ちゃんと書かないと動かない。
 -   始めはusethisとかに生成してもらい、他のパッケージを参考にしつつ修正していく。
 -   `Imports` に列挙したものは依存パッケージとして同時にインストールされる。
     しかし `library()` 時に同時に読み込まれるわけではない。
--   `Title` はピリオドを含まない一文。
-    `Description` はピリオドを含む文章。
+-   `Title` はピリオドを含まない一文でタイトルケース。
+    `Description` はピリオドを含む一段落。
 -   ライセンスを別ファイルにする場合は `License: file LICENSE` と書く
 -   `Authors@R` のとこは後でRで評価されるので変な形。
 
-### [`NAMESPACE`](http://r-pkgs.had.co.nz/namespace.html)
+### [`NAMESPACE`](https://r-pkgs.org/namespace.html)
 
 -   [後述のroxygen2](#roxygen2)がソースコードから自動生成するので**直接触らない**。
 -   ここで `export()` された関数だけがユーザーから見える。
@@ -97,7 +97,7 @@ vignettes/
     された関数はattachされてパッケージ内で利用可能になる。
     `import(package)` で全ての関数をまとめて処理できるけど名前の衝突が怖い。
 
-### [`R/` ソースコード](http://r-pkgs.had.co.nz/r.html)
+### [`R/` ソースコード](https://r-pkgs.org/r.html)
 
 -   `NAMESPACE` や `man/*.Rd` を自動生成してもらえるように
     [後述のroxygen](#roxygen2)形式でコメントを書く
@@ -112,12 +112,12 @@ vignettes/
     `.onLoad(...)`, `.onAttach(...)`, `.onUnload(...)`
     は慣習的に`zzz.R`というファイルに記述する。
 
-### [`src/` C++ソースコード](http://r-pkgs.had.co.nz/src.html)
+### [`src/` C++ソースコード](https://r-pkgs.org/src.html)
 
 [Rcppページの"Rパッケージで使う"セクション]({{< relref "rcpp.md#Rパッケージで使う" >}})を参照
 
 
-### [`vignettes/`](http://r-pkgs.had.co.nz/vignettes.html)
+### [`vignettes/`](https://r-pkgs.org/vignettes.html)
 
 個々の関数の使用例はRソースファイルの `@examples` に書くとして、
 複数の関数を組み合わせてどう使うかとか、
@@ -133,31 +133,47 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 毎回その重さを受け入れるか、わざわざ`FALSE`指定するかというのは悩みどころ。
 
 
-### [`inst/`](http://r-pkgs.had.co.nz/inst.html)
+### [`inst/`](https://r-pkgs.org/inst.html)
 
 ここに入ってるものはインストール先でトップディレクトリに移される謎仕様。
 
 論文で引用されることを想定している場合は `inst/CITATION` を作る。
 `citation('ggplot2')` のように参照できるようになる。
 
-### [`demo/`](http://r-pkgs.had.co.nz/misc.html)
 
-vignettesに取って代わられた古い機能。
-ソースコード`*.R`を置いておくと`demo()`関数で呼び出せるというだけ。
+### [`tests/`](https://r-pkgs.org/tests.html)
 
-`check()`でソースコードの中身は実行されないが、
-`demo/00Index` というファイルの整合性が取れてないと警告される。
-「デモの名前 + スペース3つ以上かタブ + 適当な説明」という形式。
-ファイル名から拡張子を取り除いたものがデモの名前になる。
-```
-mydemo1    Description of demo 1
-mydemo2    Description of demo 2
-```
+[testthat](http://testthat.r-lib.org)パッケージを使うのがデファクトスタンダード。
 
-人に見せたり`tests/`に入れたりするほどのもんでもないし、
-毎回`check()`されなくてもいいけど、
-試しに書いたコードを一応取っとく、くらいの用途にはいいかな？
+`use_testthat()` で初期設定して
+`use_test("somefunction")` のようにテストファイルを追加する。
 
+さらに[covr](https://covr.r-lib.org/)パッケージを使って、
+ソースコードのうちどれくらいがテストでカバーされてるかを可視化する。
+
+
+### [その他](http://r-pkgs.org/misc.html)
+
+`demo/`
+:   vignettesに取って代わられた古い機能。
+    ソースコード`*.R`を置いておくと`demo()`関数で呼び出せるというだけ。
+:`  check()`でソースコードの中身は実行されないが、
+    `demo/00Index` というファイルとの整合性が取れてないと警告される。
+    「デモの名前 + スペース3つ以上かタブ + 適当な説明」という形式。
+    ファイル名から拡張子を取り除いたものがデモの名前になる。
+
+    ```
+    mydemo1    Description of demo 1
+    mydemo2    Description of demo 2
+    ```
+
+`tools/`
+: たぶん何を入れても一切チェックされない自由なディレクトリ。
+  人に見せたり `tests/` に入れたりするほどのもんでもないお試しコードを一応取っとく、
+
+`.Rbuildignore`
+: Rパッケージらしからぬ変なファイルやディレクトリがあると怒られるので、
+  そういうやつをこのファイルに列挙して無視してもらう。
 
 
 ## `devtools`
@@ -167,6 +183,7 @@ mydemo2    Description of demo 2
 </a>
 
 骨組みを作るとこからCRANにデプロイするとこまでお世話してくれる。
+いろんな専門パッケージの集合体。
 
 ### 主な関数
 
@@ -225,7 +242,7 @@ Rソースコードのコメントから`NAMESPACE`とヘルプ(`man/*.Rd`)を�
 
 - <https://cran.r-project.org/web/packages/roxygen2/>
 - <https://github.com/klutometis/roxygen>
-- <http://r-pkgs.had.co.nz/man.html>
+- <https://r-pkgs.org/man.html>
 - <http://kbroman.org/pkg_primer/pages/docs.html>
 - <https://cran.r-project.org/web/packages/roxygen2/vignettes/rd.html>
 
