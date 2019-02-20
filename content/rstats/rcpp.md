@@ -43,14 +43,14 @@ rbenchmark::benchmark(r_for(n), r_vec(n), rcpp(n))[,1:4]
       なぜRcppを使うのか。
     - [Rcpp-attributes.pdf](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-attributes.pdf)
       現在主流となっているRcppの使い方全般。
-      それに "Rcpp Attributes" という名前がついていて、
+      "Rcpp Attributes" という名前がついていて、
       "inline" という古いパッケージのやり方を置き換えたらしい。
-    - [Rcpp-modules.pdf](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-modules.pdf):
-      関数やclassをRにexportする。
     - [Rcpp-package.pdf](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-package.pdf):
       自作RパッケージでRcppを使う。
     - [Rcpp-extending.pdf](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-extending.pdf):
-      自作classをRcppで扱う。
+      C++クラスから既存のR型へ、またその逆の変換。
+    - [Rcpp-modules.pdf](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-modules.pdf):
+      C++クラスをRC/S4としてRにexposeする。
     - [Rcpp-sugar.pdf](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-sugar.pdf):
       ベクトル化とlazy評価が効くRの記法をC++側で使う。
     - [Rcpp-quickref.pdf](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-quickref.pdf)
@@ -186,6 +186,11 @@ int len(const std::vector<std::string>& args) {
   `std::exception`の派生クラスなら`what()`まで表示してもらえる。
 - グローバル変数やクラスのstaticメンバは `dyn.unload()` されるまで生き続ける。
   `parallel::mclapply()` とかでフォークした先での変更は子同士にも親にも影響しない。
+- 標準出力をRのコンソールに正しく流すには `std::cout` じゃなくて `Rcpp::Rcout` を使うべし。
+  とのことなんだけど、その仕事を担ってるのは中のストリームバッファのほうなので、
+  `rdbuf()` を使ってバッファを差し替えれば `Rcout` のガワは実は必要ない。
+  時間があればそのへんの提案と実装をちゃんと送りたいけど...
+  https://github.com/RcppCore/Rcpp/pull/918
 
 
 ## 詳細
@@ -205,12 +210,13 @@ Rcppで楽ができるとはいえ、R本体の内部情報もいずれ知るこ
 
 `SEXP`: S Expression
 :   Rのあらゆるオブジェクトを表すC言語上の型。
-    これの扱いは Rcpp が肩代わりしてくれるので基本的には直接触らない。
+    メモリアロケーションやgcへの指示 (`PROTECT`/`UNPROTECT` など) が必要。
+    そういうことは Rcpp が肩代わりしてくれるので基本的には直接触らない。
 
 [`Rcpp::RObject`](http://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1RObjectMethods.html)
 :   `SEXP` の thin wrapper であり Rcpp から R の変数を扱う際の基本クラス。
-    明示的に `PROTECT`/`UNPROTECT` を書かずにRAIIで済ませられる。
-
+    メモリ開放のタイミングは依然としてgc次第なものの、
+    コード上ではRAIIのような感覚で気楽に使える。
 
 [`Rcpp::Vector<T>`](http://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1Vector.html)
 :   [`vector/instantiation.h`](http://dirk.eddelbuettel.com/code/rcpp/html/instantiation_8h_source.html)
@@ -273,6 +279,7 @@ http://gallery.rcpp.org/articles/rcpp-return-macros/
     `Rcpp::depends` できるようにヘッダーを用意してくれたりするらしい。
 
 `[[Rcpp::init]]`
+:   これがついてる関数はパッケージロード時に実行される。
 
 `[[Rcpp::internal]]`
 
@@ -281,7 +288,9 @@ http://gallery.rcpp.org/articles/rcpp-return-macros/
 
 ## 自作C/C++クラスをRで使えるようにする
 
-"Rcpp Modules" の機能を使う。
+`Rcpp::XPtr<T>` に持たせてlistか何かに入れるか、
+"Rcpp Modules" の機能でRC/S4の定義を自動生成してもらう。
+ここで説明するのは後者。
 
 1.  `RcppExports.cpp` に自動的に読み込んでもらえるヘッダー
     (e.g., `src/{packagename}_types.h`)
