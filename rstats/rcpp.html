@@ -134,14 +134,14 @@ rbenchmark<span class="o">::</span>benchmark<span class="p">(</span>r_for<span c
 なぜRcppを使うのか。</li>
 <li><a href="https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-attributes.pdf">Rcpp-attributes.pdf</a>
 現在主流となっているRcppの使い方全般。
-それに &ldquo;Rcpp Attributes&rdquo; という名前がついていて、
+&ldquo;Rcpp Attributes&rdquo; という名前がついていて、
 &ldquo;inline&rdquo; という古いパッケージのやり方を置き換えたらしい。</li>
-<li><a href="https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-modules.pdf">Rcpp-modules.pdf</a>:
-関数やclassをRにexportする。</li>
 <li><a href="https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-package.pdf">Rcpp-package.pdf</a>:
 自作RパッケージでRcppを使う。</li>
 <li><a href="https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-extending.pdf">Rcpp-extending.pdf</a>:
-自作classをRcppで扱う。</li>
+C++クラスから既存のR型へ、またその逆の変換。</li>
+<li><a href="https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-modules.pdf">Rcpp-modules.pdf</a>:
+C++クラスをRC/S4としてRにexposeする。</li>
 <li><a href="https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-sugar.pdf">Rcpp-sugar.pdf</a>:
 ベクトル化とlazy評価が効くRの記法をC++側で使う。</li>
 <li><a href="https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-quickref.pdf">Rcpp-quickref.pdf</a></li>
@@ -272,6 +272,11 @@ CXX=$(LLVM_LOC)/bin/clang++
 <code>std::exception</code>の派生クラスなら<code>what()</code>まで表示してもらえる。</li>
 <li>グローバル変数やクラスのstaticメンバは <code>dyn.unload()</code> されるまで生き続ける。
 <code>parallel::mclapply()</code> とかでフォークした先での変更は子同士にも親にも影響しない。</li>
+<li>標準出力をRのコンソールに正しく流すには <code>std::cout</code> じゃなくて <code>Rcpp::Rcout</code> を使うべし。
+とのことなんだけど、その仕事を担ってるのは中のストリームバッファのほうなので、
+<code>rdbuf()</code> を使ってバッファを差し替えれば <code>Rcout</code> のガワは実は必要ない。
+時間があればそのへんの提案と実装をちゃんと送りたいけど&hellip;
+<a href="https://github.com/RcppCore/Rcpp/pull/918">https://github.com/RcppCore/Rcpp/pull/918</a></li>
 </ul>
 
 <h2 id="詳細">詳細</h2>
@@ -293,10 +298,12 @@ CXX=$(LLVM_LOC)/bin/clang++
 <dl>
 <dt><code>SEXP</code>: S Expression</dt>
 <dd>Rのあらゆるオブジェクトを表すC言語上の型。
-これの扱いは Rcpp が肩代わりしてくれるので基本的には直接触らない。</dd>
+メモリアロケーションやgcへの指示 (<code>PROTECT</code>/<code>UNPROTECT</code> など) が必要。
+そういうことは Rcpp が肩代わりしてくれるので基本的には直接触らない。</dd>
 <dt><a href="http://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1RObjectMethods.html"><code>Rcpp::RObject</code></a></dt>
 <dd><code>SEXP</code> の thin wrapper であり Rcpp から R の変数を扱う際の基本クラス。
-明示的に <code>PROTECT</code>/<code>UNPROTECT</code> を書かずにRAIIで済ませられる。</dd>
+メモリ開放のタイミングは依然としてgc次第なものの、
+コード上ではRAIIのような感覚で気楽に使える。</dd>
 <dt><a href="http://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1Vector.html"><code>Rcpp::Vector&lt;T&gt;</code></a></dt>
 <dd><p><a href="http://dirk.eddelbuettel.com/code/rcpp/html/instantiation_8h_source.html"><code>vector/instantiation.h</code></a>
 抜粋:</p>
@@ -349,9 +356,9 @@ CXX=$(LLVM_LOC)/bin/clang++
 何も指定しなければ <code>r</code> のみ。
 <code>cpp</code> を指定すると、ほかのパッケージから
 <code>Rcpp::depends</code> できるようにヘッダーを用意してくれたりするらしい。</dd>
+<dt><code>[[Rcpp::init]]</code></dt>
+<dd>これがついてる関数はパッケージロード時に実行される。</dd>
 </dl>
-
-<p><code>[[Rcpp::init]]</code></p>
 
 <p><code>[[Rcpp::internal]]</code></p>
 
@@ -359,7 +366,9 @@ CXX=$(LLVM_LOC)/bin/clang++
 
 <h2 id="自作c-c-クラスをrで使えるようにする">自作C/C++クラスをRで使えるようにする</h2>
 
-<p>&ldquo;Rcpp Modules&rdquo; の機能を使う。</p>
+<p><code>Rcpp::XPtr&lt;T&gt;</code> に持たせてlistか何かに入れるか、
+&ldquo;Rcpp Modules&rdquo; の機能でRC/S4の定義を自動生成してもらう。
+ここで説明するのは後者。</p>
 
 <ol>
 <li><p><code>RcppExports.cpp</code> に自動的に読み込んでもらえるヘッダー
