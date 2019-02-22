@@ -443,11 +443,11 @@ Rコンソール上での表示はこれの <code>show()</code> メソッドが�
 <h3 id="問題点">問題点</h3>
 
 <ul>
-<li><p><a href="https://stackoverflow.com/questions/22241687/how-to-export-rcpp-class-method-with-default-arguments">https://stackoverflow.com/questions/22241687/how-to-export-rcpp-class-method-with-default-arguments</a>
-RCのメソッドにデフォルト引数を持たせることができない。
-元のC++クラスのメソッドにデフォルト引数があっても無視される。
+<li><p><a href="https://stackoverflow.com/questions/22241687/how-to-export-rcpp-class-method-with-default-arguments">Rcpp ModulesはRCのメソッドにデフォルト引数を持たせることができない</a>。
+元のC++クラスのメソッドにデフォルト引数があっても無視。
 パッケージロード後、例えば <code>.onAttach()</code> の中で <code>MyClass::methods(fun = ...)</code>
-などとしてメソッドを定義するしかない？</p></li>
+などとしてR関数としてメソッドを定義することは可能ではある。
+でもそれだと <code>print(MyClass)</code> の表示にも追加されず <code>obj$</code> からの補完候補にも挙がらない。</p></li>
 
 <li><p>Reference Class はドキュメントを書きにくい。
 個々のメソッドの冒頭で書くdocstringは
@@ -456,6 +456,13 @@ RCのメソッドにデフォルト引数を持たせることができない。
 Roxygenもほとんど助けてくれない。
 この状況はR6でもほぼ同じ。
 あんまり需要ないのかな。。。</p></li>
+
+<li><p>結局、オブジェクトを第一引数にとるラッパーR関数をすべてのメソッドに用意して、
+そいつにRoxygenコメントを書くのが現状の最適解か。
+オブジェクトを第一引数に取るグローバルC++関数を <code>Rcpp::Export</code> する手もあって、
+そっちのほうがソースコードの冗長性も低く抑えられるけど、
+なぜか呼び出しコストが10µs, 2KBくらい余分にかかる。
+この時間は <code>namespace::</code> 有り無しの差と同じくらい。</p></li>
 </ul>
 
 <h3 id="マクロ">マクロ</h3>
