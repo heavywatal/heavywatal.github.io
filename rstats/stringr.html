@@ -175,19 +175,21 @@ stringr — Rの文字列をまともな方法で処理する
 <dl>
 <dt><code>str_count(string, pattern)</code></dt>
 <dd>マッチする箇所の数を返す。</dd>
-<dt><code>str_detect(string, pattern)</code></dt>
+<dt><code>str_detect(string, pattern, negate = FALSE)</code></dt>
 <dd>マッチするかどうか <code>logical</code> を返す。
+<code>nagate = TRUE</code> で結果を反転。
 <code>base::grepl(pattern, x)</code> と相同。</dd>
+<dd>始まりと終わりを調べる <code>str_starts()</code>, <code>str_ends()</code> もある。</dd>
 <dt><code>str_extract(string, pattern)</code>, <code>str_extract_all(string, pattern)</code></dt>
 <dd>マッチした部分文字列を取り出す。しなかった要素には <code>NA</code>。</dd>
 <dd>数値＋単位のような文字列から数値部分だけを抜き出すには
 <a href="/rstats/readr.html#parse">readr::parse_number()</a>
 が便利。</dd>
-<dt><code>str_subset(string, pattern)</code></dt>
+<dt><code>str_subset(string, pattern, negate = FALSE)</code></dt>
 <dd><code>x[str_detect(x, pattern)]</code> のショートカット。
 マッチする要素だけ元の形で返すので
 <code>str_extract()</code> より <code>base::grep(pattern, x, value=TRUE)</code> に近い。</dd>
-<dt><code>str_which()</code></dt>
+<dt><code>str_which(string, pattern, negate = FALSE)</code></dt>
 <dd>マッチする要素のインデックスを整数で返す
 <code>which(str_detect(x, pattern))</code> のショートカット。
 <code>base::grep(pattern, x)</code> と相同。</dd>
@@ -225,7 +227,7 @@ stringr — Rの文字列をまともな方法で処理する
 <h3 id="formatting">Formatting</h3>
 
 <dl>
-<dt><code>str_to_upper()</code>, <code>str_to_lower()</code>, <code>str_to_title()</code></dt>
+<dt><code>str_to_upper()</code>, <code>str_to_lower()</code>, <code>str_to_title()</code>, <code>str_to_sentence()</code></dt>
 <dd>大文字・小文字の変換</dd>
 <dt><code>str_interp(string, env=parent.frame())</code></dt>
 <dd><code>sprintf()</code> と相同。
