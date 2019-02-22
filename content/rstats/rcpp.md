@@ -371,11 +371,11 @@ RC/S4関連文献
 
 ### 問題点
 
-- https://stackoverflow.com/questions/22241687/how-to-export-rcpp-class-method-with-default-arguments
-  RCのメソッドにデフォルト引数を持たせることができない。
-  元のC++クラスのメソッドにデフォルト引数があっても無視される。
+- [Rcpp ModulesはRCのメソッドにデフォルト引数を持たせることができない](https://stackoverflow.com/questions/22241687/how-to-export-rcpp-class-method-with-default-arguments)。
+  元のC++クラスのメソッドにデフォルト引数があっても無視。
   パッケージロード後、例えば `.onAttach()` の中で `MyClass::methods(fun = ...)`
-  などとしてメソッドを定義するしかない？
+  などとしてR関数としてメソッドを定義することは可能ではある。
+  でもそれだと `print(MyClass)` の表示にも追加されず `obj$` からの補完候補にも挙がらない。
 
 - Reference Class はドキュメントを書きにくい。
   個々のメソッドの冒頭で書くdocstringは
@@ -384,6 +384,13 @@ RC/S4関連文献
   Roxygenもほとんど助けてくれない。
   この状況はR6でもほぼ同じ。
   あんまり需要ないのかな。。。
+
+- 結局、オブジェクトを第一引数にとるラッパーR関数をすべてのメソッドに用意して、
+  そいつにRoxygenコメントを書くのが現状の最適解か。
+  オブジェクトを第一引数に取るグローバルC++関数を `Rcpp::Export` する手もあって、
+  そっちのほうがソースコードの冗長性も低く抑えられるけど、
+  なぜか呼び出しコストが10µs, 2KBくらい余分にかかる。
+  この時間は `namespace::` 有り無しの差と同じくらい。
 
 
 ### マクロ
