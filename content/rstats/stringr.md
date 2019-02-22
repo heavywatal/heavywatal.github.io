@@ -80,9 +80,11 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 `str_count(string, pattern)`
 :   マッチする箇所の数を返す。
 
-`str_detect(string, pattern)`
+`str_detect(string, pattern, negate = FALSE)`
 :   マッチするかどうか `logical` を返す。
+    `nagate = TRUE` で結果を反転。
     `base::grepl(pattern, x)` と相同。
+:   始まりと終わりを調べる `str_starts()`, `str_ends()` もある。
 
 `str_extract(string, pattern)`, `str_extract_all(string, pattern)`
 :   マッチした部分文字列を取り出す。しなかった要素には `NA`。
@@ -90,12 +92,12 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
     [readr::parse_number()]({{< relref "readr.md#parse" >}})
     が便利。
 
-`str_subset(string, pattern)`
+`str_subset(string, pattern, negate = FALSE)`
 :   `x[str_detect(x, pattern)]` のショートカット。
     マッチする要素だけ元の形で返すので
     `str_extract()` より `base::grep(pattern, x, value=TRUE)` に近い。
 
-`str_which()`
+`str_which(string, pattern, negate = FALSE)`
 :   マッチする要素のインデックスを整数で返す
     `which(str_detect(x, pattern))` のショートカット。
     `base::grep(pattern, x)` と相同。
@@ -136,7 +138,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 
 ### Formatting
 
-`str_to_upper()`, `str_to_lower()`, `str_to_title()`
+`str_to_upper()`, `str_to_lower()`, `str_to_title()`, `str_to_sentence()`
 :   大文字・小文字の変換
 
 `str_interp(string, env=parent.frame())`
