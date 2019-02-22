@@ -252,7 +252,7 @@ http://gallery.rcpp.org/articles/rcpp-return-macros/
 ### タグ
 
 `[[Rcpp::export]]`
-:   これがついてる関数は `RcppExport.cpp` を介してライブラリに登録され、
+:   これがついてるグローバル関数は `RcppExport.cpp` を介してライブラリに登録され、
     <code>.Call(`_{PACKAGE}_{FUNCTION}`)</code>
     のような形でRから呼び出せる様になる。
     それを元の名前で行えるような関数も `RcppExport.R` に自動で定義してもらえる。
@@ -264,8 +264,11 @@ http://gallery.rcpp.org/articles/rcpp-return-macros/
 :   Rパッケージの `NAMESPACE` における `export()` とは別物。
 
 `[[Rcpp::plugins(cpp14)]]`
-:   `Makevars` に `CXX_STD=CXX14` を書くのとどう違う？
-    ほかにどんなプラグインが利用可能？
+:   たぶん `sourceCpp()` とか `cppFunction()` で使うための機能で、
+    パッケージ作りでは効かない。
+:   ほかに利用可能なものはソースコード
+    [`R/Attributes.R`](https://github.com/RcppCore/Rcpp/blob/master/R/Attributes.R)
+    に書いてある。
 
 `[[Rcpp::depends(RcppArmadillo)]]`
 :   ほかのパッケージへの依存性を宣言。
@@ -291,6 +294,7 @@ http://gallery.rcpp.org/articles/rcpp-return-macros/
 `Rcpp::XPtr<T>` に持たせてlistか何かに入れるか、
 "Rcpp Modules" の機能でRC/S4の定義を自動生成してもらう。
 ここで説明するのは後者。
+Moduleの記述を自分でやらず `Rcpp::exposeClass()` に生成してもらう手もある。
 
 1.  `RcppExports.cpp` に自動的に読み込んでもらえるヘッダー
     (e.g., `src/{packagename}_types.h`)
@@ -363,6 +367,23 @@ RC/S4関連文献
 - `?setRefClass` or https://stat.ethz.ch/R-manual/R-devel/library/methods/html/refClass.html
 - https://adv-r.hadley.nz/s4.html
 - http://adv-r.had.co.nz/OO-essentials.html#rc
+
+
+### 問題点
+
+- https://stackoverflow.com/questions/22241687/how-to-export-rcpp-class-method-with-default-arguments
+  RCのメソッドにデフォルト引数を持たせることができない。
+  元のC++クラスのメソッドにデフォルト引数があっても無視される。
+  パッケージロード後、例えば `.onAttach()` の中で `MyClass::methods(fun = ...)`
+  などとしてメソッドを定義するしかない？
+
+- Reference Class はドキュメントを書きにくい。
+  個々のメソッドの冒頭で書くdocstringは
+  `MyClass$help("some_method")`
+  のようにして確認できるが `man/*.Rd` を生成しない。
+  Roxygenもほとんど助けてくれない。
+  この状況はR6でもほぼ同じ。
+  あんまり需要ないのかな。。。
 
 
 ### マクロ
