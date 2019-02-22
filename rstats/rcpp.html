@@ -334,7 +334,7 @@ CXX=$(LLVM_LOC)/bin/clang++
 
 <dl>
 <dt><code>[[Rcpp::export]]</code></dt>
-<dd>これがついてる関数は <code>RcppExport.cpp</code> を介してライブラリに登録され、
+<dd>これがついてるグローバル関数は <code>RcppExport.cpp</code> を介してライブラリに登録され、
 <code>.Call(<code>_{PACKAGE}_{FUNCTION}</code>)</code>
 のような形でRから呼び出せる様になる。
 それを元の名前で行えるような関数も <code>RcppExport.R</code> に自動で定義してもらえる。</dd>
@@ -345,8 +345,11 @@ CXX=$(LLVM_LOC)/bin/clang++
 の状態での名前空間汚染を多少調整できる。</dd>
 <dd>Rパッケージの <code>NAMESPACE</code> における <code>export()</code> とは別物。</dd>
 <dt><code>[[Rcpp::plugins(cpp14)]]</code></dt>
-<dd><code>Makevars</code> に <code>CXX_STD=CXX14</code> を書くのとどう違う？
-ほかにどんなプラグインが利用可能？</dd>
+<dd>たぶん <code>sourceCpp()</code> とか <code>cppFunction()</code> で使うための機能で、
+パッケージ作りでは効かない。</dd>
+<dd>ほかに利用可能なものはソースコード
+<a href="https://github.com/RcppCore/Rcpp/blob/master/R/Attributes.R"><code>R/Attributes.R</code></a>
+に書いてある。</dd>
 <dt><code>[[Rcpp::depends(RcppArmadillo)]]</code></dt>
 <dd>ほかのパッケージへの依存性を宣言。
 たぶんビルド時のオプションをうまくやってくれる。
@@ -368,7 +371,8 @@ CXX=$(LLVM_LOC)/bin/clang++
 
 <p><code>Rcpp::XPtr&lt;T&gt;</code> に持たせてlistか何かに入れるか、
 &ldquo;Rcpp Modules&rdquo; の機能でRC/S4の定義を自動生成してもらう。
-ここで説明するのは後者。</p>
+ここで説明するのは後者。
+Moduleの記述を自分でやらず <code>Rcpp::exposeClass()</code> に生成してもらう手もある。</p>
 
 <ol>
 <li><p><code>RcppExports.cpp</code> に自動的に読み込んでもらえるヘッダー
@@ -434,6 +438,24 @@ Rコンソール上での表示はこれの <code>show()</code> メソッドが�
 <li><code>?setRefClass</code> or <a href="https://stat.ethz.ch/R-manual/R-devel/library/methods/html/refClass.html">https://stat.ethz.ch/R-manual/R-devel/library/methods/html/refClass.html</a></li>
 <li><a href="https://adv-r.hadley.nz/s4.html">https://adv-r.hadley.nz/s4.html</a></li>
 <li><a href="http://adv-r.had.co.nz/OO-essentials.html#rc">http://adv-r.had.co.nz/OO-essentials.html#rc</a></li>
+</ul>
+
+<h3 id="問題点">問題点</h3>
+
+<ul>
+<li><p><a href="https://stackoverflow.com/questions/22241687/how-to-export-rcpp-class-method-with-default-arguments">https://stackoverflow.com/questions/22241687/how-to-export-rcpp-class-method-with-default-arguments</a>
+RCのメソッドにデフォルト引数を持たせることができない。
+元のC++クラスのメソッドにデフォルト引数があっても無視される。
+パッケージロード後、例えば <code>.onAttach()</code> の中で <code>MyClass::methods(fun = ...)</code>
+などとしてメソッドを定義するしかない？</p></li>
+
+<li><p>Reference Class はドキュメントを書きにくい。
+個々のメソッドの冒頭で書くdocstringは
+<code>MyClass$help(&quot;some_method&quot;)</code>
+のようにして確認できるが <code>man/*.Rd</code> を生成しない。
+Roxygenもほとんど助けてくれない。
+この状況はR6でもほぼ同じ。
+あんまり需要ないのかな。。。</p></li>
 </ul>
 
 <h3 id="マクロ">マクロ</h3>
