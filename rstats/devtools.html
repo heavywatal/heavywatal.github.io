@@ -222,6 +222,9 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。<
 <p><code>check()</code>がデフォルトで<code>vignette=TRUE</code>かつ処理がやや重いので、
 毎回その重さを受け入れるか、わざわざ<code>FALSE</code>指定するかというのは悩みどころ。</p>
 
+<p><a href="https://pkgdown.r-lib.org">pkgdown</a>でウェブサイトを構築すると、
+ここに置いてあるvignettesはArticlesという位置づけになる。</p>
+
 <h3 id="inst-https-r-pkgs-org-inst-html"><a href="https://r-pkgs.org/inst.html"><code>inst/</code></a></h3>
 
 <p>ここに入ってるものはインストール先でトップディレクトリに移される謎仕様。</p>
@@ -231,13 +234,12 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。<
 
 <h3 id="tests-https-r-pkgs-org-tests-html"><a href="https://r-pkgs.org/tests.html"><code>tests/</code></a></h3>
 
-<p><a href="http://testthat.r-lib.org">testthat</a>パッケージを使うのがデファクトスタンダード。</p>
-
-<p><code>use_testthat()</code> で初期設定して
+<p><a href="http://testthat.r-lib.org">testthat</a>パッケージを使うのがデファクトスタンダード。
+<code>use_testthat()</code> で初期設定して
 <code>use_test(&quot;somefunction&quot;)</code> のようにテストファイルを追加する。</p>
 
 <p>さらに<a href="https://covr.r-lib.org/">covr</a>パッケージを使って、
-ソースコードのうちどれくらいがテストでカバーされてるかを可視化する。</p>
+ソースコードのうちどれくらいがテストでカバーされてるかを可視化すると良い。</p>
 
 <h3 id="その他-http-r-pkgs-org-misc-html"><a href="http://r-pkgs.org/misc.html">その他</a></h3>
 
@@ -254,8 +256,8 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。<
 mydemo2    Description of demo 2
 </code></pre></dd>
 <dt><code>tools/</code></dt>
-<dd><p>たぶん何を入れても一切チェックされない自由なディレクトリ。
-人に見せたり <code>tests/</code> に入れたりするほどのもんでもないお試しコードを一応取っとく、</p></dd>
+<dd><p>たぶん何を入れても一切チェックされずインストールもされない自由なディレクトリ。
+<code>tests/</code> や <code>vignettes/</code> に入れる前のガラクタコードを一時的に置いとくとか。</p></dd>
 <dt><code>.Rbuildignore</code></dt>
 <dd><p>Rパッケージらしからぬ変なファイルやディレクトリがあると怒られるので、
 そういうやつをこのファイルに列挙して無視してもらう。</p></dd>
@@ -296,13 +298,6 @@ mydemo2    Description of demo 2
 普段は触る必要ないが、たまにこれが必要な不具合に出くわす。</dd>
 </dl>
 
-<h3 id="設定">設定</h3>
-
-<p>項目の説明を読む</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">?</span>devtools</code></pre></div>
-<p>例えば <code>.Rprofile</code> に</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kp">options</span><span class="p">(</span>devtools.desc.author<span class="o">=</span><span class="s">&#39;Watal M. Iwasaki &lt;user@example.com&gt; [aut, cre]&#39;</span><span class="p">)</span>
-<span class="kp">options</span><span class="p">(</span>devtools.desc.license<span class="o">=</span><span class="s">&#39;MIT&#39;</span><span class="p">)</span></code></pre></div>
 <h2 id="roxygen2"><code>roxygen2</code></h2>
 
 <p><a href="https://CRAN.R-project.org/package=roxygen2">
@@ -327,7 +322,7 @@ mydemo2    Description of demo 2
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#&#39; Title of the simple function to add 1</span>
 <span class="c1">#&#39;</span>
 <span class="c1">#&#39; The second paragraph is recognized as the description.</span>
-<span class="c1">#&#39; It is not recommended to use @title and @description explicitly.</span>
+<span class="c1">#&#39; It is not recommended to use @@title and @@description explicitly.</span>
 <span class="c1">#&#39; @param x A numeric vector</span>
 <span class="c1">#&#39; @export</span>
 <span class="c1">#&#39; @examples</span>
@@ -342,21 +337,14 @@ increment <span class="o">=</span> <span class="kr">function</span><span class="
 タイトルをコピペして全部同じにすると怒られる。
 2段落目を省略するとタイトルが流用される。</li>
 <li>空行だけでは切れ目として扱われないので <code>NULL</code> などを置いたりする。</li>
-<li>dplyrなどで列名を直に指定すると
-<code>undefined global variables</code>
-という警告が出るので
-<code>dplyr::filter(iris, .data$Species == 'setosa')</code>
-のように pronoun を使って抑える。
-どこかに <code>#' @importFrom rlang .data</code> を書いておく。
-ただし <code>$</code> によるアクセスがやや遅いので、
-<code>group_by()</code> などで多数のグループを処理するときなど気になる場合は
-<code>!!as.name(&quot;carat&quot;)</code> のようにしたほうが速い。</li>
-<li>Markdownを使うためには
-<code>Roxygen: list(markdown = TRUE)</code> を <code>DESCRIPTION</code> に加える。</li>
+<li><a href="https://cran.r-project.org/web/packages/roxygen2/vignettes/markdown.html">Rd形式の代わりにMarkdown形式で記述できる</a>。
+<code>usethis::use_roxygen_md()</code> を実行して
+<code>DESCRIPTION</code> に <code>Roxygen: list(markdown = TRUE)</code> を書き加える全体設定か、
+使いたいブロックにいちいち <code>@md</code> を書く個別設定か。</li>
 
 <li><p><code>&quot;_PACKAGE&quot;</code> という文字列の上に書かれたブロックは、
 パッケージそのものに対応するヘルプ <code>*-package.Rd</code> になる。
-<code>@useDynLib</code> など全体に関わる設定はここで。</p>
+<code>@useDynLib</code> など全体に関わる設定はここでやるのが良いのでは。</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#&#39; Example package to say hello</span>
 <span class="c1">#&#39; @aliases NULL hello-package</span>
 <span class="c1">#&#39; @useDynLib hello, .registration = TRUE</span>
@@ -365,6 +353,16 @@ increment <span class="o">=</span> <span class="kr">function</span><span class="
 <span class="c1">#&#39; @importFrom rlang .data</span>
 <span class="c1">#&#39; @keywords internal</span>
 <span class="s">&#34;_PACKAGE&#34;</span></code></pre></div></li>
+
+<li><p>dplyrなどで列名を直に指定すると
+<code>undefined global variables</code>
+という警告が出るので
+<code>dplyr::filter(iris, .data$Species == 'setosa')</code>
+のように pronoun を使って抑える。
+そのためにどこかに <code>#' @importFrom rlang .data</code> を書いておく。
+ただし <code>$</code> によるアクセスがやや遅いので、
+<code>group_by()</code> などで多数のグループを処理するときなど気になる場合は
+<code>!!as.name(&quot;carat&quot;)</code> のようにする。</p></li>
 </ul>
 
 <h3 id="タグ">タグ</h3>
@@ -375,14 +373,25 @@ increment <span class="o">=</span> <span class="kr">function</span><span class="
 名前の衝突が怖いので基本的に使わない。</dd>
 <dt><code>@importFrom pkg func</code></dt>
 <dd><code>NAMESPACE</code> で <code>importFrom()</code> するパッケージと関数を指定。
-パッケージ内で何回書いても <code>NAMESPACE</code> は汚れないっぽい。
-e.g., <code>@importFrom magrittr %&gt;%</code></dd>
+パッケージ内でよほど何回も登場する関数や演算子を登録する。
+e.g., <code>@importFrom magrittr %&gt;%</code> 。
+重複して何度も書いちゃっても大丈夫。</dd>
 <dt><code>@export</code></dt>
-<dd><code>NAMESPACE</code> で <code>export()</code> する関数を指定。</dd>
+<dd><code>NAMESPACE</code> で <code>export()</code> する関数を指定。
+一般ユーザーからはこれが付いてる関数だけ見える。</dd>
 <dt><code>@param arg1 description...</code></dt>
 <dd>関数の引数。型や役割の説明を書く。</dd>
 <dt><code>@inheritParams package::function</code></dt>
-<dd>未<code>@param</code>引数の記述を別の関数から継承する。</dd>
+<dd>引数の記述を別の関数から継承する。
+その関数に必要で <code>@param</code> が無いものだけいい感じに補ってくれる。</dd>
+<dd><code>@noRd</code> と組み合わせて使えればいろいろ楽できそうだけどダメっぽい。</dd>
+<dt><code>@template template-name</code></dt>
+<dd><code>man-roxygen/template-name.R</code> の内容を利用する。
+<code>@inheritParams</code> と違って、その関数で使用しないparamまで展開されちゃうのが欠点。</dd>
+<dt><code>@eval fun()</code></dt>
+<dd>関数を評価して出てきた文字列ベクタをroxygenコメントとして処理する。
+各要素の先頭は <code>#'</code> ではなく@タグで。
+関数には引数も渡せるのでいろいろできる。</dd>
 <dt><code>@return description</code></dt>
 <dd>関数の返り値。</dd>
 <dt><code>@examples code...</code></dt>
@@ -397,6 +406,16 @@ exportしないやつには書いてはいけない。
 同じ名前のものはどこかで1度だけ記述する。
 逆に言えば、中身が違うものに同じ名前をつけてはいけないし、
 引数や機能がほとんど重ならない関数をまとめると分かりにくくなる。</dd>
+<dt><code>@include other-file.R</code></dt>
+<dd>指定したファイルを先に読み込む。
+メソッドの定義などで順序が重要になる場合に使う。</dd>
+<dt><code>@seealso ...</code></dt>
+<dd><code>[mean()]</code>, <code>[ggplot2::diamonds]</code>, <code>&lt;https://...&gt;</code> のようにしてリンクを張れる。</dd>
+<dt><code>@family</code></dt>
+<dd>これを共通して持つ関数同士に <code>@seealso</code> が自動生成される。
+ただし <code>@rdname</code> とかで関数をまとめたりしてるとうまくいかないっぽい。</dd>
+<dt><code>@section Some Title:</code></dt>
+<dd>新しいセクションを作る。前には空行、行末にコロン、後には普通の文章。</dd>
 <dt><code>@docType</code>, <code>@name</code></dt>
 <dd>パッケージやデータを記述するのに必要だったが今では不要っぽい。</dd>
 </dl>
