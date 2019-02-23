@@ -132,6 +132,9 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 `check()`がデフォルトで`vignette=TRUE`かつ処理がやや重いので、
 毎回その重さを受け入れるか、わざわざ`FALSE`指定するかというのは悩みどころ。
 
+[pkgdown](https://pkgdown.r-lib.org)でウェブサイトを構築すると、
+ここに置いてあるvignettesはArticlesという位置づけになる。
+
 
 ### [`inst/`](https://r-pkgs.org/inst.html)
 
@@ -144,12 +147,11 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 ### [`tests/`](https://r-pkgs.org/tests.html)
 
 [testthat](http://testthat.r-lib.org)パッケージを使うのがデファクトスタンダード。
-
 `use_testthat()` で初期設定して
 `use_test("somefunction")` のようにテストファイルを追加する。
 
 さらに[covr](https://covr.r-lib.org/)パッケージを使って、
-ソースコードのうちどれくらいがテストでカバーされてるかを可視化する。
+ソースコードのうちどれくらいがテストでカバーされてるかを可視化すると良い。
 
 
 ### [その他](http://r-pkgs.org/misc.html)
@@ -168,8 +170,8 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
     ```
 
 `tools/`
-: たぶん何を入れても一切チェックされない自由なディレクトリ。
-  人に見せたり `tests/` に入れたりするほどのもんでもないお試しコードを一応取っとく、
+: たぶん何を入れても一切チェックされずインストールもされない自由なディレクトリ。
+  `tests/` や `vignettes/` に入れる前のガラクタコードを一時的に置いとくとか。
 
 `.Rbuildignore`
 : Rパッケージらしからぬ変なファイルやディレクトリがあると怒られるので、
@@ -217,21 +219,6 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
     普段は触る必要ないが、たまにこれが必要な不具合に出くわす。
 
 
-### 設定
-
-項目の説明を読む
-
-```r
-?devtools
-```
-
-例えば `.Rprofile` に
-
-```r
-options(devtools.desc.author='Watal M. Iwasaki <user@example.com> [aut, cre]')
-options(devtools.desc.license='MIT')
-```
-
 ## `roxygen2`
 
 <a href="https://CRAN.R-project.org/package=roxygen2">
@@ -256,7 +243,7 @@ Rソースコードのコメントから`NAMESPACE`とヘルプ(`man/*.Rd`)を�
 #' Title of the simple function to add 1
 #'
 #' The second paragraph is recognized as the description.
-#' It is not recommended to use @title and @description explicitly.
+#' It is not recommended to use @@title and @@description explicitly.
 #' @param x A numeric vector
 #' @export
 #' @examples
@@ -272,20 +259,13 @@ increment = function(x) {x + 1}
     タイトルをコピペして全部同じにすると怒られる。
     2段落目を省略するとタイトルが流用される。
 -   空行だけでは切れ目として扱われないので `NULL` などを置いたりする。
--   dplyrなどで列名を直に指定すると
-    `undefined global variables`
-    という警告が出るので
-    `dplyr::filter(iris, .data$Species == 'setosa')`
-    のように pronoun を使って抑える。
-    どこかに `#' @importFrom rlang .data` を書いておく。
-    ただし `$` によるアクセスがやや遅いので、
-    `group_by()` などで多数のグループを処理するときなど気になる場合は
-    `!!as.name("carat")` のようにしたほうが速い。
--   Markdownを使うためには
-    `Roxygen: list(markdown = TRUE)` を `DESCRIPTION` に加える。
+-   [Rd形式の代わりにMarkdown形式で記述できる](https://cran.r-project.org/web/packages/roxygen2/vignettes/markdown.html)。
+    `usethis::use_roxygen_md()` を実行して
+    `DESCRIPTION` に `Roxygen: list(markdown = TRUE)` を書き加える全体設定か、
+    使いたいブロックにいちいち `@md` を書く個別設定か。
 -   `"_PACKAGE"` という文字列の上に書かれたブロックは、
     パッケージそのものに対応するヘルプ `*-package.Rd` になる。
-    `@useDynLib` など全体に関わる設定はここで。
+    `@useDynLib` など全体に関わる設定はここでやるのが良いのでは。
 
     ```r
     #' Example package to say hello
@@ -298,6 +278,16 @@ increment = function(x) {x + 1}
     "_PACKAGE"
     ```
 
+-   dplyrなどで列名を直に指定すると
+    `undefined global variables`
+    という警告が出るので
+    `dplyr::filter(iris, .data$Species == 'setosa')`
+    のように pronoun を使って抑える。
+    そのためにどこかに `#' @importFrom rlang .data` を書いておく。
+    ただし `$` によるアクセスがやや遅いので、
+    `group_by()` などで多数のグループを処理するときなど気になる場合は
+    `!!as.name("carat")` のようにする。
+
 
 ### タグ
 
@@ -307,17 +297,30 @@ increment = function(x) {x + 1}
 
 `@importFrom pkg func`
 :   `NAMESPACE` で `importFrom()` するパッケージと関数を指定。
-    パッケージ内で何回書いても `NAMESPACE` は汚れないっぽい。
-    e.g., `@importFrom magrittr %>%`
+    パッケージ内でよほど何回も登場する関数や演算子を登録する。
+    e.g., `@importFrom magrittr %>%` 。
+    重複して何度も書いちゃっても大丈夫。
 
 `@export`
 :   `NAMESPACE` で `export()` する関数を指定。
+    一般ユーザーからはこれが付いてる関数だけ見える。
 
 `@param arg1 description...`
 :   関数の引数。型や役割の説明を書く。
 
 `@inheritParams package::function`
-:   未`@param`引数の記述を別の関数から継承する。
+:   引数の記述を別の関数から継承する。
+    その関数に必要で `@param` が無いものだけいい感じに補ってくれる。
+:   `@noRd` と組み合わせて使えればいろいろ楽できそうだけどダメっぽい。
+
+`@template template-name`
+:   `man-roxygen/template-name.R` の内容を利用する。
+    `@inheritParams` と違って、その関数で使用しないparamまで展開されちゃうのが欠点。
+
+`@eval fun()`
+:   関数を評価して出てきた文字列ベクタをroxygenコメントとして処理する。
+    各要素の先頭は `#' ` ではなく@タグで。
+    関数には引数も渡せるのでいろいろできる。
 
 `@return description`
 :   関数の返り値。
@@ -335,6 +338,20 @@ increment = function(x) {x + 1}
     同じ名前のものはどこかで1度だけ記述する。
     逆に言えば、中身が違うものに同じ名前をつけてはいけないし、
     引数や機能がほとんど重ならない関数をまとめると分かりにくくなる。
+
+`@include other-file.R`
+:   指定したファイルを先に読み込む。
+    メソッドの定義などで順序が重要になる場合に使う。
+
+`@seealso ...`
+:   `[mean()]`, `[ggplot2::diamonds]`, `<https://...>` のようにしてリンクを張れる。
+
+`@family`
+:   これを共通して持つ関数同士に `@seealso` が自動生成される。
+    ただし `@rdname` とかで関数をまとめたりしてるとうまくいかないっぽい。
+
+`@section Some Title:`
+:   新しいセクションを作る。前には空行、行末にコロン、後には普通の文章。
 
 `@docType`, `@name`
 :   パッケージやデータを記述するのに必要だったが今では不要っぽい。
