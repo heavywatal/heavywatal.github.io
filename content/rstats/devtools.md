@@ -169,6 +169,16 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
     mydemo2    Description of demo 2
     ```
 
+`exec/`
+: 実行可能スクリプトの置き場所。
+  インストール先はそのままパッケージ内の `exec/`
+  (つまり最初からパスが通ってるような場所ではない)。
+  パーミッションはインストール時に設定してもらえるのでソースツリーでは `644` でOK。
+  `Rscript` をshebangで指定することも可能。
+  例えばRStudioを使いこなせないターミナル勢としては
+  [`knitr::knit()` するだけのコマンド](https://github.com/heavywatal/rwtl/blob/master/exec/knit.R)
+  とか作っておくと便利。
+
 `tools/`
 : たぶん何を入れても一切チェックされずインストールもされない自由なディレクトリ。
   `tests/` や `vignettes/` に入れる前のガラクタコードを一時的に置いとくとか。
