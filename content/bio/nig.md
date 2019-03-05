@@ -9,115 +9,80 @@ https://sc.ddbj.nig.ac.jp/
 
 ## 利用開始
 
-<https://sc.ddbj.nig.ac.jp/index.php/ja-howtouse>
+<https://sc2.ddbj.nig.ac.jp/index.php/ja-howtouse>
 
-1.  [新規ユーザ登録申請](https://sc.ddbj.nig.ac.jp/index.php/ja-new-application)
+1.  [新規ユーザ登録申請](https://sc2.ddbj.nig.ac.jp/index.php/ja-new-application)
 1.  責任者にメールが届くので、それに従って誓約書PDFを管理者に送信
 1.  アカウント登録証が手元に届く
-1.  https://sc.ddbj.nig.ac.jp/ でログイン
-1.  [SSH公開鍵登録](https://sc.ddbj.nig.ac.jp/index.php/2014-09-17-05-42-33) (パスワード認証ではSSHできない)
-1.  `~/.ssh/config` に設定を追加:
+1.  https://sc2.ddbj.nig.ac.jp/ でログイン
+1.  手元のマシンでSSH公開鍵を生成し、
+    [サーバーに登録](https://sc2.ddbj.nig.ac.jp/index.php/2014-09-17-05-42-33)。
+    ドキュメントの例ではRSAが使われてるけどECDSAのほうが安全で軽い。
+    ほんとはed25519のほうが良いけどウェブ登録ではなぜか拒否される。
+
+    ```sh
+    ssh-keygen -t ecdsa -b 521 -N '' -C 'heavywatal@nig.ac.jp' -f ~/.ssh/id_ecdsa_nig
+    ```
+
+1.  手元の `~/.ssh/config` に設定を追加:
 
         Host *.ddbj.nig.ac.jp
           User heavywatal
           RequestTTY yes
+          IdentityFile ~/.ssh/id_ecdsa_nig
 
     sshコマンドでユーザ名と `-t` オプションを省略できるようになる。
 
-1.  システム内ノード間通信のパスワード認証を省くために[SSH鍵ペアを設定する]({{< relref "ssh.md" >}})。
-
 1.  ゲートウェイノードにSSH接続してログインノードに `qlogin`:
 
-        ssh gw2.ddbj.nig.ac.jp qlogin
+        ssh gw.ddbj.nig.ac.jp qlogin
 
-{{%div class="note"%}}
-Phase 1 と Phase 2 という異なるシステムが存在しているが、
-基本的にはPhase 2システムを使えば良さそう。
-共有されるのはユーザ情報のみで、ホームのファイルシステムも別。
-Phase 1システムにデータをコピーするには、
-Phase 2ゲートウェイから
-`qlogin -l trans`
-でデータ移行用ノードにログインし、
-`/home_ph1/` 以下に見える自分のホームに `rsync` する。
-{{%/div%}}
 
 ## 環境整備
 
-- [ハードウェア構成](https://sc.ddbj.nig.ac.jp/index.php/systemconfig)
-- [ソフトウェア構成](https://sc.ddbj.nig.ac.jp/index.php/system-software-config)
-  (Phase 2: Red Hat Enterprise Linux 6.4)
-    - [プログラミング環境](https://sc.ddbj.nig.ac.jp/index.php/programming)
-    - [OSSライブラリ](https://sc.ddbj.nig.ac.jp/index.php/ja-avail-oss)
-      `/usr/local/pkg/`
-    - [データベース](https://sc.ddbj.nig.ac.jp/index.php/ja-availavle-dbs)
-      `/usr/local/seq/`
+- [ハードウェア構成](https://sc2.ddbj.nig.ac.jp/index.php/systemconfig)
+- [ソフトウェア構成](https://sc2.ddbj.nig.ac.jp/index.php/system-software-config)
+  (Phase 3: Red Hat Enterprise Linux 7.5)
+    - [Singularity](https://sc2.ddbj.nig.ac.jp/index.php/singularity)
+    - [Environment Module](https://sc2.ddbj.nig.ac.jp/index.php/environment-module)
 
 ### Linuxbrew
 
 コマンドラインのプログラムをインストールするにはLinuxbrewが便利。
-ただしOS標準のコンパイラやライブラリが古すぎるので、
-最初のセットアップにひと手間必要。
-特に最近はcurlがSSL認証でコケるのでお手上げ。。。
 cf. [/dev/開発環境]({{< relref "devenv.md" >}})
 
-{{%div class="note"%}}
-emacsは `User *** has no home directory` という謎のエラーを吐く。
-{{%/div%}}
 
-### ログインシェルをzshに変更(しないで対処)
+### RcppでC++14以降が使えるRをインストールしたい
 
-<https://sc.ddbj.nig.ac.jp/index.php/ja-tips>
-
-LDAPで管理されているので `chsh` は効かない:
-
-    ldapmodify -x -D uid=heavywatal,ou=people,dc=nig,dc=ac,dc=jp -W
-    Enter LDAP Password: ********
-    dn: uid=heavywatal,ou=people,dc=nig,dc=ac,dc=jp
-    changetype:modify
-    replace:loginShell
-    loginShell:/bin/zsh
-    # ctrl-d
-
-反映されるまで少し時間がかかるっぽい。
-
-`/etc/profile.d/*` の読み込みのタイミングのせいか、
-zshにすると `ssh -t gw.nig qlogin` で `command not found` になってしまう。
-しかも `/bin/zsh` が結構古くて微妙。
-
-`~/.bashrc` にエイリアスを定義して対処したほうが良さそう:
-
-    PATH=${HOME}/.homebrew/bin:${PATH}
-    alias zmux='SHELL=$(brew --prefix)/bin/zsh tmux'
-
-ちなみにtmuxセッションの寿命はどうなってるんだろう...
-
-### 最新版Rをインストール
-
-環境が古すぎて手こずった。
-依存関係について、何が必要十分なのかまでは検証していないが、
-いくつかのライブラリは新しいものをLinuxbrewで入れておく必要がある。
-e.g., gcc, binutils, bzip2
+`module load r` で最新版が使えるけど、
+古いコンパイラでビルドされたためRcppでC++11までしか使えない。
+`/opt/pkg/r/*/lib64/R/etc/Makeconf`
+を参考に新しいコンパイラで自前ビルドを試みる:
 
 ```sh
-wget -O- https://cran.r-project.org/src/base/R-3/R-3.3.0.tar.gz | tar xz
-cd R-3.3.0/
+wget -O- https://cran.r-project.org/src/base/R-3/R-3.5.2.tar.gz | tar xz
+cd R-3.5.2/
 ./configure -h | less
-./configure LIBS="-lpthread" --prefix=${HOME}/R --disable-openmp --disable-java
-make
+./configure --prefix=${HOME}/R --disable-openmp --disable-java '--enable-R-shlib' '--enable-shared' '--with-tcl-config=/usr/lib64/tclConfig.sh' '--with-tk-config=/usr/lib64/tkConfig.sh' 'PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/cm/local/apps/curl/lib/pkgconfig:/usr/lib64/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig' 'CFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include' 'CPPFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include' 'CXXFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include' 'FFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include' 'FCFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include' 'LDFLAGS=-L/usr/local/lib64 -L/usr/lib64 -L/usr/lib -L/cm/local/apps/curl/lib'
+make -j2
 make install
 ```
 
+`configure: error: libcurl >= 7.22.0 library and headers are required with support for https`
+古いcurlは入ってないように見えるのに、なぜ？
+
+
 ## ジョブ投入、管理
 
-- <https://sc.ddbj.nig.ac.jp/index.php/ja-howtouse>
-- <https://sc.ddbj.nig.ac.jp/index.php/ja-uge-additional>
+- <https://sc2.ddbj.nig.ac.jp/index.php/ja-howtouse>
+- <https://sc2.ddbj.nig.ac.jp/index.php/ja-uge-additional>
 - [Univa Grid Engine (UGE)](http://www.univa.com/products/grid-engine)
 - <http://gridengine.eu/grid-engine-documentation>
 
 ### `qsub`
 
 遺伝研ウェブサイトにはスクリプトを書いてから渡す方法しか書いてないが、
-コマンド引数として直接渡すほうが圧倒的に楽チン。
+コマンド引数として直接渡すほうが楽チン。
 
 ```sh
 ## スクリプトを書いてから渡す
