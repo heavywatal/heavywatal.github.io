@@ -582,8 +582,9 @@ ggsave<span class="p">(</span><span class="s">&#34;mpg4.png&#34;</span><span cla
 <dd><code>gp + geom_hline(yintercept=7) + geom_vline(xintercept=11)</code></dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html">始点と終点で曲線や矢印を描く</a></dt>
 <dd><code>gp + geom_curve(aes(x, y, xend, yend), curvature = -0.2)</code></dd>
-<dd><code>gp + geom_segment(aes(x, y, xend, yend), arrow=arrow())</code></dd>
-<dd>矢印の調整は <a href="https://www.rdocumentation.org/packages/grid/topics/arrow"><code>grid::arrow()</code></a></dd>
+<dd><code>gp + geom_segment(aes(x, y, xend, yend), arrow = arrow(type = &quot;closed&quot;), linejoin = &quot;mitre&quot;)</code></dd>
+<dd>矢印の調整は<a href="https://www.rdocumentation.org/packages/grid/topics/arrow"><code>grid::arrow()</code></a>。
+普通の線より矢尻の分だけ長くなることに注意。</dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/annotate.html">文字列や図形を書き加える</a></dt>
 <dd><code>gp + annotate(&quot;text&quot;, x=1:4, y=4:1, label=sprintf(&quot;x = %d&quot;, 1:4))</code></dd>
 <dd>テーマの <code>base_family</code> は引き継がれないので <code>family=</code> で指定すべし。</dd>
