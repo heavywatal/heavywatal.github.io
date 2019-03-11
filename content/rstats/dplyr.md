@@ -159,6 +159,13 @@ dplyr::summarise_all(
     `rename_at(.tbl, .vars, .funs = list(), ...)`<br>
     `rename_if(.tbl, .predicate, .funs = list(), ...)`<br>
 
+    ```r
+    pattern = c("^Sepal" = "Gaku", "^Petal" = "Kaben")
+    iris %>% head() %>%
+      dplyr::rename_all(stringr::str_replace_all, pattern) %>%
+      print()
+    ```
+
 `dplyr::pull(.data, var=-1)`
 :   指定した1列をvector(またはlist)としてdata.frameから抜き出す。
 
