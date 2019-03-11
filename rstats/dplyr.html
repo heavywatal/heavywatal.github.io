@@ -230,7 +230,11 @@ iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>rename<span cla
 <dd><p>リネーム関数を渡せる亜種:<br>
 <code>rename_all(.tbl, .funs = list(), ...)</code><br>
 <code>rename_at(.tbl, .vars, .funs = list(), ...)</code><br>
-<code>rename_if(.tbl, .predicate, .funs = list(), ...)</code><br></p></dd>
+<code>rename_if(.tbl, .predicate, .funs = list(), ...)</code><br></p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">pattern <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#34;^Sepal&#34;</span> <span class="o">=</span> <span class="s">&#34;Gaku&#34;</span><span class="p">,</span> <span class="s">&#34;^Petal&#34;</span> <span class="o">=</span> <span class="s">&#34;Kaben&#34;</span><span class="p">)</span>
+iris <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">()</span> <span class="o">%&gt;%</span>
+  dplyr<span class="o">::</span>rename_all<span class="p">(</span>stringr<span class="o">::</span>str_replace_all<span class="p">,</span> pattern<span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="kp">print</span><span class="p">()</span></code></pre></div></dd>
 <dt><code>dplyr::pull(.data, var=-1)</code></dt>
 <dd><p>指定した1列をvector(またはlist)としてdata.frameから抜き出す。</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">()</span> <span class="o">%&gt;%</span> dplyr<span class="o">::</span>pull<span class="p">(</span>Species<span class="p">)</span>
