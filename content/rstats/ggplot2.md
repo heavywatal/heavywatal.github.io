@@ -540,8 +540,9 @@ ggsave("mpg4.png", p1 + theme_bw(base_size = 22), width = 4, height = 4)
 
 [始点と終点で曲線や矢印を描く](https://ggplot2.tidyverse.org/reference/geom_segment.html)
 :   `gp + geom_curve(aes(x, y, xend, yend), curvature = -0.2)`
-:   `gp + geom_segment(aes(x, y, xend, yend), arrow=arrow())`
-:   矢印の調整は [`grid::arrow()`](https://www.rdocumentation.org/packages/grid/topics/arrow)
+:   `gp + geom_segment(aes(x, y, xend, yend), arrow = arrow(type = "closed"), linejoin = "mitre")`
+:   矢印の調整は[`grid::arrow()`](https://www.rdocumentation.org/packages/grid/topics/arrow)。
+    普通の線より矢尻の分だけ長くなることに注意。
 
 [文字列や図形を書き加える](https://ggplot2.tidyverse.org/reference/annotate.html)
 :   `gp + annotate("text", x=1:4, y=4:1, label=sprintf("x = %d", 1:4))`
@@ -551,7 +552,6 @@ ggsave("mpg4.png", p1 + theme_bw(base_size = 22), width = 4, height = 4)
     `gp + geom_text(aes(label=foo))` のほうが適している。
     オプションで `nudge_x=2, nudge_y=2` などとすれば点と重ならないようにずらせる。
     [`position_nudge()`](https://ggplot2.tidyverse.org/reference/position_nudge.html)
-
 
 ## Extensions
 
