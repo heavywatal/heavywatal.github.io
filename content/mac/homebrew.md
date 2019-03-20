@@ -129,7 +129,7 @@ gccやboostなどのデカいやつはとりあえずデフォルトで入れた
 {{%div class="note"%}}
 Rをここからインストールするとバイナリ版のパッケージが利用できず、
 毎回ソースからビルドすることになるので、
-後述のcaskで `r-app` を入れるほうが簡単。
+後述のcaskのほうの `r` を入れるほうが簡単。
 {{%/div%}}
 
 {{%div class="note"%}}
@@ -207,12 +207,12 @@ brew cask list
 アプリ側でアップデートを実行するとCask内でのバージョンと食い違っちゃうけど使用上は問題ないらしい。
 
 alfred, amazon-drive, amazon-music, atom,
-basictex, bibdesk, cmd-eikana,
+basictex, bibdesk,
 discord, docker, dropbox, eqmac, firefox, gephi, gimp, gitter,
 google-backup-and-sync, google-chrome, google-earth, google-japanese-ime,
 inkscape, iterm2, julia, kindle, libreoffice,
 marshallofsound-google-play-music-player, megasync,
-osxfuxe, qlstephen, quicklook-csv, r-app, rstudio,
+osxfuxe, qlstephen, quicklook-csv, r, rstudio,
 skim, skyfonts, skype, slack, spideroakone, sshfs,
 the-unarchiver, virtualbox, visual-studio-code, vlc,
 whatsapp, xquartz, yujitach-menumeters
