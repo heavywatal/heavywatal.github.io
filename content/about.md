@@ -168,15 +168,15 @@ July 2010 - March 2013
 
 ## Academic Societies
 
--   [日本遺伝学会](http://gsj3.jp/)
-    / The Genetics Society of Japan
--   [日本進化学会](http://wwwsoc.nii.ac.jp/sesj2/)
-    / Society of Evolutionary Studies, Japan
+-   [日本進化学会](http://sesj.kenkyuukai.jp/)
+    / [Society of Evolutionary Studies, Japan](http://sesj.kenkyuukai.jp/special/?id=26540)
 -   [日本生態学会](http://www.esj.ne.jp/esj/) (退会中)
     / [Ecological Society of Japan](http://www.esj.ne.jp/esj/index-e.html)
--   個体群生態学会 (退会中)
-    / [The Society of Population Ecology](http://www.populationecology.org/)
--   [Evo-Devo青年の会](http://evo-devo.net/)
+-   [日本遺伝学会](https://gsj3.org/) (退会中)
+    / The Genetics Society of Japan
+-   [個体群生態学会](https://www.population-ecology.jp/) (退会中)
+    / [The Society of Population Ecology](https://www.population-ecology.jp/english/)
+
 
 ## Review
 
