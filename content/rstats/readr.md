@@ -184,7 +184,7 @@ Rの中から `install.packages('readxl')` でインストールし、
 https://github.com/tidyverse/readr
 
 ```
-devtools::install_github('tidyverse/readr')
+remotes::install_github('tidyverse/readr')
 # ...
 ld: library not found for -lintl
 ```

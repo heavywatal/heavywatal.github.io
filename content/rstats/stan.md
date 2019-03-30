@@ -253,7 +253,7 @@ https://cran.r-project.org/src/contrib/Archive/StanHeaders/
 
 リポジトリの構造が標準とはちょっと違う
 ```r
-devtools::install_github('stan-dev/rstan', ref='develop', subdir='rstan/rstan')
+remotes::install_github('stan-dev/rstan', ref='develop', subdir='rstan/rstan')
 ```
 
 ## 関連書籍

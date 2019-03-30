@@ -68,8 +68,8 @@ Linuxbrewでインストールした `cmake`, `gcc`, `glibc`
 
 1.  インストールしたRを起動し、パッケージをインストール:
     ```r
-    install.packages("devtools")
-    devtools::install_github("heavywatal/rtumopp")
+    install.packages("remotes")
+    remotes::install_github("heavywatal/rtumopp")
     ```
     最新版にアップデートするのもこのコマンド。
 
