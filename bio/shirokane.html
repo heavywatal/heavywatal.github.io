@@ -112,8 +112,9 @@ SHIROKANE — HGCスパコン
 <li><a href="https://supcom.hgc.jp/internal/cgi/version_up_s3/select.cgi">ソフトウェア</a>
 
 <ul>
-<li>RHEL 6.9</li>
-<li><code>/usr/local/bin/cmake</code> 3.8.1</li>
+<li>RHEL 7.6</li>
+<li><code>/usr/bin/cmake</code> 2.8.12</li>
+<li><code>/usr/bin/cmake3</code> 3.13.4</li>
 <li><code>/usr/local/bin/gcc</code> 4.9.3</li>
 <li><code>/usr/local/bin/git</code> 1.7.7.1</li>
 <li><code>/usr/local/package/boost/1.64.0/</code> (ただしC++11不可)</li>
@@ -169,47 +170,7 @@ remotes<span class="o">::</span>install_github<span class="p">(</span><span clas
 
 <h3 id="linuxbrew">Linuxbrew</h3>
 
-<p><a href="https://github.com/Linuxbrew/brew/wiki/CentOS6">https://github.com/Linuxbrew/brew/wiki/CentOS6</a></p>
-
-<p>まず <code>mpfr</code> インストール時の <code>make check</code> でコケるが、
-<code>brew edit mpfr</code> で該当箇所をコメントアウトして対処。</p>
-
-<p>しかし <code>glibc</code>/<code>gcc</code> のインストールがうまく行かない。
-<code>LIBRARY_PATH</code> や <code>LD_LIBRARY_PATH</code> をいじっても
-<code>libiconv.so.2</code> を見つけてもらえない:</p>
-
-<pre><code>HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_BUILD_FROM_SOURCE=1 brew install gcc --without-glibc
-==&gt; Installing gcc --without-glibc
-==&gt; Downloading https://ftp.gnu.org/gnu/gcc/gcc-5.5.0/gcc-5.5.0.tar.xz
-############################################################################################################################################################ 100.0$
-==&gt; ../configure --with-isl=/yshare1/home/watal/.linuxbrew/opt/isl@0.18 --with-bugurl=https://github.com/Linuxbrew/homebrew-core/issues --prefix=/yshare1/home/wat$
-==&gt; make
-Last 15 lines from /home/watal/.cache/Homebrew/Logs/gcc/02.make:
-/tmp/gcc-20180614-19441-uv2cp4/gcc-5.5.0/build/./gcc/xgcc -B/tmp/gcc-20180614-19441-uv2cp4/gcc-5.5.0/build/./gcc/ -dumpspecs &gt; tmp-specs
-/tmp/gcc-20180614-19441-uv2cp4/gcc-5.5.0/build/./gcc/xgcc: error while loading shared libraries: libiconv.so.2: cannot open shared object file: No such file or di$ectory
-make[3]: *** [specs] Error 127
-make[3]: *** Waiting for unfinished jobs....
-/bin/sh ../../gcc/../move-if-change tmp-attrtab.c    insn-attrtab.c
-/bin/sh ../../gcc/../move-if-change tmp-dfatab.c     insn-dfatab.c
-/bin/sh ../../gcc/../move-if-change tmp-latencytab.c insn-latencytab.c
-echo timestamp &gt; s-attrtab
-rm gcc.pod
-make[3]: Leaving directory `/tmp/gcc-20180614-19441-uv2cp4/gcc-5.5.0/build/gcc'
-make[2]: *** [all-stage1-gcc] Error 2
-make[2]: Leaving directory `/tmp/gcc-20180614-19441-uv2cp4/gcc-5.5.0/build'
-make[1]: *** [stage1-bubble] Error 2
-make[1]: Leaving directory `/tmp/gcc-20180614-19441-uv2cp4/gcc-5.5.0/build'
-make: *** [all] Error 2
-</code></pre>
-
-<p>シムリンクを張ることで一応通るようになる:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> ~/.linuxbrew/lib/
-ln -s /usr/local/lib/libiconv.so.2
-<span class="nb">cd</span> ~/.linuxbrew/include/
-ln -s /usr/local/include/gd.h
-ln -s /usr/local/include/gdfontl.h
-ln -s /usr/local/include/gdfonts.h</code></pre></div>
-<p>が、このglibcを使うと随所で不具合が&hellip;</p>
+<p>Shrokane5 (RHEL 7) では問題なく使える。</p>
 
 </article>
 </main>
