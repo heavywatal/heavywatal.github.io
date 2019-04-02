@@ -150,7 +150,11 @@ Bachelor of Science, 2008.03
 
 ## Grants and Fellowships
 
-July 2010 - March 2013
+2019-04 – 2021-03
+:   科学研究費補助金 基盤研究C 分担 (代表者: 新井田厚司)
+    "超並列がん進化シミュレーションによる腫瘍内不均一性生成機構の解明"
+
+2010-07 – 2013-03
 :   JSPS Research Fellow (DC1)
 
 ## Software
