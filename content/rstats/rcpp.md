@@ -199,11 +199,19 @@ int len(const std::vector<std::string>& args) {
 [namespace Rcpp](http://dirk.eddelbuettel.com/code/rcpp/html/namespaceRcpp.html)
 とかからブラウザのページ内検索で探すのが早い。
 
-Rcppで楽ができるとはいえ、R本体の内部情報もいずれ知ることになる。。。
+Rcppで楽ができるとはいえ、R本体の内部情報も知っておいたほうがいい。
+[C++から直接 R API に触れるべきではないという意見](https://developer.r-project.org/Blog/public/2019/03/28/use-of-c---in-packages/)もあって、
+[R-develで議論になっている](https://stat.ethz.ch/pipermail/r-devel/2019-March/077560.html)。
+R APIの例外処理で `longjmp` が多用されているため、
+RAIIを期待したC++コードはデストラクタが呼ばれなくてバグる危険性が高い、
+というのがひとつ大きな問題らしい。
+ちゃんと理解しないうちは `Rinternals.h` の中身を直接呼ぶのは避けて、
+`Rcpp::` 名前空間内のC++関数だけを使うようにするのがとりあえず安全。
 
 - https://github.com/hadley/r-internals
-- https://cran.r-project.org/doc/manuals/r-release/R-ints.html
 - https://github.com/wch/r-source/blob/trunk/src/include/Rinternals.h
+- https://cran.r-project.org/doc/manuals/r-release/R-ints.html
+- https://cran.r-project.org/doc/manuals/r-release/R-exts.html
 
 
 ### 型
