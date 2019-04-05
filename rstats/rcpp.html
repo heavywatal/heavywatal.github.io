@@ -285,12 +285,20 @@ CXX=$(LLVM_LOC)/bin/clang++
 <a href="http://dirk.eddelbuettel.com/code/rcpp/html/namespaceRcpp.html">namespace Rcpp</a>
 とかからブラウザのページ内検索で探すのが早い。</p>
 
-<p>Rcppで楽ができるとはいえ、R本体の内部情報もいずれ知ることになる。。。</p>
+<p>Rcppで楽ができるとはいえ、R本体の内部情報も知っておいたほうがいい。
+<a href="https://developer.r-project.org/Blog/public/2019/03/28/use-of-c---in-packages/">C++から直接 R API に触れるべきではないという意見</a>もあって、
+<a href="https://stat.ethz.ch/pipermail/r-devel/2019-March/077560.html">R-develで議論になっている</a>。
+R APIの例外処理で <code>longjmp</code> が多用されているため、
+RAIIを期待したC++コードはデストラクタが呼ばれなくてバグる危険性が高い、
+というのがひとつ大きな問題らしい。
+ちゃんと理解しないうちは <code>Rinternals.h</code> の中身を直接呼ぶのは避けて、
+<code>Rcpp::</code> 名前空間内のC++関数だけを使うようにするのがとりあえず安全。</p>
 
 <ul>
 <li><a href="https://github.com/hadley/r-internals">https://github.com/hadley/r-internals</a></li>
-<li><a href="https://cran.r-project.org/doc/manuals/r-release/R-ints.html">https://cran.r-project.org/doc/manuals/r-release/R-ints.html</a></li>
 <li><a href="https://github.com/wch/r-source/blob/trunk/src/include/Rinternals.h">https://github.com/wch/r-source/blob/trunk/src/include/Rinternals.h</a></li>
+<li><a href="https://cran.r-project.org/doc/manuals/r-release/R-ints.html">https://cran.r-project.org/doc/manuals/r-release/R-ints.html</a></li>
+<li><a href="https://cran.r-project.org/doc/manuals/r-release/R-exts.html">https://cran.r-project.org/doc/manuals/r-release/R-exts.html</a></li>
 </ul>
 
 <h3 id="型">型</h3>
