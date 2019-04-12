@@ -1,9 +1,9 @@
 +++
 title = 'About'
-menu = "main"
 type = "home"
 aliases = ["/cv.html"]
-weight = 1
+[menu.main]
+  weight = 1
 +++
 
 岩嵜 航
