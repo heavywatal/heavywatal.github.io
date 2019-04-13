@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.55.0-DEV" />
+<meta name="generator" content="Hugo 0.56.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
@@ -50,14 +50,10 @@ document.addEventListener("DOMContentLoaded", function() {
 "itemListElement": [
  {"@type": "ListItem",
   "position": 1,
-  "item": {
-   "@id": "https://heavywatal.github.io/cxx.html",
-   "name": "cxx"}},
+  "item": {"@id":"https://heavywatal.github.io/cxx.html","name":"cxx"} },
  {"@type": "ListItem",
   "position": 2,
-  "item": {
-   "@id": "https://heavywatal.github.io/cxx/gcc.html",
-   "name": "gcc"}}
+  "item": {"@id":"https://heavywatal.github.io/cxx/gcc.html","name":"gcc"} }
 ]}</script>
 
 <script defer src="https://use.fontawesome.com/releases/v5.8.0/js/all.js" integrity="sha384-ukiibbYjFS/1dhODSWD+PrZ6+CGCgf8VbyUH7bQQNUulL+2r59uGYToovytTf4Xm" crossorigin="anonymous"></script>
@@ -106,13 +102,9 @@ gcc
 <pre><code>g++ -g -Wall -Wextra -O3 main.cpp -o a.out
 </code></pre>
 
-<div class="note">
 <p><a href="/dev/make.html">make</a> や <a href="/dev/cmake.html">CMake</a>
 などのツールを使ってビルドすることが多く、
 ターミナルからコンパイラを直接実行することはほぼ無い。</p>
-
-</div>
-
 
 <h3 id="options">Options</h3>
 
@@ -234,16 +226,17 @@ g++-6 ではこれのGNU方言である <code>gnu++14</code> がデフォルト�
 <li>既存のバージョンとごっちゃになるのを避けるため
 <code>--program-suffix</code> を設定</li>
 <li>他言語サポートは不要なので <code>--disable-nls</code></li>
-<li><code>--disable-multilib</code> を付けないと
+
+<li><p><code>--disable-multilib</code> を付けないと
 <code>fatal error: gnu/stubs-32.h: No such file or directory. stub-32.h</code>
-などと怒られて止まる</li>
-</ul>
+などと怒られて止まる</p>
 
 <pre><code>get -O- http://ftp.gnu.org/gnu/gcc/gcc-4.9.1/gcc-4.9.1.tar.bz2 | tar xj
 kdir build
 d build/
 ./gcc-4.9.1/configure --enable-languages=c,c++,go,fortran --prefix=/usr/local --program-suffix=-4.9 --enable-shared --enable-linker-build-id --without-included-gettext --enable-threads=posix --disable-nls --with-sysroot=/ --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --enable-gnu-unique-object --disable-libmudflap --enable-plugin --with-system-zlib --disable-browser-plugin --enable-gtk-cairo --with-arch-directory=amd64 --enable-multiarch --disable-werror --with-abi=m64 --disable-multilib --with-tune=core2 --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu
 </code></pre></li>
+</ul></li>
 
 <li><p>コンパイル。ただしデフォルトではコンパイラオプションが <code>-g O2</code>
 となっていて膨大なデバッグシンボルがついた状態で出来上がってしまうらしいので、

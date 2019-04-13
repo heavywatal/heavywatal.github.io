@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.55.0-DEV" />
+<meta name="generator" content="Hugo 0.56.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
@@ -50,14 +50,10 @@ document.addEventListener("DOMContentLoaded", function() {
 "itemListElement": [
  {"@type": "ListItem",
   "position": 1,
-  "item": {
-   "@id": "https://heavywatal.github.io/dev.html",
-   "name": "dev"}},
+  "item": {"@id":"https://heavywatal.github.io/dev.html","name":"dev"} },
  {"@type": "ListItem",
   "position": 2,
-  "item": {
-   "@id": "https://heavywatal.github.io/dev/nohup.html",
-   "name": "プロセス管理"}}
+  "item": {"@id":"https://heavywatal.github.io/dev/nohup.html","name":"プロセス管理"} }
 ]}</script>
 
 <script defer src="https://use.fontawesome.com/releases/v5.8.0/js/all.js" integrity="sha384-ukiibbYjFS/1dhODSWD+PrZ6+CGCgf8VbyUH7bQQNUulL+2r59uGYToovytTf4Xm" crossorigin="anonymous"></script>
@@ -242,9 +238,11 @@ killall a.out
 <ul>
 <li>標準出力の書き出し先を指定するには <code>&gt;{OUTFILE}</code></li>
 <li>標準エラー出力の書き出し先を指定するには <code>2&gt;{OUTFILE}</code></li>
-<li>標準エラー出力を標準出力と同じところに流すには <code>&gt;{OUTFILE} 2&gt;&amp;1</code></li>
+
+<li><p>標準エラー出力を標準出力と同じところに流すには <code>&gt;{OUTFILE} 2&gt;&amp;1</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">nohup COMMAND &gt;out.log <span class="m">2</span>&gt;err.log <span class="p">&amp;</span></code></pre></div></li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">nohup COMMAND &gt;out.log <span class="m">2</span>&gt;err.log <span class="p">&amp;</span></code></pre></div>
+
 <p><a href="/dev/ssh.html">ssh</a> 接続先のサーバーで <code>nohup</code> ジョブを走らせるときは
 標準入出力をすべて切っておかないと期待通りにsshを抜けられない:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">nohup COMMAND &gt;/dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span> &lt;/dev/null <span class="p">&amp;</span></code></pre></div>
@@ -258,14 +256,9 @@ bg %1
 disown %1
 </code></pre>
 
-<div class="note">
-<p>See <a href="/dev/tmux.html">tmux</a></p>
-
-<p><code>nohup</code>, <code>disown</code> がプロセス単位で切り離すのに対して、
+<p>See <a href="/dev/tmux.html">tmux</a>.<br>
+<code>nohup</code>, <code>disown</code> がプロセス単位で切り離すのに対して、
 <code>tmux</code> は端末セッション丸ごと切り離し＆復帰することができる。</p>
-
-</div>
-
 
 <h2 id="関連書籍">関連書籍</h2>
 

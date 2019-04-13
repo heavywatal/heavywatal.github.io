@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.55.0-DEV" />
+<meta name="generator" content="Hugo 0.56.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
@@ -50,14 +50,10 @@ document.addEventListener("DOMContentLoaded", function() {
 "itemListElement": [
  {"@type": "ListItem",
   "position": 1,
-  "item": {
-   "@id": "https://heavywatal.github.io/dev.html",
-   "name": "dev"}},
+  "item": {"@id":"https://heavywatal.github.io/dev.html","name":"dev"} },
  {"@type": "ListItem",
   "position": 2,
-  "item": {
-   "@id": "https://heavywatal.github.io/dev/qt.html",
-   "name": "Qt"}}
+  "item": {"@id":"https://heavywatal.github.io/dev/qt.html","name":"Qt"} }
 ]}</script>
 
 <script defer src="https://use.fontawesome.com/releases/v5.8.0/js/all.js" integrity="sha384-ukiibbYjFS/1dhODSWD+PrZ6+CGCgf8VbyUH7bQQNUulL+2r59uGYToovytTf4Xm" crossorigin="anonymous"></script>
@@ -143,31 +139,23 @@ mv bin/Qt\ Creator.app /Applications/
 を確認する。そのほかの項目も適当に。</p></li>
 </ol>
 
-<div class="note">
 <p>古い <code>QMAKEFEATURES</code> 設定が残ってたりすると失敗するので
 再インストールを試みるときなどは注意</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">Failed to process makespec <span class="k">for</span> platform <span class="s1">&#39;macx-clang&#39;</span>
 ASSERT: <span class="s2">&#34;fileName.isEmpty() || isAbsolutePath(fileName)&#34;</span> in file */qtbase/qmake/library/ioutils.cpp, line <span class="m">61</span></code></pre></div>
-</div>
-
-
 <h2 id="qwt-qt用のグラフ描画プラグイン">qwt &mdash; Qt用のグラフ描画プラグイン</h2>
 
 <p><a href="http://qwt.sourceforge.net/">http://qwt.sourceforge.net/</a></p>
 
 <h3 id="インストール">インストール</h3>
 
-<p><a href="http://qwt.sourceforge.net/qwtinstall.html">http://qwt.sourceforge.net/qwtinstall.html</a></p>
+<ul>
+<li><a href="http://qwt.sourceforge.net/qwtinstall.html">http://qwt.sourceforge.net/qwtinstall.html</a></li>
+<li><a href="http://qt-project.org/doc/qt-5.1/qtdoc/deployment-plugins.html">http://qt-project.org/doc/qt-5.1/qtdoc/deployment-plugins.html</a></li>
+<li><a href="https://qt-project.org/doc/qtcreator-3.1/adding-plugins.html">https://qt-project.org/doc/qtcreator-3.1/adding-plugins.html</a></li>
+</ul>
 
-<p><a href="http://qt-project.org/doc/qt-5.1/qtdoc/deployment-plugins.html">http://qt-project.org/doc/qt-5.1/qtdoc/deployment-plugins.html</a></p>
-
-<p><a href="https://qt-project.org/doc/qtcreator-3.1/adding-plugins.html">https://qt-project.org/doc/qtcreator-3.1/adding-plugins.html</a></p>
-
-<div class="note">
 <p>Qt Library のバージョンを変えたらプラグインもビルドし直すべし。</p>
-
-</div>
-
 
 <ol>
 <li><p><a href="http://sourceforge.net/projects/qwt/files/qwt/">プロジェクトページ</a>
@@ -201,23 +189,18 @@ otool -L /usr/local/qwt-6.1.0/plugins/designer/libqwt_designer_plugin.dylib
 </code></pre></li>
 
 <li><p>Qt Creator で適当なプロジェクトのuiファイルを開き、
-Design タブに Qwt Widgets が登場していれば成功。</p>
-
-<p>無い場合はその画面のメニューバーから
+Design タブに Qwt Widgets が登場していれば成功。
+無い場合はその画面のメニューバーから
 <code>Tools --&gt; Form Editor --&gt; About Qt Designer Plugins...</code>
 を見て原因を探す。</p>
 
-<div class="note">
 <p>例えばこんなエラーなら、
 プラグインそのものは Qt Creator から見えているが、
 <code>qwt</code> ライブラリが読み込めていない</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">Library not loaded: qwt.framework/Versions/6/qwt
 Referenced from: /usr/local/qwt-6.1.0/plugins/designer/libqwt_designer_plugin.dylib
 Reason: image not found</code></pre></div>
-<p>これすらも無い場合はプラグインがそもそも見えていない。</p>
-
-</div>
-</li>
+<p>これすらも無い場合はプラグインがそもそも見えていない。</p></li>
 </ol>
 
 <h3 id="ビルド方法">ビルド方法</h3>
@@ -249,13 +232,9 @@ The program has unexpectedly finished.
 
 <li><p>Qt Creator 左下の緑三角で再びランしてみる。</p>
 
-<div class="note">
 <p>この段階で、開発マシンで起動できるようにはなっているはず。
 しかしQtも含めあらゆるライブラリを絶対パスで参照してしまっているので、
-このままほかのマシンにコピーしても起動できない。</p>
-
-</div>
-</li>
+このままほかのマシンにコピーしても起動できない。</p></li>
 
 <li><p>ライブラリをアプリケーションバンドル内にコピーし、参照先を変更する:</p>
 

@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.55.0-DEV" />
+<meta name="generator" content="Hugo 0.56.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
@@ -50,14 +50,10 @@ document.addEventListener("DOMContentLoaded", function() {
 "itemListElement": [
  {"@type": "ListItem",
   "position": 1,
-  "item": {
-   "@id": "https://heavywatal.github.io/rstats.html",
-   "name": "rstats"}},
+  "item": {"@id":"https://heavywatal.github.io/rstats.html","name":"rstats"} },
  {"@type": "ListItem",
   "position": 2,
-  "item": {
-   "@id": "https://heavywatal.github.io/rstats/programming.html",
-   "name": "RプログラミングTips"}}
+  "item": {"@id":"https://heavywatal.github.io/rstats/programming.html","name":"RプログラミングTips"} }
 ]}</script>
 
 <script defer src="https://use.fontawesome.com/releases/v5.8.0/js/all.js" integrity="sha384-ukiibbYjFS/1dhODSWD+PrZ6+CGCgf8VbyUH7bQQNUulL+2r59uGYToovytTf4Xm" crossorigin="anonymous"></script>
@@ -153,17 +149,10 @@ R標準の関数よりも遥かに分かりやすく安全で高機能なもの�
 デフォルトでは左から<code>q</code>までの積分 $P[X \leq q]$ 。
 <code>lower.tail=FALSE</code> とすると<code>q</code>より右の積分(相補CDF) $P[X &gt; q]$ 。</dd>
 <dd><p>第一引数やパラメータ<code>...</code>はvector処理されるが、
- 後半の論理値引数はvectorを与えても先頭のみが使われる。</p>
-
-<div class="warning">
-<p>離散分布の場合は境界の値を含むか含まないかでバー1本分の差が出るので注意。
-ホントは <code>lower.tail=FALSE</code> でも境界を含むべきだと思うんだけど。</p>
-
-</div>
-
-
-<div class="note">
-<p><code>1 - pnorm(...)</code>や<code>log(pnorm(...))</code>のほうが直感的に分かりやすいので、
+ 後半の論理値引数はvectorを与えても先頭のみが使われる。</p></dd>
+<dd><p>離散分布の場合は境界の値を含むか含まないかでバー1本分の差が出るので注意。
+ホントは <code>lower.tail=FALSE</code> でも境界を含むべきだと思うんだけど。</p></dd>
+<dd><p><code>1 - pnorm(...)</code>や<code>log(pnorm(...))</code>のほうが直感的に分かりやすいので、
 <code>lower.tail=FALSE</code>や<code>log.p=TRUE</code>は不要なようにも思われるが、
 これらの引数で内部処理させたほうが浮動小数点型の限界付近での計算が正確。</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># complementary</span>
@@ -172,17 +161,14 @@ pnorm<span class="p">(</span><span class="m">10</span><span class="p">,</span> <
 
 <span class="c1"># log</span>
 <span class="kp">log</span><span class="p">(</span>pnorm<span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">))</span>               <span class="c1"># 0</span>
-pnorm<span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> log.p<span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>        <span class="c1"># -7.619853e-24</span></code></pre></div>
-</div>
-</dd>
+pnorm<span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> log.p<span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>        <span class="c1"># -7.619853e-24</span></code></pre></div></dd>
 <dt><code>q___(p, ..., lower.tail=TRUE, log.p=FALSE)</code></dt>
 <dd><p>累積分布関数の逆関数。
 左からの累積確率が <code>p</code> となる確率変数の値。
 <code>p___()</code> の逆関数。
 <code>lower.tail=FALSE</code> とすると右から。</p></dd>
 <dt><code>r___(n, ...)</code></dt>
-<dd><p>乱数を <code>n</code> 個生成する</p></dd>
-</dl>
+<dd><p>乱数を <code>n</code> 個生成する</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">dnorm<span class="p">(</span><span class="kt">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1.96</span><span class="p">))</span>
 <span class="c1">## [1] 0.39894228 0.05844094</span>
 pnorm<span class="p">(</span><span class="kt">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1.96</span><span class="p">))</span>
@@ -190,7 +176,9 @@ pnorm<span class="p">(</span><span class="kt">c</span><span class="p">(</span><s
 qnorm<span class="p">(</span><span class="kt">c</span><span class="p">(</span><span class="m">0.5</span><span class="p">,</span> <span class="m">0.975</span><span class="p">))</span>
 <span class="c1">## [1] 0.000000 1.959964</span>
 rnorm<span class="p">(</span><span class="m">4</span><span class="p">)</span>
-<span class="c1">## [1] -1.77327259  0.95713346  0.27941121  0.08387267</span></code></pre></div>
+<span class="c1">## [1] -1.77327259  0.95713346  0.27941121  0.08387267</span></code></pre></div></dd>
+</dl>
+
 <h3 id="分布の種類">分布の種類</h3>
 
 <p>離散</p>

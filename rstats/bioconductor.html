@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.55.0-DEV" />
+<meta name="generator" content="Hugo 0.56.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
@@ -50,14 +50,10 @@ document.addEventListener("DOMContentLoaded", function() {
 "itemListElement": [
  {"@type": "ListItem",
   "position": 1,
-  "item": {
-   "@id": "https://heavywatal.github.io/rstats.html",
-   "name": "rstats"}},
+  "item": {"@id":"https://heavywatal.github.io/rstats.html","name":"rstats"} },
  {"@type": "ListItem",
   "position": 2,
-  "item": {
-   "@id": "https://heavywatal.github.io/rstats/bioconductor.html",
-   "name": "Bioconductor"}}
+  "item": {"@id":"https://heavywatal.github.io/rstats/bioconductor.html","name":"Bioconductor"} }
 ]}</script>
 
 <script defer src="https://use.fontawesome.com/releases/v5.8.0/js/all.js" integrity="sha384-ukiibbYjFS/1dhODSWD+PrZ6+CGCgf8VbyUH7bQQNUulL+2r59uGYToovytTf4Xm" crossorigin="anonymous"></script>
@@ -184,22 +180,17 @@ browseVignettes<span class="p">(</span>package<span class="o">=</span><span clas
 <code>RNAMultipleAlignment</code><br>
 <code>AAMultipleAlignment</code></dd>
 <dt>ペアワイズ整列</dt>
-<dd><p><code>PairwiseAlignments</code></p>
-
-<div class="warning">
-<p>このコンストラクタを直接呼び出してはいけない。
-<code>pairwiseAlignment()</code> 関数を使うべし。</p>
-
-</div>
-</dd>
+<dd><code>PairwiseAlignments</code></dd>
+<dd>このコンストラクタを直接呼び出してはいけない。
+<code>pairwiseAlignment()</code> 関数を使うべし。</dd>
 <dt><code>Views</code> <code>(x, start=NULL, end=NULL, width=NULL, names=NULL)</code></dt>
-<dd><p>「ある配列のこの領域とこの領域」を表現したいとき、
+<dd>「ある配列のこの領域とこの領域」を表現したいとき、
 配列を切り出すのではなく、その切り取り方のみを保持する。
 <code>IRanges</code> みたいな感じ。
-<code>as.character()</code> でその部分配列を文字列として取り出せる。</p></dd>
+<code>as.character()</code> でその部分配列を文字列として取り出せる。</dd>
 <dt><code>PDict</code> <code>(x, max.mismatch=NA, ...)</code></dt>
-<dd><p>正規表現 <code>TAA|TAG|TGA</code> のように複数の配列で検索する場合にまとめておく。
-<code>matchPDict()</code> とかで使う。</p></dd>
+<dd>正規表現 <code>TAA|TAG|TGA</code> のように複数の配列で検索する場合にまとめておく。
+<code>matchPDict()</code> とかで使う。</dd>
 </dl>
 
 <p>デモデータ</p>
@@ -470,12 +461,9 @@ bsg<span class="p">[[</span><span class="m">1</span><span class="p">]]</span></c
 <ol>
 <li><p>染色体ごとのFASTAファイルを用意する e.g. Ensemblから <code>*.chromosome.*.fa.gz</code> をダウンロードして展開</p>
 
-<div class="note">
 <p>染色体名と拡張子だけを残したファイル名にする必要がある。
-しかもgzipのままでは読めない残念な仕様なので展開しておく。 e.g. <code>IV.fa</code></p>
-
-</div>
-</li>
+しかもgzipのままでは読めない残念な仕様なので展開しておく。
+e.g. <code>IV.fa</code></p></li>
 
 <li><p>既存の <code>BSgenome</code> のやつを参考に適当にseedファイルを作る:</p>
 
@@ -500,11 +488,7 @@ PkgExamples: genome$I  # same as genome[[&quot;I&quot;]]
 seqs_srcdir: /Users/watal/db/ensembl/release-74/fasta/saccharomyces_cerevisiae/dna
 </code></pre>
 
-<div class="note">
-<p>パッケージ名に使える文字は結構限られてるので注意</p>
-
-</div>
-</li>
+<p>パッケージ名に使える文字は結構限られてるので注意</p></li>
 
 <li><p>R で <code>forgeBSgenomeDataPkg(seedfile)</code> を実行</p></li>
 

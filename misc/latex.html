@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.55.0-DEV" />
+<meta name="generator" content="Hugo 0.56.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
@@ -50,14 +50,10 @@ document.addEventListener("DOMContentLoaded", function() {
 "itemListElement": [
  {"@type": "ListItem",
   "position": 1,
-  "item": {
-   "@id": "https://heavywatal.github.io/misc.html",
-   "name": "misc"}},
+  "item": {"@id":"https://heavywatal.github.io/misc.html","name":"misc"} },
  {"@type": "ListItem",
   "position": 2,
-  "item": {
-   "@id": "https://heavywatal.github.io/misc/latex.html",
-   "name": "LaTeX"}}
+  "item": {"@id":"https://heavywatal.github.io/misc/latex.html","name":"LaTeX"} }
 ]}</script>
 
 <script defer src="https://use.fontawesome.com/releases/v5.8.0/js/all.js" integrity="sha384-ukiibbYjFS/1dhODSWD+PrZ6+CGCgf8VbyUH7bQQNUulL+2r59uGYToovytTf4Xm" crossorigin="anonymous"></script>
@@ -156,14 +152,10 @@ tlmgr install chktex</code></pre></div>
 <p>管理者権限不要の <code>--usermode</code> も用意されているが、
 なんかうまくいかないので必要に迫られない限り使わないほうがよい。</p>
 
-<div class="warning">
 <p>パッケージをアンインストールしようと思って
 <code>tlmgr uninstall some-package</code>
 などとするとTeX Live全体が消えてしまうので注意。
 正しくは <code>tlmgr remove some-package</code></p>
-
-</div>
-
 
 <h2 id="基本要素">基本要素</h2>
 
@@ -375,13 +367,15 @@ e.g., <code>mybibdata.bib</code></li>
 
 <ul>
 <li><a href="https://en.wikibooks.org/wiki/LaTeX/Fonts#Font_styles">https://en.wikibooks.org/wiki/LaTeX/Fonts#Font_styles</a></li>
-<li><a href="https://en.wikibooks.org/wiki/LaTeX/Colors">https://en.wikibooks.org/wiki/LaTeX/Colors</a></li>
-</ul>
+
+<li><p><a href="https://en.wikibooks.org/wiki/LaTeX/Colors">https://en.wikibooks.org/wiki/LaTeX/Colors</a></p>
 <div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\emph</span><span class="nb">{</span>emphasis<span class="nb">}</span>
 <span class="k">\textit</span><span class="nb">{</span>italic<span class="nb">}</span>
 <span class="k">\textbf</span><span class="nb">{</span>bold<span class="nb">}</span>
 <span class="k">\texttt</span><span class="nb">{</span>monospace<span class="nb">}</span>
-<span class="nb">{</span><span class="k">\huge</span> huge text<span class="nb">}</span></code></pre></div>
+<span class="nb">{</span><span class="k">\huge</span> huge text<span class="nb">}</span></code></pre></div></li>
+</ul>
+
 <p><code>\tiny</code>, <code>\scriptsize</code>, <code>\footnotesize</code>, <code>\small</code>,
 <code>\normalsize</code>,
 <code>\large</code>, <code>\Large</code>, <code>\LARGE</code>, <code>\huge</code>, <code>\Huge</code></p>
@@ -447,17 +441,18 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 <ul>
 <li>依存パッケージ:
 <code>luaotfload</code>, <code>adobemapping</code>, <code>ctablestack</code>, <code>ipaex</code></li>
-<li><code>bad argument #1 to 'open'</code> などと怒られる問題は、
-必要な CMap が LuaTeX から見えていないのが原因</li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">  <span class="c1">## キャッシュを再構築</span>
-  % rm -rf ~/Library/texlive/2016basic/texmf-var/luatex-cache/
-  % luaotfload-tool -u -v
 
-  <span class="c1">## 見えてるか確認</span>
-  % kpsewhich -format<span class="o">=</span>cmap UniJIS2004-UTF32-H
-  % kpsewhich -format<span class="o">=</span>cmap UniJIS2004-UTF32-V
-  % kpsewhich -format<span class="o">=</span>cmap Adobe-Japan1-UCS2</code></pre></div></li>
+<li><p><code>bad argument #1 to 'open'</code> などと怒られる問題は、
+必要な CMap が LuaTeX から見えていないのが原因</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1">## キャッシュを再構築</span>
+% rm -rf ~/Library/texlive/2016basic/texmf-var/luatex-cache/
+% luaotfload-tool -u -v
+
+<span class="c1">## 見えてるか確認</span>
+% kpsewhich -format<span class="o">=</span>cmap UniJIS2004-UTF32-H
+% kpsewhich -format<span class="o">=</span>cmap UniJIS2004-UTF32-V
+% kpsewhich -format<span class="o">=</span>cmap Adobe-Japan1-UCS2</code></pre></div></li>
+</ul></li>
 </ul>
 
 <h3 id="xelatex">XeLaTeX</h3>

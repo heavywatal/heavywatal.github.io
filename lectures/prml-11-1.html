@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.55.0-DEV" />
+<meta name="generator" content="Hugo 0.56.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
@@ -50,14 +50,10 @@ document.addEventListener("DOMContentLoaded", function() {
 "itemListElement": [
  {"@type": "ListItem",
   "position": 1,
-  "item": {
-   "@id": "https://heavywatal.github.io/lectures.html",
-   "name": "lectures"}},
+  "item": {"@id":"https://heavywatal.github.io/lectures.html","name":"lectures"} },
  {"@type": "ListItem",
   "position": 2,
-  "item": {
-   "@id": "https://heavywatal.github.io/lectures/prml-11-1.html",
-   "name": "PRML輪読会 11章1節"}}
+  "item": {"@id":"https://heavywatal.github.io/lectures/prml-11-1.html","name":"PRML輪読会 11章1節"} }
 ]}</script>
 
 <script defer src="https://use.fontawesome.com/releases/v5.8.0/js/all.js" integrity="sha384-ukiibbYjFS/1dhODSWD+PrZ6+CGCgf8VbyUH7bQQNUulL+2r59uGYToovytTf4Xm" crossorigin="anonymous"></script>
@@ -133,7 +129,6 @@ PRML輪読会 11章1節
 
 </div>
 
-
 <p><strong>目標:</strong>
 変数 $\mathbf z$ の分布 $\color{red}{p(\mathbf z)}$ を考えた上で、
 ある関数 $\color{blue}{f(\mathbf z)}$ の値がどうなるか予測したい。</p>
@@ -144,7 +139,6 @@ PRML輪読会 11章1節
 <p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.1.png"/ alt="Figure 11.1" width="300px"></p>
 
 </div>
-
 
 <p>$\color{blue}{f(\textbf{z})}$ の期待値は (<strong>式11.1</strong>)</p>
 
@@ -204,7 +198,6 @@ $p(x_1)p(x_2)p(x_3)p(x_4 \mid x_1,x_2,x_3)p(x_5 \mid x_1,x_3)p(x_6 \mid x_4)p(x_
 
 </div>
 
-
 <p>依存関係の親となるほうから順に条件付き確率で生成 (<em>ancestral sampling</em> <strong>伝承サンプリング</strong>)
 していくことにすると、同時確率は一般的に (<strong>式 11.4</strong>)</p>
 
@@ -237,12 +230,9 @@ $z_1$ から $z_M$ まで一周するだけでは求まらず、
 
 </div>
 
-
 <div class="note">
-<p><a href="/cxx/random.html">/cxx/random</a></p>
-
+<a href="/cxx/random.html">/cxx/random</a>
 </div>
-
 
 <h4 id="11-1-1-standard-distributions">11.1.1 Standard distributions</h4>
 
@@ -270,7 +260,6 @@ z = h(y) \equiv \int _{-\infty}^y p(\hat y) \mathrm d\hat y
 縦軸を $z$ として青い線を逆関数の目線で見てみると、$y$ が中央付近に来るような $z$ の区間はすごく短いが、$y$ が左から3分の1くらいのところに来るような $z$ の区間はかなり長い。</p>
 
 </div>
-
 
 <p>その不定積分の逆関数を一様乱数にかけて $y = h^{-1}(z)$ とすれば欲しかった分布の乱数が出てくる！</p>
 
@@ -323,7 +312,6 @@ $z_1^2 + z_2^2 \leq 1$ を満たさなければ捨てる。
 
 </div>
 
-
 <p>$r^2 = z_1^2 + z_2^2$ として (<strong>式 11.10</strong>, <strong>式 11.11</strong>)</p>
 
 <div>\[\begin{aligned}
@@ -343,11 +331,9 @@ p(y_1, y_2) &= p(z_1, z_2) \left| \frac{\partial(z_1, z_2)} {\partial(y_1, y_2)}
 平均と分散を変えたければ、$y = \mu + \sigma z$ のように標準偏差をかけて平均を足せばよい。</p>
 
 <div class="note">
-<p>C++11 の <code>std::normal_distribution</code> や GSL の <code>gsl_ran_gaussian</code> でも使われている。
-円に収まらないものを棄却する方法ではなく、三角関数を使ってそのまま用いる方法が取られる。</p>
-
+C++11 の <code>std::normal_distribution</code> や GSL の <code>gsl_ran_gaussian</code> でも使われている。
+円に収まらないものを棄却する方法ではなく、三角関数を使ってそのまま用いる方法が取られる。
 </div>
-
 
 <p>多変量の場合も同様に $\mathbf y = \mathbf \mu + \mathbf{Lz}$ として動かせる。
 ただし共分散は $\mathbf \Sigma = \mathbf{LL}^\mathrm T$ として <strong>コレスキー分解</strong> (<em>Cholesky decomposition</em>)する。

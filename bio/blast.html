@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.55.0-DEV" />
+<meta name="generator" content="Hugo 0.56.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
@@ -50,14 +50,10 @@ document.addEventListener("DOMContentLoaded", function() {
 "itemListElement": [
  {"@type": "ListItem",
   "position": 1,
-  "item": {
-   "@id": "https://heavywatal.github.io/bio.html",
-   "name": "bio"}},
+  "item": {"@id":"https://heavywatal.github.io/bio.html","name":"bio"} },
  {"@type": "ListItem",
   "position": 2,
-  "item": {
-   "@id": "https://heavywatal.github.io/bio/blast.html",
-   "name": "BLAST"}}
+  "item": {"@id":"https://heavywatal.github.io/bio/blast.html","name":"BLAST"} }
 ]}</script>
 
 <script defer src="https://use.fontawesome.com/releases/v5.8.0/js/all.js" integrity="sha384-ukiibbYjFS/1dhODSWD+PrZ6+CGCgf8VbyUH7bQQNUulL+2r59uGYToovytTf4Xm" crossorigin="anonymous"></script>
@@ -155,13 +151,9 @@ cd ncbi-blast-2.2.30+-src/c++/
 <pre><code>./configure --without-debug --with-strip --without-pcre --with-mt --with-flat-makefile --with-64 --with-ncbi-public --without-ccache --without-caution --without-makefile-auto-update --with-projects=scripts/projects/blast/project.lst --with-internal --prefix=/usr/local/ncbi-blast --with-boost=/usr/local/boost-gcc CC=gcc-4.9 CXX=g++-4.9
 </code></pre>
 
-<div class="note">
 <p><code>clang</code> (および Xcode のニセ <code>gcc</code>)
 では <code>configure</code> が通らないので本物の <code>gcc</code> を
-<a href="/mac/homebrew.html">Homebrew</a> などでインストールしておく。</p>
-
-</div>
-</li>
+<a href="/mac/homebrew.html">Homebrew</a> などでインストールしておく。</p></li>
 
 <li><p>そのまま <code>make</code> してもダメらしいので
 <code>Makefile.mk</code> の <code>-std=gnu++11</code> を消す:</p>
@@ -185,13 +177,9 @@ sudo make install
 export BLASTDB=${HOME}/db/blast
 </code></pre>
 
-<div class="note">
 <p><code>~/.ncbirc</code> でも <code>BLASTDB</code> を指定できるっぽいけど
 普通にシェルの環境変数を使うほうがわかりやすいし、
-<code>makeblastdb</code> の出力先として参照できるので便利。</p>
-
-</div>
-</li>
+<code>makeblastdb</code> の出力先として参照できるので便利。</p></li>
 
 <li><p>確認:</p>
 

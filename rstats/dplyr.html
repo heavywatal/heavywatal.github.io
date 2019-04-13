@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.55.0-DEV" />
+<meta name="generator" content="Hugo 0.56.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
@@ -50,14 +50,10 @@ document.addEventListener("DOMContentLoaded", function() {
 "itemListElement": [
  {"@type": "ListItem",
   "position": 1,
-  "item": {
-   "@id": "https://heavywatal.github.io/rstats.html",
-   "name": "rstats"}},
+  "item": {"@id":"https://heavywatal.github.io/rstats.html","name":"rstats"} },
  {"@type": "ListItem",
   "position": 2,
-  "item": {
-   "@id": "https://heavywatal.github.io/rstats/dplyr.html",
-   "name": "dplyr"}}
+  "item": {"@id":"https://heavywatal.github.io/rstats/dplyr.html","name":"dplyr"} }
 ]}</script>
 
 <script defer src="https://use.fontawesome.com/releases/v5.8.0/js/all.js" integrity="sha384-ukiibbYjFS/1dhODSWD+PrZ6+CGCgf8VbyUH7bQQNUulL+2r59uGYToovytTf4Xm" crossorigin="anonymous"></script>
@@ -123,14 +119,11 @@ dplyr — 高速data.frame処理
 
 <p>dplyrではなく<a href="https://magrittr.tidyverse.org/">magrittr</a>の機能。</p>
 
-<dl>
-<dt><code>x %&gt;% f(a, b)</code></dt>
-<dd>これは <code>f(x, a, b)</code> と等価。
+<p><code>x %&gt;% f(a, b)</code> は <code>f(x, a, b)</code> と等価。
 左の値 <code>x</code> を第一引数として右の関数 <code>f()</code> に渡す。
 一時変数を作ったり、関数を何重にも重ねたりすることなく、
 適用する順に次々と処理を記述することができるようになる。
-慣れれば書きやすく読みやすい。</dd>
-</dl>
+慣れれば書きやすく読みやすい。</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span>tidyverse<span class="p">)</span>
 
 <span class="c1">## with piping</span>
@@ -258,12 +251,10 @@ iris <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">(
 <span class="m">2</span>          <span class="m">5.2</span>         <span class="m">4.1</span>          <span class="m">1.5</span>         <span class="m">0.1</span>  setosa
 <span class="m">3</span>          <span class="m">5.5</span>         <span class="m">4.2</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  setosa</code></pre></div>
 <div class="warning">
-<p>評価結果が <code>NA</code> となる行は除去される。
+評価結果が <code>NA</code> となる行は除去される。
 特に不等号を使うときやや直感に反するので要注意。
-e.g., <code>filter(gene != 'TP53')</code></p>
-
-</div>
-</dd>
+e.g., <code>filter(gene != 'TP53')</code>
+</div></dd>
 <dd><p>複数列で評価する亜種:<br>
 <code>filter_all(.tbl, .vars_predicate)</code><br>
 <code>filter_if(.tbl, .predicate, .vars_predicate)</code><br>

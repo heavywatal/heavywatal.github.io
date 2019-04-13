@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.55.0-DEV" />
+<meta name="generator" content="Hugo 0.56.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
@@ -50,14 +50,10 @@ document.addEventListener("DOMContentLoaded", function() {
 "itemListElement": [
  {"@type": "ListItem",
   "position": 1,
-  "item": {
-   "@id": "https://heavywatal.github.io/rstats.html",
-   "name": "rstats"}},
+  "item": {"@id":"https://heavywatal.github.io/rstats.html","name":"rstats"} },
  {"@type": "ListItem",
   "position": 2,
-  "item": {
-   "@id": "https://heavywatal.github.io/rstats/purrr.html",
-   "name": "purrr"}}
+  "item": {"@id":"https://heavywatal.github.io/rstats/purrr.html","name":"purrr"} }
 ]}</script>
 
 <script defer src="https://use.fontawesome.com/releases/v5.8.0/js/all.js" integrity="sha384-ukiibbYjFS/1dhODSWD+PrZ6+CGCgf8VbyUH7bQQNUulL+2r59uGYToovytTf4Xm" crossorigin="anonymous"></script>
@@ -138,46 +134,44 @@ results <span class="o">=</span> purrr<span class="o">::</span>map<span class="p
 <dd>型の決まったvectorを返すmap亜種。
 <code>base::sapply()</code>や<code>base::vapply()</code>よりも覚えやすく読みやすい。</dd>
 <dt><code>purrr::map_dfr(.x, .f, ..., .id=NULL)</code></dt>
-<dd>結果を<code>dplyr::bind_rows()</code>で結合したdata.frameとして返すmap亜種。
-例えば、同じ形式のCSVファイルを一気に読んで結合、みたいなときに便利:</dd>
-</dl>
+<dd><p>結果を<code>dplyr::bind_rows()</code>で結合したdata.frameとして返すmap亜種。
+例えば、同じ形式のCSVファイルを一気に読んで結合、みたいなときに便利:</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">files <span class="o">=</span> fs<span class="o">::</span>dir_ls<span class="p">(</span><span class="s">&#34;path/to/data/&#34;</span><span class="p">,</span> glob <span class="o">=</span> <span class="s">&#34;*.csv&#34;</span><span class="p">)</span>
-combined_df <span class="o">=</span> purrr<span class="o">::</span>map_dfr<span class="p">(</span>files<span class="p">,</span> readr<span class="o">::</span>read_csv<span class="p">)</span></code></pre></div>
-<dl>
+combined_df <span class="o">=</span> purrr<span class="o">::</span>map_dfr<span class="p">(</span>files<span class="p">,</span> readr<span class="o">::</span>read_csv<span class="p">)</span></code></pre></div></dd>
 <dt><code>purrr::map2(.x, .y, .f, ...)</code></dt>
-<dd>2変数バージョン。<code>map2_int()</code>などの型指定vector版もある。
-3変数以上渡したいときはlistかdata.frameにまとめて次の<code>pmap()</code>を使う。</dd>
+<dd><p>2変数バージョン。<code>map2_int()</code>などの型指定vector版もある。
+3変数以上渡したいときはlistかdata.frameにまとめて次の<code>pmap()</code>を使う。</p></dd>
 <dt><code>purrr::pmap(.l, .f, ...)</code></dt>
-<dd>listの中身をparallelに処理するmap。
+<dd><p>listの中身をparallelに処理するmap。
 関数 <code>.f</code>の引数はlistの要素名と一致させるか <code>...</code> で受け流す必要がある。
-e.g., <code>pmap(list(a=1:3, b=4:6), function(a, b) {a * b})</code> 。</dd>
-<dd>data.frameの正体はlist of columnsなので、
-そのまま<code>.l</code>として渡せる。</dd>
-<dd><code>pmap_int</code> など出力型指定の亜種もある。</dd>
+e.g., <code>pmap(list(a=1:3, b=4:6), function(a, b) {a * b})</code> 。</p></dd>
+<dd><p>data.frameの正体はlist of columnsなので、
+そのまま<code>.l</code>として渡せる。</p></dd>
+<dd><p><code>pmap_int</code> など出力型指定の亜種もある。</p></dd>
 <dt><code>purrr::map_if(.x, .p, .f, ...)</code></dt>
-<dd><code>.p</code>が<code>TRUE</code>になる要素のみ<code>.f()</code>を適用し、残りはそのまま出力。
+<dd><p><code>.p</code>が<code>TRUE</code>になる要素のみ<code>.f()</code>を適用し、残りはそのまま出力。
 <code>.p</code>はlogical vectorでもいいし、
-<code>.x[[i]]</code>を受け取るpredicate関数でもよい。</dd>
-<dd>番号か名前で選ぶには<code>purrr::map_at(.x, .at, .f, ...)</code></dd>
+<code>.x[[i]]</code>を受け取るpredicate関数でもよい。</p></dd>
+<dd><p>番号か名前で選ぶには<code>purrr::map_at(.x, .at, .f, ...)</code></p></dd>
 <dt><code>purrr::walk(.x, .f, ...)</code></dt>
-<dd><code>map()</code>同様に関数を適用しつつ元の値をそのままinvisible返しする亜種。</dd>
+<dd><p><code>map()</code>同様に関数を適用しつつ元の値をそのままinvisible返しする亜種。</p></dd>
 <dt><code>purrr::lmap(.x, .f, ...)</code></dt>
-<dd><code>.x[[i]]</code>ではなく<code>.x[i]</code>を参照する亜種。</dd>
+<dd><p><code>.x[[i]]</code>ではなく<code>.x[i]</code>を参照する亜種。</p></dd>
 <dt><code>purrr::imap(.x, .f, ...)</code></dt>
-<dd>名前や整数インデックスを第二引数で受け取れる亜種。
-<code>iwalk()</code> などの派生もある。</dd>
+<dd><p>名前や整数インデックスを第二引数で受け取れる亜種。
+<code>iwalk()</code> などの派生もある。</p></dd>
 <dt><code>purrr::modify(.x, .f, ...)</code></dt>
-<dd>入力と同じ型で出力する亜種。
+<dd><p>入力と同じ型で出力する亜種。
 つまりdata.frameを入れたらlistじゃなくてdata.frameが出てくる。
-e.g., <code>modify_if(iris, is.numeric, round)</code></dd>
+e.g., <code>modify_if(iris, is.numeric, round)</code></p></dd>
 <dt><code>purrr::reduce(.x, .f, ..., .init)</code></dt>
-<dd>二変数関数を順々に適用して1つの値を返す。
+<dd><p>二変数関数を順々に適用して1つの値を返す。
 C++でいう<code>std::accumulate()</code>。
-例えば <code>reduce(1:3, `+`)</code> の結果は6。</dd>
+例えば <code>reduce(1:3, `+`)</code> の結果は6。</p></dd>
 <dt><code>purrr::accumulate(.x, .f, ..., .init)</code></dt>
-<dd>二変数関数を順々に適用し、過程も含めてvectorで返す。
+<dd><p>二変数関数を順々に適用し、過程も含めてvectorで返す。
 C++でいう<code>std::partial_sum()</code>。
-例えば <code>accumulate(1:3, sum)</code> の結果は <code>1 3 6</code> 。</dd>
+例えば <code>accumulate(1:3, sum)</code> の結果は <code>1 3 6</code> 。</p></dd>
 </dl>
 
 <h3 id="list作成-変形-解体">list作成・変形・解体</h3>
@@ -215,21 +209,19 @@ vectorなら <a href="/rstats/tidyr.html"><code>tidyr::crossing()</code> とか 
 <dl>
 <dt><code>purrr::invoke(.f, .x=NULL, ..., .env=NULL)</code></dt>
 <dd>list <code>.x</code> の中身を引数として関数 <code>.f</code> を呼び出す。</dd>
-<dd>関数に渡す引数があらかじめlistにまとまってるときに使う<code>do.call()</code>の改良版。</dd>
-</dl>
+<dd><p>関数に渡す引数があらかじめlistにまとまってるときに使う<code>do.call()</code>の改良版。</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">params <span class="o">=</span> <span class="kt">list</span><span class="p">(</span>n <span class="o">=</span> <span class="m">6L</span><span class="p">,</span> size <span class="o">=</span> <span class="m">10L</span><span class="p">,</span> replace <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
-purrr<span class="o">::</span>invoke<span class="p">(</span><span class="kp">sample.int</span><span class="p">,</span> params<span class="p">)</span></code></pre></div>
-<dl>
+purrr<span class="o">::</span>invoke<span class="p">(</span><span class="kp">sample.int</span><span class="p">,</span> params<span class="p">)</span></code></pre></div></dd>
 <dt><code>purrr::invoke_map(.f, .x=list(NULL), ..., .env=NULL)</code></dt>
-<dd>関数listを順々に実行してlistで返す。
-引数<code>.x</code>は同じ長さのlist of listsか、list of a listをリサイクル。</dd>
-<dd>e.g., <code>invoke_map(list(runif, rnorm), list(c(n=3, 0, 1)))</code></dd>
+<dd><p>関数listを順々に実行してlistで返す。
+引数<code>.x</code>は同じ長さのlist of listsか、list of a listをリサイクル。</p></dd>
+<dd><p>e.g., <code>invoke_map(list(runif, rnorm), list(c(n=3, 0, 1)))</code></p></dd>
 <dt><code>purrr::has_element(.x, .y)</code></dt>
-<dd>list <code>.x</code> は要素 <code>.y</code> を持っている。</dd>
+<dd><p>list <code>.x</code> は要素 <code>.y</code> を持っている。</p></dd>
 <dt><code>purrr::set_names(x, nm=x)</code></dt>
-<dd>標準の<code>setNames(x=nm, nm)</code>は第二引数のほうが省略不可という気持ち悪い定義だったが、
+<dd><p>標準の<code>setNames(x=nm, nm)</code>は第二引数のほうが省略不可という気持ち悪い定義だったが、
 この改良版ではその心配が解消されている。
-長さや型のチェックもしてくれる。</dd>
+長さや型のチェックもしてくれる。</p></dd>
 </dl>
 
 <h2 id="無名関数">無名関数</h2>
@@ -321,6 +313,8 @@ iris <span class="o">%&gt;%</span>
 <dd>第一引数が関数になってるところは<code>invoke()</code>っぽくて、
 結果の収納方法を<code>.collate</code>などで調整できるところは<code>by_row()</code>っぽい。</dd>
 </dl>
+
+<!-- workaround blackfriday bug -->
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris<span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">,</span> <span class="m">1</span><span class="o">:</span><span class="m">2</span><span class="p">]</span> <span class="o">%&gt;%</span> by_row<span class="p">(</span><span class="o">~</span><span class="kt">data_frame</span><span class="p">(</span>x<span class="o">=</span><span class="m">0</span><span class="o">:</span><span class="m">1</span><span class="p">,</span> y<span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">)),</span> <span class="m">.</span>collate<span class="o">=</span><span class="s">&#39;list&#39;</span><span class="p">)</span>
 <span class="c1">## Source: local data frame [3 x 3]</span>
 <span class="c1">##</span>

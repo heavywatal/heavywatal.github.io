@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.55.0-DEV" />
+<meta name="generator" content="Hugo 0.56.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
@@ -50,14 +50,10 @@ document.addEventListener("DOMContentLoaded", function() {
 "itemListElement": [
  {"@type": "ListItem",
   "position": 1,
-  "item": {
-   "@id": "https://heavywatal.github.io/rstats.html",
-   "name": "rstats"}},
+  "item": {"@id":"https://heavywatal.github.io/rstats.html","name":"rstats"} },
  {"@type": "ListItem",
   "position": 2,
-  "item": {
-   "@id": "https://heavywatal.github.io/rstats/reshape2.html",
-   "name": "reshape2"}}
+  "item": {"@id":"https://heavywatal.github.io/rstats/reshape2.html","name":"reshape2"} }
 ]}</script>
 
 <script defer src="https://use.fontawesome.com/releases/v5.8.0/js/all.js" integrity="sha384-ukiibbYjFS/1dhODSWD+PrZ6+CGCgf8VbyUH7bQQNUulL+2r59uGYToovytTf4Xm" crossorigin="anonymous"></script>
@@ -98,14 +94,12 @@ reshape2 — 柔軟なデータ変形ツール
 
 
 <div class="warning">
-<p><code>reshape2</code>はもう古い。
+reshape2はもう古い。
 data.frameを処理をするなら、同じ作者が新しく設計しなおした
 <a href="/rstats/tidyr.html">tidyr</a> + <a href="/rstats/dplyr.html">dplyr</a>
 のほうがより高速で洗練されているのでそちらを使おう。
-ただし3次元以上のarrayを扱うにはまだ便利。</p>
-
+ただし3次元以上のarrayを扱うにはまだ便利。
 </div>
-
 
 <ul>
 <li><a href="http://had.co.nz/reshape/">http://had.co.nz/reshape/</a></li>
@@ -130,7 +124,6 @@ data.frameを処理をするなら、同じ作者が新しく設計しなおし�
 See <code>?reshape2:::melt.array</code>.</p>
 
 </div>
-
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">reshape2<span class="o">::</span>melt<span class="p">(</span>data<span class="p">,</span> id.vars<span class="p">,</span> measure.vars<span class="p">,</span>
                variable.name<span class="o">=</span><span class="s">&#34;variable&#34;</span><span class="p">,</span> value.name<span class="o">=</span><span class="s">&#34;value&#34;</span><span class="p">,</span>
                na.rm<span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span> factorsAsStrings<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> <span class="kc">...</span><span class="p">)</span></code></pre></div>
@@ -198,11 +191,10 @@ See <code>?reshape2:::melt.array</code>.</p>
 <code>fun.aggregate</code>のように関数をグループごとに適用したい場合は
 <a href="/rstats/dplyr.html">dplyr</a>の<code>group_by()</code>と<code>summarise()</code>を使う。</p>
 
-<p>3次元以上のarrayを作りたいときは<code>reshape2::acast()</code>が便利。<br>
+<p>3次元以上のarrayを作りたいときは<code>reshape2::acast()</code>が便利。
 e.g., <code>acast(data, x ~ y ~ z, dplyr::first, value.var='v', fill=0)</code></p>
 
 </div>
-
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">reshape2<span class="o">::</span>dcast<span class="p">(</span>data<span class="p">,</span> formula<span class="p">,</span> fun.aggregate<span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> <span class="kc">...</span><span class="p">,</span>
           margins<span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> subset<span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> fill<span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> drop<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span>
           value.var<span class="o">=</span>guess_value<span class="p">(</span>data<span class="p">))</span></code></pre></div>
