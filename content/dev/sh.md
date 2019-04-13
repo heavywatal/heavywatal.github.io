@@ -102,6 +102,7 @@ echo ${string: -2}  # ef
 -   `*` グロブの最短マッチか最長マッチが使える。（正規表現は使えない）
 -   `$@` や `$*` に対しては、個々の要素に対して実行されてリストが返される。
 
+<!-- workaround blackfriday bug -->
 ```sh
 # ${STR#pattern}        # sed -e "s/^pattern//")     shortest
 # ${STR##pattern}       # sed -e "s/^pattern//")     longest

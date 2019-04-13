@@ -46,7 +46,6 @@ tags = ["c++"]
 1.  隣のタブの `Kits --> Manual --> Desktop (default) --> Qt version`
     を確認する。そのほかの項目も適当に。
 
-{{%div class="note"%}}
 古い `QMAKEFEATURES` 設定が残ってたりすると失敗するので
 再インストールを試みるときなどは注意
 
@@ -54,7 +53,7 @@ tags = ["c++"]
 Failed to process makespec for platform 'macx-clang'
 ASSERT: "fileName.isEmpty() || isAbsolutePath(fileName)" in file */qtbase/qmake/library/ioutils.cpp, line 61
 ```
-{{%/div%}}
+
 
 ## qwt --- Qt用のグラフ描画プラグイン
 
@@ -62,15 +61,11 @@ ASSERT: "fileName.isEmpty() || isAbsolutePath(fileName)" in file */qtbase/qmake/
 
 ### インストール
 
-<http://qwt.sourceforge.net/qwtinstall.html>
+- <http://qwt.sourceforge.net/qwtinstall.html>
+- <http://qt-project.org/doc/qt-5.1/qtdoc/deployment-plugins.html>
+- <https://qt-project.org/doc/qtcreator-3.1/adding-plugins.html>
 
-<http://qt-project.org/doc/qt-5.1/qtdoc/deployment-plugins.html>
-
-<https://qt-project.org/doc/qtcreator-3.1/adding-plugins.html>
-
-{{%div class="note"%}}
 Qt Library のバージョンを変えたらプラグインもビルドし直すべし。
-{{%/div%}}
 
 1.  [プロジェクトページ](http://sourceforge.net/projects/qwt/files/qwt/)
     からソースコードをダウンロードして展開:
@@ -99,24 +94,22 @@ Qt Library のバージョンを変えたらプラグインもビルドし直す
 
 1.  Qt Creator で適当なプロジェクトのuiファイルを開き、
     Design タブに Qwt Widgets が登場していれば成功。
-
     無い場合はその画面のメニューバーから
     `Tools --> Form Editor --> About Qt Designer Plugins...`
     を見て原因を探す。
 
-    {{%div class="note"%}}
-例えばこんなエラーなら、
-プラグインそのものは Qt Creator から見えているが、
-`qwt` ライブラリが読み込めていない
+    例えばこんなエラーなら、
+    プラグインそのものは Qt Creator から見えているが、
+    `qwt` ライブラリが読み込めていない
 
-```sh
-Library not loaded: qwt.framework/Versions/6/qwt
-Referenced from: /usr/local/qwt-6.1.0/plugins/designer/libqwt_designer_plugin.dylib
-Reason: image not found
-```
+    ```sh
+    Library not loaded: qwt.framework/Versions/6/qwt
+    Referenced from: /usr/local/qwt-6.1.0/plugins/designer/libqwt_designer_plugin.dylib
+    Reason: image not found
+    ```
 
-これすらも無い場合はプラグインがそもそも見えていない。
-    {{%/div%}}
+    これすらも無い場合はプラグインがそもそも見えていない。
+
 
 ### ビルド方法
 
@@ -142,11 +135,9 @@ Reason: image not found
 
 1.  Qt Creator 左下の緑三角で再びランしてみる。
 
-    {{%div class="note"%}}
-この段階で、開発マシンで起動できるようにはなっているはず。
-しかしQtも含めあらゆるライブラリを絶対パスで参照してしまっているので、
-このままほかのマシンにコピーしても起動できない。
-    {{%/div%}}
+    この段階で、開発マシンで起動できるようにはなっているはず。
+    しかしQtも含めあらゆるライブラリを絶対パスで参照してしまっているので、
+    このままほかのマシンにコピーしても起動できない。
 
 1.  ライブラリをアプリケーションバンドル内にコピーし、参照先を変更する:
 

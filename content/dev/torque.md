@@ -89,9 +89,7 @@ Pythonのvirtualenvは計算ノードに引き継がれないので、
         node02 np=4
         node03 np=4
 
-    {{%div class="note"%}}
-`np` はコア数
-    {{%/div%}}
+    `np` はコア数
 
 1.  `/var/spool/torque/spool` のパーミションを設定:
 

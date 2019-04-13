@@ -13,11 +13,9 @@ https://gcc.gnu.org/
 
     g++ -g -Wall -Wextra -O3 main.cpp -o a.out
 
-{{%div class="note"%}}
 [make]({{< relref "make.md" >}}) や [CMake]({{< relref "cmake.md" >}})
 などのツールを使ってビルドすることが多く、
 ターミナルからコンパイラを直接実行することはほぼ無い。
-{{%/div%}}
 
 ### Options
 

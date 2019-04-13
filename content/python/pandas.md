@@ -137,6 +137,7 @@ Rと同様、列を列として扱う。
   `reshape2::dcast()` のように複数の値をaggregationできる亜種として
   `df.pivot_table()` があるけどまあ使わないのが無難か。
 
+<!-- workaround blackfriday bug -->
 ```py
 molten = iris.reset_index().melt(['index', 'species'])
 molten.pivot('index', 'variable')           # species columns are redundant
@@ -160,6 +161,7 @@ nested tibble的なイメージ？
 : 横長に変形。
   展開するindexの階層を指定できる(デフォルトの`-1`は最内側)。
 
+<!-- workaround blackfriday bug -->
 ```py
 stacked = iris.set_index(['species'], append=True).stack()
 stacked.unstack()

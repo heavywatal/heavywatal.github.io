@@ -66,9 +66,7 @@ Xcode の Command Line Tools にほぼ最新版が含まれている: `clang -v`
         make
         sudo make install
 
-    {{%div class="note"%}}
-裸で configure するとデバッグモードでビルドされる
-    {{%/div%}}
+    裸で configure するとデバッグモードでビルドされる
 
 1.  [libc++をインストールする]({{< relref "#libc" >}})
 

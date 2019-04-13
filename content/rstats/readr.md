@@ -242,7 +242,6 @@ class(iris)
     例えば `iris[,'Species']` はvectorになってしまうが、
     `tbl_iris[,'Species']` はtibbleのまま。
 
-{{%div class="note"%}}
 新しいtibble 1.4以降では
 [pillar](https://github.com/r-lib/pillar/)
 というパッケージが有効数字や欠損値などの表示形式を勝手にイジるようになってしまった。
@@ -258,7 +257,6 @@ setHook(packageEvent("tibble", "attach"), function(...) {
   })
 })
 ```
-{{%/div%}}
 
 
 ### 関数

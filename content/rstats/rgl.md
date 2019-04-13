@@ -122,10 +122,9 @@ layout3d(mat, widths, heights, parent=NA, sharedMouse=FALSE, ...)
 next3d(current=NA, clear=TRUE, reuse=TRUE)
 ```
 
-{{%div class="warning"%}}
 これらはなぜかグローバルスコープでしか動作しない。
 つまり、関数やループ内に入れるとサイズなどがうまく反映されない。
-{{%/div%}}
+
 
 ## 出力
 
@@ -160,13 +159,11 @@ next3d(current=NA, clear=TRUE, reuse=TRUE)
     rgl::setupKnitr()
     ```
 
-{{%div class="note"%}}
 `rgl::setupKnitr()`の中身は
 `knitr::knit_hooks$set(webgl=rgl::hook_webgl)` といくつかの初期化コード。
 それらを実行しないと、同じコードでも時によってscriptが正しく埋め込まれず、
 `You must enable Javascript to view this page properly.`
 という的外れなエラーが表示される。
-{{%/div%}}
 
 プロットしたいchunkに`webgl=TRUE`を指定
 (PNG静止画にしたい場合はデバイス有りで`rgl=TRUE`):

@@ -133,7 +133,6 @@ bmath::cdf(dist, x);
 bmath::quantile(dist, p);
 ```
 
-{{%div class="warning"%}}
 右側の裾が欲しいときは精度を保つために `complement()` を使う。
 (Rでいう `lower.tail=FALSE`)
 
@@ -148,7 +147,6 @@ bmath::cdf(bmath::complement(dist, x));
 // bad
 1.0 - bmath::cdf(dist, x);
 ```
-{{%/div%}}
 
 
 ## [iostreams](http://www.boost.org/doc/libs/release/libs/iostreams/doc/)
@@ -210,14 +208,12 @@ Pythonの`yield`みたいなことをC++でもできるようになる。
 
 [example of Fibonacci generator](https://github.com/heavywatal/scribble/blob/master/cxx/boost_coroutine2.cpp)
 
-{{%div class="warning"%}}
 オブジェクトの寿命に注意。
 
 - `yield`返しはmoveなので、
   次の処理で再利用するつもりならコピーコンストラクタ越しに新品を返す。
 - generator的なものを返す関数を作ると、
   それを抜ける時に寿命を迎えるオブジェクトがあることに注意。
-{{%/div%}}
 
 ## そのほか
 

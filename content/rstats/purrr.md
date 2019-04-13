@@ -265,7 +265,7 @@ iris %>%
 : 第一引数が関数になってるところは`invoke()`っぽくて、
   結果の収納方法を`.collate`などで調整できるところは`by_row()`っぽい。
 
-
+<!-- workaround blackfriday bug -->
 ```r
 iris[1:3, 1:2] %>% by_row(~data_frame(x=0:1, y=c('a', 'b')), .collate='list')
 ## Source: local data frame [3 x 3]

@@ -209,10 +209,8 @@ git submodule add https://github.com/mbostock/d3.git
 git submodule add -b gitsubmodule_https https://github.com/heavywatal/x18n.git
 ```
 
-{{%div class="note"%}}
-`gh-pages`で公開する場合は参照プロトコルを
+`gh-pages` で公開する場合は参照プロトコルを
 `git://` ではなく `https://` にする必要がある。
-{{%/div%}}
 
 
 ### submoduleを含むメインリポジトリを使い始めるとき
@@ -261,10 +259,8 @@ https://help.github.com/articles/user-organization-and-project-pages/
 [Hugo]({{< relref "hugo.md" >}})
 で変換・生成したHTMLファイルを`master`ブランチに書き出している。
 
-{{%div class="note"%}}
 GitHubが勝手にJekyll処理しようとすることがあるので、
 `.nojekyll` という空ファイルを作っておく。
-{{%/div%}}
 
 
 ### プロジェクトサイトを作る

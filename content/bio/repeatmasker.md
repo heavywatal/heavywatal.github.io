@@ -146,10 +146,7 @@ FASTA形式の反復配列を分類群単位で入手することもできる:
 `${INFILE}.out`
 :   アノテーション情報。
     TSVではなく固定幅に近い表で、例外も多くて使いにくい。
-
-    {{%div class="warning"%}}
-バグってるのでこのファイルを使ってはいけない！
-    {{%/div%}}
+:   <div class="warning">バグってるのでこのファイルを使ってはいけない！</div>
 
 ## RepeatScout
 
@@ -173,10 +170,8 @@ FASTA形式の反復配列を分類群単位で入手することもできる:
 
         cat rs_output.fa | filter-stage-1.prl >rs_filtered1.fa
 
-    {{%div class="note"%}}
-[NSEG](ftp://ftp.ncbi.nih.gov/pub/seg/nseg/) はビルド不可能なので
-`filter-stage-1.prl` を適当に書き換える必要がある。
-    {{%/div%}}
+    [NSEG](ftp://ftp.ncbi.nih.gov/pub/seg/nseg/) はビルド不可能なので
+    `filter-stage-1.prl` を適当に書き換える必要がある。
 
 1.  RepeatMaskerで位置と登場回数を調べる:
 
@@ -196,9 +191,9 @@ FASTA形式の反復配列を分類群単位で入手することもできる:
 
 上記RepeatScout手順を簡単に実行するラッパー？
 
-{{%div class="warning"%}}
+<div class="warning">
 うまくできた試しがないので、RepeatScoutを直に動かしたほうが良い。
-{{%/div%}}
+</div>
 
 ### 前準備
 

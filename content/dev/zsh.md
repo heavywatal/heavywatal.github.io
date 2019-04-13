@@ -45,7 +45,6 @@ tags = ["shell"]
 `.zlogout`
 :   ログアウト時にしてほしいことが万が一あれば
 
-{{%div class="note"%}}
 `$ZDOTDIR/` 以下の個人設定ファイルの前に、
 システム全体の設定ファイルとして `/etc/z*` が読み込まれる。
 これがしばしば問題を起こすので、とりあえず `unsetopt GLOBAL_RCS` で切っとく。
@@ -65,7 +64,6 @@ if [ $(uname) = Darwin ]; then
 fi
 export PATH
 ```
-{{%/div%}}
 
 
 ## Installation

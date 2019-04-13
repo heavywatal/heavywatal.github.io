@@ -5,12 +5,9 @@ tags = ["mac", "writing"]
   parent = "mac"
 +++
 
-{{%div class="note"%}}
-ことえり は使えないにもほどがあるので
-[Google日本語入力](http://www.google.co.jp/ime/)
-をインストールして使うべし。
-以下は、まだ ことえり を使ってたときのメモ。
-{{%/div%}}
+<div class="warning">
+ここしばらくずっと Google IME を使っているので、ここの情報はもう古いかも。
+</div>
 
 学習辞書の本体:
 :   `~/Library/Preferences/com.apple.JapaneseAnalysis/LearningDictionray.dict`

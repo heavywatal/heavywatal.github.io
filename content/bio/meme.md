@@ -103,12 +103,11 @@ http://meme-suite.org/doc/meme.html
         TG 6.519e-02
         TT 1.078e-01
 
-{{%div class="note"%}}
 一度適当に走らせてみて、出力結果
 `meme.txt` の **COMMAND LINE SUMMARY** や
 `meme.html` の **model parameters**
 を見るとよい。デフォルト値もそこで分かる。
-{{%/div%}}
+
 
 ### スコア
 

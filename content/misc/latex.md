@@ -73,12 +73,11 @@ tlmgr install chktex
 管理者権限不要の `--usermode` も用意されているが、
 なんかうまくいかないので必要に迫られない限り使わないほうがよい。
 
-{{%div class="warning"%}}
 パッケージをアンインストールしようと思って
-``tlmgr uninstall some-package``
+`tlmgr uninstall some-package`
 などとするとTeX Live全体が消えてしまうので注意。
-正しくは ``tlmgr remove some-package``
-{{%/div%}}
+正しくは `tlmgr remove some-package`
+
 
 ## 基本要素
 

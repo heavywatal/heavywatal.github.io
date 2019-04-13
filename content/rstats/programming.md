@@ -58,25 +58,21 @@ R標準の関数よりも遥かに分かりやすく安全で高機能なもの�
 :    第一引数やパラメータ`...`はvector処理されるが、
      後半の論理値引数はvectorを与えても先頭のみが使われる。
 
-    {{%div class="warning"%}}
-離散分布の場合は境界の値を含むか含まないかでバー1本分の差が出るので注意。
-ホントは `lower.tail=FALSE` でも境界を含むべきだと思うんだけど。
-    {{%/div%}}
+:   離散分布の場合は境界の値を含むか含まないかでバー1本分の差が出るので注意。
+    ホントは `lower.tail=FALSE` でも境界を含むべきだと思うんだけど。
 
-    {{%div class="note"%}}
-`1 - pnorm(...)`や`log(pnorm(...))`のほうが直感的に分かりやすいので、
-`lower.tail=FALSE`や`log.p=TRUE`は不要なようにも思われるが、
-これらの引数で内部処理させたほうが浮動小数点型の限界付近での計算が正確。
-```r
-# complementary
-1 - pnorm(10, 0, 1)                # 0
-pnorm(10, 0, 1, lower.tail=FALSE)  # 7.619853e-24
+:   `1 - pnorm(...)`や`log(pnorm(...))`のほうが直感的に分かりやすいので、
+    `lower.tail=FALSE`や`log.p=TRUE`は不要なようにも思われるが、
+    これらの引数で内部処理させたほうが浮動小数点型の限界付近での計算が正確。
+    ```r
+    # complementary
+    1 - pnorm(10, 0, 1)                # 0
+    pnorm(10, 0, 1, lower.tail=FALSE)  # 7.619853e-24
 
-# log
-log(pnorm(10, 0, 1))               # 0
-pnorm(10, 0, 1, log.p=TRUE)        # -7.619853e-24
-```
-    {{%/div%}}
+    # log
+    log(pnorm(10, 0, 1))               # 0
+    pnorm(10, 0, 1, log.p=TRUE)        # -7.619853e-24
+    ```
 
 `q___(p, ..., lower.tail=TRUE, log.p=FALSE)`
 :   累積分布関数の逆関数。

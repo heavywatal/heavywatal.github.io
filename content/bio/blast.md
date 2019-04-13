@@ -56,11 +56,9 @@ Basic Local Alignment Search Tool
 
         ./configure --without-debug --with-strip --without-pcre --with-mt --with-flat-makefile --with-64 --with-ncbi-public --without-ccache --without-caution --without-makefile-auto-update --with-projects=scripts/projects/blast/project.lst --with-internal --prefix=/usr/local/ncbi-blast --with-boost=/usr/local/boost-gcc CC=gcc-4.9 CXX=g++-4.9
 
-    {{%div class="note"%}}
-`clang` (および Xcode のニセ `gcc`)
-では `configure` が通らないので本物の `gcc` を
-[Homebrew]({{< relref "homebrew.md" >}}) などでインストールしておく。
-    {{%/div%}}
+    `clang` (および Xcode のニセ `gcc`)
+    では `configure` が通らないので本物の `gcc` を
+    [Homebrew]({{< relref "homebrew.md" >}}) などでインストールしておく。
 
 1.  そのまま `make` してもダメらしいので
     `Makefile.mk` の `-std=gnu++11` を消す:
@@ -79,11 +77,9 @@ Basic Local Alignment Search Tool
         export PATH=/usr/local/ncbi-blast/bin:${PATH}
         export BLASTDB=${HOME}/db/blast
 
-    {{%div class="note"%}}
-`~/.ncbirc` でも `BLASTDB` を指定できるっぽいけど
-普通にシェルの環境変数を使うほうがわかりやすいし、
-`makeblastdb` の出力先として参照できるので便利。
-    {{%/div%}}
+    `~/.ncbirc` でも `BLASTDB` を指定できるっぽいけど
+    普通にシェルの環境変数を使うほうがわかりやすいし、
+    `makeblastdb` の出力先として参照できるので便利。
 
 1.  確認:
 

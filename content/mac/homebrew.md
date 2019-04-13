@@ -116,23 +116,10 @@ http://docs.brew.sh/FAQ.html
     zsh
     zsh-completions
 
-{{%div class="note"%}}
-コンパイル済みパッケージ(bottle)が提供されてる場合はダウンロードだけで済むが、
-オプションを付けるとソースからビルドする羽目になるので注意。
-gccやboostなどのデカいやつはとりあえずデフォルトで入れたほうが早い。
-
-`--force-bottle` と `--build-from-source` で明示的に切り替えられる。
-しかしいつの間にか、Homebrewが`/usr/local/`
-以外にインストールしてあるとbottleを使えない仕様になってしまった。
-{{%/div%}}
-
-{{%div class="note"%}}
 Rをここからインストールするとバイナリ版のパッケージが利用できず、
 毎回ソースからビルドすることになるので、
 後述のcaskのほうの `r` を入れるほうが簡単。
-{{%/div%}}
 
-{{%div class="note"%}}
 `coreutils`, `gnu-sed`, `gnu-tar`
 などは既存のコマンドとごっちゃにならないよう頭に `g`
 を付けてインストールしてくれる。
@@ -140,7 +127,7 @@ Rをここからインストールするとバイナリ版のパッケージが�
 `$(brew --prefix)/opt/{coreutils,gnu-sed,gnu-tar}/libexec/gnubin` に
 `PATH` を通すのがよい。
 `brew unlink coreutils gnu-sed gnu-tar` してもそれらのディレクトリは残る。
-{{%/div%}}
+
 
 ## brew tap
 

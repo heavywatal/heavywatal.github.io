@@ -11,13 +11,12 @@ tags = ["vcs", "python"]
 -   [日本語Wiki](https://www.mercurial-scm.org/wiki/JapaneseMercurial)
 -   [The Definitive Guide by Bryan O'Sullivan](http://hgbook.red-bean.com/read/)
 
-{{%div class="note"%}}
 [GitHub](https://github.com)が確固たる地位を確立し、
 今や[BitBucket](https://bitbucket.org)もGitに対応したので、
 どうしても既存のMercurialリポジトリを使わなきゃいけない場合を除いて、
 基本的にはGitを使うようにしたほうがよさそう。
 See [Git]({{< relref "git.md" >}}).
-{{%/div%}}
+
 
 ## 基本的な操作
 

@@ -17,6 +17,7 @@ tags = ["python", "graph"]
 -   <http://matplotlib.org/faq/howto_faq.html>
 -   <http://www.scipy-lectures.org/intro/matplotlib/matplotlib.html>
 
+<!-- workaround blackfriday bug -->
 ```py
 import numpy as np
 import pandas as pd
@@ -309,6 +310,7 @@ grid = grid.plot_marginals(sns.distplot, kde=False)
 `rc`:
 :   see below
 
+<!-- workaround blackfriday bug -->
 ```py
 >>> sns.axes_style(style='darkgrid', rc=None)
 {'axes.axisbelow': True,
@@ -364,6 +366,7 @@ grid = grid.plot_marginals(sns.distplot, kde=False)
 `rc`:
 :   see below
 
+<!-- workaround blackfriday bug -->
 ```py
 >>> sns.plotting_context(context='notebook', font_scale=1, rc=None)
 {'axes.labelsize': 11,

@@ -5,9 +5,7 @@ tags = ["mac", "package"]
   parent = "mac"
 +++
 
-{{%div class="note"%}}
 今は [Homebrew]({{< relref "homebrew.md" >}}) を使ってるのでこっちの情報は更新してない
-{{%/div%}}
 
 ## Package Manager for Mac OS X
 

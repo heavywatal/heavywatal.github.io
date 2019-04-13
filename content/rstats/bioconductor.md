@@ -106,11 +106,8 @@ browseVignettes(package='Biostrings')
 
 ペアワイズ整列
 :   `PairwiseAlignments`
-
-    {{%div class="warning"%}}
-このコンストラクタを直接呼び出してはいけない。
-`pairwiseAlignment()` 関数を使うべし。
-    {{%/div%}}
+:   このコンストラクタを直接呼び出してはいけない。
+    `pairwiseAlignment()` 関数を使うべし。
 
 `Views` `(x, start=NULL, end=NULL, width=NULL, names=NULL)`
 :   「ある配列のこの領域とこの領域」を表現したいとき、
@@ -406,10 +403,9 @@ bsg[[1]]
 
 1.  染色体ごとのFASTAファイルを用意する e.g. Ensemblから `*.chromosome.*.fa.gz` をダウンロードして展開
 
-    {{%div class="note"%}}
-染色体名と拡張子だけを残したファイル名にする必要がある。
-しかもgzipのままでは読めない残念な仕様なので展開しておく。 e.g. `IV.fa`
-    {{%/div%}}
+    染色体名と拡張子だけを残したファイル名にする必要がある。
+    しかもgzipのままでは読めない残念な仕様なので展開しておく。
+    e.g. `IV.fa`
 
 1.  既存の `BSgenome` のやつを参考に適当にseedファイルを作る:
 
@@ -433,9 +429,7 @@ bsg[[1]]
         PkgExamples: genome$I  # same as genome[["I"]]
         seqs_srcdir: /Users/watal/db/ensembl/release-74/fasta/saccharomyces_cerevisiae/dna
 
-    {{%div class="note"%}}
-パッケージ名に使える文字は結構限られてるので注意
-    {{%/div%}}
+    パッケージ名に使える文字は結構限られてるので注意
 
 1.  R で `forgeBSgenomeDataPkg(seedfile)` を実行
 1.  できあがったパッケージディレクトリをビルドしてインストール:

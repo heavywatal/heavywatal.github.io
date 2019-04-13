@@ -30,12 +30,11 @@ data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(
 
 dplyrではなく[magrittr](https://magrittr.tidyverse.org/)の機能。
 
-`x %>% f(a, b)`
-:   これは `f(x, a, b)` と等価。
-    左の値 `x` を第一引数として右の関数 `f()` に渡す。
-    一時変数を作ったり、関数を何重にも重ねたりすることなく、
-    適用する順に次々と処理を記述することができるようになる。
-    慣れれば書きやすく読みやすい。
+`x %>% f(a, b)` は `f(x, a, b)` と等価。
+左の値 `x` を第一引数として右の関数 `f()` に渡す。
+一時変数を作ったり、関数を何重にも重ねたりすることなく、
+適用する順に次々と処理を記述することができるようになる。
+慣れれば書きやすく読みやすい。
 
 ```r
 library(tidyverse)
@@ -194,11 +193,11 @@ dplyr::summarise_all(
     3          5.5         4.2          1.4         0.2  setosa
     ```
 
-    {{%div class="warning"%}}
+    <div class="warning">{{<markdownify>}}
 評価結果が `NA` となる行は除去される。
 特に不等号を使うときやや直感に反するので要注意。
 e.g., `filter(gene != 'TP53')`
-{{%/div%}}
+{{</markdownify>}}</div>
 
 :   複数列で評価する亜種:<br>
     `filter_all(.tbl, .vars_predicate)`<br>

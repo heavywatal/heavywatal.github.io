@@ -134,11 +134,9 @@ edgeRUsersGuide()
 
     P値とlogFCの両方で切ったほうがいいらしい。
 
-    {{%div class="note"%}}
-`topTags()` や `decideTestsDGE()`
-で多重検定の補正をするということは、
-`et` や `lrt` の `PValue` は補正前。
-    {{%/div%}}
+    `topTags()` や `decideTestsDGE()`
+    で多重検定の補正をするということは、
+    `et` や `lrt` の `PValue` は補正前。
 
 1.  プロット `logFC ~ mean(logCPM)` してみる
 

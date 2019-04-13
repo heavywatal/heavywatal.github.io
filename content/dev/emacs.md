@@ -178,9 +178,7 @@ initialize後に
 
 ### Caskでパッケージ管理
 
-{{%div class="note"%}}
 最近は上記のpackage.elを使っているので下記の情報は古いかも。
-{{%/div%}}
 
 -   <https://github.com/cask/cask>
 -   <https://cask.readthedocs.io/>
