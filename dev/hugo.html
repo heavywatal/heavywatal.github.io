@@ -115,12 +115,16 @@ Hugo — 静的サイトを高速生成
 例えばMacなら<a href="/mac/homebrew.html">Homebrew</a>で一発:
 <code>brew install hugo</code></p>
 
-<p>私は <code>HTML_USE_XHTML</code> をオフにするためソースコードを落として改変:</p>
+<p>私は <code>HTML_USE_XHTML</code> を切りたいのでソースコードを落として改変:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">export</span> <span class="nv">GOPATH</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.go
 <span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span>:<span class="si">${</span><span class="nv">GOPATH</span><span class="si">}</span>/bin
-go get -u -v github.com/gohugoio/hugo
-go get -v -tags extended github.com/gohugoio/hugo</code></pre></div>
-<p><code>-tags extended</code> はSASS/SCSS対応版をコンパイルするオプション。</p></li>
+mkdir <span class="nv">$HOME</span>/src
+<span class="nb">cd</span> <span class="nv">$HOME</span>/src
+git clone https://github.com/gohugoio/hugo.git
+<span class="nb">cd</span> hugo
+vim helpers/content.go  <span class="c1"># remove HTML_USE_XHTML</span>
+go install --tags extended</code></pre></div>
+<p><code>--tags extended</code> はSASS/SCSS対応版をコンパイルするオプション。</p></li>
 
 <li><p>骨組みを作る:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> path/to/site
