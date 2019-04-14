@@ -57,7 +57,6 @@ mpg
 - `geom_*()` 点や線をよろしく
 - `theme_*()` 軸とか背景の見た目をよろしく
 
-<!-- workaround blackfriday bug -->
 ```r
 ggplot(data = mpg) +
   geom_point(mapping = aes(x = displ, y = cty)) +
@@ -456,7 +455,6 @@ ggsave(filename, plot = last_plot(), device = NULL, path = NULL,
   `theme_bw(base_size = 42)` や各要素の `element_text(size = 42)` を使う。
 - scaleやunitsを使うのは慣れてからで十分。
 
-<!-- workaround blackfriday bug -->
 ```r
 # 7inch x 300dpi = 2100px四方 (デフォルト)
 ggsave("mpg1.png", p1) # width = 7, height = 7, dpi = 300
