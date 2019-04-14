@@ -226,17 +226,16 @@ g++-6 ではこれのGNU方言である <code>gnu++14</code> がデフォルト�
 <li>既存のバージョンとごっちゃになるのを避けるため
 <code>--program-suffix</code> を設定</li>
 <li>他言語サポートは不要なので <code>--disable-nls</code></li>
-
-<li><p><code>--disable-multilib</code> を付けないと
+<li><code>--disable-multilib</code> を付けないと
 <code>fatal error: gnu/stubs-32.h: No such file or directory. stub-32.h</code>
-などと怒られて止まる</p>
+などと怒られて止まる</li>
+</ul>
 
 <pre><code>get -O- http://ftp.gnu.org/gnu/gcc/gcc-4.9.1/gcc-4.9.1.tar.bz2 | tar xj
 kdir build
 d build/
 ./gcc-4.9.1/configure --enable-languages=c,c++,go,fortran --prefix=/usr/local --program-suffix=-4.9 --enable-shared --enable-linker-build-id --without-included-gettext --enable-threads=posix --disable-nls --with-sysroot=/ --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --enable-gnu-unique-object --disable-libmudflap --enable-plugin --with-system-zlib --disable-browser-plugin --enable-gtk-cairo --with-arch-directory=amd64 --enable-multiarch --disable-werror --with-abi=m64 --disable-multilib --with-tune=core2 --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu
 </code></pre></li>
-</ul></li>
 
 <li><p>コンパイル。ただしデフォルトではコンパイラオプションが <code>-g O2</code>
 となっていて膨大なデバッグシンボルがついた状態で出来上がってしまうらしいので、

@@ -210,8 +210,6 @@ e.g., <code>iris.melt('species', var_name='variable', value_name='value')</code>
 <code>reshape2::dcast()</code> のように複数の値をaggregationできる亜種として
 <code>df.pivot_table()</code> があるけどまあ使わないのが無難か。</dd>
 </dl>
-
-<!-- workaround blackfriday bug -->
 <div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="n">molten</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">melt</span><span class="p">([</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;species&#39;</span><span class="p">])</span>
 <span class="n">molten</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;variable&#39;</span><span class="p">)</span>           <span class="c1"># species columns are redundant</span>
 <span class="n">molten</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;variable&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)</span>  <span class="c1"># species column is removed</span></code></pre></div>
@@ -232,8 +230,6 @@ nested tibble的なイメージ？</p>
 <dd>横長に変形。
 展開するindexの階層を指定できる(デフォルトの<code>-1</code>は最内側)。</dd>
 </dl>
-
-<!-- workaround blackfriday bug -->
 <div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="n">stacked</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s1">&#39;species&#39;</span><span class="p">],</span> <span class="n">append</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">stack</span><span class="p">()</span>
 <span class="n">stacked</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span>
 
