@@ -25,14 +25,18 @@ http://gohugo.io/overview/quickstart/
     例えばMacなら[Homebrew]({{< relref "homebrew.md" >}})で一発:
     `brew install hugo`
 
-    私は `HTML_USE_XHTML` をオフにするためソースコードを落として改変:
+    私は `HTML_USE_XHTML` を切りたいのでソースコードを落として改変:
     ```sh
     export GOPATH=${HOME}/.go
     export PATH=${PATH}:${GOPATH}/bin
-    go get -u -v github.com/gohugoio/hugo
-    go get -v -tags extended github.com/gohugoio/hugo
+    mkdir $HOME/src
+    cd $HOME/src
+    git clone https://github.com/gohugoio/hugo.git
+    cd hugo
+    vim helpers/content.go  # remove HTML_USE_XHTML
+    go install --tags extended
     ```
-    `-tags extended` はSASS/SCSS対応版をコンパイルするオプション。
+    `--tags extended` はSASS/SCSS対応版をコンパイルするオプション。
 
 -   骨組みを作る:
     ```sh
