@@ -25,9 +25,9 @@ R標準の`boxplot()`や`hist()`などは前者の上に、
 
 - [初学者向け講義資料2018](/slides/nagoya2018/2-ggplot.html)
 - <https://ggplot2.tidyverse.org>
+- <https://r-graphics.org/>
 - <http://r4ds.had.co.nz/data-visualisation.html>
 - <http://r4ds.had.co.nz/graphics-for-communication.html>
-- <http://www.cookbook-r.com/Graphs/>
 - [version 2.0での変更点](https://blog.rstudio.com/2015/12/21/ggplot2-2-0-0/)
 - [version 3.0での変更点](https://www.tidyverse.org/articles/2018/07/ggplot2-3-0-0/)
 
@@ -172,7 +172,9 @@ ggplot(mpg) +
 
 - `name`: 凡例のタイトル。複数スケールで同じ名前にすると凡例が統合される。
 - `breaks`: 目盛りや凡例に登場させる値。
-- `labels`: breaksの値に対応する文字列。デフォルトはbreaksそのまま。
+- `labels`: breaksの値に対応して実際に表示されるラベル。
+  breaksの値を受け取って文字列を返す関数
+  (e.g., `scales::percent`, `scales::comma`) を渡すこともできる。
 - `na.value`: 欠損値のときどうするか
 - `limits`: 数値なら最大値と最小値のvector。
   文字列なら表示したいすべての値(順序も反映される)。
