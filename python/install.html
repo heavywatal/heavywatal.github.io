@@ -114,7 +114,8 @@ Pythonインストール
 <a href="/dev/git.html">Git</a> を使ってpyenvをインストール:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew install pyenv
 <span class="c1"># or</span>
-git clone https://github.com/pyenv/pyenv.git ~/.pyenv</code></pre></div></li>
+git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+mkdir -p ~/.pyenv/cache</code></pre></div></li>
 
 <li><p>Pythonのインストール先を決める環境変数
 <code>PYENV_ROOT</code> を公式推奨の <code>~/.pyenv</code> に設定し、
@@ -136,18 +137,18 @@ git clone https://github.com/pyenv/pyenv.git ~/.pyenv</code></pre></div></li>
 目当てのバージョンを探してインストール:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">exec</span> <span class="nv">$SHELL</span> -l
 pyenv install -l <span class="p">|</span> less
-pyenv install <span class="m">3</span>.7.2</code></pre></div></li>
+pyenv install <span class="m">3</span>.7.3</code></pre></div></li>
 
 <li><p>インストールしたものを常に使うように設定:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">pyenv global <span class="m">3</span>.7.2
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">pyenv global <span class="m">3</span>.7.3
 <span class="nb">exec</span> <span class="nv">$SHELL</span> -l</code></pre></div></li>
 
 <li><p><a href="/python/pip.html">pip</a> のパスを確認し、パッケージを入れる:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">which pip
-pip install -U setuptools pip wheel
-pip install -U flake8 psutil requests
-pip install -U seaborn scikit-learn pydataset
-pip install -U biopython ipython</code></pre></div></li>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">which pip3
+pip3 install -U setuptools pip wheel
+pip3 install -U flake8 psutil requests
+pip3 install -U seaborn scikit-learn pydataset
+pip3 install -U biopython ipython</code></pre></div></li>
 </ol>
 
 <h3 id="既知の問題-https-github-com-pyenv-pyenv-wiki-common-build-problems"><a href="https://github.com/pyenv/pyenv/wiki/Common-build-problems">既知の問題</a></h3>
@@ -160,6 +161,12 @@ pip install -U biopython ipython</code></pre></div></li>
 
 <li><p><a href="https://github.com/pyenv/pyenv/issues/1219">Mojaveで &ldquo;zlib not available&rdquo; と怒られる問題</a>は
 <code>CFLAGS=&quot;-I$(xcrun --show-sdk-path)/usr/include&quot;</code> を定義して回避。</p></li>
+
+<li><p><a href="https://www.python.org/dev/peps/pep-0394/">PEP 394</a>
+になるべく沿うように、
+<code>python</code> では <code>/usr/bin/python</code> が呼び出される状態を維持しつつ、
+<code>python3</code>, <code>pip3</code> を明示的に使うようにしたい。
+が、いまのところできない？</p></li>
 </ul>
 
 <h2 id="anaconda">Anaconda</h2>
