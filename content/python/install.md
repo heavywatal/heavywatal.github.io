@@ -30,6 +30,7 @@ MacやLinuxならシステムの一部として
     brew install pyenv
     # or
     git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+    mkdir -p ~/.pyenv/cache
     ```
 
 1.  Pythonのインストール先を決める環境変数
@@ -58,24 +59,24 @@ MacやLinuxならシステムの一部として
     ```sh
     exec $SHELL -l
     pyenv install -l | less
-    pyenv install 3.7.2
+    pyenv install 3.7.3
     ```
 
 1.  インストールしたものを常に使うように設定:
 
     ```sh
-    pyenv global 3.7.2
+    pyenv global 3.7.3
     exec $SHELL -l
     ```
 
 1.  [pip]({{< relref "pip.md" >}}) のパスを確認し、パッケージを入れる:
 
     ```sh
-    which pip
-    pip install -U setuptools pip wheel
-    pip install -U flake8 psutil requests
-    pip install -U seaborn scikit-learn pydataset
-    pip install -U biopython ipython
+    which pip3
+    pip3 install -U setuptools pip wheel
+    pip3 install -U flake8 psutil requests
+    pip3 install -U seaborn scikit-learn pydataset
+    pip3 install -U biopython ipython
     ```
 
 ### [既知の問題](https://github.com/pyenv/pyenv/wiki/Common-build-problems)
@@ -87,6 +88,12 @@ MacやLinuxならシステムの一部として
 
 -   [Mojaveで "zlib not available" と怒られる問題](https://github.com/pyenv/pyenv/issues/1219)は
     `CFLAGS="-I$(xcrun --show-sdk-path)/usr/include"` を定義して回避。
+
+-   [PEP 394](https://www.python.org/dev/peps/pep-0394/)
+    になるべく沿うように、
+    `python` では `/usr/bin/python` が呼び出される状態を維持しつつ、
+    `python3`, `pip3` を明示的に使うようにしたい。
+    が、いまのところできない？
 
 
 ## Anaconda
