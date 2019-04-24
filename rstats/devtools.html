@@ -232,7 +232,8 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。<
 
 <p><a href="http://testthat.r-lib.org">testthat</a>パッケージを使うのがデファクトスタンダード。
 <code>use_testthat()</code> で初期設定して
-<code>use_test(&quot;somefunction&quot;)</code> のようにテストファイルを追加する。</p>
+<code>use_test(&quot;somefunction&quot;)</code> のようにテストファイルを追加する。
+<code>tests/testthat/</code> 以下のファイル構成は <code>R/</code> と同じにしておくといい。</p>
 
 <p>さらに<a href="https://covr.r-lib.org/">covr</a>パッケージを使って、
 ソースコードのうちどれくらいがテストでカバーされてるかを可視化すると良い。</p>
@@ -287,7 +288,7 @@ mydemo2    Description of demo 2
 <dd>パッケージとしての整合性を確認。
 ついでに<code>document()</code>は実行できるけど<code>spell_check()</code>はできないので手動で。</dd>
 <dt><code>test(pkg = &quot;.&quot;, filter = NULL, ...)</code></dt>
-<dd><code>testthat</code> を呼び出して <code>test/</code> 以下のテストコードを実行する</dd>
+<dd><code>testthat</code> を呼び出して <code>tests/</code> 以下のテストコードを実行する</dd>
 <dt><code>install(pkg = &quot;.&quot;, reload = TRUE, quick = FALSE, ...)</code></dt>
 <dd>ローカルにあるディレクトリからインストール</dd>
 <dt><code>remotes::install_github(repo, ref = &quot;master&quot;, subdir = NULL, ...)</code></dt>
@@ -403,14 +404,12 @@ e.g., <code>@importFrom magrittr %&gt;%</code> 。
 <dd>例となるコードを記述する。
 exportしないやつには書いてはいけない。
 <code>\dontrun{}</code> に入れるとチェックから除外される。
-単数形の <code>@example</code> は外部ファイルのパスを受け取る</dd>
+単数形の <code>@example</code> は外部ファイルのパスを受け取る。</dd>
 <dt><code>@rdname basename</code></dt>
 <dd><code>man/</code>に書き出すRdファイルの名前。
-複数の関数で同じものを指定すればひとつのヘルプにまとめられる。
-このとき<code>@param</code>などは共有されるので、
-同じ名前のものはどこかで1度だけ記述する。
-逆に言えば、中身が違うものに同じ名前をつけてはいけないし、
-引数や機能がほとんど重ならない関数をまとめると分かりにくくなる。</dd>
+複数の関数で同じものを指定すればヘルプをひとつにまとめられる。
+このときタイトルや <code>@param</code> などは共有される。
+似たような引数を持つ関数や、関連する関数をまとめるのによく使う。</dd>
 <dt><code>@include other-file.R</code></dt>
 <dd>指定したファイルを先に読み込む。
 メソッドの定義などで順序が重要になる場合に使う。</dd>
