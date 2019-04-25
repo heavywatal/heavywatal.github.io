@@ -190,10 +190,10 @@ git
 gnu-sed
 gnu-tar
 go
-grep --with-default-names
+grep
 imagemagick
 less
-make --with-default-names
+make
 mercurial
 nano
 nkf
@@ -213,13 +213,13 @@ zsh-completions
 毎回ソースからビルドすることになるので、
 後述のcaskのほうの <code>r</code> を入れるほうが簡単。</p>
 
-<p><code>coreutils</code>, <code>gnu-sed</code>, <code>gnu-tar</code>
+<p><code>coreutils</code>, <code>gnu-sed</code>, <code>gnu-tar</code>, <code>grep</code>
 などは既存のコマンドとごっちゃにならないよう頭に <code>g</code>
 を付けてインストールしてくれる。
 元の名前でアクセスする方法はいくつかあるが、
-<code>$(brew --prefix)/opt/{coreutils,gnu-sed,gnu-tar}/libexec/gnubin</code> に
-<code>PATH</code> を通すのがよい。
-<code>brew unlink coreutils gnu-sed gnu-tar</code> してもそれらのディレクトリは残る。</p>
+<code>$(brew --prefix)/opt/{coreutils,gnu-sed,gnu-tar,grep}/libexec/gnubin</code> に
+<code>PATH</code> を通すのが楽ちん。
+<code>brew unlink coreutils gnu-sed gnu-tar grep</code> してもそれらのディレクトリは残る。</p>
 
 <h2 id="brew-tap">brew tap</h2>
 
@@ -266,13 +266,9 @@ brew install libsequence</code></pre></div>
 
 <h2 id="cask">Cask</h2>
 
-<p><a href="http://caskroom.io/">http://caskroom.io/</a></p>
-
-<p>GUIアプリケーションもHomebrewで管理してしまおうという野心的な拡張機能。</p>
-
-<p><code>brew tap caskroom/cask</code> でインストール。
+<p>GUIアプリケーションもHomebrewで管理してしまおうという野心的な拡張機能。
 使うときは普通の <code>brew</code> コマンドに <code>cask</code> を挟むだけ:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew cask install libreoffice
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew cask install atom
 brew cask list</code></pre></div>
 <p>アプリ側でアップデートを実行するとCask内でのバージョンと食い違っちゃうけど使用上は問題ないらしい。</p>
 
