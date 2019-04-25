@@ -74,10 +74,13 @@ MacやLinuxならシステムの一部として
     ```sh
     which pip3
     pip3 install -U setuptools pip wheel
-    pip3 install -U flake8 psutil requests
-    pip3 install -U seaborn scikit-learn pydataset
-    pip3 install -U biopython ipython
+    pip3 install -r /path/to/requirements.txt
     ```
+
+    よく使うパッケージは
+    [`requirements.txt`](https://github.com/heavywatal/dotfiles/blob/master/.config/python/requirements.txt)
+    の形でまとめておくと楽。
+
 
 ### [既知の問題](https://github.com/pyenv/pyenv/wiki/Common-build-problems)
 
