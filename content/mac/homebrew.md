@@ -98,10 +98,10 @@ http://docs.brew.sh/FAQ.html
     gnu-sed
     gnu-tar
     go
-    grep --with-default-names
+    grep
     imagemagick
     less
-    make --with-default-names
+    make
     mercurial
     nano
     nkf
@@ -120,13 +120,13 @@ Rをここからインストールするとバイナリ版のパッケージが�
 毎回ソースからビルドすることになるので、
 後述のcaskのほうの `r` を入れるほうが簡単。
 
-`coreutils`, `gnu-sed`, `gnu-tar`
+`coreutils`, `gnu-sed`, `gnu-tar`, `grep`
 などは既存のコマンドとごっちゃにならないよう頭に `g`
 を付けてインストールしてくれる。
 元の名前でアクセスする方法はいくつかあるが、
-`$(brew --prefix)/opt/{coreutils,gnu-sed,gnu-tar}/libexec/gnubin` に
-`PATH` を通すのがよい。
-`brew unlink coreutils gnu-sed gnu-tar` してもそれらのディレクトリは残る。
+`$(brew --prefix)/opt/{coreutils,gnu-sed,gnu-tar,grep}/libexec/gnubin` に
+`PATH` を通すのが楽ちん。
+`brew unlink coreutils gnu-sed gnu-tar grep` してもそれらのディレクトリは残る。
 
 
 ## brew tap
@@ -179,15 +179,11 @@ https://docs.brew.sh/Formula-Cookbook.html
 
 ## Cask
 
-<http://caskroom.io/>
-
 GUIアプリケーションもHomebrewで管理してしまおうという野心的な拡張機能。
-
-`brew tap caskroom/cask` でインストール。
 使うときは普通の `brew` コマンドに `cask` を挟むだけ:
 
 ```sh
-brew cask install libreoffice
+brew cask install atom
 brew cask list
 ```
 
