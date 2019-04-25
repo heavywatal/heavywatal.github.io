@@ -69,7 +69,7 @@ $Q(t) \lambda \mathrm dt = \lambda e ^ {-\lambda t} \mathrm dt$
 
 <div>\[\begin{aligned}
 \int _0^\infty \lambda e ^ {-\lambda t} \mathrm dt
-   = -e ^ {\lambda t} \Big | _0^\infty
+   = \left. -e ^ {\lambda t} \right\rvert _0^\infty
    = 1
 \end{aligned}\]</div>
 
@@ -89,7 +89,7 @@ f(t; \lambda) &= \lambda e ^ {-\lambda t} \\
 F(t; \lambda)
    &= \int _0^t f(x, \lambda) \mathrm dx
    &= \int _0^t \lambda e ^ {-\lambda x} \mathrm dx\\
-   &= -e ^ {-\lambda x} \Big | _0^t\\
+   &= \left. -e ^ {-\lambda x} \right\rvert _0^t\\
    &= 1 - e ^ {-\lambda t}
 \end{aligned}\]</div>
 

@@ -90,10 +90,10 @@ can be derived by $n - 1$ successive convolutions:
 
 <div>\[\begin{aligned}
 f_{W,1}(t) &= f_T(t) = \lambda e^{-\lambda t} \\
-f_{W,2}(t) &= \int _0^t \lambda e^{-\lambda (t-t')} \; \lambda e^{-\lambda t'} dt' \\
-           &= \lambda ^2 e^{-\lambda t} \Big[1\Big]_0^t \\
+f_{W,2}(t) &= \int _0^t \lambda e^{-\lambda (t-t')} f _{W,1}(t') dt' \\
+           &= \lambda ^2 e^{-\lambda t} \left[t'\right]_0^t \\
            &= t\lambda^2 e^{-\lambda t} \\
-f_{W,3}(t) &= \int _0^t \lambda e^{-\lambda (t-t')} \; f_2(t') dt' \\
+f_{W,3}(t) &= \int _0^t \lambda e^{-\lambda (t-t')} f _{W,2}(t') dt' \\
            &= \frac {t^2 \lambda^3 e^{-\lambda t}} {2!} \\
            &\;\vdots \\
 f_{W,n}(t) &= \lambda e^{-\lambda t} \frac{(\lambda t)^{n-1}} {(n - 1)!}
