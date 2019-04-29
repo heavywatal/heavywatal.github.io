@@ -21,10 +21,10 @@ iris = sns.load_dataset('iris')
 
 http://pandas.pydata.org/pandas-docs/stable/dsintro.html
 
-[`Series`](http://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html)
+[`Series`](http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html)
 : 1次元の名前付き `np.array()` みたいなもの。
 
-[`DataFrame`](http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html)
+[`DataFrame`](http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html)
 : Seriesを列とする2次元の表。
 : `axis=0` が行(index)で、`axis=1` が列(columns)。
 
@@ -34,13 +34,14 @@ DataFrameを時間軸方向に重ねたような3次元構造として
 
 ## 読み書き
 
-[`pd.read_table(infile)`](http://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_table.html)
-: `sep='\t'`
+[`pd.read_csv(infile)`](http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html)
+: `sep=','`
 : `header='infer'`
 : `names=None`
+: `index_col=None`
 : `usecols=None`
 
-[`df.to_csv(outfile)`](http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.to_csv.html)
+[`df.to_csv(outfile)`](http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_csv.html)
 : `sep=','`
 : `float_format=None`
 : `index=True`
@@ -106,7 +107,7 @@ See also [dplyr + magrittr on R]({{< relref "dplyr.md" >}})
 
 - [Reshaping](https://pandas.pydata.org/pandas-docs/stable/reshaping.html)
 - [Hierarchical indexing](https://pandas.pydata.org/pandas-docs/stable/advanced.html)
-- [`MultiIndex`](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.MultiIndex.html)
+- [`MultiIndex`](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.MultiIndex.html)
 
 ### Index
 
