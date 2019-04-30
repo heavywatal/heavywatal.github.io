@@ -111,7 +111,7 @@ CMake — Cross-platform Make
 <code>target_*()</code> でそれらの設定を整えて、
 <code>install()</code> でインストールする対象や行き先を指定する、というのが基本の流れ。</p>
 <div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">add_executable</span><span class="p">(</span><span class="s">a.out</span> <span class="s">hello.cpp</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">target_compile_options</span><span class="p">(</span><span class="s">a.out</span> <span class="s">PRIVATE</span> <span class="s">-Wall</span> <span class="s">-Wextra</span> <span class="s">-Wpedantic</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">target_compile_options</span><span class="p">(</span><span class="s">a.out</span> <span class="s">PRIVATE</span> <span class="s">-Wall</span> <span class="s">-Wextra</span> <span class="s">-pedantic</span><span class="p">)</span><span class="err">
 </span><span class="err"></span><span class="nb">install</span><span class="p">(</span><span class="s">TARGETS</span> <span class="s">a.out</span>
   <span class="s">RUNTIME</span> <span class="s">DESTINATION</span> <span class="s">bin</span>
 <span class="p">)</span></code></pre></div>
@@ -235,16 +235,27 @@ STATIC/SHAREDが明示されていない <code>add_library()</code> でどっち
 </ul>
 
 <h3 id="c">C++</h3>
-<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD</span> <span class="s">14</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD_REQUIRED</span> <span class="s">ON</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_EXTENSIONS</span> <span class="s">OFF</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">add_compile_options</span><span class="p">(</span><span class="s">-march=native</span> <span class="s">-Wall</span> <span class="s">-Wextra</span> <span class="s">-Wpedantic</span><span class="p">)</span><span class="err">
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">target_compile_features</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">PUBLIC</span> <span class="s">cxx_std_14</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">set_target_properties</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">PROPERTIES</span>
+  <span class="s">CXX_STANDARD_REQUIRED</span> <span class="s">ON</span>
+  <span class="s">CXX_EXTENSIONS</span> <span class="s">OFF</span>
+  <span class="s">POSITION_INDEPENDENT_CODE</span> <span class="s">ON</span>
+  <span class="s">WINDOWS_EXPORT_ALL_SYMBOLS</span> <span class="s">ON</span>
+<span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">target_compile_options</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">PRIVATE</span>
+  <span class="s">-march=native</span> <span class="s">-Wall</span> <span class="s">-Wextra</span> <span class="s">-pedantic</span>
+<span class="p">)</span><span class="err">
 </span><span class="err">
 </span><span class="err"></span><span class="nb">if</span> <span class="p">(</span><span class="s">NOT</span> <span class="s">CMAKE_BUILD_TYPE</span><span class="p">)</span><span class="err">
 </span><span class="err"></span>  <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_BUILD_TYPE</span> <span class="s">Release</span><span class="p">)</span><span class="err">
 </span><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
 </span><span class="err"></span><span class="nb">message</span><span class="p">(</span><span class="s">STATUS</span> <span class="s2">&#34;CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}&#34;</span><span class="p">)</span><span class="err">
 </span><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_FLAGS_DEV</span> <span class="s2">&#34;-O2 -g&#34;</span><span class="p">)</span></code></pre></div>
+<p><code>CMAKE_CXX_*</code> のようなグローバル設定を使わず
+<code>target_*()</code> でターゲットごとに設定するのが今後の主流。
+<a href="https://cmake.org/cmake/help/latest/prop_gbl/CMAKE_CXX_KNOWN_FEATURES.html"><code>CMAKE_CXX_KNOWN_FEATURES</code></a>
+に <code>cxx_std_14</code> などの便利なメタタグが導入されたのは CMake 3.8 から。</p>
+
 <table>
 <thead>
 <tr>
@@ -409,6 +420,8 @@ STATIC/SHAREDが明示されていない <code>add_library()</code> でどっち
 <div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">set</span><span class="p">(</span><span class="s">Boost_NO_BOOST_CMAKE</span> <span class="s">ON</span><span class="p">)</span><span class="err">
 </span><span class="err"></span><span class="nb">find_package</span><span class="p">(</span><span class="s">Boost</span> <span class="s">REQUIRED</span> <span class="s">COMPONENTS</span> <span class="s">filesystem</span><span class="p">)</span><span class="err">
 </span><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">mytarget</span> <span class="s">PRIVATE</span> <span class="s">Boost::filesystem</span><span class="p">)</span></code></pre></div>
+<p>ヘッダーだけでいい場合は <code>Boost::boost</code> ターゲットをリンクする。</p>
+
 <p>探索パスを追加するには <code>BOOST_ROOT</code> を設定する。</p>
 
 <h3 id="ctest-https-cmake-org-cmake-help-latest-module-ctest-html"><a href="https://cmake.org/cmake/help/latest/module/CTest.html">CTest</a></h3>
