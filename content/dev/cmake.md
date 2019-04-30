@@ -30,7 +30,7 @@ project(helloworld
 
 ```cmake
 add_executable(a.out hello.cpp)
-target_compile_options(a.out PRIVATE -Wall -Wextra -Wpedantic)
+target_compile_options(a.out PRIVATE -Wall -Wextra -pedantic)
 install(TARGETS a.out
   RUNTIME DESTINATION bin
 )
@@ -156,10 +156,16 @@ install(TARGETS a.out
 ### C++
 
 ```cmake
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-add_compile_options(-march=native -Wall -Wextra -Wpedantic)
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_14)
+set_target_properties(${PROJECT_NAME} PROPERTIES
+  CXX_STANDARD_REQUIRED ON
+  CXX_EXTENSIONS OFF
+  POSITION_INDEPENDENT_CODE ON
+  WINDOWS_EXPORT_ALL_SYMBOLS ON
+)
+target_compile_options(${PROJECT_NAME} PRIVATE
+  -march=native -Wall -Wextra -pedantic
+)
 
 if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
@@ -167,6 +173,11 @@ endif()
 message(STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 set(CMAKE_CXX_FLAGS_DEV "-O2 -g")
 ```
+
+`CMAKE_CXX_*` のようなグローバル設定を使わず
+`target_*()` でターゲットごとに設定するのが今後の主流。
+[`CMAKE_CXX_KNOWN_FEATURES`](https://cmake.org/cmake/help/latest/prop_gbl/CMAKE_CXX_KNOWN_FEATURES.html)
+に `cxx_std_14` などの便利なメタタグが導入されたのは CMake 3.8 から。
 
 Predefined variable              | default
 ---------------------------------|----
@@ -305,6 +316,8 @@ set(Boost_NO_BOOST_CMAKE ON)
 find_package(Boost REQUIRED COMPONENTS filesystem)
 target_link_libraries(mytarget PRIVATE Boost::filesystem)
 ```
+
+ヘッダーだけでいい場合は `Boost::boost` ターゲットをリンクする。
 
 探索パスを追加するには `BOOST_ROOT` を設定する。
 
