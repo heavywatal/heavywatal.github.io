@@ -138,7 +138,7 @@ foreach/parallel — 並行処理 in R
 を介して使う。</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span>doParallel<span class="p">)</span>
 cores <span class="o">=</span> detectCores<span class="p">(</span><span class="kt">logical</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
-cluster <span class="o">=</span> makeCluster<span class="p">(</span>cores<span class="p">,</span> <span class="s">&#39;FORK&#39;</span><span class="p">)</span>
+cluster <span class="o">=</span> makeCluster<span class="p">(</span>cores<span class="p">,</span> <span class="s">&#34;FORK&#34;</span><span class="p">)</span>
 registerDoParallel<span class="p">(</span>cluster<span class="p">)</span>
 foreach <span class="p">(</span>mu <span class="o">=</span> <span class="kp">seq_len</span><span class="p">(</span><span class="m">8L</span><span class="p">))</span> <span class="o">%dopar%</span> <span class="p">{</span>
     rnorm<span class="p">(</span><span class="m">3L</span><span class="p">,</span> mu<span class="p">)</span>
@@ -161,15 +161,15 @@ stopCluster<span class="p">(</span>cluster<span class="p">)</span></code></pre><
 <dt><code>spec</code></dt>
 <dd>いくつのworkerを立ち上げるか。
 CPUコア数を取得するには <code>parallel::detectCores(logical=FALSE)</code></dd>
-<dt><code>type='PSOCK'</code></dt>
+<dt><code>type=&quot;PSOCK&quot;</code></dt>
 <dd>デフォルト。高コストだけどだいたいどの環境でも使える。
 マルチCPUのサーバーで並列化したい場合はこれ。
 <code>foreach()</code> で使う場合 <code>.export=</code> や <code>.packages=</code> の指定が重要。</dd>
-<dt><code>type='FORK'</code></dt>
+<dt><code>type=&quot;FORK&quot;</code></dt>
 <dd>4コア1CPUとかの普通のデスクトップマシンで気楽に並列化したいならこれ。
 低コストだし <code>.export=</code> や <code>.packages=</code> を指定せず <code>foreach()</code> できる。
 Windowsでは使えないらしいけど。</dd>
-<dt><code>outfile=''</code></dt>
+<dt><code>outfile=&quot;&quot;</code></dt>
 <dd><code>print()</code>や<code>message()</code>などの出力先を標準に戻す。
 デフォルトでは<code>/dev/null</code>に捨てられてしまう。</dd>
 </dl>
@@ -191,11 +191,11 @@ Windowsでは使えないらしいけど。</dd>
 <dd>イテレータ版 <code>seq_len()</code></dd>
 <dt><code>icountn(vn)</code></dt>
 <dd>自然数限定イテレータ版 <code>expand.grid()</code></dd>
-<dt><code>iter(obj, by=c('column', 'row'))</code></dt>
+<dt><code>iter(obj, by=c(&quot;column&quot;, &quot;row&quot;))</code></dt>
 <dd>イテレータ版 <code>purrr::by_row()</code> のようなもので、
 並列<code>foreach</code>で各ノードに巨大data.frameを送りたくない場合に有用。
 data.frame以外も適用可。
-e.g., <code>iter(iris, by='row')</code></dd>
+e.g., <code>iter(iris, by=&quot;row&quot;)</code></dd>
 <dt><code>isplit(x, f, drop=FALSE, ...)</code></dt>
 <dd>イテレータ版 <code>purrr::slice_rows()</code> のようなもので、
 <code>f</code>は列名じゃなくてfactor。

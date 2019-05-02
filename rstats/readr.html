@@ -114,12 +114,12 @@ readr — 高速で柔軟なテーブル読み込み
 </ul>
 
 <p><a href="https://tidyverse.tidyverse.org/">tidyverse</a> に含まれているので、
-<code>install.packages('tidyverse')</code> で一括インストール、
+<code>install.packages(&quot;tidyverse&quot;)</code> で一括インストール、
 <code>library(tidyverse)</code> で一括ロード。
 例えば:</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span>tidyverse<span class="p">)</span>
-write_tsv<span class="p">(</span>iris<span class="p">,</span> <span class="s">&#39;iris.tsv.gz&#39;</span><span class="p">)</span>
-read_tsv<span class="p">(</span><span class="s">&#39;iris.tsv.gz&#39;</span><span class="p">)</span></code></pre></div>
+write_tsv<span class="p">(</span>iris<span class="p">,</span> <span class="s">&#34;iris.tsv.gz&#34;</span><span class="p">)</span>
+read_tsv<span class="p">(</span><span class="s">&#34;iris.tsv.gz&#34;</span><span class="p">)</span></code></pre></div>
 <ul>
 <li><a href="http://r4ds.had.co.nz/data-import.html">http://r4ds.had.co.nz/data-import.html</a></li>
 <li><a href="https://cran.r-project.org/package=readr">https://cran.r-project.org/package=readr</a></li>
@@ -135,9 +135,9 @@ read_tsv<span class="p">(</span><span class="s">&#39;iris.tsv.gz&#39;</span><spa
   col_names <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
   col_types <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span>
   locale <span class="o">=</span> default_locale<span class="p">(),</span>
-  na <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;NA&#39;</span><span class="p">),</span>
+  na <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">,</span> <span class="s">&#34;NA&#34;</span><span class="p">),</span>
   quoted_na <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
-  comment <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+  comment <span class="o">=</span> <span class="s">&#34;&#34;</span><span class="p">,</span>
   trim_ws <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
   skip <span class="o">=</span> <span class="m">0</span><span class="p">,</span>
   n_max <span class="o">=</span> <span class="kc">Inf</span><span class="p">,</span>
@@ -165,15 +165,15 @@ read_tsv<span class="p">(</span><span class="s">&#39;iris.tsv.gz&#39;</span><spa
 
 <h3 id="ファイル書き出し">ファイル書き出し</h3>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">write_delim<span class="p">(</span>x<span class="p">,</span> path<span class="p">,</span>
-  delim <span class="o">=</span> <span class="s">&#39; &#39;</span><span class="p">,</span>
-  na <span class="o">=</span> <span class="s">&#39;NA&#39;</span><span class="p">,</span>
+  delim <span class="o">=</span> <span class="s">&#34; &#34;</span><span class="p">,</span>
+  na <span class="o">=</span> <span class="s">&#34;NA&#34;</span><span class="p">,</span>
   append <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
   col_names <span class="o">=</span> <span class="o">!</span><span class="kp">append</span><span class="p">)</span></code></pre></div>
 <p><strong><code>write_csv(...)</code></strong> や <strong><code>write_tsv(...)</code></strong>
 は区切り文字 <code>delim=</code> 指定済みのショートカット。</p>
 
 <dl>
-<dt><code>write_lines(x, path, na='NA', append=FALSE)</code></dt>
+<dt><code>write_lines(x, path, na=&quot;NA&quot;, append=FALSE)</code></dt>
 <dd>vectorやlistを1行ずつ書き出す。</dd>
 <dt><code>write_file(x, path, append=FALSE)</code></dt>
 <dd>文字列をそのまま書き出す。</dd>
@@ -182,13 +182,13 @@ read_tsv<span class="p">(</span><span class="s">&#39;iris.tsv.gz&#39;</span><spa
 <h3 id="文字列から別の型へ-a-name-parse-a">文字列から別の型へ <a name="parse"></a></h3>
 
 <dl>
-<dt><code>parse_number(x, na=c('', 'NA'), locale=default_locale())</code></dt>
+<dt><code>parse_number(x, na=c(&quot;&quot;, &quot;NA&quot;), locale=default_locale())</code></dt>
 <dd>文字列で最初に登場する数値を抜き出す。
 あるカラムでは末尾に単位が付いちゃってる、みたいな状況でのみ使う。
-それ以外の複雑な判断はしないので、例えば <code>'6e23'</code> は単に6になる。</dd>
+それ以外の複雑な判断はしないので、例えば <code>&quot;6e23&quot;</code> は単に6になる。</dd>
 <dt><code>parse_double(x, ...)</code>, <code>parse_integer(x, ...)</code></dt>
 <dd>文字列をdouble/intの数値として解釈して返す。
-<code>'6e23'</code> のような指数形式も大丈夫。
+<code>&quot;6e23&quot;</code> のような指数形式も大丈夫。
 異物が混じっていた場合は警告してくれる。
 (標準の<code>as.integer()</code>とかは黙って小数点以下を切り捨てたりする)</dd>
 <dt><code>parse_logical(x, ...)</code></dt>
@@ -197,7 +197,7 @@ read_tsv<span class="p">(</span><span class="s">&#39;iris.tsv.gz&#39;</span><spa
 
 <p><code>parse_factor(x, levels, ordered=FALSE, ...)</code></p>
 
-<p><code>parse_date(x, format='', ...)</code>, <code>parse_datetime(x, format='', ...)</code>, <code>parse_time(x, format='', ...)</code></p>
+<p><code>parse_date(x, format=&quot;&quot;, ...)</code>, <code>parse_datetime(x, format=&quot;&quot;, ...)</code>, <code>parse_time(x, format=&quot;&quot;, ...)</code></p>
 
 <h2 id="列の型を指定する">列の型を指定する</h2>
 
@@ -208,19 +208,19 @@ read_tsv<span class="p">(</span><span class="s">&#39;iris.tsv.gz&#39;</span><spa
 整数と実数は区別せずnumeric型で読む(1.2から)。</p>
 
 <p>明示的に型を指定したい場合は <code>col_types</code> 引数に <code>cols()</code> 関数の値を渡す。
-文字列で <code>'ccdi_'</code> のように省略することも可能。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">read_csv<span class="p">(</span><span class="s">&#39;mydata.csv&#39;</span><span class="p">,</span> col_types<span class="o">=</span><span class="s">&#39;ccdi_&#39;</span><span class="p">)</span>
+文字列で <code>&quot;ccdi_&quot;</code> のように省略することも可能。</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">read_csv<span class="p">(</span><span class="s">&#34;mydata.csv&#34;</span><span class="p">,</span> col_types<span class="o">=</span><span class="s">&#34;ccdi_&#34;</span><span class="p">)</span>
 
-colsp <span class="o">=</span> cols<span class="p">(</span>length<span class="o">=</span>col_double<span class="p">(),</span> count<span class="o">=</span><span class="s">&#39;i&#39;</span><span class="p">,</span> <span class="m">.</span>default<span class="o">=</span><span class="s">&#39;c&#39;</span><span class="p">)</span>
-read_csv<span class="p">(</span><span class="s">&#39;mydata.csv&#39;</span><span class="p">,</span> col_types<span class="o">=</span>colsp<span class="p">)</span></code></pre></div>
+colsp <span class="o">=</span> cols<span class="p">(</span>length<span class="o">=</span>col_double<span class="p">(),</span> count<span class="o">=</span><span class="s">&#34;i&#34;</span><span class="p">,</span> <span class="m">.</span>default<span class="o">=</span><span class="s">&#34;c&#34;</span><span class="p">)</span>
+read_csv<span class="p">(</span><span class="s">&#34;mydata.csv&#34;</span><span class="p">,</span> col_types<span class="o">=</span>colsp<span class="p">)</span></code></pre></div>
 <ul>
 <li><code>[c] col_character()</code>: 文字列</li>
 <li><code>[i] col_integer()</code>: 整数</li>
 <li><code>[d] col_double()</code>: 実数</li>
 <li><code>[l] col_logical()</code>: TRUE or FALSE</li>
-<li><code>[D] col_date(format='')</code>: 日付</li>
-<li><code>[t] col_time(format='')</code>: 時間</li>
-<li><code>[T] col_datetime(format='')</code>: 日付</li>
+<li><code>[D] col_date(format=&quot;&quot;)</code>: 日付</li>
+<li><code>[t] col_time(format=&quot;&quot;)</code>: 時間</li>
+<li><code>[T] col_datetime(format=&quot;&quot;)</code>: 日付</li>
 <li><code>[n] col_number()</code>: 数字以外の文字が含まれていても無視して数字として返す</li>
 <li><code>[?] col_guess()</code>: 推測</li>
 <li><code>[_] col_skip()</code>: 列を読まない</li>
@@ -243,13 +243,13 @@ read_csv<span class="p">(</span><span class="s">&#39;mydata.csv&#39;</span><span
 <code>readxl</code> というパッケージを利用すれば、
 一旦Officeで開いてCSVに変換するという手間なしで直接Rに読み込める。</p>
 
-<p>Rの中から <code>install.packages('readxl')</code> でインストールし、
+<p>Rの中から <code>install.packages(&quot;readxl&quot;)</code> でインストールし、
 使う前に <code>library(readxl)</code> でパッケージを読み込む。</p>
 
 <dl>
 <dt><code>excel_sheets(path)</code></dt>
 <dd>ファイルに含まれるシートの名前を取得</dd>
-<dt><code>read_excel(path, sheet=1, col_names=TRUE, col_types=NULL, na='', skip=0)</code></dt>
+<dt><code>read_excel(path, sheet=1, col_names=TRUE, col_types=NULL, na=&quot;&quot;, skip=0)</code></dt>
 <dd><code>.xls</code> と <code>xlsx</code> のどちらの形式でも読める。
 <code>sheet</code> は番号でも名前でもいい。
 それ以降の引数については <code>readr</code> の関数と同じ。</dd>
@@ -259,7 +259,7 @@ read_csv<span class="p">(</span><span class="s">&#39;mydata.csv&#39;</span><span
 
 <p><a href="https://github.com/tidyverse/readr">https://github.com/tidyverse/readr</a></p>
 
-<pre><code>remotes::install_github('tidyverse/readr')
+<pre><code>remotes::install_github(&quot;tidyverse/readr&quot;)
 # ...
 ld: library not found for -lintl
 </code></pre>
@@ -273,7 +273,7 @@ brew link gettext --force</code></pre></div>
 それをRに見つけさせるため <code>~/.R/Makevars</code> にオプションを書く。</p>
 <div class="highlight"><pre class="chroma"><code class="language-makefile" data-lang="makefile"><span class="nv">LDFLAGS</span><span class="o">=</span>-L<span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.homebrew/lib
 </code></pre></div>
-<p>再びRで <code>install_github('tidyverse/readr')</code> を試みる。</p>
+<p>再びRで <code>install_github(&quot;tidyverse/readr&quot;)</code> を試みる。</p>
 
 <h2 id="tibble">tibble</h2>
 
@@ -303,8 +303,8 @@ brew link gettext --force</code></pre></div>
 例えば <code>iris$Spec</code> は黙ってvectorを返してしまうが、
 <code>tbl_iris$Spec</code> は警告つき <code>NULL</code> 。</li>
 <li>型に一貫性があり、勝手に<code>drop=TRUE</code>しない。
-例えば <code>iris[,'Species']</code> はvectorになってしまうが、
-<code>tbl_iris[,'Species']</code> はtibbleのまま。</li>
+例えば <code>iris[,&quot;Species&quot;]</code> はvectorになってしまうが、
+<code>tbl_iris[,&quot;Species&quot;]</code> はtibbleのまま。</li>
 </ul>
 
 <p>新しいtibble 1.4以降では
@@ -349,10 +349,10 @@ v2.0からは列名がちゃんとついてないとエラーになる。</dd>
 <code>c(a=1, b=2) %&gt;% enframe() %&gt;% deframe()</code></dd>
 <dt><a href="https://tibble.tidyverse.org/reference/add_row.html"><code>tibble::add_row(.data, ..., .before=NULL, .after=NULL)</code></a></dt>
 <dd>既存のtibbleに新しいデータを1行追加する。</dd>
-<dt><a href="https://tibble.tidyverse.org/reference/rownames.html"><code>tibble::rownames_to_column(df, var='rowname')</code></a></dt>
+<dt><a href="https://tibble.tidyverse.org/reference/rownames.html"><code>tibble::rownames_to_column(df, var=&quot;rowname&quot;)</code></a></dt>
 <dd>行の名前をcharacter型で1列目の変数にする。<code>dplyr::add_rownames()</code>の後継。</dd>
-<dd><code>tibble::rowid_to_column(df, var='rowid')</code> はそれを整数で。</dd>
-<dd><code>tibble::column_to_rownames(df, var='rowname')</code> はその逆。</dd>
+<dd><code>tibble::rowid_to_column(df, var=&quot;rowid&quot;)</code> はそれを整数で。</dd>
+<dd><code>tibble::column_to_rownames(df, var=&quot;rowname&quot;)</code> はその逆。</dd>
 <dd><code>tibble::remove_rownames(df)</code> は消すだけ。</dd>
 <dt><code>tibble::glimpse(.data, width=NULL)</code></dt>
 <dd>データの中身をざっと見る。
@@ -397,7 +397,7 @@ as_tibble<span class="p">(</span>iris<span class="p">)</span> <span class="o">%&
 <span class="c1"># data.table:::print.data.table で上書きした場合</span>
 as_tibble<span class="p">(</span>iris<span class="p">)</span> <span class="o">%&gt;%</span> <span class="kp">print</span><span class="p">(</span>nrows <span class="o">=</span> <span class="kp">nrow</span><span class="p">(</span><span class="m">.</span><span class="p">))</span>
 
-iris <span class="o">%&gt;%</span> page<span class="p">(</span><span class="s">&#39;print&#39;</span><span class="p">)</span></code></pre></div>
+iris <span class="o">%&gt;%</span> page<span class="p">(</span><span class="s">&#34;print&#34;</span><span class="p">)</span></code></pre></div>
 <p>オプションをいちいち設定しなくて済むように
 <a href="https://github.com/heavywatal/rwtl/blob/master/R/print.R"><code>less()</code></a>
 のような関数を定義しておくのもよい。</p>

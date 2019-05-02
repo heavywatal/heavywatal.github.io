@@ -151,8 +151,8 @@ BiocManager<span class="o">::</span>install<span class="p">(</span><span class="
 </dl>
 
 <p>使い方を調べる</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">help<span class="p">(</span>package<span class="o">=</span><span class="s">&#39;Biostrings&#39;</span><span class="p">)</span>
-browseVignettes<span class="p">(</span>package<span class="o">=</span><span class="s">&#39;Biostrings&#39;</span><span class="p">)</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">help<span class="p">(</span>package<span class="o">=</span><span class="s">&#34;Biostrings&#34;</span><span class="p">)</span>
+browseVignettes<span class="p">(</span>package<span class="o">=</span><span class="s">&#34;Biostrings&#34;</span><span class="p">)</span></code></pre></div>
 <h2 id="biostrings"><code>Biostrings</code></h2>
 
 <p><a href="https://www.bioconductor.org/packages/release/bioc/html/Biostrings.html">https://www.bioconductor.org/packages/release/bioc/html/Biostrings.html</a></p>
@@ -170,7 +170,7 @@ browseVignettes<span class="p">(</span>package<span class="o">=</span><span clas
 <code>DNAStringSet</code><br>
 <code>RNAStringSet</code><br>
 <code>AAStringSet</code></dd>
-<dt>配列セットリスト e.g. 遺伝子ごとの配列セット <code>cdsBy(txdb, by='gene')</code></dt>
+<dt>配列セットリスト e.g. 遺伝子ごとの配列セット <code>cdsBy(txdb, by=&quot;gene&quot;)</code></dt>
 <dd><code>BStringSetList</code><br>
 <code>DNAStringSetList</code><br>
 <code>RNAStringSetList</code><br>
@@ -207,8 +207,8 @@ bss <span class="o">=</span> readDNAStringSet<span class="p">(</span><span class
 <p><code>transcribe(dna)</code> &mdash; <em>deprecated</em><br>
    3&rsquo;-鋳型鎖=アンチセンス鎖-5&rsquo; を引数として相補的な 5&rsquo;-mRNA-3&rsquo; を返す。非推奨。</p>
 
-<p><code>translate(bs, genetic.code=GENETIC_CODE, if.fuzzy.codon='error')</code><br>
-   翻訳して <code>AAString</code> に変換。 引数はDNAでもRNAでもよい。 <code>genetic.code</code> は名前付き文字列ベクタで、 組み込みで使えるやつは <code>getGeneticCode('SGC2')</code> のように指定できる。 何がどの名前で使えるかは <code>GENETIC_CODE_TABLE</code> で確認。</p>
+<p><code>translate(bs, genetic.code=GENETIC_CODE, if.fuzzy.codon=&quot;error&quot;)</code><br>
+   翻訳して <code>AAString</code> に変換。 引数はDNAでもRNAでもよい。 <code>genetic.code</code> は名前付き文字列ベクタで、 組み込みで使えるやつは <code>getGeneticCode(&quot;SGC2&quot;)</code> のように指定できる。 何がどの名前で使えるかは <code>GENETIC_CODE_TABLE</code> で確認。</p>
 
 <p><code>codons(bs)</code><br>
    3塩基ずつ切って見る <code>Views</code> オブジェクトを返す。</p>
@@ -220,7 +220,7 @@ bss <span class="o">=</span> readDNAStringSet<span class="p">(</span><span class
    <code>Bstring</code> 版 <code>paste0()</code></p></dd>
 <dt>頻度を数える</dt>
 <dd><p><code>alphabetFrequency(x, as.prob=FALSE, ...)</code><br>
-<code>letterFrequency(x, letters, OR='|', as.prob=FALSE, ...)</code><br>
+<code>letterFrequency(x, letters, OR=&quot;|&quot;, as.prob=FALSE, ...)</code><br>
 <code>dinucleotideFrequency(x, ...)</code><br>
 <code>trinucleotideFrequency(x, ...)</code><br>
 <code>oligonucleotideFrequency(x, width, ...)</code><br>
@@ -229,11 +229,11 @@ bss <span class="o">=</span> readDNAStringSet<span class="p">(</span><span class
 <dd><p><code>consensusMatrix(set_or_views)</code><br>
 <code>consensusString(set_or_views, ambiguityMap, threshold, ...)</code></p></dd>
 <dt>配列ファイルを読む、書く (FASTA, FASTQ)</dt>
-<dd><p><code>readBStringSet(file, format='fasta', ...)</code><br>
-<code>readDNAStringSet(file, format='fasta', ...)</code><br>
-<code>readRNAStringSet(file, format='fasta', ...)</code><br>
-<code>readAAStringSet(file, format='fasta', ...)</code><br>
-<code>writeXStringSet(x, filepath, append=FALSE, compress=FALSE, format='fasta', ...)</code></p></dd>
+<dd><p><code>readBStringSet(file, format=&quot;fasta&quot;, ...)</code><br>
+<code>readDNAStringSet(file, format=&quot;fasta&quot;, ...)</code><br>
+<code>readRNAStringSet(file, format=&quot;fasta&quot;, ...)</code><br>
+<code>readAAStringSet(file, format=&quot;fasta&quot;, ...)</code><br>
+<code>writeXStringSet(x, filepath, append=FALSE, compress=FALSE, format=&quot;fasta&quot;, ...)</code></p></dd>
 <dt>アラインメントを読む (FASTA, stockholm, clustal)</dt>
 <dd><p><code>readDNAMultipleAlignment()</code><br>
 <code>readRNAMultipleAlignment()</code><br>
@@ -244,7 +244,7 @@ bss <span class="o">=</span> readDNAStringSet<span class="p">(</span><span class
 <dt>検索</dt>
 <dd><p><code>matchPattern(pattern, subject, ...)</code><br>
 <code>matchPDict(PDict, subject, ...)</code><br>
-<code>matchPWM(pwm, subject, min.score='80%', widh.score=FALSE, ...)</code><br>
+<code>matchPWM(pwm, subject, min.score=&quot;80%&quot;, widh.score=FALSE, ...)</code><br>
 対象は <code>Bstring</code> だけでなく <code>Views</code> でもよい。 例えば <code>codons()</code> の結果を対象とすれば読み枠限定の検索となる。 結果の返し方の違う <code>vmatchXXX()</code> と <code>countXXX()</code> もある。</p></dd>
 </dl>
 
@@ -287,7 +287,7 @@ bss <span class="o">=</span> readDNAStringSet<span class="p">(</span><span class
 <code>seqnames(x)</code><br>
 <code>seqlevels(x)</code><br>
    特定の染色体だけ対象にしたい場合は<br>
-   <code>seqlevels(x, force=TRUE) = paste0('chr', c(1:22, 'X', 'Y'))</code><br>
+   <code>seqlevels(x, force=TRUE) = paste0(&quot;chr&quot;, c(1:22, &quot;X&quot;, &quot;Y&quot;))</code><br>
    のように削り <code>seqlevels0(x)</code> で戻せる<br>
 <code>seqlengths(x)</code><br>
 <code>isCircular(x)</code><br>
@@ -314,13 +314,13 @@ bss <span class="o">=</span> readDNAStringSet<span class="p">(</span><span class
 
 <p><code>isDisjoint(gr, ...)</code><br>
 <code>disjointBins(gr, ...)</code><br>
-<code>coverage(gr, shift=0, width=NULL, wight=1, method=c('auto', 'sort', 'hash'))</code></p></dd>
+<code>coverage(gr, shift=0, width=NULL, wight=1, method=c(&quot;auto&quot;, &quot;sort&quot;, &quot;hash&quot;))</code></p></dd>
 <dt>個々の区間を操作</dt>
 <dd><p><code>shift(gr, shift=0, ...)</code><br>
 <code>narrow(gr, start=NA, end=NA, width=NA, ...)</code><br>
 <code>flank(gr, width, start=TRUE, both=FALSE, ...)</code><br>
 <code>promoters(gr, upstream=2000, downstream=200, ...)</code><br>
-<code>resize(gr, width, fix='start', ...)</code><br>
+<code>resize(gr, width, fix=&quot;start&quot;, ...)</code><br>
 <code>restrict(gr, start=NA, end=NA, ...)</code><br>
 <code>trim(gr, ...)</code></p></dd>
 <dt>重なり <a href="https://qiita.com/wakuteka/items/10027edccc6c2e244cd2">https://qiita.com/wakuteka/items/10027edccc6c2e244cd2</a></dt>
@@ -342,7 +342,7 @@ bss <span class="o">=</span> readDNAStringSet<span class="p">(</span><span class
 <dl>
 <dt>絞り込んで <code>GRanges</code> を返す</dt>
 <dd><code>transcripts(txdb, vals=NULL, columns)</code><br>
-   <code>vals=list(tx_chrom=c('chrI', 'chrV'))</code> のように指定する。 取りうる値: gene_id, tx_id, tx_name, tx_chrom, tx_strand, exon_id, exon_name, exon_chrom, exon_strand, cds_id, cds_name, cds_chrom, cds_strand, exon_rank<br>
+   <code>vals=list(tx_chrom=c(&quot;chrI&quot;, &quot;chrV&quot;))</code> のように指定する。 取りうる値: gene_id, tx_id, tx_name, tx_chrom, tx_strand, exon_id, exon_name, exon_chrom, exon_strand, cds_id, cds_name, cds_chrom, cds_strand, exon_rank<br>
 <code>exons(txdb, ...)</code><br>
 <code>cds(txdb, ...)</code><br>
 <code>genes(txdb, ...)</code><br>
@@ -353,7 +353,7 @@ bss <span class="o">=</span> readDNAStringSet<span class="p">(</span><span class
    <code>library(FDb.UCSC.tRNAs)</code> の情報を使ってtRNAコーディング部分を抽出</dd>
 <dt>グループ毎に絞り込んで <code>GRangesList</code> を返す</dt>
 <dd><code>transcriptsBy(txdb, by, use.names=FALSE, ...)</code><br>
-   <code>by</code> は <code>'gene'</code>, <code>'exon'</code>, <code>'cds'</code>, <code>'tx'</code> のどれか。<br>
+   <code>by</code> は <code>&quot;gene&quot;</code>, <code>&quot;exon&quot;</code>, <code>&quot;cds&quot;</code>, <code>&quot;tx&quot;</code> のどれか。<br>
 <code>exonsBy(txdb, by, ...)</code><br>
 <code>cdsBy(txdb, by, ...)</code><br>
 <code>intronsByTranscript(txdb, ...)</code><br>
@@ -363,9 +363,9 @@ bss <span class="o">=</span> readDNAStringSet<span class="p">(</span><span class
 <dd><code>DNAString</code> または <code>BSgenome</code> から配列を抜き出す。
 <code>transcripts</code> 引数は <code>GRanges</code>, <code>GRangesList</code>, <code>TranscriptDb</code> のどれか。</dd>
 <dt><code>TranscriptDB</code> の形式変換</dt>
-<dd><code>makeTranscriptDbFromBiomart(biomart='ensembl', dataset='hsapiens_gene_ensembl', ...)</code><br>
-<code>makeTranscriptDbFromUCSC(genome='hg18', table='knownGene', ...)</code><br>
-<code>makeTranscriptDBFromGFF(file, format=c('gff3', 'gtf'), ...)</code><br>
+<dd><code>makeTranscriptDbFromBiomart(biomart=&quot;ensembl&quot;, dataset=&quot;hsapiens_gene_ensembl&quot;, ...)</code><br>
+<code>makeTranscriptDbFromUCSC(genome=&quot;hg18&quot;, table=&quot;knownGene&quot;, ...)</code><br>
+<code>makeTranscriptDBFromGFF(file, format=c(&quot;gff3&quot;, &quot;gtf&quot;), ...)</code><br>
 <code>asBED(txdb)</code><br>
 <code>asGFF(txdb)</code></dd>
 </dl>
@@ -407,7 +407,7 @@ bsg <span class="o">=</span> BSgenome.Scerevisiae.UCSC.sacCer3</code></pre></div
 
 <p>染色体(<code>DNAString</code>)にアクセス</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">bsg<span class="o">$</span>chrI
-bsg<span class="p">[[</span><span class="s">&#39;chrI&#39;</span><span class="p">]]</span>
+bsg<span class="p">[[</span><span class="s">&#34;chrI&#34;</span><span class="p">]]</span>
 bsg<span class="p">[[</span><span class="m">1</span><span class="p">]]</span></code></pre></div>
 <hr>
 
@@ -444,12 +444,12 @@ bsg<span class="p">[[</span><span class="m">1</span><span class="p">]]</span></c
 <code>bsgenomeName(bsg)</code><br>
 <code>seqlengths()</code> などseqinfo系関数も使える</dd>
 <dt>利用可能なデータを調べる</dt>
-<dd><code>available.genomes(splitNameParts=FALSE, type=getOption('pkgType'))</code><br>
+<dd><code>available.genomes(splitNameParts=FALSE, type=getOption(&quot;pkgType&quot;))</code><br>
 <code>installed.genomes(splitNameParts=FALSE)</code></dd>
 <dt><code>getBSgenome(name, masked=FALSE)</code></dt>
 <dd>インストール済みデータから読み込み。
 <code>BSgenome.Scerevisiae.UCSC.sacCer3</code> あるいは <code>sacCer3</code> のような名前で。</dd>
-<dt><code>getSeq(bsg, names, start=NA, end=NA, width=NA, starnd='+', as.character=FALSE)</code></dt>
+<dt><code>getSeq(bsg, names, start=NA, end=NA, width=NA, starnd=&quot;+&quot;, as.character=FALSE)</code></dt>
 <dd><code>BSgenome</code> オブジェクトから配列を抜き出す。
 <code>names</code> は配列名の文字列ベクタか <code>GRanges</code> か <code>GRangesList</code></dd>
 </dl>

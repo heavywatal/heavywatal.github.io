@@ -109,7 +109,7 @@ rtracklayer
 <code>import.gff()</code>, <code>import.bed()</code> など形式ごとの関数も定義されていて、
 引数などの詳しいヘルプもそっちから見られる。</p>
 
-<p>GFFは <code>feature.type='exon'</code> などとして興味のある行だけ読んだほうが良さそう。
+<p>GFFは <code>feature.type=&quot;exon&quot;</code> などとして興味のある行だけ読んだほうが良さそう。
 結果として、余分な列も減る。</p></dd>
 <dt><code>export(gr, filename, format, ...)</code></dt>
 <dd><p><code>GRanges</code> をGFFなどの形式でファイルに書き出す。</p></dd>
@@ -121,14 +121,14 @@ rtracklayer
 
 <p>ゲノム、トラック、テーブルの指定方法が独特</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">session <span class="o">=</span> browserSession<span class="p">()</span>
-genome<span class="p">(</span>session<span class="p">)</span> <span class="o">=</span> <span class="s">&#39;hg19&#39;</span>
-query <span class="o">=</span> ucscTableQuery<span class="p">(</span>session<span class="p">,</span> <span class="s">&#39;knownGene&#39;</span><span class="p">)</span>
-tableName<span class="p">(</span>query<span class="p">)</span> <span class="o">=</span> <span class="s">&#39;kgXref&#39;</span>
+genome<span class="p">(</span>session<span class="p">)</span> <span class="o">=</span> <span class="s">&#34;hg19&#34;</span>
+query <span class="o">=</span> ucscTableQuery<span class="p">(</span>session<span class="p">,</span> <span class="s">&#34;knownGene&#34;</span><span class="p">)</span>
+tableName<span class="p">(</span>query<span class="p">)</span> <span class="o">=</span> <span class="s">&#34;kgXref&#34;</span>
 kgXref <span class="o">=</span> getTable<span class="p">(</span>query<span class="p">)</span>  <span class="c1"># data.frame</span>
 
-query <span class="o">=</span> ucscTableQuery<span class="p">(</span>session<span class="p">,</span> <span class="s">&#39;knownGene&#39;</span><span class="p">,</span> <span class="s">&#39;hg19&#39;</span><span class="p">,</span> <span class="s">&#39;kgXref&#39;</span><span class="p">)</span></code></pre></div>
+query <span class="o">=</span> ucscTableQuery<span class="p">(</span>session<span class="p">,</span> <span class="s">&#34;knownGene&#34;</span><span class="p">,</span> <span class="s">&#34;hg19&#34;</span><span class="p">,</span> <span class="s">&#34;kgXref&#34;</span><span class="p">)</span></code></pre></div>
 <p>テーブルを指定しなければ先頭が使われる</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">query <span class="o">=</span> ucscTableQuery<span class="p">(</span>session<span class="p">,</span> <span class="s">&#39;cytoBand&#39;</span><span class="p">,</span> <span class="s">&#39;hg19&#39;</span><span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">query <span class="o">=</span> ucscTableQuery<span class="p">(</span>session<span class="p">,</span> <span class="s">&#34;cytoBand&#34;</span><span class="p">,</span> <span class="s">&#34;hg19&#34;</span><span class="p">)</span>
 cytoBand <span class="o">=</span> track<span class="p">(</span>query<span class="p">)</span>  <span class="c1"># GRanges</span></code></pre></div>
 <p>トラックやテーブルの名前を閲覧</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">trackNames<span class="p">(</span>session<span class="p">)</span>

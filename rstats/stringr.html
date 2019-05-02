@@ -126,7 +126,7 @@ stringr — Rの文字列をまともな方法で処理する
 基本的には <code>stringr</code> を使っとけばよい。</p>
 
 <p><a href="https://tidyverse.tidyverse.org/">tidyverse</a> に含まれているので、
-<code>install.packages('tidyverse')</code> で一括インストール、
+<code>install.packages(&quot;tidyverse&quot;)</code> で一括インストール、
 <code>library(tidyverse)</code> で一括ロード。</p>
 
 <ul>
@@ -150,7 +150,7 @@ stringr — Rの文字列をまともな方法で処理する
 <code>str_sub&lt;-</code> が定義されているので置換にも使える。</dd>
 <dt><code>str_flatten(string, collapse=&quot;&quot;)</code></dt>
 <dd>文字列vectorを1つの文字列に結合する。</dd>
-<dt><code>str_c(..., sep='', collapse=NULL)</code></dt>
+<dt><code>str_c(..., sep=&quot;&quot;, collapse=NULL)</code></dt>
 <dd>複数の引数で与えた文字列を結合する。
 デフォルトの <code>sep</code> がスペースじゃないので <code>base::paste0()</code> に近い。</dd>
 <dt><code>str_split(string, pattern, n=Inf, simplify=FALSE)</code></dt>
@@ -163,7 +163,7 @@ stringr — Rの文字列をまともな方法で処理する
 <code>simplify=TRUE</code> とするとmatrixで返す。</dd>
 <dt><code>str_dup(string, times)</code></dt>
 <dd>指定した回数だけ文字列を繰り返して結合。
-<code>str_dup('#', 79)</code> とかで結果出力に区切りを入れたり。</dd>
+<code>str_dup(&quot;#&quot;, 79)</code> とかで結果出力に区切りを入れたり。</dd>
 </dl>
 
 <h3 id="pattern-matching">Pattern Matching</h3>
@@ -213,7 +213,7 @@ stringr — Rの文字列をまともな方法で処理する
 複数行ファイルに対するマッチではこの関数を通して挙動をいじることになる。</dd>
 <dt><code>stringr::fixed(pattern)</code></dt>
 <dd>正規表現ではなくそのままの文字としてマッチさせる</dd>
-<dt><code>stringr::boundary(type='character', skip_word_none=NA, ...)</code></dt>
+<dt><code>stringr::boundary(type=&quot;character&quot;, skip_word_none=NA, ...)</code></dt>
 <dd>境界に対するマッチ。
 <code>type</code>の選択肢は <code>character</code>, <code>line_break</code>, <code>sentence</code>, <code>word</code>.</dd>
 <dt><code>stringr::coll(pattern, ignore_case=FALSE, locale=NULL, ...)</code></dt>
@@ -230,19 +230,19 @@ stringr — Rの文字列をまともな方法で処理する
 文字列の中の <code>$[format]{expr}</code> がR表現として評価される。
 <code>[format]</code>部分は<code>sprintf()</code>と同じ形式で、省略可。
 <code>env</code> はlistやdata.frameでもよい。</dd>
-<dd>e.g., <code>stringr::str_interp('Mean sepal width is $[.3f]{mean(Sepal.Width)}.', iris)</code></dd>
+<dd>e.g., <code>stringr::str_interp(&quot;Mean sepal width is $[.3f]{mean(Sepal.Width)}.&quot;, iris)</code></dd>
 <dt><code>str_glue(..., .sep=&quot;&quot;, .envir=parent.frame())</code></dt>
 <dd><a href="https://glue.tidyverse.org/"><code>library(glue)</code></a> しなくても使えるように。</dd>
 <dt><code>str_pad(string, width, side=c(&quot;left&quot;, &quot;right&quot;, &quot;both&quot;), pad=&quot; &quot;)</code></dt>
 <dd>文字列の幅を <code>width</code> に伸ばして <code>side</code> 側を <code>pad</code> で埋める。
 例えば <code>&quot;009&quot; &quot;010&quot;</code> のように数字の左を0で埋めて長さを揃えるのにも使える:
-<code>str_pad(c('9', '10'), 3L, '0')</code></dd>
+<code>str_pad(c(&quot;9&quot;, &quot;10&quot;), 3L, &quot;0&quot;)</code></dd>
 <dt><code>str_trim(string, side=&quot;both&quot;)</code></dt>
 <dd>空白文字を除去する。
 Python でいうところの <code>str.strip()</code>。
 両端から空白文字を除去して、連続する空白文字を1つに縮める
 <code>str_squish()</code> もある。</dd>
-<dt><code>str_trunc(string, width, side=c('right', 'left', 'center'), ellipsis='...')</code></dt>
+<dt><code>str_trunc(string, width, side=c(&quot;right&quot;, &quot;left&quot;, &quot;center&quot;), ellipsis=&quot;...&quot;)</code></dt>
 <dd>一定の長さを超えたら捨てて <code>...</code> にする。</dd>
 <dt><code>str_wrap(string, width=80, indent=0, exdent=0)</code></dt>
 <dd>指定した幅で折り返す。

@@ -105,7 +105,7 @@ purrr — ループ処理やapply系関数の決定版
 それに関しては<a href="/rstats/foreach.html">foreach/parallel</a>ページを参照。</p>
 
 <p><a href="https://tidyverse.tidyverse.org/">tidyverse</a> に含まれているので、
-<code>install.packages('tidyverse')</code> で一括インストール、
+<code>install.packages(&quot;tidyverse&quot;)</code> で一括インストール、
 <code>library(tidyverse)</code> で一括ロード。</p>
 
 <h2 id="list-vector操作">list, vector操作</h2>
@@ -278,8 +278,8 @@ map_chr<span class="p">(</span>li<span class="p">,</span> <span class="kr">funct
 <p>パイプ演算子 <code>%&gt;%</code> については<a href="/rstats/dplyr.html">dplyr</a>を参照。</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">## OLD</span>
 iris <span class="o">%&gt;%</span>
-  purrrlyr<span class="o">::</span>slice_rows<span class="p">(</span><span class="s">&#39;Species&#39;</span><span class="p">)</span> <span class="o">%&gt;%</span>
-  purrrlyr<span class="o">::</span>by_slice<span class="p">(</span><span class="kp">head</span><span class="p">,</span> <span class="m">.</span>collate<span class="o">=</span><span class="s">&#39;rows&#39;</span><span class="p">)</span>
+  purrrlyr<span class="o">::</span>slice_rows<span class="p">(</span><span class="s">&#34;Species&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  purrrlyr<span class="o">::</span>by_slice<span class="p">(</span><span class="kp">head</span><span class="p">,</span> <span class="m">.</span>collate<span class="o">=</span><span class="s">&#34;rows&#34;</span><span class="p">)</span>
 
 <span class="c1">## NEW</span>
 iris <span class="o">%&gt;%</span>
@@ -297,12 +297,12 @@ iris <span class="o">%&gt;%</span>
 <dt><code>purrrlyr::slice_rows(.d, .cols=NULL)</code></dt>
 <dd>指定した列でグループ化してgrouped_dfを返す。
 <code>dplyr::group_by_(.dots=.cols)</code> と同じ。</dd>
-<dt><code>purrrlyr::by_slice(.d, ..f, ..., .collate=c('list', 'rows', 'cols'), .to='.out', .labels=TRUE)</code></dt>
+<dt><code>purrrlyr::by_slice(.d, ..f, ..., .collate=c(&quot;list&quot;, &quot;rows&quot;, &quot;cols&quot;), .to=&quot;.out&quot;, .labels=TRUE)</code></dt>
 <dd>grouped_dfを受け取ってグループごとに関数を適用する。
 <code>dplyr::do()</code> とほぼ同じ役割で、一長一短。
 こちらは出力形式をより柔軟に指定できるが、
 中の関数からgrouping variableを参照できないという弱点を持つ。</dd>
-<dt><code>purrrlyr::by_row(.d, ..f, ..., .collate=c('list', 'rows', 'cols'), .to='.out', .labels=TRUE)</code></dt>
+<dt><code>purrrlyr::by_row(.d, ..f, ..., .collate=c(&quot;list&quot;, &quot;rows&quot;, &quot;cols&quot;), .to=&quot;.out&quot;, .labels=TRUE)</code></dt>
 <dd>data.frame 1行ごとに関数を適用する。
 <code>dplyr::rowwise() %&gt;% dplyr::do()</code>的な処理を一撃で書ける。</dd>
 <dd><code>.to</code>: 結果listの列名</dd>
@@ -317,7 +317,7 @@ iris <span class="o">%&gt;%</span>
 <dd>第一引数が関数になってるところは<code>invoke()</code>っぽくて、
 結果の収納方法を<code>.collate</code>などで調整できるところは<code>by_row()</code>っぽい。</dd>
 </dl>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris<span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">,</span> <span class="m">1</span><span class="o">:</span><span class="m">2</span><span class="p">]</span> <span class="o">%&gt;%</span> by_row<span class="p">(</span><span class="o">~</span><span class="kt">data_frame</span><span class="p">(</span>x<span class="o">=</span><span class="m">0</span><span class="o">:</span><span class="m">1</span><span class="p">,</span> y<span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">)),</span> <span class="m">.</span>collate<span class="o">=</span><span class="s">&#39;list&#39;</span><span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris<span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">,</span> <span class="m">1</span><span class="o">:</span><span class="m">2</span><span class="p">]</span> <span class="o">%&gt;%</span> by_row<span class="p">(</span><span class="o">~</span><span class="kt">data_frame</span><span class="p">(</span>x<span class="o">=</span><span class="m">0</span><span class="o">:</span><span class="m">1</span><span class="p">,</span> y<span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="s">&#34;b&#34;</span><span class="p">)),</span> <span class="m">.</span>collate<span class="o">=</span><span class="s">&#34;list&#34;</span><span class="p">)</span>
 <span class="c1">## Source: local data frame [3 x 3]</span>
 <span class="c1">##</span>
 <span class="c1">##   Sepal.Length Sepal.Width           .out</span>
@@ -325,7 +325,7 @@ iris <span class="o">%&gt;%</span>
 <span class="c1">## 1          5.1         3.5 &lt;tbl_df [2,2]&gt;</span>
 <span class="c1">## 2          4.9         3.0 &lt;tbl_df [2,2]&gt;</span>
 <span class="c1">## 3          4.7         3.2 &lt;tbl_df [2,2]&gt;</span>
-iris<span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">,</span> <span class="m">1</span><span class="o">:</span><span class="m">2</span><span class="p">]</span> <span class="o">%&gt;%</span> by_row<span class="p">(</span><span class="o">~</span><span class="kt">data_frame</span><span class="p">(</span>x<span class="o">=</span><span class="m">0</span><span class="o">:</span><span class="m">1</span><span class="p">,</span> y<span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">)),</span> <span class="m">.</span>collate<span class="o">=</span><span class="s">&#39;rows&#39;</span><span class="p">)</span>
+iris<span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">,</span> <span class="m">1</span><span class="o">:</span><span class="m">2</span><span class="p">]</span> <span class="o">%&gt;%</span> by_row<span class="p">(</span><span class="o">~</span><span class="kt">data_frame</span><span class="p">(</span>x<span class="o">=</span><span class="m">0</span><span class="o">:</span><span class="m">1</span><span class="p">,</span> y<span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="s">&#34;b&#34;</span><span class="p">)),</span> <span class="m">.</span>collate<span class="o">=</span><span class="s">&#34;rows&#34;</span><span class="p">)</span>
 <span class="c1">## Source: local data frame [6 x 5]</span>
 <span class="c1">##</span>
 <span class="c1">##   Sepal.Length Sepal.Width  .row     x     y</span>
@@ -336,7 +336,7 @@ iris<span class="p">[</span><span class="m">1</span><span class="o">:</span><spa
 <span class="c1">## 4          4.9         3.0     2     1     b</span>
 <span class="c1">## 5          4.7         3.2     3     0     a</span>
 <span class="c1">## 6          4.7         3.2     3     1     b</span>
-iris<span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">,</span> <span class="m">1</span><span class="o">:</span><span class="m">2</span><span class="p">]</span> <span class="o">%&gt;%</span> by_row<span class="p">(</span><span class="o">~</span><span class="kt">data_frame</span><span class="p">(</span>x<span class="o">=</span><span class="m">0</span><span class="o">:</span><span class="m">1</span><span class="p">,</span> y<span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">)),</span> <span class="m">.</span>collate<span class="o">=</span><span class="s">&#39;cols&#39;</span><span class="p">)</span>
+iris<span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">,</span> <span class="m">1</span><span class="o">:</span><span class="m">2</span><span class="p">]</span> <span class="o">%&gt;%</span> by_row<span class="p">(</span><span class="o">~</span><span class="kt">data_frame</span><span class="p">(</span>x<span class="o">=</span><span class="m">0</span><span class="o">:</span><span class="m">1</span><span class="p">,</span> y<span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="s">&#34;b&#34;</span><span class="p">)),</span> <span class="m">.</span>collate<span class="o">=</span><span class="s">&#34;cols&#34;</span><span class="p">)</span>
 <span class="c1">## Source: local data frame [3 x 6]</span>
 <span class="c1">##</span>
 <span class="c1">##   Sepal.Length Sepal.Width    x1    x2    y1    y2</span>

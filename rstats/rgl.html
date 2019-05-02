@@ -129,7 +129,7 @@ rgl — 3Dグラフ描画
 <dd>デバイスを閉じる。<code>close3d()</code>はなぜか存在しない。</dd>
 </dl>
 
-<p><code>rgl::clear3d(type=c('shapes', 'bboxdeco', 'material'), defaults, subscene=0)</code></p>
+<p><code>rgl::clear3d(type=c(&quot;shapes&quot;, &quot;bboxdeco&quot;, &quot;material&quot;), defaults, subscene=0)</code></p>
 
 <h2 id="プロット">プロット</h2>
 
@@ -153,7 +153,7 @@ rgl — 3Dグラフ描画
 ホントはあんまり使いたくないけど、
 <code>xlim</code>, <code>ylim</code>, <code>zlim</code> オプションを受け付ける関数がこれしかないようなので、
 境界を指定しつつ球体を描きたい場合は <code>spheres3d()</code> ではなく
-<code>plot3d(type='s')</code> を使うしかないっぽい。</dd>
+<code>plot3d(type=&quot;s&quot;)</code> を使うしかないっぽい。</dd>
 </dl>
 
 <h2 id="背景や軸などの調整">背景や軸などの調整</h2>
@@ -161,7 +161,7 @@ rgl — 3Dグラフ描画
 <dl>
 <dt><code>rgl::title3d(main, sub, xlab, ylab, zlab, line=NA, ...)</code></dt>
 <dd>これを使うとmainとsubも視点によって動いてしまう。
-<code>bgplot3d({plot.new(); title('main')})</code> なら固定背景に書ける。</dd>
+<code>bgplot3d({plot.new(); title(&quot;main&quot;)})</code> なら固定背景に書ける。</dd>
 </dl>
 
 <p><code>rgl::mtext3d(text, edge, line=0, at=NULL, pos=NA, ...)</code></p>
@@ -185,11 +185,11 @@ rgl — 3Dグラフ描画
 <code>x</code> は　<code>x--</code> と等価。</dd>
 <dt><code>rgl::box3d(...)</code></dt>
 <dd>12辺の箱を描く。</dd>
-<dt><code>rgl::bbox3d(xat=NULL, yat, zat, xunit='pretty', yunit, zunit, expand=1.03, draw_front=FALSE)</code></dt>
+<dt><code>rgl::bbox3d(xat=NULL, yat, zat, xunit=&quot;pretty&quot;, yunit, zunit, expand=1.03, draw_front=FALSE)</code></dt>
 <dd>手前の辺が自動で消えるような箱を描く。</dd>
-<dt><code>rgl::axes3d(edges='bbox', labels=TRUE, tick=TRUE, nticks=5, box=FALSE, expand=1.03, ...)</code></dt>
+<dt><code>rgl::axes3d(edges=&quot;bbox&quot;, labels=TRUE, tick=TRUE, nticks=5, box=FALSE, expand=1.03, ...)</code></dt>
 <dd>上記の3つをまとめる関数。分かりにくいので使わないほうがいい。
-<code>edges='bbox'</code> の場合 <code>tick=FALSE</code> は効かないので <code>xlen=0, ylen=0, zlen=0</code> とする必要がある。</dd>
+<code>edges=&quot;bbox&quot;</code> の場合 <code>tick=FALSE</code> は効かないので <code>xlen=0, ylen=0, zlen=0</code> とする必要がある。</dd>
 <dt><code>rgl::view3d(theta=0, phi=15, fov=60, zoom=1, scale=par3d(&quot;scale&quot;), interactive=TRUE, userMatrix)</code></dt>
 <dd><code>theta</code>: 0のとき正面がxy平面。観察者が地球の公転と同じ方向に動くのが正。<br>
 <code>phi</code> [-90, 90]: 0のとき視点が水平面(xz平面)上。観察者が上に動くのが正。<br>
@@ -213,15 +213,15 @@ next3d<span class="p">(</span>current<span class="o">=</span><span class="kc">NA
 <dl>
 <dt><code>rgl::scene3d()</code></dt>
 <dd>rglネイティブな形での全構成要素リスト。</dd>
-<dt><code>rgl::snapshot3d(filename, fmt='png', top=TRUE)</code></dt>
+<dt><code>rgl::snapshot3d(filename, fmt=&quot;png&quot;, top=TRUE)</code></dt>
 <dd>PNGのみ。
 <code>top=FALSE</code>にしてはダメ。謎。</dd>
-<dt><code>rbl.postscript(filename, fmt='eps', drawText=TRUE)</code></dt>
+<dt><code>rbl.postscript(filename, fmt=&quot;eps&quot;, drawText=TRUE)</code></dt>
 <dd>ps, eps, tex, pdf, svg をサポート。
 透過や <code>bgplot3d</code> は反映されないらしいので注意。</dd>
-<dt><code>rgl::writeWebGL(dir='webGL', filename, template, prefix, snapshot, commonParts, reuse, font, width, height)</code></dt>
+<dt><code>rgl::writeWebGL(dir=&quot;webGL&quot;, filename, template, prefix, snapshot, commonParts, reuse, font, width, height)</code></dt>
 <dd>ディレクトリ構造無しの単発HTMLでいい場合は
-<code>writeWebGL('.', 'rgl.html')</code> のように指定する。
+<code>writeWebGL(&quot;.&quot;, &quot;rgl.html&quot;)</code> のように指定する。
 ヘルプには <code>snapshot</code> がファイル名も受け取れると書いてあるが嘘で <code>TRUE/FALSE</code> のみ。
 rglデバイスが不要なので<code>open3d(useNULL=TRUE)</code>としておくと余計なウィンドウを開かずに済む。</dd>
 </dl>
@@ -250,7 +250,7 @@ rgl::setupKnitr()
 <pre><code>```{r plot, webgl=TRUE}
 rgl::open3d(useNULL=TRUE)
 rgl::box3d()
-rgl::title3d('main', 'sub', 'x', 'y', 'z')
+rgl::title3d(&quot;main&quot;, &quot;sub&quot;, &quot;x&quot;, &quot;y&quot;, &quot;z&quot;)
 ```
 </code></pre>
 

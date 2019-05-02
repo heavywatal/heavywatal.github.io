@@ -132,7 +132,7 @@ biomaRt — プログラム的にデータ取得
 <h2 id="関数">関数</h2>
 
 <dl>
-<dt><code>listMarts(mart, host='www.biomart.org', ..., archive=FALSE, ...)</code></dt>
+<dt><code>listMarts(mart, host=&quot;www.biomart.org&quot;, ..., archive=FALSE, ...)</code></dt>
 <dd>利用可能なマート列挙。 e.g. <code>ensembl</code>, <code>fungi_mart_21</code>, <code>unimart</code></dd>
 <dt><code>listDatasets(mart, verbose=FALSE)</code></dt>
 <dd>マートで利用可能なデータセット列挙。 e.g. <code>scerevisiae_gene_ensembl</code></dd>
@@ -140,33 +140,33 @@ biomaRt — プログラム的にデータ取得
 <dd>マートで利用可能なデータのカテゴリ分け(ページ)を列挙。
 <code>unique(mart@attributes$page)</code> と同じ。
 データを取得するときはこれらの間を跨がないようにアトリビュートを選ぶ。</dd>
-<dt><code>listAttributes(mart, page, what=c('name', 'desciption'))</code></dt>
+<dt><code>listAttributes(mart, page, what=c(&quot;name&quot;, &quot;desciption&quot;))</code></dt>
 <dd>マートで利用可能なアトリビュート列挙。
 <code>mart@attributes</code> へのアクセサ。</dd>
-<dt><code>listFilters(mart, what=c('name', 'description'))</code></dt>
+<dt><code>listFilters(mart, what=c(&quot;name&quot;, &quot;description&quot;))</code></dt>
 <dd>マートで利用可能なフィルター列挙。
 <code>mart@filters</code> へのアクセサ。</dd>
-<dt><code>useMart(martname, dataset, host='www.biomart.org', ..., archive=FALSE, ...)</code></dt>
+<dt><code>useMart(martname, dataset, host=&quot;www.biomart.org&quot;, ..., archive=FALSE, ...)</code></dt>
 <dd>利用するマート(とデータセット)を指定して <code>Mart</code> オブジェクトを作る。
-データセットを決めずにも作れる。 e.g. <code>mart = useMart('ensembl', 'scerevisiae_gene_ensembl')</code></dd>
+データセットを決めずにも作れる。 e.g. <code>mart = useMart(&quot;ensembl&quot;, &quot;scerevisiae_gene_ensembl&quot;)</code></dd>
 <dt><code>useDataset(dataset, mart, verbose=FALSE)</code></dt>
 <dd>データセットを決めた <code>Mart</code> オブジェクトを作る。
-でもこれって <code>useMart()</code> にもできるので不要&hellip;？ e.g. <code>mart = useDataset('scerevisiae_gene_ensembl', mart)</code></dd>
-<dt><code>getBM(attributes, filters='', values='', mart, curl=NULL, checkFilters=TRUE, verbose=FALSE, uniqueRows=TRUE, bmHeader=FALSE)</code></dt>
+でもこれって <code>useMart()</code> にもできるので不要&hellip;？ e.g. <code>mart = useDataset(&quot;scerevisiae_gene_ensembl&quot;, mart)</code></dd>
+<dt><code>getBM(attributes, filters=&quot;&quot;, values=&quot;&quot;, mart, curl=NULL, checkFilters=TRUE, verbose=FALSE, uniqueRows=TRUE, bmHeader=FALSE)</code></dt>
 <dd><p>このパッケージのメイン関数。
 フィルターは名前付きリストで渡す。
 <code>filter</code> に渡すと <code>AND</code> 結合:</p>
 
-<pre><code>getBM(c('ensembl_gene_id', 'sgd_gene'),
-      filters=list(chromosome_name='IV', biotype='tRNA'),
+<pre><code>getBM(c(&quot;ensembl_gene_id&quot;, &quot;sgd_gene&quot;),
+      filters=list(chromosome_name=&quot;IV&quot;, biotype=&quot;tRNA&quot;),
       mart=ensembl)
 # 第四染色体上のtRNA遺伝子
 </code></pre>
 
 <p><code>values</code> に渡すと <code>OR</code> 結合:</p>
 
-<pre><code>getBM(c('ensembl_gene_id', 'sgd_gene'),
-      values=list(chromosome_name='IV', biotype='tRNA'),
+<pre><code>getBM(c(&quot;ensembl_gene_id&quot;, &quot;sgd_gene&quot;),
+      values=list(chromosome_name=&quot;IV&quot;, biotype=&quot;tRNA&quot;),
       mart=ensembl)
 # 第四染色体上の遺伝子とtRNA遺伝子
 </code></pre>
@@ -202,37 +202,37 @@ keytype(フィルター)は1つしか使えない。
 
 <p>マートとデータセットの決定</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span>biomaRt<span class="p">)</span>
-ensembl <span class="o">=</span> useMart<span class="p">(</span><span class="s">&#39;ensembl&#39;</span><span class="p">,</span> <span class="s">&#39;scerevisiae_gene_ensembl&#39;</span><span class="p">)</span>
+ensembl <span class="o">=</span> useMart<span class="p">(</span><span class="s">&#34;ensembl&#34;</span><span class="p">,</span> <span class="s">&#34;scerevisiae_gene_ensembl&#34;</span><span class="p">)</span>
 
 <span class="c1">## あるいは</span>
 listMarts<span class="p">()</span>
-ensembl <span class="o">=</span> useMart<span class="p">(</span><span class="s">&#39;ensembl&#39;</span><span class="p">)</span>
+ensembl <span class="o">=</span> useMart<span class="p">(</span><span class="s">&#34;ensembl&#34;</span><span class="p">)</span>
 listDatasets<span class="p">(</span>ensembl<span class="p">)</span>
-ensembl <span class="o">=</span> useDataset<span class="p">(</span><span class="s">&#39;scerevisiae_gene_ensembl&#39;</span><span class="p">,</span> ensembl<span class="p">)</span></code></pre></div>
+ensembl <span class="o">=</span> useDataset<span class="p">(</span><span class="s">&#34;scerevisiae_gene_ensembl&#34;</span><span class="p">,</span> ensembl<span class="p">)</span></code></pre></div>
 <p>どんなデータやフィルタが利用可能か調べる</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">attributePages<span class="p">(</span>ensembl<span class="p">)</span>
-listAttributes<span class="p">(</span>ensembl<span class="p">,</span> <span class="s">&#39;feature_page&#39;</span><span class="p">)</span>
+listAttributes<span class="p">(</span>ensembl<span class="p">,</span> <span class="s">&#34;feature_page&#34;</span><span class="p">)</span>
 <span class="kp">subset</span><span class="p">(</span>ensembl<span class="o">@</span>filters<span class="p">,</span> select<span class="o">=</span><span class="kt">c</span><span class="p">(</span>name<span class="p">,</span> description<span class="p">,</span> type<span class="p">,</span> operation<span class="p">))</span></code></pre></div>
 <p>フィルタの選択肢を調べる</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="kp">subset</span><span class="p">(</span>ensembl<span class="o">@</span>filters<span class="p">,</span> name<span class="o">==</span><span class="s">&#39;biotype&#39;</span><span class="p">)</span><span class="o">$</span><span class="kp">options</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="kp">subset</span><span class="p">(</span>ensembl<span class="o">@</span>filters<span class="p">,</span> name<span class="o">==</span><span class="s">&#34;biotype&#34;</span><span class="p">)</span><span class="o">$</span><span class="kp">options</span>
 <span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="s">&#34;[ncRNA,protein_coding,pseudogene,rRNA,snoRNA,snRNA,tRNA]&#34;</span>
-<span class="o">&gt;</span> keys<span class="p">(</span>ensembl<span class="p">,</span> <span class="s">&#39;biotype&#39;</span><span class="p">)</span>
+<span class="o">&gt;</span> keys<span class="p">(</span>ensembl<span class="p">,</span> <span class="s">&#34;biotype&#34;</span><span class="p">)</span>
 <span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="s">&#34;ncRNA&#34;</span> <span class="s">&#34;protein_coding&#34;</span> <span class="s">&#34;pseudogene&#34;</span> <span class="s">&#34;rRNA&#34;</span> <span class="s">&#34;snoRNA&#34;</span> <span class="s">&#34;snRNA&#34;</span> <span class="s">&#34;tRNA&#34;</span>
-<span class="o">&gt;</span> keys<span class="p">(</span>ensembl<span class="p">,</span> <span class="s">&#39;go_evidence_code&#39;</span><span class="p">)</span>
+<span class="o">&gt;</span> keys<span class="p">(</span>ensembl<span class="p">,</span> <span class="s">&#34;go_evidence_code&#34;</span><span class="p">)</span>
 <span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="s">&#34;IBA&#34;</span> <span class="s">&#34;IC&#34;</span>  <span class="s">&#34;IDA&#34;</span> <span class="s">&#34;IEA&#34;</span> <span class="s">&#34;IEP&#34;</span> <span class="s">&#34;IGI&#34;</span> <span class="s">&#34;IMP&#34;</span> <span class="s">&#34;IPI&#34;</span> <span class="s">&#34;ISA&#34;</span> <span class="s">&#34;ISM&#34;</span> <span class="s">&#34;ISS&#34;</span> <span class="s">&#34;NAS&#34;</span> <span class="s">&#34;ND&#34;</span>  <span class="s">&#34;TAS&#34;</span></code></pre></div>
 <p>近いミラーを使う</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> listMarts<span class="p">(</span>host<span class="o">=</span><span class="s">&#39;asia.ensembl.org&#39;</span><span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> listMarts<span class="p">(</span>host<span class="o">=</span><span class="s">&#34;asia.ensembl.org&#34;</span><span class="p">)</span>
                biomart               <span class="kp">version</span>
 <span class="m">1</span> ENSEMBL_MART_ENSEMBL      Ensembl Genes <span class="m">75</span>
 <span class="m">2</span>     ENSEMBL_MART_SNP  Ensembl Variation <span class="m">75</span>
 <span class="m">3</span> ENSEMBL_MART_FUNCGEN Ensembl Regulation <span class="m">75</span>
 <span class="m">4</span>    ENSEMBL_MART_VEGA               Vega <span class="m">55</span>
 <span class="m">5</span>                pride        PRIDE <span class="p">(</span>EBI UK<span class="p">)</span>
-<span class="o">&gt;</span> ensembl <span class="o">=</span> useMart<span class="p">(</span><span class="s">&#39;ENSEMBL_MART_SNP&#39;</span><span class="p">,</span> <span class="s">&#39;scerevisiae_snp&#39;</span><span class="p">,</span> host<span class="o">=</span><span class="s">&#39;asia.ensembl.org&#39;</span><span class="p">)</span></code></pre></div>
+<span class="o">&gt;</span> ensembl <span class="o">=</span> useMart<span class="p">(</span><span class="s">&#34;ENSEMBL_MART_SNP&#34;</span><span class="p">,</span> <span class="s">&#34;scerevisiae_snp&#34;</span><span class="p">,</span> host<span class="o">=</span><span class="s">&#34;asia.ensembl.org&#34;</span><span class="p">)</span></code></pre></div>
 <h3 id="uniprot-https-www-uniprot-org"><a href="https://www.uniprot.org/">UniProt</a></h3>
 
 <p>フィルタ列挙</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> unimart <span class="o">=</span> useMart<span class="p">(</span><span class="s">&#39;unimart&#39;</span><span class="p">,</span> <span class="s">&#39;uniprot&#39;</span><span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> unimart <span class="o">=</span> useMart<span class="p">(</span><span class="s">&#34;unimart&#34;</span><span class="p">,</span> <span class="s">&#34;uniprot&#34;</span><span class="p">)</span>
 <span class="o">&gt;</span> <span class="kp">subset</span><span class="p">(</span>unimart<span class="o">@</span>filters<span class="p">,</span> select<span class="o">=</span><span class="kt">c</span><span class="p">(</span>name<span class="p">,</span> description<span class="p">,</span> type<span class="p">,</span> operation<span class="p">))</span>
                name       description    type operation
 <span class="m">1</span>  superregnum_name  Superregnum name    <span class="kt">list</span>         <span class="o">=</span>
@@ -260,8 +260,8 @@ listAttributes<span class="p">(</span>ensembl<span class="p">,</span> <span clas
 <span class="m">7</span>  protein_evidence <span class="p">[</span><span class="m">1</span><span class="o">:</span> Evidence at protein level<span class="p">,</span><span class="m">2</span><span class="o">:</span> Evidence at transcript level<span class="p">,</span><span class="m">3</span><span class="o">:</span> Inferred from homology<span class="p">,</span><span class="m">4</span><span class="o">:</span> Predicted<span class="p">,</span><span class="m">5</span><span class="o">:</span> Uncertain<span class="p">]</span>
 <span class="m">16</span>       entry_type                                                                                                <span class="p">[</span>Swiss<span class="o">-</span>Prot<span class="p">,</span>TrEMBL<span class="p">]</span></code></pre></div>
 <p>&ldquo;Complete proteome&rdquo; の選択肢(すげえ長い)を抜き出す</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">proteome_name <span class="o">=</span> biomaRt<span class="o">::</span>keys<span class="p">(</span>unimart<span class="p">,</span> <span class="s">&#39;proteome_name&#39;</span><span class="p">)</span>
-<span class="kp">grep</span><span class="p">(</span><span class="s">&#39;Sac.* cer.*&#39;</span><span class="p">,</span> proteome_name<span class="p">,</span> value<span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">proteome_name <span class="o">=</span> biomaRt<span class="o">::</span>keys<span class="p">(</span>unimart<span class="p">,</span> <span class="s">&#34;proteome_name&#34;</span><span class="p">)</span>
+<span class="kp">grep</span><span class="p">(</span><span class="s">&#34;Sac.* cer.*&#34;</span><span class="p">,</span> proteome_name<span class="p">,</span> value<span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span></code></pre></div>
 <p>アトリビュート列挙
 (ただし <code>embl_id</code> 以降の項目はほとんど使えない)</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> listAttributes<span class="p">(</span>unimart<span class="p">)</span>

@@ -108,7 +108,7 @@ R標準の<code>boxplot()</code>や<code>hist()</code>などは前者の上に�
 使い方が全く異なるので、前者を知らずにいきなりggplot2から始めても大丈夫。</p>
 
 <p><a href="https://tidyverse.tidyverse.org/">tidyverse</a> に含まれているので、
-<code>install.packages('tidyverse')</code> で一括インストール、
+<code>install.packages(&quot;tidyverse&quot;)</code> で一括インストール、
 <code>library(tidyverse)</code> で一括ロード。</p>
 
 <ul>
@@ -213,14 +213,14 @@ ggplot2 v3.0 から標準装備になった。</dd>
 から選んで指定するだけなので楽ちん。
 特に離散値でお世話になる。
 利用可能なパレットは <code>RColorBrewer::display.brewer.all()</code> でも一覧できる。</dd>
-<dd><code>scale_*_brewer(..., palette='Blues', direction=1)</code>: 離散値</dd>
-<dd><code>scale_*_distiller(..., palette='Blues', direction=-1)</code>: 連続値</dd>
+<dd><code>scale_*_brewer(..., palette=&quot;Blues&quot;, direction=1)</code>: 離散値</dd>
+<dd><code>scale_*_distiller(..., palette=&quot;Blues&quot;, direction=-1)</code>: 連続値</dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html"><code>scale_*_gradient</code></a></dt>
 <dd>for <code>colour</code>, <code>fill</code></dd>
 <dd>グラデーションの基準となる色を指定する。</dd>
 <dd><code>scale_*_gradient(..., low, high, ...)</code>: 普通の連続値に</dd>
 <dd><code>scale_*_gradient2(..., low, mid, high, midpoint=0, ...)</code>: ある中央値を挟んで上下に分けたいとき</dd>
-<dd><code>scale_*_gradientn(..., colours, values=NULL, ...)</code>: 多色のヒートマップなどに e.g., <code>colours=c('#000000', '#0000FF', '#00FFFF', '#00FF00', '#FFFF00', '#FF0000')</code></dd>
+<dd><code>scale_*_gradientn(..., colours, values=NULL, ...)</code>: 多色のヒートマップなどに e.g., <code>colours=c(&quot;#000000&quot;, &quot;#0000FF&quot;, &quot;#00FFFF&quot;, &quot;#00FF00&quot;, &quot;#FFFF00&quot;, &quot;#FF0000&quot;)</code></dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/scale_identity.html"><code>scale_*_identity</code></a></dt>
 <dd>for <code>colour</code>, <code>fill</code>, <code>size</code>, <code>shape</code>, <code>linetype</code>, <code>alpha</code></dd>
 <dd>色の名前やサイズなどを示す列が予めデータに含まれている場合にそのまま使う。
@@ -271,16 +271,16 @@ breaksの値を受け取って文字列を返す関数
 <dl>
 <dt><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html"><code>facet_wrap()</code></a></dt>
 <dd><p>1変数で分割して並べる</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">facet_wrap<span class="p">(</span>facets<span class="p">,</span> nrow<span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> ncol<span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> scales<span class="o">=</span><span class="s">&#39;fixed&#39;</span><span class="p">,</span>
-           shrink<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> labeller<span class="o">=</span><span class="s">&#39;label_value&#39;</span><span class="p">,</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">facet_wrap<span class="p">(</span>facets<span class="p">,</span> nrow<span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> ncol<span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> scales<span class="o">=</span><span class="s">&#34;fixed&#34;</span><span class="p">,</span>
+           shrink<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> labeller<span class="o">=</span><span class="s">&#34;label_value&#34;</span><span class="p">,</span>
            as.table<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> <span class="kr">switch</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> drop<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span>
-           dir<span class="o">=</span><span class="s">&#39;h&#39;</span><span class="p">,</span> strip.position<span class="o">=</span><span class="s">&#39;top&#39;</span><span class="p">)</span>
+           dir<span class="o">=</span><span class="s">&#34;h&#34;</span><span class="p">,</span> strip.position<span class="o">=</span><span class="s">&#34;top&#34;</span><span class="p">)</span>
 
 p1 <span class="o">+</span> facet_wrap<span class="p">(</span><span class="o">~</span> <span class="kp">class</span><span class="p">,</span> ncol <span class="o">=</span> <span class="m">4L</span><span class="p">)</span></code></pre></div></dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html"><code>facet_grid()</code></a></dt>
 <dd><p>2変数で分割して縦横に並べる</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">facet_grid<span class="p">(</span>facets<span class="p">,</span> margins<span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span> scales<span class="o">=</span><span class="s">&#39;fixed&#39;</span><span class="p">,</span> space<span class="o">=</span><span class="s">&#39;fixed&#39;</span><span class="p">,</span>
-           shrink<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> labeller<span class="o">=</span><span class="s">&#39;label_value&#39;</span><span class="p">,</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">facet_grid<span class="p">(</span>facets<span class="p">,</span> margins<span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span> scales<span class="o">=</span><span class="s">&#34;fixed&#34;</span><span class="p">,</span> space<span class="o">=</span><span class="s">&#34;fixed&#34;</span><span class="p">,</span>
+           shrink<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> labeller<span class="o">=</span><span class="s">&#34;label_value&#34;</span><span class="p">,</span>
            as.table<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> <span class="kr">switch</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> drop<span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
 
 p1 <span class="o">+</span> facet_grid<span class="p">(</span>cyl <span class="o">~</span> <span class="kp">class</span><span class="p">)</span></code></pre></div>
@@ -330,7 +330,7 @@ ggplot内部で <code>stat_*()</code> を通して行われる。
 <dt><a href="https://ggplot2.tidyverse.org/reference/coord_polar.html">極座標</a></dt>
 <dd>パイチャートも作れるらしい</dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/coord_trans.html">座標変換</a></dt>
-<dd><code>gp + coord_trans(x='log10', y='sqrt')</code></dd>
+<dd><code>gp + coord_trans(x=&quot;log10&quot;, y=&quot;sqrt&quot;)</code></dd>
 <dd>表示する座標を変換する。
  stat前に適用される <code>scale_x_*</code> とは微妙に違う。</dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/labs.html">軸ラベルとタイトル</a></dt>
@@ -345,20 +345,20 @@ ggplot内部で <code>stat_*()</code> を通して行われる。
 <h3 id="既成テーマ">既成テーマ</h3>
 
 <dl>
-<dt><code>theme_grey(base_size=11, base_family='')</code>, <code>theme_gray(...)</code></dt>
+<dt><code>theme_grey(base_size=11, base_family=&quot;&quot;)</code>, <code>theme_gray(...)</code></dt>
 <dd>灰色背景に白い格子。
 ggplotらしいデフォルトだが、論文には使いにくい。</dd>
-<dt><code>theme_bw(base_size=11, base_family='')</code></dt>
+<dt><code>theme_bw(base_size=11, base_family=&quot;&quot;)</code></dt>
 <dd>黒枠白背景にうっすら灰色格子</dd>
-<dt><code>theme_linedraw(base_size=11, base_family='')</code></dt>
+<dt><code>theme_linedraw(base_size=11, base_family=&quot;&quot;)</code></dt>
 <dd>細いけど濃い色の <code>panel.grid</code></dd>
-<dt><code>theme_light(base_size=11, base_family='')</code></dt>
+<dt><code>theme_light(base_size=11, base_family=&quot;&quot;)</code></dt>
 <dd>それを薄くした感じ</dd>
-<dt><code>theme_minimal(base_size=11, base_family='')</code></dt>
+<dt><code>theme_minimal(base_size=11, base_family=&quot;&quot;)</code></dt>
 <dd>外枠なしの <code>theme_bw</code></dd>
-<dt><code>theme_classic(base_size=11, base_family='')</code></dt>
+<dt><code>theme_classic(base_size=11, base_family=&quot;&quot;)</code></dt>
 <dd>xy軸がL字に描かれているだけで枠もグリッドも無し</dd>
-<dt><code>theme_void(base_size=11, base_family='')</code></dt>
+<dt><code>theme_void(base_size=11, base_family=&quot;&quot;)</code></dt>
 <dd>完全に枠なし</dd>
 </dl>
 
@@ -383,8 +383,8 @@ Macなら&rdquo;HiraKakuProN-W3&rdquo;を指定すれば日本語でも文字化
 テーマは直線、長方形、文字の3種類のエレメントからなり、
 それらの性質を変更する場合は <code>element_***()</code> を介して行う</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">## ベースとなるテーマを先に適用してから</span>
-gp <span class="o">=</span> gp <span class="o">+</span> theme_bw<span class="p">(</span>base_family<span class="o">=</span><span class="s">&#39;HiraKakuProN-W3&#39;</span><span class="p">,</span> base_size<span class="o">=</span><span class="m">14</span><span class="p">)</span>
-gp <span class="o">=</span> gp <span class="o">+</span> theme<span class="p">(</span>legend.position<span class="o">=</span><span class="s">&#39;bottom&#39;</span><span class="p">)</span>
+gp <span class="o">=</span> gp <span class="o">+</span> theme_bw<span class="p">(</span>base_family<span class="o">=</span><span class="s">&#34;HiraKakuProN-W3&#34;</span><span class="p">,</span> base_size<span class="o">=</span><span class="m">14</span><span class="p">)</span>
+gp <span class="o">=</span> gp <span class="o">+</span> theme<span class="p">(</span>legend.position<span class="o">=</span><span class="s">&#34;bottom&#34;</span><span class="p">)</span>
 gp <span class="o">=</span> gp <span class="o">+</span> theme<span class="p">(</span>plot.background<span class="o">=</span>element_rect<span class="p">(</span>fill<span class="o">=</span><span class="s">&#34;transparent&#34;</span><span class="p">))</span></code></pre></div>
 <dl>
 <dt>全体</dt>
@@ -442,7 +442,7 @@ gp <span class="o">=</span> gp <span class="o">+</span> theme<span class="p">(</
 <dd><code>plot.margin</code>: (<code>unit</code> with the sizes of the top, right, bottom, and left margins)</dd>
 <dt><code>facet</code> したときのラベル</dt>
 <dd><code>strip.background</code>: (<code>element_rect</code>; inherits from <code>rect</code>)</dd>
-<dd><code>strip.placement</code>: (&lsquo;inside&rsquo;, &lsquo;outside&rsquo;)</dd>
+<dd><code>strip.placement</code>: (&ldquo;inside&rdquo;, &ldquo;outside&rdquo;)</dd>
 <dd><code>strip.text</code>: (<code>element_text</code>; inherits from <code>text</code>)<br>
 &emsp;<code>__.x</code>, <code>__.y</code></dd>
 <dt>その他</dt>
@@ -463,7 +463,7 @@ gp <span class="o">=</span> gp <span class="o">+</span> theme<span class="p">(</
 <dl>
 <dt><code>element_text(family, face, colour, size, hjust, vjust, angle, lineheight, margin)</code> &mdash; 文字</dt>
 <dd><code>family</code>: フォントファミリー。 空なら <code>theme_bw(base_family=...)</code> などの指定を継承。</dd>
-<dd><code>face</code>: (<code>'plain'</code>, <code>'italic'</code>, <code>'bold'</code>, <code>'bold.italic'</code>)</dd>
+<dd><code>face</code>: (<code>&quot;plain&quot;</code>, <code>&quot;italic&quot;</code>, <code>&quot;bold&quot;</code>, <code>&quot;bold.italic&quot;</code>)</dd>
 <dd><code>hjust</code>, <code>vjust</code>: 水平位置と垂直位置の寄せ方をそれぞれ <code>[0, 1]</code> の実数で。</dd>
 <dd><code>angle</code>: 角度 <code>[0, 360]</code></dd>
 <dd><code>margin</code>: スペース調整を関数 <code>margin(top, right, bottom, left)</code> 越しに。</dd>
@@ -479,7 +479,7 @@ units で使いそうなのは
 <code>cm</code>, <code>mm</code>, <code>inches</code>, <code>points</code>, <code>lines</code>, <code>native</code></p></dd>
 <dt><code>grid::arrow(angle, length, ends, type)</code></dt>
 <dd><p><code>axis.line</code> の <code>element_line()</code> にこれを与えて軸を矢印にするとか。</p></dd>
-<dt><code>margin(t=0, r=0, b=0, l=0, unit='pt')</code></dt>
+<dt><code>margin(t=0, r=0, b=0, l=0, unit=&quot;pt&quot;)</code></dt>
 <dd><p>marginクラス</p></dd>
 <dt><code>calc_element(element, theme, verbose=FALSE)</code></dt>
 <dd><p>継承などを考慮した上でelementがどんな値にセットされるか確かめる。</p></dd>
@@ -550,11 +550,11 @@ ggsave<span class="p">(</span><span class="s">&#34;mpg4.png&#34;</span><span cla
 <dd>グループ分けする場合のオプション:
 
 <ul>
-<li><a href="https://ggplot2.tidyverse.org/reference/position_stack.html"><code>position='stack'</code></a>:
+<li><a href="https://ggplot2.tidyverse.org/reference/position_stack.html"><code>position=&quot;stack&quot;</code></a>:
 縦に積み重ねる (デフォルト)</li>
-<li><a href="https://ggplot2.tidyverse.org/reference/position_dodge.html"><code>position='dodge'</code></a>:
+<li><a href="https://ggplot2.tidyverse.org/reference/position_dodge.html"><code>position=&quot;dodge&quot;</code></a>:
 横に並べる</li>
-<li><code>position='fill'</code>: 縦に積み重ね、高さを1に揃えて割合を示す</li>
+<li><code>position=&quot;fill&quot;</code>: 縦に積み重ね、高さを1に揃えて割合を示す</li>
 </ul></dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">箱ひげ図</a></dt>
 <dd><code>gp + geom_boxplot()</code></dd>
@@ -614,7 +614,7 @@ ggsave<span class="p">(</span><span class="s">&#34;mpg4.png&#34;</span><span cla
 
 <p>&ldquo;grob&rdquo; は &ldquo;grid graphical object&rdquo; の略。
 ggplotオブジェクトと同じように <code>ggsave()</code> に渡して保存可能。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">grob <span class="o">=</span> gridExtra<span class="o">::</span>arrangeGrob<span class="p">(</span>p1<span class="p">,</span> p2<span class="p">,</span> nrow<span class="o">=</span><span class="m">2</span><span class="p">,</span> ncol<span class="o">=</span><span class="m">1</span><span class="p">,</span> bottom<span class="o">=</span><span class="s">&#39;Time&#39;</span><span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">grob <span class="o">=</span> gridExtra<span class="o">::</span>arrangeGrob<span class="p">(</span>p1<span class="p">,</span> p2<span class="p">,</span> nrow<span class="o">=</span><span class="m">2</span><span class="p">,</span> ncol<span class="o">=</span><span class="m">1</span><span class="p">,</span> bottom<span class="o">=</span><span class="s">&#34;Time&#34;</span><span class="p">)</span>
 grid.newpage<span class="p">()</span>
 grid.draw<span class="p">(</span>grob<span class="p">)</span></code></pre></div>
 <p>複数ページのPDFに書き出したい場合は
@@ -622,7 +622,7 @@ grid.draw<span class="p">(</span>grob<span class="p">)</span></code></pre></div>
 <code>marrangeGrob()</code> に渡す。</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="m">.</span>grobs <span class="o">=</span> purrr<span class="o">::</span>map<span class="p">(</span><span class="m">.</span>dataframes<span class="p">,</span> my_ggplot_func<span class="p">)</span>
 <span class="m">.</span>gtable <span class="o">=</span> gridExtra<span class="o">::</span>marrangeGrob<span class="p">(</span><span class="m">.</span>grobs<span class="p">,</span> nrow<span class="o">=</span><span class="m">4</span><span class="p">,</span> ncol<span class="o">=</span><span class="m">3</span><span class="p">)</span>
-ggsave<span class="p">(</span><span class="s">&#39;multi_page.pdf&#39;</span><span class="p">,</span> <span class="m">.</span>gtable<span class="p">,</span> width<span class="o">=</span><span class="m">7</span><span class="p">,</span> height<span class="o">=</span><span class="m">9.9</span><span class="p">)</span></code></pre></div>
+ggsave<span class="p">(</span><span class="s">&#34;multi_page.pdf&#34;</span><span class="p">,</span> <span class="m">.</span>gtable<span class="p">,</span> width<span class="o">=</span><span class="m">7</span><span class="p">,</span> height<span class="o">=</span><span class="m">9.9</span><span class="p">)</span></code></pre></div>
 <h3 id="cowplot"><code>cowplot</code></h3>
 
 <ul>
@@ -639,7 +639,7 @@ ggsave<span class="p">(</span><span class="s">&#39;multi_page.pdf&#39;</span><sp
 <dd><p><code>facet_wrap()</code>のように、ざっと並べるのに便利。
 もちろん入れ子も可能。</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">cowplot<span class="o">::</span>plot_grid<span class="p">(</span><span class="kc">...</span><span class="p">,</span> plotlist<span class="o">=</span><span class="kc">NULL</span><span class="p">,</span>
-    align<span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="s">&#39;none&#39;</span><span class="p">,</span> <span class="s">&#39;h&#39;</span><span class="p">,</span> <span class="s">&#39;v&#39;</span><span class="p">,</span> <span class="s">&#39;hv&#39;</span><span class="p">),</span>
+    align<span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="s">&#34;none&#34;</span><span class="p">,</span> <span class="s">&#34;h&#34;</span><span class="p">,</span> <span class="s">&#34;v&#34;</span><span class="p">,</span> <span class="s">&#34;hv&#34;</span><span class="p">),</span>
     nrow<span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> ncol<span class="o">=</span><span class="kc">NULL</span><span class="p">,</span>
     scale<span class="o">=</span><span class="m">1</span><span class="p">,</span> rel_widths<span class="o">=</span><span class="m">1</span><span class="p">,</span> rel_heights<span class="o">=</span><span class="m">1</span><span class="p">,</span>
     labels<span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> label_size<span class="o">=</span><span class="m">14</span><span class="p">,</span>

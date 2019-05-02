@@ -145,7 +145,7 @@ LaTeX 関連で怒られたら足りないパッケージを入れる:
 git push -u origin master</code></pre></div></li>
 
 <li><p>とりあえず誰でもインストール可能なパッケージができたはず:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">remotes<span class="o">::</span>install_github<span class="p">(</span><span class="s">&#39;heavywatal/rhello&#39;</span><span class="p">)</span></code></pre></div></li>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">remotes<span class="o">::</span>install_github<span class="p">(</span><span class="s">&#34;heavywatal/rhello&#34;</span><span class="p">)</span></code></pre></div></li>
 </ol>
 
 <h3 id="構造">構造</h3>
@@ -210,7 +210,7 @@ vignettes/</code></pre></div>
 パッケージ全体の使い方とかを説明するのが<code>vignettes/</code>の役割。
 Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。</p>
 
-<p><code>usethis::use_vignette('hello')</code> で雛形を作ってもらうのが楽。</p>
+<p><code>usethis::use_vignette(&quot;hello&quot;)</code> で雛形を作ってもらうのが楽。</p>
 
 <p><code>pandoc</code> と <code>pandoc-citeproc</code> が必要なので
 <a href="/mac/homebrew.html">Homebrew</a> とかでインストールしておく。</p>
@@ -226,7 +226,7 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。<
 <p>ここに入ってるものはインストール先でトップディレクトリに移される謎仕様。</p>
 
 <p>論文で引用されることを想定している場合は <code>inst/CITATION</code> を作る。
-<code>citation('ggplot2')</code> のように参照できるようになる。</p>
+<code>citation(&quot;ggplot2&quot;)</code> のように参照できるようになる。</p>
 
 <h3 id="tests-https-r-pkgs-org-tests-html"><a href="https://r-pkgs.org/tests.html"><code>tests/</code></a></h3>
 
@@ -284,7 +284,7 @@ mydemo2    Description of demo 2
 <dt><code>document(pkg = &quot;.&quot;, roclets = NULL)</code></dt>
 <dd><code>roxygen2</code> を呼び出してソースコードから
 <code>NAMESPACE</code> や <code>man/*.Rd</code> を自動生成する。</dd>
-<dt><code>check(pkg='.', document = NA, ...)</code></dt>
+<dt><code>check(pkg=&quot;.&quot;, document = NA, ...)</code></dt>
 <dd>パッケージとしての整合性を確認。
 ついでに<code>document()</code>は実行できるけど<code>spell_check()</code>はできないので手動で。</dd>
 <dt><code>test(pkg = &quot;.&quot;, filter = NULL, ...)</code></dt>
@@ -294,7 +294,7 @@ mydemo2    Description of demo 2
 <dt><code>remotes::install_github(repo, ref = &quot;master&quot;, subdir = NULL, ...)</code></dt>
 <dd>GitHubリポジトリからインストール。</dd>
 <dt><code>pkgload::unload(pkg = &quot;.&quot;)</code></dt>
-<dd><code>datach('package:XXX')</code> とか <code>unloadNamespace(XXX)</code>
+<dd><code>datach(&quot;package:XXX&quot;)</code> とか <code>unloadNamespace(XXX)</code>
 よりもちゃんとまっさらにパッケージを外す。</dd>
 <dt><code>pkgload::load_all(pkg = &quot;.&quot;, reset = TRUE, compile = NA, export_all = TRUE, ...)</code></dt>
 <dd><code>install()</code> せずファイルから直接 <code>library()</code> する。
@@ -320,7 +320,7 @@ mydemo2    Description of demo 2
 <li><a href="https://cran.r-project.org/web/packages/roxygen2/vignettes/rd.html">https://cran.r-project.org/web/packages/roxygen2/vignettes/rd.html</a></li>
 </ul>
 
-<p><code>roxygen2::roxygenise(package.dir='.', ..., clean=FALSE)</code>
+<p><code>roxygen2::roxygenise(package.dir=&quot;.&quot;, ..., clean=FALSE)</code>
 を直接呼んでもよいが、
 基本的には <code>devtools::document()</code> を使って間接的に利用する。</p>
 
@@ -363,7 +363,7 @@ increment <span class="o">=</span> <span class="kr">function</span><span class="
 <li><p>dplyrなどで列名を直に指定すると
 <code>undefined global variables</code>
 という警告が出るので
-<code>dplyr::filter(iris, .data$Species == 'setosa')</code>
+<code>dplyr::filter(iris, .data$Species == &quot;setosa&quot;)</code>
 のように pronoun を使って抑える。
 そのためにどこかに <code>#' @importFrom rlang .data</code> を書いておく。
 ただし <code>$</code> によるアクセスがやや遅いので、

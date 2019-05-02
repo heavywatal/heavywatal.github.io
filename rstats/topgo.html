@@ -101,14 +101,14 @@ topGO — Bioconductor でenrichment解析
 <h2 id="使い方">使い方</h2>
 
 <h3 id="topgodata-を作る"><code>topGOdata</code> を作る</h3>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">tg_data <span class="o">=</span> new<span class="p">(</span><span class="s">&#39;topGOdata&#39;</span><span class="p">,</span>
-    ontology<span class="o">=</span><span class="s">&#39;BP&#39;</span><span class="p">,</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">tg_data <span class="o">=</span> new<span class="p">(</span><span class="s">&#34;topGOdata&#34;</span><span class="p">,</span>
+    ontology<span class="o">=</span><span class="s">&#34;BP&#34;</span><span class="p">,</span>
     allGenes<span class="o">=</span>setNames<span class="p">(</span>score<span class="p">,</span> name<span class="p">),</span>
     geneSelectionFun<span class="o">=</span><span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> <span class="p">{</span>x <span class="o">&gt;</span> threshold<span class="p">},</span>
     nodeSize<span class="o">=</span><span class="m">10</span><span class="p">,</span>
     annotationFun<span class="o">=</span>annFUN.org<span class="p">,</span>
-    mapping<span class="o">=</span><span class="s">&#39;org.Hs.eg.db&#39;</span><span class="p">,</span>
-    ID<span class="o">=</span><span class="s">&#39;entrez&#39;</span><span class="p">)</span></code></pre></div>
+    mapping<span class="o">=</span><span class="s">&#34;org.Hs.eg.db&#34;</span><span class="p">,</span>
+    ID<span class="o">=</span><span class="s">&#34;entrez&#34;</span><span class="p">)</span></code></pre></div>
 <dl>
 <dt><code>ontology</code></dt>
 <dd><code>BP</code>, <code>CC</code>, <code>MF</code> のどれか</dd>
@@ -132,7 +132,7 @@ topGO — Bioconductor でenrichment解析
 
 <hr>
 
-<p><code>annFUN.org(whichOnto, feasibleGenes, mapping, ID='entrez')</code></p>
+<p><code>annFUN.org(whichOnto, feasibleGenes, mapping, ID=&quot;entrez&quot;)</code></p>
 
 <dl>
 <dt><code>mapping</code></dt>
@@ -147,7 +147,7 @@ topGO — Bioconductor でenrichment解析
 <h3 id="解析">解析</h3>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">whichTests<span class="p">()</span>
 whichAlgorithms<span class="p">()</span>
-tg_result <span class="o">=</span> runTest<span class="p">(</span>tg_data<span class="p">,</span> algorithm<span class="o">=</span><span class="s">&#39;classic&#39;</span><span class="p">,</span> statistic<span class="o">=</span><span class="s">&#39;fisher&#39;</span><span class="p">)</span></code></pre></div>
+tg_result <span class="o">=</span> runTest<span class="p">(</span>tg_data<span class="p">,</span> algorithm<span class="o">=</span><span class="s">&#34;classic&#34;</span><span class="p">,</span> statistic<span class="o">=</span><span class="s">&#34;fisher&#34;</span><span class="p">)</span></code></pre></div>
 <dl>
 <dt><code>algorithm</code></dt>
 <dd><code>classic</code>, <code>elim</code>, <code>weight</code>,
@@ -165,15 +165,15 @@ geneData<span class="p">(</span>tg_result<span class="p">)</span></code></pre></
 <h3 id="解釈-描画">解釈・描画</h3>
 
 <p>GO termのOver-representationランキング</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">num_significant <span class="o">=</span> geneData<span class="p">(</span>tg_result<span class="p">)[</span><span class="s">&#39;Significant&#39;</span><span class="p">]</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">num_significant <span class="o">=</span> geneData<span class="p">(</span>tg_result<span class="p">)[</span><span class="s">&#34;Significant&#34;</span><span class="p">]</span>
 GenTable<span class="p">(</span>tg_data<span class="p">,</span> classic_fisher<span class="o">=</span>tg_result<span class="p">,</span> topNodes<span class="o">=</span>num_significant<span class="p">)</span></code></pre></div>
 <p><code>runTest()</code> の結果は好きな名前で複数並べることができる。</p>
 
 <hr>
 
 <p><code>Rgraphviz</code> を使ってDAG描画</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">showSigOfNodes<span class="p">(</span>tg_data<span class="p">,</span> score<span class="p">(</span>tg_result<span class="p">),</span> firstSigNodes<span class="o">=</span><span class="m">10</span><span class="p">,</span> useInfo<span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">)</span>
-printGraph<span class="p">(</span>tg_data<span class="p">,</span> tg_result<span class="p">,</span> <span class="m">20</span><span class="p">,</span> fn.prefix<span class="o">=</span><span class="s">&#39;go_fisher&#39;</span><span class="p">,</span> pdfSW<span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">showSigOfNodes<span class="p">(</span>tg_data<span class="p">,</span> score<span class="p">(</span>tg_result<span class="p">),</span> firstSigNodes<span class="o">=</span><span class="m">10</span><span class="p">,</span> useInfo<span class="o">=</span><span class="s">&#34;all&#34;</span><span class="p">)</span>
+printGraph<span class="p">(</span>tg_data<span class="p">,</span> tg_result<span class="p">,</span> <span class="m">20</span><span class="p">,</span> fn.prefix<span class="o">=</span><span class="s">&#34;go_fisher&#34;</span><span class="p">,</span> pdfSW<span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span></code></pre></div>
 <p>前者はプロットだけ、後者はPDFに書き出し。
 significant nodeが四角で、赤いほど低いP値。</p>
 
