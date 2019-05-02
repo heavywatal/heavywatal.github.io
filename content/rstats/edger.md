@@ -17,8 +17,7 @@ Robinson MD, McCarthy DJ, Smyth GK (2010)
 [Bioconductor]({{< relref "bioconductor.md" >}}) パッケージとしてインストール
 
 ```r
-source('https://bioconductor.org/biocLite.R')
-biocLite('edgeR')
+BiocManager::install("edgeR")
 ```
 
 ユーザーガイドPDFを開く

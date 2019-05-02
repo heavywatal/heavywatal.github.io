@@ -17,8 +17,7 @@ ggbio: an R package for extending the grammar of graphics for genomic data.
 [Bioconductor]({{< relref "bioconductor.md" >}}) を読み込んでインストール
 
 ```r
-source("https://bioconductor.org/biocLite.R")
-biocLite('ggbio')
+BiocManager::install("ggbio")
 library(ggbio)
 ```
 

@@ -26,7 +26,7 @@ tags = ["r", "bioconductor"]
 Bioconductor 3.8 から
 [BiocManager](https://cran.r-project.org/package=BiocManager)
 を使う方法に変わった。
-`source()` や `BiocLite()` はもう使わない。
+`source("*/biocLite.R")` や `biocLite()` はもう使わない。
 
 1.  [R本体をインストール]({{< relref "intro.md" >}})
 1.  Rの中でコマンドを実行:

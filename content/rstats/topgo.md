@@ -12,8 +12,7 @@ tags = ["r", "bioconductor"]
 Rの中からインストール
 
 ```r
-source("https://bioconductor.org/biocLite.R")
-biocLite('topGO')
+BiocManager::install("topGO")
 ```
 
 ## 使い方
