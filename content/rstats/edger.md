@@ -36,8 +36,8 @@ edgeRUsersGuide()
     ```r
     library(edgeR)
 
-    targets = data.frame(group=c('control', 'case'),
-                         files=c('control.txt', 'case.txt'))
+    targets = data.frame(group=c("control", "case"),
+                         files=c("control.txt", "case.txt"))
     dge = readDGE(targets, header=FALSE)
     ```
 
@@ -84,7 +84,7 @@ edgeRUsersGuide()
     1.  説明変数を減らしたモデルでdispersionを推定し、フルモデルで使う
 
         ```r
-        reduced = estimateGLMCommonDisp(dge, reduced.design, method='deviance', robust=TRUE, subset=NULL)
+        reduced = estimateGLMCommonDisp(dge, reduced.design, method="deviance", robust=TRUE, subset=NULL)
         dge$common.dispersion = reduced$common.dispersion
         ```
 
@@ -96,8 +96,8 @@ edgeRUsersGuide()
         例えばヒトなら
 
         ```r
-        system('wget http://www.tau.ac.il/~elieis/HKG/HK_genes.txt')
-        hk_genes = read_tsv('HK_genes.txt', col_names=c('gene_symbol', 'refseq'))
+        system("wget http://www.tau.ac.il/~elieis/HKG/HK_genes.txt")
+        hk_genes = read_tsv("HK_genes.txt", col_names=c("gene_symbol", "refseq"))
         tmp = dge
         tmp$samples$group = 1
         housekeeping = rownames(tmp$counts) %in% hk_genes$gene_symbol
@@ -109,7 +109,7 @@ edgeRUsersGuide()
 
     ```r
     et = exactTest(dge)
-    topTags(et, 20, adjust.method='BH', sort.by='PValue')
+    topTags(et, 20, adjust.method="BH", sort.by="PValue")
     ```
 
     多群ならGLMで尤度比検定
@@ -127,7 +127,7 @@ edgeRUsersGuide()
 
     ```r
     min_lfc = 1
-    de = decideTestsDGE(et, adjust.method='BH', p.value=0.01, lfc=min_lfc)
+    de = decideTestsDGE(et, adjust.method="BH", p.value=0.01, lfc=min_lfc)
     de_tags = rownames(dge)[as.logical(de)]
     ```
 
@@ -147,7 +147,7 @@ edgeRUsersGuide()
 1.  Gene Ontology解析
 
     ```r
-    go = goana(lrt, species='Hs')
+    go = goana(lrt, species="Hs")
     topGO(go)
     ```
 

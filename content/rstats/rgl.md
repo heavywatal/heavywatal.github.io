@@ -39,7 +39,7 @@ APIもガチャガチャだしドキュメントも結構いい加減なので�
 `rgl.close()`
 : デバイスを閉じる。`close3d()`はなぜか存在しない。
 
-`rgl::clear3d(type=c('shapes', 'bboxdeco', 'material'), defaults, subscene=0)`
+`rgl::clear3d(type=c("shapes", "bboxdeco", "material"), defaults, subscene=0)`
 
 ## プロット
 
@@ -69,14 +69,14 @@ APIもガチャガチャだしドキュメントも結構いい加減なので�
     ホントはあんまり使いたくないけど、
     `xlim`, `ylim`, `zlim` オプションを受け付ける関数がこれしかないようなので、
     境界を指定しつつ球体を描きたい場合は `spheres3d()` ではなく
-    `plot3d(type='s')` を使うしかないっぽい。
+    `plot3d(type="s")` を使うしかないっぽい。
 
 
 ## 背景や軸などの調整
 
 `rgl::title3d(main, sub, xlab, ylab, zlab, line=NA, ...)`
 :   これを使うとmainとsubも視点によって動いてしまう。
-    `bgplot3d({plot.new(); title('main')})` なら固定背景に書ける。
+    `bgplot3d({plot.new(); title("main")})` なら固定背景に書ける。
 
 `rgl::mtext3d(text, edge, line=0, at=NULL, pos=NA, ...)`
 
@@ -98,12 +98,12 @@ APIもガチャガチャだしドキュメントも結構いい加減なので�
 `rgl::box3d(...)`
 :   12辺の箱を描く。
 
-`rgl::bbox3d(xat=NULL, yat, zat, xunit='pretty', yunit, zunit, expand=1.03, draw_front=FALSE)`
+`rgl::bbox3d(xat=NULL, yat, zat, xunit="pretty", yunit, zunit, expand=1.03, draw_front=FALSE)`
 :   手前の辺が自動で消えるような箱を描く。
 
-`rgl::axes3d(edges='bbox', labels=TRUE, tick=TRUE, nticks=5, box=FALSE, expand=1.03, ...)`
+`rgl::axes3d(edges="bbox", labels=TRUE, tick=TRUE, nticks=5, box=FALSE, expand=1.03, ...)`
 :   上記の3つをまとめる関数。分かりにくいので使わないほうがいい。
-    `edges='bbox'` の場合 `tick=FALSE` は効かないので `xlen=0, ylen=0, zlen=0` とする必要がある。
+    `edges="bbox"` の場合 `tick=FALSE` は効かないので `xlen=0, ylen=0, zlen=0` とする必要がある。
 
 `rgl::view3d(theta=0, phi=15, fov=60, zoom=1, scale=par3d("scale"), interactive=TRUE, userMatrix)`
 :   `theta`: 0のとき正面がxy平面。観察者が地球の公転と同じ方向に動くのが正。\
@@ -133,17 +133,17 @@ next3d(current=NA, clear=TRUE, reuse=TRUE)
 `rgl::scene3d()`
 : rglネイティブな形での全構成要素リスト。
 
-`rgl::snapshot3d(filename, fmt='png', top=TRUE)`
+`rgl::snapshot3d(filename, fmt="png", top=TRUE)`
 : PNGのみ。
   `top=FALSE`にしてはダメ。謎。
 
-`rbl.postscript(filename, fmt='eps', drawText=TRUE)`
+`rbl.postscript(filename, fmt="eps", drawText=TRUE)`
 :   ps, eps, tex, pdf, svg をサポート。
     透過や `bgplot3d` は反映されないらしいので注意。
 
-`rgl::writeWebGL(dir='webGL', filename, template, prefix, snapshot, commonParts, reuse, font, width, height)`
+`rgl::writeWebGL(dir="webGL", filename, template, prefix, snapshot, commonParts, reuse, font, width, height)`
 :   ディレクトリ構造無しの単発HTMLでいい場合は
-    `writeWebGL('.', 'rgl.html')` のように指定する。
+    `writeWebGL(".", "rgl.html")` のように指定する。
     ヘルプには `snapshot` がファイル名も受け取れると書いてあるが嘘で `TRUE/FALSE` のみ。
     rglデバイスが不要なので`open3d(useNULL=TRUE)`としておくと余計なウィンドウを開かずに済む。
 
@@ -171,7 +171,7 @@ next3d(current=NA, clear=TRUE, reuse=TRUE)
     ```{r plot, webgl=TRUE}
     rgl::open3d(useNULL=TRUE)
     rgl::box3d()
-    rgl::title3d('main', 'sub', 'x', 'y', 'z')
+    rgl::title3d("main", "sub", "x", "y", "z")
     ```
 
 ループで複数描画したいときはまずrglwidgetとしてlistに詰めていき、

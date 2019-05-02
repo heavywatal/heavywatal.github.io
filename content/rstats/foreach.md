@@ -59,7 +59,7 @@ Rの並列化では `snow` や `multicore` が使われてきたが、
 ```r
 library(doParallel)
 cores = detectCores(logical=FALSE)
-cluster = makeCluster(cores, 'FORK')
+cluster = makeCluster(cores, "FORK")
 registerDoParallel(cluster)
 foreach (mu = seq_len(8L)) %dopar% {
     rnorm(3L, mu)
@@ -89,17 +89,17 @@ mclapply(X, FUN, ...,
 : いくつのworkerを立ち上げるか。
   CPUコア数を取得するには `parallel::detectCores(logical=FALSE)`
 
-`type='PSOCK'`
+`type="PSOCK"`
 : デフォルト。高コストだけどだいたいどの環境でも使える。
   マルチCPUのサーバーで並列化したい場合はこれ。
   `foreach()` で使う場合 `.export=` や `.packages=` の指定が重要。
 
-`type='FORK'`
+`type="FORK"`
 : 4コア1CPUとかの普通のデスクトップマシンで気楽に並列化したいならこれ。
   低コストだし `.export=` や `.packages=` を指定せず `foreach()` できる。
   Windowsでは使えないらしいけど。
 
-`outfile=''`
+`outfile=""`
 : `print()`や`message()`などの出力先を標準に戻す。
   デフォルトでは`/dev/null`に捨てられてしまう。
 
@@ -123,11 +123,11 @@ https://CRAN.R-project.org/package=iterators
 `icountn(vn)`
 : 自然数限定イテレータ版 `expand.grid()`
 
-`iter(obj, by=c('column', 'row'))`
+`iter(obj, by=c("column", "row"))`
 : イテレータ版 `purrr::by_row()` のようなもので、
   並列`foreach`で各ノードに巨大data.frameを送りたくない場合に有用。
   data.frame以外も適用可。
-  e.g., `iter(iris, by='row')`
+  e.g., `iter(iris, by="row")`
 
 `isplit(x, f, drop=FALSE, ...)`
 : イテレータ版 `purrr::slice_rows()` のようなもので、

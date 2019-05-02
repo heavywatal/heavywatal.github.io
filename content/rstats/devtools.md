@@ -59,7 +59,7 @@ GitHubに公開しておけば誰でも使えるようになるので、
 
 1.  とりあえず誰でもインストール可能なパッケージができたはず:
     ```r
-    remotes::install_github('heavywatal/rhello')
+    remotes::install_github("heavywatal/rhello")
     ```
 
 
@@ -124,7 +124,7 @@ vignettes/
 パッケージ全体の使い方とかを説明するのが`vignettes/`の役割。
 Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 
-`usethis::use_vignette('hello')` で雛形を作ってもらうのが楽。
+`usethis::use_vignette("hello")` で雛形を作ってもらうのが楽。
 
 `pandoc` と `pandoc-citeproc` が必要なので
 [Homebrew]({{< relref "homebrew.md" >}}) とかでインストールしておく。
@@ -141,7 +141,7 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 ここに入ってるものはインストール先でトップディレクトリに移される謎仕様。
 
 論文で引用されることを想定している場合は `inst/CITATION` を作る。
-`citation('ggplot2')` のように参照できるようになる。
+`citation("ggplot2")` のように参照できるようになる。
 
 
 ### [`tests/`](https://r-pkgs.org/tests.html)
@@ -204,7 +204,7 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 :   `roxygen2` を呼び出してソースコードから
     `NAMESPACE` や `man/*.Rd` を自動生成する。
 
-`check(pkg='.', document = NA, ...)`
+`check(pkg=".", document = NA, ...)`
 :   パッケージとしての整合性を確認。
     ついでに`document()`は実行できるけど`spell_check()`はできないので手動で。
 
@@ -218,7 +218,7 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 :   GitHubリポジトリからインストール。
 
 `pkgload::unload(pkg = ".")`
-:   `datach('package:XXX')` とか `unloadNamespace(XXX)`
+:   `datach("package:XXX")` とか `unloadNamespace(XXX)`
     よりもちゃんとまっさらにパッケージを外す。
 
 
@@ -245,7 +245,7 @@ Rソースコードのコメントから`NAMESPACE`とヘルプ(`man/*.Rd`)を�
 - <http://kbroman.org/pkg_primer/pages/docs.html>
 - <https://cran.r-project.org/web/packages/roxygen2/vignettes/rd.html>
 
-`roxygen2::roxygenise(package.dir='.', ..., clean=FALSE)`
+`roxygen2::roxygenise(package.dir=".", ..., clean=FALSE)`
 を直接呼んでもよいが、
 基本的には `devtools::document()` を使って間接的に利用する。
 
@@ -293,7 +293,7 @@ increment = function(x) {x + 1}
 -   dplyrなどで列名を直に指定すると
     `undefined global variables`
     という警告が出るので
-    `dplyr::filter(iris, .data$Species == 'setosa')`
+    `dplyr::filter(iris, .data$Species == "setosa")`
     のように pronoun を使って抑える。
     そのためにどこかに `#' @importFrom rlang .data` を書いておく。
     ただし `$` によるアクセスがやや遅いので、

@@ -20,7 +20,7 @@ GFF, BED, bedGraph, BED15, WIG, BigWig, 2bit &lt;---&gt; `GRanges`, `GRangesList
     `import.gff()`, `import.bed()` など形式ごとの関数も定義されていて、
     引数などの詳しいヘルプもそっちから見られる。
 
-    GFFは `feature.type='exon'` などとして興味のある行だけ読んだほうが良さそう。
+    GFFは `feature.type="exon"` などとして興味のある行だけ読んだほうが良さそう。
     結果として、余分な列も減る。
 
 `export(gr, filename, format, ...)`
@@ -34,18 +34,18 @@ GFF, BED, bedGraph, BED15, WIG, BigWig, 2bit &lt;---&gt; `GRanges`, `GRangesList
 
 ```r
 session = browserSession()
-genome(session) = 'hg19'
-query = ucscTableQuery(session, 'knownGene')
-tableName(query) = 'kgXref'
+genome(session) = "hg19"
+query = ucscTableQuery(session, "knownGene")
+tableName(query) = "kgXref"
 kgXref = getTable(query)  # data.frame
 
-query = ucscTableQuery(session, 'knownGene', 'hg19', 'kgXref')
+query = ucscTableQuery(session, "knownGene", "hg19", "kgXref")
 ```
 
 テーブルを指定しなければ先頭が使われる
 
 ```r
-query = ucscTableQuery(session, 'cytoBand', 'hg19')
+query = ucscTableQuery(session, "cytoBand", "hg19")
 cytoBand = track(query)  # GRanges
 ```
 

@@ -16,7 +16,7 @@ data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(
 [purrr]({{< relref "purrr.md" >}}) や [tidyr]({{< relref "tidyr.md" >}}) と一緒に使うとよい。
 
 [tidyverse](https://tidyverse.tidyverse.org/) に含まれているので、
-`install.packages('tidyverse')` で一括インストール、
+`install.packages("tidyverse")` で一括インストール、
 `library(tidyverse)` で一括ロード。
 
 -   <http://r4ds.had.co.nz/transform.html>
@@ -41,16 +41,16 @@ library(tidyverse)
 
 ## with piping
 iris %>%
-  dplyr::filter(Species != 'setosa') %>%
-  dplyr::select(-dplyr::starts_with('Sepal')) %>%
+  dplyr::filter(Species != "setosa") %>%
+  dplyr::select(-dplyr::starts_with("Sepal")) %>%
   dplyr::mutate(petal_area=Petal.Length * Petal.Width * 0.5) %>%
   dplyr::group_by(Species) %>%
   dplyr::summarise_all(funs(mean))
 
 ## with a temporary variable
 x = iris
-x = dplyr::filter(x, Species != 'setosa')
-x = dplyr::select(x, -dplyr::starts_with('Sepal'))
+x = dplyr::filter(x, Species != "setosa")
+x = dplyr::select(x, -dplyr::starts_with("Sepal"))
 x = dplyr::mutate(x, petal_area=Petal.Length * Petal.Width * 0.5)
 x = dplyr::group_by(x, Species)
 x = dplyr::summarise_all(x, funs(mean))
@@ -60,8 +60,8 @@ dplyr::summarise_all(
   dplyr::group_by(
     dplyr::mutate(
       dplyr::select(
-        dplyr::filter(iris, Species != 'setosa'),
-        -dplyr::starts_with('Sepal')),
+        dplyr::filter(iris, Species != "setosa"),
+        -dplyr::starts_with("Sepal")),
       petal_area=Petal.Length * Petal.Width * 0.5),
     Species),
   funs(mean))
@@ -89,19 +89,19 @@ dplyr::summarise_all(
 
     ```r
     iris %>% dplyr::select(Petal.Width, Species)
-    iris %>% dplyr::select('Petal.Width', 'Species')
-    iris %>% dplyr::select(c('Petal.Width', 'Species'))
+    iris %>% dplyr::select("Petal.Width", "Species")
+    iris %>% dplyr::select(c("Petal.Width", "Species"))
     iris %>% dplyr::select(4:5)
     iris %>% dplyr::select(-c(1:3))
     iris %>% dplyr::select(-(Sepal.Length:Petal.Length))
-    iris %>% dplyr::select(matches('^Petal\\.Width$|^Species$'))
+    iris %>% dplyr::select(matches("^Petal\\.Width$|^Species$"))
     ```
 
 :   文字列変数で指定しようとすると意図が曖昧になるので、
     [unquoting](https://dplyr.tidyverse.org/articles/programming.html#unquoting)
     やpronounで明確に:
     ```r
-    Sepal.Length = c('Petal.Width', 'Species')
+    Sepal.Length = c("Petal.Width", "Species")
     iris %>% dplyr::select(Sepal.Length)       # ambiguous!
     iris %>% dplyr::select(.data$Sepal.Length) # pronoun => Sepal.Length
     iris %>% dplyr::select(!!Sepal.Length)     # unquote => Petal.Width, Species
@@ -114,7 +114,7 @@ dplyr::summarise_all(
     [unquote-splicing](https://dplyr.tidyverse.org/articles/programming.html#unquote-splicing)
     して渡す必要がある。
     ```r
-    columns = c('Petal.Width', 'Species')
+    columns = c("Petal.Width", "Species")
     iris %>% distinct(!!as.name(columns[1L]))
     iris %>% distinct(!!!rlang::syms(columns))
     ```
@@ -135,7 +135,7 @@ dplyr::summarise_all(
     ```
     変数に入った文字列を使う場合も`mutate()`と同様にunquotingで:
     ```r
-    old_name = 'Species'
+    old_name = "Species"
     new_name = toupper(old_name)
     iris %>% dplyr::rename(!!new_name := !!old_name) %>% head(2)
       Sepal.Length Sepal.Width Petal.Length Petal.Width SPECIES
@@ -170,11 +170,11 @@ dplyr::summarise_all(
 
     ```r
     iris %>% head() %>% dplyr::pull(Species)
-    iris %>% head() %>% dplyr::pull('Species')
+    iris %>% head() %>% dplyr::pull("Species")
     iris %>% head() %>% dplyr::pull(5)
     iris %>% head() %>% dplyr::pull(-1)
-    iris %>% head() %>% `[[`('Species')
-    iris %>% head() %>% {.[['Species']]}
+    iris %>% head() %>% `[[`("Species")
+    iris %>% head() %>% {.[["Species"]]}
     iris %>% head() %>% {.$Species}
     {iris %>% head()}$Species
     ```
@@ -196,7 +196,7 @@ dplyr::summarise_all(
     <div class="warning">{{<markdownify>}}
 評価結果が `NA` となる行は除去される。
 特に不等号を使うときやや直感に反するので要注意。
-e.g., `filter(gene != 'TP53')`
+e.g., `filter(gene != "TP53")`
 {{</markdownify>}}</div>
 
 :   複数列で評価する亜種:<br>
@@ -253,7 +253,7 @@ e.g., `filter(gene != 'TP53')`
     [unquoting用の代入演算子 `:=`](https://dplyr.tidyverse.org/articles/programming.html#setting-variable-names)
     を使う:
     ```r
-    y = 'new_column'
+    y = "new_column"
     x = "Sepal.Length"
 
     # unquoting only right hand side
@@ -392,7 +392,7 @@ e.g., `filter(gene != 'TP53')`
 
 `dplyr::recode(.x, ..., .default=NULL, .missing=NULL)`
 :   vectorの値を変更する。e.g.,
-    `recode(letters, a='A!', c='C!')`
+    `recode(letters, a="A!", c="C!")`
 
 `dplyr::row_number(x)`
 :   `rank(x, ties.method = "first", na.last = "keep")` のショートカット。

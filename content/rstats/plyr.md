@@ -11,7 +11,7 @@ Split, Apply, Combine
 :   特定の条件でデータを分割し、それぞれに関数を適用し、再びそれを統合する。
     R標準 `apply` 系の関数よりも直感的な使い方ができ、処理も高速。
 
-Rの中から `install.packages('plyr')` でインストールし、
+Rの中から `install.packages("plyr")` でインストールし、
 使う前に `library(plyr)` で読み込む。
 
 <div class="warning">{{<markdownify>}}
@@ -38,7 +38,7 @@ e.g. 複数ファイルを読み込んでひとつのdata.frameにまとめる�
 listからdata.frameを作るので `ldply()`
 
 ```r
-> filenames = list.files(pattern='\\.csv$')
+> filenames = list.files(pattern="\\.csv$")
 > large_table = ldply(filenames, read.csv)
 ```
 

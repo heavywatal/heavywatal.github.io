@@ -40,7 +40,7 @@ BioMartからプログラマチックにデータを取得するための [Bioco
 
 ## 関数
 
-`listMarts(mart, host='www.biomart.org', ..., archive=FALSE, ...)`
+`listMarts(mart, host="www.biomart.org", ..., archive=FALSE, ...)`
 :   利用可能なマート列挙。 e.g. `ensembl`, `fungi_mart_21`, `unimart`
 
 `listDatasets(mart, verbose=FALSE)`
@@ -51,36 +51,36 @@ BioMartからプログラマチックにデータを取得するための [Bioco
     `unique(mart@attributes$page)` と同じ。
     データを取得するときはこれらの間を跨がないようにアトリビュートを選ぶ。
 
-`listAttributes(mart, page, what=c('name', 'desciption'))`
+`listAttributes(mart, page, what=c("name", "desciption"))`
 :   マートで利用可能なアトリビュート列挙。
     `mart@attributes` へのアクセサ。
 
-`listFilters(mart, what=c('name', 'description'))`
+`listFilters(mart, what=c("name", "description"))`
 :   マートで利用可能なフィルター列挙。
     `mart@filters` へのアクセサ。
 
-`useMart(martname, dataset, host='www.biomart.org', ..., archive=FALSE, ...)`
+`useMart(martname, dataset, host="www.biomart.org", ..., archive=FALSE, ...)`
 :   利用するマート(とデータセット)を指定して `Mart` オブジェクトを作る。
-    データセットを決めずにも作れる。 e.g. `mart = useMart('ensembl', 'scerevisiae_gene_ensembl')`
+    データセットを決めずにも作れる。 e.g. `mart = useMart("ensembl", "scerevisiae_gene_ensembl")`
 
 `useDataset(dataset, mart, verbose=FALSE)`
 :   データセットを決めた `Mart` オブジェクトを作る。
-    でもこれって `useMart()` にもできるので不要...？ e.g. `mart = useDataset('scerevisiae_gene_ensembl', mart)`
+    でもこれって `useMart()` にもできるので不要...？ e.g. `mart = useDataset("scerevisiae_gene_ensembl", mart)`
 
-`getBM(attributes, filters='', values='', mart, curl=NULL, checkFilters=TRUE, verbose=FALSE, uniqueRows=TRUE, bmHeader=FALSE)`
+`getBM(attributes, filters="", values="", mart, curl=NULL, checkFilters=TRUE, verbose=FALSE, uniqueRows=TRUE, bmHeader=FALSE)`
 :   このパッケージのメイン関数。
     フィルターは名前付きリストで渡す。
     `filter` に渡すと `AND` 結合:
 
-        getBM(c('ensembl_gene_id', 'sgd_gene'),
-              filters=list(chromosome_name='IV', biotype='tRNA'),
+        getBM(c("ensembl_gene_id", "sgd_gene"),
+              filters=list(chromosome_name="IV", biotype="tRNA"),
               mart=ensembl)
         # 第四染色体上のtRNA遺伝子
 
     `values` に渡すと `OR` 結合:
 
-        getBM(c('ensembl_gene_id', 'sgd_gene'),
-              values=list(chromosome_name='IV', biotype='tRNA'),
+        getBM(c("ensembl_gene_id", "sgd_gene"),
+              values=list(chromosome_name="IV", biotype="tRNA"),
               mart=ensembl)
         # 第四染色体上の遺伝子とtRNA遺伝子
 
@@ -122,45 +122,45 @@ BioMartからプログラマチックにデータを取得するための [Bioco
 
 ```r
 library(biomaRt)
-ensembl = useMart('ensembl', 'scerevisiae_gene_ensembl')
+ensembl = useMart("ensembl", "scerevisiae_gene_ensembl")
 
 ## あるいは
 listMarts()
-ensembl = useMart('ensembl')
+ensembl = useMart("ensembl")
 listDatasets(ensembl)
-ensembl = useDataset('scerevisiae_gene_ensembl', ensembl)
+ensembl = useDataset("scerevisiae_gene_ensembl", ensembl)
 ```
 
 どんなデータやフィルタが利用可能か調べる
 
 ```r
 attributePages(ensembl)
-listAttributes(ensembl, 'feature_page')
+listAttributes(ensembl, "feature_page")
 subset(ensembl@filters, select=c(name, description, type, operation))
 ```
 
 フィルタの選択肢を調べる
 
 ```r
-> subset(ensembl@filters, name=='biotype')$options
+> subset(ensembl@filters, name=="biotype")$options
 [1] "[ncRNA,protein_coding,pseudogene,rRNA,snoRNA,snRNA,tRNA]"
-> keys(ensembl, 'biotype')
+> keys(ensembl, "biotype")
 [1] "ncRNA" "protein_coding" "pseudogene" "rRNA" "snoRNA" "snRNA" "tRNA"
-> keys(ensembl, 'go_evidence_code')
+> keys(ensembl, "go_evidence_code")
 [1] "IBA" "IC"  "IDA" "IEA" "IEP" "IGI" "IMP" "IPI" "ISA" "ISM" "ISS" "NAS" "ND"  "TAS"
 ```
 
 近いミラーを使う
 
 ```r
-> listMarts(host='asia.ensembl.org')
+> listMarts(host="asia.ensembl.org")
                biomart               version
 1 ENSEMBL_MART_ENSEMBL      Ensembl Genes 75
 2     ENSEMBL_MART_SNP  Ensembl Variation 75
 3 ENSEMBL_MART_FUNCGEN Ensembl Regulation 75
 4    ENSEMBL_MART_VEGA               Vega 55
 5                pride        PRIDE (EBI UK)
-> ensembl = useMart('ENSEMBL_MART_SNP', 'scerevisiae_snp', host='asia.ensembl.org')
+> ensembl = useMart("ENSEMBL_MART_SNP", "scerevisiae_snp", host="asia.ensembl.org")
 ```
 
 ### [UniProt](https://www.uniprot.org/)
@@ -168,7 +168,7 @@ subset(ensembl@filters, select=c(name, description, type, operation))
 フィルタ列挙
 
 ```r
-> unimart = useMart('unimart', 'uniprot')
+> unimart = useMart("unimart", "uniprot")
 > subset(unimart@filters, select=c(name, description, type, operation))
                name       description    type operation
 1  superregnum_name  Superregnum name    list         =
@@ -204,8 +204,8 @@ subset(ensembl@filters, select=c(name, description, type, operation))
 "Complete proteome" の選択肢(すげえ長い)を抜き出す
 
 ```r
-proteome_name = biomaRt::keys(unimart, 'proteome_name')
-grep('Sac.* cer.*', proteome_name, value=TRUE)
+proteome_name = biomaRt::keys(unimart, "proteome_name")
+grep("Sac.* cer.*", proteome_name, value=TRUE)
 ```
 
 アトリビュート列挙

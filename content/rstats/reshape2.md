@@ -31,7 +31,7 @@ data.frameの複数列の値を、カテゴリ変数1列と値1列の組に変�
 [tidyr]({{< relref "tidyr.md" >}})の`gather()`を使おう。
 
 array対象ならまだ使い道はある。
-例えば3次元arrayを `melt(arr, c('x', 'y', 'z'))`
+例えば3次元arrayを `melt(arr, c("x", "y", "z"))`
 として3列のmatrixに戻せるのは便利。
 See `?reshape2:::melt.array`.
 {{</markdownify>}}</div>
@@ -115,7 +115,7 @@ reshape2::melt(data, id.vars, measure.vars,
 [dplyr]({{< relref "dplyr.md" >}})の`group_by()`と`summarise()`を使う。
 
 3次元以上のarrayを作りたいときは`reshape2::acast()`が便利。
-e.g., `acast(data, x ~ y ~ z, dplyr::first, value.var='v', fill=0)`
+e.g., `acast(data, x ~ y ~ z, dplyr::first, value.var="v", fill=0)`
 {{</markdownify>}}</div>
 
 ```r

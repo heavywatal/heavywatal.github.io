@@ -19,7 +19,7 @@ forループやlistの処理などをより簡潔に書けるようにしてく�
 それに関しては[foreach/parallel]({{< relref "foreach.md" >}})ページを参照。
 
 [tidyverse](https://tidyverse.tidyverse.org/) に含まれているので、
-`install.packages('tidyverse')` で一括インストール、
+`install.packages("tidyverse")` で一括インストール、
 `library(tidyverse)` で一括ロード。
 
 ## list, vector操作
@@ -220,8 +220,8 @@ https://github.com/hadley/purrrlyr/blob/master/NEWS.md
 ```r
 ## OLD
 iris %>%
-  purrrlyr::slice_rows('Species') %>%
-  purrrlyr::by_slice(head, .collate='rows')
+  purrrlyr::slice_rows("Species") %>%
+  purrrlyr::by_slice(head, .collate="rows")
 
 ## NEW
 iris %>%
@@ -243,13 +243,13 @@ iris %>%
 : 指定した列でグループ化してgrouped_dfを返す。
   `dplyr::group_by_(.dots=.cols)` と同じ。
 
-`purrrlyr::by_slice(.d, ..f, ..., .collate=c('list', 'rows', 'cols'), .to='.out', .labels=TRUE)`
+`purrrlyr::by_slice(.d, ..f, ..., .collate=c("list", "rows", "cols"), .to=".out", .labels=TRUE)`
 : grouped_dfを受け取ってグループごとに関数を適用する。
   `dplyr::do()` とほぼ同じ役割で、一長一短。
   こちらは出力形式をより柔軟に指定できるが、
   中の関数からgrouping variableを参照できないという弱点を持つ。
 
-`purrrlyr::by_row(.d, ..f, ..., .collate=c('list', 'rows', 'cols'), .to='.out', .labels=TRUE)`
+`purrrlyr::by_row(.d, ..f, ..., .collate=c("list", "rows", "cols"), .to=".out", .labels=TRUE)`
 : data.frame 1行ごとに関数を適用する。
   `dplyr::rowwise() %>% dplyr::do()`的な処理を一撃で書ける。
 : `.to`: 結果listの列名
@@ -266,7 +266,7 @@ iris %>%
   結果の収納方法を`.collate`などで調整できるところは`by_row()`っぽい。
 
 ```r
-iris[1:3, 1:2] %>% by_row(~data_frame(x=0:1, y=c('a', 'b')), .collate='list')
+iris[1:3, 1:2] %>% by_row(~data_frame(x=0:1, y=c("a", "b")), .collate="list")
 ## Source: local data frame [3 x 3]
 ##
 ##   Sepal.Length Sepal.Width           .out
@@ -274,7 +274,7 @@ iris[1:3, 1:2] %>% by_row(~data_frame(x=0:1, y=c('a', 'b')), .collate='list')
 ## 1          5.1         3.5 <tbl_df [2,2]>
 ## 2          4.9         3.0 <tbl_df [2,2]>
 ## 3          4.7         3.2 <tbl_df [2,2]>
-iris[1:3, 1:2] %>% by_row(~data_frame(x=0:1, y=c('a', 'b')), .collate='rows')
+iris[1:3, 1:2] %>% by_row(~data_frame(x=0:1, y=c("a", "b")), .collate="rows")
 ## Source: local data frame [6 x 5]
 ##
 ##   Sepal.Length Sepal.Width  .row     x     y
@@ -285,7 +285,7 @@ iris[1:3, 1:2] %>% by_row(~data_frame(x=0:1, y=c('a', 'b')), .collate='rows')
 ## 4          4.9         3.0     2     1     b
 ## 5          4.7         3.2     3     0     a
 ## 6          4.7         3.2     3     1     b
-iris[1:3, 1:2] %>% by_row(~data_frame(x=0:1, y=c('a', 'b')), .collate='cols')
+iris[1:3, 1:2] %>% by_row(~data_frame(x=0:1, y=c("a", "b")), .collate="cols")
 ## Source: local data frame [3 x 6]
 ##
 ##   Sepal.Length Sepal.Width    x1    x2    y1    y2

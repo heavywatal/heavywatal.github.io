@@ -143,12 +143,12 @@ my_add(3)       # 4   (2つめの引数を省略すると1)
 省略すると先頭の要素が採用される
 
 ```r
-great_scott = function(name=c('Marty', 'Emmett', 'Biff')) {
+great_scott = function(name=c("Marty", "Emmett", "Biff")) {
     name = match.arg(name)
-    print(sprintf('I am %s.', name))
+    print(sprintf("I am %s.", name))
 }
-great_scott('Marty')     # OK
-great_scott('DeLorean')  # Error
+great_scott("Marty")     # OK
+great_scott("DeLorean")  # Error
 great_scott()            # OK, Marty
 ```
 
@@ -159,7 +159,7 @@ great_scott()            # OK, Marty
 
 ```r
 my_func = function(x) {
-    print('WTF! This line is printed anyway.')
+    print("WTF! This line is printed anyway.")
     print(x)
 }
 my_func()

@@ -34,8 +34,8 @@ library(ggbio)
     `legend=TRUE`\
     `geom=NULL`\
     `stat=NULL`\
-    `coord=c('default', 'genome', 'truncate_gaps')`\
-    `layout=c('linear', 'karyogram', 'circle')`
+    `coord=c("default", "genome", "truncate_gaps")`\
+    `layout=c("linear", "karyogram", "circle")`
 
 `plotSingleChrom()`, `plotIdeogram()`, `Ideogram()`
 
@@ -97,13 +97,13 @@ library(ggbio)
     `heights`, `xlim`,\
     `xlab`, `main`, `title`, `theme`,\
     `track.plot.color`, `track.bg.color`,\
-    `main.height=unit(1.5, 'lines')`,\
-    `scale.height=unit(1, 'lines')`,\
-    `xlab.height=unit(1.5, 'lines')`,\
-    `padding=unit(-1, 'lines')`,\
-    `label.bg.color='white'`, `label.bg.fill='gray80'`,\
-    `label.text.color='black'`, `label.text.cex=1`,\
-    `label.width=unit(2.5, 'lines')`
+    `main.height=unit(1.5, "lines")`,\
+    `scale.height=unit(1, "lines")`,\
+    `xlab.height=unit(1.5, "lines")`,\
+    `padding=unit(-1, "lines")`,\
+    `label.bg.color="white"`, `label.bg.fill="gray80"`,\
+    `label.text.color="black"`, `label.text.cex=1`,\
+    `label.width=unit(2.5, "lines")`
 
 `zoom()`, `zoom_in()`, `zoom_out()`
 

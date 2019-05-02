@@ -20,14 +20,14 @@ BiocManager::install("topGO")
 ### `topGOdata` を作る
 
 ```r
-tg_data = new('topGOdata',
-    ontology='BP',
+tg_data = new("topGOdata",
+    ontology="BP",
     allGenes=setNames(score, name),
     geneSelectionFun=function(x) {x > threshold},
     nodeSize=10,
     annotationFun=annFUN.org,
-    mapping='org.Hs.eg.db',
-    ID='entrez')
+    mapping="org.Hs.eg.db",
+    ID="entrez")
 ```
 
 `ontology`
@@ -57,7 +57,7 @@ tg_data = new('topGOdata',
 
 ------------------------------------------------------------------------
 
-`annFUN.org(whichOnto, feasibleGenes, mapping, ID='entrez')`
+`annFUN.org(whichOnto, feasibleGenes, mapping, ID="entrez")`
 
 `mapping`
 :   [Bioconductor]({{< relref "bioconductor.md" >}}) のマッピングパッケージ。
@@ -73,7 +73,7 @@ tg_data = new('topGOdata',
 ```r
 whichTests()
 whichAlgorithms()
-tg_result = runTest(tg_data, algorithm='classic', statistic='fisher')
+tg_result = runTest(tg_data, algorithm="classic", statistic="fisher")
 ```
 
 `algorithm`
@@ -99,7 +99,7 @@ geneData(tg_result)
 GO termのOver-representationランキング
 
 ```r
-num_significant = geneData(tg_result)['Significant']
+num_significant = geneData(tg_result)["Significant"]
 GenTable(tg_data, classic_fisher=tg_result, topNodes=num_significant)
 ```
 
@@ -110,8 +110,8 @@ GenTable(tg_data, classic_fisher=tg_result, topNodes=num_significant)
 `Rgraphviz` を使ってDAG描画
 
 ```r
-showSigOfNodes(tg_data, score(tg_result), firstSigNodes=10, useInfo='all')
-printGraph(tg_data, tg_result, 20, fn.prefix='go_fisher', pdfSW=TRUE)
+showSigOfNodes(tg_data, score(tg_result), firstSigNodes=10, useInfo="all")
+printGraph(tg_data, tg_result, 20, fn.prefix="go_fisher", pdfSW=TRUE)
 ```
 
 前者はプロットだけ、後者はPDFに書き出し。

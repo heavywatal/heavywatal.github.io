@@ -20,7 +20,7 @@ R標準の`boxplot()`や`hist()`などは前者の上に、
 使い方が全く異なるので、前者を知らずにいきなりggplot2から始めても大丈夫。
 
 [tidyverse](https://tidyverse.tidyverse.org/) に含まれているので、
-`install.packages('tidyverse')` で一括インストール、
+`install.packages("tidyverse")` で一括インストール、
 `library(tidyverse)` で一括ロード。
 
 - [初学者向け講義資料2018](/slides/nagoya2018/2-ggplot.html)
@@ -133,15 +133,15 @@ ggplot(mpg) +
     から選んで指定するだけなので楽ちん。
     特に離散値でお世話になる。
     利用可能なパレットは `RColorBrewer::display.brewer.all()` でも一覧できる。
-:   `scale_*_brewer(..., palette='Blues', direction=1)`: 離散値
-:   `scale_*_distiller(..., palette='Blues', direction=-1)`: 連続値
+:   `scale_*_brewer(..., palette="Blues", direction=1)`: 離散値
+:   `scale_*_distiller(..., palette="Blues", direction=-1)`: 連続値
 
 [`scale_*_gradient`](https://ggplot2.tidyverse.org/reference/scale_gradient.html)
 :   for `colour`, `fill`
 :   グラデーションの基準となる色を指定する。
 :   `scale_*_gradient(..., low, high, ...)`: 普通の連続値に
 :   `scale_*_gradient2(..., low, mid, high, midpoint=0, ...)`: ある中央値を挟んで上下に分けたいとき
-:   `scale_*_gradientn(..., colours, values=NULL, ...)`: 多色のヒートマップなどに e.g., `colours=c('#000000', '#0000FF', '#00FFFF', '#00FF00', '#FFFF00', '#FF0000')`
+:   `scale_*_gradientn(..., colours, values=NULL, ...)`: 多色のヒートマップなどに e.g., `colours=c("#000000", "#0000FF", "#00FFFF", "#00FF00", "#FFFF00", "#FF0000")`
 
 [`scale_*_identity`](https://ggplot2.tidyverse.org/reference/scale_identity.html)
 :   for `colour`, `fill`, `size`, `shape`, `linetype`, `alpha`
@@ -194,10 +194,10 @@ ggplot(mpg) +
 [`facet_wrap()`](https://ggplot2.tidyverse.org/reference/facet_wrap.html)
 :   1変数で分割して並べる
     ```r
-    facet_wrap(facets, nrow=NULL, ncol=NULL, scales='fixed',
-               shrink=TRUE, labeller='label_value',
+    facet_wrap(facets, nrow=NULL, ncol=NULL, scales="fixed",
+               shrink=TRUE, labeller="label_value",
                as.table=TRUE, switch=NULL, drop=TRUE,
-               dir='h', strip.position='top')
+               dir="h", strip.position="top")
 
     p1 + facet_wrap(~ class, ncol = 4L)
     ```
@@ -205,8 +205,8 @@ ggplot(mpg) +
 [`facet_grid()`](https://ggplot2.tidyverse.org/reference/facet_grid.html)
 :   2変数で分割して縦横に並べる
     ```r
-    facet_grid(facets, margins=FALSE, scales='fixed', space='fixed',
-               shrink=TRUE, labeller='label_value',
+    facet_grid(facets, margins=FALSE, scales="fixed", space="fixed",
+               shrink=TRUE, labeller="label_value",
                as.table=TRUE, switch=NULL, drop=TRUE)
 
     p1 + facet_grid(cyl ~ class)
@@ -260,7 +260,7 @@ ggplot内部で `stat_*()` を通して行われる。
 :   パイチャートも作れるらしい
 
 [座標変換](https://ggplot2.tidyverse.org/reference/coord_trans.html)
-:   `gp + coord_trans(x='log10', y='sqrt')`
+:   `gp + coord_trans(x="log10", y="sqrt")`
 :    表示する座標を変換する。
      stat前に適用される `scale_x_*` とは微妙に違う。
 
@@ -275,26 +275,26 @@ ggplot内部で `stat_*()` を通して行われる。
 
 ### 既成テーマ
 
-`theme_grey(base_size=11, base_family='')`, `theme_gray(...)`
+`theme_grey(base_size=11, base_family="")`, `theme_gray(...)`
 :   灰色背景に白い格子。
     ggplotらしいデフォルトだが、論文には使いにくい。
 
-`theme_bw(base_size=11, base_family='')`
+`theme_bw(base_size=11, base_family="")`
 :   黒枠白背景にうっすら灰色格子
 
-`theme_linedraw(base_size=11, base_family='')`
+`theme_linedraw(base_size=11, base_family="")`
 :   細いけど濃い色の `panel.grid`
 
-`theme_light(base_size=11, base_family='')`
+`theme_light(base_size=11, base_family="")`
 :   それを薄くした感じ
 
-`theme_minimal(base_size=11, base_family='')`
+`theme_minimal(base_size=11, base_family="")`
 :   外枠なしの `theme_bw`
 
-`theme_classic(base_size=11, base_family='')`
+`theme_classic(base_size=11, base_family="")`
 :   xy軸がL字に描かれているだけで枠もグリッドも無し
 
-`theme_void(base_size=11, base_family='')`
+`theme_void(base_size=11, base_family="")`
 :   完全に枠なし
 
 これらをカッコ無しでコンソールに打ち込むと、
@@ -321,8 +321,8 @@ Macなら"HiraKakuProN-W3"を指定すれば日本語でも文字化けしなく
 
 ```r
 ## ベースとなるテーマを先に適用してから
-gp = gp + theme_bw(base_family='HiraKakuProN-W3', base_size=14)
-gp = gp + theme(legend.position='bottom')
+gp = gp + theme_bw(base_family="HiraKakuProN-W3", base_size=14)
+gp = gp + theme(legend.position="bottom")
 gp = gp + theme(plot.background=element_rect(fill="transparent"))
 ```
 
@@ -386,7 +386,7 @@ gp = gp + theme(plot.background=element_rect(fill="transparent"))
 
 `facet` したときのラベル
 : `strip.background`: (`element_rect`; inherits from `rect`)
-: `strip.placement`: ('inside', 'outside')
+: `strip.placement`: ("inside", "outside")
 : `strip.text`: (`element_text`; inherits from `text`)\
   &emsp;`__.x`, `__.y`
 
@@ -405,7 +405,7 @@ gp = gp + theme(plot.background=element_rect(fill="transparent"))
 
 `element_text(family, face, colour, size, hjust, vjust, angle, lineheight, margin)` --- 文字
 :   `family`: フォントファミリー。 空なら `theme_bw(base_family=...)` などの指定を継承。
-:   `face`: (`'plain'`, `'italic'`, `'bold'`, `'bold.italic'`)
+:   `face`: (`"plain"`, `"italic"`, `"bold"`, `"bold.italic"`)
 :   `hjust`, `vjust`: 水平位置と垂直位置の寄せ方をそれぞれ `[0, 1]` の実数で。
 :   `angle`: 角度 `[0, 360]`
 :   `margin`: スペース調整を関数 `margin(top, right, bottom, left)` 越しに。
@@ -429,7 +429,7 @@ gp = gp + theme(plot.background=element_rect(fill="transparent"))
 `grid::arrow(angle, length, ends, type)`
 :   `axis.line` の `element_line()` にこれを与えて軸を矢印にするとか。
 
-`margin(t=0, r=0, b=0, l=0, unit='pt')`
+`margin(t=0, r=0, b=0, l=0, unit="pt")`
 :   marginクラス
 
 `calc_element(element, theme, verbose=FALSE)`
@@ -509,11 +509,11 @@ ggsave("mpg4.png", p1 + theme_bw(base_size = 22), width = 4, height = 4)
 [棒グラフ](https://ggplot2.tidyverse.org/reference/geom_bar.html)
 :   `gp + geom_col()`
 :   グループ分けする場合のオプション:
-    - [`position='stack'`](https://ggplot2.tidyverse.org/reference/position_stack.html):
+    - [`position="stack"`](https://ggplot2.tidyverse.org/reference/position_stack.html):
       縦に積み重ねる (デフォルト)
-    - [`position='dodge'`](https://ggplot2.tidyverse.org/reference/position_dodge.html):
+    - [`position="dodge"`](https://ggplot2.tidyverse.org/reference/position_dodge.html):
       横に並べる
-    - `position='fill'`: 縦に積み重ね、高さを1に揃えて割合を示す
+    - `position="fill"`: 縦に積み重ね、高さを1に揃えて割合を示す
 
 [箱ひげ図](https://ggplot2.tidyverse.org/reference/geom_boxplot.html)
 :   `gp + geom_boxplot()`
@@ -576,7 +576,7 @@ ggplotを拡張するための仕組みがversion 2.0から正式に導入され
 ggplotオブジェクトと同じように `ggsave()` に渡して保存可能。
 
 ```r
-grob = gridExtra::arrangeGrob(p1, p2, nrow=2, ncol=1, bottom='Time')
+grob = gridExtra::arrangeGrob(p1, p2, nrow=2, ncol=1, bottom="Time")
 grid.newpage()
 grid.draw(grob)
 ```
@@ -587,7 +587,7 @@ grid.draw(grob)
 ```r
 .grobs = purrr::map(.dataframes, my_ggplot_func)
 .gtable = gridExtra::marrangeGrob(.grobs, nrow=4, ncol=3)
-ggsave('multi_page.pdf', .gtable, width=7, height=9.9)
+ggsave("multi_page.pdf", .gtable, width=7, height=9.9)
 ```
 
 ### `cowplot`
@@ -605,7 +605,7 @@ ggplotを学術論文向けにカスタマイズしやすくする。
 
     ```r
     cowplot::plot_grid(..., plotlist=NULL,
-        align=c('none', 'h', 'v', 'hv'),
+        align=c("none", "h", "v", "hv"),
         nrow=NULL, ncol=NULL,
         scale=1, rel_widths=1, rel_heights=1,
         labels=NULL, label_size=14,

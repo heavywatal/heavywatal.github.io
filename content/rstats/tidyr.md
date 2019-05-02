@@ -17,7 +17,7 @@ data.frameを縦長・横長・入れ子に変形・整形するためのツー�
 [reshape2]({{< relref "reshape2.md" >}}) を置き換えるべく再設計された改良版。
 
 [tidyverse](https://tidyverse.tidyverse.org/) に含まれているので、
-`install.packages('tidyverse')` で一括インストール、
+`install.packages("tidyverse")` で一括インストール、
 `library(tidyverse)` で一括ロード。
 
 -   <http://r4ds.had.co.nz/tidy-data.html>
@@ -28,7 +28,7 @@ data.frameを縦長・横長・入れ子に変形・整形するためのツー�
 下記のコード例で使うデータ
 
 ```r
-iris %>% head(3L) %>% rownames_to_column('id')
+iris %>% head(3L) %>% rownames_to_column("id")
 ##   id Sepal.Length Sepal.Width Petal.Length Petal.Width Species
 ## 1  1          5.1         3.5          1.4         0.2  setosa
 ## 2  2          4.9         3.0          1.4         0.2  setosa
@@ -62,7 +62,7 @@ e.g., `Species` 以外の列について、
 元の列名を `kagi` 、値を `atai` に格納した縦長の表に変形
 
 ```r
-iris %>% head(3L) %>% rownames_to_column('id') %>%
+iris %>% head(3L) %>% rownames_to_column("id") %>%
   gather(kagi, atai, -id, -Species)
 ##    id Species         kagi atai
 ## 1   1  setosa Sepal.Length  5.1
@@ -108,7 +108,7 @@ IDとなるような列がないと `Error: Duplicate identifiers` と怒られ�
 e.g., `kagi` 内の文字列を新たな列名として横長の表に変形して `atai` を移す
 
 ```r
-iris %>% head(3L) %>% rownames_to_column('id') %>%
+iris %>% head(3L) %>% rownames_to_column("id") %>%
   gather(kagi, atai, -id, -Species) %>%
   spread(kagi, atai)
 ##   id Species Petal.Length Petal.Width Sepal.Length Sepal.Width
@@ -136,7 +136,7 @@ iris %>% nest(-Species, .key=NEW_COLUMN)
 
 # equivalent to
 iris %>% dplyr::group_by(Species) %>% nest()
-iris %>% nest(matches('Length$|Width$'))
+iris %>% nest(matches("Length$|Width$"))
 ```
 
 なんでもかんでもフラットなdata.frameにして
@@ -163,7 +163,7 @@ list of data.framesだけでなく、list of vectorsとかでもよい。
 文字列カラムを任意のセパレータで複数カラムに分割。
 `reshape2::colsplit()` に相当。
 
-`tidyr::separate(data, col, into, sep='[^[:alnum:]]', remove=TRUE, convert=FALSE, extra='warn', fill='warn')`
+`tidyr::separate(data, col, into, sep="[^[:alnum:]]", remove=TRUE, convert=FALSE, extra="warn", fill="warn")`
 
 `data`
 :   `%>%` 越しに渡す
@@ -174,7 +174,7 @@ list of data.framesだけでなく、list of vectorsとかでもよい。
 `into`
 :   切り分けたあとの新しい列名を文字列ベクタで
 
-`sep='[^[:alnum:]]'`
+`sep="[^[:alnum:]]"`
 :   セパレータを正規表現で。デフォルトはあらゆる非アルファベット。
 :   整数を渡すと位置で切れる。例えば `A4` を `1L` で切ると `A` と `4` に。
 
@@ -184,19 +184,19 @@ list of data.framesだけでなく、list of vectorsとかでもよい。
 `convert=FALSE`
 :   -
 
-`extra='warn'`
+`extra="warn"`
 :   列数が揃わないときにどうするか: `warn`, `drop`, `merge`
 
-`fill='warn'`
+`fill="warn"`
 :   足りない場合にどっち側をNAで埋めるか: `warn`, `right`, `left`。
     つまり、文字を左詰めにするには`right`が正解(紛らわしい)。
 
 `kagi` 列を `part`, `axis` という2列に分割
 
 ```r
-iris %>% head(3L) %>% rownames_to_column('id') %>%
+iris %>% head(3L) %>% rownames_to_column("id") %>%
   gather(kagi, atai, -id, -Species) %>%
-  separate(kagi, c('part', 'axis'))
+  separate(kagi, c("part", "axis"))
 ##    id Species  part   axis atai
 ## 1   1  setosa Sepal Length  5.1
 ## 2   2  setosa Sepal Length  4.9
@@ -212,7 +212,7 @@ iris %>% head(3L) %>% rownames_to_column('id') %>%
 ## 12  3  setosa Petal  Width  0.2
 ```
 
-逆をやるのが `tidyr::unite(data, col, ..., sep='_', remove=TRUE)` 。
+逆をやるのが `tidyr::unite(data, col, ..., sep="_", remove=TRUE)` 。
 
 行方向に分割する `tidyr::separate_rows(data, ..., sep, convert)` もある。
 
@@ -229,7 +229,7 @@ iris %>% head(3L) %>% rownames_to_column('id') %>%
 指定しなかった列に欠損値`NA`(あるいは任意の値)を補完した行を挿入する。
 
 ```r
-df %>% complete(key1, key2, fill=list(val1=0, val2='-'))
+df %>% complete(key1, key2, fill=list(val1=0, val2="-"))
 ```
 
 ### `tidyr::expand(data, ...)`
@@ -260,7 +260,7 @@ tibble版`expand.grid(...)`のようなもの。
 これまでは `mutate(x= ifelse(is.na(x), 0, x))` のようにしてたところを
 
 ```r
-df %>% replace_na(list(x=0, y='unknown'))
+df %>% replace_na(list(x=0, y="unknown"))
 ```
 
 逆に、特定の値を`NA`にしたい場合は

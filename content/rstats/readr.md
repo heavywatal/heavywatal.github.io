@@ -25,13 +25,13 @@ tags = ["r", "tidyverse"]
 -   空白行を勝手にスキップする (1.2から)
 
 [tidyverse](https://tidyverse.tidyverse.org/) に含まれているので、
-`install.packages('tidyverse')` で一括インストール、
+`install.packages("tidyverse")` で一括インストール、
 `library(tidyverse)` で一括ロード。
 例えば:
 ```r
 library(tidyverse)
-write_tsv(iris, 'iris.tsv.gz')
-read_tsv('iris.tsv.gz')
+write_tsv(iris, "iris.tsv.gz")
+read_tsv("iris.tsv.gz")
 ```
 
 -   http://r4ds.had.co.nz/data-import.html
@@ -49,9 +49,9 @@ read_delim(file, delim,
   col_names = TRUE,
   col_types = NULL,
   locale = default_locale(),
-  na = c('', 'NA'),
+  na = c("", "NA"),
   quoted_na = TRUE,
-  comment = '',
+  comment = "",
   trim_ws = FALSE,
   skip = 0,
   n_max = Inf,
@@ -83,8 +83,8 @@ read_delim(file, delim,
 
 ```r
 write_delim(x, path,
-  delim = ' ',
-  na = 'NA',
+  delim = " ",
+  na = "NA",
   append = FALSE,
   col_names = !append)
 ```
@@ -92,7 +92,7 @@ write_delim(x, path,
 **`write_csv(...)`** や **`write_tsv(...)`**
 は区切り文字 `delim=` 指定済みのショートカット。
 
-`write_lines(x, path, na='NA', append=FALSE)`
+`write_lines(x, path, na="NA", append=FALSE)`
 : vectorやlistを1行ずつ書き出す。
 
 `write_file(x, path, append=FALSE)`
@@ -101,14 +101,14 @@ write_delim(x, path,
 
 ### 文字列から別の型へ <a name="parse"></a>
 
-`parse_number(x, na=c('', 'NA'), locale=default_locale())`
+`parse_number(x, na=c("", "NA"), locale=default_locale())`
 :   文字列で最初に登場する数値を抜き出す。
     あるカラムでは末尾に単位が付いちゃってる、みたいな状況でのみ使う。
-    それ以外の複雑な判断はしないので、例えば `'6e23'` は単に6になる。
+    それ以外の複雑な判断はしないので、例えば `"6e23"` は単に6になる。
 
 `parse_double(x, ...)`, `parse_integer(x, ...)`
 :   文字列をdouble/intの数値として解釈して返す。
-    `'6e23'` のような指数形式も大丈夫。
+    `"6e23"` のような指数形式も大丈夫。
     異物が混じっていた場合は警告してくれる。
     (標準の`as.integer()`とかは黙って小数点以下を切り捨てたりする)
 
@@ -117,7 +117,7 @@ write_delim(x, path,
 
 `parse_factor(x, levels, ordered=FALSE, ...)`
 
-`parse_date(x, format='', ...)`, `parse_datetime(x, format='', ...)`, `parse_time(x, format='', ...)`
+`parse_date(x, format="", ...)`, `parse_datetime(x, format="", ...)`, `parse_time(x, format="", ...)`
 
 
 ## 列の型を指定する
@@ -129,22 +129,22 @@ https://cran.r-project.org/web/packages/readr/vignettes/column-types.html
 整数と実数は区別せずnumeric型で読む(1.2から)。
 
 明示的に型を指定したい場合は `col_types` 引数に `cols()` 関数の値を渡す。
-文字列で `'ccdi_'` のように省略することも可能。
+文字列で `"ccdi_"` のように省略することも可能。
 
 ```r
-read_csv('mydata.csv', col_types='ccdi_')
+read_csv("mydata.csv", col_types="ccdi_")
 
-colsp = cols(length=col_double(), count='i', .default='c')
-read_csv('mydata.csv', col_types=colsp)
+colsp = cols(length=col_double(), count="i", .default="c")
+read_csv("mydata.csv", col_types=colsp)
 ```
 
 - `[c] col_character()`: 文字列
 - `[i] col_integer()`: 整数
 - `[d] col_double()`: 実数
 - `[l] col_logical()`: TRUE or FALSE
-- `[D] col_date(format='')`: 日付
-- `[t] col_time(format='')`: 時間
-- `[T] col_datetime(format='')`: 日付
+- `[D] col_date(format="")`: 日付
+- `[t] col_time(format="")`: 時間
+- `[T] col_datetime(format="")`: 日付
 - `[n] col_number()`: 数字以外の文字が含まれていても無視して数字として返す
 - `[?] col_guess()`: 推測
 - `[_] col_skip()`: 列を読まない
@@ -167,13 +167,13 @@ https://github.com/tidyverse/readxl
 `readxl` というパッケージを利用すれば、
 一旦Officeで開いてCSVに変換するという手間なしで直接Rに読み込める。
 
-Rの中から `install.packages('readxl')` でインストールし、
+Rの中から `install.packages("readxl")` でインストールし、
 使う前に `library(readxl)` でパッケージを読み込む。
 
 `excel_sheets(path)`
 :   ファイルに含まれるシートの名前を取得
 
-`read_excel(path, sheet=1, col_names=TRUE, col_types=NULL, na='', skip=0)`
+`read_excel(path, sheet=1, col_names=TRUE, col_types=NULL, na="", skip=0)`
 :   `.xls` と `xlsx` のどちらの形式でも読める。
     `sheet` は番号でも名前でもいい。
     それ以降の引数については `readr` の関数と同じ。
@@ -184,7 +184,7 @@ Rの中から `install.packages('readxl')` でインストールし、
 https://github.com/tidyverse/readr
 
 ```
-remotes::install_github('tidyverse/readr')
+remotes::install_github("tidyverse/readr")
 # ...
 ld: library not found for -lintl
 ```
@@ -205,7 +205,7 @@ Homebrewを`/usr/local/`以外に入れている場合は、
 LDFLAGS=-L${HOME}/.homebrew/lib
 ```
 
-再びRで `install_github('tidyverse/readr')` を試みる。
+再びRで `install_github("tidyverse/readr")` を試みる。
 
 
 
@@ -239,8 +239,8 @@ class(iris)
     例えば `iris$Spec` は黙ってvectorを返してしまうが、
     `tbl_iris$Spec` は警告つき `NULL` 。
 -   型に一貫性があり、勝手に`drop=TRUE`しない。
-    例えば `iris[,'Species']` はvectorになってしまうが、
-    `tbl_iris[,'Species']` はtibbleのまま。
+    例えば `iris[,"Species"]` はvectorになってしまうが、
+    `tbl_iris[,"Species"]` はtibbleのまま。
 
 新しいtibble 1.4以降では
 [pillar](https://github.com/r-lib/pillar/)
@@ -289,10 +289,10 @@ setHook(packageEvent("tibble", "attach"), function(...) {
 [`tibble::add_row(.data, ..., .before=NULL, .after=NULL)`](https://tibble.tidyverse.org/reference/add_row.html)
 :   既存のtibbleに新しいデータを1行追加する。
 
-[`tibble::rownames_to_column(df, var='rowname')`](https://tibble.tidyverse.org/reference/rownames.html)
+[`tibble::rownames_to_column(df, var="rowname")`](https://tibble.tidyverse.org/reference/rownames.html)
 :   行の名前をcharacter型で1列目の変数にする。`dplyr::add_rownames()`の後継。
-:   `tibble::rowid_to_column(df, var='rowid')` はそれを整数で。
-:   `tibble::column_to_rownames(df, var='rowname')` はその逆。
+:   `tibble::rowid_to_column(df, var="rowid")` はそれを整数で。
+:   `tibble::column_to_rownames(df, var="rowname")` はその逆。
 :   `tibble::remove_rownames(df)` は消すだけ。
 
 `tibble::glimpse(.data, width=NULL)`
@@ -344,7 +344,7 @@ as_tibble(iris) %>% print(n = nrow(.), width = 10000L)
 # data.table:::print.data.table で上書きした場合
 as_tibble(iris) %>% print(nrows = nrow(.))
 
-iris %>% page('print')
+iris %>% page("print")
 ```
 
 オプションをいちいち設定しなくて済むように

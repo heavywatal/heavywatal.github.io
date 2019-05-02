@@ -34,7 +34,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 基本的には `stringr` を使っとけばよい。
 
 [tidyverse](https://tidyverse.tidyverse.org/) に含まれているので、
-`install.packages('tidyverse')` で一括インストール、
+`install.packages("tidyverse")` で一括インストール、
 `library(tidyverse)` で一括ロード。
 
 -   <http://r4ds.had.co.nz/strings.html>
@@ -58,7 +58,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 `str_flatten(string, collapse="")`
 :   文字列vectorを1つの文字列に結合する。
 
-`str_c(..., sep='', collapse=NULL)`
+`str_c(..., sep="", collapse=NULL)`
 :   複数の引数で与えた文字列を結合する。
     デフォルトの `sep` がスペースじゃないので `base::paste0()` に近い。
 
@@ -73,7 +73,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 
 `str_dup(string, times)`
 :   指定した回数だけ文字列を繰り返して結合。
-    `str_dup('#', 79)` とかで結果出力に区切りを入れたり。
+    `str_dup("#", 79)` とかで結果出力に区切りを入れたり。
 
 ### Pattern Matching
 
@@ -128,7 +128,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 `stringr::fixed(pattern)`
 :   正規表現ではなくそのままの文字としてマッチさせる
 
-`stringr::boundary(type='character', skip_word_none=NA, ...)`
+`stringr::boundary(type="character", skip_word_none=NA, ...)`
 :   境界に対するマッチ。
     `type`の選択肢は `character`, `line_break`, `sentence`, `word`.
 
@@ -146,7 +146,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
     文字列の中の `$[format]{expr}` がR表現として評価される。
     `[format]`部分は`sprintf()`と同じ形式で、省略可。
     `env` はlistやdata.frameでもよい。
-:   e.g., `stringr::str_interp('Mean sepal width is $[.3f]{mean(Sepal.Width)}.', iris)`
+:   e.g., `stringr::str_interp("Mean sepal width is $[.3f]{mean(Sepal.Width)}.", iris)`
 
 `str_glue(..., .sep="", .envir=parent.frame())`
 :   [`library(glue)`](https://glue.tidyverse.org/) しなくても使えるように。
@@ -154,7 +154,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 `str_pad(string, width, side=c("left", "right", "both"), pad=" ")`
 :   文字列の幅を `width` に伸ばして `side` 側を `pad` で埋める。
     例えば `"009" "010"` のように数字の左を0で埋めて長さを揃えるのにも使える:
-    `str_pad(c('9', '10'), 3L, '0')`
+    `str_pad(c("9", "10"), 3L, "0")`
 
 `str_trim(string, side="both")`
 :   空白文字を除去する。
@@ -162,7 +162,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
     両端から空白文字を除去して、連続する空白文字を1つに縮める
     `str_squish()` もある。
 
-`str_trunc(string, width, side=c('right', 'left', 'center'), ellipsis='...')`
+`str_trunc(string, width, side=c("right", "left", "center"), ellipsis="...")`
 :   一定の長さを超えたら捨てて `...` にする。
 
 `str_wrap(string, width=80, indent=0, exdent=0)`

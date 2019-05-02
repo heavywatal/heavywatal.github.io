@@ -17,7 +17,7 @@ http://mc-stan.org/
 
 ## インストール
 
-Rから`install.packages('rstan')`で一発。
+Rから`install.packages("rstan")`で一発。
 jagsと違ってstan本体も同時に入れてくれる。
 [RStan-Getting-Started](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started)
 を見ると、時代や環境によってはいろいろ難しいかったのかも。
@@ -45,7 +45,7 @@ jagsと違ってstan本体も同時に入れてくれる。
     e.g., 与えられたデータが正規分布から取れてきたとすると、
     その平均と標準偏差はどれくらいだったか？
     ```r
-    .stan_code = '
+    .stan_code = "
     data {
       int n_obs;
       real[n_obs] x;
@@ -58,7 +58,7 @@ jagsと違ってstan本体も同時に入れてくれる。
 
     model {
       x ~ normal(mu, sigma);
-    }'
+    }"
     ```
 
 1. モデルをC++に変換してコンパイルする。
@@ -66,7 +66,7 @@ jagsと違ってstan本体も同時に入れてくれる。
    ```r
    .model = rstan::stan_model(model_code=.stan_code)
    # or
-   .model = rstan::stan_model(file='model.stan')
+   .model = rstan::stan_model(file="model.stan")
    ```
 
 1. コンパイル済みモデルを使ってMCMCサンプリング
@@ -244,7 +244,7 @@ Stan更新への追従にタイムラグがあるらしい。
 https://github.com/stan-dev/rstan/wiki/RStan-Transition-Periods
 
 ```r
-install.packages("https://cran.r-project.org/src/contrib/Archive/StanHeaders/StanHeaders_2.9.0.tar.gz", repos=NULL, type='source')
+install.packages("https://cran.r-project.org/src/contrib/Archive/StanHeaders/StanHeaders_2.9.0.tar.gz", repos=NULL, type="source")
 ```
 
 https://cran.r-project.org/src/contrib/Archive/StanHeaders/
@@ -253,7 +253,7 @@ https://cran.r-project.org/src/contrib/Archive/StanHeaders/
 
 リポジトリの構造が標準とはちょっと違う
 ```r
-remotes::install_github('stan-dev/rstan', ref='develop', subdir='rstan/rstan')
+remotes::install_github("stan-dev/rstan", ref="develop", subdir="rstan/rstan")
 ```
 
 ## 関連書籍

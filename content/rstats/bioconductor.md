@@ -71,8 +71,8 @@ library(edgeR)
 使い方を調べる
 
 ```r
-help(package='Biostrings')
-browseVignettes(package='Biostrings')
+help(package="Biostrings")
+browseVignettes(package="Biostrings")
 ```
 
 ## `Biostrings`
@@ -93,7 +93,7 @@ browseVignettes(package='Biostrings')
     `RNAStringSet`\
     `AAStringSet`
 
-配列セットリスト e.g. 遺伝子ごとの配列セット `cdsBy(txdb, by='gene')`
+配列セットリスト e.g. 遺伝子ごとの配列セット `cdsBy(txdb, by="gene")`
 :   `BStringSetList`\
     `DNAStringSetList`\
     `RNAStringSetList`\
@@ -136,8 +136,8 @@ bss = readDNAStringSet(.file)
     `transcribe(dna)` --- *deprecated*\
        3'-鋳型鎖=アンチセンス鎖-5' を引数として相補的な 5'-mRNA-3' を返す。非推奨。
 
-    `translate(bs, genetic.code=GENETIC_CODE, if.fuzzy.codon='error')`\
-       翻訳して `AAString` に変換。 引数はDNAでもRNAでもよい。 `genetic.code` は名前付き文字列ベクタで、 組み込みで使えるやつは `getGeneticCode('SGC2')` のように指定できる。 何がどの名前で使えるかは `GENETIC_CODE_TABLE` で確認。
+    `translate(bs, genetic.code=GENETIC_CODE, if.fuzzy.codon="error")`\
+       翻訳して `AAString` に変換。 引数はDNAでもRNAでもよい。 `genetic.code` は名前付き文字列ベクタで、 組み込みで使えるやつは `getGeneticCode("SGC2")` のように指定できる。 何がどの名前で使えるかは `GENETIC_CODE_TABLE` で確認。
 
     `codons(bs)`\
        3塩基ずつ切って見る `Views` オブジェクトを返す。
@@ -150,7 +150,7 @@ bss = readDNAStringSet(.file)
 
 頻度を数える
 :   `alphabetFrequency(x, as.prob=FALSE, ...)`\
-    `letterFrequency(x, letters, OR='|', as.prob=FALSE, ...)`\
+    `letterFrequency(x, letters, OR="|", as.prob=FALSE, ...)`\
     `dinucleotideFrequency(x, ...)`\
     `trinucleotideFrequency(x, ...)`\
     `oligonucleotideFrequency(x, width, ...)`\
@@ -161,11 +161,11 @@ bss = readDNAStringSet(.file)
     `consensusString(set_or_views, ambiguityMap, threshold, ...)`
 
 配列ファイルを読む、書く (FASTA, FASTQ)
-:   `readBStringSet(file, format='fasta', ...)`\
-    `readDNAStringSet(file, format='fasta', ...)`\
-    `readRNAStringSet(file, format='fasta', ...)`\
-    `readAAStringSet(file, format='fasta', ...)`\
-    `writeXStringSet(x, filepath, append=FALSE, compress=FALSE, format='fasta', ...)`
+:   `readBStringSet(file, format="fasta", ...)`\
+    `readDNAStringSet(file, format="fasta", ...)`\
+    `readRNAStringSet(file, format="fasta", ...)`\
+    `readAAStringSet(file, format="fasta", ...)`\
+    `writeXStringSet(x, filepath, append=FALSE, compress=FALSE, format="fasta", ...)`
 
 アラインメントを読む (FASTA, stockholm, clustal)
 :   `readDNAMultipleAlignment()`\
@@ -179,7 +179,7 @@ bss = readDNAStringSet(.file)
 検索
 :   `matchPattern(pattern, subject, ...)`\
     `matchPDict(PDict, subject, ...)`\
-    `matchPWM(pwm, subject, min.score='80%', widh.score=FALSE, ...)`\
+    `matchPWM(pwm, subject, min.score="80%", widh.score=FALSE, ...)`\
     対象は `Bstring` だけでなく `Views` でもよい。 例えば `codons()` の結果を対象とすれば読み枠限定の検索となる。 結果の返し方の違う `vmatchXXX()` と `countXXX()` もある。
 
 ## `GenomicRanges`
@@ -217,7 +217,7 @@ bss = readDNAStringSet(.file)
     `seqnames(x)`\
     `seqlevels(x)`\
        特定の染色体だけ対象にしたい場合は\
-       `seqlevels(x, force=TRUE) = paste0('chr', c(1:22, 'X', 'Y'))`\
+       `seqlevels(x, force=TRUE) = paste0("chr", c(1:22, "X", "Y"))`\
        のように削り `seqlevels0(x)` で戻せる\
     `seqlengths(x)`\
     `isCircular(x)`\
@@ -246,14 +246,14 @@ bss = readDNAStringSet(.file)
 
     `isDisjoint(gr, ...)`\
     `disjointBins(gr, ...)`\
-    `coverage(gr, shift=0, width=NULL, wight=1, method=c('auto', 'sort', 'hash'))`
+    `coverage(gr, shift=0, width=NULL, wight=1, method=c("auto", "sort", "hash"))`
 
 個々の区間を操作
 :   `shift(gr, shift=0, ...)`\
     `narrow(gr, start=NA, end=NA, width=NA, ...)`\
     `flank(gr, width, start=TRUE, both=FALSE, ...)`\
     `promoters(gr, upstream=2000, downstream=200, ...)`\
-    `resize(gr, width, fix='start', ...)`\
+    `resize(gr, width, fix="start", ...)`\
     `restrict(gr, start=NA, end=NA, ...)`\
     `trim(gr, ...)`
 
@@ -274,7 +274,7 @@ bss = readDNAStringSet(.file)
 
 絞り込んで `GRanges` を返す
 :   `transcripts(txdb, vals=NULL, columns)`\
-       `vals=list(tx_chrom=c('chrI', 'chrV'))` のように指定する。 取りうる値: gene\_id, tx\_id, tx\_name, tx\_chrom, tx\_strand, exon\_id, exon\_name, exon\_chrom, exon\_strand, cds\_id, cds\_name, cds\_chrom, cds\_strand, exon\_rank\
+       `vals=list(tx_chrom=c("chrI", "chrV"))` のように指定する。 取りうる値: gene\_id, tx\_id, tx\_name, tx\_chrom, tx\_strand, exon\_id, exon\_name, exon\_chrom, exon\_strand, cds\_id, cds\_name, cds\_chrom, cds\_strand, exon\_rank\
     `exons(txdb, ...)`\
     `cds(txdb, ...)`\
     `genes(txdb, ...)`\
@@ -286,7 +286,7 @@ bss = readDNAStringSet(.file)
 
 グループ毎に絞り込んで `GRangesList` を返す
 :   `transcriptsBy(txdb, by, use.names=FALSE, ...)`\
-       `by` は `'gene'`, `'exon'`, `'cds'`, `'tx'` のどれか。\
+       `by` は `"gene"`, `"exon"`, `"cds"`, `"tx"` のどれか。\
     `exonsBy(txdb, by, ...)`\
     `cdsBy(txdb, by, ...)`\
     `intronsByTranscript(txdb, ...)`\
@@ -298,9 +298,9 @@ bss = readDNAStringSet(.file)
     `transcripts` 引数は `GRanges`, `GRangesList`, `TranscriptDb` のどれか。
 
 `TranscriptDB` の形式変換
-:   `makeTranscriptDbFromBiomart(biomart='ensembl', dataset='hsapiens_gene_ensembl', ...)`\
-    `makeTranscriptDbFromUCSC(genome='hg18', table='knownGene', ...)`\
-    `makeTranscriptDBFromGFF(file, format=c('gff3', 'gtf'), ...)`\
+:   `makeTranscriptDbFromBiomart(biomart="ensembl", dataset="hsapiens_gene_ensembl", ...)`\
+    `makeTranscriptDbFromUCSC(genome="hg18", table="knownGene", ...)`\
+    `makeTranscriptDBFromGFF(file, format=c("gff3", "gtf"), ...)`\
     `asBED(txdb)`\
     `asGFF(txdb)`
 
@@ -349,7 +349,7 @@ bsg = BSgenome.Scerevisiae.UCSC.sacCer3
 
 ```r
 bsg$chrI
-bsg[['chrI']]
+bsg[["chrI"]]
 bsg[[1]]
 ```
 
@@ -386,14 +386,14 @@ bsg[[1]]
     `seqlengths()` などseqinfo系関数も使える
 
 利用可能なデータを調べる
-:   `available.genomes(splitNameParts=FALSE, type=getOption('pkgType'))`\
+:   `available.genomes(splitNameParts=FALSE, type=getOption("pkgType"))`\
     `installed.genomes(splitNameParts=FALSE)`
 
 `getBSgenome(name, masked=FALSE)`
 :   インストール済みデータから読み込み。
     `BSgenome.Scerevisiae.UCSC.sacCer3` あるいは `sacCer3` のような名前で。
 
-`getSeq(bsg, names, start=NA, end=NA, width=NA, starnd='+', as.character=FALSE)`
+`getSeq(bsg, names, start=NA, end=NA, width=NA, starnd="+", as.character=FALSE)`
 :   `BSgenome` オブジェクトから配列を抜き出す。
     `names` は配列名の文字列ベクタか `GRanges` か `GRangesList`
 
