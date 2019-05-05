@@ -82,6 +82,12 @@ mclapply(X, FUN, ...,
 [ラッパー関数 `mcmap()` を書いてみた](https://github.com/heavywatal/rwtl/blob/master/R/parallel.R)。
 `map_par()` のほうはFORK以外も指定できるforeachラッパー。
 
+そのへんをもっとしっかりやった
+[future](https://github.com/HenrikBengtsson/future),
+[future.apply](https://github.com/HenrikBengtsson/future.apply),
+[furrr](https://github.com/DavisVaughan/furrr)
+を使っていくのが良さそう。
+
 
 ### `makeCluster()`
 
