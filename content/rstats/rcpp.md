@@ -149,6 +149,10 @@ fibonacci(9L)
     `configure` や [CMake]({{< relref "cmake.md" >}}) を使って
     `src/Makevars.in` から生成する手もある。
 
+    `CXX_STD=CXX14` が存在しない場合は
+    `DESCRIPTION` の `SystemRequirements: C++14` が参照されるので、
+    ほかに `src/Makevars` を使う用が無い場合はそっちで指定するのが楽。
+
     参考: [Japan.R 2018 LT "Rcppパッケージで外部C++ライブラリを使う"](https://heavywatal.github.io/slides/japanr2018/)
 
 -   どうしてもユーザ側で指定すべきオプションがある場合は
@@ -169,7 +173,6 @@ fibonacci(9L)
 ### ソースコード `src/*.cpp`
 
 ```c++
-// [[Rcpp::plugins(cpp14)]]
 #include <Rcpp.h>
 
 //' First example
