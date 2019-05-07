@@ -233,6 +233,10 @@ PKG_LIBS=-L/usr/local/lib -Wl,-rpath,/usr/local/lib -lthankyou
 <code>configure</code> や <a href="/dev/cmake.html">CMake</a> を使って
 <code>src/Makevars.in</code> から生成する手もある。</p>
 
+<p><code>CXX_STD=CXX14</code> が存在しない場合は
+<code>DESCRIPTION</code> の <code>SystemRequirements: C++14</code> が参照されるので、
+ほかに <code>src/Makevars</code> を使う用が無い場合はそっちで指定するのが楽。</p>
+
 <p>参考: <a href="https://heavywatal.github.io/slides/japanr2018/">Japan.R 2018 LT &ldquo;Rcppパッケージで外部C++ライブラリを使う&rdquo;</a></p></li>
 
 <li><p>どうしてもユーザ側で指定すべきオプションがある場合は
@@ -251,8 +255,7 @@ CXX=$(LLVM_LOC)/bin/clang++
 </ul>
 
 <h3 id="ソースコード-src-cpp">ソースコード <code>src/*.cpp</code></h3>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// [[Rcpp::plugins(cpp14)]]
-</span><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;Rcpp.h&gt;</span><span class="cp">
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;Rcpp.h&gt;</span><span class="cp">
 </span><span class="cp"></span>
 <span class="c1">//&#39; First example
 </span><span class="c1">//&#39; @param args string vector
