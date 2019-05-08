@@ -14,29 +14,43 @@ https://bitbucket.org/gutenkunstlab/dadi/wiki/Installation
 1.  macOS 標準 Python 2.7 に
     [pip と virtualenv]({{< relref "pip.md" >}}) を入れる:
 
-        % /usr/bin/python -m ensurepip -v --user
-        % ~/Library/Python/2.7/bin/pip install --user -U setuptools pip virtualenv
+    ```sh
+    /usr/bin/python -m ensurepip -v --user
+    ~/Library/Python/2.7/bin/pip install --user -U setuptools pip virtualenv
+    ```
 
 1.  dadi専用のvirtualenvを作って、その中に依存パッケージをインストール:
 
-        % ~/Library/Python/2.7/bin/virtualenv ~/.virtualenv/dadi
-        % source ~/.virtualenv/dadi/bin/activate
-        (dadi) % pip install -U setuptools pip flake8
-        (dadi) % pip install -U numpy scipy matplotlib
+    ```sh
+    ~/Library/Python/2.7/bin/virtualenv ~/.virtualenv/dadi
+    source ~/.virtualenv/dadi/bin/activate
+    # (dadi) virtualenv is active
+    pip install -U setuptools pip flake8
+    pip install -U numpy scipy matplotlib
+    ```
 
 1.  リポジトリのクローンを取得し、リリース版をチェックアウトしてインストール:
 
-        (dadi) % git clone https://bitbucket.org/gutenkunstlab/dadi.git
-        (dadi) % cd dadi/
-        (dadi) % git tag
-        (dadi) % git checkout 1.7.0
-        (dadi) % python setup.py install
+    ```sh
+    # (dadi) virtualenv is active
+    git clone https://bitbucket.org/gutenkunstlab/dadi.git
+    cd dadi/
+    git tag
+    git checkout 1.7.0
+    python setup.py install
+    ```
 
 1.  テスト:
 
-        (dadi) % cd tests/
-        (dadi) % python run_tests.py
-        (dadi) % cd ..
+    ```sh
+    # (dadi) virtualenv is active
+    cd tests/
+    python run_tests.py
+    cd ..
+    ```
+
+1.  virtualenvから抜けたいときは `deactivate` コマンドを打つ。<br>
+    また入りたいときは `source ~/.virtualenv/dadi/bin/activate` を打つ。
 
 1.  `doc/` 以下に結構詳しいドキュメントが入ってるので読む (これもウェブで公開してくれたらいいのに)
 
