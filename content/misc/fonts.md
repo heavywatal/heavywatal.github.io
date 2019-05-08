@@ -35,20 +35,12 @@ tags = ["writing"]
 :   エルの小文字 l が曲がってて良い。
 :   Ubuntu Mono は特にプログラミング用のフォントとして最適。
     普通の欧文 `monospace` よりもひとまわり小さく、
-    Osaka-Mono など日本語の半角文字と同じ幅になるのもポイント。
+    全角和文フォントのちょうど半分になるのもポイント。
 
 [Open Sans](https://www.google.com/fonts/specimen/Open+Sans)
 :   すっきりゆったりニュートラルで見やすい。
     ヒラギノとの相性も抜群。
 :   ファイルサイズも小さいのでウェブフォントとして使いやすい。
-
-[Linux Libertine](http://www.linuxlibertine.org)
-:   印刷に耐えうるクオリティを目指して開発されたカッコいいセリフ体。
-:   兄弟の Linux Biolinum は Optima 似の非均等サンセリフ。
-:   いろいろ残念な側面もあってLaTeXの外では使いにくい:
-    (1) ひとまわり小さいので和文フォントとバランスをとるのが難しい。
-    (2) OpenTypeだと名前の末尾にOがつく。
-    (3) TrueTypeのItalicがバグってる？開発も停滞。
 
 [TeX Gyre Pagella](https://www.ctan.org/pkg/tex-gyre-pagella)
 :   個人的に一番好きなセリフフォント Palatino
@@ -67,10 +59,17 @@ tags = ["writing"]
 ### あまり使わなくなったやつ
 
 [DejaVu](http://dejavu-fonts.org/)
-:   Bitstream Vera の後を継いで多言語対応が進められている。
-:   Linuxにはだいたい入ってる。
+:   Bitstream Vera の後を継いで多言語対応させた、Linuxの標準的なフォント。
 :   DejaVu Sans は Verdana のように幅が広く、スクリーン上で読みやすい。
 :   DejaVu Sans Mono はプログラミングに使いやすい。
+
+[Linux Libertine](http://www.linuxlibertine.org)
+:   印刷に耐えうるクオリティを目指して開発されたカッコいいセリフ体。
+:   兄弟の Linux Biolinum は Optima 似の非均等サンセリフ。
+:   いろいろ残念な側面もあってLaTeXの外では使いにくい:
+    (1) ひとまわり小さいので和文フォントとバランスをとるのが難しい。
+    (2) OpenTypeだと名前の末尾にOがつく。
+    (3) TrueTypeのItalicがバグってる？開発も停滞。
 
 [Liberation](https://fedorahosted.org/liberation-fonts/)
 :   Fedora が Arial, Times New Roman, Courier New からの解放を目指して作ってる。
@@ -82,15 +81,13 @@ tags = ["writing"]
 :   でも FreeMono は Courier というより Courier New な細さ?
 
 [IPA](http://ossipedia.ipa.go.jp/ipafont/)
-:   十分使える日本語フリーフォントだったが、
-    源ノ角ゴシックの登場により役目を終えた感・・・？
-:   公式のIPAフォントは更新サイクルが遅いので
-    [Takao](https://launchpad.net/takao-fonts)
-    という名前でUbuntuコミュニティが保守している。
+:   Source Han の登場により役目を終えた感。
+:   [Takao](https://launchpad.net/takao-fonts)
+    はUbuntuコミュニティが保守している派生フォント。
 
 [MigMix](http://mix-mplus-ipa.sourceforge.jp/migmix/)
-:   視認性の高いM+フォントに足りない漢字をIPAゴシックから補完した合成フォント。
-:   メイリオと同じでちょっと丸すぎる印象。
+:   M+フォントに足りない漢字をIPAゴシックから補完した合成フォント。
+:   メイリオと同じで視認性は高いけどちょっと丸すぎる印象。
 
 ## Sample
 
