@@ -184,6 +184,7 @@ Bachelor of Science, 2008.03
 
 ## Review
 
--   [Journal of Theoretical Biology](https://ees.elsevier.com/jtb/)
--   [Mathematical Biosciences](https://www.journals.elsevier.com/mathematical-biosciences/)
--   [Journal of Molecular Evolution](https://link.springer.com/journal/239)
+[Journal of Molecular Evolution](https://link.springer.com/journal/239),
+[Journal of Theoretical Biology](https://ees.elsevier.com/jtb/),
+[Mathematical Biosciences](https://www.journals.elsevier.com/mathematical-biosciences/),
+[Scientific Reports](https://www.nature.com/srep/)
