@@ -43,7 +43,7 @@ library(tidyverse)
 iris %>%
   dplyr::filter(Species != "setosa") %>%
   dplyr::select(-dplyr::starts_with("Sepal")) %>%
-  dplyr::mutate(petal_area=Petal.Length * Petal.Width * 0.5) %>%
+  dplyr::mutate(petal_area = Petal.Length * Petal.Width * 0.5) %>%
   dplyr::group_by(Species) %>%
   dplyr::summarise_all(funs(mean))
 
@@ -51,7 +51,7 @@ iris %>%
 x = iris
 x = dplyr::filter(x, Species != "setosa")
 x = dplyr::select(x, -dplyr::starts_with("Sepal"))
-x = dplyr::mutate(x, petal_area=Petal.Length * Petal.Width * 0.5)
+x = dplyr::mutate(x, petal_area = Petal.Length * Petal.Width * 0.5)
 x = dplyr::group_by(x, Species)
 x = dplyr::summarise_all(x, funs(mean))
 
@@ -62,7 +62,7 @@ dplyr::summarise_all(
       dplyr::select(
         dplyr::filter(iris, Species != "setosa"),
         -dplyr::starts_with("Sepal")),
-      petal_area=Petal.Length * Petal.Width * 0.5),
+      petal_area = Petal.Length * Petal.Width * 0.5),
     Species),
   funs(mean))
 
@@ -126,21 +126,21 @@ dplyr::summarise_all(
 
 `dplyr::rename(.data, ...)`
 :   列の改名。
-    `mutate()`と同じようなイメージで `new=old` と指定。
+    `mutate()`と同じようなイメージで `new = old` と指定。
     ```r
-    iris %>% dplyr::rename(sp=Species) %>% head(2)
-      Sepal.Length Sepal.Width Petal.Length Petal.Width     sp
-    1          5.1         3.5          1.4         0.2 setosa
-    2          4.9         3.0          1.4         0.2 setosa
+    iris %>% dplyr::rename(sp = Species) %>% head(2)
+    #   Sepal.Length Sepal.Width Petal.Length Petal.Width     sp
+    # 1          5.1         3.5          1.4         0.2 setosa
+    # 2          4.9         3.0          1.4         0.2 setosa
     ```
     変数に入った文字列を使う場合も`mutate()`と同様にunquotingで:
     ```r
     old_name = "Species"
     new_name = toupper(old_name)
     iris %>% dplyr::rename(!!new_name := !!old_name) %>% head(2)
-      Sepal.Length Sepal.Width Petal.Length Petal.Width SPECIES
-    1          5.1         3.5          1.4         0.2  setosa
-    2          4.9         3.0          1.4         0.2  setosa
+    #   Sepal.Length Sepal.Width Petal.Length Petal.Width SPECIES
+    # 1          5.1         3.5          1.4         0.2  setosa
+    # 2          4.9         3.0          1.4         0.2  setosa
     ```
     名前付きベクターと
     [unquote-splicing](https://dplyr.tidyverse.org/articles/programming.html#unquote-splicing)
@@ -148,9 +148,9 @@ dplyr::summarise_all(
     ```r
     named_vec = setNames(names(iris), LETTERS[1:5])
     iris %>% dplyr::rename(!!!named_vec) %>% head(2L)
-        A   B   C   D      E
-    1 5.1 3.5 1.4 0.2 setosa
-    2 4.9 3.0 1.4 0.2 setosa
+    #     A   B   C   D      E
+    # 1 5.1 3.5 1.4 0.2 setosa
+    # 2 4.9 3.0 1.4 0.2 setosa
     ```
 
 :   リネーム関数を渡せる亜種:<br>
@@ -165,7 +165,7 @@ dplyr::summarise_all(
       print()
     ```
 
-`dplyr::pull(.data, var=-1)`
+`dplyr::pull(.data, var = -1)`
 :   指定した1列をvector(またはlist)としてdata.frameから抜き出す。
 
     ```r
@@ -187,10 +187,10 @@ dplyr::summarise_all(
 
     ```r
     iris %>% dplyr::filter(Sepal.Length<6, Sepal.Width>4)
-      Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-    1          5.7         4.4          1.5         0.4  setosa
-    2          5.2         4.1          1.5         0.1  setosa
-    3          5.5         4.2          1.4         0.2  setosa
+    #   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+    # 1          5.7         4.4          1.5         0.4  setosa
+    # 2          5.2         4.1          1.5         0.1  setosa
+    # 3          5.5         4.2          1.4         0.2  setosa
     ```
 
     <div class="warning">{{<markdownify>}}
@@ -205,18 +205,18 @@ e.g., `filter(gene != "TP53")`
     `filter_at(.tbl, .vars, .vars_predicate)`<br>
 
 
-`dplyr::distinct(.data, ..., .keep_all=FALSE)`
+`dplyr::distinct(.data, ..., .keep_all = FALSE)`
 :   指定した列に関してユニークな行のみ返す。
     `base::unique.data.frame()` よりも高速で、
     `filter(!duplicated(.[, ...]))` よりスマートで柔軟。
-    指定しなかった列を残すには `.keep_all=TRUE` とする。
+    指定しなかった列を残すには `.keep_all = TRUE` とする。
 
     ```r
     iris %>% dplyr::distinct(Species)
-         Species
-    1     setosa
-    2 versicolor
-    3  virginica
+    #      Species
+    # 1     setosa
+    # 2 versicolor
+    # 3  virginica
     ```
 
 `dplyr::slice(.data, ...)`
@@ -225,13 +225,13 @@ e.g., `filter(gene != "TP53")`
 
     ```r
     iris %>% dplyr::slice(2:4)
-      Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-    1          4.9         3.0          1.4         0.2  setosa
-    2          4.7         3.2          1.3         0.2  setosa
-    3          4.6         3.1          1.5         0.2  setosa
+    #   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+    # 1          4.9         3.0          1.4         0.2  setosa
+    # 2          4.7         3.2          1.3         0.2  setosa
+    # 3          4.6         3.1          1.5         0.2  setosa
     ```
 
-`dplyr::sample_n(tbl, size, replace=FALSE, weight=NULL)`
+`dplyr::sample_n(tbl, size, replace = FALSE, weight = NULL)`
 :   指定した行数だけランダムサンプルする。
     割合指定の `sample_frac()` もある。
 
@@ -258,15 +258,15 @@ e.g., `filter(gene != "TP53")`
 
     # unquoting only right hand side
     iris %>% dplyr::mutate(y = log(!!as.name(x))) %>% head(2)
-      Sepal.Length Sepal.Width Petal.Length Petal.Width Species        y
-    1          5.1         3.5          1.4         0.2  setosa 1.629241
-    2          4.9         3.0          1.4         0.2  setosa 1.589235
+    #   Sepal.Length Sepal.Width Petal.Length Petal.Width Species        y
+    # 1          5.1         3.5          1.4         0.2  setosa 1.629241
+    # 2          4.9         3.0          1.4         0.2  setosa 1.589235
 
     # unquoting both sides
     iris %>% dplyr::mutate(!!y := log(!!as.name(x))) %>% head(2)
-      Sepal.Length Sepal.Width Petal.Length Petal.Width Species new_column
-    1          5.1         3.5          1.4         0.2  setosa   1.629241
-    2          4.9         3.0          1.4         0.2  setosa   1.589235
+    #   Sepal.Length Sepal.Width Petal.Length Petal.Width Species new_column
+    # 1          5.1         3.5          1.4         0.2  setosa   1.629241
+    # 2          4.9         3.0          1.4         0.2  setosa   1.589235
     ```
 :   複数列を変更する亜種:<br>
     `mutate_all(.tbl, .funs, ...)`<br>
@@ -291,11 +291,11 @@ e.g., `filter(gene != "TP53")`
 
     ```r
     iris %>% dplyr::group_by(Species) %>%
-        dplyr::summarise(minpl=min(Petal.Length), maxsw=max(Sepal.Width))
-         Species minpl maxsw
-    1     setosa   1.0   4.4
-    2 versicolor   3.0   3.4
-    3  virginica   4.5   3.8
+        dplyr::summarise(minpl = min(Petal.Length), maxsw = max(Sepal.Width))
+    #      Species minpl maxsw
+    # 1     setosa   1.0   4.4
+    # 2 versicolor   3.0   3.4
+    # 3  virginica   4.5   3.8
     ```
 
 `dplyr::summarise_all(.data, .funs, ...)`
@@ -323,12 +323,12 @@ e.g., `filter(gene != "TP53")`
         dplyr::summarise_if(is.numeric, funs(min, max))
     ```
 
-`dplyr::tally(x, wt, sort=FALSE)`
-:   `summarise(x, n=n())` のショートカット。
+`dplyr::tally(x, wt, sort = FALSE)`
+:   `summarise(x, n = n())` のショートカット。
     `wt` にカラムを指定して重み付けすることもできる。
 :   `dplyr::add_tally()` は元の形を維持したままカウント列を追加。
 
-`dplyr::count(x, ..., wt=NULL, sort=FALSE)`
+`dplyr::count(x, ..., wt = NULL, sort = FALSE)`
 :   `group_by(...) %>% tally()` のショートカット。
 :   `dplyr::add_count()` は元の形を維持したままカウント列を追加。
 
@@ -337,9 +337,9 @@ e.g., `filter(gene != "TP53")`
     `arrange(desc(column))` で降順になる。
     `order()` を使うよりもタイピングの繰り返しが少ないし直感的
     ```r
-    .data[order(.data$col_a, .data$col_b),]
+    mtcars[order(mtcars$cyl, mtcars$disp), ]
     # is equivalent to
-    .data %>% dplyr::arrange(col_a, col_b)
+    mtcars %>% dplyr::arrange(cyl, disp)
     ```
 
 `dplyr::top_n(.data, n, wt)`
@@ -353,7 +353,7 @@ e.g., `filter(gene != "TP53")`
 
 ## data.frameを結合
 
-`dplyr::***_join(x, y, by=NULL, copy=FALSE)`
+`dplyr::***_join(x, y, by = NULL, copy = FALSE)`
 :   `by` で指定した列がマッチするように行を合わせて `cbind()`
 
     `full_join()`: `x` と `y` の全ての行を保持。\
@@ -376,7 +376,7 @@ e.g., `filter(gene != "TP53")`
 
 主に`mutate()`や`filter()`を補助するもの
 
-`dplyr::if_else(condition, true, false, missing=NULL)`
+`dplyr::if_else(condition, true, false, missing = NULL)`
 :   標準の`ifelse()`よりも型に厳しく、高速らしい。
     NAのときにどうするかを指定できるのも大変良い。
     ネストせずにスッキリ書ける `dplyr::case_when()` も便利。
@@ -390,9 +390,9 @@ e.g., `filter(gene != "TP53")`
 `dplyr::na_if(x, y)`
 :   `x[x == y] = NA; x` のショートカット
 
-`dplyr::recode(.x, ..., .default=NULL, .missing=NULL)`
+`dplyr::recode(.x, ..., .default = NULL, .missing = NULL)`
 :   vectorの値を変更する。e.g.,
-    `recode(letters, a="A!", c="C!")`
+    `recode(letters, a = "A!", c = "C!")`
 
 `dplyr::row_number(x)`
 :   `rank(x, ties.method = "first", na.last = "keep")` のショートカット。
@@ -407,12 +407,12 @@ e.g., `filter(gene != "TP53")`
 `dplyr::n_groups(x)`
 :   グループ数。
 
-`dplyr::last(x, order_by=NULL, default=default_missing(x))`
+`dplyr::last(x, order_by = NULL, default = default_missing(x))`
 :   最後の要素にアクセス。
     `x[length(x)]` や `tail(x, 1)` よりも楽チンだが、
     安全性重視の `dplyr::nth()` を内部で呼び出すため遅い。
 
-`dplyr::lead(x n=1, default=NA, order_by=NULL)`, `dplyr::lag(...)`
+`dplyr::lead(x n = 1, default = NA, order_by = NULL)`, `dplyr::lag(...)`
 :   `x` の中身を `n` だけずらして `default` で埋める。
     `lead()` は前に、`lag()` は後ろにずらす
 
@@ -424,7 +424,7 @@ e.g., `filter(gene != "TP53")`
 `dplyr::between(x, left, right)`
 :   `left <= x & x <= right` のショートカット。
 
-`dplyr::near(x, y, tol=.Machine$double.eps^0.5)`
+`dplyr::near(x, y, tol = .Machine$double.eps^0.5)`
 :   `abs(x - y) < tol` のショートカット。
 
 `dplyr::case_when(...)`
@@ -437,27 +437,34 @@ e.g., `filter(gene != "TP53")`
 [`purrr`]({{< relref "purrr.md" >}}) でその list of data.frames に処理を施し、
 [`dplyr`]({{< relref "dplyr.md" >}}) でその変更を元の data.frame に適用する、
 というのがtidyverse流のモダンなやり方らしい。
+それをもうちょいスマートにやる `group_map()` がv0.8.0で導入された。
 
 ```r
 iris %>%
   dplyr::group_nest(Species) %>%
-  dplyr::mutate(data= purrr::map(data, head)) %>%
+  dplyr::mutate(data = purrr::map(data, head, n = 2L)) %>%
   tidyr::unnest()
+
+# since dplyr 0.8.0
+iris %>%
+  dplyr::group_by(Species) %>%
+  dplyr::group_map(~ head(.x, 2L))
 ```
 
-`dplyr::group_by(.data, ..., add=FALSE)`
+`dplyr::group_by(.data, ..., add = FALSE)`
 :   グループごとに区切って次の処理に渡す。
-    e.g. `summarise()`, `tally()` など
+    e.g. `summarise()`, `tally()`, `group_map()` など
 
 `dplyr::group_data(.data)`
 :   グループ情報を参照:
     ```r
-    iris %>% group_by(Species) %>% group_data()
-    #       Species                       .rows
-    #        <fctr>                      <list>
-    # 1:     setosa             1,2,3,4,5,6,...
-    # 2: versicolor       51,52,53,54,55,56,...
-    # 3:  virginica 101,102,103,104,105,106,...
+    iris %>% dplyr::group_by(Species) %>% dplyr::group_data()
+    # tbl_df [3 x 2]
+    #      Species      .rows
+    #        <fct>     <list>
+    # 1     setosa <int [50]>
+    # 2 versicolor <int [50]>
+    # 3  virginica <int [50]>
     ```
 
     左側のキー列だけ欲しければ `dplyr::group_keys()` 、<br>
@@ -473,17 +480,36 @@ iris %>%
 `dplyr::group_indices(.data, ...)`
 :   `grouped_df` ではなくグループIDとして1からの整数列を返す版 `group_by()`
 
-`dplyr::rowwise(.data)`
-:   行ごとに区切って次の処理に渡す。
+`dplyr::group_map(.tbl, .f, ...)`
+:   `do()` の改良版。グループ化は保持される。
+    `.f` には[purrr]({{< relref "purrr.md" >}})的な無名関数を渡す。
+    (普通の関数も渡せるはずだけどちょっと挙動が変？)
+
+
+    ```r
+    iris %>% dplyr::group_by(Species) %>% dplyr::group_map(~ head(.x, 2L))
+    # # grouped_df [6 x 5]
+    # # Groups: Species [3]
+    #      Species Sepal.Length Sepal.Width Petal.Length Petal.Width
+    #        <fct>        <dbl>       <dbl>        <dbl>       <dbl>
+    # 1     setosa          5.1         3.5          1.4         0.2
+    # 2     setosa          4.9         3.0          1.4         0.2
+    # 3 versicolor          7.0         3.2          4.7         1.4
+    # 4 versicolor          6.4         3.2          4.5         1.5
+    # 5  virginica          6.3         3.3          6.0         2.5
+    # 6  virginica          5.8         2.7          5.1         1.9
+    ```
 
 `dplyr::do(.data, ...)`
-:   **廃止予定？** グループごとに処理する。
+:   非推奨。
+    代わりに `group_map` とかを使う。
+:   グループごとに処理する。
     `{}` 内に長い処理を書いてもいいし、関数に渡してもよい。
     グループごとに切りだされた部分は `.` で参照できる。
     出力がdata.frameじゃないと
     `Error: Results are not data frames at positions: 1`
     のように怒られるが、
-    `do(dummy=func(.))` のように名前付きにすると
+    `do(dummy = func(.))` のように名前付きにすると
     data.frameに入らないような型でも大丈夫になる。
 
     ```r
@@ -491,6 +517,11 @@ iris %>%
       dplyr::group_by(Species) %>%
       dplyr::do(head(.))
     ```
+
+`dplyr::rowwise(.data)`
+:   非推奨。
+    代わりに[`purrr::pmap()`]({{< relref "purrr.md" >}})とかを使う。
+:   行ごとに区切って次の処理に渡す。
 
 
 ## 関連書籍
