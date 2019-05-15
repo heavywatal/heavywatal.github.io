@@ -111,12 +111,13 @@ SHIROKANE — HGCスパコン
 <li>RHEL 7.6</li>
 <li><code>/usr/bin/cmake</code> 2.8.12</li>
 <li><code>/usr/bin/cmake3</code> 3.13.4</li>
-<li><code>/usr/local/bin/gcc</code> 4.9.3</li>
-<li><code>/usr/local/bin/git</code> 1.7.7.1</li>
-<li><code>/usr/local/package/boost/1.64.0/</code> (ただしC++11不可)</li>
+<li><code>/usr/bin/gcc</code> 4.8.5</li>
+<li><code>/usr/bin/python</code> 2.7.15</li>
+<li><code>/usr/bin/python3</code> 3.4.9</li>
+<li><code>/usr/local/package/boost/1.67.0/</code></li>
 <li><code>/usr/local/package/gcc/7.3.0/</code></li>
-<li><code>/usr/local/package/python/3.6.4/</code></li>
-<li><code>/usr/local/package/r/3.5.0/</code> (ただしC++14不可)</li>
+<li><code>/usr/local/package/python/3.6.5/</code></li>
+<li><code>/usr/local/package/r/3.5.0/</code></li>
 </ul></li>
 </ul>
 
@@ -124,50 +125,26 @@ SHIROKANE — HGCスパコン
 
 <p><a href="http://heavywatal.github.io/rtumopp/">http://heavywatal.github.io/rtumopp/</a></p>
 
-<p>提供されている R-3.5 はバージョンとしては十分に新しいが、
-古いコンパイラでビルドされているためC++14のライブラリを使えない。
-そのため <code>/usr/local/package/gcc/7.3.0</code>
-を使ってRをビルドするところから始める必要がある。</p>
-
-<p>Linuxbrewでインストールした <code>cmake</code>, <code>gcc</code>, <code>glibc</code>
-などがあると干渉してエラーを起こすので、
-アンインストールするかPATHから外すなどしておく。</p>
+<p>Shrokane5 で提供されている R-3.5 は
+<code>/usr/local/package/gcc/7.3.0</code>でビルドされているため
+C++14のライブラリも問題なく使える。</p>
 
 <ol>
-<li><p><code>~/.bashrc</code> などで以下のように環境変数を設定する:</p>
+<li><p>普通に <code>cmake</code> とするとバージョン2.8.12のほうが参照されてしまうので、
+優先的にパスの通ってるところに
+<code>ln -s /usr/bin/cmake3 ~/local/bin/cmake</code>
+などとしてバージョン3.8以上が使えるようにする。</p></li>
 
-<pre><code>module unload intel_env
-module unload gcc
-module load /usr/local/package/gcc/modulefiles/gcc/7.3.0
-export PATH=${HOME}/local/bin:${PATH}
-</code></pre></li>
-
-<li><p>シェルを再起動してこれを反映: <code>exec $SHELL -l</code> 。
-<code>g++ -v</code> で <code>gcc version 7.3.0</code> が表示されることを確認。</p></li>
-
-<li><p>Rをソースコードからビルドしてインストール
-(configureオプションは <code>/usr/local/package/r/3.5.1/lib64/R/etc/Makeconf</code> を参考に):</p>
-
-<pre><code>export GCC_PREFIX=/usr/local/package/gcc/7.3.0
-wget -O- https://cran.r-project.org/src/base/R-3/R-3.5.1.tar.gz | tar xz
-cd R-3.5.1/
-./configure --prefix=${HOME}/local --enable-R-shlib --enable-shared --enable-memory-profiling --with-tcl-config=/usr/local/lib/tclConfig.sh --with-tk-config=/usr/local/lib/tkConfig.sh CC=${GCC_PREFIX}/bin/gcc CXX=${GCC_PREFIX}/bin/g++ CPPFLAGS=&quot;-I${GCC_PREFIX}/include -I/usr/local/include -I/usr/include&quot; LDFLAGS=&quot;-L${GCC_PREFIX}/lib64 -L${GCC_PREFIX}/lib -L/usr/local/lib64 -L/usr/local/lib&quot; F77=${GCC_PREFIX}/bin/gfortran FC=${GCC_PREFIX}/bin/gfortran JAVA_HOME=/usr/local/package/java/jdk1.8.0_162_64 PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/usr/lib64/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig
-make -j4
-make install
-</code></pre>
-
-<p>NEWS.pdfが無い云々と怒られたら適当に <code>touch doc/NEWS.pdf</code> などして凌ぐ。</p></li>
-
-<li><p>インストールしたRを起動し、パッケージをインストール:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">install.packages<span class="p">(</span><span class="s">&#34;remotes&#34;</span><span class="p">)</span>
-remotes<span class="o">::</span>install_github<span class="p">(</span><span class="s">&#34;heavywatal/rtumopp&#34;</span><span class="p">)</span></code></pre></div>
+<li><p>Rを起動し、パッケージをインストール:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">install.packages<span class="p">(</span><span class="s">&#34;devtools&#34;</span><span class="p">)</span>
+devtools<span class="o">::</span>install_github<span class="p">(</span><span class="s">&#34;heavywatal/rtumopp&#34;</span><span class="p">)</span></code></pre></div>
 <p>最新版にアップデートするのもこのコマンド。</p></li>
 </ol>
 
 <h3 id="linuxbrew">Linuxbrew</h3>
 
 <p>Shrokane5 (RHEL 7) では問題なく使える。</p>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew install heavywatal/tap/tumopp</code></pre></div>
 </article>
 </main>
 
