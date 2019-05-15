@@ -9,13 +9,6 @@ tags = ["job"]
 
 https://supcom.hgc.jp/
 
-## 利用開始
-
-えくせる、ハンコ、郵送。
-
-無料プランはファイル総数1000個という縛りがキツすぎて実質使えない。
-
-
 ## 環境整備
 
 - [ハードウェア](https://supcom.hgc.jp/japanese/sys_const/system-main.html)
@@ -32,7 +25,9 @@ https://supcom.hgc.jp/
     - `/usr/local/package/r/3.5.0/`
 
 
-## tumopp on R
+## tumopp
+
+### on R
 
 http://heavywatal.github.io/rtumopp/
 
@@ -52,11 +47,22 @@ C++14のライブラリも問題なく使える。
     ```
     最新版にアップデートするのもこのコマンド。
 
+1.  パッケージを読み込んで実行:
+    ```r
+    library(tumopp)
+    result = tumopp("-D3 -Chex -N256")
+    ```
 
-### Linuxbrew
 
-Shrokane5 (RHEL 7) では問題なく使える。
+### command-line
+
+http://heavywatal.github.io/tumopp/
+
+Shrokane5 (RHEL 7) では問題なくLinuxbrewを使える。
 
 ```sh
 brew install heavywatal/tap/tumopp
+exec $SHELL -l
+tumopp -D3 -Chex -N256
+tumopp -h
 ```
