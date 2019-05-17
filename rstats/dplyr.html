@@ -444,20 +444,21 @@ NAのときにどうするかを指定できるのも大変良い。
 <a href="/rstats/purrr.html"><code>purrr</code></a> でその list of data.frames に処理を施し、
 <a href="/rstats/dplyr.html"><code>dplyr</code></a> でその変更を元の data.frame に適用する、
 というのがtidyverse流のモダンなやり方らしい。
-それをもうちょいスマートにやる <code>group_map()</code> がv0.8.0で導入された。</p>
+それをもうちょいスマートにやる <code>group_modify()</code> がv0.8.1で導入された。</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span>
   dplyr<span class="o">::</span>group_nest<span class="p">(</span>Species<span class="p">)</span> <span class="o">%&gt;%</span>
   dplyr<span class="o">::</span>mutate<span class="p">(</span>data <span class="o">=</span> purrr<span class="o">::</span>map<span class="p">(</span>data<span class="p">,</span> <span class="kp">head</span><span class="p">,</span> n <span class="o">=</span> <span class="m">2L</span><span class="p">))</span> <span class="o">%&gt;%</span>
   tidyr<span class="o">::</span>unnest<span class="p">()</span>
 
-<span class="c1"># since dplyr 0.8.0</span>
+<span class="c1"># since dplyr 0.8.1</span>
 iris <span class="o">%&gt;%</span>
   dplyr<span class="o">::</span>group_by<span class="p">(</span>Species<span class="p">)</span> <span class="o">%&gt;%</span>
-  dplyr<span class="o">::</span>group_map<span class="p">(</span><span class="o">~</span> <span class="kp">head</span><span class="p">(</span><span class="m">.</span>x<span class="p">,</span> <span class="m">2L</span><span class="p">))</span></code></pre></div>
+  dplyr<span class="o">::</span>group_modify<span class="p">(</span><span class="o">~</span> <span class="kp">head</span><span class="p">(</span><span class="m">.</span>x<span class="p">,</span> <span class="m">2L</span><span class="p">))</span></code></pre></div>
 <dl>
-<dt><code>dplyr::group_by(.data, ..., add = FALSE)</code></dt>
+<dt><code>dplyr::group_by(.data, ..., add = FALSE, .drop = group_by_drop_default(.data))</code></dt>
 <dd>グループごとに区切って次の処理に渡す。
-e.g. <code>summarise()</code>, <code>tally()</code>, <code>group_map()</code> など</dd>
+e.g. <code>summarise()</code>, <code>tally()</code>, <code>group_modify()</code> など</dd>
+<dd><code>.drop = FALSE</code> とすると行数ゼロになるグループも捨てずに保持できる。</dd>
 <dt><code>dplyr::group_data(.data)</code></dt>
 <dd><p>グループ情報を参照:</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>group_by<span class="p">(</span>Species<span class="p">)</span> <span class="o">%&gt;%</span> dplyr<span class="o">::</span>group_data<span class="p">()</span>
@@ -468,7 +469,7 @@ e.g. <code>summarise()</code>, <code>tally()</code>, <code>group_map()</code> �
 <span class="c1"># 2 versicolor &lt;int [50]&gt;</span>
 <span class="c1"># 3  virginica &lt;int [50]&gt;</span></code></pre></div>
 <p>左側のキー列だけ欲しければ <code>dplyr::group_keys()</code> 、<br>
-右端の行番号だけ欲しければ <code>dplyr::group_rows()</code> 。</p></dd>
+左端の行番号だけ欲しければ <code>dplyr::group_rows()</code> 。</p></dd>
 <dt><code>dplyr::group_nest(.tbl, ..., .key = &quot;data&quot;, keep = FALSE)</code></dt>
 <dd><p>入れ子 data.frame を作る。
 <code>group_by(...) %&gt;% tidyr::nest()</code> のショートカット。</p></dd>
@@ -476,11 +477,12 @@ e.g. <code>summarise()</code>, <code>tally()</code>, <code>group_map()</code> �
 <dd><p>list of data.frames に分割する。</p></dd>
 <dt><code>dplyr::group_indices(.data, ...)</code></dt>
 <dd><p><code>grouped_df</code> ではなくグループIDとして1からの整数列を返す版 <code>group_by()</code></p></dd>
-<dt><code>dplyr::group_map(.tbl, .f, ...)</code></dt>
-<dd><p><code>do()</code> の改良版。グループ化は保持される。
-<code>.f</code> には<a href="/rstats/purrr.html">purrr</a>的な無名関数を渡す。
+<dt><code>dplyr::group_modify(.tbl, .f, ...)</code></dt>
+<dd><p>グループごとに <code>.f</code> を適用してまとめたdata.frameを返す。
+「それぞれの結果の長さが1」という制約がないぶん <code>summarise()</code> よりも柔軟。</p></dd>
+<dd><p><code>.f</code> には<a href="/rstats/purrr.html#無名関数">purrrでよく見る無名関数</a>を渡す。
 (普通の関数も渡せるはずだけどちょっと挙動が変？)</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>group_by<span class="p">(</span>Species<span class="p">)</span> <span class="o">%&gt;%</span> dplyr<span class="o">::</span>group_map<span class="p">(</span><span class="o">~</span> <span class="kp">head</span><span class="p">(</span><span class="m">.</span>x<span class="p">,</span> <span class="m">2L</span><span class="p">))</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>group_by<span class="p">(</span>Species<span class="p">)</span> <span class="o">%&gt;%</span> dplyr<span class="o">::</span>group_modify<span class="p">(</span><span class="o">~</span> <span class="kp">head</span><span class="p">(</span><span class="m">.</span>x<span class="p">,</span> <span class="m">2L</span><span class="p">))</span>
 <span class="c1"># # grouped_df [6 x 5]</span>
 <span class="c1"># # Groups: Species [3]</span>
 <span class="c1">#      Species Sepal.Length Sepal.Width Petal.Length Petal.Width</span>
@@ -491,24 +493,15 @@ e.g. <code>summarise()</code>, <code>tally()</code>, <code>group_map()</code> �
 <span class="c1"># 4 versicolor          6.4         3.2          4.5         1.5</span>
 <span class="c1"># 5  virginica          6.3         3.3          6.0         2.5</span>
 <span class="c1"># 6  virginica          5.8         2.7          5.1         1.9</span></code></pre></div></dd>
+<dd><p><code>group_map()</code> は結果を <code>bind_rows()</code> せずlistとして返す亜種。
+<code>group_walk()</code> は <code>.f</code> 適用前の <code>.tbl</code> を返す亜種。</p></dd>
 <dt><code>dplyr::do(.data, ...)</code></dt>
 <dd><p>非推奨。
-代わりに <code>group_map</code> とかを使う。</p></dd>
-<dd><p>グループごとに処理する。
-<code>{}</code> 内に長い処理を書いてもいいし、関数に渡してもよい。
-グループごとに切りだされた部分は <code>.</code> で参照できる。
-出力がdata.frameじゃないと
-<code>Error: Results are not data frames at positions: 1</code>
-のように怒られるが、
-<code>do(dummy = func(.))</code> のように名前付きにすると
-data.frameに入らないような型でも大丈夫になる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span>
-  dplyr<span class="o">::</span>group_by<span class="p">(</span>Species<span class="p">)</span> <span class="o">%&gt;%</span>
-  dplyr<span class="o">::</span>do<span class="p">(</span><span class="kp">head</span><span class="p">(</span><span class="m">.</span><span class="p">))</span></code></pre></div></dd>
+代わりに <code>group_modify()</code> とかを使う。</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>group_by<span class="p">(</span>Species<span class="p">)</span> <span class="o">%&gt;%</span> dplyr<span class="o">::</span>do<span class="p">(</span><span class="kp">head</span><span class="p">(</span><span class="m">.</span><span class="p">,</span> <span class="m">2L</span><span class="p">))</span></code></pre></div></dd>
 <dt><code>dplyr::rowwise(.data)</code></dt>
 <dd><p>非推奨。
 代わりに<a href="/rstats/purrr.html"><code>purrr::pmap()</code></a>とかを使う。</p></dd>
-<dd><p>行ごとに区切って次の処理に渡す。</p></dd>
 </dl>
 
 <h2 id="関連書籍">関連書籍</h2>
