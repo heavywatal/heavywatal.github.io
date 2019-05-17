@@ -437,7 +437,7 @@ e.g., `filter(gene != "TP53")`
 [`purrr`]({{< relref "purrr.md" >}}) でその list of data.frames に処理を施し、
 [`dplyr`]({{< relref "dplyr.md" >}}) でその変更を元の data.frame に適用する、
 というのがtidyverse流のモダンなやり方らしい。
-それをもうちょいスマートにやる `group_map()` がv0.8.0で導入された。
+それをもうちょいスマートにやる `group_modify()` がv0.8.1で導入された。
 
 ```r
 iris %>%
@@ -445,15 +445,16 @@ iris %>%
   dplyr::mutate(data = purrr::map(data, head, n = 2L)) %>%
   tidyr::unnest()
 
-# since dplyr 0.8.0
+# since dplyr 0.8.1
 iris %>%
   dplyr::group_by(Species) %>%
-  dplyr::group_map(~ head(.x, 2L))
+  dplyr::group_modify(~ head(.x, 2L))
 ```
 
-`dplyr::group_by(.data, ..., add = FALSE)`
+`dplyr::group_by(.data, ..., add = FALSE, .drop = group_by_drop_default(.data))`
 :   グループごとに区切って次の処理に渡す。
-    e.g. `summarise()`, `tally()`, `group_map()` など
+    e.g. `summarise()`, `tally()`, `group_modify()` など
+:   `.drop = FALSE` とすると行数ゼロになるグループも捨てずに保持できる。
 
 `dplyr::group_data(.data)`
 :   グループ情報を参照:
@@ -468,7 +469,7 @@ iris %>%
     ```
 
     左側のキー列だけ欲しければ `dplyr::group_keys()` 、<br>
-    右端の行番号だけ欲しければ `dplyr::group_rows()` 。
+    左端の行番号だけ欲しければ `dplyr::group_rows()` 。
 
 `dplyr::group_nest(.tbl, ..., .key = "data", keep = FALSE)`
 :   入れ子 data.frame を作る。
@@ -480,14 +481,14 @@ iris %>%
 `dplyr::group_indices(.data, ...)`
 :   `grouped_df` ではなくグループIDとして1からの整数列を返す版 `group_by()`
 
-`dplyr::group_map(.tbl, .f, ...)`
-:   `do()` の改良版。グループ化は保持される。
-    `.f` には[purrr]({{< relref "purrr.md" >}})的な無名関数を渡す。
+`dplyr::group_modify(.tbl, .f, ...)`
+:   グループごとに `.f` を適用してまとめたdata.frameを返す。
+    「それぞれの結果の長さが1」という制約がないぶん `summarise()` よりも柔軟。
+:   `.f` には[purrrでよく見る無名関数]({{< relref "purrr.md#無名関数" >}})を渡す。
     (普通の関数も渡せるはずだけどちょっと挙動が変？)
 
-
     ```r
-    iris %>% dplyr::group_by(Species) %>% dplyr::group_map(~ head(.x, 2L))
+    iris %>% dplyr::group_by(Species) %>% dplyr::group_modify(~ head(.x, 2L))
     # # grouped_df [6 x 5]
     # # Groups: Species [3]
     #      Species Sepal.Length Sepal.Width Petal.Length Petal.Width
@@ -500,28 +501,20 @@ iris %>%
     # 6  virginica          5.8         2.7          5.1         1.9
     ```
 
+:   `group_map()` は結果を `bind_rows()` せずlistとして返す亜種。
+    `group_walk()` は `.f` 適用前の `.tbl` を返す亜種。
+
 `dplyr::do(.data, ...)`
 :   非推奨。
-    代わりに `group_map` とかを使う。
-:   グループごとに処理する。
-    `{}` 内に長い処理を書いてもいいし、関数に渡してもよい。
-    グループごとに切りだされた部分は `.` で参照できる。
-    出力がdata.frameじゃないと
-    `Error: Results are not data frames at positions: 1`
-    のように怒られるが、
-    `do(dummy = func(.))` のように名前付きにすると
-    data.frameに入らないような型でも大丈夫になる。
+    代わりに `group_modify()` とかを使う。
 
     ```r
-    iris %>%
-      dplyr::group_by(Species) %>%
-      dplyr::do(head(.))
+    iris %>% dplyr::group_by(Species) %>% dplyr::do(head(., 2L))
     ```
 
 `dplyr::rowwise(.data)`
 :   非推奨。
     代わりに[`purrr::pmap()`]({{< relref "purrr.md" >}})とかを使う。
-:   行ごとに区切って次の処理に渡す。
 
 
 ## 関連書籍
