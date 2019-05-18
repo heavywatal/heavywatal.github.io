@@ -80,7 +80,6 @@ mclapply(X, FUN, ...,
 
 [`purrr::map()`]({{< relref "purrr.md" >}})のように無名関数を渡せる
 [ラッパー関数 `mcmap()` を書いてみた](https://github.com/heavywatal/rwtl/blob/master/R/parallel.R)。
-`map_par()` のほうはFORK以外も指定できるforeachラッパー。
 
 そのへんをもっとしっかりやった
 [future](https://github.com/HenrikBengtsson/future),
