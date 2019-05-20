@@ -132,7 +132,7 @@ f(t; k, \mu) &= e^{-\left(\frac k \mu t \right)}
 
 ## Weibull distribution
 
-指数関数がmemerylessな待ち時間なのに対して、
+指数関数がmemorylessな待ち時間なのに対して、
 こちらはある時間まで事象が起こらなかったという記憶ありの待ち時間
 
 <div>\[\begin{aligned}
