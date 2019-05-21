@@ -135,8 +135,6 @@ Find me on
     POB-093, [SMBE2018](http://smbe2018.jp/) (2018-07) Yokohama, Japan
 -   岩嵜航・津田真樹・河田雅圭「遺伝子制御ネットワークの進化と隠蔽変異の蓄積に対する生息環境の効果」
     [日本進化学会第14回年会](http://evolgen.biol.se.tmu.ac.jp/sesj2012/) (2012-08) 首都大学東京
--   山野井貴浩、岩嵜航、武村政春、佐倉統「進化の仕組みを学べる補助教材: 架空生物オリガミバード [シミュレータ実演]」
-    東北大学生態適応GCOE環境機関コンソーシアム (2012-03) 仙台国際センター
 -   岩嵜航・津田真樹・河田雅圭「Evolutionary Model of Cryptic Variations in Gene Regulatory Networks」 [日本進化学会第13回年会](http://zoo.zool.kyoto-u.ac.jp/zsys/SESJ2011/) (2011-07) 京都大学
 -   Watal M. Iwasaki, Masaki Tsuda, Masakado Kawata "Evolutionary Model of Cryptic Variations in Gene Regulatory Networks" [Annual Meeting of Society for Molecular Biology and Evolution (SMBE2011)](http://smbe2011.com/) (2011-07) Kyoto University, Japan
 -   岩嵜航・津田真樹・河田雅圭「環境変化で出現する新奇形質：遺伝子制御ネットワークの隠蔽変異が適応進化を促進」 [日本生態学会第58回大会](http://www.esj.ne.jp/meeting/58/) (2011-03) 札幌
@@ -151,7 +149,7 @@ Find me on
 
 2019-04 – 2022-03
 :   科学研究費補助金 基盤研究C 分担 (代表者: 新井田厚司)<br>
-    "超並列がん進化シミュレーションによる腫瘍内不均一性生成機構の解明"
+    [超並列がん進化シミュレーションによる腫瘍内不均一性生成機構の解明](https://kaken.nii.ac.jp/grant/KAKENHI-PROJECT-19K12214/)
 
 2010-07 – 2013-03
 :   JSPS Research Fellow (DC1)
@@ -176,6 +174,8 @@ Find me on
 -   「[それもRにやらせよう --- 整然データの下ごしらえ](/slides/esj65)」(自由集会[「データ解析で出会う統計的問題: R の新しい作図・作表」粕谷英一・久保拓弥](http://hosho.ees.hokudai.ac.jp/~kubo/ce/EcoSj2018.html)) 日本生態学会[第65回大会](http://www.esj.ne.jp/meeting/65/) (2018-03) 札幌
 -   「架空生物オリガミバードを作って進化が起こるしくみを体験しよう」(山野井貴浩、岩嵜航)
     [サイエンスデイ](http://www.science-day.com/) (2012-07) 東北大学
+-   「進化の仕組みを学べる補助教材: 架空生物オリガミバード [シミュレータ実演]」(山野井貴浩、岩嵜航、武村政春、佐倉統)
+    東北大学生態適応GCOE環境機関コンソーシアム (2012-03) 仙台国際センター
 -   Teaching Assistant in Kawata Laboratory, Tohoku University (2009–2013).
     Statistical analysis and data visualization.
 -   Teaching Assistant in 自然科学総合実験, 東北大学 (2008).
@@ -195,8 +195,11 @@ Find me on
     [*Evol. Appl.* **1**-14](https://doi.org/10.1111/eva.12789)
 -   [`igraphlite`](https://github.com/heavywatal/rigraphlite):
     Lightweight R Interface to igraph Network Analysis Library
--   [Genetic Drift Simulator](https://heavywatal.github.io/driftr.js/)
--   [Origami Bird Simulator](https://github.com/heavywatal/oribir)
+-   [`pomber`](https://github.com/heavywatal/pomber):
+    Interactive visualization of population genomic analysis of fission yeast.
+    (新学術領域研究「[ゲノムを支える非コードDNA領域の機能](http://www.nsc.nagoya-cu.ac.jp/~jnakayam/ncDNA.html)」)
+-   [`driftr.js`](https://heavywatal.github.io/driftr.js/): Genetic Drift Simulator
+-   [`oribir`](https://github.com/heavywatal/oribir): Origami Bird Simulator
 -   [`msutils`](https://github.com/heavywatal/msutils):
     Utilities for coalescent simulation with `ms`
 -   [`sfmt-class`](https://github.com/heavywatal/sfmt-class):
