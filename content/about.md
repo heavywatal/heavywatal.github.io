@@ -191,8 +191,8 @@ Find me on
 -   [`teaposon`](https://heavywatal.github.io/teaposon):
     Population Genetic Simulation Framework of Transposable Elements
 -   [`mkrange`](https://github.com/heavywatal/mkrange):
-    Simulator used in Bridle et al. (2019)
-    [*Evol. Appl.* **1**-14](https://doi.org/10.1111/eva.12789)
+    Simulator used in Bridle et al.
+    [*Evol. Appl.* **2019**;00:1–14](https://doi.org/10.1111/eva.12789)
 -   [`igraphlite`](https://github.com/heavywatal/rigraphlite):
     Lightweight R Interface to igraph Network Analysis Library
 -   [`pomber`](https://github.com/heavywatal/pomber):
