@@ -84,7 +84,7 @@ MacやLinuxならシステムの一部として
 
 ### [既知の問題](https://github.com/pyenv/pyenv/wiki/Common-build-problems)
 
--   [matplotlib]({{< relref "matplotlib.md" >}}) で
+-   3.1.0より古い[matplotlib]({{< relref "matplotlib.md" >}}) で
     `macosx` backend を使いたい場合などは環境変数
     `PYTHON_CONFIGURE_OPTS="--enable-framework"`
     をセットしてFramework型でビルドする。

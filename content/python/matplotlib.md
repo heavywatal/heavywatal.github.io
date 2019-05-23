@@ -434,16 +434,15 @@ grid = grid.plot_marginals(sns.distplot, kde=False)
 
 `site-packages/matplotlib/mpl-data/matplotlibrc` にテンプレートがある。
 
-### [バックエンド問題](http://matplotlib.org/faq/usage_faq.html#what-is-a-backend)
+### [`macosx` backend](http://matplotlib.org/faq/usage_faq.html#what-is-a-backend)
 
-Macで非Frameworkとしてインストールした自前Pythonを使うと怒られる:
+Macで非Frameworkとしてビルドした自前Pythonをそのまま使うと怒られる:
 
     RuntimeError: Python is not installed as a framework. The Mac OS X backend will not be able to function correctly if Python is not installed as a framework. See the Python documentation for more information on installing Python as a framework on Mac OS X. Please either reinstall Python as a framework, or try one of the other backends.
 
-`~/.matplotlib/matplotlibrc` に
-`backend: tkagg` などと書いて
-`macosx` 以外に変更すればとりあえずOK。
-[Frameworkでインストールする]({{< relref "install.md" >}})ほうがいいとは思うけど。
+ので `~/.matplotlib/matplotlibrc` に `backend: tkagg` などと書いて対処する必要があったが、
+[3.1.0から大丈夫になった](https://matplotlib.org/3.1.0/users/whats_new.html)。
+
 
 ### キャッシュ問題
 
