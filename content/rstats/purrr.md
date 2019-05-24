@@ -52,7 +52,7 @@ results = purrr::map(v, ~ {paste0(.x, " is ", class(.x))})
 : 型の決まったvectorを返すmap亜種。
   `base::sapply()`や`base::vapply()`よりも覚えやすく読みやすい。
 
-`purrr::map_dfr(.x, .f, ..., .id=NULL)`
+`purrr::map_dfr(.x, .f, ..., .id = NULL)`
 : 結果を`dplyr::bind_rows()`で結合したdata.frameとして返すmap亜種。
   例えば、同じ形式のCSVファイルを一気に読んで結合、みたいなときに便利:
 
@@ -68,7 +68,7 @@ combined_df = purrr::map_dfr(files, readr::read_csv)
 `purrr::pmap(.l, .f, ...)`
 : listの中身をparallelに処理するmap。
   関数 `.f`の引数はlistの要素名と一致させるか `...` で受け流す必要がある。
-  e.g., `pmap(list(a=1:3, b=4:6), function(a, b) {a * b})` 。
+  e.g., `pmap(list(a = 1:3, b = 4:6), function(a, b) {a * b})` 。
 : data.frameの正体はlist of columnsなので、
   そのまま`.l`として渡せる。
 : `pmap_int` など出力型指定の亜種もある。
@@ -121,13 +121,13 @@ combined_df = purrr::map_dfr(files, readr::read_csv)
   `.p` に関数を渡した場合の挙動は
   `.x[.p(.x)]` じゃなくて `.x[map_lgl(.x, .p, ...)]` となることに注意。
 
-`purrr::pluck(.x, ..., .default=NULL)`
+`purrr::pluck(.x, ..., .default = NULL)`
 : オブジェクト `.x` 内の要素を引っ張り出す `[[` の強力版。
   `...` には整数、文字列、関数、listで複数指定できる。
   例えば `accessor(x[[1]])$foo` だと読む順が左右に振られるが、
   `pluck(x, 1, accessor, "foo")` だと左から右に読み流せる。
 
-`purrr::cross2(.x, .y, .filter=NULL)`
+`purrr::cross2(.x, .y, .filter = NULL)`
 : listの各要素の組み合わせを作る。
   `.filter` に渡した関数が `TRUE` となるものは除外される。
   名前付きlistを渡す `purrr::cross()` や `purrr::cross_df()` のほうが便利かも。
@@ -141,7 +141,7 @@ combined_df = purrr::map_dfr(files, readr::read_csv)
 
 ### その他
 
-`purrr::invoke(.f, .x=NULL, ..., .env=NULL)`
+`purrr::invoke(.f, .x = NULL, ..., .env = NULL)`
 : list `.x` の中身を引数として関数 `.f` を呼び出す。
 : 関数に渡す引数があらかじめlistにまとまってるときに使う`do.call()`の改良版。
 
@@ -150,16 +150,16 @@ params = list(n = 6L, size = 10L, replace = TRUE)
 purrr::invoke(sample.int, params)
 ```
 
-`purrr::invoke_map(.f, .x=list(NULL), ..., .env=NULL)`
+`purrr::invoke_map(.f, .x = list(NULL), ..., .env = NULL)`
 : 関数listを順々に実行してlistで返す。
   引数`.x`は同じ長さのlist of listsか、list of a listをリサイクル。
-: e.g., `invoke_map(list(runif, rnorm), list(c(n=3, 0, 1)))`
+: e.g., `invoke_map(list(runif, rnorm), list(c(n = 3, 0, 1)))`
 
 `purrr::has_element(.x, .y)`
 : list `.x` は要素 `.y` を持っている。
 
-`purrr::set_names(x, nm=x)`
-: 標準の`setNames(x=nm, nm)`は第二引数のほうが省略不可という気持ち悪い定義だったが、
+`purrr::set_names(x, nm = x)`
+: 標準の`setNames(x = nm, nm)`は第二引数のほうが省略不可という気持ち悪い定義だったが、
   この改良版ではその心配が解消されている。
   長さや型のチェックもしてくれる。
 
@@ -221,12 +221,12 @@ https://github.com/hadley/purrrlyr/blob/master/NEWS.md
 ## OLD
 iris %>%
   purrrlyr::slice_rows("Species") %>%
-  purrrlyr::by_slice(head, .collate="rows")
+  purrrlyr::by_slice(head, .collate = "rows")
 
 ## NEW
 iris %>%
   tidyr::nest(-Species) %>%
-  dplyr::mutate(data= purrr::map(data, head)) %>%
+  dplyr::mutate(data = purrr::map(data, head)) %>%
   tidyr::unnest()
 ```
 
@@ -239,17 +239,17 @@ iris %>%
   ただし`.f`に渡せるのは単一の関数のみで`dplyr::funs()`は使えない。
   パッケージ作者は `dplyr` の `mutate_*()` や `summarise_*()` の利用を推奨。
 
-`purrrlyr::slice_rows(.d, .cols=NULL)`
+`purrrlyr::slice_rows(.d, .cols = NULL)`
 : 指定した列でグループ化してgrouped_dfを返す。
-  `dplyr::group_by_(.dots=.cols)` と同じ。
+  `dplyr::group_by_(.dots = .cols)` と同じ。
 
-`purrrlyr::by_slice(.d, ..f, ..., .collate=c("list", "rows", "cols"), .to=".out", .labels=TRUE)`
+`purrrlyr::by_slice(.d, ..f, ..., .collate = c("list", "rows", "cols"), .to = ".out", .labels = TRUE)`
 : grouped_dfを受け取ってグループごとに関数を適用する。
   `dplyr::do()` とほぼ同じ役割で、一長一短。
   こちらは出力形式をより柔軟に指定できるが、
   中の関数からgrouping variableを参照できないという弱点を持つ。
 
-`purrrlyr::by_row(.d, ..f, ..., .collate=c("list", "rows", "cols"), .to=".out", .labels=TRUE)`
+`purrrlyr::by_row(.d, ..f, ..., .collate = c("list", "rows", "cols"), .to = ".out", .labels = TRUE)`
 : data.frame 1行ごとに関数を適用する。
   `dplyr::rowwise() %>% dplyr::do()`的な処理を一撃で書ける。
 : `.to`: 結果listの列名
@@ -266,7 +266,7 @@ iris %>%
   結果の収納方法を`.collate`などで調整できるところは`by_row()`っぽい。
 
 ```r
-iris[1:3, 1:2] %>% by_row(~data_frame(x=0:1, y=c("a", "b")), .collate="list")
+iris[1:3, 1:2] %>% by_row(~data_frame(x = 0:1, y = c("a", "b")), .collate = "list")
 ## Source: local data frame [3 x 3]
 ##
 ##   Sepal.Length Sepal.Width           .out
@@ -274,7 +274,7 @@ iris[1:3, 1:2] %>% by_row(~data_frame(x=0:1, y=c("a", "b")), .collate="list")
 ## 1          5.1         3.5 <tbl_df [2,2]>
 ## 2          4.9         3.0 <tbl_df [2,2]>
 ## 3          4.7         3.2 <tbl_df [2,2]>
-iris[1:3, 1:2] %>% by_row(~data_frame(x=0:1, y=c("a", "b")), .collate="rows")
+iris[1:3, 1:2] %>% by_row(~data_frame(x = 0:1, y = c("a", "b")), .collate = "rows")
 ## Source: local data frame [6 x 5]
 ##
 ##   Sepal.Length Sepal.Width  .row     x     y
@@ -285,7 +285,7 @@ iris[1:3, 1:2] %>% by_row(~data_frame(x=0:1, y=c("a", "b")), .collate="rows")
 ## 4          4.9         3.0     2     1     b
 ## 5          4.7         3.2     3     0     a
 ## 6          4.7         3.2     3     1     b
-iris[1:3, 1:2] %>% by_row(~data_frame(x=0:1, y=c("a", "b")), .collate="cols")
+iris[1:3, 1:2] %>% by_row(~data_frame(x = 0:1, y = c("a", "b")), .collate = "cols")
 ## Source: local data frame [3 x 6]
 ##
 ##   Sepal.Length Sepal.Width    x1    x2    y1    y2

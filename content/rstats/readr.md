@@ -17,7 +17,7 @@ tags = ["r", "tidyverse"]
 
 -   場合により10倍ほど高速
 -   文字列を勝手にfactor扱いしたりしないので
-    `stringsAsFactors=FALSE` とイチイチ書かなくて済む
+    `stringsAsFactors = FALSE` とイチイチ書かなくて済む
 -   勝手に列名を変更しない
 -   列の名前や型を指定しやすい
 -   指定した列だけ読み込むこともできる
@@ -60,7 +60,7 @@ read_delim(file, delim,
 ```
 
 **`read_csv(...)`** や **`read_tsv(...)`**
-は区切り文字 `delim=` 指定済みのショートカット。
+は区切り文字 `delim =` 指定済みのショートカット。
 
 `read_table(...)`
 :   連続する空白文字をひとつの区切りと見なして処理
@@ -68,11 +68,11 @@ read_delim(file, delim,
 `read_fwf(file, col_positions, ...)`
 :   fixed width file. 第二引数の指定方法は
 
-    1.  `fwf_empty(infile, skip=0, col_names=NULL)` で自動推定
-    1.  `fwf_widths(widths, col_names=NULL)` で幅指定
-    1.  `fwf_positions(start, end, col_names=NULL)` で開始・終了位置指定
+    1.  `fwf_empty(infile, skip = 0, col_names = NULL)` で自動推定
+    1.  `fwf_widths(widths, col_names = NULL)` で幅指定
+    1.  `fwf_positions(start, end, col_names = NULL)` で開始・終了位置指定
 
-`read_lines(file, skip=0, n_max=-1L, ...)`, `read_lines_raw(...)`
+`read_lines(file, skip = 0, n_max = -1L, ...)`, `read_lines_raw(...)`
 :   1行を1要素とした文字列ベクタとして読み込む
 
 `read_file(file)`
@@ -90,18 +90,18 @@ write_delim(x, path,
 ```
 
 **`write_csv(...)`** や **`write_tsv(...)`**
-は区切り文字 `delim=` 指定済みのショートカット。
+は区切り文字 `delim =` 指定済みのショートカット。
 
-`write_lines(x, path, na="NA", append=FALSE)`
+`write_lines(x, path, na = "NA", append = FALSE)`
 : vectorやlistを1行ずつ書き出す。
 
-`write_file(x, path, append=FALSE)`
+`write_file(x, path, append = FALSE)`
 : 文字列をそのまま書き出す。
 
 
 ### 文字列から別の型へ <a name="parse"></a>
 
-`parse_number(x, na=c("", "NA"), locale=default_locale())`
+`parse_number(x, na = c("", "NA"), locale = default_locale())`
 :   文字列で最初に登場する数値を抜き出す。
     あるカラムでは末尾に単位が付いちゃってる、みたいな状況でのみ使う。
     それ以外の複雑な判断はしないので、例えば `"6e23"` は単に6になる。
@@ -115,9 +115,11 @@ write_delim(x, path,
 `parse_logical(x, ...)`
 :   1/0/T/F/TRUE/FALSE を大文字小文字問わずlogicalに変換。
 
-`parse_factor(x, levels, ordered=FALSE, ...)`
+`parse_factor(x, levels, ordered = FALSE, ...)`
 
-`parse_date(x, format="", ...)`, `parse_datetime(x, format="", ...)`, `parse_time(x, format="", ...)`
+`parse_date(x, format = "", ...)`,
+`parse_datetime(x, format = "", ...)`,
+`parse_time(x, format = "", ...)`
 
 
 ## 列の型を指定する
@@ -142,15 +144,15 @@ read_csv("mydata.csv", col_types=colsp)
 - `[i] col_integer()`: 整数
 - `[d] col_double()`: 実数
 - `[l] col_logical()`: TRUE or FALSE
-- `[D] col_date(format="")`: 日付
-- `[t] col_time(format="")`: 時間
-- `[T] col_datetime(format="")`: 日付
+- `[D] col_date(format = "")`: 日付
+- `[t] col_time(format = "")`: 時間
+- `[T] col_datetime(format = "")`: 日付
 - `[n] col_number()`: 数字以外の文字が含まれていても無視して数字として返す
 - `[?] col_guess()`: 推測
 - `[_] col_skip()`: 列を読まない
 - `col_factor(levels, ordered)`: factor
 
-指定した列だけ読むには `cols(..., .default=col_skip())`
+指定した列だけ読むには `cols(..., .default = col_skip())`
 とするか `cols_only(...)` を使う。
 
 
@@ -173,7 +175,7 @@ Rの中から `install.packages("readxl")` でインストールし、
 `excel_sheets(path)`
 :   ファイルに含まれるシートの名前を取得
 
-`read_excel(path, sheet=1, col_names=TRUE, col_types=NULL, na="", skip=0)`
+`read_excel(path, sheet = 1, col_names = TRUE, col_types = NULL, na = "", skip = 0)`
 :   `.xls` と `xlsx` のどちらの形式でも読める。
     `sheet` は番号でも名前でもいい。
     それ以降の引数については `readr` の関数と同じ。
@@ -202,7 +204,7 @@ Homebrewを`/usr/local/`以外に入れている場合は、
 それをRに見つけさせるため `~/.R/Makevars` にオプションを書く。
 
 ```makefile
-LDFLAGS=-L${HOME}/.homebrew/lib
+LDFLAGS = -L${HOME}/.homebrew/lib
 ```
 
 再びRで `install_github("tidyverse/readr")` を試みる。
@@ -238,7 +240,7 @@ class(iris)
 -   列名の部分一致で良しとしない。
     例えば `iris$Spec` は黙ってvectorを返してしまうが、
     `tbl_iris$Spec` は警告つき `NULL` 。
--   型に一貫性があり、勝手に`drop=TRUE`しない。
+-   型に一貫性があり、勝手に`drop = TRUE`しない。
     例えば `iris[,"Species"]` はvectorになってしまうが、
     `tbl_iris[,"Species"]` はtibbleのまま。
 
@@ -264,7 +266,7 @@ setHook(packageEvent("tibble", "attach"), function(...) {
 [`tibble::tibble(...)`](https://tibble.tidyverse.org/reference/tibble.html)
 :   tibbleを新規作成。ちょっと昔までは `dplyr::data_frame()` だった。
 :   `base::data.frame()` と違ってバグが混入しにくくて便利:
-    -   勝手に型変換しない (`stringsAsFactors=FALSE`が基本)
+    -   勝手に型変換しない (`stringsAsFactors = FALSE`が基本)
     -   勝手に列名を変えない
     -   長さ1の変数以外はリサイクルしない
     -   引数の評価がlazyに行われるので前の列を利用して後の列を作ったりできる
@@ -284,18 +286,18 @@ setHook(packageEvent("tibble", "attach"), function(...) {
 [`tibble::enframe(x, name = "name", value = "value")`](https://tibble.tidyverse.org/reference/enframe.html)
 :   名前付きvectorとかlistを2列のtibbleに変換する。
     `tibble::deframe(x)` はその逆。
-    `c(a=1, b=2) %>% enframe() %>% deframe()`
+    `c(a = 1, b = 2) %>% enframe() %>% deframe()`
 
-[`tibble::add_row(.data, ..., .before=NULL, .after=NULL)`](https://tibble.tidyverse.org/reference/add_row.html)
+[`tibble::add_row(.data, ..., .before = NULL, .after = NULL)`](https://tibble.tidyverse.org/reference/add_row.html)
 :   既存のtibbleに新しいデータを1行追加する。
 
-[`tibble::rownames_to_column(df, var="rowname")`](https://tibble.tidyverse.org/reference/rownames.html)
+[`tibble::rownames_to_column(df, var = "rowname")`](https://tibble.tidyverse.org/reference/rownames.html)
 :   行の名前をcharacter型で1列目の変数にする。`dplyr::add_rownames()`の後継。
-:   `tibble::rowid_to_column(df, var="rowid")` はそれを整数で。
-:   `tibble::column_to_rownames(df, var="rowname")` はその逆。
+:   `tibble::rowid_to_column(df, var = "rowid")` はそれを整数で。
+:   `tibble::column_to_rownames(df, var = "rowname")` はその逆。
 :   `tibble::remove_rownames(df)` は消すだけ。
 
-`tibble::glimpse(.data, width=NULL)`
+`tibble::glimpse(.data, width = NULL)`
 :   データの中身をざっと見る。
     `print()` とか `str()` のようなもの。
 

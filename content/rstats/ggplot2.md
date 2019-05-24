@@ -75,7 +75,7 @@ print(p4)
 
 画像ファイルに保存するところまできっちり書く:
 ```r
-ggsave("mpg-displ-cty.png", p3, width = 4, height = 4, dpi=300)
+ggsave("mpg-displ-cty.png", p3, width = 4, height = 4, dpi = 300)
 ```
 
 ## [Aesthetic mapping](https://ggplot2.tidyverse.org/reference/aes_group_order.html)
@@ -124,7 +124,7 @@ ggplot(mpg) +
 :   色覚多様性が考慮されたパレットなので、連続値ならまずこれを使う。
     元は[別パッケージ](https://github.com/sjmgarnier/viridis)が必要だったけど
     ggplot2 v3.0 から標準装備になった。
-:   `option=`: `viridis`, `magma`, `inferno`, `plasma`
+:   `option =`: `viridis`, `magma`, `inferno`, `plasma`
 :   連続値には `_c`、離散値には `_d`。
 
 [`scale_*_brewer`](https://ggplot2.tidyverse.org/reference/scale_brewer.html)
@@ -133,15 +133,15 @@ ggplot(mpg) +
     から選んで指定するだけなので楽ちん。
     特に離散値でお世話になる。
     利用可能なパレットは `RColorBrewer::display.brewer.all()` でも一覧できる。
-:   `scale_*_brewer(..., palette="Blues", direction=1)`: 離散値
-:   `scale_*_distiller(..., palette="Blues", direction=-1)`: 連続値
+:   `scale_*_brewer(..., palette = "Blues", direction = 1)`: 離散値
+:   `scale_*_distiller(..., palette = "Blues", direction = -1)`: 連続値
 
 [`scale_*_gradient`](https://ggplot2.tidyverse.org/reference/scale_gradient.html)
 :   for `colour`, `fill`
 :   グラデーションの基準となる色を指定する。
 :   `scale_*_gradient(..., low, high, ...)`: 普通の連続値に
-:   `scale_*_gradient2(..., low, mid, high, midpoint=0, ...)`: ある中央値を挟んで上下に分けたいとき
-:   `scale_*_gradientn(..., colours, values=NULL, ...)`: 多色のヒートマップなどに e.g., `colours=c("#000000", "#0000FF", "#00FFFF", "#00FF00", "#FFFF00", "#FF0000")`
+:   `scale_*_gradient2(..., low, mid, high, midpoint = 0, ...)`: ある中央値を挟んで上下に分けたいとき
+:   `scale_*_gradientn(..., colours, values = NULL, ...)`: 多色のヒートマップなどに e.g., `colours = c("#000000", "#0000FF", "#00FFFF", "#00FF00", "#FFFF00", "#FF0000")`
 
 [`scale_*_identity`](https://ggplot2.tidyverse.org/reference/scale_identity.html)
 :   for `colour`, `fill`, `size`, `shape`, `linetype`, `alpha`
@@ -157,7 +157,7 @@ ggplot(mpg) +
     値0に面積0を対応させるには `scale_size_area()` を使う。
     半径を比例させるには `scale_radius()` があるけど要注意。
 
-[`scale_alpha(..., range=c(0.1, 1))`](https://ggplot2.tidyverse.org/reference/scale_alpha.html)\
+[`scale_alpha(..., range = c(0.1, 1))`](https://ggplot2.tidyverse.org/reference/scale_alpha.html)\
 [`scale_linetype`](https://ggplot2.tidyverse.org/reference/scale_linetype.html)\
 [`scale_shape`](https://ggplot2.tidyverse.org/reference/scale_shape.html)
 
@@ -194,10 +194,10 @@ ggplot(mpg) +
 [`facet_wrap()`](https://ggplot2.tidyverse.org/reference/facet_wrap.html)
 :   1変数で分割して並べる
     ```r
-    facet_wrap(facets, nrow=NULL, ncol=NULL, scales="fixed",
-               shrink=TRUE, labeller="label_value",
-               as.table=TRUE, switch=NULL, drop=TRUE,
-               dir="h", strip.position="top")
+    facet_wrap(facets, nrow = NULL, ncol = NULL, scales = "fixed",
+               shrink = TRUE, labeller = "label_value",
+               as.table = TRUE, switch = NULL, drop = TRUE,
+               dir = "h", strip.position = "top")
 
     p1 + facet_wrap(~ class, ncol = 4L)
     ```
@@ -205,9 +205,9 @@ ggplot(mpg) +
 [`facet_grid()`](https://ggplot2.tidyverse.org/reference/facet_grid.html)
 :   2変数で分割して縦横に並べる
     ```r
-    facet_grid(facets, margins=FALSE, scales="fixed", space="fixed",
-               shrink=TRUE, labeller="label_value",
-               as.table=TRUE, switch=NULL, drop=TRUE)
+    facet_grid(facets, margins = FALSE, scales = "fixed", space = "fixed",
+               shrink = TRUE, labeller = "label_value",
+               as.table = TRUE, switch = NULL, drop = TRUE)
 
     p1 + facet_grid(cyl ~ class)
     ```
@@ -234,7 +234,7 @@ ggplot内部で `stat_*()` を通して行われる。
 ## 座標軸やタイトルを変更
 
 [軸の区切りを変更したり対数にしたり](https://ggplot2.tidyverse.org/reference/scale_continuous.html)
-:   `gp + scale_x_continuous(breaks=seq(10, 100, by=10))`
+:   `gp + scale_x_continuous(breaks = seq(10, 100, by = 10))`
 :   `gp + scale_y_log10("Beer consumption")`
 :   `gp + scale_y_reverse()`
 :   上記の<a href="#スケール共通オプション">スケール共通オプション</a>に加えて:
@@ -251,7 +251,7 @@ ggplot内部で `stat_*()` を通して行われる。
 :   前者はデータそのものを切るが、後者はデータを変えずに描画領域だけ切る
 
 [X軸とY軸の比率を固定](https://ggplot2.tidyverse.org/reference/coord_fixed.html)
-:   `gp + coord_fixed(ratio=1)`
+:   `gp + coord_fixed(ratio = 1)`
 
 [XY軸の反転](https://ggplot2.tidyverse.org/reference/coord_flip.html)
 :   `gp + coord_flip()`
@@ -260,12 +260,12 @@ ggplot内部で `stat_*()` を通して行われる。
 :   パイチャートも作れるらしい
 
 [座標変換](https://ggplot2.tidyverse.org/reference/coord_trans.html)
-:   `gp + coord_trans(x="log10", y="sqrt")`
+:   `gp + coord_trans(x = "log10", y = "sqrt")`
 :    表示する座標を変換する。
      stat前に適用される `scale_x_*` とは微妙に違う。
 
 [軸ラベルとタイトル](https://ggplot2.tidyverse.org/reference/labs.html)
-:   `gp + labs(x="time", y="weight", title="growth", tag="A")`
+:   `gp + labs(x = "time", y = "weight", title = "growth", tag = "A")`
 :   `gp + xlab("time") + ylab("weight") + ggtitle("growth")`
 
 
@@ -275,26 +275,26 @@ ggplot内部で `stat_*()` を通して行われる。
 
 ### 既成テーマ
 
-`theme_grey(base_size=11, base_family="")`, `theme_gray(...)`
+`theme_grey(base_size = 11, base_family = "")`, `theme_gray(...)`
 :   灰色背景に白い格子。
     ggplotらしいデフォルトだが、論文には使いにくい。
 
-`theme_bw(base_size=11, base_family="")`
+`theme_bw(base_size = 11, base_family = "")`
 :   黒枠白背景にうっすら灰色格子
 
-`theme_linedraw(base_size=11, base_family="")`
+`theme_linedraw(base_size = 11, base_family = "")`
 :   細いけど濃い色の `panel.grid`
 
-`theme_light(base_size=11, base_family="")`
+`theme_light(base_size = 11, base_family = "")`
 :   それを薄くした感じ
 
-`theme_minimal(base_size=11, base_family="")`
+`theme_minimal(base_size = 11, base_family = "")`
 :   外枠なしの `theme_bw`
 
-`theme_classic(base_size=11, base_family="")`
+`theme_classic(base_size = 11, base_family = "")`
 :   xy軸がL字に描かれているだけで枠もグリッドも無し
 
-`theme_void(base_size=11, base_family="")`
+`theme_void(base_size = 11, base_family = "")`
 :   完全に枠なし
 
 これらをカッコ無しでコンソールに打ち込むと、
@@ -321,9 +321,9 @@ Macなら"HiraKakuProN-W3"を指定すれば日本語でも文字化けしなく
 
 ```r
 ## ベースとなるテーマを先に適用してから
-gp = gp + theme_bw(base_family="HiraKakuProN-W3", base_size=14)
-gp = gp + theme(legend.position="bottom")
-gp = gp + theme(plot.background=element_rect(fill="transparent"))
+gp = gp + theme_bw(base_family = "HiraKakuProN-W3", base_size = 14)
+gp = gp + theme(legend.position = "bottom")
+gp = gp + theme(plot.background = element_rect(fill = "transparent"))
 ```
 
 全体
@@ -368,7 +368,7 @@ gp = gp + theme(plot.background=element_rect(fill="transparent"))
 
 プロット領域の背景、余白、格子
 : `panel.background`: (`element_rect`; inherits from `rect`)
-: `panel.border`: (`element_rect`; inherits from `rect`; should be used with `fill=NA`)
+: `panel.border`: (`element_rect`; inherits from `rect`; should be used with `fill = NA`)
 : `panel.spacing`: (`unit`; `facet_*` の間隔)\
   &emsp;`__.x`, `__.y`
 : `panel.grid`: (`element_line`; inherits from `line`)
@@ -404,7 +404,7 @@ gp = gp + theme(plot.background=element_rect(fill="transparent"))
 `element_line(colour, size, linetype, lineend, arrow, inherit.blank)` --- 直線
 
 `element_text(family, face, colour, size, hjust, vjust, angle, lineheight, margin)` --- 文字
-:   `family`: フォントファミリー。 空なら `theme_bw(base_family=...)` などの指定を継承。
+:   `family`: フォントファミリー。 空なら `theme_bw(base_family = ...)` などの指定を継承。
 :   `face`: (`"plain"`, `"italic"`, `"bold"`, `"bold.italic"`)
 :   `hjust`, `vjust`: 水平位置と垂直位置の寄せ方をそれぞれ `[0, 1]` の実数で。
 :   `angle`: 角度 `[0, 360]`
@@ -414,14 +414,16 @@ gp = gp + theme(plot.background=element_rect(fill="transparent"))
 :   消したい要素にはこれを指定する
 
     ```r
-    gp = gp + theme(axis.ticks=element_blank())
-    gp = gp + theme(panel.grid=element_blank())
+    gp = gp + theme(
+      axis.ticks = element_blank(),
+      panel.grid = element_blank()
+    )
     ```
 
 `rel(x)`
 :   デフォルトからの相対値で `size` 引数を指定したいときに。
 
-`grid::unit(x, units, data=NULL)`
+`grid::unit(x, units, data = NULL)`
 :   こちらは絶対指定。`grid` パッケージに入ってる。
     units で使いそうなのは
     `cm`, `mm`, `inches`, `points`, `lines`, `native`
@@ -429,10 +431,10 @@ gp = gp + theme(plot.background=element_rect(fill="transparent"))
 `grid::arrow(angle, length, ends, type)`
 :   `axis.line` の `element_line()` にこれを与えて軸を矢印にするとか。
 
-`margin(t=0, r=0, b=0, l=0, unit="pt")`
+`margin(t = 0, r = 0, b = 0, l = 0, unit = "pt")`
 :   marginクラス
 
-`calc_element(element, theme, verbose=FALSE)`
+`calc_element(element, theme, verbose = FALSE)`
 :   継承などを考慮した上でelementがどんな値にセットされるか確かめる。
 
 
@@ -483,13 +485,13 @@ ggsave("mpg4.png", p1 + theme_bw(base_size = 22), width = 4, height = 4)
 ## プロットの種類
 
 [散布図](https://ggplot2.tidyverse.org/reference/geom_point.html)
-:   `gp + geom_point(size=2, alpha=0.3)`
+:   `gp + geom_point(size = 2, alpha = 0.3)`
 :   重なった点をランダムにばらかしたいときは
     [`geom_jitter()`](https://ggplot2.tidyverse.org/reference/geom_jitter.html)
 :   [点の形(shape)一覧](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html#sec:shape-spec)
 
 [折れ線グラフ](https://ggplot2.tidyverse.org/reference/geom_path.html)
-:   `gp + geom_path(size=2, linetype="dashed")` データ順に結ぶ
+:   `gp + geom_path(size = 2, linetype = "dashed")` データ順に結ぶ
 :   `gp + geom_line()` x軸上の順で結ぶ
 :   `gp + geom_step()` 階段状に結ぶ
 :   [線の種類(linetype)一覧](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html#sec:line-type-spec)
@@ -509,19 +511,19 @@ ggsave("mpg4.png", p1 + theme_bw(base_size = 22), width = 4, height = 4)
 [棒グラフ](https://ggplot2.tidyverse.org/reference/geom_bar.html)
 :   `gp + geom_col()`
 :   グループ分けする場合のオプション:
-    - [`position="stack"`](https://ggplot2.tidyverse.org/reference/position_stack.html):
+    - [`position = "stack"`](https://ggplot2.tidyverse.org/reference/position_stack.html):
       縦に積み重ねる (デフォルト)
-    - [`position="dodge"`](https://ggplot2.tidyverse.org/reference/position_dodge.html):
+    - [`position = "dodge"`](https://ggplot2.tidyverse.org/reference/position_dodge.html):
       横に並べる
-    - `position="fill"`: 縦に積み重ね、高さを1に揃えて割合を示す
+    - `position = "fill"`: 縦に積み重ね、高さを1に揃えて割合を示す
 
 [箱ひげ図](https://ggplot2.tidyverse.org/reference/geom_boxplot.html)
 :   `gp + geom_boxplot()`
 :   `gp + geom_violin()`
 
 [ヒートマップ](https://ggplot2.tidyverse.org/reference/geom_tile.html)
-:   `gp + geom_tile(aes(fill=z))`
-:   `gp + geom_raster(aes(fill=z))` --- 各タイルの大きさを揃える制約のため高速
+:   `gp + geom_tile(aes(fill = z))`
+:   `gp + geom_raster(aes(fill = z))` --- 各タイルの大きさを揃える制約のため高速
 
 [エラーバー](https://ggplot2.tidyverse.org/reference/geom_linerange.html)
 :   `gp + geom_errorbar(aes(ymax = y + se, ymin = y - se), width = 0.1)`
@@ -529,16 +531,16 @@ ggsave("mpg4.png", p1 + theme_bw(base_size = 22), width = 4, height = 4)
 :   `gp + geom_pointrange(...)`
 
 [関数](https://ggplot2.tidyverse.org/reference/stat_function.html)
-:   `ggplot(data.frame(x=c(-4, 4)), aes(x)) + stat_function(fun=dnorm, args=c(0, 1), n=200)`
+:   `ggplot(data.frame(x = c(-4, 4)), aes(x)) + stat_function(fun = dnorm, args = c(0, 1), n = 200)`
 
 ------------------------------------------------------------------------
 
 [回帰曲線](https://ggplot2.tidyverse.org/reference/geom_smooth.html)
-:   `gp + geom_smooth(method=glm, method.args=list(family=poisson), se=FALSE)`
+:   `gp + geom_smooth(method = glm, method.args = list(family = poisson), se = FALSE)`
 
 [切片と傾きで直線を描く](https://ggplot2.tidyverse.org/reference/geom_abline.html)
-:   `gp + geom_abline(intercept=3, slope=5)`
-:   `gp + geom_hline(yintercept=7) + geom_vline(xintercept=11)`
+:   `gp + geom_abline(intercept = 3, slope = 5)`
+:   `gp + geom_hline(yintercept = 7) + geom_vline(xintercept = 11)`
 
 [始点と終点で曲線や矢印を描く](https://ggplot2.tidyverse.org/reference/geom_segment.html)
 :   `gp + geom_curve(aes(x, y, xend, yend), curvature = -0.2)`
@@ -547,12 +549,12 @@ ggsave("mpg4.png", p1 + theme_bw(base_size = 22), width = 4, height = 4)
     普通の線より矢尻の分だけ長くなることに注意。
 
 [文字列や図形を書き加える](https://ggplot2.tidyverse.org/reference/annotate.html)
-:   `gp + annotate("text", x=1:4, y=4:1, label=sprintf("x = %d", 1:4))`
-:   テーマの `base_family` は引き継がれないので `family=` で指定すべし。
-:   数式を表示するには `label="italic(N[t])"` のような文字列で渡して `parse=TRUE`。
+:   `gp + annotate("text", x = 1:4, y = 4:1, label = sprintf("x = %d", 1:4))`
+:   テーマの `base_family` は引き継がれないので `family =` で指定すべし。
+:   数式を表示するには `label = "italic(N[t])"` のような文字列で渡して `parse = TRUE`。
 :   データ点に対応する文字列を添えるには
-    `gp + geom_text(aes(label=foo))` のほうが適している。
-    オプションで `nudge_x=2, nudge_y=2` などとすれば点と重ならないようにずらせる。
+    `gp + geom_text(aes(label = foo))` のほうが適している。
+    オプションで `nudge_x = 2, nudge_y = 2` などとすれば点と重ならないようにずらせる。
     [`position_nudge()`](https://ggplot2.tidyverse.org/reference/position_nudge.html)
 
 ## Extensions
@@ -576,7 +578,7 @@ ggplotを拡張するための仕組みがversion 2.0から正式に導入され
 ggplotオブジェクトと同じように `ggsave()` に渡して保存可能。
 
 ```r
-grob = gridExtra::arrangeGrob(p1, p2, nrow=2, ncol=1, bottom="Time")
+grob = gridExtra::arrangeGrob(p1, p2, nrow = 2, ncol = 1, bottom = "Time")
 grid.newpage()
 grid.draw(grob)
 ```
@@ -586,8 +588,8 @@ grid.draw(grob)
 `marrangeGrob()` に渡す。
 ```r
 .grobs = purrr::map(.dataframes, my_ggplot_func)
-.gtable = gridExtra::marrangeGrob(.grobs, nrow=4, ncol=3)
-ggsave("multi_page.pdf", .gtable, width=7, height=9.9)
+.gtable = gridExtra::marrangeGrob(.grobs, nrow = 4, ncol = 3)
+ggsave("multi_page.pdf", .gtable, width = 7, height = 9.9)
 ```
 
 ### `cowplot`
@@ -604,16 +606,16 @@ ggplotを学術論文向けにカスタマイズしやすくする。
     もちろん入れ子も可能。
 
     ```r
-    cowplot::plot_grid(..., plotlist=NULL,
-        align=c("none", "h", "v", "hv"),
-        nrow=NULL, ncol=NULL,
-        scale=1, rel_widths=1, rel_heights=1,
-        labels=NULL, label_size=14,
-        hjust=-0.5, vjust=1.5)
+    cowplot::plot_grid(..., plotlist = NULL,
+        align = c("none", "h", "v", "hv"),
+        nrow = NULL, ncol = NULL,
+        scale = 1, rel_widths = 1, rel_heights = 1,
+        labels = NULL, label_size = 14,
+        hjust = -0.5, vjust = 1.5)
     ```
     さらに細やかな制御をしたいときは以下の関数を個別に重ねていく。
 
-`cowplot::ggdraw(plot=NULL, xlim=c(0, 1), ylim=c(0, 1))`
+`cowplot::ggdraw(plot = NULL, xlim = c(0, 1), ylim = c(0, 1))`
 :  これの後ろに `+` 演算子で `draw_***()` を足していく。
 
 `cowplot::get_legend(plot)`

@@ -50,26 +50,26 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 :   文字列の長さを数える。
     `base::nchar(x)` と相同だが、`NA` に対して `2` ではなく `NA` を返す。
 
-`str_sub(string, start=1, end=-1)`
+`str_sub(string, start = 1, end = -1)`
 :   文字列を部分的に参照・変更する。
     `base::substr()` と相同だが、負数で末尾からの位置を指定できる。
     `str_sub<-` が定義されているので置換にも使える。
 
-`str_flatten(string, collapse="")`
+`str_flatten(string, collapse = "")`
 :   文字列vectorを1つの文字列に結合する。
 
-`str_c(..., sep="", collapse=NULL)`
+`str_c(..., sep = "", collapse = NULL)`
 :   複数の引数で与えた文字列を結合する。
     デフォルトの `sep` がスペースじゃないので `base::paste0()` に近い。
 
-`str_split(string, pattern, n=Inf, simplify=FALSE)`
+`str_split(string, pattern, n = Inf, simplify = FALSE)`
 :   文字列を分割してlistを返す。
     `base::strsplit(x, split)` と相同だが、
     最大 `n` 個に分割するということを指定できる。
     空文字で帳尻合わせしてちょうど `n` 個にするショートカットが
     `str_split_fixed(string, pattern, n)` 。
     `string` と `pattern` の要素数が噛み合わないときにちゃんと警告が出る。
-    `simplify=TRUE` とするとmatrixで返す。
+    `simplify = TRUE` とするとmatrixで返す。
 
 `str_dup(string, times)`
 :   指定した回数だけ文字列を繰り返して結合。
@@ -95,7 +95,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 `str_subset(string, pattern, negate = FALSE)`
 :   `x[str_detect(x, pattern)]` のショートカット。
     マッチする要素だけ元の形で返すので
-    `str_extract()` より `base::grep(pattern, x, value=TRUE)` に近い。
+    `str_extract()` より `base::grep(pattern, x, value = TRUE)` に近い。
 
 `str_which(string, pattern, negate = FALSE)`
 :   マッチする要素のインデックスを整数で返す
@@ -121,18 +121,18 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 上記関数の`pattern`引数は普通に文字列を渡すと正規表現として解釈してくれるが、
 下記の関数を通して渡すことでその挙動を変更することができる。
 
-`stringr::regex(pattern, ignore_case=FALSE, multiline=FALSE, comments=FALSE, dotall=FALSE, ...)`
+`stringr::regex(pattern, ignore_case = FALSE, multiline = FALSE, comments = FALSE, dotall = FALSE, ...)`
 :   デフォルトの[ICU正規表現](http://userguide.icu-project.org/strings/regexp)。
     複数行ファイルに対するマッチではこの関数を通して挙動をいじることになる。
 
 `stringr::fixed(pattern)`
 :   正規表現ではなくそのままの文字としてマッチさせる
 
-`stringr::boundary(type="character", skip_word_none=NA, ...)`
+`stringr::boundary(type = "character", skip_word_none = NA, ...)`
 :   境界に対するマッチ。
     `type`の選択肢は `character`, `line_break`, `sentence`, `word`.
 
-`stringr::coll(pattern, ignore_case=FALSE, locale=NULL, ...)`
+`stringr::coll(pattern, ignore_case = FALSE, locale = NULL, ...)`
 :   よくわからないけど非ascii対策？
 
 
@@ -141,31 +141,31 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 `str_to_upper()`, `str_to_lower()`, `str_to_title()`, `str_to_sentence()`
 :   大文字・小文字の変換
 
-`str_interp(string, env=parent.frame())`
+`str_interp(string, env = parent.frame())`
 :   `sprintf()` と相同。
     文字列の中の `$[format]{expr}` がR表現として評価される。
     `[format]`部分は`sprintf()`と同じ形式で、省略可。
     `env` はlistやdata.frameでもよい。
 :   e.g., `stringr::str_interp("Mean sepal width is $[.3f]{mean(Sepal.Width)}.", iris)`
 
-`str_glue(..., .sep="", .envir=parent.frame())`
+`str_glue(..., .sep = "", .envir = parent.frame())`
 :   [`library(glue)`](https://glue.tidyverse.org/) しなくても使えるように。
 
-`str_pad(string, width, side=c("left", "right", "both"), pad=" ")`
+`str_pad(string, width, side = c("left", "right", "both"), pad = " ")`
 :   文字列の幅を `width` に伸ばして `side` 側を `pad` で埋める。
     例えば `"009" "010"` のように数字の左を0で埋めて長さを揃えるのにも使える:
     `str_pad(c("9", "10"), 3L, "0")`
 
-`str_trim(string, side="both")`
+`str_trim(string, side = "both")`
 :   空白文字を除去する。
     Python でいうところの `str.strip()`。
     両端から空白文字を除去して、連続する空白文字を1つに縮める
     `str_squish()` もある。
 
-`str_trunc(string, width, side=c("right", "left", "center"), ellipsis="...")`
+`str_trunc(string, width, side = c("right", "left", "center"), ellipsis = "...")`
 :   一定の長さを超えたら捨てて `...` にする。
 
-`str_wrap(string, width=80, indent=0, exdent=0)`
+`str_wrap(string, width = 80, indent = 0, exdent = 0)`
 :   指定した幅で折り返す。
     `indent` は先頭行の左余白。
     `exdent` はそれ以外の行の左余白。

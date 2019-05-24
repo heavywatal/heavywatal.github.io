@@ -51,34 +51,34 @@ R標準の関数よりも遥かに分かりやすく安全で高機能なもの�
 `d___(x, ...)`
 :   確率密度関数 (PDF)。 $P[X = x]$
 
-`p___(q, ..., lower.tail=TRUE, log.p=FALSE)`
+`p___(q, ..., lower.tail = TRUE, log.p = FALSE)`
 :   累積分布関数 (CDF)。
     デフォルトでは左から`q`までの積分 $P[X \leq q]$ 。
-    `lower.tail=FALSE` とすると`q`より右の積分(相補CDF) $P[X > q]$ 。
+    `lower.tail = FALSE` とすると`q`より右の積分(相補CDF) $P[X > q]$ 。
 :    第一引数やパラメータ`...`はvector処理されるが、
      後半の論理値引数はvectorを与えても先頭のみが使われる。
 
 :   離散分布の場合は境界の値を含むか含まないかでバー1本分の差が出るので注意。
-    ホントは `lower.tail=FALSE` でも境界を含むべきだと思うんだけど。
+    ホントは `lower.tail = FALSE` でも境界を含むべきだと思うんだけど。
 
 :   `1 - pnorm(...)`や`log(pnorm(...))`のほうが直感的に分かりやすいので、
-    `lower.tail=FALSE`や`log.p=TRUE`は不要なようにも思われるが、
+    `lower.tail = FALSE`や`log.p = TRUE`は不要なようにも思われるが、
     これらの引数で内部処理させたほうが浮動小数点型の限界付近での計算が正確。
     ```r
     # complementary
     1 - pnorm(10, 0, 1)                # 0
-    pnorm(10, 0, 1, lower.tail=FALSE)  # 7.619853e-24
+    pnorm(10, 0, 1, lower.tail = FALSE)  # 7.619853e-24
 
     # log
     log(pnorm(10, 0, 1))               # 0
-    pnorm(10, 0, 1, log.p=TRUE)        # -7.619853e-24
+    pnorm(10, 0, 1, log.p = TRUE)        # -7.619853e-24
     ```
 
-`q___(p, ..., lower.tail=TRUE, log.p=FALSE)`
+`q___(p, ..., lower.tail = TRUE, log.p = FALSE)`
 :   累積分布関数の逆関数。
     左からの累積確率が `p` となる確率変数の値。
     `p___()` の逆関数。
-    `lower.tail=FALSE` とすると右から。
+    `lower.tail = FALSE` とすると右から。
 
 `r___(n, ...)`
 :   乱数を `n` 個生成する
@@ -112,17 +112,17 @@ _wilcox(m, n)
 
 ```r
 _beta(shape1, shape2)
-_cauchy(location=0, scale=1)
+_cauchy(location = 0, scale = 1)
 _chisq(df)
-_exp(rate=1)
+_exp(rate = 1)
 _f(df1, df2)
-_gamma(shape, rate=1, scale=1/rate)
-_lnorm(meanlog=0, sdlog=1)
-_logis(location=0, scale=1)
-_norm(mean=0, sd=1)
+_gamma(shape, rate = 1, scale = 1 / rate)
+_lnorm(meanlog = 0, sdlog = 1)
+_logis(location = 0, scale = 1)
+_norm(mean = 0, sd = 1)
 _t(df)
-_unif(min=0, max=1)
-_weibull(shape, scale=1)
+_unif(min = 0, max = 1)
+_weibull(shape, scale = 1)
 ```
 
 ## 関数を作る
@@ -130,7 +130,7 @@ _weibull(shape, scale=1)
 基本
 
 ```r
-my_add = function(x, y=1) {
+my_add = function(x, y = 1) {
    x + y
 }
 
@@ -143,7 +143,7 @@ my_add(3)       # 4   (2つめの引数を省略すると1)
 省略すると先頭の要素が採用される
 
 ```r
-great_scott = function(name=c("Marty", "Emmett", "Biff")) {
+great_scott = function(name = c("Marty", "Emmett", "Biff")) {
     name = match.arg(name)
     print(sprintf("I am %s.", name))
 }
@@ -171,7 +171,7 @@ my_func()
 利用者は引数を見るだけで意図を読み取れる
 
 ```r
-good_func = function(x, y=x) {
+good_func = function(x, y = x) {
     x + y
 }
 

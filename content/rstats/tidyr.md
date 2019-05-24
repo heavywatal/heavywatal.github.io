@@ -23,7 +23,7 @@ data.frameを縦長・横長・入れ子に変形・整形するためのツー�
 -   <http://r4ds.had.co.nz/tidy-data.html>
 -   <https://github.com/tidyverse/tidyr>
 -   `vignette("tidy-data")`
--   `demo(package="tidyr")`
+-   `demo(package = "tidyr")`
 
 下記のコード例で使うデータ
 
@@ -47,7 +47,7 @@ iris %>% head(3L) %>% rownames_to_column("id")
 [**整然データ**]({{< relref "programming.md#tidyverse" >}})
 というのはこの縦長の形。
 
-`tidyr::gather(data, key, value, ..., na.rm=FALSE, convert=FALSE)`
+`tidyr::gather(data, key, value, ..., na.rm = FALSE, convert = FALSE)`
 
 `data`
 :   `%>%` 越しに渡す
@@ -85,7 +85,7 @@ iris %>% head(3L) %>% rownames_to_column("id") %>%
 `reshape2::dcast()` に相当。
 IDとなるような列がないと `Error: Duplicate identifiers` と怒られる。
 
-`tidyr::spread(data, key, value, fill=NA, convert=FALSE, drop=TRUE)`
+`tidyr::spread(data, key, value, fill = NA, convert = FALSE, drop = TRUE)`
 
 `data`
 :   `%>%` 越しに渡す
@@ -96,13 +96,13 @@ IDとなるような列がないと `Error: Duplicate identifiers` と怒られ�
 `value`
 :   値が入ってる列
 
-`fill=NA`
+`fill = NA`
 :   該当する組み合わせの値が存在しない場合に何で埋めるか
 
-`convert=FALSE`
+`convert = FALSE`
 :   -
 
-`drop=TRUE`
+`drop = TRUE`
 :   該当する組み合わせの行が存在しない場合に欠落させるか
 
 e.g., `kagi` 内の文字列を新たな列名として横長の表に変形して `atai` を移す
@@ -119,14 +119,14 @@ iris %>% head(3L) %>% rownames_to_column("id") %>%
 
 ## Nested data.frame --- 入れ子構造
 
-### `tidyr::nest(data, ..., .key=data)`
+### `tidyr::nest(data, ..., .key = data)`
 
 data.frameをネストして(入れ子にして)、list of data.frames のカラムを作る。
 内側のdata.frameに押し込むカラムを `...` に指定するか、
 外側に残すカラムをマイナス指定する。
 
 ```r
-iris %>% nest(-Species, .key=NEW_COLUMN)
+iris %>% nest(-Species, .key = NEW_COLUMN)
 # A tibble: 3 × 2
      Species        NEW_COLUMN
       <fctr>            <list>
@@ -147,7 +147,7 @@ tidyverse時代のクールなやり方らしい。
 cf. [Hadley Wickham: Managing many models with R (YouTube)](https://www.youtube.com/watch?v=rz3_FDVt9eg)
 
 
-### `tidyr::unnest(data, ..., .drop=NA, id=NULL, .sep=NULL, .preserve=NULL)`
+### `tidyr::unnest(data, ..., .drop = NA, id = NULL, .sep = NULL, .preserve = NULL)`
 
 ネストされたdata.frameを展開してフラットにする。
 list of data.framesだけでなく、list of vectorsとかでもよい。
@@ -163,7 +163,7 @@ list of data.framesだけでなく、list of vectorsとかでもよい。
 文字列カラムを任意のセパレータで複数カラムに分割。
 `reshape2::colsplit()` に相当。
 
-`tidyr::separate(data, col, into, sep="[^[:alnum:]]", remove=TRUE, convert=FALSE, extra="warn", fill="warn")`
+`tidyr::separate(data, col, into, sep = "[^[:alnum:]]", remove = TRUE, convert = FALSE, extra = "warn", fill = "warn")`
 
 `data`
 :   `%>%` 越しに渡す
@@ -174,20 +174,20 @@ list of data.framesだけでなく、list of vectorsとかでもよい。
 `into`
 :   切り分けたあとの新しい列名を文字列ベクタで
 
-`sep="[^[:alnum:]]"`
+`sep = "[^[:alnum:]]"`
 :   セパレータを正規表現で。デフォルトはあらゆる非アルファベット。
 :   整数を渡すと位置で切れる。例えば `A4` を `1L` で切ると `A` と `4` に。
 
-`remove=TRUE`
+`remove = TRUE`
 :   切り分ける前の列を取り除くかどうか
 
-`convert=FALSE`
+`convert = FALSE`
 :   -
 
-`extra="warn"`
+`extra = "warn"`
 :   列数が揃わないときにどうするか: `warn`, `drop`, `merge`
 
-`fill="warn"`
+`fill = "warn"`
 :   足りない場合にどっち側をNAで埋めるか: `warn`, `right`, `left`。
     つまり、文字を左詰めにするには`right`が正解(紛らわしい)。
 
@@ -212,7 +212,7 @@ iris %>% head(3L) %>% rownames_to_column("id") %>%
 ## 12  3  setosa Petal  Width  0.2
 ```
 
-逆をやるのが `tidyr::unite(data, col, ..., sep="_", remove=TRUE)` 。
+逆をやるのが `tidyr::unite(data, col, ..., sep = "_", remove = TRUE)` 。
 
 行方向に分割する `tidyr::separate_rows(data, ..., sep, convert)` もある。
 
@@ -223,13 +223,13 @@ iris %>% head(3L) %>% rownames_to_column("id") %>%
 文字列から数字部分をnumericとして抜き出す関数だったが今はdeprecatedなので、
 新しい[`readr::parse_number()`]({{< relref "readr.md" >}})を使うべし。
 
-### `tidyr::complete(data, ..., fill=list())`
+### `tidyr::complete(data, ..., fill = list())`
 
 指定した列の全ての組み合わせが登場するように、
 指定しなかった列に欠損値`NA`(あるいは任意の値)を補完した行を挿入する。
 
 ```r
-df %>% complete(key1, key2, fill=list(val1=0, val2="-"))
+df %>% complete(key1, key2, fill = list(val1 = 0, val2 = "-"))
 ```
 
 ### `tidyr::expand(data, ...)`
@@ -245,7 +245,7 @@ tibble版`expand.grid(...)`のようなもの。
 `nest(data, ...) %>% dplyr::select(-data)`のショートカット。
 この結果は`expand()`や`complete()`の引数としても使える。
 
-数値vectorの補完には`full_seq(x, period, tol=1e-6)`が便利。
+数値vectorの補完には`full_seq(x, period, tol = 1e-6)`が便利。
 
 
 ### `tidyr::drop_na(data, ...)`
@@ -257,10 +257,10 @@ tibble版`expand.grid(...)`のようなもの。
 ### `tidyr::replace_na()`
 
 欠損値 `NA` を好きな値で置き換える。
-これまでは `mutate(x= ifelse(is.na(x), 0, x))` のようにしてたところを
+これまでは `mutate(x = ifelse(is.na(x), 0, x))` のようにしてたところを
 
 ```r
-df %>% replace_na(list(x=0, y="unknown"))
+df %>% replace_na(list(x = 0, y = "unknown"))
 ```
 
 逆に、特定の値を`NA`にしたい場合は

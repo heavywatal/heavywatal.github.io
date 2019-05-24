@@ -164,7 +164,7 @@ Rがファイルを探すのはこの作業ディレクトリである。
     path を省略するとワーキングディレクトリが対象となる
 
     ```r
-    read.table("mydata.txt", header=TRUE)
+    read.table("mydata.txt", header = TRUE)
     ## Warning in file(file, "rt") :
     ##   cannot open file 'mydata.txt': No such file or directory
     ## Error in file(file, "rt") : cannot open the connection
@@ -174,7 +174,7 @@ Rがファイルを探すのはこの作業ディレクトリである。
 
 ## R で調べる
 
-`help(topic, package=NULL, ...)`
+`help(topic, package = NULL, ...)`
 :   ヘルプを表示する。
     知りたいオブジェクトの先頭にクエスチョンマークを付けるという方法もある。
     以下の2つは等価
