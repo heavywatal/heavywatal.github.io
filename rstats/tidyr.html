@@ -110,7 +110,7 @@ tidyr — シンプルなデータ変形ツール
 <li><a href="http://r4ds.had.co.nz/tidy-data.html">http://r4ds.had.co.nz/tidy-data.html</a></li>
 <li><a href="https://github.com/tidyverse/tidyr">https://github.com/tidyverse/tidyr</a></li>
 <li><code>vignette(&quot;tidy-data&quot;)</code></li>
-<li><code>demo(package=&quot;tidyr&quot;)</code></li>
+<li><code>demo(package = &quot;tidyr&quot;)</code></li>
 </ul>
 
 <p>下記のコード例で使うデータ</p>
@@ -130,7 +130,7 @@ tidyr — シンプルなデータ変形ツール
 <a href="/rstats/programming.html#tidyverse"><strong>整然データ</strong></a>
 というのはこの縦長の形。</p>
 
-<p><code>tidyr::gather(data, key, value, ..., na.rm=FALSE, convert=FALSE)</code></p>
+<p><code>tidyr::gather(data, key, value, ..., na.rm = FALSE, convert = FALSE)</code></p>
 
 <dl>
 <dt><code>data</code></dt>
@@ -164,7 +164,7 @@ tidyr — シンプルなデータ変形ツール
 <code>reshape2::dcast()</code> に相当。
 IDとなるような列がないと <code>Error: Duplicate identifiers</code> と怒られる。</p>
 
-<p><code>tidyr::spread(data, key, value, fill=NA, convert=FALSE, drop=TRUE)</code></p>
+<p><code>tidyr::spread(data, key, value, fill = NA, convert = FALSE, drop = TRUE)</code></p>
 
 <dl>
 <dt><code>data</code></dt>
@@ -173,11 +173,11 @@ IDとなるような列がないと <code>Error: Duplicate identifiers</code> �
 <dd>ここに指定したカテゴリ変数のぶんだけ新しい列が作られる</dd>
 <dt><code>value</code></dt>
 <dd>値が入ってる列</dd>
-<dt><code>fill=NA</code></dt>
+<dt><code>fill = NA</code></dt>
 <dd>該当する組み合わせの値が存在しない場合に何で埋めるか</dd>
-<dt><code>convert=FALSE</code></dt>
+<dt><code>convert = FALSE</code></dt>
 <dd>-</dd>
-<dt><code>drop=TRUE</code></dt>
+<dt><code>drop = TRUE</code></dt>
 <dd>該当する組み合わせの行が存在しない場合に欠落させるか</dd>
 </dl>
 
@@ -191,12 +191,12 @@ IDとなるような列がないと <code>Error: Duplicate identifiers</code> �
 <span class="c1">## 3  3  setosa          1.3         0.2          4.7         3.2</span></code></pre></div>
 <h2 id="nested-data-frame-入れ子構造">Nested data.frame &mdash; 入れ子構造</h2>
 
-<h3 id="tidyr-nest-data-key-data"><code>tidyr::nest(data, ..., .key=data)</code></h3>
+<h3 id="tidyr-nest-data-key-data"><code>tidyr::nest(data, ..., .key = data)</code></h3>
 
 <p>data.frameをネストして(入れ子にして)、list of data.frames のカラムを作る。
 内側のdata.frameに押し込むカラムを <code>...</code> に指定するか、
 外側に残すカラムをマイナス指定する。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> nest<span class="p">(</span><span class="o">-</span>Species<span class="p">,</span> <span class="m">.</span>key<span class="o">=</span>NEW_COLUMN<span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> nest<span class="p">(</span><span class="o">-</span>Species<span class="p">,</span> <span class="m">.</span>key <span class="o">=</span> NEW_COLUMN<span class="p">)</span>
 <span class="c1"># A tibble: 3 × 2</span>
      Species        NEW_COLUMN
       <span class="o">&lt;</span>fctr<span class="o">&gt;</span>            <span class="o">&lt;</span><span class="kt">list</span><span class="o">&gt;</span>
@@ -214,7 +214,7 @@ tidyverse時代のクールなやり方らしい。</p>
 
 <p>cf. <a href="https://www.youtube.com/watch?v=rz3_FDVt9eg">Hadley Wickham: Managing many models with R (YouTube)</a></p>
 
-<h3 id="tidyr-unnest-data-drop-na-id-null-sep-null-preserve-null"><code>tidyr::unnest(data, ..., .drop=NA, id=NULL, .sep=NULL, .preserve=NULL)</code></h3>
+<h3 id="tidyr-unnest-data-drop-na-id-null-sep-null-preserve-null"><code>tidyr::unnest(data, ..., .drop = NA, id = NULL, .sep = NULL, .preserve = NULL)</code></h3>
 
 <p>ネストされたdata.frameを展開してフラットにする。
 list of data.framesだけでなく、list of vectorsとかでもよい。</p>
@@ -229,7 +229,7 @@ list of data.framesだけでなく、list of vectorsとかでもよい。</p>
 <p>文字列カラムを任意のセパレータで複数カラムに分割。
 <code>reshape2::colsplit()</code> に相当。</p>
 
-<p><code>tidyr::separate(data, col, into, sep=&quot;[^[:alnum:]]&quot;, remove=TRUE, convert=FALSE, extra=&quot;warn&quot;, fill=&quot;warn&quot;)</code></p>
+<p><code>tidyr::separate(data, col, into, sep = &quot;[^[:alnum:]]&quot;, remove = TRUE, convert = FALSE, extra = &quot;warn&quot;, fill = &quot;warn&quot;)</code></p>
 
 <dl>
 <dt><code>data</code></dt>
@@ -238,16 +238,16 @@ list of data.framesだけでなく、list of vectorsとかでもよい。</p>
 <dd>切り分けたい列の名前</dd>
 <dt><code>into</code></dt>
 <dd>切り分けたあとの新しい列名を文字列ベクタで</dd>
-<dt><code>sep=&quot;[^[:alnum:]]&quot;</code></dt>
+<dt><code>sep = &quot;[^[:alnum:]]&quot;</code></dt>
 <dd>セパレータを正規表現で。デフォルトはあらゆる非アルファベット。</dd>
 <dd>整数を渡すと位置で切れる。例えば <code>A4</code> を <code>1L</code> で切ると <code>A</code> と <code>4</code> に。</dd>
-<dt><code>remove=TRUE</code></dt>
+<dt><code>remove = TRUE</code></dt>
 <dd>切り分ける前の列を取り除くかどうか</dd>
-<dt><code>convert=FALSE</code></dt>
+<dt><code>convert = FALSE</code></dt>
 <dd>-</dd>
-<dt><code>extra=&quot;warn&quot;</code></dt>
+<dt><code>extra = &quot;warn&quot;</code></dt>
 <dd>列数が揃わないときにどうするか: <code>warn</code>, <code>drop</code>, <code>merge</code></dd>
-<dt><code>fill=&quot;warn&quot;</code></dt>
+<dt><code>fill = &quot;warn&quot;</code></dt>
 <dd>足りない場合にどっち側をNAで埋めるか: <code>warn</code>, <code>right</code>, <code>left</code>。
 つまり、文字を左詰めにするには<code>right</code>が正解(紛らわしい)。</dd>
 </dl>
@@ -269,7 +269,7 @@ list of data.framesだけでなく、list of vectorsとかでもよい。</p>
 <span class="c1">## 10  1  setosa Petal  Width  0.2</span>
 <span class="c1">## 11  2  setosa Petal  Width  0.2</span>
 <span class="c1">## 12  3  setosa Petal  Width  0.2</span></code></pre></div>
-<p>逆をやるのが <code>tidyr::unite(data, col, ..., sep=&quot;_&quot;, remove=TRUE)</code> 。</p>
+<p>逆をやるのが <code>tidyr::unite(data, col, ..., sep = &quot;_&quot;, remove = TRUE)</code> 。</p>
 
 <p>行方向に分割する <code>tidyr::separate_rows(data, ..., sep, convert)</code> もある。</p>
 
@@ -280,11 +280,11 @@ list of data.framesだけでなく、list of vectorsとかでもよい。</p>
 文字列から数字部分をnumericとして抜き出す関数だったが今はdeprecatedなので、
 新しい<a href="/rstats/readr.html"><code>readr::parse_number()</code></a>を使うべし。</p>
 
-<h3 id="tidyr-complete-data-fill-list"><code>tidyr::complete(data, ..., fill=list())</code></h3>
+<h3 id="tidyr-complete-data-fill-list"><code>tidyr::complete(data, ..., fill = list())</code></h3>
 
 <p>指定した列の全ての組み合わせが登場するように、
 指定しなかった列に欠損値<code>NA</code>(あるいは任意の値)を補完した行を挿入する。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">df <span class="o">%&gt;%</span> complete<span class="p">(</span>key1<span class="p">,</span> key2<span class="p">,</span> fill<span class="o">=</span><span class="kt">list</span><span class="p">(</span>val1<span class="o">=</span><span class="m">0</span><span class="p">,</span> val2<span class="o">=</span><span class="s">&#34;-&#34;</span><span class="p">))</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">df <span class="o">%&gt;%</span> complete<span class="p">(</span>key1<span class="p">,</span> key2<span class="p">,</span> fill <span class="o">=</span> <span class="kt">list</span><span class="p">(</span>val1 <span class="o">=</span> <span class="m">0</span><span class="p">,</span> val2 <span class="o">=</span> <span class="s">&#34;-&#34;</span><span class="p">))</span></code></pre></div>
 <h3 id="tidyr-expand-data"><code>tidyr::expand(data, ...)</code></h3>
 
 <p>指定した列の全ての組み合わせが登場するような新しいdata.frameを作る。
@@ -298,7 +298,7 @@ tibble版<code>expand.grid(...)</code>のようなもの。</p>
 <code>nest(data, ...) %&gt;% dplyr::select(-data)</code>のショートカット。
 この結果は<code>expand()</code>や<code>complete()</code>の引数としても使える。</p>
 
-<p>数値vectorの補完には<code>full_seq(x, period, tol=1e-6)</code>が便利。</p>
+<p>数値vectorの補完には<code>full_seq(x, period, tol = 1e-6)</code>が便利。</p>
 
 <h3 id="tidyr-drop-na-data"><code>tidyr::drop_na(data, ...)</code></h3>
 
@@ -309,8 +309,8 @@ tibble版<code>expand.grid(...)</code>のようなもの。</p>
 <h3 id="tidyr-replace-na"><code>tidyr::replace_na()</code></h3>
 
 <p>欠損値 <code>NA</code> を好きな値で置き換える。
-これまでは <code>mutate(x= ifelse(is.na(x), 0, x))</code> のようにしてたところを</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">df <span class="o">%&gt;%</span> replace_na<span class="p">(</span><span class="kt">list</span><span class="p">(</span>x<span class="o">=</span><span class="m">0</span><span class="p">,</span> y<span class="o">=</span><span class="s">&#34;unknown&#34;</span><span class="p">))</span></code></pre></div>
+これまでは <code>mutate(x = ifelse(is.na(x), 0, x))</code> のようにしてたところを</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">df <span class="o">%&gt;%</span> replace_na<span class="p">(</span><span class="kt">list</span><span class="p">(</span>x <span class="o">=</span> <span class="m">0</span><span class="p">,</span> y <span class="o">=</span> <span class="s">&#34;unknown&#34;</span><span class="p">))</span></code></pre></div>
 <p>逆に、特定の値を<code>NA</code>にしたい場合は
 <a href="/rstats/dplyr.html"><code>dplyr::na_if()</code></a></p>
 

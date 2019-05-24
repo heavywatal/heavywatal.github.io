@@ -143,23 +143,23 @@ stringr — Rの文字列をまともな方法で処理する
 <dt><code>str_length(string)</code></dt>
 <dd>文字列の長さを数える。
 <code>base::nchar(x)</code> と相同だが、<code>NA</code> に対して <code>2</code> ではなく <code>NA</code> を返す。</dd>
-<dt><code>str_sub(string, start=1, end=-1)</code></dt>
+<dt><code>str_sub(string, start = 1, end = -1)</code></dt>
 <dd>文字列を部分的に参照・変更する。
 <code>base::substr()</code> と相同だが、負数で末尾からの位置を指定できる。
 <code>str_sub&lt;-</code> が定義されているので置換にも使える。</dd>
-<dt><code>str_flatten(string, collapse=&quot;&quot;)</code></dt>
+<dt><code>str_flatten(string, collapse = &quot;&quot;)</code></dt>
 <dd>文字列vectorを1つの文字列に結合する。</dd>
-<dt><code>str_c(..., sep=&quot;&quot;, collapse=NULL)</code></dt>
+<dt><code>str_c(..., sep = &quot;&quot;, collapse = NULL)</code></dt>
 <dd>複数の引数で与えた文字列を結合する。
 デフォルトの <code>sep</code> がスペースじゃないので <code>base::paste0()</code> に近い。</dd>
-<dt><code>str_split(string, pattern, n=Inf, simplify=FALSE)</code></dt>
+<dt><code>str_split(string, pattern, n = Inf, simplify = FALSE)</code></dt>
 <dd>文字列を分割してlistを返す。
 <code>base::strsplit(x, split)</code> と相同だが、
 最大 <code>n</code> 個に分割するということを指定できる。
 空文字で帳尻合わせしてちょうど <code>n</code> 個にするショートカットが
 <code>str_split_fixed(string, pattern, n)</code> 。
 <code>string</code> と <code>pattern</code> の要素数が噛み合わないときにちゃんと警告が出る。
-<code>simplify=TRUE</code> とするとmatrixで返す。</dd>
+<code>simplify = TRUE</code> とするとmatrixで返す。</dd>
 <dt><code>str_dup(string, times)</code></dt>
 <dd>指定した回数だけ文字列を繰り返して結合。
 <code>str_dup(&quot;#&quot;, 79)</code> とかで結果出力に区切りを入れたり。</dd>
@@ -183,7 +183,7 @@ stringr — Rの文字列をまともな方法で処理する
 <dt><code>str_subset(string, pattern, negate = FALSE)</code></dt>
 <dd><code>x[str_detect(x, pattern)]</code> のショートカット。
 マッチする要素だけ元の形で返すので
-<code>str_extract()</code> より <code>base::grep(pattern, x, value=TRUE)</code> に近い。</dd>
+<code>str_extract()</code> より <code>base::grep(pattern, x, value = TRUE)</code> に近い。</dd>
 <dt><code>str_which(string, pattern, negate = FALSE)</code></dt>
 <dd>マッチする要素のインデックスを整数で返す
 <code>which(str_detect(x, pattern))</code> のショートカット。
@@ -207,15 +207,15 @@ stringr — Rの文字列をまともな方法で処理する
 下記の関数を通して渡すことでその挙動を変更することができる。</p>
 
 <dl>
-<dt><code>stringr::regex(pattern, ignore_case=FALSE, multiline=FALSE, comments=FALSE, dotall=FALSE, ...)</code></dt>
+<dt><code>stringr::regex(pattern, ignore_case = FALSE, multiline = FALSE, comments = FALSE, dotall = FALSE, ...)</code></dt>
 <dd>デフォルトの<a href="http://userguide.icu-project.org/strings/regexp">ICU正規表現</a>。
 複数行ファイルに対するマッチではこの関数を通して挙動をいじることになる。</dd>
 <dt><code>stringr::fixed(pattern)</code></dt>
 <dd>正規表現ではなくそのままの文字としてマッチさせる</dd>
-<dt><code>stringr::boundary(type=&quot;character&quot;, skip_word_none=NA, ...)</code></dt>
+<dt><code>stringr::boundary(type = &quot;character&quot;, skip_word_none = NA, ...)</code></dt>
 <dd>境界に対するマッチ。
 <code>type</code>の選択肢は <code>character</code>, <code>line_break</code>, <code>sentence</code>, <code>word</code>.</dd>
-<dt><code>stringr::coll(pattern, ignore_case=FALSE, locale=NULL, ...)</code></dt>
+<dt><code>stringr::coll(pattern, ignore_case = FALSE, locale = NULL, ...)</code></dt>
 <dd>よくわからないけど非ascii対策？</dd>
 </dl>
 
@@ -224,26 +224,26 @@ stringr — Rの文字列をまともな方法で処理する
 <dl>
 <dt><code>str_to_upper()</code>, <code>str_to_lower()</code>, <code>str_to_title()</code>, <code>str_to_sentence()</code></dt>
 <dd>大文字・小文字の変換</dd>
-<dt><code>str_interp(string, env=parent.frame())</code></dt>
+<dt><code>str_interp(string, env = parent.frame())</code></dt>
 <dd><code>sprintf()</code> と相同。
 文字列の中の <code>$[format]{expr}</code> がR表現として評価される。
 <code>[format]</code>部分は<code>sprintf()</code>と同じ形式で、省略可。
 <code>env</code> はlistやdata.frameでもよい。</dd>
 <dd>e.g., <code>stringr::str_interp(&quot;Mean sepal width is $[.3f]{mean(Sepal.Width)}.&quot;, iris)</code></dd>
-<dt><code>str_glue(..., .sep=&quot;&quot;, .envir=parent.frame())</code></dt>
+<dt><code>str_glue(..., .sep = &quot;&quot;, .envir = parent.frame())</code></dt>
 <dd><a href="https://glue.tidyverse.org/"><code>library(glue)</code></a> しなくても使えるように。</dd>
-<dt><code>str_pad(string, width, side=c(&quot;left&quot;, &quot;right&quot;, &quot;both&quot;), pad=&quot; &quot;)</code></dt>
+<dt><code>str_pad(string, width, side = c(&quot;left&quot;, &quot;right&quot;, &quot;both&quot;), pad = &quot; &quot;)</code></dt>
 <dd>文字列の幅を <code>width</code> に伸ばして <code>side</code> 側を <code>pad</code> で埋める。
 例えば <code>&quot;009&quot; &quot;010&quot;</code> のように数字の左を0で埋めて長さを揃えるのにも使える:
 <code>str_pad(c(&quot;9&quot;, &quot;10&quot;), 3L, &quot;0&quot;)</code></dd>
-<dt><code>str_trim(string, side=&quot;both&quot;)</code></dt>
+<dt><code>str_trim(string, side = &quot;both&quot;)</code></dt>
 <dd>空白文字を除去する。
 Python でいうところの <code>str.strip()</code>。
 両端から空白文字を除去して、連続する空白文字を1つに縮める
 <code>str_squish()</code> もある。</dd>
-<dt><code>str_trunc(string, width, side=c(&quot;right&quot;, &quot;left&quot;, &quot;center&quot;), ellipsis=&quot;...&quot;)</code></dt>
+<dt><code>str_trunc(string, width, side = c(&quot;right&quot;, &quot;left&quot;, &quot;center&quot;), ellipsis = &quot;...&quot;)</code></dt>
 <dd>一定の長さを超えたら捨てて <code>...</code> にする。</dd>
-<dt><code>str_wrap(string, width=80, indent=0, exdent=0)</code></dt>
+<dt><code>str_wrap(string, width = 80, indent = 0, exdent = 0)</code></dt>
 <dd>指定した幅で折り返す。
 <code>indent</code> は先頭行の左余白。
 <code>exdent</code> はそれ以外の行の左余白。</dd>
