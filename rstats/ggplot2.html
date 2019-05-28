@@ -310,9 +310,9 @@ ggplot_build<span class="p">(</span>p<span class="p">)</span><span class="o">$</
 
 <dl>
 <dt><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">軸の区切りを変更したり対数にしたり</a></dt>
-<dd><code>gp + scale_x_continuous(breaks = seq(10, 100, by = 10))</code></dd>
-<dd><code>gp + scale_y_log10(&quot;Beer consumption&quot;)</code></dd>
-<dd><code>gp + scale_y_reverse()</code></dd>
+<dd><code>scale_x_continuous(breaks = seq(10, 100, by = 10))</code></dd>
+<dd><code>scale_y_log10(&quot;Beer consumption&quot;)</code></dd>
+<dd><code>scale_y_reverse()</code></dd>
 <dd>上記の<a href="#スケール共通オプション">スケール共通オプション</a>に加えて:
 
 <ul>
@@ -324,22 +324,22 @@ ggplot_build<span class="p">(</span>p<span class="p">)</span><span class="o">$</
 <li><code>sec.axis</code>: 第二軸</li>
 </ul></dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html">描画する範囲を指定</a></dt>
-<dd><code>gp + ylim(0, 42) + xlim(&quot;b&quot;, &quot;c&quot;, &quot;d&quot;)</code></dd>
-<dd><code>gp + coord_cartesian(xlim = NULL, ylim = NULL)</code></dd>
+<dd><code>ylim(0, 42) + xlim(&quot;b&quot;, &quot;c&quot;, &quot;d&quot;)</code></dd>
+<dd><code>coord_cartesian(xlim = NULL, ylim = NULL)</code></dd>
 <dd>前者はデータそのものを切るが、後者はデータを変えずに描画領域だけ切る</dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html">X軸とY軸の比率を固定</a></dt>
-<dd><code>gp + coord_fixed(ratio = 1)</code></dd>
+<dd><code>coord_fixed(ratio = 1)</code></dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">XY軸の反転</a></dt>
-<dd><code>gp + coord_flip()</code></dd>
+<dd><code>coord_flip()</code></dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/coord_polar.html">極座標</a></dt>
 <dd>パイチャートも作れるらしい</dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/coord_trans.html">座標変換</a></dt>
-<dd><code>gp + coord_trans(x = &quot;log10&quot;, y = &quot;sqrt&quot;)</code></dd>
+<dd><code>coord_trans(x = &quot;log10&quot;, y = &quot;sqrt&quot;)</code></dd>
 <dd>表示する座標を変換する。
  stat前に適用される <code>scale_x_*</code> とは微妙に違う。</dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/labs.html">軸ラベルとタイトル</a></dt>
-<dd><code>gp + labs(x = &quot;time&quot;, y = &quot;weight&quot;, title = &quot;growth&quot;, tag = &quot;A&quot;)</code></dd>
-<dd><code>gp + xlab(&quot;time&quot;) + ylab(&quot;weight&quot;) + ggtitle(&quot;growth&quot;)</code></dd>
+<dd><code>labs(x = &quot;time&quot;, y = &quot;weight&quot;, title = &quot;growth&quot;, tag = &quot;A&quot;)</code></dd>
+<dd><code>xlab(&quot;time&quot;) + ylab(&quot;weight&quot;) + ggtitle(&quot;growth&quot;)</code></dd>
 </dl>
 
 <h2 id="theme-背景やラベルの調整"><code>theme</code>: 背景やラベルの調整</h2>
@@ -519,40 +519,32 @@ ggsave<span class="p">(</span><span class="s">&#34;mpg2.png&#34;</span><span cla
 ggsave<span class="p">(</span><span class="s">&#34;mpg3.png&#34;</span><span class="p">,</span> p1<span class="p">,</span> width <span class="o">=</span> <span class="m">2</span><span class="p">,</span> height <span class="o">=</span> <span class="m">2</span><span class="p">,</span> dpi <span class="o">=</span> <span class="m">600</span><span class="p">)</span>
 
 <span class="c1"># 4     x 300    = 1200  テーマを使って文字だけ拡大</span>
-ggsave<span class="p">(</span><span class="s">&#34;mpg4.png&#34;</span><span class="p">,</span> p1 <span class="o">+</span> theme_bw<span class="p">(</span>base_size <span class="o">=</span> <span class="m">22</span><span class="p">),</span> width <span class="o">=</span> <span class="m">4</span><span class="p">,</span> height <span class="o">=</span> <span class="m">4</span><span class="p">)</span>
-<span class="c1"># 7inch x 300dpi = 2100px四方 (デフォルト)</span>
-ggsave<span class="p">(</span><span class="s">&#34;mpg1.png&#34;</span><span class="p">,</span> p1<span class="p">)</span> <span class="c1"># width = 7, height = 7, dpi = 300</span>
-<span class="c1"># 4     x 300    = 1200  全体7/4倍ズーム</span>
-ggsave<span class="p">(</span><span class="s">&#34;mpg2.png&#34;</span><span class="p">,</span> p1<span class="p">,</span> width <span class="o">=</span> <span class="m">4</span><span class="p">,</span> height <span class="o">=</span> <span class="m">4</span><span class="p">)</span> <span class="c1"># dpi = 300</span>
-<span class="c1"># 2     x 600    = 1200  全体をさらに2倍ズーム</span>
-ggsave<span class="p">(</span><span class="s">&#34;mpg3.png&#34;</span><span class="p">,</span> p1<span class="p">,</span> width <span class="o">=</span> <span class="m">2</span><span class="p">,</span> height <span class="o">=</span> <span class="m">2</span><span class="p">,</span> dpi <span class="o">=</span> <span class="m">600</span><span class="p">)</span>
-<span class="c1"># 4     x 300    = 1200  テーマを使って文字だけ拡大</span>
 ggsave<span class="p">(</span><span class="s">&#34;mpg4.png&#34;</span><span class="p">,</span> p1 <span class="o">+</span> theme_bw<span class="p">(</span>base_size <span class="o">=</span> <span class="m">22</span><span class="p">),</span> width <span class="o">=</span> <span class="m">4</span><span class="p">,</span> height <span class="o">=</span> <span class="m">4</span><span class="p">)</span></code></pre></div>
 <h2 id="プロットの種類">プロットの種類</h2>
 
 <dl>
 <dt><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">散布図</a></dt>
-<dd><code>gp + geom_point(size = 2, alpha = 0.3)</code></dd>
+<dd><code>geom_point(size = 2, alpha = 0.3)</code></dd>
 <dd>重なった点をランダムにばらかしたいときは
 <a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html"><code>geom_jitter()</code></a></dd>
 <dd><a href="https://ggplot2.tidyverse.org/articles/ggplot2-specs.html#sec:shape-spec">点の形(shape)一覧</a></dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">折れ線グラフ</a></dt>
-<dd><code>gp + geom_path(size = 2, linetype = &quot;dashed&quot;)</code> データ順に結ぶ</dd>
-<dd><code>gp + geom_line()</code> x軸上の順で結ぶ</dd>
-<dd><code>gp + geom_step()</code> 階段状に結ぶ</dd>
+<dd><code>geom_path(size = 2, linetype = &quot;dashed&quot;)</code> データ順に結ぶ</dd>
+<dd><code>geom_line()</code> x軸上の順で結ぶ</dd>
+<dd><code>geom_step()</code> 階段状に結ぶ</dd>
 <dd><a href="https://ggplot2.tidyverse.org/articles/ggplot2-specs.html#sec:line-type-spec">線の種類(linetype)一覧</a></dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">面グラフ</a></dt>
-<dd><code>gp + geom_ribbon()</code> &mdash; yminからymaxの面</dd>
-<dd><code>gp + geom_area()</code> &mdash; 0からyの面</dd>
+<dd><code>geom_ribbon()</code> &mdash; yminからymaxの面</dd>
+<dd><code>geom_area()</code> &mdash; 0からyの面</dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">ヒストグラム、密度曲線</a></dt>
-<dd><code>gp + geom_histogram()</code> &mdash; 棒グラフ(連続値を<code>stat_bin()</code> で区切って)</dd>
-<dd><code>gp + geom_bar()</code> &mdash; 棒グラフ(離散値を<code>stat_count()</code>で数えて)</dd>
-<dd><code>gp + geom_freqpoly()</code> &mdash; 折れ線</dd>
-<dd><code>gp + geom_density()</code> &mdash; 密度推定されたスムーズな線</dd>
-<dd><code>gp + geom_bin2d()</code> &mdash; 二次元ヒストグラム</dd>
-<dd><code>gp + geom_hex()</code> &mdash; 六角形版二次元ヒストグラム</dd>
+<dd><code>geom_histogram()</code> &mdash; 棒グラフ(連続値を<code>stat_bin()</code> で区切って)</dd>
+<dd><code>geom_bar()</code> &mdash; 棒グラフ(離散値を<code>stat_count()</code>で数えて)</dd>
+<dd><code>geom_freqpoly()</code> &mdash; 折れ線</dd>
+<dd><code>geom_density()</code> &mdash; 密度推定されたスムーズな線</dd>
+<dd><code>geom_bin2d()</code> &mdash; 二次元ヒストグラム</dd>
+<dd><code>geom_hex()</code> &mdash; 六角形版二次元ヒストグラム</dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">棒グラフ</a></dt>
-<dd><code>gp + geom_col()</code></dd>
+<dd><code>geom_col()</code></dd>
 <dd>グループ分けする場合のオプション:
 
 <ul>
@@ -562,39 +554,43 @@ ggsave<span class="p">(</span><span class="s">&#34;mpg4.png&#34;</span><span cla
 横に並べる</li>
 <li><code>position = &quot;fill&quot;</code>: 縦に積み重ね、高さを1に揃えて割合を示す</li>
 </ul></dd>
-<dt><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">箱ひげ図</a></dt>
-<dd><code>gp + geom_boxplot()</code></dd>
-<dd><code>gp + geom_violin()</code></dd>
+<dt>箱ひげ図とその代替案</dt>
+<dd><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html"><code>geom_boxplot()</code></a>:
+生データの分布に関する情報量が落ちすぎるので要注意。</dd>
+<dd><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html"><code>geom_violin(scale = &quot;count&quot;)</code></a>:
+箱ひげ図よりは密度が分かりやすいけど、推定であることとスケールに注意。</dd>
+<dd><a href="https://github.com/clauswilke/ggridges"><code>ggridges::geom_density_ridges()</code></a>:
+violinの片側を横にしたようなもの。</dd>
+<dd><a href="https://ggplot2.tidyverse.org/reference/geom_dotplot.html"><code>geom_dotplot()</code></a>
+or <a href="https://github.com/eclarke/ggbeeswarm"><code>ggbeeswarm::geom_beeswarm()</code></a>:
+生データの分布が読み取りやすい。</dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html">ヒートマップ</a></dt>
-<dd><code>gp + geom_tile(aes(fill = z))</code></dd>
-<dd><code>gp + geom_raster(aes(fill = z))</code> &mdash; 各タイルの大きさを揃える制約のため高速</dd>
+<dd><code>geom_tile(aes(fill = z))</code></dd>
+<dd><code>geom_raster(aes(fill = z))</code> &mdash; 各タイルの大きさを揃える制約のため高速</dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">エラーバー</a></dt>
-<dd><code>gp + geom_errorbar(aes(ymax = y + se, ymin = y - se), width = 0.1)</code></dd>
-<dd><code>gp + geom_linerange(...)</code></dd>
-<dd><code>gp + geom_pointrange(...)</code></dd>
+<dd><code>geom_errorbar(aes(ymax = y + se, ymin = y - se), width = 0.1)</code></dd>
+<dd><code>geom_linerange(...)</code></dd>
+<dd><code>geom_pointrange(...)</code></dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/stat_function.html">関数</a></dt>
 <dd><code>ggplot(data.frame(x = c(-4, 4)), aes(x)) + stat_function(fun = dnorm, args = c(0, 1), n = 200)</code></dd>
-</dl>
-
-<hr>
-
-<dl>
 <dt><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">回帰曲線</a></dt>
-<dd><code>gp + geom_smooth(method = glm, method.args = list(family = poisson), se = FALSE)</code></dd>
-<dt><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">切片と傾きで直線を描く</a></dt>
-<dd><code>gp + geom_abline(intercept = 3, slope = 5)</code></dd>
-<dd><code>gp + geom_hline(yintercept = 7) + geom_vline(xintercept = 11)</code></dd>
+<dd><code>geom_smooth(method = glm, method.args = list(family = poisson), se = FALSE)</code></dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html">始点と終点で曲線や矢印を描く</a></dt>
-<dd><code>gp + geom_curve(aes(x, y, xend, yend), curvature = -0.2)</code></dd>
-<dd><code>gp + geom_segment(aes(x, y, xend, yend), arrow = arrow(type = &quot;closed&quot;), linejoin = &quot;mitre&quot;)</code></dd>
+<dd><code>geom_curve(aes(x, y, xend, yend), curvature = -0.2)</code></dd>
+<dd><code>geom_segment(aes(x, y, xend, yend), arrow = arrow(type = &quot;closed&quot;), linejoin = &quot;mitre&quot;)</code></dd>
 <dd>矢印の調整は<a href="https://www.rdocumentation.org/packages/grid/topics/arrow"><code>grid::arrow()</code></a>。
 普通の線より矢尻の分だけ長くなることに注意。</dd>
+<dt><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">切片と傾きで直線を描く</a></dt>
+<dd><code>geom_abline(intercept = 3, slope = 5)</code></dd>
+<dd><code>geom_hline(yintercept = 7) + geom_vline(xintercept = 11)</code></dd>
+<dd>これらは <code>annotate()</code> 的な位置づけであり、ほかの <code>geom_</code> 関数とはかなり挙動が違う。
+そのためか <code>annotate(&quot;hline&quot;, yintercept = 7)</code> なども思い通りの結果にはならない。</dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/annotate.html">文字列や図形を書き加える</a></dt>
-<dd><code>gp + annotate(&quot;text&quot;, x = 1:4, y = 4:1, label = sprintf(&quot;x = %d&quot;, 1:4))</code></dd>
+<dd><code>annotate(&quot;text&quot;, x = 1:4, y = 4:1, label = sprintf(&quot;x = %d&quot;, 1:4))</code></dd>
 <dd>テーマの <code>base_family</code> は引き継がれないので <code>family =</code> で指定すべし。</dd>
 <dd>数式を表示するには <code>label = &quot;italic(N[t])&quot;</code> のような文字列で渡して <code>parse = TRUE</code>。</dd>
 <dd>データ点に対応する文字列を添えるには
-<code>gp + geom_text(aes(label = foo))</code> のほうが適している。
+<code>geom_text(aes(label = foo))</code> のほうが適している。
 オプションで <code>nudge_x = 2, nudge_y = 2</code> などとすれば点と重ならないようにずらせる。
 <a href="https://ggplot2.tidyverse.org/reference/position_nudge.html"><code>position_nudge()</code></a></dd>
 </dl>
