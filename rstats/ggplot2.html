@@ -293,13 +293,18 @@ p1 <span class="o">+</span> facet_grid<span class="p">(</span>cyl <span class="o
 
 <h3 id="内部変数を使う">内部変数を使う</h3>
 
-<p><a href="https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variables">https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variables</a></p>
+<p>ヒストグラムや箱ヒゲなどの表示に必要な計算は <code>stat_*()</code> を通して内部的に行われる。
+そうした値 (<strong>calculated aesthetics</strong>) の一部は <code>aes(y = stat(count))</code> のようにして
+<a href="https://ggplot2.tidyverse.org/reference/stat.html"><code>stat()</code></a> 関数を通じて参照できる。
+(昔は <code>..count..</code> のようにピリオドつきの変な名前で参照していた。)</p>
 
-<p>ヒストグラムや箱ヒゲなどの表示に必要な計算は
-ggplot内部で <code>stat_*()</code> を通して行われる。
-そうした値 (computed variables) の一部は
-<code>..count..</code> や <code>..density..</code> みたいに
-ピリオドで囲まれた特殊な名前で参照することができる。</p>
+<p>これらはggplotオブジェクトを作るときではなく、描画するときに計算されるらしい。
+強制的にそこまで計算させて値を参照するには <code>ggplot_build()</code> を使う。
+たとえば <code>h = hist(mpg$cty)</code> のようなものを取得したいときは:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">p <span class="o">=</span> ggplot<span class="p">(</span>mpg<span class="p">,</span> aes<span class="p">(</span>cty<span class="p">))</span> <span class="o">+</span> geom_histogram<span class="p">(</span>bins <span class="o">=</span> <span class="m">6L</span><span class="p">)</span>
+ggplot_build<span class="p">(</span>p<span class="p">)</span><span class="o">$</span>data<span class="p">[[</span><span class="m">1L</span><span class="p">]]</span>
+<span class="c1"># layer_data(p)</span></code></pre></div>
+<p><a href="https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variables">https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variables</a></p>
 
 <h2 id="座標軸やタイトルを変更">座標軸やタイトルを変更</h2>
 
