@@ -243,9 +243,9 @@ https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variable
 ## 座標軸やタイトルを変更
 
 [軸の区切りを変更したり対数にしたり](https://ggplot2.tidyverse.org/reference/scale_continuous.html)
-:   `gp + scale_x_continuous(breaks = seq(10, 100, by = 10))`
-:   `gp + scale_y_log10("Beer consumption")`
-:   `gp + scale_y_reverse()`
+:   `scale_x_continuous(breaks = seq(10, 100, by = 10))`
+:   `scale_y_log10("Beer consumption")`
+:   `scale_y_reverse()`
 :   上記の<a href="#スケール共通オプション">スケール共通オプション</a>に加えて:
     - `expand`: デフォルトでは値域よりも少し余裕を持たせてあるが
       `c(0, 0)` を与えるとピッタリになる。`geom_tile()`を使うときなどに。
@@ -255,27 +255,27 @@ https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variable
     - `sec.axis`: 第二軸
 
 [描画する範囲を指定](https://ggplot2.tidyverse.org/reference/coord_cartesian.html)
-:   `gp + ylim(0, 42) + xlim("b", "c", "d")`
-:   `gp + coord_cartesian(xlim = NULL, ylim = NULL)`
+:   `ylim(0, 42) + xlim("b", "c", "d")`
+:   `coord_cartesian(xlim = NULL, ylim = NULL)`
 :   前者はデータそのものを切るが、後者はデータを変えずに描画領域だけ切る
 
 [X軸とY軸の比率を固定](https://ggplot2.tidyverse.org/reference/coord_fixed.html)
-:   `gp + coord_fixed(ratio = 1)`
+:   `coord_fixed(ratio = 1)`
 
 [XY軸の反転](https://ggplot2.tidyverse.org/reference/coord_flip.html)
-:   `gp + coord_flip()`
+:   `coord_flip()`
 
 [極座標](https://ggplot2.tidyverse.org/reference/coord_polar.html)
 :   パイチャートも作れるらしい
 
 [座標変換](https://ggplot2.tidyverse.org/reference/coord_trans.html)
-:   `gp + coord_trans(x = "log10", y = "sqrt")`
+:   `coord_trans(x = "log10", y = "sqrt")`
 :    表示する座標を変換する。
      stat前に適用される `scale_x_*` とは微妙に違う。
 
 [軸ラベルとタイトル](https://ggplot2.tidyverse.org/reference/labs.html)
-:   `gp + labs(x = "time", y = "weight", title = "growth", tag = "A")`
-:   `gp + xlab("time") + ylab("weight") + ggtitle("growth")`
+:   `labs(x = "time", y = "weight", title = "growth", tag = "A")`
+:   `xlab("time") + ylab("weight") + ggtitle("growth")`
 
 
 ## `theme`: 背景やラベルの調整
@@ -480,45 +480,37 @@ ggsave("mpg3.png", p1, width = 2, height = 2, dpi = 600)
 
 # 4     x 300    = 1200  テーマを使って文字だけ拡大
 ggsave("mpg4.png", p1 + theme_bw(base_size = 22), width = 4, height = 4)
-# 7inch x 300dpi = 2100px四方 (デフォルト)
-ggsave("mpg1.png", p1) # width = 7, height = 7, dpi = 300
-# 4     x 300    = 1200  全体7/4倍ズーム
-ggsave("mpg2.png", p1, width = 4, height = 4) # dpi = 300
-# 2     x 600    = 1200  全体をさらに2倍ズーム
-ggsave("mpg3.png", p1, width = 2, height = 2, dpi = 600)
-# 4     x 300    = 1200  テーマを使って文字だけ拡大
-ggsave("mpg4.png", p1 + theme_bw(base_size = 22), width = 4, height = 4)
 ```
 
 
 ## プロットの種類
 
 [散布図](https://ggplot2.tidyverse.org/reference/geom_point.html)
-:   `gp + geom_point(size = 2, alpha = 0.3)`
+:   `geom_point(size = 2, alpha = 0.3)`
 :   重なった点をランダムにばらかしたいときは
     [`geom_jitter()`](https://ggplot2.tidyverse.org/reference/geom_jitter.html)
 :   [点の形(shape)一覧](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html#sec:shape-spec)
 
 [折れ線グラフ](https://ggplot2.tidyverse.org/reference/geom_path.html)
-:   `gp + geom_path(size = 2, linetype = "dashed")` データ順に結ぶ
-:   `gp + geom_line()` x軸上の順で結ぶ
-:   `gp + geom_step()` 階段状に結ぶ
+:   `geom_path(size = 2, linetype = "dashed")` データ順に結ぶ
+:   `geom_line()` x軸上の順で結ぶ
+:   `geom_step()` 階段状に結ぶ
 :   [線の種類(linetype)一覧](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html#sec:line-type-spec)
 
 [面グラフ](https://ggplot2.tidyverse.org/reference/geom_ribbon.html)
-:   `gp + geom_ribbon()` --- yminからymaxの面
-:   `gp + geom_area()` --- 0からyの面
+:   `geom_ribbon()` --- yminからymaxの面
+:   `geom_area()` --- 0からyの面
 
 [ヒストグラム、密度曲線](https://ggplot2.tidyverse.org/reference/geom_histogram.html)
-:   `gp + geom_histogram()` --- 棒グラフ(連続値を`stat_bin()` で区切って)
-:   `gp + geom_bar()` --- 棒グラフ(離散値を`stat_count()`で数えて)
-:   `gp + geom_freqpoly()` --- 折れ線
-:   `gp + geom_density()` --- 密度推定されたスムーズな線
-:   `gp + geom_bin2d()` --- 二次元ヒストグラム
-:   `gp + geom_hex()` --- 六角形版二次元ヒストグラム
+:   `geom_histogram()` --- 棒グラフ(連続値を`stat_bin()` で区切って)
+:   `geom_bar()` --- 棒グラフ(離散値を`stat_count()`で数えて)
+:   `geom_freqpoly()` --- 折れ線
+:   `geom_density()` --- 密度推定されたスムーズな線
+:   `geom_bin2d()` --- 二次元ヒストグラム
+:   `geom_hex()` --- 六角形版二次元ヒストグラム
 
 [棒グラフ](https://ggplot2.tidyverse.org/reference/geom_bar.html)
-:   `gp + geom_col()`
+:   `geom_col()`
 :   グループ分けする場合のオプション:
     - [`position = "stack"`](https://ggplot2.tidyverse.org/reference/position_stack.html):
       縦に積み重ねる (デフォルト)
@@ -526,43 +518,50 @@ ggsave("mpg4.png", p1 + theme_bw(base_size = 22), width = 4, height = 4)
       横に並べる
     - `position = "fill"`: 縦に積み重ね、高さを1に揃えて割合を示す
 
-[箱ひげ図](https://ggplot2.tidyverse.org/reference/geom_boxplot.html)
-:   `gp + geom_boxplot()`
-:   `gp + geom_violin()`
+箱ひげ図とその代替案
+:   [`geom_boxplot()`](https://ggplot2.tidyverse.org/reference/geom_boxplot.html):
+    生データの分布に関する情報量が落ちすぎるので要注意。
+:   [`geom_violin(scale = "count")`](https://ggplot2.tidyverse.org/reference/geom_violin.html):
+    箱ひげ図よりは密度が分かりやすいけど、推定であることとスケールに注意。
+:   [`ggridges::geom_density_ridges()`](https://github.com/clauswilke/ggridges):
+    violinの片側を横にしたようなもの。
+:   [`geom_dotplot()`](https://ggplot2.tidyverse.org/reference/geom_dotplot.html)
+    or [`ggbeeswarm::geom_beeswarm()`](https://github.com/eclarke/ggbeeswarm):
+    生データの分布が読み取りやすい。
 
 [ヒートマップ](https://ggplot2.tidyverse.org/reference/geom_tile.html)
-:   `gp + geom_tile(aes(fill = z))`
-:   `gp + geom_raster(aes(fill = z))` --- 各タイルの大きさを揃える制約のため高速
+:   `geom_tile(aes(fill = z))`
+:   `geom_raster(aes(fill = z))` --- 各タイルの大きさを揃える制約のため高速
 
 [エラーバー](https://ggplot2.tidyverse.org/reference/geom_linerange.html)
-:   `gp + geom_errorbar(aes(ymax = y + se, ymin = y - se), width = 0.1)`
-:   `gp + geom_linerange(...)`
-:   `gp + geom_pointrange(...)`
+:   `geom_errorbar(aes(ymax = y + se, ymin = y - se), width = 0.1)`
+:   `geom_linerange(...)`
+:   `geom_pointrange(...)`
 
 [関数](https://ggplot2.tidyverse.org/reference/stat_function.html)
 :   `ggplot(data.frame(x = c(-4, 4)), aes(x)) + stat_function(fun = dnorm, args = c(0, 1), n = 200)`
 
-------------------------------------------------------------------------
-
 [回帰曲線](https://ggplot2.tidyverse.org/reference/geom_smooth.html)
-:   `gp + geom_smooth(method = glm, method.args = list(family = poisson), se = FALSE)`
-
-[切片と傾きで直線を描く](https://ggplot2.tidyverse.org/reference/geom_abline.html)
-:   `gp + geom_abline(intercept = 3, slope = 5)`
-:   `gp + geom_hline(yintercept = 7) + geom_vline(xintercept = 11)`
+:   `geom_smooth(method = glm, method.args = list(family = poisson), se = FALSE)`
 
 [始点と終点で曲線や矢印を描く](https://ggplot2.tidyverse.org/reference/geom_segment.html)
-:   `gp + geom_curve(aes(x, y, xend, yend), curvature = -0.2)`
-:   `gp + geom_segment(aes(x, y, xend, yend), arrow = arrow(type = "closed"), linejoin = "mitre")`
+:   `geom_curve(aes(x, y, xend, yend), curvature = -0.2)`
+:   `geom_segment(aes(x, y, xend, yend), arrow = arrow(type = "closed"), linejoin = "mitre")`
 :   矢印の調整は[`grid::arrow()`](https://www.rdocumentation.org/packages/grid/topics/arrow)。
     普通の線より矢尻の分だけ長くなることに注意。
 
+[切片と傾きで直線を描く](https://ggplot2.tidyverse.org/reference/geom_abline.html)
+:   `geom_abline(intercept = 3, slope = 5)`
+:   `geom_hline(yintercept = 7) + geom_vline(xintercept = 11)`
+:   これらは `annotate()` 的な位置づけであり、ほかの `geom_` 関数とはかなり挙動が違う。
+    そのためか `annotate("hline", yintercept = 7)` なども思い通りの結果にはならない。
+
 [文字列や図形を書き加える](https://ggplot2.tidyverse.org/reference/annotate.html)
-:   `gp + annotate("text", x = 1:4, y = 4:1, label = sprintf("x = %d", 1:4))`
+:   `annotate("text", x = 1:4, y = 4:1, label = sprintf("x = %d", 1:4))`
 :   テーマの `base_family` は引き継がれないので `family =` で指定すべし。
 :   数式を表示するには `label = "italic(N[t])"` のような文字列で渡して `parse = TRUE`。
 :   データ点に対応する文字列を添えるには
-    `gp + geom_text(aes(label = foo))` のほうが適している。
+    `geom_text(aes(label = foo))` のほうが適している。
     オプションで `nudge_x = 2, nudge_y = 2` などとすれば点と重ならないようにずらせる。
     [`position_nudge()`](https://ggplot2.tidyverse.org/reference/position_nudge.html)
 
