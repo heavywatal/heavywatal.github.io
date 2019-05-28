@@ -222,13 +222,22 @@ ggplot(mpg) +
 
 ### 内部変数を使う
 
-https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variables
+ヒストグラムや箱ヒゲなどの表示に必要な計算は `stat_*()` を通して内部的に行われる。
+そうした値 (**calculated aesthetics**) の一部は `aes(y = stat(count))` のようにして
+[`stat()`](https://ggplot2.tidyverse.org/reference/stat.html) 関数を通じて参照できる。
+(昔は `..count..` のようにピリオドつきの変な名前で参照していた。)
 
-ヒストグラムや箱ヒゲなどの表示に必要な計算は
-ggplot内部で `stat_*()` を通して行われる。
-そうした値 (computed variables) の一部は
-`..count..` や `..density..` みたいに
-ピリオドで囲まれた特殊な名前で参照することができる。
+これらはggplotオブジェクトを作るときではなく、描画するときに計算されるらしい。
+強制的にそこまで計算させて値を参照するには `ggplot_build()` を使う。
+たとえば `h = hist(mpg$cty)` のようなものを取得したいときは:
+
+```r
+p = ggplot(mpg, aes(cty)) + geom_histogram(bins = 6L)
+ggplot_build(p)$data[[1L]]
+# layer_data(p)
+```
+
+https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variables
 
 
 ## 座標軸やタイトルを変更
