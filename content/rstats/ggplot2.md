@@ -42,13 +42,13 @@ R標準の`boxplot()`や`hist()`などは前者の上に、
 ```r
 library(tidyverse)
 mpg
-#      manufacturer  model displ  year   cyl      trans    drv   cty   hwy     fl   class
-#            <char> <char> <num> <int> <int>     <char> <char> <int> <int> <char>  <char>
-#   1:         audi     a4   1.8  1999     4   auto(l5)      f    18    29      p compact
-#   2:         audi     a4   1.8  1999     4 manual(m5)      f    21    29      p compact
-#  ---
-# 233:   volkswagen passat   2.8  1999     6 manual(m5)      f    18    26      p midsize
-# 234:   volkswagen passat   3.6  2008     6   auto(s6)      f    17    26      p midsize
+#     manufacturer  model displ  year   cyl      trans   drv   cty   hwy    fl   class
+#            <chr>  <chr> <dbl> <int> <int>      <chr> <chr> <int> <int> <chr>   <chr>
+#   1         audi     a4   1.8  1999     4   auto(l5)     f    18    29     p compact
+#   2         audi     a4   1.8  1999     4 manual(m5)     f    21    29     p compact
+#  --
+# 233   volkswagen passat   2.8  1999     6 manual(m5)     f    18    26     p midsize
+# 234   volkswagen passat   3.6  2008     6   auto(s6)     f    17    26     p midsize
 ```
 
 このようなデータを渡して、指示をどんどん `+` していく:
@@ -195,29 +195,38 @@ ggplot(mpg) +
 :   1変数で分割して並べる
     ```r
     facet_wrap(facets, nrow = NULL, ncol = NULL, scales = "fixed",
-               shrink = TRUE, labeller = "label_value",
-               as.table = TRUE, switch = NULL, drop = TRUE,
-               dir = "h", strip.position = "top")
+      shrink = TRUE, labeller = "label_value", as.table = TRUE,
+      switch = NULL, drop = TRUE, dir = "h", strip.position = "top")
 
-    p1 + facet_wrap(~ class, ncol = 4L)
+    p1 + facet_wrap(vars(class), ncol = 4L) # new style
+    p1 + facet_wrap(~ class, ncol = 4L)     # old style
     ```
 
 [`facet_grid()`](https://ggplot2.tidyverse.org/reference/facet_grid.html)
-:   2変数で分割して縦横に並べる
+:   2変数以上で分割して縦横に並べる
     ```r
-    facet_grid(facets, margins = FALSE, scales = "fixed", space = "fixed",
-               shrink = TRUE, labeller = "label_value",
-               as.table = TRUE, switch = NULL, drop = TRUE)
+    facet_grid(rows = NULL, cols = NULL, scales = "fixed",
+      space = "fixed", shrink = TRUE, labeller = "label_value",
+      as.table = TRUE, switch = NULL, drop = TRUE, margins = FALSE,
+      facets = NULL)
 
-    p1 + facet_grid(cyl ~ class)
+    p1 + facet_grid(vars(cyl), vars(class, drv)) # new style
+    p1 + facet_grid(cyl ~ class + drv)           # old style
     ```
-    3変数以上にしたい場合は `+` で追加できる。
     1変数でいい場合は `. ~ class` のように片方をドットにする。
 
-[ファセットラベルの調整](https://ggplot2.tidyverse.org/reference/labellers.html)
+[ファセットラベルの調整 `labeller =`](https://ggplot2.tidyverse.org/reference/labellers.html)
 :   デフォルトでは値だけがfacetラベルに表示されるが、
     変数名を同時に表示したり、数式を表示したりもできる。
-    見た目の調整はテーマの `strip.*` で。
+    それを変数ごとに指定したい場合は
+    [`labeller()`](https://ggplot2.tidyverse.org/reference/labeller.html)
+    関数を使う。e.g.,<br>
+    `labeller = labeller(cyl = label_both, class = label_value)`
+:   見た目の調整はテーマの `strip.*` で。
+
+パネル同士が近すぎて `axis.text` が重なってしまう場合は
+`theme(panel.spacing = grid::unit(1, "lines"))`
+などとすれば間隔を空けられる。
 
 
 ### 内部変数を使う
