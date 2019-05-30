@@ -129,13 +129,13 @@ R標準の<code>boxplot()</code>や<code>hist()</code>などは前者の上に�
 例えばggplot2に付属の<code>mpg</code>データ:</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span>tidyverse<span class="p">)</span>
 mpg
-<span class="c1">#      manufacturer  model displ  year   cyl      trans    drv   cty   hwy     fl   class</span>
-<span class="c1">#            &lt;char&gt; &lt;char&gt; &lt;num&gt; &lt;int&gt; &lt;int&gt;     &lt;char&gt; &lt;char&gt; &lt;int&gt; &lt;int&gt; &lt;char&gt;  &lt;char&gt;</span>
-<span class="c1">#   1:         audi     a4   1.8  1999     4   auto(l5)      f    18    29      p compact</span>
-<span class="c1">#   2:         audi     a4   1.8  1999     4 manual(m5)      f    21    29      p compact</span>
-<span class="c1">#  ---</span>
-<span class="c1"># 233:   volkswagen passat   2.8  1999     6 manual(m5)      f    18    26      p midsize</span>
-<span class="c1"># 234:   volkswagen passat   3.6  2008     6   auto(s6)      f    17    26      p midsize</span></code></pre></div>
+<span class="c1">#     manufacturer  model displ  year   cyl      trans   drv   cty   hwy    fl   class</span>
+<span class="c1">#            &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt;      &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;</span>
+<span class="c1">#   1         audi     a4   1.8  1999     4   auto(l5)     f    18    29     p compact</span>
+<span class="c1">#   2         audi     a4   1.8  1999     4 manual(m5)     f    21    29     p compact</span>
+<span class="c1">#  --</span>
+<span class="c1"># 233   volkswagen passat   2.8  1999     6 manual(m5)     f    18    26     p midsize</span>
+<span class="c1"># 234   volkswagen passat   3.6  2008     6   auto(s6)     f    17    26     p midsize</span></code></pre></div>
 <p>このようなデータを渡して、指示をどんどん <code>+</code> していく:</p>
 
 <ul>
@@ -271,25 +271,34 @@ breaksの値を受け取って文字列を返す関数
 <dt><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html"><code>facet_wrap()</code></a></dt>
 <dd><p>1変数で分割して並べる</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">facet_wrap<span class="p">(</span>facets<span class="p">,</span> nrow <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> ncol <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> scales <span class="o">=</span> <span class="s">&#34;fixed&#34;</span><span class="p">,</span>
-           shrink <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> labeller <span class="o">=</span> <span class="s">&#34;label_value&#34;</span><span class="p">,</span>
-           as.table <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="kr">switch</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> drop <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
-           dir <span class="o">=</span> <span class="s">&#34;h&#34;</span><span class="p">,</span> strip.position <span class="o">=</span> <span class="s">&#34;top&#34;</span><span class="p">)</span>
+  shrink <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> labeller <span class="o">=</span> <span class="s">&#34;label_value&#34;</span><span class="p">,</span> as.table <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
+  <span class="kr">switch</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> drop <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> dir <span class="o">=</span> <span class="s">&#34;h&#34;</span><span class="p">,</span> strip.position <span class="o">=</span> <span class="s">&#34;top&#34;</span><span class="p">)</span>
 
-p1 <span class="o">+</span> facet_wrap<span class="p">(</span><span class="o">~</span> <span class="kp">class</span><span class="p">,</span> ncol <span class="o">=</span> <span class="m">4L</span><span class="p">)</span></code></pre></div></dd>
+p1 <span class="o">+</span> facet_wrap<span class="p">(</span>vars<span class="p">(</span><span class="kp">class</span><span class="p">),</span> ncol <span class="o">=</span> <span class="m">4L</span><span class="p">)</span> <span class="c1"># new style</span>
+p1 <span class="o">+</span> facet_wrap<span class="p">(</span><span class="o">~</span> <span class="kp">class</span><span class="p">,</span> ncol <span class="o">=</span> <span class="m">4L</span><span class="p">)</span>     <span class="c1"># old style</span></code></pre></div></dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html"><code>facet_grid()</code></a></dt>
-<dd><p>2変数で分割して縦横に並べる</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">facet_grid<span class="p">(</span>facets<span class="p">,</span> margins <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span> scales <span class="o">=</span> <span class="s">&#34;fixed&#34;</span><span class="p">,</span> space <span class="o">=</span> <span class="s">&#34;fixed&#34;</span><span class="p">,</span>
-           shrink <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> labeller <span class="o">=</span> <span class="s">&#34;label_value&#34;</span><span class="p">,</span>
-           as.table <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="kr">switch</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> drop <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
+<dd><p>2変数以上で分割して縦横に並べる</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">facet_grid<span class="p">(</span>rows <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> cols <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> scales <span class="o">=</span> <span class="s">&#34;fixed&#34;</span><span class="p">,</span>
+  space <span class="o">=</span> <span class="s">&#34;fixed&#34;</span><span class="p">,</span> shrink <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> labeller <span class="o">=</span> <span class="s">&#34;label_value&#34;</span><span class="p">,</span>
+  as.table <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="kr">switch</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> drop <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> margins <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
+  facets <span class="o">=</span> <span class="kc">NULL</span><span class="p">)</span>
 
-p1 <span class="o">+</span> facet_grid<span class="p">(</span>cyl <span class="o">~</span> <span class="kp">class</span><span class="p">)</span></code></pre></div>
-<p>3変数以上にしたい場合は <code>+</code> で追加できる。
-1変数でいい場合は <code>. ~ class</code> のように片方をドットにする。</p></dd>
-<dt><a href="https://ggplot2.tidyverse.org/reference/labellers.html">ファセットラベルの調整</a></dt>
+p1 <span class="o">+</span> facet_grid<span class="p">(</span>vars<span class="p">(</span>cyl<span class="p">),</span> vars<span class="p">(</span><span class="kp">class</span><span class="p">,</span> drv<span class="p">))</span> <span class="c1"># new style</span>
+p1 <span class="o">+</span> facet_grid<span class="p">(</span>cyl <span class="o">~</span> class <span class="o">+</span> drv<span class="p">)</span>           <span class="c1"># old style</span></code></pre></div>
+<p>1変数でいい場合は <code>. ~ class</code> のように片方をドットにする。</p></dd>
+<dt><a href="https://ggplot2.tidyverse.org/reference/labellers.html">ファセットラベルの調整 <code>labeller =</code></a></dt>
 <dd><p>デフォルトでは値だけがfacetラベルに表示されるが、
 変数名を同時に表示したり、数式を表示したりもできる。
-見た目の調整はテーマの <code>strip.*</code> で。</p></dd>
+それを変数ごとに指定したい場合は
+<a href="https://ggplot2.tidyverse.org/reference/labeller.html"><code>labeller()</code></a>
+関数を使う。e.g.,<br>
+<code>labeller = labeller(cyl = label_both, class = label_value)</code></p></dd>
+<dd><p>見た目の調整はテーマの <code>strip.*</code> で。</p></dd>
 </dl>
+
+<p>パネル同士が近すぎて <code>axis.text</code> が重なってしまう場合は
+<code>theme(panel.spacing = grid::unit(1, &quot;lines&quot;))</code>
+などとすれば間隔を空けられる。</p>
 
 <h3 id="内部変数を使う">内部変数を使う</h3>
 
