@@ -123,7 +123,7 @@ BibDesk, LaTeXiT, TeX Live Utility, TeXShop などのGUIアプリが不要で、
 
 <ol>
 <li><p>ソースコードを書く</p>
-<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\documentclass</span><span class="nb">{</span>article<span class="nb">}</span>
+<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\documentclass</span><span class="na">[a4paper]</span><span class="nb">{</span>article<span class="nb">}</span>
 <span class="k">\begin</span><span class="nb">{</span>document<span class="nb">}</span>
 Hello, World!
 <span class="k">\end</span><span class="nb">{</span>document<span class="nb">}</span></code></pre></div></li>
@@ -137,6 +137,29 @@ open hello.pdf</code></pre></div></li>
    原稿書きからコンパイルまで面倒を見てもらえるので、
    ターミナルにコマンドを打ち込む必要はないらしい。</p>
 
+<h4 id="latexmk"><code>latexmk</code></h4>
+
+<p>引用文献や図表への参照などを入れたりすると
+<code>pdflatex</code> を一度実行するだけではPDFが完成せず、
+コマンドを何度か繰り返し実行しなければならなくなる。
+<code>latexmk</code> はそのへんをうまくお世話してくれる。</p>
+
+<p>対象の <code>.tex</code> ファイルを明示的に指定してもいいし、
+省略してディレクトリ内のすべてのファイルを対象にしてもいい。</p>
+
+<pre><code>latexmk -h    # print help
+latexmk       # generate document
+latexmk -pv   # preview document after generation
+latexmk -pvc  # preview document and continuously update
+latexmk -C    # clean up
+</code></pre>
+
+<p>設定を <code>~/.latexmkrc</code> とかに書いておける:</p>
+<div class="highlight"><pre class="chroma"><code class="language-perl" data-lang="perl"><span class="nv">$pdf_mode</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="nv">$pdflatex</span> <span class="o">=</span> <span class="s">&#39;pdflatex -file-line-error -halt-on-error -synctex=1 %O %S&#39;</span><span class="p">;</span>
+<span class="nv">$lualatex</span> <span class="o">=</span> <span class="s">&#39;lualatex -file-line-error -halt-on-error -synctex=1 %O %S&#39;</span><span class="p">;</span></code></pre></div>
+<p><a href="https://www.ctan.org/pkg/latexmk">https://www.ctan.org/pkg/latexmk</a></p>
+
 <h3 id="tlmgr-でパッケージ管理">tlmgr でパッケージ管理</h3>
 
 <p>BasicTeXの場合は最小限のパッケージしか含まれていないので、
@@ -147,7 +170,7 @@ open hello.pdf</code></pre></div></li>
 tlmgr search --global japanese
 tlmgr search --global --file zxxrl7z
 tlmgr info --list newtx
-tlmgr install chktex</code></pre></div>
+tlmgr install chktex latexmk</code></pre></div>
 <p>管理者権限不要の <code>--usermode</code> も用意されているが、
 なんかうまくいかないので必要に迫られない限り使わないほうがよい。</p>
 
@@ -170,7 +193,7 @@ tlmgr install chktex</code></pre></div>
 アメリカ数学会(AMS)が開発したらしいが、
 ガチ数学じゃなくても数式を書く場合はこれらしい。</p>
 <div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\usepackage</span><span class="nb">{</span>amsmath<span class="nb">}</span>
-<span class="k">\usepackage</span><span class="na">[all, warning]</span><span class="nb">{</span>onlyamsmath<span class="nb">}</span></code></pre></div></li>
+<span class="k">\usepackage</span><span class="na">[all,warning]</span><span class="nb">{</span>onlyamsmath<span class="nb">}</span></code></pre></div></li>
 
 <li><p>Inline math:</p>
 <div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex">if <span class="s">$</span><span class="nb">N_e u </span><span class="nv">\ll</span><span class="nb"> </span><span class="m">1</span><span class="s">$</span>, then the population is monomorphic most of the time,</code></pre></div>
@@ -360,7 +383,7 @@ e.g., <code>mybibdata.bib</code></li>
 
 <p>最初の2回は <code>pdflatex -draftmode</code> としてPDF出力を省略すると早い。
 適切な <code>Makefile</code> を書いて自動化するべし。
-<a href="https://www.ctan.org/pkg/latexmk"><code>latexmk</code></a> を使うともっと楽ちん。</p>
+<a href="#latexmk">latexmk</a> を使うともっと楽ちん。</p>
 
 <h3 id="文字の修飾">文字の修飾</h3>
 
@@ -404,9 +427,9 @@ e.g., <code>mybibdata.bib</code></li>
 中には古すぎたりするため避けたほうがよいものもある。
 ファイルの先頭で <code>nag</code> を読み込むことで、
 コンパイル時にそういうのを警告してもらえる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\RequirePackage</span><span class="na">[l2tabu, orthodox]</span><span class="nb">{</span>nag<span class="nb">}</span>
+<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\RequirePackage</span><span class="na">[l2tabu,orthodox]</span><span class="nb">{</span>nag<span class="nb">}</span>
 
-<span class="k">\documentclass</span><span class="nb">{</span>article<span class="nb">}</span>  <span class="err">%</span> これよりも前</code></pre></div>
+<span class="k">\documentclass</span><span class="na">[a4paper]</span><span class="nb">{</span>article<span class="nb">}</span>  <span class="err">%</span> これよりも前</code></pre></div>
 <p><code>chktex</code> コマンドを使えばコンパイルよりも手軽にチェックできる。
 <a href="/dev/atom.html">Atom</a> に
 <a href="https://atom.io/packages/linter-chktex">linter-chktex</a>
@@ -528,7 +551,7 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 </dl>
 
 <p>XeTeX なら OS のフォントをフルネームで指定して使える</p>
-<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\usepackage</span><span class="nb">{</span>amsthm, amsmath<span class="nb">}</span> <span class="c">% must be called ahead of mathspec
+<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\usepackage</span><span class="nb">{</span>amsthm,amsmath<span class="nb">}</span> <span class="c">% must be called ahead of mathspec
 </span><span class="c"></span><span class="k">\usepackage</span><span class="na">[all,warning]</span><span class="nb">{</span>onlyamsmath<span class="nb">}</span>
 <span class="k">\ifxetex</span>
   <span class="k">\usepackage</span><span class="nb">{</span>mathspec<span class="nb">}</span> <span class="c">% must be called ahead of fontspec
