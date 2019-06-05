@@ -37,7 +37,7 @@ TeX Liveの新パージョンが年1回リリースされるので、そのと�
 1.  ソースコードを書く
 
     ```tex
-    \documentclass{article}
+    \documentclass[a4paper]{article}
     \begin{document}
     Hello, World!
     \end{document}
@@ -54,6 +54,34 @@ TeX Liveの新パージョンが年1回リリースされるので、そのと�
    原稿書きからコンパイルまで面倒を見てもらえるので、
    ターミナルにコマンドを打ち込む必要はないらしい。
 
+#### `latexmk`
+
+引用文献や図表への参照などを入れたりすると
+`pdflatex` を一度実行するだけではPDFが完成せず、
+コマンドを何度か繰り返し実行しなければならなくなる。
+`latexmk` はそのへんをうまくお世話してくれる。
+
+対象の `.tex` ファイルを明示的に指定してもいいし、
+省略してディレクトリ内のすべてのファイルを対象にしてもいい。
+
+```
+latexmk -h    # print help
+latexmk       # generate document
+latexmk -pv   # preview document after generation
+latexmk -pvc  # preview document and continuously update
+latexmk -C    # clean up
+```
+
+設定を `~/.latexmkrc` とかに書いておける:
+
+```perl
+$pdf_mode = 1;
+$pdflatex = 'pdflatex -file-line-error -halt-on-error -synctex=1 %O %S';
+$lualatex = 'lualatex -file-line-error -halt-on-error -synctex=1 %O %S';
+```
+
+https://www.ctan.org/pkg/latexmk
+
 
 ### tlmgr でパッケージ管理
 
@@ -67,7 +95,7 @@ tlmgr update --self --all
 tlmgr search --global japanese
 tlmgr search --global --file zxxrl7z
 tlmgr info --list newtx
-tlmgr install chktex
+tlmgr install chktex latexmk
 ```
 
 管理者権限不要の `--usermode` も用意されているが、
@@ -93,7 +121,7 @@ tlmgr install chktex
     ガチ数学じゃなくても数式を書く場合はこれらしい。
     ```tex
     \usepackage{amsmath}
-    \usepackage[all, warning]{onlyamsmath}
+    \usepackage[all,warning]{onlyamsmath}
     ```
 
 -   Inline math:
@@ -306,7 +334,7 @@ GIFアニメをそのまま埋め込むことはできないので、
 
 最初の2回は `pdflatex -draftmode` としてPDF出力を省略すると早い。
 適切な `Makefile` を書いて自動化するべし。
-[`latexmk`](https://www.ctan.org/pkg/latexmk) を使うともっと楽ちん。
+[latexmk](#latexmk) を使うともっと楽ちん。
 
 
 ### 文字の修飾
@@ -360,9 +388,9 @@ GIFアニメをそのまま埋め込むことはできないので、
 コンパイル時にそういうのを警告してもらえる。
 
 ```tex
-\RequirePackage[l2tabu, orthodox]{nag}
+\RequirePackage[l2tabu,orthodox]{nag}
 
-\documentclass{article}  % これよりも前
+\documentclass[a4paper]{article}  % これよりも前
 ```
 
 `chktex` コマンドを使えばコンパイルよりも手軽にチェックできる。
@@ -489,7 +517,7 @@ Computer Modern
 XeTeX なら OS のフォントをフルネームで指定して使える
 
 ```tex
-\usepackage{amsthm, amsmath} % must be called ahead of mathspec
+\usepackage{amsthm,amsmath} % must be called ahead of mathspec
 \usepackage[all,warning]{onlyamsmath}
 \ifxetex
   \usepackage{mathspec} % must be called ahead of fontspec
