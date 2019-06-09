@@ -8,7 +8,7 @@ tags = ["r", "tidyverse"]
 +++
 
 <a href="https://dplyr.tidyverse.org/">
-<img src="https://dplyr.tidyverse.org/logo.png" align="right" width="120" height="139">
+<img src="http://hexb.in/vector/dplyr.svg" align="right" width="120" height="139">
 </a>
 
 data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(summarise)、ソート(arrange)などの処理を施すためのパッケージ。
@@ -25,7 +25,7 @@ data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(
 ## 関数の連結 %>%
 
 <a href="https://magrittr.tidyverse.org/">
-<img src="https://magrittr.tidyverse.org/logo.png" align="right" width="120" height="139">
+<img src="http://hexb.in/vector/magrittr.svg" align="right" width="120" height="139">
 </a>
 
 dplyrではなく[magrittr](https://magrittr.tidyverse.org/)の機能。

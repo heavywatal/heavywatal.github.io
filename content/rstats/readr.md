@@ -8,7 +8,7 @@ tags = ["r", "tidyverse"]
 +++
 
 <a href="https://readr.tidyverse.org/">
-<img src="https://readr.tidyverse.org/logo.png" align="right" width="120" height="139">
+<img src="http://hexb.in/vector/readr.svg" align="right" width="120" height="139">
 </a>
 
 タブ区切りテキストやCSVファイルを読み込んでdata.frameにするツール。
@@ -215,7 +215,7 @@ LDFLAGS = -L${HOME}/.homebrew/lib
 ## tibble
 
 <a href="https://tibble.tidyverse.org/">
-<img src="https://tibble.tidyverse.org/logo.png" align="right" width="120" height="139">
+<img src="http://hexb.in/vector/tibble.svg" align="right" width="120" height="139">
 </a>
 
 - http://r4ds.had.co.nz/tibbles.html
