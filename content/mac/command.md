@@ -110,8 +110,11 @@ Open with で表示されるアプリケーションが重複しまくったと�
 `ssh` 越しにやらねばならぬときもある:
 
     hdiutil mount SomeDiskImage.dmg
+
     sudo installer -pkg SomePackage.pkg -target /
-    sudo softwareupdate -i -a
+
+    softwareupdate -l
+    softwareupdate -i -a
 
 ## Obsolete
 
