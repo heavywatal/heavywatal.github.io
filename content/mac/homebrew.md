@@ -7,11 +7,11 @@ tags = ["mac", "package"]
 
 Unixツールをパッケージとして手軽にインストールできるMac用パッケージ管理ソフト。
 
-<http://brew.sh/>
+<https://brew.sh/>
 
 ## Installation
 
-<http://docs.brew.sh/Installation.html>
+<https://docs.brew.sh/Installation.html>
 
 1.  Command Line Tools をインストールする。
     cf. [/dev/devenv]({{< relref "devenv.md" >}})
@@ -45,7 +45,7 @@ Unixツールをパッケージとして手軽にインストールできるMac�
 
 ## Usage
 
-http://docs.brew.sh/FAQ.html
+<https://docs.brew.sh/FAQ.html>
 
 - Homebrew本体とカタログをアップデートし、アップグレード可能なパッケージを表示:
 
@@ -55,7 +55,7 @@ http://docs.brew.sh/FAQ.html
 
         brew upgrade
 
-- パッケージのバージョンを固定し、`brew upgrade --all` の適用外にする。
+- パッケージのバージョンを固定し、一括 `brew upgrade` の適用外にする。
   頻繁に更新され、やたらCPUを使うやつらに。
 
         brew pin imagemagick
@@ -108,8 +108,10 @@ http://docs.brew.sh/FAQ.html
     pandoc
     rmtrash
     rsync
+    sshfs
     tmux
     tree
+    vim
     wget
     xz
     zopfli
@@ -131,8 +133,8 @@ Rをここからインストールするとバイナリ版のパッケージが�
 
 ## brew tap
 
-- http://docs.brew.sh/brew-tap.html
-- http://docs.brew.sh/Interesting-Taps-and-Forks.html
+- https://docs.brew.sh/brew-tap.html
+- https://docs.brew.sh/Interesting-Taps-and-Forks.html
 
 明示的にリポジトリを追加する:
 
@@ -196,6 +198,6 @@ google-backup-and-sync, google-chrome, google-earth, google-japanese-ime,
 inkscape, iterm2, julia, kindle, libreoffice,
 marshallofsound-google-play-music-player, megasync,
 osxfuxe, qlstephen, quicklook-csv, r, rstudio,
-skim, skyfonts, skype, slack, spideroakone, sshfs,
+skim, skyfonts, skype, slack, spideroakone,
 the-unarchiver, virtualbox, visual-studio-code, vlc,
 whatsapp, xquartz, yujitach-menumeters
