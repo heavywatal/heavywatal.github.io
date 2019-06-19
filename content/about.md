@@ -185,10 +185,11 @@ Find me on
 ## Software Development
 
 -   [`tumopp`](https://github.com/heavywatal/tumopp):
-    Tumor growth simulator in C++/R
+    Tumor growth simulator in C++/R.
+    [*PLOS ONE* **12**(9): e0184229](https://doi.org/10.1371/journal.pone.0184229)
 -   [`tekkamaki`](https://heavywatal.github.io/tekkamaki):
     Individual-based simulator of pacific bluefin tuna
--   [`teaposon`](https://heavywatal.github.io/teaposon):
+-   [`tek2`](https://heavywatal.github.io/tek2):
     Population Genetic Simulation Framework of Transposable Elements
 -   [`mkrange`](https://github.com/heavywatal/mkrange):
     Simulator used in Bridle et al.
@@ -199,7 +200,8 @@ Find me on
     Interactive visualization of population genomic analysis of fission yeast.
     (新学術領域研究「[ゲノムを支える非コードDNA領域の機能](http://www.nsc.nagoya-cu.ac.jp/~jnakayam/ncDNA.html)」)
 -   [`driftr.js`](https://heavywatal.github.io/driftr.js/): Genetic Drift Simulator
--   [`oribir`](https://github.com/heavywatal/oribir): Origami Bird Simulator
+-   [`oribir`](https://github.com/heavywatal/oribir): Origami Bird Simulator.
+    [*Evolution: Education and Outreach* **8**:14](https://dx.doi.org/10.1186/s12052-015-0043-6)
 -   [`msutils`](https://github.com/heavywatal/msutils):
     Utilities for coalescent simulation with `ms`
 -   [`sfmt-class`](https://github.com/heavywatal/sfmt-class):
@@ -225,4 +227,5 @@ Find me on
 [Journal of Molecular Evolution](https://link.springer.com/journal/239),
 [Journal of Theoretical Biology](https://ees.elsevier.com/jtb/),
 [Mathematical Biosciences](https://www.journals.elsevier.com/mathematical-biosciences/),
+[Molecular Biology and Evolution](https://academic.oup.com/mbe),
 [Scientific Reports](https://www.nature.com/srep/)
