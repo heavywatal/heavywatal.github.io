@@ -503,6 +503,30 @@ e.g. <code>summarise()</code>, <code>tally()</code>, <code>group_modify()</code>
 代わりに<a href="/rstats/purrr.html"><code>purrr::pmap()</code></a>とかを使う。</p></dd>
 </dl>
 
+<h2 id="matrix-array">matrix, array</h2>
+
+<p>data.frame を主眼とする dplyr では
+matrix や array を扱わないという方針かと思いきや、意外とそうでもなかった。</p>
+
+<dl>
+<dt><code>as.tbl_cube(x, dim_names, met_names, ...)</code></dt>
+<dd>matrix/arrayからdata.frameの一歩手前に変換する。
+<a href="/rstats/reshape2.html"><code>reshape2::melt</code></a> の改良版。
+これの結果に <code>tibble::as_tibble()</code> を適用するとわかりやすい。</dd>
+<dd>ただし <code>dimnames(x)</code> が空ではダメで、長さの正しい名前付きlistになっている必要がある。</dd>
+</dl>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># deprecated</span>
+iris3 <span class="o">%&gt;%</span>
+  reshape2<span class="o">::</span>melt<span class="p">()</span> <span class="o">%&gt;%</span>
+  tibble<span class="o">::</span>as_tibble<span class="p">()</span> <span class="o">%&gt;%</span>
+  dplyr<span class="o">::</span>rename<span class="p">(</span>obs <span class="o">=</span> Var1<span class="p">,</span> metrics <span class="o">=</span> Var2<span class="p">,</span> species <span class="o">=</span> Var3<span class="p">)</span>
+
+<span class="c1"># new</span>
+x <span class="o">=</span> iris3
+<span class="kp">dimnames</span><span class="p">(</span>x<span class="p">)[[</span><span class="m">1L</span><span class="p">]]</span> <span class="o">=</span> <span class="kp">seq_len</span><span class="p">(</span><span class="kp">dim</span><span class="p">(</span>iris3<span class="p">)[[</span><span class="m">1L</span><span class="p">]])</span>
+<span class="kp">names</span><span class="p">(</span><span class="kp">dimnames</span><span class="p">(</span>x<span class="p">))</span> <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#34;obs&#34;</span><span class="p">,</span> <span class="s">&#34;metrics&#34;</span><span class="p">,</span> <span class="s">&#34;species&#34;</span><span class="p">)</span>
+dplyr<span class="o">::</span>as.tbl_cube<span class="p">(</span>x<span class="p">,</span> met_name <span class="o">=</span> <span class="s">&#34;value&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  tibble<span class="o">::</span>as_tibble<span class="p">()</span></code></pre></div>
 <h2 id="関連書籍">関連書籍</h2>
 
 <p><a href="https://www.amazon.co.jp/dp/4774198536/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=f0acaf09c5bcbd85ee22c534caede9d1" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4774198536&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4774198536" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />

@@ -115,12 +115,14 @@ data.frameを処理をするなら、同じ作者が新しく設計しなおし�
 
 <div class="note">
 <p>この用途ならこれじゃなくて
-<a href="/rstats/tidyr.html">tidyr</a>の<code>gather()</code>を使おう。</p>
+<a href="/rstats/tidyr.html"><code>tidyr::gather()</code></a> を使おう。</p>
 
 <p>array対象ならまだ使い道はある。
 例えば3次元arrayを <code>melt(arr, c(&quot;x&quot;, &quot;y&quot;, &quot;z&quot;))</code>
 として3列のmatrixに戻せるのは便利。
-See <code>?reshape2:::melt.array</code>.</p>
+ただしこれも
+<a href="/rstats/dplyr.html"><code>dplyr::as.tbl_cube()</code></a>
+のほうが高速。</p>
 
 </div>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">reshape2<span class="o">::</span>melt<span class="p">(</span>data<span class="p">,</span> id.vars<span class="p">,</span> measure.vars<span class="p">,</span>
