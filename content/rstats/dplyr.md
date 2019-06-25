@@ -517,6 +517,33 @@ iris %>%
     代わりに[`purrr::pmap()`]({{< relref "purrr.md" >}})とかを使う。
 
 
+## matrix, array
+
+data.frame を主眼とする dplyr では
+matrix や array を扱わないという方針かと思いきや、意外とそうでもなかった。
+
+`as.tbl_cube(x, dim_names, met_names, ...)`
+:   matrix/arrayからdata.frameの一歩手前に変換する。
+    [`reshape2::melt`]({{< relref "reshape2.md" >}}) の改良版。
+    これの結果に `tibble::as_tibble()` を適用するとわかりやすい。
+:   ただし `dimnames(x)` が空ではダメで、長さの正しい名前付きlistになっている必要がある。
+
+```r
+# deprecated
+iris3 %>%
+  reshape2::melt() %>%
+  tibble::as_tibble() %>%
+  dplyr::rename(obs = Var1, metrics = Var2, species = Var3)
+
+# new
+x = iris3
+dimnames(x)[[1L]] = seq_len(dim(iris3)[[1L]])
+names(dimnames(x)) = c("obs", "metrics", "species")
+dplyr::as.tbl_cube(x, met_name = "value") %>%
+  tibble::as_tibble()
+```
+
+
 ## 関連書籍
 
 <a href="https://www.amazon.co.jp/dp/4774198536/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=f0acaf09c5bcbd85ee22c534caede9d1" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4774198536&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4774198536" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />

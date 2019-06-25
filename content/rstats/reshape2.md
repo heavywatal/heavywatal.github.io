@@ -28,12 +28,14 @@ data.frameの複数列の値を、カテゴリ変数1列と値1列の組に変�
 
 <div class="note">{{<markdownify>}}
 この用途ならこれじゃなくて
-[tidyr]({{< relref "tidyr.md" >}})の`gather()`を使おう。
+[`tidyr::gather()`]({{< relref "tidyr.md" >}}) を使おう。
 
 array対象ならまだ使い道はある。
 例えば3次元arrayを `melt(arr, c("x", "y", "z"))`
 として3列のmatrixに戻せるのは便利。
-See `?reshape2:::melt.array`.
+ただしこれも
+[`dplyr::as.tbl_cube()`]({{< relref "dplyr.md" >}})
+のほうが高速。
 {{</markdownify>}}</div>
 
 ```r
