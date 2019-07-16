@@ -191,25 +191,30 @@ tlmgr install chktex latexmk
 ```tex
 \usepackage[final]{graphicx}
 %%%
-\begin{figure}[htbp]
-\includegraphics[width=100mm]{great.pdf}
-\caption{some description
-}\label{fig:great}
+\begin{figure}
+\includegraphics[width=\columnwidth]{awesome.pdf}
+\caption{some description}%
+\label{fig:awesome}
 \end{figure}
 ```
 
-`[hb]` のようにして場所を指定できるが、
-結局はいろんな兼ね合いでコンパイラが位置を決める。
+`\begin{figure}[htbp]` のようにして配置場所の優先順位を指定できるが、
+結局はいろんな兼ね合いでコンパイラが決める。
 デフォルトは `[tbp]`。
 複数指定した場合、どの順序で書いても下記の順に優先される。
 
-- `h` here: ソースと同じ位置に
-- `t` top: 上部に
-- `b` bottom: 下部に
-- `p` float page: 図だけを含む独立したページに
+- **h**ere: ソースと同じ位置に
+- **t**op: 上部に
+- **b**ottom: 下部に
+- float **p**age: 図だけを含む独立したページに
 
-ラベル `\label{}` は `\caption{}` 直後が良いらしく、
-スペースさえもchktex警告対象なので波カッコ前で改行するという苦肉の策。
+幅の指定には `\textwidth`, `\columnwidth`, `\linewidth` などの変数が使える。
+twocolumnの文書内で `\textwidth` まで広げたい場合は
+アスタリスク付きの `\begin{figure*}` 環境を用いる。
+
+ラベル `\label{}` は `\caption{}` 直後(または内部)じゃないとおかしくなるらしい。
+間に改行やスペースが入るのもダメっぽいので `\caption{}` 行末に `%` を置いておく。
+本文からは `\ref{fig:awesome}` のようにラベルで参照しておけば番号に置き換えられる。
 
 キャプションをカスタマイズするには
 [{caption}](https://www.ctan.org/pkg/caption)
@@ -245,12 +250,12 @@ GIFアニメをそのまま埋め込むことはできないので、
 <https://en.wikibooks.org/wiki/LaTeX/Tables>
 
 キャプションやラベルなどをまとめるのが `table` 環境、
-表本体が `tabular` 環境
+表本体が `tabular` 環境。
 
 ```tex
 \begin{table}
-\caption{Parameters
-}\label{table:parameters}
+\caption{Parameters}%
+\label{table:parameters}
 \begin{tabular}{rl}
   \toprule
   Symbol & Description \\
