@@ -82,6 +82,14 @@ $lualatex = 'lualatex -file-line-error -halt-on-error -synctex=1 %O %S';
 
 https://www.ctan.org/pkg/latexmk
 
+#### SyncTeX
+
+ソースコードとPDFの対応箇所を行き来するための仕組み。
+
+- Skim to source: <kbd>shift-cmd-click</kbd>
+- Atom to PDF: <kbd>ctrl-alt-s</kbd>
+- VS Code to PDF: <kbd>alt-cmd-j</kbd>
+
 
 ### tlmgr でパッケージ管理
 
