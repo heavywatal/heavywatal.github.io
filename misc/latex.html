@@ -253,25 +253,30 @@ e.g., 分数を挟むとか、カッコの入れ子とか</li>
 <h3 id="図">図</h3>
 <div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\usepackage</span><span class="na">[final]</span><span class="nb">{</span>graphicx<span class="nb">}</span>
 <span class="c">%%%
-</span><span class="c"></span><span class="k">\begin</span><span class="nb">{</span>figure<span class="nb">}</span>[htbp]
-<span class="k">\includegraphics</span><span class="na">[width=100mm]</span><span class="nb">{</span>great.pdf<span class="nb">}</span>
-<span class="k">\caption</span><span class="nb">{</span>some description
-<span class="nb">}</span><span class="k">\label</span><span class="nb">{</span>fig:great<span class="nb">}</span>
+</span><span class="c"></span><span class="k">\begin</span><span class="nb">{</span>figure<span class="nb">}</span>
+<span class="k">\includegraphics</span><span class="na">[width=\columnwidth]</span><span class="nb">{</span>awesome.pdf<span class="nb">}</span>
+<span class="k">\caption</span><span class="nb">{</span>some description<span class="nb">}</span><span class="c">%
+</span><span class="c"></span><span class="k">\label</span><span class="nb">{</span>fig:awesome<span class="nb">}</span>
 <span class="k">\end</span><span class="nb">{</span>figure<span class="nb">}</span></code></pre></div>
-<p><code>[hb]</code> のようにして場所を指定できるが、
-結局はいろんな兼ね合いでコンパイラが位置を決める。
+<p><code>\begin{figure}[htbp]</code> のようにして配置場所の優先順位を指定できるが、
+結局はいろんな兼ね合いでコンパイラが決める。
 デフォルトは <code>[tbp]</code>。
 複数指定した場合、どの順序で書いても下記の順に優先される。</p>
 
 <ul>
-<li><code>h</code> here: ソースと同じ位置に</li>
-<li><code>t</code> top: 上部に</li>
-<li><code>b</code> bottom: 下部に</li>
-<li><code>p</code> float page: 図だけを含む独立したページに</li>
+<li><strong>h</strong>ere: ソースと同じ位置に</li>
+<li><strong>t</strong>op: 上部に</li>
+<li><strong>b</strong>ottom: 下部に</li>
+<li>float <strong>p</strong>age: 図だけを含む独立したページに</li>
 </ul>
 
-<p>ラベル <code>\label{}</code> は <code>\caption{}</code> 直後が良いらしく、
-スペースさえもchktex警告対象なので波カッコ前で改行するという苦肉の策。</p>
+<p>幅の指定には <code>\textwidth</code>, <code>\columnwidth</code>, <code>\linewidth</code> などの変数が使える。
+twocolumnの文書内で <code>\textwidth</code> まで広げたい場合は
+アスタリスク付きの <code>\begin{figure*}</code> 環境を用いる。</p>
+
+<p>ラベル <code>\label{}</code> は <code>\caption{}</code> 直後(または内部)じゃないとおかしくなるらしい。
+間に改行やスペースが入るのもダメっぽいので <code>\caption{}</code> 行末に <code>%</code> を置いておく。
+本文からは <code>\ref{fig:awesome}</code> のようにラベルで参照しておけば番号に置き換えられる。</p>
 
 <p>キャプションをカスタマイズするには
 <a href="https://www.ctan.org/pkg/caption">{caption}</a>
@@ -302,10 +307,10 @@ e.g., 分数を挟むとか、カッコの入れ子とか</li>
 <p><a href="https://en.wikibooks.org/wiki/LaTeX/Tables">https://en.wikibooks.org/wiki/LaTeX/Tables</a></p>
 
 <p>キャプションやラベルなどをまとめるのが <code>table</code> 環境、
-表本体が <code>tabular</code> 環境</p>
+表本体が <code>tabular</code> 環境。</p>
 <div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\begin</span><span class="nb">{</span>table<span class="nb">}</span>
-<span class="k">\caption</span><span class="nb">{</span>Parameters
-<span class="nb">}</span><span class="k">\label</span><span class="nb">{</span>table:parameters<span class="nb">}</span>
+<span class="k">\caption</span><span class="nb">{</span>Parameters<span class="nb">}</span><span class="c">%
+</span><span class="c"></span><span class="k">\label</span><span class="nb">{</span>table:parameters<span class="nb">}</span>
 <span class="k">\begin</span><span class="nb">{</span>tabular<span class="nb">}{</span>rl<span class="nb">}</span>
   <span class="k">\toprule</span>
   Symbol <span class="nb">&amp;</span> Description <span class="k">\\</span>
