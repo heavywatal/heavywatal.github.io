@@ -133,7 +133,7 @@ Median filter
 [imager](http://dahtah.github.io/imager/)
 : R。新しめでドキュメントも充実。内部でCImgを利用。
   CairoやX11に依存しているので、
-  LinuxbrewのRで使おうとすると膨大なxorg関連ライブラリを入れる羽目になる。
+  Rもそれらしくビルドされてる必要がある。
 
 [mmand](https://github.com/jonclayden/mmand)
 : R。READMEは良さげ。内部はRcpp。

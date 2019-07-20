@@ -14,7 +14,7 @@ tags = ["c++"]
 
 ### パッケージマネージャで
 
-[Homebrew]({{< relref "homebrew.md" >}})/Linuxbrew
+[Homebrew]({{< relref "homebrew.md" >}})
 で最新版を簡単にインストールできる。
 オプションは適当に:
 

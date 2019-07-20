@@ -20,7 +20,7 @@ ssh切断後も端末丸ごと継続され、後でまた繋ぎ直せる
 :   別の端末から接続しても同じ作業を継続できる
 :   `nohup` とかバックグラウンド化とか考えるより楽チン cf. [nohup]({{< relref "nohup.md" >}})
 
-[Homebrew]({{< relref "homebrew.md" >}}) あるいはLinuxbrewで一発インストール:
+[Homebrew]({{< relref "homebrew.md" >}}) で一発インストール:
 `brew install tmux`
 
 ## キーバインド

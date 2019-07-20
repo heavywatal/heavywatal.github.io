@@ -5,6 +5,8 @@ tags = ["package"]
   parent = "dev"
 +++
 
+https://github.com/heavywatal/dotfiles
+
 ## Linux
 
 ### ユーザ追加
@@ -25,68 +27,7 @@ tags = ["package"]
 
 これらシステム標準のものが古すぎたり、
 管理者権限がなくて自由にインストールできない場合は
-次の Linuxbrew を利用してユーザのホームに入れる。
-
-### Linuxbrew
-
-<http://linuxbrew.sh/>
-
-Macの [Homebrew]({{< relref "homebrew.md" >}}) をLinuxに移植したパッケージマネージャ。
-
-1.  RHEL/CentOS 6系の場合まずlibcurlが古すぎるので、
-    [最新のcurl](https://curl.haxx.se/download.html)をソースコードからインストール:
-    ```sh
-    wget -O- https://curl.haxx.se/download/curl-7.59.0.tar.gz | tar xz
-    cd curl-7.59.0/
-    ./configure --prefix=${HOME}/opt/local
-    make -j4
-    ```
-
-1.  `git --version` を確認して 1.7.12 未満だったら
-    [最新のgit](https://github.com/git/git/releases)をソースコードからインストール:
-    ```sh
-    wget -O- https://github.com/git/git/archive/v2.16.3.tar.gz | tar xz
-    cd git-2.16.3/
-    autoreconf -i
-    ./configure --prefix=${HOME}/opt/local --with-curl=${HOME}/opt/local
-    make -j4
-    make install
-    ```
-
-1.  上記の自前curl/gitを利用するために環境変数をセット:
-    ```sh
-    export PATH=${HOME}/opt/local/bin:$PATH
-    export HOMEBREW_NO_ENV_FILTERING=1
-    ```
-
-1.  Linuxbrewを `~/.linuxbrew` にインストール:
-    ```sh
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
-    ```
-
-1.  gccをインストール: `brew install gcc`
-
-    OS標準のgccやglibcが古すぎて
-    `glibc cannot be built with any available compilers` と怒られる場合は、
-    まずglibc抜きでgccをインストールし、そのgccでglibcをビルドして、
-    gccを入れ直す、という手間が必要:
-    ```sh
-    HOMEBREW_BUILD_FROM_SOURCE=1 brew install gcc --without-glibc
-    brew install glibc
-    brew remove gcc
-    brew install gcc
-    ```
-    それでもうまくいかないときは
-    `HOMEBREW_NO_ENV_FILTERING=1 brew install --force-bottle glibc`
-    とかでいいのか...
-
-1.  あとは欲しいものを `brew install ___`
-    ```
-    zsh --without-etcdir
-    tmux
-    pyenv
-    boost
-    ```
+[Homebrew]({{< relref "homebrew.md" >}}) を利用してユーザのホームに入れる。
 
 ## Mac
 
@@ -120,16 +61,6 @@ clang -v
 -   [QuickLook plugins]({{< relref "quicklook.md" >}})
 -   [`defaults`コマンドで各種設定]({{< relref "command.md#defaults" >}})
 
-### リソースフォークを無視
-
-`tar` などでリソースフォークを無視:
-
-```sh
-if [ $(uname) = Darwin ]; then
-    export COPYFILE_DISABLE=true
-    export COPY_EXTENDED_ATTRIBUTES_DISABLE=true
-fi
-```
 
 ## 共通
 
@@ -154,6 +85,7 @@ fi
 
 - [atom]({{< relref "atom.md" >}})
 - [emacs]({{< relref "emacs.md" >}})
+- [vim]({{< relref "vi.md" >}})
 - [nano]({{< relref "nano.md" >}})
 
 ### Trash

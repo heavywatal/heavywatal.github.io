@@ -11,7 +11,7 @@ Basic Local Alignment Search Tool
 
 ## blast+ のインストール
 
-[Homebrew/Linuxbrew]({{< relref "homebrew.md" >}}) を使って
+[Homebrew]({{< relref "homebrew.md" >}}) を使って
 `brew install blast` するのが楽チン。
 以下に紹介するのはそれ以外の茨の道。
 

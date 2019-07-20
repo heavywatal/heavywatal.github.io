@@ -58,7 +58,7 @@ C++14のライブラリも問題なく使える。
 
 http://heavywatal.github.io/tumopp/
 
-Shrokane5 (RHEL 7) では問題なくLinuxbrewを使える。
+Shrokane5 (RHEL 7) では問題なくHomebrewを使える。
 
 ```sh
 brew install heavywatal/tap/tumopp

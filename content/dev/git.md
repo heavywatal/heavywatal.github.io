@@ -28,8 +28,8 @@ Gitでなければ得られない恩恵が大きくなってきている。
 ### 準備
 
 - ローカルマシンにGitをインストールする。
-  MacならCommand Line Toolsに付属のを使うか、[Homebrew]({{< relref "homebrew.md" >}})で新しいのを入れる。
-  Linuxなら初めから入ってるのを使うか、Linuxbrewで新しいのを入れる。
+  最初から入ってる場合も多いけど、それが古すぎる場合は
+  [Homebrew]({{< relref "homebrew.md" >}}) で新しいのを入れる。
 - GitHubに個人アカウントを作る。
 - [SSH公開鍵を作って]({{< relref "ssh.md" >}})マシンとGitHubに登録する。
   https://help.github.com/articles/connecting-to-github-with-ssh/

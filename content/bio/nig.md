@@ -46,11 +46,6 @@ https://sc.ddbj.nig.ac.jp/
     - [Singularity](https://sc2.ddbj.nig.ac.jp/index.php/singularity)
     - [Environment Module](https://sc2.ddbj.nig.ac.jp/index.php/environment-module)
 
-### Linuxbrew
-
-コマンドラインのプログラムをインストールするにはLinuxbrewが便利。
-cf. [/dev/開発環境]({{< relref "devenv.md" >}})
-
 
 ### RcppでC++14以降が使えるRをインストールしたい
 
