@@ -307,6 +307,9 @@ increment = function(x) {x + 1}
 
 ### タグ
 
+使用可能なタグ一覧は `names(roxygen2:::default_tags())` で取得可能。
+[解説は準備中らしい](https://github.com/klutometis/roxygen/issues/792)。
+
 `@import pkg1, pkg2, ...`
 :   `NAMESPACE` で `import()` するパッケージを指定。
     名前の衝突が怖いので基本的に使わない。
