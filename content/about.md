@@ -65,6 +65,9 @@ Find me on
 
 **Articles**
 
+1.  Jeffrey A. Fawcett, Fumio Sato, Takahiro Sakamoto, **Watal M. Iwasaki**, Teruaki Tozaki, Hideki Innan. (2019)
+    [PLoS ONE **14**(7): e0218407](https://doi.org/10.1371/journal.pone.0218407);
+    Genome-wide SNP analysis of Japanese Thoroughbred racehorses
 1.  Atsushi Niida, **Watal M. Iwasaki**, Hideki Innan. (2018)
     [*Mol. Biol. Evol.* **35**(6) 1316--1321](https://doi.org/10.1093/molbev/msy091);
     Neutral Theory in Cancer Cell Population Genetics.
