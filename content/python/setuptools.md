@@ -122,10 +122,7 @@ hello.py = wtl.hello:main
 
 `wtl/hello.py`
 ```py
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-"""
-Sample module
+"""Sample module
 """
 
 
