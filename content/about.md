@@ -7,22 +7,22 @@ aliases = ["/cv.html"]
 +++
 
 岩嵜 航
-:   総合研究大学院大学 先導科学研究科 生命共生体進化学専攻\
-    [印南研究室](http://www.sendou.soken.ac.jp/esb/innan/InnanLab/)
-    特別研究員
+:   東北大学 生命科学研究科 生態ゲノミクス分野\
+    [牧野研究室](https://www.lifesci.tohoku.ac.jp/evolgenomics/)
+    特任助教
 
 Watal M. Iwasaki, PhD
-:   Postdoctoral fellow in [Innan Laboratory](http://www.sendou.soken.ac.jp/esb/innan/InnanLab/),\
-    Department of Evolutionary Studies of Biosystems,\
-    SOKENDAI (The Graduate University for Advanced Studies)
+:   Project Assistant Professor in [Makino Laboratory](https://www.lifesci.tohoku.ac.jp/evolgenomics/home-en/),\
+    Graduate School of Life Sciences,\
+    Tohoku University
 
 Address:
-:   School of Advanced Sciences, SOKENDAI,
-    Shonan Village, Hayama, 240-0193, Japan
-:   240-0193 神奈川県三浦郡葉山町 湘南国際村 (上山口1560-35) 総研大
+:   Biology bldg., Tohoku University,
+    Aramaki Aoba 6-3, Sendai, 980-8578, Japan
+:   980-8578 仙台市青葉区荒巻字青葉6-3 東北大学理学部生物棟
 
 Phone:
-:   +81-46-858-1576
+:   +81-22-795-6693
 
 Email:
 :   heavy.watalあgmail.com
@@ -54,8 +54,11 @@ Find me on
 
 ## Academic Positions
 
-2013-10 – Current
-:   Postdoctoral fellow in [Innan Laboratory](http://www.sendou.soken.ac.jp/esb/innan/InnanLab/), SOKENDAI.
+2019-09 – Current
+:   Project Assistant Professor in [Makino Laboratory](https://www.lifesci.tohoku.ac.jp/evolgenomics/), Tohoku University.
+
+2013-10 – 2019-08
+:   Postdoctoral fellow in [Innan Laboratory](http://www.sendou.soken.ac.jp/esb/innan/InnanLab/), SOKENDAI (The Graduate University for Advanced Studies).
 
 2010-07 – 2013-03
 :   JSPS Research Fellow (DC1) in [Kawata Laboratory](http://meme.biology.tohoku.ac.jp/klabo-wiki/), Tohoku University.
