@@ -7,19 +7,22 @@ aliases = ["/cv.html"]
 +++
 
 岩嵜 航
-:   東北大学 生命科学研究科 生態ゲノミクス分野\
-    [牧野研究室](https://www.lifesci.tohoku.ac.jp/evolgenomics/)
+:   [東北大学](https://www.tohoku.ac.jp)
+    [生命科学研究科](https://www.lifesci.tohoku.ac.jp)\
+    [進化ゲノミクス分野 牧野研究室](https://www.lifesci.tohoku.ac.jp/evolgenomics/)
     特任助教
 
 Watal M. Iwasaki, PhD
-:   Project Assistant Professor in [Makino Laboratory](https://www.lifesci.tohoku.ac.jp/evolgenomics/home-en/),\
-    Graduate School of Life Sciences,\
-    Tohoku University
+:   Project Assistant Professor in
+    [Laboratory of Evolutionary Genomics](https://www.lifesci.tohoku.ac.jp/evolgenomics/home-en/),\
+    [Graduate School of Life Sciences](https://www.lifesci.tohoku.ac.jp/en/),
+    [Tohoku University](https://www.tohoku.ac.jp/en/)
 
 Address:
 :   Biology bldg., Tohoku University,
     Aramaki Aoba 6-3, Sendai, 980-8578, Japan
-:   980-8578 仙台市青葉区荒巻字青葉6-3 東北大学理学部生物棟
+:   980-8578 仙台市青葉区荒巻字青葉6-3 東北大学
+    [理学部生物棟](https://www.google.com/maps/place/38°15'31.4"N+140°50'15.1"E)
 
 Phone:
 :   +81-22-795-6693
