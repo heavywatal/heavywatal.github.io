@@ -191,13 +191,13 @@ brew cask list
 
 アプリ側でアップデートを実行するとCask内でのバージョンと食い違っちゃうけど使用上は問題ないらしい。
 
-alfred, amazon-drive, amazon-music, atom,
+alfred, amazon-music, amazon-photos, atom,
 basictex, bibdesk,
 discord, docker, dropbox, eqmac, firefox, gephi, gimp, gitter,
-google-backup-and-sync, google-chrome, google-earth, google-japanese-ime,
+google-backup-and-sync, google-chrome, google-japanese-ime,
 inkscape, iterm2, julia, kindle, libreoffice,
-marshallofsound-google-play-music-player, megasync,
+marshallofsound-google-play-music-player, megasync, menumeters
 osxfuxe, qlstephen, quicklook-csv, r, rstudio,
 skim, skyfonts, skype, slack, spideroakone,
 the-unarchiver, virtualbox, visual-studio-code, vlc,
-whatsapp, xquartz, yujitach-menumeters
+whatsapp, xquartz
