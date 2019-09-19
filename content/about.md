@@ -71,6 +71,9 @@ Find me on
 
 **Articles**
 
+1.  **Watal M. Iwasaki**\*, T. E. Kijima\* (equally contributed), Hideki Innan. (2019)
+    [*Mol. Biol. Evol.* (in press)](https://academic.oup.com/mbe);
+    Population Genetics and Molecular Evolution of DNA Sequences in Transposable Elements. II. Accumulation of Variation and Evolution of a New Subfamily.
 1.  Jeffrey A. Fawcett, Fumio Sato, Takahiro Sakamoto, **Watal M. Iwasaki**, Teruaki Tozaki, Hideki Innan. (2019)
     [PLoS ONE **14**(7): e0218407](https://doi.org/10.1371/journal.pone.0218407);
     Genome-wide SNP analysis of Japanese Thoroughbred racehorses
