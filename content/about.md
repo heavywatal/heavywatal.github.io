@@ -180,12 +180,14 @@ Find me on
 
 ## Teaching / Outreach
 
+-   「[Rでデータを可視化する](https://heavywatal.github.io/slides/sendair2/)」
+    [Sendai.R #2](https://sendair.connpass.com/event/137548/) (2019-09) Sendai
 -   "[Using external C++ libraries in Rcpp packages](https://heavywatal.github.io/slides/japanr2018/)"
-    Japan.R 2018 (2018-12) Tokyo
+    [Japan.R 2018](https://japanr.connpass.com/event/105802/) (2018-12) Tokyo
 -   "[Writing an R package interface to C++ libraries with Rcpp](https://heavywatal.github.io/slides/tokyor71/)"
-    [Tokyo.R 71](https://tokyor.connpass.com/event/92522/) (2018-07) Tokyo
--   「[Rにやらせて楽しよう --- データの可視化と下ごしらえ](/slides/nagoya2018/)」[アドバンス生命理学特論](http://www.bio.nagoya-u.ac.jp/seminar/) ([告知ポスター](http://www.bio.nagoya-u.ac.jp/files/event/454/180518_Iwasaki.pdf)) (2018-05) 名古屋大
--   「[それもRにやらせよう --- 整然データの下ごしらえ](/slides/esj65)」(自由集会[「データ解析で出会う統計的問題: R の新しい作図・作表」粕谷英一・久保拓弥](http://hosho.ees.hokudai.ac.jp/~kubo/ce/EcoSj2018.html)) 日本生態学会[第65回大会](http://www.esj.ne.jp/meeting/65/) (2018-03) 札幌
+    [Tokyo.R #71](https://tokyor.connpass.com/event/92522/) (2018-07) Tokyo
+-   「[Rにやらせて楽しよう --- データの可視化と下ごしらえ](https://heavywatal.github.io/slides/nagoya2018/)」[アドバンス生命理学特論](http://www.bio.nagoya-u.ac.jp/seminar/) ([告知ポスター](http://www.bio.nagoya-u.ac.jp/files/event/454/180518_Iwasaki.pdf)) (2018-05) 名古屋大
+-   「[それもRにやらせよう --- 整然データの下ごしらえ](https://heavywatal.github.io/slides/esj65)」(自由集会[「データ解析で出会う統計的問題: R の新しい作図・作表」粕谷英一・久保拓弥](http://hosho.ees.hokudai.ac.jp/~kubo/ce/EcoSj2018.html)) 日本生態学会[第65回大会](http://www.esj.ne.jp/meeting/65/) (2018-03) 札幌
 -   「架空生物オリガミバードを作って進化が起こるしくみを体験しよう」(山野井貴浩、岩嵜航)
     [サイエンスデイ](http://www.science-day.com/) (2012-07) 東北大学
 -   「進化の仕組みを学べる補助教材: 架空生物オリガミバード [シミュレータ実演]」(山野井貴浩、岩嵜航、武村政春、佐倉統)
