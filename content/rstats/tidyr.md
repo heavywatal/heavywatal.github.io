@@ -24,98 +24,253 @@ data.frameを縦長・横長・入れ子に変形・整形するためのツー�
 -   <https://github.com/tidyverse/tidyr>
 -   `vignette("tidy-data")`
 -   `demo(package = "tidyr")`
-
-下記のコード例で使うデータ
-
-```r
-iris %>% head(3L) %>% rownames_to_column("id")
-##   id Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-## 1  1          5.1         3.5          1.4         0.2  setosa
-## 2  2          4.9         3.0          1.4         0.2  setosa
-## 3  3          4.7         3.2          1.3         0.2  setosa
-```
+-   https://speakerdeck.com/yutannihilation/tidyr-pivot
 
 パイプ演算子 `%>%` については[dplyr]({{< relref "dplyr.md" >}})を参照。
 
 
-## `tidyr::gather()` で縦長にする
+## `tidyr::pivot_longer()` で縦長にする
 
-複数列にまたがっていた値を、カテゴリ変数と値の2列に変換することで、
-横長(wide-format)のdata.frameを縦長(long-format)に変形する。
-`reshape2::melt()` に相当。
-[ggplot2]({{< relref "ggplot2.md" >}})などで使いやすい
-[**整然データ**]({{< relref "programming.md#tidyverse" >}})
-というのはこの縦長の形。
+複数列にまたがっていた値を1列にまとめ、元の列名をその横に添えることで、
+data.frameを横長(wide-format)から縦長(long-format)に変形する。
+`reshape2::melt()`, `tidyr::gather()` の改良版。
 
-`tidyr::gather(data, key, value, ..., na.rm = FALSE, convert = FALSE)`
+`tidyr::pivot_longer(data, cols, names_to = "name", ..., values_to = "value", ...)`
 
-`data`
-:   `%>%` 越しに渡す
+`cols`
+: 動かしたい値が含まれている列。
+  マイナスで除外指定、コロンで範囲指定、文字列、tidyselect関数なども使える。
 
-`key`, `value`
-:   出力結果で使う列名
+`names_to`
+: 元々列名だったものを入れる列の名前
 
-`...`
-:   動かす列名を指定。コロンによる範囲指定、マイナスによる除外指定も可。
-
-e.g., `Species` 以外の列について、
-元の列名を `kagi` 、値を `atai` に格納した縦長の表に変形
+`values_to`
+: 値の移動先の列名
 
 ```r
-iris %>% head(3L) %>% rownames_to_column("id") %>%
-  gather(kagi, atai, -id, -Species)
-##    id Species         kagi atai
-## 1   1  setosa Sepal.Length  5.1
-## 2   2  setosa Sepal.Length  4.9
-## 3   3  setosa Sepal.Length  4.7
-## 4   1  setosa  Sepal.Width  3.5
-## 5   2  setosa  Sepal.Width  3.0
-## 6   3  setosa  Sepal.Width  3.2
-## 7   1  setosa Petal.Length  1.4
-## 8   2  setosa Petal.Length  1.4
-## 9   3  setosa Petal.Length  1.3
-## 10  1  setosa  Petal.Width  0.2
-## 11  2  setosa  Petal.Width  0.2
-## 12  3  setosa  Petal.Width  0.2
+iris %>% as_tibble()
+#> # tbl_df [150 x 5]
+#>     Sepal.Length Sepal.Width Petal.Length Petal.Width   Species
+#>            <dbl>       <dbl>        <dbl>       <dbl>     <fct>
+#>   1          5.1         3.5          1.4         0.2    setosa
+#>   2          4.9         3.0          1.4         0.2    setosa
+#>   3          4.7         3.2          1.3         0.2    setosa
+#>   4          4.6         3.1          1.5         0.2    setosa
+#>  --
+#> 147          6.3         2.5          5.0         1.9 virginica
+#> 148          6.5         3.0          5.2         2.0 virginica
+#> 149          6.2         3.4          5.4         2.3 virginica
+#> 150          5.9         3.0          5.1         1.8 virginica
+
+iris_long = iris %>%
+  tibble::rowid_to_column("id") %>%
+  pivot_longer(c(-id, -Species), names_to = "namae", values_to = "atai") %>%
+  print()
+#> # tbl_df [600 x 4]
+#>        id   Species        namae  atai
+#>     <int>     <fct>        <chr> <dbl>
+#>   1     1    setosa Sepal.Length   5.1
+#>   2     1    setosa  Sepal.Width   3.5
+#>   3     1    setosa Petal.Length   1.4
+#>   4     1    setosa  Petal.Width   0.2
+#>  --
+#> 597   150 virginica Sepal.Length   5.9
+#> 598   150 virginica  Sepal.Width   3.0
+#> 599   150 virginica Petal.Length   5.1
+#> 600   150 virginica  Petal.Width   1.8
+
+# iris %>% gather("namae", "atai", -Species)
 ```
 
-## `tidyr::spread()` で横長にする
+## `tidyr::pivot_wider()` で横長にする
 
-`tidyr::gather()` の逆で、縦長のdata.frameを横長に変形する。
-`reshape2::dcast()` に相当。
-IDとなるような列がないと `Error: Duplicate identifiers` と怒られる。
+1列にまとまっていた値を、別の変数に応じて複数の列に並べ直すことで、
+data.frameを縦長(long-format)から横長(wide-format)に変形する。
+`reshape2::dcast()`, `tidyr::spread()` の改良版。
 
-`tidyr::spread(data, key, value, fill = NA, convert = FALSE, drop = TRUE)`
+`tidyr::pivot_wider(data, id_cols = NULL, names_from = name, ..., values_from = value, values_fill = NULL, values_fn = NULL)`
 
-`data`
-:   `%>%` 越しに渡す
+`id_cols`
+: ここで指定した列のユニークな組み合わせが変形後にそれぞれ1行になる。
+  マイナスで除外指定、コロンで範囲指定、文字列、tidyselect関数なども使える。
+  `names_from` と `values_from` を両方指定すれば省略可能。
 
-`key`
-:   ここに指定したカテゴリ変数のぶんだけ新しい列が作られる
+`names_from`
+: 新しく列名になる列
 
-`value`
-:   値が入ってる列
+`values_from`
+: 動かしたい値が入っている列
 
-`fill = NA`
-:   該当する組み合わせの値が存在しない場合に何で埋めるか
+`values_fill`
+: 存在しない組み合わせのセルを埋める値
 
-`convert = FALSE`
-:   -
+`values_fn`
+: 1つのセルに複数の値が重なってしまう場合の処理関数。例えば平均を取るとか。
 
-`drop = TRUE`
-:   該当する組み合わせの行が存在しない場合に欠落させるか
-
-e.g., `kagi` 内の文字列を新たな列名として横長の表に変形して `atai` を移す
 
 ```r
-iris %>% head(3L) %>% rownames_to_column("id") %>%
-  gather(kagi, atai, -id, -Species) %>%
-  spread(kagi, atai)
-##   id Species Petal.Length Petal.Width Sepal.Length Sepal.Width
-## 1  1  setosa          1.4         0.2          5.1         3.5
-## 2  2  setosa          1.4         0.2          4.9         3.0
-## 3  3  setosa          1.3         0.2          4.7         3.2
+iris_long %>%
+  pivot_wider(names_from = namae, values_from = atai) %>%
+  dplyr::select(-id)
+#> # tbl_df [150 x 5]
+#>       Species Sepal.Length Sepal.Width Petal.Length Petal.Width
+#>         <fct>        <dbl>       <dbl>        <dbl>       <dbl>
+#>   1    setosa          5.1         3.5          1.4         0.2
+#>   2    setosa          4.9         3.0          1.4         0.2
+#>   3    setosa          4.7         3.2          1.3         0.2
+#>   4    setosa          4.6         3.1          1.5         0.2
+#>  --
+#> 147 virginica          6.3         2.5          5.0         1.9
+#> 148 virginica          6.5         3.0          5.2         2.0
+#> 149 virginica          6.2         3.4          5.4         2.3
+#> 150 virginica          5.9         3.0          5.1         1.8
+
+# iris_long %>% spread(namae, atai) %>% dplyr::select(-id)
+
+iris_long %>%
+  pivot_wider(Species, names_from = namae, values_from = atai,
+              values_fn = list(atai = mean))
+#> # tbl_df [3 x 5]
+#>      Species Sepal.Length Sepal.Width Petal.Length Petal.Width
+#>        <fct>        <dbl>       <dbl>        <dbl>       <dbl>
+#> 1     setosa        5.006       3.428        1.462       0.246
+#> 2 versicolor        5.936       2.770        4.260       1.326
+#> 3  virginica        6.588       2.974        5.552       2.026
 ```
+
+
+## `tidyr::pivot_*` 関数のもっと高度なオプション
+
+`names_sep` や `names_pattern` を指定して
+`names_to`, `name_from` に複数の値を渡すと
+`tidyr::separate()` / `tidyr::unite()` 的な操作も同時にやってしまえる:
+
+```r
+iris_long = iris %>%
+  tibble::rowid_to_column("id") %>%
+  pivot_longer(c(-id, -Species), names_to = c("part", "axis"), names_sep = "\\.") %>%
+  print()
+#> # tbl_df [600 x 5]
+#>        id   Species  part   axis value
+#>     <int>     <fct> <chr>  <chr> <dbl>
+#>   1     1    setosa Sepal Length   5.1
+#>   2     1    setosa Sepal  Width   3.5
+#>   3     1    setosa Petal Length   1.4
+#>   4     1    setosa Petal  Width   0.2
+#>  --
+#> 597   150 virginica Sepal Length   5.9
+#> 598   150 virginica Sepal  Width   3.0
+#> 599   150 virginica Petal Length   5.1
+#> 600   150 virginica Petal  Width   1.8
+
+iris_long %>%
+  pivot_wider(c(id, Species), names_from = c(part, axis), names_sep = ".") %>%
+  dplyr::select(-id)
+#> # tbl_df [150 x 5]
+#>       Species Sepal.Length Sepal.Width Petal.Length Petal.Width
+#>         <fct>        <dbl>       <dbl>        <dbl>       <dbl>
+#>   1    setosa          5.1         3.5          1.4         0.2
+#>   2    setosa          4.9         3.0          1.4         0.2
+#>   3    setosa          4.7         3.2          1.3         0.2
+#>   4    setosa          4.6         3.1          1.5         0.2
+#>  --
+#> 147 virginica          6.3         2.5          5.0         1.9
+#> 148 virginica          6.5         3.0          5.2         2.0
+#> 149 virginica          6.2         3.4          5.4         2.3
+#> 150 virginica          5.9         3.0          5.1         1.8
+```
+
+```r
+VADeaths
+#>       Rural Male Rural Female Urban Male Urban Female
+#> 50-54       11.7          8.7       15.4          8.4
+#> 55-59       18.1         11.7       24.3         13.6
+#> 60-64       26.9         20.3       37.0         19.3
+#> 65-69       41.0         30.9       54.6         35.1
+#> 70-74       66.0         54.3       71.1         50.0
+
+VADeaths %>%
+  as.data.frame() %>%
+  rownames_to_column("age") %>%
+  pivot_longer(-age, names_to = c("region", "sex"), names_sep = " ", values_to = "death")
+#> # tbl_df [20 x 4]
+#>      age region    sex death
+#>    <chr>  <chr>  <chr> <dbl>
+#>  1 50-54  Rural   Male  11.7
+#>  2 50-54  Rural Female   8.7
+#>  3 50-54  Urban   Male  15.4
+#>  4 50-54  Urban Female   8.4
+#> --
+#> 17 70-74  Rural   Male  66.0
+#> 18 70-74  Rural Female  54.3
+#> 19 70-74  Urban   Male  71.1
+#> 20 70-74  Urban Female  50.0
+```
+
+`names_ptypes` に指定すると、列名だった変数の移動後の型変換を試みる:
+
+```r
+anscombe
+#>    x1 x2 x3 x4    y1   y2    y3    y4
+#> 1  10 10 10  8  8.04 9.14  7.46  6.58
+#> 2   8  8  8  8  6.95 8.14  6.77  5.76
+#> 3  13 13 13  8  7.58 8.74 12.74  7.71
+#> 4   9  9  9  8  8.81 8.77  7.11  8.84
+#> 5  11 11 11  8  8.33 9.26  7.81  8.47
+#> 6  14 14 14  8  9.96 8.10  8.84  7.04
+#> 7   6  6  6  8  7.24 6.13  6.08  5.25
+#> 8   4  4  4 19  4.26 3.10  5.39 12.50
+#> 9  12 12 12  8 10.84 9.13  8.15  5.56
+#> 10  7  7  7  8  4.82 7.26  6.42  7.91
+#> 11  5  5  5  8  5.68 4.74  5.73  6.89
+
+anscombe %>%
+  tibble::rowid_to_column("id") %>%
+  tidyr::pivot_longer(-id,
+    names_to = c("axis", "group"),
+    names_sep = 1L,
+    names_ptypes = list(group = integer())) %>%
+  tidyr::pivot_wider(c(id, group), names_from = axis) %>%
+  dplyr::select(-id) %>%
+  dplyr::arrange(group)
+#> # tbl_df [44 x 3]
+#>    group     x     y
+#>    <int> <dbl> <dbl>
+#>  1     1    10  8.04
+#>  2     1     8  6.95
+#>  3     1    13  7.58
+#>  4     1     9  8.81
+#> --
+#> 41     4    19 12.50
+#> 42     4     8  5.56
+#> 43     4     8  7.91
+#> 44     4     8  6.89
+```
+
+`names_prefix` を使えば、列名の頭に共通して付いてた文字を消せる:
+
+```r
+anscombe %>%
+  dplyr::select(starts_with("x")) %>%
+  tidyr::pivot_longer(everything(), names_prefix = "x")
+#> # tbl_df [44 x 2]
+#>     name value
+#>    <chr> <dbl>
+#>  1     1    10
+#>  2     2    10
+#>  3     3    10
+#>  4     4     8
+#> --
+#> 41     1     5
+#> 42     2     5
+#> 43     3     5
+#> 44     4     8
+```
+
+`names_to` に `".value"` という特殊な値を渡すことで、
+旧列名から新しい列名を作って複数のグループを同時に変形できる。
+See https://speakerdeck.com/yutannihilation/tidyr-pivot?slide=67 for details.
+
 
 ## Nested data.frame --- 入れ子構造
 
@@ -163,10 +318,7 @@ list of data.framesだけでなく、list of vectorsとかでもよい。
 文字列カラムを任意のセパレータで複数カラムに分割。
 `reshape2::colsplit()` に相当。
 
-`tidyr::separate(data, col, into, sep = "[^[:alnum:]]", remove = TRUE, convert = FALSE, extra = "warn", fill = "warn")`
-
-`data`
-:   `%>%` 越しに渡す
+`tidyr::separate(data, col, into, sep = "[^[:alnum:]]", remove = TRUE, convert = FALSE, extra = "warn", fill = "warn", ...)`
 
 `col`
 :   切り分けたい列の名前
@@ -182,7 +334,7 @@ list of data.framesだけでなく、list of vectorsとかでもよい。
 :   切り分ける前の列を取り除くかどうか
 
 `convert = FALSE`
-:   -
+:   切り分け後の値の型変換を試みるか
 
 `extra = "warn"`
 :   列数が揃わないときにどうするか: `warn`, `drop`, `merge`
@@ -191,25 +343,23 @@ list of data.framesだけでなく、list of vectorsとかでもよい。
 :   足りない場合にどっち側をNAで埋めるか: `warn`, `right`, `left`。
     つまり、文字を左詰めにするには`right`が正解(紛らわしい)。
 
-`kagi` 列を `part`, `axis` という2列に分割
-
 ```r
-iris %>% head(3L) %>% rownames_to_column("id") %>%
-  gather(kagi, atai, -id, -Species) %>%
-  separate(kagi, c("part", "axis"))
-##    id Species  part   axis atai
-## 1   1  setosa Sepal Length  5.1
-## 2   2  setosa Sepal Length  4.9
-## 3   3  setosa Sepal Length  4.7
-## 4   1  setosa Sepal  Width  3.5
-## 5   2  setosa Sepal  Width  3.0
-## 6   3  setosa Sepal  Width  3.2
-## 7   1  setosa Petal Length  1.4
-## 8   2  setosa Petal Length  1.4
-## 9   3  setosa Petal Length  1.3
-## 10  1  setosa Petal  Width  0.2
-## 11  2  setosa Petal  Width  0.2
-## 12  3  setosa Petal  Width  0.2
+va_deaths = VADeaths %>% as.data.frame() %>% tibble::rownames_to_column("class") %>% print()
+#>   class Rural Male Rural Female Urban Male Urban Female
+#> 1 50-54       11.7          8.7       15.4          8.4
+#> 2 55-59       18.1         11.7       24.3         13.6
+#> 3 60-64       26.9         20.3       37.0         19.3
+#> 4 65-69       41.0         30.9       54.6         35.1
+#> 5 70-74       66.0         54.3       71.1         50.0
+
+va_deaths %>%
+  tidyr::separate(class, c("lbound", "ubound"), "-", convert = TRUE)
+#>   lbound ubound Rural Male Rural Female Urban Male Urban Female
+#> 1     50     54       11.7          8.7       15.4          8.4
+#> 2     55     59       18.1         11.7       24.3         13.6
+#> 3     60     64       26.9         20.3       37.0         19.3
+#> 4     65     69       41.0         30.9       54.6         35.1
+#> 5     70     74       66.0         54.3       71.1         50.0
 ```
 
 逆をやるのが `tidyr::unite(data, col, ..., sep = "_", remove = TRUE)` 。
