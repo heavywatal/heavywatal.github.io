@@ -327,27 +327,47 @@ anscombe <span class="o">%&gt;%</span>
 <span class="c1">#&gt; 43     3     5</span>
 <span class="c1">#&gt; 44     4     8</span></code></pre></div>
 <p><code>names_to</code> に <code>&quot;.value&quot;</code> という特殊な値を渡すことで、
-旧列名から新しい列名を作って複数のグループを同時に変形できる。
-See <a href="https://speakerdeck.com/yutannihilation/tidyr-pivot?slide=67">https://speakerdeck.com/yutannihilation/tidyr-pivot?slide=67</a> for details.</p>
+旧列名から新しい列名が作られ、複数列への縦長変形を同時にできる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">tidy_anscombe <span class="o">=</span> anscombe <span class="o">%&gt;%</span>
+  tidyr<span class="o">::</span>pivot_longer<span class="p">(</span>                <span class="c1"># 縦長に変形したい</span>
+    everything<span class="p">(),</span>                     <span class="c1"># すべての列について</span>
+    names_to <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#34;.value&#34;</span><span class="p">,</span> <span class="s">&#34;group&#34;</span><span class="p">),</span>  <span class="c1"># x, yを列名に、1, 2, 3をgroup列に</span>
+    names_sep <span class="o">=</span> <span class="m">1L</span><span class="p">,</span>                   <span class="c1"># 切る位置</span>
+    names_ptypes <span class="o">=</span> <span class="kt">list</span><span class="p">(</span>group <span class="o">=</span> <span class="kt">integer</span><span class="p">()))</span> <span class="o">%&gt;%</span>   <span class="c1"># 型変換</span>
+  dplyr<span class="o">::</span>arrange<span class="p">(</span>group<span class="p">)</span> <span class="o">%&gt;%</span>           <span class="c1"># グループごとに並べる</span>
+  <span class="kp">print</span><span class="p">()</span>                             <span class="c1"># ggplotしたい形！</span>
+<span class="c1">#&gt; # tbl_df [44 x 3]</span>
+<span class="c1">#&gt;    group     x     y</span>
+<span class="c1">#&gt;    &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="c1">#&gt;  1     1    10  8.04</span>
+<span class="c1">#&gt;  2     1     8  6.95</span>
+<span class="c1">#&gt;  3     1    13  7.58</span>
+<span class="c1">#&gt;  4     1     9  8.81</span>
+<span class="c1">#&gt; --</span>
+<span class="c1">#&gt; 41     4    19 12.50</span>
+<span class="c1">#&gt; 42     4     8  5.56</span>
+<span class="c1">#&gt; 43     4     8  7.91</span>
+<span class="c1">#&gt; 44     4     8  6.89</span></code></pre></div>
+<p>See <a href="https://speakerdeck.com/yutannihilation/tidyr-pivot?slide=67">https://speakerdeck.com/yutannihilation/tidyr-pivot?slide=67</a> for details.</p>
 
 <h2 id="nested-data-frame-入れ子構造">Nested data.frame &mdash; 入れ子構造</h2>
 
 <h3 id="tidyr-nest-data-key-data"><code>tidyr::nest(data, ..., .key = data)</code></h3>
 
-<p>data.frameをネストして(入れ子にして)、list of data.frames のカラムを作る。
+<p>data.frameをネストして(入れ子にして)、list of data.frames のカラムを作る。
 内側のdata.frameに押し込むカラムを <code>...</code> に指定するか、
 外側に残すカラムをマイナス指定する。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> nest<span class="p">(</span><span class="o">-</span>Species<span class="p">,</span> <span class="m">.</span>key <span class="o">=</span> NEW_COLUMN<span class="p">)</span>
-<span class="c1"># A tibble: 3 × 2</span>
-     Species        NEW_COLUMN
-      <span class="o">&lt;</span>fctr<span class="o">&gt;</span>            <span class="o">&lt;</span><span class="kt">list</span><span class="o">&gt;</span>
-<span class="m">1</span>     setosa <span class="o">&lt;</span>tibble <span class="p">[</span><span class="m">50</span> × <span class="m">4</span><span class="p">]</span><span class="o">&gt;</span>
-<span class="m">2</span> versicolor <span class="o">&lt;</span>tibble <span class="p">[</span><span class="m">50</span> × <span class="m">4</span><span class="p">]</span><span class="o">&gt;</span>
-<span class="m">3</span>  virginica <span class="o">&lt;</span>tibble <span class="p">[</span><span class="m">50</span> × <span class="m">4</span><span class="p">]</span><span class="o">&gt;</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> nest<span class="p">(</span>NEW_COLUMN <span class="o">=</span> <span class="o">-</span>Species<span class="p">)</span>
+<span class="c1">#&gt; # tbl_df [3 x 2]</span>
+<span class="c1">#&gt;      Species        NEW_COLUMN</span>
+<span class="c1">#&gt;        &lt;fct&gt;   &lt;vctrs_list_of&gt;</span>
+<span class="c1">#&gt; 1     setosa &lt;tbl_df [50 x 4]&gt;</span>
+<span class="c1">#&gt; 2 versicolor &lt;tbl_df [50 x 4]&gt;</span>
+<span class="c1">#&gt; 3  virginica &lt;tbl_df [50 x 4]&gt;</span>
 
 <span class="c1"># equivalent to</span>
-iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>group_by<span class="p">(</span>Species<span class="p">)</span> <span class="o">%&gt;%</span> nest<span class="p">()</span>
-iris <span class="o">%&gt;%</span> nest<span class="p">(</span>matches<span class="p">(</span><span class="s">&#34;Length$|Width$&#34;</span><span class="p">))</span></code></pre></div>
+iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>group_nest<span class="p">(</span>Species<span class="p">,</span> <span class="m">.</span>key <span class="o">=</span> <span class="s">&#34;NEW_COLUMN&#34;</span><span class="p">)</span>
+iris <span class="o">%&gt;%</span> nest<span class="p">(</span>NEW_COLUMN <span class="o">=</span> matches<span class="p">(</span><span class="s">&#34;Length$|Width$&#34;</span><span class="p">))</span></code></pre></div>
 <p>なんでもかんでもフラットなdata.frameにして
 <a href="/rstats/dplyr.html">dplyr</a>を駆使する時代は終わり、
 ネストしておいて<a href="/rstats/purrr.html">purrr</a>を適用するのが
