@@ -268,7 +268,31 @@ anscombe %>%
 ```
 
 `names_to` に `".value"` という特殊な値を渡すことで、
-旧列名から新しい列名を作って複数のグループを同時に変形できる。
+旧列名から新しい列名が作られ、複数列への縦長変形を同時にできる。
+
+```r
+tidy_anscombe = anscombe %>%
+  tidyr::pivot_longer(                # 縦長に変形したい
+    everything(),                     # すべての列について
+    names_to = c(".value", "group"),  # x, yを列名に、1, 2, 3をgroup列に
+    names_sep = 1L,                   # 切る位置
+    names_ptypes = list(group = integer())) %>%   # 型変換
+  dplyr::arrange(group) %>%           # グループごとに並べる
+  print()                             # ggplotしたい形！
+#> # tbl_df [44 x 3]
+#>    group     x     y
+#>    <int> <dbl> <dbl>
+#>  1     1    10  8.04
+#>  2     1     8  6.95
+#>  3     1    13  7.58
+#>  4     1     9  8.81
+#> --
+#> 41     4    19 12.50
+#> 42     4     8  5.56
+#> 43     4     8  7.91
+#> 44     4     8  6.89
+```
+
 See https://speakerdeck.com/yutannihilation/tidyr-pivot?slide=67 for details.
 
 
@@ -276,22 +300,22 @@ See https://speakerdeck.com/yutannihilation/tidyr-pivot?slide=67 for details.
 
 ### `tidyr::nest(data, ..., .key = data)`
 
-data.frameをネストして(入れ子にして)、list of data.frames のカラムを作る。
+data.frameをネストして(入れ子にして)、list of data.frames のカラムを作る。
 内側のdata.frameに押し込むカラムを `...` に指定するか、
 外側に残すカラムをマイナス指定する。
 
 ```r
-iris %>% nest(-Species, .key = NEW_COLUMN)
-# A tibble: 3 × 2
-     Species        NEW_COLUMN
-      <fctr>            <list>
-1     setosa <tibble [50 × 4]>
-2 versicolor <tibble [50 × 4]>
-3  virginica <tibble [50 × 4]>
+iris %>% nest(NEW_COLUMN = -Species)
+#> # tbl_df [3 x 2]
+#>      Species        NEW_COLUMN
+#>        <fct>   <vctrs_list_of>
+#> 1     setosa <tbl_df [50 x 4]>
+#> 2 versicolor <tbl_df [50 x 4]>
+#> 3  virginica <tbl_df [50 x 4]>
 
 # equivalent to
-iris %>% dplyr::group_by(Species) %>% nest()
-iris %>% nest(matches("Length$|Width$"))
+iris %>% dplyr::group_nest(Species, .key = "NEW_COLUMN")
+iris %>% nest(NEW_COLUMN = matches("Length$|Width$"))
 ```
 
 なんでもかんでもフラットなdata.frameにして
