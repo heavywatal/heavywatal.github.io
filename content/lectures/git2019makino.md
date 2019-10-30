@@ -116,65 +116,20 @@ tags = ["vcs", "writing"]
     ```
 
 
-## Glossary / 用語
+## Essential commands / 基本操作
 
-https://help.github.com/articles/github-glossary/
-
-repository
-: commitの履歴を保持する拠点。
-  「ひとつのRパッケージ」とか「1冊の本の原稿」のような単位で作る。
-  `git init` で手元に新規作成するか、`git clone` でリモートから複製する。
-
-commit
-: git内部でroot treeのsnapshotを指すオブジェクト。
-  root treeのハッシュID、著者、コメントなどの情報を持つ。
-  動詞としては、staging areaの情報をひとつのcommitとしてリポジトリに登録することを指す。
-
-tree
-: git内部で1つのディレクトリを指すオブジェクトで、`commit`した時に作られる。
-  blobやファイル名などのメタデータに依存したハッシュIDを持ち、
-  その変化は親に伝播する。
-
-blob
-: git内部で1つのファイルを指すオブジェクトで、`add`時に作られる。
-  ファイル名などのメタデータは持たず、
-  ファイルの内容にのみ依存したハッシュIDを持つ。
-
-`origin`
-: remoteリポジトリの典型的なshortname。
-  `clone`時に自動的に追加され、
-  `push`先や`fetch`元を省略したときにデフォルトで使われる。
-  `git remote -v` で確認。
-
-`master`
-: デフォルトのブランチの典型的な名前。
-
-`HEAD`, `@`
-: 現在checkoutしているbranch/commitを指すポインタ。
-  基本的には`master`の最新commitを指していることが多い。
-  1つ前は `HEAD^` か `HEAD~`、
-  2つ前は `HEAD^^` か `HEAD~~` か `HEAD~2`。
-  (`HEAD^2` は `merge` で複数の親がある場合の2番目)
-
-zshの`EXTENDED_GLOB`が有効になってる場合は
-`HEAD^` がパターン扱いされてエラーになるので、
-`HEAD\^` のようにエスケープするか `unsetopt NOMATCH` しておいたほうがいい。
-
-
-## 基本操作の実践
-
-### 既存のリポジトリを取ってくる `clone`
+### Fetch existing repositories: `clone`
 
 1.  GitHub上の適当なリポジトリをひとつ選ぶ。
-    (e.g., <https://github.com/heavywatal/clippson>)
+    (e.g., <https://github.com/heavywatal/tumopp>)
 1.  右の方の緑の "Clone or download" ボタンを押す。
 1.  SSHではなくHTTPSを選択し、URLをコピー。
 1.  ターミナルにコマンドを入力:<br>
-    `git clone https://github.com/heavywatal/clippson.git`
+    `git clone https://github.com/heavywatal/tumopp.git`
 1.  中身を眺めてみる:
 
     ```sh
-    cd clippson/
+    cd tumopp/
     ls -al
     git log
     git remote -v
@@ -185,7 +140,7 @@ zshの`EXTENDED_GLOB`が有効になってる場合は
 このあとはオフラインでもいろいろ操作できる。
 
 
-### 新しいリポジトリを作る `init`
+### Create new repositories: `init
 
 1.  GitHubの右上の "+" から "New repository" を選択。
 1.  Repository name を例えば `helloworld` として "Create repository" を押す。
@@ -226,12 +181,12 @@ zshの`EXTENDED_GLOB`が有効になってる場合は
 1.  GitHubで履歴を閲覧し、 `git log` と同じになってることを確認。
 
 
-### 手元の変更をリモートに `push`
+### Export local changes to a remote server: `push`
 
 1.  上で作ったリポジトリに、適当なファイルを追加:
 
     ```sh
-    echo "# Hello, world!" > README.md
+    echo '# Hello, world' > README.md
     cat README.md
     git status
     ```
@@ -261,7 +216,7 @@ zshの`EXTENDED_GLOB`が有効になってる場合は
     git log
     ```
 
-### リモートの変更を手元に `fetch`
+### Import changes from a remote server: `fetch`
 
 1.  上のリポジトリでそのまま `git fetch` してみる。
     ローカルとリモートは同じ状態なので当然何も起こらない。
@@ -300,7 +255,7 @@ zshの`EXTENDED_GLOB`が有効になってる場合は
 普段の一人作業ではよく使う。
 
 
-## その他よく使うコマンド
+## Other commands
 
 ### diff
 
@@ -363,7 +318,7 @@ git reset --hard origin/master
 **リモートにpush済みのものは改変しちゃダメ！**
 
 
-## チーム作業
+## Collaboration
 
 - 基本的に、自分のリモートリポジトリにpushできるのは自分だけ。
 - コラボレータを設定して、権限を与えることも可能。
@@ -473,6 +428,51 @@ e.g., https://github.com/Rdatatable/data.table/pull/2807
     [Slack](https://slack.com/)や[Twitter](https://twitter.com/)に投稿、
     というような連携が可能。
 -   RStudioでもディレクトリを"Project"として扱うことでGitを活用できる。
+
+
+## Glossary / 用語
+
+https://help.github.com/articles/github-glossary/
+
+repository
+: commitの履歴を保持する拠点。
+  「ひとつのRパッケージ」とか「1冊の本の原稿」のような単位で作る。
+  `git init` で手元に新規作成するか、`git clone` でリモートから複製する。
+
+commit
+: git内部でroot treeのsnapshotを指すオブジェクト。
+  root treeのハッシュID、著者、コメントなどの情報を持つ。
+  動詞としては、staging areaの情報をひとつのcommitとしてリポジトリに登録することを指す。
+
+tree
+: git内部で1つのディレクトリを指すオブジェクトで、`commit`した時に作られる。
+  blobやファイル名などのメタデータに依存したハッシュIDを持ち、
+  その変化は親に伝播する。
+
+blob
+: git内部で1つのファイルを指すオブジェクトで、`add`時に作られる。
+  ファイル名などのメタデータは持たず、
+  ファイルの内容にのみ依存したハッシュIDを持つ。
+
+`origin`
+: remoteリポジトリの典型的なshortname。
+  `clone`時に自動的に追加され、
+  `push`先や`fetch`元を省略したときにデフォルトで使われる。
+  `git remote -v` で確認。
+
+`master`
+: デフォルトのブランチの典型的な名前。
+
+`HEAD`, `@`
+: 現在checkoutしているbranch/commitを指すポインタ。
+  基本的には`master`の最新commitを指していることが多い。
+  1つ前は `HEAD^` か `HEAD~`、
+  2つ前は `HEAD^^` か `HEAD~~` か `HEAD~2`。
+  (`HEAD^2` は `merge` で複数の親がある場合の2番目)
+
+zshの`EXTENDED_GLOB`が有効になってる場合は
+`HEAD^` がパターン扱いされてエラーになるので、
+`HEAD\^` のようにエスケープするか `unsetopt NOMATCH` しておいたほうがいい。
 
 
 ## Further reading
