@@ -3,16 +3,16 @@
 <head prefix="og: http://ogp.me/ns#">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
-<title>Git入門2018 - Heavy Watal</title>
+<title>Git入門2019 - Heavy Watal</title>
 <link rel="stylesheet" href="/css/theme.css">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#e08010">
 <meta name="author" content="Watal M. Iwasaki">
-<meta property="og:title" content="Git入門2018">
+<meta property="og:title" content="Git入門2019">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://heavywatal.github.io/lectures/git2018nrifs.html">
+<meta property="og:url" content="https://heavywatal.github.io/lectures/git2019makino.html">
 <meta property="og:image" content="https://avatars.githubusercontent.com/heavywatal">
 <meta property="og:description" content="">
 <meta property="og:site_name" content="Heavy Watal">
@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function() {
   "item": {"@id":"https://heavywatal.github.io/lectures.html","name":"lectures"} },
  {"@type": "ListItem",
   "position": 2,
-  "item": {"@id":"https://heavywatal.github.io/lectures/git2018nrifs.html","name":"Git入門2018"} }
+  "item": {"@id":"https://heavywatal.github.io/lectures/git2019makino.html","name":"Git入門2019"} }
 ]}</script>
 
 <script defer src="https://use.fontawesome.com/releases/v5.8.2/js/all.js" integrity="sha384-DJ25uNYET2XCl5ZF++U8eNxPWqcKohUUBUpKGlNLMchM7q4Wjg2CUpjHLaL8yYPH" crossorigin="anonymous"></script>
@@ -82,8 +82,8 @@ Heavy Watal
 </header>
 <main>
 <article>
-<header><h1><a href="/lectures/git2018nrifs.html">
-Git入門2018
+<header><h1><a href="/lectures/git2019makino.html">
+Git入門2019
 </a></h1>
 <nav class="tags"><ul>
 <li><i class="fas fa-tag"></i> <a href="/tags/vcs.html">vcs</a></li>
@@ -94,47 +94,32 @@ Git入門2018
 <ul>
 <li>
 <ul>
-<li><a href="#事前準備">事前準備</a>
+<li><a href="#environment-環境">Environment / 環境</a>
 <ul>
-<li><a href="#os別">OS別</a></li>
-<li><a href="#os共通">OS共通</a></li>
-<li><a href="#sshの設定-任意">SSHの設定 (任意)</a></li>
+<li><a href="#os">OS</a></li>
+<li><a href="#common">Common</a></li>
+<li><a href="#ssh-任意">SSH (任意)</a></li>
 </ul></li>
-<li><a href="#gitが無い世界の風景">Gitが無い世界の風景</a>
+<li><a href="#essential-commands-基本操作">Essential commands / 基本操作</a>
 <ul>
-<li><a href="#オンラインストレージやバックアップ機能では不十分">オンラインストレージやバックアップ機能では不十分</a></li>
+<li><a href="#fetch-existing-repositories-clone">Fetch existing repositories: <code>clone</code></a></li>
+<li><a href="#create-new-repositories-init">Create new repositories: <code>init</code></a></li>
+<li><a href="#export-local-changes-to-a-remote-server-push">Export local changes to a remote server: <code>push</code></a></li>
+<li><a href="#import-changes-from-a-remote-server-fetch">Import changes from a remote server: <code>fetch</code></a></li>
 </ul></li>
-<li><a href="#git-i-class-fas-fa-fw-fa-share-alt-square-i-and-github-i-class-fab-fa-fw-fa-github-i">Git<i class="fas fa-fw fa-share-alt-square"></i> and GitHub<i class="fab fa-fw fa-github"></i></a>
-<ul>
-<li><a href="#両者はどういう関係">両者はどういう関係？</a></li>
-<li><a href="#類似ツール">類似ツール</a></li>
-<li><a href="#github-i-class-fab-fa-fw-fa-github-i-の使いみち">GitHub<i class="fab fa-fw fa-github"></i>の使いみち</a></li>
-</ul></li>
-<li><a href="#構造と操作の概要">構造と操作の概要</a>
-<ul>
-<li><a href="#手元の変更を外に伝える">手元の変更を外に伝える</a></li>
-<li><a href="#外部の変更を手元に取り込む">外部の変更を手元に取り込む</a></li>
-</ul></li>
-<li><a href="#用語">用語</a></li>
-<li><a href="#基本操作の実践">基本操作の実践</a>
-<ul>
-<li><a href="#既存のリポジトリを取ってくる-clone">既存のリポジトリを取ってくる <code>clone</code></a></li>
-<li><a href="#新しいリポジトリを作る-init">新しいリポジトリを作る <code>init</code></a></li>
-<li><a href="#手元の変更をリモートに-push">手元の変更をリモートに <code>push</code></a></li>
-<li><a href="#リモートの変更を手元に-fetch">リモートの変更を手元に <code>fetch</code></a></li>
-</ul></li>
-<li><a href="#その他よく使うコマンド">その他よく使うコマンド</a>
+<li><a href="#other-commands">Other commands</a>
 <ul>
 <li><a href="#diff">diff</a></li>
 <li><a href="#rm-clean">rm, clean</a></li>
 <li><a href="#reset">reset</a></li>
 </ul></li>
-<li><a href="#チーム作業">チーム作業</a>
+<li><a href="#collaboration">Collaboration</a>
 <ul>
 <li><a href="#pull-request-pr">Pull Request (PR)</a></li>
 <li><a href="#2人1組でprとmergeを体験">2人1組でPRとmergeを体験</a></li>
 </ul></li>
 <li><a href="#tips">Tips</a></li>
+<li><a href="#glossary-用語">Glossary / 用語</a></li>
 <li><a href="#further-reading">Further reading</a></li>
 </ul></li>
 </ul>
@@ -154,11 +139,13 @@ Git入門2018
 }
 </style>
 
-<p>2018-10-15 中央水産研究所</p>
+<p>2019-10-30 東北大学 生命科学研究科 進化ゲノミクス分野 牧野研</p>
 
-<h2 id="事前準備">事前準備</h2>
+<p><a href="/slides/makino2019r/5-git.html">前半スライド</a></p>
 
-<h3 id="os別">OS別</h3>
+<h2 id="environment-環境">Environment / 環境</h2>
+
+<h3 id="os">OS</h3>
 
 <p>新しめのUNIX系OSが好ましい。</p>
 
@@ -166,7 +153,7 @@ Git入門2018
 <li>macOS
 
 <ul>
-<li>10.12 Sierra以降</li>
+<li>10.14 Mojave以降</li>
 <li>Command Line Tools</li>
 <li>Gitは標準装備のやつで大丈夫</li>
 </ul></li>
@@ -203,7 +190,7 @@ e.g.,  <code>pwd</code>, <code>ls</code>, <code>cd</code>, <code>mkdir</code></l
 </ul></li>
 </ul>
 
-<h3 id="os共通">OS共通</h3>
+<h3 id="common">Common</h3>
 
 <ul>
 <li><p>適当なテキストエディタ(開発環境)を入れておく。
@@ -228,9 +215,12 @@ cat ~/.gitconfig</code></pre></div><div class="highlight"><pre class="chroma"><c
 </span><span class="s">  email = heavywatalあmail.com</span>
 <span class="k">[push]</span>
   <span class="na">default</span> <span class="o">=</span> <span class="s">simple</span></code></pre></div></li>
+
+<li><p>Enable macOS Keychain to skip password authentication:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git config --global credential.helper osxkeychain</code></pre></div></li>
 </ul>
 
-<h3 id="sshの設定-任意">SSHの設定 (任意)</h3>
+<h3 id="ssh-任意">SSH (任意)</h3>
 
 <ul>
 <li>GitHubとの通信に2つの方式がある。
@@ -248,236 +238,20 @@ cat ~/.gitconfig</code></pre></div><div class="highlight"><pre class="chroma"><c
   <span class="na">pushinsteadof</span> <span class="o">=</span> <span class="s">https://github.com/</span></code></pre></div></li>
 </ul>
 
-<hr>
+<h2 id="essential-commands-基本操作">Essential commands / 基本操作</h2>
 
-<p>以下、本編。</p>
-
-<h2 id="gitが無い世界の風景">Gitが無い世界の風景</h2>
-
-<p>バージョン違いのファイルがフォルダを埋め尽くす。</p>
-
-<pre><code>% ls
-analysis.R
-analysis2.R
-analysis-20180129.R
-analysis-20180129改良版.R
-analysis-20180210.R
-analysis-20180210バグ？.R
-analysis佐藤edit.R
-analysis佐藤edit田中.R
-analysis完全版.R
-analysis最終.R
-analysis最終改.R
-analysis決定版！.R
-analysis真・最終.R
-plot.R
-plot2.R
-plot最終.R
-plot論文.R
-</code></pre>
-
-<p>ファイルの中にも、いつか使うかもしれなくて消せないコードがたくさん。</p>
-
-<p>ジャンクコードまみれになって、開発効率は低下、バグ混入リスクは上昇。</p>
-
-<h3 id="オンラインストレージやバックアップ機能では不十分">オンラインストレージやバックアップ機能では不十分</h3>
-
-<ul>
-<li><a href="https://dropbox.com">Dropbox<i class="fab fa-fw fa-dropbox"></i></a> とか
-<a href="https://drive.google.com/">Google Drive<i class="fab fa-fw fa-google-drive"></i></a>
-では、保存のたびに履歴が残る。</li>
-<li><a href="https://support.apple.com/HT201250">Time Machine<i class="fas fa-fw fa-clock"></i></a>
-では、一定時間間隔で履歴が残る。</li>
-</ul>
-
-<p>でも、バージョン管理や共同作業のためのツールじゃないから&hellip;</p>
-
-<ul>
-<li>いつまでも履歴を保持してもらえるとは限らない。<br>
-(ここでDropboxの履歴を例示しようと思ったらエラーで使えなかった)</li>
-<li>オフラインだったりバッテリー駆動だったりすると保存漏れが起きる。</li>
-<li>いつのバージョンに戻したらいいのか、日時以外の手掛かりが無い。</li>
-<li>ファイル変更の競合・衝突に対処しにくい。</li>
-</ul>
-
-<h2 id="git-i-class-fas-fa-fw-fa-share-alt-square-i-and-github-i-class-fab-fa-fw-fa-github-i">Git<i class="fas fa-fw fa-share-alt-square"></i> and GitHub<i class="fab fa-fw fa-github"></i></h2>
-
-<ul>
-<li>いつでも好きなところに戻れる安心感
-
-<ul>
-<li>履歴を残すタイミングは任意 = 手動。</li>
-<li>バージョン(リビジョン)ごとにメッセージを残せる。</li>
-<li>差分を簡単に見られる。</li>
-</ul></li>
-<li>複数マシンや複数人での並列作業にも使える
-
-<ul>
-<li>オフラインでも作業できる。</li>
-<li>ブランチを作ることで競合・衝突の影響を抑えられる。</li>
-<li>もし競合・衝突が起きてもうまく対処する機能がある。</li>
-<li>課題を管理する機能もある。</li>
-</ul></li>
-<li>読み方はギット、ギットハブ。(ちなみに画像のGIFはジフ)</li>
-</ul>
-
-<p>e.g., <a href="https://github.com/tidyverse/stringr/commits/master">https://github.com/tidyverse/stringr/commits/master</a></p>
-
-<h3 id="両者はどういう関係">両者はどういう関係？</h3>
-
-<p><a href="https://git-scm.com/">Git<i class="fas fa-fw fa-share-alt-square"></i></a>
-は分散型バージョン管理システムとして最も広く使われるオープンソース・ソフトウェア。
-手元のコンピュータ上でこれを操作して、変更履歴を記録・閲覧したり送受信したりする。</p>
-
-<p><a href="https://github.com">GitHub<i class="fab fa-fw fa-github"></i></a>
-はGitをより便利に使うためのオンラインサービスであり、それを運営する会社の名前でもある。
-個人的なリポジトリ置き場としてはもちろんのこと、
-多人数で共有・協力してプロジェクトを進めるプラットフォームとしても使える。</p>
-
-<h3 id="類似ツール">類似ツール</h3>
-
-<ul>
-<li>Version Control System (VCS)
-
-<ul>
-<li><a href="https://git-scm.com/">Git<i class="fas fa-fw fa-share-alt-square"></i> <code>git</code></a></li>
-<li><a href="https://www.mercurial-scm.org/">Mercurial<i class="fas fa-fw fa-tint"></i> <code>hg</code></a></li>
-<li>その他 svn, cvs, rcs など。</li>
-</ul></li>
-<li>Hosting Service
-
-<ul>
-<li><a href="https://github.com">GitHub<i class="fab fa-fw fa-github"></i></a>:
-公開リポジトリは無料。情報も連携も豊富。</li>
-<li><a href="https://bitbucket.org/">Bitbucket<i class="fab fa-fw fa-bitbucket"></i></a>:
-非公開リポジトリも無料。</li>
-<li><a href="https://about.gitlab.com/">GitLab<i class="fab fa-fw fa-gitlab"></i></a>:
-非公開リポジトリも無料。ローカル版もあり。</li>
-<li><a href="https://gitea.io/en-us/">Gitea<i class="fas fa-fw fa-coffee"></i></a>:
-ローカル版のみ。</li>
-<li>その他 SourceForge, Google Code など。</li>
-</ul></li>
-</ul>
-
-<p>VCSは基本的にGit一択。<br>
-ホスティングサービスは、使い方や予算などに応じて選択。</p>
-
-<h3 id="github-i-class-fab-fa-fw-fa-github-i-の使いみち">GitHub<i class="fab fa-fw fa-github"></i>の使いみち</h3>
-
-<ul>
-<li><p>基本: プレーンテキストのバージョン管理<i class="fas fa-fw fa-share-alt-square"></i></p>
-
-<ul>
-<li>プログラムのソースコード:
-e.g., <a href="https://github.com/tidyverse/ggplot2">ggplot2</a>, <a href="https://github.com/stan-dev/rstan">rstan</a></li>
-<li>論文や本の原稿、サプリ:
-e.g., <a href="https://github.com/hadley/r4ds">R4DS</a>, <a href="https://github.com/hadley/adv-r/">Advanced R programming</a></li>
-</ul></li>
-
-<li><p>Issues:
-バグ報告、機能要望、課題の列挙などに使われる。
-タグを付けたり、特定の人にassignすることもできる。<br>
-e.g., <a href="https://github.com/gohugoio/hugo/issues">https://github.com/gohugoio/hugo/issues</a>, <a href="https://github.com/nlohmann/json/issues">https://github.com/nlohmann/json/issues</a></p></li>
-
-<li><p>Projects:
-プロジェクトのタスク管理のためのツール。
-もちろんissueとも連携可能。<br>
-e.g., <a href="https://github.com/r-lib/pillar/projects/1">https://github.com/r-lib/pillar/projects/1</a></p></li>
-
-<li><p>Wiki:
-チーム内のちょっとした情報共有などに。
-でもできればそういう文書もちゃんとGitで管理したほうがいい。<br>
-e.g., <a href="https://github.com/gnab/remark/wiki">https://github.com/gnab/remark/wiki</a></p></li>
-
-<li><p>GitHub Pages:
-リポジトリの内容をウェブサイトとして公開できる。<br>
-e.g., <a href="https://kazutan.github.io/kazutanR/">https://kazutan.github.io/kazutanR/</a></p></li>
-</ul>
-
-<h2 id="構造と操作の概要">構造と操作の概要</h2>
-
-<h3 id="手元の変更を外に伝える">手元の変更を外に伝える</h3>
-
-<dl>
-<dt><i class="fas fa-fw fa-folder"></i> working directory (working tree)</dt>
-<dd>手元のファイルの変更はまだリポジトリに登録されていない</dd>
-<dd>↓ <code>git add</code></dd>
-<dt><i class="fas fa-fw fa-folder-plus"></i> staging area (index)</dt>
-<dd>次のコミットに含めるファイルをマークする段階</dd>
-<dd>↓ <code>git commit</code></dd>
-<dt><i class="fas fa-fw fa-code-branch"></i> local repository</dt>
-<dd>変更履歴が <code>.git/</code> 内に記録されている</dd>
-<dd>↓ <code>git push</code></dd>
-<dt><i class="fab fa-fw fa-github"></i> remote repository</dt>
-<dd>GitHubなど別マシンのリポジトリに反映</dd>
-</dl>
-
-<h3 id="外部の変更を手元に取り込む">外部の変更を手元に取り込む</h3>
-
-<dl>
-<dt><i class="fab fa-fw fa-github"></i> remote repository</dt>
-<dd>↓ <code>git fetch</code></dd>
-<dt><i class="fas fa-fw fa-code-branch"></i> local repository</dt>
-<dd>変更が <code>.git/</code> に取り込まれたが、見えてるファイルには反映されてない</dd>
-<dd>↓ <code>git checkout</code> or <code>git merge</code></dd>
-<dt><i class="fas fa-fw fa-folder"></i> working directory</dt>
-<dd>手元のファイルが最新版に同期されている</dd>
-</dl>
-
-<h2 id="用語">用語</h2>
-
-<p><a href="https://help.github.com/articles/github-glossary/">https://help.github.com/articles/github-glossary/</a></p>
-
-<dl>
-<dt>repository</dt>
-<dd>commitの履歴を保持する拠点。
-「ひとつのRパッケージ」とか「1冊の本の原稿」のような単位で作る。
-<code>git init</code> で手元に新規作成するか、<code>git clone</code> でリモートから複製する。</dd>
-<dt>commit</dt>
-<dd>git内部でroot treeのsnapshotを指すオブジェクト。
-root treeのハッシュID、著者、コメントなどの情報を持つ。
-動詞としては、staging areaの情報をひとつのcommitとしてリポジトリに登録することを指す。</dd>
-<dt>tree</dt>
-<dd>git内部で1つのディレクトリを指すオブジェクトで、<code>commit</code>した時に作られる。
-blobやファイル名などのメタデータに依存したハッシュIDを持ち、
-その変化は親に伝播する。</dd>
-<dt>blob</dt>
-<dd>git内部で1つのファイルを指すオブジェクトで、<code>add</code>時に作られる。
-ファイル名などのメタデータは持たず、
-ファイルの内容にのみ依存したハッシュIDを持つ。</dd>
-<dt><code>origin</code></dt>
-<dd>remoteリポジトリの典型的なshortname。
-<code>clone</code>時に自動的に追加され、
-<code>push</code>先や<code>fetch</code>元を省略したときにデフォルトで使われる。
-<code>git remote -v</code> で確認。</dd>
-<dt><code>master</code></dt>
-<dd>デフォルトのブランチの典型的な名前。</dd>
-<dt><code>HEAD</code>, <code>@</code></dt>
-<dd>現在checkoutしているbranch/commitを指すポインタ。
-基本的には<code>master</code>の最新commitを指していることが多い。
-1つ前は <code>HEAD^</code> か <code>HEAD~</code>、
-2つ前は <code>HEAD^^</code> か <code>HEAD~~</code> か <code>HEAD~2</code>。
-(<code>HEAD^2</code> は <code>merge</code> で複数の親がある場合の2番目)</dd>
-</dl>
-
-<p>zshの<code>EXTENDED_GLOB</code>が有効になってる場合は
-<code>HEAD^</code> がパターン扱いされてエラーになるので、
-<code>HEAD\^</code> のようにエスケープするか <code>unsetopt NOMATCH</code> しておいたほうがいい。</p>
-
-<h2 id="基本操作の実践">基本操作の実践</h2>
-
-<h3 id="既存のリポジトリを取ってくる-clone">既存のリポジトリを取ってくる <code>clone</code></h3>
+<h3 id="fetch-existing-repositories-clone">Fetch existing repositories: <code>clone</code></h3>
 
 <ol>
 <li>GitHub上の適当なリポジトリをひとつ選ぶ。
-(e.g., <a href="https://github.com/heavywatal/clippson">https://github.com/heavywatal/clippson</a>)</li>
+(e.g., <a href="https://github.com/heavywatal/tumopp">https://github.com/heavywatal/tumopp</a>)</li>
 <li>右の方の緑の &ldquo;Clone or download&rdquo; ボタンを押す。</li>
 <li>SSHではなくHTTPSを選択し、URLをコピー。</li>
 <li>ターミナルにコマンドを入力:<br>
-<code>git clone https://github.com/heavywatal/clippson.git</code></li>
+<code>git clone https://github.com/heavywatal/tumopp.git</code></li>
 
 <li><p>中身を眺めてみる:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> clippson/
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> tumopp/
 ls -al
 git log
 git remote -v</code></pre></div></li>
@@ -487,7 +261,7 @@ git remote -v</code></pre></div></li>
 履歴もごっそり複製するので、
 このあとはオフラインでもいろいろ操作できる。</p>
 
-<h3 id="新しいリポジトリを作る-init">新しいリポジトリを作る <code>init</code></h3>
+<h3 id="create-new-repositories-init">Create new repositories: <code>init</code></h3>
 
 <ol>
 <li>GitHubの右上の &ldquo;+&rdquo; から &ldquo;New repository&rdquo; を選択。</li>
@@ -519,7 +293,7 @@ git status</code></pre></div></li>
 <li><p>GitHubで履歴を閲覧し、 <code>git log</code> と同じになってることを確認。</p></li>
 </ol>
 
-<h3 id="手元の変更をリモートに-push">手元の変更をリモートに <code>push</code></h3>
+<h3 id="export-local-changes-to-a-remote-server-push">Export local changes to a remote server: <code>push</code></h3>
 
 <ol>
 <li><p>上で作ったリポジトリに、適当なファイルを追加:</p>
@@ -544,7 +318,7 @@ git status
 git log</code></pre></div></li>
 </ol>
 
-<h3 id="リモートの変更を手元に-fetch">リモートの変更を手元に <code>fetch</code></h3>
+<h3 id="import-changes-from-a-remote-server-fetch">Import changes from a remote server: <code>fetch</code></h3>
 
 <ol>
 <li><p>上のリポジトリでそのまま <code>git fetch</code> してみる。
@@ -581,7 +355,7 @@ ls -al</code></pre></div></li>
 <p><code>git fetch</code> と <code>git merge</code> を一気にやってくれる <code>git pull</code> というコマンドもあり、
 普段の一人作業ではよく使う。</p>
 
-<h2 id="その他よく使うコマンド">その他よく使うコマンド</h2>
+<h2 id="other-commands">Other commands</h2>
 
 <h3 id="diff">diff</h3>
 
@@ -632,7 +406,7 @@ git reset --hard origin/master</code></pre></div>
 
 <p><strong>リモートにpush済みのものは改変しちゃダメ！</strong></p>
 
-<h2 id="チーム作業">チーム作業</h2>
+<h2 id="collaboration">Collaboration</h2>
 
 <ul>
 <li>基本的に、自分のリモートリポジトリにpushできるのは自分だけ。</li>
@@ -764,6 +538,46 @@ git rebase -i master
 というような連携が可能。</li>
 <li>RStudioでもディレクトリを&rdquo;Project&rdquo;として扱うことでGitを活用できる。</li>
 </ul>
+
+<h2 id="glossary-用語">Glossary / 用語</h2>
+
+<p><a href="https://help.github.com/articles/github-glossary/">https://help.github.com/articles/github-glossary/</a></p>
+
+<dl>
+<dt>repository</dt>
+<dd>commitの履歴を保持する拠点。
+「ひとつのRパッケージ」とか「1冊の本の原稿」のような単位で作る。
+<code>git init</code> で手元に新規作成するか、<code>git clone</code> でリモートから複製する。</dd>
+<dt>commit</dt>
+<dd>git内部でroot treeのsnapshotを指すオブジェクト。
+root treeのハッシュID、著者、コメントなどの情報を持つ。
+動詞としては、staging areaの情報をひとつのcommitとしてリポジトリに登録することを指す。</dd>
+<dt>tree</dt>
+<dd>git内部で1つのディレクトリを指すオブジェクトで、<code>commit</code>した時に作られる。
+blobやファイル名などのメタデータに依存したハッシュIDを持ち、
+その変化は親に伝播する。</dd>
+<dt>blob</dt>
+<dd>git内部で1つのファイルを指すオブジェクトで、<code>add</code>時に作られる。
+ファイル名などのメタデータは持たず、
+ファイルの内容にのみ依存したハッシュIDを持つ。</dd>
+<dt><code>origin</code></dt>
+<dd>remoteリポジトリの典型的なshortname。
+<code>clone</code>時に自動的に追加され、
+<code>push</code>先や<code>fetch</code>元を省略したときにデフォルトで使われる。
+<code>git remote -v</code> で確認。</dd>
+<dt><code>master</code></dt>
+<dd>デフォルトのブランチの典型的な名前。</dd>
+<dt><code>HEAD</code>, <code>@</code></dt>
+<dd>現在checkoutしているbranch/commitを指すポインタ。
+基本的には<code>master</code>の最新commitを指していることが多い。
+1つ前は <code>HEAD^</code> か <code>HEAD~</code>、
+2つ前は <code>HEAD^^</code> か <code>HEAD~~</code> か <code>HEAD~2</code>。
+(<code>HEAD^2</code> は <code>merge</code> で複数の親がある場合の2番目)</dd>
+</dl>
+
+<p>zshの<code>EXTENDED_GLOB</code>が有効になってる場合は
+<code>HEAD^</code> がパターン扱いされてエラーになるので、
+<code>HEAD\^</code> のようにエスケープするか <code>unsetopt NOMATCH</code> しておいたほうがいい。</p>
 
 <h2 id="further-reading">Further reading</h2>
 
@@ -899,8 +713,8 @@ git rebase -i master
 <label for="menu-lectures" class="active">Lectures</label>
 <ul>
 <li><a href="/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
-<li class="active"><a href="/lectures/git2018nrifs.html">Git入門2018</a></li>
-<li><a href="/lectures/git2019makino.html">Git入門2019</a></li>
+<li><a href="/lectures/git2018nrifs.html">Git入門2018</a></li>
+<li class="active"><a href="/lectures/git2019makino.html">Git入門2019</a></li>
 <li><a href="/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
 <li><a href="/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
 <li><a href="/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
