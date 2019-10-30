@@ -140,7 +140,7 @@ tags = ["vcs", "writing"]
 このあとはオフラインでもいろいろ操作できる。
 
 
-### Create new repositories: `init
+### Create new repositories: `init`
 
 1.  GitHubの右上の "+" から "New repository" を選択。
 1.  Repository name を例えば `helloworld` として "Create repository" を押す。
