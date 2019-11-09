@@ -8,12 +8,26 @@ tags = ["r"]
 
 ## 初学者向け講義資料
 
+### 2019-10 東北大学
+
+<ol start="0">
+<li><a href="/slides/makino2019r/0-why-r.html">Why do we use R?</a>
+<li><a href="/slides/makino2019r/1-basic-r.html">R basics</a>
+<li><a href="/slides/makino2019r/2-ggplot.html">Visualization with R</a>
+<li><a href="/slides/makino2019r/3-tidy-data.html">Tidying and transforming data with R</a>
+<li><a href="/slides/makino2019r/4-statistics.html">Statistical analysis with R</a>
+<li><a href="/slides/makino2019r/5-git.html">File management with Git+GitHub </a>
+</ol>
+
+### 2018-05 名古屋大学
+
 <ol start="0">
 <li><a href="/slides/nagoya2018/0-why-r.html">どうしてRを使うの？</a> (12分)
 <li><a href="/slides/nagoya2018/1-basic-r.html">Rの基本</a> (15分)
 <li><a href="/slides/nagoya2018/2-ggplot.html">R + ggplot2 — きれいなグラフを簡単に合理的に</a> (25分)
 <li><a href="/slides/nagoya2018/3-tidy-data.html">R + tidyverse — 使える形にデータを整える</a> (30分)
 </ol>
+
 
 ## インターネットで調べる・尋ねる
 
