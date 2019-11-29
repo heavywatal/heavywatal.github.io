@@ -9,8 +9,6 @@ https://sc.ddbj.nig.ac.jp/
 
 ## 利用開始
 
-<https://sc2.ddbj.nig.ac.jp/index.php/ja-howtouse>
-
 1.  [新規ユーザ登録申請](https://sc2.ddbj.nig.ac.jp/index.php/ja-new-application)
 1.  責任者にメールが届くので、それに従って誓約書PDFを管理者に送信
 1.  アカウント登録証が手元に届く
@@ -40,11 +38,11 @@ https://sc.ddbj.nig.ac.jp/
 
 ## 環境整備
 
-- [ハードウェア構成](https://sc2.ddbj.nig.ac.jp/index.php/systemconfig)
-- [ソフトウェア構成](https://sc2.ddbj.nig.ac.jp/index.php/system-software-config)
+- [ハードウェア構成](https://sc.ddbj.nig.ac.jp/ja/guide/hardware)
+- [ソフトウェア構成](https://sc.ddbj.nig.ac.jp/ja/guide/software)
   (Phase 3: Red Hat Enterprise Linux 7.5)
-    - [Singularity](https://sc2.ddbj.nig.ac.jp/index.php/singularity)
-    - [Environment Module](https://sc2.ddbj.nig.ac.jp/index.php/environment-module)
+    - [Singularity](https://sc.ddbj.nig.ac.jp/ja/guide/software/singularity)
+    - [Environment Module](https://sc.ddbj.nig.ac.jp/ja/guide/software/environmental-modules)
 
 
 ### RcppでC++14以降が使えるRをインストールしたい
@@ -69,6 +67,7 @@ make install
 
 ## ジョブ投入、管理
 
+- <https://sc.ddbj.nig.ac.jp/ja/guide/software/univa-grid-engine>
 - <https://sc2.ddbj.nig.ac.jp/index.php/ja-howtouse>
 - <https://sc2.ddbj.nig.ac.jp/index.php/ja-uge-additional>
 - [Univa Grid Engine (UGE)](http://www.univa.com/products/grid-engine)
@@ -84,7 +83,7 @@ make install
 qsub test.sh
 
 ## コマンドライン引数として直接渡す
-qsub -l debug -b y -shell n -cwd -N test "pwd; sleep 5; ls >ls.txt"
+qsub -l short -b y -shell n -cwd -N test "pwd; sleep 5; ls >ls.txt"
 ```
 
 `-l ***`
