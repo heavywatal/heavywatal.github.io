@@ -63,7 +63,9 @@ GitHubに公開しておけば誰でも使えるようになるので、
     ```
 
 
-### 構造
+### ソース構造
+
+https://r-pkgs.org/package-structure-state.html
 
 ```sh
 DESCRIPTION  # 一番大事
@@ -77,6 +79,9 @@ src/         # C++ソースコード
 tests/
 vignettes/
 ```
+
+CRANから落としてくる `.tar.gz` ソースコード (bundle package) とは違う。
+
 
 ### [`DESCRIPTION`](https://r-pkgs.org/description.html)
 
@@ -204,33 +209,40 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 
 ### 主な関数
 
-`document(pkg = ".", roclets = NULL)`
+`document(pkg = ".", roclets = NULL, quiet = FALSE)`
 :   `roxygen2` を呼び出してソースコードから
     `NAMESPACE` や `man/*.Rd` を自動生成する。
+:   `src/` 内のドキュメント変更はこれ1回の実行では反映されない。
 
-`check(pkg=".", document = NA, ...)`
+`check(pkg = ".", document = NA, ...)`
 :   パッケージとしての整合性を確認。
-    ついでに`document()`は実行できるけど`spell_check()`はできないので手動で。
+    ついでに `document()` は実行できるけど `spell_check()` はできないので手動で。
 
 `test(pkg = ".", filter = NULL, ...)`
 :   `testthat` を呼び出して `tests/` 以下のテストコードを実行する
 
-`install(pkg = ".", reload = TRUE, quick = FALSE, ...)`
-:   ローカルにあるディレクトリからインストール
+`build(pkg = ".", path = NULL, ...)`
+:   `R CMD install` でインストール可能な tar ball (bundle package) を作る。
+    Rcppコードをコンパイルするという意味ではない。
 
-`remotes::install_github(repo, ref = "master", subdir = NULL, ...)`
+`install(pkg = ".", reload = TRUE, quick = FALSE, build = !quick, ...)`
+:   ローカルにあるソースからインストール。
+    `build = TRUE` のとき(デフォルト)、わざわざ bundle package を
+    `tempdir()` に作ってからそいつでインストールする。
+
+`install_github(repo, ref = "master", subdir = NULL, ...)`
 :   GitHubリポジトリからインストール。
 
-`pkgload::unload(pkg = ".")`
+`unload(pkg = ".", quiet = FALSE)`
 :   `datach("package:XXX")` とか `unloadNamespace(XXX)`
     よりもちゃんとまっさらにパッケージを外す。
 
 
-`pkgload::load_all(pkg = ".", reset = TRUE, compile = NA, export_all = TRUE, ...)`
+`load_all(pkg = ".", reset = TRUE, recompile = FALSE, export_all = TRUE, ...)`
 :   `install()` せずファイルから直接 `library()` する。
     ロード済みでもまず `unload()` が呼ばれるので安心。
 
-`pkgbuild::clean_dll(pkg = ".")`
+`clean_dll(pkg = ".")`
 :   `src/` 以下に生成される `.o`, `.so` を消す。
     普段は触る必要ないが、たまにこれが必要な不具合に出くわす。
 
