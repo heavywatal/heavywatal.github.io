@@ -147,7 +147,9 @@ git push -u origin master</code></pre></div></li>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">remotes<span class="o">::</span>install_github<span class="p">(</span><span class="s">&#34;heavywatal/rhello&#34;</span><span class="p">)</span></code></pre></div></li>
 </ol>
 
-<h3 id="構造">構造</h3>
+<h3 id="ソース構造">ソース構造</h3>
+
+<p><a href="https://r-pkgs.org/package-structure-state.html">https://r-pkgs.org/package-structure-state.html</a></p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">DESCRIPTION  <span class="c1"># 一番大事</span>
 NAMESPACE    <span class="c1"># 見せるオブジェクトを列挙</span>
 README.md    <span class="c1"># 全体の説明を簡単に</span>
@@ -158,6 +160,8 @@ man/         <span class="c1"># ヘルプファイル.Rd</span>
 src/         <span class="c1"># C++ソースコード</span>
 tests/
 vignettes/</code></pre></div>
+<p>CRANから落としてくる <code>.tar.gz</code> ソースコード (bundle package) とは違う。</p>
+
 <h3 id="description-https-r-pkgs-org-description-html"><a href="https://r-pkgs.org/description.html"><code>DESCRIPTION</code></a></h3>
 
 <ul>
@@ -284,25 +288,31 @@ mydemo2    Description of demo 2
 <h3 id="主な関数">主な関数</h3>
 
 <dl>
-<dt><code>document(pkg = &quot;.&quot;, roclets = NULL)</code></dt>
+<dt><code>document(pkg = &quot;.&quot;, roclets = NULL, quiet = FALSE)</code></dt>
 <dd><code>roxygen2</code> を呼び出してソースコードから
 <code>NAMESPACE</code> や <code>man/*.Rd</code> を自動生成する。</dd>
-<dt><code>check(pkg=&quot;.&quot;, document = NA, ...)</code></dt>
+<dd><code>src/</code> 内のドキュメント変更はこれ1回の実行では反映されない。</dd>
+<dt><code>check(pkg = &quot;.&quot;, document = NA, ...)</code></dt>
 <dd>パッケージとしての整合性を確認。
-ついでに<code>document()</code>は実行できるけど<code>spell_check()</code>はできないので手動で。</dd>
+ついでに <code>document()</code> は実行できるけど <code>spell_check()</code> はできないので手動で。</dd>
 <dt><code>test(pkg = &quot;.&quot;, filter = NULL, ...)</code></dt>
 <dd><code>testthat</code> を呼び出して <code>tests/</code> 以下のテストコードを実行する</dd>
-<dt><code>install(pkg = &quot;.&quot;, reload = TRUE, quick = FALSE, ...)</code></dt>
-<dd>ローカルにあるディレクトリからインストール</dd>
-<dt><code>remotes::install_github(repo, ref = &quot;master&quot;, subdir = NULL, ...)</code></dt>
+<dt><code>build(pkg = &quot;.&quot;, path = NULL, ...)</code></dt>
+<dd><code>R CMD install</code> でインストール可能な tar ball (bundle package) を作る。
+Rcppコードをコンパイルするという意味ではない。</dd>
+<dt><code>install(pkg = &quot;.&quot;, reload = TRUE, quick = FALSE, build = !quick, ...)</code></dt>
+<dd>ローカルにあるソースからインストール。
+<code>build = TRUE</code> のとき(デフォルト)、わざわざ bundle package を
+<code>tempdir()</code> に作ってからそいつでインストールする。</dd>
+<dt><code>install_github(repo, ref = &quot;master&quot;, subdir = NULL, ...)</code></dt>
 <dd>GitHubリポジトリからインストール。</dd>
-<dt><code>pkgload::unload(pkg = &quot;.&quot;)</code></dt>
+<dt><code>unload(pkg = &quot;.&quot;, quiet = FALSE)</code></dt>
 <dd><code>datach(&quot;package:XXX&quot;)</code> とか <code>unloadNamespace(XXX)</code>
 よりもちゃんとまっさらにパッケージを外す。</dd>
-<dt><code>pkgload::load_all(pkg = &quot;.&quot;, reset = TRUE, compile = NA, export_all = TRUE, ...)</code></dt>
+<dt><code>load_all(pkg = &quot;.&quot;, reset = TRUE, recompile = FALSE, export_all = TRUE, ...)</code></dt>
 <dd><code>install()</code> せずファイルから直接 <code>library()</code> する。
 ロード済みでもまず <code>unload()</code> が呼ばれるので安心。</dd>
-<dt><code>pkgbuild::clean_dll(pkg = &quot;.&quot;)</code></dt>
+<dt><code>clean_dll(pkg = &quot;.&quot;)</code></dt>
 <dd><code>src/</code> 以下に生成される <code>.o</code>, <code>.so</code> を消す。
 普段は触る必要ないが、たまにこれが必要な不具合に出くわす。</dd>
 </dl>
