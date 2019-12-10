@@ -45,10 +45,22 @@ https://sc.ddbj.nig.ac.jp/
     - [Environment Module](https://sc.ddbj.nig.ac.jp/ja/guide/software/environmental-modules)
 
 
-### RcppでC++14以降が使えるRをインストールしたい
+### インストール済みRを使ってみる
 
-`module load r` で最新版が使えるけど、
-古いコンパイラでビルドされたためRcppでC++11までしか使えない。
+https://sc.ddbj.nig.ac.jp/ja/guide/software/r
+
+`module load r/3.5.2` で比較的新しいやつが使えるけど、
+古いコンパイラ(おそらく `/usr/bin/gcc` 4.8.5)でビルドされているため
+RcppでC++11までしか使えない。
+また、各パッケージも同じく古いコンパイラでビルドしなければならない。
+`module load gcc` などで新しいgcc/g++がPATH上に乗っていると、
+Rcppインストール時などに
+<code>/usr/lib64/libstdc++.so.6: version `GLIBCXX_3.4.20' not found</code>
+と怒られる。
+
+
+### 自前でRをインストールする
+
 `/opt/pkg/r/*/lib64/R/etc/Makeconf`
 を参考に新しいコンパイラで自前ビルドを試みる:
 
