@@ -99,13 +99,14 @@ qsub -l short -b y -shell n -cwd -N test "pwd; sleep 5; ls >ls.txt"
 ```
 
 `-l ***`
-:   管理者が定義したキューから選んで指定し、
-    実行時間や計算ノードなどの要求を伝える。
-    例えば、24時間以内に終わるものなら `-l short` や `-l debug`、
-    2か月かかるものなら `-l month` を指定。
-   `qstat -g c` でキューの一覧とそれぞれの負荷を確認できる。
-:   1スレッドあたりのRAM上限(デフォルト4GB)もこのオプションから
-    `-l s_vmem=8G -l mem_req=8G` のように変更する。
+:   実行時間や計算ノードなどの要求を伝える。
+    管理者が定義したキューから選んで指定する。
+    例えば、3日以内に終わるものなら `-l short`、
+    2か月かかるものなら `-l epyc`、
+    メモリが多めに必要なら `-l medium`、など。
+    `qstat -g c` でキューの一覧とそれぞれの負荷を確認できるので空いてるところを探す。
+:   1スレッドあたりのRAM上限(デフォルト8GB)もこのオプションから
+    `-l s_vmem=16G -l mem_req=16G` のように変更できる。
 
 `-cwd`
 :   カレントディレクトリでジョブ実行。
@@ -167,7 +168,7 @@ qsub -l short -b y -shell n -cwd -N test "pwd; sleep 5; ls >ls.txt"
 ```sh
 #!/bin/sh
 #$ -S /bin/sh
-#$ -l debug
+#$ -l short
 #$ -cwd
 #$ -t 1-2
 #$ -N test_sh
@@ -190,7 +191,7 @@ ls
 ```py
 #!/usr/bin/env python
 #$ -S $HOME/.pyenv/shims/python
-#$ -l debug
+#$ -l short
 #$ -cwd
 #$ -t 1-2
 #$ -N test_py
