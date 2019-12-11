@@ -184,13 +184,14 @@ qsub test.sh
 qsub -l short -b y -shell n -cwd -N <span class="nb">test</span> <span class="s2">&#34;pwd; sleep 5; ls &gt;ls.txt&#34;</span></code></pre></div>
 <dl>
 <dt><code>-l ***</code></dt>
-<dd>管理者が定義したキューから選んで指定し、
-実行時間や計算ノードなどの要求を伝える。
-例えば、24時間以内に終わるものなら <code>-l short</code> や <code>-l debug</code>、
-2か月かかるものなら <code>-l month</code> を指定。
-<code>qstat -g c</code> でキューの一覧とそれぞれの負荷を確認できる。</dd>
-<dd>1スレッドあたりのRAM上限(デフォルト4GB)もこのオプションから
-<code>-l s_vmem=8G -l mem_req=8G</code> のように変更する。</dd>
+<dd>実行時間や計算ノードなどの要求を伝える。
+管理者が定義したキューから選んで指定する。
+例えば、3日以内に終わるものなら <code>-l short</code>、
+2か月かかるものなら <code>-l epyc</code>、
+メモリが多めに必要なら <code>-l medium</code>、など。
+<code>qstat -g c</code> でキューの一覧とそれぞれの負荷を確認できるので空いてるところを探す。</dd>
+<dd>1スレッドあたりのRAM上限(デフォルト8GB)もこのオプションから
+<code>-l s_vmem=16G -l mem_req=16G</code> のように変更できる。</dd>
 <dt><code>-cwd</code></dt>
 <dd>カレントディレクトリでジョブ実行。
 デフォルトでは <code>${HOME}</code>。</dd>
@@ -241,7 +242,7 @@ qsub -l short -b y -shell n -cwd -N <span class="nb">test</span> <span class="s2
 <p>ジョブスクリプト内で参照可能な特殊環境変数をプリントしてみるジョブの例:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="cp">#!/bin/sh
 </span><span class="cp"></span><span class="c1">#$ -S /bin/sh</span>
-<span class="c1">#$ -l debug</span>
+<span class="c1">#$ -l short</span>
 <span class="c1">#$ -cwd</span>
 <span class="c1">#$ -t 1-2</span>
 <span class="c1">#$ -N test_sh</span>
@@ -260,7 +261,7 @@ ls</code></pre></div>
 インタープリタを <code>-S /usr/bin/env python</code> で指定できないのは残念。</p>
 <div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span>
 <span class="c1">#$ -S $HOME/.pyenv/shims/python</span>
-<span class="c1">#$ -l debug</span>
+<span class="c1">#$ -l short</span>
 <span class="c1">#$ -cwd</span>
 <span class="c1">#$ -t 1-2</span>
 <span class="c1">#$ -N test_py</span>
