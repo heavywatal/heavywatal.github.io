@@ -106,3 +106,15 @@ rsync -auv SRC/DIR/ DST/DIR/
         alias rsync='rsync --exclude-from=${HOME}/.config/rsync-exclude'
 
 1.  そのほかで除外したいものは `--exclude` オプションで個別に指定
+
+
+## SSH越しの送受信
+
+```sh
+rsync -auv user@example.com:~/dir/ ~/dir/
+```
+
+- [SSH公開鍵を設定]({{< relref "ssh.md" >}})してパスワード無しでログインできるようにしておく。
+- `.ssh/config` でユーザー名とかも登録しておくとさらに楽。
+  `RequestTTY yes` を付けてると当然ながら怒られる。
+- リモート側の `.bashrc` とかで標準出力に何かを表示するようにしてあるとコケる

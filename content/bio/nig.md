@@ -45,36 +45,22 @@ https://sc.ddbj.nig.ac.jp/
     - [Environment Module](https://sc.ddbj.nig.ac.jp/ja/guide/software/environmental-modules)
 
 
-### インストール済みRを使ってみる
+## ファイルの送受信
 
-https://sc.ddbj.nig.ac.jp/ja/guide/software/r
-
-`module load r/3.5.2` で比較的新しいやつが使えるけど、
-古いコンパイラ(おそらく `/usr/bin/gcc` 4.8.5)でビルドされているため
-RcppでC++11までしか使えない。
-また、各パッケージも同じく古いコンパイラでビルドしなければならない。
-`module load gcc` などで新しいgcc/g++がPATH上に乗っていると、
-Rcppインストール時などに
-<code>/usr/lib64/libstdc++.so.6: version `GLIBCXX_3.4.20' not found</code>
-と怒られる。
-
-
-### 自前でRをインストールする
-
-`/opt/pkg/r/*/lib64/R/etc/Makeconf`
-を参考に新しいコンパイラで自前ビルドを試みる:
+[公式「システムへのファイル転送方法」](https://sc.ddbj.nig.ac.jp/ja/guide/software/file-transfer)
+にはsftpかAsperaを使えと書かれてるけど、
+[rsync]({{< relref "rsync.md" >}})
+を使うのが簡単かつ効率的。
 
 ```sh
-wget -O- https://cran.r-project.org/src/base/R-3/R-3.5.2.tar.gz | tar xz
-cd R-3.5.2/
-./configure -h | less
-./configure --prefix=${HOME}/R --disable-openmp --disable-java '--enable-R-shlib' '--enable-shared' '--with-tcl-config=/usr/lib64/tclConfig.sh' '--with-tk-config=/usr/lib64/tkConfig.sh' 'PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/cm/local/apps/curl/lib/pkgconfig:/usr/lib64/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig' 'CFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include' 'CPPFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include' 'CXXFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include' 'FFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include' 'FCFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include' 'LDFLAGS=-L/usr/local/lib64 -L/usr/lib64 -L/usr/lib -L/cm/local/apps/curl/lib'
-make -j2
-make install
+# send
+rsync -auv ~/input/ gw.ddbj.nig.ac.jp:~/input/
+
+# receive
+rsync -auv gw.ddbj.nig.ac.jp:~/output/ ~/output/
 ```
 
-`configure: error: libcurl >= 7.22.0 library and headers are required with support for https`
-古いcurlは入ってないように見えるのに、なぜ？
+ソースコードは当然[Git]({{< relref "git.md" >}})で管理。
 
 
 ## ジョブ投入、管理
@@ -230,3 +216,37 @@ print("SGE_TASK_ID: " + os.environ["SGE_TASK_ID"])
 
 `qquota`
 :   ユーザーに与えられたリソースを表示
+
+
+## misc.
+
+### インストール済みRを使ってみる
+
+https://sc.ddbj.nig.ac.jp/ja/guide/software/r
+
+`module load r/3.5.2` で比較的新しいやつが使えるけど、
+古いコンパイラ(おそらく `/usr/bin/gcc` 4.8.5)でビルドされているため
+RcppでC++11までしか使えない。
+また、各パッケージも同じく古いコンパイラでビルドしなければならない。
+`module load gcc` などで新しいgcc/g++がPATH上に乗っていると、
+Rcppインストール時などに
+<code>/usr/lib64/libstdc++.so.6: version `GLIBCXX_3.4.20' not found</code>
+と怒られる。
+
+
+### 自前でRをインストールする
+
+`/opt/pkg/r/*/lib64/R/etc/Makeconf`
+を参考に新しいコンパイラで自前ビルドを試みる:
+
+```sh
+wget -O- https://cran.r-project.org/src/base/R-3/R-3.5.2.tar.gz | tar xz
+cd R-3.5.2/
+./configure -h | less
+./configure --prefix=${HOME}/R --disable-openmp --disable-java '--enable-R-shlib' '--enable-shared' '--with-tcl-config=/usr/lib64/tclConfig.sh' '--with-tk-config=/usr/lib64/tkConfig.sh' 'PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/cm/local/apps/curl/lib/pkgconfig:/usr/lib64/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig' 'CFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include' 'CPPFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include' 'CXXFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include' 'FFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include' 'FCFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include' 'LDFLAGS=-L/usr/local/lib64 -L/usr/lib64 -L/usr/lib -L/cm/local/apps/curl/lib'
+make -j2
+make install
+```
+
+`configure: error: libcurl >= 7.22.0 library and headers are required with support for https`
+古いcurlは入ってないように見えるのに、なぜ？
