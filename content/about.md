@@ -25,7 +25,7 @@ Address:
     [理学部生物棟](https://www.google.com/maps/place/38°15'31.4"N+140°50'15.1"E)
 
 Phone:
-:   +81-22-795-6693
+:   +81-22-795-3543
 
 Email:
 :   heavy.watalあgmail.com
