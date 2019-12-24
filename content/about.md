@@ -246,4 +246,5 @@ Find me on
 [Journal of Theoretical Biology](https://ees.elsevier.com/jtb/),
 [Mathematical Biosciences](https://www.journals.elsevier.com/mathematical-biosciences/),
 [Molecular Biology and Evolution](https://academic.oup.com/mbe),
+[PLOS ONE](https://journals.plos.org/plosone/),
 [Scientific Reports](https://www.nature.com/srep/)
