@@ -100,6 +100,7 @@ tags = ["python"]
 -   [NCBI ESerch Utility](http://www.ncbi.nlm.nih.gov/entrez/query/static/esearch_help.html)
 -   <http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc93>
 
+    ```py
     >>> from Bio import Entrez
     >>> handle = Entrez.esearch(db="nucleotide", retmax=10, term="Opuntia")
     >>> record = Entrez.read(handle)
@@ -113,6 +114,7 @@ tags = ["python"]
     (u'TranslationSet', [{u'To': '"Opuntia"[Organism] OR Opuntia[All Fields]', u'From': 'Opuntia'}])
     (u'RetStart', '0')
     (u'QueryTranslation', '"Opuntia"[Organism] OR Opuntia[All Fields]')
+    ```
 
 ### efetch
 

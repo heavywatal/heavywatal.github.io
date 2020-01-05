@@ -61,26 +61,18 @@ install(TARGETS a.out
 
 ターゲットを定義する:
 
-- [`add_executable(<name> [EXCLUDE_FROM_ALL] ...)`]
-  (https://cmake.org/cmake/help/latest/command/add_executable.html)
-- [`add_library(<name> [STATIC|SHARED|OBJECT] [EXCLUDE_FROM_ALL|IMPORTED] ...)`]
-  (https://cmake.org/cmake/help/latest/command/add_library.html)
+- [`add_executable(<name> [EXCLUDE_FROM_ALL] ...)`](https://cmake.org/cmake/help/latest/command/add_executable.html)
+- [`add_library(<name> [STATIC|SHARED|OBJECT] [EXCLUDE_FROM_ALL|IMPORTED] ...)`](https://cmake.org/cmake/help/latest/command/add_library.html)
 
 ターゲットのプロパティを追加する:
 
 - [`set_target_properties(<target> PROPERTIES p1 v1 p2 v2 ...)`](https://cmake.org/cmake/help/latest/command/set_target_properties.html)
-- [`target_compile_definitions(<target> <INTERFACE|PRIVATE|PUBLIC> ...)`]
-  (https://cmake.org/cmake/help/latest/command/target_compile_definitions.html)
-- [`target_compile_features(<target> <P|P|I> ...)`]
-  (https://cmake.org/cmake/help/latest/command/target_compile_features.html)
-- [`target_compile_options(<target> [BEFORE] <I|P|P> ...)`]
-  (https://cmake.org/cmake/help/latest/command/target_compile_options.html)
-- [`target_sources(<target> <I|P|P> ...)`]
-  (https://cmake.org/cmake/help/latest/command/target_sources.html)
-- [`target_include_directories(<target> [SYSTEM] [BEFORE] <I|P|P> ...)`]
-  (https://cmake.org/cmake/help/latest/command/target_include_directories.html)
-- [`target_link_libraries(<target> <I|P|P> ...)`]
-  (https://cmake.org/cmake/help/latest/command/target_link_libraries.html):
+- [`target_compile_definitions(<target> <INTERFACE|PRIVATE|PUBLIC> ...)`](https://cmake.org/cmake/help/latest/command/target_compile_definitions.html)
+- [`target_compile_features(<target> <P|P|I> ...)`](https://cmake.org/cmake/help/latest/command/target_compile_features.html)
+- [`target_compile_options(<target> [BEFORE] <I|P|P> ...)`](https://cmake.org/cmake/help/latest/command/target_compile_options.html)
+- [`target_sources(<target> <I|P|P> ...)`](https://cmake.org/cmake/help/latest/command/target_sources.html)
+- [`target_include_directories(<target> [SYSTEM] [BEFORE] <I|P|P> ...)`](https://cmake.org/cmake/help/latest/command/target_include_directories.html)
+- [`target_link_libraries(<target> <I|P|P> ...)`](https://cmake.org/cmake/help/latest/command/target_link_libraries.html):
   この関数でターゲット間の依存関係を繋げていくのがCMakeの肝。
   単に共有ライブラリのリンクを指定するためだけの関数ではない。
 - ターゲットなしの `include_directories()` `link_directories()` `link_libraries()`

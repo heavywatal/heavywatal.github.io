@@ -12,7 +12,7 @@ tags = ["r"]
 <img src="https://tidyverse.tidyverse.org/logo.png" align="right" width="120" height="139">
 </a>
 
-解析も作図も**整然データ (tidy data)**を用意するところから始まる。
+解析も作図も **整然データ (tidy data)** を用意するところから始まる。
 
 - [初学者向け講義資料2019](/slides/makino2019r/3-tidy-data.html)
 - わかりやすいスライド: [整然データってなに？ by @f_nisihara](https://speakerdeck.com/fnshr/zheng-ran-detatutenani)

@@ -88,7 +88,7 @@ void func(){
 
 <http://tclap.sourceforge.net/>
 
--   "Templatized C++ Command Line Parser Library"の名のとおり
+-   "Templatized C++ Command Line Parser Library" の名のとおり
     `template` で書かれておりヘッダだけで構成される
 -   が、`configure` と `make install` というインストール手順を踏む
 -   `std::string` からパース可能

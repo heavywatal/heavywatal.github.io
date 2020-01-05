@@ -386,8 +386,8 @@ N + \lambda &= 0\\
 
 <p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.4.png"/ alt="Figure 2.4" width="200px"></p>
 $0 \le \mu_k \le 1$ かつ $\sum_k \mu_k = 1$
-という制約下での *K* 変数のディリクレ分布は *K* – 1 次元の
-**単体** (*simplex*) になる。
+という制約下での $K$ 変数のディリクレ分布は $K – 1$ 次元の
+<strong>単体</strong> (<em>simplex</em>) になる。
 {{</markdownify>}}</div>
 
 <div class="note">{{<markdownify>}}
@@ -398,7 +398,7 @@ $0 \le \mu_k \le 1$ かつ $\sum_k \mu_k = 1$
 <img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.5b.png"/ alt="Figure 2.5n" width="200px">
 <img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.5c.png"/ alt="Figure 2.5c" width="200px">
 </p>
-いろんな *α* でのディリクレ分布。
+いろんな $α$ でのディリクレ分布。
 simplexの面が水平軸方向に、密度が垂直軸になっている。
 {{</markdownify>}}</div>
 

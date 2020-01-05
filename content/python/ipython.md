@@ -48,7 +48,7 @@ open('~/.[TAB]')
 -   output cache: `_`, `__`, `___`, `_oh[n]`, `_<n>`
 -   directory: `_dh`
 
-### [Object introspection] (https://ipython.readthedocs.io/en/stable/interactive/reference.html#dynamic-object-information)
+### [Object introspection](https://ipython.readthedocs.io/en/stable/interactive/reference.html#dynamic-object-information)
 
 関数がどんな引数をとるか、
 クラスがどんなメンバを持っているか、

@@ -159,8 +159,7 @@ do_something(&some_array);  // ああ、この配列は変更されるんだな
     - lvalue値 (`Vector`)
     - const lvalue参照 (`const Vector&`) とrvalue参照 (`Vector&&`) のオーバーロード
 
-[それぞれの組み合わせでコピーとムーブが何回起こるかテストするコード]
-(https://github.com/heavywatal/scribble/blob/master/cxx/move.cpp)
+[それぞれの組み合わせでコピーとムーブが何回起こるかテストするコード](https://github.com/heavywatal/scribble/blob/master/cxx/move.cpp)
 
 const lvalue参照で受け取ったものを変更するためにはコピーが必要になるので、
 普通のlvalue渡しでは問題ないけどrvalue渡しには適さない。
@@ -197,8 +196,7 @@ lvalue値受け取りの関数はrvalueを受け取るときにはコピーを�
 `noexcept` が添えられていないと `std::move_if_noexcept()` による移動
 (例えば `std::vector` のリアロケーション) ではコピーされてしまう。
 
-[ムーブコンストラクタの定義の仕方でコピー・ムーブのされ方が変わることを確かめるコード]
-(https://github.com/heavywatal/scribble/blob/master/cxx/move_if_noexcept.cpp)
+[ムーブコンストラクタの定義の仕方でコピー・ムーブのされ方が変わることを確かめるコード](https://github.com/heavywatal/scribble/blob/master/cxx/move_if_noexcept.cpp)
 
 コンストラクタ類を必要に応じて書き足していくと忘れそうなので、
 `Cls (Cls&&) noexcept = default;`
