@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -90,19 +90,12 @@ Heavy Watal
 </ul></nav>
 </header>
 
-
-
 <p><a href="https://github.com/heavywatal/scribble/blob/master/cxx/bitwise.cpp">https://github.com/heavywatal/scribble/blob/master/cxx/bitwise.cpp</a></p>
-
 <h2 id="基本">基本</h2>
-
 <h3 id="型">型</h3>
-
 <p>きっちりサイズが定義されているものと、
 下限だけが定義されてて環境依存のものがある。</p>
-
 <p><a href="https://github.com/heavywatal/scribble/blob/master/cxx/sizeof.cpp">https://github.com/heavywatal/scribble/blob/master/cxx/sizeof.cpp</a></p>
-
 <ul>
 <li>1byte == 8bits</li>
 <li><code>sizeof(char)</code> == 1</li>
@@ -113,27 +106,24 @@ Heavy Watal
 <li><code>sizeof(uint128_t)</code> == 16
 <a href="https://boostjp.github.io/tips/multiprec-int.html"><code>&lt;boost/multiprecision/cpp_int.hpp&gt;</code></a></li>
 </ul>
-
 <p>符号あり(signed)型の場合、左端のビットが符号を司る。</p>
 <div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// uint8_t
-</span><span class="c1"></span><span class="mi">0</span><span class="n">b00000000</span> <span class="c1">//    0
-</span><span class="c1"></span><span class="mi">0</span><span class="n">b10000000</span> <span class="c1">//  128
-</span><span class="c1"></span><span class="mi">0</span><span class="n">b11111111</span> <span class="c1">//  255
+</span><span class="c1"></span><span class="mb">0b00000000</span> <span class="c1">//    0
+</span><span class="c1"></span><span class="mb">0b10000000</span> <span class="c1">//  128
+</span><span class="c1"></span><span class="mb">0b11111111</span> <span class="c1">//  255
 </span><span class="c1"></span>
 <span class="c1">// int8_t
-</span><span class="c1"></span><span class="mi">0</span><span class="n">b01111111</span> <span class="c1">//  127
-</span><span class="c1"></span><span class="mi">0</span><span class="n">b10000000</span> <span class="c1">// -128
-</span><span class="c1"></span><span class="mi">0</span><span class="n">b10000001</span> <span class="c1">// -127
-</span><span class="c1"></span><span class="mi">0</span><span class="n">b10000010</span> <span class="c1">// -126
-</span><span class="c1">//
-</span><span class="c1"></span><span class="mi">0</span><span class="n">b11111101</span> <span class="c1">//   -3
-</span><span class="c1"></span><span class="mi">0</span><span class="n">b11111110</span> <span class="c1">//   -2
-</span><span class="c1"></span><span class="mi">0</span><span class="n">b11111111</span> <span class="c1">//   -1
-</span></code></pre></div>
-<p><code>0b</code> は
+</span><span class="c1"></span><span class="mb">0b01111111</span> <span class="c1">//  127
+</span><span class="c1"></span><span class="mb">0b10000000</span> <span class="c1">// -128
+</span><span class="c1"></span><span class="mb">0b10000001</span> <span class="c1">// -127
+</span><span class="c1"></span><span class="mb">0b10000010</span> <span class="c1">// -126
+</span><span class="c1"></span><span class="c1">//
+</span><span class="c1"></span><span class="mb">0b11111101</span> <span class="c1">//   -3
+</span><span class="c1"></span><span class="mb">0b11111110</span> <span class="c1">//   -2
+</span><span class="c1"></span><span class="mb">0b11111111</span> <span class="c1">//   -1
+</span></code></pre></div><p><code>0b</code> は
 <a href="http://en.cppreference.com/w/cpp/language/integer_literal">binary literal</a>
 (C++14) の接頭辞</p>
-
 <h3 id="演算子-operator">演算子 operator</h3>
 <div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// AND, OR, XOR
 </span><span class="c1"></span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">y</span>
@@ -147,8 +137,8 @@ Heavy Watal
 </span><span class="c1"></span><span class="o">-</span> <span class="n">x</span>
 
 <span class="c1">// shift
-</span><span class="c1"></span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="n">n</span>
-<span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">n</span>
+</span><span class="c1"></span><span class="n">x</span> <span class="o">&lt;</span><span class="o">&lt;</span> <span class="n">n</span>
+<span class="n">x</span> <span class="o">&gt;</span><span class="o">&gt;</span> <span class="n">n</span>
 </code></pre></div><div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// assuming 8-bit
 </span><span class="c1"></span><span class="n">x</span> <span class="o">=</span> <span class="mi">5</span>   <span class="c1">// 0b00000101
 </span><span class="c1"></span><span class="n">x</span> <span class="o">&amp;</span> <span class="mi">1</span>   <span class="c1">// 0b00000001 =  1
@@ -156,10 +146,9 @@ Heavy Watal
 </span><span class="c1"></span><span class="n">x</span> <span class="o">^</span> <span class="mi">3</span>   <span class="c1">// 0b00000110 =  6
 </span><span class="c1"></span><span class="o">~</span> <span class="n">x</span>     <span class="c1">// 0b11111010 = -6 or 250u
 </span><span class="c1"></span><span class="o">-</span> <span class="n">x</span>     <span class="c1">// 0b11111011 = -5 or 251u
-</span><span class="c1"></span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span>  <span class="c1">// 0b00001010 = 10
-</span><span class="c1"></span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span>  <span class="c1">// 0b00000010 =  2
-</span></code></pre></div>
-<ul>
+</span><span class="c1"></span><span class="n">x</span> <span class="o">&lt;</span><span class="o">&lt;</span> <span class="mi">1</span>  <span class="c1">// 0b00001010 = 10
+</span><span class="c1"></span><span class="n">x</span> <span class="o">&gt;</span><span class="o">&gt;</span> <span class="mi">1</span>  <span class="c1">// 0b00000010 =  2
+</span></code></pre></div><ul>
 <li><code>&lt;&lt;</code> は右から0を詰めて左端を捨てる</li>
 <li><code>unsigned</code> に対する <code>&gt;&gt;</code> は左から0を詰めて右端を捨てる</li>
 <li><code>signed</code> の負数に対する <code>&gt;&gt;</code> は未定義だが、だいたい左端をコピーして右端を捨てる(i.e., 符号を維持しつつ2で割る)</li>
@@ -167,41 +156,30 @@ Heavy Watal
 暗黙の整数型は大概32-bitとかなので、両辺とも明示的に型を指定するほうが安心。
 特に上位ビットも変化する <code>~</code> や <code>-</code> を使って比較するときは要注意。</li>
 </ul>
-
 <h2 id="応用">応用</h2>
-
 <p>符号反転 <code>-x</code> は、全ビット反転して1加えることに相当する (~x | 1) 。
 つまり、符号反転して全ビット反転すると、1加えるのと同じ。</p>
 <div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
-<span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span>
-<span class="o">++</span><span class="n">x</span>
-<span class="n">x</span> <span class="o">=</span> <span class="o">-~</span><span class="n">x</span>
-</code></pre></div>
-<h3 id="std-vector-bool"><code>std::vector&lt;bool&gt;</code></h3>
-
+<span class="n">x</span> <span class="o">+</span><span class="o">=</span> <span class="mi">1</span>
+<span class="o">+</span><span class="o">+</span><span class="n">x</span>
+<span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="o">~</span><span class="n">x</span>
+</code></pre></div><h3 id="stdvectorbool"><code>std::vector&lt;bool&gt;</code></h3>
 <ul>
 <li>特殊化されているため普通のSTL vectorではない</li>
 <li>省メモリ</li>
 <li>イテレータあり e.g., <code>std::next_permutation()</code></li>
 <li><code>data()</code> メンバが無い。つまりナマのビット列としてアクセスできない？</li>
 </ul>
-
-<h3 id="std-bitset-n"><code>std::bitset&lt;N&gt;</code></h3>
-
+<h3 id="stdbitsetn"><code>std::bitset&lt;N&gt;</code></h3>
 <ul>
 <li><a href="http://en.cppreference.com/w/cpp/utility/bitset">http://en.cppreference.com/w/cpp/utility/bitset</a></li>
 <li><a href="http://www.cplusplus.com/reference/bitset/bitset/">http://www.cplusplus.com/reference/bitset/bitset/</a></li>
 <li><a href="https://cpprefjp.github.io/reference/bitset.html">https://cpprefjp.github.io/reference/bitset.html</a></li>
 </ul>
-
 <p>ビット数がコンパイル時定数</p>
-
-<h3 id="boost-dynamic-bitset"><code>boost::dynamic_bitset&lt;&gt;</code></h3>
-
+<h3 id="boostdynamic_bitset"><code>boost::dynamic_bitset&lt;&gt;</code></h3>
 <p><a href="http://www.boost.org/doc/libs/release/libs/dynamic_bitset/dynamic_bitset.html">http://www.boost.org/doc/libs/release/libs/dynamic_bitset/dynamic_bitset.html</a></p>
-
 <p>可変サイズ版bitset</p>
-
 <p><code>find_first()</code>, <code>find_next()</code>, <code>is_subset_of()</code>
 など便利な補助関数もあるが、速度的な最適化はされてないっぽいので、
 実行速度がシビアな場面では普通に <code>operator[]</code> で自前ループを書いたほうがいいかも。
@@ -237,8 +215,8 @@ Heavy Watal
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -250,11 +228,11 @@ Heavy Watal
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -273,6 +251,7 @@ Heavy Watal
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -280,7 +259,6 @@ Heavy Watal
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -292,20 +270,20 @@ Heavy Watal
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

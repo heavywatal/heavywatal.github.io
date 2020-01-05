@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -90,8 +90,6 @@ reshape2 — 柔軟なデータ変形ツール
 </ul></nav>
 </header>
 
-
-
 <div class="warning">
 reshape2はもう古い。
 data.frameを処理をするなら、同じ作者が新しく設計しなおした
@@ -99,24 +97,19 @@ data.frameを処理をするなら、同じ作者が新しく設計しなおし�
 のほうがより高速で洗練されているのでそちらを使おう。
 ただし3次元以上のarrayを扱うにはまだ便利。
 </div>
-
 <ul>
 <li><a href="http://had.co.nz/reshape/">http://had.co.nz/reshape/</a></li>
 <li><a href="https://cran.r-project.org/web/packages/reshape2/">https://cran.r-project.org/web/packages/reshape2/</a></li>
 <li><a href="https://www.rdocumentation.org/packages/reshape2">https://www.rdocumentation.org/packages/reshape2</a></li>
 <li><a href="http://seananderson.ca/2013/10/19/reshape.html">http://seananderson.ca/2013/10/19/reshape.html</a></li>
 </ul>
-
 <h2 id="melt"><code>melt()</code></h2>
-
 <p>data.frameの複数列の値を、カテゴリ変数1列と値1列の組に変換する。
 これにより、変換する列数の分だけdata.frameが縦長(long-format)になる。
 やや冗長性は増すが、<a href="/rstats/ggplot2.html">ggplot2</a> での作図などさまざまな操作がしやすくなる。</p>
-
 <div class="note">
 <p>この用途ならこれじゃなくて
 <a href="/rstats/tidyr.html"><code>tidyr::gather()</code></a> を使おう。</p>
-
 <p>array対象ならまだ使い道はある。
 例えば3次元arrayを <code>melt(arr, c(&quot;x&quot;, &quot;y&quot;, &quot;z&quot;))</code>
 として3列のmatrixに戻せるのは便利。
@@ -125,10 +118,10 @@ data.frameを処理をするなら、同じ作者が新しく設計しなおし�
 のほうが高速。</p>
 
 </div>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">reshape2<span class="o">::</span>melt<span class="p">(</span>data<span class="p">,</span> id.vars<span class="p">,</span> measure.vars<span class="p">,</span>
-               variable.name<span class="o">=</span><span class="s">&#34;variable&#34;</span><span class="p">,</span> value.name<span class="o">=</span><span class="s">&#34;value&#34;</span><span class="p">,</span>
-               na.rm<span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span> factorsAsStrings<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> <span class="kc">...</span><span class="p">)</span></code></pre></div>
-<dl>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">reshape2</span><span class="o">::</span><span class="nf">melt</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">id.vars</span><span class="p">,</span> <span class="n">measure.vars</span><span class="p">,</span>
+               <span class="n">variable.name</span><span class="o">=</span><span class="s">&#34;</span><span class="s">variable&#34;</span><span class="p">,</span> <span class="n">value.name</span><span class="o">=</span><span class="s">&#34;</span><span class="s">value&#34;</span><span class="p">,</span>
+               <span class="n">na.rm</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span> <span class="n">factorsAsStrings</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> <span class="kc">...</span><span class="p">)</span>
+</code></pre></div><dl>
 <dt><code>data</code></dt>
 <dd>data.frame</dd>
 <dt><code>id.vars</code></dt>
@@ -144,62 +137,60 @@ data.frameを処理をするなら、同じ作者が新しく設計しなおし�
 <dt><code>na.rm=FALSE</code></dt>
 <dd><code>NA</code> が含まれる行を取り除くかどうか。</dd>
 </dl>
-
 <h3 id="example">Example</h3>
-
 <ol>
-<li><p>ライブラリを読み込んでサンプルデータを見てみる(wide-format)</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="kn">library</span><span class="p">(</span>reshape2<span class="p">)</span>
-<span class="o">&gt;</span> <span class="kp">head</span><span class="p">(</span>reshape2<span class="o">::</span>french_fries<span class="p">)</span>
-   time treatment subject rep potato buttery grassy rancid painty
+<li>
+<p>ライブラリを読み込んでサンプルデータを見てみる(wide-format)</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="nf">library</span><span class="p">(</span><span class="n">reshape2</span><span class="p">)</span>
+<span class="o">&gt;</span> <span class="nf">head</span><span class="p">(</span><span class="n">reshape2</span><span class="o">::</span><span class="n">french_fries</span><span class="p">)</span>
+   <span class="n">time</span> <span class="n">treatment</span> <span class="n">subject</span> <span class="n">rep</span> <span class="n">potato</span> <span class="n">buttery</span> <span class="n">grassy</span> <span class="n">rancid</span> <span class="n">painty</span>
 <span class="m">61</span>    <span class="m">1</span>         <span class="m">1</span>       <span class="m">3</span>   <span class="m">1</span>    <span class="m">2.9</span>     <span class="m">0.0</span>    <span class="m">0.0</span>    <span class="m">0.0</span>    <span class="m">5.5</span>
 <span class="m">25</span>    <span class="m">1</span>         <span class="m">1</span>       <span class="m">3</span>   <span class="m">2</span>   <span class="m">14.0</span>     <span class="m">0.0</span>    <span class="m">0.0</span>    <span class="m">1.1</span>    <span class="m">0.0</span>
 <span class="m">62</span>    <span class="m">1</span>         <span class="m">1</span>      <span class="m">10</span>   <span class="m">1</span>   <span class="m">11.0</span>     <span class="m">6.4</span>    <span class="m">0.0</span>    <span class="m">0.0</span>    <span class="m">0.0</span>
 <span class="m">26</span>    <span class="m">1</span>         <span class="m">1</span>      <span class="m">10</span>   <span class="m">2</span>    <span class="m">9.9</span>     <span class="m">5.9</span>    <span class="m">2.9</span>    <span class="m">2.2</span>    <span class="m">0.0</span>
 <span class="m">63</span>    <span class="m">1</span>         <span class="m">1</span>      <span class="m">15</span>   <span class="m">1</span>    <span class="m">1.2</span>     <span class="m">0.1</span>    <span class="m">0.0</span>    <span class="m">1.1</span>    <span class="m">5.1</span>
-<span class="m">27</span>    <span class="m">1</span>         <span class="m">1</span>      <span class="m">15</span>   <span class="m">2</span>    <span class="m">8.8</span>     <span class="m">3.0</span>    <span class="m">3.6</span>    <span class="m">1.5</span>    <span class="m">2.3</span></code></pre></div></li>
-
-<li><p>データをlong-formatに整形</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> molten <span class="o">=</span> reshape2<span class="o">::</span>melt<span class="p">(</span>reshape2<span class="o">::</span>french_fries<span class="p">,</span>
-                         id.vars<span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="s">&#34;time&#34;</span><span class="p">,</span> <span class="s">&#34;treatment&#34;</span><span class="p">,</span> <span class="s">&#34;subject&#34;</span><span class="p">,</span> <span class="s">&#34;rep&#34;</span><span class="p">),</span>
-                         variable.name<span class="o">=</span><span class="s">&#34;flavor&#34;</span><span class="p">,</span> na.rm<span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
-<span class="o">&gt;</span> <span class="kp">head</span><span class="p">(</span>molten<span class="p">)</span>
- time treatment subject rep flavor value
-<span class="m">1</span>    <span class="m">1</span>         <span class="m">1</span>       <span class="m">3</span>   <span class="m">1</span> potato   <span class="m">2.9</span>
-<span class="m">2</span>    <span class="m">1</span>         <span class="m">1</span>       <span class="m">3</span>   <span class="m">2</span> potato  <span class="m">14.0</span>
-<span class="m">3</span>    <span class="m">1</span>         <span class="m">1</span>      <span class="m">10</span>   <span class="m">1</span> potato  <span class="m">11.0</span>
-<span class="m">4</span>    <span class="m">1</span>         <span class="m">1</span>      <span class="m">10</span>   <span class="m">2</span> potato   <span class="m">9.9</span>
-<span class="m">5</span>    <span class="m">1</span>         <span class="m">1</span>      <span class="m">15</span>   <span class="m">1</span> potato   <span class="m">1.2</span>
-<span class="m">6</span>    <span class="m">1</span>         <span class="m">1</span>      <span class="m">15</span>   <span class="m">2</span> potato   <span class="m">8.8</span></code></pre></div></li>
-
-<li><p><a href="/rstats/ggplot2.html">ggplot2</a> で作図</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="kn">library</span><span class="p">(</span>ggplot2<span class="p">)</span>
-<span class="o">&gt;</span> gp <span class="o">=</span> ggplot<span class="p">(</span>molten<span class="p">,</span> aes<span class="p">(</span>x<span class="o">=</span>time<span class="p">,</span> y<span class="o">=</span>value<span class="p">,</span> colour<span class="o">=</span>treatment<span class="p">,</span> shape<span class="o">=</span><span class="kp">as.factor</span><span class="p">(</span><span class="kp">rep</span><span class="p">)))</span>
-<span class="o">&gt;</span> gp <span class="o">=</span> gp <span class="o">+</span> geom_point<span class="p">(</span>alpha<span class="o">=</span><span class="m">0.3</span><span class="p">)</span>
-<span class="o">&gt;</span> gp <span class="o">=</span> gp <span class="o">+</span> geom_smooth<span class="p">(</span>aes<span class="p">(</span>group<span class="o">=</span>treatment<span class="p">),</span> method<span class="o">=</span>loess<span class="p">,</span> se<span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
-<span class="o">&gt;</span> gp <span class="o">=</span> gp <span class="o">+</span> facet_grid<span class="p">(</span>flavor <span class="o">~</span> subject<span class="p">)</span>
-<span class="o">&gt;</span> gp</code></pre></div></li>
+<span class="m">27</span>    <span class="m">1</span>         <span class="m">1</span>      <span class="m">15</span>   <span class="m">2</span>    <span class="m">8.8</span>     <span class="m">3.0</span>    <span class="m">3.6</span>    <span class="m">1.5</span>    <span class="m">2.3</span>
+</code></pre></div></li>
+<li>
+<p>データをlong-formatに整形</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="n">molten</span> <span class="o">=</span> <span class="n">reshape2</span><span class="o">::</span><span class="nf">melt</span><span class="p">(</span><span class="n">reshape2</span><span class="o">::</span><span class="n">french_fries</span><span class="p">,</span>
+                          <span class="n">id.vars</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&#34;</span><span class="s">time&#34;</span><span class="p">,</span> <span class="s">&#34;</span><span class="s">treatment&#34;</span><span class="p">,</span> <span class="s">&#34;</span><span class="s">subject&#34;</span><span class="p">,</span> <span class="s">&#34;</span><span class="s">rep&#34;</span><span class="p">)</span><span class="p">,</span>
+                          <span class="n">variable.name</span><span class="o">=</span><span class="s">&#34;</span><span class="s">flavor&#34;</span><span class="p">,</span> <span class="n">na.rm</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="o">&gt;</span> <span class="nf">head</span><span class="p">(</span><span class="n">molten</span><span class="p">)</span>
+  <span class="n">time</span> <span class="n">treatment</span> <span class="n">subject</span> <span class="n">rep</span> <span class="n">flavor</span> <span class="n">value</span>
+<span class="m">1</span>    <span class="m">1</span>         <span class="m">1</span>       <span class="m">3</span>   <span class="m">1</span> <span class="n">potato</span>   <span class="m">2.9</span>
+<span class="m">2</span>    <span class="m">1</span>         <span class="m">1</span>       <span class="m">3</span>   <span class="m">2</span> <span class="n">potato</span>  <span class="m">14.0</span>
+<span class="m">3</span>    <span class="m">1</span>         <span class="m">1</span>      <span class="m">10</span>   <span class="m">1</span> <span class="n">potato</span>  <span class="m">11.0</span>
+<span class="m">4</span>    <span class="m">1</span>         <span class="m">1</span>      <span class="m">10</span>   <span class="m">2</span> <span class="n">potato</span>   <span class="m">9.9</span>
+<span class="m">5</span>    <span class="m">1</span>         <span class="m">1</span>      <span class="m">15</span>   <span class="m">1</span> <span class="n">potato</span>   <span class="m">1.2</span>
+<span class="m">6</span>    <span class="m">1</span>         <span class="m">1</span>      <span class="m">15</span>   <span class="m">2</span> <span class="n">potato</span>   <span class="m">8.8</span>
+</code></pre></div></li>
+<li>
+<p><a href="/rstats/ggplot2.html">ggplot2</a> で作図</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="nf">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
+<span class="o">&gt;</span> <span class="n">gp</span> <span class="o">=</span> <span class="nf">ggplot</span><span class="p">(</span><span class="n">molten</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">time</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="n">treatment</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="nf">as.factor</span><span class="p">(</span><span class="n">rep</span><span class="p">)</span><span class="p">)</span><span class="p">)</span>
+<span class="o">&gt;</span> <span class="n">gp</span> <span class="o">=</span> <span class="n">gp</span> <span class="o">+</span> <span class="nf">geom_point</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="m">0.3</span><span class="p">)</span>
+<span class="o">&gt;</span> <span class="n">gp</span> <span class="o">=</span> <span class="n">gp</span> <span class="o">+</span> <span class="nf">geom_smooth</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="n">treatment</span><span class="p">)</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">loess</span><span class="p">,</span> <span class="n">se</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+<span class="o">&gt;</span> <span class="n">gp</span> <span class="o">=</span> <span class="n">gp</span> <span class="o">+</span> <span class="nf">facet_grid</span><span class="p">(</span><span class="n">flavor</span> <span class="o">~</span> <span class="n">subject</span><span class="p">)</span>
+<span class="o">&gt;</span> <span class="n">gp</span>
+</code></pre></div></li>
 </ol>
-
 <h2 id="dcast"><code>dcast()</code></h2>
-
 <p>カテゴリ変数を含むdata.frameを <code>melt()</code> と逆方向に
 (long-formatからwide-formatへ)整形する。</p>
-
 <div class="note">
 <p>この用途ならこれじゃなくて
 <a href="/rstats/tidyr.html">tidyr</a>の<code>spread()</code>を使おう。
 <code>fun.aggregate</code>のように関数をグループごとに適用したい場合は
 <a href="/rstats/dplyr.html">dplyr</a>の<code>group_by()</code>と<code>summarise()</code>を使う。</p>
-
 <p>3次元以上のarrayを作りたいときは<code>reshape2::acast()</code>が便利。
 e.g., <code>acast(data, x ~ y ~ z, dplyr::first, value.var=&quot;v&quot;, fill=0)</code></p>
 
 </div>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">reshape2<span class="o">::</span>dcast<span class="p">(</span>data<span class="p">,</span> formula<span class="p">,</span> fun.aggregate<span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> <span class="kc">...</span><span class="p">,</span>
-          margins<span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> subset<span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> fill<span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> drop<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span>
-          value.var<span class="o">=</span>guess_value<span class="p">(</span>data<span class="p">))</span></code></pre></div>
-<dl>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">reshape2</span><span class="o">::</span><span class="nf">dcast</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">formula</span><span class="p">,</span> <span class="n">fun.aggregate</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> <span class="kc">...</span><span class="p">,</span>
+          <span class="n">margins</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span>
+          <span class="n">value.var</span><span class="o">=</span><span class="nf">guess_value</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="p">)</span>
+</code></pre></div><dl>
 <dt><code>data</code></dt>
 <dd><code>melt()</code> されたような形でカテゴリ変数を含むdata.frame</dd>
 <dt><code>formula</code></dt>
@@ -214,51 +205,46 @@ e.g., <code>acast(data, x ~ y ~ z, dplyr::first, value.var=&quot;v&quot;, fill=0
 <dt><code>subset=NULL</code></dt>
 <dd>適用範囲を限定する e.g., <code>subset=.(variable==&quot;length&quot;)</code></dd>
 </dl>
-
 <p><code>fill=NULL</code></p>
-
 <p><code>drop=TRUE</code></p>
-
 <p><code>value.var=guess_value(data)</code></p>
-
 <h3 id="example-1">Example</h3>
-
 <p>データは上の <code>melt()</code> の例で作った <code>molten</code>。</p>
-
 <p><code>fun.aggregate</code> を省略すると <code>length</code> が適用されて要素数が分かる</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> reshape2<span class="o">::</span>acast<span class="p">(</span>molten<span class="p">,</span> treatment <span class="o">~</span> flavor<span class="p">)</span>
-Aggregation <span class="kr">function</span> <span class="kp">missing</span><span class="o">:</span> defaulting to <span class="kp">length</span>
-  potato buttery grassy rancid painty
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="n">reshape2</span><span class="o">::</span><span class="nf">acast</span><span class="p">(</span><span class="n">molten</span><span class="p">,</span> <span class="n">treatment</span> <span class="o">~</span> <span class="n">flavor</span><span class="p">)</span>
+<span class="n">Aggregation</span> <span class="n">function</span> <span class="n">missing</span><span class="o">:</span> <span class="n">defaulting</span> <span class="n">to</span> <span class="n">length</span>
+  <span class="n">potato</span> <span class="n">buttery</span> <span class="n">grassy</span> <span class="n">rancid</span> <span class="n">painty</span>
 <span class="m">1</span>    <span class="m">232</span>     <span class="m">231</span>    <span class="m">232</span>    <span class="m">232</span>    <span class="m">232</span>
 <span class="m">2</span>    <span class="m">232</span>     <span class="m">230</span>    <span class="m">232</span>    <span class="m">232</span>    <span class="m">231</span>
-<span class="m">3</span>    <span class="m">231</span>     <span class="m">231</span>    <span class="m">231</span>    <span class="m">231</span>    <span class="m">231</span></code></pre></div>
-<p>グループごとの平均値をdata.frameで</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> reshape2<span class="o">::</span>dcast<span class="p">(</span>molten<span class="p">,</span> treatment <span class="o">~</span> flavor<span class="p">,</span> <span class="kp">mean</span><span class="p">)</span>
-  treatment   potato  buttery    grassy   rancid   painty
+<span class="m">3</span>    <span class="m">231</span>     <span class="m">231</span>    <span class="m">231</span>    <span class="m">231</span>    <span class="m">231</span>
+</code></pre></div><p>グループごとの平均値をdata.frameで</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="n">reshape2</span><span class="o">::</span><span class="nf">dcast</span><span class="p">(</span><span class="n">molten</span><span class="p">,</span> <span class="n">treatment</span> <span class="o">~</span> <span class="n">flavor</span><span class="p">,</span> <span class="n">mean</span><span class="p">)</span>
+  <span class="n">treatment</span>   <span class="n">potato</span>  <span class="n">buttery</span>    <span class="n">grassy</span>   <span class="n">rancid</span>   <span class="n">painty</span>
 <span class="m">1</span>         <span class="m">1</span> <span class="m">6.887931</span> <span class="m">1.780087</span> <span class="m">0.6491379</span> <span class="m">4.065517</span> <span class="m">2.583621</span>
 <span class="m">2</span>         <span class="m">2</span> <span class="m">7.001724</span> <span class="m">1.973913</span> <span class="m">0.6629310</span> <span class="m">3.624569</span> <span class="m">2.455844</span>
-<span class="m">3</span>         <span class="m">3</span> <span class="m">6.967965</span> <span class="m">1.717749</span> <span class="m">0.6805195</span> <span class="m">3.866667</span> <span class="m">2.525541</span></code></pre></div>
-<p>足し算すると辞書式に並ぶ</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> reshape2<span class="o">::</span>acast<span class="p">(</span>molten<span class="p">,</span> treatment <span class="o">~</span> flavor <span class="o">+</span> <span class="kp">rep</span><span class="p">,</span> <span class="kp">mean</span><span class="p">)</span>
-  potato_1 potato_2 buttery_1 buttery_2  grassy_1  grassy_2 rancid_1 rancid_2 painty_1 painty_2
+<span class="m">3</span>         <span class="m">3</span> <span class="m">6.967965</span> <span class="m">1.717749</span> <span class="m">0.6805195</span> <span class="m">3.866667</span> <span class="m">2.525541</span>
+</code></pre></div><p>足し算すると辞書式に並ぶ</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="n">reshape2</span><span class="o">::</span><span class="nf">acast</span><span class="p">(</span><span class="n">molten</span><span class="p">,</span> <span class="n">treatment</span> <span class="o">~</span> <span class="n">flavor</span> <span class="o">+</span> <span class="n">rep</span><span class="p">,</span> <span class="n">mean</span><span class="p">)</span>
+  <span class="n">potato_1</span> <span class="n">potato_2</span> <span class="n">buttery_1</span> <span class="n">buttery_2</span>  <span class="n">grassy_1</span>  <span class="n">grassy_2</span> <span class="n">rancid_1</span> <span class="n">rancid_2</span> <span class="n">painty_1</span> <span class="n">painty_2</span>
 <span class="m">1</span> <span class="m">6.772414</span> <span class="m">7.003448</span>  <span class="m">1.797391</span>  <span class="m">1.762931</span> <span class="m">0.4456897</span> <span class="m">0.8525862</span> <span class="m">4.283621</span> <span class="m">3.847414</span> <span class="m">2.727586</span> <span class="m">2.439655</span>
 <span class="m">2</span> <span class="m">7.158621</span> <span class="m">6.844828</span>  <span class="m">1.989474</span>  <span class="m">1.958621</span> <span class="m">0.6905172</span> <span class="m">0.6353448</span> <span class="m">3.712069</span> <span class="m">3.537069</span> <span class="m">2.315517</span> <span class="m">2.597391</span>
-<span class="m">3</span> <span class="m">6.937391</span> <span class="m">6.998276</span>  <span class="m">1.805217</span>  <span class="m">1.631034</span> <span class="m">0.5895652</span> <span class="m">0.7706897</span> <span class="m">3.752174</span> <span class="m">3.980172</span> <span class="m">2.038261</span> <span class="m">3.008621</span></code></pre></div>
-<p>チルダで繋ぐと1次元増える</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> reshape2<span class="o">::</span>acast<span class="p">(</span>molten<span class="p">,</span> treatment <span class="o">~</span> flavor <span class="o">~</span> <span class="kp">rep</span><span class="p">,</span> <span class="kp">mean</span><span class="p">)</span>
+<span class="m">3</span> <span class="m">6.937391</span> <span class="m">6.998276</span>  <span class="m">1.805217</span>  <span class="m">1.631034</span> <span class="m">0.5895652</span> <span class="m">0.7706897</span> <span class="m">3.752174</span> <span class="m">3.980172</span> <span class="m">2.038261</span> <span class="m">3.008621</span>
+</code></pre></div><p>チルダで繋ぐと1次元増える</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="n">reshape2</span><span class="o">::</span><span class="nf">acast</span><span class="p">(</span><span class="n">molten</span><span class="p">,</span> <span class="n">treatment</span> <span class="o">~</span> <span class="n">flavor</span> <span class="o">~</span> <span class="n">rep</span><span class="p">,</span> <span class="n">mean</span><span class="p">)</span>
 <span class="p">,</span> <span class="p">,</span> <span class="m">1</span>
 
-    potato  buttery    grassy   rancid   painty
+    <span class="n">potato</span>  <span class="n">buttery</span>    <span class="n">grassy</span>   <span class="n">rancid</span>   <span class="n">painty</span>
 <span class="m">1</span> <span class="m">6.772414</span> <span class="m">1.797391</span> <span class="m">0.4456897</span> <span class="m">4.283621</span> <span class="m">2.727586</span>
 <span class="m">2</span> <span class="m">7.158621</span> <span class="m">1.989474</span> <span class="m">0.6905172</span> <span class="m">3.712069</span> <span class="m">2.315517</span>
 <span class="m">3</span> <span class="m">6.937391</span> <span class="m">1.805217</span> <span class="m">0.5895652</span> <span class="m">3.752174</span> <span class="m">2.038261</span>
 
 <span class="p">,</span> <span class="p">,</span> <span class="m">2</span>
 
-    potato  buttery    grassy   rancid   painty
+    <span class="n">potato</span>  <span class="n">buttery</span>    <span class="n">grassy</span>   <span class="n">rancid</span>   <span class="n">painty</span>
 <span class="m">1</span> <span class="m">7.003448</span> <span class="m">1.762931</span> <span class="m">0.8525862</span> <span class="m">3.847414</span> <span class="m">2.439655</span>
 <span class="m">2</span> <span class="m">6.844828</span> <span class="m">1.958621</span> <span class="m">0.6353448</span> <span class="m">3.537069</span> <span class="m">2.597391</span>
-<span class="m">3</span> <span class="m">6.998276</span> <span class="m">1.631034</span> <span class="m">0.7706897</span> <span class="m">3.980172</span> <span class="m">3.008621</span></code></pre></div>
+<span class="m">3</span> <span class="m">6.998276</span> <span class="m">1.631034</span> <span class="m">0.7706897</span> <span class="m">3.980172</span> <span class="m">3.008621</span>
+</code></pre></div>
 </article>
 </main>
 
@@ -289,8 +275,8 @@ Aggregation <span class="kr">function</span> <span class="kp">missing</span><spa
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li class="active"><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -302,11 +288,11 @@ Aggregation <span class="kr">function</span> <span class="kp">missing</span><spa
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -325,6 +311,7 @@ Aggregation <span class="kr">function</span> <span class="kp">missing</span><spa
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -332,7 +319,6 @@ Aggregation <span class="kr">function</span> <span class="kp">missing</span><spa
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -344,20 +330,20 @@ Aggregation <span class="kr">function</span> <span class="kp">missing</span><spa
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

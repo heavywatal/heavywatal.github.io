@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -91,44 +91,38 @@ purrr — ループ処理やapply系関数の決定版
 </ul></nav>
 </header>
 
-
-
-<p><a href="https://purrr.tidyverse.org/">
+<a href="https://purrr.tidyverse.org/">
 <img src="http://hexb.in/vector/purrr.svg" align="right" width="120" height="139">
-</a></p>
-
+</a>
 <p>forループやlistの処理などをより簡潔に書けるようにしてくれるパッケージ。
 標準のapply系関数よりも覚えやすく読みやすい。
 <a href="/rstats/dplyr.html">dplyr</a> や <a href="/rstats/tidyr.html">tidyr</a> と組み合わせて使う。
 いまのところ並列化する機能はないので、
 それに関しては<a href="/rstats/foreach.html">foreach/parallel</a>ページを参照。</p>
-
 <p><a href="https://tidyverse.tidyverse.org/">tidyverse</a> に含まれているので、
 <code>install.packages(&quot;tidyverse&quot;)</code> で一括インストール、
 <code>library(tidyverse)</code> で一括ロード。</p>
-
 <h2 id="list-vector操作">list, vector操作</h2>
-
 <h3 id="各要素に関数を適用するapply系関数">各要素に関数を適用するapply系関数</h3>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">v <span class="o">=</span> <span class="kt">list</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2L</span><span class="p">,</span> <span class="s">&#34;3&#34;</span><span class="p">)</span>
-check_class <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> <span class="p">{</span><span class="kp">paste0</span><span class="p">(</span>x<span class="p">,</span> <span class="s">&#34; is &#34;</span><span class="p">,</span> <span class="kp">class</span><span class="p">(</span>x<span class="p">))}</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">v</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2L</span><span class="p">,</span> <span class="s">&#34;</span><span class="s">3&#34;</span><span class="p">)</span>
+<span class="n">check_class</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span><span class="nf">paste0</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s">&#34;</span><span class="s"> is &#34;</span><span class="p">,</span> <span class="nf">class</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="p">)</span><span class="p">}</span>
 
 <span class="c1"># 自分でfor文を書くと結構大変</span>
-results <span class="o">=</span> <span class="kt">vector</span><span class="p">(</span><span class="s">&#34;list&#34;</span><span class="p">,</span> <span class="kp">length</span><span class="p">(</span>v<span class="p">))</span>
-<span class="kr">for</span> <span class="p">(</span>i <span class="kr">in</span> <span class="kp">seq_along</span><span class="p">(</span>v<span class="p">))</span> <span class="p">{</span>
-  results<span class="p">[[</span>i<span class="p">]]</span> <span class="o">=</span> check_class<span class="p">(</span>v<span class="p">[[</span>i<span class="p">]])</span>
+<span class="n">results</span> <span class="o">=</span> <span class="nf">vector</span><span class="p">(</span><span class="s">&#34;</span><span class="s">list&#34;</span><span class="p">,</span> <span class="nf">length</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="p">)</span>
+<span class="nf">for </span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="nf">seq_along</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">results</span><span class="n">[</span><span class="n">[i</span><span class="n">]</span><span class="n">]</span> <span class="o">=</span> <span class="nf">check_class</span><span class="p">(</span><span class="n">v</span><span class="n">[</span><span class="n">[i</span><span class="n">]</span><span class="n">]</span><span class="p">)</span>
 <span class="p">}</span>
 
 <span class="c1"># 1行で簡潔に記述でき、意図も明確</span>
-results <span class="o">=</span> <span class="kp">lapply</span><span class="p">(</span>v<span class="p">,</span> check_class<span class="p">)</span>
-results <span class="o">=</span> purrr<span class="o">::</span>map<span class="p">(</span>v<span class="p">,</span> check_class<span class="p">)</span>
-results <span class="o">=</span> purrr<span class="o">::</span>map<span class="p">(</span>v<span class="p">,</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> <span class="p">{</span><span class="kp">paste0</span><span class="p">(</span>x<span class="p">,</span> <span class="s">&#34; is &#34;</span><span class="p">,</span> <span class="kp">class</span><span class="p">(</span>x<span class="p">))})</span>
-results <span class="o">=</span> purrr<span class="o">::</span>map<span class="p">(</span>v<span class="p">,</span> <span class="o">~</span> <span class="p">{</span><span class="kp">paste0</span><span class="p">(</span><span class="m">.</span>x<span class="p">,</span> <span class="s">&#34; is &#34;</span><span class="p">,</span> <span class="kp">class</span><span class="p">(</span><span class="m">.</span>x<span class="p">))})</span></code></pre></div>
-<dl>
+<span class="n">results</span> <span class="o">=</span> <span class="nf">lapply</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">check_class</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">purrr</span><span class="o">::</span><span class="nf">map</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">check_class</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">purrr</span><span class="o">::</span><span class="nf">map</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span><span class="nf">paste0</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s">&#34;</span><span class="s"> is &#34;</span><span class="p">,</span> <span class="nf">class</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="p">)</span><span class="p">}</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">purrr</span><span class="o">::</span><span class="nf">map</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="o">~</span> <span class="p">{</span><span class="nf">paste0</span><span class="p">(</span><span class="n">.x</span><span class="p">,</span> <span class="s">&#34;</span><span class="s"> is &#34;</span><span class="p">,</span> <span class="nf">class</span><span class="p">(</span><span class="n">.x</span><span class="p">)</span><span class="p">)</span><span class="p">}</span><span class="p">)</span>
+</code></pre></div><dl>
 <dt><code>purrr::map(.x, .f, ...)</code></dt>
 <dd>list/vector <code>.x</code> の各要素に関数 <code>.f</code> を適用した結果をlistに詰めて返す。
 <code>base::lapply()</code>とほぼ同義。</dd>
-<dd><code>.f</code> にformulaや数値などを渡すと<a href="#無名関数">関数に変換した上で処理してくれる。(後述)</a></dd>
+<dd><code>.f</code> にformulaや数値などを渡すと<a href="#%E7%84%A1%E5%90%8D%E9%96%A2%E6%95%B0">関数に変換した上で処理してくれる。(後述)</a></dd>
 <dt><code>purrr::map_lgl()</code>, <code>map_int()</code>, <code>map_dbl()</code>, <code>map_chr()</code></dt>
 <dd>型の決まったvectorを返すmap亜種。
 <code>base::sapply()</code>や<code>base::vapply()</code>よりも覚えやすく読みやすい。</dd>
@@ -136,9 +130,9 @@ results <span class="o">=</span> purrr<span class="o">::</span>map<span class="p
 <dd>結果を<code>dplyr::bind_rows()</code>で結合したdata.frameとして返すmap亜種。
 例えば、同じ形式のCSVファイルを一気に読んで結合、みたいなときに便利:</dd>
 </dl>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">files <span class="o">=</span> fs<span class="o">::</span>dir_ls<span class="p">(</span><span class="s">&#34;path/to/data/&#34;</span><span class="p">,</span> glob <span class="o">=</span> <span class="s">&#34;*.csv&#34;</span><span class="p">)</span>
-combined_df <span class="o">=</span> purrr<span class="o">::</span>map_dfr<span class="p">(</span>files<span class="p">,</span> readr<span class="o">::</span>read_csv<span class="p">)</span></code></pre></div>
-<dl>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">files</span> <span class="o">=</span> <span class="n">fs</span><span class="o">::</span><span class="nf">dir_ls</span><span class="p">(</span><span class="s">&#34;</span><span class="s">path/to/data/&#34;</span><span class="p">,</span> <span class="n">glob</span> <span class="o">=</span> <span class="s">&#34;</span><span class="s">*.csv&#34;</span><span class="p">)</span>
+<span class="n">combined_df</span> <span class="o">=</span> <span class="n">purrr</span><span class="o">::</span><span class="nf">map_dfr</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">readr</span><span class="o">::</span><span class="n">read_csv</span><span class="p">)</span>
+</code></pre></div><dl>
 <dt><code>purrr::map2(.x, .y, .f, ...)</code></dt>
 <dd>2変数バージョン。<code>map2_int()</code>などの型指定vector版もある。
 3変数以上渡したいときはlistかdata.frameにまとめて次の<code>pmap()</code>を使う。</dd>
@@ -174,9 +168,7 @@ C++でいう<code>std::accumulate()</code>。
 C++でいう<code>std::partial_sum()</code>。
 例えば <code>accumulate(1:3, sum)</code> の結果は <code>1 3 6</code> 。</dd>
 </dl>
-
-<h3 id="list作成-変形-解体">list作成・変形・解体</h3>
-
+<h3 id="list作成変形解体">list作成・変形・解体</h3>
 <dl>
 <dt><code>purrr::list_along(x)</code></dt>
 <dd><code>x</code> と同じ長さの空listを作る <code>vector(&quot;list&quot;, length(x))</code> のショートカット。</dd>
@@ -204,17 +196,15 @@ vectorなら <a href="/rstats/tidyr.html"><code>tidyr::crossing()</code> とか 
 例えば、pair of lists &lt;=&gt; list of pairs。</dd>
 <dd>data.frameに適用するとlist of rowsが得られる。</dd>
 </dl>
-
 <h3 id="その他">その他</h3>
-
 <dl>
 <dt><code>purrr::invoke(.f, .x = NULL, ..., .env = NULL)</code></dt>
 <dd>list <code>.x</code> の中身を引数として関数 <code>.f</code> を呼び出す。</dd>
 <dd>関数に渡す引数があらかじめlistにまとまってるときに使う<code>do.call()</code>の改良版。</dd>
 </dl>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">params <span class="o">=</span> <span class="kt">list</span><span class="p">(</span>n <span class="o">=</span> <span class="m">6L</span><span class="p">,</span> size <span class="o">=</span> <span class="m">10L</span><span class="p">,</span> replace <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
-purrr<span class="o">::</span>invoke<span class="p">(</span><span class="kp">sample.int</span><span class="p">,</span> params<span class="p">)</span></code></pre></div>
-<dl>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">params</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="m">6L</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="m">10L</span><span class="p">,</span> <span class="n">replace</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
+<span class="n">purrr</span><span class="o">::</span><span class="nf">invoke</span><span class="p">(</span><span class="n">sample.int</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+</code></pre></div><dl>
 <dt><code>purrr::invoke_map(.f, .x = list(NULL), ..., .env = NULL)</code></dt>
 <dd>関数listを順々に実行してlistで返す。
 引数<code>.x</code>は同じ長さのlist of listsか、list of a listをリサイクル。</dd>
@@ -226,31 +216,28 @@ purrr<span class="o">::</span>invoke<span class="p">(</span><span class="kp">sam
 この改良版ではその心配が解消されている。
 長さや型のチェックもしてくれる。</dd>
 </dl>
-
 <h2 id="無名関数">無名関数</h2>
-
 <p>apply/map系関数は、名前のついた関数だけでなく、その場で定義された無名関数も受け取れる。
 ごく短い関数や一度しか使わない関数に名前をつけずに済むので便利。
 さらにpurrrのmap系関数はformula
 (チルダで始まる <code>~ x + y</code> のようなもの)
 や数値を受け取って関数として処理してくれる。</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># named function</span>
-ord <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> <span class="p">{</span><span class="kp">strtoi</span><span class="p">(</span><span class="kp">charToRaw</span><span class="p">(</span>x<span class="p">),</span> <span class="m">16L</span><span class="p">)}</span>
-map_int<span class="p">(</span><span class="kc">letters</span><span class="p">,</span> ord<span class="p">)</span>
+<span class="n">ord</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span><span class="nf">strtoi</span><span class="p">(</span><span class="nf">charToRaw</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="p">,</span> <span class="m">16L</span><span class="p">)</span><span class="p">}</span>
+<span class="nf">map_int</span><span class="p">(</span><span class="kc">letters</span><span class="p">,</span> <span class="n">ord</span><span class="p">)</span>
 
 <span class="c1"># unnamed function</span>
-map_int<span class="p">(</span><span class="kc">letters</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> <span class="p">{</span><span class="kp">strtoi</span><span class="p">(</span><span class="kp">charToRaw</span><span class="p">(</span>x<span class="p">),</span> <span class="m">16L</span><span class="p">)})</span>
+<span class="nf">map_int</span><span class="p">(</span><span class="kc">letters</span><span class="p">,</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span><span class="nf">strtoi</span><span class="p">(</span><span class="nf">charToRaw</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="p">,</span> <span class="m">16L</span><span class="p">)</span><span class="p">}</span><span class="p">)</span>
 
 <span class="c1"># formula</span>
-map_int<span class="p">(</span><span class="kc">letters</span><span class="p">,</span> <span class="o">~</span> <span class="kp">strtoi</span><span class="p">(</span><span class="kp">charToRaw</span><span class="p">(</span><span class="m">.</span>x<span class="p">),</span> <span class="m">16L</span><span class="p">))</span>
+<span class="nf">map_int</span><span class="p">(</span><span class="kc">letters</span><span class="p">,</span> <span class="o">~</span> <span class="nf">strtoi</span><span class="p">(</span><span class="nf">charToRaw</span><span class="p">(</span><span class="n">.x</span><span class="p">)</span><span class="p">,</span> <span class="m">16L</span><span class="p">)</span><span class="p">)</span>
 
 <span class="c1"># integer/character</span>
-li <span class="o">=</span> <span class="kt">list</span><span class="p">(</span>lower <span class="o">=</span> <span class="kc">letters</span><span class="p">,</span> upper <span class="o">=</span> <span class="kc">LETTERS</span><span class="p">)</span>
-map_chr<span class="p">(</span>li<span class="p">,</span> <span class="m">3L</span><span class="p">)</span>
-map_chr<span class="p">(</span>li<span class="p">,</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> <span class="p">{</span>x<span class="p">[[</span><span class="m">3L</span><span class="p">]]})</span></code></pre></div>
-<p>formula内部では、第一引数を<code>.x</code>または<code>.</code>として、第二引数を<code>.y</code>として参照する。
+<span class="n">li</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">lower</span> <span class="o">=</span> <span class="kc">letters</span><span class="p">,</span> <span class="n">upper</span> <span class="o">=</span> <span class="kc">LETTERS</span><span class="p">)</span>
+<span class="nf">map_chr</span><span class="p">(</span><span class="n">li</span><span class="p">,</span> <span class="m">3L</span><span class="p">)</span>
+<span class="nf">map_chr</span><span class="p">(</span><span class="n">li</span><span class="p">,</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span><span class="n">x</span><span class="n">[</span><span class="n">[3L</span><span class="n">]</span><span class="n">]</span><span class="p">}</span><span class="p">)</span>
+</code></pre></div><p>formula内部では、第一引数を<code>.x</code>または<code>.</code>として、第二引数を<code>.y</code>として参照する。
 <code>..1</code>, <code>..2</code>, <code>..3</code> のような形で三つめ以降も参照できる。</p>
-
 <dl>
 <dt><code>purrr::as_mapper(.f, ...)</code></dt>
 <dd><code>map()</code> 内部で関数への変換機能を担っている関数。</dd>
@@ -260,32 +247,28 @@ map_chr<span class="p">(</span>li<span class="p">,</span> <span class="kr">funct
 <dt><code>purrr::partial(...f, ..., .env, .lazy, .first)</code></dt>
 <dd>引数を部分的に埋めてある関数を作る。C++でいう <code>std::bind()</code></dd>
 </dl>
-
 <h2 id="purrrlyr"><code>purrrlyr</code></h2>
-
 <p>data.frame を引数にとるものは purrr 0.2.2.1 から切り離され、
 <a href="https://github.com/hadley/purrrlyr">purrrlyr</a> に移動された。
 <strong>これらは今のところdeprecatedではないが、
 近いうちにそうなるので早くほかのアプローチに移行せよ</strong> 、とのこと。
 <a href="https://github.com/hadley/purrrlyr/blob/master/NEWS.md">https://github.com/hadley/purrrlyr/blob/master/NEWS.md</a></p>
-
 <p><a href="/rstats/tidyr.html"><code>tidyr</code></a> でネストして、
 <a href="/rstats/purrr.html"><code>purrr</code></a> でその list of data.frames に処理を施し、
 <a href="/rstats/dplyr.html"><code>dplyr</code></a> でその変更を元の data.frame に適用する、
 というのがtidyverse流のモダンなやり方らしい。</p>
-
 <p>パイプ演算子 <code>%&gt;%</code> については<a href="/rstats/dplyr.html">dplyr</a>を参照。</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">## OLD</span>
-iris <span class="o">%&gt;%</span>
-  purrrlyr<span class="o">::</span>slice_rows<span class="p">(</span><span class="s">&#34;Species&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
-  purrrlyr<span class="o">::</span>by_slice<span class="p">(</span><span class="kp">head</span><span class="p">,</span> <span class="m">.</span>collate <span class="o">=</span> <span class="s">&#34;rows&#34;</span><span class="p">)</span>
+<span class="n">iris</span> <span class="o">%&gt;%</span>
+  <span class="n">purrrlyr</span><span class="o">::</span><span class="nf">slice_rows</span><span class="p">(</span><span class="s">&#34;</span><span class="s">Species&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="n">purrrlyr</span><span class="o">::</span><span class="nf">by_slice</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">.collate</span> <span class="o">=</span> <span class="s">&#34;</span><span class="s">rows&#34;</span><span class="p">)</span>
 
 <span class="c1">## NEW</span>
-iris <span class="o">%&gt;%</span>
-  tidyr<span class="o">::</span>nest<span class="p">(</span><span class="o">-</span>Species<span class="p">)</span> <span class="o">%&gt;%</span>
-  dplyr<span class="o">::</span>mutate<span class="p">(</span>data <span class="o">=</span> purrr<span class="o">::</span>map<span class="p">(</span>data<span class="p">,</span> <span class="kp">head</span><span class="p">))</span> <span class="o">%&gt;%</span>
-  tidyr<span class="o">::</span>unnest<span class="p">()</span></code></pre></div>
-<dl>
+<span class="n">iris</span> <span class="o">%&gt;%</span>
+  <span class="n">tidyr</span><span class="o">::</span><span class="nf">nest</span><span class="p">(</span><span class="o">-</span><span class="n">Species</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">purrr</span><span class="o">::</span><span class="nf">map</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">head</span><span class="p">)</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="n">tidyr</span><span class="o">::</span><span class="nf">unnest</span><span class="p">(</span><span class="p">)</span>
+</code></pre></div><dl>
 <dt><code>purrrlyr::dmap(.d, .f, ...)</code></dt>
 <dd>data.frameかgrouped_dfを受け取り、列ごとに<code>.f</code>を適用してdata.frameを返す。
 対象列を選べる<code>dmap_if()</code>と<code>dmap_at()</code>もある。
@@ -316,7 +299,7 @@ iris <span class="o">%&gt;%</span>
 <dd>第一引数が関数になってるところは<code>invoke()</code>っぽくて、
 結果の収納方法を<code>.collate</code>などで調整できるところは<code>by_row()</code>っぽい。</dd>
 </dl>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris<span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">,</span> <span class="m">1</span><span class="o">:</span><span class="m">2</span><span class="p">]</span> <span class="o">%&gt;%</span> by_row<span class="p">(</span><span class="o">~</span><span class="kt">data_frame</span><span class="p">(</span>x <span class="o">=</span> <span class="m">0</span><span class="o">:</span><span class="m">1</span><span class="p">,</span> y <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="s">&#34;b&#34;</span><span class="p">)),</span> <span class="m">.</span>collate <span class="o">=</span> <span class="s">&#34;list&#34;</span><span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span><span class="n">[1</span><span class="o">:</span><span class="m">3</span><span class="p">,</span> <span class="m">1</span><span class="o">:</span><span class="m">2</span><span class="n">]</span> <span class="o">%&gt;%</span> <span class="nf">by_row</span><span class="p">(</span><span class="o">~</span><span class="nf">data_frame</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="m">0</span><span class="o">:</span><span class="m">1</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;</span><span class="s">a&#34;</span><span class="p">,</span> <span class="s">&#34;</span><span class="s">b&#34;</span><span class="p">)</span><span class="p">)</span><span class="p">,</span> <span class="n">.collate</span> <span class="o">=</span> <span class="s">&#34;</span><span class="s">list&#34;</span><span class="p">)</span>
 <span class="c1">## Source: local data frame [3 x 3]</span>
 <span class="c1">##</span>
 <span class="c1">##   Sepal.Length Sepal.Width           .out</span>
@@ -324,7 +307,7 @@ iris <span class="o">%&gt;%</span>
 <span class="c1">## 1          5.1         3.5 &lt;tbl_df [2,2]&gt;</span>
 <span class="c1">## 2          4.9         3.0 &lt;tbl_df [2,2]&gt;</span>
 <span class="c1">## 3          4.7         3.2 &lt;tbl_df [2,2]&gt;</span>
-iris<span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">,</span> <span class="m">1</span><span class="o">:</span><span class="m">2</span><span class="p">]</span> <span class="o">%&gt;%</span> by_row<span class="p">(</span><span class="o">~</span><span class="kt">data_frame</span><span class="p">(</span>x <span class="o">=</span> <span class="m">0</span><span class="o">:</span><span class="m">1</span><span class="p">,</span> y <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="s">&#34;b&#34;</span><span class="p">)),</span> <span class="m">.</span>collate <span class="o">=</span> <span class="s">&#34;rows&#34;</span><span class="p">)</span>
+<span class="n">iris</span><span class="n">[1</span><span class="o">:</span><span class="m">3</span><span class="p">,</span> <span class="m">1</span><span class="o">:</span><span class="m">2</span><span class="n">]</span> <span class="o">%&gt;%</span> <span class="nf">by_row</span><span class="p">(</span><span class="o">~</span><span class="nf">data_frame</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="m">0</span><span class="o">:</span><span class="m">1</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;</span><span class="s">a&#34;</span><span class="p">,</span> <span class="s">&#34;</span><span class="s">b&#34;</span><span class="p">)</span><span class="p">)</span><span class="p">,</span> <span class="n">.collate</span> <span class="o">=</span> <span class="s">&#34;</span><span class="s">rows&#34;</span><span class="p">)</span>
 <span class="c1">## Source: local data frame [6 x 5]</span>
 <span class="c1">##</span>
 <span class="c1">##   Sepal.Length Sepal.Width  .row     x     y</span>
@@ -335,16 +318,15 @@ iris<span class="p">[</span><span class="m">1</span><span class="o">:</span><spa
 <span class="c1">## 4          4.9         3.0     2     1     b</span>
 <span class="c1">## 5          4.7         3.2     3     0     a</span>
 <span class="c1">## 6          4.7         3.2     3     1     b</span>
-iris<span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">,</span> <span class="m">1</span><span class="o">:</span><span class="m">2</span><span class="p">]</span> <span class="o">%&gt;%</span> by_row<span class="p">(</span><span class="o">~</span><span class="kt">data_frame</span><span class="p">(</span>x <span class="o">=</span> <span class="m">0</span><span class="o">:</span><span class="m">1</span><span class="p">,</span> y <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="s">&#34;b&#34;</span><span class="p">)),</span> <span class="m">.</span>collate <span class="o">=</span> <span class="s">&#34;cols&#34;</span><span class="p">)</span>
+<span class="n">iris</span><span class="n">[1</span><span class="o">:</span><span class="m">3</span><span class="p">,</span> <span class="m">1</span><span class="o">:</span><span class="m">2</span><span class="n">]</span> <span class="o">%&gt;%</span> <span class="nf">by_row</span><span class="p">(</span><span class="o">~</span><span class="nf">data_frame</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="m">0</span><span class="o">:</span><span class="m">1</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;</span><span class="s">a&#34;</span><span class="p">,</span> <span class="s">&#34;</span><span class="s">b&#34;</span><span class="p">)</span><span class="p">)</span><span class="p">,</span> <span class="n">.collate</span> <span class="o">=</span> <span class="s">&#34;</span><span class="s">cols&#34;</span><span class="p">)</span>
 <span class="c1">## Source: local data frame [3 x 6]</span>
 <span class="c1">##</span>
 <span class="c1">##   Sepal.Length Sepal.Width    x1    x2    y1    y2</span>
 <span class="c1">##          (dbl)       (dbl) (int) (int) (chr) (chr)</span>
 <span class="c1">## 1          5.1         3.5     0     1     a     b</span>
 <span class="c1">## 2          4.9         3.0     0     1     a     b</span>
-<span class="c1">## 3          4.7         3.2     0     1     a     b</span></code></pre></div>
-<h2 id="関連書籍">関連書籍</h2>
-
+<span class="c1">## 3          4.7         3.2     0     1     a     b</span>
+</code></pre></div><h2 id="関連書籍">関連書籍</h2>
 <p><a href="https://www.amazon.co.jp/Data-Science-Transform-Visualize-Model/dp/1491910399/ref=as_li_ss_il?s=books&ie=UTF8&qid=1508340700&sr=1-3&linkCode=li3&tag=heavywatal-22&linkId=6a53371cc80e2d6d7fc50fae5d8b862d" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1491910399&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=1491910399" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 <a href="https://www.amazon.co.jp/R%E3%81%A7%E3%81%AF%E3%81%98%E3%82%81%E3%82%8B%E3%83%87%E3%83%BC%E3%82%BF%E3%82%B5%E3%82%A4%E3%82%A8%E3%83%B3%E3%82%B9-Hadley-Wickham/dp/487311814X/ref=as_li_ss_il?ie=UTF8&qid=1508340144&sr=8-1&keywords=r&linkCode=li3&tag=heavywatal-22&linkId=4137d3d3351f8ccab5a93cefdc28fdec" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=487311814X&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=487311814X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
 
@@ -378,8 +360,8 @@ iris<span class="p">[</span><span class="m">1</span><span class="o">:</span><spa
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -391,11 +373,11 @@ iris<span class="p">[</span><span class="m">1</span><span class="o">:</span><spa
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -414,6 +396,7 @@ iris<span class="p">[</span><span class="m">1</span><span class="o">:</span><spa
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -421,7 +404,6 @@ iris<span class="p">[</span><span class="m">1</span><span class="o">:</span><spa
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -433,20 +415,20 @@ iris<span class="p">[</span><span class="m">1</span><span class="o">:</span><spa
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

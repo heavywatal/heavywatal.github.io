@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -91,21 +91,16 @@ tidyr — シンプルなデータ変形ツール
 </ul></nav>
 </header>
 
-
-
-<p><a href="https://tidyr.tidyverse.org/">
+<a href="https://tidyr.tidyverse.org/">
 <img src="http://hexb.in/vector/tidyr.svg" align="right" width="120" height="139">
-</a></p>
-
+</a>
 <p>data.frameを縦長・横長・入れ子に変形・整形するためのツール。
 <a href="/rstats/dplyr.html">dplyr</a> や <a href="/rstats/purrr.html">purrr</a>
 と一緒に使うとよい。
 <a href="/rstats/reshape2.html">reshape2</a> を置き換えるべく再設計された改良版。</p>
-
 <p><a href="https://tidyverse.tidyverse.org/">tidyverse</a> に含まれているので、
 <code>install.packages(&quot;tidyverse&quot;)</code> で一括インストール、
 <code>library(tidyverse)</code> で一括ロード。</p>
-
 <ul>
 <li><a href="http://r4ds.had.co.nz/tidy-data.html">http://r4ds.had.co.nz/tidy-data.html</a></li>
 <li><a href="https://github.com/tidyverse/tidyr">https://github.com/tidyverse/tidyr</a></li>
@@ -113,17 +108,12 @@ tidyr — シンプルなデータ変形ツール
 <li><code>demo(package = &quot;tidyr&quot;)</code></li>
 <li><a href="https://speakerdeck.com/yutannihilation/tidyr-pivot">https://speakerdeck.com/yutannihilation/tidyr-pivot</a></li>
 </ul>
-
 <p>パイプ演算子 <code>%&gt;%</code> については<a href="/rstats/dplyr.html">dplyr</a>を参照。</p>
-
-<h2 id="tidyr-pivot-longer-で縦長にする"><code>tidyr::pivot_longer()</code> で縦長にする</h2>
-
+<h2 id="tidyrpivot_longer-で縦長にする"><code>tidyr::pivot_longer()</code> で縦長にする</h2>
 <p>複数列にまたがっていた値を1列にまとめ、元の列名をその横に添えることで、
 data.frameを横長(wide-format)から縦長(long-format)に変形する。
 <code>reshape2::melt()</code>, <code>tidyr::gather()</code> の改良版。</p>
-
 <p><code>tidyr::pivot_longer(data, cols, names_to = &quot;name&quot;, ..., values_to = &quot;value&quot;, ...)</code></p>
-
 <dl>
 <dt><code>cols</code></dt>
 <dd>動かしたい値が含まれている列。
@@ -133,7 +123,7 @@ data.frameを横長(wide-format)から縦長(long-format)に変形する。
 <dt><code>values_to</code></dt>
 <dd>値の移動先の列名</dd>
 </dl>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> as_tibble<span class="p">()</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="nf">as_tibble</span><span class="p">(</span><span class="p">)</span>
 <span class="c1">#&gt; # tbl_df [150 x 5]</span>
 <span class="c1">#&gt;     Sepal.Length Sepal.Width Petal.Length Petal.Width   Species</span>
 <span class="c1">#&gt;            &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;     &lt;fct&gt;</span>
@@ -147,10 +137,10 @@ data.frameを横長(wide-format)から縦長(long-format)に変形する。
 <span class="c1">#&gt; 149          6.2         3.4          5.4         2.3 virginica</span>
 <span class="c1">#&gt; 150          5.9         3.0          5.1         1.8 virginica</span>
 
-iris_long <span class="o">=</span> iris <span class="o">%&gt;%</span>
-  tibble<span class="o">::</span>rowid_to_column<span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
-  pivot_longer<span class="p">(</span><span class="kt">c</span><span class="p">(</span><span class="o">-</span>id<span class="p">,</span> <span class="o">-</span>Species<span class="p">),</span> names_to <span class="o">=</span> <span class="s">&#34;namae&#34;</span><span class="p">,</span> values_to <span class="o">=</span> <span class="s">&#34;atai&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
-  <span class="kp">print</span><span class="p">()</span>
+<span class="n">iris_long</span> <span class="o">=</span> <span class="n">iris</span> <span class="o">%&gt;%</span>
+  <span class="n">tibble</span><span class="o">::</span><span class="nf">rowid_to_column</span><span class="p">(</span><span class="s">&#34;</span><span class="s">id&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">pivot_longer</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="o">-</span><span class="n">id</span><span class="p">,</span> <span class="o">-</span><span class="n">Species</span><span class="p">)</span><span class="p">,</span> <span class="n">names_to</span> <span class="o">=</span> <span class="s">&#34;</span><span class="s">namae&#34;</span><span class="p">,</span> <span class="n">values_to</span> <span class="o">=</span> <span class="s">&#34;</span><span class="s">atai&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">print</span><span class="p">(</span><span class="p">)</span>
 <span class="c1">#&gt; # tbl_df [600 x 4]</span>
 <span class="c1">#&gt;        id   Species        namae  atai</span>
 <span class="c1">#&gt;     &lt;int&gt;     &lt;fct&gt;        &lt;chr&gt; &lt;dbl&gt;</span>
@@ -164,15 +154,12 @@ iris_long <span class="o">=</span> iris <span class="o">%&gt;%</span>
 <span class="c1">#&gt; 599   150 virginica Petal.Length   5.1</span>
 <span class="c1">#&gt; 600   150 virginica  Petal.Width   1.8</span>
 
-<span class="c1"># iris %&gt;% gather(&#34;namae&#34;, &#34;atai&#34;, -Species)</span></code></pre></div>
-<h2 id="tidyr-pivot-wider-で横長にする"><code>tidyr::pivot_wider()</code> で横長にする</h2>
-
+<span class="c1"># iris %&gt;% gather(&#34;namae&#34;, &#34;atai&#34;, -Species)</span>
+</code></pre></div><h2 id="tidyrpivot_wider-で横長にする"><code>tidyr::pivot_wider()</code> で横長にする</h2>
 <p>1列にまとまっていた値を、別の変数に応じて複数の列に並べ直すことで、
 data.frameを縦長(long-format)から横長(wide-format)に変形する。
 <code>reshape2::dcast()</code>, <code>tidyr::spread()</code> の改良版。</p>
-
 <p><code>tidyr::pivot_wider(data, id_cols = NULL, names_from = name, ..., values_from = value, values_fill = NULL, values_fn = NULL)</code></p>
-
 <dl>
 <dt><code>id_cols</code></dt>
 <dd>ここで指定した列のユニークな組み合わせが変形後にそれぞれ1行になる。
@@ -187,9 +174,9 @@ data.frameを縦長(long-format)から横長(wide-format)に変形する。
 <dt><code>values_fn</code></dt>
 <dd>1つのセルに複数の値が重なってしまう場合の処理関数。例えば平均を取るとか。</dd>
 </dl>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris_long <span class="o">%&gt;%</span>
-  pivot_wider<span class="p">(</span>names_from <span class="o">=</span> namae<span class="p">,</span> values_from <span class="o">=</span> atai<span class="p">)</span> <span class="o">%&gt;%</span>
-  dplyr<span class="o">::</span>select<span class="p">(</span><span class="o">-</span>id<span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris_long</span> <span class="o">%&gt;%</span>
+  <span class="nf">pivot_wider</span><span class="p">(</span><span class="n">names_from</span> <span class="o">=</span> <span class="n">namae</span><span class="p">,</span> <span class="n">values_from</span> <span class="o">=</span> <span class="n">atai</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="o">-</span><span class="n">id</span><span class="p">)</span>
 <span class="c1">#&gt; # tbl_df [150 x 5]</span>
 <span class="c1">#&gt;       Species Sepal.Length Sepal.Width Petal.Length Petal.Width</span>
 <span class="c1">#&gt;         &lt;fct&gt;        &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;</span>
@@ -205,24 +192,23 @@ data.frameを縦長(long-format)から横長(wide-format)に変形する。
 
 <span class="c1"># iris_long %&gt;% spread(namae, atai) %&gt;% dplyr::select(-id)</span>
 
-iris_long <span class="o">%&gt;%</span>
-  pivot_wider<span class="p">(</span>Species<span class="p">,</span> names_from <span class="o">=</span> namae<span class="p">,</span> values_from <span class="o">=</span> atai<span class="p">,</span>
-              values_fn <span class="o">=</span> <span class="kt">list</span><span class="p">(</span>atai <span class="o">=</span> <span class="kp">mean</span><span class="p">))</span>
+<span class="n">iris_long</span> <span class="o">%&gt;%</span>
+  <span class="nf">pivot_wider</span><span class="p">(</span><span class="n">Species</span><span class="p">,</span> <span class="n">names_from</span> <span class="o">=</span> <span class="n">namae</span><span class="p">,</span> <span class="n">values_from</span> <span class="o">=</span> <span class="n">atai</span><span class="p">,</span>
+              <span class="n">values_fn</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">atai</span> <span class="o">=</span> <span class="n">mean</span><span class="p">)</span><span class="p">)</span>
 <span class="c1">#&gt; # tbl_df [3 x 5]</span>
 <span class="c1">#&gt;      Species Sepal.Length Sepal.Width Petal.Length Petal.Width</span>
 <span class="c1">#&gt;        &lt;fct&gt;        &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;</span>
 <span class="c1">#&gt; 1     setosa        5.006       3.428        1.462       0.246</span>
 <span class="c1">#&gt; 2 versicolor        5.936       2.770        4.260       1.326</span>
-<span class="c1">#&gt; 3  virginica        6.588       2.974        5.552       2.026</span></code></pre></div>
-<h2 id="tidyr-pivot-関数のもっと高度なオプション"><code>tidyr::pivot_*</code> 関数のもっと高度なオプション</h2>
-
+<span class="c1">#&gt; 3  virginica        6.588       2.974        5.552       2.026</span>
+</code></pre></div><h2 id="tidyrpivot_-関数のもっと高度なオプション"><code>tidyr::pivot_*</code> 関数のもっと高度なオプション</h2>
 <p><code>names_sep</code> や <code>names_pattern</code> を指定して
 <code>names_to</code>, <code>name_from</code> に複数の値を渡すと
 <code>tidyr::separate()</code> / <code>tidyr::unite()</code> 的な操作も同時にやってしまえる:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris_long <span class="o">=</span> iris <span class="o">%&gt;%</span>
-  tibble<span class="o">::</span>rowid_to_column<span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
-  pivot_longer<span class="p">(</span><span class="kt">c</span><span class="p">(</span><span class="o">-</span>id<span class="p">,</span> <span class="o">-</span>Species<span class="p">),</span> names_to <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#34;part&#34;</span><span class="p">,</span> <span class="s">&#34;axis&#34;</span><span class="p">),</span> names_sep <span class="o">=</span> <span class="s">&#34;\\.&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
-  <span class="kp">print</span><span class="p">()</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris_long</span> <span class="o">=</span> <span class="n">iris</span> <span class="o">%&gt;%</span>
+  <span class="n">tibble</span><span class="o">::</span><span class="nf">rowid_to_column</span><span class="p">(</span><span class="s">&#34;</span><span class="s">id&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">pivot_longer</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="o">-</span><span class="n">id</span><span class="p">,</span> <span class="o">-</span><span class="n">Species</span><span class="p">)</span><span class="p">,</span> <span class="n">names_to</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;</span><span class="s">part&#34;</span><span class="p">,</span> <span class="s">&#34;</span><span class="s">axis&#34;</span><span class="p">)</span><span class="p">,</span> <span class="n">names_sep</span> <span class="o">=</span> <span class="s">&#34;</span><span class="s">\\.&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">print</span><span class="p">(</span><span class="p">)</span>
 <span class="c1">#&gt; # tbl_df [600 x 5]</span>
 <span class="c1">#&gt;        id   Species  part   axis value</span>
 <span class="c1">#&gt;     &lt;int&gt;     &lt;fct&gt; &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt;</span>
@@ -236,9 +222,9 @@ iris_long <span class="o">%&gt;%</span>
 <span class="c1">#&gt; 599   150 virginica Petal Length   5.1</span>
 <span class="c1">#&gt; 600   150 virginica Petal  Width   1.8</span>
 
-iris_long <span class="o">%&gt;%</span>
-  pivot_wider<span class="p">(</span><span class="kt">c</span><span class="p">(</span>id<span class="p">,</span> Species<span class="p">),</span> names_from <span class="o">=</span> <span class="kt">c</span><span class="p">(</span>part<span class="p">,</span> axis<span class="p">),</span> names_sep <span class="o">=</span> <span class="s">&#34;.&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
-  dplyr<span class="o">::</span>select<span class="p">(</span><span class="o">-</span>id<span class="p">)</span>
+<span class="n">iris_long</span> <span class="o">%&gt;%</span>
+  <span class="nf">pivot_wider</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">Species</span><span class="p">)</span><span class="p">,</span> <span class="n">names_from</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="n">part</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span><span class="p">,</span> <span class="n">names_sep</span> <span class="o">=</span> <span class="s">&#34;</span><span class="s">.&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="o">-</span><span class="n">id</span><span class="p">)</span>
 <span class="c1">#&gt; # tbl_df [150 x 5]</span>
 <span class="c1">#&gt;       Species Sepal.Length Sepal.Width Petal.Length Petal.Width</span>
 <span class="c1">#&gt;         &lt;fct&gt;        &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;</span>
@@ -250,7 +236,8 @@ iris_long <span class="o">%&gt;%</span>
 <span class="c1">#&gt; 147 virginica          6.3         2.5          5.0         1.9</span>
 <span class="c1">#&gt; 148 virginica          6.5         3.0          5.2         2.0</span>
 <span class="c1">#&gt; 149 virginica          6.2         3.4          5.4         2.3</span>
-<span class="c1">#&gt; 150 virginica          5.9         3.0          5.1         1.8</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">VADeaths
+<span class="c1">#&gt; 150 virginica          5.9         3.0          5.1         1.8</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">VADeaths</span>
 <span class="c1">#&gt;       Rural Male Rural Female Urban Male Urban Female</span>
 <span class="c1">#&gt; 50-54       11.7          8.7       15.4          8.4</span>
 <span class="c1">#&gt; 55-59       18.1         11.7       24.3         13.6</span>
@@ -258,10 +245,10 @@ iris_long <span class="o">%&gt;%</span>
 <span class="c1">#&gt; 65-69       41.0         30.9       54.6         35.1</span>
 <span class="c1">#&gt; 70-74       66.0         54.3       71.1         50.0</span>
 
-VADeaths <span class="o">%&gt;%</span>
-  <span class="kp">as.data.frame</span><span class="p">()</span> <span class="o">%&gt;%</span>
-  rownames_to_column<span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
-  pivot_longer<span class="p">(</span><span class="o">-</span>age<span class="p">,</span> names_to <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#34;region&#34;</span><span class="p">,</span> <span class="s">&#34;sex&#34;</span><span class="p">),</span> names_sep <span class="o">=</span> <span class="s">&#34; &#34;</span><span class="p">,</span> values_to <span class="o">=</span> <span class="s">&#34;death&#34;</span><span class="p">)</span>
+<span class="n">VADeaths</span> <span class="o">%&gt;%</span>
+  <span class="nf">as.data.frame</span><span class="p">(</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">rownames_to_column</span><span class="p">(</span><span class="s">&#34;</span><span class="s">age&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">pivot_longer</span><span class="p">(</span><span class="o">-</span><span class="n">age</span><span class="p">,</span> <span class="n">names_to</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;</span><span class="s">region&#34;</span><span class="p">,</span> <span class="s">&#34;</span><span class="s">sex&#34;</span><span class="p">)</span><span class="p">,</span> <span class="n">names_sep</span> <span class="o">=</span> <span class="s">&#34;</span><span class="s"> &#34;</span><span class="p">,</span> <span class="n">values_to</span> <span class="o">=</span> <span class="s">&#34;</span><span class="s">death&#34;</span><span class="p">)</span>
 <span class="c1">#&gt; # tbl_df [20 x 4]</span>
 <span class="c1">#&gt;      age region    sex death</span>
 <span class="c1">#&gt;    &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt;</span>
@@ -273,9 +260,9 @@ VADeaths <span class="o">%&gt;%</span>
 <span class="c1">#&gt; 17 70-74  Rural   Male  66.0</span>
 <span class="c1">#&gt; 18 70-74  Rural Female  54.3</span>
 <span class="c1">#&gt; 19 70-74  Urban   Male  71.1</span>
-<span class="c1">#&gt; 20 70-74  Urban Female  50.0</span></code></pre></div>
-<p><code>names_ptypes</code> に指定すると、列名だった変数の移動後の型変換を試みる:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">anscombe
+<span class="c1">#&gt; 20 70-74  Urban Female  50.0</span>
+</code></pre></div><p><code>names_ptypes</code> に指定すると、列名だった変数の移動後の型変換を試みる:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">anscombe</span>
 <span class="c1">#&gt;    x1 x2 x3 x4    y1   y2    y3    y4</span>
 <span class="c1">#&gt; 1  10 10 10  8  8.04 9.14  7.46  6.58</span>
 <span class="c1">#&gt; 2   8  8  8  8  6.95 8.14  6.77  5.76</span>
@@ -289,15 +276,15 @@ VADeaths <span class="o">%&gt;%</span>
 <span class="c1">#&gt; 10  7  7  7  8  4.82 7.26  6.42  7.91</span>
 <span class="c1">#&gt; 11  5  5  5  8  5.68 4.74  5.73  6.89</span>
 
-anscombe <span class="o">%&gt;%</span>
-  tibble<span class="o">::</span>rowid_to_column<span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
-  tidyr<span class="o">::</span>pivot_longer<span class="p">(</span><span class="o">-</span>id<span class="p">,</span>
-    names_to <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#34;axis&#34;</span><span class="p">,</span> <span class="s">&#34;group&#34;</span><span class="p">),</span>
-    names_sep <span class="o">=</span> <span class="m">1L</span><span class="p">,</span>
-    names_ptypes <span class="o">=</span> <span class="kt">list</span><span class="p">(</span>group <span class="o">=</span> <span class="kt">integer</span><span class="p">()))</span> <span class="o">%&gt;%</span>
-  tidyr<span class="o">::</span>pivot_wider<span class="p">(</span><span class="kt">c</span><span class="p">(</span>id<span class="p">,</span> group<span class="p">),</span> names_from <span class="o">=</span> axis<span class="p">)</span> <span class="o">%&gt;%</span>
-  dplyr<span class="o">::</span>select<span class="p">(</span><span class="o">-</span>id<span class="p">)</span> <span class="o">%&gt;%</span>
-  dplyr<span class="o">::</span>arrange<span class="p">(</span>group<span class="p">)</span>
+<span class="n">anscombe</span> <span class="o">%&gt;%</span>
+  <span class="n">tibble</span><span class="o">::</span><span class="nf">rowid_to_column</span><span class="p">(</span><span class="s">&#34;</span><span class="s">id&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="n">tidyr</span><span class="o">::</span><span class="nf">pivot_longer</span><span class="p">(</span><span class="o">-</span><span class="n">id</span><span class="p">,</span>
+    <span class="n">names_to</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;</span><span class="s">axis&#34;</span><span class="p">,</span> <span class="s">&#34;</span><span class="s">group&#34;</span><span class="p">)</span><span class="p">,</span>
+    <span class="n">names_sep</span> <span class="o">=</span> <span class="m">1L</span><span class="p">,</span>
+    <span class="n">names_ptypes</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">group</span> <span class="o">=</span> <span class="nf">integer</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="n">tidyr</span><span class="o">::</span><span class="nf">pivot_wider</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">group</span><span class="p">)</span><span class="p">,</span> <span class="n">names_from</span> <span class="o">=</span> <span class="n">axis</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="o">-</span><span class="n">id</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="n">dplyr</span><span class="o">::</span><span class="nf">arrange</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
 <span class="c1">#&gt; # tbl_df [44 x 3]</span>
 <span class="c1">#&gt;    group     x     y</span>
 <span class="c1">#&gt;    &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
@@ -309,11 +296,11 @@ anscombe <span class="o">%&gt;%</span>
 <span class="c1">#&gt; 41     4    19 12.50</span>
 <span class="c1">#&gt; 42     4     8  5.56</span>
 <span class="c1">#&gt; 43     4     8  7.91</span>
-<span class="c1">#&gt; 44     4     8  6.89</span></code></pre></div>
-<p><code>names_prefix</code> を使えば、列名の頭に共通して付いてた文字を消せる:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">anscombe <span class="o">%&gt;%</span>
-  dplyr<span class="o">::</span>select<span class="p">(</span>starts_with<span class="p">(</span><span class="s">&#34;x&#34;</span><span class="p">))</span> <span class="o">%&gt;%</span>
-  tidyr<span class="o">::</span>pivot_longer<span class="p">(</span>everything<span class="p">(),</span> names_prefix <span class="o">=</span> <span class="s">&#34;x&#34;</span><span class="p">)</span>
+<span class="c1">#&gt; 44     4     8  6.89</span>
+</code></pre></div><p><code>names_prefix</code> を使えば、列名の頭に共通して付いてた文字を消せる:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">anscombe</span> <span class="o">%&gt;%</span>
+  <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="nf">starts_with</span><span class="p">(</span><span class="s">&#34;</span><span class="s">x&#34;</span><span class="p">)</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="n">tidyr</span><span class="o">::</span><span class="nf">pivot_longer</span><span class="p">(</span><span class="nf">everything</span><span class="p">(</span><span class="p">)</span><span class="p">,</span> <span class="n">names_prefix</span> <span class="o">=</span> <span class="s">&#34;</span><span class="s">x&#34;</span><span class="p">)</span>
 <span class="c1">#&gt; # tbl_df [44 x 2]</span>
 <span class="c1">#&gt;     name value</span>
 <span class="c1">#&gt;    &lt;chr&gt; &lt;dbl&gt;</span>
@@ -325,17 +312,17 @@ anscombe <span class="o">%&gt;%</span>
 <span class="c1">#&gt; 41     1     5</span>
 <span class="c1">#&gt; 42     2     5</span>
 <span class="c1">#&gt; 43     3     5</span>
-<span class="c1">#&gt; 44     4     8</span></code></pre></div>
-<p><code>names_to</code> に <code>&quot;.value&quot;</code> という特殊な値を渡すことで、
+<span class="c1">#&gt; 44     4     8</span>
+</code></pre></div><p><code>names_to</code> に <code>&quot;.value&quot;</code> という特殊な値を渡すことで、
 旧列名から新しい列名が作られ、複数列への縦長変形を同時にできる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">tidy_anscombe <span class="o">=</span> anscombe <span class="o">%&gt;%</span>
-  tidyr<span class="o">::</span>pivot_longer<span class="p">(</span>                <span class="c1"># 縦長に変形したい</span>
-    everything<span class="p">(),</span>                     <span class="c1"># すべての列について</span>
-    names_to <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#34;.value&#34;</span><span class="p">,</span> <span class="s">&#34;group&#34;</span><span class="p">),</span>  <span class="c1"># x, yを列名に、1, 2, 3をgroup列に</span>
-    names_sep <span class="o">=</span> <span class="m">1L</span><span class="p">,</span>                   <span class="c1"># 切る位置</span>
-    names_ptypes <span class="o">=</span> <span class="kt">list</span><span class="p">(</span>group <span class="o">=</span> <span class="kt">integer</span><span class="p">()))</span> <span class="o">%&gt;%</span>   <span class="c1"># 型変換</span>
-  dplyr<span class="o">::</span>arrange<span class="p">(</span>group<span class="p">)</span> <span class="o">%&gt;%</span>           <span class="c1"># グループごとに並べる</span>
-  <span class="kp">print</span><span class="p">()</span>                             <span class="c1"># ggplotしたい形！</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">tidy_anscombe</span> <span class="o">=</span> <span class="n">anscombe</span> <span class="o">%&gt;%</span>
+  <span class="n">tidyr</span><span class="o">::</span><span class="nf">pivot_longer</span><span class="p">(</span>                <span class="c1"># 縦長に変形したい</span>
+    <span class="nf">everything</span><span class="p">(</span><span class="p">)</span><span class="p">,</span>                     <span class="c1"># すべての列について</span>
+    <span class="n">names_to</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;</span><span class="s">.value&#34;</span><span class="p">,</span> <span class="s">&#34;</span><span class="s">group&#34;</span><span class="p">)</span><span class="p">,</span>  <span class="c1"># x, yを列名に、1, 2, 3をgroup列に</span>
+    <span class="n">names_sep</span> <span class="o">=</span> <span class="m">1L</span><span class="p">,</span>                   <span class="c1"># 切る位置</span>
+    <span class="n">names_ptypes</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">group</span> <span class="o">=</span> <span class="nf">integer</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="p">)</span> <span class="o">%&gt;%</span>   <span class="c1"># 型変換</span>
+  <span class="n">dplyr</span><span class="o">::</span><span class="nf">arrange</span><span class="p">(</span><span class="n">group</span><span class="p">)</span> <span class="o">%&gt;%</span>           <span class="c1"># グループごとに並べる</span>
+  <span class="nf">print</span><span class="p">(</span><span class="p">)</span>                             <span class="c1"># ggplotしたい形！</span>
 <span class="c1">#&gt; # tbl_df [44 x 3]</span>
 <span class="c1">#&gt;    group     x     y</span>
 <span class="c1">#&gt;    &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
@@ -347,17 +334,14 @@ anscombe <span class="o">%&gt;%</span>
 <span class="c1">#&gt; 41     4    19 12.50</span>
 <span class="c1">#&gt; 42     4     8  5.56</span>
 <span class="c1">#&gt; 43     4     8  7.91</span>
-<span class="c1">#&gt; 44     4     8  6.89</span></code></pre></div>
-<p>See <a href="https://speakerdeck.com/yutannihilation/tidyr-pivot?slide=67">https://speakerdeck.com/yutannihilation/tidyr-pivot?slide=67</a> for details.</p>
-
-<h2 id="nested-data-frame-入れ子構造">Nested data.frame &mdash; 入れ子構造</h2>
-
-<h3 id="tidyr-nest-data-key-data"><code>tidyr::nest(data, ..., .key = data)</code></h3>
-
+<span class="c1">#&gt; 44     4     8  6.89</span>
+</code></pre></div><p>See <a href="https://speakerdeck.com/yutannihilation/tidyr-pivot?slide=67">https://speakerdeck.com/yutannihilation/tidyr-pivot?slide=67</a> for details.</p>
+<h2 id="nested-dataframe-----入れ子構造">Nested data.frame &mdash; 入れ子構造</h2>
+<h3 id="tidyrnestdata--key--data"><code>tidyr::nest(data, ..., .key = data)</code></h3>
 <p>data.frameをネストして(入れ子にして)、list of data.frames のカラムを作る。
 内側のdata.frameに押し込むカラムを <code>...</code> に指定するか、
 外側に残すカラムをマイナス指定する。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">iris <span class="o">%&gt;%</span> nest<span class="p">(</span>NEW_COLUMN <span class="o">=</span> <span class="o">-</span>Species<span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="nf">nest</span><span class="p">(</span><span class="n">NEW_COLUMN</span> <span class="o">=</span> <span class="o">-</span><span class="n">Species</span><span class="p">)</span>
 <span class="c1">#&gt; # tbl_df [3 x 2]</span>
 <span class="c1">#&gt;      Species        NEW_COLUMN</span>
 <span class="c1">#&gt;        &lt;fct&gt;   &lt;vctrs_list_of&gt;</span>
@@ -366,32 +350,23 @@ anscombe <span class="o">%&gt;%</span>
 <span class="c1">#&gt; 3  virginica &lt;tbl_df [50 x 4]&gt;</span>
 
 <span class="c1"># equivalent to</span>
-iris <span class="o">%&gt;%</span> dplyr<span class="o">::</span>group_nest<span class="p">(</span>Species<span class="p">,</span> <span class="m">.</span>key <span class="o">=</span> <span class="s">&#34;NEW_COLUMN&#34;</span><span class="p">)</span>
-iris <span class="o">%&gt;%</span> nest<span class="p">(</span>NEW_COLUMN <span class="o">=</span> matches<span class="p">(</span><span class="s">&#34;Length$|Width$&#34;</span><span class="p">))</span></code></pre></div>
-<p>なんでもかんでもフラットなdata.frameにして
+<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_nest</span><span class="p">(</span><span class="n">Species</span><span class="p">,</span> <span class="n">.key</span> <span class="o">=</span> <span class="s">&#34;</span><span class="s">NEW_COLUMN&#34;</span><span class="p">)</span>
+<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="nf">nest</span><span class="p">(</span><span class="n">NEW_COLUMN</span> <span class="o">=</span> <span class="nf">matches</span><span class="p">(</span><span class="s">&#34;</span><span class="s">Length$|Width$&#34;</span><span class="p">)</span><span class="p">)</span>
+</code></pre></div><p>なんでもかんでもフラットなdata.frameにして
 <a href="/rstats/dplyr.html">dplyr</a>を駆使する時代は終わり、
 ネストしておいて<a href="/rstats/purrr.html">purrr</a>を適用するのが
 tidyverse時代のクールなやり方らしい。</p>
-
 <p>cf. <a href="https://www.youtube.com/watch?v=rz3_FDVt9eg">Hadley Wickham: Managing many models with R (YouTube)</a></p>
-
-<h3 id="tidyr-unnest-data-drop-na-id-null-sep-null-preserve-null"><code>tidyr::unnest(data, ..., .drop = NA, id = NULL, .sep = NULL, .preserve = NULL)</code></h3>
-
+<h3 id="tidyrunnestdata--drop--na-id--null-sep--null-preserve--null"><code>tidyr::unnest(data, ..., .drop = NA, id = NULL, .sep = NULL, .preserve = NULL)</code></h3>
 <p>ネストされたdata.frameを展開してフラットにする。
 list of data.framesだけでなく、list of vectorsとかでもよい。</p>
-
 <p>ネストされた列が複数ある場合は
 <code>.preserve</code> オプションを使って1列ずつ開いていける。</p>
-
 <h2 id="その他の便利関数">その他の便利関数</h2>
-
-<h3 id="tidyr-separate"><code>tidyr::separate()</code></h3>
-
+<h3 id="tidyrseparate"><code>tidyr::separate()</code></h3>
 <p>文字列カラムを任意のセパレータで複数カラムに分割。
 <code>reshape2::colsplit()</code> に相当。</p>
-
 <p><code>tidyr::separate(data, col, into, sep = &quot;[^[:alnum:]]&quot;, remove = TRUE, convert = FALSE, extra = &quot;warn&quot;, fill = &quot;warn&quot;, ...)</code></p>
-
 <dl>
 <dt><code>col</code></dt>
 <dd>切り分けたい列の名前</dd>
@@ -410,7 +385,7 @@ list of data.framesだけでなく、list of vectorsとかでもよい。</p>
 <dd>足りない場合にどっち側をNAで埋めるか: <code>warn</code>, <code>right</code>, <code>left</code>。
 つまり、文字を左詰めにするには<code>right</code>が正解(紛らわしい)。</dd>
 </dl>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">va_deaths <span class="o">=</span> VADeaths <span class="o">%&gt;%</span> <span class="kp">as.data.frame</span><span class="p">()</span> <span class="o">%&gt;%</span> tibble<span class="o">::</span>rownames_to_column<span class="p">(</span><span class="s">&#34;class&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="kp">print</span><span class="p">()</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">va_deaths</span> <span class="o">=</span> <span class="n">VADeaths</span> <span class="o">%&gt;%</span> <span class="nf">as.data.frame</span><span class="p">(</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="n">tibble</span><span class="o">::</span><span class="nf">rownames_to_column</span><span class="p">(</span><span class="s">&#34;</span><span class="s">class&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="nf">print</span><span class="p">(</span><span class="p">)</span>
 <span class="c1">#&gt;   class Rural Male Rural Female Urban Male Urban Female</span>
 <span class="c1">#&gt; 1 50-54       11.7          8.7       15.4          8.4</span>
 <span class="c1">#&gt; 2 55-59       18.1         11.7       24.3         13.6</span>
@@ -418,67 +393,50 @@ list of data.framesだけでなく、list of vectorsとかでもよい。</p>
 <span class="c1">#&gt; 4 65-69       41.0         30.9       54.6         35.1</span>
 <span class="c1">#&gt; 5 70-74       66.0         54.3       71.1         50.0</span>
 
-va_deaths <span class="o">%&gt;%</span>
-  tidyr<span class="o">::</span>separate<span class="p">(</span><span class="kp">class</span><span class="p">,</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#34;lbound&#34;</span><span class="p">,</span> <span class="s">&#34;ubound&#34;</span><span class="p">),</span> <span class="s">&#34;-&#34;</span><span class="p">,</span> convert <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
+<span class="n">va_deaths</span> <span class="o">%&gt;%</span>
+  <span class="n">tidyr</span><span class="o">::</span><span class="nf">separate</span><span class="p">(</span><span class="n">class</span><span class="p">,</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;</span><span class="s">lbound&#34;</span><span class="p">,</span> <span class="s">&#34;</span><span class="s">ubound&#34;</span><span class="p">)</span><span class="p">,</span> <span class="s">&#34;</span><span class="s">-&#34;</span><span class="p">,</span> <span class="n">convert</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
 <span class="c1">#&gt;   lbound ubound Rural Male Rural Female Urban Male Urban Female</span>
 <span class="c1">#&gt; 1     50     54       11.7          8.7       15.4          8.4</span>
 <span class="c1">#&gt; 2     55     59       18.1         11.7       24.3         13.6</span>
 <span class="c1">#&gt; 3     60     64       26.9         20.3       37.0         19.3</span>
 <span class="c1">#&gt; 4     65     69       41.0         30.9       54.6         35.1</span>
-<span class="c1">#&gt; 5     70     74       66.0         54.3       71.1         50.0</span></code></pre></div>
-<p>逆をやるのが <code>tidyr::unite(data, col, ..., sep = &quot;_&quot;, remove = TRUE)</code> 。</p>
-
+<span class="c1">#&gt; 5     70     74       66.0         54.3       71.1         50.0</span>
+</code></pre></div><p>逆をやるのが <code>tidyr::unite(data, col, ..., sep = &quot;_&quot;, remove = TRUE)</code> 。</p>
 <p>行方向に分割する <code>tidyr::separate_rows(data, ..., sep, convert)</code> もある。</p>
-
 <p><code>tidyr::extract(data, col, into, regex, ...)</code>
 を使えば正規表現でもっと細かく指定できる。</p>
-
 <p>名前の似てる <code>tidyr::extract_numeric(x)</code> は
 文字列から数字部分をnumericとして抜き出す関数だったが今はdeprecatedなので、
 新しい<a href="/rstats/readr.html"><code>readr::parse_number()</code></a>を使うべし。</p>
-
-<h3 id="tidyr-complete-data-fill-list"><code>tidyr::complete(data, ..., fill = list())</code></h3>
-
+<h3 id="tidyrcompletedata--fill--list"><code>tidyr::complete(data, ..., fill = list())</code></h3>
 <p>指定した列の全ての組み合わせが登場するように、
 指定しなかった列に欠損値<code>NA</code>(あるいは任意の値)を補完した行を挿入する。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">df <span class="o">%&gt;%</span> complete<span class="p">(</span>key1<span class="p">,</span> key2<span class="p">,</span> fill <span class="o">=</span> <span class="kt">list</span><span class="p">(</span>val1 <span class="o">=</span> <span class="m">0</span><span class="p">,</span> val2 <span class="o">=</span> <span class="s">&#34;-&#34;</span><span class="p">))</span></code></pre></div>
-<h3 id="tidyr-expand-data"><code>tidyr::expand(data, ...)</code></h3>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">df</span> <span class="o">%&gt;%</span> <span class="nf">complete</span><span class="p">(</span><span class="n">key1</span><span class="p">,</span> <span class="n">key2</span><span class="p">,</span> <span class="n">fill</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">val1</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">val2</span> <span class="o">=</span> <span class="s">&#34;</span><span class="s">-&#34;</span><span class="p">)</span><span class="p">)</span>
+</code></pre></div><h3 id="tidyrexpanddata-"><code>tidyr::expand(data, ...)</code></h3>
 <p>指定した列の全ての組み合わせが登場するような新しいdata.frameを作る。
 全ての列を指定すれば<code>complete()</code>と同じ効果だが、
 指定しなかった列が消えるという点では異なる。</p>
-
 <p><code>crossing(...)</code>はvectorを引数に取る亜種で、
 tibble版<code>expand.grid(...)</code>のようなもの。</p>
-
 <p><code>nesting(...)</code>は存在するユニークな組み合わせのみ残す、
 <code>nest(data, ...) %&gt;% dplyr::select(-data)</code>のショートカット。
 この結果は<code>expand()</code>や<code>complete()</code>の引数としても使える。</p>
-
 <p>数値vectorの補完には<code>full_seq(x, period, tol = 1e-6)</code>が便利。</p>
-
-<h3 id="tidyr-drop-na-data"><code>tidyr::drop_na(data, ...)</code></h3>
-
+<h3 id="tidyrdrop_nadata-"><code>tidyr::drop_na(data, ...)</code></h3>
 <p><code>complete()</code>の逆。
 指定した列に<code>NA</code>が含まれてる行を削除する。
 何も指定しなければ標準の <code>data[complete.cases(data),]</code> と同じ。</p>
-
-<h3 id="tidyr-replace-na"><code>tidyr::replace_na()</code></h3>
-
+<h3 id="tidyrreplace_na"><code>tidyr::replace_na()</code></h3>
 <p>欠損値 <code>NA</code> を好きな値で置き換える。
 これまでは <code>mutate(x = ifelse(is.na(x), 0, x))</code> のようにしてたところを</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">df <span class="o">%&gt;%</span> replace_na<span class="p">(</span><span class="kt">list</span><span class="p">(</span>x <span class="o">=</span> <span class="m">0</span><span class="p">,</span> y <span class="o">=</span> <span class="s">&#34;unknown&#34;</span><span class="p">))</span></code></pre></div>
-<p>逆に、特定の値を<code>NA</code>にしたい場合は
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">df</span> <span class="o">%&gt;%</span> <span class="nf">replace_na</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="s">&#34;</span><span class="s">unknown&#34;</span><span class="p">)</span><span class="p">)</span>
+</code></pre></div><p>逆に、特定の値を<code>NA</code>にしたい場合は
 <a href="/rstats/dplyr.html"><code>dplyr::na_if()</code></a></p>
-
-<h3 id="tidyr-fill"><code>tidyr::fill()</code></h3>
-
+<h3 id="tidyrfill"><code>tidyr::fill()</code></h3>
 <p><code>NA</code> を、その列の直前の <code>NA</code> でない値で埋める。
 えくせるでセルの結合とかやってしまって、
 最初のセルにしか値が無いような場合に使うのかな？</p>
-
 <h2 id="関連書籍">関連書籍</h2>
-
 <p><a href="https://www.amazon.co.jp/dp/4774198536/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=f0acaf09c5bcbd85ee22c534caede9d1" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4774198536&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4774198536" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 <a href="https://www.amazon.co.jp/Data-Science-Transform-Visualize-Model/dp/1491910399/ref=as_li_ss_il?s=books&ie=UTF8&qid=1508340700&sr=1-3&linkCode=li3&tag=heavywatal-22&linkId=6a53371cc80e2d6d7fc50fae5d8b862d" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1491910399&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=1491910399" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 <a href="https://www.amazon.co.jp/R%E3%81%A7%E3%81%AF%E3%81%98%E3%82%81%E3%82%8B%E3%83%87%E3%83%BC%E3%82%BF%E3%82%B5%E3%82%A4%E3%82%A8%E3%83%B3%E3%82%B9-Hadley-Wickham/dp/487311814X/ref=as_li_ss_il?ie=UTF8&qid=1508340144&sr=8-1&keywords=r&linkCode=li3&tag=heavywatal-22&linkId=4137d3d3351f8ccab5a93cefdc28fdec" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=487311814X&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=487311814X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
@@ -513,8 +471,8 @@ tibble版<code>expand.grid(...)</code>のようなもの。</p>
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -526,11 +484,11 @@ tibble版<code>expand.grid(...)</code>のようなもの。</p>
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -549,6 +507,7 @@ tibble版<code>expand.grid(...)</code>のようなもの。</p>
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -556,7 +515,6 @@ tibble版<code>expand.grid(...)</code>のようなもの。</p>
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -568,20 +526,20 @@ tibble版<code>expand.grid(...)</code>のようなもの。</p>
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

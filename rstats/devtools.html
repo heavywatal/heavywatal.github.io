@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -92,63 +92,61 @@ devtools — Rパッケージ作成支援
 </ul></nav>
 </header>
 
-
-
 <p>自分で書いた関数が多くなってきたら、まとめてパッケージを作るとよい。
 少しだけ面倒だが、以下のようなメリットがある。</p>
-
 <ul>
 <li>普通に変数や関数を定義するとワークスペースが名前でいっぱいになってしまうが、
 パッケージ内で定義されている変数や関数は <code>ls()</code> で出てこないのでスッキリ</li>
 <li>既存のオブジェクトと名前が衝突するような場合でも、
 <code>mypackage::func1</code> のように名前空間を明示的に指定して呼び出せる</li>
 </ul>
-
 <p>CRANに上げる程ではないとしても、
 GitHubに公開しておけば誰でも使えるようになるので、
 共同研究者と解析環境を共有したり、
 ひとつの論文のワークフローを置いておいたり、いろいろ使い道はある。</p>
-
 <h2 id="rパッケージ">Rパッケージ</h2>
-
 <ul>
 <li><a href="https://r-pkgs.org/">https://r-pkgs.org/</a></li>
 <li><a href="http://r-pkgs.had.co.nz/">http://r-pkgs.had.co.nz/</a></li>
 <li><a href="http://www.masalmon.eu/2017/12/11/goodrpackages/">How to develop good R packages (for open science)</a></li>
 </ul>
-
 <h3 id="最低限の作成手順">最低限の作成手順</h3>
-
 <ol>
-<li><p>開発支援パッケージをインストールする:
-<code>install.packages(c(&quot;devtools&quot;, &quot;usethis&quot;))</code></p></li>
-
-<li><p><a href="http://usethis.r-lib.org/">usethis</a> の関数をいくつか使って骨組みを作る:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">usethis<span class="o">::</span>create_package<span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">)</span>
-usethis<span class="o">::</span>use_mit_license<span class="p">()</span>
-usethis<span class="o">::</span>use_roxygen_md<span class="p">()</span>
-usethis<span class="o">::</span>use_package_doc<span class="p">()</span></code></pre></div></li>
-
-<li><p><code>devtools::check()</code> で様子を見てみる。
+<li>
+<p>開発支援パッケージをインストールする:
+<code>install.packages(c(&quot;devtools&quot;, &quot;usethis&quot;))</code></p>
+</li>
+<li>
+<p><a href="http://usethis.r-lib.org/">usethis</a> の関数をいくつか使って骨組みを作る:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">usethis</span><span class="o">::</span><span class="nf">create_package</span><span class="p">(</span><span class="s">&#34;</span><span class="s">hello&#34;</span><span class="p">)</span>
+<span class="n">usethis</span><span class="o">::</span><span class="nf">use_mit_license</span><span class="p">(</span><span class="p">)</span>
+<span class="n">usethis</span><span class="o">::</span><span class="nf">use_roxygen_md</span><span class="p">(</span><span class="p">)</span>
+<span class="n">usethis</span><span class="o">::</span><span class="nf">use_package_doc</span><span class="p">(</span><span class="p">)</span>
+</code></pre></div></li>
+<li>
+<p><code>devtools::check()</code> で様子を見てみる。
 LaTeX 関連で怒られたら足りないパッケージを入れる:
-<code>sudo tlmgr install inconsolata helvetic</code></p></li>
-
-<li><p>ローカルgitリポジトリを作って最初のコミットをする:
-<code>usethis::use_git()</code></p></li>
-
-<li><p>GitHubかどこかに空のリポジトリを作る。
-パッケージと同名でなくてもよい。</p></li>
-
-<li><p>そのリモートリポジトリにプッシュ:</p>
+<code>sudo tlmgr install inconsolata helvetic</code></p>
+</li>
+<li>
+<p>ローカルgitリポジトリを作って最初のコミットをする:
+<code>usethis::use_git()</code></p>
+</li>
+<li>
+<p>GitHubかどこかに空のリポジトリを作る。
+パッケージと同名でなくてもよい。</p>
+</li>
+<li>
+<p>そのリモートリポジトリにプッシュ:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git remote add origin https::/github.com/heavywatal/rhello.git
-git push -u origin master</code></pre></div></li>
-
-<li><p>とりあえず誰でもインストール可能なパッケージができたはず:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">remotes<span class="o">::</span>install_github<span class="p">(</span><span class="s">&#34;heavywatal/rhello&#34;</span><span class="p">)</span></code></pre></div></li>
+git push -u origin master
+</code></pre></div></li>
+<li>
+<p>とりあえず誰でもインストール可能なパッケージができたはず:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&#34;</span><span class="s">heavywatal/rhello&#34;</span><span class="p">)</span>
+</code></pre></div></li>
 </ol>
-
 <h3 id="ソース構造">ソース構造</h3>
-
 <p><a href="https://r-pkgs.org/package-structure-state.html">https://r-pkgs.org/package-structure-state.html</a></p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">DESCRIPTION  <span class="c1"># 一番大事</span>
 NAMESPACE    <span class="c1"># 見せるオブジェクトを列挙</span>
@@ -159,11 +157,9 @@ inst/        <span class="c1"># CITATION</span>
 man/         <span class="c1"># ヘルプファイル.Rd</span>
 src/         <span class="c1"># C++ソースコード</span>
 tests/
-vignettes/</code></pre></div>
-<p>CRANから落としてくる <code>.tar.gz</code> ソースコード (bundle package) とは違う。</p>
-
-<h3 id="description-https-r-pkgs-org-description-html"><a href="https://r-pkgs.org/description.html"><code>DESCRIPTION</code></a></h3>
-
+vignettes/
+</code></pre></div><p>CRANから落としてくる <code>.tar.gz</code> ソースコード (bundle package) とは違う。</p>
+<h3 id="descriptionhttpsr-pkgsorgdescriptionhtml"><a href="https://r-pkgs.org/description.html"><code>DESCRIPTION</code></a></h3>
 <ul>
 <li>どうでも良さそうなファイル名とは裏腹に、ちゃんと書かないと動かない。</li>
 <li>始めはusethisとかに生成してもらい、他のパッケージを参考にしつつ修正していく。</li>
@@ -174,9 +170,7 @@ vignettes/</code></pre></div>
 <li>ライセンスを別ファイルにする場合は <code>License: file LICENSE</code> と書く</li>
 <li><code>Authors@R</code> のとこは後でRで評価されるので変な形。</li>
 </ul>
-
-<h3 id="namespace-https-r-pkgs-org-namespace-html"><a href="https://r-pkgs.org/namespace.html"><code>NAMESPACE</code></a></h3>
-
+<h3 id="namespacehttpsr-pkgsorgnamespacehtml"><a href="https://r-pkgs.org/namespace.html"><code>NAMESPACE</code></a></h3>
 <ul>
 <li><a href="#roxygen2">後述のroxygen2</a>がソースコードから自動生成するので<strong>直接触らない</strong>。</li>
 <li>ここで <code>export()</code> された関数だけがユーザーから見える。</li>
@@ -184,9 +178,7 @@ vignettes/</code></pre></div>
 された関数はattachされてパッケージ内で利用可能になる。
 <code>import(package)</code> で全ての関数をまとめて処理できるけど名前の衝突が怖い。</li>
 </ul>
-
-<h3 id="r-ソースコード-https-r-pkgs-org-r-html"><a href="https://r-pkgs.org/r.html"><code>R/</code> ソースコード</a></h3>
-
+<h3 id="r-ソースコードhttpsr-pkgsorgrhtml"><a href="https://r-pkgs.org/r.html"><code>R/</code> ソースコード</a></h3>
 <ul>
 <li><code>NAMESPACE</code> や <code>man/*.Rd</code> を自動生成してもらえるように
 <a href="#roxygen2">後述のroxygen</a>形式でコメントを書く</li>
@@ -201,92 +193,69 @@ vignettes/</code></pre></div>
 <code>.onLoad(...)</code>, <code>.onAttach(...)</code>, <code>.onUnload(...)</code>
 は慣習的に<code>zzz.R</code>というファイルに記述する。</li>
 </ul>
-
-<h3 id="src-c-ソースコード-https-r-pkgs-org-src-html"><a href="https://r-pkgs.org/src.html"><code>src/</code> C++ソースコード</a></h3>
-
-<p><a href="/rstats/rcpp.html#Rパッケージで使う">Rcppページの&rdquo;Rパッケージで使う&rdquo;セクション</a>を参照</p>
-
-<h3 id="vignettes-https-r-pkgs-org-vignettes-html"><a href="https://r-pkgs.org/vignettes.html"><code>vignettes/</code></a></h3>
-
+<h3 id="src-cソースコードhttpsr-pkgsorgsrchtml"><a href="https://r-pkgs.org/src.html"><code>src/</code> C++ソースコード</a></h3>
+<p><a href="/rstats/rcpp.html#Rパッケージで使う">Rcppページの&quot;Rパッケージで使う&quot;セクション</a>を参照</p>
+<h3 id="vignetteshttpsr-pkgsorgvignetteshtml"><a href="https://r-pkgs.org/vignettes.html"><code>vignettes/</code></a></h3>
 <p>個々の関数の使用例はRソースファイルの <code>@examples</code> に書くとして、
 複数の関数を組み合わせてどう使うかとか、
 パッケージ全体の使い方とかを説明するのが<code>vignettes/</code>の役割。
 Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。</p>
-
 <p><code>usethis::use_vignette(&quot;hello&quot;)</code> で雛形を作ってもらうのが楽。</p>
-
 <p><code>pandoc</code> と <code>pandoc-citeproc</code> が必要なので
 <a href="/mac/homebrew.html">Homebrew</a> とかでインストールしておく。</p>
-
 <p><code>check()</code>がデフォルトで<code>vignette=TRUE</code>かつ処理がやや重いので、
 毎回その重さを受け入れるか、わざわざ<code>FALSE</code>指定するかというのは悩みどころ。</p>
-
 <p><a href="https://pkgdown.r-lib.org">pkgdown</a>でウェブサイトを構築すると、
 ここに置いてあるvignettesはArticlesという位置づけになる。</p>
-
-<h3 id="inst-https-r-pkgs-org-inst-html"><a href="https://r-pkgs.org/inst.html"><code>inst/</code></a></h3>
-
+<h3 id="insthttpsr-pkgsorginsthtml"><a href="https://r-pkgs.org/inst.html"><code>inst/</code></a></h3>
 <p>ここに入ってるものはインストール先でトップディレクトリに移される謎仕様。</p>
-
 <p>論文で引用されることを想定している場合は <code>inst/CITATION</code> を作る。
 <code>citation(&quot;ggplot2&quot;)</code> のように参照できるようになる。</p>
-
-<h3 id="tests-https-r-pkgs-org-tests-html"><a href="https://r-pkgs.org/tests.html"><code>tests/</code></a></h3>
-
-<p><a href="https://testthat.r-lib.org/">
+<h3 id="testshttpsr-pkgsorgtestshtml"><a href="https://r-pkgs.org/tests.html"><code>tests/</code></a></h3>
+<a href="https://testthat.r-lib.org/">
 <img src="http://hexb.in/vector/testthat.svg" align="right" width="120" height="139">
-</a></p>
-
+</a>
 <p><a href="http://testthat.r-lib.org">testthat</a>パッケージを使うのがデファクトスタンダード。
 <code>use_testthat()</code> で初期設定して
 <code>use_test(&quot;somefunction&quot;)</code> のようにテストファイルを追加する。
 <code>tests/testthat/</code> 以下のファイル構成は <code>R/</code> と同じにしておくといい。</p>
-
 <p>さらに<a href="https://covr.r-lib.org/">covr</a>パッケージを使って、
 ソースコードのうちどれくらいがテストでカバーされてるかを可視化すると良い。</p>
-
-<h3 id="その他-http-r-pkgs-org-misc-html"><a href="http://r-pkgs.org/misc.html">その他</a></h3>
-
+<h3 id="その他httpr-pkgsorgmischtml"><a href="http://r-pkgs.org/misc.html">その他</a></h3>
 <dl>
 <dt><code>demo/</code></dt>
-<dd><p>vignettesに取って代わられた古い機能。
+<dd>vignettesに取って代わられた古い機能。
 ソースコード<code>*.R</code>を置いておくと<code>demo()</code>関数で呼び出せるというだけ。
-:<code>check()</code>でソースコードの中身は実行されないが、
+:<code>  check()</code>でソースコードの中身は実行されないが、
 <code>demo/00Index</code> というファイルとの整合性が取れてないと警告される。
 「デモの名前 + スペース3つ以上かタブ + 適当な説明」という形式。
-ファイル名から拡張子を取り除いたものがデモの名前になる。</p>
-
+ファイル名から拡張子を取り除いたものがデモの名前になる。
 <pre><code>mydemo1    Description of demo 1
 mydemo2    Description of demo 2
 </code></pre></dd>
 <dt><code>exec/</code></dt>
-<dd><p>実行可能スクリプトの置き場所。
+<dd>実行可能スクリプトの置き場所。
 インストール先はそのままパッケージ内の <code>exec/</code>
 (つまり最初からパスが通ってるような場所ではない)。
 パーミッションはインストール時に設定してもらえるのでソースツリーでは <code>644</code> でOK。
 <code>Rscript</code> をshebangで指定することも可能。
 例えばRStudioを使いこなせないターミナル勢としては
 <a href="https://github.com/heavywatal/rwtl/blob/master/exec/knit.R"><code>knitr::knit()</code> するだけのコマンド</a>
-とか作っておくと便利。</p></dd>
+とか作っておくと便利。</dd>
 <dt><code>tools/</code></dt>
-<dd><p>たぶん何を入れても一切チェックされずインストールもされない自由なディレクトリ。
-<code>tests/</code> や <code>vignettes/</code> に入れる前のガラクタコードを一時的に置いとくとか。</p></dd>
+<dd>たぶん何を入れても一切チェックされずインストールもされない自由なディレクトリ。
+<code>tests/</code> や <code>vignettes/</code> に入れる前のガラクタコードを一時的に置いとくとか。</dd>
 <dt><code>.Rbuildignore</code></dt>
-<dd><p>Rパッケージらしからぬ変なファイルやディレクトリがあると怒られるので、
-そういうやつをこのファイルに列挙して無視してもらう。</p></dd>
+<dd>Rパッケージらしからぬ変なファイルやディレクトリがあると怒られるので、
+そういうやつをこのファイルに列挙して無視してもらう。</dd>
 </dl>
-
 <h2 id="devtools"><code>devtools</code></h2>
-
-<p><a href="https://devtools.r-lib.org/">
+<a href="https://devtools.r-lib.org/">
 <img src="http://hexb.in/vector/devtools.svg" align="right" width="120" height="139">
-</a></p>
-
+</a>
 <p>骨組みを作るとこからCRANにデプロイするとこまでお世話してくれる。
 いろんな専門パッケージの集合体。</p>
-
 <h3 id="主な関数">主な関数</h3>
-
 <dl>
 <dt><code>document(pkg = &quot;.&quot;, roclets = NULL, quiet = FALSE)</code></dt>
 <dd><code>roxygen2</code> を呼び出してソースコードから
@@ -316,15 +285,11 @@ Rcppコードをコンパイルするという意味ではない。</dd>
 <dd><code>src/</code> 以下に生成される <code>.o</code>, <code>.so</code> を消す。
 普段は触る必要ないが、たまにこれが必要な不具合に出くわす。</dd>
 </dl>
-
 <h2 id="roxygen2"><code>roxygen2</code></h2>
-
-<p><a href="https://github.com/klutometis/roxygen">
+<a href="https://github.com/klutometis/roxygen">
 <img src="http://hexb.in/vector/roxygen2.svg" align="right" width="120" height="139">
-</a></p>
-
+</a>
 <p>Rソースコードのコメントから<code>NAMESPACE</code>とヘルプ(<code>man/*.Rd</code>)を自動生成する。</p>
-
 <ul>
 <li><a href="https://cran.r-project.org/web/packages/roxygen2/">https://cran.r-project.org/web/packages/roxygen2/</a></li>
 <li><a href="https://github.com/klutometis/roxygen">https://github.com/klutometis/roxygen</a></li>
@@ -332,11 +297,9 @@ Rcppコードをコンパイルするという意味ではない。</dd>
 <li><a href="http://kbroman.org/pkg_primer/pages/docs.html">http://kbroman.org/pkg_primer/pages/docs.html</a></li>
 <li><a href="https://cran.r-project.org/web/packages/roxygen2/vignettes/rd.html">https://cran.r-project.org/web/packages/roxygen2/vignettes/rd.html</a></li>
 </ul>
-
 <p><code>roxygen2::roxygenise(package.dir=&quot;.&quot;, ..., clean=FALSE)</code>
 を直接呼んでもよいが、
 基本的には <code>devtools::document()</code> を使って間接的に利用する。</p>
-
 <h3 id="使い方">使い方</h3>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#&#39; Title of the simple function to add 1</span>
 <span class="c1">#&#39;</span>
@@ -346,22 +309,32 @@ Rcppコードをコンパイルするという意味ではない。</dd>
 <span class="c1">#&#39; @export</span>
 <span class="c1">#&#39; @examples</span>
 <span class="c1">#&#39; increment(42)</span>
-increment <span class="o">=</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> <span class="p">{</span>x <span class="o">+</span> <span class="m">1</span><span class="p">}</span></code></pre></div>
-<ul>
-<li><code>#'</code> から始まる行がroxygenコメントとして扱われる。</li>
-<li>タグは <code>@</code> で始まる。
-<code>@</code> そのものを入力したいときは重ねて <code>@@</code> とする。</li>
-<li>1行目にタイトル。1行あけて2段落目に説明文を書く。
+<span class="n">increment</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span><span class="n">x</span> <span class="o">+</span> <span class="m">1</span><span class="p">}</span>
+</code></pre></div><ul>
+<li>
+<p><code>#' </code> から始まる行がroxygenコメントとして扱われる。</p>
+</li>
+<li>
+<p>タグは <code>@</code> で始まる。
+<code>@</code> そのものを入力したいときは重ねて <code>@@</code> とする。</p>
+</li>
+<li>
+<p>1行目にタイトル。1行あけて2段落目に説明文を書く。
 明示的に <code>@title</code>, <code>@description</code> タグを使うことも可能だが非推奨らしい。
 タイトルをコピペして全部同じにすると怒られる。
-2段落目を省略するとタイトルが流用される。</li>
-<li>空行だけでは切れ目として扱われないので <code>NULL</code> などを置いたりする。</li>
-<li><a href="https://cran.r-project.org/web/packages/roxygen2/vignettes/markdown.html">Rd形式の代わりにMarkdown形式で記述できる</a>。
+2段落目を省略するとタイトルが流用される。</p>
+</li>
+<li>
+<p>空行だけでは切れ目として扱われないので <code>NULL</code> などを置いたりする。</p>
+</li>
+<li>
+<p><a href="https://cran.r-project.org/web/packages/roxygen2/vignettes/markdown.html">Rd形式の代わりにMarkdown形式で記述できる</a>。
 <code>usethis::use_roxygen_md()</code> を実行して
 <code>DESCRIPTION</code> に <code>Roxygen: list(markdown = TRUE)</code> を書き加える全体設定か、
-使いたいブロックにいちいち <code>@md</code> を書く個別設定か。</li>
-
-<li><p><code>&quot;_PACKAGE&quot;</code> という文字列の上に書かれたブロックは、
+使いたいブロックにいちいち <code>@md</code> を書く個別設定か。</p>
+</li>
+<li>
+<p><code>&quot;_PACKAGE&quot;</code> という文字列の上に書かれたブロックは、
 パッケージそのものに対応するヘルプ <code>*-package.Rd</code> になる。
 <code>@useDynLib</code> など全体に関わる設定はここでやるのが良いのでは。</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#&#39; Example package to say hello</span>
@@ -371,9 +344,10 @@ increment <span class="o">=</span> <span class="kr">function</span><span class="
 <span class="c1">#&#39; @importFrom magrittr %&gt;%</span>
 <span class="c1">#&#39; @importFrom rlang .data</span>
 <span class="c1">#&#39; @keywords internal</span>
-<span class="s">&#34;_PACKAGE&#34;</span></code></pre></div></li>
-
-<li><p>dplyrなどで列名を直に指定すると
+<span class="s">&#34;</span><span class="s">_PACKAGE&#34;</span>
+</code></pre></div></li>
+<li>
+<p>dplyrなどで列名を直に指定すると
 <code>undefined global variables</code>
 という警告が出るので
 <code>dplyr::filter(iris, .data$Species == &quot;setosa&quot;)</code>
@@ -381,14 +355,12 @@ increment <span class="o">=</span> <span class="kr">function</span><span class="
 そのためにどこかに <code>#' @importFrom rlang .data</code> を書いておく。
 ただし <code>$</code> によるアクセスがやや遅いので、
 <code>group_by()</code> などで多数のグループを処理するときなど気になる場合は
-<code>!!as.name(&quot;carat&quot;)</code> のようにする。</p></li>
+<code>!!as.name(&quot;carat&quot;)</code> のようにする。</p>
+</li>
 </ul>
-
 <h3 id="タグ">タグ</h3>
-
 <p>使用可能なタグ一覧は <code>names(roxygen2:::default_tags())</code> で取得可能。
 <a href="https://github.com/klutometis/roxygen/issues/792">解説は準備中らしい</a>。</p>
-
 <dl>
 <dt><code>@import pkg1, pkg2, ...</code></dt>
 <dd><code>NAMESPACE</code> で <code>import()</code> するパッケージを指定。
@@ -412,7 +384,7 @@ e.g., <code>@importFrom magrittr %&gt;%</code> 。
 <code>@inheritParams</code> と違って、その関数で使用しないparamまで展開されちゃうのが欠点。</dd>
 <dt><code>@eval fun()</code></dt>
 <dd>関数を評価して出てきた文字列ベクタをroxygenコメントとして処理する。
-各要素の先頭は <code>#'</code> ではなく@タグで。
+各要素の先頭は <code>#' </code> ではなく@タグで。
 関数には引数も渡せるのでいろいろできる。</dd>
 <dt><code>@return description</code></dt>
 <dd>関数の返り値。</dd>
@@ -439,9 +411,7 @@ exportしないやつには書いてはいけない。
 <dt><code>@docType</code>, <code>@name</code></dt>
 <dd>パッケージやデータを記述するのに必要だったが今では不要っぽい。</dd>
 </dl>
-
 <h2 id="関連書籍">関連書籍</h2>
-
 <p><a href="https://www.amazon.co.jp/dp/1491910399/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=2ac4a1dea2487eff5b1034acbbad7ddb&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1491910399&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=1491910399" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 <a href="https://www.amazon.co.jp/dp/4873117593/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=68d0ffbb02a546eca75795f147bd54e2&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873117593&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=4873117593" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
 
@@ -475,8 +445,8 @@ exportしないやつには書いてはいけない。
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -488,11 +458,11 @@ exportしないやつには書いてはいけない。
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -511,6 +481,7 @@ exportしないやつには書いてはいけない。
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -518,7 +489,6 @@ exportしないやつには書いてはいけない。
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -530,20 +500,20 @@ exportしないやつには書いてはいけない。
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -90,8 +90,6 @@ Heavy Watal
 </ul></nav>
 </header>
 
-
-
 <ul>
 <li><code>&lt;cstdlib&gt;</code> の <code>std::rand()</code> は乱数の質も悪く、速度も遅いので非推奨。
 C++11 から標準ライブラリに追加された <code>&lt;random&gt;</code> を使う。</li>
@@ -100,77 +98,60 @@ C++11 から標準ライブラリに追加された <code>&lt;random&gt;</code> 
 C++11 で追加された <code>std::shuffle()</code> に生成器を明示的に渡して使う。</li>
 <li>非標準の生成器としてはSFMTやdSFMTが高速で高品質。Xorshift系とPCGの動向にも注目。</li>
 </ul>
-
 <h2 id="random"><code>&lt;random&gt;</code></h2>
-
 <ul>
 <li><a href="http://www.cplusplus.com/reference/random/">http://www.cplusplus.com/reference/random/</a></li>
 <li><a href="http://en.cppreference.com/w/cpp/numeric/random">http://en.cppreference.com/w/cpp/numeric/random</a></li>
 <li><a href="https://cpprefjp.github.io/reference/random.html">https://cpprefjp.github.io/reference/random.html</a></li>
 </ul>
-
 <p>C++11 ではまともに使える乱数ライブラリが追加された。
 乱数生成エンジンと分布関数オブジェクトを組み合わせて使う。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;random&gt;</span><span class="cp">
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#</span><span class="cp">include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span><span class="cp"></span><span class="cp">#</span><span class="cp">include</span> <span class="cpf">&lt;random&gt;</span><span class="cp">
 </span><span class="cp"></span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// seed
-</span><span class="c1"></span>    <span class="n">std</span><span class="o">::</span><span class="n">random_device</span> <span class="n">rd</span><span class="p">;</span>
-    <span class="k">const</span> <span class="k">auto</span> <span class="n">seed</span> <span class="o">=</span> <span class="n">rd</span><span class="p">();</span>
+</span><span class="c1"></span>    <span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">random_device</span> <span class="n">rd</span><span class="p">;</span>
+    <span class="k">const</span> <span class="k">auto</span> <span class="n">seed</span> <span class="o">=</span> <span class="n">rd</span><span class="p">(</span><span class="p">)</span><span class="p">;</span>
 
     <span class="c1">// engine
-</span><span class="c1"></span>    <span class="n">std</span><span class="o">::</span><span class="n">mt19937</span> <span class="n">rng</span><span class="p">(</span><span class="n">seed</span><span class="p">);</span>
+</span><span class="c1"></span>    <span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">mt19937</span> <span class="n">rng</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span><span class="p">;</span>
 
     <span class="c1">// probability density distribution
 </span><span class="c1"></span>    <span class="k">const</span> <span class="kt">double</span> <span class="n">mean</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
     <span class="k">const</span> <span class="kt">double</span> <span class="n">sd</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">normal_distribution</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">dist</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">sd</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">normal_distribution</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">dist</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">sd</span><span class="p">)</span><span class="p">;</span>
 
     <span class="c1">// generate!
-</span><span class="c1"></span>    <span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">8</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">dist</span><span class="p">(</span><span class="n">rng</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span><span class="c1"></span>    <span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">8</span><span class="p">;</span> <span class="o">+</span><span class="o">+</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">cout</span> <span class="o">&lt;</span><span class="o">&lt;</span> <span class="n">dist</span><span class="p">(</span><span class="n">rng</span><span class="p">)</span> <span class="o">&lt;</span><span class="o">&lt;</span> <span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">endl</span><span class="p">;</span>
     <span class="p">}</span>
 
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
-<h2 id="mersenne-twister">Mersenne Twister</h2>
-
+</code></pre></div><h2 id="mersenne-twister">Mersenne Twister</h2>
 <p><a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt.html">http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt.html</a></p>
-
 <p>松本眞と西村拓士によって開発された高速・高品質な擬似乱数生成器。
 標準の <code>&lt;random&gt;</code> でも利用可能になっており、
 パラメータ定義済みの <code>std::mt19937</code> がよく使われる。</p>
-
 <h3 id="sfmt">SFMT</h3>
-
 <p><a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/">http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/</a></p>
-
 <p>Mersenne Twisterを松本眞と斎藤睦夫がさらに改良したもの。
 SIMD命令を利用して、速度も品質も向上したらしい。
 標準には含まれず、ソースからのビルドが必要。</p>
-
 <h3 id="dsfmt">dSFMT</h3>
-
 <p><a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/#dSFMT">http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/#dSFMT</a></p>
-
 <p>SFMTの <code>double</code> 版。
 整数乱数から除算で変換するよりも良質で高速。
 v2.1からは整数も出力可能。
 標準には含まれず、ソースからのビルドが必要。</p>
-
-<h3 id="インストール方法-使い方">インストール方法、使い方</h3>
-
+<h3 id="インストール方法使い方">インストール方法、使い方</h3>
 <p><a href="https://github.com/heavywatal/sfmt-class/">https://github.com/heavywatal/sfmt-class/</a></p>
-
 <p>SFMTやdSFMTを簡単に導入するためのインストーラを作って公開した。
 C++標準 <code>&lt;random&gt;</code> の <code>std::mt19937</code>
 と同じように使えるようにしたラッパークラス
 (<code>wtl::sfmt19937</code>) も書いた。</p>
-
 <h2 id="xorshift">Xorshift</h2>
-
 <p><a href="https://www.jstatsoft.org/article/view/v008i14">Marsaglia (2003)</a>
 から始まって、いくつかの改良版が派生している。
 省メモリで高速。
@@ -178,16 +159,11 @@ C++標準 <code>&lt;random&gt;</code> の <code>std::mt19937</code>
 最新情報は
 <a href="http://xoroshiro.di.unimi.it/">xoroshiro.di.unimi.it</a>
 で追えば良さそう。</p>
-
 <h2 id="pcg">PCG</h2>
-
 <p>線形合同法(LCG)の出力をpermutationした<a href="http://www.pcg-random.org/">PCG</a>も良さそう。
-作者O&rsquo;Neillのブログは読み応えがあっておもしろい。</p>
-
+作者O'Neillのブログは読み応えがあっておもしろい。</p>
 <h2 id="seed">Seed</h2>
-
-<h3 id="dev-urandom"><code>/dev/urandom</code></h3>
-
+<h3 id="devurandom"><code>/dev/urandom</code></h3>
 <p><code>/dev/random</code> は擬似乱数を生成するデバイスで、
 環境ノイズから乱数を生成するため自然乱数に近い。
 <code>/dev/urandom</code> は十分なノイズが蓄積していなくても
@@ -195,27 +171,24 @@ C++標準 <code>&lt;random&gt;</code> の <code>std::mt19937</code>
 そのために <code>/dev/random</code> ほど安全ではない。
 長期に渡って使われる暗号鍵の生成以外の目的では
 <code>/dev/urandom</code> の利用が推奨されている。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;fstream&gt;</span><span class="cp">
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#</span><span class="cp">include</span> <span class="cpf">&lt;fstream&gt;</span><span class="cp">
 </span><span class="cp"></span>
-<span class="kt">unsigned</span> <span class="kt">int</span> <span class="nf">dev_urandom</span><span class="p">()</span> <span class="p">{</span>
+<span class="kt">unsigned</span> <span class="kt">int</span> <span class="nf">dev_urandom</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
     <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
     <span class="k">try</span> <span class="p">{</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">ifstream</span> <span class="n">fin</span><span class="p">(</span><span class="s">&#34;/dev/urandom&#34;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">binary</span> <span class="o">|</span> <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">in</span><span class="p">);</span>
-        <span class="n">fin</span><span class="p">.</span><span class="n">exceptions</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">failbit</span><span class="p">);</span>
-        <span class="n">fin</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">x</span><span class="p">),</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">));</span>
+        <span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">ifstream</span> <span class="n">fin</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;</span><span class="s">/dev/urandom</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">ios</span><span class="o">:</span><span class="o">:</span><span class="n">binary</span> <span class="o">|</span> <span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">ios</span><span class="o">:</span><span class="o">:</span><span class="n">in</span><span class="p">)</span><span class="p">;</span>
+        <span class="n">fin</span><span class="p">.</span><span class="n">exceptions</span><span class="p">(</span><span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">ios</span><span class="o">:</span><span class="o">:</span><span class="n">failbit</span><span class="p">)</span><span class="p">;</span>
+        <span class="n">fin</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">*</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">x</span><span class="p">)</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">)</span><span class="p">)</span><span class="p">;</span>
     <span class="p">}</span>
-    <span class="k">catch</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">failure</span><span class="o">&amp;</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span><span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">failure</span><span class="p">(</span><span class="s">&#34;/dev/urandom&#34;</span><span class="p">);}</span>
+    <span class="k">catch</span> <span class="p">(</span><span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">ios</span><span class="o">:</span><span class="o">:</span><span class="n">failure</span><span class="o">&amp;</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span><span class="k">throw</span> <span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">ios</span><span class="o">:</span><span class="o">:</span><span class="n">failure</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;</span><span class="s">/dev/urandom</span><span class="s">&#34;</span><span class="p">)</span><span class="p">;</span><span class="p">}</span>
     <span class="k">return</span> <span class="n">x</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
-<h3 id="std-random-device"><code>std::random_device</code></h3>
-
+</code></pre></div><h3 id="stdrandom_device"><code>std::random_device</code></h3>
 <p>C++11ではそのための関数が <code>&lt;random&gt;</code> に用意されている。
 これも基本的には <code>/dev/urandom</code> から生成するらしい。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="n">std</span><span class="o">::</span><span class="n">random_device</span> <span class="n">rd</span><span class="p">;</span>
-<span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">random_device</span><span class="o">::</span><span class="n">result_type</span> <span class="n">seed</span> <span class="o">=</span> <span class="n">rd</span><span class="p">();</span>
-</code></pre></div>
-<p>大量のシミュレーションを回すときなど、
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">random_device</span> <span class="n">rd</span><span class="p">;</span>
+<span class="k">const</span> <span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">random_device</span><span class="o">:</span><span class="o">:</span><span class="n">result_type</span> <span class="n">seed</span> <span class="o">=</span> <span class="n">rd</span><span class="p">(</span><span class="p">)</span><span class="p">;</span>
+</code></pre></div><p>大量のシミュレーションを回すときなど、
 エントロピーがもっと必要な場合は <code>std::seed_seq</code> を利用する。</p>
 
 </article>
@@ -248,8 +221,8 @@ C++標準 <code>&lt;random&gt;</code> の <code>std::mt19937</code>
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -261,11 +234,11 @@ C++標準 <code>&lt;random&gt;</code> の <code>std::mt19937</code>
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -284,6 +257,7 @@ C++標準 <code>&lt;random&gt;</code> の <code>std::mt19937</code>
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -291,7 +265,6 @@ C++標準 <code>&lt;random&gt;</code> の <code>std::mt19937</code>
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -303,20 +276,20 @@ C++標準 <code>&lt;random&gt;</code> の <code>std::mt19937</code>
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

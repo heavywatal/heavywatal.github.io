@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -90,30 +90,23 @@ Hugo — 静的サイトを高速生成
 </ul></nav>
 </header>
 
-
-
 <p>Markdown記法のテキストをHTMLに変換する、静的ウェブサイト生成プログラム。
 公式ドキュメントが充実しているので基本的にそれに従えば簡単にできる。</p>
-
 <ul>
 <li><a href="https://gohugo.io/overview/introduction/">https://gohugo.io/overview/introduction/</a></li>
 <li><a href="https://discuss.gohugo.io/">https://discuss.gohugo.io/</a></li>
 <li><a href="https://github.com/gohugoio/hugo">https://github.com/gohugoio/hugo</a></li>
 </ul>
-
 <p>高速さとシンプルさに惹かれてSphinxから移行し、
 本サイトもHugoでビルドしている。
 オフラインの研究ノートとしても有用。</p>
-
 <h2 id="quickstart">Quickstart</h2>
-
 <p><a href="http://gohugo.io/overview/quickstart/">http://gohugo.io/overview/quickstart/</a></p>
-
 <ul>
-<li><p><a href="https://gohugo.io/getting-started/installing">インストール方法はいろいろ用意されてる</a>。
+<li>
+<p><a href="https://gohugo.io/getting-started/installing">インストール方法はいろいろ用意されてる</a>。
 例えばMacなら<a href="/mac/homebrew.html">Homebrew</a>で一発:
 <code>brew install hugo</code></p>
-
 <p>私は <code>HTML_USE_XHTML</code> を切りたいのでソースコードを落として改変:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">export</span> <span class="nv">GOPATH</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.go
 <span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span>:<span class="si">${</span><span class="nv">GOPATH</span><span class="si">}</span>/bin
@@ -122,66 +115,59 @@ mkdir <span class="nv">$HOME</span>/src
 git clone https://github.com/gohugoio/hugo.git
 <span class="nb">cd</span> hugo
 vim helpers/content.go  <span class="c1"># remove HTML_USE_XHTML</span>
-go install --tags extended</code></pre></div>
-<p><code>--tags extended</code> はSASS/SCSS対応版をコンパイルするオプション。</p></li>
-
-<li><p>骨組みを作る:</p>
+go install --tags extended
+</code></pre></div><p><code>--tags extended</code> はSASS/SCSS対応版をコンパイルするオプション。</p>
+</li>
+<li>
+<p>骨組みを作る:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> path/to/site
-hugo new site .</code></pre></div></li>
-
-<li><p>ページをMarkdownで書く:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">hugo new about.md</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-markdown" data-lang="markdown">+++
+hugo new site .
+</code></pre></div></li>
+<li>
+<p>ページをMarkdownで書く:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">hugo new about.md
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-markdown" data-lang="markdown">+++
 date = 2016-02-26T19:10:22+09:00
 title = &#34;About&#34;
 +++
 
 <span class="gu">## Heading
 </span><span class="gu"></span>
-normal <span class="ge">*italic*</span> **bold**</code></pre></div></li>
-
-<li><p>テーマをとりあえず全部インストール:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git clone --depth <span class="m">1</span> --recursive https://github.com/gohugoio/hugoThemes.git themes</code></pre></div></li>
-
-<li><p>ウェブサーバーを走らせる:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">hugo server -w D -t hyde</code></pre></div></li>
-
-<li><p>ブラウザから <a href="http://localhost:1313/about">http://localhost:1313/about</a> にアクセスしてみる。
-監視オプション <code>-w</code> を付けておけば、ファイルの変更がすぐに反映される。</p></li>
+normal <span class="ge">*italic*</span> **bold**
+</code></pre></div></li>
+<li>
+<p>テーマをとりあえず全部インストール:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git clone --depth <span class="m">1</span> --recursive https://github.com/gohugoio/hugoThemes.git themes
+</code></pre></div></li>
+<li>
+<p>ウェブサーバーを走らせる:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">hugo server -w D -t hyde
+</code></pre></div></li>
+<li>
+<p>ブラウザから http://localhost:1313/about にアクセスしてみる。
+監視オプション <code>-w</code> を付けておけば、ファイルの変更がすぐに反映される。</p>
+</li>
 </ul>
-
 <h2 id="設定">設定</h2>
-
 <p><a href="https://gohugo.io/overview/configuration/">https://gohugo.io/overview/configuration/</a></p>
-
 <p><code>config.toml</code></p>
-
 <h2 id="theme">Theme</h2>
-
 <p><a href="http://themes.gohugo.io/">http://themes.gohugo.io/</a></p>
-
 <p>デフォルトのテーマというものが存在しないのがつらい。
 ユーザーによっていろいろ投稿されてるけどほとんどがブログ用途。
 ということで非ブログ用に簡単なものを自作して使っている:</p>
-
 <p><a href="https://github.com/heavywatal/hugo-theme-nonblog">https://github.com/heavywatal/hugo-theme-nonblog</a></p>
-
 <h3 id="performance">Performance</h3>
-
 <p><a href="https://gohugo.io/troubleshooting/build-performance/">https://gohugo.io/troubleshooting/build-performance/</a></p>
-
 <p>ページによって内容が変わらないテンプレートは <code>partial</code> の代わりに
 <a href="https://gohugo.io/functions/partialcached/"><code>partialCached</code></a>
 を使う。
 ビルドするときに
 <code>--templateMetrics --templateMetricsHints</code>
 オプションを付けるとどのへんを変えたら良いか教えてくれる。</p>
-
 <h2 id="content">Content</h2>
-
 <h3 id="markdown">Markdown</h3>
-
 <p>正式な仕様が未だに存在せず、いくつかの方言(flavor)が存在する。</p>
-
 <dl>
 <dt><a href="http://spec.commonmark.org/">CommonMark</a></dt>
 <dd>標準仕様決定に向けて議論中。</dd>
@@ -195,25 +181,16 @@ CommonMarkに準拠することが<a href="https://githubengineering.com/a-forma
 残念ながら上記2つとも微妙に違うが、
 開発中のv2ではCommonMark準拠の流れもあるっぽい。</dd>
 </dl>
-
-<h3 id="front-matter-https-gohugo-io-content-front-matter"><a href="https://gohugo.io/content/front-matter/">Front matter</a></h3>
-
+<h3 id="front-matterhttpsgohugoiocontentfront-matter"><a href="https://gohugo.io/content/front-matter/">Front matter</a></h3>
 <p>タイトルや日付などのメタデータをファイルの先頭で記述する。
 YAMLやJSONでもいいけど、
 <a href="https://github.com/toml-lang/toml">TOML</a>のほうが将来性ありそう。</p>
-
-<h2 id="閲覧-公開方法">閲覧・公開方法</h2>
-
+<h2 id="閲覧公開方法">閲覧・公開方法</h2>
 <h3 id="hugo-server">Hugo Server</h3>
-
 <p>付属の簡易サーバーを起動。</p>
-
 <pre><code>hugo server -D -w -s /path/to/source
 open http://localhost:1313/
-</code></pre>
-
-<h3 id="localhost-mac">localhost (Mac)</h3>
-
+</code></pre><h3 id="localhost-mac">localhost (Mac)</h3>
 <p><code>public/</code> 以下に生成されるファイルを
 <code>/Library/WebServer/Documents</code> にコピーすれば
 <a href="http://localhost">localhost</a> で閲覧できる。
@@ -225,11 +202,9 @@ sudo ln -s ~/Sites Documents
 <span class="nb">cd</span> /path/to/site-source
 hugo
 rsync -au --delete --exclude<span class="o">=</span><span class="s1">&#39;.git&#39;</span> public/ ~/Sites/
-open http://localhost/</code></pre></div>
-<h3 id="github-pages">GitHub Pages</h3>
-
+open http://localhost/
+</code></pre></div><h3 id="github-pages">GitHub Pages</h3>
 <p><code>public/</code> 以下に生成されるファイルをしかるべきrepository/branchに置くだけ。</p>
-
 <p>See <a href="/dev/git.html">Git</a></p>
 
 </article>
@@ -262,8 +237,8 @@ open http://localhost/</code></pre></div>
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -275,11 +250,11 @@ open http://localhost/</code></pre></div>
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -298,6 +273,7 @@ open http://localhost/</code></pre></div>
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -305,7 +281,6 @@ open http://localhost/</code></pre></div>
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -317,20 +292,20 @@ open http://localhost/</code></pre></div>
 <label for="menu-dev" class="active">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li class="active"><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

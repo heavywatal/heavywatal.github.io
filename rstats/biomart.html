@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -91,28 +91,18 @@ biomaRt — プログラム的にデータ取得
 </ul></nav>
 </header>
 
-
-
 <p><a href="https://www.bioconductor.org/packages/release/bioc/html/biomaRt.html">https://www.bioconductor.org/packages/release/bioc/html/biomaRt.html</a></p>
-
 <p><a href="https://qiita.com/yuifu/items/a757629506c1cd98156b">https://qiita.com/yuifu/items/a757629506c1cd98156b</a></p>
-
 <p>BioMartからプログラマチックにデータを取得するための <a href="/rstats/bioconductor.html">Bioconductor</a> 拡張。
 ウェブアプリ <a href="http://www.biomart.org/biomart/martview">MartView</a> のGUIでひととおり慣れておくと良い。</p>
-
 <h2 id="クラス">クラス</h2>
-
 <dl>
 <dt><code>Mart</code></dt>
-<dd><p><code>@biomart</code> &mdash; <code>ensembl</code></p>
-
+<dd><code>@biomart</code> &mdash; <code>ensembl</code>
 <p><code>@host</code> &mdash; <code>http://www.biomart.org:80/biomart/martservice</code></p>
-
 <p><code>@dataset</code> &mdash; <code>scerevisiae_gene_ensembl</code></p>
-
-<p><code>@filters</code></p>
-
 <dl>
+<dt><code>@filters</code></dt>
 <dd><code>$name</code> &mdash; <code>chromosome_name</code>, <code>biotype</code>, &hellip;<br>
 <code>$options</code> &mdash; <code>[ncRNA,protein_coding,pseudogene,rRNA,snoRNA,snRNA,tRNA]</code>, &hellip;<br>
 <code>$operation</code> &mdash; <code>=</code>, <code>&gt;=</code>, <code>only,excluded</code>, &hellip;<br>
@@ -125,11 +115,10 @@ biomaRt — プログラム的にデータ取得
 <code>$description</code><br>
 <code>$fullDescription</code><br>
 &hellip;</dd>
-</dl></dd>
 </dl>
-
+</dd>
+</dl>
 <h2 id="関数">関数</h2>
-
 <dl>
 <dt><code>listMarts(mart, host=&quot;www.biomart.org&quot;, ..., archive=FALSE, ...)</code></dt>
 <dd>利用可能なマート列挙。 e.g. <code>ensembl</code>, <code>fungi_mart_21</code>, <code>unimart</code></dd>
@@ -152,149 +141,140 @@ biomaRt — プログラム的にデータ取得
 <dd>データセットを決めた <code>Mart</code> オブジェクトを作る。
 でもこれって <code>useMart()</code> にもできるので不要&hellip;？ e.g. <code>mart = useDataset(&quot;scerevisiae_gene_ensembl&quot;, mart)</code></dd>
 <dt><code>getBM(attributes, filters=&quot;&quot;, values=&quot;&quot;, mart, curl=NULL, checkFilters=TRUE, verbose=FALSE, uniqueRows=TRUE, bmHeader=FALSE)</code></dt>
-<dd><p>このパッケージのメイン関数。
+<dd>このパッケージのメイン関数。
 フィルターは名前付きリストで渡す。
-<code>filter</code> に渡すと <code>AND</code> 結合:</p>
-
+<code>filter</code> に渡すと <code>AND</code> 結合:
 <pre><code>getBM(c(&quot;ensembl_gene_id&quot;, &quot;sgd_gene&quot;),
       filters=list(chromosome_name=&quot;IV&quot;, biotype=&quot;tRNA&quot;),
       mart=ensembl)
 # 第四染色体上のtRNA遺伝子
 </code></pre>
-
 <p><code>values</code> に渡すと <code>OR</code> 結合:</p>
-
 <pre><code>getBM(c(&quot;ensembl_gene_id&quot;, &quot;sgd_gene&quot;),
       values=list(chromosome_name=&quot;IV&quot;, biotype=&quot;tRNA&quot;),
       mart=ensembl)
 # 第四染色体上の遺伝子とtRNA遺伝子
 </code></pre>
-
 <p>このへんとか <code>useDataset()</code> らへんとか、
-インターフェイスがあまり洗練されてない印象だなぁ&hellip;。</p></dd>
+インターフェイスがあまり洗練されてない印象だなぁ&hellip;。</p>
+</dd>
 <dt><code>getSequence(chromosome, start, end, id, type, seqType, upstream, downstream, mart)</code></dt>
-<dd><p>Sequencesページのデータをダウンロードすることに特化した <code>getBM()</code> ラッパー。 結果は2列(配列とID)の data.frame。<br>
-<strong>seqType</strong>: <code>gene_exon</code>, <code>transcript_exon</code>, <code>transcript_exon_intron</code>, <code>gene_exon_intron</code>, <code>cdna</code>, <code>coding</code>, <code>coding_transcript_flank</code>, <code>coding_gene_flank</code>, <code>transcript_flank</code>, <code>gene_flank</code>, <code>peptide</code>, <code>3utr</code>, <code>5utr</code></p></dd>
+<dd>Sequencesページのデータをダウンロードすることに特化した <code>getBM()</code> ラッパー。 結果は2列(配列とID)の data.frame。<br>
+<strong>seqType</strong>: <code>gene_exon</code>, <code>transcript_exon</code>, <code>transcript_exon_intron</code>, <code>gene_exon_intron</code>, <code>cdna</code>, <code>coding</code>, <code>coding_transcript_flank</code>, <code>coding_gene_flank</code>, <code>transcript_flank</code>, <code>gene_flank</code>, <code>peptide</code>, <code>3utr</code>, <code>5utr</code></dd>
 <dt><code>getGene(id, type, mart)</code></dt>
-<dd><p>IDを指定して遺伝子情報をダウンロードすることに特化した <code>getBM()</code> ラッパー。
+<dd>IDを指定して遺伝子情報をダウンロードすることに特化した <code>getBM()</code> ラッパー。
 得られるdata.frameは9列:
 指定したID, <code>external_gene_id</code>, <code>description</code>, <code>chromosome_name</code>,
-<code>band</code>, <code>strand</code>, <code>start_position</code>, <code>end_position</code>, <code>ensembl_gene_id</code></p></dd>
+<code>band</code>, <code>strand</code>, <code>start_position</code>, <code>end_position</code>, <code>ensembl_gene_id</code></dd>
 <dt><code>select(mart, keys, columns, keytype)</code></dt>
-<dd><p><code>getBM()</code> を生のSQLっぽくした感じ。
+<dd><code>getBM()</code> を生のSQLっぽくした感じ。
 keytype(フィルター)は1つしか使えない。
-<code>dplyr::select()</code> と名前が衝突する。</p></dd>
+<code>dplyr::select()</code> と名前が衝突する。</dd>
 <dt><code>columns(mart)</code></dt>
-<dd><p><code>mart@attributes$name</code> と同じ</p></dd>
+<dd><code>mart@attributes$name</code> と同じ</dd>
 <dt><code>keytypes(mart)</code></dt>
-<dd><p><code>mart@filters$name</code> と同じ</p></dd>
+<dd><code>mart@filters$name</code> と同じ</dd>
 <dt><code>keys(mart, keytype)</code></dt>
-<dd><p><code>subset(mart@filters, name==keytype)$options</code>
-をちゃんと要素ごとに切った文字列ベクタで。</p></dd>
+<dd><code>subset(mart@filters, name==keytype)$options</code>
+をちゃんと要素ごとに切った文字列ベクタで。</dd>
 </dl>
-
 <p><code>exportFASTA(sequences, file)</code></p>
-
 <h2 id="使用例">使用例</h2>
-
 <h3 id="ensembl">Ensembl</h3>
-
 <p>マートとデータセットの決定</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span>biomaRt<span class="p">)</span>
-ensembl <span class="o">=</span> useMart<span class="p">(</span><span class="s">&#34;ensembl&#34;</span><span class="p">,</span> <span class="s">&#34;scerevisiae_gene_ensembl&#34;</span><span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">library</span><span class="p">(</span><span class="n">biomaRt</span><span class="p">)</span>
+<span class="n">ensembl</span> <span class="o">=</span> <span class="nf">useMart</span><span class="p">(</span><span class="s">&#34;</span><span class="s">ensembl&#34;</span><span class="p">,</span> <span class="s">&#34;</span><span class="s">scerevisiae_gene_ensembl&#34;</span><span class="p">)</span>
 
 <span class="c1">## あるいは</span>
-listMarts<span class="p">()</span>
-ensembl <span class="o">=</span> useMart<span class="p">(</span><span class="s">&#34;ensembl&#34;</span><span class="p">)</span>
-listDatasets<span class="p">(</span>ensembl<span class="p">)</span>
-ensembl <span class="o">=</span> useDataset<span class="p">(</span><span class="s">&#34;scerevisiae_gene_ensembl&#34;</span><span class="p">,</span> ensembl<span class="p">)</span></code></pre></div>
-<p>どんなデータやフィルタが利用可能か調べる</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">attributePages<span class="p">(</span>ensembl<span class="p">)</span>
-listAttributes<span class="p">(</span>ensembl<span class="p">,</span> <span class="s">&#34;feature_page&#34;</span><span class="p">)</span>
-<span class="kp">subset</span><span class="p">(</span>ensembl<span class="o">@</span>filters<span class="p">,</span> select<span class="o">=</span><span class="kt">c</span><span class="p">(</span>name<span class="p">,</span> description<span class="p">,</span> type<span class="p">,</span> operation<span class="p">))</span></code></pre></div>
-<p>フィルタの選択肢を調べる</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="kp">subset</span><span class="p">(</span>ensembl<span class="o">@</span>filters<span class="p">,</span> name<span class="o">==</span><span class="s">&#34;biotype&#34;</span><span class="p">)</span><span class="o">$</span><span class="kp">options</span>
-<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="s">&#34;[ncRNA,protein_coding,pseudogene,rRNA,snoRNA,snRNA,tRNA]&#34;</span>
-<span class="o">&gt;</span> keys<span class="p">(</span>ensembl<span class="p">,</span> <span class="s">&#34;biotype&#34;</span><span class="p">)</span>
-<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="s">&#34;ncRNA&#34;</span> <span class="s">&#34;protein_coding&#34;</span> <span class="s">&#34;pseudogene&#34;</span> <span class="s">&#34;rRNA&#34;</span> <span class="s">&#34;snoRNA&#34;</span> <span class="s">&#34;snRNA&#34;</span> <span class="s">&#34;tRNA&#34;</span>
-<span class="o">&gt;</span> keys<span class="p">(</span>ensembl<span class="p">,</span> <span class="s">&#34;go_evidence_code&#34;</span><span class="p">)</span>
-<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="s">&#34;IBA&#34;</span> <span class="s">&#34;IC&#34;</span>  <span class="s">&#34;IDA&#34;</span> <span class="s">&#34;IEA&#34;</span> <span class="s">&#34;IEP&#34;</span> <span class="s">&#34;IGI&#34;</span> <span class="s">&#34;IMP&#34;</span> <span class="s">&#34;IPI&#34;</span> <span class="s">&#34;ISA&#34;</span> <span class="s">&#34;ISM&#34;</span> <span class="s">&#34;ISS&#34;</span> <span class="s">&#34;NAS&#34;</span> <span class="s">&#34;ND&#34;</span>  <span class="s">&#34;TAS&#34;</span></code></pre></div>
-<p>近いミラーを使う</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> listMarts<span class="p">(</span>host<span class="o">=</span><span class="s">&#34;asia.ensembl.org&#34;</span><span class="p">)</span>
-               biomart               <span class="kp">version</span>
-<span class="m">1</span> ENSEMBL_MART_ENSEMBL      Ensembl Genes <span class="m">75</span>
-<span class="m">2</span>     ENSEMBL_MART_SNP  Ensembl Variation <span class="m">75</span>
-<span class="m">3</span> ENSEMBL_MART_FUNCGEN Ensembl Regulation <span class="m">75</span>
-<span class="m">4</span>    ENSEMBL_MART_VEGA               Vega <span class="m">55</span>
-<span class="m">5</span>                pride        PRIDE <span class="p">(</span>EBI UK<span class="p">)</span>
-<span class="o">&gt;</span> ensembl <span class="o">=</span> useMart<span class="p">(</span><span class="s">&#34;ENSEMBL_MART_SNP&#34;</span><span class="p">,</span> <span class="s">&#34;scerevisiae_snp&#34;</span><span class="p">,</span> host<span class="o">=</span><span class="s">&#34;asia.ensembl.org&#34;</span><span class="p">)</span></code></pre></div>
-<h3 id="uniprot-https-www-uniprot-org"><a href="https://www.uniprot.org/">UniProt</a></h3>
-
+<span class="nf">listMarts</span><span class="p">(</span><span class="p">)</span>
+<span class="n">ensembl</span> <span class="o">=</span> <span class="nf">useMart</span><span class="p">(</span><span class="s">&#34;</span><span class="s">ensembl&#34;</span><span class="p">)</span>
+<span class="nf">listDatasets</span><span class="p">(</span><span class="n">ensembl</span><span class="p">)</span>
+<span class="n">ensembl</span> <span class="o">=</span> <span class="nf">useDataset</span><span class="p">(</span><span class="s">&#34;</span><span class="s">scerevisiae_gene_ensembl&#34;</span><span class="p">,</span> <span class="n">ensembl</span><span class="p">)</span>
+</code></pre></div><p>どんなデータやフィルタが利用可能か調べる</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">attributePages</span><span class="p">(</span><span class="n">ensembl</span><span class="p">)</span>
+<span class="nf">listAttributes</span><span class="p">(</span><span class="n">ensembl</span><span class="p">,</span> <span class="s">&#34;</span><span class="s">feature_page&#34;</span><span class="p">)</span>
+<span class="nf">subset</span><span class="p">(</span><span class="n">ensembl</span><span class="o">@</span><span class="n">filters</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">operation</span><span class="p">)</span><span class="p">)</span>
+</code></pre></div><p>フィルタの選択肢を調べる</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="nf">subset</span><span class="p">(</span><span class="n">ensembl</span><span class="o">@</span><span class="n">filters</span><span class="p">,</span> <span class="n">name</span><span class="o">==</span><span class="s">&#34;</span><span class="s">biotype&#34;</span><span class="p">)</span><span class="o">$</span><span class="n">options</span>
+<span class="n">[1</span><span class="n">]</span> <span class="s">&#34;</span><span class="s">[ncRNA,protein_coding,pseudogene,rRNA,snoRNA,snRNA,tRNA]&#34;</span>
+<span class="o">&gt;</span> <span class="nf">keys</span><span class="p">(</span><span class="n">ensembl</span><span class="p">,</span> <span class="s">&#34;</span><span class="s">biotype&#34;</span><span class="p">)</span>
+<span class="n">[1</span><span class="n">]</span> <span class="s">&#34;</span><span class="s">ncRNA&#34;</span> <span class="s">&#34;</span><span class="s">protein_coding&#34;</span> <span class="s">&#34;</span><span class="s">pseudogene&#34;</span> <span class="s">&#34;</span><span class="s">rRNA&#34;</span> <span class="s">&#34;</span><span class="s">snoRNA&#34;</span> <span class="s">&#34;</span><span class="s">snRNA&#34;</span> <span class="s">&#34;</span><span class="s">tRNA&#34;</span>
+<span class="o">&gt;</span> <span class="nf">keys</span><span class="p">(</span><span class="n">ensembl</span><span class="p">,</span> <span class="s">&#34;</span><span class="s">go_evidence_code&#34;</span><span class="p">)</span>
+<span class="n">[1</span><span class="n">]</span> <span class="s">&#34;</span><span class="s">IBA&#34;</span> <span class="s">&#34;</span><span class="s">IC&#34;</span>  <span class="s">&#34;</span><span class="s">IDA&#34;</span> <span class="s">&#34;</span><span class="s">IEA&#34;</span> <span class="s">&#34;</span><span class="s">IEP&#34;</span> <span class="s">&#34;</span><span class="s">IGI&#34;</span> <span class="s">&#34;</span><span class="s">IMP&#34;</span> <span class="s">&#34;</span><span class="s">IPI&#34;</span> <span class="s">&#34;</span><span class="s">ISA&#34;</span> <span class="s">&#34;</span><span class="s">ISM&#34;</span> <span class="s">&#34;</span><span class="s">ISS&#34;</span> <span class="s">&#34;</span><span class="s">NAS&#34;</span> <span class="s">&#34;</span><span class="s">ND&#34;</span>  <span class="s">&#34;</span><span class="s">TAS&#34;</span>
+</code></pre></div><p>近いミラーを使う</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="nf">listMarts</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s">&#34;</span><span class="s">asia.ensembl.org&#34;</span><span class="p">)</span>
+               <span class="n">biomart</span>               <span class="n">version</span>
+<span class="m">1</span> <span class="n">ENSEMBL_MART_ENSEMBL</span>      <span class="n">Ensembl</span> <span class="n">Genes</span> <span class="m">75</span>
+<span class="m">2</span>     <span class="n">ENSEMBL_MART_SNP</span>  <span class="n">Ensembl</span> <span class="n">Variation</span> <span class="m">75</span>
+<span class="m">3</span> <span class="n">ENSEMBL_MART_FUNCGEN</span> <span class="n">Ensembl</span> <span class="n">Regulation</span> <span class="m">75</span>
+<span class="m">4</span>    <span class="n">ENSEMBL_MART_VEGA</span>               <span class="n">Vega</span> <span class="m">55</span>
+<span class="m">5</span>                <span class="n">pride</span>        <span class="nf">PRIDE </span><span class="p">(</span><span class="n">EBI</span> <span class="n">UK</span><span class="p">)</span>
+<span class="o">&gt;</span> <span class="n">ensembl</span> <span class="o">=</span> <span class="nf">useMart</span><span class="p">(</span><span class="s">&#34;</span><span class="s">ENSEMBL_MART_SNP&#34;</span><span class="p">,</span> <span class="s">&#34;</span><span class="s">scerevisiae_snp&#34;</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s">&#34;</span><span class="s">asia.ensembl.org&#34;</span><span class="p">)</span>
+</code></pre></div><h3 id="uniprothttpswwwuniprotorg"><a href="https://www.uniprot.org/">UniProt</a></h3>
 <p>フィルタ列挙</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> unimart <span class="o">=</span> useMart<span class="p">(</span><span class="s">&#34;unimart&#34;</span><span class="p">,</span> <span class="s">&#34;uniprot&#34;</span><span class="p">)</span>
-<span class="o">&gt;</span> <span class="kp">subset</span><span class="p">(</span>unimart<span class="o">@</span>filters<span class="p">,</span> select<span class="o">=</span><span class="kt">c</span><span class="p">(</span>name<span class="p">,</span> description<span class="p">,</span> type<span class="p">,</span> operation<span class="p">))</span>
-               name       description    type operation
-<span class="m">1</span>  superregnum_name  Superregnum name    <span class="kt">list</span>         <span class="o">=</span>
-<span class="m">2</span>     proteome_name Complete proteome    <span class="kt">list</span>         <span class="o">=</span>
-<span class="m">3</span>         accession         Accession    text         <span class="o">=</span>
-<span class="m">4</span>      protein_name           Protein    text         <span class="o">=</span>
-<span class="m">5</span>    length_greater          Length <span class="o">&gt;</span>    text         <span class="o">&gt;</span>
-<span class="m">6</span>    length_smaller          Length <span class="o">&lt;</span>    text         <span class="o">&lt;</span>
-<span class="m">7</span>  protein_evidence Protein existence    <span class="kt">list</span>         <span class="o">=</span>
-<span class="m">8</span>           embl_id          EMBL IDs id_list      <span class="o">=</span><span class="p">,</span><span class="kp">in</span>
-<span class="m">9</span>   arrayexpress_id  ArrayExpress IDs id_list      <span class="o">=</span><span class="p">,</span><span class="kp">in</span>
-<span class="m">10</span>       ensembl_id       Ensembl IDs id_list      <span class="o">=</span><span class="p">,</span><span class="kp">in</span>
-<span class="m">11</span>        pdbsum_id        PDBSum IDs id_list      <span class="o">=</span><span class="p">,</span><span class="kp">in</span>
-<span class="m">12</span>        intact_id        IntAct IDs id_list      <span class="o">=</span><span class="p">,</span><span class="kp">in</span>
-<span class="m">13</span>      interpro_id      InterPro IDs id_list      <span class="o">=</span><span class="p">,</span><span class="kp">in</span>
-<span class="m">14</span>            go_id Gene Ontology IDs id_list      <span class="o">=</span><span class="p">,</span><span class="kp">in</span>
-<span class="m">15</span>        gene_name         Gene name    text         <span class="o">=</span>
-<span class="m">16</span>       entry_type        Entry type    <span class="kt">list</span>         <span class="o">=</span>
-<span class="m">17</span>        organelle         organelle    <span class="kt">list</span>         <span class="o">=</span>
-<span class="m">18</span>        plasmid_f           Plasmid    text         <span class="o">=</span></code></pre></div>
-<p>フィルタの選択肢</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="kp">subset</span><span class="p">(</span>unimart<span class="o">@</span>filters<span class="p">,</span> <span class="m">3</span> <span class="o">&lt;</span> <span class="kp">nchar</span><span class="p">(</span><span class="kp">options</span><span class="p">)</span> <span class="o">&amp;</span> <span class="kp">nchar</span><span class="p">(</span><span class="kp">options</span><span class="p">)</span> <span class="o">&lt;</span> <span class="m">120</span><span class="p">,</span> select<span class="o">=</span><span class="kt">c</span><span class="p">(</span>name<span class="p">,</span> <span class="kp">options</span><span class="p">))</span>
-               name                                                                                                            <span class="kp">options</span>
-<span class="m">1</span>  superregnum_name                                                                               <span class="p">[</span>Eukaryota<span class="p">,</span>Bacteria<span class="p">,</span>Archaea<span class="p">,</span>Viruses<span class="p">]</span>
-<span class="m">7</span>  protein_evidence <span class="p">[</span><span class="m">1</span><span class="o">:</span> Evidence at protein level<span class="p">,</span><span class="m">2</span><span class="o">:</span> Evidence at transcript level<span class="p">,</span><span class="m">3</span><span class="o">:</span> Inferred from homology<span class="p">,</span><span class="m">4</span><span class="o">:</span> Predicted<span class="p">,</span><span class="m">5</span><span class="o">:</span> Uncertain<span class="p">]</span>
-<span class="m">16</span>       entry_type                                                                                                <span class="p">[</span>Swiss<span class="o">-</span>Prot<span class="p">,</span>TrEMBL<span class="p">]</span></code></pre></div>
-<p>&ldquo;Complete proteome&rdquo; の選択肢(すげえ長い)を抜き出す</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">proteome_name <span class="o">=</span> biomaRt<span class="o">::</span>keys<span class="p">(</span>unimart<span class="p">,</span> <span class="s">&#34;proteome_name&#34;</span><span class="p">)</span>
-<span class="kp">grep</span><span class="p">(</span><span class="s">&#34;Sac.* cer.*&#34;</span><span class="p">,</span> proteome_name<span class="p">,</span> value<span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span></code></pre></div>
-<p>アトリビュート列挙
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="n">unimart</span> <span class="o">=</span> <span class="nf">useMart</span><span class="p">(</span><span class="s">&#34;</span><span class="s">unimart&#34;</span><span class="p">,</span> <span class="s">&#34;</span><span class="s">uniprot&#34;</span><span class="p">)</span>
+<span class="o">&gt;</span> <span class="nf">subset</span><span class="p">(</span><span class="n">unimart</span><span class="o">@</span><span class="n">filters</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">operation</span><span class="p">)</span><span class="p">)</span>
+               <span class="n">name</span>       <span class="n">description</span>    <span class="n">type</span> <span class="n">operation</span>
+<span class="m">1</span>  <span class="n">superregnum_name</span>  <span class="n">Superregnum</span> <span class="n">name</span>    <span class="n">list</span>         <span class="o">=</span>
+<span class="m">2</span>     <span class="n">proteome_name</span> <span class="n">Complete</span> <span class="n">proteome</span>    <span class="n">list</span>         <span class="o">=</span>
+<span class="m">3</span>         <span class="n">accession</span>         <span class="n">Accession</span>    <span class="n">text</span>         <span class="o">=</span>
+<span class="m">4</span>      <span class="n">protein_name</span>           <span class="n">Protein</span>    <span class="n">text</span>         <span class="o">=</span>
+<span class="m">5</span>    <span class="n">length_greater</span>          <span class="n">Length</span> <span class="o">&gt;</span>    <span class="n">text</span>         <span class="o">&gt;</span>
+<span class="m">6</span>    <span class="n">length_smaller</span>          <span class="n">Length</span> <span class="o">&lt;</span>    <span class="n">text</span>         <span class="o">&lt;</span>
+<span class="m">7</span>  <span class="n">protein_evidence</span> <span class="n">Protein</span> <span class="n">existence</span>    <span class="n">list</span>         <span class="o">=</span>
+<span class="m">8</span>           <span class="n">embl_id</span>          <span class="n">EMBL</span> <span class="n">IDs</span> <span class="n">id_list</span>      <span class="o">=</span><span class="p">,</span><span class="n">in</span>
+<span class="m">9</span>   <span class="n">arrayexpress_id</span>  <span class="n">ArrayExpress</span> <span class="n">IDs</span> <span class="n">id_list</span>      <span class="o">=</span><span class="p">,</span><span class="n">in</span>
+<span class="m">10</span>       <span class="n">ensembl_id</span>       <span class="n">Ensembl</span> <span class="n">IDs</span> <span class="n">id_list</span>      <span class="o">=</span><span class="p">,</span><span class="n">in</span>
+<span class="m">11</span>        <span class="n">pdbsum_id</span>        <span class="n">PDBSum</span> <span class="n">IDs</span> <span class="n">id_list</span>      <span class="o">=</span><span class="p">,</span><span class="n">in</span>
+<span class="m">12</span>        <span class="n">intact_id</span>        <span class="n">IntAct</span> <span class="n">IDs</span> <span class="n">id_list</span>      <span class="o">=</span><span class="p">,</span><span class="n">in</span>
+<span class="m">13</span>      <span class="n">interpro_id</span>      <span class="n">InterPro</span> <span class="n">IDs</span> <span class="n">id_list</span>      <span class="o">=</span><span class="p">,</span><span class="n">in</span>
+<span class="m">14</span>            <span class="n">go_id</span> <span class="n">Gene</span> <span class="n">Ontology</span> <span class="n">IDs</span> <span class="n">id_list</span>      <span class="o">=</span><span class="p">,</span><span class="n">in</span>
+<span class="m">15</span>        <span class="n">gene_name</span>         <span class="n">Gene</span> <span class="n">name</span>    <span class="n">text</span>         <span class="o">=</span>
+<span class="m">16</span>       <span class="n">entry_type</span>        <span class="n">Entry</span> <span class="n">type</span>    <span class="n">list</span>         <span class="o">=</span>
+<span class="m">17</span>        <span class="n">organelle</span>         <span class="n">organelle</span>    <span class="n">list</span>         <span class="o">=</span>
+<span class="m">18</span>        <span class="n">plasmid_f</span>           <span class="n">Plasmid</span>    <span class="n">text</span>         <span class="o">=</span>
+</code></pre></div><p>フィルタの選択肢</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="nf">subset</span><span class="p">(</span><span class="n">unimart</span><span class="o">@</span><span class="n">filters</span><span class="p">,</span> <span class="m">3</span> <span class="o">&lt;</span> <span class="nf">nchar</span><span class="p">(</span><span class="n">options</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nf">nchar</span><span class="p">(</span><span class="n">options</span><span class="p">)</span> <span class="o">&lt;</span> <span class="m">120</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span><span class="p">)</span>
+               <span class="n">name</span>                                                                                                            <span class="n">options</span>
+<span class="m">1</span>  <span class="n">superregnum_name</span>                                                                               <span class="n">[Eukaryota</span><span class="p">,</span><span class="n">Bacteria</span><span class="p">,</span><span class="n">Archaea</span><span class="p">,</span><span class="n">Viruses</span><span class="n">]</span>
+<span class="m">7</span>  <span class="n">protein_evidence</span> <span class="n">[1</span><span class="o">:</span> <span class="n">Evidence</span> <span class="n">at</span> <span class="n">protein</span> <span class="n">level</span><span class="p">,</span><span class="m">2</span><span class="o">:</span> <span class="n">Evidence</span> <span class="n">at</span> <span class="n">transcript</span> <span class="n">level</span><span class="p">,</span><span class="m">3</span><span class="o">:</span> <span class="n">Inferred</span> <span class="n">from</span> <span class="n">homology</span><span class="p">,</span><span class="m">4</span><span class="o">:</span> <span class="n">Predicted</span><span class="p">,</span><span class="m">5</span><span class="o">:</span> <span class="n">Uncertain</span><span class="n">]</span>
+<span class="m">16</span>       <span class="n">entry_type</span>                                                                                                <span class="n">[Swiss</span><span class="o">-</span><span class="n">Prot</span><span class="p">,</span><span class="n">TrEMBL</span><span class="n">]</span>
+</code></pre></div><p>&ldquo;Complete proteome&rdquo; の選択肢(すげえ長い)を抜き出す</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">proteome_name</span> <span class="o">=</span> <span class="n">biomaRt</span><span class="o">::</span><span class="nf">keys</span><span class="p">(</span><span class="n">unimart</span><span class="p">,</span> <span class="s">&#34;</span><span class="s">proteome_name&#34;</span><span class="p">)</span>
+<span class="nf">grep</span><span class="p">(</span><span class="s">&#34;</span><span class="s">Sac.* cer.*&#34;</span><span class="p">,</span> <span class="n">proteome_name</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+</code></pre></div><p>アトリビュート列挙
 (ただし <code>embl_id</code> 以降の項目はほとんど使えない)</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> listAttributes<span class="p">(</span>unimart<span class="p">)</span>
-                      name       description
-<span class="m">1</span>                accession         Accession
-<span class="m">2</span>                     name        Entry name
-<span class="m">3</span>             protein_name      Protein name
-<span class="m">4</span>                gene_name         Gene name
-<span class="m">5</span>                 organism          Organism
-<span class="m">6</span>         protein_evidence Protein existence
-<span class="m">7</span>               entry_type            Status
-<span class="m">8</span>                    go_id             GO ID
-<span class="m">9</span>                  go_name           GO name
-<span class="m">10</span>  db2go_p__dm_primary_id          GO ID<span class="p">(</span>p<span class="p">)</span>
-<span class="m">11</span> db2go_p__dm_description           GO name
-<span class="m">12</span> db2go_f__dm_description       GO name <span class="p">(</span><span class="bp">F</span><span class="p">)</span>
-<span class="m">13</span>  db2go_f__dm_primary_id         GO ID <span class="p">(</span><span class="bp">F</span><span class="p">)</span>
-<span class="m">14</span>  db2go_c__dm_primary_id         GO ID <span class="p">(</span>C<span class="p">)</span>
-<span class="m">15</span> db2go_c__dm_description       GO name <span class="p">(</span>C<span class="p">)</span>
-<span class="m">16</span>                 embl_id          EMBL IDs
-<span class="m">17</span>              ensembl_id       Ensembl IDs
-<span class="m">18</span>             interpro_id      InterPro IDs
-<span class="m">19</span>               pdbsum_id        PDBSum IDs
-<span class="m">20</span>                  pdb_id           PDB IDs
-<span class="m">21</span>            arrayexpress  ArrayExpress IDs
-<span class="m">22</span>                pride_id         PRIDE IDs
-<span class="m">23</span>             interact_id        IntAct IDs
-<span class="m">24</span>                comments          Comments
-<span class="m">25</span>               ec_number         Ec number
-<span class="m">26</span>                 keyword           Keyword
-<span class="m">27</span>            plasmid_name      Plasmid name
-<span class="m">28</span>          organelle_name    organelle name</code></pre></div>
-<hr>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="nf">listAttributes</span><span class="p">(</span><span class="n">unimart</span><span class="p">)</span>
+                      <span class="n">name</span>       <span class="n">description</span>
+<span class="m">1</span>                <span class="n">accession</span>         <span class="n">Accession</span>
+<span class="m">2</span>                     <span class="n">name</span>        <span class="n">Entry</span> <span class="n">name</span>
+<span class="m">3</span>             <span class="n">protein_name</span>      <span class="n">Protein</span> <span class="n">name</span>
+<span class="m">4</span>                <span class="n">gene_name</span>         <span class="n">Gene</span> <span class="n">name</span>
+<span class="m">5</span>                 <span class="n">organism</span>          <span class="n">Organism</span>
+<span class="m">6</span>         <span class="n">protein_evidence</span> <span class="n">Protein</span> <span class="n">existence</span>
+<span class="m">7</span>               <span class="n">entry_type</span>            <span class="n">Status</span>
+<span class="m">8</span>                    <span class="n">go_id</span>             <span class="n">GO</span> <span class="n">ID</span>
+<span class="m">9</span>                  <span class="n">go_name</span>           <span class="n">GO</span> <span class="n">name</span>
+<span class="m">10</span>  <span class="n">db2go_p__dm_primary_id</span>          <span class="n">GO</span> <span class="nf">ID</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="m">11</span> <span class="n">db2go_p__dm_description</span>           <span class="n">GO</span> <span class="n">name</span>
+<span class="m">12</span> <span class="n">db2go_f__dm_description</span>       <span class="n">GO</span> <span class="nf">name </span><span class="p">(</span><span class="bp">F</span><span class="p">)</span>
+<span class="m">13</span>  <span class="n">db2go_f__dm_primary_id</span>         <span class="n">GO</span> <span class="nf">ID </span><span class="p">(</span><span class="bp">F</span><span class="p">)</span>
+<span class="m">14</span>  <span class="n">db2go_c__dm_primary_id</span>         <span class="n">GO</span> <span class="nf">ID </span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+<span class="m">15</span> <span class="n">db2go_c__dm_description</span>       <span class="n">GO</span> <span class="nf">name </span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+<span class="m">16</span>                 <span class="n">embl_id</span>          <span class="n">EMBL</span> <span class="n">IDs</span>
+<span class="m">17</span>              <span class="n">ensembl_id</span>       <span class="n">Ensembl</span> <span class="n">IDs</span>
+<span class="m">18</span>             <span class="n">interpro_id</span>      <span class="n">InterPro</span> <span class="n">IDs</span>
+<span class="m">19</span>               <span class="n">pdbsum_id</span>        <span class="n">PDBSum</span> <span class="n">IDs</span>
+<span class="m">20</span>                  <span class="n">pdb_id</span>           <span class="n">PDB</span> <span class="n">IDs</span>
+<span class="m">21</span>            <span class="n">arrayexpress</span>  <span class="n">ArrayExpress</span> <span class="n">IDs</span>
+<span class="m">22</span>                <span class="n">pride_id</span>         <span class="n">PRIDE</span> <span class="n">IDs</span>
+<span class="m">23</span>             <span class="n">interact_id</span>        <span class="n">IntAct</span> <span class="n">IDs</span>
+<span class="m">24</span>                <span class="n">comments</span>          <span class="n">Comments</span>
+<span class="m">25</span>               <span class="n">ec_number</span>         <span class="n">Ec</span> <span class="n">number</span>
+<span class="m">26</span>                 <span class="n">keyword</span>           <span class="n">Keyword</span>
+<span class="m">27</span>            <span class="n">plasmid_name</span>      <span class="n">Plasmid</span> <span class="n">name</span>
+<span class="m">28</span>          <span class="n">organelle_name</span>    <span class="n">organelle</span> <span class="n">name</span>
+</code></pre></div><hr>
 <p><a href="https://www.amazon.co.jp/dp/4621062506//ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=c58e6e9dc365558cc336d9ea0a2c8a12" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4621062506&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4621062506" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 <a href="https://www.amazon.co.jp/dp/4320057082//ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=b0a0cf1dfe769f34f7544db70a0f6711" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4320057082&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4320057082" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 <a href="https://www.amazon.co.jp/dp/4320123700//ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=f7d9a9e5ba94b0fa7da4a582b70da85a" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4320123700&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4320123700" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
@@ -329,8 +309,8 @@ listAttributes<span class="p">(</span>ensembl<span class="p">,</span> <span clas
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -342,11 +322,11 @@ listAttributes<span class="p">(</span>ensembl<span class="p">,</span> <span clas
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -365,6 +345,7 @@ listAttributes<span class="p">(</span>ensembl<span class="p">,</span> <span clas
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -372,7 +353,6 @@ listAttributes<span class="p">(</span>ensembl<span class="p">,</span> <span clas
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -384,20 +364,20 @@ listAttributes<span class="p">(</span>ensembl<span class="p">,</span> <span clas
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

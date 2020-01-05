@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -90,80 +90,69 @@ Population Genetics
 </ul></nav>
 </header>
 
-
-
 <p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/0974707759/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41Y1PqrWh5L._SX180_.jpg" alt="Coalescent Theory: An Introduction" /></a>
 <a href="http://www.amazon.co.jp/exec/obidos/ASIN/0763757373/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51IjUPvsSVL._SX180_.jpg" alt="Genetics of Populations" /></a>
 <a href="http://www.amazon.co.jp/exec/obidos/ASIN/0198502311/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41%2Bu1SOjvcL._SX180_.jpg" alt="Evolutionary Genetics" /></a>
 <a href="http://www.amazon.co.jp/exec/obidos/ASIN/1932846123/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41f8rXshBRL._SX150_.jpg" alt="An Introduction to Population Genetics Theory" /></a></p>
-
 <h2 id="model">Model</h2>
-
 <ul>
-<li><p><strong>Wright-Fisher model</strong></p>
-
+<li>
+<p><strong>Wright-Fisher model</strong></p>
 <ul>
 <li>ランダム交配</li>
 <li>世代重複なし</li>
 <li><strong>集団サイズは有限</strong> のNで一定
 （ここがHardy-Weinbergと違う。そしてこのことによる遺伝的浮動に興味がある）</li>
 <li>係数sの変異の固定確率 $\frac {1 - e^{-2s}} {1 - e^{-4Ns}}$</li>
-</ul></li>
-
-<li><p><strong>Moran model</strong></p>
-
+</ul>
+</li>
+<li>
+<p><strong>Moran model</strong></p>
 <ul>
 <li>世代重複あり(1個体が複製して、死ぬ1個体を置き換える)。</li>
 <li>Wright-Fisherに合わせるならNステップを1世代と考える。</li>
 <li>繁殖成功の標準偏差(ヘテロ接合頻度の減少速度＝遺伝的浮動の強さ)はWright-Fisherの倍。
 有効集団サイズが半分。</li>
 <li>増殖率rの変異の固定確率 $\frac {1 - 1/r} {1 - 1/r^N}$</li>
-</ul></li>
 </ul>
-
+</li>
+</ul>
 <h2 id="statistics">Statistics</h2>
-
 <dl>
 <dt><strong>The unfolded site-frequency counts</strong> $\xi_i$</dt>
 <dd>派生型のアリルが <em>i</em> 個、祖先型のアリルが <em>n-i</em> 個である変異サイトの数</dd>
 <dt><strong>The folded site-frequency counts</strong> $\eta_i$</dt>
-<dd><p>どっちが祖先型か不明な状態。
-片方のアリルが <em>i</em> 個、もう片方のアリルが <em>n-i</em> 個である変異サイトの数</p>
-
-<p>$\eta_i = \frac{\xi_i + \xi _{n - i}}{1 + \delta _{i, n - i}}$</p></dd>
+<dd>どっちが祖先型か不明な状態。
+片方のアリルが <em>i</em> 個、もう片方のアリルが <em>n-i</em> 個である変異サイトの数
+<p>$\eta_i = \frac{\xi_i + \xi _{n - i}}{1 + \delta _{i, n - i}}$</p>
+</dd>
 <dt><strong>The number of segregating (polymorphic) sites</strong> $S$</dt>
-<dd><p>配列セットの中で、多型のあるサイトの数</p></dd>
+<dd>配列セットの中で、多型のあるサイトの数</dd>
 <dt><strong>Nucleotide diversity / 塩基多様度</strong> $\pi$</dt>
-<dd><p>整列済み配列セットについてペアワイズで塩基の異なるサイト数を数え、
+<dd>整列済み配列セットについてペアワイズで塩基の異なるサイト数を数え、
 ペアあたりで平均したもの。
 多型サイト数が同じでも、アリル頻度が均等なほど大きくなり、
-少数のアリルが優占してたりすると小さくなる。</p></dd>
+少数のアリルが優占してたりすると小さくなる。</dd>
 <dt><strong>Population mutation rate / 集団突然変異率</strong> $\theta$</dt>
-<dd><p>二倍体常染色体なら $4N_e\mu$、
+<dd>二倍体常染色体なら $4N_e\mu$、
 二倍体X染色体なら $3N_e\mu$、
 一倍体なら $2N_e\mu$。
-直接測定することができないためほかの値から推定する。</p>
-
+直接測定することができないためほかの値から推定する。
 <p><strong>Watterson (1975)</strong>: $S$ から推定</p>
-
 <div>\[\begin{aligned}
 a_1  &= 1 + \frac 1 2 + \frac 1 3 + ... + \frac 1{n-1}\\
 \mathrm{E}[S] &= \theta L a_1\\
 \theta_w &= \frac{S}{L a_1}
 \end{aligned}\]</div>
-
 <p><strong>Tajima (1983)</strong>: $\pi$ から推定</p>
-
 <div>\[\begin{aligned}
 \mathrm{E}[\pi] &= \theta L\\
 \theta_\pi   &= \frac \pi L
-\end{aligned}\]</div></dd>
+\end{aligned}\]</div>
+</dd>
 </dl>
-
 <h2 id="selection">Selection</h2>
-
 <h3 id="表現型の頻度分布に着目">表現型の頻度分布に着目</h3>
-
 <dl>
 <dt><strong>directional selection / 方向性選択</strong></dt>
 <dd>形質値の頻度分布が一方向的に動くように働く選択。
@@ -184,9 +173,7 @@ stabilizingの逆。
 表現型可塑性や表現型多型で対処される場合もあり、
 必ずしもbalancing selectionや種分化をもたらさない。</dd>
 </dl>
-
 <h3 id="遺伝子型頻度に着目">遺伝子型頻度に着目</h3>
-
 <dl>
 <dt><strong>positive selection</strong></dt>
 <dd>有益アリルの頻度を上げるように働く選択</dd>
@@ -196,9 +183,7 @@ stabilizingの逆。
 <dd>有害変異に対する purifying selection によって
 近傍配列まで遺伝的多様度が減少する</dd>
 </dl>
-
 <h3 id="どっちでも">どっちでも</h3>
-
 <dl>
 <dt><strong>balancing selection / 平衡選択</strong></dt>
 <dd>多型を維持するように働く選択<br>
@@ -239,8 +224,8 @@ antagonistic pleiotropy, disassortative mating, self-incompatibility</dd>
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -252,11 +237,11 @@ antagonistic pleiotropy, disassortative mating, self-incompatibility</dd>
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -275,6 +260,7 @@ antagonistic pleiotropy, disassortative mating, self-incompatibility</dd>
 <label for="menu-bio" class="active">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li class="active"><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -282,7 +268,6 @@ antagonistic pleiotropy, disassortative mating, self-incompatibility</dd>
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -294,20 +279,20 @@ antagonistic pleiotropy, disassortative mating, self-incompatibility</dd>
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

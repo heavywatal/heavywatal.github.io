@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -90,10 +90,7 @@ Pythonインストール
 </ul></nav>
 </header>
 
-
-
-<h2 id="標準-公式">標準・公式</h2>
-
+<h2 id="標準公式">標準・公式</h2>
 <p>MacやLinuxならシステムの一部として
 <code>/usr/bin/python</code> が既にインストールされているので、
 何もしなくても使えっちゃ使える。
@@ -101,76 +98,79 @@ Pythonインストール
 ちゃんと使える3.xを使いたければ
 <a href="https://www.python.jp/install/install.html">python.jp/環境構築ガイド</a>
 に従って最新版を入れるのが簡単。</p>
-
 <h2 id="pyenv">pyenv</h2>
-
 <p>管理者権限なしでホーム以下にインストールするには
 <a href="https://github.com/pyenv/pyenv">pyenv</a>
 が便利。</p>
-
 <ol>
-<li><p><a href="/mac/homebrew.html">Homebrew</a> か
+<li>
+<p><a href="/mac/homebrew.html">Homebrew</a> か
 <a href="/dev/git.html">Git</a> を使ってpyenvをインストール:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew install pyenv
 <span class="c1"># or</span>
 git clone https://github.com/pyenv/pyenv.git ~/.pyenv
-mkdir -p ~/.pyenv/cache</code></pre></div></li>
-
-<li><p>Pythonのインストール先を決める環境変数
+mkdir -p ~/.pyenv/cache
+</code></pre></div></li>
+<li>
+<p>Pythonのインストール先を決める環境変数
 <code>PYENV_ROOT</code> を公式推奨の <code>~/.pyenv</code> に設定し、
 ついでにPATHも追加しておく。
 シェルの設定ファイル (e.g., <code>~/.bashrc</code>) に次のように追記:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">export</span> <span class="nv">PYENV_ROOT</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.pyenv
 <span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PYENV_ROOT</span><span class="si">}</span>/bin:<span class="nv">$PATH</span>
 <span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PYENV_ROOT</span><span class="si">}</span>/versions/<span class="k">$(</span>pyenv global<span class="k">)</span>/bin:<span class="nv">$PATH</span>
-<span class="nb">export</span> PATH</code></pre></div>
-<p><code>pyenv shell</code> や <code>pyenv local</code>
+<span class="nb">export</span> PATH
+</code></pre></div><p><code>pyenv shell</code> や <code>pyenv local</code>
 を使ってPythonのバージョンを頻繁に切り替える場合は、
 <a href="https://github.com/pyenv/pyenv#installation">公式の説明</a>どおりに
 <code>eval &quot;$(pyenv init -)&quot;</code>
 を設定してshimsを使う方法のほうがいいかもしれないけど、
 そうでなければこのようにPATHだけ設定するほうが単純で、
-起動時間も短くなる。</p></li>
-
-<li><p>シェルを再起動して設定を反映し、
+起動時間も短くなる。</p>
+</li>
+<li>
+<p>シェルを再起動して設定を反映し、
 目当てのバージョンを探してインストール:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">exec</span> <span class="nv">$SHELL</span> -l
 pyenv install -l <span class="p">|</span> less
-pyenv install <span class="m">3</span>.7.3</code></pre></div></li>
-
-<li><p>インストールしたものを常に使うように設定:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">pyenv global <span class="m">3</span>.7.3
-<span class="nb">exec</span> <span class="nv">$SHELL</span> -l</code></pre></div></li>
-
-<li><p><a href="/python/pip.html">pip</a> のパスを確認し、パッケージを入れる:</p>
+pyenv install 3.7.3
+</code></pre></div></li>
+<li>
+<p>インストールしたものを常に使うように設定:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">pyenv global 3.7.3
+<span class="nb">exec</span> <span class="nv">$SHELL</span> -l
+</code></pre></div></li>
+<li>
+<p><a href="/python/pip.html">pip</a> のパスを確認し、パッケージを入れる:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">which pip3
 pip3 install -U setuptools pip wheel
-pip3 install -r /path/to/requirements.txt</code></pre></div>
-<p>よく使うパッケージは
+pip3 install -r /path/to/requirements.txt
+</code></pre></div><p>よく使うパッケージは
 <a href="https://github.com/heavywatal/dotfiles/blob/master/.config/python/requirements.txt"><code>requirements.txt</code></a>
-の形でまとめておくと楽。</p></li>
+の形でまとめておくと楽。</p>
+</li>
 </ol>
-
-<h3 id="既知の問題-https-github-com-pyenv-pyenv-wiki-common-build-problems"><a href="https://github.com/pyenv/pyenv/wiki/Common-build-problems">既知の問題</a></h3>
-
+<h3 id="既知の問題httpsgithubcompyenvpyenvwikicommon-build-problems"><a href="https://github.com/pyenv/pyenv/wiki/Common-build-problems">既知の問題</a></h3>
 <ul>
-<li><p>3.1.0より古い<a href="/python/matplotlib.html">matplotlib</a> で
+<li>
+<p>3.1.0より古い<a href="/python/matplotlib.html">matplotlib</a> で
 <code>macosx</code> backend を使いたい場合などは環境変数
 <code>PYTHON_CONFIGURE_OPTS=&quot;--enable-framework&quot;</code>
-をセットしてFramework型でビルドする。</p></li>
-
-<li><p><a href="https://github.com/pyenv/pyenv/issues/1219">Mojaveで &ldquo;zlib not available&rdquo; と怒られる問題</a>は
-<code>CFLAGS=&quot;-I$(xcrun --show-sdk-path)/usr/include&quot;</code> を定義して回避。</p></li>
-
-<li><p><a href="https://www.python.org/dev/peps/pep-0394/">PEP 394</a>
+をセットしてFramework型でビルドする。</p>
+</li>
+<li>
+<p><a href="https://github.com/pyenv/pyenv/issues/1219">Mojaveで &ldquo;zlib not available&rdquo; と怒られる問題</a>は
+<code>CFLAGS=&quot;-I$(xcrun --show-sdk-path)/usr/include&quot;</code> を定義して回避。</p>
+</li>
+<li>
+<p><a href="https://www.python.org/dev/peps/pep-0394/">PEP 394</a>
 になるべく沿うように、
 <code>python</code> では <code>/usr/bin/python</code> が呼び出される状態を維持しつつ、
 <code>python3</code>, <code>pip3</code> を明示的に使うようにしたい。
-が、いまのところできない？</p></li>
+が、いまのところできない？</p>
+</li>
 </ul>
-
 <h2 id="anaconda">Anaconda</h2>
-
 <p>Scientificな用途で使いたい場合は
 <a href="/python/scipy.html">Numpy/Scipy</a>
 などの主要パッケージもまとめて面倒みてくれる
@@ -178,63 +178,51 @@ pip3 install -r /path/to/requirements.txt</code></pre></div>
 を使うという選択肢もある。
 GUIのインストーラでもいいし、Homebrewでもいける:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew cask install anaconda
-<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span>/usr/local/anaconda3/bin:<span class="s2">&#34;</span><span class="nv">$PATH</span><span class="s2">&#34;</span></code></pre></div>
-<p>ただし<code>PATH</code>上でシステムコマンド(<code>curl</code>など)を上書きしちゃうヤンチャな面もあるので、
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span>/usr/local/anaconda3/bin:<span class="s2">&#34;</span><span class="nv">$PATH</span><span class="s2">&#34;</span>
+</code></pre></div><p>ただし<code>PATH</code>上でシステムコマンド(<code>curl</code>など)を上書きしちゃうヤンチャな面もあるので、
 それが気になる人はpyenv越しに入れることで汚染を防げる。
 全部入りに抵抗がある場合は
 <code>pyenv install miniconda3-latest</code>
 から小さくスタートすることも可能。
 パッケージ管理では <code>pip</code> の代わりに非公式の <code>conda</code> を使うことになる。</p>
-
 <h2 id="環境変数">環境変数</h2>
-
 <p><a href="https://docs.python.org/3/using/cmdline.html#environment-variables">https://docs.python.org/3/using/cmdline.html#environment-variables</a></p>
-
 <p>シェルの設定ファイル(<code>~/.zshrc</code> とか)で <code>export</code> しておく。
 一時的に無効したいときは <code>python -E</code> で起動。</p>
-
 <h3 id="pythonpath"><code>PYTHONPATH</code></h3>
-
 <p><code>import</code> の探索パス (<code>sys.path</code>) の先頭付近に場所を追加できる。
 例えば自分で書いたモジュールやパッケージの置き場所を指定しておけば、
 いつでも優先的に <code>import</code> できるようになる。</p>
-
 <h3 id="pythonuserbase"><code>PYTHONUSERBASE</code></h3>
-
 <p><a href="/python/pip.html"><code>pip install</code></a> や <code>setup.py install</code> における
 <code>--user</code> オプションの目的地を指定できる。
 デフォルトでは <code>${HOME}/.local</code> 。
 MacのFramework buildでは <code>${HOME}/Library/Python/2.7</code> とかになる。</p>
-
 <p>現在の設定は
 <a href="https://docs.python.org/3/library/site.html"><code>site</code></a>
 の <code>USER_BASE</code> で確認できる (<code>python -m site</code>)。
 <code>USER_SITE</code> はその下の <code>{BASE}/lib/python*.*/site-packages</code> に配置され、
 <code>sys.path</code> に含まれる。
 除外したいときは <code>PYTHONNOUSERSITE</code> をセットするか <code>python -s</code> で起動。</p>
-
 <h3 id="pythonstartup"><code>PYTHONSTARTUP</code></h3>
-
 <p>インタラクティブモードで起動するときに読み込むファイルを指定できる。
 例えば以下のようなものを書いておくと、
 3.4未満の古いPythonでも <code>tab</code> とか <code>^i</code> で補完できるようになる:</p>
 <div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="kn">import</span> <span class="nn">sys</span>
 
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">rlcompleter</span>
     <span class="kn">import</span> <span class="nn">readline</span>
     <span class="n">rlcompleter</span><span class="o">.</span><span class="vm">__name__</span>  <span class="c1"># suppress F401</span>
-    <span class="k">if</span> <span class="s1">&#39;libedit&#39;</span> <span class="ow">in</span> <span class="n">readline</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">:</span>
-        <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s2">&#34;bind ^I rl_complete&#34;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">libedit</span><span class="s1">&#39;</span> <span class="ow">in</span> <span class="n">readline</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">:</span>
+        <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;</span><span class="s2">bind ^I rl_complete</span><span class="s2">&#34;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s2">&#34;tab: complete&#34;</span><span class="p">)</span>
+        <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;</span><span class="s2">tab: complete</span><span class="s2">&#34;</span><span class="p">)</span>
     <span class="k">del</span> <span class="n">readline</span><span class="p">,</span> <span class="n">rlcompleter</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="k">del</span> <span class="n">sys</span></code></pre></div>
-<p>対話モードをさらに便利にするには <a href="/python/ipython.html">IPython</a> を使う。</p>
-
+    <span class="k">del</span> <span class="n">sys</span>
+</code></pre></div><p>対話モードをさらに便利にするには <a href="/python/ipython.html">IPython</a> を使う。</p>
 <h2 id="関連書籍">関連書籍</h2>
-
 <p><a href="https://www.amazon.co.jp/dp/479738946X/ref=as_li_ss_il?ie=UTF8&qid=1485612008&sr=8-6&keywords=python&linkCode=li3&tag=heavywatal-22&linkId=5ea5e48ecc83b9439f21406b6f57c062" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=479738946X&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=479738946X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 <a href="https://www.amazon.co.jp/dp/487311845X/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=72a416f5d10a9e84aaab4b3ee9613329&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=487311845X&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=487311845X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 <a href="https://www.amazon.co.jp/dp/4873118417/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=6b1a04ec880b6c730bd6e80273e30e9c&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873118417&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=4873118417" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
@@ -270,8 +258,8 @@ MacのFramework buildでは <code>${HOME}/Library/Python/2.7</code> とかにな
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -283,11 +271,11 @@ MacのFramework buildでは <code>${HOME}/Library/Python/2.7</code> とかにな
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -306,6 +294,7 @@ MacのFramework buildでは <code>${HOME}/Library/Python/2.7</code> とかにな
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -313,7 +302,6 @@ MacのFramework buildでは <code>${HOME}/Library/Python/2.7</code> とかにな
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -325,20 +313,20 @@ MacのFramework buildでは <code>${HOME}/Library/Python/2.7</code> とかにな
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

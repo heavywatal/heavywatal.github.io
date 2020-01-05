@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -90,42 +90,29 @@ R環境設定
 </ul></nav>
 </header>
 
-
-
 <p><a href="https://cran.r-project.org/manuals.html">https://cran.r-project.org/manuals.html</a></p>
-
 <h2 id="インストール">インストール</h2>
-
 <ul>
 <li><a href="https://cran.rstudio.com/">R本体</a></li>
 <li><a href="https://www.rstudio.com/products/rstudio/download/">Rstudio (任意)</a></li>
 </ul>
-
 <p>Macなら <a href="/mac/homebrew.html">Homebrew</a> で
 <code>brew cask install r rstudio</code> のように入れるのが楽チン。
 Caskじゃない <code>brew install r</code> のほうだとバイナリ版パッケージが使えなくて毎回ソースからビルドさせられるので大変。</p>
-
 <p><a href="https://cran.r-project.org/doc/manuals/R-admin.html">https://cran.r-project.org/doc/manuals/R-admin.html</a></p>
-
 <h2 id="起動オプション">起動オプション</h2>
-
 <p>ワークスペースの自動保存や自動復帰は危険なので切っておく。
 R.app や Rstudio から使う場合はメニューから環境設定みたいなやつを開く。
 シェルから使う場合は例えば以下のようなエイリアスを設定する。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">alias</span> <span class="nv">r</span><span class="o">=</span><span class="s1">&#39;R --quiet --no-save --no-restore-data&#39;</span></code></pre></div>
-<p>詳しくは <code>R --help</code> または
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">alias</span> <span class="nv">r</span><span class="o">=</span><span class="s1">&#39;R --quiet --no-save --no-restore-data&#39;</span>
+</code></pre></div><p>詳しくは <code>R --help</code> または
 <a href="https://cran.r-project.org/doc/manuals/R-intro.html#Invoking-R">https://cran.r-project.org/doc/manuals/R-intro.html#Invoking-R</a></p>
-
 <h2 id="環境変数">環境変数</h2>
-
 <p><a href="https://cran.r-project.org/doc/manuals/R-admin.html#Environment-variable-index">https://cran.r-project.org/doc/manuals/R-admin.html#Environment-variable-index</a></p>
-
 <p><a href="https://stat.ethz.ch/R-manual/R-patched/library/base/html/EnvVar.html">https://stat.ethz.ch/R-manual/R-patched/library/base/html/EnvVar.html</a></p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kp">Sys.getenv</span><span class="p">()</span></code></pre></div>
-<h2 id="renviron">.Renviron</h2>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">Sys.getenv</span><span class="p">(</span><span class="p">)</span>
+</code></pre></div><h2 id="renviron">.Renviron</h2>
 <p><a href="https://stat.ethz.ch/R-manual/R-patched/library/base/html/Startup.html">https://stat.ethz.ch/R-manual/R-patched/library/base/html/Startup.html</a></p>
-
 <p>R起動時に読み込まれ、環境変数を設定するファイル。
 Rスクリプトではなく、シェルスクリプトっぽい代入式で書く。
 例 (<a href="https://github.com/heavywatal/dotfiles/blob/master/.R/.Renviron">https://github.com/heavywatal/dotfiles/blob/master/.R/.Renviron</a>):</p>
@@ -136,9 +123,8 @@ Rスクリプトではなく、シェルスクリプトっぽい代入式で書�
 <span class="nv">R_HISTFILE</span><span class="o">=</span><span class="si">${</span><span class="nv">R_USER</span><span class="si">}</span>/.Rhistory
 <span class="nv">R_HISTSIZE</span><span class="o">=</span><span class="m">65535</span>
 <span class="nv">LANG</span><span class="o">=</span>C
-<span class="nv">LC_CTYPE</span><span class="o">=</span>en_US.UTF-8</code></pre></div>
-<p>探される・読み込まれる順序はだいたい以下のとおり:</p>
-
+<span class="nv">LC_CTYPE</span><span class="o">=</span>en_US.UTF-8
+</code></pre></div><p>探される・読み込まれる順序はだいたい以下のとおり:</p>
 <ol>
 <li><code>$R_ENVIRON</code></li>
 <li><code>$R_HOME/etc/Renviron.site</code></li>
@@ -146,25 +132,18 @@ Rスクリプトではなく、シェルスクリプトっぽい代入式で書�
 <li><code>./.Renviron</code></li>
 <li><code>~/.Renviron</code></li>
 </ol>
-
 <p>読み込ませたくないときは <code>--no-environ</code> オプション。</p>
-
 <h2 id="rprofile">.Rprofile</h2>
-
 <p><a href="https://cran.r-project.org/doc/manuals/R-intro.html#Customizing-the-environment">https://cran.r-project.org/doc/manuals/R-intro.html#Customizing-the-environment</a></p>
-
 <p>R起動時に読み込まれるファイル。
 中身はRスクリプトなので、パッケージの読み込みや関数の定義など、Rでできることは何でもできるはず。
 例: <a href="https://github.com/heavywatal/dotfiles/blob/master/.R/.Rprofile">https://github.com/heavywatal/dotfiles/blob/master/.R/.Rprofile</a></p>
-
 <p><code>.First()</code> と <code>.Last()</code> はそれぞれ起動時と終了時に実行される関数。
 これらが原因で <code>R CMD</code> やパッケージ関連の操作が失敗することもあるので、
 普通の対話環境でのみ有効になるよう <code>if (interactive())</code> などとしておいたほうが安心。</p>
-
 <p>読み込まれる順序はだいたい以下のとおり。
 <code>.Renviron</code> のほうが先に読み込まれるので、
 上記のように <code>R_PROFILE_USER</code> を定義しておいて、そこに置いとけば読み込まれる。</p>
-
 <ol>
 <li><code>$R_PROFILE</code></li>
 <li><code>$R_HOME/etc/Rprofile.site</code></li>
@@ -172,15 +151,10 @@ Rスクリプトではなく、シェルスクリプトっぽい代入式で書�
 <li><code>./.Rprofile</code></li>
 <li><code>~/.Rprofile</code></li>
 </ol>
-
 <p>読み込ませたくないときは <code>--no-init-file</code> オプション。</p>
-
 <h3 id="options"><code>options()</code></h3>
-
 <p><a href="https://stat.ethz.ch/R-manual/R-patched/library/base/html/options.html">https://stat.ethz.ch/R-manual/R-patched/library/base/html/options.html</a></p>
-
 <p><code>?options</code> で項目の一覧を見られる。</p>
-
 <p>スクリプトの結果が設定依存で変わっては困るので、
 そういう本質的なものはいじらずに、
 表示関連の項目だけ変えるに留めたほうがよい。
@@ -188,7 +162,6 @@ Rスクリプトではなく、シェルスクリプトっぽい代入式で書�
 それを設定した環境とそうでない環境で <code>read.table()</code> の結果が変わるのは危険。
 関数の引数として毎回指定するか、
 <a href="/rstats/readr.html">readr</a>の関数を使うべし。</p>
-
 <dl>
 <dt><code>warn=1</code></dt>
 <dd>警告レベルの設定。
@@ -212,16 +185,11 @@ Rスクリプトではなく、シェルスクリプトっぽい代入式で書�
 <dd>警告やエラーの出処をたどって表示する。
 Pythonほどわかりやすくないが、ちょっとはマシになる。</dd>
 </dl>
-
 <h2 id="ライブラリの管理">ライブラリの管理</h2>
-
 <p><a href="https://cran.r-project.org/doc/manuals/R-admin.html#Add_002don-packages">https://cran.r-project.org/doc/manuals/R-admin.html#Add_002don-packages</a></p>
-
-<h3 id="r-makevars"><code>~/.R/Makevars</code></h3>
-
+<h3 id="rmakevars"><code>~/.R/Makevars</code></h3>
 <p>パッケージをソースコードからビルドするときの設定。
 大概はビルド済みのものを入れるので不要だけど、たまに必要になる。</p>
-
 <p>例えば、素のmacOSでOpenMP依存のパッケージをビルドしようとすると
 <code>clang: error: unsupported option '-fopenmp'</code>
 などと怒られる。
@@ -235,9 +203,7 @@ Pythonほどわかりやすくないが、ちょっとはマシになる。</dd>
 <span class="c"># llvm
 </span><span class="c"></span><span class="nv">CC</span><span class="o">=</span>/usr/local/opt/llvm/bin/clang
 <span class="nv">CXX</span><span class="o">=</span>/usr/local/opt/llvm/bin/clang++
-</code></pre></div>
-<p><code>CPPFLAGS</code>, <code>CFLAGS</code>, <code>CXXFLAGS</code>, <code>LDFLAGS</code> なども設定可能。</p>
-
+</code></pre></div><p><code>CPPFLAGS</code>, <code>CFLAGS</code>, <code>CXXFLAGS</code>, <code>LDFLAGS</code> なども設定可能。</p>
 <p><a href="https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-Makevars">https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-Makevars</a></p>
 
 </article>
@@ -270,8 +236,8 @@ Pythonほどわかりやすくないが、ちょっとはマシになる。</dd>
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -283,11 +249,11 @@ Pythonほどわかりやすくないが、ちょっとはマシになる。</dd>
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -306,6 +272,7 @@ Pythonほどわかりやすくないが、ちょっとはマシになる。</dd>
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -313,7 +280,6 @@ Pythonほどわかりやすくないが、ちょっとはマシになる。</dd>
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -325,20 +291,20 @@ Pythonほどわかりやすくないが、ちょっとはマシになる。</dd>
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

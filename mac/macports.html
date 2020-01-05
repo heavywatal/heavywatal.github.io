@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -91,14 +91,9 @@ MacPorts
 </ul></nav>
 </header>
 
-
-
 <p>今は <a href="/mac/homebrew.html">Homebrew</a> を使ってるのでこっちの情報は更新してない</p>
-
 <h2 id="package-manager-for-mac-os-x">Package Manager for Mac OS X</h2>
-
 <p><a href="http://www.macports.org/">http://www.macports.org/</a></p>
-
 <p>MacPorts はLinuxで言うところの
 <code>apt</code> や <code>yum</code> のようなもので、
 さまざまなソフトウェアをコマンドラインから簡単に管理できるパッケージ管理システム。
@@ -106,113 +101,109 @@ MacPorts
 アップデートやアンインストールもコマンドひとつで行える。
 それぞれのパッケージのことを port と呼ぶ。
 port は <code>/opt/local/</code> 以下にインストールされる。</p>
-
 <h2 id="installation">Installation</h2>
-
 <ol>
-<li>Command Line Tools をインストールする。 cf. <a href="/dev/devenv.html">/dev/devenv</a></li>
-<li><a href="http://www.macports.org/">公式サイト</a> から
-OSに合ったディスクイメージ <code>MacPorts-***.dmg</code> をダウンロード</li>
-<li>それをマウントしてインストーラを実行</li>
-
-<li><p>コマンドがインストールされる <code>/opt/local/bin</code> にパスを通す。
+<li>
+<p>Command Line Tools をインストールする。 cf. <a href="/dev/devenv.html">/dev/devenv</a></p>
+</li>
+<li>
+<p><a href="http://www.macports.org/">公式サイト</a> から
+OSに合ったディスクイメージ <code>MacPorts-***.dmg</code> をダウンロード</p>
+</li>
+<li>
+<p>それをマウントしてインストーラを実行</p>
+</li>
+<li>
+<p>コマンドがインストールされる <code>/opt/local/bin</code> にパスを通す。
 例えば <code>.zshenv</code> や <code>.bashrc</code> に以下のように記述。:</p>
-
 <pre><code>export PATH=/opt/local/bin:/opt/local/sbin:${PATH}
-</code></pre></li>
-
-<li><p>Terminal を開いて
+</code></pre>
+</li>
+<li>
+<p>Terminal を開いて
 MacPorts 本体とportカタログをアップデート:</p>
-
 <pre><code>sudo port selfupdate
-</code></pre></li>
+</code></pre>
+</li>
 </ol>
-
 <h2 id="usage">Usage</h2>
-
 <p>ほかにもいろんなコマンドがあるけど代表的なものだけ。詳しくは <code>man port</code> で。</p>
-
 <ul>
-<li><p>欲しいportを検索:</p>
-
+<li>
+<p>欲しいportを検索:</p>
 <pre><code>port search bio
-</code></pre></li>
-
-<li><p>気になったportの詳細を表示:</p>
-
+</code></pre>
+</li>
+<li>
+<p>気になったportの詳細を表示:</p>
 <pre><code>port info [port]
-</code></pre></li>
-
-<li><p>portをインストールする時に選択できるオプションを表示。:</p>
-
+</code></pre>
+</li>
+<li>
+<p>portをインストールする時に選択できるオプションを表示。:</p>
 <pre><code>port variants [port]
-</code></pre></li>
-
-<li><p>そのportを入れるために必要な（依存している）portを表示。
+</code></pre>
+</li>
+<li>
+<p>そのportを入れるために必要な（依存している）portを表示。
 下はrecursive版で、<code>--full</code> オプションでフル表示できる。:</p>
-
 <pre><code>port deps [port]
 port rdeps [port]
-</code></pre></li>
-
-<li><p>そのportに依存しているやつらを表示。:</p>
-
+</code></pre>
+</li>
+<li>
+<p>そのportに依存しているやつらを表示。:</p>
 <pre><code>port dependents [port]
 port rdependents [port]
-</code></pre></li>
-
-<li><p>portのインストール/アンインストール。
+</code></pre>
+</li>
+<li>
+<p>portのインストール/アンインストール。
 そいつが依存しているほかのportも自動的にインストールされる。:</p>
-
 <pre><code>sudo port install [port] [+variant]
 sudo port uninstall [port]
-</code></pre></li>
-
-<li><p>インストール済みのportを一覧表示:</p>
-
-<pre><code>port installed
-</code></pre></li>
-
-<li><p>MacPorts 本体とportカタログをアップデートし、
-アップデート可能なものを一覧表示:</p>
-
-<pre><code>sudo port selfupdate &amp;&amp; port outdated
-</code></pre></li>
-
-<li><p>アップデート可能なものをすべてアップデート。
-古いものを自動でアンインストールするには <code>-u</code> オプションを付ける。:</p>
-
-<pre><code>sudo port upgrade outdated
-</code></pre></li>
-
-<li><p>インストール済みのportを再インストール:</p>
-
-<pre><code>sudo port -n upgrade --force [port]
-</code></pre></li>
-</ul>
-
-<p>-</p>
-
-<pre><code>過去のバージョンのportをインストール
-:   1.  &lt;http://trac.macports.org/browser/trunk/dports&gt; から目的のportのページを開く
-    1.  右上の&quot;Revision Log&quot;からお目当てのバージョンのリビジョン番号を確認
-    1.  以下のような svn コマンドで
-        `Portfile` をダウンロードし、インストール:
-
-            svn checkout -r 74577 http://svn.macports.org/repository/macports/trunk/dports/shells/zsh-devel zsh-devel-4.3.11
-            cd zsh-devel-4.3.11
-            sudo port install +mp_completion +doc +examples
 </code></pre>
-
+</li>
+<li>
+<p>インストール済みのportを一覧表示:</p>
+<pre><code>port installed
+</code></pre>
+</li>
+<li>
+<p>MacPorts 本体とportカタログをアップデートし、
+アップデート可能なものを一覧表示:</p>
+<pre><code>sudo port selfupdate &amp;&amp; port outdated
+</code></pre>
+</li>
+<li>
+<p>アップデート可能なものをすべてアップデート。
+古いものを自動でアンインストールするには <code>-u</code> オプションを付ける。:</p>
+<pre><code>sudo port upgrade outdated
+</code></pre>
+</li>
+<li>
+<p>インストール済みのportを再インストール:</p>
+<pre><code>sudo port -n upgrade --force [port]
+</code></pre>
+</li>
+<li>
+<p>過去のバージョンのportをインストール
+:   1.  <a href="http://trac.macports.org/browser/trunk/dports">http://trac.macports.org/browser/trunk/dports</a> から目的のportのページを開く
+1.  右上の&quot;Revision Log&quot;からお目当てのバージョンのリビジョン番号を確認
+1.  以下のような svn コマンドで
+<code>Portfile</code> をダウンロードし、インストール:</p>
+<pre><code>          svn checkout -r 74577 http://svn.macports.org/repository/macports/trunk/dports/shells/zsh-devel zsh-devel-4.3.11
+          cd zsh-devel-4.3.11
+          sudo port install +mp_completion +doc +examples
+</code></pre>
+</li>
+</ul>
 <h3 id="pseudo-portnames">pseudo-portnames</h3>
-
 <p>各コマンドの対象となるportを、実名だけでなく状態によってまとめて指定できる。
 e.g.:</p>
-
 <pre><code>port list leaves
 sudo port uninstall $(port echo inactive)
 </code></pre>
-
 <dl>
 <dt><code>all</code></dt>
 <dd>all the ports in each ports tree listed in sources.conf</dd>
@@ -227,7 +218,7 @@ sudo port uninstall $(port echo inactive)
 <dt><code>installed</code></dt>
 <dd>set of all installed ports.</dd>
 <dt><code>uninstalled</code></dt>
-<dd>ports in the ports tree(s) that aren&rsquo;t installed.</dd>
+<dd>ports in the ports tree(s) that aren't installed.</dd>
 <dt><code>outdated</code></dt>
 <dd>installed ports that are out of date with respect to their current version/revision in the ports tree(s)</dd>
 <dt><code>obsolete</code></dt>
@@ -239,32 +230,25 @@ sudo port uninstall $(port echo inactive)
 <dt><code>leaves</code></dt>
 <dd>installed ports that are unrequested and have no dependents.</dd>
 </dl>
-
 <h2 id="port-installed">port installed</h2>
-
 <h3 id="coreutils">coreutils</h3>
-
 <p>MacはFreeBSDの上にできてるので各種コマンドラインツールもBSD製のものが多い。
 一方LinuxのコマンドはGNU製が多いので、
 同じ名前でも微妙にオプションや挙動が異なったりして戸惑うことがある。
 そこで、MacPorts を使って
 GNU製のコマンドラインツール群であるcoreutilsをMacに入れる。</p>
-
 <p>各プログラムはデフォルトで接頭辞 <code>g</code> のついた状態で
 <code>/opt/local/bin/</code> にインストールされる。
 variantとして <code>+with_default_names</code> を指定してインストールすれば元の名前で入るが、
 そうすべきではないと思う。
 必要なものを <code>/usr/local/bin/</code> にシムリンク張るか、
 <code>.zshrc</code> などにエイリアスを定義して使う。:</p>
-
 <pre><code>sudo port install coreutils
 sudo ln -s /opt/local/bin/gls /usr/local/bin/ls
 
 alias ls=&quot;gls -vF --show-control-chars --color=auto&quot;
 </code></pre>
-
-<h3 id="gnu-tar-xz">GNU tar &amp; xz</h3>
-
+<h3 id="gnu-tar--xz">GNU tar &amp; xz</h3>
 <p>GNU <code>tar</code> 1.22からxz圧縮をサポートするようになった。
 Macにプリインストールされてる <code>bsdtar</code> や
 <code>gnutar</code> (1.17) では使えない。
@@ -273,28 +257,21 @@ bzipは圧縮も展開も遅くて（CPU負荷が大きくて）圧縮率が高�
 xzは最も圧縮率が高く、圧縮にはbzip2よりも時間がかかる一方で展開はgzip並みに速い。
 ということで、多くのユーザーに配布・展開されるようなファイルの圧縮に効果的。
 あるいは、書き換える予定は無いが長期保存しておかなければいけないデカいファイルとか。:</p>
-
 <pre><code>sudo port install xz gnutar
 tar cJf archive.tar.xz archive/
 </code></pre>
-
 <h3 id="zsh">zsh</h3>
-
 <p>Macには元から入ってるし、ソースからインストールするのも簡単だけど、
 port コマンドを補完できるvariantがあるのでこれを使う。
 ログインシェルにするにはひと手間必要。
 その後の設定は <a href="/dev/zsh.html">こちらのページ参照</a> 。:</p>
-
 <pre><code>sudo port install zsh-devel +mp_completion +doc +examples
 sudo emacs -nw /etc/shells # 末尾に/opt/local/bin/zshを追加
 chsh -s /opt/local/bin/zsh
 exit
 </code></pre>
-
 <h3 id="misc">misc.</h3>
-
 <p>そのほか意識的に入れるもの。依存パッケージとして勝手に入るものではなく。:</p>
-
 <pre><code>clang-3.1
 emacs
 gcc47
@@ -310,18 +287,14 @@ tmux
 wakeonlan
 wget
 </code></pre>
-
 <p>意識的には入れないけど、ぼーっとしてるとX11関連のportと共に勝手にインストールされてしまうもの。
 明示的に <code>+no_x11</code> をつけてインストールしておき、それを防ぐ。:</p>
-
 <pre><code>cairo +no_x11 +quartz
 gd2 +no_x11
 ghostscript +no_x11
 </code></pre>
-
 <p>あるいは <code>/opt/local/etc/macports/variants.conf</code>
 に以下のように書いておくと自動的にそうしてくれる。:</p>
-
 <pre><code>+no_x11 +quartz
 </code></pre>
 
@@ -355,8 +328,8 @@ ghostscript +no_x11
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -368,11 +341,11 @@ ghostscript +no_x11
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -391,6 +364,7 @@ ghostscript +no_x11
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -398,7 +372,6 @@ ghostscript +no_x11
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -410,20 +383,20 @@ ghostscript +no_x11
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

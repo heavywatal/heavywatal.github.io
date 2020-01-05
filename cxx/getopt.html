@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -90,10 +90,7 @@ C&#43;&#43;コマンドライン引数
 </ul></nav>
 </header>
 
-
-
 <h2 id="理想">理想</h2>
-
 <ul>
 <li>ビルド不要でヘッダ1つ</li>
 <li>標準ライブラリのみに依存していてポータブル</li>
@@ -104,32 +101,23 @@ C&#43;&#43;コマンドライン引数
 <li>マクロではなくtemplateやlambdaなど真っ当なC++
 (できればC++11以降の簡潔なスタイル) で書ける</li>
 </ul>
-
 <h2 id="gnu-getopt">GNU <code>getopt</code></h2>
-
 <p><a href="http://www.gnu.org/s/libc/manual/html_node/Getopt.html">http://www.gnu.org/s/libc/manual/html_node/Getopt.html</a></p>
-
 <ul>
 <li>UNIX的な環境ならインストール不要だがC/C++標準ではない</li>
 <li>ヘルプなど自動生成してくれない</li>
 <li>C++というよりCなので手作業が多い</li>
 </ul>
-
-<h2 id="boost-program-options"><code>boost::program_options</code></h2>
-
+<h2 id="boostprogram_options"><code>boost::program_options</code></h2>
 <p><a href="http://www.boost.org/doc/html/program_options.html">http://www.boost.org/doc/html/program_options.html</a></p>
-
 <ul>
 <li>格納先の変数を紐付け可能</li>
 <li>ファイルからも読み込める</li>
 <li>読み込み可能なファイルの出力方法は用意されてないので自分で書く必要がある</li>
 <li>ビルドとリンクが必要で大掛かり cf. <a href="/cxx/boost.html">boost</a></li>
 </ul>
-
 <h2 id="gflags"><code>gflags</code></h2>
-
 <p><a href="https://gflags.github.io/gflags/">https://gflags.github.io/gflags/</a></p>
-
 <ul>
 <li>テンプレートではなくマクロをふんだんに使って実装されているのでちょっと怖い</li>
 <li><code>main()</code> 関数まわりをほとんど変更することなく、 各ソースファイルで自由にオプションを定義できる(しかもたった1行で)</li>
@@ -137,35 +125,29 @@ C&#43;&#43;コマンドライン引数
 <li>入力可能なファイルを出力することも可能</li>
 <li>要ビルド＆リンク</li>
 </ul>
-
 <h3 id="usage">Usage</h3>
-
 <p><code>main()</code> 関数に書く必要があるのはこれだけ</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;gflags/gflags.h&gt;</span><span class="cp">
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#</span><span class="cp">include</span> <span class="cpf">&lt;gflags/gflags.h&gt;</span><span class="cp">
 </span><span class="cp"></span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
-    <span class="n">gflags</span><span class="o">::</span><span class="n">SetUsageMessage</span><span class="p">(</span><span class="s">&#34;This is a program to test gflags&#34;</span><span class="p">);</span>
-    <span class="n">gflags</span><span class="o">::</span><span class="n">ParseCommandLineFlags</span><span class="p">(</span><span class="o">&amp;</span><span class="n">argc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">argv</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[</span><span class="p">]</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">gflags</span><span class="o">:</span><span class="o">:</span><span class="n">SetUsageMessage</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;</span><span class="s">This is a program to test gflags</span><span class="s">&#34;</span><span class="p">)</span><span class="p">;</span>
+    <span class="n">gflags</span><span class="o">:</span><span class="o">:</span><span class="n">ParseCommandLineFlags</span><span class="p">(</span><span class="o">&amp;</span><span class="n">argc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">argv</span><span class="p">,</span> <span class="nb">true</span><span class="p">)</span><span class="p">;</span>
     <span class="c1">// do something
 </span><span class="c1"></span>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
-<p>あとは個々のソースファイルでオプションを追加。<code>namespace</code> にも入れられる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;gflags/gflags.h&gt;</span><span class="cp">
+</code></pre></div><p>あとは個々のソースファイルでオプションを追加。<code>namespace</code> にも入れられる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#</span><span class="cp">include</span> <span class="cpf">&lt;gflags/gflags.h&gt;</span><span class="cp">
 </span><span class="cp"></span>
 <span class="k">namespace</span> <span class="n">tapiola</span> <span class="p">{</span>
-    <span class="n">DEFINE_uint64</span><span class="p">(</span><span class="n">sibelius</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#34;string that is displayed with --help flag&#34;</span><span class="p">);</span>
+    <span class="n">DEFINE_uint64</span><span class="p">(</span><span class="n">sibelius</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="sa"></span><span class="s">&#34;</span><span class="s">string that is displayed with --help flag</span><span class="s">&#34;</span><span class="p">)</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="kt">void</span> <span class="n">func</span><span class="p">(){</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">tapiola</span><span class="o">::</span><span class="n">FLAGS_sibelius</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="p">)</span><span class="p">{</span>
+    <span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">cout</span> <span class="o">&lt;</span><span class="o">&lt;</span> <span class="n">tapiola</span><span class="o">:</span><span class="o">:</span><span class="n">FLAGS_sibelius</span> <span class="o">&lt;</span><span class="o">&lt;</span> <span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">endl</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
-<h2 id="cmdline">cmdline</h2>
-
+</code></pre></div><h2 id="cmdline">cmdline</h2>
 <p><a href="https://github.com/tanakh/cmdline">https://github.com/tanakh/cmdline</a><br>
 <a href="http://d.hatena.ne.jp/tanakh/20091028">http://d.hatena.ne.jp/tanakh/20091028</a></p>
-
 <ul>
 <li>ヘッダファイル1つ</li>
 <li>直感的でC++らしいデザインなので分かりやすい</li>
@@ -174,47 +156,38 @@ C&#43;&#43;コマンドライン引数
 <li>変数に直接格納することはできず、パーサのメソッドで値を取得:
 <code>template &lt;class T&gt; const T &amp;parser::get(const std::string &amp;name)</code></li>
 </ul>
-
 <h2 id="tclap">TCLAP</h2>
-
 <p><a href="http://tclap.sourceforge.net/">http://tclap.sourceforge.net/</a></p>
-
 <ul>
-<li>&ldquo;Templatized C++ Command Line Parser Library&rdquo;の名のとおり
+<li>&ldquo;Templatized C++ Command Line Parser Library&rdquo; の名のとおり
 <code>template</code> で書かれておりヘッダだけで構成される</li>
 <li>が、<code>configure</code> と <code>make install</code> というインストール手順を踏む</li>
 <li><code>std::string</code> からパース可能</li>
 <li>格納する変数は指定できず、<code>*Arg</code> オブジェクトの <code>getValue()</code> メソッドで値を取得</li>
 </ul>
-
 <h2 id="getoptpp">getoptpp</h2>
-
 <p><a href="http://code.google.com/p/getoptpp/">http://code.google.com/p/getoptpp/</a></p>
-
 <ul>
 <li><code>std::istream</code> っぽく <code>&gt;&gt;operator</code> を使う</li>
 <li>格納する変数を指定できる</li>
 <li>基本的にはライブラリをビルドして使うが、ちょっといじればヘッダの <code>#include</code> だけでも使える</li>
 <li>ファイルの読み込みやヘルプの生成は一切手伝ってくれない</li>
 </ul>
-
 <h2 id="clipp">clipp</h2>
-
 <dl>
 <dt><a href="https://github.com/muellan/clipp">https://github.com/muellan/clipp</a></dt>
-<dd><p>理念がしっかりしていて、かなり柔軟に使える。</p></dd>
-<dd><p>そのまま使うには少し難しかったり、
-値を一括して取得する機能が欠けたりという問題はある。</p></dd>
-<dd><p><a href="https://github.com/nlohmann/json">nlohmann/json</a>
+<dd>
+<p>理念がしっかりしていて、かなり柔軟に使える。</p>
+</dd>
+<dd>そのまま使うには少し難しかったり、
+値を一括して取得する機能が欠けたりという問題はある。</dd>
+<dd><a href="https://github.com/nlohmann/json">nlohmann/json</a>
 を使ってそのへんをうまくやる補助ライブラリ
 <a href="https://github.com/heavywatal/clippson">clippson</a>
-を作って利用中。</p></dd>
+を作って利用中。</dd>
 </dl>
-
 <h2 id="そのほか">そのほか</h2>
-
 <p>Githubで上位に出てくるこれらもそのうち試したい:</p>
-
 <dl>
 <dt><a href="https://github.com/docopt/docopt.cpp">https://github.com/docopt/docopt.cpp</a></dt>
 <dd>ヘルプを自動生成するのではなく、ヘルプからパーサを構築する</dd>
@@ -264,8 +237,8 @@ C&#43;&#43;コマンドライン引数
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -277,11 +250,11 @@ C&#43;&#43;コマンドライン引数
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -300,6 +273,7 @@ C&#43;&#43;コマンドライン引数
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -307,7 +281,6 @@ C&#43;&#43;コマンドライン引数
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -319,20 +292,20 @@ C&#43;&#43;コマンドライン引数
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

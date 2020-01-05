@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -90,32 +90,25 @@ plyr — データ分割-関数適用-再結合を効率的に
 </ul></nav>
 </header>
 
-
-
 <dl>
 <dt>Split, Apply, Combine</dt>
 <dd>特定の条件でデータを分割し、それぞれに関数を適用し、再びそれを統合する。
 R標準 <code>apply</code> 系の関数よりも直感的な使い方ができ、処理も高速。</dd>
 </dl>
-
 <p>Rの中から <code>install.packages(&quot;plyr&quot;)</code> でインストールし、
 使う前に <code>library(plyr)</code> で読み込む。</p>
-
 <div class="warning">
 data.frame 処理には <a href="/rstats/dplyr.html">dplyr</a>、
 list, vector 処理には <a href="/rstats/purrr.html">purrr</a>
 がある今となっては、このパッケージを使うべき場面はもう無さそう。
 </div>
-
 <ul>
 <li><a href="http://plyr.had.co.nz/">http://plyr.had.co.nz/</a></li>
 <li><a href="http://www.jstatsoft.org/v40/i01">http://www.jstatsoft.org/v40/i01</a></li>
 <li><a href="https://www.rdocumentation.org/packages/plyr">https://www.rdocumentation.org/packages/plyr</a></li>
 <li><a href="https://cran.r-project.org/web/packages/plyr/index.html">https://cran.r-project.org/web/packages/plyr/index.html</a></li>
 </ul>
-
 <h2 id="コア関数">コア関数</h2>
-
 <pre><code>from                           to array  da.fr  list   nothing
 array                             aaply  adply  alply  a_ply
 data.frame                        daply  ddply  dlply  d_ply
@@ -123,71 +116,69 @@ list or vector                    laply  ldply  llply  l_ply
 (Replicates evaluation)           raply  rdply  rlply  r_ply
 (Call a multi-argument function)  maply  mdply  mlply  m_ply
 </code></pre>
-
 <p>e.g. 複数ファイルを読み込んでひとつのdata.frameにまとめる。
 listからdata.frameを作るので <code>ldply()</code></p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> filenames <span class="o">=</span> <span class="kp">list.files</span><span class="p">(</span>pattern<span class="o">=</span><span class="s">&#34;\\.csv$&#34;</span><span class="p">)</span>
-<span class="o">&gt;</span> large_table <span class="o">=</span> ldply<span class="p">(</span>filenames<span class="p">,</span> read.csv<span class="p">)</span></code></pre></div>
-<p>e.g. data.frameについてある列の値でグループ化し、
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="n">filenames</span> <span class="o">=</span> <span class="nf">list.files</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="s">&#34;</span><span class="s">\\.csv$&#34;</span><span class="p">)</span>
+<span class="o">&gt;</span> <span class="n">large_table</span> <span class="o">=</span> <span class="nf">ldply</span><span class="p">(</span><span class="n">filenames</span><span class="p">,</span> <span class="n">read.csv</span><span class="p">)</span>
+</code></pre></div><p>e.g. data.frameについてある列の値でグループ化し、
 グループ毎に数値の列の平均を取る。
 data.frameからdata.frameを作るので <code>ddply()</code></p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> ddply<span class="p">(</span>iris<span class="p">,</span> <span class="m">.</span><span class="p">(</span>Species<span class="p">),</span> numcolwise<span class="p">(</span><span class="kp">mean</span><span class="p">))</span>
-     Species Sepal.Length Sepal.Width Petal.Length Petal.Width
-<span class="m">1</span>     setosa        <span class="m">5.006</span>       <span class="m">3.428</span>        <span class="m">1.462</span>       <span class="m">0.246</span>
-<span class="m">2</span> versicolor        <span class="m">5.936</span>       <span class="m">2.770</span>        <span class="m">4.260</span>       <span class="m">1.326</span>
-<span class="m">3</span>  virginica        <span class="m">6.588</span>       <span class="m">2.974</span>        <span class="m">5.552</span>       <span class="m">2.026</span></code></pre></div>
-<h2 id="ヘルパー関数">ヘルパー関数</h2>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="nf">ddply</span><span class="p">(</span><span class="n">iris</span><span class="p">,</span> <span class="n">.(Species</span><span class="p">)</span><span class="p">,</span> <span class="nf">numcolwise</span><span class="p">(</span><span class="n">mean</span><span class="p">)</span><span class="p">)</span>
+     <span class="n">Species</span> <span class="n">Sepal.Length</span> <span class="n">Sepal.Width</span> <span class="n">Petal.Length</span> <span class="n">Petal.Width</span>
+<span class="m">1</span>     <span class="n">setosa</span>        <span class="m">5.006</span>       <span class="m">3.428</span>        <span class="m">1.462</span>       <span class="m">0.246</span>
+<span class="m">2</span> <span class="n">versicolor</span>        <span class="m">5.936</span>       <span class="m">2.770</span>        <span class="m">4.260</span>       <span class="m">1.326</span>
+<span class="m">3</span>  <span class="n">virginica</span>        <span class="m">6.588</span>       <span class="m">2.974</span>        <span class="m">5.552</span>       <span class="m">2.026</span>
+</code></pre></div><h2 id="ヘルパー関数">ヘルパー関数</h2>
 <dl>
 <dt><code>plyr::join(x, y, by=NULL, type=&quot;left&quot;, match=&quot;all&quot;)</code></dt>
-<dd><p><code>by</code> で指定した列の値が等しいものを同じ行として、いい感じに <code>cbind()</code>。
+<dd><code>by</code> で指定した列の値が等しいものを同じ行として、いい感じに <code>cbind()</code>。
 複数行がマッチした場合のデフォルトの挙動は <code>base::merge()</code> と同じく
-<code>match=&quot;all&quot;</code> だが <code>match=&quot;first&quot;</code> も指定できて、そちらは高速らしい。</p>
-
-<p><code>type=</code></p>
-
+<code>match=&quot;all&quot;</code> だが <code>match=&quot;first&quot;</code> も指定できて、そちらは高速らしい。
 <dl>
+<dt><code>type=</code></dt>
 <dd><code>&quot;inner&quot;</code>: <code>x</code> と <code>y</code> の <code>by</code> がマッチする行のみ<br>
 <code>&quot;left&quot;</code>: <code>x</code> の全ての行を保持<br>
 <code>&quot;right&quot;</code>: <code>y</code> の全ての行を保持<br>
 <code>&quot;full&quot;</code>: <code>&quot;left&quot;</code> の結果の下に、<code>y</code> の残りの行を追加</dd>
-</dl></dd>
+</dl>
+</dd>
 <dt><code>plyr::join_all(dfs, by=NULL, type=&quot;left&quot;, match=&quot;all&quot;)</code></dt>
-<dd><p>listに入った複数のdata.frameを再帰的に <code>join()</code> する。</p></dd>
+<dd>listに入った複数のdata.frameを再帰的に <code>join()</code> する。</dd>
 <dt><code>plyr::rename(x, replace)</code></dt>
-<dd><p>data.frame列名などを <strong>部分的に</strong> 変更</p>
+<dd>data.frame列名などを <strong>部分的に</strong> 変更
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># replace引数には名前付き文字列vectorを与える</span>
 <span class="c1"># 古い名前が名前、新しい名前が値</span>
-plyr<span class="o">::</span>rename<span class="p">(</span><span class="m">.</span>data<span class="p">,</span> <span class="kt">c</span><span class="p">(</span>col_a <span class="o">=</span> <span class="s">&#34;alpha&#34;</span><span class="p">,</span> col_b <span class="o">=</span> <span class="s">&#34;beta&#34;</span><span class="p">))</span></code></pre></div></dd>
+<span class="n">plyr</span><span class="o">::</span><span class="nf">rename</span><span class="p">(</span><span class="n">.data</span><span class="p">,</span> <span class="nf">c</span><span class="p">(</span><span class="n">col_a</span> <span class="o">=</span> <span class="s">&#34;</span><span class="s">alpha&#34;</span><span class="p">,</span> <span class="n">col_b</span> <span class="o">=</span> <span class="s">&#34;</span><span class="s">beta&#34;</span><span class="p">)</span><span class="p">)</span>
+</code></pre></div></dd>
 <dt><code>plyr::count(.data, vars=NULL, wt_var=NULL)</code></dt>
-<dd><p>data.frameのなかで <code>vars</code> 列に関してユニークな行数をカウント。
-重み付けに使う列を <code>wt_var</code> に指定できる。</p></dd>
+<dd>data.frameのなかで <code>vars</code> 列に関してユニークな行数をカウント。
+重み付けに使う列を <code>wt_var</code> に指定できる。</dd>
 <dt><code>plyr::colwise(.fun, .cols=true, ...)</code>,</dt>
-<dd><p>関数を列ごとに適用するものに変換する。
+<dd>関数を列ごとに適用するものに変換する。
 例えば <code>colwise(mean)(.data)</code> は <code>colMeans(.data)</code> とほぼ同義。
 関数で使えない型が含まれている行の結果には <code>NA</code> が入る。
 <code>numcolwise(.fun, ...)</code> と <code>catcolwisw(.fun, ...)</code>
-はそれぞれ数値の行、カテゴリ変数の行だけに適用する関数を返してくれる。</p></dd>
+はそれぞれ数値の行、カテゴリ変数の行だけに適用する関数を返してくれる。</dd>
 <dt><code>plyr::each(func1, func2, ...)</code></dt>
-<dd><p>同じ引数に対して複数の関数を並列に作用させる。 e.g. <code>each(min, max, mean)(1:10)</code>, <code>each(head, tail)(.data, n=10)</code></p></dd>
+<dd>同じ引数に対して複数の関数を並列に作用させる。 e.g. <code>each(min, max, mean)(1:10)</code>, <code>each(head, tail)(.data, n=10)</code></dd>
 <dt><code>plyr::splat(func)</code></dt>
-<dd><p>ひとつのリストや文字列ベクタでまとめて引数を受け取れるような関数に変換する。
-<code>do.call()</code> はlistしか取らないがこちらは名前付きベクタも可</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> params <span class="o">=</span> <span class="kt">c</span><span class="p">(</span>by<span class="o">=</span><span class="m">2</span><span class="p">,</span> length<span class="o">=</span><span class="m">4</span><span class="p">)</span>
-<span class="o">&gt;</span> splat<span class="p">(</span><span class="kp">seq</span><span class="p">)(</span>params<span class="p">)</span>
-<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="m">1</span> <span class="m">3</span> <span class="m">5</span> <span class="m">7</span>
-<span class="o">&gt;</span> <span class="kp">do.call</span><span class="p">(</span><span class="kp">seq</span><span class="p">,</span> <span class="kp">as.list</span><span class="p">(</span>params<span class="p">))</span>
-<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="m">1</span> <span class="m">3</span> <span class="m">5</span> <span class="m">7</span></code></pre></div></dd>
+<dd>ひとつのリストや文字列ベクタでまとめて引数を受け取れるような関数に変換する。
+<code>do.call()</code> はlistしか取らないがこちらは名前付きベクタも可
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="n">params</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="m">2</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="m">4</span><span class="p">)</span>
+<span class="o">&gt;</span> <span class="nf">splat</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<span class="n">[1</span><span class="n">]</span> <span class="m">1</span> <span class="m">3</span> <span class="m">5</span> <span class="m">7</span>
+<span class="o">&gt;</span> <span class="nf">do.call</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="nf">as.list</span><span class="p">(</span><span class="n">params</span><span class="p">)</span><span class="p">)</span>
+<span class="n">[1</span><span class="n">]</span> <span class="m">1</span> <span class="m">3</span> <span class="m">5</span> <span class="m">7</span>
+</code></pre></div></dd>
 </dl>
-
 <h2 id="並列化">並列化</h2>
-
 <p><code>doMC</code> 越しに <code>foreach</code> をバックエンドとして使用する</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">install.packages<span class="p">(</span><span class="s">&#34;doMC&#34;</span><span class="p">)</span>
-<span class="kn">library</span><span class="p">(</span>doMC<span class="p">)</span>
-doMC<span class="o">::</span>registerDoMC<span class="p">(</span>parallel<span class="o">::</span>detectCores<span class="p">())</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">install.packages</span><span class="p">(</span><span class="s">&#34;</span><span class="s">doMC&#34;</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">doMC</span><span class="p">)</span>
+<span class="n">doMC</span><span class="o">::</span><span class="nf">registerDoMC</span><span class="p">(</span><span class="n">parallel</span><span class="o">::</span><span class="nf">detectCores</span><span class="p">(</span><span class="p">)</span><span class="p">)</span>
 
-<span class="m">.</span>data <span class="o">=</span> plyr<span class="o">::</span>ldply<span class="p">(</span>lst<span class="p">,</span> func<span class="p">,</span> <span class="m">.</span>parallel<span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span></code></pre></div>
+<span class="n">.data</span> <span class="o">=</span> <span class="n">plyr</span><span class="o">::</span><span class="nf">ldply</span><span class="p">(</span><span class="n">lst</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">.parallel</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+</code></pre></div>
 </article>
 </main>
 
@@ -218,8 +209,8 @@ doMC<span class="o">::</span>registerDoMC<span class="p">(</span>parallel<span c
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li class="active"><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -231,11 +222,11 @@ doMC<span class="o">::</span>registerDoMC<span class="p">(</span>parallel<span c
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -254,6 +245,7 @@ doMC<span class="o">::</span>registerDoMC<span class="p">(</span>parallel<span c
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -261,7 +253,6 @@ doMC<span class="o">::</span>registerDoMC<span class="p">(</span>parallel<span c
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -273,20 +264,20 @@ doMC<span class="o">::</span>registerDoMC<span class="p">(</span>parallel<span c
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

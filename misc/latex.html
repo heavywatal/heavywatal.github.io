@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -90,88 +90,76 @@ LaTeX
 </ul></nav>
 </header>
 
-
-
 <h2 id="基本操作">基本操作</h2>
-
 <h3 id="tex-live-をmacにインストール">TeX Live をMacにインストール</h3>
-
 <p>とにかく動く環境が欲しい人は、素直にフルのMacTeXをインストールするだけ。
 ただし2GB以上の大きなインストーラをダウンロードする必要があるので注意。
 BibDesk, LaTeXiT, TeX Live Utility, TeXShop などのGUIアプリが不要で、
 必要なパッケージをコマンドラインからインストールできる人は下記の手順で小さくインストールできる。</p>
-
 <ol>
-<li><p><a href="http://www.tug.org/mactex/">http://www.tug.org/mactex/</a> から
+<li>
+<p><a href="http://www.tug.org/mactex/">http://www.tug.org/mactex/</a> から
 <code>BasicTeX.pkg</code> を入手してインストール。
 あるいは
-<code>brew cask install basictex</code></p></li>
-
-<li><p><code>/Library/TeX/texbin/</code> にパスを通す。
-基本的には <code>/etc/paths.d/TeX</code> 越しに自動的に設定されるはず。</p></li>
-
-<li><p>今後の <code>tlmgr</code> 操作で管理者権限を使わなくて済むようにパーミッション設定:
-<code>sudo chown -R $(whoami):wheel /usr/local/texlive/</code></p></li>
-
-<li><p><code>tlmgr update --self --all</code> で諸々アップデート。</p></li>
+<code>brew cask install basictex</code></p>
+</li>
+<li>
+<p><code>/Library/TeX/texbin/</code> にパスを通す。
+基本的には <code>/etc/paths.d/TeX</code> 越しに自動的に設定されるはず。</p>
+</li>
+<li>
+<p>今後の <code>tlmgr</code> 操作で管理者権限を使わなくて済むようにパーミッション設定:
+<code>sudo chown -R $(whoami):wheel /usr/local/texlive/</code></p>
+</li>
+<li>
+<p><code>tlmgr update --self --all</code> で諸々アップデート。</p>
+</li>
 </ol>
-
 <p>TeX Liveの新パージョンが年1回リリースされるので、そのときはインストールからやり直す。
 (<code>tlmgr update</code> では更新できない)</p>
-
 <h3 id="texをpdfにコンパイル">TeXをPDFにコンパイル</h3>
-
 <ol>
-<li><p>ソースコードを書く</p>
+<li>
+<p>ソースコードを書く</p>
 <div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\documentclass</span><span class="na">[a4paper]</span><span class="nb">{</span>article<span class="nb">}</span>
 <span class="k">\begin</span><span class="nb">{</span>document<span class="nb">}</span>
 Hello, World!
-<span class="k">\end</span><span class="nb">{</span>document<span class="nb">}</span></code></pre></div></li>
-
-<li><p>ターミナルからコンパイル:</p>
+<span class="k">\end</span><span class="nb">{</span>document<span class="nb">}</span>
+</code></pre></div></li>
+<li>
+<p>ターミナルからコンパイル:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">pdflatex hello.tex
-open hello.pdf</code></pre></div></li>
+open hello.pdf
+</code></pre></div></li>
 </ol>
-
 <p>MacTeXに含まれるTeXShopというアプリを使えば、
-   原稿書きからコンパイルまで面倒を見てもらえるので、
-   ターミナルにコマンドを打ち込む必要はないらしい。</p>
-
+原稿書きからコンパイルまで面倒を見てもらえるので、
+ターミナルにコマンドを打ち込む必要はないらしい。</p>
 <h4 id="latexmk"><code>latexmk</code></h4>
-
 <p>引用文献や図表への参照などを入れたりすると
 <code>pdflatex</code> を一度実行するだけではPDFが完成せず、
 コマンドを何度か繰り返し実行しなければならなくなる。
 <code>latexmk</code> はそのへんをうまくお世話してくれる。</p>
-
 <p>対象の <code>.tex</code> ファイルを明示的に指定してもいいし、
 省略してディレクトリ内のすべてのファイルを対象にしてもいい。</p>
-
 <pre><code>latexmk -h    # print help
 latexmk       # generate document
 latexmk -pv   # preview document after generation
 latexmk -pvc  # preview document and continuously update
 latexmk -C    # clean up
-</code></pre>
-
-<p>設定を <code>~/.latexmkrc</code> とかに書いておける:</p>
-<div class="highlight"><pre class="chroma"><code class="language-perl" data-lang="perl"><span class="nv">$pdf_mode</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-<span class="nv">$pdflatex</span> <span class="o">=</span> <span class="s">&#39;pdflatex -file-line-error -halt-on-error -synctex=1 %O %S&#39;</span><span class="p">;</span>
-<span class="nv">$lualatex</span> <span class="o">=</span> <span class="s">&#39;lualatex -file-line-error -halt-on-error -synctex=1 %O %S&#39;</span><span class="p">;</span></code></pre></div>
-<p><a href="https://www.ctan.org/pkg/latexmk">https://www.ctan.org/pkg/latexmk</a></p>
-
+</code></pre><p>設定を <code>~/.latexmkrc</code> とかに書いておける:</p>
+<div class="highlight"><pre class="chroma"><code class="language-perl" data-lang="perl"><span class="nv">$</span><span class="nv">pdf_mode</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="nv">$</span><span class="nv">pdflatex</span> <span class="o">=</span> <span class="s">&#39;pdflatex -file-line-error -halt-on-error -synctex=1 %O %S&#39;</span><span class="p">;</span>
+<span class="nv">$</span><span class="nv">lualatex</span> <span class="o">=</span> <span class="s">&#39;lualatex -file-line-error -halt-on-error -synctex=1 %O %S&#39;</span><span class="p">;</span>
+</code></pre></div><p><a href="https://www.ctan.org/pkg/latexmk">https://www.ctan.org/pkg/latexmk</a></p>
 <h4 id="synctex">SyncTeX</h4>
-
 <p>ソースコードとPDFの対応箇所を行き来するための仕組み。</p>
-
 <ul>
 <li>Skim to source: <kbd>shift-cmd-click</kbd></li>
 <li>Atom to PDF: <kbd>ctrl-alt-s</kbd></li>
 <li>VS Code to PDF: <kbd>alt-cmd-j</kbd></li>
 </ul>
-
 <h3 id="tlmgr-でパッケージ管理">tlmgr でパッケージ管理</h3>
-
 <p>BasicTeXの場合は最小限のパッケージしか含まれていないので、
 大抵いくつか別途インストールする必要がある。
 &ldquo;By default, installing a package ensures that all dependencies of this package are fulfilled&rdquo;
@@ -180,47 +168,46 @@ latexmk -C    # clean up
 tlmgr search --global japanese
 tlmgr search --global --file zxxrl7z
 tlmgr info --list newtx
-tlmgr install chktex latexmk</code></pre></div>
-<p>管理者権限不要の <code>--usermode</code> も用意されているが、
+tlmgr install chktex latexmk
+</code></pre></div><p>管理者権限不要の <code>--usermode</code> も用意されているが、
 なんかうまくいかないので必要に迫られない限り使わないほうがよい。</p>
-
 <p>パッケージをアンインストールしようと思って
 <code>tlmgr uninstall some-package</code>
 などとするとTeX Live全体が消えてしまうので注意。
 正しくは <code>tlmgr remove some-package</code></p>
-
 <h2 id="基本要素">基本要素</h2>
-
 <h3 id="数式">数式</h3>
-
 <p>とりあえず
 <a href="ftp://ftp.ams.org/pub/tex/doc/amsmath/short-math-guide.pdf">Short Math Guide for LaTeX</a>
 (PDF)を読むべし。</p>
-
 <ul>
-<li><p>基本的に <a href="http://www.ams.org/publications/authors/tex/amslatex">{amsmath}</a> を使う。
+<li>
+<p>基本的に <a href="http://www.ams.org/publications/authors/tex/amslatex">{amsmath}</a> を使う。
 数式環境のデファクトスタンダード。
 アメリカ数学会(AMS)が開発したらしいが、
 ガチ数学じゃなくても数式を書く場合はこれらしい。</p>
 <div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\usepackage</span><span class="nb">{</span>amsmath<span class="nb">}</span>
-<span class="k">\usepackage</span><span class="na">[all,warning]</span><span class="nb">{</span>onlyamsmath<span class="nb">}</span></code></pre></div></li>
-
-<li><p>Inline math:</p>
-<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex">if <span class="s">$</span><span class="nb">N_e u </span><span class="nv">\ll</span><span class="nb"> </span><span class="m">1</span><span class="s">$</span>, then the population is monomorphic most of the time,</code></pre></div>
-<p><code>$...$</code> はTeXの古いやり方で、
+<span class="k">\usepackage</span><span class="na">[all,warning]</span><span class="nb">{</span>onlyamsmath<span class="nb">}</span>
+</code></pre></div></li>
+<li>
+<p>Inline math:</p>
+<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex">if <span class="s">$</span><span class="nb">N</span><span class="nb">_</span><span class="nb">e u </span><span class="nv">\ll</span><span class="nb"> </span><span class="m">1</span><span class="s">$</span>, then the population is monomorphic most of the time,
+</code></pre></div><p><code>$...$</code> はTeXの古いやり方で、
 新しいLaTeXでは <code>\(...\)</code> を用いるべし、という流れもある。
 けどダラーのほうが書きやすいし読みやすいので、
-しばらくは <code>chktex -n46</code> で様子を見る。</p></li>
-
-<li><p>Display math:</p>
+しばらくは <code>chktex -n46</code> で様子を見る。</p>
+</li>
+<li>
+<p>Display math:</p>
 <div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\begin</span><span class="nb">{</span>equation*<span class="nb">}</span><span class="k">\label</span><span class="nb">{</span>eq:growth<span class="nb">}</span>
-  N<span class="nb">_</span>t = N<span class="nb">_</span>0 e<span class="nb">^{</span>rt<span class="nb">}</span>
-<span class="k">\end</span><span class="nb">{</span>equation*<span class="nb">}</span></code></pre></div></li>
-
-<li><p>改行を含む数式を等号で揃える</p>
+  N<span class="nb">_</span>t = N<span class="nb">_</span>0 e<span class="nb">^</span><span class="nb">{</span>rt<span class="nb">}</span>
+<span class="k">\end</span><span class="nb">{</span>equation*<span class="nb">}</span>
+</code></pre></div></li>
+<li>
+<p>改行を含む数式を等号で揃える</p>
 <div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\begin</span><span class="nb">{</span>equation<span class="nb">}</span><span class="k">\label</span><span class="nb">{</span>eq:growth<span class="nb">}</span>
 <span class="k">\begin</span><span class="nb">{</span>split<span class="nb">}</span>
-  N<span class="nb">_</span>t <span class="nb">&amp;</span>= N<span class="nb">_</span>0 e<span class="nb">^{</span>rt<span class="nb">}</span> <span class="k">\\</span>
+  N<span class="nb">_</span>t <span class="nb">&amp;</span>= N<span class="nb">_</span>0 e<span class="nb">^</span><span class="nb">{</span>rt<span class="nb">}</span> <span class="k">\\</span>
       <span class="nb">&amp;</span>= N<span class="nb">_</span>0 <span class="k">\lambda</span><span class="nb">^</span>t
 <span class="k">\end</span><span class="nb">{</span>split<span class="nb">}</span>
 <span class="k">\end</span><span class="nb">{</span>equation<span class="nb">}</span>
@@ -228,26 +215,27 @@ tlmgr install chktex latexmk</code></pre></div>
 <span class="k">\begin</span><span class="nb">{</span>align<span class="nb">}</span>
   S <span class="nb">&amp;</span>= 4 <span class="k">\pi</span> r<span class="nb">^</span>2<span class="k">\label</span><span class="nb">{</span>surface<span class="nb">}</span><span class="k">\\</span>
   V <span class="nb">&amp;</span>= <span class="k">\frac</span> <span class="nb">{</span>4 <span class="k">\pi</span> r<span class="nb">^</span>3<span class="nb">}</span> 3<span class="k">\label</span><span class="nb">{</span>volume<span class="nb">}</span><span class="k">\\</span>
-<span class="k">\end</span><span class="nb">{</span>align<span class="nb">}</span></code></pre></div>
-<p><code>split</code> 環境では全体でラベルが1つ、
+<span class="k">\end</span><span class="nb">{</span>align<span class="nb">}</span>
+</code></pre></div><p><code>split</code> 環境では全体でラベルが1つ、
 <code>align</code> 環境では行ごとにラベルが生成されるので、
 用途が少し違う。
 古い <code>eqnarray</code> 環境でも似たようなことはできるが、
-スペースとかに問題あるらしく非推奨。</p></li>
-
-<li><p>場合分け</p>
+スペースとかに問題あるらしく非推奨。</p>
+</li>
+<li>
+<p>場合分け</p>
 <div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\begin</span><span class="nb">{</span>equation<span class="nb">}</span><span class="k">\label</span><span class="nb">{</span>eq:heaviside<span class="nb">}</span>
   H(x) = <span class="k">\begin</span><span class="nb">{</span>cases<span class="nb">}</span>
     <span class="nb">&amp;</span> 0 <span class="k">\text</span><span class="nb">{</span>if <span class="s">$</span><span class="nb">x </span><span class="nv">\le</span><span class="nb"> </span><span class="m">0</span><span class="s">$</span><span class="nb">}</span> <span class="k">\\</span>
     <span class="nb">&amp;</span> 1 <span class="k">\text</span><span class="nb">{</span>if <span class="s">$</span><span class="nb">x &gt; </span><span class="m">0</span><span class="s">$</span><span class="nb">}</span>
   <span class="k">\end</span><span class="nb">{</span>cases<span class="nb">}</span>
-<span class="k">\end</span><span class="nb">{</span>equation<span class="nb">}</span></code></pre></div></li>
-
-<li><p>記号:
+<span class="k">\end</span><span class="nb">{</span>equation<span class="nb">}</span>
+</code></pre></div></li>
+<li>
+<p>記号:
 <a href="http://www.ctan.org/tex-archive/info/symbols/comprehensive/">http://www.ctan.org/tex-archive/info/symbols/comprehensive/</a>
 に網羅されてるけど、
 だいたい Short Math Guide for LaTeX にまとめられてるやつで足りるはず。</p>
-
 <ul>
 <li>&ldquo;given that&rdquo; を示す縦棒はパイプ記号 <code>|</code> ではなく
 <code>\mid</code> を使うのが正しいし適度なスペースが入って読みやすい。</li>
@@ -257,9 +245,9 @@ e.g., 分数を挟むとか、カッコの入れ子とか</li>
 <li>斜体にしたくない文字を普通にするには <code>\mathrm dt</code> 。
 記号じゃないテキストには <code>\text{otherwise}</code> 。
 よく使われるやつは定義済み e.g., <code>\log</code>, <code>\exp</code></li>
-</ul></li>
 </ul>
-
+</li>
+</ul>
 <h3 id="図">図</h3>
 <div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\usepackage</span><span class="na">[final]</span><span class="nb">{</span>graphicx<span class="nb">}</span>
 <span class="c">%%%
@@ -267,42 +255,35 @@ e.g., 分数を挟むとか、カッコの入れ子とか</li>
 <span class="k">\includegraphics</span><span class="na">[width=\columnwidth]</span><span class="nb">{</span>awesome.pdf<span class="nb">}</span>
 <span class="k">\caption</span><span class="nb">{</span>some description<span class="nb">}</span><span class="c">%
 </span><span class="c"></span><span class="k">\label</span><span class="nb">{</span>fig:awesome<span class="nb">}</span>
-<span class="k">\end</span><span class="nb">{</span>figure<span class="nb">}</span></code></pre></div>
-<p><code>\begin{figure}[htbp]</code> のようにして配置場所の優先順位を指定できるが、
+<span class="k">\end</span><span class="nb">{</span>figure<span class="nb">}</span>
+</code></pre></div><p><code>\begin{figure}[htbp]</code> のようにして配置場所の優先順位を指定できるが、
 結局はいろんな兼ね合いでコンパイラが決める。
 デフォルトは <code>[tbp]</code>。
 複数指定した場合、どの順序で書いても下記の順に優先される。</p>
-
 <ul>
 <li><strong>h</strong>ere: ソースと同じ位置に</li>
 <li><strong>t</strong>op: 上部に</li>
 <li><strong>b</strong>ottom: 下部に</li>
 <li>float <strong>p</strong>age: 図だけを含む独立したページに</li>
 </ul>
-
 <p>幅の指定には <code>\textwidth</code>, <code>\columnwidth</code>, <code>\linewidth</code> などの変数が使える。
 twocolumnの文書内で <code>\textwidth</code> まで広げたい場合は
 アスタリスク付きの <code>\begin{figure*}</code> 環境を用いる。</p>
-
 <p>ラベル <code>\label{}</code> は <code>\caption{}</code> 直後(または内部)じゃないとおかしくなるらしい。
 間に改行やスペースが入るのもダメっぽいので <code>\caption{}</code> 行末に <code>%</code> を置いておく。
 本文からは <code>\ref{fig:awesome}</code> のようにラベルで参照しておけば番号に置き換えられる。</p>
-
 <p>キャプションをカスタマイズするには
 <a href="https://www.ctan.org/pkg/caption">{caption}</a>
 の <code>\captionsetup{...}</code> を用いる。</p>
-
 <p>ひとつの領域に複数の図を貼るには
 <a href="https://www.ctan.org/pkg/subfig">{subfig}</a>
 の <code>\subfloat[caption]{filename}</code> を用いる。</p>
-
 <p><a href="https://www.ctan.org/pkg/epstopdf">{epstopdf}</a>
 でEPSを取り込もうとすると(e.g., PLOS)、
 ファイルもパッケージも揃ってるはずなのに
 <code>! Package pdftex.def Error: File '*-eps-converted-to.pdf' not found.</code>
 というエラーが出る。
 変換プログラム本体である <code>ghostscript</code> をHomebrewか何かで入れる必要がある。</p>
-
 <p>GIFアニメをそのまま埋め込むことはできないので、
 <a href="https://www.ctan.org/pkg/animate">{animate}</a>で連番PNGを読み込む。</p>
 <div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="c">% tlmgr install animate media9 ocgx2
@@ -310,36 +291,30 @@ twocolumnの文書内で <code>\textwidth</code> まで広げたい場合は
 
 <span class="k">\begin</span><span class="nb">{</span>document<span class="nb">}</span>
 <span class="c">% \animategraphics[options]{frame rate}{file basename}{first}{last}
-</span><span class="c"></span><span class="k">\animategraphics</span><span class="na">[scale=0.5]</span><span class="nb">{</span>10<span class="nb">}{</span>dir/basename<span class="nb">_}{</span>1<span class="nb">}{</span>9<span class="nb">}</span>
-<span class="k">\end</span><span class="nb">{</span>document<span class="nb">}</span></code></pre></div>
-<h3 id="表">表</h3>
-
+</span><span class="c"></span><span class="k">\animategraphics</span><span class="na">[scale=0.5]</span><span class="nb">{</span>10<span class="nb">}</span><span class="nb">{</span>dir/basename<span class="nb">_</span><span class="nb">}</span><span class="nb">{</span>1<span class="nb">}</span><span class="nb">{</span>9<span class="nb">}</span>
+<span class="k">\end</span><span class="nb">{</span>document<span class="nb">}</span>
+</code></pre></div><h3 id="表">表</h3>
 <p><a href="https://en.wikibooks.org/wiki/LaTeX/Tables">https://en.wikibooks.org/wiki/LaTeX/Tables</a></p>
-
 <p>キャプションやラベルなどをまとめるのが <code>table</code> 環境、
 表本体が <code>tabular</code> 環境。</p>
 <div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\begin</span><span class="nb">{</span>table<span class="nb">}</span>
 <span class="k">\caption</span><span class="nb">{</span>Parameters<span class="nb">}</span><span class="c">%
 </span><span class="c"></span><span class="k">\label</span><span class="nb">{</span>table:parameters<span class="nb">}</span>
-<span class="k">\begin</span><span class="nb">{</span>tabular<span class="nb">}{</span>rl<span class="nb">}</span>
+<span class="k">\begin</span><span class="nb">{</span>tabular<span class="nb">}</span><span class="nb">{</span>rl<span class="nb">}</span>
   <span class="k">\toprule</span>
   Symbol <span class="nb">&amp;</span> Description <span class="k">\\</span>
   <span class="k">\midrule</span>
   <span class="s">$</span><span class="nv">\mu</span><span class="s">$</span> <span class="nb">&amp;</span> mutation rate per division <span class="k">\\</span>
-  <span class="s">$</span><span class="nb">N_</span><span class="m">0</span><span class="s">$</span> <span class="nb">&amp;</span> initial population size <span class="k">\\</span>
+  <span class="s">$</span><span class="nb">N</span><span class="nb">_</span><span class="m">0</span><span class="s">$</span> <span class="nb">&amp;</span> initial population size <span class="k">\\</span>
   <span class="k">\bottomrule</span>
 <span class="k">\end</span><span class="nb">{</span>tabular<span class="nb">}</span>
-<span class="k">\end</span><span class="nb">{</span>table<span class="nb">}</span></code></pre></div>
-<p>罫線は標準の <code>\hline</code> だと上下スペースが狭苦しいので、
+<span class="k">\end</span><span class="nb">{</span>table<span class="nb">}</span>
+</code></pre></div><p>罫線は標準の <code>\hline</code> だと上下スペースが狭苦しいので、
 <a href="https://www.ctan.org/pkg/booktabs">{booktabs}</a>
 の <code>toprule</code>, <code>midrule</code>, <code>bottomrule</code> を使う。</p>
-
 <p>ページに合わせて幅をうまいことやるには <a href="https://www.ctan.org/pkg/tabulary">{tabulary}</a> 。</p>
-
 <p>複数ページにまたがる表を作るには標準 <a href="https://www.ctan.org/pkg/longtable">{longtable}</a> やその派生。</p>
-
 <h3 id="箇条書き">箇条書き</h3>
-
 <p><a href="https://www.ctan.org/pkg/enumitem">{enumitem}</a>
 を使うといろいろなオプションが設定可能になる。</p>
 <div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\usepackage</span><span class="nb">{</span>enumitem<span class="nb">}</span>
@@ -358,50 +333,52 @@ twocolumnの文書内で <code>\textwidth</code> まで広げたい場合は
 <span class="k">\begin</span><span class="nb">{</span>description<span class="nb">}</span>[nextline]
   <span class="k">\item</span><span class="na">[key1]</span> value1
   <span class="k">\item</span><span class="na">[key2]</span> value2
-<span class="k">\end</span><span class="nb">{</span>description<span class="nb">}</span></code></pre></div>
-<p><a href="http://konoyonohana.blog.fc2.com/blog-entry-58.html">http://konoyonohana.blog.fc2.com/blog-entry-58.html</a></p>
-
+<span class="k">\end</span><span class="nb">{</span>description<span class="nb">}</span>
+</code></pre></div><p><a href="http://konoyonohana.blog.fc2.com/blog-entry-58.html">http://konoyonohana.blog.fc2.com/blog-entry-58.html</a></p>
 <h3 id="引用">引用</h3>
-
 <p><a href="https://en.wikibooks.org/wiki/LaTeX/More_Bibliographies">https://en.wikibooks.org/wiki/LaTeX/More_Bibliographies</a></p>
-
 <ol>
-<li><a href="http://bibdesk.sourceforge.net/">Bibdesk</a>
+<li>
+<p><a href="http://bibdesk.sourceforge.net/">Bibdesk</a>
 などの文献管理アプリでbibtex形式の文献リストを作る。
-e.g., <code>mybibdata.bib</code></li>
-
-<li><p>コマンドにcite keyを入れて本文に挿入。
+e.g., <code>mybibdata.bib</code></p>
+</li>
+<li>
+<p>コマンドにcite keyを入れて本文に挿入。
 このとき標準の <code>\cite</code> ではなく <code>{natbib}</code> のものを使う。</p>
 <div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\usepackage</span><span class="na">[authoryear,round,sort&amp;compress]</span><span class="nb">{</span>natbib<span class="nb">}</span>
 <span class="c">%%%
 </span><span class="c"></span>
 <span class="k">\citet</span><span class="nb">{</span>hudson1987g<span class="nb">}</span>         # Hudson et al. (1987)
 <span class="k">\citep</span><span class="nb">{</span>hudson1987g<span class="nb">}</span>         # (Hudson et al. 1987)
-<span class="k">\citep*</span><span class="nb">{</span>hudson1987g<span class="nb">}</span>        # (Hudson, Kreitman and Aguadé, 1987)
+<span class="k">\citep</span><span class="k">*</span><span class="nb">{</span>hudson1987g<span class="nb">}</span>        # (Hudson, Kreitman and Aguadé, 1987)
 <span class="k">\citep</span><span class="na">[eq. 5]</span><span class="nb">{</span>hudson1987g<span class="nb">}</span>  # (Hudson et al. 1987, eq. 5)
-<span class="k">\citep</span><span class="na">[see][]</span><span class="nb">{</span>hudson1987g<span class="nb">}</span>  # (see Hudson et al. 1987)</code></pre></div></li>
-
-<li><p>最後の方に文献リストを挿入:</p>
+<span class="k">\citep</span><span class="na">[see]</span><span class="na">[]</span><span class="nb">{</span>hudson1987g<span class="nb">}</span>  # (see Hudson et al. 1987)
+</code></pre></div></li>
+<li>
+<p>最後の方に文献リストを挿入:</p>
 <div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\bibliographystyle</span><span class="nb">{</span>abbrvnat<span class="nb">}</span>
-<span class="k">\bibliography</span><span class="nb">{</span>mybibdata<span class="nb">}</span></code></pre></div>
-<p>スタイルを規定する <code>bst</code> ファイルはだいたい各Journalで提供してくれる。</p></li>
-
-<li><p>元の <code>tex</code> をコンパイルして <code>aux</code> を生成</p></li>
-
-<li><p><code>bibtex</code> に <code>aux</code> を渡して <code>bbl</code> を生成</p></li>
-
-<li><p>再び <code>tex</code> をコンパイルすると <code>bbl</code> を踏まえて <code>aux</code> が更新される。
-(このときPDF出力すると、文献リストはできるけど引用部分はハテナ?になる)</p></li>
-
-<li><p>さらにもう1回コンパイルして完成</p></li>
+<span class="k">\bibliography</span><span class="nb">{</span>mybibdata<span class="nb">}</span>
+</code></pre></div><p>スタイルを規定する <code>bst</code> ファイルはだいたい各Journalで提供してくれる。</p>
+</li>
+<li>
+<p>元の <code>tex</code> をコンパイルして <code>aux</code> を生成</p>
+</li>
+<li>
+<p><code>bibtex</code> に <code>aux</code> を渡して <code>bbl</code> を生成</p>
+</li>
+<li>
+<p>再び <code>tex</code> をコンパイルすると <code>bbl</code> を踏まえて <code>aux</code> が更新される。
+(このときPDF出力すると、文献リストはできるけど引用部分はハテナ?になる)</p>
+</li>
+<li>
+<p>さらにもう1回コンパイルして完成</p>
+</li>
 </ol>
-
 <p>最初の2回は <code>pdflatex -draftmode</code> としてPDF出力を省略すると早い。
 適切な <code>Makefile</code> を書いて自動化するべし。
 <a href="#latexmk">latexmk</a> を使うともっと楽ちん。</p>
-
 <h3 id="文字の修飾">文字の修飾</h3>
-
 <ul>
 <li><a href="https://en.wikibooks.org/wiki/LaTeX/Fonts#Font_styles">https://en.wikibooks.org/wiki/LaTeX/Fonts#Font_styles</a></li>
 <li><a href="https://en.wikibooks.org/wiki/LaTeX/Colors">https://en.wikibooks.org/wiki/LaTeX/Colors</a></li>
@@ -410,105 +387,97 @@ e.g., <code>mybibdata.bib</code></li>
 <span class="k">\textit</span><span class="nb">{</span>italic<span class="nb">}</span>
 <span class="k">\textbf</span><span class="nb">{</span>bold<span class="nb">}</span>
 <span class="k">\texttt</span><span class="nb">{</span>monospace<span class="nb">}</span>
-<span class="nb">{</span><span class="k">\huge</span> huge text<span class="nb">}</span></code></pre></div>
-<p><code>\tiny</code>, <code>\scriptsize</code>, <code>\footnotesize</code>, <code>\small</code>,
+<span class="nb">{</span><span class="k">\huge</span> huge text<span class="nb">}</span>
+</code></pre></div><p><code>\tiny</code>, <code>\scriptsize</code>, <code>\footnotesize</code>, <code>\small</code>,
 <code>\normalsize</code>,
 <code>\large</code>, <code>\Large</code>, <code>\LARGE</code>, <code>\huge</code>, <code>\Huge</code></p>
 <div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\usepackage</span><span class="na">[normalem]</span><span class="nb">{</span>ulem<span class="nb">}</span>  <span class="c">% \uline{}, \sout{}
 </span><span class="c"></span><span class="k">\usepackage</span><span class="nb">{</span>color<span class="nb">}</span>           <span class="c">% \textcolor{}
 </span><span class="c"></span><span class="k">\usepackage</span><span class="nb">{</span>soul<span class="nb">}</span>            <span class="c">% \hl{} using {color}
-</span><span class="c">%%%
+</span><span class="c"></span><span class="c">%%%
 </span><span class="c"></span>
 <span class="k">\uline</span><span class="nb">{</span>underlined text<span class="nb">}</span>
 <span class="k">\sout</span><span class="nb">{</span>strikethrough<span class="nb">}</span>
 
-<span class="k">\textcolor</span><span class="nb">{</span>red<span class="nb">}{</span>colored text<span class="nb">}</span>
+<span class="k">\textcolor</span><span class="nb">{</span>red<span class="nb">}</span><span class="nb">{</span>colored text<span class="nb">}</span>
 <span class="nb">{</span><span class="k">\text</span><span class="nb">{</span>red<span class="nb">}</span> colored text<span class="nb">}</span>
 
-<span class="k">\hl</span><span class="nb">{</span>highlighted text<span class="nb">}</span></code></pre></div>
-<p><a href="https://www.ctan.org/pkg/ulem">{ulem}</a> は
+<span class="k">\hl</span><span class="nb">{</span>highlighted text<span class="nb">}</span>
+</code></pre></div><p><a href="https://www.ctan.org/pkg/ulem">{ulem}</a> は
 <code>[normalem]</code> オプションを付けて読まないと
 <code>\emph</code> が下線に変更されてしまうので注意。</p>
-
 <p><a href="https://www.ctan.org/pkg/soul">{soul}</a> のドキュメントによれば
 <code>\hl{環境}</code> に <code>$数式$</code> を入れられるはずだが
 &ldquo;Extra }, or forgotten $&rdquo; というエラーで弾かれる。</p>
-
 <h2 id="tips">Tips</h2>
-
 <h3 id="ダメな使い方を警告してもらう">ダメな使い方を警告してもらう</h3>
-
 <p>いろんなパッケージを使ったいろんな書き方がネット上にあふれているが、
 中には古すぎたりするため避けたほうがよいものもある。
 ファイルの先頭で <code>nag</code> を読み込むことで、
 コンパイル時にそういうのを警告してもらえる。</p>
 <div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\RequirePackage</span><span class="na">[l2tabu,orthodox]</span><span class="nb">{</span>nag<span class="nb">}</span>
 
-<span class="k">\documentclass</span><span class="na">[a4paper]</span><span class="nb">{</span>article<span class="nb">}</span>  <span class="err">%</span> これよりも前</code></pre></div>
-<p><code>chktex</code> コマンドを使えばコンパイルよりも手軽にチェックできる。
+<span class="k">\documentclass</span><span class="na">[a4paper]</span><span class="nb">{</span>article<span class="nb">}</span>  <span class="c">% これよりも前
+</span></code></pre></div><p><code>chktex</code> コマンドを使えばコンパイルよりも手軽にチェックできる。
 <a href="/dev/atom.html">Atom</a> に
 <a href="https://atom.io/packages/linter-chktex">linter-chktex</a>
 を入れれば編集中のファイルの警告箇所を随時ハイライトしてもらえる。</p>
-
 <h3 id="ligature問題">ligature問題</h3>
-
 <p>表示の美しさという点でリガチャは素晴らしいけど、
 PDF内の検索やPDFからのコピペ時に問題が発生する。
 例えば <code>fi</code> が合字になるため <code>definition</code> が検索でひっかからない。
 <code>definition</code> をコピペすると <code>de nition</code> になってしまう。</p>
-
 <p>次のコードをプリアンブルの頭の方に記述するといいらしいが、うまく機能しない。。。</p>
 <div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\input</span><span class="nb">{</span>glyphtounicode.tex<span class="nb">}</span>
 <span class="k">\pdfgentounicode</span>=1
 <span class="c">% あるいは
-</span><span class="c"></span><span class="k">\usepackage</span><span class="nb">{</span>mmap<span class="nb">}</span></code></pre></div>
-<h2 id="日本語を使う">日本語を使う</h2>
-
+</span><span class="c"></span><span class="k">\usepackage</span><span class="nb">{</span>mmap<span class="nb">}</span>
+</code></pre></div><h2 id="日本語を使う">日本語を使う</h2>
 <h3 id="lualatex">LuaLaTeX</h3>
-
 <ul>
 <li>pdfTeXの後継として、今後のスタンダードと目される</li>
 <li>かなり動作が遅い</li>
 <li><a href="https://www.ctan.org/pkg/luatexja"><code>luatexja</code></a> が精力的に開発されている</li>
-
-<li><p>最初にフォント関連の問題に遭遇するかも</p>
-
+<li>最初にフォント関連の問題に遭遇するかも
 <ul>
-<li>依存パッケージ:
-<code>luaotfload</code>, <code>adobemapping</code>, <code>ctablestack</code>, <code>ipaex</code></li>
-<li><code>bad argument #1 to 'open'</code> などと怒られる問題は、
-必要な CMap が LuaTeX から見えていないのが原因</li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">  <span class="c1">## キャッシュを再構築</span>
-  % rm -rf ~/Library/texlive/2016basic/texmf-var/luatex-cache/
-  % luaotfload-tool -u -v
+<li>
+<p>依存パッケージ:
+<code>luaotfload</code>, <code>adobemapping</code>, <code>ctablestack</code>, <code>ipaex</code></p>
+</li>
+<li>
+<p><code>bad argument #1 to 'open'</code> などと怒られる問題は、
+必要な CMap が LuaTeX から見えていないのが原因</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1">## キャッシュを再構築</span>
+% rm -rf ~/Library/texlive/2016basic/texmf-var/luatex-cache/
+% luaotfload-tool -u -v
 
-  <span class="c1">## 見えてるか確認</span>
-  % kpsewhich -format<span class="o">=</span>cmap UniJIS2004-UTF32-H
-  % kpsewhich -format<span class="o">=</span>cmap UniJIS2004-UTF32-V
-  % kpsewhich -format<span class="o">=</span>cmap Adobe-Japan1-UCS2</code></pre></div></li>
+<span class="c1">## 見えてるか確認</span>
+% kpsewhich -format<span class="o">=</span>cmap UniJIS2004-UTF32-H
+% kpsewhich -format<span class="o">=</span>cmap UniJIS2004-UTF32-V
+% kpsewhich -format<span class="o">=</span>cmap Adobe-Japan1-UCS2
+</code></pre></div></li>
 </ul>
-
+</li>
+</ul>
 <h3 id="xelatex">XeLaTeX</h3>
-
 <ul>
 <li>とにかく日本語入りでコンパイルできればいい、というのであればこれが一番楽</li>
 <li>BasicTeX に含まれているのでそのまま使える</li>
 <li>OS上にあるOTFやTTFなどのフォントがそのまま使える</li>
 <li>日本語に特化したツールは開発されていないので細かい制御がイマイチらしい</li>
 </ul>
-
 <h3 id="uplatex">upLaTeX</h3>
-
 <ul>
-<li>日本語を使えるように LaTeX を改良したもの</li>
-<li>歴史が長いので日本語組版のための便利な道具が揃っている</li>
-
-<li><p>BasicTeX には含まれていないのでいろいろインストールが必要</p>
-
-<p><code>ptex</code>, <code>uptex</code></p>
-
+<li>
+<p>日本語を使えるように LaTeX を改良したもの</p>
+</li>
+<li>
+<p>歴史が長いので日本語組版のための便利な道具が揃っている</p>
+</li>
+<li>
+<p>BasicTeX には含まれていないのでいろいろインストールが必要</p>
 <dl>
+<dt><code>ptex</code>, <code>uptex</code></dt>
 <dd><code>platex</code> などを含む</dd>
 <dt><code>jfontmaps</code></dt>
 <dd>フォント埋め込みツール <code>kanji-config-updmap</code> など</dd>
@@ -517,24 +486,23 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 <dt><code>japanese-otf</code>, <code>japanese-otf-uptex</code></dt>
 <dd><code>\usepackage[uplatex,deluxe,jis2004]{otf}</code> でヒラギノが使える</dd>
 <dt><code>ptex2pdf</code></dt>
-<dd><p><code>pdflatex</code> のように一発でPDFを作るための便利スクリプト。
-例えば <code>uplatex</code> を使ってコンパイルするには:</p>
-
+<dd><code>pdflatex</code> のように一発でPDFを作るための便利スクリプト。
+例えば <code>uplatex</code> を使ってコンパイルするには:
 <pre><code>% ptex2pdf -u -l main.tex
-</code></pre></dd>
-</dl></li>
-
-<li><p>フォントマップの設定をする:</p>
-
+</code></pre>
+</dd>
+</dl>
+</li>
+<li>
+<p>フォントマップの設定をする:</p>
 <pre><code>% kanji-config-updmap status
 % kanji-config-updmap auto
 % kanji-config-updmap noEmbed
 % kanji-config-updmap hiragino
-</code></pre></li>
+</code></pre>
+</li>
 </ul>
-
 <h2 id="フォント">フォント</h2>
-
 <dl>
 <dt>Computer Modern</dt>
 <dd>Knuth先生が作ったデフォルトフォント。</dd>
@@ -564,7 +532,6 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 <dd>印刷用途でも通用するよう作られた美しいフリーフォント。
 <code>fontaxes</code> もインストールする必要がある。</dd>
 </dl>
-
 <p>XeTeX なら OS のフォントをフルネームで指定して使える</p>
 <div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\usepackage</span><span class="nb">{</span>amsthm,amsmath<span class="nb">}</span> <span class="c">% must be called ahead of mathspec
 </span><span class="c"></span><span class="k">\usepackage</span><span class="na">[all,warning]</span><span class="nb">{</span>onlyamsmath<span class="nb">}</span>
@@ -588,8 +555,8 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
   <span class="k">\usepackage</span><span class="nb">{</span>newpxmath<span class="nb">}</span>
   <span class="k">\usepackage</span><span class="nb">{</span>textcomp<span class="nb">}</span>
   <span class="c">% \usepackage[uplatex,deluxe,jis2004]{otf}
-</span><span class="c"></span><span class="k">\fi</span></code></pre></div>
-<p>フォント関連をいじったあと明示的にマップを更新するには <code>updmap-sys</code></p>
+</span><span class="c"></span><span class="k">\fi</span>
+</code></pre></div><p>フォント関連をいじったあと明示的にマップを更新するには <code>updmap-sys</code></p>
 
 </article>
 </main>
@@ -621,8 +588,8 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -634,11 +601,11 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -657,6 +624,7 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -664,7 +632,6 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -676,20 +643,20 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

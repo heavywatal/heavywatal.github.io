@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -90,43 +90,37 @@ Heavy Watal
 </ul></nav>
 </header>
 
-
-
 <p>文献</p>
-
 <dl>
 <dt><a href="http://dx.doi.org/10.1038/nbt1053">Tompa et al. 2005</a> Nature Biotechnology</dt>
-<dd><p>Phylogenetic footprinting、発現パターン、ChIP結果などの補助的情報を使わず、
+<dd>Phylogenetic footprinting、発現パターン、ChIP結果などの補助的情報を使わず、
 配列のみを使って解析する13のツールを
 fly, human, mouse, yeast, 人工データでテストした。
 ただし、エキスパートがパラメータをファインチューニングし、
-ベストヒットした1つのモチーフを取る、という条件での比較。</p>
-
+ベストヒットした1つのモチーフを取る、という条件での比較。
 <p>どのツールもyeastで特にハイスコア。flyはやや低め。
 人工データよりもrealのスコアが低いのは、
 今回正解としている以外のモチーフも配列に含まれてて
-そいつをトップヒットとしてしまったことにペナルティがかかってしまったせい。</p></dd>
+そいつをトップヒットとしてしまったことにペナルティがかかってしまったせい。</p>
+</dd>
 <dt><a href="http://dx.doi.org/10.1093/nar/gki791">Hu et al. 2005</a> BMC Bioinformatics</dt>
-<dd><p>あまりチューニングせずほぼデフォルト設定でベンチマーク。
+<dd>あまりチューニングせずほぼデフォルト設定でベンチマーク。
 そうすると、どのツールも単体では意外とショボい。
-複数のツールを組み合わせて使うと良い。</p></dd>
+複数のツールを組み合わせて使うと良い。</dd>
 <dt><a href="http://dx.doi.org/10.1093/nar/gkl372">GuhaThakurta 2006</a> Nucleic Acids Res</dt>
-<dd><p>モチーフ探索の基本的な流れがわかりやすい</p></dd>
+<dd>モチーフ探索の基本的な流れがわかりやすい</dd>
 <dt><a href="http://dx.doi.org/10.1186/1471-2105-8-S7-S21">Das and Dai 2007</a> BMC Bioinformatics</dt>
-<dd><p>実験はしていないが網羅的なレビュー</p></dd>
+<dd>実験はしていないが網羅的なレビュー</dd>
 <dt><a href="http://www.ncbi.nlm.nih.gov/pubmed/22517426">Zambelli et al. 2013</a> Briefings in Bioinformatics</dt>
-<dd><p>ChIP時代のツールも含めてざっくり</p></dd>
+<dd>ChIP時代のツールも含めてざっくり</dd>
 </dl>
-
 <h2 id="基本">基本</h2>
-
 <h3 id="配列モチーフとは">配列モチーフとは</h3>
-
 <dl>
 <dt>一般的に</dt>
 <dd>だいたい 5–20bp くらいの生物学的に意味のある塩基配列パターン。 e.g. 転写因子結合サイト、タンパク質の機能ドメイン</dd>
 <dt><strong>palindoromic motifs</strong></dt>
-<dd>相補鎖同士を5&rsquo;から3&rsquo;に読んで同じになってるような配列。 e.g. <code>CACGTG</code>, <code>GCATGC</code></dd>
+<dd>相補鎖同士を5'から3'に読んで同じになってるような配列。 e.g. <code>CACGTG</code>, <code>GCATGC</code></dd>
 <dt><strong>spaced dyad (gapped) motifs</strong></dt>
 <dd>3–5bpくらいの保存的な結合サイトの間に非保存的なspacer/gapがある。
 結合タンパクがdimerな場合とか。 e.g. Yeast Gal4: 5&rsquo;-<code>CGGnnnnnnnnnnnCCG</code>-3&rsquo;</dd>
@@ -136,41 +130,33 @@ fly, human, mouse, yeast, 人工データでテストした。
 <dt><strong>Kozak sequence</strong></dt>
 <dd>真核生物版SD配列。</dd>
 </dl>
-
 <h3 id="見つけ方">見つけ方</h3>
-
 <p>Signature</p>
-
 <ul>
 <li>共発現 coexpression/coregulation</li>
 <li>高頻度 overrepresented</li>
 <li>保存性 conserved -&gt; phylogenetic footprinting</li>
 </ul>
-
 <p>したがって、戦略としては</p>
-
 <ul>
 <li>1ゲノムの中で共発現してる遺伝子のプロモーターを集めて高頻度な部分配列を探す</li>
 <li>複数種のorthologousな遺伝子のプロモーターを集めて特に保存的な部分配列を探す</li>
 <li>上記2つの合わせ技</li>
 </ul>
-
 <h3 id="表し方">表し方</h3>
-
 <dl>
 <dt><strong>Consensus</strong></dt>
-<dd><p>1つの文字列でバシッと表現。
+<dd>1つの文字列でバシッと表現。
 正規表現の文字集合 <code>[]</code> を使ってポジション毎の複数候補を表現したり、
 IUPAC命名法に従って degenerate symbol で表すこともある。
-<a href="http://www.bioinformatics.org/sms/iupac.html">http://www.bioinformatics.org/sms/iupac.html</a></p>
-
-<p>e.g <code>TATAAT</code>, <code>TATA[AT]A[AT]</code>, <code>TATAWAW</code></p></dd>
+<a href="http://www.bioinformatics.org/sms/iupac.html">http://www.bioinformatics.org/sms/iupac.html</a>
+<p>e.g <code>TATAAT</code>, <code>TATA[AT]A[AT]</code>, <code>TATAWAW</code></p>
+</dd>
 <dt><strong>PSPM</strong>: Position-Specific Probability Matrix</dt>
-<dd><p>ポジションごとの塩基・アミノ酸の相対的な出現頻度をそのままの整数、
+<dd>ポジションごとの塩基・アミノ酸の相対的な出現頻度をそのままの整数、
 あるいは合計1になるような実数[0, 1]の行列で表示。
 <strong>Profile</strong> とも呼ばれる。
-(<a href="http://dx.doi.org/10.1016/0022-2836(90)90223-9">Bucher 1990</a>)</p>
-
+(<a href="http://dx.doi.org/10.1016/0022-2836(90)90223-9">Bucher 1990</a>)
 <pre><code>A     C     G     T
 0.625 0.125 0.250 0.000
 0.375 0.375 0.000 0.250
@@ -180,11 +166,10 @@ IUPAC命名法に従って degenerate symbol で表すこともある。
 0.375 0.375 0.125 0.125
 0.250 0.125 0.375 0.250
 0.250 0.125 0.250 0.375
-</code></pre></dd>
+</code></pre>
+</dd>
 </dl>
-
 <!-- -->
-
 <dl>
 <dt><strong>PSSM</strong>: Position-Specific Scoring Matrix</dt>
 <dd>頻度からいろんなスコアに変換して行列にする。
@@ -192,38 +177,29 @@ IUPAC命名法に従って degenerate symbol で表すこともある。
 <dt><strong>PWM</strong>: Position Weight Matrix</dt>
 <dd>一番良く見る呼び方だが、PSPMと同義だったり、PSSMと同義だったり。。。</dd>
 <dt><strong>Sequence Logo</strong></dt>
-<dd><p>ポジションごとの保存性・確実さと各塩基・アミノ酸の寄与を
+<dd>ポジションごとの保存性・確実さと各塩基・アミノ酸の寄与を
 アルファベットの大きさで視覚的に表現。
-(<a href="http://dx.doi.org/10.1093/nar/18.20.6097">Schneider and Stephens 1990</a>)</p>
-
+(<a href="http://dx.doi.org/10.1093/nar/18.20.6097">Schneider and Stephens 1990</a>)
 <p>ポジション <em>i</em> における塩基・アミノ酸 <em>a</em> の高さは、 相対頻度 <em>f</em> と情報量 <em>R</em> の積:<br>
 $\text{Height}(a, i) = f(a, i) \times R(i)$</p>
-
 <p>ポジション <em>i</em> における情報量 (<strong>information content</strong>, IC) は、 定数ひく不確実性ひく補正項:<br>
 $R(i) = \log_2(s) - H(i) - e(n)$<br>
 ただし <em>s</em> = 4 [DNA] or 20 [Protein]</p>
-
 <p>ポジション <em>i</em> における不確実性 (Shannon entropy):<br>
 $H_i = - \sum _{k}{f(k, i)} \times \log_2 f(k, i)$</p>
-
 <p>配列の数 <em>n</em> が少ない時のための補正項:<br>
 $e(n) = \frac{1}{\ln 2} \times \frac{s - 1}{2n}$<br>
 ただし <em>s</em> = 4 [DNA] or 20 [Protein]</p>
-
-<p><a href="http://schneider.ncifcrf.gov/paper/logopaper/">http://schneider.ncifcrf.gov/paper/logopaper/</a></p></dd>
+<p><a href="http://schneider.ncifcrf.gov/paper/logopaper/">http://schneider.ncifcrf.gov/paper/logopaper/</a></p>
+</dd>
 <dt><strong>Consensus Logo</strong></dt>
-<dd><p>コンセンサス配列の重み付け表示版、あるいはSequence Logoのトップヒット限定版。
-1行の文字列なので図を使わず書式付きリッチテキストとして扱える。</p></dd>
+<dd>コンセンサス配列の重み付け表示版、あるいはSequence Logoのトップヒット限定版。
+1行の文字列なので図を使わず書式付きリッチテキストとして扱える。</dd>
 </dl>
-
 <h2 id="アルゴリズムの分類">アルゴリズムの分類</h2>
-
 <h3 id="一覧">一覧</h3>
-
 <p><a href="http://dx.doi.org/10.1186/1471-2105-8-S7-S21">Das and Dai 2007</a> 表を改変</p>
-
 <hr>
-
 <dl>
 <dt><a href="/bio/meme.html">MEME</a> Suite</dt>
 <dd><code>MEME</code>, <code>DREME</code>, <code>MEME-ChIP</code>, <code>MAST</code></dd>
@@ -239,122 +215,102 @@ peak-motifs;
 <dd>BEAM, PRISM, SPACER を組み合わせる。
 ローカル使用には作者へのメールが必要。</dd>
 </dl>
-
 <h3 id="word-based-string-based">word-based (string-based)</h3>
-
 <p>オリゴヌクレオチドの数え上げと頻度比較 = exhaustive enumeration</p>
-
 <p>全通りやるので global optimality にたどり着く</p>
-
 <p>短いモチーフ配列(=真核生物)向き</p>
-
 <p>Oligo-Analysis, Dyad-Analysis</p>
-
 <p>Weeder</p>
-
 <p>MITRA,</p>
-
 <p>YMF</p>
-
 <h3 id="psm-probabilistic-sequence-model">PSM: probabilistic sequence model</h3>
-
 <p>長いモチーフ配列(=原核生物)向き</p>
-
 <p>探索の仕方によっては local optimum に陥りがち</p>
-
 <dl>
 <dt>EM (expectation maximization) algorithm</dt>
 <dd><ol>
-<li><em>w</em> 行のPWM $\theta$ を適当に作る
-(位置 <em>j</em> が塩基 <em>a</em> である確率は $\theta_{ja}$)</li>
-</ol>
-
-<ol>
-<li><p>配列が <em>n</em> 本あり、それらの部分配列 <em>S</em> が
+<li>
+<p><em>w</em> 行のPWM $\theta$ を適当に作る
+(位置 <em>j</em> が塩基 <em>a</em> である確率は $\theta_{ja}$)</p>
+</li>
+<li>
+<p>配列が <em>n</em> 本あり、それらの部分配列 <em>S</em> が
 $\theta$ から生成される確率(すなわち尤度)は</p>
-
 <div>\[
 L(\theta) = P(S_1, ..., S_n|\theta) = \prod_i^n \prod_j^w \theta_{i, S_{i j}}
-\]</div></li>
-
-<li><p>部分配列がモチーフ $\theta$ から生成された場合と、
+\]</div>
+</li>
+<li>
+<p>部分配列がモチーフ $\theta$ から生成された場合と、
 そうじゃないただのバックグラウンド $\theta_0$ から生成された場合を</p>
-
 <div>\[\begin{aligned}
 z_i &= 1 [\text{if} S_i \text{is generated by} \theta]\\
 z_i &= 0 [\text{if} S_i \text{is generated by} \theta_0]
 \end{aligned}\]</div>
-
 <p>のように missing parameter として表すと、尤度は</p>
-
 <div>\[
 L(z, \theta, \theta^0) =
 \prod_i^n [z_i P(S_i|\theta) + (1 - z_i)P(S_i|\theta^0)]
-\]</div></li>
-
-<li><p>EMアルゴリズムでは以下の平均対数尤度を使う。</p>
-
+\]</div>
+</li>
+<li>
+<p>EMアルゴリズムでは以下の平均対数尤度を使う。</p>
 <div>\[
 \log \tilde{L}(z, \theta, \theta^0) =
 \sum_i^n [q(z_i = 1) \log P(S_i|\theta) + q(z_i = 0) \log P(S_i|\theta^0)]
 \]</div>
-
 <p>ただし $q(z_i)$ はラベル変数の事後分布で、</p>
-
 <div>\[\begin{aligned}
 q(z_i = 1) &\sim P(z_i = 1) P(S_i|\theta)\\
 q(z_i = 0) &\sim P(z_i = 0) P(S_i|\theta_0)
-\end{aligned}\]</div></li>
-
-<li><p>E (Expectation) ステップ:
-$\theta$ を使って $q(z_i)$ を更新</p></li>
-
-<li><p>M (Maximization) ステップ:
-$q(z_i)$ を使って、尤度最大となるよう $\theta$ を更新</p></li>
-
-<li><p>EMステップを繰り返す</p></li>
+\end{aligned}\]</div>
+</li>
+<li>
+<p>E (Expectation) ステップ:
+$\theta$ を使って $q(z_i)$ を更新</p>
+</li>
+<li>
+<p>M (Maximization) ステップ:
+$q(z_i)$ を使って、尤度最大となるよう $\theta$ を更新</p>
+</li>
+<li>
+<p>EMステップを繰り返す</p>
+</li>
 </ol>
-
-<p><a href="/bio/meme.html">MEME</a> では各配列が持つモチーフの数が1以外の場合も扱えるのと、
+<a href="/bio/meme.html">MEME</a> では各配列が持つモチーフの数が1以外の場合も扱えるのと、
 最初のPWMの作り方を工夫して大域最適解に行きやすくなっているという点で
-ただのEMより改善されているらしい。</p></dd>
+ただのEMより改善されているらしい。</dd>
 </dl>
-
 <hr>
-
 <dl>
 <dt>Gibbs sampling</dt>
-<dd><p><a href="http://arep.med.harvard.edu/mrnadata/mrnasoft.html">AlignACE</a> (Linux実行形式のみ配布),
-MotifSampler</p></dd>
-<dd><ol>
-<li><em>N</em> 本の各配列のモチーフ位置の初期値をランダムに与える</li>
-</ol>
-
+<dd><a href="http://arep.med.harvard.edu/mrnadata/mrnasoft.html">AlignACE</a> (Linux実行形式のみ配布),
+MotifSampler</dd>
+<dd>
 <ol>
+<li><em>N</em> 本の各配列のモチーフ位置の初期値をランダムに与える</li>
 <li>ランダムに配列をひとつ選び、それ以外の配列のモチーフを並べてPWMを計算</li>
 <li>先に選んだ配列の上でPWMをスライドさせつつスコア
 (<em>l</em>-merがPWMから生成される確率など) を計算</li>
 <li>スコアに比例した確率で新しいモチーフ位置を決める</li>
 <li>各配列のモチーフ位置が安定するまで2–4を繰り返す</li>
-</ol></dd>
-<dd><p>スコアには生の生成確率ではなく、
+</ol>
+</dd>
+<dd>
+<p>スコアには生の生成確率ではなく、
 バックグラウンドスコア(塩基出現頻度から予測される出現頻度)との比を考慮した
 相対エントロピーを用いることがある。</p>
-
 <div>\[
 \sum_i^l \sum_a^{ACGT} p_{ai} \log_2 \frac{p_{ai}}{b_a}
-\]</div></dd>
+\]</div>
+</dd>
 </dl>
-
 <h3 id="ensemble">Ensemble</h3>
-
 <p>基本的にはどのアルゴリズムもsensitivity, accuracy共に低い。
 既存のアルゴリズムを複数ensemble的に組み合わせるべし。</p>
-
 <dl>
 <dt>EMD</dt>
-<dd><p>(<a href="http://dx.doi.org/10.1186/1471-2105-7-342">Hu et al. 2006</a>)</p>
-
+<dd>(<a href="http://dx.doi.org/10.1186/1471-2105-7-342">Hu et al. 2006</a>)
 <ol>
 <li>配列 <em>N</em> 本のデータセットに対し
 <em>M</em> 個の異なるアルゴリズムをそれぞれ
@@ -362,31 +318,24 @@ MotifSampler</p></dd>
 <li>配列毎・アルゴリズム毎に予測サイトを集めてグループ化する</li>
 <li>配列毎に全アルゴリズムの予測スコアを足しあわせて
 voting, smoothing, extracting</li>
-</ol></dd>
+</ol>
+</dd>
 </dl>
-
 <h3 id="pf-phylogenetic-footprinting">PF: Phylogenetic Footprinting</h3>
-
 <p>古くは Tagle et al. 1988 がこれを用いてグロブリンの調節領域を予測した。</p>
-
 <p>ClustalW などによるアラインメントでは、
 近すぎると情報量が無く、遠すぎるとメチャクチャ。</p>
-
 <p>複数種の配列で保存的な部分配列を探すだけなら
 上記のような1 genome用のツールを使ってもある程度はいけるが、
 そのまま使うのではなくて系統関係による重み付けが必要。</p>
-
 <h3 id="backgroundの取り方">Backgroundの取り方</h3>
-
 <p>統計的仮説検証のためにランダム生成DNA配列を使ってしまうと、
 繰り返しが多く含まれていたりする現実のDNA配列と比べて &ldquo;too null&rdquo; になり、
 検出力を overestimate することにつながる。
 かといって、そういう配列を予めマスクしてしまっていいかというとそれも微妙
 (<a href="http://dx.doi.org/10.1371/journal.pone.0047836">Simcha et al. 2012</a>)</p>
-
 <p>ランダムではなくバックグラウンドと比べて多いかどうかを明示的に言いたい場合は
 <strong>discriminatory motif</strong> と呼んだりする。</p>
-
 <dl>
 <dt>Markov process</dt>
 <dd>各塩基の頻度を考慮して配列をランダム生成するのが0階(単純)マルコフ過程。
@@ -398,20 +347,13 @@ BioProspector, MotifSampler, YMF, MEME</dd>
 <dt>バックグラウンド配列セットにおけるモチーフ出現頻度を考慮</dt>
 <dd>Co-Bind 2001, WordSpy 2005, ANN-Spec 2000</dd>
 </dl>
-
 <h3 id="見つけた後の評価">見つけた後の評価</h3>
-
 <p>STAMP, TOMTOM, MotIV</p>
-
 <h2 id="ツールの性能評価">ツールの性能評価</h2>
-
 <p>ツールを作るのも難しいが、性能を正しく評価するのも難しい。</p>
-
 <p>ツール開発論文の多くは「MEMEよりxx%も精度が向上した」などと報告しているが、
 それはデータ・評価項目・コマンドオプションなどに依存している。</p>
-
 <h3 id="テストデータ">テストデータ</h3>
-
 <dl>
 <dt>現実の配列を使う</dt>
 <dd>真の正解が分からない。
@@ -420,9 +362,7 @@ BioProspector, MotifSampler, YMF, MEME</dd>
 <dd>自然の配列ができあがる真の確率過程が分からないので、
 特定のアルゴリズムに有利になったりするような偏りが生じるかも。</dd>
 </dl>
-
 <h3 id="評価項目">評価項目</h3>
-
 <dl>
 <dt>Raw Score (塩基単位)</dt>
 <dd>予測されたモチーフを正解モチーフと塩基単位で比較し、 正解 (True Positive, True Negative) と間違い (False Positive, False Negative) をカウントする。<br>
@@ -449,21 +389,15 @@ $nCC = \frac{TP \times TN - FN \times FP}{\sqrt{(TP + FN)(TN + FP)(TP + FP)(TN +
 <dd>感度と精度の平均 (<a href="http://dx.doi.org/10.1006/geno.1996.0298">Burset, M. and Guigó 1996</a>)<br>
 $nASP = \frac{Sn + PPV}{2}$</dd>
 </dl>
-
 <div class="warning">
-
-モチーフを含まないネガコンをデータに含めた場合は常に $TP = FN = 0$、
+<p>モチーフを含まないネガコンをデータに含めた場合は常に $TP = FN = 0$、
 アルゴリズムがモチーフ無しと予測した場合は常に $TP = FP = 0$
-となり、いろんな尺度が undefined/noninformative になってしまうのが悩みどころ
-
+となり、いろんな尺度が undefined/noninformative になってしまうのが悩みどころ</p>
 </div>
-
 <h3 id="評価の要約方法">評価の要約方法</h3>
-
 <p>ツールによってデータや尺度の得意・不得意があるので、
 複数のデータセットでいろんな尺度を計算することになる。
 それをどのように要約するか。</p>
-
 <dl>
 <dt><strong>Averaged</strong></dt>
 <dd>普通に算術平均</dd>
@@ -476,11 +410,8 @@ $nASP = \frac{Sn + PPV}{2}$</dd>
 それから各尺度の計算をする。
 ゼロ除算を避けられる場合が多いので有用。</dd>
 </dl>
-
 <h2 id="database">Database</h2>
-
 <h3 id="dna">DNA</h3>
-
 <dl>
 <dt><a href="http://www.gene-regulation.com/pub/databases.html">TRANSFAC</a> (<a href="http://dx.doi.org/10.1093/nar/gkg108">Matys et al. 2003</a>)</dt>
 <dd>真核生物。
@@ -491,28 +422,18 @@ Professional版と機能限定Public版がある。</dd>
 情報量は少ないが1つのTFは1つのプロファイルだけ持ってる。
 無制限。</dd>
 </dl>
-
 <p><a href="http://rulai.cshl.edu/SCPD/">SCPD</a>: The Promoter Database of Saccharomyces cerevisiae</p>
-
 <p><a href="http://dbtbs.hgc.jp/">DBTBS</a>: Database of Transcriptional Regulation in Bacillus subtilis</p>
-
 <dl>
 <dt><a href="http://regulondb.ccg.unam.mx/">RegulonDB</a>:</dt>
 <dd>Escherichia coli K-12 Transcriptional Regulatory Network</dd>
 </dl>
-
 <h3 id="protein">Protein</h3>
-
 <p><a href="http://pfam.sanger.ac.uk/">Pfam</a></p>
-
 <p><a href="http://prosite.expasy.org/">PROSITE</a></p>
-
 <p><a href="http://prodom.prabi.fr/">ProDom</a></p>
-
 <p><a href="http://www.bioinf.manchester.ac.uk/dbbrowser/PRINTS/index.php">PRINTS</a></p>
-
 <h2 id="references">References</h2>
-
 <p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320056507/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41mFg6u4ZLL._SX180_.jpg" alt="バイオインフォマティクスのためのアルゴリズム入門" /></a>
 <a href="http://www.amazon.co.jp/exec/obidos/ASIN/4621062514/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41-8yNqP0hL._SX180_.jpg" alt="バイオインフォマティクス" /></a>
 <a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320056280/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51EA2RU0BXL._SX180_.jpg" alt="バイオインフォマティクス事典" /></a>
@@ -548,8 +469,8 @@ Professional版と機能限定Public版がある。</dd>
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -561,11 +482,11 @@ Professional版と機能限定Public版がある。</dd>
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -584,6 +505,7 @@ Professional版と機能限定Public版がある。</dd>
 <label for="menu-bio" class="active">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -591,7 +513,6 @@ Professional版と機能限定Public版がある。</dd>
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -603,20 +524,20 @@ Professional版と機能限定Public版がある。</dd>
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

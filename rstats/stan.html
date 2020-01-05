@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -91,41 +91,36 @@ Stan — 高速MCMCでパラメータ推定
 </ul></nav>
 </header>
 
-
-
 <p>数あるMCMCアルゴリズムの中でも効率的なHMC(Hybrid/Hamiltonian Monte Carlo)を用いてベイズ推定を行うツール。
 <a href="http://mc-stan.org/interfaces/">Pythonやコマンドラインなどいろんな形で利用可能</a>だが、
 とりあえずRで<a href="http://mc-stan.org/interfaces/rstan.html">RStan</a>を使ってみる。</p>
-
 <p><a href="http://mc-stan.org/">http://mc-stan.org/</a></p>
-
 <h2 id="インストール">インストール</h2>
-
 <p>Rから<code>install.packages(&quot;rstan&quot;)</code>で一発。
 jagsと違ってstan本体も同時に入れてくれる。
 <a href="https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started">RStan-Getting-Started</a>
 を見ると、時代や環境によってはいろいろ難しいかったのかも。</p>
-
 <p>標準的な(Xcode Command Line Tools とか build-essential的な)開発環境はどっちみち必要。</p>
-
 <h2 id="基本的な流れ">基本的な流れ</h2>
-
 <ol>
-<li><p>rstanを読み込む</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span>rstan<span class="p">)</span>
-rstan_options<span class="p">(</span>auto_write <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
-<span class="kp">options</span><span class="p">(</span>mc.cores <span class="o">=</span> parallel<span class="o">::</span>detectCores<span class="p">())</span></code></pre></div></li>
-
-<li><p>名前付きlistとしてデータを用意する。
+<li>
+<p>rstanを読み込む</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">library</span><span class="p">(</span><span class="n">rstan</span><span class="p">)</span>
+<span class="nf">rstan_options</span><span class="p">(</span><span class="n">auto_write</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
+<span class="nf">options</span><span class="p">(</span><span class="n">mc.cores</span> <span class="o">=</span> <span class="n">parallel</span><span class="o">::</span><span class="nf">detectCores</span><span class="p">(</span><span class="p">)</span><span class="p">)</span>
+</code></pre></div></li>
+<li>
+<p>名前付きlistとしてデータを用意する。
 e.g., 平均10、標準偏差3の正規乱数。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="m">.</span>data <span class="o">=</span> <span class="kt">list</span><span class="p">(</span>x<span class="o">=</span>rnorm<span class="p">(</span><span class="m">10000</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="m">3</span><span class="p">))</span>
-<span class="m">.</span>data<span class="o">$</span>n_obs <span class="o">=</span> <span class="kp">length</span><span class="p">(</span><span class="m">.</span>data<span class="o">$</span>x<span class="p">)</span></code></pre></div></li>
-
-<li><p>Stan言語でモデルを記述する。
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">.data</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nf">rnorm</span><span class="p">(</span><span class="m">10000</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="m">3</span><span class="p">)</span><span class="p">)</span>
+<span class="n">.data</span><span class="o">$</span><span class="n">n_obs</span> <span class="o">=</span> <span class="nf">length</span><span class="p">(</span><span class="n">.data</span><span class="o">$</span><span class="n">x</span><span class="p">)</span>
+</code></pre></div></li>
+<li>
+<p>Stan言語でモデルを記述する。
 別ファイルにしてもいいし、下記のようにR文字列でもいい。
 e.g., 与えられたデータが正規分布から取れてきたとすると、
 その平均と標準偏差はどれくらいだったか？</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="m">.</span>stan_code <span class="o">=</span> <span class="s">&#34;
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">.stan_code</span> <span class="o">=</span> <span class="s">&#34;</span><span class="s">
 </span><span class="s">data {
 </span><span class="s">  int n_obs;
 </span><span class="s">  real[n_obs] x;
@@ -138,37 +133,36 @@ e.g., 与えられたデータが正規分布から取れてきたとすると�
 </span><span class="s">
 </span><span class="s">model {
 </span><span class="s">  x ~ normal(mu, sigma);
-</span><span class="s">}&#34;</span></code></pre></div></li>
-
-<li><p>モデルをC++に変換してコンパイルする。
+</span><span class="s">}&#34;</span>
+</code></pre></div></li>
+<li>
+<p>モデルをC++に変換してコンパイルする。
 ファイルから読み込んだ場合は中間ファイル<code>*.rda</code>がキャッシュされる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="m">.</span>model <span class="o">=</span> rstan<span class="o">::</span>stan_model<span class="p">(</span>model_code<span class="o">=</span><span class="m">.</span>stan_code<span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">.model</span> <span class="o">=</span> <span class="n">rstan</span><span class="o">::</span><span class="nf">stan_model</span><span class="p">(</span><span class="n">model_code</span><span class="o">=</span><span class="n">.stan_code</span><span class="p">)</span>
 <span class="c1"># or</span>
-<span class="m">.</span>model <span class="o">=</span> rstan<span class="o">::</span>stan_model<span class="p">(</span>file<span class="o">=</span><span class="s">&#34;model.stan&#34;</span><span class="p">)</span></code></pre></div></li>
-
-<li><p>コンパイル済みモデルを使ってMCMCサンプリング</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="m">.</span>fit <span class="o">=</span> rstan<span class="o">::</span>sampling<span class="p">(</span><span class="m">.</span>model<span class="p">,</span> data<span class="o">=</span><span class="m">.</span>data<span class="p">,</span> iter<span class="o">=</span><span class="m">10000</span><span class="p">,</span> chains<span class="o">=</span><span class="m">3</span><span class="p">)</span></code></pre></div></li>
-
-<li><p>結果を見てみる</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kp">print</span><span class="p">(</span><span class="m">.</span>fit<span class="p">)</span>
-<span class="kp">summary</span><span class="p">(</span><span class="m">.</span>fit<span class="p">)</span>
-plot<span class="p">(</span><span class="m">.</span>fit<span class="p">)</span>
-pairs<span class="p">(</span><span class="m">.</span>fit<span class="p">)</span>
-rstan<span class="o">::</span>traceplot<span class="p">(</span><span class="m">.</span>fit<span class="p">)</span>
-rstan<span class="o">::</span>stan_trace<span class="p">(</span><span class="m">.</span>fit<span class="p">)</span>
-rstan<span class="o">::</span>stan_hist<span class="p">(</span><span class="m">.</span>fit<span class="p">)</span>
-rstan<span class="o">::</span>stan_dens<span class="p">(</span><span class="m">.</span>fit<span class="p">)</span></code></pre></div></li>
+<span class="n">.model</span> <span class="o">=</span> <span class="n">rstan</span><span class="o">::</span><span class="nf">stan_model</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="s">&#34;</span><span class="s">model.stan&#34;</span><span class="p">)</span>
+</code></pre></div></li>
+<li>
+<p>コンパイル済みモデルを使ってMCMCサンプリング</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">.fit</span> <span class="o">=</span> <span class="n">rstan</span><span class="o">::</span><span class="nf">sampling</span><span class="p">(</span><span class="n">.model</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">.data</span><span class="p">,</span> <span class="n">iter</span><span class="o">=</span><span class="m">10000</span><span class="p">,</span> <span class="n">chains</span><span class="o">=</span><span class="m">3</span><span class="p">)</span>
+</code></pre></div></li>
+<li>
+<p>結果を見てみる</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">print</span><span class="p">(</span><span class="n">.fit</span><span class="p">)</span>
+<span class="nf">summary</span><span class="p">(</span><span class="n">.fit</span><span class="p">)</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">.fit</span><span class="p">)</span>
+<span class="nf">pairs</span><span class="p">(</span><span class="n">.fit</span><span class="p">)</span>
+<span class="n">rstan</span><span class="o">::</span><span class="nf">traceplot</span><span class="p">(</span><span class="n">.fit</span><span class="p">)</span>
+<span class="n">rstan</span><span class="o">::</span><span class="nf">stan_trace</span><span class="p">(</span><span class="n">.fit</span><span class="p">)</span>
+<span class="n">rstan</span><span class="o">::</span><span class="nf">stan_hist</span><span class="p">(</span><span class="n">.fit</span><span class="p">)</span>
+<span class="n">rstan</span><span class="o">::</span><span class="nf">stan_dens</span><span class="p">(</span><span class="n">.fit</span><span class="p">)</span>
+</code></pre></div></li>
 </ol>
-
 <h2 id="stan文法">Stan文法</h2>
-
 <p><a href="http://mc-stan.org/documentation/">http://mc-stan.org/documentation/</a>
 PDFしか無くて残念</p>
-
 <h3 id="ブロック">ブロック</h3>
-
 <p>コード内に登場できるブロックは7種類で、順番はこの通りでなければならない。</p>
-
 <dl>
 <dt><code>functions {...}</code></dt>
 <dd>関数を定義できる。</dd>
@@ -191,55 +185,44 @@ PDFしか無くて残念</p>
 <code>normal_rng()</code>などによる乱数生成が許される唯一のブロック。
 rstanならここを使わずRで結果を受け取ってからどうにかするほうが簡単？</dd>
 </dl>
-
 <h3 id="モデリング">モデリング</h3>
-
 <p>あるパラメータにおけるlog probabilityと近傍での傾きを計算し、
 それらを元に次の値にジャンプする、という操作が繰り返される。
 modelブロック内で暗黙的に定義されている <code>target</code> 変数に対して
 <code>+=</code> 演算子で対数確率をどんどん加算していく。
 (昔は隠れ変数<code>lp__</code>や<code>increment_log_prob()</code>などを使ってた。)</p>
-
 <p>サンプリング文(sampling statement)はそれを簡単に記述するためのショートカット。
 名前とは裏腹に、確率分布からのサンプリングが行われるわけではないので紛らわしい。
 例えば以下の表現はほぼ等価。
 (定数の扱い方がうまいとかでサンプリング文のほうが効率的らしいけど)</p>
-<div class="highlight"><pre class="chroma"><code class="language-stan" data-lang="stan">x ~ normal(0.0, 1.0);
+<pre><code class="language-stan" data-lang="stan">x ~ normal(0.0, 1.0);
 target += normal_lpdf(x | 0.0, 1.0);
-target += -0.5 * square(x);</code></pre></div>
-<p>確率分布としての正規化はうまいことやっといてくれるから気にしなくていいらしい
+target += -0.5 * square(x);
+</code></pre><p>確率分布としての正規化はうまいことやっといてくれるから気にしなくていいらしい
 (が、<code>T[,]</code>によるtruncated distributionではこうやって調整する、
 とかいう記述もあるので、そのへんはまだよく分からない)。</p>
-
 <div>\[\begin{aligned}
 \log p(x) &\propto -\frac {x^2} 2 \\
      p(x) &\propto \exp \left(- \frac {x^2} 2 \right)
 \end{aligned}\]</div>
-
 <p>名のある確率分布はだいたい関数として用意されている。
 形のバリエーションとしては:</p>
-
 <ul>
 <li>確率密度関数: <code>*_lpdf(y | ...)</code>, <code>*_lpmf(y | ...)</code></li>
 <li>累積分布関数: <code>*_cdf(y | ...)</code>, <code>*_lcdf(y | ...)</code></li>
 <li>相補累積分布関数: <code>*_lccdf(y | ...)</code></li>
 <li>乱数生成: <code>*_rng(...)</code></li>
 </ul>
-
 <p>(対数版のsuffixは昔は <code>_cdf_log()</code>, <code>_ccdf_log()</code> という形だった)</p>
-
 <h3 id="型">型</h3>
-
 <p>整数(<code>int</code>)、実数(<code>real</code>)、実数ベクトル(<code>vector</code>, <code>row_vector</code>)、実数行列(<code>matrix</code>)。
 内部的に <code>Eigen::Vector</code> や <code>Eigen::Matrix</code> が使われているので、
 可能な限り<code>for</code>文よりも行列演算を使うように心がける。
 配列(array)は <code>std::vector</code> で実装されていて、
 整数配列や行列配列など何でも作れるが、行列演算はできない。</p>
-
 <p>宣言時に上限下限を設定できる (constrained integer/real)。</p>
-
 <p>bool型は無くて基本的に整数の1/0。分岐ではnon-zeroがtrue扱い。</p>
-<div class="highlight"><pre class="chroma"><code class="language-stan" data-lang="stan">int i;
+<pre><code class="language-stan" data-lang="stan">int i;
 int v[42];
 real x;
 real x[42];
@@ -254,9 +237,8 @@ r * v  // real
 v * r  // matrix[3, 3]
 m * v  // vector[3]
 m * m  // matrix[3, 3]
-m[1]   // row_vector[3]</code></pre></div>
-<p>そのほかの特殊な制約つきの型</p>
-
+m[1]   // row_vector[3]
+</code></pre><p>そのほかの特殊な制約つきの型</p>
 <ul>
 <li><code>simplex</code>: 合計が1になる非負実数ベクトル</li>
 <li><code>unit_vector</code>: 二乗和が1になる実数ベクトル</li>
@@ -264,52 +246,40 @@ m[1]   // row_vector[3]</code></pre></div>
 昇順実数ベクトル。降順にしたければ <code>transformed parameters</code> ブロックで。</li>
 <li><code>cov_matrix</code>, <code>corr_matrix</code>, <code>cholesky_factor_cov</code>, <code>cholesky_factor_corr</code></li>
 </ul>
-
 <h3 id="tips">Tips</h3>
-
 <p>条件分岐するときはなるべく<code>if</code>文を避けて三項演算子やステップ関数を使うべし、
 という言語が多いけどStanでは逆に<code>if</code>文を素直に書くほうが良いらしい。
 <code>if_else()</code>では真値でも両方の引数が評価されちゃうし、
 <code>step()</code> や <code>int_step()</code> からの掛け算は遅いのだとか。</p>
-
 <p>代入演算子は普通に <code>=</code> イコール。(昔は <code>&lt;-</code> 矢印だった)</p>
-
 <p>対数尤度の値を確認したいときは <code>print(&quot;log_prob: &quot;, target())</code></p>
-
 <h2 id="可視化">可視化</h2>
-
 <p><a href="https://www.rdocumentation.org/packages/rstan/topics/Plots">https://www.rdocumentation.org/packages/rstan/topics/Plots</a></p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">stan_plot<span class="p">()</span>
-stan_trace<span class="p">()</span>
-stan_scat<span class="p">()</span>
-stan_hist<span class="p">()</span>
-stan_dens<span class="p">()</span>
-stan_ac<span class="p">()</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">stan_plot</span><span class="p">(</span><span class="p">)</span>
+<span class="nf">stan_trace</span><span class="p">(</span><span class="p">)</span>
+<span class="nf">stan_scat</span><span class="p">(</span><span class="p">)</span>
+<span class="nf">stan_hist</span><span class="p">(</span><span class="p">)</span>
+<span class="nf">stan_dens</span><span class="p">(</span><span class="p">)</span>
+<span class="nf">stan_ac</span><span class="p">(</span><span class="p">)</span>
 
 <span class="c1"># S3 method</span>
-pairs<span class="p">()</span>
-<span class="kp">print</span><span class="p">()</span></code></pre></div>
-<p><code>stanfit</code> クラスのmethodとして <code>plot()</code> や <code>traceplot()</code> が定義されているが、
+<span class="nf">pairs</span><span class="p">(</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="p">)</span>
+</code></pre></div><p><code>stanfit</code> クラスのmethodとして <code>plot()</code> や <code>traceplot()</code> が定義されているが、
 いくつかのチェックとともに <code>stan_plot()</code> 系の関数を呼び出すだけで大きな違いは無さそう。</p>
-
 <h2 id="トラブル対処">トラブル対処</h2>
-
 <h3 id="stanheaders-version-is-ahead-of-rstan-version">StanHeaders version is ahead of rstan version</h3>
-
 <p>Stanのヘッダーライブラリとrstanは別々のパッケージで提供されていて、
 Stan更新への追従にタイムラグがあるらしい。
 こんなん開発者側でどうにかして欲しいけど、
 とりあえず古い <code>StanHeaders</code> を入れてしのぐしかない。
 <a href="https://github.com/stan-dev/rstan/wiki/RStan-Transition-Periods">https://github.com/stan-dev/rstan/wiki/RStan-Transition-Periods</a></p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">install.packages<span class="p">(</span><span class="s">&#34;https://cran.r-project.org/src/contrib/Archive/StanHeaders/StanHeaders_2.9.0.tar.gz&#34;</span><span class="p">,</span> repos<span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> type<span class="o">=</span><span class="s">&#34;source&#34;</span><span class="p">)</span></code></pre></div>
-<p><a href="https://cran.r-project.org/src/contrib/Archive/StanHeaders/">https://cran.r-project.org/src/contrib/Archive/StanHeaders/</a></p>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">install.packages</span><span class="p">(</span><span class="s">&#34;</span><span class="s">https://cran.r-project.org/src/contrib/Archive/StanHeaders/StanHeaders_2.9.0.tar.gz&#34;</span><span class="p">,</span> <span class="n">repos</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> <span class="n">type</span><span class="o">=</span><span class="s">&#34;</span><span class="s">source&#34;</span><span class="p">)</span>
+</code></pre></div><p><a href="https://cran.r-project.org/src/contrib/Archive/StanHeaders/">https://cran.r-project.org/src/contrib/Archive/StanHeaders/</a></p>
 <h3 id="最新版をgithubからインストール">最新版をGitHubからインストール</h3>
-
 <p>リポジトリの構造が標準とはちょっと違う</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">remotes<span class="o">::</span>install_github<span class="p">(</span><span class="s">&#34;stan-dev/rstan&#34;</span><span class="p">,</span> ref<span class="o">=</span><span class="s">&#34;develop&#34;</span><span class="p">,</span> subdir<span class="o">=</span><span class="s">&#34;rstan/rstan&#34;</span><span class="p">)</span></code></pre></div>
-<h2 id="関連書籍">関連書籍</h2>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&#34;</span><span class="s">stan-dev/rstan&#34;</span><span class="p">,</span> <span class="n">ref</span><span class="o">=</span><span class="s">&#34;</span><span class="s">develop&#34;</span><span class="p">,</span> <span class="n">subdir</span><span class="o">=</span><span class="s">&#34;</span><span class="s">rstan/rstan&#34;</span><span class="p">)</span>
+</code></pre></div><h2 id="関連書籍">関連書籍</h2>
 <p><a href="https://www.amazon.co.jp/Stan%E3%81%A8R%E3%81%A7%E3%83%99%E3%82%A4%E3%82%BA%E7%B5%B1%E8%A8%88%E3%83%A2%E3%83%87%E3%83%AA%E3%83%B3%E3%82%B0-Wonderful-R-%E6%9D%BE%E6%B5%A6-%E5%81%A5%E5%A4%AA%E9%83%8E/dp/4320112423/ref=as_li_ss_il?_encoding=UTF8&psc=1&refRID=N4GQH6P8QHKYX0E91BVK&linkCode=li3&tag=heavywatal-22&linkId=6ffd2c8744eace95b257403231a29102" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4320112423&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4320112423" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 <a href="https://www.amazon.co.jp/gp/product/1482253445/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=9367946532fbf4369b6161aedd15c4a6" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1482253445&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=1482253445" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
 
@@ -343,8 +313,8 @@ Stan更新への追従にタイムラグがあるらしい。
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li class="active"><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li class="active"><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -356,11 +326,11 @@ Stan更新への追従にタイムラグがあるらしい。
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -379,6 +349,7 @@ Stan更新への追従にタイムラグがあるらしい。
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -386,7 +357,6 @@ Stan更新への追従にタイムラグがあるらしい。
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -398,20 +368,20 @@ Stan更新への追従にタイムラグがあるらしい。
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

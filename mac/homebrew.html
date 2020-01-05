@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -91,88 +91,81 @@ Homebrew
 </ul></nav>
 </header>
 
-
-
 <p>Unixツールをパッケージとして手軽にインストールできるMac用パッケージ管理ソフト。</p>
-
 <p><a href="https://brew.sh/">https://brew.sh/</a></p>
-
 <h2 id="installation">Installation</h2>
-
 <p><a href="https://docs.brew.sh/Installation.html">https://docs.brew.sh/Installation.html</a></p>
-
 <ol>
-<li><p>Command Line Tools をインストールする。
-cf. <a href="/dev/devenv.html">/dev/devenv</a></p></li>
-
-<li><p>ターミナルから下記のコマンドを実行し、指示に従ってパスワードを入力する:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">/usr/bin/ruby -e <span class="s2">&#34;</span><span class="k">$(</span>curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install<span class="k">)</span><span class="s2">&#34;</span></code></pre></div>
-<p>デフォルトの <code>/usr/local/</code> にインストールするのが嫌なら、
+<li>
+<p>Command Line Tools をインストールする。
+cf. <a href="/dev/devenv.html">/dev/devenv</a></p>
+</li>
+<li>
+<p>ターミナルから下記のコマンドを実行し、指示に従ってパスワードを入力する:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">/usr/bin/ruby -e <span class="s2">&#34;</span><span class="k">$(</span>curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install<span class="k">)</span><span class="s2">&#34;</span>
+</code></pre></div><p>デフォルトの <code>/usr/local/</code> にインストールするのが嫌なら、
 例えばホーム以下の <code>~/.homebrew/</code> にインストールすることもできる:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span>
 mkdir .homebrew
-curl -L https://github.com/Homebrew/brew/tarball/master <span class="p">|</span> tar xz --strip <span class="m">1</span> -C .homebrew</code></pre></div>
-<p>が、<code>/usr/local/</code> 以外にインストールすると、
+curl -L https://github.com/Homebrew/brew/tarball/master <span class="p">|</span> tar xz --strip <span class="m">1</span> -C .homebrew
+</code></pre></div><p>が、<code>/usr/local/</code> 以外にインストールすると、
 bottle機能を封じられて毎回自前ビルドする仕様になってしまったので、
-非力なラップトップとかでは結構厳しい。</p></li>
-
-<li><p><code>.zshenv</code> (もしくは<code>.zshrc</code>) でパスを通す:</p>
+非力なラップトップとかでは結構厳しい。</p>
+</li>
+<li>
+<p><code>.zshenv</code> (もしくは<code>.zshrc</code>) でパスを通す:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.homebrew/bin:/usr/local/bin:<span class="si">${</span><span class="nv">PATH</span><span class="si">}</span>
-<span class="nv">brew_prefix</span><span class="o">=</span><span class="k">$(</span>brew --prefix <span class="m">2</span>&gt;/dev/null<span class="k">)</span>
+<span class="nv">brew_prefix</span><span class="o">=</span><span class="k">$(</span>brew --prefix 2&gt;/dev/null<span class="k">)</span>
 <span class="k">if</span> <span class="o">[</span> -n <span class="s2">&#34;</span><span class="si">${</span><span class="nv">brew_prefix</span><span class="si">}</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
     <span class="nv">MANPATH</span><span class="o">=</span><span class="si">${</span><span class="nv">brew_prefix</span><span class="si">}</span>/share/man:<span class="si">${</span><span class="nv">MANPATH</span><span class="si">}</span>
-    <span class="nv">fpath</span><span class="o">=(</span><span class="si">${</span><span class="nv">brew_prefix</span><span class="si">}</span>/share/zsh-completions <span class="si">${</span><span class="nv">fpath</span><span class="si">}</span><span class="o">)</span>
+    <span class="nv">fpath</span><span class="o">=</span><span class="o">(</span><span class="si">${</span><span class="nv">brew_prefix</span><span class="si">}</span>/share/zsh-completions <span class="si">${</span><span class="nv">fpath</span><span class="si">}</span><span class="o">)</span>
 <span class="k">fi</span>
-<span class="nb">unset</span> brew_prefix</code></pre></div></li>
+<span class="nb">unset</span> brew_prefix
+</code></pre></div></li>
 </ol>
-
 <h2 id="usage">Usage</h2>
-
 <p><a href="https://docs.brew.sh/FAQ.html">https://docs.brew.sh/FAQ.html</a></p>
-
 <ul>
-<li><p>Homebrew本体とカタログをアップデートし、アップグレード可能なパッケージを表示:</p>
-
-<pre><code>brew update &amp;&amp; brew outdated
-</code></pre></li>
-
-<li><p><code>outdated</code> なものを全てアップグレード:</p>
-
-<pre><code>brew upgrade
-</code></pre></li>
-
-<li><p>パッケージのバージョンを固定し、一括 <code>brew upgrade</code> の適用外にする。
+<li>
+<p>Homebrew本体とカタログをアップデートし、アップグレード可能なパッケージを表示:</p>
+<pre><code>  brew update &amp;&amp; brew outdated
+</code></pre>
+</li>
+<li>
+<p><code>outdated</code> なものを全てアップグレード:</p>
+<pre><code>  brew upgrade
+</code></pre>
+</li>
+<li>
+<p>パッケージのバージョンを固定し、一括 <code>brew upgrade</code> の適用外にする。
 頻繁に更新され、やたらCPUを使うやつらに。</p>
-
-<pre><code>brew pin imagemagick
-</code></pre></li>
-
-<li><p>パッケージ検索:</p>
-
-<pre><code>brew search text
-</code></pre></li>
-
-<li><p>パッケージ情報の表示:</p>
-
-<pre><code>brew info formula
-</code></pre></li>
-
-<li><p>パッケージのインストール・アンインストール:</p>
-
-<pre><code>brew install formula
-brew uninstall formula
-</code></pre></li>
-
-<li><p>インストール済みパッケージ、またはパッケージ内ファイルの一覧:</p>
-
-<pre><code>brew list [formula]
-</code></pre></li>
+<pre><code>  brew pin imagemagick
+</code></pre>
+</li>
+<li>
+<p>パッケージ検索:</p>
+<pre><code>  brew search text
+</code></pre>
+</li>
+<li>
+<p>パッケージ情報の表示:</p>
+<pre><code>  brew info formula
+</code></pre>
+</li>
+<li>
+<p>パッケージのインストール・アンインストール:</p>
+<pre><code>  brew install formula
+  brew uninstall formula
+</code></pre>
+</li>
+<li>
+<p>インストール済みパッケージ、またはパッケージ内ファイルの一覧:</p>
+<pre><code>  brew list [formula]
+</code></pre>
+</li>
 </ul>
-
 <h2 id="brew-install">brew install</h2>
-
 <p>公式リポジトリから明示的にインストールしたものメモ:</p>
-
 <pre><code>aspell
 autoconf
 automake
@@ -209,11 +202,9 @@ zopfli
 zsh
 zsh-completions
 </code></pre>
-
 <p>Rをここからインストールするとバイナリ版のパッケージが利用できず、
 毎回ソースからビルドすることになるので、
 後述のcaskのほうの <code>r</code> を入れるほうが簡単。</p>
-
 <p><code>coreutils</code>, <code>gnu-sed</code>, <code>gnu-tar</code>, <code>grep</code>
 などは既存のコマンドとごっちゃにならないよう頭に <code>g</code>
 を付けてインストールしてくれる。
@@ -221,20 +212,16 @@ zsh-completions
 <code>$(brew --prefix)/opt/{coreutils,gnu-sed,gnu-tar,grep}/libexec/gnubin</code> に
 <code>PATH</code> を通すのが楽ちん。
 <code>brew unlink coreutils gnu-sed gnu-tar grep</code> してもそれらのディレクトリは残る。</p>
-
 <h2 id="brew-tap">brew tap</h2>
-
 <ul>
 <li><a href="https://docs.brew.sh/brew-tap.html">https://docs.brew.sh/brew-tap.html</a></li>
 <li><a href="https://docs.brew.sh/Interesting-Taps-and-Forks.html">https://docs.brew.sh/Interesting-Taps-and-Forks.html</a></li>
 </ul>
-
 <p>明示的にリポジトリを追加する:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew tap brewsci/bio
-brew install libsequence</code></pre></div>
-<p>暗黙に <code>brew tap</code> しつつ直接インストールも可能:
+brew install libsequence
+</code></pre></div><p>暗黙に <code>brew tap</code> しつつ直接インストールも可能:
 <code>brew install brewsci/bio/libsequence</code></p>
-
 <p>バイオインフォマティクスなど科学計算のツール群はHomebrew公式タップ
 <a href="https://github.com/Homebrew/homebrew-science"><code>homebrew/science</code></a>
 に収録されていたがdeprecatedになった。
@@ -242,37 +229,26 @@ brew install libsequence</code></pre></div>
 がフォーミュラを一旦引き継いで、 <code>homebrew/core</code> と
 <a href="https://brewsci.github.io/homebrew-bio/"><code>brewsci/bio</code></a>
 に振り分けて移行を進めている。</p>
-
 <h3 id="tapを作る">Tapを作る</h3>
-
 <p><a href="https://docs.brew.sh/How-to-Create-and-Maintain-a-Tap.html">https://docs.brew.sh/How-to-Create-and-Maintain-a-Tap.html</a></p>
-
 <p>GitHubに <code>homebrew-nicetap</code> のような名前のリポジトリを作成し、
 ルート直下の <code>Formula/</code> に <code>goodtool.rb</code> のようなファイルを置くだけ。
 使うときは <code>brew install &lt;username&gt;/nicetap/goodtool</code>
 のようにリポジトリ名から <code>homebrew-</code> を削った形で指定する。</p>
-
 <h3 id="formulaを作る">Formulaを作る</h3>
-
 <p><a href="https://docs.brew.sh/Formula-Cookbook.html">https://docs.brew.sh/Formula-Cookbook.html</a></p>
-
 <p>新規作成するには <code>brew create &lt;URL&gt;</code> コマンドが便利。</p>
-
 <p><code>url</code> には <a href="/dev/git.html#tag"><code>git tag</code></a>
 でGitHubに作られるバージョン付きアーカイブを指定してやるのが楽ちん。</p>
-
 <p><code>head</code> にリポジトリを登録してバージョン無しで運用することも可能。
 ただし <code>brew upgrade</code> ではHEADの更新をチェックしてくれないので要注意。
 <code>brew reinstall</code> するしかないのかな？</p>
-
 <h2 id="cask">Cask</h2>
-
 <p>GUIアプリケーションもHomebrewで管理してしまおうという野心的な拡張機能。
 使うときは普通の <code>brew</code> コマンドに <code>cask</code> を挟むだけ:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew cask install atom
-brew cask list</code></pre></div>
-<p>アプリ側でアップデートを実行するとCask内でのバージョンと食い違っちゃうけど使用上は問題ないらしい。</p>
-
+brew cask list
+</code></pre></div><p>アプリ側でアップデートを実行するとCask内でのバージョンと食い違っちゃうけど使用上は問題ないらしい。</p>
 <p>alfred, amazon-music, amazon-photos, atom,
 basictex, bibdesk,
 discord, docker, dropbox, eqmac, firefox, gephi, gimp, gitter,
@@ -314,8 +290,8 @@ whatsapp, xquartz</p>
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -327,11 +303,11 @@ whatsapp, xquartz</p>
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -350,6 +326,7 @@ whatsapp, xquartz</p>
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -357,7 +334,6 @@ whatsapp, xquartz</p>
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -369,20 +345,20 @@ whatsapp, xquartz</p>
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -90,55 +90,55 @@ Heavy Watal
 </ul></nav>
 </header>
 
-
-
 <p><a href="https://sc.ddbj.nig.ac.jp/">https://sc.ddbj.nig.ac.jp/</a></p>
-
 <h2 id="利用開始">利用開始</h2>
-
 <ol>
-<li><a href="https://sc2.ddbj.nig.ac.jp/index.php/ja-new-application">新規ユーザ登録申請</a></li>
-<li>責任者にメールが届くので、それに従って誓約書PDFを管理者に送信</li>
-<li>アカウント登録証が手元に届く</li>
-<li><a href="https://sc2.ddbj.nig.ac.jp/">https://sc2.ddbj.nig.ac.jp/</a> でログイン</li>
-
-<li><p>手元のマシンでSSH公開鍵を生成し、
+<li>
+<p><a href="https://sc2.ddbj.nig.ac.jp/index.php/ja-new-application">新規ユーザ登録申請</a></p>
+</li>
+<li>
+<p>責任者にメールが届くので、それに従って誓約書PDFを管理者に送信</p>
+</li>
+<li>
+<p>アカウント登録証が手元に届く</p>
+</li>
+<li>
+<p><a href="https://sc2.ddbj.nig.ac.jp/">https://sc2.ddbj.nig.ac.jp/</a> でログイン</p>
+</li>
+<li>
+<p>手元のマシンでSSH公開鍵を生成し、
 <a href="https://sc2.ddbj.nig.ac.jp/index.php/2014-09-17-05-42-33">サーバーに登録</a>。
 ドキュメントの例ではRSAが使われてるけどECDSAのほうが安全で軽い。
 ほんとはed25519のほうが良いけどウェブ登録ではなぜか拒否される。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ssh-keygen -t ecdsa -b <span class="m">521</span> -N <span class="s1">&#39;&#39;</span> -C <span class="s1">&#39;heavywatal@nig.ac.jp&#39;</span> -f ~/.ssh/id_ecdsa_nig</code></pre></div></li>
-
-<li><p>手元の <code>~/.ssh/config</code> に設定を追加:</p>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ssh-keygen -t ecdsa -b <span class="m">521</span> -N <span class="s1">&#39;&#39;</span> -C <span class="s1">&#39;heavywatal@nig.ac.jp&#39;</span> -f ~/.ssh/id_ecdsa_nig
+</code></pre></div></li>
+<li>
+<p>手元の <code>~/.ssh/config</code> に設定を追加:</p>
 <pre><code>Host *.ddbj.nig.ac.jp
   User heavywatal
   RequestTTY yes
   IdentityFile ~/.ssh/id_ecdsa_nig
 </code></pre>
-
-<p>sshコマンドでユーザ名と <code>-t</code> オプションを省略できるようになる。</p></li>
-
-<li><p>ゲートウェイノードにSSH接続してログインノードに <code>qlogin</code>:</p>
-
+<p>sshコマンドでユーザ名と <code>-t</code> オプションを省略できるようになる。</p>
+</li>
+<li>
+<p>ゲートウェイノードにSSH接続してログインノードに <code>qlogin</code>:</p>
 <pre><code>ssh gw.ddbj.nig.ac.jp qlogin
-</code></pre></li>
+</code></pre>
+</li>
 </ol>
-
 <h2 id="環境整備">環境整備</h2>
-
 <ul>
 <li><a href="https://sc.ddbj.nig.ac.jp/ja/guide/hardware">ハードウェア構成</a></li>
 <li><a href="https://sc.ddbj.nig.ac.jp/ja/guide/software">ソフトウェア構成</a>
 (Phase 3: Red Hat Enterprise Linux 7.5)
-
 <ul>
 <li><a href="https://sc.ddbj.nig.ac.jp/ja/guide/software/singularity">Singularity</a></li>
 <li><a href="https://sc.ddbj.nig.ac.jp/ja/guide/software/environmental-modules">Environment Module</a></li>
-</ul></li>
 </ul>
-
+</li>
+</ul>
 <h2 id="ファイルの送受信">ファイルの送受信</h2>
-
 <p><a href="https://sc.ddbj.nig.ac.jp/ja/guide/software/file-transfer">公式「システムへのファイル転送方法」</a>
 にはsftpかAsperaを使えと書かれてるけど、
 <a href="/dev/rsync.html">rsync</a>
@@ -147,11 +147,9 @@ Heavy Watal
 rsync -auv ~/input/ gw.ddbj.nig.ac.jp:~/input/
 
 <span class="c1"># receive</span>
-rsync -auv gw.ddbj.nig.ac.jp:~/output/ ~/output/</code></pre></div>
-<p>ソースコードは当然<a href="/dev/git.html">Git</a>で管理。</p>
-
-<h2 id="ジョブ投入-管理">ジョブ投入、管理</h2>
-
+rsync -auv gw.ddbj.nig.ac.jp:~/output/ ~/output/
+</code></pre></div><p>ソースコードは当然<a href="/dev/git.html">Git</a>で管理。</p>
+<h2 id="ジョブ投入管理">ジョブ投入、管理</h2>
 <ul>
 <li><a href="https://sc.ddbj.nig.ac.jp/ja/guide/software/univa-grid-engine">https://sc.ddbj.nig.ac.jp/ja/guide/software/univa-grid-engine</a></li>
 <li><a href="https://sc2.ddbj.nig.ac.jp/index.php/ja-howtouse">https://sc2.ddbj.nig.ac.jp/index.php/ja-howtouse</a></li>
@@ -159,17 +157,15 @@ rsync -auv gw.ddbj.nig.ac.jp:~/output/ ~/output/</code></pre></div>
 <li><a href="http://www.univa.com/products/grid-engine">Univa Grid Engine (UGE)</a></li>
 <li><a href="http://gridengine.eu/grid-engine-documentation">http://gridengine.eu/grid-engine-documentation</a></li>
 </ul>
-
 <h3 id="qsub"><code>qsub</code></h3>
-
 <p>遺伝研ウェブサイトにはスクリプトを書いてから渡す方法しか書いてないが、
 コマンド引数として直接渡すほうが楽チン。</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1">## スクリプトを書いてから渡す</span>
 qsub test.sh
 
 <span class="c1">## コマンドライン引数として直接渡す</span>
-qsub -l short -b y -shell n -cwd -N <span class="nb">test</span> <span class="s2">&#34;pwd; sleep 5; ls &gt;ls.txt&#34;</span></code></pre></div>
-<dl>
+qsub -l short -b y -shell n -cwd -N <span class="nb">test</span> <span class="s2">&#34;pwd; sleep 5; ls &gt;ls.txt&#34;</span>
+</code></pre></div><dl>
 <dt><code>-l ***</code></dt>
 <dd>実行時間や計算ノードなどの要求を伝える。
 管理者が定義したキューから選んで指定する。
@@ -221,11 +217,8 @@ qsub -l short -b y -shell n -cwd -N <span class="nb">test</span> <span class="s2
 並列処理で使用するスレッド数を指定。
 <code>-l mem_req=*G</code> の値は1スレッドあたりなので注意。</dd>
 </dl>
-
 <h3 id="qsub-スクリプト"><code>qsub</code> スクリプト</h3>
-
 <p><code>#$</code> で始まる行は <code>qsub</code> へのオプションと見なされる。</p>
-
 <p>ジョブスクリプト内で参照可能な特殊環境変数をプリントしてみるジョブの例:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="cp">#!/bin/sh
 </span><span class="cp"></span><span class="c1">#$ -S /bin/sh</span>
@@ -243,8 +236,8 @@ qsub -l short -b y -shell n -cwd -N <span class="nb">test</span> <span class="s2
 <span class="nb">echo</span> SGE_TASK_LAST: <span class="nv">$SGE_TASK_LAST</span>
 <span class="nb">echo</span> SGE_TASK_STEPSIZE: <span class="nv">$SGE_TASK_STEPSIZE</span>
 <span class="nb">pwd</span>
-ls</code></pre></div>
-<p>スクリプトはPythonでもいい。
+ls
+</code></pre></div><p>スクリプトはPythonでもいい。
 インタープリタを <code>-S /usr/bin/env python</code> で指定できないのは残念。</p>
 <div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span>
 <span class="c1">#$ -S $HOME/.pyenv/shims/python</span>
@@ -253,9 +246,8 @@ ls</code></pre></div>
 <span class="c1">#$ -t 1-2</span>
 <span class="c1">#$ -N test_py</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&#34;SGE_TASK_ID: &#34;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&#34;SGE_TASK_ID&#34;</span><span class="p">])</span></code></pre></div>
-<h3 id="補助コマンド">補助コマンド</h3>
-
+<span class="k">print</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;</span><span class="s2">SGE_TASK_ID: </span><span class="s2">&#34;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="sa"></span><span class="s2">&#34;</span><span class="s2">SGE_TASK_ID</span><span class="s2">&#34;</span><span class="p">]</span><span class="p">)</span>
+</code></pre></div><h3 id="補助コマンド">補助コマンド</h3>
 <dl>
 <dt><code>qstat</code></dt>
 <dd>現在実行中のジョブ一覧。
@@ -280,13 +272,9 @@ E(rror), r(unning), R(estarted), s(uspended)
 <dt><code>qquota</code></dt>
 <dd>ユーザーに与えられたリソースを表示</dd>
 </dl>
-
 <h2 id="misc">misc.</h2>
-
 <h3 id="インストール済みrを使ってみる">インストール済みRを使ってみる</h3>
-
 <p><a href="https://sc.ddbj.nig.ac.jp/ja/guide/software/r">https://sc.ddbj.nig.ac.jp/ja/guide/software/r</a></p>
-
 <p><code>module load r/3.5.2</code> で比較的新しいやつが使えるけど、
 古いコンパイラ(おそらく <code>/usr/bin/gcc</code> 4.8.5)でビルドされているため
 RcppでC++11までしか使えない。
@@ -295,9 +283,7 @@ RcppでC++11までしか使えない。
 Rcppインストール時などに
 <code>/usr/lib64/libstdc++.so.6: version `GLIBCXX_3.4.20&rsquo; not found</code>
 と怒られる。</p>
-
 <h3 id="自前でrをインストールする">自前でRをインストールする</h3>
-
 <p><code>/opt/pkg/r/*/lib64/R/etc/Makeconf</code>
 を参考に新しいコンパイラで自前ビルドを試みる:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">wget -O- https://cran.r-project.org/src/base/R-3/R-3.5.2.tar.gz <span class="p">|</span> tar xz
@@ -305,8 +291,8 @@ Rcppインストール時などに
 ./configure -h <span class="p">|</span> less
 ./configure --prefix<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/R --disable-openmp --disable-java <span class="s1">&#39;--enable-R-shlib&#39;</span> <span class="s1">&#39;--enable-shared&#39;</span> <span class="s1">&#39;--with-tcl-config=/usr/lib64/tclConfig.sh&#39;</span> <span class="s1">&#39;--with-tk-config=/usr/lib64/tkConfig.sh&#39;</span> <span class="s1">&#39;PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/cm/local/apps/curl/lib/pkgconfig:/usr/lib64/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig&#39;</span> <span class="s1">&#39;CFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include&#39;</span> <span class="s1">&#39;CPPFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include&#39;</span> <span class="s1">&#39;CXXFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include&#39;</span> <span class="s1">&#39;FFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include&#39;</span> <span class="s1">&#39;FCFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include&#39;</span> <span class="s1">&#39;LDFLAGS=-L/usr/local/lib64 -L/usr/lib64 -L/usr/lib -L/cm/local/apps/curl/lib&#39;</span>
 make -j2
-make install</code></pre></div>
-<p><code>configure: error: libcurl &gt;= 7.22.0 library and headers are required with support for https</code>
+make install
+</code></pre></div><p><code>configure: error: libcurl &gt;= 7.22.0 library and headers are required with support for https</code>
 古いcurlは入ってないように見えるのに、なぜ？</p>
 
 </article>
@@ -339,8 +325,8 @@ make install</code></pre></div>
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -352,11 +338,11 @@ make install</code></pre></div>
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -375,6 +361,7 @@ make install</code></pre></div>
 <label for="menu-bio" class="active">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -382,7 +369,6 @@ make install</code></pre></div>
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -394,20 +380,20 @@ make install</code></pre></div>
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

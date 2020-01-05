@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -91,10 +91,7 @@ rgl — 3Dグラフ描画
 </ul></nav>
 </header>
 
-
-
 <p>3D visualization device system (OpenGL).</p>
-
 <ul>
 <li><a href="http://rgl.neoscientists.org/">Project Homepage</a></li>
 <li><a href="http://cse.naro.affrc.go.jp/takezawa/r-tips/r/57.html">R-tips</a></li>
@@ -102,7 +99,6 @@ rgl — 3Dグラフ描画
 <li><a href="https://cran.r-project.org/web/packages/rgl/">https://cran.r-project.org/web/packages/rgl/</a></li>
 <li><a href="https://www.rdocumentation.org/packages/rgl">https://www.rdocumentation.org/packages/rgl</a></li>
 </ul>
-
 <p>APIもガチャガチャだしドキュメントも結構いい加減なので分かりにくい。
 かといってJavaScript+WebGLベースの
 <a href="https://plot.ly/r/">plotly</a> や
@@ -110,12 +106,9 @@ rgl — 3Dグラフ描画
 などもPNG保存や陰影などまだそれなりに問題がある。
 科学プロット用のOpenGLラッパーとしてはPythonの<a href="http://vispy.org/">VisPy</a>
 が将来有望だがまだ開発途上で仕様があまり固まってない。</p>
-
 <p>関数は低水準の<code>rgl.*()</code>と高水準の<code>*3d()</code>に分かれていて、
 両者を混ぜて使うのは避けたほうがいいらしい。</p>
-
 <h2 id="デバイスの起動と終了">デバイスの起動と終了</h2>
-
 <dl>
 <dt><code>rgl::open3d(..., params=get3dDefaults(), useNULL=rgl.useNULL())</code></dt>
 <dd>明示的に新しいデバイスを開く。
@@ -127,11 +120,8 @@ rgl — 3Dグラフ描画
 <dt><code>rgl.close()</code></dt>
 <dd>デバイスを閉じる。<code>close3d()</code>はなぜか存在しない。</dd>
 </dl>
-
 <p><code>rgl::clear3d(type=c(&quot;shapes&quot;, &quot;bboxdeco&quot;, &quot;material&quot;), defaults, subscene=0)</code></p>
-
 <h2 id="プロット">プロット</h2>
-
 <dl>
 <dt><code>rgl::points3d()</code></dt>
 <dd>散布図。</dd>
@@ -154,30 +144,21 @@ rgl — 3Dグラフ描画
 境界を指定しつつ球体を描きたい場合は <code>spheres3d()</code> ではなく
 <code>plot3d(type=&quot;s&quot;)</code> を使うしかないっぽい。</dd>
 </dl>
-
 <h2 id="背景や軸などの調整">背景や軸などの調整</h2>
-
 <dl>
 <dt><code>rgl::title3d(main, sub, xlab, ylab, zlab, line=NA, ...)</code></dt>
 <dd>これを使うとmainとsubも視点によって動いてしまう。
 <code>bgplot3d({plot.new(); title(&quot;main&quot;)})</code> なら固定背景に書ける。</dd>
 </dl>
-
 <p><code>rgl::mtext3d(text, edge, line=0, at=NULL, pos=NA, ...)</code></p>
-
 <p><code>rgl::bg3d()</code></p>
-
 <p><code>rgl::light3d()</code></p>
-
 <p><code>rgl::par3d()</code></p>
-
 <dl>
 <dt><a href="https://www.rdocumentation.org/packages/rgl/topics/rgl.material"><code>rgl::material3d(...)</code></a></dt>
 <dd>プロットに渡せるオプション(<code>color</code>など)はここで確認</dd>
 </dl>
-
 <h3 id="軸">軸</h3>
-
 <dl>
 <dt><code>rgl::axis3d(edge, at=NULL, labels=TRUE, tick=TRUe, line=0, pos=NULL, nticks=5, ...)</code></dt>
 <dd><code>xyz</code> と <code>+-</code> の組み合わせで軸1本を指定して描く。
@@ -194,21 +175,17 @@ rgl — 3Dグラフ描画
 <code>phi</code> [-90, 90]: 0のとき視点が水平面(xz平面)上。観察者が上に動くのが正。<br>
 <code>fov</code> [0, 179]: 0のとき無限遠から見たような平行投影。</dd>
 </dl>
-
 <h3 id="複数の図をまとめる">複数の図をまとめる</h3>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># レイアウトを指定</span>
-mfrow3d<span class="p">(</span>nr<span class="p">,</span> nc<span class="p">,</span> byrow<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> parent<span class="o">=</span><span class="kc">NA</span><span class="p">,</span> sharedMouse<span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span> <span class="kc">...</span><span class="p">)</span>
-layout3d<span class="p">(</span>mat<span class="p">,</span> widths<span class="p">,</span> heights<span class="p">,</span> parent<span class="o">=</span><span class="kc">NA</span><span class="p">,</span> sharedMouse<span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span> <span class="kc">...</span><span class="p">)</span>
+<span class="nf">mfrow3d</span><span class="p">(</span><span class="n">nr</span><span class="p">,</span> <span class="n">nc</span><span class="p">,</span> <span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">NA</span><span class="p">,</span> <span class="n">sharedMouse</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span> <span class="kc">...</span><span class="p">)</span>
+<span class="nf">layout3d</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span> <span class="n">widths</span><span class="p">,</span> <span class="n">heights</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">NA</span><span class="p">,</span> <span class="n">sharedMouse</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span> <span class="kc">...</span><span class="p">)</span>
 
 <span class="c1"># 次のsubsceneに移動</span>
-next3d<span class="p">(</span>current<span class="o">=</span><span class="kc">NA</span><span class="p">,</span> clear<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> reuse<span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span></code></pre></div>
-<p>これらはなぜかグローバルスコープでしか動作しない。
+<span class="nf">next3d</span><span class="p">(</span><span class="n">current</span><span class="o">=</span><span class="kc">NA</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+</code></pre></div><p>これらはなぜかグローバルスコープでしか動作しない。
 つまり、関数やループ内に入れるとサイズなどがうまく反映されない。</p>
-
 <h2 id="出力">出力</h2>
-
 <h3 id="ファイルに書き出す">ファイルに書き出す</h3>
-
 <dl>
 <dt><code>rgl::scene3d()</code></dt>
 <dd>rglネイティブな形での全構成要素リスト。</dd>
@@ -224,39 +201,30 @@ next3d<span class="p">(</span>current<span class="o">=</span><span class="kc">NA
 ヘルプには <code>snapshot</code> がファイル名も受け取れると書いてあるが嘘で <code>TRUE/FALSE</code> のみ。
 rglデバイスが不要なので<code>open3d(useNULL=TRUE)</code>としておくと余計なウィンドウを開かずに済む。</dd>
 </dl>
-
 <p><code>rgl::writeASY()</code>, <code>rgl::writeOBJ()</code>, <code>rgl::writePLY()</code>, <code>rgl::writeSTL()</code>.</p>
-
-<h3 id="rmarkdown-knitrでhtmlに埋め込む">rmarkdown/knitrでHTMLに埋め込む</h3>
-
+<h3 id="rmarkdownknitrでhtmlに埋め込む">rmarkdown/knitrでHTMLに埋め込む</h3>
 <p>ライブラリを読み込み、フックを設定しておく:</p>
-
 <pre><code>```{r library}
 library(rgl)
 rgl::setupKnitr()
 ```
 </code></pre>
-
 <p><code>rgl::setupKnitr()</code>の中身は
 <code>knitr::knit_hooks$set(webgl=rgl::hook_webgl)</code> といくつかの初期化コード。
 それらを実行しないと、同じコードでも時によってscriptが正しく埋め込まれず、
 <code>You must enable Javascript to view this page properly.</code>
 という的外れなエラーが表示される。</p>
-
 <p>プロットしたいchunkに<code>webgl=TRUE</code>を指定
 (PNG静止画にしたい場合はデバイス有りで<code>rgl=TRUE</code>):</p>
-
 <pre><code>```{r plot, webgl=TRUE}
 rgl::open3d(useNULL=TRUE)
 rgl::box3d()
 rgl::title3d(&quot;main&quot;, &quot;sub&quot;, &quot;x&quot;, &quot;y&quot;, &quot;z&quot;)
 ```
 </code></pre>
-
 <p>ループで複数描画したいときはまずrglwidgetとしてlistに詰めていき、
 最後に<code>htmltools::tagList()</code>に詰め替える。
 このwidget方式の場合は<code>setupKnitr()</code>不要。</p>
-
 <pre><code>```{r widget}
 library(rgl)
 purrr::map(seq_len(3), ~{
@@ -267,33 +235,28 @@ purrr::map(seq_len(3), ~{
 }) %&gt;% htmltools::tagList()
 ```
 </code></pre>
-
 <p><code>options(rgl.printRglwidget=TRUE)</code>
 とすると<code>rglwidget()</code>を省略できるが、途中経過も逐一表示されてしまう。</p>
-
 <h3 id="アニメーション">アニメーション</h3>
-
 <p><code>rgl::spin3d(axis=c(0, 0, 1), rpm=5)</code></p>
-
 <p><code>rgl::par3dinterp(times=NULL, userMatrix, scale, zoom, FOV, method, extrapolate)</code></p>
-
 <p><code>rgl::play3d(f, duration=Inf, ...)</code></p>
-
 <p><code>rgl::movie3d(f, duration, ..., fps=10, movie=&quot;movie&quot;, frames=movie, dir=tempdir(), ...)</code></p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">## 角度をセット</span>
-rgl<span class="o">::</span>view3d<span class="p">(</span><span class="m">-25</span><span class="p">,</span> <span class="m">15</span><span class="p">,</span> <span class="m">40</span><span class="p">)</span>
+<span class="n">rgl</span><span class="o">::</span><span class="nf">view3d</span><span class="p">(</span><span class="m">-25</span><span class="p">,</span> <span class="m">15</span><span class="p">,</span> <span class="m">40</span><span class="p">)</span>
 
 <span class="c1">## 最前面に持ってくる</span>
-rgl.bringtotop<span class="p">()</span>
+<span class="nf">rgl.bringtotop</span><span class="p">(</span><span class="p">)</span>
 
 <span class="c1">## アニメーション関数を作る</span>
-<span class="m">.</span>anime <span class="o">=</span> rgl<span class="o">::</span>spin3d<span class="p">(</span>axis<span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">),</span> rpm<span class="o">=</span><span class="m">15</span><span class="p">)</span>
+<span class="n">.anime</span> <span class="o">=</span> <span class="n">rgl</span><span class="o">::</span><span class="nf">spin3d</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span><span class="p">,</span> <span class="n">rpm</span><span class="o">=</span><span class="m">15</span><span class="p">)</span>
 
 <span class="c1">## X11で再生</span>
-rgl<span class="o">::</span>play3d<span class="p">(</span><span class="m">.</span>anime<span class="p">)</span>
+<span class="n">rgl</span><span class="o">::</span><span class="nf">play3d</span><span class="p">(</span><span class="n">.anime</span><span class="p">)</span>
 
 <span class="c1">## GIFアニメとして保存</span>
-rgl<span class="o">::</span>movie3d<span class="p">(</span><span class="m">.</span>anime<span class="p">,</span> duration<span class="o">=</span><span class="m">4</span><span class="p">,</span> fps<span class="o">=</span><span class="m">16</span><span class="p">,</span> movie<span class="o">=</span><span class="s">&#34;basename&#34;</span><span class="p">,</span> dir<span class="o">=</span><span class="s">&#34;~/tmp&#34;</span><span class="p">)</span></code></pre></div>
+<span class="n">rgl</span><span class="o">::</span><span class="nf">movie3d</span><span class="p">(</span><span class="n">.anime</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="m">4</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="m">16</span><span class="p">,</span> <span class="n">movie</span><span class="o">=</span><span class="s">&#34;</span><span class="s">basename&#34;</span><span class="p">,</span> <span class="n">dir</span><span class="o">=</span><span class="s">&#34;</span><span class="s">~/tmp&#34;</span><span class="p">)</span>
+</code></pre></div>
 </article>
 </main>
 
@@ -324,8 +287,8 @@ rgl<span class="o">::</span>movie3d<span class="p">(</span><span class="m">.</sp
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li class="active"><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -337,11 +300,11 @@ rgl<span class="o">::</span>movie3d<span class="p">(</span><span class="m">.</sp
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -360,6 +323,7 @@ rgl<span class="o">::</span>movie3d<span class="p">(</span><span class="m">.</sp
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -367,7 +331,6 @@ rgl<span class="o">::</span>movie3d<span class="p">(</span><span class="m">.</sp
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -379,20 +342,20 @@ rgl<span class="o">::</span>movie3d<span class="p">(</span><span class="m">.</sp
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

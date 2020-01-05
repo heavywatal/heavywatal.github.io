@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -90,49 +90,39 @@ MEME — モチーフ発見ツール
 </ul></nav>
 </header>
 
-
-
 <ul>
 <li><a href="http://meme-suite.org/">http://meme-suite.org/</a></li>
 <li><a href="http://meme-suite.org/doc/overview.html">http://meme-suite.org/doc/overview.html</a></li>
 <li><a href="http://nar.oxfordjournals.org/content/37/suppl_2/W202.abstract">Bailey et al. 2009</a></li>
 <li><a href="http://www.ncbi.nlm.nih.gov/pubmed/7584402">Bailey and Elkan 1994</a></li>
 </ul>
-
 <h2 id="インストール">インストール</h2>
-
 <p><a href="http://meme-suite.org/doc/install.html">http://meme-suite.org/doc/install.html</a></p>
-
 <ol>
-<li><p>ソースコードを<a href="http://meme-suite.org/doc/download.html">ダウンロード</a>して展開:</p>
-
+<li>
+<p>ソースコードを<a href="http://meme-suite.org/doc/download.html">ダウンロード</a>して展開:</p>
 <pre><code>wget -O- http://meme-suite.org/meme-software/4.11.2/meme_4.11.2_1.tar.gz | tar xz
-</code></pre></li>
-
-<li><p><code>configure</code> してビルド:</p>
-
+</code></pre>
+</li>
+<li>
+<p><code>configure</code> してビルド:</p>
 <pre><code>cd meme_4.11.2/
 ./configure --prefix=${HOME}/bio/local/meme --with-url=http://meme-suite.org --enable-build-libxml2 --enable-build-libxslt --enable-opt CC=clang
 make
-</code></pre></li>
-
-<li><p>パスを通す:</p>
-
+</code></pre>
+</li>
+<li>
+<p>パスを通す:</p>
 <pre><code>export PATH=${PATH}:/usr/local/meme/bin
-</code></pre></li>
+</code></pre>
+</li>
 </ol>
-
 <h2 id="meme">MEME</h2>
-
 <p><a href="http://meme-suite.org/doc/meme.html">http://meme-suite.org/doc/meme.html</a></p>
-
 <h3 id="使い方">使い方</h3>
-
 <p>複数の配列が含まれるFASTAファイルを渡すだけ:</p>
-
 <pre><code>meme sequences.fasta [options]
 </code></pre>
-
 <dl>
 <dt><code>-h</code>, <code>-version</code></dt>
 <dd>ヘルプ、バージョン表示</dd>
@@ -161,11 +151,10 @@ make
 <dt><code>-pal</code></dt>
 <dd>パリンドロームを探す</dd>
 <dt><code>-bfile &lt;bfile&gt;</code></dt>
-<dd><p>バックグラウンド配列を生成するマルコフ過程のパラメータを記述したファイルを指定。
+<dd>バックグラウンド配列を生成するマルコフ過程のパラメータを記述したファイルを指定。
 これを指定しない場合はトレーニング配列の塩基頻度のみを利用した0階マルコフ。
 FASTA配列からファイルを作ってくれるプログラム <code>fasta-get-markov</code> も用意されてる。
-<a href="http://meme.nbcr.net/meme/doc/fasta-get-markov.html">http://meme.nbcr.net/meme/doc/fasta-get-markov.html</a>:</p>
-
+<a href="http://meme.nbcr.net/meme/doc/fasta-get-markov.html">http://meme.nbcr.net/meme/doc/fasta-get-markov.html</a>:
 <pre><code># order 0
 A 3.081e-01
 C 1.919e-01
@@ -188,29 +177,22 @@ TA 7.284e-02
 TC 6.239e-02
 TG 6.519e-02
 TT 1.078e-01
-</code></pre></dd>
+</code></pre>
+</dd>
 </dl>
-
 <p>一度適当に走らせてみて、出力結果
 <code>meme.txt</code> の <strong>COMMAND LINE SUMMARY</strong> や
 <code>meme.html</code> の <strong>model parameters</strong>
 を見るとよい。デフォルト値もそこで分かる。</p>
-
 <h3 id="スコア">スコア</h3>
-
 <p><a href="http://bioinformatics.oxfordjournals.org/content/14/1/48">Bailey and Gribskov 1998</a></p>
-
 <dl>
 <dt>E-value</dt>
 <dd>そのモチーフが同じサイズのランダムな配列の中にたまたま見つかる個数の期待値</dd>
 </dl>
-
 <p>Position p-value</p>
-
 <p>Combined p-value</p>
-
 <h3 id="モチーフの出力形式">モチーフの出力形式</h3>
-
 <dl>
 <dt>LOGO</dt>
 <dd>アルファベットの大きさで視覚的に表示</dd>
@@ -226,28 +208,18 @@ position weight matrix (PWM) と呼ぶことが多いような。</dd>
 <dt>regular expression</dt>
 <dd><code>[AT]</code> のように正規表現の文字集合を使った配列</dd>
 </dl>
-
 <h2 id="dreme"><code>DREME</code></h2>
-
 <p>Discriminative Regular Expression Motif Elicitation</p>
-
 <p>短いモチーフが得意で効率的。
 background (negative) 配列を指定できる。
 ChIP-seqデータではピーク周辺100bpくらいを使うべし。</p>
-
 <h2 id="meme-chip"><code>MEME-ChIP</code></h2>
-
 <p>長いモチーフが得意な <code>MEME</code> と
 短いモチーフが得意な <code>DREME</code> を組み合わせて ensemble。</p>
-
 <h2 id="mast"><code>MAST</code></h2>
-
 <p><a href="http://meme.nbcr.net/meme/doc/mast.html">http://meme.nbcr.net/meme/doc/mast.html</a></p>
-
 <p>既知のモチーフ (<code>MEME</code> で発見されたとか) を配列データベースから検索する。</p>
-
 <h2 id="references">References</h2>
-
 <p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320056507/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41mFg6u4ZLL._SX180_.jpg" alt="バイオインフォマティクスのためのアルゴリズム入門" /></a>
 <a href="http://www.amazon.co.jp/exec/obidos/ASIN/4621062514/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41-8yNqP0hL._SX180_.jpg" alt="バイオインフォマティクス" /></a>
 <a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320056280/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51EA2RU0BXL._SX180_.jpg" alt="バイオインフォマティクス事典" /></a>
@@ -283,8 +255,8 @@ ChIP-seqデータではピーク周辺100bpくらいを使うべし。</p>
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -296,11 +268,11 @@ ChIP-seqデータではピーク周辺100bpくらいを使うべし。</p>
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -319,6 +291,7 @@ ChIP-seqデータではピーク周辺100bpくらいを使うべし。</p>
 <label for="menu-bio" class="active">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li class="active"><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -326,7 +299,6 @@ ChIP-seqデータではピーク周辺100bpくらいを使うべし。</p>
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -338,20 +310,20 @@ ChIP-seqデータではピーク周辺100bpくらいを使うべし。</p>
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

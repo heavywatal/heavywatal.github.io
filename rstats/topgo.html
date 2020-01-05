@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -91,24 +91,20 @@ topGO — Bioconductor でenrichment解析
 </ul></nav>
 </header>
 
-
-
 <p><a href="https://www.bioconductor.org/packages/release/bioc/html/topGO.html">https://www.bioconductor.org/packages/release/bioc/html/topGO.html</a></p>
-
 <p>Rの中からインストール</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">BiocManager<span class="o">::</span>install<span class="p">(</span><span class="s">&#34;topGO&#34;</span><span class="p">)</span></code></pre></div>
-<h2 id="使い方">使い方</h2>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">BiocManager</span><span class="o">::</span><span class="nf">install</span><span class="p">(</span><span class="s">&#34;</span><span class="s">topGO&#34;</span><span class="p">)</span>
+</code></pre></div><h2 id="使い方">使い方</h2>
 <h3 id="topgodata-を作る"><code>topGOdata</code> を作る</h3>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">tg_data <span class="o">=</span> new<span class="p">(</span><span class="s">&#34;topGOdata&#34;</span><span class="p">,</span>
-    ontology<span class="o">=</span><span class="s">&#34;BP&#34;</span><span class="p">,</span>
-    allGenes<span class="o">=</span>setNames<span class="p">(</span>score<span class="p">,</span> name<span class="p">),</span>
-    geneSelectionFun<span class="o">=</span><span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> <span class="p">{</span>x <span class="o">&gt;</span> threshold<span class="p">},</span>
-    nodeSize<span class="o">=</span><span class="m">10</span><span class="p">,</span>
-    annotationFun<span class="o">=</span>annFUN.org<span class="p">,</span>
-    mapping<span class="o">=</span><span class="s">&#34;org.Hs.eg.db&#34;</span><span class="p">,</span>
-    ID<span class="o">=</span><span class="s">&#34;entrez&#34;</span><span class="p">)</span></code></pre></div>
-<dl>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">tg_data</span> <span class="o">=</span> <span class="nf">new</span><span class="p">(</span><span class="s">&#34;</span><span class="s">topGOdata&#34;</span><span class="p">,</span>
+    <span class="n">ontology</span><span class="o">=</span><span class="s">&#34;</span><span class="s">BP&#34;</span><span class="p">,</span>
+    <span class="n">allGenes</span><span class="o">=</span><span class="nf">setNames</span><span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span><span class="p">,</span>
+    <span class="n">geneSelectionFun</span><span class="o">=</span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">}</span><span class="p">,</span>
+    <span class="n">nodeSize</span><span class="o">=</span><span class="m">10</span><span class="p">,</span>
+    <span class="n">annotationFun</span><span class="o">=</span><span class="n">annFUN.org</span><span class="p">,</span>
+    <span class="n">mapping</span><span class="o">=</span><span class="s">&#34;</span><span class="s">org.Hs.eg.db&#34;</span><span class="p">,</span>
+    <span class="n">ID</span><span class="o">=</span><span class="s">&#34;</span><span class="s">entrez&#34;</span><span class="p">)</span>
+</code></pre></div><dl>
 <dt><code>ontology</code></dt>
 <dd><code>BP</code>, <code>CC</code>, <code>MF</code> のどれか</dd>
 <dt><code>description</code> (省略可)</dt>
@@ -128,11 +124,8 @@ topGO — Bioconductor でenrichment解析
 <dt><code>...</code></dt>
 <dd>以降は <code>annotationFun()</code> に渡す引数。</dd>
 </dl>
-
 <hr>
-
 <p><code>annFUN.org(whichOnto, feasibleGenes, mapping, ID=&quot;entrez&quot;)</code></p>
-
 <dl>
 <dt><code>mapping</code></dt>
 <dd><a href="/rstats/bioconductor.html">Bioconductor</a> のマッピングパッケージ。
@@ -142,12 +135,11 @@ topGO — Bioconductor でenrichment解析
 <code>entrez</code>, <code>genbank</code>, <code>alias</code>, <code>ensembl</code>,
 <code>symbol</code>, <code>genename</code>, <code>unigene</code></dd>
 </dl>
-
 <h3 id="解析">解析</h3>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">whichTests<span class="p">()</span>
-whichAlgorithms<span class="p">()</span>
-tg_result <span class="o">=</span> runTest<span class="p">(</span>tg_data<span class="p">,</span> algorithm<span class="o">=</span><span class="s">&#34;classic&#34;</span><span class="p">,</span> statistic<span class="o">=</span><span class="s">&#34;fisher&#34;</span><span class="p">)</span></code></pre></div>
-<dl>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">whichTests</span><span class="p">(</span><span class="p">)</span>
+<span class="nf">whichAlgorithms</span><span class="p">(</span><span class="p">)</span>
+<span class="n">tg_result</span> <span class="o">=</span> <span class="nf">runTest</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s">&#34;</span><span class="s">classic&#34;</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="s">&#34;</span><span class="s">fisher&#34;</span><span class="p">)</span>
+</code></pre></div><dl>
 <dt><code>algorithm</code></dt>
 <dd><code>classic</code>, <code>elim</code>, <code>weight</code>,
 <code>weight01</code>, <code>lea</code>, <code>parentChild</code></dd>
@@ -157,29 +149,25 @@ tg_result <span class="o">=</span> runTest<span class="p">(</span>tg_data<span c
 <dd>デフォルトはP値を扱うように <code>increasing</code> 。
 興味のある遺伝子で値が高くなるスコアの場合は <code>decreasing</code> を指定。</dd>
 </dl>
-
 <p>結果は <code>topGOresult</code> オブジェクト</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">score<span class="p">(</span>tg_result<span class="p">)</span>
-geneData<span class="p">(</span>tg_result<span class="p">)</span></code></pre></div>
-<h3 id="解釈-描画">解釈・描画</h3>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">score</span><span class="p">(</span><span class="n">tg_result</span><span class="p">)</span>
+<span class="nf">geneData</span><span class="p">(</span><span class="n">tg_result</span><span class="p">)</span>
+</code></pre></div><h3 id="解釈描画">解釈・描画</h3>
 <p>GO termのOver-representationランキング</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">num_significant <span class="o">=</span> geneData<span class="p">(</span>tg_result<span class="p">)[</span><span class="s">&#34;Significant&#34;</span><span class="p">]</span>
-GenTable<span class="p">(</span>tg_data<span class="p">,</span> classic_fisher<span class="o">=</span>tg_result<span class="p">,</span> topNodes<span class="o">=</span>num_significant<span class="p">)</span></code></pre></div>
-<p><code>runTest()</code> の結果は好きな名前で複数並べることができる。</p>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">num_significant</span> <span class="o">=</span> <span class="nf">geneData</span><span class="p">(</span><span class="n">tg_result</span><span class="p">)</span><span class="n">[</span><span class="s">&#34;</span><span class="s">Significant&#34;</span><span class="n">]</span>
+<span class="nf">GenTable</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="n">classic_fisher</span><span class="o">=</span><span class="n">tg_result</span><span class="p">,</span> <span class="n">topNodes</span><span class="o">=</span><span class="n">num_significant</span><span class="p">)</span>
+</code></pre></div><p><code>runTest()</code> の結果は好きな名前で複数並べることができる。</p>
 <hr>
-
 <p><code>Rgraphviz</code> を使ってDAG描画</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">showSigOfNodes<span class="p">(</span>tg_data<span class="p">,</span> score<span class="p">(</span>tg_result<span class="p">),</span> firstSigNodes<span class="o">=</span><span class="m">10</span><span class="p">,</span> useInfo<span class="o">=</span><span class="s">&#34;all&#34;</span><span class="p">)</span>
-printGraph<span class="p">(</span>tg_data<span class="p">,</span> tg_result<span class="p">,</span> <span class="m">20</span><span class="p">,</span> fn.prefix<span class="o">=</span><span class="s">&#34;go_fisher&#34;</span><span class="p">,</span> pdfSW<span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span></code></pre></div>
-<p>前者はプロットだけ、後者はPDFに書き出し。
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">showSigOfNodes</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="nf">score</span><span class="p">(</span><span class="n">tg_result</span><span class="p">)</span><span class="p">,</span> <span class="n">firstSigNodes</span><span class="o">=</span><span class="m">10</span><span class="p">,</span> <span class="n">useInfo</span><span class="o">=</span><span class="s">&#34;</span><span class="s">all&#34;</span><span class="p">)</span>
+<span class="nf">printGraph</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="n">tg_result</span><span class="p">,</span> <span class="m">20</span><span class="p">,</span> <span class="n">fn.prefix</span><span class="o">=</span><span class="s">&#34;</span><span class="s">go_fisher&#34;</span><span class="p">,</span> <span class="n">pdfSW</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+</code></pre></div><p>前者はプロットだけ、後者はPDFに書き出し。
 significant nodeが四角で、赤いほど低いP値。</p>
-
 <h2 id="go-terms">GO terms</h2>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">BPterms <span class="o">=</span> <span class="kp">ls</span><span class="p">(</span>GOBPTerm<span class="p">)</span>
-MFterms <span class="o">=</span> <span class="kp">ls</span><span class="p">(</span>GOMFTerm<span class="p">)</span>
-CCterms <span class="o">=</span> <span class="kp">ls</span><span class="p">(</span>GOCCTerm<span class="p">)</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">BPterms</span> <span class="o">=</span> <span class="nf">ls</span><span class="p">(</span><span class="n">GOBPTerm</span><span class="p">)</span>
+<span class="n">MFterms</span> <span class="o">=</span> <span class="nf">ls</span><span class="p">(</span><span class="n">GOMFTerm</span><span class="p">)</span>
+<span class="n">CCterms</span> <span class="o">=</span> <span class="nf">ls</span><span class="p">(</span><span class="n">GOCCTerm</span><span class="p">)</span>
+</code></pre></div>
 </article>
 </main>
 
@@ -210,8 +198,8 @@ CCterms <span class="o">=</span> <span class="kp">ls</span><span class="p">(</sp
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li class="active"><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -223,11 +211,11 @@ CCterms <span class="o">=</span> <span class="kp">ls</span><span class="p">(</sp
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -246,6 +234,7 @@ CCterms <span class="o">=</span> <span class="kp">ls</span><span class="p">(</sp
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -253,7 +242,6 @@ CCterms <span class="o">=</span> <span class="kp">ls</span><span class="p">(</sp
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -265,20 +253,20 @@ CCterms <span class="o">=</span> <span class="kp">ls</span><span class="p">(</sp
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

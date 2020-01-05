@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -91,41 +91,40 @@ Git入門2019
 </ul></nav>
 </header>
 <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#environment-環境">Environment / 環境</a>
-<ul>
-<li><a href="#os">OS</a></li>
-<li><a href="#common">Common</a></li>
-<li><a href="#ssh-任意">SSH (任意)</a></li>
-</ul></li>
-<li><a href="#essential-commands-基本操作">Essential commands / 基本操作</a>
-<ul>
-<li><a href="#fetch-existing-repositories-clone">Fetch existing repositories: <code>clone</code></a></li>
-<li><a href="#create-new-repositories-init">Create new repositories: <code>init</code></a></li>
-<li><a href="#export-local-changes-to-a-remote-server-push">Export local changes to a remote server: <code>push</code></a></li>
-<li><a href="#import-changes-from-a-remote-server-fetch">Import changes from a remote server: <code>fetch</code></a></li>
-</ul></li>
-<li><a href="#other-commands">Other commands</a>
-<ul>
-<li><a href="#diff">diff</a></li>
-<li><a href="#rm-clean">rm, clean</a></li>
-<li><a href="#reset">reset</a></li>
-</ul></li>
-<li><a href="#collaboration">Collaboration</a>
-<ul>
-<li><a href="#pull-request-pr">Pull Request (PR)</a></li>
-<li><a href="#2人1組でprとmergeを体験">2人1組でPRとmergeを体験</a></li>
-</ul></li>
-<li><a href="#tips">Tips</a></li>
-<li><a href="#glossary-用語">Glossary / 用語</a></li>
-<li><a href="#further-reading">Further reading</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#environment--環境">Environment / 環境</a>
+      <ul>
+        <li><a href="#os">OS</a></li>
+        <li><a href="#common">Common</a></li>
+        <li><a href="#ssh-任意">SSH (任意)</a></li>
+      </ul>
+    </li>
+    <li><a href="#essential-commands--基本操作">Essential commands / 基本操作</a>
+      <ul>
+        <li><a href="#fetch-existing-repositories-clone">Fetch existing repositories: clone</a></li>
+        <li><a href="#create-new-repositories-init">Create new repositories: init</a></li>
+        <li><a href="#export-local-changes-to-a-remote-server-push">Export local changes to a remote server: push</a></li>
+        <li><a href="#import-changes-from-a-remote-server-fetch">Import changes from a remote server: fetch</a></li>
+      </ul>
+    </li>
+    <li><a href="#other-commands">Other commands</a>
+      <ul>
+        <li><a href="#diff">diff</a></li>
+        <li><a href="#rm-clean">rm, clean</a></li>
+        <li><a href="#reset">reset</a></li>
+      </ul>
+    </li>
+    <li><a href="#collaboration">Collaboration</a>
+      <ul>
+        <li><a href="#pull-request-pr">Pull Request (PR)</a></li>
+        <li><a href="#2人1組でprとmergeを体験">2人1組でPRとmergeを体験</a></li>
+      </ul>
+    </li>
+    <li><a href="#tips">Tips</a></li>
+    <li><a href="#glossary--用語">Glossary / 用語</a></li>
+    <li><a href="#further-reading">Further reading</a></li>
+  </ul>
 </nav>
-
-
 <style>
 .fa-share-alt-square {
   color: #f03c2e;
@@ -138,194 +137,218 @@ Git入門2019
   color: #62982f;
 }
 </style>
-
 <p>2019-10-30 東北大学 生命科学研究科 進化ゲノミクス分野 牧野研</p>
-
 <p><a href="/slides/makino2019r/5-git.html">前半スライド</a></p>
-
-<h2 id="environment-環境">Environment / 環境</h2>
-
+<h2 id="environment--環境">Environment / 環境</h2>
 <h3 id="os">OS</h3>
-
 <p>新しめのUNIX系OSが好ましい。</p>
-
 <ul>
 <li>macOS
-
 <ul>
 <li>10.14 Mojave以降</li>
 <li>Command Line Tools</li>
 <li>Gitは標準装備のやつで大丈夫</li>
-</ul></li>
+</ul>
+</li>
 <li>Linux
-
 <ul>
 <li>Ubuntu 16.04以降 or CentOS 7以降</li>
 <li>build-essential とか &ldquo;Development Tools&rdquo; 的なもの</li>
 <li>普通にaptやyumで入るGitが古いv1系だったら、どうにかしてv2以降を入れる</li>
-</ul></li>
-
-<li><p>Windows</p>
-
+</ul>
+</li>
+<li>Windows
 <ul>
-<li>10 (1803以降)</li>
-<li><a href="https://git-scm.com/download/">Git本体およびGit Bashを公式から入れる</a>。
-インストール途中でいろいろ選択肢あるけどとりあえずデフォルトでよいのでは。</li>
-<li><a href="https://www.rstudio.com/">RStudio</a>のターミナルのシェルとしてGit Bashを設定。
-&ldquo;Tools &gt; Global Options &gt; Terminal &gt; Shell&rdquo;</li>
-<li>RStudioで新しいTerminalを立ち上げて最低限のコマンド操作に慣れる。
-e.g.,  <code>pwd</code>, <code>ls</code>, <code>cd</code>, <code>mkdir</code></li>
-
-<li><p>Git Bashにおける <code>HOME</code> がRStudioにおけるそれと異なることに注意。</p>
+<li>
+<p>10 (1803以降)</p>
+</li>
+<li>
+<p><a href="https://git-scm.com/download/">Git本体およびGit Bashを公式から入れる</a>。
+インストール途中でいろいろ選択肢あるけどとりあえずデフォルトでよいのでは。</p>
+</li>
+<li>
+<p><a href="https://www.rstudio.com/">RStudio</a>のターミナルのシェルとしてGit Bashを設定。
+&ldquo;Tools &gt; Global Options &gt; Terminal &gt; Shell&rdquo;</p>
+</li>
+<li>
+<p>RStudioで新しいTerminalを立ち上げて最低限のコマンド操作に慣れる。
+e.g.,  <code>pwd</code>, <code>ls</code>, <code>cd</code>, <code>mkdir</code></p>
+</li>
+<li>
+<p>Git Bashにおける <code>HOME</code> がRStudioにおけるそれと異なることに注意。</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1">### Git Bash</span>
 <span class="nb">echo</span> <span class="nv">$HOME</span>
 <span class="c1"># /c/Users/watal</span>
 <span class="nb">echo</span> ~
-<span class="c1"># /c/Users/watal</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">### R</span>
-<span class="kp">normalizePath</span><span class="p">(</span><span class="s">&#34;~&#34;</span><span class="p">)</span>
-<span class="c1"># &#34;C:\\Users\\watal\\Documents&#34;</span></code></pre></div></li>
-
-<li><p>UNIX派が仕方なくWindowsを使う場合は
-<a href="https://www.msys2.org/">MSYS2</a>の <code>pacman</code> で環境を構築するのが良さそう&hellip;?</p></li>
-</ul></li>
+<span class="c1"># /c/Users/watal</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">### R</span>
+<span class="nf">normalizePath</span><span class="p">(</span><span class="s">&#34;</span><span class="s">~&#34;</span><span class="p">)</span>
+<span class="c1"># &#34;C:\\Users\\watal\\Documents&#34;</span>
+</code></pre></div></li>
+<li>
+<p>UNIX派が仕方なくWindowsを使う場合は
+<a href="https://www.msys2.org/">MSYS2</a>の <code>pacman</code> で環境を構築するのが良さそう&hellip;?</p>
+</li>
 </ul>
-
+</li>
+</ul>
 <h3 id="common">Common</h3>
-
 <ul>
-<li><p>適当なテキストエディタ(開発環境)を入れておく。
+<li>
+<p>適当なテキストエディタ(開発環境)を入れておく。
 初期状態でもGit/GitHubとの連携機能が付いていて、
 変更箇所を色付けしてくれたりコマンド入力を肩代わりしてくれたりするのが便利。</p>
-
 <ul>
 <li><a href="https://atom.io/">Atom</a>: GitHub製</li>
 <li><a href="https://code.visualstudio.com/">VS Code</a>: Microsoft製</li>
 <li><a href="https://www.rstudio.com/">RStudio</a>: RStudio製</li>
-</ul></li>
-
-<li><p><a href="https://github.com">GitHub<i class="fab fa-fw fa-github"></i></a>に個人アカウントを作る。</p></li>
-
-<li><p>Git<i class="fas fa-fw fa-share-alt-square"></i>の初期設定をターミナルから行う:</p>
+</ul>
+</li>
+<li>
+<p><a href="https://github.com">GitHub<i class="fab fa-fw fa-github"></i></a>に個人アカウントを作る。</p>
+</li>
+<li>
+<p>Git<i class="fas fa-fw fa-share-alt-square"></i>の初期設定をターミナルから行う:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git --version  <span class="c1"># 2.0以上であることを確認</span>
 git config --global user.name <span class="s2">&#34;Watal M. Iwasaki&#34;</span>
 git config --global user.email <span class="s2">&#34;heavywatalあmail.com&#34;</span>
 git config --global push.default simple
-cat ~/.gitconfig</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[user]</span>
+cat ~/.gitconfig
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[user]</span>
   <span class="na">name</span> <span class="o">=</span> <span class="s">Watal M. Iwasaki
 </span><span class="s">  email = heavywatalあmail.com</span>
 <span class="k">[push]</span>
-  <span class="na">default</span> <span class="o">=</span> <span class="s">simple</span></code></pre></div></li>
-
-<li><p>Enable macOS Keychain to skip password authentication:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git config --global credential.helper osxkeychain</code></pre></div></li>
+  <span class="na">default</span> <span class="o">=</span> <span class="s">simple</span>
+</code></pre></div></li>
+<li>
+<p>Enable macOS Keychain to skip password authentication:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git config --global credential.helper osxkeychain
+</code></pre></div></li>
 </ul>
-
 <h3 id="ssh-任意">SSH (任意)</h3>
-
 <ul>
-<li>GitHubとの通信に2つの方式がある。
-
+<li>
+<p>GitHubとの通信に2つの方式がある。</p>
 <ul>
 <li>HTTPS: 設定不要で高速だが、操作によってパスワード入力が必要</li>
 <li>SSH: 一旦ちゃんと設定すればパスワードなしで快適</li>
-</ul></li>
-<li>ダウンロード操作(clone/fetch/pull)は高速なHTTPSで、<br>
-アップロード操作(push)はパスワード無しのSSHで、というのが楽ちん。</li>
-<li><a href="/dev/ssh.html">SSH公開鍵を作って</a>ローカルマシンとGitHubに登録する。</li>
-
-<li><p>設定ファイル <code>~/.gitconfig</code> に <code>pushinsteadof</code> の設定を追加:</p>
-<div class="highlight"><pre class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[url &#34;git@github.com:&#34;]</span>
-  <span class="na">pushinsteadof</span> <span class="o">=</span> <span class="s">https://github.com/</span></code></pre></div></li>
 </ul>
-
-<h2 id="essential-commands-基本操作">Essential commands / 基本操作</h2>
-
+</li>
+<li>
+<p>ダウンロード操作(clone/fetch/pull)は高速なHTTPSで、<br>
+アップロード操作(push)はパスワード無しのSSHで、というのが楽ちん。</p>
+</li>
+<li>
+<p><a href="/dev/ssh.html">SSH公開鍵を作って</a>ローカルマシンとGitHubに登録する。</p>
+</li>
+<li>
+<p>設定ファイル <code>~/.gitconfig</code> に <code>pushinsteadof</code> の設定を追加:</p>
+<div class="highlight"><pre class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[url &#34;git@github.com:&#34;]</span>
+  <span class="na">pushinsteadof</span> <span class="o">=</span> <span class="s">https://github.com/</span>
+</code></pre></div></li>
+</ul>
+<h2 id="essential-commands--基本操作">Essential commands / 基本操作</h2>
 <h3 id="fetch-existing-repositories-clone">Fetch existing repositories: <code>clone</code></h3>
-
 <ol>
-<li>GitHub上の適当なリポジトリをひとつ選ぶ。
-(e.g., <a href="https://github.com/heavywatal/tumopp">https://github.com/heavywatal/tumopp</a>)</li>
-<li>右の方の緑の &ldquo;Clone or download&rdquo; ボタンを押す。</li>
-<li>SSHではなくHTTPSを選択し、URLをコピー。</li>
-<li>ターミナルにコマンドを入力:<br>
-<code>git clone https://github.com/heavywatal/tumopp.git</code></li>
-
-<li><p>中身を眺めてみる:</p>
+<li>
+<p>GitHub上の適当なリポジトリをひとつ選ぶ。
+(e.g., <a href="https://github.com/heavywatal/tumopp">https://github.com/heavywatal/tumopp</a>)</p>
+</li>
+<li>
+<p>右の方の緑の &ldquo;Clone or download&rdquo; ボタンを押す。</p>
+</li>
+<li>
+<p>SSHではなくHTTPSを選択し、URLをコピー。</p>
+</li>
+<li>
+<p>ターミナルにコマンドを入力:<br>
+<code>git clone https://github.com/heavywatal/tumopp.git</code></p>
+</li>
+<li>
+<p>中身を眺めてみる:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> tumopp/
 ls -al
 git log
-git remote -v</code></pre></div></li>
+git remote -v
+</code></pre></div></li>
 </ol>
-
 <p>最新版のスナップショットだけでなく、
 履歴もごっそり複製するので、
 このあとはオフラインでもいろいろ操作できる。</p>
-
 <h3 id="create-new-repositories-init">Create new repositories: <code>init</code></h3>
-
 <ol>
-<li>GitHubの右上の &ldquo;+&rdquo; から &ldquo;New repository&rdquo; を選択。</li>
-<li>Repository name を例えば <code>helloworld</code> として &ldquo;Create repository&rdquo; を押す。
+<li>
+<p>GitHubの右上の &ldquo;+&rdquo; から &ldquo;New repository&rdquo; を選択。</p>
+</li>
+<li>
+<p>Repository name を例えば <code>helloworld</code> として &ldquo;Create repository&rdquo; を押す。
 いくつかのファイル (<code>README.md</code>, <code>LICENSE</code>, <code>.gitignore</code>)
-をここで作ることもできるけど、今回はとりあえず空っぽのリポジトリを作る。</li>
-
-<li><p>手元のマシンにローカルリポジトリを作る:</p>
+をここで作ることもできるけど、今回はとりあえず空っぽのリポジトリを作る。</p>
+</li>
+<li>
+<p>手元のマシンにローカルリポジトリを作る:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mkdir helloworld
 <span class="nb">cd</span> helloworld/
 git init
-ls -al</code></pre></div>
-<p>リポジトリの本体 <code>.git/</code> が作成されたことを確認。</p></li>
-
-<li><p>空っぽのコミットを作る:</p>
+ls -al
+</code></pre></div><p>リポジトリの本体 <code>.git/</code> が作成されたことを確認。</p>
+</li>
+<li>
+<p>空っぽのコミットを作る:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git status
 git commit --allow-empty -m <span class="s2">&#34;:beer: Create repository&#34;</span>
 git status
-git log</code></pre></div>
-<p>事あるごとに <code>git status</code> や <code>git log</code> を確認すると安心。</p></li>
-
-<li><p>先程作ったリモートリポジトリを紐付けて、pushしてみる:</p>
+git log
+</code></pre></div><p>事あるごとに <code>git status</code> や <code>git log</code> を確認すると安心。</p>
+</li>
+<li>
+<p>先程作ったリモートリポジトリを紐付けて、pushしてみる:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git remote -v
 git remote add origin https://github.com/YOUR_NAME/helloworld.git
 git remote -v
 git push -u origin master
-git status</code></pre></div></li>
-
-<li><p>GitHubで履歴を閲覧し、 <code>git log</code> と同じになってることを確認。</p></li>
+git status
+</code></pre></div></li>
+<li>
+<p>GitHubで履歴を閲覧し、 <code>git log</code> と同じになってることを確認。</p>
+</li>
 </ol>
-
 <h3 id="export-local-changes-to-a-remote-server-push">Export local changes to a remote server: <code>push</code></h3>
-
 <ol>
-<li><p>上で作ったリポジトリに、適当なファイルを追加:</p>
+<li>
+<p>上で作ったリポジトリに、適当なファイルを追加:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">echo</span> <span class="s1">&#39;# Hello, world&#39;</span> &gt; README.md
 cat README.md
-git status</code></pre></div></li>
-
-<li><p>作ったファイルをstaging areaに追加:</p>
+git status
+</code></pre></div></li>
+<li>
+<p>作ったファイルをstaging areaに追加:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git add README.md
 git status
-git diff --staged</code></pre></div></li>
-
-<li><p>この変更をcommit:</p>
+git diff --staged
+</code></pre></div></li>
+<li>
+<p>この変更をcommit:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git commit -m <span class="s2">&#34;:memo: Create README.md&#34;</span>
 git status
 git log
-git show</code></pre></div></li>
-
-<li><p>リモートにpush:</p>
+git show
+</code></pre></div></li>
+<li>
+<p>リモートにpush:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git push
 git status
-git log</code></pre></div></li>
+git log
+</code></pre></div></li>
 </ol>
-
 <h3 id="import-changes-from-a-remote-server-fetch">Import changes from a remote server: <code>fetch</code></h3>
-
 <ol>
-<li><p>上のリポジトリでそのまま <code>git fetch</code> してみる。
-ローカルとリモートは同じ状態なので当然何も起こらない。</p></li>
-
-<li><p>練習のためGitHub上で <code>LICENSE</code> ファイルを作成する。</p>
-
+<li>
+<p>上のリポジトリでそのまま <code>git fetch</code> してみる。
+ローカルとリモートは同じ状態なので当然何も起こらない。</p>
+</li>
+<li>
+<p>練習のためGitHub上で <code>LICENSE</code> ファイルを作成する。</p>
 <ol>
 <li>GitHub上のリポジトリのトップページを開き
 &ldquo;Create new file&rdquo; ボタンを押す。</li>
@@ -334,31 +357,30 @@ git log</code></pre></div></li>
 <li>とりあえず &ldquo;MIT License&rdquo; を選択。</li>
 <li>YearとNameを適当に埋めて &ldquo;Review and submit&rdquo;。</li>
 <li>&ldquo;Commit directly to the <code>master</code> branch&rdquo; を選択して &ldquo;Commit new file&rdquo;</li>
-</ol></li>
-
-<li><p>その変更をローカルリポジトリに取り寄せる:</p>
+</ol>
+</li>
+<li>
+<p>その変更をローカルリポジトリに取り寄せる:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git fetch
 git status
 git log --all
-ls -al</code></pre></div>
-<p>リポジトリ内部 <code>.git/</code> の <code>origin/master</code> は更新されたが、
-working directoryにはまだ反映されていない。</p></li>
-
-<li><p><code>origin/master</code> の内容を手元のファイルに反映する:</p>
+ls -al
+</code></pre></div><p>リポジトリ内部 <code>.git/</code> の <code>origin/master</code> は更新されたが、
+working directoryにはまだ反映されていない。</p>
+</li>
+<li>
+<p><code>origin/master</code> の内容を手元のファイルに反映する:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git merge
 git status
 git log
 git show
-ls -al</code></pre></div></li>
+ls -al
+</code></pre></div></li>
 </ol>
-
 <p><code>git fetch</code> と <code>git merge</code> を一気にやってくれる <code>git pull</code> というコマンドもあり、
 普段の一人作業ではよく使う。</p>
-
 <h2 id="other-commands">Other commands</h2>
-
 <h3 id="diff">diff</h3>
-
 <p>差分を表示:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># HEAD vs working (staging前のファイルが対象)</span>
 git diff
@@ -370,17 +392,14 @@ git diff --staged
 git diff HEAD
 
 <span class="c1"># 特定コミットの変更点 (diffじゃない...)</span>
-git show <span class="o">[</span>revision<span class="o">]</span></code></pre></div>
-<h3 id="rm-clean">rm, clean</h3>
-
+git show <span class="o">[</span>revision<span class="o">]</span>
+</code></pre></div><h3 id="rm-clean">rm, clean</h3>
 <p>tracking対象から外して忘れさせる(手元のファイルはそのまま):</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git rm --cached &lt;file&gt;</code></pre></div>
-<p><code>.gitignore</code> で無視されてるuntrackedファイルを消す:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git clean -fdX</code></pre></div>
-<p>無視されていないuntrackedファイルも消したい場合は小文字の <code>-fdx</code> (危険)。</p>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git rm --cached &lt;file&gt;
+</code></pre></div><p><code>.gitignore</code> で無視されてるuntrackedファイルを消す:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git clean -fdX
+</code></pre></div><p>無視されていないuntrackedファイルも消したい場合は小文字の <code>-fdx</code> (危険)。</p>
 <h3 id="reset">reset</h3>
-
 <p><code>git reset &lt;DESTINATION&gt;</code> は <code>HEAD</code> の位置を戻す処理で、
 オプションによってindexとworing treeもそこに合わせるように変更される。
 <code>--soft</code> なら <code>HEAD</code> 移動のみ。
@@ -400,14 +419,11 @@ git reset --hard HEAD
 git reset --hard ORIG_HEAD
 
 <span class="c1"># divergedになってしまった手元のbranchを破棄 (DANGEROUS!)</span>
-git reset --hard origin/master</code></pre></div>
-<p>直前のcommitをちょっと修正したいだけなら <code>git commit --amend</code> が簡単。
+git reset --hard origin/master
+</code></pre></div><p>直前のcommitをちょっと修正したいだけなら <code>git commit --amend</code> が簡単。
 それより前のを修正するには <code>git rebase -i HEAD~3</code> とかで戻ってrewordやedit。</p>
-
 <p><strong>リモートにpush済みのものは改変しちゃダメ！</strong></p>
-
 <h2 id="collaboration">Collaboration</h2>
-
 <ul>
 <li>基本的に、自分のリモートリポジトリにpushできるのは自分だけ。</li>
 <li>コラボレータを設定して、権限を与えることも可能。
@@ -416,12 +432,9 @@ git reset --hard origin/master</code></pre></div>
 <li>権限を持たない人はforkからPull Requestを送り、
 権限を持つ少数の人がそれをレビューしてmergeするスタイルが安全。</li>
 </ul>
-
 <h3 id="pull-request-pr">Pull Request (PR)</h3>
-
 <p>他人のリポジトリに貢献するためのGitHubの機能。<br>
 e.g., <a href="https://github.com/Rdatatable/data.table/pull/2807">https://github.com/Rdatatable/data.table/pull/2807</a></p>
-
 <ol>
 <li>貢献したいリポジトリをForkして自分のGitHubアカウントに追加。</li>
 <li>Forkした自分のリポジトリを手元にclone。</li>
@@ -430,9 +443,7 @@ e.g., <a href="https://github.com/Rdatatable/data.table/pull/2807">https://githu
 <li>GitHub上で大元のリポジトリにPRを送る。</li>
 <li>取り込んでもらえたら、用済みのブランチを削除。</li>
 </ol>
-
 <h3 id="2人1組でprとmergeを体験">2人1組でPRとmergeを体験</h3>
-
 <style>
 .fa-chess-king {
   color: #990000;
@@ -441,85 +452,91 @@ e.g., <a href="https://github.com/Rdatatable/data.table/pull/2807">https://githu
   color: #000099;
 }
 </style>
-
 <ul>
 <li><i class="fas fa-fw fa-chess-king"></i> KING: リポジトリの管理権限を持つ人</li>
 <li><i class="fas fa-fw fa-chess-pawn"></i> PAWN: 権限を持たず、PRを送る人</li>
 </ul>
-
 <p>(できれば横に並んで相手の画面も見えるように)</p>
-
 <ol>
-<li><i class="fas fa-fw fa-chess-king"></i> GitHubで新しいリポジトリを作成</li>
-<li><i class="fas fa-fw fa-chess-king"></i> 何かtypoを含む <code>README.md</code> を作ってpush</li>
-<li><i class="fas fa-fw fa-chess-pawn"></i> 相手のGitHubリポジトリでその <code>README.md</code> が見えることを確認</li>
-<li><i class="fas fa-fw fa-chess-pawn"></i> 右上のForkボタンで自分のGitHubリポジトリに取り込む</li>
-
-<li><p><i class="fas fa-fw fa-chess-pawn"></i> forkした自分のリポジトリからローカルに<code>clone</code>:</p>
-
+<li>
+<p><i class="fas fa-fw fa-chess-king"></i> GitHubで新しいリポジトリを作成</p>
+</li>
+<li>
+<p><i class="fas fa-fw fa-chess-king"></i> 何かtypoを含む <code>README.md</code> を作ってpush</p>
+</li>
+<li>
+<p><i class="fas fa-fw fa-chess-pawn"></i> 相手のGitHubリポジトリでその <code>README.md</code> が見えることを確認</p>
+</li>
+<li>
+<p><i class="fas fa-fw fa-chess-pawn"></i> 右上のForkボタンで自分のGitHubリポジトリに取り込む</p>
+</li>
+<li>
+<p><i class="fas fa-fw fa-chess-pawn"></i> forkした自分のリポジトリからローカルに<code>clone</code>:</p>
 <pre><code>git clone https://github.com/{PAWN}/PROJECT.git
 cd PROJECT/
-</code></pre></li>
-
-<li><p><i class="fas fa-fw fa-chess-pawn"></i> 大元のリポジトリに<code>upstream</code>という名前をつけておく:</p>
-
+</code></pre>
+</li>
+<li>
+<p><i class="fas fa-fw fa-chess-pawn"></i> 大元のリポジトリに<code>upstream</code>という名前をつけておく:</p>
 <pre><code>git remote add upstream https://github.com/{KING}/PROJECT.git
 git remote -v
 </code></pre>
-
-<p>ちなみに自分のリポジトリには自動的に <code>origin</code> という名前がついている。</p></li>
-
-<li><p><i class="fas fa-fw fa-chess-pawn"></i> PR用のブランチを切って移動:</p>
-
+<p>ちなみに自分のリポジトリには自動的に <code>origin</code> という名前がついている。</p>
+</li>
+<li>
+<p><i class="fas fa-fw fa-chess-pawn"></i> PR用のブランチを切って移動:</p>
 <pre><code>git checkout -b fix-typo
-</code></pre></li>
-
-<li><p><i class="fas fa-fw fa-chess-pawn"></i> <code>README.md</code> をテキストエディタで編集して <code>commit</code>:</p>
-
+</code></pre>
+</li>
+<li>
+<p><i class="fas fa-fw fa-chess-pawn"></i> <code>README.md</code> をテキストエディタで編集して <code>commit</code>:</p>
 <pre><code>git diff
 git commit -a -m &quot;:memo: Fix typo in README.md&quot;
 </code></pre>
-
 <p>Git連携機能のあるエディタを使っている場合、
 そこからdiffやcommitをやってみてもよい。
-コードの追加・変更・削除による色分けの便利さも体感しよう。</p></li>
-
-<li><p><i class="fas fa-fw fa-chess-pawn"></i> この間に<code>upstream</code>で更新が無いかどうか確認:</p>
-
+コードの追加・変更・削除による色分けの便利さも体感しよう。</p>
+</li>
+<li>
+<p><i class="fas fa-fw fa-chess-pawn"></i> この間に<code>upstream</code>で更新が無いかどうか確認:</p>
 <pre><code>git fetch upstream
 </code></pre>
-
 <p>もしあったら、それをデフォルトブランチ(<code>master</code>)越しに取り込む:</p>
-
 <pre><code>git checkout master
 git merge upstream/master
 git push origin/master
 git checkout fix-typo
 git rebase -i master
-</code></pre></li>
-
-<li><p><i class="fas fa-fw fa-chess-pawn"></i> 自分のリポジトリに<code>push</code>:</p>
-
+</code></pre>
+</li>
+<li>
+<p><i class="fas fa-fw fa-chess-pawn"></i> 自分のリポジトリに<code>push</code>:</p>
 <pre><code>git push origin fix-typo
-</code></pre></li>
-
-<li><p><i class="fas fa-fw fa-chess-pawn"></i> GitHub上に出現する &ldquo;Compare &amp; pull request&rdquo; ボタンを押す。</p></li>
-
-<li><p><i class="fas fa-fw fa-chess-pawn"></i> 差分を確認し、コメント欄を埋めて提出。</p></li>
-
-<li><p><i class="fas fa-fw fa-chess-king"></i> 受け取ったPRを確認。必要に応じて修正を要求したり、自分で修正したり。</p></li>
-
-<li><p><i class="fas fa-fw fa-chess-pawn"></i> 修正を求められたらそのブランチに続けてcommitしてまたpush。</p></li>
-
-<li><p><i class="fas fa-fw fa-chess-king"></i> 問題が無ければmergeする。</p></li>
-
-<li><p><i class="fas fa-fw fa-chess-king"></i> 自分のローカルリポジトリに pull (fetch+merge) する。</p></li>
-
-<li><p><i class="fas fa-fw fa-chess-pawn"></i> 無事マージされたら作業ブランチを消す。</p></li>
+</code></pre>
+</li>
+<li>
+<p><i class="fas fa-fw fa-chess-pawn"></i> GitHub上に出現する &ldquo;Compare &amp; pull request&rdquo; ボタンを押す。</p>
+</li>
+<li>
+<p><i class="fas fa-fw fa-chess-pawn"></i> 差分を確認し、コメント欄を埋めて提出。</p>
+</li>
+<li>
+<p><i class="fas fa-fw fa-chess-king"></i> 受け取ったPRを確認。必要に応じて修正を要求したり、自分で修正したり。</p>
+</li>
+<li>
+<p><i class="fas fa-fw fa-chess-pawn"></i> 修正を求められたらそのブランチに続けてcommitしてまたpush。</p>
+</li>
+<li>
+<p><i class="fas fa-fw fa-chess-king"></i> 問題が無ければmergeする。</p>
+</li>
+<li>
+<p><i class="fas fa-fw fa-chess-king"></i> 自分のローカルリポジトリに pull (fetch+merge) する。</p>
+</li>
+<li>
+<p><i class="fas fa-fw fa-chess-pawn"></i> 無事マージされたら作業ブランチを消す。</p>
+</li>
 </ol>
-
 <h2 id="tips">Tips</h2>
-
 <ul>
 <li>習うより慣れる。
 最初はコマンドが多くて難しそう・面倒くさそうに感じるけど、
@@ -536,13 +553,10 @@ git rebase -i master
 <li>GitHubにpushされたら自動的に
 <a href="https://slack.com/">Slack</a>や<a href="https://twitter.com/">Twitter</a>に投稿、
 というような連携が可能。</li>
-<li>RStudioでもディレクトリを&rdquo;Project&rdquo;として扱うことでGitを活用できる。</li>
+<li>RStudioでもディレクトリを&quot;Project&quot;として扱うことでGitを活用できる。</li>
 </ul>
-
-<h2 id="glossary-用語">Glossary / 用語</h2>
-
+<h2 id="glossary--用語">Glossary / 用語</h2>
 <p><a href="https://help.github.com/articles/github-glossary/">https://help.github.com/articles/github-glossary/</a></p>
-
 <dl>
 <dt>repository</dt>
 <dd>commitの履歴を保持する拠点。
@@ -574,13 +588,10 @@ blobやファイル名などのメタデータに依存したハッシュIDを�
 2つ前は <code>HEAD^^</code> か <code>HEAD~~</code> か <code>HEAD~2</code>。
 (<code>HEAD^2</code> は <code>merge</code> で複数の親がある場合の2番目)</dd>
 </dl>
-
 <p>zshの<code>EXTENDED_GLOB</code>が有効になってる場合は
 <code>HEAD^</code> がパターン扱いされてエラーになるので、
 <code>HEAD\^</code> のようにエスケープするか <code>unsetopt NOMATCH</code> しておいたほうがいい。</p>
-
 <h2 id="further-reading">Further reading</h2>
-
 <ul>
 <li><a href="https://github.com/">GitHub</a>: 他人のGit活用事例が見放題。</li>
 <li><a href="https://lab.github.com/">GitHub Learning Lab</a>:
@@ -619,8 +630,8 @@ blobやファイル名などのメタデータに依存したハッシュIDを�
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -632,11 +643,11 @@ blobやファイル名などのメタデータに依存したハッシュIDを�
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -655,6 +666,7 @@ blobやファイル名などのメタデータに依存したハッシュIDを�
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -662,7 +674,6 @@ blobやファイル名などのメタデータに依存したハッシュIDを�
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -674,20 +685,20 @@ blobやファイル名などのメタデータに依存したハッシュIDを�
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

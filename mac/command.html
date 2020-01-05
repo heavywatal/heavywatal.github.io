@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -90,12 +90,8 @@ Mac固有コマンド
 </ul></nav>
 </header>
 
-
-
-<h2 id="簡単-便利">簡単・便利</h2>
-
+<h2 id="簡単便利">簡単・便利</h2>
 <h3 id="open"><code>open</code></h3>
-
 <p>Finder でダブルクリックするのと同じように、
 Terminal から一発でファイルを開くことができる。</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 関連付けられたデフォルトのアプリケーションで開く</span>
@@ -105,29 +101,24 @@ open hudson1992g.pdf
 open -a Skim hudson1992g.pdf
 
 <span class="c1"># カレントディレクトリをFinderで開く</span>
-open .</code></pre></div>
-<h3 id="pbcopy-pbpaste"><code>pbcopy</code>, <code>pbpaste</code></h3>
-
+open .
+</code></pre></div><h3 id="pbcopy-pbpaste"><code>pbcopy</code>, <code>pbpaste</code></h3>
 <p>ターミナルからクリップボード(pasteboard)を操作する。</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">pwd</span> <span class="p">|</span> pbcopy
-pbpaste <span class="p">|</span> wc</code></pre></div>
-<h3 id="say-音声読み上げ"><code>say</code> 音声読み上げ</h3>
+pbpaste <span class="p">|</span> wc
+</code></pre></div><h3 id="say-音声読み上げ"><code>say</code> 音声読み上げ</h3>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">say hello world
-pbpaste <span class="p">|</span> say</code></pre></div>
-<p>声は環境設定の Accessibility &gt; Speech で変更可能。</p>
-
+pbpaste <span class="p">|</span> say
+</code></pre></div><p>声は環境設定の Accessibility &gt; Speech で変更可能。</p>
 <h3 id="killall"><code>killall</code></h3>
-
 <p>Finder や Dock など、GUIから終了させにくいアプリケーションを再起動する。
 アプリケーションの動作が不安定になったとき、設定変更を反映させたいとき、
 メモリを開放したいときなどに使える。:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">killall Finder
 killall Dock
-killall Kotoeri</code></pre></div>
-<h2 id="設定関連">設定関連</h2>
-
+killall Kotoeri
+</code></pre></div><h2 id="設定関連">設定関連</h2>
 <h3 id="defaults"><code>defaults</code></h3>
-
 <p><code>/Library/Preferences/</code> 以下にある各種設定ファイル.plistを編集する。
 <code>true</code> に設定した項目を元に戻すには、
 項目自体を <code>delete</code> するか、<code>false</code> に設定する。</p>
@@ -146,32 +137,23 @@ defaults write com.apple.dock ResetLaunchPad -bool true<span class="p">;</span> 
 defaults write com.apple.dt.Xcode IDEIndexDisable <span class="m">1</span>
 
 <span class="c1"># Quicklook上でコピペできるようにする</span>
-defaults write com.apple.finder QLEnableTextSelection -bool true</code></pre></div>
-<p><a href="http://www.titanium.free.fr">Onyx</a> や
+defaults write com.apple.finder QLEnableTextSelection -bool <span class="nb">true</span>
+</code></pre></div><p><a href="http://www.titanium.free.fr">Onyx</a> や
 <a href="http://www.bresink.com/osx/TinkerTool.html">Tinkertool</a>
 などのGUIアプリを使うほうが簡単で安心かも</p>
-
 <h3 id="launchctl"><code>launchctl</code></h3>
-
 <p>サービスの起動、終了</p>
-
 <h3 id="lsregister"><code>lsregister</code></h3>
-
 <p>Open with で表示されるアプリケーションが重複しまくったときなど、
 ファイルとアプリケーションの関連付けに関する古い情報を消して再構築。
 まっさらに戻るわけではない。:</p>
-
 <pre><code>/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
 </code></pre>
-
 <p>設定ファイルは <code>~/Library/Preferences/com.apple.LaunchServices.plist</code></p>
-
 <h3 id="インストールなど">インストールなど</h3>
-
 <p><code>.dmg</code> のマウント、<code>.pkg</code> からのインストール、
 システムのソフトウェア・アップデートなどを
 <code>ssh</code> 越しにやらねばならぬときもある:</p>
-
 <pre><code>hdiutil mount SomeDiskImage.dmg
 
 sudo installer -pkg SomePackage.pkg -target /
@@ -179,34 +161,23 @@ sudo installer -pkg SomePackage.pkg -target /
 softwareupdate -l
 softwareupdate -i -a
 </code></pre>
-
 <h2 id="obsolete">Obsolete</h2>
-
 <h3 id="アカウント管理-niutil-nidump">アカウント管理: <code>niutil</code>, <code>nidump</code></h3>
-
 <p>Leopard以前</p>
-
 <p>項目をリストアップ:</p>
-
 <pre><code>niutil -list . /
 niutil -list . /users
 niutil -list . /groups
 </code></pre>
-
 <p>中身を見る:</p>
-
 <pre><code>niutil -read . /users/iwasaki
 niutil -read . /groups/admin
 </code></pre>
-
 <p>一覧で一気に:</p>
-
 <pre><code>nidump passwd . /
 nidump group . /
 </code></pre>
-
 <p>新規ユーザーの追加:</p>
-
 <pre><code>niutil -create / /users/hoge
 niutil -createprop / /users/hoge shell /bin/zsh
 niutil -createprop / /users/hoge uid 1050
@@ -247,8 +218,8 @@ niutil -appendprop / /groups/staff users hoge
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -260,11 +231,11 @@ niutil -appendprop / /groups/staff users hoge
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -283,6 +254,7 @@ niutil -appendprop / /groups/staff users hoge
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -290,7 +262,6 @@ niutil -appendprop / /groups/staff users hoge
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -302,20 +273,20 @@ niutil -appendprop / /groups/staff users hoge
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

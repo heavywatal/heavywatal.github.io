@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -91,11 +91,8 @@ Heavy Watal
 </ul></nav>
 </header>
 
-
-
 <p>2D/3D Cellular Automaton上の個体・細胞の分布を評価したい。
 そのためには白黒の二値画像処理の手法が結構使える。</p>
-
 <dl>
 <dt>図形 <em>X</em></dt>
 <dd>それぞれのノード(画素)の在・不在情報の集合。
@@ -107,85 +104,60 @@ $b \in B$</dd>
 <dt>voxel</dt>
 <dd>3D空間における単位。2Dでいうpixel。</dd>
 </dl>
-
 <h2 id="基本処理">基本処理</h2>
-
 <h3 id="translation-平行移動">Translation 平行移動</h3>
-
 <div>\[
 X_b = \{x + b \mid x \in X\}
 \]</div>
-
 <h3 id="dilation-膨張">Dilation 膨張</h3>
-
 <div>\[
 X \oplus B = \bigcup_{b \in B} X_b
 \]</div>
-
 <p><em>X</em> と <em>B</em> のMinkowski和。
 <em>X</em> を <em>B</em> の範囲でずらしながらunionを取ったもの。
 国土を<em>X</em> 、半径12海里の円をSEとした、領空みたいなイメージ。</p>
-
 <h3 id="erosion-浸食">Erosion 浸食</h3>
-
 <div>\[
 X \ominus B = \bigcap_{b \in B} X_b
 \]</div>
-
 <p><em>X</em> と <em>B</em> のMinkowski差。
 <em>X</em> を <em>B</em> の範囲でずらしながらintersectを取ったもの。
 SEを消しゴムとして <em>X</em> の外周上を走らせ、削るイメージ。</p>
-
 <h3 id="opening">Opening</h3>
-
 <div>\[
 X \circ B = (X \ominus B) \oplus B
 \]</div>
-
 <p>浸食してから膨張する。
 <em>X</em> からハミ出ないようにSEを滑らせた軌跡に相当する。
 トゲの先端や <em>X</em> 外部のチリなど、SEより小さい構造が削られて小さくなる。
 特定の形を持ったSEを使えば、それを含む領域だけを抽出するのにも使える。</p>
-
 <p>元画像との差分 $X - (X \circ B)$ は <strong>Top Hat</strong> と呼ばれ、
 トゲの先っちょや背景のノイズ成分が得られる。</p>
-
 <h3 id="closing">Closing</h3>
-
 <div>\[
 X \bullet B = (X \oplus B) \ominus B
 \]</div>
-
 <p>膨張してから浸食する。
 <em>X</em> の外部をOpeningすることと同義。
 <em>X</em> 内部のヒビやチリなど、SEより小さい構造が塗りつぶされ、大きくなる。</p>
-
 <p>元画像との差分 $(X \bullet B) - X$ は <strong>Black Hat</strong> と呼ばれ、
 <em>X</em> 内のヒビやトゲの根元らへんが得られる。</p>
-
 <h2 id="応用">応用</h2>
-
 <h3 id="pattern-spectrum-サイズ分布">Pattern Spectrum, サイズ分布</h3>
-
 <p>小さいSEから順に大きくしながら
 Openingで削れた部分の面積を記録していく。
 元画像の面積で割ったものはサイズ密度関数(size density function)と呼ばれる。
 細かいギザギザを含む図形ほど小さいSEで削れる成分が多い。
 要約統計量としてはモーメントやエントロピーが使える。</p>
-
 <h3 id="morphological-gradient">Morphological gradient</h3>
-
 <div>\[
 (X \oplus B) - (X \ominus B)
 \]</div>
-
 <p>dilationとerosionの差。
 エッジ検出法のひとつ。
 X上の境界が欲しい場合は$X - (X \ominus B)$。
 背景側の境界が欲しい場合は$(X \oplus B) - X$。</p>
-
 <h2 id="ノイズ除去">ノイズ除去</h2>
-
 <dl>
 <dt>平滑化フィルタ</dt>
 <dd>SEを端から端まで動かしつつ、その中に含まれる画素の平均値を中央画素に適用していく。
@@ -195,11 +167,8 @@ Gaussian filterのように、遠いものほど軽くなるように重み付�
 <dd>平均値ではなく中央値で置き換える。
 エッジは保存されるが、ソートを伴うので計算量は多め。</dd>
 </dl>
-
 <h2 id="ライブラリ">ライブラリ</h2>
-
 <p>画像処理を施す</p>
-
 <dl>
 <dt><a href="http://scikit-image.org/">scikit-image</a></dt>
 <dd>Pythonモジュール。
@@ -222,9 +191,7 @@ Rもそれらしくビルドされてる必要がある。</dd>
 <dt><a href="https://github.com/zarquon42b/Morpho">Morpho</a></dt>
 <dd>R。ドキュメント不足。</dd>
 </dl>
-
 <hr>
-
 <p><a  href="http://www.amazon.co.jp/gp/product/4621082949/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=4621082949&linkCode=as2&tag=heavywatal-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4621082949&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=as2&o=9&a=4621082949" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 <a  href="http://www.amazon.co.jp/gp/product/4862460844/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=4862460844&linkCode=as2&tag=heavywatal-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4862460844&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=as2&o=9&a=4862460844" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
 
@@ -258,8 +225,8 @@ Rもそれらしくビルドされてる必要がある。</dd>
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -271,11 +238,11 @@ Rもそれらしくビルドされてる必要がある。</dd>
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -294,6 +261,7 @@ Rもそれらしくビルドされてる必要がある。</dd>
 <label for="menu-bio" class="active">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -301,7 +269,6 @@ Rもそれらしくビルドされてる必要がある。</dd>
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li class="active"><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -313,20 +280,20 @@ Rもそれらしくビルドされてる必要がある。</dd>
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

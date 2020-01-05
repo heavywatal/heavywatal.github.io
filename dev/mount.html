@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -90,29 +90,18 @@ mount
 </ul></nav>
 </header>
 
-
-
 <p><a href="http://manpages.ubuntu.com/manpages/precise/man8/mount.8.html">http://manpages.ubuntu.com/manpages/precise/man8/mount.8.html</a></p>
-
 <h2 id="基本的な使い方">基本的な使い方</h2>
-
 <p>予め作っておいた空のディレクトリ <code>dir</code> に <code>device</code> をマウントする:</p>
-
 <pre><code>[sudo] mount [-t type] [-o option[,option]...] device dir
 </code></pre>
-
 <p>マウントを解除する:</p>
-
 <pre><code>[sudo] umount dir
 </code></pre>
-
 <p>既にマウントされているものを列挙:</p>
-
 <pre><code>mount -l
 </code></pre>
-
-<h3 id="主な-o-オプション">主な <code>-o</code> オプション</h3>
-
+<h3 id="主な--o-オプション">主な <code>-o</code> オプション</h3>
 <dl>
 <dt><code>defaults</code></dt>
 <dd><code>rw,suid,dev,exec,auto,nouser,async</code> と同じ</dd>
@@ -137,47 +126,42 @@ mount
 <dt><code>uid</code>, <code>gid</code></dt>
 <dd>ユーザID、グループIDを指定</dd>
 </dl>
-
-<h2 id="cifs-samba">cifs/samba</h2>
-
-<h3 id="ubuntu-12-04-から-cifs-マウント">Ubuntu 12.04 から cifs マウント</h3>
-
+<h2 id="cifssamba">cifs/samba</h2>
+<h3 id="ubuntu-1204-から-cifs-マウント">Ubuntu 12.04 から cifs マウント</h3>
 <p><a href="http://manpages.ubuntu.com/manpages/precise/man8/mount.cifs.8.html">http://manpages.ubuntu.com/manpages/precise/man8/mount.cifs.8.html</a></p>
-
 <ol>
-<li><p>cifs-utils をインストール:</p>
-
+<li>
+<p>cifs-utils をインストール:</p>
 <pre><code>sudo apt-get install cifs-utils
-</code></pre></li>
-
-<li><p>パスワードをコマンド履歴や <code>/etc/fstab</code> に残さなくて済むように
+</code></pre>
+</li>
+<li>
+<p>パスワードをコマンド履歴や <code>/etc/fstab</code> に残さなくて済むように
 <code>~/.cifs</code> のようなファイルを作っておく:</p>
-
 <pre><code>username=iwasaki
 password=******
-</code></pre></li>
-
-<li><p><code>mount</code> コマンドでマウント:</p>
-
+</code></pre>
+</li>
+<li>
+<p><code>mount</code> コマンドでマウント:</p>
 <pre><code>sudo mount -t cifs -o defaults,iocharset=utf8,nounix,uid=$(id -u),gid=$(id -g),credentials=$HOME/.cifs //ADDRESS/VOLUME ~/mnt
-</code></pre></li>
-
-<li><p>起動時に自動でマウントさせるには <code>/etc/fstab</code> に追記:</p>
-
+</code></pre>
+</li>
+<li>
+<p>起動時に自動でマウントさせるには <code>/etc/fstab</code> に追記:</p>
 <pre><code>//ADDRESS/VOLUME /home/iwasaki/mnt cifs credentials=/home/iwasaki/.cifs,uid=iwasaki,gid=iwasaki,nounix,iocharset=utf8,defaults 0 0
-</code></pre></li>
+</code></pre>
+</li>
 </ol>
-
-<h3 id="ubuntu-12-04-のホームディレクトリを-cifs-smb-マウント出来るようにする">Ubuntu 12.04 のホームディレクトリを cifs/smb マウント出来るようにする</h3>
-
+<h3 id="ubuntu-1204-のホームディレクトリを-cifssmb-マウント出来るようにする">Ubuntu 12.04 のホームディレクトリを cifs/smb マウント出来るようにする</h3>
 <ol>
-<li><p>samba をインストール:</p>
-
+<li>
+<p>samba をインストール:</p>
 <pre><code>sudo apt-get install samba
-</code></pre></li>
-
-<li><p><code>/etc/samba/smb.conf</code> の一部を編集:</p>
-
+</code></pre>
+</li>
+<li>
+<p><code>/etc/samba/smb.conf</code> の一部を編集:</p>
 <pre><code>[homes]
 comment = Home Directories
 browseable = no
@@ -187,71 +171,68 @@ create mask = 0644
 directory mask = 0755
 
 valid users = %S
-</code></pre></li>
-
-<li><p>サービスを再起動:</p>
-
+</code></pre>
+</li>
+<li>
+<p>サービスを再起動:</p>
 <pre><code>sudo service smbd restart
-</code></pre></li>
+</code></pre>
+</li>
 </ol>
-
 <h2 id="afp">afp</h2>
-
-<h3 id="ubuntu-12-04-のコマンドラインから-afp-でマウント">Ubuntu 12.04 のコマンドラインから afp でマウント</h3>
-
+<h3 id="ubuntu-1204-のコマンドラインから-afp-でマウント">Ubuntu 12.04 のコマンドラインから afp でマウント</h3>
 <ol>
-<li><p>afpfs-ng-utils をダウンロードしてインストール:</p>
-
+<li>
+<p>afpfs-ng-utils をダウンロードしてインストール:</p>
 <pre><code>wget http://launchpadlibrarian.net/90192653/afpfs-ng-utils_0.8.1-2_amd64.deb
 sudo dpkg -i afpfs-ng-utils_0.8.1-2_amd64.deb
-</code></pre></li>
-
-<li><p>以下のようなコマンドでマウント。できなかった:</p>
-
+</code></pre>
+</li>
+<li>
+<p>以下のようなコマンドでマウント。できなかった:</p>
 <pre><code>mount_afp 'afp://user:password@address/volume/' ~/mnt
-</code></pre></li>
+</code></pre>
+</li>
 </ol>
-
-<h3 id="ubuntu-12-04-の-nautilus-から-afp-でマウント">Ubuntu 12.04 の Nautilus から afp でマウント</h3>
-
+<h3 id="ubuntu-1204-の-nautilus-から-afp-でマウント">Ubuntu 12.04 の Nautilus から afp でマウント</h3>
 <ol>
 <li>Nautilusをアクティブにして <code>control + l</code>
 (あるいはメニューバーから <code>Go --&gt; Location...</code>）</li>
 <li>Location に <code>afp://***.***.***.***</code> という形でIPアドレスを入力してConnect</li>
 </ol>
-
 <h3 id="mac-の-finder-からマウント">Mac の Finder からマウント</h3>
-
 <ol>
 <li>Finderをアクティブにして <code>command + k</code>
 (あるいはメニューバーから <code>Go --&gt; Connect to Server...</code>)</li>
 <li>Server Address に <code>afp://***.***.***.***</code> という形でIPアドレスを入力してConnect</li>
 </ol>
-
 <h2 id="sshfs">sshfs</h2>
-
 <p><a href="https://github.com/libfuse/sshfs">https://github.com/libfuse/sshfs</a></p>
-
 <p>リモートのファイルシステムを<a href="/dev/ssh.html">ssh</a>経由でマウントし、
 Finderとかで普通のディレクトリのように扱えるようにする。
 マウントされる側はsshでログインできさえすればいいので、
 手元のマシンに必要な準備をする。</p>
-
 <ol>
-<li><p>Macなら<a href="https://osxfuse.github.io/">FUSE for macOS</a>を、
-Linuxなら<a href="https://github.com/libfuse/libfuse">libfuse</a>をインストール</p></li>
-
-<li><p>sshfsをインストール:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew install sshfs</code></pre></div></li>
-
-<li><p>マウントポイントにする適当なディレクトリを作る。
-e.g., <code>mkdir ~/mnt</code></p></li>
-
-<li><p>マウントする:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sshfs watal@example.com:/home/watal ~/mnt</code></pre></div></li>
-
-<li><p>アンマウントする:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">umount ~/mnt</code></pre></div></li>
+<li>
+<p>Macなら<a href="https://osxfuse.github.io/">FUSE for macOS</a>を、
+Linuxなら<a href="https://github.com/libfuse/libfuse">libfuse</a>をインストール</p>
+</li>
+<li>
+<p>sshfsをインストール:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew install sshfs
+</code></pre></div></li>
+<li>
+<p>マウントポイントにする適当なディレクトリを作る。
+e.g., <code>mkdir ~/mnt</code></p>
+</li>
+<li>
+<p>マウントする:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sshfs watal@example.com:/home/watal ~/mnt
+</code></pre></div></li>
+<li>
+<p>アンマウントする:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">umount ~/mnt
+</code></pre></div></li>
 </ol>
 
 </article>
@@ -284,8 +265,8 @@ e.g., <code>mkdir ~/mnt</code></p></li>
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -297,11 +278,11 @@ e.g., <code>mkdir ~/mnt</code></p></li>
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -320,6 +301,7 @@ e.g., <code>mkdir ~/mnt</code></p></li>
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -327,7 +309,6 @@ e.g., <code>mkdir ~/mnt</code></p></li>
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -339,20 +320,20 @@ e.g., <code>mkdir ~/mnt</code></p></li>
 <label for="menu-dev" class="active">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li class="active"><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

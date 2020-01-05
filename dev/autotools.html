@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -90,21 +90,15 @@ autoconf, automake
 </ul></nav>
 </header>
 
-
-
 <p>環境に合わせて <a href="/dev/make.html">Makefile</a> を作る仕組み。
 以下の3つのツールを組み合わせて使う。</p>
-
 <ul>
 <li><a href="https://www.gnu.org/software/autoconf/">https://www.gnu.org/software/autoconf/</a></li>
 <li><a href="https://www.gnu.org/software/automake/">https://www.gnu.org/software/automake/</a></li>
 <li><a href="https://www.gnu.org/software/libtool/">https://www.gnu.org/software/libtool/</a></li>
 </ul>
-
 <p><a href="/dev/cmake.html">CMake</a> のほうがモダンで高速。</p>
-
 <h2 id="commands">Commands</h2>
-
 <dl>
 <dt><code>autoscan</code></dt>
 <dd>指定したディレクトリ(指定しなければカレント)のソースコードを読んで
@@ -121,41 +115,40 @@ autoconf, automake
 <dt><code>autoreconf</code></dt>
 <dd>上記のツールをいい感じに繰り返し呼び出して各種ファイルを更新</dd>
 </dl>
-
 <h2 id="大まかな流れ">大まかな流れ</h2>
-
 <ol>
-<li><p><code>configure.scan</code> の雛形を自動生成し、
+<li>
+<p><code>configure.scan</code> の雛形を自動生成し、
 <code>configure.ac</code> に名前変更:</p>
-
 <pre><code>autoscan
 mv configure.scan configure.ac
-</code></pre></li>
-
-<li><p><code>configure.ac</code> を適宜編集</p></li>
-
-<li><p><code>Makefile.am</code> を作る</p></li>
-
-<li><p>その2つのファイルから、自動的にその他のファイルを生成:</p>
-
+</code></pre>
+</li>
+<li>
+<p><code>configure.ac</code> を適宜編集</p>
+</li>
+<li>
+<p><code>Makefile.am</code> を作る</p>
+</li>
+<li>
+<p>その2つのファイルから、自動的にその他のファイルを生成:</p>
 <pre><code>autoreconf --install
-</code></pre></li>
-
-<li><p>できあがった <code>configure</code> ファイルを試してみる:</p>
-
+</code></pre>
+</li>
+<li>
+<p>できあがった <code>configure</code> ファイルを試してみる:</p>
 <pre><code>./configure --help
 ./configure
 make
-</code></pre></li>
-
-<li><p><code>configure.ac</code> や <code>Makefile.am</code> を変更したら
-<code>autoreconf</code> で反映させる、を繰り返す</p></li>
+</code></pre>
+</li>
+<li>
+<p><code>configure.ac</code> や <code>Makefile.am</code> を変更したら
+<code>autoreconf</code> で反映させる、を繰り返す</p>
+</li>
 </ol>
-
-<h2 id="configure-ac"><code>configure.ac</code></h2>
-
+<h2 id="configureac"><code>configure.ac</code></h2>
 <p><a href="https://www.gnu.org/software/autoconf/manual/html_node/">https://www.gnu.org/software/autoconf/manual/html_node/</a></p>
-
 <ul>
 <li><code>configure.ac</code> の基本構造:
 <a href="https://www.gnu.org/software/autoconf/manual/html_node/Autoconf-Input-Layout.html">https://www.gnu.org/software/autoconf/manual/html_node/Autoconf-Input-Layout.html</a></li>
@@ -164,51 +157,38 @@ make
 <li>M4マクロ:
 <a href="https://www.gnu.org/software/autoconf/manual/html_node/M4-Macro-Index.html">https://www.gnu.org/software/autoconf/manual/html_node/M4-Macro-Index.html</a></li>
 </ul>
-
 <p>Gitのタグをバージョン番号として取り込む:</p>
-
 <pre><code>AC_INIT([MyApp], m4_esyscmd([git describe --tags | tr -d '\n']))
 </code></pre>
-
-<h2 id="makefile-am"><code>Makefile.am</code></h2>
-
+<h2 id="makefileam"><code>Makefile.am</code></h2>
 <p><a href="https://www.gnu.org/software/automake/manual/html_node/">https://www.gnu.org/software/automake/manual/html_node/</a></p>
-
 <ul>
 <li>マクロ:
 <a href="https://www.gnu.org/software/automake/manual/html_node/Macro-Index.html">https://www.gnu.org/software/automake/manual/html_node/Macro-Index.html</a></li>
 <li>変数:
 <a href="https://www.gnu.org/software/automake/manual/html_node/Variable-Index.html">https://www.gnu.org/software/automake/manual/html_node/Variable-Index.html</a></li>
 </ul>
-
 <p>インストールするファイルと場所を指定する変数:</p>
-
 <pre><code>bin_PROBRAMS = beer
 bin_SCRIPTS = beer.sh
 lib_LIBRARIES = libbeer.a
 include_HEADERS = beer.h
 </code></pre>
-
 <p>ビルドするのに必要な情報をターゲットごとに指定する変数。
 <code>target_ARGNAME</code> のような形をとる:</p>
-
 <pre><code>beer_SOURCES = main.cpp
 beer_CPPFLAGS = -DNDEBUG
 beer_CXXFLAGS = -O3
 libbeer_a_SOURCES = lib.cpp
 </code></pre>
-
 <p><code>Makefile</code> 全体に関わる変数。
 ただし上記のターゲット特異的変数に上書きされる:</p>
-
 <pre><code>AM_CPPFLAGS = -Wall -Wextra
 AM_CXXFLAGS = -O2
 </code></pre>
-
 <p>ユーザーが指定する <code>CPPFLAGS</code> は
 <code>beer_CPPFLAGS</code> や <code>AM_CPPFLAGS</code> を上書きせず、
 後ろに並べて使用される。</p>
-
 <p><a href="https://www.gnu.org/software/automake/manual/html_node/Flag-Variables-Ordering.html">https://www.gnu.org/software/automake/manual/html_node/Flag-Variables-Ordering.html</a></p>
 
 </article>
@@ -241,8 +221,8 @@ AM_CXXFLAGS = -O2
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -254,11 +234,11 @@ AM_CXXFLAGS = -O2
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -277,6 +257,7 @@ AM_CXXFLAGS = -O2
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -284,7 +265,6 @@ AM_CXXFLAGS = -O2
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -296,20 +276,20 @@ AM_CXXFLAGS = -O2
 <label for="menu-dev" class="active">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li class="active"><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li class="active"><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

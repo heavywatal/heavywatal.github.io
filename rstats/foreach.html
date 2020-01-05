@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -91,20 +91,15 @@ foreach/parallel — 並行処理 in R
 </ul></nav>
 </header>
 
-
-
 <h2 id="foreach">foreach</h2>
-
 <p>カウンター無しでループを書けるようにするパッケージ。
 普段は <a href="/rstats/purrr.html"><code>purrr::map()</code></a> とかのほうが使いやすいけど、
 <a href="#parallel">後述の並列化</a>の場面ではお世話になる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">foreach <span class="p">(</span>mu <span class="o">=</span> <span class="kp">seq_len</span><span class="p">(</span><span class="m">8</span><span class="p">),</span> <span class="m">.</span>combine<span class="o">=</span><span class="kt">c</span><span class="p">)</span> <span class="o">%do%</span> <span class="p">{</span>
-    rnorm<span class="p">(</span><span class="m">1</span><span class="p">,</span> mu<span class="p">)</span>
-<span class="p">}</span></code></pre></div>
-<p><a href="https://CRAN.R-project.org/package=foreach">https://CRAN.R-project.org/package=foreach</a></p>
-
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">foreach </span><span class="p">(</span><span class="n">mu</span> <span class="o">=</span> <span class="nf">seq_len</span><span class="p">(</span><span class="m">8</span><span class="p">)</span><span class="p">,</span> <span class="n">.combine</span><span class="o">=</span><span class="n">c</span><span class="p">)</span> <span class="o">%do%</span> <span class="p">{</span>
+    <span class="nf">rnorm</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="n">mu</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div><p><a href="https://CRAN.R-project.org/package=foreach">https://CRAN.R-project.org/package=foreach</a></p>
 <h3 id="foreach-1"><code>foreach()</code></h3>
-
 <dl>
 <dt><code>.combine (list)</code></dt>
 <dd>型が既知でvectorが欲しい場合に <code>c</code> にするなど</dd>
@@ -120,47 +115,40 @@ foreach/parallel — 並行処理 in R
 <dt><code>.inorder (TRUE)</code></dt>
 <dd>並列化する場合、順序を保持したいか</dd>
 </dl>
-
 <p><code>.init</code>, <code>.final</code>, <code>.noexport</code>, <code>.verbose</code></p>
-
 <h2 id="parallel">parallel</h2>
-
 <ul>
 <li><a href="https://cran.r-project.org/web/views/HighPerformanceComputing.html">https://cran.r-project.org/web/views/HighPerformanceComputing.html</a></li>
 <li><a href="https://stat.ethz.ch/R-manual/R-patched/library/parallel/html/00Index.html">https://stat.ethz.ch/R-manual/R-patched/library/parallel/html/00Index.html</a></li>
 </ul>
-
 <p>Rの並列化では <code>snow</code> や <code>multicore</code> が使われてきたが、
 バージョン2.14からそれらを統合した <code>parallel</code> が標準ライブラリに入った。
 直接触るのは難しいので、<code>foreach</code>(とその橋渡しライブラリ
 <a href="https://CRAN.R-project.org/package=doParallel"><code>doParallel</code></a>)
 を介して使う。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span>doParallel<span class="p">)</span>
-cores <span class="o">=</span> detectCores<span class="p">(</span><span class="kt">logical</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
-cluster <span class="o">=</span> makeCluster<span class="p">(</span>cores<span class="p">,</span> <span class="s">&#34;FORK&#34;</span><span class="p">)</span>
-registerDoParallel<span class="p">(</span>cluster<span class="p">)</span>
-foreach <span class="p">(</span>mu <span class="o">=</span> <span class="kp">seq_len</span><span class="p">(</span><span class="m">8L</span><span class="p">))</span> <span class="o">%dopar%</span> <span class="p">{</span>
-    rnorm<span class="p">(</span><span class="m">3L</span><span class="p">,</span> mu<span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">library</span><span class="p">(</span><span class="n">doParallel</span><span class="p">)</span>
+<span class="n">cores</span> <span class="o">=</span> <span class="nf">detectCores</span><span class="p">(</span><span class="n">logical</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+<span class="n">cluster</span> <span class="o">=</span> <span class="nf">makeCluster</span><span class="p">(</span><span class="n">cores</span><span class="p">,</span> <span class="s">&#34;</span><span class="s">FORK&#34;</span><span class="p">)</span>
+<span class="nf">registerDoParallel</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+<span class="nf">foreach </span><span class="p">(</span><span class="n">mu</span> <span class="o">=</span> <span class="nf">seq_len</span><span class="p">(</span><span class="m">8L</span><span class="p">)</span><span class="p">)</span> <span class="o">%dopar%</span> <span class="p">{</span>
+    <span class="nf">rnorm</span><span class="p">(</span><span class="m">3L</span><span class="p">,</span> <span class="n">mu</span><span class="p">)</span>
 <span class="p">}</span>
-stopCluster<span class="p">(</span>cluster<span class="p">)</span></code></pre></div>
-<p><code>mclapply()</code> は <code>lapply()</code> の並列化バージョンで、
+<span class="nf">stopCluster</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+</code></pre></div><p><code>mclapply()</code> は <code>lapply()</code> の並列化バージョンで、
 クラスタの生成や破棄などもぜーんぶ自動でやってくれるので便利
 (ただし <code>type=&quot;FORK&quot;</code> 固定なのでWindows不可):</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">mclapply<span class="p">(</span>X<span class="p">,</span> FUN<span class="p">,</span> <span class="kc">...</span><span class="p">,</span>
-         mc.preschedule <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> mc.set.seed <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
-         mc.silent <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span> mc.cores <span class="o">=</span> <span class="kp">getOption</span><span class="p">(</span><span class="s">&#34;mc.cores&#34;</span><span class="p">,</span> <span class="m">2L</span><span class="p">),</span>
-         mc.cleanup <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> mc.allow.recursive <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> affinity.list <span class="o">=</span> <span class="kc">NULL</span><span class="p">)</span></code></pre></div>
-<p><a href="/rstats/purrr.html"><code>purrr::map()</code></a>のように無名関数を渡せる
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">mclapply</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">FUN</span><span class="p">,</span> <span class="kc">...</span><span class="p">,</span>
+         <span class="n">mc.preschedule</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="n">mc.set.seed</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
+         <span class="n">mc.silent</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span> <span class="n">mc.cores</span> <span class="o">=</span> <span class="nf">getOption</span><span class="p">(</span><span class="s">&#34;</span><span class="s">mc.cores&#34;</span><span class="p">,</span> <span class="m">2L</span><span class="p">)</span><span class="p">,</span>
+         <span class="n">mc.cleanup</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="n">mc.allow.recursive</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="n">affinity.list</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">)</span>
+</code></pre></div><p><a href="/rstats/purrr.html"><code>purrr::map()</code></a>のように無名関数を渡せる
 <a href="https://github.com/heavywatal/rwtl/blob/master/R/parallel.R">ラッパー関数 <code>mcmap()</code> を書いてみた</a>。</p>
-
 <p>そのへんをもっとしっかりやった
 <a href="https://github.com/HenrikBengtsson/future">future</a>,
 <a href="https://github.com/HenrikBengtsson/future.apply">future.apply</a>,
 <a href="https://github.com/DavisVaughan/furrr">furrr</a>
 を使っていくのが良さそう。</p>
-
 <h3 id="makecluster"><code>makeCluster()</code></h3>
-
 <dl>
 <dt><code>spec</code></dt>
 <dd>いくつのworkerを立ち上げるか。
@@ -177,16 +165,12 @@ Windowsでは使えないらしいけど。</dd>
 <dd><code>print()</code>や<code>message()</code>などの出力先を標準に戻す。
 デフォルトでは<code>/dev/null</code>に捨てられてしまう。</dd>
 </dl>
-
 <h2 id="iterators">iterators</h2>
-
 <p><a href="https://CRAN.R-project.org/package=iterators">https://CRAN.R-project.org/package=iterators</a></p>
-
 <p>大抵はメモリを一気に確保してしまう方が速いが、
 データがRAMを超えるほど大きいときはそうも言ってられない。
 最大要求メモリを減らしたり、
 並列<code>foreach</code>のノード間通信を減らすためには<code>iterators</code>を利用する。</p>
-
 <dl>
 <dt><code>nextElem(it, ...)</code></dt>
 <dd>イテレータを進めて値を得る。
@@ -212,9 +196,7 @@ e.g., <code>isplit(iris, iris$Species)</code></dd>
 <dt><code>idiv(n, ..., chunks, chunkSize)</code></dt>
 <dd>整数<code>n</code>をいい感じに振り分ける。</dd>
 </dl>
-
 <h2 id="関連書籍">関連書籍</h2>
-
 <p><a href="https://www.amazon.co.jp/Parallel-R-Q-Ethan-McCallum-ebook/dp/B005Z29QT4/ref=as_li_ss_il?ie=UTF8&qid=1477817549&sr=8-1&keywords=r+parallel&linkCode=li3&tag=heavywatal-22&linkId=6250767635d9095cf1e3a6bace362a83" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B005Z29QT4&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=B005Z29QT4" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 <a href="https://www.amazon.co.jp/R%E3%81%AB%E3%82%88%E3%82%8B%E3%83%8F%E3%82%A4%E3%83%91%E3%83%95%E3%82%A9%E3%83%BC%E3%83%9E%E3%83%B3%E3%82%B9%E3%82%B3%E3%83%B3%E3%83%94%E3%83%A5%E3%83%BC%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0-%E7%A6%8F%E5%B3%B6-%E7%9C%9F%E5%A4%AA%E6%9C%97/dp/4883379353/ref=as_li_ss_il?ie=UTF8&qid=1477817567&sr=8-1&keywords=r+%E4%B8%A6%E5%88%97&linkCode=li3&tag=heavywatal-22&linkId=7f12f8273082a42443269e875a2c282b" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4883379353&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4883379353" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
 
@@ -248,8 +230,8 @@ e.g., <code>isplit(iris, iris$Species)</code></dd>
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -261,11 +243,11 @@ e.g., <code>isplit(iris, iris$Species)</code></dd>
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -284,6 +266,7 @@ e.g., <code>isplit(iris, iris$Species)</code></dd>
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -291,7 +274,6 @@ e.g., <code>isplit(iris, iris$Species)</code></dd>
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -303,20 +285,20 @@ e.g., <code>isplit(iris, iris$Species)</code></dd>
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

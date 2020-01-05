@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -90,10 +90,7 @@ Heavy Watal
 </ul></nav>
 </header>
 
-
-
 <h2 id="用語">用語</h2>
-
 <dl>
 <dt><strong>正方行列 (square)</strong></dt>
 <dd>行と列の数が等しい行列。</dd>
@@ -109,42 +106,34 @@ Heavy Watal
 <dt><strong>正則行列 (invertible, non-singular, non-degenerate, regular)</strong></dt>
 <dd>逆行列を持つ。行列式が0じゃない。固有値0を持たない。</dd>
 </dl>
-
 <hr>
-
 <dl>
-<dt><strong>行列式 (determinant)</strong> $\text{det}\, A, |A|$</dt>
+<dt><strong>行列式 (determinant)</strong> $\text{det}, A, |A|$</dt>
 <dd>正方行列による変換の体積拡大率。
 行列式が0 ⇔ 写像がぺちゃんこになる ⇔ 逆行列が存在しない。
 固有値の積と等しい。</dd>
-<dt><strong>跡 (trace)</strong> $\text{tr}\, A$</dt>
+<dt><strong>跡 (trace)</strong> $\text{tr}, A$</dt>
 <dd>正方行列の対角成分の和。
 固有値の和と等しい。</dd>
-<dt><strong>核 (kernel)</strong> $\text{Ker}\, A$</dt>
+<dt><strong>核 (kernel)</strong> $\text{Ker}, A$</dt>
 <dd>$A\mathbf{x} = \mathbf{o}$ で原点に移るような
 $\mathbf{x}$ の集合。 核が原点だけ(0次元) ⇔ ランク＝元の次元数 ⇔ 写像は <strong>単射</strong>。</dd>
-<dt><strong>像 (image)</strong> $\text{Im}\, A$</dt>
+<dt><strong>像 (image)</strong> $\text{Im}, A$</dt>
 <dd>$\mathbf{x}$ を目一杯いろいろ動かしたときの
 $\mathbf{y} = A\mathbf{x}$ の集合。
 像が行き先の全空間 ⇔ ランク＝行き先の次元数 ⇔ 写像は <strong>全射</strong>。</dd>
-<dt><strong>ランク (rank)</strong> $\text{rank}\, A$</dt>
+<dt><strong>ランク (rank)</strong> $\text{rank}, A$</dt>
 <dd>像の次元数。</dd>
 </dl>
-
 <h2 id="行列のべき乗">行列のべき乗</h2>
-
 <p>行列は写像。行列のべき乗は写像の繰り返し。</p>
-
 <p>ベクトル $\mathbf{x}$ に正方行列 $A$ を
 $t$ 回かけたらどうなるか知りたい。</p>
-
 <div>\[
 \mathbf{x}(t) = A\mathbf{x}(t-1) = A^t\mathbf{x}(0)
 \]</div>
-
 <p>そのまま行列計算をするのではなく、適当な正則行列で
 $\mathbf{x}(t) = P\mathbf{y}(t)$ という変数変換をしてみると</p>
-
 <div>\[\begin{aligned}
 \mathbf{y}(t) &= P^{-1}\mathbf{x}(t) \\
               &= P^{-1}A\mathbf{x}(t-1) \\
@@ -155,40 +144,31 @@ $\mathbf{x}(t) = P\mathbf{y}(t)$ という変数変換をしてみると</p>
               &= P\Lambda^t\mathbf{y}(0) \\
               &= P\Lambda^tP^{-1}\mathbf{x}(0)
 \end{aligned}\]</div>
-
 <p>このとき $\Lambda = P^{-1}AP$ が対角行列になってくれてると
 $t$ 乗する計算がすごく楽チン。</p>
-
 <div>\[\begin{aligned}
 \Lambda^t &= \text{diag}(\lambda _1, ..., \lambda _n)^t \\
           &= \text{diag}(\lambda _1^t, ..., \lambda _n^t)
 \end{aligned}\]</div>
-
 <p>この <strong>対角化 (diagonalization)</strong> をもたらす変換行列 $P$ とはどういうものか</p>
-
 <div>\[\begin{aligned}
 P^{-1}AP &= \text{diag}(\lambda _1, ..., \lambda _n) \\
       AP &= P \text{diag}(\lambda _1, ..., \lambda _n)
 \end{aligned}\]</div>
-
 <p>$P = (\mathbf{p}_1, &hellip;, \mathbf{p}_n)$ として列ごとに見ると</p>
-
 <div>\[\begin{aligned}
 A\mathbf{p}_1 &= \lambda_1 \mathbf{p}_1 \\
 \vdots \\
 A\mathbf{p}_n &= \lambda_n \mathbf{p}_n
 \end{aligned}\]</div>
-
 <p>$A$ をかけても長さが変わるだけで方向は変わらない。
 この伸縮率 $\lambda$ が <strong>固有値 (eigenvalue)</strong> で、それぞれに対応する
 $\mathbf{o}$ でない $\mathbf{p}$ が <strong>固有ベクトル (eigenvector)</strong>。</p>
-
 <p>つまり変換行列 $P$ は $A$ の固有ベクトルを並べたもので、
 $\Lambda$ は対角成分に $A$ の固有値を並べたもの。
 そうするとさっきの $\mathbf{x} = P\mathbf{y}$ は、
 $\mathbf{x}$ を $A$ の固有ベクトルの線形結合として表し、
 $A$ をかけても方向が変わらないように変数変換しておくということに相当する。</p>
-
 <div>\[\begin{aligned}
 A^t\mathbf{x} &= A^t P \mathbf{y} \\
               &= A^t (y_1\mathbf{p_1} + ... + y_n\mathbf{p_n}) \\
@@ -200,39 +180,29 @@ A^t\mathbf{x} &= A^t P \mathbf{y} \\
                    + ... + y_n \left(\frac {\lambda _n} {\lambda _k}\right) ^t \mathbf{p_n}) \\
               &\sim y_k \lambda_k ^t \mathbf{p_k}
 \end{aligned}\]</div>
-
 <p>$t$ が大きくなるにつれて最大の固有値 $\lambda_k$
 に対応する固有ベクトル $\mathbf{p_k}$ の向きに近づいていく。
 その極限には行かないにしても、固有値の大きな固有ベクトルの方向に寄っていく傾向があるってこと。</p>
-
-<h3 id="固有値-固有ベクトルの求め方">固有値・固有ベクトルの求め方</h3>
-
+<h3 id="固有値固有ベクトルの求め方">固有値・固有ベクトルの求め方</h3>
 <p>行列 $A$ に対して次のような関係を満たす非自明解として固有ベクトル $\mathbf{p}$ を求めたい。</p>
-
 <div>\[\begin{aligned}
 A\mathbf{p} &= \lambda\mathbf{p} \\
 (A - \lambda\mathbf{I}) \mathbf{p} &= \mathbf{o}
 \end{aligned}\]</div>
-
 <p>それが存在するための条件は、左にかかってる部分の行列式がゼロであること。</p>
-
 <div>\[\begin{aligned}
 | A - \lambda\mathbf{I} | = 0
 \end{aligned}\]</div>
-
 <p>この <strong>固有多項式 (characteristic equation)</strong> を解いて固有値 $\lambda$ を求め、
 それぞれの解に対して元の連立方程式を解き、 固有ベクトルを求める。
 実数解が見つかる場合、方向の変わらない固有ベクトルが存在し、線形変換 $A$ は原点からの伸び縮みを表す。
 そうでない場合、線形変換 $A$ は回転を含み、どのベクトルも方向が変わる。</p>
-
 <p>固有値が重解を含んでいてもその重複と同じ分だけ固有ベクトルが取れれば
 (代数的重複度＝幾何的重複度ならば) 対角化可能。
 対角化できない正方行列でも $P^{-1}AP = J$ となる $P$ を見つけて
 <strong>Jordan標準形</strong> まで持っていくことは可能。
 $J^t$ の計算は $\Lambda^t$ ほどじゃないにせよそれなりに楽。</p>
-
 <h2 id="参考文献">参考文献</h2>
-
 <p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/4274065782/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51QTY7RSFRL._SX160_.jpg" alt="プログラミングのための線形代数" /></a></p>
 
 </article>
@@ -265,8 +235,8 @@ $J^t$ の計算は $\Lambda^t$ ほどじゃないにせよそれなりに楽。<
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -278,11 +248,11 @@ $J^t$ の計算は $\Lambda^t$ ほどじゃないにせよそれなりに楽。<
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -301,6 +271,7 @@ $J^t$ の計算は $\Lambda^t$ ほどじゃないにせよそれなりに楽。<
 <label for="menu-bio" class="active">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -308,7 +279,6 @@ $J^t$ の計算は $\Lambda^t$ ほどじゃないにせよそれなりに楽。<
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li class="active"><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -320,20 +290,20 @@ $J^t$ の計算は $\Lambda^t$ ほどじゃないにせよそれなりに楽。<
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -91,60 +91,49 @@ ssh
 </ul></nav>
 </header>
 
-
-
 <p><a href="http://www.openssh.com/">http://www.openssh.com/</a></p>
-
 <h2 id="公開鍵によるパスワード無しの認証">公開鍵によるパスワード無しの認証</h2>
-
 <p>秘密鍵 <code>~/.ssh/id_ed25519</code> を持つホストから、
 公開鍵 <code>~/.ssh/authorized_keys</code> を持つホストに、
 パスワード無しでログインできるようにする。</p>
-
 <ol>
-<li><p>ローカルホストで鍵ペア (秘密鍵 <code>id_ed25519</code> と公開鍵 <code>id_ed25519.pub</code>) を作成:</p>
-
+<li>
+<p>ローカルホストで鍵ペア (秘密鍵 <code>id_ed25519</code> と公開鍵 <code>id_ed25519.pub</code>) を作成:</p>
 <pre><code>ssh-keygen -t ed25519 -N ''
 # Generating public/private ed25519 key pair.
 # Enter file in which to save the key (~/.ssh/id_ed25519): ＃そのままリターン
 # Your identification has been saved in ~/.ssh/id_ed25519.
 # Your public key has been saved in ~/.ssh/id_ed25519.pub.
-</code></pre>
-
-<p>Ed25519を使えない古い環境ではRSA (<code>-t rsa -b 4096</code>)
-やECDSA (<code>-t ecdsa -b 521</code>) を使う。</p></li>
-
-<li><p>できあがった公開鍵 <code>id_ed25519.pub</code> をリモートホストに登録する。
+</code></pre><p>Ed25519を使えない古い環境ではRSA (<code>-t rsa -b 4096</code>)
+やECDSA (<code>-t ecdsa -b 521</code>) を使う。</p>
+</li>
+<li>
+<p>できあがった公開鍵 <code>id_ed25519.pub</code> をリモートホストに登録する。
 やり方は場合によって異なる。</p>
-
 <p>ウェブブラウザからアップロードする方法。
 (e.g., <a href="https://github.com/settings/keys">GitHub &gt; Settings</a>)。</p>
-
 <p>ターミナルから <code>~/.ssh/authorized_keys</code> に追加する方法:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ssh-copy-id -i ~/.ssh/id_ed25519.pub watal@example.com
 <span class="c1"># or</span>
 ssh watal@example.com <span class="s2">&#34;mkdir ~/.ssh; touch ~/.ssh/authorized_keys&#34;</span>
-cat id_ed25519.pub <span class="p">|</span> ssh watal@example.com <span class="s2">&#34;cat &gt;&gt; ~/.ssh/authorized_keys&#34;</span></code></pre></div></li>
-
-<li><p>ユーザー本人だけが読み書きできるパーミッションに設定されていることを確認:</p>
+cat id_ed25519.pub <span class="p">|</span> ssh watal@example.com <span class="s2">&#34;cat &gt;&gt; ~/.ssh/authorized_keys&#34;</span>
+</code></pre></div></li>
+<li>
+<p>ユーザー本人だけが読み書きできるパーミッションに設定されていることを確認:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ls -l ~/.ssh
 ssh watal@example.com <span class="s2">&#34;ls -l ~/.ssh&#34;</span>
 <span class="c1"># if necessary</span>
 chmod <span class="m">700</span> ~/.ssh
 chmod <span class="m">600</span> ~/.ssh/id_ed25519
-chmod <span class="m">600</span> ~/.ssh/authorized_keys</code></pre></div></li>
+chmod <span class="m">600</span> ~/.ssh/authorized_keys
+</code></pre></div></li>
 </ol>
-
 <h2 id="設定">設定</h2>
-
 <p><a href="http://man.openbsd.org/OpenBSD-current/man5/ssh_config.5">http://man.openbsd.org/OpenBSD-current/man5/ssh_config.5</a></p>
-
-<h3 id="ssh-config"><code>~/.ssh/config</code></h3>
-
+<h3 id="sshconfig"><code>~/.ssh/config</code></h3>
 <p><code>ssh</code> する側のユーザー毎の設定。
 ユーザー名やアドレスをセットにしてニックネームをつけることで、入力を省略できる。
 先に書いたものが優先されるので、一般設定は最後に:</p>
-
 <pre><code>Host beast
   Hostname 192.168.6.66
   User eddie
@@ -156,27 +145,16 @@ Host *
   GSSAPIAuthentication no
   StrictHostKeyChecking no
   VisualHostKey yes
-</code></pre>
-
-<p>例えば上のような設定を <code>~/.ssh/config</code> に書いておけば以下の２つは等価:</p>
-
+</code></pre><p>例えば上のような設定を <code>~/.ssh/config</code> に書いておけば以下の２つは等価:</p>
 <pre><code>ssh -2 eddie@192.168.6.66
 ssh beast
-</code></pre>
-
-<h3 id="etc-ssh-config"><code>/etc/ssh_config</code>:</h3>
-
+</code></pre><h3 id="etcssh_config"><code>/etc/ssh_config</code>:</h3>
 <p><code>ssh</code> する側のマシン全体の設定。認証の試行を絞ることで少しでも高速にしたい:</p>
-
 <pre><code>Protocol 2
 ChallengeResponseAuthentication no
 GSSAPIAuthentication no
-</code></pre>
-
-<h3 id="etc-sshd-config"><code>/etc/sshd_config</code>:</h3>
-
+</code></pre><h3 id="etcsshd_config"><code>/etc/sshd_config</code>:</h3>
 <p><code>ssh</code> される側のデーモンの設定。余計な入り口を塞ぐべし:</p>
-
 <pre><code>Protocol 2
 PermitRootLogin without-password
 ChallengeResponseAuthentication no
@@ -184,21 +162,14 @@ PasswordAuthentication no
 KerberosAuthentication no
 GSSAPIAuthentication no
 UsePAM no
-</code></pre>
-
-<h2 id="ファイル転送">ファイル転送</h2>
-
+</code></pre><h2 id="ファイル転送">ファイル転送</h2>
 <p>ファイルひとつなら<code>scp</code>でもいいけどそれ以上なら
 <a href="/dev/rsync.html">rsync</a> を使ったほうがよい。
 あるいは<a href="/dev/mount.html#sshfs">sshfsでマウント</a>してしまうのも楽ちん。</p>
-
 <h2 id="環境変数">環境変数</h2>
-
 <pre><code>echo $SSH_CONNECTION
 [client IP] [client port] [server IP] [server port]
-</code></pre>
-
-<p>どこから <code>ssh</code> したか、を取得するには
+</code></pre><p>どこから <code>ssh</code> したか、を取得するには
 <code>echo $SSH_CONNECTION | awk '{print $1}'</code></p>
 
 </article>
@@ -231,8 +202,8 @@ UsePAM no
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -244,11 +215,11 @@ UsePAM no
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -267,6 +238,7 @@ UsePAM no
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -274,7 +246,6 @@ UsePAM no
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -286,20 +257,20 @@ UsePAM no
 <label for="menu-dev" class="active">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li class="active"><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

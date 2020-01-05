@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -90,115 +90,106 @@ RepeatMasker
 </ul></nav>
 </header>
 
-
-
 <p><a href="http://www.repeatmasker.org/RMDownload.html">http://www.repeatmasker.org/RMDownload.html</a></p>
-
 <h2 id="前準備">前準備</h2>
-
 <p><a href="/mac/homebrew.html">Homebrew</a> を使う。
 <code>brew tap brewsci/science brewsci/bio</code> しておく。</p>
-
 <h3 id="プログラム">プログラム</h3>
-
 <ul>
-<li><p>Perl 5.8 以上: <code>perl --version</code></p></li>
-
-<li><p>検索エンジンをどれか1つ以上</p>
-
+<li>
+<p>Perl 5.8 以上: <code>perl --version</code></p>
+</li>
+<li>
+<p>検索エンジンをどれか1つ以上</p>
 <ol>
-<li><a href="http://www.phrap.org/">CrossMatch</a></li>
-
-<li><p><a href="http://www.repeatmasker.org/RMBlast.html">RMBlast</a>
+<li>
+<p><a href="http://www.phrap.org/">CrossMatch</a></p>
+</li>
+<li>
+<p><a href="http://www.repeatmasker.org/RMBlast.html">RMBlast</a>
 (NCBI BLASTを RepeatMasker で使えるようにするためのラッパー)</p>
-
 <ul>
-<li>まず普通の <a href="/bio/blast.html">NCBI BLAST+</a> をインストール。
-Homebrewでもできるけどビルドに時間かかるのでバイナリで。</li>
-
-<li><p>RMBlastをインストールし、元のBLASTの <code>bin</code> 内にシムリンクを張る:</p>
-
+<li>
+<p>まず普通の <a href="/bio/blast.html">NCBI BLAST+</a> をインストール。
+Homebrewでもできるけどビルドに時間かかるのでバイナリで。</p>
+</li>
+<li>
+<p>RMBlastをインストールし、元のBLASTの <code>bin</code> 内にシムリンクを張る:</p>
 <pre><code>brew install rmblast --without-blast
 brew list rmblast
 sudo ln -s $(brew --prefix)/bin/rmblastn /usr/local/ncbi/blast/bin/
-</code></pre></li>
-</ul></li>
-
-<li><p><a href="http://www.advbiocomp.com/blast.html">AB-BLAST</a> (有料)</p></li>
-
-<li><p><a href="http://hmmer.janelia.org/">HMMER</a> &amp; DFAM (human only): <code>brew install hmmer</code></p></li>
-</ol></li>
-
-<li><p><a href="http://tandem.bu.edu/trf/trf.html">Tandem Repeat Finder</a>: <code>brew install trf</code></p></li>
-
-<li><p>RepeatMasker 本体
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p><a href="http://www.advbiocomp.com/blast.html">AB-BLAST</a> (有料)</p>
+</li>
+<li>
+<p><a href="http://hmmer.janelia.org/">HMMER</a> &amp; DFAM (human only): <code>brew install hmmer</code></p>
+</li>
+</ol>
+</li>
+<li>
+<p><a href="http://tandem.bu.edu/trf/trf.html">Tandem Repeat Finder</a>: <code>brew install trf</code></p>
+</li>
+<li>
+<p>RepeatMasker 本体
 (どこでもいいけど今回は <code>/usr/local/</code> に入れる):</p>
-
 <pre><code>wget -O- http://www.repeatmasker.org/RepeatMasker-open-4-0-5.tar.gz | tar xz
 sudo mv RepeatMasker /usr/local/
 </code></pre>
-
 <p>Homebrewで入れる場合は <code>--without-configure</code> をつけて、
-後から自分で <code>./configure</code> する。</p></li>
-
-<li><p>データベースを入れて <code>configure</code> (下記)</p></li>
+後から自分で <code>./configure</code> する。</p>
+</li>
+<li>
+<p>データベースを入れて <code>configure</code> (下記)</p>
+</li>
 </ul>
-
 <h3 id="データベース">データベース</h3>
-
 <p>RepeatMasker 用に加工された
 <a href="http://www.girinst.org/repbase">RepBase</a> ライブラリを用いる。
 ただし取得には無料登録が必要で、承認まで時間がかかる。
 また <code>@gmail.com</code> のような商用ドメインでは弾かれるので、
 <code>@soken.ac.jp</code> のような所属機関アドレスが必要。</p>
-
 <ol>
-<li><p><code>/usr/local/RepeatMasker/Libraries/</code> 直下に格納
+<li>
+<p><code>/usr/local/RepeatMasker/Libraries/</code> 直下に格納
 (念のためフォルダごと取っといてシムリンク。古いやつは適当に保持):</p>
-
 <pre><code>cd /usr/local/RepeatMasker/Libraries/
 wget -O- --http-user=&quot;USERNAME&quot; --http-password=&quot;PASSWORD&quot; http://www.girinst.org/server/archive/RepBase20.04/protected/repeatmaskerlibraries/repeatmaskerlibraries-20140131.tar.gz | tar xz
 mv Libraries repeatmaskerlibraries-20140131
 mv RepeatMaskerLib.embl RepeatMaskerLib.embl.orig
 ln -s repeatmaskerlibraries-20140131/RepeatMaskerLib.embl
-</code></pre></li>
-
-<li><p><a href="http://www.dfam.org/">Dfam</a> のアップデートがあれば
+</code></pre>
+</li>
+<li>
+<p><a href="http://www.dfam.org/">Dfam</a> のアップデートがあれば
 <code>Libraries/Dfam.hmm</code> ファイルを入れ替え:</p>
-
 <pre><code>mv Dfam.hmm Dfam.hmm.orig
 wget ftp://selab.janelia.org/pub/dfam/Release/Dfam_1.4/Dfam.hmm.gz
 gunzip Dfam.hmm.gz
-</code></pre></li>
-
-<li><p><code>configure</code> スクリプト実行:</p>
-
+</code></pre>
+</li>
+<li>
+<p><code>configure</code> スクリプト実行:</p>
 <pre><code>cd ..
 ./configure &lt;~/bio/RepeatMasker.conf
 </code></pre>
-
-<p>標準入力は毎回同じなのでファイルにしてしまったほうが楽チン</p></li>
+<p>標準入力は毎回同じなのでファイルにしてしまったほうが楽チン</p>
+</li>
 </ol>
-
 <p>FASTA形式の反復配列を分類群単位で入手することもできる:</p>
-
 <pre><code>wget -o- --http-user=&quot;USERNAME&quot; --http-password=&quot;PASSWORD&quot; http://www.girinst.org/server/RepBase/protected/RepBase20.04.fasta/fngrep.ref
 </code></pre>
-
 <h2 id="使用方法">使用方法</h2>
-
 <p><a href="http://www.repeatmasker.org/webrepeatmaskerhelp.html">http://www.repeatmasker.org/webrepeatmaskerhelp.html</a></p>
-
 <h3 id="コマンド">コマンド</h3>
-
 <p><a href="http://www.animalgenome.org/bioinfo/resources/manuals/RepeatMasker.html">http://www.animalgenome.org/bioinfo/resources/manuals/RepeatMasker.html</a> :</p>
-
 <pre><code>/usr/local/RepeatMasker/RepeatMasker -h | less
 less /usr/local/RepeatMasker/repeatmasker.help
 </code></pre>
-
 <p><code>-engine [crossmatch|wublast|abblast|ncbi|hmmer|decypher]</code></p>
-
 <dl>
 <dt><code>-parallel 1</code></dt>
 <dd>並列化の恩恵は大きい</dd>
@@ -213,9 +204,7 @@ less /usr/local/RepeatMasker/repeatmasker.help
 <dt><code>-div [number]</code></dt>
 <dd>コンセンサスからの分化度が指定したパーセント未満のやつだけマスク</dd>
 </dl>
-
 <p><code>-cutoff 225</code></p>
-
 <dl>
 <dt><code>-species CLADE_NAME</code></dt>
 <dd><a href="http://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/">http://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/</a>
@@ -232,9 +221,7 @@ chimpanzee, mammals みたいな英語名も一部可能。
 <dt><code>-gff</code></dt>
 <dd>GFFファイルも出力する。</dd>
 </dl>
-
 <h3 id="生成物">生成物</h3>
-
 <dl>
 <dt><code>${INFILE}.masked</code></dt>
 <dd>見つかった箇所 <code>NNNNN</code> に置き換えたファイル</dd>
@@ -246,151 +233,139 @@ chimpanzee, mammals みたいな英語名も一部可能。
 <dt><code>${INFILE}.out</code></dt>
 <dd>アノテーション情報。
 TSVではなく固定幅に近い表で、例外も多くて使いにくい。</dd>
-<dd><div class="warning">バグってるのでこのファイルを使ってはいけない！</div></dd>
+<dd> <div class="warning">バグってるのでこのファイルを使ってはいけない！</div>
+</dd>
 </dl>
-
 <h2 id="repeatscout">RepeatScout</h2>
-
 <p><a href="http://bix.ucsd.edu/repeatscout/">http://bix.ucsd.edu/repeatscout/</a></p>
-
 <p>反復配列を <em>de novo</em> で拾い、RepeatMaskerで利用可能なライブラリを生成する。</p>
-
 <ol>
-<li><p>RepeatScout本体をインストール:</p>
-
+<li>
+<p>RepeatScout本体をインストール:</p>
 <pre><code>brew install repeatscout --with-trf
-</code></pre></li>
-
-<li><p>L-mer の頻度テーブルをつくる:</p>
-
+</code></pre>
+</li>
+<li>
+<p>L-mer の頻度テーブルをつくる:</p>
 <pre><code>build_lmer_table -l 14 -sequence myseq.fa -freq lmer_table
-</code></pre></li>
-
-<li><p>そのテーブルと配列から反復配列のFASTAを作る:</p>
-
+</code></pre>
+</li>
+<li>
+<p>そのテーブルと配列から反復配列のFASTAを作る:</p>
 <pre><code>RepeatScout -sequence myseq.fa -output rs_output.fa -freq lmer_table -l 14
-</code></pre></li>
-
-<li><p>TRFとNSEGを呼び出して &gt;50% low-complexity なものを除外:</p>
-
+</code></pre>
+</li>
+<li>
+<p>TRFとNSEGを呼び出して &gt;50% low-complexity なものを除外:</p>
 <pre><code>cat rs_output.fa | filter-stage-1.prl &gt;rs_filtered1.fa
 </code></pre>
-
 <p><a href="ftp://ftp.ncbi.nih.gov/pub/seg/nseg/">NSEG</a> はビルド不可能なので
-<code>filter-stage-1.prl</code> を適当に書き換える必要がある。</p></li>
-
-<li><p>RepeatMaskerで位置と登場回数を調べる:</p>
-
+<code>filter-stage-1.prl</code> を適当に書き換える必要がある。</p>
+</li>
+<li>
+<p>RepeatMaskerで位置と登場回数を調べる:</p>
 <pre><code>RepeatMasker -parallel 4 -dir . -lib rs_filtered1.fa myseq.fa
-</code></pre></li>
-
-<li><p>一定回数に満たないものを除外:</p>
-
+</code></pre>
+</li>
+<li>
+<p>一定回数に満たないものを除外:</p>
 <pre><code>cat rs_filtered1.fa | filter-stage-2.prl --thresh=10 --cat=myseq.fa.out &gt;rs_filtered2.fa
-</code></pre></li>
-
-<li><p>遺伝子領域のGFFなどを与え、mobile elementっぽくないものを除去:</p>
-
+</code></pre>
+</li>
+<li>
+<p>遺伝子領域のGFFなどを与え、mobile elementっぽくないものを除去:</p>
 <pre><code>compare-out-to-gff.prl --gff=known_genes.gff --cat=myseq.fa.out --f=rs_filtered2.fa &gt;lib.ref
-</code></pre></li>
+</code></pre>
+</li>
 </ol>
-
 <h2 id="repeatmodeler">RepeatModeler</h2>
-
 <p><a href="http://www.repeatmasker.org/RepeatModeler.html">http://www.repeatmasker.org/RepeatModeler.html</a></p>
-
 <p>上記RepeatScout手順を簡単に実行するラッパー？</p>
-
 <div class="warning">
 うまくできた試しがないので、RepeatScoutを直に動かしたほうが良い。
 </div>
-
 <h3 id="前準備-1">前準備</h3>
-
 <ul>
-<li>RepeatMasker: 上記</li>
-<li>RepeatScout: 上記</li>
-
-<li><p>RECON:</p>
-
+<li>
+<p>RepeatMasker: 上記</p>
+</li>
+<li>
+<p>RepeatScout: 上記</p>
+</li>
+<li>
+<p>RECON:</p>
 <pre><code>brew install recon
-</code></pre></li>
-
-<li><p>RepeatModeler 本体:</p>
-
+</code></pre>
+</li>
+<li>
+<p>RepeatModeler 本体:</p>
 <pre><code>wget -O- http://www.repeatmasker.org/RepeatModeler-open-1-0-8.tar.gz | tar xz
 sudo mv RepeatModeler /usr/local/
 </code></pre>
-
 <p>例によって <code>configure</code> も実行:</p>
-
 <pre><code>cd /usr/local/RepeatModeler
 perl configure &lt;~/bio/RepeatModeler.conf
-</code></pre></li>
+</code></pre>
+</li>
 </ul>
-
 <h3 id="使い方">使い方</h3>
-
 <ol>
-<li><p>カレントディレクトリにBLASTデータベースを構築:</p>
-
+<li>
+<p>カレントディレクトリにBLASTデータベースを構築:</p>
 <pre><code>BuilDatabase -name Colletotrichum_orbiculare -engine ncbi path/to/Colletotrichum_orbiculare.fa
-</code></pre></li>
-
-<li><p>本体を実行(かなり時間がかかる):</p>
-
+</code></pre>
+</li>
+<li>
+<p>本体を実行(かなり時間がかかる):</p>
 <pre><code>RepeatModeler -engine ncbi -pa 4 -database Colletotrichum_orbiculare &gt;run.out
 </code></pre>
-
-<p><code>RM_[PID].[DATE]/</code> に結果が書き出される。</p></li>
-
-<li><p>できあがった <code>consensi.fa.classified</code> をライブラリとして RepeatMasker を実行:</p>
-
+<p><code>RM_[PID].[DATE]/</code> に結果が書き出される。</p>
+</li>
+<li>
+<p>できあがった <code>consensi.fa.classified</code> をライブラリとして RepeatMasker を実行:</p>
 <pre><code>RepeatMasker -lib consensi.fa.classified some_sequence.fa
-</code></pre></li>
+</code></pre>
+</li>
 </ol>
-
 <h2 id="teclass">TEclass</h2>
-
 <p><a href="http://www.compgen.uni-muenster.de/tools/teclass/">http://www.compgen.uni-muenster.de/tools/teclass/</a></p>
-
 <p>トランスポゾンを分類する。</p>
-
 <p>与えられたFASTAに含まれているのはTEだ、という仮定で分類するだけので、
 単純反復配列や重複遺伝子などを予めしっかり除去しておく必要がある。</p>
-
 <ol>
-<li><p>本体をダウンロード:</p>
-
+<li>
+<p>本体をダウンロード:</p>
 <pre><code>wget -O- http://www.compgen.uni-muenster.de/tools/teclass/download/TEclass-2.1.3.tar.gz | tar xz
 cd TEclass-2.1.3/
 less README
-</code></pre></li>
-
-<li><p>周辺ライブラリを整備。
+</code></pre>
+</li>
+<li>
+<p>周辺ライブラリを整備。
 でもとりあえず分類したいだけならblastclustなどは不要らしい:</p>
-
 <pre><code>./Download_dependencies.sh
 ./Compile_dependencies.sh
 ./Configure.pl
-</code></pre></li>
-
-<li><p>pre-built classifiers (&gt;400MB) をダウンロード:</p>
-
+</code></pre>
+</li>
+<li>
+<p>pre-built classifiers (&gt;400MB) をダウンロード:</p>
 <pre><code>cd path/to/TEclass/classifiers/
 wget -O- http://www.compgen.uni-muenster.de/tools/teclass/download/classifiers.tar.gz | tar xz
-</code></pre></li>
-
-<li><p>実行: <code>./TEclassTest.pl file.fa</code></p></li>
-
-<li><p>結果はひとつのディレクトリにまとめて書き出される</p>
-
+</code></pre>
+</li>
+<li>
+<p>実行: <code>./TEclassTest.pl file.fa</code></p>
+</li>
+<li>
+<p>結果はひとつのディレクトリにまとめて書き出される</p>
 <ul>
 <li><code>file.fa</code>: 元ファイルからTEだけ抜き出したもの？</li>
 <li><code>file.fa.html</code>: 一覧</li>
 <li><code>file.fa.lib</code>: RepeatMasker用？</li>
 <li><code>file.fa.stat</code>: LTRなどがそれぞれいくつあったか集計</li>
-</ul></li>
+</ul>
+</li>
 </ol>
 
 </article>
@@ -423,8 +398,8 @@ wget -O- http://www.compgen.uni-muenster.de/tools/teclass/download/classifiers.t
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -436,11 +411,11 @@ wget -O- http://www.compgen.uni-muenster.de/tools/teclass/download/classifiers.t
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -459,6 +434,7 @@ wget -O- http://www.compgen.uni-muenster.de/tools/teclass/download/classifiers.t
 <label for="menu-bio" class="active">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -466,7 +442,6 @@ wget -O- http://www.compgen.uni-muenster.de/tools/teclass/download/classifiers.t
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -478,20 +453,20 @@ wget -O- http://www.compgen.uni-muenster.de/tools/teclass/download/classifiers.t
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

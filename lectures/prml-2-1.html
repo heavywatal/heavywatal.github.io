@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -91,12 +91,9 @@ PRML輪読会 2章前半
 </ul></nav>
 </header>
 
-
-
 <p><a href="http://www.amazon.co.jp/exec/obidos/ASIN/0387310738/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/612j5Uo43eL._SX180_.jpg" alt="Pattern Recognition and Machine Learning (Information Science and Statistics)" /></a>
 <a href="http://www.amazon.co.jp/exec/obidos/ASIN/4621061224/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41O0QFyTHJL._SX160_.jpg" alt="パターン認識と機械学習 上" /></a>
 <a href="http://www.amazon.co.jp/exec/obidos/ASIN/4621061240/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/418MuoJetFL._SX160_.jpg" alt="パターン認識と機械学習 下 (ベイズ理論による統計的予測)" /></a></p>
-
 <dl>
 <dt>Author</dt>
 <dd>Christopher M. Bishop</dd>
@@ -111,9 +108,7 @@ PRML輪読会 2章前半
 <dt>日程</dt>
 <dd>2014-03-10</dd>
 </dl>
-
 <h2 id="2-probability-distributions">2. Probability Distributions</h2>
-
 <dl>
 <dt><em>density estimation</em>: <strong>密度推定</strong></dt>
 <dd>与えられた確率変数xのセットから確率分布p(x)をモデル化すること。</dd>
@@ -125,71 +120,50 @@ PRML輪読会 2章前半
 <dd><strong>independent and identically distributed</strong> の略。
 確率変数のセットが同じ分布に従っていて独立なとき。</dd>
 </dl>
-
 <p>2.1–2.2 離散型確率変数</p>
-
 <p>2.3 <em>Gaussian distribution</em>: <strong>正規分布</strong></p>
-
 <p>2.4 <em>exponential family</em>: <strong>指数型分布族</strong></p>
-
 <p>2.5 <em>nonparametric</em> method: <strong>ノンパラメトリック法</strong></p>
-
-<h3 id="2-1-binary-variables">2.1 Binary Variables</h3>
-
+<h3 id="21-binary-variables">2.1 Binary Variables</h3>
 <p><strong>二値変数</strong>
 $x \in {0,1}$</p>
-
 <p>コインの表裏(head/tail)のように、2つの値を取りうる確率変数。
 e.g. 表なら <em>x</em> = 1、裏なら <em>x</em> = 0。</p>
-
 <hr>
-
 <p><em>Bernoulli</em> distribution <strong>ベルヌーイ分布</strong></p>
-
 <p>表の出る確率が <em>μ</em> であるコインを1回投げて、
 表が出る確率と裏が出る確率はそれぞれ</p>
-
 <div>\[\begin{aligned}
 p(x = 1 \mid \mu) &= \mu\\
 p(x = 0 \mid \mu) &= 1 - \mu
 \end{aligned}\]</div>
-
 <p><em>x</em> の確率分布として書いて平均と分散 (Exercise 2.1) を求めると</p>
-
 <div>\[\begin{aligned}
 \text{Bern}(x \mid \mu) &= \mu ^ x (1 - \mu) ^ {1 - x} \\
 \mathrm{E}[x] &= 0(1 - \mu) + 1\mu = \mu\\
 \text{var}[x] &= \mathrm{E}[(x - \mu)^2] = \mu^2 (1 - \mu) + (1 - \mu)^2 \mu = \mu (1 - \mu)
 \end{aligned}\]</div>
-
 <p>パラメータ <em>μ</em> の下で <em>N</em> 回投げたデータセット $D = {x_1, &hellip;, x_N}$
 が得られる確率、すなわち尤度は</p>
-
 <div>\[
 p(D \mid \mu) = \prod_{n = 1}^N {p(x_n \mid \mu)}
            = \prod_{n = 1}^N {\mu^{x_n} (1 - \mu)^{1 - x_n}}
 \]</div>
-
 <p>これを最大化する <em>μ</em> を求めるため、まず対数を取って</p>
-
 <div>\[\begin{aligned}
 \ln p(D \mid \mu) &= \sum_{n = 1}^N {\ln p(x_n \mid \mu)}\\
                &= \sum_{n = 1}^N {\{x_n \ln \mu + (1 - x_n) \ln (1 - \mu)\}}\\
                &= \ln \mu \sum_{n = 1}^N x_n + \ln (1 - \mu) \sum_{n = 1}^N (1 - x_n)\\
                &= \{\ln \mu - \ln(1 - \mu)\} \sum_{n = 1}^N x_n + N \ln (1 - \mu)\\
 \end{aligned}\]</div>
-
 <div class="note">
 <p><em>sufficient statistic</em>: <strong>十分統計量</strong></p>
-
 <p>ここで対数尤度は個々の $x_n$ によらず、
 総和 $\sum_n {x_n}$ だけに依存している。
 そんな感じのやつを十分統計量と呼ぶが、ここでは詳しく触れない。</p>
 
 </div>
-
 <p><em>μ</em> で微分したものが0になるように</p>
-
 <div>\[\begin{aligned}
 \frac{d}{d\mu} \ln p(D \mid \mu)
    = \{\frac{1}{\mu} + \frac{1}{1 - \mu}\} \sum_{n = 1}^N x_n - \frac{N}{1 - \mu}
@@ -198,67 +172,50 @@ p(D \mid \mu) = \prod_{n = 1}^N {p(x_n \mid \mu)}
 \mu_\text{ML} &= \frac{1}{N} \sum_{n = 1}^N {x_n}\\
               &= \frac{m}{N}
 \end{aligned}\]</div>
-
 <p>結局のところ標本平均と同じ。
 コイン3回投げて3回表だと最尤は <em>μ</em> = 1 だが、これはどう考えてもover-fittingである。
 だいたい半々で表裏が出るっしょ、という事前情報で補正していきたい。</p>
-
 <hr>
-
 <p><em>Binomial</em> distribution <strong>二項分布</strong></p>
-
 <p>確率 <em>μ</em> で表の出るコインを <em>N</em> 回投げて表が出る回数 <em>m</em> の確率分布</p>
-
 <div>\[
 \text{Bin}(m \mid N, \mu) = \binom{N}{m} \mu^m (1 - \mu)^{N - m}
 \]</div>
-
 <div class="note">
 <p><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.1.png">Figure 2.1</a></p>
-
-<p><p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.1.png"/ alt="Figure 2.1" width="300px"></p>
-例えば <em>N</em> = 10, <em>μ</em> = 0.25 のときの <em>m</em> の頻度分布</p>
+<p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.1.png"/ alt="Figure 2.1" width="300px"></p>
+例えば *N* = 10, *μ* = 0.25 のときの *m* の頻度分布
 
 </div>
-
 <p>1回1回の観察は独立なベルヌーイ試行であり、
 そういうときは $\mathrm{E}[x + z] = \mathrm{E}[x] + \mathrm{E}[z]$ かつ
 $\text{var}[x + z] = \text{var}[x] + \text{var}[z]$ が成り立つので
 (Exercise 1.10)、平均と分散は (Exercise 2.4)</p>
-
 <div>\[\begin{aligned}
 \mathrm{E}[m] &= \mathrm{E}[\sum_{n=1}^N x_n] = \sum_{n=1}^N \mathrm{E}[x_n] = \sum_{n=1}^N \mu = N \mu \\
 \text{var}[m] &= \text{var}[\sum_{n=1}^N x_n] = \sum_{n=1}^N \text{var}[x_n]
               = \sum_{n=1}^N \mu (1 - \mu) = N \mu (1 - \mu)
 \end{aligned}\]</div>
-
-<h4 id="2-1-1-beta-distribution">2.1.1 beta distribution</h4>
-
+<h4 id="211-beta-distribution">2.1.1 beta distribution</h4>
 <p>3回続けて表が出たからといって μ=1 なわけがない、
 という事前情報をうまく取り入れて過学習を避けたい。
 事前分布 <em>p(μ)</em> を導入しよう。</p>
-
 <div>\[
 \text{posterior} \propto \text{prior} \times \text{likelihood}
 \]</div>
-
 <p>尤度が $\mu^x (1 - \mu)^{1 - x}$ という形なので、
 事前分布も <em>μ</em> と <em>1 - μ</em> の累乗にしておくと、
 事後分布と事前分布のの関数形が同じになって (<strong>共役性</strong>, <em>conjugacy</em>)
 いろいろ便利 (後述)。</p>
-
 <div>\[
 \text{Beta}(\mu \mid a, b) =
    \frac{\Gamma(a + b)}{\Gamma(a) \Gamma(b)} \mu^{a-1} (1 - \mu)^{b-1}
 \]</div>
-
 <p><a href="http://ja.wikipedia.org/wiki/%E3%82%AC%E3%83%B3%E3%83%9E%E9%96%A2%E6%95%B0">ガンマ関数</a>
 のところは(積分して1になるように)正規化するための係数で、
 形を決めるのは後ろの部分。
 <em>a</em> と <em>b</em> はパラメータ <em>μ</em> の分布を決めるための <strong>超パラメータ</strong> (<em>hyperparameter</em>)。</p>
-
 <p>平均と分散は (Exercise 2.6)</p>
-
 <div>\[\begin{aligned}
 \mathrm{E}[\mu] &= \int_0^1 \mu \text{Beta}(\mu \mid a,b)d\mu\\
               &= \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)} \int_0^1 \mu^{a} (1-\mu)^{b-1} d\mu\\
@@ -271,82 +228,64 @@ $\text{var}[x + z] = \text{var}[x] + \text{var}[z]$ が成り立つので
                 &= \frac{a(a+1)}{(a+b)(a+b+1)} - (\frac{a}{a+b})^2\\
                 &= \frac{ab}{(a + b)^2 (a + b + 1)}
 \end{aligned}\]</div>
-
 <div class="note">
 <p><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.2a.png">Figure 2.2a</a>, <a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.2b.png">Figure 2.2b</a>, <a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.2c.png">Figure 2.2c</a>, <a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.2d.png">Figure 2.2d</a></p>
-
-<p><p>
+<p>
 <img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.2a.png"/ alt="Figure 2.2a" width="240px">
 <img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.2b.png"/ alt="Figure 2.2b" width="240px">
 <img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.2c.png"/ alt="Figure 2.2c" width="240px">
 <img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.2d.png"/ alt="Figure 2.2d" width="240px">
 </p>
-ベータ分布がどんな形になるか、いろんな <em>a</em>, <em>b</em> でプロットしてみた</p>
+ベータ分布がどんな形になるか、いろんな *a*, *b* でプロットしてみた
 
 </div>
-
 <p>これを二項分布の尤度関数(2.9)と掛け算して得られる事後分布の比例関係は</p>
-
 <div>\[
 p(\mu \mid m, N, a, b) \propto \mu^{m + a - 1} (1 - \mu)^{N - m + b - 1}
 \]</div>
-
 <p>ベータ分布と同じ形をしているので、同じように正規化できる:</p>
-
 <div>\[\begin{aligned}
 p(\mu \mid m, N, a, b) &= \frac{\Gamma(N + a + b)}{\Gamma(m + a) \Gamma(N - m + b)}
                           \mu^{m + a - 1} (1 - \mu)^{N - m + b - 1}\\
                        &= \text{Beta}(\mu \mid m + a, N - m + b)
 \end{aligned}\]</div>
-
 <p>この事後分布は、新しいデータを加えて再評価するときに事前分布として使える。</p>
-
 <div class="note">
 <p>Figure 2.3</p>
-
-<p><p>
+<p>
 <img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.3a.png"/ alt="Figure 2.3a" width="240px">
 <img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.3b.png"/ alt="Figure 2.3b" width="240px">
 <img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.3c.png"/ alt="Figure 2.3c" width="240px">
 </p>
-<em>a</em> = 2, <em>b</em> = 2 の事前分布に(<a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.3a.png">Figure 2.3a</a>)、
-1回投げて表が出たというデータが追加されると(<a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.3b.png">Figure 2.3b</a>)、
-事後分布は <em>a</em> = 3, <em>b</em> = 2 のベータ分布になる(<a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.3c.png">Figure 2.3c</a>)。</p>
+*a* = 2, *b* = 2 の事前分布に([Figure 2.3a](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.3a.png))、
+1回投げて表が出たというデータが追加されると([Figure 2.3b](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.3b.png))、
+事後分布は *a* = 3, *b* = 2 のベータ分布になる([Figure 2.3c](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.3c.png))。
 
 </div>
-
 <p>表の観測数 <em>m</em> 回、裏の観測数 <em>N - m</em> 回が追加されたら、
 事前分布の <em>a</em> と <em>b</em> をその分それぞれ増やすだけで事後分布が得られる。
 したがって超パラメータ <em>a</em> と <em>b</em> はその時点での表と裏の <strong>有効観測数</strong>
 (<em>effective number of observations</em>) と解釈することができる。</p>
-
 <dl>
 <dt><em>sequential</em> approach <strong>逐次学習</strong></dt>
 <dd>観測毎に事後分布を更新していけるのでリアルタイムで利用できる。
 処理し終わったデータは捨ててもよい。</dd>
 </dl>
-
 <hr>
-
 <p>コインの真の特性 <em>μ</em> を知るのが目的ではなく、
 手元のデータを元に次のコイントスの結果を予測したいとしたら、
 興味があるのは $p(\mu)$ ではなくて $p(x = 1 \mid D)$</p>
-
 <div>\[\begin{aligned}
 p(x = 1 \mid D) = \int_0^1 p(x = 1 \mid \mu) p(\mu \mid D) d\mu
                 = \int_0^1 \mu p(\mu \mid D) d\mu
                 = \mathrm{E}[\mu \mid D]
                 = \frac{m + a}{N + a + b}
 \end{aligned}\]</div>
-
 <p>ベータ分布の平均値の式の <em>a</em> と <em>b</em> に観察数を足しただけ。
 事後分布の平均値は常に最尤推定値と事前平均の間にあり、観察数を上げていくと最尤推定の $\frac{m}{N}$ に近づく。
 分散は小さく(事後分布はシャープに)なっていく。</p>
-
 <hr>
-
 <p>データを生成する分布の上で事後平均を平均すると事前平均になる (Exercise 2.8):</p>
-
 <div>\[\begin{aligned}
 \mathrm{E}_D[\mathrm{E}_\theta[\theta \mid D]]
    &\equiv \int\left\{\int \theta p(\theta \mid D) d\theta\right\}p(D)dD\\
@@ -354,9 +293,7 @@ p(x = 1 \mid D) = \int_0^1 p(x = 1 \mid \mu) p(\mu \mid D) d\mu
    &= \int\left\{\int p(\theta,D) dD \right\} \theta d\theta\\
    &= \int p(\theta)\theta d\theta \equiv \mathrm{E}_\theta[\theta]
 \end{aligned}\]</div>
-
 <p>事後分散の平均と事後平均の分散を足すと事前分散になる:</p>
-
 <div>\[\begin{aligned}
 \mathrm{E}_D[\text{var}_\theta[\theta \mid D]] + \text{var}_D[\mathrm{E}_\theta[\theta \mid D]]
    &= \mathrm{E}_D[\mathrm{E}_\theta[\theta^2 \mid D] - \mathrm{E}_\theta[\theta \mid D]^2]
@@ -365,11 +302,8 @@ p(x = 1 \mid D) = \int_0^1 p(x = 1 \mid \mu) p(\mu \mid D) d\mu
    &= \mathrm{E}_\theta[\theta^2] - \mathrm{E}_\theta[\theta]^2\\
    &= \text{var}_\theta[\theta]
 \end{aligned}\]</div>
-
 <p>データによって例外はあるが、平均的には「事前分散 &gt; 事後分散」となる。</p>
-
-<h3 id="2-2-multinomial-variables">2.2 Multinomial Variables</h3>
-
+<h3 id="22-multinomial-variables">2.2 Multinomial Variables</h3>
 <dl>
 <dt><strong>多値変数</strong> $x \in {1, 2, &hellip;, K}$</dt>
 <dd>サイコロの目のように、3つ以上の値を取りうる確率変数。 e.g. $x \in {1,2,3,4,5,6}$</dd>
@@ -377,16 +311,12 @@ p(x = 1 \mid D) = \int_0^1 p(x = 1 \mid \mu) p(\mu \mid D) d\mu
 <dd>長さ <em>K</em> のベクトルのうち $x_k$ だけが1で、そのほかが0。
 例えばサイコロで3が出たらその観察値の表記は</dd>
 </dl>
-
 <div>\[
 \vec{x} = (0, 0, 1, 0, 0, 0)
 \]</div>
-
 <hr>
-
 <p>確率 $\mu_k$ で $x_k = 1$ になるとすると、
 サイコロを1回振るときの <em>x</em> の分布は以下のように表せる。</p>
-
 <div>\[\begin{aligned}
 p(\vec{x} \mid \vec{\mu})
   &= \prod _{k = 1}^K {\mu _k^{x _k}}\\
@@ -396,34 +326,24 @@ p(\vec{x} \mid \vec{\mu})
   &= \sum _{\vec{x}} p(\vec{x} \mid \vec{\mu}) \vec{x}
    = \vec{\mu}
 \end{aligned}\]</div>
-
 <hr>
-
 <p>サイコロを <em>N</em> 回振った観察データ <em>D</em> に対応する尤度関数は</p>
-
 <div>\[\begin{aligned}
 p(D \mid \vec{\mu}) = \prod_{n=1}^N \prod_{k=1}^K \mu_k^{x_{nk}}
                     = \prod_{k=1}^K \mu_k^{\sum_n x_{nk}}
                     = \prod_{k=1}^K \mu_k^{m_k}
 \end{aligned}\]</div>
-
 <p>$m_k$ は <em>N</em> 回のうち <em>k</em> が出た回数。
 出る順番や他の出目にはよらず、総和だけでよい、つまりこれも <strong>十分統計量</strong> の例。</p>
-
 <p>$\mu_k$ の和が1になるという拘束条件の下で対数尤度を最大化する
 $\mu_k$ を求めるには下記のようにラグランジュ未定乗数法を用いる。</p>
-
 <div>\[
 \mu_k^{ML} = - \frac{m_k}{\lambda} = \frac{m_k}{N}
 \]</div>
-
 <p>結局、観察総数 <em>N</em> のうちその目が出た数の割合が最尤推定値。</p>
-
 <div class="note">
 <p>ラグランジュ未定係数法 (Appendix E)</p>
-
 <p>極値を求めたい関数と拘束条件をそれぞれ <em>f</em>, <em>g</em> で表すと</p>
-
 <div>\[\begin{aligned}
 df &= \frac{\partial f}{\partial \mu_1} + ... + \frac{\partial f}{\partial \mu_K} = 0\\
 dg &= \frac{\partial g}{\partial \mu_1} + ... + \frac{\partial g}{\partial \mu_K} = 0
@@ -431,10 +351,8 @@ dg &= \frac{\partial g}{\partial \mu_1} + ... + \frac{\partial g}{\partial \mu_K
 <div>\[
 \frac{\partial f}{\partial \mu_k} + \lambda \frac{\partial g}{\partial \mu_k} = 0
 \]</div>
-
 <p>て感じで拘束条件のない連立方程式に置き換えられる。
 今回の例では</p>
-
 <div>\[\begin{aligned}
 f(\vec{\mu}) = \sum_{k=1}^K m_k \ln \mu_k;\;
 g(\vec{\mu}) = \sum_{k=1}^K \mu_k - 1
@@ -449,57 +367,43 @@ N + \lambda &= 0\\
 \end{aligned}\]</div>
 
 </div>
-
 <hr>
-
 <p><strong>多項分布</strong> (<em>Multinomial distribution</em>)</p>
-
 <p>観察総数とパラメータを条件とした、それぞれの出目の同時分布</p>
-
 <div>\[\begin{aligned}
 \text{Mult}(m_1, ..., m_K \mid \vec{\mu}, N)
 = \binom{N}{m_1, ..., m_K} \prod_{k=1}^{K} \mu_k^{m_k}
 = \frac{N!}{m_1! ... m_K!} \prod_{k=1}^{K} \mu_k^{m_k}
 \end{aligned}\]</div>
-
-<h4 id="2-2-1-dirichlet-distribution">2.2.1 Dirichlet distribution</h4>
-
+<h4 id="221-dirichlet-distribution">2.2.1 Dirichlet distribution</h4>
 <p>多項分布の共役事前分布を考えよう。</p>
-
 <p>式の形からするとおそらく $\mu_k$ の累乗にすればいいはず。
 ということで、積分して1になるように正規化してみる。</p>
-
 <div>\[\begin{aligned}
 \text{Dir}(\vec{\mu} \mid \vec{\alpha})
 = \frac{\Gamma(\sum_k{\alpha_k})}{\Gamma(\alpha_1)...\Gamma(\alpha_K)} \prod_{k=1}^K \mu_k^{\alpha_k - 1}
 \end{aligned}\]</div>
-
 <div class="note">
 <p><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.4.png">Figure 2.4</a></p>
-
-<p><p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.4.png"/ alt="Figure 2.4" width="200px"></p>
+<p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.4.png"/ alt="Figure 2.4" width="200px"></p>
 $0 \le \mu_k \le 1$ かつ $\sum_k \mu_k = 1$
-という制約下での <em>K</em> 変数のディリクレ分布は <em>K</em> – 1 次元の
-<strong>単体</strong> (<em>simplex</em>) になる。</p>
+という制約下での $K$ 変数のディリクレ分布は $K – 1$ 次元の
+<strong>単体</strong> (<em>simplex</em>) になる。
 
 </div>
-
 <div class="note">
 <p><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.5a.png">Figure 2.5a</a>, <a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.5b.png">Figure 2.5b</a>, <a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.5c.png">Figure 2.5c</a></p>
-
-<p><p>
+<p>
 <img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.5a.png"/ alt="Figure 2.5a" width="200px">
 <img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.5b.png"/ alt="Figure 2.5n" width="200px">
 <img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.5c.png"/ alt="Figure 2.5c" width="200px">
 </p>
-いろんな <em>α</em> でのディリクレ分布。
-simplexの面が水平軸方向に、密度が垂直軸になっている。</p>
+いろんな $α$ でのディリクレ分布。
+simplexの面が水平軸方向に、密度が垂直軸になっている。
 
 </div>
-
 <p>事後分布はこれと尤度の掛け算に比例する (2.40)。
 それを積分して1になるよう正規化する (2.41)。</p>
-
 <div>\[\begin{aligned}
 \text{posterior} &\propto \text{prior} \times \text{likelihood}\\
 p(\vec{\mu} \mid D, \vec{\alpha})
@@ -510,15 +414,12 @@ p(\vec{\mu} \mid D, \vec{\alpha})
    \prod_{k=1}^K {\mu_k^{\alpha_k + m_k - 1}}\\
 &= \text{Dir}(\vec{\mu} \mid \vec{\alpha} + \vec{m})
 \end{aligned}\]</div>
-
 <p>確かに事後分布もディリクレ分布の形をしている。
 <em>K</em> = 2 にすると二項分布・ベータ分布の話と一致。
 逆に言うと、ディリクレ分布はベータ分布を一般化した多変量ベータ分布と見なせる。
 超パラメータ $\alpha_k$ はサイコロで <em>k</em> が出た有効観察数のように解釈できる。</p>
-
 <div class="note">
 <p><strong>Johann Peter Gustav Lejeune Dirichlet</strong> (1805–1859)</p>
-
 <p>名前は &lsquo;le jeune de Richelet (リシュレから来た若者)&rsquo; に由来。
 最初の論文でフェルマーの最終定理の部分的な証明をして一躍有名に。
 作曲家メンデルスゾーンの妹と結婚した。</p>
@@ -555,8 +456,8 @@ p(\vec{\mu} \mid D, \vec{\alpha})
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -568,11 +469,11 @@ p(\vec{\mu} \mid D, \vec{\alpha})
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -591,6 +492,7 @@ p(\vec{\mu} \mid D, \vec{\alpha})
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -598,7 +500,6 @@ p(\vec{\mu} \mid D, \vec{\alpha})
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -610,20 +511,20 @@ p(\vec{\mu} \mid D, \vec{\alpha})
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

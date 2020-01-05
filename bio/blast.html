@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -90,130 +90,116 @@ BLAST
 </ul></nav>
 </header>
 
-
-
 <p>Basic Local Alignment Search Tool</p>
-
 <p><a href="http://blast.ncbi.nlm.nih.gov/">http://blast.ncbi.nlm.nih.gov/</a></p>
-
 <h2 id="blast-のインストール">blast+ のインストール</h2>
-
 <p><a href="/mac/homebrew.html">Homebrew</a> を使って
 <code>brew install blast</code> するのが楽チン。
 以下に紹介するのはそれ以外の茨の道。</p>
-
 <h3 id="linux-mac-binary">Linux, Mac (binary)</h3>
-
 <ol>
-<li><p><a href="ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST">ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST</a>
+<li>
+<p><a href="ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST">ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST</a>
 から最新版の <code>ncbi-blast-*-x64-linux.tar.gz</code>
 あるいは <code>ncbi-blast-*-universal-macosx.tar.gz</code>
 をダウンロードして展開:</p>
-
 <pre><code>wget -O- ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.2.30+-x64-linux.tar.gz | tar xz
-</code></pre></li>
-
-<li><p>しかるべきところに移動してシムリンク:</p>
-
+</code></pre>
+</li>
+<li>
+<p>しかるべきところに移動してシムリンク:</p>
 <pre><code>sudo mv ncbi-blast-2.2.30+ /usr/local/
 sudo ln -s /usr/local/ncbi-blast-2.2.30+ /usr/local/ncbi-blast
 </code></pre>
-
-<p>あとは <code>/usr/local/ncbi-blast/bin</code> にパスを通して使う。</p></li>
+<p>あとは <code>/usr/local/ncbi-blast/bin</code> にパスを通して使う。</p>
+</li>
 </ol>
-
 <h3 id="mac-source">Mac (source)</h3>
-
 <p><code>ncbi-blast-*.dmg</code> や <code>ncbi-blast-*-universal-macosx.tar.gz</code>
 は古いGCCでUniversalビルドされてるっぽいので、
 自分のマシンに最適化されるようにビルドしてみる。
 ホントに速いかどうかは試してない。</p>
-
 <p><a href="http://www.ncbi.nlm.nih.gov/books/NBK1763/#CmdLineAppsManual.Installation">http://www.ncbi.nlm.nih.gov/books/NBK1763/#CmdLineAppsManual.Installation</a></p>
-
 <ol>
-<li>Boost ライブラリをインストールする。このとき
+<li>
+<p>Boost ライブラリをインストールする。このとき
 <code>regex</code>, <code>spirit</code>, <code>system</code>, <code>filesystem</code>, <code>test</code>, <code>thread</code>
-をビルド対象に含める。 cf. <a href="/cxx/boost.html">Boost</a></li>
-<li><a href="ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST">ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST</a>
-から最新版の <code>ncbi-blast-*-src.tar.gz</code> をダウンロード</li>
-
-<li><p>展開して移動:</p>
-
+をビルド対象に含める。 cf. <a href="/cxx/boost.html">Boost</a></p>
+</li>
+<li>
+<p><a href="ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST">ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST</a>
+から最新版の <code>ncbi-blast-*-src.tar.gz</code> をダウンロード</p>
+</li>
+<li>
+<p>展開して移動:</p>
 <pre><code>tar xzf ncbi-blast-2.2.30+-src.tar.gz
 cd ncbi-blast-2.2.30+-src/c++/
-</code></pre></li>
-
-<li><p><code>ncbi-blast-*-universal-macosx.tar.gz</code> に入ってる
+</code></pre>
+</li>
+<li>
+<p><code>ncbi-blast-*-universal-macosx.tar.gz</code> に入ってる
 <code>ncbi_package_info</code> を参考に <code>configure</code> して <code>make</code>:</p>
-
 <pre><code>./configure --without-debug --with-strip --without-pcre --with-mt --with-flat-makefile --with-64 --with-ncbi-public --without-ccache --without-caution --without-makefile-auto-update --with-projects=scripts/projects/blast/project.lst --with-internal --prefix=/usr/local/ncbi-blast --with-boost=/usr/local/boost-gcc CC=gcc-4.9 CXX=g++-4.9
 </code></pre>
-
 <p><code>clang</code> (および Xcode のニセ <code>gcc</code>)
 では <code>configure</code> が通らないので本物の <code>gcc</code> を
-<a href="/mac/homebrew.html">Homebrew</a> などでインストールしておく。</p></li>
-
-<li><p>そのまま <code>make</code> してもダメらしいので
+<a href="/mac/homebrew.html">Homebrew</a> などでインストールしておく。</p>
+</li>
+<li>
+<p>そのまま <code>make</code> してもダメらしいので
 <code>Makefile.mk</code> の <code>-std=gnu++11</code> を消す:</p>
-
 <pre><code>sed -i.orig -e 's/-std=[a-z0-9+]\+//' ReleaseMT/build/Makefile.mk
-</code></pre></li>
-
-<li><p>ビルドしてインストール:</p>
-
+</code></pre>
+</li>
+<li>
+<p>ビルドしてインストール:</p>
 <pre><code>make
 sudo make install
-</code></pre></li>
+</code></pre>
+</li>
 </ol>
-
 <h3 id="共通設定">共通設定</h3>
-
 <ol>
-<li><p><code>.zshenv</code> 等でプログラムとデータベースのパスを設定:</p>
-
+<li>
+<p><code>.zshenv</code> 等でプログラムとデータベースのパスを設定:</p>
 <pre><code>export PATH=/usr/local/ncbi-blast/bin:${PATH}
 export BLASTDB=${HOME}/db/blast
 </code></pre>
-
 <p><code>~/.ncbirc</code> でも <code>BLASTDB</code> を指定できるっぽいけど
 普通にシェルの環境変数を使うほうがわかりやすいし、
-<code>makeblastdb</code> の出力先として参照できるので便利。</p></li>
-
-<li><p>確認:</p>
-
+<code>makeblastdb</code> の出力先として参照できるので便利。</p>
+</li>
+<li>
+<p>確認:</p>
 <pre><code>rehash
 blastn -version
-</code></pre></li>
+</code></pre>
+</li>
 </ol>
-
 <h2 id="ローカルデータベース構築">ローカルデータベース構築</h2>
-
 <p><code>-subject</code> オプションを使えばFASTAファイル同士でいきなり検索できるが、
 何度もやるならデータベース化しておいたほうが効率いいはず。</p>
-
 <p><a href="http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.makeblastdb_application_opt">http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.makeblastdb_application_opt</a></p>
-
 <ol>
-<li>データベースの置き場所をひとつ決め (e.g. <code>~/db/blast</code>)、
-上記のように環境変数 <code>BLASTDB</code> を設定しておく。</li>
-<li>FASTA形式の配列データを用意する (e.g. <a href="ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/">ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/</a> から <code>yeast.aa.gz</code>)</li>
-
-<li><p><code>makeblastdb</code> コマンドでBLASTデータベース形式に変換:</p>
-
+<li>
+<p>データベースの置き場所をひとつ決め (e.g. <code>~/db/blast</code>)、
+上記のように環境変数 <code>BLASTDB</code> を設定しておく。</p>
+</li>
+<li>
+<p>FASTA形式の配列データを用意する (e.g. <a href="ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/">ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/</a> から <code>yeast.aa.gz</code>)</p>
+</li>
+<li>
+<p><code>makeblastdb</code> コマンドでBLASTデータベース形式に変換:</p>
 <pre><code>makeblastdb -in yeast.nt -out ${BLASTDB}/yeast.nt -dbtype nucl -parse_seqids -hash_index
 makeblastdb -in yeast.aa -out ${BLASTDB}/yeast.aa -dbtype prot -parse_seqids -hash_index
 </code></pre>
-
 <p>圧縮ファイルは直接読めないので、展開して標準入力に流し込む。
 このとき <code>-title</code> と <code>-out</code> は必須の引数になる:</p>
-
 <pre><code>gunzip -c mydata.fa.gz | makeblastdb -in - -title mydata -out ${BLASTDB}/mydata -dbtype nucl -hash_index
-</code></pre></li>
+</code></pre>
+</li>
 </ol>
-
 <p><code>-in</code> (stdin)</p>
-
 <dl>
 <dt><code>-dbtype</code> (<code>prot</code>)</dt>
 <dd><code>prot</code> or <code>nucl</code></dd>
@@ -228,21 +214,13 @@ makeblastdb -in yeast.aa -out ${BLASTDB}/yeast.aa -dbtype prot -parse_seqids -ha
 <dd>出力先のベースネーム。
 標準入力を使う場合は必須オプション。</dd>
 </dl>
-
 <p><code>-taxid</code></p>
-
 <h2 id="プログラム実行">プログラム実行</h2>
-
 <h3 id="共通オプション">共通オプション</h3>
-
 <p><a href="http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.options_common_to_all_blast">http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.options_common_to_all_blast</a></p>
-
 <p><code>-db</code></p>
-
 <p><code>-query</code> (stdin)</p>
-
 <p><code>-out</code> (stdout)</p>
-
 <dl>
 <dt><code>-evalue</code> (10.0)</dt>
 <dd>これを下回るE値を持つものだけ集める。</dd>
@@ -253,12 +231,10 @@ makeblastdb -in yeast.aa -out ${BLASTDB}/yeast.aa -dbtype prot -parse_seqids -ha
 <dd>データベース化してないFASTAファイルを検索対象として直接指定。
 ただし <code>-num_threads</code> を指定しても並列化できない。</dd>
 </dl>
-
 <p><code>-num_threads</code> (1)</p>
-
 <dl>
 <dt><code>-outfmt</code> (0)</dt>
-<dd><p>0 = pairwise,<br>
+<dd>0 = pairwise,<br>
 1 = query-anchored showing identities,<br>
 2 = query-anchored no identities,<br>
 3 = flat query-anchored, show identities,<br>
@@ -269,16 +245,14 @@ makeblastdb -in yeast.aa -out ${BLASTDB}/yeast.aa -dbtype prot -parse_seqids -ha
 8 = Text ASN.1,<br>
 9 = Binary ASN.1<br>
 <strong>10</strong> = Comma-separated values<br>
-11 = BLAST archive format (ASN.1)</p>
-
+11 = BLAST archive format (ASN.1)
 <p>TSV/CSVテーブル(6, 7, 10)の場合は出力内容を細かく指定できる。デフォルトは
 <code>-outfmt &quot;7 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore&quot;</code></p>
-
 <p><code>qseqid</code>: Query Seq-id<br>
 <code>qgi</code>: Query GI<br>
 <code>qacc</code>: Query accesion<br>
 <code>sseqid</code>: Subject Seq-id<br>
-<code>sallseqid</code>: All subject Seq-id(s), separated by a &lsquo;;&rsquo;<br>
+<code>sallseqid</code>: All subject Seq-id(s), separated by a &lsquo;;'<br>
 <code>sgi</code>: Subject GI<br>
 <code>sallgi</code>: All subject GIs<br>
 <code>sacc</code>: Subject accession<br>
@@ -300,48 +274,37 @@ makeblastdb -in yeast.aa -out ${BLASTDB}/yeast.aa -dbtype prot -parse_seqids -ha
 <code>gapopen</code>: Number of gap openings<br>
 <code>gaps</code>: Total number of gap<br>
 <code>ppos</code>: Percentage of positive-scoring matches<br>
-<code>frames</code>: Query and subject frames separated by a &lsquo;/&rsquo;<br>
+<code>frames</code>: Query and subject frames separated by a &lsquo;/'<br>
 <code>qframe</code>: Query frame<br>
 <code>sframe</code>: Subject frame<br>
 <code>btop</code>: Blast traceback operations (BTOP)<br>
-<code>staxids</code>: unique Subject Taxonomy ID(s), separated by a &lsquo;;&rsquo;(in numerical order)<br>
-<code>sscinames</code>: unique Subject Scientific Name(s), separated by a &lsquo;;&rsquo;<br>
-<code>scomnames</code>: unique Subject Common Name(s), separated by a &lsquo;;&rsquo;<br>
+<code>staxids</code>: unique Subject Taxonomy ID(s), separated by a &lsquo;;'(in numerical order)<br>
+<code>sscinames</code>: unique Subject Scientific Name(s), separated by a &lsquo;;'<br>
+<code>scomnames</code>: unique Subject Common Name(s), separated by a &lsquo;;'<br>
 <code>sblastnames</code>: unique Subject Blast Name(s), separated by a &lsquo;;&rsquo; (in alphabetical order)<br>
 <code>sskingdoms</code>: unique Subject Super Kingdom(s), separated by a &lsquo;;&rsquo; (in alphabetical order)<br>
 <code>stitle</code>: Subject Title<br>
-<code>salltitles</code>: All Subject Title(s), separated by a &lsquo;&lt;&gt;&lsquo;<br>
+<code>salltitles</code>: All Subject Title(s), separated by a &lsquo;&lt;&gt;'<br>
 <code>sstrand</code>: Subject Strand<br>
 <code>qcovs</code>: Query Coverage Per Subject<br>
-<code>qcovhsp</code>: Query Coverage Per HSP</p></dd>
+<code>qcovhsp</code>: Query Coverage Per HSP</p>
+</dd>
 </dl>
-
 <h3 id="blastn"><code>blastn</code></h3>
-
 <p>Nucleotide query vs Nucleotide subject</p>
-
 <p><a href="http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.blastn_application_options">http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.blastn_application_options</a></p>
-
 <dl>
 <dt><code>-word_size</code> (11, short: 7, mega: 28)</dt>
 <dd>最初にexact matchさせる配列の長さ。
 短いほどいろんな開始地点から探せるが、遅くなる。</dd>
 </dl>
-
 <p><code>-gapopen</code> (5, mega: 0)</p>
-
 <p><code>-gapextend</code> (2, mega: none)</p>
-
 <p><code>-reward</code> (2, short: 1, mega: 1)</p>
-
 <p><code>-penalty</code> (-3, mega: -2)</p>
-
 <p><code>-perc_identity</code> (0)</p>
-
 <p><code>-ungapped</code></p>
-
 <hr>
-
 <dl>
 <dt><code>blastp</code></dt>
 <dd>Protein query vs Protein subject
@@ -387,8 +350,8 @@ makeblastdb -in yeast.aa -out ${BLASTDB}/yeast.aa -dbtype prot -parse_seqids -ha
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -400,11 +363,11 @@ makeblastdb -in yeast.aa -out ${BLASTDB}/yeast.aa -dbtype prot -parse_seqids -ha
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -423,6 +386,7 @@ makeblastdb -in yeast.aa -out ${BLASTDB}/yeast.aa -dbtype prot -parse_seqids -ha
 <label for="menu-bio" class="active">Biology</label>
 <ul>
 <li class="active"><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -430,7 +394,6 @@ makeblastdb -in yeast.aa -out ${BLASTDB}/yeast.aa -dbtype prot -parse_seqids -ha
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -442,20 +405,20 @@ makeblastdb -in yeast.aa -out ${BLASTDB}/yeast.aa -dbtype prot -parse_seqids -ha
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

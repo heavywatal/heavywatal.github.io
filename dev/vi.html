@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -90,22 +90,15 @@ vi
 </ul></nav>
 </header>
 
-
-
 <h2 id="基礎知識">基礎知識</h2>
-
 <p>オリジナルがvi、改良版がvim (Vi IMproved)。
 ただし、shの正体がbashであるように、LinuxやMacに入ってるviの正体はvim。
 vimのデフォルトは拡張を無効にしたvi互換モード。
 つまり設定をいじらなければ起動コマンドはviでもvimでも同じ？</p>
-
 <p>文字入力はインサートモード、それ以外はすべてノーマルモードで行う。
 起動時はノーマルモード。</p>
-
 <h2 id="ノーマルモード">ノーマルモード</h2>
-
 <h3 id="とりあえず覚えてないと死ぬやつ">とりあえず覚えてないと死ぬやつ</h3>
-
 <table>
 <thead>
 <tr>
@@ -113,52 +106,42 @@ vimのデフォルトは拡張を無効にしたvi互換モード。
 <th>action</th>
 </tr>
 </thead>
-
 <tbody>
 <tr>
 <td><kbd>i</kbd></td>
 <td>インサートモードに移行</td>
 </tr>
-
 <tr>
 <td><kbd>:w</kbd></td>
 <td>保存</td>
 </tr>
-
 <tr>
 <td><kbd>:q</kbd></td>
 <td>終了</td>
 </tr>
-
 <tr>
 <td><kbd>:q!</kbd></td>
 <td>保存しないで強制終了</td>
 </tr>
-
 <tr>
 <td><kbd>u</kbd></td>
 <td>元に戻す</td>
 </tr>
-
 <tr>
 <td><kbd>x</kbd></td>
 <td>1文字削除 (行は消せない)</td>
 </tr>
-
 <tr>
 <td><kbd>dd</kbd></td>
 <td>行カット</td>
 </tr>
-
 <tr>
 <td><kbd>ctrl-c</kbd></td>
 <td>中断</td>
 </tr>
 </tbody>
 </table>
-
 <h3 id="移動">移動</h3>
-
 <table>
 <thead>
 <tr>
@@ -166,89 +149,70 @@ vimのデフォルトは拡張を無効にしたvi互換モード。
 <th>action</th>
 </tr>
 </thead>
-
 <tbody>
 <tr>
 <td><kbd>hjkl</kbd></td>
 <td><kbd>←↓↑→</kbd></td>
 </tr>
-
 <tr>
 <td><kbd>b</kbd> <kbd>B</kbd></td>
 <td>単語頭</td>
 </tr>
-
 <tr>
 <td><kbd>w</kbd> <kbd>W</kbd></td>
 <td>次の単語頭</td>
 </tr>
-
 <tr>
 <td><kbd>0</kbd></td>
 <td>行頭</td>
 </tr>
-
 <tr>
 <td><kbd>^</kbd></td>
 <td>行頭 (非空白)</td>
 </tr>
-
 <tr>
 <td><kbd>$</kbd></td>
 <td>行末</td>
 </tr>
-
 <tr>
 <td><kbd>H</kbd></td>
 <td>画面先頭</td>
 </tr>
-
 <tr>
 <td><kbd>L</kbd></td>
 <td>画面末尾</td>
 </tr>
-
 <tr>
 <td><kbd>gg</kbd></td>
 <td>ファイル先頭</td>
 </tr>
-
 <tr>
 <td><kbd>G</kbd></td>
 <td>ファイル末尾</td>
 </tr>
-
 <tr>
 <td><kbd>ctrl-b</kbd></td>
 <td>前ページ</td>
 </tr>
-
 <tr>
 <td><kbd>ctrl-u</kbd></td>
 <td>半ページ上</td>
 </tr>
-
 <tr>
 <td><kbd>ctrl-d</kbd></td>
 <td>半ページ下</td>
 </tr>
-
 <tr>
 <td><kbd>ctrl-f</kbd></td>
 <td>次ページ</td>
 </tr>
 </tbody>
 </table>
-
 <p>数字と組み合わせられる。
 e.g., <kbd>3j</kbd>で3行下</p>
-
 <p><kbd>e</kbd>は単語末じゃなくてそのひとつ前に移動するので気持ち悪い。</p>
-
 <p>カーソルの移動だけでなく、コピーなどの動作対象の指定にも使う。</p>
-
 <h3 id="コピペ">コピペ</h3>
-
 <table>
 <thead>
 <tr>
@@ -256,39 +220,31 @@ e.g., <kbd>3j</kbd>で3行下</p>
 <th>action</th>
 </tr>
 </thead>
-
 <tbody>
 <tr>
 <td><kbd>d</kbd></td>
 <td>カット</td>
 </tr>
-
 <tr>
 <td><kbd>y</kbd></td>
 <td>コピー</td>
 </tr>
-
 <tr>
 <td><kbd>P</kbd></td>
 <td>ペースト</td>
 </tr>
 </tbody>
 </table>
-
 <p>カットとコピーは対象を指定する必要がある。</p>
-<div class="highlight"><pre class="chroma"><code class="language-nohighlight" data-lang="nohighlight">d3l  # 右に3文字カット; 3dl でもいい
+<pre><code class="language-nohighlight" data-lang="nohighlight">d3l  # 右に3文字カット; 3dl でもいい
 diw  # カーソル位置の単語をカット
-yy   # 1行まるまるコピー</code></pre></div>
-<p><kbd>p</kbd>はカーソルの右に挿入される謎仕様なので却下。
+yy   # 1行まるまるコピー
+</code></pre><p><kbd>p</kbd>はカーソルの右に挿入される謎仕様なので却下。
 <kbd>P</kbd>も挿入後のカーソル位置が気持ち悪いけど仕方ない。</p>
-
 <p>範囲選択を見ながら操作したい場合は下記のヴィジュアルモードを使う。</p>
-
-<h2 id="インサートモード-insert">インサートモード <code>-- INSERT --</code></h2>
-
+<h2 id="インサートモード----insert---">インサートモード <code>-- INSERT --</code></h2>
 <p>キー入力しかしない。
 カーソルキーで移動はできるが、基本的にはしないつもりで。</p>
-
 <dl>
 <dt>ノーマルモードへの戻り方</dt>
 <dd><kbd>esc</kbd>: 標準だが遠すぎるので却下。</dd>
@@ -296,12 +252,9 @@ yy   # 1行まるまるコピー</code></pre></div>
 <dd><kbd>ctrl-c</kbd>: 最も押しやすいし覚えやすい。
 インサートモードでのあらゆる動作を中断して戻るので注意。</dd>
 </dl>
-
-<h2 id="ヴィジュアルモード-visual">ヴィジュアルモード <code>-- VISUAL --</code></h2>
-
+<h2 id="ヴィジュアルモード----visual---">ヴィジュアルモード <code>-- VISUAL --</code></h2>
 <p><kbd>v</kbd> で始まる範囲選択モード。
 Emacsでいう<kbd>ctrl-space</kbd>。</p>
-
 <p><kbd>shift-v</kbd> で行単位選択。
 <kbd>ctrl-v</kbd> で矩形選択。</p>
 
@@ -335,8 +288,8 @@ Emacsでいう<kbd>ctrl-space</kbd>。</p>
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -348,11 +301,11 @@ Emacsでいう<kbd>ctrl-space</kbd>。</p>
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -371,6 +324,7 @@ Emacsでいう<kbd>ctrl-space</kbd>。</p>
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -378,7 +332,6 @@ Emacsでいう<kbd>ctrl-space</kbd>。</p>
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -390,20 +343,20 @@ Emacsでいう<kbd>ctrl-space</kbd>。</p>
 <label for="menu-dev" class="active">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li class="active"><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>

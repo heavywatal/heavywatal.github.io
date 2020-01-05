@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.63.0-DEV" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -90,10 +90,7 @@ C&#43;&#43;高速化
 </ul></nav>
 </header>
 
-
-
 <h2 id="はじめに">はじめに</h2>
-
 <ul>
 <li>速いプログラムで得られるメリットを超えるようなコストを払わないように。
 まずは動くプログラムを書いて目的を達成することが大事。
@@ -106,19 +103,14 @@ C&#43;&#43;高速化
 まずは標準ライブラリとかBoostを探してみる。
 あとGitHubでスターが多いやつとか。</li>
 </ul>
-
 <h2 id="頑張れコンパイラ">頑張れコンパイラ</h2>
-
 <p>Intelの icc でビルドされたプログラムは速いらしい。
 gcc や clang の最適化技術も着々と進歩しており、
 新しいコンパイラを使うほうがその恩恵を受けられる。</p>
-
 <h3 id="最適化オプション">最適化オプション</h3>
-
 <p><a href="https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html">https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html</a></p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">g++ -O3 main.cpp</code></pre></div>
-<h3 id="コンパイル時定数-constexpr">コンパイル時定数 <code>constexpr</code></h3>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">g++ -O3 main.cpp
+</code></pre></div><h3 id="コンパイル時定数-constexpr">コンパイル時定数 <code>constexpr</code></h3>
 <p>コンパイル時に計算できるものを予め計算して定数にしておくことで、
 実行時の計算を減らすことができる。
 C++11では明示的に <code>constexpr</code> 修飾することができるので積極的に使うべし。
@@ -126,37 +118,30 @@ C++11では明示的に <code>constexpr</code> 修飾することができるの
 C++11を使えない場合でも、
 定数同士の四則演算などはまとめておけばコンパイラが計算してくれるはず。</p>
 <div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// 掛け算も割り算も毎回計算
-</span><span class="c1"></span><span class="k">return</span> <span class="mf">4.0</span> <span class="o">*</span> <span class="n">M_PI</span> <span class="o">*</span> <span class="n">std</span><span class="o">::</span><span class="n">pow</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">;</span>
+</span><span class="c1"></span><span class="k">return</span> <span class="mf">4.0</span> <span class="o">*</span> <span class="n">M_PI</span> <span class="o">*</span> <span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">pow</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">;</span>
 
 <span class="c1">// コンパイル時定数を掛けるだけ
 </span><span class="c1"></span><span class="k">constexpr</span> <span class="kt">double</span> <span class="n">c</span> <span class="o">=</span> <span class="mf">4.0</span> <span class="o">*</span> <span class="n">M_PI</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">;</span>
-<span class="k">return</span> <span class="n">c</span> <span class="o">*</span> <span class="n">std</span><span class="o">::</span><span class="n">pow</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
-</code></pre></div>
-<p>また、四則演算の中でも割り算は特に遅いらしいので、
+<span class="k">return</span> <span class="n">c</span> <span class="o">*</span> <span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">pow</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="p">;</span>
+</code></pre></div><p>また、四則演算の中でも割り算は特に遅いらしいので、
 逆数のかけ算になるような書き方のほうが高速になるかもしれない。</p>
-
 <h3 id="インライン展開">インライン展開</h3>
-
 <p>関数の呼び出しにはコストがかかり、
 コードが短くて何度も呼ばれる関数では特にそのコストの割合が高くて馬鹿にできない。
 呼び出される予定のところにコンパイルの段階で関数を展開してやること
 (=インライン展開) でそのコストを無くせる。</p>
-
 <p>ファイルをまたいで使う関数の場合は定義宣言を
 <code>ソース.cpp</code> ではなく <code>ヘッダ.h</code> に置き、頭に <code>inline</code> を付ける。
 メンバ関数の場合はクラス定義の中で定義宣言にするだけでよい。
 ただしそのように書いてもコンパイラへのヒントになるだけで、
 インライン展開に必要でも十分でもない。</p>
-
 <p><code>-O2</code> では <code>-finline-small-functions</code> がオンになり、
 <code>-O3</code> では <code>-finline-functions</code> がオンになる。
 実行ファイルのサイズがデカくなるし、コンパイルは遅くなるので、バランスを考える。</p>
 <div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="kr">inline</span> <span class="kt">int</span> <span class="nf">pow2</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="n">x</span> <span class="o">*=</span> <span class="n">x</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">*</span><span class="o">=</span> <span class="n">x</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
-<h3 id="関数オブジェクト">関数オブジェクト</h3>
-
+</code></pre></div><h3 id="関数オブジェクト">関数オブジェクト</h3>
 <p>関数オブジェクトとは、<code>operator()</code> を定義した <code>class</code> または <code>struct</code> のこと。
 <code>std::for_each()</code> や <code>std::transform()</code> の最後の引数に関数を渡す場合など、
 何度も呼び出される小さい関数については、
@@ -164,76 +149,64 @@ C++11を使えない場合でも、
 コンパイラによる最適化がしやすいらしい。
 メンバ変数として値を保持できるので、
 引数のやり取りやメモリの確保・開放が少なくてすむという場面もありそう。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">class</span><span class="err"> </span><span class="nc">isAboveThreshold</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">class</span> <span class="nc">isAboveThreshold</span> <span class="p">{</span>
   <span class="k">public</span><span class="o">:</span>
-    <span class="n">isAboveThreshold</span><span class="p">(</span><span class="k">const</span> <span class="kt">double</span> <span class="n">t</span><span class="p">)</span><span class="o">:</span> <span class="n">threshold_</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
-    <span class="kt">bool</span> <span class="nf">operator</span><span class="p">()(</span><span class="k">const</span> <span class="kt">double</span> <span class="n">x</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="n">isAboveThreshold</span><span class="p">(</span><span class="k">const</span> <span class="kt">double</span> <span class="n">t</span><span class="p">)</span><span class="o">:</span> <span class="n">threshold_</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="nf">operator</span><span class="p">(</span><span class="p">)</span><span class="p">(</span><span class="k">const</span> <span class="kt">double</span> <span class="n">x</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
         <span class="k">return</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">threshold_</span><span class="p">;</span>
     <span class="p">}</span>
   <span class="k">private</span><span class="o">:</span>
     <span class="k">const</span> <span class="kt">double</span> <span class="n">threshold_</span><span class="p">;</span>
-<span class="p">};</span>
+<span class="p">}</span><span class="p">;</span>
 
-<span class="n">std</span><span class="o">::</span><span class="n">transform</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">result</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">isAboveThreshold</span><span class="p">(</span><span class="mf">3.14</span><span class="p">));</span>
-</code></pre></div>
-<p>C++11からはラムダ式が便利</p>
+<span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">transform</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="p">)</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(</span><span class="p">)</span><span class="p">,</span> <span class="n">result</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="p">)</span><span class="p">,</span> <span class="n">isAboveThreshold</span><span class="p">(</span><span class="mf">3.14</span><span class="p">)</span><span class="p">)</span><span class="p">;</span>
+</code></pre></div><p>C++11からはラムダ式が便利</p>
 <div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">const</span> <span class="kt">double</span> <span class="n">threshold</span> <span class="o">=</span> <span class="mf">3.14</span><span class="p">;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">transform</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">result</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span>
-               <span class="p">[</span><span class="n">threshold</span><span class="p">](</span><span class="kt">double</span> <span class="n">x</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">bool</span> <span class="p">{</span><span class="k">return</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">;});</span>
-</code></pre></div>
-<h2 id="余計な一時オブジェクトを作らない">余計な一時オブジェクトを作らない</h2>
-
+<span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">transform</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="p">)</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(</span><span class="p">)</span><span class="p">,</span> <span class="n">result</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="p">)</span><span class="p">,</span>
+               <span class="p">[</span><span class="n">threshold</span><span class="p">]</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">)</span> <span class="o">-</span><span class="o">&gt;</span> <span class="kt">bool</span> <span class="p">{</span><span class="k">return</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">;</span><span class="p">}</span><span class="p">)</span><span class="p">;</span>
+</code></pre></div><h2 id="余計な一時オブジェクトを作らない">余計な一時オブジェクトを作らない</h2>
 <p>普通にプログラムを書くと、思わぬところで余計な一時オブジェクトが作られることになる。
 メモリもcpu時間ももったいないので、なるべく避けよう。</p>
-
-<h3 id="const-参照渡し-or-ポインタ渡し"><code>const</code>参照渡し or ポインタ渡し</h3>
-
+<h3 id="const参照渡し-or-ポインタ渡し"><code>const</code>参照渡し or ポインタ渡し</h3>
 <p>オブジェクトの値渡しにはコピーのコストが生じるので、
 STLコンテナや自作クラスなどは参照渡しのほうが高速。
 ただし参照を解決するコストも無いわけではないので、
 <code>int</code>や<code>double</code>のような単純な型はむしろ普通の値渡しがよい。</p>
-
 <p>参照渡しされた仮引数の中身を関数内で変更すると、
 呼び出し元の実引数の値も変更されることになる。
 変更するつもりがない場合は明示的に <code>const</code> をつけて受け取るようにすると安全</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="kt">void</span> <span class="nf">do_something</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">huge_array</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="kt">void</span> <span class="nf">do_something</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="o">&amp;</span> <span class="n">huge_array</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// コピーせず本体への参照のみ受け取る。
 </span><span class="c1"></span>    <span class="c1">// constがついているので、変更しようとするとコンパイルエラー
 </span><span class="c1"></span><span class="p">}</span>
-</code></pre></div>
-<p>引数の中身を変更するつもりがある場合はポインタを受け取るようにすると、
+</code></pre></div><p>引数の中身を変更するつもりがある場合はポインタを受け取るようにすると、
 呼び出すときに <code>&amp;</code> が必要となるので意図が伝わりやすい。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="kt">void</span> <span class="nf">do_something</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;*</span> <span class="n">huge_array</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="kt">void</span> <span class="nf">do_something</span><span class="p">(</span><span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="o">*</span> <span class="n">huge_array</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// コピーせずポインタを受け取る。
 </span><span class="c1"></span>    <span class="c1">// huge_arrayの変更は呼び出し元にも影響する。
 </span><span class="c1"></span><span class="p">}</span>
 
-<span class="n">do_something</span><span class="p">(</span><span class="o">&amp;</span><span class="n">some_array</span><span class="p">);</span>  <span class="c1">// ああ、この配列は変更されるんだな
-</span></code></pre></div>
-<h3 id="ムーブセマンティクス-c-11">ムーブセマンティクス (C++11)</h3>
-
+<span class="n">do_something</span><span class="p">(</span><span class="o">&amp;</span><span class="n">some_array</span><span class="p">)</span><span class="p">;</span>  <span class="c1">// ああ、この配列は変更されるんだな
+</span></code></pre></div><h3 id="ムーブセマンティクス-c11">ムーブセマンティクス (C++11)</h3>
 <p>受け取ったものを関数の中で変更して返すような関数を作るとき、
 引数の渡し方も受け取り方も3パターンずつ考えられる。</p>
-
 <ul>
 <li>渡し方
-
 <ul>
 <li>lvalue (<code>vec0</code>)</li>
 <li>xvalue (<code>std::move(vec0)</code>)</li>
 <li>prvalue (<code>Vector{}</code>)</li>
-</ul></li>
+</ul>
+</li>
 <li>受け取り方
-
 <ul>
 <li>const lvalue参照 (<code>const Vector&amp;</code>)</li>
 <li>lvalue値 (<code>Vector</code>)</li>
 <li>const lvalue参照 (<code>const Vector&amp;</code>) とrvalue参照 (<code>Vector&amp;&amp;</code>) のオーバーロード</li>
-</ul></li>
 </ul>
-
+</li>
+</ul>
 <p><a href="https://github.com/heavywatal/scribble/blob/master/cxx/move.cpp">それぞれの組み合わせでコピーとムーブが何回起こるかテストするコード</a></p>
-
 <p>const lvalue参照で受け取ったものを変更するためにはコピーが必要になるので、
 普通のlvalue渡しでは問題ないけどrvalue渡しには適さない。
 rvalue参照受け取りでオーバーロードすると、
@@ -242,51 +215,38 @@ rvalue参照受け取りでオーバーロードすると、
 lvalue値受け取りの関数はrvalueを受け取るときにはコピーを生じない。
 オーバーロードの場合と比べてムーブが余計に1回生じるが、
 そのコストと定義の手軽さを天秤に掛けて考慮する価値はある。</p>
-
-<p><code>return</code>最適化にはムーブすらしない&rdquo;copy elision&rdquo;とムーブの2種類があって、
+<p><code>return</code>最適化にはムーブすらしない&quot;copy elision&quot;とムーブの2種類があって、
 ローカル変数やprvalueを返す場合は両方を試み、
 引数を返す場合は後者のみを試みるらしい。</p>
-
 <p>関数から値を返すときにムーブ返ししたくなるところだが、
 多くの場合コンパイラがうまいことやってくれるのでわざわざ
 <code>return std::move(output);</code> などと書く必要はない。
 やってしまうと、むしろコンパイラによる最適化を妨げるかもよと警告される。
 ただし、返る変数と関数定義で型が一致せず暗黙の型変換が挟まる場合は、
 明示的にムーブ返しする必要がある。</p>
-
 <p>関連記事はたくさん見つかるが、特に読みやすく参考になったのはこちら:</p>
-
 <blockquote>
-<p><a href="http://yohhoy.hatenablog.jp/entry/2012/12/15/120839">本当は怖くないムーブセマンティクス - yohhoyの日記（別館）</a> <br>
+<p><a href="http://yohhoy.hatenablog.jp/entry/2012/12/15/120839">本当は怖くないムーブセマンティクス - yohhoyの日記（別館）</a><br>
 <a href="http://d.hatena.ne.jp/yohhoy/20120524/p1">参照渡し or 値渡し？ - yohhoyの日記</a></p>
 </blockquote>
-
 <h3 id="noexcept"><code>noexcept</code></h3>
-
 <p>クラスに自前のデストラクタやコピーコンストラクタを書くと、
 暗黙のムーブコンストラクタが作られなくなり、
 ただ移動したいときにもコピーが行われてしまう。
 自前のムーブコンストラクタを書いても、
 <code>noexcept</code> が添えられていないと <code>std::move_if_noexcept()</code> による移動
 (例えば <code>std::vector</code> のリアロケーション) ではコピーされてしまう。</p>
-
 <p><a href="https://github.com/heavywatal/scribble/blob/master/cxx/move_if_noexcept.cpp">ムーブコンストラクタの定義の仕方でコピー・ムーブのされ方が変わることを確かめるコード</a></p>
-
 <p>コンストラクタ類を必要に応じて書き足していくと忘れそうなので、
 <code>Cls (Cls&amp;&amp;) noexcept = default;</code>
 のような明示的default/deleteを最初に全部書いてしまうほうがいいかも。
 さらに <code>static_assert()</code> でコンパイル時に
 <code>std::is_nothrow_move_constructible</code> などをチェックしておくと安心。</p>
-
 <p>それ以外の部分でも「この関数は例外を投げない」
 と宣言したほうがコンパイラにとって最適化しやすくなる。</p>
-
 <h2 id="コンテナ">コンテナ</h2>
-
 <h3 id="用途に合わせる">用途に合わせる</h3>
-
 <p><a href="http://en.cppreference.com/w/cpp/container">http://en.cppreference.com/w/cpp/container</a></p>
-
 <dl>
 <dt><code>std::array</code></dt>
 <dd>Cの配列に便利なメンバ関数を持たせたようなクラス。
@@ -319,78 +279,63 @@ C++で配列作るならとりあえずこれ。
 <dd>順序を気にしないぶん <code>std::set</code> や <code>std::map</code> より高速。
 ただしハッシュ関数の準備など多少めんどい。</dd>
 </dl>
-
 <h3 id="メモリは一気に確保">メモリは一気に確保</h3>
-
 <p><code>std::vector</code> の <code>push_back()</code> は勝手にメモリ領域を確保してくれるので、
 大きさの心配をする必要がなくて便利。
 これは多くの場合、領域が足りなくなる都度「別のところに倍の領域を確保してコピー」
 という処理をすることによって行われる。
 始め1、次2、4、8、16、、、という具合に。
 なので、10000個の要素を格納すると分かっている場合には、始めからそれだけ確保しておくと速い。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span><span class="p">;</span>
-<span class="n">v</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="mi">10000</span><span class="p">);</span>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span><span class="p">;</span>
+<span class="n">v</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span><span class="p">;</span>
 <span class="c1">// then push_back() many times
-</span></code></pre></div>
-<h2 id="ループ">ループ</h2>
-
+</span></code></pre></div><h2 id="ループ">ループ</h2>
 <h3 id="継続条件">継続条件</h3>
-
 <p><code>for</code> や <code>while</code> を回すときの継続条件式は回る度に評価されるので意外とコストになるかも。
 イテレータで回すときの <code>v.end()</code> も毎回呼び出されるので、
 ループの中身が軽い処理の場合には無視できない差になるかもしれない。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">v</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">v</span><span class="p">.</span><span class="n">size</span><span class="p">(</span><span class="p">)</span><span class="p">;</span> <span class="o">+</span><span class="o">+</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// v.size() many times!
 </span><span class="c1"></span><span class="p">}</span>
 
-<span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">v</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">v</span><span class="p">.</span><span class="n">size</span><span class="p">(</span><span class="p">)</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="o">+</span><span class="o">+</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// v.size() only once
 </span><span class="c1"></span><span class="p">}</span>
 
-<span class="k">for</span> <span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">it</span><span class="o">=</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v_end</span><span class="o">=</span><span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">it</span><span class="o">!=</span><span class="n">v_end</span><span class="p">;</span> <span class="o">++</span><span class="n">it</span><span class="p">)</span> <span class="p">{</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="o">:</span><span class="o">:</span><span class="n">iterator</span> <span class="n">it</span><span class="o">=</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="p">)</span><span class="p">,</span> <span class="n">v_end</span><span class="o">=</span><span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(</span><span class="p">)</span><span class="p">;</span> <span class="n">it</span><span class="o">!</span><span class="o">=</span><span class="n">v_end</span><span class="p">;</span> <span class="o">+</span><span class="o">+</span><span class="n">it</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// v.end() only once
 </span><span class="c1"></span><span class="p">}</span>
 
 <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="nl">x</span><span class="p">:</span> <span class="n">v</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// C++11 range-based for
 </span><span class="c1"></span><span class="p">}</span>
-</code></pre></div>
-<h3 id="前置インクリメント">前置インクリメント</h3>
-
+</code></pre></div><h3 id="前置インクリメント">前置インクリメント</h3>
 <p>後置インクリメント <code>i++</code> でも
 前置インクリメント <code>++i</code> でも <code>for</code> ループの結果は変わらない。
 が、<code>i++</code> だと前の値を記憶してからプラスする（一時オブジェクトが作られる）ので、
 <code>++i</code> のほうがいいらしい。特にイテレータのとき。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">for</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">it</span><span class="o">=</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">it</span><span class="o">!=</span><span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">it</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">for</span> <span class="p">(</span><span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="o">:</span><span class="o">:</span><span class="n">iterator</span> <span class="n">it</span><span class="o">=</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="p">)</span><span class="p">;</span> <span class="n">it</span><span class="o">!</span><span class="o">=</span><span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(</span><span class="p">)</span><span class="p">;</span> <span class="o">+</span><span class="o">+</span><span class="n">it</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// do something
 </span><span class="c1"></span><span class="p">}</span>
-</code></pre></div>
-<h3 id="出来る限り外で処理">出来る限り外で処理</h3>
-
+</code></pre></div><h3 id="出来る限り外で処理">出来る限り外で処理</h3>
 <p><code>if-else</code> や <code>try-catch</code> のブロックをループの外で大きく取れないか、
 一時変数の定義や演算などをループの外で予めやっておけないか、確認すべし。</p>
-
 <h2 id="入出力">入出力</h2>
-
 <h3 id="標準入出力">標準入出力</h3>
-
 <p>Cストリーム(<code>std::printf</code> とか)とC++ストリーム(<code>std::cout</code> とか)
 が混在するプログラムでもちゃんと関数が呼ばれた順に入出力を行うため、
 デフォルトではこれら２つのストリームが同期するようになっている。
 必要がなければ切っておく。</p>
-
 <p><code>std::cin</code> はデフォルトで <code>std::cout</code> に結びつけられてて、
 <code>std::cin</code> される度に <code>std::flush</code> されてしまうらしいので、
 そうならないように切り離す。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#</span><span class="cp">include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
 </span><span class="cp"></span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">ios</span><span class="o">:</span><span class="o">:</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">)</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
-<h2 id="関連書籍">関連書籍</h2>
-
+</code></pre></div><h2 id="関連書籍">関連書籍</h2>
 <p><a href="https://www.amazon.co.jp/Effective-Modern-_C-11-14%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%A0%E3%82%92%E9%80%B2%E5%8C%96%E3%81%95%E3%81%9B%E3%82%8B42%E9%A0%85%E7%9B%AE/dp/4873117364/ref=as_li_ss_il?_encoding=UTF8&psc=1&refRID=2W1SJD1QE3Z43HGNHQPV&linkCode=li2&tag=heavywatal-22&linkId=b5ae72d9c28f98283a01af1b110e1c8c" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873117364&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li2&o=9&a=4873117364" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 <a href="https://www.amazon.co.jp/Effective-3-ADDISON-WESLEY-PROFESSIONAL-COMPUTI/dp/4621066099/ref=as_li_ss_il?ie=UTF8&linkCode=li2&tag=heavywatal-22&linkId=920cd9757c2ac53cfd19d947c4d1d72b" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4621066099&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li2&o=9&a=4621066099" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 <a href="https://www.amazon.co.jp/gp/product/4894714108/ref=as_li_ss_il?ie=UTF8&linkCode=li2&tag=heavywatal-22&linkId=dc3cda30d8eee4b5b5193d3835261ad6" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4894714108&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li2&o=9&a=4894714108" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
@@ -426,8 +371,8 @@ C++で配列作るならとりあえずこれ。
 <li><a href="/rstats/ggbio.html">ggbio</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>
 <li><a href="/rstats/topgo.html">topGO</a></li>
-<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
 <li><a href="/rstats/plyr.html">plyr</a></li>
 <li><a href="/rstats/reshape2.html">reshape2</a></li>
 </ul>
@@ -439,11 +384,11 @@ C++で配列作るならとりあえずこれ。
 <li><a href="/python/pip.html">pip</a></li>
 <li><a href="/python/ipython.html">IPython</a></li>
 <li><a href="/python/biopython.html">BioPython</a></li>
-<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
-<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/concurrent.html">concurrent.futures</a></li>
 <li><a href="/python/copy.html">copy</a></li>
 <li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
 <li><a href="/python/setuptools.html">setuptools</a></li>
 </ul>
 
@@ -462,6 +407,7 @@ C++で配列作るならとりあえずこれ。
 <label for="menu-bio">Biology</label>
 <ul>
 <li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
 <li><a href="/bio/meme.html">MEME</a></li>
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
@@ -469,7 +415,6 @@ C++で配列作るならとりあえずこれ。
 <li><a href="/bio/samtools.html">SAMtools</a></li>
 <li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
-<li><a href="/bio/dadi.html">dadi</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
 <li><a href="/bio/linear_algebra.html">線形代数</a></li>
 <li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
@@ -481,20 +426,20 @@ C++で配列作るならとりあえずこれ。
 <label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/cmake.html">CMake</a></li>
 <li><a href="/dev/emacs.html">Emacs</a></li>
 <li><a href="/dev/git.html">Git</a></li>
 <li><a href="/dev/hugo.html">Hugo</a></li>
-<li><a href="/dev/mercurial.html">Mercurial</a></li>
-<li><a href="/dev/qt.html">Qt</a></li>
-<li><a href="/dev/torque.html">TORQUE</a></li>
-<li><a href="/dev/autotools.html">autoconf, automake</a></li>
 <li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mercurial.html">Mercurial</a></li>
 <li><a href="/dev/mount.html">mount</a></li>
 <li><a href="/dev/nano.html">nano</a></li>
+<li><a href="/dev/qt.html">Qt</a></li>
 <li><a href="/dev/rsync.html">rsync</a></li>
 <li><a href="/dev/ssh.html">ssh</a></li>
 <li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>
