@@ -14,11 +14,11 @@ Split, Apply, Combine
 Rの中から `install.packages("plyr")` でインストールし、
 使う前に `library(plyr)` で読み込む。
 
-<div class="warning">{{<markdownify>}}
+{{<div class="warning">}}
 data.frame 処理には [dplyr]({{< relref "dplyr.md" >}})、
 list, vector 処理には [purrr]({{< relref "purrr.md" >}})
 がある今となっては、このパッケージを使うべき場面はもう無さそう。
-{{</markdownify>}}</div>
+{{</div>}}
 
 -   <http://plyr.had.co.nz/>
 -   <http://www.jstatsoft.org/v40/i01>

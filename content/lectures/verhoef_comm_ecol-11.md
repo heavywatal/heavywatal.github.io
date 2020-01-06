@@ -121,29 +121,29 @@ Publisher
 -   そうでなくても遺伝的浮動によって毎世代失われていく
 -   遺伝的変異を持つことが明確に適応的（絶滅率を下げたり）なときのみ集団中に維持される
 
-<div class="note">{{<markdownify>}}
+{{<div class="note">}}
 突然変異の大部分が有害だと著者は述べているが、
 むしろ中立な場合が多いというのが一般的な認識では？
-{{</markdownify>}}</div>
+{{</div>}}
 
-<div class="note">{{<markdownify>}}
+{{<div class="note">}}
 「絶滅リスクを下げる」という将来の集団にかかるメリットのために遺伝的変異が維持される、
 と考えるのは進化学的におかしい。
 結構デリケートな話題なので少なくともこんなにさらっと流すべきではない。
-{{</markdownify>}}</div>
+{{</div>}}
 
-<div class="note">{{<markdownify>}}
+{{<div class="note">}}
 適応的な理由で多型が維持されやすくなる機構としては以下のようなものが考えられる
 
 -   **超優勢**: ヘテロな遺伝子型が有利
 -   **頻度依存選択**: 稀なほど有利
-{{</markdownify>}}</div>
+{{</div>}}
 
-<div class="note">{{<markdownify>}}
+{{<div class="note">}}
 "集団サイズ x 突然変異率" がそこそこ高ければ、
 特に適応的意義がなくても **mutation-selection-drift balance**
 によってある程度の変異は維持される。
-{{</markdownify>}}</div>
+{{</div>}}
 
 ------------------------------------------------------------------------
 
@@ -165,11 +165,11 @@ Publisher
         複雑な(多種類の養分を含む)環境ほど適応度の平均も分散も大きな遺伝子型が進化した。
         集団内の個体差を見ると「得意分野の異なる半端なジェネラリスト」たちが共存していた。
 
-    <div class="note">{{<markdownify>}}
+    {{<div class="note">}}
 語源は Darwin 1859 "On the Origins of Species"
 
 It is interesting to contemplate an **entangled bank**, clothed with many plants of many kinds, with birds singing on the bushes, with various insects flitting about, and with worms crawling through the damp earth, and to reflect that these elaborately constructed forms, so different from each other, and dependent on each other in so complex a manner, have all been produced by laws acting around us.
-    {{</markdownify>}}</div>
+    {{</div>}}
 
 **Red Queen (赤の女王) 仮説**
 :   寄生者や感染症など、種特異性が高く進化速度の早い敵に対しては、
@@ -187,14 +187,14 @@ It is interesting to contemplate an **entangled bank**, clothed with many plants
     [Gamfeldt et al. 2005](http://www.jstor.org/stable/3450727)
     :   フジツボのキプリス幼生の定着成功率
 
-    <div class="note">{{<markdownify>}}
+    {{<div class="note">}}
 最初に提唱したのは [Van Valen 1973](http://www.jstor.org/stable/2407116)
 
 化石記録を見てみると、種分化が成立してからの年代と絶滅確率には相関がなかった。
 適応しきれば絶滅しにくくなる、ということはなく、
 どんな種も絶滅せずその場に留まるために常に進化を強いられてるんじゃないか、という。
 元ネタはもちろん「鏡の国のアリス」
-    {{</markdownify>}}</div>
+    {{</div>}}
 
 ------------------------------------------------------------------------
 
@@ -220,7 +220,7 @@ It is interesting to contemplate an **entangled bank**, clothed with many plants
 :   *R. ridibunda* と *R. lessonae* のその雑種である *R. esculenta*
     を高密度・低密度の2環境で、単独・混合飼育した場合に変態までの時間がどうなるか調べた。
 
-    <div class="note">{{<markdownify>}}
+    {{<div class="note">}}
 ハイブリッドジェネシスによるヘミクローン繁殖
 
 他種のオスの精子を取り込んで雑種の受精卵を作るが、
@@ -230,12 +230,12 @@ It is interesting to contemplate an **entangled bank**, clothed with many plants
 (図は [Neaves and Bumann 2011 Trends Genet](http://dx.doi.org/10.1016/j.tig.2010.12.002))
 
 ![image](/_static/verhoef/neaves2011.png){height="400px"}
-    {{</markdownify>}}</div>
+    {{</div>}}
 
-<div class="note">{{<markdownify>}}
+{{<div class="note">}}
 [2013年2月の Nature](http://www.nature.com/nature/journal/v494/n7436/abs/nature11883.html)
 にも宿主両生類の種多様性が寄生性吸虫類の伝播を抑制して疾患を低減するという報告
-{{</markdownify>}}</div>
+{{</div>}}
 
 ### 11.2.2 遺伝的変異の定量化
 
@@ -266,7 +266,7 @@ It is interesting to contemplate an **entangled bank**, clothed with many plants
     単純に量的形質のばらつきのプロキシとしてではなく、
     ちゃんと分離して情報を得るべし。
 
-<div class="note">{{<markdownify>}}
+{{<div class="note">}}
 集団間の分化の度合いを測る F<sub>ST</sub> と Q<sub>ST</sub>
 
 F<sub>ST</sub>
@@ -277,7 +277,7 @@ Q<sub>ST</sub>
 
 Q<sub>ST</sub> &gt; F<sub>ST</sub> ならば集団間で異なる表現型が好まれるような多様化選択\
 Q<sub>ST</sub> &lt; F<sub>ST</sub> ならば集団間で同じ表現型好まれるような純化選択
-{{</markdownify>}}</div>
+{{</div>}}
 
 ### 11.2.3 遺伝的多様性と表現型多様性の関係
 
@@ -323,7 +323,7 @@ e.g. ショウジョウバエの熱応答 ([Krebs and Holbrook 2001](http://dx.d
 **canalization** (運河化、しいて言うなら)
 :   環境が多少ぶれても普通の表現型を発現するように進化的に発生過程が安定化すること
 
-<div class="note">{{<markdownify>}}
+{{<div class="note">}}
 **epigenetic landscape**
 
 本文で引用されてる [Schlichting and Pigliucci 1998](http://www.amazon.co.jp/gp/product/0878937994/ref=as_li_ss_tl?ie=UTF8&camp=247&creative=7399&creativeASIN=0878937994&linkCode=as2&tag=heavywatal-22) はいい本だけどやはりそこは
@@ -332,7 +332,7 @@ Waddington 1957 に触れてほしいところ。
 ![image](/_static/verhoef/epigenetic_landscape.gif){height="200px"}
 
 ![image](/_static/verhoef/behind_epigenetic_landscape.jpg){height="200px"}
-{{</markdownify>}}</div>
+{{</div>}}
 
 Figure 11.2b
 :   環境中央付近ではどの遺伝子型も同じような表現型応答を示している

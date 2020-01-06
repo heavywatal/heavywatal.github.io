@@ -240,14 +240,14 @@ f_T(t)\; &=\; \sum _{k=1}^\infty f_T(t \mid K=k)\; P[K=k] \\
          &=\; \lambda _1 e^{-\lambda _1 t}
 \end{aligned}\]</div>
 
-<div class="note">{{<markdownify>}}
+{{<div class="note">}}
 Taylor series of $e^x$
 
 <div>\[\begin{aligned}
 e^x \;&=\; 1 + \frac x 1 + \frac {x^2} {2!} + \frac {x^3} {3!} + \cdots \\
       &=\; \sum _{k=0}^\infty \frac {x^k} {k!}
 \end{aligned}\]</div>
-{{</markdownify>}}</div>
+{{</div>}}
 
 Filtered Poisson process = Poisson process with rate $\lambda p\; (=\lambda _1)$
 :   -   total occurrence rate $\lambda = \lambda _1 + \lambda _2$

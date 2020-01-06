@@ -193,11 +193,11 @@ dplyr::summarise_all(
     # 3          5.5         4.2          1.4         0.2  setosa
     ```
 
-    <div class="warning">{{<markdownify>}}
+    {{<div class="warning">}}
 評価結果が `NA` となる行は除去される。
 特に不等号を使うときやや直感に反するので要注意。
 e.g., `filter(gene != "TP53")`
-{{</markdownify>}}</div>
+{{</div>}}
 
 :   複数列で評価する亜種:<br>
     `filter_all(.tbl, .vars_predicate)`<br>
