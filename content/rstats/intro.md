@@ -8,7 +8,18 @@ tags = ["r"]
 
 ## 初学者向け講義資料
 
-### 2019-10 東北大学
+### 2019-12 [Rによるデータ前処理実習](/slides/tmd2019/)
+
+東京医科歯科大学 データ関連人材育成プログラム
+
+1.  [入門: 前処理とは。Rを使うメリット。Rの基本](/slides/tmd2019/1-introduction.html)
+1.  [データ構造の処理: 抽出、集約、結合、変形など](/slides/tmd2019/2-structure.html)
+1.  [データ内容の処理: 数値、文字列、日時など](/slides/tmd2019/3-content.html)
+1.  [実践: 現実の問題に対処してみる](/slides/tmd2019/4-practice.html)
+
+### 2019-10 [Hands-on R Lecture for Makino Lab](/slides/makino2019r/)
+
+東北大学
 
 <ol start="0">
 <li><a href="/slides/makino2019r/0-why-r.html">Why do we use R?</a>
@@ -19,7 +30,9 @@ tags = ["r"]
 <li><a href="/slides/makino2019r/5-git.html">File management with Git+GitHub </a>
 </ol>
 
-### 2018-05 名古屋大学
+### 2018-05 [Rにやらせて楽しよう — データの可視化と下ごしらえ](/slides/nagoya2018/)
+
+名古屋大学
 
 <ol start="0">
 <li><a href="/slides/nagoya2018/0-why-r.html">どうしてRを使うの？</a> (12分)
