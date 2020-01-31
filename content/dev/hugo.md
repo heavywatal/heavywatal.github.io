@@ -25,7 +25,7 @@ http://gohugo.io/overview/quickstart/
     例えばMacなら[Homebrew]({{< relref "homebrew.md" >}})で一発:
     `brew install hugo`
 
-    私は `HTML_USE_XHTML` を切りたいのでソースコードを落として改変:
+    バージョンを細かく指定したりソースコードを改変したりしたい場合はgitから:
     ```sh
     export GOPATH=${HOME}/.go
     export PATH=${PATH}:${GOPATH}/bin
@@ -33,7 +33,6 @@ http://gohugo.io/overview/quickstart/
     cd $HOME/src
     git clone https://github.com/gohugoio/hugo.git
     cd hugo
-    vim helpers/content.go  # remove HTML_USE_XHTML
     go install --tags extended
     ```
     `--tags extended` はSASS/SCSS対応版をコンパイルするオプション。
@@ -84,7 +83,7 @@ https://gohugo.io/overview/configuration/
 
 http://themes.gohugo.io/
 
-デフォルトのテーマというものが存在しないのがつらい。
+デフォルトのテーマというものが存在しないのがちょっと厳しい。
 ユーザーによっていろいろ投稿されてるけどほとんどがブログ用途。
 ということで非ブログ用に簡単なものを自作して使っている:
 
@@ -106,21 +105,27 @@ https://gohugo.io/troubleshooting/build-performance/
 
 ### Markdown
 
-正式な仕様が未だに存在せず、いくつかの方言(flavor)が存在する。
-
 [CommonMark](http://spec.commonmark.org/)
-: 標準仕様決定に向けて議論中。
+: "Markdown"の正式な仕様というものが存在せず、
+  いくつかの方言(flavor)が乱立していたが、
+  現在ではこれが事実上の標準仕様となりつつある。
+  [2017年からGFMがこれに準拠することになった](https://githubengineering.com/a-formal-spec-for-github-markdown/)のもよかった。
 
 [GitHub Flavored Markdown (GFM)](https://github.github.com/gfm/)
-: いま最もよく書かれているのはこれかな？
+: CommonMarkに準拠しつついくらかの機能を追加したもの。
   [Atom]({{< relref "atom.md" >}})でも標準サポート。
   基本的な書き方は[GitHub Helpのページ](https://help.github.com/articles/basic-writing-and-formatting-syntax/)が読みやすい。
-  CommonMarkに準拠することが[2017年に発表された](https://githubengineering.com/a-formal-spec-for-github-markdown/)。
 
 [Blackfriday](https://github.com/russross/blackfriday)
-: HugoのMarkdownエンジンはこれ。
-  残念ながら上記2つとも微妙に違うが、
-  開発中のv2ではCommonMark準拠の流れもあるっぽい。
+: HugoのMarkdownエンジンは長らくこれだった。
+  CommonMark準拠じゃないし、
+  リストまわりでの不具合が放置されてるし、
+  などなど不満が募るうちにGoldmarkに取って代わられた。
+
+[Goldmark](https://github.com/yuin/goldmark/)
+: 2019年末からHugoはこっちに移行した。
+  基本的にはCommonMark準拠だけど、
+  デフォルト設定での生HTMLコードの扱いがちょっと変。
 
 
 ### [Front matter](https://gohugo.io/content/front-matter/)
