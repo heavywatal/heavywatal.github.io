@@ -107,14 +107,13 @@ Hugo — 静的サイトを高速生成
 <p><a href="https://gohugo.io/getting-started/installing">インストール方法はいろいろ用意されてる</a>。
 例えばMacなら<a href="/mac/homebrew.html">Homebrew</a>で一発:
 <code>brew install hugo</code></p>
-<p>私は <code>HTML_USE_XHTML</code> を切りたいのでソースコードを落として改変:</p>
+<p>バージョンを細かく指定したりソースコードを改変したりしたい場合はgitから:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">export</span> <span class="nv">GOPATH</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.go
 <span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span>:<span class="si">${</span><span class="nv">GOPATH</span><span class="si">}</span>/bin
 mkdir <span class="nv">$HOME</span>/src
 <span class="nb">cd</span> <span class="nv">$HOME</span>/src
 git clone https://github.com/gohugoio/hugo.git
 <span class="nb">cd</span> hugo
-vim helpers/content.go  <span class="c1"># remove HTML_USE_XHTML</span>
 go install --tags extended
 </code></pre></div><p><code>--tags extended</code> はSASS/SCSS対応版をコンパイルするオプション。</p>
 </li>
@@ -153,7 +152,7 @@ normal <span class="ge">*italic*</span> **bold**
 <p><code>config.toml</code></p>
 <h2 id="theme">Theme</h2>
 <p><a href="http://themes.gohugo.io/">http://themes.gohugo.io/</a></p>
-<p>デフォルトのテーマというものが存在しないのがつらい。
+<p>デフォルトのテーマというものが存在しないのがちょっと厳しい。
 ユーザーによっていろいろ投稿されてるけどほとんどがブログ用途。
 ということで非ブログ用に簡単なものを自作して使っている:</p>
 <p><a href="https://github.com/heavywatal/hugo-theme-nonblog">https://github.com/heavywatal/hugo-theme-nonblog</a></p>
@@ -167,19 +166,25 @@ normal <span class="ge">*italic*</span> **bold**
 オプションを付けるとどのへんを変えたら良いか教えてくれる。</p>
 <h2 id="content">Content</h2>
 <h3 id="markdown">Markdown</h3>
-<p>正式な仕様が未だに存在せず、いくつかの方言(flavor)が存在する。</p>
 <dl>
 <dt><a href="http://spec.commonmark.org/">CommonMark</a></dt>
-<dd>標準仕様決定に向けて議論中。</dd>
+<dd>&ldquo;Markdown&quot;の正式な仕様というものが存在せず、
+いくつかの方言(flavor)が乱立していたが、
+現在ではこれが事実上の標準仕様となりつつある。
+<a href="https://githubengineering.com/a-formal-spec-for-github-markdown/">2017年からGFMがこれに準拠することになった</a>のもよかった。</dd>
 <dt><a href="https://github.github.com/gfm/">GitHub Flavored Markdown (GFM)</a></dt>
-<dd>いま最もよく書かれているのはこれかな？
+<dd>CommonMarkに準拠しつついくらかの機能を追加したもの。
 <a href="/dev/atom.html">Atom</a>でも標準サポート。
-基本的な書き方は<a href="https://help.github.com/articles/basic-writing-and-formatting-syntax/">GitHub Helpのページ</a>が読みやすい。
-CommonMarkに準拠することが<a href="https://githubengineering.com/a-formal-spec-for-github-markdown/">2017年に発表された</a>。</dd>
+基本的な書き方は<a href="https://help.github.com/articles/basic-writing-and-formatting-syntax/">GitHub Helpのページ</a>が読みやすい。</dd>
 <dt><a href="https://github.com/russross/blackfriday">Blackfriday</a></dt>
-<dd>HugoのMarkdownエンジンはこれ。
-残念ながら上記2つとも微妙に違うが、
-開発中のv2ではCommonMark準拠の流れもあるっぽい。</dd>
+<dd>HugoのMarkdownエンジンは長らくこれだった。
+CommonMark準拠じゃないし、
+リストまわりでの不具合が放置されてるし、
+などなど不満が募るうちにGoldmarkに取って代わられた。</dd>
+<dt><a href="https://github.com/yuin/goldmark/">Goldmark</a></dt>
+<dd>2019年末からHugoはこっちに移行した。
+基本的にはCommonMark準拠だけど、
+デフォルト設定での生HTMLコードの扱いがちょっと変。</dd>
 </dl>
 <h3 id="front-matterhttpsgohugoiocontentfront-matter"><a href="https://gohugo.io/content/front-matter/">Front matter</a></h3>
 <p>タイトルや日付などのメタデータをファイルの先頭で記述する。
