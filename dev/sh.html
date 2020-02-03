@@ -90,7 +90,12 @@ Heavy Watal
 </ul></nav>
 </header>
 
+<p><a href="https://www.gnu.org/software/bash/manual/html_node/">https://www.gnu.org/software/bash/manual/html_node/</a></p>
 <h2 id="if-then">if-then</h2>
+<ul>
+<li><a href="https://www.gnu.org/software/bash/manual/html_node/Conditional-Constructs.html">Conditional Constructs</a></li>
+<li><a href="https://www.gnu.org/software/bash/manual/html_node/Bash-Conditional-Expressions.html">Bash Conditional Expressions</a></li>
+</ul>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># basic</span>
 <span class="k">if</span> <span class="nb">test</span> -e ~<span class="p">;</span> <span class="k">then</span>
   <span class="nb">echo</span> <span class="s1">&#39;test -e ~&#39;</span>
@@ -101,7 +106,7 @@ Heavy Watal
   <span class="nb">echo</span> <span class="s1">&#39;[ -e ~ ]&#39;</span>
 <span class="k">fi</span>
 
-<span class="c1"># bash/zsh extention; not POSIX</span>
+<span class="c1"># bash/zsh extension; not POSIX</span>
 <span class="k">if</span> <span class="o">[</span><span class="o">[</span> -e ~ <span class="o">]</span><span class="o">]</span><span class="p">;</span> <span class="k">then</span>
   <span class="nb">echo</span> <span class="s1">&#39;[[ -e ~ ]]&#39;</span>
 <span class="k">fi</span>
@@ -142,6 +147,31 @@ Heavy Watal
 <span class="o">[</span> <span class="nv">$one</span> -le <span class="nv">$two</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;$one -le $two&#39;</span>
 <span class="o">[</span> <span class="nv">$two</span> -gt <span class="nv">$one</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;$two -gt $one&#39;</span>
 <span class="o">[</span> <span class="nv">$two</span> -ge <span class="nv">$one</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;$two -ge $one&#39;</span>
+</code></pre></div><h2 id="looping-constructshttpswwwgnuorgsoftwarebashmanualhtml_nodelooping-constructshtml"><a href="https://www.gnu.org/software/bash/manual/html_node/Looping-Constructs.html">Looping Constructs</a></h2>
+<p>基本形。クオートもカッコも不要:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="k">for</span> x in <span class="m">1</span> <span class="m">2</span> 3<span class="p">;</span> <span class="k">do</span>
+  <span class="nb">echo</span> <span class="nv">$x</span>
+<span class="k">done</span>
+<span class="c1"># 1</span>
+<span class="c1"># 2</span>
+<span class="c1"># 3</span>
+</code></pre></div><p><code>for x in &quot;1 2 3&quot;</code> のようにクオートすれば当然1要素扱いになるが、
+一旦変数に代入したあとの挙動はシェルによって異なるので要注意:
+zshでは1要素扱い、dashやbashではスペース区切りで分割。</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">STRING</span><span class="o">=</span><span class="s2">&#34;1 2 3&#34;</span>
+<span class="k">for</span> x in <span class="nv">$STRING</span><span class="p">;</span> <span class="k">do</span>
+  <span class="nb">echo</span> <span class="nv">$x</span>
+<span class="k">done</span>
+</code></pre></div><h2 id="special-parametershttpswwwgnuorgsoftwarebashmanualhtml_nodespecial-parametershtml"><a href="https://www.gnu.org/software/bash/manual/html_node/Special-Parameters.html">Special Parameters</a></h2>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">$0</span>        <span class="c1"># The full path of the script</span>
+<span class="nv">$1</span>        <span class="c1"># First argument</span>
+<span class="nv">$#</span>        <span class="c1"># The number of arguments ($0 is not included)</span>
+<span class="nv">$*</span>        <span class="c1"># 全ての引数。&#34;$*&#34; はひと括り: &#34;$1 $2 $3&#34;</span>
+<span class="nv">$@</span>        <span class="c1"># 全ての引数。&#34;$@&#34; は個別括り: &#34;$1&#34; &#34;$2&#34; &#34;$3&#34;</span>
+<span class="nv">$-</span>        <span class="c1"># シェルの起動時のフラグ、setコマンドを使って設定したフラグの一覧</span>
+<span class="nv">$$</span>        <span class="c1"># シェル自身のプロセスID</span>
+<span class="nv">$!</span>        <span class="c1"># シェルが最後に起動したバックグラウンドプロセスのプロセスID</span>
+<span class="nv">$?</span>        <span class="c1"># 最後に実行したコマンドのexit値</span>
 </code></pre></div><h2 id="parameter-expansionhttpswwwgnuorgsoftwarebashmanualhtml_nodeshell-parameter-expansionhtml"><a href="https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html">Parameter Expansion</a></h2>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">string</span><span class="o">=</span>abcdef
 <span class="nb">echo</span> <span class="si">${</span><span class="nv">string</span><span class="si">}</span>   <span class="c1"># abcdef</span>
@@ -184,8 +214,25 @@ Heavy Watal
 <span class="si">${</span><span class="nv">VAR</span><span class="p">:</span><span class="p">=WORD</span><span class="si">}</span>  <span class="c1"># return WORD; WORD is assigned to VAR</span>
 <span class="si">${</span><span class="nv">VAR</span><span class="p">:</span><span class="p">?WORD</span><span class="si">}</span>  <span class="c1"># display error and exit</span>
 <span class="si">${</span><span class="nv">VAR</span><span class="p">:</span><span class="p">+WORD</span><span class="si">}</span>  <span class="c1"># nothing occurs; otherwise return WORD</span>
-</code></pre></div><h2 id="arrayshttpswwwgnuorgsoftwarebashmanualhtml_nodearrayshtml"><a href="https://www.gnu.org/software/bash/manual/html_node/Arrays.html">Arrays</a></h2>
-<p>bashとzshで添字の挙動が異なる。</p>
+</code></pre></div><h2 id="misc">Misc.</h2>
+<h3 id="command-substitutionhttpswwwgnuorgsoftwarebashmanualhtml_nodecommand-substitutionhtml"><a href="https://www.gnu.org/software/bash/manual/html_node/Command-Substitution.html">Command Substitution</a></h3>
+<p>コマンドの結果を文字列として受け取る方法は
+<code>`command`</code> と <code>$(command)</code> の2つあるが、
+後者のほうが入れ子など柔軟に使えるのでより好ましい。</p>
+<h3 id="arithmetic-expansionhttpswwwgnuorgsoftwarebashmanualhtml_nodearithmetic-expansionhtml"><a href="https://www.gnu.org/software/bash/manual/html_node/Arithmetic-Expansion.html">Arithmetic Expansion</a></h3>
+<p>簡単な数値計算は <code>$((expression))</code> でできる。</p>
+<p><a href="https://www.gnu.org/software/bash/manual/html_node/Shell-Arithmetic.html">Shell Arithmetic</a></p>
+<h3 id="process-substitutionhttpswwwgnuorgsoftwarebashmanualhtml_nodeprocess-substitutionhtml"><a href="https://www.gnu.org/software/bash/manual/html_node/Process-Substitution.html">Process Substitution</a></h3>
+<p>1つのコマンドから出力を受け取るだけならパイプ <code>command1 | command2</code> で足りるけど、
+2つ以上から受け取りたいときはプロセス置換 <code>command2 &lt;(command1a) &lt;(command1b)</code> を使う。</p>
+<p>標準入力や標準出力を受け付けないコマンドでも、
+ファイル名を引数で指定できればプロセス置換で対応できる。
+例えばgzip圧縮・展開の一時ファイルを作りたくない場合とか:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">somecommand infile outfile
+gunzip -c infile.gz <span class="p">|</span> somecommand /dev/stdin /dev/stdout <span class="p">|</span> gzip -c &gt;outfile.gz
+somecommand &lt;<span class="o">(</span>gunzip -c infile.gz<span class="o">)</span> &gt;<span class="o">(</span>gzip -c &gt;outfile.gz<span class="o">)</span>
+</code></pre></div><h3 id="arrayshttpswwwgnuorgsoftwarebashmanualhtml_nodearrayshtml"><a href="https://www.gnu.org/software/bash/manual/html_node/Arrays.html">Arrays</a></h3>
+<p>POSIXでは未定義の拡張機能であり、bashとzshでも挙動が異なる。</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">array</span><span class="o">=</span><span class="o">(</span>a b c d e f<span class="o">)</span>  <span class="c1"># bash        | zsh</span>
 <span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="si">}</span>        <span class="c1"># a           | a b c d e f</span>
 <span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[0]</span><span class="si">}</span>     <span class="c1"># a           |</span>
@@ -212,24 +259,7 @@ Heavy Watal
 <span class="c1"># d</span>
 <span class="c1"># e</span>
 <span class="c1"># f</span>
-</code></pre></div><h2 id="special-parametershttpswwwgnuorgsoftwarebashmanualhtml_nodespecial-parametershtml"><a href="https://www.gnu.org/software/bash/manual/html_node/Special-Parameters.html">Special Parameters</a></h2>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">$0</span>        <span class="c1"># The full path of the script</span>
-<span class="nv">$1</span>        <span class="c1"># First argument</span>
-<span class="nv">$#</span>        <span class="c1"># The number of arguments ($0 is not included)</span>
-<span class="nv">$*</span>        <span class="c1"># 全ての引数。&#34;$*&#34; はひと括り: &#34;$1 $2 $3&#34;</span>
-<span class="nv">$@</span>        <span class="c1"># 全ての引数。&#34;$@&#34; は個別括り: &#34;$1&#34; &#34;$2&#34; &#34;$3&#34;</span>
-<span class="nv">$-</span>        <span class="c1"># シェルの起動時のフラグ、setコマンドを使って設定したフラグの一覧</span>
-<span class="nv">$$</span>        <span class="c1"># シェル自身のプロセスID</span>
-<span class="nv">$!</span>        <span class="c1"># シェルが最後に起動したバックグラウンドプロセスのプロセスID</span>
-<span class="nv">$?</span>        <span class="c1"># 最後に実行したコマンドのexit値</span>
-</code></pre></div><h2 id="misc">Misc.</h2>
-<h3 id="command">Command</h3>
-<p>コマンドの結果を文字列として受け取る方法は
-<code>`command</code>` と <code>$(command)</code> の2つあるが、
-後者のほうが入れ子など柔軟に使える。</p>
-<h3 id="arithmetic">Arithmetic</h3>
-<p>足し算くらいなら <code>$((expression))</code> で</p>
-<h2 id="関連書籍">関連書籍</h2>
+</code></pre></div><h2 id="関連書籍">関連書籍</h2>
 <p><a href="https://www.amazon.co.jp/%E6%96%B0%E3%81%97%E3%81%84Linux%E3%81%AE%E6%95%99%E7%A7%91%E6%9B%B8-%E5%A4%A7%E8%A7%92-%E7%A5%90%E4%BB%8B/dp/4797380942/ref=as_li_ss_il?ie=UTF8&qid=1487931139&sr=8-2&keywords=linux&linkCode=li3&tag=heavywatal-22&linkId=2c6b6bd4a39dec96e1c6caed3bc52116" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4797380942&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4797380942" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
 
 </article>
