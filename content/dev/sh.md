@@ -5,8 +5,13 @@ tags = ["shell"]
   parent = "dev"
 +++
 
+https://www.gnu.org/software/bash/manual/html_node/
+
 
 ## if-then
+
+- [Conditional Constructs](https://www.gnu.org/software/bash/manual/html_node/Conditional-Constructs.html)
+- [Bash Conditional Expressions](https://www.gnu.org/software/bash/manual/html_node/Bash-Conditional-Expressions.html)
 
 ```sh
 # basic
@@ -19,7 +24,7 @@ if [ -e ~ ]; then
   echo '[ -e ~ ]'
 fi
 
-# bash/zsh extention; not POSIX
+# bash/zsh extension; not POSIX
 if [[ -e ~ ]]; then
   echo '[[ -e ~ ]]'
 fi
@@ -72,6 +77,43 @@ two=2
 [ $one -le $two ] && echo '$one -le $two'
 [ $two -gt $one ] && echo '$two -gt $one'
 [ $two -ge $one ] && echo '$two -ge $one'
+```
+
+
+## [Looping Constructs](https://www.gnu.org/software/bash/manual/html_node/Looping-Constructs.html)
+
+基本形。クオートもカッコも不要:
+```sh
+for x in 1 2 3; do
+  echo $x
+done
+# 1
+# 2
+# 3
+```
+
+`for x in "1 2 3"` のようにクオートすれば当然1要素扱いになるが、
+一旦変数に代入したあとの挙動はシェルによって異なるので要注意:
+zshでは1要素扱い、dashやbashではスペース区切りで分割。
+```sh
+STRING="1 2 3"
+for x in $STRING; do
+  echo $x
+done
+```
+
+## [Special Parameters](https://www.gnu.org/software/bash/manual/html_node/Special-Parameters.html)
+
+```sh
+$0        # The full path of the script
+$1        # First argument
+$#        # The number of arguments ($0 is not included)
+$*        # 全ての引数。"$*" はひと括り: "$1 $2 $3"
+$@        # 全ての引数。"$@" は個別括り: "$1" "$2" "$3"
+$-        # シェルの起動時のフラグ、setコマンドを使って設定したフラグの一覧
+$$        # シェル自身のプロセスID
+$!        # シェルが最後に起動したバックグラウンドプロセスのプロセスID
+$?        # 最後に実行したコマンドのexit値
 ```
 
 ## [Parameter Expansion](https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html)
@@ -132,9 +174,37 @@ ${VAR:+WORD}  # nothing occurs; otherwise return WORD
 ```
 
 
-## [Arrays](https://www.gnu.org/software/bash/manual/html_node/Arrays.html)
+## Misc.
 
-bashとzshで添字の挙動が異なる。
+### [Command Substitution](https://www.gnu.org/software/bash/manual/html_node/Command-Substitution.html)
+
+コマンドの結果を文字列として受け取る方法は
+`` `command` `` と `$(command)` の2つあるが、
+後者のほうが入れ子など柔軟に使えるのでより好ましい。
+
+### [Arithmetic Expansion](https://www.gnu.org/software/bash/manual/html_node/Arithmetic-Expansion.html)
+
+簡単な数値計算は `$((expression))` でできる。
+
+[Shell Arithmetic](https://www.gnu.org/software/bash/manual/html_node/Shell-Arithmetic.html)
+
+### [Process Substitution](https://www.gnu.org/software/bash/manual/html_node/Process-Substitution.html)
+
+1つのコマンドから出力を受け取るだけならパイプ `command1 | command2` で足りるけど、
+2つ以上から受け取りたいときはプロセス置換 `command2 <(command1a) <(command1b)` を使う。
+
+標準入力や標準出力を受け付けないコマンドでも、
+ファイル名を引数で指定できればプロセス置換で対応できる。
+例えばgzip圧縮・展開の一時ファイルを作りたくない場合とか:
+```sh
+somecommand infile outfile
+gunzip -c infile.gz | somecommand /dev/stdin /dev/stdout | gzip -c >outfile.gz
+somecommand <(gunzip -c infile.gz) >(gzip -c >outfile.gz)
+```
+
+### [Arrays](https://www.gnu.org/software/bash/manual/html_node/Arrays.html)
+
+POSIXでは未定義の拡張機能であり、bashとzshでも挙動が異なる。
 ```sh
 array=(a b c d e f)  # bash        | zsh
 echo ${array}        # a           | a b c d e f
@@ -169,33 +239,6 @@ done
 # e
 # f
 ```
-
-
-## [Special Parameters](https://www.gnu.org/software/bash/manual/html_node/Special-Parameters.html)
-
-```sh
-$0        # The full path of the script
-$1        # First argument
-$#        # The number of arguments ($0 is not included)
-$*        # 全ての引数。"$*" はひと括り: "$1 $2 $3"
-$@        # 全ての引数。"$@" は個別括り: "$1" "$2" "$3"
-$-        # シェルの起動時のフラグ、setコマンドを使って設定したフラグの一覧
-$$        # シェル自身のプロセスID
-$!        # シェルが最後に起動したバックグラウンドプロセスのプロセスID
-$?        # 最後に実行したコマンドのexit値
-```
-
-## Misc.
-
-### Command
-
-コマンドの結果を文字列として受け取る方法は
-`` `command ``\` と `$(command)` の2つあるが、
-後者のほうが入れ子など柔軟に使える。
-
-### Arithmetic
-
-足し算くらいなら `$((expression))` で
 
 
 ## 関連書籍

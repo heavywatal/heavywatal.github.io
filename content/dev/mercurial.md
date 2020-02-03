@@ -125,7 +125,7 @@ cf. [ssh]({{< relref "ssh.md" >}}):
     hg backout -r 42
     hg commit
 
-管理対象外のファイルを確認・削除する (`purge` extentionを有効にして):
+管理対象外のファイルを確認・削除する (`purge` extensionを有効にして):
 
     hg clean -p
     hg clean
