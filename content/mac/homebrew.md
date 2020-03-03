@@ -5,75 +5,74 @@ tags = ["mac", "package"]
   parent = "mac"
 +++
 
-Unixツールをパッケージとして手軽にインストールできるMac用パッケージ管理ソフト。
+Unixツールをパッケージとして手軽にインストールできるパッケージ管理ソフト。
 
 <https://brew.sh/>
 
 ## Installation
 
+1.  Command Line Tools をインストールする。
+    cf. [/dev/devenv]({{< relref "devenv.md" >}}):
+    ```sh
+    xcode-select --install
+    ```
+
+1.  ターミナルから下記のコマンドを実行し、指示に従う:
+    ```sh
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    ```
+
+1.  ちゃんと入ったか確認:
+    ```sh
+    brew doctor
+    ```
+
+---
+
 <https://docs.brew.sh/Installation.html>
 
-1.  Command Line Tools をインストールする。
-    cf. [/dev/devenv]({{< relref "devenv.md" >}})
+デフォルトの `/usr/local/` にインストールするのが嫌なら、
+例えばホーム以下の `~/.homebrew/` にインストールすることもできる:
+```sh
+mkdir ~/.homebrew
+curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C ~/.homebrew
+```
+が、`/usr/local/` 以外にインストールすると、
+bottle機能を封じられて毎回自前ビルドすることになるみたいなので、
+非力なラップトップとかでは結構厳しい。
 
-1.  ターミナルから下記のコマンドを実行し、指示に従ってパスワードを入力する:
-    ```sh
-    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    ```
-
-    デフォルトの `/usr/local/` にインストールするのが嫌なら、
-    例えばホーム以下の `~/.homebrew/` にインストールすることもできる:
-    ```sh
-    cd
-    mkdir .homebrew
-    curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C .homebrew
-    ```
-    が、`/usr/local/` 以外にインストールすると、
-    bottle機能を封じられて毎回自前ビルドする仕様になってしまったので、
-    非力なラップトップとかでは結構厳しい。
-
-1.  `.zshenv` (もしくは`.zshrc`) でパスを通す:
-    ```sh
-    PATH=${HOME}/.homebrew/bin:/usr/local/bin:${PATH}
-    brew_prefix=$(brew --prefix 2>/dev/null)
-    if [ -n "${brew_prefix}" ]; then
-        MANPATH=${brew_prefix}/share/man:${MANPATH}
-        fpath=(${brew_prefix}/share/zsh-completions ${fpath})
-    fi
-    unset brew_prefix
-    ```
 
 ## Usage
 
 <https://docs.brew.sh/FAQ.html>
 
-- Homebrew本体とカタログをアップデートし、アップグレード可能なパッケージを表示:
+-   Homebrew本体とカタログをアップデートし、アップグレード可能なパッケージを表示:
 
         brew update && brew outdated
 
-- `outdated` なものを全てアップグレード:
+-   `outdated` なものを全てアップグレード:
 
         brew upgrade
 
-- パッケージのバージョンを固定し、一括 `brew upgrade` の適用外にする。
-  頻繁に更新され、やたらCPUを使うやつらに。
+-   パッケージのバージョンを固定し、一括 `brew upgrade` の適用外にする。
+    頻繁に更新され、やたらCPUを使うやつらに。
 
         brew pin imagemagick
 
-- パッケージ検索:
+-   パッケージ検索:
 
         brew search text
 
-- パッケージ情報の表示:
+-   パッケージ情報の表示:
 
         brew info formula
 
-- パッケージのインストール・アンインストール:
+-   パッケージのインストール・アンインストール:
 
         brew install formula
         brew uninstall formula
 
-- インストール済みパッケージ、またはパッケージ内ファイルの一覧:
+-   インストール済みパッケージ、またはパッケージ内ファイルの一覧:
 
         brew list [formula]
 
@@ -101,11 +100,13 @@ Unixツールをパッケージとして手軽にインストールできるMac�
     grep
     imagemagick
     less
+    lftp
     make
     mercurial
     nano
     nkf
     pandoc
+    parallel
     rmtrash
     rsync
     sshfs
@@ -195,9 +196,9 @@ alfred, amazon-music, amazon-photos, atom,
 basictex, bibdesk,
 discord, docker, dropbox, eqmac, firefox, gephi, gimp, gitter,
 google-backup-and-sync, google-chrome, google-japanese-ime,
-inkscape, iterm2, julia, kindle, libreoffice,
-marshallofsound-google-play-music-player, megasync, menumeters
+igv, inkscape, iterm2, julia, kindle, libreoffice,
+marshallofsound-google-play-music-player, megasync, menumeters,
 osxfuxe, qlstephen, quicklook-csv, r, rstudio,
 skim, skyfonts, skype, slack, spideroakone,
 the-unarchiver, virtualbox, visual-studio-code, vlc,
-whatsapp, xquartz
+whatsapp, xquartz, zoomus
