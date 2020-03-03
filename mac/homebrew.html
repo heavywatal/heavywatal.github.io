@@ -91,76 +91,71 @@ Homebrew
 </ul></nav>
 </header>
 
-<p>Unixツールをパッケージとして手軽にインストールできるMac用パッケージ管理ソフト。</p>
+<p>Unixツールをパッケージとして手軽にインストールできるパッケージ管理ソフト。</p>
 <p><a href="https://brew.sh/">https://brew.sh/</a></p>
 <h2 id="installation">Installation</h2>
-<p><a href="https://docs.brew.sh/Installation.html">https://docs.brew.sh/Installation.html</a></p>
 <ol>
 <li>
 <p>Command Line Tools をインストールする。
-cf. <a href="/dev/devenv.html">/dev/devenv</a></p>
-</li>
+cf. <a href="/dev/devenv.html">/dev/devenv</a>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">xcode-select --install
+</code></pre></div></li>
 <li>
-<p>ターミナルから下記のコマンドを実行し、指示に従ってパスワードを入力する:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">/usr/bin/ruby -e <span class="s2">&#34;</span><span class="k">$(</span>curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install<span class="k">)</span><span class="s2">&#34;</span>
-</code></pre></div><p>デフォルトの <code>/usr/local/</code> にインストールするのが嫌なら、
-例えばホーム以下の <code>~/.homebrew/</code> にインストールすることもできる:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span>
-mkdir .homebrew
-curl -L https://github.com/Homebrew/brew/tarball/master <span class="p">|</span> tar xz --strip <span class="m">1</span> -C .homebrew
-</code></pre></div><p>が、<code>/usr/local/</code> 以外にインストールすると、
-bottle機能を封じられて毎回自前ビルドする仕様になってしまったので、
-非力なラップトップとかでは結構厳しい。</p>
-</li>
+<p>ターミナルから下記のコマンドを実行し、指示に従う:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">/bin/bash -c <span class="s2">&#34;</span><span class="k">$(</span>curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh<span class="k">)</span><span class="s2">&#34;</span>
+</code></pre></div></li>
 <li>
-<p><code>.zshenv</code> (もしくは<code>.zshrc</code>) でパスを通す:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.homebrew/bin:/usr/local/bin:<span class="si">${</span><span class="nv">PATH</span><span class="si">}</span>
-<span class="nv">brew_prefix</span><span class="o">=</span><span class="k">$(</span>brew --prefix 2&gt;/dev/null<span class="k">)</span>
-<span class="k">if</span> <span class="o">[</span> -n <span class="s2">&#34;</span><span class="si">${</span><span class="nv">brew_prefix</span><span class="si">}</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    <span class="nv">MANPATH</span><span class="o">=</span><span class="si">${</span><span class="nv">brew_prefix</span><span class="si">}</span>/share/man:<span class="si">${</span><span class="nv">MANPATH</span><span class="si">}</span>
-    <span class="nv">fpath</span><span class="o">=(</span><span class="si">${</span><span class="nv">brew_prefix</span><span class="si">}</span>/share/zsh-completions <span class="si">${</span><span class="nv">fpath</span><span class="si">}</span><span class="o">)</span>
-<span class="k">fi</span>
-<span class="nb">unset</span> brew_prefix
+<p>ちゃんと入ったか確認:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew doctor
 </code></pre></div></li>
 </ol>
+<hr>
+<p><a href="https://docs.brew.sh/Installation.html">https://docs.brew.sh/Installation.html</a></p>
+<p>デフォルトの <code>/usr/local/</code> にインストールするのが嫌なら、
+例えばホーム以下の <code>~/.homebrew/</code> にインストールすることもできる:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mkdir ~/.homebrew
+curl -L https://github.com/Homebrew/brew/tarball/master <span class="p">|</span> tar xz --strip <span class="m">1</span> -C ~/.homebrew
+</code></pre></div><p>が、<code>/usr/local/</code> 以外にインストールすると、
+bottle機能を封じられて毎回自前ビルドすることになるみたいなので、
+非力なラップトップとかでは結構厳しい。</p>
 <h2 id="usage">Usage</h2>
 <p><a href="https://docs.brew.sh/FAQ.html">https://docs.brew.sh/FAQ.html</a></p>
 <ul>
 <li>
 <p>Homebrew本体とカタログをアップデートし、アップグレード可能なパッケージを表示:</p>
-<pre><code>  brew update &amp;&amp; brew outdated
+<pre><code>brew update &amp;&amp; brew outdated
 </code></pre>
 </li>
 <li>
 <p><code>outdated</code> なものを全てアップグレード:</p>
-<pre><code>  brew upgrade
+<pre><code>brew upgrade
 </code></pre>
 </li>
 <li>
 <p>パッケージのバージョンを固定し、一括 <code>brew upgrade</code> の適用外にする。
 頻繁に更新され、やたらCPUを使うやつらに。</p>
-<pre><code>  brew pin imagemagick
+<pre><code>brew pin imagemagick
 </code></pre>
 </li>
 <li>
 <p>パッケージ検索:</p>
-<pre><code>  brew search text
+<pre><code>brew search text
 </code></pre>
 </li>
 <li>
 <p>パッケージ情報の表示:</p>
-<pre><code>  brew info formula
+<pre><code>brew info formula
 </code></pre>
 </li>
 <li>
 <p>パッケージのインストール・アンインストール:</p>
-<pre><code>  brew install formula
-  brew uninstall formula
+<pre><code>brew install formula
+brew uninstall formula
 </code></pre>
 </li>
 <li>
 <p>インストール済みパッケージ、またはパッケージ内ファイルの一覧:</p>
-<pre><code>  brew list [formula]
+<pre><code>brew list [formula]
 </code></pre>
 </li>
 </ul>
@@ -185,11 +180,13 @@ go
 grep
 imagemagick
 less
+lftp
 make
 mercurial
 nano
 nkf
 pandoc
+parallel
 rmtrash
 rsync
 sshfs
@@ -253,12 +250,12 @@ brew cask list
 basictex, bibdesk,
 discord, docker, dropbox, eqmac, firefox, gephi, gimp, gitter,
 google-backup-and-sync, google-chrome, google-japanese-ime,
-inkscape, iterm2, julia, kindle, libreoffice,
-marshallofsound-google-play-music-player, megasync, menumeters
+igv, inkscape, iterm2, julia, kindle, libreoffice,
+marshallofsound-google-play-music-player, megasync, menumeters,
 osxfuxe, qlstephen, quicklook-csv, r, rstudio,
 skim, skyfonts, skype, slack, spideroakone,
 the-unarchiver, virtualbox, visual-studio-code, vlc,
-whatsapp, xquartz</p>
+whatsapp, xquartz, zoomus</p>
 
 </article>
 </main>
