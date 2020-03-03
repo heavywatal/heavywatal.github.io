@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.63.2" />
+<meta name="generator" content="Hugo 0.65.3" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -107,21 +107,21 @@ Heavy Watal
 <span class="k">fi</span>
 
 <span class="c1"># bash/zsh extension; not POSIX</span>
-<span class="k">if</span> <span class="o">[</span><span class="o">[</span> -e ~ <span class="o">]</span><span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+<span class="k">if</span> <span class="o">[[</span> -e ~ <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
   <span class="nb">echo</span> <span class="s1">&#39;[[ -e ~ ]]&#39;</span>
 <span class="k">fi</span>
 
 <span class="c1"># shortcut with exit status</span>
 <span class="nb">test</span> -e ~ <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;test -e ~ &amp;&amp; echo&#39;</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s1">&#39;not printed&#39;</span>
 <span class="o">[</span> -e ~ <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;[ -e ~ ] &amp;&amp; echo&#39;</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s1">&#39;not printed&#39;</span>
-<span class="o">[</span><span class="o">[</span> -e ~ <span class="o">]</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;[[ -e ~ ]] &amp;&amp; echo&#39;</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s1">&#39;not printed&#39;</span>
-<span class="o">[</span><span class="o">[</span> ! -e ~ <span class="o">]</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;not printed&#39;</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s1">&#39;[[ ! -e ~ ]] || echo&#39;</span>
+<span class="o">[[</span> -e ~ <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;[[ -e ~ ]] &amp;&amp; echo&#39;</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s1">&#39;not printed&#39;</span>
+<span class="o">[[</span> ! -e ~ <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;not printed&#39;</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s1">&#39;[[ ! -e ~ ]] || echo&#39;</span>
 </code></pre></div><p>AND/OR</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span> -e ~ -a -d ~ <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;[-e ~ -a -d ~]&#39;</span>
 <span class="o">[</span> -e ~ -o -f ~ <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;[-e ~ -o -f ~]&#39;</span>
 <span class="o">[</span> -e ~ <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">[</span> -d ~ <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;[ -e ~ ] &amp;&amp; [ -d ~ ]&#39;</span>
-<span class="o">[</span><span class="o">[</span> -e ~ <span class="o">&amp;&amp;</span> -d ~ <span class="o">]</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;[[ -e ~ &amp;&amp; -d ~ ]]&#39;</span>
-<span class="o">[</span><span class="o">[</span> -e ~ <span class="o">||</span> -f ~ <span class="o">]</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;[[ -e ~ || -f ~ ]]&#39;</span>
+<span class="o">[[</span> -e ~ <span class="o">&amp;&amp;</span> -d ~ <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;[[ -e ~ &amp;&amp; -d ~ ]]&#39;</span>
+<span class="o">[[</span> -e ~ <span class="o">||</span> -f ~ <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;[[ -e ~ || -f ~ ]]&#39;</span>
 </code></pre></div><p>文字列</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">EMPTY</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
 <span class="nv">NOTEMPTY</span><span class="o">=</span><span class="s1">&#39;content&#39;</span>
@@ -129,7 +129,7 @@ Heavy Watal
 <span class="o">[</span> -n <span class="s2">&#34;</span><span class="nv">$NOTEMPTY</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;-n &#34;$NOTEMPTY&#34;&#39;</span>
 <span class="o">[</span> <span class="s2">&#34;</span><span class="nv">$NOTEMPTY</span><span class="s2">&#34;</span> !<span class="o">=</span> <span class="s2">&#34;</span><span class="nv">$EMPTY</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;&#34;$NOTEMPTY&#34; != &#34;$EMPTY&#34;&#39;</span>
 <span class="o">[</span> <span class="s2">&#34;</span><span class="nv">$NOTEMPTY</span><span class="s2">&#34;</span> <span class="o">=</span> <span class="s2">&#34;content&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;&#34;$NOTEMPTY&#34; = &#34;content&#34;&#39;</span>
-<span class="o">[</span><span class="o">[</span> <span class="s2">&#34;</span><span class="nv">$NOTEMPTY</span><span class="s2">&#34;</span> <span class="o">=</span>~ <span class="s2">&#34;</span><span class="s2">tent</span>$<span class="s2">&#34;</span> <span class="o">]</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;&#34;$NOTEMPTY&#34; =~ &#34;tent$&#34;&#39;</span>
+<span class="o">[[</span> <span class="s2">&#34;</span><span class="nv">$NOTEMPTY</span><span class="s2">&#34;</span> <span class="o">=</span>~ <span class="s2">&#34;tent</span>$<span class="s2">&#34;</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;&#34;$NOTEMPTY&#34; =~ &#34;tent$&#34;&#39;</span>
 </code></pre></div><p>ファイル、ディレクトリ</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span> -e ~ <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;-e ~&#39;</span>
 <span class="o">[</span> -d ~ <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;-d ~&#39;</span>
@@ -182,7 +182,7 @@ zshでは1要素扱い、dashやbashではスペース区切りで分割。</p>
 <span class="nb">echo</span> <span class="si">${</span><span class="nv">string</span><span class="p">:</span><span class="nv">0</span><span class="p">:</span><span class="nv">3</span><span class="si">}</span>  <span class="c1"># abc</span>
 <span class="nb">echo</span> <span class="si">${</span><span class="nv">string</span><span class="p">:</span><span class="nv">1</span><span class="p">:</span><span class="nv">3</span><span class="si">}</span>  <span class="c1"># bcd</span>
 <span class="nb">echo</span> <span class="si">${</span><span class="nv">string</span><span class="p">:</span><span class="nv">2</span><span class="si">}</span>    <span class="c1"># cdef</span>
-<span class="nb">echo</span> <span class="si">${</span><span class="nv">string</span><span class="p">:</span><span class="p"> -2</span><span class="si">}</span>  <span class="c1"># ef</span>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">string</span><span class="p">: -2</span><span class="si">}</span>  <span class="c1"># ef</span>
 </code></pre></div><h3 id="置換">置換</h3>
 <p>文字列の置換には正規表現を使える <code>sed</code> が便利。
 でもパスや拡張子のちょっとした操作なら、
@@ -211,9 +211,9 @@ zshでは1要素扱い、dashやbashではスペース区切りで分割。</p>
 </code></pre></div><p>変数が設定されていない場合にどうするか</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">              <span class="c1"># if VAR is null, then</span>
 <span class="si">${</span><span class="nv">VAR</span><span class="k">:-</span><span class="nv">WORD</span><span class="si">}</span>  <span class="c1"># return WORD; VAR remains null</span>
-<span class="si">${</span><span class="nv">VAR</span><span class="p">:</span><span class="p">=WORD</span><span class="si">}</span>  <span class="c1"># return WORD; WORD is assigned to VAR</span>
-<span class="si">${</span><span class="nv">VAR</span><span class="p">:</span><span class="p">?WORD</span><span class="si">}</span>  <span class="c1"># display error and exit</span>
-<span class="si">${</span><span class="nv">VAR</span><span class="p">:</span><span class="p">+WORD</span><span class="si">}</span>  <span class="c1"># nothing occurs; otherwise return WORD</span>
+<span class="si">${</span><span class="nv">VAR</span><span class="p">:=WORD</span><span class="si">}</span>  <span class="c1"># return WORD; WORD is assigned to VAR</span>
+<span class="si">${</span><span class="nv">VAR</span><span class="p">:?WORD</span><span class="si">}</span>  <span class="c1"># display error and exit</span>
+<span class="si">${</span><span class="nv">VAR</span><span class="p">:+WORD</span><span class="si">}</span>  <span class="c1"># nothing occurs; otherwise return WORD</span>
 </code></pre></div><h2 id="misc">Misc.</h2>
 <h3 id="command-substitutionhttpswwwgnuorgsoftwarebashmanualhtml_nodecommand-substitutionhtml"><a href="https://www.gnu.org/software/bash/manual/html_node/Command-Substitution.html">Command Substitution</a></h3>
 <p>コマンドの結果を文字列として受け取る方法は
@@ -233,7 +233,7 @@ gunzip -c infile.gz <span class="p">|</span> somecommand /dev/stdin /dev/stdout 
 somecommand &lt;<span class="o">(</span>gunzip -c infile.gz<span class="o">)</span> &gt;<span class="o">(</span>gzip -c &gt;outfile.gz<span class="o">)</span>
 </code></pre></div><h3 id="arrayshttpswwwgnuorgsoftwarebashmanualhtml_nodearrayshtml"><a href="https://www.gnu.org/software/bash/manual/html_node/Arrays.html">Arrays</a></h3>
 <p>POSIXでは未定義の拡張機能であり、bashとzshでも挙動が異なる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">array</span><span class="o">=</span><span class="o">(</span>a b c d e f<span class="o">)</span>  <span class="c1"># bash        | zsh</span>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">array</span><span class="o">=(</span>a b c d e f<span class="o">)</span>  <span class="c1"># bash        | zsh</span>
 <span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="si">}</span>        <span class="c1"># a           | a b c d e f</span>
 <span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[0]</span><span class="si">}</span>     <span class="c1"># a           |</span>
 <span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[1]</span><span class="si">}</span>     <span class="c1"># b           | a</span>
@@ -242,18 +242,18 @@ somecommand &lt;<span class="o">(</span>gunzip -c infile.gz<span class="o">)</sp
 <span class="nb">echo</span> <span class="si">${#</span><span class="nv">array</span><span class="si">}</span>       <span class="c1"># 1           | 6</span>
 <span class="nb">echo</span> <span class="si">${#</span><span class="nv">array</span><span class="p">[@]</span><span class="si">}</span>    <span class="c1"># 6           | 6</span>
 </code></pre></div><p>文字列と同様にコロンを使う方法ならzshでもゼロ基準なので安全。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[@]</span><span class="p">:</span><span class="nv">0</span><span class="p">:</span><span class="nv">3</span><span class="si">}</span>  <span class="c1"># a b c</span>
-<span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[@]</span><span class="p">:</span><span class="nv">1</span><span class="p">:</span><span class="nv">3</span><span class="si">}</span>  <span class="c1"># b c d</span>
-<span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[@]</span><span class="p">:</span><span class="nv">2</span><span class="si">}</span>    <span class="c1"># c d e f</span>
-<span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[@]</span><span class="p">:</span><span class="p"> -2</span><span class="si">}</span>  <span class="c1"># e f</span>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[@]:</span><span class="nv">0</span><span class="p">:</span><span class="nv">3</span><span class="si">}</span>  <span class="c1"># a b c</span>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[@]:</span><span class="nv">1</span><span class="p">:</span><span class="nv">3</span><span class="si">}</span>  <span class="c1"># b c d</span>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[@]:</span><span class="nv">2</span><span class="si">}</span>    <span class="c1"># c d e f</span>
+<span class="nb">echo</span> <span class="si">${</span><span class="nv">array</span><span class="p">[@]: -2</span><span class="si">}</span>  <span class="c1"># e f</span>
 </code></pre></div><p><code>array[*]</code> と<code>array[@]</code> はクオートで括られる挙動が異なる。
 前者はひと括り、後者はそれぞれ括られる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="k">for</span> x in <span class="s2">&#34;</span><span class="si">${</span><span class="nv">array</span><span class="p">[*]</span><span class="p">:</span><span class="nv">3</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">;</span> <span class="k">do</span>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="k">for</span> x in <span class="s2">&#34;</span><span class="si">${</span><span class="nv">array</span><span class="p">[*]:</span><span class="nv">3</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">;</span> <span class="k">do</span>
   <span class="nb">echo</span> <span class="nv">$x</span>
 <span class="k">done</span>
 <span class="c1"># d e f</span>
 
-<span class="k">for</span> x in <span class="s2">&#34;</span><span class="si">${</span><span class="nv">array</span><span class="p">[@]</span><span class="p">:</span><span class="nv">3</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">;</span> <span class="k">do</span>
+<span class="k">for</span> x in <span class="s2">&#34;</span><span class="si">${</span><span class="nv">array</span><span class="p">[@]:</span><span class="nv">3</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">;</span> <span class="k">do</span>
   <span class="nb">echo</span> <span class="nv">$x</span>
 <span class="k">done</span>
 <span class="c1"># d</span>

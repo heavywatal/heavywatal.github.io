@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.63.2" />
+<meta name="generator" content="Hugo 0.65.3" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -97,17 +97,17 @@ Rでは大抵、生のforループを避けて、R標準のベクトル演算や
 でも、どうしても、さらに速度を追い求めたい場合にはRcppが有用となる。</p>
 <p>長さnの調和級数を求める例:</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">r_for</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">{</span>
-  <span class="n">s</span> <span class="o">=</span> <span class="m">0</span><span class="p">;</span> <span class="nf">for </span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="nf">seq_len</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="p">)</span> <span class="p">{</span><span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="m">1</span> <span class="o">/</span> <span class="n">i</span><span class="p">}</span><span class="p">;</span> <span class="n">s</span>
+  <span class="n">s</span> <span class="o">=</span> <span class="m">0</span><span class="p">;</span> <span class="nf">for </span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="nf">seq_len</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="p">{</span><span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="m">1</span> <span class="o">/</span> <span class="n">i</span><span class="p">};</span> <span class="n">s</span>
 <span class="p">}</span>
 
-<span class="n">r_vec</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="nf">sum</span><span class="p">(</span><span class="m">1</span> <span class="o">/</span> <span class="nf">seq_len</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="p">)</span>
+<span class="n">r_vec</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="nf">sum</span><span class="p">(</span><span class="m">1</span> <span class="o">/</span> <span class="nf">seq_len</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
 
-<span class="n">Rcpp</span><span class="o">::</span><span class="nf">cppFunction</span><span class="p">(</span><span class="s">&#34;</span><span class="s">double rcpp(int n) {
+<span class="n">Rcpp</span><span class="o">::</span><span class="nf">cppFunction</span><span class="p">(</span><span class="s">&#34;double rcpp(int n) {
 </span><span class="s">  double s = 0; for (int i = 1; i &lt;= n; ++i) {s += 1.0 / i;} return s;
 </span><span class="s">}&#34;</span><span class="p">)</span>  <span class="c1"># Compilation takes a few seconds here</span>
 
 <span class="n">n</span> <span class="o">=</span> <span class="m">1000000L</span>
-<span class="n">rbenchmark</span><span class="o">::</span><span class="nf">benchmark</span><span class="p">(</span><span class="nf">r_for</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="p">,</span> <span class="nf">r_vec</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="p">,</span> <span class="nf">rcpp</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="p">)</span><span class="n">[</span><span class="p">,</span><span class="m">1</span><span class="o">:</span><span class="m">4</span><span class="n">]</span>
+<span class="n">rbenchmark</span><span class="o">::</span><span class="nf">benchmark</span><span class="p">(</span><span class="nf">r_for</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">r_vec</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">rcpp</span><span class="p">(</span><span class="n">n</span><span class="p">))</span><span class="n">[</span><span class="p">,</span><span class="m">1</span><span class="o">:</span><span class="m">4</span><span class="n">]</span>
 
 <span class="c1">#       test replications elapsed relative</span>
 <span class="c1"># 1 r_for(n)          100   3.968   29.835</span>
@@ -159,9 +159,9 @@ by 津駄@teuderさん
 </ul>
 <h2 id="rスクリプトの途中で使う">Rスクリプトの途中で使う</h2>
 <p>ファイルあるいは文字列をコンパイルして使う:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">Rcpp</span><span class="o">::</span><span class="nf">sourceCpp</span><span class="p">(</span><span class="s">&#34;</span><span class="s">fibonacci.cpp&#34;</span><span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">Rcpp</span><span class="o">::</span><span class="nf">sourceCpp</span><span class="p">(</span><span class="s">&#34;fibonacci.cpp&#34;</span><span class="p">)</span>
 
-<span class="n">Rcpp</span><span class="o">::</span><span class="nf">sourceCpp</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="s">&#39;</span><span class="s">
+<span class="n">Rcpp</span><span class="o">::</span><span class="nf">sourceCpp</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="s">&#39;
 </span><span class="s">  #include &lt;Rcpp.h&gt;
 </span><span class="s">  // [[Rcpp::plugins(cpp14)]]
 </span><span class="s">  // [[Rcpp::export]]
@@ -174,7 +174,7 @@ by 津駄@teuderさん
 <span class="nf">fibonacci</span><span class="p">(</span><span class="m">9L</span><span class="p">)</span>
 <span class="c1"># [1] 34</span>
 </code></pre></div><p>いろいろな準備を任せて、関数をひとつだけ定義するショートカット:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">Rcpp</span><span class="o">::</span><span class="nf">cppFunction</span><span class="p">(</span><span class="n">plugins</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;</span><span class="s">cpp14&#34;</span><span class="p">)</span><span class="p">,</span> <span class="s">&#39;</span><span class="s">
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">Rcpp</span><span class="o">::</span><span class="nf">cppFunction</span><span class="p">(</span><span class="n">plugins</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;cpp14&#34;</span><span class="p">),</span> <span class="s">&#39;
 </span><span class="s">  int fibonacci(const int x) {
 </span><span class="s">    if (x &lt; 1) return 0;
 </span><span class="s">    if (x == 1) return 1;
@@ -203,7 +203,7 @@ by 津駄@teuderさん
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#&#39; @useDynLib hello, .registration = TRUE</span>
 <span class="c1">#&#39; @importFrom Rcpp sourceCpp</span>
 <span class="c1">#&#39; @keywords internal</span>
-<span class="s">&#34;</span><span class="s">_PACKAGE&#34;</span>
+<span class="s">&#34;_PACKAGE&#34;</span>
 </code></pre></div><p><code>@importFrom Rcpp sourceCpp</code> を省くと、パッケージ利用時に
 <code>'enterRNGScope' not provided by package 'Rcpp'</code>
 のようなエラーが出る場合がある
@@ -212,7 +212,7 @@ by 津駄@teuderさん
 <li>
 <p>同じところに <code>.onUnload</code> も定義しておく:</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">.onUnload</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">libpath</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nf">library.dynam.unload</span><span class="p">(</span><span class="s">&#34;</span><span class="s">hello&#34;</span><span class="p">,</span> <span class="n">libpath</span><span class="p">)</span>
+  <span class="nf">library.dynam.unload</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">,</span> <span class="n">libpath</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div><p>すると <code>unloadNamespace(&quot;hello&quot;)</code> したときに共有ライブラリもちゃんと外れるようになる。
 ちなみに <code>devtools::unload()</code> はこれを省略してもちゃんとリロードしてくれる。</p>
@@ -247,14 +247,14 @@ CXX=$(LLVM_LOC)/bin/clang++
 </li>
 </ul>
 <h3 id="ソースコード-srccpp">ソースコード <code>src/*.cpp</code></h3>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#</span><span class="cp">include</span> <span class="cpf">&lt;Rcpp.h&gt;</span><span class="cp">
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;Rcpp.h&gt;</span><span class="cp">
 </span><span class="cp"></span>
 <span class="c1">//&#39; First example
-</span><span class="c1"></span><span class="c1">//&#39; @param args string vector
-</span><span class="c1"></span><span class="c1">//&#39; @export
-</span><span class="c1"></span><span class="c1">// [[Rcpp::export]]
-</span><span class="c1"></span><span class="kt">int</span> <span class="nf">len</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">string</span><span class="o">&gt;</span><span class="o">&amp;</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="n">args</span><span class="p">.</span><span class="n">size</span><span class="p">(</span><span class="p">)</span><span class="p">;</span>
+</span><span class="c1">//&#39; @param args string vector
+</span><span class="c1">//&#39; @export
+</span><span class="c1">// [[Rcpp::export]]
+</span><span class="c1"></span><span class="kt">int</span> <span class="nf">len</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">args</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
 <span class="p">}</span>
 </code></pre></div><ul>
 <li><code>std::abort()</code> や <code>std::exit()</code> は呼び出したRセッションまで殺してしまう。
@@ -363,23 +363,23 @@ Moduleの記述を自分でやらず <code>Rcpp::exposeClass()</code> に生成�
 (e.g., <code>src/{packagename}_types.h</code>)
 で自作クラスの宣言と
 <code>Rcpp::as&lt;MyClass&gt;()</code> / <code>Rcpp::wrap&lt;MyClass&gt;()</code> の特殊化を行う。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#</span><span class="cp">include</span> <span class="cpf">&lt;RcppCommon.h&gt;</span><span class="cp">
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;RcppCommon.h&gt;</span><span class="cp">
 </span><span class="cp"></span>
-<span class="n">RCPP_EXPOSED_CLASS</span><span class="p">(</span><span class="n">MyClass</span><span class="p">)</span><span class="p">;</span>
+<span class="n">RCPP_EXPOSED_CLASS</span><span class="p">(</span><span class="n">MyClass</span><span class="p">);</span>
 <span class="c1">// これで as&lt;MyClass&gt; / wrap&lt;MyClass&gt; の特殊化が定義される
-</span><span class="c1"></span><span class="c1">// 必ず #include &lt;Rcpp.h&gt; より前に来るように
+</span><span class="c1">// 必ず #include &lt;Rcpp.h&gt; より前に来るように
 </span><span class="c1"></span>
-<span class="cp">#</span><span class="cp">include</span> <span class="cpf">&#34;myclass.hpp&#34;</span><span class="cp">
+<span class="cp">#include</span> <span class="cpf">&#34;myclass.hpp&#34;</span><span class="cp">
 </span><span class="cp"></span><span class="c1">// 自作クラスの宣言
 </span></code></pre></div></li>
 <li>
 <p>どこかのソースファイルでモジュールを定義</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#</span><span class="cp">include</span> <span class="cpf">&lt;Rcpp.h&gt;`</span><span class="cp">
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;Rcpp.h&gt;`</span><span class="cp">
 </span><span class="cp"></span>
 <span class="n">RCPP_MODULE</span><span class="p">(</span><span class="n">mymodule</span><span class="p">)</span> <span class="p">{</span>
-  <span class="n">Rcpp</span><span class="o">:</span><span class="o">:</span><span class="n">class_</span><span class="o">&lt;</span><span class="n">MyClass</span><span class="o">&gt;</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;</span><span class="s">MyClass</span><span class="s">&#34;</span><span class="p">)</span>
-    <span class="p">.</span><span class="n">constructor</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="p">)</span>
-    <span class="p">.</span><span class="n">const_method</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;</span><span class="s">get_x</span><span class="s">&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">MyClass</span><span class="o">:</span><span class="o">:</span><span class="n">get_x</span><span class="p">)</span>
+  <span class="n">Rcpp</span><span class="o">::</span><span class="n">class_</span><span class="o">&lt;</span><span class="n">MyClass</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&#34;MyClass&#34;</span><span class="p">)</span>
+    <span class="p">.</span><span class="n">constructor</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">()</span>
+    <span class="p">.</span><span class="n">const_method</span><span class="p">(</span><span class="s">&#34;get_x&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">MyClass</span><span class="o">::</span><span class="n">get_x</span><span class="p">)</span>
   <span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div></li>
@@ -387,10 +387,10 @@ Moduleの記述を自分でやらず <code>Rcpp::exposeClass()</code> に生成�
 <p><code>{packagename}-package.R</code> でモジュールを読み込む。
 関数やクラスを全てそのまま公開するか、
 <code>Module</code> オブジェクト越しにアクセスさせるようにするか。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">Rcpp</span><span class="o">::</span><span class="nf">loadModule</span><span class="p">(</span><span class="s">&#34;</span><span class="s">mymodule&#34;</span><span class="p">,</span> <span class="kc">TRUE</span><span class="p">)</span><span class="n">`</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">Rcpp</span><span class="o">::</span><span class="nf">loadModule</span><span class="p">(</span><span class="s">&#34;mymodule&#34;</span><span class="p">,</span> <span class="kc">TRUE</span><span class="p">)</span><span class="n">`</span>
 <span class="c1"># obj = MyClass$new(42L)</span>
 
-<span class="n">modulename</span> <span class="o">=</span> <span class="n">Rcpp</span><span class="o">::</span><span class="nf">Module</span><span class="p">(</span><span class="s">&#34;</span><span class="s">mymodule&#34;</span><span class="p">)</span>
+<span class="n">modulename</span> <span class="o">=</span> <span class="n">Rcpp</span><span class="o">::</span><span class="nf">Module</span><span class="p">(</span><span class="s">&#34;mymodule&#34;</span><span class="p">)</span>
 <span class="c1"># obj = mymodule$MyClass$new(42L)</span>
 </code></pre></div></li>
 </ol>

@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.63.2" />
+<meta name="generator" content="Hugo 0.65.3" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
@@ -175,57 +175,57 @@ rsync -auv boost ~/local/include
 <p>確率分布に従った乱数生成はC++11から <code>&lt;random&gt;</code> でサポートされるようになったが、
 確率密度関数(PDF)や累積密度関数(CDF)はまだ標準入りしてない。</p>
 <div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// #include &lt;boost/math/distributions.hpp&gt;
-</span><span class="c1"></span><span class="cp">#</span><span class="cp">include</span> <span class="cpf">&lt;boost/math/distributions/normal.hpp&gt;</span><span class="cp">
-</span><span class="cp"></span><span class="cp">#</span><span class="cp">include</span> <span class="cpf">&lt;boost/math/distributions/poisson.hpp&gt;</span><span class="cp">
-</span><span class="cp"></span><span class="cp">#</span><span class="cp">include</span> <span class="cpf">&lt;boost/math/distributions/binomial.hpp&gt;</span><span class="cp">
-</span><span class="cp"></span><span class="cp">#</span><span class="cp">include</span> <span class="cpf">&lt;boost/math/distributions/chi_squared.hpp&gt;</span><span class="cp">
+</span><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;boost/math/distributions/normal.hpp&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;boost/math/distributions/poisson.hpp&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;boost/math/distributions/binomial.hpp&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;boost/math/distributions/chi_squared.hpp&gt;</span><span class="cp">
 </span><span class="cp"></span>
-<span class="k">namespace</span> <span class="n">bmath</span> <span class="o">=</span> <span class="n">boost</span><span class="o">:</span><span class="o">:</span><span class="n">math</span><span class="p">;</span>
+<span class="k">namespace</span> <span class="n">bmath</span> <span class="o">=</span> <span class="n">boost</span><span class="o">::</span><span class="n">math</span><span class="p">;</span>
 
-<span class="n">bmath</span><span class="o">:</span><span class="o">:</span><span class="n">normal_distribution</span><span class="o">&lt;</span><span class="o">&gt;</span> <span class="n">dist</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">sd</span><span class="p">)</span><span class="p">;</span>
+<span class="n">bmath</span><span class="o">::</span><span class="n">normal_distribution</span><span class="o">&lt;&gt;</span> <span class="n">dist</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">sd</span><span class="p">);</span>
 
-<span class="n">bmath</span><span class="o">:</span><span class="o">:</span><span class="n">mean</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span><span class="p">;</span>
-<span class="n">bmath</span><span class="o">:</span><span class="o">:</span><span class="n">median</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span><span class="p">;</span>
-<span class="n">bmath</span><span class="o">:</span><span class="o">:</span><span class="n">standard_deviation</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span><span class="p">;</span>
+<span class="n">bmath</span><span class="o">::</span><span class="n">mean</span><span class="p">(</span><span class="n">dist</span><span class="p">);</span>
+<span class="n">bmath</span><span class="o">::</span><span class="n">median</span><span class="p">(</span><span class="n">dist</span><span class="p">);</span>
+<span class="n">bmath</span><span class="o">::</span><span class="n">standard_deviation</span><span class="p">(</span><span class="n">dist</span><span class="p">);</span>
 
-<span class="n">bmath</span><span class="o">:</span><span class="o">:</span><span class="n">pdf</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span><span class="p">;</span>
-<span class="n">bmath</span><span class="o">:</span><span class="o">:</span><span class="n">cdf</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span><span class="p">;</span>
-<span class="n">bmath</span><span class="o">:</span><span class="o">:</span><span class="n">quantile</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span><span class="p">;</span>
+<span class="n">bmath</span><span class="o">::</span><span class="n">pdf</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+<span class="n">bmath</span><span class="o">::</span><span class="n">cdf</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+<span class="n">bmath</span><span class="o">::</span><span class="n">quantile</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">p</span><span class="p">);</span>
 </code></pre></div><p>右側の裾が欲しいときは精度を保つために <code>complement()</code> を使う。
 (Rでいう <code>lower.tail=FALSE</code>)</p>
 <div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// good
-</span><span class="c1"></span><span class="n">bmath</span><span class="o">:</span><span class="o">:</span><span class="n">quantile</span><span class="p">(</span><span class="n">bmath</span><span class="o">:</span><span class="o">:</span><span class="n">complement</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span><span class="p">)</span><span class="p">;</span>
+</span><span class="c1"></span><span class="n">bmath</span><span class="o">::</span><span class="n">quantile</span><span class="p">(</span><span class="n">bmath</span><span class="o">::</span><span class="n">complement</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">p</span><span class="p">));</span>
 <span class="c1">// bad
-</span><span class="c1"></span><span class="n">bmath</span><span class="o">:</span><span class="o">:</span><span class="n">quantile</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span>
+</span><span class="c1"></span><span class="n">bmath</span><span class="o">::</span><span class="n">quantile</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span>
 
 <span class="c1">// good
-</span><span class="c1"></span><span class="n">bmath</span><span class="o">:</span><span class="o">:</span><span class="n">cdf</span><span class="p">(</span><span class="n">bmath</span><span class="o">:</span><span class="o">:</span><span class="n">complement</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span><span class="p">)</span><span class="p">;</span>
+</span><span class="c1"></span><span class="n">bmath</span><span class="o">::</span><span class="n">cdf</span><span class="p">(</span><span class="n">bmath</span><span class="o">::</span><span class="n">complement</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">x</span><span class="p">));</span>
 <span class="c1">// bad
-</span><span class="c1"></span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">bmath</span><span class="o">:</span><span class="o">:</span><span class="n">cdf</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span><span class="p">;</span>
+</span><span class="c1"></span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">bmath</span><span class="o">::</span><span class="n">cdf</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
 </code></pre></div><h2 id="iostreamshttpwwwboostorgdoclibsreleaselibsiostreamsdoc"><a href="http://www.boost.org/doc/libs/release/libs/iostreams/doc/">iostreams</a></h2>
 <p>要ビルド＆リンク <code>-lboost_iostreams-mt</code></p>
 <h3 id="gzip-圧縮と展開">gzip 圧縮と展開</h3>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#</span><span class="cp">include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
-</span><span class="cp"></span><span class="cp">#</span><span class="cp">include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
-</span><span class="cp"></span><span class="cp">#</span><span class="cp">include</span> <span class="cpf">&lt;boost/iostreams/filtering_stream.hpp&gt;</span><span class="cp">
-</span><span class="cp"></span><span class="cp">#</span><span class="cp">include</span> <span class="cpf">&lt;boost/iostreams/filter/gzip.hpp&gt;</span><span class="cp">
-</span><span class="cp"></span><span class="cp">#</span><span class="cp">include</span> <span class="cpf">&lt;boost/iostreams/device/file_descriptor.hpp&gt;</span><span class="cp">
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;boost/iostreams/filtering_stream.hpp&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;boost/iostreams/filter/gzip.hpp&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;boost/iostreams/device/file_descriptor.hpp&gt;</span><span class="cp">
 </span><span class="cp"></span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">namespace</span> <span class="n">bios</span> <span class="o">=</span> <span class="n">boost</span><span class="o">:</span><span class="o">:</span><span class="n">iostreams</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">namespace</span> <span class="n">bios</span> <span class="o">=</span> <span class="n">boost</span><span class="o">::</span><span class="n">iostreams</span><span class="p">;</span>
     <span class="p">{</span>
-        <span class="n">bios</span><span class="o">:</span><span class="o">:</span><span class="n">filtering_ostream</span> <span class="n">ost</span><span class="p">;</span>
-        <span class="n">ost</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">bios</span><span class="o">:</span><span class="o">:</span><span class="n">gzip_compressor</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="p">;</span>
-        <span class="n">ost</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">bios</span><span class="o">:</span><span class="o">:</span><span class="n">file_descriptor_sink</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;</span><span class="s">hello.txt.gz</span><span class="s">&#34;</span><span class="p">)</span><span class="p">)</span><span class="p">;</span>
-        <span class="n">ost</span> <span class="o">&lt;</span><span class="o">&lt;</span> <span class="sa"></span><span class="s">&#34;</span><span class="s">Hello world!</span><span class="s">&#34;</span><span class="p">;</span>
+        <span class="n">bios</span><span class="o">::</span><span class="n">filtering_ostream</span> <span class="n">ost</span><span class="p">;</span>
+        <span class="n">ost</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">bios</span><span class="o">::</span><span class="n">gzip_compressor</span><span class="p">());</span>
+        <span class="n">ost</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">bios</span><span class="o">::</span><span class="n">file_descriptor_sink</span><span class="p">(</span><span class="s">&#34;hello.txt.gz&#34;</span><span class="p">));</span>
+        <span class="n">ost</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Hello world!&#34;</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="p">{</span>
-        <span class="n">bios</span><span class="o">:</span><span class="o">:</span><span class="n">filtering_istream</span> <span class="n">ist</span><span class="p">;</span>
-        <span class="n">ist</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">bios</span><span class="o">:</span><span class="o">:</span><span class="n">gzip_decompressor</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="p">;</span>
-        <span class="n">ist</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">bios</span><span class="o">:</span><span class="o">:</span><span class="n">file_descriptor_source</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;</span><span class="s">hello.txt.gz</span><span class="s">&#34;</span><span class="p">)</span><span class="p">)</span><span class="p">;</span>
-        <span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">string</span> <span class="n">buffer</span><span class="p">;</span>
-        <span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">getline</span><span class="p">(</span><span class="n">ist</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="sa"></span><span class="sc">&#39;</span><span class="sc">\0</span><span class="sc">&#39;</span><span class="p">)</span><span class="p">;</span>
-        <span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">cout</span> <span class="o">&lt;</span><span class="o">&lt;</span> <span class="n">buffer</span> <span class="o">&lt;</span><span class="o">&lt;</span> <span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">endl</span><span class="p">;</span>
+        <span class="n">bios</span><span class="o">::</span><span class="n">filtering_istream</span> <span class="n">ist</span><span class="p">;</span>
+        <span class="n">ist</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">bios</span><span class="o">::</span><span class="n">gzip_decompressor</span><span class="p">());</span>
+        <span class="n">ist</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">bios</span><span class="o">::</span><span class="n">file_descriptor_source</span><span class="p">(</span><span class="s">&#34;hello.txt.gz&#34;</span><span class="p">));</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">buffer</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">getline</span><span class="p">(</span><span class="n">ist</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="sc">&#39;\0&#39;</span><span class="p">);</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">buffer</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div><ul>
