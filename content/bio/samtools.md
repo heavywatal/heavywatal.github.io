@@ -1,15 +1,16 @@
 +++
 title = 'SAMtools'
+subtitle = 'Utilities for the Sequence Alignment/Map (SAM) format'
 tags = ["genetics"]
 [menu.main]
   parent = "bio"
 +++
 
-<http://www.htslib.org/>
+<https://www.htslib.org/>
 
 ## 操作
 
-<http://www.htslib.org/doc/samtools.html>
+<https://www.htslib.org/doc/samtools.html>
 
 ### 下ごしらえ
 
@@ -108,32 +109,23 @@ fixmate
         chr1 12346 1
         ...
 
-### SNP calling
+### variant calling
+
+- https://samtools.github.io/bcftools/howtos/variant-calling.html
+- https://samtools.github.io/bcftools/bcftools.html
 
 VCF/BCFを書き出す:
 
-    samtools mpileup -uv aln.bam
-    chr1 12345
+```sh
+bcftools mpileup -f ref.fa aln.bam | bcftools call -mv -Ob -o calls.bcf
+```
 
-`-f ref.fa`
+以前はsamtoolsの機能だったが、bcftoolsが担うことになった。
 
-calmd
-
-------------------------------------------------------------------------
-
-merge
-
-reheader
-
-cat
-
-targetcut
-
-phase
 
 ## SAM形式
 
-<http://www.htslib.org/doc/sam.html>
+<https://www.htslib.org/doc/sam.html>
 
 <https://samtools.github.io/hts-specs/>
 
@@ -163,7 +155,7 @@ phase
     重複遺伝子などを考慮する場合はむやみに捨ててはいけない。
 
     数字とフラグを変換してくれる便利 web app:
-    <http://broadinstitute.github.io/picard/explain-flags.html>
+    <https://broadinstitute.github.io/picard/explain-flags.html>
 
     strandも場合分けして詳細に数え上げた例:
     <https://ppotato.wordpress.com/2010/08/25/samtool-bitwise-flag-paired-reads/>
@@ -211,8 +203,8 @@ phase
 
 <https://pysam.readthedocs.io/>
 
-<http://bi.biopapyrus.net/python/modules/pysam.html>
+<https://bi.biopapyrus.jp/python/module/pysam.html>
 
 ### Rsamtools
 
-<http://bioconductor.org/packages/release/bioc/html/Rsamtools.html>
+<https://bioconductor.org/packages/release/bioc/html/Rsamtools.html>
