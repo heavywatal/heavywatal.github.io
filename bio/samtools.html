@@ -3,14 +3,14 @@
 <head prefix="og: http://ogp.me/ns#">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
-<title>SAMtools - Heavy Watal</title>
+<title>SAMtools: Utilities for the Sequence Alignment/Map (SAM) format - Heavy Watal</title>
 <link rel="stylesheet" href="/css/theme.css">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#e08010">
 <meta name="author" content="Watal M. Iwasaki">
-<meta property="og:title" content="SAMtools">
+<meta property="og:title" content="SAMtools: Utilities for the Sequence Alignment/Map (SAM) format">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://heavywatal.github.io/bio/samtools.html">
 <meta property="og:image" content="https://avatars.githubusercontent.com/heavywatal">
@@ -83,16 +83,16 @@ Heavy Watal
 <main>
 <article>
 <header><h1><a href="/bio/samtools.html">
-SAMtools
+SAMtools — Utilities for the Sequence Alignment/Map (SAM) format
 </a></h1>
 <nav class="tags"><ul>
 <li><i class="fas fa-tag"></i> <a href="/tags/genetics.html">genetics</a></li>
 </ul></nav>
 </header>
 
-<p><a href="http://www.htslib.org/">http://www.htslib.org/</a></p>
+<p><a href="https://www.htslib.org/">https://www.htslib.org/</a></p>
 <h2 id="操作">操作</h2>
-<p><a href="http://www.htslib.org/doc/samtools.html">http://www.htslib.org/doc/samtools.html</a></p>
+<p><a href="https://www.htslib.org/doc/samtools.html">https://www.htslib.org/doc/samtools.html</a></p>
 <h3 id="下ごしらえ">下ごしらえ</h3>
 <ul>
 <li>
@@ -195,21 +195,16 @@ chr1 12346 1
 </code></pre>
 </li>
 </ul>
-<h3 id="snp-calling">SNP calling</h3>
+<h3 id="variant-calling">variant calling</h3>
+<ul>
+<li><a href="https://samtools.github.io/bcftools/howtos/variant-calling.html">https://samtools.github.io/bcftools/howtos/variant-calling.html</a></li>
+<li><a href="https://samtools.github.io/bcftools/bcftools.html">https://samtools.github.io/bcftools/bcftools.html</a></li>
+</ul>
 <p>VCF/BCFを書き出す:</p>
-<pre><code>samtools mpileup -uv aln.bam
-chr1 12345
-</code></pre>
-<p><code>-f ref.fa</code></p>
-<p>calmd</p>
-<hr>
-<p>merge</p>
-<p>reheader</p>
-<p>cat</p>
-<p>targetcut</p>
-<p>phase</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">bcftools mpileup -f ref.fa aln.bam <span class="p">|</span> bcftools call -mv -Ob -o calls.bcf
+</code></pre></div><p>以前はsamtoolsの機能だったが、bcftoolsが担うことになった。</p>
 <h2 id="sam形式">SAM形式</h2>
-<p><a href="http://www.htslib.org/doc/sam.html">http://www.htslib.org/doc/sam.html</a></p>
+<p><a href="https://www.htslib.org/doc/sam.html">https://www.htslib.org/doc/sam.html</a></p>
 <p><a href="https://samtools.github.io/hts-specs/">https://samtools.github.io/hts-specs/</a></p>
 <ol>
 <li>
@@ -238,7 +233,7 @@ chr1 12345
 このときどれがprimaryになるかはマッパー依存。
 重複遺伝子などを考慮する場合はむやみに捨ててはいけない。</p>
 <p>数字とフラグを変換してくれる便利 web app:
-<a href="http://broadinstitute.github.io/picard/explain-flags.html">http://broadinstitute.github.io/picard/explain-flags.html</a></p>
+<a href="https://broadinstitute.github.io/picard/explain-flags.html">https://broadinstitute.github.io/picard/explain-flags.html</a></p>
 <p>strandも場合分けして詳細に数え上げた例:
 <a href="https://ppotato.wordpress.com/2010/08/25/samtool-bitwise-flag-paired-reads/">https://ppotato.wordpress.com/2010/08/25/samtool-bitwise-flag-paired-reads/</a></p>
 </li>
@@ -299,9 +294,9 @@ X: sequence mismatch
 <h2 id="binding">Binding</h2>
 <h3 id="pysam">pysam</h3>
 <p><a href="https://pysam.readthedocs.io/">https://pysam.readthedocs.io/</a></p>
-<p><a href="http://bi.biopapyrus.net/python/modules/pysam.html">http://bi.biopapyrus.net/python/modules/pysam.html</a></p>
+<p><a href="https://bi.biopapyrus.jp/python/module/pysam.html">https://bi.biopapyrus.jp/python/module/pysam.html</a></p>
 <h3 id="rsamtools">Rsamtools</h3>
-<p><a href="http://bioconductor.org/packages/release/bioc/html/Rsamtools.html">http://bioconductor.org/packages/release/bioc/html/Rsamtools.html</a></p>
+<p><a href="https://bioconductor.org/packages/release/bioc/html/Rsamtools.html">https://bioconductor.org/packages/release/bioc/html/Rsamtools.html</a></p>
 
 </article>
 </main>
