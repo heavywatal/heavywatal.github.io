@@ -2,8 +2,9 @@
 title = "Hugo"
 subtitle =  "静的サイトを高速生成"
 tags = ["writing"]
+aliases = ["/dev/hugo.html"]
 [menu.main]
-  parent = "dev"
+  parent = "misc"
 +++
 
 Markdown記法のテキストをHTMLに変換する、静的ウェブサイト生成プログラム。
