@@ -3,16 +3,16 @@
 <head prefix="og: http://ogp.me/ns#">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
-<title>プロセス管理: nohup, disown, kill - Heavy Watal</title>
+<title>Hugo: 静的サイトを高速生成 - Heavy Watal</title>
 <link rel="stylesheet" href="/css/theme.css">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#e08010">
 <meta name="author" content="Watal M. Iwasaki">
-<meta property="og:title" content="プロセス管理: nohup, disown, kill">
+<meta property="og:title" content="Hugo: 静的サイトを高速生成">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://heavywatal.github.io/dev/nohup.html">
+<meta property="og:url" content="https://heavywatal.github.io/misc/hugo.html">
 <meta property="og:image" content="https://avatars.githubusercontent.com/heavywatal">
 <meta property="og:description" content="">
 <meta property="og:site_name" content="Heavy Watal">
@@ -49,10 +49,10 @@ document.addEventListener("DOMContentLoaded", function() {
 "itemListElement": [
  {"@type": "ListItem",
   "position": 1,
-  "item": {"@id":"https://heavywatal.github.io/dev.html","name":"dev"} },
+  "item": {"@id":"https://heavywatal.github.io/misc.html","name":"misc"} },
  {"@type": "ListItem",
   "position": 2,
-  "item": {"@id":"https://heavywatal.github.io/dev/nohup.html","name":"プロセス管理"} }
+  "item": {"@id":"https://heavywatal.github.io/misc/hugo.html","name":"Hugo"} }
 ]}</script>
 
 <script defer src="https://use.fontawesome.com/releases/v5.8.2/js/all.js" integrity="sha384-DJ25uNYET2XCl5ZF++U8eNxPWqcKohUUBUpKGlNLMchM7q4Wjg2CUpjHLaL8yYPH" crossorigin="anonymous"></script>
@@ -82,146 +82,135 @@ Heavy Watal
 </header>
 <main>
 <article>
-<header><h1><a href="/dev/nohup.html">
-プロセス管理 — nohup, disown, kill
+<header><h1><a href="/misc/hugo.html">
+Hugo — 静的サイトを高速生成
 </a></h1>
 <nav class="tags"><ul>
-<li><i class="fas fa-tag"></i> <a href="/tags/job.html">job</a></li>
+<li><i class="fas fa-tag"></i> <a href="/tags/writing.html">writing</a></li>
 </ul></nav>
 </header>
 
-<h2 id="実行中プロセスを知る">実行中プロセスを知る</h2>
-<p><code>/Applications/Utilities/Activity Monitor.app</code> を見るのが楽チン。</p>
-<h3 id="ps"><code>ps</code></h3>
-<p>OSによって挙動がかなり異なるのでややこしいが、
-LinuxのほうがいくらかBSDに歩み寄ってくれているらしい。
-とりあえず全プロセスを表示するオプション <code>ax</code>
-とカラムをたくさん表示するオプション <code>u</code>
-をつけて <code>less</code> や <code>grep</code> に流すのが基本。</p>
-<p>ソートの仕方は共通ではない。
-出力形式の調整は共通の <code>o</code> オプション。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ps aux <span class="p">|</span> less
-
-<span class="c1">## Sort on Mac</span>
-ps auxm <span class="p">|</span> head  <span class="c1"># by Memory</span>
-ps auxr <span class="p">|</span> head  <span class="c1"># by CPU</span>
-
-<span class="c1">## Sort on Linux</span>
-ps auxk -pmem <span class="p">|</span> head  <span class="c1"># by Memory</span>
-ps auxk -pcpu <span class="p">|</span> head  <span class="c1"># by CPU</span>
-
-<span class="c1">## Output format</span>
-ps axo user,pid,pcpu,pmem,command
-</code></pre></div><h3 id="top"><code>top</code></h3>
-<p>一度表示して終わりではなく、<kbd>q</kbd> で閉じるまで一定間隔で更新される。
-起動してからソート項目を切り替えられる。
-プラスで昇順、マイナスで降順。</p>
-<table>
-<thead>
-<tr>
-<th>by</th>
-<th>Linux</th>
-<th>Mac</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>PID</td>
-<td><kbd>N</kbd></td>
-<td><kbd>o -pid</kbd></td>
-</tr>
-<tr>
-<td>CPU</td>
-<td><kbd>P</kbd></td>
-<td><kbd>o -cpu</kbd></td>
-</tr>
-<tr>
-<td>Memory</td>
-<td><kbd>M</kbd></td>
-<td><kbd>o -mem</kbd></td>
-</tr>
-<tr>
-<td>Time</td>
-<td><kbd>T</kbd></td>
-<td><kbd>o -time</kbd></td>
-</tr>
-</tbody>
-</table>
-<h3 id="jobs"><code>jobs</code></h3>
-<p>システム全体のプロセスが見える上記コマンドとは違い、
-これで見えるのはそのシェルから実行したジョブだけ。
-末尾に<code>&amp;</code>をつけてバックグラウンドで走らせたジョブや、
-<kbd>ctrl-z</kbd> でsuspendしたジョブを眺めるのに使う（下記）。</p>
-<h2 id="ジョブコントロール">ジョブコントロール</h2>
-<p>何らかのプログラムを実行:</p>
-<pre><code>top
-</code></pre>
-<p>ここで <kbd>ctrl-z</kbd> を押すと、プロセスはバックグラウンドで一時停止する:</p>
-<pre><code>[1]  + 19310 suspended  top
-</code></pre>
-<p>バックグラウンドのプロセスを確認するには <code>jobs</code> コマンド。
-左からジョブ番号、カレントジョブか否か、状態、コマンド内容:</p>
-<pre><code>jobs
-[1]  + suspended  top
-</code></pre>
-<p>フォアグラウンドで再開するには <code>fg</code> コマンド。
-引数としてジョブ番号かプログラム名をパーセントに続けて指定する
-(<code>%1</code> とか <code>%a.out</code> とか)。
-<a href="/dev/zsh.html">zsh</a> なら補完もしてくれる。
-引数を省略すると、<code>jobs</code> で <code>+</code> がついてるカレントジョブが選択される。
-:</p>
-<pre><code>fg %1
-[1]  + 19310 continued  top
-</code></pre>
-<p>再び一時停止して、今度はバックグラウンドで再開する。コマンドは <code>bg</code>:</p>
-<pre><code>[1]  + 19310 suspended  top
-bg %top
-</code></pre>
-<p>始めからバックグラウンドで走らせるなら末尾にアンド:</p>
-<pre><code>top &amp;
-</code></pre>
-<p>中止させるには <code>kill</code> コマンドで <code>SIGTERM</code> シグナルを送る。
-指定するのはジョブ番号でも生のプロセスIDでもよい。
-それでも応答しないやつを強制終了するには
-<code>-9</code> オプションをつけて <code>SIGKILL</code> を送るのが最後の手段。
-<code>killall</code> は指定した文字列と前方一致するプロセスを
-すべて <code>kill</code> するショートカット。</p>
-<pre><code>kill %1
-kill -9 %a.out
-kill 19310
-killall a.out
-</code></pre>
-<h2 id="ログアウト後も継続">ログアウト後も継続</h2>
-<p>バックグラウンドで実行中のプロセスも、
-ログアウトするとhangup(<code>HUP</code>)シグナルによって終了してしまう。
-これを無視して実行し続けるようにプログラムを起動するのが <code>nohup</code>。
-バックグランド化までは面倒見てくれないので末尾の <code>&amp;</code> を忘れずに:</p>
-<pre><code>nohup COMMAND [ARGUMENTS] &amp;
-</code></pre>
-<p>標準出力と標準エラー出力は指定しなければ <code>nohup.out</code>
-または <code>~/nohup.out</code> に追記モードでリダイレクトされる。</p>
+<p>Markdown記法のテキストをHTMLに変換する、静的ウェブサイト生成プログラム。
+公式ドキュメントが充実しているので基本的にそれに従えば簡単にできる。</p>
 <ul>
-<li>標準出力の書き出し先を指定するには <code>&gt;{OUTFILE}</code></li>
-<li>標準エラー出力の書き出し先を指定するには <code>2&gt;{OUTFILE}</code></li>
-<li>標準エラー出力を標準出力と同じところに流すには <code>&gt;{OUTFILE} 2&gt;&amp;1</code></li>
+<li><a href="https://gohugo.io/overview/introduction/">https://gohugo.io/overview/introduction/</a></li>
+<li><a href="https://discuss.gohugo.io/">https://discuss.gohugo.io/</a></li>
+<li><a href="https://github.com/gohugoio/hugo">https://github.com/gohugoio/hugo</a></li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">nohup COMMAND &gt;out.log 2&gt;err.log <span class="p">&amp;</span>
-</code></pre></div><p><a href="/dev/ssh.html">ssh</a> 接続先のサーバーで <code>nohup</code> ジョブを走らせるときは
-標準入出力をすべて切っておかないと期待通りにsshを抜けられない:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">nohup COMMAND &gt;/dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span> &lt;/dev/null <span class="p">&amp;</span>
-</code></pre></div><p>うっかり普通に開始してしまったプロセスを後から <code>nohup</code> 状態にするには、
-一時停止して、バックグラウンドで再開して、<code>disown</code> に渡す:</p>
-<pre><code>./a.out  # control + z
-[1]  + 19310 suspended  a.out
-bg %1
-[1]  + 19310 continued  a.out
-disown %1
-</code></pre>
-<p>See <a href="/dev/tmux.html">tmux</a>.<br>
-<code>nohup</code>, <code>disown</code> がプロセス単位で切り離すのに対して、
-<code>tmux</code> は端末セッション丸ごと切り離し＆復帰することができる。</p>
-<h2 id="関連書籍">関連書籍</h2>
-<p><a href="https://www.amazon.co.jp/%E6%96%B0%E3%81%97%E3%81%84Linux%E3%81%AE%E6%95%99%E7%A7%91%E6%9B%B8-%E5%A4%A7%E8%A7%92-%E7%A5%90%E4%BB%8B/dp/4797380942/ref=as_li_ss_il?ie=UTF8&qid=1487931139&sr=8-2&keywords=linux&linkCode=li3&tag=heavywatal-22&linkId=2c6b6bd4a39dec96e1c6caed3bc52116" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4797380942&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4797380942" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
+<p>高速さとシンプルさに惹かれてSphinxから移行し、
+本サイトもHugoでビルドしている。
+オフラインの研究ノートとしても有用。</p>
+<h2 id="quickstart">Quickstart</h2>
+<p><a href="http://gohugo.io/overview/quickstart/">http://gohugo.io/overview/quickstart/</a></p>
+<ul>
+<li>
+<p><a href="https://gohugo.io/getting-started/installing">インストール方法はいろいろ用意されてる</a>。
+例えばMacなら<a href="/mac/homebrew.html">Homebrew</a>で一発:
+<code>brew install hugo</code></p>
+<p>バージョンを細かく指定したりソースコードを改変したりしたい場合はgitから:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">export</span> <span class="nv">GOPATH</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.go
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span>:<span class="si">${</span><span class="nv">GOPATH</span><span class="si">}</span>/bin
+mkdir <span class="nv">$HOME</span>/src
+<span class="nb">cd</span> <span class="nv">$HOME</span>/src
+git clone https://github.com/gohugoio/hugo.git
+<span class="nb">cd</span> hugo
+go install --tags extended
+</code></pre></div><p><code>--tags extended</code> はSASS/SCSS対応版をコンパイルするオプション。</p>
+</li>
+<li>
+<p>骨組みを作る:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> path/to/site
+hugo new site .
+</code></pre></div></li>
+<li>
+<p>ページをMarkdownで書く:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">hugo new about.md
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-markdown" data-lang="markdown">+++
+date = 2016-02-26T19:10:22+09:00
+title = &#34;About&#34;
++++
+
+<span class="gu">## Heading
+</span><span class="gu"></span>
+normal <span class="ge">*italic*</span> **bold**
+</code></pre></div></li>
+<li>
+<p>テーマをとりあえず全部インストール:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git clone --depth <span class="m">1</span> --recursive https://github.com/gohugoio/hugoThemes.git themes
+</code></pre></div></li>
+<li>
+<p>ウェブサーバーを走らせる:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">hugo server -w D -t hyde
+</code></pre></div></li>
+<li>
+<p>ブラウザから http://localhost:1313/about にアクセスしてみる。
+監視オプション <code>-w</code> を付けておけば、ファイルの変更がすぐに反映される。</p>
+</li>
+</ul>
+<h2 id="設定">設定</h2>
+<p><a href="https://gohugo.io/overview/configuration/">https://gohugo.io/overview/configuration/</a></p>
+<p><code>config.toml</code></p>
+<h2 id="theme">Theme</h2>
+<p><a href="http://themes.gohugo.io/">http://themes.gohugo.io/</a></p>
+<p>デフォルトのテーマというものが存在しないのがちょっと厳しい。
+ユーザーによっていろいろ投稿されてるけどほとんどがブログ用途。
+ということで非ブログ用に簡単なものを自作して使っている:</p>
+<p><a href="https://github.com/heavywatal/hugo-theme-nonblog">https://github.com/heavywatal/hugo-theme-nonblog</a></p>
+<h3 id="performance">Performance</h3>
+<p><a href="https://gohugo.io/troubleshooting/build-performance/">https://gohugo.io/troubleshooting/build-performance/</a></p>
+<p>ページによって内容が変わらないテンプレートは <code>partial</code> の代わりに
+<a href="https://gohugo.io/functions/partialcached/"><code>partialCached</code></a>
+を使う。
+ビルドするときに
+<code>--templateMetrics --templateMetricsHints</code>
+オプションを付けるとどのへんを変えたら良いか教えてくれる。</p>
+<h2 id="content">Content</h2>
+<h3 id="markdown">Markdown</h3>
+<dl>
+<dt><a href="http://spec.commonmark.org/">CommonMark</a></dt>
+<dd>&ldquo;Markdown&quot;の正式な仕様というものが存在せず、
+いくつかの方言(flavor)が乱立していたが、
+現在ではこれが事実上の標準仕様となりつつある。
+<a href="https://githubengineering.com/a-formal-spec-for-github-markdown/">2017年からGFMがこれに準拠することになった</a>のもよかった。</dd>
+<dt><a href="https://github.github.com/gfm/">GitHub Flavored Markdown (GFM)</a></dt>
+<dd>CommonMarkに準拠しつついくらかの機能を追加したもの。
+<a href="/dev/atom.html">Atom</a>でも標準サポート。
+基本的な書き方は<a href="https://help.github.com/articles/basic-writing-and-formatting-syntax/">GitHub Helpのページ</a>が読みやすい。</dd>
+<dt><a href="https://github.com/russross/blackfriday">Blackfriday</a></dt>
+<dd>HugoのMarkdownエンジンは長らくこれだった。
+CommonMark準拠じゃないし、
+リストまわりでの不具合が放置されてるし、
+などなど不満が募るうちにGoldmarkに取って代わられた。</dd>
+<dt><a href="https://github.com/yuin/goldmark/">Goldmark</a></dt>
+<dd>2019年末からHugoはこっちに移行した。
+基本的にはCommonMark準拠だけど、
+デフォルト設定での生HTMLコードの扱いがちょっと変。</dd>
+</dl>
+<h3 id="front-matterhttpsgohugoiocontentfront-matter"><a href="https://gohugo.io/content/front-matter/">Front matter</a></h3>
+<p>タイトルや日付などのメタデータをファイルの先頭で記述する。
+YAMLやJSONでもいいけど、
+<a href="https://github.com/toml-lang/toml">TOML</a>のほうが将来性ありそう。</p>
+<h2 id="閲覧公開方法">閲覧・公開方法</h2>
+<h3 id="hugo-server">Hugo Server</h3>
+<p>付属の簡易サーバーを起動。</p>
+<pre><code>hugo server -D -w -s /path/to/source
+open http://localhost:1313/
+</code></pre><h3 id="localhost-mac">localhost (Mac)</h3>
+<p><code>public/</code> 以下に生成されるファイルを
+<code>/Library/WebServer/Documents</code> にコピーすれば
+<a href="http://localhost">localhost</a> で閲覧できる。
+ユーザーの <code>~/Sites/</code> をドキュメントルートにする方法でもいいが、
+単にシンボリックリンクを張るほうが楽ちん。</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> /Library/WebServer/
+sudo mv Documents Documents.orig
+sudo ln -s ~/Sites Documents
+<span class="nb">cd</span> /path/to/site-source
+hugo
+rsync -au --delete --exclude<span class="o">=</span><span class="s1">&#39;.git&#39;</span> public/ ~/Sites/
+open http://localhost/
+</code></pre></div><h3 id="github-pages">GitHub Pages</h3>
+<p><code>public/</code> 以下に生成されるファイルをしかるべきrepository/branchに置くだけ。</p>
+<p>See <a href="/dev/git.html">Git</a></p>
 
 </article>
 </main>
@@ -304,8 +293,8 @@ disown %1
 <li><a href="/bio/motif.html">配列モチーフ探索</a></li>
 </ul>
 
-<input type="checkbox" id="menu-dev" checked>
-<label for="menu-dev" class="active">Developer Tools</label>
+<input type="checkbox" id="menu-dev">
+<label for="menu-dev">Developer Tools</label>
 <ul>
 <li><a href="/dev/atom.html">Atom</a></li>
 <li><a href="/dev/autotools.html">autoconf, automake</a></li>
@@ -324,7 +313,7 @@ disown %1
 <li><a href="/dev/vi.html">vi</a></li>
 <li><a href="/dev/zsh.html">zsh</a></li>
 <li><a href="/dev/sh.html">シェルスクリプト</a></li>
-<li class="active"><a href="/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/dev/nohup.html">プロセス管理</a></li>
 <li><a href="/dev/devenv.html">開発環境</a></li>
 </ul>
 
@@ -354,12 +343,12 @@ disown %1
 <li><a href="/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
 </ul>
 
-<input type="checkbox" id="menu-misc">
-<label for="menu-misc">Miscellaneous</label>
+<input type="checkbox" id="menu-misc" checked>
+<label for="menu-misc" class="active">Miscellaneous</label>
 <ul>
 <li><a href="/misc/fonts.html">Fonts</a></li>
 <li><a href="/misc/gollum.html">Gollum</a></li>
-<li><a href="/misc/hugo.html">Hugo</a></li>
+<li class="active"><a href="/misc/hugo.html">Hugo</a></li>
 <li><a href="/misc/latex.html">LaTeX</a></li>
 </ul>
 
