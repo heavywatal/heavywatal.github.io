@@ -73,9 +73,11 @@ https://github.com/gollum/gollum
     bundle config --local local.gollum ${SRCDIR}/gollum
     ```
 
-1.  `bundle install` で諸々インストール。
+1.  `bundle install` で gollum 及び依存パッケージをまとめてインストール。
+    `--local` を付けてこのプロジェクト専用にしてもよい。
 
-1.  `bundle exec gollum` でとりあえず走らせてみる。
+1.  `bundle exec gollum` でとりあえず走らせる。
+    手元のコンピュータなら <http://localhost:4567> で確認。
 
 
 ## 設定
