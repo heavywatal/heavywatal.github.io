@@ -13,6 +13,38 @@ https://github.com/gollum/gollum
 という方針になったので、学内ネットワークで閲覧編集可能な自前Wikiサーバーを立てる。
 開発環境は macOS, 本番環境は Ubuntu 18.04 LTS.
 
+## ソフトウェア選定
+
+[pukiwiki](https://pukiwiki.osdn.jp/)
+:   学生のときの研究室で使ってたので馴染み深い。
+    でも独自記法だしphpとか文字コードとか考えたくないので却下。
+
+[crowi](https://github.com/crowi/crowi/)
+:   Node.js + MongoDB で動くモダンな Markdown wiki。
+:   生のファイルが見えないデータベースっぽいので管理が難しそう。
+:   [growi](https://growi.org/) はこれをフォークしたもので、
+    機能もドキュメントも強化されてるし、
+    docker-compose とかですぐ使えるのも楽ちん。
+:   日本語の人しか使わなそう...?
+
+[gitit](https://github.com/jgm/gitit)
+:   pandoc + git で動くのでかなり手堅い感じ。
+:   Haskell の勉強を兼ねていじくり回す時間があれば...
+
+[gollum](https://github.com/gollum/gollum)
+:   Ruby + git で動く Markdown wiki。
+:   GitHubやGitLabのWikiにも採用されているのでコミュニティが大きそう。
+:   自前サーバーを管理できる人が抜けても内部データを簡単に再利用可能。
+:   Rubyはよく知らないけど理解しなくても雰囲気でいじれそう。
+
+[Hugo]({{< relref "hugo.md" >}})
+:   静的ウェブサイトを作る用途には最高だけどWiki機能は無い。
+:   [Netlify CMS](https://www.netlifycms.org/)
+    でWiki-likeなガワを取り付けることは可能だけど、
+    編集内容のpush先がGitHubとかになるので、
+    それを学内サーバーに即時反映させるのが難しい。
+
+
 ## gollumインストールとWiki新規作成
 
 1.  最新版のRubyを[rbenv](https://github.com/rbenv/ruby-build/wiki)で入れる:
@@ -50,7 +82,7 @@ https://github.com/gollum/gollum
 
     ---
 
-    gollum本体をいろいろいじくるために自分のフォークを使う場合:
+    gollum本体をいろいろいじくる場合は自分のフォークを使う:
 
     ```gemfile
     gem 'gollum', :github => 'heavywatal/gollum', :branch => 'custom'
@@ -124,13 +156,13 @@ http://example.com/wiki/ のようにアクセスできるようにする。
     ```
 
     ```apache
-    ProxyRequests Off¬
-    <Proxy *>¬
-      Order deny,allow¬
-      Allow from all¬
-    </Proxy>¬
-    ProxyPass /wiki http://localhost:4567/wiki¬
-    ProxyPassReverse /wiki http://localhost:4567/wiki¬
+    ProxyRequests Off
+    <Proxy *>
+      Order deny,allow
+      Allow from all
+    </Proxy>
+    ProxyPass /wiki http://localhost:4567/wiki
+    ProxyPassReverse /wiki http://localhost:4567/wiki
     ```
 
 1.  その設定ファイルを有効化してApache再起動:
@@ -184,7 +216,7 @@ end
 のようなコマンドで計算できる。
 
 
-### Markdownパーサー/レンダラを設定する
+### Markdownパーサー/レンダラを変更する
 
 https://github.com/gollum/gollum/wiki/Custom-rendering-gems
 
@@ -194,7 +226,7 @@ Markdownを読んでHTMLに変換するライブラリは
 デフォルトでは
 [kramdown](https://kramdown.gettalong.org/)
 が利用されるらしいが、
-なるべく[CommonMark+GFM](https://github.github.com/gfm/)準拠で高速なのが良いので、
+なるべく[CommonMark/GFM](https://github.github.com/gfm/)準拠で高速なのが良いので、
 [commonmarker](https://github.com/gjtorikian/commonmarker)
 を使うことにする。
 例によって `config.rb` に追記:
