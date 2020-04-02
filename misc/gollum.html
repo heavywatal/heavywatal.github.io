@@ -94,6 +94,33 @@ Gollum — MarkdownとGitで動くWikiエンジン
 <p>研究室内の連絡・情報共有は、フロー型の情報ならSlackで、ストック型の情報ならWikiで。
 という方針になったので、学内ネットワークで閲覧編集可能な自前Wikiサーバーを立てる。
 開発環境は macOS, 本番環境は Ubuntu 18.04 LTS.</p>
+<h2 id="ソフトウェア選定">ソフトウェア選定</h2>
+<dl>
+<dt><a href="https://pukiwiki.osdn.jp/">pukiwiki</a></dt>
+<dd>学生のときの研究室で使ってたので馴染み深い。
+でも独自記法だしphpとか文字コードとか考えたくないので却下。</dd>
+<dt><a href="https://github.com/crowi/crowi/">crowi</a></dt>
+<dd>Node.js + MongoDB で動くモダンな Markdown wiki。</dd>
+<dd>生のファイルが見えないデータベースっぽいので管理が難しそう。</dd>
+<dd><a href="https://growi.org/">growi</a> はこれをフォークしたもので、
+機能もドキュメントも強化されてるし、
+docker-compose とかですぐ使えるのも楽ちん。</dd>
+<dd>日本語の人しか使わなそう&hellip;?</dd>
+<dt><a href="https://github.com/jgm/gitit">gitit</a></dt>
+<dd>pandoc + git で動くのでかなり手堅い感じ。</dd>
+<dd>Haskell の勉強を兼ねていじくり回す時間があれば&hellip;</dd>
+<dt><a href="https://github.com/gollum/gollum">gollum</a></dt>
+<dd>Ruby + git で動く Markdown wiki。</dd>
+<dd>GitHubやGitLabのWikiにも採用されているのでコミュニティが大きそう。</dd>
+<dd>自前サーバーを管理できる人が抜けても内部データを簡単に再利用可能。</dd>
+<dd>Rubyはよく知らないけど理解しなくても雰囲気でいじれそう。</dd>
+<dt><a href="/misc/hugo.html">Hugo</a></dt>
+<dd>静的ウェブサイトを作る用途には最高だけどWiki機能は無い。</dd>
+<dd><a href="https://www.netlifycms.org/">Netlify CMS</a>
+でWiki-likeなガワを取り付けることは可能だけど、
+編集内容のpush先がGitHubとかになるので、
+それを学内サーバーに即時反映させるのが難しい。</dd>
+</dl>
 <h2 id="gollumインストールとwiki新規作成">gollumインストールとWiki新規作成</h2>
 <ol>
 <li>
@@ -122,7 +149,7 @@ git commit --allow-empty -m <span class="s2">&#34;:beer: Create repository&#34;<
 gem 'commonmarker'
 gem 'gollum'
 </code></pre><hr>
-<p>gollum本体をいろいろいじくるために自分のフォークを使う場合:</p>
+<p>gollum本体をいろいろいじくる場合は自分のフォークを使う:</p>
 <pre><code class="language-gemfile" data-lang="gemfile">gem 'gollum-lib', :github =&gt; 'heavywatal/gollum-lib', :branch =&gt; 'custom'
 gem 'gollum', :github =&gt; 'heavywatal/gollum', :branch =&gt; 'custom'
 </code></pre><p>開発環境ではローカルのクローンを使うように設定:</p>
@@ -170,13 +197,13 @@ e.g., <code>-b/--base-path</code>, <code>--allow-uploads page</code>.</p>
 <li>
 <p>Apacheの設定ファイルを新規作成:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo vim /etc/apache2/sites-available/gollum-wiki.conf
-</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-apache" data-lang="apache"><span class="nb">ProxyRequests</span> <span class="k">Off</span>¬
-<span class="nt">&lt;Proxy</span> <span class="s">*</span><span class="nt">&gt;</span><span class="err">¬</span>
-  <span class="nb">Order</span> deny,allow¬
-  <span class="nb">Allow</span> from <span class="k">all</span>¬
-<span class="nt">&lt;/Proxy&gt;</span><span class="err">¬</span>
-<span class="nb">ProxyPass</span> <span class="sx">/wiki</span> http://localhost:4567/wiki¬
-<span class="nb">ProxyPassReverse</span> <span class="sx">/wiki</span> http://localhost:4567/wiki¬
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-apache" data-lang="apache"><span class="nb">ProxyRequests</span> <span class="k">Off</span>
+<span class="nt">&lt;Proxy</span> <span class="s">*</span><span class="nt">&gt;</span>
+  <span class="nb">Order</span> deny,allow
+  <span class="nb">Allow</span> from <span class="k">all</span>
+<span class="nt">&lt;/Proxy&gt;</span>
+<span class="nb">ProxyPass</span> <span class="sx">/wiki</span> http://localhost:4567/wiki
+<span class="nb">ProxyPassReverse</span> <span class="sx">/wiki</span> http://localhost:4567/wiki
 </code></pre></div></li>
 <li>
 <p>その設定ファイルを有効化してApache再起動:</p>
@@ -219,7 +246,7 @@ sudo systemctl restart apache2
 とか
 <code>echo -n 'greatpassword' | sha256sum</code>
 のようなコマンドで計算できる。</p>
-<h3 id="markdownパーサーレンダラを設定する">Markdownパーサー/レンダラを設定する</h3>
+<h3 id="markdownパーサーレンダラを変更する">Markdownパーサー/レンダラを変更する</h3>
 <p><a href="https://github.com/gollum/gollum/wiki/Custom-rendering-gems">https://github.com/gollum/gollum/wiki/Custom-rendering-gems</a></p>
 <p>Markdownを読んでHTMLに変換するライブラリは
 <a href="https://github.com/github/markup">github-markup</a>
@@ -227,7 +254,7 @@ sudo systemctl restart apache2
 デフォルトでは
 <a href="https://kramdown.gettalong.org/">kramdown</a>
 が利用されるらしいが、
-なるべく<a href="https://github.github.com/gfm/">CommonMark+GFM</a>準拠で高速なのが良いので、
+なるべく<a href="https://github.github.com/gfm/">CommonMark/GFM</a>準拠で高速なのが良いので、
 <a href="https://github.com/gjtorikian/commonmarker">commonmarker</a>
 を使うことにする。
 例によって <code>config.rb</code> に追記:</p>
