@@ -123,16 +123,14 @@ gem 'commonmarker'
 gem 'gollum'
 </code></pre><hr>
 <p>gollum本体をいろいろいじくるために自分のフォークを使う場合:</p>
-<pre><code class="language-gemfile" data-lang="gemfile">gem 'gollum', :github =&gt; 'heavywatal/gollum', :branch =&gt; 'custom'
-</code></pre><p>gollum が依存する gollum-lib のほうはその <code>Gemfile</code> じゃなくて
-<code>~/.bundle/config</code> とか <code>labwiki/.bundle/config</code> に設定:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">bundle config gollum-lib heavywatal/gollum-lib
-</code></pre></div><p>開発環境ではローカルのクローンを使うように設定:</p>
+<pre><code class="language-gemfile" data-lang="gemfile">gem 'gollum-lib', :github =&gt; 'heavywatal/gollum-lib', :branch =&gt; 'custom'
+gem 'gollum', :github =&gt; 'heavywatal/gollum', :branch =&gt; 'custom'
+</code></pre><p>開発環境ではローカルのクローンを使うように設定:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">SRCDIR</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/fork
 git clone https://github.com/heavywatal/gollum-lib.git <span class="si">${</span><span class="nv">SRCDIR</span><span class="si">}</span>/gollum-lib
 git clone https://github.com/heavywatal/gollum.git <span class="si">${</span><span class="nv">SRCDIR</span><span class="si">}</span>/gollum -b custom
-bundle config --local local.gollum-lib <span class="si">${</span><span class="nv">SRCDIR</span><span class="si">}</span>/gollum-lib
-bundle config --local local.gollum <span class="si">${</span><span class="nv">SRCDIR</span><span class="si">}</span>/gollum
+bundle config local.gollum-lib <span class="si">${</span><span class="nv">SRCDIR</span><span class="si">}</span>/gollum-lib
+bundle config local.gollum <span class="si">${</span><span class="nv">SRCDIR</span><span class="si">}</span>/gollum
 </code></pre></div></li>
 <li>
 <p><code>bundle install</code> で gollum 及び依存パッケージをまとめてインストール。
