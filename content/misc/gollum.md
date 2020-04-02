@@ -85,14 +85,8 @@ https://github.com/gollum/gollum
     gollum本体をいろいろいじくる場合は自分のフォークを使う:
 
     ```gemfile
+    gem 'gollum-lib', :github => 'heavywatal/gollum-lib', :branch => 'custom'
     gem 'gollum', :github => 'heavywatal/gollum', :branch => 'custom'
-    ```
-
-    gollum が依存する gollum-lib のほうはその `Gemfile` じゃなくて
-    `~/.bundle/config` とか `labwiki/.bundle/config` に設定:
-
-    ```sh
-    bundle config gollum-lib heavywatal/gollum-lib
     ```
 
     開発環境ではローカルのクローンを使うように設定:
@@ -101,8 +95,8 @@ https://github.com/gollum/gollum
     SRCDIR=${HOME}/fork
     git clone https://github.com/heavywatal/gollum-lib.git ${SRCDIR}/gollum-lib
     git clone https://github.com/heavywatal/gollum.git ${SRCDIR}/gollum -b custom
-    bundle config --local local.gollum-lib ${SRCDIR}/gollum-lib
-    bundle config --local local.gollum ${SRCDIR}/gollum
+    bundle config local.gollum-lib ${SRCDIR}/gollum-lib
+    bundle config local.gollum ${SRCDIR}/gollum
     ```
 
 1.  `bundle install` で gollum 及び依存パッケージをまとめてインストール。
