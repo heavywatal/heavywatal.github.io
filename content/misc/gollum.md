@@ -155,8 +155,10 @@ http://example.com/wiki/ のようにアクセスできるようにする。
       Order deny,allow
       Allow from all
     </Proxy>
-    ProxyPass /wiki http://localhost:4567/wiki
-    ProxyPassReverse /wiki http://localhost:4567/wiki
+    <Location /wiki>
+      ProxyPass http://localhost:4567/wiki
+      ProxyPassReverse http://localhost:4567/wiki
+    </Location>
     ```
 
 1.  その設定ファイルを有効化してApache再起動:
@@ -253,3 +255,33 @@ end
 
 ほかにどんなのが利用可能かはこちらを参照:
 https://github.com/github/markup/blob/master/lib/github/markup/markdown.rb
+
+
+### `systemd` で自動的に開始
+
+```sh
+sudo vim /etc/systemd/system/gollum.service
+```
+
+```ini
+[Unit]
+Description=Gollum wiki server
+After=network.target
+
+[Service]
+Type=simple
+User=YOURNAME
+WorkingDirectory=/path/to/your/labwiki
+ExecStart=bundle exec gollum -c config.rb -b /wiki --allow-uploads dir
+Restart=on-abort
+StandardOutput=file:/var/log/gollum.log
+StandardError=file:/var/log/gollum.log
+
+[Install]
+WantedBy=multi-user.target
+```
+
+```sh
+sudo systemctl start gollum.service
+sudo systemctl enable gollum.service
+```
