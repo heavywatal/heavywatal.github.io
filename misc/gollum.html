@@ -202,8 +202,10 @@ e.g., <code>-b/--base-path</code>, <code>--allow-uploads page</code>.</p>
   <span class="nb">Order</span> deny,allow
   <span class="nb">Allow</span> from <span class="k">all</span>
 <span class="nt">&lt;/Proxy&gt;</span>
-<span class="nb">ProxyPass</span> <span class="sx">/wiki</span> http://localhost:4567/wiki
-<span class="nb">ProxyPassReverse</span> <span class="sx">/wiki</span> http://localhost:4567/wiki
+<span class="nt">&lt;Location</span> <span class="s">/wiki</span><span class="nt">&gt;</span>
+  <span class="nb">ProxyPass</span> http://localhost:4567/wiki
+  <span class="nb">ProxyPassReverse</span> http://localhost:4567/wiki
+<span class="nt">&lt;/Location&gt;</span>
 </code></pre></div></li>
 <li>
 <p>その設定ファイルを有効化してApache再起動:</p>
@@ -283,7 +285,26 @@ sudo systemctl restart apache2
 <span class="k">end</span>
 </code></pre></div><p>ほかにどんなのが利用可能かはこちらを参照:
 <a href="https://github.com/github/markup/blob/master/lib/github/markup/markdown.rb">https://github.com/github/markup/blob/master/lib/github/markup/markdown.rb</a></p>
+<h3 id="systemd-で自動的に開始"><code>systemd</code> で自動的に開始</h3>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo vim /etc/systemd/system/gollum.service
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[Unit]</span>
+<span class="na">Description</span><span class="o">=</span><span class="s">Gollum wiki server</span>
+<span class="na">After</span><span class="o">=</span><span class="s">network.target</span>
 
+<span class="k">[Service]</span>
+<span class="na">Type</span><span class="o">=</span><span class="s">simple</span>
+<span class="na">User</span><span class="o">=</span><span class="s">YOURNAME</span>
+<span class="na">WorkingDirectory</span><span class="o">=</span><span class="s">/path/to/your/labwiki</span>
+<span class="na">ExecStart</span><span class="o">=</span><span class="s">bundle exec gollum -c config.rb -b /wiki --allow-uploads dir</span>
+<span class="na">Restart</span><span class="o">=</span><span class="s">on-abort</span>
+<span class="na">StandardOutput</span><span class="o">=</span><span class="s">file:/var/log/gollum.log</span>
+<span class="na">StandardError</span><span class="o">=</span><span class="s">file:/var/log/gollum.log</span>
+
+<span class="k">[Install]</span>
+<span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo systemctl start gollum.service
+sudo systemctl <span class="nb">enable</span> gollum.service
+</code></pre></div>
 </article>
 </main>
 
