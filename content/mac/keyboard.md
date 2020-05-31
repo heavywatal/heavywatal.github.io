@@ -39,11 +39,28 @@ Shut Down
 Cocoaアプリのキーバインドを変更
 :   `~/Library/KeyBindings/DefaultKeyBinding.dict`
 
+### Display Brightness
 
-## US Keyboard
+明るさ調整の<kbd>🔅<sub>F1</sub></kbd><kbd>🔆<sub>F2</sub></kbd>キーは通常iMacやMacBookにのみ有効で、外部ディスプレイには効かない。
+[ExternalDisplayBrightness](https://github.com/fnesveda/ExternalDisplayBrightness/)
+というアプリを用いることで外部ディスプレイもキーボードで調節できるようになる。
 
-左手小指Aの隣、<kbd>caps lock</kbd>を<kbd>control</kbd>として使う
-:   System Preferences > Keyboard > Modifier Keys...
+
+## System Preferences > Keyboard
+
+Key Repeat & Delay Until Repeat を最速にする
+:   Keyboard > スライダーを両方とも右端に
+
+自動修正をオフにする
+:   Text > 右のやつ全部チェック外す
+
+ショートカットはデフォルト設定を使う
+:   Shortcuts > Restore Defaults (左の項目ごとに、全部)
+
+### US Keyboard
+
+左手小指<kbd>A</kbd>の隣、<kbd>caps lock</kbd>を<kbd>control</kbd>として使う
+:   Keyboard > Modifier Keys...
 
 入力言語切り替え
 :   <kbd>control</kbd><kbd>space</kbd>
