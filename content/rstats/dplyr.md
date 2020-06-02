@@ -19,7 +19,7 @@ data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(
 `install.packages("tidyverse")` で一括インストール、
 `library(tidyverse)` で一括ロード。
 
--   <http://r4ds.had.co.nz/transform.html>
+-   <https://r4ds.had.co.nz/transform.html>
 -   <https://github.com/tidyverse/dplyr>
 
 ## 関数の連結 %>%

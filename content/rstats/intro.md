@@ -45,7 +45,7 @@ tags = ["r"]
 ## インターネットで調べる・尋ねる
 
 - <https://www.rdocumentation.org/>
-- <http://r4ds.had.co.nz/> --- R for Data Science (体系的に学びたい人はぜひ通読を)
+- <https://r4ds.had.co.nz/> --- R for Data Science (体系的に学びたい人はぜひ通読を)
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/r)
 - [r-wakalang](https://github.com/tokyor/r-wakalang) --- Slack上の日本語コミュニティ
 
@@ -260,7 +260,7 @@ See [dplyr]({{< relref "dplyr.md" >}}), [purrr]({{< relref "purrr.md" >}}), and 
 ## 関連書籍
 
 Rのモダンな使い方、考え方を学ぶにはr4ds。
-まずは[公開オンライン版](http://r4ds.had.co.nz/)を読んでみて。<br>
+まずは[公開オンライン版](https://r4ds.had.co.nz/)を読んでみて。<br>
 <a href="https://www.amazon.co.jp/dp/1491910399/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=ebfaf931addcf48f288a9fb8dfebd0c9" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1491910399&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=1491910399" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 <a href="https://www.amazon.co.jp/dp/487311814X/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=c508bbce8036b379868bc9628363583f" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=487311814X&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=487311814X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 

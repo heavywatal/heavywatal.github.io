@@ -11,7 +11,7 @@ https://cran.r-project.org/manuals.html
 ## インストール
 
 - [R本体](https://cran.rstudio.com/)
-- [Rstudio (任意)](https://www.rstudio.com/products/rstudio/download/)
+- [RStudio (任意)](https://www.rstudio.com/products/rstudio/download/)
 
 Macなら [Homebrew]({{< relref "homebrew.md" >}}) で
 `brew cask install r rstudio` のように入れるのが楽チン。
@@ -23,7 +23,7 @@ https://cran.r-project.org/doc/manuals/R-admin.html
 ## 起動オプション
 
 ワークスペースの自動保存や自動復帰は危険なので切っておく。
-R.app や Rstudio から使う場合はメニューから環境設定みたいなやつを開く。
+R.app や RStudio から使う場合はメニューから環境設定みたいなやつを開く。
 シェルから使う場合は例えば以下のようなエイリアスを設定する。
 
 ```sh

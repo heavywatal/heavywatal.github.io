@@ -34,7 +34,7 @@ write_tsv(iris, "iris.tsv.gz")
 read_tsv("iris.tsv.gz")
 ```
 
--   http://r4ds.had.co.nz/data-import.html
+-   https://r4ds.had.co.nz/data-import.html
 -   https://cran.r-project.org/package=readr
 
 ## 主な関数
@@ -218,7 +218,7 @@ LDFLAGS = -L${HOME}/.homebrew/lib
 <img src="http://hexb.in/vector/tibble.svg" align="right" width="120" height="139">
 </a>
 
-- http://r4ds.had.co.nz/tibbles.html
+- https://r4ds.had.co.nz/tibbles.html
 - https://github.com/tidyverse/tibble
 
 `tbl_df` クラスが付与された改良版data.frameのことを**tibble**と呼ぶ。

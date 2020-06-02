@@ -23,13 +23,12 @@ R標準の`boxplot()`や`hist()`などは前者の上に、
 `install.packages("tidyverse")` で一括インストール、
 `library(tidyverse)` で一括ロード。
 
-- [初学者向け講義資料2019](/slides/makino2019r/2-ggplot.html)
+- [初学者向け講義資料2020](/slides/makino2020r/2-ggplot.html)
 - <https://ggplot2.tidyverse.org>
 - <https://r-graphics.org/>
-- <http://r4ds.had.co.nz/data-visualisation.html>
-- <http://r4ds.had.co.nz/graphics-for-communication.html>
-- [version 2.0での変更点](https://blog.rstudio.com/2015/12/21/ggplot2-2-0-0/)
-- [version 3.0での変更点](https://www.tidyverse.org/articles/2018/07/ggplot2-3-0-0/)
+- <https://r4ds.had.co.nz/data-visualisation.html>
+- <https://r4ds.had.co.nz/graphics-for-communication.html>
+
 
 ## 基本的な使い方
 
@@ -577,7 +576,7 @@ ggsave("mpg4.png", p1 + theme_bw(base_size = 22), width = 4, height = 4)
 ## Extensions
 
 - <https://ggplot2.tidyverse.org/articles/extending-ggplot2.html>
-- <https://www.ggplot2-exts.org/>
+- <https://exts.ggplot2.tidyverse.org/>
 
 ggplotを拡張するための仕組みがversion 2.0から正式に導入され、
 ユーザーが独自の stats や geom を作って登録することが容易になった。

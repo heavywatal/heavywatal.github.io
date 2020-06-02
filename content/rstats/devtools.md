@@ -31,7 +31,7 @@ GitHubに公開しておけば誰でも使えるようになるので、
 1.  開発支援パッケージをインストールする:
     `install.packages(c("devtools", "usethis"))`
 
-1.  [usethis](http://usethis.r-lib.org/) の関数をいくつか使って骨組みを作る:
+1.  [usethis](https://usethis.r-lib.org/) の関数をいくつか使って骨組みを作る:
 
     ```r
     usethis::create_package("hello")
@@ -155,7 +155,7 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 <img src="http://hexb.in/vector/testthat.svg" align="right" width="120" height="139">
 </a>
 
-[testthat](http://testthat.r-lib.org)パッケージを使うのがデファクトスタンダード。
+[testthat](https://testthat.r-lib.org)パッケージを使うのがデファクトスタンダード。
 `use_testthat()` で初期設定して
 `use_test("somefunction")` のようにテストファイルを追加する。
 `tests/testthat/` 以下のファイル構成は `R/` と同じにしておくといい。
@@ -164,7 +164,7 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 ソースコードのうちどれくらいがテストでカバーされてるかを可視化すると良い。
 
 
-### [その他](http://r-pkgs.org/misc.html)
+### [その他](https://r-pkgs.org/misc.html)
 
 `demo/`
 :   vignettesに取って代わられた古い機能。

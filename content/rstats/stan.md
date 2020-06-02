@@ -10,10 +10,10 @@ subtitle = "高速MCMCでパラメータ推定"
 +++
 
 数あるMCMCアルゴリズムの中でも効率的なHMC(Hybrid/Hamiltonian Monte Carlo)を用いてベイズ推定を行うツール。
-[Pythonやコマンドラインなどいろんな形で利用可能](http://mc-stan.org/interfaces/)だが、
-とりあえずRで[RStan](http://mc-stan.org/interfaces/rstan.html)を使ってみる。
+[Pythonやコマンドラインなどいろんな形で利用可能](https://mc-stan.org/interfaces/)だが、
+とりあえずRで[RStan](https://mc-stan.org/interfaces/rstan.html)を使ってみる。
 
-http://mc-stan.org/
+https://mc-stan.org/
 
 ## インストール
 
@@ -88,7 +88,7 @@ jagsと違ってstan本体も同時に入れてくれる。
 
 ## Stan文法
 
-http://mc-stan.org/documentation/
+https://mc-stan.org/documentation/
 PDFしか無くて残念
 
 ### ブロック

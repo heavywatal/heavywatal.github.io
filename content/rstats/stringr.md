@@ -37,7 +37,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 `install.packages("tidyverse")` で一括インストール、
 `library(tidyverse)` で一括ロード。
 
--   <http://r4ds.had.co.nz/strings.html>
+-   <https://r4ds.had.co.nz/strings.html>
 -   <https://cran.r-project.org/web/packages/stringr/>
 -   <https://github.com/tidyverse/stringr>
 -   <https://www.rdocumentation.org/packages/stringr>
