@@ -261,7 +261,9 @@ data.frameを縦長(long-format)から横長(wide-format)に変形する。
 <span class="c1">#&gt; 18 70-74  Rural Female  54.3</span>
 <span class="c1">#&gt; 19 70-74  Urban   Male  71.1</span>
 <span class="c1">#&gt; 20 70-74  Urban Female  50.0</span>
-</code></pre></div><p><code>names_ptypes</code> に指定すると、列名だった変数の移動後の型変換を試みる:</p>
+</code></pre></div><p><code>names_transform</code> に関数を指定すると、
+列名だったものに適用される。
+例えば型変換に使える:</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">anscombe</span>
 <span class="c1">#&gt;    x1 x2 x3 x4    y1   y2    y3    y4</span>
 <span class="c1">#&gt; 1  10 10 10  8  8.04 9.14  7.46  6.58</span>
@@ -281,7 +283,7 @@ data.frameを縦長(long-format)から横長(wide-format)に変形する。
   <span class="n">tidyr</span><span class="o">::</span><span class="nf">pivot_longer</span><span class="p">(</span><span class="o">-</span><span class="n">id</span><span class="p">,</span>
     <span class="n">names_to</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;axis&#34;</span><span class="p">,</span> <span class="s">&#34;group&#34;</span><span class="p">),</span>
     <span class="n">names_sep</span> <span class="o">=</span> <span class="m">1L</span><span class="p">,</span>
-    <span class="n">names_ptypes</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">group</span> <span class="o">=</span> <span class="nf">integer</span><span class="p">()))</span> <span class="o">%&gt;%</span>
+    <span class="n">names_transform</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">group</span> <span class="o">=</span> <span class="n">as.integer</span><span class="p">))</span> <span class="o">%&gt;%</span>
   <span class="n">tidyr</span><span class="o">::</span><span class="nf">pivot_wider</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">group</span><span class="p">),</span> <span class="n">names_from</span> <span class="o">=</span> <span class="n">axis</span><span class="p">)</span> <span class="o">%&gt;%</span>
   <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="o">-</span><span class="n">id</span><span class="p">)</span> <span class="o">%&gt;%</span>
   <span class="n">dplyr</span><span class="o">::</span><span class="nf">arrange</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
@@ -314,7 +316,8 @@ data.frameを縦長(long-format)から横長(wide-format)に変形する。
 <span class="c1">#&gt; 43     3     5</span>
 <span class="c1">#&gt; 44     4     8</span>
 </code></pre></div><p><code>names_to</code> に <code>&quot;.value&quot;</code> という特殊な値を渡すことで、
-旧列名から新しい列名が作られ、複数列への縦長変形を同時にできる。</p>
+旧列名から新しい列名が作られ、複数列への縦長変形を同時にできる。
+また <code>names_to = c(&quot;name&quot;, NA)</code> のように不要な列を捨てることもできる。</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">tidy_anscombe</span> <span class="o">=</span> <span class="n">anscombe</span> <span class="o">%&gt;%</span>
   <span class="n">tidyr</span><span class="o">::</span><span class="nf">pivot_longer</span><span class="p">(</span>                <span class="c1"># 縦長に変形したい</span>
     <span class="nf">everything</span><span class="p">(),</span>                     <span class="c1"># すべての列について</span>
@@ -350,8 +353,9 @@ data.frameを縦長(long-format)から横長(wide-format)に変形する。
 <span class="c1">#&gt; 3  virginica &lt;tbl_df [50 x 4]&gt;</span>
 
 <span class="c1"># equivalent to</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_nest</span><span class="p">(</span><span class="n">Species</span><span class="p">,</span> <span class="n">.key</span> <span class="o">=</span> <span class="s">&#34;NEW_COLUMN&#34;</span><span class="p">)</span>
 <span class="n">iris</span> <span class="o">%&gt;%</span> <span class="nf">nest</span><span class="p">(</span><span class="n">NEW_COLUMN</span> <span class="o">=</span> <span class="nf">matches</span><span class="p">(</span><span class="s">&#34;Length$|Width$&#34;</span><span class="p">))</span>
+<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_nest</span><span class="p">(</span><span class="n">Species</span><span class="p">,</span> <span class="n">.key</span> <span class="o">=</span> <span class="s">&#34;NEW_COLUMN&#34;</span><span class="p">)</span>
+<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">nest_by</span><span class="p">(</span><span class="n">Species</span><span class="p">,</span> <span class="n">.key</span> <span class="o">=</span> <span class="s">&#34;NEW_COLUMN&#34;</span><span class="p">)</span>
 </code></pre></div><p>なんでもかんでもフラットなdata.frameにして
 <a href="/rstats/dplyr.html">dplyr</a>を駆使する時代は終わり、
 ネストしておいて<a href="/rstats/purrr.html">purrr</a>を適用するのが

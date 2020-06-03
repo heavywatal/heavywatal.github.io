@@ -94,7 +94,7 @@ dplyr — 高速data.frame処理
 <a href="https://dplyr.tidyverse.org/">
 <img src="http://hexb.in/vector/dplyr.svg" align="right" width="120" height="139">
 </a>
-<p>data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(summarise)、ソート(arrange)などの処理を施すためのパッケージ。
+<p>data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(summarize)、ソート(arrange)などの処理を施すためのパッケージ。
 前作 <a href="/rstats/plyr.html">plyr</a> のうちdata.frameに関する部分が強化されている。
 <a href="/rstats/purrr.html">purrr</a> や <a href="/rstats/tidyr.html">tidyr</a> と一緒に使うとよい。</p>
 <p><a href="https://tidyverse.tidyverse.org/">tidyverse</a> に含まれているので、
@@ -117,36 +117,36 @@ dplyr — 高速data.frame処理
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
 
 <span class="c1">## with piping</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span>
-  <span class="n">dplyr</span><span class="o">::</span><span class="nf">filter</span><span class="p">(</span><span class="n">Species</span> <span class="o">!=</span> <span class="s">&#34;setosa&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
-  <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="o">-</span><span class="n">dplyr</span><span class="o">::</span><span class="nf">starts_with</span><span class="p">(</span><span class="s">&#34;Sepal&#34;</span><span class="p">))</span> <span class="o">%&gt;%</span>
-  <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">petal_area</span> <span class="o">=</span> <span class="n">Petal.Length</span> <span class="o">*</span> <span class="n">Petal.Width</span> <span class="o">*</span> <span class="m">0.5</span><span class="p">)</span> <span class="o">%&gt;%</span>
-  <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span> <span class="o">%&gt;%</span>
-  <span class="n">dplyr</span><span class="o">::</span><span class="nf">summarise_all</span><span class="p">(</span><span class="nf">funs</span><span class="p">(</span><span class="n">mean</span><span class="p">))</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">diamonds</span> <span class="o">%&gt;%</span>              <span class="c1"># 生データから出発して</span>
+  <span class="nf">select</span><span class="p">(</span><span class="n">carat</span><span class="p">,</span> <span class="n">cut</span><span class="p">,</span> <span class="n">price</span><span class="p">)</span> <span class="o">%&gt;%</span>    <span class="c1"># 列を抽出して</span>
+  <span class="nf">filter</span><span class="p">(</span><span class="n">carat</span> <span class="o">&gt;</span> <span class="m">1</span><span class="p">)</span> <span class="o">%&gt;%</span>            <span class="c1"># 行を抽出して</span>
+  <span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">%&gt;%</span>                <span class="c1"># グループ化して</span>
+  <span class="nf">summarize</span><span class="p">(</span><span class="nf">mean</span><span class="p">(</span><span class="n">price</span><span class="p">))</span> <span class="o">%&gt;%</span>       <span class="c1"># 平均を計算</span>
+  <span class="nf">print</span><span class="p">()</span>                          <span class="c1"># 表示してみる</span>
 
 <span class="c1">## with a temporary variable</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">iris</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">filter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Species</span> <span class="o">!=</span> <span class="s">&#34;setosa&#34;</span><span class="p">)</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">dplyr</span><span class="o">::</span><span class="nf">starts_with</span><span class="p">(</span><span class="s">&#34;Sepal&#34;</span><span class="p">))</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">petal_area</span> <span class="o">=</span> <span class="n">Petal.Length</span> <span class="o">*</span> <span class="n">Petal.Width</span> <span class="o">*</span> <span class="m">0.5</span><span class="p">)</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Species</span><span class="p">)</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">summarise_all</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nf">funs</span><span class="p">(</span><span class="n">mean</span><span class="p">))</span>
+<span class="n">result</span> <span class="o">=</span> <span class="nf">select</span><span class="p">(</span><span class="n">diamonds</span><span class="p">,</span> <span class="n">carat</span><span class="p">,</span> <span class="n">cut</span><span class="p">,</span> <span class="n">price</span><span class="p">)</span> <span class="c1"># 列を抽出して</span>
+<span class="n">result</span> <span class="o">=</span> <span class="nf">filter</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">carat</span> <span class="o">&gt;</span> <span class="m">1</span><span class="p">)</span>           <span class="c1"># 行を抽出して</span>
+<span class="n">result</span> <span class="o">=</span> <span class="nf">group_by</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">cut</span><span class="p">)</span>               <span class="c1"># グループ化して</span>
+<span class="n">result</span> <span class="o">=</span> <span class="nf">summarize</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nf">mean</span><span class="p">(</span><span class="n">price</span><span class="p">))</span>      <span class="c1"># 平均を計算</span>
 
 <span class="c1">## with nested functions</span>
-<span class="n">dplyr</span><span class="o">::</span><span class="nf">summarise_all</span><span class="p">(</span>
-  <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span>
-    <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span>
-      <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span>
-        <span class="n">dplyr</span><span class="o">::</span><span class="nf">filter</span><span class="p">(</span><span class="n">iris</span><span class="p">,</span> <span class="n">Species</span> <span class="o">!=</span> <span class="s">&#34;setosa&#34;</span><span class="p">),</span>
-        <span class="o">-</span><span class="n">dplyr</span><span class="o">::</span><span class="nf">starts_with</span><span class="p">(</span><span class="s">&#34;Sepal&#34;</span><span class="p">)),</span>
-      <span class="n">petal_area</span> <span class="o">=</span> <span class="n">Petal.Length</span> <span class="o">*</span> <span class="n">Petal.Width</span> <span class="o">*</span> <span class="m">0.5</span><span class="p">),</span>
-    <span class="n">Species</span><span class="p">),</span>
-  <span class="nf">funs</span><span class="p">(</span><span class="n">mean</span><span class="p">))</span>
+<span class="n">result</span> <span class="o">=</span> <span class="nf">summarize</span><span class="p">(</span>                    <span class="c1"># 平均を計算</span>
+    <span class="nf">group_by</span><span class="p">(</span>                            <span class="c1"># グループ化して</span>
+      <span class="nf">filter</span><span class="p">(</span>                              <span class="c1"># 行を抽出して</span>
+        <span class="nf">select</span><span class="p">(</span><span class="n">diamonds</span><span class="p">,</span> <span class="n">carat</span><span class="p">,</span> <span class="n">cut</span><span class="p">,</span> <span class="n">price</span><span class="p">),</span> <span class="c1"># 列を抽出して</span>
+        <span class="n">carat</span> <span class="o">&gt;</span> <span class="m">1</span><span class="p">),</span>                        <span class="c1"># 行を抽出して</span>
+      <span class="n">cut</span><span class="p">),</span>                              <span class="c1"># グループ化して</span>
+    <span class="nf">mean</span><span class="p">(</span><span class="n">price</span><span class="p">))</span>                       <span class="c1"># 平均を計算</span>
 
 <span class="c1">## result</span>
-     <span class="n">Species</span> <span class="n">Petal.Length</span> <span class="n">Petal.Width</span> <span class="n">petal_area</span>
-<span class="m">1</span> <span class="n">versicolor</span>        <span class="m">4.260</span>       <span class="m">1.326</span>     <span class="m">2.8602</span>
-<span class="m">2</span>  <span class="n">virginica</span>        <span class="m">5.552</span>       <span class="m">2.026</span>     <span class="m">5.6481</span>
+        <span class="n">cut</span> <span class="nf">mean</span><span class="p">(</span><span class="n">price</span><span class="p">)</span>
+      <span class="o">&lt;</span><span class="n">ord</span><span class="o">&gt;</span>       <span class="o">&lt;</span><span class="n">dbl</span><span class="o">&gt;</span>
+<span class="m">1</span>      <span class="n">Fair</span>    <span class="m">7177.856</span>
+<span class="m">2</span>      <span class="n">Good</span>    <span class="m">7753.601</span>
+<span class="m">3</span> <span class="n">Very</span> <span class="n">Good</span>    <span class="m">8340.549</span>
+<span class="m">4</span>   <span class="n">Premium</span>    <span class="m">8487.249</span>
+<span class="m">5</span>     <span class="n">Ideal</span>    <span class="m">8674.227</span>
 </code></pre></div><p>現状では <code>magrittr</code> パッケージの <code>%&gt;%</code> が広く採用されているが、
 <code>pipeR</code> パッケージの <code>%&gt;&gt;%</code> のほうが高速らしい。
 <a href="https://renkun-ken.github.io/pipeR-tutorial/">https://renkun-ken.github.io/pipeR-tutorial/</a></p>
@@ -161,11 +161,13 @@ dplyr — 高速data.frame処理
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="n">Petal.Width</span><span class="p">,</span> <span class="n">Species</span><span class="p">)</span>
 <span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="s">&#34;Petal.Width&#34;</span><span class="p">,</span> <span class="s">&#34;Species&#34;</span><span class="p">)</span>
 <span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&#34;Petal.Width&#34;</span><span class="p">,</span> <span class="s">&#34;Species&#34;</span><span class="p">))</span>
+<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="nf">any_of</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&#34;Petal.Width&#34;</span><span class="p">,</span> <span class="s">&#34;Species&#34;</span><span class="p">,</span> <span class="s">&#34;NOEXIST&#34;</span><span class="p">)))</span>
 <span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="m">4</span><span class="o">:</span><span class="m">5</span><span class="p">)</span>
 <span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="o">-</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">))</span>
 <span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">Sepal.Length</span><span class="o">:</span><span class="n">Petal.Length</span><span class="p">))</span>
 <span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="nf">matches</span><span class="p">(</span><span class="s">&#34;^Petal\\.Width$|^Species$&#34;</span><span class="p">))</span>
-</code></pre></div></dd>
+</code></pre></div><p><a href="https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html">https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html</a></p>
+</dd>
 <dd>
 <p>文字列変数で指定しようとすると意図が曖昧になるので、
 <a href="https://dplyr.tidyverse.org/articles/programming.html#unquoting">unquoting</a>
@@ -186,9 +188,6 @@ dplyr — 高速data.frame処理
 <span class="n">iris</span> <span class="o">%&gt;%</span> <span class="nf">distinct</span><span class="p">(</span><span class="o">!!!</span><span class="n">rlang</span><span class="o">::</span><span class="nf">syms</span><span class="p">(</span><span class="n">columns</span><span class="p">))</span>
 </code></pre></div><p>詳しくは<a href="https://amzn.to/2u0hmTs">宇宙本</a>第3章のコラム
 「selectのセマンティクスとmutateのセマンティクス、tidyeval」を参照。</p>
-</dd>
-<dd>
-<p>列の値によって選べる亜種 <code>dplyr::select_if(.tbl, .predicate, ...)</code> もある。</p>
 </dd>
 <dt><code>dplyr::rename(.data, ...)</code></dt>
 <dd>列の改名。
@@ -215,12 +214,9 @@ dplyr — 高速data.frame処理
 </code></pre></div></dd>
 <dd>
 <p>リネーム関数を渡せる亜種:<br>
-<code>rename_all(.tbl, .funs = list(), ...)</code><br>
-<code>rename_at(.tbl, .vars, .funs = list(), ...)</code><br>
-<code>rename_if(.tbl, .predicate, .funs = list(), ...)</code><br></p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">pattern</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;^Sepal&#34;</span> <span class="o">=</span> <span class="s">&#34;Gaku&#34;</span><span class="p">,</span> <span class="s">&#34;^Petal&#34;</span> <span class="o">=</span> <span class="s">&#34;Kaben&#34;</span><span class="p">)</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="nf">head</span><span class="p">()</span> <span class="o">%&gt;%</span>
-  <span class="n">dplyr</span><span class="o">::</span><span class="nf">rename_all</span><span class="p">(</span><span class="n">stringr</span><span class="o">::</span><span class="n">str_replace_all</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span> <span class="o">%&gt;%</span>
+<code>rename_with(.tbl, .fn, .cols = everything(), ...)</code><br></p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="nf">head</span><span class="p">()</span> <span class="o">%&gt;%</span>
+  <span class="n">dplyr</span><span class="o">::</span><span class="nf">rename_with</span><span class="p">(</span><span class="n">toupper</span><span class="p">,</span> <span class="nf">everything</span><span class="p">())</span> <span class="o">%&gt;%</span>
   <span class="nf">print</span><span class="p">()</span>
 </code></pre></div></dd>
 <dt><code>dplyr::pull(.data, var = -1)</code></dt>
@@ -251,12 +247,6 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code>
 </div>
 
 </dd>
-<dd>
-<p>複数列で評価する亜種:<br>
-<code>filter_all(.tbl, .vars_predicate)</code><br>
-<code>filter_if(.tbl, .predicate, .vars_predicate)</code><br>
-<code>filter_at(.tbl, .vars, .vars_predicate)</code><br></p>
-</dd>
 <dt><code>dplyr::distinct(.data, ..., .keep_all = FALSE)</code></dt>
 <dd>指定した列に関してユニークな行のみ返す。
 <code>base::unique.data.frame()</code> よりも高速で、
@@ -277,9 +267,11 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code>
 <span class="c1"># 2          4.7         3.2          1.3         0.2  setosa</span>
 <span class="c1"># 3          4.6         3.1          1.5         0.2  setosa</span>
 </code></pre></div></dd>
-<dt><code>dplyr::sample_n(tbl, size, replace = FALSE, weight = NULL)</code></dt>
-<dd>指定した行数だけランダムサンプルする。
-割合指定の <code>sample_frac()</code> もある。</dd>
+<dt><code>dplyr::slice_head(.data, ..., n, prop)</code>, <code>slice_tail()</code></dt>
+<dd>先頭・末尾の行を抽出。</dd>
+<dt><code>dplyr::slice_sample(.data, ..., n, prop, weight_by = NULL, replace = FALSE)</code></dt>
+<dd>指定した行数・割合だけランダムサンプルする。</dd>
+<dd><code>sample_n()</code> と <code>sample_frac()</code> は非推奨。</dd>
 </dl>
 <h2 id="列の変更追加">列の変更・追加</h2>
 <dl>
@@ -309,49 +301,56 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code>
 <span class="c1"># 1          5.1         3.5          1.4         0.2  setosa   1.629241</span>
 <span class="c1"># 2          4.9         3.0          1.4         0.2  setosa   1.589235</span>
 </code></pre></div></dd>
-<dd>複数列を変更する亜種:<br>
-<code>mutate_all(.tbl, .funs, ...)</code><br>
-<code>mutate_at(.tbl, .vars, .funs, ..., .cols = NULL)</code><br>
-<code>mutate_each(.tbl, .funs, ...)</code><br>
-<code>mutate_if(.tbl, .predicate, .funs, ...)</code><br></dd>
 <dt><code>dplyr::transmute(.data, ...)</code></dt>
 <dd>指定した列以外を保持しない版 <code>mutate()</code> 。
 言い換えると、列の中身の変更もできる版 <code>select()</code> 。</dd>
-<dd>複数列を変更する亜種:<br>
-<code>transmute_all(.tbl, .funs, ...)</code><br>
-<code>transmute_at(.tbl, .vars, .funs, ..., .cols = NULL)</code><br>
-<code>transmute_if(.tbl, .predicate, .funs, ...)</code><br></dd>
 </dl>
 <h2 id="dataframeの要約集計整列">data.frameの要約・集計・整列</h2>
 <dl>
-<dt><code>dplyr::summarise(.data, ...)</code></dt>
+<dt><code>dplyr::summarize(.data, ..., .group = NULL)</code></dt>
 <dd>指定した列に関数を適用して1行のdata.frameにまとめる。
 グループ化されていたらグループごとに適用して <code>bind_rows()</code> する。
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span> <span class="o">%&gt;%</span>
-    <span class="n">dplyr</span><span class="o">::</span><span class="nf">summarise</span><span class="p">(</span><span class="n">minpl</span> <span class="o">=</span> <span class="nf">min</span><span class="p">(</span><span class="n">Petal.Length</span><span class="p">),</span> <span class="n">maxsw</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="n">Sepal.Width</span><span class="p">))</span>
-<span class="c1">#      Species minpl maxsw</span>
-<span class="c1"># 1     setosa   1.0   4.4</span>
-<span class="c1"># 2 versicolor   3.0   3.4</span>
-<span class="c1"># 3  virginica   4.5   3.8</span>
+  <span class="n">dplyr</span><span class="o">::</span><span class="nf">summarize</span><span class="p">(</span><span class="n">minpw</span> <span class="o">=</span> <span class="nf">min</span><span class="p">(</span><span class="n">Petal.Width</span><span class="p">),</span> <span class="n">maxpw</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="n">Petal.Width</span><span class="p">))</span>
+<span class="c1">#      Species minpw maxpw</span>
+<span class="c1"># 1     setosa   0.1   0.6</span>
+<span class="c1"># 2 versicolor   1.0   1.8</span>
+<span class="c1"># 3  virginica   1.4   2.5</span>
 </code></pre></div></dd>
-<dt><code>dplyr::summarise_all(.data, .funs, ...)</code></dt>
-<dd>全てのカラムに関数を適用する。
-<code>***_each()</code> は非推奨になった。
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span> <span class="o">%&gt;%</span>
-    <span class="n">dplyr</span><span class="o">::</span><span class="nf">summarise_all</span><span class="p">(</span><span class="nf">funs</span><span class="p">(</span><span class="n">min</span><span class="p">,</span> <span class="n">max</span><span class="p">))</span>
+<dd>
+<p>関数の結果が長さ1じゃなくても大丈夫(v1.0.0)。</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">summarize</span><span class="p">(</span><span class="n">rangepw</span> <span class="o">=</span> <span class="nf">range</span><span class="p">(</span><span class="n">Petal.Width</span><span class="p">))</span>
+<span class="c1">#   rangepw</span>
+<span class="c1"># 1     0.1</span>
+<span class="c1"># 2     2.5</span>
 </code></pre></div></dd>
-<dt><code>dplyr::summarise_at(.data, .cols, .funs, ...)</code></dt>
-<dd>select補助関数を使って指定したカラムに関数を適用する。
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span> <span class="o">%&gt;%</span>
-    <span class="n">dplyr</span><span class="o">::</span><span class="nf">summarise_at</span><span class="p">(</span><span class="nf">vars</span><span class="p">(</span><span class="n">dplyr</span><span class="o">::</span><span class="nf">ends_with</span><span class="p">(</span><span class="s">&#34;Width&#34;</span><span class="p">)),</span> <span class="nf">funs</span><span class="p">(</span><span class="n">min</span><span class="p">,</span> <span class="n">max</span><span class="p">))</span>
+<dd>
+<p>各グループの結果がtibbleの場合、結合・展開してくれる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">nest_by</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="n">dplyr</span><span class="o">::</span><span class="nf">summarize</span><span class="p">(</span><span class="nf">head</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="m">2L</span><span class="p">))</span>
+</code></pre></div><p>これを利用して複数ファイルを一気読みできる</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">path</span> <span class="o">=</span> <span class="n">fs</span><span class="o">::</span><span class="nf">dir_ls</span><span class="p">(</span><span class="s">&#34;path/to/data&#34;</span><span class="p">,</span> <span class="n">glob</span> <span class="o">=</span> <span class="s">&#34;*.tsv&#34;</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="nf">tibble</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="n">dplyr</span><span class="o">::</span><span class="nf">rowwise</span><span class="p">()</span> <span class="o">%&gt;%</span>
+  <span class="n">dplyr</span><span class="o">::</span><span class="nf">summarize</span><span class="p">(</span><span class="n">readr</span><span class="o">::</span><span class="nf">read_tsv</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
 </code></pre></div></dd>
-<dt><code>dplyr::summarise_if(.data, .predicate, .funs, ...)</code></dt>
-<dd><code>.predicate</code>がTRUEになるカラムだけに関数を適用する。
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span> <span class="o">%&gt;%</span>
-    <span class="n">dplyr</span><span class="o">::</span><span class="nf">summarise_if</span><span class="p">(</span><span class="n">is.numeric</span><span class="p">,</span> <span class="nf">funs</span><span class="p">(</span><span class="n">min</span><span class="p">,</span> <span class="n">max</span><span class="p">))</span>
-</code></pre></div></dd>
+<dd>
+<p>複数カラムに関数を適用するには <code>across()</code> を使う</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># summarize_at</span>
+<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="nf">group_by</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">summarize</span><span class="p">(</span><span class="nf">across</span><span class="p">(</span><span class="nf">ends_with</span><span class="p">(</span><span class="s">&#34;Width&#34;</span><span class="p">),</span> <span class="n">mean</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">))</span>
+
+<span class="c1"># summarize_if</span>
+<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="nf">group_by</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">summarize</span><span class="p">(</span><span class="nf">across</span><span class="p">(</span><span class="n">is.numeric</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">))</span>
+
+<span class="c1"># summarize_all</span>
+<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="nf">group_by</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">summarize</span><span class="p">(</span><span class="nf">across</span><span class="p">(</span><span class="nf">everything</span><span class="p">(),</span> <span class="n">mean</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">))</span>
+</code></pre></div><p><code>*_at()</code>, <code>*_if()</code>, <code>*_all()</code>, <code>*_each()</code> は非推奨。</p>
+</dd>
 <dt><code>dplyr::tally(x, wt, sort = FALSE)</code></dt>
-<dd><code>summarise(x, n = n())</code> のショートカット。
+<dd><code>summarize(x, n = n())</code> のショートカット。
 <code>wt</code> にカラムを指定して重み付けすることもできる。</dd>
 <dd><code>dplyr::add_tally()</code> は元の形を維持したままカウント列を追加。</dd>
 <dt><code>dplyr::count(x, ..., wt = NULL, sort = FALSE)</code></dt>
@@ -365,13 +364,11 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code>
 <span class="c1"># is equivalent to</span>
 <span class="n">mtcars</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">arrange</span><span class="p">(</span><span class="n">cyl</span><span class="p">,</span> <span class="n">disp</span><span class="p">)</span>
 </code></pre></div></dd>
-<dt><code>dplyr::top_n(.data, n, wt)</code></dt>
-<dd><code>wt</code> で指定した列(省略時は右端の列)の降順で <code>n</code> 行だけ返す。
-境界にタイがある場合はすべて保持されて <code>n</code> 行以上の出力になる。
-元の順番が保持されるので、ソートされた結果が欲しい場合は事後に
-<code>arrange()</code> を適用することになる。
-順序の方向が <code>arrange()</code> と逆であることに注意。
-昇順で取りたいときは <code>n</code> にマイナス指定か <code>wt</code> に <code>desc(X)</code> (昇順なのに！)。</dd>
+<dt><code>dplyr::slice_max(.data, order_by, ..., n, prop, with_ties = TRUE)</code></dt>
+<dd><code>order_by, ...</code> で指定した列の降順で <code>n</code> 行だけ返す。
+境界のタイを保持する場合は <code>n</code> 行以上の出力になる。
+昇順で取りたいときはマイナス指定か <code>slice_min()</code>。</dd>
+<dd><code>top_n()</code> は非推奨。</dd>
 </dl>
 <h2 id="dataframeを結合">data.frameを結合</h2>
 <dl>
@@ -452,7 +449,7 @@ NAのときにどうするかを指定できるのも大変良い。
 </code></pre></div><dl>
 <dt><code>dplyr::group_by(.data, ..., add = FALSE, .drop = group_by_drop_default(.data))</code></dt>
 <dd>グループごとに区切って次の処理に渡す。
-e.g. <code>summarise()</code>, <code>tally()</code>, <code>group_modify()</code> など</dd>
+e.g. <code>summarize()</code>, <code>slice()</code>, <code>tally()</code>, <code>group_modify()</code> など</dd>
 <dd><code>.drop = FALSE</code> とすると行数ゼロになるグループも捨てずに保持できる。</dd>
 <dt><code>dplyr::group_data(.data)</code></dt>
 <dd>グループ情報を参照:
@@ -474,8 +471,7 @@ e.g. <code>summarise()</code>, <code>tally()</code>, <code>group_modify()</code>
 <dt><code>dplyr::group_indices(.data, ...)</code></dt>
 <dd><code>grouped_df</code> ではなくグループIDとして1からの整数列を返す版 <code>group_by()</code></dd>
 <dt><code>dplyr::group_modify(.tbl, .f, ...)</code></dt>
-<dd>グループごとに <code>.f</code> を適用してまとめたdata.frameを返す。
-「それぞれの結果の長さが1」という制約がないぶん <code>summarise()</code> よりも柔軟。</dd>
+<dd>グループごとに <code>.f</code> を適用してまとめたdata.frameを返す。</dd>
 <dd><code>.f</code> には<a href="/rstats/purrr.html#無名関数">purrrでよく見る無名関数</a>を渡す。
 (普通の関数も渡せるはずだけどちょっと挙動が変？)
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_modify</span><span class="p">(</span><span class="o">~</span> <span class="nf">head</span><span class="p">(</span><span class="n">.x</span><span class="p">,</span> <span class="m">2L</span><span class="p">))</span>
@@ -499,9 +495,11 @@ e.g. <code>summarise()</code>, <code>tally()</code>, <code>group_modify()</code>
 代わりに <code>group_modify()</code> とかを使う。
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">do</span><span class="p">(</span><span class="nf">head</span><span class="p">(</span><span class="n">.,</span> <span class="m">2L</span><span class="p">))</span>
 </code></pre></div></dd>
-<dt><code>dplyr::rowwise(.data)</code></dt>
-<dd>非推奨。
-代わりに<a href="/rstats/purrr.html"><code>purrr::pmap()</code></a>とかを使う。</dd>
+<dt><code>dplyr::rowwise(data, ...)</code></dt>
+<dd>受け取ったdataに <code>rowwise_df</code> クラスを付与して返す。
+これは1行ごとにグループ化された <code>grouped_df</code> のようなもので、
+mutate などを適用すると列全体ではなく1行ごとに関数に渡される。
+一旦非推奨となったがv1.0.0で蘇った。</dd>
 </dl>
 <h2 id="matrix-array">matrix, array</h2>
 <p>data.frame を主眼とする dplyr では
