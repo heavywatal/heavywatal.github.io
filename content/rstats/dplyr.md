@@ -11,7 +11,7 @@ tags = ["r", "tidyverse"]
 <img src="http://hexb.in/vector/dplyr.svg" align="right" width="120" height="139">
 </a>
 
-data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(summarise)、ソート(arrange)などの処理を施すためのパッケージ。
+data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(summarize)、ソート(arrange)などの処理を施すためのパッケージ。
 前作 [plyr]({{< relref "plyr.md" >}}) のうちdata.frameに関する部分が強化されている。
 [purrr]({{< relref "purrr.md" >}}) や [tidyr]({{< relref "tidyr.md" >}}) と一緒に使うとよい。
 
@@ -40,36 +40,36 @@ dplyrではなく[magrittr](https://magrittr.tidyverse.org/)の機能。
 library(tidyverse)
 
 ## with piping
-iris %>%
-  dplyr::filter(Species != "setosa") %>%
-  dplyr::select(-dplyr::starts_with("Sepal")) %>%
-  dplyr::mutate(petal_area = Petal.Length * Petal.Width * 0.5) %>%
-  dplyr::group_by(Species) %>%
-  dplyr::summarise_all(funs(mean))
+result = diamonds %>%              # 生データから出発して
+  select(carat, cut, price) %>%    # 列を抽出して
+  filter(carat > 1) %>%            # 行を抽出して
+  group_by(cut) %>%                # グループ化して
+  summarize(mean(price)) %>%       # 平均を計算
+  print()                          # 表示してみる
 
 ## with a temporary variable
-x = iris
-x = dplyr::filter(x, Species != "setosa")
-x = dplyr::select(x, -dplyr::starts_with("Sepal"))
-x = dplyr::mutate(x, petal_area = Petal.Length * Petal.Width * 0.5)
-x = dplyr::group_by(x, Species)
-x = dplyr::summarise_all(x, funs(mean))
+result = select(diamonds, carat, cut, price) # 列を抽出して
+result = filter(result, carat > 1)           # 行を抽出して
+result = group_by(result, cut)               # グループ化して
+result = summarize(result, mean(price))      # 平均を計算
 
 ## with nested functions
-dplyr::summarise_all(
-  dplyr::group_by(
-    dplyr::mutate(
-      dplyr::select(
-        dplyr::filter(iris, Species != "setosa"),
-        -dplyr::starts_with("Sepal")),
-      petal_area = Petal.Length * Petal.Width * 0.5),
-    Species),
-  funs(mean))
+result = summarize(                    # 平均を計算
+    group_by(                            # グループ化して
+      filter(                              # 行を抽出して
+        select(diamonds, carat, cut, price), # 列を抽出して
+        carat > 1),                        # 行を抽出して
+      cut),                              # グループ化して
+    mean(price))                       # 平均を計算
 
 ## result
-     Species Petal.Length Petal.Width petal_area
-1 versicolor        4.260       1.326     2.8602
-2  virginica        5.552       2.026     5.6481
+        cut mean(price)
+      <ord>       <dbl>
+1      Fair    7177.856
+2      Good    7753.601
+3 Very Good    8340.549
+4   Premium    8487.249
+5     Ideal    8674.227
 ```
 
 現状では `magrittr` パッケージの `%>%` が広く採用されているが、
@@ -91,11 +91,15 @@ dplyr::summarise_all(
     iris %>% dplyr::select(Petal.Width, Species)
     iris %>% dplyr::select("Petal.Width", "Species")
     iris %>% dplyr::select(c("Petal.Width", "Species"))
+    iris %>% dplyr::select(any_of(c("Petal.Width", "Species", "NOEXIST")))
     iris %>% dplyr::select(4:5)
     iris %>% dplyr::select(-c(1:3))
     iris %>% dplyr::select(-(Sepal.Length:Petal.Length))
     iris %>% dplyr::select(matches("^Petal\\.Width$|^Species$"))
     ```
+
+    https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html
+
 
 :   文字列変数で指定しようとすると意図が曖昧になるので、
     [unquoting](https://dplyr.tidyverse.org/articles/programming.html#unquoting)
@@ -120,8 +124,6 @@ dplyr::summarise_all(
     ```
     詳しくは[宇宙本](https://amzn.to/2u0hmTs)第3章のコラム
     「selectのセマンティクスとmutateのセマンティクス、tidyeval」を参照。
-
-:   列の値によって選べる亜種 `dplyr::select_if(.tbl, .predicate, ...)` もある。
 
 
 `dplyr::rename(.data, ...)`
@@ -154,14 +156,11 @@ dplyr::summarise_all(
     ```
 
 :   リネーム関数を渡せる亜種:<br>
-    `rename_all(.tbl, .funs = list(), ...)`<br>
-    `rename_at(.tbl, .vars, .funs = list(), ...)`<br>
-    `rename_if(.tbl, .predicate, .funs = list(), ...)`<br>
+    `rename_with(.tbl, .fn, .cols = everything(), ...)`<br>
 
     ```r
-    pattern = c("^Sepal" = "Gaku", "^Petal" = "Kaben")
     iris %>% head() %>%
-      dplyr::rename_all(stringr::str_replace_all, pattern) %>%
+      dplyr::rename_with(toupper, everything()) %>%
       print()
     ```
 
@@ -199,11 +198,6 @@ dplyr::summarise_all(
 e.g., `filter(gene != "TP53")`
 {{</div>}}
 
-:   複数列で評価する亜種:<br>
-    `filter_all(.tbl, .vars_predicate)`<br>
-    `filter_if(.tbl, .predicate, .vars_predicate)`<br>
-    `filter_at(.tbl, .vars, .vars_predicate)`<br>
-
 
 `dplyr::distinct(.data, ..., .keep_all = FALSE)`
 :   指定した列に関してユニークな行のみ返す。
@@ -231,9 +225,12 @@ e.g., `filter(gene != "TP53")`
     # 3          4.6         3.1          1.5         0.2  setosa
     ```
 
-`dplyr::sample_n(tbl, size, replace = FALSE, weight = NULL)`
-:   指定した行数だけランダムサンプルする。
-    割合指定の `sample_frac()` もある。
+`dplyr::slice_head(.data, ..., n, prop)`, `slice_tail()`
+:   先頭・末尾の行を抽出。
+
+`dplyr::slice_sample(.data, ..., n, prop, weight_by = NULL, replace = FALSE)`
+:   指定した行数・割合だけランダムサンプルする。
+:   `sample_n()` と `sample_frac()` は非推奨。
 
 
 ## 列の変更・追加
@@ -268,63 +265,72 @@ e.g., `filter(gene != "TP53")`
     # 1          5.1         3.5          1.4         0.2  setosa   1.629241
     # 2          4.9         3.0          1.4         0.2  setosa   1.589235
     ```
-:   複数列を変更する亜種:<br>
-    `mutate_all(.tbl, .funs, ...)`<br>
-    `mutate_at(.tbl, .vars, .funs, ..., .cols = NULL)`<br>
-    `mutate_each(.tbl, .funs, ...)`<br>
-    `mutate_if(.tbl, .predicate, .funs, ...)`<br>
 
 `dplyr::transmute(.data, ...)`
 :   指定した列以外を保持しない版 `mutate()` 。
     言い換えると、列の中身の変更もできる版 `select()` 。
-:   複数列を変更する亜種:<br>
-    `transmute_all(.tbl, .funs, ...)`<br>
-    `transmute_at(.tbl, .vars, .funs, ..., .cols = NULL)`<br>
-    `transmute_if(.tbl, .predicate, .funs, ...)`<br>
 
 
 ## data.frameの要約・集計・整列
 
-`dplyr::summarise(.data, ...)`
+`dplyr::summarize(.data, ..., .group = NULL)`
 :   指定した列に関数を適用して1行のdata.frameにまとめる。
     グループ化されていたらグループごとに適用して `bind_rows()` する。
 
     ```r
     iris %>% dplyr::group_by(Species) %>%
-        dplyr::summarise(minpl = min(Petal.Length), maxsw = max(Sepal.Width))
-    #      Species minpl maxsw
-    # 1     setosa   1.0   4.4
-    # 2 versicolor   3.0   3.4
-    # 3  virginica   4.5   3.8
+      dplyr::summarize(minpw = min(Petal.Width), maxpw = max(Petal.Width))
+    #      Species minpw maxpw
+    # 1     setosa   0.1   0.6
+    # 2 versicolor   1.0   1.8
+    # 3  virginica   1.4   2.5
     ```
 
-`dplyr::summarise_all(.data, .funs, ...)`
-:   全てのカラムに関数を適用する。
-    `***_each()` は非推奨になった。
+:   関数の結果が長さ1じゃなくても大丈夫(v1.0.0)。
 
     ```r
-    iris %>% dplyr::group_by(Species) %>%
-        dplyr::summarise_all(funs(min, max))
+    iris %>% dplyr::summarize(rangepw = range(Petal.Width))
+    #   rangepw
+    # 1     0.1
+    # 2     2.5
     ```
 
-`dplyr::summarise_at(.data, .cols, .funs, ...)`
-:   select補助関数を使って指定したカラムに関数を適用する。
+:   各グループの結果がtibbleの場合、結合・展開してくれる。
 
     ```r
-    iris %>% dplyr::group_by(Species) %>%
-        dplyr::summarise_at(vars(dplyr::ends_with("Width")), funs(min, max))
+    iris %>% dplyr::nest_by(Species) %>%
+      dplyr::summarize(head(data, 2L))
     ```
 
-`dplyr::summarise_if(.data, .predicate, .funs, ...)`
-:   `.predicate`がTRUEになるカラムだけに関数を適用する。
+    これを利用して複数ファイルを一気読みできる
 
     ```r
-    iris %>% dplyr::group_by(Species) %>%
-        dplyr::summarise_if(is.numeric, funs(min, max))
+    path = fs::dir_ls("path/to/data", glob = "*.tsv")
+    df = tibble(path) %>%
+      dplyr::rowwise() %>%
+      dplyr::summarize(readr::read_tsv(path))
     ```
+
+:   複数カラムに関数を適用するには `across()` を使う
+
+    ```r
+    # summarize_at
+    iris %>% group_by(Species) %>%
+      summarize(across(ends_with("Width"), mean, na.rm = TRUE))
+
+    # summarize_if
+    iris %>% group_by(Species) %>%
+      summarize(across(is.numeric, mean, na.rm = TRUE))
+
+    # summarize_all
+    iris %>% group_by(Species) %>%
+      summarize(across(everything(), mean, na.rm = TRUE))
+    ```
+
+    `*_at()`, `*_if()`, `*_all()`, `*_each()` は非推奨。
 
 `dplyr::tally(x, wt, sort = FALSE)`
-:   `summarise(x, n = n())` のショートカット。
+:   `summarize(x, n = n())` のショートカット。
     `wt` にカラムを指定して重み付けすることもできる。
 :   `dplyr::add_tally()` は元の形を維持したままカウント列を追加。
 
@@ -342,13 +348,11 @@ e.g., `filter(gene != "TP53")`
     mtcars %>% dplyr::arrange(cyl, disp)
     ```
 
-`dplyr::top_n(.data, n, wt)`
-:   `wt` で指定した列(省略時は右端の列)の降順で `n` 行だけ返す。
-    境界にタイがある場合はすべて保持されて `n` 行以上の出力になる。
-    元の順番が保持されるので、ソートされた結果が欲しい場合は事後に
-    `arrange()` を適用することになる。
-    順序の方向が `arrange()` と逆であることに注意。
-    昇順で取りたいときは `n` にマイナス指定か `wt` に `desc(X)` (昇順なのに！)。
+`dplyr::slice_max(.data, order_by, ..., n, prop, with_ties = TRUE)`
+:   `order_by, ...` で指定した列の降順で `n` 行だけ返す。
+    境界のタイを保持する場合は `n` 行以上の出力になる。
+    昇順で取りたいときはマイナス指定か `slice_min()`。
+:   `top_n()` は非推奨。
 
 
 ## data.frameを結合
@@ -453,7 +457,7 @@ iris %>%
 
 `dplyr::group_by(.data, ..., add = FALSE, .drop = group_by_drop_default(.data))`
 :   グループごとに区切って次の処理に渡す。
-    e.g. `summarise()`, `tally()`, `group_modify()` など
+    e.g. `summarize()`, `slice()`, `tally()`, `group_modify()` など
 :   `.drop = FALSE` とすると行数ゼロになるグループも捨てずに保持できる。
 
 `dplyr::group_data(.data)`
@@ -483,7 +487,6 @@ iris %>%
 
 `dplyr::group_modify(.tbl, .f, ...)`
 :   グループごとに `.f` を適用してまとめたdata.frameを返す。
-    「それぞれの結果の長さが1」という制約がないぶん `summarise()` よりも柔軟。
 :   `.f` には[purrrでよく見る無名関数]({{< relref "purrr.md#無名関数" >}})を渡す。
     (普通の関数も渡せるはずだけどちょっと挙動が変？)
 
@@ -512,9 +515,11 @@ iris %>%
     iris %>% dplyr::group_by(Species) %>% dplyr::do(head(., 2L))
     ```
 
-`dplyr::rowwise(.data)`
-:   非推奨。
-    代わりに[`purrr::pmap()`]({{< relref "purrr.md" >}})とかを使う。
+`dplyr::rowwise(data, ...)`
+:   受け取ったdataに `rowwise_df` クラスを付与して返す。
+    これは1行ごとにグループ化された `grouped_df` のようなもので、
+    mutate などを適用すると列全体ではなく1行ごとに関数に渡される。
+    一旦非推奨となったがv1.0.0で蘇った。
 
 
 ## matrix, array

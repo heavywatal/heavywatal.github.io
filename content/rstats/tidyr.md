@@ -207,7 +207,9 @@ VADeaths %>%
 #> 20 70-74  Urban Female  50.0
 ```
 
-`names_ptypes` に指定すると、列名だった変数の移動後の型変換を試みる:
+`names_transform` に関数を指定すると、
+列名だったものに適用される。
+例えば型変換に使える:
 
 ```r
 anscombe
@@ -229,7 +231,7 @@ anscombe %>%
   tidyr::pivot_longer(-id,
     names_to = c("axis", "group"),
     names_sep = 1L,
-    names_ptypes = list(group = integer())) %>%
+    names_transform = list(group = as.integer)) %>%
   tidyr::pivot_wider(c(id, group), names_from = axis) %>%
   dplyr::select(-id) %>%
   dplyr::arrange(group)
@@ -269,6 +271,7 @@ anscombe %>%
 
 `names_to` に `".value"` という特殊な値を渡すことで、
 旧列名から新しい列名が作られ、複数列への縦長変形を同時にできる。
+また `names_to = c("name", NA)` のように不要な列を捨てることもできる。
 
 ```r
 tidy_anscombe = anscombe %>%
@@ -314,8 +317,9 @@ iris %>% nest(NEW_COLUMN = -Species)
 #> 3  virginica <tbl_df [50 x 4]>
 
 # equivalent to
-iris %>% dplyr::group_nest(Species, .key = "NEW_COLUMN")
 iris %>% nest(NEW_COLUMN = matches("Length$|Width$"))
+iris %>% dplyr::group_nest(Species, .key = "NEW_COLUMN")
+iris %>% dplyr::nest_by(Species, .key = "NEW_COLUMN")
 ```
 
 なんでもかんでもフラットなdata.frameにして

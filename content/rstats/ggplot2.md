@@ -36,7 +36,7 @@ R標準の`boxplot()`や`hist()`などは前者の上に、
 [**整然データ**]({{< relref "programming.md#tidyverse" >}})
 を用意することが重要。
 言い換えると「この列がx軸、この列がy軸、この列によって色を変える」というように指示できる形。
-例えばggplot2に付属の`mpg`データ:
+例えばggplot2に付属の `mpg` データ:
 
 ```r
 library(tidyverse)
@@ -52,104 +52,106 @@ mpg
 
 このようなデータを渡して、指示をどんどん `+` していく:
 
-- `ggplot()` このデータでよろしく
-- `geom_*()` 点や線をよろしく
-- `theme_*()` 軸とか背景の見た目をよろしく
-
 ```r
-ggplot(data = mpg) +
-  geom_point(mapping = aes(x = displ, y = cty)) +
-  theme_classic(base_size = 20, base_family = "Helvetica")
+ggplot(data = mpg) +              # mpgデータでキャンバス準備
+  aes(x = displ, y = cty) +       # displ,cty列をx,y軸にmapping
+  geom_point() +                  # 散布図を描く
+  facet_wrap(~ drv) +             # drv列に応じてパネル分割
+  theme_classic(base_size = 20)   # クラシックなテーマで
 ```
 
 途中経過をオブジェクトとして取っておける:
 ```r
-p0 = ggplot(data = mpg, aes(x = displ, y = cty))
-p1 = p0 + geom_point()
-p2 = p1 + theme_classic(base_size = 20, base_family = "Helvetica")
-p3 = p2 + stat_smooth(method = lm, formula = y ~ log(x))
-p4 = p3 + facet_grid(drv ~ fl)
-print(p4)
+p1 = ggplot(data = mpg)
+p2 = p1 + aes(x = displ, y = cty)
+p3 = p2 + geom_point()
+p4 = p3 + facet_wrap(~ drv)
+p5 = p4 + theme_classic(base_size = 20)
+print(p5)
 ```
 
 画像ファイルに保存するところまできっちり書く:
 ```r
-ggsave("mpg-displ-cty.png", p3, width = 4, height = 4, dpi = 300)
+ggsave("mpg.png", p5, width = 6, height = 4, dpi = 300)
 ```
 
 ## [Aesthetic mapping](https://ggplot2.tidyverse.org/reference/aes_group_order.html)
 
 データと見せ方を紐付ける。
-`aes(colour = Species)` のように `aes()` 内で列名を指定すると、
+`aes(color = Species)` のように `aes()` 内で列名を指定すると、
 その変数に応じて色やサイズなどを変えることができる。
 言い換えると、データの値を色やサイズに変換する(スケールする)ことに相当する。
 
 ```r
 # データによって点のサイズ・色・形を変える
-p0 + geom_point(mapping = aes(x = displ, y = cty, size = cyl,
-                              colour = class, shape = drv))
+p2 + geom_point(mapping = aes(color = drv, size = cyl))
 
 # aes() の外で指定するとデータによらず全体に反映。
-# サイズは常に6、色はオレンジ、不透明度は0.4
-p0 + geom_point(mapping = aes(x = displ, y = cty),
-                size = 6, colour = "darkorange", alpha = 0.4)
+# 常に色はオレンジ、サイズは6、不透明度は0.4
+p2 + geom_point(color = "darkorange", size = 6, alpha = 0.4)
 ```
 
+### [Aestheticsまとめ](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html)
+
 - [色・透明度を変える](https://ggplot2.tidyverse.org/reference/aes_colour_fill_alpha.html)
-  - `colour`: 点や線の色
-  - `fill`: 塗りつぶしの色
+  - `color`: 点や線の色
+  - `fill`: 面の色
   - [`alpha`](https://ggplot2.tidyverse.org/reference/scale_alpha.html): 不透明度 (0が透明、1が不透明)
 - [大きさ・形を変える](https://ggplot2.tidyverse.org/reference/aes_linetype_size_shape.html)
-  - [`size`](https://ggplot2.tidyverse.org/reference/scale_size.html): 点や線のサイズ
+  - [`size`](https://ggplot2.tidyverse.org/reference/scale_size.html): 点や文字の大きさ、線の太さ
   - [`shape`](https://ggplot2.tidyverse.org/reference/scale_shape.html): 点の形
-  - [`linetype`](https://ggplot2.tidyverse.org/reference/scale_linetype.html): 線
-- 単にグループ分けする
-  - `group`: 色や形はそのままにグループ分け。反復試行の折れ線グラフなどに。
+  - [`linetype`](https://ggplot2.tidyverse.org/reference/scale_linetype.html): 線の種類
+- [単にグループ分けする](https://ggplot2.tidyverse.org/reference/aes_group_order.html)
+  - `group`: 反復試行の折れ線グラフなど、色や形はそのままで切り分けたいときに。
+- [座標、始点、終点](https://ggplot2.tidyverse.org/reference/aes_position.html)
+  - `x`, `y`: 多くのグラフで必須項目
+  - `xmin`, `xmax`, `ymin`, `ymax`, `xend`, `yend`: ものによって
 
-
-### `scale_*()` 関数で調整
+### `scale_*()` で調整
 
 変数をどうやって色やサイズに反映させるか、
 各項目に対応する `scale_*()` 関数で調整する。
 
 ```r
-ggplot(mpg) +
-  geom_point(aes(x = displ, y = cty, colour = class)) +
-  scale_colour_brewer(palette = "Spectral")
+p1 + aes(x = displ, y = cty) + geom_point(aes(color = hwy)) + scale_color_fermenter()
+  geom_point(mapping = aes(color = drv, size = cyl)) +
+  scale_color_brewer(palette = "Set1") +
+  scale_size_identity()
 ```
 
-[`scale_*_viridis_c`](https://ggplot2.tidyverse.org/reference/scale_viridis.html)
-:   for `color`, `fill`
-:   色覚多様性が考慮されたパレットなので、連続値ならまずこれを使う。
+[`scale_color_gradient`](https://ggplot2.tidyverse.org/reference/scale_gradient.html)
+:   連続値のデフォルト色スケール。
+:   グラデーションの基準となる色を自由に指定できるけど、
+    後述のviridisのようによく計算されたスケールを使ったほうが無難。
+:   `scale_color_gradient(..., low, high, ...)`: 普通の連続値に
+:   `scale_color_gradient2(..., low, mid, high, midpoint = 0, ...)`: ある中間値を挟んで上下に分けたいとき
+:   `scale_color_gradientn(..., colors, values = NULL, ...)`: 多色のヒートマップなどに e.g., `colors = c("#000000", "#0000FF", "#00FFFF", "#00FF00", "#FFFF00", "#FF0000")`
+:   離散的に塗るには [`scale_color_steps()`](https://ggplot2.tidyverse.org/reference/scale_steps.html)。
+
+[`scale_color_viridis_c`](https://ggplot2.tidyverse.org/reference/scale_viridis.html)
+:   色覚多様性が考慮されたパレットで、グレースケールでの明度変化も一定。
     元は[別パッケージ](https://github.com/sjmgarnier/viridis)が必要だったけど
-    ggplot2 v3.0 から標準装備になった。
-:   `option =`: `viridis`, `magma`, `inferno`, `plasma`
-:   連続値には `_c`、離散値には `_d`。
+    v3.0から標準装備になった。
+:   `option = "viridis"`, `"magma"`, `"inferno"`, or `"plasma"`
+:   連続値は `_c`、離散値は `_d`、連続値を離散的に塗るには `_b`。
 
-[`scale_*_brewer`](https://ggplot2.tidyverse.org/reference/scale_brewer.html)
-:   for `colour`, `fill`
-:   いい感じに考えられたパレット [Colorbrewer](http://colorbrewer2.org/)
-    から選んで指定するだけなので楽ちん。
-    特に離散値でお世話になる。
+[`scale_color_hue`](https://ggplot2.tidyverse.org/reference/scale_hue.html)
+:   離散値のデフォルト色スケール。
+
+[`scale_color_brewer`](https://ggplot2.tidyverse.org/reference/scale_brewer.html)
+:   いい感じに考えられたパレット
+    [Colorbrewer](http://colorbrewer2.org/) から選んべるので楽ちん。
     利用可能なパレットは `RColorBrewer::display.brewer.all()` でも一覧できる。
-:   `scale_*_brewer(..., palette = "Blues", direction = 1)`: 離散値
-:   `scale_*_distiller(..., palette = "Blues", direction = -1)`: 連続値
-
-[`scale_*_gradient`](https://ggplot2.tidyverse.org/reference/scale_gradient.html)
-:   for `colour`, `fill`
-:   グラデーションの基準となる色を指定する。
-:   `scale_*_gradient(..., low, high, ...)`: 普通の連続値に
-:   `scale_*_gradient2(..., low, mid, high, midpoint = 0, ...)`: ある中央値を挟んで上下に分けたいとき
-:   `scale_*_gradientn(..., colours, values = NULL, ...)`: 多色のヒートマップなどに e.g., `colours = c("#000000", "#0000FF", "#00FFFF", "#00FF00", "#FFFF00", "#FF0000")`
+:   離散値は `_brewer`、連続値は `_distiller`、連続値を離散的に塗るには `_fermenter`。
 
 [`scale_*_identity`](https://ggplot2.tidyverse.org/reference/scale_identity.html)
-:   for `colour`, `fill`, `size`, `shape`, `linetype`, `alpha`
+:   for `color`, `fill`, `size`, `shape`, `linetype`, `alpha`
 :   色の名前やサイズなどを示す列が予めデータに含まれている場合にそのまま使う。
-    [点や線の種類](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html)
 
 [`scale_*_manual`](https://ggplot2.tidyverse.org/reference/scale_manual.html)
-:   for `colour`, `fill`, `size`, `shape`, `linetype`, `alpha`
-:   対応関係を `values` 引数で直に指定する。
+:   for `color`, `fill`, `size`, `shape`, `linetype`, `alpha`
+:   対応関係を手動で指定する。
+    e.g., `scale_color_manual(values = c("4" = "red", f = "green", r = "blue"))`
 
 [`scale_size`](https://ggplot2.tidyverse.org/reference/scale_size.html)
 :   デフォルトではpointの面積を値にほぼ比例させるが、面積0にはならない。
@@ -163,7 +165,7 @@ ggplot(mpg) +
 
 ### スケール共通オプション
 
-値と見え方の対応関係が凡例(legend/colourbar)として表示される。
+値と見え方の対応関係が凡例(legend/colorbar)として表示される。
 `scale_*()` 関数に以下のオプションを指定することで設定を変えられる。
 [連続値の場合](https://ggplot2.tidyverse.org/reference/continuous_scale.html) と
 [離散値の場合](https://ggplot2.tidyverse.org/reference/discrete_scale.html)
@@ -177,10 +179,10 @@ ggplot(mpg) +
 - `na.value`: 欠損値のときどうするか
 - `limits`: 数値なら最大値と最小値のvector。
   文字列なら表示したいすべての値(順序も反映される)。
-- `guide`: 文字列で `"legend"` か `"colourbar"`。
+- `guide`: 文字列で `"legend"` か `"colorbar"`。
   さらに細かく制御したい場合は
   [`guide_legend()`](https://ggplot2.tidyverse.org/reference/guide_legend.html) や
-  [`guide_colourbar()`](https://ggplot2.tidyverse.org/reference/guide_colourbar.html)
+  [`guide_colorbar()`](https://ggplot2.tidyverse.org/reference/guide_colorbar.html)
   で。
   消したい場合は `"none"` か `FALSE` を渡せる。
 
@@ -197,20 +199,19 @@ ggplot(mpg) +
       shrink = TRUE, labeller = "label_value", as.table = TRUE,
       switch = NULL, drop = TRUE, dir = "h", strip.position = "top")
 
-    p1 + facet_wrap(vars(class), ncol = 4L) # new style
-    p1 + facet_wrap(~ class, ncol = 4L)     # old style
+    p3 + facet_wrap(vars(class), ncol = 4L) # new style
+    p3 + facet_wrap(~ class, ncol = 4L)     # old style
     ```
 
 [`facet_grid()`](https://ggplot2.tidyverse.org/reference/facet_grid.html)
 :   2変数以上で分割して縦横に並べる
     ```r
-    facet_grid(rows = NULL, cols = NULL, scales = "fixed",
-      space = "fixed", shrink = TRUE, labeller = "label_value",
-      as.table = TRUE, switch = NULL, drop = TRUE, margins = FALSE,
-      facets = NULL)
+    facet_grid(rows = NULL, cols = NULL, scales = "fixed", space = "fixed",
+      shrink = TRUE, labeller = "label_value", as.table = TRUE,
+      switch = NULL, drop = TRUE, margins = FALSE, facets = NULL)
 
-    p1 + facet_grid(vars(cyl), vars(class, drv)) # new style
-    p1 + facet_grid(cyl ~ class + drv)           # old style
+    p3 + facet_grid(vars(cyl), vars(class, drv)) # new style
+    p3 + facet_grid(cyl ~ class + drv)           # old style
     ```
     1変数でいい場合は `. ~ class` のように片方をドットにする。
 
@@ -240,7 +241,7 @@ ggplot(mpg) +
 たとえば `h = hist(mpg$cty)` のようなものを取得したいときは:
 
 ```r
-p = ggplot(mpg, aes(cty)) + geom_histogram(bins = 6L)
+p = ggplot(mpg) + aes(x = cty) + geom_histogram(bins = 6L)
 ggplot_build(p)$data[[1L]]
 # layer_data(p)
 ```
@@ -255,8 +256,9 @@ https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variable
 :   `scale_y_log10("Beer consumption")`
 :   `scale_y_reverse()`
 :   上記の<a href="#スケール共通オプション">スケール共通オプション</a>に加えて:
-    - `expand`: デフォルトでは値域よりも少し余裕を持たせてあるが
-      `c(0, 0)` を与えるとピッタリになる。`geom_tile()`を使うときなどに。
+    - [`expand = expansion(mult, add)`](https://ggplot2.tidyverse.org/reference/expansion.html):
+      デフォルトでは値域よりも少し(連続値5%、離散値0.6個分)だけ広く描かれるので、
+      それをゼロにするとか、もっと広くとるとか。
     - `trans`: 数値の変換。exp, identity, log, log10, reciprocal, reverse など。
       文字列変数の順序を変えたい場合は `limits` のほうを使う。
     - `position`: top, bottom, left, right
@@ -266,6 +268,9 @@ https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variable
 :   `ylim(0, 42) + xlim("b", "c", "d")`
 :   `coord_cartesian(xlim = NULL, ylim = NULL)`
 :   前者はデータそのものを切るが、後者はデータを変えずに描画領域だけ切る
+:   ゼロを含むようにちょっと伸ばすだけとかなら
+    [`expand_limits(x = 0)`](https://ggplot2.tidyverse.org/reference/expand_limits.html)
+    が便利。
 
 [X軸とY軸の比率を固定](https://ggplot2.tidyverse.org/reference/coord_fixed.html)
 :   `coord_fixed(ratio = 1)`
@@ -285,6 +290,11 @@ https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variable
 :   `labs(x = "time", y = "weight", title = "growth", tag = "A")`
 :   `xlab("time") + ylab("weight") + ggtitle("growth")`
 
+[凡例](https://ggplot2.tidyverse.org/reference/draw_key.html)
+:   散布図なら点、折れ線なら線が凡例のキーとして自動的に選ばれるが、
+    `geom_line(key_glyph = draw_key_rect)`
+    のように変更することもできる。
+
 
 ## `theme`: 背景やラベルの調整
 
@@ -292,39 +302,44 @@ https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variable
 
 ### 既成テーマ
 
-`theme_grey(base_size = 11, base_family = "")`, `theme_gray(...)`
+`theme_gray(base_size = 11, base_family = "")`<br>`theme_grey()`
 :   灰色背景に白い格子。
     ggplotらしいデフォルトだが、論文には使いにくい。
 
-`theme_bw(base_size = 11, base_family = "")`
+`theme_bw()`
 :   黒枠白背景にうっすら灰色格子
 
-`theme_linedraw(base_size = 11, base_family = "")`
+`theme_linedraw()`
 :   細いけど濃い色の `panel.grid`
 
-`theme_light(base_size = 11, base_family = "")`
+`theme_light()`
 :   それを薄くした感じ
 
-`theme_minimal(base_size = 11, base_family = "")`
+`theme_minimal()`
 :   外枠なしの `theme_bw`
 
-`theme_classic(base_size = 11, base_family = "")`
+`theme_classic()`
 :   xy軸がL字に描かれているだけで枠もグリッドも無し
 
-`theme_void(base_size = 11, base_family = "")`
+`theme_dark()`
+:   濃灰色背景に黒い格子。黄色の点とかが見やすい。
+
+`theme_void()`
 :   完全に枠なし
 
 これらをカッコ無しでコンソールに打ち込むと、
 下記の各エレメントの設定方法やデフォルト値を知ることができる。
 
-引数として `base_family` に"Helvetica Neue"などのフォントを指定できる。
-Macなら"HiraKakuProN-W3"を指定すれば日本語でも文字化けしなくなるはず。
+引数に `base_family = "Helvetica Neue"` などとしてフォントを指定できる。
+Macなら `"HiraKakuProN-W3"` を指定すれば日本語でも文字化けしなくなるはず。
 テーマを構成する `axis.text` などはこの設定を継承するが、
 `geom_text()` などプロット内部の要素には引き継がれないことに注意。
 
+オプションとして `base_line_size`, `base_rect_size` もいじれるようになった。
+
 ほかにもいろんなテーマが
-[ggthemes](https://cran.r-project.org/web/packages/ggthemes/vignettes/ggthemes.html)
-というパッケージで提供されている。
+[ggthemes](https://cran.r-project.org/web/packages/ggthemes/)
+というパッケージなどで提供されている。
 
 
 ### 設定項目
@@ -332,15 +347,18 @@ Macなら"HiraKakuProN-W3"を指定すれば日本語でも文字化けしなく
 <https://ggplot2.tidyverse.org/reference/theme.html>
 
 `theme()` 関数に項目と値を指定したものを、
-ほかのレイヤーと同じようにどんどん足しながら変更していく。
+ほかのレイヤーと同じようにどんどん足していける。
 テーマは直線、長方形、文字の3種類のエレメントからなり、
-それらの性質を変更する場合は `element_***()` を介して行う
+[後述の `element_***()`](#エレメント)を介して変更していく。
 
 ```r
-## ベースとなるテーマを先に適用してから
-gp = gp + theme_bw(base_family = "HiraKakuProN-W3", base_size = 14)
-gp = gp + theme(legend.position = "bottom")
-gp = gp + theme(plot.background = element_rect(fill = "transparent"))
+## ベースとなるテーマを先に適用してから微調整
+p3 + theme_bw() + theme(
+  panel.background = element_rect(fill = "white"), # 箱
+  panel.grid       = element_line(color = "blue"), # 線
+  axis.title       = element_text(size = 32),      # 文字
+  axis.text        = element_blank()               # 消す
+)
 ```
 
 全体
@@ -414,14 +432,14 @@ gp = gp + theme(plot.background = element_rect(fill = "transparent"))
 
 ### エレメント
 
-`element_rect(fill, colour, size, linetype, inherit.blank)` --- 長方形
+`element_rect(fill, color, size, linetype, inherit.blank)` --- 長方形
 :   `fill`: 塗りつぶしの色
-:   `colour`: 枠の色
+:   `color`: 枠の色
 
-`element_line(colour, size, linetype, lineend, arrow, inherit.blank)` --- 直線
+`element_line(color, size, linetype, lineend, arrow, inherit.blank)` --- 線
 
-`element_text(family, face, colour, size, hjust, vjust, angle, lineheight, margin)` --- 文字
-:   `family`: フォントファミリー。 空なら `theme_bw(base_family = ...)` などの指定を継承。
+`element_text(family, face, color, size, hjust, vjust, angle, lineheight, margin)` --- 文字
+:   `family`: フォントファミリー。 空なら `base_family` を継承。
 :   `face`: (`"plain"`, `"italic"`, `"bold"`, `"bold.italic"`)
 :   `hjust`, `vjust`: 水平位置と垂直位置の寄せ方をそれぞれ `[0, 1]` の実数で。
 :   `angle`: 角度 `[0, 360]`
@@ -429,13 +447,6 @@ gp = gp + theme(plot.background = element_rect(fill = "transparent"))
 
 `element_blank()` --- 空
 :   消したい要素にはこれを指定する
-
-    ```r
-    gp = gp + theme(
-      axis.ticks = element_blank(),
-      panel.grid = element_blank()
-    )
-    ```
 
 `rel(x)`
 :   デフォルトからの相対値で `size` 引数を指定したいときに。
@@ -474,20 +485,20 @@ ggsave(filename, plot = last_plot(), device = NULL, path = NULL,
   (これはPNGなどラスタ形式だけの話。PDFなどのベクタ形式なら気にしなくていい)
 - タイトルや軸ラベルの文字サイズを変えたいときはテーマの
   `theme_bw(base_size = 42)` や各要素の `element_text(size = 42)` を使う。
-- scaleやunitsを使うのは慣れてからで十分。
+- `scale =` や `units =` を使うのはよほど必要になったときだけ。
 
 ```r
 # 7inch x 300dpi = 2100px四方 (デフォルト)
-ggsave("mpg1.png", p1) # width = 7, height = 7, dpi = 300
+ggsave("mpg1.png", p3) # width = 7, height = 7, dpi = 300
 
 # 4     x 300    = 1200  全体7/4倍ズーム
-ggsave("mpg2.png", p1, width = 4, height = 4) # dpi = 300
+ggsave("mpg2.png", p3, width = 4, height = 4) # dpi = 300
 
 # 2     x 600    = 1200  全体をさらに2倍ズーム
-ggsave("mpg3.png", p1, width = 2, height = 2, dpi = 600)
+ggsave("mpg3.png", p3, width = 2, height = 2, dpi = 600)
 
 # 4     x 300    = 1200  テーマを使って文字だけ拡大
-ggsave("mpg4.png", p1 + theme_bw(base_size = 22), width = 4, height = 4)
+ggsave("mpg4.png", p3 + theme_bw(base_size = 22), width = 4, height = 4)
 ```
 
 
@@ -547,7 +558,7 @@ ggsave("mpg4.png", p1 + theme_bw(base_size = 22), width = 4, height = 4)
 :   `geom_pointrange(...)`
 
 [関数](https://ggplot2.tidyverse.org/reference/stat_function.html)
-:   `ggplot(data.frame(x = c(-4, 4)), aes(x)) + stat_function(fun = dnorm, args = c(0, 1), n = 200)`
+:   `ggplot(data.frame(x = c(-4, 4))) + aes(x) + stat_function(fun = dnorm, args = c(0, 1), n = 200)`
 
 [回帰曲線](https://ggplot2.tidyverse.org/reference/geom_smooth.html)
 :   `geom_smooth(method = glm, method.args = list(family = poisson), se = FALSE)`
@@ -589,6 +600,7 @@ ggplotを拡張するための仕組みがversion 2.0から正式に導入され
 `facet_grid()` や `facet_wrap()` を使えばよいが、
 関係ない複数の図を1枚に描きたい場合は `grid` や `gtable` の機能を使う必要がある。
 `gridExtra` はそのへんの操作を手軽にできるようにしてくれるパッケージ。
+**残念ながら開発中止？**
 
 "grob" は "grid graphical object" の略。
 ggplotオブジェクトと同じように `ggsave()` に渡して保存可能。
