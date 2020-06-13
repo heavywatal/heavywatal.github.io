@@ -148,6 +148,10 @@ fibonacci(9L)
     `STRICT_R_HEADERS` を定義しておくことで余計なマクロ定義を防げる。
     `configure` や [CMake]({{< relref "cmake.md" >}}) を使って
     `src/Makevars.in` から生成する手もある。
+    `configure` や `cleanup` といったスクリプトはbash拡張を含まない
+    `/bin/sh` で実行可能じゃなきゃいけないらしいので、
+    `checkbashisms` をインストールしてチェックすることが求められる
+    (`brew install checkbashisms`)。
 
     `CXX_STD=CXX14` が存在しない場合は
     `DESCRIPTION` の `SystemRequirements: C++14` が参照されるので、
