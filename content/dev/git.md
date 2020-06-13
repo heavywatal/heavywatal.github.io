@@ -104,6 +104,8 @@ repository
   `clone`時に自動的に追加され、
   `push`先や`fetch`元を省略したときにデフォルトで使われる。
   `git remote -v` で確認。
+: 他の人のリポジトリをforkして使う場合、
+  自分のを `origin`, 元のを `upstream` と名付けるのが一般的。
 
 `master`
 : デフォルトのブランチの典型的な名前。
@@ -198,6 +200,26 @@ annotated tagであれば `git push --follow-tags`
 https://git-scm.com/book/en/Git-Basics-Tagging
 
 
+### rebase
+
+ブランチの根本を別のコミットに付け替える。
+よく使うのは、開発ブランチを `master` の先頭に追従させるとき。
+
+```
+git switch some-branch
+git rebase master
+```
+
+最も近い共通祖先(MRCA)コミットから先を丸ごと移すだけならこのように単純だが、
+ブランチのブランチとか、ブランチの一部だけを移したい場合は次のようにする。
+
+```
+git rebase --onto <newbase> <base> <tip>
+```
+
+これで base–tip 間のコミットがnewbaseから伸びる形になる。
+
+
 ## Submodule
 
 ### 既存のリポジトリをsubmoduleとして追加する
@@ -290,7 +312,7 @@ https://help.github.com/articles/configuring-a-publishing-source-for-github-page
 1.  `github.com/USER/PROJECT` のForkボタンで自分のGitHubリポジトリに取り込む
 1.  forkした自分のリポジトリからローカルに`clone`:
 
-        git clone git@github.com:heavywatal/PROJECT.git
+        git clone https://github.com/heavywatal/PROJECT.git
         cd PROJECT/
 
 1.  大元のリポジトリに`upstream`という名前をつけておく:
@@ -299,28 +321,31 @@ https://help.github.com/articles/configuring-a-publishing-source-for-github-page
 
 1.  PR用のブランチを切って移動:
 
-        git checkout -b fix-typo
+        git switch -c fix-typo
 
 1.  コードを変更して`commit`:
 
-        emacs README.md
+        vim README.md
         git diff
         git commit -a -m "Fix typo in README.md"
 
-1.  この間に`upstream`で更新があったら、それをデフォルトブランチ越しに取り込む:
+1.  この間に`upstream`で更新があったか確認:
 
-        git checkout master
         git fetch upstream
-        git merge upstream/master
-        git push origin/master
-        git checkout fix-typo
-        git rebase -i master
+
+    必要ならそれを取り込む:
+
+        git switch master
+        git merge --ff-only upstream/master
+        git switch fix-typo
+        git rebase master
 
 1.  自分のリポジトリに`push`:
 
         git push [-f] origin fix-typo
 
-1.  GitHub上に出現する"Compare & pull request"ボタンを押す
+1.  PR用のURLが表示されるのでそこから飛ぶ。
+    もしくはGitHub上に出現する"Compare & pull request"ボタンを押す。
 1.  差分を確認し、コメント欄を埋めて提出
 1.  修正を求められたらそのブランチで変更し、自分のリポジトリに`push`すればPRにも反映される
 1.  マージされたらブランチを消す
@@ -331,15 +356,15 @@ https://help.github.com/articles/configuring-a-publishing-source-for-github-page
 ### 用済みブランチの掃除
 
 PRマージ済みのリモートブランチを消したい。
-明示的に消すオプションを付けるか、空ブランチをpushするか:
+一番簡単なのは、GitHub PR画面のdelete branchボタンを押すこと。
+手元のgitからやるには、明示的に `--delete` するか、空ブランチをpushするか:
 
 ```sh
 git push --delete origin issue-42
 git push origin :issue-42
 ```
 
-別のマシンやGitHub PR画面のボタンから消したりすると、
-消したはずのリモートブランチの記録が手元のリポジトリに残ることがある。
+リモートブランチを消しても手元のリポジトリには残る。
 まず確認:
 
 ```sh
@@ -381,7 +406,7 @@ submoduleなどをいじってると意図せずdetached HEAD状態になるこ�
 
 1. `master`に戻ると道筋を示してくれる:
    ```
-   git checkout master
+   git switch master
    Warning: you are leaving 2 comits behind, not connected to
    any of your branches
    If you want to keep them by creating a new branch, this may be a good time
