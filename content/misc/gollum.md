@@ -181,29 +181,44 @@ http://example.com/wiki/ のようにアクセスできるようにする。
 ```ruby
 module Precious
   class App < Sinatra::Base
-    passwd = {
-      'user1' => '0b14d501a594442a01c6859541bcb3e8164d183d32937b851835442f69d5c94e',
-      'user2' => '6cf615d5bcaac778352a8f1f3360d23f02f34ec182e259897fd6ce485d7870d4'
-    }
     use Rack::Auth::Basic, 'Private Wiki' do |username, password|
+      users = File.open(File.expand_path('../users.json', __FILE__)) do |file|
+        JSON.parse(file.read, symbolize_names: true)
+      end
+      name = username.to_sym
       digested = Digest::SHA256.hexdigest(password)
-      if passwd.key?(username) && digested == passwd[username]
-        Precious::App.set(:username, username)
+      if users.key?(name) && digested == users[name][:password]
+        Precious::App.set(:author, users[name])
       end
     end
 
     before do
-      session['gollum.author'] = {
-        name: settings.username,
-        email: "#{settings.username}@users.noreply.github.com"
-      }
+      session['gollum.author'] = settings.author
     end
   end
 end
 ```
 
+`session['gollum.author']` にハッシュを渡しておくとコミッターに反映してもらえる。
+ユーザー情報は別ファイル(ここでは`users.json`)に分離しといたほうが見通しがいい。
+
+```json
+{
+  "user1": {
+    "name": "First User",
+    "email": "user1@example.com",
+    "password": "0b14d501a594442a01c6859541bcb3e8164d183d32937b851835442f69d5c94e"
+  },
+  "user2": {
+    "name": "Second User",
+    "email": "user2@example.com",
+    "password": "6cf615d5bcaac778352a8f1f3360d23f02f34ec182e259897fd6ce485d7870d4"
+  }
+}
+```
+
 もっとちゃんとした認証システムにしたほうがいいのかもしれないけど、
-大学のファイアウォール外からはアクセス不可能なのでとりあえずこれくらいで...
+大学のファイアウォール内なのでとりあえずこれくらいで...
 
 パスワードのハッシュ値は
 `sha256sum <(pbpaste)`
@@ -251,6 +266,8 @@ module Gollum
     end
   end
 end
+
+Gollum::Markup.formats.select! { |k, _| k == :markdown }
 ```
 
 ほかにどんなのが利用可能かはこちらを参照:
