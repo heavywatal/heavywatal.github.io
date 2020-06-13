@@ -225,7 +225,11 @@ PKG_CPPFLAGS=-DSTRICT_R_HEADERS -I/usr/local/include
 PKG_LIBS=-L/usr/local/lib -Wl,-rpath,/usr/local/lib -lthankyou
 </code></pre><p><code>STRICT_R_HEADERS</code> を定義しておくことで余計なマクロ定義を防げる。
 <code>configure</code> や <a href="/dev/cmake.html">CMake</a> を使って
-<code>src/Makevars.in</code> から生成する手もある。</p>
+<code>src/Makevars.in</code> から生成する手もある。
+<code>configure</code> や <code>cleanup</code> といったスクリプトはbash拡張を含まない
+<code>/bin/sh</code> で実行可能じゃなきゃいけないらしいので、
+<code>checkbashisms</code> をインストールしてチェックすることが求められる
+(<code>brew install checkbashisms</code>)。</p>
 <p><code>CXX_STD=CXX14</code> が存在しない場合は
 <code>DESCRIPTION</code> の <code>SystemRequirements: C++14</code> が参照されるので、
 ほかに <code>src/Makevars</code> を使う用が無い場合はそっちで指定するのが楽。</p>

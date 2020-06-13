@@ -180,6 +180,8 @@ root treeのハッシュID、著者、コメントなどの情報を持つ。
 <code>clone</code>時に自動的に追加され、
 <code>push</code>先や<code>fetch</code>元を省略したときにデフォルトで使われる。
 <code>git remote -v</code> で確認。</dd>
+<dd>他の人のリポジトリをforkして使う場合、
+自分のを <code>origin</code>, 元のを <code>upstream</code> と名付けるのが一般的。</dd>
 <dt><code>master</code></dt>
 <dd>デフォルトのブランチの典型的な名前。</dd>
 <dt><code>HEAD</code>, <code>@</code></dt>
@@ -245,6 +247,15 @@ Releasesページに反映される。
 annotated tagであれば <code>git push --follow-tags</code>
 でcommitとtagを同時にpushできる。</p>
 <p><a href="https://git-scm.com/book/en/Git-Basics-Tagging">https://git-scm.com/book/en/Git-Basics-Tagging</a></p>
+<h3 id="rebase">rebase</h3>
+<p>ブランチの根本を別のコミットに付け替える。
+よく使うのは、開発ブランチを <code>master</code> の先頭に追従させるとき。</p>
+<pre><code>git switch some-branch
+git rebase master
+</code></pre><p>最も近い共通祖先(MRCA)コミットから先を丸ごと移すだけならこのように単純だが、
+ブランチのブランチとか、ブランチの一部だけを移したい場合は次のようにする。</p>
+<pre><code>git rebase --onto &lt;newbase&gt; &lt;base&gt; &lt;tip&gt;
+</code></pre><p>これで base–tip 間のコミットがnewbaseから伸びる形になる。</p>
 <h2 id="submodule">Submodule</h2>
 <h3 id="既存のリポジトリをsubmoduleとして追加する">既存のリポジトリをsubmoduleとして追加する</h3>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git submodule add https://github.com/mbostock/d3.git
@@ -323,7 +334,7 @@ git commit
 </li>
 <li>
 <p>forkした自分のリポジトリからローカルに<code>clone</code>:</p>
-<pre><code>git clone git@github.com:heavywatal/PROJECT.git
+<pre><code>git clone https://github.com/heavywatal/PROJECT.git
 cd PROJECT/
 </code></pre>
 </li>
@@ -334,24 +345,25 @@ cd PROJECT/
 </li>
 <li>
 <p>PR用のブランチを切って移動:</p>
-<pre><code>git checkout -b fix-typo
+<pre><code>git switch -c fix-typo
 </code></pre>
 </li>
 <li>
 <p>コードを変更して<code>commit</code>:</p>
-<pre><code>emacs README.md
+<pre><code>vim README.md
 git diff
 git commit -a -m &quot;Fix typo in README.md&quot;
 </code></pre>
 </li>
 <li>
-<p>この間に<code>upstream</code>で更新があったら、それをデフォルトブランチ越しに取り込む:</p>
-<pre><code>git checkout master
-git fetch upstream
-git merge upstream/master
-git push origin/master
-git checkout fix-typo
-git rebase -i master
+<p>この間に<code>upstream</code>で更新があったか確認:</p>
+<pre><code>git fetch upstream
+</code></pre>
+<p>必要ならそれを取り込む:</p>
+<pre><code>git switch master
+git merge --ff-only upstream/master
+git switch fix-typo
+git rebase master
 </code></pre>
 </li>
 <li>
@@ -360,7 +372,8 @@ git rebase -i master
 </code></pre>
 </li>
 <li>
-<p>GitHub上に出現する&quot;Compare &amp; pull request&quot;ボタンを押す</p>
+<p>PR用のURLが表示されるのでそこから飛ぶ。
+もしくはGitHub上に出現する&quot;Compare &amp; pull request&quot;ボタンを押す。</p>
 </li>
 <li>
 <p>差分を確認し、コメント欄を埋めて提出</p>
@@ -375,11 +388,11 @@ git rebase -i master
 <h2 id="問題と対処">問題と対処</h2>
 <h3 id="用済みブランチの掃除">用済みブランチの掃除</h3>
 <p>PRマージ済みのリモートブランチを消したい。
-明示的に消すオプションを付けるか、空ブランチをpushするか:</p>
+一番簡単なのは、GitHub PR画面のdelete branchボタンを押すこと。
+手元のgitからやるには、明示的に <code>--delete</code> するか、空ブランチをpushするか:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git push --delete origin issue-42
 git push origin :issue-42
-</code></pre></div><p>別のマシンやGitHub PR画面のボタンから消したりすると、
-消したはずのリモートブランチの記録が手元のリポジトリに残ることがある。
+</code></pre></div><p>リモートブランチを消しても手元のリポジトリには残る。
 まず確認:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git branch -a
 git remote show origin
@@ -405,7 +418,7 @@ HEAD detached from *******
 </code></pre></li>
 <li>
 <p><code>master</code>に戻ると道筋を示してくれる:</p>
-<pre><code>git checkout master
+<pre><code>git switch master
 Warning: you are leaving 2 comits behind, not connected to
 any of your branches
 If you want to keep them by creating a new branch, this may be a good time
