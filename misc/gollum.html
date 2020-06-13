@@ -222,27 +222,38 @@ sudo systemctl restart apache2
 <p><code>config.rb</code> にこんな感じで書くだけ:</p>
 <div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="k">module</span> <span class="nn">Precious</span>
   <span class="k">class</span> <span class="nc">App</span> <span class="o">&lt;</span> <span class="no">Sinatra</span><span class="o">::</span><span class="no">Base</span>
-    <span class="n">passwd</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="s1">&#39;user1&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;0b14d501a594442a01c6859541bcb3e8164d183d32937b851835442f69d5c94e&#39;</span><span class="p">,</span>
-      <span class="s1">&#39;user2&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;6cf615d5bcaac778352a8f1f3360d23f02f34ec182e259897fd6ce485d7870d4&#39;</span>
-    <span class="p">}</span>
     <span class="n">use</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Auth</span><span class="o">::</span><span class="no">Basic</span><span class="p">,</span> <span class="s1">&#39;Private Wiki&#39;</span> <span class="k">do</span> <span class="o">|</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="o">|</span>
+      <span class="n">users</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;../users.json&#39;</span><span class="p">,</span> <span class="bp">__FILE__</span><span class="p">))</span> <span class="k">do</span> <span class="o">|</span><span class="n">file</span><span class="o">|</span>
+        <span class="no">JSON</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">,</span> <span class="ss">symbolize_names</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
+      <span class="k">end</span>
+      <span class="nb">name</span> <span class="o">=</span> <span class="n">username</span><span class="o">.</span><span class="n">to_sym</span>
       <span class="n">digested</span> <span class="o">=</span> <span class="no">Digest</span><span class="o">::</span><span class="no">SHA256</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">(</span><span class="n">password</span><span class="p">)</span>
-      <span class="k">if</span> <span class="n">passwd</span><span class="o">.</span><span class="n">key?</span><span class="p">(</span><span class="n">username</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">digested</span> <span class="o">==</span> <span class="n">passwd</span><span class="o">[</span><span class="n">username</span><span class="o">]</span>
-        <span class="no">Precious</span><span class="o">::</span><span class="no">App</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="ss">:username</span><span class="p">,</span> <span class="n">username</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">users</span><span class="o">.</span><span class="n">key?</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">digested</span> <span class="o">==</span> <span class="n">users</span><span class="o">[</span><span class="nb">name</span><span class="o">][</span><span class="ss">:password</span><span class="o">]</span>
+        <span class="no">Precious</span><span class="o">::</span><span class="no">App</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="ss">:author</span><span class="p">,</span> <span class="n">users</span><span class="o">[</span><span class="nb">name</span><span class="o">]</span><span class="p">)</span>
       <span class="k">end</span>
     <span class="k">end</span>
 
     <span class="n">before</span> <span class="k">do</span>
-      <span class="n">session</span><span class="o">[</span><span class="s1">&#39;gollum.author&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="nb">name</span><span class="p">:</span> <span class="n">settings</span><span class="o">.</span><span class="n">username</span><span class="p">,</span>
-        <span class="ss">email</span><span class="p">:</span> <span class="s2">&#34;</span><span class="si">#{</span><span class="n">settings</span><span class="o">.</span><span class="n">username</span><span class="si">}</span><span class="s2">@users.noreply.github.com&#34;</span>
-      <span class="p">}</span>
+      <span class="n">session</span><span class="o">[</span><span class="s1">&#39;gollum.author&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">author</span>
     <span class="k">end</span>
   <span class="k">end</span>
 <span class="k">end</span>
+</code></pre></div><p><code>session['gollum.author']</code> にハッシュを渡しておくとコミッターに反映してもらえる。
+ユーザー情報は別ファイル(ここでは<code>users.json</code>)に分離しといたほうが見通しがいい。</p>
+<div class="highlight"><pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&#34;user1&#34;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;First User&#34;</span><span class="p">,</span>
+    <span class="nt">&#34;email&#34;</span><span class="p">:</span> <span class="s2">&#34;user1@example.com&#34;</span><span class="p">,</span>
+    <span class="nt">&#34;password&#34;</span><span class="p">:</span> <span class="s2">&#34;0b14d501a594442a01c6859541bcb3e8164d183d32937b851835442f69d5c94e&#34;</span>
+  <span class="p">},</span>
+  <span class="nt">&#34;user2&#34;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Second User&#34;</span><span class="p">,</span>
+    <span class="nt">&#34;email&#34;</span><span class="p">:</span> <span class="s2">&#34;user2@example.com&#34;</span><span class="p">,</span>
+    <span class="nt">&#34;password&#34;</span><span class="p">:</span> <span class="s2">&#34;6cf615d5bcaac778352a8f1f3360d23f02f34ec182e259897fd6ce485d7870d4&#34;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div><p>もっとちゃんとした認証システムにしたほうがいいのかもしれないけど、
-大学のファイアウォール外からはアクセス不可能なのでとりあえずこれくらいで&hellip;</p>
+大学のファイアウォール内なのでとりあえずこれくらいで&hellip;</p>
 <p>パスワードのハッシュ値は
 <code>sha256sum &lt;(pbpaste)</code>
 とか
@@ -283,6 +294,8 @@ sudo systemctl restart apache2
     <span class="k">end</span>
   <span class="k">end</span>
 <span class="k">end</span>
+
+<span class="no">Gollum</span><span class="o">::</span><span class="no">Markup</span><span class="o">.</span><span class="n">formats</span><span class="o">.</span><span class="n">select!</span> <span class="p">{</span> <span class="o">|</span><span class="n">k</span><span class="p">,</span> <span class="n">_</span><span class="o">|</span> <span class="n">k</span> <span class="o">==</span> <span class="ss">:markdown</span> <span class="p">}</span>
 </code></pre></div><p>ほかにどんなのが利用可能かはこちらを参照:
 <a href="https://github.com/github/markup/blob/master/lib/github/markup/markdown.rb">https://github.com/github/markup/blob/master/lib/github/markup/markdown.rb</a></p>
 <h3 id="systemd-で自動的に開始"><code>systemd</code> で自動的に開始</h3>
