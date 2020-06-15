@@ -95,9 +95,17 @@ foreach/parallel — 並行処理 in R
 <p>カウンター無しでループを書けるようにするパッケージ。
 普段は <a href="/rstats/purrr.html"><code>purrr::map()</code></a> とかのほうが使いやすいけど、
 <a href="#parallel">後述の並列化</a>の場面ではお世話になる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">foreach </span><span class="p">(</span><span class="n">mu</span> <span class="o">=</span> <span class="nf">seq_len</span><span class="p">(</span><span class="m">8</span><span class="p">),</span> <span class="n">.combine</span><span class="o">=</span><span class="n">c</span><span class="p">)</span> <span class="o">%do%</span> <span class="p">{</span>
-    <span class="nf">rnorm</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="n">mu</span><span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">library</span><span class="p">(</span><span class="n">foreach</span><span class="p">)</span>
+
+<span class="n">slow_square</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nf">Sys.sleep</span><span class="p">(</span><span class="m">0.5</span><span class="p">)</span>
+  <span class="n">x</span> <span class="o">*</span> <span class="n">x</span>
 <span class="p">}</span>
+
+<span class="nf">foreach</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">4</span><span class="p">),</span> <span class="n">.combine</span> <span class="o">=</span> <span class="n">c</span><span class="p">)</span> <span class="o">%do%</span> <span class="p">{</span>
+  <span class="nf">slow_square</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1"># 2.0 sec with 1 core</span>
 </code></pre></div><p><a href="https://CRAN.R-project.org/package=foreach">https://CRAN.R-project.org/package=foreach</a></p>
 <h3 id="foreach-1"><code>foreach()</code></h3>
 <dl>
@@ -122,21 +130,15 @@ foreach/parallel — 並行処理 in R
 <li><a href="https://stat.ethz.ch/R-manual/R-patched/library/parallel/html/00Index.html">https://stat.ethz.ch/R-manual/R-patched/library/parallel/html/00Index.html</a></li>
 </ul>
 <p>Rの並列化では <code>snow</code> や <code>multicore</code> が使われてきたが、
-バージョン2.14からそれらを統合した <code>parallel</code> が標準ライブラリに入った。
-直接触るのは難しいので、<code>foreach</code>(とその橋渡しライブラリ
-<a href="https://CRAN.R-project.org/package=doParallel"><code>doParallel</code></a>)
-を介して使う。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">library</span><span class="p">(</span><span class="n">doParallel</span><span class="p">)</span>
-<span class="n">cores</span> <span class="o">=</span> <span class="nf">detectCores</span><span class="p">(</span><span class="n">logical</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
-<span class="n">cluster</span> <span class="o">=</span> <span class="nf">makeCluster</span><span class="p">(</span><span class="n">cores</span><span class="p">,</span> <span class="s">&#34;FORK&#34;</span><span class="p">)</span>
-<span class="nf">registerDoParallel</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
-<span class="nf">foreach </span><span class="p">(</span><span class="n">mu</span> <span class="o">=</span> <span class="nf">seq_len</span><span class="p">(</span><span class="m">8L</span><span class="p">))</span> <span class="o">%dopar%</span> <span class="p">{</span>
-    <span class="nf">rnorm</span><span class="p">(</span><span class="m">3L</span><span class="p">,</span> <span class="n">mu</span><span class="p">)</span>
-<span class="p">}</span>
-<span class="nf">stopCluster</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
-</code></pre></div><p><code>mclapply()</code> は <code>lapply()</code> の並列化バージョンで、
-クラスタの生成や破棄などもぜーんぶ自動でやってくれるので便利
-(ただし <code>type=&quot;FORK&quot;</code> 固定なのでWindows不可):</p>
+バージョン2.14からそれらを統合した <code>parallel</code> が標準ライブラリに入った。</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">library</span><span class="p">(</span><span class="n">parallel</span><span class="p">)</span>
+<span class="nf">options</span><span class="p">(</span><span class="n">mc.cores</span> <span class="o">=</span> <span class="nf">detectCores</span><span class="p">(</span><span class="n">logical</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">))</span>  <span class="c1"># 4</span>
+
+<span class="nf">mclapply</span><span class="p">(</span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">4</span><span class="p">),</span> <span class="n">slow_square</span><span class="p">)</span>     <span class="c1"># 0.5 sec with 4 cores</span>
+<span class="nf">lapply</span><span class="p">(</span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">4</span><span class="p">),</span> <span class="n">slow_square</span><span class="p">)</span>       <span class="c1"># 2.0 sec with 1 cores</span>
+<span class="n">purrr</span><span class="o">::</span><span class="nf">map</span><span class="p">(</span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">4</span><span class="p">),</span> <span class="n">slow_square</span><span class="p">)</span>   <span class="c1"># 2.0 sec with 1 cores</span>
+</code></pre></div><p><code>mclapply()</code> は <code>lapply()</code> のお手軽並列化バージョン。
+UNIX系OSのforkに依存するためWindows不可。</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">mclapply</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">FUN</span><span class="p">,</span> <span class="kc">...</span><span class="p">,</span>
          <span class="n">mc.preschedule</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="n">mc.set.seed</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
          <span class="n">mc.silent</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span> <span class="n">mc.cores</span> <span class="o">=</span> <span class="nf">getOption</span><span class="p">(</span><span class="s">&#34;mc.cores&#34;</span><span class="p">,</span> <span class="m">2L</span><span class="p">),</span>
@@ -148,20 +150,33 @@ foreach/parallel — 並行処理 in R
 <a href="https://github.com/HenrikBengtsson/future.apply">future.apply</a>,
 <a href="https://github.com/DavisVaughan/furrr">furrr</a>
 を使っていくのが良さそう。</p>
-<h3 id="makecluster"><code>makeCluster()</code></h3>
+<p>もっと細かくいろいろ制御したい場合は
+<code>foreach</code> (とその橋渡しライブラリ<a href="https://CRAN.R-project.org/package=doParallel"><code>doParallel</code></a>)
+を介して使う。
+この場合、クラスタの生成や破棄なども自前でやることになる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">library</span><span class="p">(</span><span class="n">doParallel</span><span class="p">)</span>
+<span class="n">cluster</span> <span class="o">=</span> <span class="nf">makeCluster</span><span class="p">(</span><span class="nf">getOption</span><span class="p">(</span><span class="s">&#34;mc.cores&#34;</span><span class="p">,</span> <span class="m">2L</span><span class="p">),</span> <span class="n">type</span> <span class="o">=</span> <span class="s">&#34;FORK&#34;</span><span class="p">)</span>
+<span class="nf">registerDoParallel</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+
+<span class="nf">foreach</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">4</span><span class="p">))</span> <span class="o">%dopar%</span> <span class="p">{</span>
+  <span class="nf">slow_square</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nf">stopCluster</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+</code></pre></div><h3 id="makecluster"><code>makeCluster()</code></h3>
 <dl>
 <dt><code>spec</code></dt>
 <dd>いくつのworkerを立ち上げるか。
-CPUコア数を取得するには <code>parallel::detectCores(logical=FALSE)</code></dd>
-<dt><code>type=&quot;PSOCK&quot;</code></dt>
+物理コア数を取得するには <code>parallel::detectCores(logical = FALSE)</code></dd>
+<dt><code>type = &quot;PSOCK&quot;</code></dt>
 <dd>デフォルト。高コストだけどだいたいどの環境でも使える。
 マルチCPUのサーバーで並列化したい場合はこれ。
 <code>foreach()</code> で使う場合 <code>.export=</code> や <code>.packages=</code> の指定が重要。</dd>
-<dt><code>type=&quot;FORK&quot;</code></dt>
+<dt><code>type = &quot;FORK&quot;</code></dt>
 <dd>4コア1CPUとかの普通のデスクトップマシンで気楽に並列化したいならこれ。
 低コストだし <code>.export=</code> や <code>.packages=</code> を指定せず <code>foreach()</code> できる。
 Windowsでは使えないらしいけど。</dd>
-<dt><code>outfile=&quot;&quot;</code></dt>
+<dt><code>outfile = &quot;&quot;</code></dt>
 <dd><code>print()</code>や<code>message()</code>などの出力先を標準に戻す。
 デフォルトでは<code>/dev/null</code>に捨てられてしまう。</dd>
 </dl>
@@ -179,17 +194,17 @@ Windowsでは使えないらしいけど。</dd>
 <dd>イテレータ版 <code>seq_len()</code></dd>
 <dt><code>icountn(vn)</code></dt>
 <dd>自然数限定イテレータ版 <code>expand.grid()</code></dd>
-<dt><code>iter(obj, by=c(&quot;column&quot;, &quot;row&quot;))</code></dt>
+<dt><code>iter(obj, by = c(&quot;column&quot;, &quot;row&quot;))</code></dt>
 <dd>イテレータ版 <code>purrr::by_row()</code> のようなもので、
 並列<code>foreach</code>で各ノードに巨大data.frameを送りたくない場合に有用。
 data.frame以外も適用可。
-e.g., <code>iter(iris, by=&quot;row&quot;)</code></dd>
-<dt><code>isplit(x, f, drop=FALSE, ...)</code></dt>
+e.g., <code>iter(iris, by = &quot;row&quot;)</code></dd>
+<dt><code>isplit(x, f, drop = FALSE, ...)</code></dt>
 <dd>イテレータ版 <code>purrr::slice_rows()</code> のようなもので、
 <code>f</code>は列名じゃなくてfactor。
 data.frame以外も適用可。
 e.g., <code>isplit(iris, iris$Species)</code></dd>
-<dt><code>iread.table(file, ..., verbose=FALSE)</code>, <code>ireadLines(con, n=1, ...)</code></dt>
+<dt><code>iread.table(file, ..., verbose = FALSE)</code>, <code>ireadLines(con, n = 1, ...)</code></dt>
 <dd>ファイルを1行ずつ読み込む</dd>
 <dt><code>irbinom(..., count)</code>, <code>irnbinom()</code>, <code>irnorm()</code>, <code>irpois()</code>, <code>irunif()</code></dt>
 <dd>乱数</dd>
