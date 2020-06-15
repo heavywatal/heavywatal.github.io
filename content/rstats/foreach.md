@@ -14,9 +14,17 @@ tags = ["r", "concurrent"]
 [後述の並列化](#parallel)の場面ではお世話になる。
 
 ```r
-foreach (mu = seq_len(8), .combine=c) %do% {
-    rnorm(1, mu)
+library(foreach)
+
+slow_square = function(x) {
+  Sys.sleep(0.5)
+  x * x
 }
+
+foreach(x = seq(1, 4), .combine = c) %do% {
+  slow_square(x)
+}
+# 2.0 sec with 1 core
 ```
 
 https://CRAN.R-project.org/package=foreach
@@ -52,24 +60,18 @@ https://CRAN.R-project.org/package=foreach
 
 Rの並列化では `snow` や `multicore` が使われてきたが、
 バージョン2.14からそれらを統合した `parallel` が標準ライブラリに入った。
-直接触るのは難しいので、`foreach`(とその橋渡しライブラリ
-[`doParallel`](https://CRAN.R-project.org/package=doParallel))
-を介して使う。
 
 ```r
-library(doParallel)
-cores = detectCores(logical=FALSE)
-cluster = makeCluster(cores, "FORK")
-registerDoParallel(cluster)
-foreach (mu = seq_len(8L)) %dopar% {
-    rnorm(3L, mu)
-}
-stopCluster(cluster)
+library(parallel)
+options(mc.cores = detectCores(logical = FALSE))  # 4
+
+mclapply(seq(1, 4), slow_square)     # 0.5 sec with 4 cores
+lapply(seq(1, 4), slow_square)       # 2.0 sec with 1 cores
+purrr::map(seq(1, 4), slow_square)   # 2.0 sec with 1 cores
 ```
 
-`mclapply()` は `lapply()` の並列化バージョンで、
-クラスタの生成や破棄などもぜーんぶ自動でやってくれるので便利
-(ただし `type="FORK"` 固定なのでWindows不可):
+`mclapply()` は `lapply()` のお手軽並列化バージョン。
+UNIX系OSのforkに依存するためWindows不可。
 
 ```r
 mclapply(X, FUN, ...,
@@ -87,24 +89,40 @@ mclapply(X, FUN, ...,
 [furrr](https://github.com/DavisVaughan/furrr)
 を使っていくのが良さそう。
 
+もっと細かくいろいろ制御したい場合は
+`foreach` (とその橋渡しライブラリ[`doParallel`](https://CRAN.R-project.org/package=doParallel))
+を介して使う。
+この場合、クラスタの生成や破棄なども自前でやることになる。
+
+```r
+library(doParallel)
+cluster = makeCluster(getOption("mc.cores", 2L), type = "FORK")
+registerDoParallel(cluster)
+
+foreach(x = seq(1, 4)) %dopar% {
+  slow_square(x)
+}
+
+stopCluster(cluster)
+```
 
 ### `makeCluster()`
 
 `spec`
 : いくつのworkerを立ち上げるか。
-  CPUコア数を取得するには `parallel::detectCores(logical=FALSE)`
+  物理コア数を取得するには `parallel::detectCores(logical = FALSE)`
 
-`type="PSOCK"`
+`type = "PSOCK"`
 : デフォルト。高コストだけどだいたいどの環境でも使える。
   マルチCPUのサーバーで並列化したい場合はこれ。
   `foreach()` で使う場合 `.export=` や `.packages=` の指定が重要。
 
-`type="FORK"`
+`type = "FORK"`
 : 4コア1CPUとかの普通のデスクトップマシンで気楽に並列化したいならこれ。
   低コストだし `.export=` や `.packages=` を指定せず `foreach()` できる。
   Windowsでは使えないらしいけど。
 
-`outfile=""`
+`outfile = ""`
 : `print()`や`message()`などの出力先を標準に戻す。
   デフォルトでは`/dev/null`に捨てられてしまう。
 
@@ -128,19 +146,19 @@ https://CRAN.R-project.org/package=iterators
 `icountn(vn)`
 : 自然数限定イテレータ版 `expand.grid()`
 
-`iter(obj, by=c("column", "row"))`
+`iter(obj, by = c("column", "row"))`
 : イテレータ版 `purrr::by_row()` のようなもので、
   並列`foreach`で各ノードに巨大data.frameを送りたくない場合に有用。
   data.frame以外も適用可。
-  e.g., `iter(iris, by="row")`
+  e.g., `iter(iris, by = "row")`
 
-`isplit(x, f, drop=FALSE, ...)`
+`isplit(x, f, drop = FALSE, ...)`
 : イテレータ版 `purrr::slice_rows()` のようなもので、
   `f`は列名じゃなくてfactor。
   data.frame以外も適用可。
   e.g., `isplit(iris, iris$Species)`
 
-`iread.table(file, ..., verbose=FALSE)`, `ireadLines(con, n=1, ...)`
+`iread.table(file, ..., verbose = FALSE)`, `ireadLines(con, n = 1, ...)`
 : ファイルを1行ずつ読み込む
 
 `irbinom(..., count)`, `irnbinom()`, `irnorm()`, `irpois()`, `irunif()`
