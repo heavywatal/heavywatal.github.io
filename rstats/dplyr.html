@@ -155,91 +155,87 @@ dplyr — 高速data.frame処理
 <dl>
 <dt><code>dplyr::select(.data, ...)</code></dt>
 <dd>列を絞る。複数指定、範囲指定、負の指定が可能。
-<a href="https://dplyr.tidyverse.org/reference/select_helpers.html">select helper</a>
+<a href="https://tidyselect.r-lib.org/reference/select_helpers.html">select helper</a>
 によるパターン指定も便利。
 残るのが1列だけでも勝手にvectorにはならずdata.frameのまま。
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="n">Petal.Width</span><span class="p">,</span> <span class="n">Species</span><span class="p">)</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="s">&#34;Petal.Width&#34;</span><span class="p">,</span> <span class="s">&#34;Species&#34;</span><span class="p">)</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&#34;Petal.Width&#34;</span><span class="p">,</span> <span class="s">&#34;Species&#34;</span><span class="p">))</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="nf">any_of</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&#34;Petal.Width&#34;</span><span class="p">,</span> <span class="s">&#34;Species&#34;</span><span class="p">,</span> <span class="s">&#34;NOEXIST&#34;</span><span class="p">)))</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="m">4</span><span class="o">:</span><span class="m">5</span><span class="p">)</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="o">-</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">))</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">Sepal.Length</span><span class="o">:</span><span class="n">Petal.Length</span><span class="p">))</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="nf">matches</span><span class="p">(</span><span class="s">&#34;^Petal\\.Width$|^Species$&#34;</span><span class="p">))</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">7</span><span class="p">)</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="n">carat</span><span class="p">,</span> <span class="n">cut</span><span class="p">,</span> <span class="n">price</span><span class="p">)</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&#34;carat&#34;</span><span class="p">,</span> <span class="s">&#34;cut&#34;</span><span class="p">,</span> <span class="s">&#34;price&#34;</span><span class="p">))</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="o">-</span><span class="n">carat</span><span class="p">,</span> <span class="o">-</span><span class="n">cut</span><span class="p">,</span> <span class="o">-</span><span class="n">price</span><span class="p">)</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="nf">starts_with</span><span class="p">(</span><span class="s">&#34;c&#34;</span><span class="p">))</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="nf">where</span><span class="p">(</span><span class="n">is.numeric</span><span class="p">))</span>
 </code></pre></div><p><a href="https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html">https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html</a></p>
 </dd>
 <dd>
 <p>文字列変数で指定しようとすると意図が曖昧になるので、
 <a href="https://dplyr.tidyverse.org/articles/programming.html#unquoting">unquoting</a>
 やpronounで明確に:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">Sepal.Length</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;Petal.Width&#34;</span><span class="p">,</span> <span class="s">&#34;Species&#34;</span><span class="p">)</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="n">Sepal.Length</span><span class="p">)</span>       <span class="c1"># ambiguous!</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="n">.data</span><span class="o">$</span><span class="n">Sepal.Length</span><span class="p">)</span> <span class="c1"># pronoun =&gt; Sepal.Length</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="o">!!</span><span class="n">Sepal.Length</span><span class="p">)</span>     <span class="c1"># unquote =&gt; Petal.Width, Species</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="o">!!!</span><span class="n">rlang</span><span class="o">::</span><span class="nf">syms</span><span class="p">(</span><span class="n">Sepal.Length</span><span class="p">))</span>  <span class="c1"># Petal.Width, Species</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">clarity</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;carat&#34;</span><span class="p">,</span> <span class="s">&#34;cut&#34;</span><span class="p">,</span> <span class="s">&#34;price&#34;</span><span class="p">)</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="n">clarity</span><span class="p">)</span>       <span class="c1"># ambiguous!</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="n">.data</span><span class="o">$</span><span class="n">clarity</span><span class="p">)</span> <span class="c1"># pronoun =&gt; clarity</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="o">!!</span><span class="n">clarity</span><span class="p">)</span>     <span class="c1"># unquote =&gt; carat, cut, price</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="o">!!!</span><span class="n">rlang</span><span class="o">::</span><span class="nf">syms</span><span class="p">(</span><span class="n">clarity</span><span class="p">))</span>  <span class="c1"># carat, cut, price</span>
 </code></pre></div><p>これらの指定方法は <code>rename()</code> や <code>pull()</code> でも有効。
 一方、文字列を受け取れない <code>distinct()</code> や <code>group_by()</code>
 などの関数には普通のunquoteは通用しない。
 最後の例のように <code>rlang::syms()</code> でシンボル化して
 <a href="https://dplyr.tidyverse.org/articles/programming.html#unquote-splicing">unquote-splicing</a>
 して渡す必要がある。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">columns</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;Petal.Width&#34;</span><span class="p">,</span> <span class="s">&#34;Species&#34;</span><span class="p">)</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="nf">distinct</span><span class="p">(</span><span class="o">!!</span><span class="nf">as.name</span><span class="p">(</span><span class="n">columns[1L]</span><span class="p">))</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="nf">distinct</span><span class="p">(</span><span class="o">!!!</span><span class="n">rlang</span><span class="o">::</span><span class="nf">syms</span><span class="p">(</span><span class="n">columns</span><span class="p">))</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">columns</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;cut&#34;</span><span class="p">,</span> <span class="s">&#34;color&#34;</span><span class="p">)</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">distinct</span><span class="p">(</span><span class="o">!!</span><span class="nf">as.name</span><span class="p">(</span><span class="n">columns[1L]</span><span class="p">))</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">distinct</span><span class="p">(</span><span class="o">!!!</span><span class="n">rlang</span><span class="o">::</span><span class="nf">syms</span><span class="p">(</span><span class="n">columns</span><span class="p">))</span>
 </code></pre></div><p>詳しくは<a href="https://amzn.to/2u0hmTs">宇宙本</a>第3章のコラム
 「selectのセマンティクスとmutateのセマンティクス、tidyeval」を参照。</p>
 </dd>
 <dt><code>dplyr::rename(.data, ...)</code></dt>
 <dd>列の改名。
 <code>mutate()</code>と同じようなイメージで <code>new = old</code> と指定。
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">rename</span><span class="p">(</span><span class="n">sp</span> <span class="o">=</span> <span class="n">Species</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="nf">head</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
-<span class="c1">#   Sepal.Length Sepal.Width Petal.Length Petal.Width     sp</span>
-<span class="c1"># 1          5.1         3.5          1.4         0.2 setosa</span>
-<span class="c1"># 2          4.9         3.0          1.4         0.2 setosa</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">rename</span><span class="p">(</span><span class="n">SIZE</span> <span class="o">=</span> <span class="n">carat</span><span class="p">)</span>
+<span class="c1">#    SIZE       cut color clarity depth table price     x     y     z</span>
+<span class="c1"># 1  0.23     Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43</span>
+<span class="c1"># 2  0.21   Premium     E     SI1  59.8    61   326  3.89  3.84  2.31</span>
 </code></pre></div><p>変数に入った文字列を使う場合も<code>mutate()</code>と同様にunquotingで:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">old_name</span> <span class="o">=</span> <span class="s">&#34;Species&#34;</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">old_name</span> <span class="o">=</span> <span class="s">&#34;carat&#34;</span>
 <span class="n">new_name</span> <span class="o">=</span> <span class="nf">toupper</span><span class="p">(</span><span class="n">old_name</span><span class="p">)</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">rename</span><span class="p">(</span><span class="o">!!</span><span class="n">new_name</span> <span class="o">:=</span> <span class="o">!!</span><span class="n">old_name</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="nf">head</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
-<span class="c1">#   Sepal.Length Sepal.Width Petal.Length Petal.Width SPECIES</span>
-<span class="c1"># 1          5.1         3.5          1.4         0.2  setosa</span>
-<span class="c1"># 2          4.9         3.0          1.4         0.2  setosa</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">rename</span><span class="p">(</span><span class="o">!!</span><span class="n">new_name</span> <span class="o">:=</span> <span class="o">!!</span><span class="n">old_name</span><span class="p">)</span>
+<span class="c1"># tbl_df [53940 x 10]</span>
+<span class="c1">#   CARAT       cut color clarity depth table price     x     y     z</span>
+<span class="c1"># 1  0.23     Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43</span>
+<span class="c1"># 2  0.21   Premium     E     SI1  59.8    61   326  3.89  3.84  2.31</span>
 </code></pre></div><p>名前付きベクターと
 <a href="https://dplyr.tidyverse.org/articles/programming.html#unquote-splicing">unquote-splicing</a>
 を使えば一括指定できる:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">named_vec</span> <span class="o">=</span> <span class="nf">setNames</span><span class="p">(</span><span class="nf">names</span><span class="p">(</span><span class="n">iris</span><span class="p">),</span> <span class="kc">LETTERS</span><span class="n">[1</span><span class="o">:</span><span class="m">5</span><span class="n">]</span><span class="p">)</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">rename</span><span class="p">(</span><span class="o">!!!</span><span class="n">named_vec</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="nf">head</span><span class="p">(</span><span class="m">2L</span><span class="p">)</span>
-<span class="c1">#     A   B   C   D      E</span>
-<span class="c1"># 1 5.1 3.5 1.4 0.2 setosa</span>
-<span class="c1"># 2 4.9 3.0 1.4 0.2 setosa</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">named_vec</span> <span class="o">=</span> <span class="nf">setNames</span><span class="p">(</span><span class="nf">names</span><span class="p">(</span><span class="n">diamonds</span><span class="p">),</span> <span class="kc">LETTERS</span><span class="nf">[seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">10</span><span class="p">)</span><span class="n">]</span><span class="p">)</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">rename</span><span class="p">(</span><span class="o">!!!</span><span class="n">named_vec</span><span class="p">)</span>
+<span class="c1">#       A         B     C     D     E     F     G     H     I     J</span>
+<span class="c1">#   &lt;dbl&gt;     &lt;ord&gt; &lt;ord&gt; &lt;ord&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="c1"># 1  0.23     Ideal     E   SI2  61.5    55   326  3.95  3.98  2.43</span>
+<span class="c1"># 2  0.21   Premium     E   SI1  59.8    61   326  3.89  3.84  2.31</span>
 </code></pre></div></dd>
 <dd>
 <p>リネーム関数を渡せる亜種:<br>
 <code>rename_with(.tbl, .fn, .cols = everything(), ...)</code><br></p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="nf">head</span><span class="p">()</span> <span class="o">%&gt;%</span>
-  <span class="n">dplyr</span><span class="o">::</span><span class="nf">rename_with</span><span class="p">(</span><span class="n">toupper</span><span class="p">,</span> <span class="nf">everything</span><span class="p">())</span> <span class="o">%&gt;%</span>
-  <span class="nf">print</span><span class="p">()</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">rename_with</span><span class="p">(</span><span class="n">toupper</span><span class="p">,</span> <span class="nf">everything</span><span class="p">())</span>
 </code></pre></div></dd>
 <dt><code>dplyr::pull(.data, var = -1)</code></dt>
 <dd>指定した1列をvector(またはlist)としてdata.frameから抜き出す。
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="nf">head</span><span class="p">()</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">pull</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="nf">head</span><span class="p">()</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">pull</span><span class="p">(</span><span class="s">&#34;Species&#34;</span><span class="p">)</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="nf">head</span><span class="p">()</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">pull</span><span class="p">(</span><span class="m">5</span><span class="p">)</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="nf">head</span><span class="p">()</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">pull</span><span class="p">(</span><span class="m">-1</span><span class="p">)</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="nf">head</span><span class="p">()</span> <span class="o">%&gt;%</span> <span class="nf">`[[`</span><span class="p">(</span><span class="s">&#34;Species&#34;</span><span class="p">)</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="nf">head</span><span class="p">()</span> <span class="o">%&gt;%</span> <span class="p">{</span><span class="n">.[[</span><span class="s">&#34;Species&#34;</span><span class="n">]]</span><span class="p">}</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="nf">head</span><span class="p">()</span> <span class="o">%&gt;%</span> <span class="p">{</span><span class="n">.$Species</span><span class="p">}</span>
-<span class="p">{</span><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="nf">head</span><span class="p">()}</span><span class="o">$</span><span class="n">Species</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">head</span><span class="p">()</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">pull</span><span class="p">(</span><span class="n">price</span><span class="p">)</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">head</span><span class="p">()</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">pull</span><span class="p">(</span><span class="s">&#34;price&#34;</span><span class="p">)</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">head</span><span class="p">()</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">pull</span><span class="p">(</span><span class="m">7</span><span class="p">)</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">head</span><span class="p">()</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">pull</span><span class="p">(</span><span class="m">-4</span><span class="p">)</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">head</span><span class="p">()</span> <span class="o">%&gt;%</span> <span class="nf">`[[`</span><span class="p">(</span><span class="s">&#34;price&#34;</span><span class="p">)</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">head</span><span class="p">()</span> <span class="o">%&gt;%</span> <span class="p">{</span><span class="n">.[[</span><span class="s">&#34;price&#34;</span><span class="n">]]</span><span class="p">}</span>
 </code></pre></div></dd>
 </dl>
 <h3 id="行">行</h3>
 <dl>
 <dt><code>dplyr::filter(.data, ...)</code></dt>
 <dd>条件を満たす行だけを返す。<code>base::subset()</code> と似たようなもの。
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">filter</span><span class="p">(</span><span class="n">Sepal.Length</span><span class="o">&lt;</span><span class="m">6</span><span class="p">,</span> <span class="n">Sepal.Width</span><span class="o">&gt;</span><span class="m">4</span><span class="p">)</span>
-<span class="c1">#   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
-<span class="c1"># 1          5.7         4.4          1.5         0.4  setosa</span>
-<span class="c1"># 2          5.2         4.1          1.5         0.1  setosa</span>
-<span class="c1"># 3          5.5         4.2          1.4         0.2  setosa</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">filter</span><span class="p">(</span><span class="n">carat</span> <span class="o">&gt;</span> <span class="m">3</span> <span class="o">&amp;</span> <span class="n">price</span> <span class="o">&lt;</span> <span class="m">10000</span><span class="p">)</span>
+<span class="c1">#   carat     cut color clarity depth table price     x     y     z</span>
+<span class="c1"># 1  3.01 Premium     I      I1  62.7    58  8040  9.10  8.97  5.67</span>
+<span class="c1"># 2  3.11    Fair     J      I1  65.9    57  9823  9.15  9.02  5.98</span>
+<span class="c1"># 3  3.01 Premium     F      I1  62.2    56  9925  9.24  9.13  5.73</span>
 </code></pre></div><div class="warning">
 評価結果が <code>NA</code> となる行は除去される。
 特に不等号を使うときやや直感に反するので要注意。
@@ -252,20 +248,22 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code>
 <code>base::unique.data.frame()</code> よりも高速で、
 <code>filter(!duplicated(.[, ...]))</code> よりスマートで柔軟。
 指定しなかった列を残すには <code>.keep_all = TRUE</code> とする。
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">distinct</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span>
-<span class="c1">#      Species</span>
-<span class="c1"># 1     setosa</span>
-<span class="c1"># 2 versicolor</span>
-<span class="c1"># 3  virginica</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">distinct</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span>
+<span class="c1">#         cut</span>
+<span class="c1"># 1     Ideal</span>
+<span class="c1"># 2   Premium</span>
+<span class="c1"># 3      Good</span>
+<span class="c1"># 4 Very Good</span>
+<span class="c1"># 5      Fair</span>
 </code></pre></div></dd>
 <dt><code>dplyr::slice(.data, ...)</code></dt>
 <dd>行番号を指定して行を絞る。
 <code>`[`(i,)</code> の代わりに。
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">slice</span><span class="p">(</span><span class="m">2</span><span class="o">:</span><span class="m">4</span><span class="p">)</span>
-<span class="c1">#   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
-<span class="c1"># 1          4.9         3.0          1.4         0.2  setosa</span>
-<span class="c1"># 2          4.7         3.2          1.3         0.2  setosa</span>
-<span class="c1"># 3          4.6         3.1          1.5         0.2  setosa</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">slice</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">)</span>
+<span class="c1">#   carat     cut color clarity depth table price     x     y     z</span>
+<span class="c1"># 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43</span>
+<span class="c1"># 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31</span>
+<span class="c1"># 3  0.23    Good     E     VS1  56.9    65   327  4.05  4.07  2.31</span>
 </code></pre></div></dd>
 <dt><code>dplyr::slice_head(.data, ..., n, prop)</code>, <code>slice_tail()</code></dt>
 <dd>先頭・末尾の行を抽出。</dd>
@@ -279,27 +277,27 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code>
 <dd>既存の列を変更したり、新しい列を作ったり。
 <code>base::transform()</code> の改良版。
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># modify existing column</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">Sepal.Length</span> <span class="o">=</span> <span class="nf">log</span><span class="p">(</span><span class="n">Sepal.Length</span><span class="p">))</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">price</span> <span class="o">=</span> <span class="n">price</span> <span class="o">*</span> <span class="m">107.54</span><span class="p">)</span>
 
 <span class="c1"># create new column</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">ln_sepal_length</span> <span class="o">=</span> <span class="nf">log</span><span class="p">(</span><span class="n">Sepal.Length</span><span class="p">))</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">gram</span> <span class="o">=</span> <span class="m">0.2</span> <span class="o">*</span> <span class="n">carat</span><span class="p">)</span>
 </code></pre></div><p>変数に入った文字列を列名として使いたい場合は <code>!!</code> と
 <a href="https://dplyr.tidyverse.org/articles/programming.html#setting-variable-names">unquoting用の代入演算子 <code>:=</code></a>
 を使う:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">y</span> <span class="o">=</span> <span class="s">&#34;new_column&#34;</span>
-<span class="n">x</span> <span class="o">=</span> <span class="s">&#34;Sepal.Length&#34;</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">A</span> <span class="o">=</span> <span class="s">&#34;carat&#34;</span>
+<span class="n">B</span> <span class="o">=</span> <span class="s">&#34;gram&#34;</span>
 
 <span class="c1"># unquoting only right hand side</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">y</span> <span class="o">=</span> <span class="nf">log</span><span class="p">(</span><span class="o">!!</span><span class="nf">as.name</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span> <span class="o">%&gt;%</span> <span class="nf">head</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
-<span class="c1">#   Sepal.Length Sepal.Width Petal.Length Petal.Width Species        y</span>
-<span class="c1"># 1          5.1         3.5          1.4         0.2  setosa 1.629241</span>
-<span class="c1"># 2          4.9         3.0          1.4         0.2  setosa 1.589235</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">B</span> <span class="o">=</span> <span class="m">0.2</span> <span class="o">*</span> <span class="o">!!</span><span class="nf">as.name</span><span class="p">(</span><span class="n">A</span><span class="p">))</span>
+<span class="c1">#   carat     cut color clarity depth table price     x     y     z     B</span>
+<span class="c1"># 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43 0.046</span>
+<span class="c1"># 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31 0.042</span>
 
 <span class="c1"># unquoting both sides</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="o">!!</span><span class="n">y</span> <span class="o">:=</span> <span class="nf">log</span><span class="p">(</span><span class="o">!!</span><span class="nf">as.name</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span> <span class="o">%&gt;%</span> <span class="nf">head</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
-<span class="c1">#   Sepal.Length Sepal.Width Petal.Length Petal.Width Species new_column</span>
-<span class="c1"># 1          5.1         3.5          1.4         0.2  setosa   1.629241</span>
-<span class="c1"># 2          4.9         3.0          1.4         0.2  setosa   1.589235</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="o">!!</span><span class="n">B</span> <span class="o">:=</span> <span class="m">0.2</span> <span class="o">*</span> <span class="p">(</span><span class="o">!!</span><span class="nf">as.name</span><span class="p">(</span><span class="n">A</span><span class="p">)))</span>
+<span class="c1">#   carat     cut color clarity depth table price     x     y     z  gram</span>
+<span class="c1"># 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43 0.046</span>
+<span class="c1"># 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31 0.042</span>
 </code></pre></div></dd>
 <dt><code>dplyr::transmute(.data, ...)</code></dt>
 <dd>指定した列以外を保持しない版 <code>mutate()</code> 。
@@ -310,23 +308,28 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code>
 <dt><code>dplyr::summarize(.data, ..., .group = NULL)</code></dt>
 <dd>指定した列に関数を適用して1行のdata.frameにまとめる。
 グループ化されていたらグループごとに適用して <code>bind_rows()</code> する。
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span> <span class="o">%&gt;%</span>
-  <span class="n">dplyr</span><span class="o">::</span><span class="nf">summarize</span><span class="p">(</span><span class="n">minpw</span> <span class="o">=</span> <span class="nf">min</span><span class="p">(</span><span class="n">Petal.Width</span><span class="p">),</span> <span class="n">maxpw</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="n">Petal.Width</span><span class="p">))</span>
-<span class="c1">#      Species minpw maxpw</span>
-<span class="c1"># 1     setosa   0.1   0.6</span>
-<span class="c1"># 2 versicolor   1.0   1.8</span>
-<span class="c1"># 3  virginica   1.4   2.5</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span>
+  <span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">summarize</span><span class="p">(</span><span class="n">avg_carat</span> <span class="o">=</span> <span class="nf">mean</span><span class="p">(</span><span class="n">carat</span><span class="p">),</span> <span class="n">max_price</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="n">price</span><span class="p">))</span>
+<span class="c1">#         cut avg_carat max_price</span>
+<span class="c1">#       &lt;ord&gt;     &lt;dbl&gt;     &lt;int&gt;</span>
+<span class="c1"># 1      Fair 1.0461366     18574</span>
+<span class="c1"># 2      Good 0.8491847     18788</span>
+<span class="c1"># 3 Very Good 0.8063814     18818</span>
+<span class="c1"># 4   Premium 0.8919549     18823</span>
+<span class="c1"># 5     Ideal 0.7028370     18806</span>
 </code></pre></div></dd>
 <dd>
 <p>関数の結果が長さ1じゃなくても大丈夫(v1.0.0)。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">summarize</span><span class="p">(</span><span class="n">rangepw</span> <span class="o">=</span> <span class="nf">range</span><span class="p">(</span><span class="n">Petal.Width</span><span class="p">))</span>
-<span class="c1">#   rangepw</span>
-<span class="c1"># 1     0.1</span>
-<span class="c1"># 2     2.5</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">summarize</span><span class="p">(</span><span class="nf">range</span><span class="p">(</span><span class="n">carat</span><span class="p">),</span> <span class="nf">range</span><span class="p">(</span><span class="n">price</span><span class="p">))</span>
+<span class="c1">#   range(carat) range(price)</span>
+<span class="c1">#          &lt;dbl&gt;        &lt;int&gt;</span>
+<span class="c1"># 1         0.20          326</span>
+<span class="c1"># 2         5.01        18823</span>
 </code></pre></div></dd>
 <dd>
 <p>各グループの結果がtibbleの場合、結合・展開してくれる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">nest_by</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span> <span class="o">%&gt;%</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">nest_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">%&gt;%</span>
   <span class="n">dplyr</span><span class="o">::</span><span class="nf">summarize</span><span class="p">(</span><span class="nf">head</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="m">2L</span><span class="p">))</span>
 </code></pre></div><p>これを利用して複数ファイルを一気読みできる</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">path</span> <span class="o">=</span> <span class="n">fs</span><span class="o">::</span><span class="nf">dir_ls</span><span class="p">(</span><span class="s">&#34;path/to/data&#34;</span><span class="p">,</span> <span class="n">glob</span> <span class="o">=</span> <span class="s">&#34;*.tsv&#34;</span><span class="p">)</span>
@@ -336,17 +339,21 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code>
 </code></pre></div></dd>
 <dd>
 <p>複数カラムに関数を適用するには <code>across()</code> を使う</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># summarize_at</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="nf">group_by</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span> <span class="o">%&gt;%</span>
-  <span class="nf">summarize</span><span class="p">(</span><span class="nf">across</span><span class="p">(</span><span class="nf">ends_with</span><span class="p">(</span><span class="s">&#34;Width&#34;</span><span class="p">),</span> <span class="n">mean</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">))</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">median.ordered</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nf">levels</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="nf">[median</span><span class="p">(</span><span class="nf">as.integer</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="n">na.rm</span><span class="p">)</span><span class="n">]</span>
+<span class="p">}</span>
+
+<span class="c1"># summarize_at</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">summarize</span><span class="p">(</span><span class="nf">across</span><span class="p">(</span><span class="nf">starts_with</span><span class="p">(</span><span class="s">&#34;c&#34;</span><span class="p">),</span> <span class="n">median</span><span class="p">))</span>
 
 <span class="c1"># summarize_if</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="nf">group_by</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span> <span class="o">%&gt;%</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">%&gt;%</span>
   <span class="nf">summarize</span><span class="p">(</span><span class="nf">across</span><span class="p">(</span><span class="n">is.numeric</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">))</span>
 
 <span class="c1"># summarize_all</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="nf">group_by</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span> <span class="o">%&gt;%</span>
-  <span class="nf">summarize</span><span class="p">(</span><span class="nf">across</span><span class="p">(</span><span class="nf">everything</span><span class="p">(),</span> <span class="n">mean</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">))</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">summarize</span><span class="p">(</span><span class="nf">across</span><span class="p">(</span><span class="nf">everything</span><span class="p">(),</span> <span class="n">median</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">))</span>
 </code></pre></div><p><code>*_at()</code>, <code>*_if()</code>, <code>*_all()</code>, <code>*_each()</code> は非推奨。</p>
 </dd>
 <dt><code>dplyr::tally(x, wt, sort = FALSE)</code></dt>
@@ -437,14 +444,14 @@ NAのときにどうするかを指定できるのも大変良い。
 <a href="/rstats/dplyr.html"><code>dplyr</code></a> でその変更を元の data.frame に適用する、
 というのがtidyverse流のモダンなやり方らしい。
 それをもうちょいスマートにやる <code>group_modify()</code> がv0.8.1で導入された。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span>
-  <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_nest</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span> <span class="o">%&gt;%</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span>
+  <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_nest</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">%&gt;%</span>
   <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">purrr</span><span class="o">::</span><span class="nf">map</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">head</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="m">2L</span><span class="p">))</span> <span class="o">%&gt;%</span>
   <span class="n">tidyr</span><span class="o">::</span><span class="nf">unnest</span><span class="p">()</span>
 
 <span class="c1"># since dplyr 0.8.1</span>
-<span class="n">iris</span> <span class="o">%&gt;%</span>
-  <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span> <span class="o">%&gt;%</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span>
+  <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">%&gt;%</span>
   <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_modify</span><span class="p">(</span><span class="o">~</span> <span class="nf">head</span><span class="p">(</span><span class="n">.x</span><span class="p">,</span> <span class="m">2L</span><span class="p">))</span>
 </code></pre></div><dl>
 <dt><code>dplyr::group_by(.data, ..., add = FALSE, .drop = group_by_drop_default(.data))</code></dt>
@@ -453,13 +460,13 @@ e.g. <code>summarize()</code>, <code>slice()</code>, <code>tally()</code>, <code
 <dd><code>.drop = FALSE</code> とすると行数ゼロになるグループも捨てずに保持できる。</dd>
 <dt><code>dplyr::group_data(.data)</code></dt>
 <dd>グループ情報を参照:
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_data</span><span class="p">()</span>
-<span class="c1"># tbl_df [3 x 2]</span>
-<span class="c1">#      Species      .rows</span>
-<span class="c1">#        &lt;fct&gt;     &lt;list&gt;</span>
-<span class="c1"># 1     setosa &lt;int [50]&gt;</span>
-<span class="c1"># 2 versicolor &lt;int [50]&gt;</span>
-<span class="c1"># 3  virginica &lt;int [50]&gt;</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_data</span><span class="p">()</span>
+<span class="c1">#         cut           .rows</span>
+<span class="c1"># 1      Fair    &lt;int [1610]&gt;</span>
+<span class="c1"># 2      Good    &lt;int [4906]&gt;</span>
+<span class="c1"># 3 Very Good   &lt;int [12082]&gt;</span>
+<span class="c1"># 4   Premium   &lt;int [13791]&gt;</span>
+<span class="c1"># 5     Ideal   &lt;int [21551]&gt;</span>
 </code></pre></div><p>左側のキー列だけ欲しければ <code>dplyr::group_keys()</code> 、<br>
 左端の行番号だけ欲しければ <code>dplyr::group_rows()</code> 。</p>
 </dd>
@@ -471,20 +478,21 @@ e.g. <code>summarize()</code>, <code>slice()</code>, <code>tally()</code>, <code
 <dt><code>dplyr::group_indices(.data, ...)</code></dt>
 <dd><code>grouped_df</code> ではなくグループIDとして1からの整数列を返す版 <code>group_by()</code></dd>
 <dt><code>dplyr::group_modify(.tbl, .f, ...)</code></dt>
-<dd>グループごとに <code>.f</code> を適用してまとめたdata.frameを返す。</dd>
+<dd>グループごとに <code>.f</code> を適用して再結合したdata.frameを返す。</dd>
 <dd><code>.f</code> には<a href="/rstats/purrr.html#無名関数">purrrでよく見る無名関数</a>を渡す。
 (普通の関数も渡せるはずだけどちょっと挙動が変？)
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_modify</span><span class="p">(</span><span class="o">~</span> <span class="nf">head</span><span class="p">(</span><span class="n">.x</span><span class="p">,</span> <span class="m">2L</span><span class="p">))</span>
-<span class="c1"># # grouped_df [6 x 5]</span>
-<span class="c1"># # Groups: Species [3]</span>
-<span class="c1">#      Species Sepal.Length Sepal.Width Petal.Length Petal.Width</span>
-<span class="c1">#        &lt;fct&gt;        &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;</span>
-<span class="c1"># 1     setosa          5.1         3.5          1.4         0.2</span>
-<span class="c1"># 2     setosa          4.9         3.0          1.4         0.2</span>
-<span class="c1"># 3 versicolor          7.0         3.2          4.7         1.4</span>
-<span class="c1"># 4 versicolor          6.4         3.2          4.5         1.5</span>
-<span class="c1"># 5  virginica          6.3         3.3          6.0         2.5</span>
-<span class="c1"># 6  virginica          5.8         2.7          5.1         1.9</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_modify</span><span class="p">(</span><span class="o">~</span> <span class="nf">head</span><span class="p">(</span><span class="n">.x</span><span class="p">,</span> <span class="m">2L</span><span class="p">))</span>
+<span class="c1">#          cut carat color clarity depth table price     x     y     z</span>
+<span class="c1">#  1      Fair  0.22     E     VS2  65.1    61   337  3.87  3.78  2.49</span>
+<span class="c1">#  2      Fair  0.86     E     SI2  55.1    69  2757  6.45  6.33  3.52</span>
+<span class="c1">#  3      Good  0.23     E     VS1  56.9    65   327  4.05  4.07  2.31</span>
+<span class="c1">#  4      Good  0.31     J     SI2  63.3    58   335  4.34  4.35  2.75</span>
+<span class="c1">#  5 Very Good  0.24     J    VVS2  62.8    57   336  3.94  3.96  2.48</span>
+<span class="c1">#  6 Very Good  0.24     I    VVS1  62.3    57   336  3.95  3.98  2.47</span>
+<span class="c1">#  7   Premium  0.21     E     SI1  59.8    61   326  3.89  3.84  2.31</span>
+<span class="c1">#  8   Premium  0.29     I     VS2  62.4    58   334  4.20  4.23  2.63</span>
+<span class="c1">#  9     Ideal  0.23     E     SI2  61.5    55   326  3.95  3.98  2.43</span>
+<span class="c1"># 10     Ideal  0.23     J     VS1  62.8    56   340  3.93  3.90  2.46</span>
 </code></pre></div></dd>
 <dd>
 <p><code>group_map()</code> は結果を <code>bind_rows()</code> せずlistとして返す亜種。
@@ -493,7 +501,7 @@ e.g. <code>summarize()</code>, <code>slice()</code>, <code>tally()</code>, <code
 <dt><code>dplyr::do(.data, ...)</code></dt>
 <dd>非推奨。
 代わりに <code>group_modify()</code> とかを使う。
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">iris</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">do</span><span class="p">(</span><span class="nf">head</span><span class="p">(</span><span class="n">.,</span> <span class="m">2L</span><span class="p">))</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">do</span><span class="p">(</span><span class="nf">head</span><span class="p">(</span><span class="n">.,</span> <span class="m">2L</span><span class="p">))</span>
 </code></pre></div></dd>
 <dt><code>dplyr::rowwise(data, ...)</code></dt>
 <dd>受け取ったdataに <code>rowwise_df</code> クラスを付与して返す。
@@ -502,8 +510,9 @@ mutate などを適用すると列全体ではなく1行ごとに関数に渡さ
 一旦非推奨となったがv1.0.0で蘇った。</dd>
 </dl>
 <h2 id="matrix-array">matrix, array</h2>
-<p>data.frame を主眼とする dplyr では
-matrix や array を扱わないという方針かと思いきや、意外とそうでもなかった。</p>
+<p>data.frame を主眼とする dplyr では matrix や array を扱わない。
+一時期存在していた <code>tbl_cube</code> 関連の機能は
+<a href="https://github.com/hadley/cubelyr">cubelyr</a> に隔離された。</p>
 <dl>
 <dt><code>as.tbl_cube(x, dim_names, met_names, ...)</code></dt>
 <dd>matrix/arrayからdata.frameの一歩手前に変換する。
@@ -521,8 +530,7 @@ matrix や array を扱わないという方針かと思いきや、意外とそ
 <span class="n">x</span> <span class="o">=</span> <span class="n">iris3</span>
 <span class="nf">dimnames</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="n">[[1L]]</span> <span class="o">=</span> <span class="nf">seq_len</span><span class="p">(</span><span class="nf">dim</span><span class="p">(</span><span class="n">iris3</span><span class="p">)</span><span class="n">[[1L]]</span><span class="p">)</span>
 <span class="nf">names</span><span class="p">(</span><span class="nf">dimnames</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;obs&#34;</span><span class="p">,</span> <span class="s">&#34;metrics&#34;</span><span class="p">,</span> <span class="s">&#34;species&#34;</span><span class="p">)</span>
-<span class="n">dplyr</span><span class="o">::</span><span class="nf">as.tbl_cube</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">met_name</span> <span class="o">=</span> <span class="s">&#34;value&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
-  <span class="n">tibble</span><span class="o">::</span><span class="nf">as_tibble</span><span class="p">()</span>
+<span class="n">cubelyr</span><span class="o">::</span><span class="nf">as.tbl_cube</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">met_name</span> <span class="o">=</span> <span class="s">&#34;value&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="nf">as_tibble</span><span class="p">()</span>
 </code></pre></div><h2 id="関連書籍">関連書籍</h2>
 <p><a href="https://www.amazon.co.jp/dp/4774198536/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=f0acaf09c5bcbd85ee22c534caede9d1" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4774198536&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4774198536" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 <a href="https://www.amazon.co.jp/Data-Science-Transform-Visualize-Model/dp/1491910399/ref=as_li_ss_il?s=books&ie=UTF8&qid=1508340700&sr=1-3&linkCode=li3&tag=heavywatal-22&linkId=6a53371cc80e2d6d7fc50fae5d8b862d" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1491910399&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=1491910399" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
