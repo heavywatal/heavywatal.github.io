@@ -83,19 +83,17 @@ result = summarize(                    # 平均を計算
 
 `dplyr::select(.data, ...)`
 :   列を絞る。複数指定、範囲指定、負の指定が可能。
-    [select helper](https://dplyr.tidyverse.org/reference/select_helpers.html)
+    [select helper](https://tidyselect.r-lib.org/reference/select_helpers.html)
     によるパターン指定も便利。
     残るのが1列だけでも勝手にvectorにはならずdata.frameのまま。
 
     ```r
-    iris %>% dplyr::select(Petal.Width, Species)
-    iris %>% dplyr::select("Petal.Width", "Species")
-    iris %>% dplyr::select(c("Petal.Width", "Species"))
-    iris %>% dplyr::select(any_of(c("Petal.Width", "Species", "NOEXIST")))
-    iris %>% dplyr::select(4:5)
-    iris %>% dplyr::select(-c(1:3))
-    iris %>% dplyr::select(-(Sepal.Length:Petal.Length))
-    iris %>% dplyr::select(matches("^Petal\\.Width$|^Species$"))
+    diamonds %>% dplyr::select(1, 2, 7)
+    diamonds %>% dplyr::select(carat, cut, price)
+    diamonds %>% dplyr::select(c("carat", "cut", "price"))
+    diamonds %>% dplyr::select(-carat, -cut, -price)
+    diamonds %>% dplyr::select(starts_with("c"))
+    diamonds %>% dplyr::select(where(is.numeric))
     ```
 
     https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html
@@ -105,11 +103,11 @@ result = summarize(                    # 平均を計算
     [unquoting](https://dplyr.tidyverse.org/articles/programming.html#unquoting)
     やpronounで明確に:
     ```r
-    Sepal.Length = c("Petal.Width", "Species")
-    iris %>% dplyr::select(Sepal.Length)       # ambiguous!
-    iris %>% dplyr::select(.data$Sepal.Length) # pronoun => Sepal.Length
-    iris %>% dplyr::select(!!Sepal.Length)     # unquote => Petal.Width, Species
-    iris %>% dplyr::select(!!!rlang::syms(Sepal.Length))  # Petal.Width, Species
+    clarity = c("carat", "cut", "price")
+    diamonds %>% dplyr::select(clarity)       # ambiguous!
+    diamonds %>% dplyr::select(.data$clarity) # pronoun => clarity
+    diamonds %>% dplyr::select(!!clarity)     # unquote => carat, cut, price
+    diamonds %>% dplyr::select(!!!rlang::syms(clarity))  # carat, cut, price
     ```
     これらの指定方法は `rename()` や `pull()` でも有効。
     一方、文字列を受け取れない `distinct()` や `group_by()`
@@ -118,9 +116,9 @@ result = summarize(                    # 平均を計算
     [unquote-splicing](https://dplyr.tidyverse.org/articles/programming.html#unquote-splicing)
     して渡す必要がある。
     ```r
-    columns = c("Petal.Width", "Species")
-    iris %>% distinct(!!as.name(columns[1L]))
-    iris %>% distinct(!!!rlang::syms(columns))
+    columns = c("cut", "color")
+    diamonds %>% distinct(!!as.name(columns[1L]))
+    diamonds %>% distinct(!!!rlang::syms(columns))
     ```
     詳しくは[宇宙本](https://amzn.to/2u0hmTs)第3章のコラム
     「selectのセマンティクスとmutateのセマンティクス、tidyeval」を参照。
@@ -130,52 +128,50 @@ result = summarize(                    # 平均を計算
 :   列の改名。
     `mutate()`と同じようなイメージで `new = old` と指定。
     ```r
-    iris %>% dplyr::rename(sp = Species) %>% head(2)
-    #   Sepal.Length Sepal.Width Petal.Length Petal.Width     sp
-    # 1          5.1         3.5          1.4         0.2 setosa
-    # 2          4.9         3.0          1.4         0.2 setosa
+    diamonds %>% dplyr::rename(SIZE = carat)
+    #    SIZE       cut color clarity depth table price     x     y     z
+    # 1  0.23     Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43
+    # 2  0.21   Premium     E     SI1  59.8    61   326  3.89  3.84  2.31
     ```
     変数に入った文字列を使う場合も`mutate()`と同様にunquotingで:
     ```r
-    old_name = "Species"
+    old_name = "carat"
     new_name = toupper(old_name)
-    iris %>% dplyr::rename(!!new_name := !!old_name) %>% head(2)
-    #   Sepal.Length Sepal.Width Petal.Length Petal.Width SPECIES
-    # 1          5.1         3.5          1.4         0.2  setosa
-    # 2          4.9         3.0          1.4         0.2  setosa
+    diamonds %>% dplyr::rename(!!new_name := !!old_name)
+    # tbl_df [53940 x 10]
+    #   CARAT       cut color clarity depth table price     x     y     z
+    # 1  0.23     Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43
+    # 2  0.21   Premium     E     SI1  59.8    61   326  3.89  3.84  2.31
     ```
     名前付きベクターと
     [unquote-splicing](https://dplyr.tidyverse.org/articles/programming.html#unquote-splicing)
     を使えば一括指定できる:
     ```r
-    named_vec = setNames(names(iris), LETTERS[1:5])
-    iris %>% dplyr::rename(!!!named_vec) %>% head(2L)
-    #     A   B   C   D      E
-    # 1 5.1 3.5 1.4 0.2 setosa
-    # 2 4.9 3.0 1.4 0.2 setosa
+    named_vec = setNames(names(diamonds), LETTERS[seq(1, 10)])
+    diamonds %>% dplyr::rename(!!!named_vec)
+    #       A         B     C     D     E     F     G     H     I     J
+    #   <dbl>     <ord> <ord> <ord> <dbl> <dbl> <int> <dbl> <dbl> <dbl>
+    # 1  0.23     Ideal     E   SI2  61.5    55   326  3.95  3.98  2.43
+    # 2  0.21   Premium     E   SI1  59.8    61   326  3.89  3.84  2.31
     ```
 
 :   リネーム関数を渡せる亜種:<br>
     `rename_with(.tbl, .fn, .cols = everything(), ...)`<br>
 
     ```r
-    iris %>% head() %>%
-      dplyr::rename_with(toupper, everything()) %>%
-      print()
+    diamonds %>% dplyr::rename_with(toupper, everything())
     ```
 
 `dplyr::pull(.data, var = -1)`
 :   指定した1列をvector(またはlist)としてdata.frameから抜き出す。
 
     ```r
-    iris %>% head() %>% dplyr::pull(Species)
-    iris %>% head() %>% dplyr::pull("Species")
-    iris %>% head() %>% dplyr::pull(5)
-    iris %>% head() %>% dplyr::pull(-1)
-    iris %>% head() %>% `[[`("Species")
-    iris %>% head() %>% {.[["Species"]]}
-    iris %>% head() %>% {.$Species}
-    {iris %>% head()}$Species
+    diamonds %>% head() %>% dplyr::pull(price)
+    diamonds %>% head() %>% dplyr::pull("price")
+    diamonds %>% head() %>% dplyr::pull(7)
+    diamonds %>% head() %>% dplyr::pull(-4)
+    diamonds %>% head() %>% `[[`("price")
+    diamonds %>% head() %>% {.[["price"]]}
     ```
 
 
@@ -185,11 +181,11 @@ result = summarize(                    # 平均を計算
 :   条件を満たす行だけを返す。`base::subset()` と似たようなもの。
 
     ```r
-    iris %>% dplyr::filter(Sepal.Length<6, Sepal.Width>4)
-    #   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-    # 1          5.7         4.4          1.5         0.4  setosa
-    # 2          5.2         4.1          1.5         0.1  setosa
-    # 3          5.5         4.2          1.4         0.2  setosa
+    diamonds %>% dplyr::filter(carat > 3 & price < 10000)
+    #   carat     cut color clarity depth table price     x     y     z
+    # 1  3.01 Premium     I      I1  62.7    58  8040  9.10  8.97  5.67
+    # 2  3.11    Fair     J      I1  65.9    57  9823  9.15  9.02  5.98
+    # 3  3.01 Premium     F      I1  62.2    56  9925  9.24  9.13  5.73
     ```
 
     {{<div class="warning">}}
@@ -206,11 +202,13 @@ e.g., `filter(gene != "TP53")`
     指定しなかった列を残すには `.keep_all = TRUE` とする。
 
     ```r
-    iris %>% dplyr::distinct(Species)
-    #      Species
-    # 1     setosa
-    # 2 versicolor
-    # 3  virginica
+    diamonds %>% dplyr::distinct(cut)
+    #         cut
+    # 1     Ideal
+    # 2   Premium
+    # 3      Good
+    # 4 Very Good
+    # 5      Fair
     ```
 
 `dplyr::slice(.data, ...)`
@@ -218,11 +216,11 @@ e.g., `filter(gene != "TP53")`
     `` `[`(i,) `` の代わりに。
 
     ```r
-    iris %>% dplyr::slice(2:4)
-    #   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-    # 1          4.9         3.0          1.4         0.2  setosa
-    # 2          4.7         3.2          1.3         0.2  setosa
-    # 3          4.6         3.1          1.5         0.2  setosa
+    diamonds %>% dplyr::slice(1, 2, 3)
+    #   carat     cut color clarity depth table price     x     y     z
+    # 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43
+    # 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31
+    # 3  0.23    Good     E     VS1  56.9    65   327  4.05  4.07  2.31
     ```
 
 `dplyr::slice_head(.data, ..., n, prop)`, `slice_tail()`
@@ -240,30 +238,30 @@ e.g., `filter(gene != "TP53")`
     `base::transform()` の改良版。
     ```r
     # modify existing column
-    iris %>% dplyr::mutate(Sepal.Length = log(Sepal.Length))
+    diamonds %>% dplyr::mutate(price = price * 107.54)
 
     # create new column
-    iris %>% dplyr::mutate(ln_sepal_length = log(Sepal.Length))
+    diamonds %>% dplyr::mutate(gram = 0.2 * carat)
     ```
 
     変数に入った文字列を列名として使いたい場合は `!!` と
     [unquoting用の代入演算子 `:=`](https://dplyr.tidyverse.org/articles/programming.html#setting-variable-names)
     を使う:
     ```r
-    y = "new_column"
-    x = "Sepal.Length"
+    A = "carat"
+    B = "gram"
 
     # unquoting only right hand side
-    iris %>% dplyr::mutate(y = log(!!as.name(x))) %>% head(2)
-    #   Sepal.Length Sepal.Width Petal.Length Petal.Width Species        y
-    # 1          5.1         3.5          1.4         0.2  setosa 1.629241
-    # 2          4.9         3.0          1.4         0.2  setosa 1.589235
+    diamonds %>% dplyr::mutate(B = 0.2 * !!as.name(A))
+    #   carat     cut color clarity depth table price     x     y     z     B
+    # 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43 0.046
+    # 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31 0.042
 
     # unquoting both sides
-    iris %>% dplyr::mutate(!!y := log(!!as.name(x))) %>% head(2)
-    #   Sepal.Length Sepal.Width Petal.Length Petal.Width Species new_column
-    # 1          5.1         3.5          1.4         0.2  setosa   1.629241
-    # 2          4.9         3.0          1.4         0.2  setosa   1.589235
+    diamonds %>% dplyr::mutate(!!B := 0.2 * (!!as.name(A)))
+    #   carat     cut color clarity depth table price     x     y     z  gram
+    # 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43 0.046
+    # 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31 0.042
     ```
 
 `dplyr::transmute(.data, ...)`
@@ -278,27 +276,32 @@ e.g., `filter(gene != "TP53")`
     グループ化されていたらグループごとに適用して `bind_rows()` する。
 
     ```r
-    iris %>% dplyr::group_by(Species) %>%
-      dplyr::summarize(minpw = min(Petal.Width), maxpw = max(Petal.Width))
-    #      Species minpw maxpw
-    # 1     setosa   0.1   0.6
-    # 2 versicolor   1.0   1.8
-    # 3  virginica   1.4   2.5
+    diamonds %>%
+      group_by(cut) %>%
+      summarize(avg_carat = mean(carat), max_price = max(price))
+    #         cut avg_carat max_price
+    #       <ord>     <dbl>     <int>
+    # 1      Fair 1.0461366     18574
+    # 2      Good 0.8491847     18788
+    # 3 Very Good 0.8063814     18818
+    # 4   Premium 0.8919549     18823
+    # 5     Ideal 0.7028370     18806
     ```
 
 :   関数の結果が長さ1じゃなくても大丈夫(v1.0.0)。
 
     ```r
-    iris %>% dplyr::summarize(rangepw = range(Petal.Width))
-    #   rangepw
-    # 1     0.1
-    # 2     2.5
+    diamonds %>% dplyr::summarize(range(carat), range(price))
+    #   range(carat) range(price)
+    #          <dbl>        <int>
+    # 1         0.20          326
+    # 2         5.01        18823
     ```
 
 :   各グループの結果がtibbleの場合、結合・展開してくれる。
 
     ```r
-    iris %>% dplyr::nest_by(Species) %>%
+    diamonds %>% dplyr::nest_by(cut) %>%
       dplyr::summarize(head(data, 2L))
     ```
 
@@ -314,17 +317,21 @@ e.g., `filter(gene != "TP53")`
 :   複数カラムに関数を適用するには `across()` を使う
 
     ```r
+    median.ordered = function(x, na.rm = FALSE) {
+      levels(x)[median(as.integer(x), na.rm = na.rm)]
+    }
+
     # summarize_at
-    iris %>% group_by(Species) %>%
-      summarize(across(ends_with("Width"), mean, na.rm = TRUE))
+    diamonds %>% group_by(cut) %>%
+      summarize(across(starts_with("c"), median))
 
     # summarize_if
-    iris %>% group_by(Species) %>%
+    diamonds %>% group_by(cut) %>%
       summarize(across(is.numeric, mean, na.rm = TRUE))
 
     # summarize_all
-    iris %>% group_by(Species) %>%
-      summarize(across(everything(), mean, na.rm = TRUE))
+    diamonds %>% group_by(cut) %>%
+      summarize(across(everything(), median, na.rm = TRUE))
     ```
 
     `*_at()`, `*_if()`, `*_all()`, `*_each()` は非推奨。
@@ -444,14 +451,14 @@ e.g., `filter(gene != "TP53")`
 それをもうちょいスマートにやる `group_modify()` がv0.8.1で導入された。
 
 ```r
-iris %>%
-  dplyr::group_nest(Species) %>%
+diamonds %>%
+  dplyr::group_nest(cut) %>%
   dplyr::mutate(data = purrr::map(data, head, n = 2L)) %>%
   tidyr::unnest()
 
 # since dplyr 0.8.1
-iris %>%
-  dplyr::group_by(Species) %>%
+diamonds %>%
+  dplyr::group_by(cut) %>%
   dplyr::group_modify(~ head(.x, 2L))
 ```
 
@@ -463,13 +470,13 @@ iris %>%
 `dplyr::group_data(.data)`
 :   グループ情報を参照:
     ```r
-    iris %>% dplyr::group_by(Species) %>% dplyr::group_data()
-    # tbl_df [3 x 2]
-    #      Species      .rows
-    #        <fct>     <list>
-    # 1     setosa <int [50]>
-    # 2 versicolor <int [50]>
-    # 3  virginica <int [50]>
+    diamonds %>% dplyr::group_by(cut) %>% dplyr::group_data()
+    #         cut           .rows
+    # 1      Fair    <int [1610]>
+    # 2      Good    <int [4906]>
+    # 3 Very Good   <int [12082]>
+    # 4   Premium   <int [13791]>
+    # 5     Ideal   <int [21551]>
     ```
 
     左側のキー列だけ欲しければ `dplyr::group_keys()` 、<br>
@@ -486,22 +493,23 @@ iris %>%
 :   `grouped_df` ではなくグループIDとして1からの整数列を返す版 `group_by()`
 
 `dplyr::group_modify(.tbl, .f, ...)`
-:   グループごとに `.f` を適用してまとめたdata.frameを返す。
+:   グループごとに `.f` を適用して再結合したdata.frameを返す。
 :   `.f` には[purrrでよく見る無名関数]({{< relref "purrr.md#無名関数" >}})を渡す。
     (普通の関数も渡せるはずだけどちょっと挙動が変？)
 
     ```r
-    iris %>% dplyr::group_by(Species) %>% dplyr::group_modify(~ head(.x, 2L))
-    # # grouped_df [6 x 5]
-    # # Groups: Species [3]
-    #      Species Sepal.Length Sepal.Width Petal.Length Petal.Width
-    #        <fct>        <dbl>       <dbl>        <dbl>       <dbl>
-    # 1     setosa          5.1         3.5          1.4         0.2
-    # 2     setosa          4.9         3.0          1.4         0.2
-    # 3 versicolor          7.0         3.2          4.7         1.4
-    # 4 versicolor          6.4         3.2          4.5         1.5
-    # 5  virginica          6.3         3.3          6.0         2.5
-    # 6  virginica          5.8         2.7          5.1         1.9
+    diamonds %>% dplyr::group_by(cut) %>% dplyr::group_modify(~ head(.x, 2L))
+    #          cut carat color clarity depth table price     x     y     z
+    #  1      Fair  0.22     E     VS2  65.1    61   337  3.87  3.78  2.49
+    #  2      Fair  0.86     E     SI2  55.1    69  2757  6.45  6.33  3.52
+    #  3      Good  0.23     E     VS1  56.9    65   327  4.05  4.07  2.31
+    #  4      Good  0.31     J     SI2  63.3    58   335  4.34  4.35  2.75
+    #  5 Very Good  0.24     J    VVS2  62.8    57   336  3.94  3.96  2.48
+    #  6 Very Good  0.24     I    VVS1  62.3    57   336  3.95  3.98  2.47
+    #  7   Premium  0.21     E     SI1  59.8    61   326  3.89  3.84  2.31
+    #  8   Premium  0.29     I     VS2  62.4    58   334  4.20  4.23  2.63
+    #  9     Ideal  0.23     E     SI2  61.5    55   326  3.95  3.98  2.43
+    # 10     Ideal  0.23     J     VS1  62.8    56   340  3.93  3.90  2.46
     ```
 
 :   `group_map()` は結果を `bind_rows()` せずlistとして返す亜種。
@@ -512,7 +520,7 @@ iris %>%
     代わりに `group_modify()` とかを使う。
 
     ```r
-    iris %>% dplyr::group_by(Species) %>% dplyr::do(head(., 2L))
+    diamonds %>% dplyr::group_by(cut) %>% dplyr::do(head(., 2L))
     ```
 
 `dplyr::rowwise(data, ...)`
@@ -524,8 +532,9 @@ iris %>%
 
 ## matrix, array
 
-data.frame を主眼とする dplyr では
-matrix や array を扱わないという方針かと思いきや、意外とそうでもなかった。
+data.frame を主眼とする dplyr では matrix や array を扱わない。
+一時期存在していた `tbl_cube` 関連の機能は
+[cubelyr](https://github.com/hadley/cubelyr) に隔離された。
 
 `as.tbl_cube(x, dim_names, met_names, ...)`
 :   matrix/arrayからdata.frameの一歩手前に変換する。
@@ -544,8 +553,7 @@ iris3 %>%
 x = iris3
 dimnames(x)[[1L]] = seq_len(dim(iris3)[[1L]])
 names(dimnames(x)) = c("obs", "metrics", "species")
-dplyr::as.tbl_cube(x, met_name = "value") %>%
-  tibble::as_tibble()
+cubelyr::as.tbl_cube(x, met_name = "value") %>% as_tibble()
 ```
 
 

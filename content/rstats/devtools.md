@@ -309,7 +309,7 @@ increment = function(x) {x + 1}
 -   dplyrなどで列名を直に指定すると
     `undefined global variables`
     という警告が出るので
-    `dplyr::filter(iris, .data$Species == "setosa")`
+    `dplyr::filter(diamonds, .data$cut == "Ideal")`
     のように pronoun を使って抑える。
     そのためにどこかに `#' @importFrom rlang .data` を書いておく。
     ただし `$` によるアクセスがやや遅いので、
