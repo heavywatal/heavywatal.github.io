@@ -349,7 +349,7 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code>
 
 <span class="c1"># summarize_if</span>
 <span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">%&gt;%</span>
-  <span class="nf">summarize</span><span class="p">(</span><span class="nf">across</span><span class="p">(</span><span class="n">is.numeric</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">))</span>
+  <span class="nf">summarize</span><span class="p">(</span><span class="nf">across</span><span class="p">(</span><span class="nf">where</span><span class="p">(</span><span class="n">is.numeric</span><span class="p">),</span> <span class="n">mean</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">))</span>
 
 <span class="c1"># summarize_all</span>
 <span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">%&gt;%</span>
@@ -498,16 +498,25 @@ e.g. <code>summarize()</code>, <code>slice()</code>, <code>tally()</code>, <code
 <p><code>group_map()</code> は結果を <code>bind_rows()</code> せずlistとして返す亜種。
 <code>group_walk()</code> は <code>.f</code> 適用前の <code>.tbl</code> を返す亜種。</p>
 </dd>
-<dt><code>dplyr::do(.data, ...)</code></dt>
-<dd>非推奨。
-代わりに <code>group_modify()</code> とかを使う。
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">do</span><span class="p">(</span><span class="nf">head</span><span class="p">(</span><span class="n">.,</span> <span class="m">2L</span><span class="p">))</span>
-</code></pre></div></dd>
 <dt><code>dplyr::rowwise(data, ...)</code></dt>
 <dd>受け取ったdataに <code>rowwise_df</code> クラスを付与して返す。
 これは1行ごとにグループ化された <code>grouped_df</code> のようなもので、
 mutate などを適用すると列全体ではなく1行ごとに関数に渡される。
 一旦非推奨となったがv1.0.0で蘇った。</dd>
+<dd>ループ処理が重いので、計算内容と行数のバランスに注意。
+例えば <code>dplyr::c_across()</code> の併用で横方向の合計や平均を簡潔に書けるが、
+ベクトル演算を使う場合に比べてかなり遅い。
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span>
+  <span class="n">dplyr</span><span class="o">::</span><span class="nf">rowwise</span><span class="p">()</span> <span class="o">%&gt;%</span>
+  <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">mean</span> <span class="o">=</span> <span class="nf">mean</span><span class="p">(</span><span class="nf">c_across</span><span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="n">z</span><span class="p">)))</span>         <span class="c1"># slow</span>
+
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">mean</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="n">z</span><span class="p">)</span> <span class="o">/</span> <span class="m">3</span><span class="p">)</span>  <span class="c1"># fast</span>
+</code></pre></div></dd>
+<dt><code>dplyr::do(.data, ...)</code></dt>
+<dd>非推奨。
+代わりに <code>group_modify()</code> とかを使う。
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">do</span><span class="p">(</span><span class="nf">head</span><span class="p">(</span><span class="n">.,</span> <span class="m">2L</span><span class="p">))</span>
+</code></pre></div></dd>
 </dl>
 <h2 id="matrix-array">matrix, array</h2>
 <p>data.frame を主眼とする dplyr では matrix や array を扱わない。
