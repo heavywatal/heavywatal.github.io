@@ -327,7 +327,7 @@ e.g., `filter(gene != "TP53")`
 
     # summarize_if
     diamonds %>% group_by(cut) %>%
-      summarize(across(is.numeric, mean, na.rm = TRUE))
+      summarize(across(where(is.numeric), mean, na.rm = TRUE))
 
     # summarize_all
     diamonds %>% group_by(cut) %>%
@@ -515,6 +515,23 @@ diamonds %>%
 :   `group_map()` は結果を `bind_rows()` せずlistとして返す亜種。
     `group_walk()` は `.f` 適用前の `.tbl` を返す亜種。
 
+`dplyr::rowwise(data, ...)`
+:   受け取ったdataに `rowwise_df` クラスを付与して返す。
+    これは1行ごとにグループ化された `grouped_df` のようなもので、
+    mutate などを適用すると列全体ではなく1行ごとに関数に渡される。
+    一旦非推奨となったがv1.0.0で蘇った。
+:   ループ処理が重いので、計算内容と行数のバランスに注意。
+    例えば `dplyr::c_across()` の併用で横方向の合計や平均を簡潔に書けるが、
+    ベクトル演算を使う場合に比べてかなり遅い。
+
+    ```r
+    diamonds %>%
+      dplyr::rowwise() %>%
+      dplyr::mutate(mean = mean(c_across(x:z)))         # slow
+
+    diamonds %>% dplyr::mutate(mean = (x + y + z) / 3)  # fast
+    ```
+
 `dplyr::do(.data, ...)`
 :   非推奨。
     代わりに `group_modify()` とかを使う。
@@ -522,12 +539,6 @@ diamonds %>%
     ```r
     diamonds %>% dplyr::group_by(cut) %>% dplyr::do(head(., 2L))
     ```
-
-`dplyr::rowwise(data, ...)`
-:   受け取ったdataに `rowwise_df` クラスを付与して返す。
-    これは1行ごとにグループ化された `grouped_df` のようなもので、
-    mutate などを適用すると列全体ではなく1行ごとに関数に渡される。
-    一旦非推奨となったがv1.0.0で蘇った。
 
 
 ## matrix, array
