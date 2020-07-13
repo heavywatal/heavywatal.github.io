@@ -53,8 +53,8 @@ https://github.com/gollum/gollum
     # sudo apt install autoconf bison build-essential libssl-dev libyaml-dev libreadline-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev
     brew install rbenv
     rbenv install -l | less
-    rbenv install 2.7.0
-    rbenv global 2.7.0
+    rbenv install 2.7.1
+    rbenv global 2.7.1
     eval "$(rbenv init -)"
     ```
 
@@ -93,10 +93,12 @@ https://github.com/gollum/gollum
 
     ```sh
     SRCDIR=${HOME}/fork
-    git clone https://github.com/heavywatal/gollum-lib.git ${SRCDIR}/gollum-lib
     git clone https://github.com/heavywatal/gollum.git ${SRCDIR}/gollum -b custom
-    bundle config local.gollum-lib ${SRCDIR}/gollum-lib
+    git clone https://github.com/heavywatal/gollum-lib.git ${SRCDIR}/gollum-lib -b custom
+    git clone https://github.com/heavywatal/rugged_adapter.git ${SRCDIR}/rugged_adapter -b custom
     bundle config local.gollum ${SRCDIR}/gollum
+    bundle config local.gollum-lib ${SRCDIR}/gollum-lib
+    bundle config local.gollum-rugged_adapter ${SRCDIR}/rugged_adapter
     ```
 
 1.  `bundle install` で gollum 及び依存パッケージをまとめてインストール。
@@ -182,7 +184,7 @@ http://example.com/wiki/ のようにアクセスできるようにする。
 module Precious
   class App < Sinatra::Base
     use Rack::Auth::Basic, 'Private Wiki' do |username, password|
-      users = File.open(File.expand_path('../users.json', __FILE__)) do |file|
+      users = File.open(File.expand_path('users.json', __dir__)) do |file|
         JSON.parse(file.read, symbolize_names: true)
       end
       name = username.to_sym
