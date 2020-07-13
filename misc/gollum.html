@@ -128,8 +128,8 @@ docker-compose とかですぐ使えるのも楽ちん。</dd>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># sudo apt install autoconf bison build-essential libssl-dev libyaml-dev libreadline-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev</span>
 brew install rbenv
 rbenv install -l <span class="p">|</span> less
-rbenv install 2.7.0
-rbenv global 2.7.0
+rbenv install 2.7.1
+rbenv global 2.7.1
 <span class="nb">eval</span> <span class="s2">&#34;</span><span class="k">$(</span>rbenv init -<span class="k">)</span><span class="s2">&#34;</span>
 </code></pre></div><p><code>eval &quot;$(rbenv init -)&quot;</code>
 はここでインストールした <code>ruby</code> や <code>bundle</code> にPATHを通すコマンド。
@@ -154,10 +154,12 @@ gem 'gollum'
 gem 'gollum', :github =&gt; 'heavywatal/gollum', :branch =&gt; 'custom'
 </code></pre><p>開発環境ではローカルのクローンを使うように設定:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">SRCDIR</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/fork
-git clone https://github.com/heavywatal/gollum-lib.git <span class="si">${</span><span class="nv">SRCDIR</span><span class="si">}</span>/gollum-lib
 git clone https://github.com/heavywatal/gollum.git <span class="si">${</span><span class="nv">SRCDIR</span><span class="si">}</span>/gollum -b custom
-bundle config local.gollum-lib <span class="si">${</span><span class="nv">SRCDIR</span><span class="si">}</span>/gollum-lib
+git clone https://github.com/heavywatal/gollum-lib.git <span class="si">${</span><span class="nv">SRCDIR</span><span class="si">}</span>/gollum-lib -b custom
+git clone https://github.com/heavywatal/rugged_adapter.git <span class="si">${</span><span class="nv">SRCDIR</span><span class="si">}</span>/rugged_adapter -b custom
 bundle config local.gollum <span class="si">${</span><span class="nv">SRCDIR</span><span class="si">}</span>/gollum
+bundle config local.gollum-lib <span class="si">${</span><span class="nv">SRCDIR</span><span class="si">}</span>/gollum-lib
+bundle config local.gollum-rugged_adapter <span class="si">${</span><span class="nv">SRCDIR</span><span class="si">}</span>/rugged_adapter
 </code></pre></div></li>
 <li>
 <p><code>bundle install</code> で gollum 及び依存パッケージをまとめてインストール。
@@ -223,7 +225,7 @@ sudo systemctl restart apache2
 <div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="k">module</span> <span class="nn">Precious</span>
   <span class="k">class</span> <span class="nc">App</span> <span class="o">&lt;</span> <span class="no">Sinatra</span><span class="o">::</span><span class="no">Base</span>
     <span class="n">use</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Auth</span><span class="o">::</span><span class="no">Basic</span><span class="p">,</span> <span class="s1">&#39;Private Wiki&#39;</span> <span class="k">do</span> <span class="o">|</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="o">|</span>
-      <span class="n">users</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;../users.json&#39;</span><span class="p">,</span> <span class="bp">__FILE__</span><span class="p">))</span> <span class="k">do</span> <span class="o">|</span><span class="n">file</span><span class="o">|</span>
+      <span class="n">users</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;users.json&#39;</span><span class="p">,</span> <span class="n">__dir__</span><span class="p">))</span> <span class="k">do</span> <span class="o">|</span><span class="n">file</span><span class="o">|</span>
         <span class="no">JSON</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">,</span> <span class="ss">symbolize_names</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
       <span class="k">end</span>
       <span class="nb">name</span> <span class="o">=</span> <span class="n">username</span><span class="o">.</span><span class="n">to_sym</span>
