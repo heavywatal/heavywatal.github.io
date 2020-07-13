@@ -180,6 +180,8 @@ Find me on
 
 ## Teaching / Outreach
 
+-   「[Hands-on Introduction to R 2020](/slides/makino2020r/)」
+    (2020-05) 東北大ほか
 -   「[Rによるデータ前処理実習](/slides/tmd2019/)」
     (2019-12) 東京医科歯科大 [データ関連人材育成プログラム](https://md-dsc.com/summary31.php)
 -   「[Rでデータを可視化する](/slides/sendair2/)」

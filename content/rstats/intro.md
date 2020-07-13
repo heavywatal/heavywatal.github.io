@@ -8,46 +8,18 @@ tags = ["r"]
 
 ## 初学者向け講義資料
 
-### 2019-12 [Rによるデータ前処理実習](/slides/tmd2019/)
+- 2020-05 [Hands-on Introduction to R 2020](/slides/makino2020r/) 東北大学ほか
+    - どうしてRを使うの？ --- Why do we use R?
+    - Rの基本 --- R basics
+    - Rで可視化 --- Visualization with R
+    - Rでデータ整形 --- Tidying and transforming data with R
 
-東京医科歯科大学 データ関連人材育成プログラム
+<hr>
+過去の資料
 
-1.  [入門: 前処理とは。Rを使うメリット。Rの基本](/slides/tmd2019/1-introduction.html)
-1.  [データ構造の処理: 抽出、集約、結合、変形など](/slides/tmd2019/2-structure.html)
-1.  [データ内容の処理: 数値、文字列、日時など](/slides/tmd2019/3-content.html)
-1.  [実践: 現実の問題に対処してみる](/slides/tmd2019/4-practice.html)
-
-### 2019-10 [Hands-on R Lecture for Makino Lab](/slides/makino2019r/)
-
-東北大学
-
-<ol start="0">
-<li><a href="/slides/makino2019r/0-why-r.html">Why do we use R?</a>
-<li><a href="/slides/makino2019r/1-basic-r.html">R basics</a>
-<li><a href="/slides/makino2019r/2-ggplot.html">Visualization with R</a>
-<li><a href="/slides/makino2019r/3-tidy-data.html">Tidying and transforming data with R</a>
-<li><a href="/slides/makino2019r/4-statistics.html">Statistical analysis with R</a>
-<li><a href="/slides/makino2019r/5-git.html">File management with Git+GitHub </a>
-</ol>
-
-### 2018-05 [Rにやらせて楽しよう — データの可視化と下ごしらえ](/slides/nagoya2018/)
-
-名古屋大学
-
-<ol start="0">
-<li><a href="/slides/nagoya2018/0-why-r.html">どうしてRを使うの？</a> (12分)
-<li><a href="/slides/nagoya2018/1-basic-r.html">Rの基本</a> (15分)
-<li><a href="/slides/nagoya2018/2-ggplot.html">R + ggplot2 — きれいなグラフを簡単に合理的に</a> (25分)
-<li><a href="/slides/nagoya2018/3-tidy-data.html">R + tidyverse — 使える形にデータを整える</a> (30分)
-</ol>
-
-
-## インターネットで調べる・尋ねる
-
-- <https://www.rdocumentation.org/>
-- <https://r4ds.had.co.nz/> --- R for Data Science (体系的に学びたい人はぜひ通読を)
-- [Stack Overflow](https://stackoverflow.com/questions/tagged/r)
-- [r-wakalang](https://github.com/tokyor/r-wakalang) --- Slack上の日本語コミュニティ
+- 2019-12 [Rによるデータ前処理実習](/slides/tmd2019/) 東京医科歯科大学 データ関連人材育成プログラム
+- 2019-10 [Hands-on R Lecture for Makino Lab](/slides/makino2019r/) 東北大学
+- 2018-05 [Rにやらせて楽しよう — データの可視化と下ごしらえ](/slides/nagoya2018/) 名古屋大学
 
 ## R環境のインストール
 
@@ -59,7 +31,7 @@ R本体
 RStudio Desktop
 : Rをより快適に使うための総合開発環境(IDE)
 : 必須ではないけど、結構みんな使ってるらしい
-: https://www.rstudio.com/ からダウンロードしてインストール
+: https://rstudio.com/ からダウンロードしてインストール
 
 ## スクリプトを保存
 
@@ -141,8 +113,8 @@ stepAIC(model)  # OK
 [tidyverse](https://www.tidyverse.org/) パッケージ群
 ([ggplot2]({{< relref "ggplot2.md" >}}),
 [dplyr]({{< relref "dplyr.md" >}}),
-[purrr]({{< relref "purrr.md" >}}),
 [tidyr]({{< relref "tidyr.md" >}}),
+[purrr]({{< relref "purrr.md" >}}),
 [readr]({{< relref "readr.md" >}}),
 [stringr]({{< relref "stringr.md" >}})など)
 はどんな解析にも有用で、標準になってもいいくらい便利。
@@ -150,9 +122,9 @@ stepAIC(model)  # OK
 Rの中から下記のようなコマンドで一括インストール・読み込みできる。
 
 ```r
-install.packages("readr")  # 一度やればOK
-library(readr)             # 読み込みはRを起動するたびに必要
-update.packages()          # たまには更新しよう
+install.packages("tidyverse")  # 一度やればOK
+library(tidyverse)             # 読み込みはRを起動するたびに必要
+update.packages()              # たまには更新しよう
 ```
 
 そのほか
@@ -176,7 +148,7 @@ Rがファイルを探すのはこの作業ディレクトリである。
 そこからの相対パスでファイルを読み書きするのが分かりやすくて安全。
 
 `getwd()`, `setwd()`
-:   現在地の **w**orking **d**irectory をget/setする関数。
+:   現在地 **w**orking **d**irectory をget/setする関数。
 
     ```r
     getwd()
@@ -243,19 +215,26 @@ Rがファイルを探すのはこの作業ディレクトリである。
     ##   ..- attr(*, "names")= chr [1:100] "(Intercept)" "x" "" "" ...
     ```
 
+## インターネットで調べる・尋ねる
+
+- [r-wakalang](https://github.com/tokyor/r-wakalang) --- Slack上の日本語コミュニティ
+- <https://r4ds.had.co.nz/> --- R for Data Science (体系的に学びたい人はぜひ通読を)
+- <https://www.rdocumentation.org/> --- 各パッケージの公式ドキュメントを閲覧
+- [Stack Overflow](https://stackoverflow.com/questions/tagged/r)
+
 ## データ読み込み
 
-See [readr]({{< relref "readr.md" >}})
+See [readr]({{< relref "readr.md" >}}).
 
 ## データ処理・整形
 
-See [dplyr]({{< relref "dplyr.md" >}}), [purrr]({{< relref "purrr.md" >}}), and [tidyr]({{< relref "tidyr.md" >}})
+See [dplyr]({{< relref "dplyr.md" >}}), [tidyr]({{< relref "tidyr.md" >}}), and [purrr]({{< relref "purrr.md" >}}).
 
 ## グラフ作図
 
-2D: See [ggplot2]({{< relref "ggplot2.md" >}})
+2D: See [ggplot2]({{< relref "ggplot2.md" >}}).
 
-3D: See [rgl]({{< relref "rgl.md" >}})
+3D: See [rgl]({{< relref "rgl.md" >}}).
 
 ## 関連書籍
 
