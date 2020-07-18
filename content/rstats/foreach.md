@@ -147,16 +147,16 @@ https://CRAN.R-project.org/package=iterators
 : 自然数限定イテレータ版 `expand.grid()`
 
 `iter(obj, by = c("column", "row"))`
-: イテレータ版 `purrr::by_row()` のようなもので、
+: イテレータ版 `purrrlyr::by_row()` のようなもので、
   並列`foreach`で各ノードに巨大data.frameを送りたくない場合に有用。
   data.frame以外も適用可。
-  e.g., `iter(iris, by = "row")`
+  e.g., `iter(diamonds, by = "row")`
 
 `isplit(x, f, drop = FALSE, ...)`
-: イテレータ版 `purrr::slice_rows()` のようなもので、
+: イテレータ版 `purrrlyr::slice_rows()` のようなもので、
   `f`は列名じゃなくてfactor。
   data.frame以外も適用可。
-  e.g., `isplit(iris, iris$Species)`
+  e.g., `isplit(diamonds, diamonds$cut)`
 
 `iread.table(file, ..., verbose = FALSE)`, `ireadLines(con, n = 1, ...)`
 : ファイルを1行ずつ読み込む

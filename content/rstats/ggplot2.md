@@ -479,7 +479,7 @@ ggsave(filename, plot = last_plot(), device = NULL, path = NULL,
 ```
 
 - 画像形式はファイル名の拡張子から自動的に判別される
-  (e.g., `iris.png`, `iris.pdf`)。
+  (e.g., `diamonds.png`, `diamonds.pdf`)。
 - `width`や`height`を小さくするほど、文字・点・線などの要素が相対的に大きくなる。
 - `dpi`を変えることで、見た目のバランスを保ったまま解像度を変えられる。
   (これはPNGなどラスタ形式だけの話。PDFなどのベクタ形式なら気にしなくていい)

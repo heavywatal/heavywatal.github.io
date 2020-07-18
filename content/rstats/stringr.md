@@ -146,7 +146,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
     文字列の中の `$[format]{expr}` がR表現として評価される。
     `[format]`部分は`sprintf()`と同じ形式で、省略可。
     `env` はlistやdata.frameでもよい。
-:   e.g., `stringr::str_interp("Mean sepal width is $[.3f]{mean(Sepal.Width)}.", iris)`
+:   e.g., `stringr::str_interp("Mean carat is $[.3f]{mean(carat)}.", diamonds)`
 
 `str_glue(..., .sep = "", .envir = parent.frame())`
 :   [`library(glue)`](https://glue.tidyverse.org/) しなくても使えるように。

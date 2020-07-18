@@ -126,9 +126,9 @@ R起動時に読み込まれるファイル。
 
 `warnPartialMatchAttr`, `warnPartialMatchDollar`
 : listやdata.frameなどの要素を抜き出すとき、
-  対象が一意に定まる範囲で変数名の省略が許されてしまう (e.g., `iris$Sp`)。
+  対象が一意に定まる範囲で変数名の省略が許されてしまう (e.g., `mtcars$m`)。
   これは危険なので、せめて警告がでるように設定する。
-  [tibble]({{< relref "readr.md#tibble" >}}) ではエラーにしてくれるので、より安全。
+  [tibble]({{< relref "readr.md#tibble" >}}) を使うほうがより安全。
 
 `warnPartialMatchArgs`
 : 関数の引数名の省略に関する警告。

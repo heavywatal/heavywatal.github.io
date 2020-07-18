@@ -30,8 +30,8 @@ tags = ["r", "tidyverse"]
 例えば:
 ```r
 library(tidyverse)
-write_tsv(iris, "iris.tsv.gz")
-read_tsv("iris.tsv.gz")
+write_tsv(diamonds, "diamonds.tsv.gz")
+read_tsv("diamonds.tsv.gz")
 ```
 
 -   https://r4ds.had.co.nz/data-import.html
@@ -226,10 +226,10 @@ LDFLAGS = -L${HOME}/.homebrew/lib
 [readr]({{< relref "readr.md" >}}) で読み込んだデータもこの形式になる。
 
 ```r
-tbl_iris = as_tibble(iris)
-class(tbl_iris)
+tbl_mtcars = as_tibble(mtcars)
+class(tbl_mtcars)
 ## [1] "tbl_df"     "tbl"        "data.frame"
-class(iris)
+class(mtcars)
 ## [1] "data.frame"
 ```
 
@@ -238,16 +238,21 @@ class(iris)
 -   巨大なデータをうっかり`print()`しても画面を埋め尽くさない。
     (逆に全体を見たい場合は工夫が必要。後述)
 -   列名の部分一致で良しとしない。
-    例えば `iris$Spec` は黙ってvectorを返してしまうが、
-    `tbl_iris$Spec` は警告つき `NULL` 。
+    例えば `mtcars$m` は黙ってvectorを返してしまうが、
+    `tbl_mtcars$m` は警告つき `NULL` 。
 -   型に一貫性があり、勝手に`drop = TRUE`しない。
-    例えば `iris[,"Species"]` はvectorになってしまうが、
-    `tbl_iris[,"Species"]` はtibbleのまま。
+    例えば `mtcars[,"mpg"]` はvectorになってしまうが、
+    `tbl_mtcars[,"mpg"]` はtibbleのまま。
+    vectorが欲しい場合は二重四角括弧 `tbl_mtcars[["mpg"]]`。
+-   行の名前は使わない。
+    行の名前として保持されている情報を使いたい場合は
+    `rownames_to_column()` とか `rowid_to_column()`
+    で独立した列にしておく必要がある。
 
 新しいtibble 1.4以降では
 [pillar](https://github.com/r-lib/pillar/)
 というパッケージが有効数字や欠損値などの表示形式を勝手にイジるようになってしまった。
-見やすくない上にかなり遅いので `print.tbl_df()` 関数を上書きする。
+見やすくない上にかなり遅いので `print.tbl()` 関数を上書きする。
 標準の `print.data.frame()` でもいいけど、
 [data.table](https://CRAN.R-project.org/package=data.table)
 1.11 以降がインストールしてある場合は `print.data.table()` が使いやすい。
@@ -255,7 +260,7 @@ class(iris)
 # ~/.Rprofile
 setHook(packageEvent("tibble", "attach"), function(...) {
   try({
-    registerS3method("print", "tbl_df", data.table:::print.data.table)
+    registerS3method("print", "tbl", data.table:::print.data.table)
   })
 })
 ```
@@ -334,19 +339,21 @@ options(
 - https://github.com/r-lib/pillar/blob/master/R/pillar-package.R
 - https://github.com/Rdatatable/data.table/blob/master/R/onLoad.R
 
-### PAGERで全体を表示する
 
-tibbleの全体を表示したい場合は `print()` 関数に指定が必要。
-lessのようなPAGERで見たい場合は `utils::page()` が便利。
+### 大きいtibbleの全体を表示する
+
+普通に `print()` すると大きいtibbleの全体が見えない。
+`print()` 関数にオプションを指定したり `utils::page()` を利用したりする必要がある。
+RStudioを使っている場合は `View()` もしくは環境タブの変数クリックで簡単に閲覧可能。
 
 ```r
-# tibble:::print.tbl_df をそのまま使う場合
-as_tibble(iris) %>% print(n = nrow(.), width = 10000L)
+# tibble:::print.tbl をそのまま使う場合
+diamonds %>% tibble:::print.tbl(n = nrow(.), width = 10000L)
 
 # data.table:::print.data.table で上書きした場合
-as_tibble(iris) %>% print(nrows = nrow(.))
+diamonds %>% print(nrows = nrow(.))
 
-iris %>% page("print")
+diamonds %>% page("print", n = nrow(.))
 ```
 
 オプションをいちいち設定しなくて済むように

@@ -4,14 +4,14 @@ subtitle = "シンプルなデータ変形ツール"
 tags = ["r", "tidyverse"]
 [menu.main]
   parent = "rstats"
-  weight = -70
+  weight = -74
 +++
 
 <a href="https://tidyr.tidyverse.org/">
 <img src="http://hexb.in/vector/tidyr.svg" align="right" width="120" height="139">
 </a>
 
-data.frameを縦長・横長・入れ子に変形・整形するためのツール。
+data.frameを縦長・横広・入れ子に変形・整形するためのツール。
 [dplyr]({{< relref "dplyr.md" >}}) や [purrr]({{< relref "purrr.md" >}})
 と一緒に使うとよい。
 [reshape2]({{< relref "reshape2.md" >}}) を置き換えるべく再設計された改良版。
@@ -29,17 +29,22 @@ data.frameを縦長・横長・入れ子に変形・整形するためのツー�
 パイプ演算子 `%>%` については[dplyr]({{< relref "dplyr.md" >}})を参照。
 
 
-## `tidyr::pivot_longer()` で縦長にする
+## Pivoting: 縦長 ↔ 横広
+
+https://tidyr.tidyverse.org/articles/pivot.html
+
+### `tidyr::pivot_longer()` で縦長にする
 
 複数列にまたがっていた値を1列にまとめ、元の列名をその横に添えることで、
-data.frameを横長(wide-format)から縦長(long-format)に変形する。
+data.frameを横広(wide-format)から縦長(long-format)に変形する。
 `reshape2::melt()`, `tidyr::gather()` の改良版。
 
 `tidyr::pivot_longer(data, cols, names_to = "name", ..., values_to = "value", ...)`
 
 `cols`
 : 動かしたい値が含まれている列。
-  マイナスで除外指定、コロンで範囲指定、文字列、tidyselect関数なども使える。
+  コロンで範囲指定、文字列、tidyselect関数なども使える。
+  動かさない列をマイナスで指定するのほうが楽なことも多い。
 
 `names_to`
 : 元々列名だったものを入れる列の名前
@@ -48,44 +53,43 @@ data.frameを横長(wide-format)から縦長(long-format)に変形する。
 : 値の移動先の列名
 
 ```r
-iris %>% as_tibble()
-#> # tbl_df [150 x 5]
-#>     Sepal.Length Sepal.Width Petal.Length Petal.Width   Species
-#>            <dbl>       <dbl>        <dbl>       <dbl>     <fct>
-#>   1          5.1         3.5          1.4         0.2    setosa
-#>   2          4.9         3.0          1.4         0.2    setosa
-#>   3          4.7         3.2          1.3         0.2    setosa
-#>   4          4.6         3.1          1.5         0.2    setosa
-#>  --
-#> 147          6.3         2.5          5.0         1.9 virginica
-#> 148          6.5         3.0          5.2         2.0 virginica
-#> 149          6.2         3.4          5.4         2.3 virginica
-#> 150          5.9         3.0          5.1         1.8 virginica
+anscombe %>% tibble::rowid_to_column("id")
+#>    id x1 x2 x3 x4    y1   y2    y3    y4
+#> 1   1 10 10 10  8  8.04 9.14  7.46  6.58
+#> 2   2  8  8  8  8  6.95 8.14  6.77  5.76
+#> 3   3 13 13 13  8  7.58 8.74 12.74  7.71
+#> 4   4  9  9  9  8  8.81 8.77  7.11  8.84
+#> 5   5 11 11 11  8  8.33 9.26  7.81  8.47
+#> 6   6 14 14 14  8  9.96 8.10  8.84  7.04
+#> 7   7  6  6  6  8  7.24 6.13  6.08  5.25
+#> 8   8  4  4  4 19  4.26 3.10  5.39 12.50
+#> 9   9 12 12 12  8 10.84 9.13  8.15  5.56
+#> 10 10  7  7  7  8  4.82 7.26  6.42  7.91
+#> 11 11  5  5  5  8  5.68 4.74  5.73  6.89
 
-iris_long = iris %>%
-  tibble::rowid_to_column("id") %>%
-  pivot_longer(c(-id, -Species), names_to = "namae", values_to = "atai") %>%
+anscombe_long = anscombe %>% tibble::rowid_to_column("id") %>%
+  pivot_longer(-id, names_to = "namae", values_to = "atai") %>%
   print()
-#> # tbl_df [600 x 4]
-#>        id   Species        namae  atai
-#>     <int>     <fct>        <chr> <dbl>
-#>   1     1    setosa Sepal.Length   5.1
-#>   2     1    setosa  Sepal.Width   3.5
-#>   3     1    setosa Petal.Length   1.4
-#>   4     1    setosa  Petal.Width   0.2
-#>  --
-#> 597   150 virginica Sepal.Length   5.9
-#> 598   150 virginica  Sepal.Width   3.0
-#> 599   150 virginica Petal.Length   5.1
-#> 600   150 virginica  Petal.Width   1.8
+#> # tbl_df [88 x 3]
+#>       id namae  atai
+#>    <int> <chr> <dbl>
+#>  1     1    x1 10.00
+#>  2     1    x2 10.00
+#>  3     1    x3 10.00
+#>  4     1    x4  8.00
+#> --
+#> 85    11    y1  5.68
+#> 86    11    y2  4.74
+#> 87    11    y3  5.73
+#> 88    11    y4  6.89
 
-# iris %>% gather("namae", "atai", -Species)
+# anscombe %>% gather("namae", "atai")
 ```
 
-## `tidyr::pivot_wider()` で横長にする
+### `tidyr::pivot_wider()` で横広にする
 
 1列にまとまっていた値を、別の変数に応じて複数の列に並べ直すことで、
-data.frameを縦長(long-format)から横長(wide-format)に変形する。
+data.frameを縦長(long-format)から横広(wide-format)に変形する。
 `reshape2::dcast()`, `tidyr::spread()` の改良版。
 
 `tidyr::pivot_wider(data, id_cols = NULL, names_from = name, ..., values_from = value, values_fill = NULL, values_fn = NULL)`
@@ -109,75 +113,61 @@ data.frameを縦長(long-format)から横長(wide-format)に変形する。
 
 
 ```r
-iris_long %>%
+anscombe_long %>%
   pivot_wider(names_from = namae, values_from = atai) %>%
   dplyr::select(-id)
-#> # tbl_df [150 x 5]
-#>       Species Sepal.Length Sepal.Width Petal.Length Petal.Width
-#>         <fct>        <dbl>       <dbl>        <dbl>       <dbl>
-#>   1    setosa          5.1         3.5          1.4         0.2
-#>   2    setosa          4.9         3.0          1.4         0.2
-#>   3    setosa          4.7         3.2          1.3         0.2
-#>   4    setosa          4.6         3.1          1.5         0.2
-#>  --
-#> 147 virginica          6.3         2.5          5.0         1.9
-#> 148 virginica          6.5         3.0          5.2         2.0
-#> 149 virginica          6.2         3.4          5.4         2.3
-#> 150 virginica          5.9         3.0          5.1         1.8
+#> # tbl_df [11 x 8]
+#>       x1    x2    x3    x4    y1    y2    y3    y4
+#>    <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+#>  1    10    10    10     8  8.04  9.14  7.46  6.58
+#>  2     8     8     8     8  6.95  8.14  6.77  5.76
+#>  3    13    13    13     8  7.58  8.74 12.74  7.71
+#>  4     9     9     9     8  8.81  8.77  7.11  8.84
+#> --
+#>  8     4     4     4    19  4.26  3.10  5.39 12.50
+#>  9    12    12    12     8 10.84  9.13  8.15  5.56
+#> 10     7     7     7     8  4.82  7.26  6.42  7.91
+#> 11     5     5     5     8  5.68  4.74  5.73  6.89
 
-# iris_long %>% spread(namae, atai) %>% dplyr::select(-id)
-
-iris_long %>%
-  pivot_wider(Species, names_from = namae, values_from = atai,
-              values_fn = list(atai = mean))
-#> # tbl_df [3 x 5]
-#>      Species Sepal.Length Sepal.Width Petal.Length Petal.Width
-#>        <fct>        <dbl>       <dbl>        <dbl>       <dbl>
-#> 1     setosa        5.006       3.428        1.462       0.246
-#> 2 versicolor        5.936       2.770        4.260       1.326
-#> 3  virginica        6.588       2.974        5.552       2.026
+# anscombe_long %>% spread(namae, atai) %>% dplyr::select(-id)
 ```
 
 
-## `tidyr::pivot_*` 関数のもっと高度なオプション
+### `tidyr::pivot_*` 関数のもっと高度なオプション
 
 `names_sep` や `names_pattern` を指定して
 `names_to`, `name_from` に複数の値を渡すと
 `tidyr::separate()` / `tidyr::unite()` 的な操作も同時にやってしまえる:
 
 ```r
-iris_long = iris %>%
-  tibble::rowid_to_column("id") %>%
-  pivot_longer(c(-id, -Species), names_to = c("part", "axis"), names_sep = "\\.") %>%
-  print()
-#> # tbl_df [600 x 5]
-#>        id   Species  part   axis value
-#>     <int>     <fct> <chr>  <chr> <dbl>
-#>   1     1    setosa Sepal Length   5.1
-#>   2     1    setosa Sepal  Width   3.5
-#>   3     1    setosa Petal Length   1.4
-#>   4     1    setosa Petal  Width   0.2
-#>  --
-#> 597   150 virginica Sepal Length   5.9
-#> 598   150 virginica Sepal  Width   3.0
-#> 599   150 virginica Petal Length   5.1
-#> 600   150 virginica Petal  Width   1.8
-
-iris_long %>%
-  pivot_wider(c(id, Species), names_from = c(part, axis), names_sep = ".") %>%
-  dplyr::select(-id)
-#> # tbl_df [150 x 5]
-#>       Species Sepal.Length Sepal.Width Petal.Length Petal.Width
-#>         <fct>        <dbl>       <dbl>        <dbl>       <dbl>
-#>   1    setosa          5.1         3.5          1.4         0.2
-#>   2    setosa          4.9         3.0          1.4         0.2
-#>   3    setosa          4.7         3.2          1.3         0.2
-#>   4    setosa          4.6         3.1          1.5         0.2
-#>  --
-#> 147 virginica          6.3         2.5          5.0         1.9
-#> 148 virginica          6.5         3.0          5.2         2.0
-#> 149 virginica          6.2         3.4          5.4         2.3
-#> 150 virginica          5.9         3.0          5.1         1.8
+anscombe %>% tibble::rowid_to_column("id") %>%
+  tidyr::pivot_longer(-id, names_to = c("axis", "group"), names_sep = 1L) %>%
+  print() %>%
+  pivot_wider(id, names_from = c(axis, group), names_sep = "_")
+#> # tbl_df [88 x 4]
+#>       id  axis group value
+#>    <int> <chr> <chr> <dbl>
+#>  1     1     x     1 10.00
+#>  2     1     x     2 10.00
+#>  3     1     x     3 10.00
+#>  4     1     x     4  8.00
+#> --
+#> 85    11     y     1  5.68
+#> 86    11     y     2  4.74
+#> 87    11     y     3  5.73
+#> 88    11     y     4  6.89
+#> # tbl_df [11 x 9]
+#>       id   x_1   x_2   x_3   x_4   y_1   y_2   y_3   y_4
+#>    <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+#>  1     1    10    10    10     8  8.04  9.14  7.46  6.58
+#>  2     2     8     8     8     8  6.95  8.14  6.77  5.76
+#>  3     3    13    13    13     8  7.58  8.74 12.74  7.71
+#>  4     4     9     9     9     8  8.81  8.77  7.11  8.84
+#> --
+#>  8     8     4     4     4    19  4.26  3.10  5.39 12.50
+#>  9     9    12    12    12     8 10.84  9.13  8.15  5.56
+#> 10    10     7     7     7     8  4.82  7.26  6.42  7.91
+#> 11    11     5     5     5     8  5.68  4.74  5.73  6.89
 ```
 
 ```r
@@ -212,20 +202,6 @@ VADeaths %>%
 例えば型変換に使える:
 
 ```r
-anscombe
-#>    x1 x2 x3 x4    y1   y2    y3    y4
-#> 1  10 10 10  8  8.04 9.14  7.46  6.58
-#> 2   8  8  8  8  6.95 8.14  6.77  5.76
-#> 3  13 13 13  8  7.58 8.74 12.74  7.71
-#> 4   9  9  9  8  8.81 8.77  7.11  8.84
-#> 5  11 11 11  8  8.33 9.26  7.81  8.47
-#> 6  14 14 14  8  9.96 8.10  8.84  7.04
-#> 7   6  6  6  8  7.24 6.13  6.08  5.25
-#> 8   4  4  4 19  4.26 3.10  5.39 12.50
-#> 9  12 12 12  8 10.84 9.13  8.15  5.56
-#> 10  7  7  7  8  4.82 7.26  6.42  7.91
-#> 11  5  5  5  8  5.68 4.74  5.73  6.89
-
 anscombe %>%
   tibble::rowid_to_column("id") %>%
   tidyr::pivot_longer(-id,
@@ -301,25 +277,29 @@ See https://speakerdeck.com/yutannihilation/tidyr-pivot?slide=67 for details.
 
 ## Nested data.frame --- 入れ子構造
 
-### `tidyr::nest(data, ..., .key = data)`
+https://tidyr.tidyverse.org/articles/nest.html
+
+### `tidyr::nest(data, ..., .names_sep = NULL)`
 
 data.frameをネストして(入れ子にして)、list of data.frames のカラムを作る。
 内側のdata.frameに押し込むカラムを `...` に指定するか、
 外側に残すカラムをマイナス指定する。
 
 ```r
-iris %>% nest(NEW_COLUMN = -Species)
-#> # tbl_df [3 x 2]
-#>      Species        NEW_COLUMN
-#>        <fct>   <vctrs_list_of>
-#> 1     setosa <tbl_df [50 x 4]>
-#> 2 versicolor <tbl_df [50 x 4]>
-#> 3  virginica <tbl_df [50 x 4]>
+diamonds %>% nest(NEW_COLUMN = -cut) %>% unnest()
+#> # tbl_df [5 x 2]
+#>         cut           NEW_COLUMN
+#>       <ord>               <list>
+#> 1     Ideal <tbl_df [21551 x 9]>
+#> 2   Premium <tbl_df [13791 x 9]>
+#> 3      Good  <tbl_df [4906 x 9]>
+#> 4 Very Good <tbl_df [12082 x 9]>
+#> 5      Fair  <tbl_df [1610 x 9]>
 
 # equivalent to
-iris %>% nest(NEW_COLUMN = matches("Length$|Width$"))
-iris %>% dplyr::group_nest(Species, .key = "NEW_COLUMN")
-iris %>% dplyr::nest_by(Species, .key = "NEW_COLUMN")
+diamonds %>% nest(NEW_COLUMN = c(carat, color:z))
+diamonds %>% dplyr::group_nest(cut, .key = "NEW_COLUMN")
+diamonds %>% dplyr::nest_by(cut, .key = "NEW_COLUMN")
 ```
 
 なんでもかんでもフラットなdata.frameにして
@@ -330,14 +310,19 @@ tidyverse時代のクールなやり方らしい。
 cf. [Hadley Wickham: Managing many models with R (YouTube)](https://www.youtube.com/watch?v=rz3_FDVt9eg)
 
 
-### `tidyr::unnest(data, ..., .drop = NA, id = NULL, .sep = NULL, .preserve = NULL)`
+### `tidyr::unnest(data, cols, ...)`
 
 ネストされたdata.frameを展開してフラットにする。
 list of data.framesだけでなく、list of vectorsとかでもよい。
 
-ネストされた列が複数ある場合は
-`.preserve` オプションを使って1列ずつ開いていける。
+ネストされた列が複数ある場合に曖昧なコードにならないよう
+`cols` を明示的に指定することが求められる。
 
+```r
+diamonds %>%
+  nest(NEW_COLUMN = -cut) %>%
+  unnest(NEW_COLUMN)
+```
 
 ## その他の便利関数
 
