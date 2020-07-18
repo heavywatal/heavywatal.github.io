@@ -112,8 +112,8 @@ readr — 高速で柔軟なテーブル読み込み
 <code>library(tidyverse)</code> で一括ロード。
 例えば:</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
-<span class="nf">write_tsv</span><span class="p">(</span><span class="n">iris</span><span class="p">,</span> <span class="s">&#34;iris.tsv.gz&#34;</span><span class="p">)</span>
-<span class="nf">read_tsv</span><span class="p">(</span><span class="s">&#34;iris.tsv.gz&#34;</span><span class="p">)</span>
+<span class="nf">write_tsv</span><span class="p">(</span><span class="n">diamonds</span><span class="p">,</span> <span class="s">&#34;diamonds.tsv.gz&#34;</span><span class="p">)</span>
+<span class="nf">read_tsv</span><span class="p">(</span><span class="s">&#34;diamonds.tsv.gz&#34;</span><span class="p">)</span>
 </code></pre></div><ul>
 <li><a href="https://r4ds.had.co.nz/data-import.html">https://r4ds.had.co.nz/data-import.html</a></li>
 <li><a href="https://cran.r-project.org/package=readr">https://cran.r-project.org/package=readr</a></li>
@@ -255,33 +255,38 @@ brew link gettext --force
 <p><code>tbl_df</code> クラスが付与された改良版data.frameのことを<strong>tibble</strong>と呼ぶ。
 もともとは <a href="/rstats/dplyr.html">dplyr</a> パッケージで扱っていたが、独立パッケージになった。
 <a href="/rstats/readr.html">readr</a> で読み込んだデータもこの形式になる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">tbl_iris</span> <span class="o">=</span> <span class="nf">as_tibble</span><span class="p">(</span><span class="n">iris</span><span class="p">)</span>
-<span class="nf">class</span><span class="p">(</span><span class="n">tbl_iris</span><span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">tbl_mtcars</span> <span class="o">=</span> <span class="nf">as_tibble</span><span class="p">(</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="nf">class</span><span class="p">(</span><span class="n">tbl_mtcars</span><span class="p">)</span>
 <span class="c1">## [1] &#34;tbl_df&#34;     &#34;tbl&#34;        &#34;data.frame&#34;</span>
-<span class="nf">class</span><span class="p">(</span><span class="n">iris</span><span class="p">)</span>
+<span class="nf">class</span><span class="p">(</span><span class="n">mtcars</span><span class="p">)</span>
 <span class="c1">## [1] &#34;data.frame&#34;</span>
 </code></pre></div><p>生のdata.frameとの違いは:</p>
 <ul>
 <li>巨大なデータをうっかり<code>print()</code>しても画面を埋め尽くさない。
 (逆に全体を見たい場合は工夫が必要。後述)</li>
 <li>列名の部分一致で良しとしない。
-例えば <code>iris$Spec</code> は黙ってvectorを返してしまうが、
-<code>tbl_iris$Spec</code> は警告つき <code>NULL</code> 。</li>
+例えば <code>mtcars$m</code> は黙ってvectorを返してしまうが、
+<code>tbl_mtcars$m</code> は警告つき <code>NULL</code> 。</li>
 <li>型に一貫性があり、勝手に<code>drop = TRUE</code>しない。
-例えば <code>iris[,&quot;Species&quot;]</code> はvectorになってしまうが、
-<code>tbl_iris[,&quot;Species&quot;]</code> はtibbleのまま。</li>
+例えば <code>mtcars[,&quot;mpg&quot;]</code> はvectorになってしまうが、
+<code>tbl_mtcars[,&quot;mpg&quot;]</code> はtibbleのまま。
+vectorが欲しい場合は二重四角括弧 <code>tbl_mtcars[[&quot;mpg&quot;]]</code>。</li>
+<li>行の名前は使わない。
+行の名前として保持されている情報を使いたい場合は
+<code>rownames_to_column()</code> とか <code>rowid_to_column()</code>
+で独立した列にしておく必要がある。</li>
 </ul>
 <p>新しいtibble 1.4以降では
 <a href="https://github.com/r-lib/pillar/">pillar</a>
 というパッケージが有効数字や欠損値などの表示形式を勝手にイジるようになってしまった。
-見やすくない上にかなり遅いので <code>print.tbl_df()</code> 関数を上書きする。
+見やすくない上にかなり遅いので <code>print.tbl()</code> 関数を上書きする。
 標準の <code>print.data.frame()</code> でもいいけど、
 <a href="https://CRAN.R-project.org/package=data.table">data.table</a>
 1.11 以降がインストールしてある場合は <code>print.data.table()</code> が使いやすい。</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># ~/.Rprofile</span>
 <span class="nf">setHook</span><span class="p">(</span><span class="nf">packageEvent</span><span class="p">(</span><span class="s">&#34;tibble&#34;</span><span class="p">,</span> <span class="s">&#34;attach&#34;</span><span class="p">),</span> <span class="nf">function</span><span class="p">(</span><span class="kc">...</span><span class="p">)</span> <span class="p">{</span>
   <span class="nf">try</span><span class="p">({</span>
-    <span class="nf">registerS3method</span><span class="p">(</span><span class="s">&#34;print&#34;</span><span class="p">,</span> <span class="s">&#34;tbl_df&#34;</span><span class="p">,</span> <span class="n">data.table</span><span class="o">:::</span><span class="n">print.data.table</span><span class="p">)</span>
+    <span class="nf">registerS3method</span><span class="p">(</span><span class="s">&#34;print&#34;</span><span class="p">,</span> <span class="s">&#34;tbl&#34;</span><span class="p">,</span> <span class="n">data.table</span><span class="o">:::</span><span class="n">print.data.table</span><span class="p">)</span>
   <span class="p">})</span>
 <span class="p">})</span>
 </code></pre></div><h3 id="関数">関数</h3>
@@ -347,16 +352,17 @@ v2.0からは列名がちゃんとついてないとエラーになる。</dd>
 <li><a href="https://github.com/r-lib/pillar/blob/master/R/pillar-package.R">https://github.com/r-lib/pillar/blob/master/R/pillar-package.R</a></li>
 <li><a href="https://github.com/Rdatatable/data.table/blob/master/R/onLoad.R">https://github.com/Rdatatable/data.table/blob/master/R/onLoad.R</a></li>
 </ul>
-<h3 id="pagerで全体を表示する">PAGERで全体を表示する</h3>
-<p>tibbleの全体を表示したい場合は <code>print()</code> 関数に指定が必要。
-lessのようなPAGERで見たい場合は <code>utils::page()</code> が便利。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># tibble:::print.tbl_df をそのまま使う場合</span>
-<span class="nf">as_tibble</span><span class="p">(</span><span class="n">iris</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="nf">print</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">.)</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="m">10000L</span><span class="p">)</span>
+<h3 id="大きいtibbleの全体を表示する">大きいtibbleの全体を表示する</h3>
+<p>普通に <code>print()</code> すると大きいtibbleの全体が見えない。
+<code>print()</code> 関数にオプションを指定したり <code>utils::page()</code> を利用したりする必要がある。
+RStudioを使っている場合は <code>View()</code> もしくは環境タブの変数クリックで簡単に閲覧可能。</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># tibble:::print.tbl をそのまま使う場合</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">tibble</span><span class="o">:::</span><span class="nf">print.tbl</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">.)</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="m">10000L</span><span class="p">)</span>
 
 <span class="c1"># data.table:::print.data.table で上書きした場合</span>
-<span class="nf">as_tibble</span><span class="p">(</span><span class="n">iris</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="nf">print</span><span class="p">(</span><span class="n">nrows</span> <span class="o">=</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">.)</span><span class="p">)</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">print</span><span class="p">(</span><span class="n">nrows</span> <span class="o">=</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">.)</span><span class="p">)</span>
 
-<span class="n">iris</span> <span class="o">%&gt;%</span> <span class="nf">page</span><span class="p">(</span><span class="s">&#34;print&#34;</span><span class="p">)</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">page</span><span class="p">(</span><span class="s">&#34;print&#34;</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">.)</span><span class="p">)</span>
 </code></pre></div><p>オプションをいちいち設定しなくて済むように
 <a href="https://github.com/heavywatal/rwtl/blob/master/R/print.R"><code>less()</code></a>
 のような関数を定義しておくのもよい。</p>
@@ -381,8 +387,8 @@ lessのようなPAGERで見たい場合は <code>utils::page()</code> が便利�
 <li><a href="/rstats/config.html">R環境設定</a></li>
 <li><a href="/rstats/ggplot2.html">ggplot2</a></li>
 <li><a href="/rstats/dplyr.html">dplyr</a></li>
-<li><a href="/rstats/purrr.html">purrr</a></li>
 <li><a href="/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/rstats/purrr.html">purrr</a></li>
 <li class="active"><a href="/rstats/readr.html">readr</a></li>
 <li><a href="/rstats/stringr.html">stringr</a></li>
 <li><a href="/rstats/foreach.html">foreach/parallel</a></li>
