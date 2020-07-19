@@ -8,7 +8,7 @@ tags = ["r", "tidyverse"]
 +++
 
 <a href="https://dplyr.tidyverse.org/">
-<img src="http://hexb.in/vector/dplyr.svg" align="right" width="120" height="139">
+<img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/PNG/dplyr.png" align="right" width="120" height="139">
 </a>
 
 data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(summarize)、ソート(arrange)などの処理を施すためのパッケージ。
@@ -25,7 +25,7 @@ data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(
 ## 関数の連結 %>%
 
 <a href="https://magrittr.tidyverse.org/">
-<img src="http://hexb.in/vector/magrittr.svg" align="right" width="120" height="139">
+<img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/pipe.svg" align="right" width="120" height="139">
 </a>
 
 dplyrではなく[magrittr](https://magrittr.tidyverse.org/)の機能。
@@ -288,7 +288,7 @@ e.g., `filter(gene != "TP53")`
     # 5     Ideal 0.7028370     18806
     ```
 
-:   関数の結果が長さ1じゃなくても大丈夫(v1.0.0)。
+:   関数の結果が長さ1じゃなくても大丈夫(v1.0.0):
 
     ```r
     diamonds %>% dplyr::summarize(range(carat), range(price))
@@ -298,14 +298,14 @@ e.g., `filter(gene != "TP53")`
     # 2         5.01        18823
     ```
 
-:   各グループの結果がtibbleの場合、結合・展開してくれる。
+:   各グループの結果がtibbleの場合、結合・展開してくれる:
 
     ```r
     diamonds %>% dplyr::nest_by(cut) %>%
       dplyr::summarize(head(data, 2L))
     ```
 
-    これを利用して複数ファイルを一気読みできる
+    これを利用して複数ファイルを一気読みできる:
 
     ```r
     path = fs::dir_ls("path/to/data", glob = "*.tsv")
@@ -314,7 +314,9 @@ e.g., `filter(gene != "TP53")`
       dplyr::summarize(readr::read_tsv(path))
     ```
 
-:   複数カラムに関数を適用するには `across()` を使う
+    けどまあ `purrr::map_dfr(path, read_tsv)` のほうが読みやすい気がする。
+
+:   複数カラムに関数を適用するには `across()` を使う:
 
     ```r
     median.ordered = function(x, na.rm = FALSE) {

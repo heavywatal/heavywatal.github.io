@@ -152,7 +152,7 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 ### [`tests/`](https://r-pkgs.org/tests.html)
 
 <a href="https://testthat.r-lib.org/">
-<img src="http://hexb.in/vector/testthat.svg" align="right" width="120" height="139">
+<img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/testthat.svg" align="right" width="120" height="139">
 </a>
 
 [testthat](https://testthat.r-lib.org)パッケージを使うのがデファクトスタンダード。
@@ -201,7 +201,7 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 ## `devtools`
 
 <a href="https://devtools.r-lib.org/">
-<img src="http://hexb.in/vector/devtools.svg" align="right" width="120" height="139">
+<img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/devtools.svg" align="right" width="120" height="139">
 </a>
 
 骨組みを作るとこからCRANにデプロイするとこまでお世話してくれる。
@@ -250,7 +250,7 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 ## `roxygen2`
 
 <a href="https://github.com/klutometis/roxygen">
-<img src="http://hexb.in/vector/roxygen2.svg" align="right" width="120" height="139">
+<img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/roxygen2.svg" align="right" width="120" height="139">
 </a>
 
 Rソースコードのコメントから`NAMESPACE`とヘルプ(`man/*.Rd`)を自動生成する。

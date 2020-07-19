@@ -8,7 +8,7 @@ tags = ["r", "graph", "tidyverse"]
 +++
 
 <a href="https://ggplot2.tidyverse.org/">
-<img src="http://hexb.in/vector/ggplot2.svg" align="right" width="120" height="139">
+<img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/ggplot2.svg" align="right" width="120" height="139">
 </a>
 
 "The **G**rammer of **G**raphics" という体系に基づいて設計されたパッケージ。

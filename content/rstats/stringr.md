@@ -8,7 +8,7 @@ tags = ["r", "tidyverse"]
 +++
 
 <a href="https://stringr.tidyverse.org/">
-<img src="http://hexb.in/vector/stringr.svg" align="right" width="120" height="139">
+<img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/stringr.svg" align="right" width="120" height="139">
 </a>
 
 R標準の`base`パッケージが提供する関数でも文字列処理は可能だが、
