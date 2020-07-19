@@ -92,7 +92,7 @@ dplyr — 高速data.frame処理
 </header>
 
 <a href="https://dplyr.tidyverse.org/">
-<img src="http://hexb.in/vector/dplyr.svg" align="right" width="120" height="139">
+<img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/PNG/dplyr.png" align="right" width="120" height="139">
 </a>
 <p>data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(summarize)、ソート(arrange)などの処理を施すためのパッケージ。
 前作 <a href="/rstats/plyr.html">plyr</a> のうちdata.frameに関する部分が強化されている。
@@ -106,7 +106,7 @@ dplyr — 高速data.frame処理
 </ul>
 <h2 id="関数の連結-">関数の連結 %&gt;%</h2>
 <a href="https://magrittr.tidyverse.org/">
-<img src="http://hexb.in/vector/magrittr.svg" align="right" width="120" height="139">
+<img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/pipe.svg" align="right" width="120" height="139">
 </a>
 <p>dplyrではなく<a href="https://magrittr.tidyverse.org/">magrittr</a>の機能。</p>
 <p><code>x %&gt;% f(a, b)</code> は <code>f(x, a, b)</code> と等価。
@@ -320,7 +320,7 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code>
 <span class="c1"># 5     Ideal 0.7028370     18806</span>
 </code></pre></div></dd>
 <dd>
-<p>関数の結果が長さ1じゃなくても大丈夫(v1.0.0)。</p>
+<p>関数の結果が長さ1じゃなくても大丈夫(v1.0.0):</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">summarize</span><span class="p">(</span><span class="nf">range</span><span class="p">(</span><span class="n">carat</span><span class="p">),</span> <span class="nf">range</span><span class="p">(</span><span class="n">price</span><span class="p">))</span>
 <span class="c1">#   range(carat) range(price)</span>
 <span class="c1">#          &lt;dbl&gt;        &lt;int&gt;</span>
@@ -328,17 +328,18 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code>
 <span class="c1"># 2         5.01        18823</span>
 </code></pre></div></dd>
 <dd>
-<p>各グループの結果がtibbleの場合、結合・展開してくれる。</p>
+<p>各グループの結果がtibbleの場合、結合・展開してくれる:</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">nest_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">%&gt;%</span>
   <span class="n">dplyr</span><span class="o">::</span><span class="nf">summarize</span><span class="p">(</span><span class="nf">head</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="m">2L</span><span class="p">))</span>
-</code></pre></div><p>これを利用して複数ファイルを一気読みできる</p>
+</code></pre></div><p>これを利用して複数ファイルを一気読みできる:</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">path</span> <span class="o">=</span> <span class="n">fs</span><span class="o">::</span><span class="nf">dir_ls</span><span class="p">(</span><span class="s">&#34;path/to/data&#34;</span><span class="p">,</span> <span class="n">glob</span> <span class="o">=</span> <span class="s">&#34;*.tsv&#34;</span><span class="p">)</span>
 <span class="n">df</span> <span class="o">=</span> <span class="nf">tibble</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">%&gt;%</span>
   <span class="n">dplyr</span><span class="o">::</span><span class="nf">rowwise</span><span class="p">()</span> <span class="o">%&gt;%</span>
   <span class="n">dplyr</span><span class="o">::</span><span class="nf">summarize</span><span class="p">(</span><span class="n">readr</span><span class="o">::</span><span class="nf">read_tsv</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
-</code></pre></div></dd>
+</code></pre></div><p>けどまあ <code>purrr::map_dfr(path, read_tsv)</code> のほうが読みやすい気がする。</p>
+</dd>
 <dd>
-<p>複数カラムに関数を適用するには <code>across()</code> を使う</p>
+<p>複数カラムに関数を適用するには <code>across()</code> を使う:</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">median.ordered</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span> <span class="p">{</span>
   <span class="nf">levels</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="nf">[median</span><span class="p">(</span><span class="nf">as.integer</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="n">na.rm</span><span class="p">)</span><span class="n">]</span>
 <span class="p">}</span>
