@@ -349,6 +349,7 @@ list of data.framesだけでなく、list of vectorsとかでもよい。</p>
 </code></pre></div><h2 id="その他の便利関数">その他の便利関数</h2>
 <h3 id="tidyrseparate"><code>tidyr::separate()</code></h3>
 <p>文字列カラムを任意のセパレータで複数カラムに分割。
+<code>tidyr::unite()</code> の逆。
 <code>reshape2::colsplit()</code> に相当。</p>
 <p><code>tidyr::separate(data, col, into, sep = &quot;[^[:alnum:]]&quot;, remove = TRUE, convert = FALSE, extra = &quot;warn&quot;, fill = &quot;warn&quot;, ...)</code></p>
 <dl>
@@ -385,14 +386,48 @@ list of data.framesだけでなく、list of vectorsとかでもよい。</p>
 <span class="c1">#&gt; 3     60     64       26.9         20.3       37.0         19.3</span>
 <span class="c1">#&gt; 4     65     69       41.0         30.9       54.6         35.1</span>
 <span class="c1">#&gt; 5     70     74       66.0         54.3       71.1         50.0</span>
-</code></pre></div><p>逆をやるのが <code>tidyr::unite(data, col, ..., sep = &quot;_&quot;, remove = TRUE)</code> 。</p>
-<p>行方向に分割する <code>tidyr::separate_rows(data, ..., sep, convert)</code> もある。</p>
+</code></pre></div><p>行方向に分割する <code>tidyr::separate_rows(data, ..., sep, convert)</code> もある。</p>
 <p><code>tidyr::extract(data, col, into, regex, ...)</code>
 を使えば正規表現でもっと細かく指定できる。</p>
 <p>名前の似てる <code>tidyr::extract_numeric(x)</code> は
 文字列から数字部分をnumericとして抜き出す関数だったが今はdeprecatedなので、
 新しい<a href="/rstats/readr.html"><code>readr::parse_number()</code></a>を使うべし。</p>
-<h3 id="tidyrcompletedata--fill--list"><code>tidyr::complete(data, ..., fill = list())</code></h3>
+<h3 id="tidyrunitedata-col--sep--_-remove--true-narm--false"><code>tidyr::unite(data, col, ..., sep = &quot;_&quot;, remove = TRUE, na.rm = FALSE)</code></h3>
+<p>複数カラムを結合して1列にする。
+<code>tidyr::separate()</code> の逆。</p>
+<p><code>paste()</code> とか <code>stringr::str_c()</code> でも似たようなことができるけど
+<code>na.rm = TRUE</code> の挙動が欲しいときに便利。</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">df</span> <span class="o">=</span> <span class="nf">tibble</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;x&#34;</span><span class="p">,</span> <span class="s">&#34;x&#34;</span><span class="p">,</span> <span class="kc">NA</span><span class="p">),</span> <span class="n">y</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;y&#34;</span><span class="p">,</span> <span class="kc">NA</span><span class="p">,</span> <span class="s">&#34;y&#34;</span><span class="p">))</span>
+
+<span class="n">df</span> <span class="o">%&gt;%</span> <span class="n">tidyr</span><span class="o">::</span><span class="nf">unite</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="nf">c</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">sep</span> <span class="o">=</span> <span class="s">&#34;_&#34;</span><span class="p">,</span> <span class="n">remove</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span>
+<span class="c1">#&gt; # tbl_df [3 x 3]</span>
+<span class="c1">#&gt;       z     x     y</span>
+<span class="c1">#&gt;   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;</span>
+<span class="c1">#&gt; 1   x_y     x     y</span>
+<span class="c1">#&gt; 2  x_NA     x  &lt;NA&gt;</span>
+<span class="c1">#&gt; 3  NA_y  &lt;NA&gt;     y</span>
+<span class="n">df</span> <span class="o">%&gt;%</span> <span class="n">tidyr</span><span class="o">::</span><span class="nf">unite</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="nf">c</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">sep</span> <span class="o">=</span> <span class="s">&#34;_&#34;</span><span class="p">,</span> <span class="n">remove</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
+<span class="c1">#&gt; # tbl_df [3 x 3]</span>
+<span class="c1">#&gt;       z     x     y</span>
+<span class="c1">#&gt;   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;</span>
+<span class="c1">#&gt; 1   x_y     x     y</span>
+<span class="c1">#&gt; 2     x     x  &lt;NA&gt;</span>
+<span class="c1">#&gt; 3     y  &lt;NA&gt;     y</span>
+<span class="n">df</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">z</span> <span class="o">=</span> <span class="n">stringr</span><span class="o">::</span><span class="nf">str_c</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">sep</span> <span class="o">=</span> <span class="s">&#34;_&#34;</span><span class="p">))</span>
+<span class="c1">#&gt; # tbl_df [3 x 3]</span>
+<span class="c1">#&gt;       x     y     z</span>
+<span class="c1">#&gt;   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;</span>
+<span class="c1">#&gt; 1     x     y   x_y</span>
+<span class="c1">#&gt; 2     x  &lt;NA&gt;  &lt;NA&gt;</span>
+<span class="c1">#&gt; 3  &lt;NA&gt;     y  &lt;NA&gt;</span>
+<span class="n">df</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">z</span> <span class="o">=</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">coalesce</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+<span class="c1">#&gt; # tbl_df [3 x 3]</span>
+<span class="c1">#&gt;       x     y     z</span>
+<span class="c1">#&gt;   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;</span>
+<span class="c1">#&gt; 1     x     y     x</span>
+<span class="c1">#&gt; 2     x  &lt;NA&gt;     x</span>
+<span class="c1">#&gt; 3  &lt;NA&gt;     y     y</span>
+</code></pre></div><h3 id="tidyrcompletedata--fill--list"><code>tidyr::complete(data, ..., fill = list())</code></h3>
 <p>指定した列の全ての組み合わせが登場するように、
 指定しなかった列に欠損値<code>NA</code>(あるいは任意の値)を補完した行を挿入する。</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">df</span> <span class="o">%&gt;%</span> <span class="nf">complete</span><span class="p">(</span><span class="n">key1</span><span class="p">,</span> <span class="n">key2</span><span class="p">,</span> <span class="n">fill</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">val1</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">val2</span> <span class="o">=</span> <span class="s">&#34;-&#34;</span><span class="p">))</span>
