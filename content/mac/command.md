@@ -42,18 +42,21 @@ pbpaste | say
 
 声は環境設定の Accessibility > Speech で変更可能。
 
+カーソル行あるいは選択中のテキストを読み上げるショートカットも設定できる。
+<kbd>option</kbd><kbd>esc</kbd>
+
 
 ### `killall`
 
-Finder や Dock など、GUIから終了させにくいアプリケーションを再起動する。
-アプリケーションの動作が不安定になったとき、設定変更を反映させたいとき、
-メモリを開放したいときなどに使える。:
+Finder や Dock など、GUIから終了させにくいアプリケーションを再起動する:
 
 ```sh
 killall Finder
 killall Dock
 killall Kotoeri
 ```
+
+動作が不安定になったとき、設定変更を反映させたいとき、メモリを開放したいときなどに。
 
 
 ## 設定関連
@@ -81,10 +84,14 @@ defaults write com.apple.dt.Xcode IDEIndexDisable 1
 
 # Quicklook上でコピペできるようにする
 defaults write com.apple.finder QLEnableTextSelection -bool true
+
+# 特定アプリをダークモードから除外する
+# osascript -e 'id of app "Google Chrome"'
+defaults write com.google.Chrome NSRequiresAquaSystemAppearance -bool true
 ```
 
-[Onyx](http://www.titanium.free.fr) や
-[Tinkertool](http://www.bresink.com/osx/TinkerTool.html)
+[OnyX](https://www.titanium-software.fr/en/onyx.html) や
+[TinkerTool](https://www.bresink.com/osx/TinkerTool.html)
 などのGUIアプリを使うほうが簡単で安心かも
 
 
@@ -115,36 +122,3 @@ Open with で表示されるアプリケーションが重複しまくったと�
 
     softwareupdate -l
     softwareupdate -i -a
-
-## Obsolete
-
-### アカウント管理: `niutil`, `nidump`
-
-Leopard以前
-
-項目をリストアップ:
-
-    niutil -list . /
-    niutil -list . /users
-    niutil -list . /groups
-
-中身を見る:
-
-    niutil -read . /users/iwasaki
-    niutil -read . /groups/admin
-
-一覧で一気に:
-
-    nidump passwd . /
-    nidump group . /
-
-新規ユーザーの追加:
-
-    niutil -create / /users/hoge
-    niutil -createprop / /users/hoge shell /bin/zsh
-    niutil -createprop / /users/hoge uid 1050
-    niutil -createprop / /users/hoge gid 20
-    niutil -createprop / /users/hoge home /Users/hoge
-    niutil -createprop / /users/hoge _shadow_passwd
-    passwd hoge
-    niutil -appendprop / /groups/staff users hoge
