@@ -329,6 +329,7 @@ diamonds %>%
 ### `tidyr::separate()`
 
 文字列カラムを任意のセパレータで複数カラムに分割。
+`tidyr::unite()` の逆。
 `reshape2::colsplit()` に相当。
 
 `tidyr::separate(data, col, into, sep = "[^[:alnum:]]", remove = TRUE, convert = FALSE, extra = "warn", fill = "warn", ...)`
@@ -375,8 +376,6 @@ va_deaths %>%
 #> 5     70     74       66.0         54.3       71.1         50.0
 ```
 
-逆をやるのが `tidyr::unite(data, col, ..., sep = "_", remove = TRUE)` 。
-
 行方向に分割する `tidyr::separate_rows(data, ..., sep, convert)` もある。
 
 `tidyr::extract(data, col, into, regex, ...)`
@@ -385,6 +384,49 @@ va_deaths %>%
 名前の似てる `tidyr::extract_numeric(x)` は
 文字列から数字部分をnumericとして抜き出す関数だったが今はdeprecatedなので、
 新しい[`readr::parse_number()`]({{< relref "readr.md" >}})を使うべし。
+
+
+### `tidyr::unite(data, col, ..., sep = "_", remove = TRUE, na.rm = FALSE)`
+
+複数カラムを結合して1列にする。
+`tidyr::separate()` の逆。
+
+`paste()` とか `stringr::str_c()` でも似たようなことができるけど
+`na.rm = TRUE` の挙動が欲しいときに便利。
+
+```r
+df = tibble(x = c("x", "x", NA), y = c("y", NA, "y"))
+
+df %>% tidyr::unite(z, c(x, y), sep = "_", remove = FALSE)
+#> # tbl_df [3 x 3]
+#>       z     x     y
+#>   <chr> <chr> <chr>
+#> 1   x_y     x     y
+#> 2  x_NA     x  <NA>
+#> 3  NA_y  <NA>     y
+df %>% tidyr::unite(z, c(x, y), sep = "_", remove = FALSE, na.rm = TRUE)
+#> # tbl_df [3 x 3]
+#>       z     x     y
+#>   <chr> <chr> <chr>
+#> 1   x_y     x     y
+#> 2     x     x  <NA>
+#> 3     y  <NA>     y
+df %>% dplyr::mutate(z = stringr::str_c(x, y, sep = "_"))
+#> # tbl_df [3 x 3]
+#>       x     y     z
+#>   <chr> <chr> <chr>
+#> 1     x     y   x_y
+#> 2     x  <NA>  <NA>
+#> 3  <NA>     y  <NA>
+df %>% dplyr::mutate(z = dplyr::coalesce(x, y))
+#> # tbl_df [3 x 3]
+#>       x     y     z
+#>   <chr> <chr> <chr>
+#> 1     x     y     x
+#> 2     x  <NA>     x
+#> 3  <NA>     y     y
+```
+
 
 ### `tidyr::complete(data, ..., fill = list())`
 
