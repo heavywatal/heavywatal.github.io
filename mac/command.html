@@ -110,14 +110,15 @@ pbpaste <span class="p">|</span> wc
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">say hello world
 pbpaste <span class="p">|</span> say
 </code></pre></div><p>声は環境設定の Accessibility &gt; Speech で変更可能。</p>
+<p>カーソル行あるいは選択中のテキストを読み上げるショートカットも設定できる。
+<kbd>option</kbd><kbd>esc</kbd></p>
 <h3 id="killall"><code>killall</code></h3>
-<p>Finder や Dock など、GUIから終了させにくいアプリケーションを再起動する。
-アプリケーションの動作が不安定になったとき、設定変更を反映させたいとき、
-メモリを開放したいときなどに使える。:</p>
+<p>Finder や Dock など、GUIから終了させにくいアプリケーションを再起動する:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">killall Finder
 killall Dock
 killall Kotoeri
-</code></pre></div><h2 id="設定関連">設定関連</h2>
+</code></pre></div><p>動作が不安定になったとき、設定変更を反映させたいとき、メモリを開放したいときなどに。</p>
+<h2 id="設定関連">設定関連</h2>
 <h3 id="defaults"><code>defaults</code></h3>
 <p><code>/Library/Preferences/</code> 以下にある各種設定ファイル.plistを編集する。
 <code>true</code> に設定した項目を元に戻すには、
@@ -138,8 +139,12 @@ defaults write com.apple.dt.Xcode IDEIndexDisable <span class="m">1</span>
 
 <span class="c1"># Quicklook上でコピペできるようにする</span>
 defaults write com.apple.finder QLEnableTextSelection -bool <span class="nb">true</span>
-</code></pre></div><p><a href="http://www.titanium.free.fr">Onyx</a> や
-<a href="http://www.bresink.com/osx/TinkerTool.html">Tinkertool</a>
+
+<span class="c1"># 特定アプリをダークモードから除外する</span>
+<span class="c1"># osascript -e &#39;id of app &#34;Google Chrome&#34;&#39;</span>
+defaults write com.google.Chrome NSRequiresAquaSystemAppearance -bool <span class="nb">true</span>
+</code></pre></div><p><a href="https://www.titanium-software.fr/en/onyx.html">OnyX</a> や
+<a href="https://www.bresink.com/osx/TinkerTool.html">TinkerTool</a>
 などのGUIアプリを使うほうが簡単で安心かも</p>
 <h3 id="launchctl"><code>launchctl</code></h3>
 <p>サービスの起動、終了</p>
@@ -160,32 +165,6 @@ sudo installer -pkg SomePackage.pkg -target /
 
 softwareupdate -l
 softwareupdate -i -a
-</code></pre>
-<h2 id="obsolete">Obsolete</h2>
-<h3 id="アカウント管理-niutil-nidump">アカウント管理: <code>niutil</code>, <code>nidump</code></h3>
-<p>Leopard以前</p>
-<p>項目をリストアップ:</p>
-<pre><code>niutil -list . /
-niutil -list . /users
-niutil -list . /groups
-</code></pre>
-<p>中身を見る:</p>
-<pre><code>niutil -read . /users/iwasaki
-niutil -read . /groups/admin
-</code></pre>
-<p>一覧で一気に:</p>
-<pre><code>nidump passwd . /
-nidump group . /
-</code></pre>
-<p>新規ユーザーの追加:</p>
-<pre><code>niutil -create / /users/hoge
-niutil -createprop / /users/hoge shell /bin/zsh
-niutil -createprop / /users/hoge uid 1050
-niutil -createprop / /users/hoge gid 20
-niutil -createprop / /users/hoge home /Users/hoge
-niutil -createprop / /users/hoge _shadow_passwd
-passwd hoge
-niutil -appendprop / /groups/staff users hoge
 </code></pre>
 
 </article>
