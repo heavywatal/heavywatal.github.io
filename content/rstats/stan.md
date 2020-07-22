@@ -22,7 +22,8 @@ jagsと違ってstan本体も同時に入れてくれる。
 [RStan-Getting-Started](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started)
 を見ると、時代や環境によってはいろいろ難しいかったのかも。
 
-標準的な(Xcode Command Line Tools とか build-essential的な)開発環境はどっちみち必要。
+標準的な開発環境(Mac なら Command Line Tools、Ubuntu なら build-essential)はどっちみち必要。
+
 
 ## 基本的な流れ
 
@@ -36,8 +37,8 @@ jagsと違ってstan本体も同時に入れてくれる。
 1. 名前付きlistとしてデータを用意する。
    e.g., 平均10、標準偏差3の正規乱数。
    ```r
-   .data = list(x=rnorm(10000, 10, 3))
-   .data$n_obs = length(.data$x)
+   observation = list(x = rnorm(10000, 10, 3))
+   observation$length = length(observation$x)
    ```
 
 1.  Stan言語でモデルを記述する。
@@ -45,10 +46,10 @@ jagsと違ってstan本体も同時に入れてくれる。
     e.g., 与えられたデータが正規分布から取れてきたとすると、
     その平均と標準偏差はどれくらいだったか？
     ```r
-    .stan_code = "
+    stan_code = "
     data {
-      int n_obs;
-      real[n_obs] x;
+      int length;
+      real x[length];
     }
 
     parameters {
@@ -64,32 +65,31 @@ jagsと違ってstan本体も同時に入れてくれる。
 1. モデルをC++に変換してコンパイルする。
    ファイルから読み込んだ場合は中間ファイル`*.rda`がキャッシュされる。
    ```r
-   .model = rstan::stan_model(model_code=.stan_code)
+   mod = rstan::stan_model(model_code = stan_code)
    # or
-   .model = rstan::stan_model(file="model.stan")
+   mod = rstan::stan_model(file = "model.stan")
    ```
 
 1. コンパイル済みモデルを使ってMCMCサンプリング
    ```r
-   .fit = rstan::sampling(.model, data=.data, iter=10000, chains=3)
+   fit = rstan::sampling(mod, data = observation, iter = 10000, chains = 3)
    ```
 
 1. 結果を見てみる
    ```r
-   print(.fit)
-   summary(.fit)
-   plot(.fit)
-   pairs(.fit)
-   rstan::traceplot(.fit)
-   rstan::stan_trace(.fit)
-   rstan::stan_hist(.fit)
-   rstan::stan_dens(.fit)
+   print(fit)
+   summary(fit)
+   plot(fit)
+   pairs(fit)
+   rstan::traceplot(fit)
+   rstan::stan_trace(fit)
+   rstan::stan_hist(fit)
+   rstan::stan_dens(fit)
    ```
 
 ## Stan文法
 
 https://mc-stan.org/documentation/
-PDFしか無くて残念
 
 ### ブロック
 
@@ -258,5 +258,5 @@ remotes::install_github("stan-dev/rstan", ref="develop", subdir="rstan/rstan")
 
 ## 関連書籍
 
-<a href="https://www.amazon.co.jp/Stan%E3%81%A8R%E3%81%A7%E3%83%99%E3%82%A4%E3%82%BA%E7%B5%B1%E8%A8%88%E3%83%A2%E3%83%87%E3%83%AA%E3%83%B3%E3%82%B0-Wonderful-R-%E6%9D%BE%E6%B5%A6-%E5%81%A5%E5%A4%AA%E9%83%8E/dp/4320112423/ref=as_li_ss_il?_encoding=UTF8&psc=1&refRID=N4GQH6P8QHKYX0E91BVK&linkCode=li3&tag=heavywatal-22&linkId=6ffd2c8744eace95b257403231a29102" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4320112423&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4320112423" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
-<a href="https://www.amazon.co.jp/gp/product/1482253445/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=9367946532fbf4369b6161aedd15c4a6" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1482253445&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=1482253445" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+<a href="https://www.amazon.co.jp/dp/4320112423/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=a55a7a3616d8d8a6d4516c5a26bca46f&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4320112423&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=4320112423" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+<a href="https://www.amazon.co.jp/dp/4065165369/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=75cdd63ab18e3b59eaeac9e628b27ce8&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4065165369&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=4065165369" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
