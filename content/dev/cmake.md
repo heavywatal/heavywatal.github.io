@@ -6,8 +6,13 @@ subtitle = "Cross-platform Make"
   parent = "dev"
 +++
 
-[autotools]({{< relref "autotools.md" >}}) の `configure` 的な位置づけで、
 環境に合わせた [Makefile]({{< relref "make.md" >}}) を自動生成する。
+似たようなことをする `configure` スクリプトと比べて動作が高速で、
+ライブラリの依存関係なども簡潔・柔軟に記述できる。
+
+`configure` ではそれを生成する開発者だけが
+[autotools]({{< relref "autotools.md" >}}) を使うのに対して、
+CMakeでは開発者と利用者の双方がCMakeをインストールして使う。
 
 https://cmake.org/cmake/help/latest/
 
@@ -45,7 +50,7 @@ install(TARGETS a.out
 
 - `configure_file(<input> <output> [COPYONLY] [@ONLY])`:
   ファイルの一部を置換しつつ複製する。
-  例えば `@PROJECT_VERSION@` などを含む `config.hpp.in` に値を埋め込むとか。
+  例えば `@PROJECT_VERSION@` などを含む `config.hpp.in` に値を埋め込んで `config.hpp` を生成するとか。
 - `function(<name> [args...])`
 - `foreach(var IN LISTS list)`
 - `message(STATUS "Hello world!")`
@@ -71,10 +76,11 @@ install(TARGETS a.out
 - [`target_compile_features(<target> <P|P|I> ...)`](https://cmake.org/cmake/help/latest/command/target_compile_features.html)
 - [`target_compile_options(<target> [BEFORE] <I|P|P> ...)`](https://cmake.org/cmake/help/latest/command/target_compile_options.html)
 - [`target_sources(<target> <I|P|P> ...)`](https://cmake.org/cmake/help/latest/command/target_sources.html)
-- [`target_include_directories(<target> [SYSTEM] [BEFORE] <I|P|P> ...)`](https://cmake.org/cmake/help/latest/command/target_include_directories.html)
-- [`target_link_libraries(<target> <I|P|P> ...)`](https://cmake.org/cmake/help/latest/command/target_link_libraries.html):
+- [`target_include_directories(<target> [SYSTEM] [BEFORE] <I|P|P> ...)`](https://cmake.org/cmake/help/latest/command/target_include_directories.html):
+  次の関数があるおかげでこれを直接使うことは意外と少ない。
+- **[`target_link_libraries(<target> <I|P|P> ...)`](https://cmake.org/cmake/help/latest/command/target_link_libraries.html):**
   この関数でターゲット間の依存関係を繋げていくのがCMakeの肝。
-  単に共有ライブラリのリンクを指定するためだけの関数ではない。
+  ライブラリ側 `-L -l` だけではなく、インクルード側 `-I` のオプションもお世話してくれる。
 - ターゲットなしの `include_directories()` `link_directories()` `link_libraries()`
   などはディレクトリ単位で影響が及ぶ亜種で、非推奨。
 
@@ -92,8 +98,8 @@ install(TARGETS a.out
 
 `PRIVATE`
 : このターゲットをビルドするときだけ使い、これを利用するときには参照させない。
-  例えば、このプロジェクトのライブラリをビルドするにはBoostが必要だけど、
-  これを利用するときにそれらのパスを知る必要はない、とか。
+  例えば「このプロジェクトのライブラリをビルドするにはBoostヘッダーが必要だけど、
+  これを利用するときにそれらのパスを知る必要はない」とか。
 
 `INTERFACE`
 : このターゲットでは使わないけど、これを利用するときには参照させる。
@@ -345,9 +351,7 @@ add_test(NAME gene COMMAND $<TARGET_FILE:test-gene>)
 やり直したいときは、そのディレクトリごと消す。
 
 ```sh
-mkdir build
-cd build/
-cmake -DCMAKE_INSTALL_PREFIX=${HOME}/local -DCMAKE_BUILD_TYPE=Debug /path/to/project
+cmake -S . -B build -DCMAKE_INSTALL_PREFIX=${HOME}/local -DCMAKE_BUILD_TYPE=Debug
 ```
 
 デフォルトでは `Makefile` が書き出されるので
@@ -355,11 +359,19 @@ cmake -DCMAKE_INSTALL_PREFIX=${HOME}/local -DCMAKE_BUILD_TYPE=Debug /path/to/pro
 `cmake` からそれを実行することもできる:
 
 ```sh
-cmake --build . -- -j2
-cmake --build . --target install
+cmake --build build -j 2
+cmake --build build -j 2 --target install
 ```
 
-オプション
+3.15以降は `cmake --install <dir>` が使える。
+
+`-S <dir>`
+: ソースツリーを指定する。
+  3.13から。それまではundocumentedで `-H<dir>` という形だった。
+
+`-B <dir>`
+: ビルドツリーを指定する。
+  3.13から。それまではundocumentedだった。
 
 `-DCMAKE_XXX=YYY`
 : コマンドラインから変数を設定する。
@@ -367,15 +379,10 @@ cmake --build . --target install
 `-G <generator-name>`
 : Makefile, Ninja, Xcode, etc.
 
-`-E <subcommand>`
+`-E <command>`
+: シェルの違いを気にせず基本的なコマンドが使えるように。e.g.,
 : `chdir <dir> <cmd>`
 : `make_directory <dir>`
-
-`-H <dir>` (*undocumented*)
-: ソースツリーを指定する。
-
-`-B <dir>` (*undocumented*)
-: ビルドツリーを指定する。
 
 `-L`
 : キャッシュされている変数をリストアップ。
