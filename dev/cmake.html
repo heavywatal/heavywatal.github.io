@@ -91,8 +91,12 @@ CMake — Cross-platform Make
 </ul></nav>
 </header>
 
-<p><a href="/dev/autotools.html">autotools</a> の <code>configure</code> 的な位置づけで、
-環境に合わせた <a href="/dev/make.html">Makefile</a> を自動生成する。</p>
+<p>環境に合わせた <a href="/dev/make.html">Makefile</a> を自動生成する。
+似たようなことをする <code>configure</code> スクリプトと比べて動作が高速で、
+ライブラリの依存関係なども簡潔・柔軟に記述できる。</p>
+<p><code>configure</code> ではそれを生成する開発者だけが
+<a href="/dev/autotools.html">autotools</a> を使うのに対して、
+CMakeでは開発者と利用者の双方がCMakeをインストールして使う。</p>
 <p><a href="https://cmake.org/cmake/help/latest/">https://cmake.org/cmake/help/latest/</a></p>
 <h2 id="基本">基本</h2>
 <p><code>CMakeLists.txt</code> を各ディレクトリに配置して、階層的に管理する。
@@ -115,7 +119,7 @@ CMake — Cross-platform Make
 <ul>
 <li><code>configure_file(&lt;input&gt; &lt;output&gt; [COPYONLY] [@ONLY])</code>:
 ファイルの一部を置換しつつ複製する。
-例えば <code>@PROJECT_VERSION@</code> などを含む <code>config.hpp.in</code> に値を埋め込むとか。</li>
+例えば <code>@PROJECT_VERSION@</code> などを含む <code>config.hpp.in</code> に値を埋め込んで <code>config.hpp</code> を生成するとか。</li>
 <li><code>function(&lt;name&gt; [args...])</code></li>
 <li><code>foreach(var IN LISTS list)</code></li>
 <li><code>message(STATUS &quot;Hello world!&quot;)</code></li>
@@ -139,10 +143,11 @@ CMake — Cross-platform Make
 <li><a href="https://cmake.org/cmake/help/latest/command/target_compile_features.html"><code>target_compile_features(&lt;target&gt; &lt;P|P|I&gt; ...)</code></a></li>
 <li><a href="https://cmake.org/cmake/help/latest/command/target_compile_options.html"><code>target_compile_options(&lt;target&gt; [BEFORE] &lt;I|P|P&gt; ...)</code></a></li>
 <li><a href="https://cmake.org/cmake/help/latest/command/target_sources.html"><code>target_sources(&lt;target&gt; &lt;I|P|P&gt; ...)</code></a></li>
-<li><a href="https://cmake.org/cmake/help/latest/command/target_include_directories.html"><code>target_include_directories(&lt;target&gt; [SYSTEM] [BEFORE] &lt;I|P|P&gt; ...)</code></a></li>
-<li><a href="https://cmake.org/cmake/help/latest/command/target_link_libraries.html"><code>target_link_libraries(&lt;target&gt; &lt;I|P|P&gt; ...)</code></a>:
+<li><a href="https://cmake.org/cmake/help/latest/command/target_include_directories.html"><code>target_include_directories(&lt;target&gt; [SYSTEM] [BEFORE] &lt;I|P|P&gt; ...)</code></a>:
+次の関数があるおかげでこれを直接使うことは意外と少ない。</li>
+<li><strong><a href="https://cmake.org/cmake/help/latest/command/target_link_libraries.html"><code>target_link_libraries(&lt;target&gt; &lt;I|P|P&gt; ...)</code></a>:</strong>
 この関数でターゲット間の依存関係を繋げていくのがCMakeの肝。
-単に共有ライブラリのリンクを指定するためだけの関数ではない。</li>
+ライブラリ側 <code>-L -l</code> だけではなく、インクルード側 <code>-I</code> のオプションもお世話してくれる。</li>
 <li>ターゲットなしの <code>include_directories()</code> <code>link_directories()</code> <code>link_libraries()</code>
 などはディレクトリ単位で影響が及ぶ亜種で、非推奨。</li>
 </ul>
@@ -158,8 +163,8 @@ CMake — Cross-platform Make
 <dl>
 <dt><code>PRIVATE</code></dt>
 <dd>このターゲットをビルドするときだけ使い、これを利用するときには参照させない。
-例えば、このプロジェクトのライブラリをビルドするにはBoostが必要だけど、
-これを利用するときにそれらのパスを知る必要はない、とか。</dd>
+例えば「このプロジェクトのライブラリをビルドするにはBoostヘッダーが必要だけど、
+これを利用するときにそれらのパスを知る必要はない」とか。</dd>
 <dt><code>INTERFACE</code></dt>
 <dd>このターゲットでは使わないけど、これを利用するときには参照させる。
 例えば、ヘッダーライブラリを作る場合とか。</dd>
@@ -385,27 +390,28 @@ STATIC/SHAREDが明示されていない <code>add_library()</code> でどっち
 <p>いろんな中間ファイルができる上に <code>cmake clean</code> は無いので、
 ビルド用の空ディレクトリを外に作って out-of-source で実行するのが基本。
 やり直したいときは、そのディレクトリごと消す。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mkdir build
-<span class="nb">cd</span> build/
-cmake -DCMAKE_INSTALL_PREFIX<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local -DCMAKE_BUILD_TYPE<span class="o">=</span>Debug /path/to/project
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">cmake -S . -B build -DCMAKE_INSTALL_PREFIX<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local -DCMAKE_BUILD_TYPE<span class="o">=</span>Debug
 </code></pre></div><p>デフォルトでは <code>Makefile</code> が書き出されるので
 <code>make &amp;&amp; make install</code> のように実行してもいいけど、
 <code>cmake</code> からそれを実行することもできる:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">cmake --build . -- -j2
-cmake --build . --target install
-</code></pre></div><p>オプション</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">cmake --build build -j <span class="m">2</span>
+cmake --build build -j <span class="m">2</span> --target install
+</code></pre></div><p>3.15以降は <code>cmake --install &lt;dir&gt;</code> が使える。</p>
 <dl>
+<dt><code>-S &lt;dir&gt;</code></dt>
+<dd>ソースツリーを指定する。
+3.13から。それまではundocumentedで <code>-H&lt;dir&gt;</code> という形だった。</dd>
+<dt><code>-B &lt;dir&gt;</code></dt>
+<dd>ビルドツリーを指定する。
+3.13から。それまではundocumentedだった。</dd>
 <dt><code>-DCMAKE_XXX=YYY</code></dt>
 <dd>コマンドラインから変数を設定する。</dd>
 <dt><code>-G &lt;generator-name&gt;</code></dt>
 <dd>Makefile, Ninja, Xcode, etc.</dd>
-<dt><code>-E &lt;subcommand&gt;</code></dt>
+<dt><code>-E &lt;command&gt;</code></dt>
+<dd>シェルの違いを気にせず基本的なコマンドが使えるように。e.g.,</dd>
 <dd><code>chdir &lt;dir&gt; &lt;cmd&gt;</code></dd>
 <dd><code>make_directory &lt;dir&gt;</code></dd>
-<dt><code>-H &lt;dir&gt;</code> (<em>undocumented</em>)</dt>
-<dd>ソースツリーを指定する。</dd>
-<dt><code>-B &lt;dir&gt;</code> (<em>undocumented</em>)</dt>
-<dd>ビルドツリーを指定する。</dd>
 <dt><code>-L</code></dt>
 <dd>キャッシュされている変数をリストアップ。
 <code>H</code> をつけると説明文も。
