@@ -108,7 +108,7 @@ stringr — Rの文字列をまともな方法で処理する
 <li>何をやる関数なのか名前から分かりやすい<br>
 (標準が覚えにくすぎ: <code>grep</code>, <code>grepl</code>, <code>regexpr</code>, <code>gregexpr</code>, <code>regexec</code>)</li>
 <li><a href="http://site.icu-project.org/">ICU4C</a>
-(via <a href="http://www.gagolewski.com/software/stringi/">stringi</a>) を使って動くため高速</li>
+(via <a href="https://www.gagolewski.com/software/stringi/">stringi</a>) を使って動くため高速</li>
 <li><a href="http://userguide.icu-project.org/strings/regexp">ICU正規表現</a> の仕様が明確</li>
 </ul>
 <p>今や <code>stringr</code> は <a href="http://www.gagolewski.com/software/stringi/">stringi</a> のラッパーだし、
@@ -123,9 +123,7 @@ stringr — Rの文字列をまともな方法で処理する
 <code>library(tidyverse)</code> で一括ロード。</p>
 <ul>
 <li><a href="https://r4ds.had.co.nz/strings.html">https://r4ds.had.co.nz/strings.html</a></li>
-<li><a href="https://cran.r-project.org/web/packages/stringr/">https://cran.r-project.org/web/packages/stringr/</a></li>
-<li><a href="https://github.com/tidyverse/stringr">https://github.com/tidyverse/stringr</a></li>
-<li><a href="https://www.rdocumentation.org/packages/stringr">https://www.rdocumentation.org/packages/stringr</a></li>
+<li><a href="https://stringr.tidyverse.org/articles/from-base.html">base R関数との対応表</a></li>
 </ul>
 <h2 id="functions">Functions</h2>
 <h3 id="basic-operation">Basic Operation</h3>
@@ -235,7 +233,114 @@ Python でいうところの <code>str.strip()</code>。
 <code>as.character()</code> や <code>as.double()</code> などを使うか、
 <a href="/rstats/readr.html#parse"><code>readr::parse_*()</code>系の関数</a>
 を使う。</p>
-<h2 id="関連書籍">関連書籍</h2>
+<h2 id="rの文字列と正規表現">Rの文字列と正規表現</h2>
+<p>ダブルクォーテーションで挟んで作る。
+文字列の中に <code>&quot;</code> を含む場合はシングルクォーテーションで挟む。</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">s</span> <span class="o">=</span> <span class="s">&#34;This is a string.&#34;</span>
+<span class="n">s</span> <span class="o">=</span> <span class="s">&#39;This is a string with &#34;double quotes&#34;.&#39;</span>
+</code></pre></div><h3 id="エスケープシーケンス">エスケープシーケンス</h3>
+<p>バックスラッシュを使って改行 <code>\n</code> やタブ <code>\t</code> などの制御文字を表現できる。
+バックスラッシュ自体を表すためには <code>\\</code> のように重ねる必要がある。</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">string</span> <span class="o">=</span> <span class="s">&#34;x\ty\n0\t1\n&#34;</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+<span class="c1"># [1] &#34;x\ty\n0\t1\n&#34;</span>
+<span class="nf">cat</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+<span class="c1"># x       y</span>
+<span class="c1"># 0       1</span>
+<span class="n">readr</span><span class="o">::</span><span class="nf">read_tsv</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+<span class="c1">#       x     y</span>
+<span class="c1">#   &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="c1"># 1     0     1</span>
+</code></pre></div><p>See <a href="https://stat.ethz.ch/R-manual/R-patched/library/base/html/Quotes.html"><code>?Quotes</code></a></p>
+<h3 id="正規表現">正規表現</h3>
+<p><a href="http://userguide.icu-project.org/strings/regexp">ICU正規表現</a>からよく使うやつを抜粋。</p>
+<table>
+<thead>
+<tr>
+<th>メタ文字</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\d</code></td>
+<td>数字</td>
+</tr>
+<tr>
+<td><code>\s</code></td>
+<td>空白</td>
+</tr>
+<tr>
+<td><code>\w</code></td>
+<td>英数字</td>
+</tr>
+<tr>
+<td><code>.</code></td>
+<td>何でも</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>行頭</td>
+</tr>
+<tr>
+<td><code>$</code></td>
+<td>行末</td>
+</tr>
+</tbody>
+</table>
+<p><code>\D</code>, <code>\S</code>, <code>\W</code> のように大文字にすると反転してそれ以外にマッチ。</p>
+<table>
+<thead>
+<tr>
+<th>演算子</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>?</code></td>
+<td>0回か1回</td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>0回以上繰り返し</td>
+</tr>
+<tr>
+<td><code>+</code></td>
+<td>1回以上繰り返し</td>
+</tr>
+<tr>
+<td><code>{n,m}</code></td>
+<td>n回以上m回以下</td>
+</tr>
+<tr>
+<td><code>XXX(?=YYY)</code></td>
+<td>YYYに先立つXXX</td>
+</tr>
+<tr>
+<td><code>(?&lt;=YYY)XXX</code></td>
+<td>YYYに続くXXX</td>
+</tr>
+</tbody>
+</table>
+<h3 id="生文字列">生文字列</h3>
+<p>数字にマッチする正規表現を書こうとして <code>pattern = &quot;\d&quot;</code> とすると怒られる。
+先述のようにバックスラッシュそのものを表すには二重にしておく必要があるため。</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="s">&#34;\d&#34;</span>
+<span class="c1"># Error: &#39;\d&#39; is an unrecognized escape in character string starting &#34;&#34;\d&#34;</span>
+
+<span class="s">&#34;\\d&#34;</span>
+<span class="c1"># Good.</span>
+</code></pre></div><p>エスケープシーケンスを無効にした生文字列(raw string)を用いることでバックスラッシュを重ねずに済む。
+PythonやC++などでは前からあったけどRでもようやく4.0.0 から使えるようになった。</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">pattern</span> <span class="o">=</span> <span class="s">&#34;\\d&#34;</span>
+<span class="n">pattern</span> <span class="o">=</span> <span class="n">r</span><span class="s">&#34;(\d)&#34;</span>
+<span class="n">pattern</span> <span class="o">=</span> <span class="n">R</span><span class="s">&#34;(\d)&#34;</span>
+<span class="n">pattern</span> <span class="o">=</span> <span class="n">r</span><span class="s">&#34;---(\d)---&#34;</span>
+<span class="n">pattern</span> <span class="o">=</span> <span class="n">r</span><span class="s">&#34;---[\d]---&#34;</span>
+<span class="n">pattern</span> <span class="o">=</span> <span class="n">r</span><span class="s">&#34;---{\d}---&#34;</span>
+<span class="n">stringr</span><span class="o">::</span><span class="nf">str_count</span><span class="p">(</span><span class="s">&#34;1q2w3e4r&#34;</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+</code></pre></div><h2 id="関連書籍">関連書籍</h2>
 <p><a href="https://www.amazon.co.jp/Data-Science-Transform-Visualize-Model/dp/1491910399/ref=as_li_ss_il?s=books&ie=UTF8&qid=1508340700&sr=1-3&linkCode=li3&tag=heavywatal-22&linkId=6a53371cc80e2d6d7fc50fae5d8b862d" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1491910399&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=1491910399" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 <a href="https://www.amazon.co.jp/R%E3%81%A7%E3%81%AF%E3%81%98%E3%82%81%E3%82%8B%E3%83%87%E3%83%BC%E3%82%BF%E3%82%B5%E3%82%A4%E3%82%A8%E3%83%B3%E3%82%B9-Hadley-Wickham/dp/487311814X/ref=as_li_ss_il?ie=UTF8&qid=1508340144&sr=8-1&keywords=r&linkCode=li3&tag=heavywatal-22&linkId=4137d3d3351f8ccab5a93cefdc28fdec" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=487311814X&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=487311814X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
 
