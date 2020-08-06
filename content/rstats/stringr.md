@@ -19,10 +19,10 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
     -   長さゼロのオブジェクトを引数として与えた場合には長さゼロの結果を返す
     -   引数オブジェクトに `NA` が含まれる場合はその部分の結果を `NA` とする
 -   対象文字列が一貫して第一引数で、パターンが二番目
--   何をやる関数なのか名前から分かりやすい\
+-   何をやる関数なのか名前から分かりやすい<br>
     (標準が覚えにくすぎ: `grep`, `grepl`, `regexpr`, `gregexpr`, `regexec`)
 -   [ICU4C](http://site.icu-project.org/)
-    (via [stringi](http://www.gagolewski.com/software/stringi/)) を使って動くため高速
+    (via [stringi](https://www.gagolewski.com/software/stringi/)) を使って動くため高速
 -   [ICU正規表現](http://userguide.icu-project.org/strings/regexp) の仕様が明確
 
 今や `stringr` は [stringi](http://www.gagolewski.com/software/stringi/) のラッパーだし、
@@ -38,9 +38,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 `library(tidyverse)` で一括ロード。
 
 -   <https://r4ds.had.co.nz/strings.html>
--   <https://cran.r-project.org/web/packages/stringr/>
--   <https://github.com/tidyverse/stringr>
--   <https://www.rdocumentation.org/packages/stringr>
+-   [base R関数との対応表](https://stringr.tidyverse.org/articles/from-base.html)
 
 ## Functions
 
@@ -174,6 +172,89 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 `as.character()` や `as.double()` などを使うか、
 [`readr::parse_*()`系の関数]({{< relref "readr.md#parse" >}})
 を使う。
+
+
+## Rの文字列と正規表現
+
+ダブルクォーテーションで挟んで作る。
+文字列の中に `"` を含む場合はシングルクォーテーションで挟む。
+
+```r
+s = "This is a string."
+s = 'This is a string with "double quotes".'
+```
+
+### エスケープシーケンス
+
+バックスラッシュを使って改行 `\n` やタブ `\t` などの制御文字を表現できる。
+バックスラッシュ自体を表すためには `\\` のように重ねる必要がある。
+
+```r
+string = "x\ty\n0\t1\n"
+print(string)
+# [1] "x\ty\n0\t1\n"
+cat(string)
+# x       y
+# 0       1
+readr::read_tsv(string)
+#       x     y
+#   <dbl> <dbl>
+# 1     0     1
+```
+
+See [`?Quotes`](https://stat.ethz.ch/R-manual/R-patched/library/base/html/Quotes.html)
+
+
+
+### 正規表現
+
+[ICU正規表現](http://userguide.icu-project.org/strings/regexp)からよく使うやつを抜粋。
+
+| メタ文字 | 意味 |
+| ---- | ---- |
+| `\d` | 数字   |
+| `\s` | 空白   |
+| `\w` | 英数字 |
+| `.`  | 何でも |
+| `^`  | 行頭   |
+| `$`  | 行末   |
+
+`\D`, `\S`, `\W` のように大文字にすると反転してそれ以外にマッチ。
+
+| 演算子 | 意味 |
+| ---- | ---- |
+| `?`  | 0回か1回 |
+| `*`  | 0回以上繰り返し |
+| `+`  | 1回以上繰り返し |
+| `{n,m}` | n回以上m回以下 |
+| `XXX(?=YYY)`  | YYYに先立つXXX |
+| `(?<=YYY)XXX`  | YYYに続くXXX |
+
+
+### 生文字列
+
+数字にマッチする正規表現を書こうとして `pattern = "\d"` とすると怒られる。
+先述のようにバックスラッシュそのものを表すには二重にしておく必要があるため。
+```r
+"\d"
+# Error: '\d' is an unrecognized escape in character string starting ""\d"
+
+"\\d"
+# Good.
+```
+
+エスケープシーケンスを無効にした生文字列(raw string)を用いることでバックスラッシュを重ねずに済む。
+PythonやC++などでは前からあったけどRでもようやく4.0.0 から使えるようになった。
+
+```r
+pattern = "\\d"
+pattern = r"(\d)"
+pattern = R"(\d)"
+pattern = r"---(\d)---"
+pattern = r"---[\d]---"
+pattern = r"---{\d}---"
+stringr::str_count("1q2w3e4r", pattern)
+```
 
 
 ## 関連書籍
