@@ -192,14 +192,18 @@ def my_scatter(x, y, data, ax):
 
 #### [Categorical plots](https://seaborn.pydata.org/tutorial/categorical.html)
 
+`sns.stripplot(x, y, hue, data, order, ..., ax)`
+:   片軸がカテゴリカル変数の散布図
+:   これよりやや規則的な `sns.swarmplot()` も良い。
+
 `sns.boxplot(x, y, hue, data, order, ..., ax)`
 :   箱ひげ図
 
 `sns.violinplot(x, y, hue, data, order, ..., ax)`
 :   バイオリンプロット
 
-`sns.stripplot(x, y, hue, data, order, ..., ax)`
-:   片軸がカテゴリカル変数の散布図
+`sns.boxenplot(x, y, hue, data, order, ..., ax)`
+:   箱ひげ図の変種。別名 letter-value plot 。
 
 `sns.pointplot(x, y, hue, data, order, ..., ax)`
 :   点推定値(平均値とか)の折れ線グラフ + エラーバー
@@ -254,9 +258,11 @@ grid.map(plt.scatter, 'sepal_width', 'sepal_length')
 `sns.lmplot(x, y, data, hue, col, row, ...)`
 :   `regplot()` + `FacetGrid()` のショートカット。
 
-`sns.factorplot(x, y, hue, data, row, col, ..., kind, ...)`
+`sns.catplot(x, y, hue, data, row, col, ..., kind, ...)`
 :   Categorical plot + `FacetGrid()` のショートカット。
-:   `kind`: {`point`, `bar`, `count`, `box`, `violin`, `strip`}
+:   `kind`: {`strip`, `swarm`, `box`, `violin`, `boxen`, `point`, `bar`, `count`}
+:   昔は `factorplot` という名前だった。
+
 
 #### [`sns.PairGrid`](https://seaborn.pydata.org/generated/seaborn.PairGrid.html)
 
