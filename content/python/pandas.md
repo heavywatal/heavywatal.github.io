@@ -29,7 +29,8 @@ http://pandas.pydata.org/pandas-docs/stable/dsintro.html
 : `axis=0` が行(index)で、`axis=1` が列(columns)。
 
 DataFrameを時間軸方向に重ねたような3次元構造として
-`Panel` ってのもあったけど `MultiIndex` があれば不要ってことでdeprecated。
+`Panel` ってのもあったけど `MultiIndex` があれば不要ってことでv0.20からdeprecated、v0.25で削除。
+["pan(el)-da(ta)-s" が名前の由来だったのに。](https://pandas.pydata.org/pandas-docs/version/0.24/getting_started/dsintro.html#panel)
 
 
 ## 読み書き
@@ -179,6 +180,14 @@ pd.set_option('display.width', None)
 ```
 
 ディスプレイ幅は `os.get_terminal_size().columns` で明示的に取得してもいい。
+
+
+## misc.
+
+英語の発音としては [pǽndəz] のように濁るのが自然だけど
+[開発者は pan-duss [pǽndəs] と発音している](https://twitter.com/wesmckinn/status/706661972431892483)
+とのこと。
+
 
 
 ## 書籍
