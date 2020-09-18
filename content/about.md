@@ -180,10 +180,12 @@ Find me on
 
 ## Teaching / Outreach
 
+-   「インタビューでGO!!」水の森市民センター企画「子どもたちの育ちを支えよう」
+    (2020-08) 北仙台小学校
 -   「[Hands-on Introduction to R 2020](/slides/makino2020r/)」
-    (2020-05) 東北大ほか
+    東北大ほか (2020-05)
 -   「[Rによるデータ前処理実習](/slides/tmd2019/)」
-    (2019-12) 東京医科歯科大 [データ関連人材育成プログラム](https://md-dsc.com/summary31.php)
+    東京医科歯科大 [データ関連人材育成プログラム](https://md-dsc.com/summary31.php) (2019-12)
 -   「[Rでデータを可視化する](/slides/sendair2/)」
     [Sendai.R #2](https://sendair.connpass.com/event/137548/) (2019-09) Sendai
 -   "[Using external C++ libraries in Rcpp packages](/slides/japanr2018/)"
