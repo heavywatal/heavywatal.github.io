@@ -88,6 +88,10 @@ defaults write com.apple.finder QLEnableTextSelection -bool true
 # 特定アプリをダークモードから除外する
 # osascript -e 'id of app "Google Chrome"'
 defaults write com.google.Chrome NSRequiresAquaSystemAppearance -bool true
+
+# スクリーンショットを影なしで撮る
+defaults write com.apple.screencapture disable-shadow -bool true
+killall SystemUIServer
 ```
 
 [OnyX](https://www.titanium-software.fr/en/onyx.html) や
