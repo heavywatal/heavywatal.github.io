@@ -8,15 +8,17 @@ tags = ["r"]
 
 ## 初学者向け講義資料
 
-- 2020-05 [Hands-on Introduction to R 2020](/slides/makino2020r/) 東北大学ほか
-    - どうしてRを使うの？ --- Why do we use R?
-    - Rの基本 --- R basics
-    - Rで可視化 --- Visualization with R
-    - Rでデータ整形 --- Tidying and transforming data with R
+- 2020-10 [Rによるデータ前処理実習](/slides/tmd2020/) 東京医科歯科大学 データ関連人材育成プログラム
+    - 入門1: 前処理とは。Rを使うメリット。Rの基本。
+    - 入門2: データ可視化の重要性と方法。
+    - データ構造の処理1: 抽出、集約など。
+    - データ構造の処理2: 結合、変形など。
+    - データ内容の処理: 数値、文字列、日時など。
 
 <hr>
 過去の資料
 
+- 2020-05 [Hands-on Introduction to R 2020](/slides/makino2020r/) 東北大学ほか
 - 2019-12 [Rによるデータ前処理実習](/slides/tmd2019/) 東京医科歯科大学 データ関連人材育成プログラム
 - 2019-10 [Hands-on R Lecture for Makino Lab](/slides/makino2019r/) 東北大学
 - 2018-05 [Rにやらせて楽しよう — データの可視化と下ごしらえ](/slides/nagoya2018/) 名古屋大学

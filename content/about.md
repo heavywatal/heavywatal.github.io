@@ -180,6 +180,8 @@ Find me on
 
 ## Teaching / Outreach
 
+-   「[Rによるデータ前処理実習](/slides/tmd2020/)」
+    東京医科歯科大 [データ関連人材育成プログラム](https://md-dsc.com/summary31.php) (2020-10)
 -   「インタビューでGO!!」水の森市民センター企画「子どもたちの育ちを支えよう」
     (2020-08) 北仙台小学校
 -   「[Hands-on Introduction to R 2020](/slides/makino2020r/)」
