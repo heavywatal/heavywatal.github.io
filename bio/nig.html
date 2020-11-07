@@ -169,33 +169,28 @@ qsub -l short -b y -shell n -cwd -N <span class="nb">test</span> <span class="s2
 <dt><code>-l ***</code></dt>
 <dd>実行時間や計算ノードなどの要求を伝える。
 管理者が定義したキューから選んで指定する。
-例えば、3日以内に終わるものなら <code>-l short</code>、
+例えば、3日以内に終わる軽いものなら <code>-l short</code>、
 2か月かかるものなら <code>-l epyc</code>、
 メモリが多めに必要なら <code>-l medium</code>、など。
 <code>qstat -g c</code> でキューの一覧とそれぞれの負荷を確認できるので空いてるところを探す。</dd>
-<dd>1スレッドあたりのRAM上限(デフォルト8GB)もこのオプションから
+<dd>1コアあたりのRAM上限(デフォルト8GB)もこのオプションから
 <code>-l s_vmem=16G -l mem_req=16G</code> のように変更できる。</dd>
+<dt><code>-pe def_slot 8</code></dt>
+<dd>parallel environment:
+並列処理で使用するCPUコア数を指定。</dd>
+<dd>MPIによる並列化の場合はまた違うオプションがある。</dd>
 <dt><code>-cwd</code></dt>
 <dd>カレントディレクトリでジョブ実行。
 デフォルトでは <code>${HOME}</code>。</dd>
 <dt><code>-N ***</code></dt>
 <dd>ジョブに名前をつける。
-デフォルトではスクリプト名。</dd>
+デフォルトではスクリプト名が採用される。</dd>
 <dt><code>-o ***</code>, <code>-e ***</code></dt>
 <dd>標準出力・標準エラー出力の書き出し先。
 デフォルトではワーキングディレクトリ以下に
 <code>{JOBNAME}.o{JOBID}</code>, <code>{JOBNAME}.e{JOBID}</code>
 という名前で書き出される(空っぽでさえ)。
 不要な出力は <code>/dev/null</code> に流し込むべし。</dd>
-<dt><code>-b y</code></dt>
-<dd>計算ノードにバイナリがあるものとしてジョブを投げる。
-これを指定しない場合はスクリプト扱いになり、
-投入ノードから計算ノードへのコピーなど余計なプロセスが挟まるらしい。</dd>
-<dt><code>-shell n</code></dt>
-<dd>環境変数の解決など、
-プログラムの呼び出しにシェルを介す必要がない場合は
-これを指定することで多少コスト削減できる。
-当然 <code>-b y</code> のときのみ有効。</dd>
 <dt><code>-S /bin/sh</code></dt>
 <dd>インタープリタを指定。
 指定しないと <code>csh</code> が利用されるせいか、
@@ -211,11 +206,17 @@ qsub -l short -b y -shell n -cwd -N <span class="nb">test</span> <span class="s2
 システムからユーザーに与えられた上限は <code>qquota</code> コマンドで確認できる。
 いまのところ500らしい。</dd>
 <dt><code>-v VARIABLE=value</code></dt>
-<dd>環境変数を定義してジョブに引き継ぐ</dd>
-<dt><code>-pe def_slot N</code></dt>
-<dd>parallel environment:
-並列処理で使用するスレッド数を指定。
-<code>-l mem_req=*G</code> の値は1スレッドあたりなので注意。</dd>
+<dd>環境変数を定義してジョブに引き継ぐ。</dd>
+<dd>大文字 <code>-V</code> で全ての環境変数が渡される。</dd>
+<dt><code>-b y</code></dt>
+<dd>計算ノードにバイナリがあるものとしてジョブを投げる。
+これを指定しない場合はスクリプト扱いになり、
+投入ノードから計算ノードへのコピーなど余計なプロセスが挟まるらしい。</dd>
+<dt><code>-shell n</code></dt>
+<dd>環境変数の解決など、
+プログラムの呼び出しにシェルを介す必要がない場合は
+これを指定することで多少コスト削減できる。
+当然 <code>-b y</code> のときのみ有効。</dd>
 </dl>
 <h3 id="qsub-スクリプト"><code>qsub</code> スクリプト</h3>
 <p><code>#$</code> で始まる行は <code>qsub</code> へのオプションと見なされる。</p>
@@ -225,7 +226,6 @@ qsub -l short -b y -shell n -cwd -N <span class="nb">test</span> <span class="s2
 <span class="c1">#$ -l short</span>
 <span class="c1">#$ -cwd</span>
 <span class="c1">#$ -t 1-2</span>
-<span class="c1">#$ -N test_sh</span>
 <span class="nb">echo</span> HOME: <span class="nv">$HOME</span>
 <span class="nb">echo</span> USER: <span class="nv">$USER</span>
 <span class="nb">echo</span> JOB_ID: <span class="nv">$JOB_ID</span>
@@ -244,7 +244,6 @@ ls
 <span class="c1">#$ -l short</span>
 <span class="c1">#$ -cwd</span>
 <span class="c1">#$ -t 1-2</span>
-<span class="c1">#$ -N test_py</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="k">print</span><span class="p">(</span><span class="s2">&#34;SGE_TASK_ID: &#34;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&#34;SGE_TASK_ID&#34;</span><span class="p">])</span>
 </code></pre></div><h3 id="補助コマンド">補助コマンド</h3>
