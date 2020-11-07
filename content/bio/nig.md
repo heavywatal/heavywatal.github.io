@@ -87,12 +87,17 @@ qsub -l short -b y -shell n -cwd -N test "pwd; sleep 5; ls >ls.txt"
 `-l ***`
 :   実行時間や計算ノードなどの要求を伝える。
     管理者が定義したキューから選んで指定する。
-    例えば、3日以内に終わるものなら `-l short`、
+    例えば、3日以内に終わる軽いものなら `-l short`、
     2か月かかるものなら `-l epyc`、
     メモリが多めに必要なら `-l medium`、など。
     `qstat -g c` でキューの一覧とそれぞれの負荷を確認できるので空いてるところを探す。
-:   1スレッドあたりのRAM上限(デフォルト8GB)もこのオプションから
+:   1コアあたりのRAM上限(デフォルト8GB)もこのオプションから
     `-l s_vmem=16G -l mem_req=16G` のように変更できる。
+
+`-pe def_slot 8`
+:   parallel environment:
+    並列処理で使用するCPUコア数を指定。
+:   MPIによる並列化の場合はまた違うオプションがある。
 
 `-cwd`
 :   カレントディレクトリでジョブ実行。
@@ -100,7 +105,7 @@ qsub -l short -b y -shell n -cwd -N test "pwd; sleep 5; ls >ls.txt"
 
 `-N ***`
 :   ジョブに名前をつける。
-    デフォルトではスクリプト名。
+    デフォルトではスクリプト名が採用される。
 
 `-o ***`, `-e ***`
 :   標準出力・標準エラー出力の書き出し先。
@@ -108,17 +113,6 @@ qsub -l short -b y -shell n -cwd -N test "pwd; sleep 5; ls >ls.txt"
     `{JOBNAME}.o{JOBID}`, `{JOBNAME}.e{JOBID}`
     という名前で書き出される(空っぽでさえ)。
     不要な出力は `/dev/null` に流し込むべし。
-
-`-b y`
-:   計算ノードにバイナリがあるものとしてジョブを投げる。
-    これを指定しない場合はスクリプト扱いになり、
-    投入ノードから計算ノードへのコピーなど余計なプロセスが挟まるらしい。
-
-`-shell n`
-:   環境変数の解決など、
-    プログラムの呼び出しにシェルを介す必要がない場合は
-    これを指定することで多少コスト削減できる。
-    当然 `-b y` のときのみ有効。
 
 `-S /bin/sh`
 :   インタープリタを指定。
@@ -138,12 +132,20 @@ qsub -l short -b y -shell n -cwd -N test "pwd; sleep 5; ls >ls.txt"
     いまのところ500らしい。
 
 `-v VARIABLE=value`
-:   環境変数を定義してジョブに引き継ぐ
+:   環境変数を定義してジョブに引き継ぐ。
+:   大文字 `-V` で全ての環境変数が渡される。
 
-`-pe def_slot N`
-:   parallel environment:
-    並列処理で使用するスレッド数を指定。
-    `-l mem_req=*G` の値は1スレッドあたりなので注意。
+`-b y`
+:   計算ノードにバイナリがあるものとしてジョブを投げる。
+    これを指定しない場合はスクリプト扱いになり、
+    投入ノードから計算ノードへのコピーなど余計なプロセスが挟まるらしい。
+
+`-shell n`
+:   環境変数の解決など、
+    プログラムの呼び出しにシェルを介す必要がない場合は
+    これを指定することで多少コスト削減できる。
+    当然 `-b y` のときのみ有効。
+
 
 ### `qsub` スクリプト
 
@@ -157,7 +159,6 @@ qsub -l short -b y -shell n -cwd -N test "pwd; sleep 5; ls >ls.txt"
 #$ -l short
 #$ -cwd
 #$ -t 1-2
-#$ -N test_sh
 echo HOME: $HOME
 echo USER: $USER
 echo JOB_ID: $JOB_ID
@@ -180,7 +181,6 @@ ls
 #$ -l short
 #$ -cwd
 #$ -t 1-2
-#$ -N test_py
 import os
 print("SGE_TASK_ID: " + os.environ["SGE_TASK_ID"])
 ```
