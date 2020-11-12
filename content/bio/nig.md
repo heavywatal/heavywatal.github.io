@@ -74,7 +74,7 @@ rsync -auv gw.ddbj.nig.ac.jp:~/output/ ~/output/
 ### `qsub`
 
 遺伝研ウェブサイトにはスクリプトを書いてから渡す方法しか書いてないが、
-コマンド引数として直接渡すほうが楽チン。
+簡単なタスクならコマンド引数として直接渡すのもあり。
 
 ```sh
 ## スクリプトを書いてから渡す
@@ -216,6 +216,31 @@ print("SGE_TASK_ID: " + os.environ["SGE_TASK_ID"])
 
 `qquota`
 :   ユーザーに与えられたリソースを表示
+
+
+## [Singularity](https://sc.ddbj.nig.ac.jp/ja/guide/software/singularity)
+
+`/usr/local/biotools/` 以下に各種ソフトウェアが用意されている。
+[BioContainers](https://biocontainers.pro) のものをほぼそのまま置いているらしい。
+
+利用可能なソフトウェアとバージョンを探す:
+```sh
+find /usr/local/biotools/ -name 'blast*' | sort
+```
+
+イメージとプログラム名を指定して実行:
+```sh
+singularity exec -e /usr/local/biotools/f/fastp:0.20.0--hdbcaa40_0 fastp --help
+```
+
+そこらに落ちてるイメージを拾ってきて使うこともできる。
+[例えばTrinityの公式最新版を使いたい場合](https://github.com/trinityrnaseq/trinityrnaseq/wiki/Trinity-in-Docker#trinity_singularity):
+```sh
+find /usr/local/biotools/ -name 'trinity*' | sort
+mkdir -p ~/image
+wget -P ~/image/ https://data.broadinstitute.org/Trinity/TRINITY_SINGULARITY/trinityrnaseq.v2.11.0.simg
+singularity exec -e ~/image/trinityrnaseq.v2.11.0.simg Trinity --help
+```
 
 
 ## misc.
