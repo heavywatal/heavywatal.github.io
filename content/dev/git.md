@@ -6,21 +6,21 @@ tags = ["vcs", "writing"]
   parent = "dev"
 +++
 
+[GitHub]: https://github.com
+
 https://git-scm.com/
 
 Gitは分散型バージョン管理システムの代表格。
 プログラムのソースコードはもちろんのこと、
 研究ノートや論文の原稿などあらゆるテキストの管理に使える。
 
-[GitHub](https://github.com)はGitをより便利に使うためのオンラインサービス。
+[GitHub]はGitをより便利に使うためのオンラインサービス。
 個人的なリポジトリ置き場としてはもちろんのこと、
 ほかの人と共有・協力してプロジェクトを進めるプラットフォームとしても使える。
 
 Gitのライバルとして[Mercurial]({{< relref "mercurial.md" >}})もあるが、
 [BitBucket](https://bitbucket.org) (GitHubのライバル)
 がGit対応した今となってはMercurialを積極的に使う理由は無い気がする。
-むしろ[Atom]({{< relref "atom.md" >}})における差分表示など、
-Gitでなければ得られない恩恵が大きくなってきている。
 
 
 ## 基本
@@ -30,7 +30,7 @@ Gitでなければ得られない恩恵が大きくなってきている。
 - ローカルマシンにGitをインストールする。
   最初から入ってる場合も多いけど、それが古すぎる場合は
   [Homebrew]({{< relref "homebrew.md" >}}) で新しいのを入れる。
-- GitHubに個人アカウントを作る。
+- [GitHub]に個人アカウントを作る。
 - [SSH公開鍵を作って]({{< relref "ssh.md" >}})マシンとGitHubに登録する。
   https://help.github.com/articles/connecting-to-github-with-ssh/
 - `~/.gitconfig` にユーザ名やアドレスを登録する。
@@ -425,6 +425,31 @@ submoduleなどをいじってると意図せずdetached HEAD状態になるこ�
    ```
    git branch -d detached
    ```
+
+### サブディレクトリを別リポジトリに切り分ける
+
+1.  新しく作りたいリポジトリ名で元リポジトリをクローン:
+
+    ```sh
+    git clone https://github.com/heavywatal/hello.git bonjour
+    ```
+
+1.  [`filter-branch`](https://git-scm.com/docs/git-filter-branch)
+    でサブディレクトリの歴史だけ抜き出す:
+
+    ```sh
+    cd bonjour/
+    git filter-branch filter-branch --subdirectory-filter subdir
+    git log
+    ls       # サブディレクトリの中身がルートに来てる
+    ```
+
+1.  GitHubなどリモートにも新しいリポジトリを作って登録、プッシュ:
+
+    ```sh
+    git remote set-url origin https://github.com/heavywatal/bonjour.git
+    git push -u origin master
+    ```
 
 
 ### 別のリポジトリをサブディレクトリとして取り込む
