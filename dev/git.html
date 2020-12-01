@@ -100,9 +100,7 @@ Git — 分散型バージョン管理システム
 ほかの人と共有・協力してプロジェクトを進めるプラットフォームとしても使える。</p>
 <p>Gitのライバルとして<a href="/dev/mercurial.html">Mercurial</a>もあるが、
 <a href="https://bitbucket.org">BitBucket</a> (GitHubのライバル)
-がGit対応した今となってはMercurialを積極的に使う理由は無い気がする。
-むしろ<a href="/dev/atom.html">Atom</a>における差分表示など、
-Gitでなければ得られない恩恵が大きくなってきている。</p>
+がGit対応した今となってはMercurialを積極的に使う理由は無い気がする。</p>
 <h2 id="基本">基本</h2>
 <h3 id="準備">準備</h3>
 <ul>
@@ -112,7 +110,7 @@ Gitでなければ得られない恩恵が大きくなってきている。</p>
 <a href="/mac/homebrew.html">Homebrew</a> で新しいのを入れる。</p>
 </li>
 <li>
-<p>GitHubに個人アカウントを作る。</p>
+<p><a href="https://github.com">GitHub</a>に個人アカウントを作る。</p>
 </li>
 <li>
 <p><a href="/dev/ssh.html">SSH公開鍵を作って</a>マシンとGitHubに登録する。
@@ -435,6 +433,26 @@ git merge detached
 <p>不要になったbranchを消す</p>
 <pre><code>git branch -d detached
 </code></pre></li>
+</ol>
+<h3 id="サブディレクトリを別リポジトリに切り分ける">サブディレクトリを別リポジトリに切り分ける</h3>
+<ol>
+<li>
+<p>新しく作りたいリポジトリ名で元リポジトリをクローン:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git clone https://github.com/heavywatal/hello.git bonjour
+</code></pre></div></li>
+<li>
+<p><a href="https://git-scm.com/docs/git-filter-branch"><code>filter-branch</code></a>
+でサブディレクトリの歴史だけ抜き出す:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> bonjour/
+git filter-branch filter-branch --subdirectory-filter subdir
+git log
+ls       <span class="c1"># サブディレクトリの中身がルートに来てる</span>
+</code></pre></div></li>
+<li>
+<p>GitHubなどリモートにも新しいリポジトリを作って登録、プッシュ:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git remote set-url origin https://github.com/heavywatal/bonjour.git
+git push -u origin master
+</code></pre></div></li>
 </ol>
 <h3 id="別のリポジトリをサブディレクトリとして取り込む">別のリポジトリをサブディレクトリとして取り込む</h3>
 <p><a href="https://git-scm.com/book/tr/v2/Git-Tools-Advanced-Merging#_subtree_merge">Subtree Merging</a></p>
