@@ -109,7 +109,7 @@ Scientificな用途で使いたい場合は
 GUIのインストーラでもいいし、Homebrewでもいける:
 
 ```sh
-brew cask install anaconda
+brew install anaconda
 export PATH=/usr/local/anaconda3/bin:"$PATH"
 ```
 

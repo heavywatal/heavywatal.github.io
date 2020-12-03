@@ -107,7 +107,6 @@ bottle機能を封じられて毎回自前ビルドすることになるみた�
     nkf
     pandoc
     parallel
-    rmtrash
     rsync
     sshfs
     tmux
@@ -183,11 +182,13 @@ https://docs.brew.sh/Formula-Cookbook.html
 ## Cask
 
 GUIアプリケーションもHomebrewで管理してしまおうという野心的な拡張機能。
-使うときは普通の `brew` コマンドに `cask` を挟むだけ:
+昔は `brew cask install` のような形で使っていたが、
+今は `brew` 本体に統合されている。
+同名のformulaがある場合などは `--cask` で限定できる:
 
 ```sh
-brew cask install atom
-brew cask list
+brew install --cask r rstudio
+brew list --cask
 ```
 
 アプリ側でアップデートを実行するとCask内でのバージョンと食い違っちゃうけど使用上は問題ないらしい。

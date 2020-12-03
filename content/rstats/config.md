@@ -14,7 +14,7 @@ https://cran.r-project.org/manuals.html
 - [RStudio (任意)](https://www.rstudio.com/products/rstudio/download/)
 
 Macなら [Homebrew]({{< relref "homebrew.md" >}}) で
-`brew cask install r rstudio` のように入れるのが楽チン。
+`brew install --cask r rstudio` のように入れるのが楽チン。
 Caskじゃない `brew install r` のほうだとバイナリ版パッケージが使えなくて毎回ソースからビルドさせられるので大変。
 
 https://cran.r-project.org/doc/manuals/R-admin.html
