@@ -90,54 +90,59 @@ AppleScript
 </ul></nav>
 </header>
 
-<h2 id="finder-get-file-path">Finder: Get file path</h2>
-<pre><code>tell application &quot;Finder&quot;
-    set the clipboard to POSIX path of (the selection as alias)
-end tell
-</code></pre>
-<h2 id="itunes-equalizer">iTunes Equalizer</h2>
+<h2 id="メニューバーから実行可能にする">メニューバーから実行可能にする</h2>
+<ul>
+<li><code>~/Library/Scripts/</code> にスクリプトを置く</li>
+<li><code>Script Editor.app</code> を起動</li>
+<li><kbd>cmd</kbd><kbd>,</kbd> Preferences&hellip;</li>
+<li>✅ Show Script menu in menu bar</li>
+</ul>
+<h2 id="music-equalizer">Music Equalizer</h2>
 <p>イコライザを設定するスクリプト。
 <code>band 1</code> が低音で <code>band 10</code> が高音。
 下記の設定は Equal-loudness contour(等ラウドネス曲線) を考慮して
-小さい音量でもシャカシャカせずそれなりのバランスで聴こえるようにした値。
-音量やスピーカや好みによって調整し、別々のスクリプトとして保存しておくとよい:</p>
-<pre><code>tell application &quot;iTunes&quot;
-        tell EQ preset &quot;Manual&quot;
-                set band 1 to 1.5
-                set band 2 to 0.7
-                set band 3 to 0.3
-                set band 4 to 0.1
-                set band 5 to -0.1
-                set band 6 to -0.5
-                set band 7 to -1
-                set band 8 to -2
-                set band 9 to 0.3
-                set band 10 to 0.7
-                set preamp to 0
-        end tell
-end tell
-</code></pre>
-<h2 id="osascript-スクリプトをターミナルで実行">osascript: スクリプトをターミナルで実行</h2>
+小さい音量でもシャカシャカせずそれなりのバランスで聴こえるようにした例。
+耳に届きやすい 4kHz (band 8) らへんを落とすのが肝。
+機器や音量や好みによって調整し、別々のスクリプトとして保存しておくとよい:</p>
+<div class="highlight"><pre class="chroma"><code class="language-applescript" data-lang="applescript"><span class="k">tell</span> <span class="nb">application</span> <span class="s2">&#34;Music&#34;</span>
+    <span class="k">tell</span> <span class="nv">EQ</span> <span class="nv">preset</span> <span class="s2">&#34;Manual&#34;</span>
+        <span class="k">set</span> <span class="nv">band</span> <span class="mi">1</span> <span class="k">to</span> <span class="mf">1.5</span>
+        <span class="k">set</span> <span class="nv">band</span> <span class="mi">2</span> <span class="k">to</span> <span class="mf">0.7</span>
+        <span class="k">set</span> <span class="nv">band</span> <span class="mi">3</span> <span class="k">to</span> <span class="mf">0.3</span>
+        <span class="k">set</span> <span class="nv">band</span> <span class="mi">4</span> <span class="k">to</span> <span class="mf">0.1</span>
+        <span class="k">set</span> <span class="nv">band</span> <span class="mi">5</span> <span class="k">to</span> <span class="o">-</span><span class="mf">0.1</span>
+        <span class="k">set</span> <span class="nv">band</span> <span class="mi">6</span> <span class="k">to</span> <span class="o">-</span><span class="mf">0.5</span>
+        <span class="k">set</span> <span class="nv">band</span> <span class="mi">7</span> <span class="k">to</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">set</span> <span class="nv">band</span> <span class="mi">8</span> <span class="k">to</span> <span class="o">-</span><span class="mi">2</span>
+        <span class="k">set</span> <span class="nv">band</span> <span class="mi">9</span> <span class="k">to</span> <span class="mf">0.3</span>
+        <span class="k">set</span> <span class="nv">band</span> <span class="mi">10</span> <span class="k">to</span> <span class="mf">0.7</span>
+        <span class="k">set</span> <span class="nv">preamp</span> <span class="k">to</span> <span class="mi">0</span>
+    <span class="k">end</span> <span class="k">tell</span>
+    <span class="k">set</span> <span class="nv">current</span> <span class="nv">EQ</span> <span class="nv">preset</span> <span class="k">to</span> <span class="nv">EQ</span> <span class="nv">preset</span> <span class="s2">&#34;Manual&#34;</span>
+<span class="k">end</span> <span class="k">tell</span>
+</code></pre></div><h2 id="finder-get-file-path">Finder: Get file path</h2>
+<div class="highlight"><pre class="chroma"><code class="language-applescript" data-lang="applescript"><span class="k">tell</span> <span class="nb">application</span> <span class="s2">&#34;Finder&#34;</span>
+    <span class="nb">set the clipboard to</span> <span class="nv">POSIX</span> <span class="na">path</span> <span class="k">of</span> <span class="p">(</span><span class="nb">the</span> <span class="nv">selection</span> <span class="k">as</span> <span class="nv">alias</span><span class="p">)</span>
+<span class="k">end</span> <span class="k">tell</span>
+</code></pre></div><h2 id="osascript-スクリプトをターミナルで実行">osascript: スクリプトをターミナルで実行</h2>
 <p>スクリプトを置いたディレクトリにパスを通せれば楽なんだけど。できるのかな？:</p>
-<pre><code>osascript ${HOME}/Library/Scripts/Applications/Bibdesk/exportOOXML.scpt
-</code></pre>
-<h2 id="bibdesk-からgroupとtemplateを指定してexport">Bibdesk からGroupとTemplateを指定してExport</h2>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">osascript <span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/Library/Scripts/Applications/Bibdesk/exportOOXML.scpt
+</code></pre></div><h2 id="bibdesk-からgroupとtemplateを指定してexport">Bibdesk からGroupとTemplateを指定してExport</h2>
 <p>出力先、グループ名、テンプレートを最初の３行で指定し、Exportしたいライブラリを開いた状態で実行:</p>
-<pre><code>set theOutFile to POSIX file &quot;/Users/Iwasaki/Presentations/20100118Thesis/items1.xml&quot;
-set theGroup to &quot;20100118 Thesis&quot;
-set theTemplateName to &quot;OOXML template&quot;
+<div class="highlight"><pre class="chroma"><code class="language-applescript" data-lang="applescript"><span class="k">set</span> <span class="nv">theOutFile</span> <span class="k">to</span> <span class="nv">POSIX</span> <span class="nv">file</span> <span class="s2">&#34;/Users/Iwasaki/Presentations/20100118Thesis/items1.xml&#34;</span>
+<span class="k">set</span> <span class="nv">theGroup</span> <span class="k">to</span> <span class="s2">&#34;20100118 Thesis&#34;</span>
+<span class="k">set</span> <span class="nv">theTemplateName</span> <span class="k">to</span> <span class="s2">&#34;OOXML template&#34;</span>
 
-using terms from application &quot;BibDesk&quot;
-        tell application &quot;BibDesk&quot;
-                set theDoc to first document
-                set thePubs to publication of static group theGroup of theDoc
-                tell theDoc
-                        export for thePubs using template theTemplateName to theOutFile
-                end tell
-        end tell
-end using terms from
-</code></pre>
-
+<span class="k">using terms from</span> <span class="nb">application</span> <span class="s2">&#34;BibDesk&#34;</span>
+    <span class="k">tell</span> <span class="nb">application</span> <span class="s2">&#34;BibDesk&#34;</span>
+        <span class="k">set</span> <span class="nv">theDoc</span> <span class="k">to</span> <span class="nb">first</span> <span class="na">document</span>
+        <span class="k">set</span> <span class="nv">thePubs</span> <span class="k">to</span> <span class="nv">publication</span> <span class="k">of</span> <span class="nv">static</span> <span class="nv">group</span> <span class="nv">theGroup</span> <span class="k">of</span> <span class="nv">theDoc</span>
+        <span class="k">tell</span> <span class="nv">theDoc</span>
+            <span class="nv">export</span> <span class="nb">for</span> <span class="nv">thePubs</span> <span class="nv">using</span> <span class="nv">template</span> <span class="nv">theTemplateName</span> <span class="k">to</span> <span class="nv">theOutFile</span>
+        <span class="k">end</span> <span class="k">tell</span>
+    <span class="k">end</span> <span class="k">tell</span>
+<span class="k">end</span> <span class="k">using terms from</span>
+</code></pre></div>
 </article>
 </main>
 
