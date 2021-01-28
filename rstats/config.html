@@ -102,11 +102,46 @@ Caskじゃない <code>brew install r</code> のほうだとバイナリ版パ�
 <p><a href="https://cran.r-project.org/doc/manuals/R-admin.html">https://cran.r-project.org/doc/manuals/R-admin.html</a></p>
 <h2 id="起動オプション">起動オプション</h2>
 <p>ワークスペースの自動保存や自動復帰は危険なので切っておく。
-R.app や RStudio から使う場合はメニューから環境設定みたいなやつを開く。
+R.app や RStudio から使う場合はメニューから環境設定みたいなやつを開いて設定。
 シェルから使う場合は例えば以下のようなエイリアスを設定する。</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">alias</span> <span class="nv">r</span><span class="o">=</span><span class="s1">&#39;R --quiet --no-save --no-restore-data&#39;</span>
 </code></pre></div><p>詳しくは <code>R --help</code> または
 <a href="https://cran.r-project.org/doc/manuals/R-intro.html#Invoking-R">https://cran.r-project.org/doc/manuals/R-intro.html#Invoking-R</a></p>
+<h2 id="パッケージのサーチパス">パッケージのサーチパス</h2>
+<p><a href="https://stat.ethz.ch/R-manual/R-patched/library/base/html/libPaths.html">https://stat.ethz.ch/R-manual/R-patched/library/base/html/libPaths.html</a></p>
+<p><code>.libPaths()</code> でパッケージのインストール先候補一覧を取得できる。
+<code>install.packages(pkgs, lib, ...)</code>
+の <code>lib = </code> オプションを指定しない場合にこれらが参照される。
+また <code>library()</code> によるパッケージ読み込みもこれらのパスから。</p>
+<p><code>.libPaths(&quot;newpath&quot;)</code> のように任意のパスを追加することもできるが、
+後述の <code>.Renviron</code> ファイルなどで環境変数
+(<code>R_LIBS</code>, <code>R_LIBS_USER</code>, <code>R_LIBS_SITE</code>)
+を設定しておく方法がよさそう。
+ファイルから設定が正しく読み込まれても、
+<strong>当該ディレクトリが存在しないと認識されず自動生成もされない</strong>ことに注意。</p>
+<p>ここで設定するパスには <code>%v</code> といった記号でRのバージョン情報などを含めることも可能。
+古いRでインストールしたパッケージを新しいRで使おうとすると
+<code>package ‘***’ was installed before R x.y.0: please re-install it</code>
+などと怒られるので、バージョン番号を入れておいたほうがいい。
+<code>path.expand()</code> も適用されるので <code>~/.R/library</code> のようなチルダも展開される。</p>
+<p>環境変数には優先順位があるので例えば次のように使い分けられる:</p>
+<ul>
+<li><code>R_LIBS</code>: プロジェクトごとの一時的な設定</li>
+<li><code>R_LIBS_USER</code>: ユーザーが常に使いたい設定
+<ul>
+<li>macOS既定値: <code>~/Library/R/%v/library</code></li>
+<li>Linux既定値: <code>~/R/%p-library/%v</code></li>
+</ul>
+</li>
+<li><code>R_LIBS_SITE</code>: 管理者が全ユーザーに使わせたい設定
+<ul>
+<li>R内から <code>.Library.site</code> で参照可能</li>
+<li>空の場合は <code>$R_HOME/site-library</code> になる</li>
+</ul>
+</li>
+</ul>
+<p>Rと一緒についてくる標準パッケージのインストール先は <code>.Library</code> で参照可能。
+何も設定しないで使うとほかのパッケージもそこに入ってしまう場合があってあんまりよろしくない。</p>
 <h2 id="環境変数">環境変数</h2>
 <p><a href="https://cran.r-project.org/doc/manuals/R-admin.html#Environment-variable-index">https://cran.r-project.org/doc/manuals/R-admin.html#Environment-variable-index</a></p>
 <p><a href="https://stat.ethz.ch/R-manual/R-patched/library/base/html/EnvVar.html">https://stat.ethz.ch/R-manual/R-patched/library/base/html/EnvVar.html</a></p>
@@ -117,7 +152,7 @@ R.app や RStudio から使う場合はメニューから環境設定みたい�
 Rスクリプトではなく、シェルスクリプトっぽい代入式で書く。
 例 (<a href="https://github.com/heavywatal/dotfiles/blob/master/.R/.Renviron">https://github.com/heavywatal/dotfiles/blob/master/.R/.Renviron</a>):</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">R_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.R
-<span class="nv">R_LIBS_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">R_USER</span><span class="si">}</span>/library
+<span class="nv">R_LIBS_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">R_USER</span><span class="si">}</span>/library/%v
 <span class="nv">R_ENVIRON_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">R_USER</span><span class="si">}</span>/.Renviron
 <span class="nv">R_PROFILE_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">R_USER</span><span class="si">}</span>/.Rprofile
 <span class="nv">R_HISTFILE</span><span class="o">=</span><span class="si">${</span><span class="nv">R_USER</span><span class="si">}</span>/.Rhistory
