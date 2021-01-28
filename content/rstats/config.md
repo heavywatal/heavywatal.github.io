@@ -23,7 +23,7 @@ https://cran.r-project.org/doc/manuals/R-admin.html
 ## 起動オプション
 
 ワークスペースの自動保存や自動復帰は危険なので切っておく。
-R.app や RStudio から使う場合はメニューから環境設定みたいなやつを開く。
+R.app や RStudio から使う場合はメニューから環境設定みたいなやつを開いて設定。
 シェルから使う場合は例えば以下のようなエイリアスを設定する。
 
 ```sh
@@ -32,6 +32,42 @@ alias r='R --quiet --no-save --no-restore-data'
 
 詳しくは `R --help` または
 https://cran.r-project.org/doc/manuals/R-intro.html#Invoking-R
+
+
+## パッケージのサーチパス
+
+https://stat.ethz.ch/R-manual/R-patched/library/base/html/libPaths.html
+
+`.libPaths()` でパッケージのインストール先候補一覧を取得できる。
+`install.packages(pkgs, lib, ...)`
+の `lib = ` オプションを指定しない場合にこれらが参照される。
+また `library()` によるパッケージ読み込みもこれらのパスから。
+
+`.libPaths("newpath")` のように任意のパスを追加することもできるが、
+後述の `.Renviron` ファイルなどで環境変数
+(`R_LIBS`, `R_LIBS_USER`, `R_LIBS_SITE`)
+を設定しておく方法がよさそう。
+ファイルから設定が正しく読み込まれても、
+**当該ディレクトリが存在しないと認識されず自動生成もされない**ことに注意。
+
+ここで設定するパスには `%v` といった記号でRのバージョン情報などを含めることも可能。
+古いRでインストールしたパッケージを新しいRで使おうとすると
+`package ‘***’ was installed before R x.y.0: please re-install it`
+などと怒られるので、バージョン番号を入れておいたほうがいい。
+`path.expand()` も適用されるので `~/.R/library` のようなチルダも展開される。
+
+環境変数には優先順位があるので例えば次のように使い分けられる:
+
+- `R_LIBS`: プロジェクトごとの一時的な設定
+- `R_LIBS_USER`: ユーザーが常に使いたい設定
+    - macOS既定値: `~/Library/R/%v/library`
+    - Linux既定値: `~/R/%p-library/%v`
+- `R_LIBS_SITE`: 管理者が全ユーザーに使わせたい設定
+    - R内から `.Library.site` で参照可能
+    - 空の場合は `$R_HOME/site-library` になる
+
+Rと一緒についてくる標準パッケージのインストール先は `.Library` で参照可能。
+何も設定しないで使うとほかのパッケージもそこに入ってしまう場合があってあんまりよろしくない。
 
 
 ## 環境変数
@@ -55,7 +91,7 @@ Rスクリプトではなく、シェルスクリプトっぽい代入式で書�
 
 ```sh
 R_USER=${HOME}/.R
-R_LIBS_USER=${R_USER}/library
+R_LIBS_USER=${R_USER}/library/%v
 R_ENVIRON_USER=${R_USER}/.Renviron
 R_PROFILE_USER=${R_USER}/.Rprofile
 R_HISTFILE=${R_USER}/.Rhistory
