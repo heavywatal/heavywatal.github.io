@@ -38,7 +38,7 @@ Gitのライバルとして[Mercurial]({{< relref "mercurial.md" >}})もある�
 
     ```sh
     git config --global user.name "Watal M. Iwasaki"
-    git config --global user.email "heavy.watalあmail.com"
+    git config --global user.email "heavywatalあmail.com"
     less ~/.gitconfig
     ```
 - ついでに `pushinsteadof` の設定をしておく。
@@ -72,7 +72,7 @@ remote repository
 
 local repository
 : 変更が `.git/` に取り込まれたが、見えてるファイルには反映されてない
-: ↓ `checkout` or `merge`
+: ↓ `merge` or `rebase`
 
 working directory
 : 手元のファイルが最新版に同期されている
@@ -107,11 +107,11 @@ repository
 : 他の人のリポジトリをforkして使う場合、
   自分のを `origin`, 元のを `upstream` と名付けるのが一般的。
 
-`master`
+`master`, `main`
 : デフォルトのブランチの典型的な名前。
 
 `HEAD`, `@`
-: 現在checkoutしているbranch/commitを指すポインタ。
+: 現在参照しているbranch/commitを指すポインタ。
   基本的には`master`の最新commitを指していることが多い。
   1つ前は `HEAD^` か `HEAD~`、
   2つ前は `HEAD^^` か `HEAD~~` か `HEAD~2`。
@@ -250,19 +250,23 @@ git submodule add -b gitsubmodule_https https://github.com/heavywatal/x18n.git
 ### submoduleを更新
 
 1.  更新分をまとめて取得:
+    ```sh
+    git submodule foreach git fetch
+    ```
 
-        git submodule foreach git fetch
-
-1.  好きなとこまでチェックアウト:
-
-        cd d3/
-        git checkout v3.5.6
+1.  好きなコミット/タグまで移動 (旧`git checkout`):
+    ```sh
+    cd d3/
+    git switch --detach v3.5.6
+    ```
+    "detached HEAD" 状態になる。
 
 1.  メインリポジトリでその変更をコミット:
 
-        cd ..
-        git commit
-
+    ```sh
+    cd ..
+    git commit
+    ```
 
 
 ## GitHub Pages
