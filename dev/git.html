@@ -120,7 +120,7 @@ Git — 分散型バージョン管理システム
 <p><code>~/.gitconfig</code> にユーザ名やアドレスを登録する。
 <a href="https://git-scm.com/docs/git-config">https://git-scm.com/docs/git-config</a></p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git config --global user.name <span class="s2">&#34;Watal M. Iwasaki&#34;</span>
-git config --global user.email <span class="s2">&#34;heavy.watalあmail.com&#34;</span>
+git config --global user.email <span class="s2">&#34;heavywatalあmail.com&#34;</span>
 less ~/.gitconfig
 </code></pre></div></li>
 <li>
@@ -152,7 +152,7 @@ sshでパスワード無しでpushする、というのが楽ちん。</p>
 <dd>↓ <code>fetch</code></dd>
 <dt>local repository</dt>
 <dd>変更が <code>.git/</code> に取り込まれたが、見えてるファイルには反映されてない</dd>
-<dd>↓ <code>checkout</code> or <code>merge</code></dd>
+<dd>↓ <code>merge</code> or <code>rebase</code></dd>
 <dt>working directory</dt>
 <dd>手元のファイルが最新版に同期されている</dd>
 </dl>
@@ -180,10 +180,10 @@ root treeのハッシュID、著者、コメントなどの情報を持つ。
 <code>git remote -v</code> で確認。</dd>
 <dd>他の人のリポジトリをforkして使う場合、
 自分のを <code>origin</code>, 元のを <code>upstream</code> と名付けるのが一般的。</dd>
-<dt><code>master</code></dt>
+<dt><code>master</code>, <code>main</code></dt>
 <dd>デフォルトのブランチの典型的な名前。</dd>
 <dt><code>HEAD</code>, <code>@</code></dt>
-<dd>現在checkoutしているbranch/commitを指すポインタ。
+<dd>現在参照しているbranch/commitを指すポインタ。
 基本的には<code>master</code>の最新commitを指していることが多い。
 1つ前は <code>HEAD^</code> か <code>HEAD~</code>、
 2つ前は <code>HEAD^^</code> か <code>HEAD~~</code> か <code>HEAD~2</code>。
@@ -276,21 +276,19 @@ git submodule update --init --depth=5 d3
 <ol>
 <li>
 <p>更新分をまとめて取得:</p>
-<pre><code>git submodule foreach git fetch
-</code></pre>
-</li>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git submodule foreach git fetch
+</code></pre></div></li>
 <li>
-<p>好きなとこまでチェックアウト:</p>
-<pre><code>cd d3/
-git checkout v3.5.6
-</code></pre>
+<p>好きなコミット/タグまで移動 (旧<code>git checkout</code>):</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> d3/
+git switch --detach v3.5.6
+</code></pre></div><p>&ldquo;detached HEAD&rdquo; 状態になる。</p>
 </li>
 <li>
 <p>メインリポジトリでその変更をコミット:</p>
-<pre><code>cd ..
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> ..
 git commit
-</code></pre>
-</li>
+</code></pre></div></li>
 </ol>
 <h2 id="github-pages">GitHub Pages</h2>
 <p><a href="https://help.github.com/articles/user-organization-and-project-pages/">https://help.github.com/articles/user-organization-and-project-pages/</a></p>
