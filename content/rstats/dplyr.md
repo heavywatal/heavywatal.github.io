@@ -91,6 +91,7 @@ result = summarize(                    # 平均を計算
     diamonds %>% dplyr::select(1, 2, 7)
     diamonds %>% dplyr::select(carat, cut, price)
     diamonds %>% dplyr::select(c("carat", "cut", "price"))
+    diamonds %>% dplyr::select(!c(carat, cut, price))
     diamonds %>% dplyr::select(-carat, -cut, -price)
     diamonds %>% dplyr::select(starts_with("c"))
     diamonds %>% dplyr::select(where(is.numeric))
@@ -193,6 +194,25 @@ result = summarize(                    # 平均を計算
 特に不等号を使うときやや直感に反するので要注意。
 e.g., `filter(gene != "TP53")`
 {{</div>}}
+
+:   複数列で条件指定するには `if_any()`, `if_all()` が使える。
+
+    ```r
+    diamonds %>% dplyr::filter(if_any(c(x, y, z), ~ .x > 20))
+    #   carat       cut color clarity depth table price     x     y     z
+    #   <dbl>     <ord> <ord>   <ord> <dbl> <dbl> <int> <dbl> <dbl> <dbl>
+    # 1  2.00   Premium     H     SI2  58.9  57.0 12210  8.09 58.90  8.06
+    # 2  0.51 Very Good     E     VS1  61.8  54.7  1970  5.12  5.15 31.80
+    # 3  0.51     Ideal     E     VS1  61.8  55.0  2075  5.15 31.80  5.12
+    diamonds %>% dplyr::filter(if_all(where(is.numeric), ~ .x > 4))
+    #   carat     cut color clarity depth table price     x     y     z
+    #   <dbl>   <ord> <ord>   <ord> <dbl> <dbl> <int> <dbl> <dbl> <dbl>
+    # 1  4.01 Premium     I      I1  61.0    61 15223 10.14 10.10  6.17
+    # 2  4.01 Premium     J      I1  62.5    62 15223 10.02  9.94  6.24
+    # 3  4.13    Fair     H      I1  64.8    61 17329 10.00  9.85  6.43
+    # 4  5.01    Fair     J      I1  65.5    59 18018 10.74 10.54  6.98
+    # 5  4.50    Fair     J      I1  65.8    58 18531 10.23 10.16  6.72
+    ```
 
 
 `dplyr::distinct(.data, ..., .keep_all = FALSE)`
@@ -356,6 +376,9 @@ e.g., `filter(gene != "TP53")`
     # is equivalent to
     mtcars %>% dplyr::arrange(cyl, disp)
     ```
+
+`dplyr::relocate(.data, ..., .before = NULL, .after = NULL)`
+:   指定した列を左端(もしくは `.before`/`.after` 別の列)に移動する。
 
 `dplyr::slice_max(.data, order_by, ..., n, prop, with_ties = TRUE)`
 :   `order_by, ...` で指定した列の降順で `n` 行だけ返す。
