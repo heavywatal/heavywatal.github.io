@@ -161,6 +161,7 @@ dplyr — 高速data.frame処理
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">7</span><span class="p">)</span>
 <span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="n">carat</span><span class="p">,</span> <span class="n">cut</span><span class="p">,</span> <span class="n">price</span><span class="p">)</span>
 <span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&#34;carat&#34;</span><span class="p">,</span> <span class="s">&#34;cut&#34;</span><span class="p">,</span> <span class="s">&#34;price&#34;</span><span class="p">))</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="o">!</span><span class="nf">c</span><span class="p">(</span><span class="n">carat</span><span class="p">,</span> <span class="n">cut</span><span class="p">,</span> <span class="n">price</span><span class="p">))</span>
 <span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="o">-</span><span class="n">carat</span><span class="p">,</span> <span class="o">-</span><span class="n">cut</span><span class="p">,</span> <span class="o">-</span><span class="n">price</span><span class="p">)</span>
 <span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="nf">starts_with</span><span class="p">(</span><span class="s">&#34;c&#34;</span><span class="p">))</span>
 <span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="nf">where</span><span class="p">(</span><span class="n">is.numeric</span><span class="p">))</span>
@@ -243,6 +244,23 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code>
 </div>
 
 </dd>
+<dd>
+<p>複数列で条件指定するには <code>if_any()</code>, <code>if_all()</code> が使える。</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">filter</span><span class="p">(</span><span class="nf">if_any</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span> <span class="o">~</span> <span class="n">.x</span> <span class="o">&gt;</span> <span class="m">20</span><span class="p">))</span>
+<span class="c1">#   carat       cut color clarity depth table price     x     y     z</span>
+<span class="c1">#   &lt;dbl&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;ord&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="c1"># 1  2.00   Premium     H     SI2  58.9  57.0 12210  8.09 58.90  8.06</span>
+<span class="c1"># 2  0.51 Very Good     E     VS1  61.8  54.7  1970  5.12  5.15 31.80</span>
+<span class="c1"># 3  0.51     Ideal     E     VS1  61.8  55.0  2075  5.15 31.80  5.12</span>
+<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">filter</span><span class="p">(</span><span class="nf">if_all</span><span class="p">(</span><span class="nf">where</span><span class="p">(</span><span class="n">is.numeric</span><span class="p">),</span> <span class="o">~</span> <span class="n">.x</span> <span class="o">&gt;</span> <span class="m">4</span><span class="p">))</span>
+<span class="c1">#   carat     cut color clarity depth table price     x     y     z</span>
+<span class="c1">#   &lt;dbl&gt;   &lt;ord&gt; &lt;ord&gt;   &lt;ord&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="c1"># 1  4.01 Premium     I      I1  61.0    61 15223 10.14 10.10  6.17</span>
+<span class="c1"># 2  4.01 Premium     J      I1  62.5    62 15223 10.02  9.94  6.24</span>
+<span class="c1"># 3  4.13    Fair     H      I1  64.8    61 17329 10.00  9.85  6.43</span>
+<span class="c1"># 4  5.01    Fair     J      I1  65.5    59 18018 10.74 10.54  6.98</span>
+<span class="c1"># 5  4.50    Fair     J      I1  65.8    58 18531 10.23 10.16  6.72</span>
+</code></pre></div></dd>
 <dt><code>dplyr::distinct(.data, ..., .keep_all = FALSE)</code></dt>
 <dd>指定した列に関してユニークな行のみ返す。
 <code>base::unique.data.frame()</code> よりも高速で、
@@ -372,6 +390,8 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code>
 <span class="c1"># is equivalent to</span>
 <span class="n">mtcars</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">arrange</span><span class="p">(</span><span class="n">cyl</span><span class="p">,</span> <span class="n">disp</span><span class="p">)</span>
 </code></pre></div></dd>
+<dt><code>dplyr::relocate(.data, ..., .before = NULL, .after = NULL)</code></dt>
+<dd>指定した列を左端(もしくは <code>.before</code>/<code>.after</code> 別の列)に移動する。</dd>
 <dt><code>dplyr::slice_max(.data, order_by, ..., n, prop, with_ties = TRUE)</code></dt>
 <dd><code>order_by, ...</code> で指定した列の降順で <code>n</code> 行だけ返す。
 境界のタイを保持する場合は <code>n</code> 行以上の出力になる。
