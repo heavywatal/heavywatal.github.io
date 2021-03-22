@@ -329,7 +329,7 @@ Cストリーム(`std::printf` とか)とC++ストリーム(`std::cout` とか)
 
 int main() {
     std::ios::sync_with_stdio(false);
-    std::cin.tie(0);
+    std::cin.tie(nullptr);
 }
 ```
 
