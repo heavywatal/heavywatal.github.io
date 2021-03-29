@@ -26,45 +26,46 @@ tags = ["shell"]
 
 ## Configuration files
 
-[L] ログインシェルとして実行時\
-[Z] 非ログインで `zsh` 起動時\
-[S] シェルスクリプト実行時
+`$ZDOTDIR` 以下の個人設定ファイルが場合に応じて下記の順で読まれる。
+システム全体の設定ファイルとして `/etc/z*` が個人設定ファイルの前に読み込まれる。
+`unsetopt GLOBAL_RCS` で切れるが `/etc/zshenv` だけは絶対最初。
 
-`.zshenv` [LZS]
-:   スクリプトの実行にも必要な環境変数(`PATH` とか)の指定
+`.zshenv`
+:   スクリプトの実行時も含めてあらゆる場合に読み込まれる。
+    インタラクティブ用の設定などはせず、最低限の記述に留める。
+    例えば `ZDOTDIR`, `unsetopt NOMATCH` など。
 
-`.zprofile` [L]
-:   ログインシェルとして使うのに必要な設定
+`.zprofile`
+:   ログインシェルとして立ち上げるときのみ読まれる。
+    `export` する環境変数(`PATH` とか)を設定するのに適している。
+    `.bash_profile` に対応するので共通設定を
+    `.profile` に書いておいて `source` するとか。
+:   例えばローカル環境Mac + リモート環境Linux CUIで開発する場合、
+    ターミナルも[tmux]({{< relref "tmux.md" >}})もデフォルトでログインシェルを立ち上げるので、
+    `.zshrc` に一本化してしまっても構わない。
+:   使い分けるのはLinux GUIを使う場合とか、
+    よほど重い初期化をログインシェル1回で済ませたい場合とか。
 
-`.zshrc` [LZ]
-:   インタラクティブシェルとして使うのに必要な設定
+`.zshrc`
+:   ログイン・非ログイン問わず、インタラクティブシェルとして立ち上げるときに読まれる。
+    だいたいどの設定もこれに書いておけば問題ない。
+:   `.zprofile` と使い分けるなら
+    `setopt` や `autoload` など、親シェルから引き継がれないものはこちら。
+    `alias` などは別ファイルを読み込む形にして `.bashrc` と共有。
 
-`.zlogin` [L]
-:   `.zshrc` より後に読まれる以外は `.zprofile` と同じ。
+`.zlogin`
+:   `.zshrc` より後に読まれる以外は `.zprofile` と同じ。使わない。
 
 `.zlogout`
-:   ログアウト時にしてほしいことが万が一あれば
+:   ログアウト時にしてほしいことが万が一あれば。
 
-`$ZDOTDIR/` 以下の個人設定ファイルの前に、
-システム全体の設定ファイルとして `/etc/z*` が読み込まれる。
-これがしばしば問題を起こすので、とりあえず `unsetopt GLOBAL_RCS` で切っとく。
-
-例えばMacでは `/usr/libexec/path_helper` が
+Macでは `/usr/libexec/path_helper` が
 `/usr/bin` などの基本的なPATHを設定してくれる。
 Yosemiteまでは `/etc/zshenv` で実行されていたが、
-El Capitanからは `/etc/zprofile` に変更されたせいで
-`~/.zshenv` での設定がうまく反映されなくなってしまった。
-これを防ぐには以下のようにする:
-```sh
-# ~/.zshenv
-unsetopt GLOBAL_RCS
-if [ $(uname) = Darwin ]; then
-    PATH=''
-    eval $(/usr/libexec/path_helper -s)
-fi
-export PATH
-```
-
+El Capitanからは `/etc/zprofile` で実行されるため、
+`.zshenv` で `PATH` を設定しようとするとうまく反映されない。
+`unsetopt GLOBAL_RCS` で `/etc/zprofile` をスキップして `path_helper` を手動実行するか、
+素直に `.zprofile` 以降のファイルで設定する。
 
 ## Installation
 
