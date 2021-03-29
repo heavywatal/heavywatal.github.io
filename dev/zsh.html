@@ -107,38 +107,43 @@ zsh
 <dd>ヒストリーを保存するファイル</dd>
 </dl>
 <h2 id="configuration-files">Configuration files</h2>
-<p>[L] ログインシェルとして実行時<br>
-[Z] 非ログインで <code>zsh</code> 起動時<br>
-[S] シェルスクリプト実行時</p>
+<p><code>$ZDOTDIR</code> 以下の個人設定ファイルが場合に応じて下記の順で読まれる。
+システム全体の設定ファイルとして <code>/etc/z*</code> が個人設定ファイルの前に読み込まれる。
+<code>unsetopt GLOBAL_RCS</code> で切れるが <code>/etc/zshenv</code> だけは絶対最初。</p>
 <dl>
-<dt><code>.zshenv</code> [LZS]</dt>
-<dd>スクリプトの実行にも必要な環境変数(<code>PATH</code> とか)の指定</dd>
-<dt><code>.zprofile</code> [L]</dt>
-<dd>ログインシェルとして使うのに必要な設定</dd>
-<dt><code>.zshrc</code> [LZ]</dt>
-<dd>インタラクティブシェルとして使うのに必要な設定</dd>
-<dt><code>.zlogin</code> [L]</dt>
-<dd><code>.zshrc</code> より後に読まれる以外は <code>.zprofile</code> と同じ。</dd>
+<dt><code>.zshenv</code></dt>
+<dd>スクリプトの実行時も含めてあらゆる場合に読み込まれる。
+インタラクティブ用の設定などはせず、最低限の記述に留める。
+例えば <code>ZDOTDIR</code>, <code>unsetopt NOMATCH</code> など。</dd>
+<dt><code>.zprofile</code></dt>
+<dd>ログインシェルとして立ち上げるときのみ読まれる。
+<code>export</code> する環境変数(<code>PATH</code> とか)を設定するのに適している。
+<code>.bash_profile</code> に対応するので共通設定を
+<code>.profile</code> に書いておいて <code>source</code> するとか。</dd>
+<dd>例えばローカル環境Mac + リモート環境Linux CUIで開発する場合、
+ターミナルも<a href="/dev/tmux.html">tmux</a>もデフォルトでログインシェルを立ち上げるので、
+<code>.zshrc</code> に一本化してしまっても構わない。</dd>
+<dd>使い分けるのはLinux GUIを使う場合とか、
+よほど重い初期化をログインシェル1回で済ませたい場合とか。</dd>
+<dt><code>.zshrc</code></dt>
+<dd>ログイン・非ログイン問わず、インタラクティブシェルとして立ち上げるときに読まれる。
+だいたいどの設定もこれに書いておけば問題ない。</dd>
+<dd><code>.zprofile</code> と使い分けるなら
+<code>setopt</code> や <code>autoload</code> など、親シェルから引き継がれないものはこちら。
+<code>alias</code> などは別ファイルを読み込む形にして <code>.bashrc</code> と共有。</dd>
+<dt><code>.zlogin</code></dt>
+<dd><code>.zshrc</code> より後に読まれる以外は <code>.zprofile</code> と同じ。使わない。</dd>
 <dt><code>.zlogout</code></dt>
-<dd>ログアウト時にしてほしいことが万が一あれば</dd>
+<dd>ログアウト時にしてほしいことが万が一あれば。</dd>
 </dl>
-<p><code>$ZDOTDIR/</code> 以下の個人設定ファイルの前に、
-システム全体の設定ファイルとして <code>/etc/z*</code> が読み込まれる。
-これがしばしば問題を起こすので、とりあえず <code>unsetopt GLOBAL_RCS</code> で切っとく。</p>
-<p>例えばMacでは <code>/usr/libexec/path_helper</code> が
+<p>Macでは <code>/usr/libexec/path_helper</code> が
 <code>/usr/bin</code> などの基本的なPATHを設定してくれる。
 Yosemiteまでは <code>/etc/zshenv</code> で実行されていたが、
-El Capitanからは <code>/etc/zprofile</code> に変更されたせいで
-<code>~/.zshenv</code> での設定がうまく反映されなくなってしまった。
-これを防ぐには以下のようにする:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># ~/.zshenv</span>
-unsetopt GLOBAL_RCS
-<span class="k">if</span> <span class="o">[</span> <span class="k">$(</span>uname<span class="k">)</span> <span class="o">=</span> Darwin <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    <span class="nv">PATH</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
-    <span class="nb">eval</span> <span class="k">$(</span>/usr/libexec/path_helper -s<span class="k">)</span>
-<span class="k">fi</span>
-<span class="nb">export</span> PATH
-</code></pre></div><h2 id="installation">Installation</h2>
+El Capitanからは <code>/etc/zprofile</code> で実行されるため、
+<code>.zshenv</code> で <code>PATH</code> を設定しようとするとうまく反映されない。
+<code>unsetopt GLOBAL_RCS</code> で <code>/etc/zprofile</code> をスキップして <code>path_helper</code> を手動実行するか、
+素直に <code>.zprofile</code> 以降のファイルで設定する。</p>
+<h2 id="installation">Installation</h2>
 <p>基本的にはOSに入ってる <code>/bin/zsh</code> を使う。
 新しいのを入れるなら<a href="/mac/homebrew.html">Homebrew</a>を使うのが楽:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew install zsh --without-etcdir
