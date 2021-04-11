@@ -9,27 +9,27 @@ tags = ["writing"]
 
 ## 使えるフリーフォント
 
-[Noto Fonts](http://www.google.com/get/noto/)
+[Noto Fonts](https://www.google.com/get/noto/)
 :   "No tofu" を目指してGoogleが開発している多言語対応フォント。
-:   Noto Serif はそこまで美しくはないが、
-    ディスプレイ上での視認性や和文フォントとのサイズバランスも良くて便利。
+:   Noto Serif はディスプレイ上での視認性や和文フォントとのサイズバランスも良くて便利。
 :   [Noto Sans/Serif CJK](https://www.google.com/get/noto/help/cjk/)
     はAdobeと共同開発の和文フォントで、ほぼ同じものを違う名前で公開している。
     英数字がNoto SansではなくSource Sans Proなのはなぜ？
 
-[Source Sans Pro](https://github.com/adobe-fonts/source-sans-pro)
+[Source Sans Pro](https://adobe-fonts.github.io/source-sans/)
 :   小文字の l が曲がってて良いけど全体的に狭苦しい。
+:   ファミリー名がバージョン入りの "Source Sans 3" になって使いにくくなった。
 :   Googleと共同開発の
     [Source Han Sans (源ノ角ゴシック)](https://github.com/adobe-fonts/source-han-sans) と
     [Source Han Serif (源ノ明朝)](https://github.com/adobe-fonts/source-han-serif)
     はコンセプトも内容も素晴らしい日本語フォント。ウェイトもたくさんある。
     ダウンロードの選択肢がありすぎて迷うが、
     "Region-specific Subset" のSourceHanSansJPが軽くて良さそう。
-:   Source Han Code JP は普通の固定幅フォントよりも幅広で、
+:   Source Han Mono は普通の固定幅フォントよりも幅広で、
     和文と欧文の幅が3:2になるよう調整されている。
     俺は2:1のUbuntu Monoのほうが好き。
 
-[Ubuntu](http://font.ubuntu.com)
+[Ubuntu](https://design.ubuntu.com/font/)
 :   スクリーン上での視認性を重視してデザインされたフォントで、
     個性的でありながら見やすい。
 :   エルの小文字 l が曲がってて良い。
@@ -52,40 +52,42 @@ tags = ["writing"]
     [Palatino nova](http://www.linotype.co.jp/palatino%20nova%20detail.html)
     は文句なしに美しいけど有償。
 
-[Roboto](https://github.com/google/roboto)
+[Roboto](https://github.com/googlefonts/roboto)
 :   Helvetica似、かっちりコンパクト、いかにもシステム向けなフォント。
 :   でもちょっと c とかの切れ目が小さすぎたりして、視認性はイマイチ。
 
 ### あまり使わなくなったやつ
 
-[DejaVu](http://dejavu-fonts.org/)
+[DejaVu](https://dejavu-fonts.github.io/)
 :   Bitstream Vera の後を継いで多言語対応させた、Linuxの標準的なフォント。
 :   DejaVu Sans は Verdana のように幅が広く、スクリーン上で読みやすい。
 :   DejaVu Sans Mono はプログラミングに使いやすい。
 
-[Linux Libertine](http://www.linuxlibertine.org)
+[Linux Libertine](http://libertine-fonts.org/)
 :   印刷に耐えうるクオリティを目指して開発されたカッコいいセリフ体。
 :   兄弟の Linux Biolinum は Optima 似の非均等サンセリフ。
 :   いろいろ残念な側面もあってLaTeXの外では使いにくい:
     (1) ひとまわり小さいので和文フォントとバランスをとるのが難しい。
     (2) OpenTypeだと名前の末尾にOがつく。
     (3) TrueTypeのItalicがバグってる？開発も停滞。
+:   [Libertinus](https://github.com/alerque/libertinus)
+    という名前のフォークがメンテナンスされている。
 
-[Liberation](https://fedorahosted.org/liberation-fonts/)
+[Liberation](https://github.com/liberationfonts/liberation-fonts)
 :   Fedora が Arial, Times New Roman, Courier New からの解放を目指して作ってる。
 :   英数字はいいけど、グリフ数は少ない。
 :   でも Liberation Mono は Courier New というより Courier な太さ?
 
-[GNU FreeFont](http://www.gnu.org/software/freefont/)
+[GNU FreeFont](https://www.gnu.org/software/freefont/)
 :   Helvetica, Times, Courier の置き換えを狙ったフォント。
 :   でも FreeMono は Courier というより Courier New な細さ?
 
-[IPA](http://ossipedia.ipa.go.jp/ipafont/)
+[IPA](https://moji.or.jp/ipafont/)
 :   Source Han の登場により役目を終えた感。
 :   [Takao](https://launchpad.net/takao-fonts)
     はUbuntuコミュニティが保守している派生フォント。
 
-[MigMix](http://mix-mplus-ipa.sourceforge.jp/migmix/)
+[MigMix](https://mix-mplus-ipa.osdn.jp/migmix/)
 :   M+フォントに足りない漢字をIPAゴシックから補完した合成フォント。
 :   メイリオと同じで視認性は高いけどちょっと丸すぎる印象。
 
@@ -125,8 +127,8 @@ tags = ["writing"]
   <td>Merriweather</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
 </tr>
-<tr style="font-family: 'Linux Libertine O', sans-serif">
-  <td>Linux Libertine O</td>
+<tr style="font-family: 'Libertinus Serif', sans-serif">
+  <td>Libertinus Serif</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
 </tr>
 </table>
@@ -157,10 +159,6 @@ tags = ["writing"]
   <td>Roboto</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
 </tr>
-<tr style="font-family: 'Lucida Grande', serif">
-  <td>Lucida Grande</td>
-  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
-</tr>
 <tr style="font-family: 'Verdana', serif">
   <td>Verdana</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
@@ -181,12 +179,12 @@ tags = ["writing"]
   <td>Noto Sans</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
 </tr>
-<tr style="font-family: 'Source Sans Pro', serif">
-  <td>Source Sans Pro</td>
+<tr style="font-family: 'Source Sans 3', serif">
+  <td>Source Sans 3</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
 </tr>
-<tr style="font-family: 'Linux Biolinum O', serif">
-  <td>Linux Biolinum O</td>
+<tr style="font-family: 'Libertinus Sans', serif">
+  <td>Libertinus Sans</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
 </tr>
 <tr style="font-family: 'Optima', serif">
@@ -199,39 +197,39 @@ tags = ["writing"]
 
 <table><col bgcolor="#eeeeee"><col><tr style="font-family: 'Courier', serif">
   <td>Courier</td>
-  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>噌祇逢餅鯖鰯わたるメタル</td>
 </tr>
 <tr style="font-family: 'Courier New', serif">
   <td>Courier New</td>
-  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>噌祇逢餅鯖鰯わたるメタル</td>
 </tr>
 <tr style="font-family: 'Monaco', serif">
   <td>Monaco</td>
-  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>噌祇逢餅鯖鰯わたるメタル</td>
 </tr>
 <tr style="font-family: 'Menlo', serif">
   <td>Menlo</td>
-  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
-</tr>
-<tr style="font-family: 'DejaVu Sans Mono', serif">
-  <td>DejaVu Sans Mono</td>
-  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
-</tr>
-<tr style="font-family: 'Source Code Pro', serif">
-  <td>Source Code Pro</td>
-  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
-</tr>
-<tr style="font-family: 'Source Han Code JP', serif">
-  <td>Source Han Code JP</td>
-  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>噌祇逢餅鯖鰯わたるメタル</td>
 </tr>
 <tr style="font-family: 'Ubuntu Mono', serif">
   <td>Ubuntu Mono</td>
-  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>噌祇逢餅鯖鰯わたるメタル</td>
+</tr>
+<tr style="font-family: 'Source Code Pro', serif">
+  <td>Source Code Pro</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>噌祇逢餅鯖鰯わたるメタル</td>
+</tr>
+<tr style="font-family: 'Source Han Mono', serif">
+  <td>Source Han Mono</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>噌祇逢餅鯖鰯わたるメタル</td>
+</tr>
+<tr style="font-family: 'DejaVu Sans Mono', serif">
+  <td>DejaVu Sans Mono</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>噌祇逢餅鯖鰯わたるメタル</td>
 </tr>
 <tr style="font-family: 'Osaka-Mono', serif">
   <td>Osaka-Mono</td>
-  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>噌祇逢餅鯖鰯わたるメタル</td>
 </tr>
 </table>
 
@@ -253,16 +251,28 @@ tags = ["writing"]
   <td>YuGothic</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
 </tr>
-<tr style="font-family: 'Source Han Sans JP', serif">
-  <td>Source Han Sans JP</td>
+<tr style="font-family: 'Toppan Bunkyu Gothic', serif">
+  <td>Toppan Bunkyu Gothic</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
+</tr>
+<tr style="font-family: 'Toppan Bunkyu Midashi Gothic', serif">
+  <td>Toppan Bunkyu Midashi Gothic</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
+</tr>
+<tr style="font-family: 'Tsukushi A Round Gothic', serif">
+  <td>Tsukushi A Round Gothic</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
+</tr>
+<tr style="font-family: 'Tsukushi B Round Gothic', serif">
+  <td>Tsukushi B Round Gothic</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
 </tr>
 <tr style="font-family: 'Osaka-Mono', serif">
   <td>Osaka-Mono</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
 </tr>
-<tr style="font-family: 'TakaoExGothic', serif">
-  <td>TakaoExGothic</td>
+<tr style="font-family: 'Source Han Sans', serif">
+  <td>Source Han Sans</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
 </tr>
 <tr style="font-family: 'MS PGothic', serif">
@@ -285,12 +295,20 @@ tags = ["writing"]
   <td>YuMincho</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
 </tr>
-<tr style="font-family: 'Source Han Serif JP', sans-serif">
-  <td>Source Han Serif JP</td>
+<tr style="font-family: 'YuKyokasho', sans-serif">
+  <td>YuKyokasho</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
 </tr>
-<tr style="font-family: 'TakaoExMincho', sans-serif">
-  <td>TakaoExMincho</td>
+<tr style="font-family: 'Toppan Bunkyu Mincho', sans-serif">
+  <td>Toppan Bunkyu Mincho</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
+</tr>
+<tr style="font-family: 'Toppan Bunkyu Midashi Mincho', sans-serif">
+  <td>Toppan Bunkyu Midashi Mincho</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
+</tr>
+<tr style="font-family: 'Source Han Serif', sans-serif">
+  <td>Source Han Serif</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
 </tr>
 <tr style="font-family: 'MS PMincho', sans-serif">

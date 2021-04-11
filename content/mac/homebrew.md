@@ -193,13 +193,29 @@ brew list --cask
 
 アプリ側でアップデートを実行するとCask内でのバージョンと食い違っちゃうけど使用上は問題ないらしい。
 
-alfred, amazon-music, amazon-photos, atom,
-basictex, bibdesk,
-discord, docker, dropbox, eqmac, firefox, gephi, gimp, gitter,
-google-backup-and-sync, google-chrome, google-japanese-ime,
-igv, inkscape, iterm2, julia, kindle, libreoffice,
-marshallofsound-google-play-music-player, megasync, menumeters,
-osxfuxe, qlstephen, quicklook-csv, r, rstudio,
-skim, skyfonts, skype, slack, spideroakone,
-the-unarchiver, virtualbox, visual-studio-code, vlc,
-whatsapp, xquartz, zoomus
+adobe-acrobat-reader alfred amazon-photos atom
+basictex bibdesk
+discord docker dropbox firefox gephi gimp gitter
+google-backup-and-sync google-chrome google-japanese-ime
+inkscape iterm2 julia kindle libreoffice macfuse
+marshallofsound-google-play-music-player megasync menumeters
+r rstudio
+skim skype slack spideroakone spotify
+the-unarchiver virtualbox visual-studio-code vlc
+whatsapp xquartz zoomus
+
+### [Quicklook]({{< relref "quicklook.md" >}})
+
+### Fonts
+
+```sh
+brew tap homebrew/cask-fonts
+```
+
+font-ubuntu font-ubuntu-mono
+font-source-sans-pro font-source-serif-pro font-source-code-pro
+font-source-han-sans font-source-han-serif font-source-han-mono
+font-noto-sans font-noto-serif font-noto-sans-mono
+font-open-sans font-roboto
+font-libertinus font-lora font-merriweather
+font-tex-gyre-pagella font-tex-gyre-pagella-math
