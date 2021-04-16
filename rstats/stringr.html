@@ -140,13 +140,12 @@ stringr — Rの文字列をまともな方法で処理する
 <dd>複数の引数で与えた文字列を結合する。
 デフォルトの <code>sep</code> がスペースじゃないので <code>base::paste0()</code> に近い。</dd>
 <dt><code>str_split(string, pattern, n = Inf, simplify = FALSE)</code></dt>
-<dd>文字列を分割してlistを返す。
-<code>base::strsplit(x, split)</code> と相同だが、
-最大 <code>n</code> 個に分割するということを指定できる。
-空文字で帳尻合わせしてちょうど <code>n</code> 個にするショートカットが
-<code>str_split_fixed(string, pattern, n)</code> 。
+<dd>文字列を分割してlistを返す <code>base::strsplit(x, split)</code> の改良版。
 <code>string</code> と <code>pattern</code> の要素数が噛み合わないときにちゃんと警告が出る。
+最大 <code>n</code> 個に分割するということを指定できる。
 <code>simplify = TRUE</code> とするとmatrixで返す。</dd>
+<dd><code>str_split_fixed(string, pattern, n)</code> は
+<code>simplify = TRUE</code> 固定で有限 <code>n</code> 列のmatrixを返すショートカット。</dd>
 <dt><code>str_dup(string, times)</code></dt>
 <dd>指定した回数だけ文字列を繰り返して結合。
 <code>str_dup(&quot;#&quot;, 79)</code> とかで結果出力に区切りを入れたり。</dd>
@@ -159,7 +158,8 @@ stringr — Rの文字列をまともな方法で処理する
 <dd>マッチするかどうか <code>logical</code> を返す。
 <code>nagate = TRUE</code> で結果を反転。
 <code>base::grepl(pattern, x)</code> と相同。</dd>
-<dd>始まりと終わりを調べる <code>str_starts()</code>, <code>str_ends()</code> もある。</dd>
+<dd>正規表現を覚えてなくても始まりと終わりだけ手軽にマッチできる
+<code>str_starts()</code>, <code>str_ends()</code> もある。</dd>
 <dt><code>str_extract(string, pattern)</code>, <code>str_extract_all(string, pattern)</code></dt>
 <dd>マッチした部分文字列を取り出す。しなかった要素には <code>NA</code>。</dd>
 <dd>数値＋単位のような文字列から数値部分だけを抜き出すには
