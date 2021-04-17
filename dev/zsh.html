@@ -94,7 +94,12 @@ zsh
 <li><a href="http://www.zsh.org/">http://www.zsh.org/</a></li>
 <li><a href="http://zsh.sourceforge.net/Doc/">http://zsh.sourceforge.net/Doc/</a></li>
 </ul>
-<h2 id="environmental-variables">Environmental variables</h2>
+<h2 id="installation">Installation</h2>
+<p>基本的にはOSに入ってる <code>/bin/zsh</code> を使う。
+新しいのを入れるなら<a href="/mac/homebrew.html">Homebrew</a>を使うのが楽:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew install zsh
+brew install zsh-completions
+</code></pre></div><h2 id="environmental-variables">Environmental variables</h2>
 <dl>
 <dt><code>ZDOTDIR</code></dt>
 <dd>設定ファイルを読み込むディレクトリ。デフォルトは <code>${HOME}</code></dd>
@@ -142,12 +147,15 @@ El Capitanからは <code>/etc/zprofile</code> で実行されるため、
 <code>.zshenv</code> で <code>PATH</code> を設定しようとするとうまく反映されない。
 <code>unsetopt GLOBAL_RCS</code> で <code>/etc/zprofile</code> をスキップして <code>path_helper</code> を手動実行するか、
 素直に <code>.zprofile</code> 以降のファイルで設定する。</p>
-<h2 id="installation">Installation</h2>
-<p>基本的にはOSに入ってる <code>/bin/zsh</code> を使う。
-新しいのを入れるなら<a href="/mac/homebrew.html">Homebrew</a>を使うのが楽:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew install zsh --without-etcdir
-brew install zsh-completions
-</code></pre></div>
+<h3 id="起動時間短縮">起動時間短縮</h3>
+<p>まずはプロファイリングしてボトルネックを知る:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># head of .zshenv</span>
+zmodload zsh/zprof
+
+<span class="c1"># tail of .zshrc</span>
+zprof
+</code></pre></div><p><code>compinit</code> とかが遅かったり複数回呼ばれていたりするので順番やオプションを変えてみる。</p>
+
 </article>
 </main>
 
