@@ -55,14 +55,13 @@ https://github.com/gollum/gollum
     rbenv install -l | less
     rbenv install 2.7.1
     rbenv global 2.7.1
+    rbenv init
     eval "$(rbenv init -)"
     ```
 
-    `eval "$(rbenv init -)"`
-    はここでインストールした `ruby` や `bundle` にPATHを通すコマンド。
+    最後の一行はここでインストールした `ruby` や `bundle` にPATHを通すコマンド。
     新しいシェルを起動するたびに実行する必要があるので
-    `.bashrc` 等の設定ファイルに記述したくなるところだが、
-    シェルの起動がかなり遅くなってしまうので適宜手動で実行することにする。
+    `.zshrc`, `.bashrc` 等の設定ファイルに記述しておく。
 
 1.  Wiki用のリポジトリ(ここでは`labwiki`)を作成して空コミット:
 

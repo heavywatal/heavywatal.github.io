@@ -10,6 +10,16 @@ tags = ["shell"]
 -   <http://www.zsh.org/>
 -   <http://zsh.sourceforge.net/Doc/>
 
+## Installation
+
+基本的にはOSに入ってる `/bin/zsh` を使う。
+新しいのを入れるなら[Homebrew]({{< relref "homebrew.md" >}})を使うのが楽:
+
+```sh
+brew install zsh
+brew install zsh-completions
+```
+
 ## Environmental variables
 
 `ZDOTDIR`
@@ -67,12 +77,17 @@ El Capitanからは `/etc/zprofile` で実行されるため、
 `unsetopt GLOBAL_RCS` で `/etc/zprofile` をスキップして `path_helper` を手動実行するか、
 素直に `.zprofile` 以降のファイルで設定する。
 
-## Installation
 
-基本的にはOSに入ってる `/bin/zsh` を使う。
-新しいのを入れるなら[Homebrew]({{< relref "homebrew.md" >}})を使うのが楽:
+### 起動時間短縮
+
+まずはプロファイリングしてボトルネックを知る:
 
 ```sh
-brew install zsh --without-etcdir
-brew install zsh-completions
+# head of .zshenv
+zmodload zsh/zprof
+
+# tail of .zshrc
+zprof
 ```
+
+`compinit` とかが遅かったり複数回呼ばれていたりするので順番やオプションを変えてみる。
