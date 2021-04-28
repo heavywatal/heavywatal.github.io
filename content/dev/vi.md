@@ -37,7 +37,7 @@ key             | action
 
 key               | action
 ----------------- | ------
-<kbd>hjkl</kbd>   | <kbd>←↓↑→</kbd>
+<kbd>h</kbd><kbd>j</kbd><kbd>k</kbd><kbd>l</kbd> | <kbd>←</kbd><kbd>↓</kbd><kbd>↑</kbd><kbd>→</kbd>
 <kbd>b</kbd> <kbd>B</kbd> | 単語頭
 <kbd>w</kbd> <kbd>W</kbd> | 次の単語頭
 <kbd>0</kbd>      | 行頭
