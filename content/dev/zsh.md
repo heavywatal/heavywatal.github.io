@@ -20,30 +20,41 @@ brew install zsh
 brew install zsh-completions
 ```
 
-## Environmental variables
+## Environment variables
 
 `ZDOTDIR`
 :   設定ファイルを読み込むディレクトリ。デフォルトは `${HOME}`
 
-`ZSH_VERSION`
-:   `.zshrc` とかで条件分岐するのに使える
+`HISTFILE`
+:   コマンド履歴を保存するファイル。
+    デフォルトは `${ZDOTDIR}/.zsh_history`
+    っぽいけど明示的に設定しといたほうが安心。
 
 `fpath`
 :   zsh関数や補完関数のパス
 
-`HISTFILE`
-:   ヒストリーを保存するファイル
 
 ## Configuration files
 
 `$ZDOTDIR` 以下の個人設定ファイルが場合に応じて下記の順で読まれる。
 システム全体の設定ファイルとして `/etc/z*` が個人設定ファイルの前に読み込まれる。
-`unsetopt GLOBAL_RCS` で切れるが `/etc/zshenv` だけは絶対最初。
+
+`/etc/zshenv`
+:   スクリプトの実行時も含めてあらゆる場合に読み込まれ、オプションでも外せない。
+    Ubuntuはここで基本的な `PATH` を設定。
 
 `.zshenv`
-:   スクリプトの実行時も含めてあらゆる場合に読み込まれる。
+:   スクリプトの実行時も含めてほぼあらゆる場合に読み込まれる。
     インタラクティブ用の設定などはせず、最低限の記述に留める。
     例えば `ZDOTDIR`, `unsetopt NOMATCH` など。
+:   ここで `PATH` を設定したい気もするけど、
+    OSによっては次の `/etc/zprofile` で上書きされてしまう。
+    `unsetopt GLOBAL_RCS` としてそれを防ぐ手もあるけどやや危険。
+
+`/etc/zprofile`
+:   Macでは `/usr/libexec/path_helper` が
+    `/usr/bin` などの基本的な `PATH` を設定する。
+:   ここで `/etc/profile` を `source` して設定するLinuxもある。
 
 `.zprofile`
 :   ログインシェルとして立ち上げるときのみ読まれる。
@@ -58,7 +69,7 @@ brew install zsh-completions
 
 `.zshrc`
 :   ログイン・非ログイン問わず、インタラクティブシェルとして立ち上げるときに読まれる。
-    だいたいどの設定もこれに書いておけば問題ない。
+    こだわりが無ければだいたいどの設定もこれに書いておけば問題ない。
 :   `.zprofile` と使い分けるなら
     `setopt` や `autoload` など、親シェルから引き継がれないものはこちら。
     `alias` などは別ファイルを読み込む形にして `.bashrc` と共有。
@@ -68,14 +79,6 @@ brew install zsh-completions
 
 `.zlogout`
 :   ログアウト時にしてほしいことが万が一あれば。
-
-Macでは `/usr/libexec/path_helper` が
-`/usr/bin` などの基本的なPATHを設定してくれる。
-Yosemiteまでは `/etc/zshenv` で実行されていたが、
-El Capitanからは `/etc/zprofile` で実行されるため、
-`.zshenv` で `PATH` を設定しようとするとうまく反映されない。
-`unsetopt GLOBAL_RCS` で `/etc/zprofile` をスキップして `path_helper` を手動実行するか、
-素直に `.zprofile` 以降のファイルで設定する。
 
 
 ### 起動時間短縮
