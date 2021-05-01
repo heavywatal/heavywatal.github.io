@@ -99,26 +99,35 @@ zsh
 新しいのを入れるなら<a href="/mac/homebrew.html">Homebrew</a>を使うのが楽:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew install zsh
 brew install zsh-completions
-</code></pre></div><h2 id="environmental-variables">Environmental variables</h2>
+</code></pre></div><h2 id="environment-variables">Environment variables</h2>
 <dl>
 <dt><code>ZDOTDIR</code></dt>
 <dd>設定ファイルを読み込むディレクトリ。デフォルトは <code>${HOME}</code></dd>
-<dt><code>ZSH_VERSION</code></dt>
-<dd><code>.zshrc</code> とかで条件分岐するのに使える</dd>
+<dt><code>HISTFILE</code></dt>
+<dd>コマンド履歴を保存するファイル。
+デフォルトは <code>${ZDOTDIR}/.zsh_history</code>
+っぽいけど明示的に設定しといたほうが安心。</dd>
 <dt><code>fpath</code></dt>
 <dd>zsh関数や補完関数のパス</dd>
-<dt><code>HISTFILE</code></dt>
-<dd>ヒストリーを保存するファイル</dd>
 </dl>
 <h2 id="configuration-files">Configuration files</h2>
 <p><code>$ZDOTDIR</code> 以下の個人設定ファイルが場合に応じて下記の順で読まれる。
-システム全体の設定ファイルとして <code>/etc/z*</code> が個人設定ファイルの前に読み込まれる。
-<code>unsetopt GLOBAL_RCS</code> で切れるが <code>/etc/zshenv</code> だけは絶対最初。</p>
+システム全体の設定ファイルとして <code>/etc/z*</code> が個人設定ファイルの前に読み込まれる。</p>
 <dl>
+<dt><code>/etc/zshenv</code></dt>
+<dd>スクリプトの実行時も含めてあらゆる場合に読み込まれ、オプションでも外せない。
+Ubuntuはここで基本的な <code>PATH</code> を設定。</dd>
 <dt><code>.zshenv</code></dt>
-<dd>スクリプトの実行時も含めてあらゆる場合に読み込まれる。
+<dd>スクリプトの実行時も含めてほぼあらゆる場合に読み込まれる。
 インタラクティブ用の設定などはせず、最低限の記述に留める。
 例えば <code>ZDOTDIR</code>, <code>unsetopt NOMATCH</code> など。</dd>
+<dd>ここで <code>PATH</code> を設定したい気もするけど、
+OSによっては次の <code>/etc/zprofile</code> で上書きされてしまう。
+<code>unsetopt GLOBAL_RCS</code> としてそれを防ぐ手もあるけどやや危険。</dd>
+<dt><code>/etc/zprofile</code></dt>
+<dd>Macでは <code>/usr/libexec/path_helper</code> が
+<code>/usr/bin</code> などの基本的な <code>PATH</code> を設定する。</dd>
+<dd>ここで <code>/etc/profile</code> を <code>source</code> して設定するLinuxもある。</dd>
 <dt><code>.zprofile</code></dt>
 <dd>ログインシェルとして立ち上げるときのみ読まれる。
 <code>export</code> する環境変数(<code>PATH</code> とか)を設定するのに適している。
@@ -131,7 +140,7 @@ brew install zsh-completions
 よほど重い初期化をログインシェル1回で済ませたい場合とか。</dd>
 <dt><code>.zshrc</code></dt>
 <dd>ログイン・非ログイン問わず、インタラクティブシェルとして立ち上げるときに読まれる。
-だいたいどの設定もこれに書いておけば問題ない。</dd>
+こだわりが無ければだいたいどの設定もこれに書いておけば問題ない。</dd>
 <dd><code>.zprofile</code> と使い分けるなら
 <code>setopt</code> や <code>autoload</code> など、親シェルから引き継がれないものはこちら。
 <code>alias</code> などは別ファイルを読み込む形にして <code>.bashrc</code> と共有。</dd>
@@ -140,13 +149,6 @@ brew install zsh-completions
 <dt><code>.zlogout</code></dt>
 <dd>ログアウト時にしてほしいことが万が一あれば。</dd>
 </dl>
-<p>Macでは <code>/usr/libexec/path_helper</code> が
-<code>/usr/bin</code> などの基本的なPATHを設定してくれる。
-Yosemiteまでは <code>/etc/zshenv</code> で実行されていたが、
-El Capitanからは <code>/etc/zprofile</code> で実行されるため、
-<code>.zshenv</code> で <code>PATH</code> を設定しようとするとうまく反映されない。
-<code>unsetopt GLOBAL_RCS</code> で <code>/etc/zprofile</code> をスキップして <code>path_helper</code> を手動実行するか、
-素直に <code>.zprofile</code> 以降のファイルで設定する。</p>
 <h3 id="起動時間短縮">起動時間短縮</h3>
 <p>まずはプロファイリングしてボトルネックを知る:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># head of .zshenv</span>
