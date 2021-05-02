@@ -97,7 +97,7 @@ BibDesk, LaTeXiT, TeX Live Utility, TeXShop などのGUIアプリが不要で、
 必要なパッケージをコマンドラインからインストールできる人は下記の手順で小さくインストールできる。</p>
 <ol>
 <li>
-<p><a href="http://www.tug.org/mactex/">http://www.tug.org/mactex/</a> から
+<p><a href="https://www.tug.org/mactex/">https://www.tug.org/mactex/</a> から
 <code>BasicTeX.pkg</code> を入手してインストール。
 あるいは
 <code>brew install --cask basictex</code></p>
@@ -108,7 +108,7 @@ BibDesk, LaTeXiT, TeX Live Utility, TeXShop などのGUIアプリが不要で、
 </li>
 <li>
 <p>今後の <code>tlmgr</code> 操作で管理者権限を使わなくて済むようにパーミッション設定:
-<code>sudo chown -R $(whoami):wheel /usr/local/texlive/</code></p>
+<code>sudo chown -R $(whoami):admin /usr/local/texlive/</code></p>
 </li>
 <li>
 <p><code>tlmgr update --self --all</code> で諸々アップデート。</p>
@@ -159,10 +159,11 @@ latexmk -C    # clean up
 <li>VS Code to PDF: <kbd>alt-cmd-j</kbd></li>
 </ul>
 <h3 id="tlmgr-でパッケージ管理">tlmgr でパッケージ管理</h3>
-<p>BasicTeXの場合は最小限のパッケージしか含まれていないので、
-大抵いくつか別途インストールする必要がある。
+<p>BasicTeXの場合は最小限のパッケージしか付いてこないので、必要なものを別途インストールする。
 &ldquo;By default, installing a package ensures that all dependencies of this package are fulfilled&rdquo;
-と言っているが嘘で、実際には依存パッケージも手動でインストールする必要がある。</p>
+と言っていて実際tlmgr自体はそういう作りになっているが、
+多くのパッケージで依存関係がちゃんと記述されていないので、
+実際にはエラーを読みながら依存パッケージを手動でインストールすることになる。</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">tlmgr update --self --all
 tlmgr search --global japanese
 tlmgr search --global --file zxxrl7z
@@ -177,22 +178,22 @@ tlmgr install chktex latexmk
 <h2 id="基本要素">基本要素</h2>
 <h3 id="数式">数式</h3>
 <p>とりあえず
-<a href="ftp://ftp.ams.org/pub/tex/doc/amsmath/short-math-guide.pdf">Short Math Guide for LaTeX</a>
+<a href="https://mirror.ctan.org/info/short-math-guide">Short Math Guide for LaTeX</a>
 (PDF)を読むべし。</p>
 <ul>
 <li>
-<p>基本的に <a href="http://www.ams.org/publications/authors/tex/amslatex">{amsmath}</a> を使う。
+<p>基本的に <a href="https://www.ams.org/arc/resources/amslatex-about.html">{amsmath}</a> を使う。
 数式環境のデファクトスタンダード。
 アメリカ数学会(AMS)が開発したらしいが、
 ガチ数学じゃなくても数式を書く場合はこれらしい。</p>
-<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\usepackage</span><span class="nb">{</span>amsmath<span class="nb">}</span>
+<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\usepackage</span><span class="nb">{</span>amssymb,amsmath<span class="nb">}</span>
 <span class="k">\usepackage</span><span class="na">[all,warning]</span><span class="nb">{</span>onlyamsmath<span class="nb">}</span>
 </code></pre></div></li>
 <li>
 <p>Inline math:</p>
 <div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex">if <span class="s">$</span><span class="nb">N_e u </span><span class="nv">\ll</span><span class="nb"> </span><span class="m">1</span><span class="s">$</span>, then the population is monomorphic most of the time,
-</code></pre></div><p><code>$...$</code> はTeXの古いやり方で、
-新しいLaTeXでは <code>\(...\)</code> を用いるべし、という流れもある。
+</code></pre></div><p><code>$ ... $</code> はTeXの古いやり方で、
+新しいLaTeXでは <code>\( ... \)</code> を用いるべし、という流れもある。
 けどダラーのほうが書きやすいし読みやすいので、
 しばらくは <code>chktex -n46</code> で様子を見る。</p>
 </li>
@@ -201,7 +202,9 @@ tlmgr install chktex latexmk
 <div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\begin</span><span class="nb">{</span>equation*<span class="nb">}</span><span class="k">\label</span><span class="nb">{</span>eq:growth<span class="nb">}</span>
   N<span class="nb">_</span>t = N<span class="nb">_</span>0 e<span class="nb">^{</span>rt<span class="nb">}</span>
 <span class="k">\end</span><span class="nb">{</span>equation*<span class="nb">}</span>
-</code></pre></div></li>
+</code></pre></div><p>生TeXの <code>$$ ... $$</code> を使ってはいけない。
+<code>\[ ... \]</code> はOK。</p>
+</li>
 <li>
 <p>改行を含む数式を等号で揃える</p>
 <div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\begin</span><span class="nb">{</span>equation<span class="nb">}</span><span class="k">\label</span><span class="nb">{</span>eq:growth<span class="nb">}</span>
@@ -232,7 +235,7 @@ tlmgr install chktex latexmk
 </code></pre></div></li>
 <li>
 <p>記号:
-<a href="http://www.ctan.org/tex-archive/info/symbols/comprehensive/">http://www.ctan.org/tex-archive/info/symbols/comprehensive/</a>
+<a href="https://www.ctan.org/tex-archive/info/symbols/comprehensive/">https://www.ctan.org/tex-archive/info/symbols/comprehensive/</a>
 に網羅されてるけど、
 だいたい Short Math Guide for LaTeX にまとめられてるやつで足りるはず。</p>
 <ul>
@@ -333,12 +336,11 @@ twocolumnの文書内で <code>\textwidth</code> まで広げたい場合は
   <span class="k">\item</span><span class="na">[key1]</span> value1
   <span class="k">\item</span><span class="na">[key2]</span> value2
 <span class="k">\end</span><span class="nb">{</span>description<span class="nb">}</span>
-</code></pre></div><p><a href="http://konoyonohana.blog.fc2.com/blog-entry-58.html">http://konoyonohana.blog.fc2.com/blog-entry-58.html</a></p>
-<h3 id="引用">引用</h3>
+</code></pre></div><h3 id="引用">引用</h3>
 <p><a href="https://en.wikibooks.org/wiki/LaTeX/More_Bibliographies">https://en.wikibooks.org/wiki/LaTeX/More_Bibliographies</a></p>
 <ol>
 <li>
-<p><a href="http://bibdesk.sourceforge.net/">Bibdesk</a>
+<p><a href="https://bibdesk.sourceforge.io/">Bibdesk</a>
 などの文献管理アプリでbibtex形式の文献リストを作る。
 e.g., <code>mybibdata.bib</code></p>
 </li>
@@ -434,86 +436,35 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 </code></pre></div><h2 id="日本語を使う">日本語を使う</h2>
 <h3 id="lualatex">LuaLaTeX</h3>
 <ul>
+<li>OS上にあるOTFフォントがそのまま使える</li>
 <li>pdfTeXの後継として、今後のスタンダードと目される</li>
-<li>かなり動作が遅い</li>
 <li><a href="https://www.ctan.org/pkg/luatexja"><code>luatexja</code></a> が精力的に開発されている</li>
-<li>最初にフォント関連の問題に遭遇するかも
-<ul>
-<li>
-<p>依存パッケージ:
-<code>luaotfload</code>, <code>adobemapping</code>, <code>ctablestack</code>, <code>ipaex</code></p>
-</li>
-<li>
-<p><code>bad argument #1 to 'open'</code> などと怒られる問題は、
-必要な CMap が LuaTeX から見えていないのが原因</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1">## キャッシュを再構築</span>
-% rm -rf ~/Library/texlive/2016basic/texmf-var/luatex-cache/
-% luaotfload-tool -u -v
-
-<span class="c1">## 見えてるか確認</span>
-% kpsewhich -format<span class="o">=</span>cmap UniJIS2004-UTF32-H
-% kpsewhich -format<span class="o">=</span>cmap UniJIS2004-UTF32-V
-% kpsewhich -format<span class="o">=</span>cmap Adobe-Japan1-UCS2
-</code></pre></div></li>
-</ul>
-</li>
+<li>動作が遅い</li>
 </ul>
 <h3 id="xelatex">XeLaTeX</h3>
 <ul>
-<li>とにかく日本語入りでコンパイルできればいい、というのであればこれが一番楽</li>
-<li>BasicTeX に含まれているのでそのまま使える</li>
-<li>OS上にあるOTFやTTFなどのフォントがそのまま使える</li>
+<li>OS上にあるOTFフォントがそのまま使える</li>
+<li>とにかく日本語入りでコンパイルできればいい、というのであればこれが早い</li>
 <li>日本語に特化したツールは開発されていないので細かい制御がイマイチらしい</li>
 </ul>
 <h3 id="uplatex">upLaTeX</h3>
 <ul>
-<li>
-<p>日本語を使えるように LaTeX を改良したもの</p>
-</li>
-<li>
-<p>歴史が長いので日本語組版のための便利な道具が揃っている</p>
-</li>
-<li>
-<p>BasicTeX には含まれていないのでいろいろインストールが必要</p>
-<dl>
-<dt><code>ptex</code>, <code>uptex</code></dt>
-<dd><code>platex</code> などを含む</dd>
-<dt><code>jfontmaps</code></dt>
-<dd>フォント埋め込みツール <code>kanji-config-updmap</code> など</dd>
-<dt><code>jsclasses</code></dt>
-<dd><code>\documentclass{jsarticle}</code> などを含む</dd>
-<dt><code>japanese-otf</code>, <code>japanese-otf-uptex</code></dt>
-<dd><code>\usepackage[uplatex,deluxe,jis2004]{otf}</code> でヒラギノが使える</dd>
-<dt><code>ptex2pdf</code></dt>
-<dd><code>pdflatex</code> のように一発でPDFを作るための便利スクリプト。
-例えば <code>uplatex</code> を使ってコンパイルするには:
-<pre><code>% ptex2pdf -u -l main.tex
-</code></pre>
-</dd>
-</dl>
-</li>
-<li>
-<p>フォントマップの設定をする:</p>
-<pre><code>% kanji-config-updmap status
-% kanji-config-updmap auto
-% kanji-config-updmap noEmbed
-% kanji-config-updmap hiragino
-</code></pre>
-</li>
+<li>日本語を使えるように LaTeX を改良したもの</li>
+<li>歴史が長いので日本語組版のための便利な道具が揃ってるらしいけど未来は無さそう</li>
 </ul>
 <h2 id="フォント">フォント</h2>
 <dl>
 <dt>Computer Modern</dt>
 <dd>Knuth先生が作ったデフォルトフォント。</dd>
-<dt><code>\usepackage{lmodern}</code> &mdash; Latin Modern</dt>
+<dt>{lmodern} &mdash; Latin Modern</dt>
 <dd>Computer Modern の改良版。</dd>
-<dt><code>\usepackage{times}</code></dt>
+<dt>{times}</dt>
 <dd>ローマンとサンセリフにそれぞれ Times と Helvetica を割り当てる。
 数式は Computer Modern のまま。</dd>
-<dt><code>\usepackage{txfonts}</code></dt>
+<dt>{txfonts}</dt>
 <dd><code>times</code> の改良版？
 数式も Times にする。
-既にメンテナンスは放棄されている。</dd>
+直接は使わない。</dd>
 <dt><a href="https://www.ctan.org/pkg/newtx"><code>newtx</code></a></dt>
 <dd><code>txfonts</code> の後継で現役。
 本文と数式を別々に指定できる。
@@ -527,26 +478,21 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 <a href="https://www.ctan.org/pkg/tex-gyre-pagella"><code>tex-gyre-pagella</code></a>,
 <a href="https://www.ctan.org/pkg/tex-gyre-math-pagella"><code>tex-gyre-math-pagella</code></a> も入れておく。
 <strong>TeX Gyre Pagella</strong> はOpenType志向のPalatinoクローン。</dd>
-<dt><a href="https://www.ctan.org/pkg/libertine"><code>libertine</code></a> &mdash; Linux Libertine</dt>
-<dd>印刷用途でも通用するよう作られた美しいフリーフォント。
-<code>fontaxes</code> もインストールする必要がある。</dd>
+<dt><a href="https://www.ctan.org/pkg/libertinus"><code>libertinus</code></a></dt>
+<dd>美しい<a href="https://www.ctan.org/pkg/libertine"><code>Linux Libertine</code></a>の後継プロジェクト。
+type1もOTFも数式もサポートしていて便利だがひと回り小さいことに注意。</dd>
 </dl>
-<p>XeTeX なら OS のフォントをフルネームで指定して使える</p>
-<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\usepackage</span><span class="nb">{</span>amsthm,amsmath<span class="nb">}</span> <span class="c">% must be called ahead of mathspec
+<p>LuaTeX/XeTeXならOSのフォントをフルネームで指定して使えるが、
+共同執筆とかを考えるとTeX Liveパッケージやプリセットに含まれるものを使うのが安全。</p>
+<div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\usepackage</span><span class="nb">{</span>amssymb,amsmath<span class="nb">}</span> <span class="c">% must be called ahead of mathspec
 </span><span class="c"></span><span class="k">\usepackage</span><span class="na">[all,warning]</span><span class="nb">{</span>onlyamsmath<span class="nb">}</span>
-<span class="k">\ifxetex</span>
-  <span class="k">\usepackage</span><span class="nb">{</span>mathspec<span class="nb">}</span> <span class="c">% must be called ahead of fontspec
-</span><span class="c"></span>  <span class="k">\usepackage</span><span class="na">[math-style=TeX,bold-style=TeX]</span><span class="nb">{</span>unicode-math<span class="nb">}</span>
+<span class="k">\iftutex</span>
+  <span class="k">\usepackage</span><span class="na">[math-style=TeX,bold-style=TeX]</span><span class="nb">{</span>unicode-math<span class="nb">}</span>
   <span class="k">\usepackage</span><span class="na">[no-math]</span><span class="nb">{</span>fontspec<span class="nb">}</span>
-  <span class="k">\setmainfont</span><span class="nb">{</span>TeXGyrePagellaX<span class="nb">}</span>
-  <span class="k">\setmathfont</span><span class="nb">{</span>texgyrepagella-math.otf<span class="nb">}</span>
-  <span class="c">% \usepackage{xeCJK}
-</span><span class="c"></span>  <span class="c">% \setCJKmainfont[Scale=0.9,BoldFont=Hiragino Mincho ProN W6]
-</span><span class="c"></span>  <span class="c">%                                   {Hiragino Mincho ProN W3}
-</span><span class="c"></span>  <span class="c">% \setCJKsansfont[Scale=0.9,BoldFont=Hiragino Kaku Gothic ProN W6]
-</span><span class="c"></span>  <span class="c">%                                   {Hiragino Kaku Gothic ProN W3}
-</span><span class="c"></span>  <span class="c">% \setCJKmonofont[Scale=0.9,BoldFont=Hiragino Kaku Gothic ProN W6]
-</span><span class="c"></span>  <span class="c">%                                   {Hiragino Kaku Gothic ProN W3}
+  <span class="k">\setmainfont</span><span class="nb">{</span>TeX Gyre Pagella<span class="nb">}</span>
+  <span class="k">\setmathfont</span><span class="nb">{</span>TeX Gyre Pagella Math<span class="nb">}</span>
+  <span class="c">% \usepackage{luatexja}
+</span><span class="c"></span>  <span class="c">% \usepackage[hiragino-pron,scale=0.92,deluxe,jis2004,match,nfssonly]{luatexja-preset}
 </span><span class="c"></span><span class="k">\else</span>
   <span class="k">\usepackage</span><span class="na">[T1]</span><span class="nb">{</span>fontenc<span class="nb">}</span>
   <span class="k">\usepackage</span><span class="na">[utf8]</span><span class="nb">{</span>inputenc<span class="nb">}</span>
