@@ -15,7 +15,7 @@ aliases = ["/dev/tex.html"]
 BibDesk, LaTeXiT, TeX Live Utility, TeXShop などのGUIアプリが不要で、
 必要なパッケージをコマンドラインからインストールできる人は下記の手順で小さくインストールできる。
 
-1.  <http://www.tug.org/mactex/> から
+1.  <https://www.tug.org/mactex/> から
     `BasicTeX.pkg` を入手してインストール。
     あるいは
     `brew install --cask basictex`
@@ -24,7 +24,7 @@ BibDesk, LaTeXiT, TeX Live Utility, TeXShop などのGUIアプリが不要で、
     基本的には `/etc/paths.d/TeX` 越しに自動的に設定されるはず。
 
 1.  今後の `tlmgr` 操作で管理者権限を使わなくて済むようにパーミッション設定:
-    `sudo chown -R $(whoami):wheel /usr/local/texlive/`
+    `sudo chown -R $(whoami):admin /usr/local/texlive/`
 
 1.  `tlmgr update --self --all` で諸々アップデート。
 
@@ -93,10 +93,11 @@ https://www.ctan.org/pkg/latexmk
 
 ### tlmgr でパッケージ管理
 
-BasicTeXの場合は最小限のパッケージしか含まれていないので、
-大抵いくつか別途インストールする必要がある。
+BasicTeXの場合は最小限のパッケージしか付いてこないので、必要なものを別途インストールする。
 "By default, installing a package ensures that all dependencies of this package are fulfilled"
-と言っているが嘘で、実際には依存パッケージも手動でインストールする必要がある。
+と言っていて実際tlmgr自体はそういう作りになっているが、
+多くのパッケージで依存関係がちゃんと記述されていないので、
+実際にはエラーを読みながら依存パッケージを手動でインストールすることになる。
 
 ```sh
 tlmgr update --self --all
@@ -120,15 +121,15 @@ tlmgr install chktex latexmk
 ### 数式
 
 とりあえず
-[Short Math Guide for LaTeX](ftp://ftp.ams.org/pub/tex/doc/amsmath/short-math-guide.pdf)
+[Short Math Guide for LaTeX](https://mirror.ctan.org/info/short-math-guide)
 (PDF)を読むべし。
 
--   基本的に [{amsmath}](http://www.ams.org/publications/authors/tex/amslatex) を使う。
+-   基本的に [{amsmath}](https://www.ams.org/arc/resources/amslatex-about.html) を使う。
     数式環境のデファクトスタンダード。
     アメリカ数学会(AMS)が開発したらしいが、
     ガチ数学じゃなくても数式を書く場合はこれらしい。
     ```tex
-    \usepackage{amsmath}
+    \usepackage{amssymb,amsmath}
     \usepackage[all,warning]{onlyamsmath}
     ```
 
@@ -137,8 +138,8 @@ tlmgr install chktex latexmk
     if $N_e u \ll 1$, then the population is monomorphic most of the time,
     ```
 
-    `$...$` はTeXの古いやり方で、
-    新しいLaTeXでは `\(...\)` を用いるべし、という流れもある。
+    `$ ... $` はTeXの古いやり方で、
+    新しいLaTeXでは `\( ... \)` を用いるべし、という流れもある。
     けどダラーのほうが書きやすいし読みやすいので、
     しばらくは `chktex -n46` で様子を見る。
 
@@ -148,6 +149,9 @@ tlmgr install chktex latexmk
       N_t = N_0 e^{rt}
     \end{equation*}
     ```
+
+    生TeXの `$$ ... $$` を使ってはいけない。
+    `\[ ... \]` はOK。
 
 -   改行を含む数式を等号で揃える
 
@@ -182,7 +186,7 @@ tlmgr install chktex latexmk
     ```
 
 -   記号:
-    <http://www.ctan.org/tex-archive/info/symbols/comprehensive/>
+    <https://www.ctan.org/tex-archive/info/symbols/comprehensive/>
     に網羅されてるけど、
     だいたい Short Math Guide for LaTeX にまとめられてるやつで足りるはず。
     -   "given that" を示す縦棒はパイプ記号 `|` ではなく
@@ -309,13 +313,12 @@ GIFアニメをそのまま埋め込むことはできないので、
 \end{description}
 ```
 
-<http://konoyonohana.blog.fc2.com/blog-entry-58.html>
 
 ### 引用
 
 <https://en.wikibooks.org/wiki/LaTeX/More_Bibliographies>
 
-1.  [Bibdesk](http://bibdesk.sourceforge.net/)
+1.  [Bibdesk](https://bibdesk.sourceforge.io/)
     などの文献管理アプリでbibtex形式の文献リストを作る。
     e.g., `mybibdata.bib`
 1.  コマンドにcite keyを入れて本文に挿入。
@@ -432,81 +435,41 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 
 ### LuaLaTeX
 
-- pdfTeXの後継として、今後のスタンダードと目される
-- かなり動作が遅い
-- [`luatexja`](https://www.ctan.org/pkg/luatexja) が精力的に開発されている
-- 最初にフォント関連の問題に遭遇するかも
-    - 依存パッケージ:
-      `luaotfload`, `adobemapping`, `ctablestack`, `ipaex`
-    - `bad argument #1 to 'open'` などと怒られる問題は、
-      必要な CMap が LuaTeX から見えていないのが原因
+-   OS上にあるOTFフォントがそのまま使える
+-   pdfTeXの後継として、今後のスタンダードと目される
+-   [`luatexja`](https://www.ctan.org/pkg/luatexja) が精力的に開発されている
+-   動作が遅い
 
-      ```sh
-      ## キャッシュを再構築
-      % rm -rf ~/Library/texlive/2016basic/texmf-var/luatex-cache/
-      % luaotfload-tool -u -v
-
-      ## 見えてるか確認
-      % kpsewhich -format=cmap UniJIS2004-UTF32-H
-      % kpsewhich -format=cmap UniJIS2004-UTF32-V
-      % kpsewhich -format=cmap Adobe-Japan1-UCS2
-      ```
 
 ### XeLaTeX
 
--   とにかく日本語入りでコンパイルできればいい、というのであればこれが一番楽
--   BasicTeX に含まれているのでそのまま使える
--   OS上にあるOTFやTTFなどのフォントがそのまま使える
+-   OS上にあるOTFフォントがそのまま使える
+-   とにかく日本語入りでコンパイルできればいい、というのであればこれが早い
 -   日本語に特化したツールは開発されていないので細かい制御がイマイチらしい
 
 
 ### upLaTeX
 
 -   日本語を使えるように LaTeX を改良したもの
--   歴史が長いので日本語組版のための便利な道具が揃っている
--   BasicTeX には含まれていないのでいろいろインストールが必要
+-   歴史が長いので日本語組版のための便利な道具が揃ってるらしいけど未来は無さそう
 
-    `ptex`, `uptex`
-    :   `platex` などを含む
-
-    `jfontmaps`
-    :   フォント埋め込みツール `kanji-config-updmap` など
-
-    `jsclasses`
-    :   `\documentclass{jsarticle}` などを含む
-
-    `japanese-otf`, `japanese-otf-uptex`
-    :   `\usepackage[uplatex,deluxe,jis2004]{otf}` でヒラギノが使える
-
-    `ptex2pdf`
-    :   `pdflatex` のように一発でPDFを作るための便利スクリプト。
-        例えば `uplatex` を使ってコンパイルするには:
-
-            % ptex2pdf -u -l main.tex
-
--   フォントマップの設定をする:
-
-        % kanji-config-updmap status
-        % kanji-config-updmap auto
-        % kanji-config-updmap noEmbed
-        % kanji-config-updmap hiragino
 
 ## フォント
 
 Computer Modern
 :   Knuth先生が作ったデフォルトフォント。
 
-`\usepackage{lmodern}` --- Latin Modern
+{lmodern} --- Latin Modern
 :   Computer Modern の改良版。
 
-`\usepackage{times}`
+{times}
 :   ローマンとサンセリフにそれぞれ Times と Helvetica を割り当てる。
     数式は Computer Modern のまま。
 
-`\usepackage{txfonts}`
+{txfonts}
 :   `times` の改良版？
     数式も Times にする。
-    既にメンテナンスは放棄されている。
+    直接は使わない。
 
 [`newtx`](https://www.ctan.org/pkg/newtx)
 :   `txfonts` の後継で現役。
@@ -523,28 +486,23 @@ Computer Modern
     [`tex-gyre-math-pagella`](https://www.ctan.org/pkg/tex-gyre-math-pagella) も入れておく。
     **TeX Gyre Pagella** はOpenType志向のPalatinoクローン。
 
-[`libertine`](https://www.ctan.org/pkg/libertine) --- Linux Libertine
-:   印刷用途でも通用するよう作られた美しいフリーフォント。
-    `fontaxes` もインストールする必要がある。
+[`libertinus`](https://www.ctan.org/pkg/libertinus)
+:   美しい[`Linux Libertine`](https://www.ctan.org/pkg/libertine)の後継プロジェクト。
+    type1もOTFも数式もサポートしていて便利だがひと回り小さいことに注意。
 
-XeTeX なら OS のフォントをフルネームで指定して使える
+LuaTeX/XeTeXならOSのフォントをフルネームで指定して使えるが、
+共同執筆とかを考えるとTeX Liveパッケージやプリセットに含まれるものを使うのが安全。
 
 ```tex
-\usepackage{amsthm,amsmath} % must be called ahead of mathspec
+\usepackage{amssymb,amsmath} % must be called ahead of mathspec
 \usepackage[all,warning]{onlyamsmath}
-\ifxetex
-  \usepackage{mathspec} % must be called ahead of fontspec
+\iftutex
   \usepackage[math-style=TeX,bold-style=TeX]{unicode-math}
   \usepackage[no-math]{fontspec}
-  \setmainfont{TeXGyrePagellaX}
-  \setmathfont{texgyrepagella-math.otf}
-  % \usepackage{xeCJK}
-  % \setCJKmainfont[Scale=0.9,BoldFont=Hiragino Mincho ProN W6]
-  %                                   {Hiragino Mincho ProN W3}
-  % \setCJKsansfont[Scale=0.9,BoldFont=Hiragino Kaku Gothic ProN W6]
-  %                                   {Hiragino Kaku Gothic ProN W3}
-  % \setCJKmonofont[Scale=0.9,BoldFont=Hiragino Kaku Gothic ProN W6]
-  %                                   {Hiragino Kaku Gothic ProN W3}
+  \setmainfont{TeX Gyre Pagella}
+  \setmathfont{TeX Gyre Pagella Math}
+  % \usepackage{luatexja}
+  % \usepackage[hiragino-pron,scale=0.92,deluxe,jis2004,match,nfssonly]{luatexja-preset}
 \else
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
