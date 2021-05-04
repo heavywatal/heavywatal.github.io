@@ -78,6 +78,22 @@ Key Repeat & Delay Until Repeat を最速にする
 ただし、前者は頻繁に落ちるためアプリ再起動を要し、
 後者は他の設定に干渉する上に反応が遅い。
 また、画面共有やVirtualBoxでの<kbd>⌘command</kbd>の挙動が厄介になる。
+ということで結局どちらも使わない。
+
+### Input Sources
+
+[Google日本語入力](https://www.google.co.jp/ime/)を使う。
+`brew install google-japanese-ime`
+
+macOS標準の日本語入力がどうしても使いにくいポイント:
+
+- 変換候補ウィンドウを開いた場合 <kbd>return</kbd> を2回押さないと確定されない。
+- "Windows-like shortcuts" をオンにすれば
+  <kbd>return</kbd>1回で確定できるようになるが、
+  そうすると
+  <kbd>⌃n</kbd>, <kbd>⌃p</kbd>, <kbd>⌃k</kbd>
+  などのEmacs/Cocoaキーバインドが崩れる。
+
 
 ## 特殊な文字・記号の入力
 
