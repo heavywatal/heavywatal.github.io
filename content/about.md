@@ -28,7 +28,7 @@ Phone:
 :   +81-22-795-3543
 
 Email:
-:   heavy.watalあgmail.com
+:   heavywatalあgmail.com
 
 Find me on
 : <a rel="me" href="https://github.com/heavywatal" title="GitHub">
