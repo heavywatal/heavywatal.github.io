@@ -474,16 +474,21 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 <code>Unable to find TFM file</code> と怒られる。</dd>
 <dt><a href="https://www.ctan.org/pkg/newpx"><code>newpx</code></a></dt>
 <dd><code>newtx</code>と同等の機能を美しいPalatinoで。
-<code>palatino</code>, <code>pxfonts</code>,
+<code>palatino</code>, <code>pxfonts</code>, <code>newtx</code>,
 <a href="https://www.ctan.org/pkg/tex-gyre-pagella"><code>tex-gyre-pagella</code></a>,
 <a href="https://www.ctan.org/pkg/tex-gyre-math-pagella"><code>tex-gyre-math-pagella</code></a> も入れておく。
 <strong>TeX Gyre Pagella</strong> はOpenType志向のPalatinoクローン。</dd>
 <dt><a href="https://www.ctan.org/pkg/libertinus"><code>libertinus</code></a></dt>
 <dd>美しい<a href="https://www.ctan.org/pkg/libertine"><code>Linux Libertine</code></a>の後継プロジェクト。
-type1もOTFも数式もサポートしていて便利だがひと回り小さいことに注意。</dd>
+type1もOTFも数式もサポートしていて便利だがひと回り小さいことに注意。
+使うときは <code>\usepackage{libertinus}</code> でよしなにやってくれるらしいが
+依存パッケージのインストールは例によって手動:
+<code>libertibnus libertinus-fonts libertinus-type1 libertinust1math libertinus-otf</code></dd>
 </dl>
 <p>LuaTeX/XeTeXならOSのフォントをフルネームで指定して使えるが、
 共同執筆とかを考えるとTeX Liveパッケージやプリセットに含まれるものを使うのが安全。</p>
+<p>TeX Liveから入れたフォントをOSに認識させるにはシムリンクを張るだけ:
+<code>ln -s /Library/TeX/Root/texmf-dist/fonts/opentype ~/Library/Fonts/texlive-opentype</code></p>
 <div class="highlight"><pre class="chroma"><code class="language-tex" data-lang="tex"><span class="k">\usepackage</span><span class="nb">{</span>amssymb,amsmath<span class="nb">}</span> <span class="c">% must be called ahead of mathspec
 </span><span class="c"></span><span class="k">\usepackage</span><span class="na">[all,warning]</span><span class="nb">{</span>onlyamsmath<span class="nb">}</span>
 <span class="k">\iftutex</span>
