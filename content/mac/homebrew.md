@@ -17,6 +17,9 @@ Unixツールをパッケージとして手軽にインストールできるパ�
     xcode-select --install
     ```
 
+    [Xcodeを丸ごとインストールしてある場合でも独立CLTが必要](https://github.com/Homebrew/brew/issues/11250)らしい。
+
+
 1.  ターミナルから下記のコマンドを実行し、指示に従う:
     ```sh
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
@@ -102,7 +105,6 @@ bottle機能を封じられて毎回自前ビルドすることになるみた�
     less
     lftp
     make
-    mercurial
     nano
     nkf
     pandoc
@@ -110,7 +112,6 @@ bottle機能を封じられて毎回自前ビルドすることになるみた�
     rsync
     sshfs
     tmux
-    tree
     vim
     wget
     xz
@@ -193,7 +194,7 @@ brew list --cask
 
 アプリ側でアップデートを実行するとCask内でのバージョンと食い違っちゃうけど使用上は問題ないらしい。
 
-adobe-acrobat-reader alfred amazon-photos atom
+adobe-acrobat-reader amazon-photos atom
 basictex bibdesk
 discord docker dropbox firefox gephi gimp gitter
 google-backup-and-sync google-chrome google-japanese-ime
@@ -202,7 +203,7 @@ marshallofsound-google-play-music-player megasync menumeters
 r rstudio
 skim skype slack spideroakone spotify
 the-unarchiver virtualbox visual-studio-code vlc
-whatsapp xquartz zoomus
+whatsapp xquartz zoom
 
 ### [Quicklook]({{< relref "quicklook.md" >}})
 
@@ -213,9 +214,7 @@ brew tap homebrew/cask-fonts
 ```
 
 font-ubuntu font-ubuntu-mono
-font-source-sans-pro font-source-serif-pro font-source-code-pro
-font-source-han-sans font-source-han-serif font-source-han-mono
 font-noto-sans font-noto-serif font-noto-sans-mono
-font-open-sans font-roboto
+font-open-sans font-roboto font-dejavu
 font-libertinus font-lora font-merriweather
 font-tex-gyre-pagella font-tex-gyre-pagella-math

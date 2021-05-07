@@ -481,7 +481,7 @@ Computer Modern
 
 [`newpx`](https://www.ctan.org/pkg/newpx)
 :   `newtx`と同等の機能を美しいPalatinoで。
-    `palatino`, `pxfonts`,
+    `palatino`, `pxfonts`, `newtx`,
     [`tex-gyre-pagella`](https://www.ctan.org/pkg/tex-gyre-pagella),
     [`tex-gyre-math-pagella`](https://www.ctan.org/pkg/tex-gyre-math-pagella) も入れておく。
     **TeX Gyre Pagella** はOpenType志向のPalatinoクローン。
@@ -489,9 +489,16 @@ Computer Modern
 [`libertinus`](https://www.ctan.org/pkg/libertinus)
 :   美しい[`Linux Libertine`](https://www.ctan.org/pkg/libertine)の後継プロジェクト。
     type1もOTFも数式もサポートしていて便利だがひと回り小さいことに注意。
+    使うときは `\usepackage{libertinus}` でよしなにやってくれるらしいが
+    依存パッケージのインストールは例によって手動:
+    `libertibnus libertinus-fonts libertinus-type1 libertinust1math libertinus-otf`
 
 LuaTeX/XeTeXならOSのフォントをフルネームで指定して使えるが、
 共同執筆とかを考えるとTeX Liveパッケージやプリセットに含まれるものを使うのが安全。
+
+TeX Liveから入れたフォントをOSに認識させるにはシムリンクを張るだけ:
+`ln -s /Library/TeX/Root/texmf-dist/fonts/opentype ~/Library/Fonts/texlive-opentype`
+
 
 ```tex
 \usepackage{amssymb,amsmath} % must be called ahead of mathspec
