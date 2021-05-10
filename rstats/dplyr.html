@@ -153,7 +153,8 @@ dplyr — 高速data.frame処理
 <h3 id="列">列</h3>
 <dl>
 <dt><code>dplyr::select(.data, ...)</code></dt>
-<dd>列を絞る。複数指定、範囲指定、負の指定が可能。
+<dd>列を絞る。<code>:</code>範囲指定、<code>!</code>負の指定が可能。
+複数指定する場合はベクトル渡し、カンマ区切り、もしくは <code>&amp;</code> <code>|</code> を使う。
 <a href="https://tidyselect.r-lib.org/reference/select_helpers.html">select helper</a>
 によるパターン指定も便利。
 残るのが1列だけでも勝手にvectorにはならずdata.frameのまま。
@@ -161,10 +162,14 @@ dplyr — 高速data.frame処理
 <span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="n">carat</span><span class="p">,</span> <span class="n">cut</span><span class="p">,</span> <span class="n">price</span><span class="p">)</span>
 <span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&#34;carat&#34;</span><span class="p">,</span> <span class="s">&#34;cut&#34;</span><span class="p">,</span> <span class="s">&#34;price&#34;</span><span class="p">))</span>
 <span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="o">!</span><span class="nf">c</span><span class="p">(</span><span class="n">carat</span><span class="p">,</span> <span class="n">cut</span><span class="p">,</span> <span class="n">price</span><span class="p">))</span>
-<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="o">-</span><span class="n">carat</span><span class="p">,</span> <span class="o">-</span><span class="n">cut</span><span class="p">,</span> <span class="o">-</span><span class="n">price</span><span class="p">)</span>
 <span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="nf">starts_with</span><span class="p">(</span><span class="s">&#34;c&#34;</span><span class="p">))</span>
 <span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="nf">where</span><span class="p">(</span><span class="n">is.numeric</span><span class="p">))</span>
-</code></pre></div><p><a href="https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html">https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html</a></p>
+<span class="c1"># diamonds %&gt;% dplyr::select(-carat, -cut, -price)</span>
+</code></pre></div><p>カンマ区切りはORの意味で働くはずだがマイナス指定
+<code>dplyr::select(-carat, -cut, -price)</code>
+の場合だけANDのように働く(つまり3列とも抜ける)ので特殊。
+(だからマニュアルから消えたのかな？)</p>
+<p><a href="https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html">https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html</a></p>
 </dd>
 <dd>
 <p>文字列変数で指定しようとすると意図が曖昧になるので、
