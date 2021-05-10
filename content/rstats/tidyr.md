@@ -115,7 +115,7 @@ data.frameを縦長(long-format)から横広(wide-format)に変形する。
 ```r
 anscombe_long %>%
   pivot_wider(names_from = namae, values_from = atai) %>%
-  dplyr::select(-id)
+  dplyr::select(!id)
 #> # tbl_df [11 x 8]
 #>       x1    x2    x3    x4    y1    y2    y3    y4
 #>    <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
@@ -129,7 +129,7 @@ anscombe_long %>%
 #> 10     7     7     7     8  4.82  7.26  6.42  7.91
 #> 11     5     5     5     8  5.68  4.74  5.73  6.89
 
-# anscombe_long %>% spread(namae, atai) %>% dplyr::select(-id)
+# anscombe_long %>% spread(namae, atai) %>% dplyr::select(!id)
 ```
 
 
@@ -209,7 +209,7 @@ anscombe %>%
     names_sep = 1L,
     names_transform = list(group = as.integer)) %>%
   tidyr::pivot_wider(c(id, group), names_from = axis) %>%
-  dplyr::select(-id) %>%
+  dplyr::select(!id) %>%
   dplyr::arrange(group)
 #> # tbl_df [44 x 3]
 #>    group     x     y
@@ -447,7 +447,7 @@ df %>% complete(key1, key2, fill = list(val1 = 0, val2 = "-"))
 tibble版`expand.grid(...)`のようなもの。
 
 `nesting(...)`は存在するユニークな組み合わせのみ残す、
-`nest(data, ...) %>% dplyr::select(-data)`のショートカット。
+`nest(data, ...) %>% dplyr::select(!data)`のショートカット。
 この結果は`expand()`や`complete()`の引数としても使える。
 
 数値vectorの補完には`full_seq(x, period, tol = 1e-6)`が便利。

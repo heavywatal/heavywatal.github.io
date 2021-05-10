@@ -82,7 +82,8 @@ result = summarize(                    # 平均を計算
 ### 列
 
 `dplyr::select(.data, ...)`
-:   列を絞る。複数指定、範囲指定、負の指定が可能。
+:   列を絞る。`:`範囲指定、`!`負の指定が可能。
+    複数指定する場合はベクトル渡し、カンマ区切り、もしくは `&` `|` を使う。
     [select helper](https://tidyselect.r-lib.org/reference/select_helpers.html)
     によるパターン指定も便利。
     残るのが1列だけでも勝手にvectorにはならずdata.frameのまま。
@@ -92,10 +93,15 @@ result = summarize(                    # 平均を計算
     diamonds %>% dplyr::select(carat, cut, price)
     diamonds %>% dplyr::select(c("carat", "cut", "price"))
     diamonds %>% dplyr::select(!c(carat, cut, price))
-    diamonds %>% dplyr::select(-carat, -cut, -price)
     diamonds %>% dplyr::select(starts_with("c"))
     diamonds %>% dplyr::select(where(is.numeric))
+    # diamonds %>% dplyr::select(-carat, -cut, -price)
     ```
+
+    カンマ区切りはORの意味で働くはずだがマイナス指定
+    `dplyr::select(-carat, -cut, -price)`
+    の場合だけANDのように働く(つまり3列とも抜ける)ので特殊。
+    (だからマニュアルから消えたのかな？)
 
     https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html
 
