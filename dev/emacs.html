@@ -412,7 +412,6 @@ Emacs
 まず<code>init.el</code>の先頭でこのように宣言</p>
 <div class="highlight"><pre class="chroma"><code class="language-el" data-lang="el"><span class="p">(</span><span class="nb">require</span> <span class="ss">&#39;package</span><span class="p">)</span>
 <span class="p">(</span><span class="nv">add-to-list</span> <span class="ss">&#39;package-archives</span> <span class="o">&#39;</span><span class="p">(</span><span class="s">&#34;melpa&#34;</span> <span class="o">.</span> <span class="s">&#34;https://melpa.org/packages/&#34;</span><span class="p">))</span>
-<span class="p">(</span><span class="nv">add-to-list</span> <span class="ss">&#39;package-archives</span> <span class="o">&#39;</span><span class="p">(</span><span class="s">&#34;marmalade&#34;</span> <span class="o">.</span> <span class="s">&#34;https://marmalade-repo.org/packages/&#34;</span><span class="p">))</span>
 
 <span class="c1">;; Added by Package.el.  This must come before configurations of</span>
 <span class="c1">;; installed packages.  Don&#39;t delete this line.  If you don&#39;t want it,</span>
@@ -427,51 +426,6 @@ Emacs
 <code>(package-refresh-contents)</code> を入れておくとパッケージ情報を最新に保てるが、
 結構遅いので気が向いたときに手動でやったほうがいい:
 <kbd>M-x</kbd> <code>package-list-packages</code> <kbd>U</kbd> <kbd>x</kbd></p>
-<h3 id="caskでパッケージ管理">Caskでパッケージ管理</h3>
-<p>最近は上記のpackage.elを使っているので下記の情報は古いかも。</p>
-<ul>
-<li><a href="https://github.com/cask/cask">https://github.com/cask/cask</a></li>
-<li><a href="https://cask.readthedocs.io/">https://cask.readthedocs.io/</a></li>
-</ul>
-<p>Emacs 24以上じゃないと動かない (=CentOS 6.5ではダメ)</p>
-<p><code>cask</code> コマンドは基本的に <code>Cask</code>
-ファイルが置いてあるディレクトリ (e.g., <code>~/.emacs.d/</code>)
-で実行することが想定されている。
-それ以外の場所で実行するときは <code>--path ~/.emacs.d/</code>
-のようなオプションを付ける。</p>
-<h4 id="セットアップ">セットアップ</h4>
-<p><a href="https://cask.readthedocs.io/en/latest/guide/installation.html">https://cask.readthedocs.io/en/latest/guide/installation.html</a></p>
-<ol>
-<li>
-<p>Cask本体を <code>~/.cask</code> にインストール:</p>
-<pre><code>curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python
-</code></pre>
-<p>実行ファイルは <code>~/.cask/bin/</code> に置かれるので、
-<code>.zshrc</code> などで <code>PATH</code> を設定するか、
-既に通ってるところにシムリンクを張るか、フルパスで使う。</p>
-</li>
-<li>
-<p><code>~/.emacs.d/Cask</code> を書く。 cf. <a href="https://github.com/heavywatal/dotfiles/blob/master/.emacs.d/Cask">https://github.com/heavywatal/dotfiles/blob/master/.emacs.d/Cask</a></p>
-</li>
-<li>
-<p><code>~/.emacs.d/Cask</code> に書かれたパッケージをインストール:</p>
-<pre><code>cask install --path ~/.emacs.d/
-</code></pre>
-</li>
-<li>
-<p><code>~/.emacs.d/init.el</code> に設定を書く:</p>
-<pre><code>(require 'cask &quot;~/.cask/cask.el&quot;)
-(cask-initialize)
-</code></pre>
-</li>
-</ol>
-<h4 id="メンテナンス">メンテナンス</h4>
-<p>パッケージをアップデート:</p>
-<pre><code>cask update --path ~/.emacs.d/
-</code></pre>
-<p>Cask本体をアップデート:</p>
-<pre><code>cask upgrade
-</code></pre>
 
 </article>
 </main>
