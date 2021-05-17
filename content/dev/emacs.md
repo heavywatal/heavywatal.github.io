@@ -153,7 +153,6 @@ Emacs 24で標準入りしたので、基本的にこれを使うのが良さそ
 ```el
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
 
 ;; Added by Package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
@@ -174,51 +173,3 @@ initialize後に
 `(package-refresh-contents)` を入れておくとパッケージ情報を最新に保てるが、
 結構遅いので気が向いたときに手動でやったほうがいい:
 <kbd>M-x</kbd> `package-list-packages` <kbd>U</kbd> <kbd>x</kbd>
-
-
-### Caskでパッケージ管理
-
-最近は上記のpackage.elを使っているので下記の情報は古いかも。
-
--   <https://github.com/cask/cask>
--   <https://cask.readthedocs.io/>
-
-Emacs 24以上じゃないと動かない (=CentOS 6.5ではダメ)
-
-`cask` コマンドは基本的に `Cask`
-ファイルが置いてあるディレクトリ (e.g., `~/.emacs.d/`)
-で実行することが想定されている。
-それ以外の場所で実行するときは `--path ~/.emacs.d/`
-のようなオプションを付ける。
-
-#### セットアップ
-
-<https://cask.readthedocs.io/en/latest/guide/installation.html>
-
-1.  Cask本体を `~/.cask` にインストール:
-
-        curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python
-
-    実行ファイルは `~/.cask/bin/` に置かれるので、
-    `.zshrc` などで `PATH` を設定するか、
-    既に通ってるところにシムリンクを張るか、フルパスで使う。
-
-1.  `~/.emacs.d/Cask` を書く。 cf. <https://github.com/heavywatal/dotfiles/blob/master/.emacs.d/Cask>
-1.  `~/.emacs.d/Cask` に書かれたパッケージをインストール:
-
-        cask install --path ~/.emacs.d/
-
-1.  `~/.emacs.d/init.el` に設定を書く:
-
-        (require 'cask "~/.cask/cask.el")
-        (cask-initialize)
-
-#### メンテナンス
-
-パッケージをアップデート:
-
-    cask update --path ~/.emacs.d/
-
-Cask本体をアップデート:
-
-    cask upgrade
