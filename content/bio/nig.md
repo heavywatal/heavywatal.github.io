@@ -87,7 +87,7 @@ qsub -l short -b y -shell n -cwd -N test "pwd; sleep 5; ls >ls.txt"
 `-l ***`
 :   実行時間や計算ノードなどの要求を伝える。
     管理者が定義したキューから選んで指定する。
-    例えば、3日以内に終わる軽いものなら `-l short`、
+    例えば、1時間以内に終わる軽いものなら `-l short`、
     2か月かかるものなら `-l epyc`、
     メモリが多めに必要なら `-l medium`、など。
     `qstat -g c` でキューの一覧とそれぞれの負荷を確認できるので空いてるところを探す。
@@ -243,13 +243,41 @@ singularity exec -e ~/image/trinityrnaseq.v2.11.0.simg Trinity --help
 ```
 
 
-## misc.
+## R
 
-### インストール済みRを使ってみる
+### Homebrew R
+
+Homebrew on Linux における標準GCCがついに新しくなったので
+`brew install r`
+で使えるRが入るようになった。
+
+ライブラリが古かったりして途中でエラーになることもあるので
+[`brew install --force-bottle gcc`](https://github.com/Homebrew/linuxbrew-core/issues/22800)
+のような感じでやり過ごす。
+
+ただし[古い gcc@5 まわりでまだ問題が残っている](https://github.com/Homebrew/linuxbrew-core/issues/22511)ようなので要注意。
+
+
+### singularity R
+
+```sh
+find /usr/local/biotools/ -name 'r-base:*' | sort
+```
+
+最新が3.5.1と古い上にエラーで起動しない:
+
+```
+singularity exec -e /usr/local/biotools/r/r-base:3.5.1 R
+WARNING: Skipping mount /opt/pkg/singularity/3.7.1/var/singularity/mnt/session/etc/resolv.conf [files]: /etc/resolv.conf doesn't exist in container
+[1]    100279 segmentation fault  singularity exec -e /usr/local/biotools/r/r-base:3.5.1 R
+```
+
+
+### module R
 
 https://sc.ddbj.nig.ac.jp/ja/guide/software/r
 
-`module load r/3.5.2` で比較的新しいやつが使えるけど、
+`module load r/3.5.2` そのものが古い上に、
 古いコンパイラ(おそらく `/usr/bin/gcc` 4.8.5)でビルドされているため
 RcppでC++11までしか使えない。
 また、各パッケージも同じく古いコンパイラでビルドしなければならない。
@@ -259,7 +287,8 @@ Rcppインストール時などに
 と怒られる。
 
 
-### 自前でRをインストールする
+
+### Source R
 
 `/opt/pkg/r/*/lib64/R/etc/Makeconf`
 を参考に新しいコンパイラで自前ビルドを試みる:
