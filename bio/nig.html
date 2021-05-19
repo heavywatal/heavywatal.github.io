@@ -168,7 +168,7 @@ qsub -l short -b y -shell n -cwd -N <span class="nb">test</span> <span class="s2
 <dt><code>-l ***</code></dt>
 <dd>実行時間や計算ノードなどの要求を伝える。
 管理者が定義したキューから選んで指定する。
-例えば、3日以内に終わる軽いものなら <code>-l short</code>、
+例えば、1時間以内に終わる軽いものなら <code>-l short</code>、
 2か月かかるものなら <code>-l epyc</code>、
 メモリが多めに必要なら <code>-l medium</code>、など。
 <code>qstat -g c</code> でキューの一覧とそれぞれの負荷を確認できるので空いてるところを探す。</dd>
@@ -283,10 +283,24 @@ E(rror), r(unning), R(estarted), s(uspended)
 mkdir -p ~/image
 wget -P ~/image/ https://data.broadinstitute.org/Trinity/TRINITY_SINGULARITY/trinityrnaseq.v2.11.0.simg
 singularity <span class="nb">exec</span> -e ~/image/trinityrnaseq.v2.11.0.simg Trinity --help
-</code></pre></div><h2 id="misc">misc.</h2>
-<h3 id="インストール済みrを使ってみる">インストール済みRを使ってみる</h3>
+</code></pre></div><h2 id="r">R</h2>
+<h3 id="homebrew-r">Homebrew R</h3>
+<p>Homebrew on Linux における標準GCCがついに新しくなったので
+<code>brew install r</code>
+で使えるRが入るようになった。</p>
+<p>ライブラリが古かったりして途中でエラーになることもあるので
+<a href="https://github.com/Homebrew/linuxbrew-core/issues/22800"><code>brew install --force-bottle gcc</code></a>
+のような感じでやり過ごす。</p>
+<p>ただし<a href="https://github.com/Homebrew/linuxbrew-core/issues/22511">古い gcc@5 まわりでまだ問題が残っている</a>ようなので要注意。</p>
+<h3 id="singularity-r">singularity R</h3>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">find /usr/local/biotools/ -name <span class="s1">&#39;r-base:*&#39;</span> <span class="p">|</span> sort
+</code></pre></div><p>最新が3.5.1と古い上にエラーで起動しない:</p>
+<pre><code>singularity exec -e /usr/local/biotools/r/r-base:3.5.1 R
+WARNING: Skipping mount /opt/pkg/singularity/3.7.1/var/singularity/mnt/session/etc/resolv.conf [files]: /etc/resolv.conf doesn't exist in container
+[1]    100279 segmentation fault  singularity exec -e /usr/local/biotools/r/r-base:3.5.1 R
+</code></pre><h3 id="module-r">module R</h3>
 <p><a href="https://sc.ddbj.nig.ac.jp/ja/guide/software/r">https://sc.ddbj.nig.ac.jp/ja/guide/software/r</a></p>
-<p><code>module load r/3.5.2</code> で比較的新しいやつが使えるけど、
+<p><code>module load r/3.5.2</code> そのものが古い上に、
 古いコンパイラ(おそらく <code>/usr/bin/gcc</code> 4.8.5)でビルドされているため
 RcppでC++11までしか使えない。
 また、各パッケージも同じく古いコンパイラでビルドしなければならない。
@@ -294,7 +308,7 @@ RcppでC++11までしか使えない。
 Rcppインストール時などに
 <code>/usr/lib64/libstdc++.so.6: version `GLIBCXX_3.4.20' not found</code>
 と怒られる。</p>
-<h3 id="自前でrをインストールする">自前でRをインストールする</h3>
+<h3 id="source-r">Source R</h3>
 <p><code>/opt/pkg/r/*/lib64/R/etc/Makeconf</code>
 を参考に新しいコンパイラで自前ビルドを試みる:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">wget -O- https://cran.r-project.org/src/base/R-3/R-3.5.2.tar.gz <span class="p">|</span> tar xz
