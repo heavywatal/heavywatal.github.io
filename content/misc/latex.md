@@ -36,7 +36,7 @@ TeX Liveの新パージョンが年1回リリースされるので、そのと�
 
 1.  ソースコードを書く
 
-    ```tex
+    ```latex
     \documentclass[a4paper]{article}
     \begin{document}
     Hello, World!
@@ -128,13 +128,13 @@ tlmgr install chktex latexmk
     数式環境のデファクトスタンダード。
     アメリカ数学会(AMS)が開発したらしいが、
     ガチ数学じゃなくても数式を書く場合はこれらしい。
-    ```tex
+    ```latex
     \usepackage{amssymb,amsmath}
     \usepackage[all,warning]{onlyamsmath}
     ```
 
 -   Inline math:
-    ```tex
+    ```latex
     if $N_e u \ll 1$, then the population is monomorphic most of the time,
     ```
 
@@ -144,7 +144,7 @@ tlmgr install chktex latexmk
     しばらくは `chktex -n46` で様子を見る。
 
 -   Display math:
-    ```tex
+    ```latex
     \begin{equation*}\label{eq:growth}
       N_t = N_0 e^{rt}
     \end{equation*}
@@ -155,7 +155,7 @@ tlmgr install chktex latexmk
 
 -   改行を含む数式を等号で揃える
 
-    ```tex
+    ```latex
     \begin{equation}\label{eq:growth}
     \begin{split}
       N_t &= N_0 e^{rt} \\
@@ -176,7 +176,7 @@ tlmgr install chktex latexmk
     スペースとかに問題あるらしく非推奨。
 
 -   場合分け
-    ```tex
+    ```latex
     \begin{equation}\label{eq:heaviside}
       H(x) = \begin{cases}
         & 0 \text{if $x \le 0$} \\
@@ -200,7 +200,7 @@ tlmgr install chktex latexmk
 
 ### 図
 
-```tex
+```latex
 \usepackage[final]{graphicx}
 %%%
 \begin{figure}
@@ -246,7 +246,7 @@ twocolumnの文書内で `\textwidth` まで広げたい場合は
 GIFアニメをそのまま埋め込むことはできないので、
 [{animate}](https://www.ctan.org/pkg/animate)で連番PNGを読み込む。
 
-```tex
+```latex
 % tlmgr install animate media9 ocgx2
 \usepackage[autoplay,final,controls=all,type=png]{animate}
 
@@ -264,7 +264,7 @@ GIFアニメをそのまま埋め込むことはできないので、
 キャプションやラベルなどをまとめるのが `table` 環境、
 表本体が `tabular` 環境。
 
-```tex
+```latex
 \begin{table}
 \caption{Parameters}%
 \label{table:parameters}
@@ -293,7 +293,7 @@ GIFアニメをそのまま埋め込むことはできないので、
 [{enumitem}](https://www.ctan.org/pkg/enumitem)
 を使うといろいろなオプションが設定可能になる。
 
-```tex
+```latex
 \usepackage{enumitem}
 %%%
 
@@ -323,7 +323,7 @@ GIFアニメをそのまま埋め込むことはできないので、
     e.g., `mybibdata.bib`
 1.  コマンドにcite keyを入れて本文に挿入。
     このとき標準の `\cite` ではなく `{natbib}` のものを使う。
-    ```tex
+    ```latex
     \usepackage[authoryear,round,sort&compress]{natbib}
     %%%
 
@@ -335,7 +335,7 @@ GIFアニメをそのまま埋め込むことはできないので、
     ```
 
 1.  最後の方に文献リストを挿入:
-    ```tex
+    ```latex
     \bibliographystyle{abbrvnat}
     \bibliography{mybibdata}
     ```
@@ -358,7 +358,7 @@ GIFアニメをそのまま埋め込むことはできないので、
 - <https://en.wikibooks.org/wiki/LaTeX/Fonts#Font_styles>
 - <https://en.wikibooks.org/wiki/LaTeX/Colors>
 
-```tex
+```latex
 \emph{emphasis}
 \textit{italic}
 \textbf{bold}
@@ -370,7 +370,7 @@ GIFアニメをそのまま埋め込むことはできないので、
 `\normalsize`,
 `\large`, `\Large`, `\LARGE`, `\huge`, `\Huge`
 
-```tex
+```latex
 \usepackage[normalem]{ulem}  % \uline{}, \sout{}
 \usepackage{color}           % \textcolor{}
 \usepackage{soul}            % \hl{} using {color}
@@ -394,6 +394,23 @@ GIFアニメをそのまま埋め込むことはできないので、
 "Extra }, or forgotten $" というエラーで弾かれる。
 
 
+### 行番号
+
+共著者や査読者との議論をスムーズにするため各行に番号を振る。
+{amsmath} の `fleqn` オプションを使うと行番号が消えるとか、
+`twocolumn` のときに `\pagewiselinenumbers{}` がページワイズにならないとか、
+いろいろ不具合はあるものの
+[{lineno}](https://www.ctan.org/pkg/lineno)
+を使うしかなさそう。
+
+```latex
+\usepackage[mathlines,pagewise,switch]{lineno}
+\renewcommand\linenumberfont{\normalfont\scriptsize\sffamily\color[gray]{0.5}}%
+\setlength\linenumbersep{4truemm}
+
+\linenumbers{}
+```
+
 ## Tips
 
 ### ダメな使い方を警告してもらう
@@ -403,7 +420,7 @@ GIFアニメをそのまま埋め込むことはできないので、
 ファイルの先頭で `nag` を読み込むことで、
 コンパイル時にそういうのを警告してもらえる。
 
-```tex
+```latex
 \RequirePackage[l2tabu,orthodox]{nag}
 
 \documentclass[a4paper]{article}  % これよりも前
@@ -424,7 +441,7 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 
 次のコードをプリアンブルの頭の方に記述するといいらしいが、うまく機能しない。。。
 
-```tex
+```latex
 \input{glyphtounicode.tex}
 \pdfgentounicode=1
 % あるいは
@@ -500,14 +517,16 @@ TeX Liveから入れたフォントをOSに認識させるにはシムリンク�
 `ln -s /Library/TeX/Root/texmf-dist/fonts/opentype ~/Library/Fonts/texlive-opentype`
 
 
-```tex
+```latex
 \usepackage{amssymb,amsmath} % must be called ahead of mathspec
 \usepackage[all,warning]{onlyamsmath}
+\usepackage{iftex}
 \iftutex
   \usepackage[math-style=TeX,bold-style=TeX]{unicode-math}
   \usepackage[no-math]{fontspec}
   \setmainfont{TeX Gyre Pagella}
   \setmathfont{TeX Gyre Pagella Math}
+  \setsansfont{TeX Gyre Heros}
   % \usepackage{luatexja}
   % \usepackage[hiragino-pron,scale=0.92,deluxe,jis2004,match,nfssonly]{luatexja-preset}
 \else
