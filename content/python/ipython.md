@@ -9,7 +9,6 @@ tags = ["python"]
 
 - <https://ipython.org/>
 - <https://ipython.readthedocs.io/>
-- `pip install ipython jupyter` でインストール
 
 ## 対話型実行環境
 
@@ -31,7 +30,7 @@ IPython.start_ipython(argv=[])
 ### 文脈を考慮したタブ補完
 
 定義済み変数などはある程度 `rlcompleter` でも補完できるが、
-`IPython` はさらに文脈を考慮して賢い補完をしてくれる:
+IPythonはさらに文脈を考慮して賢い補完をしてくれる:
 ```py
 import o[TAB]
 import os.[TAB]
@@ -99,63 +98,38 @@ ipython --profile=<name>
 automagicを切るとか。
 
 
-## [Hydrogen](https://atom.io/packages/hydrogen)
+## Jupyter
 
-[Atom]({{< relref "atom.md" >}}) エディタ内で実行結果を確認できるようにする拡張。
-普通の `.py` ファイルだけでなく `.md` 内のコードブロックでも使える。
-
-```sh
-pip install ipykernel
-python -m ipykenel install --user
-apm install hydrogen
-```
-
-key                          | action
----------------------------- | ----
-<kbd>cmd-enter</kbd>         | `hydrogen:run`
-<kbd>alt-cmd-enter</kbd>     | `hydrogen:run-cell`
-<kbd>shift-enter</kbd>       | `hydrogen:run-and-move-down`
-<kbd>alt-shift-enter</kbd>   | `hydrogen:run-cell-and-move-down`
-<kbd>ctrl-cmd-enter</kbd>    | `hydrogen:run-all`
-<kbd>alt-cmd-backspace</kbd> | `hydrogen:clear-results`
-
-`# %%` でcellを区切れる。
-
-
-## Jupyter Notebook
-
-- <https://jupyter.org/>
-- <https://jupyter.readthedocs.io/>
-- <https://jupyter-notebook.readthedocs.io/>
+<https://jupyter.org/>
 
 ウェブブラウザ上で動く対話的実行環境。
 元はIPython Notebookだったが、
-カーネルを入れ替えることで他言語サポートが可能になり、
-汎用Notebookとして生まれ変わった。
+カーネルを入れ替えることで他言語を扱うことが可能になり、
+汎用[Jupyter Notebook](https://jupyter-notebook.readthedocs.io/)として生まれ変わった。
+それをさらに開発環境として洗練させたのが[JupyterLab](https://jupyterlab.readthedocs.io/)。
 
+ノートブック形式 `.ipynb` は
 Markdown/LaTeX記法による見出し・コメント・数式とともに
-ソースコードと実行結果をひと括りに保存しておけるので、
+ソースコードと実行結果をひとまとめに保存しておけるので、
 研究ノートのような使い方に向いている。
 Mathematica/Mapleの使い勝手に似ている。
-[ノートブック形式 `.ipynb` がGitHub上で直接閲覧できるようになった]
-(http://blog.jupyter.org/2015/05/07/rendering-notebooks-on-github/)のも便利。
+GitHub上でも直接閲覧できるし、VS CodeやAtomでも扱える。
+ターミナルやテキストエディタに馴染みのない非プログラマ向けには便利だろう。
 
-ソースコードがインプット・アウトプット混在の複雑なテキストになるので、
+ファイルがインプット・アウトプット混在の複雑なテキストになるので、
 **コマンドラインやGit上での取り回しが悪いのは致命的な欠点。**
-ターミナルやテキストエディタに馴染みのない非プログラマ向けの道具という印象。
-同じ用途なら Rmarkdown のほうが好みだし将来性があるように思う。
+後述のJupytextがこれを回避する救世主かもしれない。
 
 
-### [始め方](https://jupyter-notebook.readthedocs.io/en/stable/examples/Notebook/Notebook%20Basics.html)
+### [始め方](https://jupyterlab.readthedocs.io/en/stable/getting_started/starting.html)
 
-1.  ターミナルから起動: `jupyter notebook [file or directory]`
-1.  ウェブブラウザで `http://localhost:8888/tree` が立ち上がる
-1.  右上の New から適当なNotebookカーネル
-    (e.g., Python 3) を選択
-1.  `In [ ]:` の右の箱に適当なPythonコマンドを入れて
-    <kbd>shift-return</kbd>
-1.  左上の File から適当に保存してブラウザを閉じる
-1.  ターミナルから <kbd>control-c</kbd> で終了
+1.  適当な作業ディレクトリを作って移動: `mkdir -p ~/jupyter; cd $_`
+1.  ターミナルから起動: `jupyter lab [file or directory]`
+1.  ウェブブラウザで `http://localhost:8888/lab/` が立ち上がる
+1.  Launcher内のNotebookにある適当なカーネル (e.g., Python 3) を選択
+1.  `[ ]:` の右の箱に適当なコマンド `print('Hello, world!')` を入れて <kbd>shift-return</kbd>
+1.  適当に保存してブラウザを閉じる
+1.  ターミナルに戻って <kbd>control-c</kbd> で終了
 
 
 ### キーボードショートカット
@@ -171,6 +145,87 @@ key                     | action
 <kbd>b</kbd>            | insert cell bellow
 <kbd>dd</kbd>           | delete selected cells
 <kbd>ctrl-return</kbd>  | run selected cells
+
+
+### 出力
+
+例えばある Pandas DataFrame `df` を表示したいとき、
+単に `df` で評価するのと明示的に `print(df)` を実行するのとでは結果が異なる。
+前者はコードセルの出力として扱われ、HTML+CSSで描画される。
+後者は副作用扱いで出力番号も与えられず、普通のテキストで表示される。
+テキストで出力するオプションが欲しいけど見つからない。
+
+`nbconvert` による変換時は
+`~/.jupyter/jupyter_nbconvert_config.py`
+に以下のように書いておけば `print()` 無しでもテキスト表示できる。
+
+```py
+c.NbConvertBase.display_data_priority = ['text/plain']
+```
+
+[Jupyter’s Common Configuration Approach](https://jupyter.readthedocs.io/en/latest/use/config.html)
+によれば代入ではなく `.prepend()` でも行けそうだが、
+それだとなぜか `text/html` が優先されてしまう。
+また、いくつもある `display_data_priority` の中でなぜ
+`NbConvertBase` だけが効くのか、というのもよく分からない。
+
+
+## Jupytext
+
+<https://jupytext.readthedocs.io/>
+
+`.ipynb`, `.py`, `.md` などの形式を相互に変換してくれる。
+例えば、手元のソースコードは `.py` としてバージョン管理・編集し、
+配布時に `.ipynb` で出力といった使い方ができる。
+
+Jupytextではソースコードを同期することが主眼なので、
+knitrのようにコードセルの実行結果を含むMarkdownを書き出す機能は無い。
+それは
+`jupyter nbconvert --execute --to markdown`
+とかでやるべき仕事っぽい。
+[jupytext/issues/220](https://github.com/mwouts/jupytext/issues/220)
+で議論はある。
+
+### Format
+
+`md` (Jupytext Markdown)
+: YAMLヘッダーにメタデータを保存する。
+: コードセルにオプションを付けられる。
+: それ以外はほぼ普通のMarkdown。
+: 現状のVS Codeではコードセル内での補完が貧弱なのは残念だが、
+  リポート目的で非コードが多いならこれが扱いやすそう。
+
+`rmarkdown` ([R Markdown](https://rmarkdown.rstudio.com/))
+: コードセルに波括弧を付ける: `{python}`
+: Rから[knitr](https://yihui.org/knitr/)を使えば結果を含むMarkdownを出力できるが、
+  RとPythonの橋渡しをする
+  [reticulate](https://rstudio.github.io/reticulate/)
+  パッケージがまだまだ開発途上という印象。
+
+`md:myst` (MyST Markdown; Markedly Structured Text)
+: CommonMarkに準拠しつつreStrucutredTextやSphinxの機能をサポートするリッチなMarkdown。
+: コードセルの中にメタデータを埋め込むのが難点。
+
+`md:pandoc` (Pandoc Markdown)
+: Pandoc divs `:::` という謎要素でセルを区切るらしい。
+
+`py:light`
+: `# コメント` のかたまりをテキストセルとして扱う
+: コードと隣接するコメントはコードセル内に含められる。
+
+`py:percent`
+: セルの頭に明示的に `# %%` を書く。
+: VS Code CodeLens や Atom Hydrogen などでも認識されて特別扱いされるが、
+  むしろ表示が邪魔なのでオフにする。
+: 現状のVS Codeでコードを書くにはこれが一番扱いやすいか。
+
+`py:nomarker`
+: 情報が落ちすぎて round-trip 不可。
+
+### Config
+
+[`${XDG_CONFIG_HOME}/jupytext/jupytext.toml`](https://github.com/heavywatal/dotfiles/blob/master/.config/jupytext/jupytext.toml)
+
 
 
 ## 書籍
