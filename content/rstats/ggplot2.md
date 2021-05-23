@@ -579,6 +579,9 @@ ggsave("mpg4.png", p3 + theme_bw(base_size = 22), width = 4, height = 4)
 :   `annotate("text", x = 1:4, y = 4:1, label = sprintf("x = %d", 1:4))`
 :   テーマの `base_family` は引き継がれないので `family =` で指定すべし。
 :   数式を表示するには `label = "italic(N[t])"` のような文字列で渡して `parse = TRUE`。
+:   データ範囲によらず相対位置を指定したいとき、公式のオプションは無いが、
+    `annotate("text", x = -Inf, y = Inf, hjust = 0, vjust = 1, label = "top-left")`
+    のように `Inf` とjustificationを駆使すれば端付近に置くことができる。
 :   データ点に対応する文字列を添えるには
     `geom_text(aes(label = foo))` のほうが適している。
     オプションで `nudge_x = 2, nudge_y = 2` などとすれば点と重ならないようにずらせる。
