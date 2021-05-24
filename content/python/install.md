@@ -40,14 +40,20 @@ MacやLinuxならシステムの一部として
 
     ```sh
     export PYENV_ROOT=${HOME}/.pyenv
-    PATH=${PYENV_ROOT}/bin:$PATH
-    PATH=${PYENV_ROOT}/versions/$(pyenv global)/bin:$PATH
-    export PATH
+    if [ -d $PYENV_ROOT ]; then
+        # PATH=${PYENV_ROOT}/bin:$PATH
+        pyenv_versions=(${PYENV_ROOT}/versions/*)
+        pyenv_latest=${pyenv_versions[@]: -1}/bin
+        PATH=${pyenv_latest}:$PATH
+        export PYENV_PYTHONPATH=${pyenv_latest}/python3
+        unset pyenv_versions pyenv_latest
+    fi
     ```
 
     `pyenv shell` や `pyenv local`
     を使ってPythonのバージョンを頻繁に切り替える場合は、
     [公式の説明](https://github.com/pyenv/pyenv#installation)どおりに
+    `eval "$(pyenv init --path)"` や
     `eval "$(pyenv init -)"`
     を設定してshimsを使う方法のほうがいいかもしれないけど、
     そうでなければこのようにPATHだけ設定するほうが単純で、
@@ -59,13 +65,7 @@ MacやLinuxならシステムの一部として
     ```sh
     exec $SHELL -l
     pyenv install -l | less
-    pyenv install 3.7.3
-    ```
-
-1.  インストールしたものを常に使うように設定:
-
-    ```sh
-    pyenv global 3.7.3
+    pyenv install 3.9.5
     exec $SHELL -l
     ```
 
@@ -73,7 +73,7 @@ MacやLinuxならシステムの一部として
 
     ```sh
     which pip3
-    pip3 install -U setuptools pip wheel
+    pip3 install -U setuptools pip
     pip3 install -r /path/to/requirements.txt
     ```
 
@@ -106,15 +106,16 @@ Scientificな用途で使いたい場合は
 などの主要パッケージもまとめて面倒みてくれる
 [Anaconda](https://docs.continuum.io/anaconda/)
 を使うという選択肢もある。
-GUIのインストーラでもいいし、Homebrewでもいける:
+私は使わない。
+GUIのインストーラでもいいし、Homebrewでも入れられる:
 
 ```sh
 brew install anaconda
 export PATH=/usr/local/anaconda3/bin:"$PATH"
 ```
 
-ただし`PATH`上でシステムコマンド(`curl`など)を上書きしちゃうヤンチャな面もあるので、
-それが気になる人はpyenv越しに入れることで汚染を防げる。
+ただし`PATH`上でシステムコマンドを上書きしちゃうヤンチャな面もあるので、
+それが気になる人はpyenv越しに入れることで汚染をある程度防げる。
 全部入りに抵抗がある場合は
 `pyenv install miniconda3-latest`
 から小さくスタートすることも可能。
