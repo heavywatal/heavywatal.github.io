@@ -116,12 +116,18 @@ mkdir -p ~/.pyenv/cache
 ついでにPATHも追加しておく。
 シェルの設定ファイル (e.g., <code>~/.bashrc</code>) に次のように追記:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">export</span> <span class="nv">PYENV_ROOT</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.pyenv
-<span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PYENV_ROOT</span><span class="si">}</span>/bin:<span class="nv">$PATH</span>
-<span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PYENV_ROOT</span><span class="si">}</span>/versions/<span class="k">$(</span>pyenv global<span class="k">)</span>/bin:<span class="nv">$PATH</span>
-<span class="nb">export</span> PATH
+<span class="k">if</span> <span class="o">[</span> -d <span class="nv">$PYENV_ROOT</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="c1"># PATH=${PYENV_ROOT}/bin:$PATH</span>
+    <span class="nv">pyenv_versions</span><span class="o">=(</span><span class="si">${</span><span class="nv">PYENV_ROOT</span><span class="si">}</span>/versions/*<span class="o">)</span>
+    <span class="nv">pyenv_latest</span><span class="o">=</span><span class="si">${</span><span class="nv">pyenv_versions</span><span class="p">[@]: -1</span><span class="si">}</span>/bin
+    <span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">pyenv_latest</span><span class="si">}</span>:<span class="nv">$PATH</span>
+    <span class="nb">export</span> <span class="nv">PYENV_PYTHONPATH</span><span class="o">=</span><span class="si">${</span><span class="nv">pyenv_latest</span><span class="si">}</span>/python3
+    <span class="nb">unset</span> pyenv_versions pyenv_latest
+<span class="k">fi</span>
 </code></pre></div><p><code>pyenv shell</code> や <code>pyenv local</code>
 を使ってPythonのバージョンを頻繁に切り替える場合は、
 <a href="https://github.com/pyenv/pyenv#installation">公式の説明</a>どおりに
+<code>eval &quot;$(pyenv init --path)&quot;</code> や
 <code>eval &quot;$(pyenv init -)&quot;</code>
 を設定してshimsを使う方法のほうがいいかもしれないけど、
 そうでなければこのようにPATHだけ設定するほうが単純で、
@@ -132,17 +138,13 @@ mkdir -p ~/.pyenv/cache
 目当てのバージョンを探してインストール:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">exec</span> <span class="nv">$SHELL</span> -l
 pyenv install -l <span class="p">|</span> less
-pyenv install 3.7.3
-</code></pre></div></li>
-<li>
-<p>インストールしたものを常に使うように設定:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">pyenv global 3.7.3
+pyenv install 3.9.5
 <span class="nb">exec</span> <span class="nv">$SHELL</span> -l
 </code></pre></div></li>
 <li>
 <p><a href="/python/pip.html">pip</a> のパスを確認し、パッケージを入れる:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">which pip3
-pip3 install -U setuptools pip wheel
+pip3 install -U setuptools pip
 pip3 install -r /path/to/requirements.txt
 </code></pre></div><p>よく使うパッケージは
 <a href="https://github.com/heavywatal/dotfiles/blob/master/.config/python/requirements.txt"><code>requirements.txt</code></a>
@@ -175,11 +177,12 @@ pip3 install -r /path/to/requirements.txt
 などの主要パッケージもまとめて面倒みてくれる
 <a href="https://docs.continuum.io/anaconda/">Anaconda</a>
 を使うという選択肢もある。
-GUIのインストーラでもいいし、Homebrewでもいける:</p>
+私は使わない。
+GUIのインストーラでもいいし、Homebrewでも入れられる:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew install anaconda
 <span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span>/usr/local/anaconda3/bin:<span class="s2">&#34;</span><span class="nv">$PATH</span><span class="s2">&#34;</span>
-</code></pre></div><p>ただし<code>PATH</code>上でシステムコマンド(<code>curl</code>など)を上書きしちゃうヤンチャな面もあるので、
-それが気になる人はpyenv越しに入れることで汚染を防げる。
+</code></pre></div><p>ただし<code>PATH</code>上でシステムコマンドを上書きしちゃうヤンチャな面もあるので、
+それが気になる人はpyenv越しに入れることで汚染をある程度防げる。
 全部入りに抵抗がある場合は
 <code>pyenv install miniconda3-latest</code>
 から小さくスタートすることも可能。
