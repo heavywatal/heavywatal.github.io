@@ -173,6 +173,7 @@ p1 + aes(x = displ, y = cty) + geom_point(aes(color = hwy)) + scale_color_fermen
 
 - `name`: 凡例のタイトル。複数スケールで同じ名前にすると凡例が統合される。
 - `breaks`: 目盛りや凡例に登場させる値。
+- `n.breaks`: 目盛りをいくつに表示したいか。
 - `labels`: breaksの値に対応して実際に表示されるラベル。
   breaksの値を受け取って文字列を返す関数
   (e.g., `scales::percent`, `scales::comma`) を渡すこともできる。
@@ -183,8 +184,13 @@ p1 + aes(x = displ, y = cty) + geom_point(aes(color = hwy)) + scale_color_fermen
   さらに細かく制御したい場合は
   [`guide_legend()`](https://ggplot2.tidyverse.org/reference/guide_legend.html) や
   [`guide_colorbar()`](https://ggplot2.tidyverse.org/reference/guide_colorbar.html)
-  で。
-  消したい場合は `"none"` か `FALSE` を渡せる。
+  で。消したい場合は `"none"` か `FALSE` を渡せる。<br>
+  軸ラベルが密すぎて重なる場合に間引いたり、角度を付けたり、ずらしたりするには
+  [`guide_axis()`](https://ggplot2.tidyverse.org/reference/guide_axis.html)
+  が使える。<br>
+  これらを複数使う場合はscale関数のオプションではなく独立の
+  [`guides()`](https://ggplot2.tidyverse.org/reference/guides.html)
+  関数を使う手もある。
 
 
 ### 変数によってパネルを分割する
@@ -232,9 +238,10 @@ p1 + aes(x = displ, y = cty) + geom_point(aes(color = hwy)) + scale_color_fermen
 ### 内部変数を使う
 
 ヒストグラムや箱ヒゲなどの表示に必要な計算は `stat_*()` を通して内部的に行われる。
-そうした値 (**calculated aesthetics**) の一部は `aes(y = stat(count))` のようにして
-[`stat()`](https://ggplot2.tidyverse.org/reference/stat.html) 関数を通じて参照できる。
-(昔は `..count..` のようにピリオドつきの変な名前で参照していた。)
+そうした値の一部は [`after_stat()`](https://ggplot2.tidyverse.org/reference/aes_eval.html) 関数を通じて参照し、 `aes()` 内で使うことができる。
+例えば `geom_histogram()` や `geom_bar()` の縦軸を生のカウントから密度に変えるには
+`aes(y = after_stat(density))` のようにする。
+(昔は `..density..` とか `stat(density)` のようにしていた。)
 
 これらはggplotオブジェクトを作るときではなく、描画するときに計算されるらしい。
 強制的にそこまで計算させて値を参照するには `ggplot_build()` を使う。
@@ -246,7 +253,11 @@ ggplot_build(p)$data[[1L]]
 # layer_data(p)
 ```
 
-https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variables
+colorとfillを同色の透明度違いにする、とかやりたい場合も似たようなイメージで、
+[after_scale()](https://ggplot2.tidyverse.org/reference/aes_eval.html)
+を使って計算後・描画前に割り込める。
+
+https://ggplot2-book.org/layers.html#generated-variables
 
 
 ## 座標軸やタイトルを変更
@@ -275,8 +286,10 @@ https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variable
 [X軸とY軸の比率を固定](https://ggplot2.tidyverse.org/reference/coord_fixed.html)
 :   `coord_fixed(ratio = 1)`
 
-[XY軸の反転](https://ggplot2.tidyverse.org/reference/coord_flip.html)
+[XY軸の転置](https://ggplot2.tidyverse.org/reference/coord_flip.html)
 :   `coord_flip()`
+:   `geom_*(orientation = "y")` も可。
+    `geom_bar()`, `geom_histogram()` では `aes(y =` にマッピングするだけでもいい。
 
 [極座標](https://ggplot2.tidyverse.org/reference/coord_polar.html)
 :   パイチャートも作れるらしい
