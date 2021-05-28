@@ -232,6 +232,7 @@ e.g., <code>scale_color_manual(values = c(&quot;4&quot; = &quot;red&quot;, f = &
 <ul>
 <li><code>name</code>: 凡例のタイトル。複数スケールで同じ名前にすると凡例が統合される。</li>
 <li><code>breaks</code>: 目盛りや凡例に登場させる値。</li>
+<li><code>n.breaks</code>: 目盛りをいくつに表示したいか。</li>
 <li><code>labels</code>: breaksの値に対応して実際に表示されるラベル。
 breaksの値を受け取って文字列を返す関数
 (e.g., <code>scales::percent</code>, <code>scales::comma</code>) を渡すこともできる。</li>
@@ -242,8 +243,13 @@ breaksの値を受け取って文字列を返す関数
 さらに細かく制御したい場合は
 <a href="https://ggplot2.tidyverse.org/reference/guide_legend.html"><code>guide_legend()</code></a> や
 <a href="https://ggplot2.tidyverse.org/reference/guide_colorbar.html"><code>guide_colorbar()</code></a>
-で。
-消したい場合は <code>&quot;none&quot;</code> か <code>FALSE</code> を渡せる。</li>
+で。消したい場合は <code>&quot;none&quot;</code> か <code>FALSE</code> を渡せる。<br>
+軸ラベルが密すぎて重なる場合に間引いたり、角度を付けたり、ずらしたりするには
+<a href="https://ggplot2.tidyverse.org/reference/guide_axis.html"><code>guide_axis()</code></a>
+が使える。<br>
+これらを複数使う場合はscale関数のオプションではなく独立の
+<a href="https://ggplot2.tidyverse.org/reference/guides.html"><code>guides()</code></a>
+関数を使う手もある。</li>
 </ul>
 <h3 id="変数によってパネルを分割する">変数によってパネルを分割する</h3>
 <p>多変量データを俯瞰するには、データに応じたパネル分割も便利。
@@ -282,16 +288,20 @@ breaksの値を受け取って文字列を返す関数
 などとすれば間隔を空けられる。</p>
 <h3 id="内部変数を使う">内部変数を使う</h3>
 <p>ヒストグラムや箱ヒゲなどの表示に必要な計算は <code>stat_*()</code> を通して内部的に行われる。
-そうした値 (<strong>calculated aesthetics</strong>) の一部は <code>aes(y = stat(count))</code> のようにして
-<a href="https://ggplot2.tidyverse.org/reference/stat.html"><code>stat()</code></a> 関数を通じて参照できる。
-(昔は <code>..count..</code> のようにピリオドつきの変な名前で参照していた。)</p>
+そうした値の一部は <a href="https://ggplot2.tidyverse.org/reference/aes_eval.html"><code>after_stat()</code></a> 関数を通じて参照し、 <code>aes()</code> 内で使うことができる。
+例えば <code>geom_histogram()</code> や <code>geom_bar()</code> の縦軸を生のカウントから密度に変えるには
+<code>aes(y = after_stat(density))</code> のようにする。
+(昔は <code>..density..</code> とか <code>stat(density)</code> のようにしていた。)</p>
 <p>これらはggplotオブジェクトを作るときではなく、描画するときに計算されるらしい。
 強制的にそこまで計算させて値を参照するには <code>ggplot_build()</code> を使う。
 たとえば <code>h = hist(mpg$cty)</code> のようなものを取得したいときは:</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">p</span> <span class="o">=</span> <span class="nf">ggplot</span><span class="p">(</span><span class="n">mpg</span><span class="p">)</span> <span class="o">+</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">cty</span><span class="p">)</span> <span class="o">+</span> <span class="nf">geom_histogram</span><span class="p">(</span><span class="n">bins</span> <span class="o">=</span> <span class="m">6L</span><span class="p">)</span>
 <span class="nf">ggplot_build</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">$</span><span class="n">data[[1L]]</span>
 <span class="c1"># layer_data(p)</span>
-</code></pre></div><p><a href="https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variables">https://github.com/hadley/ggplot2-book/blob/master/layers.rmd#generated-variables</a></p>
+</code></pre></div><p>colorとfillを同色の透明度違いにする、とかやりたい場合も似たようなイメージで、
+<a href="https://ggplot2.tidyverse.org/reference/aes_eval.html">after_scale()</a>
+を使って計算後・描画前に割り込める。</p>
+<p><a href="https://ggplot2-book.org/layers.html#generated-variables">https://ggplot2-book.org/layers.html#generated-variables</a></p>
 <h2 id="座標軸やタイトルを変更">座標軸やタイトルを変更</h2>
 <dl>
 <dt><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">軸の区切りを変更したり対数にしたり</a></dt>
@@ -318,8 +328,10 @@ breaksの値を受け取って文字列を返す関数
 が便利。</dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html">X軸とY軸の比率を固定</a></dt>
 <dd><code>coord_fixed(ratio = 1)</code></dd>
-<dt><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">XY軸の反転</a></dt>
+<dt><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">XY軸の転置</a></dt>
 <dd><code>coord_flip()</code></dd>
+<dd><code>geom_*(orientation = &quot;y&quot;)</code> も可。
+<code>geom_bar()</code>, <code>geom_histogram()</code> では <code>aes(y =</code> にマッピングするだけでもいい。</dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/coord_polar.html">極座標</a></dt>
 <dd>パイチャートも作れるらしい</dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/coord_trans.html">座標変換</a></dt>
