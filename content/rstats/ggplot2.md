@@ -344,9 +344,12 @@ https://ggplot2-book.org/layers.html#generated-variables
 下記の各エレメントの設定方法やデフォルト値を知ることができる。
 
 引数に `base_family = "Helvetica Neue"` などとしてフォントを指定できる。
-Macなら `"HiraKakuProN-W3"` を指定すれば日本語でも文字化けしなくなるはず。
 テーマを構成する `axis.text` などはこの設定を継承するが、
-`geom_text()` などプロット内部の要素には引き継がれないことに注意。
+`geom_text()` や `annotate("text", ...)` などプロット内部の要素には影響しないことに注意。
+
+どうしても日本語を表示しないといけない場合は
+<https://ill-identified.hatenablog.com/entry/2020/10/03/200618>
+を参考にして設定する。
 
 オプションとして `base_line_size`, `base_rect_size` もいじれるようになった。
 
@@ -499,6 +502,7 @@ ggsave(filename, plot = last_plot(), device = NULL, path = NULL,
 - タイトルや軸ラベルの文字サイズを変えたいときはテーマの
   `theme_bw(base_size = 42)` や各要素の `element_text(size = 42)` を使う。
 - `scale =` や `units =` を使うのはよほど必要になったときだけ。
+- PDF出力でフォント関連の問題が生じたら `device = cairo_pdf` を試す。
 
 ```r
 # 7inch x 300dpi = 2100px四方 (デフォルト)
