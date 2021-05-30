@@ -371,9 +371,11 @@ ggplotらしいデフォルトだが、論文には使いにくい。</dd>
 <p>これらをカッコ無しでコンソールに打ち込むと、
 下記の各エレメントの設定方法やデフォルト値を知ることができる。</p>
 <p>引数に <code>base_family = &quot;Helvetica Neue&quot;</code> などとしてフォントを指定できる。
-Macなら <code>&quot;HiraKakuProN-W3&quot;</code> を指定すれば日本語でも文字化けしなくなるはず。
 テーマを構成する <code>axis.text</code> などはこの設定を継承するが、
-<code>geom_text()</code> などプロット内部の要素には引き継がれないことに注意。</p>
+<code>geom_text()</code> や <code>annotate(&quot;text&quot;, ...)</code> などプロット内部の要素には影響しないことに注意。</p>
+<p>どうしても日本語を表示しないといけない場合は
+<a href="https://ill-identified.hatenablog.com/entry/2020/10/03/200618">https://ill-identified.hatenablog.com/entry/2020/10/03/200618</a>
+を参考にして設定する。</p>
 <p>オプションとして <code>base_line_size</code>, <code>base_rect_size</code> もいじれるようになった。</p>
 <p>ほかにもいろんなテーマが
 <a href="https://cran.r-project.org/web/packages/ggthemes/">ggthemes</a>
@@ -499,6 +501,7 @@ units で使いそうなのは
 <li>タイトルや軸ラベルの文字サイズを変えたいときはテーマの
 <code>theme_bw(base_size = 42)</code> や各要素の <code>element_text(size = 42)</code> を使う。</li>
 <li><code>scale =</code> や <code>units =</code> を使うのはよほど必要になったときだけ。</li>
+<li>PDF出力でフォント関連の問題が生じたら <code>device = cairo_pdf</code> を試す。</li>
 </ul>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># 7inch x 300dpi = 2100px四方 (デフォルト)</span>
 <span class="nf">ggsave</span><span class="p">(</span><span class="s">&#34;mpg1.png&#34;</span><span class="p">,</span> <span class="n">p3</span><span class="p">)</span> <span class="c1"># width = 7, height = 7, dpi = 300</span>
