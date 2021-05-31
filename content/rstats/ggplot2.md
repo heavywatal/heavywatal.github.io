@@ -130,10 +130,10 @@ p1 + aes(x = displ, y = cty) + geom_point(aes(color = hwy)) + scale_color_fermen
 
 [`scale_color_viridis_c`](https://ggplot2.tidyverse.org/reference/scale_viridis.html)
 :   色覚多様性が考慮されたパレットで、グレースケールでの明度変化も一定。
-    元は[別パッケージ](https://github.com/sjmgarnier/viridis)が必要だったけど
-    v3.0から標準装備になった。
-:   `option = "viridis"`, `"magma"`, `"inferno"`, or `"plasma"`
+    使用例と詳細説明は[viridisパッケージのサイト](https://sjmgarnier.github.io/viridis/)を参照。
+:   `option = "viridis"`, `"magma"`, `"inferno"`, `"plasma"`, `"cividis"`, `"mako"`, `"rocket"`, `"turbo"`
 :   連続値は `_c`、離散値は `_d`、連続値を離散的に塗るには `_b`。
+:   黄色が明るすぎて白背景で見にくい場合などは `begin`, `end` オプションで調整可能。
 
 [`scale_color_hue`](https://ggplot2.tidyverse.org/reference/scale_hue.html)
 :   離散値のデフォルト色スケール。
@@ -526,6 +526,8 @@ ggsave("mpg4.png", p3 + theme_bw(base_size = 22), width = 4, height = 4)
 :   重なった点をランダムにばらかしたいときは
     [`geom_jitter()`](https://ggplot2.tidyverse.org/reference/geom_jitter.html)
 :   [点の形(shape)一覧](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html#sec:shape-spec)
+:   デフォルトの `shape = 19` の丸は半透明にすると縁取りしたように見えてしまう。
+    `shape = 16` の丸は均一なのでこっちを常に使うように設定できればいいんだけど。
 
 [折れ線グラフ](https://ggplot2.tidyverse.org/reference/geom_path.html)
 :   `geom_path(size = 2, linetype = "dashed")` データ順に結ぶ
