@@ -96,20 +96,22 @@ data.frameを縦長(long-format)から横広(wide-format)に変形する。
 
 `id_cols`
 : ここで指定した列のユニークな組み合わせが変形後にそれぞれ1行になる。
-  マイナスで除外指定、コロンで範囲指定、文字列、tidyselect関数なども使える。
-  `names_from` と `values_from` を両方指定すれば省略可能。
+  `!`で除外指定、`:`で範囲指定、文字列、tidyselect関数なども使える。
+  デフォルトでは `names_from` と `values_from` で指定されなかった列すべて。
 
 `names_from`
-: 新しく列名になる列
+: 新しく列名になる列。"name" という列名なら省略可能。
 
 `values_from`
-: 動かしたい値が入っている列
+: 動かしたい値が入っている列。"value" という列名なら省略可能。
 
 `values_fill`
-: 存在しない組み合わせのセルを埋める値
+: 存在しない組み合わせのセルを埋める値。
+  列によって値を変えたい場合は名前付きリストで渡す。
 
 `values_fn`
-: 1つのセルに複数の値が重なってしまう場合の処理関数。例えば平均を取るとか。
+: `id_cols` の組み合わせが一意に定まらず複数のvalueを1セルに詰め込む場合の処理関数。
+  デフォルトでは警告とともに `list()` が使われる。
 
 
 ```r
@@ -130,6 +132,31 @@ anscombe_long %>%
 #> 11     5     5     5     8  5.68  4.74  5.73  6.89
 
 # anscombe_long %>% spread(namae, atai) %>% dplyr::select(!id)
+```
+
+カテゴリカル変数を指示変数(ダミー変数)に変換するのにも使える:
+
+```r
+pg = PlantGrowth %>% dplyr::slice(c(1, 2, 11, 12, 21, 22)) %>% print()
+#   weight group
+# 1   4.17  ctrl
+# 2   5.58  ctrl
+# 3   4.81  trt1
+# 4   4.17  trt1
+# 5   6.31  trt2
+# 6   5.12  trt2
+pg %>% tibble::rowid_to_column("id") %>%
+  dplyr::mutate(name = group, value = 1L) %>%
+  tidyr::pivot_wider(values_fill = 0L) %>%
+  dplyr::select(!c(id, ctrl))
+#   weight group  trt1  trt2
+#    <dbl> <fct> <int> <int>
+# 1   4.17  ctrl     0     0
+# 2   5.58  ctrl     0     0
+# 3   4.81  trt1     1     0
+# 4   4.17  trt1     1     0
+# 5   6.31  trt2     0     1
+# 6   5.12  trt2     0     1
 ```
 
 
