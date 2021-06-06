@@ -164,16 +164,18 @@ data.frameを縦長(long-format)から横広(wide-format)に変形する。
 <dl>
 <dt><code>id_cols</code></dt>
 <dd>ここで指定した列のユニークな組み合わせが変形後にそれぞれ1行になる。
-マイナスで除外指定、コロンで範囲指定、文字列、tidyselect関数なども使える。
-<code>names_from</code> と <code>values_from</code> を両方指定すれば省略可能。</dd>
+<code>!</code>で除外指定、<code>:</code>で範囲指定、文字列、tidyselect関数なども使える。
+デフォルトでは <code>names_from</code> と <code>values_from</code> で指定されなかった列すべて。</dd>
 <dt><code>names_from</code></dt>
-<dd>新しく列名になる列</dd>
+<dd>新しく列名になる列。&ldquo;name&rdquo; という列名なら省略可能。</dd>
 <dt><code>values_from</code></dt>
-<dd>動かしたい値が入っている列</dd>
+<dd>動かしたい値が入っている列。&ldquo;value&rdquo; という列名なら省略可能。</dd>
 <dt><code>values_fill</code></dt>
-<dd>存在しない組み合わせのセルを埋める値</dd>
+<dd>存在しない組み合わせのセルを埋める値。
+列によって値を変えたい場合は名前付きリストで渡す。</dd>
 <dt><code>values_fn</code></dt>
-<dd>1つのセルに複数の値が重なってしまう場合の処理関数。例えば平均を取るとか。</dd>
+<dd><code>id_cols</code> の組み合わせが一意に定まらず複数のvalueを1セルに詰め込む場合の処理関数。
+デフォルトでは警告とともに <code>list()</code> が使われる。</dd>
 </dl>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">anscombe_long</span> <span class="o">%&gt;%</span>
   <span class="nf">pivot_wider</span><span class="p">(</span><span class="n">names_from</span> <span class="o">=</span> <span class="n">namae</span><span class="p">,</span> <span class="n">values_from</span> <span class="o">=</span> <span class="n">atai</span><span class="p">)</span> <span class="o">%&gt;%</span>
@@ -192,6 +194,27 @@ data.frameを縦長(long-format)から横広(wide-format)に変形する。
 <span class="c1">#&gt; 11     5     5     5     8  5.68  4.74  5.73  6.89</span>
 
 <span class="c1"># anscombe_long %&gt;% spread(namae, atai) %&gt;% dplyr::select(!id)</span>
+</code></pre></div><p>カテゴリカル変数を指示変数(ダミー変数)に変換するのにも使える:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">pg</span> <span class="o">=</span> <span class="n">PlantGrowth</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">slice</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">11</span><span class="p">,</span> <span class="m">12</span><span class="p">,</span> <span class="m">21</span><span class="p">,</span> <span class="m">22</span><span class="p">))</span> <span class="o">%&gt;%</span> <span class="nf">print</span><span class="p">()</span>
+<span class="c1">#   weight group</span>
+<span class="c1"># 1   4.17  ctrl</span>
+<span class="c1"># 2   5.58  ctrl</span>
+<span class="c1"># 3   4.81  trt1</span>
+<span class="c1"># 4   4.17  trt1</span>
+<span class="c1"># 5   6.31  trt2</span>
+<span class="c1"># 6   5.12  trt2</span>
+<span class="n">pg</span> <span class="o">%&gt;%</span> <span class="n">tibble</span><span class="o">::</span><span class="nf">rowid_to_column</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="n">group</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="m">1L</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="n">tidyr</span><span class="o">::</span><span class="nf">pivot_wider</span><span class="p">(</span><span class="n">values_fill</span> <span class="o">=</span> <span class="m">0L</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="o">!</span><span class="nf">c</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">ctrl</span><span class="p">))</span>
+<span class="c1">#   weight group  trt1  trt2</span>
+<span class="c1">#    &lt;dbl&gt; &lt;fct&gt; &lt;int&gt; &lt;int&gt;</span>
+<span class="c1"># 1   4.17  ctrl     0     0</span>
+<span class="c1"># 2   5.58  ctrl     0     0</span>
+<span class="c1"># 3   4.81  trt1     1     0</span>
+<span class="c1"># 4   4.17  trt1     1     0</span>
+<span class="c1"># 5   6.31  trt2     0     1</span>
+<span class="c1"># 6   5.12  trt2     0     1</span>
 </code></pre></div><h3 id="tidyrpivot_-関数のもっと高度なオプション"><code>tidyr::pivot_*</code> 関数のもっと高度なオプション</h3>
 <p><code>names_sep</code> や <code>names_pattern</code> を指定して
 <code>names_to</code>, <code>name_from</code> に複数の値を渡すと
