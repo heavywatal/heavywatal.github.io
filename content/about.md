@@ -180,6 +180,8 @@ Find me on
 
 ## Teaching / Outreach
 
+-   「[統計モデリング概論 DSHC 2021](/slides/tokiomarine2021/)」
+    東京海上 [Data Science Hill Climb](https://tokiomarine-dshc.com/) (2021-06)
 -   「[Rによるデータ前処理実習](/slides/tmd2020/)」
     東京医科歯科大 [データ関連人材育成プログラム](https://md-dsc.com/summary31.php) (2020-10)
 -   水の森市民センター企画講座「[インタビューでGO!!](https://www.sendai-shimincenter.jp/aoba/mizunomori/kouza/report/hmmr2n00000505tw.html) — 子どもたちの育ちを支えよう」
