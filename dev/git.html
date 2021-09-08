@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -118,7 +118,7 @@ Git — 分散型バージョン管理システム
 <li>
 <p><code>~/.gitconfig</code> にユーザ名やアドレスを登録する。
 <a href="https://git-scm.com/docs/git-config">https://git-scm.com/docs/git-config</a></p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git config --global user.name <span class="s2">&#34;Watal M. Iwasaki&#34;</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git config --global user.name <span class="s2">&#34;Watal M. Iwasaki&#34;</span>
 git config --global user.email <span class="s2">&#34;heavywatalあmail.com&#34;</span>
 less ~/.gitconfig
 </code></pre></div></li>
@@ -199,7 +199,7 @@ root treeのハッシュID、著者、コメントなどの情報を持つ。
 <code>--mixed</code> なら移動した <code>HEAD</code> にindexも合わせる。
 <code>--hard</code> なら移動した <code>HEAD</code> にindexとworiking treeも合わせる。
 直前の動作を取り消す用途に絞って使うのが無難:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># commit直後、それを取り消す (indexとworkingはそのまま)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># commit直後、それを取り消す (indexとworkingはそのまま)</span>
 git reset --soft HEAD^
 
 <span class="c1"># add直後、それを取り消す (workingとHEADはそのまま)</span>
@@ -217,7 +217,7 @@ git reset --hard origin/master
 それより前のを修正するには <code>git rebase -i HEAD~3</code> とかで戻ってrewordやedit。</p>
 <h3 id="diff">diff</h3>
 <p>差分を表示:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># HEAD vs working (staging前のファイルが対象)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># HEAD vs working (staging前のファイルが対象)</span>
 git diff
 
 <span class="c1"># HEAD vs index (staging済みcommit前のファイルが対象)</span>
@@ -230,14 +230,14 @@ git diff HEAD
 git show <span class="o">[</span>revision<span class="o">]</span>
 </code></pre></div><h3 id="rm-clean">rm, clean</h3>
 <p>tracking対象から外して忘れさせる(手元のファイルはそのまま):</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git rm --cached &lt;file&gt;
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git rm --cached &lt;file&gt;
 </code></pre></div><p><code>.gitignore</code> で無視されてるuntrackedファイルを消す:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git clean -fdX
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git clean -fdX
 </code></pre></div><p>無視されていないuntrackedファイルも消したい場合は小文字の <code>-fdx</code> (危険)。</p>
 <h3 id="tag">tag</h3>
 <p>特定のコミット(省略すると<code>HEAD</code>)にタグ付けする。
 lightweightとannotatedの2種類が存在し、後者にはメッセージなどが紐付く。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git tag v0.1.0 <span class="o">[</span>revision<span class="o">]</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git tag v0.1.0 <span class="o">[</span>revision<span class="o">]</span>
 git tag -a v0.1.0 -m <span class="s2">&#34;Message!&#34;</span>
 </code></pre></div><p>GitHubリポジトリに <code>git push --tags</code> するとアーカイブが作られ、
 Releasesページに反映される。
@@ -247,15 +247,15 @@ annotated tagであれば <code>git push --follow-tags</code>
 <h3 id="rebase">rebase</h3>
 <p>ブランチの根本を別のコミットに付け替える。
 よく使うのは、開発ブランチを <code>master</code> の先頭に追従させるとき。</p>
-<pre><code>git switch some-branch
+<pre tabindex="0"><code>git switch some-branch
 git rebase master
 </code></pre><p>最も近い共通祖先(MRCA)コミットから先を丸ごと移すだけならこのように単純だが、
 ブランチのブランチとか、ブランチの一部だけを移したい場合は次のようにする。</p>
-<pre><code>git rebase --onto &lt;newbase&gt; &lt;base&gt; &lt;tip&gt;
+<pre tabindex="0"><code>git rebase --onto &lt;newbase&gt; &lt;base&gt; &lt;tip&gt;
 </code></pre><p>これで base–tip 間のコミットがnewbaseから伸びる形になる。</p>
 <h2 id="submodule">Submodule</h2>
 <h3 id="既存のリポジトリをsubmoduleとして追加する">既存のリポジトリをsubmoduleとして追加する</h3>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git submodule add https://github.com/mbostock/d3.git
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git submodule add https://github.com/mbostock/d3.git
 
 <span class="c1"># ブランチを指定する場合:</span>
 git submodule add -b gitsubmodule_https https://github.com/heavywatal/x18n.git
@@ -275,17 +275,17 @@ git submodule update --init --depth=5 d3
 <ol>
 <li>
 <p>更新分をまとめて取得:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git submodule foreach git fetch
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git submodule foreach git fetch
 </code></pre></div></li>
 <li>
 <p>好きなコミット/タグまで移動 (旧<code>git checkout</code>):</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> d3/
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> d3/
 git switch --detach v3.5.6
 </code></pre></div><p>&ldquo;detached HEAD&rdquo; 状態になる。</p>
 </li>
 <li>
 <p>メインリポジトリでその変更をコミット:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> ..
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> ..
 git commit
 </code></pre></div></li>
 </ol>
@@ -385,17 +385,17 @@ git rebase master
 <p>PRマージ済みのリモートブランチを消したい。
 一番簡単なのは、GitHub PR画面のdelete branchボタンを押すこと。
 手元のgitからやるには、明示的に <code>--delete</code> するか、空ブランチをpushするか:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git push --delete origin issue-42
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git push --delete origin issue-42
 git push origin :issue-42
 </code></pre></div><p>リモートブランチを消しても手元のリポジトリには残る。
 まず確認:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git branch -a
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git branch -a
 git remote show origin
 </code></pre></div><p>こうしたstaleなブランチを刈り取る方法には二通りある:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git fetch --prune
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git fetch --prune
 git remote prune origin
 </code></pre></div><p>それでも消えないローカルブランチは手動で消す:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git branch -d issue-666
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git branch -d issue-666
 error: The branch <span class="s1">&#39;issue-666&#39;</span> is not fully merged.
 If you are sure you want to delete it, run <span class="s1">&#39;git branch -D issue-666&#39;</span>.
 </code></pre></div><p>マージ済みのブランチじゃないと上記のように怒ってくれる。
@@ -406,14 +406,14 @@ If you are sure you want to delete it, run <span class="s1">&#39;git branch -D i
 <ol>
 <li>
 <p><code>push</code>しようとして怒られて気付く</p>
-<pre><code>git push
+<pre tabindex="0"><code>git push
 fatal: You are not currently on a branch
 git status
 HEAD detached from *******
 </code></pre></li>
 <li>
 <p><code>master</code>に戻ると道筋を示してくれる:</p>
-<pre><code>git switch master
+<pre tabindex="0"><code>git switch master
 Warning: you are leaving 2 comits behind, not connected to
 any of your branches
 If you want to keep them by creating a new branch, this may be a good time
@@ -423,31 +423,31 @@ to do so with:
 </code></pre></li>
 <li>
 <p>言われたとおりbranchを作って<code>merge</code></p>
-<pre><code>git branch detached *******
+<pre tabindex="0"><code>git branch detached *******
 git merge detached
 </code></pre></li>
 <li>
 <p>不要になったbranchを消す</p>
-<pre><code>git branch -d detached
+<pre tabindex="0"><code>git branch -d detached
 </code></pre></li>
 </ol>
 <h3 id="サブディレクトリを別リポジトリに切り分ける">サブディレクトリを別リポジトリに切り分ける</h3>
 <ol>
 <li>
 <p>新しく作りたいリポジトリ名で元リポジトリをクローン:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git clone https://github.com/heavywatal/hello.git bonjour
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git clone https://github.com/heavywatal/hello.git bonjour
 </code></pre></div></li>
 <li>
 <p><a href="https://git-scm.com/docs/git-filter-branch"><code>filter-branch</code></a>
 でサブディレクトリの歴史だけ抜き出す:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> bonjour/
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> bonjour/
 git filter-branch filter-branch --subdirectory-filter subdir
 git log
 ls       <span class="c1"># サブディレクトリの中身がルートに来てる</span>
 </code></pre></div></li>
 <li>
 <p>GitHubなどリモートにも新しいリポジトリを作って登録、プッシュ:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git remote set-url origin https://github.com/heavywatal/bonjour.git
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git remote set-url origin https://github.com/heavywatal/bonjour.git
 git push -u origin master
 </code></pre></div></li>
 </ol>
@@ -460,7 +460,7 @@ git push -u origin master
 などとしても統合前までは辿れない。
 予め全ファイルをサブディレクトリに動かすだけのcommitをしておいて、
 ルート同士でmergeすると <code>--follow</code> が効く状態で取り込める。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> /path/to/<span class="si">${</span><span class="nv">subrepo</span><span class="si">}</span>/
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> /path/to/<span class="si">${</span><span class="nv">subrepo</span><span class="si">}</span>/
 mkdir <span class="si">${</span><span class="nv">subdir</span><span class="si">}</span>
 git mv <span class="k">$(</span>git ls-tree --name-only master<span class="k">)</span> <span class="si">${</span><span class="nv">subdir</span><span class="si">}</span>/
 git commit -m <span class="s2">&#34;:construction: Move all to </span><span class="si">${</span><span class="nv">subdir</span><span class="si">}</span><span class="s2">/ for integration&#34;</span>

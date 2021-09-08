@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -99,7 +99,7 @@ make
 を使って自動生成する。</p>
 <h2 id="makefile">Makefile</h2>
 <p>C++ソースコードと同じディレクトリに入れるだけでとりあえず使える例:</p>
-<div class="highlight"><pre class="chroma"><code class="language-makefile" data-lang="makefile"><span class="c">## Options
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-makefile" data-lang="makefile"><span class="c">## Options
 </span><span class="c"></span><span class="nv">PROGRAM</span> <span class="o">:=</span> a.out
 <span class="nv">CXX</span> <span class="o">:=</span> clang++
 <span class="nv">CC</span> <span class="o">:=</span> clang
@@ -133,14 +133,14 @@ make
 <p>コロンとタブを使って以下のような形式でルールを書くのが基本。
 この<code>Makefile</code>があるところでターミナルから <code>make TARGET</code> と打つと、
 ターゲットよりもソースファイルが新しい場合にコマンドが実行される。</p>
-<div class="highlight"><pre class="chroma"><code class="language-make" data-lang="make"><span class="nf">TARGET </span><span class="o">:</span> <span class="n">SOURCE</span>1 <span class="n">SOURCE</span>2
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-make" data-lang="make"><span class="nf">TARGET </span><span class="o">:</span> <span class="n">SOURCE</span>1 <span class="n">SOURCE</span>2
         COMMAND
 
 <span class="nf">a.out </span><span class="o">:</span> <span class="n">main</span>.<span class="n">cpp</span> <span class="n">sub</span>.<span class="n">cpp</span>
         g++ -O2 main.cpp sub.cpp
 </code></pre></div><p>下記のようなパターンルールが予め定義されている。
 (see <a href="https://www.gnu.org/software/make/manual/make.html#Pattern-Rules">Pattern Rule</a>)</p>
-<div class="highlight"><pre class="chroma"><code class="language-make" data-lang="make"><span class="nf">%.o </span><span class="o">:</span> %.<span class="n">c</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-make" data-lang="make"><span class="nf">%.o </span><span class="o">:</span> %.<span class="n">c</span>
         <span class="k">$(</span>CC<span class="k">)</span> <span class="k">$(</span>CPPFLAGS<span class="k">)</span> <span class="k">$(</span>CFLAGS<span class="k">)</span> -c $&lt; -o <span class="nv">$@</span>
 <span class="nf">%.o </span><span class="o">:</span> %.<span class="n">cpp</span>
         <span class="k">$(</span>CXX<span class="k">)</span> <span class="k">$(</span>CPPFLAGS<span class="k">)</span> <span class="k">$(</span>CXXFLAGS<span class="k">)</span> -c $&lt; -o <span class="nv">$@</span>
@@ -229,7 +229,7 @@ e.g., <code>-march=native -m64 -msse -msse2 -msse3 -mfpmath=sse</code></dd>
 <dt><code>_</code></dt>
 <dd>v3.81以降であれば <code>.DEFAULT_GOAL</code> が効くので <code>make all</code> と同じ</dd>
 </dl>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">make clean
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">make clean
 make
 </code></pre></div><h2 id="optionshttpswwwgnuorgsoftwaremakemanualmakehtmloptions-summary"><a href="https://www.gnu.org/software/make/manual/make.html#Options-Summary">Options</a></h2>
 <dl>

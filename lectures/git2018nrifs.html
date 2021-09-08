@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -192,12 +192,12 @@ e.g.,  <code>pwd</code>, <code>ls</code>, <code>cd</code>, <code>mkdir</code></p
 </li>
 <li>
 <p>Git Bashにおける <code>HOME</code> がRStudioにおけるそれと異なることに注意。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1">### Git Bash</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1">### Git Bash</span>
 <span class="nb">echo</span> <span class="nv">$HOME</span>
 <span class="c1"># /c/Users/watal</span>
 <span class="nb">echo</span> ~
 <span class="c1"># /c/Users/watal</span>
-</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">### R</span>
+</code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="c1">### R</span>
 <span class="nf">normalizePath</span><span class="p">(</span><span class="s">&#34;~&#34;</span><span class="p">)</span>
 <span class="c1"># &#34;C:\\Users\\watal\\Documents&#34;</span>
 </code></pre></div></li>
@@ -225,12 +225,12 @@ e.g.,  <code>pwd</code>, <code>ls</code>, <code>cd</code>, <code>mkdir</code></p
 </li>
 <li>
 <p>Git<i class="fas fa-fw fa-share-alt-square"></i>の初期設定をターミナルから行う:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git --version  <span class="c1"># 2.0以上であることを確認</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git --version  <span class="c1"># 2.0以上であることを確認</span>
 git config --global user.name <span class="s2">&#34;Watal M. Iwasaki&#34;</span>
 git config --global user.email <span class="s2">&#34;heavywatalあmail.com&#34;</span>
 git config --global push.default simple
 cat ~/.gitconfig
-</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[user]</span>
+</code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[user]</span>
   <span class="na">name</span> <span class="o">=</span> <span class="s">Watal M. Iwasaki
 </span><span class="s">  email = heavywatalあmail.com</span>
 <span class="k">[push]</span>
@@ -255,7 +255,7 @@ cat ~/.gitconfig
 </li>
 <li>
 <p>設定ファイル <code>~/.gitconfig</code> に <code>pushinsteadof</code> の設定を追加:</p>
-<div class="highlight"><pre class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[url &#34;git@github.com:&#34;]</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[url &#34;git@github.com:&#34;]</span>
   <span class="na">pushinsteadof</span> <span class="o">=</span> <span class="s">https://github.com/</span>
 </code></pre></div></li>
 </ul>
@@ -263,7 +263,7 @@ cat ~/.gitconfig
 <p>以下、本編。</p>
 <h2 id="gitが無い世界の風景">Gitが無い世界の風景</h2>
 <p>バージョン違いのファイルがフォルダを埋め尽くす。</p>
-<pre><code>% ls
+<pre tabindex="0"><code>% ls
 analysis.R
 analysis2.R
 analysis-20180129.R
@@ -467,7 +467,7 @@ blobやファイル名などのメタデータに依存したハッシュIDを�
 </li>
 <li>
 <p>中身を眺めてみる:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> clippson/
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> clippson/
 ls -al
 git log
 git remote -v
@@ -488,7 +488,7 @@ git remote -v
 </li>
 <li>
 <p>手元のマシンにローカルリポジトリを作る:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mkdir helloworld
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">mkdir helloworld
 <span class="nb">cd</span> helloworld/
 git init
 ls -al
@@ -496,7 +496,7 @@ ls -al
 </li>
 <li>
 <p>空っぽのコミットを作る:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git status
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git status
 git commit --allow-empty -m <span class="s2">&#34;:beer: Create repository&#34;</span>
 git status
 git log
@@ -504,7 +504,7 @@ git log
 </li>
 <li>
 <p>先程作ったリモートリポジトリを紐付けて、pushしてみる:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git remote -v
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git remote -v
 git remote add origin https://github.com/YOUR_NAME/helloworld.git
 git remote -v
 git push -u origin master
@@ -518,26 +518,26 @@ git status
 <ol>
 <li>
 <p>上で作ったリポジトリに、適当なファイルを追加:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">echo</span> <span class="s2">&#34;# Hello, world!&#34;</span> &gt; README.md
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">echo</span> <span class="s2">&#34;# Hello, world!&#34;</span> &gt; README.md
 cat README.md
 git status
 </code></pre></div></li>
 <li>
 <p>作ったファイルをstaging areaに追加:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git add README.md
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git add README.md
 git status
 git diff --staged
 </code></pre></div></li>
 <li>
 <p>この変更をcommit:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git commit -m <span class="s2">&#34;:memo: Create README.md&#34;</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git commit -m <span class="s2">&#34;:memo: Create README.md&#34;</span>
 git status
 git log
 git show
 </code></pre></div></li>
 <li>
 <p>リモートにpush:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git push
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git push
 git status
 git log
 </code></pre></div></li>
@@ -562,7 +562,7 @@ git log
 </li>
 <li>
 <p>その変更をローカルリポジトリに取り寄せる:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git fetch
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git fetch
 git status
 git log --all
 ls -al
@@ -571,7 +571,7 @@ working directoryにはまだ反映されていない。</p>
 </li>
 <li>
 <p><code>origin/master</code> の内容を手元のファイルに反映する:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git merge
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git merge
 git status
 git log
 git show
@@ -583,7 +583,7 @@ ls -al
 <h2 id="その他よく使うコマンド">その他よく使うコマンド</h2>
 <h3 id="diff">diff</h3>
 <p>差分を表示:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># HEAD vs working (staging前のファイルが対象)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># HEAD vs working (staging前のファイルが対象)</span>
 git diff
 
 <span class="c1"># HEAD vs index (staging済みcommit前のファイルが対象)</span>
@@ -596,9 +596,9 @@ git diff HEAD
 git show <span class="o">[</span>revision<span class="o">]</span>
 </code></pre></div><h3 id="rm-clean">rm, clean</h3>
 <p>tracking対象から外して忘れさせる(手元のファイルはそのまま):</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git rm --cached &lt;file&gt;
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git rm --cached &lt;file&gt;
 </code></pre></div><p><code>.gitignore</code> で無視されてるuntrackedファイルを消す:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git clean -fdX
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git clean -fdX
 </code></pre></div><p>無視されていないuntrackedファイルも消したい場合は小文字の <code>-fdx</code> (危険)。</p>
 <h3 id="reset">reset</h3>
 <p><code>git reset &lt;DESTINATION&gt;</code> は <code>HEAD</code> の位置を戻す処理で、
@@ -607,7 +607,7 @@ git show <span class="o">[</span>revision<span class="o">]</span>
 <code>--mixed</code> なら移動した <code>HEAD</code> にindexも合わせる。
 <code>--hard</code> なら移動した <code>HEAD</code> にindexとworiking treeも合わせる。
 直前の動作を取り消す用途に絞って使うのが無難:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># commit直後、それを取り消す (indexとworkingはそのまま)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># commit直後、それを取り消す (indexとworkingはそのまま)</span>
 git reset --soft HEAD^
 
 <span class="c1"># add直後、それを取り消す (workingとHEADはそのまま)</span>

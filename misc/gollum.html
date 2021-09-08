@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -124,7 +124,7 @@ docker-compose とかですぐ使えるのも楽ちん。</dd>
 <ol>
 <li>
 <p>最新版のRubyを<a href="https://github.com/rbenv/ruby-build/wiki">rbenv</a>で入れる:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># sudo apt install autoconf bison build-essential libssl-dev libyaml-dev libreadline-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># sudo apt install autoconf bison build-essential libssl-dev libyaml-dev libreadline-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev</span>
 brew install rbenv
 rbenv install -l <span class="p">|</span> less
 rbenv install 2.7.1
@@ -137,21 +137,21 @@ rbenv init
 </li>
 <li>
 <p>Wiki用のリポジトリ(ここでは<code>labwiki</code>)を作成して空コミット:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git init labwiki
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git init labwiki
 <span class="nb">cd</span> labwiki/
 git commit --allow-empty -m <span class="s2">&#34;:beer: Create repository&#34;</span>
 </code></pre></div></li>
 <li>
 <p><code>Gemfile</code> を作成してコミット:</p>
-<pre><code class="language-gemfile" data-lang="gemfile">source 'https://rubygems.org'
+<pre tabindex="0"><code class="language-gemfile" data-lang="gemfile">source 'https://rubygems.org'
 gem 'commonmarker'
 gem 'gollum'
 </code></pre><hr>
 <p>gollum本体をいろいろいじくる場合は自分のフォークを使う:</p>
-<pre><code class="language-gemfile" data-lang="gemfile">gem 'gollum-lib', :github =&gt; 'heavywatal/gollum-lib', :branch =&gt; 'custom'
+<pre tabindex="0"><code class="language-gemfile" data-lang="gemfile">gem 'gollum-lib', :github =&gt; 'heavywatal/gollum-lib', :branch =&gt; 'custom'
 gem 'gollum', :github =&gt; 'heavywatal/gollum', :branch =&gt; 'custom'
 </code></pre><p>開発環境ではローカルのクローンを使うように設定:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">SRCDIR</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/fork
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">SRCDIR</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/fork
 git clone https://github.com/heavywatal/gollum.git <span class="si">${</span><span class="nv">SRCDIR</span><span class="si">}</span>/gollum -b custom
 git clone https://github.com/heavywatal/gollum-lib.git <span class="si">${</span><span class="nv">SRCDIR</span><span class="si">}</span>/gollum-lib -b custom
 git clone https://github.com/heavywatal/rugged_adapter.git <span class="si">${</span><span class="nv">SRCDIR</span><span class="si">}</span>/rugged_adapter -b custom
@@ -173,7 +173,7 @@ bundle config local.gollum-rugged_adapter <span class="si">${</span><span class=
 <p><code>config.rb</code> を作成して
 <code>bundle exec gollum -c config.rb</code>
 のように指定して読ませる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s1">&#39;gollum/app&#39;</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s1">&#39;gollum/app&#39;</span>
 
 <span class="n">wiki_options</span> <span class="o">=</span> <span class="p">{</span>
   <span class="ss">page_file_dir</span><span class="p">:</span> <span class="s1">&#39;source&#39;</span><span class="p">,</span>
@@ -196,8 +196,8 @@ e.g., <code>-b/--base-path</code>, <code>--allow-uploads page</code>.</p>
 <ol>
 <li>
 <p>Apacheの設定ファイルを新規作成:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo vim /etc/apache2/sites-available/gollum-wiki.conf
-</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-apache" data-lang="apache"><span class="nb">ProxyRequests</span> <span class="k">Off</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo vim /etc/apache2/sites-available/gollum-wiki.conf
+</code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-apache" data-lang="apache"><span class="nb">ProxyRequests</span> <span class="k">Off</span>
 <span class="nt">&lt;Proxy</span> <span class="s">*</span><span class="nt">&gt;</span>
   <span class="nb">Order</span> deny,allow
   <span class="nb">Allow</span> from <span class="k">all</span>
@@ -209,7 +209,7 @@ e.g., <code>-b/--base-path</code>, <code>--allow-uploads page</code>.</p>
 </code></pre></div></li>
 <li>
 <p>その設定ファイルを有効化してApache再起動:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo a2ensite gollum-wiki.conf
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo a2ensite gollum-wiki.conf
 sudo systemctl restart apache2
 </code></pre></div></li>
 <li>
@@ -220,7 +220,7 @@ sudo systemctl restart apache2
 </ol>
 <h3 id="basic認証でやんわりパスワードをかける">BASIC認証でやんわりパスワードをかける</h3>
 <p><code>config.rb</code> にこんな感じで書くだけ:</p>
-<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="k">module</span> <span class="nn">Precious</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ruby" data-lang="ruby"><span class="k">module</span> <span class="nn">Precious</span>
   <span class="k">class</span> <span class="nc">App</span> <span class="o">&lt;</span> <span class="no">Sinatra</span><span class="o">::</span><span class="no">Base</span>
     <span class="n">use</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Auth</span><span class="o">::</span><span class="no">Basic</span><span class="p">,</span> <span class="s1">&#39;Private Wiki&#39;</span> <span class="k">do</span> <span class="o">|</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="o">|</span>
       <span class="n">users</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;users.json&#39;</span><span class="p">,</span> <span class="n">__dir__</span><span class="p">))</span> <span class="k">do</span> <span class="o">|</span><span class="n">file</span><span class="o">|</span>
@@ -240,7 +240,7 @@ sudo systemctl restart apache2
 <span class="k">end</span>
 </code></pre></div><p><code>session['gollum.author']</code> にハッシュを渡しておくとコミッターに反映してもらえる。
 ユーザー情報は別ファイル(ここでは<code>users.json</code>)に分離しといたほうが見通しがいい。</p>
-<div class="highlight"><pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
   <span class="nt">&#34;user1&#34;</span><span class="p">:</span> <span class="p">{</span>
     <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;First User&#34;</span><span class="p">,</span>
     <span class="nt">&#34;email&#34;</span><span class="p">:</span> <span class="s2">&#34;user1@example.com&#34;</span><span class="p">,</span>
@@ -271,7 +271,7 @@ sudo systemctl restart apache2
 <a href="https://github.com/gjtorikian/commonmarker">commonmarker</a>
 を使うことにする。
 例によって <code>config.rb</code> に追記:</p>
-<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="k">module</span> <span class="nn">Gollum</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ruby" data-lang="ruby"><span class="k">module</span> <span class="nn">Gollum</span>
   <span class="k">class</span> <span class="nc">Markup</span>
     <span class="no">GitHub</span><span class="o">::</span><span class="no">Markup</span><span class="o">::</span><span class="no">Markdown</span><span class="o">::</span><span class="no">MARKDOWN_GEMS</span><span class="o">.</span><span class="n">clear</span>
     <span class="no">GitHub</span><span class="o">::</span><span class="no">Markup</span><span class="o">::</span><span class="no">Markdown</span><span class="o">::</span><span class="no">MARKDOWN_GEMS</span><span class="o">[</span><span class="s1">&#39;commonmarker&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="nb">proc</span> <span class="k">do</span> <span class="o">|</span><span class="n">content</span><span class="o">|</span>
@@ -299,8 +299,8 @@ sudo systemctl restart apache2
 </code></pre></div><p>ほかにどんなのが利用可能かはこちらを参照:
 <a href="https://github.com/github/markup/blob/master/lib/github/markup/markdown.rb">https://github.com/github/markup/blob/master/lib/github/markup/markdown.rb</a></p>
 <h3 id="systemd-で自動的に開始"><code>systemd</code> で自動的に開始</h3>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo vim /etc/systemd/system/gollum.service
-</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[Unit]</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo vim /etc/systemd/system/gollum.service
+</code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[Unit]</span>
 <span class="na">Description</span><span class="o">=</span><span class="s">Gollum wiki server</span>
 <span class="na">After</span><span class="o">=</span><span class="s">network.target</span>
 
@@ -315,7 +315,7 @@ sudo systemctl restart apache2
 
 <span class="k">[Install]</span>
 <span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
-</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo systemctl start gollum.service
+</code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo systemctl start gollum.service
 sudo systemctl <span class="nb">enable</span> gollum.service
 </code></pre></div>
 </article>

@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -117,7 +117,7 @@ GitHubに公開しておけば誰でも使えるようになるので、
 </li>
 <li>
 <p><a href="https://usethis.r-lib.org/">usethis</a> の関数をいくつか使って骨組みを作る:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">usethis</span><span class="o">::</span><span class="nf">create_package</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">usethis</span><span class="o">::</span><span class="nf">create_package</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">)</span>
 <span class="n">usethis</span><span class="o">::</span><span class="nf">use_mit_license</span><span class="p">()</span>
 <span class="n">usethis</span><span class="o">::</span><span class="nf">use_roxygen_md</span><span class="p">()</span>
 <span class="n">usethis</span><span class="o">::</span><span class="nf">use_package_doc</span><span class="p">()</span>
@@ -137,17 +137,17 @@ LaTeX 関連で怒られたら足りないパッケージを入れる:
 </li>
 <li>
 <p>そのリモートリポジトリにプッシュ:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git remote add origin https::/github.com/heavywatal/rhello.git
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git remote add origin https::/github.com/heavywatal/rhello.git
 git push -u origin master
 </code></pre></div></li>
 <li>
 <p>とりあえず誰でもインストール可能なパッケージができたはず:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&#34;heavywatal/rhello&#34;</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&#34;heavywatal/rhello&#34;</span><span class="p">)</span>
 </code></pre></div></li>
 </ol>
 <h3 id="ソース構造">ソース構造</h3>
 <p><a href="https://r-pkgs.org/package-structure-state.html">https://r-pkgs.org/package-structure-state.html</a></p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">DESCRIPTION  <span class="c1"># 一番大事</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">DESCRIPTION  <span class="c1"># 一番大事</span>
 NAMESPACE    <span class="c1"># 見せるオブジェクトを列挙</span>
 README.md    <span class="c1"># 全体の説明を簡単に</span>
 R/           <span class="c1"># Rソースコード</span>
@@ -229,7 +229,7 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。<
 <code>demo/00Index</code> というファイルとの整合性が取れてないと警告される。
 「デモの名前 + スペース3つ以上かタブ + 適当な説明」という形式。
 ファイル名から拡張子を取り除いたものがデモの名前になる。
-<pre><code>mydemo1    Description of demo 1
+<pre tabindex="0"><code>mydemo1    Description of demo 1
 mydemo2    Description of demo 2
 </code></pre></dd>
 <dt><code>exec/</code></dt>
@@ -300,7 +300,7 @@ Rcppコードをコンパイルするという意味ではない。</dd>
 を直接呼んでもよいが、
 基本的には <code>devtools::document()</code> を使って間接的に利用する。</p>
 <h3 id="使い方">使い方</h3>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#&#39; Title of the simple function to add 1</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="c1">#&#39; Title of the simple function to add 1</span>
 <span class="c1">#&#39;</span>
 <span class="c1">#&#39; The second paragraph is recognized as the description.</span>
 <span class="c1">#&#39; It is not recommended to use @@title and @@description explicitly.</span>
@@ -336,7 +336,7 @@ Rcppコードをコンパイルするという意味ではない。</dd>
 <p><code>&quot;_PACKAGE&quot;</code> という文字列の上に書かれたブロックは、
 パッケージそのものに対応するヘルプ <code>*-package.Rd</code> になる。
 <code>@useDynLib</code> など全体に関わる設定はここでやるのが良いのでは。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#&#39; Example package to say hello</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="c1">#&#39; Example package to say hello</span>
 <span class="c1">#&#39; @aliases NULL hello-package</span>
 <span class="c1">#&#39; @useDynLib hello, .registration = TRUE</span>
 <span class="c1">#&#39; @importFrom Rcpp sourceCpp</span>

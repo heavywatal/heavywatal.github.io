@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -112,7 +112,7 @@ Boost — ほぼ標準C&#43;&#43;ライブラリ
 <ol>
 <li>
 <p><a href="http://www.boost.org/users/download/">http://www.boost.org/users/download/</a> から最新ソースを入手して展開。</p>
-<pre><code>wget -O- https://dl.bintray.com/boostorg/release/1.67.0/source/boost_1_67_0.tar.bz2 | tar xj
+<pre tabindex="0"><code>wget -O- https://dl.bintray.com/boostorg/release/1.67.0/source/boost_1_67_0.tar.bz2 | tar xj
 cd boost_1_67_0/
 </code></pre></li>
 <li>
@@ -120,7 +120,7 @@ cd boost_1_67_0/
 </li>
 <li>
 <p>適当なオプションを与えて <code>bootstrap.sh</code> を実行:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">./bootstrap.sh --help
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">./bootstrap.sh --help
 ./bootstrap.sh --without-icu --with-libraries<span class="o">=</span>context,filesystem,graph,iostreams,program_options,serialization,system,test
 </code></pre></div><p>設定が <code>project-config.jam</code> に書き出され、
 <code>b2</code> がビルドされる。 <code>./b2 --help</code></p>
@@ -129,7 +129,7 @@ cd boost_1_67_0/
 <p><code>~/user-config.jam</code> に [ツールセットを定義]
 (<a href="http://www.boost.org/build/doc/html/bbv2/reference/tools.html">http://www.boost.org/build/doc/html/bbv2/reference/tools.html</a>)。
 <code>darwin</code>はMac-gcc用:</p>
-<pre><code>using gcc : 14 : g++-8 : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++14 ;
+<pre tabindex="0"><code>using gcc : 14 : g++-8 : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++14 ;
 using darwin : 14 : g++-8 : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++14 ;
 using clang : 14 : clang++ : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++14 -stdlib=libc++ &lt;linkflags&gt;-stdlib=libc++ ;
 </code></pre><p>gccとclangの両方から使える統一ライブラリを作るのは難しいらしいので、
@@ -141,20 +141,20 @@ using clang : 14 : clang++ : &lt;compileflags&gt;-fPIC &lt;cxxflags&gt;-std=c++1
 [一緒にビルドされるように]
 (<a href="http://www.boost.org/doc/libs/release/libs/iostreams/doc/installation.html">http://www.boost.org/doc/libs/release/libs/iostreams/doc/installation.html</a>)
 <code>ZLIB_SOURCE</code>をフルパス指定する。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">wget -O- http://zlib.net/zlib-1.2.8.tar.gz <span class="p">|</span> tar xz -C <span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/tmp/build
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">wget -O- http://zlib.net/zlib-1.2.8.tar.gz <span class="p">|</span> tar xz -C <span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/tmp/build
 <span class="nb">export</span> <span class="nv">ZLIB_SOURCE</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/tmp/build/zlib-1.2.8
 </code></pre></div></li>
 <li>
 <p>ツールセットを指定してビルド:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">./b2 -j2 <span class="nv">toolset</span><span class="o">=</span>gcc-14 <span class="nv">link</span><span class="o">=</span>static,shared runtime-link<span class="o">=</span>shared <span class="nv">threading</span><span class="o">=</span>multi <span class="nv">variant</span><span class="o">=</span>release --layout<span class="o">=</span>tagged --build-dir<span class="o">=</span>../b2gcc --stagedir<span class="o">=</span>stage/gcc stage
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">./b2 -j2 <span class="nv">toolset</span><span class="o">=</span>gcc-14 <span class="nv">link</span><span class="o">=</span>static,shared runtime-link<span class="o">=</span>shared <span class="nv">threading</span><span class="o">=</span>multi <span class="nv">variant</span><span class="o">=</span>release --layout<span class="o">=</span>tagged --build-dir<span class="o">=</span>../b2gcc --stagedir<span class="o">=</span>stage/gcc stage
 ./b2 -j2 <span class="nv">toolset</span><span class="o">=</span>darwin-14 <span class="nv">link</span><span class="o">=</span>static,shared runtime-link<span class="o">=</span>shared <span class="nv">threading</span><span class="o">=</span>multi <span class="nv">variant</span><span class="o">=</span>release --layout<span class="o">=</span>tagged --build-dir<span class="o">=</span>../b2gcc --stagedir<span class="o">=</span>stage/gcc stage
 ./b2 -j2 <span class="nv">toolset</span><span class="o">=</span>clang-14 <span class="nv">link</span><span class="o">=</span>static,shared runtime-link<span class="o">=</span>shared <span class="nv">threading</span><span class="o">=</span>multi <span class="nv">variant</span><span class="o">=</span>release --layout<span class="o">=</span>tagged --build-dir<span class="o">=</span>../b2clang --stagedir<span class="o">=</span>stage/clang stage
 </code></pre></div></li>
 <li>
 <p>prefixを指定してインストール:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">./b2 -j2 <span class="nv">toolset</span><span class="o">=</span>gcc-14 <span class="nv">link</span><span class="o">=</span>static,shared runtime-link<span class="o">=</span>shared <span class="nv">threading</span><span class="o">=</span>multi <span class="nv">variant</span><span class="o">=</span>release --layout<span class="o">=</span>tagged --build-dir<span class="o">=</span>../b2gcc --stagedir<span class="o">=</span>stage/gcc --prefix<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local install
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">./b2 -j2 <span class="nv">toolset</span><span class="o">=</span>gcc-14 <span class="nv">link</span><span class="o">=</span>static,shared runtime-link<span class="o">=</span>shared <span class="nv">threading</span><span class="o">=</span>multi <span class="nv">variant</span><span class="o">=</span>release --layout<span class="o">=</span>tagged --build-dir<span class="o">=</span>../b2gcc --stagedir<span class="o">=</span>stage/gcc --prefix<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local install
 </code></pre></div><p>あるいは手動でインストール:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">rsync -auv stage/gcc/ ~/local/boost-gcc
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">rsync -auv stage/gcc/ ~/local/boost-gcc
 rsync -auv stage/clang/ ~/local/boost-clang
 rsync -auv boost ~/local/include
 </code></pre></div></li>
@@ -162,18 +162,18 @@ rsync -auv boost ~/local/include
 <h3 id="使うとき">使うとき</h3>
 <p>インストールした場所とリンクするライブラリをコンパイラに伝える必要がある。
 コマンドを直打ちするなら:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">clang++ -I<span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local/include -L<span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local/lib mysource.cpp -lboost_iostreams-mt -o a.out
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">clang++ -I<span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local/include -L<span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local/lib mysource.cpp -lboost_iostreams-mt -o a.out
 </code></pre></div><p><a href="/dev/make.html">Makefile</a>の変数でいうと:</p>
-<div class="highlight"><pre class="chroma"><code class="language-make" data-lang="make"><span class="nv">CPPFLAGS</span> <span class="o">=</span> -I<span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local/include
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-make" data-lang="make"><span class="nv">CPPFLAGS</span> <span class="o">=</span> -I<span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local/include
 <span class="nv">LDFLAGS</span> <span class="o">=</span> -L<span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local/lib
 <span class="nv">LDLIBS</span> <span class="o">=</span> -lboost_iostreams-mt
 </code></pre></div><p><a href="/dev/cmake.html">CMake</a>では <code>BOOST_ROOT</code> にprefixを指定:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">cmake -DBOOST_ROOT<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local ..
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">cmake -DBOOST_ROOT<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local ..
 </code></pre></div><h2 id="mathhttpwwwboostorgdoclibsreleaselibsmathdochtml"><a href="http://www.boost.org/doc/libs/release/libs/math/doc/html/">math</a></h2>
 <h3 id="distributionhttpwwwboostorgdoclibsreleaselibsmathdochtmldisthtml"><a href="http://www.boost.org/doc/libs/release/libs/math/doc/html/dist.html">distribution</a></h3>
 <p>確率分布に従った乱数生成はC++11から <code>&lt;random&gt;</code> でサポートされるようになったが、
 確率密度関数(PDF)や累積密度関数(CDF)はまだ標準入りしてない。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// #include &lt;boost/math/distributions.hpp&gt;
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// #include &lt;boost/math/distributions.hpp&gt;
 </span><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;boost/math/distributions/normal.hpp&gt;</span><span class="cp">
 </span><span class="cp">#include</span> <span class="cpf">&lt;boost/math/distributions/poisson.hpp&gt;</span><span class="cp">
 </span><span class="cp">#include</span> <span class="cpf">&lt;boost/math/distributions/binomial.hpp&gt;</span><span class="cp">
@@ -192,7 +192,7 @@ rsync -auv boost ~/local/include
 <span class="n">bmath</span><span class="o">::</span><span class="n">quantile</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">p</span><span class="p">);</span>
 </code></pre></div><p>右側の裾が欲しいときは精度を保つために <code>complement()</code> を使う。
 (Rでいう <code>lower.tail=FALSE</code>)</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// good
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// good
 </span><span class="c1"></span><span class="n">bmath</span><span class="o">::</span><span class="n">quantile</span><span class="p">(</span><span class="n">bmath</span><span class="o">::</span><span class="n">complement</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">p</span><span class="p">));</span>
 <span class="c1">// bad
 </span><span class="c1"></span><span class="n">bmath</span><span class="o">::</span><span class="n">quantile</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span>
@@ -204,7 +204,7 @@ rsync -auv boost ~/local/include
 </code></pre></div><h2 id="iostreamshttpwwwboostorgdoclibsreleaselibsiostreamsdoc"><a href="http://www.boost.org/doc/libs/release/libs/iostreams/doc/">iostreams</a></h2>
 <p>要ビルド＆リンク <code>-lboost_iostreams-mt</code></p>
 <h3 id="gzip-圧縮と展開">gzip 圧縮と展開</h3>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
 </span><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
 </span><span class="cp">#include</span> <span class="cpf">&lt;boost/iostreams/filtering_stream.hpp&gt;</span><span class="cp">
 </span><span class="cp">#include</span> <span class="cpf">&lt;boost/iostreams/filter/gzip.hpp&gt;</span><span class="cp">

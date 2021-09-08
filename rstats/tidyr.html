@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -125,7 +125,7 @@ data.frameを横広(wide-format)から縦長(long-format)に変形する。
 <dt><code>values_to</code></dt>
 <dd>値の移動先の列名</dd>
 </dl>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">anscombe</span> <span class="o">%&gt;%</span> <span class="n">tibble</span><span class="o">::</span><span class="nf">rowid_to_column</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">anscombe</span> <span class="o">%&gt;%</span> <span class="n">tibble</span><span class="o">::</span><span class="nf">rowid_to_column</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">)</span>
 <span class="c1">#&gt;    id x1 x2 x3 x4    y1   y2    y3    y4</span>
 <span class="c1">#&gt; 1   1 10 10 10  8  8.04 9.14  7.46  6.58</span>
 <span class="c1">#&gt; 2   2  8  8  8  8  6.95 8.14  6.77  5.76</span>
@@ -177,7 +177,7 @@ data.frameを縦長(long-format)から横広(wide-format)に変形する。
 <dd><code>id_cols</code> の組み合わせが一意に定まらず複数のvalueを1セルに詰め込む場合の処理関数。
 デフォルトでは警告とともに <code>list()</code> が使われる。</dd>
 </dl>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">anscombe_long</span> <span class="o">%&gt;%</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">anscombe_long</span> <span class="o">%&gt;%</span>
   <span class="nf">pivot_wider</span><span class="p">(</span><span class="n">names_from</span> <span class="o">=</span> <span class="n">namae</span><span class="p">,</span> <span class="n">values_from</span> <span class="o">=</span> <span class="n">atai</span><span class="p">)</span> <span class="o">%&gt;%</span>
   <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="o">!</span><span class="n">id</span><span class="p">)</span>
 <span class="c1">#&gt; # tbl_df [11 x 8]</span>
@@ -195,7 +195,7 @@ data.frameを縦長(long-format)から横広(wide-format)に変形する。
 
 <span class="c1"># anscombe_long %&gt;% spread(namae, atai) %&gt;% dplyr::select(!id)</span>
 </code></pre></div><p>カテゴリカル変数を指示変数(ダミー変数)に変換するのにも使える:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">pg</span> <span class="o">=</span> <span class="n">PlantGrowth</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">slice</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">11</span><span class="p">,</span> <span class="m">12</span><span class="p">,</span> <span class="m">21</span><span class="p">,</span> <span class="m">22</span><span class="p">))</span> <span class="o">%&gt;%</span> <span class="nf">print</span><span class="p">()</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">pg</span> <span class="o">=</span> <span class="n">PlantGrowth</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">slice</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">11</span><span class="p">,</span> <span class="m">12</span><span class="p">,</span> <span class="m">21</span><span class="p">,</span> <span class="m">22</span><span class="p">))</span> <span class="o">%&gt;%</span> <span class="nf">print</span><span class="p">()</span>
 <span class="c1">#   weight group</span>
 <span class="c1"># 1   4.17  ctrl</span>
 <span class="c1"># 2   5.58  ctrl</span>
@@ -219,7 +219,7 @@ data.frameを縦長(long-format)から横広(wide-format)に変形する。
 <p><code>names_sep</code> や <code>names_pattern</code> を指定して
 <code>names_to</code>, <code>name_from</code> に複数の値を渡すと
 <code>tidyr::separate()</code> / <code>tidyr::unite()</code> 的な操作も同時にやってしまえる:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">anscombe</span> <span class="o">%&gt;%</span> <span class="n">tibble</span><span class="o">::</span><span class="nf">rowid_to_column</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">anscombe</span> <span class="o">%&gt;%</span> <span class="n">tibble</span><span class="o">::</span><span class="nf">rowid_to_column</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
   <span class="n">tidyr</span><span class="o">::</span><span class="nf">pivot_longer</span><span class="p">(</span><span class="o">-</span><span class="n">id</span><span class="p">,</span> <span class="n">names_to</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;axis&#34;</span><span class="p">,</span> <span class="s">&#34;group&#34;</span><span class="p">),</span> <span class="n">names_sep</span> <span class="o">=</span> <span class="m">1L</span><span class="p">)</span> <span class="o">%&gt;%</span>
   <span class="nf">print</span><span class="p">()</span> <span class="o">%&gt;%</span>
   <span class="nf">pivot_wider</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">names_from</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">group</span><span class="p">),</span> <span class="n">names_sep</span> <span class="o">=</span> <span class="s">&#34;_&#34;</span><span class="p">)</span>
@@ -247,7 +247,7 @@ data.frameを縦長(long-format)から横広(wide-format)に変形する。
 <span class="c1">#&gt;  9     9    12    12    12     8 10.84  9.13  8.15  5.56</span>
 <span class="c1">#&gt; 10    10     7     7     7     8  4.82  7.26  6.42  7.91</span>
 <span class="c1">#&gt; 11    11     5     5     5     8  5.68  4.74  5.73  6.89</span>
-</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">VADeaths</span>
+</code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">VADeaths</span>
 <span class="c1">#&gt;       Rural Male Rural Female Urban Male Urban Female</span>
 <span class="c1">#&gt; 50-54       11.7          8.7       15.4          8.4</span>
 <span class="c1">#&gt; 55-59       18.1         11.7       24.3         13.6</span>
@@ -274,7 +274,7 @@ data.frameを縦長(long-format)から横広(wide-format)に変形する。
 </code></pre></div><p><code>names_transform</code> に関数を指定すると、
 列名だったものに適用される。
 例えば型変換に使える:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">anscombe</span> <span class="o">%&gt;%</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">anscombe</span> <span class="o">%&gt;%</span>
   <span class="n">tibble</span><span class="o">::</span><span class="nf">rowid_to_column</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
   <span class="n">tidyr</span><span class="o">::</span><span class="nf">pivot_longer</span><span class="p">(</span><span class="o">-</span><span class="n">id</span><span class="p">,</span>
     <span class="n">names_to</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;axis&#34;</span><span class="p">,</span> <span class="s">&#34;group&#34;</span><span class="p">),</span>
@@ -296,7 +296,7 @@ data.frameを縦長(long-format)から横広(wide-format)に変形する。
 <span class="c1">#&gt; 43     4     8  7.91</span>
 <span class="c1">#&gt; 44     4     8  6.89</span>
 </code></pre></div><p><code>names_prefix</code> を使えば、列名の頭に共通して付いてた文字を消せる:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">anscombe</span> <span class="o">%&gt;%</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">anscombe</span> <span class="o">%&gt;%</span>
   <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="nf">starts_with</span><span class="p">(</span><span class="s">&#34;x&#34;</span><span class="p">))</span> <span class="o">%&gt;%</span>
   <span class="n">tidyr</span><span class="o">::</span><span class="nf">pivot_longer</span><span class="p">(</span><span class="nf">everything</span><span class="p">(),</span> <span class="n">names_prefix</span> <span class="o">=</span> <span class="s">&#34;x&#34;</span><span class="p">)</span>
 <span class="c1">#&gt; # tbl_df [44 x 2]</span>
@@ -314,7 +314,7 @@ data.frameを縦長(long-format)から横広(wide-format)に変形する。
 </code></pre></div><p><code>names_to</code> に <code>&quot;.value&quot;</code> という特殊な値を渡すことで、
 旧列名から新しい列名が作られ、複数列への縦長変形を同時にできる。
 また <code>names_to = c(&quot;name&quot;, NA)</code> のように不要な列を捨てることもできる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">tidy_anscombe</span> <span class="o">=</span> <span class="n">anscombe</span> <span class="o">%&gt;%</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">tidy_anscombe</span> <span class="o">=</span> <span class="n">anscombe</span> <span class="o">%&gt;%</span>
   <span class="n">tidyr</span><span class="o">::</span><span class="nf">pivot_longer</span><span class="p">(</span>                <span class="c1"># 縦長に変形したい</span>
     <span class="nf">everything</span><span class="p">(),</span>                     <span class="c1"># すべての列について</span>
     <span class="n">names_to</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;.value&#34;</span><span class="p">,</span> <span class="s">&#34;group&#34;</span><span class="p">),</span>  <span class="c1"># x, yを列名に、1, 2, 3をgroup列に</span>
@@ -341,7 +341,7 @@ data.frameを縦長(long-format)から横広(wide-format)に変形する。
 <p>data.frameをネストして(入れ子にして)、list of data.frames のカラムを作る。
 内側のdata.frameに押し込むカラムを <code>...</code> に指定するか、
 外側に残すカラムをマイナス指定する。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">nest</span><span class="p">(</span><span class="n">NEW_COLUMN</span> <span class="o">=</span> <span class="o">-</span><span class="n">cut</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="nf">unnest</span><span class="p">()</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">nest</span><span class="p">(</span><span class="n">NEW_COLUMN</span> <span class="o">=</span> <span class="o">-</span><span class="n">cut</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="nf">unnest</span><span class="p">()</span>
 <span class="c1">#&gt; # tbl_df [5 x 2]</span>
 <span class="c1">#&gt;         cut           NEW_COLUMN</span>
 <span class="c1">#&gt;       &lt;ord&gt;               &lt;list&gt;</span>
@@ -365,7 +365,7 @@ tidyverse時代のクールなやり方らしい。</p>
 list of data.framesだけでなく、list of vectorsとかでもよい。</p>
 <p>ネストされた列が複数ある場合に曖昧なコードにならないよう
 <code>cols</code> を明示的に指定することが求められる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span>
   <span class="nf">nest</span><span class="p">(</span><span class="n">NEW_COLUMN</span> <span class="o">=</span> <span class="o">-</span><span class="n">cut</span><span class="p">)</span> <span class="o">%&gt;%</span>
   <span class="nf">unnest</span><span class="p">(</span><span class="n">NEW_COLUMN</span><span class="p">)</span>
 </code></pre></div><h2 id="その他の便利関数">その他の便利関数</h2>
@@ -392,7 +392,7 @@ list of data.framesだけでなく、list of vectorsとかでもよい。</p>
 <dd>足りない場合にどっち側をNAで埋めるか: <code>warn</code>, <code>right</code>, <code>left</code>。
 つまり、文字を左詰めにするには<code>right</code>が正解(紛らわしい)。</dd>
 </dl>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">va_deaths</span> <span class="o">=</span> <span class="n">VADeaths</span> <span class="o">%&gt;%</span> <span class="nf">as.data.frame</span><span class="p">()</span> <span class="o">%&gt;%</span> <span class="n">tibble</span><span class="o">::</span><span class="nf">rownames_to_column</span><span class="p">(</span><span class="s">&#34;class&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="nf">print</span><span class="p">()</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">va_deaths</span> <span class="o">=</span> <span class="n">VADeaths</span> <span class="o">%&gt;%</span> <span class="nf">as.data.frame</span><span class="p">()</span> <span class="o">%&gt;%</span> <span class="n">tibble</span><span class="o">::</span><span class="nf">rownames_to_column</span><span class="p">(</span><span class="s">&#34;class&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="nf">print</span><span class="p">()</span>
 <span class="c1">#&gt;   class Rural Male Rural Female Urban Male Urban Female</span>
 <span class="c1">#&gt; 1 50-54       11.7          8.7       15.4          8.4</span>
 <span class="c1">#&gt; 2 55-59       18.1         11.7       24.3         13.6</span>
@@ -419,7 +419,7 @@ list of data.framesだけでなく、list of vectorsとかでもよい。</p>
 <code>tidyr::separate()</code> の逆。</p>
 <p><code>paste()</code> とか <code>stringr::str_c()</code> でも似たようなことができるけど
 <code>na.rm = TRUE</code> の挙動が欲しいときに便利。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">df</span> <span class="o">=</span> <span class="nf">tibble</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;x&#34;</span><span class="p">,</span> <span class="s">&#34;x&#34;</span><span class="p">,</span> <span class="kc">NA</span><span class="p">),</span> <span class="n">y</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;y&#34;</span><span class="p">,</span> <span class="kc">NA</span><span class="p">,</span> <span class="s">&#34;y&#34;</span><span class="p">))</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">df</span> <span class="o">=</span> <span class="nf">tibble</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;x&#34;</span><span class="p">,</span> <span class="s">&#34;x&#34;</span><span class="p">,</span> <span class="kc">NA</span><span class="p">),</span> <span class="n">y</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;y&#34;</span><span class="p">,</span> <span class="kc">NA</span><span class="p">,</span> <span class="s">&#34;y&#34;</span><span class="p">))</span>
 
 <span class="n">df</span> <span class="o">%&gt;%</span> <span class="n">tidyr</span><span class="o">::</span><span class="nf">unite</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="nf">c</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">sep</span> <span class="o">=</span> <span class="s">&#34;_&#34;</span><span class="p">,</span> <span class="n">remove</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span>
 <span class="c1">#&gt; # tbl_df [3 x 3]</span>
@@ -452,7 +452,7 @@ list of data.framesだけでなく、list of vectorsとかでもよい。</p>
 </code></pre></div><h3 id="tidyrcompletedata--fill--list"><code>tidyr::complete(data, ..., fill = list())</code></h3>
 <p>指定した列の全ての組み合わせが登場するように、
 指定しなかった列に欠損値<code>NA</code>(あるいは任意の値)を補完した行を挿入する。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">df</span> <span class="o">%&gt;%</span> <span class="nf">complete</span><span class="p">(</span><span class="n">key1</span><span class="p">,</span> <span class="n">key2</span><span class="p">,</span> <span class="n">fill</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">val1</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">val2</span> <span class="o">=</span> <span class="s">&#34;-&#34;</span><span class="p">))</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">df</span> <span class="o">%&gt;%</span> <span class="nf">complete</span><span class="p">(</span><span class="n">key1</span><span class="p">,</span> <span class="n">key2</span><span class="p">,</span> <span class="n">fill</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">val1</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">val2</span> <span class="o">=</span> <span class="s">&#34;-&#34;</span><span class="p">))</span>
 </code></pre></div><h3 id="tidyrexpanddata-"><code>tidyr::expand(data, ...)</code></h3>
 <p>指定した列の全ての組み合わせが登場するような新しいdata.frameを作る。
 全ての列を指定すれば<code>complete()</code>と同じ効果だが、
@@ -470,7 +470,7 @@ tibble版<code>expand.grid(...)</code>のようなもの。</p>
 <h3 id="tidyrreplace_na"><code>tidyr::replace_na()</code></h3>
 <p>欠損値 <code>NA</code> を好きな値で置き換える。
 これまでは <code>mutate(x = ifelse(is.na(x), 0, x))</code> のようにしてたところを</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">df</span> <span class="o">%&gt;%</span> <span class="nf">replace_na</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="s">&#34;unknown&#34;</span><span class="p">))</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">df</span> <span class="o">%&gt;%</span> <span class="nf">replace_na</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="s">&#34;unknown&#34;</span><span class="p">))</span>
 </code></pre></div><p>逆に、特定の値を<code>NA</code>にしたい場合は
 <a href="/rstats/dplyr.html"><code>dplyr::na_if()</code></a></p>
 <h3 id="tidyrfill"><code>tidyr::fill()</code></h3>

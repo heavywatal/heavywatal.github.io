@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -108,7 +108,7 @@ gcc や clang の最適化技術も着々と進歩しており、
 新しいコンパイラを使うほうがその恩恵を受けられる。</p>
 <h3 id="最適化オプション">最適化オプション</h3>
 <p><a href="https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html">https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html</a></p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">g++ -O3 main.cpp
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">g++ -O3 main.cpp
 </code></pre></div><h3 id="コンパイル時定数-constexpr">コンパイル時定数 <code>constexpr</code></h3>
 <p>コンパイル時に計算できるものを予め計算して定数にしておくことで、
 実行時の計算を減らすことができる。
@@ -116,7 +116,7 @@ C++11では明示的に <code>constexpr</code> 修飾することができるの
 テンプレートメタプログラミングという手もある。
 C++11を使えない場合でも、
 定数同士の四則演算などはまとめておけばコンパイラが計算してくれるはず。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// 掛け算も割り算も毎回計算
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// 掛け算も割り算も毎回計算
 </span><span class="c1"></span><span class="k">return</span> <span class="mf">4.0</span> <span class="o">*</span> <span class="n">M_PI</span> <span class="o">*</span> <span class="n">std</span><span class="o">::</span><span class="n">pow</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">;</span>
 
 <span class="c1">// コンパイル時定数を掛けるだけ
@@ -137,7 +137,7 @@ C++11を使えない場合でも、
 <p><code>-O2</code> では <code>-finline-small-functions</code> がオンになり、
 <code>-O3</code> では <code>-finline-functions</code> がオンになる。
 実行ファイルのサイズがデカくなるし、コンパイルは遅くなるので、バランスを考える。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="kr">inline</span> <span class="kt">int</span> <span class="nf">pow2</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="kr">inline</span> <span class="kt">int</span> <span class="nf">pow2</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">*=</span> <span class="n">x</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div><h3 id="関数オブジェクト">関数オブジェクト</h3>
@@ -148,7 +148,7 @@ C++11を使えない場合でも、
 コンパイラによる最適化がしやすいらしい。
 メンバ変数として値を保持できるので、
 引数のやり取りやメモリの確保・開放が少なくてすむという場面もありそう。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">class</span> <span class="nc">isAboveThreshold</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="k">class</span> <span class="nc">isAboveThreshold</span> <span class="p">{</span>
   <span class="k">public</span><span class="o">:</span>
     <span class="n">isAboveThreshold</span><span class="p">(</span><span class="k">const</span> <span class="kt">double</span> <span class="n">t</span><span class="p">)</span><span class="o">:</span> <span class="n">threshold_</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
     <span class="kt">bool</span> <span class="nf">operator</span><span class="p">()(</span><span class="k">const</span> <span class="kt">double</span> <span class="n">x</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
@@ -160,7 +160,7 @@ C++11を使えない場合でも、
 
 <span class="n">std</span><span class="o">::</span><span class="n">transform</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">result</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">isAboveThreshold</span><span class="p">(</span><span class="mf">3.14</span><span class="p">));</span>
 </code></pre></div><p>C++11からはラムダ式が便利</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">const</span> <span class="kt">double</span> <span class="n">threshold</span> <span class="o">=</span> <span class="mf">3.14</span><span class="p">;</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="k">const</span> <span class="kt">double</span> <span class="n">threshold</span> <span class="o">=</span> <span class="mf">3.14</span><span class="p">;</span>
 <span class="n">std</span><span class="o">::</span><span class="n">transform</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">result</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span>
                <span class="p">[</span><span class="n">threshold</span><span class="p">](</span><span class="kt">double</span> <span class="n">x</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">bool</span> <span class="p">{</span><span class="k">return</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">;});</span>
 </code></pre></div><h2 id="余計な一時オブジェクトを作らない">余計な一時オブジェクトを作らない</h2>
@@ -174,13 +174,13 @@ STLコンテナや自作クラスなどは参照渡しのほうが高速。
 <p>参照渡しされた仮引数の中身を関数内で変更すると、
 呼び出し元の実引数の値も変更されることになる。
 変更するつもりがない場合は明示的に <code>const</code> をつけて受け取るようにすると安全</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="kt">void</span> <span class="nf">do_something</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">huge_array</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="kt">void</span> <span class="nf">do_something</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">huge_array</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// コピーせず本体への参照のみ受け取る。
 </span><span class="c1"></span>    <span class="c1">// constがついているので、変更しようとするとコンパイルエラー
 </span><span class="c1"></span><span class="p">}</span>
 </code></pre></div><p>引数の中身を変更するつもりがある場合はポインタを受け取るようにすると、
 呼び出すときに <code>&amp;</code> が必要となるので意図が伝わりやすい。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="kt">void</span> <span class="nf">do_something</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;*</span> <span class="n">huge_array</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="kt">void</span> <span class="nf">do_something</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;*</span> <span class="n">huge_array</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// コピーせずポインタを受け取る。
 </span><span class="c1"></span>    <span class="c1">// huge_arrayの変更は呼び出し元にも影響する。
 </span><span class="c1"></span><span class="p">}</span>
@@ -285,7 +285,7 @@ C++で配列作るならとりあえずこれ。
 という処理をすることによって行われる。
 始め1、次2、4、8、16、、、という具合に。
 なので、10000個の要素を格納すると分かっている場合には、始めからそれだけ確保しておくと速い。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span><span class="p">;</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span><span class="p">;</span>
 <span class="n">v</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="mi">10000</span><span class="p">);</span>
 <span class="c1">// then push_back() many times
 </span></code></pre></div><h2 id="ループ">ループ</h2>
@@ -293,7 +293,7 @@ C++で配列作るならとりあえずこれ。
 <p><code>for</code> や <code>while</code> を回すときの継続条件式は回る度に評価されるので意外とコストになるかも。
 イテレータで回すときの <code>v.end()</code> も毎回呼び出されるので、
 ループの中身が軽い処理の場合には無視できない差になるかもしれない。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">v</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">v</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// v.size() many times!
 </span><span class="c1"></span><span class="p">}</span>
 
@@ -313,7 +313,7 @@ C++で配列作るならとりあえずこれ。
 前置インクリメント <code>++i</code> でも <code>for</code> ループの結果は変わらない。
 が、<code>i++</code> だと前の値を記憶してからプラスする（一時オブジェクトが作られる）ので、
 <code>++i</code> のほうがいいらしい。特にイテレータのとき。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">for</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">it</span><span class="o">=</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">it</span><span class="o">!=</span><span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">it</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="k">for</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">it</span><span class="o">=</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">it</span><span class="o">!=</span><span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">it</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// do something
 </span><span class="c1"></span><span class="p">}</span>
 </code></pre></div><h3 id="出来る限り外で処理">出来る限り外で処理</h3>
@@ -328,7 +328,7 @@ C++で配列作るならとりあえずこれ。
 <p><code>std::cin</code> はデフォルトで <code>std::cout</code> に結びつけられてて、
 <code>std::cin</code> される度に <code>std::flush</code> されてしまうらしいので、
 そうならないように切り離す。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
 </span><span class="cp"></span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
     <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>

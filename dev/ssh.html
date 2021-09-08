@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -98,7 +98,7 @@ ssh
 <ol>
 <li>
 <p>ローカルホストで鍵ペア (秘密鍵 <code>id_ed25519</code> と公開鍵 <code>id_ed25519.pub</code>) を作成:</p>
-<pre><code>ssh-keygen -t ed25519 -N ''
+<pre tabindex="0"><code>ssh-keygen -t ed25519 -N ''
 # Generating public/private ed25519 key pair.
 # Enter file in which to save the key (~/.ssh/id_ed25519): ＃そのままリターン
 # Your identification has been saved in ~/.ssh/id_ed25519.
@@ -112,14 +112,14 @@ ssh
 <p>ウェブブラウザからアップロードする方法。
 (e.g., <a href="https://github.com/settings/keys">GitHub &gt; Settings</a>)。</p>
 <p>ターミナルから <code>~/.ssh/authorized_keys</code> に追加する方法:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ssh-copy-id -i ~/.ssh/id_ed25519.pub watal@example.com
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ssh-copy-id -i ~/.ssh/id_ed25519.pub watal@example.com
 <span class="c1"># or</span>
 ssh watal@example.com <span class="s2">&#34;mkdir ~/.ssh; touch ~/.ssh/authorized_keys&#34;</span>
 cat id_ed25519.pub <span class="p">|</span> ssh watal@example.com <span class="s2">&#34;cat &gt;&gt; ~/.ssh/authorized_keys&#34;</span>
 </code></pre></div></li>
 <li>
 <p>ユーザー本人だけが読み書きできるパーミッションに設定されていることを確認:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ls -l ~/.ssh
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ls -l ~/.ssh
 ssh watal@example.com <span class="s2">&#34;ls -l ~/.ssh&#34;</span>
 <span class="c1"># if necessary</span>
 chmod <span class="m">700</span> ~/.ssh
@@ -133,7 +133,7 @@ chmod <span class="m">600</span> ~/.ssh/authorized_keys
 <p><code>ssh</code> する側のユーザー毎の設定。
 ユーザー名やアドレスをセットにしてニックネームをつけることで、入力を省略できる。
 先に書いたものが優先されるので、一般設定は最後に:</p>
-<pre><code>Host beast
+<pre tabindex="0"><code>Host beast
   Hostname 192.168.6.66
   User eddie
 Host *.ddbj.nig.ac.jp
@@ -145,16 +145,16 @@ Host *
   StrictHostKeyChecking no
   VisualHostKey yes
 </code></pre><p>例えば上のような設定を <code>~/.ssh/config</code> に書いておけば以下の２つは等価:</p>
-<pre><code>ssh -2 eddie@192.168.6.66
+<pre tabindex="0"><code>ssh -2 eddie@192.168.6.66
 ssh beast
 </code></pre><h3 id="etcssh_config"><code>/etc/ssh_config</code>:</h3>
 <p><code>ssh</code> する側のマシン全体の設定。認証の試行を絞ることで少しでも高速にしたい:</p>
-<pre><code>Protocol 2
+<pre tabindex="0"><code>Protocol 2
 ChallengeResponseAuthentication no
 GSSAPIAuthentication no
 </code></pre><h3 id="etcsshd_config"><code>/etc/sshd_config</code>:</h3>
 <p><code>ssh</code> される側のデーモンの設定。余計な入り口を塞ぐべし:</p>
-<pre><code>Protocol 2
+<pre tabindex="0"><code>Protocol 2
 PermitRootLogin without-password
 ChallengeResponseAuthentication no
 PasswordAuthentication no
@@ -166,7 +166,7 @@ UsePAM no
 <a href="/dev/rsync.html">rsync</a> を使ったほうがよい。
 あるいは<a href="/dev/mount.html#sshfs">sshfsでマウント</a>してしまうのも楽ちん。</p>
 <h2 id="環境変数">環境変数</h2>
-<pre><code>echo $SSH_CONNECTION
+<pre tabindex="0"><code>echo $SSH_CONNECTION
 [client IP] [client port] [server IP] [server port]
 </code></pre><p>どこから <code>ssh</code> したか、を取得するには
 <code>echo $SSH_CONNECTION | awk '{print $1}'</code></p>

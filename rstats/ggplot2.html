@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -116,7 +116,7 @@ R標準の<code>boxplot()</code>や<code>hist()</code>などは前者の上に�
 を用意することが重要。
 言い換えると「この列がx軸、この列がy軸、この列によって色を変える」というように指示できる形。
 例えばggplot2に付属の <code>mpg</code> データ:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
 <span class="n">mpg</span>
 <span class="c1">#     manufacturer  model displ  year   cyl      trans   drv   cty   hwy    fl   class</span>
 <span class="c1">#            &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt;      &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;</span>
@@ -126,26 +126,26 @@ R標準の<code>boxplot()</code>や<code>hist()</code>などは前者の上に�
 <span class="c1"># 233   volkswagen passat   2.8  1999     6 manual(m5)     f    18    26     p midsize</span>
 <span class="c1"># 234   volkswagen passat   3.6  2008     6   auto(s6)     f    17    26     p midsize</span>
 </code></pre></div><p>このようなデータを渡して、指示をどんどん <code>+</code> していく:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">ggplot</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">mpg</span><span class="p">)</span> <span class="o">+</span>              <span class="c1"># mpgデータでキャンバス準備</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">ggplot</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">mpg</span><span class="p">)</span> <span class="o">+</span>              <span class="c1"># mpgデータでキャンバス準備</span>
   <span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">displ</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">cty</span><span class="p">)</span> <span class="o">+</span>       <span class="c1"># displ,cty列をx,y軸にmapping</span>
   <span class="nf">geom_point</span><span class="p">()</span> <span class="o">+</span>                  <span class="c1"># 散布図を描く</span>
   <span class="nf">facet_wrap</span><span class="p">(</span><span class="o">~</span> <span class="n">drv</span><span class="p">)</span> <span class="o">+</span>             <span class="c1"># drv列に応じてパネル分割</span>
   <span class="nf">theme_classic</span><span class="p">(</span><span class="n">base_size</span> <span class="o">=</span> <span class="m">20</span><span class="p">)</span>   <span class="c1"># クラシックなテーマで</span>
 </code></pre></div><p>途中経過をオブジェクトとして取っておける:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">p1</span> <span class="o">=</span> <span class="nf">ggplot</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">mpg</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">p1</span> <span class="o">=</span> <span class="nf">ggplot</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">mpg</span><span class="p">)</span>
 <span class="n">p2</span> <span class="o">=</span> <span class="n">p1</span> <span class="o">+</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">displ</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">cty</span><span class="p">)</span>
 <span class="n">p3</span> <span class="o">=</span> <span class="n">p2</span> <span class="o">+</span> <span class="nf">geom_point</span><span class="p">()</span>
 <span class="n">p4</span> <span class="o">=</span> <span class="n">p3</span> <span class="o">+</span> <span class="nf">facet_wrap</span><span class="p">(</span><span class="o">~</span> <span class="n">drv</span><span class="p">)</span>
 <span class="n">p5</span> <span class="o">=</span> <span class="n">p4</span> <span class="o">+</span> <span class="nf">theme_classic</span><span class="p">(</span><span class="n">base_size</span> <span class="o">=</span> <span class="m">20</span><span class="p">)</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">p5</span><span class="p">)</span>
 </code></pre></div><p>画像ファイルに保存するところまできっちり書く:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">ggsave</span><span class="p">(</span><span class="s">&#34;mpg.png&#34;</span><span class="p">,</span> <span class="n">p5</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="m">6</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="m">4</span><span class="p">,</span> <span class="n">dpi</span> <span class="o">=</span> <span class="m">300</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">ggsave</span><span class="p">(</span><span class="s">&#34;mpg.png&#34;</span><span class="p">,</span> <span class="n">p5</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="m">6</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="m">4</span><span class="p">,</span> <span class="n">dpi</span> <span class="o">=</span> <span class="m">300</span><span class="p">)</span>
 </code></pre></div><h2 id="aesthetic-mappinghttpsggplot2tidyverseorgreferenceaes_group_orderhtml"><a href="https://ggplot2.tidyverse.org/reference/aes_group_order.html">Aesthetic mapping</a></h2>
 <p>データと見せ方を紐付ける。
 <code>aes(color = Species)</code> のように <code>aes()</code> 内で列名を指定すると、
 その変数に応じて色やサイズなどを変えることができる。
 言い換えると、データの値を色やサイズに変換する(スケールする)ことに相当する。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># データによって点のサイズ・色・形を変える</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="c1"># データによって点のサイズ・色・形を変える</span>
 <span class="n">p2</span> <span class="o">+</span> <span class="nf">geom_point</span><span class="p">(</span><span class="n">mapping</span> <span class="o">=</span> <span class="nf">aes</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="n">drv</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="n">cyl</span><span class="p">))</span>
 
 <span class="c1"># aes() の外で指定するとデータによらず全体に反映。</span>
@@ -182,7 +182,7 @@ R標準の<code>boxplot()</code>や<code>hist()</code>などは前者の上に�
 <h3 id="scale_-で調整"><code>scale_*()</code> で調整</h3>
 <p>変数をどうやって色やサイズに反映させるか、
 各項目に対応する <code>scale_*()</code> 関数で調整する。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">p1</span> <span class="o">+</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">displ</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">cty</span><span class="p">)</span> <span class="o">+</span> <span class="nf">geom_point</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="n">hwy</span><span class="p">))</span> <span class="o">+</span> <span class="nf">scale_color_fermenter</span><span class="p">()</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">p1</span> <span class="o">+</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">displ</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">cty</span><span class="p">)</span> <span class="o">+</span> <span class="nf">geom_point</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="n">hwy</span><span class="p">))</span> <span class="o">+</span> <span class="nf">scale_color_fermenter</span><span class="p">()</span>
   <span class="nf">geom_point</span><span class="p">(</span><span class="n">mapping</span> <span class="o">=</span> <span class="nf">aes</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="n">drv</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="n">cyl</span><span class="p">))</span> <span class="o">+</span>
   <span class="nf">scale_color_brewer</span><span class="p">(</span><span class="n">palette</span> <span class="o">=</span> <span class="s">&#34;Set1&#34;</span><span class="p">)</span> <span class="o">+</span>
   <span class="nf">scale_size_identity</span><span class="p">()</span>
@@ -257,7 +257,7 @@ breaksの値を受け取って文字列を返す関数
 <dl>
 <dt><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html"><code>facet_wrap()</code></a></dt>
 <dd>1変数で分割して並べる
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">facet_wrap</span><span class="p">(</span><span class="n">facets</span><span class="p">,</span> <span class="n">nrow</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">ncol</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">scales</span> <span class="o">=</span> <span class="s">&#34;fixed&#34;</span><span class="p">,</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">facet_wrap</span><span class="p">(</span><span class="n">facets</span><span class="p">,</span> <span class="n">nrow</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">ncol</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">scales</span> <span class="o">=</span> <span class="s">&#34;fixed&#34;</span><span class="p">,</span>
   <span class="n">shrink</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="n">labeller</span> <span class="o">=</span> <span class="s">&#34;label_value&#34;</span><span class="p">,</span> <span class="n">as.table</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
   <span class="n">switch</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">drop</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="n">dir</span> <span class="o">=</span> <span class="s">&#34;h&#34;</span><span class="p">,</span> <span class="n">strip.position</span> <span class="o">=</span> <span class="s">&#34;top&#34;</span><span class="p">)</span>
 
@@ -266,7 +266,7 @@ breaksの値を受け取って文字列を返す関数
 </code></pre></div></dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html"><code>facet_grid()</code></a></dt>
 <dd>2変数以上で分割して縦横に並べる
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">facet_grid</span><span class="p">(</span><span class="n">rows</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">scales</span> <span class="o">=</span> <span class="s">&#34;fixed&#34;</span><span class="p">,</span> <span class="n">space</span> <span class="o">=</span> <span class="s">&#34;fixed&#34;</span><span class="p">,</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">facet_grid</span><span class="p">(</span><span class="n">rows</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">scales</span> <span class="o">=</span> <span class="s">&#34;fixed&#34;</span><span class="p">,</span> <span class="n">space</span> <span class="o">=</span> <span class="s">&#34;fixed&#34;</span><span class="p">,</span>
   <span class="n">shrink</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="n">labeller</span> <span class="o">=</span> <span class="s">&#34;label_value&#34;</span><span class="p">,</span> <span class="n">as.table</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
   <span class="n">switch</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">drop</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="n">margins</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span> <span class="n">facets</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">)</span>
 
@@ -295,7 +295,7 @@ breaksの値を受け取って文字列を返す関数
 <p>これらはggplotオブジェクトを作るときではなく、描画するときに計算されるらしい。
 強制的にそこまで計算させて値を参照するには <code>ggplot_build()</code> を使う。
 たとえば <code>h = hist(mpg$cty)</code> のようなものを取得したいときは:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">p</span> <span class="o">=</span> <span class="nf">ggplot</span><span class="p">(</span><span class="n">mpg</span><span class="p">)</span> <span class="o">+</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">cty</span><span class="p">)</span> <span class="o">+</span> <span class="nf">geom_histogram</span><span class="p">(</span><span class="n">bins</span> <span class="o">=</span> <span class="m">6L</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">p</span> <span class="o">=</span> <span class="nf">ggplot</span><span class="p">(</span><span class="n">mpg</span><span class="p">)</span> <span class="o">+</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">cty</span><span class="p">)</span> <span class="o">+</span> <span class="nf">geom_histogram</span><span class="p">(</span><span class="n">bins</span> <span class="o">=</span> <span class="m">6L</span><span class="p">)</span>
 <span class="nf">ggplot_build</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">$</span><span class="n">data[[1L]]</span>
 <span class="c1"># layer_data(p)</span>
 </code></pre></div><p>colorとfillを同色の透明度違いにする、とかやりたい場合も似たようなイメージで、
@@ -386,7 +386,7 @@ ggplotらしいデフォルトだが、論文には使いにくい。</dd>
 ほかのレイヤーと同じようにどんどん足していける。
 テーマは直線、長方形、文字の3種類のエレメントからなり、
 <a href="#%E3%82%A8%E3%83%AC%E3%83%A1%E3%83%B3%E3%83%88">後述の <code>element_***()</code></a>を介して変更していく。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">## ベースとなるテーマを先に適用してから微調整</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="c1">## ベースとなるテーマを先に適用してから微調整</span>
 <span class="n">p3</span> <span class="o">+</span> <span class="nf">theme_bw</span><span class="p">()</span> <span class="o">+</span> <span class="nf">theme</span><span class="p">(</span>
   <span class="n">panel.background</span> <span class="o">=</span> <span class="nf">element_rect</span><span class="p">(</span><span class="n">fill</span> <span class="o">=</span> <span class="s">&#34;white&#34;</span><span class="p">),</span> <span class="c1"># 箱</span>
   <span class="n">panel.grid</span>       <span class="o">=</span> <span class="nf">element_line</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s">&#34;blue&#34;</span><span class="p">),</span> <span class="c1"># 線</span>
@@ -489,7 +489,7 @@ units で使いそうなのは
 <p>RStudioやQuartzの保存ダイアログを利用して書き出すこともできるけど、
 それだとサイズ調整やファイル名入力を手作業でやることになってしまう。
 <code>ggsave()</code> をスクリプトに書いておけば何回でも同じ設定で出力できる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">ggsave</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">plot</span> <span class="o">=</span> <span class="nf">last_plot</span><span class="p">(),</span> <span class="n">device</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">path</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">ggsave</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">plot</span> <span class="o">=</span> <span class="nf">last_plot</span><span class="p">(),</span> <span class="n">device</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">path</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span>
        <span class="n">scale</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span>  <span class="n">width</span> <span class="o">=</span> <span class="kc">NA</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="kc">NA</span><span class="p">,</span>
        <span class="n">units</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;in&#34;</span><span class="p">,</span> <span class="s">&#34;cm&#34;</span><span class="p">,</span> <span class="s">&#34;mm&#34;</span><span class="p">),</span> <span class="n">dpi</span> <span class="o">=</span> <span class="m">300</span><span class="p">,</span> <span class="n">limitsize</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="kc">...</span><span class="p">)</span>
 </code></pre></div><ul>
@@ -503,7 +503,7 @@ units で使いそうなのは
 <li><code>scale =</code> や <code>units =</code> を使うのはよほど必要になったときだけ。</li>
 <li>PDF出力でフォント関連の問題が生じたら <code>device = cairo_pdf</code> を試す。</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># 7inch x 300dpi = 2100px四方 (デフォルト)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="c1"># 7inch x 300dpi = 2100px四方 (デフォルト)</span>
 <span class="nf">ggsave</span><span class="p">(</span><span class="s">&#34;mpg1.png&#34;</span><span class="p">,</span> <span class="n">p3</span><span class="p">)</span> <span class="c1"># width = 7, height = 7, dpi = 300</span>
 
 <span class="c1"># 4     x 300    = 1200  全体7/4倍ズーム</span>
@@ -608,13 +608,13 @@ or <a href="https://github.com/eclarke/ggbeeswarm"><code>ggbeeswarm::geom_beeswa
 <strong>残念ながら開発中止？</strong></p>
 <p>&ldquo;grob&rdquo; は &ldquo;grid graphical object&rdquo; の略。
 ggplotオブジェクトと同じように <code>ggsave()</code> に渡して保存可能。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">grob</span> <span class="o">=</span> <span class="n">gridExtra</span><span class="o">::</span><span class="nf">arrangeGrob</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">nrow</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">ncol</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">=</span> <span class="s">&#34;Time&#34;</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">grob</span> <span class="o">=</span> <span class="n">gridExtra</span><span class="o">::</span><span class="nf">arrangeGrob</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">nrow</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">ncol</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">=</span> <span class="s">&#34;Time&#34;</span><span class="p">)</span>
 <span class="nf">grid.newpage</span><span class="p">()</span>
 <span class="nf">grid.draw</span><span class="p">(</span><span class="n">grob</span><span class="p">)</span>
 </code></pre></div><p>複数ページのPDFに書き出したい場合は
 <a href="/rstats/purrr.html">purrr</a> などを使って list of ggplots を作っておき、
 <code>marrangeGrob()</code> に渡す。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">.grobs</span> <span class="o">=</span> <span class="n">purrr</span><span class="o">::</span><span class="nf">map</span><span class="p">(</span><span class="n">.dataframes</span><span class="p">,</span> <span class="n">my_ggplot_func</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">.grobs</span> <span class="o">=</span> <span class="n">purrr</span><span class="o">::</span><span class="nf">map</span><span class="p">(</span><span class="n">.dataframes</span><span class="p">,</span> <span class="n">my_ggplot_func</span><span class="p">)</span>
 <span class="n">.gtable</span> <span class="o">=</span> <span class="n">gridExtra</span><span class="o">::</span><span class="nf">marrangeGrob</span><span class="p">(</span><span class="n">.grobs</span><span class="p">,</span> <span class="n">nrow</span> <span class="o">=</span> <span class="m">4</span><span class="p">,</span> <span class="n">ncol</span> <span class="o">=</span> <span class="m">3</span><span class="p">)</span>
 <span class="nf">ggsave</span><span class="p">(</span><span class="s">&#34;multi_page.pdf&#34;</span><span class="p">,</span> <span class="n">.gtable</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="m">7</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="m">9.9</span><span class="p">)</span>
 </code></pre></div><h3 id="cowplot"><code>cowplot</code></h3>
@@ -629,7 +629,7 @@ ggplotオブジェクトと同じように <code>ggsave()</code> に渡して保
 <dt><code>cowplot::plot_grid()</code></dt>
 <dd><code>facet_wrap()</code>のように、ざっと並べるのに便利。
 もちろん入れ子も可能。
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">cowplot</span><span class="o">::</span><span class="nf">plot_grid</span><span class="p">(</span><span class="kc">...</span><span class="p">,</span> <span class="n">plotlist</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">cowplot</span><span class="o">::</span><span class="nf">plot_grid</span><span class="p">(</span><span class="kc">...</span><span class="p">,</span> <span class="n">plotlist</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span>
     <span class="n">align</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;none&#34;</span><span class="p">,</span> <span class="s">&#34;h&#34;</span><span class="p">,</span> <span class="s">&#34;v&#34;</span><span class="p">,</span> <span class="s">&#34;hv&#34;</span><span class="p">),</span>
     <span class="n">nrow</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">ncol</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span>
     <span class="n">scale</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">rel_widths</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">rel_heights</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span>

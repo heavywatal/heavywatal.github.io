@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -109,7 +109,7 @@ Heavy Watal
 <a href="https://sc2.ddbj.nig.ac.jp/index.php/2014-09-17-05-42-33">サーバーに登録</a>。
 ドキュメントの例ではRSAが使われてるけどECDSAのほうが安全で軽い。
 ほんとはed25519のほうが良いけどウェブ登録ではなぜか拒否される。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ssh-keygen -t ecdsa -b <span class="m">521</span> -N <span class="s1">&#39;&#39;</span> -C <span class="s1">&#39;heavywatal@nig.ac.jp&#39;</span> -f ~/.ssh/id_ecdsa_nig
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ssh-keygen -t ecdsa -b <span class="m">521</span> -N <span class="s1">&#39;&#39;</span> -C <span class="s1">&#39;heavywatal@nig.ac.jp&#39;</span> -f ~/.ssh/id_ecdsa_nig
 </code></pre></div></li>
 <li>
 <p>手元の <code>~/.ssh/config</code> に設定を追加:</p>
@@ -142,7 +142,7 @@ Heavy Watal
 にはsftpかAsperaを使えと書かれてるけど、
 <a href="/dev/rsync.html">rsync</a>
 を使うのが簡単かつ効率的。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># send</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># send</span>
 rsync -auv ~/input/ gw.ddbj.nig.ac.jp:~/input/
 
 <span class="c1"># receive</span>
@@ -159,7 +159,7 @@ rsync -auv gw.ddbj.nig.ac.jp:~/output/ ~/output/
 <h3 id="qsub"><code>qsub</code></h3>
 <p>遺伝研ウェブサイトにはスクリプトを書いてから渡す方法しか書いてないが、
 簡単なタスクならコマンド引数として直接渡すのもあり。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1">## スクリプトを書いてから渡す</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1">## スクリプトを書いてから渡す</span>
 qsub test.sh
 
 <span class="c1">## コマンドライン引数として直接渡す</span>
@@ -220,7 +220,7 @@ qsub -l short -b y -shell n -cwd -N <span class="nb">test</span> <span class="s2
 <h3 id="qsub-スクリプト"><code>qsub</code> スクリプト</h3>
 <p><code>#$</code> で始まる行は <code>qsub</code> へのオプションと見なされる。</p>
 <p>ジョブスクリプト内で参照可能な特殊環境変数をプリントしてみるジョブの例:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="cp">#!/bin/sh
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="cp">#!/bin/sh
 </span><span class="cp"></span><span class="c1">#$ -S /bin/sh</span>
 <span class="c1">#$ -l short</span>
 <span class="c1">#$ -cwd</span>
@@ -238,13 +238,13 @@ qsub -l short -b y -shell n -cwd -N <span class="nb">test</span> <span class="s2
 ls
 </code></pre></div><p>スクリプトはPythonでもいい。
 インタープリタを <code>-S /usr/bin/env python</code> で指定できないのは残念。</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span>
 <span class="c1">#$ -S $HOME/.pyenv/shims/python</span>
 <span class="c1">#$ -l short</span>
 <span class="c1">#$ -cwd</span>
 <span class="c1">#$ -t 1-2</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&#34;SGE_TASK_ID: &#34;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&#34;SGE_TASK_ID&#34;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&#34;SGE_TASK_ID: &#34;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&#34;SGE_TASK_ID&#34;</span><span class="p">])</span>
 </code></pre></div><h3 id="補助コマンド">補助コマンド</h3>
 <dl>
 <dt><code>qstat</code></dt>
@@ -274,12 +274,12 @@ E(rror), r(unning), R(estarted), s(uspended)
 <p><code>/usr/local/biotools/</code> 以下に各種ソフトウェアが用意されている。
 <a href="https://biocontainers.pro">BioContainers</a> のものをほぼそのまま置いているらしい。</p>
 <p>利用可能なソフトウェアとバージョンを探す:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">find /usr/local/biotools/ -name <span class="s1">&#39;blast*&#39;</span> <span class="p">|</span> sort
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">find /usr/local/biotools/ -name <span class="s1">&#39;blast*&#39;</span> <span class="p">|</span> sort
 </code></pre></div><p>イメージとプログラム名を指定して実行:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">singularity <span class="nb">exec</span> -e /usr/local/biotools/f/fastp:0.20.0--hdbcaa40_0 fastp --help
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">singularity <span class="nb">exec</span> -e /usr/local/biotools/f/fastp:0.20.0--hdbcaa40_0 fastp --help
 </code></pre></div><p>そこらに落ちてるイメージを拾ってきて使うこともできる。
 <a href="https://github.com/trinityrnaseq/trinityrnaseq/wiki/Trinity-in-Docker#trinity_singularity">例えばTrinityの公式最新版を使いたい場合</a>:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">find /usr/local/biotools/ -name <span class="s1">&#39;trinity*&#39;</span> <span class="p">|</span> sort
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">find /usr/local/biotools/ -name <span class="s1">&#39;trinity*&#39;</span> <span class="p">|</span> sort
 mkdir -p ~/image
 wget -P ~/image/ https://data.broadinstitute.org/Trinity/TRINITY_SINGULARITY/trinityrnaseq.v2.11.0.simg
 singularity <span class="nb">exec</span> -e ~/image/trinityrnaseq.v2.11.0.simg Trinity --help
@@ -293,9 +293,9 @@ singularity <span class="nb">exec</span> -e ~/image/trinityrnaseq.v2.11.0.simg T
 のような感じでやり過ごす。</p>
 <p>ただし<a href="https://github.com/Homebrew/linuxbrew-core/issues/22511">古い gcc@5 まわりでまだ問題が残っている</a>ようなので要注意。</p>
 <h3 id="singularity-r">singularity R</h3>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">find /usr/local/biotools/ -name <span class="s1">&#39;r-base:*&#39;</span> <span class="p">|</span> sort
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">find /usr/local/biotools/ -name <span class="s1">&#39;r-base:*&#39;</span> <span class="p">|</span> sort
 </code></pre></div><p>最新が3.5.1と古い上にエラーで起動しない:</p>
-<pre><code>singularity exec -e /usr/local/biotools/r/r-base:3.5.1 R
+<pre tabindex="0"><code>singularity exec -e /usr/local/biotools/r/r-base:3.5.1 R
 WARNING: Skipping mount /opt/pkg/singularity/3.7.1/var/singularity/mnt/session/etc/resolv.conf [files]: /etc/resolv.conf doesn't exist in container
 [1]    100279 segmentation fault  singularity exec -e /usr/local/biotools/r/r-base:3.5.1 R
 </code></pre><h3 id="module-r">module R</h3>
@@ -311,7 +311,7 @@ Rcppインストール時などに
 <h3 id="source-r">Source R</h3>
 <p><code>/opt/pkg/r/*/lib64/R/etc/Makeconf</code>
 を参考に新しいコンパイラで自前ビルドを試みる:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">wget -O- https://cran.r-project.org/src/base/R-3/R-3.5.2.tar.gz <span class="p">|</span> tar xz
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">wget -O- https://cran.r-project.org/src/base/R-3/R-3.5.2.tar.gz <span class="p">|</span> tar xz
 <span class="nb">cd</span> R-3.5.2/
 ./configure -h <span class="p">|</span> less
 ./configure --prefix<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/R --disable-openmp --disable-java <span class="s1">&#39;--enable-R-shlib&#39;</span> <span class="s1">&#39;--enable-shared&#39;</span> <span class="s1">&#39;--with-tcl-config=/usr/lib64/tclConfig.sh&#39;</span> <span class="s1">&#39;--with-tk-config=/usr/lib64/tkConfig.sh&#39;</span> <span class="s1">&#39;PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/cm/local/apps/curl/lib/pkgconfig:/usr/lib64/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig&#39;</span> <span class="s1">&#39;CFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include&#39;</span> <span class="s1">&#39;CPPFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include&#39;</span> <span class="s1">&#39;CXXFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include&#39;</span> <span class="s1">&#39;FFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include&#39;</span> <span class="s1">&#39;FCFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include&#39;</span> <span class="s1">&#39;LDFLAGS=-L/usr/local/lib64 -L/usr/lib64 -L/usr/lib -L/cm/local/apps/curl/lib&#39;</span>

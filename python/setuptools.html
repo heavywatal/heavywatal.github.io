@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -98,7 +98,7 @@ setuptools — Pythonパッケージ作成
 </ul>
 <h2 id="ファイル構成">ファイル構成</h2>
 <p>GitHubやローカルの開発環境から <code>pip</code> で直接インストールできる形。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">pywtl/
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">pywtl/
 ├── LICENSE
 ├── README.md
 ├── entry_points.cfg
@@ -110,17 +110,17 @@ setuptools — Pythonパッケージ作成
 </code></pre></div><p>リポジトリ名(<code>pywtl</code>)とパッケージ名(<code>wtl</code>)は必ずしも一致してなくてもよい。
 ローカルからのインストールは <code>-e,--editable</code>
 オプションを付けることで余計なコピーを減らせるっぽい。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">pip install -v -e ~/git/pywtl/
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">pip install -v -e ~/git/pywtl/
 pip install -v git+https://github.com/heavywatal/pywtl.git
 python -m wtl.hello
 </code></pre></div><h3 id="setuppy"><code>setup.py</code></h3>
 <p>新しいsetuptoolsでは <code>setup.cfg</code> の設定を読み込んでくれるので、
 <code>setup()</code> の引数にいろいろ渡す必要は無くなった。</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
 <span class="n">setup</span><span class="p">()</span>
 </code></pre></div><h3 id="setupcfg"><code>setup.cfg</code></h3>
 <p><a href="https://setuptools.readthedocs.io/en/latest/setuptools.html#configuring-setup-using-setup-cfg-files">https://setuptools.readthedocs.io/en/latest/setuptools.html#configuring-setup-using-setup-cfg-files</a></p>
-<div class="highlight"><pre class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[metadata]</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[metadata]</span>
 <span class="na">name</span> <span class="o">=</span> <span class="s">wtl</span>
 <span class="na">version</span> <span class="o">=</span> <span class="s">attr: wtl.__version__</span>
 <span class="na">url</span> <span class="o">=</span> <span class="s">https://github.com/heavywatal/pywtl</span>
@@ -159,7 +159,7 @@ python -m wtl.hello
 <code>${prefix}/bin/</code> に実行可能ファイルを配置するのによく使われる。
 設定は下記のように別ファイル <code>entry_points.cfg</code> として
 <code>setup.cfg</code> から読ませるのが楽チン。</p>
-<div class="highlight"><pre class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[console_scripts]</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[console_scripts]</span>
 <span class="na">hello.py</span> <span class="o">=</span> <span class="s">wtl.hello:main</span>
 </code></pre></div><p>引数を取らない関数のみ利用可能。
 コマンドライン引数を受け取りたい場合はその関数の中で標準の
@@ -175,13 +175,13 @@ python -m wtl.hello
 それを <code>setup.cfg</code> から参照することで冗長性を抑えられる。</dd>
 </dl>
 <p><code>wtl/hello.py</code></p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="s2">&#34;&#34;&#34;Sample module
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="s2">&#34;&#34;&#34;Sample module
 </span><span class="s2">&#34;&#34;&#34;</span>
 
 
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="kn">import</span> <span class="nn">getpass</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Hello, &#39;</span> <span class="o">+</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getuser</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;!&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Hello, &#39;</span> <span class="o">+</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getuser</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;!&#39;</span><span class="p">)</span>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
@@ -192,7 +192,7 @@ python -m wtl.hello
 で指定する。</p>
 <h2 id="setuptools">setuptools</h2>
 <p><a href="https://setuptools.readthedocs.io/en/latest/setuptools.html#command-reference">Command Reference</a></p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">python setup.py --help
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">python setup.py --help
 python setup.py --help-commands
 python setup.py ^i  <span class="c1"># zsh completion</span>
 

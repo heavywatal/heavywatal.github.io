@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -94,7 +94,7 @@ foreach/parallel — 並行処理 in R
 <p>カウンター無しでループを書けるようにするパッケージ。
 普段は <a href="/rstats/purrr.html"><code>purrr::map()</code></a> とかのほうが使いやすいけど、
 <a href="#parallel">後述の並列化</a>の場面ではお世話になる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">library</span><span class="p">(</span><span class="n">foreach</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">library</span><span class="p">(</span><span class="n">foreach</span><span class="p">)</span>
 
 <span class="n">slow_square</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
   <span class="nf">Sys.sleep</span><span class="p">(</span><span class="m">0.5</span><span class="p">)</span>
@@ -130,7 +130,7 @@ foreach/parallel — 並行処理 in R
 </ul>
 <p>Rの並列化では <code>snow</code> や <code>multicore</code> が使われてきたが、
 バージョン2.14からそれらを統合した <code>parallel</code> が標準ライブラリに入った。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">library</span><span class="p">(</span><span class="n">parallel</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">library</span><span class="p">(</span><span class="n">parallel</span><span class="p">)</span>
 <span class="nf">options</span><span class="p">(</span><span class="n">mc.cores</span> <span class="o">=</span> <span class="nf">detectCores</span><span class="p">(</span><span class="n">logical</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">))</span>  <span class="c1"># 4</span>
 
 <span class="nf">mclapply</span><span class="p">(</span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">4</span><span class="p">),</span> <span class="n">slow_square</span><span class="p">)</span>     <span class="c1"># 0.5 sec with 4 cores</span>
@@ -138,7 +138,7 @@ foreach/parallel — 並行処理 in R
 <span class="n">purrr</span><span class="o">::</span><span class="nf">map</span><span class="p">(</span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">4</span><span class="p">),</span> <span class="n">slow_square</span><span class="p">)</span>   <span class="c1"># 2.0 sec with 1 cores</span>
 </code></pre></div><p><code>mclapply()</code> は <code>lapply()</code> のお手軽並列化バージョン。
 UNIX系OSのforkに依存するためWindows不可。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">mclapply</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">FUN</span><span class="p">,</span> <span class="kc">...</span><span class="p">,</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">mclapply</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">FUN</span><span class="p">,</span> <span class="kc">...</span><span class="p">,</span>
          <span class="n">mc.preschedule</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="n">mc.set.seed</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
          <span class="n">mc.silent</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span> <span class="n">mc.cores</span> <span class="o">=</span> <span class="nf">getOption</span><span class="p">(</span><span class="s">&#34;mc.cores&#34;</span><span class="p">,</span> <span class="m">2L</span><span class="p">),</span>
          <span class="n">mc.cleanup</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="n">mc.allow.recursive</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="n">affinity.list</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">)</span>
@@ -153,7 +153,7 @@ UNIX系OSのforkに依存するためWindows不可。</p>
 <code>foreach</code> (とその橋渡しライブラリ<a href="https://CRAN.R-project.org/package=doParallel"><code>doParallel</code></a>)
 を介して使う。
 この場合、クラスタの生成や破棄なども自前でやることになる。</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">library</span><span class="p">(</span><span class="n">doParallel</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">library</span><span class="p">(</span><span class="n">doParallel</span><span class="p">)</span>
 <span class="n">cluster</span> <span class="o">=</span> <span class="nf">makeCluster</span><span class="p">(</span><span class="nf">getOption</span><span class="p">(</span><span class="s">&#34;mc.cores&#34;</span><span class="p">,</span> <span class="m">2L</span><span class="p">),</span> <span class="n">type</span> <span class="o">=</span> <span class="s">&#34;FORK&#34;</span><span class="p">)</span>
 <span class="nf">registerDoParallel</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
 

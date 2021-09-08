@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -92,10 +92,10 @@ topGO — Bioconductor でenrichment解析
 
 <p><a href="https://www.bioconductor.org/packages/release/bioc/html/topGO.html">https://www.bioconductor.org/packages/release/bioc/html/topGO.html</a></p>
 <p>Rの中からインストール</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">BiocManager</span><span class="o">::</span><span class="nf">install</span><span class="p">(</span><span class="s">&#34;topGO&#34;</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">BiocManager</span><span class="o">::</span><span class="nf">install</span><span class="p">(</span><span class="s">&#34;topGO&#34;</span><span class="p">)</span>
 </code></pre></div><h2 id="使い方">使い方</h2>
 <h3 id="topgodata-を作る"><code>topGOdata</code> を作る</h3>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">tg_data</span> <span class="o">=</span> <span class="nf">new</span><span class="p">(</span><span class="s">&#34;topGOdata&#34;</span><span class="p">,</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">tg_data</span> <span class="o">=</span> <span class="nf">new</span><span class="p">(</span><span class="s">&#34;topGOdata&#34;</span><span class="p">,</span>
     <span class="n">ontology</span><span class="o">=</span><span class="s">&#34;BP&#34;</span><span class="p">,</span>
     <span class="n">allGenes</span><span class="o">=</span><span class="nf">setNames</span><span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span>
     <span class="n">geneSelectionFun</span><span class="o">=</span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">},</span>
@@ -135,7 +135,7 @@ topGO — Bioconductor でenrichment解析
 <code>symbol</code>, <code>genename</code>, <code>unigene</code></dd>
 </dl>
 <h3 id="解析">解析</h3>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">whichTests</span><span class="p">()</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">whichTests</span><span class="p">()</span>
 <span class="nf">whichAlgorithms</span><span class="p">()</span>
 <span class="n">tg_result</span> <span class="o">=</span> <span class="nf">runTest</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s">&#34;classic&#34;</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="s">&#34;fisher&#34;</span><span class="p">)</span>
 </code></pre></div><dl>
@@ -149,21 +149,21 @@ topGO — Bioconductor でenrichment解析
 興味のある遺伝子で値が高くなるスコアの場合は <code>decreasing</code> を指定。</dd>
 </dl>
 <p>結果は <code>topGOresult</code> オブジェクト</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">score</span><span class="p">(</span><span class="n">tg_result</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">score</span><span class="p">(</span><span class="n">tg_result</span><span class="p">)</span>
 <span class="nf">geneData</span><span class="p">(</span><span class="n">tg_result</span><span class="p">)</span>
 </code></pre></div><h3 id="解釈描画">解釈・描画</h3>
 <p>GO termのOver-representationランキング</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">num_significant</span> <span class="o">=</span> <span class="nf">geneData</span><span class="p">(</span><span class="n">tg_result</span><span class="p">)</span><span class="n">[</span><span class="s">&#34;Significant&#34;</span><span class="n">]</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">num_significant</span> <span class="o">=</span> <span class="nf">geneData</span><span class="p">(</span><span class="n">tg_result</span><span class="p">)</span><span class="n">[</span><span class="s">&#34;Significant&#34;</span><span class="n">]</span>
 <span class="nf">GenTable</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="n">classic_fisher</span><span class="o">=</span><span class="n">tg_result</span><span class="p">,</span> <span class="n">topNodes</span><span class="o">=</span><span class="n">num_significant</span><span class="p">)</span>
 </code></pre></div><p><code>runTest()</code> の結果は好きな名前で複数並べることができる。</p>
 <hr>
 <p><code>Rgraphviz</code> を使ってDAG描画</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">showSigOfNodes</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="nf">score</span><span class="p">(</span><span class="n">tg_result</span><span class="p">),</span> <span class="n">firstSigNodes</span><span class="o">=</span><span class="m">10</span><span class="p">,</span> <span class="n">useInfo</span><span class="o">=</span><span class="s">&#34;all&#34;</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">showSigOfNodes</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="nf">score</span><span class="p">(</span><span class="n">tg_result</span><span class="p">),</span> <span class="n">firstSigNodes</span><span class="o">=</span><span class="m">10</span><span class="p">,</span> <span class="n">useInfo</span><span class="o">=</span><span class="s">&#34;all&#34;</span><span class="p">)</span>
 <span class="nf">printGraph</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="n">tg_result</span><span class="p">,</span> <span class="m">20</span><span class="p">,</span> <span class="n">fn.prefix</span><span class="o">=</span><span class="s">&#34;go_fisher&#34;</span><span class="p">,</span> <span class="n">pdfSW</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
 </code></pre></div><p>前者はプロットだけ、後者はPDFに書き出し。
 significant nodeが四角で、赤いほど低いP値。</p>
 <h2 id="go-terms">GO terms</h2>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">BPterms</span> <span class="o">=</span> <span class="nf">ls</span><span class="p">(</span><span class="n">GOBPTerm</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">BPterms</span> <span class="o">=</span> <span class="nf">ls</span><span class="p">(</span><span class="n">GOBPTerm</span><span class="p">)</span>
 <span class="n">MFterms</span> <span class="o">=</span> <span class="nf">ls</span><span class="p">(</span><span class="n">GOMFTerm</span><span class="p">)</span>
 <span class="n">CCterms</span> <span class="o">=</span> <span class="nf">ls</span><span class="p">(</span><span class="n">GOCCTerm</span><span class="p">)</span>
 </code></pre></div>
