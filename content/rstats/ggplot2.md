@@ -56,7 +56,7 @@ mpg
 ggplot(data = mpg) +              # mpgデータでキャンバス準備
   aes(x = displ, y = cty) +       # displ,cty列をx,y軸にmapping
   geom_point() +                  # 散布図を描く
-  facet_wrap(~ drv) +             # drv列に応じてパネル分割
+  facet_wrap(vars(drv)) +         # drv列に応じてパネル分割
   theme_classic(base_size = 20)   # クラシックなテーマで
 ```
 
@@ -65,7 +65,7 @@ ggplot(data = mpg) +              # mpgデータでキャンバス準備
 p1 = ggplot(data = mpg)
 p2 = p1 + aes(x = displ, y = cty)
 p3 = p2 + geom_point()
-p4 = p3 + facet_wrap(~ drv)
+p4 = p3 + facet_wrap(vars(drv))
 p5 = p4 + theme_classic(base_size = 20)
 print(p5)
 ```

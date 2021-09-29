@@ -44,7 +44,7 @@ data.frameを横広(wide-format)から縦長(long-format)に変形する。
 `cols`
 : 動かしたい値が含まれている列。
   コロンで範囲指定、文字列、tidyselect関数なども使える。
-  動かさない列をマイナスで指定するのほうが楽なことも多い。
+  動かさない列を `!` で反転指定するのほうが楽なことも多い。
 
 `names_to`
 : 元々列名だったものを入れる列の名前
@@ -68,7 +68,7 @@ anscombe %>% tibble::rowid_to_column("id")
 #> 11 11  5  5  5  8  5.68 4.74  5.73  6.89
 
 anscombe_long = anscombe %>% tibble::rowid_to_column("id") %>%
-  pivot_longer(-id, names_to = "namae", values_to = "atai") %>%
+  pivot_longer(!id, names_to = "namae", values_to = "atai") %>%
   print()
 #> # tbl_df [88 x 3]
 #>       id namae  atai
@@ -96,7 +96,7 @@ data.frameを縦長(long-format)から横広(wide-format)に変形する。
 
 `id_cols`
 : ここで指定した列のユニークな組み合わせが変形後にそれぞれ1行になる。
-  `!`で除外指定、`:`で範囲指定、文字列、tidyselect関数なども使える。
+  `!`で反転指定、`:`で範囲指定、文字列、tidyselect関数なども使える。
   デフォルトでは `names_from` と `values_from` で指定されなかった列すべて。
 
 `names_from`
@@ -168,7 +168,7 @@ pg %>% tibble::rowid_to_column("id") %>%
 
 ```r
 anscombe %>% tibble::rowid_to_column("id") %>%
-  tidyr::pivot_longer(-id, names_to = c("axis", "group"), names_sep = 1L) %>%
+  tidyr::pivot_longer(!id, names_to = c("axis", "group"), names_sep = 1L) %>%
   print() %>%
   pivot_wider(id, names_from = c(axis, group), names_sep = "_")
 #> # tbl_df [88 x 4]
@@ -209,7 +209,7 @@ VADeaths
 VADeaths %>%
   as.data.frame() %>%
   rownames_to_column("age") %>%
-  pivot_longer(-age, names_to = c("region", "sex"), names_sep = " ", values_to = "death")
+  pivot_longer(!age, names_to = c("region", "sex"), names_sep = " ", values_to = "death")
 #> # tbl_df [20 x 4]
 #>      age region    sex death
 #>    <chr>  <chr>  <chr> <dbl>
@@ -231,7 +231,7 @@ VADeaths %>%
 ```r
 anscombe %>%
   tibble::rowid_to_column("id") %>%
-  tidyr::pivot_longer(-id,
+  tidyr::pivot_longer(!id,
     names_to = c("axis", "group"),
     names_sep = 1L,
     names_transform = list(group = as.integer)) %>%
@@ -282,7 +282,7 @@ tidy_anscombe = anscombe %>%
     everything(),                     # すべての列について
     names_to = c(".value", "group"),  # x, yを列名に、1, 2, 3をgroup列に
     names_sep = 1L,                   # 切る位置
-    names_ptypes = list(group = integer())) %>%   # 型変換
+    names_transform = list(group = as.integer)) %>%   # 型変換
   dplyr::arrange(group) %>%           # グループごとに並べる
   print()                             # ggplotしたい形！
 #> # tbl_df [44 x 3]
@@ -310,10 +310,10 @@ https://tidyr.tidyverse.org/articles/nest.html
 
 data.frameをネストして(入れ子にして)、list of data.frames のカラムを作る。
 内側のdata.frameに押し込むカラムを `...` に指定するか、
-外側に残すカラムをマイナス指定する。
+外側に残すカラムを `!` で反転指定する。
 
 ```r
-diamonds %>% nest(NEW_COLUMN = -cut) %>% unnest()
+diamonds %>% nest(NEW_COLUMN = !cut) %>% unnest()
 #> # tbl_df [5 x 2]
 #>         cut           NEW_COLUMN
 #>       <ord>               <list>
@@ -347,7 +347,7 @@ list of data.framesだけでなく、list of vectorsとかでもよい。
 
 ```r
 diamonds %>%
-  nest(NEW_COLUMN = -cut) %>%
+  nest(NEW_COLUMN = !cut) %>%
   unnest(NEW_COLUMN)
 ```
 
