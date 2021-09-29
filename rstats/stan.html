@@ -252,19 +252,29 @@ m[1]   // row_vector[3]
 <p>代入演算子は普通に <code>=</code> イコール。(昔は <code>&lt;-</code> 矢印だった)</p>
 <p>対数尤度の値を確認したいときは <code>print(&quot;log_prob: &quot;, target())</code></p>
 <h2 id="可視化">可視化</h2>
-<p><a href="https://www.rdocumentation.org/packages/rstan/topics/Plots">https://www.rdocumentation.org/packages/rstan/topics/Plots</a></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">stan_plot</span><span class="p">()</span>
-<span class="nf">stan_trace</span><span class="p">()</span>
-<span class="nf">stan_scat</span><span class="p">()</span>
-<span class="nf">stan_hist</span><span class="p">()</span>
-<span class="nf">stan_dens</span><span class="p">()</span>
-<span class="nf">stan_ac</span><span class="p">()</span>
+<p><a href="https://mc-stan.org/rstan/reference/stan_plot.html">https://mc-stan.org/rstan/reference/stan_plot.html</a></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">stan_plot</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+<span class="nf">stan_trace</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+<span class="nf">stan_scat</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+<span class="nf">stan_hist</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+<span class="nf">stan_dens</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+<span class="nf">stan_ac</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
 
 <span class="c1"># S3 method</span>
 <span class="nf">pairs</span><span class="p">()</span>
 <span class="nf">print</span><span class="p">()</span>
 </code></pre></div><p><code>stanfit</code> クラスのmethodとして <code>plot()</code> や <code>traceplot()</code> が定義されているが、
 いくつかのチェックとともに <code>stan_plot()</code> 系の関数を呼び出すだけで大きな違いは無さそう。</p>
+<h2 id="librarybayesplot"><code>library(bayesplot)</code></h2>
+<p><a href="https://mc-stan.org/bayesplot/">https://mc-stan.org/bayesplot/</a></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">bayesplot</span><span class="o">::</span><span class="nf">mcmc_trace</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+
+<span class="n">rh</span> <span class="o">=</span> <span class="n">bayesplot</span><span class="o">::</span><span class="nf">rhat</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+<span class="n">neff</span> <span class="o">=</span> <span class="n">bayesplot</span><span class="o">::</span><span class="nf">neff_ratio</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+<span class="n">bayesplot</span><span class="o">::</span><span class="nf">mcmc_rhat</span><span class="p">(</span><span class="n">rh</span><span class="p">)</span>
+<span class="n">bayesplot</span><span class="o">::</span><span class="nf">mcmc_neff</span><span class="p">(</span><span class="n">neff</span><span class="p">)</span>
+</code></pre></div><h2 id="libraryrstanarm"><code>library(rstanarm)</code></h2>
+<p><a href="https://mc-stan.org/rstanarm/">https://mc-stan.org/rstanarm/</a></p>
 <h2 id="トラブル対処">トラブル対処</h2>
 <h3 id="stanheaders-version-is-ahead-of-rstan-version">StanHeaders version is ahead of rstan version</h3>
 <p>Stanのヘッダーライブラリとrstanは別々のパッケージで提供されていて、
