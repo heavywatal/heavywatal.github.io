@@ -6,7 +6,7 @@ tags = ["python"]
   parent = "python"
 +++
 
-http://pandas.pydata.org/
+<https://pandas.pydata.org/>
 
 ```python
 import pandas as pd
@@ -19,12 +19,12 @@ iris = sns.load_dataset('iris')
 
 ## 型
 
-http://pandas.pydata.org/pandas-docs/stable/dsintro.html
+<https://pandas.pydata.org/pandas-docs/stable/user_guide/dsintro.html>
 
-[`Series`](http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html)
+[`Series`](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html)
 : 1次元の名前付き `np.array()` みたいなもの。
 
-[`DataFrame`](http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html)
+[`DataFrame`](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html)
 : Seriesを列とする2次元の表。
 : `axis=0` が行(index)で、`axis=1` が列(columns)。
 
@@ -35,14 +35,14 @@ DataFrameを時間軸方向に重ねたような3次元構造として
 
 ## 読み書き
 
-[`pd.read_csv(infile)`](http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html)
+[`pd.read_csv(infile)`](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html)
 : `sep=','`
 : `header='infer'`
 : `names=None`
 : `index_col=None`
 : `usecols=None`
 
-[`df.to_csv(outfile)`](http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_csv.html)
+[`df.to_csv(outfile)`](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_csv.html)
 : `sep=','`
 : `float_format=None`
 : `index=True`
@@ -50,7 +50,7 @@ DataFrameを時間軸方向に重ねたような3次元構造として
 
 ## 基本操作
 
-http://pandas.pydata.org/pandas-docs/stable/10min.html
+https://pandas.pydata.org/pandas-docs/stable/10min.html
 
 ```python
 df.columns
@@ -61,7 +61,7 @@ df.head()
 df.tail()
 ```
 
-http://pandas.pydata.org/pandas-docs/stable/indexing.html
+https://pandas.pydata.org/pandas-docs/stable/indexing.html
 
 ```python
 df[['species']]  # DataFrame with 1 column
@@ -172,7 +172,7 @@ stacked.rename_axis(['id', 'species', 'variable']).unstack('variable')
 
 ## 設定
 
-http://pandas.pydata.org/pandas-docs/stable/options.html
+https://pandas.pydata.org/pandas-docs/stable/options.html
 
 ```python
 pd.set_option('display.max_rows', 20)

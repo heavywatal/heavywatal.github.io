@@ -214,15 +214,16 @@ m[1]   // row_vector[3]
 
 ## 可視化
 
-https://www.rdocumentation.org/packages/rstan/topics/Plots
+https://mc-stan.org/rstan/reference/stan_plot.html
+
 
 ```r
-stan_plot()
-stan_trace()
-stan_scat()
-stan_hist()
-stan_dens()
-stan_ac()
+stan_plot(fit)
+stan_trace(fit)
+stan_scat(fit)
+stan_hist(fit)
+stan_dens(fit)
+stan_ac(fit)
 
 # S3 method
 pairs()
@@ -231,6 +232,25 @@ print()
 
 `stanfit` クラスのmethodとして `plot()` や `traceplot()` が定義されているが、
 いくつかのチェックとともに `stan_plot()` 系の関数を呼び出すだけで大きな違いは無さそう。
+
+
+## `library(bayesplot)`
+
+https://mc-stan.org/bayesplot/
+
+```r
+bayesplot::mcmc_trace(fit)
+
+rh = bayesplot::rhat(fit)
+neff = bayesplot::neff_ratio(fit)
+bayesplot::mcmc_rhat(rh)
+bayesplot::mcmc_neff(neff)
+```
+
+
+## `library(rstanarm)`
+
+https://mc-stan.org/rstanarm/
 
 
 ## トラブル対処

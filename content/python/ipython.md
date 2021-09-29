@@ -79,7 +79,7 @@ files = !ls
 - 複数行うけつける cell magic は `%%` で始める。
 - デフォルトの `automagic = True` では `%` が省略可能で怖い。
 
-### [環境設定](http://ipython.readthedocs.io/en/stable/config/intro.html)
+### [環境設定](https://ipython.readthedocs.io/en/stable/config/intro.html)
 
 ```sh
 ipython help profile

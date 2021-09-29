@@ -17,7 +17,7 @@ Python 3.4 以降では `venv` と `ensurepip` が標準ライブラリに入っ
 
 ## [`pip`](https://pip.pypa.io/)
 
-[PyPI](http://pypi.python.org)
+[PyPI](https://pypi.org/)
 からの簡単にパッケージをインストールできるようにするツール。
 アンインストール機能の無い `easy_install` に取って代わり、
 現在では公式に推奨されている。

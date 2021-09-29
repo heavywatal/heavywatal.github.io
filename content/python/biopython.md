@@ -6,14 +6,14 @@ tags = ["python"]
   parent = "python"
 +++
 
-<http://biopython.org>
-<http://biopython.org/DIST/docs/api/Bio-module.html>
+<https://biopython.org>
+<https://biopython.org/DIST/docs/api/Bio-module.html>
 
 ## `SeqIO`
 
--   <http://biopython.org/wiki/SeqIO>
--   <http://biopython.org/DIST/docs/tutorial/Tutorial.html#sec51>
--   <http://biopython.org/DIST/docs/api/Bio.SeqIO-module.html>
+-   <https://biopython.org/wiki/SeqIO>
+-   <https://biopython.org/DIST/docs/tutorial/Tutorial.html#sec51>
+-   <https://biopython.org/DIST/docs/api/Bio.SeqIO-module.html>
 
 `read(file, format, alphabet=None)`
 :   1配列しか含まないファイルを読んで `SeqRecord` を返す
@@ -39,9 +39,9 @@ tags = ["python"]
 
 ## `SeqRecord`
 
--   <http://biopython.org/wiki/SeqRecord>
--   <http://biopython.org/DIST/docs/tutorial/Tutorial.html#sec32>
--   <http://biopython.org/DIST/docs/api/Bio.SeqRecord.SeqRecord-class.html>
+-   <https://biopython.org/wiki/SeqRecord>
+-   <https://biopython.org/DIST/docs/tutorial/Tutorial.html#sec32>
+-   <https://biopython.org/DIST/docs/api/Bio.SeqRecord.SeqRecord-class.html>
 
 `Seq` とそのほかの情報をひとまとまりにしたクラス。
 
@@ -71,9 +71,9 @@ tags = ["python"]
 
 ## `Seq`
 
--   <http://biopython.org/wiki/Seq>
--   <http://biopython.org/DIST/docs/tutorial/Tutorial.html#sec17>
--   <http://biopython.org/DIST/docs/api/Bio.Seq.Seq-class.html>
+-   <https://biopython.org/wiki/Seq>
+-   <https://biopython.org/DIST/docs/tutorial/Tutorial.html#sec17>
+-   <https://biopython.org/DIST/docs/api/Bio.Seq.Seq-class.html>
 
 塩基配列・アミノ酸配列のクラス。
 標準 `str` とほとんど同じように扱えるほか、
@@ -88,17 +88,17 @@ tags = ["python"]
 
 ## GenomeDiagram
 
-<http://biopython.org/DIST/docs/tutorial/Tutorial.html#sec328>
-<http://biopython.org/DIST/docs/GenomeDiagram/userguide.pdf>
+<https://biopython.org/DIST/docs/tutorial/Tutorial.html#sec328>
+<https://biopython.org/DIST/docs/GenomeDiagram/userguide.pdf>
 
 ## Entrez
 
--   <http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc90>
+-   <https://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc90>
 
 ### esearch
 
 -   [NCBI ESerch Utility](http://www.ncbi.nlm.nih.gov/entrez/query/static/esearch_help.html)
--   <http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc93>
+-   <https://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc93>
 
     ```py
     >>> from Bio import Entrez
@@ -119,7 +119,7 @@ tags = ["python"]
 ### efetch
 
 -   [NCBI EFetch Utility](http://eutils.ncbi.nlm.nih.gov/corehtml/query/static/efetch_help.html)
--   <http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc96>
+-   <https://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc96>
 
 返り値は結果(XML)へのハンドル。:
 

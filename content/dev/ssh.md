@@ -5,7 +5,7 @@ tags = ["shell", "communication"]
   parent = "dev"
 +++
 
-<http://www.openssh.com/>
+<https://www.openssh.com/>
 
 ## 公開鍵によるパスワード無しの認証
 
@@ -51,7 +51,7 @@ tags = ["shell", "communication"]
 
 ## 設定
 
-http://man.openbsd.org/OpenBSD-current/man5/ssh_config.5
+<https://man.openbsd.org/ssh_config.5>
 
 ### `~/.ssh/config`
 

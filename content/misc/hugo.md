@@ -20,7 +20,7 @@ Markdown記法のテキストをHTMLに変換する、静的ウェブサイト�
 
 ## Quickstart
 
-http://gohugo.io/overview/quickstart/
+https://gohugo.io/getting-started/quick-start/
 
 -   [インストール方法はいろいろ用意されてる](https://gohugo.io/getting-started/installing)。
     例えばMacなら[Homebrew]({{< relref "homebrew.md" >}})で一発:
@@ -82,7 +82,7 @@ https://gohugo.io/overview/configuration/
 
 ## Theme
 
-http://themes.gohugo.io/
+https://themes.gohugo.io/
 
 デフォルトのテーマというものが存在しないのがちょっと厳しい。
 ユーザーによっていろいろ投稿されてるけどほとんどがブログ用途。
@@ -106,7 +106,7 @@ https://gohugo.io/troubleshooting/build-performance/
 
 ### Markdown
 
-[CommonMark](http://spec.commonmark.org/)
+[CommonMark](https://spec.commonmark.org/)
 : "Markdown"の正式な仕様というものが存在せず、
   いくつかの方言(flavor)が乱立していたが、
   現在ではこれが事実上の標準仕様となりつつある。
@@ -149,7 +149,7 @@ open http://localhost:1313/
 
 `public/` 以下に生成されるファイルを
 `/Library/WebServer/Documents` にコピーすれば
-[localhost](http://localhost) で閲覧できる。
+<http://localhost> で閲覧できる。
 ユーザーの `~/Sites/` をドキュメントルートにする方法でもいいが、
 単にシンボリックリンクを張るほうが楽ちん。
 

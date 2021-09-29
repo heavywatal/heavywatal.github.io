@@ -81,7 +81,7 @@ key  | command
 
 ## 環境設定
 
-- http://flight-manual.atom.io/using-atom/sections/basic-customization/
+- https://flight-manual.atom.io/using-atom/sections/basic-customization/
 - https://github.com/heavywatal/dotfiles/tree/master/.atom
 
 いつもの <kbd>cmd ,</kbd> キーで設定画面を起動。
@@ -99,7 +99,7 @@ key  | command
 
 `snippets.cson`
 : 定型句に名前を付けておいて簡単に呼び出せるようにする。
-  http://flight-manual.atom.io/using-atom/sections/snippets/
+  https://flight-manual.atom.io/using-atom/sections/snippets/
 
 `styles.less`
 : エディタ本体も含めていろんな部分をCSS的にスタイル設定可能。

@@ -7,8 +7,8 @@ tags = ["shell"]
 
 ## The most powerful shell
 
--   <http://www.zsh.org/>
--   <http://zsh.sourceforge.net/Doc/>
+-   <https://www.zsh.org/>
+-   <https://zsh.sourceforge.io/>
 
 ## Installation
 

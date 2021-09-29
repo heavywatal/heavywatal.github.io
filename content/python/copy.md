@@ -5,8 +5,8 @@ tags = ["python"]
   parent = "python"
 +++
 
--   <http://docs.python.org/library/copy.html>
--   <http://docs.python.org/reference/datamodel.html>
+-   <https://docs.python.org/library/copy.html>
+-   <https://docs.python.org/reference/datamodel.html>
 
 C++からプログラミングを始めて、Pythonにおけるオブジェクトの扱い、
 特に代入・参照・コピー・mutable/immutableらへんの理解に苦しんでる人のメモ。

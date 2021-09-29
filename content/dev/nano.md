@@ -6,7 +6,7 @@ tags = ["editor"]
   parent = "dev"
 +++
 
-<http://www.nano-editor.org/>
+<https://www.nano-editor.org/>
 
 [emacs]({{< relref "emacs.md" >}})や[vi]({{< relref "vi.md" >}})ほど高機能ではないけど敷居が低い。
 

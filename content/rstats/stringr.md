@@ -21,11 +21,11 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 -   対象文字列が一貫して第一引数で、パターンが二番目
 -   何をやる関数なのか名前から分かりやすい<br>
     (標準が覚えにくすぎ: `grep`, `grepl`, `regexpr`, `gregexpr`, `regexec`)
--   [ICU4C](http://site.icu-project.org/)
-    (via [stringi](https://www.gagolewski.com/software/stringi/)) を使って動くため高速
--   [ICU正規表現](http://userguide.icu-project.org/strings/regexp) の仕様が明確
+-   [ICU4C](https://icu.unicode.org/)
+    (via [stringi](https://stringi.gagolewski.com/)) を使って動くため高速
+-   [ICU正規表現](https://unicode-org.github.io/icu/userguide/strings/regexp.html) の仕様が明確
 
-今や `stringr` は [stringi](http://www.gagolewski.com/software/stringi/) のラッパーだし、
+今や `stringr` は [stringi](https://stringi.gagolewski.com/) のラッパーだし、
 どちらもほぼ同じインターフェイスなので、
 もし前者に不足があれば後者を直接使えばよいが、
 普通に使う分にはそんな場面には出くわさない。
@@ -120,7 +120,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 下記の関数を通して渡すことでその挙動を変更することができる。
 
 `stringr::regex(pattern, ignore_case = FALSE, multiline = FALSE, comments = FALSE, dotall = FALSE, ...)`
-:   デフォルトの[ICU正規表現](http://userguide.icu-project.org/strings/regexp)。
+:   デフォルトの[ICU正規表現](https://unicode-org.github.io/icu/userguide/strings/regexp.html)。
     複数行ファイルに対するマッチではこの関数を通して挙動をいじることになる。
 
 `stringr::fixed(pattern)`
@@ -208,7 +208,7 @@ See [`?Quotes`](https://stat.ethz.ch/R-manual/R-patched/library/base/html/Quotes
 
 ### 正規表現
 
-[ICU正規表現](http://userguide.icu-project.org/strings/regexp)からよく使うやつを抜粋。
+[ICU正規表現](https://unicode-org.github.io/icu/userguide/strings/regexp.html)からよく使うやつを抜粋。
 
 | メタ文字 | 意味 |
 | ---- | ---- |

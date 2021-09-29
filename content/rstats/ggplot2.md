@@ -140,7 +140,7 @@ p1 + aes(x = displ, y = cty) + geom_point(aes(color = hwy)) + scale_color_fermen
 
 [`scale_color_brewer`](https://ggplot2.tidyverse.org/reference/scale_brewer.html)
 :   いい感じに考えられたパレット
-    [Colorbrewer](http://colorbrewer2.org/) から選んべるので楽ちん。
+    [Colorbrewer](https://colorbrewer2.org/) から選んべるので楽ちん。
     利用可能なパレットは `RColorBrewer::display.brewer.all()` でも一覧できる。
 :   離散値は `_brewer`、連続値は `_distiller`、連続値を離散的に塗るには `_fermenter`。
 

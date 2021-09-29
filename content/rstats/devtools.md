@@ -22,9 +22,8 @@ GitHubに公開しておけば誰でも使えるようになるので、
 
 ## Rパッケージ
 
-- https://r-pkgs.org/
-- <http://r-pkgs.had.co.nz/>
-- [How to develop good R packages (for open science)](http://www.masalmon.eu/2017/12/11/goodrpackages/)
+- <https://r-pkgs.org/>
+- [How to develop good R packages (for open science)](https://masalmon.eu/2017/12/11/goodrpackages/)
 
 ### 最低限の作成手順
 
@@ -258,7 +257,7 @@ Rソースコードのコメントから`NAMESPACE`とヘルプ(`man/*.Rd`)を�
 - <https://cran.r-project.org/web/packages/roxygen2/>
 - <https://github.com/klutometis/roxygen>
 - <https://r-pkgs.org/man.html>
-- <http://kbroman.org/pkg_primer/pages/docs.html>
+- <https://kbroman.org/pkg_primer/pages/docs.html>
 - <https://cran.r-project.org/web/packages/roxygen2/vignettes/rd.html>
 
 `roxygen2::roxygenise(package.dir=".", ..., clean=FALSE)`

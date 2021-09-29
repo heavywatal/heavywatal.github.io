@@ -142,8 +142,3 @@ tmux has-session >/dev/null 2>&1 && if [ -z "${TMUX}" ]; then
     tmux list-windows -a
 fi
 ```
-
-## 関連書籍
-
-<a href="https://www.amazon.co.jp/dp/B01N9HBR3D/ref=as_li_ss_il?ie=UTF8&qid=1482495704&sr=8-1&keywords=tmux&linkCode=li2&tag=heavywatal-22&linkId=2268fb4c546ca41cbc2e83ff73aa983e" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B01N9HBR3D&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li2&o=9&a=B01N9HBR3D" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
-<a href="http://www.amazon.co.jp/gp/product/178398516X/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=178398516X&linkCode=as2&tag=heavywatal-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=178398516X&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=as2&o=9&a=178398516X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />

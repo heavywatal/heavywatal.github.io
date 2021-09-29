@@ -6,16 +6,13 @@ tags = ["python", "graph"]
   parent = "python"
 +++
 
-[`matplotlib`](http://matplotlib.org/) はPythonにおけるデータ可視化のデファクトスタンダード。
+[`matplotlib`](https://matplotlib.org/) はPythonにおけるデータ可視化のデファクトスタンダード。
 基本的には何でもできるけど、基本的な機能しか提供していないので、
 いくらかの便利機能を [`seaborn`](https://seaborn.pydata.org/) で補う。
 
 ## 基本
 
--   <http://matplotlib.org/faq/usage_faq.html>
--   <http://matplotlib.org/users/>
--   <http://matplotlib.org/faq/howto_faq.html>
--   <http://www.scipy-lectures.org/intro/matplotlib/matplotlib.html>
+<https://matplotlib.org/stable/tutorials/introductory/usage.html>
 
 ```py
 import numpy as np
@@ -55,7 +52,7 @@ fig.savefig('example.png')
 FigureやAxesを意識せず `plt.plot()` などを使うスタイルは分かりにくいので不採用。
 
 
-### [pyplot](http://matplotlib.org/api/pyplot_summary.html)
+### [pyplot](https://matplotlib.org/stable/api/pyplot_summary.html)
 
 最上位のモジュール。
 Figure, Axesインスタンスを明示的に操作するスタイルでは、
@@ -69,7 +66,7 @@ Figure, Axesインスタンスを明示的に操作するスタイルでは、
   backend関係も切るっぽいので再び `fig.show()` しても開けない。
 
 
-### [Figure](http://matplotlib.org/api/figure_api.html)
+### [Figure](https://matplotlib.org/stable/api/figure_api.html)
 
 ウィンドウを表示したり画像ファイルを保存したりする単位となるクラス。
 コンストラクタを直接呼ぶのではなく
@@ -100,7 +97,7 @@ Figure, Axesインスタンスを明示的に操作するスタイルでは、
 : 子Axesへの参照
 
 
-### [Axes](http://matplotlib.org/api/axes_api.html)
+### [Axes](https://matplotlib.org/stable/api/axes_api.html)
 
 軸やラベルを持ったひとつのプロットの単位となるクラス。
 
@@ -129,8 +126,8 @@ iris.plot.scatter('sepal_width', 'sepal_length', ax=ax)
 
 ### 複数のAxesを配置する
 
-- <http://matplotlib.org/users/gridspec.html>
-- <http://matplotlib.org/users/tight_layout_guide.html>
+- <https://matplotlib.org/stable/api/gridspec_api.html>
+- <https://matplotlib.org/stable/tutorials/intermediate/gridspec.html>
 
 `plt.subplots(nrows, ncols, sharex, sharey, ...)`
 :   等サイズに分割:
@@ -168,11 +165,11 @@ iris.plot.scatter('sepal_width', 'sepal_length', ax=ax)
 
 ### Text, Annotation, Legend
 
-<http://matplotlib.org/users/text_intro.html>
+<https://matplotlib.org/stable/tutorials/text/text_intro.html>
 
-<http://matplotlib.org/users/annotations_guide.html>
+<https://matplotlib.org/stable/tutorials/text/annotations.html>
 
-<http://matplotlib.org/users/legend_guide.html>
+<https://matplotlib.org/stable/tutorials/intermediate/legend_guide.html>
 
 
 
@@ -398,7 +395,7 @@ grid = grid.plot_marginals(sns.distplot, kde=False)
 
 ## Color
 
-- <https://matplotlib.org/users/colormaps.html>
+- <https://matplotlib.org/stable/tutorials/colors/colormaps.html>
 - <https://seaborn.pydata.org/tutorial/color_palettes.html>
 
 いくつかの方法で指定できる:
@@ -410,10 +407,10 @@ grid = grid.plot_marginals(sns.distplot, kde=False)
 
 パレットもいくつかある:
 
--   [ColorBrewer](http://colorbrewer2.org/) の名前で指定。
+-   [ColorBrewer](https://colorbrewer2.org/) の名前で指定。
     `_r` をつけると逆に、`_d` をつけると暗めになる。
     e.g., `sns.color_palette('RdBu_r', n_colors=7)`
--   [xkcd](http://xkcd.com/color/rgb/) の名前リストを
+-   [xkcd](https://xkcd.com/color/rgb/) の名前リストを
     `sns.xkcd_palette()` に渡す
 -   `cubehelix_palette()` はgrayscaleでもいい感じで印刷できる
 -   自分で作る:
@@ -432,15 +429,15 @@ grid = grid.plot_marginals(sns.distplot, kde=False)
 
 ### 設定
 
-- <http://matplotlib.org/users/customizing.html>
-- <http://matplotlib.org/faq/troubleshooting_faq.html>
-- <http://matplotlib.org/faq/environment_variables_faq.html>
+- <https://matplotlib.org/stable/tutorials/introductory/customizing.html>
+- <https://matplotlib.org/stable/faq/troubleshooting_faq.html>
+- <https://matplotlib.org/stable/faq/environment_variables_faq.html>
 
 `~/.matplotlib/matplotlibrc` が読まれる。
 
 `site-packages/matplotlib/mpl-data/matplotlibrc` にテンプレートがある。
 
-### [`macosx` backend](http://matplotlib.org/faq/usage_faq.html#what-is-a-backend)
+### [`macosx` backend](https://matplotlib.org/stable/tutorials/introductory/usage.html#backends)
 
 Macで非Frameworkとしてビルドした自前Pythonをそのまま使うと怒られる:
 

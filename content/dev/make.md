@@ -174,7 +174,7 @@ a.out : main.cpp sub.cpp
   エラーや警告をプリントする
 : `$(shell COMMAND...)`:   シェルを呼び出す
 
-### [Targets](http://www.gnu.org/software/make/manual/make.html#Standard-Targets)
+### [Targets](https://www.gnu.org/software/make/manual/make.html#Standard-Targets)
 
 `all`
 :   ディレクトリ内のcppソースをコンパイル
