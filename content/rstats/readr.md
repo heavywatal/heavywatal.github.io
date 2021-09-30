@@ -15,14 +15,14 @@ tags = ["r", "tidyverse"]
 `.gz` や `.xz` などの圧縮ファイルも透過的に読み書き可能。
 標準でも `read.table()` や `read.csv()` があるけど、それらと比べて
 
--   場合により10倍ほど高速
--   文字列を勝手にfactor扱いしたりしないので
-    `stringsAsFactors = FALSE` とイチイチ書かなくて済む
--   勝手に列名を変更しない
+-   場合により数倍高速・省メモリ
 -   列の名前や型を指定しやすい
 -   指定した列だけ読み込むこともできる
 -   生data.frameではなく安全な [tibble](#tibble) として返してくれる
--   空白行を勝手にスキップする (1.2から)
+-   空白行を勝手にスキップする (1.2から `skip_empty_rows = TRUE`)
+-   勝手に列名を変更<del>しない</del> する (2.0から `name_repair = "unique"`)
+-   <del>`stringsAsFactors = FALSE` とイチイチ書かなくて文字列を読める</del>
+    R 4.0 から標準関数もこの挙動。
 
 [tidyverse](https://tidyverse.tidyverse.org/) に含まれているので、
 `install.packages("tidyverse")` で一括インストール、
@@ -32,6 +32,16 @@ tags = ["r", "tidyverse"]
 library(tidyverse)
 write_tsv(diamonds, "diamonds.tsv.gz")
 read_tsv("diamonds.tsv.gz")
+```
+
+最近ちょっと表示がおせっかい過ぎるので `~/.Rprofile` で設定を直す:
+
+```r
+options(
+  readr.num_columns = 0L,
+  readr.show_col_types = FALSE,
+  readr.show_progress = FALSE
+)
 ```
 
 -   https://r4ds.had.co.nz/data-import.html
@@ -48,6 +58,8 @@ read_delim(file, delim,
   escape_double = TRUE,
   col_names = TRUE,
   col_types = NULL,
+  col_select = NULL,
+  id = NULL,
   locale = default_locale(),
   na = c("", "NA"),
   quoted_na = TRUE,
@@ -56,7 +68,12 @@ read_delim(file, delim,
   skip = 0,
   n_max = Inf,
   guess_max = min(1000, n_max),
-  progress = show_progress())
+  name_repair = "unique",
+  num_threads = readr_threads(),
+  progress = show_progress(),
+  show_col_types = should_show_types(),
+  skip_empty_rows = TRUE,
+  lazy = TRUE)
 ```
 
 **`read_csv(...)`** や **`read_tsv(...)`**
@@ -252,7 +269,7 @@ class(mtcars)
 新しいtibble 1.4以降では
 [pillar](https://github.com/r-lib/pillar/)
 というパッケージが有効数字や欠損値などの表示形式を勝手にイジるようになってしまった。
-見やすくない上にかなり遅いので `print.tbl()` 関数を上書きする。
+見やすくない上に遅いので `print.tbl()` 関数を上書きする。
 標準の `print.data.frame()` でもいいけど、
 [data.table](https://CRAN.R-project.org/package=data.table)
 1.11 以降がインストールしてある場合は `print.data.table()` が使いやすい。
@@ -324,19 +341,15 @@ width = 160L
 options(
   pillar.neg = FALSE,
   pillar.subtle = FALSE,
-  datatable.print.class = TRUE,
-  datatable.print.colnames = "top",
-  datatable.print.nrows = height,
-  datatable.print.topn = height %/% 2L,
-  tibble.print_max = height,
-  tibble.print_min = height,
-  tibble.width = width,
+  pillar.print_max = height,
+  pillar.print_min = height,
+  pillar.width = width,
   width = min(width, 10000L)
 )
 ```
 
-- https://github.com/tidyverse/tibble/blob/master/R/tibble-package.R
-- https://github.com/r-lib/pillar/blob/master/R/pillar-package.R
+- https://github.com/r-lib/pillar/blob/master/R/options.R
+- https://github.com/tidyverse/tibble/blob/master/R/options.R
 - https://github.com/Rdatatable/data.table/blob/master/R/onLoad.R
 
 
@@ -347,8 +360,8 @@ options(
 RStudioを使っている場合は `View()` もしくは環境タブの変数クリックで簡単に閲覧可能。
 
 ```r
-# tibble:::print.tbl をそのまま使う場合
-diamonds %>% tibble:::print.tbl(n = nrow(.), width = 10000L)
+# tibble/pillarをそのまま使う場合
+diamonds %>% pillar:::print.tbl(n = nrow(.), width = 10000L)
 
 # data.table:::print.data.table で上書きした場合
 diamonds %>% print(nrows = nrow(.))
@@ -357,7 +370,7 @@ diamonds %>% page("print", n = nrow(.))
 ```
 
 オプションをいちいち設定しなくて済むように
-[`less()`](https://github.com/heavywatal/rwtl/blob/master/R/print.R)
+[`less()`](https://github.com/heavywatal/rwtl/blob/master/R/pipe.R)
 のような関数を定義しておくのもよい。
 
 
