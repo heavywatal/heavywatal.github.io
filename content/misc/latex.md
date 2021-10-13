@@ -189,11 +189,12 @@ tlmgr install chktex latexmk
     <https://www.ctan.org/tex-archive/info/symbols/comprehensive/>
     に網羅されてるけど、
     だいたい Short Math Guide for LaTeX にまとめられてるやつで足りるはず。
-    -   "given that" を示す縦棒はパイプ記号 `|` ではなく
-        `\mid` を使うのが正しいし適度なスペースが入って読みやすい。
     -   カッコの大きさを変えたいときは `\left(` と `\right)` を使っておけば、
         前後のサイズに応じて自動的にうまいことやってくれる。
         e.g., 分数を挟むとか、カッコの入れ子とか
+    -   "given that" を示す縦棒はパイプ記号 `|` ではなく
+        `\mid` を使うのが正しいし適度なスペースが入って読みやすい。
+        絶対値もパイプではなく `\lvert x \rvert` のようにする。
     -   斜体にしたくない文字を普通にするには `\mathrm dt` 。
         記号じゃないテキストには `\text{otherwise}` 。
         よく使われるやつは定義済み e.g., `\log`, `\exp`
