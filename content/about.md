@@ -180,6 +180,10 @@ Find me on
 
 ## Teaching / Outreach
 
+-   「[Rによるデータ前処理実習](/slides/tmd2021/)」
+    東京医科歯科大 [データ関連人材育成プログラム](https://md-dsc.com/summary31.php) (2021-10)
+-   「[Rにやらせて楽しよう — データの可視化と下ごしらえ](/slides/hokudai2021r/)」
+    北海道大学 生命科学院 特別講義 (2021-09)
 -   「[統計モデリング概論 DSHC 2021](/slides/tokiomarine2021/)」
     東京海上 [Data Science Hill Climb](https://tokiomarine-dshc.com/) (2021-06)
 -   「[Rによるデータ前処理実習](/slides/tmd2020/)」
