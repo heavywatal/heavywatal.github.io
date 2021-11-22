@@ -121,38 +121,36 @@ Heavy Watal
 <p>sshコマンドでユーザ名と <code>-t</code> オプションを省略できるようになる。</p>
 </li>
 <li>
-<p>ゲートウェイノードにSSH接続してログインノードに <code>qlogin</code>:</p>
+<p>ゲートウェイノードにSSH接続し、<a href="https://sc.ddbj.nig.ac.jp/general_analysis_division/ga_login">ログインノードに <code>qlogin</code></a>:</p>
 <pre><code>ssh gw.ddbj.nig.ac.jp qlogin
 </code></pre>
 </li>
 </ol>
-<h2 id="環境整備">環境整備</h2>
-<ul>
-<li><a href="https://sc.ddbj.nig.ac.jp/ja/guide/hardware">ハードウェア構成</a></li>
-<li><a href="https://sc.ddbj.nig.ac.jp/ja/guide/software">ソフトウェア構成</a>
-(Phase 3: Red Hat Enterprise Linux 7.5)
-<ul>
-<li><a href="https://sc.ddbj.nig.ac.jp/ja/guide/software/singularity">Singularity</a></li>
-<li><a href="https://sc.ddbj.nig.ac.jp/ja/guide/software/environmental-modules">Environment Module</a></li>
-</ul>
-</li>
-</ul>
 <h2 id="ファイルの送受信">ファイルの送受信</h2>
-<p><a href="https://sc.ddbj.nig.ac.jp/ja/guide/software/file-transfer">公式「システムへのファイル転送方法」</a>
+<p><a href="https://sc.ddbj.nig.ac.jp/general_analysis_division/ga_transfer">公式「システムへのファイル転送方法」</a>
 にはsftpかAsperaを使えと書かれてるけど、
 <a href="/dev/rsync.html">rsync</a>
-を使うのが簡単かつ効率的。</p>
+を使うのが簡単。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># send</span>
 rsync -auv ~/input/ gw.ddbj.nig.ac.jp:~/input/
 
 <span class="c1"># receive</span>
 rsync -auv gw.ddbj.nig.ac.jp:~/output/ ~/output/
 </code></pre></div><p>ソースコードは当然<a href="/dev/git.html">Git</a>で管理。</p>
+<h2 id="環境整備">環境整備</h2>
+<ul>
+<li><a href="https://sc.ddbj.nig.ac.jp/guides/hardware">ハードウェア構成</a></li>
+<li><a href="https://sc.ddbj.nig.ac.jp/software/software">ソフトウェア構成</a>
+(Phase 3: Red Hat Enterprise Linux 7.5)
+<ul>
+<li><a href="https://sc.ddbj.nig.ac.jp/software/Singularity">Singularity</a></li>
+</ul>
+</li>
+</ul>
 <h2 id="ジョブ投入管理">ジョブ投入、管理</h2>
 <ul>
-<li><a href="https://sc.ddbj.nig.ac.jp/ja/guide/software/univa-grid-engine">https://sc.ddbj.nig.ac.jp/ja/guide/software/univa-grid-engine</a></li>
-<li><a href="https://sc2.ddbj.nig.ac.jp/index.php/ja-howtouse">https://sc2.ddbj.nig.ac.jp/index.php/ja-howtouse</a></li>
-<li><a href="https://sc2.ddbj.nig.ac.jp/index.php/ja-uge-additional">https://sc2.ddbj.nig.ac.jp/index.php/ja-uge-additional</a></li>
+<li><a href="https://sc.ddbj.nig.ac.jp/general_analysis_division/ga_introduction">https://sc.ddbj.nig.ac.jp/general_analysis_division/ga_introduction</a></li>
+<li><a href="https://sc.ddbj.nig.ac.jp/software/univa_grid_engine">https://sc.ddbj.nig.ac.jp/software/univa_grid_engine</a></li>
 <li><a href="http://www.univa.com/products/grid-engine">Univa Grid Engine (UGE)</a></li>
 <li><a href="http://gridengine.eu/grid-engine-documentation">http://gridengine.eu/grid-engine-documentation</a></li>
 </ul>
