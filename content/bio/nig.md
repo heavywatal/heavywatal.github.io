@@ -31,26 +31,17 @@ https://sc.ddbj.nig.ac.jp/
 
     sshコマンドでユーザ名と `-t` オプションを省略できるようになる。
 
-1.  ゲートウェイノードにSSH接続してログインノードに `qlogin`:
+1.  ゲートウェイノードにSSH接続し、[ログインノードに `qlogin`](https://sc.ddbj.nig.ac.jp/general_analysis_division/ga_login):
 
         ssh gw.ddbj.nig.ac.jp qlogin
 
 
-## 環境整備
-
-- [ハードウェア構成](https://sc.ddbj.nig.ac.jp/ja/guide/hardware)
-- [ソフトウェア構成](https://sc.ddbj.nig.ac.jp/ja/guide/software)
-  (Phase 3: Red Hat Enterprise Linux 7.5)
-    - [Singularity](https://sc.ddbj.nig.ac.jp/ja/guide/software/singularity)
-    - [Environment Module](https://sc.ddbj.nig.ac.jp/ja/guide/software/environmental-modules)
-
-
 ## ファイルの送受信
 
-[公式「システムへのファイル転送方法」](https://sc.ddbj.nig.ac.jp/ja/guide/software/file-transfer)
+[公式「システムへのファイル転送方法」](https://sc.ddbj.nig.ac.jp/general_analysis_division/ga_transfer)
 にはsftpかAsperaを使えと書かれてるけど、
 [rsync]({{< relref "rsync.md" >}})
-を使うのが簡単かつ効率的。
+を使うのが簡単。
 
 ```sh
 # send
@@ -63,11 +54,18 @@ rsync -auv gw.ddbj.nig.ac.jp:~/output/ ~/output/
 ソースコードは当然[Git]({{< relref "git.md" >}})で管理。
 
 
+## 環境整備
+
+- [ハードウェア構成](https://sc.ddbj.nig.ac.jp/guides/hardware)
+- [ソフトウェア構成](https://sc.ddbj.nig.ac.jp/software/software)
+  (Phase 3: Red Hat Enterprise Linux 7.5)
+    - [Singularity](https://sc.ddbj.nig.ac.jp/software/Singularity)
+
+
 ## ジョブ投入、管理
 
-- <https://sc.ddbj.nig.ac.jp/ja/guide/software/univa-grid-engine>
-- <https://sc2.ddbj.nig.ac.jp/index.php/ja-howtouse>
-- <https://sc2.ddbj.nig.ac.jp/index.php/ja-uge-additional>
+- <https://sc.ddbj.nig.ac.jp/general_analysis_division/ga_introduction>
+- <https://sc.ddbj.nig.ac.jp/software/univa_grid_engine>
 - [Univa Grid Engine (UGE)](http://www.univa.com/products/grid-engine)
 - <http://gridengine.eu/grid-engine-documentation>
 
