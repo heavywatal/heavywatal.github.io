@@ -359,3 +359,24 @@ tags = ["writing"]
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
 </tr>
 </table>
+
+### 絵文字
+
+<table><col bgcolor="#eeeeee"><col>
+<tr style="font-family: 'Apple Color Emoji', serif">
+  <td>Apple Color Emoji</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>🍺🍻🤘🪙</td>
+</tr>
+<tr style="font-family: 'Noto Color Emoji', serif">
+  <td>Noto Color Emoji</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>🍺🍻🤘🪙</td>
+</tr>
+<tr style="font-family: 'Segoe UI Emoji', serif">
+  <td>Segoe UI Emoji</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>🍺🍻🤘🪙</td>
+</tr>
+<tr style="font-family: 'Segoe UI Symbol', serif">
+  <td>Segoe UI Symbol</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>🍺🍻🤘🪙</td>
+</tr>
+</table>
