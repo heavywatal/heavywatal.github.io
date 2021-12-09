@@ -15,4 +15,4 @@ public:
 	git clone -b master --single-branch ${REMOTE_URL} $@
 
 clean:
-	ls -d public/* | grep -Ev 'offline|slides|hpc-' | xargs $(RM) -r
+	ls -d public/* | grep -Ev 'offline|slides|hpc-|jbrowse' | xargs $(RM) -r
