@@ -158,18 +158,33 @@ killall SystemUIServer
 <pre><code>/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
 </code></pre>
 <p>設定ファイルは <code>~/Library/Preferences/com.apple.LaunchServices.plist</code></p>
-<h3 id="インストールなど">インストールなど</h3>
+<h3 id="mds-mdworker"><code>mds</code>, <code>mdworker</code></h3>
+<p>Spotlightの設定やインデックス作成に関わる。
+外付けのボリュームを除外したい場合、
+GUIから環境設定してもejectするたびに戻ってしまうので、
+下記のように <code>mdutil</code> を使う必要がある:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># インデックス情報を表示</span>
+sudo mdutil -s /Volumes/Macintosh<span class="se">\ </span>HD
+
+<span class="c1"># インデックスサービスを切る</span>
+sudo mdutil -i off /Volumes/Macintosh<span class="se">\ </span>HD
+
+<span class="c1"># インデックスを作る・更新する</span>
+sudo mdiutil -p /Volumes/Macintosh<span class="se">\ </span>HD
+
+<span class="c1"># インデックスを一旦削除して作り直し</span>
+sudo mdutil -E /Volumes/Macintosh<span class="se">\ </span>HD
+</code></pre></div><h3 id="インストールなど">インストールなど</h3>
 <p><code>.dmg</code> のマウント、<code>.pkg</code> からのインストール、
 システムのソフトウェア・アップデートなどを
 <code>ssh</code> 越しにやらねばならぬときもある:</p>
-<pre><code>hdiutil mount SomeDiskImage.dmg
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">hdiutil mount SomeDiskImage.dmg
 
 sudo installer -pkg SomePackage.pkg -target /
 
 softwareupdate -l
 softwareupdate -i -a
-</code></pre>
-
+</code></pre></div>
 </article>
 </main>
 
@@ -281,10 +296,8 @@ softwareupdate -i -a
 <li><a href="/mac/applescript.html">AppleScript</a></li>
 <li><a href="/mac/homebrew.html">Homebrew</a></li>
 <li><a href="/mac/keyboard.html">Keyboard</a></li>
-<li><a href="/mac/macports.html">MacPorts</a></li>
 <li class="active"><a href="/mac/command.html">Mac固有コマンド</a></li>
 <li><a href="/mac/quicklook.html">QuickLook</a></li>
-<li><a href="/mac/spotlight.html">Spotlight</a></li>
 <li><a href="/mac/winebottler.html">WineBottler</a></li>
 </ul>
 
