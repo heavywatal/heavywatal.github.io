@@ -18,7 +18,7 @@ https://github.com/heavywatal/dotfiles
 
 ### すぐ入れるパッケージ
 
-`sudo apt-get install`:
+`sudo apt install`:
 
     build-essential
     zsh
@@ -48,12 +48,12 @@ pkgutil --pkg-info=com.apple.pkg.CLTools_Executables
 clang -v
 ```
 
-総合開発環境 Xcode をインストールしたければ、App Store から [Xcode](https://itunes.apple.com/jp/app/xcode/id497799835) を選択。
+総合開発環境 Xcode をインストールしたければ、App Store から
+[Xcode](https://itunes.apple.com/jp/app/xcode/id497799835) を選択。
 
 ### パッケージ管理ツール
 
 -   [/mac/homebrew]({{< relref "homebrew.md" >}})
--   [/mac/macports]({{< relref "macports.md" >}})
 
 ### その他のプログラム
 
@@ -68,9 +68,6 @@ clang -v
 
 - [install]({{< relref "/python/install.md" >}})
 - [pip]({{< relref "pip.md" >}})
-- `Pillow` をインストールする前に:
-
-      sudo apt-get install libtiff5-dev libwebp-dev libfreetype6-dev liblcms2-dev libopenjpeg-dev
 
 ### C++
 
@@ -107,24 +104,14 @@ clang -v
     普段は `rmi` を使う癖をつけ、必要なときたまに `rm` を使い、
     `-f` はよほどのことが無い限り使わないようにする。
 
-`trash-cli`
+[`trash-cli`](https://github.com/andreafrancia/trash-cli)
 :   Python製なので [pip]({{< relref "pip.md" >}}) で
     `pip install trash-cli` して入れる。
-    すると以下のようなコマンドがインストールされる:
+:   ゴミ箱の場所は `~/.local/share/Trash`
 
-        restore-trash
-        trash
-        trash-empty
-        trash-list
-        trash-put
-        trash-rm
-
-    ちなみにLinuxのゴミ箱は `~/.local/share/Trash`
-
-`rmtrash`
+[`macos-trash`](https://github.com/sindresorhus/macos-trash)
 :   Macでも `trash-cli` を使えないことはないが、
     ゴミ箱のパスがMac標準の `~/.Trash` ではなく
     Linuxのものになってしまうので
-    [Homebrew]({{< relref "homebrew.md" >}}) で `rmtrash` を入れる:
-
-        brew install rmtrash
+    [Homebrew]({{< relref "homebrew.md" >}}) で `macos-trash` を入れる:
+    `brew install macos-trash`

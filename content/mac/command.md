@@ -114,15 +114,40 @@ Open with で表示されるアプリケーションが重複しまくったと�
 
 設定ファイルは `~/Library/Preferences/com.apple.LaunchServices.plist`
 
+
+### `mds`, `mdworker`
+
+Spotlightの設定やインデックス作成に関わる。
+外付けのボリュームを除外したい場合、
+GUIから環境設定してもejectするたびに戻ってしまうので、
+下記のように `mdutil` を使う必要がある:
+
+```sh
+# インデックス情報を表示
+sudo mdutil -s /Volumes/Macintosh\ HD
+
+# インデックスサービスを切る
+sudo mdutil -i off /Volumes/Macintosh\ HD
+
+# インデックスを作る・更新する
+sudo mdiutil -p /Volumes/Macintosh\ HD
+
+# インデックスを一旦削除して作り直し
+sudo mdutil -E /Volumes/Macintosh\ HD
+```
+
+
 ### インストールなど
 
 `.dmg` のマウント、`.pkg` からのインストール、
 システムのソフトウェア・アップデートなどを
 `ssh` 越しにやらねばならぬときもある:
 
-    hdiutil mount SomeDiskImage.dmg
+```sh
+hdiutil mount SomeDiskImage.dmg
 
-    sudo installer -pkg SomePackage.pkg -target /
+sudo installer -pkg SomePackage.pkg -target /
 
-    softwareupdate -l
-    softwareupdate -i -a
+softwareupdate -l
+softwareupdate -i -a
+```
