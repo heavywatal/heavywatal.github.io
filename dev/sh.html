@@ -257,8 +257,41 @@ somecommand &lt;<span class="o">(</span>gunzip -c infile.gz<span class="o">)</sp
 <span class="c1"># d</span>
 <span class="c1"># e</span>
 <span class="c1"># f</span>
-</code></pre></div><h2 id="関連書籍">関連書籍</h2>
-<p><a href="https://www.amazon.co.jp/%E6%96%B0%E3%81%97%E3%81%84Linux%E3%81%AE%E6%95%99%E7%A7%91%E6%9B%B8-%E5%A4%A7%E8%A7%92-%E7%A5%90%E4%BB%8B/dp/4797380942/ref=as_li_ss_il?ie=UTF8&qid=1487931139&sr=8-2&keywords=linux&linkCode=li3&tag=heavywatal-22&linkId=2c6b6bd4a39dec96e1c6caed3bc52116" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4797380942&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4797380942" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
+</code></pre></div><h3 id="オプション">オプション</h3>
+<p>シェル起動時に <code>bash -u script.sh</code> とするか、
+スクリプト内で <code>set -u</code> とする。
+途中で <code>set +u</code> として戻したりもできる。</p>
+<p>後述のように注意は必要だけどとりあえず走りすぎない設定で書き始めたい:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">set</span> -eux -o pipefail
+</code></pre></div><dl>
+<dt><code>-e</code></dt>
+<dd>エラーが起きたらすぐ終了する。
+これが無ければスクリプトの最後まで走ろうとする。</dd>
+<dd>挙動が変わる要因が多すぎて
+(サブシェルか、条件文がついてるか、POSIXモードか、bashバージョンなど)
+逆に難しくなるので使わないほうがいいという見方もある。
+それが気になるほど込み入ってきたらもはやシェルスクリプトの出番ではなく、
+Pythonとかでかっちり書いたほうがよいのでは。</dd>
+<dd><code>source</code> している中で <code>exit</code> するとシェルごと落ちることにも注意。</dd>
+<dt><code>-u</code></dt>
+<dd>定義されていない変数を展開しようとするとエラー扱い。</dd>
+<dt><code>-v</code></dt>
+<dd>シェルに入力されるコマンドを実行前にそのまま表示する。
+よくあるverboseオプションなので、
+スクリプトに書いてしまうより必要に応じてコマンドに足すほうが自然か。</dd>
+<dt><code>-x</code></dt>
+<dd>変数を展開してからコマンドを表示する。
+<code>-v</code> との併用も可能。</dd>
+<dt><code>-o pipefail</code></dt>
+<dd>パイプの左側でエラーになったら終了する。
+読み手側が早めに切り上げて <code>SIGPIPE</code> が発生しても止まるので注意。</dd>
+<dd>POSIXではないがbashでもzshでも利用可能。</dd>
+<dt><code>-o posix</code></dt>
+<dd>bash/zsh拡張を切ってPOSIX準拠モードで動く。
+<code>sh</code> として呼び出されるとこれになる。</dd>
+</dl>
+<h2 id="関連書籍">関連書籍</h2>
+<p><a href="https://www.amazon.co.jp/dp/4797380942?&linkCode=li3&tag=heavywatal-22&linkId=faccc593edc22f1e89bf63f13e924766&language=ja_JP&ref_=as_li_ss_il" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4797380942&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=4797380942" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
 
 </article>
 </main>
