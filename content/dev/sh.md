@@ -12,6 +12,8 @@ https://www.gnu.org/software/bash/manual/html_node/
 
 - [Conditional Constructs](https://www.gnu.org/software/bash/manual/html_node/Conditional-Constructs.html)
 - [Bash Conditional Expressions](https://www.gnu.org/software/bash/manual/html_node/Bash-Conditional-Expressions.html)
+- `[` はPOSIXコマンドで `]` は最後の引数。
+- `[[ expression ]]` は便利な面もあるけどBash拡張なので注意。
 
 ```sh
 # basic
@@ -47,8 +49,8 @@ AND/OR
 
 文字列
 ```sh
-EMPTY=''
-NOTEMPTY='content'
+EMPTY=""
+NOTEMPTY="content"
 [ -z "$EMPTY" ] && echo '-z "$EMPTY"'
 [ -n "$NOTEMPTY" ] && echo '-n "$NOTEMPTY"'
 [ "$NOTEMPTY" != "$EMPTY" ] && echo '"$NOTEMPTY" != "$EMPTY"'
@@ -58,25 +60,27 @@ NOTEMPTY='content'
 
 ファイル、ディレクトリ
 ```sh
-[ -e ~ ] && echo '-e ~'
-[ -d ~ ] && echo '-d ~'
-[ -f ~/.bashrc ] && echo '-f ~/.bashrc'
-[ -L ~/.bashrc ] && echo '-L ~/.bashrc'
-[ -r ~/.bashrc ] && echo '-r ~/.bashrc'
-[ -w ~/.bashrc ] && echo '-w ~/.bashrc'
-[ -x /bin/sh ] && echo '-x /bin/sh'
+x="${HOME}/.bashrc"
+[ -e $x ] && echo "x exists"
+[ -d $x ] && echo "x is a directory"
+[ -f $x ] && echo "x is a regular file"
+[ -s $x ] && echo "x is a regular file with size >0"
+[ -L $x ] && echo "x is a symlink"
+[ -r $x ] && echo "x is readable"
+[ -w $x ] && echo "x is writable"
+[ -x $x ] && echo "x is executable"
 ```
 
 数値比較
 ```sh
-one=1
-two=2
-[ $one -eq 1 ] && echo '$one -eq 1'
-[ $one -ne $two ] && echo '$one -ne $two'
-[ $one -lt $two ] && echo '$one -lt $two'
-[ $one -le $two ] && echo '$one -le $two'
-[ $two -gt $one ] && echo '$two -gt $one'
-[ $two -ge $one ] && echo '$two -ge $one'
+x=1
+y=2
+[ $x -eq $y ] && echo "x == y"
+[ $x -ne $y ] && echo "x != y"
+[ $x -lt $y ] && echo "x <  y"
+[ $x -le $y ] && echo "x <= y"
+[ $x -gt $y ] && echo "x >  y"
+[ $x -ge $y ] && echo "x >= y"
 ```
 
 
@@ -123,6 +127,45 @@ string=abcdef
 echo ${string}   # abcdef
 echo ${#string}  # 6
 ```
+
+うっかりアンダースコアで変数名をつなげてしまいがちなので、
+常に{カッコ}つける癖をつける:
+
+```sh
+for CITY in sendai yokosuka; do
+  echo hello_$CITY_people     # hello_
+  echo hello_${CITY}_people   # hello_sendai_people
+done
+```
+
+変数が未定義or空だったり、空白や特殊文字を含んでいたりして事故りがちなので、
+基本的にダブルクォートを付ける癖をつける:
+
+```sh
+EMPTY=""
+[ -n $EMPTY ] && echo "Bug! this is printed"
+[ -n "$EMPTY" ] && echo "OK, this is not printed."
+
+DIR=${HOME}/directory with space
+# with: command not found
+echo $DIR
+# /Users/watal/directory
+
+DIR="${HOME}/directory with space"
+echo $DIR
+# /Users/watal/directory with space
+cd $DIR
+# cd: /Users/watal/directory: No such file or directory
+cd "$DIR"
+# cd: /Users/watal/directory with space: No such file or directory
+```
+
+シングルクォートの中の変数は展開されずそのまま渡される:
+```sh
+echo "$HOME"  # /Users/watal
+echo '$HOME'  # $HOME
+```
+
 
 ### 部分列
 
