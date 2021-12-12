@@ -93,6 +93,8 @@ Heavy Watal
 <ul>
 <li><a href="https://www.gnu.org/software/bash/manual/html_node/Conditional-Constructs.html">Conditional Constructs</a></li>
 <li><a href="https://www.gnu.org/software/bash/manual/html_node/Bash-Conditional-Expressions.html">Bash Conditional Expressions</a></li>
+<li><code>[</code> はPOSIXコマンドで <code>]</code> は最後の引数。</li>
+<li><code>[[ expression ]]</code> は便利な面もあるけどBash拡張なので注意。</li>
 </ul>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># basic</span>
 <span class="k">if</span> <span class="nb">test</span> -e ~<span class="p">;</span> <span class="k">then</span>
@@ -121,30 +123,32 @@ Heavy Watal
 <span class="o">[[</span> -e ~ <span class="o">&amp;&amp;</span> -d ~ <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;[[ -e ~ &amp;&amp; -d ~ ]]&#39;</span>
 <span class="o">[[</span> -e ~ <span class="o">||</span> -f ~ <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;[[ -e ~ || -f ~ ]]&#39;</span>
 </code></pre></div><p>文字列</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">EMPTY</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
-<span class="nv">NOTEMPTY</span><span class="o">=</span><span class="s1">&#39;content&#39;</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">EMPTY</span><span class="o">=</span><span class="s2">&#34;&#34;</span>
+<span class="nv">NOTEMPTY</span><span class="o">=</span><span class="s2">&#34;content&#34;</span>
 <span class="o">[</span> -z <span class="s2">&#34;</span><span class="nv">$EMPTY</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;-z &#34;$EMPTY&#34;&#39;</span>
 <span class="o">[</span> -n <span class="s2">&#34;</span><span class="nv">$NOTEMPTY</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;-n &#34;$NOTEMPTY&#34;&#39;</span>
 <span class="o">[</span> <span class="s2">&#34;</span><span class="nv">$NOTEMPTY</span><span class="s2">&#34;</span> !<span class="o">=</span> <span class="s2">&#34;</span><span class="nv">$EMPTY</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;&#34;$NOTEMPTY&#34; != &#34;$EMPTY&#34;&#39;</span>
 <span class="o">[</span> <span class="s2">&#34;</span><span class="nv">$NOTEMPTY</span><span class="s2">&#34;</span> <span class="o">=</span> <span class="s2">&#34;content&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;&#34;$NOTEMPTY&#34; = &#34;content&#34;&#39;</span>
 <span class="o">[[</span> <span class="s2">&#34;</span><span class="nv">$NOTEMPTY</span><span class="s2">&#34;</span> <span class="o">=</span>~ <span class="s2">&#34;tent</span>$<span class="s2">&#34;</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;&#34;$NOTEMPTY&#34; =~ &#34;tent$&#34;&#39;</span>
 </code></pre></div><p>ファイル、ディレクトリ</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span> -e ~ <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;-e ~&#39;</span>
-<span class="o">[</span> -d ~ <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;-d ~&#39;</span>
-<span class="o">[</span> -f ~/.bashrc <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;-f ~/.bashrc&#39;</span>
-<span class="o">[</span> -L ~/.bashrc <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;-L ~/.bashrc&#39;</span>
-<span class="o">[</span> -r ~/.bashrc <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;-r ~/.bashrc&#39;</span>
-<span class="o">[</span> -w ~/.bashrc <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;-w ~/.bashrc&#39;</span>
-<span class="o">[</span> -x /bin/sh <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;-x /bin/sh&#39;</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">x</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="s2">/.bashrc&#34;</span>
+<span class="o">[</span> -e <span class="nv">$x</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;x exists&#34;</span>
+<span class="o">[</span> -d <span class="nv">$x</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;x is a directory&#34;</span>
+<span class="o">[</span> -f <span class="nv">$x</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;x is a regular file&#34;</span>
+<span class="o">[</span> -s <span class="nv">$x</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;x is a regular file with size &gt;0&#34;</span>
+<span class="o">[</span> -L <span class="nv">$x</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;x is a symlink&#34;</span>
+<span class="o">[</span> -r <span class="nv">$x</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;x is readable&#34;</span>
+<span class="o">[</span> -w <span class="nv">$x</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;x is writable&#34;</span>
+<span class="o">[</span> -x <span class="nv">$x</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;x is executable&#34;</span>
 </code></pre></div><p>数値比較</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">one</span><span class="o">=</span><span class="m">1</span>
-<span class="nv">two</span><span class="o">=</span><span class="m">2</span>
-<span class="o">[</span> <span class="nv">$one</span> -eq <span class="m">1</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;$one -eq 1&#39;</span>
-<span class="o">[</span> <span class="nv">$one</span> -ne <span class="nv">$two</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;$one -ne $two&#39;</span>
-<span class="o">[</span> <span class="nv">$one</span> -lt <span class="nv">$two</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;$one -lt $two&#39;</span>
-<span class="o">[</span> <span class="nv">$one</span> -le <span class="nv">$two</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;$one -le $two&#39;</span>
-<span class="o">[</span> <span class="nv">$two</span> -gt <span class="nv">$one</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;$two -gt $one&#39;</span>
-<span class="o">[</span> <span class="nv">$two</span> -ge <span class="nv">$one</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;$two -ge $one&#39;</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">x</span><span class="o">=</span><span class="m">1</span>
+<span class="nv">y</span><span class="o">=</span><span class="m">2</span>
+<span class="o">[</span> <span class="nv">$x</span> -eq <span class="nv">$y</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;x == y&#34;</span>
+<span class="o">[</span> <span class="nv">$x</span> -ne <span class="nv">$y</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;x != y&#34;</span>
+<span class="o">[</span> <span class="nv">$x</span> -lt <span class="nv">$y</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;x &lt;  y&#34;</span>
+<span class="o">[</span> <span class="nv">$x</span> -le <span class="nv">$y</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;x &lt;= y&#34;</span>
+<span class="o">[</span> <span class="nv">$x</span> -gt <span class="nv">$y</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;x &gt;  y&#34;</span>
+<span class="o">[</span> <span class="nv">$x</span> -ge <span class="nv">$y</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;x &gt;= y&#34;</span>
 </code></pre></div><h2 id="looping-constructshttpswwwgnuorgsoftwarebashmanualhtml_nodelooping-constructshtml"><a href="https://www.gnu.org/software/bash/manual/html_node/Looping-Constructs.html">Looping Constructs</a></h2>
 <p>基本形。クオートもカッコも不要:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="k">for</span> x in <span class="m">1</span> <span class="m">2</span> 3<span class="p">;</span> <span class="k">do</span>
@@ -174,6 +178,33 @@ zshでは1要素扱い、dashやbashではスペース区切りで分割。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">string</span><span class="o">=</span>abcdef
 <span class="nb">echo</span> <span class="si">${</span><span class="nv">string</span><span class="si">}</span>   <span class="c1"># abcdef</span>
 <span class="nb">echo</span> <span class="si">${#</span><span class="nv">string</span><span class="si">}</span>  <span class="c1"># 6</span>
+</code></pre></div><p>うっかりアンダースコアで変数名をつなげてしまいがちなので、
+常に{カッコ}つける癖をつける:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="k">for</span> CITY in sendai yokosuka<span class="p">;</span> <span class="k">do</span>
+  <span class="nb">echo</span> hello_<span class="nv">$CITY_people</span>     <span class="c1"># hello_</span>
+  <span class="nb">echo</span> hello_<span class="si">${</span><span class="nv">CITY</span><span class="si">}</span>_people   <span class="c1"># hello_sendai_people</span>
+<span class="k">done</span>
+</code></pre></div><p>変数が未定義or空だったり、空白や特殊文字を含んでいたりして事故りがちなので、
+基本的にダブルクォートを付ける癖をつける:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">EMPTY</span><span class="o">=</span><span class="s2">&#34;&#34;</span>
+<span class="o">[</span> -n <span class="nv">$EMPTY</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;Bug! this is printed&#34;</span>
+<span class="o">[</span> -n <span class="s2">&#34;</span><span class="nv">$EMPTY</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;OK, this is not printed.&#34;</span>
+
+<span class="nv">DIR</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/directory with space
+<span class="c1"># with: command not found</span>
+<span class="nb">echo</span> <span class="nv">$DIR</span>
+<span class="c1"># /Users/watal/directory</span>
+
+<span class="nv">DIR</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="s2">/directory with space&#34;</span>
+<span class="nb">echo</span> <span class="nv">$DIR</span>
+<span class="c1"># /Users/watal/directory with space</span>
+<span class="nb">cd</span> <span class="nv">$DIR</span>
+<span class="c1"># cd: /Users/watal/directory: No such file or directory</span>
+<span class="nb">cd</span> <span class="s2">&#34;</span><span class="nv">$DIR</span><span class="s2">&#34;</span>
+<span class="c1"># cd: /Users/watal/directory with space: No such file or directory</span>
+</code></pre></div><p>シングルクォートの中の変数は展開されずそのまま渡される:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$HOME</span><span class="s2">&#34;</span>  <span class="c1"># /Users/watal</span>
+<span class="nb">echo</span> <span class="s1">&#39;$HOME&#39;</span>  <span class="c1"># $HOME</span>
 </code></pre></div><h3 id="部分列">部分列</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># ${parameter:offset}</span>
 <span class="c1"># ${parameter:offset:length}</span>
