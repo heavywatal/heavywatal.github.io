@@ -287,6 +287,20 @@ add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 `add_subdirectory()` の対象にできないなどの問題があったが、
 こちらはコンフィグ時に実行される。
 
+```cmake
+include(FetchContent)
+set(FETCHCONTENT_QUIET OFF)
+message(STATUS "FETCHCONTENT_SOURCE_DIR_IGRAPH: ${FETCHCONTENT_SOURCE_DIR_IGRAPH}")
+FetchContent_Declare(
+  igraph
+  GIT_REPOSITORY https://github.com/igraph/igraph.git
+  GIT_TAG ${PROJECT_VERSION}
+  GIT_SHALLOW ON
+)
+FetchContent_MakeAvailable(igraph)
+message(STATUS "igraph_SOURCE_DIR: ${igraph_SOURCE_DIR}")
+```
+
 CMake 3.11 からの新機能なので、もう少し普及するまでお預け。
 当面は `execute_process()` で凌ぐ:
 ```cmake
@@ -329,9 +343,6 @@ if(BUILD_TESTING)
 endif()
 ```
 
-`enable_testing()` と書くほうが短いけど
-`BUILD_TESTING=ON` 固定なのでオプションで切れない。
-
 ```cmake
 # test/CMakeLists.txt
 add_executable(test-gene gene.cpp)
@@ -342,13 +353,24 @@ add_test(NAME gene COMMAND $<TARGET_FILE:test-gene>)
 一部のテストのみ実行したいときは `-R <pattern>` で絞る。
 
 
+[`include(CTest)`](https://github.com/Kitware/CMake/blob/master/Modules/CTest.cmake)
+は勝手に[CDash](https://www.cdash.org/)の設定をして
+`DartConfiguration.tcl` を生成する。
+次のように書き換えればそのへんをスキップできる:
+
+```cmake
+option(BUILD_TESTING "Build the testing tree." ON)
+enable_testing()
+```
+
 ## CLI
 
 ### [`cmake`](https://cmake.org/cmake/help/latest/manual/cmake.1.html)
 
-いろんな中間ファイルができる上に `cmake clean` は無いので、
 ビルド用の空ディレクトリを外に作って out-of-source で実行するのが基本。
 やり直したいときは、そのディレクトリごと消す。
+3.0以降 `cmake --target clean` はあるが、
+CMakeのバージョンを上げたときなどcleanしたい場面で使えない。
 
 ```sh
 cmake -S . -B build -DCMAKE_INSTALL_PREFIX=${HOME}/local -DCMAKE_BUILD_TYPE=Debug
