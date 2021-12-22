@@ -353,7 +353,18 @@ STATIC/SHAREDが明示されていない <code>add_library()</code> でどっち
 はビルド時に実行されるため
 <code>add_subdirectory()</code> の対象にできないなどの問題があったが、
 こちらはコンフィグ時に実行される。</p>
-<p>CMake 3.11 からの新機能なので、もう少し普及するまでお預け。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">include</span><span class="p">(</span><span class="s">FetchContent</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">FETCHCONTENT_QUIET</span> <span class="s">OFF</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">message</span><span class="p">(</span><span class="s">STATUS</span> <span class="s2">&#34;FETCHCONTENT_SOURCE_DIR_IGRAPH: ${FETCHCONTENT_SOURCE_DIR_IGRAPH}&#34;</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">FetchContent_Declare</span><span class="p">(</span>
+  <span class="s">igraph</span>
+  <span class="s">GIT_REPOSITORY</span> <span class="s">https://github.com/igraph/igraph.git</span>
+  <span class="s">GIT_TAG</span> <span class="o">${</span><span class="nv">PROJECT_VERSION</span><span class="o">}</span>
+  <span class="s">GIT_SHALLOW</span> <span class="s">ON</span>
+<span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">igraph</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">message</span><span class="p">(</span><span class="s">STATUS</span> <span class="s2">&#34;igraph_SOURCE_DIR: ${igraph_SOURCE_DIR}&#34;</span><span class="p">)</span><span class="err">
+</span></code></pre></div><p>CMake 3.11 からの新機能なので、もう少し普及するまでお預け。
 当面は <code>execute_process()</code> で凌ぐ:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">find_package</span><span class="p">(</span><span class="s">Git</span><span class="p">)</span><span class="err">
 </span><span class="err"></span><span class="nb">execute_process</span><span class="p">(</span><span class="s">COMMAND</span>
@@ -376,18 +387,23 @@ STATIC/SHAREDが明示されていない <code>add_library()</code> でどっち
 </span><span class="err"></span><span class="nb">if</span><span class="p">(</span><span class="s">BUILD_TESTING</span><span class="p">)</span><span class="err">
 </span><span class="err"></span>  <span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">test</span><span class="p">)</span><span class="err">
 </span><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
-</span></code></pre></div><p><code>enable_testing()</code> と書くほうが短いけど
-<code>BUILD_TESTING=ON</code> 固定なのでオプションで切れない。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="c"># test/CMakeLists.txt
+</span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="c"># test/CMakeLists.txt
 </span><span class="c"></span><span class="nb">add_executable</span><span class="p">(</span><span class="s">test-gene</span> <span class="s">gene.cpp</span><span class="p">)</span><span class="err">
 </span><span class="err"></span><span class="nb">add_test</span><span class="p">(</span><span class="s">NAME</span> <span class="s">gene</span> <span class="s">COMMAND</span> <span class="o">$&lt;</span><span class="nv">TARGET_FILE:test-gene</span><span class="o">&gt;</span><span class="p">)</span><span class="err">
 </span></code></pre></div><p><code>ctest -V</code> で実行。
 一部のテストのみ実行したいときは <code>-R &lt;pattern&gt;</code> で絞る。</p>
-<h2 id="cli">CLI</h2>
+<p><a href="https://github.com/Kitware/CMake/blob/master/Modules/CTest.cmake"><code>include(CTest)</code></a>
+は勝手に<a href="https://www.cdash.org/">CDash</a>の設定をして
+<code>DartConfiguration.tcl</code> を生成する。
+次のように書き換えればそのへんをスキップできる:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">option</span><span class="p">(</span><span class="s">BUILD_TESTING</span> <span class="s2">&#34;Build the testing tree.&#34;</span> <span class="s">ON</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">enable_testing</span><span class="p">()</span><span class="err">
+</span></code></pre></div><h2 id="cli">CLI</h2>
 <h3 id="cmakehttpscmakeorgcmakehelplatestmanualcmake1html"><a href="https://cmake.org/cmake/help/latest/manual/cmake.1.html"><code>cmake</code></a></h3>
-<p>いろんな中間ファイルができる上に <code>cmake clean</code> は無いので、
-ビルド用の空ディレクトリを外に作って out-of-source で実行するのが基本。
-やり直したいときは、そのディレクトリごと消す。</p>
+<p>ビルド用の空ディレクトリを外に作って out-of-source で実行するのが基本。
+やり直したいときは、そのディレクトリごと消す。
+3.0以降 <code>cmake --target clean</code> はあるが、
+CMakeのバージョンを上げたときなどcleanしたい場面で使えない。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">cmake -S . -B build -DCMAKE_INSTALL_PREFIX<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local -DCMAKE_BUILD_TYPE<span class="o">=</span>Debug
 </code></pre></div><p>デフォルトでは <code>Makefile</code> が書き出されるので
 <code>make &amp;&amp; make install</code> のように実行してもいいけど、
