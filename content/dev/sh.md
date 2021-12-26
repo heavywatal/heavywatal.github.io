@@ -40,9 +40,8 @@ test -e ~ && echo 'test -e ~ && echo' || echo 'not printed'
 
 AND/OR
 ```sh
-[ -e ~ -a -d ~ ] && echo '[-e ~ -a -d ~]'
-[ -e ~ -o -f ~ ] && echo '[-e ~ -o -f ~]'
 [ -e ~ ] && [ -d ~ ] && echo '[ -e ~ ] && [ -d ~ ]'
+[ -e ~ ] || [ -f ~ ] && echo '[ -e ~ ] || [ -f ~ ]'
 [[ -e ~ && -d ~ ]] && echo '[[ -e ~ && -d ~ ]]'
 [[ -e ~ || -f ~ ]] && echo '[[ -e ~ || -f ~ ]]'
 ```
