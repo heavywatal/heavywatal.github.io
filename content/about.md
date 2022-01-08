@@ -185,20 +185,23 @@ Find me on
 
 ## Teaching / Outreach
 
+-   「インタビューでGO!!」水の森市民センター企画講座 (2020-11) 北仙台小学校、北仙台中学校
 -   「[Rによるデータ前処理実習](/slides/tmd2021/)」
-    東京医科歯科大 [データ関連人材育成プログラム](https://md-dsc.com/summary31.php) (2021-10)
+    東京医科歯科大 [データ関連人材育成プログラム](https://ds.tmdu.org/) (2021-10)
+-   「[確率分布を理解する統計モデリング入門](/slides/multiomics2021/)」
+    東京大学 [マルチNGSオミクス解析研究会](https://amedprime-nakatolab.github.io/pages/Seminar.html) (2021-09)
 -   「[Rにやらせて楽しよう — データの可視化と下ごしらえ](/slides/hokudai2021r/)」
     北海道大学 生命科学院 特別講義 (2021-09)
 -   「[統計モデリング概論 DSHC 2021](/slides/tokiomarine2021/)」
     東京海上 [Data Science Hill Climb](https://tokiomarine-dshc.com/) (2021-06)
 -   「[Rによるデータ前処理実習](/slides/tmd2020/)」
     東京医科歯科大 [データ関連人材育成プログラム](https://md-dsc.com/summary31.php) (2020-10)
--   水の森市民センター企画講座「[インタビューでGO!!](https://www.sendai-shimincenter.jp/aoba/mizunomori/kouza/report/hmmr2n00000505tw.html) — 子どもたちの育ちを支えよう」
+-   「[インタビューでGO!!](https://www.sendai-shimincenter.jp/aoba/mizunomori/kouza/report/hmmr2n00000505tw.html) — 子どもたちの育ちを支えよう」水の森市民センター企画講座
     (2020-08) 北仙台小学校
 -   「[Hands-on Introduction to R 2020](/slides/makino2020r/)」
     東北大ほか (2020-05)
 -   「[Rによるデータ前処理実習](/slides/tmd2019/)」
-    東京医科歯科大 [データ関連人材育成プログラム](https://md-dsc.com/summary31.php) (2019-12)
+    東京医科歯科大 [データ関連人材育成プログラム](https://ds.tmdu.org/) (2019-12)
 -   「[Rでデータを可視化する](/slides/sendair2/)」
     [Sendai.R #2](https://sendair.connpass.com/event/137548/) (2019-09) Sendai
 -   "[Using external C++ libraries in Rcpp packages](/slides/japanr2018/)"
