@@ -196,12 +196,13 @@ brew list --cask
 
 adobe-acrobat-reader amazon-photos atom
 basictex bibdesk
-discord docker dropbox firefox gephi gimp gitter
-google-backup-and-sync google-chrome google-japanese-ime
+discord docker drawio dropbox firefox gimp gitter
+google-chrome google-drive google-japanese-ime
 inkscape iterm2 julia kindle libreoffice macfuse
-marshallofsound-google-play-music-player megasync menumeters
+marshallofsound-google-play-music-player
+megasync menumeters monitorcontrol
 r rstudio
-skim skype slack spideroakone spotify
+skim skype slack spideroakone
 the-unarchiver virtualbox visual-studio-code vlc
 whatsapp xquartz zoom
 
@@ -213,8 +214,8 @@ whatsapp xquartz zoom
 brew tap homebrew/cask-fonts
 ```
 
-font-ubuntu font-ubuntu-mono
+font-ubuntu font-ubuntu-mono font-ubuntu-mono-nerd-font
 font-noto-sans font-noto-serif font-noto-sans-mono
+font-source-sans-3 font-source-serif-4
 font-open-sans font-roboto font-dejavu
 font-libertinus font-lora font-merriweather
-font-tex-gyre-pagella font-tex-gyre-pagella-math
