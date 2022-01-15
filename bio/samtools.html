@@ -3,14 +3,14 @@
 <head prefix="og: http://ogp.me/ns#">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
-<title>SAMtools: Utilities for the Sequence Alignment/Map (SAM) format - Heavy Watal</title>
+<title>SAMtools: Utilities for the Sequence Alignment/Map (SAM) - Heavy Watal</title>
 <link rel="stylesheet" href="/css/theme.css">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#e08010">
 <meta name="author" content="Watal M. Iwasaki">
-<meta property="og:title" content="SAMtools: Utilities for the Sequence Alignment/Map (SAM) format">
+<meta property="og:title" content="SAMtools: Utilities for the Sequence Alignment/Map (SAM)">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://heavywatal.github.io/bio/samtools.html">
 <meta property="og:image" content="https://avatars.githubusercontent.com/heavywatal">
@@ -81,7 +81,7 @@ Heavy Watal
 <main>
 <article>
 <header><h1><a href="/bio/samtools.html">
-SAMtools — Utilities for the Sequence Alignment/Map (SAM) format
+SAMtools — Utilities for the Sequence Alignment/Map (SAM)
 </a></h1>
 <nav class="tags"><ul>
 <li><i class="fas fa-tag"></i> <a href="/tags/genetics.html">genetics</a></li>
@@ -91,85 +91,37 @@ SAMtools — Utilities for the Sequence Alignment/Map (SAM) format
 <p><a href="https://www.htslib.org/">https://www.htslib.org/</a></p>
 <h2 id="操作">操作</h2>
 <p><a href="https://www.htslib.org/doc/samtools.html">https://www.htslib.org/doc/samtools.html</a></p>
-<h3 id="下ごしらえ">下ごしらえ</h3>
-<ul>
-<li>
-<p>適当な条件でフィルタリング:</p>
-<pre><code>samtools view -hb -f3 -q2 aln.bam -o filtered.bam
-</code></pre>
-</li>
-<li>
-<p>ソート:</p>
-<pre><code>samtools sort -T tmpsam -@2 -o sorted.bam aln.bam
-</code></pre>
-<p>一時ファイルの名前なんか適当にユニークに決めてくれたらいいのに、
-<code>-T {PREFIX}</code> を指定しないと使えない。</p>
-<p>デフォルトでは位置でソートされるが、
-オプション <code>-n</code> で名前順(=ペアが隣り合う)にもできる。</p>
-</li>
-<li>
-<p>標準入力stdinからパイプする場合は <code>-</code> を引数に:</p>
-<pre><code>samtools view -hb -f3 aln.bam | samtools sort -T tmpsam -@2 -o piped.bam
-</code></pre>
-</li>
-<li>
-<p>BAMインデックス作成:</p>
-<pre><code>samtools index aln.bam
-</code></pre>
-<p><code>aln.bam.bai</code> が書き出される</p>
-</li>
-<li>
-<p>参照配列インデックス作成:</p>
-<pre><code>samtools faidx ref.fa
-</code></pre>
-<p><code>tview</code> や <code>pileup</code> などで必要になる
-<code>ref.fa.fai</code> が書き出される</p>
-</li>
-<li>
-<p>PCR duplicatesを除去:</p>
-<pre><code>samtools rmdup aln.bam unique.bam
-</code></pre>
-</li>
-</ul>
-<p>fixmate</p>
-<h3 id="閲覧">閲覧</h3>
-<ul>
-<li>
-<p>生のSAMを <code>less</code> で閲覧:</p>
-<pre><code>samtools view -h aln.bam | less
-</code></pre>
-<p><code>-o out.sam</code> とすればファイルに書き出せる。</p>
-</li>
-<li>
-<p>マッピングされた形で閲覧:</p>
-<pre><code>samtools tview aln.bam [ref.fa]
-</code></pre>
-<p>参照配列を与えると表示方法に選択肢が増える。
+<h3 id="閲覧要約">閲覧・要約</h3>
+<dl>
+<dt><a href="https://www.htslib.org/doc/samtools-view.html"><code>view</code></a></dt>
+<dd>BAM/CRAMをプレーンテキストのSAMとして閲覧:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">samtools view -h --no-PG aln.bam <span class="p">|</span> less
+</code></pre></div><p>ここで <code>-h</code> をつけないとヘッダーが削れてしまうし、
+<code>--no-PG</code> をつけないと元ファイルに含まれていなかった情報
+(<code>@PG</code>) が付加されてしまうので要注意。</p>
+</dd>
+<dd>BAM/CRAMに変換するのも、リードをフィルターするのもこのコマンド。名前が悪い。</dd>
+<dt><a href="https://www.htslib.org/doc/samtools-tview.html"><code>tview</code></a></dt>
+<dd>マッピングされた形でインタラクティブに閲覧:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">samtools tview aln.bam <span class="o">[</span>ref.fa<span class="o">]</span>
+</code></pre></div><p>参照配列を与えると表示方法に選択肢が増える。
 予めインデックスを作っておかなくても初回実行時に
 <code>faidx</code> が勝手に走って <code>ref.fa.fai</code> が作成される。</p>
-<dl>
-<dt>ヘルプ</dt>
-<dd><code>shift+/</code></dd>
-<dt>ジャンプ</dt>
-<dd><code>g</code> または <code>/</code>
-<code>chr1:10000</code> のように染色体を付けて</dd>
-</dl>
-</li>
-<li>
-<p>インデックス作成済みBAMの統計量を表示:</p>
-<pre><code>samtools idxstats aln.bam
-chr1    249250621       6343976 0
+</dd>
+<dd>ヘルプ: <kbd>shift</kbd><kbd>/</kbd></dd>
+<dd>ジャンプ: <kbd>g</kbd> または <kbd>/</kbd> して <code>chr1:10000</code> のような形式</dd>
+<dt><a href="https://www.htslib.org/doc/samtools-idxstats.html"><code>idxstats</code></a></dt>
+<dd>インデックス作成済みBAMの統計量を表示:
+<pre tabindex="0"><code>chr1    249250621       6343976 0
 chr10   135534747       2407204 0
 chr11   135006516       3773511 0
 chr12   133851895       3696141 0
 ...
-</code></pre>
-<p>seqnames, seqlengths, mapped reads, unmapped reads</p>
-</li>
-<li>
-<p>フラグの要約統計:</p>
-<pre><code>samtools flagstat aln.bam
-65182282 + 0 in total (QC-passed reads + QC-failed reads)
+</code></pre><p>seqnames, seqlengths, mapped reads, unmapped reads</p>
+</dd>
+<dt><a href="https://www.htslib.org/doc/samtools-flagstat.html"><code>flagstat</code></a></dt>
+<dd>フラグの要約統計:
+<pre tabindex="0"><code>65182282 + 0 in total (QC-passed reads + QC-failed reads)
 6895859 + 0 secondary
 0 + 0 supplementary
 0 + 0 duplicates
@@ -182,15 +134,49 @@ chr12   133851895       3696141 0
 2379053 + 0 singletons (4.08%:nan%)
 456098 + 0 with mate mapped to a different chr
 169500 + 0 with mate mapped to a different chr (mapQ&gt;=5)
-</code></pre>
+</code></pre></dd>
+</dl>
+<h3 id="下ごしらえ">下ごしらえ</h3>
+<ul>
+<li>
+<p>PCR duplicatesを除去</p>
+<ol>
+<li><a href="https://www.htslib.org/doc/samtools-collate.html"><code>samtools collate</code></a>
+でリード名ごとに並べる。
+順番は関係ないので <code>sort -n</code> より <code>collate</code> のほうが効率的。
+アラインメント直後は大概こうなっていて省略可能。</li>
+<li><a href="https://www.htslib.org/doc/samtools-fixmate.html"><code>samtools fixmate -m</code></a>
+で <code>MC</code>, <code>ms</code> タグを付加。</li>
+<li><a href="https://www.htslib.org/doc/samtools-sort.html"><code>samtools sort</code></a>
+で位置順にソート。</li>
+<li><a href="https://www.htslib.org/doc/samtools-markdup.html"><code>samtools markdup -r</code></a>
+で重複を除去。</li>
+</ol>
 </li>
 <li>
-<p>サイトごとのdepthをタブ区切りで:</p>
-<pre><code>samtools depth aln.bam
-chr1 12345 1
-chr1 12346 1
-...
-</code></pre>
+<p>適当な条件でフィルタリング:</p>
+<pre tabindex="0"><code>samtools view -hb -f3 -q2 aln.bam -o filtered.bam
+</code></pre></li>
+<li>
+<p><a href="http://www.htslib.org/doc/bgzip.html"><code>bgzip</code></a>でFASTAやGFFを圧縮。
+インデックス(<code>.gzi</code>)を利用して部分的に展開して高速アクセスすることが可能。
+普通の <code>gzip</code> としても展開可能。
+拡張子はデフォルトで <code>.gz</code> だけど <code>.bgz</code> にすることもある。</p>
+</li>
+<li>
+<p>インデックス作成:</p>
+<ul>
+<li><a href="https://www.htslib.org/doc/samtools-index.html"><code>samtools index</code></a>
+→ BAMインデックス (<code>.bam.bai</code>)</li>
+<li><a href="https://www.htslib.org/doc/samtools-faidx.html"><code>samtools faidx</code></a>
+→ 参照配列インデックス (<code>.fa.fai</code>)</li>
+<li><a href="http://www.htslib.org/doc/bgzip.html"><code>bgzip -i</code></a>
+→ BGZFインデックス (<code>.gz.gzi</code>)</li>
+<li><a href="http://www.htslib.org/doc/tabix.html"><code>tabix</code></a>
+→ タブ区切りゲノムポジションインデックス (<code>.bgz.tbi</code>)<br>
+いろんな形式を扱える(<code>-p gff|bed|sam|vcf</code>)。
+位置順ソート且つbgzip圧縮されている必要がある。</li>
+</ul>
 </li>
 </ul>
 <h3 id="variant-calling">variant calling</h3>
@@ -289,6 +275,68 @@ X: sequence mismatch
 形式は <code>TAG:VTYPE:VALUE</code></p>
 </li>
 </ol>
+<h3 id="cram">CRAM</h3>
+<p><a href="https://www.htslib.org/workflow/cram.html">https://www.htslib.org/workflow/cram.html</a></p>
+<p>参照配列からの差分だけを保持することで、BAMよりもコンパクトになりやすい。
+裏を返せば、このCRAM単体では完結できない操作も出てくるので扱いに注意が必要。
+BAMを置き換えて一般ユーザーの主流になるにはキャッシュの設計がイマイチな気がするけど、
+種数あたりのサンプル数・リード数が多くなるほど恩恵も大きくなるからオッケー、なのかなぁ。</p>
+<h4 id="参照配列を探しに行く優先順位httpswwwhtsliborgdocsamtoolshtmlreference_sequences"><a href="https://www.htslib.org/doc/samtools.html#REFERENCE_SEQUENCES">参照配列を探しに行く優先順位</a></h4>
+<ol>
+<li>samtoolsを呼ぶときの明示的なオプション, e.g., <code>--reference</code>.</li>
+<li><code>M5</code> タグのハッシュ値 → 環境変数 <code>$REF_CACHE</code>.
+<ul>
+<li>次の <code>$REF_PATH</code> 参照でダウンロードが生じた場合の保存先。
+中身は無圧縮の生FASTAなので容量に注意。</li>
+<li>ハッシュ値のプレースホルダ <code>%s</code> を含める。
+<code>%2s/%s</code> のようにするとMD5先頭2文字を消費してディレクトリ構造を作れる。
+これはファイル数が増えすぎて起こる問題を回避するため。</li>
+<li>デフォルトは <code>${XDG_CACHE_HOME}/hts-ref/%2s/%2s/%s</code> or <code>${HOME}/.cache/hts-ref/%2s/%2s/%s</code>.
+見えない場所で勝手に容量が膨らんでいくのも恐ろしいし、
+すぐ消してしまいそうな場所にあるのも恐ろしいので変えたほうがいい。</li>
+</ul>
+</li>
+<li><code>M5</code> タグのハッシュ値 → 環境変数 <code>$REF_PATH</code>.
+<ul>
+<li>普通の <code>PATH</code> と同じようにコロン区切りで <code>$REF_CACHE</code> 同様 <code>%s</code> を含む。</li>
+<li>デフォルトは <code>http://www.ebi.ac.uk/ena/cram/md5/%s</code>.
+つまり <code>REF_PATH</code> が空だと <code>UR</code> タグより先にインターネットに読みに行った挙げ句、
+無圧縮の生FASTAを勝手に保存する凶悪仕様。</li>
+</ul>
+</li>
+<li><code>UR</code> タグに書かれたファイル。ローカルのみ可、リモートは不可。
+無理やり相対パスにすることも可能だが、
+CRAMファイルからではなくコマンド実行時の <code>$PWD</code> からの相対なので実質使えない。</li>
+</ol>
+<h4 id="設定例">設定例</h4>
+<ul>
+<li>
+<p><a href="https://www.ebi.ac.uk/ena">https://www.ebi.ac.uk/ena</a>
+に参照配列があって扱う種数も多くなければ、特に設定せずともそれなりに使える。
+新しい参照配列が必要になるたびに大きめのダウンロードが発生することと、
+それがホーム以下の見えないところに溜まっていくことだけ我慢。</p>
+</li>
+<li>
+<p>参照配列を自分で管理するなら <code>M5</code> を無効化して
+<code>UR</code> のみで運用すればトラフィックやキャッシュの心配が無くなり単純。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">export</span> <span class="nv">REF_CACHE</span><span class="o">=</span>/dev/null
+<span class="nb">export</span> <span class="nv">REF_PATH</span><span class="o">=</span><span class="nv">$REF_CACHE</span>
+</code></pre></div><p>パスの変更などでタグを編集したい場合は
+<a href="https://www.htslib.org/doc/samtools-reheader.html"><code>samtools reheader</code></a> が使える。</p>
+</li>
+<li>
+<p>勝手にEBIを見に行くのは止めたいけど <code>M5</code> は使いたい場合、
+何らかの文字を <code>REF_PATH</code> に入れておけばいい。
+公式例に習って <code>$REF_CACHE</code> を入れておく:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">export</span> <span class="nv">REF_CACHE</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="s2">/db/hts-ref-cache/%2s/%2s/%s&#34;</span>
+<span class="nb">export</span> <span class="nv">REF_PATH</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$REF_CACHE</span><span class="s2">&#34;</span>
+</code></pre></div><p>手元のファイルを <code>REF_CACHE</code> に配置するには付属のスクリプトが使える。
+FASTAに複数の配列が入っていてもMD5は1本ずつ計算される。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">seq_cache_populate.pl -root <span class="si">${</span><span class="nv">REF_CACHE</span><span class="p">%%/</span><span class="se">\%</span><span class="p">*</span><span class="si">}</span> &lt;<span class="o">(</span>gunzip -c genome.fa.gz<span class="o">)</span>
+</code></pre></div><p>大元の参照配列置き場はテキトーに決めてもよくなるけど、
+キャッシュを管理するのもそれはそれで難しそう。</p>
+</li>
+</ul>
 <h2 id="binding">Binding</h2>
 <h3 id="pysam">pysam</h3>
 <p><a href="https://pysam.readthedocs.io/">https://pysam.readthedocs.io/</a></p>
