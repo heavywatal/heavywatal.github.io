@@ -1,6 +1,6 @@
 +++
 title = 'SAMtools'
-subtitle = 'Utilities for the Sequence Alignment/Map (SAM) format'
+subtitle = 'Utilities for the Sequence Alignment/Map (SAM)'
 tags = ["genetics"]
 [menu.main]
   parent = "bio"
@@ -12,102 +12,94 @@ tags = ["genetics"]
 
 <https://www.htslib.org/doc/samtools.html>
 
-### 下ごしらえ
+### 閲覧・要約
 
--   適当な条件でフィルタリング:
+[`view`](https://www.htslib.org/doc/samtools-view.html)
+:   BAM/CRAMをプレーンテキストのSAMとして閲覧:
+    ```sh
+    samtools view -h --no-PG aln.bam | less
+    ```
+    ここで `-h` をつけないとヘッダーが削れてしまうし、
+    `--no-PG` をつけないと元ファイルに含まれていなかった情報
+    (`@PG`) が付加されてしまうので要注意。
+:   BAM/CRAMに変換するのも、リードをフィルターするのもこのコマンド。名前が悪い。
 
-        samtools view -hb -f3 -q2 aln.bam -o filtered.bam
-
--   ソート:
-
-        samtools sort -T tmpsam -@2 -o sorted.bam aln.bam
-
-    一時ファイルの名前なんか適当にユニークに決めてくれたらいいのに、
-    `-T {PREFIX}` を指定しないと使えない。
-
-    デフォルトでは位置でソートされるが、
-    オプション `-n` で名前順(=ペアが隣り合う)にもできる。
-
--   標準入力stdinからパイプする場合は `-` を引数に:
-
-        samtools view -hb -f3 aln.bam | samtools sort -T tmpsam -@2 -o piped.bam
-
--   BAMインデックス作成:
-
-        samtools index aln.bam
-
-    `aln.bam.bai` が書き出される
-
--   参照配列インデックス作成:
-
-        samtools faidx ref.fa
-
-    `tview` や `pileup` などで必要になる
-    `ref.fa.fai` が書き出される
-
--   PCR duplicatesを除去:
-
-        samtools rmdup aln.bam unique.bam
-
-fixmate
-
-### 閲覧
-
--   生のSAMを `less` で閲覧:
-
-        samtools view -h aln.bam | less
-
-    `-o out.sam` とすればファイルに書き出せる。
-
--   マッピングされた形で閲覧:
-
-        samtools tview aln.bam [ref.fa]
-
+[`tview`](https://www.htslib.org/doc/samtools-tview.html)
+:   マッピングされた形でインタラクティブに閲覧:
+    ```sh
+    samtools tview aln.bam [ref.fa]
+    ```
     参照配列を与えると表示方法に選択肢が増える。
     予めインデックスを作っておかなくても初回実行時に
     `faidx` が勝手に走って `ref.fa.fai` が作成される。
+:   ヘルプ: <kbd>shift</kbd><kbd>/</kbd>
+:   ジャンプ: <kbd>g</kbd> または <kbd>/</kbd> して `chr1:10000` のような形式
 
-    ヘルプ
-    :   `shift+/`
-
-    ジャンプ
-    :   `g` または `/`
-        `chr1:10000` のように染色体を付けて
-
--   インデックス作成済みBAMの統計量を表示:
-
-        samtools idxstats aln.bam
-        chr1    249250621       6343976 0
-        chr10   135534747       2407204 0
-        chr11   135006516       3773511 0
-        chr12   133851895       3696141 0
-        ...
-
+[`idxstats`](https://www.htslib.org/doc/samtools-idxstats.html)
+:   インデックス作成済みBAMの統計量を表示:
+    ```
+    chr1    249250621       6343976 0
+    chr10   135534747       2407204 0
+    chr11   135006516       3773511 0
+    chr12   133851895       3696141 0
+    ...
+    ```
     seqnames, seqlengths, mapped reads, unmapped reads
 
--   フラグの要約統計:
+[`flagstat`](https://www.htslib.org/doc/samtools-flagstat.html)
+:   フラグの要約統計:
+    ```
+    65182282 + 0 in total (QC-passed reads + QC-failed reads)
+    6895859 + 0 secondary
+    0 + 0 supplementary
+    0 + 0 duplicates
+    65182282 + 0 mapped (100.00%:nan%)
+    58286423 + 0 paired in sequencing
+    29382202 + 0 read1
+    28904221 + 0 read2
+    52470794 + 0 properly paired (90.02%:nan%)
+    55907370 + 0 with itself and mate mapped
+    2379053 + 0 singletons (4.08%:nan%)
+    456098 + 0 with mate mapped to a different chr
+    169500 + 0 with mate mapped to a different chr (mapQ>=5)
+    ```
 
-        samtools flagstat aln.bam
-        65182282 + 0 in total (QC-passed reads + QC-failed reads)
-        6895859 + 0 secondary
-        0 + 0 supplementary
-        0 + 0 duplicates
-        65182282 + 0 mapped (100.00%:nan%)
-        58286423 + 0 paired in sequencing
-        29382202 + 0 read1
-        28904221 + 0 read2
-        52470794 + 0 properly paired (90.02%:nan%)
-        55907370 + 0 with itself and mate mapped
-        2379053 + 0 singletons (4.08%:nan%)
-        456098 + 0 with mate mapped to a different chr
-        169500 + 0 with mate mapped to a different chr (mapQ>=5)
 
--   サイトごとのdepthをタブ区切りで:
+### 下ごしらえ
 
-        samtools depth aln.bam
-        chr1 12345 1
-        chr1 12346 1
-        ...
+-   PCR duplicatesを除去
+    1. [`samtools collate`](https://www.htslib.org/doc/samtools-collate.html)
+       でリード名ごとに並べる。
+       順番は関係ないので `sort -n` より `collate` のほうが効率的。
+       アラインメント直後は大概こうなっていて省略可能。
+    1. [`samtools fixmate -m`](https://www.htslib.org/doc/samtools-fixmate.html)
+       で `MC`, `ms` タグを付加。
+    1. [`samtools sort`](https://www.htslib.org/doc/samtools-sort.html)
+       で位置順にソート。
+    1. [`samtools markdup -r`](https://www.htslib.org/doc/samtools-markdup.html)
+       で重複を除去。
+
+-   適当な条件でフィルタリング:
+    ```
+    samtools view -hb -f3 -q2 aln.bam -o filtered.bam
+    ```
+
+-   [`bgzip`](http://www.htslib.org/doc/bgzip.html)でFASTAやGFFを圧縮。
+    インデックス(`.gzi`)を利用して部分的に展開して高速アクセスすることが可能。
+    普通の `gzip` としても展開可能。
+    拡張子はデフォルトで `.gz` だけど `.bgz` にすることもある。
+
+-   インデックス作成:
+    - [`samtools index`](https://www.htslib.org/doc/samtools-index.html)
+      → BAMインデックス (`.bam.bai`)
+    - [`samtools faidx`](https://www.htslib.org/doc/samtools-faidx.html)
+      → 参照配列インデックス (`.fa.fai`)
+    - [`bgzip -i`](http://www.htslib.org/doc/bgzip.html)
+      → BGZFインデックス (`.gz.gzi`)
+    - [`tabix`](http://www.htslib.org/doc/tabix.html)
+      → タブ区切りゲノムポジションインデックス (`.bgz.tbi`)<br>
+      いろんな形式を扱える(`-p gff|bed|sam|vcf`)。
+      位置順ソート且つbgzip圧縮されている必要がある。
 
 ### variant calling
 
@@ -196,6 +188,68 @@ bcftools mpileup -f ref.fa aln.bam | bcftools call -mv -Ob -o calls.bcf
 1. `QUAL`: 塩基クオリティ
 1. それ以降はマッパー依存。
     形式は `TAG:VTYPE:VALUE`
+
+### CRAM
+
+<https://www.htslib.org/workflow/cram.html>
+
+参照配列からの差分だけを保持することで、BAMよりもコンパクトになりやすい。
+裏を返せば、このCRAM単体では完結できない操作も出てくるので扱いに注意が必要。
+BAMを置き換えて一般ユーザーの主流になるにはキャッシュの設計がイマイチな気がするけど、
+種数あたりのサンプル数・リード数が多くなるほど恩恵も大きくなるからオッケー、なのかなぁ。
+
+#### [参照配列を探しに行く優先順位](https://www.htslib.org/doc/samtools.html#REFERENCE_SEQUENCES)
+
+1.  samtoolsを呼ぶときの明示的なオプション, e.g., `--reference`.
+1.  `M5` タグのハッシュ値 → 環境変数 `$REF_CACHE`.
+    - 次の `$REF_PATH` 参照でダウンロードが生じた場合の保存先。
+      中身は無圧縮の生FASTAなので容量に注意。
+    - ハッシュ値のプレースホルダ `%s` を含める。
+      `%2s/%s` のようにするとMD5先頭2文字を消費してディレクトリ構造を作れる。
+      これはファイル数が増えすぎて起こる問題を回避するため。
+    - デフォルトは `${XDG_CACHE_HOME}/hts-ref/%2s/%2s/%s` or `${HOME}/.cache/hts-ref/%2s/%2s/%s`.
+      見えない場所で勝手に容量が膨らんでいくのも恐ろしいし、
+      すぐ消してしまいそうな場所にあるのも恐ろしいので変えたほうがいい。
+1.  `M5` タグのハッシュ値 → 環境変数 `$REF_PATH`.
+    - 普通の `PATH` と同じようにコロン区切りで `$REF_CACHE` 同様 `%s` を含む。
+    - デフォルトは `http://www.ebi.ac.uk/ena/cram/md5/%s`.
+      つまり `REF_PATH` が空だと `UR` タグより先にインターネットに読みに行った挙げ句、
+      無圧縮の生FASTAを勝手に保存する凶悪仕様。
+1.  `UR` タグに書かれたファイル。ローカルのみ可、リモートは不可。
+    無理やり相対パスにすることも可能だが、
+    CRAMファイルからではなくコマンド実行時の `$PWD` からの相対なので実質使えない。
+
+#### 設定例
+
+-   <https://www.ebi.ac.uk/ena>
+    に参照配列があって扱う種数も多くなければ、特に設定せずともそれなりに使える。
+    新しい参照配列が必要になるたびに大きめのダウンロードが発生することと、
+    それがホーム以下の見えないところに溜まっていくことだけ我慢。
+
+-   参照配列を自分で管理するなら `M5` を無効化して
+    `UR` のみで運用すればトラフィックやキャッシュの心配が無くなり単純。
+    ```sh
+    export REF_CACHE=/dev/null
+    export REF_PATH=$REF_CACHE
+    ```
+    パスの変更などでタグを編集したい場合は
+    [`samtools reheader`](https://www.htslib.org/doc/samtools-reheader.html) が使える。
+
+-   勝手にEBIを見に行くのは止めたいけど `M5` は使いたい場合、
+    何らかの文字を `REF_PATH` に入れておけばいい。
+    公式例に習って `$REF_CACHE` を入れておく:
+    ```sh
+    export REF_CACHE="${HOME}/db/hts-ref-cache/%2s/%2s/%s"
+    export REF_PATH="$REF_CACHE"
+    ```
+    手元のファイルを `REF_CACHE` に配置するには付属のスクリプトが使える。
+    FASTAに複数の配列が入っていてもMD5は1本ずつ計算される。
+    ```sh
+    seq_cache_populate.pl -root ${REF_CACHE%%/\%*} <(gunzip -c genome.fa.gz)
+    ```
+    大元の参照配列置き場はテキトーに決めてもよくなるけど、
+    キャッシュを管理するのもそれはそれで難しそう。
+
 
 ## Binding
 
