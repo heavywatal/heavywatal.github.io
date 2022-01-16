@@ -36,13 +36,11 @@ Restart
 Shut Down
 :   <kbd>⌃control</kbd><kbd>⌥option</kbd><kbd>⌘command</kbd><kbd>⏏︎eject</kbd>
 
-Cocoaアプリのキーバインドを変更
-:   `~/Library/KeyBindings/DefaultKeyBinding.dict`
 
 ### Display Brightness
 
 明るさ調整の<kbd>🔅<sub>F1</sub></kbd><kbd>🔆<sub>F2</sub></kbd>キーは通常iMacやMacBookにのみ有効で、外部ディスプレイには効かない。
-[ExternalDisplayBrightness](https://github.com/fnesveda/ExternalDisplayBrightness/)
+[MonitorControl](https://github.com/MonitorControl/MonitorControl)
 というアプリを用いることで外部ディスプレイもキーボードで調節できるようになる。
 
 
@@ -56,6 +54,7 @@ Key Repeat & Delay Until Repeat を最速にする
 
 ショートカットはデフォルト設定を使う
 :   Shortcuts > Restore Defaults (左の項目ごとに、全部)
+:   まっさらセットアップ直後に Restore Defaults を押して変わるところがあるのは謎。
 
 ### US Keyboard
 
@@ -71,14 +70,11 @@ Key Repeat & Delay Until Repeat を最速にする
 ひらがな入力
 :   <kbd>⌃control</kbd><kbd>⇧shift</kbd><kbd>j</kbd>
 
-[⌘英かな](https://github.com/iMasanari/cmd-eikana)
-もしくは
-[Karabiner-Elements](https://pqrs.org/osx/karabiner/)
-を使うことで左右の<kbd>⌘command</kbd>で入力言語切り替えができるようになる。
-ただし、前者は頻繁に落ちるためアプリ再起動を要し、
-後者は他の設定に干渉する上に反応が遅い。
-また、画面共有やVirtualBoxでの<kbd>⌘command</kbd>の挙動が厄介になる。
-ということで結局どちらも使わない。
+[Karabiner-Elements](https://github.com/pqrs-org/Karabiner-Elements)
+を使うことで左右の<kbd>⌘command</kbd>単体押下を
+<kbd>英数</kbd><kbd>かな</kbd>として扱えるようになる。
+が、<kbd>⌃control</kbd><kbd>space</kbd>も慣れればそれほど面倒じゃなくなる。
+
 
 ### Input Sources
 
