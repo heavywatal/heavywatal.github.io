@@ -93,66 +93,79 @@ setuptools — Pythonパッケージ作成
 <li><a href="https://docs.python.org/3/tutorial/modules.html">https://docs.python.org/3/tutorial/modules.html</a></li>
 <li><a href="https://docs.python.org/3/reference/import.html">https://docs.python.org/3/reference/import.html</a></li>
 <li><a href="https://packaging.python.org/">https://packaging.python.org/</a></li>
-<li><a href="https://setuptools.readthedocs.io/">https://setuptools.readthedocs.io/</a></li>
+<li><a href="https://setuptools.pypa.io/">https://setuptools.pypa.io/</a></li>
 </ul>
 <h2 id="ファイル構成">ファイル構成</h2>
 <p>GitHubやローカルの開発環境から <code>pip</code> で直接インストールできる形。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">pywtl/
 ├── LICENSE
 ├── README.md
-├── entry_points.cfg
-├── setup.cfg
-├── setup.py
+├── pyproject.toml
 └── wtl/
-    ├── __init__.py
-    └── hello.py
+    ├── __init__.py
+    └── hello.py
 </code></pre></div><p>リポジトリ名(<code>pywtl</code>)とパッケージ名(<code>wtl</code>)は必ずしも一致してなくてもよい。
-ローカルからのインストールは <code>-e,--editable</code>
-オプションを付けることで余計なコピーを減らせるっぽい。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">pip install -v -e ~/git/pywtl/
-pip install -v git+https://github.com/heavywatal/pywtl.git
+開発向けの <code>-e,--editable</code> オプションをつけたローカルインストールではコピーが起こらず、
+編集後に再インストールしなくてもそのまま反映される。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">pip install -v --user -e ~/git/pywtl/
 python -m wtl.hello
-</code></pre></div><h3 id="setuppy"><code>setup.py</code></h3>
-<p>新しいsetuptoolsでは <code>setup.cfg</code> の設定を読み込んでくれるので、
+</code></pre></div><h3 id="pyprojecttoml"><code>pyproject.toml</code></h3>
+<p><code>setuptools</code> に依存しない形式として
+<a href="https://www.python.org/dev/peps/pep-0517">PEP 517</a>,
+<a href="https://www.python.org/dev/peps/pep-0621">PEP 621</a>
+で決められた。
+<a href="https://flit.readthedocs.io/">PyPA/Flit</a> (setuptools後継？),
+<a href="https://pdm.fming.dev/">PDM</a>,
+<a href="https://python-poetry.org/">Poetry</a>,
+など後発のツールは大概このファイルだけ書けば済む。</p>
+<p><code>setuptools</code> は未対応なので書けるのはこれだけ:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="p">[</span><span class="nx">build-system</span><span class="p">]</span>
+<span class="nx">requires</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;setuptools&#34;</span><span class="p">,</span> <span class="s2">&#34;wheel&#34;</span><span class="p">]</span>
+<span class="nx">build-backend</span> <span class="p">=</span> <span class="s2">&#34;setuptools.build_meta&#34;</span>
+</code></pre></div><p>残りの項目は <code>setup.cfg</code> へ。</p>
+<h3 id="setuppy"><code>setup.py</code></h3>
+<p><code>setup.cfg</code> の設定を読んでくれるようになってからは
 <code>setup()</code> の引数にいろいろ渡す必要は無くなった。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
 <span class="n">setup</span><span class="p">()</span>
-</code></pre></div><h3 id="setupcfg"><code>setup.cfg</code></h3>
-<p><a href="https://setuptools.readthedocs.io/en/latest/setuptools.html#configuring-setup-using-setup-cfg-files">https://setuptools.readthedocs.io/en/latest/setuptools.html#configuring-setup-using-setup-cfg-files</a></p>
+</code></pre></div><p>さらに新しいバージョンではこれすらも不要になった。
+ただしこれが無いと <code>pip install --editable</code> がサポートされないらしい。</p>
+<h3 id="setupcfg"><code>setup.cfg</code></h3>
+<p><a href="https://setuptools.pypa.io/en/latest/userguide/declarative_config.html">https://setuptools.pypa.io/en/latest/userguide/declarative_config.html</a></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[metadata]</span>
 <span class="na">name</span> <span class="o">=</span> <span class="s">wtl</span>
 <span class="na">version</span> <span class="o">=</span> <span class="s">attr: wtl.__version__</span>
 <span class="na">url</span> <span class="o">=</span> <span class="s">https://github.com/heavywatal/pywtl</span>
 <span class="na">author</span> <span class="o">=</span> <span class="s">Watal M. Iwasaki</span>
 <span class="na">author_email</span> <span class="o">=</span> <span class="s">heavywatal@gmail.com</span>
-<span class="na">license_file</span> <span class="o">=</span> <span class="s">LICENSE</span>
+<span class="na">license_files</span> <span class="o">=</span> <span class="s">LICENSE</span>
 <span class="na">description</span> <span class="o">=</span> <span class="s">wtl: Personal Python package</span>
 <span class="na">long_description</span> <span class="o">=</span> <span class="s">file: README.md</span>
+<span class="na">long_description_content_type</span> <span class="o">=</span> <span class="s">text/markdown</span>
 
 <span class="k">[options]</span>
-<span class="na">zip_safe</span> <span class="o">=</span> <span class="s">False</span>
-<span class="na">packages</span> <span class="o">=</span> <span class="s">find:</span>
 <span class="na">install_requires</span> <span class="o">=</span><span class="s">
 </span><span class="s">  psutil
 </span><span class="s">  requests</span>
+<span class="na">python_requires</span> <span class="o">=</span> <span class="s">&gt;=3.9</span>
 <span class="na">entry_points</span> <span class="o">=</span> <span class="s">file: entry_points.cfg</span>
-</code></pre></div><p><code>version</code> を書くべき場所が複数あって悩ましかったけど
-<code>attr:</code> や <code>file:</code> がサポートされて一括管理可能になった。
-(Thanks, <a href="https://twitter.com/sgryjp">@sgryjp</a>-san!)</p>
-<p><code>license = MIT</code> のように文字列で済ませることも可能。</p>
-<p>依存パッケージを列挙する <code>install_requires</code> はセミコロン区切りで1行に収めることも可能。
-それらは <code>pip install</code> で自動的にインストールされ、
-その後アンインストールするとそれを使わないモジュールでさえ
-<code>distribution was not found and is required</code>
-などと怒って動いてくれなくなるくらい強制力が強い。</p>
-<p><code>requirements.txt</code> はsetuptoolsではなくpipの機能で、
+<span class="na">packages</span> <span class="o">=</span> <span class="s">find:</span>
+</code></pre></div><p><code>version</code> は <code>__init__.py</code> に <code>__version__ = &quot;0.1.0&quot;</code>
+などと書いてあるものを参照できる。
+比較したいときは
+<a href="https://packaging.pypa.io/en/latest/version.html"><code>packaging.version.parse()</code></a>
+を利用する。</p>
+<p><code>install_requires</code> に列挙された依存パッケージは
+<code>pip install</code> で自動的にインストールされる。
+一方 <code>requirements.txt</code> はsetuptoolsではなくpipの機能で、
 能動的に <code>pip install -r requirements.txt</code>
 を打たなきゃインストールされないし、
 そこに列挙されたパッケージが本当に必要になるまで怒られない。</p>
 <h3 id="entry_points"><code>entry_points</code></h3>
 <ul>
-<li><a href="https://setuptools.readthedocs.io/en/latest/setuptools.html#automatic-script-creation">https://setuptools.readthedocs.io/en/latest/setuptools.html#automatic-script-creation</a></li>
-<li><a href="https://packaging.python.org/distributing/#entry-points">https://packaging.python.org/distributing/#entry-points</a></li>
+<li><a href="https://setuptools.pypa.io/en/latest/userguide/quickstart.html#automatic-package-discovery">https://setuptools.pypa.io/en/latest/userguide/quickstart.html#automatic-package-discovery</a></li>
+<li><a href="https://setuptools.pypa.io/en/latest/userguide/entry_point.html">https://setuptools.pypa.io/en/latest/userguide/entry_point.html</a></li>
+<li><a href="https://setuptools.pypa.io/en/latest/pkg_resources.html#entry-points">https://setuptools.pypa.io/en/latest/pkg_resources.html#entry-points</a></li>
 </ul>
 <p>用途はいろいろあるけど
 <code>${prefix}/bin/</code> に実行可能ファイルを配置するのによく使われる。
@@ -169,9 +182,8 @@ python -m wtl.hello
 <dt><code>wtl/__init__.py</code></dt>
 <dd>このディレクトリがひとつのパッケージであることを示すファイル。
 空でもいいし、初期化処理やオブジェクトを記述してもよい。
-文字列変数 <code>__version__ = '0.1.2'</code> を定義して
-<code>wtl.__verison__</code> のように参照できるようにしておくのが慣例。
-それを <code>setup.cfg</code> から参照することで冗長性を抑えられる。</dd>
+文字列変数 <code>__version__ = &quot;0.1.2&quot;</code> を定義して
+<code>wtl.__verison__</code> のように参照できるようにしておくのが慣例。</dd>
 </dl>
 <p><code>wtl/hello.py</code></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="s2">&#34;&#34;&#34;Sample module
@@ -180,29 +192,24 @@ python -m wtl.hello
 
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="kn">import</span> <span class="nn">getpass</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Hello, &#39;</span> <span class="o">+</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getuser</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;!&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;Hello, &#34;</span> <span class="o">+</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getuser</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&#34;!&#34;</span><span class="p">)</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
 </code></pre></div><h3 id="manifestin"><code>MANIFEST.in</code></h3>
 <p>Pythonモジュール以外で配布物に含めたいもの、除外したいものがあれば
 <code>include</code>, <code>recursive-include</code>, <code>exclude</code>
 で指定する。</p>
-<h2 id="setuptools">setuptools</h2>
-<p><a href="https://setuptools.readthedocs.io/en/latest/setuptools.html#command-reference">Command Reference</a></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">python setup.py --help
-python setup.py --help-commands
-python setup.py ^i  <span class="c1"># zsh completion</span>
-
-<span class="c1"># 開発中に使う</span>
-python setup.py build
-python setup.py clean
-python setup.py check
-
-<span class="c1"># 配布できる形に固める</span>
-python setup.py sdist
-python setup.py bdist_wheel
+<h2 id="コマンド">コマンド</h2>
+<p>以前は
+<a href="https://setuptools.pypa.io/en/latest/userguide/commands.html"><code>setup.py</code></a>
+を使って操作してたけどそれは廃れつつある。
+最小限のビルド機能は
+<a href="https://pypa-build.readthedocs.io/"><code>build</code></a> パッケージに引き継がれた。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">pip install build
+python3 -m build --help
+python3 -m build
 </code></pre></div>
 </article>
 </main>
