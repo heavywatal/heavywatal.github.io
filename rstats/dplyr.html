@@ -498,13 +498,20 @@ e.g. <code>summarize()</code>, <code>slice()</code>, <code>tally()</code>, <code
 <dd>入れ子 data.frame を作る。
 <code>group_by(...) %&gt;% tidyr::nest()</code> のショートカット。</dd>
 <dt><code>dplyr::group_split(.tbl, ..., keep = FALSE)</code></dt>
-<dd>list of data.frames に分割する。</dd>
+<dd>list of data.frames に分割する。
+<code>.tbl %&gt;% split(.$group)</code> と同等だが、
+ドットダラーを使わくて済むし複数列をキーにするのも簡単。</dd>
 <dt><code>dplyr::group_indices(.data, ...)</code></dt>
 <dd><code>grouped_df</code> ではなくグループIDとして1からの整数列を返す版 <code>group_by()</code></dd>
 <dt><code>dplyr::group_modify(.tbl, .f, ...)</code></dt>
 <dd>グループごとに <code>.f</code> を適用して再結合したdata.frameを返す。</dd>
-<dd><code>.f</code> には<a href="/rstats/purrr.html#無名関数">purrrでよく見る無名関数</a>を渡す。
-(普通の関数も渡せるはずだけどちょっと挙動が変？)
+<dd><code>.f</code> は2つの引数をとる関数。
+1つめは区切られたdata.frame、
+2つめはグループ化のキー(となった列を含む1行のdata.frame)。</dd>
+<dd>引数が1つだったり、違うものを2つめに受け取る関数はそのままじゃ渡せないので、
+<a href="/rstats/purrr.html#無名関数">purrrでよく見る無名関数</a>
+に包んで渡す。
+このとき2つの引数はそれぞれ <code>.x</code>, <code>.y</code> として参照できる。
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_modify</span><span class="p">(</span><span class="o">~</span> <span class="nf">head</span><span class="p">(</span><span class="n">.x</span><span class="p">,</span> <span class="m">2L</span><span class="p">))</span>
 <span class="c1">#          cut carat color clarity depth table price     x     y     z</span>
 <span class="c1">#  1      Fair  0.22     E     VS2  65.1    61   337  3.87  3.78  2.49</span>
