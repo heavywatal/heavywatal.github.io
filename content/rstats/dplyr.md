@@ -519,14 +519,21 @@ diamonds %>%
 
 `dplyr::group_split(.tbl, ..., keep = FALSE)`
 :   list of data.frames に分割する。
+    `.tbl %>% split(.$group)` と同等だが、
+    ドットダラーを使わくて済むし複数列をキーにするのも簡単。
 
 `dplyr::group_indices(.data, ...)`
 :   `grouped_df` ではなくグループIDとして1からの整数列を返す版 `group_by()`
 
 `dplyr::group_modify(.tbl, .f, ...)`
 :   グループごとに `.f` を適用して再結合したdata.frameを返す。
-:   `.f` には[purrrでよく見る無名関数]({{< relref "purrr.md#無名関数" >}})を渡す。
-    (普通の関数も渡せるはずだけどちょっと挙動が変？)
+:   `.f` は2つの引数をとる関数。
+    1つめは区切られたdata.frame、
+    2つめはグループ化のキー(となった列を含む1行のdata.frame)。
+:   引数が1つだったり、違うものを2つめに受け取る関数はそのままじゃ渡せないので、
+    [purrrでよく見る無名関数]({{< relref "purrr.md#無名関数" >}})
+    に包んで渡す。
+    このとき2つの引数はそれぞれ `.x`, `.y` として参照できる。
 
     ```r
     diamonds %>% dplyr::group_by(cut) %>% dplyr::group_modify(~ head(.x, 2L))
