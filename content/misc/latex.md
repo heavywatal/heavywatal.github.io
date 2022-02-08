@@ -50,7 +50,7 @@ TeX Liveの新パージョンが年1回リリースされるので、そのと�
     open hello.pdf
     ```
 
-   MacTeXに含まれるTeXShopというアプリを使えば、
+   MacTeXに含まれるTeXShopというアプリを使えば、
    原稿書きからコンパイルまで面倒を見てもらえるので、
    ターミナルにコマンドを打ち込む必要はないらしい。
 
@@ -322,35 +322,54 @@ GIFアニメをそのまま埋め込むことはできないので、
 1.  [Bibdesk](https://bibdesk.sourceforge.io/)
     などの文献管理アプリでbibtex形式の文献リストを作る。
     e.g., `mybibdata.bib`
-1.  コマンドにcite keyを入れて本文に挿入。
-    このとき標準の `\cite` ではなく `{natbib}` のものを使う。
+1.  プリアンブルで [{natbib}](https://ctan.org/pkg/natbib) を呼び出し、スタイルを指定。
     ```latex
-    \usepackage[authoryear,round,sort&compress]{natbib}
-    %%%
-
-    \citet{hudson1987g}         # Hudson et al. (1987)
-    \citep{hudson1987g}         # (Hudson et al. 1987)
-    \citep*{hudson1987g}        # (Hudson, Kreitman and Aguadé, 1987)
-    \citep[eq. 5]{hudson1987g}  # (Hudson et al. 1987, eq. 5)
-    \citep[see][]{hudson1987g}  # (see Hudson et al. 1987)
+    \usepackage[authoryear,round]{natbib}
+    \bibliographystyle{abbrvnat}
     ```
+    スタイルとして `{natbib}` の `abbrvnat` や `unsrtnat` をそのまま使うことはまれで、
+    各Journalの提供する、あるいは有志の作る `.bst` ファイルをダウンロードして使う。
+
+    `latex makebst` コマンドから質問に答えて新規作成することも可能。
+    後で間違いに気付いた場合、イチからやり直すより中間ファイルの
+    `.dbj` ファイルを編集して `latex *.dbj` で `.bst` を生成すると早い。
+    `.bst` そのものを読み解いて編集することも不可能ではない。
+
+1.  LaTeX本文にcite keyを挿入。標準の `\cite` は使わない。
+
+    comand | `authoryear,round` | `numbers`
+    ---- | ---- | ----
+    `\citet{hudson1987g}`        | Hudson et al. (1987)  | Hudson et al. [42]
+    `\citep{hudson1987g}`        | (Hudson et al., 1987) | [42]
+    `\citealt{hudson1987g}`      | Hudson et al. 1987    | Hudson et al. 42
+    `\citealp{hudson1987g}`      | Hudson et al., 1987   | 42
+    `\citeauthor{hudson1987g}`   | Hudson et al.         | Hudson et al.
+    `\citeyear{hudson1987g}`     | 1987                  | 1987
+    `\citenum{hudson1987g}`      | 42                    | 42
+    `\citep[eq. 5]{hudson1987g}` | (Hudson et al., 1987, eq. 5) | [42, eq. 5]
+    `\citep[see][]{hudson1987g}` | (see Hudson et al., 1987) | [see 42]
+    `\citet*{hudson1987g}`       | Hudson, Kreitman, and Aguadé (1987) | Hudson, Kreitman, and Aguadé [42]
+    `\citep*{hudson1987g}`       | (Hudson, Kreitman, and Aguadé, 1987) | [42]
+
+    デフォルトは `authoryear,round,semicolon` だが
+    `\bibliographystyle{}` 次第で括弧が勝手に `square` になったりする。
+
+    "et al., 1987" の間のカンマを取りたい、といった微調整は
+    `\bibpunct{(}{)}{;}{a}{}{,}` のようにする。
 
 1.  最後の方に文献リストを挿入:
     ```latex
-    \bibliographystyle{abbrvnat}
     \bibliography{mybibdata}
     ```
 
-    スタイルを規定する `bst` ファイルはだいたい各Journalで提供してくれる。
-
-1.  元の `tex` をコンパイルして `aux` を生成
-1.  `bibtex` に `aux` を渡して `bbl` を生成
-1.  再び `tex` をコンパイルすると `bbl` を踏まえて `aux` が更新される。
+1.  元の `.tex` をコンパイルして `.aux` を生成
+1.  `bibtex` に `.aux` を渡して `.bbl` を生成
+1.  再び `.tex` をコンパイルすると `.bbl` を踏まえて `.aux` が更新される。
     (このときPDF出力すると、文献リストはできるけど引用部分はハテナ?になる)
 1.  さらにもう1回コンパイルして完成
 
 最初の2回は `pdflatex -draftmode` としてPDF出力を省略すると早い。
-適切な `Makefile` を書いて自動化するべし。
+適切な `Makefile` を書いて自動化すると楽で、
 [latexmk](#latexmk) を使うともっと楽ちん。
 
 
@@ -455,7 +474,7 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 
 -   OS上にあるOTFフォントがそのまま使える
 -   pdfTeXの後継として、今後のスタンダードと目される
--   [`luatexja`](https://www.ctan.org/pkg/luatexja) が精力的に開発されている
+-   [{luatexja}](https://www.ctan.org/pkg/luatexja) が精力的に開発されている
 -   動作が遅い
 
 
@@ -485,27 +504,27 @@ Computer Modern
     数式は Computer Modern のまま。
 
 {txfonts}
-:   `times` の改良版？
+:   {times} の改良版？
     数式も Times にする。
     直接は使わない。
 
-[`newtx`](https://www.ctan.org/pkg/newtx)
-:   `txfonts` の後継で現役。
+[{newtx}](https://www.ctan.org/pkg/newtx)
+:   {txfonts} の後継で現役。
     本文と数式を別々に指定できる。
     `\usepackage[libertine]{newtxmath}` とすると Libertine を数式に使える。
     インストールするときは `newtx` だけでなく
     `txfonts` と `boondox` も入れないと
     `Unable to find TFM file` と怒られる。
 
-[`newpx`](https://www.ctan.org/pkg/newpx)
-:   `newtx`と同等の機能を美しいPalatinoで。
-    `palatino`, `pxfonts`, `newtx`,
-    [`tex-gyre-pagella`](https://www.ctan.org/pkg/tex-gyre-pagella),
-    [`tex-gyre-math-pagella`](https://www.ctan.org/pkg/tex-gyre-math-pagella) も入れておく。
+[{newpx}](https://www.ctan.org/pkg/newpx)
+:   {newtx}と同等の機能を美しいPalatinoで。
+    {palatino}, {pxfonts}, {newtx},
+    [{tex-gyre-pagella}](https://www.ctan.org/pkg/tex-gyre-pagella),
+    [{tex-gyre-math-pagella}](https://www.ctan.org/pkg/tex-gyre-math-pagella) も入れておく。
     **TeX Gyre Pagella** はOpenType志向のPalatinoクローン。
 
-[`libertinus`](https://www.ctan.org/pkg/libertinus)
-:   美しい[`Linux Libertine`](https://www.ctan.org/pkg/libertine)の後継プロジェクト。
+[{libertinus}](https://www.ctan.org/pkg/libertinus)
+:   美しい[Linux Libertine](https://www.ctan.org/pkg/libertine)の後継プロジェクト。
     type1もOTFも数式もサポートしていて便利だがひと回り小さいことに注意。
     使うときは `\usepackage{libertinus}` でよしなにやってくれるらしいが
     依存パッケージのインストールは例によって手動:
