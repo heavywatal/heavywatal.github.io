@@ -130,7 +130,7 @@ Hello, World!
 open hello.pdf
 </code></pre></div></li>
 </ol>
-<p>MacTeXに含まれるTeXShopというアプリを使えば、
+<p>MacTeXに含まれるTeXShopというアプリを使えば、
 原稿書きからコンパイルまで面倒を見てもらえるので、
 ターミナルにコマンドを打ち込む必要はないらしい。</p>
 <h4 id="latexmk"><code>latexmk</code></h4>
@@ -345,31 +345,101 @@ twocolumnの文書内で <code>\textwidth</code> まで広げたい場合は
 e.g., <code>mybibdata.bib</code></p>
 </li>
 <li>
-<p>コマンドにcite keyを入れて本文に挿入。
-このとき標準の <code>\cite</code> ではなく <code>{natbib}</code> のものを使う。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="k">\usepackage</span><span class="na">[authoryear,round,sort&amp;compress]</span><span class="nb">{</span>natbib<span class="nb">}</span>
-<span class="c">%%%
-</span><span class="c"></span>
-<span class="k">\citet</span><span class="nb">{</span>hudson1987g<span class="nb">}</span>         # Hudson et al. (1987)
-<span class="k">\citep</span><span class="nb">{</span>hudson1987g<span class="nb">}</span>         # (Hudson et al. 1987)
-<span class="k">\citep*</span><span class="nb">{</span>hudson1987g<span class="nb">}</span>        # (Hudson, Kreitman and Aguadé, 1987)
-<span class="k">\citep</span><span class="na">[eq. 5]</span><span class="nb">{</span>hudson1987g<span class="nb">}</span>  # (Hudson et al. 1987, eq. 5)
-<span class="k">\citep</span><span class="na">[see][]</span><span class="nb">{</span>hudson1987g<span class="nb">}</span>  # (see Hudson et al. 1987)
-</code></pre></div></li>
+<p>プリアンブルで <a href="https://ctan.org/pkg/natbib">{natbib}</a> を呼び出し、スタイルを指定。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="k">\usepackage</span><span class="na">[authoryear,round]</span><span class="nb">{</span>natbib<span class="nb">}</span>
+<span class="k">\bibliographystyle</span><span class="nb">{</span>abbrvnat<span class="nb">}</span>
+</code></pre></div><p>スタイルとして <code>{natbib}</code> の <code>abbrvnat</code> や <code>unsrtnat</code> をそのまま使うことはまれで、
+各Journalの提供する、あるいは有志の作る <code>.bst</code> ファイルをダウンロードして使う。</p>
+<p><code>latex makebst</code> コマンドから質問に答えて新規作成することも可能。
+後で間違いに気付いた場合、イチからやり直すより中間ファイルの
+<code>.dbj</code> ファイルを編集して <code>latex *.dbj</code> で <code>.bst</code> を生成すると早い。
+<code>.bst</code> そのものを読み解いて編集することも不可能ではない。</p>
+</li>
+<li>
+<p>LaTeX本文にcite keyを挿入。標準の <code>\cite</code> は使わない。</p>
+<table>
+<thead>
+<tr>
+<th>comand</th>
+<th><code>authoryear,round</code></th>
+<th><code>numbers</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\citet{hudson1987g}</code></td>
+<td>Hudson et al. (1987)</td>
+<td>Hudson et al. [42]</td>
+</tr>
+<tr>
+<td><code>\citep{hudson1987g}</code></td>
+<td>(Hudson et al., 1987)</td>
+<td>[42]</td>
+</tr>
+<tr>
+<td><code>\citealt{hudson1987g}</code></td>
+<td>Hudson et al. 1987</td>
+<td>Hudson et al. 42</td>
+</tr>
+<tr>
+<td><code>\citealp{hudson1987g}</code></td>
+<td>Hudson et al., 1987</td>
+<td>42</td>
+</tr>
+<tr>
+<td><code>\citeauthor{hudson1987g}</code></td>
+<td>Hudson et al.</td>
+<td>Hudson et al.</td>
+</tr>
+<tr>
+<td><code>\citeyear{hudson1987g}</code></td>
+<td>1987</td>
+<td>1987</td>
+</tr>
+<tr>
+<td><code>\citenum{hudson1987g}</code></td>
+<td>42</td>
+<td>42</td>
+</tr>
+<tr>
+<td><code>\citep[eq. 5]{hudson1987g}</code></td>
+<td>(Hudson et al., 1987, eq. 5)</td>
+<td>[42, eq. 5]</td>
+</tr>
+<tr>
+<td><code>\citep[see][]{hudson1987g}</code></td>
+<td>(see Hudson et al., 1987)</td>
+<td>[see 42]</td>
+</tr>
+<tr>
+<td><code>\citet*{hudson1987g}</code></td>
+<td>Hudson, Kreitman, and Aguadé (1987)</td>
+<td>Hudson, Kreitman, and Aguadé [42]</td>
+</tr>
+<tr>
+<td><code>\citep*{hudson1987g}</code></td>
+<td>(Hudson, Kreitman, and Aguadé, 1987)</td>
+<td>[42]</td>
+</tr>
+</tbody>
+</table>
+<p>デフォルトは <code>authoryear,round,semicolon</code> だが
+<code>\bibliographystyle{}</code> 次第で括弧が勝手に <code>square</code> になったりする。</p>
+<p>&ldquo;et al., 1987&rdquo; の間のカンマを取りたい、といった微調整は
+<code>\bibpunct{(}{)}{;}{a}{}{,}</code> のようにする。</p>
+</li>
 <li>
 <p>最後の方に文献リストを挿入:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="k">\bibliographystyle</span><span class="nb">{</span>abbrvnat<span class="nb">}</span>
-<span class="k">\bibliography</span><span class="nb">{</span>mybibdata<span class="nb">}</span>
-</code></pre></div><p>スタイルを規定する <code>bst</code> ファイルはだいたい各Journalで提供してくれる。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="k">\bibliography</span><span class="nb">{</span>mybibdata<span class="nb">}</span>
+</code></pre></div></li>
+<li>
+<p>元の <code>.tex</code> をコンパイルして <code>.aux</code> を生成</p>
 </li>
 <li>
-<p>元の <code>tex</code> をコンパイルして <code>aux</code> を生成</p>
+<p><code>bibtex</code> に <code>.aux</code> を渡して <code>.bbl</code> を生成</p>
 </li>
 <li>
-<p><code>bibtex</code> に <code>aux</code> を渡して <code>bbl</code> を生成</p>
-</li>
-<li>
-<p>再び <code>tex</code> をコンパイルすると <code>bbl</code> を踏まえて <code>aux</code> が更新される。
+<p>再び <code>.tex</code> をコンパイルすると <code>.bbl</code> を踏まえて <code>.aux</code> が更新される。
 (このときPDF出力すると、文献リストはできるけど引用部分はハテナ?になる)</p>
 </li>
 <li>
@@ -377,7 +447,7 @@ e.g., <code>mybibdata.bib</code></p>
 </li>
 </ol>
 <p>最初の2回は <code>pdflatex -draftmode</code> としてPDF出力を省略すると早い。
-適切な <code>Makefile</code> を書いて自動化するべし。
+適切な <code>Makefile</code> を書いて自動化すると楽で、
 <a href="#latexmk">latexmk</a> を使うともっと楽ちん。</p>
 <h3 id="文字の修飾">文字の修飾</h3>
 <ul>
@@ -450,7 +520,7 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 <ul>
 <li>OS上にあるOTFフォントがそのまま使える</li>
 <li>pdfTeXの後継として、今後のスタンダードと目される</li>
-<li><a href="https://www.ctan.org/pkg/luatexja"><code>luatexja</code></a> が精力的に開発されている</li>
+<li><a href="https://www.ctan.org/pkg/luatexja">{luatexja}</a> が精力的に開発されている</li>
 <li>動作が遅い</li>
 </ul>
 <h3 id="xelatex">XeLaTeX</h3>
@@ -474,24 +544,24 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 <dd>ローマンとサンセリフにそれぞれ Times と Helvetica を割り当てる。
 数式は Computer Modern のまま。</dd>
 <dt>{txfonts}</dt>
-<dd><code>times</code> の改良版？
+<dd>{times} の改良版？
 数式も Times にする。
 直接は使わない。</dd>
-<dt><a href="https://www.ctan.org/pkg/newtx"><code>newtx</code></a></dt>
-<dd><code>txfonts</code> の後継で現役。
+<dt><a href="https://www.ctan.org/pkg/newtx">{newtx}</a></dt>
+<dd>{txfonts} の後継で現役。
 本文と数式を別々に指定できる。
 <code>\usepackage[libertine]{newtxmath}</code> とすると Libertine を数式に使える。
 インストールするときは <code>newtx</code> だけでなく
 <code>txfonts</code> と <code>boondox</code> も入れないと
 <code>Unable to find TFM file</code> と怒られる。</dd>
-<dt><a href="https://www.ctan.org/pkg/newpx"><code>newpx</code></a></dt>
-<dd><code>newtx</code>と同等の機能を美しいPalatinoで。
-<code>palatino</code>, <code>pxfonts</code>, <code>newtx</code>,
-<a href="https://www.ctan.org/pkg/tex-gyre-pagella"><code>tex-gyre-pagella</code></a>,
-<a href="https://www.ctan.org/pkg/tex-gyre-math-pagella"><code>tex-gyre-math-pagella</code></a> も入れておく。
+<dt><a href="https://www.ctan.org/pkg/newpx">{newpx}</a></dt>
+<dd>{newtx}と同等の機能を美しいPalatinoで。
+{palatino}, {pxfonts}, {newtx},
+<a href="https://www.ctan.org/pkg/tex-gyre-pagella">{tex-gyre-pagella}</a>,
+<a href="https://www.ctan.org/pkg/tex-gyre-math-pagella">{tex-gyre-math-pagella}</a> も入れておく。
 <strong>TeX Gyre Pagella</strong> はOpenType志向のPalatinoクローン。</dd>
-<dt><a href="https://www.ctan.org/pkg/libertinus"><code>libertinus</code></a></dt>
-<dd>美しい<a href="https://www.ctan.org/pkg/libertine"><code>Linux Libertine</code></a>の後継プロジェクト。
+<dt><a href="https://www.ctan.org/pkg/libertinus">{libertinus}</a></dt>
+<dd>美しい<a href="https://www.ctan.org/pkg/libertine">Linux Libertine</a>の後継プロジェクト。
 type1もOTFも数式もサポートしていて便利だがひと回り小さいことに注意。
 使うときは <code>\usepackage{libertinus}</code> でよしなにやってくれるらしいが
 依存パッケージのインストールは例によって手動:
