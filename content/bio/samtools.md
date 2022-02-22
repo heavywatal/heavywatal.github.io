@@ -22,6 +22,9 @@ tags = ["genetics"]
     ここで `-h` をつけないとヘッダーが削れてしまうし、
     `--no-PG` をつけないと元ファイルに含まれていなかった情報
     (`@PG`) が付加されてしまうので要注意。
+:   ファイルに含まれるヘッダー情報を改変せずに閲覧する
+    `samtools view --header-only --no-PG` のショートカットとして
+    `samtools head` サブコマンドが追加された。
 :   BAM/CRAMに変換するのも、リードをフィルターするのもこのコマンド。名前が悪い。
 
 [`tview`](https://www.htslib.org/doc/samtools-tview.html)
@@ -94,12 +97,14 @@ tags = ["genetics"]
       → BAMインデックス (`.bam.bai`)
     - [`samtools faidx`](https://www.htslib.org/doc/samtools-faidx.html)
       → 参照配列インデックス (`.fa.fai`)
-    - [`bgzip -i`](http://www.htslib.org/doc/bgzip.html)
-      → BGZFインデックス (`.gz.gzi`)
     - [`tabix`](http://www.htslib.org/doc/tabix.html)
       → タブ区切りゲノムポジションインデックス (`.bgz.tbi`)<br>
       いろんな形式を扱える(`-p gff|bed|sam|vcf`)。
       位置順ソート且つbgzip圧縮されている必要がある。
+    - [`bgzip -r`](http://www.htslib.org/doc/bgzip.html)
+      → BGZFインデックス (`.gz.gzi`)<br>
+      bgzip済みfastaを `faidx` するとついでに作ってもらえるし、
+      `tabix` にはおそらく込み込みなので、明示的に作ることは少ない。
 
 ### variant calling
 
@@ -117,8 +122,7 @@ bcftools mpileup -f ref.fa aln.bam | bcftools call -mv -Ob -o calls.bcf
 
 ## SAM形式
 
-<https://www.htslib.org/doc/sam.html>
-
+<https://www.htslib.org/doc/sam.html><br>
 <https://samtools.github.io/hts-specs/>
 
 1.  `QNAME`: リード名
@@ -167,16 +171,18 @@ bcftools mpileup -f ref.fa aln.bam | bcftools call -mv -Ob -o calls.bcf
          0: >10 locations
 
 1.  `CIGAR`: マッピング状況とその長さ
-    e.g., `101M`, `18M200I83M`, `65M36S`
-    :
+    e.g., `101M`, `18M200I83M`, `65M36S`:
+    - `M`: alignment match
+    - `I`: insertion to the reference
+    - `D`: deletion from the reference
+    - `N`: skipped (= intron for mRNA-to-genome; undefined otherwise)
+    - `S`: soft clipping = `SEQ` の中で無視された部分
+    - `H`: hard clipping = `SEQ` の外で無視された部分。先頭と末尾にのみ存在。
+    - `P`: padding
+    - `=`: sequence match
+    - `X`: sequence mismatch
 
-        M: alignment match
-        I: insertion
-        D: deletion
-        N: skipped = intron
-        S: soft clipping = 部分マッチで無視された部分
-        H: hard clipping = 部分マッチで無視された部分
-        X: sequence mismatch
+    `M|I|S|=|X` の長さを足せば `SEQ` の長さになる。
 
 1.  `RNEXT`: paired-endの他方が張り付いた染色体。
     同じときは `=` で不明なときは `*`
@@ -184,9 +190,9 @@ bcftools mpileup -f ref.fa aln.bam | bcftools call -mv -Ob -o calls.bcf
 1.  `TLEN`: inferred Template LENgth。
     左腕の左端から右腕の右端までの距離。
     左腕なら正、右腕なら負、single-endなら0。
-1. `SEQ`: 塩基配列
-1. `QUAL`: 塩基クオリティ
-1. それ以降はマッパー依存。
+1.  `SEQ`: 塩基配列
+1.  `QUAL`: 塩基クオリティ
+1.  それ以降はマッパー依存。
     形式は `TAG:VTYPE:VALUE`
 
 ### CRAM
@@ -249,16 +255,3 @@ BAMを置き換えて一般ユーザーの主流になるにはキャッシュ�
     ```
     大元の参照配列置き場はテキトーに決めてもよくなるけど、
     キャッシュを管理するのもそれはそれで難しそう。
-
-
-## Binding
-
-### pysam
-
-<https://pysam.readthedocs.io/>
-
-<https://bi.biopapyrus.jp/python/module/pysam.html>
-
-### Rsamtools
-
-<https://bioconductor.org/packages/release/bioc/html/Rsamtools.html>
