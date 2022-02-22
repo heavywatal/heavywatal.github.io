@@ -100,6 +100,9 @@ SAMtools — Utilities for the Sequence Alignment/Map (SAM)
 <code>--no-PG</code> をつけないと元ファイルに含まれていなかった情報
 (<code>@PG</code>) が付加されてしまうので要注意。</p>
 </dd>
+<dd>ファイルに含まれるヘッダー情報を改変せずに閲覧する
+<code>samtools view --header-only --no-PG</code> のショートカットとして
+<code>samtools head</code> サブコマンドが追加された。</dd>
 <dd>BAM/CRAMに変換するのも、リードをフィルターするのもこのコマンド。名前が悪い。</dd>
 <dt><a href="https://www.htslib.org/doc/samtools-tview.html"><code>tview</code></a></dt>
 <dd>マッピングされた形でインタラクティブに閲覧:
@@ -170,12 +173,14 @@ chr12   133851895       3696141 0
 → BAMインデックス (<code>.bam.bai</code>)</li>
 <li><a href="https://www.htslib.org/doc/samtools-faidx.html"><code>samtools faidx</code></a>
 → 参照配列インデックス (<code>.fa.fai</code>)</li>
-<li><a href="http://www.htslib.org/doc/bgzip.html"><code>bgzip -i</code></a>
-→ BGZFインデックス (<code>.gz.gzi</code>)</li>
 <li><a href="http://www.htslib.org/doc/tabix.html"><code>tabix</code></a>
 → タブ区切りゲノムポジションインデックス (<code>.bgz.tbi</code>)<br>
 いろんな形式を扱える(<code>-p gff|bed|sam|vcf</code>)。
 位置順ソート且つbgzip圧縮されている必要がある。</li>
+<li><a href="http://www.htslib.org/doc/bgzip.html"><code>bgzip -r</code></a>
+→ BGZFインデックス (<code>.gz.gzi</code>)<br>
+bgzip済みfastaを <code>faidx</code> するとついでに作ってもらえるし、
+<code>tabix</code> にはおそらく込み込みなので、明示的に作ることは少ない。</li>
 </ul>
 </li>
 </ul>
@@ -188,8 +193,8 @@ chr12   133851895       3696141 0
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">bcftools mpileup -f ref.fa aln.bam <span class="p">|</span> bcftools call -mv -Ob -o calls.bcf
 </code></pre></div><p>以前はsamtoolsの機能だったが、bcftoolsが担うことになった。</p>
 <h2 id="sam形式">SAM形式</h2>
-<p><a href="https://www.htslib.org/doc/sam.html">https://www.htslib.org/doc/sam.html</a></p>
-<p><a href="https://samtools.github.io/hts-specs/">https://samtools.github.io/hts-specs/</a></p>
+<p><a href="https://www.htslib.org/doc/sam.html">https://www.htslib.org/doc/sam.html</a><br>
+<a href="https://samtools.github.io/hts-specs/">https://samtools.github.io/hts-specs/</a></p>
 <ol>
 <li>
 <p><code>QNAME</code>: リード名</p>
@@ -241,16 +246,19 @@ chr12   133851895       3696141 0
 </li>
 <li>
 <p><code>CIGAR</code>: マッピング状況とその長さ
-e.g., <code>101M</code>, <code>18M200I83M</code>, <code>65M36S</code>
-:</p>
-<pre><code>M: alignment match
-I: insertion
-D: deletion
-N: skipped = intron
-S: soft clipping = 部分マッチで無視された部分
-H: hard clipping = 部分マッチで無視された部分
-X: sequence mismatch
-</code></pre>
+e.g., <code>101M</code>, <code>18M200I83M</code>, <code>65M36S</code>:</p>
+<ul>
+<li><code>M</code>: alignment match</li>
+<li><code>I</code>: insertion to the reference</li>
+<li><code>D</code>: deletion from the reference</li>
+<li><code>N</code>: skipped (= intron for mRNA-to-genome; undefined otherwise)</li>
+<li><code>S</code>: soft clipping = <code>SEQ</code> の中で無視された部分</li>
+<li><code>H</code>: hard clipping = <code>SEQ</code> の外で無視された部分。先頭と末尾にのみ存在。</li>
+<li><code>P</code>: padding</li>
+<li><code>=</code>: sequence match</li>
+<li><code>X</code>: sequence mismatch</li>
+</ul>
+<p><code>M|I|S|=|X</code> の長さを足せば <code>SEQ</code> の長さになる。</p>
 </li>
 <li>
 <p><code>RNEXT</code>: paired-endの他方が張り付いた染色体。
@@ -337,12 +345,6 @@ FASTAに複数の配列が入っていてもMD5は1本ずつ計算される。</
 キャッシュを管理するのもそれはそれで難しそう。</p>
 </li>
 </ul>
-<h2 id="binding">Binding</h2>
-<h3 id="pysam">pysam</h3>
-<p><a href="https://pysam.readthedocs.io/">https://pysam.readthedocs.io/</a></p>
-<p><a href="https://bi.biopapyrus.jp/python/module/pysam.html">https://bi.biopapyrus.jp/python/module/pysam.html</a></p>
-<h3 id="rsamtools">Rsamtools</h3>
-<p><a href="https://bioconductor.org/packages/release/bioc/html/Rsamtools.html">https://bioconductor.org/packages/release/bioc/html/Rsamtools.html</a></p>
 
 </article>
 </main>
