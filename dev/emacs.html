@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.92.2" />
+<meta name="generator" content="Hugo 0.96.0" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -406,19 +406,19 @@ Emacs
 <h3 id="packageel-でパッケージ管理">package.el でパッケージ管理</h3>
 <p>Emacs 24で標準入りしたので、基本的にこれを使うのが良さそう。
 まず<code>init.el</code>の先頭でこのように宣言</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-el" data-lang="el"><span class="p">(</span><span class="nb">require</span> <span class="ss">&#39;package</span><span class="p">)</span>
-<span class="p">(</span><span class="nv">add-to-list</span> <span class="ss">&#39;package-archives</span> <span class="o">&#39;</span><span class="p">(</span><span class="s">&#34;melpa&#34;</span> <span class="o">.</span> <span class="s">&#34;https://melpa.org/packages/&#34;</span><span class="p">))</span>
-
-<span class="c1">;; Added by Package.el.  This must come before configurations of</span>
-<span class="c1">;; installed packages.  Don&#39;t delete this line.  If you don&#39;t want it,</span>
-<span class="c1">;; just comment it out by adding a semicolon to the start of the line.</span>
-<span class="c1">;; You may delete these explanatory comments.</span>
-<span class="p">(</span><span class="nv">package-initialize</span><span class="p">)</span>
-</code></pre></div><p>あとは使いたいパッケージを以下のように列挙。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-el" data-lang="el"><span class="p">(</span><span class="nv">package-install</span> <span class="ss">&#39;flycheck</span><span class="p">)</span>
-<span class="p">(</span><span class="nv">package-install</span> <span class="ss">&#39;auto-complete</span><span class="p">)</span>
-<span class="p">(</span><span class="nv">package-install</span> <span class="ss">&#39;markdown-mode</span><span class="p">)</span>
-</code></pre></div><p>initialize後に
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-el" data-lang="el"><span class="line"><span class="cl"><span class="p">(</span><span class="nb">require</span> <span class="ss">&#39;package</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">(</span><span class="nv">add-to-list</span> <span class="ss">&#39;package-archives</span> <span class="o">&#39;</span><span class="p">(</span><span class="s">&#34;melpa&#34;</span> <span class="o">.</span> <span class="s">&#34;https://melpa.org/packages/&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;; Added by Package.el.  This must come before configurations of</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;; installed packages.  Don&#39;t delete this line.  If you don&#39;t want it,</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;; just comment it out by adding a semicolon to the start of the line.</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;; You may delete these explanatory comments.</span>
+</span></span><span class="line"><span class="cl"><span class="p">(</span><span class="nv">package-initialize</span><span class="p">)</span>
+</span></span></code></pre></div><p>あとは使いたいパッケージを以下のように列挙。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-el" data-lang="el"><span class="line"><span class="cl"><span class="p">(</span><span class="nv">package-install</span> <span class="ss">&#39;flycheck</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">(</span><span class="nv">package-install</span> <span class="ss">&#39;auto-complete</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">(</span><span class="nv">package-install</span> <span class="ss">&#39;markdown-mode</span><span class="p">)</span>
+</span></span></code></pre></div><p>initialize後に
 <code>(package-refresh-contents)</code> を入れておくとパッケージ情報を最新に保てるが、
 結構遅いので気が向いたときに手動でやったほうがいい:
 <kbd>M-x</kbd> <code>package-list-packages</code> <kbd>U</kbd> <kbd>x</kbd></p>

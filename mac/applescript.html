@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.92.2" />
+<meta name="generator" content="Hugo 0.96.0" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -99,45 +99,45 @@ AppleScript
 小さい音量でもシャカシャカせずそれなりのバランスで聴こえるようにした例。
 耳に届きやすい 4kHz (band 8) らへんを落とすのが肝。
 機器や音量や好みによって調整し、別々のスクリプトとして保存しておくとよい:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-applescript" data-lang="applescript"><span class="k">tell</span> <span class="nb">application</span> <span class="s2">&#34;Music&#34;</span>
-    <span class="k">tell</span> <span class="nv">EQ</span> <span class="nv">preset</span> <span class="s2">&#34;Manual&#34;</span>
-        <span class="k">set</span> <span class="nv">band</span> <span class="mi">1</span> <span class="k">to</span> <span class="mf">1.5</span>
-        <span class="k">set</span> <span class="nv">band</span> <span class="mi">2</span> <span class="k">to</span> <span class="mf">0.7</span>
-        <span class="k">set</span> <span class="nv">band</span> <span class="mi">3</span> <span class="k">to</span> <span class="mf">0.3</span>
-        <span class="k">set</span> <span class="nv">band</span> <span class="mi">4</span> <span class="k">to</span> <span class="mf">0.1</span>
-        <span class="k">set</span> <span class="nv">band</span> <span class="mi">5</span> <span class="k">to</span> <span class="o">-</span><span class="mf">0.1</span>
-        <span class="k">set</span> <span class="nv">band</span> <span class="mi">6</span> <span class="k">to</span> <span class="o">-</span><span class="mf">0.5</span>
-        <span class="k">set</span> <span class="nv">band</span> <span class="mi">7</span> <span class="k">to</span> <span class="o">-</span><span class="mi">1</span>
-        <span class="k">set</span> <span class="nv">band</span> <span class="mi">8</span> <span class="k">to</span> <span class="o">-</span><span class="mi">2</span>
-        <span class="k">set</span> <span class="nv">band</span> <span class="mi">9</span> <span class="k">to</span> <span class="mf">0.3</span>
-        <span class="k">set</span> <span class="nv">band</span> <span class="mi">10</span> <span class="k">to</span> <span class="mf">0.7</span>
-        <span class="k">set</span> <span class="nv">preamp</span> <span class="k">to</span> <span class="mi">0</span>
-    <span class="k">end</span> <span class="k">tell</span>
-    <span class="k">set</span> <span class="nv">current</span> <span class="nv">EQ</span> <span class="nv">preset</span> <span class="k">to</span> <span class="nv">EQ</span> <span class="nv">preset</span> <span class="s2">&#34;Manual&#34;</span>
-<span class="k">end</span> <span class="k">tell</span>
-</code></pre></div><h2 id="finder-get-file-path">Finder: Get file path</h2>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-applescript" data-lang="applescript"><span class="k">tell</span> <span class="nb">application</span> <span class="s2">&#34;Finder&#34;</span>
-    <span class="nb">set the clipboard to</span> <span class="nv">POSIX</span> <span class="na">path</span> <span class="k">of</span> <span class="p">(</span><span class="nb">the</span> <span class="nv">selection</span> <span class="k">as</span> <span class="nv">alias</span><span class="p">)</span>
-<span class="k">end</span> <span class="k">tell</span>
-</code></pre></div><h2 id="osascript-スクリプトをターミナルで実行">osascript: スクリプトをターミナルで実行</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-applescript" data-lang="applescript"><span class="line"><span class="cl"><span class="k">tell</span> <span class="nb">application</span> <span class="s2">&#34;Music&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">tell</span> <span class="nv">EQ</span> <span class="nv">preset</span> <span class="s2">&#34;Manual&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">set</span> <span class="nv">band</span> <span class="mi">1</span> <span class="k">to</span> <span class="mf">1.5</span>
+</span></span><span class="line"><span class="cl">        <span class="k">set</span> <span class="nv">band</span> <span class="mi">2</span> <span class="k">to</span> <span class="mf">0.7</span>
+</span></span><span class="line"><span class="cl">        <span class="k">set</span> <span class="nv">band</span> <span class="mi">3</span> <span class="k">to</span> <span class="mf">0.3</span>
+</span></span><span class="line"><span class="cl">        <span class="k">set</span> <span class="nv">band</span> <span class="mi">4</span> <span class="k">to</span> <span class="mf">0.1</span>
+</span></span><span class="line"><span class="cl">        <span class="k">set</span> <span class="nv">band</span> <span class="mi">5</span> <span class="k">to</span> <span class="o">-</span><span class="mf">0.1</span>
+</span></span><span class="line"><span class="cl">        <span class="k">set</span> <span class="nv">band</span> <span class="mi">6</span> <span class="k">to</span> <span class="o">-</span><span class="mf">0.5</span>
+</span></span><span class="line"><span class="cl">        <span class="k">set</span> <span class="nv">band</span> <span class="mi">7</span> <span class="k">to</span> <span class="o">-</span><span class="mi">1</span>
+</span></span><span class="line"><span class="cl">        <span class="k">set</span> <span class="nv">band</span> <span class="mi">8</span> <span class="k">to</span> <span class="o">-</span><span class="mi">2</span>
+</span></span><span class="line"><span class="cl">        <span class="k">set</span> <span class="nv">band</span> <span class="mi">9</span> <span class="k">to</span> <span class="mf">0.3</span>
+</span></span><span class="line"><span class="cl">        <span class="k">set</span> <span class="nv">band</span> <span class="mi">10</span> <span class="k">to</span> <span class="mf">0.7</span>
+</span></span><span class="line"><span class="cl">        <span class="k">set</span> <span class="nv">preamp</span> <span class="k">to</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="k">end</span> <span class="k">tell</span>
+</span></span><span class="line"><span class="cl">    <span class="k">set</span> <span class="nv">current</span> <span class="nv">EQ</span> <span class="nv">preset</span> <span class="k">to</span> <span class="nv">EQ</span> <span class="nv">preset</span> <span class="s2">&#34;Manual&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">end</span> <span class="k">tell</span>
+</span></span></code></pre></div><h2 id="finder-get-file-path">Finder: Get file path</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-applescript" data-lang="applescript"><span class="line"><span class="cl"><span class="k">tell</span> <span class="nb">application</span> <span class="s2">&#34;Finder&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">set the clipboard to</span> <span class="nv">POSIX</span> <span class="na">path</span> <span class="k">of</span> <span class="p">(</span><span class="nb">the</span> <span class="nv">selection</span> <span class="k">as</span> <span class="nv">alias</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">end</span> <span class="k">tell</span>
+</span></span></code></pre></div><h2 id="osascript-スクリプトをターミナルで実行">osascript: スクリプトをターミナルで実行</h2>
 <p>スクリプトを置いたディレクトリにパスを通せれば楽なんだけど。できるのかな？:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">osascript <span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/Library/Scripts/Applications/Bibdesk/exportOOXML.scpt
-</code></pre></div><h2 id="bibdesk-からgroupとtemplateを指定してexport">Bibdesk からGroupとTemplateを指定してExport</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">osascript <span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/Library/Scripts/Applications/Bibdesk/exportOOXML.scpt
+</span></span></code></pre></div><h2 id="bibdesk-からgroupとtemplateを指定してexport">Bibdesk からGroupとTemplateを指定してExport</h2>
 <p>出力先、グループ名、テンプレートを最初の３行で指定し、Exportしたいライブラリを開いた状態で実行:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-applescript" data-lang="applescript"><span class="k">set</span> <span class="nv">theOutFile</span> <span class="k">to</span> <span class="nv">POSIX</span> <span class="nv">file</span> <span class="s2">&#34;/Users/Iwasaki/Presentations/20100118Thesis/items1.xml&#34;</span>
-<span class="k">set</span> <span class="nv">theGroup</span> <span class="k">to</span> <span class="s2">&#34;20100118 Thesis&#34;</span>
-<span class="k">set</span> <span class="nv">theTemplateName</span> <span class="k">to</span> <span class="s2">&#34;OOXML template&#34;</span>
-
-<span class="k">using terms from</span> <span class="nb">application</span> <span class="s2">&#34;BibDesk&#34;</span>
-    <span class="k">tell</span> <span class="nb">application</span> <span class="s2">&#34;BibDesk&#34;</span>
-        <span class="k">set</span> <span class="nv">theDoc</span> <span class="k">to</span> <span class="nb">first</span> <span class="na">document</span>
-        <span class="k">set</span> <span class="nv">thePubs</span> <span class="k">to</span> <span class="nv">publication</span> <span class="k">of</span> <span class="nv">static</span> <span class="nv">group</span> <span class="nv">theGroup</span> <span class="k">of</span> <span class="nv">theDoc</span>
-        <span class="k">tell</span> <span class="nv">theDoc</span>
-            <span class="nv">export</span> <span class="nb">for</span> <span class="nv">thePubs</span> <span class="nv">using</span> <span class="nv">template</span> <span class="nv">theTemplateName</span> <span class="k">to</span> <span class="nv">theOutFile</span>
-        <span class="k">end</span> <span class="k">tell</span>
-    <span class="k">end</span> <span class="k">tell</span>
-<span class="k">end</span> <span class="k">using terms from</span>
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-applescript" data-lang="applescript"><span class="line"><span class="cl"><span class="k">set</span> <span class="nv">theOutFile</span> <span class="k">to</span> <span class="nv">POSIX</span> <span class="nv">file</span> <span class="s2">&#34;/Users/Iwasaki/Presentations/20100118Thesis/items1.xml&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">set</span> <span class="nv">theGroup</span> <span class="k">to</span> <span class="s2">&#34;20100118 Thesis&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">set</span> <span class="nv">theTemplateName</span> <span class="k">to</span> <span class="s2">&#34;OOXML template&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">using terms from</span> <span class="nb">application</span> <span class="s2">&#34;BibDesk&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">tell</span> <span class="nb">application</span> <span class="s2">&#34;BibDesk&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">set</span> <span class="nv">theDoc</span> <span class="k">to</span> <span class="nb">first</span> <span class="na">document</span>
+</span></span><span class="line"><span class="cl">        <span class="k">set</span> <span class="nv">thePubs</span> <span class="k">to</span> <span class="nv">publication</span> <span class="k">of</span> <span class="nv">static</span> <span class="nv">group</span> <span class="nv">theGroup</span> <span class="k">of</span> <span class="nv">theDoc</span>
+</span></span><span class="line"><span class="cl">        <span class="k">tell</span> <span class="nv">theDoc</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">export</span> <span class="nb">for</span> <span class="nv">thePubs</span> <span class="nv">using</span> <span class="nv">template</span> <span class="nv">theTemplateName</span> <span class="k">to</span> <span class="nv">theOutFile</span>
+</span></span><span class="line"><span class="cl">        <span class="k">end</span> <span class="k">tell</span>
+</span></span><span class="line"><span class="cl">    <span class="k">end</span> <span class="k">tell</span>
+</span></span><span class="line"><span class="cl"><span class="k">end</span> <span class="k">using terms from</span>
+</span></span></code></pre></div>
 </article>
 </main>
 

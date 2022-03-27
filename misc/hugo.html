@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.92.2" />
+<meta name="generator" content="Hugo 0.96.0" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -103,40 +103,40 @@ Hugo — 静的サイトを高速生成
 例えばMacなら<a href="/mac/homebrew.html">Homebrew</a>で一発:
 <code>brew install hugo</code></p>
 <p>バージョンを細かく指定したりソースコードを改変したりしたい場合はgitから:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">export</span> <span class="nv">GOPATH</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.go
-<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span>:<span class="si">${</span><span class="nv">GOPATH</span><span class="si">}</span>/bin
-mkdir <span class="nv">$HOME</span>/src
-<span class="nb">cd</span> <span class="nv">$HOME</span>/src
-git clone https://github.com/gohugoio/hugo.git
-<span class="nb">cd</span> hugo
-go install --tags extended
-</code></pre></div><p><code>--tags extended</code> はSASS/SCSS対応版をコンパイルするオプション。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">GOPATH</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.go
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span>:<span class="si">${</span><span class="nv">GOPATH</span><span class="si">}</span>/bin
+</span></span><span class="line"><span class="cl">mkdir <span class="nv">$HOME</span>/src
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> <span class="nv">$HOME</span>/src
+</span></span><span class="line"><span class="cl">git clone https://github.com/gohugoio/hugo.git
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> hugo
+</span></span><span class="line"><span class="cl">go install --tags extended
+</span></span></code></pre></div><p><code>--tags extended</code> はSASS/SCSS対応版をコンパイルするオプション。</p>
 </li>
 <li>
 <p>骨組みを作る:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> path/to/site
-hugo new site .
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> path/to/site
+</span></span><span class="line"><span class="cl">hugo new site .
+</span></span></code></pre></div></li>
 <li>
 <p>ページをMarkdownで書く:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">hugo new about.md
-</code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown">+++
-date = 2016-02-26T19:10:22+09:00
-title = &#34;About&#34;
-+++
-
-<span class="gu">## Heading
-</span><span class="gu"></span>
-normal <span class="ge">*italic*</span> <span class="gs">**bold**</span>
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">hugo new about.md
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl">+++
+</span></span><span class="line"><span class="cl">date = 2016-02-26T19:10:22+09:00
+</span></span><span class="line"><span class="cl">title = &#34;About&#34;
+</span></span><span class="line"><span class="cl">+++
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="gu">## Heading
+</span></span></span><span class="line"><span class="cl"><span class="gu"></span>
+</span></span><span class="line"><span class="cl">normal <span class="ge">*italic*</span> <span class="gs">**bold**</span>
+</span></span></code></pre></div></li>
 <li>
 <p>テーマをとりあえず全部インストール:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git clone --depth <span class="m">1</span> --recursive https://github.com/gohugoio/hugoThemes.git themes
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git clone --depth <span class="m">1</span> --recursive https://github.com/gohugoio/hugoThemes.git themes
+</span></span></code></pre></div></li>
 <li>
 <p>ウェブサーバーを走らせる:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">hugo server -w D -t hyde
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">hugo server -w D -t hyde
+</span></span></code></pre></div></li>
 <li>
 <p>ブラウザから http://localhost:1313/about にアクセスしてみる。
 監視オプション <code>-w</code> を付けておけば、ファイルの変更がすぐに反映される。</p>
@@ -196,14 +196,14 @@ open http://localhost:1313/
 <a href="http://localhost">http://localhost</a> で閲覧できる。
 ユーザーの <code>~/Sites/</code> をドキュメントルートにする方法でもいいが、
 単にシンボリックリンクを張るほうが楽ちん。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> /Library/WebServer/
-sudo mv Documents Documents.orig
-sudo ln -s ~/Sites Documents
-<span class="nb">cd</span> /path/to/site-source
-hugo
-rsync -au --delete --exclude<span class="o">=</span><span class="s1">&#39;.git&#39;</span> public/ ~/Sites/
-open http://localhost/
-</code></pre></div><h3 id="github-pages">GitHub Pages</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> /Library/WebServer/
+</span></span><span class="line"><span class="cl">sudo mv Documents Documents.orig
+</span></span><span class="line"><span class="cl">sudo ln -s ~/Sites Documents
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> /path/to/site-source
+</span></span><span class="line"><span class="cl">hugo
+</span></span><span class="line"><span class="cl">rsync -au --delete --exclude<span class="o">=</span><span class="s1">&#39;.git&#39;</span> public/ ~/Sites/
+</span></span><span class="line"><span class="cl">open http://localhost/
+</span></span></code></pre></div><h3 id="github-pages">GitHub Pages</h3>
 <p><code>public/</code> 以下に生成されるファイルをしかるべきrepository/branchに置くだけ。</p>
 <p>See <a href="/dev/git.html">Git</a></p>
 

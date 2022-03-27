@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.92.2" />
+<meta name="generator" content="Hugo 0.96.0" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -122,25 +122,25 @@ C&#43;&#43;コマンドライン引数
 </ul>
 <h3 id="usage">Usage</h3>
 <p><code>main()</code> 関数に書く必要があるのはこれだけ</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;gflags/gflags.h&gt;</span><span class="cp">
-</span><span class="cp"></span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
-    <span class="n">gflags</span><span class="o">::</span><span class="n">SetUsageMessage</span><span class="p">(</span><span class="s">&#34;This is a program to test gflags&#34;</span><span class="p">);</span>
-    <span class="n">gflags</span><span class="o">::</span><span class="n">ParseCommandLineFlags</span><span class="p">(</span><span class="o">&amp;</span><span class="n">argc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">argv</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
-    <span class="c1">// do something
-</span><span class="c1"></span>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div><p>あとは個々のソースファイルでオプションを追加。<code>namespace</code> にも入れられる。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;gflags/gflags.h&gt;</span><span class="cp">
-</span><span class="cp"></span>
-<span class="k">namespace</span> <span class="n">tapiola</span> <span class="p">{</span>
-    <span class="n">DEFINE_uint64</span><span class="p">(</span><span class="n">sibelius</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#34;string that is displayed with --help flag&#34;</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="kt">void</span> <span class="nf">func</span><span class="p">(){</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">tapiola</span><span class="o">::</span><span class="n">FLAGS_sibelius</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div><h2 id="cmdline">cmdline</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;gflags/gflags.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">gflags</span><span class="o">::</span><span class="n">SetUsageMessage</span><span class="p">(</span><span class="s">&#34;This is a program to test gflags&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">gflags</span><span class="o">::</span><span class="n">ParseCommandLineFlags</span><span class="p">(</span><span class="o">&amp;</span><span class="n">argc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">argv</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// do something
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>あとは個々のソースファイルでオプションを追加。<code>namespace</code> にも入れられる。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;gflags/gflags.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">namespace</span> <span class="n">tapiola</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">DEFINE_uint64</span><span class="p">(</span><span class="n">sibelius</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#34;string that is displayed with --help flag&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">func</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">tapiola</span><span class="o">::</span><span class="n">FLAGS_sibelius</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h2 id="cmdline">cmdline</h2>
 <p><a href="https://github.com/tanakh/cmdline">https://github.com/tanakh/cmdline</a><br>
 <a href="http://d.hatena.ne.jp/tanakh/20091028">http://d.hatena.ne.jp/tanakh/20091028</a></p>
 <ul>

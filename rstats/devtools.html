@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.92.2" />
+<meta name="generator" content="Hugo 0.96.0" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -112,11 +112,11 @@ GitHubに公開しておけば誰でも使えるようになるので、
 </li>
 <li>
 <p><a href="https://usethis.r-lib.org/">usethis</a> の関数をいくつか使って骨組みを作る:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">usethis</span><span class="o">::</span><span class="nf">create_package</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">)</span>
-<span class="n">usethis</span><span class="o">::</span><span class="nf">use_mit_license</span><span class="p">()</span>
-<span class="n">usethis</span><span class="o">::</span><span class="nf">use_roxygen_md</span><span class="p">()</span>
-<span class="n">usethis</span><span class="o">::</span><span class="nf">use_package_doc</span><span class="p">()</span>
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">usethis</span><span class="o">::</span><span class="nf">create_package</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">usethis</span><span class="o">::</span><span class="nf">use_mit_license</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">usethis</span><span class="o">::</span><span class="nf">use_roxygen_md</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">usethis</span><span class="o">::</span><span class="nf">use_package_doc</span><span class="p">()</span>
+</span></span></code></pre></div></li>
 <li>
 <p><code>devtools::check()</code> で様子を見てみる。
 LaTeX 関連で怒られたら足りないパッケージを入れる:
@@ -132,27 +132,27 @@ LaTeX 関連で怒られたら足りないパッケージを入れる:
 </li>
 <li>
 <p>そのリモートリポジトリにプッシュ:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git remote add origin https::/github.com/heavywatal/rhello.git
-git push -u origin master
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git remote add origin https::/github.com/heavywatal/rhello.git
+</span></span><span class="line"><span class="cl">git push -u origin master
+</span></span></code></pre></div></li>
 <li>
 <p>とりあえず誰でもインストール可能なパッケージができたはず:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&#34;heavywatal/rhello&#34;</span><span class="p">)</span>
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&#34;heavywatal/rhello&#34;</span><span class="p">)</span>
+</span></span></code></pre></div></li>
 </ol>
 <h3 id="ソース構造">ソース構造</h3>
 <p><a href="https://r-pkgs.org/package-structure-state.html">https://r-pkgs.org/package-structure-state.html</a></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">DESCRIPTION  <span class="c1"># 一番大事</span>
-NAMESPACE    <span class="c1"># 見せるオブジェクトを列挙</span>
-README.md    <span class="c1"># 全体の説明を簡単に</span>
-R/           <span class="c1"># Rソースコード</span>
-data/        <span class="c1"># サンプルデータなど</span>
-inst/        <span class="c1"># CITATION</span>
-man/         <span class="c1"># ヘルプファイル.Rd</span>
-src/         <span class="c1"># C++ソースコード</span>
-tests/
-vignettes/
-</code></pre></div><p>CRANから落としてくる <code>.tar.gz</code> ソースコード (bundle package) とは違う。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">DESCRIPTION  <span class="c1"># 一番大事</span>
+</span></span><span class="line"><span class="cl">NAMESPACE    <span class="c1"># 見せるオブジェクトを列挙</span>
+</span></span><span class="line"><span class="cl">README.md    <span class="c1"># 全体の説明を簡単に</span>
+</span></span><span class="line"><span class="cl">R/           <span class="c1"># Rソースコード</span>
+</span></span><span class="line"><span class="cl">data/        <span class="c1"># サンプルデータなど</span>
+</span></span><span class="line"><span class="cl">inst/        <span class="c1"># CITATION</span>
+</span></span><span class="line"><span class="cl">man/         <span class="c1"># ヘルプファイル.Rd</span>
+</span></span><span class="line"><span class="cl">src/         <span class="c1"># C++ソースコード</span>
+</span></span><span class="line"><span class="cl">tests/
+</span></span><span class="line"><span class="cl">vignettes/
+</span></span></code></pre></div><p>CRANから落としてくる <code>.tar.gz</code> ソースコード (bundle package) とは違う。</p>
 <h3 id="descriptionhttpsr-pkgsorgdescriptionhtml"><a href="https://r-pkgs.org/description.html"><code>DESCRIPTION</code></a></h3>
 <ul>
 <li>どうでも良さそうなファイル名とは裏腹に、ちゃんと書かないと動かない。</li>
@@ -295,16 +295,16 @@ Rcppコードをコンパイルするという意味ではない。</dd>
 を直接呼んでもよいが、
 基本的には <code>devtools::document()</code> を使って間接的に利用する。</p>
 <h3 id="使い方">使い方</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="c1">#&#39; Title of the simple function to add 1</span>
-<span class="c1">#&#39;</span>
-<span class="c1">#&#39; The second paragraph is recognized as the description.</span>
-<span class="c1">#&#39; It is not recommended to use @@title and @@description explicitly.</span>
-<span class="c1">#&#39; @param x A numeric vector</span>
-<span class="c1">#&#39; @export</span>
-<span class="c1">#&#39; @examples</span>
-<span class="c1">#&#39; increment(42)</span>
-<span class="n">increment</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span><span class="n">x</span> <span class="o">+</span> <span class="m">1</span><span class="p">}</span>
-</code></pre></div><ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1">#&#39; Title of the simple function to add 1</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#&#39; The second paragraph is recognized as the description.</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#&#39; It is not recommended to use @@title and @@description explicitly.</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#&#39; @param x A numeric vector</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#&#39; @export</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#&#39; @examples</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#&#39; increment(42)</span>
+</span></span><span class="line"><span class="cl"><span class="n">increment</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span><span class="n">x</span> <span class="o">+</span> <span class="m">1</span><span class="p">}</span>
+</span></span></code></pre></div><ul>
 <li>
 <p><code>#' </code> から始まる行がroxygenコメントとして扱われる。</p>
 </li>
@@ -331,15 +331,15 @@ Rcppコードをコンパイルするという意味ではない。</dd>
 <p><code>&quot;_PACKAGE&quot;</code> という文字列の上に書かれたブロックは、
 パッケージそのものに対応するヘルプ <code>*-package.Rd</code> になる。
 <code>@useDynLib</code> など全体に関わる設定はここでやるのが良いのでは。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="c1">#&#39; Example package to say hello</span>
-<span class="c1">#&#39; @aliases NULL hello-package</span>
-<span class="c1">#&#39; @useDynLib hello, .registration = TRUE</span>
-<span class="c1">#&#39; @importFrom Rcpp sourceCpp</span>
-<span class="c1">#&#39; @importFrom magrittr %&gt;%</span>
-<span class="c1">#&#39; @importFrom rlang .data</span>
-<span class="c1">#&#39; @keywords internal</span>
-<span class="s">&#34;_PACKAGE&#34;</span>
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1">#&#39; Example package to say hello</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#&#39; @aliases NULL hello-package</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#&#39; @useDynLib hello, .registration = TRUE</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#&#39; @importFrom Rcpp sourceCpp</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#&#39; @importFrom magrittr %&gt;%</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#&#39; @importFrom rlang .data</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#&#39; @keywords internal</span>
+</span></span><span class="line"><span class="cl"><span class="s">&#34;_PACKAGE&#34;</span>
+</span></span></code></pre></div></li>
 <li>
 <p>dplyrなどで列名を直に指定すると
 <code>undefined global variables</code>

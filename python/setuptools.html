@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.92.2" />
+<meta name="generator" content="Hugo 0.96.0" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -94,19 +94,19 @@ setuptools — Pythonパッケージ作成
 </ul>
 <h2 id="ファイル構成">ファイル構成</h2>
 <p>GitHubやローカルの開発環境から <code>pip</code> で直接インストールできる形。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">pywtl/
-├── LICENSE
-├── README.md
-├── pyproject.toml
-└── wtl/
-    ├── __init__.py
-    └── hello.py
-</code></pre></div><p>リポジトリ名(<code>pywtl</code>)とパッケージ名(<code>wtl</code>)は必ずしも一致してなくてもよい。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pywtl/
+</span></span><span class="line"><span class="cl">├── LICENSE
+</span></span><span class="line"><span class="cl">├── README.md
+</span></span><span class="line"><span class="cl">├── pyproject.toml
+</span></span><span class="line"><span class="cl">└── wtl/
+</span></span><span class="line"><span class="cl">    ├── __init__.py
+</span></span><span class="line"><span class="cl">    └── hello.py
+</span></span></code></pre></div><p>リポジトリ名(<code>pywtl</code>)とパッケージ名(<code>wtl</code>)は必ずしも一致してなくてもよい。
 開発向けの <code>-e,--editable</code> オプションをつけたローカルインストールではコピーが起こらず、
 編集後に再インストールしなくてもそのまま反映される。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">pip install -v --user -e ~/git/pywtl/
-python -m wtl.hello
-</code></pre></div><h3 id="pyprojecttoml"><code>pyproject.toml</code></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pip install -v --user -e ~/git/pywtl/
+</span></span><span class="line"><span class="cl">python -m wtl.hello
+</span></span></code></pre></div><h3 id="pyprojecttoml"><code>pyproject.toml</code></h3>
 <p><code>setuptools</code> に依存しない形式として
 <a href="https://www.python.org/dev/peps/pep-0517">PEP 517</a>,
 <a href="https://www.python.org/dev/peps/pep-0621">PEP 621</a>
@@ -116,38 +116,38 @@ python -m wtl.hello
 <a href="https://python-poetry.org/">Poetry</a>,
 など後発のツールは大概このファイルだけ書けば済む。</p>
 <p><code>setuptools</code> は未対応なので書けるのはこれだけ:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="p">[</span><span class="nx">build-system</span><span class="p">]</span>
-<span class="nx">requires</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;setuptools&#34;</span><span class="p">,</span> <span class="s2">&#34;wheel&#34;</span><span class="p">]</span>
-<span class="nx">build-backend</span> <span class="p">=</span> <span class="s2">&#34;setuptools.build_meta&#34;</span>
-</code></pre></div><p>残りの項目は <code>setup.cfg</code> へ。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="p">[</span><span class="nx">build-system</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">requires</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;setuptools&#34;</span><span class="p">,</span> <span class="s2">&#34;wheel&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">build-backend</span> <span class="p">=</span> <span class="s2">&#34;setuptools.build_meta&#34;</span>
+</span></span></code></pre></div><p>残りの項目は <code>setup.cfg</code> へ。</p>
 <h3 id="setuppy"><code>setup.py</code></h3>
 <p><code>setup.cfg</code> の設定を読んでくれるようになってからは
 <code>setup()</code> の引数にいろいろ渡す必要は無くなった。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
-<span class="n">setup</span><span class="p">()</span>
-</code></pre></div><p>さらに新しいバージョンではこれすらも不要になった。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
+</span></span><span class="line"><span class="cl"><span class="n">setup</span><span class="p">()</span>
+</span></span></code></pre></div><p>さらに新しいバージョンではこれすらも不要になった。
 ただしこれが無いと <code>pip install --editable</code> がサポートされないらしい。</p>
 <h3 id="setupcfg"><code>setup.cfg</code></h3>
 <p><a href="https://setuptools.pypa.io/en/latest/userguide/declarative_config.html">https://setuptools.pypa.io/en/latest/userguide/declarative_config.html</a></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[metadata]</span>
-<span class="na">name</span> <span class="o">=</span> <span class="s">wtl</span>
-<span class="na">version</span> <span class="o">=</span> <span class="s">attr: wtl.__version__</span>
-<span class="na">url</span> <span class="o">=</span> <span class="s">https://github.com/heavywatal/pywtl</span>
-<span class="na">author</span> <span class="o">=</span> <span class="s">Watal M. Iwasaki</span>
-<span class="na">author_email</span> <span class="o">=</span> <span class="s">heavywatal@gmail.com</span>
-<span class="na">license_files</span> <span class="o">=</span> <span class="s">LICENSE</span>
-<span class="na">description</span> <span class="o">=</span> <span class="s">wtl: Personal Python package</span>
-<span class="na">long_description</span> <span class="o">=</span> <span class="s">file: README.md</span>
-<span class="na">long_description_content_type</span> <span class="o">=</span> <span class="s">text/markdown</span>
-
-<span class="k">[options]</span>
-<span class="na">install_requires</span> <span class="o">=</span><span class="s">
-</span><span class="s">  psutil
-</span><span class="s">  requests</span>
-<span class="na">python_requires</span> <span class="o">=</span> <span class="s">&gt;=3.9</span>
-<span class="na">entry_points</span> <span class="o">=</span> <span class="s">file: entry_points.cfg</span>
-<span class="na">packages</span> <span class="o">=</span> <span class="s">find:</span>
-</code></pre></div><p><code>version</code> は <code>__init__.py</code> に <code>__version__ = &quot;0.1.0&quot;</code>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="k">[metadata]</span>
+</span></span><span class="line"><span class="cl"><span class="na">name</span> <span class="o">=</span> <span class="s">wtl</span>
+</span></span><span class="line"><span class="cl"><span class="na">version</span> <span class="o">=</span> <span class="s">attr: wtl.__version__</span>
+</span></span><span class="line"><span class="cl"><span class="na">url</span> <span class="o">=</span> <span class="s">https://github.com/heavywatal/pywtl</span>
+</span></span><span class="line"><span class="cl"><span class="na">author</span> <span class="o">=</span> <span class="s">Watal M. Iwasaki</span>
+</span></span><span class="line"><span class="cl"><span class="na">author_email</span> <span class="o">=</span> <span class="s">heavywatal@gmail.com</span>
+</span></span><span class="line"><span class="cl"><span class="na">license_files</span> <span class="o">=</span> <span class="s">LICENSE</span>
+</span></span><span class="line"><span class="cl"><span class="na">description</span> <span class="o">=</span> <span class="s">wtl: Personal Python package</span>
+</span></span><span class="line"><span class="cl"><span class="na">long_description</span> <span class="o">=</span> <span class="s">file: README.md</span>
+</span></span><span class="line"><span class="cl"><span class="na">long_description_content_type</span> <span class="o">=</span> <span class="s">text/markdown</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[options]</span>
+</span></span><span class="line"><span class="cl"><span class="na">install_requires</span> <span class="o">=</span><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">  psutil
+</span></span></span><span class="line"><span class="cl"><span class="s">  requests</span>
+</span></span><span class="line"><span class="cl"><span class="na">python_requires</span> <span class="o">=</span> <span class="s">&gt;=3.9</span>
+</span></span><span class="line"><span class="cl"><span class="na">entry_points</span> <span class="o">=</span> <span class="s">file: entry_points.cfg</span>
+</span></span><span class="line"><span class="cl"><span class="na">packages</span> <span class="o">=</span> <span class="s">find:</span>
+</span></span></code></pre></div><p><code>version</code> は <code>__init__.py</code> に <code>__version__ = &quot;0.1.0&quot;</code>
 などと書いてあるものを参照できる。
 比較したいときは
 <a href="https://packaging.pypa.io/en/latest/version.html"><code>packaging.version.parse()</code></a>
@@ -168,9 +168,9 @@ python -m wtl.hello
 <code>${prefix}/bin/</code> に実行可能ファイルを配置するのによく使われる。
 設定は下記のように別ファイル <code>entry_points.cfg</code> として
 <code>setup.cfg</code> から読ませるのが楽チン。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[console_scripts]</span>
-<span class="na">hello.py</span> <span class="o">=</span> <span class="s">wtl.hello:main</span>
-</code></pre></div><p>引数を取らない関数のみ利用可能。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="k">[console_scripts]</span>
+</span></span><span class="line"><span class="cl"><span class="na">hello.py</span> <span class="o">=</span> <span class="s">wtl.hello:main</span>
+</span></span></code></pre></div><p>引数を取らない関数のみ利用可能。
 コマンドライン引数を受け取りたい場合はその関数の中で標準の
 <a href="https://docs.python.org/3/library/argparse.html"><code>argparse</code></a>
 を使って処理する。</p>
@@ -183,18 +183,18 @@ python -m wtl.hello
 <code>wtl.__verison__</code> のように参照できるようにしておくのが慣例。</dd>
 </dl>
 <p><code>wtl/hello.py</code></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="s2">&#34;&#34;&#34;Sample module
-</span><span class="s2">&#34;&#34;&#34;</span>
-
-
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="kn">import</span> <span class="nn">getpass</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;Hello, &#34;</span> <span class="o">+</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getuser</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&#34;!&#34;</span><span class="p">)</span>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
-    <span class="n">main</span><span class="p">()</span>
-</code></pre></div><h3 id="manifestin"><code>MANIFEST.in</code></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;Sample module
+</span></span></span><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="kn">import</span> <span class="nn">getpass</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;Hello, &#34;</span> <span class="o">+</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getuser</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&#34;!&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">main</span><span class="p">()</span>
+</span></span></code></pre></div><h3 id="manifestin"><code>MANIFEST.in</code></h3>
 <p>Pythonモジュール以外で配布物に含めたいもの、除外したいものがあれば
 <code>include</code>, <code>recursive-include</code>, <code>exclude</code>
 で指定する。</p>
@@ -204,10 +204,10 @@ python -m wtl.hello
 を使って操作してたけどそれは廃れつつある。
 最小限のビルド機能は
 <a href="https://pypa-build.readthedocs.io/"><code>build</code></a> パッケージに引き継がれた。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">pip install build
-python3 -m build --help
-python3 -m build
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pip install build
+</span></span><span class="line"><span class="cl">python3 -m build --help
+</span></span><span class="line"><span class="cl">python3 -m build
+</span></span></code></pre></div>
 </article>
 </main>
 

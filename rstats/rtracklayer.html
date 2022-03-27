@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.92.2" />
+<meta name="generator" content="Hugo 0.96.0" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -105,20 +105,20 @@ rtracklayer
 <h2 id="ucsc-table-browserにアクセス">UCSC Table Browserにアクセス</h2>
 <p><a href="https://genome.ucsc.edu/cgi-bin/hgTables">https://genome.ucsc.edu/cgi-bin/hgTables</a></p>
 <p>ゲノム、トラック、テーブルの指定方法が独特</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">session</span> <span class="o">=</span> <span class="nf">browserSession</span><span class="p">()</span>
-<span class="nf">genome</span><span class="p">(</span><span class="n">session</span><span class="p">)</span> <span class="o">=</span> <span class="s">&#34;hg19&#34;</span>
-<span class="n">query</span> <span class="o">=</span> <span class="nf">ucscTableQuery</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s">&#34;knownGene&#34;</span><span class="p">)</span>
-<span class="nf">tableName</span><span class="p">(</span><span class="n">query</span><span class="p">)</span> <span class="o">=</span> <span class="s">&#34;kgXref&#34;</span>
-<span class="n">kgXref</span> <span class="o">=</span> <span class="nf">getTable</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>  <span class="c1"># data.frame</span>
-
-<span class="n">query</span> <span class="o">=</span> <span class="nf">ucscTableQuery</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s">&#34;knownGene&#34;</span><span class="p">,</span> <span class="s">&#34;hg19&#34;</span><span class="p">,</span> <span class="s">&#34;kgXref&#34;</span><span class="p">)</span>
-</code></pre></div><p>テーブルを指定しなければ先頭が使われる</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">query</span> <span class="o">=</span> <span class="nf">ucscTableQuery</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s">&#34;cytoBand&#34;</span><span class="p">,</span> <span class="s">&#34;hg19&#34;</span><span class="p">)</span>
-<span class="n">cytoBand</span> <span class="o">=</span> <span class="nf">track</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>  <span class="c1"># GRanges</span>
-</code></pre></div><p>トラックやテーブルの名前を閲覧</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">trackNames</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
-<span class="nf">tableNames</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">session</span> <span class="o">=</span> <span class="nf">browserSession</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nf">genome</span><span class="p">(</span><span class="n">session</span><span class="p">)</span> <span class="o">=</span> <span class="s">&#34;hg19&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">query</span> <span class="o">=</span> <span class="nf">ucscTableQuery</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s">&#34;knownGene&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">tableName</span><span class="p">(</span><span class="n">query</span><span class="p">)</span> <span class="o">=</span> <span class="s">&#34;kgXref&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">kgXref</span> <span class="o">=</span> <span class="nf">getTable</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>  <span class="c1"># data.frame</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">query</span> <span class="o">=</span> <span class="nf">ucscTableQuery</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s">&#34;knownGene&#34;</span><span class="p">,</span> <span class="s">&#34;hg19&#34;</span><span class="p">,</span> <span class="s">&#34;kgXref&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><p>テーブルを指定しなければ先頭が使われる</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">query</span> <span class="o">=</span> <span class="nf">ucscTableQuery</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s">&#34;cytoBand&#34;</span><span class="p">,</span> <span class="s">&#34;hg19&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">cytoBand</span> <span class="o">=</span> <span class="nf">track</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>  <span class="c1"># GRanges</span>
+</span></span></code></pre></div><p>トラックやテーブルの名前を閲覧</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">trackNames</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">tableNames</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+</span></span></code></pre></div>
 </article>
 </main>
 

@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.92.2" />
+<meta name="generator" content="Hugo 0.96.0" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -92,8 +92,8 @@ SAMtools — Utilities for the Sequence Alignment/Map (SAM)
 <dl>
 <dt><a href="https://www.htslib.org/doc/samtools-view.html"><code>view</code></a></dt>
 <dd>BAM/CRAMをプレーンテキストのSAMとして閲覧:
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">samtools view -h --no-PG aln.bam <span class="p">|</span> less
-</code></pre></div><p>ここで <code>-h</code> をつけないとヘッダーが削れてしまうし、
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">samtools view -h --no-PG aln.bam <span class="p">|</span> less
+</span></span></code></pre></div><p>ここで <code>-h</code> をつけないとヘッダーが削れてしまうし、
 <code>--no-PG</code> をつけないと元ファイルに含まれていなかった情報
 (<code>@PG</code>) が付加されてしまうので要注意。</p>
 </dd>
@@ -103,8 +103,8 @@ SAMtools — Utilities for the Sequence Alignment/Map (SAM)
 <dd>BAM/CRAMに変換するのも、リードをフィルターするのもこのコマンド。名前が悪い。</dd>
 <dt><a href="https://www.htslib.org/doc/samtools-tview.html"><code>tview</code></a></dt>
 <dd>マッピングされた形でインタラクティブに閲覧:
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">samtools tview aln.bam <span class="o">[</span>ref.fa<span class="o">]</span>
-</code></pre></div><p>参照配列を与えると表示方法に選択肢が増える。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">samtools tview aln.bam <span class="o">[</span>ref.fa<span class="o">]</span>
+</span></span></code></pre></div><p>参照配列を与えると表示方法に選択肢が増える。
 予めインデックスを作っておかなくても初回実行時に
 <code>faidx</code> が勝手に走って <code>ref.fa.fai</code> が作成される。</p>
 </dd>
@@ -187,8 +187,8 @@ bgzip済みfastaを <code>faidx</code> するとついでに作ってもらえ�
 <li><a href="https://samtools.github.io/bcftools/bcftools.html">https://samtools.github.io/bcftools/bcftools.html</a></li>
 </ul>
 <p>VCF/BCFを書き出す:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">bcftools mpileup -f ref.fa aln.bam <span class="p">|</span> bcftools call -mv -Ob -o calls.bcf
-</code></pre></div><p>以前はsamtoolsの機能だったが、bcftoolsが担うことになった。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">bcftools mpileup -f ref.fa aln.bam <span class="p">|</span> bcftools call -mv -Ob -o calls.bcf
+</span></span></code></pre></div><p>以前はsamtoolsの機能だったが、bcftoolsが担うことになった。</p>
 <h2 id="sam形式">SAM形式</h2>
 <p><a href="https://www.htslib.org/doc/sam.html">https://www.htslib.org/doc/sam.html</a><br>
 <a href="https://samtools.github.io/hts-specs/">https://samtools.github.io/hts-specs/</a></p>
@@ -324,21 +324,21 @@ CRAMファイルからではなくコマンド実行時の <code>$PWD</code> か
 <li>
 <p>参照配列を自分で管理するなら <code>M5</code> を無効化して
 <code>UR</code> のみで運用すればトラフィックやキャッシュの心配が無くなり単純。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">export</span> <span class="nv">REF_CACHE</span><span class="o">=</span>/dev/null
-<span class="nb">export</span> <span class="nv">REF_PATH</span><span class="o">=</span><span class="nv">$REF_CACHE</span>
-</code></pre></div><p>パスの変更などでタグを編集したい場合は
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">REF_CACHE</span><span class="o">=</span>/dev/null
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">REF_PATH</span><span class="o">=</span><span class="nv">$REF_CACHE</span>
+</span></span></code></pre></div><p>パスの変更などでタグを編集したい場合は
 <a href="https://www.htslib.org/doc/samtools-reheader.html"><code>samtools reheader</code></a> が使える。</p>
 </li>
 <li>
 <p>勝手にEBIを見に行くのは止めたいけど <code>M5</code> は使いたい場合、
 何らかの文字を <code>REF_PATH</code> に入れておけばいい。
 公式例に習って <code>$REF_CACHE</code> を入れておく:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">export</span> <span class="nv">REF_CACHE</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="s2">/db/hts-ref-cache/%2s/%2s/%s&#34;</span>
-<span class="nb">export</span> <span class="nv">REF_PATH</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$REF_CACHE</span><span class="s2">&#34;</span>
-</code></pre></div><p>手元のファイルを <code>REF_CACHE</code> に配置するには付属のスクリプトが使える。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">REF_CACHE</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="s2">/db/hts-ref-cache/%2s/%2s/%s&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">REF_PATH</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$REF_CACHE</span><span class="s2">&#34;</span>
+</span></span></code></pre></div><p>手元のファイルを <code>REF_CACHE</code> に配置するには付属のスクリプトが使える。
 FASTAに複数の配列が入っていてもMD5は1本ずつ計算される。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">seq_cache_populate.pl -root <span class="si">${</span><span class="nv">REF_CACHE</span><span class="p">%%/</span><span class="se">\%</span><span class="p">*</span><span class="si">}</span> &lt;<span class="o">(</span>gunzip -c genome.fa.gz<span class="o">)</span>
-</code></pre></div><p>大元の参照配列置き場はテキトーに決めてもよくなるけど、
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">seq_cache_populate.pl -root <span class="si">${</span><span class="nv">REF_CACHE</span><span class="p">%%/</span><span class="se">\%</span><span class="p">*</span><span class="si">}</span> &lt;<span class="o">(</span>gunzip -c genome.fa.gz<span class="o">)</span>
+</span></span></code></pre></div><p>大元の参照配列置き場はテキトーに決めてもよくなるけど、
 キャッシュを管理するのもそれはそれで難しそう。</p>
 </li>
 </ul>

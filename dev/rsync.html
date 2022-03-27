@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.92.2" />
+<meta name="generator" content="Hugo 0.96.0" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -95,16 +95,16 @@ rsync
 </code></pre>
 <p>SRC側の末尾のスラッシュの有無によって結果が大きく異なることに注意。
 DST側は付けても付けなくても同じ。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1">## SRC/ 以下のファイルが DST/ 以下に入る</span>
-rsync -auv SRC/ DST
-
-<span class="c1">## ディレクトリ DST/SRC が作られる</span>
-rsync -auv SRC DST
-
-<span class="c1">## 結果は同じだが、下のほうがより明示的</span>
-rsync -auv SRC/DIR DST
-rsync -auv SRC/DIR/ DST/DIR/
-</code></pre></div><p><a href="/dev/ssh.html">sshの設定</a>をしておけばリモートホストへの転送も可能。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1">## SRC/ 以下のファイルが DST/ 以下に入る</span>
+</span></span><span class="line"><span class="cl">rsync -auv SRC/ DST
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## ディレクトリ DST/SRC が作られる</span>
+</span></span><span class="line"><span class="cl">rsync -auv SRC DST
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## 結果は同じだが、下のほうがより明示的</span>
+</span></span><span class="line"><span class="cl">rsync -auv SRC/DIR DST
+</span></span><span class="line"><span class="cl">rsync -auv SRC/DIR/ DST/DIR/
+</span></span></code></pre></div><p><a href="/dev/ssh.html">sshの設定</a>をしておけばリモートホストへの転送も可能。
 その場合は宛先を <code>remote_machine:~/DST</code> のようにコロンで指定する。</p>
 <h2 id="options">Options</h2>
 <dl>
@@ -173,8 +173,8 @@ known_hosts
 </li>
 </ol>
 <h2 id="ssh越しの送受信">SSH越しの送受信</h2>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">rsync -auv user@example.com:~/dir/ ~/dir/
-</code></pre></div><ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">rsync -auv user@example.com:~/dir/ ~/dir/
+</span></span></code></pre></div><ul>
 <li><a href="/dev/ssh.html">SSH公開鍵を設定</a>してパスワード無しでログインできるようにしておく。</li>
 <li><code>.ssh/config</code> でユーザー名とかも登録しておくとさらに楽。
 <code>RequestTTY yes</code> を付けてると当然ながら怒られる。</li>

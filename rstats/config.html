@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.92.2" />
+<meta name="generator" content="Hugo 0.96.0" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -99,8 +99,8 @@ Caskじゃない <code>brew install r</code> のほうだとバイナリ版パ�
 <p>ワークスペースの自動保存や自動復帰は危険なので切っておく。
 R.app や RStudio から使う場合はメニューから環境設定みたいなやつを開いて設定。
 シェルから使う場合は例えば以下のようなエイリアスを設定する。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">alias</span> <span class="nv">r</span><span class="o">=</span><span class="s1">&#39;R --quiet --no-save --no-restore-data&#39;</span>
-</code></pre></div><p>詳しくは <code>R --help</code> または
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">r</span><span class="o">=</span><span class="s1">&#39;R --quiet --no-save --no-restore-data&#39;</span>
+</span></span></code></pre></div><p>詳しくは <code>R --help</code> または
 <a href="https://cran.r-project.org/doc/manuals/R-intro.html#Invoking-R">https://cran.r-project.org/doc/manuals/R-intro.html#Invoking-R</a></p>
 <h2 id="パッケージのサーチパス">パッケージのサーチパス</h2>
 <p><a href="https://stat.ethz.ch/R-manual/R-patched/library/base/html/libPaths.html">https://stat.ethz.ch/R-manual/R-patched/library/base/html/libPaths.html</a></p>
@@ -140,21 +140,21 @@ R.app や RStudio から使う場合はメニューから環境設定みたい�
 <h2 id="環境変数">環境変数</h2>
 <p><a href="https://cran.r-project.org/doc/manuals/R-admin.html#Environment-variable-index">https://cran.r-project.org/doc/manuals/R-admin.html#Environment-variable-index</a></p>
 <p><a href="https://stat.ethz.ch/R-manual/R-patched/library/base/html/EnvVar.html">https://stat.ethz.ch/R-manual/R-patched/library/base/html/EnvVar.html</a></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">Sys.getenv</span><span class="p">()</span>
-</code></pre></div><h2 id="renviron">.Renviron</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">Sys.getenv</span><span class="p">()</span>
+</span></span></code></pre></div><h2 id="renviron">.Renviron</h2>
 <p><a href="https://stat.ethz.ch/R-manual/R-patched/library/base/html/Startup.html">https://stat.ethz.ch/R-manual/R-patched/library/base/html/Startup.html</a></p>
 <p>R起動時に読み込まれ、環境変数を設定するファイル。
 Rスクリプトではなく、シェルスクリプトっぽい代入式で書く。
 例 (<a href="https://github.com/heavywatal/dotfiles/blob/master/.R/.Renviron">https://github.com/heavywatal/dotfiles/blob/master/.R/.Renviron</a>):</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">R_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.R
-<span class="nv">R_LIBS_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">R_USER</span><span class="si">}</span>/library/%v
-<span class="nv">R_ENVIRON_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">R_USER</span><span class="si">}</span>/.Renviron
-<span class="nv">R_PROFILE_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">R_USER</span><span class="si">}</span>/.Rprofile
-<span class="nv">R_HISTFILE</span><span class="o">=</span><span class="si">${</span><span class="nv">R_USER</span><span class="si">}</span>/.Rhistory
-<span class="nv">R_HISTSIZE</span><span class="o">=</span><span class="m">65535</span>
-<span class="nv">LANG</span><span class="o">=</span>C
-<span class="nv">LC_CTYPE</span><span class="o">=</span>en_US.UTF-8
-</code></pre></div><p>探される・読み込まれる順序はだいたい以下のとおり:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nv">R_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.R
+</span></span><span class="line"><span class="cl"><span class="nv">R_LIBS_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">R_USER</span><span class="si">}</span>/library/%v
+</span></span><span class="line"><span class="cl"><span class="nv">R_ENVIRON_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">R_USER</span><span class="si">}</span>/.Renviron
+</span></span><span class="line"><span class="cl"><span class="nv">R_PROFILE_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">R_USER</span><span class="si">}</span>/.Rprofile
+</span></span><span class="line"><span class="cl"><span class="nv">R_HISTFILE</span><span class="o">=</span><span class="si">${</span><span class="nv">R_USER</span><span class="si">}</span>/.Rhistory
+</span></span><span class="line"><span class="cl"><span class="nv">R_HISTSIZE</span><span class="o">=</span><span class="m">65535</span>
+</span></span><span class="line"><span class="cl"><span class="nv">LANG</span><span class="o">=</span>C
+</span></span><span class="line"><span class="cl"><span class="nv">LC_CTYPE</span><span class="o">=</span>en_US.UTF-8
+</span></span></code></pre></div><p>探される・読み込まれる順序はだいたい以下のとおり:</p>
 <ol>
 <li><code>$R_ENVIRON</code></li>
 <li><code>$R_HOME/etc/Renviron.site</code></li>
@@ -226,14 +226,14 @@ Pythonほどわかりやすくないが、ちょっとはマシになる。</dd>
 <a href="/mac/homebrew.html">Homebrew</a>で
 <code>gcc</code> か <code>llvm</code> をインストールし、
 そっちを使ってビルドするように <code>~/.R/Makevars</code> で指定する:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-make" data-lang="make"><span class="c"># gcc
-</span><span class="c"></span><span class="nv">CC</span><span class="o">=</span>/usr/local/bin/gcc-8
-<span class="nv">CXX</span><span class="o">=</span>/usr/local/bin/g++-8
-
-<span class="c"># llvm
-</span><span class="c"></span><span class="nv">CC</span><span class="o">=</span>/usr/local/opt/llvm/bin/clang
-<span class="nv">CXX</span><span class="o">=</span>/usr/local/opt/llvm/bin/clang++
-</code></pre></div><p><code>CPPFLAGS</code>, <code>CFLAGS</code>, <code>CXXFLAGS</code>, <code>LDFLAGS</code> なども設定可能。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-make" data-lang="make"><span class="line"><span class="cl"><span class="c"># gcc
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nv">CC</span><span class="o">=</span>/usr/local/bin/gcc-8
+</span></span><span class="line"><span class="cl"><span class="nv">CXX</span><span class="o">=</span>/usr/local/bin/g++-8
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c"># llvm
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nv">CC</span><span class="o">=</span>/usr/local/opt/llvm/bin/clang
+</span></span><span class="line"><span class="cl"><span class="nv">CXX</span><span class="o">=</span>/usr/local/opt/llvm/bin/clang++
+</span></span></code></pre></div><p><code>CPPFLAGS</code>, <code>CFLAGS</code>, <code>CXXFLAGS</code>, <code>LDFLAGS</code> なども設定可能。</p>
 <p><a href="https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-Makevars">https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-Makevars</a></p>
 
 </article>

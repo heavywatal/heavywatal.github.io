@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.92.2" />
+<meta name="generator" content="Hugo 0.96.0" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -95,52 +95,52 @@ make
 を使って自動生成する。</p>
 <h2 id="makefile">Makefile</h2>
 <p>C++ソースコードと同じディレクトリに入れるだけでとりあえず使える例:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-makefile" data-lang="makefile"><span class="c">## Options
-</span><span class="c"></span><span class="nv">PROGRAM</span> <span class="o">:=</span> a.out
-<span class="nv">CXX</span> <span class="o">:=</span> clang++
-<span class="nv">CC</span> <span class="o">:=</span> clang
-<span class="nv">CXXFLAGS</span> <span class="o">:=</span> -Wall -Wextra -O3 -std<span class="o">=</span>c++14
-<span class="nv">CPPFLAGS</span> <span class="o">:=</span> -I/usr/local/include -I<span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local/include
-<span class="nv">LDFLAGS</span> <span class="o">:=</span> -L/usr/local/lib -L<span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local/lib
-<span class="c">#LDLIBS := -lboost_program_options
-</span><span class="c"></span><span class="nv">TARGET_ARCH</span> <span class="o">:=</span> -march<span class="o">=</span>native
-
-<span class="c">## Dependencies
-</span><span class="c"></span><span class="nv">SRCS</span> <span class="o">:=</span> <span class="k">$(</span>wildcard *.cpp<span class="k">)</span>
-<span class="nv">OBJS</span> <span class="o">:=</span> <span class="k">$(</span>SRCS:.cpp<span class="o">=</span>.o<span class="k">)</span>
-
-<span class="err">-include</span> <span class="err">Dependfile</span>
-<span class="nf">Dependfile</span><span class="o">:</span>
-        <span class="si">${</span><span class="nv">CXX</span><span class="si">}</span> -MM <span class="si">${</span><span class="nv">CPPFLAGS</span><span class="si">}</span> <span class="si">${</span><span class="nv">CXXFLAGS</span><span class="si">}</span> <span class="si">${</span><span class="nv">TARGET_ARCH</span><span class="si">}</span> <span class="si">${</span><span class="nv">SRCS</span><span class="si">}</span> &gt; Dependfile
-
-<span class="c">## Targets
-</span><span class="c"></span><span class="nv">.DEFAULT_GOAL</span> <span class="o">:=</span> all
-<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">all</span> <span class="n">clean</span>
-
-<span class="nf">all</span><span class="o">:</span> ${<span class="n">PROGRAM</span>}
-        @:
-
-<span class="nf">${PROGRAM}</span><span class="o">:</span> ${<span class="n">OBJS</span>}
-        <span class="si">${</span><span class="nv">LINK</span><span class="p">.cpp</span><span class="si">}</span> <span class="si">${</span><span class="nv">OUTPUT_OPTION</span><span class="si">}</span> $^ <span class="si">${</span><span class="nv">LDLIBS</span><span class="si">}</span>
-
-<span class="nf">clean</span><span class="o">:</span>
-        <span class="si">${</span><span class="nv">RM</span><span class="si">}</span> <span class="si">${</span><span class="nv">OBJS</span><span class="si">}</span> <span class="si">${</span><span class="nv">PROGRAM</span><span class="si">}</span>
-</code></pre></div><h3 id="rulehttpswwwgnuorgsoftwaremakemanualmakehtmlrules"><a href="https://www.gnu.org/software/make/manual/make.html#Rules">Rule</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-makefile" data-lang="makefile"><span class="line"><span class="cl"><span class="c">## Options
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nv">PROGRAM</span> <span class="o">:=</span> a.out
+</span></span><span class="line"><span class="cl"><span class="nv">CXX</span> <span class="o">:=</span> clang++
+</span></span><span class="line"><span class="cl"><span class="nv">CC</span> <span class="o">:=</span> clang
+</span></span><span class="line"><span class="cl"><span class="nv">CXXFLAGS</span> <span class="o">:=</span> -Wall -Wextra -O3 -std<span class="o">=</span>c++14
+</span></span><span class="line"><span class="cl"><span class="nv">CPPFLAGS</span> <span class="o">:=</span> -I/usr/local/include -I<span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local/include
+</span></span><span class="line"><span class="cl"><span class="nv">LDFLAGS</span> <span class="o">:=</span> -L/usr/local/lib -L<span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local/lib
+</span></span><span class="line"><span class="cl"><span class="c">#LDLIBS := -lboost_program_options
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nv">TARGET_ARCH</span> <span class="o">:=</span> -march<span class="o">=</span>native
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c">## Dependencies
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nv">SRCS</span> <span class="o">:=</span> <span class="k">$(</span>wildcard *.cpp<span class="k">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">OBJS</span> <span class="o">:=</span> <span class="k">$(</span>SRCS:.cpp<span class="o">=</span>.o<span class="k">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">-include</span> <span class="err">Dependfile</span>
+</span></span><span class="line"><span class="cl"><span class="nf">Dependfile</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">        <span class="si">${</span><span class="nv">CXX</span><span class="si">}</span> -MM <span class="si">${</span><span class="nv">CPPFLAGS</span><span class="si">}</span> <span class="si">${</span><span class="nv">CXXFLAGS</span><span class="si">}</span> <span class="si">${</span><span class="nv">TARGET_ARCH</span><span class="si">}</span> <span class="si">${</span><span class="nv">SRCS</span><span class="si">}</span> &gt; Dependfile
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c">## Targets
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nv">.DEFAULT_GOAL</span> <span class="o">:=</span> all
+</span></span><span class="line"><span class="cl"><span class="nf">.PHONY</span><span class="o">:</span> <span class="n">all</span> <span class="n">clean</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">all</span><span class="o">:</span> ${<span class="n">PROGRAM</span>}
+</span></span><span class="line"><span class="cl">        @:
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">${PROGRAM}</span><span class="o">:</span> ${<span class="n">OBJS</span>}
+</span></span><span class="line"><span class="cl">        <span class="si">${</span><span class="nv">LINK</span><span class="p">.cpp</span><span class="si">}</span> <span class="si">${</span><span class="nv">OUTPUT_OPTION</span><span class="si">}</span> $^ <span class="si">${</span><span class="nv">LDLIBS</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">clean</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">        <span class="si">${</span><span class="nv">RM</span><span class="si">}</span> <span class="si">${</span><span class="nv">OBJS</span><span class="si">}</span> <span class="si">${</span><span class="nv">PROGRAM</span><span class="si">}</span>
+</span></span></code></pre></div><h3 id="rulehttpswwwgnuorgsoftwaremakemanualmakehtmlrules"><a href="https://www.gnu.org/software/make/manual/make.html#Rules">Rule</a></h3>
 <p>コロンとタブを使って以下のような形式でルールを書くのが基本。
 この<code>Makefile</code>があるところでターミナルから <code>make TARGET</code> と打つと、
 ターゲットよりもソースファイルが新しい場合にコマンドが実行される。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-make" data-lang="make"><span class="nf">TARGET </span><span class="o">:</span> <span class="n">SOURCE</span>1 <span class="n">SOURCE</span>2
-        COMMAND
-
-<span class="nf">a.out </span><span class="o">:</span> <span class="n">main</span>.<span class="n">cpp</span> <span class="n">sub</span>.<span class="n">cpp</span>
-        g++ -O2 main.cpp sub.cpp
-</code></pre></div><p>下記のようなパターンルールが予め定義されている。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-make" data-lang="make"><span class="line"><span class="cl"><span class="nf">TARGET </span><span class="o">:</span> <span class="n">SOURCE</span>1 <span class="n">SOURCE</span>2
+</span></span><span class="line"><span class="cl">        COMMAND
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">a.out </span><span class="o">:</span> <span class="n">main</span>.<span class="n">cpp</span> <span class="n">sub</span>.<span class="n">cpp</span>
+</span></span><span class="line"><span class="cl">        g++ -O2 main.cpp sub.cpp
+</span></span></code></pre></div><p>下記のようなパターンルールが予め定義されている。
 (see <a href="https://www.gnu.org/software/make/manual/make.html#Pattern-Rules">Pattern Rule</a>)</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-make" data-lang="make"><span class="nf">%.o </span><span class="o">:</span> %.<span class="n">c</span>
-        <span class="k">$(</span>CC<span class="k">)</span> <span class="k">$(</span>CPPFLAGS<span class="k">)</span> <span class="k">$(</span>CFLAGS<span class="k">)</span> -c $&lt; -o <span class="nv">$@</span>
-<span class="nf">%.o </span><span class="o">:</span> %.<span class="n">cpp</span>
-        <span class="k">$(</span>CXX<span class="k">)</span> <span class="k">$(</span>CPPFLAGS<span class="k">)</span> <span class="k">$(</span>CXXFLAGS<span class="k">)</span> -c $&lt; -o <span class="nv">$@</span>
-</code></pre></div><p>以下に紹介するように、ほかにも様々な変数や関数が用意されていて、
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-make" data-lang="make"><span class="line"><span class="cl"><span class="nf">%.o </span><span class="o">:</span> %.<span class="n">c</span>
+</span></span><span class="line"><span class="cl">        <span class="k">$(</span>CC<span class="k">)</span> <span class="k">$(</span>CPPFLAGS<span class="k">)</span> <span class="k">$(</span>CFLAGS<span class="k">)</span> -c $&lt; -o <span class="nv">$@</span>
+</span></span><span class="line"><span class="cl"><span class="nf">%.o </span><span class="o">:</span> %.<span class="n">cpp</span>
+</span></span><span class="line"><span class="cl">        <span class="k">$(</span>CXX<span class="k">)</span> <span class="k">$(</span>CPPFLAGS<span class="k">)</span> <span class="k">$(</span>CXXFLAGS<span class="k">)</span> -c $&lt; -o <span class="nv">$@</span>
+</span></span></code></pre></div><p>以下に紹介するように、ほかにも様々な変数や関数が用意されていて、
 個別のファイル名などをいちいち入力しなくても済むようになっている。</p>
 <h3 id="implicit-variableshttpswwwgnuorgsoftwaremakemanualmakehtmlimplicit-variables"><a href="https://www.gnu.org/software/make/manual/make.html#Implicit-Variables">Implicit Variables</a></h3>
 <p><a href="https://www.gnu.org/software/make/manual/make.html#Name-Index">https://www.gnu.org/software/make/manual/make.html#Name-Index</a></p>
@@ -225,9 +225,9 @@ e.g., <code>-march=native -m64 -msse -msse2 -msse3 -mfpmath=sse</code></dd>
 <dt><code>_</code></dt>
 <dd>v3.81以降であれば <code>.DEFAULT_GOAL</code> が効くので <code>make all</code> と同じ</dd>
 </dl>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">make clean
-make
-</code></pre></div><h2 id="optionshttpswwwgnuorgsoftwaremakemanualmakehtmloptions-summary"><a href="https://www.gnu.org/software/make/manual/make.html#Options-Summary">Options</a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">make clean
+</span></span><span class="line"><span class="cl">make
+</span></span></code></pre></div><h2 id="optionshttpswwwgnuorgsoftwaremakemanualmakehtmloptions-summary"><a href="https://www.gnu.org/software/make/manual/make.html#Options-Summary">Options</a></h2>
 <dl>
 <dt><code>-f file</code></dt>
 <dd><code>Makefile</code> じゃない名前のファイルを指定したければ</dd>

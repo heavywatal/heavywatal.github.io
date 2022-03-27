@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.92.2" />
+<meta name="generator" content="Hugo 0.96.0" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -89,60 +89,60 @@ Mac固有コマンド
 <h3 id="open"><code>open</code></h3>
 <p>Finder でダブルクリックするのと同じように、
 Terminal から一発でファイルを開くことができる。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 関連付けられたデフォルトのアプリケーションで開く</span>
-open hudson1992g.pdf
-
-<span class="c1"># アプリケーションを指定して開く</span>
-open -a Skim hudson1992g.pdf
-
-<span class="c1"># カレントディレクトリをFinderで開く</span>
-open .
-</code></pre></div><h3 id="pbcopy-pbpaste"><code>pbcopy</code>, <code>pbpaste</code></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 関連付けられたデフォルトのアプリケーションで開く</span>
+</span></span><span class="line"><span class="cl">open hudson1992g.pdf
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># アプリケーションを指定して開く</span>
+</span></span><span class="line"><span class="cl">open -a Skim hudson1992g.pdf
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># カレントディレクトリをFinderで開く</span>
+</span></span><span class="line"><span class="cl">open .
+</span></span></code></pre></div><h3 id="pbcopy-pbpaste"><code>pbcopy</code>, <code>pbpaste</code></h3>
 <p>ターミナルからクリップボード(pasteboard)を操作する。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">pwd</span> <span class="p">|</span> pbcopy
-pbpaste <span class="p">|</span> wc
-</code></pre></div><h3 id="say-音声読み上げ"><code>say</code> 音声読み上げ</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">say hello world
-pbpaste <span class="p">|</span> say
-</code></pre></div><p>声は環境設定の Accessibility &gt; Speech で変更可能。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">pwd</span> <span class="p">|</span> pbcopy
+</span></span><span class="line"><span class="cl">pbpaste <span class="p">|</span> wc
+</span></span></code></pre></div><h3 id="say-音声読み上げ"><code>say</code> 音声読み上げ</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">say hello world
+</span></span><span class="line"><span class="cl">pbpaste <span class="p">|</span> say
+</span></span></code></pre></div><p>声は環境設定の Accessibility &gt; Speech で変更可能。</p>
 <p>カーソル行あるいは選択中のテキストを読み上げるショートカットも設定できる。
 <kbd>option</kbd><kbd>esc</kbd></p>
 <h3 id="killall"><code>killall</code></h3>
 <p>Finder や Dock など、GUIから終了させにくいアプリケーションを再起動する:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">killall Finder
-killall Dock
-killall Kotoeri
-</code></pre></div><p>動作が不安定になったとき、設定変更を反映させたいとき、メモリを開放したいときなどに。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">killall Finder
+</span></span><span class="line"><span class="cl">killall Dock
+</span></span><span class="line"><span class="cl">killall Kotoeri
+</span></span></code></pre></div><p>動作が不安定になったとき、設定変更を反映させたいとき、メモリを開放したいときなどに。</p>
 <h2 id="設定関連">設定関連</h2>
 <h3 id="defaults"><code>defaults</code></h3>
 <p><code>/Library/Preferences/</code> 以下にある各種設定ファイル.plistを編集する。
 <code>true</code> に設定した項目を元に戻すには、
 項目自体を <code>delete</code> するか、<code>false</code> に設定する。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">defaults <span class="o">[</span>write/delete<span class="o">]</span> DOMAIN KEY -TYPE VALUE
-
-<span class="c1"># Finderのタイトルバーにフルパスを表示</span>
-defaults write com.apple.finder _FXShowPosixPathInTitle -boolean <span class="nb">true</span>
-
-<span class="c1"># iTerm2のタブの横幅を広くする</span>
-defaults write com.googlecode.iterm2 OptimumTabWidth -int <span class="m">360</span>
-
-<span class="c1"># Launchpadの並び順をリセット</span>
-defaults write com.apple.dock ResetLaunchPad -bool true<span class="p">;</span> killall Dock
-
-<span class="c1"># 使わないXcodeのための重いindexingを切っておく</span>
-defaults write com.apple.dt.Xcode IDEIndexDisable <span class="m">1</span>
-
-<span class="c1"># Quicklook上でコピペできるようにする</span>
-defaults write com.apple.finder QLEnableTextSelection -bool <span class="nb">true</span>
-
-<span class="c1"># 特定アプリをダークモードから除外する</span>
-<span class="c1"># osascript -e &#39;id of app &#34;Google Chrome&#34;&#39;</span>
-defaults write com.google.Chrome NSRequiresAquaSystemAppearance -bool <span class="nb">true</span>
-
-<span class="c1"># スクリーンショットを影なしで撮る</span>
-defaults write com.apple.screencapture disable-shadow -bool <span class="nb">true</span>
-killall SystemUIServer
-</code></pre></div><p><a href="https://www.titanium-software.fr/en/onyx.html">OnyX</a> や
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">defaults <span class="o">[</span>write/delete<span class="o">]</span> DOMAIN KEY -TYPE VALUE
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Finderのタイトルバーにフルパスを表示</span>
+</span></span><span class="line"><span class="cl">defaults write com.apple.finder _FXShowPosixPathInTitle -boolean <span class="nb">true</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># iTerm2のタブの横幅を広くする</span>
+</span></span><span class="line"><span class="cl">defaults write com.googlecode.iterm2 OptimumTabWidth -int <span class="m">360</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Launchpadの並び順をリセット</span>
+</span></span><span class="line"><span class="cl">defaults write com.apple.dock ResetLaunchPad -bool true<span class="p">;</span> killall Dock
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 使わないXcodeのための重いindexingを切っておく</span>
+</span></span><span class="line"><span class="cl">defaults write com.apple.dt.Xcode IDEIndexDisable <span class="m">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Quicklook上でコピペできるようにする</span>
+</span></span><span class="line"><span class="cl">defaults write com.apple.finder QLEnableTextSelection -bool <span class="nb">true</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 特定アプリをダークモードから除外する</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># osascript -e &#39;id of app &#34;Google Chrome&#34;&#39;</span>
+</span></span><span class="line"><span class="cl">defaults write com.google.Chrome NSRequiresAquaSystemAppearance -bool <span class="nb">true</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># スクリーンショットを影なしで撮る</span>
+</span></span><span class="line"><span class="cl">defaults write com.apple.screencapture disable-shadow -bool <span class="nb">true</span>
+</span></span><span class="line"><span class="cl">killall SystemUIServer
+</span></span></code></pre></div><p><a href="https://www.titanium-software.fr/en/onyx.html">OnyX</a> や
 <a href="https://www.bresink.com/osx/TinkerTool.html">TinkerTool</a>
 などのGUIアプリを使うほうが簡単で安心かも</p>
 <h3 id="launchctl"><code>launchctl</code></h3>
@@ -159,28 +159,28 @@ killall SystemUIServer
 外付けのボリュームを除外したい場合、
 GUIから環境設定してもejectするたびに戻ってしまうので、
 下記のように <code>mdutil</code> を使う必要がある:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># インデックス情報を表示</span>
-sudo mdutil -s /Volumes/Macintosh<span class="se">\ </span>HD
-
-<span class="c1"># インデックスサービスを切る</span>
-sudo mdutil -i off /Volumes/Macintosh<span class="se">\ </span>HD
-
-<span class="c1"># インデックスを作る・更新する</span>
-sudo mdiutil -p /Volumes/Macintosh<span class="se">\ </span>HD
-
-<span class="c1"># インデックスを一旦削除して作り直し</span>
-sudo mdutil -E /Volumes/Macintosh<span class="se">\ </span>HD
-</code></pre></div><h3 id="インストールなど">インストールなど</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># インデックス情報を表示</span>
+</span></span><span class="line"><span class="cl">sudo mdutil -s /Volumes/Macintosh<span class="se">\ </span>HD
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># インデックスサービスを切る</span>
+</span></span><span class="line"><span class="cl">sudo mdutil -i off /Volumes/Macintosh<span class="se">\ </span>HD
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># インデックスを作る・更新する</span>
+</span></span><span class="line"><span class="cl">sudo mdiutil -p /Volumes/Macintosh<span class="se">\ </span>HD
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># インデックスを一旦削除して作り直し</span>
+</span></span><span class="line"><span class="cl">sudo mdutil -E /Volumes/Macintosh<span class="se">\ </span>HD
+</span></span></code></pre></div><h3 id="インストールなど">インストールなど</h3>
 <p><code>.dmg</code> のマウント、<code>.pkg</code> からのインストール、
 システムのソフトウェア・アップデートなどを
 <code>ssh</code> 越しにやらねばならぬときもある:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">hdiutil mount SomeDiskImage.dmg
-
-sudo installer -pkg SomePackage.pkg -target /
-
-softwareupdate -l
-softwareupdate -i -a
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">hdiutil mount SomeDiskImage.dmg
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sudo installer -pkg SomePackage.pkg -target /
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">softwareupdate -l
+</span></span><span class="line"><span class="cl">softwareupdate -i -a
+</span></span></code></pre></div>
 </article>
 </main>
 

@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.92.2" />
+<meta name="generator" content="Hugo 0.96.0" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -171,13 +171,13 @@ rgl — 3Dグラフ描画
 <code>fov</code> [0, 179]: 0のとき無限遠から見たような平行投影。</dd>
 </dl>
 <h3 id="複数の図をまとめる">複数の図をまとめる</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="c1"># レイアウトを指定</span>
-<span class="nf">mfrow3d</span><span class="p">(</span><span class="n">nr</span><span class="p">,</span> <span class="n">nc</span><span class="p">,</span> <span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">NA</span><span class="p">,</span> <span class="n">sharedMouse</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span> <span class="kc">...</span><span class="p">)</span>
-<span class="nf">layout3d</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span> <span class="n">widths</span><span class="p">,</span> <span class="n">heights</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">NA</span><span class="p">,</span> <span class="n">sharedMouse</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span> <span class="kc">...</span><span class="p">)</span>
-
-<span class="c1"># 次のsubsceneに移動</span>
-<span class="nf">next3d</span><span class="p">(</span><span class="n">current</span><span class="o">=</span><span class="kc">NA</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
-</code></pre></div><p>これらはなぜかグローバルスコープでしか動作しない。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1"># レイアウトを指定</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mfrow3d</span><span class="p">(</span><span class="n">nr</span><span class="p">,</span> <span class="n">nc</span><span class="p">,</span> <span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">NA</span><span class="p">,</span> <span class="n">sharedMouse</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span> <span class="kc">...</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">layout3d</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span> <span class="n">widths</span><span class="p">,</span> <span class="n">heights</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">NA</span><span class="p">,</span> <span class="n">sharedMouse</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span> <span class="kc">...</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 次のsubsceneに移動</span>
+</span></span><span class="line"><span class="cl"><span class="nf">next3d</span><span class="p">(</span><span class="n">current</span><span class="o">=</span><span class="kc">NA</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+</span></span></code></pre></div><p>これらはなぜかグローバルスコープでしか動作しない。
 つまり、関数やループ内に入れるとサイズなどがうまく反映されない。</p>
 <h2 id="出力">出力</h2>
 <h3 id="ファイルに書き出す">ファイルに書き出す</h3>
@@ -237,21 +237,21 @@ purrr::map(seq_len(3), ~{
 <p><code>rgl::par3dinterp(times=NULL, userMatrix, scale, zoom, FOV, method, extrapolate)</code></p>
 <p><code>rgl::play3d(f, duration=Inf, ...)</code></p>
 <p><code>rgl::movie3d(f, duration, ..., fps=10, movie=&quot;movie&quot;, frames=movie, dir=tempdir(), ...)</code></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="c1">## 角度をセット</span>
-<span class="n">rgl</span><span class="o">::</span><span class="nf">view3d</span><span class="p">(</span><span class="m">-25</span><span class="p">,</span> <span class="m">15</span><span class="p">,</span> <span class="m">40</span><span class="p">)</span>
-
-<span class="c1">## 最前面に持ってくる</span>
-<span class="nf">rgl.bringtotop</span><span class="p">()</span>
-
-<span class="c1">## アニメーション関数を作る</span>
-<span class="n">.anime</span> <span class="o">=</span> <span class="n">rgl</span><span class="o">::</span><span class="nf">spin3d</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">),</span> <span class="n">rpm</span><span class="o">=</span><span class="m">15</span><span class="p">)</span>
-
-<span class="c1">## X11で再生</span>
-<span class="n">rgl</span><span class="o">::</span><span class="nf">play3d</span><span class="p">(</span><span class="n">.anime</span><span class="p">)</span>
-
-<span class="c1">## GIFアニメとして保存</span>
-<span class="n">rgl</span><span class="o">::</span><span class="nf">movie3d</span><span class="p">(</span><span class="n">.anime</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="m">4</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="m">16</span><span class="p">,</span> <span class="n">movie</span><span class="o">=</span><span class="s">&#34;basename&#34;</span><span class="p">,</span> <span class="n">dir</span><span class="o">=</span><span class="s">&#34;~/tmp&#34;</span><span class="p">)</span>
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1">## 角度をセット</span>
+</span></span><span class="line"><span class="cl"><span class="n">rgl</span><span class="o">::</span><span class="nf">view3d</span><span class="p">(</span><span class="m">-25</span><span class="p">,</span> <span class="m">15</span><span class="p">,</span> <span class="m">40</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## 最前面に持ってくる</span>
+</span></span><span class="line"><span class="cl"><span class="nf">rgl.bringtotop</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## アニメーション関数を作る</span>
+</span></span><span class="line"><span class="cl"><span class="n">.anime</span> <span class="o">=</span> <span class="n">rgl</span><span class="o">::</span><span class="nf">spin3d</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">),</span> <span class="n">rpm</span><span class="o">=</span><span class="m">15</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## X11で再生</span>
+</span></span><span class="line"><span class="cl"><span class="n">rgl</span><span class="o">::</span><span class="nf">play3d</span><span class="p">(</span><span class="n">.anime</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## GIFアニメとして保存</span>
+</span></span><span class="line"><span class="cl"><span class="n">rgl</span><span class="o">::</span><span class="nf">movie3d</span><span class="p">(</span><span class="n">.anime</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="m">4</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="m">16</span><span class="p">,</span> <span class="n">movie</span><span class="o">=</span><span class="s">&#34;basename&#34;</span><span class="p">,</span> <span class="n">dir</span><span class="o">=</span><span class="s">&#34;~/tmp&#34;</span><span class="p">)</span>
+</span></span></code></pre></div>
 </article>
 </main>
 

@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.92.2" />
+<meta name="generator" content="Hugo 0.96.0" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -137,14 +137,14 @@ R標準の関数よりも遥かに分かりやすく安全で高機能なもの�
 <p><code>1 - pnorm(...)</code>や<code>log(pnorm(...))</code>のほうが直感的に分かりやすいので、
 <code>lower.tail = FALSE</code>や<code>log.p = TRUE</code>は不要なようにも思われるが、
 これらの引数で内部処理させたほうが浮動小数点型の限界付近での計算が正確。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="c1"># complementary</span>
-<span class="m">1</span> <span class="o">-</span> <span class="nf">pnorm</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>                <span class="c1"># 0</span>
-<span class="nf">pnorm</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="n">lower.tail</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span>  <span class="c1"># 7.619853e-24</span>
-
-<span class="c1"># log</span>
-<span class="nf">log</span><span class="p">(</span><span class="nf">pnorm</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">))</span>               <span class="c1"># 0</span>
-<span class="nf">pnorm</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="n">log.p</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>        <span class="c1"># -7.619853e-24</span>
-</code></pre></div></dd>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1"># complementary</span>
+</span></span><span class="line"><span class="cl"><span class="m">1</span> <span class="o">-</span> <span class="nf">pnorm</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>                <span class="c1"># 0</span>
+</span></span><span class="line"><span class="cl"><span class="nf">pnorm</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="n">lower.tail</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span>  <span class="c1"># 7.619853e-24</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># log</span>
+</span></span><span class="line"><span class="cl"><span class="nf">log</span><span class="p">(</span><span class="nf">pnorm</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">))</span>               <span class="c1"># 0</span>
+</span></span><span class="line"><span class="cl"><span class="nf">pnorm</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="n">log.p</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>        <span class="c1"># -7.619853e-24</span>
+</span></span></code></pre></div></dd>
 <dt><code>q___(p, ..., lower.tail = TRUE, log.p = FALSE)</code></dt>
 <dd>累積分布関数の逆関数。
 左からの累積確率が <code>p</code> となる確率変数の値。
@@ -153,98 +153,98 @@ R標準の関数よりも遥かに分かりやすく安全で高機能なもの�
 <dt><code>r___(n, ...)</code></dt>
 <dd>乱数を <code>n</code> 個生成する</dd>
 </dl>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">dnorm</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1.96</span><span class="p">))</span>
-<span class="c1">## [1] 0.39894228 0.05844094</span>
-<span class="nf">pnorm</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1.96</span><span class="p">))</span>
-<span class="c1">## [1] 0.5000000 0.9750021</span>
-<span class="nf">qnorm</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">0.5</span><span class="p">,</span> <span class="m">0.975</span><span class="p">))</span>
-<span class="c1">## [1] 0.000000 1.959964</span>
-<span class="nf">rnorm</span><span class="p">(</span><span class="m">4</span><span class="p">)</span>
-<span class="c1">## [1] -1.77327259  0.95713346  0.27941121  0.08387267</span>
-</code></pre></div><h3 id="分布の種類">分布の種類</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">dnorm</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1.96</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## [1] 0.39894228 0.05844094</span>
+</span></span><span class="line"><span class="cl"><span class="nf">pnorm</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1.96</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## [1] 0.5000000 0.9750021</span>
+</span></span><span class="line"><span class="cl"><span class="nf">qnorm</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">0.5</span><span class="p">,</span> <span class="m">0.975</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## [1] 0.000000 1.959964</span>
+</span></span><span class="line"><span class="cl"><span class="nf">rnorm</span><span class="p">(</span><span class="m">4</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## [1] -1.77327259  0.95713346  0.27941121  0.08387267</span>
+</span></span></code></pre></div><h3 id="分布の種類">分布の種類</h3>
 <p>離散</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">_binom</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">prob</span><span class="p">)</span>
-<span class="nf">_geom</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span>
-<span class="nf">_hyper</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
-<span class="nf">_nbinom</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">prob</span><span class="p">,</span> <span class="n">mu</span><span class="p">)</span>
-<span class="nf">_pois</span><span class="p">(</span><span class="n">lambda</span><span class="p">)</span>
-<span class="nf">_signrank</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-<span class="nf">_wilcox</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
-</code></pre></div><p>連続</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">_beta</span><span class="p">(</span><span class="n">shape1</span><span class="p">,</span> <span class="n">shape2</span><span class="p">)</span>
-<span class="nf">_cauchy</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
-<span class="nf">_chisq</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-<span class="nf">_exp</span><span class="p">(</span><span class="n">rate</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
-<span class="nf">_f</span><span class="p">(</span><span class="n">df1</span><span class="p">,</span> <span class="n">df2</span><span class="p">)</span>
-<span class="nf">_gamma</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">rate</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="m">1</span> <span class="o">/</span> <span class="n">rate</span><span class="p">)</span>
-<span class="nf">_lnorm</span><span class="p">(</span><span class="n">meanlog</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">sdlog</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
-<span class="nf">_logis</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
-<span class="nf">_norm</span><span class="p">(</span><span class="n">mean</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">sd</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
-<span class="nf">_t</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-<span class="nf">_unif</span><span class="p">(</span><span class="n">min</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">max</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
-<span class="nf">_weibull</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
-</code></pre></div><h2 id="関数を作る">関数を作る</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">_binom</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">prob</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">_geom</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">_hyper</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">_nbinom</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">prob</span><span class="p">,</span> <span class="n">mu</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">_pois</span><span class="p">(</span><span class="n">lambda</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">_signrank</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">_wilcox</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</span></span></code></pre></div><p>連続</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">_beta</span><span class="p">(</span><span class="n">shape1</span><span class="p">,</span> <span class="n">shape2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">_cauchy</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">_chisq</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">_exp</span><span class="p">(</span><span class="n">rate</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">_f</span><span class="p">(</span><span class="n">df1</span><span class="p">,</span> <span class="n">df2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">_gamma</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">rate</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="m">1</span> <span class="o">/</span> <span class="n">rate</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">_lnorm</span><span class="p">(</span><span class="n">meanlog</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">sdlog</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">_logis</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">_norm</span><span class="p">(</span><span class="n">mean</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">sd</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">_t</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">_unif</span><span class="p">(</span><span class="n">min</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">max</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">_weibull</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
+</span></span></code></pre></div><h2 id="関数を作る">関数を作る</h2>
 <p>基本</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">my_add</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span> <span class="p">{</span>
-   <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
-<span class="p">}</span>
-
-<span class="nf">my_add</span><span class="p">(</span><span class="m">13</span><span class="p">,</span> <span class="m">29</span><span class="p">)</span>  <span class="c1"># 42</span>
-<span class="nf">my_add</span><span class="p">(</span><span class="m">3</span><span class="p">)</span>       <span class="c1"># 4   (2つめの引数を省略すると1)</span>
-</code></pre></div><h3 id="引数の選択肢を指定チェック-matcharg">引数の選択肢を指定・チェック <code>match.arg()</code></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">my_add</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">   <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">my_add</span><span class="p">(</span><span class="m">13</span><span class="p">,</span> <span class="m">29</span><span class="p">)</span>  <span class="c1"># 42</span>
+</span></span><span class="line"><span class="cl"><span class="nf">my_add</span><span class="p">(</span><span class="m">3</span><span class="p">)</span>       <span class="c1"># 4   (2つめの引数を省略すると1)</span>
+</span></span></code></pre></div><h3 id="引数の選択肢を指定チェック-matcharg">引数の選択肢を指定・チェック <code>match.arg()</code></h3>
 <p>省略すると先頭の要素が採用される</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">great_scott</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;Marty&#34;</span><span class="p">,</span> <span class="s">&#34;Emmett&#34;</span><span class="p">,</span> <span class="s">&#34;Biff&#34;</span><span class="p">))</span> <span class="p">{</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="nf">match.arg</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-    <span class="nf">print</span><span class="p">(</span><span class="nf">sprintf</span><span class="p">(</span><span class="s">&#34;I am %s.&#34;</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
-<span class="p">}</span>
-<span class="nf">great_scott</span><span class="p">(</span><span class="s">&#34;Marty&#34;</span><span class="p">)</span>     <span class="c1"># OK</span>
-<span class="nf">great_scott</span><span class="p">(</span><span class="s">&#34;DeLorean&#34;</span><span class="p">)</span>  <span class="c1"># Error</span>
-<span class="nf">great_scott</span><span class="p">()</span>            <span class="c1"># OK, Marty</span>
-</code></pre></div><h3 id="引数の有無をチェック">引数の有無をチェック</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">great_scott</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;Marty&#34;</span><span class="p">,</span> <span class="s">&#34;Emmett&#34;</span><span class="p">,</span> <span class="s">&#34;Biff&#34;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">name</span> <span class="o">=</span> <span class="nf">match.arg</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">print</span><span class="p">(</span><span class="nf">sprintf</span><span class="p">(</span><span class="s">&#34;I am %s.&#34;</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nf">great_scott</span><span class="p">(</span><span class="s">&#34;Marty&#34;</span><span class="p">)</span>     <span class="c1"># OK</span>
+</span></span><span class="line"><span class="cl"><span class="nf">great_scott</span><span class="p">(</span><span class="s">&#34;DeLorean&#34;</span><span class="p">)</span>  <span class="c1"># Error</span>
+</span></span><span class="line"><span class="cl"><span class="nf">great_scott</span><span class="p">()</span>            <span class="c1"># OK, Marty</span>
+</span></span></code></pre></div><h3 id="引数の有無をチェック">引数の有無をチェック</h3>
 <p>困ったことに、引数不足で呼び出した瞬間にはエラーを出してくれず、
 関数の中でその引数の中身を参照しようとしたところで初めてエラーが出て止まる</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">my_func</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nf">print</span><span class="p">(</span><span class="s">&#34;WTF! This line is printed anyway.&#34;</span><span class="p">)</span>
-    <span class="nf">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="p">}</span>
-<span class="nf">my_func</span><span class="p">()</span>
-</code></pre></div><p>関数の中で <code>missing()</code> を使えばエラーを出さずに有無をチェックできる。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">my_func</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">print</span><span class="p">(</span><span class="s">&#34;WTF! This line is printed anyway.&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nf">my_func</span><span class="p">()</span>
+</span></span></code></pre></div><p>関数の中で <code>missing()</code> を使えばエラーを出さずに有無をチェックできる。
 これを利用して引数省略可能な関数を作ることもできるが、
 それなら素直にデフォルト引数を使ったほうがシンプルだし、
 利用者は引数を見るだけで意図を読み取れる</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">good_func</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
-<span class="p">}</span>
-
-<span class="n">bad_func</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nf">if </span><span class="p">(</span><span class="nf">missing</span><span class="p">(</span><span class="n">y</span><span class="p">))</span> <span class="p">{</span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="p">}</span>
-    <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
-<span class="p">}</span>
-
-<span class="nf">good_func</span><span class="p">(</span><span class="m">3</span><span class="p">)</span>  <span class="c1"># 6</span>
-<span class="nf">bad_func</span><span class="p">(</span><span class="m">3</span><span class="p">)</span>   <span class="c1"># 6</span>
-</code></pre></div><h3 id="可変長引数-">可変長引数 (<code>...</code>)</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">good_func</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">bad_func</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">if </span><span class="p">(</span><span class="nf">missing</span><span class="p">(</span><span class="n">y</span><span class="p">))</span> <span class="p">{</span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">good_func</span><span class="p">(</span><span class="m">3</span><span class="p">)</span>  <span class="c1"># 6</span>
+</span></span><span class="line"><span class="cl"><span class="nf">bad_func</span><span class="p">(</span><span class="m">3</span><span class="p">)</span>   <span class="c1"># 6</span>
+</span></span></code></pre></div><h3 id="可変長引数-">可変長引数 (<code>...</code>)</h3>
 <p>最後の引数をピリオド３つにし、<code>list(...)</code> か <code>c(...)</code> で受け取る</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">func</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">...</span><span class="p">){</span>
-    <span class="nf">for </span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="nf">c</span><span class="p">(</span><span class="kc">...</span><span class="p">))</span> <span class="p">{</span>
-        <span class="nf">cat</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s">&#34;\n&#34;</span><span class="p">)</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div><h3 id="引数を中身ではなく名前として評価">引数を中身ではなく名前として評価</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">value</span> <span class="o">=</span> <span class="m">42</span>
-<span class="n">fun1</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">x</span>
-<span class="n">fun2</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="nf">substitute</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="n">fun3</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="nf">deparse</span><span class="p">(</span><span class="nf">substitute</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-
-<span class="nf">fun1</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-<span class="c1">## [1] 42</span>
-<span class="nf">fun1</span><span class="p">(</span><span class="nf">quote</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
-<span class="c1">## value</span>
-<span class="nf">fun2</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-<span class="c1">## value</span>
-<span class="nf">fun3</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-<span class="c1">## [1] &#34;value&#34;</span>
-</code></pre></div><p>詳しくは non-standard expression (NSE) で調べる:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">func</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">...</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">for </span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="nf">c</span><span class="p">(</span><span class="kc">...</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">cat</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s">&#34;\n&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3 id="引数を中身ではなく名前として評価">引数を中身ではなく名前として評価</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">value</span> <span class="o">=</span> <span class="m">42</span>
+</span></span><span class="line"><span class="cl"><span class="n">fun1</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">x</span>
+</span></span><span class="line"><span class="cl"><span class="n">fun2</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="nf">substitute</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">fun3</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="nf">deparse</span><span class="p">(</span><span class="nf">substitute</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">fun1</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## [1] 42</span>
+</span></span><span class="line"><span class="cl"><span class="nf">fun1</span><span class="p">(</span><span class="nf">quote</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## value</span>
+</span></span><span class="line"><span class="cl"><span class="nf">fun2</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## value</span>
+</span></span><span class="line"><span class="cl"><span class="nf">fun3</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## [1] &#34;value&#34;</span>
+</span></span></code></pre></div><p>詳しくは non-standard expression (NSE) で調べる:</p>
 <ul>
 <li><a href="https://adv-r.hadley.nz/meta">https://adv-r.hadley.nz/meta</a></li>
 <li><a href="https://cran.r-project.org/web/packages/dplyr/vignettes/programming.html">https://cran.r-project.org/web/packages/dplyr/vignettes/programming.html</a></li>
@@ -261,81 +261,81 @@ R標準の関数よりも遥かに分かりやすく安全で高機能なもの�
 <p>Rの数値や文字列は1個の値でもベクトル扱い。
 同じ長さ(または長さ1)の相手との計算はベクトルのまま行える。
 自分で <code>for</code> 文を書くよりこれを利用するほうが楽チンで高速。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">x</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">)</span>  <span class="c1"># 長さ3の数値ベクトル</span>
-<span class="n">x</span> <span class="o">+</span> <span class="n">x</span>           <span class="c1"># 同じ長さ同士の計算</span>
-<span class="c1"># [1] 2 4 6</span>
-
-<span class="n">y</span> <span class="o">=</span> <span class="m">42</span>          <span class="c1"># 長さ1の数値ベクトル</span>
-<span class="n">x</span> <span class="o">+</span> <span class="n">y</span>           <span class="c1"># 長さ3 + 長さ1 = 長さ3 (それぞれ足し算)</span>
-<span class="c1"># [1] 43 44 45</span>
-
-<span class="c1"># 自分でforを書く悪い例。</span>
-<span class="c1"># コードが無駄に長くなる上に実行速度も遅い。</span>
-<span class="n">z</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
-<span class="nf">for </span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="nf">seq_len</span><span class="p">(</span><span class="m">3</span><span class="p">))</span> <span class="p">{</span>
-  <span class="n">z[i]</span> <span class="o">=</span> <span class="n">x[i]</span> <span class="o">+</span> <span class="n">y</span>
-<span class="p">}</span>
-</code></pre></div><p>四則演算のみならず様々な処理がベクトルのまま行えるようになっている。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">x</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">)</span>  <span class="c1"># 長さ3の数値ベクトル</span>
+</span></span><span class="line"><span class="cl"><span class="n">x</span> <span class="o">+</span> <span class="n">x</span>           <span class="c1"># 同じ長さ同士の計算</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># [1] 2 4 6</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">y</span> <span class="o">=</span> <span class="m">42</span>          <span class="c1"># 長さ1の数値ベクトル</span>
+</span></span><span class="line"><span class="cl"><span class="n">x</span> <span class="o">+</span> <span class="n">y</span>           <span class="c1"># 長さ3 + 長さ1 = 長さ3 (それぞれ足し算)</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># [1] 43 44 45</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 自分でforを書く悪い例。</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># コードが無駄に長くなる上に実行速度も遅い。</span>
+</span></span><span class="line"><span class="cl"><span class="n">z</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">for </span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="nf">seq_len</span><span class="p">(</span><span class="m">3</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">z[i]</span> <span class="o">=</span> <span class="n">x[i]</span> <span class="o">+</span> <span class="n">y</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>四則演算のみならず様々な処理がベクトルのまま行えるようになっている。
 e.g., <code>log()</code>, <code>sqrt()</code>, <code>ifelse()</code>, <code>paste()</code></p>
 <h3 id="並列化">並列化</h3>
 <p>See <a href="/rstats/foreach.html#parallel">foreach #parallel</a></p>
 <h3 id="イテレータでメモリ節約">イテレータでメモリ節約</h3>
 <p>See <a href="/rstats/foreach.html#iterators">foreach #iterators</a></p>
 <h3 id="ボトルネックを知る">ボトルネックを知る</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">Rprof</span><span class="p">()</span>           <span class="c1"># start profiling</span>
-<span class="nf">some_hard_work</span><span class="p">()</span>
-<span class="nf">Rprof</span><span class="p">(</span><span class="kc">NULL</span><span class="p">)</span>       <span class="c1"># end profiling</span>
-<span class="nf">summaryRprof</span><span class="p">()</span>
-</code></pre></div><h3 id="実行時間の計測比較">実行時間の計測・比較</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">r_for</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">{</span>
-  <span class="n">s</span> <span class="o">=</span> <span class="m">0</span><span class="p">;</span> <span class="nf">for </span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="nf">seq_len</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="p">{</span><span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="m">1</span> <span class="o">/</span> <span class="n">i</span><span class="p">};</span> <span class="n">s</span>
-<span class="p">}</span>
-<span class="n">r_vec</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="nf">sum</span><span class="p">(</span><span class="m">1</span> <span class="o">/</span> <span class="nf">seq_len</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
-
-<span class="n">Rcpp</span><span class="o">::</span><span class="nf">cppFunction</span><span class="p">(</span><span class="s">&#34;double rcpp(int n) {
-</span><span class="s">  double s = 0; for (int i = 1; i &lt;= n; ++i) {s += 1.0 / i;} return s;
-</span><span class="s">}&#34;</span><span class="p">)</span>  <span class="c1"># Compilation takes a few seconds here</span>
-
-<span class="n">n</span> <span class="o">=</span> <span class="m">1000000L</span>
-<span class="nf">system.time</span><span class="p">(</span><span class="nf">r_for</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
-<span class="nf">system.time</span><span class="p">(</span><span class="nf">r_vec</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
-<span class="nf">system.time</span><span class="p">(</span><span class="nf">rcpp</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
-</code></pre></div><p>計測にはr-libチームによる<a href="https://bench.r-lib.org/">bench</a>が便利。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">Rprof</span><span class="p">()</span>           <span class="c1"># start profiling</span>
+</span></span><span class="line"><span class="cl"><span class="nf">some_hard_work</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nf">Rprof</span><span class="p">(</span><span class="kc">NULL</span><span class="p">)</span>       <span class="c1"># end profiling</span>
+</span></span><span class="line"><span class="cl"><span class="nf">summaryRprof</span><span class="p">()</span>
+</span></span></code></pre></div><h3 id="実行時間の計測比較">実行時間の計測・比較</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">r_for</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">s</span> <span class="o">=</span> <span class="m">0</span><span class="p">;</span> <span class="nf">for </span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="nf">seq_len</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="p">{</span><span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="m">1</span> <span class="o">/</span> <span class="n">i</span><span class="p">};</span> <span class="n">s</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">r_vec</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="nf">sum</span><span class="p">(</span><span class="m">1</span> <span class="o">/</span> <span class="nf">seq_len</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Rcpp</span><span class="o">::</span><span class="nf">cppFunction</span><span class="p">(</span><span class="s">&#34;double rcpp(int n) {
+</span></span></span><span class="line"><span class="cl"><span class="s">  double s = 0; for (int i = 1; i &lt;= n; ++i) {s += 1.0 / i;} return s;
+</span></span></span><span class="line"><span class="cl"><span class="s">}&#34;</span><span class="p">)</span>  <span class="c1"># Compilation takes a few seconds here</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">n</span> <span class="o">=</span> <span class="m">1000000L</span>
+</span></span><span class="line"><span class="cl"><span class="nf">system.time</span><span class="p">(</span><span class="nf">r_for</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="nf">system.time</span><span class="p">(</span><span class="nf">r_vec</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="nf">system.time</span><span class="p">(</span><span class="nf">rcpp</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+</span></span></code></pre></div><p>計測にはr-libチームによる<a href="https://bench.r-lib.org/">bench</a>が便利。
 時間だけでなくメモリや実行結果までチェックした上、可視化までお世話してくれる:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">df</span> <span class="o">=</span> <span class="n">bench</span><span class="o">::</span><span class="nf">mark</span><span class="p">(</span><span class="nf">r_for</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">r_vec</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">rcpp</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
-<span class="n">df</span>
-<span class="c1">#    expression          min         mean       median          max  itr/sec     mem_alloc  n_gc n_itr   total_time   result     memory                                             time       gc</span>
-<span class="c1">#        &lt;char&gt; &lt;bench_time&gt; &lt;bench_time&gt; &lt;bench_time&gt; &lt;bench_time&gt;    &lt;num&gt; &lt;bench_bytes&gt; &lt;num&gt; &lt;int&gt; &lt;bench_time&gt;   &lt;list&gt;     &lt;list&gt;                                           &lt;list&gt;   &lt;list&gt;</span>
-<span class="c1"># 1:   r_for(n)      30.49ms      31.14ms      31.11ms      32.82ms  32.1107        3.89MB     0    17        529ms 14.39273 &lt;Rprofmem&gt; 1: 30.7ms,30.7ms,30.8ms,31.9ms,31.1ms,31.2ms,... &lt;tbl_df&gt;</span>
-<span class="c1"># 2:   r_vec(n)       2.25ms       2.85ms       2.74ms       7.87ms 350.2935       11.44MB    35    81        231ms 14.39273 &lt;Rprofmem&gt; 2:  7.87ms,6.67ms,6.73ms,7.65ms,2.81ms,2.8ms,... &lt;tbl_df&gt;</span>
-<span class="c1"># 3:    rcpp(n)          1ms       1.02ms          1ms       1.79ms 977.6923        2.49KB     0   489        500ms 14.39273 &lt;Rprofmem&gt; 3: 1.79ms,1.05ms,1.04ms,1.04ms,1.03ms,1.03ms,... &lt;tbl_df&gt;</span>
-<span class="nf">plot</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-</code></pre></div><p>ちょっとした比較には
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">df</span> <span class="o">=</span> <span class="n">bench</span><span class="o">::</span><span class="nf">mark</span><span class="p">(</span><span class="nf">r_for</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">r_vec</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">rcpp</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#    expression          min         mean       median          max  itr/sec     mem_alloc  n_gc n_itr   total_time   result     memory                                             time       gc</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#        &lt;char&gt; &lt;bench_time&gt; &lt;bench_time&gt; &lt;bench_time&gt; &lt;bench_time&gt;    &lt;num&gt; &lt;bench_bytes&gt; &lt;num&gt; &lt;int&gt; &lt;bench_time&gt;   &lt;list&gt;     &lt;list&gt;                                           &lt;list&gt;   &lt;list&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 1:   r_for(n)      30.49ms      31.14ms      31.11ms      32.82ms  32.1107        3.89MB     0    17        529ms 14.39273 &lt;Rprofmem&gt; 1: 30.7ms,30.7ms,30.8ms,31.9ms,31.1ms,31.2ms,... &lt;tbl_df&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 2:   r_vec(n)       2.25ms       2.85ms       2.74ms       7.87ms 350.2935       11.44MB    35    81        231ms 14.39273 &lt;Rprofmem&gt; 2:  7.87ms,6.67ms,6.73ms,7.65ms,2.81ms,2.8ms,... &lt;tbl_df&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 3:    rcpp(n)          1ms       1.02ms          1ms       1.79ms 977.6923        2.49KB     0   489        500ms 14.39273 &lt;Rprofmem&gt; 3: 1.79ms,1.05ms,1.04ms,1.04ms,1.03ms,1.03ms,... &lt;tbl_df&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nf">plot</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</span></span></code></pre></div><p>ちょっとした比較には
 <a href="https://cran.r-project.org/package=rbenchmark">rbenchmark</a>
 の表示がシンプルで見やすい:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">rbenchmark</span><span class="o">::</span><span class="nf">benchmark</span><span class="p">(</span><span class="nf">r_for</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">r_vec</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">rcpp</span><span class="p">(</span><span class="n">n</span><span class="p">))</span><span class="n">[</span><span class="p">,</span><span class="m">1</span><span class="o">:</span><span class="m">4</span><span class="n">]</span>
-<span class="c1">#       test replications elapsed relative</span>
-<span class="c1"># 1 r_for(n)          100   3.968   29.835</span>
-<span class="c1"># 2 r_vec(n)          100   0.473    3.556</span>
-<span class="c1"># 3  rcpp(n)          100   0.133    1.000</span>
-</code></pre></div><p>もうちょっと詳しく見たい場合は
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">rbenchmark</span><span class="o">::</span><span class="nf">benchmark</span><span class="p">(</span><span class="nf">r_for</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">r_vec</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">rcpp</span><span class="p">(</span><span class="n">n</span><span class="p">))</span><span class="n">[</span><span class="p">,</span><span class="m">1</span><span class="o">:</span><span class="m">4</span><span class="n">]</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#       test replications elapsed relative</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 1 r_for(n)          100   3.968   29.835</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 2 r_vec(n)          100   0.473    3.556</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 3  rcpp(n)          100   0.133    1.000</span>
+</span></span></code></pre></div><p>もうちょっと詳しく見たい場合は
 <a href="https://github.com/joshuaulrich/microbenchmark/">microbenchmark</a>
 の出力も扱いやすい:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">df</span> <span class="o">=</span> <span class="n">microbenchmark</span><span class="o">::</span><span class="nf">microbenchmark</span><span class="p">(</span><span class="nf">r_for</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">r_vec</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">rcpp</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">times</span> <span class="o">=</span> <span class="m">100L</span><span class="p">)</span>
-<span class="n">df</span>
-<span class="c1"># Unit: milliseconds</span>
-<span class="c1">#      expr       min        lq      mean    median        uq       max neval</span>
-<span class="c1">#  r_for(n) 35.716909 36.131130 37.406180 36.791894 38.330989 42.605700   100</span>
-<span class="c1">#  r_vec(n)  2.630786  3.251540  4.285222  3.412421  5.573207  8.180405   100</span>
-<span class="c1">#   rcpp(n)  1.216385  1.222994  1.270488  1.231115  1.304536  1.515532   100</span>
-<span class="nf">str</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-<span class="c1"># Classes ‘microbenchmark’ and &#39;data.frame&#39;:      300 obs. of  2 variables:</span>
-<span class="c1">#  $ expr: Factor w/ 3 levels &#34;r_for(n)&#34;,&#34;r_vec(n)&#34;,..: 2 1 1 1 2 2 1 1 1 2 ...</span>
-<span class="c1">#  $ time: num  4722392 42474783 38625124 38819035 3888012 ...</span>
-<span class="nf">ggplot</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="o">+</span> <span class="nf">aes</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span> <span class="o">+</span>
-  <span class="nf">stat_summary</span><span class="p">(</span><span class="n">fun</span> <span class="o">=</span> <span class="n">mean</span><span class="p">,</span> <span class="n">geom</span> <span class="o">=</span> <span class="s">&#34;bar&#34;</span><span class="p">)</span> <span class="o">+</span>
-  <span class="nf">geom_jitter</span><span class="p">(</span><span class="n">height</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">)</span>
-</code></pre></div><h2 id="関連書籍">関連書籍</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">df</span> <span class="o">=</span> <span class="n">microbenchmark</span><span class="o">::</span><span class="nf">microbenchmark</span><span class="p">(</span><span class="nf">r_for</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">r_vec</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">rcpp</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">times</span> <span class="o">=</span> <span class="m">100L</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Unit: milliseconds</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#      expr       min        lq      mean    median        uq       max neval</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#  r_for(n) 35.716909 36.131130 37.406180 36.791894 38.330989 42.605700   100</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#  r_vec(n)  2.630786  3.251540  4.285222  3.412421  5.573207  8.180405   100</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   rcpp(n)  1.216385  1.222994  1.270488  1.231115  1.304536  1.515532   100</span>
+</span></span><span class="line"><span class="cl"><span class="nf">str</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Classes ‘microbenchmark’ and &#39;data.frame&#39;:      300 obs. of  2 variables:</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#  $ expr: Factor w/ 3 levels &#34;r_for(n)&#34;,&#34;r_vec(n)&#34;,..: 2 1 1 1 2 2 1 1 1 2 ...</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#  $ time: num  4722392 42474783 38625124 38819035 3888012 ...</span>
+</span></span><span class="line"><span class="cl"><span class="nf">ggplot</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="o">+</span> <span class="nf">aes</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">stat_summary</span><span class="p">(</span><span class="n">fun</span> <span class="o">=</span> <span class="n">mean</span><span class="p">,</span> <span class="n">geom</span> <span class="o">=</span> <span class="s">&#34;bar&#34;</span><span class="p">)</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">geom_jitter</span><span class="p">(</span><span class="n">height</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">)</span>
+</span></span></code></pre></div><h2 id="関連書籍">関連書籍</h2>
 <p>統計解析やグラフ描画ではなく、
 プログラミング言語としてのRを学びたいときに:</p>
 <p><a href="https://www.amazon.co.jp/dp/432012393X/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=15c50d7e6387ac0519680dea589c3ebc&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=432012393X&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=432012393X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />

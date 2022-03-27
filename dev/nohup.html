@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.92.2" />
+<meta name="generator" content="Hugo 0.96.0" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -95,19 +95,19 @@ LinuxのほうがいくらかBSDに歩み寄ってくれているらしい。
 をつけて <code>less</code> や <code>grep</code> に流すのが基本。</p>
 <p>ソートの仕方は共通ではない。
 出力形式の調整は共通の <code>o</code> オプション。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ps aux <span class="p">|</span> less
-
-<span class="c1">## Sort on Mac</span>
-ps auxm <span class="p">|</span> head  <span class="c1"># by Memory</span>
-ps auxr <span class="p">|</span> head  <span class="c1"># by CPU</span>
-
-<span class="c1">## Sort on Linux</span>
-ps auxk -pmem <span class="p">|</span> head  <span class="c1"># by Memory</span>
-ps auxk -pcpu <span class="p">|</span> head  <span class="c1"># by CPU</span>
-
-<span class="c1">## Output format</span>
-ps axo user,pid,pcpu,pmem,command
-</code></pre></div><h3 id="top"><code>top</code></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ps aux <span class="p">|</span> less
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## Sort on Mac</span>
+</span></span><span class="line"><span class="cl">ps auxm <span class="p">|</span> head  <span class="c1"># by Memory</span>
+</span></span><span class="line"><span class="cl">ps auxr <span class="p">|</span> head  <span class="c1"># by CPU</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## Sort on Linux</span>
+</span></span><span class="line"><span class="cl">ps auxk -pmem <span class="p">|</span> head  <span class="c1"># by Memory</span>
+</span></span><span class="line"><span class="cl">ps auxk -pcpu <span class="p">|</span> head  <span class="c1"># by CPU</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## Output format</span>
+</span></span><span class="line"><span class="cl">ps axo user,pid,pcpu,pmem,command
+</span></span></code></pre></div><h3 id="top"><code>top</code></h3>
 <p>一度表示して終わりではなく、<kbd>q</kbd> で閉じるまで一定間隔で更新される。
 起動してからソート項目を切り替えられる。
 プラスで昇順、マイナスで降順。</p>
@@ -200,11 +200,11 @@ killall a.out
 <li>標準エラー出力の書き出し先を指定するには <code>2&gt;{OUTFILE}</code></li>
 <li>標準エラー出力を標準出力と同じところに流すには <code>&gt;{OUTFILE} 2&gt;&amp;1</code></li>
 </ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">nohup COMMAND &gt;out.log 2&gt;err.log <span class="p">&amp;</span>
-</code></pre></div><p><a href="/dev/ssh.html">ssh</a> 接続先のサーバーで <code>nohup</code> ジョブを走らせるときは
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">nohup COMMAND &gt;out.log 2&gt;err.log <span class="p">&amp;</span>
+</span></span></code></pre></div><p><a href="/dev/ssh.html">ssh</a> 接続先のサーバーで <code>nohup</code> ジョブを走らせるときは
 標準入出力をすべて切っておかないと期待通りにsshを抜けられない:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">nohup COMMAND &gt;/dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span> &lt;/dev/null <span class="p">&amp;</span>
-</code></pre></div><p>うっかり普通に開始してしまったプロセスを後から <code>nohup</code> 状態にするには、
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">nohup COMMAND &gt;/dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span> &lt;/dev/null <span class="p">&amp;</span>
+</span></span></code></pre></div><p>うっかり普通に開始してしまったプロセスを後から <code>nohup</code> 状態にするには、
 一時停止して、バックグラウンドで再開して、<code>disown</code> に渡す:</p>
 <pre><code>./a.out  # control + z
 [1]  + 19310 suspended  a.out

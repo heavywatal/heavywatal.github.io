@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.92.2" />
+<meta name="generator" content="Hugo 0.96.0" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -94,7 +94,7 @@ ssh
 <ol>
 <li>
 <p>ローカルホストで鍵ペア (秘密鍵 <code>id_ed25519</code> と公開鍵 <code>id_ed25519.pub</code>) を作成:</p>
-<pre tabindex="0"><code>ssh-keygen -t ed25519 -N ''
+<pre tabindex="0"><code>ssh-keygen -t ed25519 -N &#39;&#39;
 # Generating public/private ed25519 key pair.
 # Enter file in which to save the key (~/.ssh/id_ed25519): ＃そのままリターン
 # Your identification has been saved in ~/.ssh/id_ed25519.
@@ -108,20 +108,20 @@ ssh
 <p>ウェブブラウザからアップロードする方法。
 (e.g., <a href="https://github.com/settings/keys">GitHub &gt; Settings</a>)。</p>
 <p>ターミナルから <code>~/.ssh/authorized_keys</code> に追加する方法:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ssh-copy-id -i ~/.ssh/id_ed25519.pub watal@example.com
-<span class="c1"># or</span>
-ssh watal@example.com <span class="s2">&#34;mkdir ~/.ssh; touch ~/.ssh/authorized_keys&#34;</span>
-cat id_ed25519.pub <span class="p">|</span> ssh watal@example.com <span class="s2">&#34;cat &gt;&gt; ~/.ssh/authorized_keys&#34;</span>
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ssh-copy-id -i ~/.ssh/id_ed25519.pub watal@example.com
+</span></span><span class="line"><span class="cl"><span class="c1"># or</span>
+</span></span><span class="line"><span class="cl">ssh watal@example.com <span class="s2">&#34;mkdir ~/.ssh; touch ~/.ssh/authorized_keys&#34;</span>
+</span></span><span class="line"><span class="cl">cat id_ed25519.pub <span class="p">|</span> ssh watal@example.com <span class="s2">&#34;cat &gt;&gt; ~/.ssh/authorized_keys&#34;</span>
+</span></span></code></pre></div></li>
 <li>
 <p>ユーザー本人だけが読み書きできるパーミッションに設定されていることを確認:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ls -l ~/.ssh
-ssh watal@example.com <span class="s2">&#34;ls -l ~/.ssh&#34;</span>
-<span class="c1"># if necessary</span>
-chmod <span class="m">700</span> ~/.ssh
-chmod <span class="m">600</span> ~/.ssh/id_ed25519
-chmod <span class="m">600</span> ~/.ssh/authorized_keys
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ls -l ~/.ssh
+</span></span><span class="line"><span class="cl">ssh watal@example.com <span class="s2">&#34;ls -l ~/.ssh&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># if necessary</span>
+</span></span><span class="line"><span class="cl">chmod <span class="m">700</span> ~/.ssh
+</span></span><span class="line"><span class="cl">chmod <span class="m">600</span> ~/.ssh/id_ed25519
+</span></span><span class="line"><span class="cl">chmod <span class="m">600</span> ~/.ssh/authorized_keys
+</span></span></code></pre></div></li>
 </ol>
 <h2 id="設定">設定</h2>
 <p><a href="https://man.openbsd.org/ssh_config.5">https://man.openbsd.org/ssh_config.5</a></p>

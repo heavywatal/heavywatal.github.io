@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.92.2" />
+<meta name="generator" content="Hugo 0.96.0" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -114,17 +114,17 @@ list or vector                    laply  ldply  llply  l_ply
 </code></pre>
 <p>e.g. 複数ファイルを読み込んでひとつのdata.frameにまとめる。
 listからdata.frameを作るので <code>ldply()</code></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="n">filenames</span> <span class="o">=</span> <span class="nf">list.files</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="s">&#34;\\.csv$&#34;</span><span class="p">)</span>
-<span class="o">&gt;</span> <span class="n">large_table</span> <span class="o">=</span> <span class="nf">ldply</span><span class="p">(</span><span class="n">filenames</span><span class="p">,</span> <span class="n">read.csv</span><span class="p">)</span>
-</code></pre></div><p>e.g. data.frameについてある列の値でグループ化し、
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="o">&gt;</span> <span class="n">filenames</span> <span class="o">=</span> <span class="nf">list.files</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="s">&#34;\\.csv$&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">&gt;</span> <span class="n">large_table</span> <span class="o">=</span> <span class="nf">ldply</span><span class="p">(</span><span class="n">filenames</span><span class="p">,</span> <span class="n">read.csv</span><span class="p">)</span>
+</span></span></code></pre></div><p>e.g. data.frameについてある列の値でグループ化し、
 グループ毎に数値の列の平均を取る。
 data.frameからdata.frameを作るので <code>ddply()</code></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="nf">ddply</span><span class="p">(</span><span class="n">iris</span><span class="p">,</span> <span class="n">.(Species</span><span class="p">),</span> <span class="nf">numcolwise</span><span class="p">(</span><span class="n">mean</span><span class="p">))</span>
-     <span class="n">Species</span> <span class="n">Sepal.Length</span> <span class="n">Sepal.Width</span> <span class="n">Petal.Length</span> <span class="n">Petal.Width</span>
-<span class="m">1</span>     <span class="n">setosa</span>        <span class="m">5.006</span>       <span class="m">3.428</span>        <span class="m">1.462</span>       <span class="m">0.246</span>
-<span class="m">2</span> <span class="n">versicolor</span>        <span class="m">5.936</span>       <span class="m">2.770</span>        <span class="m">4.260</span>       <span class="m">1.326</span>
-<span class="m">3</span>  <span class="n">virginica</span>        <span class="m">6.588</span>       <span class="m">2.974</span>        <span class="m">5.552</span>       <span class="m">2.026</span>
-</code></pre></div><h2 id="ヘルパー関数">ヘルパー関数</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="o">&gt;</span> <span class="nf">ddply</span><span class="p">(</span><span class="n">iris</span><span class="p">,</span> <span class="n">.(Species</span><span class="p">),</span> <span class="nf">numcolwise</span><span class="p">(</span><span class="n">mean</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">     <span class="n">Species</span> <span class="n">Sepal.Length</span> <span class="n">Sepal.Width</span> <span class="n">Petal.Length</span> <span class="n">Petal.Width</span>
+</span></span><span class="line"><span class="cl"><span class="m">1</span>     <span class="n">setosa</span>        <span class="m">5.006</span>       <span class="m">3.428</span>        <span class="m">1.462</span>       <span class="m">0.246</span>
+</span></span><span class="line"><span class="cl"><span class="m">2</span> <span class="n">versicolor</span>        <span class="m">5.936</span>       <span class="m">2.770</span>        <span class="m">4.260</span>       <span class="m">1.326</span>
+</span></span><span class="line"><span class="cl"><span class="m">3</span>  <span class="n">virginica</span>        <span class="m">6.588</span>       <span class="m">2.974</span>        <span class="m">5.552</span>       <span class="m">2.026</span>
+</span></span></code></pre></div><h2 id="ヘルパー関数">ヘルパー関数</h2>
 <dl>
 <dt><code>plyr::join(x, y, by=NULL, type=&quot;left&quot;, match=&quot;all&quot;)</code></dt>
 <dd><code>by</code> で指定した列の値が等しいものを同じ行として、いい感じに <code>cbind()</code>。
@@ -142,10 +142,10 @@ data.frameからdata.frameを作るので <code>ddply()</code></p>
 <dd>listに入った複数のdata.frameを再帰的に <code>join()</code> する。</dd>
 <dt><code>plyr::rename(x, replace)</code></dt>
 <dd>data.frame列名などを <strong>部分的に</strong> 変更
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="c1"># replace引数には名前付き文字列vectorを与える</span>
-<span class="c1"># 古い名前が名前、新しい名前が値</span>
-<span class="n">plyr</span><span class="o">::</span><span class="nf">rename</span><span class="p">(</span><span class="n">.data</span><span class="p">,</span> <span class="nf">c</span><span class="p">(</span><span class="n">col_a</span> <span class="o">=</span> <span class="s">&#34;alpha&#34;</span><span class="p">,</span> <span class="n">col_b</span> <span class="o">=</span> <span class="s">&#34;beta&#34;</span><span class="p">))</span>
-</code></pre></div></dd>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1"># replace引数には名前付き文字列vectorを与える</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 古い名前が名前、新しい名前が値</span>
+</span></span><span class="line"><span class="cl"><span class="n">plyr</span><span class="o">::</span><span class="nf">rename</span><span class="p">(</span><span class="n">.data</span><span class="p">,</span> <span class="nf">c</span><span class="p">(</span><span class="n">col_a</span> <span class="o">=</span> <span class="s">&#34;alpha&#34;</span><span class="p">,</span> <span class="n">col_b</span> <span class="o">=</span> <span class="s">&#34;beta&#34;</span><span class="p">))</span>
+</span></span></code></pre></div></dd>
 <dt><code>plyr::count(.data, vars=NULL, wt_var=NULL)</code></dt>
 <dd>data.frameのなかで <code>vars</code> 列に関してユニークな行数をカウント。
 重み付けに使う列を <code>wt_var</code> に指定できる。</dd>
@@ -160,21 +160,21 @@ data.frameからdata.frameを作るので <code>ddply()</code></p>
 <dt><code>plyr::splat(func)</code></dt>
 <dd>ひとつのリストや文字列ベクタでまとめて引数を受け取れるような関数に変換する。
 <code>do.call()</code> はlistしか取らないがこちらは名前付きベクタも可
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="n">params</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="m">2</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="m">4</span><span class="p">)</span>
-<span class="o">&gt;</span> <span class="nf">splat</span><span class="p">(</span><span class="n">seq</span><span class="p">)(</span><span class="n">params</span><span class="p">)</span>
-<span class="n">[1]</span> <span class="m">1</span> <span class="m">3</span> <span class="m">5</span> <span class="m">7</span>
-<span class="o">&gt;</span> <span class="nf">do.call</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="nf">as.list</span><span class="p">(</span><span class="n">params</span><span class="p">))</span>
-<span class="n">[1]</span> <span class="m">1</span> <span class="m">3</span> <span class="m">5</span> <span class="m">7</span>
-</code></pre></div></dd>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="o">&gt;</span> <span class="n">params</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="m">2</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="m">4</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">&gt;</span> <span class="nf">splat</span><span class="p">(</span><span class="n">seq</span><span class="p">)(</span><span class="n">params</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">[1]</span> <span class="m">1</span> <span class="m">3</span> <span class="m">5</span> <span class="m">7</span>
+</span></span><span class="line"><span class="cl"><span class="o">&gt;</span> <span class="nf">do.call</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="nf">as.list</span><span class="p">(</span><span class="n">params</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">[1]</span> <span class="m">1</span> <span class="m">3</span> <span class="m">5</span> <span class="m">7</span>
+</span></span></code></pre></div></dd>
 </dl>
 <h2 id="並列化">並列化</h2>
 <p><code>doMC</code> 越しに <code>foreach</code> をバックエンドとして使用する</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">install.packages</span><span class="p">(</span><span class="s">&#34;doMC&#34;</span><span class="p">)</span>
-<span class="nf">library</span><span class="p">(</span><span class="n">doMC</span><span class="p">)</span>
-<span class="n">doMC</span><span class="o">::</span><span class="nf">registerDoMC</span><span class="p">(</span><span class="n">parallel</span><span class="o">::</span><span class="nf">detectCores</span><span class="p">())</span>
-
-<span class="n">.data</span> <span class="o">=</span> <span class="n">plyr</span><span class="o">::</span><span class="nf">ldply</span><span class="p">(</span><span class="n">lst</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">.parallel</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">install.packages</span><span class="p">(</span><span class="s">&#34;doMC&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">doMC</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">doMC</span><span class="o">::</span><span class="nf">registerDoMC</span><span class="p">(</span><span class="n">parallel</span><span class="o">::</span><span class="nf">detectCores</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">.data</span> <span class="o">=</span> <span class="n">plyr</span><span class="o">::</span><span class="nf">ldply</span><span class="p">(</span><span class="n">lst</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">.parallel</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+</span></span></code></pre></div>
 </article>
 </main>
 

@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.92.2" />
+<meta name="generator" content="Hugo 0.96.0" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -188,15 +188,15 @@ e.g.,  <code>pwd</code>, <code>ls</code>, <code>cd</code>, <code>mkdir</code></p
 </li>
 <li>
 <p>Git Bashにおける <code>HOME</code> がRStudioにおけるそれと異なることに注意。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1">### Git Bash</span>
-<span class="nb">echo</span> <span class="nv">$HOME</span>
-<span class="c1"># /c/Users/watal</span>
-<span class="nb">echo</span> ~
-<span class="c1"># /c/Users/watal</span>
-</code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="c1">### R</span>
-<span class="nf">normalizePath</span><span class="p">(</span><span class="s">&#34;~&#34;</span><span class="p">)</span>
-<span class="c1"># &#34;C:\\Users\\watal\\Documents&#34;</span>
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1">### Git Bash</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="nv">$HOME</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># /c/Users/watal</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> ~
+</span></span><span class="line"><span class="cl"><span class="c1"># /c/Users/watal</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1">### R</span>
+</span></span><span class="line"><span class="cl"><span class="nf">normalizePath</span><span class="p">(</span><span class="s">&#34;~&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># &#34;C:\\Users\\watal\\Documents&#34;</span>
+</span></span></code></pre></div></li>
 <li>
 <p>UNIX派が仕方なくWindowsを使う場合は
 <a href="https://www.msys2.org/">MSYS2</a>の <code>pacman</code> で環境を構築するのが良さそう&hellip;?</p>
@@ -221,17 +221,17 @@ e.g.,  <code>pwd</code>, <code>ls</code>, <code>cd</code>, <code>mkdir</code></p
 </li>
 <li>
 <p>Git<i class="fas fa-fw fa-share-alt-square"></i>の初期設定をターミナルから行う:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git --version  <span class="c1"># 2.0以上であることを確認</span>
-git config --global user.name <span class="s2">&#34;Watal M. Iwasaki&#34;</span>
-git config --global user.email <span class="s2">&#34;heavywatalあmail.com&#34;</span>
-git config --global push.default simple
-cat ~/.gitconfig
-</code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[user]</span>
-  <span class="na">name</span> <span class="o">=</span> <span class="s">Watal M. Iwasaki
-</span><span class="s">  email = heavywatalあmail.com</span>
-<span class="k">[push]</span>
-  <span class="na">default</span> <span class="o">=</span> <span class="s">simple</span>
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git --version  <span class="c1"># 2.0以上であることを確認</span>
+</span></span><span class="line"><span class="cl">git config --global user.name <span class="s2">&#34;Watal M. Iwasaki&#34;</span>
+</span></span><span class="line"><span class="cl">git config --global user.email <span class="s2">&#34;heavywatalあmail.com&#34;</span>
+</span></span><span class="line"><span class="cl">git config --global push.default simple
+</span></span><span class="line"><span class="cl">cat ~/.gitconfig
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="k">[user]</span>
+</span></span><span class="line"><span class="cl">  <span class="na">name</span> <span class="o">=</span> <span class="s">Watal M. Iwasaki
+</span></span></span><span class="line"><span class="cl"><span class="s">  email = heavywatalあmail.com</span>
+</span></span><span class="line"><span class="cl"><span class="k">[push]</span>
+</span></span><span class="line"><span class="cl">  <span class="na">default</span> <span class="o">=</span> <span class="s">simple</span>
+</span></span></code></pre></div></li>
 </ul>
 <h3 id="sshの設定-任意">SSHの設定 (任意)</h3>
 <ul>
@@ -251,9 +251,9 @@ cat ~/.gitconfig
 </li>
 <li>
 <p>設定ファイル <code>~/.gitconfig</code> に <code>pushinsteadof</code> の設定を追加:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[url &#34;git@github.com:&#34;]</span>
-  <span class="na">pushinsteadof</span> <span class="o">=</span> <span class="s">https://github.com/</span>
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="k">[url &#34;git@github.com:&#34;]</span>
+</span></span><span class="line"><span class="cl">  <span class="na">pushinsteadof</span> <span class="o">=</span> <span class="s">https://github.com/</span>
+</span></span></code></pre></div></li>
 </ul>
 <hr>
 <p>以下、本編。</p>
@@ -463,11 +463,11 @@ blobやファイル名などのメタデータに依存したハッシュIDを�
 </li>
 <li>
 <p>中身を眺めてみる:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> clippson/
-ls -al
-git log
-git remote -v
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> clippson/
+</span></span><span class="line"><span class="cl">ls -al
+</span></span><span class="line"><span class="cl">git log
+</span></span><span class="line"><span class="cl">git remote -v
+</span></span></code></pre></div></li>
 </ol>
 <p>最新版のスナップショットだけでなく、
 履歴もごっそり複製するので、
@@ -484,28 +484,28 @@ git remote -v
 </li>
 <li>
 <p>手元のマシンにローカルリポジトリを作る:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">mkdir helloworld
-<span class="nb">cd</span> helloworld/
-git init
-ls -al
-</code></pre></div><p>リポジトリの本体 <code>.git/</code> が作成されたことを確認。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mkdir helloworld
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> helloworld/
+</span></span><span class="line"><span class="cl">git init
+</span></span><span class="line"><span class="cl">ls -al
+</span></span></code></pre></div><p>リポジトリの本体 <code>.git/</code> が作成されたことを確認。</p>
 </li>
 <li>
 <p>空っぽのコミットを作る:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git status
-git commit --allow-empty -m <span class="s2">&#34;:beer: Create repository&#34;</span>
-git status
-git log
-</code></pre></div><p>事あるごとに <code>git status</code> や <code>git log</code> を確認すると安心。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git status
+</span></span><span class="line"><span class="cl">git commit --allow-empty -m <span class="s2">&#34;:beer: Create repository&#34;</span>
+</span></span><span class="line"><span class="cl">git status
+</span></span><span class="line"><span class="cl">git log
+</span></span></code></pre></div><p>事あるごとに <code>git status</code> や <code>git log</code> を確認すると安心。</p>
 </li>
 <li>
 <p>先程作ったリモートリポジトリを紐付けて、pushしてみる:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git remote -v
-git remote add origin https://github.com/YOUR_NAME/helloworld.git
-git remote -v
-git push -u origin master
-git status
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git remote -v
+</span></span><span class="line"><span class="cl">git remote add origin https://github.com/YOUR_NAME/helloworld.git
+</span></span><span class="line"><span class="cl">git remote -v
+</span></span><span class="line"><span class="cl">git push -u origin master
+</span></span><span class="line"><span class="cl">git status
+</span></span></code></pre></div></li>
 <li>
 <p>GitHubで履歴を閲覧し、 <code>git log</code> と同じになってることを確認。</p>
 </li>
@@ -514,29 +514,29 @@ git status
 <ol>
 <li>
 <p>上で作ったリポジトリに、適当なファイルを追加:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">echo</span> <span class="s2">&#34;# Hello, world!&#34;</span> &gt; README.md
-cat README.md
-git status
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;# Hello, world!&#34;</span> &gt; README.md
+</span></span><span class="line"><span class="cl">cat README.md
+</span></span><span class="line"><span class="cl">git status
+</span></span></code></pre></div></li>
 <li>
 <p>作ったファイルをstaging areaに追加:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git add README.md
-git status
-git diff --staged
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git add README.md
+</span></span><span class="line"><span class="cl">git status
+</span></span><span class="line"><span class="cl">git diff --staged
+</span></span></code></pre></div></li>
 <li>
 <p>この変更をcommit:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git commit -m <span class="s2">&#34;:memo: Create README.md&#34;</span>
-git status
-git log
-git show
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git commit -m <span class="s2">&#34;:memo: Create README.md&#34;</span>
+</span></span><span class="line"><span class="cl">git status
+</span></span><span class="line"><span class="cl">git log
+</span></span><span class="line"><span class="cl">git show
+</span></span></code></pre></div></li>
 <li>
 <p>リモートにpush:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git push
-git status
-git log
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git push
+</span></span><span class="line"><span class="cl">git status
+</span></span><span class="line"><span class="cl">git log
+</span></span></code></pre></div></li>
 </ol>
 <h3 id="リモートの変更を手元に-fetch">リモートの変更を手元に <code>fetch</code></h3>
 <ol>
@@ -558,44 +558,44 @@ git log
 </li>
 <li>
 <p>その変更をローカルリポジトリに取り寄せる:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git fetch
-git status
-git log --all
-ls -al
-</code></pre></div><p>リポジトリ内部 <code>.git/</code> の <code>origin/master</code> は更新されたが、
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git fetch
+</span></span><span class="line"><span class="cl">git status
+</span></span><span class="line"><span class="cl">git log --all
+</span></span><span class="line"><span class="cl">ls -al
+</span></span></code></pre></div><p>リポジトリ内部 <code>.git/</code> の <code>origin/master</code> は更新されたが、
 working directoryにはまだ反映されていない。</p>
 </li>
 <li>
 <p><code>origin/master</code> の内容を手元のファイルに反映する:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git merge
-git status
-git log
-git show
-ls -al
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git merge
+</span></span><span class="line"><span class="cl">git status
+</span></span><span class="line"><span class="cl">git log
+</span></span><span class="line"><span class="cl">git show
+</span></span><span class="line"><span class="cl">ls -al
+</span></span></code></pre></div></li>
 </ol>
 <p><code>git fetch</code> と <code>git merge</code> を一気にやってくれる <code>git pull</code> というコマンドもあり、
 普段の一人作業ではよく使う。</p>
 <h2 id="その他よく使うコマンド">その他よく使うコマンド</h2>
 <h3 id="diff">diff</h3>
 <p>差分を表示:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># HEAD vs working (staging前のファイルが対象)</span>
-git diff
-
-<span class="c1"># HEAD vs index (staging済みcommit前のファイルが対象)</span>
-git diff --staged
-
-<span class="c1"># HEAD vs working+index (commit前の全ファイルが対象)</span>
-git diff HEAD
-
-<span class="c1"># 特定コミットの変更点 (diffじゃない...)</span>
-git show <span class="o">[</span>revision<span class="o">]</span>
-</code></pre></div><h3 id="rm-clean">rm, clean</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># HEAD vs working (staging前のファイルが対象)</span>
+</span></span><span class="line"><span class="cl">git diff
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># HEAD vs index (staging済みcommit前のファイルが対象)</span>
+</span></span><span class="line"><span class="cl">git diff --staged
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># HEAD vs working+index (commit前の全ファイルが対象)</span>
+</span></span><span class="line"><span class="cl">git diff HEAD
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 特定コミットの変更点 (diffじゃない...)</span>
+</span></span><span class="line"><span class="cl">git show <span class="o">[</span>revision<span class="o">]</span>
+</span></span></code></pre></div><h3 id="rm-clean">rm, clean</h3>
 <p>tracking対象から外して忘れさせる(手元のファイルはそのまま):</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git rm --cached &lt;file&gt;
-</code></pre></div><p><code>.gitignore</code> で無視されてるuntrackedファイルを消す:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git clean -fdX
-</code></pre></div><p>無視されていないuntrackedファイルも消したい場合は小文字の <code>-fdx</code> (危険)。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git rm --cached &lt;file&gt;
+</span></span></code></pre></div><p><code>.gitignore</code> で無視されてるuntrackedファイルを消す:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git clean -fdX
+</span></span></code></pre></div><p>無視されていないuntrackedファイルも消したい場合は小文字の <code>-fdx</code> (危険)。</p>
 <h3 id="reset">reset</h3>
 <p><code>git reset &lt;DESTINATION&gt;</code> は <code>HEAD</code> の位置を戻す処理で、
 オプションによってindexとworing treeもそこに合わせるように変更される。
@@ -603,21 +603,21 @@ git show <span class="o">[</span>revision<span class="o">]</span>
 <code>--mixed</code> なら移動した <code>HEAD</code> にindexも合わせる。
 <code>--hard</code> なら移動した <code>HEAD</code> にindexとworiking treeも合わせる。
 直前の動作を取り消す用途に絞って使うのが無難:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># commit直後、それを取り消す (indexとworkingはそのまま)</span>
-git reset --soft HEAD^
-
-<span class="c1"># add直後、それを取り消す (workingとHEADはそのまま)</span>
-git reset --mixed HEAD
-
-<span class="c1"># 変更したファイルをHEADの状態に戻す (DANGEROUS!)</span>
-git reset --hard HEAD
-
-<span class="c1"># reset直後、それを取り消す</span>
-git reset --hard ORIG_HEAD
-
-<span class="c1"># divergedになってしまった手元のbranchを破棄 (DANGEROUS!)</span>
-git reset --hard origin/master
-</code></pre></div><p>直前のcommitをちょっと修正したいだけなら <code>git commit --amend</code> が簡単。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># commit直後、それを取り消す (indexとworkingはそのまま)</span>
+</span></span><span class="line"><span class="cl">git reset --soft HEAD^
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># add直後、それを取り消す (workingとHEADはそのまま)</span>
+</span></span><span class="line"><span class="cl">git reset --mixed HEAD
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 変更したファイルをHEADの状態に戻す (DANGEROUS!)</span>
+</span></span><span class="line"><span class="cl">git reset --hard HEAD
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># reset直後、それを取り消す</span>
+</span></span><span class="line"><span class="cl">git reset --hard ORIG_HEAD
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># divergedになってしまった手元のbranchを破棄 (DANGEROUS!)</span>
+</span></span><span class="line"><span class="cl">git reset --hard origin/master
+</span></span></code></pre></div><p>直前のcommitをちょっと修正したいだけなら <code>git commit --amend</code> が簡単。
 それより前のを修正するには <code>git rebase -i HEAD~3</code> とかで戻ってrewordやedit。</p>
 <p><strong>リモートにpush済みのものは改変しちゃダメ！</strong></p>
 <h2 id="チーム作業">チーム作業</h2>

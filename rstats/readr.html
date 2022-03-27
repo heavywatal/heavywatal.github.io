@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.92.2" />
+<meta name="generator" content="Hugo 0.96.0" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -106,44 +106,44 @@ R 4.0 から標準関数もこの挙動。</li>
 <code>install.packages(&quot;tidyverse&quot;)</code> で一括インストール、
 <code>library(tidyverse)</code> で一括ロード。
 例えば:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
-<span class="nf">write_tsv</span><span class="p">(</span><span class="n">diamonds</span><span class="p">,</span> <span class="s">&#34;diamonds.tsv.gz&#34;</span><span class="p">)</span>
-<span class="nf">read_tsv</span><span class="p">(</span><span class="s">&#34;diamonds.tsv.gz&#34;</span><span class="p">)</span>
-</code></pre></div><p>最近ちょっと表示がおせっかい過ぎるので <code>~/.Rprofile</code> で設定を直す:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">options</span><span class="p">(</span>
-  <span class="n">readr.num_columns</span> <span class="o">=</span> <span class="m">0L</span><span class="p">,</span>
-  <span class="n">readr.show_col_types</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
-  <span class="n">readr.show_progress</span> <span class="o">=</span> <span class="kc">FALSE</span>
-<span class="p">)</span>
-</code></pre></div><ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">write_tsv</span><span class="p">(</span><span class="n">diamonds</span><span class="p">,</span> <span class="s">&#34;diamonds.tsv.gz&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">read_tsv</span><span class="p">(</span><span class="s">&#34;diamonds.tsv.gz&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><p>最近ちょっと表示がおせっかい過ぎるので <code>~/.Rprofile</code> で設定を直す:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">options</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">readr.num_columns</span> <span class="o">=</span> <span class="m">0L</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">readr.show_col_types</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">readr.show_progress</span> <span class="o">=</span> <span class="kc">FALSE</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span></code></pre></div><ul>
 <li><a href="https://r4ds.had.co.nz/data-import.html">https://r4ds.had.co.nz/data-import.html</a></li>
 <li><a href="https://cran.r-project.org/package=readr">https://cran.r-project.org/package=readr</a></li>
 </ul>
 <h2 id="主な関数">主な関数</h2>
 <h3 id="ファイル読み込み">ファイル読み込み</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">read_delim</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">delim</span><span class="p">,</span>
-  <span class="n">quote</span> <span class="o">=</span> <span class="s">&#39;&#34;&#39;</span><span class="p">,</span>
-  <span class="n">escape_backslash</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
-  <span class="n">escape_double</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
-  <span class="n">col_names</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
-  <span class="n">col_types</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span>
-  <span class="n">col_select</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span>
-  <span class="n">id</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span>
-  <span class="n">locale</span> <span class="o">=</span> <span class="nf">default_locale</span><span class="p">(),</span>
-  <span class="n">na</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">,</span> <span class="s">&#34;NA&#34;</span><span class="p">),</span>
-  <span class="n">quoted_na</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
-  <span class="n">comment</span> <span class="o">=</span> <span class="s">&#34;&#34;</span><span class="p">,</span>
-  <span class="n">trim_ws</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
-  <span class="n">skip</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span>
-  <span class="n">n_max</span> <span class="o">=</span> <span class="kc">Inf</span><span class="p">,</span>
-  <span class="n">guess_max</span> <span class="o">=</span> <span class="nf">min</span><span class="p">(</span><span class="m">1000</span><span class="p">,</span> <span class="n">n_max</span><span class="p">),</span>
-  <span class="n">name_repair</span> <span class="o">=</span> <span class="s">&#34;unique&#34;</span><span class="p">,</span>
-  <span class="n">num_threads</span> <span class="o">=</span> <span class="nf">readr_threads</span><span class="p">(),</span>
-  <span class="n">progress</span> <span class="o">=</span> <span class="nf">show_progress</span><span class="p">(),</span>
-  <span class="n">show_col_types</span> <span class="o">=</span> <span class="nf">should_show_types</span><span class="p">(),</span>
-  <span class="n">skip_empty_rows</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
-  <span class="n">lazy</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
-</code></pre></div><p><strong><code>read_csv(...)</code></strong> や <strong><code>read_tsv(...)</code></strong>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">read_delim</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">delim</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">quote</span> <span class="o">=</span> <span class="s">&#39;&#34;&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">escape_backslash</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">escape_double</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">col_names</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">col_types</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">col_select</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">id</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">locale</span> <span class="o">=</span> <span class="nf">default_locale</span><span class="p">(),</span>
+</span></span><span class="line"><span class="cl">  <span class="n">na</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">,</span> <span class="s">&#34;NA&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="n">quoted_na</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">comment</span> <span class="o">=</span> <span class="s">&#34;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">trim_ws</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">skip</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">n_max</span> <span class="o">=</span> <span class="kc">Inf</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">guess_max</span> <span class="o">=</span> <span class="nf">min</span><span class="p">(</span><span class="m">1000</span><span class="p">,</span> <span class="n">n_max</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="n">name_repair</span> <span class="o">=</span> <span class="s">&#34;unique&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">num_threads</span> <span class="o">=</span> <span class="nf">readr_threads</span><span class="p">(),</span>
+</span></span><span class="line"><span class="cl">  <span class="n">progress</span> <span class="o">=</span> <span class="nf">show_progress</span><span class="p">(),</span>
+</span></span><span class="line"><span class="cl">  <span class="n">show_col_types</span> <span class="o">=</span> <span class="nf">should_show_types</span><span class="p">(),</span>
+</span></span><span class="line"><span class="cl">  <span class="n">skip_empty_rows</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">lazy</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
+</span></span></code></pre></div><p><strong><code>read_csv(...)</code></strong> や <strong><code>read_tsv(...)</code></strong>
 は区切り文字 <code>delim =</code> 指定済みのショートカット。</p>
 <dl>
 <dt><code>read_table(...)</code></dt>
@@ -162,12 +162,12 @@ R 4.0 から標準関数もこの挙動。</li>
 <dd>ファイルの内容まるごと文字列で返す</dd>
 </dl>
 <h3 id="ファイル書き出し">ファイル書き出し</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">write_delim</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span>
-  <span class="n">delim</span> <span class="o">=</span> <span class="s">&#34; &#34;</span><span class="p">,</span>
-  <span class="n">na</span> <span class="o">=</span> <span class="s">&#34;NA&#34;</span><span class="p">,</span>
-  <span class="n">append</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
-  <span class="n">col_names</span> <span class="o">=</span> <span class="o">!</span><span class="n">append</span><span class="p">)</span>
-</code></pre></div><p><strong><code>write_csv(...)</code></strong> や <strong><code>write_tsv(...)</code></strong>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">write_delim</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">delim</span> <span class="o">=</span> <span class="s">&#34; &#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">na</span> <span class="o">=</span> <span class="s">&#34;NA&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">append</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">col_names</span> <span class="o">=</span> <span class="o">!</span><span class="n">append</span><span class="p">)</span>
+</span></span></code></pre></div><p><strong><code>write_csv(...)</code></strong> や <strong><code>write_tsv(...)</code></strong>
 は区切り文字 <code>delim =</code> 指定済みのショートカット。</p>
 <dl>
 <dt><code>write_lines(x, path, na = &quot;NA&quot;, append = FALSE)</code></dt>
@@ -200,11 +200,11 @@ R 4.0 から標準関数もこの挙動。</li>
 整数と実数は区別せずnumeric型で読む(1.2から)。</p>
 <p>明示的に型を指定したい場合は <code>col_types</code> 引数に <code>cols()</code> 関数の値を渡す。
 文字列で <code>&quot;ccdi_&quot;</code> のように省略することも可能。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">read_csv</span><span class="p">(</span><span class="s">&#34;mydata.csv&#34;</span><span class="p">,</span> <span class="n">col_types</span><span class="o">=</span><span class="s">&#34;ccdi_&#34;</span><span class="p">)</span>
-
-<span class="n">colsp</span> <span class="o">=</span> <span class="nf">cols</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="nf">col_double</span><span class="p">(),</span> <span class="n">count</span><span class="o">=</span><span class="s">&#34;i&#34;</span><span class="p">,</span> <span class="n">.default</span><span class="o">=</span><span class="s">&#34;c&#34;</span><span class="p">)</span>
-<span class="nf">read_csv</span><span class="p">(</span><span class="s">&#34;mydata.csv&#34;</span><span class="p">,</span> <span class="n">col_types</span><span class="o">=</span><span class="n">colsp</span><span class="p">)</span>
-</code></pre></div><ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">read_csv</span><span class="p">(</span><span class="s">&#34;mydata.csv&#34;</span><span class="p">,</span> <span class="n">col_types</span><span class="o">=</span><span class="s">&#34;ccdi_&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">colsp</span> <span class="o">=</span> <span class="nf">cols</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="nf">col_double</span><span class="p">(),</span> <span class="n">count</span><span class="o">=</span><span class="s">&#34;i&#34;</span><span class="p">,</span> <span class="n">.default</span><span class="o">=</span><span class="s">&#34;c&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">read_csv</span><span class="p">(</span><span class="s">&#34;mydata.csv&#34;</span><span class="p">,</span> <span class="n">col_types</span><span class="o">=</span><span class="n">colsp</span><span class="p">)</span>
+</span></span></code></pre></div><ul>
 <li><code>[c] col_character()</code>: 文字列</li>
 <li><code>[i] col_integer()</code>: 整数</li>
 <li><code>[d] col_double()</code>: 実数</li>
@@ -240,18 +240,18 @@ R 4.0 から標準関数もこの挙動。</li>
 </dl>
 <h2 id="最新版をソースからインストールする">最新版をソースからインストールする</h2>
 <p><a href="https://github.com/tidyverse/readr">https://github.com/tidyverse/readr</a></p>
-<pre tabindex="0"><code>remotes::install_github(&quot;tidyverse/readr&quot;)
+<pre tabindex="0"><code>remotes::install_github(&#34;tidyverse/readr&#34;)
 # ...
 ld: library not found for -lintl
 </code></pre><p>見つからないと言われてる <code>libintl.*</code> はgettextの一部なのでそいつを入れる。
 パス指定で楽をするため、keg-onlyだけど無理矢理シムリンクを張る
 (ホントは良くないかも)。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">brew install gettext
-brew link gettext --force
-</code></pre></div><p>Homebrewを<code>/usr/local/</code>以外に入れている場合は、
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew install gettext
+</span></span><span class="line"><span class="cl">brew link gettext --force
+</span></span></code></pre></div><p>Homebrewを<code>/usr/local/</code>以外に入れている場合は、
 それをRに見つけさせるため <code>~/.R/Makevars</code> にオプションを書く。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-makefile" data-lang="makefile"><span class="nv">LDFLAGS</span> <span class="o">=</span> -L<span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.homebrew/lib
-</code></pre></div><p>再びRで <code>install_github(&quot;tidyverse/readr&quot;)</code> を試みる。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-makefile" data-lang="makefile"><span class="line"><span class="cl"><span class="nv">LDFLAGS</span> <span class="o">=</span> -L<span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.homebrew/lib
+</span></span></code></pre></div><p>再びRで <code>install_github(&quot;tidyverse/readr&quot;)</code> を試みる。</p>
 <h2 id="tibble">tibble</h2>
 <a href="https://tibble.tidyverse.org/">
 <img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/tibble.svg" align="right" width="120" height="139">
@@ -263,12 +263,12 @@ brew link gettext --force
 <p><code>tbl_df</code> クラスが付与された改良版data.frameのことを<strong>tibble</strong>と呼ぶ。
 もともとは <a href="/rstats/dplyr.html">dplyr</a> パッケージで扱っていたが、独立パッケージになった。
 <a href="/rstats/readr.html">readr</a> で読み込んだデータもこの形式になる。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">tbl_mtcars</span> <span class="o">=</span> <span class="nf">as_tibble</span><span class="p">(</span><span class="n">mtcars</span><span class="p">)</span>
-<span class="nf">class</span><span class="p">(</span><span class="n">tbl_mtcars</span><span class="p">)</span>
-<span class="c1">## [1] &#34;tbl_df&#34;     &#34;tbl&#34;        &#34;data.frame&#34;</span>
-<span class="nf">class</span><span class="p">(</span><span class="n">mtcars</span><span class="p">)</span>
-<span class="c1">## [1] &#34;data.frame&#34;</span>
-</code></pre></div><p>生のdata.frameとの違いは:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">tbl_mtcars</span> <span class="o">=</span> <span class="nf">as_tibble</span><span class="p">(</span><span class="n">mtcars</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">class</span><span class="p">(</span><span class="n">tbl_mtcars</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## [1] &#34;tbl_df&#34;     &#34;tbl&#34;        &#34;data.frame&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nf">class</span><span class="p">(</span><span class="n">mtcars</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## [1] &#34;data.frame&#34;</span>
+</span></span></code></pre></div><p>生のdata.frameとの違いは:</p>
 <ul>
 <li>巨大なデータをうっかり<code>print()</code>しても画面を埋め尽くさない。
 (逆に全体を見たい場合は工夫が必要。後述)</li>
@@ -291,13 +291,13 @@ vectorが欲しい場合は二重四角括弧 <code>tbl_mtcars[[&quot;mpg&quot;]
 標準の <code>print.data.frame()</code> でもいいけど、
 <a href="https://CRAN.R-project.org/package=data.table">data.table</a>
 1.11 以降がインストールしてある場合は <code>print.data.table()</code> が使いやすい。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="c1"># ~/.Rprofile</span>
-<span class="nf">setHook</span><span class="p">(</span><span class="nf">packageEvent</span><span class="p">(</span><span class="s">&#34;tibble&#34;</span><span class="p">,</span> <span class="s">&#34;attach&#34;</span><span class="p">),</span> <span class="nf">function</span><span class="p">(</span><span class="kc">...</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nf">try</span><span class="p">({</span>
-    <span class="nf">registerS3method</span><span class="p">(</span><span class="s">&#34;print&#34;</span><span class="p">,</span> <span class="s">&#34;tbl&#34;</span><span class="p">,</span> <span class="n">data.table</span><span class="o">:::</span><span class="n">print.data.table</span><span class="p">)</span>
-  <span class="p">})</span>
-<span class="p">})</span>
-</code></pre></div><h3 id="関数">関数</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1"># ~/.Rprofile</span>
+</span></span><span class="line"><span class="cl"><span class="nf">setHook</span><span class="p">(</span><span class="nf">packageEvent</span><span class="p">(</span><span class="s">&#34;tibble&#34;</span><span class="p">,</span> <span class="s">&#34;attach&#34;</span><span class="p">),</span> <span class="nf">function</span><span class="p">(</span><span class="kc">...</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">try</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">registerS3method</span><span class="p">(</span><span class="s">&#34;print&#34;</span><span class="p">,</span> <span class="s">&#34;tbl&#34;</span><span class="p">,</span> <span class="n">data.table</span><span class="o">:::</span><span class="n">print.data.table</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span></code></pre></div><h3 id="関数">関数</h3>
 <dl>
 <dt><a href="https://tibble.tidyverse.org/reference/tibble.html"><code>tibble::tibble(...)</code></a></dt>
 <dd>tibbleを新規作成。ちょっと昔までは <code>dplyr::data_frame()</code> だった。</dd>
@@ -341,17 +341,17 @@ v2.0からは列名がちゃんとついてないとエラーになる。</dd>
 <h3 id="設定">設定</h3>
 <p>表示される行数や幅を調節する項目には以下のようなものがある。
 <code>~/.Rprofile</code> に書いておけば起動時に勝手に設定される。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">height</span> <span class="o">=</span> <span class="m">30L</span>  <span class="c1"># for example</span>
-<span class="n">width</span> <span class="o">=</span> <span class="m">160L</span>
-<span class="nf">options</span><span class="p">(</span>
-  <span class="n">pillar.neg</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
-  <span class="n">pillar.subtle</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
-  <span class="n">pillar.print_max</span> <span class="o">=</span> <span class="n">height</span><span class="p">,</span>
-  <span class="n">pillar.print_min</span> <span class="o">=</span> <span class="n">height</span><span class="p">,</span>
-  <span class="n">pillar.width</span> <span class="o">=</span> <span class="n">width</span><span class="p">,</span>
-  <span class="n">width</span> <span class="o">=</span> <span class="nf">min</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="m">10000L</span><span class="p">)</span>
-<span class="p">)</span>
-</code></pre></div><ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">height</span> <span class="o">=</span> <span class="m">30L</span>  <span class="c1"># for example</span>
+</span></span><span class="line"><span class="cl"><span class="n">width</span> <span class="o">=</span> <span class="m">160L</span>
+</span></span><span class="line"><span class="cl"><span class="nf">options</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">pillar.neg</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">pillar.subtle</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">pillar.print_max</span> <span class="o">=</span> <span class="n">height</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">pillar.print_min</span> <span class="o">=</span> <span class="n">height</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">pillar.width</span> <span class="o">=</span> <span class="n">width</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">width</span> <span class="o">=</span> <span class="nf">min</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="m">10000L</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span></code></pre></div><ul>
 <li><a href="https://github.com/r-lib/pillar/blob/master/R/options.R">https://github.com/r-lib/pillar/blob/master/R/options.R</a></li>
 <li><a href="https://github.com/tidyverse/tibble/blob/master/R/options.R">https://github.com/tidyverse/tibble/blob/master/R/options.R</a></li>
 <li><a href="https://github.com/Rdatatable/data.table/blob/master/R/onLoad.R">https://github.com/Rdatatable/data.table/blob/master/R/onLoad.R</a></li>
@@ -360,14 +360,14 @@ v2.0からは列名がちゃんとついてないとエラーになる。</dd>
 <p>普通に <code>print()</code> すると大きいtibbleの全体が見えない。
 <code>print()</code> 関数にオプションを指定したり <code>utils::page()</code> を利用したりする必要がある。
 RStudioを使っている場合は <code>View()</code> もしくは環境タブの変数クリックで簡単に閲覧可能。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="c1"># tibble/pillarをそのまま使う場合</span>
-<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">pillar</span><span class="o">:::</span><span class="nf">print.tbl</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">.)</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="m">10000L</span><span class="p">)</span>
-
-<span class="c1"># data.table:::print.data.table で上書きした場合</span>
-<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">print</span><span class="p">(</span><span class="n">nrows</span> <span class="o">=</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">.)</span><span class="p">)</span>
-
-<span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">page</span><span class="p">(</span><span class="s">&#34;print&#34;</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">.)</span><span class="p">)</span>
-</code></pre></div><p>オプションをいちいち設定しなくて済むように
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1"># tibble/pillarをそのまま使う場合</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">pillar</span><span class="o">:::</span><span class="nf">print.tbl</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">.)</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="m">10000L</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># data.table:::print.data.table で上書きした場合</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">print</span><span class="p">(</span><span class="n">nrows</span> <span class="o">=</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">.)</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">page</span><span class="p">(</span><span class="s">&#34;print&#34;</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">.)</span><span class="p">)</span>
+</span></span></code></pre></div><p>オプションをいちいち設定しなくて済むように
 <a href="https://github.com/heavywatal/rwtl/blob/master/R/pipe.R"><code>less()</code></a>
 のような関数を定義しておくのもよい。</p>
 <h2 id="関連書籍">関連書籍</h2>

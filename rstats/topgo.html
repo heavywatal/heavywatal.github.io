@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.92.2" />
+<meta name="generator" content="Hugo 0.96.0" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -90,26 +90,26 @@ topGO — Bioconductor でenrichment解析
 ある遺伝子セットにどんな機能が多めに含まれているかを解析する。</p>
 <p><a href="https://www.bioconductor.org/packages/release/bioc/html/topGO.html">https://www.bioconductor.org/packages/release/bioc/html/topGO.html</a></p>
 <p>Rの中からインストール</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">BiocManager</span><span class="o">::</span><span class="nf">install</span><span class="p">(</span><span class="s">&#34;topGO&#34;</span><span class="p">)</span>
-</code></pre></div><h2 id="使い方">使い方</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">BiocManager</span><span class="o">::</span><span class="nf">install</span><span class="p">(</span><span class="s">&#34;topGO&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><h2 id="使い方">使い方</h2>
 <p>ヒト遺伝子にランダムなスコアをつけた架空データ</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
-<span class="nf">library</span><span class="p">(</span><span class="n">org.Hs.eg.db</span><span class="p">)</span>
-<span class="n">entrez_ids</span> <span class="o">=</span> <span class="nf">mappedkeys</span><span class="p">(</span><span class="n">org.Hs.egGO</span><span class="p">)</span>
-<span class="n">scores</span> <span class="o">=</span> <span class="nf">runif</span><span class="p">(</span><span class="nf">length</span><span class="p">(</span><span class="n">entrez_ids</span><span class="p">),</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>  <span class="c1"># p-value-like</span>
-<span class="c1"># scores = rnorm(length(entrez_ids), 0, 0.4)  # log2FC-like</span>
-<span class="n">named_scores</span> <span class="o">=</span> <span class="nf">setNames</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">entrez_ids</span><span class="p">)</span>
-</code></pre></div><h3 id="topgodata-を作る"><code>topGOdata</code> を作る</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">tg_data</span> <span class="o">=</span> <span class="nf">new</span><span class="p">(</span><span class="s">&#34;topGOdata&#34;</span><span class="p">,</span>
-    <span class="n">ontology</span><span class="o">=</span><span class="s">&#34;BP&#34;</span><span class="p">,</span>
-    <span class="n">allGenes</span><span class="o">=</span><span class="n">named_scores</span><span class="p">,</span>
-    <span class="n">geneSelectionFun</span><span class="o">=</span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span><span class="n">x</span> <span class="o">&lt;</span> <span class="m">0.01</span><span class="p">},</span>
-    <span class="c1"># geneSelectionFun=function(x) {abs(x) &gt; 1},</span>
-    <span class="n">nodeSize</span><span class="o">=</span><span class="m">10</span><span class="p">,</span>
-    <span class="n">annotationFun</span><span class="o">=</span><span class="n">annFUN.org</span><span class="p">,</span>
-    <span class="n">mapping</span><span class="o">=</span><span class="s">&#34;org.Hs.eg.db&#34;</span><span class="p">,</span>
-    <span class="n">ID</span><span class="o">=</span><span class="s">&#34;entrez&#34;</span><span class="p">)</span>
-</code></pre></div><dl>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">org.Hs.eg.db</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">entrez_ids</span> <span class="o">=</span> <span class="nf">mappedkeys</span><span class="p">(</span><span class="n">org.Hs.egGO</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">scores</span> <span class="o">=</span> <span class="nf">runif</span><span class="p">(</span><span class="nf">length</span><span class="p">(</span><span class="n">entrez_ids</span><span class="p">),</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>  <span class="c1"># p-value-like</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># scores = rnorm(length(entrez_ids), 0, 0.4)  # log2FC-like</span>
+</span></span><span class="line"><span class="cl"><span class="n">named_scores</span> <span class="o">=</span> <span class="nf">setNames</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">entrez_ids</span><span class="p">)</span>
+</span></span></code></pre></div><h3 id="topgodata-を作る"><code>topGOdata</code> を作る</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">tg_data</span> <span class="o">=</span> <span class="nf">new</span><span class="p">(</span><span class="s">&#34;topGOdata&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ontology</span><span class="o">=</span><span class="s">&#34;BP&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">allGenes</span><span class="o">=</span><span class="n">named_scores</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">geneSelectionFun</span><span class="o">=</span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span><span class="n">x</span> <span class="o">&lt;</span> <span class="m">0.01</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># geneSelectionFun=function(x) {abs(x) &gt; 1},</span>
+</span></span><span class="line"><span class="cl">    <span class="n">nodeSize</span><span class="o">=</span><span class="m">10</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">annotationFun</span><span class="o">=</span><span class="n">annFUN.org</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mapping</span><span class="o">=</span><span class="s">&#34;org.Hs.eg.db&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ID</span><span class="o">=</span><span class="s">&#34;entrez&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><dl>
 <dt><code>ontology</code></dt>
 <dd><code>BP</code>, <code>CC</code>, <code>MF</code> のどれか</dd>
 <dt><code>description</code> (省略可)</dt>
@@ -155,16 +155,16 @@ fisherを使わない場合は結果の誤解を防ぐためにも一律 <code>F
 </dd>
 </dl>
 <h3 id="検定">検定</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">whichAlgorithms</span><span class="p">()</span>
-<span class="nf">whichTests</span><span class="p">()</span>
-<span class="n">so</span><span class="o">=</span><span class="s">&#34;increasing&#34;</span>
-<span class="n">resClassicFisher</span> <span class="o">=</span> <span class="nf">runTest</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s">&#34;classic&#34;</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="s">&#34;fisher&#34;</span><span class="p">,</span> <span class="n">sortOrder</span><span class="o">=</span><span class="n">so</span><span class="p">)</span>
-<span class="n">resElimFisher</span> <span class="o">=</span> <span class="nf">runTest</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s">&#34;elim&#34;</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="s">&#34;fisher&#34;</span><span class="p">,</span> <span class="n">sortOrder</span><span class="o">=</span><span class="n">so</span><span class="p">)</span>
-<span class="n">resWeightFisher</span> <span class="o">=</span> <span class="nf">runTest</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s">&#34;weight&#34;</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="s">&#34;fisher&#34;</span><span class="p">,</span> <span class="n">sortOrder</span><span class="o">=</span><span class="n">so</span><span class="p">)</span>
-<span class="n">resClassicKS</span> <span class="o">=</span> <span class="nf">runTest</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s">&#34;classic&#34;</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="s">&#34;ks&#34;</span><span class="p">,</span> <span class="n">sortOrder</span><span class="o">=</span><span class="n">so</span><span class="p">)</span>
-<span class="n">resElimKS</span> <span class="o">=</span> <span class="nf">runTest</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s">&#34;elim&#34;</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="s">&#34;ks&#34;</span><span class="p">,</span> <span class="n">sortOrder</span><span class="o">=</span><span class="n">so</span><span class="p">)</span>
-<span class="n">resWeightKS</span> <span class="o">=</span> <span class="nf">runTest</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s">&#34;weight01&#34;</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="s">&#34;ks&#34;</span><span class="p">,</span> <span class="n">sortOrder</span><span class="o">=</span><span class="n">so</span><span class="p">)</span>
-</code></pre></div><dl>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">whichAlgorithms</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nf">whichTests</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">so</span><span class="o">=</span><span class="s">&#34;increasing&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">resClassicFisher</span> <span class="o">=</span> <span class="nf">runTest</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s">&#34;classic&#34;</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="s">&#34;fisher&#34;</span><span class="p">,</span> <span class="n">sortOrder</span><span class="o">=</span><span class="n">so</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">resElimFisher</span> <span class="o">=</span> <span class="nf">runTest</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s">&#34;elim&#34;</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="s">&#34;fisher&#34;</span><span class="p">,</span> <span class="n">sortOrder</span><span class="o">=</span><span class="n">so</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">resWeightFisher</span> <span class="o">=</span> <span class="nf">runTest</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s">&#34;weight&#34;</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="s">&#34;fisher&#34;</span><span class="p">,</span> <span class="n">sortOrder</span><span class="o">=</span><span class="n">so</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">resClassicKS</span> <span class="o">=</span> <span class="nf">runTest</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s">&#34;classic&#34;</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="s">&#34;ks&#34;</span><span class="p">,</span> <span class="n">sortOrder</span><span class="o">=</span><span class="n">so</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">resElimKS</span> <span class="o">=</span> <span class="nf">runTest</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s">&#34;elim&#34;</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="s">&#34;ks&#34;</span><span class="p">,</span> <span class="n">sortOrder</span><span class="o">=</span><span class="n">so</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">resWeightKS</span> <span class="o">=</span> <span class="nf">runTest</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s">&#34;weight01&#34;</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="s">&#34;ks&#34;</span><span class="p">,</span> <span class="n">sortOrder</span><span class="o">=</span><span class="n">so</span><span class="p">)</span>
+</span></span></code></pre></div><dl>
 <dt><code>algorithm</code></dt>
 <dd><code>classic</code>: GO termをそのまま使って計算。偽陽性多め。</dd>
 <dd><code>elim</code> <a href="https://doi.org/10.1093/bioinformatics/btl140">(Alexa et al. 2006)</a>:
@@ -212,69 +212,69 @@ DEG解析やら何やらで遺伝子がp値やスコアを持ってるなら <co
 計算されるp値は多重検定の補正をしていない生の値。
 &ldquo;Significant genes&rdquo; は <code>geneSelectionFun(allGenes)</code> で <code>TRUE</code> になったものの数で、
 無関係なはずのKSでも計算されてしまって気持ち悪い。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="nf">str</span><span class="p">(</span><span class="n">resElimKS</span><span class="p">)</span>
-<span class="nf">geneData</span><span class="p">(</span><span class="n">resElimKS</span><span class="p">)</span>
-<span class="nf">score</span><span class="p">(</span><span class="n">resElimKS</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="nf">head</span><span class="p">()</span>
-</code></pre></div><h3 id="解釈描画">解釈・描画</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">str</span><span class="p">(</span><span class="n">resElimKS</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">geneData</span><span class="p">(</span><span class="n">resElimKS</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">score</span><span class="p">(</span><span class="n">resElimKS</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="nf">head</span><span class="p">()</span>
+</span></span></code></pre></div><h3 id="解釈描画">解釈・描画</h3>
 <p><code>GenTable()</code> を使って GO term Over-representation ランキングを表示できる。
 複数の <code>runTest()</code> 産物を好きな名前で複数並べたりすることもできる。
 が、P値が桁の小さい文字列型になってたり勝手に行が削られたりして怖いので使わない。
 <code>GenTable()</code> の実装を参考に似た形式のより良いテーブルを自分で作る。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="c1"># num_nodes=length(tg_data@graph@nodes)  # GO terms &gt;nodeSize</span>
-<span class="c1"># tg_table = GenTable(tg_data,</span>
-<span class="c1">#   classicFisher=resClassicFisher,</span>
-<span class="c1">#   elimFisher=resElimFisher,</span>
-<span class="c1">#   classicKS=resClassicKS,</span>
-<span class="c1">#   elimKS=resElimKS,</span>
-<span class="c1">#   topNodes=num_nodes) %&gt;%</span>
-<span class="c1">#   tibble::as_tibble() %&gt;%</span>
-<span class="c1">#   print()</span>
-
-<span class="n">annoStat</span> <span class="o">=</span> <span class="nf">termStat</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="nf">sort</span><span class="p">(</span><span class="n">tg_data</span><span class="o">@</span><span class="n">graph</span><span class="o">@</span><span class="n">nodes</span><span class="p">))</span> <span class="o">%&gt;%</span>
-  <span class="n">tibble</span><span class="o">::</span><span class="nf">rownames_to_column</span><span class="p">(</span><span class="n">var</span> <span class="o">=</span> <span class="s">&#34;GO.ID&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
-  <span class="n">tibble</span><span class="o">::</span><span class="nf">as_tibble</span><span class="p">()</span> <span class="o">%&gt;%</span>
-  <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">Term</span><span class="o">=</span><span class="n">topGO</span><span class="o">:::</span><span class="nf">.getTermsDefinition</span><span class="p">(</span><span class="n">terms</span><span class="p">,</span> <span class="nf">ontology</span><span class="p">(</span><span class="n">tg_data</span><span class="p">),</span> <span class="m">65535L</span><span class="p">))</span> <span class="o">%&gt;%</span>
-  <span class="n">dplyr</span><span class="o">::</span><span class="nf">relocate</span><span class="p">(</span><span class="n">Term</span><span class="p">,</span> <span class="n">.after</span><span class="o">=</span><span class="n">GO.ID</span><span class="p">)</span> <span class="o">%&gt;%</span>
-  <span class="nf">print</span><span class="p">()</span>
-
-<span class="n">tg_table</span> <span class="o">=</span> <span class="n">annoStat</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span>
-    <span class="n">classicFisher</span><span class="o">=</span><span class="nf">score</span><span class="p">(</span><span class="n">resClassicFisher</span><span class="p">,</span> <span class="n">whichGO</span><span class="o">=</span><span class="n">GO.ID</span><span class="p">),</span>
-    <span class="n">elimFisher</span><span class="o">=</span><span class="nf">score</span><span class="p">(</span><span class="n">resElimFisher</span><span class="p">,</span> <span class="n">whichGO</span><span class="o">=</span><span class="n">GO.ID</span><span class="p">),</span>
-    <span class="n">weightFisher</span><span class="o">=</span><span class="nf">score</span><span class="p">(</span><span class="n">resWeightFisher</span><span class="p">,</span> <span class="n">whichGO</span><span class="o">=</span><span class="n">GO.ID</span><span class="p">),</span>
-    <span class="n">classicKS</span><span class="o">=</span><span class="nf">score</span><span class="p">(</span><span class="n">resClassicKS</span><span class="p">,</span> <span class="n">whichGO</span><span class="o">=</span><span class="n">GO.ID</span><span class="p">),</span>
-    <span class="n">elimKS</span><span class="o">=</span><span class="nf">score</span><span class="p">(</span><span class="n">resElimKS</span><span class="p">,</span> <span class="n">whichGO</span><span class="o">=</span><span class="n">GO.ID</span><span class="p">),</span>
-    <span class="n">weightKS</span><span class="o">=</span><span class="nf">score</span><span class="p">(</span><span class="n">resWeightKS</span><span class="p">,</span> <span class="n">whichGO</span><span class="o">=</span><span class="n">GO.ID</span><span class="p">),</span>
-  <span class="p">)</span> <span class="o">%&gt;%</span>
-  <span class="nf">print</span><span class="p">()</span>
-</code></pre></div><p>あとは dplyr, tidyr, ggplot2 などを使って自由に整形、可視化する。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">tg_table</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">arrange</span><span class="p">(</span><span class="n">elimKS</span><span class="p">)</span>
-
-<span class="n">tg_table</span> <span class="o">%&gt;%</span>
-  <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="nf">matches</span><span class="p">(</span><span class="s">&#34;Fisher$|KS$&#34;</span><span class="p">))</span> <span class="o">%&gt;%</span>
-  <span class="nf">pairs</span><span class="p">()</span>
-
-<span class="n">p0</span> <span class="o">=</span> <span class="nf">ggplot</span><span class="p">(</span><span class="n">tg_table</span><span class="p">)</span> <span class="o">+</span>
-  <span class="nf">geom_point</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="m">16</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">)</span> <span class="o">+</span>
-  <span class="nf">coord_fixed</span><span class="p">()</span> <span class="o">+</span>
-  <span class="nf">theme_minimal</span><span class="p">()</span>
-
-<span class="n">p0</span> <span class="o">+</span> <span class="nf">aes</span><span class="p">(</span><span class="n">classicFisher</span><span class="p">,</span> <span class="n">classicKS</span><span class="p">)</span>
-<span class="n">p0</span> <span class="o">+</span> <span class="nf">aes</span><span class="p">(</span><span class="n">elimFisher</span><span class="p">,</span> <span class="n">elimKS</span><span class="p">)</span>
-<span class="n">p0</span> <span class="o">+</span> <span class="nf">aes</span><span class="p">(</span><span class="n">classicKS</span><span class="p">,</span> <span class="n">elimKS</span><span class="p">)</span>
-<span class="n">p0</span> <span class="o">+</span> <span class="nf">aes</span><span class="p">(</span><span class="n">classicKS</span><span class="p">,</span> <span class="n">weightKS</span><span class="p">)</span>
-<span class="n">p0</span> <span class="o">+</span> <span class="nf">aes</span><span class="p">(</span><span class="n">elimKS</span><span class="p">,</span> <span class="n">weightKS</span><span class="p">)</span>
-</code></pre></div><hr>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1"># num_nodes=length(tg_data@graph@nodes)  # GO terms &gt;nodeSize</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># tg_table = GenTable(tg_data,</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   classicFisher=resClassicFisher,</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   elimFisher=resElimFisher,</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   classicKS=resClassicKS,</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   elimKS=resElimKS,</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   topNodes=num_nodes) %&gt;%</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   tibble::as_tibble() %&gt;%</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   print()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">annoStat</span> <span class="o">=</span> <span class="nf">termStat</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="nf">sort</span><span class="p">(</span><span class="n">tg_data</span><span class="o">@</span><span class="n">graph</span><span class="o">@</span><span class="n">nodes</span><span class="p">))</span> <span class="o">%&gt;%</span>
+</span></span><span class="line"><span class="cl">  <span class="n">tibble</span><span class="o">::</span><span class="nf">rownames_to_column</span><span class="p">(</span><span class="n">var</span> <span class="o">=</span> <span class="s">&#34;GO.ID&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+</span></span><span class="line"><span class="cl">  <span class="n">tibble</span><span class="o">::</span><span class="nf">as_tibble</span><span class="p">()</span> <span class="o">%&gt;%</span>
+</span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">Term</span><span class="o">=</span><span class="n">topGO</span><span class="o">:::</span><span class="nf">.getTermsDefinition</span><span class="p">(</span><span class="n">terms</span><span class="p">,</span> <span class="nf">ontology</span><span class="p">(</span><span class="n">tg_data</span><span class="p">),</span> <span class="m">65535L</span><span class="p">))</span> <span class="o">%&gt;%</span>
+</span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">relocate</span><span class="p">(</span><span class="n">Term</span><span class="p">,</span> <span class="n">.after</span><span class="o">=</span><span class="n">GO.ID</span><span class="p">)</span> <span class="o">%&gt;%</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">print</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">tg_table</span> <span class="o">=</span> <span class="n">annoStat</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">classicFisher</span><span class="o">=</span><span class="nf">score</span><span class="p">(</span><span class="n">resClassicFisher</span><span class="p">,</span> <span class="n">whichGO</span><span class="o">=</span><span class="n">GO.ID</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">elimFisher</span><span class="o">=</span><span class="nf">score</span><span class="p">(</span><span class="n">resElimFisher</span><span class="p">,</span> <span class="n">whichGO</span><span class="o">=</span><span class="n">GO.ID</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">weightFisher</span><span class="o">=</span><span class="nf">score</span><span class="p">(</span><span class="n">resWeightFisher</span><span class="p">,</span> <span class="n">whichGO</span><span class="o">=</span><span class="n">GO.ID</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">classicKS</span><span class="o">=</span><span class="nf">score</span><span class="p">(</span><span class="n">resClassicKS</span><span class="p">,</span> <span class="n">whichGO</span><span class="o">=</span><span class="n">GO.ID</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">elimKS</span><span class="o">=</span><span class="nf">score</span><span class="p">(</span><span class="n">resElimKS</span><span class="p">,</span> <span class="n">whichGO</span><span class="o">=</span><span class="n">GO.ID</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">weightKS</span><span class="o">=</span><span class="nf">score</span><span class="p">(</span><span class="n">resWeightKS</span><span class="p">,</span> <span class="n">whichGO</span><span class="o">=</span><span class="n">GO.ID</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="p">)</span> <span class="o">%&gt;%</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">print</span><span class="p">()</span>
+</span></span></code></pre></div><p>あとは dplyr, tidyr, ggplot2 などを使って自由に整形、可視化する。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">tg_table</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">arrange</span><span class="p">(</span><span class="n">elimKS</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">tg_table</span> <span class="o">%&gt;%</span>
+</span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="nf">matches</span><span class="p">(</span><span class="s">&#34;Fisher$|KS$&#34;</span><span class="p">))</span> <span class="o">%&gt;%</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">pairs</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">p0</span> <span class="o">=</span> <span class="nf">ggplot</span><span class="p">(</span><span class="n">tg_table</span><span class="p">)</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">geom_point</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="m">16</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">)</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">coord_fixed</span><span class="p">()</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">theme_minimal</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">p0</span> <span class="o">+</span> <span class="nf">aes</span><span class="p">(</span><span class="n">classicFisher</span><span class="p">,</span> <span class="n">classicKS</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">p0</span> <span class="o">+</span> <span class="nf">aes</span><span class="p">(</span><span class="n">elimFisher</span><span class="p">,</span> <span class="n">elimKS</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">p0</span> <span class="o">+</span> <span class="nf">aes</span><span class="p">(</span><span class="n">classicKS</span><span class="p">,</span> <span class="n">elimKS</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">p0</span> <span class="o">+</span> <span class="nf">aes</span><span class="p">(</span><span class="n">classicKS</span><span class="p">,</span> <span class="n">weightKS</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">p0</span> <span class="o">+</span> <span class="nf">aes</span><span class="p">(</span><span class="n">elimKS</span><span class="p">,</span> <span class="n">weightKS</span><span class="p">)</span>
+</span></span></code></pre></div><hr>
 <p><code>Rgraphviz</code> を使ってDAG描画</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="c1"># BiocManager::install(&#34;Rgraphviz&#34;)</span>
-<span class="nf">showSigOfNodes</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="nf">score</span><span class="p">(</span><span class="n">resElimKS</span><span class="p">),</span> <span class="n">firstSigNodes</span><span class="o">=</span><span class="m">6</span><span class="p">,</span> <span class="n">useInfo</span><span class="o">=</span><span class="s">&#34;all&#34;</span><span class="p">)</span>
-<span class="nf">printGraph</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="n">resElimKS</span><span class="p">,</span> <span class="n">firstSigNodes</span><span class="o">=</span><span class="m">6</span><span class="p">,</span> <span class="n">fn.prefix</span><span class="o">=</span><span class="s">&#34;filename&#34;</span><span class="p">,</span> <span class="n">pdfSW</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
-</code></pre></div><p>前者はプロットだけ、後者はPDFに書き出し。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1"># BiocManager::install(&#34;Rgraphviz&#34;)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">showSigOfNodes</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="nf">score</span><span class="p">(</span><span class="n">resElimKS</span><span class="p">),</span> <span class="n">firstSigNodes</span><span class="o">=</span><span class="m">6</span><span class="p">,</span> <span class="n">useInfo</span><span class="o">=</span><span class="s">&#34;all&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">printGraph</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="n">resElimKS</span><span class="p">,</span> <span class="n">firstSigNodes</span><span class="o">=</span><span class="m">6</span><span class="p">,</span> <span class="n">fn.prefix</span><span class="o">=</span><span class="s">&#34;filename&#34;</span><span class="p">,</span> <span class="n">pdfSW</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+</span></span></code></pre></div><p>前者はプロットだけ、後者はPDFに書き出し。
 significant nodeが四角で、赤いほど低いP値。</p>
 <h2 id="go-terms">GO terms</h2>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="n">BPterms</span> <span class="o">=</span> <span class="nf">ls</span><span class="p">(</span><span class="n">GOBPTerm</span><span class="p">)</span>
-<span class="n">MFterms</span> <span class="o">=</span> <span class="nf">ls</span><span class="p">(</span><span class="n">GOMFTerm</span><span class="p">)</span>
-<span class="n">CCterms</span> <span class="o">=</span> <span class="nf">ls</span><span class="p">(</span><span class="n">GOCCTerm</span><span class="p">)</span>
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">BPterms</span> <span class="o">=</span> <span class="nf">ls</span><span class="p">(</span><span class="n">GOBPTerm</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">MFterms</span> <span class="o">=</span> <span class="nf">ls</span><span class="p">(</span><span class="n">GOMFTerm</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">CCterms</span> <span class="o">=</span> <span class="nf">ls</span><span class="p">(</span><span class="n">GOCCTerm</span><span class="p">)</span>
+</span></span></code></pre></div>
 </article>
 </main>
 

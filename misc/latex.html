@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@heavywatal">
 <meta name="twitter:creator" content="@heavywatal">
-<meta name="generator" content="Hugo 0.92.2" />
+<meta name="generator" content="Hugo 0.96.0" />
 <link rel="stylesheet" href="/lib/katex/katex.min.css">
 <script defer src="/lib/katex/katex.min.js"></script>
 <script defer src="/lib/katex/contrib/auto-render.min.js"></script>
@@ -116,16 +116,16 @@ BibDesk, LaTeXiT, TeX Live Utility, TeXShop などのGUIアプリが不要で、
 <ol>
 <li>
 <p>ソースコードを書く</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="k">\documentclass</span><span class="na">[a4paper]</span><span class="nb">{</span>article<span class="nb">}</span>
-<span class="k">\begin</span><span class="nb">{</span>document<span class="nb">}</span>
-Hello, World!
-<span class="k">\end</span><span class="nb">{</span>document<span class="nb">}</span>
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\documentclass</span><span class="na">[a4paper]</span><span class="nb">{</span>article<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>document<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">Hello, World!
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>document<span class="nb">}</span>
+</span></span></code></pre></div></li>
 <li>
 <p>ターミナルからコンパイル:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">pdflatex hello.tex
-open hello.pdf
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pdflatex hello.tex
+</span></span><span class="line"><span class="cl">open hello.pdf
+</span></span></code></pre></div></li>
 </ol>
 <p>MacTeXに含まれるTeXShopというアプリを使えば、
 原稿書きからコンパイルまで面倒を見てもらえるので、
@@ -143,10 +143,10 @@ latexmk -pv   # preview document after generation
 latexmk -pvc  # preview document and continuously update
 latexmk -C    # clean up
 </code></pre><p>設定を <code>~/.latexmkrc</code> とかに書いておける:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-perl" data-lang="perl"><span class="nv">$pdf_mode</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-<span class="nv">$pdflatex</span> <span class="o">=</span> <span class="s">&#39;pdflatex -file-line-error -halt-on-error -synctex=1 %O %S&#39;</span><span class="p">;</span>
-<span class="nv">$lualatex</span> <span class="o">=</span> <span class="s">&#39;lualatex -file-line-error -halt-on-error -synctex=1 %O %S&#39;</span><span class="p">;</span>
-</code></pre></div><p><a href="https://www.ctan.org/pkg/latexmk">https://www.ctan.org/pkg/latexmk</a></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-perl" data-lang="perl"><span class="line"><span class="cl"><span class="nv">$pdf_mode</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$pdflatex</span> <span class="o">=</span> <span class="s">&#39;pdflatex -file-line-error -halt-on-error -synctex=1 %O %S&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$lualatex</span> <span class="o">=</span> <span class="s">&#39;lualatex -file-line-error -halt-on-error -synctex=1 %O %S&#39;</span><span class="p">;</span>
+</span></span></code></pre></div><p><a href="https://www.ctan.org/pkg/latexmk">https://www.ctan.org/pkg/latexmk</a></p>
 <h4 id="synctex">SyncTeX</h4>
 <p>ソースコードとPDFの対応箇所を行き来するための仕組み。</p>
 <ul>
@@ -160,12 +160,12 @@ latexmk -C    # clean up
 と言っていて実際tlmgr自体はそういう作りになっているが、
 多くのパッケージで依存関係がちゃんと記述されていないので、
 実際にはエラーを読みながら依存パッケージを手動でインストールすることになる。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">tlmgr update --self --all
-tlmgr search --global japanese
-tlmgr search --global --file zxxrl7z
-tlmgr info --list newtx
-tlmgr install chktex latexmk
-</code></pre></div><p>管理者権限不要の <code>--usermode</code> も用意されているが、
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">tlmgr update --self --all
+</span></span><span class="line"><span class="cl">tlmgr search --global japanese
+</span></span><span class="line"><span class="cl">tlmgr search --global --file zxxrl7z
+</span></span><span class="line"><span class="cl">tlmgr info --list newtx
+</span></span><span class="line"><span class="cl">tlmgr install chktex latexmk
+</span></span></code></pre></div><p>管理者権限不要の <code>--usermode</code> も用意されているが、
 なんかうまくいかないので必要に迫られない限り使わないほうがよい。</p>
 <p>パッケージをアンインストールしようと思って
 <code>tlmgr uninstall some-package</code>
@@ -182,39 +182,39 @@ tlmgr install chktex latexmk
 数式環境のデファクトスタンダード。
 アメリカ数学会(AMS)が開発したらしいが、
 ガチ数学じゃなくても数式を書く場合はこれらしい。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="k">\usepackage</span><span class="nb">{</span>amssymb,amsmath<span class="nb">}</span>
-<span class="k">\usepackage</span><span class="na">[all,warning]</span><span class="nb">{</span>onlyamsmath<span class="nb">}</span>
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\usepackage</span><span class="nb">{</span>amssymb,amsmath<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\usepackage</span><span class="na">[all,warning]</span><span class="nb">{</span>onlyamsmath<span class="nb">}</span>
+</span></span></code></pre></div></li>
 <li>
 <p>Inline math:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex">if <span class="s">$</span><span class="nb">N_e u </span><span class="nv">\ll</span><span class="nb"> </span><span class="m">1</span><span class="s">$</span>, then the population is monomorphic most of the time,
-</code></pre></div><p><code>$ ... $</code> はTeXの古いやり方で、
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl">if <span class="s">$</span><span class="nb">N_e u </span><span class="nv">\ll</span><span class="nb"> </span><span class="m">1</span><span class="s">$</span>, then the population is monomorphic most of the time,
+</span></span></code></pre></div><p><code>$ ... $</code> はTeXの古いやり方で、
 新しいLaTeXでは <code>\( ... \)</code> を用いるべし、という流れもある。
 けどダラーのほうが書きやすいし読みやすいので、
 しばらくは <code>chktex -n46</code> で様子を見る。</p>
 </li>
 <li>
 <p>Display math:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="k">\begin</span><span class="nb">{</span>equation*<span class="nb">}</span><span class="k">\label</span><span class="nb">{</span>eq:growth<span class="nb">}</span>
-  N<span class="nb">_</span>t = N<span class="nb">_</span>0 e<span class="nb">^{</span>rt<span class="nb">}</span>
-<span class="k">\end</span><span class="nb">{</span>equation*<span class="nb">}</span>
-</code></pre></div><p>生TeXの <code>$$ ... $$</code> を使ってはいけない。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>equation*<span class="nb">}</span><span class="k">\label</span><span class="nb">{</span>eq:growth<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  N<span class="nb">_</span>t = N<span class="nb">_</span>0 e<span class="nb">^{</span>rt<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>equation*<span class="nb">}</span>
+</span></span></code></pre></div><p>生TeXの <code>$$ ... $$</code> を使ってはいけない。
 <code>\[ ... \]</code> はOK。</p>
 </li>
 <li>
 <p>改行を含む数式を等号で揃える</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="k">\begin</span><span class="nb">{</span>equation<span class="nb">}</span><span class="k">\label</span><span class="nb">{</span>eq:growth<span class="nb">}</span>
-<span class="k">\begin</span><span class="nb">{</span>split<span class="nb">}</span>
-  N<span class="nb">_</span>t <span class="nb">&amp;</span>= N<span class="nb">_</span>0 e<span class="nb">^{</span>rt<span class="nb">}</span> <span class="k">\\</span>
-      <span class="nb">&amp;</span>= N<span class="nb">_</span>0 <span class="k">\lambda</span><span class="nb">^</span>t
-<span class="k">\end</span><span class="nb">{</span>split<span class="nb">}</span>
-<span class="k">\end</span><span class="nb">{</span>equation<span class="nb">}</span>
-
-<span class="k">\begin</span><span class="nb">{</span>align<span class="nb">}</span>
-  S <span class="nb">&amp;</span>= 4 <span class="k">\pi</span> r<span class="nb">^</span>2<span class="k">\label</span><span class="nb">{</span>surface<span class="nb">}</span><span class="k">\\</span>
-  V <span class="nb">&amp;</span>= <span class="k">\frac</span> <span class="nb">{</span>4 <span class="k">\pi</span> r<span class="nb">^</span>3<span class="nb">}</span> 3<span class="k">\label</span><span class="nb">{</span>volume<span class="nb">}</span><span class="k">\\</span>
-<span class="k">\end</span><span class="nb">{</span>align<span class="nb">}</span>
-</code></pre></div><p><code>split</code> 環境では全体でラベルが1つ、
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>equation<span class="nb">}</span><span class="k">\label</span><span class="nb">{</span>eq:growth<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>split<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  N<span class="nb">_</span>t <span class="nb">&amp;</span>= N<span class="nb">_</span>0 e<span class="nb">^{</span>rt<span class="nb">}</span> <span class="k">\\</span>
+</span></span><span class="line"><span class="cl">      <span class="nb">&amp;</span>= N<span class="nb">_</span>0 <span class="k">\lambda</span><span class="nb">^</span>t
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>split<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>equation<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>align<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  S <span class="nb">&amp;</span>= 4 <span class="k">\pi</span> r<span class="nb">^</span>2<span class="k">\label</span><span class="nb">{</span>surface<span class="nb">}</span><span class="k">\\</span>
+</span></span><span class="line"><span class="cl">  V <span class="nb">&amp;</span>= <span class="k">\frac</span> <span class="nb">{</span>4 <span class="k">\pi</span> r<span class="nb">^</span>3<span class="nb">}</span> 3<span class="k">\label</span><span class="nb">{</span>volume<span class="nb">}</span><span class="k">\\</span>
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>align<span class="nb">}</span>
+</span></span></code></pre></div><p><code>split</code> 環境では全体でラベルが1つ、
 <code>align</code> 環境では行ごとにラベルが生成されるので、
 用途が少し違う。
 古い <code>eqnarray</code> 環境でも似たようなことはできるが、
@@ -222,13 +222,13 @@ tlmgr install chktex latexmk
 </li>
 <li>
 <p>場合分け</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="k">\begin</span><span class="nb">{</span>equation<span class="nb">}</span><span class="k">\label</span><span class="nb">{</span>eq:heaviside<span class="nb">}</span>
-  H(x) = <span class="k">\begin</span><span class="nb">{</span>cases<span class="nb">}</span>
-    <span class="nb">&amp;</span> 0 <span class="k">\text</span><span class="nb">{</span>if <span class="s">$</span><span class="nb">x </span><span class="nv">\le</span><span class="nb"> </span><span class="m">0</span><span class="s">$</span><span class="nb">}</span> <span class="k">\\</span>
-    <span class="nb">&amp;</span> 1 <span class="k">\text</span><span class="nb">{</span>if <span class="s">$</span><span class="nb">x &gt; </span><span class="m">0</span><span class="s">$</span><span class="nb">}</span>
-  <span class="k">\end</span><span class="nb">{</span>cases<span class="nb">}</span>
-<span class="k">\end</span><span class="nb">{</span>equation<span class="nb">}</span>
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>equation<span class="nb">}</span><span class="k">\label</span><span class="nb">{</span>eq:heaviside<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  H(x) = <span class="k">\begin</span><span class="nb">{</span>cases<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">&amp;</span> 0 <span class="k">\text</span><span class="nb">{</span>if <span class="s">$</span><span class="nb">x </span><span class="nv">\le</span><span class="nb"> </span><span class="m">0</span><span class="s">$</span><span class="nb">}</span> <span class="k">\\</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">&amp;</span> 1 <span class="k">\text</span><span class="nb">{</span>if <span class="s">$</span><span class="nb">x &gt; </span><span class="m">0</span><span class="s">$</span><span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\end</span><span class="nb">{</span>cases<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>equation<span class="nb">}</span>
+</span></span></code></pre></div></li>
 <li>
 <p>記号:
 <a href="https://www.ctan.org/tex-archive/info/symbols/comprehensive/">https://www.ctan.org/tex-archive/info/symbols/comprehensive/</a>
@@ -248,14 +248,14 @@ e.g., 分数を挟むとか、カッコの入れ子とか</li>
 </li>
 </ul>
 <h3 id="図">図</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="k">\usepackage</span><span class="na">[final]</span><span class="nb">{</span>graphicx<span class="nb">}</span>
-<span class="c">%%%
-</span><span class="c"></span><span class="k">\begin</span><span class="nb">{</span>figure<span class="nb">}</span>
-<span class="k">\includegraphics</span><span class="na">[width=\columnwidth]</span><span class="nb">{</span>awesome.pdf<span class="nb">}</span>
-<span class="k">\caption</span><span class="nb">{</span>some description<span class="nb">}</span><span class="c">%
-</span><span class="c"></span><span class="k">\label</span><span class="nb">{</span>fig:awesome<span class="nb">}</span>
-<span class="k">\end</span><span class="nb">{</span>figure<span class="nb">}</span>
-</code></pre></div><p><code>\begin{figure}[htbp]</code> のようにして配置場所の優先順位を指定できるが、
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\usepackage</span><span class="na">[final]</span><span class="nb">{</span>graphicx<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="c">%%%
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="k">\begin</span><span class="nb">{</span>figure<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\includegraphics</span><span class="na">[width=\columnwidth]</span><span class="nb">{</span>awesome.pdf<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\caption</span><span class="nb">{</span>some description<span class="nb">}</span><span class="c">%
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="k">\label</span><span class="nb">{</span>fig:awesome<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>figure<span class="nb">}</span>
+</span></span></code></pre></div><p><code>\begin{figure}[htbp]</code> のようにして配置場所の優先順位を指定できるが、
 結局はいろんな兼ね合いでコンパイラが決める。
 デフォルトは <code>[tbp]</code>。
 複数指定した場合、どの順序で書いても下記の順に優先される。</p>
@@ -285,30 +285,30 @@ twocolumnの文書内で <code>\textwidth</code> まで広げたい場合は
 変換プログラム本体である <code>ghostscript</code> をHomebrewか何かで入れる必要がある。</p>
 <p>GIFアニメをそのまま埋め込むことはできないので、
 <a href="https://www.ctan.org/pkg/animate">{animate}</a>で連番PNGを読み込む。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="c">% tlmgr install animate media9 ocgx2
-</span><span class="c"></span><span class="k">\usepackage</span><span class="na">[autoplay,final,controls=all,type=png]</span><span class="nb">{</span>animate<span class="nb">}</span>
-
-<span class="k">\begin</span><span class="nb">{</span>document<span class="nb">}</span>
-<span class="c">% \animategraphics[options]{frame rate}{file basename}{first}{last}
-</span><span class="c"></span><span class="k">\animategraphics</span><span class="na">[scale=0.5]</span><span class="nb">{</span>10<span class="nb">}{</span>dir/basename<span class="nb">_}{</span>1<span class="nb">}{</span>9<span class="nb">}</span>
-<span class="k">\end</span><span class="nb">{</span>document<span class="nb">}</span>
-</code></pre></div><h3 id="表">表</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="c">% tlmgr install animate media9 ocgx2
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="k">\usepackage</span><span class="na">[autoplay,final,controls=all,type=png]</span><span class="nb">{</span>animate<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>document<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="c">% \animategraphics[options]{frame rate}{file basename}{first}{last}
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="k">\animategraphics</span><span class="na">[scale=0.5]</span><span class="nb">{</span>10<span class="nb">}{</span>dir/basename<span class="nb">_}{</span>1<span class="nb">}{</span>9<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>document<span class="nb">}</span>
+</span></span></code></pre></div><h3 id="表">表</h3>
 <p><a href="https://en.wikibooks.org/wiki/LaTeX/Tables">https://en.wikibooks.org/wiki/LaTeX/Tables</a></p>
 <p>キャプションやラベルなどをまとめるのが <code>table</code> 環境、
 表本体が <code>tabular</code> 環境。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="k">\begin</span><span class="nb">{</span>table<span class="nb">}</span>
-<span class="k">\caption</span><span class="nb">{</span>Parameters<span class="nb">}</span><span class="c">%
-</span><span class="c"></span><span class="k">\label</span><span class="nb">{</span>table:parameters<span class="nb">}</span>
-<span class="k">\begin</span><span class="nb">{</span>tabular<span class="nb">}{</span>rl<span class="nb">}</span>
-  <span class="k">\toprule</span>
-  Symbol <span class="nb">&amp;</span> Description <span class="k">\\</span>
-  <span class="k">\midrule</span>
-  <span class="s">$</span><span class="nv">\mu</span><span class="s">$</span> <span class="nb">&amp;</span> mutation rate per division <span class="k">\\</span>
-  <span class="s">$</span><span class="nb">N_</span><span class="m">0</span><span class="s">$</span> <span class="nb">&amp;</span> initial population size <span class="k">\\</span>
-  <span class="k">\bottomrule</span>
-<span class="k">\end</span><span class="nb">{</span>tabular<span class="nb">}</span>
-<span class="k">\end</span><span class="nb">{</span>table<span class="nb">}</span>
-</code></pre></div><p>罫線は標準の <code>\hline</code> だと上下スペースが狭苦しいので、
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>table<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\caption</span><span class="nb">{</span>Parameters<span class="nb">}</span><span class="c">%
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="k">\label</span><span class="nb">{</span>table:parameters<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>tabular<span class="nb">}{</span>rl<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\toprule</span>
+</span></span><span class="line"><span class="cl">  Symbol <span class="nb">&amp;</span> Description <span class="k">\\</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\midrule</span>
+</span></span><span class="line"><span class="cl">  <span class="s">$</span><span class="nv">\mu</span><span class="s">$</span> <span class="nb">&amp;</span> mutation rate per division <span class="k">\\</span>
+</span></span><span class="line"><span class="cl">  <span class="s">$</span><span class="nb">N_</span><span class="m">0</span><span class="s">$</span> <span class="nb">&amp;</span> initial population size <span class="k">\\</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\bottomrule</span>
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>tabular<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>table<span class="nb">}</span>
+</span></span></code></pre></div><p>罫線は標準の <code>\hline</code> だと上下スペースが狭苦しいので、
 <a href="https://www.ctan.org/pkg/booktabs">{booktabs}</a>
 の <code>toprule</code>, <code>midrule</code>, <code>bottomrule</code> を使う。</p>
 <p>ページに合わせて幅をうまいことやるには <a href="https://www.ctan.org/pkg/tabulary">{tabulary}</a> 。</p>
@@ -316,24 +316,24 @@ twocolumnの文書内で <code>\textwidth</code> まで広げたい場合は
 <h3 id="箇条書き">箇条書き</h3>
 <p><a href="https://www.ctan.org/pkg/enumitem">{enumitem}</a>
 を使うといろいろなオプションが設定可能になる。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="k">\usepackage</span><span class="nb">{</span>enumitem<span class="nb">}</span>
-<span class="c">%%%
-</span><span class="c"></span>
-<span class="k">\begin</span><span class="nb">{</span>itemize<span class="nb">}</span>
-  <span class="k">\item</span> Judas Priest
-  <span class="k">\item</span> Iron Maiden
-<span class="k">\end</span><span class="nb">{</span>itemize<span class="nb">}</span>
-
-<span class="k">\begin</span><span class="nb">{</span>enumerate<span class="nb">}</span>[nosep,leftmargin=*]
-  <span class="k">\item</span> Judas Priest
-  <span class="k">\item</span> Iron Maiden
-<span class="k">\end</span><span class="nb">{</span>enumerate<span class="nb">}</span>
-
-<span class="k">\begin</span><span class="nb">{</span>description<span class="nb">}</span>[nextline]
-  <span class="k">\item</span><span class="na">[key1]</span> value1
-  <span class="k">\item</span><span class="na">[key2]</span> value2
-<span class="k">\end</span><span class="nb">{</span>description<span class="nb">}</span>
-</code></pre></div><h3 id="引用">引用</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\usepackage</span><span class="nb">{</span>enumitem<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="c">%%%
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>
+</span></span><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>itemize<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\item</span> Judas Priest
+</span></span><span class="line"><span class="cl">  <span class="k">\item</span> Iron Maiden
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>itemize<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>enumerate<span class="nb">}</span>[nosep,leftmargin=*]
+</span></span><span class="line"><span class="cl">  <span class="k">\item</span> Judas Priest
+</span></span><span class="line"><span class="cl">  <span class="k">\item</span> Iron Maiden
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>enumerate<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>description<span class="nb">}</span>[nextline]
+</span></span><span class="line"><span class="cl">  <span class="k">\item</span><span class="na">[key1]</span> value1
+</span></span><span class="line"><span class="cl">  <span class="k">\item</span><span class="na">[key2]</span> value2
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>description<span class="nb">}</span>
+</span></span></code></pre></div><h3 id="引用">引用</h3>
 <p><a href="https://en.wikibooks.org/wiki/LaTeX/More_Bibliographies">https://en.wikibooks.org/wiki/LaTeX/More_Bibliographies</a></p>
 <ol>
 <li>
@@ -343,9 +343,9 @@ e.g., <code>mybibdata.bib</code></p>
 </li>
 <li>
 <p>プリアンブルで <a href="https://ctan.org/pkg/natbib">{natbib}</a> を呼び出し、スタイルを指定。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="k">\usepackage</span><span class="na">[authoryear,round]</span><span class="nb">{</span>natbib<span class="nb">}</span>
-<span class="k">\bibliographystyle</span><span class="nb">{</span>abbrvnat<span class="nb">}</span>
-</code></pre></div><p>スタイルとして <code>{natbib}</code> の <code>abbrvnat</code> や <code>unsrtnat</code> をそのまま使うことはまれで、
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\usepackage</span><span class="na">[authoryear,round]</span><span class="nb">{</span>natbib<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\bibliographystyle</span><span class="nb">{</span>abbrvnat<span class="nb">}</span>
+</span></span></code></pre></div><p>スタイルとして <code>{natbib}</code> の <code>abbrvnat</code> や <code>unsrtnat</code> をそのまま使うことはまれで、
 各Journalの提供する、あるいは有志の作る <code>.bst</code> ファイルをダウンロードして使う。</p>
 <p><code>latex makebst</code> コマンドから質問に答えて新規作成することも可能。
 後で間違いに気付いた場合、イチからやり直すより中間ファイルの
@@ -427,8 +427,8 @@ e.g., <code>mybibdata.bib</code></p>
 </li>
 <li>
 <p>最後の方に文献リストを挿入:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="k">\bibliography</span><span class="nb">{</span>mybibdata<span class="nb">}</span>
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\bibliography</span><span class="nb">{</span>mybibdata<span class="nb">}</span>
+</span></span></code></pre></div></li>
 <li>
 <p>元の <code>.tex</code> をコンパイルして <code>.aux</code> を生成</p>
 </li>
@@ -451,27 +451,27 @@ e.g., <code>mybibdata.bib</code></p>
 <li><a href="https://en.wikibooks.org/wiki/LaTeX/Fonts#Font_styles">https://en.wikibooks.org/wiki/LaTeX/Fonts#Font_styles</a></li>
 <li><a href="https://en.wikibooks.org/wiki/LaTeX/Colors">https://en.wikibooks.org/wiki/LaTeX/Colors</a></li>
 </ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="k">\emph</span><span class="nb">{</span>emphasis<span class="nb">}</span>
-<span class="k">\textit</span><span class="nb">{</span>italic<span class="nb">}</span>
-<span class="k">\textbf</span><span class="nb">{</span>bold<span class="nb">}</span>
-<span class="k">\texttt</span><span class="nb">{</span>monospace<span class="nb">}</span>
-<span class="nb">{</span><span class="k">\huge</span> huge text<span class="nb">}</span>
-</code></pre></div><p><code>\tiny</code>, <code>\scriptsize</code>, <code>\footnotesize</code>, <code>\small</code>,
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\emph</span><span class="nb">{</span>emphasis<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\textit</span><span class="nb">{</span>italic<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\textbf</span><span class="nb">{</span>bold<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\texttt</span><span class="nb">{</span>monospace<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">{</span><span class="k">\huge</span> huge text<span class="nb">}</span>
+</span></span></code></pre></div><p><code>\tiny</code>, <code>\scriptsize</code>, <code>\footnotesize</code>, <code>\small</code>,
 <code>\normalsize</code>,
 <code>\large</code>, <code>\Large</code>, <code>\LARGE</code>, <code>\huge</code>, <code>\Huge</code></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="k">\usepackage</span><span class="na">[normalem]</span><span class="nb">{</span>ulem<span class="nb">}</span>  <span class="c">% \uline{}, \sout{}
-</span><span class="c"></span><span class="k">\usepackage</span><span class="nb">{</span>color<span class="nb">}</span>           <span class="c">% \textcolor{}
-</span><span class="c"></span><span class="k">\usepackage</span><span class="nb">{</span>soul<span class="nb">}</span>            <span class="c">% \hl{} using {color}
-</span><span class="c">%%%
-</span><span class="c"></span>
-<span class="k">\uline</span><span class="nb">{</span>underlined text<span class="nb">}</span>
-<span class="k">\sout</span><span class="nb">{</span>strikethrough<span class="nb">}</span>
-
-<span class="k">\textcolor</span><span class="nb">{</span>red<span class="nb">}{</span>colored text<span class="nb">}</span>
-<span class="nb">{</span><span class="k">\text</span><span class="nb">{</span>red<span class="nb">}</span> colored text<span class="nb">}</span>
-
-<span class="k">\hl</span><span class="nb">{</span>highlighted text<span class="nb">}</span>
-</code></pre></div><p><a href="https://www.ctan.org/pkg/ulem">{ulem}</a> は
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\usepackage</span><span class="na">[normalem]</span><span class="nb">{</span>ulem<span class="nb">}</span>  <span class="c">% \uline{}, \sout{}
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="k">\usepackage</span><span class="nb">{</span>color<span class="nb">}</span>           <span class="c">% \textcolor{}
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="k">\usepackage</span><span class="nb">{</span>soul<span class="nb">}</span>            <span class="c">% \hl{} using {color}
+</span></span></span><span class="line"><span class="cl"><span class="c">%%%
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>
+</span></span><span class="line"><span class="cl"><span class="k">\uline</span><span class="nb">{</span>underlined text<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\sout</span><span class="nb">{</span>strikethrough<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">\textcolor</span><span class="nb">{</span>red<span class="nb">}{</span>colored text<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">{</span><span class="k">\text</span><span class="nb">{</span>red<span class="nb">}</span> colored text<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">\hl</span><span class="nb">{</span>highlighted text<span class="nb">}</span>
+</span></span></code></pre></div><p><a href="https://www.ctan.org/pkg/ulem">{ulem}</a> は
 <code>[normalem]</code> オプションを付けて読まないと
 <code>\emph</code> が下線に変更されてしまうので注意。</p>
 <p><a href="https://www.ctan.org/pkg/soul">{soul}</a> のドキュメントによれば
@@ -484,21 +484,21 @@ e.g., <code>mybibdata.bib</code></p>
 いろいろ不具合はあるものの
 <a href="https://www.ctan.org/pkg/lineno">{lineno}</a>
 を使うしかなさそう。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="k">\usepackage</span><span class="na">[mathlines,pagewise,switch]</span><span class="nb">{</span>lineno<span class="nb">}</span>
-<span class="k">\renewcommand\linenumberfont</span><span class="nb">{</span><span class="k">\normalfont\scriptsize\sffamily\color</span><span class="na">[gray]</span><span class="nb">{</span>0.5<span class="nb">}}</span><span class="c">%
-</span><span class="c"></span><span class="k">\setlength\linenumbersep</span><span class="nb">{</span>4truemm<span class="nb">}</span>
-
-<span class="k">\linenumbers</span><span class="nb">{}</span>
-</code></pre></div><h2 id="tips">Tips</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\usepackage</span><span class="na">[mathlines,pagewise,switch]</span><span class="nb">{</span>lineno<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\renewcommand\linenumberfont</span><span class="nb">{</span><span class="k">\normalfont\scriptsize\sffamily\color</span><span class="na">[gray]</span><span class="nb">{</span>0.5<span class="nb">}}</span><span class="c">%
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="k">\setlength\linenumbersep</span><span class="nb">{</span>4truemm<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">\linenumbers</span><span class="nb">{}</span>
+</span></span></code></pre></div><h2 id="tips">Tips</h2>
 <h3 id="ダメな使い方を警告してもらう">ダメな使い方を警告してもらう</h3>
 <p>いろんなパッケージを使ったいろんな書き方がネット上にあふれているが、
 中には古すぎたりするため避けたほうがよいものもある。
 ファイルの先頭で <code>nag</code> を読み込むことで、
 コンパイル時にそういうのを警告してもらえる。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="k">\RequirePackage</span><span class="na">[l2tabu,orthodox]</span><span class="nb">{</span>nag<span class="nb">}</span>
-
-<span class="k">\documentclass</span><span class="na">[a4paper]</span><span class="nb">{</span>article<span class="nb">}</span>  <span class="c">% これよりも前
-</span></code></pre></div><p><code>chktex</code> コマンドを使えばコンパイルよりも手軽にチェックできる。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\RequirePackage</span><span class="na">[l2tabu,orthodox]</span><span class="nb">{</span>nag<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">\documentclass</span><span class="na">[a4paper]</span><span class="nb">{</span>article<span class="nb">}</span>  <span class="c">% これよりも前
+</span></span></span></code></pre></div><p><code>chktex</code> コマンドを使えばコンパイルよりも手軽にチェックできる。
 <a href="/dev/atom.html">Atom</a> に
 <a href="https://atom.io/packages/linter-chktex">linter-chktex</a>
 を入れれば編集中のファイルの警告箇所を随時ハイライトしてもらえる。</p>
@@ -508,11 +508,11 @@ PDF内の検索やPDFからのコピペ時に問題が発生する。
 例えば <code>fi</code> が合字になるため <code>definition</code> が検索でひっかからない。
 <code>definition</code> をコピペすると <code>de nition</code> になってしまう。</p>
 <p>次のコードをプリアンブルの頭の方に記述するといいらしいが、うまく機能しない。。。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="k">\input</span><span class="nb">{</span>glyphtounicode.tex<span class="nb">}</span>
-<span class="k">\pdfgentounicode</span>=1
-<span class="c">% あるいは
-</span><span class="c"></span><span class="k">\usepackage</span><span class="nb">{</span>mmap<span class="nb">}</span>
-</code></pre></div><h2 id="日本語を使う">日本語を使う</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\input</span><span class="nb">{</span>glyphtounicode.tex<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\pdfgentounicode</span>=1
+</span></span><span class="line"><span class="cl"><span class="c">% あるいは
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="k">\usepackage</span><span class="nb">{</span>mmap<span class="nb">}</span>
+</span></span></code></pre></div><h2 id="日本語を使う">日本語を使う</h2>
 <h3 id="lualatex">LuaLaTeX</h3>
 <ul>
 <li>OS上にあるOTFフォントがそのまま使える</li>
@@ -568,26 +568,26 @@ type1もOTFも数式もサポートしていて便利だがひと回り小さい
 共同執筆とかを考えるとTeX Liveパッケージやプリセットに含まれるものを使うのが安全。</p>
 <p>TeX Liveから入れたフォントをOSに認識させるにはシムリンクを張るだけ:
 <code>ln -s /Library/TeX/Root/texmf-dist/fonts/opentype ~/Library/Fonts/texlive-opentype</code></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="k">\usepackage</span><span class="nb">{</span>amssymb,amsmath<span class="nb">}</span> <span class="c">% must be called ahead of mathspec
-</span><span class="c"></span><span class="k">\usepackage</span><span class="na">[all,warning]</span><span class="nb">{</span>onlyamsmath<span class="nb">}</span>
-<span class="k">\usepackage</span><span class="nb">{</span>iftex<span class="nb">}</span>
-<span class="k">\iftutex</span>
-  <span class="k">\usepackage</span><span class="na">[math-style=TeX,bold-style=TeX]</span><span class="nb">{</span>unicode-math<span class="nb">}</span>
-  <span class="k">\usepackage</span><span class="na">[no-math]</span><span class="nb">{</span>fontspec<span class="nb">}</span>
-  <span class="k">\setmainfont</span><span class="nb">{</span>TeX Gyre Pagella<span class="nb">}</span>
-  <span class="k">\setmathfont</span><span class="nb">{</span>TeX Gyre Pagella Math<span class="nb">}</span>
-  <span class="k">\setsansfont</span><span class="nb">{</span>TeX Gyre Heros<span class="nb">}</span>
-  <span class="c">% \usepackage{luatexja}
-</span><span class="c"></span>  <span class="c">% \usepackage[hiragino-pron,scale=0.92,deluxe,jis2004,match,nfssonly]{luatexja-preset}
-</span><span class="c"></span><span class="k">\else</span>
-  <span class="k">\usepackage</span><span class="na">[T1]</span><span class="nb">{</span>fontenc<span class="nb">}</span>
-  <span class="k">\usepackage</span><span class="na">[utf8]</span><span class="nb">{</span>inputenc<span class="nb">}</span>
-  <span class="k">\usepackage</span><span class="nb">{</span>newpxtext<span class="nb">}</span>
-  <span class="k">\usepackage</span><span class="nb">{</span>newpxmath<span class="nb">}</span>
-  <span class="k">\usepackage</span><span class="nb">{</span>textcomp<span class="nb">}</span>
-  <span class="c">% \usepackage[uplatex,deluxe,jis2004]{otf}
-</span><span class="c"></span><span class="k">\fi</span>
-</code></pre></div><p>フォント関連をいじったあと明示的にマップを更新するには <code>updmap-sys</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\usepackage</span><span class="nb">{</span>amssymb,amsmath<span class="nb">}</span> <span class="c">% must be called ahead of mathspec
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="k">\usepackage</span><span class="na">[all,warning]</span><span class="nb">{</span>onlyamsmath<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\usepackage</span><span class="nb">{</span>iftex<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\iftutex</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\usepackage</span><span class="na">[math-style=TeX,bold-style=TeX]</span><span class="nb">{</span>unicode-math<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\usepackage</span><span class="na">[no-math]</span><span class="nb">{</span>fontspec<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\setmainfont</span><span class="nb">{</span>TeX Gyre Pagella<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\setmathfont</span><span class="nb">{</span>TeX Gyre Pagella Math<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\setsansfont</span><span class="nb">{</span>TeX Gyre Heros<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="c">% \usepackage{luatexja}
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>  <span class="c">% \usepackage[hiragino-pron,scale=0.92,deluxe,jis2004,match,nfssonly]{luatexja-preset}
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="k">\else</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\usepackage</span><span class="na">[T1]</span><span class="nb">{</span>fontenc<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\usepackage</span><span class="na">[utf8]</span><span class="nb">{</span>inputenc<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\usepackage</span><span class="nb">{</span>newpxtext<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\usepackage</span><span class="nb">{</span>newpxmath<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\usepackage</span><span class="nb">{</span>textcomp<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="c">% \usepackage[uplatex,deluxe,jis2004]{otf}
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="k">\fi</span>
+</span></span></code></pre></div><p>フォント関連をいじったあと明示的にマップを更新するには <code>updmap-sys</code></p>
 
 </article>
 </main>
