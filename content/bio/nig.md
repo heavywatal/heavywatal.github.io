@@ -281,7 +281,7 @@ RcppでC++11までしか使えない。
 また、各パッケージも同じく古いコンパイラでビルドしなければならない。
 `module load gcc` などで新しいgcc/g++がPATH上に乗っていると、
 Rcppインストール時などに
-<code>/usr/lib64/libstdc++.so.6: version `GLIBCXX_3.4.20' not found</code>
+``/usr/lib64/libstdc++.so.6: version `GLIBCXX_3.4.20' not found``
 と怒られる。
 
 

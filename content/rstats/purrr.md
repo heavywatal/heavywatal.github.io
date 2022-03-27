@@ -97,7 +97,7 @@ combined_df = purrr::map_dfr(files, readr::read_csv)
 `purrr::reduce(.x, .f, ..., .init)`
 : 二変数関数を順々に適用して1つの値を返す。
   C++でいう`std::accumulate()`。
-  例えば <code>reduce(1:3, \`+\`)</code> の結果は6。
+  例えば ``reduce(1:3, `+`)`` の結果は6。
 
 `purrr::accumulate(.x, .f, ..., .init)`
 : 二変数関数を順々に適用し、過程も含めてvectorで返す。

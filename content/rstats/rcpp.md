@@ -268,7 +268,7 @@ http://gallery.rcpp.org/articles/rcpp-return-macros/
 
 `[[Rcpp::export]]`
 :   これがついてるグローバル関数は `RcppExport.cpp` を介してライブラリに登録され、
-    <code>.Call(`_{PACKAGE}_{FUNCTION}`)</code>
+    ``.Call(`_{PACKAGE}_{FUNCTION}`)``
     のような形でRから呼び出せる様になる。
     それを元の名前で行えるような関数も `RcppExport.R` に自動で定義してもらえる。
 :   `[[Rcpp::export(".new_name_here")]]`
