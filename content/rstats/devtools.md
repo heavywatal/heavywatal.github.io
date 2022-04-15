@@ -318,8 +318,7 @@ increment = function(x) {x + 1}
 
 ### タグ
 
-使用可能なタグ一覧は `names(roxygen2:::default_tags())` で取得可能。
-[解説は準備中らしい](https://github.com/klutometis/roxygen/issues/792)。
+使用可能なタグ一覧は[準備中？](https://github.com/klutometis/roxygen/issues/792)
 
 `@import pkg1, pkg2, ...`
 :   `NAMESPACE` で `import()` するパッケージを指定。
@@ -338,9 +337,11 @@ increment = function(x) {x + 1}
 `@param arg1 description...`
 :   関数の引数。型や役割の説明を書く。
 
-`@inheritParams package::function`
-:   引数の記述を別の関数から継承する。
-    その関数に必要で `@param` が無いものだけいい感じに補ってくれる。
+`@inherit package::function [fields...]`
+:   別の関数から継承する。
+    部分的に継承したければ関数名の後に指定。
+:   params return title description details seealso sections references examples author source note
+:   `@inheritParams` は `@param` の不足を補うショートカット。
 :   `@noRd` と組み合わせて使えればいろいろ楽できそうだけどダメっぽい。
 
 `@template template-name`
