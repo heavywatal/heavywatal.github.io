@@ -103,7 +103,8 @@ dplyr — 高速data.frame処理
 <a href="https://magrittr.tidyverse.org/">
 <img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/pipe.svg" align="right" width="120" height="139">
 </a>
-<p>dplyrではなく<a href="https://magrittr.tidyverse.org/">magrittr</a>の機能。</p>
+<p>dplyrではなく<a href="https://magrittr.tidyverse.org/">magrittr</a>の機能。
+R 4.1 から標準でも <code>|&gt;</code> として使えるようになった。</p>
 <p><code>x %&gt;% f(a, b)</code> は <code>f(x, a, b)</code> と等価。
 左の値 <code>x</code> を第一引数として右の関数 <code>f()</code> に渡す。
 一時変数を作ったり、関数を何重にも重ねたりすることなく、
@@ -148,11 +149,11 @@ dplyr — 高速data.frame処理
 <h2 id="抽出絞り込み">抽出・絞り込み</h2>
 <h3 id="列">列</h3>
 <dl>
-<dt><code>dplyr::select(.data, ...)</code></dt>
+<dt><a href="https://dplyr.tidyverse.org/reference/select.html"><code>dplyr::select(.data, ...)</code></a></dt>
 <dd>列を絞る。<code>:</code>範囲指定、<code>!</code>負の指定が可能。
-複数指定する場合はベクトル渡し、カンマ区切り、もしくは <code>&amp;</code> <code>|</code> を使う。
-<a href="https://tidyselect.r-lib.org/reference/select_helpers.html">select helper</a>
+<a href="https://tidyselect.r-lib.org/reference/language.html">selection helpers</a>
 によるパターン指定も便利。
+複数の条件を組み合わせるには <code>&amp;</code> (AND), <code>|</code> (OR) で。
 残るのが1列だけでも勝手にvectorにはならずdata.frameのまま。
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">7</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="n">carat</span><span class="p">,</span> <span class="n">cut</span><span class="p">,</span> <span class="n">price</span><span class="p">)</span>
@@ -165,28 +166,33 @@ dplyr — 高速data.frame処理
 <code>dplyr::select(-carat, -cut, -price)</code>
 の場合だけANDのように働く(つまり3列とも抜ける)ので特殊。
 (だからマニュアルから消えたのかな？)</p>
-<p><a href="https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html">https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html</a></p>
 </dd>
 <dd>
-<p>文字列変数で指定しようとすると意図が曖昧になるので、
-<a href="https://dplyr.tidyverse.org/articles/programming.html#unquoting">unquoting</a>
-やpronounで明確に:</p>
+<p>文字列ベクタで指定しようとすると意図が曖昧になるので、
+<a href="https://tidyselect.r-lib.org/reference/all_of.html">ヘルパー関数 <code>all_of()</code>, <code>any_of()</code></a>を挟む。あるいは
+<a href="https://rlang.r-lib.org/reference/embrace-operator.html">{{embrace}}</a>,
+<a href="https://adv-r.hadley.nz/quasiquotation.html">!!unquoting</a>,
+<a href="https://rlang.r-lib.org/reference/dot-data.html">pronoun$</a>を使う:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">clarity</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;carat&#34;</span><span class="p">,</span> <span class="s">&#34;cut&#34;</span><span class="p">,</span> <span class="s">&#34;price&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="n">clarity</span><span class="p">)</span>       <span class="c1"># ambiguous!</span>
-</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="n">.data</span><span class="o">$</span><span class="n">clarity</span><span class="p">)</span> <span class="c1"># pronoun =&gt; clarity</span>
-</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="o">!!</span><span class="n">clarity</span><span class="p">)</span>     <span class="c1"># unquote =&gt; carat, cut, price</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="n">clarity</span><span class="p">)</span>         <span class="c1"># ambiguous!</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="n">.data</span><span class="o">$</span><span class="n">clarity</span><span class="p">)</span>   <span class="c1"># clarity</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="nf">all_of</span><span class="p">(</span><span class="n">clarity</span><span class="p">))</span> <span class="c1"># carat, cut, price</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="nf">any_of</span><span class="p">(</span><span class="n">clarity</span><span class="p">))</span> <span class="c1"># carat, cut, price</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">({{</span><span class="n">clarity</span><span class="p">}})</span>     <span class="c1"># carat, cut, price</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="o">!!</span><span class="n">clarity</span><span class="p">)</span>       <span class="c1"># carat, cut, price</span>
 </span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="o">!!!</span><span class="n">rlang</span><span class="o">::</span><span class="nf">syms</span><span class="p">(</span><span class="n">clarity</span><span class="p">))</span>  <span class="c1"># carat, cut, price</span>
-</span></span></code></pre></div><p>これらの指定方法は <code>rename()</code> や <code>pull()</code> でも有効。
-一方、文字列を受け取れない <code>distinct()</code> や <code>group_by()</code>
+</span></span></code></pre></div><p>これらの指定方法は <code>rename()</code> や <code>pull()</code> でも有効。</p>
+<p>一方、文字列を受け取れない <code>distinct()</code> や <code>group_by()</code>
 などの関数には普通のunquoteは通用しない。
-最後の例のように <code>rlang::syms()</code> でシンボル化して
-<a href="https://dplyr.tidyverse.org/articles/programming.html#unquote-splicing">unquote-splicing</a>
+最後の例のように <code>rlang::data_syms()</code> でシンボルのリストを作って
+<a href="https://rlang.r-lib.org/reference/splice-operator.html">!!!unquote-splicing</a>
 して渡す必要がある。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">columns</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;cut&#34;</span><span class="p">,</span> <span class="s">&#34;color&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">distinct</span><span class="p">(</span><span class="o">!!</span><span class="nf">as.name</span><span class="p">(</span><span class="n">columns[1L]</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">distinct</span><span class="p">(</span><span class="o">!!!</span><span class="n">rlang</span><span class="o">::</span><span class="nf">syms</span><span class="p">(</span><span class="n">columns</span><span class="p">))</span>
-</span></span></code></pre></div><p>詳しくは<a href="https://amzn.to/2u0hmTs">宇宙本</a>第3章のコラム
-「selectのセマンティクスとmutateのセマンティクス、tidyeval」を参照。</p>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">distinct</span><span class="p">(</span><span class="o">!!!</span><span class="n">rlang</span><span class="o">::</span><span class="nf">data_syms</span><span class="p">(</span><span class="n">columns</span><span class="p">))</span>
+</span></span></code></pre></div><p>詳しくは <a href="https://rlang.r-lib.org/">rlangパッケージのドキュメント</a> か
+<a href="https://amzn.to/3KpiXq0">宇宙船本</a>第3章のコラム
+「selectのセマンティクスとmutateのセマンティクス」を参照。</p>
 </dd>
 <dt><code>dplyr::rename(.data, ...)</code></dt>
 <dd>列の改名。
@@ -195,16 +201,17 @@ dplyr — 高速data.frame処理
 </span></span><span class="line"><span class="cl"><span class="c1">#    SIZE       cut color clarity depth table price     x     y     z</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># 1  0.23     Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># 2  0.21   Premium     E     SI1  59.8    61   326  3.89  3.84  2.31</span>
-</span></span></code></pre></div><p>変数に入った文字列を使う場合も<code>mutate()</code>と同様にunquotingで:</p>
+</span></span></code></pre></div></dd>
+<dd>変数に入った文字列を使う場合も<code>mutate()</code>と同様に {{embrace}} や !!unquote で:
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">old_name</span> <span class="o">=</span> <span class="s">&#34;carat&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="n">new_name</span> <span class="o">=</span> <span class="nf">toupper</span><span class="p">(</span><span class="n">old_name</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">rename</span><span class="p">(</span><span class="o">!!</span><span class="n">new_name</span> <span class="o">:=</span> <span class="o">!!</span><span class="n">old_name</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">rename</span><span class="p">({{</span><span class="n">new_name</span><span class="p">}}</span> <span class="o">:=</span> <span class="p">{{</span><span class="n">old_name</span><span class="p">}})</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># tbl_df [53940 x 10]</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#   CARAT       cut color clarity depth table price     x     y     z</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># 1  0.23     Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># 2  0.21   Premium     E     SI1  59.8    61   326  3.89  3.84  2.31</span>
 </span></span></code></pre></div><p>名前付きベクターと
-<a href="https://dplyr.tidyverse.org/articles/programming.html#unquote-splicing">unquote-splicing</a>
+<a href="https://rlang.r-lib.org/reference/splice-operator.html">!!!unquote-splicing</a>
 を使えば一括指定できる:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">named_vec</span> <span class="o">=</span> <span class="nf">setNames</span><span class="p">(</span><span class="nf">names</span><span class="p">(</span><span class="n">diamonds</span><span class="p">),</span> <span class="kc">LETTERS</span><span class="nf">[seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">10</span><span class="p">)</span><span class="n">]</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">rename</span><span class="p">(</span><span class="o">!!!</span><span class="n">named_vec</span><span class="p">)</span>
@@ -213,9 +220,8 @@ dplyr — 高速data.frame処理
 </span></span><span class="line"><span class="cl"><span class="c1"># 1  0.23     Ideal     E   SI2  61.5    55   326  3.95  3.98  2.43</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># 2  0.21   Premium     E   SI1  59.8    61   326  3.89  3.84  2.31</span>
 </span></span></code></pre></div></dd>
-<dd>
-<p>リネーム関数を渡せる亜種:<br>
-<code>rename_with(.tbl, .fn, .cols = everything(), ...)</code><br></p>
+<dd><code>rename_with(.tbl, .fn, .cols = everything(), ...)</code>
+はリネーム関数を渡せる亜種:
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">rename_with</span><span class="p">(</span><span class="n">toupper</span><span class="p">,</span> <span class="nf">everything</span><span class="p">())</span>
 </span></span></code></pre></div></dd>
 <dt><code>dplyr::pull(.data, var = -1)</code></dt>
@@ -299,8 +305,10 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># create new column</span>
 </span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">gram</span> <span class="o">=</span> <span class="m">0.2</span> <span class="o">*</span> <span class="n">carat</span><span class="p">)</span>
-</span></span></code></pre></div><p>変数に入った文字列を列名として使いたい場合は <code>!!</code> と
-<a href="https://dplyr.tidyverse.org/articles/programming.html#setting-variable-names">unquoting用の代入演算子 <code>:=</code></a>
+</span></span></code></pre></div><p>変数に入った文字列を列名として使いたい場合は上記 <code>select()</code> のときと同様、
+{{embrace}} や !!unquote を使う。
+左辺(代入先)の名前も文字列を使って表現したい場合は
+<a href="https://www.tidyverse.org/blog/2020/02/glue-strings-and-tidy-eval/#custom-result-names">walrus(セイウチ)演算子 <code>:=</code></a>
 を使う:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">A</span> <span class="o">=</span> <span class="s">&#34;carat&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="n">B</span> <span class="o">=</span> <span class="s">&#34;gram&#34;</span>
@@ -312,7 +320,7 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code>
 </span></span><span class="line"><span class="cl"><span class="c1"># 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31 0.042</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># unquoting both sides</span>
-</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="o">!!</span><span class="n">B</span> <span class="o">:=</span> <span class="m">0.2</span> <span class="o">*</span> <span class="p">(</span><span class="o">!!</span><span class="nf">as.name</span><span class="p">(</span><span class="n">A</span><span class="p">)))</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">({{</span><span class="n">B</span><span class="p">}}</span> <span class="o">:=</span> <span class="m">0.2</span> <span class="o">*</span> <span class="o">!!</span><span class="nf">as.name</span><span class="p">(</span><span class="n">A</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#   carat     cut color clarity depth table price     x     y     z  gram</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43 0.046</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31 0.042</span>

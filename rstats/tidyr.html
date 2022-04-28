@@ -107,14 +107,15 @@ tidyr — シンプルなデータ変形ツール
 <h2 id="pivoting-縦長--横広">Pivoting: 縦長 ↔ 横広</h2>
 <p><a href="https://tidyr.tidyverse.org/articles/pivot.html">https://tidyr.tidyverse.org/articles/pivot.html</a></p>
 <h3 id="tidyrpivot_longer-で縦長にする"><code>tidyr::pivot_longer()</code> で縦長にする</h3>
-<p>複数列にまたがっていた値を1列にまとめ、元の列名をその横に添えることで、
+<p>複数列のmatrix的にまたがっていた値を1列にまとめ、元の列名をその横に添えることで、
 data.frameを横広(wide-format)から縦長(long-format)に変形する。
 <code>reshape2::melt()</code>, <code>tidyr::gather()</code> の改良版。</p>
 <p><code>tidyr::pivot_longer(data, cols, names_to = &quot;name&quot;, ..., values_to = &quot;value&quot;, ...)</code></p>
 <dl>
 <dt><code>cols</code></dt>
 <dd>動かしたい値が含まれている列。
-コロンで範囲指定、文字列、tidyselect関数なども使える。
+コロンで範囲指定、文字列、
+<a href="https://tidyselect.r-lib.org/reference/language.html">selection helpers</a>なども使える。
 動かさない列を <code>!</code> で反転指定するのほうが楽なことも多い。</dd>
 <dt><code>names_to</code></dt>
 <dd>元々列名だったものを入れる列の名前</dd>
@@ -216,7 +217,7 @@ data.frameを縦長(long-format)から横広(wide-format)に変形する。
 <code>names_to</code>, <code>name_from</code> に複数の値を渡すと
 <code>tidyr::separate()</code> / <code>tidyr::unite()</code> 的な操作も同時にやってしまえる:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">anscombe</span> <span class="o">%&gt;%</span> <span class="n">tibble</span><span class="o">::</span><span class="nf">rowid_to_column</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
-</span></span><span class="line"><span class="cl">  <span class="n">tidyr</span><span class="o">::</span><span class="nf">pivot_longer</span><span class="p">(</span><span class="o">!</span><span class="n">id</span><span class="p">,</span> <span class="n">names_to</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;axis&#34;</span><span class="p">,</span> <span class="s">&#34;group&#34;</span><span class="p">),</span> <span class="n">names_sep</span> <span class="o">=</span> <span class="m">1L</span><span class="p">)</span> <span class="o">%&gt;%</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">pivot_longer</span><span class="p">(</span><span class="o">!</span><span class="n">id</span><span class="p">,</span> <span class="n">names_to</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;axis&#34;</span><span class="p">,</span> <span class="s">&#34;group&#34;</span><span class="p">),</span> <span class="n">names_sep</span> <span class="o">=</span> <span class="m">1L</span><span class="p">)</span> <span class="o">%&gt;%</span>
 </span></span><span class="line"><span class="cl">  <span class="nf">print</span><span class="p">()</span> <span class="o">%&gt;%</span>
 </span></span><span class="line"><span class="cl">  <span class="nf">pivot_wider</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">names_from</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">group</span><span class="p">),</span> <span class="n">names_sep</span> <span class="o">=</span> <span class="s">&#34;_&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&gt; # tbl_df [88 x 4]</span>
@@ -294,7 +295,7 @@ data.frameを縦長(long-format)から横広(wide-format)に変形する。
 </span></span></code></pre></div><p><code>names_prefix</code> を使えば、列名の頭に共通して付いてた文字を消せる:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">anscombe</span> <span class="o">%&gt;%</span>
 </span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="nf">starts_with</span><span class="p">(</span><span class="s">&#34;x&#34;</span><span class="p">))</span> <span class="o">%&gt;%</span>
-</span></span><span class="line"><span class="cl">  <span class="n">tidyr</span><span class="o">::</span><span class="nf">pivot_longer</span><span class="p">(</span><span class="nf">everything</span><span class="p">(),</span> <span class="n">names_prefix</span> <span class="o">=</span> <span class="s">&#34;x&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">pivot_longer</span><span class="p">(</span><span class="nf">everything</span><span class="p">(),</span> <span class="n">names_prefix</span> <span class="o">=</span> <span class="s">&#34;x&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&gt; # tbl_df [44 x 2]</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&gt;     name value</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&gt;    &lt;chr&gt; &lt;dbl&gt;</span>
@@ -311,7 +312,7 @@ data.frameを縦長(long-format)から横広(wide-format)に変形する。
 旧列名から新しい列名が作られ、複数列への縦長変形を同時にできる。
 また <code>names_to = c(&quot;name&quot;, NA)</code> のように不要な列を捨てることもできる。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">tidy_anscombe</span> <span class="o">=</span> <span class="n">anscombe</span> <span class="o">%&gt;%</span>
-</span></span><span class="line"><span class="cl">  <span class="n">tidyr</span><span class="o">::</span><span class="nf">pivot_longer</span><span class="p">(</span>                <span class="c1"># 縦長に変形したい</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">pivot_longer</span><span class="p">(</span>                       <span class="c1"># 縦長に変形したい</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">everything</span><span class="p">(),</span>                     <span class="c1"># すべての列について</span>
 </span></span><span class="line"><span class="cl">    <span class="n">names_to</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;.value&#34;</span><span class="p">,</span> <span class="s">&#34;group&#34;</span><span class="p">),</span>  <span class="c1"># x, yを列名に、1, 2, 3をgroup列に</span>
 </span></span><span class="line"><span class="cl">    <span class="n">names_sep</span> <span class="o">=</span> <span class="m">1L</span><span class="p">,</span>                   <span class="c1"># 切る位置</span>
@@ -337,7 +338,7 @@ data.frameを縦長(long-format)から横広(wide-format)に変形する。
 <p>data.frameをネストして(入れ子にして)、list of data.frames のカラムを作る。
 内側のdata.frameに押し込むカラムを <code>...</code> に指定するか、
 外側に残すカラムを <code>!</code> で反転指定する。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">nest</span><span class="p">(</span><span class="n">NEW_COLUMN</span> <span class="o">=</span> <span class="o">!</span><span class="n">cut</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="nf">unnest</span><span class="p">()</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span> <span class="nf">nest</span><span class="p">(</span><span class="n">NEW_COLUMN</span> <span class="o">=</span> <span class="o">!</span><span class="n">cut</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&gt; # tbl_df [5 x 2]</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&gt;         cut           NEW_COLUMN</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&gt;       &lt;ord&gt;               &lt;list&gt;</span>
@@ -363,7 +364,7 @@ list of data.framesだけでなく、list of vectorsとかでもよい。</p>
 <code>cols</code> を明示的に指定することが求められる。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">%&gt;%</span>
 </span></span><span class="line"><span class="cl">  <span class="nf">nest</span><span class="p">(</span><span class="n">NEW_COLUMN</span> <span class="o">=</span> <span class="o">!</span><span class="n">cut</span><span class="p">)</span> <span class="o">%&gt;%</span>
-</span></span><span class="line"><span class="cl">  <span class="nf">unnest</span><span class="p">(</span><span class="n">NEW_COLUMN</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">unnest</span><span class="p">(</span><span class="n">cols</span> <span class="o">=</span> <span class="n">NEW_COLUMN</span><span class="p">)</span>
 </span></span></code></pre></div><h2 id="その他の便利関数">その他の便利関数</h2>
 <h3 id="tidyrseparate"><code>tidyr::separate()</code></h3>
 <p>文字列カラムを任意のセパレータで複数カラムに分割。
