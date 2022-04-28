@@ -35,7 +35,7 @@ https://tidyr.tidyverse.org/articles/pivot.html
 
 ### `tidyr::pivot_longer()` で縦長にする
 
-複数列にまたがっていた値を1列にまとめ、元の列名をその横に添えることで、
+複数列のmatrix的にまたがっていた値を1列にまとめ、元の列名をその横に添えることで、
 data.frameを横広(wide-format)から縦長(long-format)に変形する。
 `reshape2::melt()`, `tidyr::gather()` の改良版。
 
@@ -43,7 +43,8 @@ data.frameを横広(wide-format)から縦長(long-format)に変形する。
 
 `cols`
 : 動かしたい値が含まれている列。
-  コロンで範囲指定、文字列、tidyselect関数なども使える。
+  コロンで範囲指定、文字列、
+  [selection helpers](https://tidyselect.r-lib.org/reference/language.html)なども使える。
   動かさない列を `!` で反転指定するのほうが楽なことも多い。
 
 `names_to`
@@ -168,7 +169,7 @@ pg %>% tibble::rowid_to_column("id") %>%
 
 ```r
 anscombe %>% tibble::rowid_to_column("id") %>%
-  tidyr::pivot_longer(!id, names_to = c("axis", "group"), names_sep = 1L) %>%
+  pivot_longer(!id, names_to = c("axis", "group"), names_sep = 1L) %>%
   print() %>%
   pivot_wider(id, names_from = c(axis, group), names_sep = "_")
 #> # tbl_df [88 x 4]
@@ -257,7 +258,7 @@ anscombe %>%
 ```r
 anscombe %>%
   dplyr::select(starts_with("x")) %>%
-  tidyr::pivot_longer(everything(), names_prefix = "x")
+  pivot_longer(everything(), names_prefix = "x")
 #> # tbl_df [44 x 2]
 #>     name value
 #>    <chr> <dbl>
@@ -278,7 +279,7 @@ anscombe %>%
 
 ```r
 tidy_anscombe = anscombe %>%
-  tidyr::pivot_longer(                # 縦長に変形したい
+  pivot_longer(                       # 縦長に変形したい
     everything(),                     # すべての列について
     names_to = c(".value", "group"),  # x, yを列名に、1, 2, 3をgroup列に
     names_sep = 1L,                   # 切る位置
@@ -313,7 +314,7 @@ data.frameをネストして(入れ子にして)、list of data.frames のカラ
 外側に残すカラムを `!` で反転指定する。
 
 ```r
-diamonds %>% nest(NEW_COLUMN = !cut) %>% unnest()
+diamonds %>% nest(NEW_COLUMN = !cut)
 #> # tbl_df [5 x 2]
 #>         cut           NEW_COLUMN
 #>       <ord>               <list>
@@ -348,7 +349,7 @@ list of data.framesだけでなく、list of vectorsとかでもよい。
 ```r
 diamonds %>%
   nest(NEW_COLUMN = !cut) %>%
-  unnest(NEW_COLUMN)
+  unnest(cols = NEW_COLUMN)
 ```
 
 ## その他の便利関数

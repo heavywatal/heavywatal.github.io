@@ -29,6 +29,7 @@ data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(
 </a>
 
 dplyrではなく[magrittr](https://magrittr.tidyverse.org/)の機能。
+R 4.1 から標準でも `|>` として使えるようになった。
 
 `x %>% f(a, b)` は `f(x, a, b)` と等価。
 左の値 `x` を第一引数として右の関数 `f()` に渡す。
@@ -81,11 +82,11 @@ result = summarize(                    # 平均を計算
 
 ### 列
 
-`dplyr::select(.data, ...)`
+[`dplyr::select(.data, ...)`](https://dplyr.tidyverse.org/reference/select.html)
 :   列を絞る。`:`範囲指定、`!`負の指定が可能。
-    複数指定する場合はベクトル渡し、カンマ区切り、もしくは `&` `|` を使う。
-    [select helper](https://tidyselect.r-lib.org/reference/select_helpers.html)
+    [selection helpers](https://tidyselect.r-lib.org/reference/language.html)
     によるパターン指定も便利。
+    複数の条件を組み合わせるには `&` (AND), `|` (OR) で。
     残るのが1列だけでも勝手にvectorにはならずdata.frameのまま。
 
     ```r
@@ -103,32 +104,36 @@ result = summarize(                    # 平均を計算
     の場合だけANDのように働く(つまり3列とも抜ける)ので特殊。
     (だからマニュアルから消えたのかな？)
 
-    https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html
-
-
-:   文字列変数で指定しようとすると意図が曖昧になるので、
-    [unquoting](https://dplyr.tidyverse.org/articles/programming.html#unquoting)
-    やpronounで明確に:
+:   文字列ベクタで指定しようとすると意図が曖昧になるので、
+    [ヘルパー関数 `all_of()`, `any_of()`](https://tidyselect.r-lib.org/reference/all_of.html)を挟む。あるいは
+    [{{embrace}}](https://rlang.r-lib.org/reference/embrace-operator.html),
+    [!!unquoting](https://adv-r.hadley.nz/quasiquotation.html),
+    [pronoun$](https://rlang.r-lib.org/reference/dot-data.html)を使う:
     ```r
     clarity = c("carat", "cut", "price")
-    diamonds %>% dplyr::select(clarity)       # ambiguous!
-    diamonds %>% dplyr::select(.data$clarity) # pronoun => clarity
-    diamonds %>% dplyr::select(!!clarity)     # unquote => carat, cut, price
+    diamonds %>% dplyr::select(clarity)         # ambiguous!
+    diamonds %>% dplyr::select(.data$clarity)   # clarity
+    diamonds %>% dplyr::select(all_of(clarity)) # carat, cut, price
+    diamonds %>% dplyr::select(any_of(clarity)) # carat, cut, price
+    diamonds %>% dplyr::select({{clarity}})     # carat, cut, price
+    diamonds %>% dplyr::select(!!clarity)       # carat, cut, price
     diamonds %>% dplyr::select(!!!rlang::syms(clarity))  # carat, cut, price
     ```
     これらの指定方法は `rename()` や `pull()` でも有効。
+
     一方、文字列を受け取れない `distinct()` や `group_by()`
     などの関数には普通のunquoteは通用しない。
-    最後の例のように `rlang::syms()` でシンボル化して
-    [unquote-splicing](https://dplyr.tidyverse.org/articles/programming.html#unquote-splicing)
+    最後の例のように `rlang::data_syms()` でシンボルのリストを作って
+    [!!!unquote-splicing](https://rlang.r-lib.org/reference/splice-operator.html)
     して渡す必要がある。
     ```r
     columns = c("cut", "color")
     diamonds %>% distinct(!!as.name(columns[1L]))
-    diamonds %>% distinct(!!!rlang::syms(columns))
+    diamonds %>% distinct(!!!rlang::data_syms(columns))
     ```
-    詳しくは[宇宙本](https://amzn.to/2u0hmTs)第3章のコラム
-    「selectのセマンティクスとmutateのセマンティクス、tidyeval」を参照。
+    詳しくは [rlangパッケージのドキュメント](https://rlang.r-lib.org/) か
+    [宇宙船本](https://amzn.to/3KpiXq0)第3章のコラム
+    「selectのセマンティクスとmutateのセマンティクス」を参照。
 
 
 `dplyr::rename(.data, ...)`
@@ -140,18 +145,18 @@ result = summarize(                    # 平均を計算
     # 1  0.23     Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43
     # 2  0.21   Premium     E     SI1  59.8    61   326  3.89  3.84  2.31
     ```
-    変数に入った文字列を使う場合も`mutate()`と同様にunquotingで:
+:   変数に入った文字列を使う場合も`mutate()`と同様に {{embrace}} や !!unquote で:
     ```r
     old_name = "carat"
     new_name = toupper(old_name)
-    diamonds %>% dplyr::rename(!!new_name := !!old_name)
+    diamonds %>% dplyr::rename({{new_name}} := {{old_name}})
     # tbl_df [53940 x 10]
     #   CARAT       cut color clarity depth table price     x     y     z
     # 1  0.23     Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43
     # 2  0.21   Premium     E     SI1  59.8    61   326  3.89  3.84  2.31
     ```
     名前付きベクターと
-    [unquote-splicing](https://dplyr.tidyverse.org/articles/programming.html#unquote-splicing)
+    [!!!unquote-splicing](https://rlang.r-lib.org/reference/splice-operator.html)
     を使えば一括指定できる:
     ```r
     named_vec = setNames(names(diamonds), LETTERS[seq(1, 10)])
@@ -161,10 +166,8 @@ result = summarize(                    # 平均を計算
     # 1  0.23     Ideal     E   SI2  61.5    55   326  3.95  3.98  2.43
     # 2  0.21   Premium     E   SI1  59.8    61   326  3.89  3.84  2.31
     ```
-
-:   リネーム関数を渡せる亜種:<br>
-    `rename_with(.tbl, .fn, .cols = everything(), ...)`<br>
-
+:   `rename_with(.tbl, .fn, .cols = everything(), ...)`
+    はリネーム関数を渡せる亜種:
     ```r
     diamonds %>% dplyr::rename_with(toupper, everything())
     ```
@@ -270,8 +273,10 @@ e.g., `filter(gene != "TP53")`
     diamonds %>% dplyr::mutate(gram = 0.2 * carat)
     ```
 
-    変数に入った文字列を列名として使いたい場合は `!!` と
-    [unquoting用の代入演算子 `:=`](https://dplyr.tidyverse.org/articles/programming.html#setting-variable-names)
+    変数に入った文字列を列名として使いたい場合は上記 `select()` のときと同様、
+    {{embrace}} や !!unquote を使う。
+    左辺(代入先)の名前も文字列を使って表現したい場合は
+    [walrus(セイウチ)演算子 `:=`](https://www.tidyverse.org/blog/2020/02/glue-strings-and-tidy-eval/#custom-result-names)
     を使う:
     ```r
     A = "carat"
@@ -284,7 +289,7 @@ e.g., `filter(gene != "TP53")`
     # 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31 0.042
 
     # unquoting both sides
-    diamonds %>% dplyr::mutate(!!B := 0.2 * (!!as.name(A)))
+    diamonds %>% dplyr::mutate({{B}} := 0.2 * !!as.name(A))
     #   carat     cut color clarity depth table price     x     y     z  gram
     # 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43 0.046
     # 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31 0.042
