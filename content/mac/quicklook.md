@@ -21,7 +21,7 @@ Finder上で <kbd>Space</kbd> を押すだけで、
     CSVファイルをセルで表示
 -   [QLStephen.qlgenerator](https://whomwah.github.io/qlstephen/):
     READMEやMakefileのような拡張子無しのファイルを表示
--   [QLColorCode.qlgenerator](https://github.com/anthonygelibert/QLColorCode):
+-   [Syntax Highlight](https://github.com/sbarex/SourceCodeSyntaxHighlight) or [QLColorCode.qlgenerator](https://github.com/anthonygelibert/QLColorCode):
     さまざまなソースコードを色分け表示。
 -   [FigTree](http://tree.bio.ed.ac.uk/software/figtree/):
     NEXUSあるいはNEWICK形式のtreeファイルから系統樹を描く
@@ -29,13 +29,17 @@ Finder上で <kbd>Space</kbd> を押すだけで、
 ## Commands
 
 ```sh
-brew install qlcommonmark qlcolorcode qlstephen quicklook-csv webpquicklook betterzip suspicious-package
+brew install qlcommonmark syntax-highlight qlstephen quicklook-csv webpquicklook betterzip suspicious-package
+
+# cannot be opened because the developer cannot be verified.
+xattr ~/Library/QuickLook/QuickLookCSV.qlgenerator
 
 # コマンドラインから利用
 qlmanage -p some.csv
 
 # キャッシュ削除してプラグイン再読込:
 qlmanage -r cache && qlmanage -r
+killall Finder Dock
 
 # 認識されているプラグインを一覧表示
 qlmanage -m
