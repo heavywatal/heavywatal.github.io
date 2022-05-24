@@ -209,24 +209,23 @@ Finderとかで普通のディレクトリのように扱えるようにする�
 手元のマシンに必要な準備をする。</p>
 <ol>
 <li>
-<p>Macなら<a href="https://osxfuse.github.io/">FUSE for macOS</a>を、
-Linuxなら<a href="https://github.com/libfuse/libfuse">libfuse</a>をインストール</p>
-</li>
-<li>
-<p>sshfsをインストール:</p>
+<p><a href="/mac/homebrew.html">Homebrew</a>でsshfsをインストール:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew install sshfs
-</span></span></code></pre></div></li>
+</span></span><span class="line"><span class="cl">brew install gromgit/fuse/sshfs-mac
+</span></span></code></pre></div><p>非オープンソースの<a href="https://osxfuse.github.io/">macFUSE</a>
+に依存するMacでは公式サポートから外れたので
+非公式Tapを使ってインストールする。
+<a href="https://github.com/libfuse/libfuse">libfuse</a>
+などは自動的に入るはず。</p>
+</li>
 <li>
 <p>マウントポイントにする適当なディレクトリを作る。
-e.g., <code>mkdir ~/mnt</code></p>
+e.g., <code>mkdir ~/mount</code></p>
 </li>
 <li>
-<p>マウントする:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sshfs watal@example.com:/home/watal ~/mnt
-</span></span></code></pre></div></li>
-<li>
-<p>アンマウントする:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">umount ~/mnt
+<p>マウント/アンマウントする:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sshfs watal@example.com:/home/watal ~/mount
+</span></span><span class="line"><span class="cl">umount ~/mount
 </span></span></code></pre></div></li>
 </ol>
 
