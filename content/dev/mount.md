@@ -137,23 +137,22 @@ Finderとかで普通のディレクトリのように扱えるようにする�
 マウントされる側はsshでログインできさえすればいいので、
 手元のマシンに必要な準備をする。
 
-1.  Macなら[FUSE for macOS](https://osxfuse.github.io/)を、
-    Linuxなら[libfuse](https://github.com/libfuse/libfuse)をインストール
-
-1.  sshfsをインストール:
+1.  [Homebrew]({{< relref "homebrew.md" >}})でsshfsをインストール:
     ```sh
     brew install sshfs
+    brew install gromgit/fuse/sshfs-mac
     ```
+    非オープンソースの[macFUSE](https://osxfuse.github.io/)
+    に依存するMacでは公式サポートから外れたので
+    非公式Tapを使ってインストールする。
+    [libfuse](https://github.com/libfuse/libfuse)
+    などは自動的に入るはず。
 
 1.  マウントポイントにする適当なディレクトリを作る。
-    e.g., `mkdir ~/mnt`
+    e.g., `mkdir ~/mount`
 
-1.  マウントする:
+1.  マウント/アンマウントする:
     ```sh
-    sshfs watal@example.com:/home/watal ~/mnt
-    ```
-
-1.  アンマウントする:
-    ```sh
-    umount ~/mnt
+    sshfs watal@example.com:/home/watal ~/mount
+    umount ~/mount
     ```
