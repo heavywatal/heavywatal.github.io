@@ -194,7 +194,7 @@ brew list --cask
 
 アプリ側でアップデートを実行するとCask内でのバージョンと食い違っちゃうけど使用上は問題ないらしい。
 
-adobe-acrobat-reader amazon-photos atom
+adobe-acrobat-reader amazon-photos
 basictex bibdesk
 discord docker drawio dropbox firefox gimp gitter
 google-chrome google-drive google-japanese-ime

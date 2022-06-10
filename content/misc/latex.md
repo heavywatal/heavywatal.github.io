@@ -87,8 +87,7 @@ https://www.ctan.org/pkg/latexmk
 ソースコードとPDFの対応箇所を行き来するための仕組み。
 
 - Skim to source: <kbd>shift-cmd-click</kbd>
-- Atom to PDF: <kbd>ctrl-alt-s</kbd>
-- VS Code to PDF: <kbd>alt-cmd-j</kbd>
+- VSCode to PDF: <kbd>alt-cmd-j</kbd>
 
 
 ### tlmgr でパッケージ管理
@@ -447,10 +446,8 @@ GIFアニメをそのまま埋め込むことはできないので、
 ```
 
 `chktex` コマンドを使えばコンパイルよりも手軽にチェックできる。
-[Atom]({{< relref "atom.md" >}}) に
-[linter-chktex](https://atom.io/packages/linter-chktex)
-を入れれば編集中のファイルの警告箇所を随時ハイライトしてもらえる。
-
+[VSCode]({{< relref "vscode.md" >}}) などのリッチなエディタなら、
+自動で実行してコード付近に警告を出してくれる。
 
 ### ligature問題
 

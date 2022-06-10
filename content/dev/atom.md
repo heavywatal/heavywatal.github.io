@@ -2,7 +2,7 @@
 date = 2016-04-25T17:03:29+09:00
 tags = ["editor", "writing"]
 title = "Atom"
-subtitle = "最強のテキストエディタ"
+subtitle = "GitHub製テキストエディタ"
 
 [menu.main]
   parent = "dev"
@@ -11,8 +11,10 @@ subtitle = "最強のテキストエディタ"
 Githubが開発したオープンソースのGUIテキストエディタ。
 ChromiumとNode.js(を用いたElectronフレームワーク)でできており、
 どのOSでも同じように動作する。
-コミュニティの力により現在も急速に成長中。
-当然[Git]({{< relref "git.md" >}})によるバージョン管理とも相性が良い。
+[Visual Studio Code]({{< relref "vscode.md" >}})
+や
+[Codespaces](https://github.com/features/codespaces)
+の台頭により[2022年に開発終了](https://github.blog/2022-06-08-sunsetting-atom/)。
 
 - https://atom.io
 - https://flight-manual.atom.io/

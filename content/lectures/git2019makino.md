@@ -71,7 +71,7 @@ tags = ["vcs", "writing"]
     初期状態でもGit/GitHubとの連携機能が付いていて、
     変更箇所を色付けしてくれたりコマンド入力を肩代わりしてくれたりするのが便利。
     - [Atom](https://atom.io/): GitHub製
-    - [VS Code](https://code.visualstudio.com/): Microsoft製
+    - [VSCode]({{< relref "vscode.md" >}}): Microsoft製
     - [RStudio](https://www.rstudio.com/): RStudio製
 
 -   [GitHub<i class="fab fa-fw fa-github"></i>](https://github.com)に個人アカウントを作る。

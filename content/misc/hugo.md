@@ -114,7 +114,6 @@ https://gohugo.io/troubleshooting/build-performance/
 
 [GitHub Flavored Markdown (GFM)](https://github.github.com/gfm/)
 : CommonMarkに準拠しつついくらかの機能を追加したもの。
-  [Atom]({{< relref "atom.md" >}})でも標準サポート。
   基本的な書き方は[GitHub Helpのページ](https://help.github.com/articles/basic-writing-and-formatting-syntax/)が読みやすい。
 
 [Blackfriday](https://github.com/russross/blackfriday)
