@@ -12,58 +12,40 @@ tags = ["python"]
 
 <https://www.scipy.org/install.html>
 
-`wheel` のおかげで `pip` いっぱつ:
-
 ```sh
 pip install numpy scipy
 ```
 
-[Anaconda]({{< relref "install.md" >}}) なら最初からMKL付きで入ってる。
-
-### test
-
-`nose` というパッケージが必要:
-```py
-import numpy
-numpy.test()
-```
-
 BLAS/LAPACK関連の確認:
 ```py
-import numpy
-numpy.show_config()
+import numpy as np
+np.show_config()
 ```
 
 ## `NumPy`
 
 数値計算・配列演算ライブラリ
 
-<https://docs.scipy.org/doc/numpy/reference/>
+<https://numpy.org/doc/stable/reference/>
 
-### [`ndarray`](https://docs.scipy.org/doc/numpy/reference/arrays.ndarray.html): N次元配列クラス
+### [`ndarray`](https://numpy.org/doc/stable/reference/arrays.ndarray.html): N次元配列クラス
 
 それを2D行列に特殊化したものが
-[`numpy.matrix`](https://docs.scipy.org/doc/numpy/reference/generated/numpy.matrix.html#numpy.matrix)
+[`numpy.matrix`](https://numpy.org/doc/stable/reference/generated/numpy.matrix.html)
 で、Rでの `matrix` に相当。
 `data.frame`/`tibble` のようなものがほしいときは
 [`pandas.DataFrame`]({{< relref "pandas.md" >}}) の出番。
 
-<https://docs.scipy.org/doc/numpy/reference/routines.matlib.html>
+<https://numpy.org/doc/stable/reference/routines.matlib.html>
 
-### [Universal functions](https://docs.scipy.org/doc/numpy/reference/ufuncs.html#available-ufuncs)
+### [Universal functions](https://numpy.org/doc/stable/reference/ufuncs.html#available-ufuncs)
 
 `ndarray` に対して効率よく element-wise な演算をする関数
 
 
-### [Routine](https://docs.scipy.org/doc/numpy/reference/routines.html)
+### [Routine](https://numpy.org/doc/stable/reference/routines.html)
 
 `ndarray` を作ったり操作したりする関数全般
-
-- <https://docs.scipy.org/doc/numpy/reference/routines.array-creation.html>
-- <https://docs.scipy.org/doc/numpy/reference/routines.array-manipulation.html>
-- <https://docs.scipy.org/doc/numpy/reference/routines.math.html>
-- <https://docs.scipy.org/doc/numpy/reference/routines.random.html>
-
 
 
 ## `SciPy`
@@ -74,8 +56,7 @@ numpy.show_config()
 
 ### [`scipy.stats`](https://docs.scipy.org/doc/scipy/reference/stats.html)
 
-<https://docs.scipy.org/doc/scipy/reference/tutorial/stats.html>
-
+<https://docs.scipy.org/doc/scipy/tutorial/stats.html>
 
 
 ## 書籍

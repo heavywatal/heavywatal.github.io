@@ -41,12 +41,10 @@ MacやLinuxならシステムの一部として
     ```sh
     export PYENV_ROOT=${HOME}/.pyenv
     if [ -d $PYENV_ROOT ]; then
-        # PATH=${PYENV_ROOT}/bin:$PATH
-        pyenv_versions=(${PYENV_ROOT}/versions/*)
-        pyenv_latest=${pyenv_versions[@]: -1}/bin
-        PATH=${pyenv_latest}:$PATH
-        export PYENV_PYTHONPATH=${pyenv_latest}/python3
-        unset pyenv_versions pyenv_latest
+        pyenv_versions=($(ls ${PYENV_ROOT}/versions | sort -V))
+        export PYENV_LATEST=${PYENV_ROOT}/versions/${pyenv_versions[@]: -1}
+        PATH=${PYENV_LATEST}/bin:$PATH
+        unset pyenv_versions
     fi
     ```
 
@@ -65,7 +63,7 @@ MacやLinuxならシステムの一部として
     ```sh
     exec $SHELL -l
     pyenv install -l | less
-    pyenv install 3.9.5
+    pyenv install 3.10.4
     exec $SHELL -l
     ```
 
@@ -73,7 +71,7 @@ MacやLinuxならシステムの一部として
 
     ```sh
     which pip3
-    pip3 install -U setuptools pip
+    pip3 install -U setuptools pip wheel
     pip3 install -r /path/to/requirements.txt
     ```
 
@@ -154,26 +152,6 @@ MacのFramework buildでは `${HOME}/Library/Python/2.7` とかになる。
 ### `PYTHONSTARTUP`
 
 インタラクティブモードで起動するときに読み込むファイルを指定できる。
-例えば以下のようなものを書いておくと、
-3.4未満の古いPythonでも `tab` とか `^i` で補完できるようになる:
-
-```py
-import sys
-
-if sys.version_info < (3, 4):
-    import rlcompleter
-    import readline
-    rlcompleter.__name__  # suppress F401
-    if 'libedit' in readline.__doc__:
-        readline.parse_and_bind("bind ^I rl_complete")
-    else:
-        readline.parse_and_bind("tab: complete")
-    del readline, rlcompleter
-else:
-    del sys
-```
-
-対話モードをさらに便利にするには [IPython]({{< relref "ipython.md" >}}) を使う。
 
 
 ## 関連書籍
