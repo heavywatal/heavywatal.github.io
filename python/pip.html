@@ -89,8 +89,9 @@ pip — パッケージ管理
 <p>古いPythonではパッケージ管理のためにツールを別途インストールする必要があった。
 Python 3.4 以降では <code>venv</code> と <code>ensurepip</code> が標準ライブラリに入って少しマシに。</p>
 <p>科学技術系の利用だけなら、Python本体のインストールからパッケージ管理までぜーんぶ
-<a href="/python/install.html#anaconda">Anaconda</a> に任せるのが楽ちん。
-その場合、本記事はほぼ無用。</p>
+<a href="/python/install.html#anaconda">Anaconda</a> に任せるのが楽ちんらしい。
+その場合 <code>pip</code> を混ぜて使ってはいけないので、本記事はほぼ無用。
+ただし、環境を汚したりAnaconda特有の不具合が出たりするので私は使わないしオススメもしない。</p>
 <h2 id="piphttpspippypaio"><a href="https://pip.pypa.io/"><code>pip</code></a></h2>
 <p><a href="https://pypi.org/">PyPI</a>
 からの簡単にパッケージをインストールできるようにするツール。
@@ -100,6 +101,28 @@ Python 2.7.9以降、3.4以降では標準ライブラリの
 <a href="https://docs.python.org/3/library/ensurepip.html"><code>ensurepip</code></a>
 によって自動的にインストールされる。</p>
 <ul>
+<li>
+<p>全体のヘルプ、コマンド毎の詳細ヘルプ:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pip3 <span class="nb">help</span>
+</span></span><span class="line"><span class="cl">pip3 install --help
+</span></span></code></pre></div></li>
+<li>
+<p>よく使うコマンド:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pip3 list --outdated
+</span></span><span class="line"><span class="cl">pip3 install -U setuptools pip wheel
+</span></span><span class="line"><span class="cl">pip3 search jupyter
+</span></span></code></pre></div></li>
+<li>
+<p>設定ファイルは <code>~/.config/pip/pip.conf</code> と公式には書いてあるが
+<code>~/.config/python/pip.conf</code> でも認識される:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="k">[list]</span>
+</span></span><span class="line"><span class="cl"><span class="na">format</span> <span class="o">=</span> <span class="s">columns</span>
+</span></span></code></pre></div></li>
+<li>
+<p>全パッケージをバージョンまでそっくり引き継ぐには:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pip3 freeze &gt;requirements.txt
+</span></span><span class="line"><span class="cl">pip3 install -r requirements.txt
+</span></span></code></pre></div></li>
 <li>
 <p>手動インストール:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">python -m ensurepip --user
@@ -112,48 +135,6 @@ Python 2.7.9以降、3.4以降では標準ライブラリの
 その中の <code>bin/</code> を <code>PATH</code> に追加するか、
 絶対パスで <code>pip</code> コマンドを使う。</p>
 </li>
-<li>
-<p><code>pip</code> コマンド</p>
-<ul>
-<li><code>install</code>: Install packages.</li>
-<li><code>uninstall</code>: Uninstall packages.</li>
-<li><code>freeze</code>: Output installed packages in requirements format.</li>
-<li><code>list</code>: List installed packages.</li>
-<li><code>show</code>: Show information about installed packages.</li>
-<li><code>search</code>: Search PyPI for packages.</li>
-<li><code>help</code>: Show help for commands.</li>
-</ul>
-</li>
-<li>
-<p>全体のヘルプ、コマンド毎の詳細ヘルプ:</p>
-<pre><code>pip help
-pip install --help
-</code></pre>
-</li>
-<li>
-<p><code>setup.py</code> にオプションを渡す:</p>
-<pre><code>pip install --install-option=&quot;--prefix=/usr/local&quot; numpy
-</code></pre>
-</li>
-<li>
-<p>よく使うコマンド:</p>
-<pre><code>pip list &amp;&amp; pip list --outdated
-pip search psutil
-pip install --upgrade setuptools
-</code></pre>
-</li>
-<li>
-<p>設定ファイルは <code>~/.pip/pip.conf</code> :</p>
-<pre><code>[global]
-download-cache = ~/.pip/cache
-</code></pre>
-</li>
-<li>
-<p>環境内のパッケージを引き継ぐには:</p>
-<pre><code>pip freeze --local &gt;requirements.txt
-pip install -r requirements.txt
-</code></pre>
-</li>
 </ul>
 <h2 id="venvhttpsdocspythonorg3libraryvenvhtml--virtualenv"><a href="https://docs.python.org/3/library/venv.html"><code>venv</code></a> / <code>virtualenv</code></h2>
 <p>Python実行環境を仮想化するパッケージ。
@@ -161,28 +142,14 @@ pip install -r requirements.txt
 Python 3.3 以降では <code>venv</code> が標準ライブラリ入りしたので
 <a href="https://virtualenv.pypa.io/"><code>virtualenv</code></a>
 の個別インストールは不要になった。</p>
-<ul>
-<li>
 <p>仮想環境を作る:</p>
-<pre><code>python3.6 -m venv [OPTIONS] /path/to/projectx
-virtualenv        [OPTIONS] /path/to/projectx
-</code></pre>
-</li>
-<li>
-<p>仮想環境に入る、から出る:</p>
-<pre><code>source /path/to/projectx/bin/activate
-deactivate
-</code></pre>
-</li>
-<li>
-<p>Pythonを更新したりするとシムリンクが壊れるので一旦消して張り直す:</p>
-<pre><code>find /path/to/projectx/ -type l
-find /path/to/projectx/ -type l -delete
-find /path/to/projectx/ -type l
-virtualenv /path/to/projectx
-</code></pre>
-</li>
-</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">python3 -m venv <span class="o">[</span>OPTIONS<span class="o">]</span> ~/.virtualenvs/myproject
+</span></span></code></pre></div><p>仮想環境に入る、から出る:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">source</span>  ~/.virtualenvs/myproject/bin/activate
+</span></span><span class="line"><span class="cl">deactivate
+</span></span></code></pre></div><p>仮想環境の置き場所はどこでもいいけど、
+<code>~/.venvs</code> とか <code>~/.virtualenvs</code> にしておけばツールに見つけてもらいやすい。
+例えば<a href="https://github.com/microsoft/vscode-python/blob/main/src/client/pythonEnvironments/base/locators/lowLevel/globalVirtualEnvronmentLocator.ts">vscode-python</a>とか。</p>
 <h2 id="setuptoolshttpsgithubcompypasetuptools"><a href="https://github.com/pypa/setuptools"><code>setuptools</code></a></h2>
 <p>パッケージ管理・作成の基本となるライブラリ。
 コマンドラインツール <code>easy_install</code>

@@ -113,12 +113,10 @@ Pythonインストール
 シェルの設定ファイル (e.g., <code>~/.bashrc</code>) に次のように追記:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">PYENV_ROOT</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.pyenv
 </span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[</span> -d <span class="nv">$PYENV_ROOT</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-</span></span><span class="line"><span class="cl">    <span class="c1"># PATH=${PYENV_ROOT}/bin:$PATH</span>
-</span></span><span class="line"><span class="cl">    <span class="nv">pyenv_versions</span><span class="o">=(</span><span class="si">${</span><span class="nv">PYENV_ROOT</span><span class="si">}</span>/versions/*<span class="o">)</span>
-</span></span><span class="line"><span class="cl">    <span class="nv">pyenv_latest</span><span class="o">=</span><span class="si">${</span><span class="nv">pyenv_versions</span><span class="p">[@]: -1</span><span class="si">}</span>/bin
-</span></span><span class="line"><span class="cl">    <span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">pyenv_latest</span><span class="si">}</span>:<span class="nv">$PATH</span>
-</span></span><span class="line"><span class="cl">    <span class="nb">export</span> <span class="nv">PYENV_PYTHONPATH</span><span class="o">=</span><span class="si">${</span><span class="nv">pyenv_latest</span><span class="si">}</span>/python3
-</span></span><span class="line"><span class="cl">    <span class="nb">unset</span> pyenv_versions pyenv_latest
+</span></span><span class="line"><span class="cl">    <span class="nv">pyenv_versions</span><span class="o">=(</span><span class="k">$(</span>ls <span class="si">${</span><span class="nv">PYENV_ROOT</span><span class="si">}</span>/versions <span class="p">|</span> sort -V<span class="k">)</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">export</span> <span class="nv">PYENV_LATEST</span><span class="o">=</span><span class="si">${</span><span class="nv">PYENV_ROOT</span><span class="si">}</span>/versions/<span class="si">${</span><span class="nv">pyenv_versions</span><span class="p">[@]: -1</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PYENV_LATEST</span><span class="si">}</span>/bin:<span class="nv">$PATH</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">unset</span> pyenv_versions
 </span></span><span class="line"><span class="cl"><span class="k">fi</span>
 </span></span></code></pre></div><p><code>pyenv shell</code> や <code>pyenv local</code>
 を使ってPythonのバージョンを頻繁に切り替える場合は、
@@ -134,13 +132,13 @@ Pythonインストール
 目当てのバージョンを探してインストール:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">exec</span> <span class="nv">$SHELL</span> -l
 </span></span><span class="line"><span class="cl">pyenv install -l <span class="p">|</span> less
-</span></span><span class="line"><span class="cl">pyenv install 3.9.5
+</span></span><span class="line"><span class="cl">pyenv install 3.10.4
 </span></span><span class="line"><span class="cl"><span class="nb">exec</span> <span class="nv">$SHELL</span> -l
 </span></span></code></pre></div></li>
 <li>
 <p><a href="/python/pip.html">pip</a> のパスを確認し、パッケージを入れる:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">which pip3
-</span></span><span class="line"><span class="cl">pip3 install -U setuptools pip
+</span></span><span class="line"><span class="cl">pip3 install -U setuptools pip wheel
 </span></span><span class="line"><span class="cl">pip3 install -r /path/to/requirements.txt
 </span></span></code></pre></div><p>よく使うパッケージは
 <a href="https://github.com/heavywatal/dotfiles/blob/master/.config/python/requirements.txt"><code>requirements.txt</code></a>
@@ -203,23 +201,7 @@ MacのFramework buildでは <code>${HOME}/Library/Python/2.7</code> とかにな
 <code>sys.path</code> に含まれる。
 除外したいときは <code>PYTHONNOUSERSITE</code> をセットするか <code>python -s</code> で起動。</p>
 <h3 id="pythonstartup"><code>PYTHONSTARTUP</code></h3>
-<p>インタラクティブモードで起動するときに読み込むファイルを指定できる。
-例えば以下のようなものを書いておくと、
-3.4未満の古いPythonでも <code>tab</code> とか <code>^i</code> で補完できるようになる:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">sys</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">    <span class="kn">import</span> <span class="nn">rlcompleter</span>
-</span></span><span class="line"><span class="cl">    <span class="kn">import</span> <span class="nn">readline</span>
-</span></span><span class="line"><span class="cl">    <span class="n">rlcompleter</span><span class="o">.</span><span class="vm">__name__</span>  <span class="c1"># suppress F401</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="s1">&#39;libedit&#39;</span> <span class="ow">in</span> <span class="n">readline</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">        <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s2">&#34;bind ^I rl_complete&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="k">else</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">        <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s2">&#34;tab: complete&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="k">del</span> <span class="n">readline</span><span class="p">,</span> <span class="n">rlcompleter</span>
-</span></span><span class="line"><span class="cl"><span class="k">else</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">del</span> <span class="n">sys</span>
-</span></span></code></pre></div><p>対話モードをさらに便利にするには <a href="/python/ipython.html">IPython</a> を使う。</p>
+<p>インタラクティブモードで起動するときに読み込むファイルを指定できる。</p>
 <h2 id="関連書籍">関連書籍</h2>
 <p><a href="https://www.amazon.co.jp/dp/479738946X/ref=as_li_ss_il?ie=UTF8&qid=1485612008&sr=8-6&keywords=python&linkCode=li3&tag=heavywatal-22&linkId=5ea5e48ecc83b9439f21406b6f57c062" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=479738946X&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=479738946X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 <a href="https://www.amazon.co.jp/dp/487311845X/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=72a416f5d10a9e84aaab4b3ee9613329&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=487311845X&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=487311845X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
