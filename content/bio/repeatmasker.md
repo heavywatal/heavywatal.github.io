@@ -21,21 +21,30 @@ brew install brewsci/bio/repeatmasker
 [HMMER](http://hmmer.org/),
 [Tandem Repeat Finder](https://tandem.bu.edu/trf/trf.html).
 
+ただし[4.0.7で更新が滞っている](https://github.com/brewsci/homebrew-bio/pull/708)ので、
+新しいものを使いたければ自力でどうにかする。
+
+```sh
+pip3 install h5py
+brew install heavywatal/tap/repeatmasker-h5
+```
 
 ### データベース
 
 単純な反復や一般的なアーティファクトはライブラリに組み込まれているが、
-もっとしっかり使いたい場合は外部のデータを利用する。
-`brew info repeatmasker` でもやり方を読める。
+もっとしっかり使いたい場合はライブラリを更新して利用する。
 
 1.  ディレクトリ移動:
     `cd $(brew --prefix)/opt/repeatmasker/libexec/`
 1.  ファイルを追加・更新する。
     - [RepBase](https://www.girinst.org/server/RepBase/):
-      最有力だったがいつの間にか有料になっていた。
+      アカデミックな用途なら無料で使えていたが、いつの間にか有料になっていた。
     - [Dfam](https://www.dfam.org/):
-      `Library/Dfam.hmm` とかを差し替える。
-1.  変更を反映させる: `./configure <configure.input`
+      使いたいものをダウンロードして `./Library/Dfam.*` を差し替える。<br>
+      RepeatMasker 4.1.0 以前は `Dfam.hmm` や `Dfam.embl` を使っていたが、
+      4.1.1 以降では `Dfam.h5` を使う。
+      4.1.2 には始めから Dfam 3.3 curatedonly が付いてくる。
+1.  変更を反映させる: `/usr/bin/perl ./configure <configure.input`
 
 実行時に毎回 `-lib` オプションでファイルを指定する手もある。
 
@@ -50,8 +59,7 @@ brew install brewsci/bio/repeatmasker
 
 ```sh
 RepeatMasker -help
-less $(brew --prefix)/opt/repeatmasker/libexec/repeatmasker.help
-RepeatMasker -e hmmer -pa 4 -qq -species oryza -dir . -xsmall -gff seq.fa
+RepeatMasker -pa 4 -qq -species oryza -dir . -xsmall -gff seq.fa
 ```
 
 入力ファイルは圧縮 `.fa.gz` でもいいけど勝手に展開してしまうので注意。
@@ -130,7 +138,7 @@ RepeatMasker -e hmmer -pa 4 -qq -species oryza -dir . -xsmall -gff seq.fa
 :   アノテーション情報。
 :   固定幅っぽい変なレイアウトの表で扱いにくい。ちょっと眺めるだけ。
 
-`${INFILE}.out`
+`${INFILE}.out.gff`
 : `-gff` オプションを付ければ作ってくれる。
   実質的に使える出力ファイルはこれだけかも。
 
