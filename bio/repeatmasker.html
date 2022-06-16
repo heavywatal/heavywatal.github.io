@@ -94,22 +94,28 @@ RepeatMasker
 <a href="https://www.repeatmasker.org/RMBlast.html">RMBlast</a>,
 <a href="http://hmmer.org/">HMMER</a>,
 <a href="https://tandem.bu.edu/trf/trf.html">Tandem Repeat Finder</a>.</p>
-<h3 id="データベース">データベース</h3>
+<p>ただし<a href="https://github.com/brewsci/homebrew-bio/pull/708">4.0.7で更新が滞っている</a>ので、
+新しいものを使いたければ自力でどうにかする。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pip3 install h5py
+</span></span><span class="line"><span class="cl">brew install heavywatal/tap/repeatmasker-h5
+</span></span></code></pre></div><h3 id="データベース">データベース</h3>
 <p>単純な反復や一般的なアーティファクトはライブラリに組み込まれているが、
-もっとしっかり使いたい場合は外部のデータを利用する。
-<code>brew info repeatmasker</code> でもやり方を読める。</p>
+もっとしっかり使いたい場合はライブラリを更新して利用する。</p>
 <ol>
 <li>ディレクトリ移動:
 <code>cd $(brew --prefix)/opt/repeatmasker/libexec/</code></li>
 <li>ファイルを追加・更新する。
 <ul>
 <li><a href="https://www.girinst.org/server/RepBase/">RepBase</a>:
-最有力だったがいつの間にか有料になっていた。</li>
+アカデミックな用途なら無料で使えていたが、いつの間にか有料になっていた。</li>
 <li><a href="https://www.dfam.org/">Dfam</a>:
-<code>Library/Dfam.hmm</code> とかを差し替える。</li>
+使いたいものをダウンロードして <code>./Library/Dfam.*</code> を差し替える。<br>
+RepeatMasker 4.1.0 以前は <code>Dfam.hmm</code> や <code>Dfam.embl</code> を使っていたが、
+4.1.1 以降では <code>Dfam.h5</code> を使う。
+4.1.2 には始めから Dfam 3.3 curatedonly が付いてくる。</li>
 </ul>
 </li>
-<li>変更を反映させる: <code>./configure &lt;configure.input</code></li>
+<li>変更を反映させる: <code>/usr/bin/perl ./configure &lt;configure.input</code></li>
 </ol>
 <p>実行時に毎回 <code>-lib</code> オプションでファイルを指定する手もある。</p>
 <h2 id="使用方法">使用方法</h2>
@@ -117,8 +123,7 @@ RepeatMasker
 <h3 id="コマンド">コマンド</h3>
 <p><a href="https://github.com/rmhubley/RepeatMasker/blob/master/repeatmasker.help">https://github.com/rmhubley/RepeatMasker/blob/master/repeatmasker.help</a> :</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">RepeatMasker -help
-</span></span><span class="line"><span class="cl">less <span class="k">$(</span>brew --prefix<span class="k">)</span>/opt/repeatmasker/libexec/repeatmasker.help
-</span></span><span class="line"><span class="cl">RepeatMasker -e hmmer -pa <span class="m">4</span> -qq -species oryza -dir . -xsmall -gff seq.fa
+</span></span><span class="line"><span class="cl">RepeatMasker -pa <span class="m">4</span> -qq -species oryza -dir . -xsmall -gff seq.fa
 </span></span></code></pre></div><p>入力ファイルは圧縮 <code>.fa.gz</code> でもいいけど勝手に展開してしまうので注意。</p>
 <p><code>-engine [crossmatch|wublast|abblast|ncbi|hmmer|decypher]</code></p>
 <dl>
@@ -175,7 +180,7 @@ chimpanzee, mammals みたいな英語名も一部可能。
 <dt><code>${INFILE}.out</code></dt>
 <dd>アノテーション情報。</dd>
 <dd>固定幅っぽい変なレイアウトの表で扱いにくい。ちょっと眺めるだけ。</dd>
-<dt><code>${INFILE}.out</code></dt>
+<dt><code>${INFILE}.out.gff</code></dt>
 <dd><code>-gff</code> オプションを付ければ作ってくれる。
 実質的に使える出力ファイルはこれだけかも。</dd>
 </dl>
