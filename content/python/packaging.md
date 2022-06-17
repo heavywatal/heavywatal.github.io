@@ -1,7 +1,7 @@
 +++
-title = 'setuptools'
-subtitle = "Pythonパッケージ作成"
+title = 'Pythonパッケージ作成'
 tags = ["python", "package"]
+aliases = ["setuptools.html"]
 [menu.main]
   parent = "python"
 +++

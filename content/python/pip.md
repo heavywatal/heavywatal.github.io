@@ -97,7 +97,7 @@ deactivate
 はこれの一部として含まれているが、直接使うことはない。
 (`pip` を使う)
 
-See also ["setuptools --- Pythonパッケージ作成"]({{< relref "setuptools.md" >}})
+See also ["setuptools --- Pythonパッケージ作成"]({{< relref "packaging.md" >}})
 
 `setuptools` の改良版としてしばらく `distribute` も利用されていたが、
 その成果が `setuptools` にマージされたので忘れていい。
