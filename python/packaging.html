@@ -90,7 +90,6 @@ Pythonパッケージ作成
 <li><a href="https://docs.python.org/3/tutorial/modules.html">https://docs.python.org/3/tutorial/modules.html</a></li>
 <li><a href="https://docs.python.org/3/reference/import.html">https://docs.python.org/3/reference/import.html</a></li>
 <li><a href="https://packaging.python.org/">https://packaging.python.org/</a></li>
-<li><a href="https://setuptools.pypa.io/">https://setuptools.pypa.io/</a></li>
 </ul>
 <h2 id="ファイル構成">ファイル構成</h2>
 <p>GitHubやローカルの開発環境から <code>pip</code> で直接インストールできる形。</p>
@@ -98,83 +97,100 @@ Pythonパッケージ作成
 </span></span><span class="line"><span class="cl">├── LICENSE
 </span></span><span class="line"><span class="cl">├── README.md
 </span></span><span class="line"><span class="cl">├── pyproject.toml
+</span></span><span class="line"><span class="cl">├── tests/
 </span></span><span class="line"><span class="cl">└── wtl/
 </span></span><span class="line"><span class="cl">    ├── __init__.py
 </span></span><span class="line"><span class="cl">    └── hello.py
-</span></span></code></pre></div><p>リポジトリ名(<code>pywtl</code>)とパッケージ名(<code>wtl</code>)は必ずしも一致してなくてもよい。
-開発向けの <code>-e,--editable</code> オプションをつけたローカルインストールではコピーが起こらず、
+</span></span></code></pre></div><p>リポジトリ名(<code>pywtl</code>)とパッケージ名(<code>wtl</code>)は必ずしも一致してなくてもよい。</p>
+<p>開発向けの <code>-e,--editable</code> オプションをつけたローカルインストールではコピーが起こらず、
 編集後に再インストールしなくてもそのまま反映される。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pip install -v --user -e ~/git/pywtl/
-</span></span><span class="line"><span class="cl">python -m wtl.hello
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pip3 install -v --user -e ~/git/pywtl/
+</span></span><span class="line"><span class="cl">python3 -m wtl.hello
 </span></span></code></pre></div><h3 id="pyprojecttoml"><code>pyproject.toml</code></h3>
-<p><code>setuptools</code> に依存しない形式として
+<p>パッケージ作成に関わる全てのメタ情報を書いておくファイル。
+<code>setuptools</code> に依存しない形式として
 <a href="https://www.python.org/dev/peps/pep-0517">PEP 517</a>,
 <a href="https://www.python.org/dev/peps/pep-0621">PEP 621</a>
 で決められた。
-<a href="https://flit.readthedocs.io/">PyPA/Flit</a> (setuptools後継？),
+<code>setup.py</code>, <code>setup.cfg</code>, <code>MANIFEST.in</code> などは過去のものとなった。</p>
+<p><a href="https://flit.readthedocs.io/">PyPA/Flit</a> (setuptools後継？),
 <a href="https://pdm.fming.dev/">PDM</a>,
 <a href="https://python-poetry.org/">Poetry</a>,
-など後発のツールは大概このファイルだけ書けば済む。</p>
-<p><code>setuptools</code> は未対応なので書けるのはこれだけ:</p>
+など後発のツールは早くから対応していて、
+<code>setuptools</code> も<a href="https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html">ようやく61.0から使えるようになった</a>。
+<code>[project]</code> テーブルは <a href="https://www.python.org/dev/peps/pep-0621">PEP 621</a>
+で項目が決められているためツールによらず共通。
+それ以外の <code>[build-system]</code> などは使うツールによって異なる。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="p">[</span><span class="nx">build-system</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="nx">requires</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;setuptools&#34;</span><span class="p">,</span> <span class="s2">&#34;wheel&#34;</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="nx">build-backend</span> <span class="p">=</span> <span class="s2">&#34;setuptools.build_meta&#34;</span>
-</span></span></code></pre></div><p>残りの項目は <code>setup.cfg</code> へ。</p>
-<h3 id="setuppy"><code>setup.py</code></h3>
-<p><code>setup.cfg</code> の設定を読んでくれるようになってからは
-<code>setup()</code> の引数にいろいろ渡す必要は無くなった。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
-</span></span><span class="line"><span class="cl"><span class="n">setup</span><span class="p">()</span>
-</span></span></code></pre></div><p>さらに新しいバージョンではこれすらも不要になった。
-ただしこれが無いと <code>pip install --editable</code> がサポートされないらしい。</p>
-<h3 id="setupcfg"><code>setup.cfg</code></h3>
-<p><a href="https://setuptools.pypa.io/en/latest/userguide/declarative_config.html">https://setuptools.pypa.io/en/latest/userguide/declarative_config.html</a></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="k">[metadata]</span>
-</span></span><span class="line"><span class="cl"><span class="na">name</span> <span class="o">=</span> <span class="s">wtl</span>
-</span></span><span class="line"><span class="cl"><span class="na">version</span> <span class="o">=</span> <span class="s">attr: wtl.__version__</span>
-</span></span><span class="line"><span class="cl"><span class="na">url</span> <span class="o">=</span> <span class="s">https://github.com/heavywatal/pywtl</span>
-</span></span><span class="line"><span class="cl"><span class="na">author</span> <span class="o">=</span> <span class="s">Watal M. Iwasaki</span>
-</span></span><span class="line"><span class="cl"><span class="na">author_email</span> <span class="o">=</span> <span class="s">heavywatal@gmail.com</span>
-</span></span><span class="line"><span class="cl"><span class="na">license_files</span> <span class="o">=</span> <span class="s">LICENSE</span>
-</span></span><span class="line"><span class="cl"><span class="na">description</span> <span class="o">=</span> <span class="s">wtl: Personal Python package</span>
-</span></span><span class="line"><span class="cl"><span class="na">long_description</span> <span class="o">=</span> <span class="s">file: README.md</span>
-</span></span><span class="line"><span class="cl"><span class="na">long_description_content_type</span> <span class="o">=</span> <span class="s">text/markdown</span>
+</span></span><span class="line"><span class="cl"><span class="nx">requires</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;flit_core &gt;=3.4,&lt;4&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">build-backend</span> <span class="p">=</span> <span class="s2">&#34;flit_core.buildapi&#34;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">[options]</span>
-</span></span><span class="line"><span class="cl"><span class="na">install_requires</span> <span class="o">=</span><span class="s">
-</span></span></span><span class="line"><span class="cl"><span class="s">  psutil
-</span></span></span><span class="line"><span class="cl"><span class="s">  requests</span>
-</span></span><span class="line"><span class="cl"><span class="na">python_requires</span> <span class="o">=</span> <span class="s">&gt;=3.9</span>
-</span></span><span class="line"><span class="cl"><span class="na">entry_points</span> <span class="o">=</span> <span class="s">file: entry_points.cfg</span>
-</span></span><span class="line"><span class="cl"><span class="na">packages</span> <span class="o">=</span> <span class="s">find:</span>
-</span></span></code></pre></div><p><code>version</code> は <code>__init__.py</code> に <code>__version__ = &quot;0.1.0&quot;</code>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">project</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">name</span> <span class="p">=</span> <span class="s2">&#34;wtl&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">authors</span> <span class="p">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span><span class="nx">name</span> <span class="p">=</span> <span class="s2">&#34;Watal M. Iwasaki&#34;</span><span class="p">,</span> <span class="nx">email</span> <span class="p">=</span> <span class="s2">&#34;heavywatal@gmail.com&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">license</span> <span class="p">=</span> <span class="p">{</span><span class="nx">file</span> <span class="p">=</span> <span class="s2">&#34;LICENSE&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nx">readme</span> <span class="p">=</span> <span class="s2">&#34;README.md&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">classifiers</span> <span class="p">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;Development Status :: 2 - Pre-Alpha&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;Environment :: Console&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;Intended Audience :: Science/Research&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;License :: OSI Approved :: MIT License&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;Topic :: Scientific/Engineering :: Bio-Informatics&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">dynamic</span> <span class="p">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;description&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;version&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">requires-python</span> <span class="p">=</span> <span class="s2">&#34;&gt;=3.10&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">dependencies</span> <span class="p">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;psutil&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;requests&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">project</span><span class="p">.</span><span class="nx">optional-dependencies</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">test</span> <span class="p">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;pyproject-flake8&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;pytest&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">project</span><span class="p">.</span><span class="nx">urls</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Source</span> <span class="p">=</span> <span class="s2">&#34;https://github.com/heavywatal/pywtl&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">project</span><span class="p">.</span><span class="nx">scripts</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;hello.py&#34;</span> <span class="p">=</span> <span class="s2">&#34;wtl.hello:main&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">tool</span><span class="p">.</span><span class="nx">pyright</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">typeCheckingMode</span> <span class="p">=</span> <span class="s2">&#34;strict&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">tool</span><span class="p">.</span><span class="nx">flake8</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">max-line-length</span> <span class="p">=</span> <span class="mi">88</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">tool</span><span class="p">.</span><span class="nx">pytest</span><span class="p">.</span><span class="nx">ini_options</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">testpaths</span> <span class="p">=</span> <span class="s2">&#34;tests&#34;</span>
+</span></span></code></pre></div><p><code>dynamic</code> に指定したものは <code>__init__.py</code> に <code>__version__ = &quot;0.1.0&quot;</code>
 などと書いてあるものを参照できる。
 比較したいときは
 <a href="https://packaging.pypa.io/en/latest/version.html"><code>packaging.version.parse()</code></a>
 を利用する。</p>
-<p><code>install_requires</code> に列挙された依存パッケージは
-<code>pip install</code> で自動的にインストールされる。
-一方 <code>requirements.txt</code> はsetuptoolsではなくpipの機能で、
-能動的に <code>pip install -r requirements.txt</code>
-を打たなきゃインストールされないし、
-そこに列挙されたパッケージが本当に必要になるまで怒られない。</p>
-<h3 id="entry_points"><code>entry_points</code></h3>
-<ul>
-<li><a href="https://setuptools.pypa.io/en/latest/userguide/quickstart.html#automatic-package-discovery">https://setuptools.pypa.io/en/latest/userguide/quickstart.html#automatic-package-discovery</a></li>
-<li><a href="https://setuptools.pypa.io/en/latest/userguide/entry_point.html">https://setuptools.pypa.io/en/latest/userguide/entry_point.html</a></li>
-<li><a href="https://setuptools.pypa.io/en/latest/pkg_resources.html#entry-points">https://setuptools.pypa.io/en/latest/pkg_resources.html#entry-points</a></li>
-</ul>
-<p>用途はいろいろあるけど
-<code>${prefix}/bin/</code> に実行可能ファイルを配置するのによく使われる。
-設定は下記のように別ファイル <code>entry_points.cfg</code> として
-<code>setup.cfg</code> から読ませるのが楽チン。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="k">[console_scripts]</span>
-</span></span><span class="line"><span class="cl"><span class="na">hello.py</span> <span class="o">=</span> <span class="s">wtl.hello:main</span>
-</span></span></code></pre></div><p>引数を取らない関数のみ利用可能。
-コマンドライン引数を受け取りたい場合はその関数の中で標準の
-<a href="https://docs.python.org/3/library/argparse.html"><code>argparse</code></a>
-を使って処理する。</p>
-<h3 id="ソースコード">ソースコード</h3>
+<p><code>dependencies</code> に列挙された依存パッケージは
+<code>pip3 install</code> で自動的にインストールされる。
+一方 <code>requirements.txt</code> はインストール過程には関与せず、
+能動的に <code>pip3 install -r requirements.txt</code>
+を打たなきゃインストールされない。</p>
+<p><code>project.scripts</code> で設定したものは
+<code>${prefix}/bin/</code> に実行可能ファイルが配置される。
+以前は <code>console_scripts</code> で設定していた。</p>
+<h3 id="setuppy"><code>setup.py</code></h3>
+<p><a href="https://setuptools.pypa.io/en/latest/userguide/declarative_config.html"><code>setup.cfg</code></a> や
+<a href="https://setuptools.pypa.io/en/latest/userguide/miscellaneous.html"><code>MANIFEST.in</code></a>
+とともに第一線を退いたが、
+<code>pip3 install --editable</code> のために最小限の
+<code>setup.py</code> が必要になる場面もあるらしい。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
+</span></span><span class="line"><span class="cl"><span class="n">setup</span><span class="p">()</span>
+</span></span></code></pre></div><h3 id="ソースコード">ソースコード</h3>
 <dl>
 <dt><code>wtl/__init__.py</code></dt>
 <dd>このディレクトリがひとつのパッケージであることを示すファイル。
@@ -185,29 +201,20 @@ Pythonパッケージ作成
 <p><code>wtl/hello.py</code></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;Sample module
 </span></span></span><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">getpass</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-</span></span><span class="line"><span class="cl">    <span class="kn">import</span> <span class="nn">getpass</span>
 </span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;Hello, &#34;</span> <span class="o">+</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getuser</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&#34;!&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">    <span class="n">main</span><span class="p">()</span>
-</span></span></code></pre></div><h3 id="manifestin"><code>MANIFEST.in</code></h3>
-<p>Pythonモジュール以外で配布物に含めたいもの、除外したいものがあれば
-<code>include</code>, <code>recursive-include</code>, <code>exclude</code>
-で指定する。</p>
-<h2 id="コマンド">コマンド</h2>
-<p>以前は
-<a href="https://setuptools.pypa.io/en/latest/userguide/commands.html"><code>setup.py</code></a>
-を使って操作してたけどそれは廃れつつある。
-最小限のビルド機能は
-<a href="https://pypa-build.readthedocs.io/"><code>build</code></a> パッケージに引き継がれた。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pip install build
-</span></span><span class="line"><span class="cl">python3 -m build --help
-</span></span><span class="line"><span class="cl">python3 -m build
-</span></span></code></pre></div>
+</span></span></code></pre></div><p>ソースツリーの中にあるファイルを参照するには
+<a href="https://docs.python.org/library/importlib.html#module-importlib.resources"><code>importlib.resources</code></a>
+が使える。
+Pythonスクリプトではない設定ファイルなどを同梱して読み込むのに便利。</p>
+
 </article>
 </main>
 
