@@ -146,21 +146,25 @@ open http://localhost:1313/
 
 ### localhost (Mac)
 
-`public/` 以下に生成されるファイルを
-`/Library/WebServer/Documents` にコピーすれば
+`public/` 以下に生成されるファイルをシムリンクやコピーで
+`/Library/WebServer/Documents/` に配置すれば
 <http://localhost> で閲覧できる。
 ユーザーの `~/Sites/` をドキュメントルートにする方法でもいいが、
-単にシンボリックリンクを張るほうが楽ちん。
+単にシムリンクを張るほうが楽ちん。
 
 ```sh
-cd /Library/WebServer/
-sudo mv Documents Documents.orig
-sudo ln -s ~/Sites Documents
-cd /path/to/site-source
-hugo
-rsync -au --delete --exclude='.git' public/ ~/Sites/
+ls /Library/WebServer/
+sudo mv /Library/WebServer/Documents /Library/WebServer/Documents.orig
+sudo ln -s ~/path/to/public /Library/WebServer/Documents
 open http://localhost/
 ```
+
+[5秒待たされる問題](https://stackoverflow.com/questions/70698918/)
+を避けるため `KeepAlive Off` を設定しておく。
+`/etc/apache2/httpd.conf` を直に書き換えるか、
+`/etc/apache2/other/keepalive.conf` のようなファイルを作り、
+`sudo apachectl graceful` で変更を反映。
+
 
 ### GitHub Pages
 
