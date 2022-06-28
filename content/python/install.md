@@ -67,6 +67,15 @@ MacやLinuxならシステムの一部として
     exec $SHELL -l
     ```
 
+    R から [`reticulate`](https://rstudio.github.io/reticulate/)
+    越しに呼ぶ場合は共有ライブラリを有効にしてビルドする:
+    ```sh
+    env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.7.13
+    # or
+    Rscript -e 'reticulate::install_python("3.7.13")'
+    ```
+
+
 1.  [pip]({{< relref "pip.md" >}}) のパスを確認し、パッケージを入れる:
 
     ```sh

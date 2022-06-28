@@ -197,10 +197,8 @@ knitrのようにコードセルの実行結果を含むMarkdownを書き出す�
 
 `rmarkdown` ([R Markdown](https://rmarkdown.rstudio.com/))
 : コードセルに波括弧を付ける: `{python}`
-: Rから[knitr](https://yihui.org/knitr/)を使えば結果を含むMarkdownを出力できるが、
-  RとPythonの橋渡しをする
-  [reticulate](https://rstudio.github.io/reticulate/)
-  パッケージがまだまだ開発途上という印象。
+: Rから[knitr](https://yihui.org/knitr/)を使えば結果を含むMarkdownを出力できる。
+  RとPythonの橋渡しは[reticulate](https://rstudio.github.io/reticulate/)が担う。
 
 `md:myst` (MyST Markdown; Markedly Structured Text)
 : CommonMarkに準拠しつつreStrucutredTextやSphinxの機能をサポートするリッチなMarkdown。

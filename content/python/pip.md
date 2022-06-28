@@ -87,7 +87,10 @@ deactivate
 
 仮想環境の置き場所はどこでもいいけど、
 `~/.venvs` とか `~/.virtualenvs` にしておけばツールに見つけてもらいやすい。
-例えば[vscode-python](https://github.com/microsoft/vscode-python/blob/main/src/client/pythonEnvironments/base/locators/lowLevel/globalVirtualEnvronmentLocator.ts)とか。
+例えば
+[vscode-python](https://github.com/microsoft/vscode-python/blob/main/src/client/pythonEnvironments/base/locators/lowLevel/globalVirtualEnvronmentLocator.ts),
+[reticulate](https://github.com/rstudio/reticulate/blob/main/R/virtualenv.R),
+etc.
 
 
 ## [`setuptools`](https://github.com/pypa/setuptools)
