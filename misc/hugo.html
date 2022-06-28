@@ -190,19 +190,21 @@ YAMLやJSONでもいいけど、
 <pre tabindex="0"><code>hugo server -D -w -s /path/to/source
 open http://localhost:1313/
 </code></pre><h3 id="localhost-mac">localhost (Mac)</h3>
-<p><code>public/</code> 以下に生成されるファイルを
-<code>/Library/WebServer/Documents</code> にコピーすれば
+<p><code>public/</code> 以下に生成されるファイルをシムリンクやコピーで
+<code>/Library/WebServer/Documents/</code> に配置すれば
 <a href="http://localhost">http://localhost</a> で閲覧できる。
 ユーザーの <code>~/Sites/</code> をドキュメントルートにする方法でもいいが、
-単にシンボリックリンクを張るほうが楽ちん。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> /Library/WebServer/
-</span></span><span class="line"><span class="cl">sudo mv Documents Documents.orig
-</span></span><span class="line"><span class="cl">sudo ln -s ~/Sites Documents
-</span></span><span class="line"><span class="cl"><span class="nb">cd</span> /path/to/site-source
-</span></span><span class="line"><span class="cl">hugo
-</span></span><span class="line"><span class="cl">rsync -au --delete --exclude<span class="o">=</span><span class="s1">&#39;.git&#39;</span> public/ ~/Sites/
+単にシムリンクを張るほうが楽ちん。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ls /Library/WebServer/
+</span></span><span class="line"><span class="cl">sudo mv /Library/WebServer/Documents /Library/WebServer/Documents.orig
+</span></span><span class="line"><span class="cl">sudo ln -s ~/path/to/public /Library/WebServer/Documents
 </span></span><span class="line"><span class="cl">open http://localhost/
-</span></span></code></pre></div><h3 id="github-pages">GitHub Pages</h3>
+</span></span></code></pre></div><p><a href="https://stackoverflow.com/questions/70698918/">5秒待たされる問題</a>
+を避けるため <code>KeepAlive Off</code> を設定しておく。
+<code>/etc/apache2/httpd.conf</code> を直に書き換えるか、
+<code>/etc/apache2/other/keepalive.conf</code> のようなファイルを作り、
+<code>sudo apachectl graceful</code> で変更を反映。</p>
+<h3 id="github-pages">GitHub Pages</h3>
 <p><code>public/</code> 以下に生成されるファイルをしかるべきrepository/branchに置くだけ。</p>
 <p>See <a href="/dev/git.html">Git</a></p>
 
