@@ -30,9 +30,10 @@ np.show_config()
 
 ### [`ndarray`](https://numpy.org/doc/stable/reference/arrays.ndarray.html): N次元配列クラス
 
-それを2D行列に特殊化したものが
+2D行列に特殊化したものとして
 [`numpy.matrix`](https://numpy.org/doc/stable/reference/generated/numpy.matrix.html)
-で、Rでの `matrix` に相当。
+もあったが2018年ごろから非推奨。
+
 `data.frame`/`tibble` のようなものがほしいときは
 [`pandas.DataFrame`]({{< relref "pandas.md" >}}) の出番。
 
