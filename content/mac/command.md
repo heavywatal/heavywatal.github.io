@@ -103,6 +103,17 @@ killall SystemUIServer
 
 サービスの起動、終了
 
+MacBook Pro の Touch Bar は完全なる失敗作であり欠陥品である。
+目視を要求してtouch typingを阻害するばかりでなく、
+意図せぬ接触による誤動作を誘発する。
+例えば、再生ボタンをうっかり触るとMusic.appが起動してしまう。
+次のコマンドでそれを防げる:
+```sh
+launchctl unload -w /System/Library/LaunchAgents/com.apple.rcd.plist
+```
+ただし副作用としてそれ以外の用途でも再生ボタンを使えなくなる。
+Music.appの起動だけを防ぐオプションは存在しないのかな？
+
 
 ### `lsregister`
 
