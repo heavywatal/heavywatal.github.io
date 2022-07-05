@@ -147,6 +147,14 @@ Terminal から一発でファイルを開くことができる。</p>
 などのGUIアプリを使うほうが簡単で安心かも</p>
 <h3 id="launchctl"><code>launchctl</code></h3>
 <p>サービスの起動、終了</p>
+<p>MacBook Pro の Touch Bar は完全なる失敗作であり欠陥品である。
+目視を要求してtouch typingを阻害するばかりでなく、
+意図せぬ接触による誤動作を誘発する。
+例えば、再生ボタンをうっかり触るとMusic.appが起動してしまう。
+次のコマンドでそれを防げる:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">launchctl unload -w /System/Library/LaunchAgents/com.apple.rcd.plist
+</span></span></code></pre></div><p>ただし副作用としてそれ以外の用途でも再生ボタンを使えなくなる。
+Music.appの起動だけを防ぐオプションは存在しないのかな？</p>
 <h3 id="lsregister"><code>lsregister</code></h3>
 <p>Open with で表示されるアプリケーションが重複しまくったときなど、
 ファイルとアプリケーションの関連付けに関する古い情報を消して再構築。
