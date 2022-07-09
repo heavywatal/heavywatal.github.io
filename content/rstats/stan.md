@@ -10,82 +10,108 @@ subtitle = "高速MCMCでパラメータ推定"
 +++
 
 数あるMCMCアルゴリズムの中でも効率的なHMC(Hybrid/Hamiltonian Monte Carlo)を用いてベイズ推定を行うツール。
-[Pythonやコマンドラインなどいろんな形で利用可能](https://mc-stan.org/interfaces/)だが、
-とりあえずRで[RStan](https://mc-stan.org/interfaces/rstan.html)を使ってみる。
+[RやPythonなどいろんなインターフェイスで利用可能](https://mc-stan.org/interfaces/)。
+[RStan](https://mc-stan.org/users/interfaces/rstan.html),
+[PyStan](https://mc-stan.org/users/interfaces/pystan.html)
+が長らく使われてきたが、
+[CmdStanR](https://mc-stan.org/cmdstanr/),
+[CmdStanPy](https://cmdstanpy.readthedocs.io/)
+への移行が進んできている。
 
 https://mc-stan.org/
 
+
 ## インストール
 
-Rから`install.packages("rstan")`で一発。
-jagsと違ってstan本体も同時に入れてくれる。
-[RStan-Getting-Started](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started)
-を見ると、時代や環境によってはいろいろ難しいかったのかも。
+RやPythonのパッケージを入れてから、それ越しにCmdStan本体を入れる。
 
-標準的な開発環境(Mac なら Command Line Tools、Ubuntu なら build-essential)はどっちみち必要。
+```r
+install.packages("cmdstanr", repos = "https://mc-stan.org/r-packages/")
+library(cmdstanr)
+check_cmdstan_toolchain()
+install_cmdstan()
+cmdstan_path()
+cmdstan_version()
+```
+
+```py
+%pip3 install cmdstanpy
+import cmdstanpy
+cmdstanpy.install_cmdstan()
+cmdstanpy.cmdstan_path()
+cmdstanpy.cmdstan_version()
+cmdstanpy.show_versions()
+```
 
 
 ## 基本的な流れ
 
-1. rstanを読み込む
+1. cmdstanrを読み込む
    ```r
-   library(rstan)
-   rstan_options(auto_write = TRUE)
-   options(mc.cores = parallel::detectCores())
+   library(cmdstanr)
    ```
-
 1. 名前付きlistとしてデータを用意する。
-   e.g., 平均10、標準偏差3の正規乱数。
+   e.g., 平均10のポアソン乱数。
    ```r
-   observation = list(x = rnorm(10000, 10, 3))
-   observation$length = length(observation$x)
+   sample_size = 1000L
+   mydata = list(N = sample_size, x = rpois(sample_size, 10))
    ```
-
 1.  Stan言語でモデルを記述する。
-    別ファイルにしてもいいし、下記のようにR文字列でもいい。
-    e.g., 与えられたデータが正規分布から取れてきたとすると、
-    その平均と標準偏差はどれくらいだったか？
-    ```r
-    stan_code = "
+    RStanには文字列で渡せたがCmdStanPy, CmdStanRは別ファイル必須。
+    e.g., 与えられたデータがポアソン分布から取れてきたとすると、
+    その平均はどれくらいだったか？
+    ```stan
     data {
-      int length;
-      real x[length];
+      int<lower=0> N;
+      array[N] int<lower=0> x;
     }
 
     parameters {
-      real mu;
-      real<lower=0> sigma;
+      real<lower=0> lambda;
     }
 
     model {
-      x ~ normal(mu, sigma);
-    }"
+      x ~ poisson(lambda);
+    }
     ```
-
 1. モデルをC++に変換してコンパイルする。
-   ファイルから読み込んだ場合は中間ファイル`*.rda`がキャッシュされる。
+   中間ファイルは `*.hpp`。
    ```r
-   mod = rstan::stan_model(model_code = stan_code)
-   # or
-   mod = rstan::stan_model(file = "model.stan")
+   model = cmdstan_model("model.stan")
    ```
-
+   <https://mc-stan.org/cmdstanr/reference/cmdstan_model.html>
 1. コンパイル済みモデルを使ってMCMCサンプリング
    ```r
-   fit = rstan::sampling(mod, data = observation, iter = 10000, chains = 3)
+   fit = model$sample(mydata)
    ```
+   <https://mc-stan.org/cmdstanr/reference/model-method-sample.html>
+1.  結果を見てみる
+    ```r
+    print(fit)
+    fit$summary()
+    fit$cmdstan_summary()
+    fit$cmdstan_diagnose()
+    fit$sampler_diagnostics()
+    fit$diagnostic_summary()
+    fit$metadata()
+    ```
+    <https://mc-stan.org/cmdstanr/reference/CmdStanMCMC.html>
+1.  MCMCサンプルを使う。
+    ```r
+    draws_df = fit$draws(format = "df")
+    draws = fit$draws()
+    params = names(model$variables()$parameters)
+    bayesplot::mcmc_acf_bar(draws, pars = params)
+    bayesplot::mcmc_trace(draws, pars = params)
+    bayesplot::mcmc_hist(draws, pars = params)
+    bayesplot::mcmc_combo(draws, pars = params)
+    rhat = bayesplot::rhat(fit)
+    neff = bayesplot::neff_ratio(fit)
+    bayesplot::mcmc_rhat(rhat)
+    bayesplot::mcmc_neff(neff)
+    ```
+    <https://mc-stan.org/cmdstanr/reference/fit-method-draws.html>
 
-1. 結果を見てみる
-   ```r
-   print(fit)
-   summary(fit)
-   plot(fit)
-   pairs(fit)
-   rstan::traceplot(fit)
-   rstan::stan_trace(fit)
-   rstan::stan_hist(fit)
-   rstan::stan_dens(fit)
-   ```
 
 ## Stan文法
 
@@ -118,9 +144,8 @@ https://mc-stan.org/documentation/
   サンプルされないローカル変数を宣言してもよいが、制約をかけることはできない。
 
 `generated quantities {...}`
-: サンプリング後の値を使って好きなことをするとこ？
-  `normal_rng()`などによる乱数生成が許される唯一のブロック。
-  rstanならここを使わずRで結果を受け取ってからどうにかするほうが簡単？
+: `normal_rng()`などによる乱数生成が許される唯一のブロック。
+  観察値の確信区間とかを
 
 ### モデリング
 
@@ -175,9 +200,9 @@ bool型は無くて基本的に整数の1/0。分岐ではnon-zeroがtrue扱い�
 
 ```stan
 int i;
-int v[42];
 real x;
-real x[42];
+array[42] int a;
+array[42] real y;
 int<lower=1,upper=6> dice;
 
 vector[3] v;
@@ -191,6 +216,8 @@ m * v  // vector[3]
 m * m  // matrix[3, 3]
 m[1]   // row_vector[3]
 ```
+
+[配列を `int v[3]` のように宣言する書き方は非推奨になった。](https://mc-stan.org/docs/reference-manual/brackets-array-syntax.html)
 
 そのほかの特殊な制約つきの型
 
@@ -212,69 +239,22 @@ m[1]   // row_vector[3]
 
 対数尤度の値を確認したいときは `print("log_prob: ", target())`
 
-## 可視化
-
-https://mc-stan.org/rstan/reference/stan_plot.html
-
-
-```r
-stan_plot(fit)
-stan_trace(fit)
-stan_scat(fit)
-stan_hist(fit)
-stan_dens(fit)
-stan_ac(fit)
-
-# S3 method
-pairs()
-print()
-```
-
-`stanfit` クラスのmethodとして `plot()` や `traceplot()` が定義されているが、
-いくつかのチェックとともに `stan_plot()` 系の関数を呼び出すだけで大きな違いは無さそう。
-
 
 ## `library(bayesplot)`
 
-https://mc-stan.org/bayesplot/
-
-```r
-bayesplot::mcmc_trace(fit)
-
-rh = bayesplot::rhat(fit)
-neff = bayesplot::neff_ratio(fit)
-bayesplot::mcmc_rhat(rh)
-bayesplot::mcmc_neff(neff)
-```
+<https://mc-stan.org/bayesplot/>
 
 
 ## `library(rstanarm)`
 
-https://mc-stan.org/rstanarm/
+<https://mc-stan.org/rstanarm/>
 
+R標準のGLMのような使い心地でStanを動かせるようにするパッケージ。
 
-## トラブル対処
+- formulaでモデルを立てられる。
+- data.frameを渡せる。
+- パラメータ調整やコンパイルの済んだパーツを使いまわせるので試行錯誤が早い。
 
-### StanHeaders version is ahead of rstan version
-
-Stanのヘッダーライブラリとrstanは別々のパッケージで提供されていて、
-Stan更新への追従にタイムラグがあるらしい。
-こんなん開発者側でどうにかして欲しいけど、
-とりあえず古い `StanHeaders` を入れてしのぐしかない。
-https://github.com/stan-dev/rstan/wiki/RStan-Transition-Periods
-
-```r
-install.packages("https://cran.r-project.org/src/contrib/Archive/StanHeaders/StanHeaders_2.9.0.tar.gz", repos=NULL, type="source")
-```
-
-https://cran.r-project.org/src/contrib/Archive/StanHeaders/
-
-### 最新版をGitHubからインストール
-
-リポジトリの構造が標準とはちょっと違う
-```r
-remotes::install_github("stan-dev/rstan", ref="develop", subdir="rstan/rstan")
-```
 
 ## 関連書籍
 
