@@ -87,71 +87,84 @@ Stan — 高速MCMCでパラメータ推定
 </header>
 
 <p>数あるMCMCアルゴリズムの中でも効率的なHMC(Hybrid/Hamiltonian Monte Carlo)を用いてベイズ推定を行うツール。
-<a href="https://mc-stan.org/interfaces/">Pythonやコマンドラインなどいろんな形で利用可能</a>だが、
-とりあえずRで<a href="https://mc-stan.org/interfaces/rstan.html">RStan</a>を使ってみる。</p>
+<a href="https://mc-stan.org/interfaces/">RやPythonなどいろんなインターフェイスで利用可能</a>。
+<a href="https://mc-stan.org/users/interfaces/rstan.html">RStan</a>,
+<a href="https://mc-stan.org/users/interfaces/pystan.html">PyStan</a>
+が長らく使われてきたが、
+<a href="https://mc-stan.org/cmdstanr/">CmdStanR</a>,
+<a href="https://cmdstanpy.readthedocs.io/">CmdStanPy</a>
+への移行が進んできている。</p>
 <p><a href="https://mc-stan.org/">https://mc-stan.org/</a></p>
 <h2 id="インストール">インストール</h2>
-<p>Rから<code>install.packages(&quot;rstan&quot;)</code>で一発。
-jagsと違ってstan本体も同時に入れてくれる。
-<a href="https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started">RStan-Getting-Started</a>
-を見ると、時代や環境によってはいろいろ難しいかったのかも。</p>
-<p>標準的な開発環境(Mac なら Command Line Tools、Ubuntu なら build-essential)はどっちみち必要。</p>
-<h2 id="基本的な流れ">基本的な流れ</h2>
+<p>RやPythonのパッケージを入れてから、それ越しにCmdStan本体を入れる。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">install.packages</span><span class="p">(</span><span class="s">&#34;cmdstanr&#34;</span><span class="p">,</span> <span class="n">repos</span> <span class="o">=</span> <span class="s">&#34;https://mc-stan.org/r-packages/&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">cmdstanr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">check_cmdstan_toolchain</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nf">install_cmdstan</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nf">cmdstan_path</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nf">cmdstan_version</span><span class="p">()</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="o">%</span><span class="n">pip3</span> <span class="n">install</span> <span class="n">cmdstanpy</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">cmdstanpy</span>
+</span></span><span class="line"><span class="cl"><span class="n">cmdstanpy</span><span class="o">.</span><span class="n">install_cmdstan</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">cmdstanpy</span><span class="o">.</span><span class="n">cmdstan_path</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">cmdstanpy</span><span class="o">.</span><span class="n">cmdstan_version</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">cmdstanpy</span><span class="o">.</span><span class="n">show_versions</span><span class="p">()</span>
+</span></span></code></pre></div><h2 id="基本的な流れ">基本的な流れ</h2>
 <ol>
-<li>
-<p>rstanを読み込む</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">rstan</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="nf">rstan_options</span><span class="p">(</span><span class="n">auto_write</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="nf">options</span><span class="p">(</span><span class="n">mc.cores</span> <span class="o">=</span> <span class="n">parallel</span><span class="o">::</span><span class="nf">detectCores</span><span class="p">())</span>
+<li>cmdstanrを読み込む
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">cmdstanr</span><span class="p">)</span>
 </span></span></code></pre></div></li>
-<li>
-<p>名前付きlistとしてデータを用意する。
-e.g., 平均10、標準偏差3の正規乱数。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">observation</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">rnorm</span><span class="p">(</span><span class="m">10000</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="m">3</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="n">observation</span><span class="o">$</span><span class="n">length</span> <span class="o">=</span> <span class="nf">length</span><span class="p">(</span><span class="n">observation</span><span class="o">$</span><span class="n">x</span><span class="p">)</span>
+<li>名前付きlistとしてデータを用意する。
+e.g., 平均10のポアソン乱数。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">sample_size</span> <span class="o">=</span> <span class="m">1000L</span>
+</span></span><span class="line"><span class="cl"><span class="n">mydata</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">N</span> <span class="o">=</span> <span class="n">sample_size</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="nf">rpois</span><span class="p">(</span><span class="n">sample_size</span><span class="p">,</span> <span class="m">10</span><span class="p">))</span>
 </span></span></code></pre></div></li>
-<li>
-<p>Stan言語でモデルを記述する。
-別ファイルにしてもいいし、下記のようにR文字列でもいい。
-e.g., 与えられたデータが正規分布から取れてきたとすると、
-その平均と標準偏差はどれくらいだったか？</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">stan_code</span> <span class="o">=</span> <span class="s">&#34;
-</span></span></span><span class="line"><span class="cl"><span class="s">data {
-</span></span></span><span class="line"><span class="cl"><span class="s">  int length;
-</span></span></span><span class="line"><span class="cl"><span class="s">  real x[length];
-</span></span></span><span class="line"><span class="cl"><span class="s">}
-</span></span></span><span class="line"><span class="cl"><span class="s">
-</span></span></span><span class="line"><span class="cl"><span class="s">parameters {
-</span></span></span><span class="line"><span class="cl"><span class="s">  real mu;
-</span></span></span><span class="line"><span class="cl"><span class="s">  real&lt;lower=0&gt; sigma;
-</span></span></span><span class="line"><span class="cl"><span class="s">}
-</span></span></span><span class="line"><span class="cl"><span class="s">
-</span></span></span><span class="line"><span class="cl"><span class="s">model {
-</span></span></span><span class="line"><span class="cl"><span class="s">  x ~ normal(mu, sigma);
-</span></span></span><span class="line"><span class="cl"><span class="s">}&#34;</span>
-</span></span></code></pre></div></li>
-<li>
-<p>モデルをC++に変換してコンパイルする。
-ファイルから読み込んだ場合は中間ファイル<code>*.rda</code>がキャッシュされる。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">mod</span> <span class="o">=</span> <span class="n">rstan</span><span class="o">::</span><span class="nf">stan_model</span><span class="p">(</span><span class="n">model_code</span> <span class="o">=</span> <span class="n">stan_code</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># or</span>
-</span></span><span class="line"><span class="cl"><span class="n">mod</span> <span class="o">=</span> <span class="n">rstan</span><span class="o">::</span><span class="nf">stan_model</span><span class="p">(</span><span class="n">file</span> <span class="o">=</span> <span class="s">&#34;model.stan&#34;</span><span class="p">)</span>
-</span></span></code></pre></div></li>
-<li>
-<p>コンパイル済みモデルを使ってMCMCサンプリング</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">fit</span> <span class="o">=</span> <span class="n">rstan</span><span class="o">::</span><span class="nf">sampling</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">observation</span><span class="p">,</span> <span class="n">iter</span> <span class="o">=</span> <span class="m">10000</span><span class="p">,</span> <span class="n">chains</span> <span class="o">=</span> <span class="m">3</span><span class="p">)</span>
-</span></span></code></pre></div></li>
-<li>
-<p>結果を見てみる</p>
+<li>Stan言語でモデルを記述する。
+RStanには文字列で渡せたがCmdStanPy, CmdStanRは別ファイル必須。
+e.g., 与えられたデータがポアソン分布から取れてきたとすると、
+その平均はどれくらいだったか？
+<pre tabindex="0"><code class="language-stan" data-lang="stan">data {
+  int&lt;lower=0&gt; N;
+  array[N] int&lt;lower=0&gt; x;
+}
+
+parameters {
+  real&lt;lower=0&gt; lambda;
+}
+
+model {
+  x ~ poisson(lambda);
+}
+</code></pre></li>
+<li>モデルをC++に変換してコンパイルする。
+中間ファイルは <code>*.hpp</code>。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">model</span> <span class="o">=</span> <span class="nf">cmdstan_model</span><span class="p">(</span><span class="s">&#34;model.stan&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><a href="https://mc-stan.org/cmdstanr/reference/cmdstan_model.html">https://mc-stan.org/cmdstanr/reference/cmdstan_model.html</a></li>
+<li>コンパイル済みモデルを使ってMCMCサンプリング
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">fit</span> <span class="o">=</span> <span class="n">model</span><span class="o">$</span><span class="nf">sample</span><span class="p">(</span><span class="n">mydata</span><span class="p">)</span>
+</span></span></code></pre></div><a href="https://mc-stan.org/cmdstanr/reference/model-method-sample.html">https://mc-stan.org/cmdstanr/reference/model-method-sample.html</a></li>
+<li>結果を見てみる
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">print</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="nf">summary</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="nf">plot</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="nf">pairs</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">rstan</span><span class="o">::</span><span class="nf">traceplot</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">rstan</span><span class="o">::</span><span class="nf">stan_trace</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">rstan</span><span class="o">::</span><span class="nf">stan_hist</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">rstan</span><span class="o">::</span><span class="nf">stan_dens</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
-</span></span></code></pre></div></li>
+</span></span><span class="line"><span class="cl"><span class="n">fit</span><span class="o">$</span><span class="nf">summary</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">fit</span><span class="o">$</span><span class="nf">cmdstan_summary</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">fit</span><span class="o">$</span><span class="nf">cmdstan_diagnose</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">fit</span><span class="o">$</span><span class="nf">sampler_diagnostics</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">fit</span><span class="o">$</span><span class="nf">diagnostic_summary</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">fit</span><span class="o">$</span><span class="nf">metadata</span><span class="p">()</span>
+</span></span></code></pre></div><a href="https://mc-stan.org/cmdstanr/reference/CmdStanMCMC.html">https://mc-stan.org/cmdstanr/reference/CmdStanMCMC.html</a></li>
+<li>MCMCサンプルを使う。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">draws_df</span> <span class="o">=</span> <span class="n">fit</span><span class="o">$</span><span class="nf">draws</span><span class="p">(</span><span class="n">format</span> <span class="o">=</span> <span class="s">&#34;df&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">draws</span> <span class="o">=</span> <span class="n">fit</span><span class="o">$</span><span class="nf">draws</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">params</span> <span class="o">=</span> <span class="nf">names</span><span class="p">(</span><span class="n">model</span><span class="o">$</span><span class="nf">variables</span><span class="p">()</span><span class="o">$</span><span class="n">parameters</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">bayesplot</span><span class="o">::</span><span class="nf">mcmc_acf_bar</span><span class="p">(</span><span class="n">draws</span><span class="p">,</span> <span class="n">pars</span> <span class="o">=</span> <span class="n">params</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">bayesplot</span><span class="o">::</span><span class="nf">mcmc_trace</span><span class="p">(</span><span class="n">draws</span><span class="p">,</span> <span class="n">pars</span> <span class="o">=</span> <span class="n">params</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">bayesplot</span><span class="o">::</span><span class="nf">mcmc_hist</span><span class="p">(</span><span class="n">draws</span><span class="p">,</span> <span class="n">pars</span> <span class="o">=</span> <span class="n">params</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">bayesplot</span><span class="o">::</span><span class="nf">mcmc_combo</span><span class="p">(</span><span class="n">draws</span><span class="p">,</span> <span class="n">pars</span> <span class="o">=</span> <span class="n">params</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">rhat</span> <span class="o">=</span> <span class="n">bayesplot</span><span class="o">::</span><span class="nf">rhat</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">neff</span> <span class="o">=</span> <span class="n">bayesplot</span><span class="o">::</span><span class="nf">neff_ratio</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">bayesplot</span><span class="o">::</span><span class="nf">mcmc_rhat</span><span class="p">(</span><span class="n">rhat</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">bayesplot</span><span class="o">::</span><span class="nf">mcmc_neff</span><span class="p">(</span><span class="n">neff</span><span class="p">)</span>
+</span></span></code></pre></div><a href="https://mc-stan.org/cmdstanr/reference/fit-method-draws.html">https://mc-stan.org/cmdstanr/reference/fit-method-draws.html</a></li>
 </ol>
 <h2 id="stan文法">Stan文法</h2>
 <p><a href="https://mc-stan.org/documentation/">https://mc-stan.org/documentation/</a></p>
@@ -175,9 +188,8 @@ e.g., 与えられたデータが正規分布から取れてきたとすると�
 <dd>唯一の必須ブロック。
 サンプルされないローカル変数を宣言してもよいが、制約をかけることはできない。</dd>
 <dt><code>generated quantities {...}</code></dt>
-<dd>サンプリング後の値を使って好きなことをするとこ？
-<code>normal_rng()</code>などによる乱数生成が許される唯一のブロック。
-rstanならここを使わずRで結果を受け取ってからどうにかするほうが簡単？</dd>
+<dd><code>normal_rng()</code>などによる乱数生成が許される唯一のブロック。
+観察値の確信区間とかを</dd>
 </dl>
 <h3 id="モデリング">モデリング</h3>
 <p>あるパラメータにおけるlog probabilityと近傍での傾きを計算し、
@@ -217,9 +229,9 @@ target += -0.5 * square(x);
 <p>宣言時に上限下限を設定できる (constrained integer/real)。</p>
 <p>bool型は無くて基本的に整数の1/0。分岐ではnon-zeroがtrue扱い。</p>
 <pre tabindex="0"><code class="language-stan" data-lang="stan">int i;
-int v[42];
 real x;
-real x[42];
+array[42] int a;
+array[42] real y;
 int&lt;lower=1,upper=6&gt; dice;
 
 vector[3] v;
@@ -232,7 +244,8 @@ v * r  // matrix[3, 3]
 m * v  // vector[3]
 m * m  // matrix[3, 3]
 m[1]   // row_vector[3]
-</code></pre><p>そのほかの特殊な制約つきの型</p>
+</code></pre><p><a href="https://mc-stan.org/docs/reference-manual/brackets-array-syntax.html">配列を <code>int v[3]</code> のように宣言する書き方は非推奨になった。</a></p>
+<p>そのほかの特殊な制約つきの型</p>
 <ul>
 <li><code>simplex</code>: 合計が1になる非負実数ベクトル</li>
 <li><code>unit_vector</code>: 二乗和が1になる実数ベクトル</li>
@@ -247,43 +260,17 @@ m[1]   // row_vector[3]
 <code>step()</code> や <code>int_step()</code> からの掛け算は遅いのだとか。</p>
 <p>代入演算子は普通に <code>=</code> イコール。(昔は <code>&lt;-</code> 矢印だった)</p>
 <p>対数尤度の値を確認したいときは <code>print(&quot;log_prob: &quot;, target())</code></p>
-<h2 id="可視化">可視化</h2>
-<p><a href="https://mc-stan.org/rstan/reference/stan_plot.html">https://mc-stan.org/rstan/reference/stan_plot.html</a></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">stan_plot</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="nf">stan_trace</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="nf">stan_scat</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="nf">stan_hist</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="nf">stan_dens</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="nf">stan_ac</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># S3 method</span>
-</span></span><span class="line"><span class="cl"><span class="nf">pairs</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="nf">print</span><span class="p">()</span>
-</span></span></code></pre></div><p><code>stanfit</code> クラスのmethodとして <code>plot()</code> や <code>traceplot()</code> が定義されているが、
-いくつかのチェックとともに <code>stan_plot()</code> 系の関数を呼び出すだけで大きな違いは無さそう。</p>
 <h2 id="librarybayesplot"><code>library(bayesplot)</code></h2>
 <p><a href="https://mc-stan.org/bayesplot/">https://mc-stan.org/bayesplot/</a></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">bayesplot</span><span class="o">::</span><span class="nf">mcmc_trace</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">rh</span> <span class="o">=</span> <span class="n">bayesplot</span><span class="o">::</span><span class="nf">rhat</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">neff</span> <span class="o">=</span> <span class="n">bayesplot</span><span class="o">::</span><span class="nf">neff_ratio</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">bayesplot</span><span class="o">::</span><span class="nf">mcmc_rhat</span><span class="p">(</span><span class="n">rh</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">bayesplot</span><span class="o">::</span><span class="nf">mcmc_neff</span><span class="p">(</span><span class="n">neff</span><span class="p">)</span>
-</span></span></code></pre></div><h2 id="libraryrstanarm"><code>library(rstanarm)</code></h2>
+<h2 id="libraryrstanarm"><code>library(rstanarm)</code></h2>
 <p><a href="https://mc-stan.org/rstanarm/">https://mc-stan.org/rstanarm/</a></p>
-<h2 id="トラブル対処">トラブル対処</h2>
-<h3 id="stanheaders-version-is-ahead-of-rstan-version">StanHeaders version is ahead of rstan version</h3>
-<p>Stanのヘッダーライブラリとrstanは別々のパッケージで提供されていて、
-Stan更新への追従にタイムラグがあるらしい。
-こんなん開発者側でどうにかして欲しいけど、
-とりあえず古い <code>StanHeaders</code> を入れてしのぐしかない。
-<a href="https://github.com/stan-dev/rstan/wiki/RStan-Transition-Periods">https://github.com/stan-dev/rstan/wiki/RStan-Transition-Periods</a></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">install.packages</span><span class="p">(</span><span class="s">&#34;https://cran.r-project.org/src/contrib/Archive/StanHeaders/StanHeaders_2.9.0.tar.gz&#34;</span><span class="p">,</span> <span class="n">repos</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> <span class="n">type</span><span class="o">=</span><span class="s">&#34;source&#34;</span><span class="p">)</span>
-</span></span></code></pre></div><p><a href="https://cran.r-project.org/src/contrib/Archive/StanHeaders/">https://cran.r-project.org/src/contrib/Archive/StanHeaders/</a></p>
-<h3 id="最新版をgithubからインストール">最新版をGitHubからインストール</h3>
-<p>リポジトリの構造が標準とはちょっと違う</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&#34;stan-dev/rstan&#34;</span><span class="p">,</span> <span class="n">ref</span><span class="o">=</span><span class="s">&#34;develop&#34;</span><span class="p">,</span> <span class="n">subdir</span><span class="o">=</span><span class="s">&#34;rstan/rstan&#34;</span><span class="p">)</span>
-</span></span></code></pre></div><h2 id="関連書籍">関連書籍</h2>
+<p>R標準のGLMのような使い心地でStanを動かせるようにするパッケージ。</p>
+<ul>
+<li>formulaでモデルを立てられる。</li>
+<li>data.frameを渡せる。</li>
+<li>パラメータ調整やコンパイルの済んだパーツを使いまわせるので試行錯誤が早い。</li>
+</ul>
+<h2 id="関連書籍">関連書籍</h2>
 <p><a href="https://www.amazon.co.jp/dp/4320112423/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=a55a7a3616d8d8a6d4516c5a26bca46f&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4320112423&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=4320112423" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 <a href="https://www.amazon.co.jp/dp/4065165369/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=75cdd63ab18e3b59eaeac9e628b27ce8&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4065165369&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=4065165369" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
 
