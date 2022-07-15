@@ -16,10 +16,11 @@ tags = ["r"]
     - 統計モデリング: 確率分布、尤度、一般化線形モデル
     - データ解釈の基礎知識
     - R Markdownを用いたレポート作成
-- [Rを用いたデータ解析の基礎と応用](https://comicalcommet.github.io/r-training-2021/)
-   (石川由希 2021 名古屋大学):<br>
+- [Rを用いたデータ解析の基礎と応用](https://comicalcommet.github.io/r-training-2022/)
+   (石川由希 2022 名古屋大学):<br>
   初心者に寄り添ってさらに噛み砕いた説明。
-  [**よくあるエラー集**](https://comicalcommet.github.io/r-training-2021/R_training_2021_7.html)が特に重宝。
+  実験生物学における「とにかくt検定」脱却を目指した統計解析パートも実践的で充実。
+  [**よくあるエラー集**](https://comicalcommet.github.io/r-training-2022/R_training_2022_7.html)が特に重宝。
 
 
 ## R環境のインストール
