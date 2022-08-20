@@ -201,7 +201,7 @@ latexmk -C    # clean up
 <code>\[ ... \]</code> はOK。</p>
 </li>
 <li>
-<p>改行を含む数式を等号で揃える</p>
+<p>改行したり、等号で揃えたり</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>equation<span class="nb">}</span><span class="k">\label</span><span class="nb">{</span>eq:growth<span class="nb">}</span>
 </span></span><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>split<span class="nb">}</span>
 </span></span><span class="line"><span class="cl">  N<span class="nb">_</span>t <span class="nb">&amp;</span>= N<span class="nb">_</span>0 e<span class="nb">^{</span>rt<span class="nb">}</span> <span class="k">\\</span>
@@ -213,11 +213,13 @@ latexmk -C    # clean up
 </span></span><span class="line"><span class="cl">  S <span class="nb">&amp;</span>= 4 <span class="k">\pi</span> r<span class="nb">^</span>2<span class="k">\label</span><span class="nb">{</span>surface<span class="nb">}</span><span class="k">\\</span>
 </span></span><span class="line"><span class="cl">  V <span class="nb">&amp;</span>= <span class="k">\frac</span> <span class="nb">{</span>4 <span class="k">\pi</span> r<span class="nb">^</span>3<span class="nb">}</span> 3<span class="k">\label</span><span class="nb">{</span>volume<span class="nb">}</span><span class="k">\\</span>
 </span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>align<span class="nb">}</span>
-</span></span></code></pre></div><p><code>split</code> 環境では全体でラベルが1つ、
-<code>align</code> 環境では行ごとにラベルが生成されるので、
-用途が少し違う。
-古い <code>eqnarray</code> 環境でも似たようなことはできるが、
-スペースとかに問題あるらしく非推奨。</p>
+</span></span></code></pre></div><p><code>{split}</code> 環境は <code>{equation}</code> 環境内部で1つの数式を複数行に分ける。
+数式番号は1つのまま。
+<code>&amp;</code> を1つまでしか使えない。
+<code>{aligned}</code> 環境なら <code>&amp;</code> を複数使えるが上位互換というわけでもないらしい。</p>
+<p><code>{align}</code> は独立した数式環境を作り、行ごとに数式番号を生成する。
+<code>{align*}</code> としたり行末に <code>\notag</code> を置くことで数式番号を抑制できる。</p>
+<p>古い <code>{eqnarray}</code> 環境でも似たようなことはできるが問題があるらしく非推奨。</p>
 </li>
 <li>
 <p>場合分け</p>
