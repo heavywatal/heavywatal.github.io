@@ -169,7 +169,7 @@ model {
 <h2 id="stan文法">Stan文法</h2>
 <p><a href="https://mc-stan.org/documentation/">https://mc-stan.org/documentation/</a></p>
 <h3 id="ブロック">ブロック</h3>
-<p>コード内に登場できるブロックは7種類で、順番はこの通りでなければならない。</p>
+<p>コード内に登場できるブロックは7種類で、省略可能だが順番はこの通りでなければならない。</p>
 <dl>
 <dt><code>functions {...}</code></dt>
 <dd>関数を定義できる。</dd>
@@ -182,8 +182,8 @@ model {
 <dt><code>parameters {...}</code></dt>
 <dd>サンプリングされる変数の宣言。</dd>
 <dt><code>transformed parameters {...}</code></dt>
-<dd>変数の宣言と代入。
-モデルで使いやすい形にパラメータを変形しておくとか？</dd>
+<dd>モデルで使いやすい形に値を変換しておくとか。
+ここに書いた変数もサンプリングされる。</dd>
 <dt><code>model {...}</code></dt>
 <dd>唯一の必須ブロック。
 サンプルされないローカル変数を宣言してもよいが、制約をかけることはできない。</dd>
@@ -221,13 +221,16 @@ target += -0.5 * square(x);
 </ul>
 <p>(対数版のsuffixは昔は <code>_cdf_log()</code>, <code>_ccdf_log()</code> という形だった)</p>
 <h3 id="型">型</h3>
-<p>整数(<code>int</code>)、実数(<code>real</code>)、実数ベクトル(<code>vector</code>, <code>row_vector</code>)、実数行列(<code>matrix</code>)。
-内部的に <code>Eigen::Vector</code> や <code>Eigen::Matrix</code> が使われているので、
-可能な限り<code>for</code>文よりも行列演算を使うように心がける。
-配列(array)は <code>std::vector</code> で実装されていて、
-整数配列や行列配列など何でも作れるが、行列演算はできない。</p>
-<p>宣言時に上限下限を設定できる (constrained integer/real)。</p>
-<p>bool型は無くて基本的に整数の1/0。分岐ではnon-zeroがtrue扱い。</p>
+<ul>
+<li>スカラーは整数(<code>int</code>) or 実数(<code>real</code>)。</li>
+<li>実数ベクトル(<code>vector</code>, <code>row_vector</code>)と実数行列(<code>matrix</code>)は
+<code>Eigen::Vector</code> や <code>Eigen::Matrix</code> で実装されているので効率的に行列演算を行える。</li>
+<li>配列(<code>array</code>)は <code>std::vector</code> で実装されていて、
+整数配列や行列配列など何でも作れるが、行列演算はできないので生の<code>for</code>ループが必要。
+<a href="https://mc-stan.org/docs/reference-manual/brackets-array-syntax.html"><code>int v[3]</code> のように宣言する書き方は非推奨になった。</a></li>
+<li>宣言時に上限下限を設定できる (constrained integer/real)。</li>
+<li>bool型は無くて基本的に整数の1/0。分岐ではnon-zeroがtrue扱い。</li>
+</ul>
 <pre tabindex="0"><code class="language-stan" data-lang="stan">int i;
 real x;
 array[42] int a;
@@ -244,8 +247,7 @@ v * r  // matrix[3, 3]
 m * v  // vector[3]
 m * m  // matrix[3, 3]
 m[1]   // row_vector[3]
-</code></pre><p><a href="https://mc-stan.org/docs/reference-manual/brackets-array-syntax.html">配列を <code>int v[3]</code> のように宣言する書き方は非推奨になった。</a></p>
-<p>そのほかの特殊な制約つきの型</p>
+</code></pre><p>そのほかの特殊な制約つきの型</p>
 <ul>
 <li><code>simplex</code>: 合計が1になる非負実数ベクトル</li>
 <li><code>unit_vector</code>: 二乗和が1になる実数ベクトル</li>
@@ -262,13 +264,24 @@ m[1]   // row_vector[3]
 <p>対数尤度の値を確認したいときは <code>print(&quot;log_prob: &quot;, target())</code></p>
 <h2 id="librarybayesplot"><code>library(bayesplot)</code></h2>
 <p><a href="https://mc-stan.org/bayesplot/">https://mc-stan.org/bayesplot/</a></p>
+<h2 id="libraryposterior"><code>library(posterior)</code></h2>
+<p><a href="https://mc-stan.org/posterior/">https://mc-stan.org/posterior/</a></p>
 <h2 id="libraryrstanarm"><code>library(rstanarm)</code></h2>
 <p><a href="https://mc-stan.org/rstanarm/">https://mc-stan.org/rstanarm/</a></p>
 <p>R標準のGLMのような使い心地でStanを動かせるようにするパッケージ。</p>
 <ul>
 <li>formulaでモデルを立てられる。</li>
 <li>data.frameを渡せる。</li>
-<li>パラメータ調整やコンパイルの済んだパーツを使いまわせるので試行錯誤が早い。</li>
+<li>パラメータ調整やコンパイルの済んだ部品を組むような形なので試行錯誤が早い。</li>
+</ul>
+<h2 id="librarybrms"><code>library(brms)</code></h2>
+<p><a href="https://paul-buerkner.github.io/brms/">https://paul-buerkner.github.io/brms/</a></p>
+<p>rstanarmと同様にformula形式でStanを動かせるようにする。
+相違点:</p>
+<ul>
+<li><a href="https://github.com/stan-dev">stan-dev</a>チームの一員ではない。</li>
+<li>コンパイル済みの部品を使わずStanコードを生成する。そのぶん遅いが柔軟。</li>
+<li>CmdStanRをbackendとして使える。</li>
 </ul>
 <h2 id="関連書籍">関連書籍</h2>
 <p><a href="https://www.amazon.co.jp/dp/4320112423/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=a55a7a3616d8d8a6d4516c5a26bca46f&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4320112423&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=4320112423" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
