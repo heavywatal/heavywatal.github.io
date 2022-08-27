@@ -119,7 +119,7 @@ https://mc-stan.org/documentation/
 
 ### ブロック
 
-コード内に登場できるブロックは7種類で、順番はこの通りでなければならない。
+コード内に登場できるブロックは7種類で、省略可能だが順番はこの通りでなければならない。
 
 `functions {...}`
 : 関数を定義できる。
@@ -136,8 +136,8 @@ https://mc-stan.org/documentation/
 : サンプリングされる変数の宣言。
 
 `transformed parameters {...}`
-: 変数の宣言と代入。
-  モデルで使いやすい形にパラメータを変形しておくとか？
+: モデルで使いやすい形に値を変換しておくとか。
+  ここに書いた変数もサンプリングされる。
 
 `model {...}`
 : 唯一の必須ブロック。
@@ -188,15 +188,14 @@ target += -0.5 * square(x);
 
 ### 型
 
-整数(`int`)、実数(`real`)、実数ベクトル(`vector`, `row_vector`)、実数行列(`matrix`)。
-内部的に `Eigen::Vector` や `Eigen::Matrix` が使われているので、
-可能な限り`for`文よりも行列演算を使うように心がける。
-配列(array)は `std::vector` で実装されていて、
-整数配列や行列配列など何でも作れるが、行列演算はできない。
-
-宣言時に上限下限を設定できる (constrained integer/real)。
-
-bool型は無くて基本的に整数の1/0。分岐ではnon-zeroがtrue扱い。
+- スカラーは整数(`int`) or 実数(`real`)。
+- 実数ベクトル(`vector`, `row_vector`)と実数行列(`matrix`)は
+  `Eigen::Vector` や `Eigen::Matrix` で実装されているので効率的に行列演算を行える。
+- 配列(`array`)は `std::vector` で実装されていて、
+  整数配列や行列配列など何でも作れるが、行列演算はできないので生の`for`ループが必要。
+  [`int v[3]` のように宣言する書き方は非推奨になった。](https://mc-stan.org/docs/reference-manual/brackets-array-syntax.html)
+- 宣言時に上限下限を設定できる (constrained integer/real)。
+- bool型は無くて基本的に整数の1/0。分岐ではnon-zeroがtrue扱い。
 
 ```stan
 int i;
@@ -216,8 +215,6 @@ m * v  // vector[3]
 m * m  // matrix[3, 3]
 m[1]   // row_vector[3]
 ```
-
-[配列を `int v[3]` のように宣言する書き方は非推奨になった。](https://mc-stan.org/docs/reference-manual/brackets-array-syntax.html)
 
 そのほかの特殊な制約つきの型
 
@@ -245,6 +242,11 @@ m[1]   // row_vector[3]
 <https://mc-stan.org/bayesplot/>
 
 
+## `library(posterior)`
+
+<https://mc-stan.org/posterior/>
+
+
 ## `library(rstanarm)`
 
 <https://mc-stan.org/rstanarm/>
@@ -253,7 +255,19 @@ R標準のGLMのような使い心地でStanを動かせるようにするパッ
 
 - formulaでモデルを立てられる。
 - data.frameを渡せる。
-- パラメータ調整やコンパイルの済んだパーツを使いまわせるので試行錯誤が早い。
+- パラメータ調整やコンパイルの済んだ部品を組むような形なので試行錯誤が早い。
+
+
+## `library(brms)`
+
+<https://paul-buerkner.github.io/brms/>
+
+rstanarmと同様にformula形式でStanを動かせるようにする。
+相違点:
+
+- [stan-dev](https://github.com/stan-dev)チームの一員ではない。
+- コンパイル済みの部品を使わずStanコードを生成する。そのぶん遅いが柔軟。
+- CmdStanRをbackendとして使える。
 
 
 ## 関連書籍

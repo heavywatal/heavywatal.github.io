@@ -185,6 +185,8 @@ Find me on
 
 ## Teaching / Outreach
 
+-   「[統計モデリング概論 DSHC 2022](/slides/tokiomarine2022/)」
+    東京海上 [Data Science Hill Climb](https://tokiomarine-dshc.com/) (2022-08)
 -   「[Rを用いたデータ解析の基礎](/slides/tohoku2022r/)」 (2022-04) 東北大学 進化学実習
 -   「インタビューでGO!!」水の森市民センター企画講座 (2021-11) 北仙台小学校、北仙台中学校
 -   「[Rによるデータ前処理実習](/slides/tmd2021/)」
