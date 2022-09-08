@@ -97,22 +97,28 @@ Pythonパッケージ作成
 </span></span><span class="line"><span class="cl">├── LICENSE
 </span></span><span class="line"><span class="cl">├── README.md
 </span></span><span class="line"><span class="cl">├── pyproject.toml
-</span></span><span class="line"><span class="cl">├── tests/
-</span></span><span class="line"><span class="cl">└── wtl/
-</span></span><span class="line"><span class="cl">    ├── __init__.py
-</span></span><span class="line"><span class="cl">    └── hello.py
+</span></span><span class="line"><span class="cl">├── src/wtl/
+</span></span><span class="line"><span class="cl">│   ├── __init__.py
+</span></span><span class="line"><span class="cl">│   └── hello.py
+</span></span><span class="line"><span class="cl">└── tests/
 </span></span></code></pre></div><p>リポジトリ名(<code>pywtl</code>)とパッケージ名(<code>wtl</code>)は必ずしも一致してなくてもよい。</p>
+<p>ソースコードは <code>src</code> の中に入れる流派と、ルート直下に置く流派がある。
+<a href="https://docs.pytest.org/explanation/goodpractices.html">落とし穴が少なくて推奨されているのは前者</a>。</p>
 <p>開発向けの <code>-e,--editable</code> オプションをつけたローカルインストールではコピーが起こらず、
 編集後に再インストールしなくてもそのまま反映される。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pip3 install -v --user -e ~/git/pywtl/
 </span></span><span class="line"><span class="cl">python3 -m wtl.hello
+</span></span><span class="line"><span class="cl">python3 -m site
 </span></span></code></pre></div><h3 id="pyprojecttoml"><code>pyproject.toml</code></h3>
 <p>パッケージ作成に関わる全てのメタ情報を書いておくファイル。
 <code>setuptools</code> に依存しない形式として
 <a href="https://www.python.org/dev/peps/pep-0517">PEP 517</a>,
 <a href="https://www.python.org/dev/peps/pep-0621">PEP 621</a>
 で決められた。
-<code>setup.py</code>, <code>setup.cfg</code>, <code>MANIFEST.in</code> などは過去のものとなった。</p>
+過去によく使われていた <code>setup.py</code>,
+<a href="https://setuptools.pypa.io/en/latest/userguide/declarative_config.html"><code>setup.cfg</code></a>,
+<a href="https://setuptools.pypa.io/en/latest/userguide/miscellaneous.html"><code>MANIFEST.in</code></a>
+などは非推奨になった。</p>
 <p><a href="https://flit.readthedocs.io/">PyPA/Flit</a> (setuptools後継？),
 <a href="https://pdm.fming.dev/">PDM</a>,
 <a href="https://python-poetry.org/">Poetry</a>,
@@ -132,6 +138,7 @@ Pythonパッケージ作成
 </span></span><span class="line"><span class="cl"><span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="nx">license</span> <span class="p">=</span> <span class="p">{</span><span class="nx">file</span> <span class="p">=</span> <span class="s2">&#34;LICENSE&#34;</span><span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="nx">readme</span> <span class="p">=</span> <span class="s2">&#34;README.md&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">dynamic</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;description&#34;</span><span class="p">,</span> <span class="s2">&#34;version&#34;</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="nx">classifiers</span> <span class="p">=</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;Development Status :: 2 - Pre-Alpha&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;Environment :: Console&#34;</span><span class="p">,</span>
@@ -139,20 +146,17 @@ Pythonパッケージ作成
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;License :: OSI Approved :: MIT License&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;Topic :: Scientific/Engineering :: Bio-Informatics&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl"><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="nx">dynamic</span> <span class="p">=</span> <span class="p">[</span>
-</span></span><span class="line"><span class="cl">  <span class="s2">&#34;description&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s2">&#34;version&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl"><span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="nx">requires-python</span> <span class="p">=</span> <span class="s2">&#34;&gt;=3.10&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="nx">dependencies</span> <span class="p">=</span> <span class="p">[</span>
-</span></span><span class="line"><span class="cl">  <span class="s2">&#34;psutil&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s2">&#34;requests&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;tomli &gt;= 2.0; python_version &lt; &#39;3.11&#39;&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="p">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">project</span><span class="p">.</span><span class="nx">optional-dependencies</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="nx">test</span> <span class="p">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl"><span class="nx">dev</span> <span class="p">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;black&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;pyproject-flake8&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;pytest&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;pytest-cov&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl"><span class="p">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">project</span><span class="p">.</span><span class="nx">urls</span><span class="p">]</span>
@@ -168,7 +172,11 @@ Pythonパッケージ作成
 </span></span><span class="line"><span class="cl"><span class="nx">max-line-length</span> <span class="p">=</span> <span class="mi">88</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">tool</span><span class="p">.</span><span class="nx">pytest</span><span class="p">.</span><span class="nx">ini_options</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="nx">testpaths</span> <span class="p">=</span> <span class="s2">&#34;tests&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">pythonpath</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;src&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">testpaths</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;tests&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">tool</span><span class="p">.</span><span class="nx">coverage</span><span class="p">.</span><span class="nx">run</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">source</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;src&#34;</span><span class="p">]</span>
 </span></span></code></pre></div><p><code>dynamic</code> に指定したものは <code>__init__.py</code> に <code>__version__ = &quot;0.1.0&quot;</code>
 などと書いてあるものを参照できる。
 比較したいときは
@@ -179,18 +187,16 @@ Pythonパッケージ作成
 一方 <code>requirements.txt</code> はインストール過程には関与せず、
 能動的に <code>pip3 install -r requirements.txt</code>
 を打たなきゃインストールされない。</p>
+<p>optional dependencies もインストールしたい場合は
+<code>pip3 install -v -e .[dev]</code> のように <code>[key]</code> を使ってパッケージを指定する。</p>
 <p><code>project.scripts</code> で設定したものは
 <code>${prefix}/bin/</code> に実行可能ファイルが配置される。
 以前は <code>console_scripts</code> で設定していた。</p>
-<h3 id="setuppy"><code>setup.py</code></h3>
-<p><a href="https://setuptools.pypa.io/en/latest/userguide/declarative_config.html"><code>setup.cfg</code></a> や
-<a href="https://setuptools.pypa.io/en/latest/userguide/miscellaneous.html"><code>MANIFEST.in</code></a>
-とともに第一線を退いたが、
-<code>pip3 install --editable</code> のために最小限の
-<code>setup.py</code> が必要になる場面もあるらしい。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
-</span></span><span class="line"><span class="cl"><span class="n">setup</span><span class="p">()</span>
-</span></span></code></pre></div><h3 id="ソースコード">ソースコード</h3>
+<p>コード整形やテストのような各種開発ツールの設定も <code>[tool.***]</code> に記述できる。
+主要な開発ツールとしては
+<a href="https://github.com/PyCQA/flake8/issues/234">flake8だけが頑なに対応拒否を続けている</a>
+ので仕方なく <a href="https://github.com/csachs/pyproject-flake8">pyproject-flake8</a> を使う。</p>
+<h3 id="ソースコード">ソースコード</h3>
 <dl>
 <dt><code>wtl/__init__.py</code></dt>
 <dd>このディレクトリがひとつのパッケージであることを示すファイル。
@@ -199,7 +205,7 @@ Pythonパッケージ作成
 <code>wtl.__verison__</code> のように参照できるようにしておくのが慣例。</dd>
 </dl>
 <p><code>wtl/hello.py</code></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;Sample module
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;Simple module to say hello
 </span></span></span><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">getpass</span>
 </span></span><span class="line"><span class="cl">
