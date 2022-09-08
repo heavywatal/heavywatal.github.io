@@ -19,13 +19,16 @@ pywtl/
 ├── LICENSE
 ├── README.md
 ├── pyproject.toml
-├── tests/
-└── wtl/
-    ├── __init__.py
-    └── hello.py
+├── src/wtl/
+│   ├── __init__.py
+│   └── hello.py
+└── tests/
 ```
 
 リポジトリ名(`pywtl`)とパッケージ名(`wtl`)は必ずしも一致してなくてもよい。
+
+ソースコードは `src` の中に入れる流派と、ルート直下に置く流派がある。
+[落とし穴が少なくて推奨されているのは前者](https://docs.pytest.org/explanation/goodpractices.html)。
 
 開発向けの `-e,--editable` オプションをつけたローカルインストールではコピーが起こらず、
 編集後に再インストールしなくてもそのまま反映される。
@@ -33,6 +36,7 @@ pywtl/
 ```sh
 pip3 install -v --user -e ~/git/pywtl/
 python3 -m wtl.hello
+python3 -m site
 ```
 
 ### `pyproject.toml`
@@ -42,7 +46,10 @@ python3 -m wtl.hello
 [PEP 517](https://www.python.org/dev/peps/pep-0517),
 [PEP 621](https://www.python.org/dev/peps/pep-0621)
 で決められた。
-`setup.py`, `setup.cfg`, `MANIFEST.in` などは過去のものとなった。
+過去によく使われていた `setup.py`,
+[`setup.cfg`](https://setuptools.pypa.io/en/latest/userguide/declarative_config.html),
+[`MANIFEST.in`](https://setuptools.pypa.io/en/latest/userguide/miscellaneous.html)
+などは非推奨になった。
 
 [PyPA/Flit](https://flit.readthedocs.io/) (setuptools後継？),
 [PDM](https://pdm.fming.dev/),
@@ -65,6 +72,7 @@ authors = [
 ]
 license = {file = "LICENSE"}
 readme = "README.md"
+dynamic = ["description", "version"]
 classifiers = [
   "Development Status :: 2 - Pre-Alpha",
   "Environment :: Console",
@@ -72,20 +80,17 @@ classifiers = [
   "License :: OSI Approved :: MIT License",
   "Topic :: Scientific/Engineering :: Bio-Informatics",
 ]
-dynamic = [
-  "description",
-  "version",
-]
 requires-python = ">=3.10"
 dependencies = [
-  "psutil",
-  "requests"
+  "tomli >= 2.0; python_version < '3.11'"
 ]
 
 [project.optional-dependencies]
-test = [
+dev = [
+  "black",
   "pyproject-flake8",
   "pytest",
+  "pytest-cov",
 ]
 
 [project.urls]
@@ -101,7 +106,11 @@ typeCheckingMode = "strict"
 max-line-length = 88
 
 [tool.pytest.ini_options]
-testpaths = "tests"
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["src"]
 ```
 
 `dynamic` に指定したものは `__init__.py` に `__version__ = "0.1.0"`
@@ -116,23 +125,18 @@ testpaths = "tests"
 能動的に `pip3 install -r requirements.txt`
 を打たなきゃインストールされない。
 
+optional dependencies もインストールしたい場合は
+`pip3 install -v -e .[dev]` のように `[key]` を使ってパッケージを指定する。
+
 `project.scripts` で設定したものは
 `${prefix}/bin/` に実行可能ファイルが配置される。
 以前は `console_scripts` で設定していた。
 
+コード整形やテストのような各種開発ツールの設定も `[tool.***]` に記述できる。
+主要な開発ツールとしては
+[flake8だけが頑なに対応拒否を続けている](https://github.com/PyCQA/flake8/issues/234)
+ので仕方なく [pyproject-flake8](https://github.com/csachs/pyproject-flake8) を使う。
 
-### `setup.py`
-
-[`setup.cfg`](https://setuptools.pypa.io/en/latest/userguide/declarative_config.html) や
-[`MANIFEST.in`](https://setuptools.pypa.io/en/latest/userguide/miscellaneous.html)
-とともに第一線を退いたが、
-`pip3 install --editable` のために最小限の
-`setup.py` が必要になる場面もあるらしい。
-
-```py
-from setuptools import setup
-setup()
-```
 
 
 ### ソースコード
@@ -145,7 +149,7 @@ setup()
 
 `wtl/hello.py`
 ```py
-"""Sample module
+"""Simple module to say hello
 """
 import getpass
 
