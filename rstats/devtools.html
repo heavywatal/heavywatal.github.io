@@ -212,15 +212,39 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。<
 <p><a href="https://testthat.r-lib.org">testthat</a>パッケージを使うのがデファクトスタンダード。
 <code>use_testthat()</code> で初期設定して
 <code>use_test(&quot;somefunction&quot;)</code> のようにテストファイルを追加する。
-<code>tests/testthat/</code> 以下のファイル構成は <code>R/</code> と同じにしておくといい。</p>
+<code>tests/testthat/</code> 以下のファイル構成は <code>R/</code> と同じにしておくとわかりやすい。</p>
 <p>さらに<a href="https://covr.r-lib.org/">covr</a>パッケージを使って、
 ソースコードのうちどれくらいがテストでカバーされてるかを可視化すると良い。</p>
+<h3 id="data"><code>data/</code></h3>
+<ul>
+<li><a href="https://r-pkgs.org/data.html">https://r-pkgs.org/data.html</a></li>
+<li><a href="https://usethis.r-lib.org/reference/use_data.html">https://usethis.r-lib.org/reference/use_data.html</a></li>
+</ul>
+<p><code>usethis::use_data_raw()</code> で <code>data-raw/&lt;dataset&gt;.R</code> をセットアップし、
+その中で <code>usethis::use_data()</code> を呼んで
+<code>data/&lt;dataset&gt;.rda</code> や <code>R/sysdata.rda</code> に配置する。</p>
+<dl>
+<dt><code>data/</code></dt>
+<dd>R から <code>save()</code>, <code>load()</code> で読むようなバイナリ形式のファイルを置く。
+1オブジェクト1ファイルで同名にして <code>.rda</code>, <code>.RData</code> 拡張子を付ける。</dd>
+<dd>勝手にexportされるので <code>R/</code> 内のソースにroxygenドキュメントを書く。</dd>
+<dt><code>R/sysdata.rda</code></dt>
+<dd>ユーザーに公開せずパッケージ内部で使うためのデータ。</dd>
+<dt><code>data-raw/</code></dt>
+<dd><code>data/</code> のファイルを作るためのソースコードやテキストデータを置いておく。</dd>
+<dd>bundled package には入れない
+(ように <code>usethis::use_data_raw()</code> が <code>.Rbuildignore</code> を設定する)。</dd>
+<dt><code>inst/extdata/</code></dt>
+<dd>データ読み書きを例示するためのデータファイルを置いておく。</dd>
+<dd><code>system.file(&quot;extdata&quot;, &quot;mtcars.csv&quot;, package = &quot;readr&quot;)</code>
+のようにアクセスできる。</dd>
+</dl>
 <h3 id="その他httpsr-pkgsorgmischtml"><a href="https://r-pkgs.org/misc.html">その他</a></h3>
 <dl>
 <dt><code>demo/</code></dt>
 <dd>vignettesに取って代わられた古い機能。
-ソースコード<code>*.R</code>を置いておくと<code>demo()</code>関数で呼び出せるというだけ。
-:<code>  check()</code>でソースコードの中身は実行されないが、
+ソースコード<code>*.R</code>を置いておくと<code>demo()</code>関数で呼び出せるというだけ。</dd>
+<dd><code>check()</code>でソースコードの中身は実行されないが、
 <code>demo/00Index</code> というファイルとの整合性が取れてないと警告される。
 「デモの名前 + スペース3つ以上かタブ + 適当な説明」という形式。
 ファイル名から拡張子を取り除いたものがデモの名前になる。
