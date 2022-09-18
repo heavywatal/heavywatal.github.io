@@ -157,10 +157,37 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 [testthat](https://testthat.r-lib.org)パッケージを使うのがデファクトスタンダード。
 `use_testthat()` で初期設定して
 `use_test("somefunction")` のようにテストファイルを追加する。
-`tests/testthat/` 以下のファイル構成は `R/` と同じにしておくといい。
+`tests/testthat/` 以下のファイル構成は `R/` と同じにしておくとわかりやすい。
 
 さらに[covr](https://covr.r-lib.org/)パッケージを使って、
 ソースコードのうちどれくらいがテストでカバーされてるかを可視化すると良い。
+
+### `data/`
+
+- <https://r-pkgs.org/data.html>
+- <https://usethis.r-lib.org/reference/use_data.html>
+
+`usethis::use_data_raw()` で `data-raw/<dataset>.R` をセットアップし、
+その中で `usethis::use_data()` を呼んで
+`data/<dataset>.rda` や `R/sysdata.rda` に配置する。
+
+`data/`
+: R から `save()`, `load()` で読むようなバイナリ形式のファイルを置く。
+  1オブジェクト1ファイルで同名にして `.rda`, `.RData` 拡張子を付ける。
+: 勝手にexportされるので `R/` 内のソースにroxygenドキュメントを書く。
+
+`R/sysdata.rda`
+: ユーザーに公開せずパッケージ内部で使うためのデータ。
+
+`data-raw/`
+: `data/` のファイルを作るためのソースコードやテキストデータを置いておく。
+: bundled package には入れない
+  (ように `usethis::use_data_raw()` が `.Rbuildignore` を設定する)。
+
+`inst/extdata/`
+: データ読み書きを例示するためのデータファイルを置いておく。
+: `system.file("extdata", "mtcars.csv", package = "readr")`
+  のようにアクセスできる。
 
 
 ### [その他](https://r-pkgs.org/misc.html)
@@ -168,7 +195,7 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 `demo/`
 :   vignettesに取って代わられた古い機能。
     ソースコード`*.R`を置いておくと`demo()`関数で呼び出せるというだけ。
-:`  check()`でソースコードの中身は実行されないが、
+:   `check()`でソースコードの中身は実行されないが、
     `demo/00Index` というファイルとの整合性が取れてないと警告される。
     「デモの名前 + スペース3つ以上かタブ + 適当な説明」という形式。
     ファイル名から拡張子を取り除いたものがデモの名前になる。
