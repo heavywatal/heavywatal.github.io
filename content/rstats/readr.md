@@ -8,7 +8,7 @@ tags = ["r", "tidyverse"]
 +++
 
 <a href="https://readr.tidyverse.org/">
-<img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/readr.svg" align="right" width="120" height="139">
+<img src="/_img/hex-stickers/readr.webp" align="right" width="120" height="139">
 </a>
 
 タブ区切りテキストやCSVファイルを読み込んでdata.frameにするツール。
@@ -176,7 +176,7 @@ read_csv("mydata.csv", col_types=colsp)
 ## Excelファイルを読み込む
 
 <a href="https://readxl.tidyverse.org/">
-<img src="https://readxl.tidyverse.org/logo.png" align="right" width="120" height="139">
+<img src="/_img/hex-stickers/readxl.webp" align="right" width="120" height="139">
 </a>
 
 https://github.com/tidyverse/readxl
@@ -232,7 +232,7 @@ LDFLAGS = -L${HOME}/.homebrew/lib
 ## tibble
 
 <a href="https://tibble.tidyverse.org/">
-<img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/tibble.svg" align="right" width="120" height="139">
+<img src="/_img/hex-stickers/tibble.webp" align="right" width="120" height="139">
 </a>
 
 - https://r4ds.had.co.nz/tibbles.html

@@ -22,6 +22,10 @@ GitHubに公開しておけば誰でも使えるようになるので、
 
 ## Rパッケージ
 
+<a href="https://usethis.r-lib.org/">
+<img src="/_img/hex-stickers/usethis.webp" align="right" width="120" height="139">
+</a>
+
 - <https://r-pkgs.org/>
 - [How to develop good R packages (for open science)](https://masalmon.eu/2017/12/11/goodrpackages/)
 
@@ -123,6 +127,10 @@ CRANから落としてくる `.tar.gz` ソースコード (bundle package) と�
 
 ### [`vignettes/`](https://r-pkgs.org/vignettes.html)
 
+<a href="https://pkgdown.r-lib.org/">
+<img src="/_img/hex-stickers/pkgdown.webp" align="right" width="120" height="139">
+</a>
+
 個々の関数の使用例はRソースファイルの `@examples` に書くとして、
 複数の関数を組み合わせてどう使うかとか、
 パッケージ全体の使い方とかを説明するのが`vignettes/`の役割。
@@ -151,7 +159,11 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 ### [`tests/`](https://r-pkgs.org/tests.html)
 
 <a href="https://testthat.r-lib.org/">
-<img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/testthat.svg" align="right" width="120" height="139">
+<img src="/_img/hex-stickers/testthat.webp" align="right" width="120" height="139">
+</a>
+
+<a href="https://covr.r-lib.org/">
+<img src="/_img/hex-stickers/covr.webp" align="right" width="120" height="139">
 </a>
 
 [testthat](https://testthat.r-lib.org)パッケージを使うのがデファクトスタンダード。
@@ -227,7 +239,7 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 ## `devtools`
 
 <a href="https://devtools.r-lib.org/">
-<img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/devtools.svg" align="right" width="120" height="139">
+<img src="/_img/hex-stickers/devtools.webp" align="right" width="120" height="139">
 </a>
 
 骨組みを作るとこからCRANにデプロイするとこまでお世話してくれる。
@@ -276,7 +288,7 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 ## `roxygen2`
 
 <a href="https://github.com/klutometis/roxygen">
-<img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/roxygen2.svg" align="right" width="120" height="139">
+<img src="/_img/hex-stickers/roxygen2.webp" align="right" width="120" height="139">
 </a>
 
 Rソースコードのコメントから`NAMESPACE`とヘルプ(`man/*.Rd`)を自動生成する。
