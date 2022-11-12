@@ -185,9 +185,13 @@ Find me on
 
 ## Teaching / Outreach
 
+-   「[逆順で理解する R Markdown Presentation](/slides/tokyor102/)」
+    [Tokyo.R #102](https://tokyor.connpass.com/event/262836/) (2022-10)
+-   「[Rによるデータ前処理実習](/slides/tmd2022/)」
+    東京医科歯科大 [データ関連人材育成プログラム](https://ds.tmdu.org/) (2022-09)
 -   「[統計モデリング概論 DSHC 2022](/slides/tokiomarine2022/)」
     東京海上 [Data Science Hill Climb](https://tokiomarine-dshc.com/) (2022-08)
--   「[Rを用いたデータ解析の基礎](/slides/tohoku2022r/)」 (2022-04) 東北大学 進化学実習
+-   「[Rを用いたデータ解析の基礎](/slides/tohoku2022r/)」東北大学 進化学実習 (2022-04)
 -   「インタビューでGO!!」水の森市民センター企画講座 (2021-11) 北仙台小学校、北仙台中学校
 -   「[Rによるデータ前処理実習](/slides/tmd2021/)」
     東京医科歯科大 [データ関連人材育成プログラム](https://ds.tmdu.org/) (2021-10)
@@ -265,6 +269,7 @@ Find me on
 
 ## Peer Review
 
+[Genes & Genetic Systems](https://gsj3.org/ggs/),
 [Journal of Molecular Evolution](https://link.springer.com/journal/239),
 [Journal of Theoretical Biology](https://ees.elsevier.com/jtb/),
 [Mathematical Biosciences](https://www.journals.elsevier.com/mathematical-biosciences/),
