@@ -129,6 +129,20 @@ System Preferences > Keyboard > Input Sources > Add "ABC - Extended"
 u with umlaut and tone (ǖ ǘ ǚ ǜ)
 :   <kbd>⌥option</kbd><kbd>`</kbd> + <kbd>v</kbd>
 
+
+### <kbd>⌥option</kbd>
+
+|     | <kbd>⌥option</kbd> | <kbd>⌥option</kbd><kbd>⇧shift</kbd> |
+| --- | --------- | ----------------- |
+| <kbd>8</kbd> | • bullet | ° degree |
+| <kbd>-</kbd> | – en dash | — em dash |
+| <kbd>=</kbd> | ≠ not equal | ± plus minus |
+| <kbd>[</kbd> | “ left double quotation | ” right double quotation |
+| <kbd>]</kbd> | ‘ left single quotation | ’ right single quotation |
+| <kbd>\\</kbd> | « left double angle quotation | » right double angle quotation |
+| <kbd>&lt;</kbd> | ≤ less than or equal to | |
+| <kbd>&gt;</kbd> | ≥ greater than or equal to | |
+
 ### 絵文字・記号
 
 <kbd>⌃control</kbd><kbd>⌘command</kbd><kbd>space</kbd>
