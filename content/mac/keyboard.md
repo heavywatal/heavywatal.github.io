@@ -23,18 +23,27 @@ https://support.apple.com/en-us/HT201236
 
 Dialog (Restart/Sleep/Shut Down)
 :   <kbd>⌃control</kbd><kbd>⏏︎eject</kbd>
+:   <kbd>⌃control</kbd><kbd>⏻power</kbd>
 
 Sleep Display
 :   <kbd>⇧shift</kbd><kbd>⌃control</kbd><kbd>⏏︎eject</kbd>
+:   <kbd>⇧shift</kbd><kbd>⌃control</kbd><kbd>⏻power</kbd>
 
 Sleep
 :   <kbd>⌥option</kbd><kbd>⌘command</kbd><kbd>⏏︎eject</kbd>
+:   <kbd>⌥option</kbd><kbd>⌘command</kbd><kbd>⏻power</kbd>
 
 Restart
 :   <kbd>⌃control</kbd><kbd>⌘command</kbd><kbd>⏏︎eject</kbd>
 
 Shut Down
 :   <kbd>⌃control</kbd><kbd>⌥option</kbd><kbd>⌘command</kbd><kbd>⏏︎eject</kbd>
+
+[Startup key combinations](https://support.apple.com/en-us/HT201255)
+:   機種によって違うので要確認。
+:   Safe mode: キャッシュ削除、諸々のチェックと修復など
+:   Reset NVRAM/PRAM: 画面や音の設定
+:   [Reset SMC](https://support.apple.com/en-us/HT201295): 電源、ファン、内蔵カメラなどハードウェア関係
 
 
 ### Display Brightness
@@ -157,3 +166,21 @@ beer🍺🍻, metal🤘, muscle💪, thumb👍, smile😁🤣, option ⌥, schwa
 1.  右上メニューバーから Unicode Hex Input を選択
 1.  <kbd>⌥option</kbd> を押しつつ番号を入力
     (e.g. <kbd>⌥option</kbd><kbd>2318</kbd> で ⌘ が入力される)
+
+
+## Magic Trackpad
+
+### 応答しなくなった場合に試すこと
+
+1.  スイッチ off → on (触覚フィードバックの有無)
+1.  System Preferences → Bluetooth ("Not Connected" or "Connection Rejected"?)
+1.  有線接続
+1.  一旦デバイスを削除して再登録。
+    System Preferences はキーボード操作で完結できないので、
+    有線マウスが無い場合は[blueutil](https://github.com/toy/blueutil)で操作。
+    ```sh
+    brew install blueutil
+    blueutil --paired
+    blueutil --unpair 00-00-00-00-00-00
+    ```
+1.  セーフモード、SMCリセット、PRAM/NVRAMリセット
