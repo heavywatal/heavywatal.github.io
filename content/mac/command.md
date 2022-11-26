@@ -63,7 +63,7 @@ killall Kotoeri
 
 ### `defaults`
 
-`/Library/Preferences/` 以下にある各種設定ファイル.plistを編集する。
+`~/Library/Preferences/` 以下にある各種設定ファイル.plistを編集する。
 `true` に設定した項目を元に戻すには、
 項目自体を `delete` するか、`false` に設定する。
 
@@ -72,9 +72,6 @@ defaults [write/delete] DOMAIN KEY -TYPE VALUE
 
 # Finderのタイトルバーにフルパスを表示
 defaults write com.apple.finder _FXShowPosixPathInTitle -boolean true
-
-# iTerm2のタブの横幅を広くする
-defaults write com.googlecode.iterm2 OptimumTabWidth -int 360
 
 # Launchpadの並び順をリセット
 defaults write com.apple.dock ResetLaunchPad -bool true; killall Dock
@@ -89,9 +86,12 @@ defaults write com.apple.finder QLEnableTextSelection -bool true
 # osascript -e 'id of app "Google Chrome"'
 defaults write com.google.Chrome NSRequiresAquaSystemAppearance -bool true
 
-# スクリーンショットを影なしで撮る
+# スクリーンショットの保存先を変更
+defaults write com.apple.screencapture location "~/Pictures/Screenshot"
+# 影なしで撮る
 defaults write com.apple.screencapture disable-shadow -bool true
-killall SystemUIServer
+# 撮影後のサムネイル表示(=遅延)を無効にする
+defaults write com.apple.screencapture show-thumbnail -bool false
 ```
 
 [OnyX](https://www.titanium-software.fr/en/onyx.html) や
