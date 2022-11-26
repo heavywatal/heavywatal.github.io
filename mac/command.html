@@ -115,16 +115,13 @@ Terminal から一発でファイルを開くことができる。</p>
 </span></span></code></pre></div><p>動作が不安定になったとき、設定変更を反映させたいとき、メモリを開放したいときなどに。</p>
 <h2 id="設定関連">設定関連</h2>
 <h3 id="defaults"><code>defaults</code></h3>
-<p><code>/Library/Preferences/</code> 以下にある各種設定ファイル.plistを編集する。
+<p><code>~/Library/Preferences/</code> 以下にある各種設定ファイル.plistを編集する。
 <code>true</code> に設定した項目を元に戻すには、
 項目自体を <code>delete</code> するか、<code>false</code> に設定する。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">defaults <span class="o">[</span>write/delete<span class="o">]</span> DOMAIN KEY -TYPE VALUE
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># Finderのタイトルバーにフルパスを表示</span>
 </span></span><span class="line"><span class="cl">defaults write com.apple.finder _FXShowPosixPathInTitle -boolean <span class="nb">true</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># iTerm2のタブの横幅を広くする</span>
-</span></span><span class="line"><span class="cl">defaults write com.googlecode.iterm2 OptimumTabWidth -int <span class="m">360</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># Launchpadの並び順をリセット</span>
 </span></span><span class="line"><span class="cl">defaults write com.apple.dock ResetLaunchPad -bool true<span class="p">;</span> killall Dock
@@ -139,9 +136,12 @@ Terminal から一発でファイルを開くことができる。</p>
 </span></span><span class="line"><span class="cl"><span class="c1"># osascript -e &#39;id of app &#34;Google Chrome&#34;&#39;</span>
 </span></span><span class="line"><span class="cl">defaults write com.google.Chrome NSRequiresAquaSystemAppearance -bool <span class="nb">true</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># スクリーンショットを影なしで撮る</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># スクリーンショットの保存先を変更</span>
+</span></span><span class="line"><span class="cl">defaults write com.apple.screencapture location <span class="s2">&#34;~/Pictures/Screenshot&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 影なしで撮る</span>
 </span></span><span class="line"><span class="cl">defaults write com.apple.screencapture disable-shadow -bool <span class="nb">true</span>
-</span></span><span class="line"><span class="cl">killall SystemUIServer
+</span></span><span class="line"><span class="cl"><span class="c1"># 撮影後のサムネイル表示(=遅延)を無効にする</span>
+</span></span><span class="line"><span class="cl">defaults write com.apple.screencapture show-thumbnail -bool <span class="nb">false</span>
 </span></span></code></pre></div><p><a href="https://www.titanium-software.fr/en/onyx.html">OnyX</a> や
 <a href="https://www.bresink.com/osx/TinkerTool.html">TinkerTool</a>
 などのGUIアプリを使うほうが簡単で安心かも</p>
