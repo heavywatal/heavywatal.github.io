@@ -80,6 +80,10 @@ a.out : main.cpp sub.cpp
 以下に紹介するように、ほかにも様々な変数や関数が用意されていて、
 個別のファイル名などをいちいち入力しなくても済むようになっている。
 
+ファイル名が明示的に書かれずルールのみで生成された中間ファイルは自動的に削除される。
+`.PRECIOUS` ターゲットにその名を加えておくとそれを防げる。
+逆に、名前は出すけど中間ファイルとして扱いたい場合は `.SECONDARY` ターゲットに加える。
+
 
 ### [Implicit Variables](https://www.gnu.org/software/make/manual/make.html#Implicit-Variables)
 
