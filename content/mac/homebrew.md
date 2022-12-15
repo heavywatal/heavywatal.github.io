@@ -95,7 +95,9 @@ bottle機能を封じられて毎回自前ビルドすることになるみた�
     doxygen
     eigen
     emacs
+    exiftool
     findutils
+    fswatch
     git
     gnu-sed
     gnu-tar
@@ -109,13 +111,16 @@ bottle機能を封じられて毎回自前ビルドすることになるみた�
     nkf
     pandoc
     parallel
+    pyenv
+    qpdf
+    rbenv
     rsync
     sshfs
     tmux
     vim
+    webp
     wget
     xz
-    zopfli
     zsh
     zsh-completions
 
@@ -198,10 +203,9 @@ adobe-acrobat-reader amazon-photos
 basictex bibdesk
 discord docker drawio dropbox firefox gimp gitter
 google-chrome google-drive google-japanese-ime
-inkscape iterm2 julia kindle libreoffice macfuse
-marshallofsound-google-play-music-player
+inkscape iterm2 joplin julia kindle macfuse
 megasync menumeters monitorcontrol
-r rstudio
+quarto r rstudio
 skim skype slack spideroakone
 the-unarchiver virtualbox visual-studio-code vlc
 whatsapp xquartz zoom
