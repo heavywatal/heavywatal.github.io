@@ -86,172 +86,156 @@ rgl — 3Dグラフ描画
 </ul></nav>
 </header>
 
-<p>3D visualization device system (OpenGL).</p>
 <ul>
-<li><a href="http://rgl.neoscientists.org/">Project Homepage</a></li>
-<li><a href="http://cse.naro.affrc.go.jp/takezawa/r-tips/r/57.html">R-tips</a></li>
-<li><a href="https://cran.r-project.org/web/packages/rgl/vignettes/rgl.html">https://cran.r-project.org/web/packages/rgl/vignettes/rgl.html</a></li>
+<li><a href="https://dmurdoch.github.io/rgl/">Project Homepage</a></li>
 <li><a href="https://cran.r-project.org/web/packages/rgl/">https://cran.r-project.org/web/packages/rgl/</a></li>
-<li><a href="https://www.rdocumentation.org/packages/rgl">https://www.rdocumentation.org/packages/rgl</a></li>
 </ul>
-<p>APIもガチャガチャだしドキュメントも結構いい加減なので分かりにくい。
-かといってJavaScript+WebGLベースの
-<a href="https://plot.ly/r/">plotly</a> や
-<a href="https://bwlewis.github.io/rthreejs/">threejs</a>
-などもPNG保存や陰影などまだそれなりに問題がある。
-科学プロット用のOpenGLラッパーとしてはPythonの<a href="http://vispy.org/">VisPy</a>
-が将来有望だがまだ開発途上で仕様があまり固まってない。</p>
-<p>関数は低水準の<code>rgl.*()</code>と高水準の<code>*3d()</code>に分かれていて、
-両者を混ぜて使うのは避けたほうがいいらしい。</p>
-<h2 id="デバイスの起動と終了">デバイスの起動と終了</h2>
-<dl>
-<dt><code>rgl::open3d(..., params=get3dDefaults(), useNULL=rgl.useNULL())</code></dt>
-<dd>明示的に新しいデバイスを開く。
-何も無い状態で<code>plot3d()</code>などが呼ばれたら勝手に開かれる。
-サイズ指定は<code>windowRect=c(0, 0, 600, 600)</code>のような引数で。</dd>
-<dd><code>useNULL=TRUE</code>はWebGLを書き出すだけで描画デバイスが必要ないときに。
-セッション全体に渡ってデバイス不要な(あるいはそもそも無い)場合は、
-<code>library(rgl)</code>の前に<code>options(rgl.useNULL=TRUE)</code>するのがよい。</dd>
-<dt><code>rgl.close()</code></dt>
-<dd>デバイスを閉じる。<code>close3d()</code>はなぜか存在しない。</dd>
-</dl>
-<p><code>rgl::clear3d(type=c(&quot;shapes&quot;, &quot;bboxdeco&quot;, &quot;material&quot;), defaults, subscene=0)</code></p>
+<p>長らく2種類の書き方が混在していたが、
+バージョン 1.0 から<a href="https://dmurdoch.github.io/rgl/articles/deprecation.html"><code>rgl.*()</code> 関数の使用が非推奨</a>となり一本化された。
+ドキュメントも一新されて使いやすくなってきた。</p>
 <h2 id="プロット">プロット</h2>
+<h3 id="primitive-shapeshttpsdmurdochgithubiorglreferenceprimitiveshtml"><a href="https://dmurdoch.github.io/rgl/reference/primitives.html">Primitive shapes</a></h3>
 <dl>
-<dt><code>rgl::points3d()</code></dt>
+<dt><code>rgl::points3d(x, y = NULL, z = NULL, ...)</code></dt>
 <dd>散布図。</dd>
-<dt><code>rgl::spheres3d()</code></dt>
-<dd>球体。</dd>
-<dt><code>rgl::lines3d()</code></dt>
+<dt><code>rgl::lines3d(x, y = NULL, z = NULL, ...)</code></dt>
 <dd>折れ線</dd>
-<dt><code>rgl::segments3d()</code></dt>
+<dt><code>rgl::segments3d(x, y = NULL, z = NULL, ...)</code></dt>
 <dd>線分</dd>
-<dt><code>rgl::triangles3d()</code></dt>
+<dt><code>rgl::triangles3d(x, y = NULL, z = NULL, ...)</code></dt>
 <dd>3点を結ぶ面</dd>
-<dt><code>rgl::quads3d()</code></dt>
+<dt><code>rgl::quads3d(x, y = NULL, z = NULL, ...)</code></dt>
 <dd>4点を結ぶ三角形2つ</dd>
-<dt><code>rgl::surface3d()</code>, <code>rgl::terrain3d()</code></dt>
+</dl>
+<h3 id="other-shapes">Other shapes</h3>
+<dl>
+<dt><code>rgl::spheres3d(x, y = NULL, z = NULL, radius = 1, fastTransparency = TRUE, ...)</code></dt>
+<dd>球体。</dd>
+<dt><code>rgl::surface3d(x, y = NULL, z = NULL, ..., normal_x = NULL, normal_y = NULL, normal_z = NULL, texture_s = NULL, texture_t = NULL, flip = FALSE)</code></dt>
 <dd>地形図のような局面</dd>
-<dt><code>rgl::plot3d()</code></dt>
-<dd><code>type=</code>引数で上記のタイプを決定できる高次関数。
+<dt><code>rgl::plot3d(x, ...)</code></dt>
+<dd><code>type =</code>引数で上記の様々な形を描ける高次関数。
 ホントはあんまり使いたくないけど、
 <code>xlim</code>, <code>ylim</code>, <code>zlim</code> オプションを受け付ける関数がこれしかないようなので、
 境界を指定しつつ球体を描きたい場合は <code>spheres3d()</code> ではなく
-<code>plot3d(type=&quot;s&quot;)</code> を使うしかないっぽい。</dd>
+<code>plot3d(type = &quot;s&quot;)</code> を使うしかないっぽい。</dd>
 </dl>
 <h2 id="背景や軸などの調整">背景や軸などの調整</h2>
 <dl>
-<dt><code>rgl::title3d(main, sub, xlab, ylab, zlab, line=NA, ...)</code></dt>
+<dt><code>rgl::title3d(main, sub, xlab, ylab, zlab, line, level, floating, ...)</code></dt>
 <dd>これを使うとmainとsubも視点によって動いてしまう。
 <code>bgplot3d({plot.new(); title(&quot;main&quot;)})</code> なら固定背景に書ける。</dd>
 </dl>
-<p><code>rgl::mtext3d(text, edge, line=0, at=NULL, pos=NA, ...)</code></p>
-<p><code>rgl::bg3d()</code></p>
-<p><code>rgl::light3d()</code></p>
-<p><code>rgl::par3d()</code></p>
+<p><code>rgl::mtext3d(text, edge, at = NULL, line = 0, level = 0, floating = FALSE, pos = NA, ...)</code></p>
+<p><code>rgl::bg3d(color, sphere = FALSE, back = &quot;lines&quot;, fogtype = &quot;none&quot;, fogScale = 1, col, ...)</code></p>
+<p><code>rgl::light3d(theta = 0, phi = 15, x = NULL, y = NULL, z = NULL, viewpoint.rel = TRUE, ambient = &quot;#FFFFFF&quot;, diffuse = &quot;#FFFFFF&quot;, specular = &quot;#FFFFFF&quot;)</code></p>
+<p><code>rgl::par3d(..., no.readonly = FALSE, dev = cur3d(), subscene = currentSubscene3d(dev))</code></p>
 <dl>
-<dt><a href="https://www.rdocumentation.org/packages/rgl/topics/rgl.material"><code>rgl::material3d(...)</code></a></dt>
+<dt><a href="https://dmurdoch.github.io/rgl/reference/material.html"><code>rgl::material3d(..., id = NULL)</code></a></dt>
 <dd>プロットに渡せるオプション(<code>color</code>など)はここで確認</dd>
 </dl>
 <h3 id="軸">軸</h3>
 <dl>
-<dt><code>rgl::axis3d(edge, at=NULL, labels=TRUE, tick=TRUe, line=0, pos=NULL, nticks=5, ...)</code></dt>
+<dt><code>rgl::axis3d(edge, at = NULL, labels = TRUE, tick = TRUE, line = 0, pos = NULL, nticks = 5, ...)</code></dt>
 <dd><code>xyz</code> と <code>+-</code> の組み合わせで軸1本を指定して描く。
 <code>x</code> は　<code>x--</code> と等価。</dd>
 <dt><code>rgl::box3d(...)</code></dt>
 <dd>12辺の箱を描く。</dd>
-<dt><code>rgl::bbox3d(xat=NULL, yat, zat, xunit=&quot;pretty&quot;, yunit, zunit, expand=1.03, draw_front=FALSE)</code></dt>
+<dt><code>rgl::bbox3d(xat = NULL, yat = NULL, zat = NULL, xunit = &quot;pretty&quot;, yunit = &quot;pretty&quot;, zunit = &quot;pretty&quot;, expand = 1.03, draw_front = FALSE, xlab = NULL, ylab = NULL, zlab = NULL, xlen = 5, ylen = 5, zlen = 5, marklen = 15, marklen.rel = TRUE, ...)</code></dt>
 <dd>手前の辺が自動で消えるような箱を描く。</dd>
-<dt><code>rgl::axes3d(edges=&quot;bbox&quot;, labels=TRUE, tick=TRUE, nticks=5, box=FALSE, expand=1.03, ...)</code></dt>
+<dt><code>rgl::axes3d(edges = &quot;bbox&quot;, labels = TRUE, tick = TRUE, nticks = 5, box = FALSE, expand = 1.03, ...)</code></dt>
 <dd>上記の3つをまとめる関数。分かりにくいので使わないほうがいい。
-<code>edges=&quot;bbox&quot;</code> の場合 <code>tick=FALSE</code> は効かないので <code>xlen=0, ylen=0, zlen=0</code> とする必要がある。</dd>
-<dt><code>rgl::view3d(theta=0, phi=15, fov=60, zoom=1, scale=par3d(&quot;scale&quot;), interactive=TRUE, userMatrix)</code></dt>
+<code>edges = &quot;bbox&quot;</code> の場合 <code>tick = FALSE</code> は効かないので <code>xlen = 0, ylen = 0, zlen = 0</code> とする必要がある。</dd>
+<dt><code>rgl::view3d(theta = 0, phi = 15, fov = 60, zoom = 1, scale = par3d(&quot;scale&quot;), interactive = TRUE, userMatrix)</code></dt>
 <dd><code>theta</code>: 0のとき正面がxy平面。観察者が地球の公転と同じ方向に動くのが正。<br>
 <code>phi</code> [-90, 90]: 0のとき視点が水平面(xz平面)上。観察者が上に動くのが正。<br>
 <code>fov</code> [0, 179]: 0のとき無限遠から見たような平行投影。</dd>
 </dl>
 <h3 id="複数の図をまとめる">複数の図をまとめる</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1"># レイアウトを指定</span>
-</span></span><span class="line"><span class="cl"><span class="nf">mfrow3d</span><span class="p">(</span><span class="n">nr</span><span class="p">,</span> <span class="n">nc</span><span class="p">,</span> <span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">NA</span><span class="p">,</span> <span class="n">sharedMouse</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span> <span class="kc">...</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="nf">layout3d</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span> <span class="n">widths</span><span class="p">,</span> <span class="n">heights</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">NA</span><span class="p">,</span> <span class="n">sharedMouse</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span> <span class="kc">...</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mfrow3d</span><span class="p">(</span><span class="n">nr</span><span class="p">,</span> <span class="n">nc</span><span class="p">,</span> <span class="n">byrow</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="n">parent</span> <span class="o">=</span> <span class="kc">NA</span><span class="p">,</span> <span class="n">sharedMouse</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span> <span class="kc">...</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">layout3d</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span> <span class="n">widths</span><span class="p">,</span> <span class="n">heights</span><span class="p">,</span> <span class="n">parent</span> <span class="o">=</span> <span class="kc">NA</span><span class="p">,</span> <span class="n">sharedMouse</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span> <span class="kc">...</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 次のsubsceneに移動</span>
-</span></span><span class="line"><span class="cl"><span class="nf">next3d</span><span class="p">(</span><span class="n">current</span><span class="o">=</span><span class="kc">NA</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">next3d</span><span class="p">(</span><span class="n">current</span> <span class="o">=</span> <span class="kc">NA</span><span class="p">,</span> <span class="n">clear</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="n">reuse</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
 </span></span></code></pre></div><p>これらはなぜかグローバルスコープでしか動作しない。
 つまり、関数やループ内に入れるとサイズなどがうまく反映されない。</p>
 <h2 id="出力">出力</h2>
+<h3 id="デバイスの起動と終了">デバイスの起動と終了</h3>
+<dl>
+<dt><code>rgl::open3d(..., params = get3dDefaults(), useNULL = rgl.useNULL(), silent = FALSE)</code></dt>
+<dd>明示的に新しいデバイスを開く。
+何も無い状態で<code>plot3d()</code>などが呼ばれたら勝手に開かれる。
+サイズ指定は<code>windowRect = c(0, 0, 600, 600)</code>のような引数で。</dd>
+<dt><code>rgl::close3d(dev = cur3d(), silent = TRUE)</code></dt>
+<dd>デバイスを閉じる。</dd>
+</dl>
+<p><code>rgl::clear3d(type = c(&quot;shapes&quot;, &quot;bboxdeco&quot;, &quot;material&quot;), defaults = getr3dDefaults(), subscene = 0)</code></p>
+<h3 id="displayhttpsdmurdochgithubiorgldevarticlesrglhtmldefault-display"><a href="https://dmurdoch.github.io/rgl/dev/articles/rgl.html#default-display">Display</a></h3>
+<p>デフォルトでは独立のウィンドウ(XQuartz, X11など)が立ち上がる。</p>
+<dl>
+<dt><code>options(rgl.useNULL = TRUE)</code></dt>
+<dd>独立ウィンドウが開くのを抑制。</dd>
+<dt><code>rglwidget()</code></dt>
+<dd>WebGLに変換してRStudio, <a href="/dev/vscode.html">VSCode</a>, ウェブブラウザなど出力。</dd>
+<dt><code>options(rgl.printRglwidget = TRUE)</code></dt>
+<dd>自動的に <code>rglwidget()</code> を呼ぶ。使わないほうが無難。</dd>
+</dl>
 <h3 id="ファイルに書き出す">ファイルに書き出す</h3>
 <dl>
-<dt><code>rgl::scene3d()</code></dt>
+<dt><code>rgl::scene3d(minimal = TRUE)</code></dt>
 <dd>rglネイティブな形での全構成要素リスト。</dd>
-<dt><code>rgl::snapshot3d(filename, fmt=&quot;png&quot;, top=TRUE)</code></dt>
+<dt><code>rgl::snapshot3d(filename, fmt = &quot;png&quot;, top = TRUE, ..., scene, width, height, webshot)</code></dt>
 <dd>PNGのみ。
-<code>top=FALSE</code>にしてはダメ。謎。</dd>
-<dt><code>rbl.postscript(filename, fmt=&quot;eps&quot;, drawText=TRUE)</code></dt>
+<code>top = FALSE</code>にしてはダメ。謎。</dd>
+<dt><code>rbl.postscript(filename, fmt = &quot;eps&quot;, drawText = TRUE)</code></dt>
 <dd>ps, eps, tex, pdf, svg をサポート。
 透過や <code>bgplot3d</code> は反映されないらしいので注意。</dd>
-<dt><code>rgl::writeWebGL(dir=&quot;webGL&quot;, filename, template, prefix, snapshot, commonParts, reuse, font, width, height)</code></dt>
-<dd>ディレクトリ構造無しの単発HTMLでいい場合は
-<code>writeWebGL(&quot;.&quot;, &quot;rgl.html&quot;)</code> のように指定する。
-ヘルプには <code>snapshot</code> がファイル名も受け取れると書いてあるが嘘で <code>TRUE/FALSE</code> のみ。
-rglデバイスが不要なので<code>open3d(useNULL=TRUE)</code>としておくと余計なウィンドウを開かずに済む。</dd>
+<dt><code>rgl::writeWebGL()</code></dt>
+<dd>deprecatedだから代わりに <code>rglwidget()</code> を使えとのことだがそちらにファイル書き出し機能は無い。</dd>
 </dl>
-<p><code>rgl::writeASY()</code>, <code>rgl::writeOBJ()</code>, <code>rgl::writePLY()</code>, <code>rgl::writeSTL()</code>.</p>
 <h3 id="rmarkdownknitrでhtmlに埋め込む">rmarkdown/knitrでHTMLに埋め込む</h3>
-<p>ライブラリを読み込み、フックを設定しておく:</p>
-<pre><code>```{r library}
-library(rgl)
-rgl::setupKnitr()
-```
-</code></pre>
-<p><code>rgl::setupKnitr()</code>の中身は
-<code>knitr::knit_hooks$set(webgl=rgl::hook_webgl)</code> といくつかの初期化コード。
-それらを実行しないと、同じコードでも時によってscriptが正しく埋め込まれず、
-<code>You must enable Javascript to view this page properly.</code>
-という的外れなエラーが表示される。</p>
-<p>プロットしたいchunkに<code>webgl=TRUE</code>を指定
-(PNG静止画にしたい場合はデバイス有りで<code>rgl=TRUE</code>):</p>
-<pre><code>```{r plot, webgl=TRUE}
-rgl::open3d(useNULL=TRUE)
-rgl::box3d()
-rgl::title3d(&quot;main&quot;, &quot;sub&quot;, &quot;x&quot;, &quot;y&quot;, &quot;z&quot;)
-```
-</code></pre>
-<p>ループで複数描画したいときはまずrglwidgetとしてlistに詰めていき、
-最後に<code>htmltools::tagList()</code>に詰め替える。
-このwidget方式の場合は<code>setupKnitr()</code>不要。</p>
-<pre><code>```{r widget}
-library(rgl)
-purrr::map(seq_len(3), ~{
-    on.exit(rgl::rgl.close())
-    rgl::open3d(useNULL=TRUE)
-    rgl::box3d()
-    rgl::rglwidget(width=200, height=200)
-}) %&gt;% htmltools::tagList()
-```
-</code></pre>
-<p><code>options(rgl.printRglwidget=TRUE)</code>
-とすると<code>rglwidget()</code>を省略できるが、途中経過も逐一表示されてしまう。</p>
+<p>パッケージを読み込み、hookを設定しておく(<code>rgl::setupKnitr()</code> を使う手もある):</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl">```{r library}
+</span></span><span class="line"><span class="cl">options(rgl.useNULL = TRUE)
+</span></span><span class="line"><span class="cl">library(rgl)
+</span></span><span class="line"><span class="cl">knitr::knit_hooks$set(webgl = rgl::hook_webgl)
+</span></span><span class="line"><span class="cl">knitr::knit_hooks$set(rgl = rgl::hook_rgl)
+</span></span><span class="line"><span class="cl">```
+</span></span></code></pre></div><p>WebGLを出力したい場合は <code>webgl = TRUE</code>、
+PNG静止画を出力したい場合は <code>rgl = TRUE</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl">```{r plot, webgl = TRUE}
+</span></span><span class="line"><span class="cl">rgl::box3d()
+</span></span><span class="line"><span class="cl">rgl::title3d(&#34;main&#34;, &#34;sub&#34;, &#34;x&#34;, &#34;y&#34;, &#34;z&#34;)
+</span></span><span class="line"><span class="cl">```
+</span></span></code></pre></div><p><code>rgl::rglwidget()</code> を明示的に呼ぶならhookは不要。
+複数描画したいときは <code>htmltools::tagList()</code> に詰める手もある:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl">```{r widget}
+</span></span><span class="line"><span class="cl">purrr::map(seq_len(3), ~{
+</span></span><span class="line"><span class="cl">  rgl::box3d()
+</span></span><span class="line"><span class="cl">  rgl::rglwidget(width = 200, height = 200)
+</span></span><span class="line"><span class="cl">}) |&gt; htmltools::tagList()
+</span></span><span class="line"><span class="cl">```
+</span></span></code></pre></div><p>WebGLへの変換は出力先がHTMLであることを条件にしているらしく、
+<code>rmarkdown::render()</code> なら上記コードで問題ないが <code>knitr::knit()</code> はダメ。
+強制的に変換する手段はあるのかな&hellip;?</p>
 <h3 id="アニメーション">アニメーション</h3>
-<p><code>rgl::spin3d(axis=c(0, 0, 1), rpm=5)</code></p>
-<p><code>rgl::par3dinterp(times=NULL, userMatrix, scale, zoom, FOV, method, extrapolate)</code></p>
-<p><code>rgl::play3d(f, duration=Inf, ...)</code></p>
-<p><code>rgl::movie3d(f, duration, ..., fps=10, movie=&quot;movie&quot;, frames=movie, dir=tempdir(), ...)</code></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1">## 角度をセット</span>
-</span></span><span class="line"><span class="cl"><span class="n">rgl</span><span class="o">::</span><span class="nf">view3d</span><span class="p">(</span><span class="m">-25</span><span class="p">,</span> <span class="m">15</span><span class="p">,</span> <span class="m">40</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">## 最前面に持ってくる</span>
+<p><code>rgl::spin3d(axis = c(0, 0, 1), rpm = 5, dev = cur3d(), subscene)</code></p>
+<p><code>rgl::par3dinterp(times = NULL, userMatrix, scale, zoom, FOV, method, extrapolate)</code></p>
+<p><code>rgl::play3d(f, duration = Inf, dev = cur3d(), ..., startTime = 0)</code></p>
+<p><code>rgl::movie3d(f, duration, dev = cur3d(), ..., fps = 10, movie = &quot;movie&quot;, frames = movie, dir = tempdir(), covert, clean, verbose, top, type, startTime, webshot)</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">rgl</span><span class="o">::</span><span class="nf">view3d</span><span class="p">(</span><span class="m">-25</span><span class="p">,</span> <span class="m">15</span><span class="p">,</span> <span class="m">40</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="nf">rgl.bringtotop</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">## アニメーション関数を作る</span>
-</span></span><span class="line"><span class="cl"><span class="n">.anime</span> <span class="o">=</span> <span class="n">rgl</span><span class="o">::</span><span class="nf">spin3d</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">),</span> <span class="n">rpm</span><span class="o">=</span><span class="m">15</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">## X11で再生</span>
+</span></span><span class="line"><span class="cl"><span class="n">.anime</span> <span class="o">=</span> <span class="n">rgl</span><span class="o">::</span><span class="nf">spin3d</span><span class="p">(</span><span class="n">axis</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">),</span> <span class="n">rpm</span> <span class="o">=</span> <span class="m">15</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">rgl</span><span class="o">::</span><span class="nf">play3d</span><span class="p">(</span><span class="n">.anime</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">## GIFアニメとして保存</span>
-</span></span><span class="line"><span class="cl"><span class="n">rgl</span><span class="o">::</span><span class="nf">movie3d</span><span class="p">(</span><span class="n">.anime</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="m">4</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="m">16</span><span class="p">,</span> <span class="n">movie</span><span class="o">=</span><span class="s">&#34;basename&#34;</span><span class="p">,</span> <span class="n">dir</span><span class="o">=</span><span class="s">&#34;~/tmp&#34;</span><span class="p">)</span>
-</span></span></code></pre></div>
+</span></span><span class="line"><span class="cl"><span class="n">rgl</span><span class="o">::</span><span class="nf">movie3d</span><span class="p">(</span><span class="n">.anime</span><span class="p">,</span> <span class="n">duration</span> <span class="o">=</span> <span class="m">4</span><span class="p">,</span> <span class="n">fps</span> <span class="o">=</span> <span class="m">16</span><span class="p">,</span> <span class="n">movie</span> <span class="o">=</span> <span class="s">&#34;basename&#34;</span><span class="p">,</span> <span class="n">dir</span> <span class="o">=</span> <span class="s">&#34;~/tmp&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><h2 id="ほかに3dグラフを描けそうな手段">ほかに3Dグラフを描けそうな手段:</h2>
+<ul>
+<li><a href="https://plotly.com/r/3d-charts/">plotly</a></li>
+<li><a href="https://bwlewis.github.io/rthreejs/">threejs</a></li>
+<li><a href="https://vispy.org/">VisPy</a></li>
+</ul>
+
 </article>
 </main>
 
