@@ -10,11 +10,11 @@ tags = ["vcs", "writing"]
 
 https://git-scm.com/
 
-Gitは分散型バージョン管理システムの代表格。
+<img height=16 width=16 src="https://cdn.simpleicons.org/git">Gitは分散型バージョン管理システムの代表格。
 プログラムのソースコードはもちろんのこと、
 研究ノートや論文の原稿などあらゆるテキストの管理に使える。
 
-[GitHub]はGitをより便利に使うためのオンラインサービス。
+<img height=16 width=16 src="https://cdn.simpleicons.org/github">[GitHub]はGitをより便利に使うためのオンラインサービス。
 個人的なリポジトリ置き場としてはもちろんのこと、
 ほかの人と共有・協力してプロジェクトを進めるプラットフォームとしても使える。
 
@@ -49,32 +49,32 @@ Gitのライバルとして[Mercurial]({{< relref "mercurial.md" >}})もある�
 
 ### 手元の変更を外に伝える
 
-working directory (working tree)
+📁 working directory (working tree)
 : 手元のファイルの変更はまだリポジトリに登録されていない
 : ↓ `add`
 
-staging area (index)
+<img height=16 width=16 src="https://cdn.simpleicons.org/git"> staging area (index)
 : 次のコミットに含めるファイルをマークする段階
 : ↓ `commit`
 
-local repository
+<img height=16 width=16 src="https://cdn.simpleicons.org/git"> local repository
 : 変更履歴が `.git/` 内に記録されている
 : ↓ `push`
 
-remote repository
+<img height=16 width=16 src="https://cdn.simpleicons.org/github"> remote repository
 : GitHubなど別マシンのリポジトリに反映
 
 
 ### 外部の変更を手元に取り込む
 
-remote repository
+<img height=16 width=16 src="https://cdn.simpleicons.org/github"> remote repository
 : ↓ `fetch`
 
-local repository
+<img height=16 width=16 src="https://cdn.simpleicons.org/git"> local repository
 : 変更が `.git/` に取り込まれたが、見えてるファイルには反映されてない
 : ↓ `merge` or `rebase`
 
-working directory
+📁 working directory
 : 手元のファイルが最新版に同期されている
 
 
@@ -356,6 +356,30 @@ https://help.github.com/articles/configuring-a-publishing-source-for-github-page
 
 
 ## 問題と対処
+
+### Trailing whitespace 以外の変更だけ add する
+
+大概のIDEには保存時に行末の空白を自動削除するオプションがある。
+それによって自分のソースコードは常にきれいに保てるが、
+他人の汚いコードやknitrの結果などを編集するときに余計な差分を作ってしまう。
+[VSCode]({{< relref "vscode.md" >}}) なら "Save without Formatting"
+で設定を変えずに済ませられることは覚えていても、
+"Find in Files" で一括編集したときにも空白が削られることは忘れがち。
+
+```sh
+git diff --ignore-space-at-eol | git apply --cached
+```
+
+上記ワンライナーで大概うまくいくが、
+変更箇所が近かったりすると `error: patch failed` と蹴られる。
+その場合は次のようにworkaround:
+
+```sh
+git diff --ignore-space-at-eol > tmp.diff
+git stash
+git apply --cached tmp.diff
+git stash drop
+```
 
 ### 用済みブランチの掃除
 
