@@ -86,10 +86,10 @@ Git — 分散型バージョン管理システム
 </header>
 
 <p><a href="https://git-scm.com/">https://git-scm.com/</a></p>
-<p>Gitは分散型バージョン管理システムの代表格。
+<p><img height=16 width=16 src="https://cdn.simpleicons.org/git">Gitは分散型バージョン管理システムの代表格。
 プログラムのソースコードはもちろんのこと、
 研究ノートや論文の原稿などあらゆるテキストの管理に使える。</p>
-<p><a href="https://github.com">GitHub</a>はGitをより便利に使うためのオンラインサービス。
+<p><img height=16 width=16 src="https://cdn.simpleicons.org/github"><a href="https://github.com">GitHub</a>はGitをより便利に使うためのオンラインサービス。
 個人的なリポジトリ置き場としてはもちろんのこと、
 ほかの人と共有・協力してプロジェクトを進めるプラットフォームとしても使える。</p>
 <p>Gitのライバルとして<a href="/dev/mercurial.html">Mercurial</a>もあるが、
@@ -128,26 +128,26 @@ sshでパスワード無しでpushする、というのが楽ちん。</p>
 </ul>
 <h3 id="手元の変更を外に伝える">手元の変更を外に伝える</h3>
 <dl>
-<dt>working directory (working tree)</dt>
+<dt>📁 working directory (working tree)</dt>
 <dd>手元のファイルの変更はまだリポジトリに登録されていない</dd>
 <dd>↓ <code>add</code></dd>
-<dt>staging area (index)</dt>
+<dt><img height=16 width=16 src="https://cdn.simpleicons.org/git"> staging area (index)</dt>
 <dd>次のコミットに含めるファイルをマークする段階</dd>
 <dd>↓ <code>commit</code></dd>
-<dt>local repository</dt>
+<dt><img height=16 width=16 src="https://cdn.simpleicons.org/git"> local repository</dt>
 <dd>変更履歴が <code>.git/</code> 内に記録されている</dd>
 <dd>↓ <code>push</code></dd>
-<dt>remote repository</dt>
+<dt><img height=16 width=16 src="https://cdn.simpleicons.org/github"> remote repository</dt>
 <dd>GitHubなど別マシンのリポジトリに反映</dd>
 </dl>
 <h3 id="外部の変更を手元に取り込む">外部の変更を手元に取り込む</h3>
 <dl>
-<dt>remote repository</dt>
+<dt><img height=16 width=16 src="https://cdn.simpleicons.org/github"> remote repository</dt>
 <dd>↓ <code>fetch</code></dd>
-<dt>local repository</dt>
+<dt><img height=16 width=16 src="https://cdn.simpleicons.org/git"> local repository</dt>
 <dd>変更が <code>.git/</code> に取り込まれたが、見えてるファイルには反映されてない</dd>
 <dd>↓ <code>merge</code> or <code>rebase</code></dd>
-<dt>working directory</dt>
+<dt>📁 working directory</dt>
 <dd>手元のファイルが最新版に同期されている</dd>
 </dl>
 <h3 id="用語">用語</h3>
@@ -376,7 +376,22 @@ git rebase master
 </li>
 </ol>
 <h2 id="問題と対処">問題と対処</h2>
-<h3 id="用済みブランチの掃除">用済みブランチの掃除</h3>
+<h3 id="trailing-whitespace-以外の変更だけ-add-する">Trailing whitespace 以外の変更だけ add する</h3>
+<p>大概のIDEには保存時に行末の空白を自動削除するオプションがある。
+それによって自分のソースコードは常にきれいに保てるが、
+他人の汚いコードやknitrの結果などを編集するときに余計な差分を作ってしまう。
+<a href="/dev/vscode.html">VSCode</a> なら &ldquo;Save without Formatting&rdquo;
+で設定を変えずに済ませられることは覚えていても、
+&ldquo;Find in Files&rdquo; で一括編集したときにも空白が削られることは忘れがち。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git diff --ignore-space-at-eol <span class="p">|</span> git apply --cached
+</span></span></code></pre></div><p>上記ワンライナーで大概うまくいくが、
+変更箇所が近かったりすると <code>error: patch failed</code> と蹴られる。
+その場合は次のようにworkaround:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git diff --ignore-space-at-eol &gt; tmp.diff
+</span></span><span class="line"><span class="cl">git stash
+</span></span><span class="line"><span class="cl">git apply --cached tmp.diff
+</span></span><span class="line"><span class="cl">git stash drop
+</span></span></code></pre></div><h3 id="用済みブランチの掃除">用済みブランチの掃除</h3>
 <p>PRマージ済みのリモートブランチを消したい。
 一番簡単なのは、GitHub PR画面のdelete branchボタンを押すこと。
 手元のgitからやるには、明示的に <code>--delete</code> するか、空ブランチをpushするか:</p>
