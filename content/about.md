@@ -32,13 +32,13 @@ Email:
 
 Find me on
 : <a rel="me" href="https://github.com/heavywatal" title="GitHub">
-  <i class="fab fa-fw fa-lg fa-github"></i></a>
+  <img height=24 width=24 src="https://cdn.simpleicons.org/github/333333" alt="GitHub"></a>
   <a rel="me" href="https://www.facebook.com/profile.php?id=100002135628677" title="Facebook">
-  <i class="fab fa-fw fa-lg fa-facebook"></i></a>
+  <img height=24 width=24 src="https://cdn.simpleicons.org/facebook" alt="Facebook"></a>
   <a rel="me" href="https://twitter.com/heavywatal" title="Twitter">
-  <i class="fab fa-fw fa-lg fa-twitter"></i></a>
+  <img height=24 width=24 src="https://cdn.simpleicons.org/twitter" alt="Twitter"></a>
   <a href="https://www.amazon.co.jp/wishlist/Z62OJBP7VCNP" title="ほしい物">
-  <i class="fab fa-fw fa-lg fa-amazon"></i></a>
+  <img height=24 width=24 src="https://cdn.simpleicons.org/amazon/333333" alt="Amazon"></a>
 
 <!--more-->
 

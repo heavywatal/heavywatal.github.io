@@ -8,19 +8,6 @@ tags = ["vcs", "writing"]
   parent = "lectures"
 +++
 
-<style>
-.fa-share-alt-square {
-  color: #f03c2e;
-  transform: rotate(45deg);
-}
-.fa-tint {
-  color: #949494;
-}
-.fa-coffee {
-  color: #62982f;
-}
-</style>
-
 2018-10-15 中央水産研究所
 
 ## 事前準備
@@ -72,9 +59,9 @@ tags = ["vcs", "writing"]
     - [VSCode]({{< relref "vscode.md" >}}): Microsoft製
     - [RStudio](https://www.rstudio.com/): RStudio製
 
--   [GitHub<i class="fab fa-fw fa-github"></i>](https://github.com)に個人アカウントを作る。
+-   [GitHub<img height=16 width=16 src="https://cdn.simpleicons.org/github">](https://github.com)に個人アカウントを作る。
 
--   Git<i class="fas fa-fw fa-share-alt-square"></i>の初期設定をターミナルから行う:
+-   Git<img height=16 width=16 src="https://cdn.simpleicons.org/git">の初期設定をターミナルから行う:
 
     ```sh
     git --version  # 2.0以上であることを確認
@@ -144,10 +131,10 @@ plot論文.R
 
 ### オンラインストレージやバックアップ機能では不十分
 
-- [Dropbox<i class="fab fa-fw fa-dropbox"></i>](https://dropbox.com) とか
-  [Google Drive<i class="fab fa-fw fa-google-drive"></i>](https://drive.google.com/)
+- [Dropbox<img height=16 width=16 src="https://cdn.simpleicons.org/dropbox">](https://dropbox.com) とか
+  [Google Drive<img height=16 width=16 src="https://cdn.simpleicons.org/googledrive">](https://drive.google.com/)
   では、保存のたびに履歴が残る。
-- [Time Machine<i class="fas fa-fw fa-clock"></i>](https://support.apple.com/HT201250)
+- [Time Machine](https://support.apple.com/HT201250)
   では、一定時間間隔で履歴が残る。
 
 でも、バージョン管理や共同作業のためのツールじゃないから...
@@ -159,7 +146,7 @@ plot論文.R
 - ファイル変更の競合・衝突に対処しにくい。
 
 
-## Git<i class="fas fa-fw fa-share-alt-square"></i> and GitHub<i class="fab fa-fw fa-github"></i>
+## Git<img height=16 width=16 src="https://cdn.simpleicons.org/git"> and GitHub<img height=16 width=16 src="https://cdn.simpleicons.org/github">
 
 - いつでも好きなところに戻れる安心感
     - 履歴を残すタイミングは任意 = 手動。
@@ -176,11 +163,11 @@ e.g., https://github.com/tidyverse/stringr/commits/master
 
 ### 両者はどういう関係？
 
-[Git<i class="fas fa-fw fa-share-alt-square"></i>](https://git-scm.com/)
+[Git<img height=16 width=16 src="https://cdn.simpleicons.org/git">](https://git-scm.com/)
 は分散型バージョン管理システムとして最も広く使われるオープンソース・ソフトウェア。
 手元のコンピュータ上でこれを操作して、変更履歴を記録・閲覧したり送受信したりする。
 
-[GitHub<i class="fab fa-fw fa-github"></i>](https://github.com)
+[GitHub<img height=16 width=16 src="https://cdn.simpleicons.org/github">](https://github.com)
 はGitをより便利に使うためのオンラインサービスであり、それを運営する会社の名前でもある。
 個人的なリポジトリ置き場としてはもちろんのこと、
 多人数で共有・協力してプロジェクトを進めるプラットフォームとしても使える。
@@ -188,17 +175,17 @@ e.g., https://github.com/tidyverse/stringr/commits/master
 ### 類似ツール
 
 - Version Control System (VCS)
-    - [Git<i class="fas fa-fw fa-share-alt-square"></i> `git`](https://git-scm.com/)
-    - [Mercurial<i class="fas fa-fw fa-tint"></i> `hg`](https://www.mercurial-scm.org/)
+    - [Git<img height=16 width=16 src="https://cdn.simpleicons.org/git">](https://git-scm.com/) `git`
+    - [Mercurial<img height=16 width=16 src="https://cdn.simpleicons.org/mercurial">](https://www.mercurial-scm.org/) `hg`
     - その他 svn, cvs, rcs など。
 - Hosting Service
-    - [GitHub<i class="fab fa-fw fa-github"></i>](https://github.com):
+    - [GitHub<img height=16 width=16 src="https://cdn.simpleicons.org/github">](https://github.com):
       公開リポジトリは無料。情報も連携も豊富。
-    - [Bitbucket<i class="fab fa-fw fa-bitbucket"></i>](https://bitbucket.org/):
+    - [Bitbucket<img height=16 width=16 src="https://cdn.simpleicons.org/bitbucket">](https://bitbucket.org/):
       非公開リポジトリも無料。
-    - [GitLab<i class="fab fa-fw fa-gitlab"></i>](https://about.gitlab.com/):
+    - [GitLab<img height=16 width=16 src="https://cdn.simpleicons.org/gitlab">](https://about.gitlab.com/):
       非公開リポジトリも無料。ローカル版もあり。
-    - [Gitea<i class="fas fa-fw fa-coffee"></i>](https://gitea.io/en-us/):
+    - [Gitea<img height=16 width=16 src="https://cdn.simpleicons.org/gitea">](https://gitea.io/en-us/):
       ローカル版のみ。
     - その他 SourceForge, Google Code など。
 
@@ -206,9 +193,9 @@ VCSは基本的にGit一択。<br>
 ホスティングサービスは、使い方や予算などに応じて選択。
 
 
-### GitHub<i class="fab fa-fw fa-github"></i>の使いみち
+### GitHub<img height=16 width=16 src="https://cdn.simpleicons.org/github">の使いみち
 
-- 基本: プレーンテキストのバージョン管理<i class="fas fa-fw fa-share-alt-square"></i>
+- 基本: プレーンテキストのバージョン管理<img height=16 width=16 src="https://cdn.simpleicons.org/git">
     - プログラムのソースコード:
       e.g., [ggplot2](https://github.com/tidyverse/ggplot2), [rstan](https://github.com/stan-dev/rstan)
     - 論文や本の原稿、サプリ:
@@ -238,32 +225,32 @@ VCSは基本的にGit一択。<br>
 
 ### 手元の変更を外に伝える
 
-<i class="fas fa-fw fa-folder"></i> working directory (working tree)
+📁 working directory (working tree)
 : 手元のファイルの変更はまだリポジトリに登録されていない
 : ↓ `git add`
 
-<i class="fas fa-fw fa-folder-plus"></i> staging area (index)
+<img height=16 width=16 src="https://cdn.simpleicons.org/git"> staging area (index)
 : 次のコミットに含めるファイルをマークする段階
 : ↓ `git commit`
 
-<i class="fas fa-fw fa-code-branch"></i> local repository
+<img height=16 width=16 src="https://cdn.simpleicons.org/git"> local repository
 : 変更履歴が `.git/` 内に記録されている
 : ↓ `git push`
 
-<i class="fab fa-fw fa-github"></i> remote repository
+<img height=16 width=16 src="https://cdn.simpleicons.org/github"> remote repository
 : GitHubなど別マシンのリポジトリに反映
 
 
 ### 外部の変更を手元に取り込む
 
-<i class="fab fa-fw fa-github"></i> remote repository
+<img height=16 width=16 src="https://cdn.simpleicons.org/github"> remote repository
 : ↓ `git fetch`
 
-<i class="fas fa-fw fa-code-branch"></i> local repository
+<img height=16 width=16 src="https://cdn.simpleicons.org/git"> local repository
 : 変更が `.git/` に取り込まれたが、見えてるファイルには反映されてない
 : ↓ `git checkout` or `git merge`
 
-<i class="fas fa-fw fa-folder"></i> working directory
+📁 working directory
 : 手元のファイルが最新版に同期されている
 
 
@@ -539,41 +526,32 @@ e.g., https://github.com/Rdatatable/data.table/pull/2807
 
 ### 2人1組でPRとmergeを体験
 
-<style>
-.fa-chess-king {
-  color: #990000;
-}
-.fa-chess-pawn {
-  color: #000099;
-}
-</style>
-
-- <i class="fas fa-fw fa-chess-king"></i> KING: リポジトリの管理権限を持つ人
-- <i class="fas fa-fw fa-chess-pawn"></i> PAWN: 権限を持たず、PRを送る人
+- 🐸 カエル: リポジトリの管理権限を持つ人
+- 🐰 ウサギ: 権限を持たず、PRを送る人
 
 (できれば横に並んで相手の画面も見えるように)
 
-1.  <i class="fas fa-fw fa-chess-king"></i> GitHubで新しいリポジトリを作成
-1.  <i class="fas fa-fw fa-chess-king"></i> 何かtypoを含む `README.md` を作ってpush
-1.  <i class="fas fa-fw fa-chess-pawn"></i> 相手のGitHubリポジトリでその `README.md` が見えることを確認
-1.  <i class="fas fa-fw fa-chess-pawn"></i> 右上のForkボタンで自分のGitHubリポジトリに取り込む
-1.  <i class="fas fa-fw fa-chess-pawn"></i> forkした自分のリポジトリからローカルに`clone`:
+1.  🐸 GitHubで新しいリポジトリを作成
+1.  🐸 何かtypoを含む `README.md` を作ってpush
+1.  🐰 相手のGitHubリポジトリでその `README.md` が見えることを確認
+1.  🐰 右上のForkボタンで自分のGitHubリポジトリに取り込む
+1.  🐰 forkした自分のリポジトリからローカルに`clone`:
 
         git clone https://github.com/{PAWN}/PROJECT.git
         cd PROJECT/
 
-1.  <i class="fas fa-fw fa-chess-pawn"></i> 大元のリポジトリに`upstream`という名前をつけておく:
+1.  🐰 大元のリポジトリに`upstream`という名前をつけておく:
 
         git remote add upstream https://github.com/{KING}/PROJECT.git
         git remote -v
 
     ちなみに自分のリポジトリには自動的に `origin` という名前がついている。
 
-1.  <i class="fas fa-fw fa-chess-pawn"></i> PR用のブランチを切って移動:
+1.  🐰 PR用のブランチを切って移動:
 
         git checkout -b fix-typo
 
-1.  <i class="fas fa-fw fa-chess-pawn"></i> `README.md` をテキストエディタで編集して `commit`:
+1.  🐰 `README.md` をテキストエディタで編集して `commit`:
 
         git diff
         git commit -a -m ":memo: Fix typo in README.md"
@@ -582,7 +560,7 @@ e.g., https://github.com/Rdatatable/data.table/pull/2807
     そこからdiffやcommitをやってみてもよい。
     コードの追加・変更・削除による色分けの便利さも体感しよう。
 
-1.  <i class="fas fa-fw fa-chess-pawn"></i> この間に`upstream`で更新が無いかどうか確認:
+1.  🐰 この間に`upstream`で更新が無いかどうか確認:
 
         git fetch upstream
 
@@ -594,17 +572,17 @@ e.g., https://github.com/Rdatatable/data.table/pull/2807
         git checkout fix-typo
         git rebase -i master
 
-1.  <i class="fas fa-fw fa-chess-pawn"></i> 自分のリポジトリに`push`:
+1.  🐰 自分のリポジトリに`push`:
 
         git push origin fix-typo
 
-1.  <i class="fas fa-fw fa-chess-pawn"></i> GitHub上に出現する "Compare & pull request" ボタンを押す。
-1.  <i class="fas fa-fw fa-chess-pawn"></i> 差分を確認し、コメント欄を埋めて提出。
-1.  <i class="fas fa-fw fa-chess-king"></i> 受け取ったPRを確認。必要に応じて修正を要求したり、自分で修正したり。
-1.  <i class="fas fa-fw fa-chess-pawn"></i> 修正を求められたらそのブランチに続けてcommitしてまたpush。
-1.  <i class="fas fa-fw fa-chess-king"></i> 問題が無ければmergeする。
-1.  <i class="fas fa-fw fa-chess-king"></i> 自分のローカルリポジトリに pull (fetch+merge) する。
-1.  <i class="fas fa-fw fa-chess-pawn"></i> 無事マージされたら作業ブランチを消す。
+1.  🐰 GitHub上に出現する "Compare & pull request" ボタンを押す。
+1.  🐰 差分を確認し、コメント欄を埋めて提出。
+1.  🐸 受け取ったPRを確認。必要に応じて修正を要求したり、自分で修正したり。
+1.  🐰 修正を求められたらそのブランチに続けてcommitしてまたpush。
+1.  🐸 問題が無ければmergeする。
+1.  🐸 自分のローカルリポジトリに pull (fetch+merge) する。
+1.  🐰 無事マージされたら作業ブランチを消す。
 
 ## Tips
 

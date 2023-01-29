@@ -8,19 +8,6 @@ tags = ["vcs", "writing"]
   parent = "lectures"
 +++
 
-<style>
-.fa-share-alt-square {
-  color: #f03c2e;
-  transform: rotate(45deg);
-}
-.fa-tint {
-  color: #949494;
-}
-.fa-coffee {
-  color: #62982f;
-}
-</style>
-
 2019-10-30 東北大学 生命科学研究科 進化ゲノミクス分野 牧野研
 
 [前半スライド](/slides/makino2019r/5-git.html)
@@ -74,9 +61,9 @@ tags = ["vcs", "writing"]
     - [VSCode]({{< relref "vscode.md" >}}): Microsoft製
     - [RStudio](https://www.rstudio.com/): RStudio製
 
--   [GitHub<i class="fab fa-fw fa-github"></i>](https://github.com)に個人アカウントを作る。
+-   [GitHub<img height=16 width=16 src="https://cdn.simpleicons.org/github">](https://github.com)に個人アカウントを作る。
 
--   Git<i class="fas fa-fw fa-share-alt-square"></i>の初期設定をターミナルから行う:
+-   Git<img height=16 width=16 src="https://cdn.simpleicons.org/git">の初期設定をターミナルから行う:
 
     ```sh
     git --version  # 2.0以上であることを確認
@@ -343,41 +330,32 @@ e.g., https://github.com/Rdatatable/data.table/pull/2807
 
 ### 2人1組でPRとmergeを体験
 
-<style>
-.fa-chess-king {
-  color: #990000;
-}
-.fa-chess-pawn {
-  color: #000099;
-}
-</style>
-
-- <i class="fas fa-fw fa-chess-king"></i> KING: リポジトリの管理権限を持つ人
-- <i class="fas fa-fw fa-chess-pawn"></i> PAWN: 権限を持たず、PRを送る人
+- 🐸 KING: リポジトリの管理権限を持つ人
+- 🐰 PAWN: 権限を持たず、PRを送る人
 
 (できれば横に並んで相手の画面も見えるように)
 
-1.  <i class="fas fa-fw fa-chess-king"></i> GitHubで新しいリポジトリを作成
-1.  <i class="fas fa-fw fa-chess-king"></i> 何かtypoを含む `README.md` を作ってpush
-1.  <i class="fas fa-fw fa-chess-pawn"></i> 相手のGitHubリポジトリでその `README.md` が見えることを確認
-1.  <i class="fas fa-fw fa-chess-pawn"></i> 右上のForkボタンで自分のGitHubリポジトリに取り込む
-1.  <i class="fas fa-fw fa-chess-pawn"></i> forkした自分のリポジトリからローカルに`clone`:
+1.  🐸 GitHubで新しいリポジトリを作成
+1.  🐸 何かtypoを含む `README.md` を作ってpush
+1.  🐰 相手のGitHubリポジトリでその `README.md` が見えることを確認
+1.  🐰 右上のForkボタンで自分のGitHubリポジトリに取り込む
+1.  🐰 forkした自分のリポジトリからローカルに`clone`:
 
         git clone https://github.com/{PAWN}/PROJECT.git
         cd PROJECT/
 
-1.  <i class="fas fa-fw fa-chess-pawn"></i> 大元のリポジトリに`upstream`という名前をつけておく:
+1.  🐰 大元のリポジトリに`upstream`という名前をつけておく:
 
         git remote add upstream https://github.com/{KING}/PROJECT.git
         git remote -v
 
     ちなみに自分のリポジトリには自動的に `origin` という名前がついている。
 
-1.  <i class="fas fa-fw fa-chess-pawn"></i> PR用のブランチを切って移動:
+1.  🐰 PR用のブランチを切って移動:
 
         git checkout -b fix-typo
 
-1.  <i class="fas fa-fw fa-chess-pawn"></i> `README.md` をテキストエディタで編集して `commit`:
+1.  🐰 `README.md` をテキストエディタで編集して `commit`:
 
         git diff
         git commit -a -m ":memo: Fix typo in README.md"
@@ -386,7 +364,7 @@ e.g., https://github.com/Rdatatable/data.table/pull/2807
     そこからdiffやcommitをやってみてもよい。
     コードの追加・変更・削除による色分けの便利さも体感しよう。
 
-1.  <i class="fas fa-fw fa-chess-pawn"></i> この間に`upstream`で更新が無いかどうか確認:
+1.  🐰 この間に`upstream`で更新が無いかどうか確認:
 
         git fetch upstream
 
@@ -398,17 +376,17 @@ e.g., https://github.com/Rdatatable/data.table/pull/2807
         git checkout fix-typo
         git rebase -i master
 
-1.  <i class="fas fa-fw fa-chess-pawn"></i> 自分のリポジトリに`push`:
+1.  🐰 自分のリポジトリに`push`:
 
         git push origin fix-typo
 
-1.  <i class="fas fa-fw fa-chess-pawn"></i> GitHub上に出現する "Compare & pull request" ボタンを押す。
-1.  <i class="fas fa-fw fa-chess-pawn"></i> 差分を確認し、コメント欄を埋めて提出。
-1.  <i class="fas fa-fw fa-chess-king"></i> 受け取ったPRを確認。必要に応じて修正を要求したり、自分で修正したり。
-1.  <i class="fas fa-fw fa-chess-pawn"></i> 修正を求められたらそのブランチに続けてcommitしてまたpush。
-1.  <i class="fas fa-fw fa-chess-king"></i> 問題が無ければmergeする。
-1.  <i class="fas fa-fw fa-chess-king"></i> 自分のローカルリポジトリに pull (fetch+merge) する。
-1.  <i class="fas fa-fw fa-chess-pawn"></i> 無事マージされたら作業ブランチを消す。
+1.  🐰 GitHub上に出現する "Compare & pull request" ボタンを押す。
+1.  🐰 差分を確認し、コメント欄を埋めて提出。
+1.  🐸 受け取ったPRを確認。必要に応じて修正を要求したり、自分で修正したり。
+1.  🐰 修正を求められたらそのブランチに続けてcommitしてまたpush。
+1.  🐸 問題が無ければmergeする。
+1.  🐸 自分のローカルリポジトリに pull (fetch+merge) する。
+1.  🐰 無事マージされたら作業ブランチを消す。
 
 ## Tips
 
