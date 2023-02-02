@@ -22,16 +22,13 @@ data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(
 -   <https://r4ds.had.co.nz/transform.html>
 -   <https://github.com/tidyverse/dplyr>
 
-## 関数の連結 %>%
+## パイプ演算子 |> による関数の連結
 
 <a href="https://magrittr.tidyverse.org/">
 <img src="/_img/hex-stickers/pipe.webp" align="right" width="120" height="139">
 </a>
 
-dplyrではなく[magrittr](https://magrittr.tidyverse.org/)の機能。
-R 4.1 から標準でも `|>` として使えるようになった。
-
-`x %>% f(a, b)` は `f(x, a, b)` と等価。
+`x |> f(a, b)` は `f(x, a, b)` と等価。
 左の値 `x` を第一引数として右の関数 `f()` に渡す。
 一時変数を作ったり、関数を何重にも重ねたりすることなく、
 適用する順に次々と処理を記述することができるようになる。
@@ -41,12 +38,12 @@ R 4.1 から標準でも `|>` として使えるようになった。
 library(tidyverse)
 
 ## with piping
-result = diamonds %>%              # 生データから出発して
-  select(carat, cut, price) %>%    # 列を抽出して
-  filter(carat > 1) %>%            # 行を抽出して
-  group_by(cut) %>%                # グループ化して
-  summarize(mean(price)) %>%       # 平均を計算
-  print()                          # 表示してみる
+result = diamonds |>              # 生データから出発して
+  select(carat, cut, price) |>    # 列を抽出して
+  filter(carat > 1) |>            # 行を抽出して
+  group_by(cut) |>                # グループ化して
+  summarize(mean(price)) |>       # 平均を計算
+  print()                         # 表示してみる
 
 ## with a temporary variable
 result = select(diamonds, carat, cut, price) # 列を抽出して
@@ -73,9 +70,15 @@ result = summarize(                    # 平均を計算
 5     Ideal    8674.227
 ```
 
-現状では `magrittr` パッケージの `%>%` が広く採用されているが、
-`pipeR` パッケージの `%>>%` のほうが高速らしい。
-<https://renkun-ken.github.io/pipeR-tutorial/>
+R 4.1 から標準で `|>` が使えるようになり、徐々に普及してきた。
+それまでdplyr始めtidyverseでは
+[magrittr](https://magrittr.tidyverse.org/) の `%>%` が長らく使われていた。
+R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイマイチなので、
+`%>%` から完全移行できる状態ではない。
+
+さらに高性能なものを求める人々は
+[`pipeR`](https://renkun-ken.github.io/pipeR/) パッケージの `%>>%`
+を使っていたが最近はあまり見かけない。
 
 
 ## 抽出・絞り込み
@@ -90,13 +93,13 @@ result = summarize(                    # 平均を計算
     残るのが1列だけでも勝手にvectorにはならずdata.frameのまま。
 
     ```r
-    diamonds %>% dplyr::select(1, 2, 7)
-    diamonds %>% dplyr::select(carat, cut, price)
-    diamonds %>% dplyr::select(c("carat", "cut", "price"))
-    diamonds %>% dplyr::select(!c(carat, cut, price))
-    diamonds %>% dplyr::select(starts_with("c"))
-    diamonds %>% dplyr::select(where(is.numeric))
-    # diamonds %>% dplyr::select(-carat, -cut, -price)
+    diamonds |> dplyr::select(1, 2, 7)
+    diamonds |> dplyr::select(carat, cut, price)
+    diamonds |> dplyr::select(c("carat", "cut", "price"))
+    diamonds |> dplyr::select(!c(carat, cut, price))
+    diamonds |> dplyr::select(starts_with("c"))
+    diamonds |> dplyr::select(where(is.numeric))
+    # diamonds |> dplyr::select(-carat, -cut, -price)
     ```
 
     カンマ区切りはORの意味で働くはずだがマイナス指定
@@ -111,13 +114,13 @@ result = summarize(                    # 平均を計算
     [pronoun$](https://rlang.r-lib.org/reference/dot-data.html)を使う:
     ```r
     clarity = c("carat", "cut", "price")
-    diamonds %>% dplyr::select(clarity)         # ambiguous!
-    diamonds %>% dplyr::select(.data$clarity)   # clarity
-    diamonds %>% dplyr::select(all_of(clarity)) # carat, cut, price
-    diamonds %>% dplyr::select(any_of(clarity)) # carat, cut, price
-    diamonds %>% dplyr::select({{clarity}})     # carat, cut, price
-    diamonds %>% dplyr::select(!!clarity)       # carat, cut, price
-    diamonds %>% dplyr::select(!!!rlang::syms(clarity))  # carat, cut, price
+    diamonds |> dplyr::select(clarity)         # ambiguous!
+    diamonds |> dplyr::select(.data$clarity)   # clarity
+    diamonds |> dplyr::select(all_of(clarity)) # carat, cut, price
+    diamonds |> dplyr::select(any_of(clarity)) # carat, cut, price
+    diamonds |> dplyr::select({{clarity}})     # carat, cut, price
+    diamonds |> dplyr::select(!!clarity)       # carat, cut, price
+    diamonds |> dplyr::select(!!!rlang::syms(clarity))  # carat, cut, price
     ```
     これらの指定方法は `rename()` や `pull()` でも有効。
 
@@ -128,8 +131,8 @@ result = summarize(                    # 平均を計算
     して渡す必要がある。
     ```r
     columns = c("cut", "color")
-    diamonds %>% distinct(!!as.name(columns[1L]))
-    diamonds %>% distinct(!!!rlang::data_syms(columns))
+    diamonds |> distinct(!!as.name(columns[1L]))
+    diamonds |> distinct(!!!rlang::data_syms(columns))
     ```
     詳しくは [rlangパッケージのドキュメント](https://rlang.r-lib.org/) か
     [宇宙船本](https://amzn.to/3KpiXq0)第3章のコラム
@@ -140,7 +143,7 @@ result = summarize(                    # 平均を計算
 :   列の改名。
     `mutate()`と同じようなイメージで `new = old` と指定。
     ```r
-    diamonds %>% dplyr::rename(SIZE = carat)
+    diamonds |> dplyr::rename(SIZE = carat)
     #    SIZE       cut color clarity depth table price     x     y     z
     # 1  0.23     Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43
     # 2  0.21   Premium     E     SI1  59.8    61   326  3.89  3.84  2.31
@@ -149,7 +152,7 @@ result = summarize(                    # 平均を計算
     ```r
     old_name = "carat"
     new_name = toupper(old_name)
-    diamonds %>% dplyr::rename({{new_name}} := {{old_name}})
+    diamonds |> dplyr::rename({{new_name}} := {{old_name}})
     # tbl_df [53940 x 10]
     #   CARAT       cut color clarity depth table price     x     y     z
     # 1  0.23     Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43
@@ -160,7 +163,7 @@ result = summarize(                    # 平均を計算
     を使えば一括指定できる:
     ```r
     named_vec = setNames(names(diamonds), LETTERS[seq(1, 10)])
-    diamonds %>% dplyr::rename(!!!named_vec)
+    diamonds |> dplyr::rename(!!!named_vec)
     #       A         B     C     D     E     F     G     H     I     J
     #   <dbl>     <ord> <ord> <ord> <dbl> <dbl> <int> <dbl> <dbl> <dbl>
     # 1  0.23     Ideal     E   SI2  61.5    55   326  3.95  3.98  2.43
@@ -169,19 +172,19 @@ result = summarize(                    # 平均を計算
 :   `rename_with(.tbl, .fn, .cols = everything(), ...)`
     はリネーム関数を渡せる亜種:
     ```r
-    diamonds %>% dplyr::rename_with(toupper, everything())
+    diamonds |> dplyr::rename_with(toupper, everything())
     ```
 
 `dplyr::pull(.data, var = -1)`
 :   指定した1列をvector(またはlist)としてdata.frameから抜き出す。
 
     ```r
-    diamonds %>% head() %>% dplyr::pull(price)
-    diamonds %>% head() %>% dplyr::pull("price")
-    diamonds %>% head() %>% dplyr::pull(7)
-    diamonds %>% head() %>% dplyr::pull(-4)
-    diamonds %>% head() %>% `[[`("price")
-    diamonds %>% head() %>% {.[["price"]]}
+    diamonds |> head() |> dplyr::pull(price)
+    diamonds |> head() |> dplyr::pull("price")
+    diamonds |> head() |> dplyr::pull(7)
+    diamonds |> head() |> dplyr::pull(-4)
+    diamonds |> head() %>% `[[`("price")
+    diamonds |> head() %>% {.[["price"]]}
     ```
 
 
@@ -191,7 +194,7 @@ result = summarize(                    # 平均を計算
 :   条件を満たす行だけを返す。`base::subset()` と似たようなもの。
 
     ```r
-    diamonds %>% dplyr::filter(carat > 3 & price < 10000)
+    diamonds |> dplyr::filter(carat > 3 & price < 10000)
     #   carat     cut color clarity depth table price     x     y     z
     # 1  3.01 Premium     I      I1  62.7    58  8040  9.10  8.97  5.67
     # 2  3.11    Fair     J      I1  65.9    57  9823  9.15  9.02  5.98
@@ -207,13 +210,13 @@ e.g., `filter(gene != "TP53")`
 :   複数列で条件指定するには `if_any()`, `if_all()` が使える。
 
     ```r
-    diamonds %>% dplyr::filter(if_any(c(x, y, z), ~ .x > 20))
+    diamonds |> dplyr::filter(if_any(c(x, y, z), ~ .x > 20))
     #   carat       cut color clarity depth table price     x     y     z
     #   <dbl>     <ord> <ord>   <ord> <dbl> <dbl> <int> <dbl> <dbl> <dbl>
     # 1  2.00   Premium     H     SI2  58.9  57.0 12210  8.09 58.90  8.06
     # 2  0.51 Very Good     E     VS1  61.8  54.7  1970  5.12  5.15 31.80
     # 3  0.51     Ideal     E     VS1  61.8  55.0  2075  5.15 31.80  5.12
-    diamonds %>% dplyr::filter(if_all(where(is.numeric), ~ .x > 4))
+    diamonds |> dplyr::filter(if_all(where(is.numeric), ~ .x > 4))
     #   carat     cut color clarity depth table price     x     y     z
     #   <dbl>   <ord> <ord>   <ord> <dbl> <dbl> <int> <dbl> <dbl> <dbl>
     # 1  4.01 Premium     I      I1  61.0    61 15223 10.14 10.10  6.17
@@ -231,7 +234,7 @@ e.g., `filter(gene != "TP53")`
     指定しなかった列を残すには `.keep_all = TRUE` とする。
 
     ```r
-    diamonds %>% dplyr::distinct(cut)
+    diamonds |> dplyr::distinct(cut)
     #         cut
     # 1     Ideal
     # 2   Premium
@@ -245,7 +248,7 @@ e.g., `filter(gene != "TP53")`
     `` `[`(i,) `` の代わりに。
 
     ```r
-    diamonds %>% dplyr::slice(1, 2, 3)
+    diamonds |> dplyr::slice(1, 2, 3)
     #   carat     cut color clarity depth table price     x     y     z
     # 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43
     # 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31
@@ -267,10 +270,10 @@ e.g., `filter(gene != "TP53")`
     `base::transform()` の改良版。
     ```r
     # modify existing column
-    diamonds %>% dplyr::mutate(price = price * 107.54)
+    diamonds |> dplyr::mutate(price = price * 107.54)
 
     # create new column
-    diamonds %>% dplyr::mutate(gram = 0.2 * carat)
+    diamonds |> dplyr::mutate(gram = 0.2 * carat)
     ```
 
     変数に入った文字列を列名として使いたい場合は上記 `select()` のときと同様、
@@ -283,13 +286,13 @@ e.g., `filter(gene != "TP53")`
     B = "gram"
 
     # unquoting only right hand side
-    diamonds %>% dplyr::mutate(B = 0.2 * !!as.name(A))
+    diamonds |> dplyr::mutate(B = 0.2 * !!as.name(A))
     #   carat     cut color clarity depth table price     x     y     z     B
     # 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43 0.046
     # 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31 0.042
 
     # unquoting both sides
-    diamonds %>% dplyr::mutate({{B}} := 0.2 * !!as.name(A))
+    diamonds |> dplyr::mutate({{B}} := 0.2 * !!as.name(A))
     #   carat     cut color clarity depth table price     x     y     z  gram
     # 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43 0.046
     # 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31 0.042
@@ -307,8 +310,8 @@ e.g., `filter(gene != "TP53")`
     グループ化されていたらグループごとに適用して `bind_rows()` する。
 
     ```r
-    diamonds %>%
-      group_by(cut) %>%
+    diamonds |>
+      group_by(cut) |>
       summarize(avg_carat = mean(carat), max_price = max(price))
     #         cut avg_carat max_price
     #       <ord>     <dbl>     <int>
@@ -322,7 +325,7 @@ e.g., `filter(gene != "TP53")`
 :   関数の結果が長さ1じゃなくても大丈夫(v1.0.0):
 
     ```r
-    diamonds %>% dplyr::summarize(range(carat), range(price))
+    diamonds |> dplyr::summarize(range(carat), range(price))
     #   range(carat) range(price)
     #          <dbl>        <int>
     # 1         0.20          326
@@ -332,7 +335,7 @@ e.g., `filter(gene != "TP53")`
 :   各グループの結果がtibbleの場合、結合・展開してくれる:
 
     ```r
-    diamonds %>% dplyr::nest_by(cut) %>%
+    diamonds |> dplyr::nest_by(cut) |>
       dplyr::summarize(head(data, 2L))
     ```
 
@@ -340,8 +343,8 @@ e.g., `filter(gene != "TP53")`
 
     ```r
     path = fs::dir_ls("path/to/data", glob = "*.tsv")
-    df = tibble(path) %>%
-      dplyr::rowwise() %>%
+    df = tibble(path) |>
+      dplyr::rowwise() |>
       dplyr::summarize(readr::read_tsv(path))
     ```
 
@@ -355,15 +358,15 @@ e.g., `filter(gene != "TP53")`
     }
 
     # summarize_at
-    diamonds %>% group_by(cut) %>%
+    diamonds |> group_by(cut) |>
       summarize(across(starts_with("c"), median))
 
     # summarize_if
-    diamonds %>% group_by(cut) %>%
+    diamonds |> group_by(cut) |>
       summarize(across(where(is.numeric), mean, na.rm = TRUE))
 
     # summarize_all
-    diamonds %>% group_by(cut) %>%
+    diamonds |> group_by(cut) |>
       summarize(across(everything(), median, na.rm = TRUE))
     ```
 
@@ -375,7 +378,7 @@ e.g., `filter(gene != "TP53")`
 :   `dplyr::add_tally()` は元の形を維持したままカウント列を追加。
 
 `dplyr::count(x, ..., wt = NULL, sort = FALSE)`
-:   `group_by(...) %>% tally()` のショートカット。
+:   `group_by(...) |> tally()` のショートカット。
 :   `dplyr::add_count()` は元の形を維持したままカウント列を追加。
 
 `dplyr::arrange(.data, column1, column2, ...)`
@@ -385,7 +388,7 @@ e.g., `filter(gene != "TP53")`
     ```r
     mtcars[order(mtcars$cyl, mtcars$disp), ]
     # is equivalent to
-    mtcars %>% dplyr::arrange(cyl, disp)
+    mtcars |> dplyr::arrange(cyl, disp)
     ```
 
 `dplyr::relocate(.data, ..., .before = NULL, .after = NULL)`
@@ -487,14 +490,14 @@ e.g., `filter(gene != "TP53")`
 それをもうちょいスマートにやる `group_modify()` がv0.8.1で導入された。
 
 ```r
-diamonds %>%
-  dplyr::group_nest(cut) %>%
-  dplyr::mutate(data = purrr::map(data, head, n = 2L)) %>%
+diamonds |>
+  dplyr::group_nest(cut) |>
+  dplyr::mutate(data = purrr::map(data, head, n = 2L)) |>
   tidyr::unnest()
 
 # since dplyr 0.8.1
-diamonds %>%
-  dplyr::group_by(cut) %>%
+diamonds |>
+  dplyr::group_by(cut) |>
   dplyr::group_modify(~ head(.x, 2L))
 ```
 
@@ -506,7 +509,7 @@ diamonds %>%
 `dplyr::group_data(.data)`
 :   グループ情報を参照:
     ```r
-    diamonds %>% dplyr::group_by(cut) %>% dplyr::group_data()
+    diamonds |> dplyr::group_by(cut) |> dplyr::group_data()
     #         cut           .rows
     # 1      Fair    <int [1610]>
     # 2      Good    <int [4906]>
@@ -520,11 +523,11 @@ diamonds %>%
 
 `dplyr::group_nest(.tbl, ..., .key = "data", keep = FALSE)`
 :   入れ子 data.frame を作る。
-    `group_by(...) %>% tidyr::nest()` のショートカット。
+    `group_by(...) |> tidyr::nest()` のショートカット。
 
 `dplyr::group_split(.tbl, ..., keep = FALSE)`
 :   list of data.frames に分割する。
-    `.tbl %>% split(.$group)` と同等だが、
+    `.tbl |> split(.$group)` と同等だが、
     ドットダラーを使わくて済むし複数列をキーにするのも簡単。
 
 `dplyr::group_indices(.data, ...)`
@@ -541,7 +544,7 @@ diamonds %>%
     このとき2つの引数はそれぞれ `.x`, `.y` として参照できる。
 
     ```r
-    diamonds %>% dplyr::group_by(cut) %>% dplyr::group_modify(~ head(.x, 2L))
+    diamonds |> dplyr::group_by(cut) |> dplyr::group_modify(~ head(.x, 2L))
     #          cut carat color clarity depth table price     x     y     z
     #  1      Fair  0.22     E     VS2  65.1    61   337  3.87  3.78  2.49
     #  2      Fair  0.86     E     SI2  55.1    69  2757  6.45  6.33  3.52
@@ -568,11 +571,11 @@ diamonds %>%
     ベクトル演算を使う場合に比べてかなり遅い。
 
     ```r
-    diamonds %>%
-      dplyr::rowwise() %>%
+    diamonds |>
+      dplyr::rowwise() |>
       dplyr::mutate(mean = mean(c_across(x:z)))         # slow
 
-    diamonds %>% dplyr::mutate(mean = (x + y + z) / 3)  # fast
+    diamonds |> dplyr::mutate(mean = (x + y + z) / 3)  # fast
     ```
 
 `dplyr::do(.data, ...)`
@@ -580,7 +583,7 @@ diamonds %>%
     代わりに `group_modify()` とかを使う。
 
     ```r
-    diamonds %>% dplyr::group_by(cut) %>% dplyr::do(head(., 2L))
+    diamonds |> dplyr::group_by(cut) |> dplyr::do(head(., 2L))
     ```
 
 
@@ -598,16 +601,16 @@ data.frame を主眼とする dplyr では matrix や array を扱わない。
 
 ```r
 # deprecated
-iris3 %>%
-  reshape2::melt() %>%
-  tibble::as_tibble() %>%
+iris3 |>
+  reshape2::melt() |>
+  tibble::as_tibble() |>
   dplyr::rename(obs = Var1, metrics = Var2, species = Var3)
 
 # new
 x = iris3
 dimnames(x)[[1L]] = seq_len(dim(iris3)[[1L]])
 names(dimnames(x)) = c("obs", "metrics", "species")
-cubelyr::as.tbl_cube(x, met_name = "value") %>% as_tibble()
+cubelyr::as.tbl_cube(x, met_name = "value") |> as_tibble()
 ```
 
 

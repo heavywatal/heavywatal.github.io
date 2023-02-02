@@ -163,7 +163,7 @@ resWeightKS = runTest(tg_data, algorithm="weight01", statistic="ks", sortOrder=s
 ```r
 str(resElimKS)
 geneData(resElimKS)
-score(resElimKS) %>% head()
+score(resElimKS) |> head()
 ```
 
 ### 解釈・描画
@@ -180,35 +180,35 @@ score(resElimKS) %>% head()
 #   elimFisher=resElimFisher,
 #   classicKS=resClassicKS,
 #   elimKS=resElimKS,
-#   topNodes=num_nodes) %>%
-#   tibble::as_tibble() %>%
+#   topNodes=num_nodes) |>
+#   tibble::as_tibble() |>
 #   print()
 
-annoStat = termStat(tg_data, sort(tg_data@graph@nodes)) %>%
-  tibble::rownames_to_column(var = "GO.ID") %>%
-  tibble::as_tibble() %>%
-  dplyr::mutate(Term=topGO:::.getTermsDefinition(terms, ontology(tg_data), 65535L)) %>%
-  dplyr::relocate(Term, .after=GO.ID) %>%
+annoStat = termStat(tg_data, sort(tg_data@graph@nodes)) |>
+  tibble::rownames_to_column(var = "GO.ID") |>
+  tibble::as_tibble() |>
+  dplyr::mutate(Term=topGO:::.getTermsDefinition(terms, ontology(tg_data), 65535L)) |>
+  dplyr::relocate(Term, .after=GO.ID) |>
   print()
 
-tg_table = annoStat %>% dplyr::mutate(
+tg_table = annoStat |> dplyr::mutate(
     classicFisher=score(resClassicFisher, whichGO=GO.ID),
     elimFisher=score(resElimFisher, whichGO=GO.ID),
     weightFisher=score(resWeightFisher, whichGO=GO.ID),
     classicKS=score(resClassicKS, whichGO=GO.ID),
     elimKS=score(resElimKS, whichGO=GO.ID),
     weightKS=score(resWeightKS, whichGO=GO.ID),
-  ) %>%
+  ) |>
   print()
 ```
 
 あとは dplyr, tidyr, ggplot2 などを使って自由に整形、可視化する。
 
 ```r
-tg_table %>% dplyr::arrange(elimKS)
+tg_table |> dplyr::arrange(elimKS)
 
-tg_table %>%
-  dplyr::select(matches("Fisher$|KS$")) %>%
+tg_table |>
+  dplyr::select(matches("Fisher$|KS$")) |>
   pairs()
 
 p0 = ggplot(tg_table) +

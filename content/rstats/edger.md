@@ -38,15 +38,15 @@ edgeRUsersGuide()
 
     targets = data.frame(group=c("control", "case"),
                          files=c("control.txt", "case.txt"))
-    dge = readDGE(targets, header=FALSE)
+    dge = readDGE(targets, header = FALSE)
     ```
 
 1.  低カウント過ぎる遺伝子を除去
 
     ```r
-    ok_c = (dge$counts > 5) %>% rowSums %>% {. > 0}
-    ok_cpm = dge %>% cpm %>% {. > 1} %>% rowSums %>% {. > 0}
-    dge = dge[ok_c & ok_cpm, , keep.lib.sizes=FALSE]
+    ok_c = (dge$counts > 5) |> rowSums() |> as.logical()
+    ok_cpm = (cpm(dge) > 1) |> rowSums() |> as.logical()
+    dge = dge[ok_c & ok_cpm, , keep.lib.sizes = FALSE]
     ```
 
 1.  正規化係数を計算
@@ -59,7 +59,7 @@ edgeRUsersGuide()
 1.  モデル
 
     ```r
-    design = model.matrix(~ 0 + group, data=targets)
+    design = model.matrix(~ 0 + group, data = targets)
     ```
 
 1.  common dispersion, trended dispersion, tagwise dispersionを推定

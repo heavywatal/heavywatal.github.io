@@ -26,7 +26,7 @@ data.frameを縦長・横広・入れ子に変形・整形するためのツー�
 -   `demo(package = "tidyr")`
 -   https://speakerdeck.com/yutannihilation/tidyr-pivot
 
-パイプ演算子 `%>%` については[dplyr]({{< relref "dplyr.md" >}})を参照。
+パイプ演算子 `|>` については[dplyr]({{< relref "dplyr.md" >}})を参照。
 
 
 ## Pivoting: 縦長 ↔ 横広
@@ -54,7 +54,7 @@ data.frameを横広(wide-format)から縦長(long-format)に変形する。
 : 値の移動先の列名
 
 ```r
-anscombe %>% tibble::rowid_to_column("id")
+anscombe |> tibble::rowid_to_column("id")
 #>    id x1 x2 x3 x4    y1   y2    y3    y4
 #> 1   1 10 10 10  8  8.04 9.14  7.46  6.58
 #> 2   2  8  8  8  8  6.95 8.14  6.77  5.76
@@ -68,8 +68,8 @@ anscombe %>% tibble::rowid_to_column("id")
 #> 10 10  7  7  7  8  4.82 7.26  6.42  7.91
 #> 11 11  5  5  5  8  5.68 4.74  5.73  6.89
 
-anscombe_long = anscombe %>% tibble::rowid_to_column("id") %>%
-  pivot_longer(!id, names_to = "namae", values_to = "atai") %>%
+anscombe_long = anscombe |> tibble::rowid_to_column("id") |>
+  pivot_longer(!id, names_to = "namae", values_to = "atai") |>
   print()
 #> # tbl_df [88 x 3]
 #>       id namae  atai
@@ -84,7 +84,7 @@ anscombe_long = anscombe %>% tibble::rowid_to_column("id") %>%
 #> 87    11    y3  5.73
 #> 88    11    y4  6.89
 
-# anscombe %>% gather("namae", "atai")
+# anscombe |> gather("namae", "atai")
 ```
 
 ### `tidyr::pivot_wider()` で横広にする
@@ -116,8 +116,8 @@ data.frameを縦長(long-format)から横広(wide-format)に変形する。
 
 
 ```r
-anscombe_long %>%
-  pivot_wider(names_from = namae, values_from = atai) %>%
+anscombe_long |>
+  pivot_wider(names_from = namae, values_from = atai) |>
   dplyr::select(!id)
 #> # tbl_df [11 x 8]
 #>       x1    x2    x3    x4    y1    y2    y3    y4
@@ -132,13 +132,13 @@ anscombe_long %>%
 #> 10     7     7     7     8  4.82  7.26  6.42  7.91
 #> 11     5     5     5     8  5.68  4.74  5.73  6.89
 
-# anscombe_long %>% spread(namae, atai) %>% dplyr::select(!id)
+# anscombe_long |> spread(namae, atai) |> dplyr::select(!id)
 ```
 
 カテゴリカル変数を指示変数(ダミー変数)に変換するのにも使える:
 
 ```r
-pg = PlantGrowth %>% dplyr::slice(c(1, 2, 11, 12, 21, 22)) %>% print()
+pg = PlantGrowth |> dplyr::slice(c(1, 2, 11, 12, 21, 22)) |> print()
 #   weight group
 # 1   4.17  ctrl
 # 2   5.58  ctrl
@@ -146,9 +146,9 @@ pg = PlantGrowth %>% dplyr::slice(c(1, 2, 11, 12, 21, 22)) %>% print()
 # 4   4.17  trt1
 # 5   6.31  trt2
 # 6   5.12  trt2
-pg %>% tibble::rowid_to_column("id") %>%
-  dplyr::mutate(name = group, value = 1L) %>%
-  tidyr::pivot_wider(values_fill = 0L) %>%
+pg |> tibble::rowid_to_column("id") |>
+  dplyr::mutate(name = group, value = 1L) |>
+  tidyr::pivot_wider(values_fill = 0L) |>
   dplyr::select(!c(id, ctrl))
 #   weight group  trt1  trt2
 #    <dbl> <fct> <int> <int>
@@ -168,9 +168,9 @@ pg %>% tibble::rowid_to_column("id") %>%
 `tidyr::separate()` / `tidyr::unite()` 的な操作も同時にやってしまえる:
 
 ```r
-anscombe %>% tibble::rowid_to_column("id") %>%
-  pivot_longer(!id, names_to = c("axis", "group"), names_sep = 1L) %>%
-  print() %>%
+anscombe |> tibble::rowid_to_column("id") |>
+  pivot_longer(!id, names_to = c("axis", "group"), names_sep = 1L) |>
+  print() |>
   pivot_wider(id, names_from = c(axis, group), names_sep = "_")
 #> # tbl_df [88 x 4]
 #>       id  axis group value
@@ -207,9 +207,9 @@ VADeaths
 #> 65-69       41.0         30.9       54.6         35.1
 #> 70-74       66.0         54.3       71.1         50.0
 
-VADeaths %>%
-  as.data.frame() %>%
-  rownames_to_column("age") %>%
+VADeaths |>
+  as.data.frame() |>
+  rownames_to_column("age") |>
   pivot_longer(!age, names_to = c("region", "sex"), names_sep = " ", values_to = "death")
 #> # tbl_df [20 x 4]
 #>      age region    sex death
@@ -230,14 +230,14 @@ VADeaths %>%
 例えば型変換に使える:
 
 ```r
-anscombe %>%
-  tibble::rowid_to_column("id") %>%
+anscombe |>
+  tibble::rowid_to_column("id") |>
   tidyr::pivot_longer(!id,
     names_to = c("axis", "group"),
     names_sep = 1L,
-    names_transform = list(group = as.integer)) %>%
-  tidyr::pivot_wider(c(id, group), names_from = axis) %>%
-  dplyr::select(!id) %>%
+    names_transform = list(group = as.integer)) |>
+  tidyr::pivot_wider(c(id, group), names_from = axis) |>
+  dplyr::select(!id) |>
   dplyr::arrange(group)
 #> # tbl_df [44 x 3]
 #>    group     x     y
@@ -256,8 +256,8 @@ anscombe %>%
 `names_prefix` を使えば、列名の頭に共通して付いてた文字を消せる:
 
 ```r
-anscombe %>%
-  dplyr::select(starts_with("x")) %>%
+anscombe |>
+  dplyr::select(starts_with("x")) |>
   pivot_longer(everything(), names_prefix = "x")
 #> # tbl_df [44 x 2]
 #>     name value
@@ -278,13 +278,13 @@ anscombe %>%
 また `names_to = c("name", NA)` のように不要な列を捨てることもできる。
 
 ```r
-tidy_anscombe = anscombe %>%
+tidy_anscombe = anscombe |>
   pivot_longer(                       # 縦長に変形したい
     everything(),                     # すべての列について
     names_to = c(".value", "group"),  # x, yを列名に、1, 2, 3をgroup列に
     names_sep = 1L,                   # 切る位置
-    names_transform = list(group = as.integer)) %>%   # 型変換
-  dplyr::arrange(group) %>%           # グループごとに並べる
+    names_transform = list(group = as.integer)) |>   # 型変換
+  dplyr::arrange(group) |>           # グループごとに並べる
   print()                             # ggplotしたい形！
 #> # tbl_df [44 x 3]
 #>    group     x     y
@@ -314,7 +314,7 @@ data.frameをネストして(入れ子にして)、list of data.frames のカラ
 外側に残すカラムを `!` で反転指定する。
 
 ```r
-diamonds %>% nest(NEW_COLUMN = !cut)
+diamonds |> nest(NEW_COLUMN = !cut)
 #> # tbl_df [5 x 2]
 #>         cut           NEW_COLUMN
 #>       <ord>               <list>
@@ -325,9 +325,9 @@ diamonds %>% nest(NEW_COLUMN = !cut)
 #> 5      Fair  <tbl_df [1610 x 9]>
 
 # equivalent to
-diamonds %>% nest(NEW_COLUMN = c(carat, color:z))
-diamonds %>% dplyr::group_nest(cut, .key = "NEW_COLUMN")
-diamonds %>% dplyr::nest_by(cut, .key = "NEW_COLUMN")
+diamonds |> nest(NEW_COLUMN = c(carat, color:z))
+diamonds |> dplyr::group_nest(cut, .key = "NEW_COLUMN")
+diamonds |> dplyr::nest_by(cut, .key = "NEW_COLUMN")
 ```
 
 なんでもかんでもフラットなdata.frameにして
@@ -347,8 +347,8 @@ list of data.framesだけでなく、list of vectorsとかでもよい。
 `cols` を明示的に指定することが求められる。
 
 ```r
-diamonds %>%
-  nest(NEW_COLUMN = !cut) %>%
+diamonds |>
+  nest(NEW_COLUMN = !cut) |>
   unnest(cols = NEW_COLUMN)
 ```
 
@@ -386,7 +386,7 @@ diamonds %>%
     つまり、文字を左詰めにするには`right`が正解(紛らわしい)。
 
 ```r
-va_deaths = VADeaths %>% as.data.frame() %>% tibble::rownames_to_column("class") %>% print()
+va_deaths = VADeaths |> as.data.frame() |> tibble::rownames_to_column("class") |> print()
 #>   class Rural Male Rural Female Urban Male Urban Female
 #> 1 50-54       11.7          8.7       15.4          8.4
 #> 2 55-59       18.1         11.7       24.3         13.6
@@ -394,7 +394,7 @@ va_deaths = VADeaths %>% as.data.frame() %>% tibble::rownames_to_column("class")
 #> 4 65-69       41.0         30.9       54.6         35.1
 #> 5 70-74       66.0         54.3       71.1         50.0
 
-va_deaths %>%
+va_deaths |>
   tidyr::separate(class, c("lbound", "ubound"), "-", convert = TRUE)
 #>   lbound ubound Rural Male Rural Female Urban Male Urban Female
 #> 1     50     54       11.7          8.7       15.4          8.4
@@ -425,28 +425,28 @@ va_deaths %>%
 ```r
 df = tibble(x = c("x", "x", NA), y = c("y", NA, "y"))
 
-df %>% tidyr::unite(z, c(x, y), sep = "_", remove = FALSE)
+df |> tidyr::unite(z, c(x, y), sep = "_", remove = FALSE)
 #> # tbl_df [3 x 3]
 #>       z     x     y
 #>   <chr> <chr> <chr>
 #> 1   x_y     x     y
 #> 2  x_NA     x  <NA>
 #> 3  NA_y  <NA>     y
-df %>% tidyr::unite(z, c(x, y), sep = "_", remove = FALSE, na.rm = TRUE)
+df |> tidyr::unite(z, c(x, y), sep = "_", remove = FALSE, na.rm = TRUE)
 #> # tbl_df [3 x 3]
 #>       z     x     y
 #>   <chr> <chr> <chr>
 #> 1   x_y     x     y
 #> 2     x     x  <NA>
 #> 3     y  <NA>     y
-df %>% dplyr::mutate(z = stringr::str_c(x, y, sep = "_"))
+df |> dplyr::mutate(z = stringr::str_c(x, y, sep = "_"))
 #> # tbl_df [3 x 3]
 #>       x     y     z
 #>   <chr> <chr> <chr>
 #> 1     x     y   x_y
 #> 2     x  <NA>  <NA>
 #> 3  <NA>     y  <NA>
-df %>% dplyr::mutate(z = dplyr::coalesce(x, y))
+df |> dplyr::mutate(z = dplyr::coalesce(x, y))
 #> # tbl_df [3 x 3]
 #>       x     y     z
 #>   <chr> <chr> <chr>
@@ -462,7 +462,7 @@ df %>% dplyr::mutate(z = dplyr::coalesce(x, y))
 指定しなかった列に欠損値`NA`(あるいは任意の値)を補完した行を挿入する。
 
 ```r
-df %>% complete(key1, key2, fill = list(val1 = 0, val2 = "-"))
+df |> complete(key1, key2, fill = list(val1 = 0, val2 = "-"))
 ```
 
 ### `tidyr::expand(data, ...)`
@@ -475,7 +475,7 @@ df %>% complete(key1, key2, fill = list(val1 = 0, val2 = "-"))
 tibble版`expand.grid(...)`のようなもの。
 
 `nesting(...)`は存在するユニークな組み合わせのみ残す、
-`nest(data, ...) %>% dplyr::select(!data)`のショートカット。
+`nest(data, ...) |> dplyr::select(!data)`のショートカット。
 この結果は`expand()`や`complete()`の引数としても使える。
 
 数値vectorの補完には`full_seq(x, period, tol = 1e-6)`が便利。
@@ -493,7 +493,7 @@ tibble版`expand.grid(...)`のようなもの。
 これまでは `mutate(x = ifelse(is.na(x), 0, x))` のようにしてたところを
 
 ```r
-df %>% replace_na(list(x = 0, y = "unknown"))
+df |> replace_na(list(x = 0, y = "unknown"))
 ```
 
 逆に、特定の値を`NA`にしたい場合は

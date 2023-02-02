@@ -239,7 +239,6 @@ LDFLAGS = -L${HOME}/.homebrew/lib
 - https://github.com/tidyverse/tibble
 
 `tbl_df` クラスが付与された改良版data.frameのことを**tibble**と呼ぶ。
-もともとは [dplyr]({{< relref "dplyr.md" >}}) パッケージで扱っていたが、独立パッケージになった。
 [readr]({{< relref "readr.md" >}}) で読み込んだデータもこの形式になる。
 
 ```r
@@ -269,18 +268,7 @@ class(mtcars)
 新しいtibble 1.4以降では
 [pillar](https://github.com/r-lib/pillar/)
 というパッケージが有効数字や欠損値などの表示形式を勝手にイジるようになってしまった。
-見やすくない上に遅いので `print.tbl()` 関数を上書きする。
-標準の `print.data.frame()` でもいいけど、
-[data.table](https://CRAN.R-project.org/package=data.table)
-1.11 以降がインストールしてある場合は `print.data.table()` が使いやすい。
-```r
-# ~/.Rprofile
-setHook(packageEvent("tibble", "attach"), function(...) {
-  try({
-    registerS3method("print", "tbl", data.table:::print.data.table)
-  })
-})
-```
+見やすくない上に遅いので私は `registerS3method()` で上書きしている。
 
 
 ### 関数
@@ -308,7 +296,7 @@ setHook(packageEvent("tibble", "attach"), function(...) {
 [`tibble::enframe(x, name = "name", value = "value")`](https://tibble.tidyverse.org/reference/enframe.html)
 :   名前付きvectorとかlistを2列のtibbleに変換する。
     `tibble::deframe(x)` はその逆。
-    `c(a = 1, b = 2) %>% enframe() %>% deframe()`
+    `c(a = 1, b = 2) |> enframe() |> deframe()`
 
 [`tibble::add_row(.data, ..., .before = NULL, .after = NULL)`](https://tibble.tidyverse.org/reference/add_row.html)
 :   既存のtibbleに新しいデータを1行追加する。
@@ -348,30 +336,31 @@ options(
 )
 ```
 
-- https://github.com/r-lib/pillar/blob/master/R/options.R
-- https://github.com/tidyverse/tibble/blob/master/R/options.R
-- https://github.com/Rdatatable/data.table/blob/master/R/onLoad.R
+- https://github.com/r-lib/pillar/blob/main/R/options.R
+- https://github.com/tidyverse/tibble/blob/main/R/options.R
 
 
 ### 大きいtibbleの全体を表示する
 
 普通に `print()` すると大きいtibbleの全体が見えない。
 `print()` 関数にオプションを指定したり `utils::page()` を利用したりする必要がある。
-RStudioを使っている場合は `View()` もしくは環境タブの変数クリックで簡単に閲覧可能。
+RStudioやVSCodeを使っている場合は `View()` でスプレッドシートのように閲覧可能。
 
 ```r
-# tibble/pillarをそのまま使う場合
-diamonds %>% pillar:::print.tbl(n = nrow(.), width = 10000L)
+# pillar:::print.tbl()にオプションを渡す方式
+diamonds |> print(n = Inf, width = Inf)
+diamonds |> page("print", n = Inf, width = Inf)
 
-# data.table:::print.data.table で上書きした場合
-diamonds %>% print(nrows = nrow(.))
-
-diamonds %>% page("print", n = nrow(.))
+# 標準data.frame用のprint()を呼ぶ方式
+diamonds |> base::print.data.frame(max = .Machine$integer.max)
 ```
 
 オプションをいちいち設定しなくて済むように
+[`max_print()`](https://github.com/heavywatal/rwtl/blob/master/R/print.R),
 [`less()`](https://github.com/heavywatal/rwtl/blob/master/R/pipe.R)
 のような関数を定義しておくのもよい。
+
+`getOption("max.print")` の初期値は99999だがRStudioでは勝手に1000まで下げられる。
 
 
 ## 関連書籍
