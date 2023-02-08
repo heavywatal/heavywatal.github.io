@@ -78,34 +78,44 @@ key  | command | description
    の設定。
    1. VSCodeの設定に `"r.sessionWatcher": true` を追加して再起動。
       "Create R terminal" コマンドで専用コンソールを立ち上げる場合はこれだけ。
-   1. ターミナルの[tmux]({{< relref "tmux.md" >}})からRを立ち上げるような場合、
+   1. Integrated Terminalから手動でRを立ち上げるような場合、
       設定ファイルを明示的に読み込む必要があるので `.Rprofile` に追記:
       ```r
-      if (interactive() && Sys.getenv("RSTUDIO") == "") {
-        Sys.setenv(TERM_PROGRAM = "vscode")
+      if (interactive() && Sys.getenv("TERM_PROGRAM") == "vscode") {
         source("~/.vscode-R/init.R")
       }
       ```
+      [tmux]({{< relref "tmux.md" >}}) が `TERM_PROGRAM` を上書きすることに注意。
 
 ここまでやれば `View()` や `help()` などをVSCodeで表示できる。
 以下はお好みで。
 
 - [VSCodeの設定](https://github.com/REditorSupport/vscode-R/wiki/Extension-settings)
+  - `"r.rmarkdown.enableCodeLens": false`: CodeLensは邪魔。
+  - `r.session.viewers.viewColumn`:
+    [interactive viewers](https://github.com/REditorSupport/vscode-R/wiki/Interactive-viewers)
+    をどこで表示するか。
+    - `Active`: 既存editor group内の新規タブ。
+    - `Two`, `Beside`: 新規editor groupを作って表示。2つの違いは不明。
+      左右ではなく上下に分割して表示させるには
+      `"workbench.editor.openSideBySideDirection": "down"` 。
+      [See vscode-R#1126](https://github.com/REditorSupport/vscode-R/issues/1126).
+    - `Disable`: ネイティブに任せる。
+    - デフォルト: {plot: Two, browser: Active, viewer: Two, pageViewer: Active, view: Two, helpPanel: Two}
 - [Rの設定](https://github.com/REditorSupport/vscode-R/wiki/R-options)。
-  例えば、作図や`View()`の度に Editor Layout "Two Columns" で分割表示されるのが嫌なので:
-  ```r
-  options(vsc.plot = FALSE)
-  options(vsc.view = "Active")
-  options(vsc.helpPanel = "Active")
-  ```
-  ["Two Rows" に固定する方法があればいいんだけど...](https://github.com/REditorSupport/vscode-R/issues/1126)
-- VSCode内で図を描画したければ
-  [httpgd](https://nx10.github.io/httpgd/) を入れる:
-  ```r
-  install.packages("httpgd")
-  ```
-  VSCodeの設定に `"r.plot.useHttpgd": true` を追加。
-  <br>ただしこれも前述のレイアウト問題の影響を受ける。
+  ほとんどの項目はVSCode側で設定できる。
+  それらをどうしてもRから上書きしたいときに使う。
+- 図をどうやって描画するか:
+  - デフォルト: `png()` で書き出してVSCode内に表示。
+    [ragg](https://github.com/r-lib/ragg/)を使うオプションが欲しいところだけど無い。
+    描画領域のサイズ変化に追従する機能なども無い。
+  - [httpgd](https://nx10.github.io/httpgd/) を使ってVSCode内に表示。
+    `install.packages("httpgd")` した上で
+    VSCodeの設定に `"r.plot.useHttpgd": true` を追加。
+    SVG形式なので[要素数が多くなるほど急激に重くなり](https://github.com/nx10/httpgd/issues/113)、例えばdiamondsの散布図でも使い物にならない。
+    PNGも選べるように[unigd](https://nx10.github.io/unigd/)を開発中らしい。
+  - 外部ターミナルでRを起動するのと同じように独立XQuartzなどで表示。
+    上記 `viewColumn` を `"plot": "Disable"` に設定する。
 - [IPython]({{< relref "ipython.md" >}})
   のようにコンソール上での補完や色付けなどを強化したければ
   [radian](https://github.com/randy3k/radian)

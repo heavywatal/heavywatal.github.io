@@ -16,9 +16,9 @@ tags = ["job", "shell"]
 :   1つのsshセッションで複数の端末を持てる。
 
 ssh切断後も端末丸ごと継続され、後でまた繋ぎ直せる
-:   不意のssh切断でも作業が失われない
-:   別の端末から接続しても同じ作業を継続できる
-:   `nohup` とかバックグラウンド化とか考えるより楽チン cf. [nohup]({{< relref "nohup.md" >}})
+:   不意のssh切断でも作業が失われない。
+:   別の端末から接続しても同じ作業を継続できる。
+:   [`nohup`]({{< relref "nohup.md" >}}) とかバックグラウンド化とか考えるより楽チン。
 
 [Homebrew]({{< relref "homebrew.md" >}}) で一発インストール:
 `brew install tmux`
@@ -76,13 +76,34 @@ key          | command | description
 
 <https://github.com/heavywatal/dotfiles/blob/master/.tmux.conf>
 
-prefix 変更
+`prefix <key>`
 :   <kbd>C-b</kbd> はキャレット左移動に使われるべきなので、
     `zsh` や `emacs` で使わない <kbd>C-t</kbd> に変更する。
     tmux の頭文字で覚えやすいし、<kbd>b</kbd> より若干近い。
 
-起動時ウィンドウサイズ変更 `aggressive-resize`
-:   サイズの異なる端末からアクセスしたときに随時ウィンドウサイズ変更
+`aggressive-resize [on | off]`
+:   サイズの異なる端末からattachしたときにウィンドウサイズを変更する。
+
+`update-environment <variables>`
+:   attachするときに環境変数を親プロセスから持ち込んで既存sessionの値を上書きする。
+:   `DISPLAY` や `SSH_AUTH_SOCK` などがデフォルトで含まれているので、
+    `-a` オプションで追加するのが無難。
+:   `TERM_PROGRAM` は特殊で、指定しても強制的に `tmux` に上書きされる。
+    `showenv TERM_PROGRAM` で上書き前の情報がとれるようにはなるので、
+    それを使って環境変数を再上書きすることは可能。
+    ただしattachの度にそこまで実行できないことには注意。
+    [See tmux#3468](https://github.com/tmux/tmux/issues/3468).
+
+デタッチ後しばらくしてシェルを起動すると残存セッションを忘れがちなので、
+以下のようなものを `.zshrc` とかに書いておけば表示で気付ける。
+
+```sh
+if [ -n "$TMUX" ]; then
+  eval $(tmux showenv TERM_PROGRAM)
+else
+  tmux has-session >/dev/null 2>&1 && tmux list-sessions
+fi
+```
 
 `open` や `pbcopy` などがうまく働かなくて
 [reattach-to-user-namespace](https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard)
@@ -93,52 +114,23 @@ prefix 変更
 
 1.  リモートサーバーに ssh ログインし、
     tmux の新しいセッションを開始:
-
-        ssh remote.sample.com
-        tmux -2u
-
-1.  ウィンドウを縦に分割し、右ペインでPythonインタプリタを起動:
-
-        [C-t %]
-        python
-
-1.  左ペインにフォーカスを戻し、ファイルを閲覧したり何だり:
-
-        [C-t o]
-        less ~/.tmux.conf
-
-1.  新しいウィンドウを作って `root` 仕事をしたり何だり:
-
-        [C-t c]
-        su -
-
-1.  ウィンドウを切り替える:
-
-        C-t l
-        C-t n
-        C-t p
-
-1.  このセッションをデタッチし、ログアウトして家に帰る:
-
-        [C-t d]
-        logout
-
+    ```sh
+    ssh remote.sample.com
+    tmux -2u
+    ```
+1.  ウィンドウを左右に分割し <kbd>C-t</kbd><kbd>%</kbd>、
+    右ペインでPythonインタプリタを起動 `python`:
+1.  左ペインにフォーカスを戻し<kbd>C-t</kbd><kbd>o</kbd>、
+    ファイルを閲覧したり何だり `less ~/.tmux.conf`
+1.  新しいウィンドウを作って <kbd>C-t</kbd><kbd>c</kbd>、
+    `root` 仕事をしたり何だり `su -`
+1.  ウィンドウを切り替える <kbd>C-t</kbd><kbd>l</kbd>, <kbd>C-t</kbd><kbd>n</kbd>, <kbd>C-t</kbd><kbd>p</kbd>
+1.  このセッションをデタッチし <kbd>C-t</kbd><kbd>d</kbd>、
+    ログアウトして家に帰る `exit`
 1.  家からサーバーに再び ssh ログインして、
     さっきの tmux セッションをアタッチして作業を再開:
-
-        ssh remote.sample.com
-        tmux attach -d
-
-### 備忘
-
-デタッチ後しばらくしてシェルを起動すると残存セッションを忘れがちなので、
-以下のようなものを `.zshrc` とかに書いておけば表示で気付ける。
-
-```sh
-tmux has-session >/dev/null 2>&1 && if [ -z "${TMUX}" ]; then
-    echo '% tmux list-sessions'
-    tmux list-sessions
-    echo '% tmux list-windows -a'
-    tmux list-windows -a
-fi
-```
+    ```sh
+    ssh remote.sample.com
+    tmux attach -d
+    ```
+1.  セッション内のすべてのペインで `exit` して終了。
