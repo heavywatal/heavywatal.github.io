@@ -93,9 +93,9 @@ tmux — 仮想端末でリモート仕事を安全に
 <dd>GUIアプリのタブ代わりに。</dd>
 <dd>1つのsshセッションで複数の端末を持てる。</dd>
 <dt>ssh切断後も端末丸ごと継続され、後でまた繋ぎ直せる</dt>
-<dd>不意のssh切断でも作業が失われない</dd>
-<dd>別の端末から接続しても同じ作業を継続できる</dd>
-<dd><code>nohup</code> とかバックグラウンド化とか考えるより楽チン cf. <a href="/dev/nohup.html">nohup</a></dd>
+<dd>不意のssh切断でも作業が失われない。</dd>
+<dd>別の端末から接続しても同じ作業を継続できる。</dd>
+<dd><a href="/dev/nohup.html"><code>nohup</code></a> とかバックグラウンド化とか考えるより楽チン。</dd>
 </dl>
 <p><a href="/mac/homebrew.html">Homebrew</a> で一発インストール:
 <code>brew install tmux</code></p>
@@ -238,74 +238,56 @@ prefix keyはデフォルトで <kbd>C-b</kbd> (<kbd>control-b</kbd>の略記)�
 <p>設定ファイル： <code>~/.tmux.conf</code></p>
 <p><a href="https://github.com/heavywatal/dotfiles/blob/master/.tmux.conf">https://github.com/heavywatal/dotfiles/blob/master/.tmux.conf</a></p>
 <dl>
-<dt>prefix 変更</dt>
+<dt><code>prefix &lt;key&gt;</code></dt>
 <dd><kbd>C-b</kbd> はキャレット左移動に使われるべきなので、
 <code>zsh</code> や <code>emacs</code> で使わない <kbd>C-t</kbd> に変更する。
 tmux の頭文字で覚えやすいし、<kbd>b</kbd> より若干近い。</dd>
-<dt>起動時ウィンドウサイズ変更 <code>aggressive-resize</code></dt>
-<dd>サイズの異なる端末からアクセスしたときに随時ウィンドウサイズ変更</dd>
+<dt><code>aggressive-resize [on | off]</code></dt>
+<dd>サイズの異なる端末からattachしたときにウィンドウサイズを変更する。</dd>
+<dt><code>update-environment &lt;variables&gt;</code></dt>
+<dd>attachするときに環境変数を親プロセスから持ち込んで既存sessionの値を上書きする。</dd>
+<dd><code>DISPLAY</code> や <code>SSH_AUTH_SOCK</code> などがデフォルトで含まれているので、
+<code>-a</code> オプションで追加するのが無難。</dd>
+<dd><code>TERM_PROGRAM</code> は特殊で、指定しても強制的に <code>tmux</code> に上書きされる。
+<code>showenv TERM_PROGRAM</code> で上書き前の情報がとれるようにはなるので、
+それを使って環境変数を再上書きすることは可能。
+ただしattachの度にそこまで実行できないことには注意。
+<a href="https://github.com/tmux/tmux/issues/3468">See tmux#3468</a>.</dd>
 </dl>
-<p><code>open</code> や <code>pbcopy</code> などがうまく働かなくて
+<p>デタッチ後しばらくしてシェルを起動すると残存セッションを忘れがちなので、
+以下のようなものを <code>.zshrc</code> とかに書いておけば表示で気付ける。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[</span> -n <span class="s2">&#34;</span><span class="nv">$TMUX</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">eval</span> <span class="k">$(</span>tmux showenv TERM_PROGRAM<span class="k">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">else</span>
+</span></span><span class="line"><span class="cl">  tmux has-session &gt;/dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="o">&amp;&amp;</span> tmux list-sessions
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span></code></pre></div><p><code>open</code> や <code>pbcopy</code> などがうまく働かなくて
 <a href="https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard">reattach-to-user-namespace</a>
 が必要になる問題は既に解消された。</p>
 <h2 id="利用例">利用例</h2>
 <ol>
-<li>
-<p>リモートサーバーに ssh ログインし、
-tmux の新しいセッションを開始:</p>
-<pre><code>ssh remote.sample.com
-tmux -2u
-</code></pre>
-</li>
-<li>
-<p>ウィンドウを縦に分割し、右ペインでPythonインタプリタを起動:</p>
-<pre><code>[C-t %]
-python
-</code></pre>
-</li>
-<li>
-<p>左ペインにフォーカスを戻し、ファイルを閲覧したり何だり:</p>
-<pre><code>[C-t o]
-less ~/.tmux.conf
-</code></pre>
-</li>
-<li>
-<p>新しいウィンドウを作って <code>root</code> 仕事をしたり何だり:</p>
-<pre><code>[C-t c]
-su -
-</code></pre>
-</li>
-<li>
-<p>ウィンドウを切り替える:</p>
-<pre><code>C-t l
-C-t n
-C-t p
-</code></pre>
-</li>
-<li>
-<p>このセッションをデタッチし、ログアウトして家に帰る:</p>
-<pre><code>[C-t d]
-logout
-</code></pre>
-</li>
-<li>
-<p>家からサーバーに再び ssh ログインして、
-さっきの tmux セッションをアタッチして作業を再開:</p>
-<pre><code>ssh remote.sample.com
-tmux attach -d
-</code></pre>
-</li>
+<li>リモートサーバーに ssh ログインし、
+tmux の新しいセッションを開始:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ssh remote.sample.com
+</span></span><span class="line"><span class="cl">tmux -2u
+</span></span></code></pre></div></li>
+<li>ウィンドウを左右に分割し <kbd>C-t</kbd><kbd>%</kbd>、
+右ペインでPythonインタプリタを起動 <code>python</code>:</li>
+<li>左ペインにフォーカスを戻し<kbd>C-t</kbd><kbd>o</kbd>、
+ファイルを閲覧したり何だり <code>less ~/.tmux.conf</code></li>
+<li>新しいウィンドウを作って <kbd>C-t</kbd><kbd>c</kbd>、
+<code>root</code> 仕事をしたり何だり <code>su -</code></li>
+<li>ウィンドウを切り替える <kbd>C-t</kbd><kbd>l</kbd>, <kbd>C-t</kbd><kbd>n</kbd>, <kbd>C-t</kbd><kbd>p</kbd></li>
+<li>このセッションをデタッチし <kbd>C-t</kbd><kbd>d</kbd>、
+ログアウトして家に帰る <code>exit</code></li>
+<li>家からサーバーに再び ssh ログインして、
+さっきの tmux セッションをアタッチして作業を再開:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ssh remote.sample.com
+</span></span><span class="line"><span class="cl">tmux attach -d
+</span></span></code></pre></div></li>
+<li>セッション内のすべてのペインで <code>exit</code> して終了。</li>
 </ol>
-<h3 id="備忘">備忘</h3>
-<p>デタッチ後しばらくしてシェルを起動すると残存セッションを忘れがちなので、
-以下のようなものを <code>.zshrc</code> とかに書いておけば表示で気付ける。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">tmux has-session &gt;/dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="o">&amp;&amp;</span> <span class="k">if</span> <span class="o">[</span> -z <span class="s2">&#34;</span><span class="si">${</span><span class="nv">TMUX</span><span class="si">}</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s1">&#39;% tmux list-sessions&#39;</span>
-</span></span><span class="line"><span class="cl">    tmux list-sessions
-</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s1">&#39;% tmux list-windows -a&#39;</span>
-</span></span><span class="line"><span class="cl">    tmux list-windows -a
-</span></span><span class="line"><span class="cl"><span class="k">fi</span>
-</span></span></code></pre></div>
+
 </article>
 </main>
 

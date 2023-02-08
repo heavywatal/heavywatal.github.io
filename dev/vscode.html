@@ -200,31 +200,53 @@ VSCode — Microsoft製テキストエディタ
 <ol>
 <li>VSCodeの設定に <code>&quot;r.sessionWatcher&quot;: true</code> を追加して再起動。
 &ldquo;Create R terminal&rdquo; コマンドで専用コンソールを立ち上げる場合はこれだけ。</li>
-<li>ターミナルの<a href="/dev/tmux.html">tmux</a>からRを立ち上げるような場合、
+<li>Integrated Terminalから手動でRを立ち上げるような場合、
 設定ファイルを明示的に読み込む必要があるので <code>.Rprofile</code> に追記:
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">if </span><span class="p">(</span><span class="nf">interactive</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="nf">Sys.getenv</span><span class="p">(</span><span class="s">&#34;RSTUDIO&#34;</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#34;&#34;</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nf">Sys.setenv</span><span class="p">(</span><span class="n">TERM_PROGRAM</span> <span class="o">=</span> <span class="s">&#34;vscode&#34;</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">if </span><span class="p">(</span><span class="nf">interactive</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="nf">Sys.getenv</span><span class="p">(</span><span class="s">&#34;TERM_PROGRAM&#34;</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#34;vscode&#34;</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">  <span class="nf">source</span><span class="p">(</span><span class="s">&#34;~/.vscode-R/init.R&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div></li>
+</span></span></code></pre></div><a href="/dev/tmux.html">tmux</a> が <code>TERM_PROGRAM</code> を上書きすることに注意。</li>
 </ol>
 </li>
 </ol>
 <p>ここまでやれば <code>View()</code> や <code>help()</code> などをVSCodeで表示できる。
 以下はお好みで。</p>
 <ul>
-<li><a href="https://github.com/REditorSupport/vscode-R/wiki/Extension-settings">VSCodeの設定</a></li>
+<li><a href="https://github.com/REditorSupport/vscode-R/wiki/Extension-settings">VSCodeの設定</a>
+<ul>
+<li><code>&quot;r.rmarkdown.enableCodeLens&quot;: false</code>: CodeLensは邪魔。</li>
+<li><code>r.session.viewers.viewColumn</code>:
+<a href="https://github.com/REditorSupport/vscode-R/wiki/Interactive-viewers">interactive viewers</a>
+をどこで表示するか。
+<ul>
+<li><code>Active</code>: 既存editor group内の新規タブ。</li>
+<li><code>Two</code>, <code>Beside</code>: 新規editor groupを作って表示。2つの違いは不明。
+左右ではなく上下に分割して表示させるには
+<code>&quot;workbench.editor.openSideBySideDirection&quot;: &quot;down&quot;</code> 。
+<a href="https://github.com/REditorSupport/vscode-R/issues/1126">See vscode-R#1126</a>.</li>
+<li><code>Disable</code>: ネイティブに任せる。</li>
+<li>デフォルト: {plot: Two, browser: Active, viewer: Two, pageViewer: Active, view: Two, helpPanel: Two}</li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a href="https://github.com/REditorSupport/vscode-R/wiki/R-options">Rの設定</a>。
-例えば、作図や<code>View()</code>の度に Editor Layout &ldquo;Two Columns&rdquo; で分割表示されるのが嫌なので:
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">options</span><span class="p">(</span><span class="n">vsc.plot</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="nf">options</span><span class="p">(</span><span class="n">vsc.view</span> <span class="o">=</span> <span class="s">&#34;Active&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="nf">options</span><span class="p">(</span><span class="n">vsc.helpPanel</span> <span class="o">=</span> <span class="s">&#34;Active&#34;</span><span class="p">)</span>
-</span></span></code></pre></div><a href="https://github.com/REditorSupport/vscode-R/issues/1126">&ldquo;Two Rows&rdquo; に固定する方法があればいいんだけど&hellip;</a></li>
-<li>VSCode内で図を描画したければ
-<a href="https://nx10.github.io/httpgd/">httpgd</a> を入れる:
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">install.packages</span><span class="p">(</span><span class="s">&#34;httpgd&#34;</span><span class="p">)</span>
-</span></span></code></pre></div>VSCodeの設定に <code>&quot;r.plot.useHttpgd&quot;: true</code> を追加。
-<br>ただしこれも前述のレイアウト問題の影響を受ける。</li>
+ほとんどの項目はVSCode側で設定できる。
+それらをどうしてもRから上書きしたいときに使う。</li>
+<li>図をどうやって描画するか:
+<ul>
+<li>デフォルト: <code>png()</code> で書き出してVSCode内に表示。
+<a href="https://github.com/r-lib/ragg/">ragg</a>を使うオプションが欲しいところだけど無い。
+描画領域のサイズ変化に追従する機能なども無い。</li>
+<li><a href="https://nx10.github.io/httpgd/">httpgd</a> を使ってVSCode内に表示。
+<code>install.packages(&quot;httpgd&quot;)</code> した上で
+VSCodeの設定に <code>&quot;r.plot.useHttpgd&quot;: true</code> を追加。
+SVG形式なので<a href="https://github.com/nx10/httpgd/issues/113">要素数が多くなるほど急激に重くなり</a>、例えばdiamondsの散布図でも使い物にならない。
+PNGも選べるように<a href="https://nx10.github.io/unigd/">unigd</a>を開発中らしい。</li>
+<li>外部ターミナルでRを起動するのと同じように独立XQuartzなどで表示。
+上記 <code>viewColumn</code> を <code>&quot;plot&quot;: &quot;Disable&quot;</code> に設定する。</li>
+</ul>
+</li>
 <li><a href="/python/ipython.html">IPython</a>
 のようにコンソール上での補完や色付けなどを強化したければ
 <a href="https://github.com/randy3k/radian">radian</a>
