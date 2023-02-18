@@ -134,18 +134,26 @@ Hugo — 静的サイトを高速生成
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git clone --depth <span class="m">1</span> --recursive https://github.com/gohugoio/hugoThemes.git themes
 </span></span></code></pre></div></li>
 <li>
-<p>ウェブサーバーを走らせる:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">hugo server -w D -t hyde
+<p>適当なテーマでウェブサーバーを走らせる:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">hugo server -t blank
 </span></span></code></pre></div></li>
 <li>
 <p>ブラウザから http://localhost:1313/about にアクセスしてみる。
-監視オプション <code>-w</code> を付けておけば、ファイルの変更がすぐに反映される。</p>
+<code>hugo server</code>, <code>hugo -w</code> はファイルを監視していて変更をすぐに反映する。</p>
 </li>
 </ul>
 <h2 id="設定">設定</h2>
 <p><a href="https://gohugo.io/overview/configuration/">https://gohugo.io/overview/configuration/</a></p>
-<p><code>config.toml</code></p>
-<h2 id="theme">Theme</h2>
+<p>長らく <code>config.toml</code> だったが今は <code>hugo.toml</code> がデフォルト。
+<code>config/_default/hugo.toml</code> に置いても同じ。</p>
+<p><code>config/</code> 直下のディレクトリ名と <code>-e/--environment</code> オプションで切り替え可能。
+ただしデフォルトの挙動がわかりにくい罠なので注意。例えば <code>config/_default/</code> と <code>config/production/</code> を持って <code>hugo</code> を実行するとproduction環境になってしまう。
+production環境を作らず <code>config/public/</code> とかにしておけば明示的に <code>-e public</code>
+を渡さない限り常にデフォルトのdevelopment環境になるので分かりやすい。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">hugo        <span class="c1"># -e production (confusing!)</span>
+</span></span><span class="line"><span class="cl">hugo -w     <span class="c1"># -e development</span>
+</span></span><span class="line"><span class="cl">hugo server <span class="c1"># -e development</span>
+</span></span></code></pre></div><h2 id="theme">Theme</h2>
 <p><a href="https://themes.gohugo.io/">https://themes.gohugo.io/</a></p>
 <p>デフォルトのテーマというものが存在しないのがちょっと厳しい。
 ユーザーによっていろいろ投稿されてるけどほとんどがブログ用途。
@@ -187,7 +195,7 @@ YAMLやJSONでもいいけど、
 <h2 id="閲覧公開方法">閲覧・公開方法</h2>
 <h3 id="hugo-server">Hugo Server</h3>
 <p>付属の簡易サーバーを起動。</p>
-<pre tabindex="0"><code>hugo server -D -w -s /path/to/source
+<pre tabindex="0"><code>hugo server
 open http://localhost:1313/
 </code></pre><h3 id="localhost-mac">localhost (Mac)</h3>
 <p><code>public/</code> 以下に生成されるファイルをシムリンクやコピーで
