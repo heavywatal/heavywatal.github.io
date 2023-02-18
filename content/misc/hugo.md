@@ -65,20 +65,32 @@ https://gohugo.io/getting-started/quick-start/
     git clone --depth 1 --recursive https://github.com/gohugoio/hugoThemes.git themes
     ```
 
--   ウェブサーバーを走らせる:
+-   適当なテーマでウェブサーバーを走らせる:
     ```sh
-    hugo server -w D -t hyde
+    hugo server -t blank
     ```
 
 -   ブラウザから http://localhost:1313/about にアクセスしてみる。
-    監視オプション `-w` を付けておけば、ファイルの変更がすぐに反映される。
+    `hugo server`, `hugo -w` はファイルを監視していて変更をすぐに反映する。
 
 
 ## 設定
 
 https://gohugo.io/overview/configuration/
 
-`config.toml`
+長らく `config.toml` だったが今は `hugo.toml` がデフォルト。
+`config/_default/hugo.toml` に置いても同じ。
+
+`config/` 直下のディレクトリ名と `-e/--environment` オプションで切り替え可能。
+ただしデフォルトの挙動がわかりにくい罠なので注意。例えば `config/_default/` と `config/production/` を持って `hugo` を実行するとproduction環境になってしまう。
+production環境を作らず `config/public/` とかにしておけば明示的に `-e public`
+を渡さない限り常にデフォルトのdevelopment環境になるので分かりやすい。
+
+```sh
+hugo        # -e production (confusing!)
+hugo -w     # -e development
+hugo server # -e development
+```
 
 ## Theme
 
@@ -134,13 +146,14 @@ https://gohugo.io/troubleshooting/build-performance/
 YAMLやJSONでもいいけど、
 [TOML](https://github.com/toml-lang/toml)のほうが将来性ありそう。
 
+
 ## 閲覧・公開方法
 
 ### Hugo Server
 
 付属の簡易サーバーを起動。
 ```
-hugo server -D -w -s /path/to/source
+hugo server
 open http://localhost:1313/
 ```
 
