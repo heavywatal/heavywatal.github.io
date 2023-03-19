@@ -359,7 +359,7 @@ Figure 11.2b
 
 ## 11.3 群集の特性が個体レベルの遺伝子型や選択によって決まる実例
 
-### 延長された表現型 [Dawkins 1982](http://www.amazon.co.jp/gp/product/4314004851/ref=as_li_ss_tl?ie=UTF8&camp=247&creative=7399&creativeASIN=4314004851&linkCode=as2&tag=heavywatal-22)
+### 延長された表現型 (Dawkins 1982)
 
 進化の基本単位は遺伝子であるが、
 遺伝子の表現型は個体だけでなくその外部にも拡張して解釈できる。

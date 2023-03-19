@@ -6,8 +6,8 @@ tags = ["c++"]
   parent = "cxx"
 +++
 
-- http://www.boost.org/
-- http://www.boost.org/doc/libs/release/
+- https://www.boost.org/
+- https://www.boost.org/doc/libs/release/
 - https://boostjp.github.io/
 
 ## Installation
@@ -26,11 +26,11 @@ tags = ["c++"]
 
 ### ソースから
 
-- http://www.boost.org/doc/libs/release/more/getting_started/unix-variants.html
-- http://www.boost.org/build/
+- https://www.boost.org/doc/libs/release/more/getting_started/unix-variants.html
+- https://www.boost.org/build/
 - https://boostjp.github.io/howtobuild.html
 
-1.  <http://www.boost.org/users/download/> から最新ソースを入手して展開。
+1.  <https://www.boost.org/users/download/> から最新ソースを入手して展開。
     ```
     wget -O- https://dl.bintray.com/boostorg/release/1.67.0/source/boost_1_67_0.tar.bz2 | tar xj
     cd boost_1_67_0/
@@ -47,7 +47,7 @@ tags = ["c++"]
     `b2` がビルドされる。 `./b2 --help`
 
 1. `~/user-config.jam` に [ツールセットを定義]
-    (http://www.boost.org/build/doc/html/bbv2/reference/tools.html)。
+    (https://www.boost.org/build/doc/html/bbv2/reference/tools.html)。
     `darwin`はMac-gcc用:
     ```
     using gcc : 14 : g++-8 : <compileflags>-fPIC <cxxflags>-std=c++14 ;
@@ -58,12 +58,12 @@ tags = ["c++"]
     それぞれのコンパイラで別々にビルドしてインストールする。
 
 1.  システム標準zlibをリンクしようとしてエラーになるような場合は、
-    [zlib公式](http://zlib.net/)からソースを落として展開し、
+    [zlib公式](https://zlib.net/)からソースを落として展開し、
     [一緒にビルドされるように]
-    (http://www.boost.org/doc/libs/release/libs/iostreams/doc/installation.html)
+    (https://www.boost.org/doc/libs/release/libs/iostreams/doc/installation.html)
     `ZLIB_SOURCE`をフルパス指定する。
     ```sh
-    wget -O- http://zlib.net/zlib-1.2.8.tar.gz | tar xz -C ${HOME}/tmp/build
+    wget -O- https://zlib.net/zlib-1.2.8.tar.gz | tar xz -C ${HOME}/tmp/build
     export ZLIB_SOURCE=${HOME}/tmp/build/zlib-1.2.8
     ```
 
@@ -106,9 +106,13 @@ cmake -DBOOST_ROOT=${HOME}/local ..
 ```
 
 
-## [math](http://www.boost.org/doc/libs/release/libs/math/doc/html/)
+## math
 
-### [distribution](http://www.boost.org/doc/libs/release/libs/math/doc/html/dist.html)
+<https://www.boost.org/doc/libs/release/libs/math/>
+
+### distribution
+
+<https://www.boost.org/doc/libs/release/libs/math/doc/html/dist.html>
 
 確率分布に従った乱数生成はC++11から `<random>` でサポートされるようになったが、
 確率密度関数(PDF)や累積密度関数(CDF)はまだ標準入りしてない。
@@ -149,7 +153,9 @@ bmath::cdf(bmath::complement(dist, x));
 ```
 
 
-## [iostreams](http://www.boost.org/doc/libs/release/libs/iostreams/doc/)
+## iostreams
+
+<https://www.boost.org/doc/libs/release/libs/iostreams/doc/>
 
 要ビルド＆リンク `-lboost_iostreams-mt`
 
@@ -193,14 +199,18 @@ int main() {
   [`wtl::zfstream`](https://github.com/heavywatal/cxxwtl/blob/master/zfstream.hpp)
 
 
-## [program_options](http://www.boost.org/doc/libs/release/doc/html/program_options.html)
+## program_options
+
+<https://www.boost.org/doc/libs/release/libs/program_options/>
 
 要ビルド＆リンク `-lboost_program_options-mt`
 
 cf. [getopt]({{< relref "getopt.md" >}})
 
 
-## [coroutine2](http://www.boost.org/doc/libs/release/libs/coroutine2/doc/html/)
+## coroutine2
+
+<https://www.boost.org/doc/libs/release/libs/coroutine2/>
 
 要ビルド＆リンク `-lboost_context-mt`
 
@@ -217,6 +227,6 @@ Pythonの`yield`みたいなことをC++でもできるようになる。
 
 ## そのほか
 
-[`<boost/multiprecision/cpp_int.hpp>`](http://www.boost.org/libs/multiprecision)
+[`<boost/multiprecision/cpp_int.hpp>`](https://www.boost.org/libs/multiprecision)
 
-[`<boost/dynamic_bitset.hpp>`](http://www.boost.org/libs/dynamic_bitset)
+[`<boost/dynamic_bitset.hpp>`](https://www.boost.org/libs/dynamic_bitset)

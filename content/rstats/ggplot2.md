@@ -75,7 +75,7 @@ print(p5)
 ggsave("mpg.png", p5, width = 6, height = 4, dpi = 300)
 ```
 
-## [Aesthetic mapping](https://ggplot2.tidyverse.org/reference/aes_group_order.html)
+## Aesthetic mapping
 
 データと見せ方を紐付ける。
 `aes(color = Species)` のように `aes()` 内で列名を指定すると、
@@ -91,7 +91,9 @@ p2 + geom_point(mapping = aes(color = drv, size = cyl))
 p2 + geom_point(color = "darkorange", size = 6, alpha = 0.4)
 ```
 
-### [Aestheticsまとめ](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html)
+### Aestheticsまとめ
+
+<https://ggplot2.tidyverse.org/articles/ggplot2-specs.html>
 
 - [色・透明度を変える](https://ggplot2.tidyverse.org/reference/aes_colour_fill_alpha.html)
   - `color`: 点や線の色

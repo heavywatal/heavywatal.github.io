@@ -83,7 +83,9 @@ y=2
 ```
 
 
-## [Looping Constructs](https://www.gnu.org/software/bash/manual/html_node/Looping-Constructs.html)
+## Looping Constructs
+
+<https://www.gnu.org/software/bash/manual/html_node/Looping-Constructs.html>
 
 基本形。クオートもカッコも不要:
 ```sh
@@ -105,7 +107,9 @@ for x in $STRING; do
 done
 ```
 
-## [Special Parameters](https://www.gnu.org/software/bash/manual/html_node/Special-Parameters.html)
+## Special Parameters
+
+<https://www.gnu.org/software/bash/manual/html_node/Special-Parameters.html>
 
 ```sh
 $0        # The full path of the script
@@ -119,7 +123,9 @@ $!        # シェルが最後に起動したバックグラウンドプロセ�
 $?        # 最後に実行したコマンドのexit値
 ```
 
-## [Parameter Expansion](https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html)
+## Parameter Expansion
+
+<https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html>
 
 ```sh
 string=abcdef
@@ -218,19 +224,25 @@ ${VAR:+WORD}  # nothing occurs; otherwise return WORD
 
 ## Misc.
 
-### [Command Substitution](https://www.gnu.org/software/bash/manual/html_node/Command-Substitution.html)
+### Command Substitution
+
+<https://www.gnu.org/software/bash/manual/html_node/Command-Substitution.html>
 
 コマンドの結果を文字列として受け取る方法は
 `` `command` `` と `$(command)` の2つあるが、
 後者のほうが入れ子など柔軟に使えるのでより好ましい。
 
-### [Arithmetic Expansion](https://www.gnu.org/software/bash/manual/html_node/Arithmetic-Expansion.html)
+### Arithmetic Expansion
+
+<https://www.gnu.org/software/bash/manual/html_node/Arithmetic-Expansion.html>
 
 簡単な数値計算は `$((expression))` でできる。
 
 [Shell Arithmetic](https://www.gnu.org/software/bash/manual/html_node/Shell-Arithmetic.html)
 
-### [Process Substitution](https://www.gnu.org/software/bash/manual/html_node/Process-Substitution.html)
+### Process Substitution
+
+<https://www.gnu.org/software/bash/manual/html_node/Process-Substitution.html>
 
 1つのコマンドから出力を受け取るだけならパイプ `command1 | command2` で足りるけど、
 2つ以上から受け取りたいときはプロセス置換 `command2 <(command1a) <(command1b)` を使う。
@@ -244,7 +256,9 @@ gunzip -c infile.gz | somecommand /dev/stdin /dev/stdout | gzip -c >outfile.gz
 somecommand <(gunzip -c infile.gz) >(gzip -c >outfile.gz)
 ```
 
-### [Arrays](https://www.gnu.org/software/bash/manual/html_node/Arrays.html)
+### Arrays
+
+<https://www.gnu.org/software/bash/manual/html_node/Arrays.html>
 
 POSIXでは未定義の拡張機能であり、bashとzshでも挙動が異なる。
 ```sh

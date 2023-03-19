@@ -210,7 +210,9 @@ skim skype slack spideroakone
 the-unarchiver virtualbox visual-studio-code vlc
 whatsapp xquartz zoom
 
-### [Quicklook]({{< relref "quicklook.md" >}})
+### Quicklook
+
+[See Quicklook]({{< relref "quicklook.md" >}}).
 
 ### Fonts
 

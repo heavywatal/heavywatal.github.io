@@ -163,7 +163,9 @@ subset(ensembl@filters, select=c(name, description, type, operation))
 > ensembl = useMart("ENSEMBL_MART_SNP", "scerevisiae_snp", host="asia.ensembl.org")
 ```
 
-### [UniProt](https://www.uniprot.org/)
+### UniProt
+
+<https://www.uniprot.org/>
 
 フィルタ列挙
 

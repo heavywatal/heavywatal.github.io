@@ -16,7 +16,9 @@ Python 3.4 以降では `venv` と `ensurepip` が標準ライブラリに入っ
 ただし、環境を汚したりAnaconda特有の不具合が出たりするので私は使わないしオススメもしない。
 
 
-## [`pip`](https://pip.pypa.io/)
+## `pip`
+
+<https://pip.pypa.io/>
 
 [PyPI](https://pypi.org/)
 からの簡単にパッケージをインストールできるようにするツール。
@@ -66,7 +68,9 @@ Python 2.7.9以降、3.4以降では標準ライブラリの
     絶対パスで `pip` コマンドを使う。
 
 
-## [`venv`](https://docs.python.org/3/library/venv.html) / `virtualenv`
+## `venv`
+
+https://docs.python.org/3/library/venv.html
 
 Python実行環境を仮想化するパッケージ。
 これで作った仮想環境内で `pip` を使ってパッケージ管理する。
@@ -93,7 +97,9 @@ deactivate
 etc.
 
 
-## [`setuptools`](https://github.com/pypa/setuptools)
+## `setuptools`
+
+<https://github.com/pypa/setuptools>
 
 パッケージ管理・作成の基本となるライブラリ。
 コマンドラインツール `easy_install`

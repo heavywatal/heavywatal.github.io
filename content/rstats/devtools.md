@@ -68,7 +68,7 @@ GitHubに公開しておけば誰でも使えるようになるので、
 
 ### ソース構造
 
-https://r-pkgs.org/package-structure-state.html
+<https://r-pkgs.org/structure.html>
 
 ```sh
 DESCRIPTION  # 一番大事
@@ -86,7 +86,9 @@ vignettes/
 CRANから落としてくる `.tar.gz` ソースコード (bundle package) とは違う。
 
 
-### [`DESCRIPTION`](https://r-pkgs.org/description.html)
+### `DESCRIPTION`
+
+<https://r-pkgs.org/description.html>
 
 -   どうでも良さそうなファイル名とは裏腹に、ちゃんと書かないと動かない。
 -   始めはusethisとかに生成してもらい、他のパッケージを参考にしつつ修正していく。
@@ -97,7 +99,9 @@ CRANから落としてくる `.tar.gz` ソースコード (bundle package) と�
 -   ライセンスを別ファイルにする場合は `License: file LICENSE` と書く
 -   `Authors@R` のとこは後でRで評価されるので変な形。
 
-### [`NAMESPACE`](https://r-pkgs.org/namespace.html)
+### `NAMESPACE`
+
+<https://r-pkgs.org/namespace.html>
 
 -   [後述のroxygen2](#roxygen2)がソースコードから自動生成するので**直接触らない**。
 -   ここで `export()` された関数だけがユーザーから見える。
@@ -105,7 +109,9 @@ CRANから落としてくる `.tar.gz` ソースコード (bundle package) と�
     された関数はattachされてパッケージ内で利用可能になる。
     `import(package)` で全ての関数をまとめて処理できるけど名前の衝突が怖い。
 
-### [`R/` ソースコード](https://r-pkgs.org/r.html)
+### `R/` ソースコード
+
+<https://r-pkgs.org/code.html>
 
 -   `NAMESPACE` や `man/*.Rd` を自動生成してもらえるように
     [後述のroxygen](#roxygen2)形式でコメントを書く
@@ -120,12 +126,16 @@ CRANから落としてくる `.tar.gz` ソースコード (bundle package) と�
     `.onLoad(...)`, `.onAttach(...)`, `.onUnload(...)`
     は慣習的に`zzz.R`というファイルに記述する。
 
-### [`src/` C++ソースコード](https://r-pkgs.org/src.html)
+### `src/` C++ソースコード
+
+<https://r-pkgs.org/src.html>
 
 [Rcppページの"Rパッケージで使う"セクション]({{< relref "rcpp.md#Rパッケージで使う" >}})を参照
 
 
-### [`vignettes/`](https://r-pkgs.org/vignettes.html)
+### `vignettes/`
+
+<https://r-pkgs.org/vignettes.html>
 
 <a href="https://pkgdown.r-lib.org/">
 <img src="/_img/hex-stickers/pkgdown.webp" align="right" width="120" height="139">
@@ -148,15 +158,9 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 ここに置いてあるvignettesはArticlesという位置づけになる。
 
 
-### [`inst/`](https://r-pkgs.org/inst.html)
+### `tests/`
 
-ここに入ってるものはインストール先でトップディレクトリに移される謎仕様。
-
-論文で引用されることを想定している場合は `inst/CITATION` を作る。
-`citation("ggplot2")` のように参照できるようになる。
-
-
-### [`tests/`](https://r-pkgs.org/tests.html)
+<https://r-pkgs.org/tests.html>
 
 <a href="https://testthat.r-lib.org/">
 <img src="/_img/hex-stickers/testthat.webp" align="right" width="120" height="139">
@@ -202,7 +206,9 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
   のようにアクセスできる。
 
 
-### [その他](https://r-pkgs.org/misc.html)
+### その他
+
+<https://r-pkgs.org/misc.html>
 
 `demo/`
 :   vignettesに取って代わられた古い機能。
@@ -226,6 +232,11 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
   例えばRStudioを使いこなせないターミナル勢としては
   [`knitr::knit()` するだけのコマンド](https://github.com/heavywatal/rwtl/blob/master/exec/knit.R)
   とか作っておくと便利。
+
+`inst/`
+: ここに入ってるものはインストール先でトップディレクトリに移される謎仕様。
+: 論文で引用されることを想定している場合は `inst/CITATION` を作る。
+  `citation("ggplot2")` のように参照できるようになる。
 
 `tools/`
 : たぶん何を入れても一切チェックされずインストールもされない自由なディレクトリ。

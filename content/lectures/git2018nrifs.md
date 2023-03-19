@@ -146,7 +146,7 @@ plot論文.R
 - ファイル変更の競合・衝突に対処しにくい。
 
 
-## Git<img height=16 width=16 src="https://cdn.simpleicons.org/git"> and GitHub<img height=16 width=16 src="https://cdn.simpleicons.org/github">
+## Git and GitHub
 
 - いつでも好きなところに戻れる安心感
     - 履歴を残すタイミングは任意 = 手動。
@@ -193,7 +193,7 @@ VCSは基本的にGit一択。<br>
 ホスティングサービスは、使い方や予算などに応じて選択。
 
 
-### GitHub<img height=16 width=16 src="https://cdn.simpleicons.org/github">の使いみち
+### GitHubの使いみち
 
 - 基本: プレーンテキストのバージョン管理<img height=16 width=16 src="https://cdn.simpleicons.org/git">
     - プログラムのソースコード:

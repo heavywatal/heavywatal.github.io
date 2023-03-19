@@ -7,7 +7,7 @@ tags = ["genetics"]
 
 Basic Local Alignment Search Tool
 
-<http://blast.ncbi.nlm.nih.gov/>
+<https://blast.ncbi.nlm.nih.gov/doc/blast-help/downloadblastdata.html>
 
 ## blast+ のインストール
 
@@ -17,7 +17,7 @@ Basic Local Alignment Search Tool
 
 ### Linux, Mac (binary)
 
-1.  <ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST>
+1.  <https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/>
     から最新版の `ncbi-blast-*-x64-linux.tar.gz`
     あるいは `ncbi-blast-*-universal-macosx.tar.gz`
     をダウンロードして展開:
@@ -39,7 +39,7 @@ Basic Local Alignment Search Tool
 自分のマシンに最適化されるようにビルドしてみる。
 ホントに速いかどうかは試してない。
 
-<http://www.ncbi.nlm.nih.gov/books/NBK1763/#CmdLineAppsManual.Installation>
+<https://www.ncbi.nlm.nih.gov/books/NBK279690/#CmdLineAppsManual.Installation>
 
 1.  Boost ライブラリをインストールする。このとき
     `regex`, `spirit`, `system`, `filesystem`, `test`, `thread`
@@ -91,7 +91,7 @@ Basic Local Alignment Search Tool
 `-subject` オプションを使えばFASTAファイル同士でいきなり検索できるが、
 何度もやるならデータベース化しておいたほうが効率いいはず。
 
-<http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.makeblastdb_application_opt>
+<https://www.ncbi.nlm.nih.gov/books/NBK279684/#appendices.T.makeblastdb_application_opt>
 
 1.  データベースの置き場所をひとつ決め (e.g. `~/db/blast`)、
     上記のように環境変数 `BLASTDB` を設定しておく。
@@ -131,7 +131,7 @@ Basic Local Alignment Search Tool
 
 ### 共通オプション
 
-<http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.options_common_to_all_blast>
+<https://www.ncbi.nlm.nih.gov/books/NBK279684/#appendices.T.options_common_to_all_blast>
 
 `-db`
 
@@ -214,7 +214,7 @@ Basic Local Alignment Search Tool
 
 Nucleotide query vs Nucleotide subject
 
-<http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.blastn_application_options>
+<https://www.ncbi.nlm.nih.gov/books/NBK279684/#appendices.T.blastn_application_options>
 
 `-word_size` (11, short: 7, mega: 28)
 :   最初にexact matchさせる配列の長さ。
@@ -236,16 +236,16 @@ Nucleotide query vs Nucleotide subject
 
 `blastp`
 :   Protein query vs Protein subject
-    <http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.blastp_application_options>
+    <https://www.ncbi.nlm.nih.gov/books/NBK279684/#appendices.T.blastp_application_options>
 
 `blastx`
 :   Nucleotide query (translated) vs Protein subject
-    <http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.blastx_application_options>
+    <https://www.ncbi.nlm.nih.gov/books/NBK279684/#appendices.T.blastx_application_options>
 
 `tblastn`
 :   Protein query vs Nucleotide subject (translated)
-    <http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.tblastn_application_options>
+    <https://www.ncbi.nlm.nih.gov/books/NBK279684/#appendices.T.tblastn_application_options>
 
 `tblastx`
 :   Nucleotide query (translated) vs Nucleotide subject (translated)
-    <http://www.ncbi.nlm.nih.gov/books/NBK279675/#appendices.T.tblastx_application_options>
+    <https://www.ncbi.nlm.nih.gov/books/NBK279684/#appendices.T.tblastx_application_options>

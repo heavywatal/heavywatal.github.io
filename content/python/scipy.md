@@ -28,7 +28,9 @@ np.show_config()
 
 <https://numpy.org/doc/stable/reference/>
 
-### [`ndarray`](https://numpy.org/doc/stable/reference/arrays.ndarray.html): N次元配列クラス
+### `ndarray`: N次元配列クラス
+
+<https://numpy.org/doc/stable/reference/arrays.ndarray.html>
 
 2D行列に特殊化したものとして
 [`numpy.matrix`](https://numpy.org/doc/stable/reference/generated/numpy.matrix.html)
@@ -39,25 +41,28 @@ np.show_config()
 
 <https://numpy.org/doc/stable/reference/routines.matlib.html>
 
-### [Universal functions](https://numpy.org/doc/stable/reference/ufuncs.html#available-ufuncs)
+### Universal functions
+
+<https://numpy.org/doc/stable/reference/ufuncs.html#available-ufuncs>
 
 `ndarray` に対して効率よく element-wise な演算をする関数
 
 
-### [Routine](https://numpy.org/doc/stable/reference/routines.html)
+### Routine
+
+<https://numpy.org/doc/stable/reference/routines.html>
 
 `ndarray` を作ったり操作したりする関数全般
 
 
-## `SciPy`
-
-高度な科学技術計算ライブラリ
+## `SciPy`: 高度な科学技術計算ライブラリ
 
 <https://docs.scipy.org/doc/scipy/reference/>
 
-### [`scipy.stats`](https://docs.scipy.org/doc/scipy/reference/stats.html)
+### `scipy.stats`
 
-<https://docs.scipy.org/doc/scipy/tutorial/stats.html>
+- <https://docs.scipy.org/doc/scipy/reference/stats.html>
+- <https://docs.scipy.org/doc/scipy/tutorial/stats.html>
 
 
 ## 書籍

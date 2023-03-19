@@ -116,7 +116,7 @@ write_delim(x, path,
 : 文字列をそのまま書き出す。
 
 
-### 文字列から別の型へ <a name="parse"></a>
+### 文字列から別の型へ
 
 `parse_number(x, na = c("", "NA"), locale = default_locale())`
 :   文字列で最初に登場する数値を抜き出す。

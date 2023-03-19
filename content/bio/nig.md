@@ -216,7 +216,9 @@ print("SGE_TASK_ID: " + os.environ["SGE_TASK_ID"])
 :   ユーザーに与えられたリソースを表示
 
 
-## [Singularity](https://sc.ddbj.nig.ac.jp/ja/guide/software/singularity)
+## Singularity
+
+<https://sc.ddbj.nig.ac.jp/ja/guide/software/singularity>
 
 `/usr/local/biotools/` 以下に各種ソフトウェアが用意されている。
 [BioContainers](https://biocontainers.pro) のものをほぼそのまま置いているらしい。

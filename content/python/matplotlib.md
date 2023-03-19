@@ -52,7 +52,9 @@ fig.savefig('example.png')
 FigureやAxesを意識せず `plt.plot()` などを使うスタイルは分かりにくいので不採用。
 
 
-### [pyplot](https://matplotlib.org/stable/api/pyplot_summary.html)
+### pyplot
+
+<https://matplotlib.org/stable/api/pyplot_summary.html>
 
 最上位のモジュール。
 Figure, Axesインスタンスを明示的に操作するスタイルでは、
@@ -66,7 +68,9 @@ Figure, Axesインスタンスを明示的に操作するスタイルでは、
   backend関係も切るっぽいので再び `fig.show()` しても開けない。
 
 
-### [Figure](https://matplotlib.org/stable/api/figure_api.html)
+### Figure
+
+<https://matplotlib.org/stable/api/figure_api.html>
 
 ウィンドウを表示したり画像ファイルを保存したりする単位となるクラス。
 コンストラクタを直接呼ぶのではなく
@@ -97,7 +101,9 @@ Figure, Axesインスタンスを明示的に操作するスタイルでは、
 : 子Axesへの参照
 
 
-### [Axes](https://matplotlib.org/stable/api/axes_api.html)
+### Axes
+
+<https://matplotlib.org/stable/api/axes_api.html>
 
 軸やラベルを持ったひとつのプロットの単位となるクラス。
 
@@ -187,7 +193,9 @@ def my_scatter(x, y, data, ax):
 
 <https://seaborn.pydata.org/examples>
 
-#### [Categorical plots](https://seaborn.pydata.org/tutorial/categorical.html)
+#### Categorical plots
+
+<https://seaborn.pydata.org/tutorial/categorical.html>
 
 `sns.stripplot(x, y, hue, data, order, ..., ax)`
 :   片軸がカテゴリカル変数の散布図
@@ -211,7 +219,9 @@ def my_scatter(x, y, data, ax):
 `sns.countplot(x, y, hue, data, order, ..., ax)`
 :   カテゴリカル変数の頻度棒グラフ
 
-#### [Distribution plots](https://seaborn.pydata.org/tutorial/distributions.html)
+#### Distribution plots
+
+<https://seaborn.pydata.org/tutorial/distributions.html>
 
 `sns.distplot(a, bins, hist=True, kde=True, rug=False, fit=None, ..., ax)`
 :   `ax.hist()` + `sns.kdeplot()` + `sns.rugplot()`
@@ -222,19 +232,25 @@ def my_scatter(x, y, data, ax):
 `sns.heatmap(data, vmin, vmax, cmap, center, ..., square, mask, ax)`
 :   ヒートマップ。入力データはtidyじゃなくて行列の形。
 
-#### [Regression plots](https://seaborn.pydata.org/tutorial/regression.html)
+#### Regression plots
+
+<https://seaborn.pydata.org/tutorial/regression.html>
 
 `sns.regplot(x, y, data, ..., fit_reg=True, ci=95, ..., ax)`
 :   散布図 + 回帰線。
 
-### [Axis Grid](https://seaborn.pydata.org/tutorial/axis_grids.html)
+### Axis Grid
+
+<https://seaborn.pydata.org/tutorial/axis_grids.html>
 
 FigureとAxisをいい感じに初期化して、関連するデータを縦・横・色の方向に並べる土台。
 これにAxis-level plotを乗せるところまでショートカットする高級関数がFigure-level plot。
 できあがったGridクラスの`.set()`系メソッドとか`.fig`プロパティを通じていろいろ調整できる。
 これをまた別のグリッドに埋め込むというRのgrobのような操作はたぶんできない。
 
-#### [`sns.FacetGrid`](https://seaborn.pydata.org/generated/seaborn.FacetGrid.html)
+#### `sns.FacetGrid`
+
+<https://seaborn.pydata.org/generated/seaborn.FacetGrid.html>
 
 `(data, row, col, hue, col_wrap, sharex, sharey, ...)`
 
@@ -261,7 +277,9 @@ grid.map(plt.scatter, 'sepal_width', 'sepal_length')
 :   昔は `factorplot` という名前だった。
 
 
-#### [`sns.PairGrid`](https://seaborn.pydata.org/generated/seaborn.PairGrid.html)
+#### `sns.PairGrid`
+
+<https://seaborn.pydata.org/generated/seaborn.PairGrid.html>
 
 `(data, hue, ..., vars, x_vars, y_vars, ...)`
 
@@ -277,7 +295,9 @@ grid = grid.map_diag(sns.distplot)
 :   `kind`: {`scatter`, `reg`}
 :   `diag_kind`: {`hist`, `kde`}
 
-#### [`sns.JointGrid`](https://seaborn.pydata.org/generated/seaborn.JointGrid.html)
+#### `sns.JointGrid`
+
+<https://seaborn.pydata.org/generated/seaborn.JointGrid.html>
 
 `(x, y, data, size, ratio, space, dropna, xlim, ylim)`
 
@@ -437,7 +457,9 @@ grid = grid.plot_marginals(sns.distplot, kde=False)
 
 `site-packages/matplotlib/mpl-data/matplotlibrc` にテンプレートがある。
 
-### [`macosx` backend](https://matplotlib.org/stable/tutorials/introductory/usage.html#backends)
+### backends
+
+<https://matplotlib.org/stable/users/explain/backends.html>
 
 Macで非Frameworkとしてビルドした自前Pythonをそのまま使うと怒られる:
 

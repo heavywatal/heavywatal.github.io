@@ -47,7 +47,9 @@ open('~/.[TAB]')
 -   output cache: `_`, `__`, `___`, `_oh[n]`, `_<n>`
 -   directory: `_dh`
 
-### [Object introspection](https://ipython.readthedocs.io/en/stable/interactive/reference.html#dynamic-object-information)
+### Object introspection
+
+<https://ipython.readthedocs.io/en/stable/interactive/reference.html#dynamic-object-information>
 
 関数がどんな引数をとるか、
 クラスがどんなメンバを持っているか、
@@ -73,13 +75,17 @@ open('~/.[TAB]')
 files = !ls
 ```
 
-### [マジックコマンド](https://ipython.readthedocs.io/en/stable/interactive/magics.html)
+### マジックコマンド
+
+<https://ipython.readthedocs.io/en/stable/interactive/magics.html>
 
 - 一行単位の line magic は `%` で始める。
 - 複数行うけつける cell magic は `%%` で始める。
 - デフォルトの `automagic = True` では `%` が省略可能で怖い。
 
-### [環境設定](https://ipython.readthedocs.io/en/stable/config/intro.html)
+### 環境設定
+
+<https://ipython.readthedocs.io/en/stable/config/intro.html>
 
 ```sh
 ipython help profile
@@ -121,7 +127,9 @@ GitHub上でも直接閲覧できるし、[VSCode]({{< relref "vscode.md" >}}) �
 後述のJupytextがこれを回避する救世主かもしれない。
 
 
-### [始め方](https://jupyterlab.readthedocs.io/en/stable/getting_started/starting.html)
+### 始め方
+
+<https://jupyterlab.readthedocs.io/en/stable/getting_started/starting.html>
 
 1.  適当な作業ディレクトリを作って移動: `mkdir -p ~/jupyter; cd $_`
 1.  ターミナルから起動: `jupyter lab [file or directory]`

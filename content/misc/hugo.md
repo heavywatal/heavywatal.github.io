@@ -10,9 +10,8 @@ aliases = ["/dev/hugo.html"]
 Markdown記法のテキストをHTMLに変換する、静的ウェブサイト生成プログラム。
 公式ドキュメントが充実しているので基本的にそれに従えば簡単にできる。
 
-- https://gohugo.io/overview/introduction/
-- https://discuss.gohugo.io/
-- https://github.com/gohugoio/hugo
+- <https://gohugo.io/documentation/>
+- <https://github.com/gohugoio/hugo>
 
 高速さとシンプルさに惹かれてSphinxから移行し、
 本サイトもHugoでビルドしている。
@@ -20,9 +19,9 @@ Markdown記法のテキストをHTMLに変換する、静的ウェブサイト�
 
 ## Quickstart
 
-https://gohugo.io/getting-started/quick-start/
+<https://gohugo.io/getting-started/quick-start/>
 
--   [インストール方法はいろいろ用意されてる](https://gohugo.io/getting-started/installing)。
+-   [インストール方法はいろいろ用意されてる](https://gohugo.io/installation/)。
     例えばMacなら[Homebrew]({{< relref "homebrew.md" >}})で一発:
     `brew install hugo`
 
@@ -30,8 +29,8 @@ https://gohugo.io/getting-started/quick-start/
     ```sh
     export GOPATH=${HOME}/.go
     export PATH=${PATH}:${GOPATH}/bin
-    mkdir $HOME/src
-    cd $HOME/src
+    mkdir ${HOME}/src
+    cd ${HOME}/src
     git clone https://github.com/gohugoio/hugo.git
     cd hugo
     go install --tags extended
@@ -67,7 +66,7 @@ https://gohugo.io/getting-started/quick-start/
 
 -   適当なテーマでウェブサーバーを走らせる:
     ```sh
-    hugo server -t blank
+    hugo server --theme blank
     ```
 
 -   ブラウザから http://localhost:1313/about にアクセスしてみる。
@@ -76,7 +75,7 @@ https://gohugo.io/getting-started/quick-start/
 
 ## 設定
 
-https://gohugo.io/overview/configuration/
+<https://gohugo.io/getting-started/configuration/>
 
 長らく `config.toml` だったが今は `hugo.toml` がデフォルト。
 `config/_default/hugo.toml` に置いても同じ。
@@ -94,7 +93,7 @@ hugo server # -e development
 
 ## Theme
 
-https://themes.gohugo.io/
+<https://themes.gohugo.io/>
 
 デフォルトのテーマというものが存在しないのがちょっと厳しい。
 ユーザーによっていろいろ投稿されてるけどほとんどがブログ用途。
@@ -104,7 +103,7 @@ https://github.com/heavywatal/hugo-theme-nonblog
 
 ### Performance
 
-https://gohugo.io/troubleshooting/build-performance/
+<https://gohugo.io/troubleshooting/build-performance/>
 
 ページによって内容が変わらないテンプレートは `partial` の代わりに
 [`partialCached`](https://gohugo.io/functions/partialcached/)
@@ -140,7 +139,9 @@ https://gohugo.io/troubleshooting/build-performance/
   デフォルト設定での生HTMLコードの扱いがちょっと変。
 
 
-### [Front matter](https://gohugo.io/content/front-matter/)
+### Front matter
+
+<https://gohugo.io/content-management/front-matter/>
 
 タイトルや日付などのメタデータをファイルの先頭で記述する。
 YAMLやJSONでもいいけど、

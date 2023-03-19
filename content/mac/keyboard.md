@@ -139,7 +139,7 @@ u with umlaut and tone (ǖ ǘ ǚ ǜ)
 :   <kbd>⌥option</kbd><kbd>`</kbd> + <kbd>v</kbd>
 
 
-### <kbd>⌥option</kbd>
+### ⌥ option
 
 |     | <kbd>⌥option</kbd> | <kbd>⌥option</kbd><kbd>⇧shift</kbd> |
 | --- | --------- | ----------------- |

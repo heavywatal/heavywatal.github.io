@@ -22,7 +22,9 @@ https://gcc.gnu.org/
 - https://gcc.gnu.org/onlinedocs/gcc/Invoking-GCC.html
 - https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html
 
-#### [出力オプション](https://gcc.gnu.org/onlinedocs/gcc/Overall-Options.html)
+#### 出力オプション
+
+<https://gcc.gnu.org/onlinedocs/gcc/Overall-Options.html>
 
 `-c`
 :   コンパイルするだけでリンクしない
@@ -30,7 +32,9 @@ https://gcc.gnu.org/
 `-o {file}`
 :   出力先のファイル名を指定
 
-#### [C/C++オプション](https://gcc.gnu.org/onlinedocs/gcc/C-Dialect-Options.html)
+#### C/C++オプション
+
+<https://gcc.gnu.org/onlinedocs/gcc/C-Dialect-Options.html>
 
 `-std=c++11`
 :   2011年のISO標準でコンパイルする。
@@ -39,7 +43,9 @@ https://gcc.gnu.org/
 :   2014年のISO標準でコンパイルする。
     g++-6 ではこれのGNU方言である `gnu++14` がデフォルトになった。
 
-#### [警告オプション](https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html)
+#### 警告オプション
+
+<https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html>
 
 `-Wall`
 :   基本的な警告
@@ -50,12 +56,16 @@ https://gcc.gnu.org/
 `-Werror`
 :   警告をエラー扱いにする
 
-#### [デバッグオプション](https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html)
+#### デバッグオプション
+
+<https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html>
 
 `-g`
 :   gdb で使えるデバッグ情報を埋め込む
 
-#### [最適化オプション](https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html)
+#### 最適化オプション
+
+<https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html>
 
 `-O1`
 :   軽い最適化
@@ -69,7 +79,9 @@ https://gcc.gnu.org/
 `-Os`
 :   コードサイズが最小になるように
 
-#### [プリプロセッサオプション](https://gcc.gnu.org/onlinedocs/gcc/Preprocessor-Options.html)
+#### プリプロセッサオプション
+
+<https://gcc.gnu.org/onlinedocs/gcc/Preprocessor-Options.html>
 
 `-D {name}`, `-D {name=definition}`
 :   ソースコードで `#define` するのと同じようにマクロを定義する
@@ -84,7 +96,9 @@ https://gcc.gnu.org/
 :   ファイルの依存関係を書き出す。
     前者はシステムヘッダーを含み、後者は含まない。
 
-#### [リンクオプション](https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html)
+#### リンクオプション
+
+<https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html>
 
 `-l {library}`
 :   リンクするライブラリを指定する。

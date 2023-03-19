@@ -87,7 +87,7 @@ tags = ["genetics"]
     samtools view -hb -f3 -q2 aln.bam -o filtered.bam
     ```
 
--   [`bgzip`](http://www.htslib.org/doc/bgzip.html)でFASTAやGFFを圧縮。
+-   [`bgzip`](https://www.htslib.org/doc/bgzip.html)でFASTAやGFFを圧縮。
     インデックス(`.gzi`)を利用して部分的に展開して高速アクセスすることが可能。
     普通の `gzip` としても展開可能。
     拡張子はデフォルトで `.gz` だけど `.bgz` にすることもある。
@@ -97,11 +97,11 @@ tags = ["genetics"]
       → BAMインデックス (`.bam.bai`)
     - [`samtools faidx`](https://www.htslib.org/doc/samtools-faidx.html)
       → 参照配列インデックス (`.fa.fai`)
-    - [`tabix`](http://www.htslib.org/doc/tabix.html)
+    - [`tabix`](https://www.htslib.org/doc/tabix.html)
       → タブ区切りゲノムポジションインデックス (`.bgz.tbi`)<br>
       いろんな形式を扱える(`-p gff|bed|sam|vcf`)。
       位置順ソート且つbgzip圧縮されている必要がある。
-    - [`bgzip -r`](http://www.htslib.org/doc/bgzip.html)
+    - [`bgzip -r`](https://www.htslib.org/doc/bgzip.html)
       → BGZFインデックス (`.gz.gzi`)<br>
       bgzip済みfastaを `faidx` するとついでに作ってもらえるし、
       `tabix` にはおそらく込み込みなので、明示的に作ることは少ない。
@@ -204,7 +204,9 @@ bcftools mpileup -f ref.fa aln.bam | bcftools call -mv -Ob -o calls.bcf
 BAMを置き換えて一般ユーザーの主流になるにはキャッシュの設計がイマイチな気がするけど、
 種数あたりのサンプル数・リード数が多くなるほど恩恵も大きくなるからオッケー、なのかなぁ。
 
-#### [参照配列を探しに行く優先順位](https://www.htslib.org/doc/samtools.html#REFERENCE_SEQUENCES)
+#### 参照配列を探しに行く優先順位
+
+<https://www.htslib.org/doc/samtools.html#REFERENCE_SEQUENCES>
 
 1.  samtoolsを呼ぶときの明示的なオプション, e.g., `--reference`.
 1.  `M5` タグのハッシュ値 → 環境変数 `$REF_CACHE`.

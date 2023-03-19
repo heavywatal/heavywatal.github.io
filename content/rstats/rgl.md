@@ -16,7 +16,9 @@ tags = ["r", "graph"]
 
 ## プロット
 
-### [Primitive shapes](https://dmurdoch.github.io/rgl/reference/primitives.html)
+### Primitive shapes
+
+<https://dmurdoch.github.io/rgl/reference/primitives.html>
 
 `rgl::points3d(x, y = NULL, z = NULL, ...)`
 :   散布図。
@@ -117,7 +119,9 @@ next3d(current = NA, clear = TRUE, reuse = TRUE)
 
 `rgl::clear3d(type = c("shapes", "bboxdeco", "material"), defaults = getr3dDefaults(), subscene = 0)`
 
-### [Display](https://dmurdoch.github.io/rgl/dev/articles/rgl.html#default-display)
+### Display
+
+<https://dmurdoch.github.io/rgl/dev/articles/rgl.html#default-display>
 
 デフォルトでは独立のウィンドウ(XQuartz, X11など)が立ち上がる。
 

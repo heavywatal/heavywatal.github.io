@@ -89,7 +89,9 @@ MacやLinuxならシステムの一部として
     の形でまとめておくと楽。
 
 
-### [既知の問題](https://github.com/pyenv/pyenv/wiki/Common-build-problems)
+### 既知の問題
+
+<https://github.com/pyenv/pyenv/wiki/Common-build-problems>
 
 -   3.1.0より古い[matplotlib]({{< relref "matplotlib.md" >}}) で
     `macosx` backend を使いたい場合などは環境変数

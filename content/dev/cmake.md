@@ -44,7 +44,9 @@ install(TARGETS a.out
 [`cmake` コマンドの使い方は後述](#cli)
 
 
-## [Commands](https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html)
+## Commands
+
+<https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html>
 
 ### Scripting commands
 
@@ -58,7 +60,9 @@ install(TARGETS a.out
 - `set(VARIABLE value)`
 
 
-### [Project commands](https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html#id4)
+### Project commands
+
+<https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html#project-commands>
 
 サブディレクトリを利用する:
 
@@ -112,7 +116,9 @@ install(TARGETS a.out
 : `make [all]` から外れて、明示的なターゲット指定でのみビルドされるようになる。
 
 
-## [Variables](https://cmake.org/cmake/help/latest/manual/cmake-variables.7.html)
+## Variables
+
+<https://cmake.org/cmake/help/latest/manual/cmake-variables.7.html>
 
 ### Variables that Provide Information
 
@@ -192,7 +198,9 @@ Predefined variable              | default
 `-DCMAKE_BUILD_TYPE=???` をcase-insensitiveに解釈してもらえる。
 
 
-## [Generator expressions](https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html)
+## Generator expressions
+
+<https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html>
 
 文脈に応じて変数を評価する仕組み。
 
@@ -205,11 +213,15 @@ target_include_directories(${PROJECT_NAME} INTERFACE
 )
 ```
 
-## [Modules](https://cmake.org/cmake/help/latest/manual/cmake-modules.7.html)
+## Modules
+
+<https://cmake.org/cmake/help/latest/manual/cmake-modules.7.html>
 
 `include()` や `find_package()` から使う。
 
-### [GNUInstallDirs](https://cmake.org/cmake/help/latest/module/GNUInstallDirs.html)
+### GNUInstallDirs
+
+<https://cmake.org/cmake/help/latest/module/GNUInstallDirs.html>
 
 インストール先のディレクトリを指定するときの標準的な値を決めてくれる。
 
@@ -228,7 +240,9 @@ if(${CMAKE_INSTALL_PREFIX} MATCHES linuxbrew)
 endif()
 ```
 
-### [CMakePackageConfigHelpers](https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html)
+### CMakePackageConfigHelpers
+
+<https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html>
 
 他のプロジェクトから以下のように利用されるライブラリを作りたい。
 外部プロジェクトであることを明確にするため
@@ -278,7 +292,9 @@ add_library(${PROJECT_NAME} SHARED)
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 ```
 
-### [FetchContent](https://cmake.org/cmake/help/latest/module/FetchContent.html)
+### FetchContent
+
+<https://cmake.org/cmake/help/latest/module/FetchContent.html>
 
 外部ライブラリを取ってきて配置する。
 前からあった
@@ -312,7 +328,9 @@ execute_process(COMMAND
 add_subdirectory(${SUBDIR} EXCLUDE_FROM_ALL)
 ```
 
-### [FindThreads](https://cmake.org/cmake/help/latest/module/FindThreads.html)
+### FindThreads
+
+<https://cmake.org/cmake/help/latest/module/FindThreads.html>
 
 `-lpthread` とか自分で書かない。
 
@@ -321,7 +339,9 @@ find_package(Threads)
 target_link_libraries(mytarget PRIVATE Threads::Threads)
 ```
 
-### [FindBoost](https://cmake.org/cmake/help/latest/module/FindBoost.html)
+### FindBoost
+
+<https://cmake.org/cmake/help/latest/module/FindBoost.html>
 
 ```cmake
 set(Boost_NO_BOOST_CMAKE ON)
@@ -334,7 +354,9 @@ target_link_libraries(mytarget PRIVATE Boost::filesystem)
 探索パスを追加するには `BOOST_ROOT` を設定する。
 
 
-### [CTest](https://cmake.org/cmake/help/latest/module/CTest.html)
+### CTest
+
+<https://cmake.org/cmake/help/latest/module/CTest.html>
 
 ```cmake
 include(CTest)
@@ -365,7 +387,9 @@ enable_testing()
 
 ## CLI
 
-### [`cmake`](https://cmake.org/cmake/help/latest/manual/cmake.1.html)
+### `cmake`
+
+<https://cmake.org/cmake/help/latest/manual/cmake.1.html>
 
 ビルド用の空ディレクトリを外に作って out-of-source で実行するのが基本。
 やり直したいときは、そのディレクトリごと消す。

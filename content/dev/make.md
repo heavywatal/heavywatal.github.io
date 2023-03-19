@@ -53,7 +53,9 @@ clean:
 ```
 
 
-### [Rule](https://www.gnu.org/software/make/manual/make.html#Rules)
+### Rule
+
+<https://www.gnu.org/software/make/manual/make.html#Rules>
 
 コロンとタブを使って以下のような形式でルールを書くのが基本。
 この`Makefile`があるところでターミナルから `make TARGET` と打つと、
@@ -85,9 +87,10 @@ a.out : main.cpp sub.cpp
 逆に、名前は出すけど中間ファイルとして扱いたい場合は `.SECONDARY` ターゲットに加える。
 
 
-### [Implicit Variables](https://www.gnu.org/software/make/manual/make.html#Implicit-Variables)
+### Implicit Variables
 
-<https://www.gnu.org/software/make/manual/make.html#Name-Index>
+- <https://www.gnu.org/software/make/manual/make.html#Implicit-Variables>
+- <https://www.gnu.org/software/make/manual/make.html#Name-Index>
 
 `CC`
 :   Cコンパイラ `cc`
@@ -130,7 +133,9 @@ a.out : main.cpp sub.cpp
     e.g., `-march=native -m64 -msse -msse2 -msse3 -mfpmath=sse`
 
 
-### [Automatic Variables](https://www.gnu.org/software/make/manual/make.html#Automatic-Variables)
+### Automatic Variables
+
+<https://www.gnu.org/software/make/manual/make.html#Automatic-Variables>
 
 `$@`
 :   ターゲット
@@ -144,7 +149,9 @@ a.out : main.cpp sub.cpp
 :   新しく更新があったファイルだけ欲しい場合は `$?`
 
 
-### [Functions](https://www.gnu.org/software/make/manual/make.html#Functions)
+### Functions
+
+<https://www.gnu.org/software/make/manual/make.html#Functions>
 
 [文字列関連](https://www.gnu.org/software/make/manual/make.html#Text-Functions)
 :   `$(subst FROM,TO,TEXT)`
@@ -178,7 +185,9 @@ a.out : main.cpp sub.cpp
   エラーや警告をプリントする
 : `$(shell COMMAND...)`:   シェルを呼び出す
 
-### [Targets](https://www.gnu.org/software/make/manual/make.html#Standard-Targets)
+### Targets
+
+<https://www.gnu.org/software/make/manual/make.html#Standard-Targets>
 
 `all`
 :   ディレクトリ内のcppソースをコンパイル
@@ -194,7 +203,9 @@ make clean
 make
 ```
 
-## [Options](https://www.gnu.org/software/make/manual/make.html#Options-Summary)
+## Options
+
+<https://www.gnu.org/software/make/manual/make.html#Options-Summary>
 
 `-f file`
 :   `Makefile` じゃない名前のファイルを指定したければ
