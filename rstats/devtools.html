@@ -143,7 +143,7 @@ LaTeX 関連で怒られたら足りないパッケージを入れる:
 </span></span></code></pre></div></li>
 </ol>
 <h3 id="ソース構造">ソース構造</h3>
-<p><a href="https://r-pkgs.org/package-structure-state.html">https://r-pkgs.org/package-structure-state.html</a></p>
+<p><a href="https://r-pkgs.org/structure.html">https://r-pkgs.org/structure.html</a></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">DESCRIPTION  <span class="c1"># 一番大事</span>
 </span></span><span class="line"><span class="cl">NAMESPACE    <span class="c1"># 見せるオブジェクトを列挙</span>
 </span></span><span class="line"><span class="cl">README.md    <span class="c1"># 全体の説明を簡単に</span>
@@ -155,7 +155,8 @@ LaTeX 関連で怒られたら足りないパッケージを入れる:
 </span></span><span class="line"><span class="cl">tests/
 </span></span><span class="line"><span class="cl">vignettes/
 </span></span></code></pre></div><p>CRANから落としてくる <code>.tar.gz</code> ソースコード (bundle package) とは違う。</p>
-<h3 id="descriptionhttpsr-pkgsorgdescriptionhtml"><a href="https://r-pkgs.org/description.html"><code>DESCRIPTION</code></a></h3>
+<h3 id="description"><code>DESCRIPTION</code></h3>
+<p><a href="https://r-pkgs.org/description.html">https://r-pkgs.org/description.html</a></p>
 <ul>
 <li>どうでも良さそうなファイル名とは裏腹に、ちゃんと書かないと動かない。</li>
 <li>始めはusethisとかに生成してもらい、他のパッケージを参考にしつつ修正していく。</li>
@@ -166,7 +167,8 @@ LaTeX 関連で怒られたら足りないパッケージを入れる:
 <li>ライセンスを別ファイルにする場合は <code>License: file LICENSE</code> と書く</li>
 <li><code>Authors@R</code> のとこは後でRで評価されるので変な形。</li>
 </ul>
-<h3 id="namespacehttpsr-pkgsorgnamespacehtml"><a href="https://r-pkgs.org/namespace.html"><code>NAMESPACE</code></a></h3>
+<h3 id="namespace"><code>NAMESPACE</code></h3>
+<p><a href="https://r-pkgs.org/namespace.html">https://r-pkgs.org/namespace.html</a></p>
 <ul>
 <li><a href="#roxygen2">後述のroxygen2</a>がソースコードから自動生成するので<strong>直接触らない</strong>。</li>
 <li>ここで <code>export()</code> された関数だけがユーザーから見える。</li>
@@ -174,7 +176,8 @@ LaTeX 関連で怒られたら足りないパッケージを入れる:
 された関数はattachされてパッケージ内で利用可能になる。
 <code>import(package)</code> で全ての関数をまとめて処理できるけど名前の衝突が怖い。</li>
 </ul>
-<h3 id="r-ソースコードhttpsr-pkgsorgrhtml"><a href="https://r-pkgs.org/r.html"><code>R/</code> ソースコード</a></h3>
+<h3 id="r-ソースコード"><code>R/</code> ソースコード</h3>
+<p><a href="https://r-pkgs.org/code.html">https://r-pkgs.org/code.html</a></p>
 <ul>
 <li><code>NAMESPACE</code> や <code>man/*.Rd</code> を自動生成してもらえるように
 <a href="#roxygen2">後述のroxygen</a>形式でコメントを書く</li>
@@ -189,9 +192,11 @@ LaTeX 関連で怒られたら足りないパッケージを入れる:
 <code>.onLoad(...)</code>, <code>.onAttach(...)</code>, <code>.onUnload(...)</code>
 は慣習的に<code>zzz.R</code>というファイルに記述する。</li>
 </ul>
-<h3 id="src-cソースコードhttpsr-pkgsorgsrchtml"><a href="https://r-pkgs.org/src.html"><code>src/</code> C++ソースコード</a></h3>
+<h3 id="src-cソースコード"><code>src/</code> C++ソースコード</h3>
+<p><a href="https://r-pkgs.org/src.html">https://r-pkgs.org/src.html</a></p>
 <p><a href="/rstats/rcpp.html#Rパッケージで使う">Rcppページの&quot;Rパッケージで使う&quot;セクション</a>を参照</p>
-<h3 id="vignetteshttpsr-pkgsorgvignetteshtml"><a href="https://r-pkgs.org/vignettes.html"><code>vignettes/</code></a></h3>
+<h3 id="vignettes"><code>vignettes/</code></h3>
+<p><a href="https://r-pkgs.org/vignettes.html">https://r-pkgs.org/vignettes.html</a></p>
 <a href="https://pkgdown.r-lib.org/">
 <img src="/_img/hex-stickers/pkgdown.webp" align="right" width="120" height="139">
 </a>
@@ -206,11 +211,8 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。<
 毎回その重さを受け入れるか、わざわざ<code>FALSE</code>指定するかというのは悩みどころ。</p>
 <p><a href="https://pkgdown.r-lib.org">pkgdown</a>でウェブサイトを構築すると、
 ここに置いてあるvignettesはArticlesという位置づけになる。</p>
-<h3 id="insthttpsr-pkgsorginsthtml"><a href="https://r-pkgs.org/inst.html"><code>inst/</code></a></h3>
-<p>ここに入ってるものはインストール先でトップディレクトリに移される謎仕様。</p>
-<p>論文で引用されることを想定している場合は <code>inst/CITATION</code> を作る。
-<code>citation(&quot;ggplot2&quot;)</code> のように参照できるようになる。</p>
-<h3 id="testshttpsr-pkgsorgtestshtml"><a href="https://r-pkgs.org/tests.html"><code>tests/</code></a></h3>
+<h3 id="tests"><code>tests/</code></h3>
+<p><a href="https://r-pkgs.org/tests.html">https://r-pkgs.org/tests.html</a></p>
 <a href="https://testthat.r-lib.org/">
 <img src="/_img/hex-stickers/testthat.webp" align="right" width="120" height="139">
 </a>
@@ -247,7 +249,8 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。<
 <dd><code>system.file(&quot;extdata&quot;, &quot;mtcars.csv&quot;, package = &quot;readr&quot;)</code>
 のようにアクセスできる。</dd>
 </dl>
-<h3 id="その他httpsr-pkgsorgmischtml"><a href="https://r-pkgs.org/misc.html">その他</a></h3>
+<h3 id="その他">その他</h3>
+<p><a href="https://r-pkgs.org/misc.html">https://r-pkgs.org/misc.html</a></p>
 <dl>
 <dt><code>demo/</code></dt>
 <dd>vignettesに取って代わられた古い機能。
@@ -268,6 +271,10 @@ mydemo2    Description of demo 2
 例えばRStudioを使いこなせないターミナル勢としては
 <a href="https://github.com/heavywatal/rwtl/blob/master/exec/knit.R"><code>knitr::knit()</code> するだけのコマンド</a>
 とか作っておくと便利。</dd>
+<dt><code>inst/</code></dt>
+<dd>ここに入ってるものはインストール先でトップディレクトリに移される謎仕様。</dd>
+<dd>論文で引用されることを想定している場合は <code>inst/CITATION</code> を作る。
+<code>citation(&quot;ggplot2&quot;)</code> のように参照できるようになる。</dd>
 <dt><code>tools/</code></dt>
 <dd>たぶん何を入れても一切チェックされずインストールもされない自由なディレクトリ。
 <code>tests/</code> や <code>vignettes/</code> に入れる前のガラクタコードを一時的に置いとくとか。</dd>
