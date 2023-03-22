@@ -88,45 +88,69 @@ ssh
 <p><a href="https://www.openssh.com/">https://www.openssh.com/</a></p>
 <h2 id="公開鍵によるパスワード無しの認証">公開鍵によるパスワード無しの認証</h2>
 <p>秘密鍵 <code>~/.ssh/id_ed25519</code> を持つホストから、
-公開鍵 <code>~/.ssh/authorized_keys</code> を持つホストに、
-パスワード無しでログインできるようにする。</p>
+公開鍵 <code>~/.ssh/authorized_keys</code> を持つホストにログインできるようにする。</p>
+<p>手元のコンピュータ1台につき1ペア生成して、公開鍵をリモートホストに登録するのが基本。
+リモートホストごとに違う鍵を使うことも可能。</p>
 <ol>
 <li>
-<p>ローカルホストで鍵ペア (秘密鍵 <code>id_ed25519</code> と公開鍵 <code>id_ed25519.pub</code>) を作成:</p>
-<pre tabindex="0"><code>ssh-keygen -t ed25519 -N &#39;&#39;
+<p>手元のコンピュータで鍵ペア (秘密鍵 <code>id_ed25519</code> と公開鍵 <code>id_ed25519.pub</code>) を作成:</p>
+<pre tabindex="0"><code>ssh-keygen -t ed25519
 # Generating public/private ed25519 key pair.
-# Enter file in which to save the key (~/.ssh/id_ed25519): ＃そのままリターン
-# Your identification has been saved in ~/.ssh/id_ed25519.
-# Your public key has been saved in ~/.ssh/id_ed25519.pub.
-</code></pre><p>Ed25519を使えない古い環境ではRSA (<code>-t rsa -b 4096</code>)
-やECDSA (<code>-t ecdsa -b 521</code>) を使う。</p>
+# Enter file in which to save the key (~/.ssh/id_ed25519): &lt;return&gt;
+# Enter passphrase (empty for no passphrase):              パスフレーズ&lt;return&gt;
+# Enter same passphrase again:                             パスフレーズ&lt;return&gt;
+# Your identification has been saved in ~/.ssh/id_ed25519
+# Your public key has been saved in ~/.ssh/id_ed25519.pub
+</code></pre><ul>
+<li>Ed25519を使えない古い環境ではRSA (<code>-t rsa -b 4096</code>)
+やECDSA (<code>-t ecdsa -b 521</code>) を使う。</li>
+<li>鍵ファイルの名前はデフォルトのまま<kbd>return</kbd>が簡単。
+特定のリモートサーバー用に別の鍵を用意する場合だけ変える。
+使用中のものを上書きしてしまわないように注意。</li>
+<li>コメントは「この鍵がどこで作られたか」の人間用メモ。
+ホスト名がまともならデフォルト <code>-C username@hostname</code> の形でいい。</li>
+<li>ここで入力するパスフレーズはログインパスワードではなく鍵の暗号化に使われる。
+パスフレーズ無しのほうが断然楽ちんなのでそうされることが多いが、
+ssh-agentやKeyChainを設定しておけば入力をほとんど省略できるので、
+簡単なものでも設定しておいたほうが鍵ファイル流出に強くなる。</li>
+</ul>
 </li>
 <li>
-<p>できあがった公開鍵 <code>id_ed25519.pub</code> をリモートホストに登録する。
+<p>できあがった鍵ペアのうち公開鍵のほう <code>~/.ssh/id_ed25519.pub</code>
+をリモートホストの <code>~/.ssh/authorized_keys</code> に追加する。
 やり方は場合によって異なる。</p>
-<p>ウェブブラウザからアップロードする方法。
-(e.g., <a href="https://github.com/settings/keys">GitHub &gt; Settings</a>)。</p>
-<p>ターミナルから <code>~/.ssh/authorized_keys</code> に追加する方法:</p>
+<ul>
+<li>ウェブブラウザからアップロードする方法。
+(e.g., <a href="https://github.com/settings/keys">GitHub &gt; Settings</a>)。</li>
+<li>ターミナルからコマンドで送り込む方法
+(パスワードなど別の認証でログインできる場合):
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ssh-copy-id -i ~/.ssh/id_ed25519.pub watal@example.com
 </span></span><span class="line"><span class="cl"><span class="c1"># or</span>
 </span></span><span class="line"><span class="cl">ssh watal@example.com <span class="s2">&#34;mkdir ~/.ssh; touch ~/.ssh/authorized_keys&#34;</span>
 </span></span><span class="line"><span class="cl">cat id_ed25519.pub <span class="p">|</span> ssh watal@example.com <span class="s2">&#34;cat &gt;&gt; ~/.ssh/authorized_keys&#34;</span>
 </span></span></code></pre></div></li>
+</ul>
+</li>
 <li>
-<p>ユーザー本人だけが読み書きできるパーミッションに設定されていることを確認:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ls -l ~/.ssh
-</span></span><span class="line"><span class="cl">ssh watal@example.com <span class="s2">&#34;ls -l ~/.ssh&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># if necessary</span>
-</span></span><span class="line"><span class="cl">chmod <span class="m">700</span> ~/.ssh
+<p><code>~/.ssh/</code> ディレクトリ内のパーミッションを確認:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ls -al ~/.ssh
+</span></span><span class="line"><span class="cl"><span class="c1"># drwx------  .</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># -rw-------  authorized_keys</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># -rw-------  config</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># -rw-------  id_ed25519</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># -rw-r--r--  id_ed25519.pub</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># -rw-------  known_hosts</span>
+</span></span></code></pre></div><p>外に出していい公開鍵 <code>.pub</code> 以外はユーザー本人だけが読み書きできるように。
+必要があれば次のようなコマンドで修正:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">chmod <span class="m">700</span> ~/.ssh
 </span></span><span class="line"><span class="cl">chmod <span class="m">600</span> ~/.ssh/id_ed25519
 </span></span><span class="line"><span class="cl">chmod <span class="m">600</span> ~/.ssh/authorized_keys
 </span></span></code></pre></div></li>
 </ol>
 <h2 id="設定">設定</h2>
-<p><a href="https://man.openbsd.org/ssh_config.5">https://man.openbsd.org/ssh_config.5</a></p>
 <h3 id="sshconfig"><code>~/.ssh/config</code></h3>
 <p><code>ssh</code> する側のユーザー毎の設定。
-ユーザー名やアドレスをセットにしてニックネームをつけることで、入力を省略できる。
+設定項目は <code>ssh_config</code> と同じ。
 先に書いたものが優先されるので、一般設定は最後に:</p>
 <pre tabindex="0"><code>Host beast
   Hostname 192.168.6.66
@@ -135,28 +159,43 @@ Host *.ddbj.nig.ac.jp
   User heavywatal
   RequestTTY yes
 Host *
-  Protocol 2
+  PasswordAuthentication no
+  KbdInteractiveAuthentication no
   GSSAPIAuthentication no
   StrictHostKeyChecking no
   VisualHostKey yes
-</code></pre><p>例えば上のような設定を <code>~/.ssh/config</code> に書いておけば以下の２つは等価:</p>
-<pre tabindex="0"><code>ssh -2 eddie@192.168.6.66
-ssh beast
-</code></pre><h3 id="etcssh_config"><code>/etc/ssh_config</code>:</h3>
-<p><code>ssh</code> する側のマシン全体の設定。認証の試行を絞ることで少しでも高速にしたい:</p>
-<pre tabindex="0"><code>Protocol 2
-ChallengeResponseAuthentication no
-GSSAPIAuthentication no
-</code></pre><h3 id="etcsshd_config"><code>/etc/sshd_config</code>:</h3>
+  AddKeysToAgent yes
+  UseKeychain yes
+  IdentityFile ~/.ssh/id_ed25519
+</code></pre><p>ユーザー名やアドレスをセットにしてニックネームをつけることで、入力を省略できる。
+例えば上のような設定を <code>~/.ssh/config</code> に書いておけば以下の２つは等価:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ssh eddie@192.168.6.66
+</span></span><span class="line"><span class="cl">ssh beast
+</span></span></code></pre></div><p>macOSで <code>UseKeychain yes</code> にしておけばパスフレーズ入力は最初の1回だけで済む。
+パスフレーズ無しのような手軽さで秘密鍵の流出に強くなる。
+<code>AddKeysToAgent yes</code> を設定せず
+<code>ssh-add -l</code> が <code>The agent has no identities.</code> を返す状態でも行ける。</p>
+<h3 id="etcssh_config"><code>/etc/ssh_config</code></h3>
+<p><a href="https://manpages.ubuntu.com/manpages/man5/ssh_config.5.html"><code>man ssh_config</code></a></p>
+<p><code>ssh</code> する側のコンピュータ全体の設定。
+普通は <code>~/.ssh/config</code> で事足りるのでいじらない。
+サーバー間の通信を調整する管理者向け。</p>
+<h3 id="etcsshd_config"><code>/etc/sshd_config</code></h3>
+<p><a href="https://manpages.ubuntu.com/manpages/man5/sshd_config.5.html"><code>man sshd_config</code></a></p>
 <p><code>ssh</code> される側のデーモンの設定。余計な入り口を塞ぐべし:</p>
-<pre tabindex="0"><code>Protocol 2
-PermitRootLogin without-password
-ChallengeResponseAuthentication no
+<pre tabindex="0"><code>PermitRootLogin no
 PasswordAuthentication no
+KbdInteractiveAuthentication no
 KerberosAuthentication no
 GSSAPIAuthentication no
 UsePAM no
-</code></pre><h2 id="ファイル転送">ファイル転送</h2>
+</code></pre><dl>
+<dt><code>PermitRootLogin</code></dt>
+<dd><code>without-password</code> は <code>prohibit-password</code> に取って代わられた。</dd>
+<dt><code>KbdInteractiveAuthentication</code></dt>
+<dd><code>ChallengeResponseAuthentication</code> は取って代わられた。</dd>
+</dl>
+<h2 id="ファイル転送">ファイル転送</h2>
 <p>ファイルひとつなら<code>scp</code>でもいいけどそれ以上なら
 <a href="/dev/rsync.html">rsync</a> を使ったほうがよい。
 あるいは<a href="/dev/mount.html#sshfs">sshfsでマウント</a>してしまうのも楽ちん。</p>
