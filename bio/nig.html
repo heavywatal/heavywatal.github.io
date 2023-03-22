@@ -86,40 +86,34 @@ Heavy Watal
 
 <p><a href="https://sc.ddbj.nig.ac.jp/">https://sc.ddbj.nig.ac.jp/</a></p>
 <h2 id="利用開始">利用開始</h2>
+<p><a href="https://sc.ddbj.nig.ac.jp/start_the_service">https://sc.ddbj.nig.ac.jp/start_the_service</a></p>
 <ol>
-<li>
-<p><a href="https://sc2.ddbj.nig.ac.jp/index.php/ja-new-application">新規ユーザ登録申請</a></p>
+<li><a href="https://sc.ddbj.nig.ac.jp/application/">利用規定等</a>を熟読。</li>
+<li>手元のコンピュータでSSH鍵ペアを生成しておく。既にある場合は作り直す必要なし。
+<a href="https://sc.ddbj.nig.ac.jp/application/ssh_keys">公式ドキュメント</a>
+に従ってRSA 3072にするのが無難だが、Ed25519やEDCSAを登録することも可能。</li>
+<li><a href="https://sc-account.ddbj.nig.ac.jp/application/registration">利用登録申請</a>のフォームを埋める。
+<ul>
+<li>申請者</li>
+<li>所属機関</li>
+<li>アカウント: 作っておいたSSH公開鍵をここでコピペ。</li>
+<li><a href="https://sc.ddbj.nig.ac.jp/application/#%E8%B2%AC%E4%BB%BB%E8%80%85%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6">責任者</a></li>
+</ul>
 </li>
-<li>
-<p>責任者にメールが届くので、それに従って誓約書PDFを管理者に送信</p>
-</li>
-<li>
-<p>アカウント登録証が手元に届く</p>
-</li>
-<li>
-<p><a href="https://sc2.ddbj.nig.ac.jp/">https://sc2.ddbj.nig.ac.jp/</a> でログイン</p>
-</li>
-<li>
-<p>手元のマシンでSSH公開鍵を生成し、
-<a href="https://sc2.ddbj.nig.ac.jp/index.php/2014-09-17-05-42-33">サーバーに登録</a>。
-ドキュメントの例ではRSAが使われてるけどECDSAのほうが安全で軽い。
-ほんとはed25519のほうが良いけどウェブ登録ではなぜか拒否される。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ssh-keygen -t ecdsa -b <span class="m">521</span> -N <span class="s1">&#39;&#39;</span> -C <span class="s1">&#39;heavywatal@nig.ac.jp&#39;</span> -f ~/.ssh/id_ecdsa_nig
-</span></span></code></pre></div></li>
-<li>
-<p>手元の <code>~/.ssh/config</code> に設定を追加:</p>
-<pre><code>Host *.ddbj.nig.ac.jp
-  User heavywatal
+<li>申請者と責任者にメールが届くので、それに従って誓約書PDFを管理者に送信。</li>
+<li>アカウント登録証が手元に届く。</li>
+<li>手元の <code>~/.ssh/config</code> に設定を追加:
+<pre tabindex="0"><code>Host *.ddbj.nig.ac.jp
   RequestTTY yes
-  IdentityFile ~/.ssh/id_ecdsa_nig
-</code></pre>
-<p>sshコマンドでユーザ名と <code>-t</code> オプションを省略できるようになる。</p>
-</li>
-<li>
-<p>ゲートウェイノードにSSH接続し、<a href="https://sc.ddbj.nig.ac.jp/general_analysis_division/ga_login">ログインノードに <code>qlogin</code></a>:</p>
-<pre><code>ssh gw.ddbj.nig.ac.jp qlogin
-</code></pre>
-</li>
+  User heavywatal
+  IdentityFile ~/.ssh/id_ed25519
+</code></pre>ユーザ名と鍵ファイル名は適宜調整。
+これでsshコマンドを短く済ませられる。</li>
+<li>ゲートウェイノードにSSH接続し、<a href="https://sc.ddbj.nig.ac.jp/general_analysis_division/ga_login">ログインノードに <code>qlogin</code></a>:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ssh gw.ddbj.nig.ac.jp qlogin
+</span></span><span class="line"><span class="cl"><span class="c1"># which is equivalent to (thanks to ~/.ssh/config)</span>
+</span></span><span class="line"><span class="cl">ssh -t -f ~/.ssh/id_ed25519 heavywatal@gw.ddbj.nig.ac.jp qlogin
+</span></span></code></pre></div></li>
 </ol>
 <h2 id="ファイルの送受信">ファイルの送受信</h2>
 <p><a href="https://sc.ddbj.nig.ac.jp/general_analysis_division/ga_transfer">公式「システムへのファイル転送方法」</a>
@@ -263,8 +257,8 @@ E(rror), r(unning), R(estarted), s(uspended)
 <dt><code>qquota</code></dt>
 <dd>ユーザーに与えられたリソースを表示</dd>
 </dl>
-<h2 id="singularity">Singularity</h2>
-<p><a href="https://sc.ddbj.nig.ac.jp/ja/guide/software/singularity">https://sc.ddbj.nig.ac.jp/ja/guide/software/singularity</a></p>
+<h2 id="apptainer-singularity">Apptainer (Singularity)</h2>
+<p><a href="https://sc.ddbj.nig.ac.jp/software/Apptainer/">https://sc.ddbj.nig.ac.jp/software/Apptainer/</a></p>
 <p><code>/usr/local/biotools/</code> 以下に各種ソフトウェアが用意されている。
 <a href="https://biocontainers.pro">BioContainers</a> のものをほぼそのまま置いているらしい。</p>
 <p>利用可能なソフトウェアとバージョンを探す:</p>
