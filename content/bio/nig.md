@@ -5,35 +5,38 @@ tags = ["job"]
   parent = "bio"
 +++
 
-https://sc.ddbj.nig.ac.jp/
+<https://sc.ddbj.nig.ac.jp/>
 
 ## 利用開始
 
-1.  [新規ユーザ登録申請](https://sc2.ddbj.nig.ac.jp/index.php/ja-new-application)
-1.  責任者にメールが届くので、それに従って誓約書PDFを管理者に送信
-1.  アカウント登録証が手元に届く
-1.  https://sc2.ddbj.nig.ac.jp/ でログイン
-1.  手元のマシンでSSH公開鍵を生成し、
-    [サーバーに登録](https://sc2.ddbj.nig.ac.jp/index.php/2014-09-17-05-42-33)。
-    ドキュメントの例ではRSAが使われてるけどECDSAのほうが安全で軽い。
-    ほんとはed25519のほうが良いけどウェブ登録ではなぜか拒否される。
+<https://sc.ddbj.nig.ac.jp/start_the_service>
 
-    ```sh
-    ssh-keygen -t ecdsa -b 521 -N '' -C 'heavywatal@nig.ac.jp' -f ~/.ssh/id_ecdsa_nig
-    ```
-
+1.  [利用規定等](https://sc.ddbj.nig.ac.jp/application/)を熟読。
+1.  手元のコンピュータでSSH鍵ペアを生成しておく。既にある場合は作り直す必要なし。
+    [公式ドキュメント](https://sc.ddbj.nig.ac.jp/application/ssh_keys)
+    に従ってRSA 3072にするのが無難だが、Ed25519やEDCSAを登録することも可能。
+1.  [利用登録申請](https://sc-account.ddbj.nig.ac.jp/application/registration)のフォームを埋める。
+    - 申請者
+    - 所属機関
+    - アカウント: 作っておいたSSH公開鍵をここでコピペ。
+    - [責任者](https://sc.ddbj.nig.ac.jp/application/#%E8%B2%AC%E4%BB%BB%E8%80%85%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6)
+1.  申請者と責任者にメールが届くので、それに従って誓約書PDFを管理者に送信。
+1.  アカウント登録証が手元に届く。
 1.  手元の `~/.ssh/config` に設定を追加:
-
-        Host *.ddbj.nig.ac.jp
-          User heavywatal
-          RequestTTY yes
-          IdentityFile ~/.ssh/id_ecdsa_nig
-
-    sshコマンドでユーザ名と `-t` オプションを省略できるようになる。
-
+    ```
+    Host *.ddbj.nig.ac.jp
+      RequestTTY yes
+      User heavywatal
+      IdentityFile ~/.ssh/id_ed25519
+    ```
+    ユーザ名と鍵ファイル名は適宜調整。
+    これでsshコマンドを短く済ませられる。
 1.  ゲートウェイノードにSSH接続し、[ログインノードに `qlogin`](https://sc.ddbj.nig.ac.jp/general_analysis_division/ga_login):
-
-        ssh gw.ddbj.nig.ac.jp qlogin
+    ```sh
+    ssh gw.ddbj.nig.ac.jp qlogin
+    # which is equivalent to (thanks to ~/.ssh/config)
+    ssh -t -f ~/.ssh/id_ed25519 heavywatal@gw.ddbj.nig.ac.jp qlogin
+    ```
 
 
 ## ファイルの送受信
@@ -216,9 +219,9 @@ print("SGE_TASK_ID: " + os.environ["SGE_TASK_ID"])
 :   ユーザーに与えられたリソースを表示
 
 
-## Singularity
+## Apptainer (Singularity)
 
-<https://sc.ddbj.nig.ac.jp/ja/guide/software/singularity>
+<https://sc.ddbj.nig.ac.jp/software/Apptainer/>
 
 `/usr/local/biotools/` 以下に各種ソフトウェアが用意されている。
 [BioContainers](https://biocontainers.pro) のものをほぼそのまま置いているらしい。
