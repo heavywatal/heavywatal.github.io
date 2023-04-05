@@ -10,6 +10,9 @@ tags = ["communication"]
 ひとつのsshセッションで複数のファイルを送受信する、
 という使い方が可能なので `cp` や `scp` よりも便利な場合が多い。
 
+- <https://rsync.samba.org/>
+- <https://github.com/WayneD/rsync>
+
 ## 基本
 
 オプションについては後述するとして、基本は:
@@ -72,6 +75,14 @@ rsync -auv SRC/DIR/ DST/DIR/
 
 ## Exclude and include
 
+<https://download.samba.org/pub/rsync/rsync.1#PATTERN_MATCHING_RULES>
+
+- 先に記述したものほど優先。
+- 正規表現ではなくglob寄りの独自文法。
+- 基本的にはpathの最終コンポーネント(basename)の部分が評価対象。
+- 上位ディレクトリから順に評価し、除外されたらそれより下は読みに行かない。
+- 末尾が `/` ならディレクトリにのみマッチ。
+
 `--include=<PATTERN>`
 :   マッチするファイル・ディレクトリを除外しない
 
@@ -81,31 +92,12 @@ rsync -auv SRC/DIR/ DST/DIR/
 `--exclude-from=<FILE>`
 :   ファイルに記述した除外パターンを読む
 
-先に記述したものほど優先される。
-
-1.  いつでも除外したいものを適当なファイル(`~/.config/rsync-exclude`)に記述する:
-
-        ._*
-        .DS_Store
-        .Trash
-        .Trashes
-        .Spotlight-*
-        .hidden
-        .vol
-        .localized
-        *~
-        *.o
-        *.out
-        *.pyc
-        *.zhistory
-        known_hosts
-
-1.  `--exclude-from` オプションでそのファイルを読ませる。
-    例えば `.zshrc` にこう書く:
-
-        alias rsync='rsync --exclude-from=${HOME}/.config/rsync-exclude'
-
-1.  そのほかで除外したいものは `--exclude` オプションで個別に指定
+`-C`, `--cvs-exclude`
+:   ほぼいつでも無視したいであろうものを除外する。
+    基本的にはこれを使う方針で大丈夫そうだが
+    `tags`, `core` とかはディレクトリ名として普通に使いそうなので注意。
+:   `RCS SCCS CVS CVS.adm RCSLOG cvslog.* tags TAGS .make.state .nse_depinfo *~ #* .#* ,* _$* *$ *.old *.bak *.BAK *.orig *.rej .del-* *.a *.olb *.o *.obj *.so *.exe *.Z *.elc *.ln core .svn/ .git/ .hg/ .bzr/`
+:   これに加えて **`${HOME}/.cvsignore` も自動で読まれる**というのが便利。
 
 
 ## SSH越しの送受信
