@@ -88,6 +88,10 @@ rsync
 更新があったものだけをコピーする、
 ひとつのsshセッションで複数のファイルを送受信する、
 という使い方が可能なので <code>cp</code> や <code>scp</code> よりも便利な場合が多い。</p>
+<ul>
+<li><a href="https://rsync.samba.org/">https://rsync.samba.org/</a></li>
+<li><a href="https://github.com/WayneD/rsync">https://github.com/WayneD/rsync</a></li>
+</ul>
 <h2 id="基本">基本</h2>
 <p>オプションについては後述するとして、基本は:</p>
 <pre><code>rsync -auv SRC/ DST/
@@ -133,6 +137,14 @@ DST側は付けても付けなくても同じ。</p>
 新しいMacのAPFSはLinuxと同じ <code>utf8</code> と見なしておけば良さそう&hellip;?</dd>
 </dl>
 <h2 id="exclude-and-include">Exclude and include</h2>
+<p><a href="https://download.samba.org/pub/rsync/rsync.1#PATTERN_MATCHING_RULES">https://download.samba.org/pub/rsync/rsync.1#PATTERN_MATCHING_RULES</a></p>
+<ul>
+<li>先に記述したものほど優先。</li>
+<li>正規表現ではなくglob寄りの独自文法。</li>
+<li>基本的にはpathの最終コンポーネント(basename)の部分が評価対象。</li>
+<li>上位ディレクトリから順に評価し、除外されたらそれより下は読みに行かない。</li>
+<li>末尾が <code>/</code> ならディレクトリにのみマッチ。</li>
+</ul>
 <dl>
 <dt><code>--include=&lt;PATTERN&gt;</code></dt>
 <dd>マッチするファイル・ディレクトリを除外しない</dd>
@@ -140,37 +152,13 @@ DST側は付けても付けなくても同じ。</p>
 <dd>マッチするファイル・ディレクトリを除外</dd>
 <dt><code>--exclude-from=&lt;FILE&gt;</code></dt>
 <dd>ファイルに記述した除外パターンを読む</dd>
+<dt><code>-C</code>, <code>--cvs-exclude</code></dt>
+<dd>ほぼいつでも無視したいであろうものを除外する。
+基本的にはこれを使う方針で大丈夫そうだが
+<code>tags</code>, <code>core</code> とかはディレクトリ名として普通に使いそうなので注意。</dd>
+<dd><code>RCS SCCS CVS CVS.adm RCSLOG cvslog.* tags TAGS .make.state .nse_depinfo *~ #* .#* ,* _$* *$ *.old *.bak *.BAK *.orig *.rej .del-* *.a *.olb *.o *.obj *.so *.exe *.Z *.elc *.ln core .svn/ .git/ .hg/ .bzr/</code></dd>
+<dd>これに加えて <strong><code>${HOME}/.cvsignore</code> も自動で読まれる</strong>というのが便利。</dd>
 </dl>
-<p>先に記述したものほど優先される。</p>
-<ol>
-<li>
-<p>いつでも除外したいものを適当なファイル(<code>~/.config/rsync-exclude</code>)に記述する:</p>
-<pre><code>._*
-.DS_Store
-.Trash
-.Trashes
-.Spotlight-*
-.hidden
-.vol
-.localized
-*~
-*.o
-*.out
-*.pyc
-*.zhistory
-known_hosts
-</code></pre>
-</li>
-<li>
-<p><code>--exclude-from</code> オプションでそのファイルを読ませる。
-例えば <code>.zshrc</code> にこう書く:</p>
-<pre><code>alias rsync='rsync --exclude-from=${HOME}/.config/rsync-exclude'
-</code></pre>
-</li>
-<li>
-<p>そのほかで除外したいものは <code>--exclude</code> オプションで個別に指定</p>
-</li>
-</ol>
 <h2 id="ssh越しの送受信">SSH越しの送受信</h2>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">rsync -auv user@example.com:~/dir/ ~/dir/
 </span></span></code></pre></div><ul>
