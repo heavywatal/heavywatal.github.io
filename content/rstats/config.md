@@ -175,6 +175,20 @@ R起動時に読み込まれるファイル。
 : 警告やエラーの出処をたどって表示する。
   Pythonほどわかりやすくないが、ちょっとはマシになる。
 
+`defaultPackages`
+: 起動時(`.First()` 実行よりは後)に自動で読み込むパッケージを指定する。
+: 環境変数 `R_DEFAULT_PACKAGES` からも変更可能。
+: デフォルトは datasets, utils, grDevices, graphics, stats, methods.
+: `conflicted` と `tidyverse` を加えて横着したいところだが、
+  そうすると肝心の衝突チェックが機能しなくなる。
+  前者だけを加えた上で次のようにフックを設定すれば自動読み込みでチェック有効:
+  ```r
+  setHook(packageEvent("conflicted", "attach"), \(...) library(tidyverse))
+  ```
+  ちなみに `conflicted` は knitr chunk 内や `withr::local_package()` では動かない。
+  ["conflicted is designed specifically for use in interactive sessions"](https://github.com/r-lib/conflicted/issues/88#issuecomment-1445383091)
+  とのこと。
+
 
 ## ライブラリの管理
 
