@@ -213,6 +213,18 @@ Rスクリプトではなく、シェルスクリプトっぽい代入式で書�
 <dt><code>showWarnCalls=TRUE</code>, <code>showErrorCalls=TRUE</code></dt>
 <dd>警告やエラーの出処をたどって表示する。
 Pythonほどわかりやすくないが、ちょっとはマシになる。</dd>
+<dt><code>defaultPackages</code></dt>
+<dd>起動時(<code>.First()</code> 実行よりは後)に自動で読み込むパッケージを指定する。</dd>
+<dd>環境変数 <code>R_DEFAULT_PACKAGES</code> からも変更可能。</dd>
+<dd>デフォルトは datasets, utils, grDevices, graphics, stats, methods.</dd>
+<dd><code>conflicted</code> と <code>tidyverse</code> を加えて横着したいところだが、
+そうすると肝心の衝突チェックが機能しなくなる。
+前者だけを加えた上で次のようにフックを設定すれば自動読み込みでチェック有効:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">setHook</span><span class="p">(</span><span class="nf">packageEvent</span><span class="p">(</span><span class="s">&#34;conflicted&#34;</span><span class="p">,</span> <span class="s">&#34;attach&#34;</span><span class="p">),</span> <span class="nf">\</span><span class="p">(</span><span class="kc">...</span><span class="p">)</span> <span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">))</span>
+</span></span></code></pre></div><p>ちなみに <code>conflicted</code> は knitr chunk 内や <code>withr::local_package()</code> では動かない。
+<a href="https://github.com/r-lib/conflicted/issues/88#issuecomment-1445383091">&ldquo;conflicted is designed specifically for use in interactive sessions&rdquo;</a>
+とのこと。</p>
+</dd>
 </dl>
 <h2 id="ライブラリの管理">ライブラリの管理</h2>
 <p><a href="https://cran.r-project.org/doc/manuals/R-admin.html#Add_002don-packages">https://cran.r-project.org/doc/manuals/R-admin.html#Add_002don-packages</a></p>
