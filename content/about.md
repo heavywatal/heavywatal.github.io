@@ -185,10 +185,13 @@ Find me on
 
 ## Teaching / Outreach
 
+-   「[Rを用いたデータ解析の基礎](/slides/tohoku2023r/)」東北大学 進化学実習 (2023-04)
+-   「[統計モデリング入門](/slides/tmd2022stats/)
+    東京医科歯科大 [データサイエンス人材育成プログラム](https://ds.tmdu.org/) (2023-03)
 -   「[逆順で理解する R Markdown Presentation](/slides/tokyor102/)」
     [Tokyo.R #102](https://tokyor.connpass.com/event/262836/) (2022-10)
 -   「[Rによるデータ前処理実習](/slides/tmd2022/)」
-    東京医科歯科大 [データ関連人材育成プログラム](https://ds.tmdu.org/) (2022-09)
+    東京医科歯科大 [データサイエンス人材育成プログラム](https://ds.tmdu.org/) (2022-09)
 -   「[統計モデリング概論 DSHC 2022](/slides/tokiomarine2022/)」
     東京海上 [Data Science Hill Climb](https://tokiomarine-dshc.com/) (2022-08)
 -   「[Rを用いたデータ解析の基礎](/slides/tohoku2022r/)」東北大学 進化学実習 (2022-04)
