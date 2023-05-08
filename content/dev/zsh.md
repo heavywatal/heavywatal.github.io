@@ -94,3 +94,21 @@ zprof
 ```
 
 `compinit` とかが遅かったり複数回呼ばれていたりするので順番やオプションを変えてみる。
+
+
+## Glob
+
+### Qualifiers
+
+ファイルの種類を限定したり順番を変えたりできる。
+`setopt EXTENDED_GLOB` で有効になる。
+
+- `*(/)`: directories
+- `*(.)`: plain files
+- `*(@)`: symbolic links
+- `*(*)`: executable plain files
+- `*(On)`, `*(^on)`: descending order by name.<br>
+  `*(Om)`, `*(^om)`: ascending order by modification time, oldest first.<br>
+  例えば `file` と `file.backup` を比較したいときにただ
+  `diff file*` とするとbackupのほうが後に来てしまうのを解決。
+  名前順と時間順でデフォルトの方向が逆なのはいずいけど仕方ない。
