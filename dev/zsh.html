@@ -152,6 +152,21 @@ OSによっては次の <code>/etc/zprofile</code> で上書きされてしま�
 </span></span><span class="line"><span class="cl"><span class="c1"># tail of .zshrc</span>
 </span></span><span class="line"><span class="cl">zprof
 </span></span></code></pre></div><p><code>compinit</code> とかが遅かったり複数回呼ばれていたりするので順番やオプションを変えてみる。</p>
+<h2 id="glob">Glob</h2>
+<h3 id="qualifiers">Qualifiers</h3>
+<p>ファイルの種類を限定したり順番を変えたりできる。
+<code>setopt EXTENDED_GLOB</code> で有効になる。</p>
+<ul>
+<li><code>*(/)</code>: directories</li>
+<li><code>*(.)</code>: plain files</li>
+<li><code>*(@)</code>: symbolic links</li>
+<li><code>*(*)</code>: executable plain files</li>
+<li><code>*(On)</code>, <code>*(^on)</code>: descending order by name.<br>
+<code>*(Om)</code>, <code>*(^om)</code>: ascending order by modification time, oldest first.<br>
+例えば <code>file</code> と <code>file.backup</code> を比較したいときにただ
+<code>diff file*</code> とするとbackupのほうが後に来てしまうのを解決。
+名前順と時間順でデフォルトの方向が逆なのはいずいけど仕方ない。</li>
+</ul>
 
 </article>
 </main>
