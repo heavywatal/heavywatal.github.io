@@ -19,15 +19,9 @@ brew install brewsci/bio/repeatmasker
 依存プログラムも自動的に入る:
 [RMBlast](https://www.repeatmasker.org/RMBlast.html),
 [HMMER](http://hmmer.org/),
-[Tandem Repeat Finder](https://tandem.bu.edu/trf/trf.html).
+[Tandem Repeat Finder](https://tandem.bu.edu/trf/trf.html),
+[h5py](https://docs.h5py.org/).
 
-ただし[4.0.7で更新が滞っている](https://github.com/brewsci/homebrew-bio/pull/708)ので、
-新しいものを使いたければ自力でどうにかする。
-
-```sh
-pip3 install h5py
-brew install heavywatal/tap/repeatmasker-h5
-```
 
 ### データベース
 
