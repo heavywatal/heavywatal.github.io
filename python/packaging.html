@@ -153,9 +153,9 @@ Pythonパッケージ作成
 </span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">project</span><span class="p">.</span><span class="nx">optional-dependencies</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="nx">dev</span> <span class="p">=</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;black&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s2">&#34;pyproject-flake8&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;pytest&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;pytest-cov&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;ruff&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl"><span class="p">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">project</span><span class="p">.</span><span class="nx">urls</span><span class="p">]</span>
@@ -167,8 +167,8 @@ Pythonパッケージ作成
 </span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">tool</span><span class="p">.</span><span class="nx">pyright</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="nx">typeCheckingMode</span> <span class="p">=</span> <span class="s2">&#34;strict&#34;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">tool</span><span class="p">.</span><span class="nx">flake8</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="nx">max-line-length</span> <span class="p">=</span> <span class="mi">88</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">tool</span><span class="p">.</span><span class="nx">ruff</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">select</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;E&#34;</span><span class="p">,</span> <span class="s2">&#34;F&#34;</span><span class="p">,</span> <span class="s2">&#34;W&#34;</span><span class="p">,</span> <span class="s2">&#34;I&#34;</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">tool</span><span class="p">.</span><span class="nx">pytest</span><span class="p">.</span><span class="nx">ini_options</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="nx">pythonpath</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;src&#34;</span><span class="p">]</span>
@@ -192,9 +192,9 @@ Pythonパッケージ作成
 <code>${prefix}/bin/</code> に実行可能ファイルが配置される。
 以前は <code>console_scripts</code> で設定していた。</p>
 <p>コード整形やテストのような各種開発ツールの設定も <code>[tool.***]</code> に記述できる。
-主要な開発ツールとしては
-<a href="https://github.com/PyCQA/flake8/issues/234">flake8だけが頑なに対応拒否を続けている</a>
-ので仕方なく <a href="https://github.com/csachs/pyproject-flake8">pyproject-flake8</a> を使う。</p>
+linterとしては
+<a href="https://github.com/PyCQA/flake8/issues/234"><code>pyproject.toml</code> 対応拒否のflake8</a>
+を捨てて超高速Rust製<a href="https://beta.ruff.rs/">ruff</a>を使う。</p>
 <h3 id="ソースコード">ソースコード</h3>
 <dl>
 <dt><code>wtl/__init__.py</code></dt>
