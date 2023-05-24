@@ -88,9 +88,9 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
   "black",
-  "pyproject-flake8",
   "pytest",
   "pytest-cov",
+  "ruff",
 ]
 
 [project.urls]
@@ -102,8 +102,8 @@ Source = "https://github.com/heavywatal/pywtl"
 [tool.pyright]
 typeCheckingMode = "strict"
 
-[tool.flake8]
-max-line-length = 88
+[tool.ruff]
+select = ["E", "F", "W", "I"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
@@ -133,9 +133,9 @@ optional dependencies もインストールしたい場合は
 以前は `console_scripts` で設定していた。
 
 コード整形やテストのような各種開発ツールの設定も `[tool.***]` に記述できる。
-主要な開発ツールとしては
-[flake8だけが頑なに対応拒否を続けている](https://github.com/PyCQA/flake8/issues/234)
-ので仕方なく [pyproject-flake8](https://github.com/csachs/pyproject-flake8) を使う。
+linterとしては
+[`pyproject.toml` 対応拒否のflake8](https://github.com/PyCQA/flake8/issues/234)
+を捨てて超高速Rust製[ruff](https://beta.ruff.rs/)を使う。
 
 
 
