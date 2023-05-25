@@ -12,7 +12,7 @@ tags = ["r", "tidyverse"]
 </a>
 
 data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(summarize)、ソート(arrange)などの処理を施すためのパッケージ。
-前作 [plyr]({{< relref "plyr.md" >}}) のうちdata.frameに関する部分が強化されている。
+前作plyrのうちdata.frameに関する部分が強化されている。
 [purrr]({{< relref "purrr.md" >}}) や [tidyr]({{< relref "tidyr.md" >}}) と一緒に使うとよい。
 
 [tidyverse](https://tidyverse.tidyverse.org/) に含まれているので、

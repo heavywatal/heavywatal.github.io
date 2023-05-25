@@ -499,5 +499,3 @@ bsg[[1]]
 <http://blog.hackingisbelieving.org/2012/02/r.html>
 
 <https://qiita.com/wakuteka/items/a99d5fb9f24367f55461>
-
-[ggbio]({{< relref "ggbio.md" >}})
