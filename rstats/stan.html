@@ -261,6 +261,11 @@ m[1]   // row_vector[3]
 <code>step()</code> や <code>int_step()</code> からの掛け算は遅いのだとか。</p>
 <p>代入演算子は普通に <code>=</code> イコール。(昔は <code>&lt;-</code> 矢印だった)</p>
 <p>対数尤度の値を確認したいときは <code>print(&quot;log_prob: &quot;, target())</code></p>
+<p>正規分布のsigmaやポアソン分布のlambdaの値域をちゃんと <code>real&lt;lower=0&gt;</code> に絞っているのに
+<code>Scale parameter is 0, but must be positive!</code>
+と怒られることがある。
+実害はないけどどうしても警告を消したい場合は
+<a href="https://discourse.mc-stan.org/t/scale-parameter-is-0-but-must-be-0-can-i-do-anything-to-deal-with-this/19453">違うseedを使うとか <code>step_size = 0.1</code> のように歩幅を狭めるとかで対処できる</a>。</p>
 <h2 id="librarybayesplot"><code>library(bayesplot)</code></h2>
 <p><a href="https://mc-stan.org/bayesplot/">https://mc-stan.org/bayesplot/</a></p>
 <h2 id="libraryposterior"><code>library(posterior)</code></h2>
