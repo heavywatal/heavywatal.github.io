@@ -236,6 +236,11 @@ m[1]   // row_vector[3]
 
 対数尤度の値を確認したいときは `print("log_prob: ", target())`
 
+正規分布のsigmaやポアソン分布のlambdaの値域をちゃんと `real<lower=0>` に絞っているのに
+`Scale parameter is 0, but must be positive!`
+と怒られることがある。
+実害はないけどどうしても警告を消したい場合は
+[違うseedを使うとか `step_size = 0.1` のように歩幅を狭めるとかで対処できる](https://discourse.mc-stan.org/t/scale-parameter-is-0-but-must-be-0-can-i-do-anything-to-deal-with-this/19453)。
 
 ## `library(bayesplot)`
 
