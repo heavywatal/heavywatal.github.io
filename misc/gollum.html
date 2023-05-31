@@ -87,7 +87,7 @@ Gollum — MarkdownとGitで動くWikiエンジン
 <p><a href="https://github.com/gollum/gollum">https://github.com/gollum/gollum</a></p>
 <p>研究室内の連絡・情報共有は、フロー型の情報ならSlackで、ストック型の情報ならWikiで。
 という方針になったので、学内ネットワークで閲覧編集可能な自前Wikiサーバーを立てる。
-開発環境は macOS, 本番環境は Ubuntu 18.04 LTS.</p>
+開発環境は macOS, 本番環境は Ubuntu 18.04 → 20.04 → 22.04 LTS.</p>
 <h2 id="ソフトウェア選定">ソフトウェア選定</h2>
 <dl>
 <dt><a href="https://pukiwiki.osdn.jp/">pukiwiki</a></dt>
@@ -118,17 +118,25 @@ docker-compose とかですぐ使えるのも楽ちん。</dd>
 <h2 id="gollumインストールとwiki新規作成">gollumインストールとWiki新規作成</h2>
 <ol>
 <li>
-<p>最新版のRubyを<a href="https://github.com/rbenv/ruby-build/wiki">rbenv</a>で入れる:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># sudo apt install autoconf bison build-essential libssl-dev libyaml-dev libreadline-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev</span>
-</span></span><span class="line"><span class="cl">brew install rbenv
-</span></span><span class="line"><span class="cl">rbenv install -l <span class="p">|</span> less
-</span></span><span class="line"><span class="cl">rbenv install 2.7.1
-</span></span><span class="line"><span class="cl">rbenv global 2.7.1
+<p><a href="https://github.com/rbenv/ruby-build/wiki">rbenv</a>を設定してRubyを入れる。
+MacならHomebrewでもいいけどLinuxではHomebrewを混ぜるとエラーになりがちなので避け、
+管理者たちが出入りできるところに <code>RBENV_ROOT</code> を置く:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo apt install autoconf patch build-essential rustc libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libgmp-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev uuid-dev
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">RBENV_ROOT</span><span class="o">=</span>/home/local/.rbenv
+</span></span><span class="line"><span class="cl"><span class="nv">PATH</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="s2">:</span><span class="si">${</span><span class="nv">RBENV_ROOT</span><span class="si">}</span><span class="s2">/bin&#34;</span>
+</span></span><span class="line"><span class="cl">git clone https://github.com/rbenv/rbenv.git <span class="nv">$RBENV_ROOT</span>
+</span></span><span class="line"><span class="cl">git clone https://github.com/rbenv/ruby-build.git <span class="si">${</span><span class="nv">RBENV_ROOT</span><span class="si">}</span>/plugins/ruby-build
 </span></span><span class="line"><span class="cl">rbenv init
 </span></span><span class="line"><span class="cl"><span class="nb">eval</span> <span class="s2">&#34;</span><span class="k">$(</span>rbenv init -<span class="k">)</span><span class="s2">&#34;</span>
-</span></span></code></pre></div><p>最後の一行はここでインストールした <code>ruby</code> や <code>bundle</code> にPATHを通すコマンド。
+</span></span><span class="line"><span class="cl">rbenv install -l
+</span></span><span class="line"><span class="cl">rbenv install 3.1.4
+</span></span></code></pre></div><p><code>eval &quot;$(rbenv init -)&quot;</code> はここでインストールした
+<code>ruby</code> や <code>bundle</code> にPATHを通すコマンド。
 新しいシェルを起動するたびに実行する必要があるので
 <code>.zshrc</code>, <code>.bashrc</code> 等の設定ファイルに記述しておく。</p>
+<p><code>rbenv global 3.1.4</code> とするか、
+次に作るWikiリポジトリ内で <code>rbenv local 3.1.4</code>
+とすることで使用するRubyのバージョンを設定する。</p>
 </li>
 <li>
 <p>Wiki用のリポジトリ(ここでは<code>labwiki</code>)を作成して空コミット:</p>
@@ -143,7 +151,8 @@ gem &#39;commonmarker&#39;
 gem &#39;gollum&#39;
 </code></pre><hr>
 <p>gollum本体をいろいろいじくる場合は自分のフォークを使う:</p>
-<pre tabindex="0"><code class="language-gemfile" data-lang="gemfile">gem &#39;gollum-lib&#39;, :github =&gt; &#39;heavywatal/gollum-lib&#39;, :branch =&gt; &#39;custom&#39;
+<pre tabindex="0"><code class="language-gemfile" data-lang="gemfile">gem &#39;gollum-rugged_adapter&#39;, :github =&gt; &#39;heavywatal/rugged_adapter&#39;, :branch =&gt; &#39;custom&#39;
+gem &#39;gollum-lib&#39;, :github =&gt; &#39;heavywatal/gollum-lib&#39;, :branch =&gt; &#39;custom&#39;
 gem &#39;gollum&#39;, :github =&gt; &#39;heavywatal/gollum&#39;, :branch =&gt; &#39;custom&#39;
 </code></pre><p>開発環境ではローカルのクローンを使うように設定:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nv">SRCDIR</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/fork
