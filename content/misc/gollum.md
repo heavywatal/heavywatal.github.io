@@ -11,7 +11,7 @@ https://github.com/gollum/gollum
 
 研究室内の連絡・情報共有は、フロー型の情報ならSlackで、ストック型の情報ならWikiで。
 という方針になったので、学内ネットワークで閲覧編集可能な自前Wikiサーバーを立てる。
-開発環境は macOS, 本番環境は Ubuntu 18.04 LTS.
+開発環境は macOS, 本番環境は Ubuntu 18.04 → 20.04 → 22.04 LTS.
 
 ## ソフトウェア選定
 
@@ -47,21 +47,31 @@ https://github.com/gollum/gollum
 
 ## gollumインストールとWiki新規作成
 
-1.  最新版のRubyを[rbenv](https://github.com/rbenv/ruby-build/wiki)で入れる:
+1.  [rbenv](https://github.com/rbenv/ruby-build/wiki)を設定してRubyを入れる。
+    MacならHomebrewでもいいけどLinuxではHomebrewを混ぜるとエラーになりがちなので避け、
+    管理者たちが出入りできるところに `RBENV_ROOT` を置く:
 
     ```sh
-    # sudo apt install autoconf bison build-essential libssl-dev libyaml-dev libreadline-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev
-    brew install rbenv
-    rbenv install -l | less
-    rbenv install 2.7.1
-    rbenv global 2.7.1
+    sudo apt install autoconf patch build-essential rustc libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libgmp-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev uuid-dev
+    export RBENV_ROOT=/home/local/.rbenv
+    PATH="${PATH}:${RBENV_ROOT}/bin"
+    git clone https://github.com/rbenv/rbenv.git $RBENV_ROOT
+    git clone https://github.com/rbenv/ruby-build.git ${RBENV_ROOT}/plugins/ruby-build
     rbenv init
     eval "$(rbenv init -)"
+    rbenv install -l
+    rbenv install 3.1.4
     ```
 
-    最後の一行はここでインストールした `ruby` や `bundle` にPATHを通すコマンド。
+    `eval "$(rbenv init -)"` はここでインストールした
+    `ruby` や `bundle` にPATHを通すコマンド。
     新しいシェルを起動するたびに実行する必要があるので
     `.zshrc`, `.bashrc` 等の設定ファイルに記述しておく。
+
+    `rbenv global 3.1.4` とするか、
+    次に作るWikiリポジトリ内で `rbenv local 3.1.4`
+    とすることで使用するRubyのバージョンを設定する。
+
 
 1.  Wiki用のリポジトリ(ここでは`labwiki`)を作成して空コミット:
 
@@ -84,6 +94,7 @@ https://github.com/gollum/gollum
     gollum本体をいろいろいじくる場合は自分のフォークを使う:
 
     ```gemfile
+    gem 'gollum-rugged_adapter', :github => 'heavywatal/rugged_adapter', :branch => 'custom'
     gem 'gollum-lib', :github => 'heavywatal/gollum-lib', :branch => 'custom'
     gem 'gollum', :github => 'heavywatal/gollum', :branch => 'custom'
     ```
