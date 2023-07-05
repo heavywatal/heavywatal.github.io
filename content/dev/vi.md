@@ -1,21 +1,31 @@
 +++
 date = 2016-05-20T00:14:03+09:00
 tags = ["editor"]
+aliases = ["/dev/nano.html"]
 title = "vi"
 
 [menu.main]
   parent = "dev"
 +++
 
-## 基礎知識
+## 概要
+
+ターミナル上で軽快に動作するテキストエディタ。
+文字入力はインサートモード、それ以外はすべてノーマルモードで行う。
+起動時はノーマルモード。
 
 オリジナルがvi、改良版がvim (Vi IMproved)。
 ただし、shの正体がbashであるように、LinuxやMacに入ってるviの正体はvim。
 vimのデフォルトは拡張を無効にしたvi互換モード。
 つまり設定をいじらなければ起動コマンドはviでもvimでも同じ？
 
-文字入力はインサートモード、それ以外はすべてノーマルモードで行う。
-起動時はノーマルモード。
+ターミナル上で設定ファイルを修正したり、
+[git]({{< relref "git.md" >}}) commit でメッセージ入力したり、
+といった軽い用途でしか私は使わない。
+その用途でも人に紹介するなら後述の[nano](#gnu-nano)から。
+それ以上のテキスト編集は[VSCode]({{< relref "vscode.md" >}})で。
+[Neovim](https://neovim.io/)も気になってはいる。
+
 
 ## ノーマルモード
 
@@ -101,3 +111,34 @@ Emacsでいう<kbd>ctrl-space</kbd>。
 <kbd>shift-v</kbd> で行単位選択。
 <kbd>ctrl-v</kbd> で矩形選択。
 
+
+
+
+## GNU nano
+
+<https://www.nano-editor.org/>
+
+機能は控えめだが操作が平易なテキストエディタ。
+ターミナル初心者に勧めやすいし、軽微なサーバー作業でも頼りになる。
+
+- 画面の下の方に保存や終了のコマンドが書いてあり、
+[emacs]({{< relref "emacs.md" >}})や[vi]({{< relref "vi.md" >}})と比べて迷いにくい。
+- vimと同じかそれ以上に、OS標準装備として利用可能な場合が多い。
+
+### Installation
+
+Linux にも Mac にも最初からインストールされている。
+それが古くてどうしても気に入らない場合は
+[Homebrew]({{< relref "homebrew.md" >}})
+とかで新しいのを入れる:
+
+```sh
+brew install nano
+nano -V
+```
+
+### Configuration
+
+各種設定は `~/.nanorc` ファイルで。
+とはいえ、フルカスタムしたところで機能は高が知れているし、
+動かなくなったら困るので最低限の設定にとどめる。

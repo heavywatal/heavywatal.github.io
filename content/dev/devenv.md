@@ -83,7 +83,6 @@ clang -v
 - [VSCode]({{< relref "vscode.md" >}})
 - [emacs]({{< relref "emacs.md" >}})
 - [vim]({{< relref "vi.md" >}})
-- [nano]({{< relref "nano.md" >}})
 
 ### Trash
 
