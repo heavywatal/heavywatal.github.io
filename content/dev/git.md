@@ -2,6 +2,7 @@
 title = 'Git'
 subtitle = '分散型バージョン管理システム'
 tags = ["vcs", "writing"]
+aliases = ["/dev/mercurial.html"]
 [menu.main]
   parent = "dev"
 +++
@@ -18,7 +19,7 @@ https://git-scm.com/
 個人的なリポジトリ置き場としてはもちろんのこと、
 ほかの人と共有・協力してプロジェクトを進めるプラットフォームとしても使える。
 
-Gitのライバルとして[Mercurial]({{< relref "mercurial.md" >}})もあるが、
+Gitのライバルとして[Mercurial](https://www.mercurial-scm.org/)もあるが、
 [BitBucket](https://bitbucket.org) (GitHubのライバル)
 がGit対応した今となってはMercurialを積極的に使う理由は無い気がする。
 
