@@ -1,0 +1,360 @@
+<!doctype html>
+<html>
+<head prefix="og: http://ogp.me/ns#">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<title>Docker - Heavy Watal</title>
+<link rel="stylesheet" href="/css/theme.css">
+<link rel="icon" href="/heavywatal.svg">
+<link rel="icon" href="/favicon.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#eeeeee">
+<meta name="author" content="Watal M. Iwasaki">
+<meta property="og:title" content="Docker">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://heavywatal.github.io/dev/docker.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/heavywatal">
+<meta property="og:description" content="">
+<meta property="og:site_name" content="Heavy Watal">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@heavywatal">
+<meta name="twitter:creator" content="@heavywatal">
+<link rel="stylesheet" href="/lib/katex/katex.min.css">
+<script defer src="/lib/katex/katex.min.js"></script>
+<script defer src="/lib/katex/contrib/auto-render.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: "\\[", right: "\\]", display: true},
+      {left: "$", right: "$", display: false}
+    ]
+  });
+});
+</script>
+<style>
+.katex {
+  font-size: 1.12em;
+}
+
+.katex-display > .katex {
+  text-align: left;
+  padding-left: 2rem;
+}
+</style>
+<script type="application/ld+json">{
+"@context": "http://schema.org",
+"@type": "BreadcrumbList",
+"itemListElement": [
+ {"@type": "ListItem",
+  "position": 1,
+  "item": {"@id":"https://heavywatal.github.io/dev.html","name":"dev"} },
+ {"@type": "ListItem",
+  "position": 2,
+  "item": {"@id":"https://heavywatal.github.io/dev/docker.html","name":"Docker"} }
+]}</script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-V60H2JH0G6"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-V60H2JH0G6', { 'anonymize_ip': false });
+}
+</script>
+
+</head>
+<body>
+<header><h1><a href="/">
+<img class="logo" src="/heavywatal.svg" alt="岩嵜航">
+Heavy Watal
+</a></h1>
+</header>
+<main>
+<article>
+<header><h1><a href="/dev/docker.html">
+Docker
+</a></h1>
+<nav class="tags">
+<a href="/tags/package.html"><div>package</div></a>
+</nav>
+</header>
+
+<p><a href="https://docs.docker.com/">https://docs.docker.com/</a></p>
+<p>ホストOSから隔離された環境でアプリケーションを動かすためのプラットフォーム。
+ゲストOSを丸ごと動かす仮想マシンとは異なり、ホストLinuxのカーネルを使うので軽い。
+LinuxじゃないホストOSでは仮想化が挟まるぶんのコストが結局かかる。</p>
+<p>管理者権限を持っている状況でサービスを開発・運用するのに向いている。
+HPCにおけるCLIツール導入や一般ユーザーからの利用が目的なら <a href="/dev/apptainer.html">Apptainer</a> のほうが便利。</p>
+<h2 id="get-started">Get Started</h2>
+<h3 id="glossary">Glossary</h3>
+<dl>
+<dt>container</dt>
+<dd>ホストOSから隔離されたプロセスやファイルシステムを持つ実行環境。
+目的のアプリケーションを動かすのに必要な構成要素のうちkernelより上をすべて含む。
+imageを読み込んで起動したインスタンス。</dd>
+<dt>image</dt>
+<dd>containerの構成要素を集めて固めたファイル。</dd>
+<dd>Docker独自の形式をベースに<a href="https://github.com/opencontainers/image-spec">OCI</a>として標準化されている。</dd>
+<dt>dockerfile</dt>
+<dd>imageのレシピ。</dd>
+</dl>
+<h3 id="linux">Linux</h3>
+<p><a href="https://docs.docker.com/engine/install/ubuntu/">https://docs.docker.com/engine/install/ubuntu/</a></p>
+<p>apt repository を追加してインストール。</p>
+<p><code>sudo</code> なしで実行できるようにするには:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo gpasswd --add <span class="k">$(</span>whoami<span class="k">)</span> docker
+</span></span><span class="line"><span class="cl">sudo chgrp docker /var/run/docker.sock
+</span></span><span class="line"><span class="cl">sudo systemctl restart docker
+</span></span><span class="line"><span class="cl"><span class="nb">exit</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># login again</span>
+</span></span><span class="line"><span class="cl">docker --version
+</span></span></code></pre></div><h3 id="mac">Mac</h3>
+<p>FormulaではなくCaskのほうの Docker Desktop を入れるのが簡単:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew install --cask docker
+</span></span><span class="line"><span class="cl">open -a Docker
+</span></span></code></pre></div><p>ユーザーのホームにCLIのシムリンクができるのでパスを通す:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.docker/bin:<span class="nv">$PATH</span>
+</span></span><span class="line"><span class="cl">docker --version
+</span></span><span class="line"><span class="cl">docker-compose --version
+</span></span></code></pre></div><ul>
+<li><input checked="" disabled="" type="checkbox"> Use Virtualization framework</li>
+<li><input checked="" disabled="" type="checkbox"> VirtioFS. 古い gRPC FUSE よりも速いらしい。
+サードパーティのmutagenはもっと速いらしい。</li>
+<li>CPUやRAMの上限など適宜変更。</li>
+</ul>
+<h3 id="hello-world">Hello world</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker image pull hello-world
+</span></span><span class="line"><span class="cl">docker image ls
+</span></span><span class="line"><span class="cl">docker container run hello-world
+</span></span><span class="line"><span class="cl">docker container ls --all
+</span></span></code></pre></div><p><code>run</code> で手元にimageが見つからなければ勝手に <code>pull</code> される。
+containerは実行終了後も残る。</p>
+<h2 id="cli">CLI</h2>
+<p>操作対象がcontrainerかimageかなどによってサブコマンドを使う。
+前は <code>docker pull</code>, <code>docker run</code> のようにフラットなコマンド体系だった。</p>
+<h3 id="docker-container-subcommands"><code>docker container</code> subcommands</h3>
+<p><a href="https://docs.docker.com/engine/reference/commandline/container/">https://docs.docker.com/engine/reference/commandline/container/</a></p>
+<dl>
+<dt><code>docker container ls</code></dt>
+<dd>実行中のcontainerを表示。</dd>
+<dd><code>-a</code>: 終了後のものも表示。</dd>
+<dd><code>-q</code>: IDのみ表示。</dd>
+<dt><code>docker container rm CONTAINER</code></dt>
+<dd>containerを削除。</dd>
+<dd>停止中のものを一括削除するなら <code>docker container prune</code></dd>
+<dt><code>docker container run [OPTIONS] IMAGE [COMMAND]</code></dt>
+<dd>新しいcontainerを走らせてコマンドを実行。</dd>
+<dd><code>-i, --interactive</code>: 標準入力を開けておく。</dd>
+<dd><code>-t, --tty</code>: 標準出力を開けておく。</dd>
+<dd><code>-d, --detach</code>: バックグラウンドで実行させておく。
+うっかりフォアグラウンドで起動してしまっても
+<kbd>^p</kbd><kbd>^q</kbd> でデタッチできる。</dd>
+<dd><code>--rm</code>: 終了後に削除。これを指定しないと <code>ls -a</code> のリストに残る。</dd>
+<dd><code>--name string</code>: コンテナに名前を付ける。 <code>exec</code> で指定するときに便利。</dd>
+<dd><code>--mount</code>: containerから外のファイルシステムにアクセスできるように割り当てる。
+<ul>
+<li><code>type=volume,src=&lt;VOLUME-NAME&gt;,dst=&lt;CONTAINER-PATH&gt;</code>:
+Docker管理下に場所を確保する。
+container再起動やcontainer間共有のための永続化にはこっちを使う。
+Docker外でも使うデータを読み書きするのには向かない。</li>
+<li><code>type=bind,src=&lt;HOST-PATH&gt;,dst=&lt;CONTAINER-PATH&gt;</code>: ホスト側の場所を直接指定する。
+古い <code>-v</code> オプションによる指定は非推奨。</li>
+<li><code>--mount type=bind,src=&quot;$PWD&quot;,dst=&quot;$PWD&quot;</code><br>
+<code>--workdir &quot;$PWD&quot;</code><br>
+<code>--user &quot;$(id -u):$(id -g)&quot;</code><br>
+のようにするとcontainer内のプログラムにカレント以下を渡せる。
+Apptainerならこのへんの設定をデフォルトでやってくれる。</li>
+</ul>
+</dd>
+<dt><code>docker container exec [OPTIONS] IMAGE COMMAND</code></dt>
+<dd>既に走ってるcontainerでコマンドを実行。</dd>
+</dl>
+<p><code>docker container stats</code></p>
+<h3 id="docker-image-subcommands"><code>docker image</code> subcommands</h3>
+<p><a href="https://docs.docker.com/engine/reference/commandline/image/">https://docs.docker.com/engine/reference/commandline/image/</a></p>
+<dl>
+<dt><code>docker image ls</code></dt>
+<dd>手元にあるimageを一覧表示。</dd>
+<dt><code>docker image pull NAME:TAG</code></dt>
+<dd>Docker Hub などからimageをダウンロード。</dd>
+</dl>
+<h3 id="misc">misc.</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker system info
+</span></span><span class="line"><span class="cl">docker system df
+</span></span></code></pre></div><h2 id="registry">Registry</h2>
+<dl>
+<dt><a href="https://biocontainers.pro/registry/">BioContainers</a></dt>
+<dd><a href="https://bioconda.github.io/">BioConda</a> receipes を使っているらしい。</dd>
+<dd>実際のregistry機能をホストしているのは他所のサーバー:
+<ul>
+<li><a href="https://hub.docker.com/u/biocontainers">https://hub.docker.com/u/biocontainers</a> OCI</li>
+<li><a href="https://quay.io/organization/biocontainers">https://quay.io/organization/biocontainers</a> OCI</li>
+<li><a href="https://depot.galaxyproject.org/singularity/">https://depot.galaxyproject.org/singularity/</a> SIF.
+<a href="https://github.com/BioContainers/singularity-build-bot">singularity-build-bot</a>
+がQuayからOCIを取得して変換。
+通信が遅く、~500MB以上のイメージをpullしようとするとタイムアウトになって使えない。
+一旦 <code>wget</code> か何かで落とすか、自分でOCIから変換するほうが早くて確実。</li>
+</ul>
+</dd>
+<dt><a href="https://hub.docker.com/">Docker Hub</a></dt>
+<dd>100 pulls / 6 hours の制限がある。
+無料のPersonalアカウントで認証していれば200。</dd>
+<dt><a href="https://quay.io/">Quay.io</a></dt>
+<dd>無料アカウントは無い。pull制限は?</dd>
+<dt><a href="https://gcr.io">Google Container Registry</a></dt>
+<dd>シェルさえ含まず軽量セキュアな <a href="https://github.com/GoogleContainerTools/distroless">distroless</a> を提供。</dd>
+</dl>
+<p><a href="https://ghcr.io">GitHub Container Registry (GitHub Packages)</a></p>
+<p><a href="https://docs.gitlab.com/ee/user/packages/container_registry/">GitLab Container Registry</a></p>
+
+</article>
+</main>
+
+<nav class="side-bar">
+<div class="menu">
+
+<div><a href="/about.html">About</a></div>
+
+<div><a href="/research.html">Research Interests</a></div>
+
+<input type="checkbox" id="menu-rstats">
+<label for="menu-rstats">R stats</label>
+<ul>
+<li><a href="/rstats/intro.html">R自学自習の基礎知識</a></li>
+<li><a href="/rstats/programming.html">RプログラミングTips</a></li>
+<li><a href="/rstats/config.html">R環境設定</a></li>
+<li><a href="/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/rstats/purrr.html">purrr</a></li>
+<li><a href="/rstats/readr.html">readr</a></li>
+<li><a href="/rstats/stringr.html">stringr</a></li>
+<li><a href="/rstats/knitr.html">knitr</a></li>
+<li><a href="/rstats/foreach.html">foreach/parallel</a></li>
+<li><a href="/rstats/devtools.html">devtools</a></li>
+<li><a href="/rstats/rcpp.html">Rcpp</a></li>
+<li><a href="/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/rstats/edger.html">edgeR</a></li>
+<li><a href="/rstats/topgo.html">topGO</a></li>
+<li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
+<li><a href="/rstats/reshape2.html">reshape2</a></li>
+</ul>
+
+<input type="checkbox" id="menu-python">
+<label for="menu-python">Python</label>
+<ul>
+<li><a href="/python/install.html">Pythonインストール</a></li>
+<li><a href="/python/pip.html">pip</a></li>
+<li><a href="/python/ipython.html">IPython</a></li>
+<li><a href="/python/biopython.html">BioPython</a></li>
+<li><a href="/python/concurrent.html">concurrent.futures</a></li>
+<li><a href="/python/copy.html">copy</a></li>
+<li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
+<li><a href="/python/packaging.html">Pythonパッケージ作成</a></li>
+</ul>
+
+<input type="checkbox" id="menu-cxx">
+<label for="menu-cxx">C&#43;&#43;</label>
+<ul>
+<li><a href="/cxx/boost.html">Boost</a></li>
+<li><a href="/cxx/getopt.html">C&#43;&#43;コマンドライン引数</a></li>
+<li><a href="/cxx/speed.html">C&#43;&#43;高速化</a></li>
+<li><a href="/cxx/gcc.html">gcc</a></li>
+<li><a href="/cxx/bitwise.html">ビット演算</a></li>
+<li><a href="/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="menu-bio">
+<label for="menu-bio">Biology</label>
+<ul>
+<li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
+<li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/bio/meme.html">MEME</a></li>
+<li><a href="/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/bio/samtools.html">SAMtools</a></li>
+<li><a href="/bio/shirokane.html">SHIROKANE</a></li>
+<li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/bio/mathmorph.html">数理形態学</a></li>
+<li><a href="/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="menu-dev" checked>
+<label for="menu-dev" class="active">Developer Tools</label>
+<ul>
+<li><a href="/dev/apptainer.html">Apptainer</a></li>
+<li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/dev/cmake.html">CMake</a></li>
+<li class="active"><a href="/dev/docker.html">Docker</a></li>
+<li><a href="/dev/emacs.html">Emacs</a></li>
+<li><a href="/dev/git.html">Git</a></li>
+<li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mount.html">mount</a></li>
+<li><a href="/dev/rsync.html">rsync</a></li>
+<li><a href="/dev/ssh.html">ssh</a></li>
+<li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
+<li><a href="/dev/vi.html">vi</a></li>
+<li><a href="/dev/vscode.html">VSCode</a></li>
+<li><a href="/dev/zsh.html">zsh</a></li>
+<li><a href="/dev/sh.html">シェルスクリプト</a></li>
+<li><a href="/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="menu-mac">
+<label for="menu-mac">Mac</label>
+<ul>
+<li><a href="/mac/applescript.html">AppleScript</a></li>
+<li><a href="/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/mac/command.html">Mac固有コマンド</a></li>
+<li><a href="/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/mac/winebottler.html">WineBottler</a></li>
+</ul>
+
+<input type="checkbox" id="menu-lectures">
+<label for="menu-lectures">Lectures</label>
+<ul>
+<li><a href="/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/lectures/git2018nrifs.html">Git入門2018</a></li>
+<li><a href="/lectures/git2019makino.html">Git入門2019</a></li>
+<li><a href="/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="menu-misc">
+<label for="menu-misc">Miscellaneous</label>
+<ul>
+<li><a href="/misc/fonts.html">Fonts</a></li>
+<li><a href="/misc/gollum.html">Gollum</a></li>
+<li><a href="/misc/hugo.html">Hugo</a></li>
+<li><a href="/misc/latex.html">LaTeX</a></li>
+</ul>
+
+<div><a href="/tags.html">Tags</a></div>
+</div>
+<form class="cse-search-box" action="/search.html">
+<label><input type="text" name="q" aria-label="cse-search-box"></label>
+</form>
+</nav>
+<footer><small>(ɔ) 2008 岩嵜航 Watal M. Iwasaki</small></footer>
+</body>
+</html>
