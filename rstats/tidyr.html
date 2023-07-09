@@ -156,9 +156,9 @@ data.frameを横広(wide-format)から縦長(long-format)に変形する。
 <p>1列にまとまっていた値を、別の変数に応じて複数の列に並べ直すことで、
 data.frameを縦長(long-format)から横広(wide-format)に変形する。
 <code>reshape2::dcast()</code>, <code>tidyr::spread()</code> の改良版。</p>
-<p><code>tidyr::pivot_wider(data, id_cols = NULL, names_from = name, ..., values_from = value, values_fill = NULL, values_fn = NULL)</code></p>
+<p><code>tidyr::pivot_wider(data, ..., id_cols = NULL, names_from = name, values_from = value, values_fill = NULL, values_fn = NULL)</code></p>
 <dl>
-<dt><code>id_cols</code></dt>
+<dt><code>...</code>, <code>id_cols</code></dt>
 <dd>ここで指定した列のユニークな組み合わせが変形後にそれぞれ1行になる。
 <code>!</code>で反転指定、<code>:</code>で範囲指定、文字列、tidyselect関数なども使える。
 デフォルトでは <code>names_from</code> と <code>values_from</code> で指定されなかった列すべて。</dd>
@@ -333,7 +333,7 @@ data.frameを縦長(long-format)から横広(wide-format)に変形する。
 </span></span></code></pre></div><p>See <a href="https://speakerdeck.com/yutannihilation/tidyr-pivot?slide=67">https://speakerdeck.com/yutannihilation/tidyr-pivot?slide=67</a> for details.</p>
 <h2 id="nested-dataframe-----入れ子構造">Nested data.frame &mdash; 入れ子構造</h2>
 <p><a href="https://tidyr.tidyverse.org/articles/nest.html">https://tidyr.tidyverse.org/articles/nest.html</a></p>
-<h3 id="tidyrnestdata--names_sep--null"><code>tidyr::nest(data, ..., .names_sep = NULL)</code></h3>
+<h3 id="tidyrnestdata--by--null-key--null-names_sep--null"><code>tidyr::nest(data, ..., .by = NULL, .key = NULL, .names_sep = NULL)</code></h3>
 <p>data.frameをネストして(入れ子にして)、list of data.frames のカラムを作る。
 内側のdata.frameに押し込むカラムを <code>...</code> に指定するか、
 外側に残すカラムを <code>!</code> で反転指定する。</p>
@@ -349,12 +349,10 @@ data.frameを縦長(long-format)から横広(wide-format)に変形する。
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># equivalent to</span>
 </span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="nf">nest</span><span class="p">(</span><span class="n">NEW_COLUMN</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="n">carat</span><span class="p">,</span> <span class="n">color</span><span class="o">:</span><span class="n">z</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="nf">nest</span><span class="p">(</span><span class="n">.by</span> <span class="o">=</span> <span class="n">cut</span><span class="p">,</span> <span class="n">.key</span> <span class="o">=</span> <span class="s">&#34;NEW_COLUMN&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_nest</span><span class="p">(</span><span class="n">cut</span><span class="p">,</span> <span class="n">.key</span> <span class="o">=</span> <span class="s">&#34;NEW_COLUMN&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">nest_by</span><span class="p">(</span><span class="n">cut</span><span class="p">,</span> <span class="n">.key</span> <span class="o">=</span> <span class="s">&#34;NEW_COLUMN&#34;</span><span class="p">)</span>
-</span></span></code></pre></div><p>なんでもかんでもフラットなdata.frameにして
-<a href="/rstats/dplyr.html">dplyr</a>を駆使する時代は終わり、
-ネストしておいて<a href="/rstats/purrr.html">purrr</a>を適用するのが
-tidyverse時代のクールなやり方らしい。</p>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">nest_by</span><span class="p">(</span><span class="n">cut</span><span class="p">,</span> <span class="n">.key</span> <span class="o">=</span> <span class="s">&#34;NEW_COLUMN&#34;</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">ungroup</span><span class="p">()</span>
+</span></span></code></pre></div><p><code>.key</code> を使う方法でそれを省略すると <code>data</code> という名前の列になる。</p>
 <p>cf. <a href="https://www.youtube.com/watch?v=rz3_FDVt9eg">Hadley Wickham: Managing many models with R (YouTube)</a></p>
 <h3 id="tidyrunnestdata-cols-"><code>tidyr::unnest(data, cols, ...)</code></h3>
 <p>ネストされたdata.frameを展開してフラットにする。
@@ -364,7 +362,8 @@ list of data.framesだけでなく、list of vectorsとかでもよい。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span>
 </span></span><span class="line"><span class="cl">  <span class="nf">nest</span><span class="p">(</span><span class="n">NEW_COLUMN</span> <span class="o">=</span> <span class="o">!</span><span class="n">cut</span><span class="p">)</span> <span class="o">|&gt;</span>
 </span></span><span class="line"><span class="cl">  <span class="nf">unnest</span><span class="p">(</span><span class="n">cols</span> <span class="o">=</span> <span class="n">NEW_COLUMN</span><span class="p">)</span>
-</span></span></code></pre></div><h2 id="その他の便利関数">その他の便利関数</h2>
+</span></span></code></pre></div><p>方向を明示する <code>tidyr::unnest_longer()</code>, <code>tidyr::unnest_wider()</code> もある。</p>
+<h2 id="その他の便利関数">その他の便利関数</h2>
 <h3 id="tidyrseparate"><code>tidyr::separate()</code></h3>
 <p>文字列カラムを任意のセパレータで複数カラムに分割。
 <code>tidyr::unite()</code> の逆。

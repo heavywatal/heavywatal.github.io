@@ -107,30 +107,31 @@ dplyr — 高速data.frame処理
 一時変数を作ったり、関数を何重にも重ねたりすることなく、
 適用する順に次々と処理を記述することができるようになる。
 慣れれば書きやすく読みやすい。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">conflicted</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">## with piping</span>
-</span></span><span class="line"><span class="cl"><span class="n">result</span> <span class="o">=</span> <span class="n">diamonds</span> <span class="o">|&gt;</span>              <span class="c1"># 生データから出発して</span>
-</span></span><span class="line"><span class="cl">  <span class="nf">select</span><span class="p">(</span><span class="n">carat</span><span class="p">,</span> <span class="n">cut</span><span class="p">,</span> <span class="n">price</span><span class="p">)</span> <span class="o">|&gt;</span>    <span class="c1"># 列を抽出して</span>
-</span></span><span class="line"><span class="cl">  <span class="nf">filter</span><span class="p">(</span><span class="n">carat</span> <span class="o">&gt;</span> <span class="m">1</span><span class="p">)</span> <span class="o">|&gt;</span>            <span class="c1"># 行を抽出して</span>
-</span></span><span class="line"><span class="cl">  <span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">|&gt;</span>                <span class="c1"># グループ化して</span>
-</span></span><span class="line"><span class="cl">  <span class="nf">summarize</span><span class="p">(</span><span class="nf">mean</span><span class="p">(</span><span class="n">price</span><span class="p">))</span> <span class="o">|&gt;</span>       <span class="c1"># 平均を計算</span>
-</span></span><span class="line"><span class="cl">  <span class="nf">print</span><span class="p">()</span>                         <span class="c1"># 表示してみる</span>
+</span></span><span class="line"><span class="cl"><span class="n">result</span> <span class="o">=</span> <span class="n">diamonds</span> <span class="o">|&gt;</span>                   <span class="c1"># 生データから出発して</span>
+</span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="n">carat</span><span class="p">,</span> <span class="n">cut</span><span class="p">,</span> <span class="n">price</span><span class="p">)</span> <span class="o">|&gt;</span>  <span class="c1"># 列を抽出して</span>
+</span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">filter</span><span class="p">(</span><span class="n">carat</span> <span class="o">&gt;</span> <span class="m">1</span><span class="p">)</span> <span class="o">|&gt;</span>          <span class="c1"># 行を抽出して</span>
+</span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">|&gt;</span>              <span class="c1"># グループ化して</span>
+</span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">summarize</span><span class="p">(</span><span class="nf">mean</span><span class="p">(</span><span class="n">price</span><span class="p">))</span> <span class="o">|&gt;</span>     <span class="c1"># 平均を計算</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">print</span><span class="p">()</span>                              <span class="c1"># 表示してみる</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">## with a temporary variable</span>
-</span></span><span class="line"><span class="cl"><span class="n">result</span> <span class="o">=</span> <span class="nf">select</span><span class="p">(</span><span class="n">diamonds</span><span class="p">,</span> <span class="n">carat</span><span class="p">,</span> <span class="n">cut</span><span class="p">,</span> <span class="n">price</span><span class="p">)</span> <span class="c1"># 列を抽出して</span>
-</span></span><span class="line"><span class="cl"><span class="n">result</span> <span class="o">=</span> <span class="nf">filter</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">carat</span> <span class="o">&gt;</span> <span class="m">1</span><span class="p">)</span>           <span class="c1"># 行を抽出して</span>
-</span></span><span class="line"><span class="cl"><span class="n">result</span> <span class="o">=</span> <span class="nf">group_by</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">cut</span><span class="p">)</span>               <span class="c1"># グループ化して</span>
-</span></span><span class="line"><span class="cl"><span class="n">result</span> <span class="o">=</span> <span class="nf">summarize</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nf">mean</span><span class="p">(</span><span class="n">price</span><span class="p">))</span>      <span class="c1"># 平均を計算</span>
+</span></span><span class="line"><span class="cl"><span class="n">result</span> <span class="o">=</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="n">diamonds</span><span class="p">,</span> <span class="n">carat</span><span class="p">,</span> <span class="n">cut</span><span class="p">,</span> <span class="n">price</span><span class="p">)</span> <span class="c1"># 列を抽出して</span>
+</span></span><span class="line"><span class="cl"><span class="n">result</span> <span class="o">=</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">filter</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">carat</span> <span class="o">&gt;</span> <span class="m">1</span><span class="p">)</span>           <span class="c1"># 行を抽出して</span>
+</span></span><span class="line"><span class="cl"><span class="n">result</span> <span class="o">=</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">cut</span><span class="p">)</span>               <span class="c1"># グループ化して</span>
+</span></span><span class="line"><span class="cl"><span class="n">result</span> <span class="o">=</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">summarize</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nf">mean</span><span class="p">(</span><span class="n">price</span><span class="p">))</span>      <span class="c1"># 平均を計算</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">## with nested functions</span>
-</span></span><span class="line"><span class="cl"><span class="n">result</span> <span class="o">=</span> <span class="nf">summarize</span><span class="p">(</span>                    <span class="c1"># 平均を計算</span>
-</span></span><span class="line"><span class="cl">    <span class="nf">group_by</span><span class="p">(</span>                            <span class="c1"># グループ化して</span>
-</span></span><span class="line"><span class="cl">      <span class="nf">filter</span><span class="p">(</span>                              <span class="c1"># 行を抽出して</span>
-</span></span><span class="line"><span class="cl">        <span class="nf">select</span><span class="p">(</span><span class="n">diamonds</span><span class="p">,</span> <span class="n">carat</span><span class="p">,</span> <span class="n">cut</span><span class="p">,</span> <span class="n">price</span><span class="p">),</span> <span class="c1"># 列を抽出して</span>
-</span></span><span class="line"><span class="cl">        <span class="n">carat</span> <span class="o">&gt;</span> <span class="m">1</span><span class="p">),</span>                        <span class="c1"># 行を抽出して</span>
-</span></span><span class="line"><span class="cl">      <span class="n">cut</span><span class="p">),</span>                              <span class="c1"># グループ化して</span>
-</span></span><span class="line"><span class="cl">    <span class="nf">mean</span><span class="p">(</span><span class="n">price</span><span class="p">))</span>                       <span class="c1"># 平均を計算</span>
+</span></span><span class="line"><span class="cl"><span class="n">result</span> <span class="o">=</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">summarize</span><span class="p">(</span>              <span class="c1"># 平均を計算</span>
+</span></span><span class="line"><span class="cl">    <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span>                        <span class="c1"># グループ化して</span>
+</span></span><span class="line"><span class="cl">      <span class="n">dplyr</span><span class="o">::</span><span class="nf">filter</span><span class="p">(</span>                            <span class="c1"># 行を抽出して</span>
+</span></span><span class="line"><span class="cl">        <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="n">diamonds</span><span class="p">,</span> <span class="n">carat</span><span class="p">,</span> <span class="n">cut</span><span class="p">,</span> <span class="n">price</span><span class="p">),</span> <span class="c1"># 列を抽出して</span>
+</span></span><span class="line"><span class="cl">        <span class="n">carat</span> <span class="o">&gt;</span> <span class="m">1</span><span class="p">),</span>                             <span class="c1"># 行を抽出して</span>
+</span></span><span class="line"><span class="cl">      <span class="n">cut</span><span class="p">),</span>                                 <span class="c1"># グループ化して</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mean</span><span class="p">(</span><span class="n">price</span><span class="p">))</span>                        <span class="c1"># 平均を計算</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">## result</span>
 </span></span><span class="line"><span class="cl">        <span class="n">cut</span> <span class="nf">mean</span><span class="p">(</span><span class="n">price</span><span class="p">)</span>
@@ -196,6 +197,133 @@ R 4.2 の段階では <code>|&gt;</code> のプレースホルダー <code>_</co
 <a href="https://amzn.to/3KpiXq0">宇宙船本</a>第3章のコラム
 「selectのセマンティクスとmutateのセマンティクス」を参照。</p>
 </dd>
+<dt><code>dplyr::pull(.data, var = -1, name = NULL)</code></dt>
+<dd>指定した1列をvector(またはlist)としてdata.frameから抜き出す。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="nf">head</span><span class="p">()</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">pull</span><span class="p">(</span><span class="n">price</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="nf">head</span><span class="p">()</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">pull</span><span class="p">(</span><span class="s">&#34;price&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="nf">head</span><span class="p">()</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">pull</span><span class="p">(</span><span class="m">7</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="nf">head</span><span class="p">()</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">pull</span><span class="p">(</span><span class="m">-4</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="nf">head</span><span class="p">()</span> <span class="o">%&gt;%</span> <span class="nf">`[[`</span><span class="p">(</span><span class="s">&#34;price&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="nf">head</span><span class="p">()</span> <span class="o">%&gt;%</span> <span class="p">{</span><span class="n">.[[</span><span class="s">&#34;price&#34;</span><span class="n">]]</span><span class="p">}</span>
+</span></span></code></pre></div></dd>
+<dd><code>name</code> オプションにID的な列を渡すと名前付きvectorを楽に作れる:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">starwars</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">pull</span><span class="p">(</span><span class="n">mass</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+</span></span></code></pre></div></dd>
+</dl>
+<h3 id="行">行</h3>
+<dl>
+<dt><code>dplyr::filter(.data, ..., .by = NULL, .preserve = FALSE)</code></dt>
+<dd>条件を満たす行だけを返す。<code>base::subset()</code> と似たようなもの。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">filter</span><span class="p">(</span><span class="n">carat</span> <span class="o">&gt;</span> <span class="m">3</span> <span class="o">&amp;</span> <span class="n">price</span> <span class="o">&lt;</span> <span class="m">10000</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   carat     cut color clarity depth table price     x     y     z</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 1  3.01 Premium     I      I1  62.7    58  8040  9.10  8.97  5.67</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 2  3.11    Fair     J      I1  65.9    57  9823  9.15  9.02  5.98</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 3  3.01 Premium     F      I1  62.2    56  9925  9.24  9.13  5.73</span>
+</span></span></code></pre></div><div class="warning">
+評価結果が <code>NA</code> となる行は除去される。
+特に不等号を使うときやや直感に反するので要注意。
+e.g., <code>filter(gene != &quot;TP53&quot;)</code>
+</div>
+
+</dd>
+<dd>
+<p>複数列で条件指定するには <code>if_any()</code>, <code>if_all()</code> が使える。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">filter</span><span class="p">(</span><span class="nf">if_any</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span> <span class="nf">\</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="m">20</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   carat       cut color clarity depth table price     x     y     z</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   &lt;dbl&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;ord&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 1  2.00   Premium     H     SI2  58.9  57.0 12210  8.09 58.90  8.06</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 2  0.51 Very Good     E     VS1  61.8  54.7  1970  5.12  5.15 31.80</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 3  0.51     Ideal     E     VS1  61.8  55.0  2075  5.15 31.80  5.12</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">filter</span><span class="p">(</span><span class="nf">if_all</span><span class="p">(</span><span class="nf">where</span><span class="p">(</span><span class="n">is.numeric</span><span class="p">),</span> <span class="nf">\</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="m">4</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   carat     cut color clarity depth table price     x     y     z</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   &lt;dbl&gt;   &lt;ord&gt; &lt;ord&gt;   &lt;ord&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 1  4.01 Premium     I      I1  61.0    61 15223 10.14 10.10  6.17</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 2  4.01 Premium     J      I1  62.5    62 15223 10.02  9.94  6.24</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 3  4.13    Fair     H      I1  64.8    61 17329 10.00  9.85  6.43</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 4  5.01    Fair     J      I1  65.5    59 18018 10.74 10.54  6.98</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 5  4.50    Fair     J      I1  65.8    58 18531 10.23 10.16  6.72</span>
+</span></span></code></pre></div></dd>
+<dt><code>dplyr::distinct(.data, ..., .keep_all = FALSE)</code></dt>
+<dd>指定した列に関してユニークな行のみ返す。
+<code>base::unique.data.frame()</code> よりも高速で、
+<code>filter(!duplicated(.[, ...]))</code> よりスマートで柔軟。
+指定しなかった列を残すには <code>.keep_all = TRUE</code> とする。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">distinct</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#         cut</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 1     Ideal</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 2   Premium</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 3      Good</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 4 Very Good</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 5      Fair</span>
+</span></span></code></pre></div></dd>
+<dt><code>dplyr::slice(.data, ..., .by = NULL, .preserve = FALSE)</code></dt>
+<dd>行番号を指定して行を絞る。
+<code>`[`(i,)</code> の代わりに。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">slice</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   carat     cut color clarity depth table price     x     y     z</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 3  0.23    Good     E     VS1  56.9    65   327  4.05  4.07  2.31</span>
+</span></span></code></pre></div></dd>
+<dt><code>dplyr::slice_head(.data, ..., n, prop)</code>, <code>slice_tail()</code></dt>
+<dd>先頭・末尾の行を抽出。</dd>
+<dt><code>dplyr::slice_max(.data, order_by, ..., n, prop, by = NULL, with_ties = TRUE, na_rm = FALSE)</code></dt>
+<dd><code>order_by, ...</code> で指定した列の降順で <code>n</code> 行だけ返す。
+境界のタイを保持する場合は <code>n</code> 行以上の出力になる。
+昇順で取りたいときはマイナス指定か <code>slice_min()</code>。</dd>
+<dt><code>dplyr::slice_sample(.data, ..., n, prop, weight_by = NULL, replace = FALSE)</code></dt>
+<dd>指定した行数・割合だけランダムサンプルする。</dd>
+</dl>
+<h2 id="列の変更追加">列の変更・追加</h2>
+<dl>
+<dt><code>dplyr::mutate(.data, ..., .by = NULL, .keep = &quot;all&quot;, .before = NULL, .after = NULL)</code></dt>
+<dd>既存の列を変更したり、新しい列を作ったり。
+<code>base::transform()</code> の改良版。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1"># modify existing column</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">price</span> <span class="o">=</span> <span class="n">price</span> <span class="o">*</span> <span class="m">107.54</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># create new column</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">gram</span> <span class="o">=</span> <span class="m">0.2</span> <span class="o">*</span> <span class="n">carat</span><span class="p">)</span>
+</span></span></code></pre></div></dd>
+<dd>変数に入った文字列を列名として使いたい場合は上記 <code>select()</code> のときと同様、
+{{embrace}} や !!unquote を使う。
+左辺(代入先)の名前も文字列を使って表現したい場合は
+<a href="https://www.tidyverse.org/blog/2020/02/glue-strings-and-tidy-eval/#custom-result-names">walrus(セイウチ)演算子 <code>:=</code></a>
+を使う:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">A</span> <span class="o">=</span> <span class="s">&#34;carat&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">B</span> <span class="o">=</span> <span class="s">&#34;gram&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># unquoting only right hand side</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">B</span> <span class="o">=</span> <span class="m">0.2</span> <span class="o">*</span> <span class="o">!!</span><span class="nf">as.name</span><span class="p">(</span><span class="n">A</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   carat     cut color clarity depth table price     x     y     z     B</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43 0.046</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31 0.042</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># unquoting both sides</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">({{</span><span class="n">B</span><span class="p">}}</span> <span class="o">:=</span> <span class="m">0.2</span> <span class="o">*</span> <span class="o">!!</span><span class="nf">as.name</span><span class="p">(</span><span class="n">A</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   carat     cut color clarity depth table price     x     y     z  gram</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43 0.046</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31 0.042</span>
+</span></span></code></pre></div></dd>
+<dd><ul>
+<li><code>.keep = &quot;all&quot;</code>: すべての列を残すデフォルト。</li>
+<li><code>.keep = &quot;used&quot;</code>: 入力に使った列と出力の列のみ残す。</li>
+<li><code>.keep = &quot;unused&quot;</code>: 入力に使った列は捨て、出力の列とほかの列を残す。</li>
+<li><code>.keep = &quot;none&quot;</code>: グループ化と出力の列のみ残す。旧 <code>transmute()</code> のような挙動。</li>
+</ul>
+</dd>
+<dd>新しい列をどこに作るかを <code>.before</code>, <code>.after</code> 指定できる。</dd>
+<dd>
+<p>複数の列をtidyselectして1列作りたいときは
+<code>dplyr::pick(...)</code> と <code>Reduce(f, x)</code> / <code>purrr::reduce(.x, .f)</code> を組み合わせる:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">prod</span> <span class="o">=</span> <span class="nf">Reduce</span><span class="p">(</span><span class="n">`*`</span><span class="p">,</span> <span class="nf">pick</span><span class="p">(</span><span class="nf">where</span><span class="p">(</span><span class="n">is.numeric</span><span class="p">))))</span> <span class="o">|&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">mean_xyz</span> <span class="o">=</span> <span class="nf">Reduce</span><span class="p">(</span><span class="n">`+`</span><span class="p">,</span> <span class="nf">pick</span><span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="n">z</span><span class="p">))</span> <span class="o">/</span> <span class="nf">ncol</span><span class="p">(</span><span class="nf">pick</span><span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="n">z</span><span class="p">)))</span> <span class="o">|&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">max_xyz</span> <span class="o">=</span> <span class="nf">Reduce</span><span class="p">(</span><span class="n">pmax</span><span class="p">,</span> <span class="nf">pick</span><span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="n">z</span><span class="p">)))</span> <span class="o">|&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">print</span><span class="p">()</span>
+</span></span></code></pre></div><p><code>dplyr::select()</code> と違って <code>.data</code> を渡さなくてもいいので、
+プレースホルダの貧弱な base pipe <code>|&gt;</code> でも使える。</p>
+</dd>
 <dt><code>dplyr::rename(.data, ...)</code></dt>
 <dd>列の改名。
 <code>mutate()</code>と同じようなイメージで <code>new = old</code> と指定。
@@ -226,114 +354,10 @@ R 4.2 の段階では <code>|&gt;</code> のプレースホルダー <code>_</co
 はリネーム関数を渡せる亜種:
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">rename_with</span><span class="p">(</span><span class="n">toupper</span><span class="p">,</span> <span class="nf">everything</span><span class="p">())</span>
 </span></span></code></pre></div></dd>
-<dt><code>dplyr::pull(.data, var = -1)</code></dt>
-<dd>指定した1列をvector(またはlist)としてdata.frameから抜き出す。
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="nf">head</span><span class="p">()</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">pull</span><span class="p">(</span><span class="n">price</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="nf">head</span><span class="p">()</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">pull</span><span class="p">(</span><span class="s">&#34;price&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="nf">head</span><span class="p">()</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">pull</span><span class="p">(</span><span class="m">7</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="nf">head</span><span class="p">()</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">pull</span><span class="p">(</span><span class="m">-4</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="nf">head</span><span class="p">()</span> <span class="o">%&gt;%</span> <span class="nf">`[[`</span><span class="p">(</span><span class="s">&#34;price&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="nf">head</span><span class="p">()</span> <span class="o">%&gt;%</span> <span class="p">{</span><span class="n">.[[</span><span class="s">&#34;price&#34;</span><span class="n">]]</span><span class="p">}</span>
-</span></span></code></pre></div></dd>
-</dl>
-<h3 id="行">行</h3>
-<dl>
-<dt><code>dplyr::filter(.data, ...)</code></dt>
-<dd>条件を満たす行だけを返す。<code>base::subset()</code> と似たようなもの。
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">filter</span><span class="p">(</span><span class="n">carat</span> <span class="o">&gt;</span> <span class="m">3</span> <span class="o">&amp;</span> <span class="n">price</span> <span class="o">&lt;</span> <span class="m">10000</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#   carat     cut color clarity depth table price     x     y     z</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 1  3.01 Premium     I      I1  62.7    58  8040  9.10  8.97  5.67</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 2  3.11    Fair     J      I1  65.9    57  9823  9.15  9.02  5.98</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 3  3.01 Premium     F      I1  62.2    56  9925  9.24  9.13  5.73</span>
-</span></span></code></pre></div><div class="warning">
-評価結果が <code>NA</code> となる行は除去される。
-特に不等号を使うときやや直感に反するので要注意。
-e.g., <code>filter(gene != &quot;TP53&quot;)</code>
-</div>
-
-</dd>
-<dd>
-<p>複数列で条件指定するには <code>if_any()</code>, <code>if_all()</code> が使える。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">filter</span><span class="p">(</span><span class="nf">if_any</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span> <span class="o">~</span> <span class="n">.x</span> <span class="o">&gt;</span> <span class="m">20</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#   carat       cut color clarity depth table price     x     y     z</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#   &lt;dbl&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;ord&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 1  2.00   Premium     H     SI2  58.9  57.0 12210  8.09 58.90  8.06</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 2  0.51 Very Good     E     VS1  61.8  54.7  1970  5.12  5.15 31.80</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 3  0.51     Ideal     E     VS1  61.8  55.0  2075  5.15 31.80  5.12</span>
-</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">filter</span><span class="p">(</span><span class="nf">if_all</span><span class="p">(</span><span class="nf">where</span><span class="p">(</span><span class="n">is.numeric</span><span class="p">),</span> <span class="o">~</span> <span class="n">.x</span> <span class="o">&gt;</span> <span class="m">4</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#   carat     cut color clarity depth table price     x     y     z</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#   &lt;dbl&gt;   &lt;ord&gt; &lt;ord&gt;   &lt;ord&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 1  4.01 Premium     I      I1  61.0    61 15223 10.14 10.10  6.17</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 2  4.01 Premium     J      I1  62.5    62 15223 10.02  9.94  6.24</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 3  4.13    Fair     H      I1  64.8    61 17329 10.00  9.85  6.43</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 4  5.01    Fair     J      I1  65.5    59 18018 10.74 10.54  6.98</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 5  4.50    Fair     J      I1  65.8    58 18531 10.23 10.16  6.72</span>
-</span></span></code></pre></div></dd>
-<dt><code>dplyr::distinct(.data, ..., .keep_all = FALSE)</code></dt>
-<dd>指定した列に関してユニークな行のみ返す。
-<code>base::unique.data.frame()</code> よりも高速で、
-<code>filter(!duplicated(.[, ...]))</code> よりスマートで柔軟。
-指定しなかった列を残すには <code>.keep_all = TRUE</code> とする。
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">distinct</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#         cut</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 1     Ideal</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 2   Premium</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 3      Good</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 4 Very Good</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 5      Fair</span>
-</span></span></code></pre></div></dd>
-<dt><code>dplyr::slice(.data, ...)</code></dt>
-<dd>行番号を指定して行を絞る。
-<code>`[`(i,)</code> の代わりに。
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">slice</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#   carat     cut color clarity depth table price     x     y     z</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 3  0.23    Good     E     VS1  56.9    65   327  4.05  4.07  2.31</span>
-</span></span></code></pre></div></dd>
-<dt><code>dplyr::slice_head(.data, ..., n, prop)</code>, <code>slice_tail()</code></dt>
-<dd>先頭・末尾の行を抽出。</dd>
-<dt><code>dplyr::slice_sample(.data, ..., n, prop, weight_by = NULL, replace = FALSE)</code></dt>
-<dd>指定した行数・割合だけランダムサンプルする。</dd>
-<dd><code>sample_n()</code> と <code>sample_frac()</code> は非推奨。</dd>
-</dl>
-<h2 id="列の変更追加">列の変更・追加</h2>
-<dl>
-<dt><code>dplyr::mutate(.data, ...)</code></dt>
-<dd>既存の列を変更したり、新しい列を作ったり。
-<code>base::transform()</code> の改良版。
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1"># modify existing column</span>
-</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">price</span> <span class="o">=</span> <span class="n">price</span> <span class="o">*</span> <span class="m">107.54</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># create new column</span>
-</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">gram</span> <span class="o">=</span> <span class="m">0.2</span> <span class="o">*</span> <span class="n">carat</span><span class="p">)</span>
-</span></span></code></pre></div><p>変数に入った文字列を列名として使いたい場合は上記 <code>select()</code> のときと同様、
-{{embrace}} や !!unquote を使う。
-左辺(代入先)の名前も文字列を使って表現したい場合は
-<a href="https://www.tidyverse.org/blog/2020/02/glue-strings-and-tidy-eval/#custom-result-names">walrus(セイウチ)演算子 <code>:=</code></a>
-を使う:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">A</span> <span class="o">=</span> <span class="s">&#34;carat&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="n">B</span> <span class="o">=</span> <span class="s">&#34;gram&#34;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># unquoting only right hand side</span>
-</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">B</span> <span class="o">=</span> <span class="m">0.2</span> <span class="o">*</span> <span class="o">!!</span><span class="nf">as.name</span><span class="p">(</span><span class="n">A</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#   carat     cut color clarity depth table price     x     y     z     B</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43 0.046</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31 0.042</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># unquoting both sides</span>
-</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">({{</span><span class="n">B</span><span class="p">}}</span> <span class="o">:=</span> <span class="m">0.2</span> <span class="o">*</span> <span class="o">!!</span><span class="nf">as.name</span><span class="p">(</span><span class="n">A</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#   carat     cut color clarity depth table price     x     y     z  gram</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43 0.046</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31 0.042</span>
-</span></span></code></pre></div></dd>
-<dt><code>dplyr::transmute(.data, ...)</code></dt>
-<dd>指定した列以外を保持しない版 <code>mutate()</code> 。
-言い換えると、列の中身の変更もできる版 <code>select()</code> 。</dd>
 </dl>
 <h2 id="dataframeの要約集計整列">data.frameの要約・集計・整列</h2>
 <dl>
-<dt><code>dplyr::summarize(.data, ..., .group = NULL)</code></dt>
+<dt><code>dplyr::summarize(.data, ..., .by = NULL, .group = NULL)</code></dt>
 <dd>指定した列に関数を適用して1行のdata.frameにまとめる。
 グループ化されていたらグループごとに適用して <code>bind_rows()</code> する。
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span>
@@ -348,8 +372,23 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code>
 </span></span><span class="line"><span class="cl"><span class="c1"># 5     Ideal 0.7028370     18806</span>
 </span></span></code></pre></div></dd>
 <dd>
-<p>関数の結果が長さ1じゃなくても大丈夫(v1.0.0):</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">summarize</span><span class="p">(</span><span class="nf">range</span><span class="p">(</span><span class="n">carat</span><span class="p">),</span> <span class="nf">range</span><span class="p">(</span><span class="n">price</span><span class="p">))</span>
+<p>複数カラムに関数を適用するには <code>across()</code> を使う:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1"># summarize_at</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="nf">summarize</span><span class="p">(</span><span class="nf">across</span><span class="p">(</span><span class="nf">starts_with</span><span class="p">(</span><span class="s">&#34;c&#34;</span><span class="p">),</span> <span class="n">max</span><span class="p">),</span> <span class="n">.by</span> <span class="o">=</span> <span class="n">cut</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># summarize_if</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="nf">summarize</span><span class="p">(</span><span class="nf">across</span><span class="p">(</span><span class="nf">where</span><span class="p">(</span><span class="n">is.numeric</span><span class="p">),</span> <span class="n">max</span><span class="p">),</span> <span class="n">.by</span> <span class="o">=</span> <span class="n">cut</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># summarize_all</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="nf">summarize</span><span class="p">(</span><span class="nf">across</span><span class="p">(</span><span class="nf">everything</span><span class="p">(),</span> <span class="n">max</span><span class="p">),</span> <span class="n">.by</span> <span class="o">=</span> <span class="n">cut</span><span class="p">)</span>
+</span></span></code></pre></div></dd>
+<dd>
+<p>各列の計算結果は長さ1でなければいけない。
+そうじゃなくても大丈夫な時期もあったが、その機能は <code>reframe()</code> に分離された。</p>
+</dd>
+<dt><code>dplyr::reframe(.data, ..., .by = NULL, .group = NULL)</code></dt>
+<dd>各グループの結果が複数行にまたがっても大丈夫な <code>summarize()</code> 亜種。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">reframe</span><span class="p">(</span><span class="nf">range</span><span class="p">(</span><span class="n">carat</span><span class="p">),</span> <span class="nf">range</span><span class="p">(</span><span class="n">price</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#   range(carat) range(price)</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#          &lt;dbl&gt;        &lt;int&gt;</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># 1         0.20          326</span>
@@ -358,32 +397,14 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code>
 <dd>
 <p>各グループの結果がtibbleの場合、結合・展開してくれる:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">nest_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">|&gt;</span>
-</span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">summarize</span><span class="p">(</span><span class="nf">head</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="m">2L</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">reframe</span><span class="p">(</span><span class="nf">head</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="m">2L</span><span class="p">))</span>
 </span></span></code></pre></div><p>これを利用して複数ファイルを一気読みできる:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">path</span> <span class="o">=</span> <span class="n">fs</span><span class="o">::</span><span class="nf">dir_ls</span><span class="p">(</span><span class="s">&#34;path/to/data&#34;</span><span class="p">,</span> <span class="n">glob</span> <span class="o">=</span> <span class="s">&#34;*.tsv&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">df</span> <span class="o">=</span> <span class="nf">tibble</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">|&gt;</span>
 </span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">rowwise</span><span class="p">()</span> <span class="o">|&gt;</span>
-</span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">summarize</span><span class="p">(</span><span class="n">readr</span><span class="o">::</span><span class="nf">read_tsv</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
-</span></span></code></pre></div><p>けどまあ <code>purrr::map_dfr(path, read_tsv)</code> のほうが読みやすい気がする。</p>
-</dd>
-<dd>
-<p>複数カラムに関数を適用するには <code>across()</code> を使う:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">median.ordered</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nf">levels</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="nf">[median</span><span class="p">(</span><span class="nf">as.integer</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="n">na.rm</span><span class="p">)</span><span class="n">]</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># summarize_at</span>
-</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">|&gt;</span>
-</span></span><span class="line"><span class="cl">  <span class="nf">summarize</span><span class="p">(</span><span class="nf">across</span><span class="p">(</span><span class="nf">starts_with</span><span class="p">(</span><span class="s">&#34;c&#34;</span><span class="p">),</span> <span class="n">median</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># summarize_if</span>
-</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">|&gt;</span>
-</span></span><span class="line"><span class="cl">  <span class="nf">summarize</span><span class="p">(</span><span class="nf">across</span><span class="p">(</span><span class="nf">where</span><span class="p">(</span><span class="n">is.numeric</span><span class="p">),</span> <span class="n">mean</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># summarize_all</span>
-</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">|&gt;</span>
-</span></span><span class="line"><span class="cl">  <span class="nf">summarize</span><span class="p">(</span><span class="nf">across</span><span class="p">(</span><span class="nf">everything</span><span class="p">(),</span> <span class="n">median</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">))</span>
-</span></span></code></pre></div><p><code>*_at()</code>, <code>*_if()</code>, <code>*_all()</code>, <code>*_each()</code> は非推奨。</p>
+</span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">reframe</span><span class="p">(</span><span class="n">readr</span><span class="o">::</span><span class="nf">read_tsv</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+</span></span></code></pre></div><p>けどまあ <code>purrr::map(path, read_tsv) |&gt; purrr::list_rbind()</code>
+のほうが読みやすい気がする。</p>
 </dd>
 <dt><code>dplyr::tally(x, wt, sort = FALSE)</code></dt>
 <dd><code>summarize(x, n = n())</code> のショートカット。
@@ -392,7 +413,7 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code>
 <dt><code>dplyr::count(x, ..., wt = NULL, sort = FALSE)</code></dt>
 <dd><code>group_by(...) |&gt; tally()</code> のショートカット。</dd>
 <dd><code>dplyr::add_count()</code> は元の形を維持したままカウント列を追加。</dd>
-<dt><code>dplyr::arrange(.data, column1, column2, ...)</code></dt>
+<dt><code>dplyr::arrange(.data, ..., .by_group = FALSE)</code></dt>
 <dd>指定した列の昇順でdata.frameの行を並べ替える。
 <code>arrange(desc(column))</code> で降順になる。
 <code>order()</code> を使うよりもタイピングの繰り返しが少ないし直感的
@@ -402,11 +423,6 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code>
 </span></span></code></pre></div></dd>
 <dt><code>dplyr::relocate(.data, ..., .before = NULL, .after = NULL)</code></dt>
 <dd>指定した列を左端(もしくは <code>.before</code>/<code>.after</code> 別の列)に移動する。</dd>
-<dt><code>dplyr::slice_max(.data, order_by, ..., n, prop, with_ties = TRUE)</code></dt>
-<dd><code>order_by, ...</code> で指定した列の降順で <code>n</code> 行だけ返す。
-境界のタイを保持する場合は <code>n</code> 行以上の出力になる。
-昇順で取りたいときはマイナス指定か <code>slice_min()</code>。</dd>
-<dd><code>top_n()</code> は非推奨。</dd>
 </dl>
 <h2 id="dataframeを結合">data.frameを結合</h2>
 <dl>
@@ -417,9 +433,15 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code>
 <code>left_join()</code>: <code>x</code> の全ての行を保持。<code>y</code> に複数マッチする行があったらすべて保持。<br>
 <code>right_join()</code>: <code>y</code> の全ての行を保持。<code>x</code> に複数マッチする行があったらすべて保持。<br>
 <code>semi_join()</code>: <code>x</code> の全ての行を保持。<code>y</code> に複数マッチする行があっても元の <code>x</code> の行だけ保持。<br>
-<code>anti_join()</code>: <code>y</code> にマッチしない <code>x</code> の行のみ。</p>
-<p>列名が異なる場合は <code>by</code> を名前付きベクタにすればよい</p>
+<code>anti_join()</code>: <code>y</code> にマッチしない <code>x</code> の行のみ。<br>
+<code>cross_join()</code>: マッチするものではなく、全ての組み合わせを作って結合。</p>
 </dd>
+<dd>
+<p>列名が異なる場合は <code>by</code> を名前付きvectorにする:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">dplyr</span><span class="o">::</span><span class="nf">full_join</span><span class="p">(</span><span class="n">band_members</span><span class="p">,</span> <span class="n">band_instruments2</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#34;artist&#34;</span><span class="p">))</span>
+</span></span></code></pre></div></dd>
+<dd><a href="https://dplyr.tidyverse.org/reference/join_by.html"><code>join_by()</code></a>
+を使えば不等号などを含めて柔軟に結合条件を指定できる。</dd>
 <dt><code>dplyr::bind_rows(...)</code>, <code>dplyr::bind_cols(...)</code></dt>
 <dd>標準の <code>rbind()</code>, <code>cbind()</code> より効率よくdata.frameを結合。
 引数は個別でもリストでもよい。
@@ -445,7 +467,14 @@ NAのときにどうするかを指定できるのも大変良い。
 <code>recode(letters, a = &quot;A!&quot;, c = &quot;C!&quot;)</code></dd>
 <dt><code>dplyr::row_number(x)</code></dt>
 <dd><code>rank(x, ties.method = &quot;first&quot;, na.last = &quot;keep&quot;)</code> のショートカット。
-グループ毎に連番を振るのに便利。</dd>
+グループ毎に連番を振るのに便利。同点でも登場順に違う順位を与える。</dd>
+<dd><code>dplyr::min_rank(x)</code>: 同点には同じ値。2位タイがあれば3位不在。<code>ties.method = &quot;min&quot;</code></dd>
+<dd><code>dplyr::dense_rank(x)</code>: 同点には同じ値。2位タイがあっても3位から再スタート。</dd>
+<dt><code>dplyr::consecutive_id(...)</code></dt>
+<dd>値が変化したら番号をインクリメント。こういうグループ化したいときがある:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">consecutive_id</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># [1] 1 1 2 2 2 3 3 4</span>
+</span></span></code></pre></div></dd>
 <dt><code>dplyr::ntile(x, n)</code></dt>
 <dd>数値ベクトル <code>x</code> を順位によって <code>n</code> 個のクラスに均等分け</dd>
 <dt><code>dplyr::n_distinct(x)</code></dt>
@@ -473,17 +502,27 @@ NAのときにどうするかを指定できるのも大変良い。
 <p><a href="/rstats/tidyr.html"><code>tidyr</code></a> でネストして、
 <a href="/rstats/purrr.html"><code>purrr</code></a> でその list of data.frames に処理を施し、
 <a href="/rstats/dplyr.html"><code>dplyr</code></a> でその変更を元の data.frame に適用する、
-というのがtidyverse流のモダンなやり方らしい。
-それをもうちょいスマートにやる <code>group_modify()</code> がv0.8.1で導入された。</p>
+というのがtidyverse流の柔軟なやり方。</p>
+<p>v0.8.1で <code>group_modify()</code> などが導入され、
+ネストせずグループ化までで済ませやすくなった。</p>
+<p>v1.1.0 からは多くの関数に一時グループ化
+<a href="https://dplyr.tidyverse.org/reference/dplyr_by.html"><code>.by</code> / <code>by</code></a>
+オプションが追加され、
+事前のグループ化と事後のグループ解除を省略しやすくなった。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span>
 </span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_nest</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">|&gt;</span>
-</span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">purrr</span><span class="o">::</span><span class="nf">map</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">head</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="m">2L</span><span class="p">))</span> <span class="o">|&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">purrr</span><span class="o">::</span><span class="nf">map</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nf">\</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="nf">head</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="m">2L</span><span class="p">)))</span> <span class="o">|&gt;</span>
 </span></span><span class="line"><span class="cl">  <span class="n">tidyr</span><span class="o">::</span><span class="nf">unnest</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># since dplyr 0.8.1</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># dplyr &gt;= 0.8.1</span>
 </span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span>
 </span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">|&gt;</span>
-</span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_modify</span><span class="p">(</span><span class="o">~</span> <span class="nf">head</span><span class="p">(</span><span class="n">.x</span><span class="p">,</span> <span class="m">2L</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_modify</span><span class="p">(</span><span class="nf">\</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="nf">head</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="m">2L</span><span class="p">))</span> <span class="o">|&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">ungroup</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># dplyr &gt;= 1.1.0</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">slice_head</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="m">2L</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="n">cut</span><span class="p">)</span>
 </span></span></code></pre></div><dl>
 <dt><code>dplyr::group_by(.data, ..., add = FALSE, .drop = group_by_drop_default(.data))</code></dt>
 <dd>グループごとに区切って次の処理に渡す。
@@ -503,23 +542,25 @@ e.g. <code>summarize()</code>, <code>slice()</code>, <code>tally()</code>, <code
 </dd>
 <dt><code>dplyr::group_nest(.tbl, ..., .key = &quot;data&quot;, keep = FALSE)</code></dt>
 <dd>入れ子 data.frame を作る。
-<code>group_by(...) |&gt; tidyr::nest()</code> のショートカット。</dd>
-<dt><code>dplyr::group_split(.tbl, ..., keep = FALSE)</code></dt>
+<code>tidyr::nest(.by = c(...))</code> と役割が被りすぎて微妙な立場らしい。</dd>
+<dd><code>keep = TRUE</code> とするとグループ化に使った列も入れ子のdata.frameに残す。</dd>
+<dd>グループ化を解除してフラットな <code>tbl_df</code> を返す。</dd>
+<dt><code>dplyr::nest_by(.tbl, ..., .key = &quot;data&quot;, keep = FALSE)</code></dt>
+<dd>上記 <code>group_nest</code> とほぼ同じだが、こちらはグループ化されたまま <code>rowwise_df</code> を返す。</dd>
+<dt><code>dplyr::group_split(.tbl, ..., .key = &quot;data&quot;, .keep = FALSE)</code></dt>
 <dd>list of data.frames に分割する。
 <code>.tbl |&gt; split(.$group)</code> と同等だが、
 ドットダラーを使わくて済むし複数列をキーにするのも簡単。</dd>
 <dt><code>dplyr::group_indices(.data, ...)</code></dt>
 <dd><code>grouped_df</code> ではなくグループIDとして1からの整数列を返す版 <code>group_by()</code></dd>
-<dt><code>dplyr::group_modify(.tbl, .f, ...)</code></dt>
+<dt><code>dplyr::group_modify(.tbl, .f, ..., .keep = FALSE)</code></dt>
 <dd>グループごとに <code>.f</code> を適用して再結合したdata.frameを返す。</dd>
 <dd><code>.f</code> は2つの引数をとる関数。
 1つめは区切られたdata.frame、
-2つめはグループ化のキー(となった列を含む1行のdata.frame)。</dd>
-<dd>引数が1つだったり、違うものを2つめに受け取る関数はそのままじゃ渡せないので、
-<a href="/rstats/purrr.html#無名関数">purrrでよく見る無名関数</a>
-に包んで渡す。
-このとき2つの引数はそれぞれ <code>.x</code>, <code>.y</code> として参照できる。
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_modify</span><span class="p">(</span><span class="o">~</span> <span class="nf">head</span><span class="p">(</span><span class="n">.x</span><span class="p">,</span> <span class="m">2L</span><span class="p">))</span>
+2つめはグループ化のキー(となった列を含む1行のdata.frame)。
+引数が1つだったり、違うものを2つめに受け取る関数はそのままじゃ渡せないので、
+<a href="/rstats/purrr.html">purrr</a>のときと同様に無名関数に包んで渡す。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_modify</span><span class="p">(</span><span class="nf">\</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="nf">head</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="m">2L</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#          cut carat color clarity depth table price     x     y     z</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#  1      Fair  0.22     E     VS2  65.1    61   337  3.87  3.78  2.49</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#  2      Fair  0.86     E     SI2  55.1    69  2757  6.45  6.33  3.52</span>
@@ -533,7 +574,7 @@ e.g. <code>summarize()</code>, <code>slice()</code>, <code>tally()</code>, <code
 </span></span><span class="line"><span class="cl"><span class="c1"># 10     Ideal  0.23     J     VS1  62.8    56   340  3.93  3.90  2.46</span>
 </span></span></code></pre></div></dd>
 <dd>
-<p><code>group_map()</code> は結果を <code>bind_rows()</code> せずlistとして返す亜種。
+<p><code>group_map()</code> は結果を <code>bind_rows()</code> せずlistとして返す亜種。<br>
 <code>group_walk()</code> は <code>.f</code> 適用前の <code>.tbl</code> を返す亜種。</p>
 </dd>
 <dt><code>dplyr::rowwise(data, ...)</code></dt>
@@ -546,17 +587,33 @@ mutate などを適用すると列全体ではなく1行ごとに関数に渡さ
 ベクトル演算を使う場合に比べてかなり遅い。
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span>
 </span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">rowwise</span><span class="p">()</span> <span class="o">|&gt;</span>
-</span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">mean</span> <span class="o">=</span> <span class="nf">mean</span><span class="p">(</span><span class="nf">c_across</span><span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="n">z</span><span class="p">)))</span>         <span class="c1"># slow</span>
+</span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">mean_xyz</span> <span class="o">=</span> <span class="nf">mean</span><span class="p">(</span><span class="nf">c_across</span><span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="n">z</span><span class="p">)))</span>                       <span class="c1"># slow</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">mean</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="n">z</span><span class="p">)</span> <span class="o">/</span> <span class="m">3</span><span class="p">)</span>  <span class="c1"># fast</span>
-</span></span></code></pre></div></dd>
-<dt><code>dplyr::do(.data, ...)</code></dt>
-<dd>非推奨。
-代わりに <code>group_modify()</code> とかを使う。
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">do</span><span class="p">(</span><span class="nf">head</span><span class="p">(</span><span class="n">.,</span> <span class="m">2L</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">mean_xyz</span> <span class="o">=</span> <span class="nf">Reduce</span><span class="p">(</span><span class="n">`+`</span><span class="p">,</span> <span class="nf">pick</span><span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="n">z</span><span class="p">))</span> <span class="o">/</span> <span class="nf">ncol</span><span class="p">(</span><span class="nf">pick</span><span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="n">z</span><span class="p">)))</span>  <span class="c1"># fast</span>
 </span></span></code></pre></div></dd>
 </dl>
-<h2 id="matrix-array">matrix, array</h2>
+<h2 id="deprecatedsuperceeded">deprecated/superceeded</h2>
+<dl>
+<dt><code>dplyr::do(.data, ...)</code></dt>
+<dd><code>reframe()</code>, <code>slice*()</code> などに取って代わられた。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">do</span><span class="p">(</span><span class="nf">head</span><span class="p">(</span><span class="n">.,</span> <span class="m">2L</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">slice_head</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="m">2L</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="n">cut</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">reframe</span><span class="p">(</span><span class="nf">across</span><span class="p">(</span><span class="nf">everything</span><span class="p">(),</span> <span class="n">range</span><span class="p">),</span> <span class="n">.by</span> <span class="o">=</span> <span class="n">cut</span><span class="p">)</span>
+</span></span></code></pre></div></dd>
+<dt><code>dplyr::transmute(.data, ...)</code></dt>
+<dd>指定した列以外を保持しない版 <code>mutate()</code> 。
+言い換えると、列の中身の変更もできる版 <code>select()</code> 。</dd>
+<dd><code>mutate(.keep = &quot;none&quot;)</code> に取って代わられた。</dd>
+<dt><code>*_at()</code>, <code>*_if()</code>, <code>*_all()</code>, <code>*_each()</code></dt>
+<dd>条件を満たす列・複数の列に関数を適用する <code>mutate()</code>, <code>summarize()</code> 亜種。
+<code>across()</code> の登場により非推奨。</dd>
+<dt><code>top_n()</code>, <code>top_frac()</code></dt>
+<dd><code>slice_min()</code>, <code>slice_max()</code> に取って代わられた。</dd>
+<dt><code>sample_n()</code>, <code>sample_frac()</code></dt>
+<dd><code>slice_sample()</code> に取って代わられた。</dd>
+</dl>
+<h3 id="matrix-array">matrix, array</h3>
 <p>data.frame を主眼とする dplyr では matrix や array を扱わない。
 一時期存在していた <code>tbl_cube</code> 関連の機能は
 <a href="https://github.com/hadley/cubelyr">cubelyr</a> に隔離された。</p>
