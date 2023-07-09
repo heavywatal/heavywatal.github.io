@@ -35,30 +35,31 @@ data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(
 慣れれば書きやすく読みやすい。
 
 ```r
+library(conflicted)
 library(tidyverse)
 
 ## with piping
-result = diamonds |>              # 生データから出発して
-  select(carat, cut, price) |>    # 列を抽出して
-  filter(carat > 1) |>            # 行を抽出して
-  group_by(cut) |>                # グループ化して
-  summarize(mean(price)) |>       # 平均を計算
-  print()                         # 表示してみる
+result = diamonds |>                   # 生データから出発して
+  dplyr::select(carat, cut, price) |>  # 列を抽出して
+  dplyr::filter(carat > 1) |>          # 行を抽出して
+  dplyr::group_by(cut) |>              # グループ化して
+  dplyr::summarize(mean(price)) |>     # 平均を計算
+  print()                              # 表示してみる
 
 ## with a temporary variable
-result = select(diamonds, carat, cut, price) # 列を抽出して
-result = filter(result, carat > 1)           # 行を抽出して
-result = group_by(result, cut)               # グループ化して
-result = summarize(result, mean(price))      # 平均を計算
+result = dplyr::select(diamonds, carat, cut, price) # 列を抽出して
+result = dplyr::filter(result, carat > 1)           # 行を抽出して
+result = dplyr::group_by(result, cut)               # グループ化して
+result = dplyr::summarize(result, mean(price))      # 平均を計算
 
 ## with nested functions
-result = summarize(                    # 平均を計算
-    group_by(                            # グループ化して
-      filter(                              # 行を抽出して
-        select(diamonds, carat, cut, price), # 列を抽出して
-        carat > 1),                        # 行を抽出して
-      cut),                              # グループ化して
-    mean(price))                       # 平均を計算
+result = dplyr::summarize(              # 平均を計算
+    dplyr::group_by(                        # グループ化して
+      dplyr::filter(                            # 行を抽出して
+        dplyr::select(diamonds, carat, cut, price), # 列を抽出して
+        carat > 1),                             # 行を抽出して
+      cut),                                 # グループ化して
+    mean(price))                        # 平均を計算
 
 ## result
         cut mean(price)
@@ -139,6 +140,153 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
     「selectのセマンティクスとmutateのセマンティクス」を参照。
 
 
+`dplyr::pull(.data, var = -1, name = NULL)`
+:   指定した1列をvector(またはlist)としてdata.frameから抜き出す。
+
+    ```r
+    diamonds |> head() |> dplyr::pull(price)
+    diamonds |> head() |> dplyr::pull("price")
+    diamonds |> head() |> dplyr::pull(7)
+    diamonds |> head() |> dplyr::pull(-4)
+    diamonds |> head() %>% `[[`("price")
+    diamonds |> head() %>% {.[["price"]]}
+    ```
+:   `name` オプションにID的な列を渡すと名前付きvectorを楽に作れる:
+    ```r
+    starwars |> dplyr::pull(mass, name)
+    ```
+
+
+### 行
+
+`dplyr::filter(.data, ..., .by = NULL, .preserve = FALSE)`
+:   条件を満たす行だけを返す。`base::subset()` と似たようなもの。
+
+    ```r
+    diamonds |> dplyr::filter(carat > 3 & price < 10000)
+    #   carat     cut color clarity depth table price     x     y     z
+    # 1  3.01 Premium     I      I1  62.7    58  8040  9.10  8.97  5.67
+    # 2  3.11    Fair     J      I1  65.9    57  9823  9.15  9.02  5.98
+    # 3  3.01 Premium     F      I1  62.2    56  9925  9.24  9.13  5.73
+    ```
+
+    {{<div class="warning">}}
+評価結果が `NA` となる行は除去される。
+特に不等号を使うときやや直感に反するので要注意。
+e.g., `filter(gene != "TP53")`
+{{</div>}}
+
+:   複数列で条件指定するには `if_any()`, `if_all()` が使える。
+
+    ```r
+    diamonds |> dplyr::filter(if_any(c(x, y, z), \(v) v > 20))
+    #   carat       cut color clarity depth table price     x     y     z
+    #   <dbl>     <ord> <ord>   <ord> <dbl> <dbl> <int> <dbl> <dbl> <dbl>
+    # 1  2.00   Premium     H     SI2  58.9  57.0 12210  8.09 58.90  8.06
+    # 2  0.51 Very Good     E     VS1  61.8  54.7  1970  5.12  5.15 31.80
+    # 3  0.51     Ideal     E     VS1  61.8  55.0  2075  5.15 31.80  5.12
+    diamonds |> dplyr::filter(if_all(where(is.numeric), \(x) x > 4))
+    #   carat     cut color clarity depth table price     x     y     z
+    #   <dbl>   <ord> <ord>   <ord> <dbl> <dbl> <int> <dbl> <dbl> <dbl>
+    # 1  4.01 Premium     I      I1  61.0    61 15223 10.14 10.10  6.17
+    # 2  4.01 Premium     J      I1  62.5    62 15223 10.02  9.94  6.24
+    # 3  4.13    Fair     H      I1  64.8    61 17329 10.00  9.85  6.43
+    # 4  5.01    Fair     J      I1  65.5    59 18018 10.74 10.54  6.98
+    # 5  4.50    Fair     J      I1  65.8    58 18531 10.23 10.16  6.72
+    ```
+
+
+`dplyr::distinct(.data, ..., .keep_all = FALSE)`
+:   指定した列に関してユニークな行のみ返す。
+    `base::unique.data.frame()` よりも高速で、
+    `filter(!duplicated(.[, ...]))` よりスマートで柔軟。
+    指定しなかった列を残すには `.keep_all = TRUE` とする。
+
+    ```r
+    diamonds |> dplyr::distinct(cut)
+    #         cut
+    # 1     Ideal
+    # 2   Premium
+    # 3      Good
+    # 4 Very Good
+    # 5      Fair
+    ```
+
+`dplyr::slice(.data, ..., .by = NULL, .preserve = FALSE)`
+:   行番号を指定して行を絞る。
+    `` `[`(i,) `` の代わりに。
+
+    ```r
+    diamonds |> dplyr::slice(1, 2, 3)
+    #   carat     cut color clarity depth table price     x     y     z
+    # 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43
+    # 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31
+    # 3  0.23    Good     E     VS1  56.9    65   327  4.05  4.07  2.31
+    ```
+
+`dplyr::slice_head(.data, ..., n, prop)`, `slice_tail()`
+:   先頭・末尾の行を抽出。
+
+`dplyr::slice_max(.data, order_by, ..., n, prop, by = NULL, with_ties = TRUE, na_rm = FALSE)`
+:   `order_by, ...` で指定した列の降順で `n` 行だけ返す。
+    境界のタイを保持する場合は `n` 行以上の出力になる。
+    昇順で取りたいときはマイナス指定か `slice_min()`。
+
+`dplyr::slice_sample(.data, ..., n, prop, weight_by = NULL, replace = FALSE)`
+:   指定した行数・割合だけランダムサンプルする。
+
+
+## 列の変更・追加
+
+`dplyr::mutate(.data, ..., .by = NULL, .keep = "all", .before = NULL, .after = NULL)`
+:   既存の列を変更したり、新しい列を作ったり。
+    `base::transform()` の改良版。
+    ```r
+    # modify existing column
+    diamonds |> dplyr::mutate(price = price * 107.54)
+
+    # create new column
+    diamonds |> dplyr::mutate(gram = 0.2 * carat)
+    ```
+:   変数に入った文字列を列名として使いたい場合は上記 `select()` のときと同様、
+    {{embrace}} や !!unquote を使う。
+    左辺(代入先)の名前も文字列を使って表現したい場合は
+    [walrus(セイウチ)演算子 `:=`](https://www.tidyverse.org/blog/2020/02/glue-strings-and-tidy-eval/#custom-result-names)
+    を使う:
+    ```r
+    A = "carat"
+    B = "gram"
+
+    # unquoting only right hand side
+    diamonds |> dplyr::mutate(B = 0.2 * !!as.name(A))
+    #   carat     cut color clarity depth table price     x     y     z     B
+    # 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43 0.046
+    # 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31 0.042
+
+    # unquoting both sides
+    diamonds |> dplyr::mutate({{B}} := 0.2 * !!as.name(A))
+    #   carat     cut color clarity depth table price     x     y     z  gram
+    # 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43 0.046
+    # 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31 0.042
+    ```
+:   - `.keep = "all"`: すべての列を残すデフォルト。
+    - `.keep = "used"`: 入力に使った列と出力の列のみ残す。
+    - `.keep = "unused"`: 入力に使った列は捨て、出力の列とほかの列を残す。
+    - `.keep = "none"`: グループ化と出力の列のみ残す。旧 `transmute()` のような挙動。
+:   新しい列をどこに作るかを `.before`, `.after` 指定できる。
+
+:   複数の列をtidyselectして1列作りたいときは
+    `dplyr::pick(...)` と `Reduce(f, x)` / `purrr::reduce(.x, .f)` を組み合わせる:
+    ```r
+    diamonds |>
+      dplyr::mutate(prod = Reduce(`*`, pick(where(is.numeric)))) |>
+      dplyr::mutate(mean_xyz = Reduce(`+`, pick(x:z)) / ncol(pick(x:z))) |>
+      dplyr::mutate(max_xyz = Reduce(pmax, pick(x:z))) |>
+      print()
+    ```
+    `dplyr::select()` と違って `.data` を渡さなくてもいいので、
+    プレースホルダの貧弱な base pipe `|>` でも使える。
+
 `dplyr::rename(.data, ...)`
 :   列の改名。
     `mutate()`と同じようなイメージで `new = old` と指定。
@@ -175,137 +323,10 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
     diamonds |> dplyr::rename_with(toupper, everything())
     ```
 
-`dplyr::pull(.data, var = -1)`
-:   指定した1列をvector(またはlist)としてdata.frameから抜き出す。
-
-    ```r
-    diamonds |> head() |> dplyr::pull(price)
-    diamonds |> head() |> dplyr::pull("price")
-    diamonds |> head() |> dplyr::pull(7)
-    diamonds |> head() |> dplyr::pull(-4)
-    diamonds |> head() %>% `[[`("price")
-    diamonds |> head() %>% {.[["price"]]}
-    ```
-
-
-### 行
-
-`dplyr::filter(.data, ...)`
-:   条件を満たす行だけを返す。`base::subset()` と似たようなもの。
-
-    ```r
-    diamonds |> dplyr::filter(carat > 3 & price < 10000)
-    #   carat     cut color clarity depth table price     x     y     z
-    # 1  3.01 Premium     I      I1  62.7    58  8040  9.10  8.97  5.67
-    # 2  3.11    Fair     J      I1  65.9    57  9823  9.15  9.02  5.98
-    # 3  3.01 Premium     F      I1  62.2    56  9925  9.24  9.13  5.73
-    ```
-
-    {{<div class="warning">}}
-評価結果が `NA` となる行は除去される。
-特に不等号を使うときやや直感に反するので要注意。
-e.g., `filter(gene != "TP53")`
-{{</div>}}
-
-:   複数列で条件指定するには `if_any()`, `if_all()` が使える。
-
-    ```r
-    diamonds |> dplyr::filter(if_any(c(x, y, z), ~ .x > 20))
-    #   carat       cut color clarity depth table price     x     y     z
-    #   <dbl>     <ord> <ord>   <ord> <dbl> <dbl> <int> <dbl> <dbl> <dbl>
-    # 1  2.00   Premium     H     SI2  58.9  57.0 12210  8.09 58.90  8.06
-    # 2  0.51 Very Good     E     VS1  61.8  54.7  1970  5.12  5.15 31.80
-    # 3  0.51     Ideal     E     VS1  61.8  55.0  2075  5.15 31.80  5.12
-    diamonds |> dplyr::filter(if_all(where(is.numeric), ~ .x > 4))
-    #   carat     cut color clarity depth table price     x     y     z
-    #   <dbl>   <ord> <ord>   <ord> <dbl> <dbl> <int> <dbl> <dbl> <dbl>
-    # 1  4.01 Premium     I      I1  61.0    61 15223 10.14 10.10  6.17
-    # 2  4.01 Premium     J      I1  62.5    62 15223 10.02  9.94  6.24
-    # 3  4.13    Fair     H      I1  64.8    61 17329 10.00  9.85  6.43
-    # 4  5.01    Fair     J      I1  65.5    59 18018 10.74 10.54  6.98
-    # 5  4.50    Fair     J      I1  65.8    58 18531 10.23 10.16  6.72
-    ```
-
-
-`dplyr::distinct(.data, ..., .keep_all = FALSE)`
-:   指定した列に関してユニークな行のみ返す。
-    `base::unique.data.frame()` よりも高速で、
-    `filter(!duplicated(.[, ...]))` よりスマートで柔軟。
-    指定しなかった列を残すには `.keep_all = TRUE` とする。
-
-    ```r
-    diamonds |> dplyr::distinct(cut)
-    #         cut
-    # 1     Ideal
-    # 2   Premium
-    # 3      Good
-    # 4 Very Good
-    # 5      Fair
-    ```
-
-`dplyr::slice(.data, ...)`
-:   行番号を指定して行を絞る。
-    `` `[`(i,) `` の代わりに。
-
-    ```r
-    diamonds |> dplyr::slice(1, 2, 3)
-    #   carat     cut color clarity depth table price     x     y     z
-    # 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43
-    # 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31
-    # 3  0.23    Good     E     VS1  56.9    65   327  4.05  4.07  2.31
-    ```
-
-`dplyr::slice_head(.data, ..., n, prop)`, `slice_tail()`
-:   先頭・末尾の行を抽出。
-
-`dplyr::slice_sample(.data, ..., n, prop, weight_by = NULL, replace = FALSE)`
-:   指定した行数・割合だけランダムサンプルする。
-:   `sample_n()` と `sample_frac()` は非推奨。
-
-
-## 列の変更・追加
-
-`dplyr::mutate(.data, ...)`
-:   既存の列を変更したり、新しい列を作ったり。
-    `base::transform()` の改良版。
-    ```r
-    # modify existing column
-    diamonds |> dplyr::mutate(price = price * 107.54)
-
-    # create new column
-    diamonds |> dplyr::mutate(gram = 0.2 * carat)
-    ```
-
-    変数に入った文字列を列名として使いたい場合は上記 `select()` のときと同様、
-    {{embrace}} や !!unquote を使う。
-    左辺(代入先)の名前も文字列を使って表現したい場合は
-    [walrus(セイウチ)演算子 `:=`](https://www.tidyverse.org/blog/2020/02/glue-strings-and-tidy-eval/#custom-result-names)
-    を使う:
-    ```r
-    A = "carat"
-    B = "gram"
-
-    # unquoting only right hand side
-    diamonds |> dplyr::mutate(B = 0.2 * !!as.name(A))
-    #   carat     cut color clarity depth table price     x     y     z     B
-    # 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43 0.046
-    # 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31 0.042
-
-    # unquoting both sides
-    diamonds |> dplyr::mutate({{B}} := 0.2 * !!as.name(A))
-    #   carat     cut color clarity depth table price     x     y     z  gram
-    # 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43 0.046
-    # 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31 0.042
-    ```
-
-`dplyr::transmute(.data, ...)`
-:   指定した列以外を保持しない版 `mutate()` 。
-    言い換えると、列の中身の変更もできる版 `select()` 。
-
 
 ## data.frameの要約・集計・整列
 
-`dplyr::summarize(.data, ..., .group = NULL)`
+`dplyr::summarize(.data, ..., .by = NULL, .group = NULL)`
 :   指定した列に関数を適用して1行のdata.frameにまとめる。
     グループ化されていたらグループごとに適用して `bind_rows()` する。
 
@@ -322,10 +343,27 @@ e.g., `filter(gene != "TP53")`
     # 5     Ideal 0.7028370     18806
     ```
 
-:   関数の結果が長さ1じゃなくても大丈夫(v1.0.0):
+:   複数カラムに関数を適用するには `across()` を使う:
 
     ```r
-    diamonds |> dplyr::summarize(range(carat), range(price))
+    # summarize_at
+    diamonds |> summarize(across(starts_with("c"), max), .by = cut)
+
+    # summarize_if
+    diamonds |> summarize(across(where(is.numeric), max), .by = cut)
+
+    # summarize_all
+    diamonds |> summarize(across(everything(), max), .by = cut)
+    ```
+
+:   各列の計算結果は長さ1でなければいけない。
+    そうじゃなくても大丈夫な時期もあったが、その機能は `reframe()` に分離された。
+
+`dplyr::reframe(.data, ..., .by = NULL, .group = NULL)`
+:   各グループの結果が複数行にまたがっても大丈夫な `summarize()` 亜種。
+
+    ```r
+    diamonds |> dplyr::reframe(range(carat), range(price))
     #   range(carat) range(price)
     #          <dbl>        <int>
     # 1         0.20          326
@@ -336,7 +374,7 @@ e.g., `filter(gene != "TP53")`
 
     ```r
     diamonds |> dplyr::nest_by(cut) |>
-      dplyr::summarize(head(data, 2L))
+      dplyr::reframe(head(data, 2L))
     ```
 
     これを利用して複数ファイルを一気読みできる:
@@ -345,32 +383,11 @@ e.g., `filter(gene != "TP53")`
     path = fs::dir_ls("path/to/data", glob = "*.tsv")
     df = tibble(path) |>
       dplyr::rowwise() |>
-      dplyr::summarize(readr::read_tsv(path))
+      dplyr::reframe(readr::read_tsv(path))
     ```
 
-    けどまあ `purrr::map_dfr(path, read_tsv)` のほうが読みやすい気がする。
-
-:   複数カラムに関数を適用するには `across()` を使う:
-
-    ```r
-    median.ordered = function(x, na.rm = FALSE) {
-      levels(x)[median(as.integer(x), na.rm = na.rm)]
-    }
-
-    # summarize_at
-    diamonds |> group_by(cut) |>
-      summarize(across(starts_with("c"), median))
-
-    # summarize_if
-    diamonds |> group_by(cut) |>
-      summarize(across(where(is.numeric), mean, na.rm = TRUE))
-
-    # summarize_all
-    diamonds |> group_by(cut) |>
-      summarize(across(everything(), median, na.rm = TRUE))
-    ```
-
-    `*_at()`, `*_if()`, `*_all()`, `*_each()` は非推奨。
+    けどまあ `purrr::map(path, read_tsv) |> purrr::list_rbind()`
+    のほうが読みやすい気がする。
 
 `dplyr::tally(x, wt, sort = FALSE)`
 :   `summarize(x, n = n())` のショートカット。
@@ -381,7 +398,7 @@ e.g., `filter(gene != "TP53")`
 :   `group_by(...) |> tally()` のショートカット。
 :   `dplyr::add_count()` は元の形を維持したままカウント列を追加。
 
-`dplyr::arrange(.data, column1, column2, ...)`
+`dplyr::arrange(.data, ..., .by_group = FALSE)`
 :   指定した列の昇順でdata.frameの行を並べ替える。
     `arrange(desc(column))` で降順になる。
     `order()` を使うよりもタイピングの繰り返しが少ないし直感的
@@ -394,12 +411,6 @@ e.g., `filter(gene != "TP53")`
 `dplyr::relocate(.data, ..., .before = NULL, .after = NULL)`
 :   指定した列を左端(もしくは `.before`/`.after` 別の列)に移動する。
 
-`dplyr::slice_max(.data, order_by, ..., n, prop, with_ties = TRUE)`
-:   `order_by, ...` で指定した列の降順で `n` 行だけ返す。
-    境界のタイを保持する場合は `n` 行以上の出力になる。
-    昇順で取りたいときはマイナス指定か `slice_min()`。
-:   `top_n()` は非推奨。
-
 
 ## data.frameを結合
 
@@ -411,9 +422,15 @@ e.g., `filter(gene != "TP53")`
     `left_join()`: `x` の全ての行を保持。`y` に複数マッチする行があったらすべて保持。\
     `right_join()`: `y` の全ての行を保持。`x` に複数マッチする行があったらすべて保持。\
     `semi_join()`: `x` の全ての行を保持。`y` に複数マッチする行があっても元の `x` の行だけ保持。\
-    `anti_join()`: `y` にマッチしない `x` の行のみ。
+    `anti_join()`: `y` にマッチしない `x` の行のみ。\
+    `cross_join()`: マッチするものではなく、全ての組み合わせを作って結合。
 
-    列名が異なる場合は `by` を名前付きベクタにすればよい
+:   列名が異なる場合は `by` を名前付きvectorにする:
+    ```r
+    dplyr::full_join(band_members, band_instruments2, by = c(name = "artist"))
+    ```
+:   [`join_by()`](https://dplyr.tidyverse.org/reference/join_by.html)
+    を使えば不等号などを含めて柔軟に結合条件を指定できる。
 
 `dplyr::bind_rows(...)`, `dplyr::bind_cols(...)`
 :   標準の `rbind()`, `cbind()` より効率よくdata.frameを結合。
@@ -446,7 +463,16 @@ e.g., `filter(gene != "TP53")`
 
 `dplyr::row_number(x)`
 :   `rank(x, ties.method = "first", na.last = "keep")` のショートカット。
-    グループ毎に連番を振るのに便利。
+    グループ毎に連番を振るのに便利。同点でも登場順に違う順位を与える。
+:   `dplyr::min_rank(x)`: 同点には同じ値。2位タイがあれば3位不在。`ties.method = "min"`
+:   `dplyr::dense_rank(x)`: 同点には同じ値。2位タイがあっても3位から再スタート。
+
+`dplyr::consecutive_id(...)`
+:   値が変化したら番号をインクリメント。こういうグループ化したいときがある:
+    ```r
+    c(0, 0, 1, 1, 1, 0, 0, 1) |> dplyr::consecutive_id()
+    # [1] 1 1 2 2 2 3 3 4
+    ```
 
 `dplyr::ntile(x, n)`
 :   数値ベクトル `x` を順位によって `n` 個のクラスに均等分け
@@ -486,19 +512,31 @@ e.g., `filter(gene != "TP53")`
 [`tidyr`]({{< relref "tidyr.md" >}}) でネストして、
 [`purrr`]({{< relref "purrr.md" >}}) でその list of data.frames に処理を施し、
 [`dplyr`]({{< relref "dplyr.md" >}}) でその変更を元の data.frame に適用する、
-というのがtidyverse流のモダンなやり方らしい。
-それをもうちょいスマートにやる `group_modify()` がv0.8.1で導入された。
+というのがtidyverse流の柔軟なやり方。
+
+v0.8.1で `group_modify()` などが導入され、
+ネストせずグループ化までで済ませやすくなった。
+
+v1.1.0 からは多くの関数に一時グループ化
+[`.by` / `by`](https://dplyr.tidyverse.org/reference/dplyr_by.html)
+オプションが追加され、
+事前のグループ化と事後のグループ解除を省略しやすくなった。
 
 ```r
 diamonds |>
   dplyr::group_nest(cut) |>
-  dplyr::mutate(data = purrr::map(data, head, n = 2L)) |>
+  dplyr::mutate(data = purrr::map(data, \(x) head(x, n = 2L))) |>
   tidyr::unnest()
 
-# since dplyr 0.8.1
+# dplyr >= 0.8.1
 diamonds |>
   dplyr::group_by(cut) |>
-  dplyr::group_modify(~ head(.x, 2L))
+  dplyr::group_modify(\(x, key) head(x, 2L)) |>
+  dplyr::ungroup()
+
+# dplyr >= 1.1.0
+diamonds |>
+  dplyr::slice_head(n = 2L, by = cut)
 ```
 
 `dplyr::group_by(.data, ..., add = FALSE, .drop = group_by_drop_default(.data))`
@@ -523,9 +561,14 @@ diamonds |>
 
 `dplyr::group_nest(.tbl, ..., .key = "data", keep = FALSE)`
 :   入れ子 data.frame を作る。
-    `group_by(...) |> tidyr::nest()` のショートカット。
+    `tidyr::nest(.by = c(...))` と役割が被りすぎて微妙な立場らしい。
+:   `keep = TRUE` とするとグループ化に使った列も入れ子のdata.frameに残す。
+:   グループ化を解除してフラットな `tbl_df` を返す。
 
-`dplyr::group_split(.tbl, ..., keep = FALSE)`
+`dplyr::nest_by(.tbl, ..., .key = "data", keep = FALSE)`
+:   上記 `group_nest` とほぼ同じだが、こちらはグループ化されたまま `rowwise_df` を返す。
+
+`dplyr::group_split(.tbl, ..., .key = "data", .keep = FALSE)`
 :   list of data.frames に分割する。
     `.tbl |> split(.$group)` と同等だが、
     ドットダラーを使わくて済むし複数列をキーにするのも簡単。
@@ -533,18 +576,16 @@ diamonds |>
 `dplyr::group_indices(.data, ...)`
 :   `grouped_df` ではなくグループIDとして1からの整数列を返す版 `group_by()`
 
-`dplyr::group_modify(.tbl, .f, ...)`
+`dplyr::group_modify(.tbl, .f, ..., .keep = FALSE)`
 :   グループごとに `.f` を適用して再結合したdata.frameを返す。
 :   `.f` は2つの引数をとる関数。
     1つめは区切られたdata.frame、
     2つめはグループ化のキー(となった列を含む1行のdata.frame)。
-:   引数が1つだったり、違うものを2つめに受け取る関数はそのままじゃ渡せないので、
-    [purrrでよく見る無名関数]({{< relref "purrr.md#無名関数" >}})
-    に包んで渡す。
-    このとき2つの引数はそれぞれ `.x`, `.y` として参照できる。
+    引数が1つだったり、違うものを2つめに受け取る関数はそのままじゃ渡せないので、
+    [purrr]({{< relref "purrr.md" >}})のときと同様に無名関数に包んで渡す。
 
     ```r
-    diamonds |> dplyr::group_by(cut) |> dplyr::group_modify(~ head(.x, 2L))
+    diamonds |> dplyr::group_by(cut) |> dplyr::group_modify(\(x, key) head(x, 2L))
     #          cut carat color clarity depth table price     x     y     z
     #  1      Fair  0.22     E     VS2  65.1    61   337  3.87  3.78  2.49
     #  2      Fair  0.86     E     SI2  55.1    69  2757  6.45  6.33  3.52
@@ -558,7 +599,7 @@ diamonds |>
     # 10     Ideal  0.23     J     VS1  62.8    56   340  3.93  3.90  2.46
     ```
 
-:   `group_map()` は結果を `bind_rows()` せずlistとして返す亜種。
+:   `group_map()` は結果を `bind_rows()` せずlistとして返す亜種。<br>
     `group_walk()` は `.f` 適用前の `.tbl` を返す亜種。
 
 `dplyr::rowwise(data, ...)`
@@ -573,21 +614,40 @@ diamonds |>
     ```r
     diamonds |>
       dplyr::rowwise() |>
-      dplyr::mutate(mean = mean(c_across(x:z)))         # slow
+      dplyr::mutate(mean_xyz = mean(c_across(x:z)))                       # slow
 
-    diamonds |> dplyr::mutate(mean = (x + y + z) / 3)  # fast
+    diamonds |>
+      dplyr::mutate(mean_xyz = Reduce(`+`, pick(x:z)) / ncol(pick(x:z)))  # fast
     ```
+
+
+## deprecated/superceeded
 
 `dplyr::do(.data, ...)`
-:   非推奨。
-    代わりに `group_modify()` とかを使う。
-
+:   `reframe()`, `slice*()` などに取って代わられた。
     ```r
     diamonds |> dplyr::group_by(cut) |> dplyr::do(head(., 2L))
+    diamonds |> dplyr::slice_head(n = 2L, by = cut)
+    diamonds |> dplyr::reframe(across(everything(), range), .by = cut)
     ```
 
+`dplyr::transmute(.data, ...)`
+:   指定した列以外を保持しない版 `mutate()` 。
+    言い換えると、列の中身の変更もできる版 `select()` 。
+:   `mutate(.keep = "none")` に取って代わられた。
 
-## matrix, array
+`*_at()`, `*_if()`, `*_all()`, `*_each()`
+:   条件を満たす列・複数の列に関数を適用する `mutate()`, `summarize()` 亜種。
+    `across()` の登場により非推奨。
+
+`top_n()`, `top_frac()`
+:   `slice_min()`, `slice_max()` に取って代わられた。
+
+`sample_n()`, `sample_frac()`
+:   `slice_sample()` に取って代わられた。
+
+
+### matrix, array
 
 data.frame を主眼とする dplyr では matrix や array を扱わない。
 一時期存在していた `tbl_cube` 関連の機能は
