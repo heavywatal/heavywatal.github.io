@@ -130,11 +130,11 @@ See also [dplyr + magrittr on R]({{< relref "dplyr.md" >}})
 Rと同様、列を列として扱う。
 
 `df.melt(id_vars=None, value_vars=None, var_name=None, value_name='value', ...)`
-: 縦長に変形。Rでいう `tidyr::gather()`。
+: 縦長に変形。Rでいう `tidyr::pivot_longer()`。
   e.g., `iris.melt('species', var_name='variable', value_name='value')`
 
 `df.pivot(index=None, columns=None, values=None)`
-: 横長に変形。Rでいう `tidyr::spread()`。
+: 横長に変形。Rでいう `tidyr::pivot_wider()`。
   動かさない列を指定できないのかな？
   `reshape2::dcast()` のように複数の値をaggregationできる亜種として
   `df.pivot_table()` があるけどまあ使わないのが無難か。

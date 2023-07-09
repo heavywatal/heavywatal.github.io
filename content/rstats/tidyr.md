@@ -93,9 +93,9 @@ anscombe_long = anscombe |> tibble::rowid_to_column("id") |>
 data.frameを縦長(long-format)から横広(wide-format)に変形する。
 `reshape2::dcast()`, `tidyr::spread()` の改良版。
 
-`tidyr::pivot_wider(data, id_cols = NULL, names_from = name, ..., values_from = value, values_fill = NULL, values_fn = NULL)`
+`tidyr::pivot_wider(data, ..., id_cols = NULL, names_from = name, values_from = value, values_fill = NULL, values_fn = NULL)`
 
-`id_cols`
+`...`, `id_cols`
 : ここで指定した列のユニークな組み合わせが変形後にそれぞれ1行になる。
   `!`で反転指定、`:`で範囲指定、文字列、tidyselect関数なども使える。
   デフォルトでは `names_from` と `values_from` で指定されなかった列すべて。
@@ -307,7 +307,7 @@ See https://speakerdeck.com/yutannihilation/tidyr-pivot?slide=67 for details.
 
 https://tidyr.tidyverse.org/articles/nest.html
 
-### `tidyr::nest(data, ..., .names_sep = NULL)`
+### `tidyr::nest(data, ..., .by = NULL, .key = NULL, .names_sep = NULL)`
 
 data.frameをネストして(入れ子にして)、list of data.frames のカラムを作る。
 内側のdata.frameに押し込むカラムを `...` に指定するか、
@@ -326,14 +326,12 @@ diamonds |> nest(NEW_COLUMN = !cut)
 
 # equivalent to
 diamonds |> nest(NEW_COLUMN = c(carat, color:z))
+diamonds |> nest(.by = cut, .key = "NEW_COLUMN")
 diamonds |> dplyr::group_nest(cut, .key = "NEW_COLUMN")
-diamonds |> dplyr::nest_by(cut, .key = "NEW_COLUMN")
+diamonds |> dplyr::nest_by(cut, .key = "NEW_COLUMN") |> dplyr::ungroup()
 ```
 
-なんでもかんでもフラットなdata.frameにして
-[dplyr]({{< relref "dplyr.md" >}})を駆使する時代は終わり、
-ネストしておいて[purrr]({{< relref "purrr.md" >}})を適用するのが
-tidyverse時代のクールなやり方らしい。
+`.key` を使う方法でそれを省略すると `data` という名前の列になる。
 
 cf. [Hadley Wickham: Managing many models with R (YouTube)](https://www.youtube.com/watch?v=rz3_FDVt9eg)
 
@@ -351,6 +349,9 @@ diamonds |>
   nest(NEW_COLUMN = !cut) |>
   unnest(cols = NEW_COLUMN)
 ```
+
+方向を明示する `tidyr::unnest_longer()`, `tidyr::unnest_wider()` もある。
+
 
 ## その他の便利関数
 

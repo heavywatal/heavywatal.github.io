@@ -27,6 +27,9 @@ forループやlistの処理などをより簡潔に書けるようにしてく�
 ### 各要素に関数を適用するapply系関数
 
 ```r
+library(conflicted)
+library(tidyverse)
+
 v = list(1, 2L, "3")
 check_class = function(x) {paste0(x, " is ", class(x))}
 

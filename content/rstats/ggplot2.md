@@ -39,6 +39,7 @@ R標準の`boxplot()`や`hist()`などは前者の上に、
 例えばggplot2に付属の `mpg` データ:
 
 ```r
+library(conflicted)
 library(tidyverse)
 mpg
 #     manufacturer  model displ  year   cyl      trans   drv   cty   hwy    fl   class
