@@ -233,9 +233,13 @@ e.g., <code>scale_color_manual(values = c(&quot;4&quot; = &quot;red&quot;, f = &
 <li><code>labels</code>: breaksの値に対応して実際に表示されるラベル。
 breaksの値を受け取って文字列を返す関数
 (e.g., <code>scales::percent</code>, <code>scales::comma</code>) を渡すこともできる。</li>
-<li><code>na.value</code>: 欠損値のときどうするか</li>
 <li><code>limits</code>: 数値なら最大値と最小値のvector。
 文字列なら表示したいすべての値(順序も反映される)。</li>
+<li><code>rescaler</code>: データの値を [0, 1] の範囲にrescaleする関数。
+デフォルトは <code>scales::rescale()</code>。</li>
+<li><code>oob</code>: out-of-boundsをどうするか。デフォルトは <code>NA</code> 扱い。
+<code>scales::squish</code> を渡すとlimitsの値につぶす。</li>
+<li><code>na.value</code>: 欠損値のときどうするか。</li>
 <li><code>guide</code>: 文字列で <code>&quot;legend&quot;</code> か <code>&quot;colorbar&quot;</code>。
 さらに細かく制御したい場合は
 <a href="https://ggplot2.tidyverse.org/reference/guide_legend.html"><code>guide_legend()</code></a> や
