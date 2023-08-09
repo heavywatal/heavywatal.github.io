@@ -180,9 +180,13 @@ p1 + aes(x = displ, y = cty) + geom_point(aes(color = hwy)) + scale_color_fermen
 - `labels`: breaksの値に対応して実際に表示されるラベル。
   breaksの値を受け取って文字列を返す関数
   (e.g., `scales::percent`, `scales::comma`) を渡すこともできる。
-- `na.value`: 欠損値のときどうするか
 - `limits`: 数値なら最大値と最小値のvector。
   文字列なら表示したいすべての値(順序も反映される)。
+- `rescaler`: データの値を [0, 1] の範囲にrescaleする関数。
+  デフォルトは `scales::rescale()`。
+- `oob`: out-of-boundsをどうするか。デフォルトは `NA` 扱い。
+  `scales::squish` を渡すとlimitsの値につぶす。
+- `na.value`: 欠損値のときどうするか。
 - `guide`: 文字列で `"legend"` か `"colorbar"`。
   さらに細かく制御したい場合は
   [`guide_legend()`](https://ggplot2.tidyverse.org/reference/guide_legend.html) や
