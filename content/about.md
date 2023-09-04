@@ -185,6 +185,8 @@ Find me on
 
 ## Teaching / Outreach
 
+-   「[統計モデリング概論 DSHC 2023](/slides/tokiomarine2023/)」
+    東京海上 [Data Science Hill Climb](https://tokiomarine-dshc.com/) (2023-08)
 -   「[統計モデリング入門](/slides/iwate2023stats/)」
     岩手大学  [連合農学研究科](https://ugas.agr.iwate-u.ac.jp/) (2023-06)
 -   「[Rを用いたデータ解析の基礎](/slides/tohoku2023r/)」東北大学 進化学実習 (2023-04)
