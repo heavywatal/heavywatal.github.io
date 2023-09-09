@@ -26,10 +26,11 @@ ssh切断後も端末丸ごと継続され、後でまた繋ぎ直せる
 ## キーバインド
 
 tmux 内で **prefix key** に続けて特定のキーを送信すると、
-そのキーに応じたさまざまなコマンドを実行できる。
-prefix keyはデフォルトで <kbd>C-b</kbd> (<kbd>control-b</kbd>の略記)だが
-後述の設定で <kbd>C-t</kbd> に変更することにする。
-(e.g. <kbd>C-t ?</kbd> でキーバインドを列挙)。
+そのキーに応じたさまざまなコマンドを実行できる
+(e.g. <kbd>prefix</kbd><kbd>?</kbd> でキーバインドを列挙)。
+prefix keyはデフォルトで <kbd>C-b</kbd>
+(<kbd>control</kbd><kbd>b</kbd>の略記、<kbd>^b</kbd>と等価)
+だがそれはキャレット左移動に使われるべきなので後述のように変更する。
 
 key          | command | description
 ------------ | ------- | -----------
@@ -58,17 +59,31 @@ key          | command | description
 ### コピーモード
 
 上に戻ってスクロールしたり、その内容をコピーしたいときはコピーモードを使う。
-コピーモード中のキー操作はデフォルトでは `emacs` 風になっている。
+キーボードから <kbd>prefix</kbd><kbd>[</kbd> で入れるほか、
+`set -g mouse on` を設定すれば上スクロールで自然に入れる。
 
-1.  <kbd>C-t [</kbd> でコピーモードに入る
-1.  <kbd>C-space</kbd> でコピー開始点をマーク
-1.  <kbd>C-w</kbd> で終点をマークし、コピーモードを出る
-1.  <kbd>C-t ]</kbd> でペースト
+コピーモードでのキー操作はデフォルトだとemacs風で、
+環境変数 `EDITOR`/`VISUAL` やオプション `mode-keys` からviに変更できる。
+シェルを介さずに直接起動する場合も考えると明示的にオプション設定しておくのが無難。
 
-設定ファイルに
-`bind-key -t emacs-copy C-w copy-pipe "pbcopy"`
-と書いておけばコピー内容がMacのクリップボードにも送られるので、
-普通に<kbd>cmd-v</kbd>でペーストできる。
+command           | vi    | emacs | description
+----------------- | ----- | ----- | -----------
+`cancel` | <kbd>q</kbd> | <kbd>esc</kbd> | コピーモード終了
+`begin-selection` | <kbd>space</kbd> | <kbd>C-space</kbd> | 選択開始点をマーク
+`copy-pipe-and-cancel` | <kbd>enter</kbd> | <kbd>M-w</kbd> | 選択範囲内を `copy-command` に送って終了
+
+コピーと同時に終了せずモードや選択状態を維持したい場合はキーバインドを
+`copy-pipe` や `copy-pipe-no-clear` に変更する。
+
+`copy-pipe*` の宛先はデフォルトでtmux内のバッファになっており、
+ペーストはtmux内で <kbd>prefix</kbd><kbd>]</kbd> するしかない。
+macOSで次のように設定しておけば、
+<kbd>⌘command</kbd><kbd>c</kbd>と同じところにコピーして、
+アプリを超えて<kbd>⌘command</kbd><kbd>v</kbd>できるようになる:
+```
+if "command -v pbcopy" "set -s copy-command pbcopy"
+```
+
 
 ## 設定
 
@@ -77,9 +92,13 @@ key          | command | description
 <https://github.com/heavywatal/dotfiles/blob/master/.tmux.conf>
 
 `prefix <key>`
-:   <kbd>C-b</kbd> はキャレット左移動に使われるべきなので、
-    `zsh` や `emacs` で使わない <kbd>C-t</kbd> に変更する。
-    tmux の頭文字で覚えやすいし、<kbd>b</kbd> より若干近い。
+:   使えるのは `^h` や `^[` のようなASCIIキャレット記法が存在するもの。
+    シェルやエディタであまり使わず左手だけで完結できるキーがいい。
+    tmux の頭文字で覚えやすい <kbd>C-t</kbd> がよかったけど
+    [`fzf`](https://github.com/junegunn/fzf) と衝突。
+:   同じキーを `bind <key> send-prefix` に設定しておけば、
+    2回押しのうち1回分がtmuxを貫通して伝わる。
+    使う頻度の低いキーとの衝突ならこれで乗り切れる。
 
 `aggressive-resize [on | off]`
 :   サイズの異なる端末からattachしたときにウィンドウサイズを変更する。
@@ -116,16 +135,16 @@ fi
     tmux の新しいセッションを開始:
     ```sh
     ssh remote.sample.com
-    tmux -2u
+    tmux
     ```
-1.  ウィンドウを左右に分割し <kbd>C-t</kbd><kbd>%</kbd>、
+1.  ウィンドウを左右に分割し <kbd>prefix</kbd><kbd>%</kbd>、
     右ペインでPythonインタプリタを起動 `python`:
-1.  左ペインにフォーカスを戻し<kbd>C-t</kbd><kbd>o</kbd>、
+1.  左ペインにフォーカスを戻し<kbd>prefix</kbd><kbd>o</kbd>、
     ファイルを閲覧したり何だり `less ~/.tmux.conf`
-1.  新しいウィンドウを作って <kbd>C-t</kbd><kbd>c</kbd>、
+1.  新しいウィンドウを作って <kbd>prefix</kbd><kbd>c</kbd>、
     `root` 仕事をしたり何だり `su -`
-1.  ウィンドウを切り替える <kbd>C-t</kbd><kbd>l</kbd>, <kbd>C-t</kbd><kbd>n</kbd>, <kbd>C-t</kbd><kbd>p</kbd>
-1.  このセッションをデタッチし <kbd>C-t</kbd><kbd>d</kbd>、
+1.  ウィンドウを切り替える <kbd>prefix</kbd><kbd>l</kbd>, <kbd>prefix</kbd><kbd>n</kbd>, <kbd>prefix</kbd><kbd>p</kbd>
+1.  このセッションをデタッチし <kbd>prefix</kbd><kbd>d</kbd>、
     ログアウトして家に帰る `exit`
 1.  家からサーバーに再び ssh ログインして、
     さっきの tmux セッションをアタッチして作業を再開:
