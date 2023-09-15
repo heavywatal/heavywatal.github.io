@@ -39,26 +39,18 @@ GitHubに公開しておけば誰でも使えるようになるので、
     ```r
     usethis::create_package("hello")
     usethis::use_mit_license()
-    usethis::use_roxygen_md()
     usethis::use_package_doc()
     ```
 
 1.  `devtools::check()` で様子を見てみる。
-    LaTeX 関連で怒られたら足りないパッケージを入れる:
-    `sudo tlmgr install inconsolata helvetic`
 
 1.  ローカルgitリポジトリを作って最初のコミットをする:
     `usethis::use_git()`
 
-1.  GitHubかどこかに空のリポジトリを作る。
-    パッケージと同名でなくてもよい。
+1.  GitHubに同名のリポジトリを作ってプッシュ:
+    `usethis::use_github()`
 
-1.  そのリモートリポジトリにプッシュ:
-
-    ```sh
-    git remote add origin https::/github.com/heavywatal/rhello.git
-    git push -u origin master
-    ```
+    （リポジトリの名前をパッケージ名と違うものにしたい場合などは手動で）
 
 1.  とりあえず誰でもインストール可能なパッケージができたはず:
     ```r
@@ -336,10 +328,10 @@ increment = function(x) {x + 1}
     タイトルをコピペして全部同じにすると怒られる。
     2段落目を省略するとタイトルが流用される。
 -   空行だけでは切れ目として扱われないので `NULL` などを置いたりする。
--   [Rd形式の代わりにMarkdown形式で記述できる](https://cran.r-project.org/web/packages/roxygen2/vignettes/markdown.html)。
-    `usethis::use_roxygen_md()` を実行して
-    `DESCRIPTION` に `Roxygen: list(markdown = TRUE)` を書き加える全体設定か、
-    使いたいブロックにいちいち `@md` を書く個別設定か。
+-   [Rd形式の代わりにMarkdown形式で記述できる](https://roxygen2.r-lib.org/articles/markdown.html)。
+    `usethis::create_package()` がデフォルトで
+    `Roxygen: list(markdown = TRUE)` を `DESCRIPTION` に書いてくれる。
+    その全体設定をせず使いたいブロックにいちいち `@md` を書く個別設定も可能。
 -   `"_PACKAGE"` という文字列の上に書かれたブロックは、
     パッケージそのものに対応するヘルプ `*-package.Rd` になる。
     `@useDynLib` など全体に関わる設定はここでやるのが良いのでは。
@@ -349,8 +341,7 @@ increment = function(x) {x + 1}
     #' @aliases NULL hello-package
     #' @useDynLib hello, .registration = TRUE
     #' @importFrom Rcpp sourceCpp
-    #' @importFrom magrittr %>%
-    #' @importFrom rlang .data
+    #' @importFrom rlang .data := %||%
     #' @keywords internal
     "_PACKAGE"
     ```
@@ -377,7 +368,7 @@ increment = function(x) {x + 1}
 `@importFrom pkg func`
 :   `NAMESPACE` で `importFrom()` するパッケージと関数を指定。
     パッケージ内でよほど何回も登場する関数や演算子を登録する。
-    e.g., `@importFrom magrittr %>%` 。
+    e.g., `@importFrom rlang .data` 。
     重複して何度も書いちゃっても大丈夫。
 
 `@export`
