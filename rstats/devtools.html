@@ -116,27 +116,20 @@ GitHubに公開しておけば誰でも使えるようになるので、
 <p><a href="https://usethis.r-lib.org/">usethis</a> の関数をいくつか使って骨組みを作る:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">usethis</span><span class="o">::</span><span class="nf">create_package</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">usethis</span><span class="o">::</span><span class="nf">use_mit_license</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="n">usethis</span><span class="o">::</span><span class="nf">use_roxygen_md</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="n">usethis</span><span class="o">::</span><span class="nf">use_package_doc</span><span class="p">()</span>
 </span></span></code></pre></div></li>
 <li>
-<p><code>devtools::check()</code> で様子を見てみる。
-LaTeX 関連で怒られたら足りないパッケージを入れる:
-<code>sudo tlmgr install inconsolata helvetic</code></p>
+<p><code>devtools::check()</code> で様子を見てみる。</p>
 </li>
 <li>
 <p>ローカルgitリポジトリを作って最初のコミットをする:
 <code>usethis::use_git()</code></p>
 </li>
 <li>
-<p>GitHubかどこかに空のリポジトリを作る。
-パッケージと同名でなくてもよい。</p>
+<p>GitHubに同名のリポジトリを作ってプッシュ:
+<code>usethis::use_github()</code></p>
+<p>（リポジトリの名前をパッケージ名と違うものにしたい場合などは手動で）</p>
 </li>
-<li>
-<p>そのリモートリポジトリにプッシュ:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git remote add origin https::/github.com/heavywatal/rhello.git
-</span></span><span class="line"><span class="cl">git push -u origin master
-</span></span></code></pre></div></li>
 <li>
 <p>とりあえず誰でもインストール可能なパッケージができたはず:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&#34;heavywatal/rhello&#34;</span><span class="p">)</span>
@@ -361,10 +354,10 @@ Rcppコードをコンパイルするという意味ではない。</dd>
 <p>空行だけでは切れ目として扱われないので <code>NULL</code> などを置いたりする。</p>
 </li>
 <li>
-<p><a href="https://cran.r-project.org/web/packages/roxygen2/vignettes/markdown.html">Rd形式の代わりにMarkdown形式で記述できる</a>。
-<code>usethis::use_roxygen_md()</code> を実行して
-<code>DESCRIPTION</code> に <code>Roxygen: list(markdown = TRUE)</code> を書き加える全体設定か、
-使いたいブロックにいちいち <code>@md</code> を書く個別設定か。</p>
+<p><a href="https://roxygen2.r-lib.org/articles/markdown.html">Rd形式の代わりにMarkdown形式で記述できる</a>。
+<code>usethis::create_package()</code> がデフォルトで
+<code>Roxygen: list(markdown = TRUE)</code> を <code>DESCRIPTION</code> に書いてくれる。
+その全体設定をせず使いたいブロックにいちいち <code>@md</code> を書く個別設定も可能。</p>
 </li>
 <li>
 <p><code>&quot;_PACKAGE&quot;</code> という文字列の上に書かれたブロックは、
@@ -374,8 +367,7 @@ Rcppコードをコンパイルするという意味ではない。</dd>
 </span></span><span class="line"><span class="cl"><span class="c1">#&#39; @aliases NULL hello-package</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&#39; @useDynLib hello, .registration = TRUE</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&#39; @importFrom Rcpp sourceCpp</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#&#39; @importFrom magrittr %&gt;%</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#&#39; @importFrom rlang .data</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#&#39; @importFrom rlang .data := %||%</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&#39; @keywords internal</span>
 </span></span><span class="line"><span class="cl"><span class="s">&#34;_PACKAGE&#34;</span>
 </span></span></code></pre></div></li>
@@ -400,7 +392,7 @@ Rcppコードをコンパイルするという意味ではない。</dd>
 <dt><code>@importFrom pkg func</code></dt>
 <dd><code>NAMESPACE</code> で <code>importFrom()</code> するパッケージと関数を指定。
 パッケージ内でよほど何回も登場する関数や演算子を登録する。
-e.g., <code>@importFrom magrittr %&gt;%</code> 。
+e.g., <code>@importFrom rlang .data</code> 。
 重複して何度も書いちゃっても大丈夫。</dd>
 <dt><code>@export</code></dt>
 <dd><code>NAMESPACE</code> で <code>export()</code> する関数を指定。
