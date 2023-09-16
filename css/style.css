@@ -1,4 +1,5 @@
 :root {
+  color-scheme: light dark;
   --color-link: #429131;
   --color-text: #444;
   --emoji: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Sans Emoji";
@@ -7,6 +8,11 @@
   --monospace: Menlo, Consolas, "DejaVu Sans Mono", monospace, var(--emoji);
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-text: #bbb;
+  }
+}
 @font-face {
   font-family: "Yu Gothic Medium";
   src: local("Yu Gothic Medium");
@@ -32,7 +38,7 @@ html {
 
 body {
   color: var(--color-text);
-  background-color: #eee;
+  background-color: rgba(204, 204, 204, 0.2666666667);
   font-family: var(--sans-serif);
 }
 
@@ -55,15 +61,15 @@ li p {
 
 code {
   font-family: var(--monospace);
-  background-color: #f7f7f7;
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgba(153, 153, 153, 0.0941176471);
   padding: 2px 4px;
   font-size: 0.85em;
 }
 
 pre {
   font-family: var(--monospace);
-  background-color: #f6f8fa;
+  box-shadow: inset 0 0 9px rgba(153, 153, 153, 0.2);
+  background-color: rgba(153, 153, 153, 0.0235294118);
   padding: 6px 8px;
   margin-block: 0.3em 1em;
   line-height: 1.4;
@@ -81,10 +87,9 @@ kbd {
   font-size: 0.7em;
   padding: 1px 5px;
   margin: -3px 2px 0 0;
-  box-shadow: 0 -1px 0 #aaa inset;
-  border: solid 1px #ccc;
+  box-shadow: inset 0 -1px 0 rgba(136, 136, 136, 0.5333333333);
+  border: solid 1px rgba(136, 136, 136, 0.4);
   border-radius: 3px;
-  background: #fcfcfc;
 }
 
 dl dt {
@@ -101,18 +106,18 @@ dl dd p {
 }
 dl dd::before {
   content: ":";
-  color: #ccc;
+  opacity: 0.25;
   position: absolute;
   left: -0.8em;
 }
 
 table {
-  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 8px rgba(136, 136, 136, 0.4);
   border-spacing: 4px;
 }
 
 thead {
-  background: #ddd;
+  background: rgba(136, 136, 136, 0.2);
 }
 
 th,
@@ -124,7 +129,7 @@ blockquote {
   margin: 8px 0;
   padding-block: 4px 1px;
   padding-inline: 24px 0;
-  border-left: solid 2px #ccc;
+  border-left: solid 2px rgba(136, 136, 136, 0.5333333333);
   position: relative;
 }
 blockquote::before {
@@ -134,7 +139,7 @@ blockquote::before {
   left: 8px;
   font-size: 2.4rem;
   font-family: var(--serif);
-  color: #999;
+  color: rgba(136, 136, 136, 0.8);
 }
 
 a svg:hover {
@@ -174,13 +179,14 @@ header .logo {
 
 footer {
   width: 100%;
-  color: #999;
+  color: rgba(136, 136, 136, 0.8);
   padding: 12px 4px;
   text-align: right;
 }
 
 main,
-.menu {
+.menu,
+#search-form {
   box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
 }
 
@@ -189,7 +195,7 @@ main,
 }
 
 main {
-  background-color: #fff;
+  background-color: Canvas;
   max-width: calc(100% - 216px);
   width: 100%;
   padding: 24px;
@@ -207,20 +213,20 @@ article header h1 {
 }
 article h2 {
   font-size: 1.4rem;
-  background-color: #e8e8e8;
+  background: linear-gradient(to right, rgba(136, 136, 136, 0.2), rgba(136, 136, 136, 0));
   margin-block: 1.2em 0.8em;
-  padding: 6px 10px;
+  padding: 0.4rem 0.7rem;
   font-weight: normal;
   position: relative;
 }
 article h2::before {
   position: absolute;
-  top: 4px;
-  left: -18px;
-  line-height: 1.8ex;
-  font-size: 1.3rem;
+  top: 0.2rem;
+  left: -1.1rem;
+  line-height: 1.1em;
+  font-size: 1.2rem;
   white-space: pre;
-  color: #ccc;
+  color: rgba(136, 136, 136, 0.5333333333);
   content: "#\a#";
 }
 article header + h2 {
@@ -228,37 +234,38 @@ article header + h2 {
 }
 article h3 {
   font-size: 1.2rem;
-  border-bottom: solid 2px #ccc;
+  background: linear-gradient(to right, rgba(136, 136, 136, 0.1333333333), rgba(136, 136, 136, 0) 80%);
   margin-block: 1.2em 0.8em;
-  padding-block: 4px;
+  padding: 0.3rem 0.7rem;
   font-weight: normal;
   position: relative;
 }
 article h3::before {
   position: absolute;
   top: 0;
-  left: -16px;
-  line-height: 1.7ex;
+  left: -1rem;
+  line-height: 0.9em;
   font-size: 0.9rem;
   white-space: pre;
-  color: #ccc;
+  color: rgba(136, 136, 136, 0.5333333333);
   content: "#\a#\a#";
 }
 article h4 {
   font-size: 1.1rem;
+  background: linear-gradient(to right, rgba(136, 136, 136, 0.1333333333), rgba(136, 136, 136, 0) 60%);
   margin-block: 1.2em 0.8em;
-  padding-block: 3px;
+  padding: 0.2rem 0.6rem;
   font-weight: normal;
   position: relative;
 }
 article h4::before {
   position: absolute;
   top: 0;
-  left: -14px;
-  line-height: 1.6ex;
+  left: -0.9rem;
+  line-height: 0.82em;
   font-size: 0.6rem;
   white-space: pre;
-  color: #ccc;
+  color: rgba(136, 136, 136, 0.5333333333);
   content: "#\a#\a#\a#";
 }
 article a:hover {
@@ -266,7 +273,7 @@ article a:hover {
 }
 
 .menu {
-  background-color: #fff;
+  background-color: Canvas;
   padding: 0;
 }
 .menu ul {
@@ -294,12 +301,13 @@ article a:hover {
   position: relative;
   padding: 10px 6px;
   font-size: 1.1rem;
+  cursor: pointer;
 }
 .menu label::after {
   content: "❯";
   position: absolute;
   right: 8px;
-  color: #ccc;
+  color: rgba(136, 136, 136, 0.4);
   transition: all 0.2s ease-out;
 }
 .menu label.active::after {
@@ -315,26 +323,25 @@ article a:hover {
   transform: rotate(90deg);
 }
 .menu li {
-  background: #f4f4f4;
+  background: rgba(204, 204, 204, 0.1254901961);
   margin: 0;
 }
 .menu div,
 .menu label,
 .menu li,
 .menu label.active {
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid rgba(136, 136, 136, 0.4);
 }
 .menu .active {
   font-weight: bold;
   color: var(--color-link);
   border-color: var(--color-link);
 }
+.menu div:hover,
 .menu label:hover,
-.menu a:hover {
-  cursor: pointer;
-  color: var(--color-link);
-  background-color: #fff;
-  box-shadow: 0 0 6px #fff;
+.menu li:hover {
+  filter: brightness(1.1);
+  transform: scale(1.01);
 }
 
 #search-form {
@@ -460,13 +467,13 @@ article a:hover {
 .tags div,
 .terms dt div {
   display: inline-block;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: normal;
   padding: 1px 9px;
   border-radius: 2em;
-  color: #fff;
-  opacity: 0.8;
-  background-color: #999;
+  color: var(--color-text);
+  opacity: 0.88;
+  background-color: rgba(136, 136, 136, 0.3333333333);
 }
 .tags div a,
 .terms dt div a {
@@ -493,8 +500,8 @@ article a:hover {
   border-radius: 4px;
   font-weight: normal;
   color: #fff;
-  opacity: 0.8;
-  background-color: #999;
+  opacity: 0.66;
+  background-color: #888;
   position: relative;
 }
 .readmore:hover {
@@ -508,46 +515,66 @@ article a:hover {
   color: #fff;
 }
 
-.chroma .err,
-.chroma .w,
+.chroma {
+  /* Keyword */
+  /* Constant, Type, NameSpace */
+  /* Builtin, Exception, Label, Tag */
+  /* Variable */
+  /* Class, Function */
+  /* LiteralNumber */
+  /* LiteralString */
+  /* Comment */
+}
 .chroma .n,
 .chroma .o,
 .chroma .p {
-  color: #444;
+  opacity: 0.95;
 }
 .chroma .k,
 .chroma .kd,
 .chroma .kn,
 .chroma .kp,
 .chroma .kr,
+.chroma .kt,
 .chroma .ow {
-  color: #d73a49;
+  color: #56B4E9;
 }
 .chroma .kc,
-.chroma .kt,
 .chroma .no,
 .chroma .nd,
 .chroma .ni,
-.chroma .nn,
-.chroma .vc,
-.chroma .vg,
-.chroma .vi,
-.chroma .vm {
-  color: #005cc5;
-}
-.chroma .na,
-.chroma .nc,
-.chroma .nf,
-.chroma .nv,
-.chroma .nx {
-  color: #6f42c1;
+.chroma .nn {
+  color: #0072B2;
 }
 .chroma .nb,
 .chroma .bp,
 .chroma .ne,
 .chroma .nl,
 .chroma .nt {
-  color: #22863a;
+  color: #009E73;
+}
+.chroma .na,
+.chroma .nx,
+.chroma .nv,
+.chroma .vc,
+.chroma .vg,
+.chroma .vi,
+.chroma .vm {
+  color: #D55E00;
+}
+.chroma .nc,
+.chroma .nf,
+.chroma .fm {
+  color: #E69F00;
+}
+.chroma .m,
+.chroma .mb,
+.chroma .mf,
+.chroma .mh,
+.chroma .mi,
+.chroma .il,
+.chroma .mo {
+  color: #CC79A7;
 }
 .chroma .s,
 .chroma .sa,
@@ -563,16 +590,7 @@ article a:hover {
 .chroma .sr,
 .chroma .s1,
 .chroma .ss {
-  color: #032f62;
-}
-.chroma .m,
-.chroma .mb,
-.chroma .mf,
-.chroma .mh,
-.chroma .mi,
-.chroma .il,
-.chroma .mo {
-  color: #005cc5;
+  color: #CC79A7;
 }
 .chroma .c,
 .chroma .ch,
@@ -581,26 +599,36 @@ article a:hover {
 .chroma .cs,
 .chroma .cp,
 .chroma .cpf {
-  color: #6a737d;
+  opacity: 0.66;
 }
 .chroma .ge {
   font-style: italic;
 }
+.chroma .gh,
+.chroma .gu,
 .chroma .gs {
   font-weight: bold;
 }
-.chroma .gh,
-.chroma .gu {
-  color: #000;
+.chroma .gl {
+  text-decoration: underline;
 }
-.chroma .gd,
+.chroma .gi {
+  background-color: rgba(0, 255, 0, 0.1333333333);
+}
+.chroma .gd {
+  background-color: rgba(255, 0, 0, 0.1333333333);
+}
+.chroma .hl {
+  background-color: rgba(255, 255, 0, 0.2);
+}
 .chroma .gr,
-.chroma .gi,
 .chroma .go,
 .chroma .gp,
 .chroma .gt,
+.chroma .err,
+.chroma .w,
 .chroma .x {
-  color: #d70;
+  font-style: italic;
 }
 .chroma .ln {
   margin-right: 0.4em;
