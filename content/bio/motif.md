@@ -350,11 +350,12 @@ Raw Score (サイト単位)
 :   感度と精度の平均 ([Burset, M. and Guigó 1996](http://dx.doi.org/10.1006/geno.1996.0298))\
     $nASP = \frac{Sn + PPV}{2}$
 
-{{<div class="warning">}}
+<div class="warning">
+
 モチーフを含まないネガコンをデータに含めた場合は常に $TP = FN = 0$、
 アルゴリズムがモチーフ無しと予測した場合は常に $TP = FP = 0$
 となり、いろんな尺度が undefined/noninformative になってしまうのが悩みどころ
-{{</div>}}
+</div>
 
 ### 評価の要約方法
 

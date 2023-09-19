@@ -38,7 +38,8 @@ Q(t) &= \lim_{\mathrm dt \to 0} (1 - \lambda \mathrm dt) ^ {t/ \mathrm d t}\\
      &= e ^ {-\lambda t}
 \end{aligned}\]</div>
 
-{{<div class="note">}}
+<div class="note">
+
 ネイピア数
 
 <div>\[\begin{aligned}
@@ -47,9 +48,10 @@ Q(t) &= \lim_{\mathrm dt \to 0} (1 - \lambda \mathrm dt) ^ {t/ \mathrm d t}\\
    &= \lim_{y \to \infty} \left(1 + \frac 1 y \right)^{ay}\\
    &= e^a
 \end{aligned}\]</div>
-{{</div>}}
+</div>
 
-{{<div class="note">}}
+<div class="note">
+
 別の考え方
 
 <div>\[\begin{aligned}
@@ -60,7 +62,7 @@ Q(t + \mathrm dt) - Q(t) &= -\lambda Q(t) \mathrm dt\\
 \ln Q(t) &= -\lambda t\\
 Q(t) &= e ^ {-\lambda t}
 \end{aligned}\]</div>
-{{</div>}}
+</div>
 
 $t$ らへんで初めて起こる確率は、
 $t$ まで起こらず次の瞬間に起こる確率

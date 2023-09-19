@@ -7,13 +7,14 @@ tags = ["r"]
   weight = 99
 +++
 
-{{<div class="warning">}}
+<div class="warning">
+
 reshape2はもう古い。
 data.frameを処理をするなら、同じ作者が新しく設計しなおした
 [tidyr]({{< relref "tidyr.md" >}}) + [dplyr]({{< relref "dplyr.md" >}})
 のほうがより高速で洗練されているのでそちらを使おう。
 ただし3次元以上のarrayを扱うにはまだ便利。
-{{</div>}}
+</div>
 
 -   <http://had.co.nz/reshape/>
 -   <https://cran.r-project.org/web/packages/reshape2/>
@@ -26,7 +27,8 @@ data.frameの複数列の値を、カテゴリ変数1列と値1列の組に変�
 これにより、変換する列数の分だけdata.frameが縦長(long-format)になる。
 やや冗長性は増すが、[ggplot2]({{< relref "ggplot2.md" >}}) での作図などさまざまな操作がしやすくなる。
 
-{{<div class="note">}}
+<div class="note">
+
 この用途ならこれじゃなくて
 [`tidyr::gather()`]({{< relref "tidyr.md" >}}) を使おう。
 
@@ -36,7 +38,7 @@ array対象ならまだ使い道はある。
 ただしこれも
 [`dplyr::as.tbl_cube()`]({{< relref "dplyr.md" >}})
 のほうが高速。
-{{</div>}}
+</div>
 
 ```r
 reshape2::melt(data, id.vars, measure.vars,
@@ -110,7 +112,8 @@ reshape2::melt(data, id.vars, measure.vars,
 カテゴリ変数を含むdata.frameを `melt()` と逆方向に
 (long-formatからwide-formatへ)整形する。
 
-{{<div class="note">}}
+<div class="note">
+
 この用途ならこれじゃなくて
 [tidyr]({{< relref "tidyr.md" >}})の`spread()`を使おう。
 `fun.aggregate`のように関数をグループごとに適用したい場合は
@@ -118,7 +121,7 @@ reshape2::melt(data, id.vars, measure.vars,
 
 3次元以上のarrayを作りたいときは`reshape2::acast()`が便利。
 e.g., `acast(data, x ~ y ~ z, dplyr::first, value.var="v", fill=0)`
-{{</div>}}
+</div>
 
 ```r
 reshape2::dcast(data, formula, fun.aggregate=NULL, ...,
