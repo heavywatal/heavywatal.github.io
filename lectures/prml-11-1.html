@@ -112,18 +112,14 @@ PRML輪読会 11章1節
 モナコ公国のモンテカルロ地区に国営カジノがあって、
 ウラムの叔父がそこで負けて親戚から借金したことにちなんで
 同僚のニコラス・メトロポリスが命名したらしい。</p>
-
 </div>
-
 <p><strong>目標:</strong>
 変数 $\mathbf z$ の分布 $\color{red}{p(\mathbf z)}$ を考えた上で、
 ある関数 $\color{blue}{f(\mathbf z)}$ の値がどうなるか予測したい。</p>
 <div class="note">
 <p><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.1.png">Figure 11.1</a></p>
 <p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.1.png" alt="Figure 11.1" width="300px"></p>
-
 </div>
-
 <p>$\color{blue}{f(\textbf{z})}$ の期待値は (<strong>式11.1</strong>)</p>
 <div>\[
 \mathbb E[f] = \int f(\mathbf z) p(\mathbf z) \mathrm d \mathbf z
@@ -165,9 +161,7 @@ $z_i$ がそれぞれ独立な分布から出てくる場合はいいとして�
 変数の因果関係がこのような閉路なし有向グラフで表せる場合、同時確率は **式 8.4**
 $p(x_1)p(x_2)p(x_3)p(x_4 \mid x_1,x_2,x_3)p(x_5 \mid x_1,x_3)p(x_6 \mid x_4)p(x_7 \mid x_4,x_5)$
 のように条件付き確率の積で表せる。
-
 </div>
-
 <p>依存関係の親となるほうから順に条件付き確率で生成 (<em>ancestral sampling</em> <strong>伝承サンプリング</strong>)
 していくことにすると、同時確率は一般的に (<strong>式 11.4</strong>)</p>
 <div>\[
@@ -190,13 +184,10 @@ $z_1$ から $z_M$ まで一周するだけでは求まらず、
 いくつも生成しようとするとノイズが溜まるまで待たされることになるのであまり使わない。
 待ち時間無しにそれなりの擬似乱数を作ってくれるデバイスとして <code>/dev/urandom</code>
 があるが、ここから毎回読み出すのもコストが高いので、シード生成にのみ使う。</p>
-
 </div>
-
 <div class="note">
-<a href="/cxx/random.html">/cxx/random</a>
+<p><a href="/cxx/random.html">/cxx/random</a></p>
 </div>
-
 <h4 id="1111-standard-distributions">11.1.1 Standard distributions</h4>
 <p>変数 $z$ が $(0,1)$ の一様乱数だとして、
 適当な関数をかけて $y = f(z)$ とするとその分布は (<strong>式 11.5</strong>)</p>
@@ -214,9 +205,7 @@ z = h(y) \equiv \int _{-\infty}^y p(\hat y) \mathrm d\hat y
 <p><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.2.png">Figure 11.2</a></p>
 <p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.2.png" alt="Figure 11.2" width="300px"></p>
 縦軸を $z$ として青い線を逆関数の目線で見てみると、$y$ が中央付近に来るような $z$ の区間はすごく短いが、$y$ が左から3分の1くらいのところに来るような $z$ の区間はかなり長い。
-
 </div>
-
 <p>その不定積分の逆関数を一様乱数にかけて $y = h^{-1}(z)$ とすれば欲しかった分布の乱数が出てくる！</p>
 <p>例えば指数分布だと (<strong>式 11.7</strong>)</p>
 <div>\[\begin{aligned}
@@ -253,9 +242,7 @@ $z_1^2 + z_2^2 \leq 1$ を満たさなければ捨てる。
 <div class="note">
 <p><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.2.png">Figure 11.3</a></p>
 <p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.3.png" alt="Figure 11.3" width="200px"></p>
-
 </div>
-
 <p>$r^2 = z_1^2 + z_2^2$ として (<strong>式 11.10</strong>, <strong>式 11.11</strong>)</p>
 <div>\[\begin{aligned}
 y_1 &= z_1 \left(\frac {-2\ln r^2} {r^2}\right)^{1/2}\\
@@ -270,10 +257,9 @@ p(y_1, y_2) &= p(z_1, z_2) \left| \frac{\partial(z_1, z_2)} {\partial(y_1, y_2)}
 <p>のように表され、それぞれ独立な標準正規乱数になっていることがわかる。
 平均と分散を変えたければ、$y = \mu + \sigma z$ のように標準偏差をかけて平均を足せばよい。</p>
 <div class="note">
-C++11 の <code>std::normal_distribution</code> や GSL の <code>gsl_ran_gaussian</code> でも使われている。
-円に収まらないものを棄却する方法ではなく、三角関数を使ってそのまま用いる方法が取られる。
+<p>C++11 の <code>std::normal_distribution</code> や GSL の <code>gsl_ran_gaussian</code> でも使われている。
+円に収まらないものを棄却する方法ではなく、三角関数を使ってそのまま用いる方法が取られる。</p>
 </div>
-
 <p>多変量の場合も同様に $\mathbf y = \mathbf \mu + \mathbf{Lz}$ として動かせる。
 ただし共分散は $\mathbf \Sigma = \mathbf{LL}^\mathrm T$ として <strong>コレスキー分解</strong> (<em>Cholesky decomposition</em>)する。
 これは対称行列に特化したLU分解で、$\mathbf L$ は下三角行列になる。
