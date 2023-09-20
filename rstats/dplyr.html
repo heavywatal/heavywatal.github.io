@@ -110,15 +110,20 @@ dplyr — 高速data.frame処理
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">conflicted</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">## with piping</span>
 </span></span><span class="line"><span class="cl"><span class="n">result</span> <span class="o">=</span> <span class="n">diamonds</span> <span class="o">|&gt;</span>                   <span class="c1"># 生データから出発して</span>
 </span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="n">carat</span><span class="p">,</span> <span class="n">cut</span><span class="p">,</span> <span class="n">price</span><span class="p">)</span> <span class="o">|&gt;</span>  <span class="c1"># 列を抽出して</span>
 </span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">filter</span><span class="p">(</span><span class="n">carat</span> <span class="o">&gt;</span> <span class="m">1</span><span class="p">)</span> <span class="o">|&gt;</span>          <span class="c1"># 行を抽出して</span>
 </span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">|&gt;</span>              <span class="c1"># グループ化して</span>
 </span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">summarize</span><span class="p">(</span><span class="nf">mean</span><span class="p">(</span><span class="n">price</span><span class="p">))</span> <span class="o">|&gt;</span>     <span class="c1"># 平均を計算</span>
 </span></span><span class="line"><span class="cl">  <span class="nf">print</span><span class="p">()</span>                              <span class="c1"># 表示してみる</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">## with a temporary variable</span>
+</span></span></code></pre></div><pre tabindex="0"><code>        cut mean(price)
+1      Fair    7177.856
+2      Good    7753.601
+3 Very Good    8340.549
+4   Premium    8487.249
+5     Ideal    8674.227
+</code></pre><p>同じことをパイプなしでやると読みにくい:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1">## with a temporary variable</span>
 </span></span><span class="line"><span class="cl"><span class="n">result</span> <span class="o">=</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">select</span><span class="p">(</span><span class="n">diamonds</span><span class="p">,</span> <span class="n">carat</span><span class="p">,</span> <span class="n">cut</span><span class="p">,</span> <span class="n">price</span><span class="p">)</span> <span class="c1"># 列を抽出して</span>
 </span></span><span class="line"><span class="cl"><span class="n">result</span> <span class="o">=</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">filter</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">carat</span> <span class="o">&gt;</span> <span class="m">1</span><span class="p">)</span>           <span class="c1"># 行を抽出して</span>
 </span></span><span class="line"><span class="cl"><span class="n">result</span> <span class="o">=</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">cut</span><span class="p">)</span>               <span class="c1"># グループ化して</span>
@@ -132,15 +137,6 @@ dplyr — 高速data.frame処理
 </span></span><span class="line"><span class="cl">        <span class="n">carat</span> <span class="o">&gt;</span> <span class="m">1</span><span class="p">),</span>                             <span class="c1"># 行を抽出して</span>
 </span></span><span class="line"><span class="cl">      <span class="n">cut</span><span class="p">),</span>                                 <span class="c1"># グループ化して</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">mean</span><span class="p">(</span><span class="n">price</span><span class="p">))</span>                        <span class="c1"># 平均を計算</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">## result</span>
-</span></span><span class="line"><span class="cl">        <span class="n">cut</span> <span class="nf">mean</span><span class="p">(</span><span class="n">price</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">      <span class="o">&lt;</span><span class="n">ord</span><span class="o">&gt;</span>       <span class="o">&lt;</span><span class="n">dbl</span><span class="o">&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="m">1</span>      <span class="n">Fair</span>    <span class="m">7177.856</span>
-</span></span><span class="line"><span class="cl"><span class="m">2</span>      <span class="n">Good</span>    <span class="m">7753.601</span>
-</span></span><span class="line"><span class="cl"><span class="m">3</span> <span class="n">Very</span> <span class="n">Good</span>    <span class="m">8340.549</span>
-</span></span><span class="line"><span class="cl"><span class="m">4</span>   <span class="n">Premium</span>    <span class="m">8487.249</span>
-</span></span><span class="line"><span class="cl"><span class="m">5</span>     <span class="n">Ideal</span>    <span class="m">8674.227</span>
 </span></span></code></pre></div><p>R 4.1 から標準で <code>|&gt;</code> が使えるようになり、徐々に普及してきた。
 それまでdplyr始めtidyverseでは
 <a href="https://magrittr.tidyverse.org/">magrittr</a> の <code>%&gt;%</code> が長らく使われていた。
@@ -215,55 +211,49 @@ R 4.2 の段階では <code>|&gt;</code> のプレースホルダー <code>_</co
 <dt><code>dplyr::filter(.data, ..., .by = NULL, .preserve = FALSE)</code></dt>
 <dd>条件を満たす行だけを返す。<code>base::subset()</code> と似たようなもの。
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">filter</span><span class="p">(</span><span class="n">carat</span> <span class="o">&gt;</span> <span class="m">3</span> <span class="o">&amp;</span> <span class="n">price</span> <span class="o">&lt;</span> <span class="m">10000</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#   carat     cut color clarity depth table price     x     y     z</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 1  3.01 Premium     I      I1  62.7    58  8040  9.10  8.97  5.67</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 2  3.11    Fair     J      I1  65.9    57  9823  9.15  9.02  5.98</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 3  3.01 Premium     F      I1  62.2    56  9925  9.24  9.13  5.73</span>
-</span></span></code></pre></div><div class="warning">
-<p>評価結果が <code>NA</code> となる行は除去される。
+</span></span></code></pre></div><pre tabindex="0"><code>  carat     cut color clarity depth table price    x    y    z
+1  3.01 Premium     I      I1  62.7    58  8040 9.10 8.97 5.67
+2  3.11    Fair     J      I1  65.9    57  9823 9.15 9.02 5.98
+3  3.01 Premium     F      I1  62.2    56  9925 9.24 9.13 5.73
+</code></pre><p>評価結果が <code>NA</code> となる行は除去される。
 特に不等号を使うときやや直感に反するので要注意。
 e.g., <code>filter(gene != &quot;TP53&quot;)</code></p>
-</div>
 </dd>
 <dd>
 <p>複数列で条件指定するには <code>if_any()</code>, <code>if_all()</code> が使える。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">filter</span><span class="p">(</span><span class="nf">if_any</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span> <span class="nf">\</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="m">20</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#   carat       cut color clarity depth table price     x     y     z</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#   &lt;dbl&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;ord&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 1  2.00   Premium     H     SI2  58.9  57.0 12210  8.09 58.90  8.06</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 2  0.51 Very Good     E     VS1  61.8  54.7  1970  5.12  5.15 31.80</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 3  0.51     Ideal     E     VS1  61.8  55.0  2075  5.15 31.80  5.12</span>
-</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">filter</span><span class="p">(</span><span class="nf">if_all</span><span class="p">(</span><span class="nf">where</span><span class="p">(</span><span class="n">is.numeric</span><span class="p">),</span> <span class="nf">\</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="m">4</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#   carat     cut color clarity depth table price     x     y     z</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#   &lt;dbl&gt;   &lt;ord&gt; &lt;ord&gt;   &lt;ord&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 1  4.01 Premium     I      I1  61.0    61 15223 10.14 10.10  6.17</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 2  4.01 Premium     J      I1  62.5    62 15223 10.02  9.94  6.24</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 3  4.13    Fair     H      I1  64.8    61 17329 10.00  9.85  6.43</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 4  5.01    Fair     J      I1  65.5    59 18018 10.74 10.54  6.98</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 5  4.50    Fair     J      I1  65.8    58 18531 10.23 10.16  6.72</span>
-</span></span></code></pre></div></dd>
+</span></span></code></pre></div><pre tabindex="0"><code>  carat       cut color clarity depth table price    x     y     z
+1  2.00   Premium     H     SI2  58.9  57.0 12210 8.09 58.90  8.06
+2  0.51 Very Good     E     VS1  61.8  54.7  1970 5.12  5.15 31.80
+3  0.51     Ideal     E     VS1  61.8  55.0  2075 5.15 31.80  5.12
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">filter</span><span class="p">(</span><span class="nf">if_all</span><span class="p">(</span><span class="nf">where</span><span class="p">(</span><span class="n">is.numeric</span><span class="p">),</span> <span class="nf">\</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="m">4.1</span><span class="p">))</span>
+</span></span></code></pre></div><pre tabindex="0"><code>  carat  cut color clarity depth table price     x     y    z
+1  4.13 Fair     H      I1  64.8    61 17329 10.00  9.85 6.43
+2  5.01 Fair     J      I1  65.5    59 18018 10.74 10.54 6.98
+3  4.50 Fair     J      I1  65.8    58 18531 10.23 10.16 6.72
+</code></pre></dd>
 <dt><code>dplyr::distinct(.data, ..., .keep_all = FALSE)</code></dt>
 <dd>指定した列に関してユニークな行のみ返す。
 <code>base::unique.data.frame()</code> よりも高速で、
 <code>filter(!duplicated(.[, ...]))</code> よりスマートで柔軟。
 指定しなかった列を残すには <code>.keep_all = TRUE</code> とする。
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">distinct</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#         cut</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 1     Ideal</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 2   Premium</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 3      Good</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 4 Very Good</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 5      Fair</span>
-</span></span></code></pre></div></dd>
+</span></span></code></pre></div><pre tabindex="0"><code>        cut
+1     Ideal
+2   Premium
+3      Good
+4 Very Good
+5      Fair
+</code></pre></dd>
 <dt><code>dplyr::slice(.data, ..., .by = NULL, .preserve = FALSE)</code></dt>
 <dd>行番号を指定して行を絞る。
 <code>`[`(i,)</code> の代わりに。
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">slice</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#   carat     cut color clarity depth table price     x     y     z</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 3  0.23    Good     E     VS1  56.9    65   327  4.05  4.07  2.31</span>
-</span></span></code></pre></div></dd>
+</span></span></code></pre></div><pre tabindex="0"><code>  carat     cut color clarity depth table price    x    y    z
+1  0.23   Ideal     E     SI2  61.5    55   326 3.95 3.98 2.43
+2  0.21 Premium     E     SI1  59.8    61   326 3.89 3.84 2.31
+3  0.23    Good     E     VS1  56.9    65   327 4.05 4.07 2.31
+</code></pre></dd>
 <dt><code>dplyr::slice_head(.data, ..., n, prop)</code>, <code>slice_tail()</code></dt>
 <dd>先頭・末尾の行を抽出。</dd>
 <dt><code>dplyr::slice_max(.data, order_by, ..., n, prop, by = NULL, with_ties = TRUE, na_rm = FALSE)</code></dt>
@@ -276,34 +266,41 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code></p>
 <h2 id="列の変更追加">列の変更・追加</h2>
 <dl>
 <dt><code>dplyr::mutate(.data, ..., .by = NULL, .keep = &quot;all&quot;, .before = NULL, .after = NULL)</code></dt>
-<dd>既存の列を変更したり、新しい列を作ったり。
+<dd>新しい列を作ったり、既存の列を変更したり。
 <code>base::transform()</code> の改良版。
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1"># modify existing column</span>
-</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">price</span> <span class="o">=</span> <span class="n">price</span> <span class="o">*</span> <span class="m">107.54</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># create new column</span>
-</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">gram</span> <span class="o">=</span> <span class="m">0.2</span> <span class="o">*</span> <span class="n">carat</span><span class="p">)</span>
-</span></span></code></pre></div></dd>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">gram</span> <span class="o">=</span> <span class="m">0.2</span> <span class="o">*</span> <span class="n">carat</span><span class="p">)</span> <span class="o">|&gt;</span>  <span class="c1"># create new</span>
+</span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">price</span> <span class="o">=</span> <span class="n">price</span> <span class="o">*</span> <span class="m">140</span><span class="p">)</span>    <span class="c1"># modify existing</span>
+</span></span></code></pre></div><pre tabindex="0"><code>      carat     cut color clarity depth table  price    x    y    z  gram
+    1  0.23   Ideal     E     SI2  61.5    55  45640 3.95 3.98 2.43 0.046
+    2  0.21 Premium     E     SI1  59.8    61  45640 3.89 3.84 2.31 0.042
+   --                                                                    
+53939  0.86 Premium     H     SI2  61.0    58 385980 6.15 6.12 3.74 0.172
+53940  0.75   Ideal     D     SI2  62.2    55 385980 5.83 5.87 3.64 0.150
+</code></pre></dd>
 <dd>変数に入った文字列を列名として使いたい場合は上記 <code>select()</code> のときと同様、
 {{embrace}} や !!unquote を使う。
-左辺(代入先)の名前も文字列を使って表現したい場合は
-<a href="https://www.tidyverse.org/blog/2020/02/glue-strings-and-tidy-eval/#custom-result-names">walrus(セイウチ)演算子 <code>:=</code></a>
-を使う:
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">A</span> <span class="o">=</span> <span class="s">&#34;carat&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="n">B</span> <span class="o">=</span> <span class="s">&#34;gram&#34;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># unquoting only right hand side</span>
 </span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">B</span> <span class="o">=</span> <span class="m">0.2</span> <span class="o">*</span> <span class="o">!!</span><span class="nf">as.name</span><span class="p">(</span><span class="n">A</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#   carat     cut color clarity depth table price     x     y     z     B</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43 0.046</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31 0.042</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># unquoting both sides</span>
-</span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">({{</span><span class="n">B</span><span class="p">}}</span> <span class="o">:=</span> <span class="m">0.2</span> <span class="o">*</span> <span class="o">!!</span><span class="nf">as.name</span><span class="p">(</span><span class="n">A</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#   carat     cut color clarity depth table price     x     y     z  gram</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 1  0.23   Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43 0.046</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 2  0.21 Premium     E     SI1  59.8    61   326  3.89  3.84  2.31 0.042</span>
-</span></span></code></pre></div></dd>
+</span></span></code></pre></div><pre tabindex="0"><code>      carat     cut color clarity depth table price    x    y    z     B
+    1  0.23   Ideal     E     SI2  61.5    55   326 3.95 3.98 2.43 0.046
+    2  0.21 Premium     E     SI1  59.8    61   326 3.89 3.84 2.31 0.042
+   --                                                                   
+53939  0.86 Premium     H     SI2  61.0    58  2757 6.15 6.12 3.74 0.172
+53940  0.75   Ideal     D     SI2  62.2    55  2757 5.83 5.87 3.64 0.150
+</code></pre></dd>
+<dd>左辺(代入先)の名前も文字列を使って表現したい場合は
+<a href="https://www.tidyverse.org/blog/2020/02/glue-strings-and-tidy-eval/#custom-result-names">walrus(セイウチ)演算子 <code>:=</code></a>
+を使う:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">({{</span><span class="n">B</span><span class="p">}}</span> <span class="o">:=</span> <span class="m">0.2</span> <span class="o">*</span> <span class="o">!!</span><span class="nf">as.name</span><span class="p">(</span><span class="n">A</span><span class="p">))</span>
+</span></span></code></pre></div><pre tabindex="0"><code>      carat     cut color clarity depth table price    x    y    z  gram
+    1  0.23   Ideal     E     SI2  61.5    55   326 3.95 3.98 2.43 0.046
+    2  0.21 Premium     E     SI1  59.8    61   326 3.89 3.84 2.31 0.042
+   --                                                                   
+53939  0.86 Premium     H     SI2  61.0    58  2757 6.15 6.12 3.74 0.172
+53940  0.75   Ideal     D     SI2  62.2    55  2757 5.83 5.87 3.64 0.150
+</code></pre></dd>
 <dd><ul>
 <li><code>.keep = &quot;all&quot;</code>: すべての列を残すデフォルト。</li>
 <li><code>.keep = &quot;used&quot;</code>: 入力に使った列と出力の列のみ残す。</li>
@@ -327,28 +324,35 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code></p>
 <dd>列の改名。
 <code>mutate()</code>と同じようなイメージで <code>new = old</code> と指定。
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">rename</span><span class="p">(</span><span class="n">SIZE</span> <span class="o">=</span> <span class="n">carat</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#    SIZE       cut color clarity depth table price     x     y     z</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 1  0.23     Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 2  0.21   Premium     E     SI1  59.8    61   326  3.89  3.84  2.31</span>
-</span></span></code></pre></div></dd>
+</span></span></code></pre></div><pre tabindex="0"><code>      SIZE     cut color clarity depth table price    x    y    z
+    1 0.23   Ideal     E     SI2  61.5    55   326 3.95 3.98 2.43
+    2 0.21 Premium     E     SI1  59.8    61   326 3.89 3.84 2.31
+   --                                                            
+53939 0.86 Premium     H     SI2  61.0    58  2757 6.15 6.12 3.74
+53940 0.75   Ideal     D     SI2  62.2    55  2757 5.83 5.87 3.64
+</code></pre></dd>
 <dd>変数に入った文字列を使う場合も<code>mutate()</code>と同様に {{embrace}} や !!unquote で:
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">old_name</span> <span class="o">=</span> <span class="s">&#34;carat&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="n">new_name</span> <span class="o">=</span> <span class="nf">toupper</span><span class="p">(</span><span class="n">old_name</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">rename</span><span class="p">({{</span><span class="n">new_name</span><span class="p">}}</span> <span class="o">:=</span> <span class="p">{{</span><span class="n">old_name</span><span class="p">}})</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># tbl_df [53940 x 10]</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#   CARAT       cut color clarity depth table price     x     y     z</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 1  0.23     Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 2  0.21   Premium     E     SI1  59.8    61   326  3.89  3.84  2.31</span>
-</span></span></code></pre></div><p>名前付きベクターと
+</span></span></code></pre></div><pre tabindex="0"><code>      CARAT     cut color clarity depth table price    x    y    z
+    1  0.23   Ideal     E     SI2  61.5    55   326 3.95 3.98 2.43
+    2  0.21 Premium     E     SI1  59.8    61   326 3.89 3.84 2.31
+   --                                                             
+53939  0.86 Premium     H     SI2  61.0    58  2757 6.15 6.12 3.74
+53940  0.75   Ideal     D     SI2  62.2    55  2757 5.83 5.87 3.64
+</code></pre><p>名前付きベクターと
 <a href="https://rlang.r-lib.org/reference/splice-operator.html">!!!unquote-splicing</a>
 を使えば一括指定できる:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">named_vec</span> <span class="o">=</span> <span class="nf">setNames</span><span class="p">(</span><span class="nf">names</span><span class="p">(</span><span class="n">diamonds</span><span class="p">),</span> <span class="kc">LETTERS</span><span class="nf">[seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">10</span><span class="p">)</span><span class="n">]</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">rename</span><span class="p">(</span><span class="o">!!!</span><span class="n">named_vec</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#       A         B     C     D     E     F     G     H     I     J</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#   &lt;dbl&gt;     &lt;ord&gt; &lt;ord&gt; &lt;ord&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 1  0.23     Ideal     E   SI2  61.5    55   326  3.95  3.98  2.43</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 2  0.21   Premium     E   SI1  59.8    61   326  3.89  3.84  2.31</span>
-</span></span></code></pre></div></dd>
+</span></span></code></pre></div><pre tabindex="0"><code>         A       B C   D    E  F    G    H    I    J
+    1 0.23   Ideal E SI2 61.5 55  326 3.95 3.98 2.43
+    2 0.21 Premium E SI1 59.8 61  326 3.89 3.84 2.31
+   --                                               
+53939 0.86 Premium H SI2 61.0 58 2757 6.15 6.12 3.74
+53940 0.75   Ideal D SI2 62.2 55 2757 5.83 5.87 3.64
+</code></pre></dd>
 <dd><code>rename_with(.tbl, .fn, .cols = everything(), ...)</code>
 はリネーム関数を渡せる亜種:
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">rename_with</span><span class="p">(</span><span class="n">toupper</span><span class="p">,</span> <span class="nf">everything</span><span class="p">())</span>
@@ -362,14 +366,13 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span>
 </span></span><span class="line"><span class="cl">  <span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">|&gt;</span>
 </span></span><span class="line"><span class="cl">  <span class="nf">summarize</span><span class="p">(</span><span class="n">avg_carat</span> <span class="o">=</span> <span class="nf">mean</span><span class="p">(</span><span class="n">carat</span><span class="p">),</span> <span class="n">max_price</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="n">price</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#         cut avg_carat max_price</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#       &lt;ord&gt;     &lt;dbl&gt;     &lt;int&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 1      Fair 1.0461366     18574</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 2      Good 0.8491847     18788</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 3 Very Good 0.8063814     18818</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 4   Premium 0.8919549     18823</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 5     Ideal 0.7028370     18806</span>
-</span></span></code></pre></div></dd>
+</span></span></code></pre></div><pre tabindex="0"><code>        cut avg_carat max_price
+1      Fair 1.0461366     18574
+2      Good 0.8491847     18788
+3 Very Good 0.8063814     18818
+4   Premium 0.8919549     18823
+5     Ideal 0.7028370     18806
+</code></pre></dd>
 <dd>
 <p>複数カラムに関数を適用するには <code>across()</code> を使う:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1"># summarize_at</span>
@@ -388,11 +391,10 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code></p>
 <dt><code>dplyr::reframe(.data, ..., .by = NULL, .group = NULL)</code></dt>
 <dd>各グループの結果が複数行にまたがっても大丈夫な <code>summarize()</code> 亜種。
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">reframe</span><span class="p">(</span><span class="nf">range</span><span class="p">(</span><span class="n">carat</span><span class="p">),</span> <span class="nf">range</span><span class="p">(</span><span class="n">price</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#   range(carat) range(price)</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#          &lt;dbl&gt;        &lt;int&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 1         0.20          326</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 2         5.01        18823</span>
-</span></span></code></pre></div></dd>
+</span></span></code></pre></div><pre tabindex="0"><code>  range(carat) range(price)
+1         0.20          326
+2         5.01        18823
+</code></pre></dd>
 <dd>
 <p>各グループの結果がtibbleの場合、結合・展開してくれる:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">nest_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">|&gt;</span>
@@ -472,8 +474,8 @@ NAのときにどうするかを指定できるのも大変良い。
 <dt><code>dplyr::consecutive_id(...)</code></dt>
 <dd>値が変化したら番号をインクリメント。こういうグループ化したいときがある:
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">consecutive_id</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># [1] 1 1 2 2 2 3 3 4</span>
-</span></span></code></pre></div></dd>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] 1 1 2 2 2 3 3 4
+</code></pre></dd>
 <dt><code>dplyr::ntile(x, n)</code></dt>
 <dd>数値ベクトル <code>x</code> を順位によって <code>n</code> 個のクラスに均等分け</dd>
 <dt><code>dplyr::n_distinct(x)</code></dt>
@@ -488,7 +490,8 @@ NAのときにどうするかを指定できるのも大変良い。
 <dd><code>x</code> の中身を <code>n</code> だけずらして <code>default</code> で埋める。
 <code>lead()</code> は前に、<code>lag()</code> は後ろにずらす
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">lag</span><span class="p">(</span><span class="nf">seq_len</span><span class="p">(</span><span class="m">5</span><span class="p">),</span> <span class="m">2</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="c1">## [1] NA NA 1 2 3</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] NA NA  1  2  3
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1">## [1] NA NA 1 2 3</span>
 </span></span></code></pre></div></dd>
 <dt><code>dplyr::between(x, left, right)</code></dt>
 <dd><code>left &lt;= x &amp; x &lt;= right</code> のショートカット。</dd>
@@ -530,13 +533,13 @@ e.g. <code>summarize()</code>, <code>slice()</code>, <code>tally()</code>, <code
 <dt><code>dplyr::group_data(.data)</code></dt>
 <dd>グループ情報を参照:
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_data</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#         cut           .rows</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 1      Fair    &lt;int [1610]&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 2      Good    &lt;int [4906]&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 3 Very Good   &lt;int [12082]&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 4   Premium   &lt;int [13791]&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 5     Ideal   &lt;int [21551]&gt;</span>
-</span></span></code></pre></div><p>左側のキー列だけ欲しければ <code>dplyr::group_keys()</code> 、<br>
+</span></span></code></pre></div><pre tabindex="0"><code>        cut         .rows
+1      Fair  &lt;int [1610]&gt;
+2      Good  &lt;int [4906]&gt;
+3 Very Good &lt;int [12082]&gt;
+4   Premium &lt;int [13791]&gt;
+5     Ideal &lt;int [21551]&gt;
+</code></pre><p>左側のキー列だけ欲しければ <code>dplyr::group_keys()</code> 、<br>
 左端の行番号だけ欲しければ <code>dplyr::group_rows()</code> 。</p>
 </dd>
 <dt><code>dplyr::group_nest(.tbl, ..., .key = &quot;data&quot;, keep = FALSE)</code></dt>
@@ -560,18 +563,17 @@ e.g. <code>summarize()</code>, <code>slice()</code>, <code>tally()</code>, <code
 引数が1つだったり、違うものを2つめに受け取る関数はそのままじゃ渡せないので、
 <a href="/rstats/purrr.html">purrr</a>のときと同様に無名関数に包んで渡す。
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_modify</span><span class="p">(</span><span class="nf">\</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="nf">head</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="m">2L</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#          cut carat color clarity depth table price     x     y     z</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#  1      Fair  0.22     E     VS2  65.1    61   337  3.87  3.78  2.49</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#  2      Fair  0.86     E     SI2  55.1    69  2757  6.45  6.33  3.52</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#  3      Good  0.23     E     VS1  56.9    65   327  4.05  4.07  2.31</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#  4      Good  0.31     J     SI2  63.3    58   335  4.34  4.35  2.75</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#  5 Very Good  0.24     J    VVS2  62.8    57   336  3.94  3.96  2.48</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#  6 Very Good  0.24     I    VVS1  62.3    57   336  3.95  3.98  2.47</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#  7   Premium  0.21     E     SI1  59.8    61   326  3.89  3.84  2.31</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#  8   Premium  0.29     I     VS2  62.4    58   334  4.20  4.23  2.63</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#  9     Ideal  0.23     E     SI2  61.5    55   326  3.95  3.98  2.43</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 10     Ideal  0.23     J     VS1  62.8    56   340  3.93  3.90  2.46</span>
-</span></span></code></pre></div></dd>
+</span></span></code></pre></div><pre tabindex="0"><code>       cut carat color clarity depth table price    x    y    z
+ 1    Fair  0.22     E     VS2  65.1    61   337 3.87 3.78 2.49
+ 2    Fair  0.86     E     SI2  55.1    69  2757 6.45 6.33 3.52
+ 3    Good  0.23     E     VS1  56.9    65   327 4.05 4.07 2.31
+ 4    Good  0.31     J     SI2  63.3    58   335 4.34 4.35 2.75
+--                                                             
+ 7 Premium  0.21     E     SI1  59.8    61   326 3.89 3.84 2.31
+ 8 Premium  0.29     I     VS2  62.4    58   334 4.20 4.23 2.63
+ 9   Ideal  0.23     E     SI2  61.5    55   326 3.95 3.98 2.43
+10   Ideal  0.23     J     VS1  62.8    56   340 3.93 3.90 2.46
+</code></pre></dd>
 <dd>
 <p><code>group_map()</code> は結果を <code>bind_rows()</code> せずlistとして返す亜種。<br>
 <code>group_walk()</code> は <code>.f</code> 適用前の <code>.tbl</code> を返す亜種。</p>
