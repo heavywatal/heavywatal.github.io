@@ -1,0 +1,371 @@
++++
+title = 'GenomicRanges'
+subtitle = "ゲノム上の範囲やアノテーション"
+tags = ["r", "bioconductor"]
+[menu.main]
+  parent = "rstats"
+  weight = -40
++++
+
+```{r, setup-r}
+#| file: "setup.R"
+#| cache: false
+#| echo: false
+#| results: "asis"
+```
+
+```{r, setup-local}
+#| cache: false
+#| echo: false
+withr::local_package("GenomicRanges")
+knitr::opts_chunk$set(fig.height = 1)
+knitr::opts_chunk$set(fig.width = 4)
+knitr::opts_chunk$set(dev.args = list(bg = "transparent"))
+knitr::opts_knit$set(upload.fun = knitr::image_uri)
+
+setMethod(show, "IPosRanges",
+  \(object) IRanges:::show_IPosRanges(object, print.classinfo = FALSE),
+  where = parent.frame()
+)
+
+plot_ranges = function(data) {
+  as.data.frame(data) |>
+    dplyr::mutate(y = disjointBins(data)) |>
+    ggplot() +
+    aes(start - 0.01, y) +
+    geom_segment(aes(xend = end + 0.01, yend = y), linewidth = 2, lineend = "round", color = "royalblue") +
+    labs(x = "position") +
+    theme_classic(base_size = 12) +
+    theme(
+      axis.text.y = element_blank(),
+      axis.ticks.y = element_blank(),
+      axis.title = element_blank(),
+      axis.text = element_text(color = "#888888"),
+      axis.ticks = element_line(color = "#888888"),
+      axis.line = element_line(color = "#888888"),
+      panel.background = element_rect(fill = "transparent", color = NA),
+      plot.background = element_rect(fill = "transparent", color = NA)
+    )
+}
+```
+
+<https://bioconductor.org/packages/GenomicRanges>
+
+ゲノム上の座標・範囲を表現するための型として S4 class `GenomicRanges` を提供する。
+これは整数の範囲を扱う
+[`IRanges`](https://bioconductor.org/packages/IRanges)
+を拡張したもの。
+
+
+## Installation
+
+```r
+install.packages("BiocManager")
+BiocManager::install("GenomicRanges")
+library(GenomicRanges)
+```
+
+
+## `IRanges`
+
+両端の値を含む閉区間 `[start, end]` なのが厄介。
+end = start + width - 1 の関係。
+width = 0 のときだけ例外的に end < start になり、両端を含まない。
+
+```{r, iranges-constructor}
+ir1 = IRanges(start = 1:4, width = 3:0)
+ir2 = IRanges(start = 1:4, end = 3)
+ir3 = IRanges(end = 3, width = 3:0)
+stopifnot(identical(ir1, ir2), identical(ir1, ir3))
+ir1
+start(ir1)
+end(ir1)
+width(ir1)
+```
+
+
+## `GenomicRanges`
+
+```{r, granges-constructor}
+gr = GRanges(
+  seqnames = c("chr2", "chr1", "chr1"),    # 染色体の名前
+  ranges = IRanges(101:103, width = 100),  # 座標
+  strand = c("-", "+", "*"),
+  score = 51:53,                           # 任意のelementMetadata列
+  GC = 0.1 * 5:7,                          # 任意のelementMetadata列
+  seqinfo = NULL,
+  seqlengths = c(chr1 = 249250621, chr2 = 243199373)
+)
+gr
+```
+
+上記のように自分で作る機会はほぼ無くて、
+`GenomicRanges::makeGRangesFromDataFrame(df)`,
+`rtraclayer::import("annotation.gff3")`,
+`GenomicFeatures::genes(txdb)`,
+のような形で読み込むことが多い。
+
+個々の区間の情報へのアクセスはIRangeと同じ
+`start(gr)`, `end(gr)`, `width(gr)`
+に加えて:
+```{r, granges-accessor}
+seqnames(gr)
+ranges(gr)
+strand(gr)
+mcols(gr)
+```
+
+`S4Vectors::mcols()` で参照・代入するのは区間ごとのメタデータ。
+
+データセット全体のメタデータとして染色体の長さなども扱う:
+```{r, seqinfo}
+seqinfo(gr)
+seqlevels(gr)
+seqlengths(gr)
+isCircular(gr)
+genome(gr)
+```
+
+
+
+## Functions
+
+多くの関数は `IRanges` と `GenomicRanges` で同様に動作する。
+より単純な前者で例を示し、後者固有の話は適宜挟む。
+
+```{r, iranges-orig}
+#| echo: [1, 2]
+ir = IRanges(c(1, 8, 14, 15, 19, 34, 40), width = c(12, 6, 6, 15, 6, 2, 7))
+ir
+ir |> plot_ranges()
+```
+
+### Intra-range methods
+
+個々の区間を操作
+
+`shift(x, shift = 0L, use.names = TRUE)`
+: ずらす。
+
+`narrow(x, start = NA, end = NA, width = NA, use.names = TRUE)`
+: 狭める。startには正、endには負の値を与える。
+: start = 1, end = -1 のとき何もしないというのがわかりにくすぎて怖い。
+  ```{r, narrow}
+identical(ir, narrow(ir, 1, -1))
+  ```
+: `threebands(x, start = NA, end = NA, width = NA)`
+  は削られる両端部分も含めて
+  `$left`, `$middle`, `$right` のリストで返してくれる亜種。
+: 逆に広げるには `flank()` を `punion()` するか、
+  `+` 演算子で両側に広げてから片側を `narrow()` するか？
+
+`resize(x, width, fix = "start", use.names = TRUE, ...)`
+: 幅を変える。
+: `fix`: start, end, center
+
+`flank(x, width, start = TRUE, both = FALSE, use.names = TRUE, ...)`
+: start上流もしくはend下流の領域。両方いっぺんには取れない。
+: `both = TRUE` は start (or end) を起点に両側という意味であり、範囲の両側ではない。
+  ```{r, flank}
+flank(ir, 1, both = TRUE)
+  ```
+: `promoters(x, upstream=2000, downstream=200, use.names=TRUE, ...)`
+  はstart起点に上下異なる幅で取ってこられる亜種。
+
+`reflect(x, bounds, use.names = TRUE)`
+: `bounds` の裏から見た相対位置にする。
+  ```{r, reflect}
+reflect(ir, IRanges(1, 1000))
+  ```
+: いかにも負のstrandの座標処理に使えそうだがなぜかGenomicRangesには未対応。
+  自分で書くならこんな感じか:
+  ```{r, reflect-granges}
+y = gr
+bounds = IRanges(start = 1, width = seqlengths(gr)[as.vector(seqnames(gr))])
+ranges(y)[strand(gr) == "-"] = reflect(ranges(gr), bounds)[strand(gr) == "-"]
+y
+  ```
+: `reverse(x)` は `reflect(x, range(x))` のショートカット。
+  区間を逆順に並べる `rev()` とは違う。
+  ```{r, reverse}
+#| include: false
+stopifnot(identical(reverse(ir), reflect(ir, range(ir))))
+  ```
+
+`restrict(x, start = NA, end = NA, keep.all.ranges = FALSE, use.names = TRUE)`
+: `start` から `end` までの範囲のみ残して外を捨てる。境界含む。
+: `end = 14` で15から始まる区間が取れてきちゃうのはバグじゃない？
+  ```{r, restrict}
+restrict(ir, 10, 14)
+  ```
+
+足し算・引き算は両側に伸縮:
+
+```{r, plus}
+IRanges(101:200) + 100
+```
+
+掛け算はズームイン・ズームアウト:
+```{r, multiply}
+IRanges(101:200) * 2
+IRanges(101:200) * 0.5
+```
+
+### Inter-range methods
+
+区間の集合を操作
+
+`range(x, ..., with.revmap = FALSE, na.rm = FALSE)`
+: 端から端まで1つの区間として返す。
+  ```{r, range}
+range(ir)
+  ```
+
+`reduce(x, drop.empty.ranges = FALSE, min.gapwidth = 1L, with.revmap = FALSE)`
+: 重なっている区間をつなげて平らにする。
+: `with.revmap = TRUE` とすると入力した区間がどこに含まれるかをmcolsに保持する。
+  ```{r, iranges-reduce}
+#| echo: 1
+reduce(ir, with.revmap = TRUE)
+reduce(ir) |> plot_ranges()
+  ```
+: `min.gapwidth` を大きくすると離れた区間もつなげられる。
+  例えば `reduce(ir, min.gapwidth = 10L)` で全部つながって `range(ir)` と同じになる。
+
+`gaps(x, start=NA, end=NA, ...)`
+: `IRanges::setdiff(IRanges(start, end), x)` と同等。
+  start/end 省略時は `range(x)` からの差分。
+  ```{r, gaps}
+gaps(ir)
+  ```
+: GRangesに対しては染色体全体からの差分がstrandごとに計算される:
+  ```{r, gaps-gr}
+gaps(gr)
+  ```
+
+
+`disjoin(x, ...)`
+: 全ての始点・終点を使い、重なり無しで最多の小区間にして返す。
+  ```{r, iranges-disjoin}
+#| echo: 1
+disjoin(ir)
+disjoin(ir) |> plot_ranges()
+  ```
+
+`disjointBins(x, ...)`
+: 重ならないように描画するときのy座標に使える。
+  ```{r, disjointBins}
+disjointBins(ir)
+  ```
+
+`union(x, y)`, `intersect(x, y)`, `setdiff(x, y)`
+: 結果は `reduce()` 済みの区間。
+: element-wise の `punion()`, `pintersect()`, `psetdiff()`, `pgap()` もある。
+
+`GenomicRanges::subtract(x, y, minoverlap = 1L, ...)`
+: `setdiff()` と似ているが元の区間ごとの `GRangesList` にして返す。
+
+
+### Overlaps
+
+`type`
+: any: ちょっとでも重なっているか距離が `maxgap` 以下ならOK。
+: start/end/equal: 開始/終了/両方の距離が `maxgap` 以下ならOK。
+: within: queryがすっぽり含まれていればOK。 `maxgap` の意図・挙動は不明。
+
+`findOverlaps(query, subject, maxgap = -1L, minoverlap = 0L, type, select, ...)`
+: `select`: subject側に複数マッチした場合に何を返すか。
+  デフォルトの "all" ならHits型オブジェクト、
+  "first" や "last" なら整数vectorでインデックスを返す。
+  "arbitrary" の挙動は謎だが乱数を振ったりするわけではなさそう。
+  ```{r, findOverlaps}
+findOverlaps(ir, ir)
+findOverlaps(ir, ir, select = "first")
+  ```
+: `mergeByOverlaps(query, subject, ...)` と
+  `findOverlapPairs(query, subject, ...)`
+  はHits型とは違う謎の形式で返す亜種。
+
+`countOverlaps(query, subject, maxgap = -1L, minoverlap = 0L, type, ...)`
+: いくつsubjectと重なるか、queryと同じ長さの整数vectorを返す。
+  ```{r, countOverlaps}
+countOverlaps(ir, ir)
+  ```
+
+`overlapsAny(query, subject, maxgap = -1L, minoverlap = 0L, type, ...)`
+: ひとつでもsubjectと重なるものがあるか、queryと同じ長さの論理vectorを返す。
+  ```{r, overlapsAny}
+overlapsAny(ir, ir[4])
+  ```
+: `%over%`, `%within%` `%outside%`
+  という演算子で短く書けるけど可読性低下とconflictが怖いので使わない。
+
+`subsetByOverlaps(x, ranges, maxgap = -1L, minoverlap = 0L, type, invert = FALSE, ...)`
+: `x[overlapsAny(x, ranges)]` のショートカット。
+  ```{r, subsetByOverlaps}
+#| include: false
+stopifnot(identical(subsetByOverlaps(ir, ir[4]), ir[overlapsAny(ir, ir[4])]))
+  ```
+
+`overlapsRanges(query, subject, hits = NULL, ...)`
+: subsetByOverlapsした上、重なっている部分のみ切り詰めて返す。
+
+`poverlaps(query, subject, maxgap = 0L, minoverlap = 1L, type, ...)`
+: `min()` に対する `pmin()` のように、element-wiseに比較する。
+  ```{r, poverlaps}
+poverlaps(ir, rev(ir))
+  ```
+
+`coverage(x, shift=0L, width=NULL, weight=1L, method=c("auto", "sort", "hash", "naive"))`
+: 重なりの数をRle型で。
+  ```{r, coverage}
+coverage(ir, shift = 200, width = 800)
+  ```
+: `cvg(x, from = NA, to = NA, weight = 1L, varname = "cvg", collapse = FALSE, ...)`
+  も似たような関数だがドキュメント無し。
+: `slice(x, ...)` を使うと「カバレッジがこれ以上の区間」みたいなのを簡単に取れる:
+  ```{r, slice}
+coverage(ir) |> IRanges::slice(lower = 2, rangesOnly = TRUE)
+  ```
+
+
+### Neighboring
+
+`nearest(x, subject, select = c("arbitrary", "all"))`
+: 最も近いもの、あるいはoverlapしているもの。
+  ```{r, nearest}
+nearest(ir, ir)
+  ```
+
+`precede(x, subject, select = c("first", "all"))`
+: subjectのうちどれの上流にあるか。重なるものは除外。
+  ```{r, precede}
+precede(ir, ir)
+  ```
+
+`follow(x, subject, select = c("last", "all"))`
+: subjectのうちどれの下流にあるか。重なるものは除外。
+  ```{r, follow}
+follow(ir, ir)
+  ```
+
+`distanceToNearest(x, subject, select = c("arbitrary", "all"))`
+: 最も近いsubjectへの距離。overlapしている場合はゼロ。
+  ```{r, distanceToNearest}
+distanceToNearest(ir, ir[1:3])
+  ```
+: `distance(x, y)` はelement-wizeに計算。
+  ```{r, distance}
+distance(ir, rev(ir))
+  ```
+
+
+### `ignore.strand`
+
+GenomicRangesの操作はデフォルトでseqnamesとstrandごとに分けて行われる。
+strandを無視するには `ignore.strand = TRUE` を渡す。
+
+```{r, ignore-strand}
+reduce(gr)
+reduce(gr, ignore.strand = TRUE)
+```

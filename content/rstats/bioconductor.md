@@ -184,84 +184,8 @@ bss = readDNAStringSet(.file)
 
 ## `GenomicRanges`
 
-<https://www.bioconductor.org/packages/release/bioc/html/GenomicRanges.html>
+[See "IRanges and GenomicRanges"]({{< relref "iranges.md" >}}).
 
-<https://qiita.com/yuifu/items/556af5d4d086c96ec783>
-
-### クラス
-
-`GRanges`
-:   `@seqnames`\
-    `@ranges`\
-    `@strand`\
-    `@elementMetadata`\
-    `@seqinfo`\
-    `@metadata`
-
-`makeGRangesFromDataFrame(df, keep.extra.columns=FALSE, ignore.strand=FALSE, seqinfo=NULL, ...)`
-:   対応する列名 `seqnames.field`, `start.field`, `end.field`, `strand.field`
-    を指定することもできるが、大概いい感じに拾ってくれる。
-
-`GRangesList` `(gr1, gr2, ...)`
-
-`Seqinfo` `(seqnames, seqlengths, isCircular, genome)`
-:   `@genome`\
-    `@is_circular`\
-    `@seqlengths`\
-    `@seqnames`
-
-### 関数
-
-配列の情報を get, set, modify
-:   `seqinfo(x)`\
-    `seqnames(x)`\
-    `seqlevels(x)`\
-       特定の染色体だけ対象にしたい場合は\
-       `seqlevels(x, force=TRUE) = paste0("chr", c(1:22, "X", "Y"))`\
-       のように削り `seqlevels0(x)` で戻せる\
-    `seqlengths(x)`\
-    `isCircular(x)`\
-    `genome(x)`
-
-個々の区間のプロパティを参照
-:   `start(gr)`, `end(gr)`, `width(gr)`\
-    `strand(gr)`\
-    `names(gr)`\
-    `metadata(gr)`
-
-区間の集合を操作 (デフォルトではstrand毎に)
-:   <https://qiita.com/wakuteka/items/9634e5ed96db3536756f>
-
-    `range(gr, ..., ignore.strand=FALSE, na.rm=FALSE)`\
-       端から端まで1つの区間として返す
-
-    `reduce(gr, ...)`\
-       重なってる区間をつなげる
-
-    `gaps(gr, start=1, end=seqlengths(gr))`\
-       含まれていない部分だけ抽出 (= 全区間 - `reduce(gr)`)
-
-    `disjoin(gr, ...)`\
-       重ならない部分だけ抽出
-
-    `isDisjoint(gr, ...)`\
-    `disjointBins(gr, ...)`\
-    `coverage(gr, shift=0, width=NULL, wight=1, method=c("auto", "sort", "hash"))`
-
-個々の区間を操作
-:   `shift(gr, shift=0, ...)`\
-    `narrow(gr, start=NA, end=NA, width=NA, ...)`\
-    `flank(gr, width, start=TRUE, both=FALSE, ...)`\
-    `promoters(gr, upstream=2000, downstream=200, ...)`\
-    `resize(gr, width, fix="start", ...)`\
-    `restrict(gr, start=NA, end=NA, ...)`\
-    `trim(gr, ...)`
-
-重なり <https://qiita.com/wakuteka/items/10027edccc6c2e244cd2>
-:   `findOverlaps(query, subject, ...)`\
-    `countOverlaps(query, subject, ...)`\
-    `overlapsAny(query, subject, ...)`\
-    `subsetByOverlaps(query, subject, ...)`
 
 ## `GenomicFeatures`
 
