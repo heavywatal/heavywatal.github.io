@@ -7,9 +7,17 @@ tags = ["r", "tidyverse"]
   weight = -75
 +++
 
+```{r, setup-r}
+#| file: "setup.R"
+#| cache: false
+#| echo: false
+#| results: "asis"
+```
 
-
-
+```{r, setup-local}
+#| cache: false
+#| echo: false
+```
 
 <a href="https://dplyr.tidyverse.org/">
 <img src="/_img/hex-stickers/dplyr.webp" align="right" width="120" height="139">
@@ -38,8 +46,7 @@ data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(
 適用する順に次々と処理を記述することができるようになる。
 慣れれば書きやすく読みやすい。
 
-
-```r
+```{r, piping}
 library(conflicted)
 library(tidyverse)
 
@@ -49,15 +56,6 @@ result = diamonds |>                   # 生データから出発して
   dplyr::group_by(cut) |>              # グループ化して
   dplyr::summarize(mean(price)) |>     # 平均を計算
   print()                              # 表示してみる
-```
-
-```
-        cut mean(price)
-1      Fair    7177.856
-2      Good    7753.601
-3 Very Good    8340.549
-4   Premium    8487.249
-5     Ideal    8674.227
 ```
 
 同じことをパイプなしでやると読みにくい:
@@ -169,16 +167,8 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
 `dplyr::filter(.data, ..., .by = NULL, .preserve = FALSE)`
 :   条件を満たす行だけを返す。`base::subset()` と似たようなもの。
 
-    
-    ```r
+    ```{r, filter}
     diamonds |> dplyr::filter(carat > 3 & price < 10000)
-    ```
-    
-    ```
-      carat     cut color clarity depth table price    x    y    z
-    1  3.01 Premium     I      I1  62.7    58  8040 9.10 8.97 5.67
-    2  3.11    Fair     J      I1  65.9    57  9823 9.15 9.02 5.98
-    3  3.01 Premium     F      I1  62.2    56  9925 9.24 9.13 5.73
     ```
 
     評価結果が `NA` となる行は除去される。
@@ -187,27 +177,9 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
 
 :   複数列で条件指定するには `if_any()`, `if_all()` が使える。
 
-    
-    ```r
+    ```{r, filter-if}
     diamonds |> dplyr::filter(if_any(c(x, y, z), \(v) v > 20))
-    ```
-    
-    ```
-      carat       cut color clarity depth table price    x     y     z
-    1  2.00   Premium     H     SI2  58.9  57.0 12210 8.09 58.90  8.06
-    2  0.51 Very Good     E     VS1  61.8  54.7  1970 5.12  5.15 31.80
-    3  0.51     Ideal     E     VS1  61.8  55.0  2075 5.15 31.80  5.12
-    ```
-    
-    ```r
     diamonds |> dplyr::filter(if_all(where(is.numeric), \(x) x > 4.1))
-    ```
-    
-    ```
-      carat  cut color clarity depth table price     x     y    z
-    1  4.13 Fair     H      I1  64.8    61 17329 10.00  9.85 6.43
-    2  5.01 Fair     J      I1  65.5    59 18018 10.74 10.54 6.98
-    3  4.50 Fair     J      I1  65.8    58 18531 10.23 10.16 6.72
     ```
 
 
@@ -217,34 +189,16 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
     `filter(!duplicated(.[, ...]))` よりスマートで柔軟。
     指定しなかった列を残すには `.keep_all = TRUE` とする。
 
-    
-    ```r
+    ```{r, distinct}
     diamonds |> dplyr::distinct(cut)
-    ```
-    
-    ```
-            cut
-    1     Ideal
-    2   Premium
-    3      Good
-    4 Very Good
-    5      Fair
     ```
 
 `dplyr::slice(.data, ..., .by = NULL, .preserve = FALSE)`
 :   行番号を指定して行を絞る。
     `` `[`(i,) `` の代わりに。
 
-    
-    ```r
+    ```{r, slice}
     diamonds |> dplyr::slice(1, 2, 3)
-    ```
-    
-    ```
-      carat     cut color clarity depth table price    x    y    z
-    1  0.23   Ideal     E     SI2  61.5    55   326 3.95 3.98 2.43
-    2  0.21 Premium     E     SI1  59.8    61   326 3.89 3.84 2.31
-    3  0.23    Good     E     VS1  56.9    65   327 4.05 4.07 2.31
     ```
 
 `dplyr::slice_head(.data, ..., n, prop)`, `slice_tail()`
@@ -264,53 +218,29 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
 `dplyr::mutate(.data, ..., .by = NULL, .keep = "all", .before = NULL, .after = NULL)`
 :   新しい列を作ったり、既存の列を変更したり。
     `base::transform()` の改良版。
-    
-    ```r
+    ```{r, mutate}
+    #| R.options:
+    #|   pillar.print_max: 4
     diamonds |>
       dplyr::mutate(gram = 0.2 * carat) |>  # create new
       dplyr::mutate(price = price * 140)    # modify existing
     ```
-    
-    ```
-          carat     cut color clarity depth table  price    x    y    z  gram
-        1  0.23   Ideal     E     SI2  61.5    55  45640 3.95 3.98 2.43 0.046
-        2  0.21 Premium     E     SI1  59.8    61  45640 3.89 3.84 2.31 0.042
-       --                                                                    
-    53939  0.86 Premium     H     SI2  61.0    58 385980 6.15 6.12 3.74 0.172
-    53940  0.75   Ideal     D     SI2  62.2    55 385980 5.83 5.87 3.64 0.150
-    ```
 :   変数に入った文字列を列名として使いたい場合は上記 `select()` のときと同様、
     {{embrace}} や !!unquote を使う。
-    
-    ```r
+    ```{r, mutate-unquote}
+    #| R.options:
+    #|   pillar.print_max: 4
     A = "carat"
     B = "gram"
     diamonds |> dplyr::mutate(B = 0.2 * !!as.name(A))
     ```
-    
-    ```
-          carat     cut color clarity depth table price    x    y    z     B
-        1  0.23   Ideal     E     SI2  61.5    55   326 3.95 3.98 2.43 0.046
-        2  0.21 Premium     E     SI1  59.8    61   326 3.89 3.84 2.31 0.042
-       --                                                                   
-    53939  0.86 Premium     H     SI2  61.0    58  2757 6.15 6.12 3.74 0.172
-    53940  0.75   Ideal     D     SI2  62.2    55  2757 5.83 5.87 3.64 0.150
-    ```
 :   左辺(代入先)の名前も文字列を使って表現したい場合は
     [walrus(セイウチ)演算子 `:=`](https://www.tidyverse.org/blog/2020/02/glue-strings-and-tidy-eval/#custom-result-names)
     を使う:
-    
-    ```r
+    ```{r, mutate-walrus}
+    #| R.options:
+    #|   pillar.print_max: 4
     diamonds |> dplyr::mutate({{B}} := 0.2 * !!as.name(A))
-    ```
-    
-    ```
-          carat     cut color clarity depth table price    x    y    z  gram
-        1  0.23   Ideal     E     SI2  61.5    55   326 3.95 3.98 2.43 0.046
-        2  0.21 Premium     E     SI1  59.8    61   326 3.89 3.84 2.31 0.042
-       --                                                                   
-    53939  0.86 Premium     H     SI2  61.0    58  2757 6.15 6.12 3.74 0.172
-    53940  0.75   Ideal     D     SI2  62.2    55  2757 5.83 5.87 3.64 0.150
     ```
 :   - `.keep = "all"`: すべての列を残すデフォルト。
     - `.keep = "used"`: 入力に使った列と出力の列のみ残す。
@@ -333,51 +263,27 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
 `dplyr::rename(.data, ...)`
 :   列の改名。
     `mutate()`と同じようなイメージで `new = old` と指定。
-    
-    ```r
+    ```{r, rename}
+    #| R.options:
+    #|   pillar.print_max: 4
     diamonds |> dplyr::rename(SIZE = carat)
     ```
-    
-    ```
-          SIZE     cut color clarity depth table price    x    y    z
-        1 0.23   Ideal     E     SI2  61.5    55   326 3.95 3.98 2.43
-        2 0.21 Premium     E     SI1  59.8    61   326 3.89 3.84 2.31
-       --                                                            
-    53939 0.86 Premium     H     SI2  61.0    58  2757 6.15 6.12 3.74
-    53940 0.75   Ideal     D     SI2  62.2    55  2757 5.83 5.87 3.64
-    ```
 :   変数に入った文字列を使う場合も`mutate()`と同様に {{embrace}} や !!unquote で:
-    
-    ```r
+    ```{r, rename-embrace}
+    #| R.options:
+    #|   pillar.print_max: 4
     old_name = "carat"
     new_name = toupper(old_name)
     diamonds |> dplyr::rename({{new_name}} := {{old_name}})
     ```
-    
-    ```
-          CARAT     cut color clarity depth table price    x    y    z
-        1  0.23   Ideal     E     SI2  61.5    55   326 3.95 3.98 2.43
-        2  0.21 Premium     E     SI1  59.8    61   326 3.89 3.84 2.31
-       --                                                             
-    53939  0.86 Premium     H     SI2  61.0    58  2757 6.15 6.12 3.74
-    53940  0.75   Ideal     D     SI2  62.2    55  2757 5.83 5.87 3.64
-    ```
     名前付きベクターと
     [!!!unquote-splicing](https://rlang.r-lib.org/reference/splice-operator.html)
     を使えば一括指定できる:
-    
-    ```r
+    ```{r, rename-unquote-splicing}
+    #| R.options:
+    #|   pillar.print_max: 4
     named_vec = setNames(names(diamonds), LETTERS[seq(1, 10)])
     diamonds |> dplyr::rename(!!!named_vec)
-    ```
-    
-    ```
-             A       B C   D    E  F    G    H    I    J
-        1 0.23   Ideal E SI2 61.5 55  326 3.95 3.98 2.43
-        2 0.21 Premium E SI1 59.8 61  326 3.89 3.84 2.31
-       --                                               
-    53939 0.86 Premium H SI2 61.0 58 2757 6.15 6.12 3.74
-    53940 0.75   Ideal D SI2 62.2 55 2757 5.83 5.87 3.64
     ```
 :   `rename_with(.tbl, .fn, .cols = everything(), ...)`
     はリネーム関数を渡せる亜種:
@@ -392,20 +298,10 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
 :   指定した列に関数を適用して1行のdata.frameにまとめる。
     グループ化されていたらグループごとに適用して `bind_rows()` する。
 
-    
-    ```r
+    ```{r, summarize}
     diamonds |>
       group_by(cut) |>
       summarize(avg_carat = mean(carat), max_price = max(price))
-    ```
-    
-    ```
-            cut avg_carat max_price
-    1      Fair 1.0461366     18574
-    2      Good 0.8491847     18788
-    3 Very Good 0.8063814     18818
-    4   Premium 0.8919549     18823
-    5     Ideal 0.7028370     18806
     ```
 
 :   複数カラムに関数を適用するには `across()` を使う:
@@ -427,15 +323,8 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
 `dplyr::reframe(.data, ..., .by = NULL, .group = NULL)`
 :   各グループの結果が複数行にまたがっても大丈夫な `summarize()` 亜種。
 
-    
-    ```r
+    ```{r, reframe}
     diamonds |> dplyr::reframe(range(carat), range(price))
-    ```
-    
-    ```
-      range(carat) range(price)
-    1         0.20          326
-    2         5.01        18823
     ```
 
 :   各グループの結果がtibbleの場合、結合・展開してくれる:
@@ -537,13 +426,8 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
 
 `dplyr::consecutive_id(...)`
 :   値が変化したら番号をインクリメント。こういうグループ化したいときがある:
-    
-    ```r
+    ```{r, consecutive}
     c(0, 0, 1, 1, 1, 0, 0, 1) |> dplyr::consecutive_id()
-    ```
-    
-    ```
-    [1] 1 1 2 2 2 3 3 4
     ```
 
 `dplyr::ntile(x, n)`
@@ -564,16 +448,8 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
 :   `x` の中身を `n` だけずらして `default` で埋める。
     `lead()` は前に、`lag()` は後ろにずらす
 
-    
-    ```r
+    ```{r, lag}
     lag(seq_len(5), 2)
-    ```
-    
-    ```
-    [1] NA NA  1  2  3
-    ```
-    
-    ```r
     ## [1] NA NA 1 2 3
     ```
 
@@ -626,18 +502,8 @@ diamonds |>
 
 `dplyr::group_data(.data)`
 :   グループ情報を参照:
-    
-    ```r
+    ```{r, group-data}
     diamonds |> dplyr::group_by(cut) |> dplyr::group_data()
-    ```
-    
-    ```
-            cut         .rows
-    1      Fair  <int [1610]>
-    2      Good  <int [4906]>
-    3 Very Good <int [12082]>
-    4   Premium <int [13791]>
-    5     Ideal <int [21551]>
     ```
 
     左側のキー列だけ欲しければ `dplyr::group_keys()` 、<br>
@@ -668,22 +534,8 @@ diamonds |>
     引数が1つだったり、違うものを2つめに受け取る関数はそのままじゃ渡せないので、
     [purrr]({{< relref "purrr.md" >}})のときと同様に無名関数に包んで渡す。
 
-    
-    ```r
+    ```{r, group-modify}
     diamonds |> dplyr::group_by(cut) |> dplyr::group_modify(\(x, key) head(x, 2L))
-    ```
-    
-    ```
-           cut carat color clarity depth table price    x    y    z
-     1    Fair  0.22     E     VS2  65.1    61   337 3.87 3.78 2.49
-     2    Fair  0.86     E     SI2  55.1    69  2757 6.45 6.33 3.52
-     3    Good  0.23     E     VS1  56.9    65   327 4.05 4.07 2.31
-     4    Good  0.31     J     SI2  63.3    58   335 4.34 4.35 2.75
-    --                                                             
-     7 Premium  0.21     E     SI1  59.8    61   326 3.89 3.84 2.31
-     8 Premium  0.29     I     VS2  62.4    58   334 4.20 4.23 2.63
-     9   Ideal  0.23     E     SI2  61.5    55   326 3.95 3.98 2.43
-    10   Ideal  0.23     J     VS1  62.8    56   340 3.93 3.90 2.46
     ```
 
 :   `group_map()` は結果を `bind_rows()` せずlistとして返す亜種。<br>
