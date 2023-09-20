@@ -224,74 +224,7 @@ Bioconductor — Genomicデータ解析ツール群
 対象は <code>Bstring</code> だけでなく <code>Views</code> でもよい。 例えば <code>codons()</code> の結果を対象とすれば読み枠限定の検索となる。 結果の返し方の違う <code>vmatchXXX()</code> と <code>countXXX()</code> もある。</dd>
 </dl>
 <h2 id="genomicranges"><code>GenomicRanges</code></h2>
-<p><a href="https://www.bioconductor.org/packages/release/bioc/html/GenomicRanges.html">https://www.bioconductor.org/packages/release/bioc/html/GenomicRanges.html</a></p>
-<p><a href="https://qiita.com/yuifu/items/556af5d4d086c96ec783">https://qiita.com/yuifu/items/556af5d4d086c96ec783</a></p>
-<h3 id="クラス-1">クラス</h3>
-<dl>
-<dt><code>GRanges</code></dt>
-<dd><code>@seqnames</code><br>
-<code>@ranges</code><br>
-<code>@strand</code><br>
-<code>@elementMetadata</code><br>
-<code>@seqinfo</code><br>
-<code>@metadata</code></dd>
-<dt><code>makeGRangesFromDataFrame(df, keep.extra.columns=FALSE, ignore.strand=FALSE, seqinfo=NULL, ...)</code></dt>
-<dd>対応する列名 <code>seqnames.field</code>, <code>start.field</code>, <code>end.field</code>, <code>strand.field</code>
-を指定することもできるが、大概いい感じに拾ってくれる。</dd>
-</dl>
-<p><code>GRangesList</code> <code>(gr1, gr2, ...)</code></p>
-<dl>
-<dt><code>Seqinfo</code> <code>(seqnames, seqlengths, isCircular, genome)</code></dt>
-<dd><code>@genome</code><br>
-<code>@is_circular</code><br>
-<code>@seqlengths</code><br>
-<code>@seqnames</code></dd>
-</dl>
-<h3 id="関数-1">関数</h3>
-<dl>
-<dt>配列の情報を get, set, modify</dt>
-<dd><code>seqinfo(x)</code><br>
-<code>seqnames(x)</code><br>
-<code>seqlevels(x)</code><br>
-   特定の染色体だけ対象にしたい場合は<br>
-   <code>seqlevels(x, force=TRUE) = paste0(&quot;chr&quot;, c(1:22, &quot;X&quot;, &quot;Y&quot;))</code><br>
-   のように削り <code>seqlevels0(x)</code> で戻せる<br>
-<code>seqlengths(x)</code><br>
-<code>isCircular(x)</code><br>
-<code>genome(x)</code></dd>
-<dt>個々の区間のプロパティを参照</dt>
-<dd><code>start(gr)</code>, <code>end(gr)</code>, <code>width(gr)</code><br>
-<code>strand(gr)</code><br>
-<code>names(gr)</code><br>
-<code>metadata(gr)</code></dd>
-<dt>区間の集合を操作 (デフォルトではstrand毎に)</dt>
-<dd><a href="https://qiita.com/wakuteka/items/9634e5ed96db3536756f">https://qiita.com/wakuteka/items/9634e5ed96db3536756f</a>
-<p><code>range(gr, ..., ignore.strand=FALSE, na.rm=FALSE)</code><br>
-   端から端まで1つの区間として返す</p>
-<p><code>reduce(gr, ...)</code><br>
-   重なってる区間をつなげる</p>
-<p><code>gaps(gr, start=1, end=seqlengths(gr))</code><br>
-   含まれていない部分だけ抽出 (= 全区間 - <code>reduce(gr)</code>)</p>
-<p><code>disjoin(gr, ...)</code><br>
-   重ならない部分だけ抽出</p>
-<p><code>isDisjoint(gr, ...)</code><br>
-<code>disjointBins(gr, ...)</code><br>
-<code>coverage(gr, shift=0, width=NULL, wight=1, method=c(&quot;auto&quot;, &quot;sort&quot;, &quot;hash&quot;))</code></p>
-</dd>
-<dt>個々の区間を操作</dt>
-<dd><code>shift(gr, shift=0, ...)</code><br>
-<code>narrow(gr, start=NA, end=NA, width=NA, ...)</code><br>
-<code>flank(gr, width, start=TRUE, both=FALSE, ...)</code><br>
-<code>promoters(gr, upstream=2000, downstream=200, ...)</code><br>
-<code>resize(gr, width, fix=&quot;start&quot;, ...)</code><br>
-<code>restrict(gr, start=NA, end=NA, ...)</code><br>
-<code>trim(gr, ...)</code></dd>
-<dt>重なり <a href="https://qiita.com/wakuteka/items/10027edccc6c2e244cd2">https://qiita.com/wakuteka/items/10027edccc6c2e244cd2</a></dt>
-<dd><code>findOverlaps(query, subject, ...)</code><br>
-<code>countOverlaps(query, subject, ...)</code><br>
-<code>overlapsAny(query, subject, ...)</code><br>
-<code>subsetByOverlaps(query, subject, ...)</code></dd>
-</dl>
+<p><a href="/rstats/iranges.html">See &ldquo;IRanges and GenomicRanges&rdquo;</a>.</p>
 <h2 id="genomicfeatures"><code>GenomicFeatures</code></h2>
 <p><a href="https://www.bioconductor.org/packages/release/bioc/html/GenomicFeatures.html">https://www.bioconductor.org/packages/release/bioc/html/GenomicFeatures.html</a></p>
 <p><a href="https://qiita.com/yuifu/items/4bab5f713aa75bd18a84">https://qiita.com/yuifu/items/4bab5f713aa75bd18a84</a></p>
@@ -340,7 +273,7 @@ Bioconductor — Genomicデータ解析ツール群
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="s">&#34;BSgenome.Scerevisiae.UCSC.sacCer3&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">bsg</span> <span class="o">=</span> <span class="n">BSgenome.Scerevisiae.UCSC.sacCer3</span>
-</span></span></code></pre></div><h3 id="クラス-2">クラス</h3>
+</span></span></code></pre></div><h3 id="クラス-1">クラス</h3>
 <dl>
 <dt><code>BSgenome</code></dt>
 <dd><code>@organism</code><br>
@@ -377,7 +310,7 @@ Bioconductor — Genomicデータ解析ツール群
 <hr>
 <p><code>GenomeData</code></p>
 <p><code>GenomeDescription</code></p>
-<h3 id="関数-2">関数</h3>
+<h3 id="関数-1">関数</h3>
 <dl>
 <dt>アクセサー</dt>
 <dd><code>organism(bsg)</code><br>
@@ -443,7 +376,7 @@ R CMD INSTALL BSgenome.Scerevisiae.EF4.74.ensembl
 </ol>
 <h2 id="variantannotation"><code>VariantAnnotation</code></h2>
 <p><a href="https://www.bioconductor.org/packages/release/bioc/html/VariantAnnotation.html">https://www.bioconductor.org/packages/release/bioc/html/VariantAnnotation.html</a></p>
-<h3 id="クラス-3">クラス</h3>
+<h3 id="クラス-2">クラス</h3>
 <dl>
 <dt><code>VCF</code>, <code>CollapsedVCF</code>, <code>ExpandedVCF</code></dt>
 <dd><code>@assays</code><br>
@@ -460,7 +393,7 @@ R CMD INSTALL BSgenome.Scerevisiae.EF4.74.ensembl
 <code>@rowData</code><br>
    変異の位置情報 <code>GRanges</code>。 <code>rowData()</code> でアクセスすると <code>@fixed</code> の情報込みで表示される。</dd>
 </dl>
-<h3 id="関数-3">関数</h3>
+<h3 id="関数-2">関数</h3>
 <dl>
 <dt><code>readVcf(file, genome, param)</code></dt>
 <dd>予めターミナルで <code>tabix -h some_file.vcf.gz</code> を実行して
@@ -517,6 +450,7 @@ varAllele : 省略あるいは <code>alt(vcf)</code></dd>
 <li><a href="/rstats/devtools.html">devtools</a></li>
 <li><a href="/rstats/rcpp.html">Rcpp</a></li>
 <li class="active"><a href="/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/rstats/genomicranges.html">GenomicRanges</a></li>
 <li><a href="/rstats/rtracklayer.html">rtracklayer</a></li>
 <li><a href="/rstats/biomart.html">biomaRt</a></li>
 <li><a href="/rstats/edger.html">edgeR</a></li>

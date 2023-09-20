@@ -1,0 +1,646 @@
+<!doctype html>
+<html>
+<head prefix="og: http://ogp.me/ns#">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<title>GenomicRanges: ゲノム上の範囲やアノテーション - Heavy Watal</title>
+<link rel="stylesheet" href="/css/style.css">
+<link rel="icon" href="/heavywatal.svg">
+<link rel="icon" href="/favicon.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#eeeeee">
+<meta name="author" content="Watal M. Iwasaki">
+<meta property="og:title" content="GenomicRanges: ゲノム上の範囲やアノテーション">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://heavywatal.github.io/rstats/genomicranges.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/heavywatal">
+<meta property="og:description" content="">
+<meta property="og:site_name" content="Heavy Watal">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@heavywatal">
+<meta name="twitter:creator" content="@heavywatal">
+<link rel="stylesheet" href="/lib/katex/katex.min.css">
+<script defer src="/lib/katex/katex.min.js"></script>
+<script defer src="/lib/katex/contrib/auto-render.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: "\\[", right: "\\]", display: true},
+      {left: "$", right: "$", display: false}
+    ]
+  });
+});
+</script>
+<style>
+.katex {
+  font-size: 1.12em;
+}
+
+.katex-display > .katex {
+  text-align: left;
+  padding-left: 2rem;
+}
+</style>
+<script type="application/ld+json">{
+"@context": "http://schema.org",
+"@type": "BreadcrumbList",
+"itemListElement": [
+ {"@type": "ListItem",
+  "position": 1,
+  "item": {"@id":"https://heavywatal.github.io/rstats.html","name":"rstats"} },
+ {"@type": "ListItem",
+  "position": 2,
+  "item": {"@id":"https://heavywatal.github.io/rstats/genomicranges.html","name":"GenomicRanges"} }
+]}</script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-V60H2JH0G6"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-V60H2JH0G6', { 'anonymize_ip': false });
+}
+</script>
+
+</head>
+<body>
+<header><h1><a href="/">
+<img class="logo" src="/heavywatal.svg" alt="岩嵜航">
+Heavy Watal
+</a></h1>
+</header>
+<main>
+<article>
+<header><h1><a href="/rstats/genomicranges.html">
+GenomicRanges — ゲノム上の範囲やアノテーション
+</a></h1>
+<nav class="tags">
+<a href="/tags/r.html"><div>r</div></a>
+<a href="/tags/bioconductor.html"><div>bioconductor</div></a>
+</nav>
+</header>
+
+<p><a href="https://bioconductor.org/packages/GenomicRanges">https://bioconductor.org/packages/GenomicRanges</a></p>
+<p>ゲノム上の座標・範囲を表現するための型として S4 class <code>GenomicRanges</code> を提供する。
+これは整数の範囲を扱う
+<a href="https://bioconductor.org/packages/IRanges"><code>IRanges</code></a>
+を拡張したもの。</p>
+<h2 id="installation">Installation</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">install.packages</span><span class="p">(</span><span class="s">&#34;BiocManager&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">BiocManager</span><span class="o">::</span><span class="nf">install</span><span class="p">(</span><span class="s">&#34;GenomicRanges&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">GenomicRanges</span><span class="p">)</span>
+</span></span></code></pre></div><h2 id="iranges"><code>IRanges</code></h2>
+<p>両端の値を含む閉区間 <code>[start, end]</code> なのが厄介。
+end = start + width - 1 の関係。
+width = 0 のときだけ例外的に end &lt; start になり、両端を含まない。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">ir1</span> <span class="o">=</span> <span class="nf">IRanges</span><span class="p">(</span><span class="n">start</span> <span class="o">=</span> <span class="m">1</span><span class="o">:</span><span class="m">4</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="m">3</span><span class="o">:</span><span class="m">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ir2</span> <span class="o">=</span> <span class="nf">IRanges</span><span class="p">(</span><span class="n">start</span> <span class="o">=</span> <span class="m">1</span><span class="o">:</span><span class="m">4</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="m">3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ir3</span> <span class="o">=</span> <span class="nf">IRanges</span><span class="p">(</span><span class="n">end</span> <span class="o">=</span> <span class="m">3</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="m">3</span><span class="o">:</span><span class="m">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">stopifnot</span><span class="p">(</span><span class="nf">identical</span><span class="p">(</span><span class="n">ir1</span><span class="p">,</span> <span class="n">ir2</span><span class="p">),</span> <span class="nf">identical</span><span class="p">(</span><span class="n">ir1</span><span class="p">,</span> <span class="n">ir3</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">ir1</span>
+</span></span></code></pre></div><pre tabindex="0"><code>IRanges object with 4 ranges and 0 metadata columns:
+      start end width
+  [1]     1   3     3
+  [2]     2   3     2
+  [3]     3   3     1
+  [4]     4   3     0
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">start</span><span class="p">(</span><span class="n">ir1</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] 1 2 3 4
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">end</span><span class="p">(</span><span class="n">ir1</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] 3 3 3 3
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">width</span><span class="p">(</span><span class="n">ir1</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] 3 2 1 0
+</code></pre><h2 id="genomicranges"><code>GenomicRanges</code></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">gr</span> <span class="o">=</span> <span class="nf">GRanges</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">seqnames</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;chr2&#34;</span><span class="p">,</span> <span class="s">&#34;chr1&#34;</span><span class="p">,</span> <span class="s">&#34;chr1&#34;</span><span class="p">),</span>    <span class="c1"># 染色体の名前</span>
+</span></span><span class="line"><span class="cl">  <span class="n">ranges</span> <span class="o">=</span> <span class="nf">IRanges</span><span class="p">(</span><span class="m">101</span><span class="o">:</span><span class="m">103</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="m">100</span><span class="p">),</span>  <span class="c1"># 座標</span>
+</span></span><span class="line"><span class="cl">  <span class="n">strand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;-&#34;</span><span class="p">,</span> <span class="s">&#34;+&#34;</span><span class="p">,</span> <span class="s">&#34;*&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="n">score</span> <span class="o">=</span> <span class="m">51</span><span class="o">:</span><span class="m">53</span><span class="p">,</span>                           <span class="c1"># 任意のelementMetadata列</span>
+</span></span><span class="line"><span class="cl">  <span class="n">GC</span> <span class="o">=</span> <span class="m">0.1</span> <span class="o">*</span> <span class="m">5</span><span class="o">:</span><span class="m">7</span><span class="p">,</span>                          <span class="c1"># 任意のelementMetadata列</span>
+</span></span><span class="line"><span class="cl">  <span class="n">seqinfo</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">seqlengths</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="n">chr1</span> <span class="o">=</span> <span class="m">249250621</span><span class="p">,</span> <span class="n">chr2</span> <span class="o">=</span> <span class="m">243199373</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">gr</span>
+</span></span></code></pre></div><pre tabindex="0"><code>GRanges object with 3 ranges and 2 metadata columns:
+      seqnames    ranges strand |     score        GC
+         &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt; | &lt;integer&gt; &lt;numeric&gt;
+  [1]     chr2   101-200      - |        51       0.5
+  [2]     chr1   102-201      + |        52       0.6
+  [3]     chr1   103-202      * |        53       0.7
+  -------
+  seqinfo: 2 sequences from an unspecified genome
+</code></pre><p>上記のように自分で作る機会はほぼ無くて、
+<code>GenomicRanges::makeGRangesFromDataFrame(df)</code>,
+<code>rtraclayer::import(&quot;annotation.gff3&quot;)</code>,
+<code>GenomicFeatures::genes(txdb)</code>,
+のような形で読み込むことが多い。</p>
+<p>個々の区間の情報へのアクセスはIRangeと同じ
+<code>start(gr)</code>, <code>end(gr)</code>, <code>width(gr)</code>
+に加えて:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">seqnames</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>factor-Rle of length 3 with 2 runs
+  Lengths:    1    2
+  Values : chr2 chr1
+Levels(2): chr1 chr2
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">ranges</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>IRanges object with 3 ranges and 0 metadata columns:
+      start end width
+  [1]   101 200   100
+  [2]   102 201   100
+  [3]   103 202   100
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">strand</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>factor-Rle of length 3 with 3 runs
+  Lengths: 1 1 1
+  Values : - + *
+Levels(3): + - *
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">mcols</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>DataFrame with 3 rows and 2 columns
+      score        GC
+  &lt;integer&gt; &lt;numeric&gt;
+1        51       0.5
+2        52       0.6
+3        53       0.7
+</code></pre><p><code>S4Vectors::mcols()</code> で参照・代入するのは区間ごとのメタデータ。</p>
+<p>データセット全体のメタデータとして染色体の長さなども扱う:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">seqinfo</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>Seqinfo object with 2 sequences from an unspecified genome:
+  seqnames seqlengths isCircular genome
+  chr1      249250621         NA   &lt;NA&gt;
+  chr2      243199373         NA   &lt;NA&gt;
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">seqlevels</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] &#34;chr1&#34; &#34;chr2&#34;
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">seqlengths</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>     chr1      chr2 
+249250621 243199373 
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">isCircular</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>chr1 chr2 
+  NA   NA 
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">genome</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>chr1 chr2 
+  NA   NA 
+</code></pre><h2 id="functions">Functions</h2>
+<p>多くの関数は <code>IRanges</code> と <code>GenomicRanges</code> で同様に動作する。
+より単純な前者で例を示し、後者固有の話は適宜挟む。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">ir</span> <span class="o">=</span> <span class="nf">IRanges</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">8</span><span class="p">,</span> <span class="m">14</span><span class="p">,</span> <span class="m">15</span><span class="p">,</span> <span class="m">19</span><span class="p">,</span> <span class="m">34</span><span class="p">,</span> <span class="m">40</span><span class="p">),</span> <span class="n">width</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">12</span><span class="p">,</span> <span class="m">6</span><span class="p">,</span> <span class="m">6</span><span class="p">,</span> <span class="m">15</span><span class="p">,</span> <span class="m">6</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">7</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">ir</span>
+</span></span></code></pre></div><pre tabindex="0"><code>IRanges object with 7 ranges and 0 metadata columns:
+      start end width
+  [1]     1  12    12
+  [2]     8  13     6
+  [3]    14  19     6
+  [4]    15  29    15
+  [5]    19  24     6
+  [6]    34  35     2
+  [7]    40  46     7
+</code></pre><p><img src="data:image/png;base64,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" alt="plot of chunk iranges-orig"></p>
+<h3 id="intra-range-methods">Intra-range methods</h3>
+<p>個々の区間を操作</p>
+<dl>
+<dt><code>shift(x, shift = 0L, use.names = TRUE)</code></dt>
+<dd>ずらす。</dd>
+<dt><code>narrow(x, start = NA, end = NA, width = NA, use.names = TRUE)</code></dt>
+<dd>狭める。startには正、endには負の値を与える。</dd>
+<dd>start = 1, end = -1 のとき何もしないというのがわかりにくすぎて怖い。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">identical</span><span class="p">(</span><span class="n">ir</span><span class="p">,</span> <span class="nf">narrow</span><span class="p">(</span><span class="n">ir</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">-1</span><span class="p">))</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] TRUE
+</code></pre></dd>
+<dd><code>threebands(x, start = NA, end = NA, width = NA)</code>
+は削られる両端部分も含めて
+<code>$left</code>, <code>$middle</code>, <code>$right</code> のリストで返してくれる亜種。</dd>
+<dd>逆に広げるには <code>flank()</code> を <code>punion()</code> するか、
+<code>+</code> 演算子で両側に広げてから片側を <code>narrow()</code> するか？</dd>
+<dt><code>resize(x, width, fix = &quot;start&quot;, use.names = TRUE, ...)</code></dt>
+<dd>幅を変える。</dd>
+<dd><code>fix</code>: start, end, center</dd>
+<dt><code>flank(x, width, start = TRUE, both = FALSE, use.names = TRUE, ...)</code></dt>
+<dd>start上流もしくはend下流の領域。両方いっぺんには取れない。</dd>
+<dd><code>both = TRUE</code> は start (or end) を起点に両側という意味であり、範囲の両側ではない。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">flank</span><span class="p">(</span><span class="n">ir</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="n">both</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>IRanges object with 7 ranges and 0 metadata columns:
+      start end width
+  [1]     0   1     2
+  [2]     7   8     2
+  [3]    13  14     2
+  [4]    14  15     2
+  [5]    18  19     2
+  [6]    33  34     2
+  [7]    39  40     2
+</code></pre></dd>
+<dd><code>promoters(x, upstream=2000, downstream=200, use.names=TRUE, ...)</code>
+はstart起点に上下異なる幅で取ってこられる亜種。</dd>
+<dt><code>reflect(x, bounds, use.names = TRUE)</code></dt>
+<dd><code>bounds</code> の裏から見た相対位置にする。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">reflect</span><span class="p">(</span><span class="n">ir</span><span class="p">,</span> <span class="nf">IRanges</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">1000</span><span class="p">))</span>
+</span></span></code></pre></div><pre tabindex="0"><code>IRanges object with 7 ranges and 0 metadata columns:
+      start  end width
+  [1]   989 1000    12
+  [2]   988  993     6
+  [3]   982  987     6
+  [4]   972  986    15
+  [5]   977  982     6
+  [6]   966  967     2
+  [7]   955  961     7
+</code></pre></dd>
+<dd>いかにも負のstrandの座標処理に使えそうだがなぜかGenomicRangesには未対応。
+自分で書くならこんな感じか:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">y</span> <span class="o">=</span> <span class="n">gr</span>
+</span></span><span class="line"><span class="cl"><span class="n">bounds</span> <span class="o">=</span> <span class="nf">IRanges</span><span class="p">(</span><span class="n">start</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="nf">seqlengths</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span><span class="nf">[as.vector</span><span class="p">(</span><span class="nf">seqnames</span><span class="p">(</span><span class="n">gr</span><span class="p">))</span><span class="n">]</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">ranges</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="nf">[strand</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#34;-&#34;</span><span class="n">]</span> <span class="o">=</span> <span class="nf">reflect</span><span class="p">(</span><span class="nf">ranges</span><span class="p">(</span><span class="n">gr</span><span class="p">),</span> <span class="n">bounds</span><span class="p">)</span><span class="nf">[strand</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#34;-&#34;</span><span class="n">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">y</span>
+</span></span></code></pre></div><pre tabindex="0"><code>GRanges object with 3 ranges and 2 metadata columns:
+      seqnames              ranges strand |     score        GC
+         &lt;Rle&gt;           &lt;IRanges&gt;  &lt;Rle&gt; | &lt;integer&gt; &lt;numeric&gt;
+  [1]     chr2 243199174-243199273      - |        51       0.5
+  [2]     chr1             102-201      + |        52       0.6
+  [3]     chr1             103-202      * |        53       0.7
+  -------
+  seqinfo: 2 sequences from an unspecified genome
+</code></pre></dd>
+<dd><code>reverse(x)</code> は <code>reflect(x, range(x))</code> のショートカット。
+区間を逆順に並べる <code>rev()</code> とは違う。</dd>
+<dt><code>restrict(x, start = NA, end = NA, keep.all.ranges = FALSE, use.names = TRUE)</code></dt>
+<dd><code>start</code> から <code>end</code> までの範囲のみ残して外を捨てる。境界含む。</dd>
+<dd><code>end = 14</code> で15から始まる区間が取れてきちゃうのはバグじゃない？
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">restrict</span><span class="p">(</span><span class="n">ir</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="m">14</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>IRanges object with 4 ranges and 0 metadata columns:
+      start end width
+  [1]    10  12     3
+  [2]    10  13     4
+  [3]    14  14     1
+  [4]    15  14     0
+</code></pre></dd>
+</dl>
+<p>足し算・引き算は両側に伸縮:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">IRanges</span><span class="p">(</span><span class="m">101</span><span class="o">:</span><span class="m">200</span><span class="p">)</span> <span class="o">+</span> <span class="m">100</span>
+</span></span></code></pre></div><pre tabindex="0"><code>IRanges object with 1 range and 0 metadata columns:
+      start end width
+  [1]     1 300   300
+</code></pre><p>掛け算はズームイン・ズームアウト:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">IRanges</span><span class="p">(</span><span class="m">101</span><span class="o">:</span><span class="m">200</span><span class="p">)</span> <span class="o">*</span> <span class="m">2</span>
+</span></span></code></pre></div><pre tabindex="0"><code>IRanges object with 1 range and 0 metadata columns:
+      start end width
+  [1]   126 175    50
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">IRanges</span><span class="p">(</span><span class="m">101</span><span class="o">:</span><span class="m">200</span><span class="p">)</span> <span class="o">*</span> <span class="m">0.5</span>
+</span></span></code></pre></div><pre tabindex="0"><code>IRanges object with 1 range and 0 metadata columns:
+      start end width
+  [1]    51 250   200
+</code></pre><h3 id="inter-range-methods">Inter-range methods</h3>
+<p>区間の集合を操作</p>
+<dl>
+<dt><code>range(x, ..., with.revmap = FALSE, na.rm = FALSE)</code></dt>
+<dd>端から端まで1つの区間として返す。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">range</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>IRanges object with 1 range and 0 metadata columns:
+      start end width
+  [1]     1  46    46
+</code></pre></dd>
+<dt><code>reduce(x, drop.empty.ranges = FALSE, min.gapwidth = 1L, with.revmap = FALSE)</code></dt>
+<dd>重なっている区間をつなげて平らにする。</dd>
+<dd><code>with.revmap = TRUE</code> とすると入力した区間がどこに含まれるかをmcolsに保持する。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">reduce</span><span class="p">(</span><span class="n">ir</span><span class="p">,</span> <span class="n">with.revmap</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>IRanges object with 3 ranges and 1 metadata column:
+      start end width |    revmap
+  [1]     1  29    29 | 1,2,3,...
+  [2]    34  35     2 |         6
+  [3]    40  46     7 |         7
+</code></pre><p><img src="data:image/png;base64,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" alt="plot of chunk iranges-reduce"></p>
+</dd>
+<dd><code>min.gapwidth</code> を大きくすると離れた区間もつなげられる。
+例えば <code>reduce(ir, min.gapwidth = 10L)</code> で全部つながって <code>range(ir)</code> と同じになる。</dd>
+<dt><code>gaps(x, start=NA, end=NA, ...)</code></dt>
+<dd><code>IRanges::setdiff(IRanges(start, end), x)</code> と同等。
+start/end 省略時は <code>range(x)</code> からの差分。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">gaps</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>IRanges object with 2 ranges and 0 metadata columns:
+      start end width
+  [1]    30  33     4
+  [2]    36  39     4
+</code></pre></dd>
+<dd>GRangesに対しては染色体全体からの差分がstrandごとに計算される:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">gaps</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>GRanges object with 9 ranges and 0 metadata columns:
+      seqnames        ranges strand
+         &lt;Rle&gt;     &lt;IRanges&gt;  &lt;Rle&gt;
+  [1]     chr1         1-101      +
+  [2]     chr1 202-249250621      +
+  [3]     chr1   1-249250621      -
+  [4]     chr1         1-102      *
+  [5]     chr1 203-249250621      *
+  [6]     chr2   1-243199373      +
+  [7]     chr2         1-100      -
+  [8]     chr2 201-243199373      -
+  [9]     chr2   1-243199373      *
+  -------
+  seqinfo: 2 sequences from an unspecified genome
+</code></pre></dd>
+<dt><code>disjoin(x, ...)</code></dt>
+<dd>全ての始点・終点を使い、重なり無しで最多の小区間にして返す。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">disjoin</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>IRanges object with 10 ranges and 0 metadata columns:
+       start end width
+   [1]     1   7     7
+   [2]     8  12     5
+   [3]    13  13     1
+   [4]    14  14     1
+   [5]    15  18     4
+   [6]    19  19     1
+   [7]    20  24     5
+   [8]    25  29     5
+   [9]    34  35     2
+  [10]    40  46     7
+</code></pre><p><img src="data:image/png;base64,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" alt="plot of chunk iranges-disjoin"></p>
+</dd>
+<dt><code>disjointBins(x, ...)</code></dt>
+<dd>重ならないように描画するときのy座標に使える。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">disjointBins</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] 1 2 1 2 3 1 1
+</code></pre></dd>
+<dt><code>union(x, y)</code>, <code>intersect(x, y)</code>, <code>setdiff(x, y)</code></dt>
+<dd>結果は <code>reduce()</code> 済みの区間。</dd>
+<dd>element-wise の <code>punion()</code>, <code>pintersect()</code>, <code>psetdiff()</code>, <code>pgap()</code> もある。</dd>
+<dt><code>GenomicRanges::subtract(x, y, minoverlap = 1L, ...)</code></dt>
+<dd><code>setdiff()</code> と似ているが元の区間ごとの <code>GRangesList</code> にして返す。</dd>
+</dl>
+<h3 id="overlaps">Overlaps</h3>
+<dl>
+<dt><code>type</code></dt>
+<dd>any: ちょっとでも重なっているか距離が <code>maxgap</code> 以下ならOK。</dd>
+<dd>start/end/equal: 開始/終了/両方の距離が <code>maxgap</code> 以下ならOK。</dd>
+<dd>within: queryがすっぽり含まれていればOK。 <code>maxgap</code> の意図・挙動は不明。</dd>
+<dt><code>findOverlaps(query, subject, maxgap = -1L, minoverlap = 0L, type, select, ...)</code></dt>
+<dd><code>select</code>: subject側に複数マッチした場合に何を返すか。
+デフォルトの &ldquo;all&rdquo; ならHits型オブジェクト、
+&ldquo;first&rdquo; や &ldquo;last&rdquo; なら整数vectorでインデックスを返す。
+&ldquo;arbitrary&rdquo; の挙動は謎だが乱数を振ったりするわけではなさそう。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">findOverlaps</span><span class="p">(</span><span class="n">ir</span><span class="p">,</span> <span class="n">ir</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>Hits object with 15 hits and 0 metadata columns:
+       queryHits subjectHits
+       &lt;integer&gt;   &lt;integer&gt;
+   [1]         1           1
+   [2]         1           2
+   [3]         2           1
+   [4]         2           2
+   [5]         3           3
+   ...       ...         ...
+  [11]         5           3
+  [12]         5           4
+  [13]         5           5
+  [14]         6           6
+  [15]         7           7
+  -------
+  queryLength: 7 / subjectLength: 7
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">findOverlaps</span><span class="p">(</span><span class="n">ir</span><span class="p">,</span> <span class="n">ir</span><span class="p">,</span> <span class="n">select</span> <span class="o">=</span> <span class="s">&#34;first&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] 1 1 3 3 3 6 7
+</code></pre></dd>
+<dd><code>mergeByOverlaps(query, subject, ...)</code> と
+<code>findOverlapPairs(query, subject, ...)</code>
+はHits型とは違う謎の形式で返す亜種。</dd>
+<dt><code>countOverlaps(query, subject, maxgap = -1L, minoverlap = 0L, type, ...)</code></dt>
+<dd>いくつsubjectと重なるか、queryと同じ長さの整数vectorを返す。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">countOverlaps</span><span class="p">(</span><span class="n">ir</span><span class="p">,</span> <span class="n">ir</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] 2 2 3 3 3 1 1
+</code></pre></dd>
+<dt><code>overlapsAny(query, subject, maxgap = -1L, minoverlap = 0L, type, ...)</code></dt>
+<dd>ひとつでもsubjectと重なるものがあるか、queryと同じ長さの論理vectorを返す。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">overlapsAny</span><span class="p">(</span><span class="n">ir</span><span class="p">,</span> <span class="n">ir[4]</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] FALSE FALSE  TRUE  TRUE  TRUE FALSE FALSE
+</code></pre></dd>
+<dd><code>%over%</code>, <code>%within%</code> <code>%outside%</code>
+という演算子で短く書けるけど可読性低下とconflictが怖いので使わない。</dd>
+<dt><code>subsetByOverlaps(x, ranges, maxgap = -1L, minoverlap = 0L, type, invert = FALSE, ...)</code></dt>
+<dd><code>x[overlapsAny(x, ranges)]</code> のショートカット。</dd>
+<dt><code>overlapsRanges(query, subject, hits = NULL, ...)</code></dt>
+<dd>subsetByOverlapsした上、重なっている部分のみ切り詰めて返す。</dd>
+<dt><code>poverlaps(query, subject, maxgap = 0L, minoverlap = 1L, type, ...)</code></dt>
+<dd><code>min()</code> に対する <code>pmin()</code> のように、element-wiseに比較する。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">poverlaps</span><span class="p">(</span><span class="n">ir</span><span class="p">,</span> <span class="nf">rev</span><span class="p">(</span><span class="n">ir</span><span class="p">))</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] FALSE FALSE  TRUE  TRUE  TRUE FALSE FALSE
+</code></pre></dd>
+<dt><code>coverage(x, shift=0L, width=NULL, weight=1L, method=c(&quot;auto&quot;, &quot;sort&quot;, &quot;hash&quot;, &quot;naive&quot;))</code></dt>
+<dd>重なりの数をRle型で。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">coverage</span><span class="p">(</span><span class="n">ir</span><span class="p">,</span> <span class="n">shift</span> <span class="o">=</span> <span class="m">200</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="m">800</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>integer-Rle of length 800 with 13 runs
+  Lengths: 200   7   5   2   4   1   5   5   4   2   4   7 554
+  Values :   0   1   2   1   2   3   2   1   0   1   0   1   0
+</code></pre></dd>
+<dd><code>cvg(x, from = NA, to = NA, weight = 1L, varname = &quot;cvg&quot;, collapse = FALSE, ...)</code>
+も似たような関数だがドキュメント無し。</dd>
+<dd><code>slice(x, ...)</code> を使うと「カバレッジがこれ以上の区間」みたいなのを簡単に取れる:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">coverage</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="n">IRanges</span><span class="o">::</span><span class="nf">slice</span><span class="p">(</span><span class="n">lower</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">rangesOnly</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>IRanges object with 2 ranges and 0 metadata columns:
+      start end width
+  [1]     8  12     5
+  [2]    15  24    10
+</code></pre></dd>
+</dl>
+<h3 id="neighboring">Neighboring</h3>
+<dl>
+<dt><code>nearest(x, subject, select = c(&quot;arbitrary&quot;, &quot;all&quot;))</code></dt>
+<dd>最も近いもの、あるいはoverlapしているもの。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">nearest</span><span class="p">(</span><span class="n">ir</span><span class="p">,</span> <span class="n">ir</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] 1 1 2 3 3 6 7
+</code></pre></dd>
+<dt><code>precede(x, subject, select = c(&quot;first&quot;, &quot;all&quot;))</code></dt>
+<dd>subjectのうちどれの上流にあるか。重なるものは除外。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">precede</span><span class="p">(</span><span class="n">ir</span><span class="p">,</span> <span class="n">ir</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1]  3  3  6  6  6  7 NA
+</code></pre></dd>
+<dt><code>follow(x, subject, select = c(&quot;last&quot;, &quot;all&quot;))</code></dt>
+<dd>subjectのうちどれの下流にあるか。重なるものは除外。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">follow</span><span class="p">(</span><span class="n">ir</span><span class="p">,</span> <span class="n">ir</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] NA NA  2  2  2  4  6
+</code></pre></dd>
+<dt><code>distanceToNearest(x, subject, select = c(&quot;arbitrary&quot;, &quot;all&quot;))</code></dt>
+<dd>最も近いsubjectへの距離。overlapしている場合はゼロ。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">distanceToNearest</span><span class="p">(</span><span class="n">ir</span><span class="p">,</span> <span class="n">ir[1</span><span class="o">:</span><span class="m">3</span><span class="n">]</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>Hits object with 7 hits and 1 metadata column:
+      queryHits subjectHits |  distance
+      &lt;integer&gt;   &lt;integer&gt; | &lt;integer&gt;
+  [1]         1           1 |         0
+  [2]         2           1 |         0
+  [3]         3           2 |         0
+  [4]         4           3 |         0
+  [5]         5           3 |         0
+  [6]         6           3 |        14
+  [7]         7           3 |        20
+  -------
+  queryLength: 7 / subjectLength: 3
+</code></pre></dd>
+<dd><code>distance(x, y)</code> はelement-wizeに計算。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">distance</span><span class="p">(</span><span class="n">ir</span><span class="p">,</span> <span class="nf">rev</span><span class="p">(</span><span class="n">ir</span><span class="p">))</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] 27 20  0  0  0 20 27
+</code></pre></dd>
+</dl>
+<h3 id="ignorestrand"><code>ignore.strand</code></h3>
+<p>GenomicRangesの操作はデフォルトでseqnamesとstrandごとに分けて行われる。
+strandを無視するには <code>ignore.strand = TRUE</code> を渡す。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">reduce</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>GRanges object with 3 ranges and 0 metadata columns:
+      seqnames    ranges strand
+         &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt;
+  [1]     chr1   102-201      +
+  [2]     chr1   103-202      *
+  [3]     chr2   101-200      -
+  -------
+  seqinfo: 2 sequences from an unspecified genome
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">reduce</span><span class="p">(</span><span class="n">gr</span><span class="p">,</span> <span class="n">ignore.strand</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>GRanges object with 2 ranges and 0 metadata columns:
+      seqnames    ranges strand
+         &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt;
+  [1]     chr1   102-202      *
+  [2]     chr2   101-200      *
+  -------
+  seqinfo: 2 sequences from an unspecified genome
+</code></pre>
+</article>
+</main>
+
+<nav class="side-bar">
+<div class="menu">
+
+<div><a href="/about.html">About</a></div>
+
+<div><a href="/research.html">Research Interests</a></div>
+
+<input type="checkbox" id="menu-rstats" checked>
+<label for="menu-rstats" class="active">R stats</label>
+<ul>
+<li><a href="/rstats/intro.html">R自学自習の基礎知識</a></li>
+<li><a href="/rstats/programming.html">RプログラミングTips</a></li>
+<li><a href="/rstats/config.html">R環境設定</a></li>
+<li><a href="/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/rstats/purrr.html">purrr</a></li>
+<li><a href="/rstats/readr.html">readr</a></li>
+<li><a href="/rstats/stringr.html">stringr</a></li>
+<li><a href="/rstats/knitr.html">knitr</a></li>
+<li><a href="/rstats/foreach.html">foreach/parallel</a></li>
+<li><a href="/rstats/devtools.html">devtools</a></li>
+<li><a href="/rstats/rcpp.html">Rcpp</a></li>
+<li><a href="/rstats/bioconductor.html">Bioconductor</a></li>
+<li class="active"><a href="/rstats/genomicranges.html">GenomicRanges</a></li>
+<li><a href="/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/rstats/edger.html">edgeR</a></li>
+<li><a href="/rstats/topgo.html">topGO</a></li>
+<li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
+<li><a href="/rstats/reshape2.html">reshape2</a></li>
+</ul>
+
+<input type="checkbox" id="menu-python">
+<label for="menu-python">Python</label>
+<ul>
+<li><a href="/python/install.html">Pythonインストール</a></li>
+<li><a href="/python/pip.html">pip</a></li>
+<li><a href="/python/ipython.html">IPython</a></li>
+<li><a href="/python/biopython.html">BioPython</a></li>
+<li><a href="/python/concurrent.html">concurrent.futures</a></li>
+<li><a href="/python/copy.html">copy</a></li>
+<li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
+<li><a href="/python/packaging.html">Pythonパッケージ作成</a></li>
+</ul>
+
+<input type="checkbox" id="menu-cxx">
+<label for="menu-cxx">C&#43;&#43;</label>
+<ul>
+<li><a href="/cxx/boost.html">Boost</a></li>
+<li><a href="/cxx/getopt.html">C&#43;&#43;コマンドライン引数</a></li>
+<li><a href="/cxx/speed.html">C&#43;&#43;高速化</a></li>
+<li><a href="/cxx/gcc.html">gcc</a></li>
+<li><a href="/cxx/bitwise.html">ビット演算</a></li>
+<li><a href="/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="menu-bio">
+<label for="menu-bio">Biology</label>
+<ul>
+<li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
+<li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/bio/meme.html">MEME</a></li>
+<li><a href="/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/bio/samtools.html">SAMtools</a></li>
+<li><a href="/bio/shirokane.html">SHIROKANE</a></li>
+<li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/bio/mathmorph.html">数理形態学</a></li>
+<li><a href="/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="menu-dev">
+<label for="menu-dev">Developer Tools</label>
+<ul>
+<li><a href="/dev/apptainer.html">Apptainer</a></li>
+<li><a href="/dev/atom.html">Atom</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/dev/cmake.html">CMake</a></li>
+<li><a href="/dev/docker.html">Docker</a></li>
+<li><a href="/dev/emacs.html">Emacs</a></li>
+<li><a href="/dev/git.html">Git</a></li>
+<li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mount.html">mount</a></li>
+<li><a href="/dev/rsync.html">rsync</a></li>
+<li><a href="/dev/ssh.html">ssh</a></li>
+<li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
+<li><a href="/dev/vi.html">vi</a></li>
+<li><a href="/dev/vscode.html">VSCode</a></li>
+<li><a href="/dev/zsh.html">zsh</a></li>
+<li><a href="/dev/sh.html">シェルスクリプト</a></li>
+<li><a href="/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="menu-mac">
+<label for="menu-mac">Mac</label>
+<ul>
+<li><a href="/mac/applescript.html">AppleScript</a></li>
+<li><a href="/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/mac/command.html">Mac固有コマンド</a></li>
+<li><a href="/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/mac/winebottler.html">WineBottler</a></li>
+</ul>
+
+<input type="checkbox" id="menu-lectures">
+<label for="menu-lectures">Lectures</label>
+<ul>
+<li><a href="/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/lectures/git2018nrifs.html">Git入門2018</a></li>
+<li><a href="/lectures/git2019makino.html">Git入門2019</a></li>
+<li><a href="/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="menu-misc">
+<label for="menu-misc">Miscellaneous</label>
+<ul>
+<li><a href="/misc/fonts.html">Fonts</a></li>
+<li><a href="/misc/gollum.html">Gollum</a></li>
+<li><a href="/misc/hugo.html">Hugo</a></li>
+<li><a href="/misc/latex.html">LaTeX</a></li>
+</ul>
+
+<div><a href="/tags.html">Tags</a></div>
+</div>
+<form action="/search.html" id="search-form">
+<input type="search" name="q" placeholder="search">
+</form>
+</nav>
+<footer><small>(ɔ) 2008 岩嵜航 Watal M. Iwasaki</small></footer>
+</body>
+</html>
