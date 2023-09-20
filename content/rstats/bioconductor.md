@@ -184,7 +184,7 @@ bss = readDNAStringSet(.file)
 
 ## `GenomicRanges`
 
-[See "IRanges and GenomicRanges"]({{< relref "iranges.md" >}}).
+[See "IRanges and GenomicRanges"]({{< relref "genomicranges.md" >}}).
 
 
 ## `GenomicFeatures`
