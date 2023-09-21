@@ -1,14 +1,21 @@
 .DEFAULT_GOAL := all
-.PHONY: all hugo watch clean
+SUBDIRS := $(wildcard content/*/.knitr)
+.PHONY: all hugo watch benchmark clean ${SUBDIRS}
 
 all: hugo
 	@:
 
-hugo: | public
+hugo: ${SUBDIRS} | public
 	hugo
+
+${SUBDIRS}:
+	$(MAKE) -C $@
 
 watch:
 	hugo -w
+
+benchmark:
+	hugo --templateMetrics --templateMetricsHints
 
 public:
 	$(eval REMOTE_URL := $(shell git remote get-url origin))
