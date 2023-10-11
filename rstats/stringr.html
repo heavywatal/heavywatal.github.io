@@ -116,7 +116,7 @@ stringr — Rの文字列をまともな方法で処理する
 <code>install.packages(&quot;tidyverse&quot;)</code> で一括インストール、
 <code>library(tidyverse)</code> で一括ロード。</p>
 <ul>
-<li><a href="https://r4ds.had.co.nz/strings.html">https://r4ds.had.co.nz/strings.html</a></li>
+<li><a href="https://r4ds.hadley.nz/strings.html">https://r4ds.hadley.nz/strings.html</a></li>
 <li><a href="https://stringr.tidyverse.org/articles/from-base.html">base R関数との対応表</a></li>
 </ul>
 <h2 id="functions">Functions</h2>
@@ -124,26 +124,68 @@ stringr — Rの文字列をまともな方法で処理する
 <dl>
 <dt><code>str_length(string)</code></dt>
 <dd>文字列の長さを数える。
-<code>base::nchar(x)</code> と相同だが、<code>NA</code> に対して <code>2</code> ではなく <code>NA</code> を返す。</dd>
+<code>base::nchar(x)</code> と相同。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">str_length</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&#34;NA&#34;</span><span class="p">,</span> <span class="kc">NA</span><span class="p">))</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1]  2 NA
+</code></pre></dd>
 <dt><code>str_sub(string, start = 1, end = -1)</code></dt>
 <dd>文字列を部分的に参照・変更する。
 <code>base::substr()</code> と相同だが、負数で末尾からの位置を指定できる。
-<code>str_sub&lt;-</code> が定義されているので置換にも使える。</dd>
+ただしRのインデックスは1始まりで終端も含むの。
+<code>str_sub&lt;-</code> が定義されているので置換にも使える。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">str_sub</span><span class="p">(</span><span class="s">&#34;supercalifragilisticexpialidocious&#34;</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="m">-15</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] &#34;fragilistic&#34;
+</code></pre></dd>
 <dt><code>str_flatten(string, collapse = &quot;&quot;)</code></dt>
-<dd>文字列vectorを1つの文字列に結合する。</dd>
+<dd>文字列vectorを1つの文字列に結合する。
+<code>base::paste0(string, collapse = &quot;&quot;)</code> と同等だが <code>NA</code> を扱える。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">str_flatten</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&#34;Dragon&#34;</span><span class="p">,</span> <span class="kc">NA</span><span class="p">,</span> <span class="s">&#34;Force&#34;</span><span class="p">))</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] NA
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">str_flatten</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&#34;Dragon&#34;</span><span class="p">,</span> <span class="kc">NA</span><span class="p">,</span> <span class="s">&#34;Force&#34;</span><span class="p">),</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] &#34;DragonForce&#34;
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">paste0</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&#34;Dragon&#34;</span><span class="p">,</span> <span class="kc">NA</span><span class="p">,</span> <span class="s">&#34;Force&#34;</span><span class="p">),</span> <span class="n">collapse</span> <span class="o">=</span> <span class="s">&#34;&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] &#34;DragonNAForce&#34;
+</code></pre></dd>
 <dt><code>str_c(..., sep = &quot;&quot;, collapse = NULL)</code></dt>
 <dd>複数の引数で与えた文字列を結合する。
-デフォルトの <code>sep</code> がスペースじゃないので <code>base::paste0()</code> に近い。</dd>
+デフォルトの <code>sep</code> がスペースじゃないので <code>base::paste0()</code> に近い。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">str_c</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&#34;Dragon&#34;</span><span class="p">,</span> <span class="s">&#34;Hammer&#34;</span><span class="p">),</span> <span class="nf">c</span><span class="p">(</span><span class="kc">NA</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">),</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;Force&#34;</span><span class="p">,</span> <span class="s">&#34;Fall&#34;</span><span class="p">))</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] NA           &#34;HammerFall&#34;
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">paste0</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&#34;Dragon&#34;</span><span class="p">,</span> <span class="s">&#34;Hammer&#34;</span><span class="p">),</span> <span class="nf">c</span><span class="p">(</span><span class="kc">NA</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">),</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;Force&#34;</span><span class="p">,</span> <span class="s">&#34;Fall&#34;</span><span class="p">))</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] &#34;DragonNAForce&#34; &#34;HammerFall&#34;   
+</code></pre></dd>
 <dt><code>str_split(string, pattern, n = Inf, simplify = FALSE)</code></dt>
 <dd>文字列を分割してlistを返す <code>base::strsplit(x, split)</code> の改良版。
 <code>string</code> と <code>pattern</code> の要素数が噛み合わないときにちゃんと警告が出る。
 最大 <code>n</code> 個に分割するということを指定できる。
-<code>simplify = TRUE</code> とするとmatrixで返す。</dd>
+<code>simplify = TRUE</code> とするとmatrixで返す。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">str_split</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&#34;DragonForce&#34;</span><span class="p">,</span> <span class="s">&#34;HammerFall&#34;</span><span class="p">),</span> <span class="s">&#34;(?&lt;=[a-z])(?=[A-Z])&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[[1]]
+[1] &#34;Dragon&#34; &#34;Force&#34; 
+    
+[[2]]
+[1] &#34;Hammer&#34; &#34;Fall&#34;  
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">str_split</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&#34;DragonForce&#34;</span><span class="p">,</span> <span class="s">&#34;HammerFall&#34;</span><span class="p">),</span> <span class="s">&#34;(?&lt;=[a-z])(?=[A-Z])&#34;</span><span class="p">,</span> <span class="n">simplify</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>     [,1]     [,2]   
+[1,] &#34;Dragon&#34; &#34;Force&#34;
+[2,] &#34;Hammer&#34; &#34;Fall&#34; 
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">str_split_1</span><span class="p">(</span><span class="s">&#34;DragonForce&#34;</span><span class="p">,</span> <span class="s">&#34;(?&lt;=[a-z])(?=[A-Z])&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] &#34;Dragon&#34; &#34;Force&#34; 
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">str_split_i</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&#34;DragonForce&#34;</span><span class="p">,</span> <span class="s">&#34;HammerFall&#34;</span><span class="p">),</span> <span class="s">&#34;(?&lt;=[a-z])(?=[A-Z])&#34;</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] &#34;Dragon&#34; &#34;Hammer&#34;
+</code></pre></dd>
+<dd><code>str_split_1(string, pattern)</code> は1つの文字列を受け取ってvectorを返す簡略版。</dd>
+<dd><code>str_split_i(string, pattern, i)</code> は分割してできたi番目の要素だけをvectorで返す亜種。</dd>
 <dd><code>str_split_fixed(string, pattern, n)</code> は
-<code>simplify = TRUE</code> 固定で有限 <code>n</code> 列のmatrixを返すショートカット。</dd>
+<code>n</code> 必須、 <code>simplify = TRUE</code> 固定でmatrixを返すショートカット。</dd>
+<dd>data.frame内の文字列を分割したい場合は
+<a href="/rstats/tidyr.html"><code>tidyr::separate*()</code></a> 系の関数を使う。</dd>
 <dt><code>str_dup(string, times)</code></dt>
 <dd>指定した回数だけ文字列を繰り返して結合。
-<code>str_dup(&quot;#&quot;, 79)</code> とかで結果出力に区切りを入れたり。</dd>
+<code>base::strrep()</code> と同等。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">str_dup</span><span class="p">(</span><span class="s">&#34;pizza&#34;</span><span class="p">,</span> <span class="m">10</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] &#34;pizzapizzapizzapizzapizzapizzapizzapizzapizzapizza&#34;
+</code></pre></dd>
 </dl>
 <h3 id="pattern-matching">Pattern Matching</h3>
 <dl>
