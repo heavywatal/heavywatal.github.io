@@ -6,8 +6,17 @@ tags = ["r", "tidyverse"]
   parent = "rstats"
   weight = -60
 +++
-
-
+```{r, setup-r}
+#| file: "setup.R"
+#| cache: false
+#| echo: false
+#| results: "asis"
+```
+```{r, setup-local}
+#| cache: false
+#| echo: false
+library(stringr)
+```
 
 <a href="https://stringr.tidyverse.org/">
 <img src="/_img/hex-stickers/stringr.webp" align="right" width="120" height="139">
@@ -49,13 +58,8 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 `str_length(string)`
 :   文字列の長さを数える。
     `base::nchar(x)` と相同。
-    
-    ```r
+    ```{r, length}
     str_length(c("NA", NA))
-    ```
-    
-    ```
-    [1]  2 NA
     ```
 
 `str_sub(string, start = 1, end = -1)`
@@ -63,61 +67,25 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
     `base::substr()` と相同だが、負数で末尾からの位置を指定できる。
     ただしRのインデックスは1始まりで終端も含むの。
     `str_sub<-` が定義されているので置換にも使える。
-    
-    ```r
+    ```{r, sub}
     str_sub("supercalifragilisticexpialidocious", 10, -15)
-    ```
-    
-    ```
-    [1] "fragilistic"
     ```
 
 `str_flatten(string, collapse = "")`
 :   文字列vectorを1つの文字列に結合する。
     `base::paste0(string, collapse = "")` と同等だが `NA` を扱える。
-    
-    ```r
+    ```{r, flatten}
     str_flatten(c("Dragon", NA, "Force"))
-    ```
-    
-    ```
-    [1] NA
-    ```
-    
-    ```r
     str_flatten(c("Dragon", NA, "Force"), na.rm = TRUE)
-    ```
-    
-    ```
-    [1] "DragonForce"
-    ```
-    
-    ```r
     paste0(c("Dragon", NA, "Force"), collapse = "")
-    ```
-    
-    ```
-    [1] "DragonNAForce"
     ```
 
 `str_c(..., sep = "", collapse = NULL)`
 :   複数の引数で与えた文字列を結合する。
     デフォルトの `sep` がスペースじゃないので `base::paste0()` に近い。
-    
-    ```r
+    ```{r, c}
     str_c(c("Dragon", "Hammer"), c(NA, ""), c("Force", "Fall"))
-    ```
-    
-    ```
-    [1] NA           "HammerFall"
-    ```
-    
-    ```r
     paste0(c("Dragon", "Hammer"), c(NA, ""), c("Force", "Fall"))
-    ```
-    
-    ```
-    [1] "DragonNAForce" "HammerFall"   
     ```
 
 `str_split(string, pattern, n = Inf, simplify = FALSE)`
@@ -125,43 +93,11 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
     `string` と `pattern` の要素数が噛み合わないときにちゃんと警告が出る。
     最大 `n` 個に分割するということを指定できる。
     `simplify = TRUE` とするとmatrixで返す。
-    
-    ```r
+    ```{r, split}
     str_split(c("DragonForce", "HammerFall"), "(?<=[a-z])(?=[A-Z])")
-    ```
-    
-    ```
-    [[1]]
-    [1] "Dragon" "Force" 
-    
-    [[2]]
-    [1] "Hammer" "Fall"  
-    ```
-    
-    ```r
     str_split(c("DragonForce", "HammerFall"), "(?<=[a-z])(?=[A-Z])", simplify = TRUE)
-    ```
-    
-    ```
-         [,1]     [,2]   
-    [1,] "Dragon" "Force"
-    [2,] "Hammer" "Fall" 
-    ```
-    
-    ```r
     str_split_1("DragonForce", "(?<=[a-z])(?=[A-Z])")
-    ```
-    
-    ```
-    [1] "Dragon" "Force" 
-    ```
-    
-    ```r
     str_split_i(c("DragonForce", "HammerFall"), "(?<=[a-z])(?=[A-Z])", 1)
-    ```
-    
-    ```
-    [1] "Dragon" "Hammer"
     ```
 :   `str_split_1(string, pattern)` は1つの文字列を受け取ってvectorを返す簡略版。
 :   `str_split_i(string, pattern, i)` は分割してできたi番目の要素だけをvectorで返す亜種。
@@ -173,13 +109,8 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 `str_dup(string, times)`
 :   指定した回数だけ文字列を繰り返して結合。
     `base::strrep()` と同等。
-    
-    ```r
+    ```{r, dup}
     str_dup("pizza", 10)
-    ```
-    
-    ```
-    [1] "pizzapizzapizzapizzapizzapizzapizzapizzapizzapizza"
     ```
 
 ### Pattern Matching
