@@ -37,7 +37,7 @@ R標準の関数よりも遥かに分かりやすく安全で高機能なもの�
 - data.frame <=> CSV/TSV の読み書きには [readr]({{< relref "readr.md" >}})
 - list <=> json の読み書きには [jsonlite](https://cran.r-project.org/web/packages/jsonlite/)
 
-[日本語版](https://amzn.to/2yyFRKt)でも[英語版](https://amzn.to/2tbRmVc)でも[公開オンライン版](https://r4ds.had.co.nz/)でもいいのでとにかく **R for Data Science (r4ds)** を読むのが一番。
+[日本語版](https://amzn.to/2yyFRKt)でも[英語版](https://amzn.to/2tbRmVc)でも[公開オンライン版](https://r4ds.hadley.nz/)でもいいのでとにかく **R for Data Science (r4ds)** を読むのが一番。
 即戦力が欲しい場合は、新しく日本語で書かれた「[RユーザのためのRStudio[実践]入門−tidyverseによるモダンな分析フローの世界](https://amzn.to/2u0hmTs)」が取っつきやすい。
 
 ## 確率分布

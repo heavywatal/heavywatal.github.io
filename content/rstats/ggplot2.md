@@ -26,8 +26,8 @@ R標準の`boxplot()`や`hist()`などは前者の上に、
 - [初学者向け講義資料2023](/slides/tohoku2023r/2-visualization.html)
 - <https://ggplot2.tidyverse.org>
 - <https://r-graphics.org/>
-- <https://r4ds.had.co.nz/data-visualisation.html>
-- <https://r4ds.had.co.nz/graphics-for-communication.html>
+- <https://r4ds.hadley.nz/data-visualize.html>
+- <https://r4ds.hadley.nz/communication.html>
 
 
 ## 基本的な使い方

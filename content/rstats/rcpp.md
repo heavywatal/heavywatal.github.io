@@ -63,11 +63,9 @@ rbenchmark::benchmark(r_for(n), r_vec(n), rcpp(n))[,1:4]
       はかなり参考になる。
 - API: http://dirk.eddelbuettel.com/code/rcpp/html/
 - Advanced R: [Rewriting R code in C++](https://adv-r.hadley.nz/rcpp.html)
-- <span class="fragment" data-fragment-index="1">
-  [みんなのRcpp](https://teuder.github.io/rcpp4everyone_ja/) and
+- [みんなのRcpp](https://teuder.github.io/rcpp4everyone_ja/) and
   [Rcpp for everyone](https://teuder.github.io/rcpp4everyone_en/)
   by 津駄@teuderさん
-  </span>
 
 ## Rスクリプトの途中で使う
 
@@ -106,7 +104,9 @@ fibonacci(9L)
 ## Rパッケージで使う
 
 - [Rcpp-package.pdf](http://dirk.eddelbuettel.com/code/rcpp/Rcpp-package.pdf) by Dirk Eddelbuettel and Romain François
-- [Compiled code (`src/`) - R packages](http://r-pkgs.had.co.nz/src.html) by Hadley Wickham
+- tidyverseでは[cpp11](https://cpp11.r-lib.org/)を使うようになったので
+  [R Packages (Wickham and Bryan) ](https://r-pkgs.org/misc.html)
+  におけるRcppの扱いは小さい。
 
 ### 準備手順
 
@@ -423,11 +423,3 @@ http://dirk.eddelbuettel.com/code/rcpp/html/module_8h.html
 
 `RCPP_EXPOSED_CLASS(MyClass)`
 : それらの前にさらに `class MyClass;` の前方宣言もする。
-
-
-
-
-## 関連書籍
-
-<a href="https://www.amazon.co.jp/dp/1461468671/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=ba6c791d1fab3179e6a351c2347bbdc9&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1461468671&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=1461468671" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
-<a href="https://www.amazon.co.jp/dp/B0748CFJL3/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=2a5507d53af7170cbd1a42f540f72351&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0748CFJL3&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=B0748CFJL3" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />

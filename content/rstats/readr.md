@@ -45,8 +45,8 @@ options(
 )
 ```
 
--   https://r4ds.had.co.nz/data-import.html
--   https://cran.r-project.org/package=readr
+-   <https://r4ds.hadley.nz/data-import.html>
+-   <https://cran.r-project.org/package=readr>
 
 ## 主な関数
 
