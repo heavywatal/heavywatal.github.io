@@ -145,9 +145,9 @@ Pythonパッケージ作成
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;License :: OSI Approved :: MIT License&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;Topic :: Scientific/Engineering :: Bio-Informatics&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl"><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="nx">requires-python</span> <span class="p">=</span> <span class="s2">&#34;&gt;=3.10&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">requires-python</span> <span class="p">=</span> <span class="s2">&#34;&gt;=3.11&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="nx">dependencies</span> <span class="p">=</span> <span class="p">[</span>
-</span></span><span class="line"><span class="cl">  <span class="s2">&#34;tomli &gt;= 2.0; python_version &lt; &#39;3.11&#39;&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;tomli-w&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl"><span class="p">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">project</span><span class="p">.</span><span class="nx">optional-dependencies</span><span class="p">]</span>
@@ -176,6 +176,11 @@ Pythonパッケージ作成
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">tool</span><span class="p">.</span><span class="nx">coverage</span><span class="p">.</span><span class="nx">run</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="nx">source</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;src&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">tool</span><span class="p">.</span><span class="nx">coverage</span><span class="p">.</span><span class="nx">report</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">exclude_also</span> <span class="p">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;if __name__ == .__main__.:&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
 </span></span></code></pre></div><p><code>dynamic</code> に指定したものは <code>__init__.py</code> に <code>__version__ = &quot;0.1.0&quot;</code>
 などと書いてあるものを参照できる。
 比較したいときは
@@ -194,7 +199,7 @@ Pythonパッケージ作成
 <p>コード整形やテストのような各種開発ツールの設定も <code>[tool.***]</code> に記述できる。
 linterとしては
 <a href="https://github.com/PyCQA/flake8/issues/234"><code>pyproject.toml</code> 対応拒否のflake8</a>
-を捨てて超高速Rust製<a href="https://beta.ruff.rs/">ruff</a>を使う。</p>
+を捨てて超高速Rust製<a href="https://docs.astral.sh/ruff/">ruff</a>を使う。</p>
 <h3 id="ソースコード">ソースコード</h3>
 <dl>
 <dt><code>wtl/__init__.py</code></dt>
