@@ -80,9 +80,9 @@ classifiers = [
   "License :: OSI Approved :: MIT License",
   "Topic :: Scientific/Engineering :: Bio-Informatics",
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
-  "tomli >= 2.0; python_version < '3.11'"
+  "tomli-w",
 ]
 
 [project.optional-dependencies]
@@ -111,6 +111,11 @@ testpaths = ["tests"]
 
 [tool.coverage.run]
 source = ["src"]
+
+[tool.coverage.report]
+exclude_also = [
+  "if __name__ == .__main__.:",
+]
 ```
 
 `dynamic` に指定したものは `__init__.py` に `__version__ = "0.1.0"`
@@ -135,7 +140,7 @@ optional dependencies もインストールしたい場合は
 コード整形やテストのような各種開発ツールの設定も `[tool.***]` に記述できる。
 linterとしては
 [`pyproject.toml` 対応拒否のflake8](https://github.com/PyCQA/flake8/issues/234)
-を捨てて超高速Rust製[ruff](https://beta.ruff.rs/)を使う。
+を捨てて超高速Rust製[ruff](https://docs.astral.sh/ruff/)を使う。
 
 
 
