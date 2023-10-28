@@ -249,26 +249,61 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 `str_to_upper()`, `str_to_lower()`, `str_to_title()`, `str_to_sentence()`
 :   大文字・小文字の変換
 
-`str_interp(string, env = parent.frame())`
-:   `sprintf()` と相同。
-    文字列の中の `$[format]{expr}` がR表現として評価される。
-    `[format]`部分は`sprintf()`と同じ形式で、省略可。
-    `env` はlistやdata.frameでもよい。
-:   e.g., `stringr::str_interp("Mean carat is $[.3f]{mean(carat)}.", diamonds)`
-
 `str_glue(..., .sep = "", .envir = parent.frame())`
-:   [`library(glue)`](https://glue.tidyverse.org/) しなくても使えるように。
+:   渡された文字列の中の `{R表現}` を評価して埋め込む。
+    `sprintf()` よりも使い方が簡単。ライバルは `paste0()` とか。
+    `str_interp()` はこれに取って代わられた。
+    
+    ```r
+    str_glue("fruit[1] is {fruit[1]}.")
+    ```
+    
+    ```
+    fruit[1] is apple.
+    ```
+:   data.frameの流れるpipe上では `str_glue_data()` が便利:
+    
+    ```r
+    mtcars |> str_glue_data("mean(disp) is {mean(disp)}.")
+    ```
+    
+    ```
+    mean(disp) is 230.721875.
+    ```
+:   本家の [`library(glue)`](https://glue.tidyverse.org/) にはほかのオプションもある。
+    それでもPythonのf-stringのような簡易フォーマッタは無くてちょっと不便。
 
 `str_pad(string, width, side = c("left", "right", "both"), pad = " ")`
 :   文字列の幅を `width` に伸ばして `side` 側を `pad` で埋める。
-    例えば `"009" "010"` のように数字の左を0で埋めて長さを揃えるのにも使える:
-    `str_pad(c("9", "10"), 3L, "0")`
+    
+    ```r
+    str_pad(c("9", "10"), 3L, pad = "0")
+    ```
+    
+    ```
+    [1] "009" "010"
+    ```
 
 `str_trim(string, side = "both")`
-:   空白文字を除去する。
-    Python でいうところの `str.strip()`。
-    両端から空白文字を除去して、連続する空白文字を1つに縮める
-    `str_squish()` もある。
+:   端の空白文字を除去する。
+    Python でいうところの `string.strip()`。
+:   `str_squish()` は両端trimしたうえに内部の連続する空白文字を1つに縮める亜種。
+    
+    ```r
+    str_trim("   trim   me   ")
+    ```
+    
+    ```
+    [1] "trim   me"
+    ```
+    
+    ```r
+    str_squish("   trim   me   ")
+    ```
+    
+    ```
+    [1] "trim me"
+    ```
 
 `str_trunc(string, width, side = c("right", "left", "center"), ellipsis = "...")`
 :   一定の長さを超えたら捨てて `...` にする。
@@ -299,17 +334,32 @@ s = 'This is a string with "double quotes".'
 バックスラッシュを使って改行 `\n` やタブ `\t` などの制御文字を表現できる。
 バックスラッシュ自体を表すためには `\\` のように重ねる必要がある。
 
+
 ```r
 string = "x\ty\n0\t1\n"
 print(string)
-# [1] "x\ty\n0\t1\n"
+```
+
+```
+[1] "x\ty\n0\t1\n"
+```
+
+```r
 cat(string)
-# x       y
-# 0       1
-readr::read_tsv(string)
-#       x     y
-#   <dbl> <dbl>
-# 1     0     1
+```
+
+```
+x	y
+0	1
+```
+
+```r
+readr::read_tsv(I(string))
+```
+
+```
+  x y
+1 0 1
 ```
 
 See [`?Quotes`](https://stat.ethz.ch/R-manual/R-patched/library/base/html/Quotes.html)
@@ -347,7 +397,7 @@ See [`?Quotes`](https://stat.ethz.ch/R-manual/R-patched/library/base/html/Quotes
 先述のようにバックスラッシュそのものを表すには二重にしておく必要があるため。
 ```r
 "\d"
-# Error: '\d' is an unrecognized escape in character string starting ""\d"
+# Error: '\d' is an unrecognized escape in character string starting (<input>:1:3)
 
 "\\d"
 # Good.
@@ -369,5 +419,5 @@ stringr::str_count("1q2w3e4r", pattern)
 
 ## 関連書籍
 
-<a href="https://www.amazon.co.jp/Data-Science-Transform-Visualize-Model/dp/1491910399/ref=as_li_ss_il?s=books&ie=UTF8&qid=1508340700&sr=1-3&linkCode=li3&tag=heavywatal-22&linkId=6a53371cc80e2d6d7fc50fae5d8b862d" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1491910399&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=1491910399" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
-<a href="https://www.amazon.co.jp/R%E3%81%A7%E3%81%AF%E3%81%98%E3%82%81%E3%82%8B%E3%83%87%E3%83%BC%E3%82%BF%E3%82%B5%E3%82%A4%E3%82%A8%E3%83%B3%E3%82%B9-Hadley-Wickham/dp/487311814X/ref=as_li_ss_il?ie=UTF8&qid=1508340144&sr=8-1&keywords=r&linkCode=li3&tag=heavywatal-22&linkId=4137d3d3351f8ccab5a93cefdc28fdec" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=487311814X&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=487311814X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+<a href="https://www.amazon.co.jp/dp/1492097403?&linkCode=li3&tag=heavywatal-22&linkId=163b4c2d2d4f43d197e985a033d397c1&language=ja_JP&ref_=as_li_ss_il" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1492097403&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=1492097403" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+<a href="https://www.amazon.co.jp/dp/487311814X?&linkCode=li3&tag=heavywatal-22&linkId=a289b1f9dbb4f189b4209b374662d6f7&language=ja_JP&ref_=as_li_ss_il" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=487311814X&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=487311814X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
