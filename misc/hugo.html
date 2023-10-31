@@ -97,18 +97,32 @@ Hugo — 静的サイトを高速生成
 <p><a href="https://gohugo.io/getting-started/quick-start/">https://gohugo.io/getting-started/quick-start/</a></p>
 <ul>
 <li>
-<p><a href="https://gohugo.io/installation/">インストール方法はいろいろ用意されてる</a>。
-例えばMacなら<a href="/mac/homebrew.html">Homebrew</a>で一発:
-<code>brew install hugo</code></p>
-<p>バージョンを細かく指定したりソースコードを改変したりしたい場合はgitから:</p>
+<p>Hugo本体をインストール。
+<a href="https://gohugo.io/installation/">方法はいろいろ用意されてる</a>。</p>
+<ul>
+<li>手動でよければOSに合った<a href="https://github.com/gohugoio/hugo/releases">公式prebuilt binary</a>をダウンロードしてPATHを通すのが簡単。</li>
+<li>コマンドで管理するなら<a href="/mac/homebrew.html">Homebrew</a>で一発:
+<code>brew install hugo</code></li>
+<li>ソースコードを改変したりしたい場合は <a href="/dev/git.html">git</a> から:
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">GOPATH</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.go
 </span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span>:<span class="si">${</span><span class="nv">GOPATH</span><span class="si">}</span>/bin
 </span></span><span class="line"><span class="cl">mkdir <span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/src
 </span></span><span class="line"><span class="cl"><span class="nb">cd</span> <span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/src
 </span></span><span class="line"><span class="cl">git clone https://github.com/gohugoio/hugo.git
 </span></span><span class="line"><span class="cl"><span class="nb">cd</span> hugo
-</span></span><span class="line"><span class="cl">go install --tags extended
-</span></span></code></pre></div><p><code>--tags extended</code> はSASS/SCSS対応版をコンパイルするオプション。</p>
+</span></span><span class="line"><span class="cl">go install -v
+</span></span></code></pre></div>SCSSのための <code>--tags extended</code> オプションは不要になった。</li>
+</ul>
+</li>
+<li>
+<p>SCSSを使う場合は Dart Sass を別途インストールする。
+この方法もいろいろあるけど
+<a href="https://github.com/sass/dart-sass/releases">公式prebuilt binary</a>
+を使うのが簡単。適当に落としてPATHを通す。
+<code>wget -O- https://github.com/sass/dart-sass/releases/download/1.69.5/dart-sass-1.69.5-macos-x64.tar.gz | tar xz</code></p>
+</li>
+<li>
+<p>ちゃんとインストールできているか確認: <code>hugo env</code></p>
 </li>
 <li>
 <p>骨組みを作る:</p>
