@@ -21,22 +21,29 @@ Markdown記法のテキストをHTMLに変換する、静的ウェブサイト�
 
 <https://gohugo.io/getting-started/quick-start/>
 
--   [インストール方法はいろいろ用意されてる](https://gohugo.io/installation/)。
-    例えばMacなら[Homebrew]({{< relref "homebrew.md" >}})で一発:
+-   Hugo本体をインストール。
+    [方法はいろいろ用意されてる](https://gohugo.io/installation/)。
+
+    - 手動でよければOSに合った[公式prebuilt binary](https://github.com/gohugoio/hugo/releases)をダウンロードしてPATHを通すのが簡単。
+    - コマンドで管理するなら[Homebrew]({{< relref "homebrew.md" >}})で一発:
     `brew install hugo`
-
-    バージョンを細かく指定したりソースコードを改変したりしたい場合はgitから:
-    ```sh
-    export GOPATH=${HOME}/.go
-    export PATH=${PATH}:${GOPATH}/bin
-    mkdir ${HOME}/src
-    cd ${HOME}/src
-    git clone https://github.com/gohugoio/hugo.git
-    cd hugo
-    go install --tags extended
-    ```
-    `--tags extended` はSASS/SCSS対応版をコンパイルするオプション。
-
+    - ソースコードを改変したりしたい場合は [git]({{< relref "git.md" >}}) から:
+      ```sh
+      export GOPATH=${HOME}/.go
+      export PATH=${PATH}:${GOPATH}/bin
+      mkdir ${HOME}/src
+      cd ${HOME}/src
+      git clone https://github.com/gohugoio/hugo.git
+      cd hugo
+      go install -v
+      ```
+      SCSSのための `--tags extended` オプションは不要になった。
+-   SCSSを使う場合は Dart Sass を別途インストールする。
+    この方法もいろいろあるけど
+    [公式prebuilt binary](https://github.com/sass/dart-sass/releases)
+    を使うのが簡単。適当に落としてPATHを通す。
+    `wget -O- https://github.com/sass/dart-sass/releases/download/1.69.5/dart-sass-1.69.5-macos-x64.tar.gz | tar xz`
+-   ちゃんとインストールできているか確認: `hugo env`
 -   骨組みを作る:
     ```sh
     cd path/to/site
