@@ -1,12 +1,15 @@
 .DEFAULT_GOAL := all
 SUBDIRS := $(wildcard content/*/.knitr)
-.PHONY: all hugo watch benchmark clean ${SUBDIRS}
+.PHONY: all development public watch benchmark hugo clean ${SUBDIRS}
 
-all: hugo
+all: development public
 	@:
 
-hugo: ${SUBDIRS} | public
-	hugo
+development public: ${SUBDIRS}
+	hugo --environment $@
+
+public-clean: ${SUBDIRS}
+	hugo --environment public --cleanDestinationDir
 
 ${SUBDIRS}:
 	$(MAKE) -C $@
@@ -17,12 +20,15 @@ watch:
 benchmark:
 	hugo --templateMetrics --templateMetricsHints
 
-public:
-	$(eval REMOTE_URL := $(shell git remote get-url origin))
-	git clone -b master --single-branch ${REMOTE_URL} $@
+init:
+	git clone -b master --single-branch $$(git remote get-url origin) public
+	git submodule update --init --single-branch
+
+echo:
+	echo $$(git remote get-url origin)
 
 clean:
-	ls -d public/* | grep -Ev 'offline|slides|hpc-|jbrowse' | xargs $(RM) -r
+	ls -d development/* | grep -Ev 'offline|slides|hpc-|jbrowse' | xargs $(RM) -r
 
 .PHONY: hex-stickers
 
