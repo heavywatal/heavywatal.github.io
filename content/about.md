@@ -185,6 +185,7 @@ Find me on
 
 ## Teaching / Outreach
 
+-   「[Hands-on Introduction to R](/slides/english2023r/)」Tohoku University (2023-11)
 -   「[統計モデリング概論 DSHC 2023](/slides/tokiomarine2023/)」
     東京海上 [Data Science Hill Climb](https://tokiomarine-dshc.com/) (2023-08)
 -   「[統計モデリング入門](/slides/iwate2023stats/)」
