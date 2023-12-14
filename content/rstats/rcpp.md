@@ -341,26 +341,36 @@ Moduleの記述を自分でやらず `Rcpp::exposeClass()` に生成してもら
     }
     ```
 
-1.  `{packagename}-package.R` でモジュールを読み込む。
+1.  `zzz.R` でモジュールを読み込む。
     関数やクラスを全てそのまま公開するか、
     `Module` オブジェクト越しにアクセスさせるようにするか。
 
-     ```r
-     Rcpp::loadModule("mymodule", TRUE)`
-     # obj = MyClass$new(42L)
+    ```r
+    Rcpp::loadModule("mymodule", TRUE)`
+    # obj = MyClass$new(42L)
 
-     modulename = Rcpp::Module("mymodule")
-     # obj = mymodule$MyClass$new(42L)
-     ```
+    modulename = Rcpp::Module("mymodule")
+    # obj = mymodule$MyClass$new(42L)
+    ```
+
+    場所は `{packagename}-package.R` とかでもいいけど読まれる順序が重要。
+    `setClass("Rcpp_MyClass")` を書く場合にはそれより後で読まれるようにしないと
+    `devtools::load_all()` や `devtools::test()`
+    などリロード後のオブジェクト生成でエラーになる:
+    `trying to generate an object from a virtual class`
 
 パッケージを読み込むといくつかのRC/S4クラスが定義される。
 
 `Rcpp_MyClass`
 :   `C++Object` を継承した Reference Class (RC)。
+:   S4メソッドをカスタマイズするには明示的に
+    `setClass("Rcpp_MyClass")` したうえで
+    `setMethod("show", "Rcpp_MyClass", \(obj) {})` などとしていく。
 
 `C++Object`
 :   R上でC++オブジェクトを扱うための親S4クラス。
     Rコンソール上での表示はこれの `show()` メソッドがデフォルトで利用される。
+    `C++ object <0x7fd58cfd2f20> of class 'MyClass' <0x7fd59409d1d0>`
 
 `C++Class`
 :   コンストラクタをR側にexposeするためのクラスで、
