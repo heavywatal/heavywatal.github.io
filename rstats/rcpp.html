@@ -380,7 +380,7 @@ Moduleの記述を自分でやらず <code>Rcpp::exposeClass()</code> に生成�
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div></li>
 <li>
-<p><code>{packagename}-package.R</code> でモジュールを読み込む。
+<p><code>zzz.R</code> でモジュールを読み込む。
 関数やクラスを全てそのまま公開するか、
 <code>Module</code> オブジェクト越しにアクセスさせるようにするか。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">Rcpp</span><span class="o">::</span><span class="nf">loadModule</span><span class="p">(</span><span class="s">&#34;mymodule&#34;</span><span class="p">,</span> <span class="kc">TRUE</span><span class="p">)</span><span class="n">`</span>
@@ -388,15 +388,24 @@ Moduleの記述を自分でやらず <code>Rcpp::exposeClass()</code> に生成�
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="n">modulename</span> <span class="o">=</span> <span class="n">Rcpp</span><span class="o">::</span><span class="nf">Module</span><span class="p">(</span><span class="s">&#34;mymodule&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># obj = mymodule$MyClass$new(42L)</span>
-</span></span></code></pre></div></li>
+</span></span></code></pre></div><p>場所は <code>{packagename}-package.R</code> とかでもいいけど読まれる順序が重要。
+<code>setClass(&quot;Rcpp_MyClass&quot;)</code> を書く場合にはそれより後で読まれるようにしないと
+<code>devtools::load_all()</code> や <code>devtools::test()</code>
+などリロード後のオブジェクト生成でエラーになる:
+<code>trying to generate an object from a virtual class</code></p>
+</li>
 </ol>
 <p>パッケージを読み込むといくつかのRC/S4クラスが定義される。</p>
 <dl>
 <dt><code>Rcpp_MyClass</code></dt>
 <dd><code>C++Object</code> を継承した Reference Class (RC)。</dd>
+<dd>S4メソッドをカスタマイズするには明示的に
+<code>setClass(&quot;Rcpp_MyClass&quot;)</code> したうえで
+<code>setMethod(&quot;show&quot;, &quot;Rcpp_MyClass&quot;, \(obj) {})</code> などとしていく。</dd>
 <dt><code>C++Object</code></dt>
 <dd>R上でC++オブジェクトを扱うための親S4クラス。
-Rコンソール上での表示はこれの <code>show()</code> メソッドがデフォルトで利用される。</dd>
+Rコンソール上での表示はこれの <code>show()</code> メソッドがデフォルトで利用される。
+<code>C++ object &lt;0x7fd58cfd2f20&gt; of class 'MyClass' &lt;0x7fd59409d1d0&gt;</code></dd>
 <dt><code>C++Class</code></dt>
 <dd>コンストラクタをR側にexposeするためのクラスで、
 <code>MyClass$new(...)</code> のようにして新規オブジェクトを生成する。
