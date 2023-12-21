@@ -95,7 +95,7 @@ readr — 高速で柔軟なテーブル読み込み
 <li>場合により数倍高速・省メモリ</li>
 <li>列の名前や型を指定しやすい</li>
 <li>指定した列だけ読み込むこともできる</li>
-<li>生data.frameではなく安全な <a href="#tibble">tibble</a> として返してくれる</li>
+<li>生data.frameより安全な <a href="#tibble">tibble</a> として返してくれる</li>
 <li>空白行を勝手にスキップする (1.2から <code>skip_empty_rows = TRUE</code>)</li>
 <li>勝手に列名を変更<del>しない</del> する (2.0から <code>name_repair = &quot;unique&quot;</code>)</li>
 <li><del><code>stringsAsFactors = FALSE</code> とイチイチ書かなくて文字列を読める</del>
@@ -109,12 +109,6 @@ R 4.0 から標準関数もこの挙動。</li>
 </span></span><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="nf">write_tsv</span><span class="p">(</span><span class="n">diamonds</span><span class="p">,</span> <span class="s">&#34;diamonds.tsv.gz&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="nf">read_tsv</span><span class="p">(</span><span class="s">&#34;diamonds.tsv.gz&#34;</span><span class="p">)</span>
-</span></span></code></pre></div><p>最近ちょっと表示がおせっかい過ぎるので <code>~/.Rprofile</code> で設定を直す:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">options</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">  <span class="n">readr.num_columns</span> <span class="o">=</span> <span class="m">0L</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="n">readr.show_col_types</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="n">readr.show_progress</span> <span class="o">=</span> <span class="kc">FALSE</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span>
 </span></span></code></pre></div><ul>
 <li><a href="https://r4ds.hadley.nz/data-import.html">https://r4ds.hadley.nz/data-import.html</a></li>
 <li><a href="https://cran.r-project.org/package=readr">https://cran.r-project.org/package=readr</a></li>
@@ -161,33 +155,100 @@ R 4.0 から標準関数もこの挙動。</li>
 <dt><code>read_file(file)</code></dt>
 <dd>ファイルの内容まるごと文字列で返す</dd>
 </dl>
-<h3 id="ファイル書き出し">ファイル書き出し</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">write_delim</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span>
+<p>同じ形式の複数ファイルをvectorで渡せば、順に読み込んで <code>rbind()</code> してくれる。
+<code>purrr::map(file, readr::read_csv) |&gt; purrr::list_rbind(names_to = &quot;file&quot;)</code>
+と同等だが、それよりも少し高速で、列の型推定もうまくいきやすい。
+ただし <code>names_to = </code> のように元のファイルとの関連を残すオプションは無い。</p>
+<p>ファイルの中身を文字列として渡すことも可能。
+自動で判別してもらえるけど <code>I()</code> で包むのが確実。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">content</span> <span class="o">=</span> <span class="s">&#34;x,y\n1,a\n&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">readr</span><span class="o">::</span><span class="nf">read_csv</span><span class="p">(</span><span class="nf">I</span><span class="p">(</span><span class="n">content</span><span class="p">))</span>
+</span></span></code></pre></div><pre tabindex="0"><code>  x y
+1 1 a
+</code></pre><h3 id="ファイル書き出し">ファイル書き出し</h3>
+<p>標準の <code>write.*()</code> 関数をオプション無しで使うと、
+左端に余計な列を追加したり、不要な&quot;クオート&quot;を追加したりする。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">iris</span> <span class="o">|&gt;</span> <span class="nf">head</span><span class="p">(</span><span class="m">2</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="nf">write.csv</span><span class="p">(</span><span class="nf">stdout</span><span class="p">())</span>
+</span></span></code></pre></div><pre tabindex="0"><code>&#34;&#34;,&#34;Sepal.Length&#34;,&#34;Sepal.Width&#34;,&#34;Petal.Length&#34;,&#34;Petal.Width&#34;,&#34;Species&#34;
+&#34;1&#34;,5.1,3.5,1.4,0.2,&#34;setosa&#34;
+&#34;2&#34;,4.9,3,1.4,0.2,&#34;setosa&#34;
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">iris</span> <span class="o">|&gt;</span> <span class="nf">head</span><span class="p">(</span><span class="m">2</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="n">readr</span><span class="o">::</span><span class="nf">write_csv</span><span class="p">(</span><span class="nf">stdout</span><span class="p">())</span>
+</span></span></code></pre></div><pre tabindex="0"><code>Sepal.Length,Sepal.Width,Petal.Length,Petal.Width,Species
+5.1,3.5,1.4,0.2,setosa
+4.9,3,1.4,0.2,setosa
+</code></pre><p><code>readr::write_*()</code> のデフォルトはそれよりだいぶマシだが、
+欠損値を空欄ではなく <code>NA</code> にしてしまうことだけ要注意。
+空欄にするには毎回 <code>na = &quot;&quot;</code> が必要。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">write_delim</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">  <span class="n">delim</span> <span class="o">=</span> <span class="s">&#34; &#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">  <span class="n">na</span> <span class="o">=</span> <span class="s">&#34;NA&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">  <span class="n">append</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="n">col_names</span> <span class="o">=</span> <span class="o">!</span><span class="n">append</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">col_names</span> <span class="o">=</span> <span class="o">!</span><span class="n">append</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">quote</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;needed&#34;</span><span class="p">,</span> <span class="s">&#34;all&#34;</span><span class="p">,</span> <span class="s">&#34;none&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="n">escape</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;double&#34;</span><span class="p">,</span> <span class="s">&#34;backslash&#34;</span><span class="p">,</span> <span class="s">&#34;none&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="n">eol</span> <span class="o">=</span> <span class="s">&#34;\n&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">num_threads</span> <span class="o">=</span> <span class="nf">readr_threads</span><span class="p">(),</span>
+</span></span><span class="line"><span class="cl">  <span class="n">progress</span> <span class="o">=</span> <span class="nf">show_progress</span><span class="p">())</span>
 </span></span></code></pre></div><p><strong><code>write_csv(...)</code></strong> や <strong><code>write_tsv(...)</code></strong>
 は区切り文字 <code>delim =</code> 指定済みのショートカット。</p>
 <dl>
-<dt><code>write_lines(x, path, na = &quot;NA&quot;, append = FALSE)</code></dt>
+<dt><code>write_lines(x, file, sep = &quot;\n&quot;, na = &quot;NA&quot;, append = FALSE)</code></dt>
 <dd>vectorやlistを1行ずつ書き出す。</dd>
-<dt><code>write_file(x, path, append = FALSE)</code></dt>
+<dt><code>write_file(x, file, append = FALSE)</code></dt>
 <dd>文字列をそのまま書き出す。</dd>
 </dl>
 <h3 id="文字列から別の型へ">文字列から別の型へ</h3>
 <dl>
-<dt><code>parse_number(x, na = c(&quot;&quot;, &quot;NA&quot;), locale = default_locale())</code></dt>
+<dt><code>parse_number(x, na = c(&quot;&quot;, &quot;NA&quot;), locale = default_locale(), trim_ws = TRUE)</code></dt>
 <dd>文字列で最初に登場する数値を抜き出す。
-あるカラムでは末尾に単位が付いちゃってる、みたいな状況でのみ使う。
-それ以外の複雑な判断はしないので、例えば <code>&quot;6e23&quot;</code> は単に6になる。</dd>
-<dt><code>parse_double(x, ...)</code>, <code>parse_integer(x, ...)</code></dt>
-<dd>文字列をdouble/intの数値として解釈して返す。
+邪魔な文字が前後に入っていても大丈夫。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">x</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;42&#34;</span><span class="p">,</span> <span class="s">&#34;1.293e2&#34;</span><span class="p">,</span> <span class="s">&#34;i18n&#34;</span><span class="p">,</span> <span class="s">&#34;24/7&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">readr</span><span class="o">::</span><span class="nf">parse_number</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1]  42.0 129.3  18.0  24.0
+</code></pre></dd>
+<dt><code>parse_double(x, ...)</code></dt>
+<dd>文字列を実数型として解釈して返す。
 <code>&quot;6e23&quot;</code> のような指数形式も大丈夫。
-異物が混じっていた場合は警告してくれる。
-(標準の<code>as.integer()</code>とかは黙って小数点以下を切り捨てたりする)</dd>
+異物が混じっていた場合は警告して欠損値扱い。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">readr</span><span class="o">::</span><span class="nf">parse_double</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1]  42.0 129.3    NA    NA
+attr(,&#34;problems&#34;)
+  row col               expected actual
+1   3  NA               a double   i18n
+2   4  NA no trailing characters   24/7
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">as.double</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1]  42.0 129.3    NA    NA
+</code></pre></dd>
+<dt><code>parse_double(x, ...)</code>, <code>parse_integer(x, ...)</code></dt>
+<dd>文字列を整数型として解釈して返す。
+小数点などを含む文字列は警告して欠損値扱い。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">readr</span><span class="o">::</span><span class="nf">parse_integer</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] 42 NA NA NA
+attr(,&#34;problems&#34;)
+  row col               expected  actual
+1   2  NA no trailing characters 1.293e2
+2   3  NA no trailing characters    i18n
+3   4  NA no trailing characters    24/7
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">as.integer</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1]  42 129  NA  NA
+</code></pre><p>標準の <code>as.integer()</code> が1ではなく129を返すということは、
+一旦実数型で読み取ったあと小数点以下を切り捨ててるっぽい。</p>
+</dd>
 <dt><code>parse_logical(x, ...)</code></dt>
-<dd>1/0/T/F/TRUE/FALSE を大文字小文字問わずlogicalに変換。</dd>
+<dd>特定の文字列を論理値型として解釈。
+大文字小文字は問わない。
+&ldquo;0以外の数字はtrue&rdquo; のような数値型からの変換規則とは異なる。
+<code>T</code>, <code>F</code> を <code>TRUE</code>, <code>FALSE</code> 扱いしてしまうことに注意。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">readr</span><span class="o">::</span><span class="nf">parse_logical</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&#34;1&#34;</span><span class="p">,</span> <span class="s">&#34;0&#34;</span><span class="p">,</span> <span class="s">&#34;t&#34;</span><span class="p">,</span> <span class="s">&#34;f&#34;</span><span class="p">,</span> <span class="s">&#34;TRUE&#34;</span><span class="p">,</span> <span class="s">&#34;FALSE&#34;</span><span class="p">,</span> <span class="s">&#34;2&#34;</span><span class="p">))</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1]  TRUE FALSE  TRUE FALSE  TRUE FALSE    NA
+attr(,&#34;problems&#34;)
+  row col           expected actual
+1   7  NA 1/0/T/F/TRUE/FALSE      2
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">as.logical</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&#34;1&#34;</span><span class="p">,</span> <span class="s">&#34;0&#34;</span><span class="p">,</span> <span class="s">&#34;t&#34;</span><span class="p">,</span> <span class="s">&#34;f&#34;</span><span class="p">,</span> <span class="s">&#34;TRUE&#34;</span><span class="p">,</span> <span class="s">&#34;FALSE&#34;</span><span class="p">,</span> <span class="s">&#34;2&#34;</span><span class="p">))</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1]    NA    NA    NA    NA  TRUE FALSE    NA
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">as.logical</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">-1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">))</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1]  TRUE FALSE  TRUE  TRUE
+</code></pre></dd>
 </dl>
 <p><code>parse_factor(x, levels, ordered = FALSE, ...)</code></p>
 <p><code>parse_date(x, format = &quot;&quot;, ...)</code>,
@@ -196,7 +257,7 @@ R 4.0 から標準関数もこの挙動。</li>
 <h2 id="列の型を指定する">列の型を指定する</h2>
 <p><a href="https://cran.r-project.org/web/packages/readr/vignettes/column-types.html">https://cran.r-project.org/web/packages/readr/vignettes/column-types.html</a></p>
 <p>基本的には何も指定しなくても数値などを認識していい感じに設定してくれる。
-標準の <code>read.csv()</code> などと違って暗黙のfactor変換はしない。
+文字列を勝手にfactorに変換したりはしない。
 整数と実数は区別せずnumeric型で読む(1.2から)。</p>
 <p>明示的に型を指定したい場合は <code>col_types</code> 引数に <code>cols()</code> 関数の値を渡す。
 文字列で <code>&quot;ccdi_&quot;</code> のように省略することも可能。</p>
@@ -219,7 +280,23 @@ R 4.0 から標準関数もこの挙動。</li>
 </ul>
 <p>指定した列だけ読むには <code>cols(..., .default = col_skip())</code>
 とするか <code>cols_only(...)</code> を使う。</p>
-<h2 id="excelファイルを読み込む">Excelファイルを読み込む</h2>
+<h2 id="設定">設定</h2>
+<p>最近ちょっと表示がおせっかい過ぎるので <code>~/.Rprofile</code> で設定を直す:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">options</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">readr.num_columns</span> <span class="o">=</span> <span class="m">0L</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">readr.show_col_types</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">readr.show_progress</span> <span class="o">=</span> <span class="kc">FALSE</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span></code></pre></div><p><code>read::read_*()</code> で読み込んだばかりのtibbleは各列の型情報を含んだ
+<code>spec_tbl_df</code> という特殊なサブクラスになっている。
+この機能を切るオプションは用意されていない。
+すぐに普通のtibbleが欲しい場合は <code>[]</code> で空subsettingするのが手軽。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">data</span> <span class="o">=</span> <span class="n">readr</span><span class="o">::</span><span class="nf">readr_example</span><span class="p">(</span><span class="s">&#34;mtcars.csv&#34;</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="n">readr</span><span class="o">::</span><span class="nf">read_csv</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nf">class</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] &#34;spec_tbl_df&#34; &#34;tbl_df&#34;      &#34;tbl&#34;         &#34;data.frame&#34; 
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">class</span><span class="p">(</span><span class="n">data[]</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] &#34;tbl_df&#34;     &#34;tbl&#34;        &#34;data.frame&#34;
+</code></pre><h2 id="excelファイルを読み込む">Excelファイルを読み込む</h2>
 <a href="https://readxl.tidyverse.org/">
 <img src="/_img/hex-stickers/readxl.webp" align="right" width="120" height="139">
 </a>
@@ -238,20 +315,6 @@ R 4.0 から標準関数もこの挙動。</li>
 <code>sheet</code> は番号でも名前でもいい。
 それ以降の引数については <code>readr</code> の関数と同じ。</dd>
 </dl>
-<h2 id="最新版をソースからインストールする">最新版をソースからインストールする</h2>
-<p><a href="https://github.com/tidyverse/readr">https://github.com/tidyverse/readr</a></p>
-<pre tabindex="0"><code>remotes::install_github(&#34;tidyverse/readr&#34;)
-# ...
-ld: library not found for -lintl
-</code></pre><p>見つからないと言われてる <code>libintl.*</code> はgettextの一部なのでそいつを入れる。
-パス指定で楽をするため、keg-onlyだけど無理矢理シムリンクを張る
-(ホントは良くないかも)。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew install gettext
-</span></span><span class="line"><span class="cl">brew link gettext --force
-</span></span></code></pre></div><p>Homebrewを<code>/usr/local/</code>以外に入れている場合は、
-それをRに見つけさせるため <code>~/.R/Makevars</code> にオプションを書く。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-makefile" data-lang="makefile"><span class="line"><span class="cl"><span class="nv">LDFLAGS</span> <span class="o">=</span> -L<span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.homebrew/lib
-</span></span></code></pre></div><p>再びRで <code>install_github(&quot;tidyverse/readr&quot;)</code> を試みる。</p>
 <h2 id="tibble">tibble</h2>
 <a href="https://tibble.tidyverse.org/">
 <img src="/_img/hex-stickers/tibble.webp" align="right" width="120" height="139">
@@ -264,24 +327,53 @@ ld: library not found for -lintl
 <a href="/rstats/readr.html">readr</a> で読み込んだデータもこの形式になる。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">tbl_mtcars</span> <span class="o">=</span> <span class="nf">as_tibble</span><span class="p">(</span><span class="n">mtcars</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="nf">class</span><span class="p">(</span><span class="n">tbl_mtcars</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="c1">## [1] &#34;tbl_df&#34;     &#34;tbl&#34;        &#34;data.frame&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="nf">class</span><span class="p">(</span><span class="n">mtcars</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="c1">## [1] &#34;data.frame&#34;</span>
-</span></span></code></pre></div><p>生のdata.frameとの違いは:</p>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] &#34;tbl_df&#34;     &#34;tbl&#34;        &#34;data.frame&#34;
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">class</span><span class="p">(</span><span class="n">mtcars</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] &#34;data.frame&#34;
+</code></pre><p>生のdata.frameとの違いは:</p>
 <ul>
-<li>巨大なデータをうっかり<code>print()</code>しても画面を埋め尽くさない。
-(逆に全体を見たい場合は工夫が必要。後述)</li>
-<li>列名の部分一致で良しとしない。
-例えば <code>mtcars$m</code> は黙ってvectorを返してしまうが、
-<code>tbl_mtcars$m</code> は警告つき <code>NULL</code> 。</li>
-<li>型に一貫性があり、勝手に<code>drop = TRUE</code>しない。
+<li>
+<p>巨大なデータをうっかり<code>print()</code>しても画面を埋め尽くさない。
+(逆に全体を見たい場合は工夫が必要。後述)</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">print</span><span class="p">(</span><span class="n">tbl_mtcars</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>    mpg cyl disp  hp drat    wt  qsec vs am gear carb
+ 1 21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+ 2 21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+--                                                   
+31 15.0   8  301 335 3.54 3.570 14.60  0  1    5    8
+32 21.4   4  121 109 4.11 2.780 18.60  1  1    4    2
+</code></pre></li>
+<li>
+<p>列名の部分一致で良しとしない。
+例えば <code>mtcars$m</code> は黙ってmpg列vectorを返してしまうが、
+<code>tbl_mtcars$m</code> は警告つき <code>NULL</code> 。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">mtcars</span><span class="o">$</span><span class="n">m</span>
+</span></span><span class="line"><span class="cl"><span class="c1">##  [1] 21.0 21.0 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 17.8 16.4 17.3 15.2 10.4 10.4 14.7 32.4 30.4 33.9 21.5 15.5 15.2 13.3 19.2 27.3 26.0 30.4 15.8 19.7 15.0 21.4</span>
+</span></span><span class="line"><span class="cl"><span class="n">tbl_mtcars</span><span class="o">$</span><span class="n">m</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## Warning: Unknown or uninitialised column: `m`.</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## NULL</span>
+</span></span></code></pre></div></li>
+<li>
+<p>型に一貫性があり、勝手に<code>drop = TRUE</code>しない。
 例えば <code>mtcars[,&quot;mpg&quot;]</code> はvectorになってしまうが、
 <code>tbl_mtcars[,&quot;mpg&quot;]</code> はtibbleのまま。
-vectorが欲しい場合は二重四角括弧 <code>tbl_mtcars[[&quot;mpg&quot;]]</code>。</li>
-<li>行の名前は使わない。
+vectorが欲しい場合は二重四角括弧 <code>tbl_mtcars[[&quot;mpg&quot;]]</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">mtcars[</span><span class="p">,</span><span class="s">&#34;mpg&#34;</span><span class="n">]</span>      <span class="c1"># implicit drop = TRUE</span>
+</span></span></code></pre></div><pre tabindex="0"><code> [1] 21.0 21.0 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 17.8 16.4 17.3 15.2 10.4 10.4 14.7 32.4 30.4 33.9 21.5 15.5 15.2 13.3 19.2 27.3 26.0 30.4 15.8 19.7 15.0 21.4
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">tbl_mtcars[</span><span class="p">,</span><span class="s">&#34;mpg&#34;</span><span class="n">]</span>  <span class="c1"># remains tibble</span>
+</span></span></code></pre></div><pre tabindex="0"><code>    mpg
+ 1 21.0
+ 2 21.0
+--     
+31 15.0
+32 21.4
+</code></pre></li>
+<li>
+<p>行の名前は使わない。
 行の名前として保持されている情報を使いたい場合は
 <code>rownames_to_column()</code> とか <code>rowid_to_column()</code>
-で独立した列にしておく必要がある。</li>
+で独立した列にしておく必要がある。</p>
+</li>
 </ul>
 <p>新しいtibble 1.4以降では
 <a href="https://github.com/r-lib/pillar/">pillar</a>
@@ -328,7 +420,7 @@ v2.0からは列名がちゃんとついてないとエラーになる。</dd>
 <dt><code>pillar::obj_sum(x)</code></dt>
 <dd><code>type_sum</code>とサイズ e.g., <code>&quot;data.frame [150 x 5]&quot;</code></dd>
 </dl>
-<h3 id="設定">設定</h3>
+<h3 id="設定-1">設定</h3>
 <p>表示される行数や幅を調節する項目には以下のようなものがある。
 <code>~/.Rprofile</code> に書いておけば起動時に勝手に設定される。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">height</span> <span class="o">=</span> <span class="m">30L</span>  <span class="c1"># for example</span>
