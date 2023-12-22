@@ -69,6 +69,13 @@ Find me on
 
 ## Publications
 
+**Preprints**
+
+-   Watal M. Iwasaki, Kosuke Aoki, Ryuichi Sugino, Atsushi Natsume, Hideki Innan.
+    <https://dx.doi.org/10.2139/ssrn.4191903>
+    Simulating Cancer Evolution and Intratumor Heterogeneity Reveals the Optimal Number of Biopsy Samples for NGS-Based Cancer Gene Testing
+
+
 **Articles**
 
 1.  **Watal M. Iwasaki**\*, T. E. Kijima\* (equally contributed), Hideki Innan. (2020)
