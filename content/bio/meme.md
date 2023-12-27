@@ -56,7 +56,7 @@ http://meme-suite.org/doc/meme.html
 
 `-mod`
 :   モチーフが配列上にどう分布しているか\
-    `oops`: One Occurence Per Sequence\
+    `oops`: One Occurrence Per Sequence\
     `zoops`: Zero or OOPS\
     `anr`: Any Number of Repetitions
 

@@ -210,7 +210,7 @@ RepeatMasker -pa 4 -qq -species oryza -dir . -xsmall -gff seq.fa
 
 1.  カレントディレクトリにBLASTデータベースを構築:
     ```sh
-    BuilDatabase -name Colletotrichum_orbiculare -engine ncbi path/to/Colletotrichum_orbiculare.fa
+    BuildDatabase -name Colletotrichum_orbiculare -engine ncbi path/to/Colletotrichum_orbiculare.fa
     ```
 1.  本体を実行(かなり時間がかかる):
     ```sh

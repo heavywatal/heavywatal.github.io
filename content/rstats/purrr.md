@@ -232,7 +232,7 @@ formula内部では、第一引数を`.x`または`.`として、第二引数を
 : 引数を部分的に埋めてある関数を作る。C++でいう `std::bind()`
 
 
-## deprecated/superceeded
+## deprecated/superseded
 
 `purrr::map_dfr(.x, .f, ..., .id = NULL)`, `map_dfc()`
 : 入力と出力が一対一対応しないということでmapファミリーから外され、

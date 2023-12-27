@@ -71,7 +71,7 @@ P[K(t+s) - K(s) = k] \;&=\; P[K(t) = k]
 \end{aligned}\]</div>
 
 (Eq. 2.53)
-Waiting time to the first event is exponentially distiributed,
+Waiting time to the first event is exponentially distributed,
 
 <div>\[
 f_T(t) = \lambda e^{-\lambda t}
@@ -85,7 +85,7 @@ f_T(t) = \lambda e^{-\lambda t}
 
 (Eq. 2.54)
 The waiting time $W$ until the $n$ th event
-(= the sum of $n$ *i.i.d.* wating times)
+(= the sum of $n$ *i.i.d.* waiting times)
 can be derived by $n - 1$ successive convolutions:
 
 <div>\[\begin{aligned}
@@ -204,7 +204,7 @@ $X_2, X_2, X_2, ..., X_2, \boldsymbol{X_1}$, ...
 
 (Eq. 2.62)
 How many $X_2$ (e.g., mutation events) occur
-before $X_1$ (e.g., common ancector event)?
+before $X_1$ (e.g., common ancestor event)?
 
 <div>\[\begin{aligned}
 P[K=k] \;&=\; P[\text{First }X_1\text{ occurs at }K\text{th trial}] \\

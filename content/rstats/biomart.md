@@ -51,7 +51,7 @@ BioMartからプログラマチックにデータを取得するための [Bioco
     `unique(mart@attributes$page)` と同じ。
     データを取得するときはこれらの間を跨がないようにアトリビュートを選ぶ。
 
-`listAttributes(mart, page, what=c("name", "desciption"))`
+`listAttributes(mart, page, what=c("name", "description"))`
 :   マートで利用可能なアトリビュート列挙。
     `mart@attributes` へのアクセサ。
 

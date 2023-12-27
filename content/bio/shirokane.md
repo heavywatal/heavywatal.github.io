@@ -31,7 +31,7 @@ https://supcom.hgc.jp/
 
 https://heavywatal.github.io/rtumopp/
 
-Shrokane5 で提供されている R-3.5 は
+Shirokane5 で提供されている R-3.5 は
 `/usr/local/package/gcc/7.3.0`でビルドされているため
 C++14のライブラリも問題なく使える。
 
@@ -58,7 +58,7 @@ C++14のライブラリも問題なく使える。
 
 https://heavywatal.github.io/tumopp/
 
-Shrokane5 (RHEL 7) では問題なくHomebrewを使える。
+Shirokane5 (RHEL 7) では問題なくHomebrewを使える。
 
 ```sh
 brew install heavywatal/tap/tumopp

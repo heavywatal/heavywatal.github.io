@@ -106,7 +106,7 @@ GRanges object with 3 ranges and 2 metadata columns:
 
 上記のように自分で作る機会はほぼ無くて、
 `GenomicRanges::makeGRangesFromDataFrame(df)`,
-`rtraclayer::import("annotation.gff3")`,
+`rtracklayer::import("annotation.gff3")`,
 `GenomicFeatures::genes(txdb)`,
 のような形で読み込むことが多い。
 
@@ -328,7 +328,7 @@ IRanges object with 7 ranges and 0 metadata columns:
   ```
 : `reverse(x)` は `reflect(x, range(x))` のショートカット。
   区間を逆順に並べる `rev()` とは違う。
-  
+
 
 `restrict(x, start = NA, end = NA, keep.all.ranges = FALSE, use.names = TRUE)`
 : `start` から `end` までの範囲のみ残して外を捨てる。境界含む。
@@ -573,7 +573,7 @@ IRanges object with 1 range and 0 metadata columns:
 
 `subsetByOverlaps(x, ranges, maxgap = -1L, minoverlap = 0L, type, invert = FALSE, ...)`
 : `x[overlapsAny(x, ranges)]` のショートカット。
-  
+
 
 `overlapsRanges(query, subject, hits = NULL, ...)`
 : subsetByOverlapsした上、重なっている部分のみ切り詰めて返す。
@@ -673,7 +673,7 @@ IRanges object with 1 range and 0 metadata columns:
     -------
     queryLength: 7 / subjectLength: 3
   ```
-: `distance(x, y)` はelement-wizeに計算。
+: `distance(x, y)` はelement-wiseに計算。
   
   ```r
   distance(ir, rev(ir))

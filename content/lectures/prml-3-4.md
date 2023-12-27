@@ -27,7 +27,7 @@ Materials
 日程
 :   2014-06-30
 
-## 3. Linnear Models For Regression
+## 3. Linear Models For Regression
 
 3.1 Linear Basis Function Models: 八島さん、関口さん
 

@@ -179,7 +179,7 @@ bss = readDNAStringSet(.file)
 検索
 :   `matchPattern(pattern, subject, ...)`\
     `matchPDict(PDict, subject, ...)`\
-    `matchPWM(pwm, subject, min.score="80%", widh.score=FALSE, ...)`\
+    `matchPWM(pwm, subject, min.score="80%", with.score=FALSE, ...)`\
     対象は `Bstring` だけでなく `Views` でもよい。 例えば `codons()` の結果を対象とすれば読み枠限定の検索となる。 結果の返し方の違う `vmatchXXX()` と `countXXX()` もある。
 
 ## `GenomicRanges`
@@ -317,7 +317,7 @@ bsg[[1]]
 :   インストール済みデータから読み込み。
     `BSgenome.Scerevisiae.UCSC.sacCer3` あるいは `sacCer3` のような名前で。
 
-`getSeq(bsg, names, start=NA, end=NA, width=NA, starnd="+", as.character=FALSE)`
+`getSeq(bsg, names, start=NA, end=NA, width=NA, strand="+", as.character=FALSE)`
 :   `BSgenome` オブジェクトから配列を抜き出す。
     `names` は配列名の文字列ベクタか `GRanges` か `GRangesList`
 

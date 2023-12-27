@@ -708,7 +708,7 @@ diamonds |>
     ```
 
 
-## deprecated/superceeded
+## deprecated/superseded
 
 `dplyr::do(.data, ...)`
 :   `reframe()`, `slice*()` などに取って代わられた。

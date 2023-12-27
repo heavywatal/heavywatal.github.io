@@ -166,7 +166,7 @@ Find me on
 -   岩嵜航・津田真樹・河田雅圭「環境変化で出現する新奇形質：遺伝子制御ネットワークの隠蔽変異が適応進化を促進」 [日本生態学会第58回大会](http://www.esj.ne.jp/meeting/58/) (2011-03) 札幌
 -   岩嵜航・津田真樹・河田雅圭「隠蔽変異を介した表現型多様性創出における選択圧の影響：遺伝子制御ネットワークの個体ベースモデル」 [日本進化学会第12回年会](http://www.evolution.bio.titech.ac.jp/sesj2010/sesj_index.html) (2010-08) 東京工業大学
 -   岩嵜航・津田真樹・河田雅圭「隠れた変異の蓄積と顕在化に与える環境変動の影響：遺伝子制御ネットワークの個体ベースモデル」 [日本生態学会第57回大会](http://www.esj.ne.jp/meeting/57/) (2010-03) 東京大学
--   Watal M. Iwasaki, Masaki Tsuda, Masakado Kawata "Cryptic polymorphisms induced by environments in henotypes produced by gene regulatory networks." [International Symposium on Complex Systems Biology](http://chaos.c.u-tokyo.ac.jp/CSB/) (2009-10) The University of Tokyo, Japan
+-   Watal M. Iwasaki, Masaki Tsuda, Masakado Kawata "Cryptic polymorphisms induced by environments in phenotypes produced by gene regulatory networks." [International Symposium on Complex Systems Biology](http://chaos.c.u-tokyo.ac.jp/CSB/) (2009-10) The University of Tokyo, Japan
 -   岩嵜航・津田真樹・河田雅圭「隠れた遺伝的変異と可塑性から進化する新規表現型」 [日本生態学会第56回大会](http://www.esj.ne.jp/meeting/56/) (2009-03) 岩手県立大学
 -   岩嵜航・津田真樹・河田雅圭「遺伝子制御ネットワークの進化による新規形質獲得機構」 [日本進化学会第10回年会](http://wwwsoc.nii.ac.jp/sesj2/nenkai/2008/) (2008-08) 東京大学
 

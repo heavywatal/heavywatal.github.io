@@ -171,7 +171,7 @@ Basic Local Alignment Search Tool
 
     `qseqid`: Query Seq-id\
     `qgi`: Query GI\
-    `qacc`: Query accesion\
+    `qacc`: Query accession\
     `sseqid`: Subject Seq-id\
     `sallseqid`: All subject Seq-id(s), separated by a ';'\
     `sgi`: Subject GI\

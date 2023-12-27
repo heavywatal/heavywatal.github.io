@@ -85,7 +85,7 @@ Gitのタグをバージョン番号として取り込む:
 
 インストールするファイルと場所を指定する変数:
 
-    bin_PROBRAMS = beer
+    bin_PROGRAMS = beer
     bin_SCRIPTS = beer.sh
     lib_LIBRARIES = libbeer.a
     include_HEADERS = beer.h

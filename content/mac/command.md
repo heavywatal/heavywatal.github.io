@@ -141,7 +141,7 @@ sudo mdutil -s /Volumes/Macintosh\ HD
 sudo mdutil -i off /Volumes/Macintosh\ HD
 
 # インデックスを作る・更新する
-sudo mdiutil -p /Volumes/Macintosh\ HD
+sudo mdutil -p /Volumes/Macintosh\ HD
 
 # インデックスを一旦削除して作り直し
 sudo mdutil -E /Volumes/Macintosh\ HD

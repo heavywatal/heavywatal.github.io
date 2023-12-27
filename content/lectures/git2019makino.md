@@ -277,10 +277,10 @@ git clean -fdX
 ### reset
 
 `git reset <DESTINATION>` は `HEAD` の位置を戻す処理で、
-オプションによってindexとworing treeもそこに合わせるように変更される。
+オプションによってindexとworking treeもそこに合わせるように変更される。
 `--soft` なら `HEAD` 移動のみ。
 `--mixed` なら移動した `HEAD` にindexも合わせる。
-`--hard` なら移動した `HEAD` にindexとworiking treeも合わせる。
+`--hard` なら移動した `HEAD` にindexとworking treeも合わせる。
 直前の動作を取り消す用途に絞って使うのが無難:
 ```sh
 # commit直後、それを取り消す (indexとworkingはそのまま)

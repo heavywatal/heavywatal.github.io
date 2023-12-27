@@ -209,7 +209,7 @@ knitrのようにコードセルの実行結果を含むMarkdownを書き出す�
   RとPythonの橋渡しは[reticulate](https://rstudio.github.io/reticulate/)が担う。
 
 `md:myst` (MyST Markdown; Markedly Structured Text)
-: CommonMarkに準拠しつつreStrucutredTextやSphinxの機能をサポートするリッチなMarkdown。
+: CommonMarkに準拠しつつreStructuredTextやSphinxの機能をサポートするリッチなMarkdown。
 : コードセルの中にメタデータを埋め込むのが難点。
 
 `md:pandoc` (Pandoc Markdown)

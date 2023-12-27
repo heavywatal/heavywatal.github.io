@@ -17,7 +17,7 @@ Markdown記法のテキストをHTMLに変換する、静的ウェブサイト�
 本サイトもHugoでビルドしている。
 オフラインの研究ノートとしても有用。
 
-## Quickstart
+## Quick start
 
 <https://gohugo.io/getting-started/quick-start/>
 

@@ -85,7 +85,7 @@ containerは実行終了後も残る。
 
 ## CLI
 
-操作対象がcontrainerかimageかなどによってサブコマンドを使う。
+操作対象がcontainerかimageかなどによってサブコマンドを使う。
 前は `docker pull`, `docker run` のようにフラットなコマンド体系だった。
 
 ### `docker container` subcommands
@@ -150,7 +150,7 @@ docker system df
 ## Registry
 
 [BioContainers](https://biocontainers.pro/registry/)
-: [BioConda](https://bioconda.github.io/) receipes を使っているらしい。
+: [BioConda](https://bioconda.github.io/) recipes を使っているらしい。
 : 実際のregistry機能をホストしているのは他所のサーバー:
   - <https://hub.docker.com/u/biocontainers> OCI
   - <https://quay.io/organization/biocontainers> OCI

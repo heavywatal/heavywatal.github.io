@@ -252,7 +252,7 @@ C++11 の `std::normal_distribution` や GSL の `gsl_ran_gaussian` でも使わ
 多変量の場合も同様に $\mathbf y = \mathbf \mu + \mathbf{Lz}$ として動かせる。
 ただし共分散は $\mathbf \Sigma = \mathbf{LL}^\mathrm T$ として **コレスキー分解** (*Cholesky decomposition*)する。
 これは対称行列に特化したLU分解で、$\mathbf L$ は下三角行列になる。
-変換後の平均と分散を確かめてみる (**Excersize 11.5**)
+変換後の平均と分散を確かめてみる (**Exercise 11.5**)
 
 <div>\[\begin{aligned}
 \mathbb E[\mathbf y] &= \mathbb E[\mathbf \mu + \mathbf{Lz}] = \mathbf \mu + \mathbf 0 \\

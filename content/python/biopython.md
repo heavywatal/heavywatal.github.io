@@ -97,7 +97,7 @@ tags = ["python"]
 
 ### esearch
 
--   [NCBI ESerch Utility](http://www.ncbi.nlm.nih.gov/entrez/query/static/esearch_help.html)
+-   [NCBI ESearch Utility](http://www.ncbi.nlm.nih.gov/entrez/query/static/esearch_help.html)
 -   <https://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc93>
 
     ```py

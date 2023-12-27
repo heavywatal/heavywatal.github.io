@@ -275,7 +275,7 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 :   GitHubリポジトリからインストール。
 
 `unload(pkg = ".", quiet = FALSE)`
-:   `datach("package:XXX")` とか `unloadNamespace(XXX)`
+:   `detach("package:XXX")` とか `unloadNamespace(XXX)`
     よりもちゃんとまっさらにパッケージを外す。
 
 
