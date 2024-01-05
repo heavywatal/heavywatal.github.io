@@ -1,6 +1,7 @@
 +++
 title = 'dplyr'
 subtitle = "高速data.frame処理"
+aliases = ["plyr.html"]
 tags = ["r", "tidyverse"]
 [menu.main]
   parent = "rstats"

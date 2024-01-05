@@ -2,7 +2,6 @@
 title = 'Git'
 subtitle = '分散型バージョン管理システム'
 tags = ["vcs", "writing"]
-aliases = ["/dev/mercurial.html"]
 [menu.main]
   parent = "dev"
 +++

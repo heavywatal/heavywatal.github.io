@@ -2,7 +2,6 @@
 title = "Hugo"
 subtitle =  "静的サイトを高速生成"
 tags = ["writing"]
-aliases = ["/dev/hugo.html"]
 [menu.main]
   parent = "misc"
 +++

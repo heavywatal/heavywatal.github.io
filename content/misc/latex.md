@@ -1,7 +1,6 @@
 +++
 title = 'LaTeX'
 tags = ["writing"]
-aliases = ["/dev/tex.html"]
 [menu.main]
   parent = "misc"
 +++

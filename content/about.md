@@ -1,7 +1,6 @@
 +++
 title = 'About'
 type = "home"
-aliases = ["/cv.html"]
 [menu.main]
   weight = 1
 +++
@@ -18,19 +17,15 @@ Watal M. Iwasaki, PhD
     [Graduate School of Life Sciences](https://www.lifesci.tohoku.ac.jp/en/),
     [Tohoku University](https://www.tohoku.ac.jp/en/)
 
-Address:
-:   Biology bldg., Tohoku University,
-    Aramaki Aoba 6-3, Sendai, 980-8578, Japan
+Address
 :   980-8578 仙台市青葉区荒巻字青葉6-3 東北大学
     [理学部生物棟](https://www.google.com/maps/place/38°15'31.4"N+140°50'15.1"E)
-
-Phone:
+:   Biology bldg., Tohoku University,
+    Aramaki Aoba 6-3, Sendai, 980-8578, Japan
 :   +81-22-795-3543
 
-Email:
+Contacts
 :   heavywatalあgmail.com
-
-Find me on
 : <a rel="me" href="https://github.com/heavywatal" title="GitHub">
   <img height=24 width=24 src="https://cdn.simpleicons.org/github/333333" alt="GitHub"></a>
   <a rel="me" href="https://www.facebook.com/profile.php?id=100002135628677" title="Facebook">
