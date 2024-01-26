@@ -101,12 +101,12 @@ Rでは大抵、生のforループを避けて、R標準のベクトル演算や
 </span></span></span><span class="line"><span class="cl"><span class="s">}&#34;</span><span class="p">)</span>  <span class="c1"># Compilation takes a few seconds here</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="n">n</span> <span class="o">=</span> <span class="m">1000000L</span>
-</span></span><span class="line"><span class="cl"><span class="n">rbenchmark</span><span class="o">::</span><span class="nf">benchmark</span><span class="p">(</span><span class="nf">r_for</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">r_vec</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">rcpp</span><span class="p">(</span><span class="n">n</span><span class="p">))</span><span class="n">[</span><span class="p">,</span><span class="m">1</span><span class="o">:</span><span class="m">4</span><span class="n">]</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">#       test replications elapsed relative</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 1 r_for(n)          100   3.968   29.835</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 2 r_vec(n)          100   0.473    3.556</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 3  rcpp(n)          100   0.133    1.000</span>
+</span></span><span class="line"><span class="cl"><span class="n">bench</span><span class="o">::</span><span class="nf">mark</span><span class="p">(</span><span class="nf">r_for</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">r_vec</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">rcpp</span><span class="p">(</span><span class="n">n</span><span class="p">))</span><span class="n">[</span><span class="p">,</span> <span class="m">1</span><span class="o">:</span><span class="m">5</span><span class="n">]</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#     expression          min       median    itr/sec     mem_alloc</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   &lt;bench_expr&gt; &lt;bench_time&gt; &lt;bench_time&gt;      &lt;dbl&gt; &lt;bench_bytes&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 1     r_for(n)      17.89ms      18.32ms   54.73703            0B</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 2     r_vec(n)       3.71ms       3.83ms  244.17061       11.44MB</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 3      rcpp(n)     933.96µs     948.07µs 1038.38453        2.49KB</span>
 </span></span></code></pre></div><h2 id="documentation">Documentation</h2>
 <ul>
 <li>Project Home: <a href="http://www.rcpp.org/">http://www.rcpp.org/</a></li>
@@ -191,7 +191,8 @@ by 津駄@teuderさん</li>
 <code>DESCRIPTION</code> や <code>src/.gitignore</code> などが書き換えられる。</p>
 </li>
 <li>
-<p><code>R/***-package.R</code> など適当なとこに <code>@useDynLib</code> の設定を追加:</p>
+<p><code>R/hello-package.R</code> に <code>@useDynLib</code> の設定を追加:
+(パッケージ名helloを適宜置き換えて)</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1">#&#39; @useDynLib hello, .registration = TRUE</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&#39; @importFrom Rcpp sourceCpp</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&#39; @keywords internal</span>
@@ -464,6 +465,71 @@ Roxygenもほとんど助けてくれない。
 <dt><code>RCPP_EXPOSED_CLASS(MyClass)</code></dt>
 <dd>それらの前にさらに <code>class MyClass;</code> の前方宣言もする。</dd>
 </dl>
+<hr>
+<h1 id="cpp11">cpp11</h1>
+<p><a href="https://cpp11.r-lib.org/">https://cpp11.r-lib.org/</a></p>
+<h2 id="rcpp-との違い">Rcpp との違い</h2>
+<ul>
+<li>header-only なので依存関係のトラブルが少ない。</li>
+<li><a href="https://cpp11.r-lib.org/articles/motivations.html#compilation-speed">コンパイルが速くて省メモリ</a>。</li>
+<li>vectorに変更を加えるには明示的にwritableな型を使う必要があり、
+これが自動的にcopy-on-writeしてくれるので、
+うっかり参照元オブジェクトまで変更してしまう事故が起こりにくい。</li>
+<li>ALTREPオブジェクトを扱える。
+とはいえ新規作成の方法は用意されていない。
+<a href="https://github.com/wch/r-source/blob/7f6327b076889621a2e7244ef6c769f74c6012fb/src/include/Rinternals.h#L858">R 4.1 までの <code>Rinternals.h</code></a>
+にあった <code>R_compact_intrange</code> マクロは
+<a href="https://cran.r-project.org/doc/manuals/r-release/NEWS.html">R 4.2 から非公開の <code>Defn.h</code> に移動してしまった。</a></li>
+<li>Rcpp Modules が無い。
+つまり、自作クラスをR側で使うには
+<code>cpp11::external_pointer&lt;MyClass&gt;</code>
+を受け渡しする関数を自分で用意する必要がある。</li>
+<li>Rcpp Sugar が無い。
+つまり、Rのベクトル演算っぽい書き方をC++側でやりたければ自分で関数を書く必要がある。
+<code>cpp11::package(&quot;base&quot;)</code> から関数を呼べるけどコストを考えるとやや本末転倒。</li>
+<li>Rcpp Attributes <code>// [[Rcpp::export]]</code> に比べると <code>[[cpp11::register]]</code> のサポートは限定的。
+<ul>
+<li>C++関数にデフォルト引数をつけてもR関数には反映されない。</li>
+<li>C++関数にRoxygenコメントをつけてもR関数には反映されない。</li>
+</ul>
+</li>
+<li><code>cpp11test/src</code> にテストを置く。</li>
+</ul>
+<h2 id="rcpp-からの移行">Rcpp からの移行</h2>
+<p><a href="https://cpp11.r-lib.org/articles/converting.html">https://cpp11.r-lib.org/articles/converting.html</a></p>
+<ul>
+<li><code>usethis::use_cpp11()</code></li>
+<li><code>#include &lt;Rcpp.h&gt;</code> → <code>#include &lt;cpp11.hpp&gt;</code></li>
+<li><code>// [Rcpp::export]</code> → <code>[[cpp11::register]]</code></li>
+<li><a href="https://cpp11.r-lib.org/articles/converting.html#cheatsheet">Cheatsheet</a>
+を見ながらソースコードを書き換え。</li>
+<li><code>R/hello-package.R</code> を確認。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1">#&#39; @useDynLib hello, .registration = TRUE</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#&#39; @keywords internal</span>
+</span></span><span class="line"><span class="cl"><span class="s">&#34;_PACKAGE&#34;</span>
+</span></span></code></pre></div><code>@import Rcpp</code> とか <code>@importFrom Rcpp sourceCpp</code> があれば消す。</li>
+<li><code>DESCRIPTION</code>
+<ul>
+<li><code>LinkingTo</code>: <code>Rcpp</code> → <code>cpp11</code></li>
+<li><code>Imports</code>: <code>Rcpp</code> → <code>cpp11</code></li>
+</ul>
+</li>
+<li><code>R/RcppExports.R</code> 消す。</li>
+<li><code>src/RcppExports.cpp</code> 消す。</li>
+<li><code>src/Makevars</code>: <code>PKG_CPPFLAGS=-DSTRICT_R_HEADERS</code> 消す。</li>
+<li><code>devtools::clean_dll()</code></li>
+<li><code>devtools::document()</code></li>
+</ul>
+<h2 id="misc">misc.</h2>
+<ul>
+<li><code>cpp11::r_vector&lt;T&gt;</code> は <code>Rcpp::Vector&lt;T&gt;</code> と同様、
+値渡ししても中身はコピーされず参照渡し的な挙動になる。
+ただしcpp11では変更不可能。</li>
+<li><code>cpp11::writable::r_vector&lt;T&gt;</code> は
+<code>Rf_shallow_duplicate</code> をコピーコンストラクタに持つおかげで
+R と同じような copy-on-write の挙動を示す。
+どうしても参照渡ししたい場合は <code>std::move()</code> を通す。</li>
+</ul>
 
 </article>
 </main>
