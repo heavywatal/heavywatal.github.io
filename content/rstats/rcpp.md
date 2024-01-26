@@ -25,12 +25,12 @@ Rcpp::cppFunction("double rcpp(int n) {
 }")  # Compilation takes a few seconds here
 
 n = 1000000L
-rbenchmark::benchmark(r_for(n), r_vec(n), rcpp(n))[,1:4]
-
-#       test replications elapsed relative
-# 1 r_for(n)          100   3.968   29.835
-# 2 r_vec(n)          100   0.473    3.556
-# 3  rcpp(n)          100   0.133    1.000
+bench::mark(r_for(n), r_vec(n), rcpp(n))[, 1:5]
+#     expression          min       median    itr/sec     mem_alloc
+#   <bench_expr> <bench_time> <bench_time>      <dbl> <bench_bytes>
+# 1     r_for(n)      17.89ms      18.32ms   54.73703            0B
+# 2     r_vec(n)       3.71ms       3.83ms  244.17061       11.44MB
+# 3      rcpp(n)     933.96µs     948.07µs 1038.38453        2.49KB
 ```
 
 ## Documentation
@@ -116,8 +116,8 @@ fibonacci(9L)
 -   `usethis::use_rcpp()` を実行して設定を整える。
     `DESCRIPTION` や `src/.gitignore` などが書き換えられる。
 
--   `R/***-package.R` など適当なとこに `@useDynLib` の設定を追加:
-
+-   `R/hello-package.R` に `@useDynLib` の設定を追加:
+    (パッケージ名helloを適宜置き換えて)
     ```r
     #' @useDynLib hello, .registration = TRUE
     #' @importFrom Rcpp sourceCpp
@@ -433,3 +433,73 @@ http://dirk.eddelbuettel.com/code/rcpp/html/module_8h.html
 
 `RCPP_EXPOSED_CLASS(MyClass)`
 : それらの前にさらに `class MyClass;` の前方宣言もする。
+
+
+
+
+<hr>
+
+# cpp11
+
+<https://cpp11.r-lib.org/>
+
+## Rcpp との違い
+
+- header-only なので依存関係のトラブルが少ない。
+- [コンパイルが速くて省メモリ](https://cpp11.r-lib.org/articles/motivations.html#compilation-speed)。
+- vectorに変更を加えるには明示的にwritableな型を使う必要があり、
+  これが自動的にcopy-on-writeしてくれるので、
+  うっかり参照元オブジェクトまで変更してしまう事故が起こりにくい。
+- ALTREPオブジェクトを扱える。
+  とはいえ新規作成の方法は用意されていない。
+  [R 4.1 までの `Rinternals.h`](https://github.com/wch/r-source/blob/7f6327b076889621a2e7244ef6c769f74c6012fb/src/include/Rinternals.h#L858)
+  にあった `R_compact_intrange` マクロは
+  [R 4.2 から非公開の `Defn.h` に移動してしまった。](https://cran.r-project.org/doc/manuals/r-release/NEWS.html)
+- Rcpp Modules が無い。
+  つまり、自作クラスをR側で使うには
+  `cpp11::external_pointer<MyClass>`
+  を受け渡しする関数を自分で用意する必要がある。
+- Rcpp Sugar が無い。
+  つまり、Rのベクトル演算っぽい書き方をC++側でやりたければ自分で関数を書く必要がある。
+  `cpp11::package("base")` から関数を呼べるけどコストを考えるとやや本末転倒。
+- Rcpp Attributes `// [[Rcpp::export]]` に比べると `[[cpp11::register]]` のサポートは限定的。
+  - C++関数にデフォルト引数をつけてもR関数には反映されない。
+  - C++関数にRoxygenコメントをつけてもR関数には反映されない。
+- `cpp11test/src` にテストを置く。
+
+
+## Rcpp からの移行
+
+<https://cpp11.r-lib.org/articles/converting.html>
+
+- `usethis::use_cpp11()`
+- `#include <Rcpp.h>` → `#include <cpp11.hpp>`
+- `// [Rcpp::export]` → `[[cpp11::register]]`
+- [Cheatsheet](https://cpp11.r-lib.org/articles/converting.html#cheatsheet)
+  を見ながらソースコードを書き換え。
+- `R/hello-package.R` を確認。
+  ```r
+  #' @useDynLib hello, .registration = TRUE
+  #' @keywords internal
+  "_PACKAGE"
+  ```
+  `@import Rcpp` とか `@importFrom Rcpp sourceCpp` があれば消す。
+- `DESCRIPTION`
+  - `LinkingTo`: `Rcpp` → `cpp11`
+  - `Imports`: `Rcpp` → `cpp11`
+- `R/RcppExports.R` 消す。
+- `src/RcppExports.cpp` 消す。
+- `src/Makevars`: `PKG_CPPFLAGS=-DSTRICT_R_HEADERS` 消す。
+- `devtools::clean_dll()`
+- `devtools::document()`
+
+
+## misc.
+
+- `cpp11::r_vector<T>` は `Rcpp::Vector<T>` と同様、
+  値渡ししても中身はコピーされず参照渡し的な挙動になる。
+  ただしcpp11では変更不可能。
+- `cpp11::writable::r_vector<T>` は
+  `Rf_shallow_duplicate` をコピーコンストラクタに持つおかげで
+  R と同じような copy-on-write の挙動を示す。
+  どうしても参照渡ししたい場合は `std::move()` を通す。
