@@ -97,7 +97,7 @@ tags = ["writing"]
 
 ### serif
 
-<table><col bgcolor="#eeeeee"><col>
+<table><col style="background-color: #aaaaaa2a;"><col>
 <tr style="font-family: serif, sans-serif">
   <td>serif</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
@@ -150,7 +150,7 @@ tags = ["writing"]
 
 ### sans-serif
 
-<table><col bgcolor="#eeeeee"><col>
+<table><col style="background-color: #aaaaaa2a;"><col>
 <tr style="font-family: sans-serif, serif">
   <td>sans-serif</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
@@ -227,7 +227,7 @@ tags = ["writing"]
 
 ### monospace
 
-<table><col bgcolor="#eeeeee"><col>
+<table><col style="background-color: #aaaaaa2a;"><col>
 <tr style="font-family: monospace, serif">
   <td>monospace</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>噌祇逢餅鯖鰯わたるメタル</td>
@@ -276,7 +276,7 @@ tags = ["writing"]
 
 ### ゴシック体
 
-<table><col bgcolor="#eeeeee"><col>
+<table><col style="background-color: #aaaaaa2a;"><col>
 <tr style="font-family: 'Hiragino Sans', serif">
   <td>Hiragino Sans</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
@@ -325,7 +325,7 @@ tags = ["writing"]
 
 ### 明朝体
 
-<table><col bgcolor="#eeeeee"><col>
+<table><col style="background-color: #aaaaaa2a;"><col>
 <tr style="font-family: 'Hiragino Mincho ProN', sans-serif">
   <td>Hiragino Mincho ProN</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
@@ -362,7 +362,7 @@ tags = ["writing"]
 
 ### 絵文字
 
-<table><col bgcolor="#eeeeee"><col>
+<table><col style="background-color: #aaaaaa2a;"><col>
 <tr style="font-family: 'Apple Color Emoji', serif">
   <td>Apple Color Emoji</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>🍺🍻🤘🪙</td>
