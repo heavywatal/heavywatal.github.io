@@ -12,7 +12,8 @@ tags = ["job"]
 <https://sc.ddbj.nig.ac.jp/start_the_service>
 
 1.  [利用規定等](https://sc.ddbj.nig.ac.jp/application/)を熟読。
-1.  手元のコンピュータでSSH鍵ペアを生成しておく。既にある場合は作り直す必要なし。
+1.  手元のコンピュータで[SSH鍵ペアを生成]({{< relref "ssh.md" >}})しておく。
+    既にある場合は作り直す必要なし。
     [公式ドキュメント](https://sc.ddbj.nig.ac.jp/application/ssh_keys)
     に従ってRSA 3072にするのが無難だが、Ed25519やEDCSAを登録することも可能。
 1.  [利用登録申請](https://sc-account.ddbj.nig.ac.jp/application/registration)のフォームを埋める。
@@ -62,7 +63,7 @@ rsync -auv gw.ddbj.nig.ac.jp:~/output/ ~/output/
 - [ハードウェア構成](https://sc.ddbj.nig.ac.jp/guides/hardware)
 - [ソフトウェア構成](https://sc.ddbj.nig.ac.jp/software/software)
   (Phase 3: Red Hat Enterprise Linux 7.5)
-    - [Singularity](https://sc.ddbj.nig.ac.jp/software/Singularity)
+    - [Apptainer](https://sc.ddbj.nig.ac.jp/software/Apptainer/)
 
 
 ## ジョブ投入、管理
@@ -221,7 +222,8 @@ print("SGE_TASK_ID: " + os.environ["SGE_TASK_ID"])
 
 ## Apptainer (Singularity)
 
-<https://sc.ddbj.nig.ac.jp/software/Apptainer/>
+- <https://sc.ddbj.nig.ac.jp/software/Apptainer/>
+- [Apptainer]({{< relref "apptainer.md" >}})
 
 `/usr/local/biotools/` 以下に各種ソフトウェアが用意されている。
 [BioContainers](https://biocontainers.pro) のものをほぼそのまま置いているらしい。
@@ -233,7 +235,7 @@ find /usr/local/biotools/ -name 'blast*' | sort
 
 イメージとプログラム名を指定して実行:
 ```sh
-singularity exec -e /usr/local/biotools/f/fastp:0.20.0--hdbcaa40_0 fastp --help
+apptainer exec -e /usr/local/biotools/f/fastp:0.23.4--hadf994f_2 fastp --help
 ```
 
 そこらに落ちてるイメージを拾ってきて使うこともできる。
@@ -242,68 +244,17 @@ singularity exec -e /usr/local/biotools/f/fastp:0.20.0--hdbcaa40_0 fastp --help
 find /usr/local/biotools/ -name 'trinity*' | sort
 mkdir -p ~/image
 wget -P ~/image/ https://data.broadinstitute.org/Trinity/TRINITY_SINGULARITY/trinityrnaseq.v2.11.0.simg
-singularity exec -e ~/image/trinityrnaseq.v2.11.0.simg Trinity --help
+apptainer exec -e ~/image/trinityrnaseq.v2.11.0.simg Trinity --help
 ```
 
 
 ## R
 
-### Homebrew R
+<https://sc.ddbj.nig.ac.jp/software/R>
 
-Homebrew on Linux における標準GCCがついに新しくなったので
-`brew install r`
-で使えるRが入るようになった。
-
-ライブラリが古かったりして途中でエラーになることもあるので
-[`brew install --force-bottle gcc`](https://github.com/Homebrew/linuxbrew-core/issues/22800)
-のような感じでやり過ごす。
-
-ただし[古い gcc@5 まわりでまだ問題が残っている](https://github.com/Homebrew/linuxbrew-core/issues/22511)ようなので要注意。
-
-
-### singularity R
+### apptainer R
 
 ```sh
 find /usr/local/biotools/ -name 'r-base:*' | sort
+apptainer exec -e /usr/local/biotools/r/r-base:4.2.1 R
 ```
-
-最新が3.5.1と古い上にエラーで起動しない:
-
-```
-singularity exec -e /usr/local/biotools/r/r-base:3.5.1 R
-WARNING: Skipping mount /opt/pkg/singularity/3.7.1/var/singularity/mnt/session/etc/resolv.conf [files]: /etc/resolv.conf doesn't exist in container
-[1]    100279 segmentation fault  singularity exec -e /usr/local/biotools/r/r-base:3.5.1 R
-```
-
-
-### module R
-
-https://sc.ddbj.nig.ac.jp/ja/guide/software/r
-
-`module load r/3.5.2` そのものが古い上に、
-古いコンパイラ(おそらく `/usr/bin/gcc` 4.8.5)でビルドされているため
-RcppでC++11までしか使えない。
-また、各パッケージも同じく古いコンパイラでビルドしなければならない。
-`module load gcc` などで新しいgcc/g++がPATH上に乗っていると、
-Rcppインストール時などに
-``/usr/lib64/libstdc++.so.6: version `GLIBCXX_3.4.20' not found``
-と怒られる。
-
-
-
-### Source R
-
-`/opt/pkg/r/*/lib64/R/etc/Makeconf`
-を参考に新しいコンパイラで自前ビルドを試みる:
-
-```sh
-wget -O- https://cran.r-project.org/src/base/R-3/R-3.5.2.tar.gz | tar xz
-cd R-3.5.2/
-./configure -h | less
-./configure --prefix=${HOME}/R --disable-openmp --disable-java '--enable-R-shlib' '--enable-shared' '--with-tcl-config=/usr/lib64/tclConfig.sh' '--with-tk-config=/usr/lib64/tkConfig.sh' 'PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/cm/local/apps/curl/lib/pkgconfig:/usr/lib64/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig' 'CFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include' 'CPPFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include' 'CXXFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include' 'FFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include' 'FCFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include' 'LDFLAGS=-L/usr/local/lib64 -L/usr/lib64 -L/usr/lib -L/cm/local/apps/curl/lib'
-make -j2
-make install
-```
-
-`configure: error: libcurl >= 7.22.0 library and headers are required with support for https`
-古いcurlは入ってないように見えるのに、なぜ？

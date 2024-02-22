@@ -51,23 +51,19 @@ docker --version
 
 ### Mac
 
-FormulaではなくCaskのほうの Docker Desktop を入れるのが簡単:
+Docker Desktop より [Orbstack](https://orbstack.dev/) のほうが軽くて使いやすい。
+いずれにせよ [Homebrew]({{< relref "homebrew.md" >}}) で入れるのが簡単:
 ```sh
-brew install --cask docker
-open -a Docker
+brew install --cask orbstack
+open -a OrbStack
 ```
 
-ユーザーのホームにCLIのシムリンクができるのでパスを通す:
+OrbStack.app を起動するとシェルの設定を勝手にいじってパスを通してくれる:
 ```sh
-PATH=${HOME}/.docker/bin:$PATH
+orb --help
 docker --version
 docker-compose --version
 ```
-
-- [x] Use Virtualization framework
-- [x] VirtioFS. 古い gRPC FUSE よりも速いらしい。
-  サードパーティのmutagenはもっと速いらしい。
-- CPUやRAMの上限など適宜変更。
 
 
 ### Hello world

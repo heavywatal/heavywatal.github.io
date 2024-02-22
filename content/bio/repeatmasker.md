@@ -9,11 +9,34 @@ tags = ["genetics"]
 
 ## インストール
 
+### プログラム + データベース
+
+- <https://hub.docker.com/r/dfam/tetools>
+- <https://github.com/Dfam-consortium/TETools/>
+
+全部入りの [Dockerコンテナ]({{< relref "docker.md" >}}) を使うのが楽。
+データベースも含めて20GB以上ダウンロードし、80GB以上ストレージを使う。
+
+```sh
+docker image pull dfam/tetools
+docker container run -dit --mount type=bind,source="$PWD",target=/work --workdir /work --user "$(id -u):$(id -g)" --name dfamtet dfam/tetools
+docker container exec dfamtet RepeatMasker | head
+docker container exec dfamtet rmblastn -version
+docker container exec dfamtet trf -v
+```
+
+```sh
+apptainer pull dfam-tetools_1.sif docker://dfam/tetools:1
+apptainer exec dfam-tetools_1.sif rmblastn -version
+```
+
 ### プログラム
 
-[Homebrew]({{< relref "homebrew.md" >}}) で一撃:
+プログラムだけを入れるなら
+[Homebrew]({{< relref "homebrew.md" >}}) でも可能だが、
+numpyや古いPythonに依存していて不便:
 ```sh
-brew install brewsci/bio/repeatmasker
+brew info brewsci/bio/repeatmasker
 ```
 
 依存プログラムも自動的に入る:
