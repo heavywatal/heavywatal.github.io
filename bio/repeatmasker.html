@@ -86,9 +86,25 @@ RepeatMasker
 
 <p><a href="https://www.repeatmasker.org/">https://www.repeatmasker.org/</a></p>
 <h2 id="インストール">インストール</h2>
-<h3 id="プログラム">プログラム</h3>
-<p><a href="/mac/homebrew.html">Homebrew</a> で一撃:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew install brewsci/bio/repeatmasker
+<h3 id="プログラム--データベース">プログラム + データベース</h3>
+<ul>
+<li><a href="https://hub.docker.com/r/dfam/tetools">https://hub.docker.com/r/dfam/tetools</a></li>
+<li><a href="https://github.com/Dfam-consortium/TETools/">https://github.com/Dfam-consortium/TETools/</a></li>
+</ul>
+<p>全部入りの <a href="/dev/docker.html">Dockerコンテナ</a> を使うのが楽。
+データベースも含めて20GB以上ダウンロードし、80GB以上ストレージを使う。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker image pull dfam/tetools
+</span></span><span class="line"><span class="cl">docker container run -dit --mount <span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span><span class="s2">&#34;</span><span class="nv">$PWD</span><span class="s2">&#34;</span>,target<span class="o">=</span>/work --workdir /work --user <span class="s2">&#34;</span><span class="k">$(</span>id -u<span class="k">)</span><span class="s2">:</span><span class="k">$(</span>id -g<span class="k">)</span><span class="s2">&#34;</span> --name dfamtet dfam/tetools
+</span></span><span class="line"><span class="cl">docker container <span class="nb">exec</span> dfamtet RepeatMasker <span class="p">|</span> head
+</span></span><span class="line"><span class="cl">docker container <span class="nb">exec</span> dfamtet rmblastn -version
+</span></span><span class="line"><span class="cl">docker container <span class="nb">exec</span> dfamtet trf -v
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">apptainer pull dfam-tetools_1.sif docker://dfam/tetools:1
+</span></span><span class="line"><span class="cl">apptainer <span class="nb">exec</span> dfam-tetools_1.sif rmblastn -version
+</span></span></code></pre></div><h3 id="プログラム">プログラム</h3>
+<p>プログラムだけを入れるなら
+<a href="/mac/homebrew.html">Homebrew</a> でも可能だが、
+numpyや古いPythonに依存していて不便:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew info brewsci/bio/repeatmasker
 </span></span></code></pre></div><p>依存プログラムも自動的に入る:
 <a href="https://www.repeatmasker.org/RMBlast.html">RMBlast</a>,
 <a href="http://hmmer.org/">HMMER</a>,

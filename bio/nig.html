@@ -89,7 +89,8 @@ Heavy Watal
 <p><a href="https://sc.ddbj.nig.ac.jp/start_the_service">https://sc.ddbj.nig.ac.jp/start_the_service</a></p>
 <ol>
 <li><a href="https://sc.ddbj.nig.ac.jp/application/">利用規定等</a>を熟読。</li>
-<li>手元のコンピュータでSSH鍵ペアを生成しておく。既にある場合は作り直す必要なし。
+<li>手元のコンピュータで<a href="/dev/ssh.html">SSH鍵ペアを生成</a>しておく。
+既にある場合は作り直す必要なし。
 <a href="https://sc.ddbj.nig.ac.jp/application/ssh_keys">公式ドキュメント</a>
 に従ってRSA 3072にするのが無難だが、Ed25519やEDCSAを登録することも可能。</li>
 <li><a href="https://sc-account.ddbj.nig.ac.jp/application/registration">利用登録申請</a>のフォームを埋める。
@@ -132,7 +133,7 @@ Heavy Watal
 <li><a href="https://sc.ddbj.nig.ac.jp/software/software">ソフトウェア構成</a>
 (Phase 3: Red Hat Enterprise Linux 7.5)
 <ul>
-<li><a href="https://sc.ddbj.nig.ac.jp/software/Singularity">Singularity</a></li>
+<li><a href="https://sc.ddbj.nig.ac.jp/software/Apptainer/">Apptainer</a></li>
 </ul>
 </li>
 </ul>
@@ -258,56 +259,28 @@ E(rror), r(unning), R(estarted), s(uspended)
 <dd>ユーザーに与えられたリソースを表示</dd>
 </dl>
 <h2 id="apptainer-singularity">Apptainer (Singularity)</h2>
-<p><a href="https://sc.ddbj.nig.ac.jp/software/Apptainer/">https://sc.ddbj.nig.ac.jp/software/Apptainer/</a></p>
+<ul>
+<li><a href="https://sc.ddbj.nig.ac.jp/software/Apptainer/">https://sc.ddbj.nig.ac.jp/software/Apptainer/</a></li>
+<li><a href="/dev/apptainer.html">Apptainer</a></li>
+</ul>
 <p><code>/usr/local/biotools/</code> 以下に各種ソフトウェアが用意されている。
 <a href="https://biocontainers.pro">BioContainers</a> のものをほぼそのまま置いているらしい。</p>
 <p>利用可能なソフトウェアとバージョンを探す:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">find /usr/local/biotools/ -name <span class="s1">&#39;blast*&#39;</span> <span class="p">|</span> sort
 </span></span></code></pre></div><p>イメージとプログラム名を指定して実行:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">singularity <span class="nb">exec</span> -e /usr/local/biotools/f/fastp:0.20.0--hdbcaa40_0 fastp --help
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">apptainer <span class="nb">exec</span> -e /usr/local/biotools/f/fastp:0.23.4--hadf994f_2 fastp --help
 </span></span></code></pre></div><p>そこらに落ちてるイメージを拾ってきて使うこともできる。
 <a href="https://github.com/trinityrnaseq/trinityrnaseq/wiki/Trinity-in-Docker#trinity_singularity">例えばTrinityの公式最新版を使いたい場合</a>:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">find /usr/local/biotools/ -name <span class="s1">&#39;trinity*&#39;</span> <span class="p">|</span> sort
 </span></span><span class="line"><span class="cl">mkdir -p ~/image
 </span></span><span class="line"><span class="cl">wget -P ~/image/ https://data.broadinstitute.org/Trinity/TRINITY_SINGULARITY/trinityrnaseq.v2.11.0.simg
-</span></span><span class="line"><span class="cl">singularity <span class="nb">exec</span> -e ~/image/trinityrnaseq.v2.11.0.simg Trinity --help
+</span></span><span class="line"><span class="cl">apptainer <span class="nb">exec</span> -e ~/image/trinityrnaseq.v2.11.0.simg Trinity --help
 </span></span></code></pre></div><h2 id="r">R</h2>
-<h3 id="homebrew-r">Homebrew R</h3>
-<p>Homebrew on Linux における標準GCCがついに新しくなったので
-<code>brew install r</code>
-で使えるRが入るようになった。</p>
-<p>ライブラリが古かったりして途中でエラーになることもあるので
-<a href="https://github.com/Homebrew/linuxbrew-core/issues/22800"><code>brew install --force-bottle gcc</code></a>
-のような感じでやり過ごす。</p>
-<p>ただし<a href="https://github.com/Homebrew/linuxbrew-core/issues/22511">古い gcc@5 まわりでまだ問題が残っている</a>ようなので要注意。</p>
-<h3 id="singularity-r">singularity R</h3>
+<p><a href="https://sc.ddbj.nig.ac.jp/software/R">https://sc.ddbj.nig.ac.jp/software/R</a></p>
+<h3 id="apptainer-r">apptainer R</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">find /usr/local/biotools/ -name <span class="s1">&#39;r-base:*&#39;</span> <span class="p">|</span> sort
-</span></span></code></pre></div><p>最新が3.5.1と古い上にエラーで起動しない:</p>
-<pre tabindex="0"><code>singularity exec -e /usr/local/biotools/r/r-base:3.5.1 R
-WARNING: Skipping mount /opt/pkg/singularity/3.7.1/var/singularity/mnt/session/etc/resolv.conf [files]: /etc/resolv.conf doesn&#39;t exist in container
-[1]    100279 segmentation fault  singularity exec -e /usr/local/biotools/r/r-base:3.5.1 R
-</code></pre><h3 id="module-r">module R</h3>
-<p><a href="https://sc.ddbj.nig.ac.jp/ja/guide/software/r">https://sc.ddbj.nig.ac.jp/ja/guide/software/r</a></p>
-<p><code>module load r/3.5.2</code> そのものが古い上に、
-古いコンパイラ(おそらく <code>/usr/bin/gcc</code> 4.8.5)でビルドされているため
-RcppでC++11までしか使えない。
-また、各パッケージも同じく古いコンパイラでビルドしなければならない。
-<code>module load gcc</code> などで新しいgcc/g++がPATH上に乗っていると、
-Rcppインストール時などに
-<code>/usr/lib64/libstdc++.so.6: version `GLIBCXX_3.4.20' not found</code>
-と怒られる。</p>
-<h3 id="source-r">Source R</h3>
-<p><code>/opt/pkg/r/*/lib64/R/etc/Makeconf</code>
-を参考に新しいコンパイラで自前ビルドを試みる:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wget -O- https://cran.r-project.org/src/base/R-3/R-3.5.2.tar.gz <span class="p">|</span> tar xz
-</span></span><span class="line"><span class="cl"><span class="nb">cd</span> R-3.5.2/
-</span></span><span class="line"><span class="cl">./configure -h <span class="p">|</span> less
-</span></span><span class="line"><span class="cl">./configure --prefix<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/R --disable-openmp --disable-java <span class="s1">&#39;--enable-R-shlib&#39;</span> <span class="s1">&#39;--enable-shared&#39;</span> <span class="s1">&#39;--with-tcl-config=/usr/lib64/tclConfig.sh&#39;</span> <span class="s1">&#39;--with-tk-config=/usr/lib64/tkConfig.sh&#39;</span> <span class="s1">&#39;PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/cm/local/apps/curl/lib/pkgconfig:/usr/lib64/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig&#39;</span> <span class="s1">&#39;CFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include&#39;</span> <span class="s1">&#39;CPPFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include&#39;</span> <span class="s1">&#39;CXXFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include&#39;</span> <span class="s1">&#39;FFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include&#39;</span> <span class="s1">&#39;FCFLAGS=-I/usr/local/include:/usr/include/X11:/cm/local/apps/curl/include&#39;</span> <span class="s1">&#39;LDFLAGS=-L/usr/local/lib64 -L/usr/lib64 -L/usr/lib -L/cm/local/apps/curl/lib&#39;</span>
-</span></span><span class="line"><span class="cl">make -j2
-</span></span><span class="line"><span class="cl">make install
-</span></span></code></pre></div><p><code>configure: error: libcurl &gt;= 7.22.0 library and headers are required with support for https</code>
-古いcurlは入ってないように見えるのに、なぜ？</p>
-
+</span></span><span class="line"><span class="cl">apptainer <span class="nb">exec</span> -e /usr/local/biotools/r/r-base:4.2.1 R
+</span></span></code></pre></div>
 </article>
 </main>
 
