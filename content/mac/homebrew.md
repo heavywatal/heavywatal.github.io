@@ -11,6 +11,8 @@ Unixツールをパッケージとして手軽にインストールできるパ�
 
 ## Installation
 
+<https://docs.brew.sh/Installation>
+
 1.  Command Line Tools をインストールする。
     cf. [/dev/devenv]({{< relref "devenv.md" >}}):
     ```sh
@@ -30,24 +32,15 @@ Unixツールをパッケージとして手軽にインストールできるパ�
     brew doctor
     ```
 
----
-
-<https://docs.brew.sh/Installation.html>
-
-デフォルトの `/usr/local/` にインストールするのが嫌なら、
-例えばホーム以下の `~/.homebrew/` にインストールすることもできる:
-```sh
-mkdir ~/.homebrew
-curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C ~/.homebrew
-```
-が、`/usr/local/` 以外にインストールすると、
-bottle機能を封じられて毎回自前ビルドすることになるみたいなので、
-非力なラップトップとかでは結構厳しい。
-
 
 ## Usage
 
-<https://docs.brew.sh/FAQ.html>
+<https://docs.brew.sh/FAQ>
+
+-   パッケージのインストール・アンインストール:
+
+        brew install cmake
+        brew uninstall cmake
 
 -   Homebrew本体とカタログをアップデートし、アップグレード可能なパッケージを表示:
 
@@ -57,23 +50,13 @@ bottle機能を封じられて毎回自前ビルドすることになるみた�
 
         brew upgrade
 
--   パッケージのバージョンを固定し、一括 `brew upgrade` の適用外にする。
-    頻繁に更新され、やたらCPUを使うやつらに。
-
-        brew pin imagemagick
-
 -   パッケージ検索:
 
-        brew search text
+        brew search cmake
 
 -   パッケージ情報の表示:
 
-        brew info formula
-
--   パッケージのインストール・アンインストール:
-
-        brew install formula
-        brew uninstall formula
+        brew info cmake
 
 -   インストール済みパッケージ、またはパッケージ内ファイルの一覧:
 
@@ -84,30 +67,17 @@ bottle機能を封じられて毎回自前ビルドすることになるみた�
 
 公式リポジトリから明示的にインストールしたものメモ:
 
-    aspell
-    autoconf
-    automake
-    binutils
     boost
     cmake
     coreutils
-    diffutils
     doxygen
     eigen
     emacs
     exiftool
-    findutils
-    fswatch
     git
-    gnu-sed
-    gnu-tar
     go
-    grep
-    imagemagick
-    less
     lftp
     make
-    nano
     nkf
     pandoc
     parallel
@@ -115,18 +85,16 @@ bottle機能を封じられて毎回自前ビルドすることになるみた�
     qpdf
     rbenv
     rsync
-    sshfs
     tmux
-    vim
     webp
     wget
     xz
-    zsh
     zsh-completions
+    zstd
 
 Rをここからインストールするとバイナリ版のパッケージが利用できず、
 毎回ソースからビルドすることになるので、
-後述のcaskのほうの `r` を入れるほうが簡単。
+後述のように `--cask r` で入れるほうが簡単。
 
 `coreutils`, `gnu-sed`, `gnu-tar`, `grep`
 などは既存のコマンドとごっちゃにならないよう頭に `g`
@@ -139,8 +107,8 @@ Rをここからインストールするとバイナリ版のパッケージが�
 
 ## brew tap
 
-- https://docs.brew.sh/brew-tap.html
-- https://docs.brew.sh/Interesting-Taps-and-Forks.html
+- <https://docs.brew.sh/Taps>
+- <https://docs.brew.sh/Interesting-Taps-and-Forks>
 
 明示的にリポジトリを追加する:
 
@@ -163,7 +131,7 @@ brew install libsequence
 
 ### Tapを作る
 
-https://docs.brew.sh/How-to-Create-and-Maintain-a-Tap.html
+<https://docs.brew.sh/How-to-Create-and-Maintain-a-Tap>
 
 GitHubに `homebrew-nicetap` のような名前のリポジトリを作成し、
 ルート直下の `Formula/` に `goodtool.rb` のようなファイルを置くだけ。
@@ -173,7 +141,7 @@ GitHubに `homebrew-nicetap` のような名前のリポジトリを作成し、
 
 ### Formulaを作る
 
-https://docs.brew.sh/Formula-Cookbook.html
+<https://docs.brew.sh/Formula-Cookbook>
 
 新規作成するには `brew create <URL>` コマンドが便利。
 
@@ -199,16 +167,16 @@ brew list --cask
 
 アプリ側でアップデートを実行するとCask内でのバージョンと食い違っちゃうけど使用上は問題ないらしい。
 
-adobe-acrobat-reader amazon-photos
+amazon-photos
 basictex bibdesk
-discord docker drawio dropbox firefox gimp gitter
-google-chrome google-drive google-japanese-ime
-inkscape iterm2 joplin julia kindle macfuse
+discord drawio dropbox firefox
+google-chrome google-drive
+inkscape joplin julia kindle macfuse
 megasync menumeters monitorcontrol
-quarto r rstudio
+orbstack quarto r rstudio
 skim skype slack spideroakone
-the-unarchiver virtualbox visual-studio-code vlc
-whatsapp xquartz zoom
+the-unarchiver visual-studio-code vlc
+wezterm xquartz zoom
 
 ### Quicklook
 
@@ -220,8 +188,9 @@ whatsapp xquartz zoom
 brew tap homebrew/cask-fonts
 ```
 
+font-biz-udgothic font-biz-udmincho font-biz-udpgothic font-biz-udpmincho
 font-ubuntu font-ubuntu-mono font-ubuntu-mono-nerd-font
 font-noto-sans font-noto-serif font-noto-sans-mono
 font-source-sans-3 font-source-serif-4
 font-open-sans font-roboto font-dejavu
-font-libertinus font-lora font-merriweather
+font-lora font-merriweather
