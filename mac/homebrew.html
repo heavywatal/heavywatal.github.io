@@ -88,6 +88,7 @@ Homebrew
 <p>Unixツールをパッケージとして手軽にインストールできるパッケージ管理ソフト。</p>
 <p><a href="https://brew.sh/">https://brew.sh/</a></p>
 <h2 id="installation">Installation</h2>
+<p><a href="https://docs.brew.sh/Installation">https://docs.brew.sh/Installation</a></p>
 <ol>
 <li>
 <p>Command Line Tools をインストールする。
@@ -104,18 +105,15 @@ cf. <a href="/dev/devenv.html">/dev/devenv</a>:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew doctor
 </span></span></code></pre></div></li>
 </ol>
-<hr>
-<p><a href="https://docs.brew.sh/Installation.html">https://docs.brew.sh/Installation.html</a></p>
-<p>デフォルトの <code>/usr/local/</code> にインストールするのが嫌なら、
-例えばホーム以下の <code>~/.homebrew/</code> にインストールすることもできる:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mkdir ~/.homebrew
-</span></span><span class="line"><span class="cl">curl -L https://github.com/Homebrew/brew/tarball/master <span class="p">|</span> tar xz --strip <span class="m">1</span> -C ~/.homebrew
-</span></span></code></pre></div><p>が、<code>/usr/local/</code> 以外にインストールすると、
-bottle機能を封じられて毎回自前ビルドすることになるみたいなので、
-非力なラップトップとかでは結構厳しい。</p>
 <h2 id="usage">Usage</h2>
-<p><a href="https://docs.brew.sh/FAQ.html">https://docs.brew.sh/FAQ.html</a></p>
+<p><a href="https://docs.brew.sh/FAQ">https://docs.brew.sh/FAQ</a></p>
 <ul>
+<li>
+<p>パッケージのインストール・アンインストール:</p>
+<pre><code>brew install cmake
+brew uninstall cmake
+</code></pre>
+</li>
 <li>
 <p>Homebrew本体とカタログをアップデートし、アップグレード可能なパッケージを表示:</p>
 <pre><code>brew update &amp;&amp; brew outdated
@@ -127,25 +125,13 @@ bottle機能を封じられて毎回自前ビルドすることになるみた�
 </code></pre>
 </li>
 <li>
-<p>パッケージのバージョンを固定し、一括 <code>brew upgrade</code> の適用外にする。
-頻繁に更新され、やたらCPUを使うやつらに。</p>
-<pre><code>brew pin imagemagick
-</code></pre>
-</li>
-<li>
 <p>パッケージ検索:</p>
-<pre><code>brew search text
+<pre><code>brew search cmake
 </code></pre>
 </li>
 <li>
 <p>パッケージ情報の表示:</p>
-<pre><code>brew info formula
-</code></pre>
-</li>
-<li>
-<p>パッケージのインストール・アンインストール:</p>
-<pre><code>brew install formula
-brew uninstall formula
+<pre><code>brew info cmake
 </code></pre>
 </li>
 <li>
@@ -156,30 +142,17 @@ brew uninstall formula
 </ul>
 <h2 id="brew-install">brew install</h2>
 <p>公式リポジトリから明示的にインストールしたものメモ:</p>
-<pre><code>aspell
-autoconf
-automake
-binutils
-boost
+<pre><code>boost
 cmake
 coreutils
-diffutils
 doxygen
 eigen
 emacs
 exiftool
-findutils
-fswatch
 git
-gnu-sed
-gnu-tar
 go
-grep
-imagemagick
-less
 lftp
 make
-nano
 nkf
 pandoc
 parallel
@@ -187,18 +160,16 @@ pyenv
 qpdf
 rbenv
 rsync
-sshfs
 tmux
-vim
 webp
 wget
 xz
-zsh
 zsh-completions
+zstd
 </code></pre>
 <p>Rをここからインストールするとバイナリ版のパッケージが利用できず、
 毎回ソースからビルドすることになるので、
-後述のcaskのほうの <code>r</code> を入れるほうが簡単。</p>
+後述のように <code>--cask r</code> で入れるほうが簡単。</p>
 <p><code>coreutils</code>, <code>gnu-sed</code>, <code>gnu-tar</code>, <code>grep</code>
 などは既存のコマンドとごっちゃにならないよう頭に <code>g</code>
 を付けてインストールしてくれる。
@@ -208,8 +179,8 @@ zsh-completions
 <code>brew unlink coreutils gnu-sed gnu-tar grep</code> してもそれらのディレクトリは残る。</p>
 <h2 id="brew-tap">brew tap</h2>
 <ul>
-<li><a href="https://docs.brew.sh/brew-tap.html">https://docs.brew.sh/brew-tap.html</a></li>
-<li><a href="https://docs.brew.sh/Interesting-Taps-and-Forks.html">https://docs.brew.sh/Interesting-Taps-and-Forks.html</a></li>
+<li><a href="https://docs.brew.sh/Taps">https://docs.brew.sh/Taps</a></li>
+<li><a href="https://docs.brew.sh/Interesting-Taps-and-Forks">https://docs.brew.sh/Interesting-Taps-and-Forks</a></li>
 </ul>
 <p>明示的にリポジトリを追加する:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew tap brewsci/bio
@@ -224,13 +195,13 @@ zsh-completions
 <a href="https://brewsci.github.io/homebrew-bio/"><code>brewsci/bio</code></a>
 に振り分けて移行を進めている。</p>
 <h3 id="tapを作る">Tapを作る</h3>
-<p><a href="https://docs.brew.sh/How-to-Create-and-Maintain-a-Tap.html">https://docs.brew.sh/How-to-Create-and-Maintain-a-Tap.html</a></p>
+<p><a href="https://docs.brew.sh/How-to-Create-and-Maintain-a-Tap">https://docs.brew.sh/How-to-Create-and-Maintain-a-Tap</a></p>
 <p>GitHubに <code>homebrew-nicetap</code> のような名前のリポジトリを作成し、
 ルート直下の <code>Formula/</code> に <code>goodtool.rb</code> のようなファイルを置くだけ。
 使うときは <code>brew install &lt;username&gt;/nicetap/goodtool</code>
 のようにリポジトリ名から <code>homebrew-</code> を削った形で指定する。</p>
 <h3 id="formulaを作る">Formulaを作る</h3>
-<p><a href="https://docs.brew.sh/Formula-Cookbook.html">https://docs.brew.sh/Formula-Cookbook.html</a></p>
+<p><a href="https://docs.brew.sh/Formula-Cookbook">https://docs.brew.sh/Formula-Cookbook</a></p>
 <p>新規作成するには <code>brew create &lt;URL&gt;</code> コマンドが便利。</p>
 <p><code>url</code> には <a href="/dev/git.html#tag"><code>git tag</code></a>
 でGitHubに作られるバージョン付きアーカイブを指定してやるのが楽ちん。</p>
@@ -245,25 +216,26 @@ zsh-completions
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew install --cask r rstudio
 </span></span><span class="line"><span class="cl">brew list --cask
 </span></span></code></pre></div><p>アプリ側でアップデートを実行するとCask内でのバージョンと食い違っちゃうけど使用上は問題ないらしい。</p>
-<p>adobe-acrobat-reader amazon-photos
+<p>amazon-photos
 basictex bibdesk
-discord docker drawio dropbox firefox gimp gitter
-google-chrome google-drive google-japanese-ime
-inkscape iterm2 joplin julia kindle macfuse
+discord drawio dropbox firefox
+google-chrome google-drive
+inkscape joplin julia kindle macfuse
 megasync menumeters monitorcontrol
-quarto r rstudio
+orbstack quarto r rstudio
 skim skype slack spideroakone
-the-unarchiver virtualbox visual-studio-code vlc
-whatsapp xquartz zoom</p>
+the-unarchiver visual-studio-code vlc
+wezterm xquartz zoom</p>
 <h3 id="quicklook">Quicklook</h3>
 <p><a href="/mac/quicklook.html">See Quicklook</a>.</p>
 <h3 id="fonts">Fonts</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew tap homebrew/cask-fonts
-</span></span></code></pre></div><p>font-ubuntu font-ubuntu-mono font-ubuntu-mono-nerd-font
+</span></span></code></pre></div><p>font-biz-udgothic font-biz-udmincho font-biz-udpgothic font-biz-udpmincho
+font-ubuntu font-ubuntu-mono font-ubuntu-mono-nerd-font
 font-noto-sans font-noto-serif font-noto-sans-mono
 font-source-sans-3 font-source-serif-4
 font-open-sans font-roboto font-dejavu
-font-libertinus font-lora font-merriweather</p>
+font-lora font-merriweather</p>
 
 </article>
 </main>
