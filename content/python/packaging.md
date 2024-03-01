@@ -61,7 +61,7 @@ python3 -m site
 
 ```toml
 [build-system]
-requires = ["flit_core >=3.4,<4"]
+requires = ["flit_core >=3.6,<4"]
 build-backend = "flit_core.buildapi"
 
 [project]
@@ -79,14 +79,13 @@ classifiers = [
   "License :: OSI Approved :: MIT License",
   "Topic :: Scientific/Engineering :: Bio-Informatics",
 ]
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 dependencies = [
   "tomli-w",
 ]
 
 [project.optional-dependencies]
 dev = [
-  "black",
   "pytest",
   "pytest-cov",
   "ruff",
@@ -101,8 +100,9 @@ Source = "https://github.com/heavywatal/pywtl"
 [tool.pyright]
 typeCheckingMode = "strict"
 
-[tool.ruff]
-select = ["E", "F", "W", "I"]
+[tool.ruff.lint]
+select = ["F", "E", "W", "I", "N", "UP", "S", "B", "A", "PL"]
+ignore = ["S101"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
@@ -140,7 +140,8 @@ optional dependencies もインストールしたい場合は
 linterとしては
 [`pyproject.toml` 対応拒否のflake8](https://github.com/PyCQA/flake8/issues/234)
 を捨てて超高速Rust製[ruff](https://docs.astral.sh/ruff/)を使う。
-
+0.2からはformatterとしても使えるようになり、
+[https://black.readthedocs.io](black)も不要になった。
 
 
 ### ソースコード
