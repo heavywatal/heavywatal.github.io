@@ -23,7 +23,7 @@ https://cmake.org/cmake/help/latest/
 プロジェクトのトップに置くものは、以下のようなコマンドで始める必要がある。
 
 ```cmake
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.15)
 project(helloworld
   VERSION 0.1.0
   LANGUAGES CXX)
@@ -58,6 +58,9 @@ install(TARGETS a.out
 - `message(STATUS "Hello world!")`
 - `option(VARIABLE "Message" ON)`
 - `set(VARIABLE value)`
+- [`cmake_path()`](https://cmake.org/cmake/help/latest/command/cmake_path.html)
+  パス操作全般。
+  3.20 より古い環境では `get_filename_component()` 。
 
 
 ### Project commands
@@ -160,7 +163,7 @@ install(TARGETS a.out
 ### C++
 
 ```cmake
-target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_14)
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 set_target_properties(${PROJECT_NAME} PROPERTIES
   CXX_STANDARD_REQUIRED ON
   CXX_EXTENSIONS OFF
@@ -171,17 +174,17 @@ target_compile_options(${PROJECT_NAME} PRIVATE
   -march=native -Wall -Wextra -pedantic
 )
 
-if (NOT CMAKE_BUILD_TYPE)
+if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
-message(STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
+cmake_print_variables(CMAKE_BUILD_TYPE)
 set(CMAKE_CXX_FLAGS_DEV "-O2 -g")
 ```
 
 `CMAKE_CXX_*` のようなグローバル設定を使わず
 `target_*()` でターゲットごとに設定するのが今後の主流。
 [`CMAKE_CXX_KNOWN_FEATURES`](https://cmake.org/cmake/help/latest/prop_gbl/CMAKE_CXX_KNOWN_FEATURES.html)
-に `cxx_std_14` などの便利なメタタグが導入されたのは CMake 3.8 から。
+に `cxx_std_17` などの便利なメタタグが導入されたのは CMake 3.8 から。
 
 Predefined variable              | default
 ---------------------------------|----
@@ -218,6 +221,16 @@ target_include_directories(${PROJECT_NAME} INTERFACE
 <https://cmake.org/cmake/help/latest/manual/cmake-modules.7.html>
 
 `include()` や `find_package()` から使う。
+
+### include(CMakePrintHelpers)
+
+変数の名前と中身を表示してくれる。
+名前を2回書かずに済む。
+次の二つは等価:
+```cmake
+cmake_print_variables(VAR)
+message(STATUS VAR="${VAR}")
+```
 
 ### GNUInstallDirs
 
@@ -306,7 +319,7 @@ add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 ```cmake
 include(FetchContent)
 set(FETCHCONTENT_QUIET OFF)
-message(STATUS "FETCHCONTENT_SOURCE_DIR_IGRAPH: ${FETCHCONTENT_SOURCE_DIR_IGRAPH}")
+cmake_print_variables(FETCHCONTENT_SOURCE_DIR_IGRAPH)
 FetchContent_Declare(
   igraph
   GIT_REPOSITORY https://github.com/igraph/igraph.git
@@ -314,11 +327,23 @@ FetchContent_Declare(
   GIT_SHALLOW ON
 )
 FetchContent_MakeAvailable(igraph)
-message(STATUS "igraph_SOURCE_DIR: ${igraph_SOURCE_DIR}")
+cmake_print_variables(igraph_SOURCE_DIR, igraph_BINARY_DIR)
 ```
 
-CMake 3.11 からの新機能なので、もう少し普及するまでお預け。
-当面は `execute_process()` で凌ぐ:
+`FETCHCONTENT_SOURCE_DIR_<uppercaseName>` が定義されている場合は、
+fetchせずそこにあるものを使う。
+
+成功したら
+`<lowercaseName>_POPULATED`,
+`<lowercaseName>_SOURCE_DIR`,
+`<lowercaseName>_BINARY_DIR`
+が定義される。
+
+3.24以降は `find_package()` との統合が進み、見つからなければfetchする、を簡単に書けるようになる。
+
+3.28以降は `EXCLUDE_FROM_ALL` オプションも渡せる。
+
+CMake 3.11 より古い環境では `execute_process()` で凌ぐ:
 ```cmake
 find_package(Git)
 execute_process(COMMAND
@@ -398,18 +423,9 @@ CMakeのバージョンを上げたときなどcleanしたい場面で使えな�
 
 ```sh
 cmake -S . -B build -DCMAKE_INSTALL_PREFIX=${HOME}/local -DCMAKE_BUILD_TYPE=Debug
+cmake --build build -j2
+cmake --install build
 ```
-
-デフォルトでは `Makefile` が書き出されるので
-`make && make install` のように実行してもいいけど、
-`cmake` からそれを実行することもできる:
-
-```sh
-cmake --build build -j 2
-cmake --build build -j 2 --target install
-```
-
-3.15以降は `cmake --install <dir>` が使える。
 
 `-S <dir>`
 : ソースツリーを指定する。
@@ -424,6 +440,11 @@ cmake --build build -j 2 --target install
 
 `-G <generator-name>`
 : Makefile, Ninja, Xcode, etc.
+: デフォルトでは `Makefile` が書き出されるので
+  `make && make install` と書いてもいいけど、
+  generator非依存の `cmake --build` を使ったほうがいい。
+: `cmake --install <dir>` が使えるのは3.15以降。
+  それまでは `cmake --build build --target install` と明示する必要があった。
 
 `-E <command>`
 : シェルの違いを気にせず基本的なコマンドが使えるように。e.g.,
