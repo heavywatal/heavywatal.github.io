@@ -95,7 +95,7 @@ CMakeでは開発者と利用者の双方がCMakeをインストールして使�
 <h2 id="基本">基本</h2>
 <p><code>CMakeLists.txt</code> を各ディレクトリに配置して、階層的に管理する。
 プロジェクトのトップに置くものは、以下のようなコマンドで始める必要がある。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.1</span><span class="p">)</span><span class="err">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.15</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">project</span><span class="p">(</span><span class="s">helloworld</span>
 </span></span><span class="line"><span class="cl">  <span class="s">VERSION</span> <span class="s">0.1.0</span>
 </span></span><span class="line"><span class="cl">  <span class="s">LANGUAGES</span> <span class="s">CXX</span><span class="p">)</span><span class="err">
@@ -120,6 +120,9 @@ CMakeでは開発者と利用者の双方がCMakeをインストールして使�
 <li><code>message(STATUS &quot;Hello world!&quot;)</code></li>
 <li><code>option(VARIABLE &quot;Message&quot; ON)</code></li>
 <li><code>set(VARIABLE value)</code></li>
+<li><a href="https://cmake.org/cmake/help/latest/command/cmake_path.html"><code>cmake_path()</code></a>
+パス操作全般。
+3.20 より古い環境では <code>get_filename_component()</code> 。</li>
 </ul>
 <h3 id="project-commands">Project commands</h3>
 <p><a href="https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html#project-commands">https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html#project-commands</a></p>
@@ -207,7 +210,7 @@ STATIC/SHAREDが明示されていない <code>add_library()</code> でどっち
 <li><code>CMAKE_MACOSX_RPATH</code></li>
 </ul>
 <h3 id="c">C++</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">target_compile_features</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">PUBLIC</span> <span class="s">cxx_std_14</span><span class="p">)</span><span class="err">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">target_compile_features</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">PUBLIC</span> <span class="s">cxx_std_17</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set_target_properties</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">PROPERTIES</span>
 </span></span><span class="line"><span class="cl">  <span class="s">CXX_STANDARD_REQUIRED</span> <span class="s">ON</span>
 </span></span><span class="line"><span class="cl">  <span class="s">CXX_EXTENSIONS</span> <span class="s">OFF</span>
@@ -218,15 +221,15 @@ STATIC/SHAREDが明示されていない <code>add_library()</code> でどっち
 </span></span><span class="line"><span class="cl">  <span class="s">-march=native</span> <span class="s">-Wall</span> <span class="s">-Wextra</span> <span class="s">-pedantic</span>
 </span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">if</span> <span class="p">(</span><span class="s">NOT</span> <span class="s">CMAKE_BUILD_TYPE</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">if</span><span class="p">(</span><span class="s">NOT</span> <span class="s">CMAKE_BUILD_TYPE</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span>  <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_BUILD_TYPE</span> <span class="s">Release</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">message</span><span class="p">(</span><span class="s">STATUS</span> <span class="s2">&#34;CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">cmake_print_variables</span><span class="p">(</span><span class="s">CMAKE_BUILD_TYPE</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_FLAGS_DEV</span> <span class="s2">&#34;-O2 -g&#34;</span><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><p><code>CMAKE_CXX_*</code> のようなグローバル設定を使わず
 <code>target_*()</code> でターゲットごとに設定するのが今後の主流。
 <a href="https://cmake.org/cmake/help/latest/prop_gbl/CMAKE_CXX_KNOWN_FEATURES.html"><code>CMAKE_CXX_KNOWN_FEATURES</code></a>
-に <code>cxx_std_14</code> などの便利なメタタグが導入されたのは CMake 3.8 から。</p>
+に <code>cxx_std_17</code> などの便利なメタタグが導入されたのは CMake 3.8 から。</p>
 <table>
 <thead>
 <tr>
@@ -274,7 +277,13 @@ STATIC/SHAREDが明示されていない <code>add_library()</code> でどっち
 </span></span></span></code></pre></div><h2 id="modules">Modules</h2>
 <p><a href="https://cmake.org/cmake/help/latest/manual/cmake-modules.7.html">https://cmake.org/cmake/help/latest/manual/cmake-modules.7.html</a></p>
 <p><code>include()</code> や <code>find_package()</code> から使う。</p>
-<h3 id="gnuinstalldirs">GNUInstallDirs</h3>
+<h3 id="includecmakeprinthelpers">include(CMakePrintHelpers)</h3>
+<p>変数の名前と中身を表示してくれる。
+名前を2回書かずに済む。
+次の二つは等価:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">cmake_print_variables</span><span class="p">(</span><span class="s">VAR</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">message</span><span class="p">(</span><span class="s">STATUS</span> <span class="s">VAR=</span><span class="s2">&#34;${VAR}&#34;</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><h3 id="gnuinstalldirs">GNUInstallDirs</h3>
 <p><a href="https://cmake.org/cmake/help/latest/module/GNUInstallDirs.html">https://cmake.org/cmake/help/latest/module/GNUInstallDirs.html</a></p>
 <p>インストール先のディレクトリを指定するときの標準的な値を決めてくれる。</p>
 <table>
@@ -359,7 +368,7 @@ STATIC/SHAREDが明示されていない <code>add_library()</code> でどっち
 こちらはコンフィグ時に実行される。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">include</span><span class="p">(</span><span class="s">FetchContent</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">FETCHCONTENT_QUIET</span> <span class="s">OFF</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">message</span><span class="p">(</span><span class="s">STATUS</span> <span class="s2">&#34;FETCHCONTENT_SOURCE_DIR_IGRAPH: ${FETCHCONTENT_SOURCE_DIR_IGRAPH}&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">cmake_print_variables</span><span class="p">(</span><span class="s">FETCHCONTENT_SOURCE_DIR_IGRAPH</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">FetchContent_Declare</span><span class="p">(</span>
 </span></span><span class="line"><span class="cl">  <span class="s">igraph</span>
 </span></span><span class="line"><span class="cl">  <span class="s">GIT_REPOSITORY</span> <span class="s">https://github.com/igraph/igraph.git</span>
@@ -367,9 +376,17 @@ STATIC/SHAREDが明示されていない <code>add_library()</code> でどっち
 </span></span><span class="line"><span class="cl">  <span class="s">GIT_SHALLOW</span> <span class="s">ON</span>
 </span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">igraph</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">message</span><span class="p">(</span><span class="s">STATUS</span> <span class="s2">&#34;igraph_SOURCE_DIR: ${igraph_SOURCE_DIR}&#34;</span><span class="p">)</span><span class="err">
-</span></span></span></code></pre></div><p>CMake 3.11 からの新機能なので、もう少し普及するまでお預け。
-当面は <code>execute_process()</code> で凌ぐ:</p>
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">cmake_print_variables</span><span class="p">(</span><span class="s">igraph_SOURCE_DIR,</span> <span class="s">igraph_BINARY_DIR</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><p><code>FETCHCONTENT_SOURCE_DIR_&lt;uppercaseName&gt;</code> が定義されている場合は、
+fetchせずそこにあるものを使う。</p>
+<p>成功したら
+<code>&lt;lowercaseName&gt;_POPULATED</code>,
+<code>&lt;lowercaseName&gt;_SOURCE_DIR</code>,
+<code>&lt;lowercaseName&gt;_BINARY_DIR</code>
+が定義される。</p>
+<p>3.24以降は <code>find_package()</code> との統合が進み、見つからなければfetchする、を簡単に書けるようになる。</p>
+<p>3.28以降は <code>EXCLUDE_FROM_ALL</code> オプションも渡せる。</p>
+<p>CMake 3.11 より古い環境では <code>execute_process()</code> で凌ぐ:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">find_package</span><span class="p">(</span><span class="s">Git</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">execute_process</span><span class="p">(</span><span class="s">COMMAND</span>
 </span></span><span class="line"><span class="cl">  <span class="o">${</span><span class="nv">GIT_EXECUTABLE</span><span class="o">}</span> <span class="s">clone</span> <span class="s">--recursive</span> <span class="s">--depth=1</span> <span class="s">--branch=master</span> <span class="s">https://github.com/USER/REPO.git</span> <span class="o">${</span><span class="nv">SUBDIR</span><span class="o">}</span>
@@ -413,13 +430,9 @@ STATIC/SHAREDが明示されていない <code>add_library()</code> でどっち
 3.0以降 <code>cmake --target clean</code> はあるが、
 CMakeのバージョンを上げたときなどcleanしたい場面で使えない。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cmake -S . -B build -DCMAKE_INSTALL_PREFIX<span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/local -DCMAKE_BUILD_TYPE<span class="o">=</span>Debug
-</span></span></code></pre></div><p>デフォルトでは <code>Makefile</code> が書き出されるので
-<code>make &amp;&amp; make install</code> のように実行してもいいけど、
-<code>cmake</code> からそれを実行することもできる:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cmake --build build -j <span class="m">2</span>
-</span></span><span class="line"><span class="cl">cmake --build build -j <span class="m">2</span> --target install
-</span></span></code></pre></div><p>3.15以降は <code>cmake --install &lt;dir&gt;</code> が使える。</p>
-<dl>
+</span></span><span class="line"><span class="cl">cmake --build build -j2
+</span></span><span class="line"><span class="cl">cmake --install build
+</span></span></code></pre></div><dl>
 <dt><code>-S &lt;dir&gt;</code></dt>
 <dd>ソースツリーを指定する。
 3.13から。それまではundocumentedで <code>-H&lt;dir&gt;</code> という形だった。</dd>
@@ -430,6 +443,11 @@ CMakeのバージョンを上げたときなどcleanしたい場面で使えな�
 <dd>コマンドラインから変数を設定する。</dd>
 <dt><code>-G &lt;generator-name&gt;</code></dt>
 <dd>Makefile, Ninja, Xcode, etc.</dd>
+<dd>デフォルトでは <code>Makefile</code> が書き出されるので
+<code>make &amp;&amp; make install</code> と書いてもいいけど、
+generator非依存の <code>cmake --build</code> を使ったほうがいい。</dd>
+<dd><code>cmake --install &lt;dir&gt;</code> が使えるのは3.15以降。
+それまでは <code>cmake --build build --target install</code> と明示する必要があった。</dd>
 <dt><code>-E &lt;command&gt;</code></dt>
 <dd>シェルの違いを気にせず基本的なコマンドが使えるように。e.g.,</dd>
 <dd><code>chdir &lt;dir&gt; &lt;cmd&gt;</code></dd>

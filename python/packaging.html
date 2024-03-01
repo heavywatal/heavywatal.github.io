@@ -127,7 +127,7 @@ Pythonパッケージ作成
 で項目が決められているためツールによらず共通。
 それ以外の <code>[build-system]</code> などは使うツールによって異なる。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="p">[</span><span class="nx">build-system</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="nx">requires</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;flit_core &gt;=3.4,&lt;4&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">requires</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;flit_core &gt;=3.6,&lt;4&#34;</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="nx">build-backend</span> <span class="p">=</span> <span class="s2">&#34;flit_core.buildapi&#34;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">project</span><span class="p">]</span>
@@ -145,14 +145,13 @@ Pythonパッケージ作成
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;License :: OSI Approved :: MIT License&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;Topic :: Scientific/Engineering :: Bio-Informatics&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl"><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="nx">requires-python</span> <span class="p">=</span> <span class="s2">&#34;&gt;=3.11&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">requires-python</span> <span class="p">=</span> <span class="s2">&#34;&gt;=3.12&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="nx">dependencies</span> <span class="p">=</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;tomli-w&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl"><span class="p">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">project</span><span class="p">.</span><span class="nx">optional-dependencies</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="nx">dev</span> <span class="p">=</span> <span class="p">[</span>
-</span></span><span class="line"><span class="cl">  <span class="s2">&#34;black&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;pytest&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;pytest-cov&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;ruff&#34;</span><span class="p">,</span>
@@ -167,8 +166,9 @@ Pythonパッケージ作成
 </span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">tool</span><span class="p">.</span><span class="nx">pyright</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="nx">typeCheckingMode</span> <span class="p">=</span> <span class="s2">&#34;strict&#34;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">tool</span><span class="p">.</span><span class="nx">ruff</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="nx">select</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;E&#34;</span><span class="p">,</span> <span class="s2">&#34;F&#34;</span><span class="p">,</span> <span class="s2">&#34;W&#34;</span><span class="p">,</span> <span class="s2">&#34;I&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">tool</span><span class="p">.</span><span class="nx">ruff</span><span class="p">.</span><span class="nx">lint</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">select</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;F&#34;</span><span class="p">,</span> <span class="s2">&#34;E&#34;</span><span class="p">,</span> <span class="s2">&#34;W&#34;</span><span class="p">,</span> <span class="s2">&#34;I&#34;</span><span class="p">,</span> <span class="s2">&#34;N&#34;</span><span class="p">,</span> <span class="s2">&#34;UP&#34;</span><span class="p">,</span> <span class="s2">&#34;S&#34;</span><span class="p">,</span> <span class="s2">&#34;B&#34;</span><span class="p">,</span> <span class="s2">&#34;A&#34;</span><span class="p">,</span> <span class="s2">&#34;PL&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">ignore</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;S101&#34;</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">tool</span><span class="p">.</span><span class="nx">pytest</span><span class="p">.</span><span class="nx">ini_options</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="nx">pythonpath</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;src&#34;</span><span class="p">]</span>
@@ -199,7 +199,9 @@ Pythonパッケージ作成
 <p>コード整形やテストのような各種開発ツールの設定も <code>[tool.***]</code> に記述できる。
 linterとしては
 <a href="https://github.com/PyCQA/flake8/issues/234"><code>pyproject.toml</code> 対応拒否のflake8</a>
-を捨てて超高速Rust製<a href="https://docs.astral.sh/ruff/">ruff</a>を使う。</p>
+を捨てて超高速Rust製<a href="https://docs.astral.sh/ruff/">ruff</a>を使う。
+0.2からはformatterとしても使えるようになり、
+<a href="black">https://black.readthedocs.io</a>も不要になった。</p>
 <h3 id="ソースコード">ソースコード</h3>
 <dl>
 <dt><code>wtl/__init__.py</code></dt>
