@@ -7,13 +7,11 @@ tags = ["book"]
   parent = "lectures"
 +++
 
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/0199228981/heavywatal-22/" rel="nofollow" target="_blank" style="float:right;"><img src="http://ecx.images-amazon.com/images/I/51CLBZHNqIL._SX210_.jpg" alt="Community Ecology: Processes, Models, and Applications (Oxford Biology)" /></a>
-
 Author
 :   Jacintha Ellers
 
 Book
-:   [Community Ecology: Processes, Models, and Applications](http://www.amazon.co.jp/exec/obidos/ASIN/0199228981/heavywatal-22/)
+:   [Community Ecology: Processes, Models, and Applications](https://www.amazon.co.jp/dp/0199228981?&linkCode=ll1&tag=heavywatal-22&linkId=92503959e24ba16ca64c8ba0473d6d88)
 
 Editor
 :   Herman A. Verhoef and Peter J.Morin
@@ -463,10 +461,3 @@ Figure 11.2b
   - [Harvey et al. 2003](http://dx.doi.org/10.1046/j.1365-2656.2003.00722.x):
     植食者が毒の少ない餌を食べられたかどうかで、
     そいつの寄生蜂・超寄生蜂の体サイズや生残率が決まる。
-
-## References
-
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/0199228981/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51CLBZHNqIL._SX200_.jpg" alt="Community Ecology: Processes, Models, and Applications (Oxford Biology)" /></a>
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/0226797619/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/415TJ9H95DL._SX160_.jpg" alt="The Geographic Mosaic Of Coevolution (Interspecific Interactions)" /></a>
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/0878937994/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41BGZJPZMWL._SX200_.jpg" alt="Phenotypic Evolution: A Reaction Norm Perspective" /></a>
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4314004851/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51nbrX68CwL._SX160_.jpg" alt="延長された表現型―自然淘汰の単位としての遺伝子" /></a>

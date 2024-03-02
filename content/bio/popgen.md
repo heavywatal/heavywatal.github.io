@@ -5,10 +5,6 @@ tags = ["genetics"]
   parent = "bio"
 +++
 
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/0974707759/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41Y1PqrWh5L._SX180_.jpg" alt="Coalescent Theory: An Introduction" /></a>
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/0763757373/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51IjUPvsSVL._SX180_.jpg" alt="Genetics of Populations" /></a>
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/0198502311/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41%2Bu1SOjvcL._SX180_.jpg" alt="Evolutionary Genetics" /></a>
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/1932846123/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41f8rXshBRL._SX150_.jpg" alt="An Introduction to Population Genetics Theory" /></a>
 ## Model
 
 - **Wright-Fisher model**
@@ -112,3 +108,11 @@ tags = ["genetics"]
     **spatially varying selection**\
     **frequency-dependent selection / 頻度依存選択**\
     antagonistic pleiotropy, disassortative mating, self-incompatibility
+
+
+---
+
+- [John Wakely "Coalescent Theory: An Introduction"](https://www.amazon.co.jp/dp/0974707759?&linkCode=ll1&tag=heavywatal-22&linkId=a938e9af55ab8c42f36704afa4824abb)
+- [Hedrick "Genetics of Populations"](https://www.amazon.co.jp/dp/0763757373?&linkCode=ll1&tag=heavywatal-22&linkId=a1981ab7dd9ab91ffe3e662d4f3dcf3a)
+- [John Maynard Smith "Evolutionary Genetics"](https://www.amazon.co.jp/exec/obidos/ASIN/0198502311?&linkCode=ll1&tag=heavywatal-22&linkId=f0e9c32fbf68446433142eec098d8107)
+- [Crow and Kimura "An Introduction to Population Genetics Theory"](https://www.amazon.co.jp/dp/1932846123?&linkCode=ll1&tag=heavywatal-22&linkId=df7d60943eb4e2c6a2345004600917fd)

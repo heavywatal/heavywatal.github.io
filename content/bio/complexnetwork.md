@@ -57,6 +57,6 @@ Degree assortativity
 
 ----
 
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4764903636/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/412zEm9DGuL._SX160_.jpg" alt="複雑ネットワーク―基礎から応用まで" /></a>
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/1107626250/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51f41OuhBOL._SX160_.jpg" alt="Dynamical Processes on Complex Networks" /></a>
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/B005PS507U/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51F6oA7jkwL._SX150_.jpg" alt="Analysis of Biological Networks (Wiley Series in Bioinformatics)" /></a>
+- [複雑ネットワーク―基礎から応用まで](https://www.amazon.co.jp/dp/B01M3053F3?&linkCode=ll1&tag=heavywatal-22&linkId=d8dcc4ea6399fa9ae8af3a41940fb51d)
+- [Dynamical Processes on Complex Networks](https://www.amazon.co.jp/dp/1107626250?&linkCode=ll1&tag=heavywatal-22&linkId=eddcc70a0a7b34c5635759e3d1ee43bd)
+- [Analysis of Biological Networks (Wiley Series in Bioinformatics)](https://www.amazon.co.jp/dp/B005PS507U?&linkCode=ll1&tag=heavywatal-22&linkId=ff9e036ea743019e50c999c84157312b)

@@ -152,4 +152,4 @@ $J^t$ の計算は $\Lambda^t$ ほどじゃないにせよそれなりに楽。
 
 ## 参考文献
 
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4274065782/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51QTY7RSFRL._SX160_.jpg" alt="プログラミングのための線形代数" /></a>
+[プログラミングのための線形代数](https://www.amazon.co.jp/dp/4274065782?&linkCode=ll1&tag=heavywatal-22&linkId=6ca65e07866f95d319e3b97ffc486d18)

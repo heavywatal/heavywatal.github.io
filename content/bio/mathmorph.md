@@ -144,5 +144,5 @@ Median filter
 
 ----
 
-<a  href="http://www.amazon.co.jp/gp/product/4621082949/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=4621082949&linkCode=as2&tag=heavywatal-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4621082949&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=as2&o=9&a=4621082949" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
-<a  href="http://www.amazon.co.jp/gp/product/4862460844/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=4862460844&linkCode=as2&tag=heavywatal-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4862460844&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=as2&o=9&a=4862460844" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+- [非線形画像・信号処理 (モルフォロジの基礎と応用)](https://www.amazon.co.jp/dp/4621082949?&linkCode=ll1&tag=heavywatal-22&linkId=8d2ef0480c9752ec4c45ea04893e0fa2)
+- [3次元画像処理](https://www.amazon.co.jp/dp/4862460844?&linkCode=ll1&tag=heavywatal-22&linkId=c4f0058e3e42e8d1ba850b1c9276e02d)

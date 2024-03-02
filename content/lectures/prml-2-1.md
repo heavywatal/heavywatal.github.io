@@ -5,15 +5,13 @@ tags = ["math", "book"]
   parent = "lectures"
 +++
 
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/0387310738/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/612j5Uo43eL._SX180_.jpg" alt="Pattern Recognition and Machine Learning (Information Science and Statistics)" /></a>
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4621061224/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41O0QFyTHJL._SX160_.jpg" alt="パターン認識と機械学習 上" /></a>
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4621061240/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/418MuoJetFL._SX160_.jpg" alt="パターン認識と機械学習 下 (ベイズ理論による統計的予測)" /></a>
-
 Author
 :   Christopher M. Bishop
 
 Book
-:   [Pattern Recognition and Machine Learning](http://www.amazon.co.jp/exec/obidos/ASIN/4621061224/heavywatal-22/)
+: [Pattern Recognition and Machine Learning](https://www.amazon.co.jp/dp/0387310738?&linkCode=ll1&tag=heavywatal-22&linkId=0dacd1cec1bcc3d73dc0a9f27d158183)
+: [パターン認識と機械学習 上](https://www.amazon.co.jp/dp/4621061224?&linkCode=ll1&tag=heavywatal-22&linkId=07bf2a676e8cf9d3f62a5ae847fa4962)
+: [パターン認識と機械学習 下](https://www.amazon.co.jp/dp/4621061240?&linkCode=ll1&tag=heavywatal-22&linkId=c376a10b53faed6da45c3591d5dbc61a)
 
 Publisher
 :   [Springer](http://www.springer.com/computer/image+processing/book/978-0-387-31073-2)

@@ -5,10 +5,8 @@ tags = ["genetics", "book"]
   parent = "lectures"
 +++
 
-<a href="http://www.amazon.co.jp/gp/product/0974707759/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=0974707759&linkCode=as2&tag=heavywatal-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=0974707759&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=as2&o=9&a=0974707759" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
-
 Book
-:   [Coalescent Theory --- An Introduction](http://www.amazon.co.jp/gp/product/0974707759/ref=as_li_ss_tl?ie=UTF8&camp=247&creative=7399&creativeASIN=0974707759&linkCode=as2&tag=heavywatal-22)
+:   [Coalescent Theory --- An Introduction](https://www.amazon.co.jp/dp/0974707759?&linkCode=ll1&tag=heavywatal-22&linkId=a938e9af55ab8c42f36704afa4824abb)
 
 Author
 :   [John Wakeley](http://www.oeb.harvard.edu/faculty/wakeley/wakeleylab.htm)

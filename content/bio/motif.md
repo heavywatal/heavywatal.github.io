@@ -409,7 +409,7 @@ Raw Score (サイト単位)
 
 ## References
 
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320056507/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41mFg6u4ZLL._SX180_.jpg" alt="バイオインフォマティクスのためのアルゴリズム入門" /></a>
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4621062514/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41-8yNqP0hL._SX180_.jpg" alt="バイオインフォマティクス" /></a>
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4320056280/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51EA2RU0BXL._SX180_.jpg" alt="バイオインフォマティクス事典" /></a>
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/0387310738/heavywatal-22/" rel="nofollow" target="_blank"><img src="http://ecx.images-amazon.com/images/I/612j5Uo43eL._SX180_.jpg" alt="Pattern Recognition and Machine Learning (Information Science and Statistics)" /></a>
+- [バイオインフォマティクスのためのアルゴリズム入門](https://www.amazon.co.jp/dp/4320056507?&linkCode=ll1&tag=heavywatal-22&linkId=76478843e121eb67b247097dc03afec8)
+- [バイオインフォマティクス](https://www.amazon.co.jp/dp/4621062514?&linkCode=ll1&tag=heavywatal-22&linkId=36ad1d7b5e767b5d4e8f068df2de77b4)
+- [バイオインフォマティクス事典](https://www.amazon.co.jp/dp/4320056280?&linkCode=ll1&tag=heavywatal-22&linkId=1c78a849ed5ddcccea4826a023d95c10)
+- [Pattern Recognition and Machine Learning](https://www.amazon.co.jp/dp/0387310738?&linkCode=ll1&tag=heavywatal-22&linkId=0dacd1cec1bcc3d73dc0a9f27d158183)
