@@ -16,7 +16,7 @@ tags = ["r"]
 
 - [初学者向け講義資料2023](/slides/tohoku2023r/3-structure1.html)
 - わかりやすいスライド: [整然データってなに？ by @f_nisihara](https://speakerdeck.com/fnshr/zheng-ran-detatutenani)
-- 詳しい解説: [整然データとは何か by @f_nisihara](http://id.fnshr.info/2017/01/09/tidy-data-intro/)
+- 詳しい解説: [整然データとは何か by @f_nisihara](https://id.fnshr.info/2017/01/09/tidy-data-intro/)
 - 原著: [Tidy Data by @hadley](https://dx.doi.org/10.18637/jss.v059.i10)
 
 >   *tidy datasets are all alike but every messy dataset is messy in its own way*\

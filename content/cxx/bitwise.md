@@ -22,7 +22,7 @@ https://github.com/heavywatal/scribble/blob/master/cxx/sizeof.cpp
 - `sizeof(bool)` >= 1
 - `sizeof(int)` >= 4
 - `sizeof(uint32_t)` == 4
-  [`<cstdint>`](http://en.cppreference.com/w/cpp/header/cstdint)
+  [`<cstdint>`](https://en.cppreference.com/w/cpp/header/cstdint)
 - `sizeof(uint128_t)` == 16
   [`<boost/multiprecision/cpp_int.hpp>`](https://boostjp.github.io/tips/multiprec-int.html)
 
@@ -46,7 +46,7 @@ https://github.com/heavywatal/scribble/blob/master/cxx/sizeof.cpp
 ```
 
 `0b` は
-[binary literal](http://en.cppreference.com/w/cpp/language/integer_literal)
+[binary literal](https://en.cppreference.com/w/cpp/language/integer_literal)
 (C++14) の接頭辞
 
 ### 演算子 operator
@@ -110,8 +110,8 @@ x = -~x
 
 ### `std::bitset<N>`
 
-- http://en.cppreference.com/w/cpp/utility/bitset
-- http://www.cplusplus.com/reference/bitset/bitset/
+- https://en.cppreference.com/w/cpp/utility/bitset
+- https://cplusplus.com/reference/bitset/bitset/
 - https://cpprefjp.github.io/reference/bitset.html
 
 ビット数がコンパイル時定数
@@ -119,7 +119,7 @@ x = -~x
 
 ### `boost::dynamic_bitset<>`
 
-http://www.boost.org/doc/libs/release/libs/dynamic_bitset/dynamic_bitset.html
+https://www.boost.org/doc/libs/release/libs/dynamic_bitset/dynamic_bitset.html
 
 可変サイズ版bitset
 

@@ -12,10 +12,7 @@ tags = ["r", "bioconductor"]
 <a href="https://www.amazon.co.jp/dp/4320123700//ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=f7d9a9e5ba94b0fa7da4a582b70da85a" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4320123700&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=4320123700" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
 
 - <https://www.bioconductor.org>
-- <http://blog.hackingisbelieving.org/2010/09/r-package_06.html>
-- <https://qiita.com/tags/bioconductor>
-- <http://manuals.bioinformatics.ucr.edu/home/R_BioCondManual>
-- <http://search.bioconductor.jp/>
+- <https://blog.hackingisbelieving.org/2010/09/r-package_06.html>
 
 ## 基本操作
 
@@ -412,14 +409,14 @@ bsg[[1]]
 
 ## モチーフ検索
 
-<http://blog.hackingisbelieving.org/2012/02/dna-bioconductor.html>
+<https://blog.hackingisbelieving.org/2012/02/dna-bioconductor.html>
 
 [/bio/motif]({{< relref "motif.md" >}})
 
 ## 作図
 
-<http://blog.hackingisbelieving.org/2012/02/rbioconductor.html>
+<https://blog.hackingisbelieving.org/2012/02/rbioconductor.html>
 
-<http://blog.hackingisbelieving.org/2012/02/r.html>
+<https://blog.hackingisbelieving.org/2012/02/r.html>
 
 <https://qiita.com/wakuteka/items/a99d5fb9f24367f55461>

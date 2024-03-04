@@ -18,7 +18,7 @@ tags = ["c++"]
 
 ## GNU `getopt`
 
-<http://www.gnu.org/s/libc/manual/html_node/Getopt.html>
+<https://www.gnu.org/s/libc/manual/html_node/Getopt.html>
 
 -   UNIX的な環境ならインストール不要だがC/C++標準ではない
 -   ヘルプなど自動生成してくれない
@@ -26,7 +26,7 @@ tags = ["c++"]
 
 ## `boost::program_options`
 
-<http://www.boost.org/doc/html/program_options.html>
+<https://www.boost.org/doc/html/program_options.html>
 
 -   格納先の変数を紐付け可能
 -   ファイルからも読み込める

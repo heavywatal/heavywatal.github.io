@@ -35,8 +35,8 @@ bench::mark(r_for(n), r_vec(n), rcpp(n))[, 1:5]
 
 ## Documentation
 
-- Project Home: http://www.rcpp.org/
-- CRAN: https://cran.r-project.org/package=Rcpp
+- Project Home: <https://www.rcpp.org/>
+- CRAN: <https://cran.r-project.org/package=Rcpp>
     - [Rcpp-JSS-2011.pdf](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-jss-2011.pdf):
       原典。
     - [Rcpp-introduction.pdf](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-introduction.pdf):
@@ -55,13 +55,13 @@ bench::mark(r_for(n), r_vec(n), rcpp(n))[, 1:5]
       ベクトル化とlazy評価が効くRの記法をC++側で使う。
     - [Rcpp-quickref.pdf](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-quickref.pdf)
     - [Rcpp-FAQ.pdf](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-FAQ.pdf)
-- GitHub: https://github.com/RcppCore/Rcpp
+- GitHub: <https://github.com/RcppCore/Rcpp>
     - 上のPDFは分量が多いわりに意外と網羅的ではない。
       ざっくり読んでなんとなく分かってきたら、
       さらなるドキュメントを求めてネットの海を彷徨うよりソースコードに当たったほうが早い。特に
       [`inst/unitTests`](https://github.com/RcppCore/Rcpp/tree/master/inst/unitTests)
       はかなり参考になる。
-- API: http://dirk.eddelbuettel.com/code/rcpp/html/
+- API: <https://dirk.eddelbuettel.com/code/rcpp/html/>
 - Advanced R: [Rewriting R code in C++](https://adv-r.hadley.nz/rcpp.html)
 - [みんなのRcpp](https://teuder.github.io/rcpp4everyone_ja/) and
   [Rcpp for everyone](https://teuder.github.io/rcpp4everyone_en/)
@@ -103,7 +103,7 @@ fibonacci(9L)
 
 ## Rパッケージで使う
 
-- [Rcpp-package.pdf](http://dirk.eddelbuettel.com/code/rcpp/Rcpp-package.pdf) by Dirk Eddelbuettel and Romain François
+- [Rcpp-package.pdf](https://dirk.eddelbuettel.com/code/rcpp/Rcpp-package.pdf) by Dirk Eddelbuettel and Romain François
 - tidyverseでは[cpp11](https://cpp11.r-lib.org/)を使うようになったので
   [R Packages (Wickham and Bryan) ](https://r-pkgs.org/misc.html)
   におけるRcppの扱いは小さい。
@@ -203,7 +203,7 @@ int len(const std::vector<std::string>& args) {
 ## 詳細
 
 アタリがついてる場合は
-[namespace Rcpp](http://dirk.eddelbuettel.com/code/rcpp/html/namespaceRcpp.html)
+[namespace Rcpp](https://dirk.eddelbuettel.com/code/rcpp/html/namespaceRcpp.html)
 とかからブラウザのページ内検索で探すのが早い。
 
 Rcppで楽ができるとはいえ、R本体の内部情報も知っておいたほうがいい。
@@ -228,13 +228,13 @@ RAIIを期待したC++コードはデストラクタが呼ばれなくてバグ�
     メモリアロケーションやgcへの指示 (`PROTECT`/`UNPROTECT` など) が必要。
     そういうことは Rcpp が肩代わりしてくれるので基本的には直接触らない。
 
-[`Rcpp::RObject`](http://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1RObjectMethods.html)
+[`Rcpp::RObject`](https://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1RObjectMethods.html)
 :   `SEXP` の thin wrapper であり Rcpp から R の変数を扱う際の基本クラス。
     メモリ開放のタイミングは依然としてgc次第なものの、
     コード上ではRAIIのような感覚で気楽に使える。
 
-[`Rcpp::Vector<T>`](http://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1Vector.html)
-:   [`vector/instantiation.h`](http://dirk.eddelbuettel.com/code/rcpp/html/instantiation_8h_source.html)
+[`Rcpp::Vector<T>`](https://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1Vector.html)
+:   [`vector/instantiation.h`](https://dirk.eddelbuettel.com/code/rcpp/html/instantiation_8h_source.html)
     抜粋:
 
     ```c++
@@ -255,14 +255,14 @@ RAIIを期待したC++コードはデストラクタが呼ばれなくてバグ�
     `const std::vector<>&` 受け取りの場合はコピーが発生する。
 
 
-[`Rcpp::DataFrame`](http://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1DataFrame__Impl.html)
+[`Rcpp::DataFrame`](https://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1DataFrame__Impl.html)
 :   Rの上では強力だけどC++内では扱いにくい。
     出力として使うだけに留めるのが無難。
 
 
 関数オーバーロードもテンプレートもそのままRにexportすることはできない。
 実行時の型情報で振り分ける関数で包んでexportする必要がある。
-http://gallery.rcpp.org/articles/rcpp-return-macros/
+https://gallery.rcpp.org/articles/rcpp-return-macros/
 
 ### タグ
 
@@ -390,8 +390,8 @@ Moduleの記述を自分でやらず `Rcpp::exposeClass()` に生成してもら
 RC/S4関連文献
 
 - `?setRefClass` or https://stat.ethz.ch/R-manual/R-devel/library/methods/html/refClass.html
+- https://adv-r.hadley.nz/oo.html
 - https://adv-r.hadley.nz/s4.html
-- http://adv-r.had.co.nz/OO-essentials.html#rc
 
 
 ### 問題点
@@ -420,7 +420,7 @@ RC/S4関連文献
 
 ### マクロ
 
-http://dirk.eddelbuettel.com/code/rcpp/html/module_8h.html
+https://dirk.eddelbuettel.com/code/rcpp/html/module_8h.html
 
 `RCPP_EXPOSED_AS(MyClass)`
 : `as<MyClass>` を定義してくれるマクロ。参照型やポインタ型もやってくれる。

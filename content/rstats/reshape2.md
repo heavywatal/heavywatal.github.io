@@ -19,7 +19,7 @@ data.frameを処理をするなら、同じ作者が新しく設計しなおし�
 -   <http://had.co.nz/reshape/>
 -   <https://cran.r-project.org/web/packages/reshape2/>
 -   <https://www.rdocumentation.org/packages/reshape2>
--   <http://seananderson.ca/2013/10/19/reshape.html>
+-   <https://seananderson.ca/2013/10/19/reshape/>
 
 ## `melt()`
 

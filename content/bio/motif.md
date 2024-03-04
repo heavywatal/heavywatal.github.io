@@ -7,7 +7,7 @@ tags = ["genetics"]
 
 文献
 
-[Tompa et al. 2005](http://dx.doi.org/10.1038/nbt1053) Nature Biotechnology
+[Tompa et al. 2005](https://dx.doi.org/10.1038/nbt1053) Nature Biotechnology
 :   Phylogenetic footprinting、発現パターン、ChIP結果などの補助的情報を使わず、
     配列のみを使って解析する13のツールを
     fly, human, mouse, yeast, 人工データでテストした。
@@ -19,18 +19,18 @@ tags = ["genetics"]
     今回正解としている以外のモチーフも配列に含まれてて
     そいつをトップヒットとしてしまったことにペナルティがかかってしまったせい。
 
-[Hu et al. 2005](http://dx.doi.org/10.1093/nar/gki791) BMC Bioinformatics
+[Hu et al. 2005](https://dx.doi.org/10.1093/nar/gki791) BMC Bioinformatics
 :   あまりチューニングせずほぼデフォルト設定でベンチマーク。
     そうすると、どのツールも単体では意外とショボい。
     複数のツールを組み合わせて使うと良い。
 
-[GuhaThakurta 2006](http://dx.doi.org/10.1093/nar/gkl372) Nucleic Acids Res
+[GuhaThakurta 2006](https://dx.doi.org/10.1093/nar/gkl372) Nucleic Acids Res
 :   モチーフ探索の基本的な流れがわかりやすい
 
-[Das and Dai 2007](http://dx.doi.org/10.1186/1471-2105-8-S7-S21) BMC Bioinformatics
+[Das and Dai 2007](https://dx.doi.org/10.1186/1471-2105-8-S7-S21) BMC Bioinformatics
 :   実験はしていないが網羅的なレビュー
 
-[Zambelli et al. 2013](http://www.ncbi.nlm.nih.gov/pubmed/22517426) Briefings in Bioinformatics
+[Zambelli et al. 2013](https://www.ncbi.nlm.nih.gov/pubmed/22517426) Briefings in Bioinformatics
 :   ChIP時代のツールも含めてざっくり
 
 ## 基本
@@ -82,7 +82,7 @@ Signature
 :   ポジションごとの塩基・アミノ酸の相対的な出現頻度をそのままの整数、
     あるいは合計1になるような実数[0, 1]の行列で表示。
     **Profile** とも呼ばれる。
-    ([Bucher 1990](http://dx.doi.org/10.1016/0022-2836(90)90223-9))
+    ([Bucher 1990](https://dx.doi.org/10.1016/0022-2836(90)90223-9))
 
         A     C     G     T
         0.625 0.125 0.250 0.000
@@ -106,7 +106,7 @@ Signature
 **Sequence Logo**
 :   ポジションごとの保存性・確実さと各塩基・アミノ酸の寄与を
     アルファベットの大きさで視覚的に表現。
-    ([Schneider and Stephens 1990](http://dx.doi.org/10.1093/nar/18.20.6097))
+    ([Schneider and Stephens 1990](https://dx.doi.org/10.1093/nar/18.20.6097))
 
     ポジション *i* における塩基・アミノ酸 *a* の高さは、 相対頻度 *f* と情報量 *R* の積:\
     $\text{Height}(a, i) = f(a, i) \times R(i)$
@@ -132,7 +132,7 @@ Signature
 
 ### 一覧
 
-[Das and Dai 2007](http://dx.doi.org/10.1186/1471-2105-8-S7-S21) 表を改変
+[Das and Dai 2007](https://dx.doi.org/10.1186/1471-2105-8-S7-S21) 表を改変
 
 ------------------------------------------------------------------------
 
@@ -253,7 +253,7 @@ Gibbs sampling
 既存のアルゴリズムを複数ensemble的に組み合わせるべし。
 
 EMD
-:   ([Hu et al. 2006](http://dx.doi.org/10.1186/1471-2105-7-342))
+:   ([Hu et al. 2006](https://dx.doi.org/10.1186/1471-2105-7-342))
 
     1.  配列 *N* 本のデータセットに対し
         *M* 個の異なるアルゴリズムをそれぞれ
@@ -279,7 +279,7 @@ ClustalW などによるアラインメントでは、
 繰り返しが多く含まれていたりする現実のDNA配列と比べて "too null" になり、
 検出力を overestimate することにつながる。
 かといって、そういう配列を予めマスクしてしまっていいかというとそれも微妙
-([Simcha et al. 2012](http://dx.doi.org/10.1371/journal.pone.0047836))
+([Simcha et al. 2012](https://dx.doi.org/10.1371/journal.pone.0047836))
 
 ランダムではなくバックグラウンドと比べて多いかどうかを明示的に言いたい場合は
 **discriminatory motif** と呼んだりする。
@@ -289,7 +289,7 @@ Markov process
     1つ前の塩基を考慮して次の塩基の出方が影響を受ける
     (つまり塩基ペアの頻度情報をつかう)のが1階マルコフ過程。
     て感じで配列を生成するマルコフ過程のオーダーを高くしていく。
-    [Thijs et al. 2001](http://www.ncbi.nlm.nih.gov/pubmed/11751219)
+    [Thijs et al. 2001](https://www.ncbi.nlm.nih.gov/pubmed/11751219)
     BioProspector, MotifSampler, YMF, MEME
 
 バックグラウンド配列セットにおけるモチーフ出現頻度を考慮
@@ -339,15 +339,15 @@ Raw Score (サイト単位)
     $PPV = \frac{TP}{TP + FP}$
 
 **Performance Coefficient** (塩基単位)
-:   正解率 ([Pevzner and Sze 2000](http://www.ncbi.nlm.nih.gov/pubmed/10977088))\
+:   正解率 ([Pevzner and Sze 2000](https://www.ncbi.nlm.nih.gov/pubmed/10977088))\
     $nPC = \frac{TP}{TP + FN + FP}$
 
 **Correlation Coefficient** (塩基単位)
-:   予測と正解のピアソン相関係数 ([Burset, M. and Guigó 1996](http://dx.doi.org/10.1006/geno.1996.0298))\
+:   予測と正解のピアソン相関係数 ([Burset, M. and Guigó 1996](https://dx.doi.org/10.1006/geno.1996.0298))\
     $nCC = \frac{TP \times TN - FN \times FP}{\sqrt{(TP + FN)(TN + FP)(TP + FP)(TN + FN)}}$
 
 **Average Site Performance** (塩基単位)
-:   感度と精度の平均 ([Burset, M. and Guigó 1996](http://dx.doi.org/10.1006/geno.1996.0298))\
+:   感度と精度の平均 ([Burset, M. and Guigó 1996](https://dx.doi.org/10.1006/geno.1996.0298))\
     $nASP = \frac{Sn + PPV}{2}$
 
 <div class="warning">
@@ -380,12 +380,12 @@ Raw Score (サイト単位)
 
 ### DNA
 
-[TRANSFAC](http://www.gene-regulation.com/pub/databases.html) ([Matys et al. 2003](http://dx.doi.org/10.1093/nar/gkg108))
+[TRANSFAC](http://www.gene-regulation.com/pub/databases.html) ([Matys et al. 2003](https://dx.doi.org/10.1093/nar/gkg108))
 :   真核生物。
     情報量は多いが1つのTFが複数のプロファイルを持ってる。
     Professional版と機能限定Public版がある。
 
-[JASPAR](http://jaspar.genereg.net/) ([Sandelin et al. 2004](http://dx.doi.org/10.1093/nar/gkh012))
+[JASPAR](http://jaspar.genereg.net/) ([Sandelin et al. 2004](https://dx.doi.org/10.1093/nar/gkh012))
 :   真核生物。
     情報量は少ないが1つのTFは1つのプロファイルだけ持ってる。
     無制限。

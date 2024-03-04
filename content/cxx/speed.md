@@ -212,7 +212,7 @@ lvalue値受け取りの関数はrvalueを受け取るときにはコピーを�
 
 ### 用途に合わせる
 
-http://en.cppreference.com/w/cpp/container
+<https://en.cppreference.com/w/cpp/container>
 
 `std::array`
 :   Cの配列に便利なメンバ関数を持たせたようなクラス。

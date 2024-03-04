@@ -116,21 +116,21 @@ Median filter
 
 画像処理を施す
 
-[scikit-image](http://scikit-image.org/)
+[scikit-image](https://scikit-image.org/)
 : Pythonモジュール。
-  [scipy.ndimage](http://docs.scipy.org/doc/scipy/reference/tutorial/ndimage.html)
+  [scipy.ndimage](https://docs.scipy.org/doc/scipy/tutorial/ndimage.html)
   を更に拡張したもの。
-  [numpy.array](http://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html)
+  [numpy.array](https://numpy.org/doc/stable/reference/generated/numpy.array.html)
   を使って表現されるので汎用関数の適用も容易。
 
-[OpenCV (Open Source Computer Vision)](http://opencv.org/)
+[OpenCV (Open Source Computer Vision)](https://opencv.org/)
 : C++、Pythonなど。信頼と実績があるらしく、書籍やネット上の情報も多い。
 
-[CImg](http://cimg.eu/)
+[CImg](https://cimg.eu/)
 : C++。ヘッダひとつincludeするだけ。
   ドキュメントも良さげ。
 
-[imager](http://dahtah.github.io/imager/)
+[imager](https://dahtah.github.io/imager/)
 : R。新しめでドキュメントも充実。内部でCImgを利用。
   CairoやX11に依存しているので、
   Rもそれらしくビルドされてる必要がある。

@@ -97,7 +97,7 @@ tags = ["python"]
 
 ### esearch
 
--   [NCBI ESearch Utility](http://www.ncbi.nlm.nih.gov/entrez/query/static/esearch_help.html)
+-   [NCBI ESearch Utility](https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESearch)
 -   <https://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc93>
 
     ```py
@@ -118,7 +118,7 @@ tags = ["python"]
 
 ### efetch
 
--   [NCBI EFetch Utility](http://eutils.ncbi.nlm.nih.gov/corehtml/query/static/efetch_help.html)
+-   [NCBI EFetch Utility](https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EFetch)
 -   <https://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc96>
 
 返り値は結果(XML)へのハンドル。:

@@ -106,7 +106,7 @@ RepeatMasker -pa 4 -qq -species oryza -dir . -xsmall -gff seq.fa
 :   そのときのスコア閾値: `-cutoff 225`
 
 `-species CLADE_NAME`
-:   <http://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/>
+:   <https://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/>
     に出てくるクレード名で指定可能。
     大文字小文字は無視。
     chimpanzee, mammals みたいな英語名も一部可能。

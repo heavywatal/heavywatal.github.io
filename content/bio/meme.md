@@ -6,23 +6,23 @@ tags = ["genetics"]
   parent = "bio"
 +++
 
-- http://meme-suite.org/
-- http://meme-suite.org/doc/overview.html
-- [Bailey et al. 2009](http://nar.oxfordjournals.org/content/37/suppl_2/W202.abstract)
-- [Bailey and Elkan 1994](http://www.ncbi.nlm.nih.gov/pubmed/7584402)
+- https://meme-suite.org/
+- https://meme-suite.org/doc/overview.html
+- [Bailey et al. 2009](https://academic.oup.com/nar/article/37/suppl_2/W202/1135092)
+- [Bailey and Elkan 1994](https://www.ncbi.nlm.nih.gov/pubmed/7584402)
 
 ## インストール
 
-http://meme-suite.org/doc/install.html
+https://meme-suite.org/doc/install.html
 
-1.  ソースコードを[ダウンロード](http://meme-suite.org/doc/download.html)して展開:
+1.  ソースコードを[ダウンロード](https://meme-suite.org/doc/download.html)して展開:
 
-        wget -O- http://meme-suite.org/meme-software/4.11.2/meme_4.11.2_1.tar.gz | tar xz
+        wget -O- https://meme-suite.org/meme-software/4.11.2/meme_4.11.2_1.tar.gz | tar xz
 
 1.  `configure` してビルド:
 
         cd meme_4.11.2/
-        ./configure --prefix=${HOME}/bio/local/meme --with-url=http://meme-suite.org --enable-build-libxml2 --enable-build-libxslt --enable-opt CC=clang
+        ./configure --prefix=${HOME}/bio/local/meme --with-url=https://meme-suite.org --enable-build-libxml2 --enable-build-libxslt --enable-opt CC=clang
         make
 
 1.  パスを通す:
@@ -31,7 +31,7 @@ http://meme-suite.org/doc/install.html
 
 ## MEME
 
-http://meme-suite.org/doc/meme.html
+https://meme-suite.org/doc/meme.html
 
 ### 使い方
 

@@ -5,7 +5,7 @@ tags = ["communication"]
   parent = "dev"
 +++
 
-<http://manpages.ubuntu.com/manpages/precise/man8/mount.8.html>
+<https://manpages.ubuntu.com/manpages/man8/mount.8.html>
 
 ## 基本的な使い方
 
@@ -60,7 +60,7 @@ tags = ["communication"]
 
 ### Ubuntu 12.04 から cifs マウント
 
-<http://manpages.ubuntu.com/manpages/precise/man8/mount.cifs.8.html>
+<https://manpages.ubuntu.com/manpages/man8/mount.cifs.8.html>
 
 1.  cifs-utils をインストール:
 

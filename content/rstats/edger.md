@@ -96,7 +96,7 @@ edgeRUsersGuide()
         例えばヒトなら
 
         ```r
-        system("wget http://www.tau.ac.il/~elieis/HKG/HK_genes.txt")
+        system("wget https://www.tau.ac.il/~elieis/HKG/HK_genes.txt")
         hk_genes = read_tsv("HK_genes.txt", col_names=c("gene_symbol", "refseq"))
         tmp = dge
         tmp$samples$group = 1

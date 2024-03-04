@@ -63,7 +63,7 @@ tags = ["writing"]
 :   DejaVu Sans は Verdana のように幅が広く、スクリーン上で読みやすい。
 :   DejaVu Sans Mono はプログラミングに使いやすい。
 
-[Linux Libertine](http://libertine-fonts.org/)
+[Linux Libertine](https://libertine-fonts.org/)
 :   印刷に耐えうるクオリティを目指して開発されたカッコいいセリフ体。
 :   兄弟の Linux Biolinum は Optima 似の非均等サンセリフ。
 :   いろいろ残念な側面もあってLaTeXの外では使いにくい:

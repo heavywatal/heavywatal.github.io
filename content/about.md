@@ -132,7 +132,7 @@ Contacts
     "Comprehensive Framework for Evolutionary Simulation of Intratumor Heterogeneity"
     [International Workshop for Systems Genetics 2018 (IWSG2018)](http://iwsg2018.hgc.jp/) (2018-11) Tokyo
 -   岩嵜航「隠蔽変異を介して相互に促進される生命システムの複雑化と多様化」 [第6回Evo-Devo青年の会 --- 新奇性の生まれるとき](http://evo-devo.net/Events/6th/events_6th.html) (2013-07) 東京大学三崎臨海実習所
--   岩嵜航・津田真樹・河田雅圭「環境と発生システムの相互作用が制限または増進する進化可能性」(自由集会「[esj60w]({{< relref "esj60w.md" >}})」嶋田正和・三浦徹) [日本生態学会第60回大会](http://www.esj.ne.jp/meeting/60/) (2013-03) 静岡
+-   岩嵜航・津田真樹・河田雅圭「環境と発生システムの相互作用が制限または増進する進化可能性」(自由集会「[esj60w]({{< relref "esj60w.md" >}})」嶋田正和・三浦徹) [日本生態学会第60回大会](https://www.esj.ne.jp/meeting/60/) (2013-03) 静岡
 -   Watal M. Iwasaki, Masaki E. Tsuda, Masakado Kawata "Revealing Genetic and Environmental Factors that Affect Cryptic Variations in Gene Regulatory Networks by Individual-Based Model" [RCIS International Conference](http://tenure5.vbl.okayama-u.ac.jp/RCIS_symposium/) (2012-11) Okayama University, Japan
 -   岩嵜航・津田真樹・河田雅圭「遺伝子制御ネットワークが隠蔽する新奇形質」 [個体群生態学会第28回大会](https://sites.google.com/site/populecol28/) (2012-10) 東邦大学
 
@@ -158,11 +158,11 @@ Contacts
     [日本進化学会第14回年会](http://evolgen.biol.se.tmu.ac.jp/sesj2012/) (2012-08) 首都大学東京
 -   岩嵜航・津田真樹・河田雅圭「Evolutionary Model of Cryptic Variations in Gene Regulatory Networks」 [日本進化学会第13回年会](http://zoo.zool.kyoto-u.ac.jp/zsys/SESJ2011/) (2011-07) 京都大学
 -   Watal M. Iwasaki, Masaki Tsuda, Masakado Kawata "Evolutionary Model of Cryptic Variations in Gene Regulatory Networks" [Annual Meeting of Society for Molecular Biology and Evolution (SMBE2011)](http://smbe2011.com/) (2011-07) Kyoto University, Japan
--   岩嵜航・津田真樹・河田雅圭「環境変化で出現する新奇形質：遺伝子制御ネットワークの隠蔽変異が適応進化を促進」 [日本生態学会第58回大会](http://www.esj.ne.jp/meeting/58/) (2011-03) 札幌
+-   岩嵜航・津田真樹・河田雅圭「環境変化で出現する新奇形質：遺伝子制御ネットワークの隠蔽変異が適応進化を促進」 [日本生態学会第58回大会](https://www.esj.ne.jp/meeting/58/) (2011-03) 札幌
 -   岩嵜航・津田真樹・河田雅圭「隠蔽変異を介した表現型多様性創出における選択圧の影響：遺伝子制御ネットワークの個体ベースモデル」 [日本進化学会第12回年会](http://www.evolution.bio.titech.ac.jp/sesj2010/sesj_index.html) (2010-08) 東京工業大学
--   岩嵜航・津田真樹・河田雅圭「隠れた変異の蓄積と顕在化に与える環境変動の影響：遺伝子制御ネットワークの個体ベースモデル」 [日本生態学会第57回大会](http://www.esj.ne.jp/meeting/57/) (2010-03) 東京大学
+-   岩嵜航・津田真樹・河田雅圭「隠れた変異の蓄積と顕在化に与える環境変動の影響：遺伝子制御ネットワークの個体ベースモデル」 [日本生態学会第57回大会](https://www.esj.ne.jp/meeting/57/) (2010-03) 東京大学
 -   Watal M. Iwasaki, Masaki Tsuda, Masakado Kawata "Cryptic polymorphisms induced by environments in phenotypes produced by gene regulatory networks." [International Symposium on Complex Systems Biology](http://chaos.c.u-tokyo.ac.jp/CSB/) (2009-10) The University of Tokyo, Japan
--   岩嵜航・津田真樹・河田雅圭「隠れた遺伝的変異と可塑性から進化する新規表現型」 [日本生態学会第56回大会](http://www.esj.ne.jp/meeting/56/) (2009-03) 岩手県立大学
+-   岩嵜航・津田真樹・河田雅圭「隠れた遺伝的変異と可塑性から進化する新規表現型」 [日本生態学会第56回大会](https://www.esj.ne.jp/meeting/56/) (2009-03) 岩手県立大学
 -   岩嵜航・津田真樹・河田雅圭「遺伝子制御ネットワークの進化による新規形質獲得機構」 [日本進化学会第10回年会](http://wwwsoc.nii.ac.jp/sesj2/nenkai/2008/) (2008-08) 東京大学
 
 
@@ -226,7 +226,7 @@ Contacts
 -   "[Writing an R package interface to C++ libraries with Rcpp](/slides/tokyor71/)"
     [Tokyo.R #71](https://tokyor.connpass.com/event/92522/) (2018-07) Tokyo
 -   「[Rにやらせて楽しよう --- データの可視化と下ごしらえ](/slides/nagoya2018/)」[アドバンス生命理学特論](http://www.bio.nagoya-u.ac.jp/seminar/) ([告知ポスター](http://www.bio.nagoya-u.ac.jp/files/event/454/180518_Iwasaki.pdf)) (2018-05) 名古屋大
--   「[それもRにやらせよう --- 整然データの下ごしらえ](/slides/esj65)」(自由集会[「データ解析で出会う統計的問題: R の新しい作図・作表」粕谷英一・久保拓弥](http://hosho.ees.hokudai.ac.jp/~kubo/ce/EcoSj2018.html)) 日本生態学会[第65回大会](http://www.esj.ne.jp/meeting/65/) (2018-03) 札幌
+-   「[それもRにやらせよう --- 整然データの下ごしらえ](/slides/esj65)」(自由集会[「データ解析で出会う統計的問題: R の新しい作図・作表」粕谷英一・久保拓弥](http://hosho.ees.hokudai.ac.jp/~kubo/ce/EcoSj2018.html)) 日本生態学会[第65回大会](https://www.esj.ne.jp/meeting/65/) (2018-03) 札幌
 -   「架空生物オリガミバードを作って進化が起こるしくみを体験しよう」(山野井貴浩、岩嵜航)
     [サイエンスデイ](http://www.science-day.com/) (2012-07) 東北大学
 -   「進化の仕組みを学べる補助教材: 架空生物オリガミバード [シミュレータ実演]」(山野井貴浩、岩嵜航、武村政春、佐倉統)
@@ -269,8 +269,8 @@ Contacts
 
 -   [日本進化学会](http://sesj.kenkyuukai.jp/)
     / [Society of Evolutionary Studies, Japan](http://sesj.kenkyuukai.jp/special/?id=26540)
--   [日本生態学会](http://www.esj.ne.jp/esj/) (退会中)
-    / [Ecological Society of Japan](http://www.esj.ne.jp/esj/index-e.html)
+-   [日本生態学会](https://www.esj.ne.jp/esj/) (退会中)
+    / [Ecological Society of Japan](https://www.esj.ne.jp/esj/index-e.html)
 -   [日本遺伝学会](https://gsj3.org/) (退会中)
     / The Genetics Society of Japan
 -   [個体群生態学会](https://www.population-ecology.jp/) (退会中)

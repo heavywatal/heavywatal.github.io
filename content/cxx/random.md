@@ -15,8 +15,8 @@ tags = ["c++"]
 
 ## `<random>`
 
--   <http://www.cplusplus.com/reference/random/>
--   <http://en.cppreference.com/w/cpp/numeric/random>
+-   <https://cplusplus.com/reference/random/>
+-   <https://en.cppreference.com/w/cpp/numeric/random>
 -   <https://cpprefjp.github.io/reference/random.html>
 
 C++11 ではまともに使える乱数ライブラリが追加された。

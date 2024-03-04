@@ -152,7 +152,7 @@ resWeightKS = runTest(tg_data, algorithm="weight01", statistic="ks", sortOrder=s
 :   `statistic` は、遺伝子セットが既に区切ってあるなら `fisher` 、
     DEG解析やら何やらで遺伝子がp値やスコアを持ってるなら `ks` 。
     `globaltest` を使いたい場合は
-    [本家 `globaltest` パッケージ](http://bioconductor.org/packages/release/bioc/html/globaltest.html)
+    [本家 `globaltest` パッケージ](https://bioconductor.org/packages/release/bioc/html/globaltest.html)
     を参照。
 
 結果は `topGOresult` オブジェクト。
