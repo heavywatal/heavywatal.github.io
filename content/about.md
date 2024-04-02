@@ -22,7 +22,7 @@ Address
     [理学部生物棟](https://www.google.com/maps/place/38°15'31.4"N+140°50'15.1"E)
 :   Biology bldg., Tohoku University,
     Aramaki Aoba 6-3, Sendai, 980-8578, Japan
-:   +81-22-795-3543
+:   +81-22-795-6693
 
 Contacts
 :   heavywatalあgmail.com
