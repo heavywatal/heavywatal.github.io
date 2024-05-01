@@ -187,6 +187,7 @@ Contacts
 
 ## Teaching / Outreach
 
+-   「[Rを用いたデータ解析の基礎](/slides/tohoku2024r/)」東北大学 進化学実習 (2024-04)
 -   「[Hands-on Introduction to R](/slides/english2023r/)」Tohoku University (2023-11)
 -   「[統計モデリング概論 DSHC 2023](/slides/tokiomarine2023/)」
     東京海上 [Data Science Hill Climb](https://tokiomarine-dshc.com/) (2023-08)

@@ -8,18 +8,17 @@ tags = ["r"]
 
 ## 初学者向け講義資料
 
-- [Rを用いたデータ解析の基礎](/slides/tohoku2023r/) 2023-04 東北大学
+- [Rを用いたデータ解析の基礎](/slides/tohoku2024r/) 2024-04 東北大学
   (学部3年生向け進化学実習の一部)
     - 導入: データ解析の全体像。Rを使うメリット。Rの基本。
     - データの可視化、レポート作成
     - データ前処理: 抽出、集約、結合、変形
-    - データ解釈の基礎知識
     - 統計モデリング: 確率分布、尤度、一般化線形モデル
-- [Rを用いたデータ解析の基礎と応用](https://comicalcommet.github.io/r-training-2022/)
-   (石川由希 2022 名古屋大学):<br>
+- [Rを用いたデータ解析の基礎と応用](https://comicalcommet.github.io/r-training-2023/)
+   (石川由希 2023 名古屋大学):<br>
   初心者に寄り添ってさらに噛み砕いた説明。
   実験生物学における「とにかくt検定」脱却を目指した統計解析パートも実践的で充実。
-  [**よくあるエラー集**](https://comicalcommet.github.io/r-training-2022/R_training_2022_7.html)が特に重宝。
+  [**よくあるエラー集**](https://comicalcommet.github.io/r-training-2023/R_training_2023_7.html)が特に重宝。
 
 
 ## R環境のインストール
