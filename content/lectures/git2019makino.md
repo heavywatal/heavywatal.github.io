@@ -403,8 +403,7 @@ e.g., https://github.com/Rdatatable/data.table/pull/2807
     とりあえず大文字で始まる命令形の一文を書くところから始めたらよいのでは。
     コミットの内容に応じた分類で[先頭に絵文字を入れるスタイル](https://github.com/carloscuesta/gitmoji/)も人気になりつつある。
 -   GitHubにpushされたら自動的に
-    [Slack](https://slack.com/)や[Twitter](https://twitter.com/)に投稿、
-    というような連携が可能。
+    [Slack](https://slack.com/) に投稿、というような連携が可能。
 -   RStudioでもディレクトリを"Project"として扱うことでGitを活用できる。
 
 
