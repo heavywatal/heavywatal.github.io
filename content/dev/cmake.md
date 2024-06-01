@@ -67,9 +67,12 @@ install(TARGETS a.out
 
 <https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html#project-commands>
 
-サブディレクトリを利用する:
+外部のCMakeプロジェクトを利用する:
 
-- [`add_subdirectory(source_dir [binary_dir] [EXCLUDE_FROM_ALL])`](https://cmake.org/cmake/help/latest/command/add_subdirectory.html)
+- [`find_package(<name> [version] [REQUIRED] ...)`](https://cmake.org/cmake/help/latest/command/find_package.html):
+  ビルド・インストール済みのを取り込む。
+- [`add_subdirectory(source_dir [binary_dir] [EXCLUDE_FROM_ALL])`](https://cmake.org/cmake/help/latest/command/add_subdirectory.html):
+  インストール前のソースツリーを取り込む。
 
 ターゲットを定義する:
 
@@ -170,8 +173,10 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
   POSITION_INDEPENDENT_CODE ON
   WINDOWS_EXPORT_ALL_SYMBOLS ON
 )
-target_compile_options(${PROJECT_NAME} PRIVATE
-  -march=native -Wall -Wextra -pedantic
+target_compile_options(common PRIVATE
+  -Wall -Wextra -pedantic
+  $<$<STREQUAL:${CMAKE_SYSTEM_PROCESSOR},x86_64>:-march=native>
+  $<$<STREQUAL:${CMAKE_SYSTEM_PROCESSOR},arm64>:-march=armv8.3-a+sha3>
 )
 
 if(NOT CMAKE_BUILD_TYPE)
@@ -206,6 +211,7 @@ Predefined variable              | default
 <https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html>
 
 文脈に応じて変数を評価する仕組み。
+`if()` よりも簡潔に書ける。
 
 プロジェクト内のビルド時と、外部パッケージとして利用される時とで、
 インクルードパスを使い分ける。
@@ -309,12 +315,8 @@ add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 <https://cmake.org/cmake/help/latest/module/FetchContent.html>
 
-外部ライブラリを取ってきて配置する。
-前からあった
-[ExternalProject](https://cmake.org/cmake/help/latest/module/ExternalProject.html)
-はビルド時に実行されるため
-`add_subdirectory()` の対象にできないなどの問題があったが、
-こちらはコンフィグ時に実行される。
+外部ライブラリをコンフィグ時に取ってくる。
+CMake 3.11 から。
 
 ```cmake
 include(FetchContent)
@@ -330,28 +332,34 @@ FetchContent_MakeAvailable(igraph)
 cmake_print_variables(igraph_SOURCE_DIR, igraph_BINARY_DIR)
 ```
 
-`FETCHCONTENT_SOURCE_DIR_<uppercaseName>` が定義されている場合は、
-fetchせずそこにあるものを使う。
+`FetchContent_Declare()`
+: まずこれで依存関係を宣言する。
+  複数ある場合、先に全部宣言してからまとめてMakeAvailableを呼ぶのが推奨。
+: ソースに関するオプションは
+  [ExternalProject](https://cmake.org/cmake/help/latest/module/ExternalProject.html)
+  とほぼ同じ。
+: `FIND_PACKAGE_ARGS`: (3.24+)<br>
+  `EXCLUDE_FROM_ALL`: (3.28+)
 
-成功したら
-`<lowercaseName>_POPULATED`,
-`<lowercaseName>_SOURCE_DIR`,
-`<lowercaseName>_BINARY_DIR`
-が定義される。
+`FetchContent_MakeAvailable()`
+: 宣言された依存ライブラリを利用可能な状態にする。(3.14+)
+: これひとつを実行することが推奨されているが、各段階を手動で書くこともできる。
+  1. `find_package()` を試みて、見つからなければ次に進む。(3.24+)
+  1. `FetchContent_GetProperties()` で過去にPopulateしたものがあるか確認。
+     `<lowercaseName>_POPULATED` が定義されていなければ次に進む。
+  1. `FetchContent_Populate()` でソースコードを取得する。
+     `FETCHCONTENT_SOURCE_DIR_<uppercaseName>`
+     が定義されている場合はfetchせずそこにあるものを使う。
+     成功したら3つの変数をセットする:
+     - `<lowercaseName>_POPULATED`
+     - `<lowercaseName>_SOURCE_DIR`
+     - `<lowercaseName>_BINARY_DIR`
+  1. `add_subdirectory()`
+     でプロジェクトに取り込む。
 
-3.24以降は `find_package()` との統合が進み、見つからなければfetchする、を簡単に書けるようになる。
-
-3.28以降は `EXCLUDE_FROM_ALL` オプションも渡せる。
-
-CMake 3.11 より古い環境では `execute_process()` で凌ぐ:
-```cmake
-find_package(Git)
-execute_process(COMMAND
-  ${GIT_EXECUTABLE} clone --recursive --depth=1 --branch=master https://github.com/USER/REPO.git ${SUBDIR}
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
-add_subdirectory(${SUBDIR} EXCLUDE_FROM_ALL)
-```
+似て非なる `ExternalProject` はビルド時に実行されるので
+`add_subdirectory()` の対象にできず、
+`execute_process()` で git を直接叩くなどして凌いでいた。
 
 ### FindThreads
 
@@ -416,7 +424,7 @@ enable_testing()
 
 <https://cmake.org/cmake/help/latest/manual/cmake.1.html>
 
-ビルド用の空ディレクトリを外に作って out-of-source で実行するのが基本。
+ビルド用のディレクトリを別に作って out-of-source で実行するのが基本。
 やり直したいときは、そのディレクトリごと消す。
 3.0以降 `cmake --target clean` はあるが、
 CMakeのバージョンを上げたときなどcleanしたい場面で使えない。
@@ -456,3 +464,16 @@ cmake --install build
   `H` をつけると説明文も。
   `A` をつけるとadvancedな変数も。
   見るだけなら `-N` オプションと共に。
+
+
+## Versions
+
+- 3.28: `FetchContent_Declare(... EXCLUDE_FROM_ALL)`, Ubuntu 24.04 noble
+- 3.24: `FetchContent_Declare(... FIND_PACKAGE_ARGS)`
+- 3.22: Ubuntu 22.04 jammy
+- 3.20: `cmake_path()`
+- 3.16: Ubuntu 20.04 focal
+- 3.15: `cmake --install`
+- 3.13: `cmake -S . -B build`
+- 3.11: `include(FetchContent)`
+- 3.8: `cxx_std_17`
