@@ -37,11 +37,15 @@ Markdown記法のテキストをHTMLに変換する、静的ウェブサイト�
       go install -v
       ```
       SCSSのための `--tags extended` オプションは不要になった。
--   SCSSを使う場合は Dart Sass を別途インストールする。
+-   SCSSを使う場合は Dart Sass を別途インストールしてPATHを通す。
     この方法もいろいろあるけど
     [公式prebuilt binary](https://github.com/sass/dart-sass/releases)
-    を使うのが簡単。適当に落としてPATHを通す。
-    `wget -O- https://github.com/sass/dart-sass/releases/download/1.69.5/dart-sass-1.69.5-macos-x64.tar.gz | tar xz`
+    を使うのが簡単。
+    ```sh
+    brew install heavywatal/tap/dart-sass
+    # or
+    wget -O- https://github.com/sass/dart-sass/releases/download/1.77.4/dart-sass-1.77.4-macos-x64.tar.gz | tar xz
+    ```
 -   ちゃんとインストールできているか確認: `hugo env`
 -   骨組みを作る:
     ```sh
