@@ -121,9 +121,12 @@ CMakeでは開発者と利用者の双方がCMakeをインストールして使�
 </ul>
 <h3 id="project-commands">Project commands</h3>
 <p><a href="https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html#project-commands">https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html#project-commands</a></p>
-<p>サブディレクトリを利用する:</p>
+<p>外部のCMakeプロジェクトを利用する:</p>
 <ul>
-<li><a href="https://cmake.org/cmake/help/latest/command/add_subdirectory.html"><code>add_subdirectory(source_dir [binary_dir] [EXCLUDE_FROM_ALL])</code></a></li>
+<li><a href="https://cmake.org/cmake/help/latest/command/find_package.html"><code>find_package(&lt;name&gt; [version] [REQUIRED] ...)</code></a>:
+ビルド・インストール済みのを取り込む。</li>
+<li><a href="https://cmake.org/cmake/help/latest/command/add_subdirectory.html"><code>add_subdirectory(source_dir [binary_dir] [EXCLUDE_FROM_ALL])</code></a>:
+インストール前のソースツリーを取り込む。</li>
 </ul>
 <p>ターゲットを定義する:</p>
 <ul>
@@ -212,8 +215,10 @@ STATIC/SHAREDが明示されていない <code>add_library()</code> でどっち
 </span></span><span class="line"><span class="cl">  <span class="s">POSITION_INDEPENDENT_CODE</span> <span class="s">ON</span>
 </span></span><span class="line"><span class="cl">  <span class="s">WINDOWS_EXPORT_ALL_SYMBOLS</span> <span class="s">ON</span>
 </span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_compile_options</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">PRIVATE</span>
-</span></span><span class="line"><span class="cl">  <span class="s">-march=native</span> <span class="s">-Wall</span> <span class="s">-Wextra</span> <span class="s">-pedantic</span>
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_compile_options</span><span class="p">(</span><span class="s">common</span> <span class="s">PRIVATE</span>
+</span></span><span class="line"><span class="cl">  <span class="s">-Wall</span> <span class="s">-Wextra</span> <span class="s">-pedantic</span>
+</span></span><span class="line"><span class="cl">  <span class="o">$&lt;</span><span class="nv">$&lt;STREQUAL:${CMAKE_SYSTEM_PROCESSOR},x86_64</span><span class="o">&gt;</span><span class="s">:-march=native&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">$&lt;</span><span class="nv">$&lt;STREQUAL:${CMAKE_SYSTEM_PROCESSOR},arm64</span><span class="o">&gt;</span><span class="s">:-march=armv8.3-a+sha3&gt;</span>
 </span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">if</span><span class="p">(</span><span class="s">NOT</span> <span class="s">CMAKE_BUILD_TYPE</span><span class="p">)</span><span class="err">
@@ -262,7 +267,8 @@ STATIC/SHAREDが明示されていない <code>add_library()</code> でどっち
 <code>-DCMAKE_BUILD_TYPE=???</code> をcase-insensitiveに解釈してもらえる。</p>
 <h2 id="generator-expressions">Generator expressions</h2>
 <p><a href="https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html">https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html</a></p>
-<p>文脈に応じて変数を評価する仕組み。</p>
+<p>文脈に応じて変数を評価する仕組み。
+<code>if()</code> よりも簡潔に書ける。</p>
 <p>プロジェクト内のビルド時と、外部パッケージとして利用される時とで、
 インクルードパスを使い分ける。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">target_include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">INTERFACE</span>
@@ -355,12 +361,8 @@ STATIC/SHAREDが明示されていない <code>add_library()</code> でどっち
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">add_library</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="s">::</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">ALIAS</span> <span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><h3 id="fetchcontent">FetchContent</h3>
 <p><a href="https://cmake.org/cmake/help/latest/module/FetchContent.html">https://cmake.org/cmake/help/latest/module/FetchContent.html</a></p>
-<p>外部ライブラリを取ってきて配置する。
-前からあった
-<a href="https://cmake.org/cmake/help/latest/module/ExternalProject.html">ExternalProject</a>
-はビルド時に実行されるため
-<code>add_subdirectory()</code> の対象にできないなどの問題があったが、
-こちらはコンフィグ時に実行される。</p>
+<p>外部ライブラリをコンフィグ時に取ってくる。
+CMake 3.11 から。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">include</span><span class="p">(</span><span class="s">FetchContent</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">FETCHCONTENT_QUIET</span> <span class="s">OFF</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">cmake_print_variables</span><span class="p">(</span><span class="s">FETCHCONTENT_SOURCE_DIR_IGRAPH</span><span class="p">)</span><span class="err">
@@ -372,23 +374,41 @@ STATIC/SHAREDが明示されていない <code>add_library()</code> でどっち
 </span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">igraph</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">cmake_print_variables</span><span class="p">(</span><span class="s">igraph_SOURCE_DIR,</span> <span class="s">igraph_BINARY_DIR</span><span class="p">)</span><span class="err">
-</span></span></span></code></pre></div><p><code>FETCHCONTENT_SOURCE_DIR_&lt;uppercaseName&gt;</code> が定義されている場合は、
-fetchせずそこにあるものを使う。</p>
-<p>成功したら
-<code>&lt;lowercaseName&gt;_POPULATED</code>,
-<code>&lt;lowercaseName&gt;_SOURCE_DIR</code>,
-<code>&lt;lowercaseName&gt;_BINARY_DIR</code>
-が定義される。</p>
-<p>3.24以降は <code>find_package()</code> との統合が進み、見つからなければfetchする、を簡単に書けるようになる。</p>
-<p>3.28以降は <code>EXCLUDE_FROM_ALL</code> オプションも渡せる。</p>
-<p>CMake 3.11 より古い環境では <code>execute_process()</code> で凌ぐ:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">find_package</span><span class="p">(</span><span class="s">Git</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">execute_process</span><span class="p">(</span><span class="s">COMMAND</span>
-</span></span><span class="line"><span class="cl">  <span class="o">${</span><span class="nv">GIT_EXECUTABLE</span><span class="o">}</span> <span class="s">clone</span> <span class="s">--recursive</span> <span class="s">--depth=1</span> <span class="s">--branch=master</span> <span class="s">https://github.com/USER/REPO.git</span> <span class="o">${</span><span class="nv">SUBDIR</span><span class="o">}</span>
-</span></span><span class="line"><span class="cl">  <span class="s">WORKING_DIRECTORY</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="o">${</span><span class="nv">SUBDIR</span><span class="o">}</span> <span class="s">EXCLUDE_FROM_ALL</span><span class="p">)</span><span class="err">
-</span></span></span></code></pre></div><h3 id="findthreads">FindThreads</h3>
+</span></span></span></code></pre></div><dl>
+<dt><code>FetchContent_Declare()</code></dt>
+<dd>まずこれで依存関係を宣言する。
+複数ある場合、先に全部宣言してからまとめてMakeAvailableを呼ぶのが推奨。</dd>
+<dd>ソースに関するオプションは
+<a href="https://cmake.org/cmake/help/latest/module/ExternalProject.html">ExternalProject</a>
+とほぼ同じ。</dd>
+<dd><code>FIND_PACKAGE_ARGS</code>: (3.24+)<br>
+<code>EXCLUDE_FROM_ALL</code>: (3.28+)</dd>
+<dt><code>FetchContent_MakeAvailable()</code></dt>
+<dd>宣言された依存ライブラリを利用可能な状態にする。(3.14+)</dd>
+<dd>これひとつを実行することが推奨されているが、各段階を手動で書くこともできる。
+<ol>
+<li><code>find_package()</code> を試みて、見つからなければ次に進む。(3.24+)</li>
+<li><code>FetchContent_GetProperties()</code> で過去にPopulateしたものがあるか確認。
+<code>&lt;lowercaseName&gt;_POPULATED</code> が定義されていなければ次に進む。</li>
+<li><code>FetchContent_Populate()</code> でソースコードを取得する。
+<code>FETCHCONTENT_SOURCE_DIR_&lt;uppercaseName&gt;</code>
+が定義されている場合はfetchせずそこにあるものを使う。
+成功したら3つの変数をセットする:
+<ul>
+<li><code>&lt;lowercaseName&gt;_POPULATED</code></li>
+<li><code>&lt;lowercaseName&gt;_SOURCE_DIR</code></li>
+<li><code>&lt;lowercaseName&gt;_BINARY_DIR</code></li>
+</ul>
+</li>
+<li><code>add_subdirectory()</code>
+でプロジェクトに取り込む。</li>
+</ol>
+</dd>
+</dl>
+<p>似て非なる <code>ExternalProject</code> はビルド時に実行されるので
+<code>add_subdirectory()</code> の対象にできず、
+<code>execute_process()</code> で git を直接叩くなどして凌いでいた。</p>
+<h3 id="findthreads">FindThreads</h3>
 <p><a href="https://cmake.org/cmake/help/latest/module/FindThreads.html">https://cmake.org/cmake/help/latest/module/FindThreads.html</a></p>
 <p><code>-lpthread</code> とか自分で書かない。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">find_package</span><span class="p">(</span><span class="s">Threads</span><span class="p">)</span><span class="err">
@@ -420,7 +440,7 @@ fetchせずそこにあるものを使う。</p>
 </span></span></span></code></pre></div><h2 id="cli">CLI</h2>
 <h3 id="cmake"><code>cmake</code></h3>
 <p><a href="https://cmake.org/cmake/help/latest/manual/cmake.1.html">https://cmake.org/cmake/help/latest/manual/cmake.1.html</a></p>
-<p>ビルド用の空ディレクトリを外に作って out-of-source で実行するのが基本。
+<p>ビルド用のディレクトリを別に作って out-of-source で実行するのが基本。
 やり直したいときは、そのディレクトリごと消す。
 3.0以降 <code>cmake --target clean</code> はあるが、
 CMakeのバージョンを上げたときなどcleanしたい場面で使えない。</p>
@@ -453,6 +473,18 @@ generator非依存の <code>cmake --build</code> を使ったほうがいい。<
 <code>A</code> をつけるとadvancedな変数も。
 見るだけなら <code>-N</code> オプションと共に。</dd>
 </dl>
+<h2 id="versions">Versions</h2>
+<ul>
+<li>3.28: <code>FetchContent_Declare(... EXCLUDE_FROM_ALL)</code>, Ubuntu 24.04 noble</li>
+<li>3.24: <code>FetchContent_Declare(... FIND_PACKAGE_ARGS)</code></li>
+<li>3.22: Ubuntu 22.04 jammy</li>
+<li>3.20: <code>cmake_path()</code></li>
+<li>3.16: Ubuntu 20.04 focal</li>
+<li>3.15: <code>cmake --install</code></li>
+<li>3.13: <code>cmake -S . -B build</code></li>
+<li>3.11: <code>include(FetchContent)</code></li>
+<li>3.8: <code>cxx_std_17</code></li>
+</ul>
 
 </article>
 </main>
