@@ -210,10 +210,10 @@ Predefined variable              | default
 
 <https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html>
 
-文脈に応じて変数を評価する仕組み。
-`if()` よりも簡潔に書ける。
+ビルド時の状態に応じてに変数を評価する仕組み。
+コンフィグ時に評価される `if()` とは使い方が異なる。
 
-プロジェクト内のビルド時と、外部パッケージとして利用される時とで、
+例えば、プロジェクト内のビルド時と、外部パッケージとして利用される時とで、
 インクルードパスを使い分ける。
 ```cmake
 target_include_directories(${PROJECT_NAME} INTERFACE
@@ -221,6 +221,14 @@ target_include_directories(${PROJECT_NAME} INTERFACE
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 ```
+
+コンフィグ時には評価前の文字列でしかないので、
+`if()` などの条件分岐にも使えないし、
+`cmake_print_variables()` や `message()` しても中身は見えない。
+実際にどんな値が入ったかを確かめるには
+`file(GENERATE OUTPUT <outfile> CONTENT <content>)`
+などでビルド時に書き出すことになる。
+
 
 ## Modules
 
