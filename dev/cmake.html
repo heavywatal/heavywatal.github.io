@@ -267,15 +267,21 @@ STATIC/SHAREDが明示されていない <code>add_library()</code> でどっち
 <code>-DCMAKE_BUILD_TYPE=???</code> をcase-insensitiveに解釈してもらえる。</p>
 <h2 id="generator-expressions">Generator expressions</h2>
 <p><a href="https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html">https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html</a></p>
-<p>文脈に応じて変数を評価する仕組み。
-<code>if()</code> よりも簡潔に書ける。</p>
-<p>プロジェクト内のビルド時と、外部パッケージとして利用される時とで、
+<p>ビルド時の状態に応じてに変数を評価する仕組み。
+コンフィグ時に評価される <code>if()</code> とは使い方が異なる。</p>
+<p>例えば、プロジェクト内のビルド時と、外部パッケージとして利用される時とで、
 インクルードパスを使い分ける。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">target_include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">INTERFACE</span>
 </span></span><span class="line"><span class="cl">  <span class="o">$&lt;</span><span class="nv">BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include</span><span class="o">&gt;</span>
 </span></span><span class="line"><span class="cl">  <span class="o">$&lt;</span><span class="nv">INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}</span><span class="o">&gt;</span>
 </span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
-</span></span></span></code></pre></div><h2 id="modules">Modules</h2>
+</span></span></span></code></pre></div><p>コンフィグ時には評価前の文字列でしかないので、
+<code>if()</code> などの条件分岐にも使えないし、
+<code>cmake_print_variables()</code> や <code>message()</code> しても中身は見えない。
+実際にどんな値が入ったかを確かめるには
+<code>file(GENERATE OUTPUT &lt;outfile&gt; CONTENT &lt;content&gt;)</code>
+などでビルド時に書き出すことになる。</p>
+<h2 id="modules">Modules</h2>
 <p><a href="https://cmake.org/cmake/help/latest/manual/cmake-modules.7.html">https://cmake.org/cmake/help/latest/manual/cmake-modules.7.html</a></p>
 <p><code>include()</code> や <code>find_package()</code> から使う。</p>
 <h3 id="includecmakeprinthelpers">include(CMakePrintHelpers)</h3>
