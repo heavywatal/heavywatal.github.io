@@ -78,7 +78,29 @@ Pythonインストール
 <a href="/tags/python.html"><div>python</div></a>
 </nav>
 </header>
-
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#標準公式">標準・公式</a></li>
+    <li><a href="#rye">rye</a>
+      <ul>
+        <li><a href="#pythonインストーラーとしてだけ使う">Pythonインストーラーとしてだけ使う</a></li>
+      </ul>
+    </li>
+    <li><a href="#pyenv">pyenv</a>
+      <ul>
+        <li><a href="#既知の問題">既知の問題</a></li>
+      </ul>
+    </li>
+    <li><a href="#anaconda">Anaconda</a></li>
+    <li><a href="#環境変数">環境変数</a>
+      <ul>
+        <li><a href="#pythonpath"><code>PYTHONPATH</code></a></li>
+        <li><a href="#pythonuserbase"><code>PYTHONUSERBASE</code></a></li>
+        <li><a href="#pythonstartup"><code>PYTHONSTARTUP</code></a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
 <h2 id="標準公式">標準・公式</h2>
 <p>MacやLinuxならシステムの一部として
 <code>/usr/bin/python</code> が既にインストールされているので、
@@ -87,10 +109,43 @@ Pythonインストール
 ちゃんと使える3.xを使いたければ
 <a href="https://www.python.jp/install/install.html">python.jp/環境構築ガイド</a>
 に従って最新版を入れるのが簡単。</p>
-<h2 id="pyenv">pyenv</h2>
-<p>管理者権限なしでホーム以下にインストールするには
-<a href="https://github.com/pyenv/pyenv">pyenv</a>
-が便利。</p>
+<h2 id="rye">rye</h2>
+<p><a href="https://rye.astral.sh/">https://rye.astral.sh/</a></p>
+<p>プロジェクトの環境構築を一切合切面倒見てくれる管理ツール。
+ruffやuvと同じチームが開発していて、同じくrust製。
+次のワンライナーでプログラム本体や設定ファイルなどが <code>~/.rye/</code> に配置される:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">curl -sSf https://rye.astral.sh/get <span class="p">|</span> bash
+</span></span></code></pre></div><p>任意のバージョンのPythonを入れるためのツールとして、
+つまり<a href="#pyenv">pyenv</a>的な位置付けでも使える。
+しかもビルド済みのPythonを
+<a href="https://github.com/indygreg/python-build-standalone">https://github.com/indygreg/python-build-standalone</a>
+から取ってくるので、自前ビルド環境に左右されずCPUも使わず簡単。</p>
+<h3 id="pythonインストーラーとしてだけ使う">Pythonインストーラーとしてだけ使う</h3>
+<p>パッケージ運用はまだ普通にpipとかでいいかなと思うので、今のところ私はこの使い方。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># インストール済みバージョン一覧</span>
+</span></span><span class="line"><span class="cl">rye toolchain list
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 利用可能バージョン一覧</span>
+</span></span><span class="line"><span class="cl">rye toolchain list --include-downloadable
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># インストール</span>
+</span></span><span class="line"><span class="cl">rye toolchain fetch cpython@3.12.3
+</span></span></code></pre></div><p><code>global-python = true</code>
+の設定でshimsにPATHが通っていればryeの管理下にあるPythonをプロジェクト外でも使えるが、逆に
+<code>pyproject.toml</code> が存在するディレクトリでのみそれができないという問題
+<a href="https://github.com/astral-sh/rye/issues/1121">#1121</a>
+がある。
+shimsに頼らず自分でPATHを設定するworkaround:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[</span> -d <span class="s2">&#34;</span><span class="si">${</span><span class="nv">RYE_HOME</span><span class="p">:=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="p">/.rye</span><span class="si">}</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  <span class="nv">py_versions</span><span class="o">=(</span><span class="k">$(</span>ls <span class="s2">&#34;</span><span class="si">${</span><span class="nv">RYE_HOME</span><span class="si">}</span><span class="s2">/py&#34;</span> <span class="p">|</span> sort -V<span class="k">)</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">export</span> <span class="nv">PY_PREFIX</span><span class="o">=</span><span class="si">${</span><span class="nv">RYE_HOME</span><span class="si">}</span>/py/<span class="si">${</span><span class="nv">py_versions</span><span class="p">[@]: -1</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl">  <span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PY_PREFIX</span><span class="si">}</span>/bin:<span class="si">${</span><span class="nv">PATH</span><span class="si">}</span>:<span class="si">${</span><span class="nv">RYE_HOME</span><span class="si">}</span>/shims
+</span></span><span class="line"><span class="cl">  <span class="nb">unset</span> py_versions
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span></code></pre></div><h2 id="pyenv">pyenv</h2>
+<p><a href="https://github.com/pyenv/pyenv">https://github.com/pyenv/pyenv</a></p>
+<p>管理者権限なしでホーム以下にインストールできる。
+ソースコードを取ってきて自前ビルドするのが上記<a href="#rye">rye</a>と比べたときのメリットでありデメリット。</p>
 <ol>
 <li>
 <p><a href="/mac/homebrew.html">Homebrew</a> か
@@ -105,12 +160,11 @@ Pythonインストール
 <code>PYENV_ROOT</code> を公式推奨の <code>~/.pyenv</code> に設定し、
 ついでにPATHも追加しておく。
 シェルの設定ファイル (e.g., <code>~/.bashrc</code>) に次のように追記:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">PYENV_ROOT</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.pyenv
-</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[</span> -d <span class="nv">$PYENV_ROOT</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-</span></span><span class="line"><span class="cl">    <span class="nv">pyenv_versions</span><span class="o">=(</span><span class="k">$(</span>ls <span class="si">${</span><span class="nv">PYENV_ROOT</span><span class="si">}</span>/versions <span class="p">|</span> sort -V<span class="k">)</span><span class="o">)</span>
-</span></span><span class="line"><span class="cl">    <span class="nb">export</span> <span class="nv">PYENV_LATEST</span><span class="o">=</span><span class="si">${</span><span class="nv">PYENV_ROOT</span><span class="si">}</span>/versions/<span class="si">${</span><span class="nv">pyenv_versions</span><span class="p">[@]: -1</span><span class="si">}</span>
-</span></span><span class="line"><span class="cl">    <span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PYENV_LATEST</span><span class="si">}</span>/bin:<span class="nv">$PATH</span>
-</span></span><span class="line"><span class="cl">    <span class="nb">unset</span> pyenv_versions
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[</span> -d <span class="s2">&#34;</span><span class="si">${</span><span class="nv">PYENV_ROOT</span><span class="p">:=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="p">/.pyenv</span><span class="si">}</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  <span class="nv">py_versions</span><span class="o">=(</span><span class="k">$(</span>ls <span class="s2">&#34;</span><span class="si">${</span><span class="nv">PYENV_ROOT</span><span class="si">}</span><span class="s2">/versions&#34;</span> <span class="p">|</span> sort -V<span class="k">)</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">export</span> <span class="nv">PY_PREFIX</span><span class="o">=</span><span class="si">${</span><span class="nv">PYENV_ROOT</span><span class="si">}</span>/versions/<span class="si">${</span><span class="nv">py_versions</span><span class="p">[@]: -1</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl">  <span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PY_PREFIX</span><span class="si">}</span>/bin:<span class="nv">$PATH</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">unset</span> py_versions
 </span></span><span class="line"><span class="cl"><span class="k">fi</span>
 </span></span></code></pre></div><p><code>pyenv shell</code> や <code>pyenv local</code>
 を使ってPythonのバージョンを頻繁に切り替える場合は、
@@ -126,7 +180,7 @@ Pythonインストール
 目当てのバージョンを探してインストール:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">exec</span> <span class="nv">$SHELL</span> -l
 </span></span><span class="line"><span class="cl">pyenv install -l <span class="p">|</span> less
-</span></span><span class="line"><span class="cl">pyenv install 3.10.4
+</span></span><span class="line"><span class="cl">pyenv install 3.12.3
 </span></span><span class="line"><span class="cl"><span class="nb">exec</span> <span class="nv">$SHELL</span> -l
 </span></span></code></pre></div><p>R から <a href="https://rstudio.github.io/reticulate/"><code>reticulate</code></a>
 越しに呼ぶ場合は共有ライブラリを有効にしてビルドする:</p>
