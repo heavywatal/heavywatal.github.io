@@ -65,44 +65,59 @@ Unixツールをパッケージとして手軽にインストールできるパ�
 
 ## brew install
 
-公式リポジトリから明示的にインストールしたものメモ:
-
-    boost
-    cmake
-    coreutils
-    doxygen
-    eigen
-    emacs
-    exiftool
-    git
-    go
-    lftp
-    make
-    nkf
-    pandoc
-    parallel
-    pyenv
-    qpdf
-    rbenv
-    rsync
-    tmux
-    webp
-    wget
-    xz
-    zsh-completions
-    zstd
+公式リポジトリから明示的にインストールしたものメモ:<br>
+boost
+cmake
+doxygen
+eigen
+exiftool
+fzf
+go
+make
+miller
+nkf
+pandoc
+parallel
+qpdf
+rbenv
+rsync
+tmux
+webp
+wget
+xz
+zsh-completions
+zstd
 
 Rをここからインストールするとバイナリ版のパッケージが利用できず、
 毎回ソースからビルドすることになるので、
 後述のように `--cask r` で入れるほうが簡単。
 
-`coreutils`, `gnu-sed`, `gnu-tar`, `grep`
-などは既存のコマンドとごっちゃにならないよう頭に `g`
+`coreutils`, `gnu-tar`
+などは既存のシステムコマンドとごっちゃにならないよう頭に `g`
 を付けてインストールしてくれる。
 元の名前でアクセスする方法はいくつかあるが、
 `$(brew --prefix)/opt/{coreutils,gnu-sed,gnu-tar,grep}/libexec/gnubin` に
 `PATH` を通すのが楽ちん。
-`brew unlink coreutils gnu-sed gnu-tar grep` してもそれらのディレクトリは残る。
+`brew unlink coreutils gnu-tar` してもそれらのディレクトリは残る。
+
+rust製ツールもcargoで自前ビルドするよりこちらで入れてしまった方が楽ちん:<br>
+as-tree
+bat
+diskus
+dust
+eza
+fd
+git-delta
+hck
+hexyl
+hyperfine
+lsd
+monolith
+oxipng
+qsv
+ripgrep
+sd
+
 
 
 ## brew tap
