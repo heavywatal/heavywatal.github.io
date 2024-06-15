@@ -1,5 +1,6 @@
 +++
 title = 'Pythonインストール'
+toc = true
 tags = ["python"]
 [menu.main]
   parent = "python"
@@ -17,11 +18,60 @@ MacやLinuxならシステムの一部として
 に従って最新版を入れるのが簡単。
 
 
+## rye
+
+<https://rye.astral.sh/>
+
+プロジェクトの環境構築を一切合切面倒見てくれる管理ツール。
+ruffやuvと同じチームが開発していて、同じくrust製。
+次のワンライナーでプログラム本体や設定ファイルなどが `~/.rye/` に配置される:
+```sh
+curl -sSf https://rye.astral.sh/get | bash
+```
+
+任意のバージョンのPythonを入れるためのツールとして、
+つまり[pyenv](#pyenv)的な位置付けでも使える。
+しかもビルド済みのPythonを
+<https://github.com/indygreg/python-build-standalone>
+から取ってくるので、自前ビルド環境に左右されずCPUも使わず簡単。
+
+### Pythonインストーラーとしてだけ使う
+
+パッケージ運用はまだ普通にpipとかでいいかなと思うので、今のところ私はこの使い方。
+
+```sh
+# インストール済みバージョン一覧
+rye toolchain list
+
+# 利用可能バージョン一覧
+rye toolchain list --include-downloadable
+
+# インストール
+rye toolchain fetch cpython@3.12.3
+```
+
+`global-python = true`
+の設定でshimsにPATHが通っていればryeの管理下にあるPythonをプロジェクト外でも使えるが、逆に
+`pyproject.toml` が存在するディレクトリでのみそれができないという問題
+[#1121](https://github.com/astral-sh/rye/issues/1121)
+がある。
+shimsに頼らず自分でPATHを設定するworkaround:
+```sh
+if [ -d "${RYE_HOME:=${HOME}/.rye}" ]; then
+  py_versions=($(ls "${RYE_HOME}/py" | sort -V))
+  export PY_PREFIX=${RYE_HOME}/py/${py_versions[@]: -1}
+  PATH=${PY_PREFIX}/bin:${PATH}:${RYE_HOME}/shims
+  unset py_versions
+fi
+```
+
+
 ## pyenv
 
-管理者権限なしでホーム以下にインストールするには
-[pyenv](https://github.com/pyenv/pyenv)
-が便利。
+<https://github.com/pyenv/pyenv>
+
+管理者権限なしでホーム以下にインストールできる。
+ソースコードを取ってきて自前ビルドするのが上記[rye](#rye)と比べたときのメリットでありデメリット。
 
 1.  [Homebrew]({{< relref "homebrew.md" >}}) か
     [Git]({{< relref "git.md" >}}) を使ってpyenvをインストール:
@@ -39,12 +89,11 @@ MacやLinuxならシステムの一部として
     シェルの設定ファイル (e.g., `~/.bashrc`) に次のように追記:
 
     ```sh
-    export PYENV_ROOT=${HOME}/.pyenv
-    if [ -d $PYENV_ROOT ]; then
-        pyenv_versions=($(ls ${PYENV_ROOT}/versions | sort -V))
-        export PYENV_LATEST=${PYENV_ROOT}/versions/${pyenv_versions[@]: -1}
-        PATH=${PYENV_LATEST}/bin:$PATH
-        unset pyenv_versions
+    if [ -d "${PYENV_ROOT:=${HOME}/.pyenv}" ]; then
+      py_versions=($(ls "${PYENV_ROOT}/versions" | sort -V))
+      export PY_PREFIX=${PYENV_ROOT}/versions/${py_versions[@]: -1}
+      PATH=${PY_PREFIX}/bin:$PATH
+      unset py_versions
     fi
     ```
 
@@ -63,7 +112,7 @@ MacやLinuxならシステムの一部として
     ```sh
     exec $SHELL -l
     pyenv install -l | less
-    pyenv install 3.10.4
+    pyenv install 3.12.3
     exec $SHELL -l
     ```
 
