@@ -2,13 +2,14 @@
 title = "VSCode"
 subtitle = "Microsoft製テキストエディタ"
 date = 2022-06-09T10:52:28+09:00
+aliases = ["/dev/atom.html"]
 tags = ["editor", "writing"]
 [menu.main]
   parent = "dev"
 +++
 
 Microsoftが開発しているGUIテキストエディタ。
-[Atom]({{< relref "atom.md" >}}) を継ぐもの。
+[Atom](https://github.com/atom/atom) を継ぐもの。
 
 <https://code.visualstudio.com>
 
