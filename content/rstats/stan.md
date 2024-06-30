@@ -15,7 +15,7 @@ subtitle = "高速MCMCでパラメータ推定"
 [PyStan](https://mc-stan.org/users/interfaces/pystan.html)
 が長らく使われてきたが、
 [CmdStanR](https://mc-stan.org/cmdstanr/),
-[CmdStanPy](https://cmdstanpy.readthedocs.io/)
+[CmdStanPy](https://mc-stan.org/cmdstanpy/)
 への移行が進んできている。
 
 https://mc-stan.org/
@@ -26,7 +26,7 @@ https://mc-stan.org/
 RやPythonのパッケージを入れてから、それ越しにCmdStan本体を入れる。
 
 ```r
-install.packages("cmdstanr", repos = "https://mc-stan.org/r-packages/")
+install.packages("cmdstanr", repos = c(stan = "https://stan-dev.r-universe.dev"))
 library(cmdstanr)
 check_cmdstan_toolchain()
 install_cmdstan()
@@ -261,6 +261,7 @@ R標準のGLMのような使い心地でStanを動かせるようにするパッ
 - formulaでモデルを立てられる。
 - data.frameを渡せる。
 - パラメータ調整やコンパイルの済んだ部品を組むような形なので試行錯誤が早い。
+- ただしcmdstanrではなくrstanを使う。
 
 
 ## `library(brms)`
