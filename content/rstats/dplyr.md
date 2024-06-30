@@ -743,7 +743,7 @@ data.frame を主眼とする dplyr では matrix や array を扱わない。
 
 `as.tbl_cube(x, dim_names, met_names, ...)`
 :   matrix/arrayからdata.frameの一歩手前に変換する。
-    [`reshape2::melt`]({{< relref "reshape2.md" >}}) の改良版。
+    [`reshape2::melt`](https://github.com/hadley/reshape) の改良版。
     これの結果に `tibble::as_tibble()` を適用するとわかりやすい。
 :   ただし `dimnames(x)` が空ではダメで、長さの正しい名前付きlistになっている必要がある。
 
