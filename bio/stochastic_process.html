@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 <style>
 .katex {
-  font-size: 1.12em;
+  font-size: 1.06em;
 }
 
 .katex-display > .katex {
@@ -84,17 +84,17 @@ Stochastic Process
 <p>確率 <em>p</em> のBernoulli試行で <em>k</em> 回目に初めて当たる確率。
 まず外し続ける必要がある。</p>
 <div>\[\begin{aligned}
-\text{Prob}[X = k] &= p(1 - p)^{k - 1} \\
-\mathrm E[X] &= \frac 1 p \\
-\text{Var}[X] &= \frac {1 - p} p
+\Pr[X = k] &= p(1 - p)^{k - 1} \\
+\operatorname{E}[X] &= \frac 1 p \\
+\operatorname{Var}[X] &= \frac {1 - p} p
 \end{aligned}\]</div>
 <h2 id="negative-binomial-distribution-負の二項分布">Negative binomial distribution 負の二項分布</h2>
 <p>確率 <em>p</em> のBernoulli試行で <em>r</em> 回目の当たりが <em>k</em> 回目に出る確率。
 幾何分布を <em>r</em> 回畳み込んだもの。</p>
 <div>\[\begin{aligned}
-\text{Prob}[X = k] &= {k - 1 \choose r - 1} p^r (1 - p)^{k - r} \\
-\mathrm E[X] &= \frac r p \\
-\text{Var}[X] &= \frac {r(1 - p)} {p^2}
+\Pr[X = k] &= {k - 1 \choose r - 1} p^r (1 - p)^{k - r} \\
+\operatorname{E}[X] &= \frac r p \\
+\operatorname{Var}[X] &= \frac {r(1 - p)} {p^2}
 \end{aligned}\]</div>
 <h2 id="exponential-distribution-指数分布">Exponential distribution 指数分布</h2>
 <p>幾何分布の連続時間バージョン。
@@ -137,8 +137,8 @@ $Q(t) \lambda \mathrm dt = \lambda e ^ {-\lambda t} \mathrm dt$
 すなわち確率密度関数 (PDF: probability density function) は</p>
 <div>\[\begin{aligned}
 f(t; \lambda) &= \lambda e ^ {-\lambda t} \\
-\mathrm E[t] &= \frac 1 \lambda \\
-\text{Var}[t] &= \frac 1 {\lambda^2}
+\operatorname{E}[t] &= \frac 1 \lambda \\
+\operatorname{Var}[t] &= \frac 1 {\lambda^2}
 \end{aligned}\]</div>
 <p>また、$t$ までに最低1回は起こる確率、
 すなわち累積分布関数 (CDF: cumulative distribution function) は</p>
@@ -156,8 +156,8 @@ shape <em>k</em> (&gt;0), scale <em>θ</em> (&gt;0) を使った一般的な表�
 平均待ち時間 <em>θ</em> の事象が <em>k</em> 回起こるまでの待ち時間の分布と見なせる。</p>
 <div>\[\begin{aligned}
 f(x; k, \theta) &= \frac {x^{k-1} \exp[-\frac x \theta]} {\theta^k \Gamma(k)} \\
-\mathrm E[x] &= k\theta \\
-\text{Var}[x] &= k\theta^2 \\
+\operatorname{E}[x] &= k\theta \\
+\operatorname{Var}[x] &= k\theta^2 \\
 \end{aligned}\]</div>
 <p>rate parameter $\lambda = \frac 1 \theta$ を使った形だと導出もイメージしやすい。
 時間当たり <em>λ</em> 回起こるPoisson過程で <em>k</em> 回起こるまでの待ち時間の分布、
@@ -167,16 +167,16 @@ cf. <a href="/lectures/wakeley-2-2.html">/lectures/wakeley-2-2</a></p>
 f(t; k, \lambda) &= \lambda e^{-\lambda t}
                 \frac {(\lambda t)^{k-1}}
                       {\Gamma(k)} \\
-\mathrm E[t] &= \frac k \lambda \\
-\text{Var}[t] &= \frac k {\lambda^2} \\
+\operatorname{E}[t] &= \frac k \lambda \\
+\operatorname{Var}[t] &= \frac k {\lambda^2} \\
 \end{aligned}\]</div>
 <p>内部的に <em>k</em> ステップからなる過程が時間 $\mu = \frac k \lambda = k\theta$ で完了する。</p>
 <div>\[\begin{aligned}
 f(t; k, \mu) &= e^{-\left(\frac k \mu t \right)}
                 \frac {k^k t^{k-1}}
                       {\mu^k \Gamma(k)} \\
-\mathrm E[t] &= \mu \\
-\text{Var}[t] &= \frac {\mu^2} k \\
+\operatorname{E}[t] &= \mu \\
+\operatorname{Var}[t] &= \frac {\mu^2} k \\
 \end{aligned}\]</div>
 <h2 id="weibull-distribution">Weibull distribution</h2>
 <p>指数関数がmemorylessな待ち時間なのに対して、

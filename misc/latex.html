@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 <style>
 .katex {
-  font-size: 1.12em;
+  font-size: 1.06em;
 }
 
 .katex-display > .katex {
@@ -236,9 +236,29 @@ e.g., 分数を挟むとか、カッコの入れ子とか</li>
 <li>&ldquo;given that&rdquo; を示す縦棒はパイプ記号 <code>|</code> ではなく
 <code>\mid</code> を使うのが正しいし適度なスペースが入って読みやすい。
 絶対値もパイプではなく <code>\lvert x \rvert</code> のようにする。</li>
-<li>斜体にしたくない文字を普通にするには <code>\mathrm dt</code> 。
-記号じゃないテキストには <code>\text{otherwise}</code> 。
-よく使われるやつは定義済み e.g., <code>\log</code>, <code>\exp</code></li>
+<li>数式内では一文字ずつ変数扱いされて斜体になる。
+複数文字の単語や立体で表現するには一手間必要:
+<ul>
+<li>記号じゃないテキスト: <code>\text{otherwise}</code></li>
+<li>セリフ体ハードコード、スペース無し: <code>\mathrm dt</code> $\mathrm dt$</li>
+<li>フォントや前後スペースを文脈依存で: <code>\operatorname{var}(X)</code>
+$\operatorname{var}(X)$, $\operatorname{tr}A$</li>
+<li><code>\DeclareMathOperator{\Prob}{Prob}</code> のようにショートカットを作れる。
+amsmathで定義済み:<br>
+$\exp$, $\lg$, $\ln$, $\log$,
+$\deg$, $\det$, $\dim$, $\ker$,
+$\Pr$,  $\gcd$, $\hom$,
+$\arg$, $\min$, $\max$, $\inf$, $\sup$,
+<br>
+$\sin$, $\cos$, $\tan$,
+$\arcsin$, $\arccos$, $\arctan$,
+$\sinh$, $\cosh$, $\tanh$, $\coth$,
+$\sec$, $\csc$, $\cot$,
+<br>
+$\lim$, $\liminf$, $\limsup$, $\injlim$, $\projlim$,
+$\varliminf$, $\varlimsup$, $\varinjlim$, $\varprojlim$</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
