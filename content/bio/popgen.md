@@ -51,14 +51,14 @@ tags = ["genetics"]
 
     <div>\[\begin{aligned}
     a_1  &= 1 + \frac 1 2 + \frac 1 3 + ... + \frac 1{n-1}\\
-    \mathrm{E}[S] &= \theta L a_1\\
+    \operatorname{E}[S] &= \theta L a_1\\
     \theta_w &= \frac{S}{L a_1}
     \end{aligned}\]</div>
 
     **Tajima (1983)**: $\pi$ から推定
 
     <div>\[\begin{aligned}
-    \mathrm{E}[\pi] &= \theta L\\
+    \operatorname{E}[\pi] &= \theta L\\
     \theta_\pi   &= \frac \pi L
     \end{aligned}\]</div>
 

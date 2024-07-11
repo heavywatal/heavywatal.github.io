@@ -11,9 +11,9 @@ tags = ["genetics", "math"]
 まず外し続ける必要がある。
 
 <div>\[\begin{aligned}
-\text{Prob}[X = k] &= p(1 - p)^{k - 1} \\
-\mathrm E[X] &= \frac 1 p \\
-\text{Var}[X] &= \frac {1 - p} p
+\Pr[X = k] &= p(1 - p)^{k - 1} \\
+\operatorname{E}[X] &= \frac 1 p \\
+\operatorname{Var}[X] &= \frac {1 - p} p
 \end{aligned}\]</div>
 
 ## Negative binomial distribution 負の二項分布
@@ -22,9 +22,9 @@ tags = ["genetics", "math"]
 幾何分布を *r* 回畳み込んだもの。
 
 <div>\[\begin{aligned}
-\text{Prob}[X = k] &= {k - 1 \choose r - 1} p^r (1 - p)^{k - r} \\
-\mathrm E[X] &= \frac r p \\
-\text{Var}[X] &= \frac {r(1 - p)} {p^2}
+\Pr[X = k] &= {k - 1 \choose r - 1} p^r (1 - p)^{k - r} \\
+\operatorname{E}[X] &= \frac r p \\
+\operatorname{Var}[X] &= \frac {r(1 - p)} {p^2}
 \end{aligned}\]</div>
 
 ## Exponential distribution 指数分布
@@ -80,8 +80,8 @@ $Q(t) \lambda \mathrm dt = \lambda e ^ {-\lambda t} \mathrm dt$
 
 <div>\[\begin{aligned}
 f(t; \lambda) &= \lambda e ^ {-\lambda t} \\
-\mathrm E[t] &= \frac 1 \lambda \\
-\text{Var}[t] &= \frac 1 {\lambda^2}
+\operatorname{E}[t] &= \frac 1 \lambda \\
+\operatorname{Var}[t] &= \frac 1 {\lambda^2}
 \end{aligned}\]</div>
 
 また、$t$ までに最低1回は起こる確率、
@@ -105,8 +105,8 @@ shape *k* (&gt;0), scale *θ* (&gt;0) を使った一般的な表し方では、
 
 <div>\[\begin{aligned}
 f(x; k, \theta) &= \frac {x^{k-1} \exp[-\frac x \theta]} {\theta^k \Gamma(k)} \\
-\mathrm E[x] &= k\theta \\
-\text{Var}[x] &= k\theta^2 \\
+\operatorname{E}[x] &= k\theta \\
+\operatorname{Var}[x] &= k\theta^2 \\
 \end{aligned}\]</div>
 
 rate parameter $\lambda = \frac 1 \theta$ を使った形だと導出もイメージしやすい。
@@ -118,8 +118,8 @@ cf. [/lectures/wakeley-2-2]({{< relref "wakeley-2-2.md" >}})
 f(t; k, \lambda) &= \lambda e^{-\lambda t}
                 \frac {(\lambda t)^{k-1}}
                       {\Gamma(k)} \\
-\mathrm E[t] &= \frac k \lambda \\
-\text{Var}[t] &= \frac k {\lambda^2} \\
+\operatorname{E}[t] &= \frac k \lambda \\
+\operatorname{Var}[t] &= \frac k {\lambda^2} \\
 \end{aligned}\]</div>
 
 内部的に *k* ステップからなる過程が時間 $\mu = \frac k \lambda = k\theta$ で完了する。
@@ -128,8 +128,8 @@ f(t; k, \lambda) &= \lambda e^{-\lambda t}
 f(t; k, \mu) &= e^{-\left(\frac k \mu t \right)}
                 \frac {k^k t^{k-1}}
                       {\mu^k \Gamma(k)} \\
-\mathrm E[t] &= \mu \\
-\text{Var}[t] &= \frac {\mu^2} k \\
+\operatorname{E}[t] &= \mu \\
+\operatorname{Var}[t] &= \frac {\mu^2} k \\
 \end{aligned}\]</div>
 
 ## Weibull distribution

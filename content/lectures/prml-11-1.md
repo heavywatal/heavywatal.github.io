@@ -80,9 +80,9 @@ $\mathbf{z}_l$ をそれぞれ $f$ に放り込んで平均を取ってみよう
 この推定値の分散は (**Exercise 11.1**, **式 11.3**)
 
 <div>\[\begin{aligned}
-\text{var}[\hat f] &= \text{var} \left[\frac 1 L \sum^L_{l=1} f(\mathbf z_l) \right] \\
-                   &= \frac 1 {L^2} \sum^L_{l=1} \text{var}[f(\mathbf z)] \\
-                   &= \frac 1 L \text{var}[f] \\
+\operatorname{var}[\hat f] &= \operatorname{var} \left[\frac 1 L \sum^L_{l=1} f(\mathbf z_l) \right] \\
+                   &= \frac 1 {L^2} \sum^L_{l=1} \operatorname{var}[f(\mathbf z)] \\
+                   &= \frac 1 L \operatorname{var}[f] \\
                    &= \frac 1 L \mathbb E[(f - \mathbb E[f])^2]
 \end{aligned}\]</div>
 
@@ -254,7 +254,7 @@ C++11 の `std::normal_distribution` や GSL の `gsl_ran_gaussian` でも使わ
 
 <div>\[\begin{aligned}
 \mathbb E[\mathbf y] &= \mathbb E[\mathbf \mu + \mathbf{Lz}] = \mathbf \mu + \mathbf 0 \\
-\text{cov}[\mathbf y]
+\operatorname{cov}[\mathbf y]
    &= \mathbb E\left[(\mathbf y - \mathbb E[\mathbf y])(\mathbf y - \mathbb E[\mathbf y])^\mathrm T \right] \\
    &= \mathbb E[(\mathbf \mu + \mathbf{Lz} - \mathbf \mu)(\mathbf \mu + \mathbf{Lz} - \mathbf \mu)^\mathrm T] \\
    &= \mathbb E[\mathbf{Lz}(\mathbf{Lz})^\mathrm T] \\

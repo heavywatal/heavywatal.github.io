@@ -197,9 +197,26 @@ tlmgr install chktex latexmk
     -   "given that" を示す縦棒はパイプ記号 `|` ではなく
         `\mid` を使うのが正しいし適度なスペースが入って読みやすい。
         絶対値もパイプではなく `\lvert x \rvert` のようにする。
-    -   斜体にしたくない文字を普通にするには `\mathrm dt` 。
-        記号じゃないテキストには `\text{otherwise}` 。
-        よく使われるやつは定義済み e.g., `\log`, `\exp`
+    -   数式内では一文字ずつ変数扱いされて斜体になる。
+        複数文字の単語や立体で表現するには一手間必要:
+        - 記号じゃないテキスト: `\text{otherwise}`
+        - セリフ体ハードコード、スペース無し: `\mathrm dt` $\mathrm dt$
+        - フォントや前後スペースを文脈依存で: `\operatorname{var}(X)`
+          $\operatorname{var}(X)$, $\operatorname{tr}A$
+        - `\DeclareMathOperator{\Prob}{Prob}` のようにショートカット作成。
+          amsmathで定義済み:<br>
+          $\exp$, $\lg$, $\ln$, $\log$,
+          $\deg$, $\det$, $\dim$, $\ker$,
+          $\Pr$,  $\gcd$, $\hom$,
+          $\arg$, $\min$, $\max$, $\inf$, $\sup$,
+          <br>
+          $\sin$, $\cos$, $\tan$,
+          $\arcsin$, $\arccos$, $\arctan$,
+          $\sinh$, $\cosh$, $\tanh$, $\coth$,
+          $\sec$, $\csc$, $\cot$,
+          <br>
+          $\lim$, $\liminf$, $\limsup$, $\injlim$, $\projlim$,
+          $\varliminf$, $\varlimsup$, $\varinjlim$, $\varprojlim$
 
 ### 図
 

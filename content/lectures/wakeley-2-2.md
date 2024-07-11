@@ -103,10 +103,10 @@ This is the **gamma distribution**.
 The mean and the variance are
 
 <div>\[\begin{aligned}
-\mathrm{E}[W] &= \sum^n \mathrm{E}[T] \\
+\operatorname{E}[W] &= \sum^n \operatorname{E}[T] \\
               &= \sum^n \frac 1 \lambda \\
               &= \frac n \lambda \\
-\text{Var}[W] &= \sum^n \text{Var}[T] \\
+\operatorname{Var}[W] &= \sum^n \operatorname{Var}[T] \\
               &= \sum^n \frac 1 {\lambda^2} \\
               &= \frac n {\lambda^2}
 \end{aligned}\]</div>

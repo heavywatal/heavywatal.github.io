@@ -71,8 +71,8 @@ p(x = 0 \mid \mu) &= 1 - \mu
 
 <div>\[\begin{aligned}
 \text{Bern}(x \mid \mu) &= \mu ^ x (1 - \mu) ^ {1 - x} \\
-\mathrm{E}[x] &= 0(1 - \mu) + 1\mu = \mu\\
-\text{var}[x] &= \mathrm{E}[(x - \mu)^2] = \mu^2 (1 - \mu) + (1 - \mu)^2 \mu = \mu (1 - \mu)
+\operatorname{E}[x] &= 0(1 - \mu) + 1\mu = \mu\\
+\operatorname{var}[x] &= \operatorname{E}[(x - \mu)^2] = \mu^2 (1 - \mu) + (1 - \mu)^2 \mu = \mu (1 - \mu)
 \end{aligned}\]</div>
 
 パラメータ *μ* の下で *N* 回投げたデータセット $D = \{x_1, ..., x_N\}$
@@ -136,13 +136,13 @@ p(D \mid \mu) = \prod_{n = 1}^N {p(x_n \mid \mu)}
 </div>
 
 1回1回の観察は独立なベルヌーイ試行であり、
-そういうときは $\mathrm{E}[x + z] = \mathrm{E}[x] + \mathrm{E}[z]$ かつ
-$\text{var}[x + z] = \text{var}[x] + \text{var}[z]$ が成り立つので
+そういうときは $\operatorname{E}[x + z] = \operatorname{E}[x] + \operatorname{E}[z]$ かつ
+$\operatorname{var}[x + z] = \operatorname{var}[x] + \operatorname{var}[z]$ が成り立つので
 (Exercise 1.10)、平均と分散は (Exercise 2.4)
 
 <div>\[\begin{aligned}
-\mathrm{E}[m] &= \mathrm{E}[\sum_{n=1}^N x_n] = \sum_{n=1}^N \mathrm{E}[x_n] = \sum_{n=1}^N \mu = N \mu \\
-\text{var}[m] &= \text{var}[\sum_{n=1}^N x_n] = \sum_{n=1}^N \text{var}[x_n]
+\operatorname{E}[m] &= \operatorname{E}[\sum_{n=1}^N x_n] = \sum_{n=1}^N \operatorname{E}[x_n] = \sum_{n=1}^N \mu = N \mu \\
+\operatorname{var}[m] &= \operatorname{var}[\sum_{n=1}^N x_n] = \sum_{n=1}^N \operatorname{var}[x_n]
               = \sum_{n=1}^N \mu (1 - \mu) = N \mu (1 - \mu)
 \end{aligned}\]</div>
 
@@ -174,14 +174,14 @@ $\text{var}[x + z] = \text{var}[x] + \text{var}[z]$ が成り立つので
 平均と分散は (Exercise 2.6)
 
 <div>\[\begin{aligned}
-\mathrm{E}[\mu] &= \int_0^1 \mu \text{Beta}(\mu \mid a,b)d\mu\\
+\operatorname{E}[\mu] &= \int_0^1 \mu \text{Beta}(\mu \mid a,b)d\mu\\
               &= \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)} \int_0^1 \mu^{a} (1-\mu)^{b-1} d\mu\\
               &= \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)} \frac{\Gamma(a+1)\Gamma(b)}{\Gamma(a+b+1)}\\
               &= \frac{\Gamma(a+b)}{\Gamma(a)} \frac{a\Gamma(a)}{(a+b)\Gamma(a+b)}\\
               &= \frac{a}{a + b}\\
-\text{var}[\mu] &= \int_0^1 \mu^2 \text{Beta}(\mu \mid a,b)d\mu - \mathrm{E}[\mu]^2\\
-                &= \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)} \frac{\Gamma(a+2)\Gamma(b)}{\Gamma(a+b+2)} - \mathrm{E}[\mu]^2\\
-                &= \frac{\Gamma(a+b)}{\Gamma(a)} \frac{a(a+1)\Gamma(a)}{(a+b)(a+b+1)\Gamma(a+b)} - \mathrm{E}[\mu]^2\\
+\operatorname{var}[\mu] &= \int_0^1 \mu^2 \text{Beta}(\mu \mid a,b)d\mu - \operatorname{E}[\mu]^2\\
+                &= \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)} \frac{\Gamma(a+2)\Gamma(b)}{\Gamma(a+b+2)} - \operatorname{E}[\mu]^2\\
+                &= \frac{\Gamma(a+b)}{\Gamma(a)} \frac{a(a+1)\Gamma(a)}{(a+b)(a+b+1)\Gamma(a+b)} - \operatorname{E}[\mu]^2\\
                 &= \frac{a(a+1)}{(a+b)(a+b+1)} - (\frac{a}{a+b})^2\\
                 &= \frac{ab}{(a + b)^2 (a + b + 1)}
 \end{aligned}\]</div>
@@ -247,7 +247,7 @@ Figure 2.3
 <div>\[\begin{aligned}
 p(x = 1 \mid D) = \int_0^1 p(x = 1 \mid \mu) p(\mu \mid D) d\mu
                 = \int_0^1 \mu p(\mu \mid D) d\mu
-                = \mathrm{E}[\mu \mid D]
+                = \operatorname{E}[\mu \mid D]
                 = \frac{m + a}{N + a + b}
 \end{aligned}\]</div>
 
@@ -260,22 +260,22 @@ p(x = 1 \mid D) = \int_0^1 p(x = 1 \mid \mu) p(\mu \mid D) d\mu
 データを生成する分布の上で事後平均を平均すると事前平均になる (Exercise 2.8):
 
 <div>\[\begin{aligned}
-\mathrm{E}_D[\mathrm{E}_\theta[\theta \mid D]]
+\operatorname{E}_D[\operatorname{E}_\theta[\theta \mid D]]
    &\equiv \int\left\{\int \theta p(\theta \mid D) d\theta\right\}p(D)dD\\
    &= \int\int \theta p(\theta,D) d\theta dD\\
    &= \int\left\{\int p(\theta,D) dD \right\} \theta d\theta\\
-   &= \int p(\theta)\theta d\theta \equiv \mathrm{E}_\theta[\theta]
+   &= \int p(\theta)\theta d\theta \equiv \operatorname{E}_\theta[\theta]
 \end{aligned}\]</div>
 
 事後分散の平均と事後平均の分散を足すと事前分散になる:
 
 <div>\[\begin{aligned}
-\mathrm{E}_D[\text{var}_\theta[\theta \mid D]] + \text{var}_D[\mathrm{E}_\theta[\theta \mid D]]
-   &= \mathrm{E}_D[\mathrm{E}_\theta[\theta^2 \mid D] - \mathrm{E}_\theta[\theta \mid D]^2]
-      + \mathrm{E}_D[\mathrm{E}_\theta[\theta \mid D]^2] - \mathrm{E}_D[\mathrm{E}_\theta[\theta \mid D]]^2\\
-   &= \mathrm{E}_D[\mathrm{E}_\theta[\theta^2 \mid D]] - \mathrm{E}_D[\mathrm{E}_\theta[\theta \mid D]]^2\\
-   &= \mathrm{E}_\theta[\theta^2] - \mathrm{E}_\theta[\theta]^2\\
-   &= \text{var}_\theta[\theta]
+\operatorname{E}_D[\operatorname{var}_\theta[\theta \mid D]] + \operatorname{var}_D[\operatorname{E}_\theta[\theta \mid D]]
+   &= \operatorname{E}_D[\operatorname{E}_\theta[\theta^2 \mid D] - \operatorname{E}_\theta[\theta \mid D]^2]
+      + \operatorname{E}_D[\operatorname{E}_\theta[\theta \mid D]^2] - \operatorname{E}_D[\operatorname{E}_\theta[\theta \mid D]]^2\\
+   &= \operatorname{E}_D[\operatorname{E}_\theta[\theta^2 \mid D]] - \operatorname{E}_D[\operatorname{E}_\theta[\theta \mid D]]^2\\
+   &= \operatorname{E}_\theta[\theta^2] - \operatorname{E}_\theta[\theta]^2\\
+   &= \operatorname{var}_\theta[\theta]
 \end{aligned}\]</div>
 
 データによって例外はあるが、平均的には「事前分散 &gt; 事後分散」となる。
@@ -303,7 +303,7 @@ p(\vec{x} \mid \vec{\mu})
   &= \prod _{k = 1}^K {\mu _k^{x _k}}\\
 \sum _{\vec{x}} p(\vec{x} \mid \vec{\mu})
   &= \sum _{k=1}^K {\mu _k} = 1\\
-\mathrm{E}[\vec{x} \mid \vec{\mu}]
+\operatorname{E}[\vec{x} \mid \vec{\mu}]
   &= \sum _{\vec{x}} p(\vec{x} \mid \vec{\mu}) \vec{x}
    = \vec{\mu}
 \end{aligned}\]</div>

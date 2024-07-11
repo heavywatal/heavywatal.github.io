@@ -27,25 +27,25 @@ tags = ["math"]
 
 ------------------------------------------------------------------------
 
-**行列式 (determinant)** $\text{det}\, A, |A|$
+**行列式 (determinant)** $\det A, |A|$
 :   正方行列による変換の体積拡大率。
     行列式が0 ⇔ 写像がぺちゃんこになる ⇔ 逆行列が存在しない。
     固有値の積と等しい。
 
-**跡 (trace)** $\text{tr}\, A$
+**跡 (trace)** $\operatorname{tr} A$
 :   正方行列の対角成分の和。
     固有値の和と等しい。
 
-**核 (kernel)** $\text{Ker}\, A$
+**核 (kernel)** $\ker A$
 :   $A\mathbf{x} = \mathbf{o}$ で原点に移るような
     $\mathbf{x}$ の集合。 核が原点だけ(0次元) ⇔ ランク＝元の次元数 ⇔ 写像は **単射**。
 
-**像 (image)** $\text{Im}\, A$
+**像 (image)** $\operatorname{Im} A$
 :   $\mathbf{x}$ を目一杯いろいろ動かしたときの
     $\mathbf{y} = A\mathbf{x}$ の集合。
     像が行き先の全空間 ⇔ ランク＝行き先の次元数 ⇔ 写像は **全射**。
 
-**ランク (rank)** $\text{rank}\, A$
+**ランク (rank)** $\operatorname{rank} A$
 :   像の次元数。
 
 ## 行列のべき乗
@@ -77,15 +77,15 @@ $\mathbf{x}(t) = P\mathbf{y}(t)$ という変数変換をしてみると
 $t$ 乗する計算がすごく楽チン。
 
 <div>\[\begin{aligned}
-\Lambda^t &= \text{diag}(\lambda _1, ..., \lambda _n)^t \\
-          &= \text{diag}(\lambda _1^t, ..., \lambda _n^t)
+\Lambda^t &= \operatorname{diag}(\lambda _1, ..., \lambda _n)^t \\
+          &= \operatorname{diag}(\lambda _1^t, ..., \lambda _n^t)
 \end{aligned}\]</div>
 
 この **対角化 (diagonalization)** をもたらす変換行列 $P$ とはどういうものか
 
 <div>\[\begin{aligned}
-P^{-1}AP &= \text{diag}(\lambda _1, ..., \lambda _n) \\
-      AP &= P \text{diag}(\lambda _1, ..., \lambda _n)
+P^{-1}AP &= \operatorname{diag}(\lambda _1, ..., \lambda _n) \\
+      AP &= P \operatorname{diag}(\lambda _1, ..., \lambda _n)
 \end{aligned}\]</div>
 
 $P = (\mathbf{p}_1, ..., \mathbf{p}_n)$ として列ごとに見ると
