@@ -187,6 +187,8 @@ Contacts
 
 ## Teaching / Outreach
 
+-   「[統計モデリング入門](/slides/iwate2024stats/)」
+    岩手大学  [連合農学研究科](https://ugas.agr.iwate-u.ac.jp/) (2024-07)
 -   「[Rを用いたデータ解析の基礎](/slides/tohoku2024r/)」東北大学 進化学実習 (2024-04)
 -   「[Hands-on Introduction to R](/slides/english2023r/)」Tohoku University (2023-11)
 -   「[統計モデリング概論 DSHC 2023](/slides/tokiomarine2023/)」
