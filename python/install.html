@@ -65,11 +65,7 @@ Pythonインストール
         <li><a href="#pythonインストーラーとしてだけ使う">Pythonインストーラーとしてだけ使う</a></li>
       </ul>
     </li>
-    <li><a href="#pyenv">pyenv</a>
-      <ul>
-        <li><a href="#既知の問題">既知の問題</a></li>
-      </ul>
-    </li>
+    <li><a href="#pyenv">pyenv</a></li>
     <li><a href="#anaconda">Anaconda</a></li>
     <li><a href="#環境変数">環境変数</a>
       <ul>
@@ -82,12 +78,11 @@ Pythonインストール
 </nav>
 <h2 id="標準公式">標準・公式</h2>
 <p>MacやLinuxならシステムの一部として
-<code>/usr/bin/python</code> が既にインストールされているので、
+<code>/usr/bin/python3</code> が既にインストールされているので、
 何もしなくても使えっちゃ使える。
-でも大概そこに入ってるのは古い2.7とかなので、
-ちゃんと使える3.xを使いたければ
+でも大概そこに入ってるのはちょっと古いバージョンなので、
 <a href="https://www.python.jp/install/install.html">python.jp/環境構築ガイド</a>
-に従って最新版を入れるのが簡単。</p>
+に従って最新版を入れるのがよい。</p>
 <h2 id="rye">rye</h2>
 <p><a href="https://rye.astral.sh/">https://rye.astral.sh/</a></p>
 <p>プロジェクトの環境構築を一切合切面倒見てくれる管理ツール。
@@ -108,7 +103,7 @@ ruffやuvと同じチームが開発していて、同じくrust製。
 </span></span><span class="line"><span class="cl">rye toolchain list --include-downloadable
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># インストール</span>
-</span></span><span class="line"><span class="cl">rye toolchain fetch cpython@3.12.3
+</span></span><span class="line"><span class="cl">rye toolchain fetch cpython@3.12
 </span></span></code></pre></div><p><code>global-python = true</code>
 の設定でshimsにPATHが通っていればryeの管理下にあるPythonをプロジェクト外でも使えるが、逆に
 <code>pyproject.toml</code> が存在するディレクトリでのみそれができないという問題
@@ -124,7 +119,7 @@ shimsに頼らず自分でPATHを設定するworkaround:</p>
 </span></span></code></pre></div><h2 id="pyenv">pyenv</h2>
 <p><a href="https://github.com/pyenv/pyenv">https://github.com/pyenv/pyenv</a></p>
 <p>管理者権限なしでホーム以下にインストールできる。
-ソースコードを取ってきて自前ビルドするのが上記<a href="#rye">rye</a>と比べたときのメリットでありデメリット。</p>
+ソースコードを取ってきて自前ビルドするという点で上記<a href="#rye">rye</a>と異なる。</p>
 <ol>
 <li>
 <p><a href="/mac/homebrew.html">Homebrew</a> か
@@ -134,6 +129,10 @@ shimsに頼らず自分でPATHを設定するworkaround:</p>
 </span></span><span class="line"><span class="cl">git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 </span></span><span class="line"><span class="cl">mkdir -p ~/.pyenv/cache
 </span></span></code></pre></div></li>
+<li>
+<p><a href="https://github.com/pyenv/pyenv/wiki">https://github.com/pyenv/pyenv/wiki</a>
+を参考に依存ライブラリをインストールしておくとビルドが少し軽くなる。</p>
+</li>
 <li>
 <p>Pythonのインストール先を決める環境変数
 <code>PYENV_ROOT</code> を公式推奨の <code>~/.pyenv</code> に設定し、
@@ -159,45 +158,25 @@ shimsに頼らず自分でPATHを設定するworkaround:</p>
 目当てのバージョンを探してインストール:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">exec</span> <span class="nv">$SHELL</span> -l
 </span></span><span class="line"><span class="cl">pyenv install -l <span class="p">|</span> less
-</span></span><span class="line"><span class="cl">pyenv install 3.12.3
+</span></span><span class="line"><span class="cl">pyenv install 3.12
 </span></span><span class="line"><span class="cl"><span class="nb">exec</span> <span class="nv">$SHELL</span> -l
 </span></span></code></pre></div><p>R から <a href="https://rstudio.github.io/reticulate/"><code>reticulate</code></a>
 越しに呼ぶ場合は共有ライブラリを有効にしてビルドする:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">env <span class="nv">PYTHON_CONFIGURE_OPTS</span><span class="o">=</span><span class="s2">&#34;--enable-shared&#34;</span> pyenv install 3.7.13
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">env <span class="nv">PYTHON_CONFIGURE_OPTS</span><span class="o">=</span><span class="s2">&#34;--enable-shared&#34;</span> pyenv install 3.10
 </span></span><span class="line"><span class="cl"><span class="c1"># or</span>
-</span></span><span class="line"><span class="cl">Rscript -e <span class="s1">&#39;reticulate::install_python(&#34;3.7.13&#34;)&#39;</span>
+</span></span><span class="line"><span class="cl">Rscript -e <span class="s1">&#39;reticulate::install_python(&#34;3.10&#34;)&#39;</span>
 </span></span></code></pre></div></li>
 <li>
 <p><a href="/python/pip.html">pip</a> のパスを確認し、パッケージを入れる:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">which pip3
-</span></span><span class="line"><span class="cl">pip3 install -U setuptools pip wheel
+</span></span><span class="line"><span class="cl">pip3 install -U setuptools pip
 </span></span><span class="line"><span class="cl">pip3 install -r /path/to/requirements.txt
 </span></span></code></pre></div><p>よく使うパッケージは
 <a href="https://github.com/heavywatal/dotfiles/blob/master/.config/python/requirements.txt"><code>requirements.txt</code></a>
 の形でまとめておくと楽。</p>
 </li>
 </ol>
-<h3 id="既知の問題">既知の問題</h3>
 <p><a href="https://github.com/pyenv/pyenv/wiki/Common-build-problems">https://github.com/pyenv/pyenv/wiki/Common-build-problems</a></p>
-<ul>
-<li>
-<p>3.1.0より古い<a href="/python/matplotlib.html">matplotlib</a> で
-<code>macosx</code> backend を使いたい場合などは環境変数
-<code>PYTHON_CONFIGURE_OPTS=&quot;--enable-framework&quot;</code>
-をセットしてFramework型でビルドする。</p>
-</li>
-<li>
-<p><a href="https://github.com/pyenv/pyenv/issues/1219">Mojaveで &ldquo;zlib not available&rdquo; と怒られる問題</a>は
-<code>CFLAGS=&quot;-I$(xcrun --show-sdk-path)/usr/include&quot;</code> を定義して回避。</p>
-</li>
-<li>
-<p><a href="https://www.python.org/dev/peps/pep-0394/">PEP 394</a>
-になるべく沿うように、
-<code>python</code> では <code>/usr/bin/python</code> が呼び出される状態を維持しつつ、
-<code>python3</code>, <code>pip3</code> を明示的に使うようにしたい。
-が、いまのところできない？</p>
-</li>
-</ul>
 <h2 id="anaconda">Anaconda</h2>
 <p>Scientificな用途で使いたい場合は
 <a href="/python/scipy.html">Numpy/Scipy</a>
@@ -205,10 +184,8 @@ shimsに頼らず自分でPATHを設定するworkaround:</p>
 <a href="https://docs.continuum.io/anaconda/">Anaconda</a>
 を使うという選択肢もある。
 私は使わない。
-GUIのインストーラでもいいし、Homebrewでも入れられる:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew install anaconda
-</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span>/usr/local/anaconda3/bin:<span class="s2">&#34;</span><span class="nv">$PATH</span><span class="s2">&#34;</span>
-</span></span></code></pre></div><p>ただし<code>PATH</code>上でシステムコマンドを上書きしちゃうヤンチャな面もあるので、
+GUIのインストーラでもいいし、Homebrewでも入れられる。</p>
+<p>ただし<code>PATH</code>上でシステムコマンドを上書きしちゃうヤンチャな面もあるので、
 それが気になる人はpyenv越しに入れることで汚染をある程度防げる。
 全部入りに抵抗がある場合は
 <code>pyenv install miniconda3-latest</code>
