@@ -10,12 +10,11 @@ tags = ["python"]
 ## 標準・公式
 
 MacやLinuxならシステムの一部として
-`/usr/bin/python` が既にインストールされているので、
+`/usr/bin/python3` が既にインストールされているので、
 何もしなくても使えっちゃ使える。
-でも大概そこに入ってるのは古い2.7とかなので、
-ちゃんと使える3.xを使いたければ
+でも大概そこに入ってるのはちょっと古いバージョンなので、
 [python.jp/環境構築ガイド](https://www.python.jp/install/install.html)
-に従って最新版を入れるのが簡単。
+に従って最新版を入れるのがよい。
 
 
 ## rye
@@ -47,7 +46,7 @@ rye toolchain list
 rye toolchain list --include-downloadable
 
 # インストール
-rye toolchain fetch cpython@3.12.3
+rye toolchain fetch cpython@3.12
 ```
 
 `global-python = true`
@@ -71,7 +70,7 @@ fi
 <https://github.com/pyenv/pyenv>
 
 管理者権限なしでホーム以下にインストールできる。
-ソースコードを取ってきて自前ビルドするのが上記[rye](#rye)と比べたときのメリットでありデメリット。
+ソースコードを取ってきて自前ビルドするという点で上記[rye](#rye)と異なる。
 
 1.  [Homebrew]({{< relref "homebrew.md" >}}) か
     [Git]({{< relref "git.md" >}}) を使ってpyenvをインストール:
@@ -82,6 +81,9 @@ fi
     git clone https://github.com/pyenv/pyenv.git ~/.pyenv
     mkdir -p ~/.pyenv/cache
     ```
+
+1.  <https://github.com/pyenv/pyenv/wiki>
+    を参考に依存ライブラリをインストールしておくとビルドが少し軽くなる。
 
 1.  Pythonのインストール先を決める環境変数
     `PYENV_ROOT` を公式推奨の `~/.pyenv` に設定し、
@@ -112,24 +114,23 @@ fi
     ```sh
     exec $SHELL -l
     pyenv install -l | less
-    pyenv install 3.12.3
+    pyenv install 3.12
     exec $SHELL -l
     ```
 
     R から [`reticulate`](https://rstudio.github.io/reticulate/)
     越しに呼ぶ場合は共有ライブラリを有効にしてビルドする:
     ```sh
-    env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.7.13
+    env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.10
     # or
-    Rscript -e 'reticulate::install_python("3.7.13")'
+    Rscript -e 'reticulate::install_python("3.10")'
     ```
-
 
 1.  [pip]({{< relref "pip.md" >}}) のパスを確認し、パッケージを入れる:
 
     ```sh
     which pip3
-    pip3 install -U setuptools pip wheel
+    pip3 install -U setuptools pip
     pip3 install -r /path/to/requirements.txt
     ```
 
@@ -138,23 +139,8 @@ fi
     の形でまとめておくと楽。
 
 
-### 既知の問題
-
 <https://github.com/pyenv/pyenv/wiki/Common-build-problems>
 
--   3.1.0より古い[matplotlib]({{< relref "matplotlib.md" >}}) で
-    `macosx` backend を使いたい場合などは環境変数
-    `PYTHON_CONFIGURE_OPTS="--enable-framework"`
-    をセットしてFramework型でビルドする。
-
--   [Mojaveで "zlib not available" と怒られる問題](https://github.com/pyenv/pyenv/issues/1219)は
-    `CFLAGS="-I$(xcrun --show-sdk-path)/usr/include"` を定義して回避。
-
--   [PEP 394](https://www.python.org/dev/peps/pep-0394/)
-    になるべく沿うように、
-    `python` では `/usr/bin/python` が呼び出される状態を維持しつつ、
-    `python3`, `pip3` を明示的に使うようにしたい。
-    が、いまのところできない？
 
 
 ## Anaconda
@@ -165,12 +151,7 @@ Scientificな用途で使いたい場合は
 [Anaconda](https://docs.continuum.io/anaconda/)
 を使うという選択肢もある。
 私は使わない。
-GUIのインストーラでもいいし、Homebrewでも入れられる:
-
-```sh
-brew install anaconda
-export PATH=/usr/local/anaconda3/bin:"$PATH"
-```
+GUIのインストーラでもいいし、Homebrewでも入れられる。
 
 ただし`PATH`上でシステムコマンドを上書きしちゃうヤンチャな面もあるので、
 それが気になる人はpyenv越しに入れることで汚染をある程度防げる。
