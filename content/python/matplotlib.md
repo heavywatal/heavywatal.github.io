@@ -7,12 +7,13 @@ tags = ["python", "graph"]
 +++
 
 [`matplotlib`](https://matplotlib.org/) はPythonにおけるデータ可視化のデファクトスタンダード。
-基本的には何でもできるけど、基本的な機能しか提供していないので、
-いくらかの便利機能を [`seaborn`](https://seaborn.pydata.org/) で補う。
+とはいえユーザーが直接これを使ってグラフを描ききるのは難しく、
+Rでいうgridパッケージに近い階層と見なしたほうがいいかもしれない。
+[`seaborn`](https://seaborn.pydata.org/) 越しに使うのが便利。
 
 ## 基本
 
-<https://matplotlib.org/stable/tutorials/introductory/usage.html>
+<https://matplotlib.org/stable/users/explain/quick_start.html>
 
 ```py
 import numpy as np
@@ -31,7 +32,7 @@ ax = fig.subplots()
 # Plot on this ax
 ax.scatter('sepal_width', 'sepal_length', data=iris)
 
-# Show figure (in Jupyter, Hydrogen, or other inline IPython environments)
+# Show figure (in Jupyter and other inline IPython environments)
 display(fig)
 
 # Show figure in a new window (with non-inline backends)
@@ -171,15 +172,32 @@ iris.plot.scatter('sepal_width', 'sepal_length', ax=ax)
 
 ### Text, Annotation, Legend
 
-<https://matplotlib.org/stable/tutorials/text/text_intro.html>
+<https://matplotlib.org/stable/users/explain/text/text_intro.html>
 
-<https://matplotlib.org/stable/tutorials/text/annotations.html>
-
-<https://matplotlib.org/stable/tutorials/intermediate/legend_guide.html>
+<https://matplotlib.org/stable/users/explain/axes/legend_guide.html>
 
 
 
 ## Seaborn
+
+### `seaborn.objects` interface
+
+<https://seaborn.pydata.org/tutorial/objects_interface.html>
+
+v0.12 で導入された新しいAPI。
+[ggplot2]({{< relref "ggplot2.md" >}}) に近い感覚で書くことができる。
+従来のAPIで描けるものをどれくらいカバーしているかはわからないけど、
+今後はこちらを使っていきたい。
+
+```py
+import seaborn as sns
+import seaborn.objects as so
+
+penguins = sns.load_dataset("penguins")
+p = so.Plot(penguins, x="bill_length_mm", y="bill_depth_mm", color="species")
+p.add(so.Dot(alpha = 0.5))
+p.show()
+```
 
 ### Axes-level plot
 
@@ -193,12 +211,45 @@ def my_scatter(x, y, data, ax):
 
 <https://seaborn.pydata.org/examples>
 
+
+#### Visualizing statistical relationships
+
+<https://seaborn.pydata.org/tutorial/relational.html>
+
+`sns.scatterplot(data, *, markers, ..., ax)`
+:   散布図。
+
+`sns.lineplot(data, *, style, markers, dashes, ..., ax)`
+:   折れ線グラフ。
+
+
+#### Distribution plots
+
+<https://seaborn.pydata.org/tutorial/distributions.html>
+
+`sns.histplot(data, stat='count', bins='auto', binwidth=None, binrange=None, discrete=None, ..., ax)`
+:   ヒストグラム。
+:   `discrete=True` とするだけで整数をうまく描いてくれる。
+:   半端な立ち位置だった [`distplot()`はdeprecated](https://gist.github.com/mwaskom/de44147ed2974457ad6372750bbe5751).
+
+`sns.kdeplot(data, data2=None, shade=False, ..., ax)`
+:   カーネル密度推定。
+
+`sns.ecdfplot(data, ..., ax)`
+:   empirical cumulative density function.
+
+`sns.rugplot(data, ..., ax)`
+:   軸沿いにtickを描く。
+
+`sns.heatmap(data, vmin, vmax, cmap, center, ..., square, mask, ax)`
+:   ヒートマップ。入力データはtidyじゃなくて行列の形。
+
 #### Categorical plots
 
 <https://seaborn.pydata.org/tutorial/categorical.html>
 
 `sns.stripplot(x, y, hue, data, order, ..., ax)`
-:   片軸がカテゴリカル変数の散布図
+:   片軸がカテゴリカル変数の `geom_jitter` に相当。
 :   これよりやや規則的な `sns.swarmplot()` も良い。
 
 `sns.boxplot(x, y, hue, data, order, ..., ax)`
@@ -219,25 +270,13 @@ def my_scatter(x, y, data, ax):
 `sns.countplot(x, y, hue, data, order, ..., ax)`
 :   カテゴリカル変数の頻度棒グラフ
 
-#### Distribution plots
-
-<https://seaborn.pydata.org/tutorial/distributions.html>
-
-`sns.distplot(a, bins, hist=True, kde=True, rug=False, fit=None, ..., ax)`
-:   `ax.hist()` + `sns.kdeplot()` + `sns.rugplot()`
-
-`sns.kdeplot(data, data2=None, shade=False, ..., ax)`
-:   カーネル密度推定。
-
-`sns.heatmap(data, vmin, vmax, cmap, center, ..., square, mask, ax)`
-:   ヒートマップ。入力データはtidyじゃなくて行列の形。
-
 #### Regression plots
 
 <https://seaborn.pydata.org/tutorial/regression.html>
 
 `sns.regplot(x, y, data, ..., fit_reg=True, ci=95, ..., ax)`
 :   散布図 + 回帰線。
+
 
 ### Axis Grid
 
@@ -252,42 +291,62 @@ FigureとAxisをいい感じに初期化して、関連するデータを縦・�
 
 <https://seaborn.pydata.org/generated/seaborn.FacetGrid.html>
 
-`(data, row, col, hue, col_wrap, sharex, sharey, ...)`
+- `row=None`, `col=None`, `hue=None`,
+- `col_wrap=None`,
+- `sharex=True`, `sharey=True`,
+- `height=3`, `aspect=1`,
+- `legend_out=True`, `despine=True`, `margin_titles=False`,
+- dropna, palette, xlim, ylim,
+  row_order, col_order, hue_order,
+  hue_kws, subplot_kws, gridspec_kws
 
 カテゴリカル変数でプロットを分けて並べる:
 ```py
 grid = sns.FacetGrid(iris, col='species', col_wrap=2)
-grid.map(sns.regplot, 'sepal_width', 'sepal_length')
+grid.map(sns.scatterplot, 'sepal_width', 'sepal_length')
 ```
 
 変数によって色分けする:
 ```py
 grid = sns.FacetGrid(iris, hue='species')
-grid.map(plt.scatter, 'sepal_width', 'sepal_length')
+grid.map(sns.scatterplot, 'sepal_width', 'sepal_length')
 ```
 
 `map()` メソッドには `plt.scatter` など生のmatplotlib関数も渡せる。
 
-`sns.lmplot(x, y, data, hue, col, row, ...)`
-:   `regplot()` + `FacetGrid()` のショートカット。
+`sns.relplot(data, *, )`
+:   散布図・折れ線グラフ + `FacetGrid()` のショートカット。
+:   `kind`: {`scatter`, `line`}
+
+`sns.displot(data, kind='hist', rug=False, ...)`
+:   Distribution plot + `FacetGrid()` のショートカット。
+:   `kind`: {`hist`, `kde`, `ecdf`}
 
 `sns.catplot(x, y, hue, data, row, col, ..., kind, ...)`
 :   Categorical plot + `FacetGrid()` のショートカット。
 :   `kind`: {`strip`, `swarm`, `box`, `violin`, `boxen`, `point`, `bar`, `count`}
 :   昔は `factorplot` という名前だった。
 
+`sns.lmplot(x, y, data, hue, col, row, ...)`
+:   `regplot()` + `FacetGrid()` のショートカット。
+
 
 #### `sns.PairGrid`
 
 <https://seaborn.pydata.org/generated/seaborn.PairGrid.html>
 
-`(data, hue, ..., vars, x_vars, y_vars, ...)`
+- `hue=None`
+- `vars=None`, `x_vars=None`, `y_vars=None`
+- `corner=False`: 下半分だけのcorner plotにするには `True`
+- `height=2.5`, `aspect=1`, `layout_pad=0.5`
+- hue_order=None, palette=None, hue_kws=None,
+  diag_sharey=True, despine=True, dropna=False
 
 ペアワイズ散布図 + 対角線ヒストグラム
 ```py
-grid = sns.PairGrid(iris)
-grid = grid.map_offdiag(sns.regplot)
-grid = grid.map_diag(sns.distplot)
+grid = sns.PairGrid(iris, corner=True)
+grid = grid.map_offdiag(sns.scatterplot)
+grid = grid.map_diag(sns.histplot)
 ```
 
 `sns.pairplot(data, hue, hue_order, palette, vars, x_vars, y_vars, kind, diag_kind, ...)`
@@ -299,23 +358,31 @@ grid = grid.map_diag(sns.distplot)
 
 <https://seaborn.pydata.org/generated/seaborn.JointGrid.html>
 
-`(x, y, data, size, ratio, space, dropna, xlim, ylim)`
+- x, y, hue
+- `height=6`, `ratio=5`, `space=0.2`
+- palette, hue_order, hue_norm,
+  dropna, xlim, ylim
+- `marginal_ticks=False`
 
 散布図 + 周辺分布:
 ```py
-grid = sns.JointGrid('sepal_width', 'sepal_length', iris)
-grid = grid.plot_joint(sns.regplot)
-grid = grid.plot_marginals(sns.distplot, kde=False)
+grid = sns.JointGrid(iris, x='sepal_width', y='sepal_length')
+grid = grid.plot_joint(sns.scatterplot)
+grid = grid.plot_marginals(sns.histplot)
 ```
 
 `sns.jointplot(x, y, data, kind, stat_func, ...)`
 :   `JointGrid()` のショートカット。
-:   `kind`: {`scatter`, `reg`, `resid`, `kde`, `hex`}
+:   `kind`: {`scatter`, `kde`, `hist`, `hex`, `reg`, `resid`}
 
 #### `sns.ClusterGrid()`
 
+このGridクラスをユーザーが直接インスタンス化することは想定されていない。
+
+<https://seaborn.pydata.org/generated/seaborn.clustermap.html>
+
 `sns.clustermap(data, ...)`
-:   `heatmap()` + `ClusterGrid()`
+:   `sns.heatmap()` + `ClusterGrid()`
 
 
 ### Style
@@ -375,7 +442,7 @@ grid = grid.plot_marginals(sns.distplot, kde=False)
 
 ### Context
 
-<https://seaborn.pydata.org/tutorial/aesthetics.html#scaling-plot-elements-with-plotting-context-and-set-context>
+<https://seaborn.pydata.org/tutorial/aesthetics.html#scaling-plot-elements>
 
 ラベルや点・線などのスケール調整。
 
@@ -415,7 +482,7 @@ grid = grid.plot_marginals(sns.distplot, kde=False)
 
 ## Color
 
-- <https://matplotlib.org/stable/tutorials/colors/colormaps.html>
+- <https://matplotlib.org/stable/users/explain/colors/colormaps.html>
 - <https://seaborn.pydata.org/tutorial/color_palettes.html>
 
 いくつかの方法で指定できる:
@@ -440,41 +507,11 @@ grid = grid.plot_marginals(sns.distplot, kde=False)
 
 
 
-## その他
+## 設定
 
-### インストール
-
-[pyenvか何かで最新のPython3系をインストールして]({{< relref "install.md" >}})、
-`pip install seaborn` を実行。
-
-### 設定
-
-- <https://matplotlib.org/stable/tutorials/introductory/customizing.html>
-- <https://matplotlib.org/stable/faq/troubleshooting_faq.html>
-- <https://matplotlib.org/stable/faq/environment_variables_faq.html>
+- <https://matplotlib.org/stable/users/explain/customizing.html>
+- <https://matplotlib.org/stable/install/environment_variables_faq.html>
 
 `~/.matplotlib/matplotlibrc` が読まれる。
 
 `site-packages/matplotlib/mpl-data/matplotlibrc` にテンプレートがある。
-
-### backends
-
-<https://matplotlib.org/stable/users/explain/backends.html>
-
-Macで非Frameworkとしてビルドした自前Pythonをそのまま使うと怒られる:
-
-    RuntimeError: Python is not installed as a framework. The Mac OS X backend will not be able to function correctly if Python is not installed as a framework. See the Python documentation for more information on installing Python as a framework on Mac OS X. Please either reinstall Python as a framework, or try one of the other backends.
-
-ので `~/.matplotlib/matplotlibrc` に `backend: tkagg` などと書いて対処する必要があったが、
-[3.1.0から大丈夫になった](https://matplotlib.org/3.1.0/users/whats_new.html)。
-
-
-### キャッシュ問題
-
-使用するPythonを変更すると以下のようなランタイムエラーが出ることがある:
-
-    RuntimeError: Could not open facefile /Library/Python/2.6/site-packages/matplotlib/mpl-data/fonts/ttf/Vera.ttf; Cannot_Open_Resource
-
-そういうときはキャッシュを削除してみるとよい:
-
-    rm -rf ~/.matplotlib/fontList.cache
