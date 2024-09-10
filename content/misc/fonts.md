@@ -33,9 +33,14 @@ tags = ["writing"]
 :   スクリーン上での視認性を重視してデザインされたフォントで、
     個性的でありながら見やすい。
 :   エルの小文字 l が曲がってて良い。
-:   Ubuntu Mono は特にプログラミング用のフォントとして最適。
+:   [Ubuntu Sans](https://github.com/canonical/Ubuntu-Sans-fonts)
+    という改良版は Open Sans 寄りの細さで、本文でも使いやすくなった印象。
+:   **Ubuntu Mono は特にプログラミング用のフォントとして最適**。
     普通の欧文 `monospace` よりもひとまわり小さく、
     全角和文フォントのちょうど半分になるのもポイント。
+:   [Ubuntu Sans Mono](https://github.com/canonical/ubuntu-sans-mono-fonts)
+    はほかのUbuntu familyとの親和性を追求した結果として
+    [全角和文フォントの半分幅という長所を捨ててしまった](https://github.com/canonical/Ubuntu-Sans-Mono-fonts/issues/10)。残念。
 
 [Open Sans](https://www.google.com/fonts/specimen/Open+Sans)
 :   すっきりゆったりニュートラルで見やすい。
@@ -48,7 +53,7 @@ tags = ["writing"]
     デザイナー本人によるフリーな合法クローンの URW Palladio L
     やそれをTeXコミュニティで拡張した TeX Gyre Pagella
     ならLinuxでもどこでも使える。
-    最新改良版
+:   最新改良版
     [Palatino nova](http://www.linotype.co.jp/palatino%20nova%20detail.html)
     は文句なしに美しいけど有償。
 
@@ -199,6 +204,10 @@ tags = ["writing"]
   <td>Ubuntu</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
 </tr>
+<tr style="font-family: 'Ubuntu Sans', serif">
+  <td>Ubuntu Sans</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
+</tr>
 <tr style="font-family: 'Open Sans', serif">
   <td>Open Sans</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
@@ -254,6 +263,10 @@ tags = ["writing"]
 </tr>
 <tr style="font-family: 'Ubuntu Mono', serif">
   <td>Ubuntu Mono</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>噌祇逢餅鯖鰯わたるメタル</td>
+</tr>
+<tr style="font-family: 'Ubuntu Sans Mono', serif">
+  <td>Ubuntu Sans Mono</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>噌祇逢餅鯖鰯わたるメタル</td>
 </tr>
 <tr style="font-family: 'Source Code Pro', serif">
@@ -365,18 +378,22 @@ tags = ["writing"]
 <table><col style="background-color: #aaaaaa2a;"><col>
 <tr style="font-family: 'Apple Color Emoji', serif">
   <td>Apple Color Emoji</td>
-  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>🍺🍻🤘🪙</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>🍺🍻🤘🪙⚡️⬆️ </td>
 </tr>
 <tr style="font-family: 'Noto Color Emoji', serif">
   <td>Noto Color Emoji</td>
-  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>🍺🍻🤘🪙</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>🍺🍻🤘🪙⚡️⬆️ </td>
 </tr>
 <tr style="font-family: 'Segoe UI Emoji', serif">
   <td>Segoe UI Emoji</td>
-  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>🍺🍻🤘🪙</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>🍺🍻🤘🪙⚡️⬆️ </td>
 </tr>
 <tr style="font-family: 'Segoe UI Symbol', serif">
   <td>Segoe UI Symbol</td>
-  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>🍺🍻🤘🪙</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>🍺🍻🤘🪙⚡️⬆️ </td>
+</tr>
+<tr style="font-family: 'UbuntuMono Nerd Font', serif">
+  <td>UbuntuMono Nerd Font</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>🍺🍻🤘🪙⚡️⬆️ </td>
 </tr>
 </table>
