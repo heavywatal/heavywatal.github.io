@@ -80,12 +80,12 @@ parallel — 並行処理 in R
 </span></span><span class="line"><span class="cl">  <span class="n">x</span> <span class="o">*</span> <span class="n">x</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nf">lapply</span><span class="p">(</span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">4</span><span class="p">),</span> <span class="n">slow_square</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="nf">timeit</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nf">lapply</span><span class="p">(</span><span class="nf">seq_len</span><span class="p">(</span><span class="m">4L</span><span class="p">),</span> <span class="n">slow_square</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="nf">timeit</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">purrr</span><span class="o">::</span><span class="nf">map</span><span class="p">(</span><span class="nf">seq_len</span><span class="p">(</span><span class="m">4L</span><span class="p">),</span> <span class="n">slow_square</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="nf">timeit</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">parallel</span><span class="o">::</span><span class="nf">mclapply</span><span class="p">(</span><span class="nf">seq_len</span><span class="p">(</span><span class="m">4L</span><span class="p">),</span> <span class="n">slow_square</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="nf">timeit</span><span class="p">()</span>
 </span></span></code></pre></div><pre tabindex="0"><code>[1] 1.2
-</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">purrr</span><span class="o">::</span><span class="nf">map</span><span class="p">(</span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">4</span><span class="p">),</span> <span class="n">slow_square</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="nf">timeit</span><span class="p">()</span>
-</span></span></code></pre></div><pre tabindex="0"><code>[1] 1.2
-</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">parallel</span><span class="o">::</span><span class="nf">mclapply</span><span class="p">(</span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">4</span><span class="p">),</span> <span class="n">slow_square</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="nf">timeit</span><span class="p">()</span>
-</span></span></code></pre></div><pre tabindex="0"><code>[1] 0.3
+[1] 1.2
+[1] 0.3
 </code></pre><p><a href="https://stat.ethz.ch/R-manual/R-patched/library/parallel/html/mclapply.html"><code>mclapply()</code></a>
 は <code>lapply()</code> のお手軽並列化バージョン。
 UNIX系OSのforkに依存するためWindows不可。</p>
@@ -118,7 +118,75 @@ Windowsでは使えないらしいけど。</dd>
 <dd><code>print()</code>や<code>message()</code>などの出力先を標準に戻す。
 デフォルトでは<code>/dev/null</code>に捨てられてしまう。</dd>
 </dl>
-<h2 id="foreach">foreach</h2>
+<h3 id="乱数と再現性">乱数と再現性</h3>
+<p>並列化せず親プロセスで実行すれば当然再現性あり:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">rint</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="kc">...</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="m">65535L</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="m">3L</span><span class="p">)</span> <span class="nf">sample.int</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">set.seed</span><span class="p">(</span><span class="m">19937</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">lapply</span><span class="p">(</span><span class="nf">seq_len</span><span class="p">(</span><span class="m">4L</span><span class="p">),</span> <span class="n">rint</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="nf">simplify2array</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nf">set.seed</span><span class="p">(</span><span class="m">19937</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">lapply</span><span class="p">(</span><span class="nf">seq_len</span><span class="p">(</span><span class="m">4L</span><span class="p">),</span> <span class="n">rint</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="nf">simplify2array</span><span class="p">()</span>
+</span></span></code></pre></div><pre tabindex="0"><code>      [,1]  [,2]  [,3]  [,4]
+[1,] 49270 65407  8721 23119
+[2,] 19176 60768 65517 62677
+[3,] 29429 29809  5210  9959
+      [,1]  [,2]  [,3]  [,4]
+[1,] 49270 65407  8721 23119
+[2,] 19176 60768 65517 62677
+[3,] 29429 29809  5210  9959
+</code></pre><p>デフォルト <code>mc.set.seed = TRUE</code> で並列化すると子プロセスがてんでにシードを設定して再現性なし:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">set.seed</span><span class="p">(</span><span class="m">19937</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">parallel</span><span class="o">::</span><span class="nf">mclapply</span><span class="p">(</span><span class="nf">seq_len</span><span class="p">(</span><span class="m">4L</span><span class="p">),</span> <span class="n">rint</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="nf">simplify2array</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nf">set.seed</span><span class="p">(</span><span class="m">19937</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">parallel</span><span class="o">::</span><span class="nf">mclapply</span><span class="p">(</span><span class="nf">seq_len</span><span class="p">(</span><span class="m">4L</span><span class="p">),</span> <span class="n">rint</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="nf">simplify2array</span><span class="p">()</span>
+</span></span></code></pre></div><pre tabindex="0"><code>      [,1]  [,2]  [,3]  [,4]
+[1,] 62234  3262 12411 62023
+[2,] 62793  4436 53581 20557
+[3,]  8474 55511  8828 14334
+      [,1]  [,2]  [,3]  [,4]
+[1,] 44555 57701 37457 48634
+[2,] 35817  3149 40988 23286
+[3,] 10319 34748 35695 30145
+</code></pre><p><code>mc.set.seed = FALSE</code> では親プロセスのシードが参照されて再現性こそあるものの、
+いくつかの子プロセス(<code>mc.cores</code>の数ずつ？)がセットで同じ乱数列を出してくる:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">invisible</span><span class="p">(</span><span class="nf">runif</span><span class="p">(</span><span class="m">1</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="nf">set.seed</span><span class="p">(</span><span class="m">19937</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">parallel</span><span class="o">::</span><span class="nf">mclapply</span><span class="p">(</span><span class="nf">seq_len</span><span class="p">(</span><span class="m">6L</span><span class="p">),</span> <span class="n">rint</span><span class="p">,</span> <span class="n">mc.set.seed</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span> <span class="n">mc.cores</span> <span class="o">=</span> <span class="m">2L</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="nf">simplify2array</span><span class="p">()</span>
+</span></span></code></pre></div><pre tabindex="0"><code>      [,1]  [,2]  [,3]  [,4]  [,5]  [,6]
+[1,] 49270 49270 65407 65407  8721  8721
+[2,] 19176 19176 60768 60768 65517 65517
+[3,] 29429 29429 29809 29809  5210  5210
+</code></pre><p><code>RNGkind(&quot;L'Ecuyer-CMRG&quot;)</code> を設定する、
+もしくは <code>set.seed(19937, &quot;L'Ecuyer-CMRG&quot;)</code> のようにシード設定すると
+<code>mc.set.seed = TRUE</code> の挙動が変わる。
+再現性は親プロセスの乱数生成器の状態依存となり、
+なおかつ子プロセスがそれぞれ異なる乱数列を出してくれるようになる。
+親プロセスの乱数生成器の状態が <code>mclapply()</code> や子プロセスによって更新されないことに注意:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">RNGkind</span><span class="p">(</span><span class="s">&#34;L&#39;Ecuyer-CMRG&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">set.seed</span><span class="p">(</span><span class="m">19937</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">parallel</span><span class="o">::</span><span class="nf">mclapply</span><span class="p">(</span><span class="nf">seq_len</span><span class="p">(</span><span class="m">4L</span><span class="p">),</span> <span class="n">rint</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="nf">simplify2array</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">parallel</span><span class="o">::</span><span class="nf">mclapply</span><span class="p">(</span><span class="nf">seq_len</span><span class="p">(</span><span class="m">4L</span><span class="p">),</span> <span class="n">rint</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="nf">simplify2array</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nf">invisible</span><span class="p">(</span><span class="nf">runif</span><span class="p">(</span><span class="m">1</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">parallel</span><span class="o">::</span><span class="nf">mclapply</span><span class="p">(</span><span class="nf">seq_len</span><span class="p">(</span><span class="m">4L</span><span class="p">),</span> <span class="n">rint</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="nf">simplify2array</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nf">set.seed</span><span class="p">(</span><span class="m">19937</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">parallel</span><span class="o">::</span><span class="nf">mclapply</span><span class="p">(</span><span class="nf">seq_len</span><span class="p">(</span><span class="m">4L</span><span class="p">),</span> <span class="n">rint</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="nf">simplify2array</span><span class="p">()</span>
+</span></span></code></pre></div><pre tabindex="0"><code>      [,1]  [,2]  [,3]  [,4]
+[1,] 33309 19174 22386 46754
+[2,] 38519 53475 45877 24809
+[3,] 39904 60478 42220 45717
+      [,1]  [,2]  [,3]  [,4]
+[1,] 33309 19174 22386 46754
+[2,] 38519 53475 45877 24809
+[3,] 39904 60478 42220 45717
+      [,1]  [,2]  [,3]  [,4]
+[1,] 17241 10459 58255 18031
+[2,] 39348 54919 19631 64554
+[3,] 65371 12315 16237  4515
+      [,1]  [,2]  [,3]  [,4]
+[1,] 33309 19174 22386 46754
+[2,] 38519 53475 45877 24809
+[3,] 39904 60478 42220 45717
+</code></pre><h2 id="foreach">foreach</h2>
 <p><a href="https://CRAN.R-project.org/package=foreach">https://CRAN.R-project.org/package=foreach</a></p>
 <p>カウンター無しでループを書けるようにするパッケージ。
 普段は <a href="/rstats/purrr.html"><code>purrr::map()</code></a> とかのほうが使いやすいけど、
@@ -131,11 +199,11 @@ Windowsでは使えないらしいけど。</dd>
 </span></span><span class="line"><span class="cl"><span class="n">cluster</span> <span class="o">=</span> <span class="nf">makeCluster</span><span class="p">(</span><span class="nf">getOption</span><span class="p">(</span><span class="s">&#34;mc.cores&#34;</span><span class="p">,</span> <span class="m">2L</span><span class="p">),</span> <span class="n">type</span> <span class="o">=</span> <span class="s">&#34;FORK&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="nf">registerDoParallel</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nf">foreach</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">4</span><span class="p">),</span> <span class="n">.combine</span> <span class="o">=</span> <span class="n">c</span><span class="p">)</span> <span class="o">%do%</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="nf">foreach</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">seq_len</span><span class="p">(</span><span class="m">4L</span><span class="p">),</span> <span class="n">.combine</span> <span class="o">=</span> <span class="n">c</span><span class="p">)</span> <span class="o">%do%</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">  <span class="nf">slow_square</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="o">|&gt;</span> <span class="nf">timeit</span><span class="p">()</span>
 </span></span></code></pre></div><pre tabindex="0"><code>[1] 1.2
-</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">foreach</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">4</span><span class="p">))</span> <span class="o">%dopar%</span> <span class="p">{</span>
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">foreach</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">seq_len</span><span class="p">(</span><span class="m">4L</span><span class="p">))</span> <span class="o">%dopar%</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">  <span class="nf">slow_square</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="o">|&gt;</span> <span class="nf">timeit</span><span class="p">()</span>
 </span></span></code></pre></div><pre tabindex="0"><code>[1] 0.3
