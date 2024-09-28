@@ -11,6 +11,7 @@ tags = ["r", "concurrent"]
 ```{r, setup-local}
 #| cache: false
 #| echo: false
+options(mc.cores = parallel::detectCores(logical = FALSE))
 knitr::opts_chunk$set(comment = "")
 knitr::opts_chunk$set(message = NA)
 knitr::opts_chunk$set(warning = NA)
@@ -27,6 +28,7 @@ Rの並列化では `snow` や `multicore` が使われてきたが、
 バージョン2.14からそれらを統合した `parallel` が標準ライブラリに入った。
 
 ```{r, parallel}
+#| results: hold
 options(mc.cores = parallel::detectCores(logical = FALSE))
 
 timeit = function(expr, digits = 1) {
@@ -41,9 +43,9 @@ slow_square = function(x) {
   x * x
 }
 
-lapply(seq(1, 4), slow_square) |> timeit()
-purrr::map(seq(1, 4), slow_square) |> timeit()
-parallel::mclapply(seq(1, 4), slow_square) |> timeit()
+lapply(seq_len(4L), slow_square) |> timeit()
+purrr::map(seq_len(4L), slow_square) |> timeit()
+parallel::mclapply(seq_len(4L), slow_square) |> timeit()
 ```
 
 [`mclapply()`](https://stat.ethz.ch/R-manual/R-patched/library/parallel/html/mclapply.html)
@@ -89,6 +91,55 @@ mclapply(X, FUN, ...,
   デフォルトでは`/dev/null`に捨てられてしまう。
 
 
+### 乱数と再現性
+
+並列化せず親プロセスで実行すれば当然再現性あり:
+```{r, lapply}
+#| results: hold
+rint = function(..., n = 65535L, size = 3L) sample.int(n, size)
+
+set.seed(19937)
+lapply(seq_len(4L), rint) |> simplify2array()
+set.seed(19937)
+lapply(seq_len(4L), rint) |> simplify2array()
+```
+
+デフォルト `mc.set.seed = TRUE` で並列化すると子プロセスがてんでにシードを設定して再現性なし:
+```{r, mc-set-seed-true}
+#| results: hold
+set.seed(19937)
+parallel::mclapply(seq_len(4L), rint) |> simplify2array()
+set.seed(19937)
+parallel::mclapply(seq_len(4L), rint) |> simplify2array()
+```
+
+`mc.set.seed = FALSE` では親プロセスのシードが参照されて再現性こそあるものの、
+いくつかの子プロセス(`mc.cores`の数ずつ？)がセットで同じ乱数列を出してくる:
+```{r, mc-set-seed-false}
+#| results: hold
+invisible(runif(1))
+set.seed(19937)
+parallel::mclapply(seq_len(6L), rint, mc.set.seed = FALSE, mc.cores = 2L) |> simplify2array()
+```
+
+`RNGkind("L'Ecuyer-CMRG")` を設定する、
+もしくは `set.seed(19937, "L'Ecuyer-CMRG")` のようにシード設定すると
+`mc.set.seed = TRUE` の挙動が変わる。
+再現性は親プロセスの乱数生成器の状態依存となり、
+なおかつ子プロセスがそれぞれ異なる乱数列を出してくれるようになる。
+親プロセスの乱数生成器の状態が `mclapply()` や子プロセスによって更新されないことに注意:
+```{r, mc-reset-stream}
+#| results: hold
+RNGkind("L'Ecuyer-CMRG")
+set.seed(19937)
+parallel::mclapply(seq_len(4L), rint) |> simplify2array()
+parallel::mclapply(seq_len(4L), rint) |> simplify2array()
+invisible(runif(1))
+parallel::mclapply(seq_len(4L), rint) |> simplify2array()
+set.seed(19937)
+parallel::mclapply(seq_len(4L), rint) |> simplify2array()
+```
+
 ## foreach
 
 <https://CRAN.R-project.org/package=foreach>
@@ -107,11 +158,11 @@ library(doParallel)
 cluster = makeCluster(getOption("mc.cores", 2L), type = "FORK")
 registerDoParallel(cluster)
 
-foreach(x = seq(1, 4), .combine = c) %do% {
+foreach(x = seq_len(4L), .combine = c) %do% {
   slow_square(x)
 } |> timeit()
 
-foreach(x = seq(1, 4)) %dopar% {
+foreach(x = seq_len(4L)) %dopar% {
   slow_square(x)
 } |> timeit()
 

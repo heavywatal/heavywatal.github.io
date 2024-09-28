@@ -34,26 +34,14 @@ slow_square = function(x) {
   x * x
 }
 
-lapply(seq(1, 4), slow_square) |> timeit()
+lapply(seq_len(4L), slow_square) |> timeit()
+purrr::map(seq_len(4L), slow_square) |> timeit()
+parallel::mclapply(seq_len(4L), slow_square) |> timeit()
 ```
 
 ```
 [1] 1.2
-```
-
-``` r
-purrr::map(seq(1, 4), slow_square) |> timeit()
-```
-
-```
 [1] 1.2
-```
-
-``` r
-parallel::mclapply(seq(1, 4), slow_square) |> timeit()
-```
-
-```
 [1] 0.3
 ```
 
@@ -100,6 +88,103 @@ mclapply(X, FUN, ...,
   デフォルトでは`/dev/null`に捨てられてしまう。
 
 
+### 乱数と再現性
+
+並列化せず親プロセスで実行すれば当然再現性あり:
+
+``` r
+rint = function(..., n = 65535L, size = 3L) sample.int(n, size)
+
+set.seed(19937)
+lapply(seq_len(4L), rint) |> simplify2array()
+set.seed(19937)
+lapply(seq_len(4L), rint) |> simplify2array()
+```
+
+```
+      [,1]  [,2]  [,3]  [,4]
+[1,] 49270 65407  8721 23119
+[2,] 19176 60768 65517 62677
+[3,] 29429 29809  5210  9959
+      [,1]  [,2]  [,3]  [,4]
+[1,] 49270 65407  8721 23119
+[2,] 19176 60768 65517 62677
+[3,] 29429 29809  5210  9959
+```
+
+デフォルト `mc.set.seed = TRUE` で並列化すると子プロセスがてんでにシードを設定して再現性なし:
+
+``` r
+set.seed(19937)
+parallel::mclapply(seq_len(4L), rint) |> simplify2array()
+set.seed(19937)
+parallel::mclapply(seq_len(4L), rint) |> simplify2array()
+```
+
+```
+      [,1]  [,2]  [,3]  [,4]
+[1,] 62234  3262 12411 62023
+[2,] 62793  4436 53581 20557
+[3,]  8474 55511  8828 14334
+      [,1]  [,2]  [,3]  [,4]
+[1,] 44555 57701 37457 48634
+[2,] 35817  3149 40988 23286
+[3,] 10319 34748 35695 30145
+```
+
+`mc.set.seed = FALSE` では親プロセスのシードが参照されて再現性こそあるものの、
+いくつかの子プロセス(`mc.cores`の数ずつ？)がセットで同じ乱数列を出してくる:
+
+``` r
+invisible(runif(1))
+set.seed(19937)
+parallel::mclapply(seq_len(6L), rint, mc.set.seed = FALSE, mc.cores = 2L) |> simplify2array()
+```
+
+```
+      [,1]  [,2]  [,3]  [,4]  [,5]  [,6]
+[1,] 49270 49270 65407 65407  8721  8721
+[2,] 19176 19176 60768 60768 65517 65517
+[3,] 29429 29429 29809 29809  5210  5210
+```
+
+`RNGkind("L'Ecuyer-CMRG")` を設定する、
+もしくは `set.seed(19937, "L'Ecuyer-CMRG")` のようにシード設定すると
+`mc.set.seed = TRUE` の挙動が変わる。
+再現性は親プロセスの乱数生成器の状態依存となり、
+なおかつ子プロセスがそれぞれ異なる乱数列を出してくれるようになる。
+親プロセスの乱数生成器の状態が `mclapply()` や子プロセスによって更新されないことに注意:
+
+``` r
+RNGkind("L'Ecuyer-CMRG")
+set.seed(19937)
+parallel::mclapply(seq_len(4L), rint) |> simplify2array()
+parallel::mclapply(seq_len(4L), rint) |> simplify2array()
+invisible(runif(1))
+parallel::mclapply(seq_len(4L), rint) |> simplify2array()
+set.seed(19937)
+parallel::mclapply(seq_len(4L), rint) |> simplify2array()
+```
+
+```
+      [,1]  [,2]  [,3]  [,4]
+[1,] 33309 19174 22386 46754
+[2,] 38519 53475 45877 24809
+[3,] 39904 60478 42220 45717
+      [,1]  [,2]  [,3]  [,4]
+[1,] 33309 19174 22386 46754
+[2,] 38519 53475 45877 24809
+[3,] 39904 60478 42220 45717
+      [,1]  [,2]  [,3]  [,4]
+[1,] 17241 10459 58255 18031
+[2,] 39348 54919 19631 64554
+[3,] 65371 12315 16237  4515
+      [,1]  [,2]  [,3]  [,4]
+[1,] 33309 19174 22386 46754
+[2,] 38519 53475 45877 24809
+[3,] 39904 60478 42220 45717
+```
+
 ## foreach
 
 <https://CRAN.R-project.org/package=foreach>
@@ -118,7 +203,7 @@ library(doParallel)
 cluster = makeCluster(getOption("mc.cores", 2L), type = "FORK")
 registerDoParallel(cluster)
 
-foreach(x = seq(1, 4), .combine = c) %do% {
+foreach(x = seq_len(4L), .combine = c) %do% {
   slow_square(x)
 } |> timeit()
 ```
@@ -128,7 +213,7 @@ foreach(x = seq(1, 4), .combine = c) %do% {
 ```
 
 ``` r
-foreach(x = seq(1, 4)) %dopar% {
+foreach(x = seq_len(4L)) %dopar% {
   slow_square(x)
 } |> timeit()
 ```
