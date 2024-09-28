@@ -258,11 +258,11 @@ e.g., `log()`, `sqrt()`, `ifelse()`, `paste()`
 
 ### 並列化
 
-See [foreach #parallel]({{< relref "foreach.md#parallel" >}})
+See [parallel]({{< relref "parallel.md" >}})
 
 ### イテレータでメモリ節約
 
-See [foreach #iterators]({{< relref "foreach.md#iterators" >}})
+See [parallel #iterators]({{< relref "parallel.md#iterators" >}})
 
 ### ボトルネックを知る
 

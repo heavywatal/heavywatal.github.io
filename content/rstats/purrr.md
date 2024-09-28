@@ -16,7 +16,7 @@ forループやlistの処理などをより簡潔に書けるようにしてく�
 標準のapply系関数よりも覚えやすく読みやすい。
 [dplyr]({{< relref "dplyr.md" >}}) や [tidyr]({{< relref "tidyr.md" >}}) と組み合わせて使う。
 いまのところ並列化する機能はないので、
-それに関しては[foreach/parallel]({{< relref "foreach.md" >}})ページを参照。
+それに関しては[parallel]({{< relref "parallel.md" >}})ページを参照。
 
 [tidyverse](https://tidyverse.tidyverse.org/) に含まれているので、
 `install.packages("tidyverse")` で一括インストール、
