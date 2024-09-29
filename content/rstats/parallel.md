@@ -64,8 +64,23 @@ mclapply(X, FUN, ...,
 [furrr](https://github.com/DavisVaughan/furrr)
 を使っていくのが良さそう。
 
-もっと細かくいろいろ制御したい場合は後述の `foreach` を介して使う。
+もっと細かくいろいろ制御したい場合は
+`parLapply()` 系の関数や後述の `foreach` を介して使う。
+その場合、`makeCluster()`/`stopCluster()`
+で明示的にクラスタを生成・破棄したり、
+子プロセスで使うオブジェクトやパッケージを
+`clusterEvalQ()` や `clusterExport()` などで予め宣言したりする必要がある。
 
+
+``` r
+cluster = parallel::makeCluster(4L, type = "FORK")
+parallel::parLapply(cluster, seq_len(4L), slow_square) |> timeit()
+parallel::stopCluster(cluster)
+```
+
+```
+[1] 0.3
+```
 
 ### `makeCluster()`
 
@@ -79,7 +94,7 @@ mclapply(X, FUN, ...,
   `foreach()` で使う場合 `.export=` や `.packages=` の指定が重要。
 
 `type = "FORK"`
-: 4コア1CPUとかの普通のデスクトップマシンで気楽に並列化したいならこれ。
+: マルチコアCPUひとつ搭載の普通のパソコンで気楽に並列化したいならこれ。
   低コストだし `.export=` や `.packages=` を指定せず `foreach()` できる。
   Windowsでは使えないらしいけど。
 
@@ -136,7 +151,6 @@ parallel::mclapply(seq_len(4L), rint) |> simplify2array()
 いくつかの子プロセス(`mc.cores`の数ずつ？)がセットで同じ乱数列を出してくる:
 
 ``` r
-invisible(runif(1))
 set.seed(19937)
 parallel::mclapply(seq_len(6L), rint, mc.set.seed = FALSE, mc.cores = 2L) |> simplify2array()
 ```
@@ -190,40 +204,33 @@ parallel::mclapply(seq_len(4L), rint) |> simplify2array()
 <https://CRAN.R-project.org/package=foreach>
 
 カウンター無しでループを書けるようにするパッケージ。
-普段は [`purrr::map()`]({{< relref "purrr.md" >}}) とかのほうが使いやすいけど、
-前述の `mclapply()` よりも並列化を細かく制御したい場面ではお世話になる。
-この場合、橋渡しライブラリ
+普段は [`purrr::map()`]({{< relref "purrr.md" >}}) 系関数のほうが使いやすいけど、
+並行処理をするために `mclapply()` で足りない場面では橋渡しライブラリ
 [`doParallel`](https://CRAN.R-project.org/package=doParallel)
-の助けを借りつつクラスタの生成や破棄なども自前でやることになる。
+とともに助けを借りると少し楽かもしれない。
+あとはメモリの制約のために後述の `iterators` を使うときとか。
 
 
 ``` r
 library(foreach)
 library(doParallel)
-cluster = makeCluster(getOption("mc.cores", 2L), type = "FORK")
+cluster = parallel::makeCluster(getOption("mc.cores", 2L), type = "FORK")
 registerDoParallel(cluster)
 
 foreach(x = seq_len(4L), .combine = c) %do% {
   slow_square(x)
 } |> timeit()
+
+foreach(x = seq_len(4L)) %dopar% {
+  slow_square(x)
+} |> timeit()
+
+parallel::stopCluster(cluster)
 ```
 
 ```
 [1] 1.2
-```
-
-``` r
-foreach(x = seq_len(4L)) %dopar% {
-  slow_square(x)
-} |> timeit()
-```
-
-```
 [1] 0.3
-```
-
-``` r
-stopCluster(cluster)
 ```
 
 ### `foreach()`
