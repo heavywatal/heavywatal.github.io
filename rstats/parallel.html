@@ -100,8 +100,17 @@ UNIX系OSのforkに依存するためWindows不可。</p>
 <a href="https://github.com/HenrikBengtsson/future.apply">future.apply</a>,
 <a href="https://github.com/DavisVaughan/furrr">furrr</a>
 を使っていくのが良さそう。</p>
-<p>もっと細かくいろいろ制御したい場合は後述の <code>foreach</code> を介して使う。</p>
-<h3 id="makecluster"><code>makeCluster()</code></h3>
+<p>もっと細かくいろいろ制御したい場合は
+<code>parLapply()</code> 系の関数や後述の <code>foreach</code> を介して使う。
+その場合、<code>makeCluster()</code>/<code>stopCluster()</code>
+で明示的にクラスタを生成・破棄したり、
+子プロセスで使うオブジェクトやパッケージを
+<code>clusterEvalQ()</code> や <code>clusterExport()</code> などで予め宣言したりする必要がある。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">cluster</span> <span class="o">=</span> <span class="n">parallel</span><span class="o">::</span><span class="nf">makeCluster</span><span class="p">(</span><span class="m">4L</span><span class="p">,</span> <span class="n">type</span> <span class="o">=</span> <span class="s">&#34;FORK&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">parallel</span><span class="o">::</span><span class="nf">parLapply</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="nf">seq_len</span><span class="p">(</span><span class="m">4L</span><span class="p">),</span> <span class="n">slow_square</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="nf">timeit</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">parallel</span><span class="o">::</span><span class="nf">stopCluster</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] 0.3
+</code></pre><h3 id="makecluster"><code>makeCluster()</code></h3>
 <dl>
 <dt><code>spec</code></dt>
 <dd>いくつのworkerを立ち上げるか。
@@ -111,7 +120,7 @@ UNIX系OSのforkに依存するためWindows不可。</p>
 マルチCPUのサーバーで並列化したい場合はこれ。
 <code>foreach()</code> で使う場合 <code>.export=</code> や <code>.packages=</code> の指定が重要。</dd>
 <dt><code>type = &quot;FORK&quot;</code></dt>
-<dd>4コア1CPUとかの普通のデスクトップマシンで気楽に並列化したいならこれ。
+<dd>マルチコアCPUひとつ搭載の普通のパソコンで気楽に並列化したいならこれ。
 低コストだし <code>.export=</code> や <code>.packages=</code> を指定せず <code>foreach()</code> できる。
 Windowsでは使えないらしいけど。</dd>
 <dt><code>outfile = &quot;&quot;</code></dt>
@@ -149,8 +158,7 @@ Windowsでは使えないらしいけど。</dd>
 [3,] 10319 34748 35695 30145
 </code></pre><p><code>mc.set.seed = FALSE</code> では親プロセスのシードが参照されて再現性こそあるものの、
 いくつかの子プロセス(<code>mc.cores</code>の数ずつ？)がセットで同じ乱数列を出してくる:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">invisible</span><span class="p">(</span><span class="nf">runif</span><span class="p">(</span><span class="m">1</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="nf">set.seed</span><span class="p">(</span><span class="m">19937</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">set.seed</span><span class="p">(</span><span class="m">19937</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">parallel</span><span class="o">::</span><span class="nf">mclapply</span><span class="p">(</span><span class="nf">seq_len</span><span class="p">(</span><span class="m">6L</span><span class="p">),</span> <span class="n">rint</span><span class="p">,</span> <span class="n">mc.set.seed</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span> <span class="n">mc.cores</span> <span class="o">=</span> <span class="m">2L</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="nf">simplify2array</span><span class="p">()</span>
 </span></span></code></pre></div><pre tabindex="0"><code>      [,1]  [,2]  [,3]  [,4]  [,5]  [,6]
 [1,] 49270 49270 65407 65407  8721  8721
@@ -189,26 +197,28 @@ Windowsでは使えないらしいけど。</dd>
 </code></pre><h2 id="foreach">foreach</h2>
 <p><a href="https://CRAN.R-project.org/package=foreach">https://CRAN.R-project.org/package=foreach</a></p>
 <p>カウンター無しでループを書けるようにするパッケージ。
-普段は <a href="/rstats/purrr.html"><code>purrr::map()</code></a> とかのほうが使いやすいけど、
-前述の <code>mclapply()</code> よりも並列化を細かく制御したい場面ではお世話になる。
-この場合、橋渡しライブラリ
+普段は <a href="/rstats/purrr.html"><code>purrr::map()</code></a> 系関数のほうが使いやすいけど、
+並行処理をするために <code>mclapply()</code> で足りない場面では橋渡しライブラリ
 <a href="https://CRAN.R-project.org/package=doParallel"><code>doParallel</code></a>
-の助けを借りつつクラスタの生成や破棄なども自前でやることになる。</p>
+とともに助けを借りると少し楽かもしれない。
+あとはメモリの制約のために後述の <code>iterators</code> を使うときとか。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">foreach</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">doParallel</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">cluster</span> <span class="o">=</span> <span class="nf">makeCluster</span><span class="p">(</span><span class="nf">getOption</span><span class="p">(</span><span class="s">&#34;mc.cores&#34;</span><span class="p">,</span> <span class="m">2L</span><span class="p">),</span> <span class="n">type</span> <span class="o">=</span> <span class="s">&#34;FORK&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">cluster</span> <span class="o">=</span> <span class="n">parallel</span><span class="o">::</span><span class="nf">makeCluster</span><span class="p">(</span><span class="nf">getOption</span><span class="p">(</span><span class="s">&#34;mc.cores&#34;</span><span class="p">,</span> <span class="m">2L</span><span class="p">),</span> <span class="n">type</span> <span class="o">=</span> <span class="s">&#34;FORK&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="nf">registerDoParallel</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nf">foreach</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">seq_len</span><span class="p">(</span><span class="m">4L</span><span class="p">),</span> <span class="n">.combine</span> <span class="o">=</span> <span class="n">c</span><span class="p">)</span> <span class="o">%do%</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">  <span class="nf">slow_square</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="o">|&gt;</span> <span class="nf">timeit</span><span class="p">()</span>
-</span></span></code></pre></div><pre tabindex="0"><code>[1] 1.2
-</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">foreach</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">seq_len</span><span class="p">(</span><span class="m">4L</span><span class="p">))</span> <span class="o">%dopar%</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">foreach</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">seq_len</span><span class="p">(</span><span class="m">4L</span><span class="p">))</span> <span class="o">%dopar%</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">  <span class="nf">slow_square</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="o">|&gt;</span> <span class="nf">timeit</span><span class="p">()</span>
-</span></span></code></pre></div><pre tabindex="0"><code>[1] 0.3
-</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">stopCluster</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
-</span></span></code></pre></div><h3 id="foreach-1"><code>foreach()</code></h3>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">parallel</span><span class="o">::</span><span class="nf">stopCluster</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] 1.2
+[1] 0.3
+</code></pre><h3 id="foreach-1"><code>foreach()</code></h3>
 <dl>
 <dt><code>.combine (list)</code></dt>
 <dd>型が既知でvectorが欲しい場合に <code>c</code> にするなど</dd>
