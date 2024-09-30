@@ -66,9 +66,12 @@ Contacts
 
 **Preprints**
 
--   Watal M. Iwasaki, Kosuke Aoki, Ryuichi Sugino, Atsushi Natsume, Hideki Innan.
-    <https://dx.doi.org/10.2139/ssrn.4191903>
-    Simulating Cancer Evolution and Intratumor Heterogeneity Reveals the Optimal Number of Biopsy Samples for NGS-Based Cancer Gene Testing
+-   Takeshi Kuroha, Fabien Lombardo, **Watal M. Iwasaki**, Svetlana Chechetka, Yoshihiro Kawahara, Akiko Yoshida, Junko Kyozuka, Takashi Makino, Hitoshi Yoshida.
+    <https://doi.org/10.1101/2024.09.17.612847>;
+    Fine-Tuning *TAWAWA1*-Mediated Panicle Architecture by Genome Editing of a Downstream Conserved Noncoding Sequence in Rice.
+-   **Watal M. Iwasaki**, Kosuke Aoki, Ryuichi Sugino, Atsushi Natsume, Hideki Innan.
+    <https://dx.doi.org/10.2139/ssrn.4191903>;
+    Simulating Cancer Evolution and Intratumor Heterogeneity Reveals the Optimal Number of Biopsy Samples for NGS-Based Cancer Gene Testing.
 
 
 **Articles**
@@ -187,6 +190,8 @@ Contacts
 
 ## Teaching / Outreach
 
+-   「[Rによるデータ前処理実習](/slides/tmd2024/)」
+    東京医科歯科大 [データサイエンス人材育成プログラム](https://ds.tmdu.org/) (2024-09)
 -   「[統計モデリング入門](/slides/iwate2024stats/)」
     岩手大学  [連合農学研究科](https://ugas.agr.iwate-u.ac.jp/) (2024-07)
 -   「[Rを用いたデータ解析の基礎](/slides/tohoku2024r/)」東北大学 進化学実習 (2024-04)
