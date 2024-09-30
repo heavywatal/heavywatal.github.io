@@ -26,12 +26,12 @@ tags = ["r"]
 R本体
 : コマンドを解釈して実行するコア部分
 : よく使われる関数なども標準パッケージとして同梱
-: https://cran.rstudio.com/ からダウンロードしてインストール
+: <https://cloud.r-project.org/> からダウンロードしてインストール
 
 RStudio Desktop
 : Rをより快適に使うための総合開発環境(IDE)
 : 必須ではないけど、結構みんな使ってるらしい
-: https://rstudio.com/ からダウンロードしてインストール
+: <https://posit.co/download/rstudio-desktop/> からダウンロードしてインストール
 
 ## スクリプトを保存
 
@@ -42,7 +42,7 @@ R のコンソールにコマンドを打ち込むと、即座に結果が返っ
 一連の処理をまとめてスクリプト(テキストファイル)に書き出しておくとよい。
 ファイルの拡張子は `.txt` でも何でもいいが `.R` にすることが多い。
 
-[R Markdown](https://rmarkdown.rstudio.com/)
+[Quarto](https://quarto.org/)
 を使えばコードと解析結果の図表を同時に保存・プレゼンすることができる。
 
 
@@ -108,7 +108,7 @@ stepAIC(model)  # OK
 
 数千ものパッケージが有志により開発され、CRANにまとめて公開されている。
 
-例えば [rstudio.com/products/rpackages](https://www.rstudio.com/products/rpackages/)
+例えば <https://posit.co/products/open-source/rpackages/>
 で紹介されているもの、特にHadley Wickhamらによる
 [tidyverse](https://www.tidyverse.org/) パッケージ群
 ([ggplot2]({{< relref "ggplot2.md" >}}),

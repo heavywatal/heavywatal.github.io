@@ -187,7 +187,8 @@ c.NbConvertBase.display_data_priority = ['text/plain']
 配布時に `.ipynb` で出力といった使い方ができる。
 
 Jupytextではソースコードを同期することが主眼なので、
-knitrのようにコードセルの実行結果を含むMarkdownを書き出す機能は無い。
+[knitr]({{< relref "knitr.md" >}})
+のようにコードセルの実行結果を含むMarkdownを書き出す機能は無い。
 それは
 `jupyter nbconvert --execute --to markdown`
 とかでやるべき仕事っぽい。
@@ -205,7 +206,7 @@ knitrのようにコードセルの実行結果を含むMarkdownを書き出す�
 
 `rmarkdown` ([R Markdown](https://rmarkdown.rstudio.com/))
 : コードセルに波括弧を付ける: `{python}`
-: Rから[knitr](https://yihui.org/knitr/)を使えば結果を含むMarkdownを出力できる。
+: Rから [knitr]({{< relref "knitr.md" >}}) を使えば結果を含むMarkdownを出力できる。
   RとPythonの橋渡しは[reticulate](https://rstudio.github.io/reticulate/)が担う。
 
 `md:myst` (MyST Markdown; Markedly Structured Text)

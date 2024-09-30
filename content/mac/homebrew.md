@@ -114,6 +114,7 @@ hyperfine
 lsd
 monolith
 oxipng
+procs
 qsv
 ripgrep
 sd
@@ -184,10 +185,10 @@ brew list --cask
 
 amazon-photos
 basictex bibdesk
-discord drawio dropbox firefox
+discord drawio dropbox equinox firefox
 google-chrome google-drive
-inkscape joplin julia kindle macfuse
-megasync menumeters monitorcontrol
+inkscape joplin julia
+macfuse megasync menumeters monitorcontrol
 orbstack quarto r rstudio
 skim skype slack spideroakone
 the-unarchiver visual-studio-code vlc
@@ -203,8 +204,10 @@ wezterm xquartz zoom
 brew tap homebrew/cask-fonts
 ```
 
+font-sf-mono font-sf-pro
 font-biz-udgothic font-biz-udmincho font-biz-udpgothic font-biz-udpmincho
 font-ubuntu font-ubuntu-mono font-ubuntu-mono-nerd-font
+font-ubuntu-sans font-ubuntu-sans-mono font-ubuntu-sans-nerd-font
 font-noto-sans font-noto-serif font-noto-sans-mono
 font-source-sans-3 font-source-serif-4
 font-open-sans font-roboto font-dejavu

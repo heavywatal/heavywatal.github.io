@@ -10,8 +10,8 @@ https://cran.r-project.org/manuals.html
 
 ## インストール
 
-- [R本体](https://cran.rstudio.com/)
-- [RStudio (任意)](https://www.rstudio.com/products/rstudio/download/)
+- [R本体](https://cloud.r-project.org/)
+- [RStudio (任意)](https://posit.co/download/rstudio-desktop/)
 
 Macなら [Homebrew]({{< relref "homebrew.md" >}}) で
 `brew install --cask r rstudio` のように入れるのが楽チン。

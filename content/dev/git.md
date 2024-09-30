@@ -361,7 +361,7 @@ https://help.github.com/articles/configuring-a-publishing-source-for-github-page
 
 大概のIDEには保存時に行末の空白を自動削除するオプションがある。
 それによって自分のソースコードは常にきれいに保てるが、
-他人の汚いコードやknitrの結果などを編集するときに余計な差分を作ってしまう。
+他人の汚いコードや [knitr]({{< relref "knitr.md" >}}) の結果などを編集するときに余計な差分を作ってしまう。
 [VSCode]({{< relref "vscode.md" >}}) なら "Save without Formatting"
 で設定を変えずに済ませられることは覚えていても、
 "Find in Files" で一括編集したときにも空白が削られることは忘れがち。

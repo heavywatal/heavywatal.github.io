@@ -152,7 +152,7 @@ next3d(current = NA, clear = TRUE, reuse = TRUE)
 :   deprecatedだから代わりに `rglwidget()` を使えとのことだがそちらにファイル書き出し機能は無い。
 
 
-### rmarkdown/knitrでHTMLに埋め込む
+### [knitr]({{< relref "knitr.md" >}})でHTMLに埋め込む
 
 パッケージを読み込み、hookを設定しておく(`rgl::setupKnitr()` を使う手もある):
 
