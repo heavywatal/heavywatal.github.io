@@ -7,7 +7,7 @@ tags = ["writing"]
   parent = "misc"
 +++
 
-https://github.com/gollum/gollum
+<https://github.com/gollum/gollum>
 
 研究室内の連絡・情報共有は、フロー型の情報ならSlackで、ストック型の情報ならWikiで。
 という方針になったので、学内ネットワークで閲覧編集可能な自前Wikiサーバーを立てる。
@@ -60,7 +60,7 @@ https://github.com/gollum/gollum
     rbenv init
     eval "$(rbenv init -)"
     rbenv install -l
-    rbenv install 3.1.4
+    rbenv install 3.3.5
     ```
 
     `eval "$(rbenv init -)"` はここでインストールした
@@ -68,8 +68,8 @@ https://github.com/gollum/gollum
     新しいシェルを起動するたびに実行する必要があるので
     `.zshrc`, `.bashrc` 等の設定ファイルに記述しておく。
 
-    `rbenv global 3.1.4` とするか、
-    次に作るWikiリポジトリ内で `rbenv local 3.1.4`
+    `rbenv global 3.3.5` とするか、
+    次に作るWikiリポジトリ内で `rbenv local 3.3.5`
     とすることで使用するRubyのバージョンを設定する。
 
 
@@ -120,6 +120,9 @@ https://github.com/gollum/gollum
 
 ## 設定
 
+- <https://github.com/gollum/gollum#configuration>
+- <https://github.com/gollum/gollum/wiki/Sample-config.rb>
+
 ### 基本
 
 `config.rb` を作成して
@@ -130,10 +133,10 @@ https://github.com/gollum/gollum
 require 'gollum/app'
 
 wiki_options = {
-  page_file_dir: 'source',
+  allow_uploads: true,
+  base_path: '/wiki',
   css: true,
-  mathjax: false,
-  emoji: true
+  page_file_dir: 'source',
 }
 Precious::App.set(:wiki_options, wiki_options)
 ```
@@ -144,9 +147,6 @@ Precious::App.set(:wiki_options, wiki_options)
 `css: true` により `custom.css` を読み込まれるようになるが、
 残念ながらリポジトリルートではなく `source/custom.css` に置かなければならない。
 また、ローカルファイルではなくコミット済みのものが読まれることに注意。
-
-なぜかここからは設定できずコマンドからのみ設定可能な項目もある。<br>
-e.g., `-b/--base-path`, `--allow-uploads page`.
 
 
 ### ポート番号なしでアクセスする
@@ -180,10 +180,7 @@ http://example.com/wiki/ のようにアクセスできるようにする。
     sudo systemctl restart apache2
     ```
 
-1.  `bundle exec gollum -b /wiki` で起動。
-
-    `config.rb` のほうで `Precious::App` に
-    `base_path: '/wiki'` を渡してもなぜか効かない。
+1.  `bundle exec gollum` で起動。
 
 
 ### BASIC認証でやんわりパスワードをかける
@@ -301,7 +298,7 @@ After=network.target
 Type=simple
 User=YOURNAME
 WorkingDirectory=/path/to/your/labwiki
-ExecStart=bundle exec gollum -c config.rb -b /wiki --allow-uploads dir
+ExecStart=bundle exec gollum -c config.rb
 Restart=on-abort
 StandardOutput=file:/var/log/gollum.log
 StandardError=file:/var/log/gollum.log
