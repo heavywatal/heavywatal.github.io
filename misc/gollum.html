@@ -103,13 +103,13 @@ MacならHomebrewでもいいけどLinuxではHomebrewを混ぜるとエラー�
 </span></span><span class="line"><span class="cl">rbenv init
 </span></span><span class="line"><span class="cl"><span class="nb">eval</span> <span class="s2">&#34;</span><span class="k">$(</span>rbenv init -<span class="k">)</span><span class="s2">&#34;</span>
 </span></span><span class="line"><span class="cl">rbenv install -l
-</span></span><span class="line"><span class="cl">rbenv install 3.1.4
+</span></span><span class="line"><span class="cl">rbenv install 3.3.5
 </span></span></code></pre></div><p><code>eval &quot;$(rbenv init -)&quot;</code> はここでインストールした
 <code>ruby</code> や <code>bundle</code> にPATHを通すコマンド。
 新しいシェルを起動するたびに実行する必要があるので
 <code>.zshrc</code>, <code>.bashrc</code> 等の設定ファイルに記述しておく。</p>
-<p><code>rbenv global 3.1.4</code> とするか、
-次に作るWikiリポジトリ内で <code>rbenv local 3.1.4</code>
+<p><code>rbenv global 3.3.5</code> とするか、
+次に作るWikiリポジトリ内で <code>rbenv local 3.3.5</code>
 とすることで使用するRubyのバージョンを設定する。</p>
 </li>
 <li>
@@ -147,6 +147,10 @@ gem &#39;gollum&#39;, :github =&gt; &#39;heavywatal/gollum&#39;, :branch =&gt; &
 </li>
 </ol>
 <h2 id="設定">設定</h2>
+<ul>
+<li><a href="https://github.com/gollum/gollum#configuration">https://github.com/gollum/gollum#configuration</a></li>
+<li><a href="https://github.com/gollum/gollum/wiki/Sample-config.rb">https://github.com/gollum/gollum/wiki/Sample-config.rb</a></li>
+</ul>
 <h3 id="基本">基本</h3>
 <p><code>config.rb</code> を作成して
 <code>bundle exec gollum -c config.rb</code>
@@ -154,10 +158,10 @@ gem &#39;gollum&#39;, :github =&gt; &#39;heavywatal/gollum&#39;, :branch =&gt; &
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ruby" data-lang="ruby"><span class="line"><span class="cl"><span class="nb">require</span> <span class="s1">&#39;gollum/app&#39;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="n">wiki_options</span> <span class="o">=</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="ss">page_file_dir</span><span class="p">:</span> <span class="s1">&#39;source&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="ss">allow_uploads</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="ss">base_path</span><span class="p">:</span> <span class="s1">&#39;/wiki&#39;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">  <span class="ss">css</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="ss">mathjax</span><span class="p">:</span> <span class="kp">false</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="ss">emoji</span><span class="p">:</span> <span class="kp">true</span>
+</span></span><span class="line"><span class="cl">  <span class="ss">page_file_dir</span><span class="p">:</span> <span class="s1">&#39;source&#39;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="no">Precious</span><span class="o">::</span><span class="no">App</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="ss">:wiki_options</span><span class="p">,</span> <span class="n">wiki_options</span><span class="p">)</span>
 </span></span></code></pre></div><p>例えばこの場合、
@@ -165,8 +169,6 @@ gem &#39;gollum&#39;, :github =&gt; &#39;heavywatal/gollum&#39;, :branch =&gt; &
 <p><code>css: true</code> により <code>custom.css</code> を読み込まれるようになるが、
 残念ながらリポジトリルートではなく <code>source/custom.css</code> に置かなければならない。
 また、ローカルファイルではなくコミット済みのものが読まれることに注意。</p>
-<p>なぜかここからは設定できずコマンドからのみ設定可能な項目もある。<br>
-e.g., <code>-b/--base-path</code>, <code>--allow-uploads page</code>.</p>
 <h3 id="ポート番号なしでアクセスする">ポート番号なしでアクセスする</h3>
 <p>デフォルトでは <a href="http://example.com:4567">http://example.com:4567</a> のように4567番ポートのルートで動く。
 これを80番ポートの<code>/wiki</code>以下で動くように調整して
@@ -191,9 +193,7 @@ e.g., <code>-b/--base-path</code>, <code>--allow-uploads page</code>.</p>
 </span></span><span class="line"><span class="cl">sudo systemctl restart apache2
 </span></span></code></pre></div></li>
 <li>
-<p><code>bundle exec gollum -b /wiki</code> で起動。</p>
-<p><code>config.rb</code> のほうで <code>Precious::App</code> に
-<code>base_path: '/wiki'</code> を渡してもなぜか効かない。</p>
+<p><code>bundle exec gollum</code> で起動。</p>
 </li>
 </ol>
 <h3 id="basic認証でやんわりパスワードをかける">BASIC認証でやんわりパスワードをかける</h3>
@@ -286,7 +286,7 @@ e.g., <code>-b/--base-path</code>, <code>--allow-uploads page</code>.</p>
 </span></span><span class="line"><span class="cl"><span class="na">Type</span><span class="o">=</span><span class="s">simple</span>
 </span></span><span class="line"><span class="cl"><span class="na">User</span><span class="o">=</span><span class="s">YOURNAME</span>
 </span></span><span class="line"><span class="cl"><span class="na">WorkingDirectory</span><span class="o">=</span><span class="s">/path/to/your/labwiki</span>
-</span></span><span class="line"><span class="cl"><span class="na">ExecStart</span><span class="o">=</span><span class="s">bundle exec gollum -c config.rb -b /wiki --allow-uploads dir</span>
+</span></span><span class="line"><span class="cl"><span class="na">ExecStart</span><span class="o">=</span><span class="s">bundle exec gollum -c config.rb</span>
 </span></span><span class="line"><span class="cl"><span class="na">Restart</span><span class="o">=</span><span class="s">on-abort</span>
 </span></span><span class="line"><span class="cl"><span class="na">StandardOutput</span><span class="o">=</span><span class="s">file:/var/log/gollum.log</span>
 </span></span><span class="line"><span class="cl"><span class="na">StandardError</span><span class="o">=</span><span class="s">file:/var/log/gollum.log</span>
