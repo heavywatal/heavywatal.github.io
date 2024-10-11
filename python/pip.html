@@ -71,9 +71,13 @@ Python 3.4 以降では <code>venv</code> と <code>ensurepip</code> が標準�
 からの簡単にパッケージをインストールできるようにするツール。
 アンインストール機能の無い <code>easy_install</code> に取って代わり、
 現在では公式に推奨されている。
-Python 2.7.9以降、3.4以降では標準ライブラリの
+Python 3.4以降では標準ライブラリの
 <a href="https://docs.python.org/3/library/ensurepip.html"><code>ensurepip</code></a>
 によって自動的にインストールされる。</p>
+<p>Python 3.12以降では <a href="https://peps.python.org/pep-0668/">PEP 668</a> が有効となり、
+仮想環境の外でグローバルに <code>pip3 install</code> しようとすると多くの場合
+<code>error: externally-managed-environment</code> と怒られる。
+後述の<a href="#venv"><code>venv</code></a>で仮想環境を作り、その中でpipを実行する。</p>
 <ul>
 <li>
 <p>全体のヘルプ、コマンド毎の詳細ヘルプ:</p>
@@ -83,7 +87,7 @@ Python 2.7.9以降、3.4以降では標準ライブラリの
 <li>
 <p>よく使うコマンド:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pip3 list --outdated
-</span></span><span class="line"><span class="cl">pip3 install -U setuptools pip wheel
+</span></span><span class="line"><span class="cl">pip3 install -U pip
 </span></span><span class="line"><span class="cl">pip3 search jupyter
 </span></span></code></pre></div></li>
 <li>
@@ -99,16 +103,8 @@ Python 2.7.9以降、3.4以降では標準ライブラリの
 </span></span></code></pre></div></li>
 <li>
 <p>手動インストール:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">python -m ensurepip --user
-</span></span><span class="line"><span class="cl"><span class="c1"># または</span>
-</span></span><span class="line"><span class="cl">curl -O https://bootstrap.pypa.io/get-pip.py
-</span></span><span class="line"><span class="cl">python get-pip.py --user
-</span></span></code></pre></div><p><code>--user</code> を付けた場合のインストール先は環境変数
-<a href="/python/install.html#pythonuserbase"><code>PYTHONUSERBASE</code></a>
-で指定できる。
-その中の <code>bin/</code> を <code>PATH</code> に追加するか、
-絶対パスで <code>pip</code> コマンドを使う。</p>
-</li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">python3 -m ensurepip
+</span></span></code></pre></div></li>
 </ul>
 <h2 id="venv"><code>venv</code></h2>
 <p><a href="https://docs.python.org/3/library/venv.html">https://docs.python.org/3/library/venv.html</a></p>
@@ -119,22 +115,42 @@ Python 3.3 以降では <code>venv</code> が標準ライブラリ入りした�
 の個別インストールは不要になった。</p>
 <p>仮想環境を作る:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">python3 -m venv <span class="o">[</span>OPTIONS<span class="o">]</span> ~/.virtualenvs/myproject
-</span></span></code></pre></div><p>仮想環境に入る、から出る:</p>
+</span></span></code></pre></div><p>仮想環境に入る、仮想環境から出る:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">source</span>  ~/.virtualenvs/myproject/bin/activate
 </span></span><span class="line"><span class="cl">deactivate
-</span></span></code></pre></div><p>仮想環境の置き場所はどこでもいいけど、
-<code>~/.venvs</code> とか <code>~/.virtualenvs</code> にしておけばツールに見つけてもらいやすい。
+</span></span></code></pre></div><p><code>activate</code> により <code>PATH</code>, <code>PS1</code>, <code>PYTHONHOME</code> が変更され、
+<code>deactivate</code> でそれらは復元される。
+<code>activate</code> するときまでの値が保持・復元されるということに注意。</p>
+<p><code>VIRTUAL_ENV_DISABLE_PROMPT=1</code> を設定しておけばプロンプト左端に
+<code>(venv)</code> を追加させないようにできる。</p>
+<p>仮想環境の置き場所はどこでもいいけど、
+各プロジェクトのトップに <code>.venv</code> を作って <code>.venv/bin/activate</code> するのがモダン。
+プロジェクトの外にまとめる場合は
+<code>~/.venvs/</code> とか <code>~/.virtualenvs/</code> の下に置けば各種ツールに見つけてもらいやすい。
 例えば
 <a href="https://github.com/microsoft/vscode-python/blob/main/src/client/pythonEnvironments/base/locators/lowLevel/globalVirtualEnvronmentLocator.ts">vscode-python</a>,
 <a href="https://github.com/rstudio/reticulate/blob/main/R/virtualenv.R">reticulate</a>,
-etc.</p>
+etc.
+さらにそこを <code>WORKON_HOME</code> という環境変数に入れておけばより安心。</p>
+<p><a href="https://peps.python.org/pep-0668/">PEP 668</a>
+を無視してグローバルにパッケージをインストールしたい場合、
+<code>--break-system-packages</code> というオプションで突破することもできるが、
+グローバルっぽい仮想環境を作るほうがマイルドで安全。
+例えば次のようにシェルを設定して
+<code>python3 -m venv ${WORKON_HOME}/global</code> のように仮想環境を作ってPATHを通すとか。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">WORKON_HOME</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="s2">/.virtualenvs&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">WORKON_HOME</span><span class="si">}</span>/global/bin:<span class="nv">$PATH</span>
+</span></span></code></pre></div><h2 id="uv"><code>uv</code></h2>
+<p>pipやvenvに相当することを超高速に実行できるrust製ツール。
+おまけにPython本体のインストールもできる。</p>
+<p><a href="/python/install.html#uv">/python/install#uv</a> の項を参照。</p>
 <h2 id="setuptools"><code>setuptools</code></h2>
 <p><a href="https://github.com/pypa/setuptools">https://github.com/pypa/setuptools</a></p>
 <p>パッケージ管理・作成の基本となるライブラリ。
 コマンドラインツール <code>easy_install</code>
 はこれの一部として含まれているが、直接使うことはない。
 (<code>pip</code> を使う)</p>
-<p>See also <a href="/python/packaging.html">&ldquo;setuptools &mdash; Pythonパッケージ作成&rdquo;</a></p>
+<p>See also <a href="/python/packaging.html">&ldquo;Pythonパッケージ作成&rdquo;</a></p>
 <p><code>setuptools</code> の改良版としてしばらく <code>distribute</code> も利用されていたが、
 その成果が <code>setuptools</code> にマージされたので忘れていい。</p>
 

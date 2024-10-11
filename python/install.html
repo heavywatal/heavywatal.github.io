@@ -60,6 +60,12 @@ Pythonインストール
 <nav id="TableOfContents">
   <ul>
     <li><a href="#標準公式">標準・公式</a></li>
+    <li><a href="#uv">uv</a>
+      <ul>
+        <li><a href="#pythonインストーラーとして使う">Pythonインストーラーとして使う</a></li>
+        <li><a href="#設定">設定</a></li>
+      </ul>
+    </li>
     <li><a href="#rye">rye</a>
       <ul>
         <li><a href="#pythonインストーラーとしてだけ使う">Pythonインストーラーとしてだけ使う</a></li>
@@ -83,19 +89,54 @@ Pythonインストール
 でも大概そこに入ってるのはちょっと古いバージョンなので、
 <a href="https://www.python.jp/install/install.html">python.jp/環境構築ガイド</a>
 に従って最新版を入れるのがよい。</p>
-<h2 id="rye">rye</h2>
-<p><a href="https://rye.astral.sh/">https://rye.astral.sh/</a></p>
+<h2 id="uv">uv</h2>
+<p><a href="https://docs.astral.sh/uv/">https://docs.astral.sh/uv/</a></p>
 <p>プロジェクトの環境構築を一切合切面倒見てくれる管理ツール。
-ruffやuvと同じチームが開発していて、同じくrust製。
-次のワンライナーでプログラム本体や設定ファイルなどが <code>~/.rye/</code> に配置される:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">curl -sSf https://rye.astral.sh/get <span class="p">|</span> bash
-</span></span></code></pre></div><p>任意のバージョンのPythonを入れるためのツールとして、
+ruffや<a href="#rye">rye</a>と同じチームが開発していて、同じくrust製。
+次のワンライナーでプログラム本体が <code>~/.cargo/bin/uv</code> に配置される:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">curl -LsSf https://astral.sh/uv/install.sh <span class="p">|</span> sh
+</span></span></code></pre></div><p>rust/cargoを使わない人は <code>source ~/.cargo/bin/env</code>
+みたいな文をシェルの設定ファイルに追加してPATHを通す必要があるかも。</p>
+<p>任意のバージョンのPythonを入れるためのツールとして、
 つまり<a href="#pyenv">pyenv</a>的な位置付けでも使える。
 しかもビルド済みのPythonを
 <a href="https://github.com/indygreg/python-build-standalone">https://github.com/indygreg/python-build-standalone</a>
 から取ってくるので、自前ビルド環境に左右されずCPUも使わず簡単。</p>
+<h3 id="pythonインストーラーとして使う">Pythonインストーラーとして使う</h3>
+<p><a href="https://docs.astral.sh/uv/reference/cli/#uv-python">https://docs.astral.sh/uv/reference/cli/#uv-python</a></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># バージョン一覧</span>
+</span></span><span class="line"><span class="cl">uv python list
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># インストール</span>
+</span></span><span class="line"><span class="cl">uv python install
+</span></span></code></pre></div><p>バージョンを省略すると適当な最新版。
+<code>3</code> とか <code>3.12</code> みたいな指定でもその中での最新版を入れられる。</p>
+<p><code>~/.local/share/uv/python/</code> 以下に配置される。
+<code>uv run</code> や <code>uv venv</code> 越しに使う前提ならここにPATHを通す必要はない。</p>
+<h3 id="設定">設定</h3>
+<p><a href="https://docs.astral.sh/uv/configuration/environment/">https://docs.astral.sh/uv/configuration/environment/</a></p>
+<p>設定ファイルは <code>~/.config/uv/</code> に置くらしいけど、
+今のところ環境変数を使うのが主流。</p>
+<p>ほかのツールで入れたPythonやシステム標準の <code>/usr/bin/python</code>
+まで探しに行って報告しようとしてくれる。
+uv自身で入れたPythonだけに専念してもらうと少し早くなる:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">UV_PYTHON_PREFERENCE</span><span class="o">=</span>only-managed
+</span></span></code></pre></div><p><a href="https://peps.python.org/pep-0668/">PEP 668</a> <code>EXTERNALLY-MANAGED</code> が有効なので
+<a href="https://docs.astral.sh/uv/reference/cli/#uv-venv"><code>uv venv</code></a>
+で仮想環境を作って使う。</p>
+<p><a href="https://docs.astral.sh/uv/reference/cli/#uv-pip"><code>uv pip</code></a>
+は普通の<a href="/python/pip.html">pip</a>と比べて圧倒的に速い。</p>
+<p>ほかにも<a href="https://docs.astral.sh/uv/reference/cli/#uv">サブコマンド</a>がたくさん。</p>
+<h2 id="rye">rye</h2>
+<p><a href="https://rye.astral.sh/">https://rye.astral.sh/</a></p>
+<p>プロジェクトの環境構築を一切合切面倒見てくれる管理ツール。
+ruffや<a href="#uv">uv</a>と同じチームが開発していて、同じくrust製。
+次のワンライナーでプログラム本体や設定ファイルなどが <code>~/.rye/</code> に配置される:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">curl -sSf https://rye.astral.sh/get <span class="p">|</span> bash
+</span></span></code></pre></div><p>内部的にuvを使っていて、役割がややかぶっている。
+uvの開発が急速に進む一方、こちらはやや遅れてきて存在意義が揺らいできている&hellip;?</p>
 <h3 id="pythonインストーラーとしてだけ使う">Pythonインストーラーとしてだけ使う</h3>
-<p>パッケージ運用はまだ普通にpipとかでいいかなと思うので、今のところ私はこの使い方。</p>
+<p>パッケージ運用はまだ普通にpipとかでいいかなと思う人の使い方。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># インストール済みバージョン一覧</span>
 </span></span><span class="line"><span class="cl">rye toolchain list
 </span></span><span class="line"><span class="cl">
@@ -104,7 +145,8 @@ ruffやuvと同じチームが開発していて、同じくrust製。
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># インストール</span>
 </span></span><span class="line"><span class="cl">rye toolchain fetch cpython@3.12
-</span></span></code></pre></div><p><code>global-python = true</code>
+</span></span></code></pre></div><p>今のところグローバルに <code>pip3 install</code> しても怒られない。
+<code>global-python = true</code>
 の設定でshimsにPATHが通っていればryeの管理下にあるPythonをプロジェクト外でも使えるが、逆に
 <code>pyproject.toml</code> が存在するディレクトリでのみそれができないという問題
 <a href="https://github.com/astral-sh/rye/issues/1121">#1121</a>
@@ -119,7 +161,8 @@ shimsに頼らず自分でPATHを設定するworkaround:</p>
 </span></span></code></pre></div><h2 id="pyenv">pyenv</h2>
 <p><a href="https://github.com/pyenv/pyenv">https://github.com/pyenv/pyenv</a></p>
 <p>管理者権限なしでホーム以下にインストールできる。
-ソースコードを取ってきて自前ビルドするという点で上記<a href="#rye">rye</a>と異なる。</p>
+ソースコードを取ってきて自前ビルドするという点で上記<a href="#uv">uv</a>や<a href="#rye">rye</a>と異なる。
+共有ライブラリやフレームワークなどを有効にしたい場合に使いやすい。</p>
 <ol>
 <li>
 <p><a href="/mac/homebrew.html">Homebrew</a> か
