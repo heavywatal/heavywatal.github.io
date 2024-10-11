@@ -17,16 +17,19 @@ MacやLinuxならシステムの一部として
 に従って最新版を入れるのがよい。
 
 
-## rye
+## uv
 
-<https://rye.astral.sh/>
+<https://docs.astral.sh/uv/>
 
 プロジェクトの環境構築を一切合切面倒見てくれる管理ツール。
-ruffやuvと同じチームが開発していて、同じくrust製。
-次のワンライナーでプログラム本体や設定ファイルなどが `~/.rye/` に配置される:
+ruffや[rye](#rye)と同じチームが開発していて、同じくrust製。
+次のワンライナーでプログラム本体が `~/.cargo/bin/uv` に配置される:
 ```sh
-curl -sSf https://rye.astral.sh/get | bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
+
+rust/cargoを使わない人は `source ~/.cargo/bin/env`
+みたいな文をシェルの設定ファイルに追加してPATHを通す必要があるかも。
 
 任意のバージョンのPythonを入れるためのツールとして、
 つまり[pyenv](#pyenv)的な位置付けでも使える。
@@ -34,9 +37,65 @@ curl -sSf https://rye.astral.sh/get | bash
 <https://github.com/indygreg/python-build-standalone>
 から取ってくるので、自前ビルド環境に左右されずCPUも使わず簡単。
 
+### Pythonインストーラーとして使う
+
+<https://docs.astral.sh/uv/reference/cli/#uv-python>
+
+```sh
+# バージョン一覧
+uv python list
+
+# インストール
+uv python install
+```
+
+バージョンを省略すると適当な最新版。
+`3` とか `3.12` みたいな指定でもその中での最新版を入れられる。
+
+`~/.local/share/uv/python/` 以下に配置される。
+`uv run` や `uv venv` 越しに使う前提ならここにPATHを通す必要はない。
+
+### 設定
+
+<https://docs.astral.sh/uv/configuration/environment/>
+
+設定ファイルは `~/.config/uv/` に置くらしいけど、
+今のところ環境変数を使うのが主流。
+
+ほかのツールで入れたPythonやシステム標準の `/usr/bin/python`
+まで探しに行って報告しようとしてくれる。
+uv自身で入れたPythonだけに専念してもらうと少し早くなる:
+```sh
+export UV_PYTHON_PREFERENCE=only-managed
+```
+
+[PEP 668](https://peps.python.org/pep-0668/) `EXTERNALLY-MANAGED` が有効なので
+[`uv venv`](https://docs.astral.sh/uv/reference/cli/#uv-venv)
+で仮想環境を作って使う。
+
+[`uv pip`](https://docs.astral.sh/uv/reference/cli/#uv-pip)
+は普通の[pip]({{< relref "pip.md" >}})と比べて圧倒的に速い。
+
+ほかにも[サブコマンド](https://docs.astral.sh/uv/reference/cli/#uv)がたくさん。
+
+
+## rye
+
+<https://rye.astral.sh/>
+
+プロジェクトの環境構築を一切合切面倒見てくれる管理ツール。
+ruffや[uv](#uv)と同じチームが開発していて、同じくrust製。
+次のワンライナーでプログラム本体や設定ファイルなどが `~/.rye/` に配置される:
+```sh
+curl -sSf https://rye.astral.sh/get | bash
+```
+
+内部的にuvを使っていて、役割がややかぶっている。
+uvの開発が急速に進む一方、こちらはやや遅れてきて存在意義が揺らいできている...?
+
 ### Pythonインストーラーとしてだけ使う
 
-パッケージ運用はまだ普通にpipとかでいいかなと思うので、今のところ私はこの使い方。
+パッケージ運用はまだ普通にpipとかでいいかなと思う人の使い方。
 
 ```sh
 # インストール済みバージョン一覧
@@ -49,6 +108,7 @@ rye toolchain list --include-downloadable
 rye toolchain fetch cpython@3.12
 ```
 
+今のところグローバルに `pip3 install` しても怒られない。
 `global-python = true`
 の設定でshimsにPATHが通っていればryeの管理下にあるPythonをプロジェクト外でも使えるが、逆に
 `pyproject.toml` が存在するディレクトリでのみそれができないという問題
@@ -70,7 +130,8 @@ fi
 <https://github.com/pyenv/pyenv>
 
 管理者権限なしでホーム以下にインストールできる。
-ソースコードを取ってきて自前ビルドするという点で上記[rye](#rye)と異なる。
+ソースコードを取ってきて自前ビルドするという点で上記[uv](#uv)や[rye](#rye)と異なる。
+共有ライブラリやフレームワークなどを有効にしたい場合に使いやすい。
 
 1.  [Homebrew]({{< relref "homebrew.md" >}}) か
     [Git]({{< relref "git.md" >}}) を使ってpyenvをインストール:

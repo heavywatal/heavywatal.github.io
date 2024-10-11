@@ -24,9 +24,14 @@ Python 3.4 以降では `venv` と `ensurepip` が標準ライブラリに入っ
 からの簡単にパッケージをインストールできるようにするツール。
 アンインストール機能の無い `easy_install` に取って代わり、
 現在では公式に推奨されている。
-Python 2.7.9以降、3.4以降では標準ライブラリの
+Python 3.4以降では標準ライブラリの
 [`ensurepip`](https://docs.python.org/3/library/ensurepip.html)
 によって自動的にインストールされる。
+
+Python 3.12以降では [PEP 668](https://peps.python.org/pep-0668/) が有効となり、
+仮想環境の外でグローバルに `pip3 install` しようとすると多くの場合
+`error: externally-managed-environment` と怒られる。
+後述の[`venv`](#venv)で仮想環境を作り、その中でpipを実行する。
 
 -   全体のヘルプ、コマンド毎の詳細ヘルプ:
     ```sh
@@ -37,7 +42,7 @@ Python 2.7.9以降、3.4以降では標準ライブラリの
 -   よく使うコマンド:
     ```sh
     pip3 list --outdated
-    pip3 install -U setuptools pip wheel
+    pip3 install -U pip
     pip3 search jupyter
     ```
 
@@ -56,21 +61,13 @@ Python 2.7.9以降、3.4以降では標準ライブラリの
 
 -   手動インストール:
     ```sh
-    python -m ensurepip --user
-    # または
-    curl -O https://bootstrap.pypa.io/get-pip.py
-    python get-pip.py --user
+    python3 -m ensurepip
     ```
-    `--user` を付けた場合のインストール先は環境変数
-    [`PYTHONUSERBASE`]({{< relref "install.md#pythonuserbase" >}})
-    で指定できる。
-    その中の `bin/` を `PATH` に追加するか、
-    絶対パスで `pip` コマンドを使う。
 
 
 ## `venv`
 
-https://docs.python.org/3/library/venv.html
+<https://docs.python.org/3/library/venv.html>
 
 Python実行環境を仮想化するパッケージ。
 これで作った仮想環境内で `pip` を使ってパッケージ管理する。
@@ -83,18 +80,46 @@ Python 3.3 以降では `venv` が標準ライブラリ入りしたので
 python3 -m venv [OPTIONS] ~/.virtualenvs/myproject
 ```
 
-仮想環境に入る、から出る:
+仮想環境に入る、仮想環境から出る:
 ```sh
 source  ~/.virtualenvs/myproject/bin/activate
 deactivate
 ```
 
+`activate` により `PATH`, `PS1`, `PYTHONHOME` が変更され、
+`deactivate` でそれらは復元される。
+`activate` するときまでの値が保持・復元されるということに注意。
+
+`VIRTUAL_ENV_DISABLE_PROMPT=1` を設定しておけばプロンプト左端に
+`(venv)` を追加させないようにできる。
+
 仮想環境の置き場所はどこでもいいけど、
-`~/.venvs` とか `~/.virtualenvs` にしておけばツールに見つけてもらいやすい。
+各プロジェクトのトップに `.venv` を作って `.venv/bin/activate` するのがモダン。
+プロジェクトの外にまとめる場合は
+`~/.venvs/` とか `~/.virtualenvs/` の下に置けば各種ツールに見つけてもらいやすい。
 例えば
 [vscode-python](https://github.com/microsoft/vscode-python/blob/main/src/client/pythonEnvironments/base/locators/lowLevel/globalVirtualEnvronmentLocator.ts),
 [reticulate](https://github.com/rstudio/reticulate/blob/main/R/virtualenv.R),
 etc.
+さらにそこを `WORKON_HOME` という環境変数に入れておけばより安心。
+
+[PEP 668](https://peps.python.org/pep-0668/)
+を無視してグローバルにパッケージをインストールしたい場合、
+`--break-system-packages` というオプションで突破することもできるが、
+グローバルっぽい仮想環境を作るほうがマイルドで安全。
+例えば次のようにシェルを設定して
+`python3 -m venv ${WORKON_HOME}/global` のように仮想環境を作ってPATHを通すとか。
+```sh
+export WORKON_HOME="${HOME}/.virtualenvs"
+PATH=${WORKON_HOME}/global/bin:$PATH
+```
+
+## `uv`
+
+pipやvenvに相当することを超高速に実行できるrust製ツール。
+おまけにPython本体のインストールもできる。
+
+[/python/install#uv]({{< relref "install.md#uv" >}}) の項を参照。
 
 
 ## `setuptools`
@@ -106,7 +131,7 @@ etc.
 はこれの一部として含まれているが、直接使うことはない。
 (`pip` を使う)
 
-See also ["setuptools --- Pythonパッケージ作成"]({{< relref "packaging.md" >}})
+See also ["Pythonパッケージ作成"]({{< relref "packaging.md" >}})
 
 `setuptools` の改良版としてしばらく `distribute` も利用されていたが、
 その成果が `setuptools` にマージされたので忘れていい。
