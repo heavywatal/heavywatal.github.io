@@ -302,49 +302,64 @@ STATIC/SHAREDが明示されていない <code>add_library()</code> でどっち
       </tr>
   </tbody>
 </table>
-<p>Linuxでは <code>lib64</code> が標準的だが、Linuxbrewで使うには <code>lib</code> にする必要がある。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">if</span><span class="p">(</span><span class="o">${</span><span class="nv">CMAKE_INSTALL_PREFIX</span><span class="o">}</span> <span class="s">MATCHES</span> <span class="s">linuxbrew</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span>  <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_INSTALL_LIBDIR</span> <span class="s">lib</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
-</span></span></span></code></pre></div><h3 id="cmakepackageconfighelpers">CMakePackageConfigHelpers</h3>
+<h3 id="cmakepackageconfighelpers">CMakePackageConfigHelpers</h3>
 <p><a href="https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html">https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html</a></p>
 <p>他のプロジェクトから以下のように利用されるライブラリを作りたい。
 外部プロジェクトであることを明確にするため
 <code>名前空間::ターゲット</code> という形でリンクするのが筋:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">project</span><span class="p">(</span><span class="s">otherproject</span> <span class="s">CXX</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">find_package</span><span class="p">(</span><span class="s">mylib</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># add_subdirectory(mylib)
-</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">othertarget</span> <span class="s">PRIVATE</span> <span class="s">mylib::mylib</span><span class="p">)</span><span class="err">
-</span></span></span></code></pre></div><p><code>${CMAKE_INSTALL_PREFIX}/share/</code> らへんにconfigファイルを送り込む必要がある。
-<code>install(TARGETS)</code> の中で <code>EXPORT</code> のためのターゲット定義し、
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">othertarget</span> <span class="s">PRIVATE</span> <span class="s">mylib::mylib</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><p>こうやって使ってもらうためには <code>*config.cmake</code> ファイルを
+<a href="https://cmake.org/cmake/help/latest/command/find_package.html#config-mode-search-procedure"><code>find_package()</code> の探索先</a>
+のどこかにインストールする必要がある。
+選択肢があり過ぎて悩ましく、公式ドキュメントにも推奨などは書かれていないが、
+<a href="https://discourse.cmake.org/t/what-should-the-destination-be-for-a-header-only-librarys-cmake-config-file/8473">識者のコメント</a>
+によれば次の二択で使い分ける方針が良さそう:</p>
+<ul>
+<li><code>share/cmake/${PROJECT_NAME}</code>:
+header-only, architecture-independent.
+<code>find_package()</code> は <code>${CMAKE_INSTALL_DATADIR}</code> に追従せず <code>share</code> を読みにいく。</li>
+<li><code>${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}</code>:
+共有ライブラリあり、architecture-dependent.</li>
+</ul>
+<p><code>install(TARGETS)</code> の中で <code>EXPORT</code> のためのターゲット定義し、
 <code>install(EXPORT)</code> でその設定を行う:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">project</span><span class="p">(</span><span class="s">mylib</span>
 </span></span><span class="line"><span class="cl">  <span class="s">VERSION</span> <span class="s">0.1.0</span>
 </span></span><span class="line"><span class="cl">  <span class="s">LANGUAGES</span> <span class="s">CXX</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># ...
-</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">install</span><span class="p">(</span><span class="s">TARGETS</span> <span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">install</span><span class="p">(</span><span class="s">TARGETS</span> <span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
 </span></span><span class="line"><span class="cl">  <span class="s">EXPORT</span> <span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="s">-config</span>
-</span></span><span class="line"><span class="cl">  <span class="s">LIBRARY</span> <span class="s">DESTINATION</span> <span class="o">${</span><span class="nv">CMAKE_INSTALL_LIBDIR</span><span class="o">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">config_destination</span> <span class="o">${</span><span class="nv">CMAKE_INSTALL_LIBDIR</span><span class="o">}</span><span class="s">/cmake/</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">install</span><span class="p">(</span><span class="s">EXPORT</span> <span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="s">-config</span>
-</span></span><span class="line"><span class="cl">  <span class="s">DESTINATION</span> <span class="o">${</span><span class="nv">CMAKE_INSTALL_DATADIR</span><span class="o">}</span><span class="s">/</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
+</span></span><span class="line"><span class="cl">  <span class="s">DESTINATION</span> <span class="o">${</span><span class="nv">config_destination</span><span class="o">}</span>
 </span></span><span class="line"><span class="cl">  <span class="s">NAMESPACE</span> <span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="s">::</span>
 </span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><p>バージョン情報も同じところに送り込む:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">VERSION_CONFIG</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="s">-config-version.cmake</span><span class="p">)</span><span class="err">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">version_file</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="s">-config-version.cmake</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">include</span><span class="p">(</span><span class="s">CMakePackageConfigHelpers</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">write_basic_package_version_file</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">  <span class="o">${</span><span class="nv">VERSION_CONFIG</span><span class="o">}</span> <span class="s">COMPATIBILITY</span> <span class="s">AnyNewerVersion</span>
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">write_basic_package_version_file</span><span class="p">(</span><span class="o">${</span><span class="nv">version_file</span><span class="o">}</span>
+</span></span><span class="line"><span class="cl">  <span class="s">COMPATIBILITY</span> <span class="s">AnyNewerVersion</span>
 </span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">install</span><span class="p">(</span><span class="s">FILES</span> <span class="o">${</span><span class="nv">VERSION_CONFIG</span><span class="o">}</span>
-</span></span><span class="line"><span class="cl">  <span class="s">DESTINATION</span> <span class="o">${</span><span class="nv">CMAKE_INSTALL_DATADIR</span><span class="o">}</span><span class="s">/</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">install</span><span class="p">(</span><span class="s">FILES</span> <span class="o">${</span><span class="nv">version_file</span><span class="o">}</span>
+</span></span><span class="line"><span class="cl">  <span class="s">DESTINATION</span> <span class="o">${</span><span class="nv">config_destination</span><span class="o">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><p><code>find_package()</code> から使うにはここまでの設定で十分だが、
 <code>add_subdirectory()</code> からでも同じ形で使えるようにするため、
 <code>ALIAS</code> を設定しておいたほうがいい:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">add_library</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">SHARED</span><span class="p">)</span><span class="err">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">add_library</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">add_library</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="s">::</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">ALIAS</span> <span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="p">)</span><span class="err">
-</span></span></span></code></pre></div><h3 id="fetchcontent">FetchContent</h3>
+</span></span></span></code></pre></div><p>上記のように直接 <code>EXPORT *-config</code> するのは簡易版。
+ライブラリ利用時に必要な変数をインストール時に設定してあげたいときなどは、
+同じ内容を <code>EXPORT *-targets</code> のような名前で書き出しておき、
+<code>configure_package_config_file(Config.cmake.in, ...)</code>
+のようなコマンドで <code>*-config.cmake</code> を生成し、
+その中から <code>include(*-targets)</code> する。</p>
+<h3 id="fetchcontent">FetchContent</h3>
 <p><a href="https://cmake.org/cmake/help/latest/module/FetchContent.html">https://cmake.org/cmake/help/latest/module/FetchContent.html</a></p>
 <p>外部ライブラリをコンフィグ時に取ってくる。
 CMake 3.11 から。</p>
@@ -460,13 +475,18 @@ generator非依存の <code>cmake --build</code> を使ったほうがいい。<
 </dl>
 <h2 id="versions">Versions</h2>
 <ul>
-<li>3.28: <code>FetchContent_Declare(... EXCLUDE_FROM_ALL)</code>, Ubuntu 24.04 noble</li>
-<li>3.24: <code>FetchContent_Declare(... FIND_PACKAGE_ARGS)</code></li>
-<li>3.22: Ubuntu 22.04 jammy</li>
-<li>3.20: <code>cmake_path()</code></li>
-<li>3.16: Ubuntu 20.04 focal</li>
+<li>3.28: <code>FetchContent_Declare(... EXCLUDE_FROM_ALL)</code>,
+<a href="https://cmake.org/cmake/help/latest/manual/cmake-cxxmodules.7.html">C++20 modules</a>,
+<a href="https://launchpad.net/ubuntu/noble/+source/cmake">Ubuntu 24.04 noble</a></li>
+<li>3.24: <code>FetchContent_Declare(... FIND_PACKAGE_ARGS)</code>, <code>--fresh</code></li>
+<li>3.23: <code>FILE_SET</code></li>
+<li>3.22: <a href="https://launchpad.net/ubuntu/jammy/+source/cmake">Ubuntu 22.04 jammy</a></li>
+<li>3.20: <a href="https://cmake.org/cmake/help/latest/command/cmake_path.html"><code>cmake_path()</code></a>, <code>cxx_std_23</code></li>
+<li>3.19: <a href="https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html"><code>CMakePresets.json</code></a></li>
+<li>3.16: <a href="https://launchpad.net/ubuntu/focal/+source/cmake">Ubuntu 20.04 focal</a></li>
 <li>3.15: <code>cmake --install</code></li>
-<li>3.13: <code>cmake -S . -B build</code></li>
+<li>3.13: <code>cmake -S . -B build</code>, <code>target_link_directories</code>, <code>target_link_options</code></li>
+<li>3.12: <code>cxx_std_20</code></li>
 <li>3.11: <code>include(FetchContent)</code></li>
 <li>3.8: <code>cxx_std_17</code></li>
 </ul>
