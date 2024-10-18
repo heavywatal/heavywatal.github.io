@@ -260,12 +260,6 @@ Variable                    | Value
 `CMAKE_INSTALL_DATADIR`     | `share`
 `CMAKE_INSTALL_FULL_<dir>`  | `${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_<dir>}`
 
-Linuxでは `lib64` が標準的だが、Linuxbrewで使うには `lib` にする必要がある。
-```cmake
-if(${CMAKE_INSTALL_PREFIX} MATCHES linuxbrew)
-  set(CMAKE_INSTALL_LIBDIR lib)
-endif()
-```
 
 ### CMakePackageConfigHelpers
 
@@ -277,11 +271,22 @@ endif()
 ```cmake
 project(otherproject CXX)
 find_package(mylib)
-# add_subdirectory(mylib)
 target_link_libraries(othertarget PRIVATE mylib::mylib)
 ```
 
-`${CMAKE_INSTALL_PREFIX}/share/` らへんにconfigファイルを送り込む必要がある。
+こうやって使ってもらうためには `*config.cmake` ファイルを
+[`find_package()` の探索先](https://cmake.org/cmake/help/latest/command/find_package.html#config-mode-search-procedure)
+のどこかにインストールする必要がある。
+選択肢があり過ぎて悩ましく、公式ドキュメントにも推奨などは書かれていないが、
+[識者のコメント](https://discourse.cmake.org/t/what-should-the-destination-be-for-a-header-only-librarys-cmake-config-file/8473)
+によれば次の二択で使い分ける方針が良さそう:
+
+- `share/cmake/${PROJECT_NAME}`:
+  header-only, architecture-independent.
+  `find_package()` は `${CMAKE_INSTALL_DATADIR}` に追従せず `share` を読みにいく。
+- `${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}`:
+  共有ライブラリあり、architecture-dependent.
+
 `install(TARGETS)` の中で `EXPORT` のためのターゲット定義し、
 `install(EXPORT)` でその設定を行う:
 ```cmake
@@ -289,25 +294,27 @@ project(mylib
   VERSION 0.1.0
   LANGUAGES CXX)
 # ...
+
 install(TARGETS ${PROJECT_NAME}
   EXPORT ${PROJECT_NAME}-config
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
+
+set(config_destination ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 install(EXPORT ${PROJECT_NAME}-config
-  DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}
+  DESTINATION ${config_destination}
   NAMESPACE ${PROJECT_NAME}::
 )
 ```
 
 バージョン情報も同じところに送り込む:
 ```cmake
-set(VERSION_CONFIG ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake)
+set(version_file ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake)
 include(CMakePackageConfigHelpers)
-write_basic_package_version_file(
-  ${VERSION_CONFIG} COMPATIBILITY AnyNewerVersion
+write_basic_package_version_file(${version_file}
+  COMPATIBILITY AnyNewerVersion
 )
-install(FILES ${VERSION_CONFIG}
-  DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}
+install(FILES ${version_file}
+  DESTINATION ${config_destination}
 )
 ```
 
@@ -315,9 +322,17 @@ install(FILES ${VERSION_CONFIG}
 `add_subdirectory()` からでも同じ形で使えるようにするため、
 `ALIAS` を設定しておいたほうがいい:
 ```cmake
-add_library(${PROJECT_NAME} SHARED)
+add_library(${PROJECT_NAME})
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 ```
+
+上記のように直接 `EXPORT *-config` するのは簡易版。
+ライブラリ利用時に必要な変数をインストール時に設定してあげたいときなどは、
+同じ内容を `EXPORT *-targets` のような名前で書き出しておき、
+`configure_package_config_file(Config.cmake.in, ...)`
+のようなコマンドで `*-config.cmake` を生成し、
+その中から `include(*-targets)` する。
+
 
 ### FetchContent
 
@@ -476,12 +491,17 @@ cmake --install build
 
 ## Versions
 
-- 3.28: `FetchContent_Declare(... EXCLUDE_FROM_ALL)`, Ubuntu 24.04 noble
-- 3.24: `FetchContent_Declare(... FIND_PACKAGE_ARGS)`
-- 3.22: Ubuntu 22.04 jammy
-- 3.20: `cmake_path()`
-- 3.16: Ubuntu 20.04 focal
+- 3.28: `FetchContent_Declare(... EXCLUDE_FROM_ALL)`,
+  [C++20 modules](https://cmake.org/cmake/help/latest/manual/cmake-cxxmodules.7.html),
+  [Ubuntu 24.04 noble](https://launchpad.net/ubuntu/noble/+source/cmake)
+- 3.24: `FetchContent_Declare(... FIND_PACKAGE_ARGS)`, `--fresh`
+- 3.23: `FILE_SET`
+- 3.22: [Ubuntu 22.04 jammy](https://launchpad.net/ubuntu/jammy/+source/cmake)
+- 3.20: [`cmake_path()`](https://cmake.org/cmake/help/latest/command/cmake_path.html), `cxx_std_23`
+- 3.19: [`CMakePresets.json`](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html)
+- 3.16: [Ubuntu 20.04 focal](https://launchpad.net/ubuntu/focal/+source/cmake)
 - 3.15: `cmake --install`
-- 3.13: `cmake -S . -B build`
+- 3.13: `cmake -S . -B build`, `target_link_directories`, `target_link_options`
+- 3.12: `cxx_std_20`
 - 3.11: `include(FetchContent)`
 - 3.8: `cxx_std_17`
