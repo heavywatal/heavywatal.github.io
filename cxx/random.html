@@ -64,13 +64,14 @@ C++11 から標準ライブラリに追加された <code>&lt;random&gt;</code> 
 <li><code>&lt;algorithm&gt;</code> の <code>std::random_shuffle()</code> は引数省略で
 <code>std::rand()</code> が使われてしまうので非推奨。
 C++11 で追加された <code>std::shuffle()</code> に生成器を明示的に渡して使う。</li>
-<li>非標準の生成器としてはSFMTやdSFMTが高速で高品質。Xorshift系とPCGの動向にも注目。</li>
+<li>非標準の生成器としてはSFMTやdSFMTが高速で高品質。
+徐々にPCGやXorshift系の利用も広がってきている。</li>
 </ul>
 <h2 id="random"><code>&lt;random&gt;</code></h2>
 <ul>
-<li><a href="https://cplusplus.com/reference/random/">https://cplusplus.com/reference/random/</a></li>
 <li><a href="https://en.cppreference.com/w/cpp/numeric/random">https://en.cppreference.com/w/cpp/numeric/random</a></li>
 <li><a href="https://cpprefjp.github.io/reference/random.html">https://cpprefjp.github.io/reference/random.html</a></li>
+<li><a href="https://cplusplus.com/reference/random/">https://cplusplus.com/reference/random/</a></li>
 </ul>
 <p>C++11 ではまともに使える乱数ライブラリが追加された。
 乱数生成エンジンと分布関数オブジェクトを組み合わせて使う。</p>
@@ -101,61 +102,74 @@ C++11 で追加された <code>std::shuffle()</code> に生成器を明示的に
 <p><a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt.html">http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt.html</a></p>
 <p>松本眞と西村拓士によって開発された高速・高品質な擬似乱数生成器。
 標準の <code>&lt;random&gt;</code> でも利用可能になっており、
-パラメータ定義済みの <code>std::mt19937</code> がよく使われる。</p>
+パラメータ定義済みの <code>std::mt19937</code> がよく使われる。
+<a href="https://stat.ethz.ch/R-manual/R-patched/library/base/html/Random.html">Rのデフォルト</a>にも採用されている。</p>
 <h3 id="sfmt">SFMT</h3>
 <p><a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/">http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/</a></p>
 <p>Mersenne Twisterを松本眞と斎藤睦夫がさらに改良したもの。
 SIMD命令を利用して、速度も品質も向上したらしい。
 標準には含まれず、ソースからのビルドが必要。</p>
-<h3 id="dsfmt">dSFMT</h3>
-<p><a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/#dSFMT">http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/#dSFMT</a></p>
-<p>SFMTの <code>double</code> 版。
+<p>double型を直接生成する亜種
+<a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/#dSFMT">dSFMT</a>
+もある。
 整数乱数から除算で変換するよりも良質で高速。
 v2.1からは整数も出力可能。
-標準には含まれず、ソースからのビルドが必要。</p>
-<h3 id="インストール方法使い方">インストール方法、使い方</h3>
-<p><a href="https://github.com/heavywatal/sfmt-class/">https://github.com/heavywatal/sfmt-class/</a></p>
-<p>SFMTやdSFMTを簡単に導入するためのインストーラを作って公開した。
-C++標準 <code>&lt;random&gt;</code> の <code>std::mt19937</code>
-と同じように使えるようにしたラッパークラス
-(<code>wtl::sfmt19937</code>) も書いた。</p>
-<h2 id="xorshift">Xorshift</h2>
-<p><a href="https://www.jstatsoft.org/article/view/v008i14">Marsaglia (2003)</a>
-から始まって、いくつかの改良版が派生している。
-省メモリで高速。
-周期は $2^{128}$ ほどでMTに比べれば短いけど、大概はこれで十分。
-最新情報は
-<a href="http://xoroshiro.di.unimi.it/">xoroshiro.di.unimi.it</a>
-で追えば良さそう。</p>
+かつてはJuliaのデフォルトに採用されていた。</p>
+<p>本家の実装はC言語の関数として提供されていて、
+C++標準 <code>&lt;random&gt;</code> と組み合わせて使う設計にはなっていない。
+そこで <code>std::mt19937</code> と同じように使えるようにしたラッパークラス
+<a href="https://github.com/heavywatal/sfmt-class/"><code>wtl::sfmt19937</code></a> を書いた。
+<a href="/dev/cmake.html">CMake</a>
+でSFMTを簡単に導入するためのインストーラをとしても使える。</p>
 <h2 id="pcg">PCG</h2>
-<p>線形合同法(LCG)の出力をpermutationした<a href="http://www.pcg-random.org/">PCG</a>も良さそう。
+<p><a href="https://www.pcg-random.org/">https://www.pcg-random.org/</a></p>
+<p>線形合同法(LCG: linear congruential generator)の出力をpermutationする。
+周期はMTに比べれば短いけど、省メモリ、高速で、品質テストの結果も優秀。
+<a href="https://numpy.org/doc/stable/reference/random/generator.html"><code>numpy.random.default_rng</code></a>
+としても採用されている。
 作者O&rsquo;Neillのブログは読み応えがあっておもしろい。</p>
+<p>本家C++実装 <a href="https://github.com/imneme/pcg-cpp">pcg-cpp</a> は
+<a href="/dev/cmake.html">CMake</a> 非対応なので使いにくい。
+<a href="https://github.com/imneme/pcg-cpp/issues/43">issue</a> にも挙がり
+<a href="https://github.com/imneme/pcg-cpp/pull/44">PR</a> も提出されたが、
+巨大な差分を生じる悪手によりマージされず頓挫したらしい。
+とりあえず自分のフォーク
+<a href="https://github.com/heavywatal/pcg-cpp">heavywatal/pcg-cpp</a>
+で最低限の <code>CMakeLists.txt</code> を書いて対処。</p>
+<p>また、本家pcg-cppは実験的な亜種クラスを大量に含んでいてソースが複雑化・肥大化している。
+そこで <code>pcg32</code> と <code>pcg64</code> に必要な部分だけを抜き出し、
+single-headerで手軽に使える軽量版
+<a href="https://github.com/heavywatal/pcglite">pcglite</a>
+を作ってみた。</p>
+<ul>
+<li><a href="https://github.com/heavywatal/pcg-cpp">pcg-cpp</a>:
+~3600 lines / 3 headers</li>
+<li><a href="https://github.com/heavywatal/pcglite">pcglite</a>:
+~250 lines / 1 header</li>
+</ul>
+<h2 id="xorshift-family">Xorshift family</h2>
+<p><a href="https://prng.di.unimi.it/">https://prng.di.unimi.it/</a></p>
+<p><a href="https://www.jstatsoft.org/article/view/v008i14">Marsaglia (2003)</a>
+から始まって、別の開発者(主にVigna)によっていくつかの改良版が派生している。
+Xoshiro256++が<a href="https://docs.julialang.org/en/v1/stdlib/Random/">Juliaのデフォルト</a>に採用されている。</p>
+<p>PCG作者との論争を見る限り、こちらの作者は口が悪い。
+乱数の品質でどちらが優れているのかは分からないけど。</p>
 <h2 id="seed">Seed</h2>
 <h3 id="devurandom"><code>/dev/urandom</code></h3>
 <p><code>/dev/random</code> は擬似乱数を生成するデバイスで、
-環境ノイズから乱数を生成するため自然乱数に近い。
+環境ノイズから乱数を生成するため自然乱数に近いが、遅い。
 <code>/dev/urandom</code> は十分なノイズが蓄積していなくても
 内部プールの再利用によってすぐに生成してくれるが、
 そのために <code>/dev/random</code> ほど安全ではない。
-長期に渡って使われる暗号鍵の生成以外の目的では
-<code>/dev/urandom</code> の利用が推奨されている。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;fstream&gt;</span><span class="cp">
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
-</span></span><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">int</span> <span class="nf">dev_urandom</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="k">try</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">ifstream</span> <span class="n">fin</span><span class="p">(</span><span class="s">&#34;/dev/urandom&#34;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">binary</span> <span class="o">|</span> <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">in</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">fin</span><span class="p">.</span><span class="n">exceptions</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">failbit</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">fin</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">x</span><span class="p">),</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">));</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="k">catch</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">failure</span><span class="o">&amp;</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span><span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">failure</span><span class="p">(</span><span class="s">&#34;/dev/urandom&#34;</span><span class="p">);}</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">x</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><h3 id="stdrandom_device"><code>std::random_device</code></h3>
-<p>C++11ではそのための関数が <code>&lt;random&gt;</code> に用意されている。
-これも基本的には <code>/dev/urandom</code> から生成するらしい。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">random_device</span> <span class="n">rd</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">random_device</span><span class="o">::</span><span class="n">result_type</span> <span class="n">seed</span> <span class="o">=</span> <span class="n">rd</span><span class="p">();</span>
+長期に渡って使われる暗号鍵の生成以外の目的、
+すなわちランダムっぽい乱数シードの生成のような目的では
+<code>/dev/urandom</code> の利用で十分らしい。
+が、今やこれを直接読むコードは必要なく、次のように標準ライブラリを利用する。</p>
+<h3 id="stdrandom_device"><code>std::random_device</code></h3>
+<p>C++11から標準の <code>&lt;random&gt;</code> で提供される。
+基本的には <code>/dev/urandom</code> から生成するらしい。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">random_device</span> <span class="n">seeder</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="k">auto</span> <span class="n">seed</span> <span class="o">=</span> <span class="n">seeder</span><span class="p">();</span>
 </span></span></code></pre></div><p>大量のシミュレーションを回すときなど、
 エントロピーがもっと必要な場合は <code>std::seed_seq</code> を利用する。</p>
 
