@@ -183,8 +183,8 @@ lvalue値受け取りの関数はrvalueを受け取るときにはコピーを�
 
 関連記事はたくさん見つかるが、特に読みやすく参考になったのはこちら:
 
-> [本当は怖くないムーブセマンティクス - yohhoyの日記（別館）](http://yohhoy.hatenablog.jp/entry/2012/12/15/120839) \
-> [参照渡し or 値渡し？ - yohhoyの日記](http://d.hatena.ne.jp/yohhoy/20120524/p1)
+> [本当は怖くないムーブセマンティクス - yohhoyの日記（別館）](https://yohhoy.hatenablog.jp/entry/2012/12/15/120839) \
+> [参照渡し or 値渡し？ - yohhoyの日記](https://d.hatena.ne.jp/yohhoy/20120524/p1)
 
 
 ### `noexcept`
@@ -232,8 +232,8 @@ lvalue値受け取りの関数はrvalueを受け取るときにはコピーを�
     便利なだけでなくきっと最適化もされやすい。
     ただし長さの変更など苦手な点もあるので使い所は限られる。
     本格的なベクタ演算・行列演算がしたければ
-    [Eigen](http://eigen.tuxfamily.org/) や
-    [Armadillo](http://arma.sourceforge.net/) などを使ったほうよさそう。
+    [Eigen](https://eigen.tuxfamily.org/) や
+    [Armadillo](https://arma.sourceforge.net/) などを使ったほうよさそう。
 
 `std::deque`
 :   `vector` とほぼ同じだが、`reserve()` ができない。

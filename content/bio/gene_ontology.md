@@ -10,13 +10,14 @@ tags = ["genetics", "database"]
 機能に応じて遺伝子にたくさんのタグ(**GO term**)を付けましょうってこと。
 
 e.g. Human RB1
-<http://amigo.geneontology.org/amigo/gene_product/UniProtKB:P06400>
+<https://amigo.geneontology.org/amigo/gene_product/UniProtKB:P06400>
 
 ## GO term
 
-<http://geneontology.org/page/ontology-structure>
+- <https://geneontology.org/docs/GO-term-elements>
+- <https://geneontology.org/docs/ontology-documentation/>
 
-e.g. <http://amigo.geneontology.org/amigo/term/GO:0043065#display-graphics-tab>
+e.g. <https://amigo.geneontology.org/amigo/term/GO:0043065#display-graphics-tab>
 
 小さくて専門的な下位termから、大きくて一般的な上位termに向かう
 directed acyclic graph (DAG) を構成している。
@@ -26,17 +27,17 @@ directed acyclic graph (DAG) を構成している。
 
 最上位のtermは3つ:
 
-[Biological Process](http://geneontology.org/page/biological-process-ontology-guidelines)
+Biological Process
 :   生物学的な機能。
     下位には例えば、分化、細胞分裂、細胞死など。
     `GO:0008150`
 
-[Cellular Component](http://geneontology.org/page/cellular-component-ontology-guidelines)
+Cellular Component
 :   細胞内での局在。
     下位には例えば、核内、小胞体など。
     `GO:0005575`
 
-[Molecular Function](http://geneontology.org/page/molecular-function-ontology-guidelines)
+Molecular Function
 :   化学的な機能。
     下位には例えば、加水分解酵素、DNA結合など。
     `GO:0003674`
@@ -45,7 +46,7 @@ directed acyclic graph (DAG) を構成している。
 
 ### GO relation
 
-<http://geneontology.org/page/ontology-relations>
+<https://geneontology.org/docs/ontology-relations/>
 
 DAGのエッジのことをrelationと呼ぶ。
 
@@ -69,7 +70,7 @@ e.g. 対照区と処理区で発現が変化した遺伝子には、XXXという
 
 ### Amigo
 
-<http://amigo.geneontology.org>
+<https://amigo.geneontology.org>
 
 ### BioConductor
 

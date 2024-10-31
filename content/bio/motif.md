@@ -74,7 +74,7 @@ Signature
 :   1つの文字列でバシッと表現。
     正規表現の文字集合 `[]` を使ってポジション毎の複数候補を表現したり、
     IUPAC命名法に従って degenerate symbol で表すこともある。
-    <http://www.bioinformatics.org/sms/iupac.html>
+    <https://www.bioinformatics.org/sms/iupac.html>
 
     e.g `TATAAT`, `TATA[AT]A[AT]`, `TATAWAW`
 
@@ -122,8 +122,6 @@ Signature
     $e(n) = \frac{1}{\ln 2} \times \frac{s - 1}{2n}$\
     ただし *s* = 4 [DNA] or 20 [Protein]
 
-    <http://schneider.ncifcrf.gov/paper/logopaper/>
-
 **Consensus Logo**
 :   コンセンサス配列の重み付け表示版、あるいはSequence Logoのトップヒット限定版。
     1行の文字列なので図を使わず書式付きリッチテキストとして扱える。
@@ -142,13 +140,13 @@ Signature
 [MoD Tools](http://159.149.160.51/modtools/)
 :   Weeder, WeederH, Pscan, PscanChIP
 
-[RSAT](http://www.rsat.eu/) (Regulatory Sequence Analysis Tools)
+[RSAT](https://rsat.france-bioinformatique.fr/teaching/RSAT_portal.html) (Regulatory Sequence Analysis Tools)
 :   Oligo-Analysis, Dyad-Analysis, Consensus,
     peak-motifs;
     ローカル使用には作者へのメールが必要。
 
-[Brutlag Bioinformatics Group](http://motif.stanford.edu/distributions/)
-:   BioProspector, [MDscan](http://mdscan.stanford.edu/)
+[Brutlag Bioinformatics Group](https://motif.stanford.edu/distributions/)
+:   BioProspector, [MDscan](https://ai.stanford.edu/~xsliu/MDscan/)
 
 [SCOPE](http://genie.dartmouth.edu/scope/about.php)
 :   BEAM, PRISM, SPACER を組み合わせる。
@@ -228,7 +226,7 @@ EM (expectation maximization) algorithm
 ------------------------------------------------------------------------
 
 Gibbs sampling
-:   [AlignACE](http://arep.med.harvard.edu/mrnadata/mrnasoft.html) (Linux実行形式のみ配布),
+:   [AlignACE](https://arep.med.harvard.edu/mrnadata/mrnasoft.html) (Linux実行形式のみ配布),
     MotifSampler
 
 :   1.  *N* 本の各配列のモチーフ位置の初期値をランダムに与える
@@ -380,12 +378,12 @@ Raw Score (サイト単位)
 
 ### DNA
 
-[TRANSFAC](http://www.gene-regulation.com/pub/databases.html) ([Matys et al. 2003](https://dx.doi.org/10.1093/nar/gkg108))
+[TRANSFAC](http://gene-regulation.com/pub/databases.html) ([Matys et al. 2003](https://dx.doi.org/10.1093/nar/gkg108))
 :   真核生物。
     情報量は多いが1つのTFが複数のプロファイルを持ってる。
     Professional版と機能限定Public版がある。
 
-[JASPAR](http://jaspar.genereg.net/) ([Sandelin et al. 2004](https://dx.doi.org/10.1093/nar/gkh012))
+[JASPAR](https://jaspar.elixir.no/) ([Sandelin et al. 2004](https://dx.doi.org/10.1093/nar/gkh012))
 :   真核生物。
     情報量は少ないが1つのTFは1つのプロファイルだけ持ってる。
     無制限。
@@ -394,14 +392,14 @@ Raw Score (サイト単位)
 
 [DBTBS](http://dbtbs.hgc.jp/): Database of Transcriptional Regulation in Bacillus subtilis
 
-[RegulonDB](http://regulondb.ccg.unam.mx/):
+[RegulonDB](https://regulondb.ccg.unam.mx/):
 :   Escherichia coli K-12 Transcriptional Regulatory Network
 
 ### Protein
 
-[Pfam](http://pfam.sanger.ac.uk/)
+[Pfam](http://pfam.xfam.org/)
 
-[PROSITE](http://prosite.expasy.org/)
+[PROSITE](https://prosite.expasy.org/)
 
 [ProDom](http://prodom.prabi.fr/)
 

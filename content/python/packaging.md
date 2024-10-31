@@ -141,7 +141,7 @@ linterとしては
 [`pyproject.toml` 対応拒否のflake8](https://github.com/PyCQA/flake8/issues/234)
 を捨てて超高速Rust製[ruff](https://docs.astral.sh/ruff/)を使う。
 0.2からはformatterとしても使えるようになり、
-[https://black.readthedocs.io](black)も不要になった。
+[black](https://black.readthedocs.io)も不要になった。
 
 
 ### ソースコード

@@ -77,8 +77,7 @@ https://meme-suite.org/doc/meme.html
 `-bfile <bfile>`
 :   バックグラウンド配列を生成するマルコフ過程のパラメータを記述したファイルを指定。
     これを指定しない場合はトレーニング配列の塩基頻度のみを利用した0階マルコフ。
-    FASTA配列からファイルを作ってくれるプログラム `fasta-get-markov` も用意されてる。
-    <http://meme.nbcr.net/meme/doc/fasta-get-markov.html>:
+    FASTA配列からファイルを作ってくれるプログラム [`fasta-get-markov`](https://meme-suite.org/meme/doc/fasta-get-markov.html) も用意されてる。
 
         # order 0
         A 3.081e-01
@@ -111,7 +110,7 @@ https://meme-suite.org/doc/meme.html
 
 ### スコア
 
-[Bailey and Gribskov 1998](http://bioinformatics.oxfordjournals.org/content/14/1/48)
+[Bailey and Gribskov 1998](https://doi.org/10.1093/bioinformatics/14.1.48)
 
 E-value
 :   そのモチーフが同じサイズのランダムな配列の中にたまたま見つかる個数の期待値
@@ -156,7 +155,7 @@ ChIP-seqデータではピーク周辺100bpくらいを使うべし。
 
 ## `MAST`
 
-<http://meme.nbcr.net/meme/doc/mast.html>
+<https://meme-suite.org/meme/doc/mast.html>
 
 既知のモチーフ (`MEME` で発見されたとか) を配列データベースから検索する。
 

@@ -56,10 +56,10 @@ Contacts
 :   Project Assistant Professor in [Makino Laboratory](https://www.lifesci.tohoku.ac.jp/evolgenomics/), Tohoku University.
 
 2013-10 – 2019-08
-:   Postdoctoral fellow in [Innan Laboratory](http://www.sendou.soken.ac.jp/esb/innan/InnanLab/), SOKENDAI (The Graduate University for Advanced Studies).
+:   Postdoctoral fellow in [Innan Laboratory](https://rcies.soken.ac.jp/labs/innan/index.html), SOKENDAI (The Graduate University for Advanced Studies).
 
 2010-07 – 2013-03
-:   JSPS Research Fellow (DC1) in [Kawata Laboratory](http://meme.biology.tohoku.ac.jp/klabo-wiki/), Tohoku University.
+:   JSPS Research Fellow (DC1) in [Kawata Laboratory](http://www.biology.tohoku.ac.jp/lab-www/makino_lab/foreverklabo/), Tohoku University.
 
 
 ## Publications
