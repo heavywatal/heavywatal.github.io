@@ -110,10 +110,9 @@ Contacts
 **Book Chapters**
 
 1.  Atsushi Niida and **Watal M. Iwasaki**
-    "Agent-Based Modeling and Analysis of Cancer Evolution"
-    in Simulation Modelling
-    (working title; [2021-10 online-first](https://www.intechopen.com/online-first/78775))
-    doi:10.5772/intechopen.100140, IntechOpen
+    "Agent-Based Modeling and Analysis of Cancer Evolution",
+    [Chapter 4 in Simulation Modeling](https://doi.org/10.5772/intechopen.100140),
+     (2022) IntechOpen
 1.  印南秀樹、**岩嵜航**、新井田厚司
     「がんゲノミクスと集団遺伝学の融合」
     [*BIO Clinica* **33**:6](https://www.fujisan.co.jp/product/1281683000/)
@@ -271,8 +270,10 @@ Contacts
     [*Evolution: Education and Outreach* **8**:14](https://dx.doi.org/10.1186/s12052-015-0043-6)
 -   [`msutils`](https://github.com/heavywatal/msutils):
     Utilities for coalescent simulation with `ms`
+-   [`pcglite`](https://github.com/heavywatal/pcglite):
+    Lightweight subset of PCG for C++
 -   [`sfmt-class`](https://github.com/heavywatal/sfmt-class):
-    SFMT installer and wrapper class for C++
+    SFMT wrapper class for C++
 -   [Hugo theme for non-blog websites](https://github.com/heavywatal/hugo-theme-nonblog)
 -   [Hugo theme for reveal.js slides](https://github.com/heavywatal/hugo-theme-reveal)
 
