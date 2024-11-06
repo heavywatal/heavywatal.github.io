@@ -78,6 +78,12 @@ install(TARGETS a.out
 
 - [`add_executable(<name> [EXCLUDE_FROM_ALL] ...)`](https://cmake.org/cmake/help/latest/command/add_executable.html)
 - [`add_library(<name> [STATIC|SHARED|OBJECT] [EXCLUDE_FROM_ALL|IMPORTED] ...)`](https://cmake.org/cmake/help/latest/command/add_library.html)
+  | option | Mac | Linux | Win | description |
+  | ------ | --- | ----- | --- | ----------- |
+  | `STATIC` | `.a` | `.a` | `.lib` | オブジェクトをまとめて目次をつけたarchive。静的リンクで複製は生じるが最適化される。 |
+  | `SHARED` | `.dylib` | `.so` | `.dll` | オブジェクトをまとめて実行可能ファイル一歩手前まで加工したもの。動的リンクでストレージにもメモリにも1つだけあればいいので効率はいいけどRPATHのお世話が必要。 |
+  | `OBJECT` | `.o` | `.o` | `.obj` | コンパイル単位のオブジェクト。ライブラリを経由しないぶん`STATIC`より効率的かと思いきや、リンク時に最適化されず、使わないコードまで保持される。使い道はライブラリを複数作りたい時くらい？ |
+
 
 ターゲットのプロパティを追加する:
 
@@ -502,6 +508,6 @@ cmake --install build
 - 3.16: [Ubuntu 20.04 focal](https://launchpad.net/ubuntu/focal/+source/cmake)
 - 3.15: `cmake --install`
 - 3.13: `cmake -S . -B build`, `target_link_directories`, `target_link_options`
-- 3.12: `cxx_std_20`
+- 3.12: `cxx_std_20`, linking `OBJECT` libraries
 - 3.11: `include(FetchContent)`
 - 3.8: `cxx_std_17`
