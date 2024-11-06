@@ -110,7 +110,42 @@ CMakeでは開発者と利用者の双方がCMakeをインストールして使�
 <p>ターゲットを定義する:</p>
 <ul>
 <li><a href="https://cmake.org/cmake/help/latest/command/add_executable.html"><code>add_executable(&lt;name&gt; [EXCLUDE_FROM_ALL] ...)</code></a></li>
-<li><a href="https://cmake.org/cmake/help/latest/command/add_library.html"><code>add_library(&lt;name&gt; [STATIC|SHARED|OBJECT] [EXCLUDE_FROM_ALL|IMPORTED] ...)</code></a></li>
+<li><a href="https://cmake.org/cmake/help/latest/command/add_library.html"><code>add_library(&lt;name&gt; [STATIC|SHARED|OBJECT] [EXCLUDE_FROM_ALL|IMPORTED] ...)</code></a>
+<table>
+  <thead>
+      <tr>
+          <th>option</th>
+          <th>Mac</th>
+          <th>Linux</th>
+          <th>Win</th>
+          <th>description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>STATIC</code></td>
+          <td><code>.a</code></td>
+          <td><code>.a</code></td>
+          <td><code>.lib</code></td>
+          <td>オブジェクトをまとめて目次をつけたarchive。静的リンクで複製は生じるが最適化される。</td>
+      </tr>
+      <tr>
+          <td><code>SHARED</code></td>
+          <td><code>.dylib</code></td>
+          <td><code>.so</code></td>
+          <td><code>.dll</code></td>
+          <td>オブジェクトをまとめて実行可能ファイル一歩手前まで加工したもの。動的リンクでストレージにもメモリにも1つだけあればいいので効率はいいけどRPATHのお世話が必要。</td>
+      </tr>
+      <tr>
+          <td><code>OBJECT</code></td>
+          <td><code>.o</code></td>
+          <td><code>.o</code></td>
+          <td><code>.obj</code></td>
+          <td>コンパイル単位のオブジェクト。ライブラリを経由しないぶん<code>STATIC</code>より効率的かと思いきや、リンク時に最適化されず、使わないコードまで保持される。使い道はライブラリを複数作りたい時くらい？</td>
+      </tr>
+  </tbody>
+</table>
+</li>
 </ul>
 <p>ターゲットのプロパティを追加する:</p>
 <ul>
@@ -486,7 +521,7 @@ generator非依存の <code>cmake --build</code> を使ったほうがいい。<
 <li>3.16: <a href="https://launchpad.net/ubuntu/focal/+source/cmake">Ubuntu 20.04 focal</a></li>
 <li>3.15: <code>cmake --install</code></li>
 <li>3.13: <code>cmake -S . -B build</code>, <code>target_link_directories</code>, <code>target_link_options</code></li>
-<li>3.12: <code>cxx_std_20</code></li>
+<li>3.12: <code>cxx_std_20</code>, linking <code>OBJECT</code> libraries</li>
 <li>3.11: <code>include(FetchContent)</code></li>
 <li>3.8: <code>cxx_std_17</code></li>
 </ul>
