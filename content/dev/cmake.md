@@ -367,7 +367,7 @@ cmake_print_variables(igraph_SOURCE_DIR, igraph_BINARY_DIR)
 : ソースに関するオプションは
   [ExternalProject](https://cmake.org/cmake/help/latest/module/ExternalProject.html)
   とほぼ同じ。
-: `FIND_PACKAGE_ARGS`: (3.24+)<br>
+: `FIND_PACKAGE_ARGS`: (3.24+)\
   `EXCLUDE_FROM_ALL`: (3.28+)
 
 `FetchContent_MakeAvailable()`

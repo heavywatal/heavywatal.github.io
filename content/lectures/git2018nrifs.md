@@ -84,7 +84,7 @@ tags = ["vcs", "writing"]
 -   GitHubとの通信に2つの方式がある。
     - HTTPS: 設定不要で高速だが、操作によってパスワード入力が必要
     - SSH: 一旦ちゃんと設定すればパスワードなしで快適
--   ダウンロード操作(clone/fetch/pull)は高速なHTTPSで、<br>
+-   ダウンロード操作(clone/fetch/pull)は高速なHTTPSで、\
     アップロード操作(push)はパスワード無しのSSHで、というのが楽ちん。
 -   [SSH公開鍵を作って]({{< relref "ssh.md" >}})ローカルマシンとGitHubに登録する。
 -   設定ファイル `~/.gitconfig` に `pushinsteadof` の設定を追加:
@@ -139,7 +139,7 @@ plot論文.R
 
 でも、バージョン管理や共同作業のためのツールじゃないから...
 
-- いつまでも履歴を保持してもらえるとは限らない。<br>
+- いつまでも履歴を保持してもらえるとは限らない。\
   (ここでDropboxの履歴を例示しようと思ったらエラーで使えなかった)
 - オフラインだったりバッテリー駆動だったりすると保存漏れが起きる。
 - いつのバージョンに戻したらいいのか、日時以外の手掛かりが無い。
@@ -189,7 +189,7 @@ e.g., https://github.com/tidyverse/stringr/commits/master
       ローカル版のみ。
     - その他 SourceForge, Google Code など。
 
-VCSは基本的にGit一択。<br>
+VCSは基本的にGit一択。\
 ホスティングサービスは、使い方や予算などに応じて選択。
 
 
@@ -203,21 +203,21 @@ VCSは基本的にGit一択。<br>
 
 - Issues:
   バグ報告、機能要望、課題の列挙などに使われる。
-  タグを付けたり、特定の人にassignすることもできる。<br>
+  タグを付けたり、特定の人にassignすることもできる。\
   e.g., https://github.com/gohugoio/hugo/issues, https://github.com/nlohmann/json/issues
 
 - Projects:
   プロジェクトのタスク管理のためのツール。
-  もちろんissueとも連携可能。<br>
+  もちろんissueとも連携可能。\
   e.g., https://github.com/r-lib/pillar/projects/1
 
 - Wiki:
   チーム内のちょっとした情報共有などに。
-  でもできればそういう文書もちゃんとGitで管理したほうがいい。<br>
+  でもできればそういう文書もちゃんとGitで管理したほうがいい。\
   e.g., https://github.com/gnab/remark/wiki
 
 - GitHub Pages:
-  リポジトリの内容をウェブサイトとして公開できる。<br>
+  リポジトリの内容をウェブサイトとして公開できる。\
   e.g., https://kazutan.github.io/kazutanR/
 
 
@@ -307,7 +307,7 @@ zshの`EXTENDED_GLOB`が有効になってる場合は
     (e.g., <https://github.com/heavywatal/clippson>)
 1.  右の方の緑の "Clone or download" ボタンを押す。
 1.  SSHではなくHTTPSを選択し、URLをコピー。
-1.  ターミナルにコマンドを入力:<br>
+1.  ターミナルにコマンドを入力:\
     `git clone https://github.com/heavywatal/clippson.git`
 1.  中身を眺めてみる:
 
@@ -513,7 +513,7 @@ git reset --hard origin/master
 
 ### Pull Request (PR)
 
-他人のリポジトリに貢献するためのGitHubの機能。<br>
+他人のリポジトリに貢献するためのGitHubの機能。\
 e.g., https://github.com/Rdatatable/data.table/pull/2807
 
 1.  貢献したいリポジトリをForkして自分のGitHubアカウントに追加。

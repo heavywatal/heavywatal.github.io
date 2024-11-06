@@ -98,11 +98,11 @@ tags = ["genetics"]
     - [`samtools faidx`](https://www.htslib.org/doc/samtools-faidx.html)
       → 参照配列インデックス (`.fa.fai`)
     - [`tabix`](https://www.htslib.org/doc/tabix.html)
-      → タブ区切りゲノムポジションインデックス (`.bgz.tbi`)<br>
+      → タブ区切りゲノムポジションインデックス (`.bgz.tbi`)\
       いろんな形式を扱える(`-p gff|bed|sam|vcf`)。
       位置順ソート且つbgzip圧縮されている必要がある。
     - [`bgzip -r`](https://www.htslib.org/doc/bgzip.html)
-      → BGZFインデックス (`.gz.gzi`)<br>
+      → BGZFインデックス (`.gz.gzi`)\
       bgzip済みfastaを `faidx` するとついでに作ってもらえるし、
       `tabix` にはおそらく込み込みなので、明示的に作ることは少ない。
 
@@ -122,8 +122,8 @@ bcftools mpileup -f ref.fa aln.bam | bcftools call -mv -Ob -o calls.bcf
 
 ## SAM形式
 
-<https://www.htslib.org/doc/sam.html><br>
-<https://samtools.github.io/hts-specs/>
+- <https://www.htslib.org/doc/sam.html>
+- <https://samtools.github.io/hts-specs/>
 
 1.  `QNAME`: リード名
 1.  `FLAG`: マッピングの状況をビット表現:

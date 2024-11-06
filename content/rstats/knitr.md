@@ -106,10 +106,10 @@ figureやcacheの出力先に使われるのでuniqueになるように注意す
 - `knitr::opts_chunk$set(warning = NA)`: 同上。
 - `echo: false`: コードを表示しない。
   `echo: -1` のように数値で特定の行だけを除外したりもできる。
-- `results: 'markup'`: 標準出力があるたびにコードフェンスに入れて編み込む。(デフォルト)<br>
-  `results: 'hide'`: 表示しない。`FALSE` でも。<br>
-  `results: 'asis'`: コードフェンスに入れず生の文字列として編み込む。<br>
-  `results: 'hold'`: 標準出力をchunk最後まで溜めてまとめて編み込む。<br>
+- `results: 'markup'`: 標準出力があるたびにコードフェンスに入れて編み込む。(デフォルト)\
+  `results: 'hide'`: 表示しない。`FALSE` でも。\
+  `results: 'asis'`: コードフェンスに入れず生の文字列として編み込む。\
+  `results: 'hold'`: 標準出力をchunk最後まで溜めてまとめて編み込む。
 - `eval: false`: 評価しない。
 - `include: false`: コードも結果も出力しない。実行だけする。
   空行が1行だけ追加されるのを防ぐのは難しそう。

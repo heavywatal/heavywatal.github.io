@@ -113,9 +113,9 @@ containerは実行終了後も残る。
       Docker外でも使うデータを読み書きするのには向かない。
     - `type=bind,src=<HOST-PATH>,dst=<CONTAINER-PATH>`: ホスト側の場所を直接指定する。
       古い `-v` オプションによる指定は非推奨。
-    -	`--mount type=bind,src="$PWD",dst="$PWD"`<br>
-      `--workdir "$PWD"`<br>
-      `--user "$(id -u):$(id -g)"`<br>
+    -	`--mount type=bind,src="$PWD",dst="$PWD"`\
+      `--workdir "$PWD"`\
+      `--user "$(id -u):$(id -g)"`\
       のようにするとcontainer内のプログラムにカレント以下を渡せる。
       Apptainerならこのへんの設定をデフォルトでやってくれる。
 

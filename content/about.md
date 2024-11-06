@@ -42,7 +42,7 @@ Contacts
 
 2013-09
 :   Doctor of Life Sciences, Graduate School of Life Sciences, Tohoku University.
-    (Prof. Masakado Kawata)<br>
+    (Prof. Masakado Kawata)\
     "Evolution of Diversity and Complexity by Cryptic Variations in Gene Regulatory Networks"
 
 2008-03
@@ -171,7 +171,7 @@ Contacts
 ## Grants and Fellowships
 
 2019-04 – 2022-03
-:   科学研究費補助金 基盤研究C 分担 (代表者: 新井田厚司)<br>
+:   科学研究費補助金 基盤研究C 分担 (代表者: 新井田厚司)\
     [超並列がん進化シミュレーションによる腫瘍内不均一性生成機構の解明](https://kaken.nii.ac.jp/grant/KAKENHI-PROJECT-19K12214/)
 
 2010-07 – 2013-03

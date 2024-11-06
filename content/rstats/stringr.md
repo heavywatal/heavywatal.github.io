@@ -21,7 +21,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
     -   長さゼロのオブジェクトを引数として与えた場合には長さゼロの結果を返す
     -   引数オブジェクトに `NA` が含まれる場合はその部分の結果を `NA` とする
 -   対象文字列が一貫して第一引数で、パターンが二番目
--   何をやる関数なのか名前から分かりやすい<br>
+-   何をやる関数なのか名前から分かりやすい\
     (標準が覚えにくすぎ: `grep`, `grepl`, `regexpr`, `gregexpr`, `regexec`)
 -   [ICU4C](https://icu.unicode.org/)
     (via [stringi](https://stringi.gagolewski.com/)) を使って動くため高速
@@ -254,7 +254,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
     `sprintf()` よりも使い方が簡単。ライバルは `paste0()` とか。
     `str_interp()` はこれに取って代わられた。
     
-    ```r
+    ``` r
     str_glue("fruit[1] is {fruit[1]}.")
     ```
     
@@ -263,7 +263,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
     ```
 :   data.frameの流れるpipe上では `str_glue_data()` が便利:
     
-    ```r
+    ``` r
     mtcars |> str_glue_data("mean(disp) is {mean(disp)}.")
     ```
     
@@ -276,7 +276,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 `str_pad(string, width, side = c("left", "right", "both"), pad = " ")`
 :   文字列の幅を `width` に伸ばして `side` 側を `pad` で埋める。
     
-    ```r
+    ``` r
     str_pad(c("9", "10"), 3L, pad = "0")
     ```
     
@@ -289,7 +289,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
     Python でいうところの `string.strip()`。
 :   `str_squish()` は両端trimしたうえに内部の連続する空白文字を1つに縮める亜種。
     
-    ```r
+    ``` r
     str_trim("   trim   me   ")
     ```
     
@@ -297,7 +297,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
     [1] "trim   me"
     ```
     
-    ```r
+    ``` r
     str_squish("   trim   me   ")
     ```
     
@@ -335,7 +335,7 @@ s = 'This is a string with "double quotes".'
 バックスラッシュ自体を表すためには `\\` のように重ねる必要がある。
 
 
-```r
+``` r
 string = "x\ty\n0\t1\n"
 print(string)
 ```
@@ -344,7 +344,7 @@ print(string)
 [1] "x\ty\n0\t1\n"
 ```
 
-```r
+``` r
 cat(string)
 ```
 
@@ -353,7 +353,7 @@ x	y
 0	1
 ```
 
-```r
+``` r
 readr::read_tsv(I(string))
 ```
 

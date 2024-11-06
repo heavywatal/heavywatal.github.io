@@ -191,10 +191,10 @@ p1 + aes(x = displ, y = cty) + geom_point(aes(color = hwy)) + scale_color_fermen
   さらに細かく制御したい場合は
   [`guide_legend()`](https://ggplot2.tidyverse.org/reference/guide_legend.html) や
   [`guide_colorbar()`](https://ggplot2.tidyverse.org/reference/guide_colorbar.html)
-  で。消したい場合は `"none"` か `FALSE` を渡せる。<br>
+  で。消したい場合は `"none"` か `FALSE` を渡せる。\
   軸ラベルが密すぎて重なる場合に間引いたり、角度を付けたり、ずらしたりするには
   [`guide_axis()`](https://ggplot2.tidyverse.org/reference/guide_axis.html)
-  が使える。<br>
+  が使える。\
   これらを複数使う場合はscale関数のオプションではなく独立の
   [`guides()`](https://ggplot2.tidyverse.org/reference/guides.html)
   関数を使う手もある。
@@ -233,7 +233,7 @@ p1 + aes(x = displ, y = cty) + geom_point(aes(color = hwy)) + scale_color_fermen
     変数名を同時に表示したり、数式を表示したりもできる。
     それを変数ごとに指定したい場合は
     [`labeller()`](https://ggplot2.tidyverse.org/reference/labeller.html)
-    関数を使う。e.g.,<br>
+    関数を使う。e.g.,\
     `labeller = labeller(cyl = label_both, class = label_value)`
 :   見た目の調整はテーマの `strip.*` で。
 
@@ -322,7 +322,7 @@ https://ggplot2-book.org/layers.html#generated-variables
 
 ### 既成テーマ
 
-`theme_gray(base_size = 11, base_family = "")`<br>`theme_grey()`
+`theme_gray(base_size = 11, base_family = "")`, `theme_grey()`
 :   灰色背景に白い格子。
     ggplotらしいデフォルトだが、論文には使いにくい。
 

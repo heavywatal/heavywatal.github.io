@@ -204,17 +204,17 @@ tlmgr install chktex latexmk
         - フォントや前後スペースを文脈依存で: `\operatorname{var}(X)`
           $\operatorname{var}(X)$, $\operatorname{tr}A$
         - `\DeclareMathOperator{\Prob}{Prob}` のようにショートカット作成。
-          amsmathで定義済み:<br>
+          amsmathで定義済み:\
           $\exp$, $\lg$, $\ln$, $\log$,
           $\deg$, $\det$, $\dim$, $\ker$,
           $\Pr$,  $\gcd$, $\hom$,
           $\arg$, $\min$, $\max$, $\inf$, $\sup$,
-          <br>
+          \
           $\sin$, $\cos$, $\tan$,
           $\arcsin$, $\arccos$, $\arctan$,
           $\sinh$, $\cosh$, $\tanh$, $\coth$,
           $\sec$, $\csc$, $\cot$,
-          <br>
+          \
           $\lim$, $\liminf$, $\limsup$, $\injlim$, $\projlim$,
           $\varliminf$, $\varlimsup$, $\varinjlim$, $\varprojlim$
 

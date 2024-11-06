@@ -142,6 +142,6 @@ nohup COMMAND >/dev/null 2>&1 </dev/null &
     [1]  + 19310 continued  a.out
     disown %1
 
-See [tmux]({{< relref "tmux.md" >}}).<br>
+See [tmux]({{< relref "tmux.md" >}}).\
 `nohup`, `disown` がプロセス単位で切り離すのに対して、
 `tmux` は端末セッション丸ごと切り離し＆復帰することができる。

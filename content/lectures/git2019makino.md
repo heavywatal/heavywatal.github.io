@@ -92,7 +92,7 @@ tags = ["vcs", "writing"]
 -   GitHubとの通信に2つの方式がある。
     - HTTPS: 設定不要で高速だが、操作によってパスワード入力が必要
     - SSH: 一旦ちゃんと設定すればパスワードなしで快適
--   ダウンロード操作(clone/fetch/pull)は高速なHTTPSで、<br>
+-   ダウンロード操作(clone/fetch/pull)は高速なHTTPSで、\
     アップロード操作(push)はパスワード無しのSSHで、というのが楽ちん。
 -   [SSH公開鍵を作って]({{< relref "ssh.md" >}})ローカルマシンとGitHubに登録する。
 -   設定ファイル `~/.gitconfig` に `pushinsteadof` の設定を追加:
@@ -111,7 +111,7 @@ tags = ["vcs", "writing"]
     (e.g., <https://github.com/heavywatal/tumopp>)
 1.  右の方の緑の "Clone or download" ボタンを押す。
 1.  SSHではなくHTTPSを選択し、URLをコピー。
-1.  ターミナルにコマンドを入力:<br>
+1.  ターミナルにコマンドを入力:\
     `git clone https://github.com/heavywatal/tumopp.git`
 1.  中身を眺めてみる:
 
@@ -317,7 +317,7 @@ git reset --hard origin/master
 
 ### Pull Request (PR)
 
-他人のリポジトリに貢献するためのGitHubの機能。<br>
+他人のリポジトリに貢献するためのGitHubの機能。\
 e.g., https://github.com/Rdatatable/data.table/pull/2807
 
 1.  貢献したいリポジトリをForkして自分のGitHubアカウントに追加。

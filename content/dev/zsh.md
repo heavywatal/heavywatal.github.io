@@ -107,8 +107,8 @@ zprof
 - `*(.)`: plain files
 - `*(@)`: symbolic links
 - `*(*)`: executable plain files
-- `*(On)`, `*(^on)`: descending order by name.<br>
-  `*(Om)`, `*(^om)`: ascending order by modification time, oldest first.<br>
+- `*(On)`, `*(^on)`: descending order by name.\
+  `*(Om)`, `*(^om)`: ascending order by modification time, oldest first.\
   例えば `file` と `file.backup` を比較したいときにただ
   `diff file*` とするとbackupのほうが後に来てしまうのを解決。
   名前順と時間順でデフォルトの方向が逆なのはいずいけど仕方ない。

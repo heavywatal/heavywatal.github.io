@@ -641,7 +641,7 @@ diamonds |>
     5     Ideal <int [21551]>
     ```
 
-    左側のキー列だけ欲しければ `dplyr::group_keys()` 、<br>
+    左側のキー列だけ欲しければ `dplyr::group_keys()` 、\
     左端の行番号だけ欲しければ `dplyr::group_rows()` 。
 
 `dplyr::group_nest(.tbl, ..., .key = "data", keep = FALSE)`
@@ -687,7 +687,7 @@ diamonds |>
     10   Ideal  0.23     J     VS1  62.8    56   340 3.93 3.90 2.46
     ```
 
-:   `group_map()` は結果を `bind_rows()` せずlistとして返す亜種。<br>
+:   `group_map()` は結果を `bind_rows()` せずlistとして返す亜種。\
     `group_walk()` は `.f` 適用前の `.tbl` を返す亜種。
 
 `dplyr::rowwise(data, ...)`

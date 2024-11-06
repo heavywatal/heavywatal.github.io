@@ -49,7 +49,7 @@ https://bitbucket.org/gutenkunstlab/dadi/wiki/Installation
     cd ..
     ```
 
-1.  virtualenvから抜けたいときは `deactivate` コマンドを打つ。<br>
+1.  virtualenvから抜けたいときは `deactivate` コマンドを打つ。\
     また入りたいときは `source ~/.virtualenv/dadi/bin/activate` を打つ。
 
 1.  `doc/` 以下に結構詳しいドキュメントが入ってるので読む (これもウェブで公開してくれたらいいのに)

@@ -57,7 +57,7 @@ brew info brewsci/bio/repeatmasker
     - [RepBase](https://www.girinst.org/server/RepBase/):
       アカデミックな用途なら無料で使えていたが、いつの間にか有料になっていた。
     - [Dfam](https://www.dfam.org/):
-      使いたいものをダウンロードして `./Library/Dfam.*` を差し替える。<br>
+      使いたいものをダウンロードして `./Library/Dfam.*` を差し替える。\
       RepeatMasker 4.1.0 以前は `Dfam.hmm` や `Dfam.embl` を使っていたが、
       4.1.1 以降では `Dfam.h5` を使う。
       4.1.2 には始めから Dfam 3.3 curatedonly が付いてくる。
