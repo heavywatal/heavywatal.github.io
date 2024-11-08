@@ -93,10 +93,13 @@ Pythonインストール
 <p><a href="https://docs.astral.sh/uv/">https://docs.astral.sh/uv/</a></p>
 <p>プロジェクトの環境構築を一切合切面倒見てくれる管理ツール。
 ruffや<a href="#rye">rye</a>と同じチームが開発していて、同じくrust製。
-次のワンライナーでプログラム本体が <code>~/.cargo/bin/uv</code> に配置される:</p>
+次のワンライナーでプログラム本体が <code>~/.local/bin/uv</code> に配置される:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">curl -LsSf https://astral.sh/uv/install.sh <span class="p">|</span> sh
-</span></span></code></pre></div><p>rust/cargoを使わない人は <code>source ~/.cargo/bin/env</code>
-みたいな文をシェルの設定ファイルに追加してPATHを通す必要があるかも。</p>
+</span></span></code></pre></div><p>シェルの設定が書き換えられて <code>PATH</code> を設定してもらえる。
+ドットファイルを勝手にいじられたくない人は
+<code>INSTALLER_NO_MODIFY_PATH=1</code> を定義してから実行すれば避けられる。
+現状では <code>uv self update</code> でも同じ処理が走ってしまうが、
+それは<a href="https://github.com/astral-sh/uv/issues/7319">近日中に改められるらしい</a>。</p>
 <p>任意のバージョンのPythonを入れるためのツールとして、
 つまり<a href="#pyenv">pyenv</a>的な位置付けでも使える。
 しかもビルド済みのPythonを
