@@ -23,13 +23,16 @@ MacやLinuxならシステムの一部として
 
 プロジェクトの環境構築を一切合切面倒見てくれる管理ツール。
 ruffや[rye](#rye)と同じチームが開発していて、同じくrust製。
-次のワンライナーでプログラム本体が `~/.cargo/bin/uv` に配置される:
+次のワンライナーでプログラム本体が `~/.local/bin/uv` に配置される:
 ```sh
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-rust/cargoを使わない人は `source ~/.cargo/bin/env`
-みたいな文をシェルの設定ファイルに追加してPATHを通す必要があるかも。
+シェルの設定が書き換えられて `PATH` を設定してもらえる。
+ドットファイルを勝手にいじられたくない人は
+`INSTALLER_NO_MODIFY_PATH=1` を定義してから実行すれば避けられる。
+現状では `uv self update` でも同じ処理が走ってしまうが、
+それは[近日中に改められるらしい](https://github.com/astral-sh/uv/issues/7319)。
 
 任意のバージョンのPythonを入れるためのツールとして、
 つまり[pyenv](#pyenv)的な位置付けでも使える。
