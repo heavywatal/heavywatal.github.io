@@ -169,6 +169,28 @@ install(TARGETS a.out
 - `CMAKE_INSTALL_RPATH_USE_LINK_PATH`
 - `CMAKE_MACOSX_RPATH`
 
+
+### Environment variables
+
+<https://cmake.org/cmake/help/latest/manual/cmake-env-variables.7.html>
+
+変数として自動的に利用可能になったりはせず、
+[`$ENV{VAR}`](https://cmake.org/cmake/help/latest/variable/ENV.html)
+みたいな形で参照するのが基本。
+
+ただし、一部の環境変数はCMakeの変数の初期値として採用される。
+e.g., `CMAKE_PREFIX_PATH`, `CXX`, `<PackageName>_ROOT`, etc.
+
+何が渡っているかは `cmake -E environment` で確認できる。
+
+[`CMAKE_EXPORT_COMPILE_COMMANDS`](https://cmake.org/cmake/help/latest/envvar/CMAKE_EXPORT_COMPILE_COMMANDS.html)
+: 定義しておくとコンフィグ時に `compile_commands.json` を生成してもらえる。
+  これで [clangd](https://clangd.llvm.org/) にコンパイルオプションを伝えられる。
+  ソースファイルの親ディレクトリを辿るだけでなく
+  `build` という名のサブディレクトリも探してくれるので
+  `-B build` の慣習に従っていればコピーやシムリンクも不要。
+
+
 ### C++
 
 ```cmake
@@ -275,9 +297,9 @@ Variable                    | Value
 外部プロジェクトであることを明確にするため
 `名前空間::ターゲット` という形でリンクするのが筋:
 ```cmake
-project(otherproject CXX)
-find_package(mylib)
-target_link_libraries(othertarget PRIVATE mylib::mylib)
+project(OtherProject CXX)
+find_package(MyLib)
+target_link_libraries(OtherTarget PRIVATE MyLib::MyLib)
 ```
 
 こうやって使ってもらうためには `*config.cmake` ファイルを
@@ -296,7 +318,7 @@ target_link_libraries(othertarget PRIVATE mylib::mylib)
 `install(TARGETS)` の中で `EXPORT` のためのターゲット定義し、
 `install(EXPORT)` でその設定を行う:
 ```cmake
-project(mylib
+project(MyLib
   VERSION 0.1.0
   LANGUAGES CXX)
 # ...
@@ -398,22 +420,23 @@ cmake_print_variables(igraph_SOURCE_DIR, igraph_BINARY_DIR)
 
 ```cmake
 find_package(Threads)
-target_link_libraries(mytarget PRIVATE Threads::Threads)
+target_link_libraries(MyTarget PRIVATE Threads::Threads)
 ```
 
 ### FindBoost
 
 <https://cmake.org/cmake/help/latest/module/FindBoost.html>
 
+Boostの特別扱いはdeprecatedになった。
+普通のCMakeパッケージとして探すには、
+`CONFIG` とか `NO_MODULE` オプションを足して明示的にConfigモードを使う。
+
 ```cmake
-set(Boost_NO_BOOST_CMAKE ON)
-find_package(Boost REQUIRED COMPONENTS filesystem)
-target_link_libraries(mytarget PRIVATE Boost::filesystem)
+find_package(Boost CONFIG REQUIRED COMPONENTS context)
+target_link_libraries(MyTarget PRIVATE Boost::context)
 ```
 
-ヘッダーだけでいい場合は `Boost::boost` ターゲットをリンクする。
-
-探索パスを追加するには `BOOST_ROOT` を設定する。
+ヘッダーだけでいい場合は `Boost::boost` をリンクする。
 
 
 ### CTest
@@ -472,7 +495,7 @@ cmake --install build
 : ビルドツリーを指定する。
   3.13から。それまではundocumentedだった。
 
-`-DCMAKE_XXX=YYY`
+`-D <var>=<value>`
 : コマンドラインから変数を設定する。
 
 `-G <generator-name>`
@@ -505,6 +528,7 @@ cmake --install build
 - 3.22: [Ubuntu 22.04 jammy](https://launchpad.net/ubuntu/jammy/+source/cmake)
 - 3.20: [`cmake_path()`](https://cmake.org/cmake/help/latest/command/cmake_path.html), `cxx_std_23`
 - 3.19: [`CMakePresets.json`](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html)
+- 3.17: [`CMAKE_EXPORT_COMPILE_COMMANDS`](https://cmake.org/cmake/help/latest/envvar/CMAKE_EXPORT_COMPILE_COMMANDS.html)
 - 3.16: [Ubuntu 20.04 focal](https://launchpad.net/ubuntu/focal/+source/cmake)
 - 3.15: `cmake --install`
 - 3.13: `cmake -S . -B build`, `target_link_directories`, `target_link_options`
