@@ -81,35 +81,33 @@ gcc や clang の最適化技術も着々と進歩しており、
 </span></span></code></pre></div><h3 id="コンパイル時定数-constexpr">コンパイル時定数 <code>constexpr</code></h3>
 <p>コンパイル時に計算できるものを予め計算して定数にしておくことで、
 実行時の計算を減らすことができる。
-C++11では明示的に <code>constexpr</code> 修飾することができるので積極的に使うべし。
+C++11以降では明示的に <code>constexpr</code> 修飾することができるので積極的に使うべし。
 テンプレートメタプログラミングという手もある。
-C++11を使えない場合でも、
-定数同士の四則演算などはまとめておけばコンパイラが計算してくれるはず。</p>
+定数同士の四則演算などは近くにまとめておけばコンパイラが計算してくれるはず。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">// 掛け算も割り算も毎回計算
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">return</span> <span class="mf">4.0</span> <span class="o">*</span> <span class="n">M_PI</span> <span class="o">*</span> <span class="n">std</span><span class="o">::</span><span class="n">pow</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">// コンパイル時定数を掛けるだけ
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">constexpr</span> <span class="kt">double</span> <span class="n">c</span> <span class="o">=</span> <span class="mf">4.0</span> <span class="o">*</span> <span class="n">M_PI</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="k">return</span> <span class="n">c</span> <span class="o">*</span> <span class="n">std</span><span class="o">::</span><span class="n">pow</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
-</span></span></code></pre></div><p>また、四則演算の中でも割り算は特に遅いらしいので、
-逆数のかけ算になるような書き方のほうが高速になるかもしれない。</p>
+</span></span></code></pre></div><p><code>constexpr</code> 関数も作れる。
+こちらは「引数がコンパイル時に決まってれば中の計算もコンパイル時にやれます」
+ということを示すだけで、普通の変数を渡して普通の関数のようにも使える。</p>
 <h3 id="インライン展開">インライン展開</h3>
 <p>関数の呼び出しにはコストがかかり、
 コードが短くて何度も呼ばれる関数では特にそのコストの割合が高くて馬鹿にできない。
 呼び出される予定のところにコンパイルの段階で関数を展開してやること
-(=インライン展開) でそのコストを無くせる。</p>
+(=インライン展開) でそのコストを無くせる。
+実行ファイルのサイズやコンパイル時間とのトレードオフはあるけど。</p>
 <p>ファイルをまたいで使う関数の場合は定義宣言を
 <code>ソース.cpp</code> ではなく <code>ヘッダ.h</code> に置き、頭に <code>inline</code> を付ける。
 メンバ関数の場合はクラス定義の中で定義宣言にするだけでよい。
 ただしそのように書いてもコンパイラへのヒントになるだけで、
-インライン展開に必要でも十分でもない。</p>
-<p><code>-O2</code> では <code>-finline-small-functions</code> がオンになり、
-<code>-O3</code> では <code>-finline-functions</code> がオンになる。
-実行ファイルのサイズがデカくなるし、コンパイルは遅くなるので、バランスを考える。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="kr">inline</span> <span class="kt">int</span> <span class="nf">pow2</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">x</span> <span class="o">*=</span> <span class="n">x</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><h3 id="関数オブジェクト">関数オブジェクト</h3>
+インライン展開に必要でも十分でもない。
+<code>-O2</code> 以上の速度重視オプションで
+<code>-finline-small-functions</code> とか <code>-finline-functions</code>
+のようなオプションをオンにする。</p>
+<h3 id="関数オブジェクト">関数オブジェクト</h3>
 <p>関数オブジェクトとは、<code>operator()</code> を定義した <code>class</code> または <code>struct</code> のこと。
 <code>std::for_each()</code> や <code>std::transform()</code> の最後の引数に関数を渡す場合など、
 何度も呼び出される小さい関数については、
@@ -148,14 +146,19 @@ STLコンテナや自作クラスなどは参照渡しのほうが高速。
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// constがついているので、変更しようとするとコンパイルエラー
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
 </span></span></code></pre></div><p>引数の中身を変更するつもりがある場合はポインタを受け取るようにすると、
-呼び出すときに <code>&amp;</code> が必要となるので意図が伝わりやすい。</p>
+呼び出し側のコードに <code>&amp;</code> が必要となるので意図を読み取りやすい。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">do_something</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;*</span> <span class="n">huge_array</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// コピーせずポインタを受け取る。
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// huge_arrayの変更は呼び出し元にも影響する。
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="n">do_something</span><span class="p">(</span><span class="o">&amp;</span><span class="n">some_array</span><span class="p">);</span>  <span class="c1">// ああ、この配列は変更されるんだな
-</span></span></span></code></pre></div><h3 id="ムーブセマンティクス-c11">ムーブセマンティクス (C++11)</h3>
+</span></span></span></code></pre></div><p>ただし C++ Core Guidelines によれば、
+<a href="https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rf-ptr-ref">F.60: Prefer T* over T&amp; when “no argument” is a valid option
+</a>
+とのことで、むしろ
+<code>nullptr</code> で値なしを表現する必要が無いなら普通に参照のほうがシンプルに書けるし生成されるコードも良くなるかも、とのこと。</p>
+<h3 id="ムーブセマンティクス">ムーブセマンティクス</h3>
 <p>受け取ったものを関数の中で変更して返すような関数を作るとき、
 引数の渡し方も受け取り方も3パターンずつ考えられる。</p>
 <ul>
@@ -211,7 +214,11 @@ lvalue値受け取りの関数はrvalueを受け取るときにはコピーを�
 さらに <code>static_assert()</code> でコンパイル時に
 <code>std::is_nothrow_move_constructible</code> などをチェックしておくと安心。</p>
 <p>それ以外の部分でも「この関数は例外を投げない」
-と宣言したほうがコンパイラにとって最適化しやすくなる。</p>
+と伝えたほうがコンパイラにとっては最適化しやすくなる。
+メンバーを変更しようとするとコンパイル時に怒ってくれるconst修飾とは違い、
+noexceptをつけたからといって実際に例外を投げないコードしか書けなくなるわけではなく、
+「もし俺が例外を投げるようなことがあればプログラム諸共殺してくれて構わない」
+と実行時の挙動を誓約する感じ。</p>
 <h2 id="コンテナ">コンテナ</h2>
 <h3 id="用途に合わせる">用途に合わせる</h3>
 <p><a href="https://en.cppreference.com/w/cpp/container">https://en.cppreference.com/w/cpp/container</a></p>
@@ -275,7 +282,7 @@ C++で配列作るならとりあえずこれ。
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="nl">x</span><span class="p">:</span> <span class="n">v</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// C++11 range-based for
+</span></span><span class="line"><span class="cl">    <span class="c1">// range-based for
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
 </span></span></code></pre></div><h3 id="前置インクリメント">前置インクリメント</h3>
 <p>後置インクリメント <code>i++</code> でも
