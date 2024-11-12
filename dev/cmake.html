@@ -221,6 +221,22 @@ STATIC/SHAREDが明示されていない <code>add_library()</code> でどっち
 <li><code>CMAKE_INSTALL_RPATH_USE_LINK_PATH</code></li>
 <li><code>CMAKE_MACOSX_RPATH</code></li>
 </ul>
+<h3 id="environment-variables">Environment variables</h3>
+<p><a href="https://cmake.org/cmake/help/latest/manual/cmake-env-variables.7.html">https://cmake.org/cmake/help/latest/manual/cmake-env-variables.7.html</a></p>
+<p>変数として自動的に利用可能になったりはせず、
+<a href="https://cmake.org/cmake/help/latest/variable/ENV.html"><code>$ENV{VAR}</code></a>
+みたいな形で参照するのが基本。</p>
+<p>ただし、一部の環境変数はCMakeの変数の初期値として採用される。
+e.g., <code>CMAKE_PREFIX_PATH</code>, <code>CXX</code>, <code>&lt;PackageName&gt;_ROOT</code>, etc.</p>
+<p>何が渡っているかは <code>cmake -E environment</code> で確認できる。</p>
+<dl>
+<dt><a href="https://cmake.org/cmake/help/latest/envvar/CMAKE_EXPORT_COMPILE_COMMANDS.html"><code>CMAKE_EXPORT_COMPILE_COMMANDS</code></a></dt>
+<dd>定義しておくとコンフィグ時に <code>compile_commands.json</code> を生成してもらえる。
+これで <a href="https://clangd.llvm.org/">clangd</a> にコンパイルオプションを伝えられる。
+ソースファイルの親ディレクトリを辿るだけでなく
+<code>build</code> という名のサブディレクトリも探してくれるので
+<code>-B build</code> の慣習に従っていればコピーやシムリンクも不要。</dd>
+</dl>
 <h3 id="c">C++</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">target_compile_features</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">PUBLIC</span> <span class="s">cxx_std_17</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set_target_properties</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">PROPERTIES</span>
@@ -342,9 +358,9 @@ STATIC/SHAREDが明示されていない <code>add_library()</code> でどっち
 <p>他のプロジェクトから以下のように利用されるライブラリを作りたい。
 外部プロジェクトであることを明確にするため
 <code>名前空間::ターゲット</code> という形でリンクするのが筋:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">project</span><span class="p">(</span><span class="s">otherproject</span> <span class="s">CXX</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">find_package</span><span class="p">(</span><span class="s">mylib</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">othertarget</span> <span class="s">PRIVATE</span> <span class="s">mylib::mylib</span><span class="p">)</span><span class="err">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">project</span><span class="p">(</span><span class="s">OtherProject</span> <span class="s">CXX</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">find_package</span><span class="p">(</span><span class="s">MyLib</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OtherTarget</span> <span class="s">PRIVATE</span> <span class="s">MyLib::MyLib</span><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><p>こうやって使ってもらうためには <code>*config.cmake</code> ファイルを
 <a href="https://cmake.org/cmake/help/latest/command/find_package.html#config-mode-search-procedure"><code>find_package()</code> の探索先</a>
 のどこかにインストールする必要がある。
@@ -360,7 +376,7 @@ header-only, architecture-independent.
 </ul>
 <p><code>install(TARGETS)</code> の中で <code>EXPORT</code> のためのターゲット定義し、
 <code>install(EXPORT)</code> でその設定を行う:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">project</span><span class="p">(</span><span class="s">mylib</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">project</span><span class="p">(</span><span class="s">MyLib</span>
 </span></span><span class="line"><span class="cl">  <span class="s">VERSION</span> <span class="s">0.1.0</span>
 </span></span><span class="line"><span class="cl">  <span class="s">LANGUAGES</span> <span class="s">CXX</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># ...
@@ -447,14 +463,15 @@ CMake 3.11 から。</p>
 <p><a href="https://cmake.org/cmake/help/latest/module/FindThreads.html">https://cmake.org/cmake/help/latest/module/FindThreads.html</a></p>
 <p><code>-lpthread</code> とか自分で書かない。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">find_package</span><span class="p">(</span><span class="s">Threads</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">mytarget</span> <span class="s">PRIVATE</span> <span class="s">Threads::Threads</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">MyTarget</span> <span class="s">PRIVATE</span> <span class="s">Threads::Threads</span><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><h3 id="findboost">FindBoost</h3>
 <p><a href="https://cmake.org/cmake/help/latest/module/FindBoost.html">https://cmake.org/cmake/help/latest/module/FindBoost.html</a></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">Boost_NO_BOOST_CMAKE</span> <span class="s">ON</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">find_package</span><span class="p">(</span><span class="s">Boost</span> <span class="s">REQUIRED</span> <span class="s">COMPONENTS</span> <span class="s">filesystem</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">mytarget</span> <span class="s">PRIVATE</span> <span class="s">Boost::filesystem</span><span class="p">)</span><span class="err">
-</span></span></span></code></pre></div><p>ヘッダーだけでいい場合は <code>Boost::boost</code> ターゲットをリンクする。</p>
-<p>探索パスを追加するには <code>BOOST_ROOT</code> を設定する。</p>
+<p>Boostの特別扱いはdeprecatedになった。
+普通のCMakeパッケージとして探すには、
+<code>CONFIG</code> とか <code>NO_MODULE</code> オプションを足して明示的にConfigモードを使う。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">find_package</span><span class="p">(</span><span class="s">Boost</span> <span class="s">CONFIG</span> <span class="s">REQUIRED</span> <span class="s">COMPONENTS</span> <span class="s">context</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">MyTarget</span> <span class="s">PRIVATE</span> <span class="s">Boost::context</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><p>ヘッダーだけでいい場合は <code>Boost::boost</code> をリンクする。</p>
 <h3 id="ctest">CTest</h3>
 <p><a href="https://cmake.org/cmake/help/latest/module/CTest.html">https://cmake.org/cmake/help/latest/module/CTest.html</a></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">include</span><span class="p">(</span><span class="s">CTest</span><span class="p">)</span><span class="err">
@@ -489,7 +506,7 @@ CMakeのバージョンを上げたときなどcleanしたい場面で使えな�
 <dt><code>-B &lt;dir&gt;</code></dt>
 <dd>ビルドツリーを指定する。
 3.13から。それまではundocumentedだった。</dd>
-<dt><code>-DCMAKE_XXX=YYY</code></dt>
+<dt><code>-D &lt;var&gt;=&lt;value&gt;</code></dt>
 <dd>コマンドラインから変数を設定する。</dd>
 <dt><code>-G &lt;generator-name&gt;</code></dt>
 <dd>Makefile, Ninja, Xcode, etc.</dd>
@@ -518,6 +535,7 @@ generator非依存の <code>cmake --build</code> を使ったほうがいい。<
 <li>3.22: <a href="https://launchpad.net/ubuntu/jammy/+source/cmake">Ubuntu 22.04 jammy</a></li>
 <li>3.20: <a href="https://cmake.org/cmake/help/latest/command/cmake_path.html"><code>cmake_path()</code></a>, <code>cxx_std_23</code></li>
 <li>3.19: <a href="https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html"><code>CMakePresets.json</code></a></li>
+<li>3.17: <a href="https://cmake.org/cmake/help/latest/envvar/CMAKE_EXPORT_COMPILE_COMMANDS.html"><code>CMAKE_EXPORT_COMPILE_COMMANDS</code></a></li>
 <li>3.16: <a href="https://launchpad.net/ubuntu/focal/+source/cmake">Ubuntu 20.04 focal</a></li>
 <li>3.15: <code>cmake --install</code></li>
 <li>3.13: <code>cmake -S . -B build</code>, <code>target_link_directories</code>, <code>target_link_options</code></li>
