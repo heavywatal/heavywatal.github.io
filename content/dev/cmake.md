@@ -36,9 +36,7 @@ project(helloworld
 ```cmake
 add_executable(a.out hello.cpp)
 target_compile_options(a.out PRIVATE -Wall -Wextra -pedantic)
-install(TARGETS a.out
-  RUNTIME DESTINATION bin
-)
+install(TARGETS a.out)
 ```
 
 [`cmake` コマンドの使い方は後述](#cli)
@@ -93,10 +91,11 @@ install(TARGETS a.out
 - [`target_compile_options(<target> [BEFORE] <I|P|P> ...)`](https://cmake.org/cmake/help/latest/command/target_compile_options.html)
 - [`target_sources(<target> <I|P|P> ...)`](https://cmake.org/cmake/help/latest/command/target_sources.html)
 - [`target_include_directories(<target> [SYSTEM] [BEFORE] <I|P|P> ...)`](https://cmake.org/cmake/help/latest/command/target_include_directories.html):
-  次の関数があるおかげでこれを直接使うことは意外と少ない。
+  ソースツリー内とインストール先でヘッダーファイルの置き方が変わる場合などに使う。
+  外部からインポートしたパッケージのヘッダーにはこちらを使わず、次の関数を使う。
 - **[`target_link_libraries(<target> <I|P|P> ...)`](https://cmake.org/cmake/help/latest/command/target_link_libraries.html):**
   この関数でターゲット間の依存関係を繋げていくのがCMakeの肝。
-  ライブラリ側 `-L -l` だけではなく、インクルード側 `-I` のオプションもお世話してくれる。
+  共有ライブラリのオプション `-L -l` だけではなく、ヘッダーのオプション `-I` もお世話してくれる。
 - ターゲットなしの `include_directories()` `link_directories()` `link_libraries()`
   などはディレクトリ単位で影響が及ぶ亜種で、非推奨。
 
@@ -195,12 +194,7 @@ e.g., `CMAKE_PREFIX_PATH`, `CXX`, `<PackageName>_ROOT`, etc.
 
 ```cmake
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
-set_target_properties(${PROJECT_NAME} PROPERTIES
-  CXX_STANDARD_REQUIRED ON
-  CXX_EXTENSIONS OFF
-  POSITION_INDEPENDENT_CODE ON
-  WINDOWS_EXPORT_ALL_SYMBOLS ON
-)
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS OFF)
 target_compile_options(common PRIVATE
   -Wall -Wextra -pedantic
   $<$<STREQUAL:${CMAKE_SYSTEM_PROCESSOR},x86_64>:-march=native>
@@ -291,10 +285,11 @@ Variable                    | Value
 
 ### CMakePackageConfigHelpers
 
-<https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html>
+- <https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html>
+- <https://cmake.org/cmake/help/latest/guide/importing-exporting/>
 
 他のプロジェクトから以下のように利用されるライブラリを作りたい。
-外部プロジェクトであることを明確にするため
+外部から `IMPORTED` されたターゲットであることを明確にするため
 `名前空間::ターゲット` という形でリンクするのが筋:
 ```cmake
 project(OtherProject CXX)
@@ -313,10 +308,10 @@ target_link_libraries(OtherTarget PRIVATE MyLib::MyLib)
   header-only, architecture-independent.
   `find_package()` は `${CMAKE_INSTALL_DATADIR}` に追従せず `share` を読みにいく。
 - `${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}`:
-  共有ライブラリあり、architecture-dependent.
+  コンパイル成果物を含む、architecture-dependent.
 
-`install(TARGETS)` の中で `EXPORT` のためのターゲット定義し、
-`install(EXPORT)` でその設定を行う:
+`install(TARGETS)` の `EXPORT` オプションでターゲットを関連づけ、
+`install(EXPORT)` でファイルのインストールを設定する:
 ```cmake
 project(MyLib
   VERSION 0.1.0
@@ -355,11 +350,62 @@ add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 ```
 
 上記のように直接 `EXPORT *-config` するのは簡易版。
-ライブラリ利用時に必要な変数をインストール時に設定してあげたいときなどは、
+ライブラリ利用時に何らかの処理を行いたい場合は、
 同じ内容を `EXPORT *-targets` のような名前で書き出しておき、
-`configure_package_config_file(Config.cmake.in, ...)`
-のようなコマンドで `*-config.cmake` を生成し、
-その中から `include(*-targets)` する。
+それを `include()` する `*-config.cmake` を次のようなコマンドで生成する。
+```cmake
+configure_package_config_file(config.cmake.in ${PROJECT_NAME}-config.cmake
+  INSTALL_DESTINATION ${config_destination}
+)
+```
+
+鋳型となる `config.cmake.in` にはとりあえず次の3行を書く:
+```cmake
+@PACKAGE_INIT@
+include("${CMAKE_CURRENT_LIST_DIR}/${CMAKE_FIND_PACKAGE_NAME}-targets.cmake")
+check_required_components(${CMAKE_FIND_PACKAGE_NAME})
+```
+
+これだけだと直接 `EXPORT *-config` するのとほとんど変わらないけど、
+ほかにも好きな処理を書いてインストールできる、というのがミソ。
+例えばzlibを使うライブラリを作って、その依存関係を伝播させたいとき、
+次のような処理を書いておくと利用者側で `find_package(ZLIB)` を書かなくてよくなる:
+```cmake
+include(CMakeFindDependencyMacro)
+find_dependency(ZLIB)
+```
+[`find_dependency()`](https://cmake.org/cmake/help/latest/module/CMakeFindDependencyMacro.html)
+は上流で指定された `REQUIRED` や `QUIET` などをうまく転送してくれる `find_package()` ラッパー。
+
+`check_required_components()` は
+`configure_package_config_file()` が `@PACKAGE_INIT@` のところに生成してくれる関数で、
+サポート外のコンポーネントが指定された場合に `<PackageName>_FOUND` をFalseにする。
+具体的には、ユーザーから `find_package(<PackageName> COMPONENTS compo)` とされたときに
+`<PackageName>_compo_FOUND` 変数をチェックするだけなので、
+例えば上記の2行に加えて次のように書くと、
+zlibが見つかったら `zlib` コンポーネントを提供する、という挙動になる:
+```cmake
+set(${CMAKE_FIND_PACKAGE_NAME}_zlib_FOUND ${ZLIB_FOUND})
+```
+
+`check_required_components()` はメッセージが不親切だったりしてイマイチなので、
+`NO_CHECK_REQUIRED_COMPONENTS_MACRO` オプションで作らせないようにして、
+`foreach(component ${${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS})`
+を自分で回してチェックするパターンもよく見かける。
+[公式ガイド](https://cmake.org/cmake/help/latest/guide/importing-exporting/index.html#adding-components)
+でも
+[pr0g/cmake-examples](https://github.com/pr0g/cmake-examples/tree/main/examples/more/components)
+でもそうしている。
+
+コンポーネントの提供方法について調べると、
+それぞれ異なる使用例みたいなものしか見つからなくて理解に苦労した。
+しかし分かってみると要件は案外単純:
+
+- `*config.cmake` 内でユーザーから指定されたコンポーネントをチェックし、
+  メッセージを表示するなり何なりの応答する。選択肢は2つ。
+  - `<PackageName>_<component>_FOUND` を定義して `check_required_components()` に任せる。
+  - `${<PackageName>_FIND_COMPONENTS}` を自前で回して処理する。
+- 慣例的に、コンポーネントと同名のターゲットを名前空間内に定義して `EXPORT` する。
 
 
 ### FetchContent
@@ -526,6 +572,7 @@ cmake --install build
 - 3.24: `FetchContent_Declare(... FIND_PACKAGE_ARGS)`, `--fresh`
 - 3.23: `FILE_SET`
 - 3.22: [Ubuntu 22.04 jammy](https://launchpad.net/ubuntu/jammy/+source/cmake)
+- 3.21: [`PROJECT_IS_TOP_LEVEL`](https://cmake.org/cmake/help/latest/variable/PROJECT_IS_TOP_LEVEL.html)
 - 3.20: [`cmake_path()`](https://cmake.org/cmake/help/latest/command/cmake_path.html), `cxx_std_23`
 - 3.19: [`CMakePresets.json`](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html)
 - 3.17: [`CMAKE_EXPORT_COMPILE_COMMANDS`](https://cmake.org/cmake/help/latest/envvar/CMAKE_EXPORT_COMPILE_COMMANDS.html)
