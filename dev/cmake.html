@@ -78,9 +78,7 @@ CMakeでは開発者と利用者の双方がCMakeをインストールして使�
 <code>install()</code> でインストールする対象や行き先を指定する、というのが基本の流れ。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">add_executable</span><span class="p">(</span><span class="s">a.out</span> <span class="s">hello.cpp</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_compile_options</span><span class="p">(</span><span class="s">a.out</span> <span class="s">PRIVATE</span> <span class="s">-Wall</span> <span class="s">-Wextra</span> <span class="s">-pedantic</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">install</span><span class="p">(</span><span class="s">TARGETS</span> <span class="s">a.out</span>
-</span></span><span class="line"><span class="cl">  <span class="s">RUNTIME</span> <span class="s">DESTINATION</span> <span class="s">bin</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">install</span><span class="p">(</span><span class="s">TARGETS</span> <span class="s">a.out</span><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><p><a href="#cli"><code>cmake</code> コマンドの使い方は後述</a></p>
 <h2 id="commands">Commands</h2>
 <p><a href="https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html">https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html</a></p>
@@ -155,10 +153,11 @@ CMakeでは開発者と利用者の双方がCMakeをインストールして使�
 <li><a href="https://cmake.org/cmake/help/latest/command/target_compile_options.html"><code>target_compile_options(&lt;target&gt; [BEFORE] &lt;I|P|P&gt; ...)</code></a></li>
 <li><a href="https://cmake.org/cmake/help/latest/command/target_sources.html"><code>target_sources(&lt;target&gt; &lt;I|P|P&gt; ...)</code></a></li>
 <li><a href="https://cmake.org/cmake/help/latest/command/target_include_directories.html"><code>target_include_directories(&lt;target&gt; [SYSTEM] [BEFORE] &lt;I|P|P&gt; ...)</code></a>:
-次の関数があるおかげでこれを直接使うことは意外と少ない。</li>
+ソースツリー内とインストール先でヘッダーファイルの置き方が変わる場合などに使う。
+外部からインポートしたパッケージのヘッダーにはこちらを使わず、次の関数を使う。</li>
 <li><strong><a href="https://cmake.org/cmake/help/latest/command/target_link_libraries.html"><code>target_link_libraries(&lt;target&gt; &lt;I|P|P&gt; ...)</code></a>:</strong>
 この関数でターゲット間の依存関係を繋げていくのがCMakeの肝。
-ライブラリ側 <code>-L -l</code> だけではなく、インクルード側 <code>-I</code> のオプションもお世話してくれる。</li>
+共有ライブラリのオプション <code>-L -l</code> だけではなく、ヘッダーのオプション <code>-I</code> もお世話してくれる。</li>
 <li>ターゲットなしの <code>include_directories()</code> <code>link_directories()</code> <code>link_libraries()</code>
 などはディレクトリ単位で影響が及ぶ亜種で、非推奨。</li>
 </ul>
@@ -239,12 +238,7 @@ e.g., <code>CMAKE_PREFIX_PATH</code>, <code>CXX</code>, <code>&lt;PackageName&gt
 </dl>
 <h3 id="c">C++</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">target_compile_features</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">PUBLIC</span> <span class="s">cxx_std_17</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set_target_properties</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">PROPERTIES</span>
-</span></span><span class="line"><span class="cl">  <span class="s">CXX_STANDARD_REQUIRED</span> <span class="s">ON</span>
-</span></span><span class="line"><span class="cl">  <span class="s">CXX_EXTENSIONS</span> <span class="s">OFF</span>
-</span></span><span class="line"><span class="cl">  <span class="s">POSITION_INDEPENDENT_CODE</span> <span class="s">ON</span>
-</span></span><span class="line"><span class="cl">  <span class="s">WINDOWS_EXPORT_ALL_SYMBOLS</span> <span class="s">ON</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set_target_properties</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">PROPERTIES</span> <span class="s">CXX_EXTENSIONS</span> <span class="s">OFF</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_compile_options</span><span class="p">(</span><span class="s">common</span> <span class="s">PRIVATE</span>
 </span></span><span class="line"><span class="cl">  <span class="s">-Wall</span> <span class="s">-Wextra</span> <span class="s">-pedantic</span>
 </span></span><span class="line"><span class="cl">  <span class="o">$&lt;</span><span class="nv">$&lt;STREQUAL:${CMAKE_SYSTEM_PROCESSOR},x86_64</span><span class="o">&gt;</span><span class="s">:-march=native&gt;</span>
@@ -354,9 +348,12 @@ e.g., <code>CMAKE_PREFIX_PATH</code>, <code>CXX</code>, <code>&lt;PackageName&gt
   </tbody>
 </table>
 <h3 id="cmakepackageconfighelpers">CMakePackageConfigHelpers</h3>
-<p><a href="https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html">https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html</a></p>
+<ul>
+<li><a href="https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html">https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html</a></li>
+<li><a href="https://cmake.org/cmake/help/latest/guide/importing-exporting/">https://cmake.org/cmake/help/latest/guide/importing-exporting/</a></li>
+</ul>
 <p>他のプロジェクトから以下のように利用されるライブラリを作りたい。
-外部プロジェクトであることを明確にするため
+外部から <code>IMPORTED</code> されたターゲットであることを明確にするため
 <code>名前空間::ターゲット</code> という形でリンクするのが筋:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">project</span><span class="p">(</span><span class="s">OtherProject</span> <span class="s">CXX</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">find_package</span><span class="p">(</span><span class="s">MyLib</span><span class="p">)</span><span class="err">
@@ -372,10 +369,10 @@ e.g., <code>CMAKE_PREFIX_PATH</code>, <code>CXX</code>, <code>&lt;PackageName&gt
 header-only, architecture-independent.
 <code>find_package()</code> は <code>${CMAKE_INSTALL_DATADIR}</code> に追従せず <code>share</code> を読みにいく。</li>
 <li><code>${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}</code>:
-共有ライブラリあり、architecture-dependent.</li>
+コンパイル成果物を含む、architecture-dependent.</li>
 </ul>
-<p><code>install(TARGETS)</code> の中で <code>EXPORT</code> のためのターゲット定義し、
-<code>install(EXPORT)</code> でその設定を行う:</p>
+<p><code>install(TARGETS)</code> の <code>EXPORT</code> オプションでターゲットを関連づけ、
+<code>install(EXPORT)</code> でファイルのインストールを設定する:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">project</span><span class="p">(</span><span class="s">MyLib</span>
 </span></span><span class="line"><span class="cl">  <span class="s">VERSION</span> <span class="s">0.1.0</span>
 </span></span><span class="line"><span class="cl">  <span class="s">LANGUAGES</span> <span class="s">CXX</span><span class="p">)</span><span class="err">
@@ -405,11 +402,53 @@ header-only, architecture-independent.
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">add_library</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">add_library</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="s">::</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">ALIAS</span> <span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><p>上記のように直接 <code>EXPORT *-config</code> するのは簡易版。
-ライブラリ利用時に必要な変数をインストール時に設定してあげたいときなどは、
+ライブラリ利用時に何らかの処理を行いたい場合は、
 同じ内容を <code>EXPORT *-targets</code> のような名前で書き出しておき、
-<code>configure_package_config_file(Config.cmake.in, ...)</code>
-のようなコマンドで <code>*-config.cmake</code> を生成し、
-その中から <code>include(*-targets)</code> する。</p>
+それを <code>include()</code> する <code>*-config.cmake</code> を次のようなコマンドで生成する。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">configure_package_config_file</span><span class="p">(</span><span class="s">config.cmake.in</span> <span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="s">-config.cmake</span>
+</span></span><span class="line"><span class="cl">  <span class="s">INSTALL_DESTINATION</span> <span class="o">${</span><span class="nv">config_destination</span><span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><p>鋳型となる <code>config.cmake.in</code> にはとりあえず次の3行を書く:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="err">@PACKAGE_INIT@
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">include</span><span class="p">(</span><span class="s2">&#34;${CMAKE_CURRENT_LIST_DIR}/${CMAKE_FIND_PACKAGE_NAME}-targets.cmake&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">check_required_components</span><span class="p">(</span><span class="o">${</span><span class="nv">CMAKE_FIND_PACKAGE_NAME</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><p>これだけだと直接 <code>EXPORT *-config</code> するのとほとんど変わらないけど、
+ほかにも好きな処理を書いてインストールできる、というのがミソ。
+例えばzlibを使うライブラリを作って、その依存関係を伝播させたいとき、
+次のような処理を書いておくと利用者側で <code>find_package(ZLIB)</code> を書かなくてよくなる:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">include</span><span class="p">(</span><span class="s">CMakeFindDependencyMacro</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">find_dependency</span><span class="p">(</span><span class="s">ZLIB</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><p><a href="https://cmake.org/cmake/help/latest/module/CMakeFindDependencyMacro.html"><code>find_dependency()</code></a>
+は上流で指定された <code>REQUIRED</code> や <code>QUIET</code> などをうまく転送してくれる <code>find_package()</code> ラッパー。</p>
+<p><code>check_required_components()</code> は
+<code>configure_package_config_file()</code> が <code>@PACKAGE_INIT@</code> のところに生成してくれる関数で、
+サポート外のコンポーネントが指定された場合に <code>&lt;PackageName&gt;_FOUND</code> をFalseにする。
+具体的には、ユーザーから <code>find_package(&lt;PackageName&gt; COMPONENTS compo)</code> とされたときに
+<code>&lt;PackageName&gt;_compo_FOUND</code> 変数をチェックするだけなので、
+例えば上記の2行に加えて次のように書くと、
+zlibが見つかったら <code>zlib</code> コンポーネントを提供する、という挙動になる:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="o">${</span><span class="nv">CMAKE_FIND_PACKAGE_NAME</span><span class="o">}</span><span class="s">_zlib_FOUND</span> <span class="o">${</span><span class="nv">ZLIB_FOUND</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><p><code>check_required_components()</code> はメッセージが不親切だったりしてイマイチなので、
+<code>NO_CHECK_REQUIRED_COMPONENTS_MACRO</code> オプションで作らせないようにして、
+<code>foreach(component ${${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS})</code>
+を自分で回してチェックするパターンもよく見かける。
+<a href="https://cmake.org/cmake/help/latest/guide/importing-exporting/index.html#adding-components">公式ガイド</a>
+でも
+<a href="https://github.com/pr0g/cmake-examples/tree/main/examples/more/components">pr0g/cmake-examples</a>
+でもそうしている。</p>
+<p>コンポーネントの提供方法について調べると、
+それぞれ異なる使用例みたいなものしか見つからなくて理解に苦労した。
+しかし分かってみると要件は案外単純:</p>
+<ul>
+<li><code>*config.cmake</code> 内でユーザーから指定されたコンポーネントをチェックし、
+メッセージを表示するなり何なりの応答する。選択肢は2つ。
+<ul>
+<li><code>&lt;PackageName&gt;_&lt;component&gt;_FOUND</code> を定義して <code>check_required_components()</code> に任せる。</li>
+<li><code>${&lt;PackageName&gt;_FIND_COMPONENTS}</code> を自前で回して処理する。</li>
+</ul>
+</li>
+<li>慣例的に、コンポーネントと同名のターゲットを名前空間内に定義して <code>EXPORT</code> する。</li>
+</ul>
 <h3 id="fetchcontent">FetchContent</h3>
 <p><a href="https://cmake.org/cmake/help/latest/module/FetchContent.html">https://cmake.org/cmake/help/latest/module/FetchContent.html</a></p>
 <p>外部ライブラリをコンフィグ時に取ってくる。
@@ -533,6 +572,7 @@ generator非依存の <code>cmake --build</code> を使ったほうがいい。<
 <li>3.24: <code>FetchContent_Declare(... FIND_PACKAGE_ARGS)</code>, <code>--fresh</code></li>
 <li>3.23: <code>FILE_SET</code></li>
 <li>3.22: <a href="https://launchpad.net/ubuntu/jammy/+source/cmake">Ubuntu 22.04 jammy</a></li>
+<li>3.21: <a href="https://cmake.org/cmake/help/latest/variable/PROJECT_IS_TOP_LEVEL.html"><code>PROJECT_IS_TOP_LEVEL</code></a></li>
 <li>3.20: <a href="https://cmake.org/cmake/help/latest/command/cmake_path.html"><code>cmake_path()</code></a>, <code>cxx_std_23</code></li>
 <li>3.19: <a href="https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html"><code>CMakePresets.json</code></a></li>
 <li>3.17: <a href="https://cmake.org/cmake/help/latest/envvar/CMAKE_EXPORT_COMPILE_COMMANDS.html"><code>CMAKE_EXPORT_COMPILE_COMMANDS</code></a></li>
