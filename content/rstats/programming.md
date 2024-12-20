@@ -26,9 +26,6 @@ tags = ["r"]
 はそういう思想に基いて互いに連携するようデザインされたパッケージ群で、
 R標準の関数よりも遥かに分かりやすく安全で高機能なものを提供してくれている。
 
-<a href="https://www.amazon.co.jp/dp/1491910399/ref=as_li_ss_il?ie=UTF8&linkCode=li1&tag=heavywatal-22&linkId=d1bd6164c391c38d0b93ca1f2954e48e&language=ja_JP" target="_blank"><img border="0" align="right" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1491910399&Format=_SL110_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li1&o=9&a=1491910399" width="1" height="1" border="0" align="right" alt="" style="border:none !important; margin:0px !important;" />
-<a href="https://www.amazon.co.jp/dp/487311814X/ref=as_li_ss_il?ie=UTF8&linkCode=li1&tag=heavywatal-22&linkId=d00c85d8def7b00c3e0ce9cdde50ffae&language=ja_JP" target="_blank"><img border="0" align="right" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=487311814X&Format=_SL110_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li1&o=9&a=487311814X" width="1" height="1" border="0" align="right" alt="" style="border:none !important; margin:0px !important;" />
-
 - グラフ描画には [ggplot2]({{< relref "ggplot2.md" >}})
 - data.frame内の計算・要約・抽出には [dplyr]({{< relref "dplyr.md" >}})
 - data.frameの変形・ネストには [tidyr]({{< relref "tidyr.md" >}})
@@ -335,13 +332,6 @@ ggplot(df) + aes(expr, time) +
   geom_jitter(height = 0, alpha = 0.5)
 ```
 
-## 関連書籍
+## Links
 
-統計解析やグラフ描画ではなく、
-プログラミング言語としてのRを学びたいときに:
-
-<a href="https://www.amazon.co.jp/dp/432012393X/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=15c50d7e6387ac0519680dea589c3ebc&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=432012393X&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=432012393X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
-<a href="https://www.amazon.co.jp/dp/4873117151/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=b538c2dbecbc5ce7e09be4fafeb99ff7&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873117151&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=4873117151" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
-<a href="https://www.amazon.co.jp/dp/4873115795/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=21ebf4fefc4890ca976d313ae873fe2c&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873115795&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=4873115795" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
-
-https://adv-r.hadley.nz/
+- <https://adv-r.hadley.nz/>

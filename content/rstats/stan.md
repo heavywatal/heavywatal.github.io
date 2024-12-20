@@ -274,9 +274,3 @@ rstanarmと同様にformula形式でStanを動かせるようにする。
 - [stan-dev](https://github.com/stan-dev)チームの一員ではない。
 - コンパイル済みの部品を使わずStanコードを生成する。そのぶん遅いが柔軟。
 - CmdStanRをbackendとして使える。
-
-
-## 関連書籍
-
-<a href="https://www.amazon.co.jp/dp/4320112423/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=a55a7a3616d8d8a6d4516c5a26bca46f&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4320112423&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=4320112423" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
-<a href="https://www.amazon.co.jp/dp/4065165369/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=75cdd63ab18e3b59eaeac9e628b27ce8&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4065165369&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=4065165369" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />

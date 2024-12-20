@@ -425,9 +425,3 @@ increment = function(x) {x + 1}
 
 `@docType`, `@name`
 :   パッケージやデータを記述するのに必要だったが今では不要っぽい。
-
-
-## 関連書籍
-
-<a href="https://www.amazon.co.jp/dp/1491910399/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=2ac4a1dea2487eff5b1034acbbad7ddb&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1491910399&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=1491910399" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
-<a href="https://www.amazon.co.jp/dp/4873117593/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=68d0ffbb02a546eca75795f147bd54e2&language=ja_JP" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873117593&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=4873117593" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />

@@ -239,13 +239,17 @@ See [dplyr]({{< relref "dplyr.md" >}}), [tidyr]({{< relref "tidyr.md" >}}), and 
 
 ## 関連書籍
 
-Rのモダンな使い方、考え方を学ぶにはr4ds。
-まずは[公開オンライン版](https://r4ds.hadley.nz/)を読んでみて。\
-<a href="https://www.amazon.co.jp/dp/1491910399/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=ebfaf931addcf48f288a9fb8dfebd0c9" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1491910399&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=1491910399" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
-<a href="https://www.amazon.co.jp/dp/487311814X/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=c508bbce8036b379868bc9628363583f" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=487311814X&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=487311814X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+R for Data Science --- Hadley Wickham et al.
+: Rのモダンな使い方、考え方を学ぶにはr4ds。
+  まずは公開オンライン版を読んでみて。
+: <https://r4ds.hadley.nz>
+: [Paperback](https://amzn.to/4cpL6w8)
+: [日本語版書籍(Rではじめるデータサイエンス)](https://amzn.to/2yyFRKt)
 
-即戦力が欲しい場合は、新しく日本語で書かれた宇宙本が取っつきやすい:\
-<a href="https://www.amazon.co.jp/dp/4297121700?&linkCode=li3&tag=heavywatal-22&linkId=77762a4d0080a840ec5d94df9c0c5ceb&language=ja_JP&ref_=as_li_ss_il" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4297121700&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=4297121700" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+宇宙船本
+: 手っ取り早くtidyverseを使えるようになる本。
+: [RユーザのためのRStudio[実践]入門](https://amzn.to/2Yy5LND) 松村ら 2021
 
-統計モデルの基礎は緑本で:\
-<a href="https://www.amazon.co.jp/dp/400006973X/ref=as_li_ss_il?ie=UTF8&linkCode=li3&tag=heavywatal-22&linkId=eea6b2ec8a0fbef9df8c163f92cc6ced" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=400006973X&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&l=li3&o=9&a=400006973X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+緑本
+: [データ解析のための統計モデリング入門](https://amzn.to/33suMIZ) 久保拓弥 2012
+: <https://kuboweb.github.io/-kubo/ce/IwanamiBook.html>

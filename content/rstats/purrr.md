@@ -267,9 +267,3 @@ formula内部では、第一引数を`.x`または`.`として、第二引数を
 `purrr::transpose(.l)`
 : `purrr::list_transpose()` に取って代わられた。
 
-
-
-## 関連書籍
-
-<a href="https://www.amazon.co.jp/dp/1492097403?&linkCode=li3&tag=heavywatal-22&linkId=163b4c2d2d4f43d197e985a033d397c1&language=ja_JP&ref_=as_li_ss_il" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=1492097403&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=1492097403" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
-<a href="https://www.amazon.co.jp/dp/487311814X?&linkCode=li3&tag=heavywatal-22&linkId=a289b1f9dbb4f189b4209b374662d6f7&language=ja_JP&ref_=as_li_ss_il" target="_blank"><img border="0" src="//ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=487311814X&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=heavywatal-22&language=ja_JP" ></a><img src="https://ir-jp.amazon-adsystem.com/e/ir?t=heavywatal-22&language=ja_JP&l=li3&o=9&a=487311814X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
