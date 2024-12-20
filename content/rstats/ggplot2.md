@@ -11,7 +11,7 @@ tags = ["r", "graph", "tidyverse"]
 <img src="/_img/hex-stickers/ggplot2.webp" align="right" width="120" height="139">
 </a>
 
-"The **G**rammer of **G**raphics" という体系に基づいて設計されたパッケージ。
+"The **G**rammar of **G**raphics" という体系に基づいて設計されたパッケージ。
 単にいろんなグラフを「描ける」だけじゃなく「一貫性のある文法で合理的に描ける」。
 
 Rのグラフ描画システムには`graphics`と`grid`の2つが存在しており、
