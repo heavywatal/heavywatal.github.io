@@ -66,11 +66,7 @@ Pythonインストール
         <li><a href="#設定">設定</a></li>
       </ul>
     </li>
-    <li><a href="#rye">rye</a>
-      <ul>
-        <li><a href="#pythonインストーラーとしてだけ使う">Pythonインストーラーとしてだけ使う</a></li>
-      </ul>
-    </li>
+    <li><a href="#rye">rye</a></li>
     <li><a href="#pyenv">pyenv</a></li>
     <li><a href="#anaconda">Anaconda</a></li>
     <li><a href="#環境変数">環境変数</a>
@@ -92,19 +88,17 @@ Pythonインストール
 <h2 id="uv">uv</h2>
 <p><a href="https://docs.astral.sh/uv/">https://docs.astral.sh/uv/</a></p>
 <p>プロジェクトの環境構築を一切合切面倒見てくれる管理ツール。
-ruffや<a href="#rye">rye</a>と同じチームが開発していて、同じくrust製。
+ruffと同じチームが開発していて、同じくrust製。
 次のワンライナーでプログラム本体が <code>~/.local/bin/uv</code> に配置される:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">curl -LsSf https://astral.sh/uv/install.sh <span class="p">|</span> sh
 </span></span></code></pre></div><p>シェルの設定が書き換えられて <code>PATH</code> を設定してもらえる。
 ドットファイルを勝手にいじられたくない人は
-<code>INSTALLER_NO_MODIFY_PATH=1</code> を定義してから実行すれば避けられる。
-現状では <code>uv self update</code> でも同じ処理が走ってしまうが、
-それは<a href="https://github.com/astral-sh/uv/issues/7319">近日中に改められるらしい</a>。</p>
+<code>INSTALLER_NO_MODIFY_PATH=1</code> を定義してから実行すれば避けられる。</p>
 <p>任意のバージョンのPythonを入れるためのツールとして、
 つまり<a href="#pyenv">pyenv</a>的な位置付けでも使える。
 しかもビルド済みのPythonを
-<a href="https://github.com/indygreg/python-build-standalone">https://github.com/indygreg/python-build-standalone</a>
-から取ってくるので、自前ビルド環境に左右されずCPUも使わず簡単。</p>
+<a href="https://github.com/astral-sh/python-build-standalone">python-build-standalone</a>
+から取ってくるので、自前ビルド環境に左右されずCPUも使わず簡単・高速。</p>
 <h3 id="pythonインストーラーとして使う">Pythonインストーラーとして使う</h3>
 <p><a href="https://docs.astral.sh/uv/reference/cli/#uv-python">https://docs.astral.sh/uv/reference/cli/#uv-python</a></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># バージョン一覧</span>
@@ -113,7 +107,7 @@ ruffや<a href="#rye">rye</a>と同じチームが開発していて、同じく
 </span></span><span class="line"><span class="cl"><span class="c1"># インストール</span>
 </span></span><span class="line"><span class="cl">uv python install
 </span></span></code></pre></div><p>バージョンを省略すると適当な最新版。
-<code>3</code> とか <code>3.12</code> みたいな指定でもその中での最新版を入れられる。</p>
+<code>3</code> とか <code>3.13</code> みたいな指定でもその中での最新版を入れられる。</p>
 <p><code>~/.local/share/uv/python/</code> 以下に配置される。
 <code>uv run</code> や <code>uv venv</code> 越しに使う前提ならここにPATHを通す必要はない。</p>
 <h3 id="設定">設定</h3>
@@ -132,36 +126,11 @@ uv自身で入れたPythonだけに専念してもらうと少し早くなる:</
 <p>ほかにも<a href="https://docs.astral.sh/uv/reference/cli/#uv">サブコマンド</a>がたくさん。</p>
 <h2 id="rye">rye</h2>
 <p><a href="https://rye.astral.sh/">https://rye.astral.sh/</a></p>
-<p>プロジェクトの環境構築を一切合切面倒見てくれる管理ツール。
-ruffや<a href="#uv">uv</a>と同じチームが開発していて、同じくrust製。
-次のワンライナーでプログラム本体や設定ファイルなどが <code>~/.rye/</code> に配置される:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">curl -sSf https://rye.astral.sh/get <span class="p">|</span> bash
-</span></span></code></pre></div><p>内部的にuvを使っていて、役割がややかぶっている。
-uvの開発が急速に進む一方、こちらはやや遅れてきて存在意義が揺らいできている&hellip;?</p>
-<h3 id="pythonインストーラーとしてだけ使う">Pythonインストーラーとしてだけ使う</h3>
-<p>パッケージ運用はまだ普通にpipとかでいいかなと思う人の使い方。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># インストール済みバージョン一覧</span>
-</span></span><span class="line"><span class="cl">rye toolchain list
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 利用可能バージョン一覧</span>
-</span></span><span class="line"><span class="cl">rye toolchain list --include-downloadable
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># インストール</span>
-</span></span><span class="line"><span class="cl">rye toolchain fetch cpython@3.12
-</span></span></code></pre></div><p>今のところグローバルに <code>pip3 install</code> しても怒られない。
-<code>global-python = true</code>
-の設定でshimsにPATHが通っていればryeの管理下にあるPythonをプロジェクト外でも使えるが、逆に
-<code>pyproject.toml</code> が存在するディレクトリでのみそれができないという問題
-<a href="https://github.com/astral-sh/rye/issues/1121">#1121</a>
-がある。
-shimsに頼らず自分でPATHを設定するworkaround:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[</span> -d <span class="s2">&#34;</span><span class="si">${</span><span class="nv">RYE_HOME</span><span class="p">:=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="p">/.rye</span><span class="si">}</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-</span></span><span class="line"><span class="cl">  <span class="nv">py_versions</span><span class="o">=(</span><span class="k">$(</span>ls <span class="s2">&#34;</span><span class="si">${</span><span class="nv">RYE_HOME</span><span class="si">}</span><span class="s2">/py&#34;</span> <span class="p">|</span> sort -V<span class="k">)</span><span class="o">)</span>
-</span></span><span class="line"><span class="cl">  <span class="nb">export</span> <span class="nv">PY_PREFIX</span><span class="o">=</span><span class="si">${</span><span class="nv">RYE_HOME</span><span class="si">}</span>/py/<span class="si">${</span><span class="nv">py_versions</span><span class="p">[@]: -1</span><span class="si">}</span>
-</span></span><span class="line"><span class="cl">  <span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PY_PREFIX</span><span class="si">}</span>/bin:<span class="si">${</span><span class="nv">PATH</span><span class="si">}</span>:<span class="si">${</span><span class="nv">RYE_HOME</span><span class="si">}</span>/shims
-</span></span><span class="line"><span class="cl">  <span class="nb">unset</span> py_versions
-</span></span><span class="line"><span class="cl"><span class="k">fi</span>
-</span></span></code></pre></div><h2 id="pyenv">pyenv</h2>
+<p>&ldquo;cargo for Python&rdquo; を目指して開発されている管理ツール。
+uvの成熟とともに一般ユーザーにとっての存在意義が薄れていき、
+現在は公式に「新しいプロジェクトにはuvのほうがおすすめ」となっている。
+今後も実験的な目的で開発は続けられるらしい。</p>
+<h2 id="pyenv">pyenv</h2>
 <p><a href="https://github.com/pyenv/pyenv">https://github.com/pyenv/pyenv</a></p>
 <p>管理者権限なしでホーム以下にインストールできる。
 ソースコードを取ってきて自前ビルドするという点で上記<a href="#uv">uv</a>や<a href="#rye">rye</a>と異なる。
@@ -204,7 +173,7 @@ shimsに頼らず自分でPATHを設定するworkaround:</p>
 目当てのバージョンを探してインストール:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">exec</span> <span class="nv">$SHELL</span> -l
 </span></span><span class="line"><span class="cl">pyenv install -l <span class="p">|</span> less
-</span></span><span class="line"><span class="cl">pyenv install 3.12
+</span></span><span class="line"><span class="cl">pyenv install 3.13
 </span></span><span class="line"><span class="cl"><span class="nb">exec</span> <span class="nv">$SHELL</span> -l
 </span></span></code></pre></div><p>R から <a href="https://rstudio.github.io/reticulate/"><code>reticulate</code></a>
 越しに呼ぶ場合は共有ライブラリを有効にしてビルドする:</p>
