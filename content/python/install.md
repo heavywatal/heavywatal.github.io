@@ -22,7 +22,7 @@ MacやLinuxならシステムの一部として
 <https://docs.astral.sh/uv/>
 
 プロジェクトの環境構築を一切合切面倒見てくれる管理ツール。
-ruffや[rye](#rye)と同じチームが開発していて、同じくrust製。
+ruffと同じチームが開発していて、同じくrust製。
 次のワンライナーでプログラム本体が `~/.local/bin/uv` に配置される:
 ```sh
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -31,14 +31,12 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 シェルの設定が書き換えられて `PATH` を設定してもらえる。
 ドットファイルを勝手にいじられたくない人は
 `INSTALLER_NO_MODIFY_PATH=1` を定義してから実行すれば避けられる。
-現状では `uv self update` でも同じ処理が走ってしまうが、
-それは[近日中に改められるらしい](https://github.com/astral-sh/uv/issues/7319)。
 
 任意のバージョンのPythonを入れるためのツールとして、
 つまり[pyenv](#pyenv)的な位置付けでも使える。
 しかもビルド済みのPythonを
-<https://github.com/indygreg/python-build-standalone>
-から取ってくるので、自前ビルド環境に左右されずCPUも使わず簡単。
+[python-build-standalone](https://github.com/astral-sh/python-build-standalone)
+から取ってくるので、自前ビルド環境に左右されずCPUも使わず簡単・高速。
 
 ### Pythonインストーラーとして使う
 
@@ -53,7 +51,7 @@ uv python install
 ```
 
 バージョンを省略すると適当な最新版。
-`3` とか `3.12` みたいな指定でもその中での最新版を入れられる。
+`3` とか `3.13` みたいな指定でもその中での最新版を入れられる。
 
 `~/.local/share/uv/python/` 以下に配置される。
 `uv run` や `uv venv` 越しに使う前提ならここにPATHを通す必要はない。
@@ -86,46 +84,10 @@ export UV_PYTHON_PREFERENCE=only-managed
 
 <https://rye.astral.sh/>
 
-プロジェクトの環境構築を一切合切面倒見てくれる管理ツール。
-ruffや[uv](#uv)と同じチームが開発していて、同じくrust製。
-次のワンライナーでプログラム本体や設定ファイルなどが `~/.rye/` に配置される:
-```sh
-curl -sSf https://rye.astral.sh/get | bash
-```
-
-内部的にuvを使っていて、役割がややかぶっている。
-uvの開発が急速に進む一方、こちらはやや遅れてきて存在意義が揺らいできている...?
-
-### Pythonインストーラーとしてだけ使う
-
-パッケージ運用はまだ普通にpipとかでいいかなと思う人の使い方。
-
-```sh
-# インストール済みバージョン一覧
-rye toolchain list
-
-# 利用可能バージョン一覧
-rye toolchain list --include-downloadable
-
-# インストール
-rye toolchain fetch cpython@3.12
-```
-
-今のところグローバルに `pip3 install` しても怒られない。
-`global-python = true`
-の設定でshimsにPATHが通っていればryeの管理下にあるPythonをプロジェクト外でも使えるが、逆に
-`pyproject.toml` が存在するディレクトリでのみそれができないという問題
-[#1121](https://github.com/astral-sh/rye/issues/1121)
-がある。
-shimsに頼らず自分でPATHを設定するworkaround:
-```sh
-if [ -d "${RYE_HOME:=${HOME}/.rye}" ]; then
-  py_versions=($(ls "${RYE_HOME}/py" | sort -V))
-  export PY_PREFIX=${RYE_HOME}/py/${py_versions[@]: -1}
-  PATH=${PY_PREFIX}/bin:${PATH}:${RYE_HOME}/shims
-  unset py_versions
-fi
-```
+"cargo for Python" を目指して開発されている管理ツール。
+uvの成熟とともに一般ユーザーにとっての存在意義が薄れていき、
+現在は公式に「新しいプロジェクトにはuvのほうがおすすめ」となっている。
+今後も実験的な目的で開発は続けられるらしい。
 
 
 ## pyenv
@@ -178,7 +140,7 @@ fi
     ```sh
     exec $SHELL -l
     pyenv install -l | less
-    pyenv install 3.12
+    pyenv install 3.13
     exec $SHELL -l
     ```
 
