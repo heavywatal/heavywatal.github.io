@@ -5,7 +5,7 @@ tags = ["mac", "package"]
   parent = "mac"
 +++
 
-Unixツールをパッケージとして手軽にインストールできるパッケージ管理ソフト。
+Unixツールを手軽にインストールできるパッケージ管理ソフト。
 
 <https://brew.sh/>
 
@@ -24,7 +24,7 @@ Unixツールをパッケージとして手軽にインストールできるパ�
 
 1.  ターミナルから下記のコマンドを実行し、指示に従う:
     ```sh
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     ```
 
 1.  ちゃんと入ったか確認:
@@ -181,7 +181,13 @@ brew install --cask r rstudio
 brew list --cask
 ```
 
-アプリ側でアップデートを実行するとCask内でのバージョンと食い違っちゃうけど使用上は問題ないらしい。
+アプリ側にアップデート機能があって `auto_updates true` とされているものは普通の
+`brew outdated` や `brew upgrade` には出てこない。
+`brew outdated --greedy-auto-updates`
+で一覧して明示的に `brew upgrade <cask>` することも可能だが、
+そのままCaskのバージョンから離れていっても問題ない。
+`$(brew --cache)` 以下にインストーラーが保持されるので、
+ストレージ不足で気になる場合は確認して消す。
 
 amazon-photos
 basictex bibdesk
