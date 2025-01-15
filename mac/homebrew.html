@@ -59,7 +59,7 @@ Homebrew
 </nav>
 </header>
 
-<p>Unixツールをパッケージとして手軽にインストールできるパッケージ管理ソフト。</p>
+<p>Unixツールを手軽にインストールできるパッケージ管理ソフト。</p>
 <p><a href="https://brew.sh/">https://brew.sh/</a></p>
 <h2 id="installation">Installation</h2>
 <p><a href="https://docs.brew.sh/Installation">https://docs.brew.sh/Installation</a></p>
@@ -72,7 +72,7 @@ cf. <a href="/dev/devenv.html">/dev/devenv</a>:</p>
 </li>
 <li>
 <p>ターミナルから下記のコマンドを実行し、指示に従う:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">/bin/bash -c <span class="s2">&#34;</span><span class="k">$(</span>curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh<span class="k">)</span><span class="s2">&#34;</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">/bin/bash -c <span class="s2">&#34;</span><span class="k">$(</span>curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh<span class="k">)</span><span class="s2">&#34;</span>
 </span></span></code></pre></div></li>
 <li>
 <p>ちゃんと入ったか確認:</p>
@@ -203,7 +203,13 @@ sd</p>
 同名のformulaがある場合などは <code>--cask</code> で限定できる:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew install --cask r rstudio
 </span></span><span class="line"><span class="cl">brew list --cask
-</span></span></code></pre></div><p>アプリ側でアップデートを実行するとCask内でのバージョンと食い違っちゃうけど使用上は問題ないらしい。</p>
+</span></span></code></pre></div><p>アプリ側にアップデート機能があって <code>auto_updates true</code> とされているものは普通の
+<code>brew outdated</code> や <code>brew upgrade</code> には出てこない。
+<code>brew outdated --greedy-auto-updates</code>
+で一覧して明示的に <code>brew upgrade &lt;cask&gt;</code> することも可能だが、
+そのままCaskのバージョンから離れていっても問題ない。
+<code>$(brew --cache)</code> 以下にインストーラーが保持されるので、
+ストレージ不足で気になる場合は確認して消す。</p>
 <p>amazon-photos
 basictex bibdesk
 discord drawio dropbox equinox firefox
