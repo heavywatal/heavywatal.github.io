@@ -251,27 +251,26 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 ### 主な関数
 
 `document(pkg = ".", roclets = NULL, quiet = FALSE)`
-:   `roxygen2` を呼び出してソースコードから
+:   [`roxygen2`](#roxygen2) を呼び出してソースコードから
     `NAMESPACE` や `man/*.Rd` を自動生成する。
-:   `src/` 内のドキュメント変更はこれ1回の実行では反映されない。
 
 `check(pkg = ".", document = NA, ...)`
 :   パッケージとしての整合性を確認。
     ついでに `document()` は実行できるけど `spell_check()` はできないので手動で。
 
 `test(pkg = ".", filter = NULL, ...)`
-:   `testthat` を呼び出して `tests/` 以下のテストコードを実行する
+:   `testthat` を呼び出して [`tests/`](#tests) 以下のテストコードを実行する
 
 `build(pkg = ".", path = NULL, ...)`
 :   `R CMD install` でインストール可能な tar ball (bundle package) を作る。
-    Rcppコードをコンパイルするという意味ではない。
+    `src/` のコードをコンパイルするという意味ではない。
 
 `install(pkg = ".", reload = TRUE, quick = FALSE, build = !quick, ...)`
 :   ローカルにあるソースからインストール。
     `build = TRUE` のとき(デフォルト)、わざわざ bundle package を
     `tempdir()` に作ってからそいつでインストールする。
 
-`install_github(repo, ref = "master", subdir = NULL, ...)`
+`install_github(repo, ref = "HEAD", subdir = NULL, ...)`
 :   GitHubリポジトリからインストール。
 
 `unload(pkg = ".", quiet = FALSE)`
@@ -282,6 +281,11 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 `load_all(pkg = ".", reset = TRUE, recompile = FALSE, export_all = TRUE, ...)`
 :   `install()` せずファイルから直接 `library()` する。
     ロード済みでもまず `unload()` が呼ばれるので安心。
+:   `load_all` 状態のパッケージに対して `system.file()` を呼び出すと、
+    [`pkgload::system.file()`](https://pkgload.r-lib.org/reference/system.file.html)
+    が間に割り込み、ソースのトップと `inst/` を起点にして探索してくれる。
+    `configure` で生成するファイルを見つけてもらうには
+    `$R_PACKAGE_DIR` に直接送り込まず一旦 `inst/` などに置く必要がある。
 
 `clean_dll(pkg = ".")`
 :   `src/` 以下に生成される `.o`, `.so` を消す。
@@ -338,10 +342,8 @@ increment = function(x) {x + 1}
 
     ```r
     #' Example package to say hello
-    #' @aliases NULL hello-package
     #' @useDynLib hello, .registration = TRUE
-    #' @importFrom Rcpp sourceCpp
-    #' @importFrom rlang .data := %||%
+    #' @importFrom rlang .data :=
     #' @keywords internal
     "_PACKAGE"
     ```
