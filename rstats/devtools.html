@@ -258,22 +258,21 @@ mydemo2    Description of demo 2
 <h3 id="主な関数">主な関数</h3>
 <dl>
 <dt><code>document(pkg = &quot;.&quot;, roclets = NULL, quiet = FALSE)</code></dt>
-<dd><code>roxygen2</code> を呼び出してソースコードから
+<dd><a href="#roxygen2"><code>roxygen2</code></a> を呼び出してソースコードから
 <code>NAMESPACE</code> や <code>man/*.Rd</code> を自動生成する。</dd>
-<dd><code>src/</code> 内のドキュメント変更はこれ1回の実行では反映されない。</dd>
 <dt><code>check(pkg = &quot;.&quot;, document = NA, ...)</code></dt>
 <dd>パッケージとしての整合性を確認。
 ついでに <code>document()</code> は実行できるけど <code>spell_check()</code> はできないので手動で。</dd>
 <dt><code>test(pkg = &quot;.&quot;, filter = NULL, ...)</code></dt>
-<dd><code>testthat</code> を呼び出して <code>tests/</code> 以下のテストコードを実行する</dd>
+<dd><code>testthat</code> を呼び出して <a href="#tests"><code>tests/</code></a> 以下のテストコードを実行する</dd>
 <dt><code>build(pkg = &quot;.&quot;, path = NULL, ...)</code></dt>
 <dd><code>R CMD install</code> でインストール可能な tar ball (bundle package) を作る。
-Rcppコードをコンパイルするという意味ではない。</dd>
+<code>src/</code> のコードをコンパイルするという意味ではない。</dd>
 <dt><code>install(pkg = &quot;.&quot;, reload = TRUE, quick = FALSE, build = !quick, ...)</code></dt>
 <dd>ローカルにあるソースからインストール。
 <code>build = TRUE</code> のとき(デフォルト)、わざわざ bundle package を
 <code>tempdir()</code> に作ってからそいつでインストールする。</dd>
-<dt><code>install_github(repo, ref = &quot;master&quot;, subdir = NULL, ...)</code></dt>
+<dt><code>install_github(repo, ref = &quot;HEAD&quot;, subdir = NULL, ...)</code></dt>
 <dd>GitHubリポジトリからインストール。</dd>
 <dt><code>unload(pkg = &quot;.&quot;, quiet = FALSE)</code></dt>
 <dd><code>detach(&quot;package:XXX&quot;)</code> とか <code>unloadNamespace(XXX)</code>
@@ -281,6 +280,11 @@ Rcppコードをコンパイルするという意味ではない。</dd>
 <dt><code>load_all(pkg = &quot;.&quot;, reset = TRUE, recompile = FALSE, export_all = TRUE, ...)</code></dt>
 <dd><code>install()</code> せずファイルから直接 <code>library()</code> する。
 ロード済みでもまず <code>unload()</code> が呼ばれるので安心。</dd>
+<dd><code>load_all</code> 状態のパッケージに対して <code>system.file()</code> を呼び出すと、
+<a href="https://pkgload.r-lib.org/reference/system.file.html"><code>pkgload::system.file()</code></a>
+が間に割り込み、ソースのトップと <code>inst/</code> を起点にして探索してくれる。
+<code>configure</code> で生成するファイルを見つけてもらうには
+<code>$R_PACKAGE_DIR</code> に直接送り込まず一旦 <code>inst/</code> などに置く必要がある。</dd>
 <dt><code>clean_dll(pkg = &quot;.&quot;)</code></dt>
 <dd><code>src/</code> 以下に生成される <code>.o</code>, <code>.so</code> を消す。
 普段は触る必要ないが、たまにこれが必要な不具合に出くわす。</dd>
@@ -338,10 +342,8 @@ Rcppコードをコンパイルするという意味ではない。</dd>
 パッケージそのものに対応するヘルプ <code>*-package.Rd</code> になる。
 <code>@useDynLib</code> など全体に関わる設定はここでやるのが良いのでは。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1">#&#39; Example package to say hello</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#&#39; @aliases NULL hello-package</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&#39; @useDynLib hello, .registration = TRUE</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#&#39; @importFrom Rcpp sourceCpp</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#&#39; @importFrom rlang .data := %||%</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#&#39; @importFrom rlang .data :=</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&#39; @keywords internal</span>
 </span></span><span class="line"><span class="cl"><span class="s">&#34;_PACKAGE&#34;</span>
 </span></span></code></pre></div></li>
