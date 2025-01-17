@@ -136,17 +136,37 @@ https://github.com/heavywatal/hugo-theme-nonblog
 [GitHub Flavored Markdown (GFM)](https://github.github.com/gfm/)
 : CommonMarkに準拠しつついくらかの機能を追加したもの。
   基本的な書き方は[GitHub Helpのページ](https://help.github.com/articles/basic-writing-and-formatting-syntax/)が読みやすい。
+: - [tables](https://github.github.com/gfm/#tables-extension-)
+  - [task lists](https://github.github.com/gfm/#task-list-items-extension-):
+    - [ ] `- [ ]`
+    - [x] `- [x]`
+  - [~strikethrough~](https://github.github.com/gfm/#strikethrough-extension-):
+    `~text~`, `~~text~~`
+  - [extended autolink](https://github.github.com/gfm/#autolinks-extension-):
+    `<` と `>` で挟まなくても
+    `https://` とか `www.` とかで始まるURLらしきものを認識してリンク生成する。
+  - [tagfilter](https://github.github.com/gfm/#disallowed-raw-html-extension-):
+    生HTMLタグのうち悪用されやすいものを無効にする。
+    `<title>`,
+    `<textarea>`,
+    `<style>`,
+    `<xmp>`,
+    `<iframe>`,
+    `<noembed>`,
+    `<noframes>`,
+    `<script>`,
+    `<plaintext>`.
+
+[Goldmark](https://github.com/yuin/goldmark/)
+: 2019年末からHugoのデフォルトエンジン。
+: 基本的にはCommonMark準拠だけど、
+  デフォルト設定での生HTMLコードの扱いがちょっと変。
 
 [Blackfriday](https://github.com/russross/blackfriday)
 : HugoのMarkdownエンジンは長らくこれだった。
   CommonMark準拠じゃないし、
   リストまわりでの不具合が放置されてるし、
   などなど不満が募るうちにGoldmarkに取って代わられた。
-
-[Goldmark](https://github.com/yuin/goldmark/)
-: 2019年末からHugoはこっちに移行した。
-  基本的にはCommonMark準拠だけど、
-  デフォルト設定での生HTMLコードの扱いがちょっと変。
 
 
 ### Front matter

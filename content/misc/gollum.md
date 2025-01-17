@@ -234,6 +234,7 @@ end
 とか
 `echo -n 'greatpassword' | sha256sum`
 のようなコマンドで計算できる。
+`sha256sum` が無ければ `shasum -a 256` でも同じ。
 
 
 ### Markdownパーサー/レンダラを変更する
@@ -256,22 +257,23 @@ module Gollum
   class Markup
     GitHub::Markup::Markdown::MARKDOWN_GEMS.clear
     GitHub::Markup::Markdown::MARKDOWN_GEMS['commonmarker'] = proc do |content|
-      exts = %i[
-        table
-        tasklist
-        strikethrough
-        autolink
-      ]
-      parse_opts = %i[
-        UNSAFE
-        SMART
-      ]
-      render_opts = %i[
-        UNSAFE
-        GITHUB_PRE_LANG
-      ]
-      doc = CommonMarker.render_doc(content, parse_opts, exts)
-      doc.to_html(render_opts)
+      Commonmarker.to_html(content, options: {
+        extention: {
+          autolink: true,
+          strikethrough: true,
+          table: true,
+          tagfilter: false,
+          tasklist: true,
+        },
+        parse: {
+          smart: true,
+        },
+        render: {
+          github_pre_lang: true,
+          hardbreaks: false,
+          unsafe: true,
+        },
+      })
     end
   end
 end
