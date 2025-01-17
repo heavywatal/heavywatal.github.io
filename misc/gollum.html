@@ -236,7 +236,8 @@ gem &#39;gollum&#39;, :github =&gt; &#39;heavywatal/gollum&#39;, :branch =&gt; &
 <code>sha256sum &lt;(pbpaste)</code>
 とか
 <code>echo -n 'greatpassword' | sha256sum</code>
-のようなコマンドで計算できる。</p>
+のようなコマンドで計算できる。
+<code>sha256sum</code> が無ければ <code>shasum -a 256</code> でも同じ。</p>
 <h3 id="markdownパーサーレンダラを変更する">Markdownパーサー/レンダラを変更する</h3>
 <p><a href="https://github.com/gollum/gollum/wiki/Custom-rendering-gems">https://github.com/gollum/gollum/wiki/Custom-rendering-gems</a></p>
 <p>Markdownを読んでHTMLに変換するライブラリは
@@ -253,22 +254,23 @@ gem &#39;gollum&#39;, :github =&gt; &#39;heavywatal/gollum&#39;, :branch =&gt; &
 </span></span><span class="line"><span class="cl">  <span class="k">class</span> <span class="nc">Markup</span>
 </span></span><span class="line"><span class="cl">    <span class="no">GitHub</span><span class="o">::</span><span class="no">Markup</span><span class="o">::</span><span class="no">Markdown</span><span class="o">::</span><span class="no">MARKDOWN_GEMS</span><span class="o">.</span><span class="n">clear</span>
 </span></span><span class="line"><span class="cl">    <span class="no">GitHub</span><span class="o">::</span><span class="no">Markup</span><span class="o">::</span><span class="no">Markdown</span><span class="o">::</span><span class="no">MARKDOWN_GEMS</span><span class="o">[</span><span class="s1">&#39;commonmarker&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="nb">proc</span> <span class="k">do</span> <span class="o">|</span><span class="n">content</span><span class="o">|</span>
-</span></span><span class="line"><span class="cl">      <span class="n">exts</span> <span class="o">=</span> <span class="o">%</span><span class="n">i</span><span class="o">[</span>
-</span></span><span class="line"><span class="cl">        <span class="n">table</span>
-</span></span><span class="line"><span class="cl">        <span class="n">tasklist</span>
-</span></span><span class="line"><span class="cl">        <span class="n">strikethrough</span>
-</span></span><span class="line"><span class="cl">        <span class="n">autolink</span>
-</span></span><span class="line"><span class="cl">      <span class="o">]</span>
-</span></span><span class="line"><span class="cl">      <span class="n">parse_opts</span> <span class="o">=</span> <span class="o">%</span><span class="n">i</span><span class="o">[</span>
-</span></span><span class="line"><span class="cl">        <span class="no">UNSAFE</span>
-</span></span><span class="line"><span class="cl">        <span class="no">SMART</span>
-</span></span><span class="line"><span class="cl">      <span class="o">]</span>
-</span></span><span class="line"><span class="cl">      <span class="n">render_opts</span> <span class="o">=</span> <span class="o">%</span><span class="n">i</span><span class="o">[</span>
-</span></span><span class="line"><span class="cl">        <span class="no">UNSAFE</span>
-</span></span><span class="line"><span class="cl">        <span class="no">GITHUB_PRE_LANG</span>
-</span></span><span class="line"><span class="cl">      <span class="o">]</span>
-</span></span><span class="line"><span class="cl">      <span class="n">doc</span> <span class="o">=</span> <span class="no">CommonMarker</span><span class="o">.</span><span class="n">render_doc</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">parse_opts</span><span class="p">,</span> <span class="n">exts</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">      <span class="n">doc</span><span class="o">.</span><span class="n">to_html</span><span class="p">(</span><span class="n">render_opts</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="no">Commonmarker</span><span class="o">.</span><span class="n">to_html</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="ss">options</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="ss">extention</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="ss">autolink</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="ss">strikethrough</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="ss">table</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="ss">tagfilter</span><span class="p">:</span> <span class="kp">false</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="ss">tasklist</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="ss">parse</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="ss">smart</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="ss">render</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="ss">github_pre_lang</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="ss">hardbreaks</span><span class="p">:</span> <span class="kp">false</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="ss">unsafe</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">      <span class="p">})</span>
 </span></span><span class="line"><span class="cl">    <span class="k">end</span>
 </span></span><span class="line"><span class="cl">  <span class="k">end</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
