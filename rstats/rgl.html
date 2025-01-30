@@ -172,26 +172,26 @@ rgl — 3Dグラフ描画
 <h3 id="htmlに埋め込む">HTMLに埋め込む</h3>
 <p><a href="/rstats/knitr.html">Quarto/RMarkdown/knitr</a>でコードを書く。
 パッケージを読み込み、hookを設定しておく(<code>rgl::setupKnitr()</code> を使う手もある):</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl">```{r library}
-</span></span><span class="line"><span class="cl">options(rgl.useNULL = TRUE)
-</span></span><span class="line"><span class="cl">library(rgl)
-</span></span><span class="line"><span class="cl">knitr::knit_hooks$set(webgl = rgl::hook_webgl)
-</span></span><span class="line"><span class="cl">knitr::knit_hooks$set(rgl = rgl::hook_rgl)
-</span></span><span class="line"><span class="cl">```
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl">``<span class="sb">`{r library}
+</span></span></span><span class="line"><span class="cl"><span class="sb">options(rgl.useNULL = TRUE)
+</span></span></span><span class="line"><span class="cl"><span class="sb">library(rgl)
+</span></span></span><span class="line"><span class="cl"><span class="sb">knitr::knit_hooks$set(webgl = rgl::hook_webgl)
+</span></span></span><span class="line"><span class="cl"><span class="sb">knitr::knit_hooks$set(rgl = rgl::hook_rgl)
+</span></span></span><span class="line"><span class="cl"><span class="sb">`</span>``
 </span></span></code></pre></div><p>WebGLを出力したい場合は <code>webgl = TRUE</code>、
 PNG静止画を出力したい場合は <code>rgl = TRUE</code>:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl">```{r plot, webgl = TRUE}
-</span></span><span class="line"><span class="cl">rgl::box3d()
-</span></span><span class="line"><span class="cl">rgl::title3d(&#34;main&#34;, &#34;sub&#34;, &#34;x&#34;, &#34;y&#34;, &#34;z&#34;)
-</span></span><span class="line"><span class="cl">```
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl">``<span class="sb">`{r plot, webgl = TRUE}
+</span></span></span><span class="line"><span class="cl"><span class="sb">rgl::box3d()
+</span></span></span><span class="line"><span class="cl"><span class="sb">rgl::title3d(&#34;main&#34;, &#34;sub&#34;, &#34;x&#34;, &#34;y&#34;, &#34;z&#34;)
+</span></span></span><span class="line"><span class="cl"><span class="sb">`</span>``
 </span></span></code></pre></div><p><code>rgl::rglwidget()</code> を明示的に呼ぶならhookは不要。
 複数描画したいときは <code>htmltools::tagList()</code> に詰める手もある:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl">```{r widget}
-</span></span><span class="line"><span class="cl">purrr::map(seq_len(3), ~{
-</span></span><span class="line"><span class="cl">  rgl::box3d()
-</span></span><span class="line"><span class="cl">  rgl::rglwidget(width = 200, height = 200)
-</span></span><span class="line"><span class="cl">}) |&gt; htmltools::tagList()
-</span></span><span class="line"><span class="cl">```
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl">``<span class="sb">`{r widget}
+</span></span></span><span class="line"><span class="cl"><span class="sb">purrr::map(seq_len(3), ~{
+</span></span></span><span class="line"><span class="cl"><span class="sb">  rgl::box3d()
+</span></span></span><span class="line"><span class="cl"><span class="sb">  rgl::rglwidget(width = 200, height = 200)
+</span></span></span><span class="line"><span class="cl"><span class="sb">}) |&gt; htmltools::tagList()
+</span></span></span><span class="line"><span class="cl"><span class="sb">`</span>``
 </span></span></code></pre></div><p>WebGLへの変換は出力先がHTMLであることを条件にしているらしく、
 <code>rmarkdown::render()</code> なら上記コードで問題ないが <code>knitr::knit()</code> はダメ。
 強制的に変換する手段はあるのかな&hellip;?</p>
