@@ -65,6 +65,11 @@ docker --version
 docker-compose --version
 ```
 
+Silicon Mac で x86_64/amd64 のイメージを動かすには
+`--platform linux/amd64`
+のようなオプションを明示的に与えてRosettaを介す。
+<https://docs.orbstack.dev/docker/#intel-x86-emulation>
+
 
 ### Hello world
 
