@@ -84,7 +84,6 @@ rsync
 tmux
 webp
 wget
-xz
 zsh-completions
 zstd
 
@@ -189,14 +188,14 @@ brew list --cask
 `$(brew --cache)` 以下にインストーラーが保持されるので、
 ストレージ不足で気になる場合は確認して消す。
 
-amazon-photos
+aldente amazon-photos
 basictex bibdesk
 discord drawio dropbox equinox firefox
 google-chrome google-drive
 inkscape joplin julia
 macfuse megasync menumeters monitorcontrol
 orbstack quarto r rstudio
-skim skype slack spideroakone
+skim skype slack
 the-unarchiver visual-studio-code vlc
 wezterm xquartz zoom
 
@@ -211,7 +210,6 @@ brew tap homebrew/cask-fonts
 ```
 
 font-sf-mono font-sf-pro
-font-biz-udgothic font-biz-udmincho font-biz-udpgothic font-biz-udpmincho
 font-ubuntu font-ubuntu-mono font-ubuntu-mono-nerd-font
 font-ubuntu-sans font-ubuntu-sans-mono font-ubuntu-sans-nerd-font
 font-noto-sans font-noto-serif font-noto-sans-mono

@@ -142,9 +142,9 @@ Finderとかで普通のディレクトリのように扱えるようにする�
     brew install sshfs
     brew install gromgit/fuse/sshfs-mac
     ```
-    非オープンソースの[macFUSE](https://osxfuse.github.io/)
+    非オープンソースの[macFUSE](https://macfuse.github.io/)
     に依存するMacでは公式サポートから外れたので
-    非公式Tapを使ってインストールする。
+    [非公式Tap](https://github.com/gromgit/homebrew-fuse)を使ってインストールする。
     [libfuse](https://github.com/libfuse/libfuse)
     などは自動的に入るはず。
 
