@@ -59,6 +59,25 @@ Heavy Watal
 </header>
 
 <p><a href="https://www.gnu.org/software/bash/manual/html_node/">https://www.gnu.org/software/bash/manual/html_node/</a></p>
+<h2 id="互換性">互換性</h2>
+<p>実装されている機能やコマンドの挙動はシェルの種類によって異なる。
+困ったことに、慣例的によく使われる <code>/bin/sh</code> の正体もOSによって異なるため、
+Macで動くスクリプトがUbuntuでは動かないということも起こる。
+多くは暗黙のBash拡張をDashに蹴られるパターン。
+なるべくどの環境でも動くようにするための選択肢は？</p>
+<ul>
+<li>明示的に <code>/bin/bash</code> を使う。
+これが許されない環境でだけほかの選択肢を検討すればいいでしょう。</li>
+<li>POSIXで規定された機能だけを使って書く。
+<a href="https://marketplace.visualstudio.com/items?itemName=timonwong.shellcheck">ShellCheck</a>
+とか <code>checkbashisms</code> とかで確認できる。
+だいたいUbuntuの <code>/bin/dash</code> で動けば十分だろうけど徹底するなら
+<a href="https://magicant.github.io/yash/"><code>yash -o posixly-correct</code></a>
+とか？</li>
+<li>なるべくPOSIX限定で書いて <code>/bin/bash</code> で実行。
+いいとこ取りの安全策にも思えるけど、
+shebangに <code>#!/bin/bash</code> と書くとShellCheckがBash拡張をグイグイ勧めてくるので難しい。</li>
+</ul>
 <h2 id="if-then">if-then</h2>
 <ul>
 <li><a href="https://www.gnu.org/software/bash/manual/html_node/Conditional-Constructs.html">Conditional Constructs</a></li>
@@ -209,13 +228,29 @@ zshでは1要素扱い、dashやbashではスペース区切りで分割。</p>
 </span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="si">${</span><span class="nv">FILEPATH</span><span class="p">%.*</span><span class="si">}</span>        <span class="c1"># /root/dir/file.tar</span>
 </span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="si">${</span><span class="nv">FILEPATH</span><span class="p">%%.*</span><span class="si">}</span>       <span class="c1"># /root/dir/file</span>
 </span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="si">${</span><span class="nv">FILEPATH</span><span class="p">/%.*/.zip</span><span class="si">}</span>  <span class="c1"># /root/dir/file.zip</span>
-</span></span></code></pre></div><p>変数が設定されていない場合にどうするか</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">              <span class="c1"># if VAR is null, then</span>
-</span></span><span class="line"><span class="cl"><span class="si">${</span><span class="nv">VAR</span><span class="k">:-</span><span class="nv">WORD</span><span class="si">}</span>  <span class="c1"># return WORD; VAR remains null</span>
-</span></span><span class="line"><span class="cl"><span class="si">${</span><span class="nv">VAR</span><span class="p">:=WORD</span><span class="si">}</span>  <span class="c1"># return WORD; WORD is assigned to VAR</span>
-</span></span><span class="line"><span class="cl"><span class="si">${</span><span class="nv">VAR</span><span class="p">:?WORD</span><span class="si">}</span>  <span class="c1"># display error and exit</span>
-</span></span><span class="line"><span class="cl"><span class="si">${</span><span class="nv">VAR</span><span class="p">:+WORD</span><span class="si">}</span>  <span class="c1"># nothing occurs; otherwise return WORD</span>
-</span></span></code></pre></div><h2 id="misc">Misc.</h2>
+</span></span></code></pre></div><p>変数が未定義or空っぽの場合にどうにかする:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nv">NULL</span><span class="o">=</span>
+</span></span><span class="line"><span class="cl">: <span class="si">${</span><span class="nv">NULL</span><span class="k">:-</span><span class="nv">default</span><span class="si">}</span>  <span class="c1"># return &#34;default&#34;; NULL remains null</span>
+</span></span><span class="line"><span class="cl">: <span class="si">${</span><span class="nv">NULL</span><span class="p">:=default</span><span class="si">}</span>  <span class="c1"># return &#34;default&#34;; &#34;default&#34; is assigned to NULL</span>
+</span></span><span class="line"><span class="cl">: <span class="si">${</span><span class="nv">NULL</span><span class="p">:?message</span><span class="si">}</span>  <span class="c1"># display error &#34;message&#34; and exit</span>
+</span></span><span class="line"><span class="cl">: <span class="si">${</span><span class="nv">NULL</span><span class="p">:+alt</span><span class="si">}</span>      <span class="c1"># do nothing</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">: <span class="si">${</span><span class="nv">NULL</span><span class="p">-default</span><span class="si">}</span>   <span class="c1"># return null; NULL remains null</span>
+</span></span><span class="line"><span class="cl">: <span class="si">${</span><span class="nv">NULL</span><span class="p">=default</span><span class="si">}</span>   <span class="c1"># return null; NULL remains null</span>
+</span></span><span class="line"><span class="cl">: <span class="si">${</span><span class="nv">NULL</span><span class="p">?message</span><span class="si">}</span>   <span class="c1"># return null</span>
+</span></span><span class="line"><span class="cl">: <span class="si">${</span><span class="nv">NULL</span><span class="p">+alt</span><span class="si">}</span>       <span class="c1"># return &#34;alt&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">unset</span> UNSET
+</span></span><span class="line"><span class="cl"><span class="o">[</span> <span class="s2">&#34;</span><span class="si">${</span><span class="nv">UNSET</span><span class="k">:-</span><span class="nv">default</span><span class="si">}</span><span class="s2">&#34;</span> <span class="o">=</span> <span class="s2">&#34;</span><span class="si">${</span><span class="nv">UNSET</span><span class="p">-default</span><span class="si">}</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;default = default&#39;</span>
+</span></span></code></pre></div><p>コロンの有無により、定義済み空っぽ変数の扱いが異なる。
+コロン有りの場合、空っぽは未定義と同じ扱い。
+コロン無しの場合、空っぽは意図的とみなして中身ありと同じ扱い。
+未定義変数はコロンの有無によらず同じ扱い。</p>
+<p>先頭に置いてあるコロン <code>:</code> は「変数展開以外に何もせずすぐ終わる」コマンド。
+変数にデフォルト値を設定したいだけとか、
+<a href="/dev/make.html">Makefile</a> で依存関係を書きたいだけとか、
+使い所は結構ある。</p>
+<h2 id="misc">Misc.</h2>
 <h3 id="command-substitution">Command Substitution</h3>
 <p><a href="https://www.gnu.org/software/bash/manual/html_node/Command-Substitution.html">https://www.gnu.org/software/bash/manual/html_node/Command-Substitution.html</a></p>
 <p>コマンドの結果を文字列として受け取る方法は
