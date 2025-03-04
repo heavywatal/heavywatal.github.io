@@ -8,6 +8,27 @@ tags = ["shell"]
 https://www.gnu.org/software/bash/manual/html_node/
 
 
+## 互換性
+
+実装されている機能やコマンドの挙動はシェルの種類によって異なる。
+困ったことに、慣例的によく使われる `/bin/sh` の正体もOSによって異なるため、
+Macで動くスクリプトがUbuntuでは動かないということも起こる。
+多くは暗黙のBash拡張をDashに蹴られるパターン。
+なるべくどの環境でも動くようにするための選択肢は？
+
+- 明示的に `/bin/bash` を使う。
+  これが許されない環境でだけほかの選択肢を検討すればいいでしょう。
+- POSIXで規定された機能だけを使って書く。
+  [ShellCheck](https://marketplace.visualstudio.com/items?itemName=timonwong.shellcheck)
+  とか `checkbashisms` とかで確認できる。
+  だいたいUbuntuの `/bin/dash` で動けば十分だろうけど徹底するなら
+  [`yash -o posixly-correct`](https://magicant.github.io/yash/)
+  とか？
+- なるべくPOSIX限定で書いて `/bin/bash` で実行。
+  いいとこ取りの安全策にも思えるけど、
+  shebangに `#!/bin/bash` と書くとShellCheckがBash拡張をグイグイ勧めてくるので難しい。
+
+
 ## if-then
 
 - [Conditional Constructs](https://www.gnu.org/software/bash/manual/html_node/Conditional-Constructs.html)
@@ -212,14 +233,31 @@ echo ${FILEPATH%%.*}       # /root/dir/file
 echo ${FILEPATH/%.*/.zip}  # /root/dir/file.zip
 ```
 
-変数が設定されていない場合にどうするか
+変数が未定義or空っぽの場合にどうにかする:
 ```sh
-              # if VAR is null, then
-${VAR:-WORD}  # return WORD; VAR remains null
-${VAR:=WORD}  # return WORD; WORD is assigned to VAR
-${VAR:?WORD}  # display error and exit
-${VAR:+WORD}  # nothing occurs; otherwise return WORD
+NULL=
+: ${NULL:-default}  # return "default"; NULL remains null
+: ${NULL:=default}  # return "default"; "default" is assigned to NULL
+: ${NULL:?message}  # display error "message" and exit
+: ${NULL:+alt}      # do nothing
+
+: ${NULL-default}   # return null; NULL remains null
+: ${NULL=default}   # return null; NULL remains null
+: ${NULL?message}   # return null
+: ${NULL+alt}       # return "alt"
+
+unset UNSET
+[ "${UNSET:-default}" = "${UNSET-default}" ] && echo 'default = default'
 ```
+コロンの有無により、定義済み空っぽ変数の扱いが異なる。
+コロン有りの場合、空っぽは未定義と同じ扱い。
+コロン無しの場合、空っぽは意図的とみなして中身ありと同じ扱い。
+未定義変数はコロンの有無によらず同じ扱い。
+
+先頭に置いてあるコロン `:` は「変数展開以外に何もせずすぐ終わる」コマンド。
+変数にデフォルト値を設定したいだけとか、
+[Makefile]({{< relref "make.md" >}}) で依存関係を書きたいだけとか、
+使い所は結構ある。
 
 
 ## Misc.
