@@ -67,7 +67,8 @@ Macで動くスクリプトがUbuntuでは動かないということも起こ�
 なるべくどの環境でも動くようにするための選択肢は？</p>
 <ul>
 <li>明示的に <code>/bin/bash</code> を使う。
-これが許されない環境でだけほかの選択肢を検討すればいいでしょう。</li>
+これが許されない環境でだけほかの選択肢を検討すればいいでしょう。
+ただしMacのBashは GPL v3 適用前の古い version 3.2 で固定されていることに注意。</li>
 <li>POSIXで規定された機能だけを使って書く。
 <a href="https://marketplace.visualstudio.com/items?itemName=timonwong.shellcheck">ShellCheck</a>
 とか <code>checkbashisms</code> とかで確認できる。
@@ -240,16 +241,22 @@ zshでは1要素扱い、dashやbashではスペース区切りで分割。</p>
 </span></span><span class="line"><span class="cl">: <span class="si">${</span><span class="nv">NULL</span><span class="p">?message</span><span class="si">}</span>   <span class="c1"># return null</span>
 </span></span><span class="line"><span class="cl">: <span class="si">${</span><span class="nv">NULL</span><span class="p">+alt</span><span class="si">}</span>       <span class="c1"># return &#34;alt&#34;</span>
 </span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> -u
 </span></span><span class="line"><span class="cl"><span class="nb">unset</span> UNSET
 </span></span><span class="line"><span class="cl"><span class="o">[</span> <span class="s2">&#34;</span><span class="si">${</span><span class="nv">UNSET</span><span class="k">:-</span><span class="nv">default</span><span class="si">}</span><span class="s2">&#34;</span> <span class="o">=</span> <span class="s2">&#34;</span><span class="si">${</span><span class="nv">UNSET</span><span class="p">-default</span><span class="si">}</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;default = default&#39;</span>
 </span></span></code></pre></div><p>コロンの有無により、定義済み空っぽ変数の扱いが異なる。
 コロン有りの場合、空っぽは未定義と同じ扱い。
 コロン無しの場合、空っぽは意図的とみなして中身ありと同じ扱い。
-未定義変数はコロンの有無によらず同じ扱い。</p>
+未定義変数はコロンの有無によらず同じ扱いで、
+<code>set -u</code> オプションの時でもエラーにならない。</p>
 <p>先頭に置いてあるコロン <code>:</code> は「変数展開以外に何もせずすぐ終わる」コマンド。
 変数にデフォルト値を設定したいだけとか、
 <a href="/dev/make.html">Makefile</a> で依存関係を書きたいだけとか、
 使い所は結構ある。</p>
+<p><code>${var,,}</code> や <code>${var@L}</code> のような大文字小文字変換は便利だけど、
+Bash version 4以降で導入された拡張なのでMacでは使えない。
+Zshでは <code>${var:l}</code> のように書ける。
+外部コマンドでやるなら <code>tr '[:upper:]' '[:lower:]'</code> とか。</p>
 <h2 id="misc">Misc.</h2>
 <h3 id="command-substitution">Command Substitution</h3>
 <p><a href="https://www.gnu.org/software/bash/manual/html_node/Command-Substitution.html">https://www.gnu.org/software/bash/manual/html_node/Command-Substitution.html</a></p>
@@ -300,6 +307,7 @@ zshでは1要素扱い、dashやbashではスペース区切りで分割。</p>
 </span></span><span class="line"><span class="cl"><span class="c1"># e</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># f</span>
 </span></span></code></pre></div><h3 id="オプション">オプション</h3>
+<p><a href="https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html">https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html</a></p>
 <p>シェル起動時に <code>bash -u script.sh</code> とするか、
 スクリプト内で <code>set -u</code> とする。
 途中で <code>set +u</code> として戻したりもできる。</p>
@@ -316,7 +324,9 @@ zshでは1要素扱い、dashやbashではスペース区切りで分割。</p>
 Pythonとかでかっちり書いたほうがよいのでは。</dd>
 <dd><code>source</code> している中で <code>exit</code> するとシェルごと落ちることにも注意。</dd>
 <dt><code>-u</code></dt>
-<dd>定義されていない変数を展開しようとするとエラー扱い。</dd>
+<dd>定義されていない変数を展開しようとすると <code>unbound variable</code> エラー扱い。</dd>
+<dd>未定義時の動作を <code>${UNSET-}</code> のように明示的に書いておけば、
+このオプションがついてる時でもエラーにせず空っぽ扱いできる。</dd>
 <dt><code>-v</code></dt>
 <dd>シェルに入力されるコマンドを実行前にそのまま表示する。
 よくあるverboseオプションなので、
