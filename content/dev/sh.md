@@ -18,6 +18,7 @@ Macで動くスクリプトがUbuntuでは動かないということも起こ�
 
 - 明示的に `/bin/bash` を使う。
   これが許されない環境でだけほかの選択肢を検討すればいいでしょう。
+  ただしMacのBashは GPL v3 適用前の古い version 3.2 で固定されていることに注意。
 - POSIXで規定された機能だけを使って書く。
   [ShellCheck](https://marketplace.visualstudio.com/items?itemName=timonwong.shellcheck)
   とか `checkbashisms` とかで確認できる。
@@ -246,18 +247,25 @@ NULL=
 : ${NULL?message}   # return null
 : ${NULL+alt}       # return "alt"
 
+set -u
 unset UNSET
 [ "${UNSET:-default}" = "${UNSET-default}" ] && echo 'default = default'
 ```
 コロンの有無により、定義済み空っぽ変数の扱いが異なる。
 コロン有りの場合、空っぽは未定義と同じ扱い。
 コロン無しの場合、空っぽは意図的とみなして中身ありと同じ扱い。
-未定義変数はコロンの有無によらず同じ扱い。
+未定義変数はコロンの有無によらず同じ扱いで、
+`set -u` オプションの時でもエラーにならない。
 
 先頭に置いてあるコロン `:` は「変数展開以外に何もせずすぐ終わる」コマンド。
 変数にデフォルト値を設定したいだけとか、
 [Makefile]({{< relref "make.md" >}}) で依存関係を書きたいだけとか、
 使い所は結構ある。
+
+`${var,,}` や `${var@L}` のような大文字小文字変換は便利だけど、
+Bash version 4以降で導入された拡張なのでMacでは使えない。
+Zshでは `${var:l}` のように書ける。
+外部コマンドでやるなら `tr '[:upper:]' '[:lower:]'` とか。
 
 
 ## Misc.
@@ -336,6 +344,8 @@ done
 
 ### オプション
 
+<https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html>
+
 シェル起動時に `bash -u script.sh` とするか、
 スクリプト内で `set -u` とする。
 途中で `set +u` として戻したりもできる。
@@ -356,7 +366,9 @@ set -eux -o pipefail
 : `source` している中で `exit` するとシェルごと落ちることにも注意。
 
 `-u`
-: 定義されていない変数を展開しようとするとエラー扱い。
+: 定義されていない変数を展開しようとすると `unbound variable` エラー扱い。
+: 未定義時の動作を `${UNSET-}` のように明示的に書いておけば、
+  このオプションがついてる時でもエラーにせず空っぽ扱いできる。
 
 `-v`
 : シェルに入力されるコマンドを実行前にそのまま表示する。
