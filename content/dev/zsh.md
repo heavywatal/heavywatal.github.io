@@ -20,21 +20,9 @@ brew install zsh
 brew install zsh-completions
 ```
 
-## Environment variables
-
-`ZDOTDIR`
-:   設定ファイルを読み込むディレクトリ。デフォルトは `${HOME}`
-
-`HISTFILE`
-:   コマンド履歴を保存するファイル。
-    デフォルトは `${ZDOTDIR}/.zsh_history`
-    っぽいけど明示的に設定しといたほうが安心。
-
-`fpath`
-:   zsh関数や補完関数のパス
-
-
 ## Configuration files
+
+<https://zsh.sourceforge.io/Doc/Release/Files.html>
 
 `$ZDOTDIR` 以下の個人設定ファイルが場合に応じて下記の順で読まれる。
 システム全体の設定ファイルとして `/etc/z*` が個人設定ファイルの前に読み込まれる。
@@ -59,8 +47,7 @@ brew install zsh-completions
 `.zprofile`
 :   ログインシェルとして立ち上げるときのみ読まれる。
     `export` する環境変数(`PATH` とか)を設定するのに適している。
-    `.bash_profile` に対応するので共通設定を
-    `.profile` に書いておいて `source` するとか。
+    `.bash_profile` との共通設定を `.profile` に書いておいて `source` するとか。
 :   例えばローカル環境Mac + リモート環境Linux CUIで開発する場合、
     ターミナルも[tmux]({{< relref "tmux.md" >}})もデフォルトでログインシェルを立ち上げるので、
     `.zshrc` に一本化してしまっても構わない。
@@ -79,6 +66,39 @@ brew install zsh-completions
 
 `.zlogout`
 :   ログアウト時にしてほしいことが万が一あれば。
+
+以下は Bash の設定ファイル。
+<https://www.gnu.org/software/bash/manual/bash.html#Bash-Startup-Files>
+
+`/etc/profile`
+:   ログインシェルの場合ここから開始。
+:   OSによって `/etc/bash.bashrc` や `/etc/bashrc` を `source` する。
+
+`~/.bash_profile`
+:   ログインシェルの場合の2つめ。
+    もし存在しなかったら `~/.bash_login` を読みに行き、
+    それも存在しなかったら `~/.profile` を読む。
+    どれかが読めたところで自動読み込みは終了。
+    つまりこれが存在する場合は `~/.profile` が自動では読み込まれないし、
+    いずれにせよ `~/.bashrc` を自動で読みには行かない。
+:   ほかのシェルとの共通設定を `~/.profile` と `~/.bashrc` に書き、
+    ここではそれらを `source` するだけにしておくと見通しがいい。
+
+`~/.bashrc`
+:   非ログインでインタラクティブの場合に自動で読まれる唯一のファイル。
+:   ログインシェルの場合は自動では読まれないので
+    `~/.bash_profile` から `source` するのが普通。
+:   非インタラクティブでも[SSH]({{< relref "ssh.md" >}})越しの
+    [`rsync`]({{< relref "rsync.md" >}}) とか `scp`
+    とかで読まれて失敗の原因となる。
+    環境変数やメッセージを `echo` したくなるかもしれないけど、
+    標準出力や標準エラーへの書き出しは厳禁。
+    始めに `$-` とか `$PS1` を調べて終了するようにしておくと安心。
+
+`$BASH_ENV`
+:   スクリプト実行直前にこの環境変数の指すファイルを読み込む。
+:   POSIXモードの `sh` として呼ばれた場合は `$ENV` を読みに行く。
+:   スクリプトの中で明示的に `source` するほうが明快で安全なので使わない。
 
 
 ### 起動時間短縮
