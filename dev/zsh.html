@@ -68,18 +68,8 @@ zsh
 新しいのを入れるなら<a href="/mac/homebrew.html">Homebrew</a>を使うのが楽:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew install zsh
 </span></span><span class="line"><span class="cl">brew install zsh-completions
-</span></span></code></pre></div><h2 id="environment-variables">Environment variables</h2>
-<dl>
-<dt><code>ZDOTDIR</code></dt>
-<dd>設定ファイルを読み込むディレクトリ。デフォルトは <code>${HOME}</code></dd>
-<dt><code>HISTFILE</code></dt>
-<dd>コマンド履歴を保存するファイル。
-デフォルトは <code>${ZDOTDIR}/.zsh_history</code>
-っぽいけど明示的に設定しといたほうが安心。</dd>
-<dt><code>fpath</code></dt>
-<dd>zsh関数や補完関数のパス</dd>
-</dl>
-<h2 id="configuration-files">Configuration files</h2>
+</span></span></code></pre></div><h2 id="configuration-files">Configuration files</h2>
+<p><a href="https://zsh.sourceforge.io/Doc/Release/Files.html">https://zsh.sourceforge.io/Doc/Release/Files.html</a></p>
 <p><code>$ZDOTDIR</code> 以下の個人設定ファイルが場合に応じて下記の順で読まれる。
 システム全体の設定ファイルとして <code>/etc/z*</code> が個人設定ファイルの前に読み込まれる。</p>
 <dl>
@@ -100,8 +90,7 @@ OSによっては次の <code>/etc/zprofile</code> で上書きされてしま�
 <dt><code>.zprofile</code></dt>
 <dd>ログインシェルとして立ち上げるときのみ読まれる。
 <code>export</code> する環境変数(<code>PATH</code> とか)を設定するのに適している。
-<code>.bash_profile</code> に対応するので共通設定を
-<code>.profile</code> に書いておいて <code>source</code> するとか。</dd>
+<code>.bash_profile</code> との共通設定を <code>.profile</code> に書いておいて <code>source</code> するとか。</dd>
 <dd>例えばローカル環境Mac + リモート環境Linux CUIで開発する場合、
 ターミナルも<a href="/dev/tmux.html">tmux</a>もデフォルトでログインシェルを立ち上げるので、
 <code>.zshrc</code> に一本化してしまっても構わない。</dd>
@@ -117,6 +106,36 @@ OSによっては次の <code>/etc/zprofile</code> で上書きされてしま�
 <dd><code>.zshrc</code> より後に読まれる以外は <code>.zprofile</code> と同じ。使わない。</dd>
 <dt><code>.zlogout</code></dt>
 <dd>ログアウト時にしてほしいことが万が一あれば。</dd>
+</dl>
+<p>以下は Bash の設定ファイル。
+<a href="https://www.gnu.org/software/bash/manual/bash.html#Bash-Startup-Files">https://www.gnu.org/software/bash/manual/bash.html#Bash-Startup-Files</a></p>
+<dl>
+<dt><code>/etc/profile</code></dt>
+<dd>ログインシェルの場合ここから開始。</dd>
+<dd>OSによって <code>/etc/bash.bashrc</code> や <code>/etc/bashrc</code> を <code>source</code> する。</dd>
+<dt><code>~/.bash_profile</code></dt>
+<dd>ログインシェルの場合の2つめ。
+もし存在しなかったら <code>~/.bash_login</code> を読みに行き、
+それも存在しなかったら <code>~/.profile</code> を読む。
+どれかが読めたところで自動読み込みは終了。
+つまりこれが存在する場合は <code>~/.profile</code> が自動では読み込まれないし、
+いずれにせよ <code>~/.bashrc</code> を自動で読みには行かない。</dd>
+<dd>ほかのシェルとの共通設定を <code>~/.profile</code> と <code>~/.bashrc</code> に書き、
+ここではそれらを <code>source</code> するだけにしておくと見通しがいい。</dd>
+<dt><code>~/.bashrc</code></dt>
+<dd>非ログインでインタラクティブの場合に自動で読まれる唯一のファイル。</dd>
+<dd>ログインシェルの場合は自動では読まれないので
+<code>~/.bash_profile</code> から <code>source</code> するのが普通。</dd>
+<dd>非インタラクティブでも<a href="/dev/ssh.html">SSH</a>越しの
+<a href="/dev/rsync.html"><code>rsync</code></a> とか <code>scp</code>
+とかで読まれて失敗の原因となる。
+環境変数やメッセージを <code>echo</code> したくなるかもしれないけど、
+標準出力や標準エラーへの書き出しは厳禁。
+始めに <code>$-</code> とか <code>$PS1</code> を調べて終了するようにしておくと安心。</dd>
+<dt><code>$BASH_ENV</code></dt>
+<dd>スクリプト実行直前にこの環境変数の指すファイルを読み込む。</dd>
+<dd>POSIXモードの <code>sh</code> として呼ばれた場合は <code>$ENV</code> を読みに行く。</dd>
+<dd>スクリプトの中で明示的に <code>source</code> するほうが明快で安全なので使わない。</dd>
 </dl>
 <h3 id="起動時間短縮">起動時間短縮</h3>
 <p>まずはプロファイリングしてボトルネックを知る:</p>
