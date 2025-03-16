@@ -20,6 +20,10 @@ watch:
 benchmark:
 	hugo --templateMetrics --templateMetricsHints
 
+pull:
+	git pull
+	git -C public pull
+
 init:
 	git clone -b master --single-branch $$(git remote get-url origin) public
 	git submodule update --init --single-branch

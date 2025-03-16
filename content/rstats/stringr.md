@@ -50,7 +50,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 :   文字列の長さを数える。
     `base::nchar(x)` と相同。
     
-    ```r
+    ``` r
     str_length(c("NA", NA))
     ```
     
@@ -64,7 +64,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
     ただしRのインデックスは1始まりで終端も含むの。
     `str_sub<-` が定義されているので置換にも使える。
     
-    ```r
+    ``` r
     str_sub("supercalifragilisticexpialidocious", 10, -15)
     ```
     
@@ -76,7 +76,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 :   文字列vectorを1つの文字列に結合する。
     `base::paste0(string, collapse = "")` と同等だが `NA` を扱える。
     
-    ```r
+    ``` r
     str_flatten(c("Dragon", NA, "Force"))
     ```
     
@@ -84,7 +84,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
     [1] NA
     ```
     
-    ```r
+    ``` r
     str_flatten(c("Dragon", NA, "Force"), na.rm = TRUE)
     ```
     
@@ -92,7 +92,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
     [1] "DragonForce"
     ```
     
-    ```r
+    ``` r
     paste0(c("Dragon", NA, "Force"), collapse = "")
     ```
     
@@ -104,7 +104,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 :   複数の引数で与えた文字列を結合する。
     デフォルトの `sep` がスペースじゃないので `base::paste0()` に近い。
     
-    ```r
+    ``` r
     str_c(c("Dragon", "Hammer"), c(NA, ""), c("Force", "Fall"))
     ```
     
@@ -112,7 +112,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
     [1] NA           "HammerFall"
     ```
     
-    ```r
+    ``` r
     paste0(c("Dragon", "Hammer"), c(NA, ""), c("Force", "Fall"))
     ```
     
@@ -126,7 +126,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
     最大 `n` 個に分割するということを指定できる。
     `simplify = TRUE` とするとmatrixで返す。
     
-    ```r
+    ``` r
     str_split(c("DragonForce", "HammerFall"), "(?<=[a-z])(?=[A-Z])")
     ```
     
@@ -138,7 +138,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
     [1] "Hammer" "Fall"  
     ```
     
-    ```r
+    ``` r
     str_split(c("DragonForce", "HammerFall"), "(?<=[a-z])(?=[A-Z])", simplify = TRUE)
     ```
     
@@ -148,7 +148,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
     [2,] "Hammer" "Fall" 
     ```
     
-    ```r
+    ``` r
     str_split_1("DragonForce", "(?<=[a-z])(?=[A-Z])")
     ```
     
@@ -156,7 +156,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
     [1] "Dragon" "Force" 
     ```
     
-    ```r
+    ``` r
     str_split_i(c("DragonForce", "HammerFall"), "(?<=[a-z])(?=[A-Z])", 1)
     ```
     
@@ -174,7 +174,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 :   指定した回数だけ文字列を繰り返して結合。
     `base::strrep()` と同等。
     
-    ```r
+    ``` r
     str_dup("pizza", 10)
     ```
     

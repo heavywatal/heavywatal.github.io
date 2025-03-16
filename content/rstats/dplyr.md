@@ -40,7 +40,7 @@ data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(
 慣れれば書きやすく読みやすい。
 
 
-```r
+``` r
 library(conflicted)
 library(tidyverse)
 
@@ -171,7 +171,7 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
 :   条件を満たす行だけを返す。`base::subset()` と似たようなもの。
 
     
-    ```r
+    ``` r
     diamonds |> dplyr::filter(carat > 3 & price < 10000)
     ```
     
@@ -189,7 +189,7 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
 :   複数列で条件指定するには `if_any()`, `if_all()` が使える。
 
     
-    ```r
+    ``` r
     diamonds |> dplyr::filter(if_any(c(x, y, z), \(v) v > 20))
     ```
     
@@ -200,7 +200,7 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
     3  0.51     Ideal     E     VS1  61.8  55.0  2075 5.15 31.80  5.12
     ```
     
-    ```r
+    ``` r
     diamonds |> dplyr::filter(if_all(where(is.numeric), \(x) x > 4.1))
     ```
     
@@ -219,7 +219,7 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
     指定しなかった列を残すには `.keep_all = TRUE` とする。
 
     
-    ```r
+    ``` r
     diamonds |> dplyr::distinct(cut)
     ```
     
@@ -237,7 +237,7 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
     `` `[`(i,) `` の代わりに。
 
     
-    ```r
+    ``` r
     diamonds |> dplyr::slice(1, 2, 3)
     ```
     
@@ -266,7 +266,7 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
 :   新しい列を作ったり、既存の列を変更したり。
     `base::transform()` の改良版。
     
-    ```r
+    ``` r
     diamonds |>
       dplyr::mutate(gram = 0.2 * carat) |>  # create new
       dplyr::mutate(price = price * 140)    # modify existing
@@ -283,7 +283,7 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
 :   変数に入った文字列を列名として使いたい場合は上記 `select()` のときと同様、
     {{embrace}} や !!unquote を使う。
     
-    ```r
+    ``` r
     A = "carat"
     B = "gram"
     diamonds |> dplyr::mutate(B = 0.2 * !!as.name(A))
@@ -301,7 +301,7 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
     [walrus(セイウチ)演算子 `:=`](https://www.tidyverse.org/blog/2020/02/glue-strings-and-tidy-eval/#custom-result-names)
     を使う:
     
-    ```r
+    ``` r
     diamonds |> dplyr::mutate({{B}} := 0.2 * !!as.name(A))
     ```
     
@@ -335,7 +335,7 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
 :   列の改名。
     `mutate()`と同じようなイメージで `new = old` と指定。
     
-    ```r
+    ``` r
     diamonds |> dplyr::rename(SIZE = carat)
     ```
     
@@ -349,7 +349,7 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
     ```
 :   変数に入った文字列を使う場合も`mutate()`と同様に {{embrace}} や !!unquote で:
     
-    ```r
+    ``` r
     old_name = "carat"
     new_name = toupper(old_name)
     diamonds |> dplyr::rename({{new_name}} := {{old_name}})
@@ -367,7 +367,7 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
     [!!!unquote-splicing](https://rlang.r-lib.org/reference/splice-operator.html)
     を使えば一括指定できる:
     
-    ```r
+    ``` r
     named_vec = setNames(names(diamonds), LETTERS[seq(1, 10)])
     diamonds |> dplyr::rename(!!!named_vec)
     ```
@@ -394,7 +394,7 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
     グループ化されていたらグループごとに適用して `bind_rows()` する。
 
     
-    ```r
+    ``` r
     diamonds |>
       group_by(cut) |>
       summarize(avg_carat = mean(carat), max_price = max(price))
@@ -429,7 +429,7 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
 :   各グループの結果が複数行にまたがっても大丈夫な `summarize()` 亜種。
 
     
-    ```r
+    ``` r
     diamonds |> dplyr::reframe(range(carat), range(price))
     ```
     
@@ -539,7 +539,7 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
 `dplyr::consecutive_id(...)`
 :   値が変化したら番号をインクリメント。こういうグループ化したいときがある:
     
-    ```r
+    ``` r
     c(0, 0, 1, 1, 1, 0, 0, 1) |> dplyr::consecutive_id()
     ```
     
@@ -566,7 +566,7 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
     `lead()` は前に、`lag()` は後ろにずらす
 
     
-    ```r
+    ``` r
     lag(seq_len(5), 2)
     ```
     
@@ -574,7 +574,7 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
     [1] NA NA  1  2  3
     ```
     
-    ```r
+    ``` r
     ## [1] NA NA 1 2 3
     ```
 
@@ -628,7 +628,7 @@ diamonds |>
 `dplyr::group_data(.data)`
 :   グループ情報を参照:
     
-    ```r
+    ``` r
     diamonds |> dplyr::group_by(cut) |> dplyr::group_data()
     ```
     
@@ -670,7 +670,7 @@ diamonds |>
     [purrr]({{< relref "purrr.md" >}})のときと同様に無名関数に包んで渡す。
 
     
-    ```r
+    ``` r
     diamonds |> dplyr::group_by(cut) |> dplyr::group_modify(\(x, key) head(x, 2L))
     ```
     

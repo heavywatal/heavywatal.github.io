@@ -99,7 +99,7 @@ read_delim(file, delim,
 ファイルの中身を文字列として渡すことも可能。
 自動で判別してもらえるけど `I()` で包むのが確実。
 
-```r
+``` r
 content = "x,y\n1,a\n"
 readr::read_csv(I(content))
 ```
@@ -115,7 +115,7 @@ readr::read_csv(I(content))
 左端に余計な列を追加したり、不要な"クオート"を追加したりする。
 
 
-```r
+``` r
 iris |> head(2) |> write.csv(stdout())
 ```
 
@@ -125,7 +125,7 @@ iris |> head(2) |> write.csv(stdout())
 "2",4.9,3,1.4,0.2,"setosa"
 ```
 
-```r
+``` r
 iris |> head(2) |> readr::write_csv(stdout())
 ```
 
@@ -168,7 +168,7 @@ write_delim(x, file,
 :   文字列で最初に登場する数値を抜き出す。
     邪魔な文字が前後に入っていても大丈夫。
     
-    ```r
+    ``` r
     x = c("42", "1.293e2", "i18n", "24/7")
     readr::parse_number(x)
     ```
@@ -182,7 +182,7 @@ write_delim(x, file,
     `"6e23"` のような指数形式も大丈夫。
     異物が混じっていた場合は警告して欠損値扱い。
     
-    ```r
+    ``` r
     readr::parse_double(x)
     ```
     
@@ -194,7 +194,7 @@ write_delim(x, file,
     2   4  NA no trailing characters   24/7
     ```
     
-    ```r
+    ``` r
     as.double(x)
     ```
     
@@ -206,7 +206,7 @@ write_delim(x, file,
 :   文字列を整数型として解釈して返す。
     小数点などを含む文字列は警告して欠損値扱い。
     
-    ```r
+    ``` r
     readr::parse_integer(x)
     ```
     
@@ -219,7 +219,7 @@ write_delim(x, file,
     3   4  NA no trailing characters    24/7
     ```
     
-    ```r
+    ``` r
     as.integer(x)
     ```
     
@@ -235,7 +235,7 @@ write_delim(x, file,
     "0以外の数字はtrue" のような数値型からの変換規則とは異なる。
     `T`, `F` を `TRUE`, `FALSE` 扱いしてしまうことに注意。
     
-    ```r
+    ``` r
     readr::parse_logical(c("1", "0", "t", "f", "TRUE", "FALSE", "2"))
     ```
     
@@ -246,7 +246,7 @@ write_delim(x, file,
     1   7  NA 1/0/T/F/TRUE/FALSE      2
     ```
     
-    ```r
+    ``` r
     as.logical(c("1", "0", "t", "f", "TRUE", "FALSE", "2"))
     ```
     
@@ -254,7 +254,7 @@ write_delim(x, file,
     [1]    NA    NA    NA    NA  TRUE FALSE    NA
     ```
     
-    ```r
+    ``` r
     as.logical(c(-1, 0, 1, 2))
     ```
     
@@ -323,7 +323,7 @@ options(
 すぐに普通のtibbleが欲しい場合は `[]` で空subsettingするのが手軽。
 
 
-```r
+``` r
 data = readr::readr_example("mtcars.csv") |> readr::read_csv()
 class(data)
 ```
@@ -332,7 +332,7 @@ class(data)
 [1] "spec_tbl_df" "tbl_df"      "tbl"         "data.frame" 
 ```
 
-```r
+``` r
 class(data[])
 ```
 
@@ -380,7 +380,7 @@ Rの中から `install.packages("readxl")` でインストールし、
 [readr]({{< relref "readr.md" >}}) で読み込んだデータもこの形式になる。
 
 
-```r
+``` r
 tbl_mtcars = as_tibble(mtcars)
 class(tbl_mtcars)
 ```
@@ -389,7 +389,7 @@ class(tbl_mtcars)
 [1] "tbl_df"     "tbl"        "data.frame"
 ```
 
-```r
+``` r
 class(mtcars)
 ```
 
@@ -402,7 +402,7 @@ class(mtcars)
 -   巨大なデータをうっかり`print()`しても画面を埋め尽くさない。
     (逆に全体を見たい場合は工夫が必要。後述)
     
-    ```r
+    ``` r
     print(tbl_mtcars)
     ```
     
@@ -418,7 +418,7 @@ class(mtcars)
     例えば `mtcars$m` は黙ってmpg列vectorを返してしまうが、
     `tbl_mtcars$m` は警告つき `NULL` 。
     
-    ```r
+    ``` r
     mtcars$m
     ##  [1] 21.0 21.0 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 17.8 16.4 17.3 15.2 10.4 10.4 14.7 32.4 30.4 33.9 21.5 15.5 15.2 13.3 19.2 27.3 26.0 30.4 15.8 19.7 15.0 21.4
     tbl_mtcars$m
@@ -430,7 +430,7 @@ class(mtcars)
     `tbl_mtcars[,"mpg"]` はtibbleのまま。
     vectorが欲しい場合は二重四角括弧 `tbl_mtcars[["mpg"]]`。
     
-    ```r
+    ``` r
     mtcars[,"mpg"]      # implicit drop = TRUE
     ```
     
@@ -438,7 +438,7 @@ class(mtcars)
      [1] 21.0 21.0 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 17.8 16.4 17.3 15.2 10.4 10.4 14.7 32.4 30.4 33.9 21.5 15.5 15.2 13.3 19.2 27.3 26.0 30.4 15.8 19.7 15.0 21.4
     ```
     
-    ```r
+    ``` r
     tbl_mtcars[,"mpg"]  # remains tibble
     ```
     

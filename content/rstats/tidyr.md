@@ -59,7 +59,7 @@ data.frameを横広(wide-format)から縦長(long-format)に変形する。
 : 値の移動先の列名
 
 
-```r
+``` r
 anscombe_long = anscombe |>
   tibble::rowid_to_column("id") |>
   print() |>
@@ -121,7 +121,7 @@ data.frameを縦長(long-format)から横広(wide-format)に変形する。
 
 
 
-```r
+``` r
 anscombe_long |>
   pivot_wider(names_from = namae, values_from = atai) |>
   dplyr::select(!id)
@@ -143,7 +143,7 @@ anscombe_long |>
 カテゴリカル変数を指示変数(ダミー変数)に変換するのにも使える:
 
 
-```r
+``` r
 pg = PlantGrowth |> dplyr::slice(c(1, 2, 11, 12, 21, 22)) |> print()
 ```
 
@@ -157,7 +157,7 @@ pg = PlantGrowth |> dplyr::slice(c(1, 2, 11, 12, 21, 22)) |> print()
 6   5.12  trt2
 ```
 
-```r
+``` r
 pg |> tibble::rowid_to_column("id") |>
   dplyr::mutate(name = group, value = 1L) |>
   tidyr::pivot_wider(values_fill = 0L) |>
@@ -182,7 +182,7 @@ pg |> tibble::rowid_to_column("id") |>
 `tidyr::separate()` / `tidyr::unite()` 的な操作も同時にやってしまえる:
 
 
-```r
+``` r
 anscombe |> tibble::rowid_to_column("id") |>
   pivot_longer(!id, names_to = c("axis", "group"), names_sep = 1L) |>
   print() |>
@@ -213,7 +213,7 @@ anscombe |> tibble::rowid_to_column("id") |>
 ```
 
 
-```r
+``` r
 VADeaths |>
   as.data.frame() |>
   print() |>
@@ -245,7 +245,7 @@ VADeaths |>
 例えば型変換に使える:
 
 
-```r
+``` r
 anscombe |>
   tibble::rowid_to_column("id") |>
   tidyr::pivot_longer(!id,
@@ -273,7 +273,7 @@ anscombe |>
 `names_prefix` を使えば、列名の頭に共通して付いてた文字を消せる:
 
 
-```r
+``` r
 anscombe |>
   dplyr::select(starts_with("x")) |>
   pivot_longer(everything(), names_prefix = "x")
@@ -297,7 +297,7 @@ anscombe |>
 また `names_to = c("name", NA)` のように不要な列を捨てることもできる。
 
 
-```r
+``` r
 tidy_anscombe = anscombe |>
   pivot_longer(                       # 縦長に変形したい
     everything(),                     # すべての列について
@@ -336,7 +336,7 @@ data.frameをネストして(入れ子にして)、list of data.frames のカラ
 外側に残すカラムを `!` で反転指定する。
 
 
-```r
+``` r
 diamonds |> nest(NEW_COLUMN = !cut) |> dplyr::arrange(cut)
 ```
 
@@ -412,7 +412,7 @@ diamonds |>
     つまり、文字を左詰めにするには`right`が正解(紛らわしい)。
 
 
-```r
+``` r
 VADeaths |> as.data.frame() |>
   tibble::rownames_to_column("class") |>
   print() |>
@@ -453,7 +453,7 @@ VADeaths |> as.data.frame() |>
 `na.rm = TRUE` の挙動が欲しいときに便利。
 
 
-```r
+``` r
 df = tibble(x = c("x", "x", NA), y = c("y", NA, "y"))
 df |> tidyr::unite(z, c(x, y), sep = "_", remove = FALSE)
 ```
@@ -465,7 +465,7 @@ df |> tidyr::unite(z, c(x, y), sep = "_", remove = FALSE)
 3 NA_y <NA>    y
 ```
 
-```r
+``` r
 df |> tidyr::unite(z, c(x, y), sep = "_", remove = FALSE, na.rm = TRUE)
 ```
 
@@ -476,7 +476,7 @@ df |> tidyr::unite(z, c(x, y), sep = "_", remove = FALSE, na.rm = TRUE)
 3   y <NA>    y
 ```
 
-```r
+``` r
 df |> dplyr::mutate(z = stringr::str_c(x, y, sep = "_"))
 ```
 
@@ -487,7 +487,7 @@ df |> dplyr::mutate(z = stringr::str_c(x, y, sep = "_"))
 3 <NA>    y <NA>
 ```
 
-```r
+``` r
 df |> dplyr::mutate(z = dplyr::coalesce(x, y))
 ```
 
