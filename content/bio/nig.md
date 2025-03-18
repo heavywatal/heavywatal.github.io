@@ -7,52 +7,56 @@ tags = ["job"]
 
 <https://sc.ddbj.nig.ac.jp/>
 
+各ページのURLがコロコロ変わってリンク切れになりやすい。
+
 ## 利用開始
 
-<https://sc.ddbj.nig.ac.jp/start_the_service>
-
-1.  [利用規定等](https://sc.ddbj.nig.ac.jp/application/)を熟読。
+1.  利用規定等を熟読。
 1.  手元のコンピュータで[SSH鍵ペアを生成]({{< relref "ssh.md" >}})しておく。
-    既にある場合は作り直す必要なし。
     [公式ドキュメント](https://sc.ddbj.nig.ac.jp/application/ssh_keys)
-    に従ってRSA 3072にするのが無難だが、Ed25519やEDCSAを登録することも可能。
-1.  [利用登録申請](https://sc-account.ddbj.nig.ac.jp/application/registration)のフォームを埋める。
+    に従って特殊なファイル名の鍵を新規作成してもいいけど、
+    他の用途で作ったものが既にある場合は作り直さなくてもいい。
+1.  [利用登録申請](https://sc.ddbj.nig.ac.jp/application/registration)のフォームを埋める。
     - 申請者
     - 所属機関
     - アカウント: 作っておいたSSH公開鍵をここでコピペ。
-    - [責任者](https://sc.ddbj.nig.ac.jp/application/#%E8%B2%AC%E4%BB%BB%E8%80%85%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6)
+    - 責任者
 1.  申請者と責任者にメールが届くので、それに従って誓約書PDFを管理者に送信。
 1.  アカウント登録証が手元に届く。
 1.  手元の `~/.ssh/config` に設定を追加:
     ```
     Host *.ddbj.nig.ac.jp
-      RequestTTY yes
       User heavywatal
       IdentityFile ~/.ssh/id_ed25519
     ```
     ユーザ名と鍵ファイル名は適宜調整。
     これでsshコマンドを短く済ませられる。
-1.  ゲートウェイノードにSSH接続し、[ログインノードに `qlogin`](https://sc.ddbj.nig.ac.jp/general_analysis_division/ga_login):
+1.  ゲートウェイノードにSSH接続:
     ```sh
-    ssh gw.ddbj.nig.ac.jp qlogin
-    # which is equivalent to (thanks to ~/.ssh/config)
-    ssh -t -f ~/.ssh/id_ed25519 heavywatal@gw.ddbj.nig.ac.jp qlogin
+    ssh gw.ddbj.nig.ac.jp
+    ```
+1.  それから `qlogin` コマンドで計算ノードにログインしていたのは過去の話。
+    今後の運用はわからないが、システム移行中の2025年3月現在、
+    ひとまずインタラクティブノード `a001`, `a002`, `a003`
+    のどれかにSSH接続してから作業せよとのこと。
+    ```sh
+    ssh a001
     ```
 
 
 ## ファイルの送受信
 
-[公式「システムへのファイル転送方法」](https://sc.ddbj.nig.ac.jp/general_analysis_division/ga_transfer)
-にはsftpかAsperaを使えと書かれてるけど、
+[公式「システムへのファイル転送方法」](https://sc.ddbj.nig.ac.jp/guides/using_general_analysis_division/ga_data_transfer/)
+にはscp, sftp, Asperaを使えと書かれてるけど、
 [rsync]({{< relref "rsync.md" >}})
 を使うのが簡単。
 
 ```sh
 # send
-rsync -auv ~/input/ gw.ddbj.nig.ac.jp:~/input/
+rsync -auvC ~/input/ gw.ddbj.nig.ac.jp:~/input/
 
 # receive
-rsync -auv gw.ddbj.nig.ac.jp:~/output/ ~/output/
+rsync -auvC gw.ddbj.nig.ac.jp:~/output/ ~/output/
 ```
 
 ソースコードは当然[Git]({{< relref "git.md" >}})で管理。
@@ -61,168 +65,175 @@ rsync -auv gw.ddbj.nig.ac.jp:~/output/ ~/output/
 ## 環境整備
 
 - [ハードウェア構成](https://sc.ddbj.nig.ac.jp/guides/hardware)
-- [ソフトウェア構成](https://sc.ddbj.nig.ac.jp/software/software)
-  (Phase 3: Red Hat Enterprise Linux 7.5)
-    - [Apptainer](https://sc.ddbj.nig.ac.jp/software/Apptainer/)
+- [ソフトウェア構成](https://sc.ddbj.nig.ac.jp/guides/software/)
+  (Ubuntu 24.04)
+    - [Apptainer](https://sc.ddbj.nig.ac.jp/guides/software/Container/Apptainer/)
 
 
-## ジョブ投入、管理
+## ジョブ投入
 
-- <https://sc.ddbj.nig.ac.jp/general_analysis_division/ga_introduction>
-- <https://sc.ddbj.nig.ac.jp/software/univa_grid_engine>
-- [Univa Grid Engine (UGE)](http://www.univa.com/products/grid-engine)
-- <http://gridengine.eu/grid-engine-documentation>
+SSH接続して、そのまま直に重いコマンドを実行してはいけない。
+ジョブスケジューラを使って計算ノードに仕事を投げる必要がある。
 
-### `qsub`
+PBS系の Sun/Univa/Altair Grid Engine が長らく使われていたが、2025年からSlurmに移行。
 
-遺伝研ウェブサイトにはスクリプトを書いてから渡す方法しか書いてないが、
-簡単なタスクならコマンド引数として直接渡すのもあり。
+- <https://www.schedmd.com/slurm/>
+- <https://sc.ddbj.nig.ac.jp/guides/software/JobScheduler/Slurm/>
+
+
+
+
+
+### コマンド抜粋
+
+<https://slurm.schedmd.com/man_index.html>
+
+[`sbatch`](https://slurm.schedmd.com/sbatch.html)
+:   [バッチスクリプト](#バッチスクリプト)の形でジョブを投入する。
+    PBS系の `qsub` に相当。
+:   [詳細は後述](#sbatch)
+
+[`srun`](https://slurm.schedmd.com/srun.html)
+:   実行可能ファイルを直に指定する形でジョブを投入する。
+:   e.g., `srun --pty bash` でインタラクティブなシェルを起動。
+
+[`sinfo`](https://slurm.schedmd.com/sinfo.html)
+:   システム全体の使用状態を表示。
+    `sinfo -alN` でノード毎の詳細表示。
+
+[`squeue`](https://slurm.schedmd.com/squeue.html)
+:   現在実行中のジョブ一覧。
+    `squeue --me` で自分のジョブだけ表示。
+:   [JOB-STATE-CODES](https://slurm.schedmd.com/squeue.html>):
+    `CA:CANCELLED`, `CD:COMPLETED`, `F:FAILED`, `PD:PENDING`, `R:RUNNING`
+
+[`sacct`](https://slurm.schedmd.com/sacct.html)
+:   ジョブ実行履歴の表示。
+
+[`scontrol`](https://slurm.schedmd.com/scontrol.html)
+:   ジョブの詳細表示と条件変更など。
+:   `scontrol show job <JOBID>` でジョブの詳細を表示。
+
+[`scancel`](https://slurm.schedmd.com/scancel.html)
+:   ジョブ削除。
+
+
+### `sbatch`
+
+<https://slurm.schedmd.com/sbatch.html>
+
+[バッチスクリプト](#バッチスクリプト)の形でジョブを投げる。
 
 ```sh
-## スクリプトを書いてから渡す
-qsub test.sh
-
-## コマンドライン引数として直接渡す
-qsub -l short -b y -shell n -cwd -N test "pwd; sleep 5; ls >ls.txt"
+man sbatch
+sbatch --help
+sbatch test.sh
 ```
 
-`-l ***`
-:   実行時間や計算ノードなどの要求を伝える。
-    管理者が定義したキューから選んで指定する。
-    例えば、1時間以内に終わる軽いものなら `-l short`、
-    2か月かかるものなら `-l epyc`、
-    メモリが多めに必要なら `-l medium`、など。
-    `qstat -g c` でキューの一覧とそれぞれの負荷を確認できるので空いてるところを探す。
-:   1コアあたりのRAM上限(デフォルト8GB)もこのオプションから
-    `-l s_vmem=16G -l mem_req=16G` のように変更できる。
+オプションは `sbatch` コマンドに渡してもいいし、
+後述のようにスクリプトの中に書いてもいい。
+以下はよく使いそうなオプション抜粋。
 
-`-pe def_slot 8`
-:   parallel environment:
-    並列処理で使用するCPUコア数を指定。
-:   MPIによる並列化の場合はまた違うオプションがある。
+`-h, --help`
 
-`-cwd`
-:   カレントディレクトリでジョブ実行。
-    デフォルトでは `${HOME}`。
+`-D, --chdir=<directory>`
+:   ジョブを実行するディレクトリ。
+    デフォルトではカレント `${PWD}`。
 
-`-N ***`
+`-a, --array=<indexes>`
+:   アレイジョブとして投入する。
+    タスクごとにパラメータを変えてプログラムを走らせたい場合は、
+    スクリプトの中で環境変数 `SLURM_ARRAY_TASK_ID` を拾ってどうにかする。
+:   e.g., `-a 1-4` で4個のタスクを持つアレイジョブ。
+:   `-a 1-4%2` で同時実行数の上限を2にする。
+
+`-c, --cpus-per-task=<ncpus>`
+:   タスクあたりに使用するCPUコア数。
+    デフォルトは1コア。
+
+`--export=[ALL,]<variables>`
+:   ジョブに引き継ぐ環境変数。
+    デフォルトは `ALL` で、`sbatch` を実行したシェルにあるものすべて。
+:   追加したり上書きしたりしたい場合は
+    `--export=ALL,VAR1=value1`
+    のようにカンマ区切りで指定する。
+
+`-J, --job-name=<jobname>`
 :   ジョブに名前をつける。
     デフォルトではスクリプト名が採用される。
 
-`-o ***`, `-e ***`
-:   標準出力・標準エラー出力の書き出し先。
-    デフォルトではワーキングディレクトリ以下に
-    `{JOBNAME}.o{JOBID}`, `{JOBNAME}.e{JOBID}`
-    という名前で書き出される(空っぽでさえ)。
-    不要な出力は `/dev/null` に流し込むべし。
+`--mem=<size>[units]`
+:   計算ノードに要求するRAM容量。
+:   単位には K, M, G, T が使えて、省略するとメガバイト。
+:   `--mem-per-cpu` でCPUコアあたりのRAMを指定することもできる。
 
-`-S /bin/sh`
-:   インタープリタを指定。
-    指定しないと `csh` が利用されるせいか、
-    標準出力で `Warning: no access to tty` と怒られる。
+`-o, --output=<filename_pattern>`
+:   標準出力の書き出し先。
+    デフォルトはジョブIDを使って `slurm-%j.out` に書き出される。
+    ワーキングディレクトリからの相対パスだと思うけど明記されておらず不明。
+:   `-e, --error=<filename_pattern>`
+    を指定しなければ標準エラーも同じところに出力される。
 
-`-t 1-M`
-:   M個のタスクを持つアレイジョブとして投入する。
-    タスクごとにパラメータを変えてプログラムを走らせたい場合は、
-    スクリプトの中で環境変数 `SGE_TASK_ID` を拾ってどうにかする。
-    `qsub` コマンドを生成して何回も呼ぶほうが圧倒的に楽だけど、
-    アレイジョブのほうがクラスタ側の負荷が小さいらしい。ほんとかな。
+`-p, --partition=<partition_names>`
+:   どのグループの計算ノードに投げるか。
+    PBS系でいうqueueに相当。
+    何が選べるかはシステムの設定次第で、例えば遺伝研の場合は
+    - `-p short`: 1時間以内に終わる軽いもの
+    - `-p epyc`: 124日以内に終わる長いもの
+    - `-p medium`: 124日以内に終わる長さで、メモリを多めに使うもの
 
-`-tc MAX_RUNNING_TASKS`
-:   アレイジョブで同時実行するタスク数の上限を指定。
-    システムからユーザーに与えられた上限は `qquota` コマンドで確認できる。
-    いまのところ500らしい。
-
-`-v VARIABLE=value`
-:   環境変数を定義してジョブに引き継ぐ。
-:   大文字 `-V` で全ての環境変数が渡される。
-
-`-b y`
-:   計算ノードにバイナリがあるものとしてジョブを投げる。
-    これを指定しない場合はスクリプト扱いになり、
-    投入ノードから計算ノードへのコピーなど余計なプロセスが挟まるらしい。
-
-`-shell n`
-:   環境変数の解決など、
-    プログラムの呼び出しにシェルを介す必要がない場合は
-    これを指定することで多少コスト削減できる。
-    当然 `-b y` のときのみ有効。
+`-t, --time=<time>`
+:   時間を制限する。
+    ここでの宣言が上記partitionの設定より長いと一生pending。
+:   形式は `MM`, `MM:SS`, `HH:MM:SS`, `DD-HH`, `DD-HH:MM`, `DD-HH:MM:SS` のいずれか。
 
 
-### `qsub` スクリプト
+### バッチスクリプト
 
-`#$` で始まる行は `qsub` へのオプションと見なされる。
+`sbatch` コマンドに渡すスクリプト。
+`#SBATCH` で始まる行は `sbatch` へのオプションと見なされる。
 
-ジョブスクリプト内で参照可能な特殊環境変数をプリントしてみるジョブの例:
+スクリプト内で参照可能な環境変数をプリントしてみるジョブの例:
 
 ```sh
-#!/bin/sh
-#$ -S /bin/sh
-#$ -l short
-#$ -cwd
-#$ -t 1-2
-echo HOME: $HOME
-echo USER: $USER
-echo JOB_ID: $JOB_ID
-echo JOB_NAME: $JOB_NAME
-echo HOSTNAME: $HOSTNAME
-echo SGE_TASK_ID: $SGE_TASK_ID
-echo SGE_TASK_FIRST:$SGE_TASK_FIRST
-echo SGE_TASK_LAST: $SGE_TASK_LAST
-echo SGE_TASK_STEPSIZE: $SGE_TASK_STEPSIZE
-pwd
-ls
+#!/bin/bash
+#SBATCH -t 00-00:01:00
+#SBATCH --mem-per-cpu 1g
+#SBATCH -J print
+
+date -Iseconds
+
+echo SLURM_ARRAY_JOB_ID: ${SLURM_ARRAY_JOB_ID-}
+echo SLURM_ARRAY_TASK_ID: ${SLURM_ARRAY_TASK_ID-}
+echo SLURM_ARRAY_TASK_COUNT: ${SLURM_ARRAY_TASK_COUNT-}
+echo SLURM_ARRAY_TASK_MIN: ${SLURM_ARRAY_TASK_MIN-}
+echo SLURM_ARRAY_TASK_MAX: ${SLURM_ARRAY_TASK_MAX-}
+echo SLURM_ARRAY_TASK_STEP: ${SLURM_ARRAY_TASK_STEP-}
+echo SLURM_JOB_ID: ${SLURM_JOB_ID-}
+echo SLURM_JOB_NAME: ${SLURM_JOB_NAME-}
+echo SLURM_JOB_NODELIST: ${SLURM_JOB_NODELIST-}
+echo SLURM_JOB_PARTITION: ${SLURM_JOB_PARTITION-}
+echo SLURM_JOB_START_TIME: ${SLURM_JOB_START_TIME-}
+echo SLURM_MEM_PER_CPU: ${SLURM_MEM_PER_CPU-}
+echo SLURM_MEM_PER_NODE: ${SLURM_MEM_PER_NODE-}
+echo SLURM_SUBMIT_DIR: ${SLURM_SUBMIT_DIR-}
+echo SLURM_SUBMIT_HOST: ${SLURM_SUBMIT_HOST-}
+echo SLURM_TASK_PID: ${SLURM_TASK_PID-}
+echo SLURMD_NODENAME: ${SLURMD_NODENAME-}
+
+echo HOME: ${HOME-}
+echo USER: ${USER-}
+echo PWD: ${PWD-}
+echo PATH: ${PATH-}
+
+date -Iseconds
 ```
-
-スクリプトはPythonでもいい。
-インタープリタを `-S /usr/bin/env python` で指定できないのは残念。
-
-```py
-#!/usr/bin/env python
-#$ -S $HOME/.pyenv/shims/python
-#$ -l short
-#$ -cwd
-#$ -t 1-2
-import os
-print("SGE_TASK_ID: " + os.environ["SGE_TASK_ID"])
-```
-
-### 補助コマンド
-
-`qstat`
-:   現在実行中のジョブ一覧。
-    ステータスは1文字に省略されて
-    E(rror), r(unning), R(estarted), s(uspended)
-    のように表示される。
-    詳しくは `man qstat` を参照。
-
-`qstat -g c`
-:   クラスタで定義されているキューの一覧と、それぞれの負荷を表示
-
-`qstat -f | less`
-:   全ノードの状況をfullに表示
-
-`qstat -u '*' | less`
-:   全ユーザのジョブを表示。
-    `-s p` でpending中のみに絞ったり、
-    `-l medium` でキューの種類を絞ったりできる。
-
-`qstat -j JOBID`
-:   ジョブの詳細表示
-
-`qacct -j JOBID`
-:   ジョブ実行後にリソース消費を確認
-
-`qdel JOBID`
-:   ジョブ削除
-
-`qquota`
-:   ユーザーに与えられたリソースを表示
 
 
 ## Apptainer (Singularity)
 
-- <https://sc.ddbj.nig.ac.jp/software/Apptainer/>
+- <https://sc.ddbj.nig.ac.jp/guides/software/Container/Apptainer/>
+- <https://sc.ddbj.nig.ac.jp/guides/software/Container/BioContainers/>
 - [Apptainer]({{< relref "apptainer.md" >}})
 
 `/usr/local/biotools/` 以下に各種ソフトウェアが用意されている。
@@ -250,11 +261,16 @@ apptainer exec -e ~/image/trinityrnaseq.v2.11.0.simg Trinity --help
 
 ## R
 
-<https://sc.ddbj.nig.ac.jp/software/R>
+<https://sc.ddbj.nig.ac.jp/guides/software/DevelopmentEnvironment/R/>
 
-### apptainer R
+### Apptainer R
 
+存在するけどエラーで動かない:
 ```sh
 find /usr/local/biotools/ -name 'r-base:*' | sort
-apptainer exec -e /usr/local/biotools/r/r-base:4.2.1 R
+apptainer exec /usr/local/biotools/r/r-base:4.4.1 R --no-save --no-restore-data
+```
+```
+ *** caught segfault ***
+address (nil), cause 'memory not mapped'
 ```
