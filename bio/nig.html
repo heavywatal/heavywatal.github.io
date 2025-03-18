@@ -59,182 +59,191 @@ Heavy Watal
 </header>
 
 <p><a href="https://sc.ddbj.nig.ac.jp/">https://sc.ddbj.nig.ac.jp/</a></p>
+<p>各ページのURLがコロコロ変わってリンク切れになりやすい。</p>
 <h2 id="利用開始">利用開始</h2>
-<p><a href="https://sc.ddbj.nig.ac.jp/start_the_service">https://sc.ddbj.nig.ac.jp/start_the_service</a></p>
 <ol>
-<li><a href="https://sc.ddbj.nig.ac.jp/application/">利用規定等</a>を熟読。</li>
+<li>利用規定等を熟読。</li>
 <li>手元のコンピュータで<a href="/dev/ssh.html">SSH鍵ペアを生成</a>しておく。
-既にある場合は作り直す必要なし。
 <a href="https://sc.ddbj.nig.ac.jp/application/ssh_keys">公式ドキュメント</a>
-に従ってRSA 3072にするのが無難だが、Ed25519やEDCSAを登録することも可能。</li>
-<li><a href="https://sc-account.ddbj.nig.ac.jp/application/registration">利用登録申請</a>のフォームを埋める。
+に従って特殊なファイル名の鍵を新規作成してもいいけど、
+他の用途で作ったものが既にある場合は作り直さなくてもいい。</li>
+<li><a href="https://sc.ddbj.nig.ac.jp/application/registration">利用登録申請</a>のフォームを埋める。
 <ul>
 <li>申請者</li>
 <li>所属機関</li>
 <li>アカウント: 作っておいたSSH公開鍵をここでコピペ。</li>
-<li><a href="https://sc.ddbj.nig.ac.jp/application/#%E8%B2%AC%E4%BB%BB%E8%80%85%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6">責任者</a></li>
+<li>責任者</li>
 </ul>
 </li>
 <li>申請者と責任者にメールが届くので、それに従って誓約書PDFを管理者に送信。</li>
 <li>アカウント登録証が手元に届く。</li>
 <li>手元の <code>~/.ssh/config</code> に設定を追加:
 <pre tabindex="0"><code>Host *.ddbj.nig.ac.jp
-  RequestTTY yes
   User heavywatal
   IdentityFile ~/.ssh/id_ed25519
 </code></pre>ユーザ名と鍵ファイル名は適宜調整。
 これでsshコマンドを短く済ませられる。</li>
-<li>ゲートウェイノードにSSH接続し、<a href="https://sc.ddbj.nig.ac.jp/general_analysis_division/ga_login">ログインノードに <code>qlogin</code></a>:
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ssh gw.ddbj.nig.ac.jp qlogin
-</span></span><span class="line"><span class="cl"><span class="c1"># which is equivalent to (thanks to ~/.ssh/config)</span>
-</span></span><span class="line"><span class="cl">ssh -t -f ~/.ssh/id_ed25519 heavywatal@gw.ddbj.nig.ac.jp qlogin
+<li>ゲートウェイノードにSSH接続:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ssh gw.ddbj.nig.ac.jp
+</span></span></code></pre></div></li>
+<li>それから <code>qlogin</code> コマンドで計算ノードにログインしていたのは過去の話。
+今後の運用はわからないが、システム移行中の2025年3月現在、
+ひとまずインタラクティブノード <code>a001</code>, <code>a002</code>, <code>a003</code>
+のどれかにSSH接続してから作業せよとのこと。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ssh a001
 </span></span></code></pre></div></li>
 </ol>
 <h2 id="ファイルの送受信">ファイルの送受信</h2>
-<p><a href="https://sc.ddbj.nig.ac.jp/general_analysis_division/ga_transfer">公式「システムへのファイル転送方法」</a>
-にはsftpかAsperaを使えと書かれてるけど、
+<p><a href="https://sc.ddbj.nig.ac.jp/guides/using_general_analysis_division/ga_data_transfer/">公式「システムへのファイル転送方法」</a>
+にはscp, sftp, Asperaを使えと書かれてるけど、
 <a href="/dev/rsync.html">rsync</a>
 を使うのが簡単。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># send</span>
-</span></span><span class="line"><span class="cl">rsync -auv ~/input/ gw.ddbj.nig.ac.jp:~/input/
+</span></span><span class="line"><span class="cl">rsync -auvC ~/input/ gw.ddbj.nig.ac.jp:~/input/
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># receive</span>
-</span></span><span class="line"><span class="cl">rsync -auv gw.ddbj.nig.ac.jp:~/output/ ~/output/
+</span></span><span class="line"><span class="cl">rsync -auvC gw.ddbj.nig.ac.jp:~/output/ ~/output/
 </span></span></code></pre></div><p>ソースコードは当然<a href="/dev/git.html">Git</a>で管理。</p>
 <h2 id="環境整備">環境整備</h2>
 <ul>
 <li><a href="https://sc.ddbj.nig.ac.jp/guides/hardware">ハードウェア構成</a></li>
-<li><a href="https://sc.ddbj.nig.ac.jp/software/software">ソフトウェア構成</a>
-(Phase 3: Red Hat Enterprise Linux 7.5)
+<li><a href="https://sc.ddbj.nig.ac.jp/guides/software/">ソフトウェア構成</a>
+(Ubuntu 24.04)
 <ul>
-<li><a href="https://sc.ddbj.nig.ac.jp/software/Apptainer/">Apptainer</a></li>
+<li><a href="https://sc.ddbj.nig.ac.jp/guides/software/Container/Apptainer/">Apptainer</a></li>
 </ul>
 </li>
 </ul>
-<h2 id="ジョブ投入管理">ジョブ投入、管理</h2>
+<h2 id="ジョブ投入">ジョブ投入</h2>
+<p>SSH接続して、そのまま直に重いコマンドを実行してはいけない。
+ジョブスケジューラを使って計算ノードに仕事を投げる必要がある。</p>
+<p>PBS系の Sun/Univa/Altair Grid Engine が長らく使われていたが、2025年からSlurmに移行。</p>
 <ul>
-<li><a href="https://sc.ddbj.nig.ac.jp/general_analysis_division/ga_introduction">https://sc.ddbj.nig.ac.jp/general_analysis_division/ga_introduction</a></li>
-<li><a href="https://sc.ddbj.nig.ac.jp/software/univa_grid_engine">https://sc.ddbj.nig.ac.jp/software/univa_grid_engine</a></li>
-<li><a href="http://www.univa.com/products/grid-engine">Univa Grid Engine (UGE)</a></li>
-<li><a href="http://gridengine.eu/grid-engine-documentation">http://gridengine.eu/grid-engine-documentation</a></li>
+<li><a href="https://www.schedmd.com/slurm/">https://www.schedmd.com/slurm/</a></li>
+<li><a href="https://sc.ddbj.nig.ac.jp/guides/software/JobScheduler/Slurm/">https://sc.ddbj.nig.ac.jp/guides/software/JobScheduler/Slurm/</a></li>
 </ul>
-<h3 id="qsub"><code>qsub</code></h3>
-<p>遺伝研ウェブサイトにはスクリプトを書いてから渡す方法しか書いてないが、
-簡単なタスクならコマンド引数として直接渡すのもあり。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1">## スクリプトを書いてから渡す</span>
-</span></span><span class="line"><span class="cl">qsub test.sh
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">## コマンドライン引数として直接渡す</span>
-</span></span><span class="line"><span class="cl">qsub -l short -b y -shell n -cwd -N <span class="nb">test</span> <span class="s2">&#34;pwd; sleep 5; ls &gt;ls.txt&#34;</span>
-</span></span></code></pre></div><dl>
-<dt><code>-l ***</code></dt>
-<dd>実行時間や計算ノードなどの要求を伝える。
-管理者が定義したキューから選んで指定する。
-例えば、1時間以内に終わる軽いものなら <code>-l short</code>、
-2か月かかるものなら <code>-l epyc</code>、
-メモリが多めに必要なら <code>-l medium</code>、など。
-<code>qstat -g c</code> でキューの一覧とそれぞれの負荷を確認できるので空いてるところを探す。</dd>
-<dd>1コアあたりのRAM上限(デフォルト8GB)もこのオプションから
-<code>-l s_vmem=16G -l mem_req=16G</code> のように変更できる。</dd>
-<dt><code>-pe def_slot 8</code></dt>
-<dd>parallel environment:
-並列処理で使用するCPUコア数を指定。</dd>
-<dd>MPIによる並列化の場合はまた違うオプションがある。</dd>
-<dt><code>-cwd</code></dt>
-<dd>カレントディレクトリでジョブ実行。
-デフォルトでは <code>${HOME}</code>。</dd>
-<dt><code>-N ***</code></dt>
+<h3 id="コマンド抜粋">コマンド抜粋</h3>
+<p><a href="https://slurm.schedmd.com/man_index.html">https://slurm.schedmd.com/man_index.html</a></p>
+<dl>
+<dt><a href="https://slurm.schedmd.com/sbatch.html"><code>sbatch</code></a></dt>
+<dd><a href="#%E3%83%90%E3%83%83%E3%83%81%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88">バッチスクリプト</a>の形でジョブを投入する。
+PBS系の <code>qsub</code> に相当。</dd>
+<dd><a href="#sbatch">詳細は後述</a></dd>
+<dt><a href="https://slurm.schedmd.com/srun.html"><code>srun</code></a></dt>
+<dd>実行可能ファイルを直に指定する形でジョブを投入する。</dd>
+<dd>e.g., <code>srun --pty bash</code> でインタラクティブなシェルを起動。</dd>
+<dt><a href="https://slurm.schedmd.com/sinfo.html"><code>sinfo</code></a></dt>
+<dd>システム全体の使用状態を表示。
+<code>sinfo -alN</code> でノード毎の詳細表示。</dd>
+<dt><a href="https://slurm.schedmd.com/squeue.html"><code>squeue</code></a></dt>
+<dd>現在実行中のジョブ一覧。
+<code>squeue --me</code> で自分のジョブだけ表示。</dd>
+<dd><a href="https://slurm.schedmd.com/squeue.html%3E">JOB-STATE-CODES</a>:
+<code>CA:CANCELLED</code>, <code>CD:COMPLETED</code>, <code>F:FAILED</code>, <code>PD:PENDING</code>, <code>R:RUNNING</code></dd>
+<dt><a href="https://slurm.schedmd.com/sacct.html"><code>sacct</code></a></dt>
+<dd>ジョブ実行履歴の表示。</dd>
+<dt><a href="https://slurm.schedmd.com/scontrol.html"><code>scontrol</code></a></dt>
+<dd>ジョブの詳細表示と条件変更など。</dd>
+<dd><code>scontrol show job &lt;JOBID&gt;</code> でジョブの詳細を表示。</dd>
+<dt><a href="https://slurm.schedmd.com/scancel.html"><code>scancel</code></a></dt>
+<dd>ジョブ削除。</dd>
+</dl>
+<h3 id="sbatch"><code>sbatch</code></h3>
+<p><a href="https://slurm.schedmd.com/sbatch.html">https://slurm.schedmd.com/sbatch.html</a></p>
+<p><a href="#%E3%83%90%E3%83%83%E3%83%81%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88">バッチスクリプト</a>の形でジョブを投げる。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">man sbatch
+</span></span><span class="line"><span class="cl">sbatch --help
+</span></span><span class="line"><span class="cl">sbatch test.sh
+</span></span></code></pre></div><p>オプションは <code>sbatch</code> コマンドに渡してもいいし、
+後述のようにスクリプトの中に書いてもいい。
+以下はよく使いそうなオプション抜粋。</p>
+<p><code>-h, --help</code></p>
+<dl>
+<dt><code>-D, --chdir=&lt;directory&gt;</code></dt>
+<dd>ジョブを実行するディレクトリ。
+デフォルトではカレント <code>${PWD}</code>。</dd>
+<dt><code>-a, --array=&lt;indexes&gt;</code></dt>
+<dd>アレイジョブとして投入する。
+タスクごとにパラメータを変えてプログラムを走らせたい場合は、
+スクリプトの中で環境変数 <code>SLURM_ARRAY_TASK_ID</code> を拾ってどうにかする。</dd>
+<dd>e.g., <code>-a 1-4</code> で4個のタスクを持つアレイジョブ。</dd>
+<dd><code>-a 1-4%2</code> で同時実行数の上限を2にする。</dd>
+<dt><code>-c, --cpus-per-task=&lt;ncpus&gt;</code></dt>
+<dd>タスクあたりに使用するCPUコア数。
+デフォルトは1コア。</dd>
+<dt><code>--export=[ALL,]&lt;variables&gt;</code></dt>
+<dd>ジョブに引き継ぐ環境変数。
+デフォルトは <code>ALL</code> で、<code>sbatch</code> を実行したシェルにあるものすべて。</dd>
+<dd>追加したり上書きしたりしたい場合は
+<code>--export=ALL,VAR1=value1</code>
+のようにカンマ区切りで指定する。</dd>
+<dt><code>-J, --job-name=&lt;jobname&gt;</code></dt>
 <dd>ジョブに名前をつける。
 デフォルトではスクリプト名が採用される。</dd>
-<dt><code>-o ***</code>, <code>-e ***</code></dt>
-<dd>標準出力・標準エラー出力の書き出し先。
-デフォルトではワーキングディレクトリ以下に
-<code>{JOBNAME}.o{JOBID}</code>, <code>{JOBNAME}.e{JOBID}</code>
-という名前で書き出される(空っぽでさえ)。
-不要な出力は <code>/dev/null</code> に流し込むべし。</dd>
-<dt><code>-S /bin/sh</code></dt>
-<dd>インタープリタを指定。
-指定しないと <code>csh</code> が利用されるせいか、
-標準出力で <code>Warning: no access to tty</code> と怒られる。</dd>
-<dt><code>-t 1-M</code></dt>
-<dd>M個のタスクを持つアレイジョブとして投入する。
-タスクごとにパラメータを変えてプログラムを走らせたい場合は、
-スクリプトの中で環境変数 <code>SGE_TASK_ID</code> を拾ってどうにかする。
-<code>qsub</code> コマンドを生成して何回も呼ぶほうが圧倒的に楽だけど、
-アレイジョブのほうがクラスタ側の負荷が小さいらしい。ほんとかな。</dd>
-<dt><code>-tc MAX_RUNNING_TASKS</code></dt>
-<dd>アレイジョブで同時実行するタスク数の上限を指定。
-システムからユーザーに与えられた上限は <code>qquota</code> コマンドで確認できる。
-いまのところ500らしい。</dd>
-<dt><code>-v VARIABLE=value</code></dt>
-<dd>環境変数を定義してジョブに引き継ぐ。</dd>
-<dd>大文字 <code>-V</code> で全ての環境変数が渡される。</dd>
-<dt><code>-b y</code></dt>
-<dd>計算ノードにバイナリがあるものとしてジョブを投げる。
-これを指定しない場合はスクリプト扱いになり、
-投入ノードから計算ノードへのコピーなど余計なプロセスが挟まるらしい。</dd>
-<dt><code>-shell n</code></dt>
-<dd>環境変数の解決など、
-プログラムの呼び出しにシェルを介す必要がない場合は
-これを指定することで多少コスト削減できる。
-当然 <code>-b y</code> のときのみ有効。</dd>
-</dl>
-<h3 id="qsub-スクリプト"><code>qsub</code> スクリプト</h3>
-<p><code>#$</code> で始まる行は <code>qsub</code> へのオプションと見なされる。</p>
-<p>ジョブスクリプト内で参照可能な特殊環境変数をプリントしてみるジョブの例:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/sh
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="c1">#$ -S /bin/sh</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#$ -l short</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#$ -cwd</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#$ -t 1-2</span>
-</span></span><span class="line"><span class="cl"><span class="nb">echo</span> HOME: <span class="nv">$HOME</span>
-</span></span><span class="line"><span class="cl"><span class="nb">echo</span> USER: <span class="nv">$USER</span>
-</span></span><span class="line"><span class="cl"><span class="nb">echo</span> JOB_ID: <span class="nv">$JOB_ID</span>
-</span></span><span class="line"><span class="cl"><span class="nb">echo</span> JOB_NAME: <span class="nv">$JOB_NAME</span>
-</span></span><span class="line"><span class="cl"><span class="nb">echo</span> HOSTNAME: <span class="nv">$HOSTNAME</span>
-</span></span><span class="line"><span class="cl"><span class="nb">echo</span> SGE_TASK_ID: <span class="nv">$SGE_TASK_ID</span>
-</span></span><span class="line"><span class="cl"><span class="nb">echo</span> SGE_TASK_FIRST:<span class="nv">$SGE_TASK_FIRST</span>
-</span></span><span class="line"><span class="cl"><span class="nb">echo</span> SGE_TASK_LAST: <span class="nv">$SGE_TASK_LAST</span>
-</span></span><span class="line"><span class="cl"><span class="nb">echo</span> SGE_TASK_STEPSIZE: <span class="nv">$SGE_TASK_STEPSIZE</span>
-</span></span><span class="line"><span class="cl"><span class="nb">pwd</span>
-</span></span><span class="line"><span class="cl">ls
-</span></span></code></pre></div><p>スクリプトはPythonでもいい。
-インタープリタを <code>-S /usr/bin/env python</code> で指定できないのは残念。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="ch">#!/usr/bin/env python</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#$ -S $HOME/.pyenv/shims/python</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#$ -l short</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#$ -cwd</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#$ -t 1-2</span>
-</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">os</span>
-</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;SGE_TASK_ID: &#34;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&#34;SGE_TASK_ID&#34;</span><span class="p">])</span>
-</span></span></code></pre></div><h3 id="補助コマンド">補助コマンド</h3>
-<dl>
-<dt><code>qstat</code></dt>
-<dd>現在実行中のジョブ一覧。
-ステータスは1文字に省略されて
-E(rror), r(unning), R(estarted), s(uspended)
-のように表示される。
-詳しくは <code>man qstat</code> を参照。</dd>
-<dt><code>qstat -g c</code></dt>
-<dd>クラスタで定義されているキューの一覧と、それぞれの負荷を表示</dd>
-<dt><code>qstat -f | less</code></dt>
-<dd>全ノードの状況をfullに表示</dd>
-<dt><code>qstat -u '*' | less</code></dt>
-<dd>全ユーザのジョブを表示。
-<code>-s p</code> でpending中のみに絞ったり、
-<code>-l medium</code> でキューの種類を絞ったりできる。</dd>
-<dt><code>qstat -j JOBID</code></dt>
-<dd>ジョブの詳細表示</dd>
-<dt><code>qacct -j JOBID</code></dt>
-<dd>ジョブ実行後にリソース消費を確認</dd>
-<dt><code>qdel JOBID</code></dt>
-<dd>ジョブ削除</dd>
-<dt><code>qquota</code></dt>
-<dd>ユーザーに与えられたリソースを表示</dd>
-</dl>
-<h2 id="apptainer-singularity">Apptainer (Singularity)</h2>
+<dt><code>--mem=&lt;size&gt;[units]</code></dt>
+<dd>計算ノードに要求するRAM容量。</dd>
+<dd>単位には K, M, G, T が使えて、省略するとメガバイト。</dd>
+<dd><code>--mem-per-cpu</code> でCPUコアあたりのRAMを指定することもできる。</dd>
+<dt><code>-o, --output=&lt;filename_pattern&gt;</code></dt>
+<dd>標準出力の書き出し先。
+デフォルトはジョブIDを使って <code>slurm-%j.out</code> に書き出される。
+ワーキングディレクトリからの相対パスだと思うけど明記されておらず不明。</dd>
+<dd><code>-e, --error=&lt;filename_pattern&gt;</code>
+を指定しなければ標準エラーも同じところに出力される。</dd>
+<dt><code>-p, --partition=&lt;partition_names&gt;</code></dt>
+<dd>どのグループの計算ノードに投げるか。
+PBS系でいうqueueに相当。
+何が選べるかはシステムの設定次第で、例えば遺伝研の場合は
 <ul>
-<li><a href="https://sc.ddbj.nig.ac.jp/software/Apptainer/">https://sc.ddbj.nig.ac.jp/software/Apptainer/</a></li>
+<li><code>-p short</code>: 1時間以内に終わる軽いもの</li>
+<li><code>-p epyc</code>: 124日以内に終わる長いもの</li>
+<li><code>-p medium</code>: 124日以内に終わる長さで、メモリを多めに使うもの</li>
+</ul>
+</dd>
+<dt><code>-t, --time=&lt;time&gt;</code></dt>
+<dd>時間を制限する。
+ここでの宣言が上記partitionの設定より長いと一生pending。</dd>
+<dd>形式は <code>MM</code>, <code>MM:SS</code>, <code>HH:MM:SS</code>, <code>DD-HH</code>, <code>DD-HH:MM</code>, <code>DD-HH:MM:SS</code> のいずれか。</dd>
+</dl>
+<h3 id="バッチスクリプト">バッチスクリプト</h3>
+<p><code>sbatch</code> コマンドに渡すスクリプト。
+<code>#SBATCH</code> で始まる行は <code>sbatch</code> へのオプションと見なされる。</p>
+<p>スクリプト内で参照可能な環境変数をプリントしてみるジョブの例:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="c1">#SBATCH -t 00-00:01:00</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#SBATCH --mem-per-cpu 1g</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#SBATCH -J print</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">date -Iseconds
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> SLURM_ARRAY_JOB_ID: <span class="si">${</span><span class="nv">SLURM_ARRAY_JOB_ID</span><span class="p">-</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> SLURM_ARRAY_TASK_ID: <span class="si">${</span><span class="nv">SLURM_ARRAY_TASK_ID</span><span class="p">-</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> SLURM_ARRAY_TASK_COUNT: <span class="si">${</span><span class="nv">SLURM_ARRAY_TASK_COUNT</span><span class="p">-</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> SLURM_ARRAY_TASK_MIN: <span class="si">${</span><span class="nv">SLURM_ARRAY_TASK_MIN</span><span class="p">-</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> SLURM_ARRAY_TASK_MAX: <span class="si">${</span><span class="nv">SLURM_ARRAY_TASK_MAX</span><span class="p">-</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> SLURM_ARRAY_TASK_STEP: <span class="si">${</span><span class="nv">SLURM_ARRAY_TASK_STEP</span><span class="p">-</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> SLURM_JOB_ID: <span class="si">${</span><span class="nv">SLURM_JOB_ID</span><span class="p">-</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> SLURM_JOB_NAME: <span class="si">${</span><span class="nv">SLURM_JOB_NAME</span><span class="p">-</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> SLURM_JOB_NODELIST: <span class="si">${</span><span class="nv">SLURM_JOB_NODELIST</span><span class="p">-</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> SLURM_JOB_PARTITION: <span class="si">${</span><span class="nv">SLURM_JOB_PARTITION</span><span class="p">-</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> SLURM_JOB_START_TIME: <span class="si">${</span><span class="nv">SLURM_JOB_START_TIME</span><span class="p">-</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> SLURM_MEM_PER_CPU: <span class="si">${</span><span class="nv">SLURM_MEM_PER_CPU</span><span class="p">-</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> SLURM_MEM_PER_NODE: <span class="si">${</span><span class="nv">SLURM_MEM_PER_NODE</span><span class="p">-</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> SLURM_SUBMIT_DIR: <span class="si">${</span><span class="nv">SLURM_SUBMIT_DIR</span><span class="p">-</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> SLURM_SUBMIT_HOST: <span class="si">${</span><span class="nv">SLURM_SUBMIT_HOST</span><span class="p">-</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> SLURM_TASK_PID: <span class="si">${</span><span class="nv">SLURM_TASK_PID</span><span class="p">-</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> SLURMD_NODENAME: <span class="si">${</span><span class="nv">SLURMD_NODENAME</span><span class="p">-</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> HOME: <span class="si">${</span><span class="nv">HOME</span><span class="p">-</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> USER: <span class="si">${</span><span class="nv">USER</span><span class="p">-</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> PWD: <span class="si">${</span><span class="nv">PWD</span><span class="p">-</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> PATH: <span class="si">${</span><span class="nv">PATH</span><span class="p">-</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">date -Iseconds
+</span></span></code></pre></div><h2 id="apptainer-singularity">Apptainer (Singularity)</h2>
+<ul>
+<li><a href="https://sc.ddbj.nig.ac.jp/guides/software/Container/Apptainer/">https://sc.ddbj.nig.ac.jp/guides/software/Container/Apptainer/</a></li>
+<li><a href="https://sc.ddbj.nig.ac.jp/guides/software/Container/BioContainers/">https://sc.ddbj.nig.ac.jp/guides/software/Container/BioContainers/</a></li>
 <li><a href="/dev/apptainer.html">Apptainer</a></li>
 </ul>
 <p><code>/usr/local/biotools/</code> 以下に各種ソフトウェアが用意されている。
@@ -250,11 +259,14 @@ E(rror), r(unning), R(estarted), s(uspended)
 </span></span><span class="line"><span class="cl">wget -P ~/image/ https://data.broadinstitute.org/Trinity/TRINITY_SINGULARITY/trinityrnaseq.v2.11.0.simg
 </span></span><span class="line"><span class="cl">apptainer <span class="nb">exec</span> -e ~/image/trinityrnaseq.v2.11.0.simg Trinity --help
 </span></span></code></pre></div><h2 id="r">R</h2>
-<p><a href="https://sc.ddbj.nig.ac.jp/software/R">https://sc.ddbj.nig.ac.jp/software/R</a></p>
-<h3 id="apptainer-r">apptainer R</h3>
+<p><a href="https://sc.ddbj.nig.ac.jp/guides/software/DevelopmentEnvironment/R/">https://sc.ddbj.nig.ac.jp/guides/software/DevelopmentEnvironment/R/</a></p>
+<h3 id="apptainer-r">Apptainer R</h3>
+<p>存在するけどエラーで動かない:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">find /usr/local/biotools/ -name <span class="s1">&#39;r-base:*&#39;</span> <span class="p">|</span> sort
-</span></span><span class="line"><span class="cl">apptainer <span class="nb">exec</span> -e /usr/local/biotools/r/r-base:4.2.1 R
-</span></span></code></pre></div>
+</span></span><span class="line"><span class="cl">apptainer <span class="nb">exec</span> /usr/local/biotools/r/r-base:4.4.1 R --no-save --no-restore-data
+</span></span></code></pre></div><pre tabindex="0"><code> *** caught segfault ***
+address (nil), cause &#39;memory not mapped&#39;
+</code></pre>
 </article>
 </main>
 
