@@ -312,12 +312,18 @@ Rソースコードのコメントから`NAMESPACE`とヘルプ(`man/*.Rd`)を�
 
 ### 使い方
 
+<https://roxygen2.r-lib.org/articles/rd.html>
+
 ```r
-#' Title of the simple function to add 1
+#' Title of the simple function to add 1 (without explicit @@title tag)
 #'
 #' The second paragraph is recognized as the description.
-#' It is not recommended to use @@title and @@description explicitly.
-#' @param x A numeric vector
+#' Explicit @@description is unnecessary unless you want to include
+#' an empty line to express multiple paragraphs or bullet lists.
+#'
+#' The third and subsequent paragraphs are recognized as the details.
+#' @param x A numeric vector.
+#' @returns A numeric vector with 1 added to each element.
 #' @export
 #' @examples
 #' increment(42)
@@ -328,7 +334,8 @@ increment = function(x) {x + 1}
 -   タグは `@` で始まる。
     `@` そのものを入力したいときは重ねて `@@` とする。
 -   1行目にタイトル。1行あけて2段落目に説明文を書く。
-    明示的に `@title`, `@description` タグを使うことも可能だが非推奨らしい。
+    明示的な `@title`, `@description`, `@details` タグは大概不要。
+    箇条書きや複数段落を表現したい場合にだけ適宜使う。
     タイトルをコピペして全部同じにすると怒られる。
     2段落目を省略するとタイトルが流用される。
 -   空行だけでは切れ目として扱われないので `NULL` などを置いたりする。
@@ -354,9 +361,8 @@ increment = function(x) {x + 1}
     `dplyr::filter(diamonds, .data$cut == "Ideal")`
     のように pronoun を使って抑える。
     そのためにどこかに `#' @importFrom rlang .data` を書いておく。
-    ただし `$` によるアクセスがやや遅いので、
-    `group_by()` などで多数のグループを処理するときなど気になる場合は
-    `!!as.name("carat")` のようにする。
+    ただし `group_by()` で多数のグループを処理するときなど、
+    `.data$` の遅さが気になる場合は `!!as.name("carat")` のようにする。
 
 
 ### タグ
@@ -369,16 +375,46 @@ increment = function(x) {x + 1}
 
 `@importFrom pkg func`
 :   `NAMESPACE` で `importFrom()` するパッケージと関数を指定。
-    パッケージ内でよほど何回も登場する関数や演算子を登録する。
-    e.g., `@importFrom rlang .data` 。
-    重複して何度も書いちゃっても大丈夫。
+    パッケージ内でよほど何回も登場する関数や
+    `名前空間::` の形で使いにくい演算子を登録する。
+    e.g., `@importFrom rlang .data :=` 。
+    重複して書いても大丈夫。
 
 `@export`
 :   `NAMESPACE` で `export()` する関数を指定。
     一般ユーザーからはこれが付いてる関数だけ見える。
+    基本的にはこれをつける関数にだけドキュメントを書く。
 
 `@param arg1 description...`
-:   関数の引数。型や役割の説明を書く。
+:   関数の引数。型や役割の説明を文として書く。つまり大文字で始まりピリオドで終わる。
+
+`@returns ...`
+:   返り値の型などを簡潔に、文として書く。
+    "Value" というセクションに出力される。
+    `@description` で済むような場合でもCRANに求められるらしい。
+    `@return` も同じだが tidyverse 界隈では `@returns` のほうが好まれている。
+
+`@examples code...`
+:   例となるコードを記述する。
+    最後に空行を入れるとそれもしっかり含まれてしまう。
+:   親環境に影響を与えないように注意する。
+    ファイルの書き出しや `options()` など副作用を伴う例を書く場合は手動で現状復帰する。
+    `tempdir()` は使えるが `on.exit()` と [`withr`](https://withr.r-lib.org/)
+    は使えないらしい。
+:   使い方は見せるけど実行しない、結果を見せない場合は `\dontrun{}` に入れる。
+    `@examplesIf` で条件付きにもできる。
+:   単数形の `@example` は外部ファイルのパスを受け取る。
+
+`@rdname basename`
+:   `man/`に書き出すRdファイルの名前。
+    複数の関数で同じものを指定すればヘルプをひとつにまとめられる。
+    このときタイトルや `@param` などは共有される。
+    似たような引数を持つ関数や、関連する関数をまとめるのによく使う。
+
+`@include other-file.R`
+:   指定したファイルを先に読み込むように `DESCRIPTION` の `Collate` を自動生成する。
+    ひとつでも使うと全ファイルを列挙する形になってしまうので、
+    メソッドの定義などで順序が重要になる場合にのみ使う。
 
 `@inherit package::function [fields...]`
 :   別の関数から継承する。
@@ -396,25 +432,6 @@ increment = function(x) {x + 1}
     各要素の先頭は `#' ` ではなく@タグで。
     関数には引数も渡せるのでいろいろできる。
 
-`@return description`
-:   関数の返り値。
-
-`@examples code...`
-:   例となるコードを記述する。
-    exportしないやつには書いてはいけない。
-    `\dontrun{}` に入れるとチェックから除外される。
-    単数形の `@example` は外部ファイルのパスを受け取る。
-
-`@rdname basename`
-:   `man/`に書き出すRdファイルの名前。
-    複数の関数で同じものを指定すればヘルプをひとつにまとめられる。
-    このときタイトルや `@param` などは共有される。
-    似たような引数を持つ関数や、関連する関数をまとめるのによく使う。
-
-`@include other-file.R`
-:   指定したファイルを先に読み込む。
-    メソッドの定義などで順序が重要になる場合に使う。
-
 `@seealso ...`
 :   `[mean()]`, `[ggplot2::diamonds]`, `<https://...>` のようにしてリンクを張れる。
 
@@ -423,7 +440,8 @@ increment = function(x) {x + 1}
     ただし `@rdname` とかで関数をまとめたりしてるとうまくいかないっぽい。
 
 `@section Some Title:`
-:   新しいセクションを作る。前には空行、行末にコロン、後には普通の文章。
+:   `@description` や `@details` にセクションを作るための古いタグ。
+    今はMarkdownで簡単に書ける: `# Section`, `## Subsection`
 
 `@docType`, `@name`
 :   パッケージやデータを記述するのに必要だったが今では不要っぽい。
