@@ -305,11 +305,16 @@ mydemo2    Description of demo 2
 を直接呼んでもよいが、
 基本的には <code>devtools::document()</code> を使って間接的に利用する。</p>
 <h3 id="使い方">使い方</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1">#&#39; Title of the simple function to add 1</span>
+<p><a href="https://roxygen2.r-lib.org/articles/rd.html">https://roxygen2.r-lib.org/articles/rd.html</a></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1">#&#39; Title of the simple function to add 1 (without explicit @@title tag)</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&#39;</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&#39; The second paragraph is recognized as the description.</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#&#39; It is not recommended to use @@title and @@description explicitly.</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#&#39; @param x A numeric vector</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#&#39; Explicit @@description is unnecessary unless you want to include</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#&#39; an empty line to express multiple paragraphs or bullet lists.</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#&#39; The third and subsequent paragraphs are recognized as the details.</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#&#39; @param x A numeric vector.</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#&#39; @returns A numeric vector with 1 added to each element.</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&#39; @export</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&#39; @examples</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&#39; increment(42)</span>
@@ -324,7 +329,8 @@ mydemo2    Description of demo 2
 </li>
 <li>
 <p>1行目にタイトル。1行あけて2段落目に説明文を書く。
-明示的に <code>@title</code>, <code>@description</code> タグを使うことも可能だが非推奨らしい。
+明示的な <code>@title</code>, <code>@description</code>, <code>@details</code> タグは大概不要。
+箇条書きや複数段落を表現したい場合にだけ適宜使う。
 タイトルをコピペして全部同じにすると怒られる。
 2段落目を省略するとタイトルが流用される。</p>
 </li>
@@ -354,9 +360,8 @@ mydemo2    Description of demo 2
 <code>dplyr::filter(diamonds, .data$cut == &quot;Ideal&quot;)</code>
 のように pronoun を使って抑える。
 そのためにどこかに <code>#' @importFrom rlang .data</code> を書いておく。
-ただし <code>$</code> によるアクセスがやや遅いので、
-<code>group_by()</code> などで多数のグループを処理するときなど気になる場合は
-<code>!!as.name(&quot;carat&quot;)</code> のようにする。</p>
+ただし <code>group_by()</code> で多数のグループを処理するときなど、
+<code>.data$</code> の遅さが気になる場合は <code>!!as.name(&quot;carat&quot;)</code> のようにする。</p>
 </li>
 </ul>
 <h3 id="タグ">タグ</h3>
@@ -367,14 +372,40 @@ mydemo2    Description of demo 2
 名前の衝突が怖いので基本的に使わない。</dd>
 <dt><code>@importFrom pkg func</code></dt>
 <dd><code>NAMESPACE</code> で <code>importFrom()</code> するパッケージと関数を指定。
-パッケージ内でよほど何回も登場する関数や演算子を登録する。
-e.g., <code>@importFrom rlang .data</code> 。
-重複して何度も書いちゃっても大丈夫。</dd>
+パッケージ内でよほど何回も登場する関数や
+<code>名前空間::</code> の形で使いにくい演算子を登録する。
+e.g., <code>@importFrom rlang .data :=</code> 。
+重複して書いても大丈夫。</dd>
 <dt><code>@export</code></dt>
 <dd><code>NAMESPACE</code> で <code>export()</code> する関数を指定。
-一般ユーザーからはこれが付いてる関数だけ見える。</dd>
+一般ユーザーからはこれが付いてる関数だけ見える。
+基本的にはこれをつける関数にだけドキュメントを書く。</dd>
 <dt><code>@param arg1 description...</code></dt>
-<dd>関数の引数。型や役割の説明を書く。</dd>
+<dd>関数の引数。型や役割の説明を文として書く。つまり大文字で始まりピリオドで終わる。</dd>
+<dt><code>@returns ...</code></dt>
+<dd>返り値の型などを簡潔に、文として書く。
+&ldquo;Value&rdquo; というセクションに出力される。
+<code>@description</code> で済むような場合でもCRANに求められるらしい。
+<code>@return</code> も同じだが tidyverse 界隈では <code>@returns</code> のほうが好まれている。</dd>
+<dt><code>@examples code...</code></dt>
+<dd>例となるコードを記述する。
+最後に空行を入れるとそれもしっかり含まれてしまう。</dd>
+<dd>親環境に影響を与えないように注意する。
+ファイルの書き出しや <code>options()</code> など副作用を伴う例を書く場合は手動で現状復帰する。
+<code>tempdir()</code> は使えるが <code>on.exit()</code> と <a href="https://withr.r-lib.org/"><code>withr</code></a>
+は使えないらしい。</dd>
+<dd>使い方は見せるけど実行しない、結果を見せない場合は <code>\dontrun{}</code> に入れる。
+<code>@examplesIf</code> で条件付きにもできる。</dd>
+<dd>単数形の <code>@example</code> は外部ファイルのパスを受け取る。</dd>
+<dt><code>@rdname basename</code></dt>
+<dd><code>man/</code>に書き出すRdファイルの名前。
+複数の関数で同じものを指定すればヘルプをひとつにまとめられる。
+このときタイトルや <code>@param</code> などは共有される。
+似たような引数を持つ関数や、関連する関数をまとめるのによく使う。</dd>
+<dt><code>@include other-file.R</code></dt>
+<dd>指定したファイルを先に読み込むように <code>DESCRIPTION</code> の <code>Collate</code> を自動生成する。
+ひとつでも使うと全ファイルを列挙する形になってしまうので、
+メソッドの定義などで順序が重要になる場合にのみ使う。</dd>
 <dt><code>@inherit package::function [fields...]</code></dt>
 <dd>別の関数から継承する。
 部分的に継承したければ関数名の後に指定。</dd>
@@ -388,28 +419,14 @@ e.g., <code>@importFrom rlang .data</code> 。
 <dd>関数を評価して出てきた文字列ベクタをroxygenコメントとして処理する。
 各要素の先頭は <code>#' </code> ではなく@タグで。
 関数には引数も渡せるのでいろいろできる。</dd>
-<dt><code>@return description</code></dt>
-<dd>関数の返り値。</dd>
-<dt><code>@examples code...</code></dt>
-<dd>例となるコードを記述する。
-exportしないやつには書いてはいけない。
-<code>\dontrun{}</code> に入れるとチェックから除外される。
-単数形の <code>@example</code> は外部ファイルのパスを受け取る。</dd>
-<dt><code>@rdname basename</code></dt>
-<dd><code>man/</code>に書き出すRdファイルの名前。
-複数の関数で同じものを指定すればヘルプをひとつにまとめられる。
-このときタイトルや <code>@param</code> などは共有される。
-似たような引数を持つ関数や、関連する関数をまとめるのによく使う。</dd>
-<dt><code>@include other-file.R</code></dt>
-<dd>指定したファイルを先に読み込む。
-メソッドの定義などで順序が重要になる場合に使う。</dd>
 <dt><code>@seealso ...</code></dt>
 <dd><code>[mean()]</code>, <code>[ggplot2::diamonds]</code>, <code>&lt;https://...&gt;</code> のようにしてリンクを張れる。</dd>
 <dt><code>@family</code></dt>
 <dd>これを共通して持つ関数同士に <code>@seealso</code> が自動生成される。
 ただし <code>@rdname</code> とかで関数をまとめたりしてるとうまくいかないっぽい。</dd>
 <dt><code>@section Some Title:</code></dt>
-<dd>新しいセクションを作る。前には空行、行末にコロン、後には普通の文章。</dd>
+<dd><code>@description</code> や <code>@details</code> にセクションを作るための古いタグ。
+今はMarkdownで簡単に書ける: <code># Section</code>, <code>## Subsection</code></dd>
 <dt><code>@docType</code>, <code>@name</code></dt>
 <dd>パッケージやデータを記述するのに必要だったが今では不要っぽい。</dd>
 </dl>
