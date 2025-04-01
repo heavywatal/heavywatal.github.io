@@ -134,9 +134,8 @@ CRANから落としてくる `.tar.gz` ソースコード (bundle package) と�
 </a>
 
 個々の関数の使用例はRソースファイルの `@examples` に書くとして、
-複数の関数を組み合わせてどう使うかとか、
-パッケージ全体の使い方とかを説明するのが`vignettes/`の役割。
-Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
+複数の関数を組み合わせてどう使うかを説明するのが`vignettes/`の役割。
+R Markdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 
 `usethis::use_vignette("hello")` で雛形を作ってもらうのが楽。
 
@@ -147,7 +146,18 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 毎回その重さを受け入れるか、わざわざ`FALSE`指定するかというのは悩みどころ。
 
 [pkgdown](https://pkgdown.r-lib.org)でウェブサイトを構築すると、
-ここに置いてあるvignettesはArticlesという位置づけになる。
+ここに置いてある文書は
+[Articles](https://pkgdown.r-lib.org/articles/pkgdown.html#articles)
+という位置づけで出力される。
+
+ただしパッケージと同名で `vignettes/<package-name>.Rmd` というファイルを作ると、
+Articles一覧の中ではなくReferenceの隣に "Get started" としてリンクされる。
+ここでパッケージの使い方を説明することが期待されている。
+`index.md`/`README.md` から生成されるホームページも似たような役割じゃないかと思うが、
+そちらはパッケージを使うかどうか判断するための情報を提供するところとして書き、
+「実際に使いたくなったら "Get started" を見よ」
+というリンクを末尾に置いておくのが良さそう。
+[pkgdown#2372](https://github.com/r-lib/pkgdown/issues/2372)
 
 
 ### `tests/`
@@ -237,6 +247,13 @@ Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 `.Rbuildignore`
 : Rパッケージらしからぬ変なファイルやディレクトリがあると怒られるので、
   そういうやつをこのファイルに列挙して無視してもらう。
+
+`README.md`
+: GitHubでいい感じに見えるようにMarkdown形式でパッケージの概要を書く。
+  Rコードを含む `README.Rmd` から `devtools::build_readme()` で生成することも可能。
+: pkgdownでもホームページの材料として使われるが、`index.md` を置けばそちらが優先される。
+  開発者向けと一般向けを使い分けるとか。
+  `index.md` をルートに置きたくない場合は `pkgdown/index.md` でもいい。
 
 
 ## `devtools`
