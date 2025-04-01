@@ -168,16 +168,25 @@ GitHubに公開しておけば誰でも使えるようになるので、
 <img src="/_img/hex-stickers/pkgdown.webp" align="right" width="120" height="139">
 </a>
 <p>個々の関数の使用例はRソースファイルの <code>@examples</code> に書くとして、
-複数の関数を組み合わせてどう使うかとか、
-パッケージ全体の使い方とかを説明するのが<code>vignettes/</code>の役割。
-Rmarkdown形式で書いてHTMLやPDFで表示できるので表現力豊か。</p>
+複数の関数を組み合わせてどう使うかを説明するのが<code>vignettes/</code>の役割。
+R Markdown形式で書いてHTMLやPDFで表示できるので表現力豊か。</p>
 <p><code>usethis::use_vignette(&quot;hello&quot;)</code> で雛形を作ってもらうのが楽。</p>
 <p><code>pandoc</code> と <code>pandoc-citeproc</code> が必要なので
 <a href="/mac/homebrew.html">Homebrew</a> とかでインストールしておく。</p>
 <p><code>check()</code>がデフォルトで<code>vignette=TRUE</code>かつ処理がやや重いので、
 毎回その重さを受け入れるか、わざわざ<code>FALSE</code>指定するかというのは悩みどころ。</p>
 <p><a href="https://pkgdown.r-lib.org">pkgdown</a>でウェブサイトを構築すると、
-ここに置いてあるvignettesはArticlesという位置づけになる。</p>
+ここに置いてある文書は
+<a href="https://pkgdown.r-lib.org/articles/pkgdown.html#articles">Articles</a>
+という位置づけで出力される。</p>
+<p>ただしパッケージと同名で <code>vignettes/&lt;package-name&gt;.Rmd</code> というファイルを作ると、
+Articles一覧の中ではなくReferenceの隣に &ldquo;Get started&rdquo; としてリンクされる。
+ここでパッケージの使い方を説明することが期待されている。
+<code>index.md</code>/<code>README.md</code> から生成されるホームページも似たような役割じゃないかと思うが、
+そちらはパッケージを使うかどうか判断するための情報を提供するところとして書き、
+「実際に使いたくなったら &ldquo;Get started&rdquo; を見よ」
+というリンクを末尾に置いておくのが良さそう。
+<a href="https://github.com/r-lib/pkgdown/issues/2372">pkgdown#2372</a></p>
 <h3 id="tests"><code>tests/</code></h3>
 <p><a href="https://r-pkgs.org/tests.html">https://r-pkgs.org/tests.html</a></p>
 <a href="https://testthat.r-lib.org/">
@@ -248,6 +257,12 @@ mydemo2    Description of demo 2
 <dt><code>.Rbuildignore</code></dt>
 <dd>Rパッケージらしからぬ変なファイルやディレクトリがあると怒られるので、
 そういうやつをこのファイルに列挙して無視してもらう。</dd>
+<dt><code>README.md</code></dt>
+<dd>GitHubでいい感じに見えるようにMarkdown形式でパッケージの概要を書く。
+Rコードを含む <code>README.Rmd</code> から <code>devtools::build_readme()</code> で生成することも可能。</dd>
+<dd>pkgdownでもホームページの材料として使われるが、<code>index.md</code> を置けばそちらが優先される。
+開発者向けと一般向けを使い分けるとか。
+<code>index.md</code> をルートに置きたくない場合は <code>pkgdown/index.md</code> でもいい。</dd>
 </dl>
 <h2 id="devtools"><code>devtools</code></h2>
 <a href="https://devtools.r-lib.org/">
