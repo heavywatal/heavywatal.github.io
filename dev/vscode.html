@@ -159,6 +159,122 @@ VSCode — Microsoft製テキストエディタ
 <a href="https://github.com/heavywatal/dotfiles/blob/master/.config/Code/User/settings.json"><code>~/.config/Code/User/settings.json</code></a></p>
 <h2 id="拡張パッケージ">拡張パッケージ</h2>
 <p><a href="https://code.visualstudio.com/docs/editor/extension-marketplace">https://code.visualstudio.com/docs/editor/extension-marketplace</a></p>
+<h3 id="github-copilot">GitHub Copilot</h3>
+<ul>
+<li><a href="https://github.com/features/copilot">https://github.com/features/copilot</a></li>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=GitHub.copilot">https://marketplace.visualstudio.com/items?itemName=GitHub.copilot</a></li>
+</ul>
+<p>AI coding assistant.
+プログラミングはもちろんのこと、論文書きやメール書きも含めテキスト仕事なら何でもサポートしてもらえる。
+対話形式もできるけど何より補完機能が便利。
+<a href="/dev/git.html">Git</a>を触ったことがない人にもおすすめ。
+いろいろな利用法があるけどここに書くのはVSCodeからのもの。</p>
+<p>Microsoft製のCopilotだけを使うわけではなく(というか選択肢に無い？)、
+ChatGPT や Claude のようないくつかの大規模言語モデルから選択できる。</p>
+<h4 id="設定">設定</h4>
+<p><a href="https://github.com/features/copilot/plans">https://github.com/features/copilot/plans</a>:
+Free でも使えるけどかなり限定的。
+GitHub Education に登録することで Pro 相当の機能を無料で使わせてもらえる。</p>
+<ol>
+<li>
+<p><a href="https://github.com">GitHub</a> にアカウントを作る。
+このときはGmailでも何でもいいので普段よく使うアドレスを登録。</p>
+</li>
+<li>
+<p><a href="https://github.com/education">GitHub Education</a> にも登録する。
+ここでは教育機関のメールアドレスが必要: <code>@tohoku.ac.jp</code>, <code>@hogwarts.edu</code>, etc.
+学生証や職員証の写真をアップロードする必要があったかも。</p>
+</li>
+<li>
+<p>VSCode を起動して GitHub Copilot 拡張をインストール。
+<kbd>^</kbd><kbd>⌘</kbd><kbd>x</kbd> <code>copilot</code></p>
+</li>
+<li>
+<p>右上の人型アイコン or 上部中央右の
+<img height=16 width=16 src="https://cdn.simpleicons.org/githubcopilot" alt="Copilotボタン"></a>
+から &ldquo;Sign in with GitHub to Use GitHub Copilot&rdquo; みたいなメニューを選択。
+ウェブブラウザに飛ばされるので指示に従って認証。</p>
+</li>
+<li>
+<p>試しにVSCodeでテキストファイルを新規作成 <kbd>⌘</kbd><kbd>n</kbd>
+して適当に書いて改行<kbd>⏎</kbd>:</p>
+<blockquote>
+<p>Dear Professor Makino,</p></blockquote>
+<p>1秒待つと次のような文がグレーで表示される:</p>
+<blockquote>
+<p>I hope this message finds you well. I am writing to express my gratitude for your invaluable support and guidance throughout my research journey. Your mentorship has been instrumental in shaping my academic path, and I am truly thankful for the opportunities you have provided me.</p></blockquote>
+<p><kbd>tab</kbd> で採用。
+続けて <kbd>⌘</kbd><kbd>i</kbd> で簡易チャットを開き &ldquo;Translate it to Japanese&rdquo; と頼んでみる:</p>
+<blockquote>
+<p>私はこのメッセージがあなたに届くことを願っています。私は研究の旅を通じてあなたの貴重なサポートと指導に感謝の意を表したく、この手紙を書いています。あなたの指導は私の学問的な道を形作る上で非常に重要であり、私に提供してくださった機会に心から感謝しています。</p></blockquote>
+</li>
+</ol>
+<p>設定確認・変更:</p>
+<ul>
+<li><a href="https://github.com/settings/copilot">GitHub上でのCopilotの設定</a></li>
+<li>VSCode上部
+<img height=16 width=16 src="https://cdn.simpleicons.org/githubcopilot" alt="Copilotボタン"></a>
+右のV字をクリック → &ldquo;Configure Code Completions&hellip;&rdquo;:
+<ul>
+<li>&ldquo;Status: Ready (Disabled)&rdquo; になってたらその下の &ldquo;Enable Completions&rdquo; で有効化。</li>
+<li>&ldquo;Edit Keyboard Shortcuts&hellip;&rdquo;</li>
+<li>&ldquo;Edit Settings&hellip;&rdquo;</li>
+</ul>
+</li>
+</ul>
+<h4 id="使い方">使い方</h4>
+<p>とにかく自動補完をオンにしてテキストを書く。</p>
+<table>
+  <thead>
+      <tr>
+          <th>key</th>
+          <th>command</th>
+          <th>description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><kbd>esc</kbd></td>
+          <td>Hide Inline Suggestion</td>
+          <td>却下</td>
+      </tr>
+      <tr>
+          <td><kbd>tab</kbd></td>
+          <td>Accept Inline Suggestion</td>
+          <td>全部採用</td>
+      </tr>
+      <tr>
+          <td><kbd>⌘</kbd><kbd>→</kbd></td>
+          <td>Accept Next Word Of &hellip;</td>
+          <td>部分採用</td>
+      </tr>
+      <tr>
+          <td><kbd>⌥</kbd><kbd>\ </kbd></td>
+          <td>Trigger Inline Suggestion</td>
+          <td>自動補完されないときに手動で</td>
+      </tr>
+      <tr>
+          <td><kbd>^</kbd><kbd>⏎</kbd></td>
+          <td>Open Completions Panel</td>
+          <td>別パネルで補完候補を表示</td>
+      </tr>
+      <tr>
+          <td><kbd>⌘</kbd><kbd>i</kbd></td>
+          <td>Toggle Inline Chat</td>
+          <td>その場で簡易チャット</td>
+      </tr>
+      <tr>
+          <td><kbd>^</kbd><kbd>⌘</kbd><kbd>i</kbd></td>
+          <td>Toggle Chat</td>
+          <td>右側にバーを開いてチャット</td>
+      </tr>
+      <tr>
+          <td><kbd>⇧</kbd><kbd>⌘</kbd><kbd>i</kbd></td>
+          <td>Toggle Copilot Edits</td>
+          <td>複数ファイルにまたがる変更とか</td>
+      </tr>
+  </tbody>
+</table>
 <h3 id="r">R</h3>
 <p><a href="https://code.visualstudio.com/docs/languages/r">https://code.visualstudio.com/docs/languages/r</a></p>
 <p>人にはRStudioを薦めるけど個人的にはこっちのほうが使いやすい。</p>
