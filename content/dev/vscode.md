@@ -62,6 +62,79 @@ key  | command | description
 <https://code.visualstudio.com/docs/editor/extension-marketplace>
 
 
+### GitHub Copilot
+
+- <https://github.com/features/copilot>
+- <https://marketplace.visualstudio.com/items?itemName=GitHub.copilot>
+
+AI coding assistant.
+プログラミングはもちろんのこと、論文書きやメール書きも含めテキスト仕事なら何でもサポートしてもらえる。
+対話形式もできるけど何より補完機能が便利。
+[Git]({{< relref "git.md" >}})を触ったことがない人にもおすすめ。
+いろいろな利用法があるけどここに書くのはVSCode上の。
+
+Microsoft製のCopilotだけを使うわけではなく(というか選択肢に無い？)、
+ChatGPT や Claude のようないくつかの大規模言語モデルから選択できる。
+
+
+#### 設定
+
+<https://github.com/features/copilot/plans>\
+Free でも使えるけどかなり限定的。
+GitHub Education に登録すれば Pro 相当の機能を無料で使わせてもらえる。
+
+1. [GitHub](https://github.com) にアカウントを作る。
+   このときはGmailでも何でもいいので普段よく使うアドレスを登録。
+1. [GitHub Education](https://github.com/education) にも登録する。
+   ここでは教育機関のメールアドレスが必要: `@tohoku.ac.jp`, `@hogwarts.edu`, etc.
+   学生証や職員証の写真をアップロードする必要があったかも。
+1. VSCode を起動して GitHub Copilot 拡張をインストール。
+   <kbd>⇧</kbd><kbd>⌘</kbd><kbd>x</kbd> `copilot`
+1. 右上の人型アイコン or 上部中央右の
+   <img height=16 width=16 src="https://cdn.simpleicons.org/githubcopilot" alt="Copilotボタン"></a>
+   から "Sign in with GitHub to Use GitHub Copilot" みたいなメニューを選択。
+   ウェブブラウザに飛ばされるので指示に従って認証。
+1. 試しにVSCodeでテキストファイルを新規作成 <kbd>⌘</kbd><kbd>n</kbd>
+   して適当に書いて改行<kbd>⏎</kbd>:
+
+   > Dear Professor Makino,
+
+   1秒待つと次のような文がグレーで表示される:
+
+   > I hope this message finds you well. I am writing to express my gratitude for your invaluable support and guidance throughout my research journey. Your mentorship has been instrumental in shaping my academic path, and I am truly thankful for the opportunities you have provided me.
+
+   <kbd>tab</kbd> で採用。
+   続けて <kbd>⌘</kbd><kbd>i</kbd> で簡易チャットを開き "Translate it to Japanese" と頼んでみる:
+
+   > 私はこのメッセージがあなたに届くことを願っています。私は研究の旅を通じてあなたの貴重なサポートと指導に感謝の意を表したく、この手紙を書いています。あなたの指導は私の学問的な道を形作る上で非常に重要であり、私に提供してくださった機会に心から感謝しています。
+
+
+設定確認・変更:
+
+- [GitHub上でのCopilotの設定](https://github.com/settings/copilot)
+- VSCode上部
+  <img height=16 width=16 src="https://cdn.simpleicons.org/githubcopilot" alt="Copilotボタン"></a>
+  右のV字をクリック → "Configure Code Completions...":
+  - "Status: Ready (Disabled)" になってたらその下の "Enable Completions" で有効化。
+  - "Edit Keyboard Shortcuts..."
+  - "Edit Settings..."
+
+#### 使い方
+
+とにかく自動補完をオンにしてテキストを書く。
+
+key  | command | description
+---- | ------- | -----------
+<kbd>esc</kbd> | Hide Inline Suggestion | 却下
+<kbd>tab</kbd> | Accept Inline Suggestion | 全部採用
+<kbd>⌘</kbd><kbd>→</kbd> | Accept Next Word Of ... | 部分採用
+<kbd>⌥</kbd><kbd>\ </kbd> | Trigger Inline Suggestion | 自動補完されないときに手動で
+<kbd>^</kbd><kbd>⏎</kbd> | Open Completions Panel | 別パネルで補完候補を表示
+<kbd>⌘</kbd><kbd>i</kbd> | Toggle Inline Chat | その場で簡易チャット
+<kbd>^</kbd><kbd>⌘</kbd><kbd>i</kbd> | Toggle Chat | 右側にバーを開いてチャット
+<kbd>⇧</kbd><kbd>⌘</kbd><kbd>i</kbd> | Toggle Copilot Edits | 複数ファイルにまたがる変更とか
+
+
 ### R
 
 <https://code.visualstudio.com/docs/languages/r>
