@@ -14,6 +14,25 @@ Microsoftが開発しているGUIテキストエディタ。
 <https://code.visualstudio.com>
 
 
+## フォルダ単位で開く
+
+VSCodeはファイルごとにひとつのウィンドウを開くのではなく、
+フォルダ単位でウィンドウを開き、複数のファイルをタブで表示するのが基本。
+そうは言ってもホームフォルダまるごととかではなく、
+次のような機能を効率的に使えるような、ちょうどいい階層のフォルダを開きたい。
+
+- <kbd>⇧</kbd><kbd>⌘</kbd><kbd>e</kbd>: 左側にツリー表示
+- <kbd>⇧</kbd><kbd>⌘</kbd><kbd>f</kbd>: ファイル横断検索
+- <kbd>⌘</kbd><kbd>p</kbd>: ファイル名を検索して開く
+- 後述の [GitHub Copilot](#github-copilot) に文脈を読んで編集してもらう
+
+例えば[Git]({{< relref "git.md" >}})を使っている人はリポジトリ単位で開く。
+[Git Project Manager](https://marketplace.visualstudio.com/items/?itemName=felipecaputo.git-project-manager)
+という拡張を入れておくと
+<kbd>⌥</kbd><kbd>⌘</kbd><kbd>p</kbd>
+から選択できる。
+
+
 ## Keyboard Shortcuts
 
 <https://code.visualstudio.com/docs/getstarted/keybindings>
