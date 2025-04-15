@@ -66,9 +66,6 @@ Contacts
 
 **Preprints**
 
--   Takeshi Kuroha, Fabien Lombardo, **Watal M. Iwasaki**, Svetlana Chechetka, Yoshihiro Kawahara, Akiko Yoshida, Junko Kyozuka, Takashi Makino, Hitoshi Yoshida.
-    <https://doi.org/10.1101/2024.09.17.612847>;
-    Fine-Tuning *TAWAWA1*-Mediated Panicle Architecture by Genome Editing of a Downstream Conserved Noncoding Sequence in Rice.
 -   **Watal M. Iwasaki**, Kosuke Aoki, Ryuichi Sugino, Atsushi Natsume, Hideki Innan.
     <https://dx.doi.org/10.2139/ssrn.4191903>;
     Simulating Cancer Evolution and Intratumor Heterogeneity Reveals the Optimal Number of Biopsy Samples for NGS-Based Cancer Gene Testing.
@@ -76,6 +73,9 @@ Contacts
 
 **Articles**
 
+1.  Takeshi Kuroha, Fabien Lombardo, **Watal M. Iwasaki**, Svetlana Chechetka, Yoshihiro Kawahara, Akiko Yoshida, Takashi Makino, Hitoshi Yoshida. (2025)
+    [*Plant Biotechnol. J.* **Early View** pp.1--3](https://doi.org/10.1111/pbi.70043);
+    Modification of *TAWAWA1*-mediated panicle architecture by genome editing of a downstream conserved noncoding sequence in rice.
 1.  **Watal M. Iwasaki**\*, T. E. Kijima\* (equally contributed), Hideki Innan. (2020)
     [*Mol. Biol. Evol.* **37**(2) 355--364](https://doi.org/10.1093/molbev/msz220);
     Population Genetics and Molecular Evolution of DNA Sequences in Transposable Elements. II. Accumulation of Variation and Evolution of a New Subfamily.
