@@ -294,9 +294,10 @@ https://ggplot2-book.org/layers.html#generated-variables
 :   `coord_fixed(ratio = 1)`
 
 [XY軸の転置](https://ggplot2.tidyverse.org/reference/coord_flip.html)
-:   `coord_flip()`
-:   `geom_*(orientation = "y")` も可。
-    `geom_bar()`, `geom_histogram()` では `aes(y =` にマッピングするだけでもいい。
+:   `coord_flip()` もまだ提供されているが、使わなくても実現可能。
+:   大抵 `aes()` の `x` と `y` を入れ替えるだけ。
+    `geom_histogram()` などでは `aes(y =` にマッピング。
+:   `geom_col()`, `geom_area()` などには `orientation = "y"` オプションも渡す。
 
 [極座標](https://ggplot2.tidyverse.org/reference/coord_polar.html)
 :   パイチャートも作れるらしい
@@ -411,13 +412,16 @@ p3 + theme_bw() + theme(
 : `legend.key.size`: (`unit`)
 : `legend.key.height`: (`unit`; inherits from `legend.key.size`)
 : `legend.key.width`: (`unit`; inherits from `legend.key.size`)
+: `legend.frame`: (`element_rect`)
 : `legend.text`: (`element_text`; inherits from `text`)
-: `legend.text.align`: (number from `0` (left) to `1` (right))
 : `legend.title`: (`element_text`; inherits from `title`)
-: `legend.title.align`: (number from `0` (left) to `1` (right))
-: `legend.position`: (`"left"`, `"right"`, `"bottom"`, `"top"`, `"none"` `c(0, 1)`)
+: `legend.title.position`: (`"top"`, `"right"`, `"bottom"`, `"left"`)
+: `legend.position`: (`"none"`, `"left"`, `"right"`, `"bottom"`, `"top"`, `"inside"`)
+: `legend.position.inside`: (`c(1, 1)` で右上)
 : `legend.direction`: (`"horizontal"` or `"vertical"`)
-: `legend.justification`: (`"center"` or `c(0, 1)` のような数値でアンカー位置を指定)
+: `legend.justification`: (`"center"` or `c(0, 1)` のような数値でアンカー位置を指定)\
+  &emsp;`__.top`, `__.bottom`, `__.left`, `__.right`, `__.inside`
+: `legend.location`: (`"panel"`, `"plot"`)
 : `legend.box`: (`"horizontal"` or `"vertical"`)
 : `legend.box.just`: (`"top"`, `"bottom"`, `"left"`, or `"right"`)
 : `legend.box.margin`: (`margin`)
@@ -438,8 +442,12 @@ p3 + theme_bw() + theme(
 全体の背景、タイトル、余白
 : `plot.background`: (`element_rect`; inherits from `rect`)
 : `plot.title`: (`element_text`; inherits from `title`)
+: `plot.title.position`: (`"panel"` or `"plot"`)
 : `plot.subtitle`: (`element_text`; inherits from `title`)
 : `plot.caption`: (`element_text`; inherits from `title`)
+: `plot.tag`: (`element_text`; inherits from `title`)
+: `plot.tag.position`: (`"topleft"`, `"top"`, `"topright"`, `"left"`, `"right"`, `"bottomleft"`, `"bottom"`, `"bottomright"`)
+: `plot.tag.location`: (`"panel"`, `"plot"`, `"margin"`)
 : `plot.margin`: (`unit` with the sizes of the top, right, bottom, and left margins)
 
 `facet` したときのラベル
