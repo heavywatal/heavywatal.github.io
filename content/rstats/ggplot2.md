@@ -23,7 +23,7 @@ R標準の`boxplot()`や`hist()`などは前者の上に、
 `install.packages("tidyverse")` で一括インストール、
 `library(tidyverse)` で一括ロード。
 
-- [初学者向け講義資料2024](/slides/tohoku2024r/2-visualization.html)
+- [初学者向け講義資料2025](/slides/tohoku2025r/2-visualization.html)
 - <https://ggplot2.tidyverse.org>
 - <https://r-graphics.org/>
 - <https://r4ds.hadley.nz/data-visualize.html>

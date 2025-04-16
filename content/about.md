@@ -189,6 +189,7 @@ Contacts
 
 ## Teaching / Outreach
 
+-   「[Rを用いたデータ解析の基礎](/slides/tohoku2025r/)」東北大学 進化学実習 (2025-04)
 -   「[Rによるデータ前処理実習](/slides/tmd2024/)」
     東京医科歯科大 [データサイエンス人材育成プログラム](https://ds.tmdu.org/) (2024-09)
 -   「[統計モデリング概論 DSHC 2024](/slides/tokiomarine2024/)」
