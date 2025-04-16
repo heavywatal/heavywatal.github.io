@@ -73,7 +73,7 @@ R標準の<code>boxplot()</code>や<code>hist()</code>などは前者の上に�
 <code>install.packages(&quot;tidyverse&quot;)</code> で一括インストール、
 <code>library(tidyverse)</code> で一括ロード。</p>
 <ul>
-<li><a href="/slides/tohoku2024r/2-visualization.html">初学者向け講義資料2024</a></li>
+<li><a href="/slides/tohoku2025r/2-visualization.html">初学者向け講義資料2025</a></li>
 <li><a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a></li>
 <li><a href="https://r-graphics.org/">https://r-graphics.org/</a></li>
 <li><a href="https://r4ds.hadley.nz/data-visualize.html">https://r4ds.hadley.nz/data-visualize.html</a></li>
@@ -304,9 +304,10 @@ breaksの値を受け取って文字列を返す関数
 <dt><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html">X軸とY軸の比率を固定</a></dt>
 <dd><code>coord_fixed(ratio = 1)</code></dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">XY軸の転置</a></dt>
-<dd><code>coord_flip()</code></dd>
-<dd><code>geom_*(orientation = &quot;y&quot;)</code> も可。
-<code>geom_bar()</code>, <code>geom_histogram()</code> では <code>aes(y =</code> にマッピングするだけでもいい。</dd>
+<dd><code>coord_flip()</code> もまだ提供されているが、使わなくても実現可能。</dd>
+<dd>大抵 <code>aes()</code> の <code>x</code> と <code>y</code> を入れ替えるだけ。
+<code>geom_histogram()</code> などでは <code>aes(y =</code> にマッピング。</dd>
+<dd><code>geom_col()</code>, <code>geom_area()</code> などには <code>orientation = &quot;y&quot;</code> オプションも渡す。</dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/coord_polar.html">極座標</a></dt>
 <dd>パイチャートも作れるらしい</dd>
 <dt><a href="https://ggplot2.tidyverse.org/reference/coord_trans.html">座標変換</a></dt>
@@ -394,13 +395,16 @@ ggplotらしいデフォルトだが、論文には使いにくい。</dd>
 <dd><code>legend.key.size</code>: (<code>unit</code>)</dd>
 <dd><code>legend.key.height</code>: (<code>unit</code>; inherits from <code>legend.key.size</code>)</dd>
 <dd><code>legend.key.width</code>: (<code>unit</code>; inherits from <code>legend.key.size</code>)</dd>
+<dd><code>legend.frame</code>: (<code>element_rect</code>)</dd>
 <dd><code>legend.text</code>: (<code>element_text</code>; inherits from <code>text</code>)</dd>
-<dd><code>legend.text.align</code>: (number from <code>0</code> (left) to <code>1</code> (right))</dd>
 <dd><code>legend.title</code>: (<code>element_text</code>; inherits from <code>title</code>)</dd>
-<dd><code>legend.title.align</code>: (number from <code>0</code> (left) to <code>1</code> (right))</dd>
-<dd><code>legend.position</code>: (<code>&quot;left&quot;</code>, <code>&quot;right&quot;</code>, <code>&quot;bottom&quot;</code>, <code>&quot;top&quot;</code>, <code>&quot;none&quot;</code> <code>c(0, 1)</code>)</dd>
+<dd><code>legend.title.position</code>: (<code>&quot;top&quot;</code>, <code>&quot;right&quot;</code>, <code>&quot;bottom&quot;</code>, <code>&quot;left&quot;</code>)</dd>
+<dd><code>legend.position</code>: (<code>&quot;none&quot;</code>, <code>&quot;left&quot;</code>, <code>&quot;right&quot;</code>, <code>&quot;bottom&quot;</code>, <code>&quot;top&quot;</code>, <code>&quot;inside&quot;</code>)</dd>
+<dd><code>legend.position.inside</code>: (<code>c(1, 1)</code> で右上)</dd>
 <dd><code>legend.direction</code>: (<code>&quot;horizontal&quot;</code> or <code>&quot;vertical&quot;</code>)</dd>
-<dd><code>legend.justification</code>: (<code>&quot;center&quot;</code> or <code>c(0, 1)</code> のような数値でアンカー位置を指定)</dd>
+<dd><code>legend.justification</code>: (<code>&quot;center&quot;</code> or <code>c(0, 1)</code> のような数値でアンカー位置を指定)<br>
+ <code>__.top</code>, <code>__.bottom</code>, <code>__.left</code>, <code>__.right</code>, <code>__.inside</code></dd>
+<dd><code>legend.location</code>: (<code>&quot;panel&quot;</code>, <code>&quot;plot&quot;</code>)</dd>
 <dd><code>legend.box</code>: (<code>&quot;horizontal&quot;</code> or <code>&quot;vertical&quot;</code>)</dd>
 <dd><code>legend.box.just</code>: (<code>&quot;top&quot;</code>, <code>&quot;bottom&quot;</code>, <code>&quot;left&quot;</code>, or <code>&quot;right&quot;</code>)</dd>
 <dd><code>legend.box.margin</code>: (<code>margin</code>)</dd>
@@ -419,8 +423,12 @@ ggplotらしいデフォルトだが、論文には使いにくい。</dd>
 <dt>全体の背景、タイトル、余白</dt>
 <dd><code>plot.background</code>: (<code>element_rect</code>; inherits from <code>rect</code>)</dd>
 <dd><code>plot.title</code>: (<code>element_text</code>; inherits from <code>title</code>)</dd>
+<dd><code>plot.title.position</code>: (<code>&quot;panel&quot;</code> or <code>&quot;plot&quot;</code>)</dd>
 <dd><code>plot.subtitle</code>: (<code>element_text</code>; inherits from <code>title</code>)</dd>
 <dd><code>plot.caption</code>: (<code>element_text</code>; inherits from <code>title</code>)</dd>
+<dd><code>plot.tag</code>: (<code>element_text</code>; inherits from <code>title</code>)</dd>
+<dd><code>plot.tag.position</code>: (<code>&quot;topleft&quot;</code>, <code>&quot;top&quot;</code>, <code>&quot;topright&quot;</code>, <code>&quot;left&quot;</code>, <code>&quot;right&quot;</code>, <code>&quot;bottomleft&quot;</code>, <code>&quot;bottom&quot;</code>, <code>&quot;bottomright&quot;</code>)</dd>
+<dd><code>plot.tag.location</code>: (<code>&quot;panel&quot;</code>, <code>&quot;plot&quot;</code>, <code>&quot;margin&quot;</code>)</dd>
 <dd><code>plot.margin</code>: (<code>unit</code> with the sizes of the top, right, bottom, and left margins)</dd>
 <dt><code>facet</code> したときのラベル</dt>
 <dd><code>strip.background</code>: (<code>element_rect</code>; inherits from <code>rect</code>)</dd>
