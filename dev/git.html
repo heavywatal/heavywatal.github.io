@@ -82,7 +82,7 @@ Git — 分散型バージョン管理システム
 </li>
 <li>
 <p><a href="/dev/ssh.html">SSH公開鍵を作って</a>マシンとGitHubに登録する。
-<a href="https://help.github.com/articles/connecting-to-github-with-ssh/">https://help.github.com/articles/connecting-to-github-with-ssh/</a></p>
+<a href="https://docs.github.com/authentication/connecting-to-github-with-ssh">https://docs.github.com/authentication/connecting-to-github-with-ssh</a></p>
 </li>
 <li>
 <p><code>~/.gitconfig</code> にユーザ名やアドレスを登録する。
@@ -152,7 +152,7 @@ root treeのハッシュID、著者、コメントなどの情報を持つ。
 <dd>デフォルトのブランチの典型的な名前。</dd>
 <dt><code>HEAD</code>, <code>@</code></dt>
 <dd>現在参照しているbranch/commitを指すポインタ。
-基本的には<code>master</code>の最新commitを指していることが多い。
+基本的には<code>main</code>の最新commitを指していることが多い。
 1つ前は <code>HEAD^</code> か <code>HEAD~</code>、
 2つ前は <code>HEAD^^</code> か <code>HEAD~~</code> か <code>HEAD~2</code>。
 (<code>HEAD^2</code> は <code>merge</code> で複数の親がある場合の2番目)</dd>
@@ -181,7 +181,7 @@ root treeのハッシュID、著者、コメントなどの情報を持つ。
 </span></span><span class="line"><span class="cl">git reset --hard ORIG_HEAD
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># divergedになってしまった手元のbranchを破棄 (DANGEROUS!)</span>
-</span></span><span class="line"><span class="cl">git reset --hard origin/master
+</span></span><span class="line"><span class="cl">git reset --hard origin/main
 </span></span></code></pre></div><p>直前のcommitをちょっと修正したいだけなら <code>git commit --amend</code> が簡単。
 それより前のを修正するには <code>git rebase -i HEAD~3</code> とかで戻ってrewordやedit。</p>
 <h3 id="diff">diff</h3>
@@ -215,13 +215,13 @@ annotated tagであれば <code>git push --follow-tags</code>
 <p><a href="https://git-scm.com/book/en/Git-Basics-Tagging">https://git-scm.com/book/en/Git-Basics-Tagging</a></p>
 <h3 id="rebase">rebase</h3>
 <p>ブランチの根本を別のコミットに付け替える。
-よく使うのは、開発ブランチを <code>master</code> の先頭に追従させるとき。</p>
-<pre tabindex="0"><code>git switch some-branch
-git rebase master
-</code></pre><p>最も近い共通祖先(MRCA)コミットから先を丸ごと移すだけならこのように単純だが、
+よく使うのは、開発ブランチを <code>main</code> の先頭に追従させるとき。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git switch some-branch
+</span></span><span class="line"><span class="cl">git rebase main
+</span></span></code></pre></div><p>最も近い共通祖先(MRCA)コミットから先を丸ごと移すだけならこのように単純だが、
 ブランチのブランチとか、ブランチの一部だけを移したい場合は次のようにする。</p>
-<pre tabindex="0"><code>git rebase --onto &lt;newbase&gt; &lt;base&gt; &lt;tip&gt;
-</code></pre><p>これで base–tip 間のコミットがnewbaseから伸びる形になる。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git rebase --onto &lt;newbase&gt; &lt;base&gt; &lt;tip&gt;
+</span></span></code></pre></div><p>これで base–tip 間のコミットがnewbaseから伸びる形になる。</p>
 <h2 id="submodule">Submodule</h2>
 <h3 id="既存のリポジトリをsubmoduleとして追加する">既存のリポジトリをsubmoduleとして追加する</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git submodule add https://github.com/mbostock/d3.git
@@ -232,15 +232,14 @@ git rebase master
 <code>git://</code> ではなく <code>https://</code> にする必要がある。</p>
 <h3 id="submoduleを含むメインリポジトリを使い始めるとき">submoduleを含むメインリポジトリを使い始めるとき</h3>
 <p>最初に<code>clone</code>/<code>fetch</code>してきた時submoduleたちは空なのでまず:</p>
-<pre><code>git submodule update --init
-
-# 使いたいbranchがmasterではない場合は --remote
-git submodule update --init --remote x18n
-
-# 歴史があって重いリポジトリはshallowに
-git submodule update --init --depth=5 d3
-</code></pre>
-<h3 id="submoduleを更新">submoduleを更新</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git submodule update --init
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 使いたいbranchがデフォルトではない場合は --remote</span>
+</span></span><span class="line"><span class="cl">git submodule update --init --remote x18n
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 歴史があって重いリポジトリはshallowに</span>
+</span></span><span class="line"><span class="cl">git submodule update --init --depth<span class="o">=</span><span class="m">5</span> d3
+</span></span></code></pre></div><h3 id="submoduleを更新">submoduleを更新</h3>
 <ol>
 <li>
 <p>更新分をまとめて取得:</p>
@@ -259,35 +258,43 @@ git submodule update --init --depth=5 d3
 </span></span></code></pre></div></li>
 </ol>
 <h2 id="github-pages">GitHub Pages</h2>
-<p><a href="https://help.github.com/articles/user-organization-and-project-pages/">https://help.github.com/articles/user-organization-and-project-pages/</a></p>
+<p><a href="https://docs.github.com/pages">https://docs.github.com/pages</a></p>
 <h3 id="ユーザーサイトを作る">ユーザーサイトを作る</h3>
 <ol>
 <li><code>USERNAME.github.io</code> という名前のリポジトリをGitHub上で作成</li>
-<li>公開したいウェブサイトを<code>master</code>ブランチとして<code>push</code></li>
+<li>公開したいウェブサイトを <code>main</code> ブランチとして <code>push</code></li>
 <li><code>https://USERNAME.github.io</code> にアクセスしてみる。</li>
 </ol>
 <p>例えば本ウェブサイトは
 <code>heavywatal.github.io</code> というリポジトリの
 <code>source</code>ブランチでMarkdownテキストを書き、
 <a href="/misc/hugo.html">Hugo</a>
-で変換・生成したHTMLファイルを<code>master</code>ブランチに書き出している。</p>
+で変換・生成したHTMLファイルを <code>main</code> ブランチに書き出している。</p>
 <p>GitHubが勝手にJekyll処理しようとすることがあるので、
 <code>.nojekyll</code> という空ファイルを作っておく。</p>
 <h3 id="プロジェクトサイトを作る">プロジェクトサイトを作る</h3>
-<p><a href="https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/">https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/</a></p>
+<p><a href="https://docs.github.com/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site">https://docs.github.com/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site</a></p>
 <p>リポジトリの内容を <code>https://USERNAME.github.io/PROJECT/</code> に公開することができる。
 方法は複数あり、リポジトリの設定画面から選択できる。</p>
-<ol>
-<li><code>gh-pages</code> ブランチの内容を公開 (古い方法)</li>
-<li><code>master</code> ブランチの内容を公開</li>
-<li><code>master</code> ブランチの <code>/docs</code> ディレクトリのみを公開</li>
-</ol>
-<p>前は1番の方法しかなくてブランチの扱いがやや面倒だったが、
-今では<code>master</code>だけで簡単に済ませられるようになった。</p>
+<ul>
+<li>GitHub Actions を使ってビルドからデプロイまで自動化</li>
+<li>特定のブランチ、特定のディレクトリを公開。e.g.,
+<ul>
+<li><code>gh-pages</code> ブランチの <code>/</code> ルートを公開</li>
+<li><code>main</code> ブランチの <code>/docs</code> ディレクトリのみを公開</li>
+</ul>
+</li>
+</ul>
+<p>ソースコードやプログラムを更新した結果、
+生成されるドキュメントがどう変わるかを一応確認してからデプロイしたいので、
+今のところ手でビルド→確認→commit→pushという流れを採用している。</p>
+<p><code>/docs</code> を公開する方法だと <code>main</code> ブランチだけで済ませられて楽だけど、
+コミット履歴が汚くなるというデメリットがある。
+結局 <code>gh-pages</code> ブランチを作る古来の方法がいい塩梅。</p>
 <h2 id="pull-request-pr">Pull Request (PR)</h2>
 <ul>
 <li>大元のリポジトリを<code>upstream</code>、フォークした自分のリポジトリを<code>origin</code>と名付ける。</li>
-<li>デフォルトブランチ(<code>master</code>とか<code>develop</code>とか)は更新取得のためだけに使い、変更は新規ブランチで行う。</li>
+<li>デフォルトブランチ(<code>main</code>とか<code>develop</code>とか)は更新取得のためだけに使い、変更は新規ブランチで行う。</li>
 <li><code>push</code>済みのcommitを<code>rebase</code>するとIDが変わっちゃうのでダメ。</li>
 </ul>
 <h3 id="基本の流れ">基本の流れ</h3>
@@ -298,43 +305,36 @@ git submodule update --init --depth=5 d3
 </li>
 <li>
 <p>forkした自分のリポジトリからローカルに<code>clone</code>:</p>
-<pre><code>git clone https://github.com/heavywatal/PROJECT.git
-cd PROJECT/
-</code></pre>
-</li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git clone https://github.com/heavywatal/PROJECT.git
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> PROJECT/
+</span></span></code></pre></div></li>
 <li>
 <p>大元のリポジトリに<code>upstream</code>という名前をつけておく:</p>
-<pre><code>git remote add upstream git://github.com/USER/PROJECT.git
-</code></pre>
-</li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git remote add upstream git://github.com/USER/PROJECT.git
+</span></span></code></pre></div></li>
 <li>
 <p>PR用のブランチを切って移動:</p>
-<pre><code>git switch -c fix-typo
-</code></pre>
-</li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git switch -c fix-typo
+</span></span></code></pre></div></li>
 <li>
 <p>コードを変更して<code>commit</code>:</p>
-<pre><code>vim README.md
-git diff
-git commit -a -m &quot;Fix typo in README.md&quot;
-</code></pre>
-</li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">vim README.md
+</span></span><span class="line"><span class="cl">git diff
+</span></span><span class="line"><span class="cl">git commit -a -m <span class="s2">&#34;Fix typo in README.md&#34;</span>
+</span></span></code></pre></div></li>
 <li>
 <p>この間に<code>upstream</code>で更新があったか確認:</p>
-<pre><code>git fetch upstream
-</code></pre>
-<p>必要ならそれを取り込む:</p>
-<pre><code>git switch master
-git merge --ff-only upstream/master
-git switch fix-typo
-git rebase master
-</code></pre>
-</li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git fetch upstream
+</span></span></code></pre></div><p>必要ならそれを取り込む:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git switch main
+</span></span><span class="line"><span class="cl">git merge --ff-only upstream/main
+</span></span><span class="line"><span class="cl">git switch fix-typo
+</span></span><span class="line"><span class="cl">git rebase main
+</span></span></code></pre></div></li>
 <li>
 <p>自分のリポジトリに<code>push</code>:</p>
-<pre><code>git push [-f] origin fix-typo
-</code></pre>
-</li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git push origin fix-typo
+</span></span></code></pre></div></li>
 <li>
 <p>PR用のURLが表示されるのでそこから飛ぶ。
 もしくはGitHub上に出現する&quot;Compare &amp; pull request&quot;ボタンを押す。</p>
@@ -380,25 +380,31 @@ git rebase master
 </span></span><span class="line"><span class="cl">git remote prune origin
 </span></span></code></pre></div><p>それでも消えないローカルブランチは手動で消す:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git branch -d issue-666
-</span></span><span class="line"><span class="cl">error: The branch <span class="s1">&#39;issue-666&#39;</span> is not fully merged.
-</span></span><span class="line"><span class="cl">If you are sure you want to delete it, run <span class="s1">&#39;git branch -D issue-666&#39;</span>.
-</span></span></code></pre></div><p>マージ済みのブランチじゃないと上記のように怒ってくれる。
+</span></span></code></pre></div><pre tabindex="0"><code>error: The branch &#39;issue-666&#39; is not fully merged.
+If you are sure you want to delete it, run &#39;git branch -D issue-666&#39;.
+</code></pre><p>マージ済みのブランチじゃないと上記のように怒ってくれる。
 消してもいい確信があればオプションを大文字 <code>-D</code> にして強制削除。</p>
-<h3 id="detached-head-からの復帰">detached HEAD からの復帰</h3>
+<p><code>--single-branch</code> をつけ忘れて <code>git clone</code> したあと
+<code>git branch --remote --delete</code> でリモートブランチへの参照を消しても、
+次の <code>fetch</code>/<code>pull</code> でまた復活してしまう。
+そうならないように消すには:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git remote set-branches origin main
+</span></span><span class="line"><span class="cl">git fetch --prune
+</span></span></code></pre></div><h3 id="detached-head-からの復帰">detached HEAD からの復帰</h3>
 <p>submoduleなどをいじってると意図せずdetached HEAD状態になることがある。
-その状態でcommitしてしまった変更を<code>master</code>に反映したい。</p>
+その状態でcommitしてしまった変更を<code>main</code>に反映したい。</p>
 <ol>
 <li>
 <p><code>push</code>しようとして怒られて気付く</p>
-<pre tabindex="0"><code>git push
-fatal: You are not currently on a branch
-git status
-HEAD detached from *******
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git push
+</span></span></code></pre></div><pre tabindex="0"><code>fatal: You are not currently on a branch
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git status
+</span></span></code></pre></div><pre tabindex="0"><code>HEAD detached from *******
 </code></pre></li>
 <li>
-<p><code>master</code>に戻ると道筋を示してくれる:</p>
-<pre tabindex="0"><code>git switch master
-Warning: you are leaving 2 comits behind, not connected to
+<p><code>main</code>に戻ると道筋を示してくれる:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git switch main
+</span></span></code></pre></div><pre tabindex="0"><code>Warning: you are leaving 2 comits behind, not connected to
 any of your branches
 If you want to keep them by creating a new branch, this may be a good time
 to do so with:
@@ -407,13 +413,13 @@ to do so with:
 </code></pre></li>
 <li>
 <p>言われたとおりbranchを作って<code>merge</code></p>
-<pre tabindex="0"><code>git branch detached *******
-git merge detached
-</code></pre></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git branch detached *******
+</span></span><span class="line"><span class="cl">git merge detached
+</span></span></code></pre></div></li>
 <li>
 <p>不要になったbranchを消す</p>
-<pre tabindex="0"><code>git branch -d detached
-</code></pre></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git branch -d detached
+</span></span></code></pre></div></li>
 </ol>
 <h3 id="サブディレクトリを別リポジトリに切り分ける">サブディレクトリを別リポジトリに切り分ける</h3>
 <ol>
@@ -432,7 +438,7 @@ git merge detached
 <li>
 <p>GitHubなどリモートにも新しいリポジトリを作って登録、プッシュ:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git remote set-url origin https://github.com/heavywatal/bonjour.git
-</span></span><span class="line"><span class="cl">git push -u origin master
+</span></span><span class="line"><span class="cl">git push -u origin main
 </span></span></code></pre></div></li>
 </ol>
 <h3 id="別のリポジトリをサブディレクトリとして取り込む">別のリポジトリをサブディレクトリとして取り込む</h3>
@@ -446,13 +452,13 @@ git merge detached
 ルート同士でmergeすると <code>--follow</code> が効く状態で取り込める。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> /path/to/<span class="si">${</span><span class="nv">subrepo</span><span class="si">}</span>/
 </span></span><span class="line"><span class="cl">mkdir <span class="si">${</span><span class="nv">subdir</span><span class="si">}</span>
-</span></span><span class="line"><span class="cl">git mv <span class="k">$(</span>git ls-tree --name-only master<span class="k">)</span> <span class="si">${</span><span class="nv">subdir</span><span class="si">}</span>/
+</span></span><span class="line"><span class="cl">git mv <span class="k">$(</span>git ls-tree --name-only main<span class="k">)</span> <span class="si">${</span><span class="nv">subdir</span><span class="si">}</span>/
 </span></span><span class="line"><span class="cl">git commit -m <span class="s2">&#34;:construction: Move all to </span><span class="si">${</span><span class="nv">subdir</span><span class="si">}</span><span class="s2">/ for integration&#34;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nb">cd</span> /path/to/<span class="si">${</span><span class="nv">mainrepo</span><span class="si">}</span>/
 </span></span><span class="line"><span class="cl">git remote add <span class="si">${</span><span class="nv">subrepo</span><span class="si">}</span> /path/to/<span class="si">${</span><span class="nv">subrepo</span><span class="si">}</span>
 </span></span><span class="line"><span class="cl">git fetch <span class="si">${</span><span class="nv">subrepo</span><span class="si">}</span>
-</span></span><span class="line"><span class="cl">git merge --no-commit --allow-unrelated-histories <span class="si">${</span><span class="nv">subrepo</span><span class="si">}</span>/master
+</span></span><span class="line"><span class="cl">git merge --no-commit --allow-unrelated-histories <span class="si">${</span><span class="nv">subrepo</span><span class="si">}</span>/main
 </span></span><span class="line"><span class="cl">git commit
 </span></span></code></pre></div><ul>
 <li>
