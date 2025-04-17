@@ -32,9 +32,9 @@ Gitのライバルとして[Mercurial](https://www.mercurial-scm.org/)もある�
   [Homebrew]({{< relref "homebrew.md" >}}) で新しいのを入れる。
 - [GitHub]に個人アカウントを作る。
 - [SSH公開鍵を作って]({{< relref "ssh.md" >}})マシンとGitHubに登録する。
-  https://help.github.com/articles/connecting-to-github-with-ssh/
+  <https://docs.github.com/authentication/connecting-to-github-with-ssh>
 - `~/.gitconfig` にユーザ名やアドレスを登録する。
-  https://git-scm.com/docs/git-config
+  <https://git-scm.com/docs/git-config>
 
     ```sh
     git config --global user.name "Watal M. Iwasaki"
@@ -112,7 +112,7 @@ repository
 
 `HEAD`, `@`
 : 現在参照しているbranch/commitを指すポインタ。
-  基本的には`master`の最新commitを指していることが多い。
+  基本的には`main`の最新commitを指していることが多い。
   1つ前は `HEAD^` か `HEAD~`、
   2つ前は `HEAD^^` か `HEAD~~` か `HEAD~2`。
   (`HEAD^2` は `merge` で複数の親がある場合の2番目)
@@ -146,7 +146,7 @@ git reset --hard HEAD
 git reset --hard ORIG_HEAD
 
 # divergedになってしまった手元のbranchを破棄 (DANGEROUS!)
-git reset --hard origin/master
+git reset --hard origin/main
 ```
 
 直前のcommitをちょっと修正したいだけなら `git commit --amend` が簡単。
@@ -203,17 +203,17 @@ https://git-scm.com/book/en/Git-Basics-Tagging
 ### rebase
 
 ブランチの根本を別のコミットに付け替える。
-よく使うのは、開発ブランチを `master` の先頭に追従させるとき。
+よく使うのは、開発ブランチを `main` の先頭に追従させるとき。
 
-```
+```sh
 git switch some-branch
-git rebase master
+git rebase main
 ```
 
 最も近い共通祖先(MRCA)コミットから先を丸ごと移すだけならこのように単純だが、
 ブランチのブランチとか、ブランチの一部だけを移したい場合は次のようにする。
 
-```
+```sh
 git rebase --onto <newbase> <base> <tip>
 ```
 
@@ -239,13 +239,15 @@ git submodule add -b gitsubmodule_https https://github.com/heavywatal/x18n.git
 
 最初に`clone`/`fetch`してきた時submoduleたちは空なのでまず:
 
-    git submodule update --init
+```sh
+git submodule update --init
 
-    # 使いたいbranchがmasterではない場合は --remote
-    git submodule update --init --remote x18n
+# 使いたいbranchがデフォルトではない場合は --remote
+git submodule update --init --remote x18n
 
-    # 歴史があって重いリポジトリはshallowに
-    git submodule update --init --depth=5 d3
+# 歴史があって重いリポジトリはshallowに
+git submodule update --init --depth=5 d3
+```
 
 ### submoduleを更新
 
@@ -271,19 +273,19 @@ git submodule add -b gitsubmodule_https https://github.com/heavywatal/x18n.git
 
 ## GitHub Pages
 
-https://help.github.com/articles/user-organization-and-project-pages/
+<https://docs.github.com/pages>
 
 ### ユーザーサイトを作る
 
 1. `USERNAME.github.io` という名前のリポジトリをGitHub上で作成
-1. 公開したいウェブサイトを`master`ブランチとして`push`
+1. 公開したいウェブサイトを `main` ブランチとして `push`
 1. `https://USERNAME.github.io` にアクセスしてみる。
 
 例えば本ウェブサイトは
 `heavywatal.github.io` というリポジトリの
 `source`ブランチでMarkdownテキストを書き、
 [Hugo]({{< relref "hugo.md" >}})
-で変換・生成したHTMLファイルを`master`ブランチに書き出している。
+で変換・生成したHTMLファイルを `main` ブランチに書き出している。
 
 GitHubが勝手にJekyll処理しようとすることがあるので、
 `.nojekyll` という空ファイルを作っておく。
@@ -291,22 +293,28 @@ GitHubが勝手にJekyll処理しようとすることがあるので、
 
 ### プロジェクトサイトを作る
 
-https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/
+<https://docs.github.com/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site>
 
 リポジトリの内容を `https://USERNAME.github.io/PROJECT/` に公開することができる。
 方法は複数あり、リポジトリの設定画面から選択できる。
 
-1. `gh-pages` ブランチの内容を公開 (古い方法)
-1. `master` ブランチの内容を公開
-1. `master` ブランチの `/docs` ディレクトリのみを公開
+- GitHub Actions を使ってビルドからデプロイまで自動化
+- 特定のブランチ、特定のディレクトリを公開。e.g.,
+  - `gh-pages` ブランチの `/` ルートを公開
+  - `main` ブランチの `/docs` ディレクトリのみを公開
 
-前は1番の方法しかなくてブランチの扱いがやや面倒だったが、
-今では`master`だけで簡単に済ませられるようになった。
+ソースコードやプログラムを更新した結果、
+生成されるドキュメントがどう変わるかを一応確認してからデプロイしたいので、
+今のところ手でビルド→確認→commit→pushという流れを採用している。
+
+`/docs` を公開する方法だと `main` ブランチだけで済ませられて楽だけど、
+コミット履歴が汚くなるというデメリットがある。
+結局 `gh-pages` ブランチを作る古来の方法がいい塩梅。
 
 ## Pull Request (PR)
 
 -   大元のリポジトリを`upstream`、フォークした自分のリポジトリを`origin`と名付ける。
--   デフォルトブランチ(`master`とか`develop`とか)は更新取得のためだけに使い、変更は新規ブランチで行う。
+-   デフォルトブランチ(`main`とか`develop`とか)は更新取得のためだけに使い、変更は新規ブランチで行う。
 -   `push`済みのcommitを`rebase`するとIDが変わっちゃうのでダメ。
 
 ### 基本の流れ
@@ -315,38 +323,45 @@ https://help.github.com/articles/configuring-a-publishing-source-for-github-page
 
 1.  `github.com/USER/PROJECT` のForkボタンで自分のGitHubリポジトリに取り込む
 1.  forkした自分のリポジトリからローカルに`clone`:
-
-        git clone https://github.com/heavywatal/PROJECT.git
-        cd PROJECT/
+    ```sh
+    git clone https://github.com/heavywatal/PROJECT.git
+    cd PROJECT/
+    ```
 
 1.  大元のリポジトリに`upstream`という名前をつけておく:
-
-        git remote add upstream git://github.com/USER/PROJECT.git
+    ```sh
+    git remote add upstream git://github.com/USER/PROJECT.git
+    ```
 
 1.  PR用のブランチを切って移動:
-
-        git switch -c fix-typo
+    ```sh
+    git switch -c fix-typo
+    ```
 
 1.  コードを変更して`commit`:
-
-        vim README.md
-        git diff
-        git commit -a -m "Fix typo in README.md"
+    ```sh
+    vim README.md
+    git diff
+    git commit -a -m "Fix typo in README.md"
+    ```
 
 1.  この間に`upstream`で更新があったか確認:
-
-        git fetch upstream
+    ```sh
+    git fetch upstream
+    ```
 
     必要ならそれを取り込む:
-
-        git switch master
-        git merge --ff-only upstream/master
-        git switch fix-typo
-        git rebase master
+    ```sh
+    git switch main
+    git merge --ff-only upstream/main
+    git switch fix-typo
+    git rebase main
+    ```
 
 1.  自分のリポジトリに`push`:
-
-        git push [-f] origin fix-typo
+    ```sh
+    git push origin fix-typo
+    ```
 
 1.  PR用のURLが表示されるのでそこから飛ぶ。
     もしくはGitHub上に出現する"Compare & pull request"ボタンを押す。
@@ -411,6 +426,8 @@ git remote prune origin
 
 ```sh
 git branch -d issue-666
+```
+```
 error: The branch 'issue-666' is not fully merged.
 If you are sure you want to delete it, run 'git branch -D issue-666'.
 ```
@@ -418,23 +435,40 @@ If you are sure you want to delete it, run 'git branch -D issue-666'.
 マージ済みのブランチじゃないと上記のように怒ってくれる。
 消してもいい確信があればオプションを大文字 `-D` にして強制削除。
 
+`--single-branch` をつけ忘れて `git clone` したあと
+`git branch --remote --delete` でリモートブランチへの参照を消しても、
+次の `fetch`/`pull` でまた復活してしまう。
+そうならないように消すには:
+```sh
+git remote set-branches origin main
+git fetch --prune
+```
+
 
 ### detached HEAD からの復帰
 
 submoduleなどをいじってると意図せずdetached HEAD状態になることがある。
-その状態でcommitしてしまった変更を`master`に反映したい。
+その状態でcommitしてしまった変更を`main`に反映したい。
 
 1. `push`しようとして怒られて気付く
-   ```
+   ```sh
    git push
+   ```
+   ```
    fatal: You are not currently on a branch
+   ```
+   ```sh
    git status
+   ```
+   ```
    HEAD detached from *******
    ```
 
-1. `master`に戻ると道筋を示してくれる:
+1. `main`に戻ると道筋を示してくれる:
+   ```sh
+   git switch main
    ```
-   git switch master
+   ```
    Warning: you are leaving 2 comits behind, not connected to
    any of your branches
    If you want to keep them by creating a new branch, this may be a good time
@@ -444,13 +478,13 @@ submoduleなどをいじってると意図せずdetached HEAD状態になるこ�
    ```
 
 1. 言われたとおりbranchを作って`merge`
-   ```
+   ```sh
    git branch detached *******
    git merge detached
    ```
 
 1. 不要になったbranchを消す
-   ```
+   ```sh
    git branch -d detached
    ```
 
@@ -476,7 +510,7 @@ submoduleなどをいじってると意図せずdetached HEAD状態になるこ�
 
     ```sh
     git remote set-url origin https://github.com/heavywatal/bonjour.git
-    git push -u origin master
+    git push -u origin main
     ```
 
 
@@ -495,13 +529,13 @@ submoduleなどをいじってると意図せずdetached HEAD状態になるこ�
 ```sh
 cd /path/to/${subrepo}/
 mkdir ${subdir}
-git mv $(git ls-tree --name-only master) ${subdir}/
+git mv $(git ls-tree --name-only main) ${subdir}/
 git commit -m ":construction: Move all to ${subdir}/ for integration"
 
 cd /path/to/${mainrepo}/
 git remote add ${subrepo} /path/to/${subrepo}
 git fetch ${subrepo}
-git merge --no-commit --allow-unrelated-histories ${subrepo}/master
+git merge --no-commit --allow-unrelated-histories ${subrepo}/main
 git commit
 ```
 
