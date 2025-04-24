@@ -69,7 +69,7 @@ README.md    # 全体の説明を簡単に
 R/           # Rソースコード
 data/        # サンプルデータなど
 inst/        # CITATION
-man/         # ヘルプファイル.Rd
+man/         # マニュアル.Rd
 src/         # C++ソースコード
 tests/
 vignettes/
@@ -84,8 +84,18 @@ CRANから落としてくる `.tar.gz` ソースコード (bundle package) と�
 
 -   どうでも良さそうなファイル名とは裏腹に、ちゃんと書かないと動かない。
 -   始めはusethisとかに生成してもらい、他のパッケージを参考にしつつ修正していく。
--   `Imports` に列挙したものは依存パッケージとして同時にインストールされる。
-    しかし `library()` 時に同時に読み込まれるわけではない。
+    書き換えたら `usethis::use_tidy_description()` で整える。
+-   `Imports` に列挙したものは依存パッケージとして一緒にインストールされる。
+    `NAMESPACE` における `import()` とは意味が異なり、
+    `library()` 時に読み込まれるわけではない。
+-   `Depends` は `R (>= 4.4.0)` としてRの下限を指定する程度にしか使わない。
+    `Imports` のように依存パッケージを列挙することもできるが、
+    そうすると `library()` 時にそいつらもattachされてしまう。
+    それが有用なのは既存パッケージを拡張する場合 (e.g., `stars` → `sf`) や、
+    パッケージ機能を分割した場合 (e.g., `devtools` → `usethis`) だけ。
+-   `Suggests` にはオプショナルな機能や開発時に必要なパッケージを列挙する。
+    ユーザーの環境にインストールされている保証は無いので、
+    `requireNamespace()` などで確認してから使う。
 -   `Title` はピリオドを含まない一文でタイトルケース。
     `Description` はピリオドを含む一段落。
 -   ライセンスを別ファイルにする場合は `License: file LICENSE` と書く
@@ -99,7 +109,7 @@ CRANから落としてくる `.tar.gz` ソースコード (bundle package) と�
 -   ここで `export()` された関数だけがユーザーから見える。
 -   外部パッケージから `importFrom(package, function)`
     された関数はattachされてパッケージ内で利用可能になる。
-    `import(package)` で全ての関数をまとめて処理できるけど名前の衝突が怖い。
+    `import(package)` で全ての関数を一括処理できるけど名前の衝突が怖いので避ける。
 
 ### `R/` ソースコード
 
@@ -247,6 +257,7 @@ Articles一覧の中ではなくReferenceの隣に "Get started" としてリン
 `.Rbuildignore`
 : Rパッケージらしからぬ変なファイルやディレクトリがあると怒られるので、
   そういうやつをこのファイルに列挙して無視してもらう。
+  ほとんど手で書くことはなく、usethisを使っているうちに膨らんでいく。
 
 `README.md`
 : GitHubでいい感じに見えるようにMarkdown形式でパッケージの概要を書く。
@@ -315,7 +326,7 @@ Articles一覧の中ではなくReferenceの隣に "Get started" としてリン
 <img src="/_img/hex-stickers/roxygen2.webp" align="right" width="120" height="139">
 </a>
 
-Rソースコードのコメントから`NAMESPACE`とヘルプ(`man/*.Rd`)を自動生成する。
+Rソースコードのコメントから`NAMESPACE`とマニュアル(`man/*.Rd`)を自動生成する。
 
 - <https://cran.r-project.org/web/packages/roxygen2/>
 - <https://github.com/klutometis/roxygen>
@@ -329,7 +340,8 @@ Rソースコードのコメントから`NAMESPACE`とヘルプ(`man/*.Rd`)を�
 
 ### 使い方
 
-<https://roxygen2.r-lib.org/articles/rd.html>
+- <https://roxygen2.r-lib.org/articles/rd.html>
+- <https://style.tidyverse.org/documentation.html>
 
 ```r
 #' Title of the simple function to add 1 (without explicit @@title tag)
@@ -356,14 +368,15 @@ increment = function(x) {x + 1}
     タイトルをコピペして全部同じにすると怒られる。
     2段落目を省略するとタイトルが流用される。
 -   空行だけでは切れ目として扱われないので `NULL` などを置いたりする。
--   [Rd形式の代わりにMarkdown形式で記述できる](https://roxygen2.r-lib.org/articles/markdown.html)。
+-   [Rd形式の代わりにMarkdown形式で記述できる](https://roxygen2.r-lib.org/articles/rd-formatting.html)。
     `usethis::create_package()` がデフォルトで
     `Roxygen: list(markdown = TRUE)` を `DESCRIPTION` に書いてくれる。
     その全体設定をせず使いたいブロックにいちいち `@md` を書く個別設定も可能。
+    ` ```{r } ` でコードチャンクを作ったり、
+    `` `r ` `` でインラインRコードを評価したりもできる。
 -   `"_PACKAGE"` という文字列の上に書かれたブロックは、
-    パッケージそのものに対応するヘルプ `*-package.Rd` になる。
+    パッケージそのものに対応するマニュアル `*-package.Rd` になる。
     `@useDynLib` など全体に関わる設定はここでやるのが良いのでは。
-
     ```r
     #' Example package to say hello
     #' @useDynLib hello, .registration = TRUE
@@ -371,7 +384,6 @@ increment = function(x) {x + 1}
     #' @keywords internal
     "_PACKAGE"
     ```
-
 -   dplyrなどで列名を直に指定すると
     `undefined global variables`
     という警告が出るので
@@ -384,7 +396,8 @@ increment = function(x) {x + 1}
 
 ### タグ
 
-使用可能なタグ一覧は[準備中？](https://github.com/klutometis/roxygen/issues/792)
+使用可能なタグ一覧を[求める声があがって久しい](https://github.com/klutometis/roxygen/issues/792)けどまだ無さそう。
+[roxygen2公式reference](https://roxygen2.r-lib.org/reference/) は充実してきた。
 
 `@import pkg1, pkg2, ...`
 :   `NAMESPACE` で `import()` するパッケージを指定。
@@ -392,15 +405,37 @@ increment = function(x) {x + 1}
 
 `@importFrom pkg func`
 :   `NAMESPACE` で `importFrom()` するパッケージと関数を指定。
-    パッケージ内でよほど何回も登場する関数や
-    `名前空間::` の形で使いにくい演算子を登録する。
-    e.g., `@importFrom rlang .data :=` 。
     重複して書いても大丈夫。
+:   パッケージ内でよほど何回も登場する関数や
+    `名前空間::` の形で使いにくい演算子を登録する。
+    e.g., `@importFrom rlang .data :=`
+:   ロード時に依存パッケージも丸ごと読み込まれるので重いやつに注意。
 
 `@export`
 :   `NAMESPACE` で `export()` する関数を指定。
     一般ユーザーからはこれが付いてる関数だけ見える。
-    基本的にはこれをつける関数にだけドキュメントを書く。
+:   S3メソッドにもこれをつければ勝手に認識してくれるはずだが、
+    うまくいかない時は明示的に `@method generic class` をつけてみる。
+:   これ無しのinternalな関数はパッケージ内部か
+    `devtools::load_all()` 環境下でのみ使える。
+    `pkg:::fun()` のように三連コロンで無理やり呼び出すこともできるけど、
+    安全ではなくいろいろ警告される。
+
+`@rdname basename`
+:   `man/`に書き出すRdファイルの名前。
+    複数の関数で同じものを指定すればマニュアルをひとつにまとめられる。
+    このときタイトルや `@param` などは共有される。
+
+`@name name`
+:   マニュアルやpkgdownで参照されるトピック名を指定する。
+    デフォルトでは同じ `@rdname` を持つ関数の中で先頭のもの。
+    `@aliases alias1 alias2` のように追加できる。
+:   `@keywords` や `@concept` は使わない。
+    R内の `help.search()` や `???` での検索にしか使われないので。
+:   `@keywords internal` は特別で、トピックとして登録せずマニュアルを作る効果がある。
+    一応 `@export` するけど一般ユーザー向けではない、みたいな関数に使うのかな。
+    `@export` しない真のinternal関数については
+    `@noRd` でマニュアル生成を抑制する(それでもroxygenコメントを書く)ことが推奨されている。
 
 `@param arg1 description...`
 :   関数の引数。型や役割の説明を文として書く。つまり大文字で始まりピリオドで終わる。
@@ -420,45 +455,50 @@ increment = function(x) {x + 1}
     は使えないらしい。
 :   使い方は見せるけど実行しない、結果を見せない場合は `\dontrun{}` に入れる。
     `@examplesIf` で条件付きにもできる。
+:   `@description` の中に `## Examples` セクションを自作する手もある。
+    e.g., [dplyr/R/select.R](https://github.com/tidyverse/dplyr/blob/HEAD/R/select.R)
 :   単数形の `@example` は外部ファイルのパスを受け取る。
-
-`@rdname basename`
-:   `man/`に書き出すRdファイルの名前。
-    複数の関数で同じものを指定すればヘルプをひとつにまとめられる。
-    このときタイトルや `@param` などは共有される。
-    似たような引数を持つ関数や、関連する関数をまとめるのによく使う。
-
-`@include other-file.R`
-:   指定したファイルを先に読み込むように `DESCRIPTION` の `Collate` を自動生成する。
-    ひとつでも使うと全ファイルを列挙する形になってしまうので、
-    メソッドの定義などで順序が重要になる場合にのみ使う。
 
 `@inherit package::function [fields...]`
 :   別の関数から継承する。
     部分的に継承したければ関数名の後に指定。
 :   params return title description details seealso sections references examples author source note
-:   `@inheritParams` は `@param` の不足を補うショートカット。
-:   `@noRd` と組み合わせて使えればいろいろ楽できそうだけどダメっぽい。
+:   `@inheritParams pkg::fun` は `@param` の不足を補うショートカット。
+:   `@inheritDotParams pkg::fun` を使うと
+     `...` の内訳を別の関数のドキュメントから継承できる。
+     特定の引数だけを含めたり除外したりもできる。
 
-`@template template-name`
-:   `man-roxygen/template-name.R` の内容を利用する。
-    `@inheritParams` と違って、その関数で使用しないparamまで展開されちゃうのが欠点。
+`@usage ...`
+:   "Usage" セクションで関数をどう表示するか。
+    指定しなければ普通に `fun(x, y)` のようになる。
+:   ggplot2の `scale_colour_` と `scale_color_` のようにエイリアスを保持する場合、
+    ほぼ同じものが2つ表示されるのを抑えたいので、
+    `@usage NULL` で消したり `@usage # alias = orig` のように明示したりする。
 
-`@eval fun()`
-:   関数を評価して出てきた文字列ベクタをroxygenコメントとして処理する。
+`@eval ...`
+:   コードを評価して出てきた文字列ベクタをroxygenコメントとして処理する。
     各要素の先頭は `#' ` ではなく@タグで。
     関数には引数も渡せるのでいろいろできる。
 
 `@seealso ...`
 :   `[mean()]`, `[ggplot2::diamonds]`, `<https://...>` のようにしてリンクを張れる。
 
-`@family`
+`@family ...`
 :   これを共通して持つ関数同士に `@seealso` が自動生成される。
     ただし `@rdname` とかで関数をまとめたりしてるとうまくいかないっぽい。
+
+`@include other-file.R`
+:   指定したファイルを先に読み込むように `DESCRIPTION` の `Collate` を自動生成する。
+    ひとつでも使うと全ファイルを列挙する形になってしまうので、
+    メソッドの定義などで順序が重要になる場合にのみ使う。
+
+`@template template-name`
+:   `man-roxygen/template-name.R` の内容を利用する。
+    `@inheritParams` と違って、その関数で使用しないparamまで展開されちゃうのが欠点。
 
 `@section Some Title:`
 :   `@description` や `@details` にセクションを作るための古いタグ。
     今はMarkdownで簡単に書ける: `# Section`, `## Subsection`
 
-`@docType`, `@name`
+`@docType`
 :   パッケージやデータを記述するのに必要だったが今では不要っぽい。
