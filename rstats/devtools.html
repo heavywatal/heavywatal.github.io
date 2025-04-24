@@ -117,7 +117,7 @@ GitHubに公開しておけば誰でも使えるようになるので、
 </span></span><span class="line"><span class="cl">R/           <span class="c1"># Rソースコード</span>
 </span></span><span class="line"><span class="cl">data/        <span class="c1"># サンプルデータなど</span>
 </span></span><span class="line"><span class="cl">inst/        <span class="c1"># CITATION</span>
-</span></span><span class="line"><span class="cl">man/         <span class="c1"># ヘルプファイル.Rd</span>
+</span></span><span class="line"><span class="cl">man/         <span class="c1"># マニュアル.Rd</span>
 </span></span><span class="line"><span class="cl">src/         <span class="c1"># C++ソースコード</span>
 </span></span><span class="line"><span class="cl">tests/
 </span></span><span class="line"><span class="cl">vignettes/
@@ -126,9 +126,19 @@ GitHubに公開しておけば誰でも使えるようになるので、
 <p><a href="https://r-pkgs.org/description.html">https://r-pkgs.org/description.html</a></p>
 <ul>
 <li>どうでも良さそうなファイル名とは裏腹に、ちゃんと書かないと動かない。</li>
-<li>始めはusethisとかに生成してもらい、他のパッケージを参考にしつつ修正していく。</li>
-<li><code>Imports</code> に列挙したものは依存パッケージとして同時にインストールされる。
-しかし <code>library()</code> 時に同時に読み込まれるわけではない。</li>
+<li>始めはusethisとかに生成してもらい、他のパッケージを参考にしつつ修正していく。
+書き換えたら <code>usethis::use_tidy_description()</code> で整える。</li>
+<li><code>Imports</code> に列挙したものは依存パッケージとして一緒にインストールされる。
+<code>NAMESPACE</code> における <code>import()</code> とは意味が異なり、
+<code>library()</code> 時に読み込まれるわけではない。</li>
+<li><code>Depends</code> は <code>R (&gt;= 4.4.0)</code> としてRの下限を指定する程度にしか使わない。
+<code>Imports</code> のように依存パッケージを列挙することもできるが、
+そうすると <code>library()</code> 時にそいつらもattachされてしまう。
+それが有用なのは既存パッケージを拡張する場合 (e.g., <code>stars</code> → <code>sf</code>) や、
+パッケージ機能を分割した場合 (e.g., <code>devtools</code> → <code>usethis</code>) だけ。</li>
+<li><code>Suggests</code> にはオプショナルな機能や開発時に必要なパッケージを列挙する。
+ユーザーの環境にインストールされている保証は無いので、
+<code>requireNamespace()</code> などで確認してから使う。</li>
 <li><code>Title</code> はピリオドを含まない一文でタイトルケース。
 <code>Description</code> はピリオドを含む一段落。</li>
 <li>ライセンスを別ファイルにする場合は <code>License: file LICENSE</code> と書く</li>
@@ -141,7 +151,7 @@ GitHubに公開しておけば誰でも使えるようになるので、
 <li>ここで <code>export()</code> された関数だけがユーザーから見える。</li>
 <li>外部パッケージから <code>importFrom(package, function)</code>
 された関数はattachされてパッケージ内で利用可能になる。
-<code>import(package)</code> で全ての関数をまとめて処理できるけど名前の衝突が怖い。</li>
+<code>import(package)</code> で全ての関数を一括処理できるけど名前の衝突が怖いので避ける。</li>
 </ul>
 <h3 id="r-ソースコード"><code>R/</code> ソースコード</h3>
 <p><a href="https://r-pkgs.org/code.html">https://r-pkgs.org/code.html</a></p>
@@ -256,7 +266,8 @@ mydemo2    Description of demo 2
 <code>tests/</code> や <code>vignettes/</code> に入れる前のガラクタコードを一時的に置いとくとか。</dd>
 <dt><code>.Rbuildignore</code></dt>
 <dd>Rパッケージらしからぬ変なファイルやディレクトリがあると怒られるので、
-そういうやつをこのファイルに列挙して無視してもらう。</dd>
+そういうやつをこのファイルに列挙して無視してもらう。
+ほとんど手で書くことはなく、usethisを使っているうちに膨らんでいく。</dd>
 <dt><code>README.md</code></dt>
 <dd>GitHubでいい感じに見えるようにMarkdown形式でパッケージの概要を書く。
 Rコードを含む <code>README.Rmd</code> から <code>devtools::build_readme()</code> で生成することも可能。</dd>
@@ -308,7 +319,7 @@ Rコードを含む <code>README.Rmd</code> から <code>devtools::build_readme(
 <a href="https://github.com/klutometis/roxygen">
 <img src="/_img/hex-stickers/roxygen2.webp" align="right" width="120" height="139">
 </a>
-<p>Rソースコードのコメントから<code>NAMESPACE</code>とヘルプ(<code>man/*.Rd</code>)を自動生成する。</p>
+<p>Rソースコードのコメントから<code>NAMESPACE</code>とマニュアル(<code>man/*.Rd</code>)を自動生成する。</p>
 <ul>
 <li><a href="https://cran.r-project.org/web/packages/roxygen2/">https://cran.r-project.org/web/packages/roxygen2/</a></li>
 <li><a href="https://github.com/klutometis/roxygen">https://github.com/klutometis/roxygen</a></li>
@@ -320,7 +331,10 @@ Rコードを含む <code>README.Rmd</code> から <code>devtools::build_readme(
 を直接呼んでもよいが、
 基本的には <code>devtools::document()</code> を使って間接的に利用する。</p>
 <h3 id="使い方">使い方</h3>
-<p><a href="https://roxygen2.r-lib.org/articles/rd.html">https://roxygen2.r-lib.org/articles/rd.html</a></p>
+<ul>
+<li><a href="https://roxygen2.r-lib.org/articles/rd.html">https://roxygen2.r-lib.org/articles/rd.html</a></li>
+<li><a href="https://style.tidyverse.org/documentation.html">https://style.tidyverse.org/documentation.html</a></li>
+</ul>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1">#&#39; Title of the simple function to add 1 (without explicit @@title tag)</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&#39;</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&#39; The second paragraph is recognized as the description.</span>
@@ -335,66 +349,76 @@ Rコードを含む <code>README.Rmd</code> から <code>devtools::build_readme(
 </span></span><span class="line"><span class="cl"><span class="c1">#&#39; increment(42)</span>
 </span></span><span class="line"><span class="cl"><span class="n">increment</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span><span class="n">x</span> <span class="o">+</span> <span class="m">1</span><span class="p">}</span>
 </span></span></code></pre></div><ul>
-<li>
-<p><code>#' </code> から始まる行がroxygenコメントとして扱われる。</p>
-</li>
-<li>
-<p>タグは <code>@</code> で始まる。
-<code>@</code> そのものを入力したいときは重ねて <code>@@</code> とする。</p>
-</li>
-<li>
-<p>1行目にタイトル。1行あけて2段落目に説明文を書く。
+<li><code>#' </code> から始まる行がroxygenコメントとして扱われる。</li>
+<li>タグは <code>@</code> で始まる。
+<code>@</code> そのものを入力したいときは重ねて <code>@@</code> とする。</li>
+<li>1行目にタイトル。1行あけて2段落目に説明文を書く。
 明示的な <code>@title</code>, <code>@description</code>, <code>@details</code> タグは大概不要。
 箇条書きや複数段落を表現したい場合にだけ適宜使う。
 タイトルをコピペして全部同じにすると怒られる。
-2段落目を省略するとタイトルが流用される。</p>
-</li>
-<li>
-<p>空行だけでは切れ目として扱われないので <code>NULL</code> などを置いたりする。</p>
-</li>
-<li>
-<p><a href="https://roxygen2.r-lib.org/articles/markdown.html">Rd形式の代わりにMarkdown形式で記述できる</a>。
+2段落目を省略するとタイトルが流用される。</li>
+<li>空行だけでは切れ目として扱われないので <code>NULL</code> などを置いたりする。</li>
+<li><a href="https://roxygen2.r-lib.org/articles/rd-formatting.html">Rd形式の代わりにMarkdown形式で記述できる</a>。
 <code>usethis::create_package()</code> がデフォルトで
 <code>Roxygen: list(markdown = TRUE)</code> を <code>DESCRIPTION</code> に書いてくれる。
-その全体設定をせず使いたいブロックにいちいち <code>@md</code> を書く個別設定も可能。</p>
-</li>
-<li>
-<p><code>&quot;_PACKAGE&quot;</code> という文字列の上に書かれたブロックは、
-パッケージそのものに対応するヘルプ <code>*-package.Rd</code> になる。
-<code>@useDynLib</code> など全体に関わる設定はここでやるのが良いのでは。</p>
+その全体設定をせず使いたいブロックにいちいち <code>@md</code> を書く個別設定も可能。
+<code>```{r }</code> でコードチャンクを作ったり、
+<code>`r `</code> でインラインRコードを評価したりもできる。</li>
+<li><code>&quot;_PACKAGE&quot;</code> という文字列の上に書かれたブロックは、
+パッケージそのものに対応するマニュアル <code>*-package.Rd</code> になる。
+<code>@useDynLib</code> など全体に関わる設定はここでやるのが良いのでは。
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1">#&#39; Example package to say hello</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&#39; @useDynLib hello, .registration = TRUE</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&#39; @importFrom rlang .data :=</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&#39; @keywords internal</span>
 </span></span><span class="line"><span class="cl"><span class="s">&#34;_PACKAGE&#34;</span>
 </span></span></code></pre></div></li>
-<li>
-<p>dplyrなどで列名を直に指定すると
+<li>dplyrなどで列名を直に指定すると
 <code>undefined global variables</code>
 という警告が出るので
 <code>dplyr::filter(diamonds, .data$cut == &quot;Ideal&quot;)</code>
 のように pronoun を使って抑える。
 そのためにどこかに <code>#' @importFrom rlang .data</code> を書いておく。
 ただし <code>group_by()</code> で多数のグループを処理するときなど、
-<code>.data$</code> の遅さが気になる場合は <code>!!as.name(&quot;carat&quot;)</code> のようにする。</p>
-</li>
+<code>.data$</code> の遅さが気になる場合は <code>!!as.name(&quot;carat&quot;)</code> のようにする。</li>
 </ul>
 <h3 id="タグ">タグ</h3>
-<p>使用可能なタグ一覧は<a href="https://github.com/klutometis/roxygen/issues/792">準備中？</a></p>
+<p>使用可能なタグ一覧を<a href="https://github.com/klutometis/roxygen/issues/792">求める声があがって久しい</a>けどまだ無さそう。
+<a href="https://roxygen2.r-lib.org/reference/">roxygen2公式reference</a> は充実してきた。</p>
 <dl>
 <dt><code>@import pkg1, pkg2, ...</code></dt>
 <dd><code>NAMESPACE</code> で <code>import()</code> するパッケージを指定。
 名前の衝突が怖いので基本的に使わない。</dd>
 <dt><code>@importFrom pkg func</code></dt>
 <dd><code>NAMESPACE</code> で <code>importFrom()</code> するパッケージと関数を指定。
-パッケージ内でよほど何回も登場する関数や
-<code>名前空間::</code> の形で使いにくい演算子を登録する。
-e.g., <code>@importFrom rlang .data :=</code> 。
 重複して書いても大丈夫。</dd>
+<dd>パッケージ内でよほど何回も登場する関数や
+<code>名前空間::</code> の形で使いにくい演算子を登録する。
+e.g., <code>@importFrom rlang .data :=</code></dd>
+<dd>ロード時に依存パッケージも丸ごと読み込まれるので重いやつに注意。</dd>
 <dt><code>@export</code></dt>
 <dd><code>NAMESPACE</code> で <code>export()</code> する関数を指定。
-一般ユーザーからはこれが付いてる関数だけ見える。
-基本的にはこれをつける関数にだけドキュメントを書く。</dd>
+一般ユーザーからはこれが付いてる関数だけ見える。</dd>
+<dd>S3メソッドにもこれをつければ勝手に認識してくれるはずだが、
+うまくいかない時は明示的に <code>@method generic class</code> をつけてみる。</dd>
+<dd>これ無しのinternalな関数はパッケージ内部か
+<code>devtools::load_all()</code> 環境下でのみ使える。
+<code>pkg:::fun()</code> のように三連コロンで無理やり呼び出すこともできるけど、
+安全ではなくいろいろ警告される。</dd>
+<dt><code>@rdname basename</code></dt>
+<dd><code>man/</code>に書き出すRdファイルの名前。
+複数の関数で同じものを指定すればマニュアルをひとつにまとめられる。
+このときタイトルや <code>@param</code> などは共有される。</dd>
+<dt><code>@name name</code></dt>
+<dd>マニュアルやpkgdownで参照されるトピック名を指定する。
+デフォルトでは同じ <code>@rdname</code> を持つ関数の中で先頭のもの。
+<code>@aliases alias1 alias2</code> のように追加できる。</dd>
+<dd><code>@keywords</code> や <code>@concept</code> は使わない。
+R内の <code>help.search()</code> や <code>???</code> での検索にしか使われないので。</dd>
+<dd><code>@keywords internal</code> は特別で、トピックとして登録せずマニュアルを作る効果がある。
+一応 <code>@export</code> するけど一般ユーザー向けではない、みたいな関数に使うのかな。
+<code>@export</code> しない真のinternal関数については
+<code>@noRd</code> でマニュアル生成を抑制する(それでもroxygenコメントを書く)ことが推奨されている。</dd>
 <dt><code>@param arg1 description...</code></dt>
 <dd>関数の引数。型や役割の説明を文として書く。つまり大文字で始まりピリオドで終わる。</dd>
 <dt><code>@returns ...</code></dt>
@@ -411,38 +435,43 @@ e.g., <code>@importFrom rlang .data :=</code> 。
 は使えないらしい。</dd>
 <dd>使い方は見せるけど実行しない、結果を見せない場合は <code>\dontrun{}</code> に入れる。
 <code>@examplesIf</code> で条件付きにもできる。</dd>
+<dd><code>@description</code> の中に <code>## Examples</code> セクションを自作する手もある。
+e.g., <a href="https://github.com/tidyverse/dplyr/blob/HEAD/R/select.R">dplyr/R/select.R</a></dd>
 <dd>単数形の <code>@example</code> は外部ファイルのパスを受け取る。</dd>
-<dt><code>@rdname basename</code></dt>
-<dd><code>man/</code>に書き出すRdファイルの名前。
-複数の関数で同じものを指定すればヘルプをひとつにまとめられる。
-このときタイトルや <code>@param</code> などは共有される。
-似たような引数を持つ関数や、関連する関数をまとめるのによく使う。</dd>
-<dt><code>@include other-file.R</code></dt>
-<dd>指定したファイルを先に読み込むように <code>DESCRIPTION</code> の <code>Collate</code> を自動生成する。
-ひとつでも使うと全ファイルを列挙する形になってしまうので、
-メソッドの定義などで順序が重要になる場合にのみ使う。</dd>
 <dt><code>@inherit package::function [fields...]</code></dt>
 <dd>別の関数から継承する。
 部分的に継承したければ関数名の後に指定。</dd>
 <dd>params return title description details seealso sections references examples author source note</dd>
-<dd><code>@inheritParams</code> は <code>@param</code> の不足を補うショートカット。</dd>
-<dd><code>@noRd</code> と組み合わせて使えればいろいろ楽できそうだけどダメっぽい。</dd>
-<dt><code>@template template-name</code></dt>
-<dd><code>man-roxygen/template-name.R</code> の内容を利用する。
-<code>@inheritParams</code> と違って、その関数で使用しないparamまで展開されちゃうのが欠点。</dd>
-<dt><code>@eval fun()</code></dt>
-<dd>関数を評価して出てきた文字列ベクタをroxygenコメントとして処理する。
+<dd><code>@inheritParams pkg::fun</code> は <code>@param</code> の不足を補うショートカット。</dd>
+<dd><code>@inheritDotParams pkg::fun</code> を使うと
+<code>...</code> の内訳を別の関数のドキュメントから継承できる。
+特定の引数だけを含めたり除外したりもできる。</dd>
+<dt><code>@usage ...</code></dt>
+<dd>&ldquo;Usage&rdquo; セクションで関数をどう表示するか。
+指定しなければ普通に <code>fun(x, y)</code> のようになる。</dd>
+<dd>ggplot2の <code>scale_colour_</code> と <code>scale_color_</code> のようにエイリアスを保持する場合、
+ほぼ同じものが2つ表示されるのを抑えたいので、
+<code>@usage NULL</code> で消したり <code>@usage # alias = orig</code> のように明示したりする。</dd>
+<dt><code>@eval ...</code></dt>
+<dd>コードを評価して出てきた文字列ベクタをroxygenコメントとして処理する。
 各要素の先頭は <code>#' </code> ではなく@タグで。
 関数には引数も渡せるのでいろいろできる。</dd>
 <dt><code>@seealso ...</code></dt>
 <dd><code>[mean()]</code>, <code>[ggplot2::diamonds]</code>, <code>&lt;https://...&gt;</code> のようにしてリンクを張れる。</dd>
-<dt><code>@family</code></dt>
+<dt><code>@family ...</code></dt>
 <dd>これを共通して持つ関数同士に <code>@seealso</code> が自動生成される。
 ただし <code>@rdname</code> とかで関数をまとめたりしてるとうまくいかないっぽい。</dd>
+<dt><code>@include other-file.R</code></dt>
+<dd>指定したファイルを先に読み込むように <code>DESCRIPTION</code> の <code>Collate</code> を自動生成する。
+ひとつでも使うと全ファイルを列挙する形になってしまうので、
+メソッドの定義などで順序が重要になる場合にのみ使う。</dd>
+<dt><code>@template template-name</code></dt>
+<dd><code>man-roxygen/template-name.R</code> の内容を利用する。
+<code>@inheritParams</code> と違って、その関数で使用しないparamまで展開されちゃうのが欠点。</dd>
 <dt><code>@section Some Title:</code></dt>
 <dd><code>@description</code> や <code>@details</code> にセクションを作るための古いタグ。
 今はMarkdownで簡単に書ける: <code># Section</code>, <code>## Subsection</code></dd>
-<dt><code>@docType</code>, <code>@name</code></dt>
+<dt><code>@docType</code></dt>
 <dd>パッケージやデータを記述するのに必要だったが今では不要っぽい。</dd>
 </dl>
 
