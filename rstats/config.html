@@ -68,6 +68,49 @@ R環境設定
 <code>brew install --cask r rstudio</code> のように入れるのが楽チン。
 Caskじゃない <code>brew install r</code> のほうだとバイナリ版パッケージが使えなくて毎回ソースからビルドさせられるので大変。</p>
 <p><a href="https://cran.r-project.org/doc/manuals/R-admin.html">https://cran.r-project.org/doc/manuals/R-admin.html</a></p>
+<h3 id="whats-new">What’s New?</h3>
+<p><a href="https://cran.r-project.org/doc/manuals/r-release/NEWS.html">https://cran.r-project.org/doc/manuals/r-release/NEWS.html</a></p>
+<ul>
+<li>4.5
+<ul>
+<li><a href="https://stat.ethz.ch/R-manual/R-patched/library/datasets/html/penguins.html"><code>penguins</code></a></li>
+<li><code>install.packages()</code> in parallel</li>
+<li><code>base::use()</code></li>
+<li>C23 default</li>
+</ul>
+</li>
+<li>4.4
+<ul>
+<li><code>%||%</code> operator</li>
+</ul>
+</li>
+<li>4.3
+<ul>
+<li>C17 and C++17 default; C++23 support</li>
+<li>extraction with the placeholder <code>_</code></li>
+</ul>
+</li>
+<li>4.2
+<ul>
+<li>placeholder <code>_</code> for a named argument</li>
+</ul>
+</li>
+<li>4.1
+<ul>
+<li>shorthand function <code>\(x) x + 1</code></li>
+<li>native pipe operator <code>|&gt;</code></li>
+</ul>
+</li>
+<li>4.0
+<ul>
+<li><code>StringsAsFactors = FALSE</code> by default</li>
+<li>color palettes: R4, Okabe-Ito, etc.</li>
+<li>raw character strings <code>r&quot;(...)&quot;</code></li>
+<li><code>tools::R_user_dir()</code></li>
+<li>C++20 support</li>
+</ul>
+</li>
+</ul>
 <h2 id="起動オプション">起動オプション</h2>
 <p>ワークスペースの自動保存や自動復帰は危険なので切っておく。
 R.app や RStudio から使う場合はメニューから環境設定みたいなやつを開いて設定。
@@ -158,13 +201,10 @@ Rスクリプトではなく、シェルスクリプトっぽい代入式で書�
 <h3 id="options"><code>options()</code></h3>
 <p><a href="https://stat.ethz.ch/R-manual/R-patched/library/base/html/options.html">https://stat.ethz.ch/R-manual/R-patched/library/base/html/options.html</a></p>
 <p><code>?options</code> で項目の一覧を見られる。</p>
-<p>スクリプトの結果が設定依存で変わっては困るので、
+<p>ほかの人とスクリプトをやり取りする場合など、
+実行結果が設定依存で変わっては困るので、
 そういう本質的なものはいじらずに、
-表示関連の項目だけ変えるに留めたほうがよい。
-例えば <code>options(stringsAsFactors=FALSE)</code> とやってしまいたくなるが、
-それを設定した環境とそうでない環境で <code>read.table()</code> の結果が変わるのは危険。
-関数の引数として毎回指定するか、
-<a href="/rstats/readr.html">readr</a>の関数を使うべし。</p>
+表示関連の項目だけ変えるに留めたほうがよい。</p>
 <dl>
 <dt><code>warn=1</code></dt>
 <dd>警告レベルの設定。
@@ -202,23 +242,26 @@ Pythonほどわかりやすくないが、ちょっとはマシになる。</dd>
 </dl>
 <h2 id="ライブラリの管理">ライブラリの管理</h2>
 <p><a href="https://cran.r-project.org/doc/manuals/R-admin.html#Add_002don-packages">https://cran.r-project.org/doc/manuals/R-admin.html#Add_002don-packages</a></p>
+<h3 id="開発者ツール">開発者ツール</h3>
+<p>C, C++, Fortran で書かれたソースコードをビルドするためのツール。
+普通はビルド済みのバイナリ版パッケージをインストールするだけので不要。
+<a href="/rstats/stan.html">Stan</a>でモデルを書くとか、パッケージの開発最新版を使いたいとか、
+そういうときに必要になる。</p>
+<ul>
+<li>macOS: <a href="https://mac.r-project.org/tools/">https://mac.r-project.org/tools/</a>
+<ul>
+<li>Command Line Tools:
+<code>xcode-select --install</code> を Terminal.app で実行。
+Xcodeを全部入れる必要は無い。</li>
+<li>上記リンクから <code>gfortran-*.pkg</code> を落として入れる。
+ほかの方法で入れたものを使うのは難しい。</li>
+</ul>
+</li>
+<li>Windows: <a href="https://cloud.r-project.org/bin/windows/Rtools/">https://cloud.r-project.org/bin/windows/Rtools/</a></li>
+</ul>
 <h3 id="rmakevars"><code>~/.R/Makevars</code></h3>
 <p>パッケージをソースコードからビルドするときの設定。
-大概はビルド済みのものを入れるので不要だけど、たまに必要になる。</p>
-<p>例えば、素のmacOSでOpenMP依存のパッケージをビルドしようとすると
-<code>clang: error: unsupported option '-fopenmp'</code>
-などと怒られる。
-<a href="/mac/homebrew.html">Homebrew</a>で
-<code>gcc</code> か <code>llvm</code> をインストールし、
-そっちを使ってビルドするように <code>~/.R/Makevars</code> で指定する:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-make" data-lang="make"><span class="line"><span class="cl"><span class="c"># gcc
-</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nv">CC</span><span class="o">=</span>/usr/local/bin/gcc-8
-</span></span><span class="line"><span class="cl"><span class="nv">CXX</span><span class="o">=</span>/usr/local/bin/g++-8
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c"># llvm
-</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nv">CC</span><span class="o">=</span>/usr/local/opt/llvm/bin/clang
-</span></span><span class="line"><span class="cl"><span class="nv">CXX</span><span class="o">=</span>/usr/local/opt/llvm/bin/clang++
-</span></span></code></pre></div><p><code>CPPFLAGS</code>, <code>CFLAGS</code>, <code>CXXFLAGS</code>, <code>LDFLAGS</code> なども設定可能。</p>
+不具合の元なので基本的には作らない。</p>
 <p><a href="https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-Makevars">https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-Makevars</a></p>
 
 </article>
