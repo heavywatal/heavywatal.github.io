@@ -20,6 +20,33 @@ Caskじゃない `brew install r` のほうだとバイナリ版パッケージ�
 https://cran.r-project.org/doc/manuals/R-admin.html
 
 
+### What’s New?
+
+<https://cran.r-project.org/doc/manuals/r-release/NEWS.html>
+
+- 4.5
+  - [`penguins`](https://stat.ethz.ch/R-manual/R-patched/library/datasets/html/penguins.html)
+  - `install.packages()` in parallel
+  - `base::use()`
+  - C23 default
+- 4.4
+  - `%||%` operator
+- 4.3
+  - C17 and C++17 default; C++23 support
+  - extraction with the placeholder `_`
+- 4.2
+  - placeholder `_` for a named argument
+- 4.1
+  - shorthand function `\(x) x + 1`
+  - native pipe operator `|>`
+- 4.0
+  - `StringsAsFactors = FALSE` by default
+  - color palettes: R4, Okabe-Ito, etc.
+  - raw character strings `r"(...)"`
+  - `tools::R_user_dir()`
+  - C++20 support
+
+
 ## 起動オプション
 
 ワークスペースの自動保存や自動復帰は危険なので切っておく。
@@ -142,13 +169,10 @@ R起動時に読み込まれるファイル。
 
 `?options` で項目の一覧を見られる。
 
-スクリプトの結果が設定依存で変わっては困るので、
+ほかの人とスクリプトをやり取りする場合など、
+実行結果が設定依存で変わっては困るので、
 そういう本質的なものはいじらずに、
 表示関連の項目だけ変えるに留めたほうがよい。
-例えば `options(stringsAsFactors=FALSE)` とやってしまいたくなるが、
-それを設定した環境とそうでない環境で `read.table()` の結果が変わるのは危険。
-関数の引数として毎回指定するか、
-[readr]({{< relref "readr.md" >}})の関数を使うべし。
 
 `warn=1`
 : 警告レベルの設定。
@@ -194,28 +218,26 @@ R起動時に読み込まれるファイル。
 
 https://cran.r-project.org/doc/manuals/R-admin.html#Add_002don-packages
 
+
+### 開発者ツール
+
+C, C++, Fortran で書かれたソースコードをビルドするためのツール。
+普通はビルド済みのバイナリ版パッケージをインストールするだけので不要。
+[Stan]({{< relref "stan.md" >}})でモデルを書くとか、パッケージの開発最新版を使いたいとか、
+そういうときに必要になる。
+
+- macOS: <https://mac.r-project.org/tools/>
+  - Command Line Tools:
+    `xcode-select --install` を Terminal.app で実行。
+    Xcodeを全部入れる必要は無い。
+  - 上記リンクから `gfortran-*.pkg` を落として入れる。
+    ほかの方法で入れたものを使うのは難しい。
+- Windows: <https://cloud.r-project.org/bin/windows/Rtools/>
+
+
 ### `~/.R/Makevars`
 
 パッケージをソースコードからビルドするときの設定。
-大概はビルド済みのものを入れるので不要だけど、たまに必要になる。
+不具合の元なので基本的には作らない。
 
-例えば、素のmacOSでOpenMP依存のパッケージをビルドしようとすると
-`clang: error: unsupported option '-fopenmp'`
-などと怒られる。
-[Homebrew]({{< relref "homebrew.md" >}})で
-`gcc` か `llvm` をインストールし、
-そっちを使ってビルドするように `~/.R/Makevars` で指定する:
-
-```make
-# gcc
-CC=/usr/local/bin/gcc-8
-CXX=/usr/local/bin/g++-8
-
-# llvm
-CC=/usr/local/opt/llvm/bin/clang
-CXX=/usr/local/opt/llvm/bin/clang++
-```
-
-`CPPFLAGS`, `CFLAGS`, `CXXFLAGS`, `LDFLAGS` なども設定可能。
-
-https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-Makevars
+<https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-Makevars>
