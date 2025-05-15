@@ -12,6 +12,8 @@ tags = ["r", "tidyverse"]
 
 
 
+[tidy-select]: https://tidyr.tidyverse.org/reference/tidyr_tidy_select.html
+
 <a href="https://tidyr.tidyverse.org/">
 <img src="/_img/hex-stickers/tidyr.webp" align="right" width="120" height="139">
 </a>
@@ -27,7 +29,7 @@ data.frameを縦長・横広・入れ子に変形・整形するためのツー�
 
 -   <https://r4ds.hadley.nz/data-tidy.html>
 -   <https://github.com/tidyverse/tidyr>
--   `vignette("tidy-data")`
+-   [`vignette("tidy-data")`](https://tidyr.tidyverse.org/articles/tidy-data.html)
 -   `demo(package = "tidyr")`
 -   https://speakerdeck.com/yutannihilation/tidyr-pivot
 
@@ -47,7 +49,7 @@ data.frameを横広(wide-format)から縦長(long-format)に変形する。
 `tidyr::pivot_longer(data, cols, names_to = "name", ..., values_to = "value", ...)`
 
 `cols`
-: 動かしたい値が含まれている列。
+: 動かしたい値が含まれている列の [tidy-select] 指定。
   コロンで範囲指定、文字列、
   [selection helpers](https://tidyselect.r-lib.org/reference/language.html)なども使える。
   動かさない列を `!` で反転指定するのほうが楽なことも多い。
@@ -100,16 +102,16 @@ data.frameを縦長(long-format)から横広(wide-format)に変形する。
 
 `tidyr::pivot_wider(data, ..., id_cols = NULL, names_from = name, values_from = value, values_fill = NULL, values_fn = NULL)`
 
-`...`, `id_cols`
-: ここで指定した列のユニークな組み合わせが変形後にそれぞれ1行になる。
-  `!`で反転指定、`:`で範囲指定、文字列、tidyselect関数なども使える。
+`id_cols`
+: ここで [tidy-select] 指定した列のユニークな組み合わせが変形後にそれぞれ1行になる。
+  `!`で反転指定、`:`で範囲指定、文字列なども使える。
   デフォルトでは `names_from` と `values_from` で指定されなかった列すべて。
 
 `names_from`
-: 新しく列名になる列。"name" という列名なら省略可能。
+: 新しく列名になる列の [tidy-select]。"name" という列名なら省略可能。
 
 `values_from`
-: 動かしたい値が入っている列。"value" という列名なら省略可能。
+: 動かしたい値が入っている列の [tidy-select]。"value" という列名なら省略可能。
 
 `values_fill`
 : 存在しない組み合わせのセルを埋める値。
@@ -327,7 +329,8 @@ See https://speakerdeck.com/yutannihilation/tidyr-pivot?slide=67 for details.
 
 ## Nested data.frame --- 入れ子構造
 
-https://tidyr.tidyverse.org/articles/nest.html
+- <https://tidyr.tidyverse.org/articles/rectangle.html>
+- <https://tidyr.tidyverse.org/articles/nest.html>
 
 ### `tidyr::nest(data, ..., .by = NULL, .key = NULL, .names_sep = NULL)`
 
@@ -389,14 +392,15 @@ diamonds |>
 `tidyr::separate(data, col, into, sep = "[^[:alnum:]]", remove = TRUE, convert = FALSE, extra = "warn", fill = "warn", ...)`
 
 `col`
-:   切り分けたい列の名前
+:   切り分けたい列の [tidy-select] 指定。
 
 `into`
 :   切り分けたあとの新しい列名を文字列ベクタで
 
 `sep = "[^[:alnum:]]"`
 :   セパレータを正規表現で。デフォルトはあらゆる非アルファベット。
-:   整数を渡すと位置で切れる。例えば `A4` を `1L` で切ると `A` と `4` に。
+:   整数を渡すとその位置の後ろで切れる。
+    例えば `A4` を `sep = 1L` で切ると `A` と `4` に。
 
 `remove = TRUE`
 :   切り分ける前の列を取り除くかどうか
@@ -434,10 +438,15 @@ VADeaths |> as.data.frame() |>
 5     70     74       66.0         54.3       71.1         50.0
 ```
 
-行方向に分割する `tidyr::separate_rows(data, ..., sep, convert)` もある。
+新しい `tidyr::separate_wider_delim()`, `tidyr::separate_wider_position()`
+のほうが公式の推奨らしいけどちょっと名前が長い。
+
+行方向に分割する `tidyr::separate_rows(data, ..., sep, convert)` もあり、
+同様に `tidyr::separate_longer_delim()`, `tidyr::separate_longer_position()` のほうが公式の推奨。
 
 `tidyr::extract(data, col, into, regex, ...)`
-を使えば正規表現でもっと細かく指定できる。
+を使えば正規表現でもっと細かく指定でき、
+`tidyr::separate_wider_regex()` がその最新版。
 
 名前の似てる `tidyr::extract_numeric(x)` は
 文字列から数字部分をnumericとして抜き出す関数だったが今はdeprecatedなので、
@@ -530,13 +539,42 @@ tibble版`expand.grid(...)`のようなもの。
 指定した列に`NA`が含まれてる行を削除する。
 何も指定しなければ標準の `data[complete.cases(data),]` と同じ。
 
+
+``` r
+df = tibble::tibble(x = c(1, 2, NA), y = c("a", NA, "c"), z = c("D", "E", NA))
+df |> tidyr::drop_na(x)
+```
+
+```
+  x    y z
+1 1    a D
+2 2 <NA> E
+```
+
+``` r
+df |> tidyr::drop_na()
+```
+
+```
+  x y z
+1 1 a D
+```
+
 ### `tidyr::replace_na()`
 
 欠損値 `NA` を好きな値で置き換える。
 これまでは `mutate(x = ifelse(is.na(x), 0, x))` のようにしてたところを
 
-```r
-df |> replace_na(list(x = 0, y = "unknown"))
+
+``` r
+df |> tidyr::replace_na(list(x = 9999, y = "unknown"))
+```
+
+```
+     x       y    z
+1    1       a    D
+2    2 unknown    E
+3 9999       c <NA>
 ```
 
 逆に、特定の値を`NA`にしたい場合は
@@ -545,6 +583,18 @@ df |> replace_na(list(x = 0, y = "unknown"))
 
 ### `tidyr::fill()`
 
-`NA` を、その列の直前の `NA` でない値で埋める。
+欠損値 `NA` を、その列の前後の値で埋める。
 えくせるでセルの結合とかやってしまって、
-最初のセルにしか値が無いような場合に使うのかな？
+最初のセルにしか値が無いような場合に使えそう。
+
+
+``` r
+df |> tidyr::fill(x, y, .direction = "down")
+```
+
+```
+  x y    z
+1 1 a    D
+2 2 a    E
+3 2 c <NA>
+```

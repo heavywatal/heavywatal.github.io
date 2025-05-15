@@ -512,23 +512,65 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
 
 主に`mutate()`や`filter()`を補助するもの
 
-`dplyr::if_else(condition, true, false, missing = NULL)`
-:   標準の`ifelse()`よりも型に厳しく、高速らしい。
+`dplyr::if_else(condition, true, false, missing = NULL, ..., ptype = NULL, size = NULL)`
+:   `TRUE` の位置では `x` を採用、`FALSE` の位置では `y` を採用。
+    標準の`ifelse()`よりも型に厳しく、高速らしい。
     NAのときにどうするかを指定できるのも大変良い。
     ネストせずにスッキリ書ける `dplyr::case_when()` も便利。
+    
+    ``` r
+    condition = c(TRUE, TRUE, FALSE)
+    x = c(1, 2, 3)
+    y = c(100, 200, 300)
+    dplyr::if_else(condition, x, y)
+    ```
+    
+    ```
+    [1]   1   2 300
+    ```
 
-`dplyr::coalesce(x, ...)`
+`dplyr::coalesce(..., .ptype = NULL, .size = NULL)`
 :   最初のvectorでNAだったとこは次のvectorのやつを採用、
     という`ifelse(!is.na(x), x, y)`的な処理をする。
+    
+    ``` r
+    df = tibble::tibble(x = c(1, 2, NA), y = c("a", NA, "c"), z = c("D", "E", NA))
+    df |> dplyr::mutate(y_or_z = dplyr::coalesce(y, z))
+    ```
+    
+    ```
+       x    y    z y_or_z
+    1  1    a    D      a
+    2  2 <NA>    E      E
+    3 NA    c <NA>      c
+    ```
     基本的には同じ長さのvectorを渡すが、
     2つめに長さ1のを渡して`tidyr::replace_na()`的に使うのも便利。
 
 `dplyr::na_if(x, y)`
 :   `x[x == y] = NA; x` のショートカット
+    
+    ``` r
+    df |> dplyr::mutate(x = dplyr::na_if(x, 1), y = dplyr::na_if(y, "a"))
+    ```
+    
+    ```
+       x    y    z
+    1 NA <NA>    D
+    2  2 <NA>    E
+    3 NA    c <NA>
+    ```
 
 `dplyr::recode(.x, ..., .default = NULL, .missing = NULL)`
 :   vectorの値を変更する。e.g.,
-    `recode(letters, a = "A!", c = "C!")`
+    
+    ``` r
+    recode(letters[1:6], a = "A!", c = "C!")
+    ```
+    
+    ```
+    [1] "A!" "b"  "C!" "d"  "e"  "f" 
+    ```
 
 `dplyr::row_number(x)`
 :   `rank(x, ties.method = "first", na.last = "keep")` のショートカット。
