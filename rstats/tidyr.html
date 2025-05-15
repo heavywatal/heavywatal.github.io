@@ -72,7 +72,7 @@ tidyr — シンプルなデータ変形ツール
 <ul>
 <li><a href="https://r4ds.hadley.nz/data-tidy.html">https://r4ds.hadley.nz/data-tidy.html</a></li>
 <li><a href="https://github.com/tidyverse/tidyr">https://github.com/tidyverse/tidyr</a></li>
-<li><code>vignette(&quot;tidy-data&quot;)</code></li>
+<li><a href="https://tidyr.tidyverse.org/articles/tidy-data.html"><code>vignette(&quot;tidy-data&quot;)</code></a></li>
 <li><code>demo(package = &quot;tidyr&quot;)</code></li>
 <li><a href="https://speakerdeck.com/yutannihilation/tidyr-pivot">https://speakerdeck.com/yutannihilation/tidyr-pivot</a></li>
 </ul>
@@ -86,7 +86,7 @@ data.frameを横広(wide-format)から縦長(long-format)に変形する。
 <p><code>tidyr::pivot_longer(data, cols, names_to = &quot;name&quot;, ..., values_to = &quot;value&quot;, ...)</code></p>
 <dl>
 <dt><code>cols</code></dt>
-<dd>動かしたい値が含まれている列。
+<dd>動かしたい値が含まれている列の <a href="https://tidyr.tidyverse.org/reference/tidyr_tidy_select.html">tidy-select</a> 指定。
 コロンで範囲指定、文字列、
 <a href="https://tidyselect.r-lib.org/reference/language.html">selection helpers</a>なども使える。
 動かさない列を <code>!</code> で反転指定するのほうが楽なことも多い。</dd>
@@ -128,14 +128,14 @@ data.frameを縦長(long-format)から横広(wide-format)に変形する。
 <code>reshape2::dcast()</code>, <code>tidyr::spread()</code> の改良版。</p>
 <p><code>tidyr::pivot_wider(data, ..., id_cols = NULL, names_from = name, values_from = value, values_fill = NULL, values_fn = NULL)</code></p>
 <dl>
-<dt><code>...</code>, <code>id_cols</code></dt>
-<dd>ここで指定した列のユニークな組み合わせが変形後にそれぞれ1行になる。
-<code>!</code>で反転指定、<code>:</code>で範囲指定、文字列、tidyselect関数なども使える。
+<dt><code>id_cols</code></dt>
+<dd>ここで <a href="https://tidyr.tidyverse.org/reference/tidyr_tidy_select.html">tidy-select</a> 指定した列のユニークな組み合わせが変形後にそれぞれ1行になる。
+<code>!</code>で反転指定、<code>:</code>で範囲指定、文字列なども使える。
 デフォルトでは <code>names_from</code> と <code>values_from</code> で指定されなかった列すべて。</dd>
 <dt><code>names_from</code></dt>
-<dd>新しく列名になる列。&ldquo;name&rdquo; という列名なら省略可能。</dd>
+<dd>新しく列名になる列の <a href="https://tidyr.tidyverse.org/reference/tidyr_tidy_select.html">tidy-select</a>。&ldquo;name&rdquo; という列名なら省略可能。</dd>
 <dt><code>values_from</code></dt>
-<dd>動かしたい値が入っている列。&ldquo;value&rdquo; という列名なら省略可能。</dd>
+<dd>動かしたい値が入っている列の <a href="https://tidyr.tidyverse.org/reference/tidyr_tidy_select.html">tidy-select</a>。&ldquo;value&rdquo; という列名なら省略可能。</dd>
 <dt><code>values_fill</code></dt>
 <dd>存在しない組み合わせのセルを埋める値。
 列によって値を変えたい場合は名前付きリストで渡す。</dd>
@@ -285,7 +285,10 @@ data.frameを縦長(long-format)から横広(wide-format)に変形する。
 44     4  8  6.89
 </code></pre><p>See <a href="https://speakerdeck.com/yutannihilation/tidyr-pivot?slide=67">https://speakerdeck.com/yutannihilation/tidyr-pivot?slide=67</a> for details.</p>
 <h2 id="nested-dataframe--入れ子構造">Nested data.frame &mdash; 入れ子構造</h2>
-<p><a href="https://tidyr.tidyverse.org/articles/nest.html">https://tidyr.tidyverse.org/articles/nest.html</a></p>
+<ul>
+<li><a href="https://tidyr.tidyverse.org/articles/rectangle.html">https://tidyr.tidyverse.org/articles/rectangle.html</a></li>
+<li><a href="https://tidyr.tidyverse.org/articles/nest.html">https://tidyr.tidyverse.org/articles/nest.html</a></li>
+</ul>
 <h3 id="tidyrnestdata--by--null-key--null-names_sep--null"><code>tidyr::nest(data, ..., .by = NULL, .key = NULL, .names_sep = NULL)</code></h3>
 <p>data.frameをネストして(入れ子にして)、list of data.frames のカラムを作る。
 内側のdata.frameに押し込むカラムを <code>...</code> に指定するか、
@@ -321,12 +324,13 @@ list of data.framesだけでなく、list of vectorsとかでもよい。</p>
 <p><code>tidyr::separate(data, col, into, sep = &quot;[^[:alnum:]]&quot;, remove = TRUE, convert = FALSE, extra = &quot;warn&quot;, fill = &quot;warn&quot;, ...)</code></p>
 <dl>
 <dt><code>col</code></dt>
-<dd>切り分けたい列の名前</dd>
+<dd>切り分けたい列の <a href="https://tidyr.tidyverse.org/reference/tidyr_tidy_select.html">tidy-select</a> 指定。</dd>
 <dt><code>into</code></dt>
 <dd>切り分けたあとの新しい列名を文字列ベクタで</dd>
 <dt><code>sep = &quot;[^[:alnum:]]&quot;</code></dt>
 <dd>セパレータを正規表現で。デフォルトはあらゆる非アルファベット。</dd>
-<dd>整数を渡すと位置で切れる。例えば <code>A4</code> を <code>1L</code> で切ると <code>A</code> と <code>4</code> に。</dd>
+<dd>整数を渡すとその位置の後ろで切れる。
+例えば <code>A4</code> を <code>sep = 1L</code> で切ると <code>A</code> と <code>4</code> に。</dd>
 <dt><code>remove = TRUE</code></dt>
 <dd>切り分ける前の列を取り除くかどうか</dd>
 <dt><code>convert = FALSE</code></dt>
@@ -353,9 +357,13 @@ list of data.framesだけでなく、list of vectorsとかでもよい。</p>
 3     60     64       26.9         20.3       37.0         19.3
 4     65     69       41.0         30.9       54.6         35.1
 5     70     74       66.0         54.3       71.1         50.0
-</code></pre><p>行方向に分割する <code>tidyr::separate_rows(data, ..., sep, convert)</code> もある。</p>
+</code></pre><p>新しい <code>tidyr::separate_wider_delim()</code>, <code>tidyr::separate_wider_position()</code>
+のほうが公式の推奨らしいけどちょっと名前が長い。</p>
+<p>行方向に分割する <code>tidyr::separate_rows(data, ..., sep, convert)</code> もあり、
+同様に <code>tidyr::separate_longer_delim()</code>, <code>tidyr::separate_longer_position()</code> のほうが公式の推奨。</p>
 <p><code>tidyr::extract(data, col, into, regex, ...)</code>
-を使えば正規表現でもっと細かく指定できる。</p>
+を使えば正規表現でもっと細かく指定でき、
+<code>tidyr::separate_wider_regex()</code> がその最新版。</p>
 <p>名前の似てる <code>tidyr::extract_numeric(x)</code> は
 文字列から数字部分をnumericとして抜き出す関数だったが今はdeprecatedなので、
 新しい<a href="/rstats/readr.html"><code>readr::parse_number()</code></a>を使うべし。</p>
@@ -403,17 +411,34 @@ tibble版<code>expand.grid(...)</code>のようなもの。</p>
 <p><code>complete()</code>の逆。
 指定した列に<code>NA</code>が含まれてる行を削除する。
 何も指定しなければ標準の <code>data[complete.cases(data),]</code> と同じ。</p>
-<h3 id="tidyrreplace_na"><code>tidyr::replace_na()</code></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">df</span> <span class="o">=</span> <span class="n">tibble</span><span class="o">::</span><span class="nf">tibble</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="kc">NA</span><span class="p">),</span> <span class="n">y</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="kc">NA</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">),</span> <span class="n">z</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;D&#34;</span><span class="p">,</span> <span class="s">&#34;E&#34;</span><span class="p">,</span> <span class="kc">NA</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span> <span class="o">|&gt;</span> <span class="n">tidyr</span><span class="o">::</span><span class="nf">drop_na</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>  x    y z
+1 1    a D
+2 2 &lt;NA&gt; E
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">df</span> <span class="o">|&gt;</span> <span class="n">tidyr</span><span class="o">::</span><span class="nf">drop_na</span><span class="p">()</span>
+</span></span></code></pre></div><pre tabindex="0"><code>  x y z
+1 1 a D
+</code></pre><h3 id="tidyrreplace_na"><code>tidyr::replace_na()</code></h3>
 <p>欠損値 <code>NA</code> を好きな値で置き換える。
 これまでは <code>mutate(x = ifelse(is.na(x), 0, x))</code> のようにしてたところを</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">df</span> <span class="o">|&gt;</span> <span class="nf">replace_na</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="s">&#34;unknown&#34;</span><span class="p">))</span>
-</span></span></code></pre></div><p>逆に、特定の値を<code>NA</code>にしたい場合は
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">df</span> <span class="o">|&gt;</span> <span class="n">tidyr</span><span class="o">::</span><span class="nf">replace_na</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="m">9999</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="s">&#34;unknown&#34;</span><span class="p">))</span>
+</span></span></code></pre></div><pre tabindex="0"><code>     x       y    z
+1    1       a    D
+2    2 unknown    E
+3 9999       c &lt;NA&gt;
+</code></pre><p>逆に、特定の値を<code>NA</code>にしたい場合は
 <a href="/rstats/dplyr.html"><code>dplyr::na_if()</code></a></p>
 <h3 id="tidyrfill"><code>tidyr::fill()</code></h3>
-<p><code>NA</code> を、その列の直前の <code>NA</code> でない値で埋める。
+<p>欠損値 <code>NA</code> を、その列の前後の値で埋める。
 えくせるでセルの結合とかやってしまって、
-最初のセルにしか値が無いような場合に使うのかな？</p>
-
+最初のセルにしか値が無いような場合に使えそう。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">df</span> <span class="o">|&gt;</span> <span class="n">tidyr</span><span class="o">::</span><span class="nf">fill</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">.direction</span> <span class="o">=</span> <span class="s">&#34;down&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>  x y    z
+1 1 a    D
+2 2 a    E
+3 2 c &lt;NA&gt;
+</code></pre>
 </article>
 </main>
 

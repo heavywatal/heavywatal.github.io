@@ -426,20 +426,42 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code></p>
 <h2 id="その他の関数">その他の関数</h2>
 <p>主に<code>mutate()</code>や<code>filter()</code>を補助するもの</p>
 <dl>
-<dt><code>dplyr::if_else(condition, true, false, missing = NULL)</code></dt>
-<dd>標準の<code>ifelse()</code>よりも型に厳しく、高速らしい。
+<dt><code>dplyr::if_else(condition, true, false, missing = NULL, ..., ptype = NULL, size = NULL)</code></dt>
+<dd><code>TRUE</code> の位置では <code>x</code> を採用、<code>FALSE</code> の位置では <code>y</code> を採用。
+標準の<code>ifelse()</code>よりも型に厳しく、高速らしい。
 NAのときにどうするかを指定できるのも大変良い。
-ネストせずにスッキリ書ける <code>dplyr::case_when()</code> も便利。</dd>
-<dt><code>dplyr::coalesce(x, ...)</code></dt>
+ネストせずにスッキリ書ける <code>dplyr::case_when()</code> も便利。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">condition</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="kc">TRUE</span><span class="p">,</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="kc">FALSE</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">x</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">y</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">100</span><span class="p">,</span> <span class="m">200</span><span class="p">,</span> <span class="m">300</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">dplyr</span><span class="o">::</span><span class="nf">if_else</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1]   1   2 300
+</code></pre></dd>
+<dt><code>dplyr::coalesce(..., .ptype = NULL, .size = NULL)</code></dt>
 <dd>最初のvectorでNAだったとこは次のvectorのやつを採用、
 という<code>ifelse(!is.na(x), x, y)</code>的な処理をする。
-基本的には同じ長さのvectorを渡すが、
-2つめに長さ1のを渡して<code>tidyr::replace_na()</code>的に使うのも便利。</dd>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">df</span> <span class="o">=</span> <span class="n">tibble</span><span class="o">::</span><span class="nf">tibble</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="kc">NA</span><span class="p">),</span> <span class="n">y</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="kc">NA</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">),</span> <span class="n">z</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;D&#34;</span><span class="p">,</span> <span class="s">&#34;E&#34;</span><span class="p">,</span> <span class="kc">NA</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">y_or_z</span> <span class="o">=</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">coalesce</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">))</span>
+</span></span></code></pre></div><pre tabindex="0"><code>   x    y    z y_or_z
+1  1    a    D      a
+2  2 &lt;NA&gt;    E      E
+3 NA    c &lt;NA&gt;      c
+</code></pre><p>基本的には同じ長さのvectorを渡すが、
+2つめに長さ1のを渡して<code>tidyr::replace_na()</code>的に使うのも便利。</p>
+</dd>
 <dt><code>dplyr::na_if(x, y)</code></dt>
-<dd><code>x[x == y] = NA; x</code> のショートカット</dd>
+<dd><code>x[x == y] = NA; x</code> のショートカット
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">df</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">na_if</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="m">1</span><span class="p">),</span> <span class="n">y</span> <span class="o">=</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">na_if</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="s">&#34;a&#34;</span><span class="p">))</span>
+</span></span></code></pre></div><pre tabindex="0"><code>   x    y    z
+1 NA &lt;NA&gt;    D
+2  2 &lt;NA&gt;    E
+3 NA    c &lt;NA&gt;
+</code></pre></dd>
 <dt><code>dplyr::recode(.x, ..., .default = NULL, .missing = NULL)</code></dt>
 <dd>vectorの値を変更する。e.g.,
-<code>recode(letters, a = &quot;A!&quot;, c = &quot;C!&quot;)</code></dd>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">recode</span><span class="p">(</span><span class="kc">letters</span><span class="n">[1</span><span class="o">:</span><span class="m">6</span><span class="n">]</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="s">&#34;A!&#34;</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="s">&#34;C!&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] &#34;A!&#34; &#34;b&#34;  &#34;C!&#34; &#34;d&#34;  &#34;e&#34;  &#34;f&#34; 
+</code></pre></dd>
 <dt><code>dplyr::row_number(x)</code></dt>
 <dd><code>rank(x, ties.method = &quot;first&quot;, na.last = &quot;keep&quot;)</code> のショートカット。
 グループ毎に連番を振るのに便利。同点でも登場順に違う順位を与える。</dd>
