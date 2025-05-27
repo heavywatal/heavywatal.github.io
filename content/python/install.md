@@ -95,8 +95,10 @@ uvの成熟とともに一般ユーザーにとっての存在意義が薄れて
 <https://github.com/pyenv/pyenv>
 
 管理者権限なしでホーム以下にインストールできる。
-ソースコードを取ってきて自前ビルドするという点で上記[uv](#uv)や[rye](#rye)と異なる。
-共有ライブラリやフレームワークなどを有効にしたい場合に使いやすい。
+ソースコードを取ってきて自前ビルドするという点で上記[uv](#uv)と異なる。
+共有ライブラリやフレームワークなどを有効にしたカスタムビルドに便利、
+という使い方も過去にはあったが、
+[reticulateもuvを使うようになった](https://posit.co/blog/reticulate-1-41/)今となっては...?
 
 1.  [Homebrew]({{< relref "homebrew.md" >}}) か
     [Git]({{< relref "git.md" >}}) を使ってpyenvをインストール:
@@ -135,21 +137,15 @@ uvの成熟とともに一般ユーザーにとっての存在意義が薄れて
     起動時間も短くなる。
 
 1.  シェルを再起動して設定を反映し、
+    必要に応じて環境変数をセットし、
     目当てのバージョンを探してインストール:
 
     ```sh
     exec $SHELL -l
+    export PYTHON_CONFIGURE_OPTS="--enable-shared"
     pyenv install -l | less
-    pyenv install 3.13
+    pyenv install 3.11
     exec $SHELL -l
-    ```
-
-    R から [`reticulate`](https://rstudio.github.io/reticulate/)
-    越しに呼ぶ場合は共有ライブラリを有効にしてビルドする:
-    ```sh
-    env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.10
-    # or
-    Rscript -e 'reticulate::install_python("3.10")'
     ```
 
 1.  [pip]({{< relref "pip.md" >}}) のパスを確認し、パッケージを入れる:
