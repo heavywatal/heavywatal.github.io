@@ -140,19 +140,32 @@ GitHub Education に登録すれば Pro 相当の機能を無料で使わせて�
 
 #### 使い方
 
-とにかく自動補完をオンにしてテキストを書く。
+大きく3つの方法がある。
+いずれにせよ、開いているファイルや選択中のテキストを文脈として読み取ってもらえる。
+AIを使う、というと一般にはチャットのイメージが強いだろうけど、
+質問や命令を考える必要さえない自動補完こそがズボラな人間の強力な味方。
+
+1. チャット用のサイドバーで質問や編集を行う。
+   [3つのモードがある](https://github.blog/ai-and-ml/github-copilot/copilot-ask-edit-and-agent-modes-what-they-do-and-when-to-use-them/):
+   - **Ask**: 質問に答えてもらうだけ。\
+     e.g., "How do you remove axis ticks in ggplot?", "Explain this code".
+   - **Edit**: 編集を提案してもらう。ファイル書き換えユーザーが差分を確認してから。\
+     e.g., "Correct grammatical and typographical errors", "Translate it to Japanese".
+   - **Agent**: 目的だけを伝えて、ファイルの編集もいちいち確認せず任せる。
+2. <kbd>⌘</kbd><kbd>i</kbd> で **Inline Chat** を開き、
+   上記 "Ask" や "Edit" に相当することをその場で行う。
+3. とにかく自動補完をオンにしてテキストを書き、続きを **Inline Suggestion** してもらう。
+
 
 key  | command | description
 ---- | ------- | -----------
 <kbd>esc</kbd> | Hide Inline Suggestion | 却下
 <kbd>tab</kbd> | Accept Inline Suggestion | 全部採用
 <kbd>⌘</kbd><kbd>→</kbd> | Accept Next Word Of ... | 部分採用
-<kbd>⌥</kbd><kbd>\ </kbd> | Trigger Inline Suggestion | 自動補完されないときに手動で
-<kbd>^</kbd><kbd>⏎</kbd> | Open Completions Panel | 別パネルで補完候補を表示
+<kbd>⌥</kbd><kbd>&bsol;</kbd> | Trigger Inline Suggestion | 自動補完されないときに手動で
 <kbd>⌘</kbd><kbd>i</kbd> | Toggle Inline Chat | その場で簡易チャット
 <kbd>^</kbd><kbd>⌘</kbd><kbd>i</kbd> | Toggle Chat | 右側にバーを開いてチャット
-<kbd>⇧</kbd><kbd>⌘</kbd><kbd>i</kbd> | Toggle Copilot Edits | 複数ファイルにまたがる変更とか
-
+<kbd>⌘</kbd><kbd>.</kbd> | Set Chat Mode | Ask → Edit → Agent → ...
 
 ### R
 
