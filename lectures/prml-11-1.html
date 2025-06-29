@@ -69,7 +69,7 @@ PRML輪読会 11章1節
 <dt>Publisher</dt>
 <dd><a href="http://www.springer.com/computer/image+processing/book/978-0-387-31073-2">Springer</a></dd>
 <dt>Materials</dt>
-<dd><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/">http://research.microsoft.com/en-us/um/people/cmbishop/prml/</a></dd>
+<dd><a href="https://www.microsoft.com/en-us/research/people/cmbishop/prml-book/">https://www.microsoft.com/en-us/research/people/cmbishop/prml-book/</a></dd>
 <dt>輪読担当</dt>
 <dd>岩嵜航</dd>
 <dt>日程</dt>
@@ -78,7 +78,10 @@ PRML輪読会 11章1節
 <h2 id="11-sampling-methods">11. Sampling Methods</h2>
 <p>10章では決定論的な近似を見てきた。
 この章ではサンプリングを伴う <em>Monte Carlo</em> 法を取り扱う。</p>
-<div class="note">
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">
+Note
+</p>
 <p>モンテカルロ法の由来</p>
 <p>スタニスワフ・ウラムがソリテアの成功率を考えてた時に思いついて、
 同僚のジョン・フォン・ノイマンが計算機上での実用まで持ってったらしい。
@@ -89,10 +92,7 @@ PRML輪読会 11章1節
 <p><strong>目標:</strong>
 変数 $\mathbf z$ の分布 $\color{red}{p(\mathbf z)}$ を考えた上で、
 ある関数 $\color{blue}{f(\mathbf z)}$ の値がどうなるか予測したい。</p>
-<div class="note">
-<p><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.1.png">Figure 11.1</a></p>
-<p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.1.png" alt="Figure 11.1" width="300px"></p>
-</div>
+<p>Figure 11.1</p>
 <p>$\color{blue}{f(\textbf{z})}$ の期待値は (<strong>式11.1</strong>)</p>
 <div>\[
 \mathbb E[f] = \int f(\mathbf z) p(\mathbf z) \mathrm d \mathbf z
@@ -128,12 +128,14 @@ $\mathbf{z}_l$ をそれぞれ $f$ に放り込んで平均を取ってみよう
 <hr>
 <p>$\color{red}{p(\mathbf z)}$ が実は $p(z_1, z_2, &hellip;, z_M)$ という同時確率だということを思い出そう。
 $z_i$ がそれぞれ独立な分布から出てくる場合はいいとして、そうじゃない場合はどうしたらいいか？</p>
-<div class="note">
-<p><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure8.2.png">Figure 8.2</a></p>
-<p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure8.2.png" alt="Figure 8.2" width="200px"></p>
-変数の因果関係がこのような閉路なし有向グラフで表せる場合、同時確率は **式 8.4**
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">
+Note
+</p>
+<p>Figure 8.2</p>
+<p>変数の因果関係がこのような閉路なし有向グラフで表せる場合、同時確率は <strong>式 8.4</strong>
 $p(x_1)p(x_2)p(x_3)p(x_4 \mid x_1,x_2,x_3)p(x_5 \mid x_1,x_3)p(x_6 \mid x_4)p(x_7 \mid x_4,x_5)$
-のように条件付き確率の積で表せる。
+のように条件付き確率の積で表せる。</p>
 </div>
 <p>依存関係の親となるほうから順に条件付き確率で生成 (<em>ancestral sampling</em> <strong>伝承サンプリング</strong>)
 していくことにすると、同時確率は一般的に (<strong>式 11.4</strong>)</p>
@@ -151,14 +153,20 @@ $z_1$ から $z_M$ まで一周するだけでは求まらず、
 <p>コンピュータ上でサンプリングを行うときに真の乱数を使うことは稀で、だいたいは適当なシードから決定論的な過程で擬似乱数を生成することになる。
 擬似乱数の質も問題になったりするけどこの本では詳しく扱わない。
 いい感じで $(0,1)$ の一様乱数が生成できるものとして進める。</p>
-<div class="note">
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">
+Note
+</p>
 <p>Unix/Linux系OSが提供する乱数</p>
 <p>ハードウェア的なノイズから生成した真の乱数は <code>/dev/random</code> から読み出せるが、
 いくつも生成しようとするとノイズが溜まるまで待たされることになるのであまり使わない。
 待ち時間無しにそれなりの擬似乱数を作ってくれるデバイスとして <code>/dev/urandom</code>
 があるが、ここから毎回読み出すのもコストが高いので、シード生成にのみ使う。</p>
 </div>
-<div class="note">
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">
+Note
+</p>
 <p><a href="/cxx/random.html">/cxx/random</a></p>
 </div>
 <h4 id="1111-standard-distributions">11.1.1 Standard distributions</h4>
@@ -174,10 +182,12 @@ $\color{red}{p(y)}$ の不定積分を (<strong>式 11.6</strong>)</p>
 z = h(y) \equiv \int _{-\infty}^y p(\hat y) \mathrm d\hat y
 \]</div>
 <p>のように $\color{blue}{h(y)}$ として定義してみると <strong>図 11.2</strong> のような関係になる。</p>
-<div class="note">
-<p><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.2.png">Figure 11.2</a></p>
-<p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.2.png" alt="Figure 11.2" width="300px"></p>
-縦軸を $z$ として青い線を逆関数の目線で見てみると、$y$ が中央付近に来るような $z$ の区間はすごく短いが、$y$ が左から3分の1くらいのところに来るような $z$ の区間はかなり長い。
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">
+Note
+</p>
+<p>Figure 11.2</p>
+<p>縦軸を $z$ として青い線を逆関数の目線で見てみると、$y$ が中央付近に来るような $z$ の区間はすごく短いが、$y$ が左から3分の1くらいのところに来るような $z$ の区間はかなり長い。</p>
 </div>
 <p>その不定積分の逆関数を一様乱数にかけて $y = h^{-1}(z)$ とすれば欲しかった分布の乱数が出てくる！</p>
 <p>例えば指数分布だと (<strong>式 11.7</strong>)</p>
@@ -212,10 +222,7 @@ p(y_1, ..., y_M) = p(z_1, ..., z_M) \left| \frac {\partial (z_1, ..., z_M)}
 まず $(-1,1)$ の一様乱数をふたつ $z_1, z_2$ として取ってきて、
 $z_1^2 + z_2^2 \leq 1$ を満たさなければ捨てる。
 これは下図の円の中に収まる一様乱数だけ取ってくることに相当する。</p>
-<div class="note">
-<p><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.2.png">Figure 11.3</a></p>
-<p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.3.png" alt="Figure 11.3" width="200px"></p>
-</div>
+<p>Figure 11.3</p>
 <p>$r^2 = z_1^2 + z_2^2$ として (<strong>式 11.10</strong>, <strong>式 11.11</strong>)</p>
 <div>\[\begin{aligned}
 y_1 &= z_1 \left(\frac {-2\ln r^2} {r^2}\right)^{1/2}\\
@@ -229,7 +236,10 @@ p(y_1, y_2) &= p(z_1, z_2) \left| \frac{\partial(z_1, z_2)} {\partial(y_1, y_2)}
 \end{aligned}\]</div>
 <p>のように表され、それぞれ独立な標準正規乱数になっていることがわかる。
 平均と分散を変えたければ、$y = \mu + \sigma z$ のように標準偏差をかけて平均を足せばよい。</p>
-<div class="note">
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">
+Note
+</p>
 <p>C++11 の <code>std::normal_distribution</code> や GSL の <code>gsl_ran_gaussian</code> でも使われている。
 円に収まらないものを棄却する方法ではなく、三角関数を使ってそのまま用いる方法が取られる。</p>
 </div>

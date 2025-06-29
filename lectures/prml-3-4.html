@@ -69,7 +69,7 @@ PRML輪読会 3章4節
 <dt>Publisher</dt>
 <dd><a href="http://www.springer.com/computer/image+processing/book/978-0-387-31073-2">Springer</a></dd>
 <dt>Materials</dt>
-<dd><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/">http://research.microsoft.com/en-us/um/people/cmbishop/prml/</a></dd>
+<dd><a href="https://www.microsoft.com/en-us/research/people/cmbishop/prml-book/">https://www.microsoft.com/en-us/research/people/cmbishop/prml-book/</a></dd>
 <dt>輪読担当</dt>
 <dd>岩嵜航</dd>
 <dt>日程</dt>
@@ -91,13 +91,18 @@ PRML輪読会 3章4節
 p(X)   &= \sum^Y p(X,Y) \\
 p(X,Y) &= p(Y \mid X) P(X)
 \end{aligned}\]</div>
-<div class="note">
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">
+Note
+</p>
 <p>変数</p>
-<p>新しい入力: $\mathbf x$<br>
-それに対する出力(予測したい): $t$<br>
-モデルの中のパラメータ: $\mathbf w$<br>
-観察(トレーニング)データ: $\mathcal D$<br>
-<em>L</em> 個のモデル: $\mathcal M_1, &hellip;, \mathcal M_L$</p>
+<ul>
+<li>新しい入力: $\mathbf x$</li>
+<li>それに対する出力(予測したい): $t$</li>
+<li>モデルの中のパラメータ: $\mathbf w$</li>
+<li>観察(トレーニング)データ: $\mathcal D$</li>
+<li><em>L</em> 個のモデル: $\mathcal M_1, &hellip;, \mathcal M_L$</li>
+</ul>
 </div>
 <hr>
 <p>モデルの事後分布 $p(\mathcal M _i \mid \mathcal D)$ は、</p>
@@ -114,7 +119,10 @@ p(\mathcal M _i \mid \mathcal D)
 \]</div>
 <p>これを評価したいんだけど、
 モデルの事前分布なんてだいたい分からないので、重要なのは後者のevidence。</p>
-<div class="note">
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">
+Note
+</p>
 <p><em>Bayes factor</em> <strong>ベイズ因子</strong></p>
 <p>モデル $\mathcal M _j$ に対する $\mathcal M _i$ のevidence比
 $\frac {p(\mathcal D \mid \mathcal M _i)} {p(\mathcal D \mid \mathcal M _j)}$</p>
@@ -149,7 +157,10 @@ p(\mathcal D \mid \mathcal M _i)
 (ただしパラメータは事前分布からランダムに取ったもの) とも理解できる。
 この $p(\mathbf w \mid \mathcal M_i)$
 はモデルで想定してる何らかの事前分布ってことでいいのかな？</p>
-<div class="note">
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">
+Note
+</p>
 <p>積分の中身からすると、パラメータの事後分布を求める式の正規化項になる (<strong>式 3.69</strong>)</p>
 <div>\[
 p(\mathbf w \mid \mathcal D, \mathcal M _i)
@@ -158,13 +169,15 @@ p(\mathbf w \mid \mathcal D, \mathcal M _i)
 \]</div>
 </div>
 <p>あるひとつのパラメータ $w$ を持つモデルを考える。</p>
-<div class="note">
-<p><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure3.12.png">Figure 3.12</a> 近似</p>
-<p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure3.12.png" alt="Figure 3.12" width="300px"></p>
-パラメータ $w$ の事前分布(青)と、それよりシャープな事後分布(赤)。
-MAP推定値らへんで長方形に分布してるものとして近似。
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">
+Note
+</p>
+<p>Figure 3.12 近似</p>
+<p>パラメータ $w$ の事前分布(青)と、それよりシャープな事後分布(赤)。
+MAP推定値らへんで長方形に分布してるものとして近似。</p>
 </div>
-<p><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure3.12.png">Figure 3.12</a> のように近似すると式3.68の積分をただの掛け算で書き変えられる
+<p>Figure 3.12 のように近似すると式3.68の積分をただの掛け算で書き変えられる
 (モデル依存の表記を省略, <strong>式 3.70, 3.71</strong>)。</p>
 <div>\[\begin{aligned}
 p(\mathcal D)
@@ -194,14 +207,19 @@ p(\mathcal D)
 <p>パラメータが増える(モデルの複雑性が増す)ごとに第一項は大きくなっていくかもしれないが、
 第二項のペナルティも大きな負になっていく。
 <strong>中程度が良さそう → 過学習しない！</strong></p>
-<div class="note">
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">
+Note
+</p>
 <p>長方形じゃなくてもっとちゃんとしたGaussian近似をSection 4.4.1で</p>
 </div>
-<div class="note">
-<p><a href="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure3.13.png">Figure 3.13</a> <strong>どうして中程度の複雑性のモデルが好まれるか</strong></p>
-<p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure3.13.png" alt="Figure 3.13" width="300px"></p>
-横軸はデータセットが取りうる値を1次元で表現。
-モデルの複雑性を $\mathcal M _1 < \mathcal M _2 <  \mathcal M _3$ とする。
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">
+Note
+</p>
+<p>Figure 3.13 <strong>どうして中程度の複雑性のモデルが好まれるか</strong></p>
+<p>横軸はデータセットが取りうる値を1次元で表現。
+モデルの複雑性を $\mathcal M _1 &lt; \mathcal M _2 &lt;  \mathcal M _3$ とする。</p>
 <p>シンプルなモデル $\mathcal M _1$ は生成(説明)できるデータの範囲が狭く
 (いろいろパラメータを変えても似通ったデータセットしか出てこない)、
 複雑なモデル $\mathcal M _3$ はいろんなデータを生成できるがそれぞれの重みは低い。
