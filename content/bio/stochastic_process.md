@@ -38,31 +38,27 @@ Q(t) &= \lim_{\mathrm dt \to 0} (1 - \lambda \mathrm dt) ^ {t/ \mathrm d t}\\
      &= e ^ {-\lambda t}
 \end{aligned}\]</div>
 
-<div class="note">
+> [!note]
+> ネイピア数
+>
+> <div>\[\begin{aligned}
+> \lim_{x \to \infty} \left(1 + \frac 1 x \right)^x &= e\\
+> \lim_{x \to \infty} \left(1 + \frac a x \right)^x
+>    &= \lim_{y \to \infty} \left(1 + \frac 1 y \right)^{ay}\\
+>    &= e^a
+> \end{aligned}\]</div>
 
-ネイピア数
-
-<div>\[\begin{aligned}
-\lim_{x \to \infty} \left(1 + \frac 1 x \right)^x &= e\\
-\lim_{x \to \infty} \left(1 + \frac a x \right)^x
-   &= \lim_{y \to \infty} \left(1 + \frac 1 y \right)^{ay}\\
-   &= e^a
-\end{aligned}\]</div>
-</div>
-
-<div class="note">
-
-別の考え方
-
-<div>\[\begin{aligned}
-Q(t + \mathrm dt) &= Q(t) (1 - \lambda \mathrm dt)\\
-Q(t + \mathrm dt) - Q(t) &= -\lambda Q(t) \mathrm dt\\
-\frac {\mathrm dQ(t)} {\mathrm dt} &= -\lambda Q(t)\\
-\frac 1 {Q(t)} \mathrm dQ(t) &= -\lambda \mathrm dt\\
-\ln Q(t) &= -\lambda t\\
-Q(t) &= e ^ {-\lambda t}
-\end{aligned}\]</div>
-</div>
+> [!note]
+> 別の考え方
+>
+> <div>\[\begin{aligned}
+> Q(t + \mathrm dt) &= Q(t) (1 - \lambda \mathrm dt)\\
+> Q(t + \mathrm dt) - Q(t) &= -\lambda Q(t) \mathrm dt\\
+> \frac {\mathrm dQ(t)} {\mathrm dt} &= -\lambda Q(t)\\
+> \frac 1 {Q(t)} \mathrm dQ(t) &= -\lambda \mathrm dt\\
+> \ln Q(t) &= -\lambda t\\
+> Q(t) &= e ^ {-\lambda t}
+> \end{aligned}\]</div>
 
 $t$ らへんで初めて起こる確率は、
 $t$ まで起こらず次の瞬間に起こる確率

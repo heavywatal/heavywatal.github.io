@@ -17,7 +17,7 @@ Publisher
 :   [Springer](http://www.springer.com/computer/image+processing/book/978-0-387-31073-2)
 
 Materials
-:   <http://research.microsoft.com/en-us/um/people/cmbishop/prml/>
+:   <https://www.microsoft.com/en-us/research/people/cmbishop/prml-book/>
 
 輪読担当
 :   岩嵜航
@@ -92,14 +92,12 @@ p(D \mid \mu) = \prod_{n = 1}^N {p(x_n \mid \mu)}
                &= \{\ln \mu - \ln(1 - \mu)\} \sum_{n = 1}^N x_n + N \ln (1 - \mu)\\
 \end{aligned}\]</div>
 
-<div class="note">
-
-*sufficient statistic*: **十分統計量**
-
-ここで対数尤度は個々の $x_n$ によらず、
-総和 $\sum_n {x_n}$ だけに依存している。
-そんな感じのやつを十分統計量と呼ぶが、ここでは詳しく触れない。
-</div>
+> [!note]
+> *sufficient statistic*: **十分統計量**
+>
+> ここで対数尤度は個々の $x_n$ によらず、
+> 総和 $\sum_n {x_n}$ だけに依存している。
+> そんな感じのやつを十分統計量と呼ぶが、ここでは詳しく触れない。
 
 *μ* で微分したものが0になるように
 
@@ -126,14 +124,10 @@ p(D \mid \mu) = \prod_{n = 1}^N {p(x_n \mid \mu)}
 \text{Bin}(m \mid N, \mu) = \binom{N}{m} \mu^m (1 - \mu)^{N - m}
 \]</div>
 
-<div class="note">
-
-[Figure 2.1](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.1.png)
-
-<img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.1.png" alt="Figure 2.1" width="300px">
-
-例えば *N* = 10, *μ* = 0.25 のときの *m* の頻度分布
-</div>
+> [!note]
+> Figure 2.1
+>
+> 例えば *N* = 10, *μ* = 0.25 のときの *m* の頻度分布
 
 1回1回の観察は独立なベルヌーイ試行であり、
 そういうときは $\operatorname{E}[x + z] = \operatorname{E}[x] + \operatorname{E}[z]$ かつ
@@ -186,18 +180,10 @@ $\operatorname{var}[x + z] = \operatorname{var}[x] + \operatorname{var}[z]$ が�
                 &= \frac{ab}{(a + b)^2 (a + b + 1)}
 \end{aligned}\]</div>
 
-<div class="note">
-
-[Figure 2.2a](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.2a.png), [Figure 2.2b](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.2b.png), [Figure 2.2c](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.2c.png), [Figure 2.2d](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.2d.png)
-
-<p>
-<img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.2a.png" alt="Figure 2.2a" width="240px">
-<img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.2b.png" alt="Figure 2.2b" width="240px">
-<img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.2c.png" alt="Figure 2.2c" width="240px">
-<img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.2d.png" alt="Figure 2.2d" width="240px">
-</p>
-ベータ分布がどんな形になるか、いろんな *a*, *b* でプロットしてみた
-</div>
+> [!note]
+> Figure 2.2
+>
+> ベータ分布がどんな形になるか、いろんな *a*, *b* でプロットしてみた
 
 これを二項分布の尤度関数(2.9)と掛け算して得られる事後分布の比例関係は
 
@@ -215,19 +201,12 @@ p(\mu \mid m, N, a, b) &= \frac{\Gamma(N + a + b)}{\Gamma(m + a) \Gamma(N - m + 
 
 この事後分布は、新しいデータを加えて再評価するときに事前分布として使える。
 
-<div class="note">
-Figure 2.3
-
-<p>
-<img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.3a.png" alt="Figure 2.3a" width="240px">
-<img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.3b.png" alt="Figure 2.3b" width="240px">
-<img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.3c.png" alt="Figure 2.3c" width="240px">
-</p>
-
-*a* = 2, *b* = 2 の事前分布に([Figure 2.3a](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.3a.png))、
-1回投げて表が出たというデータが追加されると([Figure 2.3b](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.3b.png))、
-事後分布は *a* = 3, *b* = 2 のベータ分布になる([Figure 2.3c](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.3c.png))。
-</div>
+> [!note]
+> Figure 2.3
+>
+> *a* = 2, *b* = 2 の事前分布に(Figure 2.3a)、
+> 1回投げて表が出たというデータが追加されると(Figure 2.3b)、
+> 事後分布は *a* = 3, *b* = 2 のベータ分布になる(Figure 2.3c)。
 
 表の観測数 *m* 回、裏の観測数 *N - m* 回が追加されたら、
 事前分布の *a* と *b* をその分それぞれ増やすだけで事後分布が得られる。
@@ -330,36 +309,35 @@ $\mu_k$ を求めるには下記のようにラグランジュ未定乗数法を
 
 結局、観察総数 *N* のうちその目が出た数の割合が最尤推定値。
 
-<div class="note">
-
-ラグランジュ未定係数法 (Appendix E)
-
-極値を求めたい関数と拘束条件をそれぞれ *f*, *g* で表すと
-
-<div>\[\begin{aligned}
-df &= \frac{\partial f}{\partial \mu_1} + ... + \frac{\partial f}{\partial \mu_K} = 0\\
-dg &= \frac{\partial g}{\partial \mu_1} + ... + \frac{\partial g}{\partial \mu_K} = 0
-\end{aligned}\]</div>
-<div>\[
-\frac{\partial f}{\partial \mu_k} + \lambda \frac{\partial g}{\partial \mu_k} = 0
-\]</div>
-
-て感じで拘束条件のない連立方程式に置き換えられる。
-今回の例では
-
-<div>\[\begin{aligned}
-f(\vec{\mu}) = \sum_{k=1}^K m_k \ln \mu_k;\;
-g(\vec{\mu}) = \sum_{k=1}^K \mu_k - 1
-\end{aligned}\]</div>
-<div>\[\begin{aligned}
-\frac{\partial f}{\partial \mu_k} + \lambda \frac{\partial g}{\partial \mu_k} =
-\frac{m_k}{\mu_k} + \lambda &= 0\\
-m_k + \lambda \mu_k &= 0\;\therefore \mu_k^{ML} = - \frac{m_k}{\lambda}\\
-\sum_k(m_k + \lambda \mu_k) &= 0\\
-N + \lambda &= 0\\
-\lambda &= -N
-\end{aligned}\]</div>
-</div>
+> [!note]
+> ラグランジュ未定係数法 (Appendix E)
+>
+> 極値を求めたい関数と拘束条件をそれぞれ *f*, *g* で表すと
+>
+> <div>\[\begin{aligned}
+> df &= \frac{\partial f}{\partial \mu_1} + ... + \frac{\partial f}{\partial \mu_K} = 0\\
+> dg &= \frac{\partial g}{\partial \mu_1} + ... + \frac{\partial g}{\partial \mu_K} = 0
+> \end{aligned}\]</div>
+> <div>\[
+> \frac{\partial f}{\partial \mu_k} + \lambda \frac{\partial g}{\partial \mu_k} = 0
+> \]</div>
+>
+> て感じで拘束条件のない連立方程式に置き換えられる。
+> 今回の例では
+>
+> <div>\[\begin{aligned}
+> f(\vec{\mu}) = \sum_{k=1}^K m_k \ln \mu_k;\;
+> g(\vec{\mu}) = \sum_{k=1}^K \mu_k - 1
+> \end{aligned}\]</div>
+> <div>\[\begin{aligned}
+> \frac{\partial f}{\partial \mu_k} + \lambda \frac{\partial g}{\partial \mu_k} =
+> \frac{m_k}{\mu_k} + \lambda &= 0\\
+> m_k + \lambda \mu_k &= 0\;\therefore \mu_k^{ML} = - \frac{m_k}{\lambda}\\
+> \sum_k(m_k + \lambda \mu_k) &= 0\\
+> N + \lambda &= 0\\
+> \lambda &= -N
+> \end{aligned}\]</div>
+> </div>
 
 ------------------------------------------------------------------------
 
@@ -385,28 +363,18 @@ N + \lambda &= 0\\
 = \frac{\Gamma(\sum_k{\alpha_k})}{\Gamma(\alpha_1)...\Gamma(\alpha_K)} \prod_{k=1}^K \mu_k^{\alpha_k - 1}
 \end{aligned}\]</div>
 
-<div class="note">
+> [!note]
+> Figure 2.4
+>
+> $0 \le \mu_k \le 1$ かつ $\sum_k \mu_k = 1$
+> という制約下での $K$ 変数のディリクレ分布は $K – 1$ 次元の
+> **単体** (*simplex*) になる。
 
-[Figure 2.4](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.4.png)
-
-<img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.4.png" alt="Figure 2.4" width="200px">
-
-$0 \le \mu_k \le 1$ かつ $\sum_k \mu_k = 1$
-という制約下での $K$ 変数のディリクレ分布は $K – 1$ 次元の
-**単体** (*simplex*) になる。
-</div>
-
-<div class="note">
-
-[Figure 2.5a](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.5a.png), [Figure 2.5b](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.5b.png), [Figure 2.5c](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.5c.png)
-
-<img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.5a.png" alt="Figure 2.5a" width="200px">
-<img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.5b.png" alt="Figure 2.5n" width="200px">
-<img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure2.5c.png" alt="Figure 2.5c" width="200px">
-
-いろんな $α$ でのディリクレ分布。
-simplexの面が水平軸方向に、密度が垂直軸になっている。
-</div>
+> [!note]
+> Figure 2.5a
+>
+> いろんな $α$ でのディリクレ分布。
+> simplexの面が水平軸方向に、密度が垂直軸になっている。
 
 事後分布はこれと尤度の掛け算に比例する (2.40)。
 それを積分して1になるよう正規化する (2.41)。
@@ -427,11 +395,9 @@ p(\vec{\mu} \mid D, \vec{\alpha})
 逆に言うと、ディリクレ分布はベータ分布を一般化した多変量ベータ分布と見なせる。
 超パラメータ $\alpha_k$ はサイコロで *k* が出た有効観察数のように解釈できる。
 
-<div class="note">
-
-**Johann Peter Gustav Lejeune Dirichlet** (1805–1859)
-
-名前は 'le jeune de Richelet (リシュレから来た若者)' に由来。
-最初の論文でフェルマーの最終定理の部分的な証明をして一躍有名に。
-作曲家メンデルスゾーンの妹と結婚した。
-</div>
+> [!note]
+> **Johann Peter Gustav Lejeune Dirichlet** (1805–1859)
+>
+> 名前は 'le jeune de Richelet (リシュレから来た若者)' に由来。
+> 最初の論文でフェルマーの最終定理の部分的な証明をして一躍有名に。
+> 作曲家メンデルスゾーンの妹と結婚した。

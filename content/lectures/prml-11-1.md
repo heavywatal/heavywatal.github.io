@@ -17,7 +17,7 @@ Publisher
 :   [Springer](http://www.springer.com/computer/image+processing/book/978-0-387-31073-2)
 
 Materials
-:   <http://research.microsoft.com/en-us/um/people/cmbishop/prml/>
+:   <https://www.microsoft.com/en-us/research/people/cmbishop/prml-book/>
 
 輪読担当
 :   岩嵜航
@@ -30,27 +30,21 @@ Materials
 10章では決定論的な近似を見てきた。
 この章ではサンプリングを伴う *Monte Carlo* 法を取り扱う。
 
-<div class="note">
+> [!note]
+> モンテカルロ法の由来
+>
+> スタニスワフ・ウラムがソリテアの成功率を考えてた時に思いついて、
+> 同僚のジョン・フォン・ノイマンが計算機上での実用まで持ってったらしい。
+> モナコ公国のモンテカルロ地区に国営カジノがあって、
+> ウラムの叔父がそこで負けて親戚から借金したことにちなんで
+> 同僚のニコラス・メトロポリスが命名したらしい。
 
-モンテカルロ法の由来
-
-スタニスワフ・ウラムがソリテアの成功率を考えてた時に思いついて、
-同僚のジョン・フォン・ノイマンが計算機上での実用まで持ってったらしい。
-モナコ公国のモンテカルロ地区に国営カジノがあって、
-ウラムの叔父がそこで負けて親戚から借金したことにちなんで
-同僚のニコラス・メトロポリスが命名したらしい。
-</div>
 
 **目標:**
 変数 $\mathbf z$ の分布 $\color{red}{p(\mathbf z)}$ を考えた上で、
 ある関数 $\color{blue}{f(\mathbf z)}$ の値がどうなるか予測したい。
 
-<div class="note">
-
-[Figure 11.1](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.1.png)
-
-<p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.1.png" alt="Figure 11.1" width="300px"></p>
-</div>
+Figure 11.1
 
 $\color{blue}{f(\textbf{z})}$ の期待値は (**式11.1**)
 
@@ -98,15 +92,12 @@ $\mathbf{z}_l$ をそれぞれ $f$ に放り込んで平均を取ってみよう
 $\color{red}{p(\mathbf z)}$ が実は $p(z_1, z_2, ..., z_M)$ という同時確率だということを思い出そう。
 $z_i$ がそれぞれ独立な分布から出てくる場合はいいとして、そうじゃない場合はどうしたらいいか？
 
-<div class="note">
-
-[Figure 8.2](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure8.2.png)
-
-<p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure8.2.png" alt="Figure 8.2" width="200px"></p>
-変数の因果関係がこのような閉路なし有向グラフで表せる場合、同時確率は **式 8.4**
-$p(x_1)p(x_2)p(x_3)p(x_4 \mid x_1,x_2,x_3)p(x_5 \mid x_1,x_3)p(x_6 \mid x_4)p(x_7 \mid x_4,x_5)$
-のように条件付き確率の積で表せる。
-</div>
+> [!note]
+> Figure 8.2
+>
+> 変数の因果関係がこのような閉路なし有向グラフで表せる場合、同時確率は **式 8.4**
+> $p(x_1)p(x_2)p(x_3)p(x_4 \mid x_1,x_2,x_3)p(x_5 \mid x_1,x_3)p(x_6 \mid x_4)p(x_7 \mid x_4,x_5)$
+> のように条件付き確率の積で表せる。
 
 依存関係の親となるほうから順に条件付き確率で生成 (*ancestral sampling* **伝承サンプリング**)
 していくことにすると、同時確率は一般的に (**式 11.4**)
@@ -130,20 +121,17 @@ $z_1$ から $z_M$ まで一周するだけでは求まらず、
 擬似乱数の質も問題になったりするけどこの本では詳しく扱わない。
 いい感じで $(0,1)$ の一様乱数が生成できるものとして進める。
 
-<div class="note">
+> [!note]
+> Unix/Linux系OSが提供する乱数
+>
+> ハードウェア的なノイズから生成した真の乱数は `/dev/random` から読み出せるが、
+> いくつも生成しようとするとノイズが溜まるまで待たされることになるのであまり使わない。
+> 待ち時間無しにそれなりの擬似乱数を作ってくれるデバイスとして `/dev/urandom`
+> があるが、ここから毎回読み出すのもコストが高いので、シード生成にのみ使う。
 
-Unix/Linux系OSが提供する乱数
+> [!note]
+> [/cxx/random]({{< relref "random.md" >}})
 
-ハードウェア的なノイズから生成した真の乱数は `/dev/random` から読み出せるが、
-いくつも生成しようとするとノイズが溜まるまで待たされることになるのであまり使わない。
-待ち時間無しにそれなりの擬似乱数を作ってくれるデバイスとして `/dev/urandom`
-があるが、ここから毎回読み出すのもコストが高いので、シード生成にのみ使う。
-</div>
-
-<div class="note">
-
-[/cxx/random]({{< relref "random.md" >}})
-</div>
 
 #### 11.1.1 Standard distributions
 
@@ -164,13 +152,10 @@ z = h(y) \equiv \int _{-\infty}^y p(\hat y) \mathrm d\hat y
 
 のように $\color{blue}{h(y)}$ として定義してみると **図 11.2** のような関係になる。
 
-<div class="note">
-
-[Figure 11.2](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.2.png)
-
-<p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.2.png" alt="Figure 11.2" width="300px"></p>
-縦軸を $z$ として青い線を逆関数の目線で見てみると、$y$ が中央付近に来るような $z$ の区間はすごく短いが、$y$ が左から3分の1くらいのところに来るような $z$ の区間はかなり長い。
-</div>
+> [!note]
+> Figure 11.2
+>
+> 縦軸を $z$ として青い線を逆関数の目線で見てみると、$y$ が中央付近に来るような $z$ の区間はすごく短いが、$y$ が左から3分の1くらいのところに来るような $z$ の区間はかなり長い。
 
 その不定積分の逆関数を一様乱数にかけて $y = h^{-1}(z)$ とすれば欲しかった分布の乱数が出てくる！
 
@@ -216,12 +201,7 @@ p(y_1, ..., y_M) = p(z_1, ..., z_M) \left| \frac {\partial (z_1, ..., z_M)}
 $z_1^2 + z_2^2 \leq 1$ を満たさなければ捨てる。
 これは下図の円の中に収まる一様乱数だけ取ってくることに相当する。
 
-<div class="note">
-
-[Figure 11.3](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.2.png)
-
-<p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure11.3.png" alt="Figure 11.3" width="200px"></p>
-</div>
+Figure 11.3
 
 $r^2 = z_1^2 + z_2^2$ として (**式 11.10**, **式 11.11**)
 
@@ -241,11 +221,9 @@ p(y_1, y_2) &= p(z_1, z_2) \left| \frac{\partial(z_1, z_2)} {\partial(y_1, y_2)}
 のように表され、それぞれ独立な標準正規乱数になっていることがわかる。
 平均と分散を変えたければ、$y = \mu + \sigma z$ のように標準偏差をかけて平均を足せばよい。
 
-<div class="note">
-
-C++11 の `std::normal_distribution` や GSL の `gsl_ran_gaussian` でも使われている。
-円に収まらないものを棄却する方法ではなく、三角関数を使ってそのまま用いる方法が取られる。
-</div>
+> [!note]
+> C++11 の `std::normal_distribution` や GSL の `gsl_ran_gaussian` でも使われている。
+> 円に収まらないものを棄却する方法ではなく、三角関数を使ってそのまま用いる方法が取られる。
 
 多変量の場合も同様に $\mathbf y = \mathbf \mu + \mathbf{Lz}$ として動かせる。
 ただし共分散は $\mathbf \Sigma = \mathbf{LL}^\mathrm T$ として **コレスキー分解** (*Cholesky decomposition*)する。

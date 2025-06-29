@@ -17,7 +17,7 @@ Publisher
 :   [Springer](http://www.springer.com/computer/image+processing/book/978-0-387-31073-2)
 
 Materials
-:   <http://research.microsoft.com/en-us/um/people/cmbishop/prml/>
+:   <https://www.microsoft.com/en-us/research/people/cmbishop/prml-book/>
 
 輪読担当
 :   岩嵜航
@@ -48,16 +48,14 @@ p(X)   &= \sum^Y p(X,Y) \\
 p(X,Y) &= p(Y \mid X) P(X)
 \end{aligned}\]</div>
 
-<div class="note">
-
-変数
-
-新しい入力: $\mathbf x$\
-それに対する出力(予測したい): $t$\
-モデルの中のパラメータ: $\mathbf w$\
-観察(トレーニング)データ: $\mathcal D$\
-*L* 個のモデル: $\mathcal M_1, ..., \mathcal M_L$
-</div>
+> [!note]
+> 変数
+>
+> - 新しい入力: $\mathbf x$
+> - それに対する出力(予測したい): $t$
+> - モデルの中のパラメータ: $\mathbf w$
+> - 観察(トレーニング)データ: $\mathcal D$
+> - *L* 個のモデル: $\mathcal M_1, ..., \mathcal M_L$
 
 ------------------------------------------------------------------------
 
@@ -78,13 +76,11 @@ p(\mathcal M _i \mid \mathcal D)
 これを評価したいんだけど、
 モデルの事前分布なんてだいたい分からないので、重要なのは後者のevidence。
 
-<div class="note">
-
-*Bayes factor* **ベイズ因子**
-
-モデル $\mathcal M _j$ に対する $\mathcal M _i$ のevidence比
-$\frac {p(\mathcal D \mid \mathcal M _i)} {p(\mathcal D \mid \mathcal M _j)}$
-</div>
+> [!note]
+> *Bayes factor* **ベイズ因子**
+>
+> モデル $\mathcal M _j$ に対する $\mathcal M _i$ のevidence比
+> $\frac {p(\mathcal D \mid \mathcal M _i)} {p(\mathcal D \mid \mathcal M _j)}$
 
 ------------------------------------------------------------------------
 
@@ -127,29 +123,24 @@ p(\mathcal D \mid \mathcal M _i)
 この $p(\mathbf w \mid \mathcal M_i)$
 はモデルで想定してる何らかの事前分布ってことでいいのかな？
 
-<div class="note">
-
-積分の中身からすると、パラメータの事後分布を求める式の正規化項になる (**式 3.69**)
-
-<div>\[
-p(\mathbf w \mid \mathcal D, \mathcal M _i)
-   = \frac {p(\mathcal D \mid \mathbf w, \mathcal M _i) p(\mathbf w \mid \mathcal M _i)}
-           {p(\mathcal D \mid \mathcal M _i)}
-\]</div>
-</div>
+> [!note]
+> 積分の中身からすると、パラメータの事後分布を求める式の正規化項になる (**式 3.69**)
+>
+> <div>\[
+> p(\mathbf w \mid \mathcal D, \mathcal M _i)
+>    = \frac {p(\mathcal D \mid \mathbf w, \mathcal M _i) p(\mathbf w \mid \mathcal M _i)}
+>            {p(\mathcal D \mid \mathcal M _i)}
+> \]</div>
 
 あるひとつのパラメータ $w$ を持つモデルを考える。
 
-<div class="note">
+> [!note]
+> Figure 3.12 近似
+>
+> パラメータ $w$ の事前分布(青)と、それよりシャープな事後分布(赤)。
+> MAP推定値らへんで長方形に分布してるものとして近似。
 
-[Figure 3.12](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure3.12.png) 近似
-
-<p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure3.12.png" alt="Figure 3.12" width="300px"></p>
-パラメータ $w$ の事前分布(青)と、それよりシャープな事後分布(赤)。
-MAP推定値らへんで長方形に分布してるものとして近似。
-</div>
-
-[Figure 3.12](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure3.12.png) のように近似すると式3.68の積分をただの掛け算で書き変えられる
+Figure 3.12 のように近似すると式3.68の積分をただの掛け算で書き変えられる
 (モデル依存の表記を省略, **式 3.70, 3.71**)。
 
 <div>\[\begin{aligned}
@@ -185,25 +176,20 @@ p(\mathcal D)
 第二項のペナルティも大きな負になっていく。
 **中程度が良さそう → 過学習しない！**
 
-<div class="note">
+> [!note]
+> 長方形じゃなくてもっとちゃんとしたGaussian近似をSection 4.4.1で
 
-長方形じゃなくてもっとちゃんとしたGaussian近似をSection 4.4.1で
-</div>
-
-<div class="note">
-
-[Figure 3.13](http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure3.13.png) **どうして中程度の複雑性のモデルが好まれるか**
-
-<p><img src="http://research.microsoft.com/en-us/um/people/cmbishop/prml/prmlfigs-png/Figure3.13.png" alt="Figure 3.13" width="300px"></p>
-横軸はデータセットが取りうる値を1次元で表現。
-モデルの複雑性を $\mathcal M _1 < \mathcal M _2 <  \mathcal M _3$ とする。
-
-シンプルなモデル $\mathcal M _1$ は生成(説明)できるデータの範囲が狭く
-(いろいろパラメータを変えても似通ったデータセットしか出てこない)、
-複雑なモデル $\mathcal M _3$ はいろんなデータを生成できるがそれぞれの重みは低い。
-特定のデータセット $\mathcal D _0$ に対しては中程度の複雑さを持つモデル
-$\mathcal M _2$ が一番大きいevidenceを持つことになる。
-</div>
+> [!note]
+> Figure 3.13 **どうして中程度の複雑性のモデルが好まれるか**
+>
+> 横軸はデータセットが取りうる値を1次元で表現。
+> モデルの複雑性を $\mathcal M _1 < \mathcal M _2 <  \mathcal M _3$ とする。
+>
+> シンプルなモデル $\mathcal M _1$ は生成(説明)できるデータの範囲が狭く
+> (いろいろパラメータを変えても似通ったデータセットしか出てこない)、
+> 複雑なモデル $\mathcal M _3$ はいろんなデータを生成できるがそれぞれの重みは低い。
+> 特定のデータセット $\mathcal D _0$ に対しては中程度の複雑さを持つモデル
+> $\mathcal M _2$ が一番大きいevidenceを持つことになる。
 
 ------------------------------------------------------------------------
 
