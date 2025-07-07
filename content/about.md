@@ -189,6 +189,8 @@ Contacts
 
 ## Teaching / Outreach
 
+-   「[統計モデリング入門](/slides/iwate2025stats/)」
+    岩手大学  [連合農学研究科](https://ugas.agr.iwate-u.ac.jp/) (2024-06)
 -   「[Rを用いたデータ解析の基礎](/slides/tohoku2025r/)」東北大学 進化学実習 (2025-04)
 -   「[Rによるデータ前処理実習](/slides/tmd2024/)」
     東京医科歯科大 [データサイエンス人材育成プログラム](https://ds.tmdu.org/) (2024-09)
