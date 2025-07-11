@@ -8,6 +8,9 @@ tags = ["vcs", "writing"]
   parent = "lectures"
 +++
 
+[Git]: https://git-scm.com/
+[GitHub]: https://github.com
+
 2018-10-15 中央水産研究所
 
 ## 事前準備
@@ -59,9 +62,11 @@ tags = ["vcs", "writing"]
     - [VSCode]({{< relref "vscode.md" >}}): Microsoft製
     - [RStudio](https://www.rstudio.com/): RStudio製
 
--   [GitHub<img height=16 width=16 src="https://cdn.simpleicons.org/github">](https://github.com)に個人アカウントを作る。
+-   <iconify-icon inline icon="bi:github"></iconify-icon>
+    [GitHub]に個人アカウントを作る。
 
--   Git<img height=16 width=16 src="https://cdn.simpleicons.org/git">の初期設定をターミナルから行う:
+-   <iconify-icon inline icon="bi:git"></iconify-icon>
+    [Git]の初期設定をターミナルから行う:
 
     ```sh
     git --version  # 2.0以上であることを確認
@@ -131,8 +136,8 @@ plot論文.R
 
 ### オンラインストレージやバックアップ機能では不十分
 
-- [Dropbox<img height=16 width=16 src="https://cdn.simpleicons.org/dropbox">](https://dropbox.com) とか
-  [Google Drive<img height=16 width=16 src="https://cdn.simpleicons.org/googledrive">](https://drive.google.com/)
+- [Dropbox](https://dropbox.com) とか
+  [Google Drive](https://drive.google.com/)
   では、保存のたびに履歴が残る。
 - [Time Machine](https://support.apple.com/HT201250)
   では、一定時間間隔で履歴が残る。
@@ -163,11 +168,11 @@ e.g., https://github.com/tidyverse/stringr/commits/master
 
 ### 両者はどういう関係？
 
-[Git<img height=16 width=16 src="https://cdn.simpleicons.org/git">](https://git-scm.com/)
+<iconify-icon inline icon="bi:git"></iconify-icon> [Git]
 は分散型バージョン管理システムとして最も広く使われるオープンソース・ソフトウェア。
 手元のコンピュータ上でこれを操作して、変更履歴を記録・閲覧したり送受信したりする。
 
-[GitHub<img height=16 width=16 src="https://cdn.simpleicons.org/github">](https://github.com)
+<iconify-icon inline icon="bi:github"></iconify-icon> [GitHub]
 はGitをより便利に使うためのオンラインサービスであり、それを運営する会社の名前でもある。
 個人的なリポジトリ置き場としてはもちろんのこと、
 多人数で共有・協力してプロジェクトを進めるプラットフォームとしても使える。
@@ -175,17 +180,18 @@ e.g., https://github.com/tidyverse/stringr/commits/master
 ### 類似ツール
 
 - Version Control System (VCS)
-    - [Git<img height=16 width=16 src="https://cdn.simpleicons.org/git">](https://git-scm.com/) `git`
-    - [Mercurial<img height=16 width=16 src="https://cdn.simpleicons.org/mercurial">](https://www.mercurial-scm.org/) `hg`
+    - <iconify-icon inline icon="bi:git"></iconify-icon> [Git] `git`
+    - [Mercurial](https://www.mercurial-scm.org/) `hg`
     - その他 svn, cvs, rcs など。
 - Hosting Service
-    - [GitHub<img height=16 width=16 src="https://cdn.simpleicons.org/github">](https://github.com):
+    - <iconify-icon inline icon="bi:github"></iconify-icon> [GitHub]:
       公開リポジトリは無料。情報も連携も豊富。
-    - [Bitbucket<img height=16 width=16 src="https://cdn.simpleicons.org/bitbucket">](https://bitbucket.org/):
-      非公開リポジトリも無料。
-    - [GitLab<img height=16 width=16 src="https://cdn.simpleicons.org/gitlab">](https://about.gitlab.com/):
+    - <iconify-icon inline icon="bi:gitlab"></iconify-icon>
+      [GitLab](https://about.gitlab.com/):
       非公開リポジトリも無料。ローカル版もあり。
-    - [Gitea<img height=16 width=16 src="https://cdn.simpleicons.org/gitea">](https://gitea.io/en-us/):
+    - [Bitbucket](https://bitbucket.org/):
+      非公開リポジトリも無料。
+    - [Gitea](https://gitea.io/en-us/):
       ローカル版のみ。
     - その他 SourceForge, Google Code など。
 
@@ -195,7 +201,8 @@ VCSは基本的にGit一択。\
 
 ### GitHubの使いみち
 
-- 基本: プレーンテキストのバージョン管理<img height=16 width=16 src="https://cdn.simpleicons.org/git">
+- 基本: プレーンテキストのバージョン管理
+  <iconify-icon inline icon="bi:git"></iconify-icon>
     - プログラムのソースコード:
       e.g., [ggplot2](https://github.com/tidyverse/ggplot2), [rstan](https://github.com/stan-dev/rstan)
     - 論文や本の原稿、サプリ:
@@ -229,24 +236,24 @@ VCSは基本的にGit一択。\
 : 手元のファイルの変更はまだリポジトリに登録されていない
 : ↓ `git add`
 
-<img height=16 width=16 src="https://cdn.simpleicons.org/git"> staging area (index)
+<iconify-icon inline icon="bi:git"></iconify-icon> staging area (index)
 : 次のコミットに含めるファイルをマークする段階
 : ↓ `git commit`
 
-<img height=16 width=16 src="https://cdn.simpleicons.org/git"> local repository
+<iconify-icon inline icon="bi:git"></iconify-icon> local repository
 : 変更履歴が `.git/` 内に記録されている
 : ↓ `git push`
 
-<img height=16 width=16 src="https://cdn.simpleicons.org/github"> remote repository
+<iconify-icon inline icon="bi:github"></iconify-icon> remote repository
 : GitHubなど別マシンのリポジトリに反映
 
 
 ### 外部の変更を手元に取り込む
 
-<img height=16 width=16 src="https://cdn.simpleicons.org/github"> remote repository
+<iconify-icon inline icon="bi:github"></iconify-icon> remote repository
 : ↓ `git fetch`
 
-<img height=16 width=16 src="https://cdn.simpleicons.org/git"> local repository
+<iconify-icon inline icon="bi:git"></iconify-icon> local repository
 : 変更が `.git/` に取り込まれたが、見えてるファイルには反映されてない
 : ↓ `git checkout` or `git merge`
 

@@ -61,9 +61,11 @@ tags = ["vcs", "writing"]
     - [VSCode]({{< relref "vscode.md" >}}): Microsoft製
     - [RStudio](https://www.rstudio.com/): RStudio製
 
--   [GitHub<img height=16 width=16 src="https://cdn.simpleicons.org/github">](https://github.com)に個人アカウントを作る。
+-   <iconify-icon inline icon="bi:github"></iconify-icon>
+    [GitHub](https://github.com)に個人アカウントを作る。
 
--   Git<img height=16 width=16 src="https://cdn.simpleicons.org/git">の初期設定をターミナルから行う:
+-   <iconify-icon inline icon="bi:git"></iconify-icon>
+    Gitの初期設定をターミナルから行う:
 
     ```sh
     git --version  # 2.0以上であることを確認

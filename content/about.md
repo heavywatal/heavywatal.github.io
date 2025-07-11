@@ -5,6 +5,15 @@ type = "home"
   weight = 1
 +++
 
+<style>
+.contacts-icons {
+  font-size: 1.5em;
+}
+.contacts-icons a {
+  color: var(--canvas-text);
+}
+</style>
+
 岩嵜 航
 :   [東北大学](https://www.tohoku.ac.jp)
     [生命科学研究科](https://www.lifesci.tohoku.ac.jp)\
@@ -26,14 +35,16 @@ Address
 
 Contacts
 :   heavywatalあgmail.com
-: <a rel="me" href="https://github.com/heavywatal" title="GitHub">
-  <img height=24 width=24 src="https://cdn.simpleicons.org/github/333333" alt="GitHub"></a>
+: <span class="contacts-icons">
+  <a rel="me" href="https://github.com/heavywatal" title="GitHub">
+  <iconify-icon inline icon="bi:github"></iconify-icon></a>
   <a rel="me" href="https://www.facebook.com/profile.php?id=100002135628677" title="Facebook">
-  <img height=24 width=24 src="https://cdn.simpleicons.org/facebook" alt="Facebook"></a>
+  <iconify-icon inline icon="bi:facebook"></iconify-icon></a>
   <a rel="me" href="https://bsky.app/profile/heavywatal.bsky.social" title="Bluesky">
-  <img height=24 width=24 src="https://cdn.simpleicons.org/bluesky" alt="Bluesky"></a>
+  <iconify-icon inline icon="bi:bluesky"></iconify-icon></a>
   <a href="https://www.amazon.co.jp/wishlist/Z62OJBP7VCNP" title="ほしい物">
-  <img height=24 width=24 src="https://cdn.simpleicons.org/amazon/333333" alt="Amazon"></a>
+  <iconify-icon inline icon="bi:gift"></iconify-icon></a>
+  </span>
 
 <!--more-->
 

@@ -110,7 +110,7 @@ GitHub Education に登録すれば Pro 相当の機能を無料で使わせて�
 1. VSCode を起動して GitHub Copilot 拡張をインストール。
    <kbd>⇧</kbd><kbd>⌘</kbd><kbd>x</kbd> `copilot`
 1. 右上の人型アイコン or 上部中央右の
-   <img height=16 width=16 src="https://cdn.simpleicons.org/githubcopilot" alt="Copilotボタン"></a>
+   <iconify-icon inline icon="octicon:copilot-16" title="Copilotボタン"></iconify-icon>
    から "Sign in with GitHub to Use GitHub Copilot" みたいなメニューを選択。
    ウェブブラウザに飛ばされるので指示に従って認証。
 1. 試しにVSCodeでテキストファイルを新規作成 <kbd>⌘</kbd><kbd>n</kbd>
@@ -132,7 +132,7 @@ GitHub Education に登録すれば Pro 相当の機能を無料で使わせて�
 
 - [GitHub上でのCopilotの設定](https://github.com/settings/copilot)
 - VSCode上部
-  <img height=16 width=16 src="https://cdn.simpleicons.org/githubcopilot" alt="Copilotボタン"></a>
+  <iconify-icon inline icon="octicon:copilot-16" title="Copilotボタン"></iconify-icon>
   右のV字をクリック → "Configure Code Completions...":
   - "Status: Ready (Disabled)" になってたらその下の "Enable Completions" で有効化。
   - "Edit Keyboard Shortcuts..."

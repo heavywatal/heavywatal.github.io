@@ -10,11 +10,13 @@ tags = ["vcs", "writing"]
 
 https://git-scm.com/
 
-<img height=16 width=16 src="https://cdn.simpleicons.org/git">Gitは分散型バージョン管理システムの代表格。
+<iconify-icon inline icon="bi:git"></iconify-icon>
+Gitは分散型バージョン管理システムの代表格。
 プログラムのソースコードはもちろんのこと、
 研究ノートや論文の原稿などあらゆるテキストの管理に使える。
 
-<img height=16 width=16 src="https://cdn.simpleicons.org/github">[GitHub]はGitをより便利に使うためのオンラインサービス。
+<iconify-icon inline icon="bi:github"></iconify-icon>
+[GitHub]はGitをより便利に使うためのオンラインサービス。
 個人的なリポジトリ置き場としてはもちろんのこと、
 ほかの人と共有・協力してプロジェクトを進めるプラットフォームとしても使える。
 
@@ -53,24 +55,24 @@ Gitのライバルとして[Mercurial](https://www.mercurial-scm.org/)もある�
 : 手元のファイルの変更はまだリポジトリに登録されていない
 : ↓ `add`
 
-<img height=16 width=16 src="https://cdn.simpleicons.org/git"> staging area (index)
+<iconify-icon inline icon="bi:git"></iconify-icon> staging area (index)
 : 次のコミットに含めるファイルをマークする段階
 : ↓ `commit`
 
-<img height=16 width=16 src="https://cdn.simpleicons.org/git"> local repository
+<iconify-icon inline icon="bi:git"></iconify-icon> local repository
 : 変更履歴が `.git/` 内に記録されている
 : ↓ `push`
 
-<img height=16 width=16 src="https://cdn.simpleicons.org/github"> remote repository
+<iconify-icon inline icon="bi:github"></iconify-icon> remote repository
 : GitHubなど別マシンのリポジトリに反映
 
 
 ### 外部の変更を手元に取り込む
 
-<img height=16 width=16 src="https://cdn.simpleicons.org/github"> remote repository
+<iconify-icon inline icon="bi:github"></iconify-icon> remote repository
 : ↓ `fetch`
 
-<img height=16 width=16 src="https://cdn.simpleicons.org/git"> local repository
+<iconify-icon inline icon="bi:git"></iconify-icon> local repository
 : 変更が `.git/` に取り込まれたが、見えてるファイルには反映されてない
 : ↓ `merge` or `rebase`
 
