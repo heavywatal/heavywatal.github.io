@@ -199,7 +199,8 @@ root treeのハッシュID、著者、コメントなどの情報を持つ。
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 特定コミットの変更点 (diffじゃない...)</span>
 </span></span><span class="line"><span class="cl">git show <span class="o">[</span>revision<span class="o">]</span>
-</span></span></code></pre></div><h3 id="rm-clean">rm, clean</h3>
+</span></span></code></pre></div><p><a href="https://dandavison.github.io/delta/">delta</a>を使うと見やすくなる。</p>
+<h3 id="rm-clean">rm, clean</h3>
 <p>tracking対象から外して忘れさせる(手元のファイルはそのまま):</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git rm --cached &lt;file&gt;
 </span></span></code></pre></div><p><code>.gitignore</code> で無視されてるuntrackedファイルを消す:</p>
@@ -207,7 +208,7 @@ root treeのハッシュID、著者、コメントなどの情報を持つ。
 </span></span></code></pre></div><p>無視されていないuntrackedファイルも消したい場合は小文字の <code>-fdx</code> (危険)。</p>
 <h3 id="tag">tag</h3>
 <p>特定のコミット(省略すると<code>HEAD</code>)にタグ付けする。
-lightweightとannotatedの2種類が存在し、後者にはメッセージなどが紐付く。</p>
+lightweightとannotatedの2種類が存在し、メッセージなどが紐付く後者が推奨。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git tag v0.1.0 <span class="o">[</span>revision<span class="o">]</span>
 </span></span><span class="line"><span class="cl">git tag -a v0.1.0 -m <span class="s2">&#34;Message!&#34;</span>
 </span></span></code></pre></div><p>GitHubリポジトリに <code>git push --tags</code> するとアーカイブが作られ、
@@ -224,41 +225,28 @@ annotated tagであれば <code>git push --follow-tags</code>
 ブランチのブランチとか、ブランチの一部だけを移したい場合は次のようにする。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git rebase --onto &lt;newbase&gt; &lt;base&gt; &lt;tip&gt;
 </span></span></code></pre></div><p>これで base–tip 間のコミットがnewbaseから伸びる形になる。</p>
-<h2 id="submodule">Submodule</h2>
-<h3 id="既存のリポジトリをsubmoduleとして追加する">既存のリポジトリをsubmoduleとして追加する</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git submodule add https://github.com/mbostock/d3.git
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># ブランチを指定する場合:</span>
-</span></span><span class="line"><span class="cl">git submodule add -b gitsubmodule_https https://github.com/heavywatal/x18n.git
-</span></span></code></pre></div><p><code>gh-pages</code> で公開する場合は参照プロトコルを
-<code>git://</code> ではなく <code>https://</code> にする必要がある。</p>
-<h3 id="submoduleを含むメインリポジトリを使い始めるとき">submoduleを含むメインリポジトリを使い始めるとき</h3>
-<p>最初に<code>clone</code>/<code>fetch</code>してきた時submoduleたちは空なのでまず:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git submodule update --init
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 使いたいbranchがデフォルトではない場合は --remote</span>
-</span></span><span class="line"><span class="cl">git submodule update --init --remote x18n
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 歴史があって重いリポジトリはshallowに</span>
-</span></span><span class="line"><span class="cl">git submodule update --init --depth<span class="o">=</span><span class="m">5</span> d3
-</span></span></code></pre></div><h3 id="submoduleを更新">submoduleを更新</h3>
-<ol>
-<li>
-<p>更新分をまとめて取得:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git submodule foreach git fetch
-</span></span></code></pre></div></li>
-<li>
-<p>好きなコミット/タグまで移動 (旧<code>git checkout</code>):</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> d3/
-</span></span><span class="line"><span class="cl">git switch --detach v3.5.6
-</span></span></code></pre></div><p>&ldquo;detached HEAD&rdquo; 状態になる。</p>
-</li>
-<li>
-<p>メインリポジトリでその変更をコミット:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> ..
-</span></span><span class="line"><span class="cl">git commit
-</span></span></code></pre></div></li>
-</ol>
+<h3 id="submodule">Submodule</h3>
+<ul>
+<li><a href="https://git-scm.com/book/en/v2/Git-Tools-Submodules">https://git-scm.com/book/en/v2/Git-Tools-Submodules</a></li>
+<li><a href="https://git-scm.com/docs/git-submodule">https://git-scm.com/docs/git-submodule</a></li>
+</ul>
+<p>リポジトリの中に別のリポジトリへの参照を保持する仕組み。
+個々のファイルの履歴は混ぜずに依存関係を管理したいときに使える。
+ソースコードを丸ごとvendorするより冗長性は小さいけど、異物を抱えている感じは否めない。
+各分野でパッケージやモジュールを管理する仕組みが発展して不要になることが増えてきた。
+e.g., CMake FetchContent, Hugo Modules, etc.</p>
+<p>既存のリポジトリを追加する方法は <code>git clone</code> と似ている:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git submodule add https://github.com/rstudio/hex-stickers.git
+</span></span></code></pre></div><p>submoduleを含むリポジトリを普通に <code>git clone</code> してくると参照しか取れないので、
+まず次のようなコマンドで実体を取得する:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git submodule update --init --recursive
+</span></span></code></pre></div><p>submoduleの更新をまとめて取得:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git submodule foreach git pull
+</span></span></code></pre></div><p>submoduleを削除するのは1つのコマンドで完結できない:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git submodule deinit <span class="nv">$SUB_MOD</span>
+</span></span><span class="line"><span class="cl">git rm -r <span class="nv">$SUB_MOD</span>
+</span></span><span class="line"><span class="cl">rm -rf .git/modules/<span class="nv">$SUB_MOD</span>
+</span></span></code></pre></div><p>submoduleに何らかの変更を加えたら親リポジトリでも参照を更新する。</p>
 <h2 id="github-pages">GitHub Pages</h2>
 <p><a href="https://docs.github.com/pages">https://docs.github.com/pages</a></p>
 <h3 id="ユーザーサイトを作る">ユーザーサイトを作る</h3>
@@ -423,27 +411,40 @@ to do so with:
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git branch -d detached
 </span></span></code></pre></div></li>
 </ol>
-<h3 id="サブディレクトリを別リポジトリに切り分ける">サブディレクトリを別リポジトリに切り分ける</h3>
-<ol>
-<li>
-<p>新しく作りたいリポジトリ名で元リポジトリをクローン:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git clone https://github.com/heavywatal/hello.git bonjour
-</span></span></code></pre></div></li>
-<li>
-<p><a href="https://git-scm.com/docs/git-filter-branch"><code>filter-branch</code></a>
-でサブディレクトリの歴史だけ抜き出す:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> bonjour/
-</span></span><span class="line"><span class="cl">git filter-branch filter-branch --subdirectory-filter subdir
+<h3 id="サブディレクトリを別のブランチやリポジトリに切り分ける">サブディレクトリを別のブランチやリポジトリに切り分ける</h3>
+<p><a href="https://github.com/git/git/tree/master/contrib/subtree"><code>git subtree</code></a>
+は公式サブコマンドとして取り込まれてはいるけどドキュメントには入ってない。
+ドキュメントのある
+<a href="https://git-scm.com/docs/git-filter-branch"><code>git filter-branch</code></a>は非推奨になり、
+今のところサードパーティの<a href="https://github.com/newren/git-filter-repo"><code>git-filter-repo</code></a>が推奨。</p>
+<p><a href="https://htmlpreview.github.io/?https://github.com/newren/git-filter-repo/blob/docs/html/git-filter-repo.html"><code>man git-filter-repo</code></a>
+を読み、歴史改変がいかに危険で面倒なことかを理解する。</p>
+<p>例えば <code>main</code> ブランチの <code>docs/</code> で公開していた GitHub Pages を
+<code>gh-pages</code> ブランチに切り分け、 <code>main</code> の履歴から消去したいとする。
+<code>main</code> の履歴の検索性が上がるなどのメリットがあるとして、
+散在する全てのクローンやフォークが一旦無効になるリスクとコストに見合うかどうか。
+<code>gh-pages</code> ブランチに置くのはソースコードではなく生成物なので、
+履歴の重要性はそれほど大きくない。
+自分ひとりで開発している小規模リポジトリならギリギリ試す価値ありかもしれないけど、
+<code>main</code> はそのままにして <code>gh-pages</code> は新しいorphanブランチを作るほうが無難な気がする。</p>
+<p>インストール方法はいろいろあるので好きなやつを選ぶ。
+Python製なのでuvがセットアップしてあれば早い:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">uv pip install git-filter-repo
+</span></span></code></pre></div><p>安全のため手元のリポジトリを使わず、別のところにフレッシュなクローンを用意する。
+<code>docs/</code> 以下だけを保持し、トップレベルに移動:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git clone https://github.com/heavywatal/tekka.git
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> tekka/
+</span></span><span class="line"><span class="cl">git filter-repo --path docs/ --path-rename docs/:
 </span></span><span class="line"><span class="cl">git log
-</span></span><span class="line"><span class="cl">ls       <span class="c1"># サブディレクトリの中身がルートに来てる</span>
-</span></span></code></pre></div></li>
-<li>
-<p>GitHubなどリモートにも新しいリポジトリを作って登録、プッシュ:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git remote set-url origin https://github.com/heavywatal/bonjour.git
-</span></span><span class="line"><span class="cl">git push -u origin main
-</span></span></code></pre></div></li>
-</ol>
-<h3 id="別のリポジトリをサブディレクトリとして取り込む">別のリポジトリをサブディレクトリとして取り込む</h3>
+</span></span><span class="line"><span class="cl">ls
+</span></span></code></pre></div><p>元のリポジトリを誤って上書きしないように <code>git remote</code> が消去される。
+必要に応じて <code>git remote add origin</code> で登録し直す。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git remote -v
+</span></span></code></pre></div><p>不要なタグがあれば消す:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git tag
+</span></span></code></pre></div><p>宛先をよく確認して <code>push</code> する:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git push -u origin gh-pages
+</span></span></code></pre></div><h3 id="別のリポジトリをサブディレクトリとして取り込む">別のリポジトリをサブディレクトリとして取り込む</h3>
 <p><a href="https://git-scm.com/book/tr/v2/Git-Tools-Advanced-Merging#_subtree_merge">Subtree Merging</a></p>
 <p>オプション <code>-X subtree=${subdir}</code> を利用してサブディレクトリに入れると、
 全体の <code>git log</code> では統合されてるように見えるけど、
