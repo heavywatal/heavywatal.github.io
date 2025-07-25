@@ -172,6 +172,9 @@ git diff HEAD
 git show [revision]
 ```
 
+[delta](https://dandavison.github.io/delta/)を使うと見やすくなる。
+
+
 ### rm, clean
 
 tracking対象から外して忘れさせる(手元のファイルはそのまま):
@@ -188,7 +191,7 @@ git clean -fdX
 ### tag
 
 特定のコミット(省略すると`HEAD`)にタグ付けする。
-lightweightとannotatedの2種類が存在し、後者にはメッセージなどが紐付く。
+lightweightとannotatedの2種類が存在し、メッセージなどが紐付く後者が推奨。
 ```sh
 git tag v0.1.0 [revision]
 git tag -a v0.1.0 -m "Message!"
@@ -222,55 +225,41 @@ git rebase --onto <newbase> <base> <tip>
 これで base–tip 間のコミットがnewbaseから伸びる形になる。
 
 
-## Submodule
+### Submodule
 
-### 既存のリポジトリをsubmoduleとして追加する
+- <https://git-scm.com/book/en/v2/Git-Tools-Submodules>
+- <https://git-scm.com/docs/git-submodule>
 
+リポジトリの中に別のリポジトリへの参照を保持する仕組み。
+個々のファイルの履歴は混ぜずに依存関係を管理したいときに使える。
+ソースコードを丸ごとvendorするより冗長性は小さいけど、異物を抱えている感じは否めない。
+各分野でパッケージやモジュールを管理する仕組みが発展して不要になることが増えてきた。
+e.g., CMake FetchContent, Hugo Modules, etc.
+
+既存のリポジトリを追加する方法は `git clone` と似ている:
 ```sh
-git submodule add https://github.com/mbostock/d3.git
-
-# ブランチを指定する場合:
-git submodule add -b gitsubmodule_https https://github.com/heavywatal/x18n.git
+git submodule add https://github.com/rstudio/hex-stickers.git
 ```
 
-`gh-pages` で公開する場合は参照プロトコルを
-`git://` ではなく `https://` にする必要がある。
-
-
-### submoduleを含むメインリポジトリを使い始めるとき
-
-最初に`clone`/`fetch`してきた時submoduleたちは空なのでまず:
-
+submoduleを含むリポジトリを普通に `git clone` してくると参照しか取れないので、
+まず次のようなコマンドで実体を取得する:
 ```sh
-git submodule update --init
-
-# 使いたいbranchがデフォルトではない場合は --remote
-git submodule update --init --remote x18n
-
-# 歴史があって重いリポジトリはshallowに
-git submodule update --init --depth=5 d3
+git submodule update --init --recursive
 ```
 
-### submoduleを更新
+submoduleの更新をまとめて取得:
+```sh
+git submodule foreach git pull
+```
 
-1.  更新分をまとめて取得:
-    ```sh
-    git submodule foreach git fetch
-    ```
+submoduleを削除するのは1つのコマンドで完結できない:
+```sh
+git submodule deinit $SUB_MOD
+git rm -r $SUB_MOD
+rm -rf .git/modules/$SUB_MOD
+```
 
-1.  好きなコミット/タグまで移動 (旧`git checkout`):
-    ```sh
-    cd d3/
-    git switch --detach v3.5.6
-    ```
-    "detached HEAD" 状態になる。
-
-1.  メインリポジトリでその変更をコミット:
-
-    ```sh
-    cd ..
-    git commit
-    ```
+submoduleに何らかの変更を加えたら親リポジトリでも参照を更新する。
 
 
 ## GitHub Pages
@@ -490,30 +479,57 @@ submoduleなどをいじってると意図せずdetached HEAD状態になるこ�
    git branch -d detached
    ```
 
-### サブディレクトリを別リポジトリに切り分ける
+### サブディレクトリを別のブランチやリポジトリに切り分ける
 
-1.  新しく作りたいリポジトリ名で元リポジトリをクローン:
+[`git subtree`](https://github.com/git/git/tree/master/contrib/subtree)
+は公式サブコマンドとして取り込まれてはいるけどドキュメントには入ってない。
+ドキュメントのある
+[`git filter-branch`](https://git-scm.com/docs/git-filter-branch)は非推奨になり、
+今のところサードパーティの[`git-filter-repo`](https://github.com/newren/git-filter-repo)が推奨。
 
-    ```sh
-    git clone https://github.com/heavywatal/hello.git bonjour
-    ```
+[`man git-filter-repo`](https://htmlpreview.github.io/?https://github.com/newren/git-filter-repo/blob/docs/html/git-filter-repo.html)
+を読み、歴史改変がいかに危険で面倒なことかを理解する。
 
-1.  [`filter-branch`](https://git-scm.com/docs/git-filter-branch)
-    でサブディレクトリの歴史だけ抜き出す:
+例えば `main` ブランチの `docs/` で公開していた GitHub Pages を
+`gh-pages` ブランチに切り分け、 `main` の履歴から消去したいとする。
+`main` の履歴の検索性が上がるなどのメリットがあるとして、
+散在する全てのクローンやフォークが一旦無効になるリスクとコストに見合うかどうか。
+`gh-pages` ブランチに置くのはソースコードではなく生成物なので、
+履歴の重要性はそれほど大きくない。
+自分ひとりで開発している小規模リポジトリならギリギリ試す価値ありかもしれないけど、
+`main` はそのままにして `gh-pages` は新しいorphanブランチを作るほうが無難な気がする。
 
-    ```sh
-    cd bonjour/
-    git filter-branch filter-branch --subdirectory-filter subdir
-    git log
-    ls       # サブディレクトリの中身がルートに来てる
-    ```
+インストール方法はいろいろあるので好きなやつを選ぶ。
+Python製なのでuvがセットアップしてあれば早い:
+```sh
+uv pip install git-filter-repo
+```
 
-1.  GitHubなどリモートにも新しいリポジトリを作って登録、プッシュ:
+安全のため手元のリポジトリを使わず、別のところにフレッシュなクローンを用意する。
+`docs/` 以下だけを保持し、トップレベルに移動:
+```sh
+git clone https://github.com/heavywatal/tekka.git
+cd tekka/
+git filter-repo --path docs/ --path-rename docs/:
+git log
+ls
+```
 
-    ```sh
-    git remote set-url origin https://github.com/heavywatal/bonjour.git
-    git push -u origin main
-    ```
+元のリポジトリを誤って上書きしないように `git remote` が消去される。
+必要に応じて `git remote add origin` で登録し直す。
+```sh
+git remote -v
+```
+
+不要なタグがあれば消す:
+```sh
+git tag
+```
+
+宛先をよく確認して `push` する:
+```sh
+git push -u origin gh-pages
+```
 
 
 ### 別のリポジトリをサブディレクトリとして取り込む
