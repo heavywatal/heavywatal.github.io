@@ -147,6 +147,28 @@ production環境を作らず <code>config/public/</code> とかにしておけ�
 ユーザーによっていろいろ投稿されてるけどほとんどがブログ用途。
 ということで非ブログ用に簡単なものを自作して使っている:</p>
 <p><a href="https://github.com/heavywatal/hugo-theme-nonblog">https://github.com/heavywatal/hugo-theme-nonblog</a></p>
+<h2 id="template">Template</h2>
+<ul>
+<li><a href="https://gohugo.io/templates/">https://gohugo.io/templates/</a></li>
+<li><a href="https://gohugo.io/functions/">https://gohugo.io/functions/</a></li>
+<li><a href="https://gohugo.io/methods/">https://gohugo.io/methods/</a></li>
+</ul>
+<p>先頭のドット <code>.</code> は現在のcontextを表す。
+普通のページのテンプレートではページを表す状態から始まり、
+<code>{{ with }}</code> や <code>{{ end }}</code> などによって階層的に変化していく。</p>
+<p><code>.Site.Params.author.name</code> のように chain してメソッドや変数を参照できる。
+TOMLやYAMLではハイフン <code>-</code> がキーに入っても問題ないが、
+Hugo template では chain できなくなるため非推奨。
+<a href="https://gohugo.io/functions/collections/indexfunction/"><code>index</code></a>
+関数を使えばそういうやつでも参照できるけど。</p>
+<dl>
+<dt><a href="https://gohugo.io/methods/page/param/"><code>{{ .Param &quot;key&quot; }}</code></a></dt>
+<dd><code>.Params.key</code> が存在すればそれ、しなければ <code>site.Params.key</code> を参照する。</dd>
+<dd><code>{{ .Params.key }}</code>:
+各ページの front matter の <code>[params]</code> セクションに書いたものを参照。</dd>
+<dd><code>{{ site.Params.key }}</code>
+サイト全体の設定 <code>hugo.toml</code> の <code>[params]</code> セクションに書いたものを参照。</dd>
+</dl>
 <h3 id="performance">Performance</h3>
 <p><a href="https://gohugo.io/troubleshooting/build-performance/">https://gohugo.io/troubleshooting/build-performance/</a></p>
 <p>ページによって内容が変わらないテンプレートは <code>partial</code> の代わりに
@@ -166,20 +188,19 @@ production環境を作らず <code>config/public/</code> とかにしておけ�
 <dt><a href="https://github.github.com/gfm/">GitHub Flavored Markdown (GFM)</a></dt>
 <dd>CommonMarkに準拠しつついくらかの機能を追加したもの。
 基本的な書き方は<a href="https://help.github.com/articles/basic-writing-and-formatting-syntax/">GitHub Helpのページ</a>が読みやすい。</dd>
-<dd><ul>
-<li><a href="https://github.github.com/gfm/#tables-extension-">tables</a></li>
-<li><a href="https://github.github.com/gfm/#task-list-items-extension-">task lists</a>:
+<dd><a href="https://github.github.com/gfm/#tables-extension-">tables</a></dd>
+<dd><a href="https://github.github.com/gfm/#task-list-items-extension-">task lists</a>:
 <ul>
 <li><input disabled="" type="checkbox"> <code>- [ ]</code></li>
 <li><input checked="" disabled="" type="checkbox"> <code>- [x]</code></li>
 </ul>
-</li>
-<li><a href="https://github.github.com/gfm/#strikethrough-extension-"><del>strikethrough</del></a>:
-<code>~text~</code>, <code>~~text~~</code></li>
-<li><a href="https://github.github.com/gfm/#autolinks-extension-">extended autolink</a>:
+</dd>
+<dd><a href="https://github.github.com/gfm/#strikethrough-extension-">~strikethrough~</a>:
+<code>~text~</code>, <code>~~text~~</code></dd>
+<dd><a href="https://github.github.com/gfm/#autolinks-extension-">extended autolink</a>:
 <code>&lt;</code> と <code>&gt;</code> で挟まなくても
-<code>https://</code> とか <code>www.</code> とかで始まるURLらしきものを認識してリンク生成する。</li>
-<li><a href="https://github.github.com/gfm/#disallowed-raw-html-extension-">tagfilter</a>:
+<code>https://</code> とか <code>www.</code> とかで始まるURLらしきものを認識してリンク生成する。</dd>
+<dd><a href="https://github.github.com/gfm/#disallowed-raw-html-extension-">tagfilter</a>:
 生HTMLタグのうち悪用されやすいものを無効にする。
 <code>&lt;title&gt;</code>,
 <code>&lt;textarea&gt;</code>,
@@ -189,9 +210,7 @@ production環境を作らず <code>config/public/</code> とかにしておけ�
 <code>&lt;noembed&gt;</code>,
 <code>&lt;noframes&gt;</code>,
 <code>&lt;script&gt;</code>,
-<code>&lt;plaintext&gt;</code>.</li>
-</ul>
-</dd>
+<code>&lt;plaintext&gt;</code>.</dd>
 <dt><a href="https://github.com/yuin/goldmark/">Goldmark</a></dt>
 <dd>2019年末からHugoのデフォルトエンジン。</dd>
 <dd>基本的にはCommonMark準拠だけど、
