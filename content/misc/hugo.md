@@ -111,6 +111,31 @@ hugo server # -e development
 
 https://github.com/heavywatal/hugo-theme-nonblog
 
+
+## Template
+
+- <https://gohugo.io/templates/>
+- <https://gohugo.io/functions/>
+- <https://gohugo.io/methods/>
+
+先頭のドット `.` は現在のcontextを表す。
+普通のページのテンプレートではページを表す状態から始まり、
+`{{ with }}` や ``{{ end }}`` などによって階層的に変化していく。
+
+`.Site.Params.author.name` のように chain してメソッドや変数を参照できる。
+TOMLやYAMLではハイフン `-` がキーに入っても問題ないが、
+Hugo template では chain できなくなるため非推奨。
+[`index`](https://gohugo.io/functions/collections/indexfunction/)
+関数を使えばそういうやつでも参照できるけど。
+
+[`{{ .Param "key" }}`](https://gohugo.io/methods/page/param/)
+: `.Params.key` が存在すればそれ、しなければ `site.Params.key` を参照する。
+: `{{ .Params.key }}`:
+  各ページの front matter の `[params]` セクションに書いたものを参照。
+: `{{ site.Params.key }}`
+  サイト全体の設定 `hugo.toml` の `[params]` セクションに書いたものを参照。
+
+
 ### Performance
 
 <https://gohugo.io/troubleshooting/build-performance/>
@@ -136,26 +161,26 @@ https://github.com/heavywatal/hugo-theme-nonblog
 [GitHub Flavored Markdown (GFM)](https://github.github.com/gfm/)
 : CommonMarkに準拠しつついくらかの機能を追加したもの。
   基本的な書き方は[GitHub Helpのページ](https://help.github.com/articles/basic-writing-and-formatting-syntax/)が読みやすい。
-: - [tables](https://github.github.com/gfm/#tables-extension-)
-  - [task lists](https://github.github.com/gfm/#task-list-items-extension-):
-    - [ ] `- [ ]`
-    - [x] `- [x]`
-  - [~strikethrough~](https://github.github.com/gfm/#strikethrough-extension-):
-    `~text~`, `~~text~~`
-  - [extended autolink](https://github.github.com/gfm/#autolinks-extension-):
-    `<` と `>` で挟まなくても
-    `https://` とか `www.` とかで始まるURLらしきものを認識してリンク生成する。
-  - [tagfilter](https://github.github.com/gfm/#disallowed-raw-html-extension-):
-    生HTMLタグのうち悪用されやすいものを無効にする。
-    `<title>`,
-    `<textarea>`,
-    `<style>`,
-    `<xmp>`,
-    `<iframe>`,
-    `<noembed>`,
-    `<noframes>`,
-    `<script>`,
-    `<plaintext>`.
+: [tables](https://github.github.com/gfm/#tables-extension-)
+: [task lists](https://github.github.com/gfm/#task-list-items-extension-):
+  - [ ] `- [ ]`
+  - [x] `- [x]`
+: [~strikethrough~](https://github.github.com/gfm/#strikethrough-extension-):
+  `~text~`, `~~text~~`
+: [extended autolink](https://github.github.com/gfm/#autolinks-extension-):
+  `<` と `>` で挟まなくても
+  `https://` とか `www.` とかで始まるURLらしきものを認識してリンク生成する。
+: [tagfilter](https://github.github.com/gfm/#disallowed-raw-html-extension-):
+  生HTMLタグのうち悪用されやすいものを無効にする。
+  `<title>`,
+  `<textarea>`,
+  `<style>`,
+  `<xmp>`,
+  `<iframe>`,
+  `<noembed>`,
+  `<noframes>`,
+  `<script>`,
+  `<plaintext>`.
 
 [Goldmark](https://github.com/yuin/goldmark/)
 : 2019年末からHugoのデフォルトエンジン。

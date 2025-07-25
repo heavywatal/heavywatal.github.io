@@ -11,10 +11,11 @@ tags = ["writing"]
 
 [Noto Fonts](https://www.google.com/get/noto/)
 :   "No tofu" を目指してGoogleが開発している多言語対応フォント。
+:   Ubuntu 23.04 から DejaVu に替わって標準フォントになった。
 :   Noto Serif はディスプレイ上での視認性や和文フォントとのサイズバランスも良くて便利。
 :   [Noto Sans/Serif CJK](https://www.google.com/get/noto/help/cjk/)
-    はAdobeと共同開発の和文フォントで、ほぼ同じものを違う名前で公開している。
-    英数字がNoto SansではなくSource Sans Proなのはなぜ？
+    はAdobeと共同開発の和文フォントで、同じものを違う名前で公開している。
+    そのため名前はNotoだけど英数字はSource由来。
 
 [Source Sans Pro](https://adobe-fonts.github.io/source-sans/)
 :   小文字の l が曲がってて良いけど全体的に小さくて狭苦しい。
@@ -42,11 +43,6 @@ tags = ["writing"]
     はほかのUbuntu familyとの親和性を追求した結果として
     [全角和文フォントの半分幅という長所を捨ててしまった](https://github.com/canonical/Ubuntu-Sans-Mono-fonts/issues/10)。残念。
 
-[Open Sans](https://www.google.com/fonts/specimen/Open+Sans)
-:   すっきりゆったりニュートラルで見やすい。
-    ヒラギノとの相性も抜群。
-:   ファイルサイズも小さいのでウェブフォントとして使いやすい。
-
 [TeX Gyre Pagella](https://www.ctan.org/pkg/tex-gyre-pagella)
 :   個人的に一番好きなセリフフォント Palatino
     はMacでもWinでも利用可能だがフリーではない。
@@ -57,16 +53,22 @@ tags = ["writing"]
     [Palatino nova](http://www.linotype.co.jp/palatino%20nova%20detail.html)
     は文句なしに美しいけど有償。
 
-[Roboto](https://github.com/googlefonts/roboto)
-:   Helvetica似、かっちりコンパクト、いかにもシステム向けなフォント。
-:   でもちょっと c とかの切れ目が小さすぎたりして、視認性はイマイチ。
 
 ### あまり使わなくなったやつ
+
+[Open Sans](https://www.google.com/fonts/specimen/Open+Sans)
+:   すっきりゆったりニュートラルで見やすい。
+    ヒラギノとの相性も抜群。
+:   ファイルサイズも小さいのでウェブフォントとして使いやすい。
 
 [DejaVu](https://dejavu-fonts.github.io/)
 :   Bitstream Vera の後を継いで多言語対応させた、Linuxの標準的なフォント。
 :   DejaVu Sans は Verdana のように幅が広く、スクリーン上で読みやすい。
 :   DejaVu Sans Mono はプログラミングに使いやすい。
+
+[Roboto](https://github.com/googlefonts/roboto)
+:   Helvetica似、かっちりコンパクト、いかにもシステム向けなフォント。
+:   でもちょっと c とかの切れ目が小さすぎたりして、視認性はイマイチ。
 
 [Linux Libertine](https://libertine-fonts.org/)
 :   印刷に耐えうるクオリティを目指して開発されたカッコいいセリフ体。
@@ -78,23 +80,13 @@ tags = ["writing"]
 :   [Libertinus](https://github.com/alerque/libertinus)
     という名前のフォークがメンテナンスされている。
 
-[Liberation](https://github.com/liberationfonts/liberation-fonts)
-:   Fedora が Arial, Times New Roman, Courier New からの解放を目指して作ってる。
-:   英数字はいいけど、グリフ数は少ない。
-:   でも Liberation Mono は Courier New というより Courier な太さ?
-
-[GNU FreeFont](https://www.gnu.org/software/freefont/)
-:   Helvetica, Times, Courier の置き換えを狙ったフォント。
-:   でも FreeMono は Courier というより Courier New な細さ?
-
 [IPA](https://moji.or.jp/ipafont/)
 :   Source Han の登場により役目を終えた感。
 :   [Takao](https://launchpad.net/takao-fonts)
     はUbuntuコミュニティが保守している派生フォント。
+:   [MigMix](https://itouhiro.github.io/mixfont-mplus-ipa/migmix/)
+    などの合成素材として使われている。
 
-[MigMix](https://mix-mplus-ipa.osdn.jp/migmix/)
-:   M+フォントに足りない漢字をIPAゴシックから補完した合成フォント。
-:   メイリオと同じで視認性は高いけどちょっと丸すぎる印象。
 
 ## Sample
 
@@ -133,18 +125,6 @@ tags = ["writing"]
 </tr>
 <tr style="font-family: 'Noto Serif', sans-serif">
   <td>Noto Serif</td>
-  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
-</tr>
-<tr style="font-family: 'Source Serif 4', sans-serif">
-  <td>Source Serif 4</td>
-  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
-</tr>
-<tr style="font-family: 'Source Serif Pro', sans-serif">
-  <td>Source Serif Pro</td>
-  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
-</tr>
-<tr style="font-family: Merriweather, sans-serif">
-  <td>Merriweather</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
 </tr>
 <tr style="font-family: 'Libertinus Serif', sans-serif">
@@ -188,16 +168,16 @@ tags = ["writing"]
   <td>Arial</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
 </tr>
-<tr style="font-family: Roboto, serif">
-  <td>Roboto</td>
+<tr style="font-family: Avenir, serif">
+  <td>Avenir</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
+</tr>
+<tr style="font-family: 'Avenir Next', serif">
+  <td>Avenir Next</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
 </tr>
 <tr style="font-family: Verdana, serif">
   <td>Verdana</td>
-  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
-</tr>
-<tr style="font-family: 'DejaVu Sans', serif">
-  <td>DejaVu Sans</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
 </tr>
 <tr style="font-family: Ubuntu, serif">
@@ -208,20 +188,16 @@ tags = ["writing"]
   <td>Ubuntu Sans</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
 </tr>
-<tr style="font-family: 'Open Sans', serif">
-  <td>Open Sans</td>
-  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
-</tr>
 <tr style="font-family: 'Noto Sans', serif">
   <td>Noto Sans</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
 </tr>
-<tr style="font-family: 'Source Sans 3', serif">
-  <td>Source Sans 3</td>
+<tr style="font-family: 'DejaVu Sans', serif">
+  <td>DejaVu Sans</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
 </tr>
-<tr style="font-family: 'Source Sans Pro', serif">
-  <td>Source Sans Pro</td>
+<tr style="font-family: Roboto, serif">
+  <td>Roboto</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~</td>
 </tr>
 <tr style="font-family: 'Libertinus Sans', serif">
@@ -269,6 +245,10 @@ tags = ["writing"]
   <td>Ubuntu Sans Mono</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>噌祇逢餅鯖鰯わたるメタル</td>
 </tr>
+<tr style="font-family: 'Noto Sans Mono', serif">
+  <td>Noto Sans Mono</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>噌祇逢餅鯖鰯わたるメタル</td>
+</tr>
 <tr style="font-family: 'Source Code Pro', serif">
   <td>Source Code Pro</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>噌祇逢餅鯖鰯わたるメタル</td>
@@ -279,10 +259,6 @@ tags = ["writing"]
 </tr>
 <tr style="font-family: 'DejaVu Sans Mono', serif">
   <td>DejaVu Sans Mono</td>
-  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>噌祇逢餅鯖鰯わたるメタル</td>
-</tr>
-<tr style="font-family: Osaka-Mono, serif">
-  <td>Osaka-Mono</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>噌祇逢餅鯖鰯わたるメタル</td>
 </tr>
 </table>
@@ -322,12 +298,20 @@ tags = ["writing"]
   <td>Tsukushi B Round Gothic</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
 </tr>
-<tr style="font-family: Osaka-Mono, serif">
-  <td>Osaka-Mono</td>
+<tr style="font-family: 'BIZ UDGothic', serif">
+  <td>BIZ UDGothic</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
+</tr>
+<tr style="font-family: 'Noto Sans CJK JP', serif">
+  <td>Noto Sans CJK JP</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
 </tr>
 <tr style="font-family: 'Source Han Sans', serif">
   <td>Source Han Sans</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
+</tr>
+<tr style="font-family: Osaka-Mono, serif">
+  <td>Osaka-Mono</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
 </tr>
 <tr style="font-family: 'MS PGothic', serif">
@@ -355,12 +339,24 @@ tags = ["writing"]
   <td>YuKyokasho</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
 </tr>
+<tr style="font-family: 'YuKyokasho Yoko', sans-serif">
+  <td>YuKyokasho Yoko</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
+</tr>
 <tr style="font-family: 'Toppan Bunkyu Mincho', sans-serif">
   <td>Toppan Bunkyu Mincho</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
 </tr>
 <tr style="font-family: 'Toppan Bunkyu Midashi Mincho', sans-serif">
   <td>Toppan Bunkyu Midashi Mincho</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
+</tr>
+<tr style="font-family: 'BIZ UDMincho', sans-serif">
+  <td>BIZ UDMincho</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
+</tr>
+<tr style="font-family: 'Noto Serif CJK JP', sans-serif">
+  <td>Noto Serif CJK JP</td>
   <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠<br>噌祇逢餅鯖鰯わたるメタル</td>
 </tr>
 <tr style="font-family: 'Source Han Serif', sans-serif">
@@ -378,22 +374,26 @@ tags = ["writing"]
 <table><col style="background-color: #aaaaaa2a;"><col>
 <tr style="font-family: 'Apple Color Emoji', serif">
   <td>Apple Color Emoji</td>
-  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>🍺🍻🤘🪙⚡️⬆️ </td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>🍺🍻🤘⚡♨⬆ </td>
 </tr>
-<tr style="font-family: 'Noto Color Emoji', serif">
-  <td>Noto Color Emoji</td>
-  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>🍺🍻🤘🪙⚡️⬆️ </td>
+<tr style="font-family: 'Apple Symbols', serif">
+  <td>Apple Symbols</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>🍺🍻🤘⚡♨⬆ </td>
 </tr>
 <tr style="font-family: 'Segoe UI Emoji', serif">
   <td>Segoe UI Emoji</td>
-  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>🍺🍻🤘🪙⚡️⬆️ </td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>🍺🍻🤘⚡♨⬆ </td>
 </tr>
 <tr style="font-family: 'Segoe UI Symbol', serif">
   <td>Segoe UI Symbol</td>
-  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>🍺🍻🤘🪙⚡️⬆️ </td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>🍺🍻🤘⚡♨⬆ </td>
+</tr>
+<tr style="font-family: 'Noto Color Emoji', serif">
+  <td>Noto Color Emoji</td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>🍺🍻🤘⚡♨⬆ </td>
 </tr>
 <tr style="font-family: 'UbuntuMono Nerd Font', serif">
   <td>UbuntuMono Nerd Font</td>
-  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>🍺🍻🤘🪙⚡️⬆️ </td>
+  <td>!"#$%&'()*+,-./0123456789:;<=>?@<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`<br>abcdefghijklmnopqrstuvwxyz{|}~<br>🍺🍻🤘⚡♨⬆ </td>
 </tr>
 </table>
