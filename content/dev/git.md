@@ -53,15 +53,18 @@ Gitのライバルとして[Mercurial](https://www.mercurial-scm.org/)もある�
 
 📁 working directory (working tree)
 : 手元のファイルの変更はまだリポジトリに登録されていない
-: ↓ `add`
+
+&nbsp; ↓ `git add`
 
 <iconify-icon inline icon="bi:git"></iconify-icon> staging area (index)
 : 次のコミットに含めるファイルをマークする段階
-: ↓ `commit`
+
+&nbsp; ↓ `git commit`
 
 <iconify-icon inline icon="bi:git"></iconify-icon> local repository
 : 変更履歴が `.git/` 内に記録されている
-: ↓ `push`
+
+&nbsp; ↓ `git push`
 
 <iconify-icon inline icon="bi:github"></iconify-icon> remote repository
 : GitHubなど別マシンのリポジトリに反映
@@ -70,11 +73,14 @@ Gitのライバルとして[Mercurial](https://www.mercurial-scm.org/)もある�
 ### 外部の変更を手元に取り込む
 
 <iconify-icon inline icon="bi:github"></iconify-icon> remote repository
-: ↓ `fetch`
+: 最新版
+
+&nbsp; ↓ `git fetch`
 
 <iconify-icon inline icon="bi:git"></iconify-icon> local repository
 : 変更が `.git/` に取り込まれたが、見えてるファイルには反映されてない
-: ↓ `merge` or `rebase`
+
+&nbsp; ↓ `git merge` or `git rebase`
 
 📁 working directory
 : 手元のファイルが最新版に同期されている
@@ -95,7 +101,7 @@ tree
 commit
 : git内部でroot treeのsnapshotを指すオブジェクト。
   root treeのハッシュID、著者、コメントなどの情報を持つ。
-  動詞としては、staging areaの情報をひとつのcommitとしてリポジトリに登録することを指す。
+: 動詞としては、staging areaの情報をひとつのcommitとしてリポジトリに登録することを指す。
 
 repository
 : commitの履歴を保持する拠点。
@@ -130,29 +136,33 @@ zshの`EXTENDED_GLOB`が有効になってる場合は
 
 `git reset <DESTINATION>` は `HEAD` の位置を戻す処理で、
 オプションによってindexとworking treeもそこに合わせるように変更される。
-`--soft` なら `HEAD` 移動のみ。
-`--mixed` なら移動した `HEAD` にindexも合わせる。
-`--hard` なら移動した `HEAD` にindexとworking treeも合わせる。
-直前の動作を取り消す用途に絞って使うのが無難:
-```sh
-# commit直後、それを取り消す (indexとworkingはそのまま)
-git reset --soft HEAD^
+直前の動作を取り消す用途に絞って使うのが無難。
 
-# add直後、それを取り消す (workingとHEADはそのまま)
-git reset --mixed HEAD
+- `--soft`: `HEAD` 移動のみ。indexとworkingはそのまま。
+  ```sh
+  # 直前のcommitを取り消し、staged状態まで戻す
+  git reset --soft HEAD~
+  ```
+  直前のcommitをちょっと修正したいだけなら `git commit --amend` が簡単。
+  それより前のを修正するには `git rebase -i HEAD~3` とかで戻ってrewordやedit。
+- `--mixed`: 移動した `HEAD` にindexも合わせる。
+  `git add` を取り消すのに使える:
+  ```sh
+  # 同義だけど git status で提案されるのは後者
+  git reset --mixed HEAD~
+  git restore --staged .
+  ```
+- `--hard`: 移動した `HEAD` にindexとworking treeも合わせる。危険。
+  ```sh
+  # 変更したファイルをHEADの状態に戻す (DANGEROUS!)
+  git reset --hard HEAD
 
-# 変更したファイルをHEADの状態に戻す (DANGEROUS!)
-git reset --hard HEAD
+  # reset直後、それを取り消す
+  git reset --hard ORIG_HEAD
 
-# reset直後、それを取り消す
-git reset --hard ORIG_HEAD
-
-# divergedになってしまった手元のbranchを破棄 (DANGEROUS!)
-git reset --hard origin/main
-```
-
-直前のcommitをちょっと修正したいだけなら `git commit --amend` が簡単。
-それより前のを修正するには `git rebase -i HEAD~3` とかで戻ってrewordやedit。
+  # divergedになってしまった手元のbranchを破棄 (DANGEROUS!)
+  git reset --hard origin/main
+  ```
 
 
 ### diff
@@ -298,21 +308,37 @@ GitHubが勝手にJekyll処理しようとすることがあるので、
 生成されるドキュメントがどう変わるかを一応確認してからデプロイしたいので、
 今のところ手でビルド→確認→commit→pushという流れを採用している。
 
-`/docs` を公開する方法だと `main` ブランチだけで済ませられて楽だけど、
+`main` ブランチだけで済ませる方法は楽な面もあるけど、
 コミット履歴が汚くなるというデメリットがある。
 結局 `gh-pages` ブランチを作る古来の方法がいい塩梅。
 
+その場合 `main` の作業ディレクトリで `git switch --orphan gh-pages` するより、
+新しいディレクトリから初期化するほうが簡単かつ安全:
+```sh
+git init -b gh-pages docs
+cd docs/
+git remote add origin https://github.com/USERNAME/PROJECT.git
+git commit --allow-empty -m ":beer: Create orphan branch"
+git push -u origin gh-pages
+```
+
+
 ## Pull Request (PR)
 
--   大元のリポジトリを`upstream`、フォークした自分のリポジトリを`origin`と名付ける。
+-   <https://docs.github.com/en/pull-requests>
+-   他人のプロジェクトに変更を提案するための仕組み。
+-   リモートリポジトリを2つ参照することになる。
+    - 大元のを`upstream`、フォークした自分のを`origin`と呼ぶのが一般的。
+    - 大元のを`origin`、フォークを`自分のユーザー名`にすることもある。
+      e.g., [Homebrew PR](https://docs.brew.sh/How-To-Open-a-Homebrew-Pull-Request)
 -   デフォルトブランチ(`main`とか`develop`とか)は更新取得のためだけに使い、変更は新規ブランチで行う。
--   `push`済みのcommitを`rebase`するとIDが変わっちゃうのでダメ。
+
 
 ### 基本の流れ
 
 例えば `USER` さんの `PROJECT` のコード修正に貢献する場合。
 
-1.  `github.com/USER/PROJECT` のForkボタンで自分のGitHubリポジトリに取り込む
+1.  `github.com/USER/PROJECT` の "Fork" ボタンで自分のGitHubリポジトリに取り込む
 1.  forkした自分のリポジトリからローカルに`clone`:
     ```sh
     git clone https://github.com/heavywatal/PROJECT.git
@@ -321,7 +347,7 @@ GitHubが勝手にJekyll処理しようとすることがあるので、
 
 1.  大元のリポジトリに`upstream`という名前をつけておく:
     ```sh
-    git remote add upstream git://github.com/USER/PROJECT.git
+    git remote add upstream https://github.com/USER/PROJECT.git
     ```
 
 1.  PR用のブランチを切って移動:
@@ -351,41 +377,22 @@ GitHubが勝手にJekyll処理しようとすることがあるので、
 
 1.  自分のリポジトリに`push`:
     ```sh
-    git push origin fix-typo
+    git push -u origin fix-typo
     ```
 
 1.  PR用のURLが表示されるのでそこから飛ぶ。
-    もしくはGitHub上に出現する"Compare & pull request"ボタンを押す。
-1.  差分を確認し、コメント欄を埋めて提出
-1.  修正を求められたらそのブランチで変更し、自分のリポジトリに`push`すればPRにも反映される
-1.  マージされたらブランチを消す
+    もしくはGitHub上に出現する "Compare & pull request" ボタンを押す。
+1.  差分を確認し、コメント欄を埋めて提出。
+1.  待つ。
 
+    修正を求められたらそのブランチで変更し、自分のリポジトリに`push`すればPRにも反映される。
 
-## 問題と対処
+    この間に `upstream` に更新があった場合、
+    `rebase` でPRに取り込むべきか、マージする側でその処理をするか、
+    判断は元のプロジェクト管理者に従う。
+    `rebase` すると `git push --force` が必要になる。
+1.  マージされたらブランチを消す。
 
-### Trailing whitespace 以外の変更だけ add する
-
-大概のIDEには保存時に行末の空白を自動削除するオプションがある。
-それによって自分のソースコードは常にきれいに保てるが、
-他人の汚いコードや [knitr]({{< relref "knitr.md" >}}) の結果などを編集するときに余計な差分を作ってしまう。
-[VSCode]({{< relref "vscode.md" >}}) なら "Save without Formatting"
-で設定を変えずに済ませられることは覚えていても、
-"Find in Files" で一括編集したときにも空白が削られることは忘れがち。
-
-```sh
-git diff --ignore-space-at-eol | git apply --cached
-```
-
-上記ワンライナーで大概うまくいくが、
-変更箇所が近かったりすると `error: patch failed` と蹴られる。
-その場合は次のようにworkaround:
-
-```sh
-git diff --ignore-space-at-eol > tmp.diff
-git stash
-git apply --cached tmp.diff
-git stash drop
-```
 
 ### 用済みブランチの掃除
 
@@ -433,6 +440,36 @@ If you are sure you want to delete it, run 'git branch -D issue-666'.
 ```sh
 git remote set-branches origin main
 git fetch --prune
+```
+
+
+## 問題と対処
+
+`git status` で次の一手を提案してくれることが多いので、まずはそれに従う。
+
+
+### Trailing whitespace 以外の変更だけ add する
+
+大概のIDEには保存時に行末の空白を自動削除するオプションがある。
+それによって自分のソースコードは常にきれいに保てるが、
+他人の汚いコードや [knitr]({{< relref "knitr.md" >}}) の結果などを編集するときに余計な差分を作ってしまう。
+[VSCode]({{< relref "vscode.md" >}}) なら "Save without Formatting"
+で設定を変えずに済ませられることは覚えていても、
+"Find in Files" で一括編集したときにも空白が削られることは忘れがち。
+
+```sh
+git diff --ignore-space-at-eol | git apply --cached
+```
+
+上記ワンライナーで大概うまくいくが、
+変更箇所が近かったりすると `error: patch failed` と蹴られる。
+その場合は次のようにworkaround:
+
+```sh
+git diff --ignore-space-at-eol > tmp.diff
+git stash
+git apply --cached tmp.diff
+git stash drop
 ```
 
 
@@ -487,17 +524,19 @@ submoduleなどをいじってると意図せずdetached HEAD状態になるこ�
 [`git filter-branch`](https://git-scm.com/docs/git-filter-branch)は非推奨になり、
 今のところサードパーティの[`git-filter-repo`](https://github.com/newren/git-filter-repo)が推奨。
 
-[`man git-filter-repo`](https://htmlpreview.github.io/?https://github.com/newren/git-filter-repo/blob/docs/html/git-filter-repo.html)
+> [!NOTE]
+>
+> [`man git-filter-repo`](https://htmlpreview.github.io/?https://github.com/newren/git-filter-repo/blob/docs/html/git-filter-repo.html)
 を読み、歴史改変がいかに危険で面倒なことかを理解する。
-
-例えば `main` ブランチの `docs/` で公開していた GitHub Pages を
+>
+> 例えば `main` ブランチの `docs/` で公開していた GitHub Pages を
 `gh-pages` ブランチに切り分け、 `main` の履歴から消去したいとする。
 `main` の履歴の検索性が上がるなどのメリットがあるとして、
 散在する全てのクローンやフォークが一旦無効になるリスクとコストに見合うかどうか。
 `gh-pages` ブランチに置くのはソースコードではなく生成物なので、
 履歴の重要性はそれほど大きくない。
 自分ひとりで開発している小規模リポジトリならギリギリ試す価値ありかもしれないけど、
-`main` はそのままにして `gh-pages` は新しいorphanブランチを作るほうが無難な気がする。
+`main` はそのままにして `gh-pages` は新しいorphanブランチを作るほうが無難。
 
 インストール方法はいろいろあるので好きなやつを選ぶ。
 Python製なのでuvがセットアップしてあれば早い:
@@ -505,31 +544,19 @@ Python製なのでuvがセットアップしてあれば早い:
 uv pip install git-filter-repo
 ```
 
-安全のため手元のリポジトリを使わず、別のところにフレッシュなクローンを用意する。
-`docs/` 以下だけを保持し、トップレベルに移動:
-```sh
-git clone https://github.com/heavywatal/tekka.git
-cd tekka/
-git filter-repo --path docs/ --path-rename docs/:
-git log
-ls
-```
+安全のため手元のリポジトリを使わず、
+新たに `git clone` したフレッシュなリポジトリを使う。
 
-元のリポジトリを誤って上書きしないように `git remote` が消去される。
-必要に応じて `git remote add origin` で登録し直す。
+`docs/` 以下の履歴だけを保持し、トップレベルに移動する例:
 ```sh
+git filter-repo --path docs/ --path-rename docs/:
+ls
+git log --graph --all
 git remote -v
 ```
 
-不要なタグがあれば消す:
-```sh
-git tag
-```
-
-宛先をよく確認して `push` する:
-```sh
-git push -u origin gh-pages
-```
+元のリポジトリを誤って上書きしないようにリモートの設定が消去される。
+必要に応じて `git remote add origin` で登録し直す。
 
 
 ### 別のリポジトリをサブディレクトリとして取り込む
