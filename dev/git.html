@@ -106,23 +106,34 @@ sshでパスワード無しでpushする、というのが楽ちん。</p>
 <dl>
 <dt>📁 working directory (working tree)</dt>
 <dd>手元のファイルの変更はまだリポジトリに登録されていない</dd>
-<dd>↓ <code>add</code></dd>
+</dl>
+<p>  ↓ <code>git add</code></p>
+<dl>
 <dt><iconify-icon inline icon="bi:git"></iconify-icon> staging area (index)</dt>
 <dd>次のコミットに含めるファイルをマークする段階</dd>
-<dd>↓ <code>commit</code></dd>
+</dl>
+<p>  ↓ <code>git commit</code></p>
+<dl>
 <dt><iconify-icon inline icon="bi:git"></iconify-icon> local repository</dt>
 <dd>変更履歴が <code>.git/</code> 内に記録されている</dd>
-<dd>↓ <code>push</code></dd>
+</dl>
+<p>  ↓ <code>git push</code></p>
+<dl>
 <dt><iconify-icon inline icon="bi:github"></iconify-icon> remote repository</dt>
 <dd>GitHubなど別マシンのリポジトリに反映</dd>
 </dl>
 <h3 id="外部の変更を手元に取り込む">外部の変更を手元に取り込む</h3>
 <dl>
 <dt><iconify-icon inline icon="bi:github"></iconify-icon> remote repository</dt>
-<dd>↓ <code>fetch</code></dd>
+<dd>最新版</dd>
+</dl>
+<p>  ↓ <code>git fetch</code></p>
+<dl>
 <dt><iconify-icon inline icon="bi:git"></iconify-icon> local repository</dt>
 <dd>変更が <code>.git/</code> に取り込まれたが、見えてるファイルには反映されてない</dd>
-<dd>↓ <code>merge</code> or <code>rebase</code></dd>
+</dl>
+<p>  ↓ <code>git merge</code> or <code>git rebase</code></p>
+<dl>
 <dt>📁 working directory</dt>
 <dd>手元のファイルが最新版に同期されている</dd>
 </dl>
@@ -138,8 +149,8 @@ blobやファイル名などのメタデータに依存したハッシュIDを�
 その変化は親に伝播する。</dd>
 <dt>commit</dt>
 <dd>git内部でroot treeのsnapshotを指すオブジェクト。
-root treeのハッシュID、著者、コメントなどの情報を持つ。
-動詞としては、staging areaの情報をひとつのcommitとしてリポジトリに登録することを指す。</dd>
+root treeのハッシュID、著者、コメントなどの情報を持つ。</dd>
+<dd>動詞としては、staging areaの情報をひとつのcommitとしてリポジトリに登録することを指す。</dd>
 <dt>repository</dt>
 <dd>commitの履歴を保持する拠点。
 <code>git init</code> で手元に新規作成するか、<code>git clone</code> でリモートから複製する。</dd>
@@ -166,17 +177,21 @@ root treeのハッシュID、著者、コメントなどの情報を持つ。
 <h3 id="reset">reset</h3>
 <p><code>git reset &lt;DESTINATION&gt;</code> は <code>HEAD</code> の位置を戻す処理で、
 オプションによってindexとworking treeもそこに合わせるように変更される。
-<code>--soft</code> なら <code>HEAD</code> 移動のみ。
-<code>--mixed</code> なら移動した <code>HEAD</code> にindexも合わせる。
-<code>--hard</code> なら移動した <code>HEAD</code> にindexとworking treeも合わせる。
-直前の動作を取り消す用途に絞って使うのが無難:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># commit直後、それを取り消す (indexとworkingはそのまま)</span>
-</span></span><span class="line"><span class="cl">git reset --soft HEAD^
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># add直後、それを取り消す (workingとHEADはそのまま)</span>
-</span></span><span class="line"><span class="cl">git reset --mixed HEAD
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 変更したファイルをHEADの状態に戻す (DANGEROUS!)</span>
+直前の動作を取り消す用途に絞って使うのが無難。</p>
+<ul>
+<li><code>--soft</code>: <code>HEAD</code> 移動のみ。indexとworkingはそのまま。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 直前のcommitを取り消し、staged状態まで戻す</span>
+</span></span><span class="line"><span class="cl">git reset --soft HEAD~
+</span></span></code></pre></div>直前のcommitをちょっと修正したいだけなら <code>git commit --amend</code> が簡単。
+それより前のを修正するには <code>git rebase -i HEAD~3</code> とかで戻ってrewordやedit。</li>
+<li><code>--mixed</code>: 移動した <code>HEAD</code> にindexも合わせる。
+<code>git add</code> を取り消すのに使える:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 同義だけど git status で提案されるのは後者</span>
+</span></span><span class="line"><span class="cl">git reset --mixed HEAD~
+</span></span><span class="line"><span class="cl">git restore --staged .
+</span></span></code></pre></div></li>
+<li><code>--hard</code>: 移動した <code>HEAD</code> にindexとworking treeも合わせる。危険。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 変更したファイルをHEADの状態に戻す (DANGEROUS!)</span>
 </span></span><span class="line"><span class="cl">git reset --hard HEAD
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># reset直後、それを取り消す</span>
@@ -184,8 +199,8 @@ root treeのハッシュID、著者、コメントなどの情報を持つ。
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># divergedになってしまった手元のbranchを破棄 (DANGEROUS!)</span>
 </span></span><span class="line"><span class="cl">git reset --hard origin/main
-</span></span></code></pre></div><p>直前のcommitをちょっと修正したいだけなら <code>git commit --amend</code> が簡単。
-それより前のを修正するには <code>git rebase -i HEAD~3</code> とかで戻ってrewordやedit。</p>
+</span></span></code></pre></div></li>
+</ul>
 <h3 id="diff">diff</h3>
 <p>差分を表示:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># HEAD vs working (staging前のファイルが対象)</span>
@@ -278,20 +293,34 @@ e.g., CMake FetchContent, Hugo Modules, etc.</p>
 <p>ソースコードやプログラムを更新した結果、
 生成されるドキュメントがどう変わるかを一応確認してからデプロイしたいので、
 今のところ手でビルド→確認→commit→pushという流れを採用している。</p>
-<p><code>/docs</code> を公開する方法だと <code>main</code> ブランチだけで済ませられて楽だけど、
+<p><code>main</code> ブランチだけで済ませる方法は楽な面もあるけど、
 コミット履歴が汚くなるというデメリットがある。
 結局 <code>gh-pages</code> ブランチを作る古来の方法がいい塩梅。</p>
-<h2 id="pull-request-pr">Pull Request (PR)</h2>
+<p>その場合 <code>main</code> の作業ディレクトリで <code>git switch --orphan gh-pages</code> するより、
+新しいディレクトリから初期化するほうが簡単かつ安全:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git init -b gh-pages docs
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> docs/
+</span></span><span class="line"><span class="cl">git remote add origin https://github.com/USERNAME/PROJECT.git
+</span></span><span class="line"><span class="cl">git commit --allow-empty -m <span class="s2">&#34;:beer: Create orphan branch&#34;</span>
+</span></span><span class="line"><span class="cl">git push -u origin gh-pages
+</span></span></code></pre></div><h2 id="pull-request-pr">Pull Request (PR)</h2>
 <ul>
-<li>大元のリポジトリを<code>upstream</code>、フォークした自分のリポジトリを<code>origin</code>と名付ける。</li>
+<li><a href="https://docs.github.com/en/pull-requests">https://docs.github.com/en/pull-requests</a></li>
+<li>他人のプロジェクトに変更を提案するための仕組み。</li>
+<li>リモートリポジトリを2つ参照することになる。
+<ul>
+<li>大元のを<code>upstream</code>、フォークした自分のを<code>origin</code>と呼ぶのが一般的。</li>
+<li>大元のを<code>origin</code>、フォークを<code>自分のユーザー名</code>にすることもある。
+e.g., <a href="https://docs.brew.sh/How-To-Open-a-Homebrew-Pull-Request">Homebrew PR</a></li>
+</ul>
+</li>
 <li>デフォルトブランチ(<code>main</code>とか<code>develop</code>とか)は更新取得のためだけに使い、変更は新規ブランチで行う。</li>
-<li><code>push</code>済みのcommitを<code>rebase</code>するとIDが変わっちゃうのでダメ。</li>
 </ul>
 <h3 id="基本の流れ">基本の流れ</h3>
 <p>例えば <code>USER</code> さんの <code>PROJECT</code> のコード修正に貢献する場合。</p>
 <ol>
 <li>
-<p><code>github.com/USER/PROJECT</code> のForkボタンで自分のGitHubリポジトリに取り込む</p>
+<p><code>github.com/USER/PROJECT</code> の &ldquo;Fork&rdquo; ボタンで自分のGitHubリポジトリに取り込む</p>
 </li>
 <li>
 <p>forkした自分のリポジトリからローカルに<code>clone</code>:</p>
@@ -300,7 +329,7 @@ e.g., CMake FetchContent, Hugo Modules, etc.</p>
 </span></span></code></pre></div></li>
 <li>
 <p>大元のリポジトリに<code>upstream</code>という名前をつけておく:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git remote add upstream git://github.com/USER/PROJECT.git
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git remote add upstream https://github.com/USER/PROJECT.git
 </span></span></code></pre></div></li>
 <li>
 <p>PR用のブランチを切って移動:</p>
@@ -323,39 +352,28 @@ e.g., CMake FetchContent, Hugo Modules, etc.</p>
 </span></span></code></pre></div></li>
 <li>
 <p>自分のリポジトリに<code>push</code>:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git push origin fix-typo
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git push -u origin fix-typo
 </span></span></code></pre></div></li>
 <li>
 <p>PR用のURLが表示されるのでそこから飛ぶ。
-もしくはGitHub上に出現する&quot;Compare &amp; pull request&quot;ボタンを押す。</p>
+もしくはGitHub上に出現する &ldquo;Compare &amp; pull request&rdquo; ボタンを押す。</p>
 </li>
 <li>
-<p>差分を確認し、コメント欄を埋めて提出</p>
+<p>差分を確認し、コメント欄を埋めて提出。</p>
 </li>
 <li>
-<p>修正を求められたらそのブランチで変更し、自分のリポジトリに<code>push</code>すればPRにも反映される</p>
+<p>待つ。</p>
+<p>修正を求められたらそのブランチで変更し、自分のリポジトリに<code>push</code>すればPRにも反映される。</p>
+<p>この間に <code>upstream</code> に更新があった場合、
+<code>rebase</code> でPRに取り込むべきか、マージする側でその処理をするか、
+判断は元のプロジェクト管理者に従う。
+<code>rebase</code> すると <code>git push --force</code> が必要になる。</p>
 </li>
 <li>
-<p>マージされたらブランチを消す</p>
+<p>マージされたらブランチを消す。</p>
 </li>
 </ol>
-<h2 id="問題と対処">問題と対処</h2>
-<h3 id="trailing-whitespace-以外の変更だけ-add-する">Trailing whitespace 以外の変更だけ add する</h3>
-<p>大概のIDEには保存時に行末の空白を自動削除するオプションがある。
-それによって自分のソースコードは常にきれいに保てるが、
-他人の汚いコードや <a href="/rstats/knitr.html">knitr</a> の結果などを編集するときに余計な差分を作ってしまう。
-<a href="/dev/vscode.html">VSCode</a> なら &ldquo;Save without Formatting&rdquo;
-で設定を変えずに済ませられることは覚えていても、
-&ldquo;Find in Files&rdquo; で一括編集したときにも空白が削られることは忘れがち。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git diff --ignore-space-at-eol <span class="p">|</span> git apply --cached
-</span></span></code></pre></div><p>上記ワンライナーで大概うまくいくが、
-変更箇所が近かったりすると <code>error: patch failed</code> と蹴られる。
-その場合は次のようにworkaround:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git diff --ignore-space-at-eol &gt; tmp.diff
-</span></span><span class="line"><span class="cl">git stash
-</span></span><span class="line"><span class="cl">git apply --cached tmp.diff
-</span></span><span class="line"><span class="cl">git stash drop
-</span></span></code></pre></div><h3 id="用済みブランチの掃除">用済みブランチの掃除</h3>
+<h3 id="用済みブランチの掃除">用済みブランチの掃除</h3>
 <p>PRマージ済みのリモートブランチを消したい。
 一番簡単なのは、GitHub PR画面のdelete branchボタンを押すこと。
 手元のgitからやるには、明示的に <code>--delete</code> するか、空ブランチをpushするか:</p>
@@ -380,6 +398,23 @@ If you are sure you want to delete it, run &#39;git branch -D issue-666&#39;.
 そうならないように消すには:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git remote set-branches origin main
 </span></span><span class="line"><span class="cl">git fetch --prune
+</span></span></code></pre></div><h2 id="問題と対処">問題と対処</h2>
+<p><code>git status</code> で次の一手を提案してくれることが多いので、まずはそれに従う。</p>
+<h3 id="trailing-whitespace-以外の変更だけ-add-する">Trailing whitespace 以外の変更だけ add する</h3>
+<p>大概のIDEには保存時に行末の空白を自動削除するオプションがある。
+それによって自分のソースコードは常にきれいに保てるが、
+他人の汚いコードや <a href="/rstats/knitr.html">knitr</a> の結果などを編集するときに余計な差分を作ってしまう。
+<a href="/dev/vscode.html">VSCode</a> なら &ldquo;Save without Formatting&rdquo;
+で設定を変えずに済ませられることは覚えていても、
+&ldquo;Find in Files&rdquo; で一括編集したときにも空白が削られることは忘れがち。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git diff --ignore-space-at-eol <span class="p">|</span> git apply --cached
+</span></span></code></pre></div><p>上記ワンライナーで大概うまくいくが、
+変更箇所が近かったりすると <code>error: patch failed</code> と蹴られる。
+その場合は次のようにworkaround:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git diff --ignore-space-at-eol &gt; tmp.diff
+</span></span><span class="line"><span class="cl">git stash
+</span></span><span class="line"><span class="cl">git apply --cached tmp.diff
+</span></span><span class="line"><span class="cl">git stash drop
 </span></span></code></pre></div><h3 id="detached-head-からの復帰">detached HEAD からの復帰</h3>
 <p>submoduleなどをいじってると意図せずdetached HEAD状態になることがある。
 その状態でcommitしてしまった変更を<code>main</code>に反映したい。</p>
@@ -417,6 +452,8 @@ to do so with:
 ドキュメントのある
 <a href="https://git-scm.com/docs/git-filter-branch"><code>git filter-branch</code></a>は非推奨になり、
 今のところサードパーティの<a href="https://github.com/newren/git-filter-repo"><code>git-filter-repo</code></a>が推奨。</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title"><iconify-icon inline icon="octicon:info-16"></iconify-icon>Note</p>
 <p><a href="https://htmlpreview.github.io/?https://github.com/newren/git-filter-repo/blob/docs/html/git-filter-repo.html"><code>man git-filter-repo</code></a>
 を読み、歴史改変がいかに危険で面倒なことかを理解する。</p>
 <p>例えば <code>main</code> ブランチの <code>docs/</code> で公開していた GitHub Pages を
@@ -426,25 +463,21 @@ to do so with:
 <code>gh-pages</code> ブランチに置くのはソースコードではなく生成物なので、
 履歴の重要性はそれほど大きくない。
 自分ひとりで開発している小規模リポジトリならギリギリ試す価値ありかもしれないけど、
-<code>main</code> はそのままにして <code>gh-pages</code> は新しいorphanブランチを作るほうが無難な気がする。</p>
+<code>main</code> はそのままにして <code>gh-pages</code> は新しいorphanブランチを作るほうが無難。</p>
+</div>
 <p>インストール方法はいろいろあるので好きなやつを選ぶ。
 Python製なのでuvがセットアップしてあれば早い:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">uv pip install git-filter-repo
-</span></span></code></pre></div><p>安全のため手元のリポジトリを使わず、別のところにフレッシュなクローンを用意する。
-<code>docs/</code> 以下だけを保持し、トップレベルに移動:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git clone https://github.com/heavywatal/tekka.git
-</span></span><span class="line"><span class="cl"><span class="nb">cd</span> tekka/
-</span></span><span class="line"><span class="cl">git filter-repo --path docs/ --path-rename docs/:
-</span></span><span class="line"><span class="cl">git log
+</span></span></code></pre></div><p>安全のため手元のリポジトリを使わず、
+新たに <code>git clone</code> したフレッシュなリポジトリを使う。</p>
+<p><code>docs/</code> 以下の履歴だけを保持し、トップレベルに移動する例:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git filter-repo --path docs/ --path-rename docs/:
 </span></span><span class="line"><span class="cl">ls
-</span></span></code></pre></div><p>元のリポジトリを誤って上書きしないように <code>git remote</code> が消去される。
+</span></span><span class="line"><span class="cl">git log --graph --all
+</span></span><span class="line"><span class="cl">git remote -v
+</span></span></code></pre></div><p>元のリポジトリを誤って上書きしないようにリモートの設定が消去される。
 必要に応じて <code>git remote add origin</code> で登録し直す。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git remote -v
-</span></span></code></pre></div><p>不要なタグがあれば消す:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git tag
-</span></span></code></pre></div><p>宛先をよく確認して <code>push</code> する:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git push -u origin gh-pages
-</span></span></code></pre></div><h3 id="別のリポジトリをサブディレクトリとして取り込む">別のリポジトリをサブディレクトリとして取り込む</h3>
+<h3 id="別のリポジトリをサブディレクトリとして取り込む">別のリポジトリをサブディレクトリとして取り込む</h3>
 <p><a href="https://git-scm.com/book/tr/v2/Git-Tools-Advanced-Merging#_subtree_merge">Subtree Merging</a></p>
 <p>オプション <code>-X subtree=${subdir}</code> を利用してサブディレクトリに入れると、
 全体の <code>git log</code> では統合されてるように見えるけど、
