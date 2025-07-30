@@ -54,8 +54,8 @@ Heavy Watal
 Homebrew
 </a></h1>
 <nav class="tags">
-<a href="/tags/mac.html"><div>mac</div></a>
-<a href="/tags/package.html"><div>package</div></a>
+<a href="/tags/mac.html">mac</a>
+<a href="/tags/package.html">package</a>
 </nav>
 </header>
 
@@ -82,37 +82,25 @@ cf. <a href="/dev/devenv.html">/dev/devenv</a>:</p>
 <h2 id="usage">Usage</h2>
 <p><a href="https://docs.brew.sh/FAQ">https://docs.brew.sh/FAQ</a></p>
 <ul>
-<li>
-<p>パッケージのインストール・アンインストール:</p>
-<pre><code>brew install cmake
-brew uninstall cmake
-</code></pre>
-</li>
-<li>
-<p>Homebrew本体とカタログをアップデートし、アップグレード可能なパッケージを表示:</p>
-<pre><code>brew update &amp;&amp; brew outdated
-</code></pre>
-</li>
-<li>
-<p><code>outdated</code> なものを全てアップグレード:</p>
-<pre><code>brew upgrade
-</code></pre>
-</li>
-<li>
-<p>パッケージ検索:</p>
-<pre><code>brew search cmake
-</code></pre>
-</li>
-<li>
-<p>パッケージ情報の表示:</p>
-<pre><code>brew info cmake
-</code></pre>
-</li>
-<li>
-<p>インストール済みパッケージ、またはパッケージ内ファイルの一覧:</p>
-<pre><code>brew list [formula]
-</code></pre>
-</li>
+<li>パッケージのインストール・アンインストール:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew install cmake
+</span></span><span class="line"><span class="cl">brew uninstall cmake
+</span></span></code></pre></div></li>
+<li>Homebrew本体とカタログをアップデートし、アップグレード可能なパッケージを表示:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew update <span class="o">&amp;&amp;</span> brew outdated
+</span></span></code></pre></div></li>
+<li><code>outdated</code> なものを全てアップグレード:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew upgrade
+</span></span></code></pre></div></li>
+<li>パッケージ検索:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew search cmake
+</span></span></code></pre></div></li>
+<li>パッケージ情報の表示:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew info cmake
+</span></span></code></pre></div></li>
+<li>インストール済みパッケージ、またはパッケージ内ファイルの一覧:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew list <span class="o">[</span>formula<span class="o">]</span>
+</span></span></code></pre></div></li>
 </ul>
 <h2 id="brew-install">brew install</h2>
 <p>公式リポジトリから明示的にインストールしたものメモ:<br>
@@ -124,13 +112,13 @@ exiftool
 fzf
 go
 make
-miller
 nkf
 pandoc
 parallel
 qpdf
 rbenv
 rsync
+switchaudio-osx
 tmux
 webp
 wget
@@ -138,7 +126,7 @@ zsh-completions
 zstd</p>
 <p>Rをここからインストールするとバイナリ版のパッケージが利用できず、
 毎回ソースからビルドすることになるので、
-後述のように <code>--cask r</code> で入れるほうが簡単。</p>
+後述のように <code>--cask r-app</code> で入れるほうが簡単。</p>
 <p><code>coreutils</code>, <code>gnu-tar</code>
 などは既存のシステムコマンドとごっちゃにならないよう頭に <code>g</code>
 を付けてインストールしてくれる。
@@ -200,7 +188,7 @@ sd</p>
 昔は <code>brew cask install</code> のような形で使っていたが、
 今は <code>brew</code> 本体に統合されている。
 同名のformulaがある場合などは <code>--cask</code> で限定できる:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew install --cask r rstudio
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew install --cask r-app rstudio
 </span></span><span class="line"><span class="cl">brew list --cask
 </span></span></code></pre></div><p>アプリ側にアップデート機能があって <code>auto_updates true</code> とされているものは普通の
 <code>brew outdated</code> や <code>brew upgrade</code> には出てこない。
@@ -209,27 +197,26 @@ sd</p>
 そのままCaskのバージョンから離れていっても問題ない。
 <code>$(brew --cache)</code> 以下にインストーラーが保持されるので、
 ストレージ不足で気になる場合は確認して消す。</p>
-<p>aldente amazon-photos
-basictex bibdesk
+<p>aldente
+basictex betterdisplay bibdesk
+container
 discord drawio dropbox equinox firefox
-google-chrome google-drive
+ghostty google-chrome google-drive
 inkscape joplin julia
 macfuse megasync menumeters monitorcontrol
-orbstack quarto r rstudio
-skim skype slack
-the-unarchiver visual-studio-code vlc
-wezterm xquartz zoom</p>
+orbstack proxy-audio-device quarto
+r-app rstudio skim slack
+visual-studio-code vlc
+whatsapp xquartz zoom</p>
 <h3 id="quicklook">Quicklook</h3>
 <p><a href="/mac/quicklook.html">See Quicklook</a>.</p>
 <h3 id="fonts">Fonts</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew tap homebrew/cask-fonts
 </span></span></code></pre></div><p>font-sf-mono font-sf-pro
-font-ubuntu font-ubuntu-mono font-ubuntu-mono-nerd-font
-font-ubuntu-sans font-ubuntu-sans-mono font-ubuntu-sans-nerd-font
+font-ubuntu font-ubuntu-mono
+font-ubuntu-sans font-ubuntu-sans-mono
 font-noto-sans font-noto-serif font-noto-sans-mono
-font-source-sans-3 font-source-serif-4
-font-open-sans font-roboto font-dejavu
-font-lora font-merriweather</p>
+font-symbols-only-nerd-font font-ubuntu-mono-nerd-font</p>
 
 </article>
 </main>
@@ -369,9 +356,9 @@ font-lora font-merriweather</p>
 
 <div><a href="/tags.html">Tags</a></div>
 </div>
-<form action="/search.html" id="search-form">
+<search><form action="/search.html">
 <input type="search" name="q" placeholder="search">
-</form>
+</form></search>
 </nav>
 <footer><small>(ɔ) 2008 岩嵜航 Watal M. Iwasaki</small></footer>
 </body>
