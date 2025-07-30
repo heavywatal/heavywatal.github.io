@@ -38,30 +38,30 @@ Unixツールを手軽にインストールできるパッケージ管理ソフ�
 <https://docs.brew.sh/FAQ>
 
 -   パッケージのインストール・アンインストール:
-
-        brew install cmake
-        brew uninstall cmake
-
+    ```sh
+    brew install cmake
+    brew uninstall cmake
+    ```
 -   Homebrew本体とカタログをアップデートし、アップグレード可能なパッケージを表示:
-
-        brew update && brew outdated
-
+    ```sh
+    brew update && brew outdated
+    ```
 -   `outdated` なものを全てアップグレード:
-
-        brew upgrade
-
+    ```sh
+    brew upgrade
+    ```
 -   パッケージ検索:
-
-        brew search cmake
-
+    ```sh
+    brew search cmake
+    ```
 -   パッケージ情報の表示:
-
-        brew info cmake
-
+    ```sh
+    brew info cmake
+    ```
 -   インストール済みパッケージ、またはパッケージ内ファイルの一覧:
-
-        brew list [formula]
-
+    ```sh
+    brew list [formula]
+    ```
 
 ## brew install
 
@@ -74,13 +74,13 @@ exiftool
 fzf
 go
 make
-miller
 nkf
 pandoc
 parallel
 qpdf
 rbenv
 rsync
+switchaudio-osx
 tmux
 webp
 wget
@@ -89,7 +89,7 @@ zstd
 
 Rをここからインストールするとバイナリ版のパッケージが利用できず、
 毎回ソースからビルドすることになるので、
-後述のように `--cask r` で入れるほうが簡単。
+後述のように `--cask r-app` で入れるほうが簡単。
 
 `coreutils`, `gnu-tar`
 などは既存のシステムコマンドとごっちゃにならないよう頭に `g`
@@ -176,7 +176,7 @@ GUIアプリケーションもHomebrewで管理してしまおうという野心
 同名のformulaがある場合などは `--cask` で限定できる:
 
 ```sh
-brew install --cask r rstudio
+brew install --cask r-app rstudio
 brew list --cask
 ```
 
@@ -188,16 +188,17 @@ brew list --cask
 `$(brew --cache)` 以下にインストーラーが保持されるので、
 ストレージ不足で気になる場合は確認して消す。
 
-aldente amazon-photos
-basictex bibdesk
+aldente
+basictex betterdisplay bibdesk
+container
 discord drawio dropbox equinox firefox
-google-chrome google-drive
+ghostty google-chrome google-drive
 inkscape joplin julia
 macfuse megasync menumeters monitorcontrol
-orbstack quarto r rstudio
-skim skype slack
-the-unarchiver visual-studio-code vlc
-wezterm xquartz zoom
+orbstack proxy-audio-device quarto
+r-app rstudio skim slack
+visual-studio-code vlc
+whatsapp xquartz zoom
 
 ### Quicklook
 
@@ -210,9 +211,7 @@ brew tap homebrew/cask-fonts
 ```
 
 font-sf-mono font-sf-pro
-font-ubuntu font-ubuntu-mono font-ubuntu-mono-nerd-font
-font-ubuntu-sans font-ubuntu-sans-mono font-ubuntu-sans-nerd-font
+font-ubuntu font-ubuntu-mono
+font-ubuntu-sans font-ubuntu-sans-mono
 font-noto-sans font-noto-serif font-noto-sans-mono
-font-source-sans-3 font-source-serif-4
-font-open-sans font-roboto font-dejavu
-font-lora font-merriweather
+font-symbols-only-nerd-font font-ubuntu-mono-nerd-font

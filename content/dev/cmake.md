@@ -458,6 +458,11 @@ cmake_print_variables(igraph_SOURCE_DIR, igraph_BINARY_DIR)
 `add_subdirectory()` の対象にできず、
 `execute_process()` で git を直接叩くなどして凌いでいた。
 
+[Homebrew]({{< relref "homebrew.md" >}}) Formula の中では原則禁止。
+できる限り `find_package()` で済むようにして、
+どうしても無理なとき `-DHOMEBREW_ALLOW_FETCHCONTENT=ON"` を末尾に追加。
+
+
 ### FindThreads
 
 <https://cmake.org/cmake/help/latest/module/FindThreads.html>
