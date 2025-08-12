@@ -98,7 +98,9 @@ ChatGPT や Claude のようないくつかの大規模言語モデルから選�
 
 #### 設定
 
-<https://github.com/features/copilot/plans>\
+- <https://github.com/features/copilot/plans>
+- <https://docs.github.com/copilot/reference/ai-models/model-comparison>
+
 Free でも使えるけどかなり限定的。
 GitHub Education に登録すれば Pro 相当の機能を無料で使わせてもらえる。
 
@@ -149,9 +151,12 @@ AIを使う、というと一般にはチャットのイメージが強いだろ
    [3つのモードがある](https://github.blog/ai-and-ml/github-copilot/copilot-ask-edit-and-agent-modes-what-they-do-and-when-to-use-them/):
    - **Ask**: 質問に答えてもらうだけ。\
      e.g., "How do you remove axis ticks in ggplot?", "Explain this code".
-   - **Edit**: 編集を提案してもらう。ファイル書き換えユーザーが差分を確認してから。\
+   - **Edit**: 編集を提案してもらう。ユーザーが差分を確認して保存。\
      e.g., "Correct grammatical and typographical errors", "Translate it to Japanese".
    - **Agent**: 目的だけを伝えて、ファイルの編集もいちいち確認せず任せる。
+
+   チャットにフォーカスして <kbd>⌘</kbd><kbd>.</kbd> でモード選択、
+   <kbd>⌥</kbd><kbd>⌘</kbd><kbd>.</kbd> でモデル選択のリストが開く。
 2. <kbd>⌘</kbd><kbd>i</kbd> で **Inline Chat** を開き、
    上記 "Ask" や "Edit" に相当することをその場で行う。
 3. とにかく自動補完をオンにしてテキストを書き、続きを **Inline Suggestion** してもらう。
@@ -165,7 +170,7 @@ key  | command | description
 <kbd>⌥</kbd><kbd>&bsol;</kbd> | Trigger Inline Suggestion | 自動補完されないときに手動で
 <kbd>⌘</kbd><kbd>i</kbd> | Toggle Inline Chat | その場で簡易チャット
 <kbd>^</kbd><kbd>⌘</kbd><kbd>i</kbd> | Toggle Chat | 右側にバーを開いてチャット
-<kbd>⌘</kbd><kbd>.</kbd> | Set Chat Mode | Ask → Edit → Agent → ...
+
 
 ### R
 
