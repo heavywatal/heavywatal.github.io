@@ -274,16 +274,40 @@ header a:any-link {
   color: inherit;
   text-decoration: none;
 }
-header .logo {
-  height: 32px;
-  vertical-align: text-bottom;
-  margin-right: 4px;
-}
 
 body > header {
   width: 100%;
+  margin-block: 0.6rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+body > header .logo {
+  height: 32px;
+  vertical-align: text-bottom;
+  margin-inline: 6px;
+}
+body > header .site-title {
   font-size: 1.2rem;
-  padding: 10px 6px;
+  font-weight: 500;
+  flex-basis: max-content;
+}
+body > header search {
+  margin-inline-start: auto;
+}
+
+search input {
+  font-size: 0.88rem;
+  width: 12rem;
+  padding-inline: 0.4rem;
+  line-height: inherit;
+  border: none;
+  background-color: var(--canvas);
+  color: var(--canvas-text);
+}
+search input::placeholder {
+  opacity: 0.75;
 }
 
 footer {
@@ -295,7 +319,7 @@ footer {
 
 main,
 .menu,
-search > form {
+search input {
   box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
 }
 
@@ -452,25 +476,13 @@ article h4::before {
   transform: scale(1.01);
 }
 
-search > form {
-  margin-block: 1rem 0;
-}
-search > form input {
-  font-size: 0.88rem;
-  padding: 4px 6px;
-  width: 100%;
-  border: none;
-  background-color: var(--canvas);
-  color: var(--canvas-text);
-}
-search > form input::placeholder {
-  opacity: 0.75;
-}
-
 @media (max-width: 712px) {
   body {
     padding: 0;
     font-size: 0.9rem;
+  }
+  header {
+    margin-inline: 0.5rem;
   }
   .side-bar {
     width: 100%;
