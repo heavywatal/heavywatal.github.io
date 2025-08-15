@@ -62,7 +62,32 @@ devtools — Rパッケージ作成支援
 <a href="/tags/package.html">package</a>
 </nav>
 </header>
-
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#rパッケージ">Rパッケージ</a>
+      <ul>
+        <li><a href="#最低限の作成手順">最低限の作成手順</a></li>
+        <li><a href="#ソース構造">ソース構造</a></li>
+        <li><a href="#description"><code>DESCRIPTION</code></a></li>
+        <li><a href="#namespace"><code>NAMESPACE</code></a></li>
+        <li><a href="#r-ソースコード"><code>R/</code> ソースコード</a></li>
+        <li><a href="#src-cソースコード"><code>src/</code> C++ソースコード</a></li>
+        <li><a href="#vignettes"><code>vignettes/</code></a></li>
+        <li><a href="#tests"><code>tests/</code></a></li>
+        <li><a href="#data"><code>data/</code></a></li>
+        <li><a href="#その他">その他</a></li>
+      </ul>
+    </li>
+    <li><a href="#devtools"><code>devtools</code></a></li>
+    <li><a href="#roxygen2"><code>roxygen2</code></a>
+      <ul>
+        <li><a href="#使い方">使い方</a></li>
+        <li><a href="#タグ">タグ</a></li>
+      </ul>
+    </li>
+    <li><a href="#pkgdown"><code>pkgdown</code></a></li>
+  </ul>
+</nav>
 <p>自分で書いた関数が多くなってきたら、まとめてパッケージを作るとよい。
 少しだけ面倒だが、以下のようなメリットがある。</p>
 <ul>
@@ -177,9 +202,6 @@ GitHubに公開しておけば誰でも使えるようになるので、
 <p><a href="/rstats/rcpp.html#Rパッケージで使う">Rcppページの&quot;Rパッケージで使う&quot;セクション</a>を参照</p>
 <h3 id="vignettes"><code>vignettes/</code></h3>
 <p><a href="https://r-pkgs.org/vignettes.html">https://r-pkgs.org/vignettes.html</a></p>
-<a href="https://pkgdown.r-lib.org/">
-<img src="/_img/hex-stickers/pkgdown.webp" align="right" width="120" height="139">
-</a>
 <p>個々の関数の使用例はRソースファイルの <code>@examples</code> に書くとして、
 複数の関数を組み合わせてどう使うかを説明するのが<code>vignettes/</code>の役割。
 R Markdown形式で書いてHTMLやPDFで表示できるので表現力豊か。</p>
@@ -188,7 +210,7 @@ R Markdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 <a href="/mac/homebrew.html">Homebrew</a> とかでインストールしておく。</p>
 <p><code>check()</code>がデフォルトで<code>vignette=TRUE</code>かつ処理がやや重いので、
 毎回その重さを受け入れるか、わざわざ<code>FALSE</code>指定するかというのは悩みどころ。</p>
-<p><a href="https://pkgdown.r-lib.org">pkgdown</a>でウェブサイトを構築すると、
+<p>後述の<a href="#pkgdown">pkgdown</a>でウェブサイトを構築すると、
 ここに置いてある文書は
 <a href="https://pkgdown.r-lib.org/articles/pkgdown.html#articles">Articles</a>
 という位置づけで出力される。</p>
@@ -284,7 +306,6 @@ Rコードを含む <code>README.Rmd</code> から <code>devtools::build_readme(
 </a>
 <p>骨組みを作るとこからCRANにデプロイするとこまでお世話してくれる。
 いろんな専門パッケージの集合体。</p>
-<h3 id="主な関数">主な関数</h3>
 <dl>
 <dt><code>document(pkg = &quot;.&quot;, roclets = NULL, quiet = FALSE)</code></dt>
 <dd><a href="#roxygen2"><code>roxygen2</code></a> を呼び出してソースコードから
@@ -477,6 +498,27 @@ e.g., <a href="https://github.com/tidyverse/dplyr/blob/HEAD/R/select.R">dplyr/R/
 <dt><code>@docType</code></dt>
 <dd>パッケージやデータを記述するのに必要だったが今では不要っぽい。</dd>
 </dl>
+<h2 id="pkgdown"><code>pkgdown</code></h2>
+<a href="https://pkgdown.r-lib.org/">
+<img src="/_img/hex-stickers/pkgdown.webp" align="right" width="120" height="139">
+</a>
+<p><a href="https://r-pkgs.org/website.html">https://r-pkgs.org/website.html</a></p>
+<p>パッケージのソースコードからウェブサイトを自動生成してくれる。
+初期設定は例によってusethisに任せる:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">usethis</span><span class="o">::</span><span class="nf">use_pkgdown</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">usethis</span><span class="o">::</span><span class="nf">use_github_pages</span><span class="p">()</span>
+</span></span></code></pre></div><p><code>_pkgdown.yml</code> という設定ファイルを適宜編集して
+<code>pkgdown::build_site()</code> を実行すると <code>docs/</code> 以下にファイルが生成される。
+それを <a href="/dev/git.html#github-pages">GitHub Pages</a> とかで公開する。</p>
+<p>ファイル生成と GitHub Pages へのデプロイも GitHub Actions で自動化したければ
+<code>usethis::use_pkgdown_github_pages()</code> で設定してもらえる。</p>
+<p>生成される <code>docs/pkgdown.yml</code> には <code>last_built</code> の日付とか <code>pandoc</code> のバージョンとか、
+いちいち差分を発生させたくないような情報が入っているので、
+<code>.gitignore</code> に入れて無視したくなる。
+しかし <code>pkgdown.yml</code> 不在の <code>docs/</code> ディレクトリにファイルを生成しようとすると
+&ldquo;docs is non-empty and not built by pkgdown&rdquo;
+と怒られる。
+仕方ないので <code>touch docs/pkgdown.yml</code> で空ファイルを作って対処する。</p>
 
 </article>
 </main>
