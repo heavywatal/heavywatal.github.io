@@ -5,6 +5,8 @@ tags = ["r", "tidyverse", "package"]
 [menu.main]
   parent = "rstats"
   weight = -50
+[params]
+  toc = true
 +++
 
 自分で書いた関数が多くなってきたら、まとめてパッケージを作るとよい。
@@ -139,10 +141,6 @@ CRANから落としてくる `.tar.gz` ソースコード (bundle package) と�
 
 <https://r-pkgs.org/vignettes.html>
 
-<a href="https://pkgdown.r-lib.org/">
-<img src="/_img/hex-stickers/pkgdown.webp" align="right" width="120" height="139">
-</a>
-
 個々の関数の使用例はRソースファイルの `@examples` に書くとして、
 複数の関数を組み合わせてどう使うかを説明するのが`vignettes/`の役割。
 R Markdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
@@ -155,7 +153,7 @@ R Markdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 `check()`がデフォルトで`vignette=TRUE`かつ処理がやや重いので、
 毎回その重さを受け入れるか、わざわざ`FALSE`指定するかというのは悩みどころ。
 
-[pkgdown](https://pkgdown.r-lib.org)でウェブサイトを構築すると、
+後述の[pkgdown](#pkgdown)でウェブサイトを構築すると、
 ここに置いてある文書は
 [Articles](https://pkgdown.r-lib.org/articles/pkgdown.html#articles)
 という位置づけで出力される。
@@ -275,8 +273,6 @@ Articles一覧の中ではなくReferenceの隣に "Get started" としてリン
 
 骨組みを作るとこからCRANにデプロイするとこまでお世話してくれる。
 いろんな専門パッケージの集合体。
-
-### 主な関数
 
 `document(pkg = ".", roclets = NULL, quiet = FALSE)`
 :   [`roxygen2`](#roxygen2) を呼び出してソースコードから
@@ -502,3 +498,34 @@ increment = function(x) {x + 1}
 
 `@docType`
 :   パッケージやデータを記述するのに必要だったが今では不要っぽい。
+
+
+## `pkgdown`
+
+<a href="https://pkgdown.r-lib.org/">
+<img src="/_img/hex-stickers/pkgdown.webp" align="right" width="120" height="139">
+</a>
+
+<https://r-pkgs.org/website.html>
+
+パッケージのソースコードからウェブサイトを自動生成してくれる。
+初期設定は例によってusethisに任せる:
+```r
+usethis::use_pkgdown()
+usethis::use_github_pages()
+```
+
+`_pkgdown.yml` という設定ファイルを適宜編集して
+`pkgdown::build_site()` を実行すると `docs/` 以下にファイルが生成される。
+それを [GitHub Pages]({{< relref "git.md" >}}#github-pages) とかで公開する。
+
+ファイル生成と GitHub Pages へのデプロイも GitHub Actions で自動化したければ
+`usethis::use_pkgdown_github_pages()` で設定してもらえる。
+
+生成される `docs/pkgdown.yml` には `last_built` の日付とか `pandoc` のバージョンとか、
+いちいち差分を発生させたくないような情報が入っているので、
+`.gitignore` に入れて無視したくなる。
+しかし `pkgdown.yml` 不在の `docs/` ディレクトリにファイルを生成しようとすると
+"docs is non-empty and not built by pkgdown"
+と怒られる。
+仕方ないので `touch docs/pkgdown.yml` で空ファイルを作って対処する。
