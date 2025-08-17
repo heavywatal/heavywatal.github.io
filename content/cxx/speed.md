@@ -184,8 +184,8 @@ lvalue値受け取りの関数はrvalueを受け取るときにはコピーを�
 
 関連記事はたくさん見つかるが、特に読みやすく参考になったのはこちら:
 
-> [本当は怖くないムーブセマンティクス - yohhoyの日記（別館）](https://yohhoy.hatenablog.jp/entry/2012/12/15/120839) \
-> [参照渡し or 値渡し？ - yohhoyの日記](https://d.hatena.ne.jp/yohhoy/20120524/p1)
+- [<cite>本当は怖くないムーブセマンティクス</cite> --- yohhoyの日記（別館）](https://yohhoy.hatenablog.jp/entry/2012/12/15/120839)
+- [<cite>参照渡し or 値渡し？</cite> --- yohhoyの日記](https://d.hatena.ne.jp/yohhoy/20120524/p1)
 
 
 ### `noexcept`

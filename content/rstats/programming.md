@@ -9,7 +9,7 @@ tags = ["r"]
 ## tidyverse
 
 <a href="https://tidyverse.org/">
-<img src="/_img/hex-stickers/tidyverse.webp" align="right" width="120" height="139">
+<img src="/_img/hex-stickers/tidyverse.webp" style="float: right;" width="120" height="139">
 </a>
 
 解析も作図も **整然データ (tidy data)** を用意するところから始まる。
@@ -19,8 +19,11 @@ tags = ["r"]
 - 詳しい解説: [整然データとは何か by @f_nisihara](https://id.fnshr.info/2017/01/09/tidy-data-intro/)
 - 原著: [Tidy Data by @hadley](https://dx.doi.org/10.18637/jss.v059.i10)
 
->   *tidy datasets are all alike but every messy dataset is messy in its own way*\
->   --- *Hadley Wickham*
+<figure>
+
+>   *tidy datasets are all alike but every messy dataset is messy in its own way*
+<figcaption>— Hadley Wickham</figcaption>
+</figure>
 
 [tidyverse](https://www.tidyverse.org/)
 はそういう思想に基いて互いに連携するようデザインされたパッケージ群で、

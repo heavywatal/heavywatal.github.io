@@ -8,7 +8,7 @@ tags = ["r", "graph", "tidyverse"]
 +++
 
 <a href="https://ggplot2.tidyverse.org/">
-<img src="/_img/hex-stickers/ggplot2.webp" align="right" width="120" height="139">
+<img src="/_img/hex-stickers/ggplot2.webp" style="float: right;" width="120" height="139">
 </a>
 
 "The **G**rammar of **G**raphics" という体系に基づいて設計されたパッケージ。

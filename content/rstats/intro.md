@@ -103,7 +103,7 @@ stepAIC(model)  # OK
 ### Contributed Packages
 
 <a href="https://tidyverse.tidyverse.org/">
-<img src="/_img/hex-stickers/tidyverse.webp" align="right" width="120" height="139">
+<img src="/_img/hex-stickers/tidyverse.webp" style="float: right;" width="120" height="139">
 </a>
 
 数千ものパッケージが有志により開発され、CRANにまとめて公開されている。

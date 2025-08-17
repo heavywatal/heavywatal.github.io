@@ -10,7 +10,7 @@ tags = ["r", "tidyverse"]
 
 
 <a href="https://stringr.tidyverse.org/">
-<img src="/_img/hex-stickers/stringr.webp" align="right" width="120" height="139">
+<img src="/_img/hex-stickers/stringr.webp" style="float: right;" width="120" height="139">
 </a>
 
 R標準の`base`パッケージが提供する関数でも文字列処理は可能だが、

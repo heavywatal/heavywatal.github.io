@@ -13,7 +13,7 @@ tags = ["r", "tidyverse"]
 
 
 <a href="https://dplyr.tidyverse.org/">
-<img src="/_img/hex-stickers/dplyr.webp" align="right" width="120" height="139">
+<img src="/_img/hex-stickers/dplyr.webp" style="float: right;" width="120" height="139">
 </a>
 
 data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(summarize)、ソート(arrange)などの処理を施すためのパッケージ。
@@ -30,7 +30,7 @@ data.frameに対して抽出(select, filter)、部分的変更(mutate)、要約(
 ## パイプ演算子 |> による関数の連結
 
 <a href="https://magrittr.tidyverse.org/">
-<img src="/_img/hex-stickers/pipe.webp" align="right" width="120" height="139">
+<img src="/_img/hex-stickers/pipe.webp" style="float: right;" width="120" height="139">
 </a>
 
 `x |> f(a, b)` は `f(x, a, b)` と等価。

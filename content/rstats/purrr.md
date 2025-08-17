@@ -9,7 +9,7 @@ subtitle = "ループ処理やapply系関数の決定版"
 +++
 
 <a href="https://purrr.tidyverse.org/">
-<img src="/_img/hex-stickers/purrr.webp" align="right" width="120" height="139">
+<img src="/_img/hex-stickers/purrr.webp" style="float: right;" width="120" height="139">
 </a>
 
 forループやlistの処理などをより簡潔に書けるようにしてくれるパッケージ。

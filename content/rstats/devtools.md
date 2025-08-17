@@ -25,7 +25,7 @@ GitHubに公開しておけば誰でも使えるようになるので、
 ## Rパッケージ
 
 <a href="https://usethis.r-lib.org/">
-<img src="/_img/hex-stickers/usethis.webp" align="right" width="120" height="139">
+<img src="/_img/hex-stickers/usethis.webp" style="float: right;" width="120" height="139">
 </a>
 
 - <https://r-pkgs.org/>
@@ -173,11 +173,11 @@ Articles一覧の中ではなくReferenceの隣に "Get started" としてリン
 <https://r-pkgs.org/tests.html>
 
 <a href="https://testthat.r-lib.org/">
-<img src="/_img/hex-stickers/testthat.webp" align="right" width="120" height="139">
+<img src="/_img/hex-stickers/testthat.webp" style="float: right;" width="120" height="139">
 </a>
 
 <a href="https://covr.r-lib.org/">
-<img src="/_img/hex-stickers/covr.webp" align="right" width="120" height="139">
+<img src="/_img/hex-stickers/covr.webp" style="float: right;" width="120" height="139">
 </a>
 
 [testthat](https://testthat.r-lib.org)パッケージを使うのがデファクトスタンダード。
@@ -268,7 +268,7 @@ Articles一覧の中ではなくReferenceの隣に "Get started" としてリン
 ## `devtools`
 
 <a href="https://devtools.r-lib.org/">
-<img src="/_img/hex-stickers/devtools.webp" align="right" width="120" height="139">
+<img src="/_img/hex-stickers/devtools.webp" style="float: right;" width="120" height="139">
 </a>
 
 骨組みを作るとこからCRANにデプロイするとこまでお世話してくれる。
@@ -319,7 +319,7 @@ Articles一覧の中ではなくReferenceの隣に "Get started" としてリン
 ## `roxygen2`
 
 <a href="https://github.com/klutometis/roxygen">
-<img src="/_img/hex-stickers/roxygen2.webp" align="right" width="120" height="139">
+<img src="/_img/hex-stickers/roxygen2.webp" style="float: right;" width="120" height="139">
 </a>
 
 Rソースコードのコメントから`NAMESPACE`とマニュアル(`man/*.Rd`)を自動生成する。
@@ -503,7 +503,7 @@ increment = function(x) {x + 1}
 ## `pkgdown`
 
 <a href="https://pkgdown.r-lib.org/">
-<img src="/_img/hex-stickers/pkgdown.webp" align="right" width="120" height="139">
+<img src="/_img/hex-stickers/pkgdown.webp" style="float: right;" width="120" height="139">
 </a>
 
 <https://r-pkgs.org/website.html>

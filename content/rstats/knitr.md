@@ -8,7 +8,7 @@ tags = ['r', 'tidyverse']
 +++
 
 <a href="https://yihui.org/knitr/">
-<img src="/_img/hex-stickers/knitr.webp" align="right" width="120" height="139">
+<img src="/_img/hex-stickers/knitr.webp" style="float: right;" width="120" height="139">
 </a>
 
 特殊Markdownファイル (.Rmd, .qmd) に含まれるRコードを実行し、

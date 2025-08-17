@@ -12,7 +12,7 @@ tags = ["r", "tidyverse"]
 
 
 <a href="https://readr.tidyverse.org/">
-<img src="/_img/hex-stickers/readr.webp" align="right" width="120" height="139">
+<img src="/_img/hex-stickers/readr.webp" style="float: right;" width="120" height="139">
 </a>
 
 タブ区切りテキストやCSVファイルを読み込んでdata.frameにするツール。
@@ -344,7 +344,7 @@ class(data[])
 ## Excelファイルを読み込む
 
 <a href="https://readxl.tidyverse.org/">
-<img src="/_img/hex-stickers/readxl.webp" align="right" width="120" height="139">
+<img src="/_img/hex-stickers/readxl.webp" style="float: right;" width="120" height="139">
 </a>
 
 https://github.com/tidyverse/readxl
@@ -370,7 +370,7 @@ Rの中から `install.packages("readxl")` でインストールし、
 ## tibble
 
 <a href="https://tibble.tidyverse.org/">
-<img src="/_img/hex-stickers/tibble.webp" align="right" width="120" height="139">
+<img src="/_img/hex-stickers/tibble.webp" style="float: right;" width="120" height="139">
 </a>
 
 - https://r4ds.had.co.nz/tibbles.html

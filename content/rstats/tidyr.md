@@ -15,7 +15,7 @@ tags = ["r", "tidyverse"]
 [tidy-select]: https://tidyr.tidyverse.org/reference/tidyr_tidy_select.html
 
 <a href="https://tidyr.tidyverse.org/">
-<img src="/_img/hex-stickers/tidyr.webp" align="right" width="120" height="139">
+<img src="/_img/hex-stickers/tidyr.webp" style="float: right;" width="120" height="139">
 </a>
 
 data.frameを縦長・横広・入れ子に変形・整形するためのツール。
