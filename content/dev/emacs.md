@@ -143,7 +143,7 @@ e.g., <kbd>C-u 3 C-_</kbd> とすれば3操作分だけ元に戻せる。
 
 `~/.emacs.d/init.el`
 
-<https://github.com/heavywatal/dotfiles/blob/master/.emacs.d/init.el>
+<https://github.com/heavywatal/dotfiles/blob/master/.config/emacs/init.el>
 
 ### package.el でパッケージ管理
 

@@ -25,14 +25,14 @@ pull:
 	git -C public pull
 
 init:
-	git clone -b master --single-branch $$(git remote get-url origin) public
+	git clone -b gh-pages --single-branch $$(git remote get-url origin) public
 	git submodule update --init --single-branch
 
 echo:
 	echo $$(git remote get-url origin)
 
 clean:
-	ls -d development/* | grep -Ev 'offline|slides|hpc-|jbrowse' | xargs $(RM) -r
+	fd -d1 -td -tf . development | grep -Ev 'offline|slides|hpc-|jbrowse' | xargs $(RM) -r
 
 .PHONY: hex-stickers
 

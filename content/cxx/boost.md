@@ -195,8 +195,7 @@ int main() {
   標準streamのような沈黙を求める場合は代わりに
   `std::ifstream` などを `push()` する。
 - ファイル名に応じてフィルタを切り替えるようなクラスを定義しておけば、
-  透過的に読み書きできる。e.g.,
-  [`wtl::zfstream`](https://github.com/heavywatal/cxxwtl/blob/master/zfstream.hpp)
+  透過的に読み書きできる。
 
 
 ## program_options

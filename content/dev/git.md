@@ -283,10 +283,10 @@ submoduleに何らかの変更を加えたら親リポジトリでも参照を�
 1. `https://USERNAME.github.io` にアクセスしてみる。
 
 例えば本ウェブサイトは
-`heavywatal.github.io` というリポジトリの
-`source`ブランチでMarkdownテキストを書き、
+[`heavywatal/heavywatal.github.io`](https://github.com/heavywatal/heavywatal.github.io/tree/gh-pages)
+というリポジトリの `source` ブランチでMarkdownテキストを書き、
 [Hugo]({{< relref "hugo.md" >}})
-で変換・生成したHTMLファイルを `main` ブランチに書き出している。
+で変換・生成したHTMLファイルを `gh-pages` ブランチに書き出している。
 
 GitHubが勝手にJekyll処理しようとすることがあるので、
 `.nojekyll` という空ファイルを作っておく。
@@ -524,7 +524,7 @@ submoduleなどをいじってると意図せずdetached HEAD状態になるこ�
 [`git filter-branch`](https://git-scm.com/docs/git-filter-branch)は非推奨になり、
 今のところサードパーティの[`git-filter-repo`](https://github.com/newren/git-filter-repo)が推奨。
 
-> [!NOTE]
+> [!CAUTION]
 >
 > [`man git-filter-repo`](https://htmlpreview.github.io/?https://github.com/newren/git-filter-repo/blob/docs/html/git-filter-repo.html)
 を読み、歴史改変がいかに危険で面倒なことかを理解する。

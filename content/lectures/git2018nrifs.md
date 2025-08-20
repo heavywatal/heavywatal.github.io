@@ -164,7 +164,7 @@ plot論文.R
     - 課題を管理する機能もある。
 - 読み方はギット、ギットハブ。(ちなみに画像のGIFはジフ)
 
-e.g., https://github.com/tidyverse/stringr/commits/master
+e.g., <https://github.com/tidyverse/stringr/commits/main>
 
 ### 両者はどういう関係？
 

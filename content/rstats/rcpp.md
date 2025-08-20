@@ -59,7 +59,7 @@ bench::mark(r_for(n), r_vec(n), rcpp(n))[, 1:5]
     - 上のPDFは分量が多いわりに意外と網羅的ではない。
       ざっくり読んでなんとなく分かってきたら、
       さらなるドキュメントを求めてネットの海を彷徨うよりソースコードに当たったほうが早い。特に
-      [`inst/unitTests`](https://github.com/RcppCore/Rcpp/tree/master/inst/unitTests)
+      [`inst/tinytest`](https://github.com/RcppCore/Rcpp/tree/master/inst/tinytest)
       はかなり参考になる。
 - API: <https://dirk.eddelbuettel.com/code/rcpp/html/>
 - Advanced R: [Rewriting R code in C++](https://adv-r.hadley.nz/rcpp.html)
