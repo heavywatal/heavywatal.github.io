@@ -284,7 +284,8 @@ submoduleに何らかの変更を加えたら親リポジトリでも参照を�
 
 例えば本ウェブサイトは
 [`heavywatal/heavywatal.github.io`](https://github.com/heavywatal/heavywatal.github.io/tree/gh-pages)
-というリポジトリの `source` ブランチでMarkdownテキストを書き、
+というリポジトリの `source` ブランチで
+[Markdown]({{< relref "markdown.md" >}}) テキストを書き、
 [Hugo]({{< relref "hugo.md" >}})
 で変換・生成したHTMLファイルを `gh-pages` ブランチに書き出している。
 

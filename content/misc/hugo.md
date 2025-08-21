@@ -1,12 +1,14 @@
 +++
 title = "Hugo"
 subtitle =  "静的サイトを高速生成"
-tags = ["writing"]
+tags = ["writing", "web"]
 [menu.main]
   parent = "misc"
 +++
 
-Markdown記法のテキストをHTMLに変換する、静的ウェブサイト生成プログラム。
+[Markdown]: {{< relref "markdown.md" >}}
+
+[Markdown]記法のテキストをHTMLに変換する、静的ウェブサイト生成プログラム。
 公式ドキュメントが充実しているので基本的にそれに従えば簡単にできる。
 
 - <https://gohugo.io/documentation/>
@@ -38,54 +40,51 @@ Markdown記法のテキストをHTMLに変換する、静的ウェブサイト�
       ```
       SCSSのための `--tags extended` オプションは不要になった。
 -   SCSSを使う場合は Dart Sass を別途インストールしてPATHを通す。
-    この方法もいろいろあるけど
+    方法はいろいろあるけど
     [公式prebuilt binary](https://github.com/sass/dart-sass/releases)
-    を使うのが簡単。
+    をダウンロードするか
+    [Homebrew]({{< relref "homebrew.md" >}}) を使うのが簡単:
     ```sh
     brew install heavywatal/tap/dart-sass
     # or
-    wget -O- https://github.com/sass/dart-sass/releases/download/1.77.4/dart-sass-1.77.4-macos-x64.tar.gz | tar xz
+    brew install sass/sass/sass
     ```
 -   ちゃんとインストールできているか確認: `hugo env`
--   骨組みを作る:
+-   空っぽのディレクトリに移動して骨組みを作る:
     ```sh
     cd path/to/site
     hugo new site .
     ```
 
--   ページをMarkdownで書く:
-    ```sh
-    hugo new about.md
+-   設定ファイル `hugo.toml` を作ってテーマを指定:
+    ```toml
+    [module]
+    [[module.imports]]
+    path = "github.com/theNewDynamic/gohugo-theme-ananke"
     ```
 
+-   適当なページを作る `hugo new about.md`:
     ```markdown
     +++
-    date = 2016-02-26T19:10:22+09:00
     title = "About"
     +++
 
     ## Heading
 
-    normal *italic* **bold**
+    normal *emphasis* **strong**
     ```
 
--   テーマをとりあえず全部インストール:
+-   ウェブサーバーを走らせる:
     ```sh
-    git clone --depth 1 --recursive https://github.com/gohugoio/hugoThemes.git themes
+    hugo server
     ```
-
--   適当なテーマでウェブサーバーを走らせる:
-    ```sh
-    hugo server --theme blank
-    ```
-
--   ブラウザから http://localhost:1313/about にアクセスしてみる。
+-   ブラウザから <http://localhost:1313/about> にアクセスしてみる。
     `hugo server`, `hugo -w` はファイルを監視していて変更をすぐに反映する。
 
 
-## 設定
+## Configuration
 
-<https://gohugo.io/getting-started/configuration/>
+<https://gohugo.io/configuration/>
 
 長らく `config.toml` だったが今は `hugo.toml` がデフォルト。
 `config/_default/hugo.toml` に置いても同じ。
@@ -150,48 +149,12 @@ Hugo template では chain できなくなるため非推奨。
 
 ## Content
 
-### Markdown
+<https://gohugo.io/content-management/>
 
-[CommonMark](https://spec.commonmark.org/)
-: "Markdown"の正式な仕様というものが存在せず、
-  いくつかの方言(flavor)が乱立していたが、
-  現在ではこれが事実上の標準仕様となりつつある。
-  [2017年からGFMがこれに準拠することになった](https://githubengineering.com/a-formal-spec-for-github-markdown/)のもよかった。
-
-[GitHub Flavored Markdown (GFM)](https://github.github.com/gfm/)
-: CommonMarkに準拠しつついくらかの機能を追加したもの。
-  基本的な書き方は[GitHub Helpのページ](https://help.github.com/articles/basic-writing-and-formatting-syntax/)が読みやすい。
-: [tables](https://github.github.com/gfm/#tables-extension-)
-: [task lists](https://github.github.com/gfm/#task-list-items-extension-):
-  - [ ] `- [ ]`
-  - [x] `- [x]`
-: [~strikethrough~](https://github.github.com/gfm/#strikethrough-extension-):
-  `~text~`, `~~text~~`
-: [extended autolink](https://github.github.com/gfm/#autolinks-extension-):
-  `<` と `>` で挟まなくても
-  `https://` とか `www.` とかで始まるURLらしきものを認識してリンク生成する。
-: [tagfilter](https://github.github.com/gfm/#disallowed-raw-html-extension-):
-  生HTMLタグのうち悪用されやすいものを無効にする。
-  `<title>`,
-  `<textarea>`,
-  `<style>`,
-  `<xmp>`,
-  `<iframe>`,
-  `<noembed>`,
-  `<noframes>`,
-  `<script>`,
-  `<plaintext>`.
-
-[Goldmark](https://github.com/yuin/goldmark/)
-: 2019年末からHugoのデフォルトエンジン。
-: 基本的にはCommonMark準拠だけど、
-  デフォルト設定での生HTMLコードの扱いがちょっと変。
-
-[Blackfriday](https://github.com/russross/blackfriday)
-: HugoのMarkdownエンジンは長らくこれだった。
-  CommonMark準拠じゃないし、
-  リストまわりでの不具合が放置されてるし、
-  などなど不満が募るうちにGoldmarkに取って代わられた。
+[Markdown attributes](https://gohugo.io/content-management/markdown-attributes/)
+とか
+[Shortcodes](https://gohugo.io/content-management/shortcodes/)
+とかの機能は便利だけど [Markdown] からの逸脱を最小限に留めたい気もする。
 
 
 ### Front matter
@@ -200,7 +163,7 @@ Hugo template では chain できなくなるため非推奨。
 
 タイトルや日付などのメタデータをファイルの先頭で記述する。
 YAMLやJSONでもいいけど、
-[TOML](https://github.com/toml-lang/toml)のほうが将来性ありそう。
+[TOML](https://toml.io/)のほうが将来性ありそう。
 
 
 ## 閲覧・公開方法
@@ -210,7 +173,6 @@ YAMLやJSONでもいいけど、
 付属の簡易サーバーを起動。
 ```
 hugo server
-open http://localhost:1313/
 ```
 
 ### localhost (Mac)
@@ -237,6 +199,6 @@ open http://localhost/
 
 ### GitHub Pages
 
-`public/` 以下に生成されるファイルをしかるべきrepository/branchに置くだけ。
+`public/` 以下に生成されるファイルを `gh-pages` ブランチにアップロード。
 
-See [Git]({{< relref "git.md" >}})
+See [Git #github-pages]({{< relref "git.md#github-pages" >}}).

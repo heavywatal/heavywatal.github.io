@@ -1,7 +1,7 @@
 +++
 title = 'knitr'
 subtitle = 'Markdownにコード実行結果を編み込む'
-tags = ['r', 'tidyverse']
+tags = ['r', 'tidyverse', 'writing']
 [menu.main]
   parent = 'rstats'
   weight = -58
@@ -12,7 +12,7 @@ tags = ['r', 'tidyverse']
 </a>
 
 特殊Markdownファイル (.Rmd, .qmd) に含まれるRコードを実行し、
-結果を編み込んで汎用Markdownファイル (.md) に変換する。
+結果を編み込んで汎用[Markdown]({{< relref "markdown.md" >}})ファイル (.md) に変換する。
 
 一般的には [Quarto](https://quarto.org/) や
 [R Markdown](https://rmarkdown.rstudio.com/)
