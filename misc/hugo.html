@@ -58,10 +58,11 @@ Hugo — 静的サイトを高速生成
 </a></h1>
 <nav class="tags">
 <a href="/tags/writing.html">writing</a>
+<a href="/tags/web.html">web</a>
 </nav>
 </header>
 
-<p>Markdown記法のテキストをHTMLに変換する、静的ウェブサイト生成プログラム。
+<p><a href="/misc/markdown.html">Markdown</a>記法のテキストをHTMLに変換する、静的ウェブサイト生成プログラム。
 公式ドキュメントが充実しているので基本的にそれに従えば簡単にできる。</p>
 <ul>
 <li><a href="https://gohugo.io/documentation/">https://gohugo.io/documentation/</a></li>
@@ -93,48 +94,49 @@ Hugo — 静的サイトを高速生成
 </li>
 <li>
 <p>SCSSを使う場合は Dart Sass を別途インストールしてPATHを通す。
-この方法もいろいろあるけど
+方法はいろいろあるけど
 <a href="https://github.com/sass/dart-sass/releases">公式prebuilt binary</a>
-を使うのが簡単。</p>
+をダウンロードするか
+<a href="/mac/homebrew.html">Homebrew</a> を使うのが簡単:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew install heavywatal/tap/dart-sass
 </span></span><span class="line"><span class="cl"><span class="c1"># or</span>
-</span></span><span class="line"><span class="cl">wget -O- https://github.com/sass/dart-sass/releases/download/1.77.4/dart-sass-1.77.4-macos-x64.tar.gz <span class="p">|</span> tar xz
+</span></span><span class="line"><span class="cl">brew install sass/sass/sass
 </span></span></code></pre></div></li>
 <li>
 <p>ちゃんとインストールできているか確認: <code>hugo env</code></p>
 </li>
 <li>
-<p>骨組みを作る:</p>
+<p>空っぽのディレクトリに移動して骨組みを作る:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> path/to/site
 </span></span><span class="line"><span class="cl">hugo new site .
 </span></span></code></pre></div></li>
 <li>
-<p>ページをMarkdownで書く:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">hugo new about.md
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl">+++
-</span></span><span class="line"><span class="cl">date = 2016-02-26T19:10:22+09:00
+<p>設定ファイル <code>hugo.toml</code> を作ってテーマを指定:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="p">[</span><span class="nx">module</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">[[</span><span class="nx">module</span><span class="p">.</span><span class="nx">imports</span><span class="p">]]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">path</span> <span class="p">=</span> <span class="s2">&#34;github.com/theNewDynamic/gohugo-theme-ananke&#34;</span>
+</span></span></code></pre></div></li>
+<li>
+<p>適当なページを作る <code>hugo new about.md</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl">+++
 </span></span><span class="line"><span class="cl">title = &#34;About&#34;
 </span></span><span class="line"><span class="cl">+++
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="gu">## Heading
 </span></span></span><span class="line"><span class="cl"><span class="gu"></span>
-</span></span><span class="line"><span class="cl">normal <span class="ge">*italic*</span> <span class="gs">**bold**</span>
+</span></span><span class="line"><span class="cl">normal <span class="ge">*emphasis*</span> <span class="gs">**strong**</span>
 </span></span></code></pre></div></li>
 <li>
-<p>テーマをとりあえず全部インストール:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git clone --depth <span class="m">1</span> --recursive https://github.com/gohugoio/hugoThemes.git themes
+<p>ウェブサーバーを走らせる:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">hugo server
 </span></span></code></pre></div></li>
 <li>
-<p>適当なテーマでウェブサーバーを走らせる:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">hugo server --theme blank
-</span></span></code></pre></div></li>
-<li>
-<p>ブラウザから http://localhost:1313/about にアクセスしてみる。
+<p>ブラウザから <a href="http://localhost:1313/about">http://localhost:1313/about</a> にアクセスしてみる。
 <code>hugo server</code>, <code>hugo -w</code> はファイルを監視していて変更をすぐに反映する。</p>
 </li>
 </ul>
-<h2 id="設定">設定</h2>
-<p><a href="https://gohugo.io/getting-started/configuration/">https://gohugo.io/getting-started/configuration/</a></p>
+<h2 id="configuration">Configuration</h2>
+<p><a href="https://gohugo.io/configuration/">https://gohugo.io/configuration/</a></p>
 <p>長らく <code>config.toml</code> だったが今は <code>hugo.toml</code> がデフォルト。
 <code>config/_default/hugo.toml</code> に置いても同じ。</p>
 <p><code>config/</code> 直下のディレクトリ名と <code>-e/--environment</code> オプションで切り替え可能。
@@ -181,59 +183,20 @@ Hugo template では chain できなくなるため非推奨。
 <code>--templateMetrics --templateMetricsHints</code>
 オプションを付けるとどのへんを変えたら良いか教えてくれる。</p>
 <h2 id="content">Content</h2>
-<h3 id="markdown">Markdown</h3>
-<dl>
-<dt><a href="https://spec.commonmark.org/">CommonMark</a></dt>
-<dd>&ldquo;Markdown&quot;の正式な仕様というものが存在せず、
-いくつかの方言(flavor)が乱立していたが、
-現在ではこれが事実上の標準仕様となりつつある。
-<a href="https://githubengineering.com/a-formal-spec-for-github-markdown/">2017年からGFMがこれに準拠することになった</a>のもよかった。</dd>
-<dt><a href="https://github.github.com/gfm/">GitHub Flavored Markdown (GFM)</a></dt>
-<dd>CommonMarkに準拠しつついくらかの機能を追加したもの。
-基本的な書き方は<a href="https://help.github.com/articles/basic-writing-and-formatting-syntax/">GitHub Helpのページ</a>が読みやすい。</dd>
-<dd><a href="https://github.github.com/gfm/#tables-extension-">tables</a></dd>
-<dd><a href="https://github.github.com/gfm/#task-list-items-extension-">task lists</a>:
-<ul>
-<li><input disabled="" type="checkbox"> <code>- [ ]</code></li>
-<li><input checked="" disabled="" type="checkbox"> <code>- [x]</code></li>
-</ul>
-</dd>
-<dd><a href="https://github.github.com/gfm/#strikethrough-extension-">~strikethrough~</a>:
-<code>~text~</code>, <code>~~text~~</code></dd>
-<dd><a href="https://github.github.com/gfm/#autolinks-extension-">extended autolink</a>:
-<code>&lt;</code> と <code>&gt;</code> で挟まなくても
-<code>https://</code> とか <code>www.</code> とかで始まるURLらしきものを認識してリンク生成する。</dd>
-<dd><a href="https://github.github.com/gfm/#disallowed-raw-html-extension-">tagfilter</a>:
-生HTMLタグのうち悪用されやすいものを無効にする。
-<code>&lt;title&gt;</code>,
-<code>&lt;textarea&gt;</code>,
-<code>&lt;style&gt;</code>,
-<code>&lt;xmp&gt;</code>,
-<code>&lt;iframe&gt;</code>,
-<code>&lt;noembed&gt;</code>,
-<code>&lt;noframes&gt;</code>,
-<code>&lt;script&gt;</code>,
-<code>&lt;plaintext&gt;</code>.</dd>
-<dt><a href="https://github.com/yuin/goldmark/">Goldmark</a></dt>
-<dd>2019年末からHugoのデフォルトエンジン。</dd>
-<dd>基本的にはCommonMark準拠だけど、
-デフォルト設定での生HTMLコードの扱いがちょっと変。</dd>
-<dt><a href="https://github.com/russross/blackfriday">Blackfriday</a></dt>
-<dd>HugoのMarkdownエンジンは長らくこれだった。
-CommonMark準拠じゃないし、
-リストまわりでの不具合が放置されてるし、
-などなど不満が募るうちにGoldmarkに取って代わられた。</dd>
-</dl>
+<p><a href="https://gohugo.io/content-management/">https://gohugo.io/content-management/</a></p>
+<p><a href="https://gohugo.io/content-management/markdown-attributes/">Markdown attributes</a>
+とか
+<a href="https://gohugo.io/content-management/shortcodes/">Shortcodes</a>
+とかの機能は便利だけど <a href="/misc/markdown.html">Markdown</a> からの逸脱を最小限に留めたい気もする。</p>
 <h3 id="front-matter">Front matter</h3>
 <p><a href="https://gohugo.io/content-management/front-matter/">https://gohugo.io/content-management/front-matter/</a></p>
 <p>タイトルや日付などのメタデータをファイルの先頭で記述する。
 YAMLやJSONでもいいけど、
-<a href="https://github.com/toml-lang/toml">TOML</a>のほうが将来性ありそう。</p>
+<a href="https://toml.io/">TOML</a>のほうが将来性ありそう。</p>
 <h2 id="閲覧公開方法">閲覧・公開方法</h2>
 <h3 id="hugo-server">Hugo Server</h3>
 <p>付属の簡易サーバーを起動。</p>
 <pre tabindex="0"><code>hugo server
-open http://localhost:1313/
 </code></pre><h3 id="localhost-mac">localhost (Mac)</h3>
 <p><code>public/</code> 以下に生成されるファイルをシムリンクやコピーで
 <code>/Library/WebServer/Documents/</code> に配置すれば
@@ -250,8 +213,8 @@ open http://localhost:1313/
 <code>/etc/apache2/other/keepalive.conf</code> のようなファイルを作り、
 <code>sudo apachectl graceful</code> で変更を反映。</p>
 <h3 id="github-pages">GitHub Pages</h3>
-<p><code>public/</code> 以下に生成されるファイルをしかるべきrepository/branchに置くだけ。</p>
-<p>See <a href="/dev/git.html">Git</a></p>
+<p><code>public/</code> 以下に生成されるファイルを <code>gh-pages</code> ブランチにアップロード。</p>
+<p>See <a href="/dev/git.html#github-pages">Git #github-pages</a>.</p>
 
 </article>
 </main>
@@ -387,6 +350,7 @@ open http://localhost:1313/
 <li><a href="/misc/gollum.html">Gollum</a></li>
 <li class="active"><a href="/misc/hugo.html">Hugo</a></li>
 <li><a href="/misc/latex.html">LaTeX</a></li>
+<li><a href="/misc/markdown.html">Markdown</a></li>
 </ul>
 
 <div><a href="/tags/">Tags</a></div>

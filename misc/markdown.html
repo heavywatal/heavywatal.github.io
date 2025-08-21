@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="ja">
+<head prefix="og: http://ogp.me/ns#">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<title>Markdown: 軽量マークアップ言語 - Heavy Watal</title>
+<link rel="stylesheet" href="/css/style.css">
+<link rel="icon" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#eeeeee">
+<meta name="author" content="Watal M. Iwasaki">
+<meta property="og:title" content="Markdown: 軽量マークアップ言語">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://heavywatal.github.io/misc/markdown.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/heavywatal">
+<meta property="og:description" content="">
+<meta property="og:site_name" content="Heavy Watal">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@heavywatal">
+<meta name="twitter:creator" content="@heavywatal">
+<link rel="stylesheet" href="/lib/iconify.css">
+<link rel="stylesheet" href="/lib/katex/katex.min.css">
+<script type="module" src="/lib/katex/katex.min.js"></script>
+<script type="application/ld+json">{
+"@context": "http://schema.org",
+"@type": "BreadcrumbList",
+"itemListElement": [
+ {"@type": "ListItem",
+  "position": 1,
+  "item": {"@id": "https://heavywatal.github.io/misc/", "name": "misc" }},
+ {"@type": "ListItem",
+  "position": 2,
+  "item": {"@id": "https://heavywatal.github.io/misc/markdown.html", "name": "Markdown" }}
+]}</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-V60H2JH0G6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-V60H2JH0G6');
+</script>
+</head>
+<body>
+<header>
+<a href="/">
+<img class="logo" src="/heavywatal.svg" alt="岩嵜航"><span class="site-title">Heavy Watal</span>
+</a>
+<search><form action="/search.html">
+<input type="search" name="q" placeholder="search">
+</form></search>
+</header>
+<main>
+<article>
+<header><h1><a href="/misc/markdown.html">
+Markdown — 軽量マークアップ言語
+</a></h1>
+<nav class="tags">
+<a href="/tags/writing.html">writing</a>
+<a href="/tags/web.html">web</a>
+</nav>
+</header>
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a>
+      <ul>
+        <li><a href="#flavors">Flavors</a></li>
+        <li><a href="#rules">Rules</a></li>
+      </ul>
+    </li>
+    <li><a href="#leaf-blocks">Leaf blocks</a>
+      <ul>
+        <li><a href="#horizontal-rules">Horizontal rules</a></li>
+        <li><a href="#headings">Headings</a></li>
+        <li><a href="#fenced-code-blocks">Fenced Code blocks</a></li>
+        <li><a href="#html-blocks">HTML blocks</a></li>
+        <li><a href="#paragraphs">Paragraphs</a></li>
+        <li><a href="#tables">Tables</a></li>
+      </ul>
+    </li>
+    <li><a href="#containter-blocks">Containter blocks</a>
+      <ul>
+        <li><a href="#block-quotes">Block quotes</a></li>
+        <li><a href="#lists">Lists</a></li>
+      </ul>
+    </li>
+    <li><a href="#inlines">Inlines</a>
+      <ul>
+        <li><a href="#code-spans">Code spans</a></li>
+        <li><a href="#emphasis">Emphasis</a></li>
+        <li><a href="#links">Links</a></li>
+        <li><a href="#images">Images</a></li>
+        <li><a href="#raw-html">Raw HTML</a></li>
+        <li><a href="#line-breaks">Line breaks</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+<h2 id="introduction">Introduction</h2>
+<ul>
+<li><a href="https://spec.commonmark.org/current/">https://spec.commonmark.org/current/</a></li>
+<li><a href="https://docs.github.com/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax">https://docs.github.com/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax</a></li>
+</ul>
+<p>HTMLに変換することを前提に設計された軽量マークアップ言語。
+ある程度HTMLを理解しておいたほうが使いやすい。
+同類他言語と比べて、変換前のテキストのままでも読みやすいのが特徴。</p>
+<h3 id="flavors">Flavors</h3>
+<dl>
+<dt><a href="https://spec.commonmark.org/">CommonMark</a></dt>
+<dd>Markdownの正式な仕様というものが存在せず、
+いくつかの方言(flavor)が乱立していたが、
+現在ではこれが事実上の標準仕様となりつつある。
+<a href="https://githubengineering.com/a-formal-spec-for-github-markdown/">2017年からGFMがこれに準拠することになった</a>のもよかった。</dd>
+<dt><a href="https://github.github.com/gfm/">GitHub Flavored Markdown (GFM)</a></dt>
+<dd>CommonMarkに準拠しつついくつかの機能を追加したもの。</dd>
+<dd><a href="#tables"><code>table</code></a>,
+<a href="#task-lists"><code>tasklist</code></a>,
+<a href="#emphasis"><code>strikethrough</code></a>,
+<a href="#links"><code>autolink</code></a>,
+<a href="#raw-html"><code>tagfilter</code></a></dd>
+<dt><a href="/misc/hugo.html">Hugo</a> / <a href="https://github.com/yuin/goldmark/">Goldmark</a></dt>
+<dd>基本的には CommonMark/GFM 準拠だけど独自の設定や拡張がたくさん。</dd>
+<dd><a href="https://gohugo.io/content-management/markdown-attributes/">Markdown attributes</a></dd>
+<dd><a href="https://gohugo.io/content-management/shortcodes/">Shortcodes</a></dd>
+<dd><a href="https://gohugo.io/content-management/summaries/">Summaries</a></dd>
+<dd><a href="https://gohugo.io/configuration/markup/#goldmark">https://gohugo.io/configuration/markup/#goldmark</a></dd>
+<dt><a href="https://pandoc.org/MANUAL.html#pandocs-markdown">Pandoc&rsquo;s Markdown</a></dt>
+<dd>独自の拡張が多くて怖いけど <code>--from</code>/<code>--to</code> オプションに
+<code>commonmark</code> や <code>gfm</code> を渡せば大丈夫そう。</dd>
+<dt><a href="/rstats/knitr.html">knitr</a> / R Markdown / Quarto</dt>
+<dd>コードブロックのRやPythonを実行し、その結果をMarkdownに編み込む。</dd>
+</dl>
+<h3 id="rules">Rules</h3>
+<ul>
+<li>記号は HTML entities に自動変換される。HTML entities を書くとそのまま出力。
+<ul>
+<li>Markdown <code>2&gt;&amp;1</code> → HTML <code>2&amp;gt;&amp;amp;1</code> → 2&gt;&amp;1</li>
+<li>Markdown <code>2&amp;gt;&amp;amp;1</code> → HTML <code>2&amp;gt;&amp;amp;1</code> → 2&gt;&amp;1</li>
+</ul>
+</li>
+<li>backslashをASCII記号の前に置くとエスケープ
+<ul>
+<li>Markdown記法を無効化し、記号そのものとして表示: *em* \</li>
+<li>開始する文字だけエスケープすれば足りる: [text](href) &lt;a&gt;</li>
+<li>そのほかの前に置かれたbackslashはそのまま表示: \n\t\1</li>
+</ul>
+</li>
+<li><a href="https://spec.commonmark.org/current/#blocks-and-inlines">blockのほうがinlineよりも先に処理される</a>
+<ul>
+<li>`one</li>
+<li>two`</li>
+</ul>
+</li>
+</ul>
+<h2 id="leaf-blocks">Leaf blocks</h2>
+<h3 id="horizontal-rules">Horizontal rules</h3>
+<p><code>***</code>, <code>---</code>, <code>___</code> だけの行は <code>&lt;hr&gt;</code> に変換される。</p>
+<hr>
+<hr>
+<hr>
+<h3 id="headings">Headings</h3>
+<dl>
+<dt>ATX style</dt>
+<dd>行頭の <code>#</code> の数に応じて <code>&lt;h1&gt;</code> から <code>&lt;h6&gt;</code> に変換される。</dd>
+<dd><code>### h3</code> のように半角スペースを挟む必要がある。</dd>
+<dd><code>### h3 #####</code> のように後ろを修飾してもいい</dd>
+<dt>SETEXT style</dt>
+<dd>次の行に <code>===</code> または <code>---</code> を並べて下線のようにすると、
+前者は <code>&lt;h1&gt;</code>, 後者は <code>&lt;h2&gt;</code> に変換される。</dd>
+</dl>
+<h4 id="h4">h4</h4>
+<h5 id="h5">h5</h5>
+<h6 id="h6">h6</h6>
+<h3 id="fenced-code-blocks">Fenced Code blocks</h3>
+<p>3連backquoteで挟むと <code>&lt;pre&gt;&lt;code&gt; &lt;/code&gt;&lt;/pre&gt;</code> に変換される。
+言語を指定すると
+<a href="https://gohugo.io/content-management/syntax-highlighting/">syntax highlighting</a>
+できることが多い。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">hello</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;Hello, world!&#34;</span><span class="p">)</span> <span class="c1"># コメント</span>
+</span></span></code></pre></div><pre tabindex="0"><code>Hello, world!
+</code></pre><p>未定義の言語を指定すると <code>pre</code> に <code>chroma</code> クラスが付かない:</p>
+<pre tabindex="0"><code class="language-unknown-language" data-lang="unknown-language">print(&#34;Hello, world!&#34;)
+</code></pre><p><code>text</code>, <code>plain</code>, <code>no-highlight</code> を指定すると <code>chroma</code> あり色なし:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">print(&#34;Hello, world!&#34;)
+</span></span></code></pre></div><p>3連backquoteを含むコードは4連backquoteで表現できる:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl"><span class="s">```python
+</span></span></span><span class="line"><span class="cl"><span class="s"></span><span class="k">def</span> <span class="nf">hello</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;Hello, world!&#34;</span><span class="p">)</span> <span class="c1"># コメント</span>
+</span></span><span class="line"><span class="cl"><span class="s">```</span>
+</span></span></code></pre></div><p>基本的には fenced code blocks を書くとして、
+行頭にスペース4つ置くと indented code block になることは頭に入れておく。</p>
+<pre><code>インデントのつもりがコードブロックになったりするので。
+</code></pre>
+<h3 id="html-blocks">HTML blocks</h3>
+<p>次の条件を満たすところはMarkdownとしては変換されずそのままHTMLに出力される。
+自動的に <code>&lt;p&gt;&lt;/p&gt;</code> で囲まれたりもしない。</p>
+<ol>
+<li>行頭 <code>&lt;pre</code>, <code>&lt;script</code>, <code>&lt;style</code>, <code>&lt;textarea</code> からその閉じタグまで。
+空行では途切れない。</li>
+<li><code>&lt;!--</code> から <code>--&gt;</code> まで</li>
+<li><code>&lt;?</code> から <code>?&gt;</code> まで</li>
+<li><code>&lt;!</code> とそれに続くASCII文字から <code>&gt;</code> まで（Hugoでは無効？）</li>
+<li><code>&lt;![CDATA[</code> から <code>]]&gt;</code> まで</li>
+<li>行頭blockタグから空行まで。
+タグは不完全でも閉じタグでも構わない。
+閉じタグでは終わらない。
+<ul>
+<li><code>&lt;div&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;blockquote&gt;</code></li>
+<li><code>&lt;h1&gt;</code>, <code>&lt;h2&gt;</code>, <code>&lt;h3&gt;</code>, <code>&lt;h4&gt;</code>, <code>&lt;h5&gt;</code>, <code>&lt;h6&gt;</code></li>
+<li><code>&lt;li&gt;</code>, <code>&lt;ul&gt;</code>, <code>&lt;ol&gt;</code>, <code>&lt;menu&gt;</code></li>
+<li><code>&lt;dl&gt;</code>, <code>&lt;dt&gt;</code>, <code>&lt;dd&gt;</code></li>
+<li><code>&lt;main&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;aside&gt;</code>, <code>&lt;footer&gt;</code>, <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;address&gt;</code></li>
+<li><code>&lt;table&gt;</code>, <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, <code>&lt;tfoot&gt;</code>, <code>&lt;tr&gt;</code>, <code>&lt;th&gt;</code>, <code>&lt;td&gt;</code>, <code>&lt;caption&gt;</code></li>
+<li><code>&lt;details&gt;</code>, <code>&lt;summary&gt;</code></li>
+<li><code>&lt;figure&gt;</code>, <code>&lt;figcaption&gt;</code></li>
+<li><code>&lt;search&gt;</code>, <code>&lt;fieldset&gt;</code>, <code>&lt;form&gt;</code>, <code>&lt;legend&gt;</code></li>
+</ul>
+</li>
+<li>inlineでも独自でも、任意のタグだけの行から空行まで。
+前項とは違って、開始タグは一行で完結している必要がある。</li>
+</ol>
+<p>type 6 であれば、直前のMarkdownブロックは空行が無くても <code>&lt;/p&gt;</code> で閉じるし、
+開始タグ直後の改行で独立させる必要もない:</p>
+<blockquote>*HTML block type 6*</blockquote>
+*終了タグ後も空行を入れないとHTML block続行。*
+<p>閉じタグ前であっても空行でMarkdownに戻る。開始タグ直後である必要もない:</p>
+<blockquote>
+*HTML block type 6*
+<p><strong>Markdown block</strong> wrapped in <code>&lt;p&gt;&lt;/p&gt;</code></p>
+</blockquote>
+<p>非blockタグで始めるには空行でMarkdownの段落を終わらせたうえ、
+開始タグ単独で1行を終える必要がある:</p>
+<del>
+*HTML block type 7*
+</del>
+<p>そうじゃないと
+<del>
+<em>raw HTML</em> in <strong>Markdown block</strong> wrapped in <code>&lt;p&gt;&lt;/p&gt;</code>
+</del></p>
+<p><del><em>raw HTML</em> in <strong>Markdown block</strong> wrapped in <code>&lt;p&gt;&lt;/p&gt;</code></del></p>
+<!-- *HTML comment* -->
+<!--
+*HTML comment*
+-->
+<? *Processing Instruction* ?>
+<?
+*Processing Instruction*
+?>
+<![CDATA[ *Character Data* ]]>
+<![CDATA[
+*Character Data*
+]]>
+<h3 id="paragraphs">Paragraphs</h3>
+<p>地の文は <code>&lt;p&gt;&lt;/p&gt;</code> で囲まれて段落になる。</p>
+<p>空行をひとつ以上挟むと改段落。
+何行空けても出力結果は同じ。</p>
+<h3 id="tables">Tables</h3>
+<p><a href="https://github.github.com/gfm/#tables-extension-">GFM <code>table</code> extension</a></p>
+<table>
+  <thead>
+      <tr>
+          <th>normal</th>
+          <th style="text-align: left">left</th>
+          <th style="text-align: center">center</th>
+          <th style="text-align: right">right</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>n</td>
+          <td style="text-align: left">l</td>
+          <td style="text-align: center">c</td>
+          <td style="text-align: right">r</td>
+      </tr>
+      <tr>
+          <td>N</td>
+          <td style="text-align: left">L</td>
+          <td style="text-align: center">C</td>
+          <td style="text-align: right">R</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="containter-blocks">Containter blocks</h2>
+<h3 id="block-quotes">Block quotes</h3>
+<blockquote>
+<p>Blockquote</p>
+<p>second paragraph</p></blockquote>
+<h4 id="alerts">Alerts</h4>
+<p><a href="https://github.blog/changelog/2023-12-14-new-markdown-extension-alerts-provide-distinctive-styling-for-significant-content/">2023-12-14</a>
+GitHub 独自の拡張として
+<a href="https://docs.github.com/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts">Alerts</a>
+が追加された。
+GFMに正式に組み込まれたわけではない。</p>
+<p><a href="/misc/hugo.html">Hugo</a> では
+<a href="https://gohugo.io/render-hooks/blockquotes/">blockquote render hooks</a>
+を使えば同じことを実現できる。
+<a href="https://github.com/orgs/community/discussions/16925">community#16925</a>
+の実装例を見るとHTMLは <code>&lt;div class=&quot;markdown-alert&quot;&gt;</code> 。</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title"><iconify-icon inline icon="octicon:info-16"></iconify-icon>Note</p>
+<p>Useful information that users should know, even when skimming content.</p>
+</div>
+<div class="markdown-alert markdown-alert-tip">
+<p class="markdown-alert-title"><iconify-icon inline icon="octicon:light-bulb-16"></iconify-icon>Tip</p>
+<p>Helpful advice for doing things better or more easily.</p>
+</div>
+<div class="markdown-alert markdown-alert-important">
+<p class="markdown-alert-title"><iconify-icon inline icon="octicon:report-16"></iconify-icon>Important</p>
+<p>Key information users need to know to achieve their goal.</p>
+</div>
+<div class="markdown-alert markdown-alert-warning">
+<p class="markdown-alert-title"><iconify-icon inline icon="octicon:alert-16"></iconify-icon>Warning</p>
+<p>Urgent info that needs immediate user attention to avoid problems.</p>
+</div>
+<div class="markdown-alert markdown-alert-caution">
+<p class="markdown-alert-title"><iconify-icon inline icon="octicon:stop-16"></iconify-icon>Caution</p>
+<p>Advises about risks or negative outcomes of certain actions.</p>
+</div>
+<div class="markdown-alert markdown-alert-unknown">
+<p class="markdown-alert-title">Unknown</p>
+<p>Unknown alert type shown without color or icon.</p>
+</div>
+<blockquote>
+<p>[!type]&#43; title</p>
+<p>Hogo provides <code>AlertSign</code> and <code>AlertTitle</code> for the extended syntax like
+<a href="https://help.obsidian.md/callouts">Obsidian callouts</a>.
+This theme may also support it if it gets more popular.</p></blockquote>
+<h3 id="lists">Lists</h3>
+<p>行頭に <code>- </code>, <code>+ </code>, <code>* </code> を置くと <code>&lt;ul&gt;&lt;li&gt;</code> の unordered list になる:</p>
+<ul>
+<li>Unordered list</li>
+<li>Nested level 1
+<ul>
+<li>Nested level 2
+<ul>
+<li>Nested level 3
+<ul>
+<li>Nested level 4</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Nested level 1</li>
+</ul>
+<p>行頭に <code>1. </code> か <code>1) </code> を置くと <code>&lt;ol&gt;&lt;li&gt;</code> の ordered list になる:</p>
+<ol>
+<li>Ordered list</li>
+<li>Nested level 1
+<ol>
+<li>Nested level 2
+<ol>
+<li>Nested level 3
+<ol>
+<li>Nested level 4</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>Nested level 1</li>
+</ol>
+<p>ひとつでも段落を持つアイテムがあると、全ての <code>&lt;li&gt;</code> の中に <code>&lt;p&gt;</code> が入る:</p>
+<ul>
+<li>
+<p>list with paragraphs</p>
+<p>paragraph 2 in item 1</p>
+</li>
+<li>
+<p>item 2 in p<br>
+second line</p>
+</li>
+</ul>
+<p>リスト開始は段落継続よりも強いので空行を入れる必要はない。
+逆に言えば、空行の有無でレイアウトを変えることもできない。</p>
+<h4 id="task-lists">Task lists</h4>
+<p><a href="https://github.github.com/gfm/#task-list-items-extension-">GFM <code>tasklist</code> extension</a></p>
+<ul>
+<li><input disabled="" type="checkbox"> Unchecked</li>
+<li><input checked="" disabled="" type="checkbox"> Checked
+<ul>
+<li>nested ul
+<ul>
+<li><input disabled="" type="checkbox"> nested ul</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><code>&lt;ol&gt;</code> でも行けるっぽい:</p>
+<ol>
+<li><input disabled="" type="checkbox"> Unchecked</li>
+<li><input checked="" disabled="" type="checkbox"> Checked</li>
+</ol>
+<h4 id="definition-lists">Definition lists</h4>
+<p>GFMにも無いけど<a href="/misc/hugo.html">Hugo</a>/Goldmarkではデフォルト有効な拡張。</p>
+<dl>
+<dt>term</dt>
+<dd>definition</dd>
+<dt><code>&lt;dt&gt;</code></dt>
+<dd><code>&lt;dd&gt;</code></dd>
+</dl>
+<h2 id="inlines">Inlines</h2>
+<h3 id="code-spans">Code spans</h3>
+<p>backtick/backquote 1つか2つで挟むと <code>`inline code`</code>.</p>
+<p><code>line endings are converted to spaces.</code></p>
+<p><code>&lt;- leading and trailing spaces are removed -&gt;</code>
+ただし両側ともにある場合のみで、削るのは1つずつ。</p>
+<p><code>space-&gt;    &lt;-here</code>
+内側のスペースの数は変わらずHTMLに出力されるけど、
+ブラウザで1つに潰されるのがデフォルト。
+文字通り表示させるためにCSSで
+<code>code {white-space: pre-wrap;}</code> としておくのが推奨。</p>
+<h3 id="emphasis">Emphasis</h3>
+<ul>
+<li><em>emphasis, typically italic</em></li>
+<li><strong>strong, typically bold</strong>
+<ul>
+<li>外側にスペースが無くても有効: left<strong>strong</strong>right</li>
+<li>内側のスペースで無効化: ** normal **</li>
+<li>underscore <code>_</code> は外側にスペースが必要: left__normal__right</li>
+</ul>
+</li>
+<li><em><strong>strong emphasis, typycally bold italic</strong></em></li>
+<li>~strikethrough~, <del>strikethrough</del>:
+<a href="https://github.github.com/gfm/#strikethrough-extension-">GFM <code>strikethrough</code> extension</a>.
+チルダ1つでも <code>&lt;del&gt;&lt;/del&gt;</code> に変換するのがGFMの仕様かつHugoの初期設定だけど暴発しがち。
+安全のため無効化するか、2つ重ねでのみ変換するように設定する。</li>
+</ul>
+<h3 id="links">Links</h3>
+<ul>
+<li><a href="https://spec.commonmark.org/current/#links" title="optional title">Link text</a>:
+<code>[text](&lt;href&gt; &quot;optional title&quot;)</code></li>
+<li><a href="https://spec.commonmark.org/current/#link-reference-definitions" title="Optional title">Link reference definitions</a>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl">[text]: <span class="p">&lt;</span><span class="nt">href</span><span class="p">&gt;</span> &#34;optional title&#34;
+</span></span></code></pre></div></li>
+<li>Explicit autolink: <code>&lt;https://example.com&gt;</code> <a href="https://example.com">https://example.com</a></li>
+<li><a href="https://github.github.com/gfm/#autolinks-extension-">GFM <code>autolink</code> extension</a>:
+<code>&lt;</code> と <code>&gt;</code> で挟まなくても
+<code>https://</code> とか <code>www.</code> とかで始まるURLらしきものを認識してリンク生成する。
+<a href="https://example.com">https://example.com</a></li>
+<li>Footnote <code>[^1]</code><sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> <code>[^name]</code><sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup></li>
+</ul>
+<h3 id="images">Images</h3>
+<p><code>![Alt text](&lt;/path/to/file.png&gt; &quot;Optional title&quot;)</code>
+<img src="/not-found.png" alt="Alt text" title="Optional title"></p>
+<p><img src="/favicon.svg" alt="/favicon.svg"></p>
+<img src="/favicon.svg" height=16>
+<p><a href="#raw-html">raw HTML</a> <code>&lt;img src=&quot;...&quot; alt=&quot;...&quot; title=&quot;...&quot;&gt;</code>
+を書いた方が分かりやすいし他のattributeも使える。
+ただし完全に同義というわけではなく、
+段落まわりの挙動で違いが出ることがある。
+すなわち <code>![]()</code> 記法のほうはどう書いても <code>&lt;p&gt;</code> の中に入るが、
+生タグ独立で <a href="#html-blocks">HTML blocks</a> になると囲われない。</p>
+<h3 id="raw-html">Raw HTML</h3>
+<p><a href="#html-blocks">HTML blocks</a> の条件を満たさない使い方をした生HTMLタグは、
+Markdownの文脈を切らずにそのままHTMLに出力される。
+つまり <code>&lt;span&gt;</code> とか <code>&lt;kbd&gt;</code> で修飾したりできる。</p>
+<p>安全性のためにデフォルトでは無効化されている場合が多い。</p>
+<ul>
+<li>
+<p><a href="https://github.github.com/gfm/#disallowed-raw-html-extension-">GFM <code>tagfilter</code></a>:
+<code>&lt;title&gt;</code>,
+<code>&lt;textarea&gt;</code>,
+<code>&lt;style&gt;</code>,
+<code>&lt;xmp&gt;</code>,
+<code>&lt;iframe&gt;</code>,
+<code>&lt;noembed&gt;</code>,
+<code>&lt;noframes&gt;</code>,
+<code>&lt;script&gt;</code>,
+<code>&lt;plaintext&gt;</code>.</p>
+</li>
+<li>
+<p><a href="https://gohugo.io/configuration/markup/#rendererunsafe">Hugo <code>renderer.unsafe = false</code></a></p>
+</li>
+</ul>
+<h3 id="line-breaks">Line breaks</h3>
+<dl>
+<dt>Soft line breaks</dt>
+<dd>改行ひとつはHTMLでも改行ひとつのままで、普通はスペースとしてレンダリングされる。</dd>
+<dd>改行を改行として見せる設定も可能ではある。
+<ul>
+<li>CSSでレンダリングを変える:
+<a href="https://developer.mozilla.org/docs/Web/CSS/white-space"><code>white-space: pre*</code></a></li>
+<li>パーサーで <code>&lt;br&gt;</code> を入れる:
+<a href="https://gohugo.io/configuration/markup/#rendererhardwraps">Hugo <code>renderer.hardWraps</code></a></li>
+</ul>
+</dd>
+<dd>スペースを入れたくない言語のためのオプションがある場合もある。
+e.g., <a href="https://github.com/yuin/goldmark#cjk-extension">goldmark CJK extension</a></dd>
+<dt>Hard line breaks</dt>
+<dd>行末にバックスラッシュ <code>\</code> を置くと <code>&lt;br&gt;</code> が入って段落内改行。</dd>
+<dd>行末にスペース2つ置いても同じ効果を得られることになってるけど、
+trailing whitespace は取り除かれるべきだし見えにくいので使わない。</dd>
+</dl>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p><code>[^1]: </code> GFMにも無いけどHugo/Goldmarkではデフォルト有効な拡張。
+<a href="https://github.com/yuin/goldmark?tab=readme-ov-file#footnotes-extension">https://github.com/yuin/goldmark?tab=readme-ov-file#footnotes-extension</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p><code>[^name]: </code> 番号でない名前もつけられるけど出力は通し番号。</p>
+<p>空行とスペース4つで複数段落も可能。&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+
+</article>
+</main>
+
+<nav class="side-bar">
+<div class="menu">
+
+<div><a href="/about.html">About</a></div>
+
+<div><a href="/research.html">Research Interests</a></div>
+
+<input type="checkbox" id="menu-rstats">
+<label for="menu-rstats">R stats</label>
+<ul>
+<li><a href="/rstats/intro.html">R自学自習の基礎知識</a></li>
+<li><a href="/rstats/programming.html">RプログラミングTips</a></li>
+<li><a href="/rstats/config.html">R環境設定</a></li>
+<li><a href="/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/rstats/purrr.html">purrr</a></li>
+<li><a href="/rstats/readr.html">readr</a></li>
+<li><a href="/rstats/stringr.html">stringr</a></li>
+<li><a href="/rstats/knitr.html">knitr</a></li>
+<li><a href="/rstats/parallel.html">parallel</a></li>
+<li><a href="/rstats/devtools.html">devtools</a></li>
+<li><a href="/rstats/rcpp.html">Rcpp</a></li>
+<li><a href="/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/rstats/genomicranges.html">GenomicRanges</a></li>
+<li><a href="/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/rstats/edger.html">edgeR</a></li>
+<li><a href="/rstats/topgo.html">topGO</a></li>
+<li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
+</ul>
+
+<input type="checkbox" id="menu-python">
+<label for="menu-python">Python</label>
+<ul>
+<li><a href="/python/install.html">Pythonインストール</a></li>
+<li><a href="/python/pip.html">pip</a></li>
+<li><a href="/python/ipython.html">IPython</a></li>
+<li><a href="/python/biopython.html">BioPython</a></li>
+<li><a href="/python/concurrent.html">concurrent.futures</a></li>
+<li><a href="/python/copy.html">copy</a></li>
+<li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
+<li><a href="/python/packaging.html">Pythonパッケージ作成</a></li>
+</ul>
+
+<input type="checkbox" id="menu-cxx">
+<label for="menu-cxx">C&#43;&#43;</label>
+<ul>
+<li><a href="/cxx/boost.html">Boost</a></li>
+<li><a href="/cxx/getopt.html">C&#43;&#43;コマンドライン引数</a></li>
+<li><a href="/cxx/speed.html">C&#43;&#43;高速化</a></li>
+<li><a href="/cxx/gcc.html">gcc</a></li>
+<li><a href="/cxx/bitwise.html">ビット演算</a></li>
+<li><a href="/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="menu-bio">
+<label for="menu-bio">Biology</label>
+<ul>
+<li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
+<li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/bio/meme.html">MEME</a></li>
+<li><a href="/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/bio/samtools.html">SAMtools</a></li>
+<li><a href="/bio/shirokane.html">SHIROKANE</a></li>
+<li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/bio/mathmorph.html">数理形態学</a></li>
+<li><a href="/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="menu-dev">
+<label for="menu-dev">Developer Tools</label>
+<ul>
+<li><a href="/dev/apptainer.html">Apptainer</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/dev/cmake.html">CMake</a></li>
+<li><a href="/dev/docker.html">Docker</a></li>
+<li><a href="/dev/emacs.html">Emacs</a></li>
+<li><a href="/dev/git.html">Git</a></li>
+<li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mount.html">mount</a></li>
+<li><a href="/dev/rsync.html">rsync</a></li>
+<li><a href="/dev/ssh.html">ssh</a></li>
+<li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/torque.html">TORQUE</a></li>
+<li><a href="/dev/vi.html">vi</a></li>
+<li><a href="/dev/vscode.html">VSCode</a></li>
+<li><a href="/dev/zsh.html">zsh</a></li>
+<li><a href="/dev/sh.html">シェルスクリプト</a></li>
+<li><a href="/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="menu-mac">
+<label for="menu-mac">Mac</label>
+<ul>
+<li><a href="/mac/applescript.html">AppleScript</a></li>
+<li><a href="/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/mac/command.html">Mac固有コマンド</a></li>
+<li><a href="/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/mac/winebottler.html">WineBottler</a></li>
+</ul>
+
+<input type="checkbox" id="menu-lectures">
+<label for="menu-lectures">Lectures</label>
+<ul>
+<li><a href="/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/lectures/git2018nrifs.html">Git入門2018</a></li>
+<li><a href="/lectures/git2019makino.html">Git入門2019</a></li>
+<li><a href="/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="menu-misc" checked>
+<label for="menu-misc" class="active">Miscellaneous</label>
+<ul>
+<li><a href="/misc/fonts.html">Fonts</a></li>
+<li><a href="/misc/gollum.html">Gollum</a></li>
+<li><a href="/misc/hugo.html">Hugo</a></li>
+<li><a href="/misc/latex.html">LaTeX</a></li>
+<li class="active"><a href="/misc/markdown.html">Markdown</a></li>
+</ul>
+
+<div><a href="/tags/">Tags</a></div>
+</div>
+</nav>
+<footer><small>(ɔ) 2008 岩嵜航 Watal M. Iwasaki</small></footer>
+</body>
+</html>
