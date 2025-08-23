@@ -85,7 +85,7 @@ Contacts
 **Articles**
 
 1.  Takeshi Kuroha, Fabien Lombardo, **Watal M. Iwasaki**, Svetlana Chechetka, Yoshihiro Kawahara, Akiko Yoshida, Takashi Makino, Hitoshi Yoshida. (2025)
-    [*Plant Biotechnol. J.* **Early View** pp.1--3](https://doi.org/10.1111/pbi.70043);
+    [*Plant Biotechnol. J.* **23**(7) 2667-2669](https://doi.org/10.1111/pbi.70043);
     Modification of *TAWAWA1*-mediated panicle architecture by genome editing of a downstream conserved noncoding sequence in rice.
 1.  **Watal M. Iwasaki**\*, T. E. Kijima\* (equally contributed), Hideki Innan. (2020)
     [*Mol. Biol. Evol.* **37**(2) 355--364](https://doi.org/10.1093/molbev/msz220);
