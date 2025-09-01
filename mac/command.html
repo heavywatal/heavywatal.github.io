@@ -164,7 +164,21 @@ GUIから環境設定してもejectするたびに戻ってしまうので、
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">softwareupdate -l
 </span></span><span class="line"><span class="cl">softwareupdate -i -a
-</span></span></code></pre></div>
+</span></span></code></pre></div><h4 id="linux-bootable-usb-stick">Linux bootable USB stick</h4>
+<ol>
+<li>USBメモリを挿してデバイスの名前を確認:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">diskutil list
+</span></span></code></pre></div>この例では <code>/dev/disk4</code> とする。</li>
+<li>FAT32でフォーマットし、一旦アンマウント:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo diskutil eraseDisk FAT32 <span class="s2">&#34;UBUNTU&#34;</span> GPTFormat /dev/disk4
+</span></span><span class="line"><span class="cl">diskutil unmountDisk /dev/disk4
+</span></span></code></pre></div></li>
+<li>ダウンロードしておいたISOイメージを書き込む:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo dd <span class="k">if</span><span class="o">=</span>ubuntu-24.04.3-live-server-amd64.iso <span class="nv">of</span><span class="o">=</span>/dev/disk4 <span class="nv">bs</span><span class="o">=</span>1m
+</span></span><span class="line"><span class="cl">diskutil list
+</span></span></code></pre></div></li>
+</ol>
+
 </article>
 </main>
 
