@@ -162,3 +162,22 @@ sudo installer -pkg SomePackage.pkg -target /
 softwareupdate -l
 softwareupdate -i -a
 ```
+
+
+#### Linux bootable USB stick
+
+1. USBメモリを挿してデバイスの名前を確認:
+   ```sh
+   diskutil list
+   ```
+   この例では `/dev/disk4` とする。
+1. FAT32でフォーマットし、一旦アンマウント:
+   ```sh
+   sudo diskutil eraseDisk FAT32 "UBUNTU" GPTFormat /dev/disk4
+   diskutil unmountDisk /dev/disk4
+   ```
+1. ダウンロードしておいたISOイメージを書き込む:
+   ```sh
+   sudo dd if=ubuntu-24.04.3-live-server-amd64.iso of=/dev/disk4 bs=1m
+   diskutil list
+   ```
