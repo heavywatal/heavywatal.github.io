@@ -166,6 +166,70 @@ YAMLやJSONでもいいけど、
 [TOML](https://toml.io/)のほうが将来性ありそう。
 
 
+### Syntax Highlighting
+
+<https://gohugo.io/content-management/syntax-highlighting/>
+
+See [Markdown#fenced-code-blocks]({{< relref "markdown.md#fenced-code-blocks" >}}).
+
+```html
+<div class="highlight">
+  <pre class="chroma">
+    <code class="language-py" data-lang="py">
+      <span class="line">
+        <span class="cl">
+```
+
+未定義の言語を指定すると `pre` に `chroma` クラスが付かない:
+```unknown-language
+print("Hello, world!")
+```
+
+`text`, `plain`, `no-highlight` を指定すると `chroma` あり色なし:
+```text
+print("Hello, world!")
+```
+
+`hl_inline`
+: `true` にすると `div` と `pre` なしで `code.inline-code` から開始。
+  改行が効くかどうかはCSS `white-space` 次第。
+: ```py {hl_inline=true}
+  import sys
+  sys.version
+  ```
+
+`hl_lines`
+: 単一の数値もしくは文字列, e.g., `1`, `"2-4 7"`
+  ```py {hl_lines="1-2"}
+  import sys
+  sys.version
+  ```
+
+`lineNos`
+: `table`, `true` (`lineNumbersInTable=true`)
+  ```py {lineNos=true, hl_lines=1, lineNoStart=8}
+  import sys
+  sys.version
+  ```
+: `inline`
+  ```py {lineNos=inline, hl_lines=1, lineNoStart=8}
+  import sys
+  sys.version
+  ```
+
+`lineNoStart`
+: 行番号の開始値を指定。`hl_lines` には影響しない。
+
+`noClasses`
+: デフォルト `true` では `style` オプションに従った色を直接出力する。
+: `false` にするとクラスを付与するだけになり、CSSで色を指定できる。
+  `hugo gen chromastyles` で雛形を生成できる。
+  <https://github.com/alecthomas/chroma/blob/master/types.go>
+
+`wrapperClass`
+: `pre` の親 `div` のクラス名。デフォルトは `highlight`.
+
+
 ## 閲覧・公開方法
 
 ### Hugo Server

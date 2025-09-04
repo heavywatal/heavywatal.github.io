@@ -98,9 +98,8 @@ SETEXT style
 ### Fenced Code blocks
 
 3連backquoteで挟むと `<pre><code> </code></pre>` に変換される。
-言語を指定すると
-[syntax highlighting](https://gohugo.io/content-management/syntax-highlighting/)
-できることが多い。
+言語を指定すると色付けできることが多い。
+See [Hugo#syntax-highlighting]({{< relref "hugo.md#syntax-highlighting" >}}).
 
 ```python
 def hello():
@@ -108,16 +107,6 @@ def hello():
 ```
 ```
 Hello, world!
-```
-
-未定義の言語を指定すると `pre` に `chroma` クラスが付かない:
-```unknown-language
-print("Hello, world!")
-```
-
-`text`, `plain`, `no-highlight` を指定すると `chroma` あり色なし:
-```text
-print("Hello, world!")
 ```
 
 3連backquoteを含むコードは4連backquoteで表現できる:
