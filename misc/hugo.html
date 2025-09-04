@@ -193,6 +193,57 @@ Hugo template では chain できなくなるため非推奨。
 <p>タイトルや日付などのメタデータをファイルの先頭で記述する。
 YAMLやJSONでもいいけど、
 <a href="https://toml.io/">TOML</a>のほうが将来性ありそう。</p>
+<h3 id="syntax-highlighting">Syntax Highlighting</h3>
+<p><a href="https://gohugo.io/content-management/syntax-highlighting/">https://gohugo.io/content-management/syntax-highlighting/</a></p>
+<p>See <a href="/misc/markdown.html#fenced-code-blocks">Markdown#fenced-code-blocks</a>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;highlight&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">pre</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;chroma&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">code</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;language-py&#34;</span> <span class="na">data-lang</span><span class="o">=</span><span class="s">&#34;py&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;line&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;cl&#34;</span><span class="p">&gt;</span>
+</span></span></code></pre></div><p>未定義の言語を指定すると <code>pre</code> に <code>chroma</code> クラスが付かない:</p>
+<pre tabindex="0"><code class="language-unknown-language" data-lang="unknown-language">print(&#34;Hello, world!&#34;)
+</code></pre><p><code>text</code>, <code>plain</code>, <code>no-highlight</code> を指定すると <code>chroma</code> あり色なし:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">print(&#34;Hello, world!&#34;)
+</span></span></code></pre></div><dl>
+<dt><code>hl_inline</code></dt>
+<dd><code>true</code> にすると <code>div</code> と <code>pre</code> なしで <code>code.inline-code</code> から開始。
+改行が効くかどうかはCSS <code>white-space</code> 次第。</dd>
+<dd><code class="code-inline language-py"><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">version</span>
+</code></dd>
+<dt><code>hl_lines</code></dt>
+<dd>単一の数値もしくは文字列, e.g., <code>1</code>, <code>&quot;2-4 7&quot;</code>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line hl"><span class="cl"><span class="kn">import</span> <span class="nn">sys</span>
+</span></span><span class="line hl"><span class="cl"><span class="n">sys</span><span class="o">.</span><span class="n">version</span>
+</span></span></code></pre></div></dd>
+<dt><code>lineNos</code></dt>
+<dd><code>table</code>, <code>true</code> (<code>lineNumbersInTable=true</code>)
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="hl"><span class="lnt">8
+</span></span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line hl"><span class="cl"><span class="kn">import</span> <span class="nn">sys</span>
+</span></span><span class="line"><span class="cl"><span class="n">sys</span><span class="o">.</span><span class="n">version</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></dd>
+<dd><code>inline</code>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line hl"><span class="ln">8</span><span class="cl"><span class="kn">import</span> <span class="nn">sys</span>
+</span></span><span class="line"><span class="ln">9</span><span class="cl"><span class="n">sys</span><span class="o">.</span><span class="n">version</span>
+</span></span></code></pre></div></dd>
+<dt><code>lineNoStart</code></dt>
+<dd>行番号の開始値を指定。<code>hl_lines</code> には影響しない。</dd>
+<dt><code>noClasses</code></dt>
+<dd>デフォルト <code>true</code> では <code>style</code> オプションに従った色を直接出力する。</dd>
+<dd><code>false</code> にするとクラスを付与するだけになり、CSSで色を指定できる。
+<code>hugo gen chromastyles</code> で雛形を生成できる。
+<a href="https://github.com/alecthomas/chroma/blob/master/types.go">https://github.com/alecthomas/chroma/blob/master/types.go</a></dd>
+<dt><code>wrapperClass</code></dt>
+<dd><code>pre</code> の親 <code>div</code> のクラス名。デフォルトは <code>highlight</code>.</dd>
+</dl>
 <h2 id="閲覧公開方法">閲覧・公開方法</h2>
 <h3 id="hugo-server">Hugo Server</h3>
 <p>付属の簡易サーバーを起動。</p>
