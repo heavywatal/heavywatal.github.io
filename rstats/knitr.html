@@ -91,9 +91,13 @@ knitr — Markdownにコード実行結果を編み込む
 <li><a href="/slides/tokyor102/">逆順で理解する R Markdown Presentation</a> 2022-10
 <a href="https://tokyor.connpass.com/event/262836/">Tokyo.R #102</a></li>
 </ul>
-<h2 id="options">Options</h2>
+<h2 id="options">
+Options<a href="#options"></a>
+</h2>
 <p><a href="https://yihui.org/knitr/options/">https://yihui.org/knitr/options/</a></p>
-<h3 id="format">Format</h3>
+<h3 id="format">
+Format<a href="#format"></a>
+</h3>
 <dl>
 <dt>chunk header <code>{r, tag=value, tag=value}</code> 形式</dt>
 <dd>knitrではこれが基本という扱い。</dd>
@@ -123,7 +127,9 @@ Yihuiは付けているが、RStudioの新規作成RmdやPosit社のcheatsheet�
 <dt>一括 <code>knitr::opts_chunk$set(tag = value)</code> 形式</dt>
 <dd>文書内、それより後ろのchunkのデフォルトを変更する。</dd>
 </dl>
-<h3 id="chunk-label">Chunk label</h3>
+<h3 id="chunk-label">
+Chunk label<a href="#chunk-label"></a>
+</h3>
 <p>区切りにはなぜか<strong>ハイフンが推奨</strong>。ピリオドやアンダースコアではなく。</p>
 <p>figureやcacheの出力先に使われるのでuniqueになるように注意する。
 文書内での重複はknitrがチェックして怒ってくれるが、
@@ -131,7 +137,9 @@ Yihuiは付けているが、RStudioの新規作成RmdやPosit社のcheatsheet�
 <p>省略すると <code>unnamed-chunk-%d</code> のような形で自動的に割り振られる。
 入力ファイルによって変わるように
 <code>unnamed.chunk.label</code> オプションを変更しておいたほうが安全。</p>
-<h3 id="general">General</h3>
+<h3 id="general">
+General<a href="#general"></a>
+</h3>
 <ul>
 <li><code>knitr::opts_chunk$set(error = FALSE)</code>:
 knitr単独で使う場合、デフォルトではchunk内でエラーが生じても止まらず危険。
@@ -163,7 +171,9 @@ knitr単独で使う場合、デフォルトではchunk内でエラーが生じ�
 <a href="https://bookdown.org/yihui/rmarkdown-cookbook/reuse-chunks.html#embed-chunk"><code>&lt;&lt;label&gt;&gt;</code></a> で埋め込むのはちょっとお行儀が悪い気がするので使わない。</li>
 <li><code>opts.label</code>: ほかのchunkのオプションを継承する。</li>
 </ul>
-<h3 id="external">External</h3>
+<h3 id="external">
+External<a href="#external"></a>
+</h3>
 <ul>
 <li><code>file: 'setup.R'</code>: 外部ファイルをchunkのソースコードとして読み込む。
 <code>code: expr! 'readLines(&quot;setup.R&quot;)'</code> も同様。
@@ -175,7 +185,9 @@ chunkの内容をファイルに書き出す。
 そのままでは表示されず <code>echo</code> も効かない。
 <code>lang</code> を追加設定することで言語付きコードフェンスになる。</li>
 </ul>
-<h3 id="cache">Cache</h3>
+<h3 id="cache">
+Cache<a href="#cache"></a>
+</h3>
 <ul>
 <li><code>knitr::opts_chunk$set(cache = TRUE)</code>:
 実行結果を保存しておき、chunk内容に変更が無ければ再利用する。
@@ -207,7 +219,9 @@ tagが <code>cache.extra</code> である必要はない。
 <a href="https://github.com/yihui/knitr/pull/405">yihui/knitr#405</a></li>
 <li><code>dependson</code>: 依存するchunkをlabelや数値で指定。</li>
 </ul>
-<h3 id="figure">Figure</h3>
+<h3 id="figure">
+Figure<a href="#figure"></a>
+</h3>
 <ul>
 <li><code>fig.path</code>: <code>cache.path</code> と同様の挙動。</li>
 <li><code>fig.width: 10</code></li>
@@ -232,7 +246,9 @@ tagが <code>cache.extra</code> である必要はない。
 XQuartzのPNGに比べるとなんとなく文字がガチャガチャで美しくない気がするので、
 日本語を使うchunkでだけ設定するほうがいいかも。</li>
 </ul>
-<h3 id="package-options-knitropts_knit">Package Options <code>knitr::opts_knit</code></h3>
+<h3 id="package-options-knitropts_knit">
+Package Options <code>knitr::opts_knit</code><a href="#package-options-knitropts_knit"></a>
+</h3>
 <p><a href="https://yihui.org/knitr/options/#package-options">https://yihui.org/knitr/options/#package-options</a></p>
 <p>knitrロード前に <code>options(knitr.package.verbose = TRUE)</code> とするか、
 <code>knit()</code> 実行前に <code>knitr::opts_knit$set(verbose = TRUE)</code> とするか。
@@ -249,7 +265,9 @@ chunk内からの実行では遅い。
 <li><code>base.dir</code>: plotの出力先を絶対パスで指定したいことがもしあれば。
 chunk optionではないことに注意。</li>
 </ul>
-<h3 id="global-r-options">Global R Options</h3>
+<h3 id="global-r-options">
+Global R Options<a href="#global-r-options"></a>
+</h3>
 <p><a href="https://yihui.org/knitr/options/#global-r-options">https://yihui.org/knitr/options/#global-r-options</a></p>
 <p>なぜ <code>knitr::opts_knit</code> とまた違うくくりがあるのかは謎。歴史的経緯？</p>
 <ul>
@@ -257,7 +275,9 @@ chunk optionではないことに注意。</li>
 デフォルトではchunk名の確認さえままならないほどコンパクトなので、
 例を参考にして適当に差し替える。</li>
 </ul>
-<h2 id="functions">Functions</h2>
+<h2 id="functions">
+Functions<a href="#functions"></a>
+</h2>
 <dl>
 <dt><a href="https://github.com/yihui/knitr/blob/master/R/output.R"><code>knitr::knit(input, output = NULL, ...)</code></a></dt>
 <dd><code>input</code>: 呼び出し元とは違うディレクトリにあるファイルを指定しても、
@@ -280,12 +300,16 @@ chunk内の <code>getwd()</code> はこのファイルが基準となる。</dd>
 <dt><code>knitr::knit_exit()</code></dt>
 <dd>文書の途中で終了。</dd>
 </dl>
-<h2 id="hooks">Hooks</h2>
+<h2 id="hooks">
+Hooks<a href="#hooks"></a>
+</h2>
 <ul>
 <li><a href="https://yihui.org/knitr/hooks/">https://yihui.org/knitr/hooks/</a></li>
 <li><a href="https://bookdown.org/yihui/rmarkdown-cookbook/chunk-hooks.html">https://bookdown.org/yihui/rmarkdown-cookbook/chunk-hooks.html</a></li>
 </ul>
-<h3 id="chunk-hooks">Chunk hooks</h3>
+<h3 id="chunk-hooks">
+Chunk hooks<a href="#chunk-hooks"></a>
+</h3>
 <ul>
 <li>chunk前後に評価するコードをsetできる。</li>
 <li>setしたオプションが <code>NULL</code> でなければ(<code>FALSE</code> でも)評価される。
@@ -304,7 +328,9 @@ chunk内と同じとは限らないことに注意。</li>
 </span></span><span class="line"><span class="cl">    <span class="c1"># evaluated after chunk code</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">})</span>
-</span></span></code></pre></div><h3 id="output-hooks">Output hooks</h3>
+</span></span></code></pre></div><h3 id="output-hooks">
+Output hooks<a href="#output-hooks"></a>
+</h3>
 <ul>
 <li>コード評価後、コードや実行結果の文字列をいじる。</li>
 <li><code>source</code>, <code>output</code>, <code>warning</code>, <code>message</code>, <code>error</code>,
@@ -317,7 +343,9 @@ engineを変えた場合はchunkと同じ、、、？</li>
 </span></span><span class="line"><span class="cl">  <span class="nf">message</span><span class="p">(</span><span class="s">&#34;hook source &#34;</span><span class="p">,</span> <span class="nf">getwd</span><span class="p">())</span>
 </span></span><span class="line"><span class="cl">  <span class="nf">paste0</span><span class="p">(</span><span class="s">&#34;src: &#34;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">})</span>
-</span></span></code></pre></div><h3 id="option-hooks">Option hooks</h3>
+</span></span></code></pre></div><h3 id="option-hooks">
+Option hooks<a href="#option-hooks"></a>
+</h3>
 <ul>
 <li><code>options</code> を受け取り、変更し、返す関数をsetしておく。</li>
 <li>setしたオプションの値が <code>NULL</code> でさえなければ評価される。
@@ -332,7 +360,9 @@ chunk内と同じとは限らないことに注意。</li>
 </span></span><span class="line"><span class="cl">  <span class="n">options</span><span class="o">$</span><span class="n">fig.height</span> <span class="o">=</span> <span class="n">options</span><span class="o">$</span><span class="n">fig.square</span>
 </span></span><span class="line"><span class="cl">  <span class="n">options</span>
 </span></span><span class="line"><span class="cl"><span class="p">})</span>
-</span></span></code></pre></div><h2 id="quarto">Quarto</h2>
+</span></span></code></pre></div><h2 id="quarto">
+Quarto<a href="#quarto"></a>
+</h2>
 <p><a href="https://quarto.org/docs/output-formats/hugo.html">https://quarto.org/docs/output-formats/hugo.html</a></p>
 
 </article>

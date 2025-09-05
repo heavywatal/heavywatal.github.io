@@ -61,7 +61,9 @@ C&#43;&#43;コマンドライン引数
 </nav>
 </header>
 
-<h2 id="理想">理想</h2>
+<h2 id="理想">
+理想<a href="#理想"></a>
+</h2>
 <ul>
 <li>ビルド不要でヘッダ1つ</li>
 <li>標準ライブラリのみに依存していてポータブル</li>
@@ -72,14 +74,18 @@ C&#43;&#43;コマンドライン引数
 <li>マクロではなくtemplateやlambdaなど真っ当なC++
 (できればC++11以降の簡潔なスタイル) で書ける</li>
 </ul>
-<h2 id="gnu-getopt">GNU <code>getopt</code></h2>
+<h2 id="gnu-getopt">
+GNU <code>getopt</code><a href="#gnu-getopt"></a>
+</h2>
 <p><a href="https://www.gnu.org/s/libc/manual/html_node/Getopt.html">https://www.gnu.org/s/libc/manual/html_node/Getopt.html</a></p>
 <ul>
 <li>UNIX的な環境ならインストール不要だがC/C++標準ではない</li>
 <li>ヘルプなど自動生成してくれない</li>
 <li>C++というよりCなので手作業が多い</li>
 </ul>
-<h2 id="boostprogram_options"><code>boost::program_options</code></h2>
+<h2 id="boostprogram_options">
+<code>boost::program_options</code><a href="#boostprogram_options"></a>
+</h2>
 <p><a href="https://www.boost.org/doc/html/program_options.html">https://www.boost.org/doc/html/program_options.html</a></p>
 <ul>
 <li>格納先の変数を紐付け可能</li>
@@ -87,7 +93,9 @@ C&#43;&#43;コマンドライン引数
 <li>読み込み可能なファイルの出力方法は用意されてないので自分で書く必要がある</li>
 <li>ビルドとリンクが必要で大掛かり cf. <a href="/cxx/boost.html">boost</a></li>
 </ul>
-<h2 id="gflags"><code>gflags</code></h2>
+<h2 id="gflags">
+<code>gflags</code><a href="#gflags"></a>
+</h2>
 <p><a href="https://gflags.github.io/gflags/">https://gflags.github.io/gflags/</a></p>
 <ul>
 <li>テンプレートではなくマクロをふんだんに使って実装されているのでちょっと怖い</li>
@@ -96,7 +104,9 @@ C&#43;&#43;コマンドライン引数
 <li>入力可能なファイルを出力することも可能</li>
 <li>要ビルド＆リンク</li>
 </ul>
-<h3 id="usage">Usage</h3>
+<h3 id="usage">
+Usage<a href="#usage"></a>
+</h3>
 <p><code>main()</code> 関数に書く必要があるのはこれだけ</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;gflags/gflags.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span>
@@ -116,7 +126,9 @@ C&#43;&#43;コマンドライン引数
 </span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">func</span><span class="p">(){</span>
 </span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">tapiola</span><span class="o">::</span><span class="n">FLAGS_sibelius</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><h2 id="cmdline">cmdline</h2>
+</span></span></code></pre></div><h2 id="cmdline">
+cmdline<a href="#cmdline"></a>
+</h2>
 <p><a href="https://github.com/tanakh/cmdline">https://github.com/tanakh/cmdline</a><br>
 <a href="http://d.hatena.ne.jp/tanakh/20091028">http://d.hatena.ne.jp/tanakh/20091028</a></p>
 <ul>
@@ -127,7 +139,9 @@ C&#43;&#43;コマンドライン引数
 <li>変数に直接格納することはできず、パーサのメソッドで値を取得:
 <code>template &lt;class T&gt; const T &amp;parser::get(const std::string &amp;name)</code></li>
 </ul>
-<h2 id="tclap">TCLAP</h2>
+<h2 id="tclap">
+TCLAP<a href="#tclap"></a>
+</h2>
 <p><a href="http://tclap.sourceforge.net/">http://tclap.sourceforge.net/</a></p>
 <ul>
 <li>&ldquo;Templatized C++ Command Line Parser Library&rdquo; の名のとおり
@@ -136,7 +150,9 @@ C&#43;&#43;コマンドライン引数
 <li><code>std::string</code> からパース可能</li>
 <li>格納する変数は指定できず、<code>*Arg</code> オブジェクトの <code>getValue()</code> メソッドで値を取得</li>
 </ul>
-<h2 id="getoptpp">getoptpp</h2>
+<h2 id="getoptpp">
+getoptpp<a href="#getoptpp"></a>
+</h2>
 <p><a href="http://code.google.com/p/getoptpp/">http://code.google.com/p/getoptpp/</a></p>
 <ul>
 <li><code>std::istream</code> っぽく <code>&gt;&gt;operator</code> を使う</li>
@@ -144,7 +160,9 @@ C&#43;&#43;コマンドライン引数
 <li>基本的にはライブラリをビルドして使うが、ちょっといじればヘッダの <code>#include</code> だけでも使える</li>
 <li>ファイルの読み込みやヘルプの生成は一切手伝ってくれない</li>
 </ul>
-<h2 id="clipp">clipp</h2>
+<h2 id="clipp">
+clipp<a href="#clipp"></a>
+</h2>
 <dl>
 <dt><a href="https://github.com/muellan/clipp">https://github.com/muellan/clipp</a></dt>
 <dd>
@@ -157,7 +175,9 @@ C&#43;&#43;コマンドライン引数
 <a href="https://github.com/heavywatal/clippson">clippson</a>
 を作って利用中。</dd>
 </dl>
-<h2 id="そのほか">そのほか</h2>
+<h2 id="そのほか">
+そのほか<a href="#そのほか"></a>
+</h2>
 <p>Githubで上位に出てくるこれらもそのうち試したい:</p>
 <dl>
 <dt><a href="https://github.com/docopt/docopt.cpp">https://github.com/docopt/docopt.cpp</a></dt>

@@ -63,7 +63,9 @@
 
 <p><a href="https://sc.ddbj.nig.ac.jp/">https://sc.ddbj.nig.ac.jp/</a></p>
 <p>各ページのURLがコロコロ変わってリンク切れになりやすい。</p>
-<h2 id="利用開始">利用開始</h2>
+<h2 id="利用開始">
+利用開始<a href="#利用開始"></a>
+</h2>
 <ol>
 <li>利用規定等を熟読。</li>
 <li>手元のコンピュータで<a href="/dev/ssh.html">SSH鍵ペアを生成</a>しておく。
@@ -96,7 +98,9 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ssh a001
 </span></span></code></pre></div></li>
 </ol>
-<h2 id="ファイルの送受信">ファイルの送受信</h2>
+<h2 id="ファイルの送受信">
+ファイルの送受信<a href="#ファイルの送受信"></a>
+</h2>
 <p><a href="https://sc.ddbj.nig.ac.jp/guides/using_general_analysis_division/ga_data_transfer/">公式「システムへのファイル転送方法」</a>
 にはscp, sftp, Asperaを使えと書かれてるけど、
 <a href="/dev/rsync.html">rsync</a>
@@ -107,7 +111,9 @@
 </span></span><span class="line"><span class="cl"><span class="c1"># receive</span>
 </span></span><span class="line"><span class="cl">rsync -auvC gw.ddbj.nig.ac.jp:~/output/ ~/output/
 </span></span></code></pre></div><p>ソースコードは当然<a href="/dev/git.html">Git</a>で管理。</p>
-<h2 id="環境整備">環境整備</h2>
+<h2 id="環境整備">
+環境整備<a href="#環境整備"></a>
+</h2>
 <ul>
 <li><a href="https://sc.ddbj.nig.ac.jp/guides/hardware">ハードウェア構成</a></li>
 <li><a href="https://sc.ddbj.nig.ac.jp/guides/software/">ソフトウェア構成</a>
@@ -117,7 +123,9 @@
 </ul>
 </li>
 </ul>
-<h2 id="ジョブ投入">ジョブ投入</h2>
+<h2 id="ジョブ投入">
+ジョブ投入<a href="#ジョブ投入"></a>
+</h2>
 <p>SSH接続して、そのまま直に重いコマンドを実行してはいけない。
 ジョブスケジューラを使って計算ノードに仕事を投げる必要がある。</p>
 <p>PBS系の Sun/Univa/Altair Grid Engine が長らく使われていたが、2025年からSlurmに移行。</p>
@@ -125,7 +133,9 @@
 <li><a href="https://www.schedmd.com/slurm/">https://www.schedmd.com/slurm/</a></li>
 <li><a href="https://sc.ddbj.nig.ac.jp/guides/software/JobScheduler/Slurm/">https://sc.ddbj.nig.ac.jp/guides/software/JobScheduler/Slurm/</a></li>
 </ul>
-<h3 id="コマンド抜粋">コマンド抜粋</h3>
+<h3 id="コマンド抜粋">
+コマンド抜粋<a href="#コマンド抜粋"></a>
+</h3>
 <p><a href="https://slurm.schedmd.com/man_index.html">https://slurm.schedmd.com/man_index.html</a></p>
 <dl>
 <dt><a href="https://slurm.schedmd.com/sbatch.html"><code>sbatch</code></a></dt>
@@ -151,7 +161,9 @@ PBS系の <code>qsub</code> に相当。</dd>
 <dt><a href="https://slurm.schedmd.com/scancel.html"><code>scancel</code></a></dt>
 <dd>ジョブ削除。</dd>
 </dl>
-<h3 id="sbatch"><code>sbatch</code></h3>
+<h3 id="sbatch">
+<code>sbatch</code><a href="#sbatch"></a>
+</h3>
 <p><a href="https://slurm.schedmd.com/sbatch.html">https://slurm.schedmd.com/sbatch.html</a></p>
 <p><a href="#%E3%83%90%E3%83%83%E3%83%81%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88">バッチスクリプト</a>の形でジョブを投げる。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">man sbatch
@@ -208,7 +220,9 @@ PBS系でいうqueueに相当。
 ここでの宣言が上記partitionの設定より長いと一生pending。</dd>
 <dd>形式は <code>MM</code>, <code>MM:SS</code>, <code>HH:MM:SS</code>, <code>DD-HH</code>, <code>DD-HH:MM</code>, <code>DD-HH:MM:SS</code> のいずれか。</dd>
 </dl>
-<h3 id="バッチスクリプト">バッチスクリプト</h3>
+<h3 id="バッチスクリプト">
+バッチスクリプト<a href="#バッチスクリプト"></a>
+</h3>
 <p><code>sbatch</code> コマンドに渡すスクリプト。
 <code>#SBATCH</code> で始まる行は <code>sbatch</code> へのオプションと見なされる。</p>
 <p>スクリプト内で参照可能な環境変数をプリントしてみるジョブの例:</p>
@@ -243,7 +257,9 @@ PBS系でいうqueueに相当。
 </span></span><span class="line"><span class="cl"><span class="nb">echo</span> PATH: <span class="si">${</span><span class="nv">PATH</span><span class="p">-</span><span class="si">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">date -Iseconds
-</span></span></code></pre></div><h2 id="apptainer-singularity">Apptainer (Singularity)</h2>
+</span></span></code></pre></div><h2 id="apptainer-singularity">
+Apptainer (Singularity)<a href="#apptainer-singularity"></a>
+</h2>
 <ul>
 <li><a href="https://sc.ddbj.nig.ac.jp/guides/software/Container/Apptainer/">https://sc.ddbj.nig.ac.jp/guides/software/Container/Apptainer/</a></li>
 <li><a href="https://sc.ddbj.nig.ac.jp/guides/software/Container/BioContainers/">https://sc.ddbj.nig.ac.jp/guides/software/Container/BioContainers/</a></li>
@@ -261,9 +277,13 @@ PBS系でいうqueueに相当。
 </span></span><span class="line"><span class="cl">mkdir -p ~/image
 </span></span><span class="line"><span class="cl">wget -P ~/image/ https://data.broadinstitute.org/Trinity/TRINITY_SINGULARITY/trinityrnaseq.v2.11.0.simg
 </span></span><span class="line"><span class="cl">apptainer <span class="nb">exec</span> -e ~/image/trinityrnaseq.v2.11.0.simg Trinity --help
-</span></span></code></pre></div><h2 id="r">R</h2>
+</span></span></code></pre></div><h2 id="r">
+R<a href="#r"></a>
+</h2>
 <p><a href="https://sc.ddbj.nig.ac.jp/guides/software/DevelopmentEnvironment/R/">https://sc.ddbj.nig.ac.jp/guides/software/DevelopmentEnvironment/R/</a></p>
-<h3 id="apptainer-r">Apptainer R</h3>
+<h3 id="apptainer-r">
+Apptainer R<a href="#apptainer-r"></a>
+</h3>
 <p>存在するけどエラーで動かない:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">find /usr/local/biotools/ -name <span class="s1">&#39;r-base:*&#39;</span> <span class="p">|</span> sort
 </span></span><span class="line"><span class="cl">apptainer <span class="nb">exec</span> /usr/local/biotools/r/r-base:4.4.1 R --no-save --no-restore-data

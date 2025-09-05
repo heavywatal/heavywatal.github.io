@@ -63,7 +63,9 @@ ssh
 </header>
 
 <p><a href="https://www.openssh.com/">https://www.openssh.com/</a></p>
-<h2 id="公開鍵によるパスワード無しの認証">公開鍵によるパスワード無しの認証</h2>
+<h2 id="公開鍵によるパスワード無しの認証">
+公開鍵によるパスワード無しの認証<a href="#公開鍵によるパスワード無しの認証"></a>
+</h2>
 <p>秘密鍵 <code>~/.ssh/id_ed25519</code> を持つホストから、
 公開鍵 <code>~/.ssh/authorized_keys</code> を持つホストにログインできるようにする。</p>
 <p>手元のコンピュータ1台につき1ペア生成して、公開鍵をリモートホストに登録するのが基本。
@@ -124,8 +126,12 @@ ssh-agentやKeyChainを設定しておけば入力をほとんど省略できる
 </span></span><span class="line"><span class="cl">chmod <span class="m">600</span> ~/.ssh/authorized_keys
 </span></span></code></pre></div></li>
 </ol>
-<h2 id="設定">設定</h2>
-<h3 id="sshconfig"><code>~/.ssh/config</code></h3>
+<h2 id="設定">
+設定<a href="#設定"></a>
+</h2>
+<h3 id="sshconfig">
+<code>~/.ssh/config</code><a href="#sshconfig"></a>
+</h3>
 <p><code>ssh</code> する側のユーザー毎の設定。
 設定項目は <code>ssh_config</code> と同じ。
 先に書いたものが優先されるので、一般設定は最後に:</p>
@@ -152,12 +158,16 @@ Host *
 パスフレーズ無しのような手軽さで秘密鍵の流出に強くなる。
 <code>AddKeysToAgent yes</code> を設定せず
 <code>ssh-add -l</code> が <code>The agent has no identities.</code> を返す状態でも行ける。</p>
-<h3 id="etcssh_config"><code>/etc/ssh_config</code></h3>
+<h3 id="etcssh_config">
+<code>/etc/ssh_config</code><a href="#etcssh_config"></a>
+</h3>
 <p><a href="https://manpages.ubuntu.com/manpages/man5/ssh_config.5.html"><code>man ssh_config</code></a></p>
 <p><code>ssh</code> する側のコンピュータ全体の設定。
 普通は <code>~/.ssh/config</code> で事足りるのでいじらない。
 サーバー間の通信を調整する管理者向け。</p>
-<h3 id="etcsshd_config"><code>/etc/sshd_config</code></h3>
+<h3 id="etcsshd_config">
+<code>/etc/sshd_config</code><a href="#etcsshd_config"></a>
+</h3>
 <p><a href="https://manpages.ubuntu.com/manpages/man5/sshd_config.5.html"><code>man sshd_config</code></a></p>
 <p><code>ssh</code> される側のデーモンの設定。余計な入り口を塞ぐべし:</p>
 <pre tabindex="0"><code>PermitRootLogin no
@@ -172,11 +182,15 @@ UsePAM no
 <dt><code>KbdInteractiveAuthentication</code></dt>
 <dd><code>ChallengeResponseAuthentication</code> は取って代わられた。</dd>
 </dl>
-<h2 id="ファイル転送">ファイル転送</h2>
+<h2 id="ファイル転送">
+ファイル転送<a href="#ファイル転送"></a>
+</h2>
 <p>ファイルひとつなら<code>scp</code>でもいいけどそれ以上なら
 <a href="/dev/rsync.html">rsync</a> を使ったほうがよい。
 あるいは<a href="/dev/mount.html#sshfs">sshfsでマウント</a>してしまうのも楽ちん。</p>
-<h2 id="環境変数">環境変数</h2>
+<h2 id="環境変数">
+環境変数<a href="#環境変数"></a>
+</h2>
 <pre tabindex="0"><code>echo $SSH_CONNECTION
 [client IP] [client port] [server IP] [server port]
 </code></pre><p>どこから <code>ssh</code> したか、を取得するには

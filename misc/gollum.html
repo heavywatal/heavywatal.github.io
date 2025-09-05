@@ -65,7 +65,9 @@ Gollum — MarkdownとGitで動くWikiエンジン
 <p>研究室内の連絡・情報共有は、フロー型の情報ならSlackで、ストック型の情報ならWikiで。
 という方針になったので、学内ネットワークで閲覧編集可能な自前Wikiサーバーを立てる。
 開発環境は macOS, 本番環境は Ubuntu 18.04 → 20.04 → 22.04 LTS.</p>
-<h2 id="ソフトウェア選定">ソフトウェア選定</h2>
+<h2 id="ソフトウェア選定">
+ソフトウェア選定<a href="#ソフトウェア選定"></a>
+</h2>
 <dl>
 <dt><a href="https://pukiwiki.osdn.jp/">pukiwiki</a></dt>
 <dd>学生のときの研究室で使ってたので馴染み深い。
@@ -92,7 +94,9 @@ docker-compose とかですぐ使えるのも楽ちん。</dd>
 編集内容のpush先がGitHubとかになるので、
 それを学内サーバーに即時反映させるのが難しい。</dd>
 </dl>
-<h2 id="gollumインストールとwiki新規作成">gollumインストールとWiki新規作成</h2>
+<h2 id="gollumインストールとwiki新規作成">
+gollumインストールとWiki新規作成<a href="#gollumインストールとwiki新規作成"></a>
+</h2>
 <ol>
 <li>
 <p><a href="https://github.com/rbenv/ruby-build/wiki">rbenv</a>を設定してRubyを入れる。
@@ -149,12 +153,16 @@ gem &#39;gollum&#39;, :github =&gt; &#39;heavywatal/gollum&#39;, :branch =&gt; &
 手元のコンピュータなら <a href="http://localhost:4567">http://localhost:4567</a> で確認。</p>
 </li>
 </ol>
-<h2 id="設定">設定</h2>
+<h2 id="設定">
+設定<a href="#設定"></a>
+</h2>
 <ul>
 <li><a href="https://github.com/gollum/gollum#configuration">https://github.com/gollum/gollum#configuration</a></li>
 <li><a href="https://github.com/gollum/gollum/wiki/Sample-config.rb">https://github.com/gollum/gollum/wiki/Sample-config.rb</a></li>
 </ul>
-<h3 id="基本">基本</h3>
+<h3 id="基本">
+基本<a href="#基本"></a>
+</h3>
 <p><code>config.rb</code> を作成して
 <code>bundle exec gollum -c config.rb</code>
 のように指定して読ませる。</p>
@@ -172,7 +180,9 @@ gem &#39;gollum&#39;, :github =&gt; &#39;heavywatal/gollum&#39;, :branch =&gt; &
 <p><code>css: true</code> により <code>custom.css</code> を読み込まれるようになるが、
 残念ながらリポジトリルートではなく <code>source/custom.css</code> に置かなければならない。
 また、ローカルファイルではなくコミット済みのものが読まれることに注意。</p>
-<h3 id="ポート番号なしでアクセスする">ポート番号なしでアクセスする</h3>
+<h3 id="ポート番号なしでアクセスする">
+ポート番号なしでアクセスする<a href="#ポート番号なしでアクセスする"></a>
+</h3>
 <p>デフォルトでは <a href="http://example.com:4567">http://example.com:4567</a> のように4567番ポートのルートで動く。
 これを80番ポートの<code>/wiki</code>以下で動くように調整して
 <a href="http://example.com/wiki/">http://example.com/wiki/</a> のようにアクセスできるようにする。</p>
@@ -199,7 +209,9 @@ gem &#39;gollum&#39;, :github =&gt; &#39;heavywatal/gollum&#39;, :branch =&gt; &
 <p><code>bundle exec gollum</code> で起動。</p>
 </li>
 </ol>
-<h3 id="basic認証でやんわりパスワードをかける">BASIC認証でやんわりパスワードをかける</h3>
+<h3 id="basic認証でやんわりパスワードをかける">
+BASIC認証でやんわりパスワードをかける<a href="#basic認証でやんわりパスワードをかける"></a>
+</h3>
 <p><code>config.rb</code> にこんな感じで書くだけ:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ruby" data-lang="ruby"><span class="line"><span class="cl"><span class="k">module</span> <span class="nn">Precious</span>
 </span></span><span class="line"><span class="cl">  <span class="k">class</span> <span class="nc">App</span> <span class="o">&lt;</span> <span class="no">Sinatra</span><span class="o">::</span><span class="no">Base</span>
@@ -241,7 +253,9 @@ gem &#39;gollum&#39;, :github =&gt; &#39;heavywatal/gollum&#39;, :branch =&gt; &
 <code>echo -n 'greatpassword' | sha256sum</code>
 のようなコマンドで計算できる。
 <code>sha256sum</code> が無ければ <code>shasum -a 256</code> でも同じ。</p>
-<h3 id="markdownパーサーレンダラを変更する">Markdownパーサー/レンダラを変更する</h3>
+<h3 id="markdownパーサーレンダラを変更する">
+Markdownパーサー/レンダラを変更する<a href="#markdownパーサーレンダラを変更する"></a>
+</h3>
 <p><a href="https://github.com/gollum/gollum/wiki/Custom-rendering-gems">https://github.com/gollum/gollum/wiki/Custom-rendering-gems</a></p>
 <p>Markdownを読んでHTMLに変換するライブラリは
 <a href="https://github.com/github/markup">github-markup</a>
@@ -281,7 +295,9 @@ gem &#39;gollum&#39;, :github =&gt; &#39;heavywatal/gollum&#39;, :branch =&gt; &
 </span></span><span class="line"><span class="cl"><span class="no">Gollum</span><span class="o">::</span><span class="no">Markup</span><span class="o">.</span><span class="n">formats</span><span class="o">.</span><span class="n">select!</span> <span class="p">{</span> <span class="o">|</span><span class="n">k</span><span class="p">,</span> <span class="n">_</span><span class="o">|</span> <span class="n">k</span> <span class="o">==</span> <span class="ss">:markdown</span> <span class="p">}</span>
 </span></span></code></pre></div><p>ほかにどんなのが利用可能かはこちらを参照:
 <a href="https://github.com/github/markup/blob/master/lib/github/markup/markdown.rb">https://github.com/github/markup/blob/master/lib/github/markup/markdown.rb</a></p>
-<h3 id="systemd-で自動的に開始"><code>systemd</code> で自動的に開始</h3>
+<h3 id="systemd-で自動的に開始">
+<code>systemd</code> で自動的に開始<a href="#systemd-で自動的に開始"></a>
+</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo vim /etc/systemd/system/gollum.service
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="k">[Unit]</span>
 </span></span><span class="line"><span class="cl"><span class="na">Description</span><span class="o">=</span><span class="s">Gollum wiki server</span>

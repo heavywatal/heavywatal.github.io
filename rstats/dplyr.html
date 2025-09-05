@@ -75,7 +75,9 @@ dplyr — 高速data.frame処理
 <li><a href="https://r4ds.hadley.nz/data-transform.html">https://r4ds.hadley.nz/data-transform.html</a></li>
 <li><a href="https://github.com/tidyverse/dplyr">https://github.com/tidyverse/dplyr</a></li>
 </ul>
-<h2 id="パイプ演算子--による関数の連結">パイプ演算子 |&gt; による関数の連結</h2>
+<h2 id="パイプ演算子--による関数の連結">
+パイプ演算子 |&gt; による関数の連結<a href="#パイプ演算子--による関数の連結"></a>
+</h2>
 <a href="https://magrittr.tidyverse.org/">
 <img src="/_img/hex-stickers/pipe.webp" style="float: right;" width="120" height="139">
 </a>
@@ -122,8 +124,12 @@ R 4.2 の段階では <code>|&gt;</code> のプレースホルダー <code>_</co
 <p>さらに高性能なものを求める人々は
 <a href="https://renkun-ken.github.io/pipeR/"><code>pipeR</code></a> パッケージの <code>%&gt;&gt;%</code>
 を使っていたが最近はあまり見かけない。</p>
-<h2 id="抽出絞り込み">抽出・絞り込み</h2>
-<h3 id="列">列</h3>
+<h2 id="抽出絞り込み">
+抽出・絞り込み<a href="#抽出絞り込み"></a>
+</h2>
+<h3 id="列">
+列<a href="#列"></a>
+</h3>
 <dl>
 <dt><a href="https://dplyr.tidyverse.org/reference/select.html"><code>dplyr::select(.data, ...)</code></a></dt>
 <dd>列を絞る。<code>:</code>範囲指定、<code>!</code>負の指定が可能。
@@ -183,7 +189,9 @@ R 4.2 の段階では <code>|&gt;</code> のプレースホルダー <code>_</co
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">starwars</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">pull</span><span class="p">(</span><span class="n">mass</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 </span></span></code></pre></div></dd>
 </dl>
-<h3 id="行">行</h3>
+<h3 id="行">
+行<a href="#行"></a>
+</h3>
 <dl>
 <dt><code>dplyr::filter(.data, ..., .by = NULL, .preserve = FALSE)</code></dt>
 <dd>条件を満たす行だけを返す。<code>base::subset()</code> と似たようなもの。
@@ -240,7 +248,9 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code></p>
 <dt><code>dplyr::slice_sample(.data, ..., n, prop, weight_by = NULL, replace = FALSE)</code></dt>
 <dd>指定した行数・割合だけランダムサンプルする。</dd>
 </dl>
-<h2 id="列の変更追加">列の変更・追加</h2>
+<h2 id="列の変更追加">
+列の変更・追加<a href="#列の変更追加"></a>
+</h2>
 <dl>
 <dt><code>dplyr::mutate(.data, ..., .by = NULL, .keep = &quot;all&quot;, .before = NULL, .after = NULL)</code></dt>
 <dd>新しい列を作ったり、既存の列を変更したり。
@@ -335,7 +345,9 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">rename_with</span><span class="p">(</span><span class="n">toupper</span><span class="p">,</span> <span class="nf">everything</span><span class="p">())</span>
 </span></span></code></pre></div></dd>
 </dl>
-<h2 id="dataframeの要約集計整列">data.frameの要約・集計・整列</h2>
+<h2 id="dataframeの要約集計整列">
+data.frameの要約・集計・整列<a href="#dataframeの要約集計整列"></a>
+</h2>
 <dl>
 <dt><code>dplyr::summarize(.data, ..., .by = NULL, .group = NULL)</code></dt>
 <dd>指定した列に関数を適用して1行のdata.frameにまとめる。
@@ -402,7 +414,9 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code></p>
 <dt><code>dplyr::relocate(.data, ..., .before = NULL, .after = NULL)</code></dt>
 <dd>指定した列を左端(もしくは <code>.before</code>/<code>.after</code> 別の列)に移動する。</dd>
 </dl>
-<h2 id="dataframeを結合">data.frameを結合</h2>
+<h2 id="dataframeを結合">
+data.frameを結合<a href="#dataframeを結合"></a>
+</h2>
 <dl>
 <dt><code>dplyr::***_join(x, y, by = NULL, copy = FALSE)</code></dt>
 <dd><code>by</code> で指定した列がマッチするように行を合わせて <code>cbind()</code>
@@ -426,7 +440,9 @@ e.g., <code>filter(gene != &quot;TP53&quot;)</code></p>
 そのほかにも標準の集合関数を置き換えるものが提供されている:
 <code>intersect()</code>, <code>union()</code>, <code>union_all()</code>, <code>setdiff()</code>, <code>setequal()</code></dd>
 </dl>
-<h2 id="その他の関数">その他の関数</h2>
+<h2 id="その他の関数">
+その他の関数<a href="#その他の関数"></a>
+</h2>
 <p>主に<code>mutate()</code>や<code>filter()</code>を補助するもの</p>
 <dl>
 <dt><code>dplyr::if_else(condition, true, false, missing = NULL, ..., ptype = NULL, size = NULL)</code></dt>
@@ -499,7 +515,9 @@ NAのときにどうするかを指定できるのも大変良い。
 <dt><code>dplyr::case_when(...)</code></dt>
 <dd><code>if {} else if {} else if {} ...</code> のショートカット。</dd>
 </dl>
-<h2 id="グループ化">グループ化</h2>
+<h2 id="グループ化">
+グループ化<a href="#グループ化"></a>
+</h2>
 <p><a href="/rstats/tidyr.html"><code>tidyr</code></a> でネストして、
 <a href="/rstats/purrr.html"><code>purrr</code></a> でその list of data.frames に処理を施し、
 <a href="/rstats/dplyr.html"><code>dplyr</code></a> でその変更を元の data.frame に適用する、
@@ -593,7 +611,9 @@ mutate などを適用すると列全体ではなく1行ごとに関数に渡さ
 </span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">mutate</span><span class="p">(</span><span class="n">mean_xyz</span> <span class="o">=</span> <span class="nf">Reduce</span><span class="p">(</span><span class="n">`+`</span><span class="p">,</span> <span class="nf">pick</span><span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="n">z</span><span class="p">))</span> <span class="o">/</span> <span class="nf">ncol</span><span class="p">(</span><span class="nf">pick</span><span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="n">z</span><span class="p">)))</span>  <span class="c1"># fast</span>
 </span></span></code></pre></div></dd>
 </dl>
-<h2 id="deprecatedsuperseded">deprecated/superseded</h2>
+<h2 id="deprecatedsuperseded">
+deprecated/superseded<a href="#deprecatedsuperseded"></a>
+</h2>
 <dl>
 <dt><code>dplyr::do(.data, ...)</code></dt>
 <dd><code>reframe()</code>, <code>slice*()</code> などに取って代わられた。
@@ -613,7 +633,9 @@ mutate などを適用すると列全体ではなく1行ごとに関数に渡さ
 <dt><code>sample_n()</code>, <code>sample_frac()</code></dt>
 <dd><code>slice_sample()</code> に取って代わられた。</dd>
 </dl>
-<h3 id="matrix-array">matrix, array</h3>
+<h3 id="matrix-array">
+matrix, array<a href="#matrix-array"></a>
+</h3>
 <p>data.frame を主眼とする dplyr では matrix や array を扱わない。
 一時期存在していた <code>tbl_cube</code> 関連の機能は
 <a href="https://github.com/hadley/cubelyr">cubelyr</a> に隔離された。</p>

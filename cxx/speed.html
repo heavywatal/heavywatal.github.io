@@ -61,7 +61,9 @@ C&#43;&#43;高速化
 </nav>
 </header>
 
-<h2 id="はじめに">はじめに</h2>
+<h2 id="はじめに">
+はじめに<a href="#はじめに"></a>
+</h2>
 <ul>
 <li>速いプログラムで得られるメリットを超えるようなコストを払わないように。
 まずは動くプログラムを書いて目的を達成することが大事。
@@ -74,14 +76,20 @@ C&#43;&#43;高速化
 まずは標準ライブラリとかBoostを探してみる。
 あとGitHubでスターが多いやつとか。</li>
 </ul>
-<h2 id="頑張れコンパイラ">頑張れコンパイラ</h2>
+<h2 id="頑張れコンパイラ">
+頑張れコンパイラ<a href="#頑張れコンパイラ"></a>
+</h2>
 <p>Intelの icc でビルドされたプログラムは速いらしい。
 gcc や clang の最適化技術も着々と進歩しており、
 新しいコンパイラを使うほうがその恩恵を受けられる。</p>
-<h3 id="最適化オプション">最適化オプション</h3>
+<h3 id="最適化オプション">
+最適化オプション<a href="#最適化オプション"></a>
+</h3>
 <p><a href="https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html">https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html</a></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">g++ -O3 main.cpp
-</span></span></code></pre></div><h3 id="コンパイル時定数-constexpr">コンパイル時定数 <code>constexpr</code></h3>
+</span></span></code></pre></div><h3 id="コンパイル時定数-constexpr">
+コンパイル時定数 <code>constexpr</code><a href="#コンパイル時定数-constexpr"></a>
+</h3>
 <p>コンパイル時に計算できるものを予め計算して定数にしておくことで、
 実行時の計算を減らすことができる。
 C++11以降では明示的に <code>constexpr</code> 修飾することができるので積極的に使うべし。
@@ -96,7 +104,9 @@ C++11以降では明示的に <code>constexpr</code> 修飾することができ
 </span></span></code></pre></div><p><code>constexpr</code> 関数も作れる。
 こちらは「引数がコンパイル時に決まってれば中の計算もコンパイル時にやれます」
 ということを示すだけで、普通の変数を渡して普通の関数のようにも使える。</p>
-<h3 id="インライン展開">インライン展開</h3>
+<h3 id="インライン展開">
+インライン展開<a href="#インライン展開"></a>
+</h3>
 <p>関数の呼び出しにはコストがかかり、
 コードが短くて何度も呼ばれる関数では特にそのコストの割合が高くて馬鹿にできない。
 呼び出される予定のところにコンパイルの段階で関数を展開してやること
@@ -110,7 +120,9 @@ C++11以降では明示的に <code>constexpr</code> 修飾することができ
 <code>-O2</code> 以上の速度重視オプションで
 <code>-finline-small-functions</code> とか <code>-finline-functions</code>
 のようなオプションをオンにする。</p>
-<h3 id="関数オブジェクト">関数オブジェクト</h3>
+<h3 id="関数オブジェクト">
+関数オブジェクト<a href="#関数オブジェクト"></a>
+</h3>
 <p>関数オブジェクトとは、<code>operator()</code> を定義した <code>class</code> または <code>struct</code> のこと。
 <code>std::for_each()</code> や <code>std::transform()</code> の最後の引数に関数を渡す場合など、
 何度も呼び出される小さい関数については、
@@ -133,10 +145,14 @@ C++11以降では明示的に <code>constexpr</code> 修飾することができ
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">const</span> <span class="kt">double</span> <span class="n">threshold</span> <span class="o">=</span> <span class="mf">3.14</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">transform</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">result</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span>
 </span></span><span class="line"><span class="cl">               <span class="p">[</span><span class="n">threshold</span><span class="p">](</span><span class="kt">double</span> <span class="n">x</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">bool</span> <span class="p">{</span><span class="k">return</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">;});</span>
-</span></span></code></pre></div><h2 id="余計な一時オブジェクトを作らない">余計な一時オブジェクトを作らない</h2>
+</span></span></code></pre></div><h2 id="余計な一時オブジェクトを作らない">
+余計な一時オブジェクトを作らない<a href="#余計な一時オブジェクトを作らない"></a>
+</h2>
 <p>普通にプログラムを書くと、思わぬところで余計な一時オブジェクトが作られることになる。
 メモリもcpu時間ももったいないので、なるべく避けよう。</p>
-<h3 id="const参照渡し-or-ポインタ渡し"><code>const</code>参照渡し or ポインタ渡し</h3>
+<h3 id="const参照渡し-or-ポインタ渡し">
+<code>const</code>参照渡し or ポインタ渡し<a href="#const参照渡し-or-ポインタ渡し"></a>
+</h3>
 <p>オブジェクトの値渡しにはコピーのコストが生じるので、
 STLコンテナや自作クラスなどは参照渡しのほうが高速。
 ただし参照を解決するコストも無いわけではないので、
@@ -161,7 +177,9 @@ STLコンテナや自作クラスなどは参照渡しのほうが高速。
 </a>
 とのことで、むしろ
 <code>nullptr</code> で値なしを表現する必要が無いなら普通に参照のほうがシンプルに書けるし生成されるコードも良くなるかも、とのこと。</p>
-<h3 id="ムーブセマンティクス">ムーブセマンティクス</h3>
+<h3 id="ムーブセマンティクス">
+ムーブセマンティクス<a href="#ムーブセマンティクス"></a>
+</h3>
 <p>受け取ったものを関数の中で変更して返すような関数を作るとき、
 引数の渡し方も受け取り方も3パターンずつ考えられる。</p>
 <ul>
@@ -203,7 +221,9 @@ lvalue値受け取りの関数はrvalueを受け取るときにはコピーを�
 <li><a href="https://yohhoy.hatenablog.jp/entry/2012/12/15/120839"><cite>本当は怖くないムーブセマンティクス</cite> &mdash; yohhoyの日記（別館）</a></li>
 <li><a href="https://d.hatena.ne.jp/yohhoy/20120524/p1"><cite>参照渡し or 値渡し？</cite> &mdash; yohhoyの日記</a></li>
 </ul>
-<h3 id="noexcept"><code>noexcept</code></h3>
+<h3 id="noexcept">
+<code>noexcept</code><a href="#noexcept"></a>
+</h3>
 <p>クラスに自前のデストラクタやコピーコンストラクタを書くと、
 暗黙のムーブコンストラクタが作られなくなり、
 ただ移動したいときにもコピーが行われてしまう。
@@ -222,8 +242,12 @@ lvalue値受け取りの関数はrvalueを受け取るときにはコピーを�
 noexceptをつけたからといって実際に例外を投げないコードしか書けなくなるわけではなく、
 「もし俺が例外を投げるようなことがあればプログラム諸共殺してくれて構わない」
 と実行時の挙動を誓約する感じ。</p>
-<h2 id="コンテナ">コンテナ</h2>
-<h3 id="用途に合わせる">用途に合わせる</h3>
+<h2 id="コンテナ">
+コンテナ<a href="#コンテナ"></a>
+</h2>
+<h3 id="用途に合わせる">
+用途に合わせる<a href="#用途に合わせる"></a>
+</h3>
 <p><a href="https://en.cppreference.com/w/cpp/container">https://en.cppreference.com/w/cpp/container</a></p>
 <dl>
 <dt><code>std::array</code></dt>
@@ -257,7 +281,9 @@ C++で配列作るならとりあえずこれ。
 <dd>順序を気にしないぶん <code>std::set</code> や <code>std::map</code> より高速。
 ただしハッシュ関数の準備など多少めんどい。</dd>
 </dl>
-<h3 id="メモリは一気に確保">メモリは一気に確保</h3>
+<h3 id="メモリは一気に確保">
+メモリは一気に確保<a href="#メモリは一気に確保"></a>
+</h3>
 <p><code>std::vector</code> の <code>push_back()</code> は勝手にメモリ領域を確保してくれるので、
 大きさの心配をする必要がなくて便利。
 これは多くの場合、領域が足りなくなる都度「別のところに倍の領域を確保してコピー」
@@ -267,8 +293,12 @@ C++で配列作るならとりあえずこれ。
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="n">v</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="mi">10000</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="c1">// then push_back() many times
-</span></span></span></code></pre></div><h2 id="ループ">ループ</h2>
-<h3 id="継続条件">継続条件</h3>
+</span></span></span></code></pre></div><h2 id="ループ">
+ループ<a href="#ループ"></a>
+</h2>
+<h3 id="継続条件">
+継続条件<a href="#継続条件"></a>
+</h3>
 <p><code>for</code> や <code>while</code> を回すときの継続条件式は回る度に評価されるので意外とコストになるかも。
 イテレータで回すときの <code>v.end()</code> も毎回呼び出されるので、
 ループの中身が軽い処理の場合には無視できない差になるかもしれない。</p>
@@ -287,7 +317,9 @@ C++で配列作るならとりあえずこれ。
 </span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="nl">x</span><span class="p">:</span> <span class="n">v</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// range-based for
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
-</span></span></code></pre></div><h3 id="前置インクリメント">前置インクリメント</h3>
+</span></span></code></pre></div><h3 id="前置インクリメント">
+前置インクリメント<a href="#前置インクリメント"></a>
+</h3>
 <p>後置インクリメント <code>i++</code> でも
 前置インクリメント <code>++i</code> でも <code>for</code> ループの結果は変わらない。
 が、<code>i++</code> だと前の値を記憶してからプラスする（一時オブジェクトが作られる）ので、
@@ -295,11 +327,17 @@ C++で配列作るならとりあえずこれ。
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">it</span><span class="o">=</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">it</span><span class="o">!=</span><span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">it</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// do something
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
-</span></span></code></pre></div><h3 id="出来る限り外で処理">出来る限り外で処理</h3>
+</span></span></code></pre></div><h3 id="出来る限り外で処理">
+出来る限り外で処理<a href="#出来る限り外で処理"></a>
+</h3>
 <p><code>if-else</code> や <code>try-catch</code> のブロックをループの外で大きく取れないか、
 一時変数の定義や演算などをループの外で予めやっておけないか、確認すべし。</p>
-<h2 id="入出力">入出力</h2>
-<h3 id="標準入出力">標準入出力</h3>
+<h2 id="入出力">
+入出力<a href="#入出力"></a>
+</h2>
+<h3 id="標準入出力">
+標準入出力<a href="#標準入出力"></a>
+</h3>
 <p>Cストリーム(<code>std::printf</code> とか)とC++ストリーム(<code>std::cout</code> とか)
 が混在するプログラムでもちゃんと関数が呼ばれた順に入出力を行うため、
 デフォルトではこれら２つのストリームが同期するようになっている。

@@ -372,22 +372,39 @@ article h1 {
   font-size: 1.4rem;
   font-weight: bold;
 }
+article :is(h2, h3, h4, h5, h6) {
+  font-weight: normal;
+  position: relative;
+}
+article :is(h2, h3, h4, h5, h6)::before {
+  position: absolute;
+  top: 0;
+  white-space: pre;
+  color: hsla(0, 0%, 55%, 0.55);
+}
+article :is(h2, h3, h4, h5, h6) > a[href^="#"] {
+  user-select: none;
+  position: absolute;
+  top: 0;
+  left: -1.2rem;
+  height: 100%;
+  width: 1rem;
+  background-color: var(--canvas);
+  opacity: 0.25;
+}
+article :is(h2, h3, h4, h5, h6) > a[href^="#"]:hover {
+  opacity: 0;
+}
 article h2 {
   font-size: 1.4rem;
   background: linear-gradient(to right, rgba(153, 153, 153, 0.2666666667), rgba(153, 153, 153, 0));
   margin-block: 1.2em 0.8em;
   padding: 0.4rem 0.7rem;
-  font-weight: normal;
-  position: relative;
 }
 article h2::before {
-  position: absolute;
-  top: 0.2rem;
   left: -1.1rem;
-  line-height: 1.1em;
+  line-height: 1.25;
   font-size: 1.2rem;
-  white-space: pre;
-  color: rgba(136, 136, 136, 0.5333333333);
   content: "#\a#";
 }
 article header + h2 {
@@ -398,17 +415,11 @@ article h3 {
   background: linear-gradient(to right, rgba(153, 153, 153, 0.2), rgba(153, 153, 153, 0) 80%);
   margin-block: 1.2em 0.8em;
   padding: 0.3rem 0.7rem;
-  font-weight: normal;
-  position: relative;
 }
 article h3::before {
-  position: absolute;
-  top: 0;
   left: -1rem;
-  line-height: 0.9em;
+  line-height: 0.9;
   font-size: 0.9rem;
-  white-space: pre;
-  color: rgba(136, 136, 136, 0.5333333333);
   content: "#\a#\a#";
 }
 article h4 {
@@ -416,18 +427,33 @@ article h4 {
   background: linear-gradient(to right, rgba(153, 153, 153, 0.2), rgba(153, 153, 153, 0) 60%);
   margin-block: 1.2em 0.8em;
   padding: 0.2rem 0.6rem;
-  font-weight: normal;
-  position: relative;
 }
 article h4::before {
-  position: absolute;
-  top: 0;
   left: -0.9rem;
-  line-height: 0.82em;
+  line-height: 0.82;
   font-size: 0.6rem;
-  white-space: pre;
-  color: rgba(136, 136, 136, 0.5333333333);
   content: "#\a#\a#\a#";
+}
+article h5 {
+  font-size: 1.05rem;
+  margin-block: 1.2em 0.8em;
+}
+article h5::before {
+  left: -1.1rem;
+  line-height: 0.8;
+  font-size: 0.6rem;
+  text-align: center;
+  content: "##\a#\a##";
+}
+article h6 {
+  font-size: 1.05rem;
+  margin-block: 1.2em 0.8em;
+}
+article h6::before {
+  left: -1.1rem;
+  line-height: 0.8;
+  font-size: 0.6rem;
+  content: "##\a##\a##";
 }
 
 .menu {

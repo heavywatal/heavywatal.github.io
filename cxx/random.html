@@ -70,7 +70,9 @@ C++11 で追加された <code>std::shuffle()</code> に生成器を明示的に
 <li>非標準の生成器としてはSFMTやdSFMTが高速で高品質。
 徐々にPCGやXorshift系の利用も広がってきている。</li>
 </ul>
-<h2 id="random"><code>&lt;random&gt;</code></h2>
+<h2 id="random">
+<code>&lt;random&gt;</code><a href="#random"></a>
+</h2>
 <ul>
 <li><a href="https://en.cppreference.com/w/cpp/numeric/random">https://en.cppreference.com/w/cpp/numeric/random</a></li>
 <li><a href="https://cpprefjp.github.io/reference/random.html">https://cpprefjp.github.io/reference/random.html</a></li>
@@ -101,13 +103,17 @@ C++11 で追加された <code>std::shuffle()</code> に生成器を明示的に
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><h2 id="mersenne-twister">Mersenne Twister</h2>
+</span></span></code></pre></div><h2 id="mersenne-twister">
+Mersenne Twister<a href="#mersenne-twister"></a>
+</h2>
 <p><a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt.html">http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt.html</a></p>
 <p>松本眞と西村拓士によって開発された高速・高品質な擬似乱数生成器。
 標準の <code>&lt;random&gt;</code> でも利用可能になっており、
 パラメータ定義済みの <code>std::mt19937</code> がよく使われる。
 <a href="https://stat.ethz.ch/R-manual/R-patched/library/base/html/Random.html">Rのデフォルト</a>にも採用されている。</p>
-<h3 id="sfmt">SFMT</h3>
+<h3 id="sfmt">
+SFMT<a href="#sfmt"></a>
+</h3>
 <p><a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/">http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/</a></p>
 <p>Mersenne Twisterを松本眞と斎藤睦夫がさらに改良したもの。
 SIMD命令を利用して、速度も品質も向上したらしい。
@@ -124,7 +130,9 @@ C++標準 <code>&lt;random&gt;</code> と組み合わせて使う設計にはな
 <a href="https://github.com/heavywatal/sfmt-class/"><code>wtl::sfmt19937</code></a> を書いた。
 <a href="/dev/cmake.html">CMake</a>
 でSFMTを簡単に導入するためのインストーラをとしても使える。</p>
-<h2 id="pcg">PCG</h2>
+<h2 id="pcg">
+PCG<a href="#pcg"></a>
+</h2>
 <p><a href="https://www.pcg-random.org/">https://www.pcg-random.org/</a></p>
 <p>線形合同法(LCG: linear congruential generator)の出力をpermutationする。
 周期はMTに比べれば短いけど、省メモリ、高速で、品質テストの結果も優秀。
@@ -150,15 +158,21 @@ single-headerで手軽に使える軽量版
 <li><a href="https://github.com/heavywatal/pcglite">pcglite</a>:
 ~250 lines / 1 header</li>
 </ul>
-<h2 id="xorshift-family">Xorshift family</h2>
+<h2 id="xorshift-family">
+Xorshift family<a href="#xorshift-family"></a>
+</h2>
 <p><a href="https://prng.di.unimi.it/">https://prng.di.unimi.it/</a></p>
 <p><a href="https://www.jstatsoft.org/article/view/v008i14">Marsaglia (2003)</a>
 から始まって、別の開発者(主にVigna)によっていくつかの改良版が派生している。
 Xoshiro256++が<a href="https://docs.julialang.org/en/v1/stdlib/Random/">Juliaのデフォルト</a>に採用されている。</p>
 <p>PCG作者との論争を見る限り、こちらの作者は口が悪い。
 乱数の品質でどちらが優れているのかは分からないけど。</p>
-<h2 id="seed">Seed</h2>
-<h3 id="devurandom"><code>/dev/urandom</code></h3>
+<h2 id="seed">
+Seed<a href="#seed"></a>
+</h2>
+<h3 id="devurandom">
+<code>/dev/urandom</code><a href="#devurandom"></a>
+</h3>
 <p><code>/dev/random</code> は擬似乱数を生成するデバイスで、
 環境ノイズから乱数を生成するため自然乱数に近いが、遅い。
 <code>/dev/urandom</code> は十分なノイズが蓄積していなくても
@@ -168,7 +182,9 @@ Xoshiro256++が<a href="https://docs.julialang.org/en/v1/stdlib/Random/">Julia�
 すなわちランダムっぽい乱数シードの生成のような目的では
 <code>/dev/urandom</code> の利用で十分らしい。
 が、今やこれを直接読むコードは必要なく、次のように標準ライブラリを利用する。</p>
-<h3 id="stdrandom_device"><code>std::random_device</code></h3>
+<h3 id="stdrandom_device">
+<code>std::random_device</code><a href="#stdrandom_device"></a>
+</h3>
 <p>C++11から標準の <code>&lt;random&gt;</code> で提供される。
 基本的には <code>/dev/urandom</code> から生成するらしい。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">random_device</span> <span class="n">seeder</span><span class="p">;</span>

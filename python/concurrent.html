@@ -62,7 +62,9 @@ concurrent.futures — 並行処理 in Python
 </nav>
 </header>
 
-<h2 id="概要">概要</h2>
+<h2 id="概要">
+概要<a href="#概要"></a>
+</h2>
 <p><strong>Global Interpreter Lock (GIL)</strong> の制約により、
 1つのPythonインタープリタでは同時に1つのスレッドしかコードを実行できない。
 したがってCPUバウンドなピュアPythonコードを
@@ -86,7 +88,9 @@ CPUバウンドなPythonコードもGILに邪魔されず並列処理できる�
 </span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">target_func</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 </span></span><span class="line"><span class="cl">    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
-</span></span></code></pre></div><h2 id="concurrentfutures"><code>concurrent.futures</code></h2>
+</span></span></code></pre></div><h2 id="concurrentfutures">
+<code>concurrent.futures</code><a href="#concurrentfutures"></a>
+</h2>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">os</span>
 </span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">concurrent.futures</span> <span class="k">as</span> <span class="nn">confu</span>
 </span></span><span class="line"><span class="cl">
@@ -105,7 +109,9 @@ CPUバウンドなPythonコードもGILに邪魔されず並列処理できる�
 </span></span></code></pre></div><p>デフォルトの <code>max_workers=None</code> では <code>5 * os.cpu_count()</code> になるらしい。</p>
 <p><code>multiprocessing</code> 由来の <code>ProcessPoolExecutor</code> も使い方は同じ。
 こちらは <code>os.cpu_count()</code> がデフォルト。</p>
-<h2 id="threading"><code>threading</code></h2>
+<h2 id="threading">
+<code>threading</code><a href="#threading"></a>
+</h2>
 <p><code>target</code> を指定して作った <code>Thread</code> インスタンスで <code>start()</code> するのが基本。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">threading</span>
 </span></span><span class="line"><span class="cl">
@@ -137,7 +143,9 @@ CPUバウンドなPythonコードもGILに邪魔されず並列処理できる�
 </span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">th</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
 </span></span></code></pre></div><p>スレッド数の上限値を設けたい場合は
 <code>threading.Semaphore</code> でうまくロックしてやる必要がある。</p>
-<h2 id="multiprocessing"><code>multiprocessing</code></h2>
+<h2 id="multiprocessing">
+<code>multiprocessing</code><a href="#multiprocessing"></a>
+</h2>
 <p><code>threading.Thread</code> とほぼ同じインターフェイスの
 <code>Process</code> クラスも用意されているが、
 <code>Pool</code> を使ったほうが楽チン。</p>
@@ -147,7 +155,9 @@ CPUバウンドなPythonコードもGILに邪魔されず並列処理できる�
 </span></span><span class="line"><span class="cl">    <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">pool</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">target_func</span><span class="p">,</span> <span class="p">[</span><span class="n">x</span><span class="p">])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)]</span>
 </span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
-</span></span></code></pre></div><h3 id="mpcpu_count"><code>mp.cpu_count()</code></h3>
+</span></span></code></pre></div><h3 id="mpcpu_count">
+<code>mp.cpu_count()</code><a href="#mpcpu_count"></a>
+</h3>
 <p>このためだけに <code>multiprocessing</code> をimportするのは億劫だったが、
 3.4で <code>os.cpu_count()</code> が追加された。</p>
 <p>Hyper-Threading (HT)が有効な場合は論理コア数が返ってくることに注意。

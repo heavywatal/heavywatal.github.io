@@ -67,7 +67,9 @@ topGO — Bioconductor でenrichment解析
 <p><a href="https://www.bioconductor.org/packages/release/bioc/html/topGO.html">https://www.bioconductor.org/packages/release/bioc/html/topGO.html</a></p>
 <p>Rの中からインストール</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">BiocManager</span><span class="o">::</span><span class="nf">install</span><span class="p">(</span><span class="s">&#34;topGO&#34;</span><span class="p">)</span>
-</span></span></code></pre></div><h2 id="使い方">使い方</h2>
+</span></span></code></pre></div><h2 id="使い方">
+使い方<a href="#使い方"></a>
+</h2>
 <p>ヒト遺伝子にランダムなスコアをつけた架空データ</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">org.Hs.eg.db</span><span class="p">)</span>
@@ -75,7 +77,9 @@ topGO — Bioconductor でenrichment解析
 </span></span><span class="line"><span class="cl"><span class="n">scores</span> <span class="o">=</span> <span class="nf">runif</span><span class="p">(</span><span class="nf">length</span><span class="p">(</span><span class="n">entrez_ids</span><span class="p">),</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>  <span class="c1"># p-value-like</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># scores = rnorm(length(entrez_ids), 0, 0.4)  # log2FC-like</span>
 </span></span><span class="line"><span class="cl"><span class="n">named_scores</span> <span class="o">=</span> <span class="nf">setNames</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">entrez_ids</span><span class="p">)</span>
-</span></span></code></pre></div><h3 id="topgodata-を作る"><code>topGOdata</code> を作る</h3>
+</span></span></code></pre></div><h3 id="topgodata-を作る">
+<code>topGOdata</code> を作る<a href="#topgodata-を作る"></a>
+</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">tg_data</span> <span class="o">=</span> <span class="nf">new</span><span class="p">(</span><span class="s">&#34;topGOdata&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">    <span class="n">ontology</span><span class="o">=</span><span class="s">&#34;BP&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">    <span class="n">allGenes</span><span class="o">=</span><span class="n">named_scores</span><span class="p">,</span>
@@ -130,7 +134,9 @@ fisherを使わない場合は結果の誤解を防ぐためにも一律 <code>F
 </dl>
 </dd>
 </dl>
-<h3 id="検定">検定</h3>
+<h3 id="検定">
+検定<a href="#検定"></a>
+</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">whichAlgorithms</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="nf">whichTests</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="n">so</span><span class="o">=</span><span class="s">&#34;increasing&#34;</span>
@@ -191,7 +197,9 @@ DEG解析やら何やらで遺伝子がp値やスコアを持ってるなら <co
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">str</span><span class="p">(</span><span class="n">resElimKS</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="nf">geneData</span><span class="p">(</span><span class="n">resElimKS</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="nf">score</span><span class="p">(</span><span class="n">resElimKS</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="nf">head</span><span class="p">()</span>
-</span></span></code></pre></div><h3 id="解釈描画">解釈・描画</h3>
+</span></span></code></pre></div><h3 id="解釈描画">
+解釈・描画<a href="#解釈描画"></a>
+</h3>
 <p><code>GenTable()</code> を使って GO term Over-representation ランキングを表示できる。
 複数の <code>runTest()</code> 産物を好きな名前で複数並べたりすることもできる。
 が、P値が桁の小さい文字列型になってたり勝手に行が削られたりして怖いので使わない。
@@ -246,7 +254,9 @@ DEG解析やら何やらで遺伝子がp値やスコアを持ってるなら <co
 </span></span><span class="line"><span class="cl"><span class="nf">printGraph</span><span class="p">(</span><span class="n">tg_data</span><span class="p">,</span> <span class="n">resElimKS</span><span class="p">,</span> <span class="n">firstSigNodes</span><span class="o">=</span><span class="m">6</span><span class="p">,</span> <span class="n">fn.prefix</span><span class="o">=</span><span class="s">&#34;filename&#34;</span><span class="p">,</span> <span class="n">pdfSW</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
 </span></span></code></pre></div><p>前者はプロットだけ、後者はPDFに書き出し。
 significant nodeが四角で、赤いほど低いP値。</p>
-<h2 id="go-terms">GO terms</h2>
+<h2 id="go-terms">
+GO terms<a href="#go-terms"></a>
+</h2>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">BPterms</span> <span class="o">=</span> <span class="nf">ls</span><span class="p">(</span><span class="n">GOBPTerm</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">MFterms</span> <span class="o">=</span> <span class="nf">ls</span><span class="p">(</span><span class="n">GOMFTerm</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">CCterms</span> <span class="o">=</span> <span class="nf">ls</span><span class="p">(</span><span class="n">GOCCTerm</span><span class="p">)</span>

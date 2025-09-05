@@ -68,7 +68,9 @@ Pandas — data.frame in Python
 </span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="n">iris</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;iris&#39;</span><span class="p">)</span>
-</span></span></code></pre></div><h2 id="型">型</h2>
+</span></span></code></pre></div><h2 id="型">
+型<a href="#型"></a>
+</h2>
 <p><a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/dsintro.html">https://pandas.pydata.org/pandas-docs/stable/user_guide/dsintro.html</a></p>
 <dl>
 <dt><a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html"><code>Series</code></a></dt>
@@ -80,7 +82,9 @@ Pandas — data.frame in Python
 <p>DataFrameを時間軸方向に重ねたような3次元構造として
 <code>Panel</code> ってのもあったけど <code>MultiIndex</code> があれば不要ってことでv0.20からdeprecated、v0.25で削除。
 <a href="https://pandas.pydata.org/pandas-docs/version/0.24/getting_started/dsintro.html#panel">&ldquo;pan(el)-da(ta)-s&rdquo; が名前の由来だったのに。</a></p>
-<h2 id="読み書き">読み書き</h2>
+<h2 id="読み書き">
+読み書き<a href="#読み書き"></a>
+</h2>
 <dl>
 <dt><a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html"><code>pd.read_csv(infile)</code></a></dt>
 <dd><code>sep=','</code></dd>
@@ -93,7 +97,9 @@ Pandas — data.frame in Python
 <dd><code>float_format=None</code></dd>
 <dd><code>index=True</code></dd>
 </dl>
-<h2 id="基本操作">基本操作</h2>
+<h2 id="基本操作">
+基本操作<a href="#基本操作"></a>
+</h2>
 <p><a href="https://pandas.pydata.org/pandas-docs/stable/10min.html">https://pandas.pydata.org/pandas-docs/stable/10min.html</a></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">columns</span>
 </span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">index</span>
@@ -121,7 +127,9 @@ Pandas — data.frame in Python
 は既存のメソッド名(e.g., <code>min</code>)と被るとダメなので基本的には使わないほうが良さそう。</p>
 <p>番号でもラベルでもアクセスできる <code>df.ix[]</code> もあったが、
 曖昧で危険なのでdeprecated.</p>
-<h3 id="method-chaining">method chaining</h3>
+<h3 id="method-chaining">
+method chaining<a href="#method-chaining"></a>
+</h3>
 <p>DataFrameを何回も再帰代入するより、メソッドを繋いだほうが書きやすいし読みやすい。
 カッコかバックスラッシュを使えばドット前に改行やスペースを入れて整形可能。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="p">(</span><span class="n">iris</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;species != &#34;setosa&#34;&#39;</span><span class="p">)</span>
@@ -132,13 +140,17 @@ Pandas — data.frame in Python
 </span></span><span class="line"><span class="cl">     <span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s1">&#39;petal_length&#39;</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">)</span>
 </span></span></code></pre></div><p>See also <a href="/rstats/dplyr.html">dplyr + magrittr on R</a></p>
-<h2 id="変形">変形</h2>
+<h2 id="変形">
+変形<a href="#変形"></a>
+</h2>
 <ul>
 <li><a href="https://pandas.pydata.org/pandas-docs/stable/reshaping.html">Reshaping</a></li>
 <li><a href="https://pandas.pydata.org/pandas-docs/stable/advanced.html">Hierarchical indexing</a></li>
 <li><a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.MultiIndex.html"><code>MultiIndex</code></a></li>
 </ul>
-<h3 id="index">Index</h3>
+<h3 id="index">
+Index<a href="#index"></a>
+</h3>
 <dl>
 <dt><code>df.set_index(keys, drop=True, append=False, inplace=False, verify_integrity=False)</code></dt>
 <dd>指定したcolumnをindexにする。</dd>
@@ -148,7 +160,9 @@ Pandas — data.frame in Python
 <p><code>df.swaplevel(0, 1, axis=0)</code></p>
 <p><code>df.reorder_levels([1, 0], axis=0)</code></p>
 <p><code>df.rename_axis(mapper, axis=0, copy=True, inplace=False)</code></p>
-<h3 id="melt-pivot">melt, pivot</h3>
+<h3 id="melt-pivot">
+melt, pivot<a href="#melt-pivot"></a>
+</h3>
 <p>Rと同様、列を列として扱う。</p>
 <dl>
 <dt><code>df.melt(id_vars=None, value_vars=None, var_name=None, value_name='value', ...)</code></dt>
@@ -163,7 +177,9 @@ e.g., <code>iris.melt('species', var_name='variable', value_name='value')</code>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="n">molten</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">melt</span><span class="p">([</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;species&#39;</span><span class="p">])</span>
 </span></span><span class="line"><span class="cl"><span class="n">molten</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;variable&#39;</span><span class="p">)</span>           <span class="c1"># species columns are redundant</span>
 </span></span><span class="line"><span class="cl"><span class="n">molten</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;variable&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)</span>  <span class="c1"># species column is removed</span>
-</span></span></code></pre></div><h3 id="stack-unstack">stack, unstack</h3>
+</span></span></code></pre></div><h3 id="stack-unstack">
+stack, unstack<a href="#stack-unstack"></a>
+</h3>
 <p>MultiIndexを中心に考える。
 nested tibble的なイメージ？</p>
 <dl>
@@ -183,12 +199,16 @@ nested tibble的なイメージ？</p>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># more explicitly</span>
 </span></span><span class="line"><span class="cl"><span class="n">stacked</span><span class="o">.</span><span class="n">rename_axis</span><span class="p">([</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;species&#39;</span><span class="p">,</span> <span class="s1">&#39;variable&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">unstack</span><span class="p">(</span><span class="s1">&#39;variable&#39;</span><span class="p">)</span>
-</span></span></code></pre></div><h2 id="設定">設定</h2>
+</span></span></code></pre></div><h2 id="設定">
+設定<a href="#設定"></a>
+</h2>
 <p><a href="https://pandas.pydata.org/pandas-docs/stable/options.html">https://pandas.pydata.org/pandas-docs/stable/options.html</a></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.max_rows&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.width&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 </span></span></code></pre></div><p>ディスプレイ幅は <code>os.get_terminal_size().columns</code> で明示的に取得してもいい。</p>
-<h2 id="misc">misc.</h2>
+<h2 id="misc">
+misc.<a href="#misc"></a>
+</h2>
 <p>英語の発音としては [pǽndəz] のように濁るのが自然だけど
 <a href="https://twitter.com/wesmckinn/status/706661972431892483">開発者は pan-duss [pǽndəs] と発音している</a>
 とのこと。</p>

@@ -71,7 +71,9 @@ Stan — 高速MCMCでパラメータ推定
 <a href="https://mc-stan.org/cmdstanpy/">CmdStanPy</a>
 への移行が進んできている。</p>
 <p><a href="https://mc-stan.org/">https://mc-stan.org/</a></p>
-<h2 id="インストール">インストール</h2>
+<h2 id="インストール">
+インストール<a href="#インストール"></a>
+</h2>
 <p>RやPythonのパッケージを入れてから、それ越しにCmdStan本体を入れる。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">install.packages</span><span class="p">(</span><span class="s">&#34;cmdstanr&#34;</span><span class="p">,</span> <span class="n">repos</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="n">stan</span> <span class="o">=</span> <span class="s">&#34;https://stan-dev.r-universe.dev&#34;</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">cmdstanr</span><span class="p">)</span>
@@ -85,7 +87,9 @@ Stan — 高速MCMCでパラメータ推定
 </span></span><span class="line"><span class="cl"><span class="n">cmdstanpy</span><span class="o">.</span><span class="n">cmdstan_path</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="n">cmdstanpy</span><span class="o">.</span><span class="n">cmdstan_version</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="n">cmdstanpy</span><span class="o">.</span><span class="n">show_versions</span><span class="p">()</span>
-</span></span></code></pre></div><h2 id="基本的な流れ">基本的な流れ</h2>
+</span></span></code></pre></div><h2 id="基本的な流れ">
+基本的な流れ<a href="#基本的な流れ"></a>
+</h2>
 <ol>
 <li>cmdstanrを読み込む
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">cmdstanr</span><span class="p">)</span>
@@ -142,9 +146,13 @@ model {
 </span></span><span class="line"><span class="cl"><span class="n">bayesplot</span><span class="o">::</span><span class="nf">mcmc_neff</span><span class="p">(</span><span class="n">neff</span><span class="p">)</span>
 </span></span></code></pre></div><a href="https://mc-stan.org/cmdstanr/reference/fit-method-draws.html">https://mc-stan.org/cmdstanr/reference/fit-method-draws.html</a></li>
 </ol>
-<h2 id="stan文法">Stan文法</h2>
+<h2 id="stan文法">
+Stan文法<a href="#stan文法"></a>
+</h2>
 <p><a href="https://mc-stan.org/documentation/">https://mc-stan.org/documentation/</a></p>
-<h3 id="ブロック">ブロック</h3>
+<h3 id="ブロック">
+ブロック<a href="#ブロック"></a>
+</h3>
 <p>コード内に登場できるブロックは7種類で、省略可能だが順番はこの通りでなければならない。</p>
 <dl>
 <dt><code>functions {...}</code></dt>
@@ -167,7 +175,9 @@ model {
 <dd><code>normal_rng()</code>などによる乱数生成が許される唯一のブロック。
 観察値の確信区間とかを</dd>
 </dl>
-<h3 id="モデリング">モデリング</h3>
+<h3 id="モデリング">
+モデリング<a href="#モデリング"></a>
+</h3>
 <p>あるパラメータにおけるlog probabilityと近傍での傾きを計算し、
 それらを元に次の値にジャンプする、という操作が繰り返される。
 modelブロック内で暗黙的に定義されている <code>target</code> 変数に対して
@@ -196,7 +206,9 @@ target += -0.5 * square(x);
 <li>乱数生成: <code>*_rng(...)</code></li>
 </ul>
 <p>(対数版のsuffixは昔は <code>_cdf_log()</code>, <code>_ccdf_log()</code> という形だった)</p>
-<h3 id="型">型</h3>
+<h3 id="型">
+型<a href="#型"></a>
+</h3>
 <ul>
 <li>スカラーは整数(<code>int</code>) or 実数(<code>real</code>)。</li>
 <li>実数ベクトル(<code>vector</code>, <code>row_vector</code>)と実数行列(<code>matrix</code>)は
@@ -231,7 +243,9 @@ m[1]   // row_vector[3]
 昇順実数ベクトル。降順にしたければ <code>transformed parameters</code> ブロックで。</li>
 <li><code>cov_matrix</code>, <code>corr_matrix</code>, <code>cholesky_factor_cov</code>, <code>cholesky_factor_corr</code></li>
 </ul>
-<h3 id="tips">Tips</h3>
+<h3 id="tips">
+Tips<a href="#tips"></a>
+</h3>
 <p>条件分岐するときはなるべく<code>if</code>文を避けて三項演算子やステップ関数を使うべし、
 という言語が多いけどStanでは逆に<code>if</code>文を素直に書くほうが良いらしい。
 <code>if_else()</code>では真値でも両方の引数が評価されちゃうし、
@@ -243,11 +257,17 @@ m[1]   // row_vector[3]
 と怒られることがある。
 実害はないけどどうしても警告を消したい場合は
 <a href="https://discourse.mc-stan.org/t/scale-parameter-is-0-but-must-be-0-can-i-do-anything-to-deal-with-this/19453">違うseedを使うとか <code>step_size = 0.1</code> のように歩幅を狭めるとかで対処できる</a>。</p>
-<h2 id="librarybayesplot"><code>library(bayesplot)</code></h2>
+<h2 id="librarybayesplot">
+<code>library(bayesplot)</code><a href="#librarybayesplot"></a>
+</h2>
 <p><a href="https://mc-stan.org/bayesplot/">https://mc-stan.org/bayesplot/</a></p>
-<h2 id="libraryposterior"><code>library(posterior)</code></h2>
+<h2 id="libraryposterior">
+<code>library(posterior)</code><a href="#libraryposterior"></a>
+</h2>
 <p><a href="https://mc-stan.org/posterior/">https://mc-stan.org/posterior/</a></p>
-<h2 id="libraryrstanarm"><code>library(rstanarm)</code></h2>
+<h2 id="libraryrstanarm">
+<code>library(rstanarm)</code><a href="#libraryrstanarm"></a>
+</h2>
 <p><a href="https://mc-stan.org/rstanarm/">https://mc-stan.org/rstanarm/</a></p>
 <p>R標準のGLMのような使い心地でStanを動かせるようにするパッケージ。</p>
 <ul>
@@ -256,7 +276,9 @@ m[1]   // row_vector[3]
 <li>パラメータ調整やコンパイルの済んだ部品を組むような形なので試行錯誤が早い。</li>
 <li>ただしcmdstanrではなくrstanを使う。</li>
 </ul>
-<h2 id="librarybrms"><code>library(brms)</code></h2>
+<h2 id="librarybrms">
+<code>library(brms)</code><a href="#librarybrms"></a>
+</h2>
 <p><a href="https://paul-buerkner.github.io/brms/">https://paul-buerkner.github.io/brms/</a></p>
 <p>rstanarmと同様にformula形式でStanを動かせるようにする。
 相違点:</p>

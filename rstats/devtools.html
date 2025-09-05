@@ -100,7 +100,9 @@ devtools — Rパッケージ作成支援
 GitHubに公開しておけば誰でも使えるようになるので、
 共同研究者と解析環境を共有したり、
 ひとつの論文のワークフローを置いておいたり、いろいろ使い道はある。</p>
-<h2 id="rパッケージ">Rパッケージ</h2>
+<h2 id="rパッケージ">
+Rパッケージ<a href="#rパッケージ"></a>
+</h2>
 <a href="https://usethis.r-lib.org/">
 <img src="/_img/hex-stickers/usethis.webp" style="float: right;" width="120" height="139">
 </a>
@@ -108,7 +110,9 @@ GitHubに公開しておけば誰でも使えるようになるので、
 <li><a href="https://r-pkgs.org/">https://r-pkgs.org/</a></li>
 <li><a href="https://masalmon.eu/2017/12/11/goodrpackages/">How to develop good R packages (for open science)</a></li>
 </ul>
-<h3 id="最低限の作成手順">最低限の作成手順</h3>
+<h3 id="最低限の作成手順">
+最低限の作成手順<a href="#最低限の作成手順"></a>
+</h3>
 <ol>
 <li>
 <p>開発支援パッケージをインストールする:
@@ -137,7 +141,9 @@ GitHubに公開しておけば誰でも使えるようになるので、
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&#34;heavywatal/rhello&#34;</span><span class="p">)</span>
 </span></span></code></pre></div></li>
 </ol>
-<h3 id="ソース構造">ソース構造</h3>
+<h3 id="ソース構造">
+ソース構造<a href="#ソース構造"></a>
+</h3>
 <p><a href="https://r-pkgs.org/structure.html">https://r-pkgs.org/structure.html</a></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">DESCRIPTION  <span class="c1"># 一番大事</span>
 </span></span><span class="line"><span class="cl">NAMESPACE    <span class="c1"># 見せるオブジェクトを列挙</span>
@@ -150,7 +156,9 @@ GitHubに公開しておけば誰でも使えるようになるので、
 </span></span><span class="line"><span class="cl">tests/
 </span></span><span class="line"><span class="cl">vignettes/
 </span></span></code></pre></div><p>CRANから落としてくる <code>.tar.gz</code> ソースコード (bundle package) とは違う。</p>
-<h3 id="description"><code>DESCRIPTION</code></h3>
+<h3 id="description">
+<code>DESCRIPTION</code><a href="#description"></a>
+</h3>
 <p><a href="https://r-pkgs.org/description.html">https://r-pkgs.org/description.html</a></p>
 <ul>
 <li>どうでも良さそうなファイル名とは裏腹に、ちゃんと書かないと動かない。</li>
@@ -172,7 +180,9 @@ GitHubに公開しておけば誰でも使えるようになるので、
 <li>ライセンスを別ファイルにする場合は <code>License: file LICENSE</code> と書く</li>
 <li><code>Authors@R</code> のとこは後でRで評価されるので変な形。</li>
 </ul>
-<h3 id="namespace"><code>NAMESPACE</code></h3>
+<h3 id="namespace">
+<code>NAMESPACE</code><a href="#namespace"></a>
+</h3>
 <p><a href="https://r-pkgs.org/namespace.html">https://r-pkgs.org/namespace.html</a></p>
 <ul>
 <li><a href="#roxygen2">後述のroxygen2</a>がソースコードから自動生成するので<strong>直接触らない</strong>。</li>
@@ -181,7 +191,9 @@ GitHubに公開しておけば誰でも使えるようになるので、
 された関数はattachされてパッケージ内で利用可能になる。
 <code>import(package)</code> で全ての関数を一括処理できるけど名前の衝突が怖いので避ける。</li>
 </ul>
-<h3 id="r-ソースコード"><code>R/</code> ソースコード</h3>
+<h3 id="r-ソースコード">
+<code>R/</code> ソースコード<a href="#r-ソースコード"></a>
+</h3>
 <p><a href="https://r-pkgs.org/code.html">https://r-pkgs.org/code.html</a></p>
 <ul>
 <li><code>NAMESPACE</code> や <code>man/*.Rd</code> を自動生成してもらえるように
@@ -197,10 +209,14 @@ GitHubに公開しておけば誰でも使えるようになるので、
 <code>.onLoad(...)</code>, <code>.onAttach(...)</code>, <code>.onUnload(...)</code>
 は慣習的に<code>zzz.R</code>というファイルに記述する。</li>
 </ul>
-<h3 id="src-cソースコード"><code>src/</code> C++ソースコード</h3>
+<h3 id="src-cソースコード">
+<code>src/</code> C++ソースコード<a href="#src-cソースコード"></a>
+</h3>
 <p><a href="https://r-pkgs.org/src.html">https://r-pkgs.org/src.html</a></p>
 <p><a href="/rstats/rcpp.html#Rパッケージで使う">Rcppページの&quot;Rパッケージで使う&quot;セクション</a>を参照</p>
-<h3 id="vignettes"><code>vignettes/</code></h3>
+<h3 id="vignettes">
+<code>vignettes/</code><a href="#vignettes"></a>
+</h3>
 <p><a href="https://r-pkgs.org/vignettes.html">https://r-pkgs.org/vignettes.html</a></p>
 <p>個々の関数の使用例はRソースファイルの <code>@examples</code> に書くとして、
 複数の関数を組み合わせてどう使うかを説明するのが<code>vignettes/</code>の役割。
@@ -222,7 +238,9 @@ Articles一覧の中ではなくReferenceの隣に &ldquo;Get started&rdquo; と
 「実際に使いたくなったら &ldquo;Get started&rdquo; を見よ」
 というリンクを末尾に置いておくのが良さそう。
 <a href="https://github.com/r-lib/pkgdown/issues/2372">pkgdown#2372</a></p>
-<h3 id="tests"><code>tests/</code></h3>
+<h3 id="tests">
+<code>tests/</code><a href="#tests"></a>
+</h3>
 <p><a href="https://r-pkgs.org/tests.html">https://r-pkgs.org/tests.html</a></p>
 <a href="https://testthat.r-lib.org/">
 <img src="/_img/hex-stickers/testthat.webp" style="float: right;" width="120" height="139">
@@ -236,7 +254,9 @@ Articles一覧の中ではなくReferenceの隣に &ldquo;Get started&rdquo; と
 <code>tests/testthat/</code> 以下のファイル構成は <code>R/</code> と同じにしておくとわかりやすい。</p>
 <p>さらに<a href="https://covr.r-lib.org/">covr</a>パッケージを使って、
 ソースコードのうちどれくらいがテストでカバーされてるかを可視化すると良い。</p>
-<h3 id="data"><code>data/</code></h3>
+<h3 id="data">
+<code>data/</code><a href="#data"></a>
+</h3>
 <ul>
 <li><a href="https://r-pkgs.org/data.html">https://r-pkgs.org/data.html</a></li>
 <li><a href="https://usethis.r-lib.org/reference/use_data.html">https://usethis.r-lib.org/reference/use_data.html</a></li>
@@ -260,7 +280,9 @@ Articles一覧の中ではなくReferenceの隣に &ldquo;Get started&rdquo; と
 <dd><code>system.file(&quot;extdata&quot;, &quot;mtcars.csv&quot;, package = &quot;readr&quot;)</code>
 のようにアクセスできる。</dd>
 </dl>
-<h3 id="その他">その他</h3>
+<h3 id="その他">
+その他<a href="#その他"></a>
+</h3>
 <p><a href="https://r-pkgs.org/misc.html">https://r-pkgs.org/misc.html</a></p>
 <dl>
 <dt><code>demo/</code></dt>
@@ -300,7 +322,9 @@ Rコードを含む <code>README.Rmd</code> から <code>devtools::build_readme(
 開発者向けと一般向けを使い分けるとか。
 <code>index.md</code> をルートに置きたくない場合は <code>pkgdown/index.md</code> でもいい。</dd>
 </dl>
-<h2 id="devtools"><code>devtools</code></h2>
+<h2 id="devtools">
+<code>devtools</code><a href="#devtools"></a>
+</h2>
 <a href="https://devtools.r-lib.org/">
 <img src="/_img/hex-stickers/devtools.webp" style="float: right;" width="120" height="139">
 </a>
@@ -339,7 +363,9 @@ Rコードを含む <code>README.Rmd</code> から <code>devtools::build_readme(
 <dd><code>src/</code> 以下に生成される <code>.o</code>, <code>.so</code> を消す。
 普段は触る必要ないが、たまにこれが必要な不具合に出くわす。</dd>
 </dl>
-<h2 id="roxygen2"><code>roxygen2</code></h2>
+<h2 id="roxygen2">
+<code>roxygen2</code><a href="#roxygen2"></a>
+</h2>
 <a href="https://github.com/klutometis/roxygen">
 <img src="/_img/hex-stickers/roxygen2.webp" style="float: right;" width="120" height="139">
 </a>
@@ -354,7 +380,9 @@ Rコードを含む <code>README.Rmd</code> から <code>devtools::build_readme(
 <p><code>roxygen2::roxygenise(package.dir=&quot;.&quot;, ..., clean=FALSE)</code>
 を直接呼んでもよいが、
 基本的には <code>devtools::document()</code> を使って間接的に利用する。</p>
-<h3 id="使い方">使い方</h3>
+<h3 id="使い方">
+使い方<a href="#使い方"></a>
+</h3>
 <ul>
 <li><a href="https://roxygen2.r-lib.org/articles/rd.html">https://roxygen2.r-lib.org/articles/rd.html</a></li>
 <li><a href="https://style.tidyverse.org/documentation.html">https://style.tidyverse.org/documentation.html</a></li>
@@ -406,7 +434,9 @@ Rコードを含む <code>README.Rmd</code> から <code>devtools::build_readme(
 ただし <code>group_by()</code> で多数のグループを処理するときなど、
 <code>.data$</code> の遅さが気になる場合は <code>!!as.name(&quot;carat&quot;)</code> のようにする。</li>
 </ul>
-<h3 id="タグ">タグ</h3>
+<h3 id="タグ">
+タグ<a href="#タグ"></a>
+</h3>
 <p>使用可能なタグ一覧を<a href="https://github.com/klutometis/roxygen/issues/792">求める声があがって久しい</a>けどまだ無さそう。
 <a href="https://roxygen2.r-lib.org/reference/">roxygen2公式reference</a> は充実してきた。</p>
 <dl>
@@ -498,7 +528,9 @@ e.g., <a href="https://github.com/tidyverse/dplyr/blob/HEAD/R/select.R">dplyr/R/
 <dt><code>@docType</code></dt>
 <dd>パッケージやデータを記述するのに必要だったが今では不要っぽい。</dd>
 </dl>
-<h2 id="pkgdown"><code>pkgdown</code></h2>
+<h2 id="pkgdown">
+<code>pkgdown</code><a href="#pkgdown"></a>
+</h2>
 <a href="https://pkgdown.r-lib.org/">
 <img src="/_img/hex-stickers/pkgdown.webp" style="float: right;" width="120" height="139">
 </a>

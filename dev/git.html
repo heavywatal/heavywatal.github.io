@@ -74,8 +74,12 @@ Gitは分散型バージョン管理システムの代表格。
 <p>Gitのライバルとして<a href="https://www.mercurial-scm.org/">Mercurial</a>もあるが、
 <a href="https://bitbucket.org">BitBucket</a> (GitHubのライバル)
 がGit対応した今となってはMercurialを積極的に使う理由は無い気がする。</p>
-<h2 id="基本">基本</h2>
-<h3 id="準備">準備</h3>
+<h2 id="基本">
+基本<a href="#基本"></a>
+</h2>
+<h3 id="準備">
+準備<a href="#準備"></a>
+</h3>
 <ul>
 <li>
 <p>ローカルマシンにGitをインストールする。
@@ -105,7 +109,9 @@ sshでパスワード無しでpushする、というのが楽ちん。</p>
 <p>設定例: <a href="https://github.com/heavywatal/dotfiles/blob/master/.gitconfig"><code>heavywatal/dotfiles/.gitconfig</code></a></p>
 </li>
 </ul>
-<h3 id="手元の変更を外に伝える">手元の変更を外に伝える</h3>
+<h3 id="手元の変更を外に伝える">
+手元の変更を外に伝える<a href="#手元の変更を外に伝える"></a>
+</h3>
 <dl>
 <dt>📁 working directory (working tree)</dt>
 <dd>手元のファイルの変更はまだリポジトリに登録されていない</dd>
@@ -125,7 +131,9 @@ sshでパスワード無しでpushする、というのが楽ちん。</p>
 <dt><iconify-icon inline icon="bi:github"></iconify-icon> remote repository</dt>
 <dd>GitHubなど別マシンのリポジトリに反映</dd>
 </dl>
-<h3 id="外部の変更を手元に取り込む">外部の変更を手元に取り込む</h3>
+<h3 id="外部の変更を手元に取り込む">
+外部の変更を手元に取り込む<a href="#外部の変更を手元に取り込む"></a>
+</h3>
 <dl>
 <dt><iconify-icon inline icon="bi:github"></iconify-icon> remote repository</dt>
 <dd>最新版</dd>
@@ -140,7 +148,9 @@ sshでパスワード無しでpushする、というのが楽ちん。</p>
 <dt>📁 working directory</dt>
 <dd>手元のファイルが最新版に同期されている</dd>
 </dl>
-<h3 id="用語">用語</h3>
+<h3 id="用語">
+用語<a href="#用語"></a>
+</h3>
 <dl>
 <dt>blob</dt>
 <dd>git内部で1つのファイルを指すオブジェクトで、<code>add</code>時に作られる。
@@ -176,8 +186,12 @@ root treeのハッシュID、著者、コメントなどの情報を持つ。</d
 <p>zshの<code>EXTENDED_GLOB</code>が有効になってる場合は
 <code>HEAD^</code> がパターン扱いされてエラーになるので、
 <code>HEAD\^</code> のようにエスケープするか <code>unsetopt NOMATCH</code> しておいたほうがいい。</p>
-<h2 id="よく使うコマンド">よく使うコマンド</h2>
-<h3 id="reset">reset</h3>
+<h2 id="よく使うコマンド">
+よく使うコマンド<a href="#よく使うコマンド"></a>
+</h2>
+<h3 id="reset">
+reset<a href="#reset"></a>
+</h3>
 <p><code>git reset &lt;DESTINATION&gt;</code> は <code>HEAD</code> の位置を戻す処理で、
 オプションによってindexとworking treeもそこに合わせるように変更される。
 直前の動作を取り消す用途に絞って使うのが無難。</p>
@@ -204,7 +218,9 @@ root treeのハッシュID、著者、コメントなどの情報を持つ。</d
 </span></span><span class="line"><span class="cl">git reset --hard origin/main
 </span></span></code></pre></div></li>
 </ul>
-<h3 id="diff">diff</h3>
+<h3 id="diff">
+diff<a href="#diff"></a>
+</h3>
 <p>差分を表示:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># HEAD vs working (staging前のファイルが対象)</span>
 </span></span><span class="line"><span class="cl">git diff
@@ -218,13 +234,17 @@ root treeのハッシュID、著者、コメントなどの情報を持つ。</d
 </span></span><span class="line"><span class="cl"><span class="c1"># 特定コミットの変更点 (diffじゃない...)</span>
 </span></span><span class="line"><span class="cl">git show <span class="o">[</span>revision<span class="o">]</span>
 </span></span></code></pre></div><p><a href="https://dandavison.github.io/delta/">delta</a>を使うと見やすくなる。</p>
-<h3 id="rm-clean">rm, clean</h3>
+<h3 id="rm-clean">
+rm, clean<a href="#rm-clean"></a>
+</h3>
 <p>tracking対象から外して忘れさせる(手元のファイルはそのまま):</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git rm --cached &lt;file&gt;
 </span></span></code></pre></div><p><code>.gitignore</code> で無視されてるuntrackedファイルを消す:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git clean -fdX
 </span></span></code></pre></div><p>無視されていないuntrackedファイルも消したい場合は小文字の <code>-fdx</code> (危険)。</p>
-<h3 id="tag">tag</h3>
+<h3 id="tag">
+tag<a href="#tag"></a>
+</h3>
 <p>特定のコミット(省略すると<code>HEAD</code>)にタグ付けする。
 lightweightとannotatedの2種類が存在し、メッセージなどが紐付く後者が推奨。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git tag v0.1.0 <span class="o">[</span>revision<span class="o">]</span>
@@ -234,7 +254,9 @@ Releasesページに反映される。
 annotated tagであれば <code>git push --follow-tags</code>
 でcommitとtagを同時にpushできる。</p>
 <p><a href="https://git-scm.com/book/en/Git-Basics-Tagging">https://git-scm.com/book/en/Git-Basics-Tagging</a></p>
-<h3 id="rebase">rebase</h3>
+<h3 id="rebase">
+rebase<a href="#rebase"></a>
+</h3>
 <p>ブランチの根本を別のコミットに付け替える。
 よく使うのは、開発ブランチを <code>main</code> の先頭に追従させるとき。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git switch some-branch
@@ -243,7 +265,9 @@ annotated tagであれば <code>git push --follow-tags</code>
 ブランチのブランチとか、ブランチの一部だけを移したい場合は次のようにする。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git rebase --onto &lt;newbase&gt; &lt;base&gt; &lt;tip&gt;
 </span></span></code></pre></div><p>これで base–tip 間のコミットがnewbaseから伸びる形になる。</p>
-<h3 id="submodule">Submodule</h3>
+<h3 id="submodule">
+Submodule<a href="#submodule"></a>
+</h3>
 <ul>
 <li><a href="https://git-scm.com/book/en/v2/Git-Tools-Submodules">https://git-scm.com/book/en/v2/Git-Tools-Submodules</a></li>
 <li><a href="https://git-scm.com/docs/git-submodule">https://git-scm.com/docs/git-submodule</a></li>
@@ -265,9 +289,13 @@ e.g., CMake FetchContent, Hugo Modules, etc.</p>
 </span></span><span class="line"><span class="cl">git rm -r <span class="nv">$SUB_MOD</span>
 </span></span><span class="line"><span class="cl">rm -rf .git/modules/<span class="nv">$SUB_MOD</span>
 </span></span></code></pre></div><p>submoduleに何らかの変更を加えたら親リポジトリでも参照を更新する。</p>
-<h2 id="github-pages">GitHub Pages</h2>
+<h2 id="github-pages">
+GitHub Pages<a href="#github-pages"></a>
+</h2>
 <p><a href="https://docs.github.com/pages">https://docs.github.com/pages</a></p>
-<h3 id="ユーザーサイトを作る">ユーザーサイトを作る</h3>
+<h3 id="ユーザーサイトを作る">
+ユーザーサイトを作る<a href="#ユーザーサイトを作る"></a>
+</h3>
 <ol>
 <li><code>USERNAME.github.io</code> という名前のリポジトリをGitHub上で作成</li>
 <li>公開したいウェブサイトを <code>main</code> ブランチとして <code>push</code></li>
@@ -281,7 +309,9 @@ e.g., CMake FetchContent, Hugo Modules, etc.</p>
 で変換・生成したHTMLファイルを <code>gh-pages</code> ブランチに書き出している。</p>
 <p>GitHubが勝手にJekyll処理しようとすることがあるので、
 <code>.nojekyll</code> という空ファイルを作っておく。</p>
-<h3 id="プロジェクトサイトを作る">プロジェクトサイトを作る</h3>
+<h3 id="プロジェクトサイトを作る">
+プロジェクトサイトを作る<a href="#プロジェクトサイトを作る"></a>
+</h3>
 <p><a href="https://docs.github.com/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site">https://docs.github.com/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site</a></p>
 <p>リポジトリの内容を <code>https://USERNAME.github.io/PROJECT/</code> に公開することができる。
 方法は複数あり、リポジトリの設定画面から選択できる。</p>
@@ -307,7 +337,9 @@ e.g., CMake FetchContent, Hugo Modules, etc.</p>
 </span></span><span class="line"><span class="cl">git remote add origin https://github.com/USERNAME/PROJECT.git
 </span></span><span class="line"><span class="cl">git commit --allow-empty -m <span class="s2">&#34;:beer: Create orphan branch&#34;</span>
 </span></span><span class="line"><span class="cl">git push -u origin gh-pages
-</span></span></code></pre></div><h2 id="pull-request-pr">Pull Request (PR)</h2>
+</span></span></code></pre></div><h2 id="pull-request-pr">
+Pull Request (PR)<a href="#pull-request-pr"></a>
+</h2>
 <ul>
 <li><a href="https://docs.github.com/en/pull-requests">https://docs.github.com/en/pull-requests</a></li>
 <li>他人のプロジェクトに変更を提案するための仕組み。</li>
@@ -320,7 +352,9 @@ e.g., <a href="https://docs.brew.sh/How-To-Open-a-Homebrew-Pull-Request">Homebre
 </li>
 <li>デフォルトブランチ(<code>main</code>とか<code>develop</code>とか)は更新取得のためだけに使い、変更は新規ブランチで行う。</li>
 </ul>
-<h3 id="基本の流れ">基本の流れ</h3>
+<h3 id="基本の流れ">
+基本の流れ<a href="#基本の流れ"></a>
+</h3>
 <p>例えば <code>USER</code> さんの <code>PROJECT</code> のコード修正に貢献する場合。</p>
 <ol>
 <li>
@@ -377,7 +411,9 @@ e.g., <a href="https://docs.brew.sh/How-To-Open-a-Homebrew-Pull-Request">Homebre
 <p>マージされたらブランチを消す。</p>
 </li>
 </ol>
-<h3 id="用済みブランチの掃除">用済みブランチの掃除</h3>
+<h3 id="用済みブランチの掃除">
+用済みブランチの掃除<a href="#用済みブランチの掃除"></a>
+</h3>
 <p>PRマージ済みのリモートブランチを消したい。
 一番簡単なのは、GitHub PR画面のdelete branchボタンを押すこと。
 手元のgitからやるには、明示的に <code>--delete</code> するか、空ブランチをpushするか:</p>
@@ -402,9 +438,13 @@ If you are sure you want to delete it, run &#39;git branch -D issue-666&#39;.
 そうならないように消すには:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git remote set-branches origin main
 </span></span><span class="line"><span class="cl">git fetch --prune
-</span></span></code></pre></div><h2 id="問題と対処">問題と対処</h2>
+</span></span></code></pre></div><h2 id="問題と対処">
+問題と対処<a href="#問題と対処"></a>
+</h2>
 <p><code>git status</code> で次の一手を提案してくれることが多いので、まずはそれに従う。</p>
-<h3 id="trailing-whitespace-以外の変更だけ-add-する">Trailing whitespace 以外の変更だけ add する</h3>
+<h3 id="trailing-whitespace-以外の変更だけ-add-する">
+Trailing whitespace 以外の変更だけ add する<a href="#trailing-whitespace-以外の変更だけ-add-する"></a>
+</h3>
 <p>大概のIDEには保存時に行末の空白を自動削除するオプションがある。
 それによって自分のソースコードは常にきれいに保てるが、
 他人の汚いコードや <a href="/rstats/knitr.html">knitr</a> の結果などを編集するときに余計な差分を作ってしまう。
@@ -419,7 +459,9 @@ If you are sure you want to delete it, run &#39;git branch -D issue-666&#39;.
 </span></span><span class="line"><span class="cl">git stash
 </span></span><span class="line"><span class="cl">git apply --cached tmp.diff
 </span></span><span class="line"><span class="cl">git stash drop
-</span></span></code></pre></div><h3 id="detached-head-からの復帰">detached HEAD からの復帰</h3>
+</span></span></code></pre></div><h3 id="detached-head-からの復帰">
+detached HEAD からの復帰<a href="#detached-head-からの復帰"></a>
+</h3>
 <p>submoduleなどをいじってると意図せずdetached HEAD状態になることがある。
 その状態でcommitしてしまった変更を<code>main</code>に反映したい。</p>
 <ol>
@@ -450,7 +492,9 @@ to do so with:
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git branch -d detached
 </span></span></code></pre></div></li>
 </ol>
-<h3 id="サブディレクトリを別のブランチやリポジトリに切り分ける">サブディレクトリを別のブランチやリポジトリに切り分ける</h3>
+<h3 id="サブディレクトリを別のブランチやリポジトリに切り分ける">
+サブディレクトリを別のブランチやリポジトリに切り分ける<a href="#サブディレクトリを別のブランチやリポジトリに切り分ける"></a>
+</h3>
 <p><a href="https://github.com/git/git/tree/master/contrib/subtree"><code>git subtree</code></a>
 は公式サブコマンドとして取り込まれてはいるけどドキュメントには入ってない。
 ドキュメントのある
@@ -481,7 +525,9 @@ Python製なのでuvがセットアップしてあれば早い:</p>
 </span></span><span class="line"><span class="cl">git remote -v
 </span></span></code></pre></div><p>元のリポジトリを誤って上書きしないようにリモートの設定が消去される。
 必要に応じて <code>git remote add origin</code> で登録し直す。</p>
-<h3 id="別のリポジトリをサブディレクトリとして取り込む">別のリポジトリをサブディレクトリとして取り込む</h3>
+<h3 id="別のリポジトリをサブディレクトリとして取り込む">
+別のリポジトリをサブディレクトリとして取り込む<a href="#別のリポジトリをサブディレクトリとして取り込む"></a>
+</h3>
 <p><a href="https://git-scm.com/book/tr/v2/Git-Tools-Advanced-Merging#_subtree_merge">Subtree Merging</a></p>
 <p>オプション <code>-X subtree=${subdir}</code> を利用してサブディレクトリに入れると、
 全体の <code>git log</code> では統合されてるように見えるけど、

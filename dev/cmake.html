@@ -69,7 +69,9 @@ CMake — Cross-platform Make
 <a href="/dev/autotools.html">autotools</a> を使うのに対して、
 CMakeでは開発者と利用者の双方がCMakeをインストールして使う。</p>
 <p><a href="https://cmake.org/cmake/help/latest/">https://cmake.org/cmake/help/latest/</a></p>
-<h2 id="基本">基本</h2>
+<h2 id="基本">
+基本<a href="#基本"></a>
+</h2>
 <p><code>CMakeLists.txt</code> を各ディレクトリに配置して、階層的に管理する。
 プロジェクトのトップに置くものは、以下のようなコマンドで始める必要がある。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.15</span><span class="p">)</span><span class="err">
@@ -83,9 +85,13 @@ CMakeでは開発者と利用者の双方がCMakeをインストールして使�
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_compile_options</span><span class="p">(</span><span class="s">a.out</span> <span class="s">PRIVATE</span> <span class="s">-Wall</span> <span class="s">-Wextra</span> <span class="s">-pedantic</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">install</span><span class="p">(</span><span class="s">TARGETS</span> <span class="s">a.out</span><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><p><a href="#cli"><code>cmake</code> コマンドの使い方は後述</a></p>
-<h2 id="commands">Commands</h2>
+<h2 id="commands">
+Commands<a href="#commands"></a>
+</h2>
 <p><a href="https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html">https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html</a></p>
-<h3 id="scripting-commands">Scripting commands</h3>
+<h3 id="scripting-commands">
+Scripting commands<a href="#scripting-commands"></a>
+</h3>
 <ul>
 <li><code>configure_file(&lt;input&gt; &lt;output&gt; [COPYONLY] [@ONLY])</code>:
 ファイルの一部を置換しつつ複製する。
@@ -99,7 +105,9 @@ CMakeでは開発者と利用者の双方がCMakeをインストールして使�
 パス操作全般。
 3.20 より古い環境では <code>get_filename_component()</code> 。</li>
 </ul>
-<h3 id="project-commands">Project commands</h3>
+<h3 id="project-commands">
+Project commands<a href="#project-commands"></a>
+</h3>
 <p><a href="https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html#project-commands">https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html#project-commands</a></p>
 <p>外部のCMakeプロジェクトを利用する:</p>
 <ul>
@@ -172,7 +180,9 @@ CMakeでは開発者と利用者の双方がCMakeをインストールして使�
 <li><code>install(EXPORT)</code>: 外部のCMakeから使いやすくするためのconfigをインストールする。
 似て非なる <code>export()</code> はビルドツリーにあるものを使わせるための謎コマンド。</li>
 </ul>
-<h3 id="オプション">オプション</h3>
+<h3 id="オプション">
+オプション<a href="#オプション"></a>
+</h3>
 <dl>
 <dt><code>PRIVATE</code></dt>
 <dd>このターゲットをビルドするときだけ使い、これを利用するときには参照させない。
@@ -186,9 +196,13 @@ CMakeでは開発者と利用者の双方がCMakeをインストールして使�
 <dt><code>EXCLUDE_FROM_ALL</code></dt>
 <dd><code>make [all]</code> から外れて、明示的なターゲット指定でのみビルドされるようになる。</dd>
 </dl>
-<h2 id="variables">Variables</h2>
+<h2 id="variables">
+Variables<a href="#variables"></a>
+</h2>
 <p><a href="https://cmake.org/cmake/help/latest/manual/cmake-variables.7.html">https://cmake.org/cmake/help/latest/manual/cmake-variables.7.html</a></p>
-<h3 id="variables-that-provide-information">Variables that Provide Information</h3>
+<h3 id="variables-that-provide-information">
+Variables that Provide Information<a href="#variables-that-provide-information"></a>
+</h3>
 <ul>
 <li><code>PROJECT_SOURCE_DIR</code>, <code>PROJECT_BINARY_DIR</code>:
 直近の <code>project()</code> におけるソースツリー、ビルドツリーの最上階。</li>
@@ -202,7 +216,9 @@ CMakeでは開発者と利用者の双方がCMakeをインストールして使�
 <li><code>CMAKE_SKIP_RPATH</code></li>
 <li><code>CMAKE_VERBOSE_MAKEFILE</code>: とりあえず <code>ON</code></li>
 </ul>
-<h3 id="variables-that-change-behavior">Variables that Change Behavior</h3>
+<h3 id="variables-that-change-behavior">
+Variables that Change Behavior<a href="#variables-that-change-behavior"></a>
+</h3>
 <ul>
 <li><code>BUILD_SHARED_LIBS</code>:
 STATIC/SHAREDが明示されていない <code>add_library()</code> でどっちをビルドするか。</li>
@@ -211,9 +227,13 @@ STATIC/SHAREDが明示されていない <code>add_library()</code> でどっち
 <li><code>CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT</code></li>
 <li><code>CMAKE_PREFIX_PATH</code>: パッケージやファイル探索 <code>find_*()</code> の候補パスを追加する</li>
 </ul>
-<h3 id="variables-that-describe-the-system">Variables that Describe the System</h3>
+<h3 id="variables-that-describe-the-system">
+Variables that Describe the System<a href="#variables-that-describe-the-system"></a>
+</h3>
 <p><code>APPLE</code>, <code>UNIX</code>, <code>WIN32</code></p>
-<h3 id="variables-that-control-the-build">Variables that Control the Build</h3>
+<h3 id="variables-that-control-the-build">
+Variables that Control the Build<a href="#variables-that-control-the-build"></a>
+</h3>
 <ul>
 <li><code>CMAKE_BUILD_RPATH</code></li>
 <li><code>CMAKE_BUILD_WITH_INSTALL_NAME_DIR</code></li>
@@ -223,7 +243,9 @@ STATIC/SHAREDが明示されていない <code>add_library()</code> でどっち
 <li><code>CMAKE_INSTALL_RPATH_USE_LINK_PATH</code></li>
 <li><code>CMAKE_MACOSX_RPATH</code></li>
 </ul>
-<h3 id="environment-variables">Environment variables</h3>
+<h3 id="environment-variables">
+Environment variables<a href="#environment-variables"></a>
+</h3>
 <p><a href="https://cmake.org/cmake/help/latest/manual/cmake-env-variables.7.html">https://cmake.org/cmake/help/latest/manual/cmake-env-variables.7.html</a></p>
 <p>変数として自動的に利用可能になったりはせず、
 <a href="https://cmake.org/cmake/help/latest/variable/ENV.html"><code>$ENV{VAR}</code></a>
@@ -239,7 +261,9 @@ e.g., <code>CMAKE_PREFIX_PATH</code>, <code>CXX</code>, <code>&lt;PackageName&gt
 <code>build</code> という名のサブディレクトリも探してくれるので
 <code>-B build</code> の慣習に従っていればコピーやシムリンクも不要。</dd>
 </dl>
-<h3 id="c">C++</h3>
+<h3 id="c">
+C++<a href="#c"></a>
+</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">target_compile_features</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">PUBLIC</span> <span class="s">cxx_std_17</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set_target_properties</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">PROPERTIES</span> <span class="s">CXX_EXTENSIONS</span> <span class="s">OFF</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_compile_options</span><span class="p">(</span><span class="s">common</span> <span class="s">PRIVATE</span>
@@ -292,7 +316,9 @@ e.g., <code>CMAKE_PREFIX_PATH</code>, <code>CXX</code>, <code>&lt;PackageName&gt
 という組み合わせ <code>-O2 -g</code> は用意されていないので自分で定義する。
 <code>CMAKE_CXX_FLAGS_???</code> を適当に作れば
 <code>-DCMAKE_BUILD_TYPE=???</code> をcase-insensitiveに解釈してもらえる。</p>
-<h2 id="generator-expressions">Generator expressions</h2>
+<h2 id="generator-expressions">
+Generator expressions<a href="#generator-expressions"></a>
+</h2>
 <p><a href="https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html">https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html</a></p>
 <p>ビルド時の状態に応じてに変数を評価する仕組み。
 コンフィグ時に評価される <code>if()</code> とは使い方が異なる。</p>
@@ -308,16 +334,22 @@ e.g., <code>CMAKE_PREFIX_PATH</code>, <code>CXX</code>, <code>&lt;PackageName&gt
 実際にどんな値が入ったかを確かめるには
 <code>file(GENERATE OUTPUT &lt;outfile&gt; CONTENT &lt;content&gt;)</code>
 などでビルド時に書き出すことになる。</p>
-<h2 id="modules">Modules</h2>
+<h2 id="modules">
+Modules<a href="#modules"></a>
+</h2>
 <p><a href="https://cmake.org/cmake/help/latest/manual/cmake-modules.7.html">https://cmake.org/cmake/help/latest/manual/cmake-modules.7.html</a></p>
 <p><code>include()</code> や <code>find_package()</code> から使う。</p>
-<h3 id="includecmakeprinthelpers">include(CMakePrintHelpers)</h3>
+<h3 id="includecmakeprinthelpers">
+include(CMakePrintHelpers)<a href="#includecmakeprinthelpers"></a>
+</h3>
 <p>変数の名前と中身を表示してくれる。
 名前を2回書かずに済む。
 次の二つは等価:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">cmake_print_variables</span><span class="p">(</span><span class="s">VAR</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">message</span><span class="p">(</span><span class="s">STATUS</span> <span class="s">VAR=</span><span class="s2">&#34;${VAR}&#34;</span><span class="p">)</span><span class="err">
-</span></span></span></code></pre></div><h3 id="gnuinstalldirs">GNUInstallDirs</h3>
+</span></span></span></code></pre></div><h3 id="gnuinstalldirs">
+GNUInstallDirs<a href="#gnuinstalldirs"></a>
+</h3>
 <p><a href="https://cmake.org/cmake/help/latest/module/GNUInstallDirs.html">https://cmake.org/cmake/help/latest/module/GNUInstallDirs.html</a></p>
 <p>インストール先のディレクトリを指定するときの標準的な値を決めてくれる。</p>
 <table>
@@ -350,7 +382,9 @@ e.g., <code>CMAKE_PREFIX_PATH</code>, <code>CXX</code>, <code>&lt;PackageName&gt
       </tr>
   </tbody>
 </table>
-<h3 id="cmakepackageconfighelpers">CMakePackageConfigHelpers</h3>
+<h3 id="cmakepackageconfighelpers">
+CMakePackageConfigHelpers<a href="#cmakepackageconfighelpers"></a>
+</h3>
 <ul>
 <li><a href="https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html">https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html</a></li>
 <li><a href="https://cmake.org/cmake/help/latest/guide/importing-exporting/">https://cmake.org/cmake/help/latest/guide/importing-exporting/</a></li>
@@ -452,7 +486,9 @@ zlibが見つかったら <code>zlib</code> コンポーネントを提供する
 </li>
 <li>慣例的に、コンポーネントと同名のターゲットを名前空間内に定義して <code>EXPORT</code> する。</li>
 </ul>
-<h3 id="fetchcontent">FetchContent</h3>
+<h3 id="fetchcontent">
+FetchContent<a href="#fetchcontent"></a>
+</h3>
 <p><a href="https://cmake.org/cmake/help/latest/module/FetchContent.html">https://cmake.org/cmake/help/latest/module/FetchContent.html</a></p>
 <p>外部ライブラリをコンフィグ時に取ってくる。
 CMake 3.11 から。</p>
@@ -504,12 +540,16 @@ CMake 3.11 から。</p>
 <p><a href="/mac/homebrew.html">Homebrew</a> Formula の中では原則禁止。
 できる限り <code>find_package()</code> で済むようにして、
 どうしても無理なとき <code>-DHOMEBREW_ALLOW_FETCHCONTENT=ON&quot;</code> を末尾に追加。</p>
-<h3 id="findthreads">FindThreads</h3>
+<h3 id="findthreads">
+FindThreads<a href="#findthreads"></a>
+</h3>
 <p><a href="https://cmake.org/cmake/help/latest/module/FindThreads.html">https://cmake.org/cmake/help/latest/module/FindThreads.html</a></p>
 <p><code>-lpthread</code> とか自分で書かない。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">find_package</span><span class="p">(</span><span class="s">Threads</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">MyTarget</span> <span class="s">PRIVATE</span> <span class="s">Threads::Threads</span><span class="p">)</span><span class="err">
-</span></span></span></code></pre></div><h3 id="findboost">FindBoost</h3>
+</span></span></span></code></pre></div><h3 id="findboost">
+FindBoost<a href="#findboost"></a>
+</h3>
 <p><a href="https://cmake.org/cmake/help/latest/module/FindBoost.html">https://cmake.org/cmake/help/latest/module/FindBoost.html</a></p>
 <p>Boostの特別扱いはdeprecatedになった。
 普通のCMakeパッケージとして探すには、
@@ -517,7 +557,9 @@ CMake 3.11 から。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">find_package</span><span class="p">(</span><span class="s">Boost</span> <span class="s">CONFIG</span> <span class="s">REQUIRED</span> <span class="s">COMPONENTS</span> <span class="s">context</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">MyTarget</span> <span class="s">PRIVATE</span> <span class="s">Boost::context</span><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><p>ヘッダーだけでいい場合は <code>Boost::boost</code> をリンクする。</p>
-<h3 id="ctest">CTest</h3>
+<h3 id="ctest">
+CTest<a href="#ctest"></a>
+</h3>
 <p><a href="https://cmake.org/cmake/help/latest/module/CTest.html">https://cmake.org/cmake/help/latest/module/CTest.html</a></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">include</span><span class="p">(</span><span class="s">CTest</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">if</span><span class="p">(</span><span class="s">BUILD_TESTING</span><span class="p">)</span><span class="err">
@@ -534,8 +576,12 @@ CMake 3.11 から。</p>
 次のように書き換えればそのへんをスキップできる:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">option</span><span class="p">(</span><span class="s">BUILD_TESTING</span> <span class="s2">&#34;Build the testing tree.&#34;</span> <span class="s">ON</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">enable_testing</span><span class="p">()</span><span class="err">
-</span></span></span></code></pre></div><h2 id="cli">CLI</h2>
-<h3 id="cmake"><code>cmake</code></h3>
+</span></span></span></code></pre></div><h2 id="cli">
+CLI<a href="#cli"></a>
+</h2>
+<h3 id="cmake">
+<code>cmake</code><a href="#cmake"></a>
+</h3>
 <p><a href="https://cmake.org/cmake/help/latest/manual/cmake.1.html">https://cmake.org/cmake/help/latest/manual/cmake.1.html</a></p>
 <p>ビルド用のディレクトリを別に作って out-of-source で実行するのが基本。
 やり直したいときは、そのディレクトリごと消す。
@@ -570,7 +616,9 @@ generator非依存の <code>cmake --build</code> を使ったほうがいい。<
 <code>A</code> をつけるとadvancedな変数も。
 見るだけなら <code>-N</code> オプションと共に。</dd>
 </dl>
-<h2 id="versions">Versions</h2>
+<h2 id="versions">
+Versions<a href="#versions"></a>
+</h2>
 <ul>
 <li>3.28: <code>FetchContent_Declare(... EXCLUDE_FROM_ALL)</code>,
 <a href="https://cmake.org/cmake/help/latest/manual/cmake-cxxmodules.7.html">C++20 modules</a>,

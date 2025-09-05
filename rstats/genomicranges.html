@@ -67,11 +67,15 @@ GenomicRanges — ゲノム上の範囲やアノテーション
 これは整数の範囲を扱う
 <a href="https://bioconductor.org/packages/IRanges"><code>IRanges</code></a>
 を拡張したもの。</p>
-<h2 id="installation">Installation</h2>
+<h2 id="installation">
+Installation<a href="#installation"></a>
+</h2>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">install.packages</span><span class="p">(</span><span class="s">&#34;BiocManager&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">BiocManager</span><span class="o">::</span><span class="nf">install</span><span class="p">(</span><span class="s">&#34;GenomicRanges&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">GenomicRanges</span><span class="p">)</span>
-</span></span></code></pre></div><h2 id="iranges"><code>IRanges</code></h2>
+</span></span></code></pre></div><h2 id="iranges">
+<code>IRanges</code><a href="#iranges"></a>
+</h2>
 <p>両端の値を含む閉区間 <code>[start, end]</code> なのが厄介。
 end = start + width - 1 の関係。
 width = 0 のときだけ例外的に end &lt; start になり、両端を含まない。</p>
@@ -92,7 +96,9 @@ width = 0 のときだけ例外的に end &lt; start になり、両端を含ま
 </span></span></code></pre></div><pre tabindex="0"><code>[1] 3 3 3 3
 </code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">width</span><span class="p">(</span><span class="n">ir1</span><span class="p">)</span>
 </span></span></code></pre></div><pre tabindex="0"><code>[1] 3 2 1 0
-</code></pre><h2 id="genomicranges"><code>GenomicRanges</code></h2>
+</code></pre><h2 id="genomicranges">
+<code>GenomicRanges</code><a href="#genomicranges"></a>
+</h2>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">gr</span> <span class="o">=</span> <span class="nf">GRanges</span><span class="p">(</span>
 </span></span><span class="line"><span class="cl">  <span class="n">seqnames</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;chr2&#34;</span><span class="p">,</span> <span class="s">&#34;chr1&#34;</span><span class="p">,</span> <span class="s">&#34;chr1&#34;</span><span class="p">),</span>    <span class="c1"># 染色体の名前</span>
 </span></span><span class="line"><span class="cl">  <span class="n">ranges</span> <span class="o">=</span> <span class="nf">IRanges</span><span class="p">(</span><span class="m">101</span><span class="o">:</span><span class="m">103</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="m">100</span><span class="p">),</span>  <span class="c1"># 座標</span>
@@ -160,7 +166,9 @@ Levels(3): + - *
 </code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">genome</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span>
 </span></span></code></pre></div><pre tabindex="0"><code>chr1 chr2 
   NA   NA 
-</code></pre><h2 id="functions">Functions</h2>
+</code></pre><h2 id="functions">
+Functions<a href="#functions"></a>
+</h2>
 <p>多くの関数は <code>IRanges</code> と <code>GenomicRanges</code> で同様に動作する。
 より単純な前者で例を示し、後者固有の話は適宜挟む。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">ir</span> <span class="o">=</span> <span class="nf">IRanges</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">8</span><span class="p">,</span> <span class="m">14</span><span class="p">,</span> <span class="m">15</span><span class="p">,</span> <span class="m">19</span><span class="p">,</span> <span class="m">34</span><span class="p">,</span> <span class="m">40</span><span class="p">),</span> <span class="n">width</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">12</span><span class="p">,</span> <span class="m">6</span><span class="p">,</span> <span class="m">6</span><span class="p">,</span> <span class="m">15</span><span class="p">,</span> <span class="m">6</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">7</span><span class="p">))</span>
@@ -175,7 +183,9 @@ Levels(3): + - *
   [6]    34  35     2
   [7]    40  46     7
 </code></pre><p><img src="data:image/png;base64,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" alt="plot of chunk iranges-orig"></p>
-<h3 id="intra-range-methods">Intra-range methods</h3>
+<h3 id="intra-range-methods">
+Intra-range methods<a href="#intra-range-methods"></a>
+</h3>
 <p>個々の区間を操作</p>
 <dl>
 <dt><code>shift(x, shift = 0L, use.names = TRUE)</code></dt>
@@ -266,7 +276,9 @@ Levels(3): + - *
 </span></span></code></pre></div><pre tabindex="0"><code>IRanges object with 1 range and 0 metadata columns:
       start end width
   [1]    51 250   200
-</code></pre><h3 id="inter-range-methods">Inter-range methods</h3>
+</code></pre><h3 id="inter-range-methods">
+Inter-range methods<a href="#inter-range-methods"></a>
+</h3>
 <p>区間の集合を操作</p>
 <dl>
 <dt><code>range(x, ..., with.revmap = FALSE, na.rm = FALSE)</code></dt>
@@ -343,7 +355,9 @@ start/end 省略時は <code>range(x)</code> からの差分。
 <dt><code>GenomicRanges::subtract(x, y, minoverlap = 1L, ...)</code></dt>
 <dd><code>setdiff()</code> と似ているが元の区間ごとの <code>GRangesList</code> にして返す。</dd>
 </dl>
-<h3 id="overlaps">Overlaps</h3>
+<h3 id="overlaps">
+Overlaps<a href="#overlaps"></a>
+</h3>
 <dl>
 <dt><code>type</code></dt>
 <dd>any: ちょっとでも重なっているか距離が <code>maxgap</code> 以下ならOK。</dd>
@@ -415,7 +429,9 @@ start/end 省略時は <code>range(x)</code> からの差分。
   [2]    15  24    10
 </code></pre></dd>
 </dl>
-<h3 id="neighboring">Neighboring</h3>
+<h3 id="neighboring">
+Neighboring<a href="#neighboring"></a>
+</h3>
 <dl>
 <dt><code>nearest(x, subject, select = c(&quot;arbitrary&quot;, &quot;all&quot;))</code></dt>
 <dd>最も近いもの、あるいはoverlapしているもの。
@@ -453,7 +469,9 @@ start/end 省略時は <code>range(x)</code> からの差分。
 </span></span></code></pre></div><pre tabindex="0"><code>[1] 27 20  0  0  0 20 27
 </code></pre></dd>
 </dl>
-<h3 id="ignorestrand"><code>ignore.strand</code></h3>
+<h3 id="ignorestrand">
+<code>ignore.strand</code><a href="#ignorestrand"></a>
+</h3>
 <p>GenomicRangesの操作はデフォルトでseqnamesとstrandごとに分けて行われる。
 strandを無視するには <code>ignore.strand = TRUE</code> を渡す。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">reduce</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span>

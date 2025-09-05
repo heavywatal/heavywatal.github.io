@@ -75,26 +75,36 @@ $b \in B$</dd>
 <dt>voxel</dt>
 <dd>3D空間における単位。2Dでいうpixel。</dd>
 </dl>
-<h2 id="基本処理">基本処理</h2>
-<h3 id="translation-平行移動">Translation 平行移動</h3>
+<h2 id="基本処理">
+基本処理<a href="#基本処理"></a>
+</h2>
+<h3 id="translation-平行移動">
+Translation 平行移動<a href="#translation-平行移動"></a>
+</h3>
 <div>\[
 X_b = \{x + b \mid x \in X\}
 \]</div>
-<h3 id="dilation-膨張">Dilation 膨張</h3>
+<h3 id="dilation-膨張">
+Dilation 膨張<a href="#dilation-膨張"></a>
+</h3>
 <div>\[
 X \oplus B = \bigcup_{b \in B} X_b
 \]</div>
 <p><em>X</em> と <em>B</em> のMinkowski和。
 <em>X</em> を <em>B</em> の範囲でずらしながらunionを取ったもの。
 国土を<em>X</em> 、半径12海里の円をSEとした、領空みたいなイメージ。</p>
-<h3 id="erosion-浸食">Erosion 浸食</h3>
+<h3 id="erosion-浸食">
+Erosion 浸食<a href="#erosion-浸食"></a>
+</h3>
 <div>\[
 X \ominus B = \bigcap_{b \in B} X_b
 \]</div>
 <p><em>X</em> と <em>B</em> のMinkowski差。
 <em>X</em> を <em>B</em> の範囲でずらしながらintersectを取ったもの。
 SEを消しゴムとして <em>X</em> の外周上を走らせ、削るイメージ。</p>
-<h3 id="opening">Opening</h3>
+<h3 id="opening">
+Opening<a href="#opening"></a>
+</h3>
 <div>\[
 X \circ B = (X \ominus B) \oplus B
 \]</div>
@@ -104,7 +114,9 @@ X \circ B = (X \ominus B) \oplus B
 特定の形を持ったSEを使えば、それを含む領域だけを抽出するのにも使える。</p>
 <p>元画像との差分 $X - (X \circ B)$ は <strong>Top Hat</strong> と呼ばれ、
 トゲの先っちょや背景のノイズ成分が得られる。</p>
-<h3 id="closing">Closing</h3>
+<h3 id="closing">
+Closing<a href="#closing"></a>
+</h3>
 <div>\[
 X \bullet B = (X \oplus B) \ominus B
 \]</div>
@@ -113,14 +125,20 @@ X \bullet B = (X \oplus B) \ominus B
 <em>X</em> 内部のヒビやチリなど、SEより小さい構造が塗りつぶされ、大きくなる。</p>
 <p>元画像との差分 $(X \bullet B) - X$ は <strong>Black Hat</strong> と呼ばれ、
 <em>X</em> 内のヒビやトゲの根元らへんが得られる。</p>
-<h2 id="応用">応用</h2>
-<h3 id="pattern-spectrum-サイズ分布">Pattern Spectrum, サイズ分布</h3>
+<h2 id="応用">
+応用<a href="#応用"></a>
+</h2>
+<h3 id="pattern-spectrum-サイズ分布">
+Pattern Spectrum, サイズ分布<a href="#pattern-spectrum-サイズ分布"></a>
+</h3>
 <p>小さいSEから順に大きくしながら
 Openingで削れた部分の面積を記録していく。
 元画像の面積で割ったものはサイズ密度関数(size density function)と呼ばれる。
 細かいギザギザを含む図形ほど小さいSEで削れる成分が多い。
 要約統計量としてはモーメントやエントロピーが使える。</p>
-<h3 id="morphological-gradient">Morphological gradient</h3>
+<h3 id="morphological-gradient">
+Morphological gradient<a href="#morphological-gradient"></a>
+</h3>
 <div>\[
 (X \oplus B) - (X \ominus B)
 \]</div>
@@ -128,7 +146,9 @@ Openingで削れた部分の面積を記録していく。
 エッジ検出法のひとつ。
 X上の境界が欲しい場合は$X - (X \ominus B)$。
 背景側の境界が欲しい場合は$(X \oplus B) - X$。</p>
-<h2 id="ノイズ除去">ノイズ除去</h2>
+<h2 id="ノイズ除去">
+ノイズ除去<a href="#ノイズ除去"></a>
+</h2>
 <dl>
 <dt>平滑化フィルタ</dt>
 <dd>SEを端から端まで動かしつつ、その中に含まれる画素の平均値を中央画素に適用していく。
@@ -138,7 +158,9 @@ Gaussian filterのように、遠いものほど軽くなるように重み付�
 <dd>平均値ではなく中央値で置き換える。
 エッジは保存されるが、ソートを伴うので計算量は多め。</dd>
 </dl>
-<h2 id="ライブラリ">ライブラリ</h2>
+<h2 id="ライブラリ">
+ライブラリ<a href="#ライブラリ"></a>
+</h2>
 <p>画像処理を施す</p>
 <dl>
 <dt><a href="https://scikit-image.org/">scikit-image</a></dt>
