@@ -17,7 +17,7 @@ BibDesk, LaTeXiT, TeX Live Utility, TeXShop などのGUIアプリが不要で、
 1.  <https://www.tug.org/mactex/> から
     `BasicTeX.pkg` を入手してインストール。
     あるいは
-    `brew install --cask basictex`
+    `brew install basictex`
 
 1.  `/Library/TeX/texbin/` にパスを通す。
     基本的には `/etc/paths.d/TeX` 越しに自動的に設定されるはず。

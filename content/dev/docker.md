@@ -54,7 +54,7 @@ docker --version
 Docker Desktop より [Orbstack](https://orbstack.dev/) のほうが軽くて使いやすい。
 いずれにせよ [Homebrew]({{< relref "homebrew.md" >}}) で入れるのが簡単:
 ```sh
-brew install --cask orbstack
+brew install orbstack
 open -a OrbStack
 ```
 

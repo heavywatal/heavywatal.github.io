@@ -89,7 +89,7 @@ zstd
 
 Rをここからインストールするとバイナリ版のパッケージが利用できず、
 毎回ソースからビルドすることになるので、
-後述のように `--cask r-app` で入れるほうが簡単。
+後述のようにCaskのほうの `r-app` を入れるほうが簡単。
 
 `coreutils`, `gnu-tar`
 などは既存のシステムコマンドとごっちゃにならないよう頭に `g`
@@ -176,7 +176,7 @@ GUIアプリケーションもHomebrewで管理してしまおうという野心
 同名のformulaがある場合などは `--cask` で限定できる:
 
 ```sh
-brew install --cask r-app rstudio
+brew install r-app rstudio
 brew list --cask
 ```
 
