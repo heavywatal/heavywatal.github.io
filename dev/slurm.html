@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="ja">
+<head prefix="og: http://ogp.me/ns#">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<title>Slurm - Heavy Watal</title>
+<link rel="stylesheet" href="/css/style.css">
+<link rel="icon" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#eeeeee">
+<meta name="author" content="Watal M. Iwasaki">
+<meta property="og:title" content="Slurm">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://heavywatal.github.io/dev/slurm.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/heavywatal">
+<meta property="og:description" content="">
+<meta property="og:site_name" content="Heavy Watal">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@heavywatal">
+<meta name="twitter:creator" content="@heavywatal">
+<link rel="stylesheet" href="/lib/iconify.css">
+<link rel="stylesheet" href="/lib/katex/katex.min.css">
+<script type="module" src="/lib/katex/katex.min.js"></script>
+<script type="application/ld+json">{
+"@context": "http://schema.org",
+"@type": "BreadcrumbList",
+"itemListElement": [
+ {"@type": "ListItem",
+  "position": 1,
+  "item": {"@id": "https://heavywatal.github.io/dev/", "name": "dev" }},
+ {"@type": "ListItem",
+  "position": 2,
+  "item": {"@id": "https://heavywatal.github.io/dev/slurm.html", "name": "Slurm" }}
+]}</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-V60H2JH0G6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-V60H2JH0G6');
+</script>
+</head>
+<body>
+<header>
+<a href="/">
+<img class="logo" src="/heavywatal.svg" alt="岩嵜航"><span class="site-title">Heavy Watal</span>
+</a>
+<search><form action="/search.html">
+<input type="search" name="q" placeholder="search">
+</form></search>
+</header>
+<main>
+<article>
+<header><h1><a href="/dev/slurm.html">
+Slurm
+</a></h1>
+<nav class="tags">
+<a href="/tags/job.html">job</a>
+<a href="/tags/concurrent.html">concurrent</a>
+</nav>
+</header>
+
+<p>Migrated from <a href="https://wiki.archlinux.org/title/TORQUE">TORQUE</a> and <a href="https://github.com/openpbs/openpbs">OpenPBS</a>.</p>
+<ul>
+<li>Ubuntu 24.04 Noble Numbat</li>
+<li><a href="https://launchpad.net/ubuntu/noble/+package/slurmd">Slurm 23.11.4</a></li>
+</ul>
+<h2 id="installation">
+Installation<a href="#installation"></a>
+</h2>
+<ul>
+<li><a href="https://slurm.schedmd.com/quickstart_admin.html">https://slurm.schedmd.com/quickstart_admin.html</a></li>
+<li><a href="https://memo.fifthdimension.jp/configure-slurm-workload-manager-on-ubuntu">https://memo.fifthdimension.jp/configure-slurm-workload-manager-on-ubuntu</a></li>
+</ul>
+<p>Common for both controler and compute nodes:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo apt updata <span class="o">&amp;&amp;</span> apt list --upgradable
+</span></span><span class="line"><span class="cl">sudo apt upgrade
+</span></span><span class="line"><span class="cl">sudo apt install munge slurmd
+</span></span></code></pre></div><p>Set NTP server and time zone:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo timedatectl set-timezone Asia/Tokyo
+</span></span><span class="line"><span class="cl">sudo vim /etc/systemd/timesyncd.conf
+</span></span></code></pre></div><pre tabindex="0"><code>[Time]
+NTP=YOUR_NTP_SERVER_HERE
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo systemctl restart systemd-timesyncd
+</span></span><span class="line"><span class="cl">systemctl status systemd-timesyncd
+</span></span><span class="line"><span class="cl">timedatectl timesync-status
+</span></span></code></pre></div><h3 id="controller-node">
+Controller node<a href="#controller-node"></a>
+</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo apt install slurm-wlm slurmctld
+</span></span></code></pre></div><p>Create <code>/etc/munge/munge.key</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo -u munge /usr/sbin/mungekey -v
+</span></span></code></pre></div><p>Create <a href="https://slurm.schedmd.com/cgroup.conf.html"><code>/etc/slurm/cgroup.conf</code></a>.
+It can be empty, but you may want to try resource constraints:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">ConstrainCores=yes
+</span></span><span class="line"><span class="cl">ConstrainDevices=yes
+</span></span><span class="line"><span class="cl">ConstrainRAMSpace=yes
+</span></span></code></pre></div><p>Use <code>/usr/share/doc/slurmctld/slurm-wlm-configurator.easy.html</code> to generate
+an almost-default <a href="https://slurm.schedmd.com/slurm.conf.html"><code>/etc/slurm/slurm.conf</code></a>.</p>
+<ul>
+<li><code>ClusterName</code></li>
+<li><code>SlurmctldHost</code></li>
+<li><code>NodeName</code></li>
+<li><code>PartitionName</code></li>
+<li><code>CPUs</code>: Leave it blank to get <code>Sockets * CoresPerSocket * ThreadsPerCore</code>.</li>
+<li><code>Sockets</code></li>
+<li><code>CoresPerSocket</code></li>
+<li><code>ThreadsPerCore</code></li>
+<li><code>RealMemory</code>: Total memory in MB minus some margin for OS.</li>
+</ul>
+<p>Prepare directories for log files and state files:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo mkdir -p /var/lib/slurm/slurmctld
+</span></span><span class="line"><span class="cl">sudo mkdir -p /var/lib/slurm/slurmd
+</span></span><span class="line"><span class="cl">sudo mkdir -p /var/log/slurm
+</span></span><span class="line"><span class="cl">sudo chown -R slurm:slurm /var/lib/slurm
+</span></span><span class="line"><span class="cl">sudo chown -R slurm:slurm /var/log/slurm
+</span></span></code></pre></div><p>Set permissions for configuration files:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo chown -R slurm:slurm /etc/slurm
+</span></span><span class="line"><span class="cl">sudo chmod <span class="m">644</span> /etc/slurm/slurm.conf
+</span></span><span class="line"><span class="cl">sudo chmod <span class="m">644</span> /etc/slurm/cgroup.conf
+</span></span></code></pre></div><p>Enable and start services:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo systemctl <span class="nb">enable</span> --now munge slurmd slurmctld
+</span></span><span class="line"><span class="cl">systemctl status munge slurmd slurmctld
+</span></span></code></pre></div><p>Copy <code>munge.key</code>, <code>slurm.conf</code>, and <code>cgroup.conf</code> to some NFS-shared directory, e.g., <code>/home/admin/etc/slurm/</code>, to distribute them to compute nodes later.</p>
+<h3 id="compute-node">
+Compute node<a href="#compute-node"></a>
+</h3>
+<p>Prepare directories for log files and state files:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo mkdir -p /var/lib/slurm/slurmd
+</span></span><span class="line"><span class="cl">sudo mkdir -p /var/log/slurm
+</span></span><span class="line"><span class="cl">sudo chown -R slurm:slurm /var/lib/slurm
+</span></span><span class="line"><span class="cl">sudo chown -R slurm:slurm /var/log/slurm
+</span></span></code></pre></div><p>Copy <code>munge.key</code>, <code>slurm.conf</code>, and <code>cgroup.conf</code> from the controler node:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> /home/admin/etc/slurm/
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sudo cp munge.key /etc/munge/
+</span></span><span class="line"><span class="cl">sudo chmod <span class="m">400</span> /etc/munge/munge.key
+</span></span><span class="line"><span class="cl">sudo chown munge:munge /etc/munge/munge.key
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sudo cp slurm.conf /etc/slurm/
+</span></span><span class="line"><span class="cl">sudo cp cgroup.conf /etc/slurm/
+</span></span><span class="line"><span class="cl">sudo chmod <span class="m">644</span> /etc/slurm/*.conf
+</span></span></code></pre></div><p>Enable and start services:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo systemctl <span class="nb">enable</span> --now munge slurmd
+</span></span><span class="line"><span class="cl">systemctl status munge slurmd
+</span></span></code></pre></div><h3 id="check">
+Check<a href="#check"></a>
+</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sinfo
+</span></span><span class="line"><span class="cl">scontrol show nodes
+</span></span><span class="line"><span class="cl">systemctl status munge slurmd slurmctld
+</span></span><span class="line"><span class="cl">sudo less /var/log/slurm/slurmctld.log
+</span></span><span class="line"><span class="cl">sudo less /var/log/slurm/slurmd.log
+</span></span></code></pre></div><p>You may need to update the state manually:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo scontrol reconfigure
+</span></span><span class="line"><span class="cl">sudo scontrol update <span class="nv">nodename</span><span class="o">=</span>compute01 <span class="nv">state</span><span class="o">=</span>resume
+</span></span></code></pre></div>
+</article>
+</main>
+
+<nav class="side-bar">
+<div class="menu">
+
+<div><a href="/about.html">About</a></div>
+
+<div><a href="/research.html">Research Interests</a></div>
+
+<input type="checkbox" id="menu-rstats">
+<label for="menu-rstats">R stats</label>
+<ul>
+<li><a href="/rstats/intro.html">R自学自習の基礎知識</a></li>
+<li><a href="/rstats/programming.html">RプログラミングTips</a></li>
+<li><a href="/rstats/config.html">R環境設定</a></li>
+<li><a href="/rstats/ggplot2.html">ggplot2</a></li>
+<li><a href="/rstats/dplyr.html">dplyr</a></li>
+<li><a href="/rstats/tidyr.html">tidyr</a></li>
+<li><a href="/rstats/purrr.html">purrr</a></li>
+<li><a href="/rstats/readr.html">readr</a></li>
+<li><a href="/rstats/stringr.html">stringr</a></li>
+<li><a href="/rstats/knitr.html">knitr</a></li>
+<li><a href="/rstats/parallel.html">parallel</a></li>
+<li><a href="/rstats/devtools.html">devtools</a></li>
+<li><a href="/rstats/rcpp.html">Rcpp</a></li>
+<li><a href="/rstats/bioconductor.html">Bioconductor</a></li>
+<li><a href="/rstats/genomicranges.html">GenomicRanges</a></li>
+<li><a href="/rstats/rtracklayer.html">rtracklayer</a></li>
+<li><a href="/rstats/biomart.html">biomaRt</a></li>
+<li><a href="/rstats/edger.html">edgeR</a></li>
+<li><a href="/rstats/topgo.html">topGO</a></li>
+<li><a href="/rstats/rgl.html">rgl</a></li>
+<li><a href="/rstats/stan.html">Stan</a></li>
+</ul>
+
+<input type="checkbox" id="menu-python">
+<label for="menu-python">Python</label>
+<ul>
+<li><a href="/python/install.html">Pythonインストール</a></li>
+<li><a href="/python/pip.html">pip</a></li>
+<li><a href="/python/ipython.html">IPython</a></li>
+<li><a href="/python/biopython.html">BioPython</a></li>
+<li><a href="/python/concurrent.html">concurrent.futures</a></li>
+<li><a href="/python/copy.html">copy</a></li>
+<li><a href="/python/matplotlib.html">matplotlib &#43; seaborn</a></li>
+<li><a href="/python/scipy.html">NumPy, SciPy</a></li>
+<li><a href="/python/pandas.html">Pandas</a></li>
+<li><a href="/python/packaging.html">Pythonパッケージ作成</a></li>
+</ul>
+
+<input type="checkbox" id="menu-cxx">
+<label for="menu-cxx">C&#43;&#43;</label>
+<ul>
+<li><a href="/cxx/boost.html">Boost</a></li>
+<li><a href="/cxx/getopt.html">C&#43;&#43;コマンドライン引数</a></li>
+<li><a href="/cxx/speed.html">C&#43;&#43;高速化</a></li>
+<li><a href="/cxx/gcc.html">gcc</a></li>
+<li><a href="/cxx/bitwise.html">ビット演算</a></li>
+<li><a href="/cxx/random.html">擬似乱数生成器</a></li>
+</ul>
+
+<input type="checkbox" id="menu-bio">
+<label for="menu-bio">Biology</label>
+<ul>
+<li><a href="/bio/blast.html">BLAST</a></li>
+<li><a href="/bio/dadi.html">dadi</a></li>
+<li><a href="/bio/gene_ontology.html">Gene Ontology</a></li>
+<li><a href="/bio/meme.html">MEME</a></li>
+<li><a href="/bio/popgen.html">Population Genetics</a></li>
+<li><a href="/bio/repeatmasker.html">RepeatMasker</a></li>
+<li><a href="/bio/samtools.html">SAMtools</a></li>
+<li><a href="/bio/shirokane.html">SHIROKANE</a></li>
+<li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
+<li><a href="/bio/mathmorph.html">数理形態学</a></li>
+<li><a href="/bio/linear_algebra.html">線形代数</a></li>
+<li><a href="/bio/complexnetwork.html">複雑ネットワーク</a></li>
+<li><a href="/bio/nig.html">遺伝研スパコン</a></li>
+<li><a href="/bio/motif.html">配列モチーフ探索</a></li>
+</ul>
+
+<input type="checkbox" id="menu-dev" checked>
+<label for="menu-dev" class="active">Developer Tools</label>
+<ul>
+<li><a href="/dev/apptainer.html">Apptainer</a></li>
+<li><a href="/dev/autotools.html">autoconf, automake</a></li>
+<li><a href="/dev/cmake.html">CMake</a></li>
+<li><a href="/dev/docker.html">Docker</a></li>
+<li><a href="/dev/emacs.html">Emacs</a></li>
+<li><a href="/dev/git.html">Git</a></li>
+<li><a href="/dev/make.html">make</a></li>
+<li><a href="/dev/mount.html">mount</a></li>
+<li><a href="/dev/rsync.html">rsync</a></li>
+<li class="active"><a href="/dev/slurm.html">Slurm</a></li>
+<li><a href="/dev/ssh.html">ssh</a></li>
+<li><a href="/dev/tmux.html">tmux</a></li>
+<li><a href="/dev/vi.html">vi</a></li>
+<li><a href="/dev/vscode.html">VSCode</a></li>
+<li><a href="/dev/zsh.html">zsh</a></li>
+<li><a href="/dev/sh.html">シェルスクリプト</a></li>
+<li><a href="/dev/nohup.html">プロセス管理</a></li>
+<li><a href="/dev/devenv.html">開発環境</a></li>
+</ul>
+
+<input type="checkbox" id="menu-mac">
+<label for="menu-mac">Mac</label>
+<ul>
+<li><a href="/mac/applescript.html">AppleScript</a></li>
+<li><a href="/mac/homebrew.html">Homebrew</a></li>
+<li><a href="/mac/keyboard.html">Keyboard</a></li>
+<li><a href="/mac/command.html">Mac固有コマンド</a></li>
+<li><a href="/mac/quicklook.html">QuickLook</a></li>
+<li><a href="/mac/winebottler.html">WineBottler</a></li>
+</ul>
+
+<input type="checkbox" id="menu-lectures">
+<label for="menu-lectures">Lectures</label>
+<ul>
+<li><a href="/lectures/verhoef_comm_ecol-11.html">Community Ecology 輪読会 11章</a></li>
+<li><a href="/lectures/git2018nrifs.html">Git入門2018</a></li>
+<li><a href="/lectures/git2019makino.html">Git入門2019</a></li>
+<li><a href="/lectures/prml-11-1.html">PRML輪読会 11章1節</a></li>
+<li><a href="/lectures/prml-2-1.html">PRML輪読会 2章前半</a></li>
+<li><a href="/lectures/prml-3-4.html">PRML輪読会 3章4節</a></li>
+<li><a href="/lectures/wakeley-2-2.html">Wakeley輪読会 2章2節</a></li>
+</ul>
+
+<input type="checkbox" id="menu-misc">
+<label for="menu-misc">Miscellaneous</label>
+<ul>
+<li><a href="/misc/fonts.html">Fonts</a></li>
+<li><a href="/misc/gollum.html">Gollum</a></li>
+<li><a href="/misc/hugo.html">Hugo</a></li>
+<li><a href="/misc/latex.html">LaTeX</a></li>
+<li><a href="/misc/markdown.html">Markdown</a></li>
+</ul>
+
+<div><a href="/tags/">Tags</a></div>
+</div>
+</nav>
+<footer><small>(ɔ) 2008 岩嵜航 Watal M. Iwasaki</small></footer>
+</body>
+</html>
