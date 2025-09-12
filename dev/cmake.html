@@ -100,7 +100,8 @@ Scripting commands<a href="#scripting-commands"></a>
 <li><code>foreach(var IN LISTS list)</code></li>
 <li><code>message(STATUS &quot;Hello world!&quot;)</code></li>
 <li><code>option(VARIABLE &quot;Message&quot; ON)</code></li>
-<li><code>set(VARIABLE value)</code></li>
+<li><code>set(VARIABLE value)</code>
+<code>PARENT_SCOPE</code> で親スコープの変数に代入できるが、現在のスコープではそれを参照できない。</li>
 <li><a href="https://cmake.org/cmake/help/latest/command/cmake_path.html"><code>cmake_path()</code></a>
 パス操作全般。
 3.20 より古い環境では <code>get_filename_component()</code> 。</li>
@@ -493,35 +494,42 @@ FetchContent<a href="#fetchcontent"></a>
 <p>外部ライブラリをコンフィグ時に取ってくる。
 CMake 3.11 から。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">include</span><span class="p">(</span><span class="s">FetchContent</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">FETCHCONTENT_QUIET</span> <span class="s">OFF</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">cmake_print_variables</span><span class="p">(</span><span class="s">FETCHCONTENT_SOURCE_DIR_IGRAPH</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">FetchContent_Declare</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">  <span class="s">igraph</span>
-</span></span><span class="line"><span class="cl">  <span class="s">GIT_REPOSITORY</span> <span class="s">https://github.com/igraph/igraph.git</span>
-</span></span><span class="line"><span class="cl">  <span class="s">GIT_TAG</span> <span class="o">${</span><span class="nv">PROJECT_VERSION</span><span class="o">}</span>
-</span></span><span class="line"><span class="cl">  <span class="s">GIT_SHALLOW</span> <span class="s">ON</span>
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">FetchContent_Declare</span><span class="p">(</span><span class="s">pcglite</span>
+</span></span><span class="line"><span class="cl">  <span class="s">GIT_REPOSITORY</span> <span class="s">https://github.com/heavywatal/pcglite.git</span>
+</span></span><span class="line"><span class="cl">  <span class="s">GIT_TAG</span> <span class="s">v0.2.1</span>
+</span></span><span class="line"><span class="cl">  <span class="s">EXCLUDE_FROM_ALL</span>
+</span></span><span class="line"><span class="cl">  <span class="s">FIND_PACKAGE_ARGS</span> <span class="s">0.2.1</span>
 </span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">igraph</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">cmake_print_variables</span><span class="p">(</span><span class="s">igraph_SOURCE_DIR,</span> <span class="s">igraph_BINARY_DIR</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">pcglite</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">cmake_print_variables</span><span class="p">(</span><span class="s">pcglite_FOUND</span> <span class="s">pcglite_DIR</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">cmake_print_variables</span><span class="p">(</span><span class="s">pcglite_SOURCE_DIR</span> <span class="s">pcglite_BINARY_DIR</span><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><dl>
 <dt><code>FetchContent_Declare()</code></dt>
-<dd>まずこれで依存関係を宣言する。
-複数ある場合、先に全部宣言してからまとめてMakeAvailableを呼ぶのが推奨。</dd>
+<dd>まずこれで依存関係を宣言する。</dd>
 <dd>ソースに関するオプションは
 <a href="https://cmake.org/cmake/help/latest/module/ExternalProject.html">ExternalProject</a>
-とほぼ同じ。</dd>
-<dd><code>FIND_PACKAGE_ARGS</code>: (3.24+)<br>
-<code>EXCLUDE_FROM_ALL</code>: (3.28+)</dd>
+とほぼ同じで、そちらを見に行く必要がある。</dd>
+<dd><code>GIT_TAG</code> はタグだけでなくブランチやハッシュも指定できる。
+公式推奨はハッシュらしい。
+<code>GIT_SHALLOW</code> が使えるのはタグとブランチのみ。</dd>
+<dd><code>EXCLUDE_FROM_ALL</code>: (3.28+) findできなかった場合の <code>add_subdirectory()</code> に渡される。
+一緒にインストールする必要のない <code>PRIVATE</code> 依存のときに。</dd>
+<dd><code>FIND_PACKAGE_ARGS</code>: (3.24+)</dd>
 <dt><code>FetchContent_MakeAvailable()</code></dt>
 <dd>宣言された依存ライブラリを利用可能な状態にする。(3.14+)</dd>
 <dd>これひとつを実行することが推奨されているが、各段階を手動で書くこともできる。
 <ol>
-<li><code>find_package()</code> を試みて、見つからなければ次に進む。(3.24+)</li>
+<li>(3.24+) <code>find_package()</code> を試みる。
+見つかったら3つの変数をセットして終了:
+<ul>
+<li><code>&lt;lowercaseName&gt;_FOUND</code></li>
+<li><code>&lt;lowercaseName&gt;_DIR</code></li>
+<li><code>&lt;lowercaseName&gt;_POPULATED</code></li>
+</ul>
+</li>
 <li><code>FetchContent_GetProperties()</code> で過去にPopulateしたものがあるか確認。
 <code>&lt;lowercaseName&gt;_POPULATED</code> が定義されていなければ次に進む。</li>
 <li><code>FetchContent_Populate()</code> でソースコードを取得する。
-<code>FETCHCONTENT_SOURCE_DIR_&lt;uppercaseName&gt;</code>
-が定義されている場合はfetchせずそこにあるものを使う。
 成功したら3つの変数をセットする:
 <ul>
 <li><code>&lt;lowercaseName&gt;_POPULATED</code></li>
@@ -533,7 +541,31 @@ CMake 3.11 から。</p>
 でプロジェクトに取り込む。</li>
 </ol>
 </dd>
+<dt><code>FETCHCONTENT_TRY_FIND_PACKAGE_MODE</code></dt>
+<dd>(3.24+; <code>OPT_IN</code>, <code>ALWAYS</code>, <code>NEVER</code>)
+ソースを取ってくる前に <code>find_package()</code> で探すかどうかを制御する。
+デフォルト未定義は <code>OPT_IN</code> と同じで、
+<code>FIND_PACKAGE_ARGS</code> が(空でも)指定されていたら実行。</dd>
+<dt><code>FETCHCONTENT_SOURCE_DIR_&lt;uppercaseName&gt;</code></dt>
+<dd>指定したソースツリーをあるがままpopulate済みとして使う。
+<code>GIT_TAG</code> なども無視。</dd>
 </dl>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title"><iconify-icon inline icon="octicon:info-16"></iconify-icon>Note</p>
+<p><code>FETCHCONTENT_SOURCE_DIR_&lt;uppercaseName&gt;</code> が定義されていると
+<code>FETCHCONTENT_TRY_FIND_PACKAGE_MODE</code> や <code>FIND_PACKAGE_ARGS</code> によらず
+<code>find_package()</code> さえも強制スキップされる謎仕様。
+「インストール済み &gt; ローカルに既存のソースツリー &gt; 外部からソース取得」
+という節約的な優先順位を実現するのは案外難しい。</p>
+</div>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title"><iconify-icon inline icon="octicon:info-16"></iconify-icon>Note</p>
+<p>同じパッケージの宣言が複数ある場合は早い者勝ちで、階層を超えて共有される。
+わかりやすく上位の呼び出し元の情報を優先するため、
+先に全部 <code>Declare</code> してからまとめて <code>MakeAvailable</code> するのが推奨。</p>
+<blockquote>
+<p>Projects should aim to declare the details of all dependencies they might use before they call FetchContent_MakeAvailable() for any of them.</p></blockquote>
+</div>
 <p>似て非なる <code>ExternalProject</code> はビルド時に実行されるので
 <code>add_subdirectory()</code> の対象にできず、
 <code>execute_process()</code> で git を直接叩くなどして凌いでいた。</p>
@@ -616,10 +648,16 @@ generator非依存の <code>cmake --build</code> を使ったほうがいい。<
 <code>A</code> をつけるとadvancedな変数も。
 見るだけなら <code>-N</code> オプションと共に。</dd>
 </dl>
+<h2 id="style-guide">
+Style guide<a href="#style-guide"></a>
+</h2>
+<p><a href="https://learn.microsoft.com/en-us/vcpkg/contributing/cmake-guidelines">https://learn.microsoft.com/en-us/vcpkg/contributing/cmake-guidelines</a></p>
 <h2 id="versions">
 Versions<a href="#versions"></a>
 </h2>
 <ul>
+<li>4.1: <a href="https://cmake.org/cmake/help/latest/policy/CMP0186.html">Fix <code>^</code> regex bug</a></li>
+<li>3.30: <a href="https://cmake.org/cmake/help/latest/policy/CMP0168.html"><code>FetchContent</code> without sub-build</a></li>
 <li>3.28: <code>FetchContent_Declare(... EXCLUDE_FROM_ALL)</code>,
 <a href="https://cmake.org/cmake/help/latest/manual/cmake-cxxmodules.7.html">C++20 modules</a>,
 <a href="https://launchpad.net/ubuntu/noble/+source/cmake">Ubuntu 24.04 noble</a></li>
