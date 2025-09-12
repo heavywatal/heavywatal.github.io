@@ -56,6 +56,7 @@ install(TARGETS a.out)
 - `message(STATUS "Hello world!")`
 - `option(VARIABLE "Message" ON)`
 - `set(VARIABLE value)`
+  `PARENT_SCOPE` で親スコープの変数に代入できるが、現在のスコープではそれを参照できない。
 - [`cmake_path()`](https://cmake.org/cmake/help/latest/command/cmake_path.html)
   パス操作全般。
   3.20 より古い環境では `get_filename_component()` 。
@@ -417,42 +418,69 @@ CMake 3.11 から。
 
 ```cmake
 include(FetchContent)
-set(FETCHCONTENT_QUIET OFF)
-cmake_print_variables(FETCHCONTENT_SOURCE_DIR_IGRAPH)
-FetchContent_Declare(
-  igraph
-  GIT_REPOSITORY https://github.com/igraph/igraph.git
-  GIT_TAG ${PROJECT_VERSION}
-  GIT_SHALLOW ON
+FetchContent_Declare(pcglite
+  GIT_REPOSITORY https://github.com/heavywatal/pcglite.git
+  GIT_TAG v0.2.1
+  EXCLUDE_FROM_ALL
+  FIND_PACKAGE_ARGS 0.2.1
 )
-FetchContent_MakeAvailable(igraph)
-cmake_print_variables(igraph_SOURCE_DIR, igraph_BINARY_DIR)
+FetchContent_MakeAvailable(pcglite)
+cmake_print_variables(pcglite_FOUND pcglite_DIR)
+cmake_print_variables(pcglite_SOURCE_DIR pcglite_BINARY_DIR)
 ```
 
 `FetchContent_Declare()`
 : まずこれで依存関係を宣言する。
-  複数ある場合、先に全部宣言してからまとめてMakeAvailableを呼ぶのが推奨。
 : ソースに関するオプションは
   [ExternalProject](https://cmake.org/cmake/help/latest/module/ExternalProject.html)
-  とほぼ同じ。
-: `FIND_PACKAGE_ARGS`: (3.24+)\
-  `EXCLUDE_FROM_ALL`: (3.28+)
+  とほぼ同じで、そちらを見に行く必要がある。
+: `GIT_TAG` はタグだけでなくブランチやハッシュも指定できる。
+  公式推奨はハッシュらしい。
+  `GIT_SHALLOW` が使えるのはタグとブランチのみ。
+: `EXCLUDE_FROM_ALL`: (3.28+) findできなかった場合の `add_subdirectory()` に渡される。
+  一緒にインストールする必要のない `PRIVATE` 依存のときに。
+: `FIND_PACKAGE_ARGS`: (3.24+)
 
 `FetchContent_MakeAvailable()`
 : 宣言された依存ライブラリを利用可能な状態にする。(3.14+)
 : これひとつを実行することが推奨されているが、各段階を手動で書くこともできる。
-  1. `find_package()` を試みて、見つからなければ次に進む。(3.24+)
+  1. (3.24+) `find_package()` を試みる。
+     見つかったら3つの変数をセットして終了:
+     - `<lowercaseName>_FOUND`
+     - `<lowercaseName>_DIR`
+     - `<lowercaseName>_POPULATED`
   1. `FetchContent_GetProperties()` で過去にPopulateしたものがあるか確認。
      `<lowercaseName>_POPULATED` が定義されていなければ次に進む。
   1. `FetchContent_Populate()` でソースコードを取得する。
-     `FETCHCONTENT_SOURCE_DIR_<uppercaseName>`
-     が定義されている場合はfetchせずそこにあるものを使う。
      成功したら3つの変数をセットする:
      - `<lowercaseName>_POPULATED`
      - `<lowercaseName>_SOURCE_DIR`
      - `<lowercaseName>_BINARY_DIR`
   1. `add_subdirectory()`
      でプロジェクトに取り込む。
+
+`FETCHCONTENT_TRY_FIND_PACKAGE_MODE`
+: (3.24+; `OPT_IN`, `ALWAYS`, `NEVER`)
+  ソースを取ってくる前に `find_package()` で探すかどうかを制御する。
+  デフォルト未定義は `OPT_IN` と同じで、
+  `FIND_PACKAGE_ARGS` が(空でも)指定されていたら実行。
+
+`FETCHCONTENT_SOURCE_DIR_<uppercaseName>`
+: 指定したソースツリーをあるがままpopulate済みとして使う。
+  `GIT_TAG` なども無視。
+
+> [!NOTE]
+> `FETCHCONTENT_SOURCE_DIR_<uppercaseName>` が定義されていると
+> `FETCHCONTENT_TRY_FIND_PACKAGE_MODE` や `FIND_PACKAGE_ARGS` によらず
+> `find_package()` さえも強制スキップされる謎仕様。
+> 「インストール済み > ローカルに既存のソースツリー > 外部からソース取得」
+> という節約的な優先順位を実現するのは案外難しい。
+
+> [!NOTE]
+> 同じパッケージの宣言が複数ある場合は早い者勝ちで、階層を超えて共有される。
+> わかりやすく上位の呼び出し元の情報を優先するため、
+> 先に全部 `Declare` してからまとめて `MakeAvailable` するのが推奨。
+> > Projects should aim to declare the details of all dependencies they might use before they call FetchContent_MakeAvailable() for any of them.
 
 似て非なる `ExternalProject` はビルド時に実行されるので
 `add_subdirectory()` の対象にできず、
@@ -569,8 +597,15 @@ cmake --install build
   見るだけなら `-N` オプションと共に。
 
 
+## Style guide
+
+<https://learn.microsoft.com/en-us/vcpkg/contributing/cmake-guidelines>
+
+
 ## Versions
 
+- 4.1: [Fix `^` regex bug](https://cmake.org/cmake/help/latest/policy/CMP0186.html)
+- 3.30: [`FetchContent` without sub-build](https://cmake.org/cmake/help/latest/policy/CMP0168.html)
 - 3.28: `FetchContent_Declare(... EXCLUDE_FROM_ALL)`,
   [C++20 modules](https://cmake.org/cmake/help/latest/manual/cmake-cxxmodules.7.html),
   [Ubuntu 24.04 noble](https://launchpad.net/ubuntu/noble/+source/cmake)
