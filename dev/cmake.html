@@ -96,6 +96,10 @@ Scripting commands<a href="#scripting-commands"></a>
 <li><code>configure_file(&lt;input&gt; &lt;output&gt; [COPYONLY] [@ONLY])</code>:
 ファイルの一部を置換しつつ複製する。
 例えば <code>@PROJECT_VERSION@</code> などを含む <code>config.hpp.in</code> に値を埋め込んで <code>config.hpp</code> を生成するとか。</li>
+<li><a href="https://cmake.org/cmake/help/latest/command/execute_process.html"><code>execute_process(COMMAND ...)</code></a>:
+シェル無しで外部コマンドを直接実行する。
+<code>COMMAND</code> を複数書くだけでパイプラインも組めるし、標準出力も取れる。
+親プロジェクトから呼ばれることも考えて <code>WORKING_DIRECTORY</code> は明示的に指定すべし。</li>
 <li><code>function(&lt;name&gt; [args...])</code></li>
 <li><code>foreach(var IN LISTS list)</code></li>
 <li><code>message(STATUS &quot;Hello world!&quot;)</code></li>
@@ -265,23 +269,22 @@ e.g., <code>CMAKE_PREFIX_PATH</code>, <code>CXX</code>, <code>&lt;PackageName&gt
 <h3 id="c">
 C++<a href="#c"></a>
 </h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">target_compile_features</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">PUBLIC</span> <span class="s">cxx_std_17</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set_target_properties</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">PROPERTIES</span> <span class="s">CXX_EXTENSIONS</span> <span class="s">OFF</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_compile_options</span><span class="p">(</span><span class="s">common</span> <span class="s">PRIVATE</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">add_compile_options</span><span class="p">(</span>
 </span></span><span class="line"><span class="cl">  <span class="s">-Wall</span> <span class="s">-Wextra</span> <span class="s">-pedantic</span>
+</span></span><span class="line"><span class="cl">  <span class="o">$&lt;</span><span class="nv">IF:$&lt;BOOL:$&lt;CONFIG</span><span class="o">&gt;</span><span class="s">&gt;,,-O2&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">$&lt;</span><span class="nv">IF:$&lt;BOOL:$&lt;CONFIG</span><span class="o">&gt;</span><span class="s">&gt;,,-g&gt;</span>
 </span></span><span class="line"><span class="cl">  <span class="o">$&lt;</span><span class="nv">$&lt;STREQUAL:${CMAKE_SYSTEM_PROCESSOR},x86_64</span><span class="o">&gt;</span><span class="s">:-march=native&gt;</span>
-</span></span><span class="line"><span class="cl">  <span class="o">$&lt;</span><span class="nv">$&lt;STREQUAL:${CMAKE_SYSTEM_PROCESSOR},arm64</span><span class="o">&gt;</span><span class="s">:-march=armv8.3-a+sha3&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">$&lt;</span><span class="nv">$&lt;STREQUAL:${CMAKE_SYSTEM_PROCESSOR},arm64</span><span class="o">&gt;</span><span class="s">:-march=armv8.4-a&gt;</span>
 </span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">if</span><span class="p">(</span><span class="s">NOT</span> <span class="s">CMAKE_BUILD_TYPE</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span>  <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_BUILD_TYPE</span> <span class="s">Release</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">cmake_print_variables</span><span class="p">(</span><span class="s">CMAKE_BUILD_TYPE</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_FLAGS_DEV</span> <span class="s2">&#34;-O2 -g&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_compile_features</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">PUBLIC</span> <span class="s">cxx_std_17</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set_target_properties</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">PROPERTIES</span> <span class="s">CXX_EXTENSIONS</span> <span class="s">OFF</span><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><p><code>CMAKE_CXX_*</code> のようなグローバル設定を使わず
 <code>target_*()</code> でターゲットごとに設定するのが今後の主流。
 <a href="https://cmake.org/cmake/help/latest/prop_gbl/CMAKE_CXX_KNOWN_FEATURES.html"><code>CMAKE_CXX_KNOWN_FEATURES</code></a>
 に <code>cxx_std_17</code> などの便利なメタタグが導入されたのは CMake 3.8 から。</p>
+<p>グローバルなビルドオプションは利用者側が
+<code>-DCMAKE_BUILD_TYPE=Release</code> のようにタイトルケースで指定するのが慣例。</p>
 <table>
   <thead>
       <tr>
@@ -315,8 +318,14 @@ C++<a href="#c"></a>
 <p><code>#ifndef NDEBUG</code> なコードを残しつつ、
 そこそこ速くコンパイル＆実行したい、
 という組み合わせ <code>-O2 -g</code> は用意されていないので自分で定義する。
-<code>CMAKE_CXX_FLAGS_???</code> を適当に作れば
-<code>-DCMAKE_BUILD_TYPE=???</code> をcase-insensitiveに解釈してもらえる。</p>
+例えば上記の例のように無指定のときのデフォルトとするか、
+<code>set(CMAKE_CXX_FLAGS_DEV &quot;-O2 -g&quot;)</code> として明示的に
+<code>-DCMAKE_BUILD_TYPE=Dev</code> で利用するとか。</p>
+<p><code>CMAKE_BUILD_TYPE</code> を普通の変数として参照するのは避けたほうがいい。
+うっかり case-sensitive な処理を書いてしまうリスクもあるし、
+multi-config generator ではコンフィグ時に未定義。
+<a href="https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html#configuration-expressions"><code>$&lt;CONFIG&gt;</code></a>
+などの generator expression を使えばそれらを回避できる。</p>
 <h2 id="generator-expressions">
 Generator expressions<a href="#generator-expressions"></a>
 </h2>
