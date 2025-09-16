@@ -51,6 +51,10 @@ install(TARGETS a.out)
 - `configure_file(<input> <output> [COPYONLY] [@ONLY])`:
   ファイルの一部を置換しつつ複製する。
   例えば `@PROJECT_VERSION@` などを含む `config.hpp.in` に値を埋め込んで `config.hpp` を生成するとか。
+- [`execute_process(COMMAND ...)`](https://cmake.org/cmake/help/latest/command/execute_process.html):
+  シェル無しで外部コマンドを直接実行する。
+  `COMMAND` を複数書くだけでパイプラインも組めるし、標準出力も取れる。
+  親プロジェクトから呼ばれることも考えて `WORKING_DIRECTORY` は明示的に指定すべし。
 - `function(<name> [args...])`
 - `foreach(var IN LISTS list)`
 - `message(STATUS "Hello world!")`
@@ -194,25 +198,25 @@ e.g., `CMAKE_PREFIX_PATH`, `CXX`, `<PackageName>_ROOT`, etc.
 ### C++
 
 ```cmake
-target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
-set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS OFF)
-target_compile_options(common PRIVATE
+add_compile_options(
   -Wall -Wextra -pedantic
+  $<IF:$<BOOL:$<CONFIG>>,,-O2>
+  $<IF:$<BOOL:$<CONFIG>>,,-g>
   $<$<STREQUAL:${CMAKE_SYSTEM_PROCESSOR},x86_64>:-march=native>
-  $<$<STREQUAL:${CMAKE_SYSTEM_PROCESSOR},arm64>:-march=armv8.3-a+sha3>
+  $<$<STREQUAL:${CMAKE_SYSTEM_PROCESSOR},arm64>:-march=armv8.4-a>
 )
 
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Release)
-endif()
-cmake_print_variables(CMAKE_BUILD_TYPE)
-set(CMAKE_CXX_FLAGS_DEV "-O2 -g")
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS OFF)
 ```
 
 `CMAKE_CXX_*` のようなグローバル設定を使わず
 `target_*()` でターゲットごとに設定するのが今後の主流。
 [`CMAKE_CXX_KNOWN_FEATURES`](https://cmake.org/cmake/help/latest/prop_gbl/CMAKE_CXX_KNOWN_FEATURES.html)
 に `cxx_std_17` などの便利なメタタグが導入されたのは CMake 3.8 から。
+
+グローバルなビルドオプションは利用者側が
+`-DCMAKE_BUILD_TYPE=Release` のようにタイトルケースで指定するのが慣例。
 
 Predefined variable              | default
 ---------------------------------|----
@@ -225,8 +229,15 @@ Predefined variable              | default
 `#ifndef NDEBUG` なコードを残しつつ、
 そこそこ速くコンパイル＆実行したい、
 という組み合わせ `-O2 -g` は用意されていないので自分で定義する。
-`CMAKE_CXX_FLAGS_???` を適当に作れば
-`-DCMAKE_BUILD_TYPE=???` をcase-insensitiveに解釈してもらえる。
+例えば上記の例のように無指定のときのデフォルトとするか、
+`set(CMAKE_CXX_FLAGS_DEV "-O2 -g")` として明示的に
+`-DCMAKE_BUILD_TYPE=Dev` で利用するとか。
+
+`CMAKE_BUILD_TYPE` を普通の変数として参照するのは避けたほうがいい。
+うっかり case-sensitive な処理を書いてしまうリスクもあるし、
+multi-config generator ではコンフィグ時に未定義。
+[`$<CONFIG>`](https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html#configuration-expressions)
+などの generator expression を使えばそれらを回避できる。
 
 
 ## Generator expressions
