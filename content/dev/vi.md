@@ -40,7 +40,7 @@ key             | action
 <kbd>u</kbd>    | 元に戻す
 <kbd>x</kbd>    | 1文字削除 (行は消せない)
 <kbd>dd</kbd>   | 行カット
-<kbd>ctrl-c</kbd> | 中断
+<kbd>ctrl</kbd><kbd>c</kbd> | 中断
 
 
 ### 移動
@@ -57,10 +57,10 @@ key               | action
 <kbd>L</kbd>      | 画面末尾
 <kbd>gg</kbd>     | ファイル先頭
 <kbd>G</kbd>      | ファイル末尾
-<kbd>ctrl-b</kbd> | 前ページ
-<kbd>ctrl-u</kbd> | 半ページ上
-<kbd>ctrl-d</kbd> | 半ページ下
-<kbd>ctrl-f</kbd> | 次ページ
+<kbd>ctrl</kbd><kbd>b</kbd> | 前ページ
+<kbd>ctrl</kbd><kbd>u</kbd> | 半ページ上
+<kbd>ctrl</kbd><kbd>d</kbd> | 半ページ下
+<kbd>ctrl</kbd><kbd>f</kbd> | 次ページ
 
 数字と組み合わせられる。
 e.g., <kbd>3j</kbd>で3行下
@@ -98,18 +98,18 @@ yy   # 1行まるまるコピー
 
 ノーマルモードへの戻り方
 : <kbd>esc</kbd>: 標準だが遠すぎるので却下。
-: <kbd>ctrl-[</kbd>: それなりに押しやすく、<kbd>esc</kbd>と同じ挙動。
-: <kbd>ctrl-c</kbd>: 最も押しやすいし覚えやすい。
+: <kbd>ctrl</kbd><kbd>[</kbd>: それなりに押しやすく、<kbd>esc</kbd>と同じ挙動。
+: <kbd>ctrl</kbd><kbd>c</kbd>: 最も押しやすいし覚えやすい。
   インサートモードでのあらゆる動作を中断して戻るので注意。
 
 
 ## ヴィジュアルモード `-- VISUAL --`
 
 <kbd>v</kbd> で始まる範囲選択モード。
-Emacsでいう<kbd>ctrl-space</kbd>。
+Emacsでいう<kbd>ctrl</kbd><kbd>space</kbd>。
 
-<kbd>shift-v</kbd> で行単位選択。
-<kbd>ctrl-v</kbd> で矩形選択。
+<kbd>shift</kbd><kbd>v</kbd> で行単位選択。
+<kbd>ctrl</kbd><kbd>v</kbd> で矩形選択。
 
 
 

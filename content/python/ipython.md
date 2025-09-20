@@ -40,8 +40,8 @@ open('~/.[TAB]')
 ### 履歴
 
 -   上下キーで単純に遡る
--   途中まで入力して <kbd>control-p</kbd> で前方一致する履歴のみ遡る
--   <kbd>control-r</kbd> から部分一致する履歴を検索
+-   途中まで入力して <kbd>ctrl</kbd><kbd>p</kbd> で前方一致する履歴のみ遡る
+-   <kbd>ctrl</kbd><kbd>r</kbd> から部分一致する履歴を検索
 -   `%hist`
 -   input cache: `_i`, `_ii`, `_iii`, `_ih[n]`, `_i<n>`
 -   output cache: `_`, `__`, `___`, `_oh[n]`, `_<n>`
@@ -135,9 +135,9 @@ GitHub上でも直接閲覧できるし、[VSCode]({{< relref "vscode.md" >}}) �
 1.  ターミナルから起動: `jupyter lab [file or directory]`
 1.  ウェブブラウザで `http://localhost:8888/lab/` が立ち上がる
 1.  Launcher内のNotebookにある適当なカーネル (e.g., Python 3) を選択
-1.  `[ ]:` の右の箱に適当なコマンド `print('Hello, world!')` を入れて <kbd>shift-return</kbd>
+1.  `[ ]:` の右の箱に適当なコマンド `print('Hello, world!')` を入れて <kbd>shift</kbd><kbd>return</kbd>
 1.  適当に保存してブラウザを閉じる
-1.  ターミナルに戻って <kbd>control-c</kbd> で終了
+1.  ターミナルに戻って <kbd>ctrl</kbd><kbd>c</kbd> で終了
 
 
 ### キーボードショートカット
@@ -152,7 +152,7 @@ key                     | action
 <kbd>a</kbd>            | insert cell above
 <kbd>b</kbd>            | insert cell bellow
 <kbd>dd</kbd>           | delete selected cells
-<kbd>ctrl-return</kbd>  | run selected cells
+<kbd>ctrl</kbd><kbd>return</kbd>  | run selected cells
 
 
 ### 出力

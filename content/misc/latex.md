@@ -85,8 +85,8 @@ https://www.ctan.org/pkg/latexmk
 
 ソースコードとPDFの対応箇所を行き来するための仕組み。
 
-- Skim to source: <kbd>shift-cmd-click</kbd>
-- VSCode to PDF: <kbd>alt-cmd-j</kbd>
+- Skim to source: <kbd>shift</kbd><kbd>cmd</kbd><kbd>click</kbd>
+- VSCode to PDF: <kbd>option</kbd><kbd>cmd</kbd><kbd>j</kbd>
 
 
 ### tlmgr でパッケージ管理

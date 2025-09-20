@@ -55,7 +55,7 @@ Time   | <kbd>T</kbd> | <kbd>o -time</kbd>
 システム全体のプロセスが見える上記コマンドとは違い、
 これで見えるのはそのシェルから実行したジョブだけ。
 末尾に`&`をつけてバックグラウンドで走らせたジョブや、
-<kbd>ctrl-z</kbd> でsuspendしたジョブを眺めるのに使う（下記）。
+<kbd>ctrl</kbd><kbd>z</kbd> でsuspendしたジョブを眺めるのに使う（下記）。
 
 
 ## ジョブコントロール
@@ -64,7 +64,7 @@ Time   | <kbd>T</kbd> | <kbd>o -time</kbd>
 
     top
 
-ここで <kbd>ctrl-z</kbd> を押すと、プロセスはバックグラウンドで一時停止する:
+ここで <kbd>ctrl</kbd><kbd>z</kbd> を押すと、プロセスはバックグラウンドで一時停止する:
 
     [1]  + 19310 suspended  top
 

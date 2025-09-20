@@ -32,7 +32,7 @@ key              | command           | action
 ---------------- | ----------------- | ------------------
 <kbd>C-g</kbd>   | `keyboard-quit`   | とにかくキャンセル
 <kbd>C-z</kbd>   | `suspend-emacs`   | とりあえずemacsを抜ける
-<kbd>C-x u</kbd> | `advertised-undo` | 元に戻す
+<kbd>C-x</kbd><kbd>u</kbd> | `advertised-undo` | 元に戻す
 <kbd>C-_</kbd>   | `advertised-undo` | 元に戻す
 <kbd>C-/</kbd>   | `advertised-undo` | 元に戻す
  | |
@@ -40,11 +40,11 @@ key              | command           | action
 <kbd>M-x</kbd>   |        | ミニバッファをコマンド受付状態にする
 <kbd>M-!</kbd>   |        | ミニバッファをシェルコマンド受付状態にする
  | |
-<kbd>C-x C-f     | `find-file`               | 開く
-<kbd>C-x C-s     | `save-file`               | 上書き保存
-<kbd>C-x C-w     | `write-file`              | 別名で保存
-<kbd>C-x C-c     | `save-buffers-kill-emacs` | 終了
-<kbd>C-x d       | `dired`                   | directory edit に突入 (下記)
+<kbd>C-x</kbd><kbd>C-f</kbd> | `find-file`               | 開く
+<kbd>C-x</kbd><kbd>C-s</kbd> | `save-file`               | 上書き保存
+<kbd>C-x</kbd><kbd>C-w</kbd> | `write-file`              | 別名で保存
+<kbd>C-x</kbd><kbd>C-c</kbd> | `save-buffers-kill-emacs` | 終了
+<kbd>C-x</kbd><kbd>d</kbd>   | `dired`                   | directory edit に突入 (下記)
  | |
 <kbd>C-s</kbd>   | `isearch-forward`     | 下に検索
 <kbd>C-r</kbd>   | `isearch-backward`    | 上に検索
@@ -56,32 +56,32 @@ key              | command           | action
 <kbd>M-w</kbd>   | `copy-region-as-kill` | マークから現在地までコピー
 <kbd>C-y</kbd>   | `yank`                | 貼り付け
  | |
-<kbd>C-x r k</kbd> | `kill-rectangle` | 矩形にカット
-<kbd>C-x r y</kbd> | `yank-rectangle` | 矩形にペースト
-<kbd>C-x r o</kbd> | `open-rectangle` | 矩形にスペース
+<kbd>C-x</kbd><kbd>r k</kbd> | `kill-rectangle` | 矩形にカット
+<kbd>C-x</kbd><kbd>r y</kbd> | `yank-rectangle` | 矩形にペースト
+<kbd>C-x</kbd><kbd>r o</kbd> | `open-rectangle` | 矩形にスペース
  | |
-<kbd>C-q TAB</kbd> |                  | タブコード \t 入力
-<kbd>C-x TAB</kbd> | `indent-rigidly` | 選択された領域を左右キーで手動インデント
+<kbd>C-q</kbd><kbd>TAB</kbd> |                  | タブコード \t 入力
+<kbd>C-x</kbd><kbd>TAB</kbd> | `indent-rigidly` | 選択された領域を左右キーで手動インデント
  | |
-<kbd>C-x k</kbd>   | `kill-buffer`      | バッファを消す = ファイルを閉じる
-<kbd>C-x b</kbd>   | `switch-to-buffer` | バッファを切り替える
-<kbd>C-x C-b</kbd> | `list-buffers`     | バッファリストを開く(下記)
+<kbd>C-x</kbd><kbd>k</kbd>   | `kill-buffer`      | バッファを消す = ファイルを閉じる
+<kbd>C-x</kbd><kbd>b</kbd>   | `switch-to-buffer` | バッファを切り替える
+<kbd>C-x</kbd><kbd>C-b</kbd> | `list-buffers`     | バッファリストを開く(下記)
  | |
-<kbd>C-x 0</kbd>   | | このwindowを閉じて分割解除
-<kbd>C-x 1</kbd>   | | 分割解除してこのwindowを最大化
-<kbd>C-x 2</kbd>   | | 上下分割
-<kbd>C-x 3</kbd>   | | 左右分割
-<kbd>C-x o</kbd>   | | other (next) windowにフォーカスを移す
+<kbd>C-x</kbd><kbd>0</kbd>   | | このwindowを閉じて分割解除
+<kbd>C-x</kbd><kbd>1</kbd>   | | 分割解除してこのwindowを最大化
+<kbd>C-x</kbd><kbd>2</kbd>   | | 上下分割
+<kbd>C-x</kbd><kbd>3</kbd>   | | 左右分割
+<kbd>C-x</kbd><kbd>o</kbd>   | | other (next) windowにフォーカスを移す
  | |
-<kbd>C-x 5 0</kbd> | | delete-frame
-<kbd>C-x 5 1</kbd> | | delete-other-frame
-<kbd>C-x 5 2</kbd> | | make-frame-command
-<kbd>C-x 5 o</kbd> | | other-frame
-<kbd>C-x 5 b</kbd> | | switch-tobuffer-other-frame
-<kbd>C-x 5 f</kbd> | | find-file-other-frame
-<kbd>C-x 5 d</kbd> | | dired-other-frame
+<kbd>C-x</kbd><kbd>5 0</kbd> | | delete-frame
+<kbd>C-x</kbd><kbd>5 1</kbd> | | delete-other-frame
+<kbd>C-x</kbd><kbd>5 2</kbd> | | make-frame-command
+<kbd>C-x</kbd><kbd>5 o</kbd> | | other-frame
+<kbd>C-x</kbd><kbd>5 b</kbd> | | switch-tobuffer-other-frame
+<kbd>C-x</kbd><kbd>5 f</kbd> | | find-file-other-frame
+<kbd>C-x</kbd><kbd>5 d</kbd> | | dired-other-frame
 
-### `list-buffers` <kbd>C-x C-b</kbd>
+### `list-buffers` <kbd>C-x</kbd><kbd>C-b</kbd>
 
 バッファリストを隣のウィンドウで開く。
 
@@ -98,7 +98,7 @@ key              | command           | action
 <kbd>u</kbd> マーク取り消し\
 <kbd>q</kbd> list終了
 
-### `dired` <kbd>C-x d</kbd>
+### `dired` <kbd>C-x</kbd><kbd>d</kbd>
 
 ファイラのようなバッファ。
 コピーや移動もできるけど、まあそれはシェルからやればいい。
@@ -110,11 +110,11 @@ key              | command           | action
 
 ### 繰り返し入力
 
-<kbd>C-u N X</kbd> あるいは <kbd>M-N X</kbd> で、XをN回入力する。
+<kbd>C-u</kbd><kbd>N</kbd><kbd>X</kbd> あるいは <kbd>M-N</kbd><kbd>X</kbd> で、XをN回入力する。
 
-e.g., <kbd>C-u 79 -</kbd> と打てば水平線を入力できる。
+e.g., <kbd>C-u</kbd><kbd>79</kbd><kbd>-</kbd> と打てば水平線を入力できる。
 
-e.g., <kbd>C-u 3 C-_</kbd> とすれば3操作分だけ元に戻せる。
+e.g., <kbd>C-u</kbd><kbd>3</kbd><kbd>C-_</kbd> とすれば3操作分だけ元に戻せる。
 
 ## モード
 
@@ -128,16 +128,16 @@ e.g., <kbd>C-u 3 C-_</kbd> とすれば3操作分だけ元に戻せる。
 
 ### Markdown
 
-<kbd>C-c C-c p</kbd> preview on browser\
-<kbd>C-c C-c m</kbd> preview on buffer\
-<kbd>C-c C-c v</kbd> write preview and open in browser\
-<kbd>C-c C-c e</kbd> write preview
+<kbd>C-c</kbd><kbd>C-c</kbd><kbd>p</kbd> preview on browser\
+<kbd>C-c</kbd><kbd>C-c</kbd><kbd>m</kbd> preview on buffer\
+<kbd>C-c</kbd><kbd>C-c</kbd><kbd>v</kbd> write preview and open in browser\
+<kbd>C-c</kbd><kbd>C-c</kbd><kbd>e</kbd> write preview
 
 ### R (ESS)
 
-<kbd>M-x R</kbd> R起動\
-<kbd>C-c C-r</kbd> `ess-eval-region`\
-<kbd>C-c C-q</kbd> R終了
+<kbd>M-x</kbd><kbd>R</kbd> R起動\
+<kbd>C-c</kbd><kbd>C-r</kbd> `ess-eval-region`\
+<kbd>C-c</kbd><kbd>C-q</kbd> R終了
 
 ## 設定
 
