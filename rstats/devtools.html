@@ -114,31 +114,30 @@ Rパッケージ<a href="#rパッケージ"></a>
 最低限の作成手順<a href="#最低限の作成手順"></a>
 </h3>
 <ol>
-<li>
-<p>開発支援パッケージをインストールする:
-<code>install.packages(c(&quot;devtools&quot;, &quot;usethis&quot;))</code></p>
-</li>
-<li>
-<p><a href="https://usethis.r-lib.org/">usethis</a> の関数をいくつか使って骨組みを作る:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">usethis</span><span class="o">::</span><span class="nf">create_package</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">usethis</span><span class="o">::</span><span class="nf">use_mit_license</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="n">usethis</span><span class="o">::</span><span class="nf">use_package_doc</span><span class="p">()</span>
+<li>開発支援パッケージをインストールして読み込む:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">install.packages</span><span class="p">(</span><span class="s">&#34;devtools&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">library</span><span class="p">(</span><span class="n">devtools</span><span class="p">)</span>
+</span></span></code></pre></div><a href="https://usethis.r-lib.org/">usethis</a> の関数も読み込まれて利用可能になる。</li>
+<li>パッケージの骨組みを作る:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">create_package</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">getwd</span><span class="p">()</span> <span class="c1"># 自動的に移動していることを確認</span>
+</span></span></code></pre></div>予め作った <code>hello/</code> の中で <code>create_package(&quot;.&quot;)</code> しても同じ。</li>
+<li>一般的な初期設定して、様子を見てみる:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">use_mit_license</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nf">use_package_doc</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nf">check</span><span class="p">()</span>
 </span></span></code></pre></div></li>
-<li>
-<p><code>devtools::check()</code> で様子を見てみる。</p>
-</li>
-<li>
-<p>ローカルgitリポジトリを作って最初のコミットをする:
-<code>usethis::use_git()</code></p>
-</li>
-<li>
-<p>GitHubに同名のリポジトリを作ってプッシュ:
-<code>usethis::use_github()</code></p>
-<p>（リポジトリの名前をパッケージ名と違うものにしたい場合などは手動で）</p>
-</li>
-<li>
-<p>とりあえず誰でもインストール可能なパッケージができたはず:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&#34;heavywatal/rhello&#34;</span><span class="p">)</span>
+<li>ローカルgitリポジトリを作って最初のコミットをする
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">use_git</span><span class="p">()</span>
+</span></span></code></pre></div>最初のコミットを空っぽにしたい場合は予め手動でやっておく:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git init
+</span></span><span class="line"><span class="cl">git commit --allow-empty -m <span class="s2">&#34;empty commit&#34;</span>
+</span></span></code></pre></div></li>
+<li>GitHubに同名のリポジトリを作ってプッシュ:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">use_github</span><span class="p">()</span>
+</span></span></code></pre></div>リポジトリの名前をパッケージ名と違うものにしたい場合などは手動で。</li>
+<li>とりあえず誰でもインストール可能なパッケージができたはず:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">install_github</span><span class="p">(</span><span class="s">&#34;heavywatal/rhello&#34;</span><span class="p">)</span>
 </span></span></code></pre></div></li>
 </ol>
 <h3 id="ソース構造">
@@ -163,7 +162,7 @@ Rパッケージ<a href="#rパッケージ"></a>
 <ul>
 <li>どうでも良さそうなファイル名とは裏腹に、ちゃんと書かないと動かない。</li>
 <li>始めはusethisとかに生成してもらい、他のパッケージを参考にしつつ修正していく。
-書き換えたら <code>usethis::use_tidy_description()</code> で整える。</li>
+書き換えたら <code>use_tidy_description()</code> で整える。</li>
 <li><code>Imports</code> に列挙したものは依存パッケージとして一緒にインストールされる。
 <code>NAMESPACE</code> における <code>import()</code> とは意味が異なり、
 <code>library()</code> 時に読み込まれるわけではない。</li>
@@ -221,7 +220,7 @@ Rパッケージ<a href="#rパッケージ"></a>
 <p>個々の関数の使用例はRソースファイルの <code>@examples</code> に書くとして、
 複数の関数を組み合わせてどう使うかを説明するのが<code>vignettes/</code>の役割。
 R Markdown形式で書いてHTMLやPDFで表示できるので表現力豊か。</p>
-<p><code>usethis::use_vignette(&quot;hello&quot;)</code> で雛形を作ってもらうのが楽。</p>
+<p><code>use_vignette(&quot;hello&quot;)</code> で雛形を作ってもらうのが楽。</p>
 <p><code>pandoc</code> と <code>pandoc-citeproc</code> が必要なので
 <a href="/mac/homebrew.html">Homebrew</a> とかでインストールしておく。</p>
 <p><code>check()</code>がデフォルトで<code>vignette=TRUE</code>かつ処理がやや重いので、
@@ -261,8 +260,8 @@ Articles一覧の中ではなくReferenceの隣に &ldquo;Get started&rdquo; と
 <li><a href="https://r-pkgs.org/data.html">https://r-pkgs.org/data.html</a></li>
 <li><a href="https://usethis.r-lib.org/reference/use_data.html">https://usethis.r-lib.org/reference/use_data.html</a></li>
 </ul>
-<p><code>usethis::use_data_raw()</code> で <code>data-raw/&lt;dataset&gt;.R</code> をセットアップし、
-その中で <code>usethis::use_data()</code> を呼んで
+<p><code>use_data_raw()</code> で <code>data-raw/&lt;dataset&gt;.R</code> をセットアップし、
+その中で <code>use_data()</code> を呼んで
 <code>data/&lt;dataset&gt;.rda</code> や <code>R/sysdata.rda</code> に配置する。</p>
 <dl>
 <dt><code>data/</code></dt>
@@ -274,7 +273,7 @@ Articles一覧の中ではなくReferenceの隣に &ldquo;Get started&rdquo; と
 <dt><code>data-raw/</code></dt>
 <dd><code>data/</code> のファイルを作るためのソースコードやテキストデータを置いておく。</dd>
 <dd>bundled package には入れない
-(ように <code>usethis::use_data_raw()</code> が <code>.Rbuildignore</code> を設定する)。</dd>
+(ように <code>use_data_raw()</code> が <code>.Rbuildignore</code> を設定する)。</dd>
 <dt><code>inst/extdata/</code></dt>
 <dd>データ読み書きを例示するためのデータファイルを置いておく。</dd>
 <dd><code>system.file(&quot;extdata&quot;, &quot;mtcars.csv&quot;, package = &quot;readr&quot;)</code>
@@ -317,7 +316,7 @@ mydemo2    Description of demo 2
 ほとんど手で書くことはなく、usethisを使っているうちに膨らんでいく。</dd>
 <dt><code>README.md</code></dt>
 <dd>GitHubでいい感じに見えるようにMarkdown形式でパッケージの概要を書く。
-Rコードを含む <code>README.Rmd</code> から <code>devtools::build_readme()</code> で生成することも可能。</dd>
+Rコードを含む <code>README.Rmd</code> から <code>build_readme()</code> で生成することも可能。</dd>
 <dd>pkgdownでもホームページの材料として使われるが、<code>index.md</code> を置けばそちらが優先される。
 開発者向けと一般向けを使い分けるとか。
 <code>index.md</code> をルートに置きたくない場合は <code>pkgdown/index.md</code> でもいい。</dd>
@@ -411,7 +410,7 @@ Rコードを含む <code>README.Rmd</code> から <code>devtools::build_readme(
 2段落目を省略するとタイトルが流用される。</li>
 <li>空行だけでは切れ目として扱われないので <code>NULL</code> などを置いたりする。</li>
 <li><a href="https://roxygen2.r-lib.org/articles/rd-formatting.html">Rd形式の代わりにMarkdown形式で記述できる</a>。
-<code>usethis::create_package()</code> がデフォルトで
+<code>create_package()</code> がデフォルトで
 <code>Roxygen: list(markdown = TRUE)</code> を <code>DESCRIPTION</code> に書いてくれる。
 その全体設定をせず使いたいブロックにいちいち <code>@md</code> を書く個別設定も可能。
 <code>```{r }</code> でコードチャンクを作ったり、
@@ -537,13 +536,13 @@ e.g., <a href="https://github.com/tidyverse/dplyr/blob/HEAD/R/select.R">dplyr/R/
 <p><a href="https://r-pkgs.org/website.html">https://r-pkgs.org/website.html</a></p>
 <p>パッケージのソースコードからウェブサイトを自動生成してくれる。
 初期設定は例によってusethisに任せる:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">usethis</span><span class="o">::</span><span class="nf">use_pkgdown</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="n">usethis</span><span class="o">::</span><span class="nf">use_github_pages</span><span class="p">()</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">use_pkgdown</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nf">use_github_pages</span><span class="p">()</span>
 </span></span></code></pre></div><p><code>_pkgdown.yml</code> という設定ファイルを適宜編集して
 <code>pkgdown::build_site()</code> を実行すると <code>docs/</code> 以下にファイルが生成される。
 それを <a href="/dev/git.html#github-pages">GitHub Pages</a> とかで公開する。</p>
 <p>ファイル生成と GitHub Pages へのデプロイも GitHub Actions で自動化したければ
-<code>usethis::use_pkgdown_github_pages()</code> で設定してもらえる。</p>
+<code>use_pkgdown_github_pages()</code> で設定してもらえる。</p>
 <p>生成される <code>docs/pkgdown.yml</code> には <code>last_built</code> の日付とか <code>pandoc</code> のバージョンとか、
 いちいち差分を発生させたくないような情報が入っているので、
 <code>.gitignore</code> に入れて無視したくなる。
