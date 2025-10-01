@@ -34,9 +34,9 @@ vimのデフォルトは拡張を無効にしたvi互換モード。
 key             | action
 --------------- | ------
 <kbd>i</kbd>    | インサートモードに移行
-<kbd>:w</kbd>   | 保存
-<kbd>:q</kbd>   | 終了
-<kbd>:q!</kbd>  | 保存しないで強制終了
+<kbd>:</kbd><kbd>w</kbd>   | 保存
+<kbd>:</kbd><kbd>q</kbd>   | 終了
+<kbd>:</kbd><kbd>q</kbd><kbd>!</kbd>  | 保存しないで強制終了
 <kbd>u</kbd>    | 元に戻す
 <kbd>x</kbd>    | 1文字削除 (行は消せない)
 <kbd>dd</kbd>   | 行カット
@@ -45,18 +45,20 @@ key             | action
 
 ### 移動
 
-key               | action
------------------ | ------
+key                         | action
+--------------------------- | ------
 <kbd>h</kbd><kbd>j</kbd><kbd>k</kbd><kbd>l</kbd> | <kbd>←</kbd><kbd>↓</kbd><kbd>↑</kbd><kbd>→</kbd>
-<kbd>b</kbd> <kbd>B</kbd> | 単語頭
-<kbd>w</kbd> <kbd>W</kbd> | 次の単語頭
-<kbd>0</kbd>      | 行頭
-<kbd>^</kbd>      | 行頭 (非空白)
-<kbd>$</kbd>      | 行末
-<kbd>H</kbd>      | 画面先頭
-<kbd>L</kbd>      | 画面末尾
-<kbd>gg</kbd>     | ファイル先頭
-<kbd>G</kbd>      | ファイル末尾
+<kbd>b</kbd>                | 前の単語頭 (ハイフンとかでも区切る)
+<kbd>B</kbd>                | 前の単語頭 (空白のみ認識)
+<kbd>w</kbd>                | 次の単語頭 (ハイフンとかでも区切る)
+<kbd>W</kbd>                | 次の単語頭 (空白のみ認識)
+<kbd>0</kbd>                | 行頭
+<kbd>^</kbd>                | 行頭 (非空白)
+<kbd>$</kbd>                | 行末
+<kbd>H</kbd>                | 画面先頭
+<kbd>L</kbd>                | 画面末尾
+<kbd>g</kbd><kbd>g</kbd>    | ファイル先頭
+<kbd>G</kbd>                | ファイル末尾
 <kbd>ctrl</kbd><kbd>b</kbd> | 前ページ
 <kbd>ctrl</kbd><kbd>u</kbd> | 半ページ上
 <kbd>ctrl</kbd><kbd>d</kbd> | 半ページ下
@@ -89,6 +91,23 @@ yy   # 1行まるまるコピー
 <kbd>P</kbd>も挿入後のカーソル位置が気持ち悪いけど仕方ない。
 
 範囲選択を見ながら操作したい場合は下記のヴィジュアルモードを使う。
+
+
+### マクロ
+
+<kbd>q</kbd>に続けて任意の1文字を押すと記録開始。
+**<kbd>q</kbd>で終了**。
+
+<kbd>:</kbd><kbd>q</kbd> のつもりで誤って `recording @` 状態になり、
+<kbd>esc</kbd>でも<kbd>ctrl</kbd><kbd>c</kbd>でも抜けられずにハマりがち。
+
+例えば
+<kbd>q</kbd><kbd>w</kbd>
+と入力して `recording @w` と表示されたら、
+続けて <kbd>a</kbd>`hello`<kbd>esc</kbd> と入力し、
+<kbd>q</kbd> で登録完了。
+`@w` で実行すると `hello` が入力される。
+数字を頭につけて繰り返すこともできる。
 
 
 ## インサートモード `-- INSERT --`
