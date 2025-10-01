@@ -96,15 +96,15 @@ vimのデフォルトは拡張を無効にしたvi互換モード。
           <td>インサートモードに移行</td>
       </tr>
       <tr>
-          <td><kbd>:w</kbd></td>
+          <td><kbd>:</kbd><kbd>w</kbd></td>
           <td>保存</td>
       </tr>
       <tr>
-          <td><kbd>:q</kbd></td>
+          <td><kbd>:</kbd><kbd>q</kbd></td>
           <td>終了</td>
       </tr>
       <tr>
-          <td><kbd>:q!</kbd></td>
+          <td><kbd>:</kbd><kbd>q</kbd><kbd>!</kbd></td>
           <td>保存しないで強制終了</td>
       </tr>
       <tr>
@@ -141,12 +141,20 @@ vimのデフォルトは拡張を無効にしたvi互換モード。
           <td><kbd>←</kbd><kbd>↓</kbd><kbd>↑</kbd><kbd>→</kbd></td>
       </tr>
       <tr>
-          <td><kbd>b</kbd> <kbd>B</kbd></td>
-          <td>単語頭</td>
+          <td><kbd>b</kbd></td>
+          <td>前の単語頭 (ハイフンとかでも区切る)</td>
       </tr>
       <tr>
-          <td><kbd>w</kbd> <kbd>W</kbd></td>
-          <td>次の単語頭</td>
+          <td><kbd>B</kbd></td>
+          <td>前の単語頭 (空白のみ認識)</td>
+      </tr>
+      <tr>
+          <td><kbd>w</kbd></td>
+          <td>次の単語頭 (ハイフンとかでも区切る)</td>
+      </tr>
+      <tr>
+          <td><kbd>W</kbd></td>
+          <td>次の単語頭 (空白のみ認識)</td>
       </tr>
       <tr>
           <td><kbd>0</kbd></td>
@@ -169,7 +177,7 @@ vimのデフォルトは拡張を無効にしたvi互換モード。
           <td>画面末尾</td>
       </tr>
       <tr>
-          <td><kbd>gg</kbd></td>
+          <td><kbd>g</kbd><kbd>g</kbd></td>
           <td>ファイル先頭</td>
       </tr>
       <tr>
@@ -230,6 +238,20 @@ yy   # 1行まるまるコピー
 </code></pre><p><kbd>p</kbd>はカーソルの右に挿入される謎仕様なので却下。
 <kbd>P</kbd>も挿入後のカーソル位置が気持ち悪いけど仕方ない。</p>
 <p>範囲選択を見ながら操作したい場合は下記のヴィジュアルモードを使う。</p>
+<h3 id="マクロ">
+マクロ<a href="#マクロ"></a>
+</h3>
+<p><kbd>q</kbd>に続けて任意の1文字を押すと記録開始。
+<strong><kbd>q</kbd>で終了</strong>。</p>
+<p><kbd>:</kbd><kbd>q</kbd> のつもりで誤って <code>recording @</code> 状態になり、
+<kbd>esc</kbd>でも<kbd>ctrl</kbd><kbd>c</kbd>でも抜けられずにハマりがち。</p>
+<p>例えば
+<kbd>q</kbd><kbd>w</kbd>
+と入力して <code>recording @w</code> と表示されたら、
+続けて <kbd>a</kbd><code>hello</code><kbd>esc</kbd> と入力し、
+<kbd>q</kbd> で登録完了。
+<code>@w</code> で実行すると <code>hello</code> が入力される。
+数字を頭につけて繰り返すこともできる。</p>
 <h2 id="インサートモード----insert---">
 インサートモード <code>-- INSERT --</code><a href="#インサートモード----insert---"></a>
 </h2>
