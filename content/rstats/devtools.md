@@ -33,30 +33,41 @@ GitHubに公開しておけば誰でも使えるようになるので、
 
 ### 最低限の作成手順
 
-1.  開発支援パッケージをインストールする:
-    `install.packages(c("devtools", "usethis"))`
-
-1.  [usethis](https://usethis.r-lib.org/) の関数をいくつか使って骨組みを作る:
-
+1.  開発支援パッケージをインストールして読み込む:
     ```r
-    usethis::create_package("hello")
-    usethis::use_mit_license()
-    usethis::use_package_doc()
+    install.packages("devtools")
+    library(devtools)
     ```
-
-1.  `devtools::check()` で様子を見てみる。
-
-1.  ローカルgitリポジトリを作って最初のコミットをする:
-    `usethis::use_git()`
-
+    [usethis](https://usethis.r-lib.org/) の関数も読み込まれて利用可能になる。
+1.  パッケージの骨組みを作る:
+    ```r
+    create_package("hello")
+    getwd() # 自動的に移動していることを確認
+    ```
+    予め作った `hello/` の中で `create_package(".")` しても同じ。
+1.  一般的な初期設定して、様子を見てみる:
+    ```r
+    use_mit_license()
+    use_package_doc()
+    check()
+    ```
+1.  ローカルgitリポジトリを作って最初のコミットをする
+    ```r
+    use_git()
+    ```
+    最初のコミットを空っぽにしたい場合は予め手動でやっておく:
+    ```sh
+    git init
+    git commit --allow-empty -m "empty commit"
+    ```
 1.  GitHubに同名のリポジトリを作ってプッシュ:
-    `usethis::use_github()`
-
-    （リポジトリの名前をパッケージ名と違うものにしたい場合などは手動で）
-
+    ```r
+    use_github()
+    ```
+    リポジトリの名前をパッケージ名と違うものにしたい場合などは手動で。
 1.  とりあえず誰でもインストール可能なパッケージができたはず:
     ```r
-    remotes::install_github("heavywatal/rhello")
+    install_github("heavywatal/rhello")
     ```
 
 
@@ -86,7 +97,7 @@ CRANから落としてくる `.tar.gz` ソースコード (bundle package) と�
 
 -   どうでも良さそうなファイル名とは裏腹に、ちゃんと書かないと動かない。
 -   始めはusethisとかに生成してもらい、他のパッケージを参考にしつつ修正していく。
-    書き換えたら `usethis::use_tidy_description()` で整える。
+    書き換えたら `use_tidy_description()` で整える。
 -   `Imports` に列挙したものは依存パッケージとして一緒にインストールされる。
     `NAMESPACE` における `import()` とは意味が異なり、
     `library()` 時に読み込まれるわけではない。
@@ -145,7 +156,7 @@ CRANから落としてくる `.tar.gz` ソースコード (bundle package) と�
 複数の関数を組み合わせてどう使うかを説明するのが`vignettes/`の役割。
 R Markdown形式で書いてHTMLやPDFで表示できるので表現力豊か。
 
-`usethis::use_vignette("hello")` で雛形を作ってもらうのが楽。
+`use_vignette("hello")` で雛形を作ってもらうのが楽。
 
 `pandoc` と `pandoc-citeproc` が必要なので
 [Homebrew]({{< relref "homebrew.md" >}}) とかでインストールしておく。
@@ -193,8 +204,8 @@ Articles一覧の中ではなくReferenceの隣に "Get started" としてリン
 - <https://r-pkgs.org/data.html>
 - <https://usethis.r-lib.org/reference/use_data.html>
 
-`usethis::use_data_raw()` で `data-raw/<dataset>.R` をセットアップし、
-その中で `usethis::use_data()` を呼んで
+`use_data_raw()` で `data-raw/<dataset>.R` をセットアップし、
+その中で `use_data()` を呼んで
 `data/<dataset>.rda` や `R/sysdata.rda` に配置する。
 
 `data/`
@@ -208,7 +219,7 @@ Articles一覧の中ではなくReferenceの隣に "Get started" としてリン
 `data-raw/`
 : `data/` のファイルを作るためのソースコードやテキストデータを置いておく。
 : bundled package には入れない
-  (ように `usethis::use_data_raw()` が `.Rbuildignore` を設定する)。
+  (ように `use_data_raw()` が `.Rbuildignore` を設定する)。
 
 `inst/extdata/`
 : データ読み書きを例示するためのデータファイルを置いておく。
@@ -259,7 +270,7 @@ Articles一覧の中ではなくReferenceの隣に "Get started" としてリン
 
 `README.md`
 : GitHubでいい感じに見えるようにMarkdown形式でパッケージの概要を書く。
-  Rコードを含む `README.Rmd` から `devtools::build_readme()` で生成することも可能。
+  Rコードを含む `README.Rmd` から `build_readme()` で生成することも可能。
 : pkgdownでもホームページの材料として使われるが、`index.md` を置けばそちらが優先される。
   開発者向けと一般向けを使い分けるとか。
   `index.md` をルートに置きたくない場合は `pkgdown/index.md` でもいい。
@@ -365,7 +376,7 @@ increment = function(x) {x + 1}
     2段落目を省略するとタイトルが流用される。
 -   空行だけでは切れ目として扱われないので `NULL` などを置いたりする。
 -   [Rd形式の代わりにMarkdown形式で記述できる](https://roxygen2.r-lib.org/articles/rd-formatting.html)。
-    `usethis::create_package()` がデフォルトで
+    `create_package()` がデフォルトで
     `Roxygen: list(markdown = TRUE)` を `DESCRIPTION` に書いてくれる。
     その全体設定をせず使いたいブロックにいちいち `@md` を書く個別設定も可能。
     ` ```{r } ` でコードチャンクを作ったり、
@@ -511,8 +522,8 @@ increment = function(x) {x + 1}
 パッケージのソースコードからウェブサイトを自動生成してくれる。
 初期設定は例によってusethisに任せる:
 ```r
-usethis::use_pkgdown()
-usethis::use_github_pages()
+use_pkgdown()
+use_github_pages()
 ```
 
 `_pkgdown.yml` という設定ファイルを適宜編集して
@@ -520,7 +531,7 @@ usethis::use_github_pages()
 それを [GitHub Pages]({{< relref "git.md" >}}#github-pages) とかで公開する。
 
 ファイル生成と GitHub Pages へのデプロイも GitHub Actions で自動化したければ
-`usethis::use_pkgdown_github_pages()` で設定してもらえる。
+`use_pkgdown_github_pages()` で設定してもらえる。
 
 生成される `docs/pkgdown.yml` には `last_built` の日付とか `pandoc` のバージョンとか、
 いちいち差分を発生させたくないような情報が入っているので、
