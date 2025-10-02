@@ -152,6 +152,130 @@ SSH越しの送受信<a href="#ssh越しの送受信"></a>
 <code>RequestTTY yes</code> を付けてると当然ながら怒られる。</li>
 <li>リモート側の <code>.bashrc</code> とかで標準出力に何かを表示するようにしてあるとコケる</li>
 </ul>
+<h2 id="wget">
+wget<a href="#wget"></a>
+</h2>
+<p><a href="https://www.gnu.org/software/wget/manual/wget.html">https://www.gnu.org/software/wget/manual/wget.html</a></p>
+<dl>
+<dt><code>-nv</code>, <code>--no-verbose</code></dt>
+<dd>基本が結構うるさいverboseなので、最低限の表示に抑える。
+<code>-q</code>, <code>--quiet</code> よりはマイルド。</dd>
+<dt><code>-P</code>, <code>--directory-prefix</code></dt>
+<dd>出力先のディレクトリ。デフォルトは <code>.</code> カレント。</dd>
+<dt><code>-O</code></dt>
+<dd>単一の出力ファイルを指定。
+シェルの <code>&gt;</code> リダイレクトと同じように、既存のファイルはまず消される。
+ハイフン <code>-</code> で標準出力。</dd>
+<dd>何もつけなければURLの最後の部分がファイル名になる。
+これを繰り返すと <code>file.1</code> のように連番が付く。</dd>
+<dt><code>-nc</code>, <code>--no-clobber</code></dt>
+<dd>出力先ファイルが存在する場合、サイズや時間によらず連番も取得もしない。
+使い所がわからない。</dd>
+<dt><code>-c</code>, <code>--continue</code></dt>
+<dd>出力先ファイルが存在する場合、連番をつけずに部分ファイルとして扱う。
+不足分だけ取得して通信量を節約できるとは限らない。</dd>
+<dt><code>-N</code>, <code>--timestamping</code></dt>
+<dd>ローカルのファイルが新しい場合は取得しない。
+時間だけでなくサイズの違いも考慮してくれる。</dd>
+</dl>
+<h3 id="recursive-retrieval-options">
+Recursive retrieval options<a href="#recursive-retrieval-options"></a>
+</h3>
+<p>これの存在が curl との大きな違い。</p>
+<dl>
+<dt><code>-m</code>, <code>--mirror</code></dt>
+<dd><code>-r -N -l inf --no-remove-listing</code></dd>
+<dt><code>-r</code>, <code>--recursive</code></dt>
+<dd>再起的に取得。
+ftpでは普通にディレクトリを潜っていく。</dd>
+<dd>http(s)ではリンクを辿ることを意味する。
+一見ディレクトリ指定のような
+<code>https://example.com/dir/</code> を渡した場合でも、
+<code>--default-page</code> (<code>index.html</code>) ファイルを取得してそのリンクを辿る。</dd>
+<dt><code>-l</code>, <code>--level</code></dt>
+<dd>再帰の最大深度を指定。0で無制限。デフォルトは5。</dd>
+<dt><code>-A</code>, <code>--accept</code>, <code>-R</code>, <code>--reject</code>, <code>--accept-regex</code>, <code>--reject-regex</code></dt>
+<dd>指定したsuffixあるいはパターンにマッチするものだけを取得、あるいは除外。
+comma-separated list。</dd>
+<dd>ディレクトリ版は <code>-I</code>, <code>--include-directories</code>, <code>X</code>, <code>--exclude-directories</code></dd>
+<dt><code>-H</code>, <code>--span-hosts</code></dt>
+<dd>外部ホストへのリンクも辿る。</dd>
+<dt><code>-L</code>, <code>--relative</code></dt>
+<dd>相対リンクのみ辿る。</dd>
+<dt><code>-np</code>, <code>--no-parent</code></dt>
+<dd>ディレクトリを遡らない。
+<code>-r</code> を使うときは大概この挙動を意図してるはず。</dd>
+<dd>URL末尾のスラッシュ <code>/</code> をちゃんとつけないとそのディレクトリが起点にならないので注意。</dd>
+<dt><code>-nH</code>, <code>--no-host-directories</code></dt>
+<dd>ホスト名のディレクトリを作らない。
+デフォルトでは <code>example.com/file</code> のようにホスト名のディレクトリが作られる。</dd>
+<dd>逆に確実に作りたい場合は <code>-x</code>, <code>--force-directories</code> 。</dd>
+<dt><code>--cut-dirs</code></dt>
+<dd>取得元のディレクトリ階層を上から指定した数だけ無視して下層だけ作る。</dd>
+</dl>
+<table>
+  <thead>
+      <tr>
+          <th>option</th>
+          <th>output</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>-r -np -P tmp</code></td>
+          <td><code>tmp/example.com/dist/dir/file</code></td>
+      </tr>
+      <tr>
+          <td><code>-r -np</code></td>
+          <td><code>example.com/dist/dir/file</code></td>
+      </tr>
+      <tr>
+          <td><code>-r -np -nH</code></td>
+          <td><code>dist/dir/file</code></td>
+      </tr>
+      <tr>
+          <td><code>-r -np -nH --cut-dirs=1</code></td>
+          <td><code>dist/file</code></td>
+      </tr>
+      <tr>
+          <td><code>-r -nd</code></td>
+          <td><code>file</code></td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="curl">
+curl<a href="#curl"></a>
+</h2>
+<p><a href="https://curl.se/">https://curl.se/</a></p>
+<p>大概どのOSでも最初から入ってるので、
+単一ファイルを取得するには手軽で便利。
+インストールスクリプトなどで使われることも多い。</p>
+<dl>
+<dt><code>-f</code>, <code>--fail</code></dt>
+<dd>403 Forbidden や 404 Not Found のときにそのページを取得せずエラー終了する。</dd>
+<dt><code>-s</code>, <code>--silent</code></dt>
+<dd>プログレスバーやエラーの表示を抑制する。</dd>
+<dd><code>-S</code>, <code>--show-error</code> を追加してエラー表示だけ有効にすることが多い。</dd>
+<dt><code>-L</code>, <code>--location</code></dt>
+<dd>3xxリダイレクトを辿る。</dd>
+<dt><code>-o</code>, <code>--output</code></dt>
+<dd>出力先ファイルを指定。
+デフォルト無指定もしくはハイフン <code>-</code> で標準出力。</dd>
+<dd>URLに <code>{one,two}</code> や <code>[1-3]</code> のような表現を含めて複数ファイルを取得する場合は
+<code>file#1.txt</code> のようなプレースホルダが使える。</dd>
+<dt><code>-O</code>, <code>--remote-name</code></dt>
+<dd>URLの最後の部分をファイル名として保存。</dd>
+<dd>サーバー側が指定した名前を採用したい場合は
+<code>-J</code>, <code>--remote-header-name</code> を使う。</dd>
+<dt><code>-R</code>, <code>--remote-time</code></dt>
+<dd>リモートファイルのタイムスタンプを取得してローカルファイルに適用。</dd>
+<dt><code>--output-dir</code></dt>
+<dd>出力先ディレクトリを指定。
+デフォルトは <code>.</code> カレント。
+存在しないディレクトリを作ってもらうには <code>--create-dirs</code> も必要。</dd>
+<dt><code>--no-clobber</code></dt>
+<dd>出力先ファイルが存在する場合、上書きせず連番をつける。</dd>
+</dl>
 
 </article>
 </main>
