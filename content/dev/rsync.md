@@ -110,3 +110,126 @@ rsync -auv user@example.com:~/dir/ ~/dir/
 - `.ssh/config` でユーザー名とかも登録しておくとさらに楽。
   `RequestTTY yes` を付けてると当然ながら怒られる。
 - リモート側の `.bashrc` とかで標準出力に何かを表示するようにしてあるとコケる
+
+
+## wget
+
+<https://www.gnu.org/software/wget/manual/wget.html>
+
+`-nv`, `--no-verbose`
+: 基本が結構うるさいverboseなので、最低限の表示に抑える。
+  `-q`, `--quiet` よりはマイルド。
+
+`-P`, `--directory-prefix`
+: 出力先のディレクトリ。デフォルトは `.` カレント。
+
+`-O`
+: 単一の出力ファイルを指定。
+  シェルの `>` リダイレクトと同じように、既存のファイルはまず消される。
+  ハイフン `-` で標準出力。
+: 何もつけなければURLの最後の部分がファイル名になる。
+  これを繰り返すと `file.1` のように連番が付く。
+
+`-nc`, `--no-clobber`
+: 出力先ファイルが存在する場合、サイズや時間によらず連番も取得もしない。
+  使い所がわからない。
+
+`-c`, `--continue`
+: 出力先ファイルが存在する場合、連番をつけずに部分ファイルとして扱う。
+  不足分だけ取得して通信量を節約できるとは限らない。
+
+`-N`, `--timestamping`
+: ローカルのファイルが新しい場合は取得しない。
+  時間だけでなくサイズの違いも考慮してくれる。
+
+### Recursive retrieval options
+
+これの存在が curl との大きな違い。
+
+`-m`, `--mirror`
+: `-r -N -l inf --no-remove-listing`
+
+`-r`, `--recursive`
+: 再起的に取得。
+  ftpでは普通にディレクトリを潜っていく。
+: http(s)ではリンクを辿ることを意味する。
+  一見ディレクトリ指定のような
+  `https://example.com/dir/` を渡した場合でも、
+  `--default-page` (`index.html`) ファイルを取得してそのリンクを辿る。
+
+`-l`, `--level`
+: 再帰の最大深度を指定。0で無制限。デフォルトは5。
+
+`-A`, `--accept`, `-R`, `--reject`, `--accept-regex`, `--reject-regex`
+: 指定したsuffixあるいはパターンにマッチするものだけを取得、あるいは除外。
+  comma-separated list。
+: ディレクトリ版は `-I`, `--include-directories`, `X`, `--exclude-directories`
+
+`-H`, `--span-hosts`
+: 外部ホストへのリンクも辿る。
+
+`-L`, `--relative`
+: 相対リンクのみ辿る。
+
+`-np`, `--no-parent`
+: ディレクトリを遡らない。
+  `-r` を使うときは大概この挙動を意図してるはず。
+: URL末尾のスラッシュ `/` をちゃんとつけないとそのディレクトリが起点にならないので注意。
+
+`-nH`, `--no-host-directories`
+: ホスト名のディレクトリを作らない。
+  デフォルトでは `example.com/file` のようにホスト名のディレクトリが作られる。
+: 逆に確実に作りたい場合は `-x`, `--force-directories` 。
+
+`--cut-dirs`
+: 取得元のディレクトリ階層を上から指定した数だけ無視して下層だけ作る。
+
+| option                    | output |
+|---------------------------|--------|
+| `-r -np -P tmp`           | `tmp/example.com/dist/dir/file` |
+| `-r -np`                  | `example.com/dist/dir/file` |
+| `-r -np -nH`              | `dist/dir/file` |
+| `-r -np -nH --cut-dirs=1` | `dist/file` |
+| `-r -nd`                  | `file` |
+
+
+## curl
+
+<https://curl.se/>
+
+大概どのOSでも最初から入ってるので、
+単一ファイルを取得するには手軽で便利。
+インストールスクリプトなどで使われることも多い。
+
+`-f`, `--fail`
+: 403 Forbidden や 404 Not Found のときにそのページを取得せずエラー終了する。
+
+`-s`, `--silent`
+: プログレスバーやエラーの表示を抑制する。
+: `-S`, `--show-error` を追加してエラー表示だけ有効にすることが多い。
+
+`-L`, `--location`
+: 3xxリダイレクトを辿る。
+
+`-o`, `--output`
+: 出力先ファイルを指定。
+  デフォルト無指定もしくはハイフン `-` で標準出力。
+: URLに `{one,two}` や `[1-3]` のような表現を含めて複数ファイルを取得する場合は
+  `file#1.txt` のようなプレースホルダが使える。
+
+`-O`, `--remote-name`
+: URLの最後の部分をファイル名として保存。
+: サーバー側が指定した名前を採用したい場合は
+  `-J`, `--remote-header-name` を使う。
+
+`-R`, `--remote-time`
+: リモートファイルのタイムスタンプを取得してローカルファイルに適用。
+
+`--output-dir`
+: 出力先ディレクトリを指定。
+  デフォルトは `.` カレント。
+  存在しないディレクトリを作ってもらうには `--create-dirs` も必要。
+
+`--no-clobber`
+: 出力先ファイルが存在する場合、上書きせず連番をつける。
+
