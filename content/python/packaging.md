@@ -33,12 +33,29 @@ pywtl/
 編集後に再インストールしなくてもそのまま反映される。
 
 ```sh
-pip3 install -v --user -e ~/git/pywtl/
+uv pip install -e .
 python3 -m wtl.hello
 python3 -m site
 ```
 
+手動で作ってもいいけど [`uv`]({{< relref "install.md#uv" >}}) に任せるのが楽。
+いくつかの形式があるけどとりあえず `--lib`:
+- `--app`: パッケージとして扱われることを想定しないスクリプトやウェブアプリなど。
+- `--package`: `src/` レイアウトで `[build-system]` も設定される。
+- `--lib`: 上記に加えて `py.typed` も作成される。
+```sh
+uv init --lib example-lib
+cd example-lib/
+uv run python -c 'import example_lib; print(example_lib.hello())'
+uv version
+```
+See <https://docs.astral.sh/uv/concepts/projects/init/>.
+
+
 ### `pyproject.toml`
+
+- <https://packaging.python.org/en/latest/specifications/pyproject-toml/>
+- <https://packaging.python.org/en/latest/guides/writing-pyproject-toml/>
 
 パッケージ作成に関わる全てのメタ情報を書いておくファイル。
 `setuptools` に依存しない形式として
@@ -50,28 +67,38 @@ python3 -m site
 [`MANIFEST.in`](https://setuptools.pypa.io/en/latest/userguide/miscellaneous.html)
 などは非推奨になった。
 
+`[build-system]`, `[project]`, `[tool]`
+という3つのテーブルから成る。後に
+[PEP 735](https://www.python.org/dev/peps/pep-0735) で
+`[dependency-groups]` が追加された。
+
+
+#### `build-system`
+
+必須ではないけど推奨。
 [PyPA/Flit](https://flit.readthedocs.io/) (setuptools後継？),
 [PDM](https://pdm.fming.dev/),
 [Poetry](https://python-poetry.org/),
 など後発のツールは早くから対応していて、
 `setuptools` も[ようやく61.0から使えるようになった](https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html)。
-`[project]` テーブルは [PEP 621](https://www.python.org/dev/peps/pep-0621)
-で項目が決められているためツールによらず共通。
-それ以外の `[build-system]` などは使うツールによって異なる。
-
+とりあえず `uv init --lib` 初期設定の `uv_build` を使い、もし不満を感じたら考える。
 ```toml
 [build-system]
-requires = ["flit_core >=3.6,<4"]
-build-backend = "flit_core.buildapi"
+requires = ["uv_build>=0.8.24,<0.9.0"]
+build-backend = "uv_build"
+```
 
+#### `project`
+```toml
 [project]
 name = "wtl"
+version = "0.1.0"
+description = "Personal Python Package"
 authors = [
   {name = "Watal M. Iwasaki", email = "heavywatal@gmail.com"}
 ]
 license = {file = "LICENSE"}
 readme = "README.md"
-dynamic = ["description", "version"]
 classifiers = [
   "Development Status :: 2 - Pre-Alpha",
   "Environment :: Console",
@@ -79,12 +106,12 @@ classifiers = [
   "License :: OSI Approved :: MIT License",
   "Topic :: Scientific/Engineering :: Bio-Informatics",
 ]
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 dependencies = [
   "tomli-w",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
   "pytest",
   "pytest-cov",
@@ -96,13 +123,80 @@ Source = "https://github.com/heavywatal/pywtl"
 
 [project.scripts]
 "hello.py" = "wtl.hello:main"
+```
 
+`project.dynamic` に `["description", "version"]` と指定して
+`__init__.py` のdocstringや `__version__`
+を参照できるかはbackend次第。
+`uv_build` は今のところサポートしていないので
+([uv#8714](https://github.com/astral-sh/uv/issues/8714))
+`pyproject.toml` に書いたバージョンを
+[`importlib.metadata`](https://docs.python.org/3/library/importlib.metadata.html)
+で `__init__.py` に取り込む。
+```py
+import importlib.metadata
+
+assert __package__
+__version__ = importlib.metadata.version(__package__)
+__doc__ = importlib.metadata.metadata(__package__)["Summary"]
+```
+バージョンを比較したいときは
+[`packaging.version.parse()`](https://packaging.pypa.io/en/latest/version.html)
+を利用する。
+
+依存関係を書けるところはいくつかある。
+See <https://docs.astral.sh/uv/concepts/projects/dependencies/>:
+- `project.dependencies`:
+  普通の依存関係。
+  `uv pip install` で自動的にインストールされる。
+- `project.optional-dependencies`:
+  通称"extras"。
+  ユーザー向けに公開されるけどデフォルトではインストールされない。
+  `uv add altair --optional plot` のように追加し、
+  `uv pip install polars[plot]` のようにインストールする。
+- [`dependency-groups`](https://packaging.python.org/en/latest/specifications/dependency-groups/):
+  開発者向けで `[project]` の外にある。
+  パッケージ化しないプロジェクトの依存関係を記述するのにも使える。
+  `uv add --group dev ruff` のようにして追加。
+  名前は何でもいいけど `dev` は `uv` で特別扱いされていて、
+  `--dev` オプションがあったり、デフォルトで `uv sync` 対象だったりする。
+- `requirements.txt`:
+  インストール過程には関与せず、能動的に
+  `pip install -r requirements.txt` のように参照するためのもの。
+
+`project.scripts` で設定したものは
+`${prefix}/bin/` に実行可能ファイルが配置される。
+以前は `console_scripts` で設定していた。
+
+
+#### `tool`
+
+コード整形やテストのような各種開発ツールの設定を記述する。
+
+linterとしては
+[`pyproject.toml` 対応拒否のflake8](https://github.com/PyCQA/flake8/issues/234)
+を捨てて超高速Rust製[ruff](https://docs.astral.sh/ruff/)を使う。
+0.2からはformatterとしても使えるようになり、
+[black](https://black.readthedocs.io)も不要になった。
+
+```toml
 [tool.pyright]
 typeCheckingMode = "strict"
 
 [tool.ruff.lint]
-select = ["F", "E", "W", "I", "N", "UP", "S", "B", "A", "PL"]
-ignore = ["S101"]
+select = ["ALL"]
+ignore = [
+  "D1",   # missing docstring
+  "D203", # incompatible
+  "D213", # incompatible
+  "ANN401", # Any
+  "T201", # print
+  "S101", # assert
+  "DTZ",  # timezone
+  "COM812", # trailing comma
+  "TD",   # todo
+  "FIX",  # todo
+]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
@@ -117,32 +211,6 @@ exclude_also = [
 ]
 ```
 
-`dynamic` に指定したものは `__init__.py` に `__version__ = "0.1.0"`
-などと書いてあるものを参照できる。
-比較したいときは
-[`packaging.version.parse()`](https://packaging.pypa.io/en/latest/version.html)
-を利用する。
-
-`dependencies` に列挙された依存パッケージは
-`pip3 install` で自動的にインストールされる。
-一方 `requirements.txt` はインストール過程には関与せず、
-能動的に `pip3 install -r requirements.txt`
-を打たなきゃインストールされない。
-
-optional dependencies もインストールしたい場合は
-`pip3 install -v -e .[dev]` のように `[key]` を使ってパッケージを指定する。
-
-`project.scripts` で設定したものは
-`${prefix}/bin/` に実行可能ファイルが配置される。
-以前は `console_scripts` で設定していた。
-
-コード整形やテストのような各種開発ツールの設定も `[tool.***]` に記述できる。
-linterとしては
-[`pyproject.toml` 対応拒否のflake8](https://github.com/PyCQA/flake8/issues/234)
-を捨てて超高速Rust製[ruff](https://docs.astral.sh/ruff/)を使う。
-0.2からはformatterとしても使えるようになり、
-[black](https://black.readthedocs.io)も不要になった。
-
 
 ### ソースコード
 
@@ -154,8 +222,8 @@ linterとしては
 
 `wtl/hello.py`
 ```py
-"""Simple module to say hello
-"""
+"""Simple module to say hello."""
+
 import getpass
 
 
