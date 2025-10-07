@@ -84,12 +84,28 @@ Pythonパッケージ作成
 <a href="https://docs.pytest.org/explanation/goodpractices.html">落とし穴が少なくて推奨されているのは前者</a>。</p>
 <p>開発向けの <code>-e,--editable</code> オプションをつけたローカルインストールではコピーが起こらず、
 編集後に再インストールしなくてもそのまま反映される。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pip3 install -v --user -e ~/git/pywtl/
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">uv pip install -e .
 </span></span><span class="line"><span class="cl">python3 -m wtl.hello
 </span></span><span class="line"><span class="cl">python3 -m site
-</span></span></code></pre></div><h3 id="pyprojecttoml">
+</span></span></code></pre></div><p>手動で作ってもいいけど <a href="/python/install.html#uv"><code>uv</code></a> に任せるのが楽。
+いくつかの形式があるけどとりあえず <code>--lib</code>:</p>
+<ul>
+<li><code>--app</code>: パッケージとして扱われることを想定しないスクリプトやウェブアプリなど。</li>
+<li><code>--package</code>: <code>src/</code> レイアウトで <code>[build-system]</code> も設定される。</li>
+<li><code>--lib</code>: 上記に加えて <code>py.typed</code> も作成される。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">uv init --lib example-lib
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> example-lib/
+</span></span><span class="line"><span class="cl">uv run python -c <span class="s1">&#39;import example_lib; print(example_lib.hello())&#39;</span>
+</span></span><span class="line"><span class="cl">uv version
+</span></span></code></pre></div><p>See <a href="https://docs.astral.sh/uv/concepts/projects/init/">https://docs.astral.sh/uv/concepts/projects/init/</a>.</p>
+<h3 id="pyprojecttoml">
 <code>pyproject.toml</code><a href="#pyprojecttoml"></a>
 </h3>
+<ul>
+<li><a href="https://packaging.python.org/en/latest/specifications/pyproject-toml/">https://packaging.python.org/en/latest/specifications/pyproject-toml/</a></li>
+<li><a href="https://packaging.python.org/en/latest/guides/writing-pyproject-toml/">https://packaging.python.org/en/latest/guides/writing-pyproject-toml/</a></li>
+</ul>
 <p>パッケージ作成に関わる全てのメタ情報を書いておくファイル。
 <code>setuptools</code> に依存しない形式として
 <a href="https://www.python.org/dev/peps/pep-0517">PEP 517</a>,
@@ -99,26 +115,35 @@ Pythonパッケージ作成
 <a href="https://setuptools.pypa.io/en/latest/userguide/declarative_config.html"><code>setup.cfg</code></a>,
 <a href="https://setuptools.pypa.io/en/latest/userguide/miscellaneous.html"><code>MANIFEST.in</code></a>
 などは非推奨になった。</p>
-<p><a href="https://flit.readthedocs.io/">PyPA/Flit</a> (setuptools後継？),
+<p><code>[build-system]</code>, <code>[project]</code>, <code>[tool]</code>
+という3つのテーブルから成る。後に
+<a href="https://www.python.org/dev/peps/pep-0735">PEP 735</a> で
+<code>[dependency-groups]</code> が追加された。</p>
+<h4 id="build-system">
+<code>build-system</code><a href="#build-system"></a>
+</h4>
+<p>必須ではないけど推奨。
+<a href="https://flit.readthedocs.io/">PyPA/Flit</a> (setuptools後継？),
 <a href="https://pdm.fming.dev/">PDM</a>,
 <a href="https://python-poetry.org/">Poetry</a>,
 など後発のツールは早くから対応していて、
 <code>setuptools</code> も<a href="https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html">ようやく61.0から使えるようになった</a>。
-<code>[project]</code> テーブルは <a href="https://www.python.org/dev/peps/pep-0621">PEP 621</a>
-で項目が決められているためツールによらず共通。
-それ以外の <code>[build-system]</code> などは使うツールによって異なる。</p>
+とりあえず <code>uv init --lib</code> 初期設定の <code>uv_build</code> を使い、もし不満を感じたら考える。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="p">[</span><span class="nx">build-system</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="nx">requires</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;flit_core &gt;=3.6,&lt;4&#34;</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="nx">build-backend</span> <span class="p">=</span> <span class="s2">&#34;flit_core.buildapi&#34;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">project</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">requires</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;uv_build&gt;=0.8.24,&lt;0.9.0&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">build-backend</span> <span class="p">=</span> <span class="s2">&#34;uv_build&#34;</span>
+</span></span></code></pre></div><h4 id="project">
+<code>project</code><a href="#project"></a>
+</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="p">[</span><span class="nx">project</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="nx">name</span> <span class="p">=</span> <span class="s2">&#34;wtl&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">version</span> <span class="p">=</span> <span class="s2">&#34;0.1.0&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">description</span> <span class="p">=</span> <span class="s2">&#34;Personal Python Package&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="nx">authors</span> <span class="p">=</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">  <span class="p">{</span><span class="nx">name</span> <span class="p">=</span> <span class="s2">&#34;Watal M. Iwasaki&#34;</span><span class="p">,</span> <span class="nx">email</span> <span class="p">=</span> <span class="s2">&#34;heavywatal@gmail.com&#34;</span><span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="nx">license</span> <span class="p">=</span> <span class="p">{</span><span class="nx">file</span> <span class="p">=</span> <span class="s2">&#34;LICENSE&#34;</span><span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="nx">readme</span> <span class="p">=</span> <span class="s2">&#34;README.md&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="nx">dynamic</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;description&#34;</span><span class="p">,</span> <span class="s2">&#34;version&#34;</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="nx">classifiers</span> <span class="p">=</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;Development Status :: 2 - Pre-Alpha&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;Environment :: Console&#34;</span><span class="p">,</span>
@@ -126,12 +151,12 @@ Pythonパッケージ作成
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;License :: OSI Approved :: MIT License&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;Topic :: Scientific/Engineering :: Bio-Informatics&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl"><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="nx">requires-python</span> <span class="p">=</span> <span class="s2">&#34;&gt;=3.12&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">requires-python</span> <span class="p">=</span> <span class="s2">&#34;&gt;=3.13&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="nx">dependencies</span> <span class="p">=</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;tomli-w&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl"><span class="p">]</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">project</span><span class="p">.</span><span class="nx">optional-dependencies</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">dependency-groups</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="nx">dev</span> <span class="p">=</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;pytest&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;pytest-cov&#34;</span><span class="p">,</span>
@@ -143,13 +168,72 @@ Pythonパッケージ作成
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">project</span><span class="p">.</span><span class="nx">scripts</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;hello.py&#34;</span> <span class="p">=</span> <span class="s2">&#34;wtl.hello:main&#34;</span>
+</span></span></code></pre></div><p><code>project.dynamic</code> に <code>[&quot;description&quot;, &quot;version&quot;]</code> と指定して
+<code>__init__.py</code> のdocstringや <code>__version__</code>
+を参照できるかはbackend次第。
+<code>uv_build</code> は今のところサポートしていないので
+(<a href="https://github.com/astral-sh/uv/issues/8714">uv#8714</a>)
+<code>pyproject.toml</code> に書いたバージョンを
+<a href="https://docs.python.org/3/library/importlib.metadata.html"><code>importlib.metadata</code></a>
+で <code>__init__.py</code> に取り込む。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">importlib.metadata</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">tool</span><span class="p">.</span><span class="nx">pyright</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="k">assert</span> <span class="n">__package__</span>
+</span></span><span class="line"><span class="cl"><span class="n">__version__</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">version</span><span class="p">(</span><span class="n">__package__</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">metadata</span><span class="p">(</span><span class="n">__package__</span><span class="p">)[</span><span class="s2">&#34;Summary&#34;</span><span class="p">]</span>
+</span></span></code></pre></div><p>バージョンを比較したいときは
+<a href="https://packaging.pypa.io/en/latest/version.html"><code>packaging.version.parse()</code></a>
+を利用する。</p>
+<p>依存関係を書けるところはいくつかある。
+See <a href="https://docs.astral.sh/uv/concepts/projects/dependencies/">https://docs.astral.sh/uv/concepts/projects/dependencies/</a>:</p>
+<ul>
+<li><code>project.dependencies</code>:
+普通の依存関係。
+<code>uv pip install</code> で自動的にインストールされる。</li>
+<li><code>project.optional-dependencies</code>:
+通称&quot;extras&quot;。
+ユーザー向けに公開されるけどデフォルトではインストールされない。
+<code>uv add altair --optional plot</code> のように追加し、
+<code>uv pip install polars[plot]</code> のようにインストールする。</li>
+<li><a href="https://packaging.python.org/en/latest/specifications/dependency-groups/"><code>dependency-groups</code></a>:
+開発者向けで <code>[project]</code> の外にある。
+パッケージ化しないプロジェクトの依存関係を記述するのにも使える。
+<code>uv add --group dev ruff</code> のようにして追加。
+名前は何でもいいけど <code>dev</code> は <code>uv</code> で特別扱いされていて、
+<code>--dev</code> オプションがあったり、デフォルトで <code>uv sync</code> 対象だったりする。</li>
+<li><code>requirements.txt</code>:
+インストール過程には関与せず、能動的に
+<code>pip install -r requirements.txt</code> のように参照するためのもの。</li>
+</ul>
+<p><code>project.scripts</code> で設定したものは
+<code>${prefix}/bin/</code> に実行可能ファイルが配置される。
+以前は <code>console_scripts</code> で設定していた。</p>
+<h4 id="tool">
+<code>tool</code><a href="#tool"></a>
+</h4>
+<p>コード整形やテストのような各種開発ツールの設定を記述する。</p>
+<p>linterとしては
+<a href="https://github.com/PyCQA/flake8/issues/234"><code>pyproject.toml</code> 対応拒否のflake8</a>
+を捨てて超高速Rust製<a href="https://docs.astral.sh/ruff/">ruff</a>を使う。
+0.2からはformatterとしても使えるようになり、
+<a href="https://black.readthedocs.io">black</a>も不要になった。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="p">[</span><span class="nx">tool</span><span class="p">.</span><span class="nx">pyright</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="nx">typeCheckingMode</span> <span class="p">=</span> <span class="s2">&#34;strict&#34;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">tool</span><span class="p">.</span><span class="nx">ruff</span><span class="p">.</span><span class="nx">lint</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="nx">select</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;F&#34;</span><span class="p">,</span> <span class="s2">&#34;E&#34;</span><span class="p">,</span> <span class="s2">&#34;W&#34;</span><span class="p">,</span> <span class="s2">&#34;I&#34;</span><span class="p">,</span> <span class="s2">&#34;N&#34;</span><span class="p">,</span> <span class="s2">&#34;UP&#34;</span><span class="p">,</span> <span class="s2">&#34;S&#34;</span><span class="p">,</span> <span class="s2">&#34;B&#34;</span><span class="p">,</span> <span class="s2">&#34;A&#34;</span><span class="p">,</span> <span class="s2">&#34;PL&#34;</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="nx">ignore</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;S101&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">select</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;ALL&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">ignore</span> <span class="p">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;D1&#34;</span><span class="p">,</span>   <span class="c"># missing docstring</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;D203&#34;</span><span class="p">,</span> <span class="c"># incompatible</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;D213&#34;</span><span class="p">,</span> <span class="c"># incompatible</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;ANN401&#34;</span><span class="p">,</span> <span class="c"># Any</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;T201&#34;</span><span class="p">,</span> <span class="c"># print</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;S101&#34;</span><span class="p">,</span> <span class="c"># assert</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;DTZ&#34;</span><span class="p">,</span>  <span class="c"># timezone</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;COM812&#34;</span><span class="p">,</span> <span class="c"># trailing comma</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;TD&#34;</span><span class="p">,</span>   <span class="c"># todo</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;FIX&#34;</span><span class="p">,</span>  <span class="c"># todo</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">tool</span><span class="p">.</span><span class="nx">pytest</span><span class="p">.</span><span class="nx">ini_options</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="nx">pythonpath</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;src&#34;</span><span class="p">]</span>
@@ -162,28 +246,7 @@ Pythonパッケージ作成
 </span></span><span class="line"><span class="cl"><span class="nx">exclude_also</span> <span class="p">=</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;if __name__ == .__main__.:&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl"><span class="p">]</span>
-</span></span></code></pre></div><p><code>dynamic</code> に指定したものは <code>__init__.py</code> に <code>__version__ = &quot;0.1.0&quot;</code>
-などと書いてあるものを参照できる。
-比較したいときは
-<a href="https://packaging.pypa.io/en/latest/version.html"><code>packaging.version.parse()</code></a>
-を利用する。</p>
-<p><code>dependencies</code> に列挙された依存パッケージは
-<code>pip3 install</code> で自動的にインストールされる。
-一方 <code>requirements.txt</code> はインストール過程には関与せず、
-能動的に <code>pip3 install -r requirements.txt</code>
-を打たなきゃインストールされない。</p>
-<p>optional dependencies もインストールしたい場合は
-<code>pip3 install -v -e .[dev]</code> のように <code>[key]</code> を使ってパッケージを指定する。</p>
-<p><code>project.scripts</code> で設定したものは
-<code>${prefix}/bin/</code> に実行可能ファイルが配置される。
-以前は <code>console_scripts</code> で設定していた。</p>
-<p>コード整形やテストのような各種開発ツールの設定も <code>[tool.***]</code> に記述できる。
-linterとしては
-<a href="https://github.com/PyCQA/flake8/issues/234"><code>pyproject.toml</code> 対応拒否のflake8</a>
-を捨てて超高速Rust製<a href="https://docs.astral.sh/ruff/">ruff</a>を使う。
-0.2からはformatterとしても使えるようになり、
-<a href="https://black.readthedocs.io">black</a>も不要になった。</p>
-<h3 id="ソースコード">
+</span></span></code></pre></div><h3 id="ソースコード">
 ソースコード<a href="#ソースコード"></a>
 </h3>
 <dl>
@@ -194,8 +257,8 @@ linterとしては
 <code>wtl.__version__</code> のように参照できるようにしておくのが慣例。</dd>
 </dl>
 <p><code>wtl/hello.py</code></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;Simple module to say hello
-</span></span></span><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;Simple module to say hello.&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">getpass</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">
