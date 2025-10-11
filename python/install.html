@@ -79,6 +79,7 @@ Pythonインストール
         <li><a href="#pythonstartup"><code>PYTHONSTARTUP</code></a></li>
       </ul>
     </li>
+    <li><a href="#versions">Versions</a></li>
   </ul>
 </nav>
 <h2 id="標準公式">
@@ -122,14 +123,20 @@ Pythonインストーラーとして使う<a href="#pythonインストーラー�
 <h3 id="設定">
 設定<a href="#設定"></a>
 </h3>
-<p><a href="https://docs.astral.sh/uv/configuration/environment/">https://docs.astral.sh/uv/configuration/environment/</a></p>
-<p>設定ファイルは <code>~/.config/uv/</code> に置くらしいけど、
-今のところ環境変数を使うのが主流。</p>
-<p>ほかのツールで入れたPythonやシステム標準の <code>/usr/bin/python</code>
-まで探しに行って報告しようとしてくれる。
-uv自身で入れたPythonだけに専念してもらうと少し早くなる:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">UV_PYTHON_PREFERENCE</span><span class="o">=</span>only-managed
-</span></span></code></pre></div><p><a href="https://peps.python.org/pep-0668/">PEP 668</a> <code>EXTERNALLY-MANAGED</code> が有効なので
+<ul>
+<li><a href="https://docs.astral.sh/uv/concepts/configuration-files/">https://docs.astral.sh/uv/concepts/configuration-files/</a></li>
+<li><a href="https://docs.astral.sh/uv/reference/settings/">https://docs.astral.sh/uv/reference/settings/</a></li>
+</ul>
+<p>ユーザー設定ファイルは <code>~/.config/uv/uv.toml</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="nx">python-preference</span> <span class="p">=</span> <span class="s2">&#34;only-managed&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">python-downloads</span> <span class="p">=</span> <span class="s2">&#34;manual&#34;</span>
+</span></span></code></pre></div><p>ほかのツールで入れたPythonやシステム標準の <code>/usr/bin/python</code>
+まで探しに行って報告しようとするのを抑え、
+uv自身で入れたPythonだけに専念してもらうと少し早くなる。</p>
+<p>各種コマンドで勝手にPythonをインストールしようとするのを抑えると、
+<code>uv python list</code> で利用可能なPythonが表示されなくなってしまう。
+<code>--allow-python-downloads</code> で一時的に許可すればよい。</p>
+<p><a href="https://peps.python.org/pep-0668/">PEP 668</a> <code>EXTERNALLY-MANAGED</code> が有効なので
 <a href="https://docs.astral.sh/uv/reference/cli/#uv-venv"><code>uv venv</code></a>
 で仮想環境を作って使う。</p>
 <p><a href="https://docs.astral.sh/uv/reference/cli/#uv-pip"><code>uv pip</code></a>
@@ -251,6 +258,83 @@ MacのFramework buildでは <code>${HOME}/Library/Python/2.7</code> とかにな
 <code>PYTHONSTARTUP</code><a href="#pythonstartup"></a>
 </h3>
 <p>インタラクティブモードで起動するときに読み込むファイルを指定できる。</p>
+<h2 id="versions">
+Versions<a href="#versions"></a>
+</h2>
+<p><a href="https://devguide.python.org/versions/">https://devguide.python.org/versions/</a></p>
+<ul>
+<li><a href="https://docs.python.org/3.14/whatsnew/3.14.html">3.14</a>
+<ul>
+<li><a href="https://docs.python.org/3/library/string.templatelib.html">t-strings</a></li>
+<li><a href="https://docs.python.org/3/library/compression.zstd.html">zstd</a></li>
+</ul>
+</li>
+<li><a href="https://docs.python.org/3.13/whatsnew/3.13.html">3.13</a>
+<ul>
+<li><code>typing.ReadOnly</code>, <code>typing.TypeIs</code></li>
+<li>Free-threaded CPython</li>
+</ul>
+</li>
+<li><a href="https://docs.python.org/3.12/whatsnew/3.12.html">3.12</a>
+<ul>
+<li>Generics without <code>TypeVar</code> or <code>Generic</code></li>
+<li><code>pathlib.walk()</code></li>
+<li>f-strings improvements</li>
+<li>PEP 668 <code>EXTERNALLY-MANAGED</code></li>
+</ul>
+</li>
+<li><a href="https://docs.python.org/3.11/whatsnew/3.11.html">3.11</a>
+<ul>
+<li><a href="https://docs.python.org/3/library/tomllib.html"><code>tomllib</code></a></li>
+</ul>
+</li>
+<li><a href="https://docs.python.org/3.10/whatsnew/3.10.html">3.10</a>
+<ul>
+<li><code>TypeAlias</code></li>
+<li><code>A | B</code> for <code>Union[A, B]</code></li>
+</ul>
+</li>
+<li><a href="https://docs.python.org/3.9/whatsnew/3.9.html">3.9</a>
+<ul>
+<li><code>list</code> とか <code>dict</code> で直に type hint を書ける。</li>
+</ul>
+</li>
+<li><a href="https://docs.python.org/3.8/whatsnew/3.8.html">3.8</a>
+<ul>
+<li><code>:=</code> (walrus operator)</li>
+<li><code>f&quot;{var=}&quot;</code> for debugging</li>
+<li><a href="https://docs.python.org/3/library/importlib.metadata.html"><code>importlib.metadata</code></a></li>
+</ul>
+</li>
+<li><a href="https://docs.python.org/3.7/whatsnew/3.7.html">3.7</a>
+<ul>
+<li><a href="https://docs.python.org/3/library/dataclasses.html"><code>dataclasses</code></a></li>
+<li><a href="https://docs.python.org/3/library/importlib.resources.html"><code>importlib.resources</code></a></li>
+<li><code>dict</code> insertion order guaranteed</li>
+</ul>
+</li>
+<li><a href="https://docs.python.org/3.6/whatsnew/3.6.html">3.6</a>
+<ul>
+<li><a href="https://docs.python.org/3/library/stdtypes.html#formatted-string-literals-f-strings">f-strings</a></li>
+<li><code>1_000_000</code></li>
+</ul>
+</li>
+<li><a href="https://docs.python.org/3.5/whatsnew/3.5.html">3.5</a>
+<ul>
+<li><a href="https://docs.python.org/3/library/subprocess.html#subprocess.run"><code>subprocess.run()</code></a></li>
+</ul>
+</li>
+<li><a href="https://docs.python.org/3.4/whatsnew/3.4.html">3.4</a>
+<ul>
+<li><a href="https://docs.python.org/3/library/pathlib.html"><code>pathlib</code></a></li>
+</ul>
+</li>
+<li><a href="https://docs.python.org/3.3/whatsnew/3.3.html">3.3</a>
+<ul>
+<li><a href="https://docs.python.org/3/library/venv.html"><code>venv</code></a></li>
+</ul>
+</li>
+</ul>
 
 </article>
 </main>
