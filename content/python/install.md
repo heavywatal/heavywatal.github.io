@@ -58,17 +58,22 @@ uv python install
 
 ### 設定
 
-<https://docs.astral.sh/uv/configuration/environment/>
+- <https://docs.astral.sh/uv/concepts/configuration-files/>
+- <https://docs.astral.sh/uv/reference/settings/>
 
-設定ファイルは `~/.config/uv/` に置くらしいけど、
-今のところ環境変数を使うのが主流。
+ユーザー設定ファイルは `~/.config/uv/uv.toml`:
+```toml
+python-preference = "only-managed"
+python-downloads = "manual"
+```
 
 ほかのツールで入れたPythonやシステム標準の `/usr/bin/python`
-まで探しに行って報告しようとしてくれる。
-uv自身で入れたPythonだけに専念してもらうと少し早くなる:
-```sh
-export UV_PYTHON_PREFERENCE=only-managed
-```
+まで探しに行って報告しようとするのを抑え、
+uv自身で入れたPythonだけに専念してもらうと少し早くなる。
+
+各種コマンドで勝手にPythonをインストールしようとするのを抑えると、
+`uv python list` で利用可能なPythonが表示されなくなってしまう。
+`--allow-python-downloads` で一時的に許可すればよい。
 
 [PEP 668](https://peps.python.org/pep-0668/) `EXTERNALLY-MANAGED` が有効なので
 [`uv venv`](https://docs.astral.sh/uv/reference/cli/#uv-venv)
@@ -215,3 +220,45 @@ MacのFramework buildでは `${HOME}/Library/Python/2.7` とかになる。
 ### `PYTHONSTARTUP`
 
 インタラクティブモードで起動するときに読み込むファイルを指定できる。
+
+
+## Versions
+
+<https://devguide.python.org/versions/>
+
+- [3.14](https://docs.python.org/3.14/whatsnew/3.14.html)
+  - [t-strings](https://docs.python.org/3/library/string.templatelib.html)
+  - [zstd](https://docs.python.org/3/library/compression.zstd.html)
+- [3.13](https://docs.python.org/3.13/whatsnew/3.13.html)
+  - `typing.ReadOnly`, `typing.TypeIs`
+  - Free-threaded CPython
+- [3.12](https://docs.python.org/3.12/whatsnew/3.12.html)
+  - Generics without `TypeVar` or `Generic`
+  - `pathlib.walk()`
+  - f-strings improvements
+  - PEP 668 `EXTERNALLY-MANAGED`
+- [3.11](https://docs.python.org/3.11/whatsnew/3.11.html)
+  - [`tomllib`](https://docs.python.org/3/library/tomllib.html)
+- [3.10](https://docs.python.org/3.10/whatsnew/3.10.html)
+  - `TypeAlias`
+  - `A | B` for `Union[A, B]`
+- [3.9](https://docs.python.org/3.9/whatsnew/3.9.html)
+  - `list` とか `dict` で直に type hint を書ける。
+- [3.8](https://docs.python.org/3.8/whatsnew/3.8.html)
+  - `:=` (walrus operator)
+  - `f"{var=}"` for debugging
+  - [`importlib.metadata`](https://docs.python.org/3/library/importlib.metadata.html)
+- [3.7](https://docs.python.org/3.7/whatsnew/3.7.html)
+  - [`dataclasses`](https://docs.python.org/3/library/dataclasses.html)
+  - [`importlib.resources`](https://docs.python.org/3/library/importlib.resources.html)
+  - `dict` insertion order guaranteed
+- [3.6](https://docs.python.org/3.6/whatsnew/3.6.html)
+  - [f-strings](https://docs.python.org/3/library/stdtypes.html#formatted-string-literals-f-strings)
+  - `1_000_000`
+- [3.5](https://docs.python.org/3.5/whatsnew/3.5.html)
+  - [`subprocess.run()`](https://docs.python.org/3/library/subprocess.html#subprocess.run)
+- [3.4](https://docs.python.org/3.4/whatsnew/3.4.html)
+  - [`pathlib`](https://docs.python.org/3/library/pathlib.html)
+- [3.3](https://docs.python.org/3.3/whatsnew/3.3.html)
+  - [`venv`](https://docs.python.org/3/library/venv.html)
+
