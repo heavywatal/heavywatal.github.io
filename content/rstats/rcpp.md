@@ -503,3 +503,6 @@ https://dirk.eddelbuettel.com/code/rcpp/html/module_8h.html
   `Rf_shallow_duplicate` をコピーコンストラクタに持つおかげで
   R と同じような copy-on-write の挙動を示す。
   どうしても参照渡ししたい場合は `std::move()` を通す。
+- `std::vector` と同じように使えると仮定せず、
+  [実装を確認](https://github.com/r-lib/cpp11/blob/main/inst/include/cpp11/r_vector.hpp)したほうがいい。
+  例えば、サイズ指定のコンストラクタや `resize()` で伸ばした領域はゼロ埋めずそのまま。
