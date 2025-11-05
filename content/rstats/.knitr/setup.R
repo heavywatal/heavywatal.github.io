@@ -1,4 +1,3 @@
-grDevices::palette("Okabe-Ito")
 withr::local_options(
   mc.cores = parallel::detectCores(),
   wtl.printdf.summarize = FALSE,
@@ -10,11 +9,7 @@ withr::local_options(
   dplyr.summarise.inform = FALSE,
   readr.num_columns = 0L,
   readr.show_progress = FALSE,
-  readr.show_col_types = FALSE,
-  ggplot2.continuous.colour = "viridis",
-  ggplot2.continuous.fill = "viridis",
-  ggplot2.discrete.colour = grDevices::palette()[-1],
-  ggplot2.discrete.fill = grDevices::palette()[-1]
+  readr.show_col_types = FALSE
 )
 ggplot2::theme_set(wtl::theme_wtl())
 withr::local_package("tibble")
