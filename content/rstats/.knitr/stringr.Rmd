@@ -53,66 +53,6 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 
 ## Functions
 
-### Basic Operation
-
-`str_length(string)`
-:   文字列の長さを数える。
-    `base::nchar(x)` と相同。
-    ```{r, length}
-    str_length(c("NA", NA))
-    ```
-
-`str_sub(string, start = 1, end = -1)`
-:   文字列を部分的に参照・変更する。
-    `base::substr()` と相同だが、負数で末尾からの位置を指定できる。
-    ただしRのインデックスは1始まりで終端も含むの。
-    `str_sub<-` が定義されているので置換にも使える。
-    ```{r, sub}
-    str_sub("supercalifragilisticexpialidocious", 10, -15)
-    ```
-
-`str_flatten(string, collapse = "")`
-:   文字列vectorを1つの文字列に結合する。
-    `base::paste0(string, collapse = "")` と同等だが `NA` を扱える。
-    ```{r, flatten}
-    str_flatten(c("Dragon", NA, "Force"))
-    str_flatten(c("Dragon", NA, "Force"), na.rm = TRUE)
-    paste0(c("Dragon", NA, "Force"), collapse = "")
-    ```
-
-`str_c(..., sep = "", collapse = NULL)`
-:   複数の引数で与えた文字列を結合する。
-    デフォルトの `sep` がスペースじゃないので `base::paste0()` に近い。
-    ```{r, c}
-    str_c(c("Dragon", "Hammer"), c(NA, ""), c("Force", "Fall"))
-    paste0(c("Dragon", "Hammer"), c(NA, ""), c("Force", "Fall"))
-    ```
-
-`str_split(string, pattern, n = Inf, simplify = FALSE)`
-:   文字列を分割してlistを返す `base::strsplit(x, split)` の改良版。
-    `string` と `pattern` の要素数が噛み合わないときにちゃんと警告が出る。
-    最大 `n` 個に分割するということを指定できる。
-    `simplify = TRUE` とするとmatrixで返す。
-    ```{r, split}
-    str_split(c("DragonForce", "HammerFall"), "(?<=[a-z])(?=[A-Z])")
-    str_split(c("DragonForce", "HammerFall"), "(?<=[a-z])(?=[A-Z])", simplify = TRUE)
-    str_split_1("DragonForce", "(?<=[a-z])(?=[A-Z])")
-    str_split_i(c("DragonForce", "HammerFall"), "(?<=[a-z])(?=[A-Z])", 1)
-    ```
-:   `str_split_1(string, pattern)` は1つの文字列を受け取ってvectorを返す簡略版。
-:   `str_split_i(string, pattern, i)` は分割してできたi番目の要素だけをvectorで返す亜種。
-:   `str_split_fixed(string, pattern, n)` は
-    `n` 必須、 `simplify = TRUE` 固定でmatrixを返すショートカット。
-:   data.frame内の文字列を分割したい場合は
-    [`tidyr::separate*()`]({{< relref "tidyr.md" >}}) 系の関数を使う。
-
-`str_dup(string, times)`
-:   指定した回数だけ文字列を繰り返して結合。
-    `base::strrep()` と同等。
-    ```{r, dup}
-    str_dup("pizza", 10)
-    ```
-
 ### Pattern Matching
 
 `str_count(string, pattern)`
@@ -141,7 +81,7 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
     `which(str_detect(x, pattern))` のショートカット。
     `base::grep(pattern, x)` と相同。
 
-`str_locate(string, pattern)`
+`str_locate(string, pattern)`, `str_locate_all(string, pattern)`
 :   マッチする最初の箇所の `start`, `end` 位置を行列で返す。
 
 `str_match(string, pattern)`, `str_match_all(string, pattern)`
@@ -154,6 +94,24 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
     `base::sub(pattern, replacement, x)` と相同。
     `base::gsub()` のように全てのマッチを置換するには `str_replace_all()` 。
     `str_remove()` はマッチした部分を消すためのショートカット。
+
+`str_split(string, pattern, n = Inf, simplify = FALSE)`
+:   文字列を分割してlistを返す `base::strsplit(x, split)` の改良版。
+    `string` と `pattern` の要素数が噛み合わないときにちゃんと警告が出る。
+    最大 `n` 個に分割するということを指定できる。
+    `simplify = TRUE` とするとmatrixで返す。
+    ```{r, split}
+    str_split(c("DragonForce", "HammerFall"), "(?<=[a-z])(?=[A-Z])")
+    str_split(c("DragonForce", "HammerFall"), "(?<=[a-z])(?=[A-Z])", simplify = TRUE)
+    str_split_1("DragonForce", "(?<=[a-z])(?=[A-Z])")
+    str_split_i(c("DragonForce", "HammerFall"), "(?<=[a-z])(?=[A-Z])", 1)
+    ```
+:   `str_split_1(string, pattern)` は1つの文字列を受け取ってvectorを返す簡略版。
+:   `str_split_i(string, pattern, i)` は分割してできたi番目の要素だけをvectorで返す亜種。
+:   `str_split_fixed(string, pattern, n)` は
+    `n` 必須、 `simplify = TRUE` 固定でmatrixを返すショートカット。
+:   data.frame内の文字列を分割したい場合は
+    [`tidyr::separate*()`]({{< relref "tidyr.md" >}}) 系の関数を使う。
 
 ------------------------------------------------------------------------
 
@@ -175,10 +133,24 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
 :   よくわからないけど非ascii対策？
 
 
-### Formatting
+### Combining
 
-`str_to_upper()`, `str_to_lower()`, `str_to_title()`, `str_to_sentence()`
-:   大文字・小文字の変換
+`str_c(..., sep = "", collapse = NULL)`
+:   複数の引数で与えた文字列を結合する。
+    デフォルトの `sep` がスペースじゃないので `base::paste0()` に近い。
+    ```{r, c}
+    str_c(c("Dragon", "Hammer"), c(NA, ""), c("Force", "Fall"))
+    paste0(c("Dragon", "Hammer"), c(NA, ""), c("Force", "Fall"))
+    ```
+
+`str_flatten(string, collapse = "")`
+:   文字列vectorを1つの文字列に結合する。
+    `base::paste0(string, collapse = "")` と同等だが `NA` を扱える。
+    ```{r, flatten}
+    str_flatten(c("Dragon", NA, "Force"))
+    str_flatten(c("Dragon", NA, "Force"), na.rm = TRUE)
+    paste(c("Dragon", NA, "Force"), collapse = "")
+    ```
 
 `str_glue(..., .sep = "", .envir = parent.frame())`
 :   渡された文字列の中の `{R表現}` を評価して埋め込む。
@@ -193,6 +165,76 @@ R標準の`base`パッケージが提供する関数でも文字列処理は可�
     ```
 :   本家の [`library(glue)`](https://glue.tidyverse.org/) にはほかのオプションもある。
     それでもPythonのf-stringのような簡易フォーマッタは無くてちょっと不便。
+
+
+### Basic Operation
+
+`str_length(string)`
+:   文字列の長さを数える。より正確には、コードポイントの数を数える。
+    `base::nchar(x)` と相同。
+    ```{r, length}
+    x = c("NA", NA, "な", "\u2668", "\u2668\uFE0F")
+    print(x)
+    str_length(x)
+    ```
+
+`str_width()`
+:   半角英数を1として幅を計算する。
+    ```{r, width}
+    str_width(x)
+    ```
+
+`str_sub(string, start = 1, end = -1)`
+:   文字列を部分的に参照・変更する。
+    `base::substr()` と相同だが、負数で末尾からの位置を指定できる。
+    ただしRのインデックスは1始まりで終端も含むの。
+    `str_sub<-` が定義されているので置換にも使える。
+    ```{r, sub}
+    str_sub("supercalifragilisticexpialidocious", 10, -15)
+    ```
+
+`str_equal(x, y, locale = "en", ignore_case = FALSE, ...)`
+:   Unicode正規化を考慮して文字列が等しいかどうかを判定する。
+    ```{r, equal}
+    "No\u0338gne" == "Nøgne"
+    str_equal("No\u0338gne", "Nøgne")
+    ```
+
+`str_unique(x, locale = "en", ignore_case = FALSE, ...)`
+:   Unicode正規化を考慮して重複を除去する。
+    ```{r, unique}
+    str_unique(c("No\u0338gne", "Nøgne"))
+    ```
+
+`str_sort(x, decreasing = FALSE, na_last = TRUE, locale = "en", numeric = FALSE, ...)`
+:   文字列をソートする。
+:   `str_order()` はソートに使えるインデックスを返す。
+    e.g., `x[str_order(x)]`
+:   `str_rank()` は各要素の順位を返す。
+    e.g., `starwars |> dplyr::arrange(str_rank(name))`
+
+
+### Formatting
+
+`str_to_upper()`, `str_to_lower()`, `str_to_title()`, `str_to_sentence()`
+:   大文字・小文字の変換
+
+`str_to_camel()`, `str_to_snake()`, `str_to_kebab()`
+:   プログラミングの命名規則のような変換。
+    ```{r, camel}
+    x = "quick brown fox"
+    str_to_camel(x)
+    str_to_camel(x, first_upper = TRUE)
+    str_to_snake(x)
+    str_to_kebab(x)
+    ```
+
+`str_dup(string, times)`
+:   指定した回数だけ文字列を繰り返して結合。
+    `base::strrep()` と同等。
+    ```{r, dup}
+    str_dup("pizza", 10)
+    ```
 
 `str_pad(string, width, side = c("left", "right", "both"), pad = " ")`
 :   文字列の幅を `width` に伸ばして `side` 側を `pad` で埋める。
@@ -266,12 +308,12 @@ See [`?Quotes`](https://stat.ethz.ch/R-manual/R-patched/library/base/html/Quotes
 
 | 演算子 | 意味 |
 | ---- | ---- |
-| `?`  | 0回か1回 |
-| `*`  | 0回以上繰り返し |
-| `+`  | 1回以上繰り返し |
-| `{n,m}` | n回以上m回以下 |
-| `XXX(?=YYY)`  | YYYに先立つXXX |
-| `(?<=YYY)XXX`  | YYYに続くXXX |
+| `a?`  | 0回か1回のa |
+| `a*`  | 0回以上繰り返したa |
+| `a+`  | 1回以上繰り返したa |
+| `a{n,m}` | n回以上m回以下のa |
+| `a(?=c)`  | cに先立つa |
+| `(?<=b)a`  | bに続くa |
 
 
 ### 生文字列
