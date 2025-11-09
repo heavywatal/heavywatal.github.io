@@ -218,6 +218,14 @@ set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS OFF)
 グローバルなビルドオプションは利用者側が
 `-DCMAKE_BUILD_TYPE=Release` のようにタイトルケースで指定するのが慣例。
 
+ヘッダーが別のヘッダーを読み込む transitive include によって、
+コンパイル時の負荷が増大したり `#include` し忘れが隠蔽されたりすることがある。
+[この影響をなるべく小さくするための変更がlibc++に入った](https://libcxx.llvm.org/DesignDocs/HeaderRemovalPolicy.html)。
+後方互換性のために今のところデフォルト無効だが、次のような定義で有効にできる:
+```cmake
+add_compile_definitions("_LIBCPP_REMOVE_TRANSITIVE_INCLUDES")
+```
+
 Predefined variable              | default
 ---------------------------------|----
 `CMAKE_CXX_FLAGS`                |
