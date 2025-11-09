@@ -285,7 +285,12 @@ C++<a href="#c"></a>
 に <code>cxx_std_17</code> などの便利なメタタグが導入されたのは CMake 3.8 から。</p>
 <p>グローバルなビルドオプションは利用者側が
 <code>-DCMAKE_BUILD_TYPE=Release</code> のようにタイトルケースで指定するのが慣例。</p>
-<table>
+<p>ヘッダーが別のヘッダーを読み込む transitive include によって、
+コンパイル時の負荷が増大したり <code>#include</code> し忘れが隠蔽されたりすることがある。
+<a href="https://libcxx.llvm.org/DesignDocs/HeaderRemovalPolicy.html">この影響をなるべく小さくするための変更がlibc++に入った</a>。
+後方互換性のために今のところデフォルト無効だが、次のような定義で有効にできる:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">add_compile_definitions</span><span class="p">(</span><span class="s2">&#34;_LIBCPP_REMOVE_TRANSITIVE_INCLUDES&#34;</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><table>
   <thead>
       <tr>
           <th>Predefined variable</th>
