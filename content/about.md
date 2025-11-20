@@ -120,6 +120,10 @@ Contacts
 
 **Book Chapters**
 
+1.  **岩嵜航**
+    第6章 医学「腫瘍形成モデル」
+    [理論生物学事典](https://amzn.to/484S0pn)
+    (2025-11) 巌佐庸、大槻久、佐竹暁子、望月敦史 (編集幹事) 朝倉書店
 1.  Atsushi Niida and **Watal M. Iwasaki**
     "Agent-Based Modeling and Analysis of Cancer Evolution",
     [Chapter 4 in Simulation Modeling](https://doi.org/10.5772/intechopen.100140),
