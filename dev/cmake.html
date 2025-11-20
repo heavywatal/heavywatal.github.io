@@ -270,7 +270,10 @@ e.g., <code>CMAKE_PREFIX_PATH</code>, <code>CXX</code>, <code>&lt;PackageName&gt
 C++<a href="#c"></a>
 </h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">add_compile_options</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">  <span class="s">-Wall</span> <span class="s">-Wextra</span> <span class="s">-pedantic</span>
+</span></span><span class="line"><span class="cl">  <span class="s">-Wall</span> <span class="s">-Wextra</span> <span class="s">-Wpedantic</span>
+</span></span><span class="line"><span class="cl">  <span class="s">-Wconversion</span> <span class="s">-Wsign-conversion</span>
+</span></span><span class="line"><span class="cl">  <span class="s">-Wshadow</span>
+</span></span><span class="line"><span class="cl">  <span class="o">$&lt;</span><span class="nv">IF:$&lt;BOOL:$&lt;CONFIG</span><span class="o">&gt;</span><span class="s">&gt;,,-Werror&gt;</span>
 </span></span><span class="line"><span class="cl">  <span class="o">$&lt;</span><span class="nv">IF:$&lt;BOOL:$&lt;CONFIG</span><span class="o">&gt;</span><span class="s">&gt;,,-O2&gt;</span>
 </span></span><span class="line"><span class="cl">  <span class="o">$&lt;</span><span class="nv">IF:$&lt;BOOL:$&lt;CONFIG</span><span class="o">&gt;</span><span class="s">&gt;,,-g&gt;</span>
 </span></span><span class="line"><span class="cl">  <span class="o">$&lt;</span><span class="nv">$&lt;STREQUAL:${CMAKE_SYSTEM_PROCESSOR},x86_64</span><span class="o">&gt;</span><span class="s">:-march=native&gt;</span>
@@ -285,12 +288,7 @@ C++<a href="#c"></a>
 に <code>cxx_std_17</code> などの便利なメタタグが導入されたのは CMake 3.8 から。</p>
 <p>グローバルなビルドオプションは利用者側が
 <code>-DCMAKE_BUILD_TYPE=Release</code> のようにタイトルケースで指定するのが慣例。</p>
-<p>ヘッダーが別のヘッダーを読み込む transitive include によって、
-コンパイル時の負荷が増大したり <code>#include</code> し忘れが隠蔽されたりすることがある。
-<a href="https://libcxx.llvm.org/DesignDocs/HeaderRemovalPolicy.html">この影響をなるべく小さくするための変更がlibc++に入った</a>。
-後方互換性のために今のところデフォルト無効だが、次のような定義で有効にできる:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">add_compile_definitions</span><span class="p">(</span><span class="s2">&#34;_LIBCPP_REMOVE_TRANSITIVE_INCLUDES&#34;</span><span class="p">)</span><span class="err">
-</span></span></span></code></pre></div><table>
+<table>
   <thead>
       <tr>
           <th>Predefined variable</th>
@@ -331,7 +329,12 @@ C++<a href="#c"></a>
 multi-config generator ではコンフィグ時に未定義。
 <a href="https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html#configuration-expressions"><code>$&lt;CONFIG&gt;</code></a>
 などの generator expression を使えばそれらを回避できる。</p>
-<h2 id="generator-expressions">
+<p>ヘッダーが別のヘッダーを読み込む transitive include によって、
+コンパイル時の負荷が増大したり <code>#include</code> し忘れが隠蔽されたりすることがある。
+<a href="https://libcxx.llvm.org/DesignDocs/HeaderRemovalPolicy.html">この影響をなるべく小さくするための変更がlibc++に入った</a>。
+後方互換性のために今のところデフォルト無効だが、次のような定義で有効にできる:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">add_compile_definitions</span><span class="p">(</span><span class="s2">&#34;_LIBCPP_REMOVE_TRANSITIVE_INCLUDES&#34;</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><h2 id="generator-expressions">
 Generator expressions<a href="#generator-expressions"></a>
 </h2>
 <p><a href="https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html">https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html</a></p>
@@ -581,6 +584,12 @@ CMake 3.11 から。</p>
 <p>Projects should aim to declare the details of all dependencies they might use before they call FetchContent_MakeAvailable() for any of them.</p>
 </blockquote>
 </div>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title"><iconify-icon inline icon="octicon:info-16"></iconify-icon>Note</p>
+<p><code>_FOUND</code> のときと <code>_POPULATED</code> のときでグローバルオプションの効き方が異なる？
+例えばトップレベルの <code>add_compile_options()</code> で警告を有効化した場合、
+後者では依存ライブラリにも伝播して警告されるが、前者ではそうならない。</p>
+</div>
 <p>似て非なる <code>ExternalProject</code> はビルド時に実行されるので
 <code>add_subdirectory()</code> の対象にできず、
 <code>execute_process()</code> で git を直接叩くなどして凌いでいた。</p>
@@ -609,7 +618,7 @@ CTest<a href="#ctest"></a>
 </h3>
 <p><a href="https://cmake.org/cmake/help/latest/module/CTest.html">https://cmake.org/cmake/help/latest/module/CTest.html</a></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">include</span><span class="p">(</span><span class="s">CTest</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">if</span><span class="p">(</span><span class="s">BUILD_TESTING</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">if</span><span class="p">(</span><span class="s">BUILD_TESTING</span> <span class="s">AND</span> <span class="s">PROJECT_IS_TOP_LEVEL</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span>  <span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">test</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
 </span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># test/CMakeLists.txt
