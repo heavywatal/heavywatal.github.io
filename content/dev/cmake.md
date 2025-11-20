@@ -199,7 +199,10 @@ e.g., `CMAKE_PREFIX_PATH`, `CXX`, `<PackageName>_ROOT`, etc.
 
 ```cmake
 add_compile_options(
-  -Wall -Wextra -pedantic
+  -Wall -Wextra -Wpedantic
+  -Wconversion -Wsign-conversion
+  -Wshadow
+  $<IF:$<BOOL:$<CONFIG>>,,-Werror>
   $<IF:$<BOOL:$<CONFIG>>,,-O2>
   $<IF:$<BOOL:$<CONFIG>>,,-g>
   $<$<STREQUAL:${CMAKE_SYSTEM_PROCESSOR},x86_64>:-march=native>
@@ -217,14 +220,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS OFF)
 
 グローバルなビルドオプションは利用者側が
 `-DCMAKE_BUILD_TYPE=Release` のようにタイトルケースで指定するのが慣例。
-
-ヘッダーが別のヘッダーを読み込む transitive include によって、
-コンパイル時の負荷が増大したり `#include` し忘れが隠蔽されたりすることがある。
-[この影響をなるべく小さくするための変更がlibc++に入った](https://libcxx.llvm.org/DesignDocs/HeaderRemovalPolicy.html)。
-後方互換性のために今のところデフォルト無効だが、次のような定義で有効にできる:
-```cmake
-add_compile_definitions("_LIBCPP_REMOVE_TRANSITIVE_INCLUDES")
-```
 
 Predefined variable              | default
 ---------------------------------|----
@@ -246,6 +241,14 @@ Predefined variable              | default
 multi-config generator ではコンフィグ時に未定義。
 [`$<CONFIG>`](https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html#configuration-expressions)
 などの generator expression を使えばそれらを回避できる。
+
+ヘッダーが別のヘッダーを読み込む transitive include によって、
+コンパイル時の負荷が増大したり `#include` し忘れが隠蔽されたりすることがある。
+[この影響をなるべく小さくするための変更がlibc++に入った](https://libcxx.llvm.org/DesignDocs/HeaderRemovalPolicy.html)。
+後方互換性のために今のところデフォルト無効だが、次のような定義で有効にできる:
+```cmake
+add_compile_definitions("_LIBCPP_REMOVE_TRANSITIVE_INCLUDES")
+```
 
 
 ## Generator expressions
@@ -501,6 +504,11 @@ cmake_print_variables(pcglite_SOURCE_DIR pcglite_BINARY_DIR)
 > 先に全部 `Declare` してからまとめて `MakeAvailable` するのが推奨。
 > > Projects should aim to declare the details of all dependencies they might use before they call FetchContent_MakeAvailable() for any of them.
 
+> [!NOTE]
+> `_FOUND` のときと `_POPULATED` のときでグローバルオプションの効き方が異なる？
+> 例えばトップレベルの `add_compile_options()` で警告を有効化した場合、
+> 後者では依存ライブラリにも伝播して警告されるが、前者ではそうならない。
+
 似て非なる `ExternalProject` はビルド時に実行されるので
 `add_subdirectory()` の対象にできず、
 `execute_process()` で git を直接叩くなどして凌いでいた。
@@ -543,7 +551,7 @@ target_link_libraries(MyTarget PRIVATE Boost::context)
 
 ```cmake
 include(CTest)
-if(BUILD_TESTING)
+if(BUILD_TESTING AND PROJECT_IS_TOP_LEVEL)
   add_subdirectory(test)
 endif()
 ```
