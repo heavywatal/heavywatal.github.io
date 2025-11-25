@@ -84,20 +84,20 @@ See <https://docs.astral.sh/uv/concepts/projects/init/>.
 とりあえず `uv init --lib` 初期設定の `uv_build` を使い、もし不満を感じたら考える。
 ```toml
 [build-system]
-requires = ["uv_build>=0.8.24,<0.9.0"]
+requires = ["uv_build>=0.9.11,<1.0.0"]
 build-backend = "uv_build"
 ```
 
 #### `project`
+
 ```toml
 [project]
 name = "wtl"
 version = "0.1.0"
 description = "Personal Python Package"
-authors = [
-  {name = "Watal M. Iwasaki", email = "heavywatal@gmail.com"}
-]
-license = {file = "LICENSE"}
+authors = [{ name = "Watal M. Iwasaki", email = "heavywatal@gmail.com" }]
+license = "MIT"
+license-files = ["LICENSE"]
 readme = "README.md"
 classifiers = [
   "Development Status :: 2 - Pre-Alpha",
@@ -111,18 +111,18 @@ dependencies = [
   "tomli-w",
 ]
 
+[project.urls]
+source = "https://github.com/heavywatal/pywtl"
+
+[project.scripts]
+"hello.py" = "wtl.hello:main"
+
 [dependency-groups]
 dev = [
   "pytest",
   "pytest-cov",
   "ruff",
 ]
-
-[project.urls]
-Source = "https://github.com/heavywatal/pywtl"
-
-[project.scripts]
-"hello.py" = "wtl.hello:main"
 ```
 
 `project.dynamic` に `["description", "version"]` と指定して
