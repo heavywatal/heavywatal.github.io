@@ -130,7 +130,7 @@ Pythonパッケージ作成
 <code>setuptools</code> も<a href="https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html">ようやく61.0から使えるようになった</a>。
 とりあえず <code>uv init --lib</code> 初期設定の <code>uv_build</code> を使い、もし不満を感じたら考える。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="p">[</span><span class="nx">build-system</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="nx">requires</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;uv_build&gt;=0.8.24,&lt;0.9.0&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">requires</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;uv_build&gt;=0.9.11,&lt;1.0.0&#34;</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="nx">build-backend</span> <span class="p">=</span> <span class="s2">&#34;uv_build&#34;</span>
 </span></span></code></pre></div><h4 id="project">
 <code>project</code><a href="#project"></a>
@@ -139,10 +139,9 @@ Pythonパッケージ作成
 </span></span><span class="line"><span class="cl"><span class="nx">name</span> <span class="p">=</span> <span class="s2">&#34;wtl&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="nx">version</span> <span class="p">=</span> <span class="s2">&#34;0.1.0&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="nx">description</span> <span class="p">=</span> <span class="s2">&#34;Personal Python Package&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="nx">authors</span> <span class="p">=</span> <span class="p">[</span>
-</span></span><span class="line"><span class="cl">  <span class="p">{</span><span class="nx">name</span> <span class="p">=</span> <span class="s2">&#34;Watal M. Iwasaki&#34;</span><span class="p">,</span> <span class="nx">email</span> <span class="p">=</span> <span class="s2">&#34;heavywatal@gmail.com&#34;</span><span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="nx">license</span> <span class="p">=</span> <span class="p">{</span><span class="nx">file</span> <span class="p">=</span> <span class="s2">&#34;LICENSE&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nx">authors</span> <span class="p">=</span> <span class="p">[{</span> <span class="nx">name</span> <span class="p">=</span> <span class="s2">&#34;Watal M. Iwasaki&#34;</span><span class="p">,</span> <span class="nx">email</span> <span class="p">=</span> <span class="s2">&#34;heavywatal@gmail.com&#34;</span> <span class="p">}]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">license</span> <span class="p">=</span> <span class="s2">&#34;MIT&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">license-files</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;LICENSE&#34;</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="nx">readme</span> <span class="p">=</span> <span class="s2">&#34;README.md&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="nx">classifiers</span> <span class="p">=</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;Development Status :: 2 - Pre-Alpha&#34;</span><span class="p">,</span>
@@ -156,18 +155,18 @@ Pythonパッケージ作成
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;tomli-w&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl"><span class="p">]</span>
 </span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">project</span><span class="p">.</span><span class="nx">urls</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">source</span> <span class="p">=</span> <span class="s2">&#34;https://github.com/heavywatal/pywtl&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">project</span><span class="p">.</span><span class="nx">scripts</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;hello.py&#34;</span> <span class="p">=</span> <span class="s2">&#34;wtl.hello:main&#34;</span>
+</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">dependency-groups</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="nx">dev</span> <span class="p">=</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;pytest&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;pytest-cov&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;ruff&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl"><span class="p">]</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">project</span><span class="p">.</span><span class="nx">urls</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="nx">Source</span> <span class="p">=</span> <span class="s2">&#34;https://github.com/heavywatal/pywtl&#34;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">project</span><span class="p">.</span><span class="nx">scripts</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="s2">&#34;hello.py&#34;</span> <span class="p">=</span> <span class="s2">&#34;wtl.hello:main&#34;</span>
 </span></span></code></pre></div><p><code>project.dynamic</code> に <code>[&quot;description&quot;, &quot;version&quot;]</code> と指定して
 <code>__init__.py</code> のdocstringや <code>__version__</code>
 を参照できるかはbackend次第。
