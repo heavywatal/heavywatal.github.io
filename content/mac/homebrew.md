@@ -78,7 +78,6 @@ nkf
 pandoc
 parallel
 qpdf
-rbenv
 rsync
 switchaudio-osx
 tmux

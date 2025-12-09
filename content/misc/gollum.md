@@ -47,42 +47,34 @@ tags = ["writing"]
 
 ## gollumインストールとWiki新規作成
 
-1.  [rbenv](https://github.com/rbenv/ruby-build/wiki)を設定してRubyを入れる。
-    MacならHomebrewでもいいけどLinuxではHomebrewを混ぜるとエラーになりがちなので避け、
-    管理者たちが出入りできるところに `RBENV_ROOT` を置く:
+[mise](https://mise.jdx.dev/lang/ruby.html) や [rbenv](https://github.com/rbenv/rbenv) などでRubyを管理する。
+いずれにせよ実行部隊として [ruby-build](https://github.com/rbenv/ruby-build/wiki) が動く。
+[uv]({{< relref "/python/install.md" >}})
+のようにバイナリを落としてくるものがあればなお楽だけどRuby界にはまだ無さそう？
 
+1.  必要なパッケージをインストールする。
     ```sh
-    sudo apt install autoconf patch build-essential rustc libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libgmp-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev uuid-dev
-    export RBENV_ROOT=/home/local/.rbenv
-    PATH="${PATH}:${RBENV_ROOT}/bin"
-    git clone https://github.com/rbenv/rbenv.git $RBENV_ROOT
-    git clone https://github.com/rbenv/ruby-build.git ${RBENV_ROOT}/plugins/ruby-build
-    rbenv init
-    eval "$(rbenv init -)"
-    rbenv install -l
-    rbenv install 3.3.5
+    sudo apt install build-essential autoconf libssl-dev libyaml-dev zlib1g-dev libffi-dev libgmp-dev rustc
     ```
-
-    `eval "$(rbenv init -)"` はここでインストールした
-    `ruby` や `bundle` にPATHを通すコマンド。
-    新しいシェルを起動するたびに実行する必要があるので
-    `.zshrc`, `.bashrc` 等の設定ファイルに記述しておく。
-
-    `rbenv global 3.3.5` とするか、
-    次に作るWikiリポジトリ内で `rbenv local 3.3.5`
-    とすることで使用するRubyのバージョンを設定する。
-
-
+1.  miseにパスを通す:
+    ```sh
+    PATH=${XDG_DATA_HOME:-${HOME}/.local/share}/mise/shims:$PATH
+    ```
+1.  `~/.config/mise/config.toml` にバージョンを指定してインストール:
+    ```toml
+    [tools]
+    ruby = "latest"
+    ```
+    ```sh
+    RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@3)" mise install ruby
+    ```
 1.  Wiki用のリポジトリ(ここでは`labwiki`)を作成して空コミット:
-
     ```sh
     git init labwiki
     cd labwiki/
     git commit --allow-empty -m ":beer: Create repository"
     ```
-
 1.  `Gemfile` を作成してコミット:
-
     ```gemfile
     source 'https://rubygems.org'
     gem 'commonmarker'
@@ -92,7 +84,6 @@ tags = ["writing"]
     ---
 
     gollum本体をいろいろいじくる場合は自分のフォークを使う:
-
     ```gemfile
     gem 'gollum-rugged_adapter', :github => 'heavywatal/rugged_adapter', :branch => 'custom'
     gem 'gollum-lib', :github => 'heavywatal/gollum-lib', :branch => 'custom'
@@ -100,7 +91,6 @@ tags = ["writing"]
     ```
 
     開発環境ではローカルのクローンを使うように設定:
-
     ```sh
     SRCDIR=${HOME}/fork
     git clone https://github.com/heavywatal/gollum.git ${SRCDIR}/gollum -b custom
@@ -113,7 +103,6 @@ tags = ["writing"]
 
 1.  `bundle install` で gollum 及び依存パッケージをまとめてインストール。
     `--local` を付けてこのプロジェクト専用にしてもよい。
-
 1.  `bundle exec gollum` でとりあえず走らせる。
     手元のコンピュータなら <http://localhost:4567> で確認。
 
