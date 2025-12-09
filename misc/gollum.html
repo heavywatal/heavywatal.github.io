@@ -97,28 +97,25 @@ docker-compose とかですぐ使えるのも楽ちん。</dd>
 <h2 id="gollumインストールとwiki新規作成">
 gollumインストールとWiki新規作成<a href="#gollumインストールとwiki新規作成"></a>
 </h2>
+<p><a href="https://mise.jdx.dev/lang/ruby.html">mise</a> や <a href="https://github.com/rbenv/rbenv">rbenv</a> などでRubyを管理する。
+いずれにせよ実行部隊として <a href="https://github.com/rbenv/ruby-build/wiki">ruby-build</a> が動く。
+<a href="/python/install.html">uv</a>
+のようにバイナリを落としてくるものがあればなお楽だけどRuby界にはまだ無さそう？</p>
 <ol>
 <li>
-<p><a href="https://github.com/rbenv/ruby-build/wiki">rbenv</a>を設定してRubyを入れる。
-MacならHomebrewでもいいけどLinuxではHomebrewを混ぜるとエラーになりがちなので避け、
-管理者たちが出入りできるところに <code>RBENV_ROOT</code> を置く:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo apt install autoconf patch build-essential rustc libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libgmp-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev uuid-dev
-</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">RBENV_ROOT</span><span class="o">=</span>/home/local/.rbenv
-</span></span><span class="line"><span class="cl"><span class="nv">PATH</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="s2">:</span><span class="si">${</span><span class="nv">RBENV_ROOT</span><span class="si">}</span><span class="s2">/bin&#34;</span>
-</span></span><span class="line"><span class="cl">git clone https://github.com/rbenv/rbenv.git <span class="nv">$RBENV_ROOT</span>
-</span></span><span class="line"><span class="cl">git clone https://github.com/rbenv/ruby-build.git <span class="si">${</span><span class="nv">RBENV_ROOT</span><span class="si">}</span>/plugins/ruby-build
-</span></span><span class="line"><span class="cl">rbenv init
-</span></span><span class="line"><span class="cl"><span class="nb">eval</span> <span class="s2">&#34;</span><span class="k">$(</span>rbenv init -<span class="k">)</span><span class="s2">&#34;</span>
-</span></span><span class="line"><span class="cl">rbenv install -l
-</span></span><span class="line"><span class="cl">rbenv install 3.3.5
-</span></span></code></pre></div><p><code>eval &quot;$(rbenv init -)&quot;</code> はここでインストールした
-<code>ruby</code> や <code>bundle</code> にPATHを通すコマンド。
-新しいシェルを起動するたびに実行する必要があるので
-<code>.zshrc</code>, <code>.bashrc</code> 等の設定ファイルに記述しておく。</p>
-<p><code>rbenv global 3.3.5</code> とするか、
-次に作るWikiリポジトリ内で <code>rbenv local 3.3.5</code>
-とすることで使用するRubyのバージョンを設定する。</p>
-</li>
+<p>必要なパッケージをインストールする。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo apt install build-essential autoconf libssl-dev libyaml-dev zlib1g-dev libffi-dev libgmp-dev rustc
+</span></span></code></pre></div></li>
+<li>
+<p>miseにパスを通す:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">XDG_DATA_HOME</span><span class="k">:-</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="p">/.local/share</span><span class="si">}</span>/mise/shims:<span class="nv">$PATH</span>
+</span></span></code></pre></div></li>
+<li>
+<p><code>~/.config/mise/config.toml</code> にバージョンを指定してインストール:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="p">[</span><span class="nx">tools</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">ruby</span> <span class="p">=</span> <span class="s2">&#34;latest&#34;</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nv">RUBY_CONFIGURE_OPTS</span><span class="o">=</span><span class="s2">&#34;--with-openssl-dir=</span><span class="k">$(</span>brew --prefix openssl@3<span class="k">)</span><span class="s2">&#34;</span> mise install ruby
+</span></span></code></pre></div></li>
 <li>
 <p>Wiki用のリポジトリ(ここでは<code>labwiki</code>)を作成して空コミット:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git init labwiki
