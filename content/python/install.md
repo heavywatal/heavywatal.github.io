@@ -229,6 +229,10 @@ MacのFramework buildでは `${HOME}/Library/Python/2.7` とかになる。
 - [3.14](https://docs.python.org/3.14/whatsnew/3.14.html)
   - [t-strings](https://docs.python.org/3/library/string.templatelib.html)
   - [zstd](https://docs.python.org/3/library/compression.zstd.html)
+  - PEP 649, 749 "Deferred evaluation of annotations":
+    `from __future__ import annotations` が標準動作になった。
+    - 未定義クラスをtypingで使う時にquoteしなくてよい。
+    - typing用のインポートは `typing.TYPE_CHECKING` が `True` のときだけでよい。
 - [3.13](https://docs.python.org/3.13/whatsnew/3.13.html)
   - `typing.ReadOnly`, `typing.TypeIs`
   - Free-threaded CPython
