@@ -48,24 +48,29 @@ tags = ["writing"]
 ## gollumインストールとWiki新規作成
 
 [mise](https://mise.jdx.dev/lang/ruby.html) や [rbenv](https://github.com/rbenv/rbenv) などでRubyを管理する。
-いずれにせよ実行部隊として [ruby-build](https://github.com/rbenv/ruby-build/wiki) が動く。
-[uv]({{< relref "/python/install.md" >}})
-のようにバイナリを落としてくるものがあればなお楽だけどRuby界にはまだ無さそう？
+ソースからビルドする [ruby-build](https://github.com/rbenv/ruby-build/wiki) 系と、
+ビルド済みバイナリを落としてくる [rv](https://github.com/spinel-coop/rv) 系があり、
+後者で済むならそのほうが楽。
 
-1.  必要なパッケージをインストールする。
+1.  miseをインストールしてパスを通す:
     ```sh
-    sudo apt install build-essential autoconf libssl-dev libyaml-dev zlib1g-dev libffi-dev libgmp-dev rustc
-    ```
-1.  miseにパスを通す:
-    ```sh
+    curl https://mise.run | sh
     PATH=${XDG_DATA_HOME:-${HOME}/.local/share}/mise/shims:$PATH
     ```
-1.  `~/.config/mise/config.toml` にバージョンを指定してインストール:
+1.  `~/.config/mise/config.toml` にバージョンを指定:
     ```toml
     [tools]
     ruby = "latest"
     ```
+1.  バイナリをインストール:
+    [jdx/mise/discussions/7268](https://github.com/jdx/mise/discussions/7268)
     ```sh
+    mise settings experimental=true
+    mise use -g ruby
+    ```
+    ソースからビルドする場合は依存パッケージのインストールやSSLの設定を適宜行う:
+    ```sh
+    sudo apt install build-essential autoconf libssl-dev libyaml-dev zlib1g-dev libffi-dev libgmp-dev rustc
     RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@3)" mise install ruby
     ```
 1.  Wiki用のリポジトリ(ここでは`labwiki`)を作成して空コミット:
