@@ -98,23 +98,28 @@ docker-compose とかですぐ使えるのも楽ちん。</dd>
 gollumインストールとWiki新規作成<a href="#gollumインストールとwiki新規作成"></a>
 </h2>
 <p><a href="https://mise.jdx.dev/lang/ruby.html">mise</a> や <a href="https://github.com/rbenv/rbenv">rbenv</a> などでRubyを管理する。
-いずれにせよ実行部隊として <a href="https://github.com/rbenv/ruby-build/wiki">ruby-build</a> が動く。
-<a href="/python/install.html">uv</a>
-のようにバイナリを落としてくるものがあればなお楽だけどRuby界にはまだ無さそう？</p>
+ソースからビルドする <a href="https://github.com/rbenv/ruby-build/wiki">ruby-build</a> 系と、
+ビルド済みバイナリを落としてくる <a href="https://github.com/spinel-coop/rv">rv</a> 系があり、
+後者で済むならそのほうが楽。</p>
 <ol>
 <li>
-<p>必要なパッケージをインストールする。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo apt install build-essential autoconf libssl-dev libyaml-dev zlib1g-dev libffi-dev libgmp-dev rustc
+<p>miseをインストールしてパスを通す:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">curl https://mise.run <span class="p">|</span> sh
+</span></span><span class="line"><span class="cl"><span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">XDG_DATA_HOME</span><span class="k">:-</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="p">/.local/share</span><span class="si">}</span>/mise/shims:<span class="nv">$PATH</span>
 </span></span></code></pre></div></li>
 <li>
-<p>miseにパスを通す:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">XDG_DATA_HOME</span><span class="k">:-</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="p">/.local/share</span><span class="si">}</span>/mise/shims:<span class="nv">$PATH</span>
-</span></span></code></pre></div></li>
-<li>
-<p><code>~/.config/mise/config.toml</code> にバージョンを指定してインストール:</p>
+<p><code>~/.config/mise/config.toml</code> にバージョンを指定:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="p">[</span><span class="nx">tools</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="nx">ruby</span> <span class="p">=</span> <span class="s2">&#34;latest&#34;</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nv">RUBY_CONFIGURE_OPTS</span><span class="o">=</span><span class="s2">&#34;--with-openssl-dir=</span><span class="k">$(</span>brew --prefix openssl@3<span class="k">)</span><span class="s2">&#34;</span> mise install ruby
+</span></span></code></pre></div></li>
+<li>
+<p>バイナリをインストール:
+<a href="https://github.com/jdx/mise/discussions/7268">jdx/mise/discussions/7268</a></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mise settings <span class="nv">experimental</span><span class="o">=</span><span class="nb">true</span>
+</span></span><span class="line"><span class="cl">mise use -g ruby
+</span></span></code></pre></div><p>ソースからビルドする場合は依存パッケージのインストールやSSLの設定を適宜行う:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo apt install build-essential autoconf libssl-dev libyaml-dev zlib1g-dev libffi-dev libgmp-dev rustc
+</span></span><span class="line"><span class="cl"><span class="nv">RUBY_CONFIGURE_OPTS</span><span class="o">=</span><span class="s2">&#34;--with-openssl-dir=</span><span class="k">$(</span>brew --prefix openssl@3<span class="k">)</span><span class="s2">&#34;</span> mise install ruby
 </span></span></code></pre></div></li>
 <li>
 <p>Wiki用のリポジトリ(ここでは<code>labwiki</code>)を作成して空コミット:</p>
