@@ -160,11 +160,11 @@ distribution<a href="#distribution"></a>
 <p>確率分布に従った乱数生成はC++11から <code>&lt;random&gt;</code> でサポートされるようになったが、
 確率密度関数(PDF)や累積密度関数(CDF)はまだ標準入りしてない。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">// #include &lt;boost/math/distributions.hpp&gt;
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;boost/math/distributions/normal.hpp&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;boost/math/distributions/normal.hpp&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;boost/math/distributions/poisson.hpp&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;boost/math/distributions/binomial.hpp&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;boost/math/distributions/chi_squared.hpp&gt;</span><span class="cp">
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">namespace</span> <span class="n">bmath</span> <span class="o">=</span> <span class="n">boost</span><span class="o">::</span><span class="n">math</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="n">bmath</span><span class="o">::</span><span class="n">normal_distribution</span><span class="o">&lt;&gt;</span> <span class="n">dist</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">sd</span><span class="p">);</span>
@@ -179,14 +179,14 @@ distribution<a href="#distribution"></a>
 </span></span></code></pre></div><p>右側の裾が欲しいときは精度を保つために <code>complement()</code> を使う。
 (Rでいう <code>lower.tail=FALSE</code>)</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">// good
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">bmath</span><span class="o">::</span><span class="n">quantile</span><span class="p">(</span><span class="n">bmath</span><span class="o">::</span><span class="n">complement</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">p</span><span class="p">));</span>
+</span></span></span><span class="line"><span class="cl"><span class="n">bmath</span><span class="o">::</span><span class="n">quantile</span><span class="p">(</span><span class="n">bmath</span><span class="o">::</span><span class="n">complement</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">p</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl"><span class="c1">// bad
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">bmath</span><span class="o">::</span><span class="n">quantile</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span>
+</span></span></span><span class="line"><span class="cl"><span class="n">bmath</span><span class="o">::</span><span class="n">quantile</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">// good
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">bmath</span><span class="o">::</span><span class="n">cdf</span><span class="p">(</span><span class="n">bmath</span><span class="o">::</span><span class="n">complement</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">x</span><span class="p">));</span>
+</span></span></span><span class="line"><span class="cl"><span class="n">bmath</span><span class="o">::</span><span class="n">cdf</span><span class="p">(</span><span class="n">bmath</span><span class="o">::</span><span class="n">complement</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">x</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl"><span class="c1">// bad
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">bmath</span><span class="o">::</span><span class="n">cdf</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl"><span class="mf">1.0</span> <span class="o">-</span> <span class="n">bmath</span><span class="o">::</span><span class="n">cdf</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
 </span></span></code></pre></div><h2 id="iostreams">
 iostreams<a href="#iostreams"></a>
 </h2>
@@ -200,7 +200,7 @@ gzip 圧縮と展開<a href="#gzip-圧縮と展開"></a>
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;boost/iostreams/filtering_stream.hpp&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;boost/iostreams/filter/gzip.hpp&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;boost/iostreams/device/file_descriptor.hpp&gt;</span><span class="cp">
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="k">namespace</span> <span class="n">bios</span> <span class="o">=</span> <span class="n">boost</span><span class="o">::</span><span class="n">iostreams</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">{</span>

@@ -75,15 +75,15 @@ CMakeでは開発者と利用者の双方がCMakeをインストールして使�
 <p><code>CMakeLists.txt</code> を各ディレクトリに配置して、階層的に管理する。
 プロジェクトのトップに置くものは、以下のようなコマンドで始める必要がある。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.15</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">project</span><span class="p">(</span><span class="s">helloworld</span>
+</span></span></span><span class="line"><span class="cl"><span class="nb">project</span><span class="p">(</span><span class="s">helloworld</span>
 </span></span><span class="line"><span class="cl">  <span class="s">VERSION</span> <span class="s">0.1.0</span>
 </span></span><span class="line"><span class="cl">  <span class="s">LANGUAGES</span> <span class="s">CXX</span><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><p><code>add_executable()</code> や <code>add_library()</code> でビルドターゲットを作成し、
 <code>target_*()</code> でそれらの設定を整えて、
 <code>install()</code> でインストールする対象や行き先を指定する、というのが基本の流れ。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">add_executable</span><span class="p">(</span><span class="s">a.out</span> <span class="s">hello.cpp</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_compile_options</span><span class="p">(</span><span class="s">a.out</span> <span class="s">PRIVATE</span> <span class="s">-Wall</span> <span class="s">-Wextra</span> <span class="s">-pedantic</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">install</span><span class="p">(</span><span class="s">TARGETS</span> <span class="s">a.out</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">target_compile_options</span><span class="p">(</span><span class="s">a.out</span> <span class="s">PRIVATE</span> <span class="s">-Wall</span> <span class="s">-Wextra</span> <span class="s">-pedantic</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">install</span><span class="p">(</span><span class="s">TARGETS</span> <span class="s">a.out</span><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><p><a href="#cli"><code>cmake</code> コマンドの使い方は後述</a></p>
 <h2 id="commands">
 Commands<a href="#commands"></a>
@@ -280,8 +280,8 @@ C++<a href="#c"></a>
 </span></span><span class="line"><span class="cl">  <span class="o">$&lt;</span><span class="nv">$&lt;STREQUAL:${CMAKE_SYSTEM_PROCESSOR},arm64</span><span class="o">&gt;</span><span class="s">:-march=armv8.4-a&gt;</span>
 </span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_compile_features</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">PUBLIC</span> <span class="s">cxx_std_17</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set_target_properties</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">PROPERTIES</span> <span class="s">CXX_EXTENSIONS</span> <span class="s">OFF</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">target_compile_features</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">PUBLIC</span> <span class="s">cxx_std_17</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set_target_properties</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">PROPERTIES</span> <span class="s">CXX_EXTENSIONS</span> <span class="s">OFF</span><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><p><code>CMAKE_CXX_*</code> のようなグローバル設定を使わず
 <code>target_*()</code> でターゲットごとに設定するのが今後の主流。
 <a href="https://cmake.org/cmake/help/latest/prop_gbl/CMAKE_CXX_KNOWN_FEATURES.html"><code>CMAKE_CXX_KNOWN_FEATURES</code></a>
@@ -364,7 +364,7 @@ include(CMakePrintHelpers)<a href="#includecmakeprinthelpers"></a>
 名前を2回書かずに済む。
 次の二つは等価:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">cmake_print_variables</span><span class="p">(</span><span class="s">VAR</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">message</span><span class="p">(</span><span class="s">STATUS</span> <span class="s">VAR=</span><span class="s2">&#34;${VAR}&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">message</span><span class="p">(</span><span class="s">STATUS</span> <span class="s">VAR=</span><span class="s2">&#34;${VAR}&#34;</span><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><h3 id="gnuinstalldirs">
 GNUInstallDirs<a href="#gnuinstalldirs"></a>
 </h3>
@@ -411,8 +411,8 @@ CMakePackageConfigHelpers<a href="#cmakepackageconfighelpers"></a>
 外部から <code>IMPORTED</code> されたターゲットであることを明確にするため
 <code>名前空間::ターゲット</code> という形でリンクするのが筋:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">project</span><span class="p">(</span><span class="s">OtherProject</span> <span class="s">CXX</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">find_package</span><span class="p">(</span><span class="s">MyLib</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OtherTarget</span> <span class="s">PRIVATE</span> <span class="s">MyLib::MyLib</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">find_package</span><span class="p">(</span><span class="s">MyLib</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">OtherTarget</span> <span class="s">PRIVATE</span> <span class="s">MyLib::MyLib</span><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><p>こうやって使ってもらうためには <code>*config.cmake</code> ファイルを
 <a href="https://cmake.org/cmake/help/latest/command/find_package.html#config-mode-search-procedure"><code>find_package()</code> の探索先</a>
 のどこかにインストールする必要がある。
@@ -431,31 +431,31 @@ header-only, architecture-independent.
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">project</span><span class="p">(</span><span class="s">MyLib</span>
 </span></span><span class="line"><span class="cl">  <span class="s">VERSION</span> <span class="s">0.1.0</span>
 </span></span><span class="line"><span class="cl">  <span class="s">LANGUAGES</span> <span class="s">CXX</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># ...
-</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">install</span><span class="p">(</span><span class="s">TARGETS</span> <span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
+</span></span></span><span class="line"><span class="cl"><span class="c"># ...
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">install</span><span class="p">(</span><span class="s">TARGETS</span> <span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
 </span></span><span class="line"><span class="cl">  <span class="s">EXPORT</span> <span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="s">-config</span>
 </span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">config_destination</span> <span class="o">${</span><span class="nv">CMAKE_INSTALL_LIBDIR</span><span class="o">}</span><span class="s">/cmake/</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">install</span><span class="p">(</span><span class="s">EXPORT</span> <span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="s">-config</span>
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">config_destination</span> <span class="o">${</span><span class="nv">CMAKE_INSTALL_LIBDIR</span><span class="o">}</span><span class="s">/cmake/</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">install</span><span class="p">(</span><span class="s">EXPORT</span> <span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="s">-config</span>
 </span></span><span class="line"><span class="cl">  <span class="s">DESTINATION</span> <span class="o">${</span><span class="nv">config_destination</span><span class="o">}</span>
 </span></span><span class="line"><span class="cl">  <span class="s">NAMESPACE</span> <span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="s">::</span>
 </span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><p>バージョン情報も同じところに送り込む:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">version_file</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="s">-config-version.cmake</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">include</span><span class="p">(</span><span class="s">CMakePackageConfigHelpers</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">write_basic_package_version_file</span><span class="p">(</span><span class="o">${</span><span class="nv">version_file</span><span class="o">}</span>
+</span></span></span><span class="line"><span class="cl"><span class="nb">include</span><span class="p">(</span><span class="s">CMakePackageConfigHelpers</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">write_basic_package_version_file</span><span class="p">(</span><span class="o">${</span><span class="nv">version_file</span><span class="o">}</span>
 </span></span><span class="line"><span class="cl">  <span class="s">COMPATIBILITY</span> <span class="s">AnyNewerVersion</span>
 </span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">install</span><span class="p">(</span><span class="s">FILES</span> <span class="o">${</span><span class="nv">version_file</span><span class="o">}</span>
+</span></span></span><span class="line"><span class="cl"><span class="nb">install</span><span class="p">(</span><span class="s">FILES</span> <span class="o">${</span><span class="nv">version_file</span><span class="o">}</span>
 </span></span><span class="line"><span class="cl">  <span class="s">DESTINATION</span> <span class="o">${</span><span class="nv">config_destination</span><span class="o">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><p><code>find_package()</code> から使うにはここまでの設定で十分だが、
 <code>add_subdirectory()</code> からでも同じ形で使えるようにするため、
 <code>ALIAS</code> を設定しておいたほうがいい:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">add_library</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">add_library</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="s">::</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">ALIAS</span> <span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_library</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="s">::</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">ALIAS</span> <span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><p>上記のように直接 <code>EXPORT *-config</code> するのは簡易版。
 ライブラリ利用時に何らかの処理を行いたい場合は、
 同じ内容を <code>EXPORT *-targets</code> のような名前で書き出しておき、
@@ -465,14 +465,14 @@ header-only, architecture-independent.
 </span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><p>鋳型となる <code>config.cmake.in</code> にはとりあえず次の3行を書く:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="err">@PACKAGE_INIT@
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">include</span><span class="p">(</span><span class="s2">&#34;${CMAKE_CURRENT_LIST_DIR}/${CMAKE_FIND_PACKAGE_NAME}-targets.cmake&#34;</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">check_required_components</span><span class="p">(</span><span class="o">${</span><span class="nv">CMAKE_FIND_PACKAGE_NAME</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">include</span><span class="p">(</span><span class="s2">&#34;${CMAKE_CURRENT_LIST_DIR}/${CMAKE_FIND_PACKAGE_NAME}-targets.cmake&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">check_required_components</span><span class="p">(</span><span class="o">${</span><span class="nv">CMAKE_FIND_PACKAGE_NAME</span><span class="o">}</span><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><p>これだけだと直接 <code>EXPORT *-config</code> するのとほとんど変わらないけど、
 ほかにも好きな処理を書いてインストールできる、というのがミソ。
 例えばzlibを使うライブラリを作って、その依存関係を伝播させたいとき、
 次のような処理を書いておくと利用者側で <code>find_package(ZLIB)</code> を書かなくてよくなる:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">include</span><span class="p">(</span><span class="s">CMakeFindDependencyMacro</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">find_dependency</span><span class="p">(</span><span class="s">ZLIB</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">find_dependency</span><span class="p">(</span><span class="s">ZLIB</span><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><p><a href="https://cmake.org/cmake/help/latest/module/CMakeFindDependencyMacro.html"><code>find_dependency()</code></a>
 は上流で指定された <code>REQUIRED</code> や <code>QUIET</code> などをうまく転送してくれる <code>find_package()</code> ラッパー。</p>
 <p><code>check_required_components()</code> は
@@ -511,15 +511,15 @@ FetchContent<a href="#fetchcontent"></a>
 <p>外部ライブラリをコンフィグ時に取ってくる。
 CMake 3.11 から。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">include</span><span class="p">(</span><span class="s">FetchContent</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">FetchContent_Declare</span><span class="p">(</span><span class="s">pcglite</span>
+</span></span></span><span class="line"><span class="cl"><span class="nb">FetchContent_Declare</span><span class="p">(</span><span class="s">pcglite</span>
 </span></span><span class="line"><span class="cl">  <span class="s">GIT_REPOSITORY</span> <span class="s">https://github.com/heavywatal/pcglite.git</span>
 </span></span><span class="line"><span class="cl">  <span class="s">GIT_TAG</span> <span class="s">v0.2.1</span>
 </span></span><span class="line"><span class="cl">  <span class="s">EXCLUDE_FROM_ALL</span>
 </span></span><span class="line"><span class="cl">  <span class="s">FIND_PACKAGE_ARGS</span> <span class="s">0.2.1</span>
 </span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">pcglite</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">cmake_print_variables</span><span class="p">(</span><span class="s">pcglite_FOUND</span> <span class="s">pcglite_DIR</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">cmake_print_variables</span><span class="p">(</span><span class="s">pcglite_SOURCE_DIR</span> <span class="s">pcglite_BINARY_DIR</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">pcglite</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">cmake_print_variables</span><span class="p">(</span><span class="s">pcglite_FOUND</span> <span class="s">pcglite_DIR</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">cmake_print_variables</span><span class="p">(</span><span class="s">pcglite_SOURCE_DIR</span> <span class="s">pcglite_BINARY_DIR</span><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><dl>
 <dt><code>FetchContent_Declare()</code></dt>
 <dd>まずこれで依存関係を宣言する。</dd>
@@ -602,7 +602,7 @@ FindThreads<a href="#findthreads"></a>
 <p><a href="https://cmake.org/cmake/help/latest/module/FindThreads.html">https://cmake.org/cmake/help/latest/module/FindThreads.html</a></p>
 <p><code>-lpthread</code> とか自分で書かない。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">find_package</span><span class="p">(</span><span class="s">Threads</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">MyTarget</span> <span class="s">PRIVATE</span> <span class="s">Threads::Threads</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">MyTarget</span> <span class="s">PRIVATE</span> <span class="s">Threads::Threads</span><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><h3 id="findboost">
 FindBoost<a href="#findboost"></a>
 </h3>
@@ -611,19 +611,19 @@ FindBoost<a href="#findboost"></a>
 普通のCMakeパッケージとして探すには、
 <code>CONFIG</code> とか <code>NO_MODULE</code> オプションを足して明示的にConfigモードを使う。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">find_package</span><span class="p">(</span><span class="s">Boost</span> <span class="s">CONFIG</span> <span class="s">REQUIRED</span> <span class="s">COMPONENTS</span> <span class="s">context</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">MyTarget</span> <span class="s">PRIVATE</span> <span class="s">Boost::context</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">MyTarget</span> <span class="s">PRIVATE</span> <span class="s">Boost::context</span><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><p>ヘッダーだけでいい場合は <code>Boost::boost</code> をリンクする。</p>
 <h3 id="ctest">
 CTest<a href="#ctest"></a>
 </h3>
 <p><a href="https://cmake.org/cmake/help/latest/module/CTest.html">https://cmake.org/cmake/help/latest/module/CTest.html</a></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">include</span><span class="p">(</span><span class="s">CTest</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">if</span><span class="p">(</span><span class="s">BUILD_TESTING</span> <span class="s">AND</span> <span class="s">PROJECT_IS_TOP_LEVEL</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span>  <span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">test</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">if</span><span class="p">(</span><span class="s">BUILD_TESTING</span> <span class="s">AND</span> <span class="s">PROJECT_IS_TOP_LEVEL</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">  <span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">test</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">endif</span><span class="p">()</span><span class="err">
 </span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># test/CMakeLists.txt
-</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">add_executable</span><span class="p">(</span><span class="s">test-gene</span> <span class="s">gene.cpp</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">add_test</span><span class="p">(</span><span class="s">NAME</span> <span class="s">gene</span> <span class="s">COMMAND</span> <span class="o">$&lt;</span><span class="nv">TARGET_FILE:test-gene</span><span class="o">&gt;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_executable</span><span class="p">(</span><span class="s">test-gene</span> <span class="s">gene.cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_test</span><span class="p">(</span><span class="s">NAME</span> <span class="s">gene</span> <span class="s">COMMAND</span> <span class="o">$&lt;</span><span class="nv">TARGET_FILE:test-gene</span><span class="o">&gt;</span><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><p><code>ctest -V</code> で実行。
 一部のテストのみ実行したいときは <code>-R &lt;pattern&gt;</code> で絞る。</p>
 <p><a href="https://github.com/Kitware/CMake/blob/master/Modules/CTest.cmake"><code>include(CTest)</code></a>
@@ -631,7 +631,7 @@ CTest<a href="#ctest"></a>
 <code>DartConfiguration.tcl</code> を生成する。
 次のように書き換えればそのへんをスキップできる:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">option</span><span class="p">(</span><span class="s">BUILD_TESTING</span> <span class="s2">&#34;Build the testing tree.&#34;</span> <span class="s">ON</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">enable_testing</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">enable_testing</span><span class="p">()</span><span class="err">
 </span></span></span></code></pre></div><h2 id="cli">
 CLI<a href="#cli"></a>
 </h2>

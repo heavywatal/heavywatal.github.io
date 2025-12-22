@@ -232,12 +232,12 @@ CXX=$(LLVM_LOC)/bin/clang++
 ソースコード <code>src/*.cpp</code><a href="#ソースコード-srccpp"></a>
 </h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;Rcpp.h&gt;</span><span class="cp">
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">//&#39; First example
 </span></span></span><span class="line"><span class="cl"><span class="c1">//&#39; @param args string vector
 </span></span></span><span class="line"><span class="cl"><span class="c1">//&#39; @export
 </span></span></span><span class="line"><span class="cl"><span class="c1">// [[Rcpp::export]]
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">int</span> <span class="nf">len</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">len</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">args</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><ul>
@@ -290,8 +290,8 @@ RAIIを期待したC++コードはデストラクタが呼ばれなくてバグ�
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="n">Vector</span><span class="o">&lt;</span><span class="n">LGLSXP</span><span class="o">&gt;</span>  <span class="n">LogicalVector</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="n">Vector</span><span class="o">&lt;</span><span class="n">INTSXP</span><span class="o">&gt;</span>  <span class="n">IntegerVector</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="n">Vector</span><span class="o">&lt;</span><span class="n">REALSXP</span><span class="o">&gt;</span> <span class="n">NumericVector</span><span class="p">;</span> <span class="c1">// DoubleVector
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">typedef</span> <span class="n">Vector</span><span class="o">&lt;</span><span class="n">STRSXP</span><span class="o">&gt;</span>  <span class="n">StringVector</span><span class="p">;</span>  <span class="c1">// CharacterVector
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">typedef</span> <span class="n">Vector</span><span class="o">&lt;</span><span class="n">VECSXP</span><span class="o">&gt;</span>  <span class="n">List</span><span class="p">;</span>          <span class="c1">// GenericVector
+</span></span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="n">Vector</span><span class="o">&lt;</span><span class="n">STRSXP</span><span class="o">&gt;</span>  <span class="n">StringVector</span><span class="p">;</span>  <span class="c1">// CharacterVector
+</span></span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="n">Vector</span><span class="o">&lt;</span><span class="n">VECSXP</span><span class="o">&gt;</span>  <span class="n">List</span><span class="p">;</span>          <span class="c1">// GenericVector
 </span></span></span></code></pre></div><p>クラスのメンバとして生の配列ではなくそこへの参照を保持する。
 しかし <code>std::vector</code> とは異なり、
 このオブジェクトをコピーしてもメモリ上の中身はコピーされず、
@@ -356,18 +356,18 @@ Moduleの記述を自分でやらず <code>Rcpp::exposeClass()</code> に生成�
 で自作クラスの宣言と
 <code>Rcpp::as&lt;MyClass&gt;()</code> / <code>Rcpp::wrap&lt;MyClass&gt;()</code> の特殊化を行う。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;RcppCommon.h&gt;</span><span class="cp">
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="n">RCPP_EXPOSED_CLASS</span><span class="p">(</span><span class="n">MyClass</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="c1">// これで as&lt;MyClass&gt; / wrap&lt;MyClass&gt; の特殊化が定義される
 </span></span></span><span class="line"><span class="cl"><span class="c1">// 必ず #include &lt;Rcpp.h&gt; より前に来るように
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;myclass.hpp&#34;</span><span class="cp">
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="c1">// 自作クラスの宣言
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 自作クラスの宣言
 </span></span></span></code></pre></div></li>
 <li>
 <p>どこかのソースファイルでモジュールを定義</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;Rcpp.h&gt;</span><span class="cp">`
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="n">RCPP_MODULE</span><span class="p">(</span><span class="n">mymodule</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">  <span class="n">Rcpp</span><span class="o">::</span><span class="n">class_</span><span class="o">&lt;</span><span class="n">MyClass</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&#34;MyClass&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">constructor</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">()</span>
