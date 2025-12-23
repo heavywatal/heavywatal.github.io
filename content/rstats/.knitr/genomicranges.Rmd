@@ -17,7 +17,7 @@ tags = ["r", "bioconductor"]
 ```{r, setup-local}
 #| cache: false
 #| echo: false
-withr::local_package("GenomicRanges")
+library("GenomicRanges")
 knitr::opts_chunk$set(fig.height = 1)
 knitr::opts_chunk$set(fig.width = 4)
 knitr::opts_chunk$set(dev.args = list(bg = "transparent"))
@@ -133,10 +133,12 @@ genome(gr)
 多くの関数は `IRanges` と `GenomicRanges` で同様に動作する。
 より単純な前者で例を示し、後者固有の話は適宜挟む。
 
-```{r, iranges-orig}
-#| echo: [1, 2]
+```{r, ir}
 ir = IRanges(c(1, 8, 14, 15, 19, 34, 40), width = c(12, 6, 6, 15, 6, 2, 7))
 ir
+```
+```{r, iranges-orig}
+#| echo: false
 ir |> plot_ranges()
 ```
 

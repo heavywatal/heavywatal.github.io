@@ -251,6 +251,18 @@ chunk内からの実行では遅い。
 - <https://yihui.org/knitr/hooks/>
 - <https://bookdown.org/yihui/rmarkdown-cookbook/chunk-hooks.html>
 
+
+### Knit hooks
+
+`knit()` の始めと終わりに評価する関数をsetできる。
+[since 1.51](https://github.com/yihui/knitr/releases/tag/v1.51)
+
+```r
+knitr::knit_hooks$set(before.knit = \() {})
+knitr::knit_hooks$set(after.knit = \() {})
+```
+
+
 ### Chunk hooks
 
 - chunk前後に評価するコードをsetできる。
@@ -306,6 +318,39 @@ knitr::opts_hooks$set(fig.square = \(options) {
   options
 })
 ```
+
+
+## litedown
+
+<https://yihui.org/litedown>
+
+knitrやrmarkdownの作者がイチから開発しなおしている軽量版。
+まだまだ開発途上だけど、全ての機能を再開発しようとしているわけでもない。
+
+[Comparison to knitr](https://yihui.org/litedown/#sec:comparison-to-knitr)
+
+- `knitr::knit()` に相当するのは
+  [`litedown::fuse()`](https://cran.r-project.org/web/packages/litedown/refman/litedown.html#fuse)
+- オプション設定に使うのは
+  [`litedown::reactor()`](https://github.com/search?q=repo%3Ayihui%2Flitedown+reactor+echo+message+collapse)
+  - `echo`: 単純な `TRUE` / `FALSE` のみ。
+  - `R.options` 未対応: `withr::local_options()` を置いて `echo = -1` することもできない。
+  - `fig.alt` はユーザーにちゃんと設定されることを期待して空のまま出力される。
+  - `fig.process` 未対応
+  - `dpi` 未対応: `dev.args = list(res = 108)` とかで代替可能か？
+- code chunk の `echo` 結果が
+  ` ``` {.r} ` という独自形式になってしまう。
+  これはバグではなく仕様らしい
+  ([yihui/litedown#107](https://github.com/yihui/litedown/issues/107))。
+  CommonMark準拠のパーサーに渡すには `attr.source = "r"` で修正する。
+  `attr.source = "{engine}"` のように一般化できれば助かるんだけど。
+- 明示的に `print()` しない場合の表示方法がデフォルトで `xfun::record_print()` で、
+  `data.frame` がMarkdownに変換されたりする。
+  とりあえず普通に戻すには
+  [`print = NA`](https://yihui.org/litedown/#sec:option-print) とする。
+- `withr::local_*` 系のスコープがcode chunkごとに別々。
+  このほうが自然な気がする。
+
 
 ## Quarto
 

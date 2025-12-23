@@ -219,7 +219,7 @@ anscombe |> tibble::rowid_to_column("id") |>
 VADeaths |>
   as.data.frame() |>
   print() |>
-  rownames_to_column("age") |>
+  tibble::rownames_to_column("age") |>
   pivot_longer(!age, names_to = c("region", "sex"), names_sep = " ", values_to = "death")
 ```
 

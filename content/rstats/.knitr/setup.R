@@ -1,4 +1,4 @@
-withr::local_options(
+options(
   mc.cores = parallel::detectCores(),
   wtl.printdf.summarize = FALSE,
   wtl.printdf.classes = FALSE,
@@ -12,8 +12,8 @@ withr::local_options(
   readr.show_col_types = FALSE
 )
 ggplot2::theme_set(wtl::theme_wtl())
-withr::local_package("tibble")
-withr::local_package("ggplot2")
+library(tibble) # nolint: unused_import_linter.
+library(ggplot2) # nolint: unused_import_linter.
 registerS3method("print", "tbl", wtl::printdf)
 registerS3method("print", "tbl_df", wtl::printdf)
 knitr::opts_chunk$set(comment = "")
@@ -23,6 +23,17 @@ knitr::opts_chunk$set(dev = "ragg_png")
 knitr::opts_chunk$set(dpi = 108)
 knitr::opts_chunk$set(fig.process = wtl::oxipng)
 knitr::opts_chunk$set(cache = TRUE, autodep = TRUE)
+litedown::reactor(
+  comment = "",
+  message = NA,
+  warning = NA,
+  fig.path = "../figure/",
+  dev = ragg::agg_png,
+  dev.args = list(res = 108),
+  cache = TRUE,
+  attr.source = "r",
+  print = NA
+)
 set.seed(24601)
 
 src_alt_fig_chunk = function(label, ext = "png", number = 1L) {
