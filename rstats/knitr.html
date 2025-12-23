@@ -307,7 +307,14 @@ Hooks<a href="#hooks"></a>
 <li><a href="https://yihui.org/knitr/hooks/">https://yihui.org/knitr/hooks/</a></li>
 <li><a href="https://bookdown.org/yihui/rmarkdown-cookbook/chunk-hooks.html">https://bookdown.org/yihui/rmarkdown-cookbook/chunk-hooks.html</a></li>
 </ul>
-<h3 id="chunk-hooks">
+<h3 id="knit-hooks">
+Knit hooks<a href="#knit-hooks"></a>
+</h3>
+<p><code>knit()</code> の始めと終わりに評価する関数をsetできる。
+<a href="https://github.com/yihui/knitr/releases/tag/v1.51">since 1.51</a></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">knitr</span><span class="o">::</span><span class="n">knit_hooks</span><span class="o">$</span><span class="nf">set</span><span class="p">(</span><span class="n">before.knit</span> <span class="o">=</span> <span class="nf">\</span><span class="p">()</span> <span class="p">{})</span>
+</span></span><span class="line"><span class="cl"><span class="n">knitr</span><span class="o">::</span><span class="n">knit_hooks</span><span class="o">$</span><span class="nf">set</span><span class="p">(</span><span class="n">after.knit</span> <span class="o">=</span> <span class="nf">\</span><span class="p">()</span> <span class="p">{})</span>
+</span></span></code></pre></div><h3 id="chunk-hooks">
 Chunk hooks<a href="#chunk-hooks"></a>
 </h3>
 <ul>
@@ -360,7 +367,40 @@ chunk内と同じとは限らないことに注意。</li>
 </span></span><span class="line"><span class="cl">  <span class="n">options</span><span class="o">$</span><span class="n">fig.height</span> <span class="o">=</span> <span class="n">options</span><span class="o">$</span><span class="n">fig.square</span>
 </span></span><span class="line"><span class="cl">  <span class="n">options</span>
 </span></span><span class="line"><span class="cl"><span class="p">})</span>
-</span></span></code></pre></div><h2 id="quarto">
+</span></span></code></pre></div><h2 id="litedown">
+litedown<a href="#litedown"></a>
+</h2>
+<p><a href="https://yihui.org/litedown">https://yihui.org/litedown</a></p>
+<p>knitrやrmarkdownの作者がイチから開発しなおしている軽量版。
+まだまだ開発途上だけど、全ての機能を再開発しようとしているわけでもない。</p>
+<p><a href="https://yihui.org/litedown/#sec:comparison-to-knitr">Comparison to knitr</a></p>
+<ul>
+<li><code>knitr::knit()</code> に相当するのは
+<a href="https://cran.r-project.org/web/packages/litedown/refman/litedown.html#fuse"><code>litedown::fuse()</code></a></li>
+<li>オプション設定に使うのは
+<a href="https://github.com/search?q=repo%3Ayihui%2Flitedown+reactor+echo+message+collapse"><code>litedown::reactor()</code></a>
+<ul>
+<li><code>echo</code>: 単純な <code>TRUE</code> / <code>FALSE</code> のみ。</li>
+<li><code>R.options</code> 未対応: <code>withr::local_options()</code> を置いて <code>echo = -1</code> することもできない。</li>
+<li><code>fig.alt</code> はユーザーにちゃんと設定されることを期待して空のまま出力される。</li>
+<li><code>fig.process</code> 未対応</li>
+<li><code>dpi</code> 未対応: <code>dev.args = list(res = 108)</code> とかで代替可能か？</li>
+</ul>
+</li>
+<li>code chunk の <code>echo</code> 結果が
+<code>``` {.r}</code> という独自形式になってしまう。
+これはバグではなく仕様らしい
+(<a href="https://github.com/yihui/litedown/issues/107">yihui/litedown#107</a>)。
+CommonMark準拠のパーサーに渡すには <code>attr.source = &quot;r&quot;</code> で修正する。
+<code>attr.source = &quot;{engine}&quot;</code> のように一般化できれば助かるんだけど。</li>
+<li>明示的に <code>print()</code> しない場合の表示方法がデフォルトで <code>xfun::record_print()</code> で、
+<code>data.frame</code> がMarkdownに変換されたりする。
+とりあえず普通に戻すには
+<a href="https://yihui.org/litedown/#sec:option-print"><code>print = NA</code></a> とする。</li>
+<li><code>withr::local_*</code> 系のスコープがcode chunkごとに別々。
+このほうが自然な気がする。</li>
+</ul>
+<h2 id="quarto">
 Quarto<a href="#quarto"></a>
 </h2>
 <p><a href="https://quarto.org/docs/output-formats/hugo.html">https://quarto.org/docs/output-formats/hugo.html</a></p>
