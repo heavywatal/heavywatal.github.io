@@ -96,7 +96,25 @@
 ひとまずインタラクティブノード <code>a001</code>, <code>a002</code>, <code>a003</code>
 のどれかにSSH接続してから作業せよとのこと。
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ssh a001
-</span></span></code></pre></div></li>
+</span></span></code></pre></div>手元の <code>~/.ssh/config</code> で <code>ProxyJump</code> の設定をすれば、
+任意のインタラクティブノードに一撃で接続できる。
+例えば a001 で <code>zsh</code> のログインシェルを立ち上げるには:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ssh interactive.ddbj.nig.ac.jp
+</span></span></code></pre></div><pre tabindex="0"><code>Host a001.ddbj.nig.ac.jp
+  HostName a001
+  ProxyJump gw.ddbj.nig.ac.jp
+Host a002.ddbj.nig.ac.jp
+  HostName a002
+  ProxyJump gw.ddbj.nig.ac.jp
+Host a003.ddbj.nig.ac.jp
+  HostName a003
+  ProxyJump gw.ddbj.nig.ac.jp
+Host interactive.ddbj.nig.ac.jp
+  HostName a001
+  ProxyJump gw.ddbj.nig.ac.jp
+  RequestTTY yes
+  RemoteCommand /bin/zsh -l
+</code></pre></li>
 </ol>
 <h2 id="ファイルの送受信">
 ファイルの送受信<a href="#ファイルの送受信"></a>
@@ -104,7 +122,8 @@
 <p><a href="https://sc.ddbj.nig.ac.jp/guides/using_general_analysis_division/ga_data_transfer/">公式「システムへのファイル転送方法」</a>
 にはscp, sftp, Asperaを使えと書かれてるけど、
 <a href="/dev/rsync.html">rsync</a>
-を使うのが簡単。</p>
+を使うのが簡単。
+このときの宛先はゲートウェイノード。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># send</span>
 </span></span><span class="line"><span class="cl">rsync -auvC ~/input/ gw.ddbj.nig.ac.jp:~/input/
 </span></span><span class="line"><span class="cl">
