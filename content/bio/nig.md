@@ -42,7 +42,28 @@ tags = ["job"]
     ```sh
     ssh a001
     ```
-
+    手元の `~/.ssh/config` で `ProxyJump` の設定をすれば、
+    任意のインタラクティブノードに一撃で接続できる。
+    例えば a001 で `zsh` のログインシェルを立ち上げるには:
+    ```sh
+    ssh interactive.ddbj.nig.ac.jp
+    ```
+    ```
+    Host a001.ddbj.nig.ac.jp
+      HostName a001
+      ProxyJump gw.ddbj.nig.ac.jp
+    Host a002.ddbj.nig.ac.jp
+      HostName a002
+      ProxyJump gw.ddbj.nig.ac.jp
+    Host a003.ddbj.nig.ac.jp
+      HostName a003
+      ProxyJump gw.ddbj.nig.ac.jp
+    Host interactive.ddbj.nig.ac.jp
+      HostName a001
+      ProxyJump gw.ddbj.nig.ac.jp
+      RequestTTY yes
+      RemoteCommand /bin/zsh -l
+    ```
 
 ## ファイルの送受信
 
@@ -50,6 +71,7 @@ tags = ["job"]
 にはscp, sftp, Asperaを使えと書かれてるけど、
 [rsync]({{< relref "rsync.md" >}})
 を使うのが簡単。
+このときの宛先はゲートウェイノード。
 
 ```sh
 # send
