@@ -21,12 +21,19 @@ tags = ["python", "concurrent"]
 は新しいインタプリタを `os.fork()` で立ち上げるので、
 CPUバウンドなPythonコードもGILに邪魔されず並列処理できる。
 ただし通信のため関数や返り値がpicklableでなければならない。
+コストも高い。
 
 それらの低級ライブラリを使いやすくまとめたのが
 [`concurrent.futures`](https://docs.python.org/3/library/concurrent.futures.html)
 (since 3.2) なので、とりあえずこれを使えばよい。
-新しい [`asyncio`](https://docs.python.org/3/library/asyncio.html)
-(since 3.4) は勝手が違いすぎてとっつきにくい。
+
+I/Oバウンドな処理を並列化したい場合のもうひとつの選択肢として
+[`asyncio`](https://docs.python.org/3/library/asyncio.html)
+(since 3.4) もある。
+こちらのほうが大規模な非同期I/O処理には向いているらしい。
+ただし、呼び出し側の書き換えだけで既存の関数をそのまま並列化できる
+`ThreadPoolExecutor` とは異なり、
+呼び出される関数のほうも非同期対応に書き換える必要がある。
 
 並列化対象の関数の例:
 
