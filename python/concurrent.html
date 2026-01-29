@@ -75,12 +75,18 @@ concurrent.futures — 並行処理 in Python
 <p>一方 <a href="https://docs.python.org/3/library/multiprocessing.html"><code>multiprocessing</code></a>
 は新しいインタプリタを <code>os.fork()</code> で立ち上げるので、
 CPUバウンドなPythonコードもGILに邪魔されず並列処理できる。
-ただし通信のため関数や返り値がpicklableでなければならない。</p>
+ただし通信のため関数や返り値がpicklableでなければならない。
+コストも高い。</p>
 <p>それらの低級ライブラリを使いやすくまとめたのが
 <a href="https://docs.python.org/3/library/concurrent.futures.html"><code>concurrent.futures</code></a>
-(since 3.2) なので、とりあえずこれを使えばよい。
-新しい <a href="https://docs.python.org/3/library/asyncio.html"><code>asyncio</code></a>
-(since 3.4) は勝手が違いすぎてとっつきにくい。</p>
+(since 3.2) なので、とりあえずこれを使えばよい。</p>
+<p>I/Oバウンドな処理を並列化したい場合のもうひとつの選択肢として
+<a href="https://docs.python.org/3/library/asyncio.html"><code>asyncio</code></a>
+(since 3.4) もある。
+こちらのほうが大規模な非同期I/O処理には向いているらしい。
+ただし、呼び出し側の書き換えだけで既存の関数をそのまま並列化できる
+<code>ThreadPoolExecutor</code> とは異なり、
+呼び出される関数のほうも非同期対応に書き換える必要がある。</p>
 <p>並列化対象の関数の例:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">time</span>
 </span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">random</span>
