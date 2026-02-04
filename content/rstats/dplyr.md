@@ -182,9 +182,12 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
     3  3.01 Premium     F      I1  62.2    56  9925 9.24 9.13 5.73
     ```
 
-    評価結果が `NA` となる行は除去される。
+    評価結果が `NA` となる行は `FALSE` 扱いで除去される。
     特に不等号を使うときやや直感に反するので要注意。
     e.g., `filter(gene != "TP53")`
+
+:   `dplyr::filter_out()` は条件を満たす行を除去する亜種。
+    `NA` は `FALSE` 扱いで保持される。
 
 :   複数列で条件指定するには `if_any()`, `if_all()` が使える。
 
@@ -508,11 +511,87 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
     `intersect()`, `union()`, `union_all()`, `setdiff()`, `setequal()`
 
 
+## 値の変換・置換
+
+<https://dplyr.tidyverse.org/articles/recoding-replacing.html>
+
+`dplyr::if_else()` の多重ネストを避けて簡潔に書けるようにする関数群。
+
+- Recoding: 新しいvectorを作りたい
+- Replacing: 既存vectorを部分的に置き換えたい
+
+|                 | Recoding | Replacing |
+|-----------------|----------|-----------|
+| `TRUE`/`FALSE` で分岐 | `case_when()` | `replace_when()` |
+| 値そのもので分岐 | `recode_values()` | `replace_values()` |
+
+`dplyr::case_when(..., .default = NULL, .unmatched = "default", .ptype = NULL, .size = NULL)`
+:   `if {} else if {} else if {} ...` のショートカット。
+    
+    ``` r
+    dplyr::case_when(seq_len(26L) < 4L ~ 1, seq_len(26L) %% 2L == 0L ~ 2, .default = 0)
+    ```
+    
+    ```
+     [1] 1 1 1 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2
+    ```
+
+`recode_values(x, ..., from = NULL, to = NULL, default = NULL, unmatched = "default")`
+:   `x %in% Y` のような比較を書かず値を見てもらえる。
+    対応表が既にあるような場合は `from`, `to` にvectorを渡せて便利。
+    
+    ``` r
+    dplyr::recode_values(letters, c("a", "b", "c") ~ 1, default = 0)
+    ```
+    
+    ```
+     [1] 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    ```
+    
+    ``` r
+    dplyr::recode_values(letters, from = c("a", "b", "c"), to = c(1, 2, 3), default = 0)
+    ```
+    
+    ```
+     [1] 1 2 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    ```
+
+`replace_when(x, ...)`
+:   条件によって置換する。
+    
+    ``` r
+    dplyr::replace_when(letters, seq_len(26L) < 4L ~ "_", seq_len(26L) %% 2L == 0L ~ "!")
+    ```
+    
+    ```
+     [1] "_" "_" "_" "!" "e" "!" "g" "!" "i" "!" "k" "!" "m" "!" "o" "!" "q" "!" "s" "!" "u" "!" "w" "!" "y" "!"
+    ```
+
+`replace_values(x, ..., from = NULL, to = NULL)`
+:   値を直接置換する。
+    
+    ``` r
+    dplyr::replace_values(letters, c("a", "b", "c") ~ "_")
+    ```
+    
+    ```
+     [1] "_" "_" "_" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z"
+    ```
+    
+    ``` r
+    dplyr::replace_values(letters, from = c("a", "b", "c"), to = c("_", "!", "?"))
+    ```
+    
+    ```
+     [1] "_" "!" "?" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z"
+    ```
+
+
 ## その他の関数
 
 主に`mutate()`や`filter()`を補助するもの
 
-`dplyr::if_else(condition, true, false, missing = NULL, ..., ptype = NULL, size = NULL)`
+`dplyr::if_else(condition, true, false, missing = NULL, ..., ptype = NULL)`
 :   `TRUE` の位置では `x` を採用、`FALSE` の位置では `y` を採用。
     標準の`ifelse()`よりも型に厳しく、高速らしい。
     NAのときにどうするかを指定できるのも大変良い。
@@ -559,17 +638,6 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
     1 NA <NA>    D
     2  2 <NA>    E
     3 NA    c <NA>
-    ```
-
-`dplyr::recode(.x, ..., .default = NULL, .missing = NULL)`
-:   vectorの値を変更する。e.g.,
-    
-    ``` r
-    recode(letters[1:6], a = "A!", c = "C!")
-    ```
-    
-    ```
-    [1] "A!" "b"  "C!" "d"  "e"  "f" 
     ```
 
 `dplyr::row_number(x)`
@@ -620,17 +688,20 @@ R 4.2 の段階では `|>` のプレースホルダー `_` の使い勝手がイ
     ## [1] NA NA 1 2 3
     ```
 
-`dplyr::between(x, left, right)`
+`dplyr::between(x, left, right, ..., ptype = NULL)`
 :   `left <= x & x <= right` のショートカット。
 
 `dplyr::near(x, y, tol = .Machine$double.eps^0.5)`
 :   `abs(x - y) < tol` のショートカット。
 
-`dplyr::case_when(...)`
-:   `if {} else if {} else if {} ...` のショートカット。
+`dplyr::when_any(..., na_rm = FALSE, size = NULL)`, `dplyr::when_all(...)`
+:   `any()` と `all()` のベクターelement-wise版。
+    `x | y | z`, `x & y & z` と書くのと同じだが、カッコやインデントによっては見やすくなる。
 
 
 ## グループ化
+
+<https://dplyr.tidyverse.org/articles/grouping.html>
 
 [`tidyr`]({{< relref "tidyr.md" >}}) でネストして、
 [`purrr`]({{< relref "purrr.md" >}}) でその list of data.frames に処理を施し、
@@ -662,7 +733,7 @@ diamonds |>
   dplyr::slice_head(n = 2L, by = cut)
 ```
 
-`dplyr::group_by(.data, ..., add = FALSE, .drop = group_by_drop_default(.data))`
+`dplyr::group_by(.data, ..., .add = FALSE, .drop = group_by_drop_default(.data))`
 :   グループごとに区切って次の処理に渡す。
     e.g. `summarize()`, `slice()`, `tally()`, `group_modify()` など
 :   `.drop = FALSE` とすると行数ゼロになるグループも捨てずに保持できる。
@@ -752,6 +823,17 @@ diamonds |>
 
 
 ## deprecated/superseded
+
+`dplyr::recode(.x, ..., .default = NULL, .missing = NULL)`
+:   `recode_values()`, `replace_values()` に取って代わられた。
+    
+    ``` r
+    recode(letters[1:6], a = "A!", c = "C!")
+    ```
+    
+    ```
+    [1] "A!" "b"  "C!" "d"  "e"  "f" 
+    ```
 
 `dplyr::do(.data, ...)`
 :   `reframe()`, `slice*()` などに取って代わられた。
