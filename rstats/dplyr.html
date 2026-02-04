@@ -200,9 +200,13 @@ R 4.2 の段階では <code>|&gt;</code> のプレースホルダー <code>_</co
 1  3.01 Premium     I      I1  62.7    58  8040 9.10 8.97 5.67
 2  3.11    Fair     J      I1  65.9    57  9823 9.15 9.02 5.98
 3  3.01 Premium     F      I1  62.2    56  9925 9.24 9.13 5.73
-</code></pre><p>評価結果が <code>NA</code> となる行は除去される。
+</code></pre><p>評価結果が <code>NA</code> となる行は <code>FALSE</code> 扱いで除去される。
 特に不等号を使うときやや直感に反するので要注意。
 e.g., <code>filter(gene != &quot;TP53&quot;)</code></p>
+</dd>
+<dd>
+<p><code>dplyr::filter_out()</code> は条件を満たす行を除去する亜種。
+<code>NA</code> は <code>FALSE</code> 扱いで保持される。</p>
 </dd>
 <dd>
 <p>複数列で条件指定するには <code>if_any()</code>, <code>if_all()</code> が使える。</p>
@@ -440,12 +444,69 @@ data.frameを結合<a href="#dataframeを結合"></a>
 そのほかにも標準の集合関数を置き換えるものが提供されている:
 <code>intersect()</code>, <code>union()</code>, <code>union_all()</code>, <code>setdiff()</code>, <code>setequal()</code></dd>
 </dl>
+<h2 id="値の変換置換">
+値の変換・置換<a href="#値の変換置換"></a>
+</h2>
+<p><a href="https://dplyr.tidyverse.org/articles/recoding-replacing.html">https://dplyr.tidyverse.org/articles/recoding-replacing.html</a></p>
+<p><code>dplyr::if_else()</code> の多重ネストを避けて簡潔に書けるようにする関数群。</p>
+<ul>
+<li>Recoding: 新しいvectorを作りたい</li>
+<li>Replacing: 既存vectorを部分的に置き換えたい</li>
+</ul>
+<table>
+  <thead>
+      <tr>
+          <th></th>
+          <th>Recoding</th>
+          <th>Replacing</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>TRUE</code>/<code>FALSE</code> で分岐</td>
+          <td><code>case_when()</code></td>
+          <td><code>replace_when()</code></td>
+      </tr>
+      <tr>
+          <td>値そのもので分岐</td>
+          <td><code>recode_values()</code></td>
+          <td><code>replace_values()</code></td>
+      </tr>
+  </tbody>
+</table>
+<dl>
+<dt><code>dplyr::case_when(..., .default = NULL, .unmatched = &quot;default&quot;, .ptype = NULL, .size = NULL)</code></dt>
+<dd><code>if {} else if {} else if {} ...</code> のショートカット。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">dplyr</span><span class="o">::</span><span class="nf">case_when</span><span class="p">(</span><span class="nf">seq_len</span><span class="p">(</span><span class="m">26L</span><span class="p">)</span> <span class="o">&lt;</span> <span class="m">4L</span> <span class="o">~</span> <span class="m">1</span><span class="p">,</span> <span class="nf">seq_len</span><span class="p">(</span><span class="m">26L</span><span class="p">)</span> <span class="o">%%</span> <span class="m">2L</span> <span class="o">==</span> <span class="m">0L</span> <span class="o">~</span> <span class="m">2</span><span class="p">,</span> <span class="n">.default</span> <span class="o">=</span> <span class="m">0</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code> [1] 1 1 1 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2
+</code></pre></dd>
+<dt><code>recode_values(x, ..., from = NULL, to = NULL, default = NULL, unmatched = &quot;default&quot;)</code></dt>
+<dd><code>x %in% Y</code> のような比較を書かず値を見てもらえる。
+対応表が既にあるような場合は <code>from</code>, <code>to</code> にvectorを渡せて便利。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">dplyr</span><span class="o">::</span><span class="nf">recode_values</span><span class="p">(</span><span class="kc">letters</span><span class="p">,</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="s">&#34;b&#34;</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">)</span> <span class="o">~</span> <span class="m">1</span><span class="p">,</span> <span class="n">default</span> <span class="o">=</span> <span class="m">0</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code> [1] 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">dplyr</span><span class="o">::</span><span class="nf">recode_values</span><span class="p">(</span><span class="kc">letters</span><span class="p">,</span> <span class="n">from</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="s">&#34;b&#34;</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">),</span> <span class="n">to</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">),</span> <span class="n">default</span> <span class="o">=</span> <span class="m">0</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code> [1] 1 2 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+</code></pre></dd>
+<dt><code>replace_when(x, ...)</code></dt>
+<dd>条件によって置換する。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">dplyr</span><span class="o">::</span><span class="nf">replace_when</span><span class="p">(</span><span class="kc">letters</span><span class="p">,</span> <span class="nf">seq_len</span><span class="p">(</span><span class="m">26L</span><span class="p">)</span> <span class="o">&lt;</span> <span class="m">4L</span> <span class="o">~</span> <span class="s">&#34;_&#34;</span><span class="p">,</span> <span class="nf">seq_len</span><span class="p">(</span><span class="m">26L</span><span class="p">)</span> <span class="o">%%</span> <span class="m">2L</span> <span class="o">==</span> <span class="m">0L</span> <span class="o">~</span> <span class="s">&#34;!&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code> [1] &#34;_&#34; &#34;_&#34; &#34;_&#34; &#34;!&#34; &#34;e&#34; &#34;!&#34; &#34;g&#34; &#34;!&#34; &#34;i&#34; &#34;!&#34; &#34;k&#34; &#34;!&#34; &#34;m&#34; &#34;!&#34; &#34;o&#34; &#34;!&#34; &#34;q&#34; &#34;!&#34; &#34;s&#34; &#34;!&#34; &#34;u&#34; &#34;!&#34; &#34;w&#34; &#34;!&#34; &#34;y&#34; &#34;!&#34;
+</code></pre></dd>
+<dt><code>replace_values(x, ..., from = NULL, to = NULL)</code></dt>
+<dd>値を直接置換する。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">dplyr</span><span class="o">::</span><span class="nf">replace_values</span><span class="p">(</span><span class="kc">letters</span><span class="p">,</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="s">&#34;b&#34;</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">)</span> <span class="o">~</span> <span class="s">&#34;_&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code> [1] &#34;_&#34; &#34;_&#34; &#34;_&#34; &#34;d&#34; &#34;e&#34; &#34;f&#34; &#34;g&#34; &#34;h&#34; &#34;i&#34; &#34;j&#34; &#34;k&#34; &#34;l&#34; &#34;m&#34; &#34;n&#34; &#34;o&#34; &#34;p&#34; &#34;q&#34; &#34;r&#34; &#34;s&#34; &#34;t&#34; &#34;u&#34; &#34;v&#34; &#34;w&#34; &#34;x&#34; &#34;y&#34; &#34;z&#34;
+</code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">dplyr</span><span class="o">::</span><span class="nf">replace_values</span><span class="p">(</span><span class="kc">letters</span><span class="p">,</span> <span class="n">from</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="s">&#34;b&#34;</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">),</span> <span class="n">to</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;_&#34;</span><span class="p">,</span> <span class="s">&#34;!&#34;</span><span class="p">,</span> <span class="s">&#34;?&#34;</span><span class="p">))</span>
+</span></span></code></pre></div><pre tabindex="0"><code> [1] &#34;_&#34; &#34;!&#34; &#34;?&#34; &#34;d&#34; &#34;e&#34; &#34;f&#34; &#34;g&#34; &#34;h&#34; &#34;i&#34; &#34;j&#34; &#34;k&#34; &#34;l&#34; &#34;m&#34; &#34;n&#34; &#34;o&#34; &#34;p&#34; &#34;q&#34; &#34;r&#34; &#34;s&#34; &#34;t&#34; &#34;u&#34; &#34;v&#34; &#34;w&#34; &#34;x&#34; &#34;y&#34; &#34;z&#34;
+</code></pre></dd>
+</dl>
 <h2 id="その他の関数">
 その他の関数<a href="#その他の関数"></a>
 </h2>
 <p>主に<code>mutate()</code>や<code>filter()</code>を補助するもの</p>
 <dl>
-<dt><code>dplyr::if_else(condition, true, false, missing = NULL, ..., ptype = NULL, size = NULL)</code></dt>
+<dt><code>dplyr::if_else(condition, true, false, missing = NULL, ..., ptype = NULL)</code></dt>
 <dd><code>TRUE</code> の位置では <code>x</code> を採用、<code>FALSE</code> の位置では <code>y</code> を採用。
 標準の<code>ifelse()</code>よりも型に厳しく、高速らしい。
 NAのときにどうするかを指定できるのも大変良い。
@@ -476,11 +537,6 @@ NAのときにどうするかを指定できるのも大変良い。
 2  2 &lt;NA&gt;    E
 3 NA    c &lt;NA&gt;
 </code></pre></dd>
-<dt><code>dplyr::recode(.x, ..., .default = NULL, .missing = NULL)</code></dt>
-<dd>vectorの値を変更する。e.g.,
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">recode</span><span class="p">(</span><span class="kc">letters</span><span class="n">[1</span><span class="o">:</span><span class="m">6</span><span class="n">]</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="s">&#34;A!&#34;</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="s">&#34;C!&#34;</span><span class="p">)</span>
-</span></span></code></pre></div><pre tabindex="0"><code>[1] &#34;A!&#34; &#34;b&#34;  &#34;C!&#34; &#34;d&#34;  &#34;e&#34;  &#34;f&#34; 
-</code></pre></dd>
 <dt><code>dplyr::row_number(x)</code></dt>
 <dd><code>rank(x, ties.method = &quot;first&quot;, na.last = &quot;keep&quot;)</code> のショートカット。
 グループ毎に連番を振るのに便利。同点でも登場順に違う順位を与える。</dd>
@@ -508,16 +564,18 @@ NAのときにどうするかを指定できるのも大変良い。
 </span></span></code></pre></div><pre tabindex="0"><code>[1] NA NA  1  2  3
 </code></pre><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1">## [1] NA NA 1 2 3</span>
 </span></span></code></pre></div></dd>
-<dt><code>dplyr::between(x, left, right)</code></dt>
+<dt><code>dplyr::between(x, left, right, ..., ptype = NULL)</code></dt>
 <dd><code>left &lt;= x &amp; x &lt;= right</code> のショートカット。</dd>
 <dt><code>dplyr::near(x, y, tol = .Machine$double.eps^0.5)</code></dt>
 <dd><code>abs(x - y) &lt; tol</code> のショートカット。</dd>
-<dt><code>dplyr::case_when(...)</code></dt>
-<dd><code>if {} else if {} else if {} ...</code> のショートカット。</dd>
+<dt><code>dplyr::when_any(..., na_rm = FALSE, size = NULL)</code>, <code>dplyr::when_all(...)</code></dt>
+<dd><code>any()</code> と <code>all()</code> のベクターelement-wise版。
+<code>x | y | z</code>, <code>x &amp; y &amp; z</code> と書くのと同じだが、カッコやインデントによっては見やすくなる。</dd>
 </dl>
 <h2 id="グループ化">
 グループ化<a href="#グループ化"></a>
 </h2>
+<p><a href="https://dplyr.tidyverse.org/articles/grouping.html">https://dplyr.tidyverse.org/articles/grouping.html</a></p>
 <p><a href="/rstats/tidyr.html"><code>tidyr</code></a> でネストして、
 <a href="/rstats/purrr.html"><code>purrr</code></a> でその list of data.frames に処理を施し、
 <a href="/rstats/dplyr.html"><code>dplyr</code></a> でその変更を元の data.frame に適用する、
@@ -543,7 +601,7 @@ NAのときにどうするかを指定できるのも大変良い。
 </span></span><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span>
 </span></span><span class="line"><span class="cl">  <span class="n">dplyr</span><span class="o">::</span><span class="nf">slice_head</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="m">2L</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="n">cut</span><span class="p">)</span>
 </span></span></code></pre></div><dl>
-<dt><code>dplyr::group_by(.data, ..., add = FALSE, .drop = group_by_drop_default(.data))</code></dt>
+<dt><code>dplyr::group_by(.data, ..., .add = FALSE, .drop = group_by_drop_default(.data))</code></dt>
 <dd>グループごとに区切って次の処理に渡す。
 e.g. <code>summarize()</code>, <code>slice()</code>, <code>tally()</code>, <code>group_modify()</code> など</dd>
 <dd><code>.drop = FALSE</code> とすると行数ゼロになるグループも捨てずに保持できる。</dd>
@@ -615,6 +673,11 @@ mutate などを適用すると列全体ではなく1行ごとに関数に渡さ
 deprecated/superseded<a href="#deprecatedsuperseded"></a>
 </h2>
 <dl>
+<dt><code>dplyr::recode(.x, ..., .default = NULL, .missing = NULL)</code></dt>
+<dd><code>recode_values()</code>, <code>replace_values()</code> に取って代わられた。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">recode</span><span class="p">(</span><span class="kc">letters</span><span class="n">[1</span><span class="o">:</span><span class="m">6</span><span class="n">]</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="s">&#34;A!&#34;</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="s">&#34;C!&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>[1] &#34;A!&#34; &#34;b&#34;  &#34;C!&#34; &#34;d&#34;  &#34;e&#34;  &#34;f&#34; 
+</code></pre></dd>
 <dt><code>dplyr::do(.data, ...)</code></dt>
 <dd><code>reframe()</code>, <code>slice*()</code> などに取って代わられた。
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">diamonds</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">group_by</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="n">dplyr</span><span class="o">::</span><span class="nf">do</span><span class="p">(</span><span class="nf">head</span><span class="p">(</span><span class="n">.,</span> <span class="m">2L</span><span class="p">))</span>
