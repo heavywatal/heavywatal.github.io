@@ -1,8 +1,8 @@
 :root {
-  --background-color: hsl(220deg 0% 75% / 25%);
+  --background-color: oklch(80% 0 0deg / 0.25);
   --canvas: #fff;
-  --canvas-text: hsl(220deg 0% 27%);
-  --link-text: hsl(220deg 100% 27%);
+  --canvas-text: oklch(from var(--link-text) l 0 h);
+  --link-text: oklch(38% 0.16 256deg);
 }
 
 :root {
@@ -91,7 +91,7 @@
 }
 .markdown-alert, blockquote {
   overflow: auto;
-  border-inline-start: 0.2em solid hsla(0, 0%, 55%, 0.55);
+  border-inline-start: 0.2em solid oklch(64% 0 0deg / 0.55);
   margin: 1em 0;
   padding-inline: 1em;
 }
@@ -123,7 +123,7 @@ a {
   text-decoration: none;
 }
 a:hover {
-  color: hsl(from var(--link-text) h calc(1.5 * s) l);
+  color: oklch(from var(--link-text) l calc(c + 0.08) h);
   text-decoration: underline;
 }
 
@@ -184,20 +184,20 @@ code, pre {
 :not(pre) > code {
   font-size: 0.85em;
   padding: 0.1em 0.2em;
-  background-color: hsla(0, 0%, 60%, 0.1);
+  background-color: oklch(68% 0 0deg / 0.1);
   white-space: pre-wrap;
 }
 
 pre {
   font-size: 0.85em;
-  background-color: hsla(0, 0%, 73%, 0.25);
+  background-color: oklch(79% 0 0deg / 0.25);
   padding: 0.375rem 0.5rem;
   margin-block: 0.3rem;
   overflow-x: auto;
 }
 pre.chroma {
-  background-color: hsla(0, 0%, 73%, 0.04);
-  box-shadow: inset 0 0 0.4rem hsla(0, 0%, 73%, 0.25);
+  background-color: oklch(79% 0 0deg / 0.04);
+  box-shadow: inset 0 0 0.4rem oklch(79% 0 0deg / 0.25);
 }
 .highlight:has(+ pre) > pre {
   margin-block-end: 0;
@@ -212,7 +212,7 @@ blockquote {
 }
 blockquote::before {
   content: "“";
-  color: hsla(0, 0%, 55%, 0.55);
+  color: oklch(64% 0 0deg / 0.55);
   font-family: serif;
   font-size: 2em;
   margin: 0 -1.6rem -4rem;
@@ -229,7 +229,7 @@ th, td {
 
 th {
   padding-bottom: 0.3em;
-  border-bottom: 0.1em solid hsla(0, 0%, 55%, 0.55);
+  border-bottom: 0.1em solid oklch(64% 0 0deg / 0.55);
   text-align: start;
 }
 
@@ -241,7 +241,7 @@ kbd {
   padding: 0.04em 0.24em;
   margin: -0.16em 0.08em 0 0.04em;
   box-shadow: 0.04em 0.06em 0.1em var(--canvas-text);
-  border: solid 0.06em hsla(0, 0%, 55%, 0.55);
+  border: solid 0.06em oklch(64% 0 0deg / 0.55);
   border-radius: 0.18em;
 }
 
@@ -260,7 +260,7 @@ figure {
 }
 figure:has(blockquote) {
   margin-block: 1em;
-  border-inline-start: 0.2rem solid hsla(0, 0%, 55%, 0.55);
+  border-inline-start: 0.2rem solid oklch(64% 0 0deg / 0.55);
 }
 figure:has(blockquote) figcaption {
   padding-block: 0.5em;
@@ -300,8 +300,7 @@ details[open]::details-content {
 @media (prefers-color-scheme: dark) {
   :root {
     --canvas: #000;
-    --canvas-text: hsl(220deg 0% 75%);
-    --link-text: hsl(220deg 100% 75%);
+    --link-text: oklch(80% 0.16 256deg);
   }
 }
 body {
@@ -360,7 +359,7 @@ search input::placeholder {
 
 footer {
   width: 100%;
-  color: rgba(136, 136, 136, 0.8);
+  color: oklch(63% 0 0deg / 0.8);
   padding: 12px 4px;
   text-align: right;
 }
@@ -368,7 +367,7 @@ footer {
 main,
 .menu,
 search input {
-  box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 12px oklch(0% 0 0deg / 0.2);
 }
 
 .side-bar {
@@ -401,7 +400,7 @@ article :is(h2, h3, h4, h5, h6)::before {
   position: absolute;
   top: 0;
   white-space: pre;
-  color: hsla(0, 0%, 55%, 0.55);
+  color: oklch(64% 0 0deg / 0.55);
 }
 article :is(h2, h3, h4, h5, h6) > a[href^="#"] {
   user-select: none;
@@ -418,7 +417,7 @@ article :is(h2, h3, h4, h5, h6) > a[href^="#"]:hover {
 }
 article h2 {
   font-size: 1.4rem;
-  background: linear-gradient(to right, rgba(153, 153, 153, 0.2666666667), rgba(153, 153, 153, 0));
+  background: linear-gradient(to right, oklch(68% 0 0deg / 0.27), oklch(68% 0 0deg / 0));
   margin-block: 1.2em 0.8em;
   padding: 0.4rem 0.7rem;
 }
@@ -433,7 +432,7 @@ article header + h2 {
 }
 article h3 {
   font-size: 1.2rem;
-  background: linear-gradient(to right, rgba(153, 153, 153, 0.2), rgba(153, 153, 153, 0) 80%);
+  background: linear-gradient(to right, oklch(68% 0 0deg / 0.2), oklch(68% 0 0deg / 0) 80%);
   margin-block: 1.2em 0.8em;
   padding: 0.3rem 0.7rem;
 }
@@ -445,7 +444,7 @@ article h3::before {
 }
 article h4 {
   font-size: 1.1rem;
-  background: linear-gradient(to right, rgba(153, 153, 153, 0.2), rgba(153, 153, 153, 0) 60%);
+  background: linear-gradient(to right, oklch(68% 0 0deg / 0.2), oklch(68% 0 0deg / 0) 60%);
   margin-block: 1.2em 0.8em;
   padding: 0.2rem 0.6rem;
 }
@@ -513,7 +512,7 @@ article h6::before {
   content: "❯";
   position: absolute;
   right: 8px;
-  color: rgba(136, 136, 136, 0.4);
+  color: oklch(60% 0 0deg / 0.4);
   transition: all 0.2s ease-out;
 }
 .menu label.active::after {
@@ -529,14 +528,14 @@ article h6::before {
   transform: rotate(90deg);
 }
 .menu li {
-  background: rgba(204, 204, 204, 0.1254901961);
+  background: oklch(85% 0 0deg / 0.125);
   margin: 0;
 }
 .menu div,
 .menu label,
 .menu li,
 .menu label.active {
-  border-bottom: 1px solid rgba(136, 136, 136, 0.4);
+  border-bottom: 1px solid oklch(63% 0 0deg / 0.4);
 }
 .menu .active {
   font-weight: bold;
@@ -597,7 +596,7 @@ article h6::before {
 
 #TableOfContents {
   max-width: 80%;
-  border: solid 1px #999;
+  border: solid 1px oklch(68% 0 0deg);
   margin: 20px 20px 20px auto;
   padding: 12px;
 }
@@ -611,44 +610,31 @@ article h6::before {
   list-style-type: none;
 }
 
+.markdown-alert {
+  --lightness: 56%;
+  --chroma: 0.18;
+  --color: oklch(var(--lightness) 0 0deg);
+  background-color: oklch(from var(--color) 84% c h/0.08);
+  border-color: var(--color);
+}
 .markdown-alert-title {
   font-weight: 500;
+  color: var(--color);
 }
-
 .markdown-alert-note {
-  background-color: color-mix(in srgb, #0969da, transparent 96%);
-  border-color: #0969da;
-}
-.markdown-alert-note .markdown-alert-title {
-  color: #0969da;
+  --color: oklch(var(--lightness) var(--chroma) 256deg);
 }
 .markdown-alert-tip {
-  background-color: color-mix(in srgb, #1a7f37, transparent 96%);
-  border-color: #1a7f37;
-}
-.markdown-alert-tip .markdown-alert-title {
-  color: #1a7f37;
+  --color: oklch(var(--lightness) var(--chroma) 148deg);
 }
 .markdown-alert-important {
-  background-color: color-mix(in srgb, #8250df, transparent 96%);
-  border-color: #8250df;
-}
-.markdown-alert-important .markdown-alert-title {
-  color: #8250df;
+  --color: oklch(var(--lightness) var(--chroma) 295deg);
 }
 .markdown-alert-warning {
-  background-color: color-mix(in srgb, #9a6700, transparent 96%);
-  border-color: #9a6700;
-}
-.markdown-alert-warning .markdown-alert-title {
-  color: #9a6700;
+  --color: oklch(var(--lightness) var(--chroma) 75deg);
 }
 .markdown-alert-caution {
-  background-color: color-mix(in srgb, #d1242f, transparent 96%);
-  border-color: #d1242f;
-}
-.markdown-alert-caution .markdown-alert-title {
-  color: #d1242f;
+  --color: oklch(var(--lightness) var(--chroma) 25deg);
 }
 
 .bubble {
@@ -656,7 +642,7 @@ article h6::before {
   font-size: 0.92em;
   padding: 0.2em 0.4em;
   border-radius: 0.2em;
-  background: rgba(153, 153, 153, 0.4);
+  background: oklch(68% 0 0deg / 0.4);
 }
 .bubble::after {
   content: "";
@@ -666,7 +652,7 @@ article h6::before {
   height: 0.5em;
   aspect-ratio: 1;
   clip-path: polygon(0 0, 100% 0, 0 100%);
-  background: rgba(153, 153, 153, 0.4);
+  background: oklch(68% 0 0deg / 0.4);
 }
 .bubble[class~=flipY]::after {
   bottom: unset;
@@ -726,7 +712,7 @@ header .tags {
   border-radius: 1em;
   color: var(--canvas-text);
   opacity: 0.88;
-  background-color: hsla(0, 0%, 66%, 0.33);
+  background-color: oklch(73% 0 0deg / 0.33);
 }
 .tags a:hover,
 .terms dt a:hover {
