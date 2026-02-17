@@ -130,7 +130,7 @@ Pythonパッケージ作成
 <code>setuptools</code> も<a href="https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html">ようやく61.0から使えるようになった</a>。
 とりあえず <code>uv init --lib</code> 初期設定の <code>uv_build</code> を使い、もし不満を感じたら考える。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="p">[</span><span class="nx">build-system</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="nx">requires</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;uv_build&gt;=0.9.11,&lt;1.0.0&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">requires</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;uv_build&gt;=0.10.0,&lt;1.0.0&#34;</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="nx">build-backend</span> <span class="p">=</span> <span class="s2">&#34;uv_build&#34;</span>
 </span></span></code></pre></div><h4 id="project">
 <code>project</code><a href="#project"></a>
@@ -150,7 +150,7 @@ Pythonパッケージ作成
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;License :: OSI Approved :: MIT License&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;Topic :: Scientific/Engineering :: Bio-Informatics&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl"><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="nx">requires-python</span> <span class="p">=</span> <span class="s2">&#34;&gt;=3.13&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">requires-python</span> <span class="p">=</span> <span class="s2">&#34;&gt;=3.14&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="nx">dependencies</span> <span class="p">=</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;tomli-w&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl"><span class="p">]</span>
@@ -211,11 +211,6 @@ See <a href="https://docs.astral.sh/uv/concepts/projects/dependencies/">https://
 <code>tool</code><a href="#tool"></a>
 </h4>
 <p>コード整形やテストのような各種開発ツールの設定を記述する。</p>
-<p>linterとしては
-<a href="https://github.com/PyCQA/flake8/issues/234"><code>pyproject.toml</code> 対応拒否のflake8</a>
-を捨てて超高速Rust製<a href="https://docs.astral.sh/ruff/">ruff</a>を使う。
-0.2からはformatterとしても使えるようになり、
-<a href="https://black.readthedocs.io">black</a>も不要になった。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="p">[</span><span class="nx">tool</span><span class="p">.</span><span class="nx">pyright</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="nx">typeCheckingMode</span> <span class="p">=</span> <span class="s2">&#34;strict&#34;</span>
 </span></span><span class="line"><span class="cl">
@@ -245,7 +240,22 @@ See <a href="https://docs.astral.sh/uv/concepts/projects/dependencies/">https://
 </span></span><span class="line"><span class="cl"><span class="nx">exclude_also</span> <span class="p">=</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;if __name__ == .__main__.:&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl"><span class="p">]</span>
-</span></span></code></pre></div><h3 id="ソースコード">
+</span></span></code></pre></div><p>linterとしては
+<a href="https://github.com/PyCQA/flake8/issues/234"><code>pyproject.toml</code> 対応拒否のflake8</a>
+を捨てて超高速Rust製<a href="https://docs.astral.sh/ruff/">ruff</a>を使う。
+0.2からはformatterとしても使えるようになり、
+<a href="https://black.readthedocs.io">black</a>も不要になった。
+各プロジェクトの <code>pyproject.toml</code> で設定するのが基本だが、次のようなルールで読み込まれる。
+See <a href="https://docs.astral.sh/ruff/configuration/">https://docs.astral.sh/ruff/configuration/</a>.</p>
+<ul>
+<li>明示的にCLIで指定するのが最優先。</li>
+<li>最初に見つかったファイルを読み込んで探索終了。
+マージしたい場合は <code>extends</code> で明示的に指定する。</li>
+<li>ファイル名は <code>.ruff.toml</code>, <code>ruff.toml</code>, <code>pyproject.toml</code> で、この順に優先。</li>
+<li>カレントディレクトリから上に向かってファイルを探索。</li>
+<li>ユーザー設定を探索: <code>${XDG_CONFIG_HOME}/ruff/</code>, <code>${HOME}/.config/ruff/</code>, <code>${HOME}/.ruff/</code>, etc.</li>
+</ul>
+<h3 id="ソースコード">
 ソースコード<a href="#ソースコード"></a>
 </h3>
 <dl>
