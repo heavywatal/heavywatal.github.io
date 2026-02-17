@@ -84,7 +84,7 @@ See <https://docs.astral.sh/uv/concepts/projects/init/>.
 とりあえず `uv init --lib` 初期設定の `uv_build` を使い、もし不満を感じたら考える。
 ```toml
 [build-system]
-requires = ["uv_build>=0.9.11,<1.0.0"]
+requires = ["uv_build>=0.10.0,<1.0.0"]
 build-backend = "uv_build"
 ```
 
@@ -106,7 +106,7 @@ classifiers = [
   "License :: OSI Approved :: MIT License",
   "Topic :: Scientific/Engineering :: Bio-Informatics",
 ]
-requires-python = ">=3.13"
+requires-python = ">=3.14"
 dependencies = [
   "tomli-w",
 ]
@@ -173,12 +173,6 @@ See <https://docs.astral.sh/uv/concepts/projects/dependencies/>:
 
 コード整形やテストのような各種開発ツールの設定を記述する。
 
-linterとしては
-[`pyproject.toml` 対応拒否のflake8](https://github.com/PyCQA/flake8/issues/234)
-を捨てて超高速Rust製[ruff](https://docs.astral.sh/ruff/)を使う。
-0.2からはformatterとしても使えるようになり、
-[black](https://black.readthedocs.io)も不要になった。
-
 ```toml
 [tool.pyright]
 typeCheckingMode = "strict"
@@ -210,6 +204,20 @@ exclude_also = [
   "if __name__ == .__main__.:",
 ]
 ```
+
+linterとしては
+[`pyproject.toml` 対応拒否のflake8](https://github.com/PyCQA/flake8/issues/234)
+を捨てて超高速Rust製[ruff](https://docs.astral.sh/ruff/)を使う。
+0.2からはformatterとしても使えるようになり、
+[black](https://black.readthedocs.io)も不要になった。
+各プロジェクトの `pyproject.toml` で設定するのが基本だが、次のようなルールで読み込まれる。
+See <https://docs.astral.sh/ruff/configuration/>.
+- 明示的にCLIで指定するのが最優先。
+- 最初に見つかったファイルを読み込んで探索終了。
+  マージしたい場合は `extends` で明示的に指定する。
+- ファイル名は `.ruff.toml`, `ruff.toml`, `pyproject.toml` で、この順に優先。
+- カレントディレクトリから上に向かってファイルを探索。
+- ユーザー設定を探索: `${XDG_CONFIG_HOME}/ruff/`, `${HOME}/.config/ruff/`, `${HOME}/.ruff/`, etc.
 
 
 ### ソースコード
