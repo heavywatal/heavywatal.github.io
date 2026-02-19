@@ -51,17 +51,17 @@ Contacts
 
 ## Education
 
-2013-09
+2013-09-25
 :   Doctor of Life Sciences, Graduate School of Life Sciences, Tohoku University.
     (Prof. Masakado Kawata)\
     "Evolution of Diversity and Complexity by Cryptic Variations in Gene Regulatory Networks"
 
-2008-03
+2008-03-25
 :   Bachelor of Science, Biological Institute, Faculty of Science, Tohoku University.
     (Prof. Masakado Kawata)
 
 
-## Academic Positions
+## Work Experience
 
 2019-09 – Current
 :   Project Assistant Professor in [Makino Laboratory](https://www.lifesci.tohoku.ac.jp/evolgenomics/), Tohoku University.
@@ -204,6 +204,8 @@ Contacts
 
 ## Teaching / Outreach
 
+-   「[Rによる統計モデリング入門](/slides/tochigi2026/)」
+    栃木県[農業総合研究センター](https://www.pref.tochigi.lg.jp/g59/) (2026-02)
 -   「[統計モデリング概論 DSHC 2025](/slides/dshc2025/)」
     東京海上 [Data Science Hill Climb](https://tokiomarine-dshc.com/) (2025-09)
 -   「[統計モデリング入門](/slides/iwate2025stats/)」
@@ -269,6 +271,8 @@ Contacts
 
 ## Software Development
 
+-   [`ranemone`](https://github.com/heavywatal/ranemone):
+    R interface to [ANEMONE DB](https://db.anemone.bio/).
 -   [`tumopp`](https://github.com/heavywatal/tumopp):
     Tumor growth simulator in C++/R.
     [*PLOS ONE* **12**(9): e0184229](https://doi.org/10.1371/journal.pone.0184229)
