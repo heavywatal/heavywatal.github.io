@@ -140,20 +140,31 @@ PCG<a href="#pcg"></a>
 としても採用されている。
 作者O&rsquo;Neillのブログは読み応えがあっておもしろい。</p>
 <p>本家C++実装 <a href="https://github.com/imneme/pcg-cpp">pcg-cpp</a> は
-<a href="/dev/cmake.html">CMake</a> 非対応なので使いにくい。
+<a href="/dev/cmake.html">CMake</a> <code>find_package()</code> 非対応。
 <a href="https://github.com/imneme/pcg-cpp/issues/43">issue</a> にも挙がり
 <a href="https://github.com/imneme/pcg-cpp/pull/44">PR</a> も提出されたが、
-巨大な差分を生じる悪手によりマージされず頓挫したらしい。
-とりあえず自分のフォーク
-<a href="https://github.com/heavywatal/pcg-cpp">heavywatal/pcg-cpp</a>
-で最低限の <code>CMakeLists.txt</code> を書いて対処。</p>
-<p>また、本家pcg-cppは実験的な亜種クラスを大量に含んでいてソースが複雑化・肥大化している。
+巨大な差分を生じる悪手によりマージされず頓挫した。
+header-onlyなので <code>FetchContent</code> でソースを取得してパスを通せば使える:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">FetchContent_Declare</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">  <span class="s">pcg_cpp</span>
+</span></span><span class="line"><span class="cl">  <span class="s">URL</span> <span class="s">https://github.com/imneme/pcg-cpp/archive/428802d1a5634f96bcd0705fab379ff0113bcf13.tar.gz</span>
+</span></span><span class="line"><span class="cl">  <span class="s">URL_HASH</span> <span class="s">SHA256=79f23706ed0cbc1bb57ea35d50d0abed66898b8f7b0bcf2aaecdfd234863b060</span>
+</span></span><span class="line"><span class="cl">  <span class="s">DOWNLOAD_NO_PROGRESS</span> <span class="s">TRUE</span>
+</span></span><span class="line"><span class="cl">  <span class="s">EXCLUDE_FROM_ALL</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">pcg_cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_library</span><span class="p">(</span><span class="s">pcg</span> <span class="s">INTERFACE</span> <span class="s">EXCLUDE_FROM_ALL</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_library</span><span class="p">(</span><span class="s">pcg::pcg</span> <span class="s">ALIAS</span> <span class="s">pcg</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">target_include_directories</span><span class="p">(</span><span class="s">pcg</span> <span class="s">INTERFACE</span> <span class="s2">&#34;${pcg_cpp_SOURCE_DIR}/include&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">your_target</span> <span class="s">PRIVATE</span> <span class="s">pcg::pcg</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><p>また、本家pcg-cppは実験的な亜種クラスを大量に含んでいてソースが複雑化・肥大化している。
 そこで <code>pcg32</code> と <code>pcg64</code> に必要な部分だけを抜き出し、
 single-headerで手軽に使える軽量版
 <a href="https://github.com/heavywatal/pcglite">pcglite</a>
 を作ってみた。</p>
 <ul>
-<li><a href="https://github.com/heavywatal/pcg-cpp">pcg-cpp</a>:
+<li><a href="https://github.com/imneme/pcg-cpp">pcg-cpp</a>:
 ~3600 lines / 3 headers</li>
 <li><a href="https://github.com/heavywatal/pcglite">pcglite</a>:
 ~250 lines / 1 header</li>
