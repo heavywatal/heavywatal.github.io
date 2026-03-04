@@ -92,13 +92,26 @@ C++標準 `<random>` と組み合わせて使う設計にはなっていない�
 作者O'Neillのブログは読み応えがあっておもしろい。
 
 本家C++実装 [pcg-cpp](https://github.com/imneme/pcg-cpp) は
-[CMake]({{< relref "cmake.md" >}}) 非対応なので使いにくい。
+[CMake]({{< relref "cmake.md" >}}) `find_package()` 非対応。
 [issue](https://github.com/imneme/pcg-cpp/issues/43) にも挙がり
 [PR](https://github.com/imneme/pcg-cpp/pull/44) も提出されたが、
-巨大な差分を生じる悪手によりマージされず頓挫したらしい。
-とりあえず自分のフォーク
-[heavywatal/pcg-cpp](https://github.com/heavywatal/pcg-cpp)
-で最低限の `CMakeLists.txt` を書いて対処。
+巨大な差分を生じる悪手によりマージされず頓挫した。
+header-onlyなので `FetchContent` でソースを取得してパスを通せば使える:
+```cmake
+FetchContent_Declare(
+  pcg_cpp
+  URL https://github.com/imneme/pcg-cpp/archive/428802d1a5634f96bcd0705fab379ff0113bcf13.tar.gz
+  URL_HASH SHA256=79f23706ed0cbc1bb57ea35d50d0abed66898b8f7b0bcf2aaecdfd234863b060
+  DOWNLOAD_NO_PROGRESS TRUE
+  EXCLUDE_FROM_ALL
+)
+FetchContent_MakeAvailable(pcg_cpp)
+add_library(pcg INTERFACE EXCLUDE_FROM_ALL)
+add_library(pcg::pcg ALIAS pcg)
+target_include_directories(pcg INTERFACE "${pcg_cpp_SOURCE_DIR}/include")
+
+target_link_libraries(your_target PRIVATE pcg::pcg)
+```
 
 また、本家pcg-cppは実験的な亜種クラスを大量に含んでいてソースが複雑化・肥大化している。
 そこで `pcg32` と `pcg64` に必要な部分だけを抜き出し、
@@ -106,7 +119,7 @@ single-headerで手軽に使える軽量版
 [pcglite](https://github.com/heavywatal/pcglite)
 を作ってみた。
 
-- [pcg-cpp](https://github.com/heavywatal/pcg-cpp):
+- [pcg-cpp](https://github.com/imneme/pcg-cpp):
   ~3600 lines / 3 headers
 - [pcglite](https://github.com/heavywatal/pcglite):
   ~250 lines / 1 header
