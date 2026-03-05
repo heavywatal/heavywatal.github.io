@@ -281,59 +281,29 @@ r_for = function(n) {
 }
 r_vec = function(n) sum(1 / seq_len(n))
 
-Rcpp::cppFunction("double rcpp(int n) {
+cpp11::cpp_function("double cpp(int n) {
   double s = 0; for (int i = 1; i <= n; ++i) {s += 1.0 / i;} return s;
 }")  # Compilation takes a few seconds here
 
 n = 1000000L
 system.time(r_for(n))
 system.time(r_vec(n))
-system.time(rcpp(n))
+system.time(cpp(n))
 ```
 
 計測にはr-libチームによる[bench](https://bench.r-lib.org/)が便利。
 時間だけでなくメモリや実行結果までチェックした上、可視化までお世話してくれる:
 ```r
-df = bench::mark(r_for(n), r_vec(n), rcpp(n))
+df = bench::mark(r_for(n), r_vec(n), cpp(n))
 df
-#    expression          min         mean       median          max  itr/sec     mem_alloc  n_gc n_itr   total_time   result     memory                                             time       gc
-#        <char> <bench_time> <bench_time> <bench_time> <bench_time>    <num> <bench_bytes> <num> <int> <bench_time>   <list>     <list>                                           <list>   <list>
-# 1:   r_for(n)      30.49ms      31.14ms      31.11ms      32.82ms  32.1107        3.89MB     0    17        529ms 14.39273 <Rprofmem> 1: 30.7ms,30.7ms,30.8ms,31.9ms,31.1ms,31.2ms,... <tbl_df>
-# 2:   r_vec(n)       2.25ms       2.85ms       2.74ms       7.87ms 350.2935       11.44MB    35    81        231ms 14.39273 <Rprofmem> 2:  7.87ms,6.67ms,6.73ms,7.65ms,2.81ms,2.8ms,... <tbl_df>
-# 3:    rcpp(n)          1ms       1.02ms          1ms       1.79ms 977.6923        2.49KB     0   489        500ms 14.39273 <Rprofmem> 3: 1.79ms,1.05ms,1.04ms,1.04ms,1.03ms,1.03ms,... <tbl_df>
+#     expression          min       median    itr/sec     mem_alloc  gc/sec n_itr  n_gc   total_time    result              memory               time                 gc
+#   <bench_expr> <bench_time> <bench_time>      <dbl> <bench_bytes>   <dbl> <int> <dbl> <bench_time>    <list>              <list>             <list>             <list>
+# 1     r_for(n)      10.65ms      11.04ms   89.49499            0B   0.000    45     0        503ms <dbl [1]>  <Rprofmem [0 x 3]>  <bench_time [45]>  <tbl_df [45 x 3]>
+# 2     r_vec(n)       1.75ms       1.98ms  492.42763       11.46MB 107.324   156    34        317ms <dbl [1]> <Rprofmem [34 x 3]> <bench_time [190]> <tbl_df [190 x 3]>
+# 3       cpp(n)     687.57µs     688.45µs 1446.98162        6.57KB   0.000   724     0        500ms <dbl [1]> <Rprofmem [20 x 3]> <bench_time [724]> <tbl_df [724 x 3]>
 plot(df)
 ```
 
-ちょっとした比較には
-[rbenchmark](https://cran.r-project.org/package=rbenchmark)
-の表示がシンプルで見やすい:
-```r
-rbenchmark::benchmark(r_for(n), r_vec(n), rcpp(n))[,1:4]
-#       test replications elapsed relative
-# 1 r_for(n)          100   3.968   29.835
-# 2 r_vec(n)          100   0.473    3.556
-# 3  rcpp(n)          100   0.133    1.000
-```
-
-もうちょっと詳しく見たい場合は
-[microbenchmark](https://github.com/joshuaulrich/microbenchmark/)
-の出力も扱いやすい:
-```r
-df = microbenchmark::microbenchmark(r_for(n), r_vec(n), rcpp(n), times = 100L)
-df
-# Unit: milliseconds
-#      expr       min        lq      mean    median        uq       max neval
-#  r_for(n) 35.716909 36.131130 37.406180 36.791894 38.330989 42.605700   100
-#  r_vec(n)  2.630786  3.251540  4.285222  3.412421  5.573207  8.180405   100
-#   rcpp(n)  1.216385  1.222994  1.270488  1.231115  1.304536  1.515532   100
-str(df)
-# Classes ‘microbenchmark’ and 'data.frame':      300 obs. of  2 variables:
-#  $ expr: Factor w/ 3 levels "r_for(n)","r_vec(n)",..: 2 1 1 1 2 2 1 1 1 2 ...
-#  $ time: num  4722392 42474783 38625124 38819035 3888012 ...
-ggplot(df) + aes(expr, time) +
-  stat_summary(fun = mean, geom = "bar") +
-  geom_jitter(height = 0, alpha = 0.5)
-```
 
 ## Links
 

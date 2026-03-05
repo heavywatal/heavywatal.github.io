@@ -6,18 +6,32 @@ tags = ["r"]
   weight = -95
 +++
 
-https://cran.r-project.org/manuals.html
+<https://cran.r-project.org/manuals.html>
 
 ## インストール
 
-- [R本体](https://cloud.r-project.org/)
-- [RStudio (任意)](https://posit.co/download/rstudio-desktop/)
+1.  OSのソフトウェア・アップデートを基本的に全て適用して再起動。
+1.  ファイル名の末尾(`.pdf` とか `.png` とか)の[拡張子を常時表示する](https://duckduckgo.com/?q=拡張子+表示)ようにOSを設定。
+1.  <https://cloud.r-project.org/>
+    から最新版の **R本体** をダウンロードしてインストール。
+    OK連打のデフォルト設定で。
+    古いものが既に入っている場合は念のため削除してから。
+    - <iconify-icon inline icon="bi:windows"></iconify-icon>
+      [Windows → base](https://cloud.r-project.org/bin/windows/base) → `R-*-win.exe`
+    - <iconify-icon inline icon="bi:apple"></iconify-icon>
+      [Mac](https://cloud.r-project.org/bin/macosx/)
+      → `R-*-arm64.pkg` (Apple Silicon) or `R-*-x86_64.pkg` (Intel)
+1.  <https://posit.co/download/rstudio-desktop/>
+    から最新版の **RStudio** をダウンロードしてインストール。
+    古いものが既に入っている場合は念のため削除してから。
+1.  RStudioを起動。初回は「開発元の不明なアプリ」を許可するような操作が必要かも。
 
+> [!TIP]
 Macなら [Homebrew]({{< relref "homebrew.md" >}}) で
 `brew install r-app rstudio` のように入れるのが楽チン。
 Caskじゃない `brew install r` のほうだとバイナリ版パッケージが使えなくて毎回ソースからビルドさせられるので大変。
 
-https://cran.r-project.org/doc/manuals/R-admin.html
+<https://cran.r-project.org/doc/manuals/R-admin.html>
 
 
 ### What’s New?
@@ -63,7 +77,7 @@ https://cran.r-project.org/doc/manuals/R-intro.html#Invoking-R
 
 ## パッケージのサーチパス
 
-https://stat.ethz.ch/R-manual/R-patched/library/base/html/libPaths.html
+[`?.libPaths`](https://stat.ethz.ch/R-manual/R-patched/library/base/html/libPaths.html)
 
 `.libPaths()` でパッケージのインストール先候補一覧を取得できる。
 `install.packages(pkgs, lib, ...)`
@@ -71,11 +85,21 @@ https://stat.ethz.ch/R-manual/R-patched/library/base/html/libPaths.html
 また `library()` によるパッケージ読み込みもこれらのパスから。
 
 `.libPaths("newpath")` のように任意のパスを追加することもできるが、
-後述の `.Renviron` ファイルなどで環境変数
-(`R_LIBS`, `R_LIBS_USER`, `R_LIBS_SITE`)
-を設定しておく方法がよさそう。
-ファイルから設定が正しく読み込まれても、
-**当該ディレクトリが存在しないと認識されず自動生成もされない**ことに注意。
+`.Renviron` ファイルなどで環境変数から自動的に設定するほうが便利。
+環境変数には優先順位があるので例えば次のように使い分けられる:
+
+- `R_LIBS`: プロジェクトごとの一時的な設定
+- `R_LIBS_USER`: ユーザーが常に使いたい設定。空の場合の規定値はOSによって異なる:
+    - <iconify-icon inline icon="bi:ubuntu"></iconify-icon>
+      Linux: `~/R/%p-library/%v`
+    - <iconify-icon inline icon="bi:apple"></iconify-icon>
+      Mac: `~/Library/R/%a/%v/library`
+    - <iconify-icon inline icon="bi:windows"></iconify-icon>
+      Windows: `${LOCALAPPDATA}/R/win-library/%v`\
+      (`%LOCALAPPDATA%` は大概 `C:\Users\${username}\AppData\Local`)
+- `R_LIBS_SITE`: 管理者が全ユーザーに使わせたい設定
+    - R内から `.Library.site` で参照可能
+    - 空の場合は `$R_HOME/site-library` になる
 
 ここで設定するパスには `%v` といった記号でRのバージョン情報などを含めることも可能。
 古いRでインストールしたパッケージを新しいRで使おうとすると
@@ -83,15 +107,9 @@ https://stat.ethz.ch/R-manual/R-patched/library/base/html/libPaths.html
 などと怒られるので、バージョン番号を入れておいたほうがいい。
 `path.expand()` も適用されるので `~/.R/library` のようなチルダも展開される。
 
-環境変数には優先順位があるので例えば次のように使い分けられる:
-
-- `R_LIBS`: プロジェクトごとの一時的な設定
-- `R_LIBS_USER`: ユーザーが常に使いたい設定
-    - macOS既定値: `~/Library/R/%v/library`
-    - Linux既定値: `~/R/%p-library/%v`
-- `R_LIBS_SITE`: 管理者が全ユーザーに使わせたい設定
-    - R内から `.Library.site` で参照可能
-    - 空の場合は `$R_HOME/site-library` になる
+> [!WARNING]
+設定がファイルから読み込まれても、
+**当該ディレクトリが存在しないと認識されず自動生成もされない**。
 
 Rと一緒についてくる標準パッケージのインストール先は `.Library` で参照可能。
 何も設定しないで使うとほかのパッケージもそこに入ってしまう場合があってあんまりよろしくない。
@@ -101,7 +119,7 @@ Rと一緒についてくる標準パッケージのインストール先は `.L
 
 https://cran.r-project.org/doc/manuals/R-admin.html#Environment-variable-index
 
-https://stat.ethz.ch/R-manual/R-patched/library/base/html/EnvVar.html
+[`?"environment variables"`](https://stat.ethz.ch/R-manual/R-patched/library/base/html/EnvVar.html)
 
 ```r
 Sys.getenv()
@@ -110,19 +128,18 @@ Sys.getenv()
 
 ## .Renviron
 
-<https://stat.ethz.ch/R-manual/R-patched/library/base/html/Startup.html>
+[`?Startup`](https://stat.ethz.ch/R-manual/R-patched/library/base/html/Startup.html)
 
 R起動時に読み込まれ、環境変数を設定するファイル。
 Rスクリプトではなく、シェルスクリプトっぽい代入式で書く。
 例 (<https://github.com/heavywatal/dotfiles/blob/master/.R/.Renviron>):
 
 ```sh
-R_USER=${HOME}/.R
-R_LIBS_USER=${R_USER}/library/%v
-R_ENVIRON_USER=${R_USER}/.Renviron
-R_PROFILE_USER=${R_USER}/.Rprofile
-R_HISTFILE=${R_USER}/.Rhistory
-R_HISTSIZE=65535
+R_LIBS_USER=${HOME}/.R/library/%v
+R_ENVIRON_USER=${HOME}/.R/.Renviron
+R_PROFILE_USER=${HOME}/.R/.Rprofile
+R_HISTFILE=${HOME}/.R/.Rhistory
+_R_CHECK_SYSTEM_CLOCK_=FALSE
 LANG=C
 LC_CTYPE=en_US.UTF-8
 ```
@@ -148,7 +165,7 @@ R起動時に読み込まれるファイル。
 
 `.First()` と `.Last()` はそれぞれ起動時と終了時に実行される関数。
 これらが原因で `R CMD` やパッケージ関連の操作が失敗することもあるので、
-普通の対話環境でのみ有効になるよう `if (interactive())` などとしておいたほうが安心。
+普通の対話環境でのみ有効になるよう `if (interactive())` で包んでおいたほうが安心。
 
 読み込まれる順序はだいたい以下のとおり。
 `.Renviron` のほうが先に読み込まれるので、
@@ -165,9 +182,8 @@ R起動時に読み込まれるファイル。
 
 ### `options()`
 
-<https://stat.ethz.ch/R-manual/R-patched/library/base/html/options.html>
-
-`?options` で項目の一覧を見られる。
+[`?options`](https://stat.ethz.ch/R-manual/R-patched/library/base/html/options.html)
+で項目の一覧を見られる。
 
 ほかの人とスクリプトをやり取りする場合など、
 実行結果が設定依存で変わっては困るので、
@@ -181,7 +197,7 @@ R起動時に読み込まれるファイル。
   などと軽く表示されるだけなので、
   見落としたりして後々大変なバグ取り作業に発展する恐れがある。
   警告が発生するごとに警告文を表示する(`warn=1`)か、
-  エラー扱いにして計算をストップするようにしておく(`warn=2`)ことでそれを回避すべし。
+  エラー扱いにして計算をストップするようにしておく(`warn=2`)ことでそれを回避できる。
   ちなみに負数だと警告無視。
 
 `warnPartialMatchAttr`, `warnPartialMatchDollar`
@@ -214,7 +230,7 @@ R起動時に読み込まれるファイル。
   とのこと。
 
 
-## ライブラリの管理
+## Advanced
 
 https://cran.r-project.org/doc/manuals/R-admin.html#Add_002don-packages
 
@@ -226,13 +242,16 @@ C, C++, Fortran で書かれたソースコードをビルドするためのツ�
 [Stan]({{< relref "stan.md" >}})でモデルを書くとか、パッケージの開発最新版を使いたいとか、
 そういうときに必要になる。
 
-- macOS: <https://mac.r-project.org/tools/>
-  - Command Line Tools:
-    `xcode-select --install` を Terminal.app で実行。
-    Xcodeを全部入れる必要は無い。
-  - 上記リンクから `gfortran-*.pkg` を落として入れる。
+- <iconify-icon inline icon="bi:apple"></iconify-icon>
+  Mac:
+  - [**Command Line Tools**](https://duckduckgo.com/?q=command+line+tools):
+    ターミナルで `xcode-select --install` を実行。
+    Xcode環境は不要。
+  - [**`gfortran-*.pkg`**](https://mac.r-project.org/tools/) を落として入れる。
     ほかの方法で入れたものを使うのは難しい。
-- Windows: <https://cloud.r-project.org/bin/windows/Rtools/>
+- <iconify-icon inline icon="bi:windows"></iconify-icon>
+  Windows: [**Rtools**](https://cloud.r-project.org/bin/windows/Rtools/)
+  (R本体のバージョンに合わせる)
 
 
 ### `~/.R/Makevars`
