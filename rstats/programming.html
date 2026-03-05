@@ -300,49 +300,24 @@ e.g., <code>log()</code>, <code>sqrt()</code>, <code>ifelse()</code>, <code>past
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="n">r_vec</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="nf">sum</span><span class="p">(</span><span class="m">1</span> <span class="o">/</span> <span class="nf">seq_len</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">Rcpp</span><span class="o">::</span><span class="nf">cppFunction</span><span class="p">(</span><span class="s">&#34;double rcpp(int n) {
+</span></span><span class="line"><span class="cl"><span class="n">cpp11</span><span class="o">::</span><span class="nf">cpp_function</span><span class="p">(</span><span class="s">&#34;double cpp(int n) {
 </span></span></span><span class="line"><span class="cl"><span class="s">  double s = 0; for (int i = 1; i &lt;= n; ++i) {s += 1.0 / i;} return s;
 </span></span></span><span class="line"><span class="cl"><span class="s">}&#34;</span><span class="p">)</span>  <span class="c1"># Compilation takes a few seconds here</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="n">n</span> <span class="o">=</span> <span class="m">1000000L</span>
 </span></span><span class="line"><span class="cl"><span class="nf">system.time</span><span class="p">(</span><span class="nf">r_for</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl"><span class="nf">system.time</span><span class="p">(</span><span class="nf">r_vec</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="nf">system.time</span><span class="p">(</span><span class="nf">rcpp</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="nf">system.time</span><span class="p">(</span><span class="nf">cpp</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
 </span></span></code></pre></div><p>計測にはr-libチームによる<a href="https://bench.r-lib.org/">bench</a>が便利。
 時間だけでなくメモリや実行結果までチェックした上、可視化までお世話してくれる:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">df</span> <span class="o">=</span> <span class="n">bench</span><span class="o">::</span><span class="nf">mark</span><span class="p">(</span><span class="nf">r_for</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">r_vec</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">rcpp</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">df</span> <span class="o">=</span> <span class="n">bench</span><span class="o">::</span><span class="nf">mark</span><span class="p">(</span><span class="nf">r_for</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">r_vec</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">cpp</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl"><span class="n">df</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#    expression          min         mean       median          max  itr/sec     mem_alloc  n_gc n_itr   total_time   result     memory                                             time       gc</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#        &lt;char&gt; &lt;bench_time&gt; &lt;bench_time&gt; &lt;bench_time&gt; &lt;bench_time&gt;    &lt;num&gt; &lt;bench_bytes&gt; &lt;num&gt; &lt;int&gt; &lt;bench_time&gt;   &lt;list&gt;     &lt;list&gt;                                           &lt;list&gt;   &lt;list&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 1:   r_for(n)      30.49ms      31.14ms      31.11ms      32.82ms  32.1107        3.89MB     0    17        529ms 14.39273 &lt;Rprofmem&gt; 1: 30.7ms,30.7ms,30.8ms,31.9ms,31.1ms,31.2ms,... &lt;tbl_df&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 2:   r_vec(n)       2.25ms       2.85ms       2.74ms       7.87ms 350.2935       11.44MB    35    81        231ms 14.39273 &lt;Rprofmem&gt; 2:  7.87ms,6.67ms,6.73ms,7.65ms,2.81ms,2.8ms,... &lt;tbl_df&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 3:    rcpp(n)          1ms       1.02ms          1ms       1.79ms 977.6923        2.49KB     0   489        500ms 14.39273 &lt;Rprofmem&gt; 3: 1.79ms,1.05ms,1.04ms,1.04ms,1.03ms,1.03ms,... &lt;tbl_df&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#     expression          min       median    itr/sec     mem_alloc  gc/sec n_itr  n_gc   total_time    result              memory               time                 gc</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   &lt;bench_expr&gt; &lt;bench_time&gt; &lt;bench_time&gt;      &lt;dbl&gt; &lt;bench_bytes&gt;   &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;bench_time&gt;    &lt;list&gt;              &lt;list&gt;             &lt;list&gt;             &lt;list&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 1     r_for(n)      10.65ms      11.04ms   89.49499            0B   0.000    45     0        503ms &lt;dbl [1]&gt;  &lt;Rprofmem [0 x 3]&gt;  &lt;bench_time [45]&gt;  &lt;tbl_df [45 x 3]&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 2     r_vec(n)       1.75ms       1.98ms  492.42763       11.46MB 107.324   156    34        317ms &lt;dbl [1]&gt; &lt;Rprofmem [34 x 3]&gt; &lt;bench_time [190]&gt; &lt;tbl_df [190 x 3]&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 3       cpp(n)     687.57µs     688.45µs 1446.98162        6.57KB   0.000   724     0        500ms &lt;dbl [1]&gt; &lt;Rprofmem [20 x 3]&gt; &lt;bench_time [724]&gt; &lt;tbl_df [724 x 3]&gt;</span>
 </span></span><span class="line"><span class="cl"><span class="nf">plot</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-</span></span></code></pre></div><p>ちょっとした比較には
-<a href="https://cran.r-project.org/package=rbenchmark">rbenchmark</a>
-の表示がシンプルで見やすい:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">rbenchmark</span><span class="o">::</span><span class="nf">benchmark</span><span class="p">(</span><span class="nf">r_for</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">r_vec</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">rcpp</span><span class="p">(</span><span class="n">n</span><span class="p">))</span><span class="n">[</span><span class="p">,</span><span class="m">1</span><span class="o">:</span><span class="m">4</span><span class="n">]</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#       test replications elapsed relative</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 1 r_for(n)          100   3.968   29.835</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 2 r_vec(n)          100   0.473    3.556</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 3  rcpp(n)          100   0.133    1.000</span>
-</span></span></code></pre></div><p>もうちょっと詳しく見たい場合は
-<a href="https://github.com/joshuaulrich/microbenchmark/">microbenchmark</a>
-の出力も扱いやすい:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">df</span> <span class="o">=</span> <span class="n">microbenchmark</span><span class="o">::</span><span class="nf">microbenchmark</span><span class="p">(</span><span class="nf">r_for</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">r_vec</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nf">rcpp</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">times</span> <span class="o">=</span> <span class="m">100L</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">df</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># Unit: milliseconds</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#      expr       min        lq      mean    median        uq       max neval</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#  r_for(n) 35.716909 36.131130 37.406180 36.791894 38.330989 42.605700   100</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#  r_vec(n)  2.630786  3.251540  4.285222  3.412421  5.573207  8.180405   100</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#   rcpp(n)  1.216385  1.222994  1.270488  1.231115  1.304536  1.515532   100</span>
-</span></span><span class="line"><span class="cl"><span class="nf">str</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># Classes ‘microbenchmark’ and &#39;data.frame&#39;:      300 obs. of  2 variables:</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#  $ expr: Factor w/ 3 levels &#34;r_for(n)&#34;,&#34;r_vec(n)&#34;,..: 2 1 1 1 2 2 1 1 1 2 ...</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#  $ time: num  4722392 42474783 38625124 38819035 3888012 ...</span>
-</span></span><span class="line"><span class="cl"><span class="nf">ggplot</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="o">+</span> <span class="nf">aes</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span> <span class="o">+</span>
-</span></span><span class="line"><span class="cl">  <span class="nf">stat_summary</span><span class="p">(</span><span class="n">fun</span> <span class="o">=</span> <span class="n">mean</span><span class="p">,</span> <span class="n">geom</span> <span class="o">=</span> <span class="s">&#34;bar&#34;</span><span class="p">)</span> <span class="o">+</span>
-</span></span><span class="line"><span class="cl">  <span class="nf">geom_jitter</span><span class="p">(</span><span class="n">height</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">)</span>
 </span></span></code></pre></div><h2 id="links">
 Links<a href="#links"></a>
 </h2>

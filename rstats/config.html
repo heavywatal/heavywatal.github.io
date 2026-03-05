@@ -65,13 +65,32 @@ R環境設定
 <h2 id="インストール">
 インストール<a href="#インストール"></a>
 </h2>
+<ol>
+<li>OSのソフトウェア・アップデートを基本的に全て適用して再起動。</li>
+<li>ファイル名の末尾(<code>.pdf</code> とか <code>.png</code> とか)の<a href="https://duckduckgo.com/?q=%E6%8B%A1%E5%BC%B5%E5%AD%90+%E8%A1%A8%E7%A4%BA">拡張子を常時表示する</a>ようにOSを設定。</li>
+<li><a href="https://cloud.r-project.org/">https://cloud.r-project.org/</a>
+から最新版の <strong>R本体</strong> をダウンロードしてインストール。
+OK連打のデフォルト設定で。
+古いものが既に入っている場合は念のため削除してから。
 <ul>
-<li><a href="https://cloud.r-project.org/">R本体</a></li>
-<li><a href="https://posit.co/download/rstudio-desktop/">RStudio (任意)</a></li>
+<li><iconify-icon inline icon="bi:windows"></iconify-icon>
+<a href="https://cloud.r-project.org/bin/windows/base">Windows → base</a> → <code>R-*-win.exe</code></li>
+<li><iconify-icon inline icon="bi:apple"></iconify-icon>
+<a href="https://cloud.r-project.org/bin/macosx/">Mac</a>
+→ <code>R-*-arm64.pkg</code> (Apple Silicon) or <code>R-*-x86_64.pkg</code> (Intel)</li>
 </ul>
+</li>
+<li><a href="https://posit.co/download/rstudio-desktop/">https://posit.co/download/rstudio-desktop/</a>
+から最新版の <strong>RStudio</strong> をダウンロードしてインストール。
+古いものが既に入っている場合は念のため削除してから。</li>
+<li>RStudioを起動。初回は「開発元の不明なアプリ」を許可するような操作が必要かも。</li>
+</ol>
+<div class="markdown-alert markdown-alert-tip">
+<p class="markdown-alert-title"><iconify-icon inline icon="octicon:light-bulb-16"></iconify-icon>Tip</p>
 <p>Macなら <a href="/mac/homebrew.html">Homebrew</a> で
 <code>brew install r-app rstudio</code> のように入れるのが楽チン。
 Caskじゃない <code>brew install r</code> のほうだとバイナリ版パッケージが使えなくて毎回ソースからビルドさせられるので大変。</p>
+</div>
 <p><a href="https://cran.r-project.org/doc/manuals/R-admin.html">https://cran.r-project.org/doc/manuals/R-admin.html</a></p>
 <h3 id="whats-new">
 What’s New?<a href="#whats-new"></a>
@@ -130,29 +149,25 @@ R.app や RStudio から使う場合はメニューから環境設定みたい�
 <h2 id="パッケージのサーチパス">
 パッケージのサーチパス<a href="#パッケージのサーチパス"></a>
 </h2>
-<p><a href="https://stat.ethz.ch/R-manual/R-patched/library/base/html/libPaths.html">https://stat.ethz.ch/R-manual/R-patched/library/base/html/libPaths.html</a></p>
+<p><a href="https://stat.ethz.ch/R-manual/R-patched/library/base/html/libPaths.html"><code>?.libPaths</code></a></p>
 <p><code>.libPaths()</code> でパッケージのインストール先候補一覧を取得できる。
 <code>install.packages(pkgs, lib, ...)</code>
 の <code>lib = </code> オプションを指定しない場合にこれらが参照される。
 また <code>library()</code> によるパッケージ読み込みもこれらのパスから。</p>
 <p><code>.libPaths(&quot;newpath&quot;)</code> のように任意のパスを追加することもできるが、
-後述の <code>.Renviron</code> ファイルなどで環境変数
-(<code>R_LIBS</code>, <code>R_LIBS_USER</code>, <code>R_LIBS_SITE</code>)
-を設定しておく方法がよさそう。
-ファイルから設定が正しく読み込まれても、
-<strong>当該ディレクトリが存在しないと認識されず自動生成もされない</strong>ことに注意。</p>
-<p>ここで設定するパスには <code>%v</code> といった記号でRのバージョン情報などを含めることも可能。
-古いRでインストールしたパッケージを新しいRで使おうとすると
-<code>package ‘***’ was installed before R x.y.0: please re-install it</code>
-などと怒られるので、バージョン番号を入れておいたほうがいい。
-<code>path.expand()</code> も適用されるので <code>~/.R/library</code> のようなチルダも展開される。</p>
-<p>環境変数には優先順位があるので例えば次のように使い分けられる:</p>
+<code>.Renviron</code> ファイルなどで環境変数から自動的に設定するほうが便利。
+環境変数には優先順位があるので例えば次のように使い分けられる:</p>
 <ul>
 <li><code>R_LIBS</code>: プロジェクトごとの一時的な設定</li>
-<li><code>R_LIBS_USER</code>: ユーザーが常に使いたい設定
+<li><code>R_LIBS_USER</code>: ユーザーが常に使いたい設定。空の場合の規定値はOSによって異なる:
 <ul>
-<li>macOS既定値: <code>~/Library/R/%v/library</code></li>
-<li>Linux既定値: <code>~/R/%p-library/%v</code></li>
+<li><iconify-icon inline icon="bi:ubuntu"></iconify-icon>
+Linux: <code>~/R/%p-library/%v</code></li>
+<li><iconify-icon inline icon="bi:apple"></iconify-icon>
+Mac: <code>~/Library/R/%a/%v/library</code></li>
+<li><iconify-icon inline icon="bi:windows"></iconify-icon>
+Windows: <code>${LOCALAPPDATA}/R/win-library/%v</code><br>
+(<code>%LOCALAPPDATA%</code> は大概 <code>C:\Users\${username}\AppData\Local</code>)</li>
 </ul>
 </li>
 <li><code>R_LIBS_SITE</code>: 管理者が全ユーザーに使わせたい設定
@@ -162,27 +177,36 @@ R.app や RStudio から使う場合はメニューから環境設定みたい�
 </ul>
 </li>
 </ul>
+<p>ここで設定するパスには <code>%v</code> といった記号でRのバージョン情報などを含めることも可能。
+古いRでインストールしたパッケージを新しいRで使おうとすると
+<code>package ‘***’ was installed before R x.y.0: please re-install it</code>
+などと怒られるので、バージョン番号を入れておいたほうがいい。
+<code>path.expand()</code> も適用されるので <code>~/.R/library</code> のようなチルダも展開される。</p>
+<div class="markdown-alert markdown-alert-warning">
+<p class="markdown-alert-title"><iconify-icon inline icon="octicon:alert-16"></iconify-icon>Warning</p>
+<p>設定がファイルから読み込まれても、
+<strong>当該ディレクトリが存在しないと認識されず自動生成もされない</strong>。</p>
+</div>
 <p>Rと一緒についてくる標準パッケージのインストール先は <code>.Library</code> で参照可能。
 何も設定しないで使うとほかのパッケージもそこに入ってしまう場合があってあんまりよろしくない。</p>
 <h2 id="環境変数">
 環境変数<a href="#環境変数"></a>
 </h2>
 <p><a href="https://cran.r-project.org/doc/manuals/R-admin.html#Environment-variable-index">https://cran.r-project.org/doc/manuals/R-admin.html#Environment-variable-index</a></p>
-<p><a href="https://stat.ethz.ch/R-manual/R-patched/library/base/html/EnvVar.html">https://stat.ethz.ch/R-manual/R-patched/library/base/html/EnvVar.html</a></p>
+<p><a href="https://stat.ethz.ch/R-manual/R-patched/library/base/html/EnvVar.html"><code>?&quot;environment variables&quot;</code></a></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">Sys.getenv</span><span class="p">()</span>
 </span></span></code></pre></div><h2 id="renviron">
 .Renviron<a href="#renviron"></a>
 </h2>
-<p><a href="https://stat.ethz.ch/R-manual/R-patched/library/base/html/Startup.html">https://stat.ethz.ch/R-manual/R-patched/library/base/html/Startup.html</a></p>
+<p><a href="https://stat.ethz.ch/R-manual/R-patched/library/base/html/Startup.html"><code>?Startup</code></a></p>
 <p>R起動時に読み込まれ、環境変数を設定するファイル。
 Rスクリプトではなく、シェルスクリプトっぽい代入式で書く。
 例 (<a href="https://github.com/heavywatal/dotfiles/blob/master/.R/.Renviron">https://github.com/heavywatal/dotfiles/blob/master/.R/.Renviron</a>):</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nv">R_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.R
-</span></span><span class="line"><span class="cl"><span class="nv">R_LIBS_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">R_USER</span><span class="si">}</span>/library/%v
-</span></span><span class="line"><span class="cl"><span class="nv">R_ENVIRON_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">R_USER</span><span class="si">}</span>/.Renviron
-</span></span><span class="line"><span class="cl"><span class="nv">R_PROFILE_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">R_USER</span><span class="si">}</span>/.Rprofile
-</span></span><span class="line"><span class="cl"><span class="nv">R_HISTFILE</span><span class="o">=</span><span class="si">${</span><span class="nv">R_USER</span><span class="si">}</span>/.Rhistory
-</span></span><span class="line"><span class="cl"><span class="nv">R_HISTSIZE</span><span class="o">=</span><span class="m">65535</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nv">R_LIBS_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.R/library/%v
+</span></span><span class="line"><span class="cl"><span class="nv">R_ENVIRON_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.R/.Renviron
+</span></span><span class="line"><span class="cl"><span class="nv">R_PROFILE_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.R/.Rprofile
+</span></span><span class="line"><span class="cl"><span class="nv">R_HISTFILE</span><span class="o">=</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.R/.Rhistory
+</span></span><span class="line"><span class="cl"><span class="nv">_R_CHECK_SYSTEM_CLOCK_</span><span class="o">=</span>FALSE
 </span></span><span class="line"><span class="cl"><span class="nv">LANG</span><span class="o">=</span>C
 </span></span><span class="line"><span class="cl"><span class="nv">LC_CTYPE</span><span class="o">=</span>en_US.UTF-8
 </span></span></code></pre></div><p>探される・読み込まれる順序はだいたい以下のとおり:</p>
@@ -203,7 +227,7 @@ Rスクリプトではなく、シェルスクリプトっぽい代入式で書�
 例: <a href="https://github.com/heavywatal/dotfiles/blob/master/.R/.Rprofile">https://github.com/heavywatal/dotfiles/blob/master/.R/.Rprofile</a></p>
 <p><code>.First()</code> と <code>.Last()</code> はそれぞれ起動時と終了時に実行される関数。
 これらが原因で <code>R CMD</code> やパッケージ関連の操作が失敗することもあるので、
-普通の対話環境でのみ有効になるよう <code>if (interactive())</code> などとしておいたほうが安心。</p>
+普通の対話環境でのみ有効になるよう <code>if (interactive())</code> で包んでおいたほうが安心。</p>
 <p>読み込まれる順序はだいたい以下のとおり。
 <code>.Renviron</code> のほうが先に読み込まれるので、
 上記のように <code>R_PROFILE_USER</code> を定義しておいて、そこに置いとけば読み込まれる。</p>
@@ -218,8 +242,8 @@ Rスクリプトではなく、シェルスクリプトっぽい代入式で書�
 <h3 id="options">
 <code>options()</code><a href="#options"></a>
 </h3>
-<p><a href="https://stat.ethz.ch/R-manual/R-patched/library/base/html/options.html">https://stat.ethz.ch/R-manual/R-patched/library/base/html/options.html</a></p>
-<p><code>?options</code> で項目の一覧を見られる。</p>
+<p><a href="https://stat.ethz.ch/R-manual/R-patched/library/base/html/options.html"><code>?options</code></a>
+で項目の一覧を見られる。</p>
 <p>ほかの人とスクリプトをやり取りする場合など、
 実行結果が設定依存で変わっては困るので、
 そういう本質的なものはいじらずに、
@@ -232,7 +256,7 @@ Rスクリプトではなく、シェルスクリプトっぽい代入式で書�
 などと軽く表示されるだけなので、
 見落としたりして後々大変なバグ取り作業に発展する恐れがある。
 警告が発生するごとに警告文を表示する(<code>warn=1</code>)か、
-エラー扱いにして計算をストップするようにしておく(<code>warn=2</code>)ことでそれを回避すべし。
+エラー扱いにして計算をストップするようにしておく(<code>warn=2</code>)ことでそれを回避できる。
 ちなみに負数だと警告無視。</dd>
 <dt><code>warnPartialMatchAttr</code>, <code>warnPartialMatchDollar</code></dt>
 <dd>listやdata.frameなどの要素を抜き出すとき、
@@ -259,8 +283,8 @@ Pythonほどわかりやすくないが、ちょっとはマシになる。</dd>
 とのこと。</p>
 </dd>
 </dl>
-<h2 id="ライブラリの管理">
-ライブラリの管理<a href="#ライブラリの管理"></a>
+<h2 id="advanced">
+Advanced<a href="#advanced"></a>
 </h2>
 <p><a href="https://cran.r-project.org/doc/manuals/R-admin.html#Add_002don-packages">https://cran.r-project.org/doc/manuals/R-admin.html#Add_002don-packages</a></p>
 <h3 id="開発者ツール">
@@ -271,16 +295,19 @@ Pythonほどわかりやすくないが、ちょっとはマシになる。</dd>
 <a href="/rstats/stan.html">Stan</a>でモデルを書くとか、パッケージの開発最新版を使いたいとか、
 そういうときに必要になる。</p>
 <ul>
-<li>macOS: <a href="https://mac.r-project.org/tools/">https://mac.r-project.org/tools/</a>
+<li><iconify-icon inline icon="bi:apple"></iconify-icon>
+Mac:
 <ul>
-<li>Command Line Tools:
-<code>xcode-select --install</code> を Terminal.app で実行。
-Xcodeを全部入れる必要は無い。</li>
-<li>上記リンクから <code>gfortran-*.pkg</code> を落として入れる。
+<li><a href="https://duckduckgo.com/?q=command+line+tools"><strong>Command Line Tools</strong></a>:
+ターミナルで <code>xcode-select --install</code> を実行。
+Xcode環境は不要。</li>
+<li><a href="https://mac.r-project.org/tools/"><strong><code>gfortran-*.pkg</code></strong></a> を落として入れる。
 ほかの方法で入れたものを使うのは難しい。</li>
 </ul>
 </li>
-<li>Windows: <a href="https://cloud.r-project.org/bin/windows/Rtools/">https://cloud.r-project.org/bin/windows/Rtools/</a></li>
+<li><iconify-icon inline icon="bi:windows"></iconify-icon>
+Windows: <a href="https://cloud.r-project.org/bin/windows/Rtools/"><strong>Rtools</strong></a>
+(R本体のバージョンに合わせる)</li>
 </ul>
 <h3 id="rmakevars">
 <code>~/.R/Makevars</code><a href="#rmakevars"></a>
