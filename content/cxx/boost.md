@@ -2,8 +2,6 @@
 title = 'Boost'
 subtitle = "ほぼ標準C++ライブラリ"
 tags = ["c++"]
-[menu.main]
-  parent = "cxx"
 +++
 
 - https://www.boost.org/

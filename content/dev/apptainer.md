@@ -1,9 +1,6 @@
 +++
 title = "Apptainer"
 tags = ["package"]
-
-[menu.main]
-  parent = "dev"
 +++
 
 <https://apptainer.org/>

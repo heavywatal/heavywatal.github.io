@@ -4,8 +4,6 @@ date = 2018-10-15T13:30:00+09:00
 draft = false
 toc = true
 tags = ["vcs", "writing"]
-[menu.main]
-  parent = "lectures"
 +++
 
 [Git]: https://git-scm.com/

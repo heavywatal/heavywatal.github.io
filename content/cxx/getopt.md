@@ -1,8 +1,6 @@
 +++
 title = 'C++コマンドライン引数'
 tags = ["c++"]
-[menu.main]
-  parent = "cxx"
 +++
 
 ## 理想

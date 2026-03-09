@@ -3,8 +3,6 @@ date = 2018-06-14T10:00:00+09:00
 title = 'SHIROKANE'
 subtitle = 'HGCスパコン'
 tags = ["job"]
-[menu.main]
-  parent = "bio"
 +++
 
 https://supcom.hgc.jp/

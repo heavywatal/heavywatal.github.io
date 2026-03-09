@@ -1,8 +1,6 @@
 +++
 title = 'Stochastic Process'
 tags = ["genetics", "math"]
-[menu.main]
-  parent = "bio"
 +++
 
 ## Geometric distribution 幾何分布

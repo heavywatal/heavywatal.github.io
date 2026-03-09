@@ -1,8 +1,6 @@
 +++
 title = 'mount'
 tags = ["communication"]
-[menu.main]
-  parent = "dev"
 +++
 
 <https://manpages.ubuntu.com/manpages/man8/mount.8.html>

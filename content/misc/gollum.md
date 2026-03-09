@@ -3,8 +3,6 @@ title = "Gollum"
 subtitle = "MarkdownとGitで動くWikiエンジン"
 date = 2020-03-31T19:21:46+09:00
 tags = ["writing"]
-[menu.main]
-  parent = "misc"
 +++
 
 <https://github.com/gollum/gollum>

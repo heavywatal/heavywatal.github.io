@@ -1,8 +1,6 @@
 +++
 title = 'Mac固有コマンド'
 tags = ["mac"]
-[menu.main]
-  parent = "mac"
 +++
 
 ## 簡単・便利

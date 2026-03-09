@@ -3,8 +3,6 @@ title = 'Community Ecology 輪読会 11章'
 subtitle = 'Evolutionary processes in community ecology'
 toc = true
 tags = ["book"]
-[menu.main]
-  parent = "lectures"
 +++
 
 Author

@@ -1,8 +1,6 @@
 +++
 title = 'autoconf, automake'
 tags = ["package"]
-[menu.main]
-  parent = "dev"
 +++
 
 環境に合わせて [Makefile]({{< relref "make.md" >}}) を作る仕組み。

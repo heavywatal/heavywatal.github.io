@@ -2,8 +2,6 @@
 title = 'tmux'
 subtitle = "仮想端末でリモート仕事を安全に"
 tags = ["job", "shell"]
-[menu.main]
-  parent = "dev"
 +++
 
 <https://tmux.github.io/>

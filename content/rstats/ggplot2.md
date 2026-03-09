@@ -2,9 +2,7 @@
 title = 'ggplot2'
 subtitle = "きれいなグラフを簡単に合理的に"
 tags = ["r", "graph", "tidyverse"]
-[menu.main]
-  parent = "rstats"
-  weight = -79
+weight = -79
 +++
 
 <a href="https://ggplot2.tidyverse.org/">

@@ -3,9 +3,6 @@ date = 2016-05-20T00:14:03+09:00
 tags = ["editor"]
 aliases = ["/dev/nano.html"]
 title = "vi"
-
-[menu.main]
-  parent = "dev"
 +++
 
 ## 概要

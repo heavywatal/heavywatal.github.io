@@ -2,9 +2,7 @@
 title = 'Pythonインストール'
 toc = true
 tags = ["python"]
-[menu.main]
-  parent = "python"
-  weight = -99
+weight = -99
 +++
 
 ## 標準・公式

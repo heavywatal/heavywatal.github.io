@@ -1,8 +1,6 @@
 +++
 title = 'rsync'
 tags = ["communication"]
-[menu.main]
-  parent = "dev"
 +++
 
 ファイルをコピーし、2つのディレクトリを同期する。

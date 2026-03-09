@@ -3,10 +3,7 @@ date = 2016-06-23T13:06:06+09:00
 tags = ["r", "c++"]
 title = "Stan"
 subtitle = "高速MCMCでパラメータ推定"
-
-[menu.main]
-  parent = "rstats"
-  weight = 1
+weight = 1
 +++
 
 数あるMCMCアルゴリズムの中でも効率的なHMC(Hybrid/Hamiltonian Monte Carlo)を用いてベイズ推定を行うツール。

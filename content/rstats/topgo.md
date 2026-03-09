@@ -2,9 +2,7 @@
 title = 'topGO'
 subtitle = "Bioconductor でenrichment解析"
 tags = ["r", "bioconductor"]
-[menu.main]
-  parent = "rstats"
-  weight = -30
+weight = -30
 +++
 
 [Gene Ontology]({{< relref "gene_ontology.md" >}}) を利用して、

@@ -1,8 +1,6 @@
 +++
 title = 'Keyboard'
 tags = ["mac", "writing"]
-[menu.main]
-  parent = "mac"
 +++
 
 ## Shortcuts

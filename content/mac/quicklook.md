@@ -1,8 +1,6 @@
 +++
 title = 'QuickLook'
 tags = ["mac"]
-[menu.main]
-  parent = "mac"
 +++
 
 Finder上で <kbd>Space</kbd> を押すだけで、

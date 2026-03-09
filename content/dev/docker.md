@@ -1,9 +1,6 @@
 +++
 title = "Docker"
 tags = ["package"]
-
-[menu.main]
-  parent = "dev"
 +++
 
 <https://docs.docker.com/>

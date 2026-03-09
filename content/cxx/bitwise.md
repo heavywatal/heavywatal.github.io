@@ -2,8 +2,6 @@
 title = "ビット演算"
 subtitle = "Bitwise operation"
 tags = ["c++"]
-[menu.main]
-  parent = "cxx"
 +++
 
 https://github.com/heavywatal/scribble/blob/master/cxx/bitwise.cpp

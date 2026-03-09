@@ -3,9 +3,7 @@ title = 'tidyr'
 subtitle = "シンプルなデータ変形ツール"
 aliases = ["reshape2.html"]
 tags = ["r", "tidyverse"]
-[menu.main]
-  parent = "rstats"
-  weight = -74
+weight = -74
 +++
 
 

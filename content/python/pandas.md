@@ -2,8 +2,6 @@
 title = 'Pandas'
 subtitle = "data.frame in Python"
 tags = ["python"]
-[menu.main]
-  parent = "python"
 +++
 
 <https://pandas.pydata.org/>

@@ -1,8 +1,6 @@
 +++
 title = 'Emacs'
 tags = ["editor"]
-[menu.main]
-  parent = "dev"
 +++
 
 ## 単語

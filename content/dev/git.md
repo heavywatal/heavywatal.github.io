@@ -2,8 +2,6 @@
 title = 'Git'
 subtitle = '分散型バージョン管理システム'
 tags = ["vcs", "writing"]
-[menu.main]
-  parent = "dev"
 +++
 
 [GitHub]: https://github.com

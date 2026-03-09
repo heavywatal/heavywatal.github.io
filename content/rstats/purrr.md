@@ -3,9 +3,7 @@ date = 2016-05-27T18:31:56+09:00
 tags = ["r", "tidyverse"]
 title = "purrr"
 subtitle = "ループ処理やapply系関数の決定版"
-[menu.main]
-  parent = "rstats"
-  weight = -73
+weight = -73
 +++
 
 <a href="https://purrr.tidyverse.org/">

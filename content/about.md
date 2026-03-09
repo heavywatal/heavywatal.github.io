@@ -2,7 +2,7 @@
 title = 'About'
 type = "home"
 [menu.main]
-  weight = 1
+  weight = -99
 +++
 
 <style>

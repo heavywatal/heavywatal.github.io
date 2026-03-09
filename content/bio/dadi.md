@@ -1,8 +1,6 @@
 +++
 title = 'dadi'
 tags = ["genetics", "python"]
-[menu.main]
-  parent = "bio"
 +++
 
 https://bitbucket.org/gutenkunstlab/dadi

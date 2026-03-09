@@ -2,8 +2,6 @@
 title = 'matplotlib + seaborn'
 subtitle = "Pythonでグラフ描画"
 tags = ["python", "graph"]
-[menu.main]
-  parent = "python"
 +++
 
 [`matplotlib`](https://matplotlib.org/) はPythonにおけるデータ可視化のデファクトスタンダード。

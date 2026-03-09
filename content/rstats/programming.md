@@ -1,9 +1,7 @@
 +++
 title = 'RプログラミングTips'
 tags = ["r"]
-[menu.main]
-  parent = "rstats"
-  weight = -97
+weight = -97
 +++
 
 ## tidyverse

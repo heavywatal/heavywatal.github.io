@@ -2,8 +2,6 @@
 title = 'SAMtools'
 subtitle = 'Utilities for the Sequence Alignment/Map (SAM)'
 tags = ["genetics"]
-[menu.main]
-  parent = "bio"
 +++
 
 <https://www.htslib.org/>

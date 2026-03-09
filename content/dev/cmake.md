@@ -2,8 +2,6 @@
 tags = ["package", "c++"]
 title = "CMake"
 subtitle = "Cross-platform Make"
-[menu.main]
-  parent = "dev"
 +++
 
 環境に合わせた [Makefile]({{< relref "make.md" >}}) を自動生成する。

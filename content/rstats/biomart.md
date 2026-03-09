@@ -2,9 +2,7 @@
 title = 'biomaRt'
 subtitle = "プログラム的にデータ取得"
 tags = ["r", "bioconductor"]
-[menu.main]
-  parent = "rstats"
-  weight = -33
+weight = -33
 +++
 
 <https://www.bioconductor.org/packages/release/bioc/html/biomaRt.html>

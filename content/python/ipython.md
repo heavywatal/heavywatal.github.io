@@ -2,9 +2,7 @@
 title = 'IPython'
 subtitle = "強力な対話型Python実行環境"
 tags = ["python"]
-[menu.main]
-  parent = "python"
-  weight = -90
+weight = -90
 +++
 
 - <https://ipython.org/>

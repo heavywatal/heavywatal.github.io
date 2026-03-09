@@ -4,8 +4,6 @@ date = 2019-10-30T14:00:00+09:00
 draft = false
 toc = true
 tags = ["vcs", "writing"]
-[menu.main]
-  parent = "lectures"
 +++
 
 2019-10-30 東北大学 生命科学研究科 進化ゲノミクス分野 牧野研

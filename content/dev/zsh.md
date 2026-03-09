@@ -1,8 +1,6 @@
 +++
 title = 'zsh'
 tags = ["shell"]
-[menu.main]
-  parent = "dev"
 +++
 
 ## The most powerful shell

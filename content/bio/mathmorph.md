@@ -3,9 +3,6 @@ date = 2016-05-23T17:51:48+09:00
 tags = ["math", "graph"]
 title = "数理形態学"
 subtitle = "Mathematical morphology"
-
-[menu.main]
-  parent = "bio"
 +++
 
 2D/3D Cellular Automaton上の個体・細胞の分布を評価したい。

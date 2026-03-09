@@ -1,8 +1,6 @@
 +++
 title = 'RepeatMasker'
 tags = ["genetics"]
-[menu.main]
-  parent = "bio"
 +++
 
 <https://www.repeatmasker.org/>

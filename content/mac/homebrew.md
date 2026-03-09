@@ -1,8 +1,6 @@
 +++
 title = 'Homebrew'
 tags = ["mac", "package"]
-[menu.main]
-  parent = "mac"
 +++
 
 Unixツールを手軽にインストールできるパッケージ管理ソフト。

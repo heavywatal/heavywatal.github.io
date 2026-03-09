@@ -1,8 +1,6 @@
 +++
 title = '線形代数'
 tags = ["math"]
-[menu.main]
-  parent = "bio"
 +++
 
 ## 用語

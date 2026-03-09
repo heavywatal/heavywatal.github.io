@@ -1,8 +1,6 @@
 +++
 title = '遺伝研スパコン'
 tags = ["job"]
-[menu.main]
-  parent = "bio"
 +++
 
 <https://sc.ddbj.nig.ac.jp/>

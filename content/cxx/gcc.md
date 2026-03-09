@@ -1,8 +1,6 @@
 +++
 title = 'gcc'
 tags = ["c++"]
-[menu.main]
-  parent = "cxx"
 +++
 
 https://gcc.gnu.org/

@@ -2,8 +2,6 @@
 title = "Hugo"
 subtitle =  "静的サイトを高速生成"
 tags = ["writing", "web"]
-[menu.main]
-  parent = "misc"
 +++
 
 [Markdown]: {{< relref "markdown.md" >}}

@@ -2,8 +2,7 @@
 title = 'Markdown'
 subtitle =  "軽量マークアップ言語"
 tags = ["writing", "web"]
-[menu.main]
-  parent = "misc"
+
 [params]
   toc = true
 +++

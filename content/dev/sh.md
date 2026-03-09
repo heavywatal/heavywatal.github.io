@@ -1,8 +1,6 @@
 +++
 title = 'シェルスクリプト'
 tags = ["shell"]
-[menu.main]
-  parent = "dev"
 +++
 
 https://www.gnu.org/software/bash/manual/html_node/

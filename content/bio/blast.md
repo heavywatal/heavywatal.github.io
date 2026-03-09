@@ -1,8 +1,6 @@
 +++
 title = 'BLAST'
 tags = ["genetics"]
-[menu.main]
-  parent = "bio"
 +++
 
 Basic Local Alignment Search Tool

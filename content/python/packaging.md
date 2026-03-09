@@ -1,8 +1,6 @@
 +++
 title = 'Pythonパッケージ作成'
 tags = ["python", "package"]
-[menu.main]
-  parent = "python"
 +++
 
 - <https://docs.python.org/3/tutorial/modules.html>

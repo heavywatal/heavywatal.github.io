@@ -1,8 +1,6 @@
 +++
 title = 'copy'
 tags = ["python"]
-[menu.main]
-  parent = "python"
 +++
 
 -   <https://docs.python.org/library/copy.html>

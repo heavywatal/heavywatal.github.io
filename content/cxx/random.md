@@ -1,8 +1,6 @@
 +++
 title = '擬似乱数生成器'
 tags = ["c++"]
-[menu.main]
-  parent = "cxx"
 +++
 
 -   `<cstdlib>` の `std::rand()` は乱数の質も悪く、速度も遅いので非推奨。

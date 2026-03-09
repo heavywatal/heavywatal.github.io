@@ -1,8 +1,6 @@
 +++
 title = 'make'
 tags = ["package", "c++"]
-[menu.main]
-  parent = "dev"
 +++
 
 https://www.gnu.org/software/make/manual/make.html

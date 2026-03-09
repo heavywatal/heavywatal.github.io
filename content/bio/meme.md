@@ -2,8 +2,6 @@
 title = 'MEME'
 subtitle = "モチーフ発見ツール"
 tags = ["genetics"]
-[menu.main]
-  parent = "bio"
 +++
 
 - https://meme-suite.org/

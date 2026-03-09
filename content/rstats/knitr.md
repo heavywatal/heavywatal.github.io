@@ -2,9 +2,7 @@
 title = 'knitr'
 subtitle = 'Markdownにコード実行結果を編み込む'
 tags = ['r', 'tidyverse', 'writing']
-[menu.main]
-  parent = 'rstats'
-  weight = -58
+weight = -58
 +++
 
 <a href="https://yihui.org/knitr/">

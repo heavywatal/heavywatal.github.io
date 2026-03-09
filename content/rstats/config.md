@@ -1,9 +1,7 @@
 +++
 title = 'R環境設定'
 tags = ["r"]
-[menu.main]
-  parent = "rstats"
-  weight = -95
+weight = -95
 +++
 
 <https://cran.r-project.org/manuals.html>

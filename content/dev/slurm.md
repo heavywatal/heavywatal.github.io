@@ -2,8 +2,6 @@
 title = "Slurm"
 tags = ["job", "concurrent"]
 aliases = ["torque.html"]
-[menu.main]
-  parent = "dev"
 +++
 
 Migrated from [TORQUE](https://wiki.archlinux.org/title/TORQUE) and [OpenPBS](https://github.com/openpbs/openpbs).

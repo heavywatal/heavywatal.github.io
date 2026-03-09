@@ -1,9 +1,7 @@
 +++
 title = 'R自学自習の基礎知識'
 tags = ["r"]
-[menu.main]
-  parent = "rstats"
-  weight = -99
+weight = -99
 +++
 
 ## 初学者向け講義資料

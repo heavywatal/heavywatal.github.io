@@ -1,8 +1,6 @@
 +++
 title = 'Gene Ontology'
 tags = ["genetics", "database"]
-[menu.main]
-  parent = "bio"
 +++
 
 生物種や分野によらない共通の語彙で遺伝子産物の機能を記述するための用語体系。

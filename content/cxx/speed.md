@@ -1,8 +1,6 @@
 +++
 title = 'C++高速化'
 tags = ["c++"]
-[menu.main]
-  parent = "cxx"
 +++
 
 ## はじめに

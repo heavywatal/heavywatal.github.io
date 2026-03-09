@@ -1,8 +1,6 @@
 +++
 title = 'Population Genetics'
 tags = ["genetics"]
-[menu.main]
-  parent = "bio"
 +++
 
 ## Model

@@ -4,8 +4,6 @@ subtitle = "Microsoft製テキストエディタ"
 date = 2022-06-09T10:52:28+09:00
 aliases = ["/dev/atom.html"]
 tags = ["editor", "writing"]
-[menu.main]
-  parent = "dev"
 +++
 
 Microsoftが開発しているGUIテキストエディタ。

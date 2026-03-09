@@ -2,9 +2,7 @@
 title = 'Rcpp'
 subtitle = "RからC++を使う"
 tags = ["r", "c++", "package"]
-[menu.main]
-  parent = "rstats"
-  weight = -45
+weight = -45
 +++
 
 プログラムの書き方によって速度やメモリ効率は大きく変わる。

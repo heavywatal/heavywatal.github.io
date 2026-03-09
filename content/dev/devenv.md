@@ -1,8 +1,6 @@
 +++
 title = '開発環境'
 tags = ["package"]
-[menu.main]
-  parent = "dev"
 +++
 
 https://github.com/heavywatal/dotfiles

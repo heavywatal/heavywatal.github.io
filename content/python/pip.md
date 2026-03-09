@@ -2,9 +2,7 @@
 title = 'pip'
 subtitle = "パッケージ管理"
 tags = ["python", "package"]
-[menu.main]
-  parent = "python"
-  weight = -95
+weight = -95
 +++
 
 古いPythonではパッケージ管理のためにツールを別途インストールする必要があった。

@@ -2,9 +2,7 @@
 title = 'Bioconductor'
 subtitle = "Genomicデータ解析ツール群"
 tags = ["r", "bioconductor"]
-[menu.main]
-  parent = "rstats"
-  weight = -40
+weight = -40
 +++
 
 - <https://www.bioconductor.org>

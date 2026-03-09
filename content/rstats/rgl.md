@@ -2,9 +2,7 @@
 title = 'rgl'
 subtitle = "3Dグラフ描画"
 tags = ["r", "graph"]
-[menu.main]
-  parent = "rstats"
-  weight = 1
+weight = 1
 +++
 
 -   [Project Homepage](https://dmurdoch.github.io/rgl/)

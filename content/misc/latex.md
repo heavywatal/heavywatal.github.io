@@ -1,8 +1,6 @@
 +++
 title = 'LaTeX'
 tags = ["writing"]
-[menu.main]
-  parent = "misc"
 +++
 
 ## 基本操作
