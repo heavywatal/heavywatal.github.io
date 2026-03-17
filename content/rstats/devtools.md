@@ -1,6 +1,5 @@
 +++
-title = 'devtools'
-subtitle = "Rパッケージ作成支援"
+title = 'Rパッケージ作成'
 tags = ["r", "tidyverse", "package"]
 weight = -50
 [params]
@@ -65,7 +64,7 @@ GitHubに公開しておけば誰でも使えるようになるので、
     リポジトリの名前をパッケージ名と違うものにしたい場合などは手動で。
 1.  とりあえず誰でもインストール可能なパッケージができたはず:
     ```r
-    install_github("heavywatal/rhello")
+    pak::pak("heavywatal/rhello")
     ```
 
 
@@ -78,8 +77,7 @@ DESCRIPTION  # 一番大事
 NAMESPACE    # 見せるオブジェクトを列挙
 README.md    # 全体の説明を簡単に
 R/           # Rソースコード
-data/        # サンプルデータなど
-inst/        # CITATION
+data/        # 例示データなど
 man/         # マニュアル.Rd
 src/         # C++ソースコード
 tests/
@@ -303,9 +301,6 @@ Articles一覧の中ではなくReferenceの隣に "Get started" としてリン
     `build = TRUE` のとき(デフォルト)、わざわざ bundle package を
     `tempdir()` に作ってからそいつでインストールする。
 
-`install_github(repo, ref = "HEAD", subdir = NULL, ...)`
-:   GitHubリポジトリからインストール。
-
 `unload(pkg = ".", quiet = FALSE)`
 :   `detach("package:XXX")` とか `unloadNamespace(XXX)`
     よりもちゃんとまっさらにパッケージを外す。
@@ -401,8 +396,7 @@ increment = function(x) {x + 1}
 
 ### タグ
 
-使用可能なタグ一覧を[求める声があがって久しい](https://github.com/klutometis/roxygen/issues/792)けどまだ無さそう。
-[roxygen2公式reference](https://roxygen2.r-lib.org/reference/) は充実してきた。
+<https://roxygen2.r-lib.org/reference/>
 
 `@import pkg1, pkg2, ...`
 :   `NAMESPACE` で `import()` するパッケージを指定。
