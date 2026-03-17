@@ -38,7 +38,7 @@ clean:
 
 HEXSRC := submodules/hex-stickers
 HEXDST := static/_img/hex-stickers
-TIDYVERSE := covr devtools dplyr forcats ggplot2 knitr lubridate pipe pkgdown purrr quarto readr readxl rmarkdown roxygen2 stringr testthat tibble tidyr tidyverse usethis
+TIDYVERSE := covr devtools dplyr forcats ggplot2 knitr lubridate pipe pkgdown purrr quarto readr readxl rmarkdown roxygen2 stringr testthat tibble tidyr tidyverse usethis air positron svglite
 TIDYVERSE := $(addprefix ${HEXDST}/, ${TIDYVERSE})
 TIDYVERSE := $(addsuffix .webp, ${TIDYVERSE})
 
