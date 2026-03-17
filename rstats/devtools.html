@@ -3,14 +3,14 @@
 <head prefix="og: http://ogp.me/ns#">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
-<title>devtools: Rパッケージ作成支援 - Heavy Watal</title>
+<title>Rパッケージ作成 - Heavy Watal</title>
 <link rel="stylesheet" href="/css/style.css">
 <link rel="icon" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
 <link rel="manifest" href="/manifest.webmanifest">
 <meta name="theme-color" content="#eeeeee">
 <meta name="author" content="Watal M. Iwasaki">
-<meta property="og:title" content="devtools: Rパッケージ作成支援">
+<meta property="og:title" content="Rパッケージ作成">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://heavywatal.github.io/rstats/devtools.html">
 <meta property="og:image" content="https://avatars.githubusercontent.com/heavywatal">
@@ -31,7 +31,7 @@
   "item": {"@id": "https://heavywatal.github.io/rstats/", "name": "rstats" }},
  {"@type": "ListItem",
   "position": 2,
-  "item": {"@id": "https://heavywatal.github.io/rstats/devtools.html", "name": "devtools" }}
+  "item": {"@id": "https://heavywatal.github.io/rstats/devtools.html", "name": "Rパッケージ作成" }}
 ]}</script>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-V60H2JH0G6"></script>
@@ -54,7 +54,7 @@
 <main>
 <article>
 <header><h1><a href="/rstats/devtools.html">
-devtools — Rパッケージ作成支援
+Rパッケージ作成
 </a></h1>
 <nav class="tags">
 <a href="/tags/r.html">r</a>
@@ -137,7 +137,7 @@ Rパッケージ<a href="#rパッケージ"></a>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">use_github</span><span class="p">()</span>
 </span></span></code></pre></div>リポジトリの名前をパッケージ名と違うものにしたい場合などは手動で。</li>
 <li>とりあえず誰でもインストール可能なパッケージができたはず:
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">install_github</span><span class="p">(</span><span class="s">&#34;heavywatal/rhello&#34;</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">pak</span><span class="o">::</span><span class="nf">pak</span><span class="p">(</span><span class="s">&#34;heavywatal/rhello&#34;</span><span class="p">)</span>
 </span></span></code></pre></div></li>
 </ol>
 <h3 id="ソース構造">
@@ -148,8 +148,7 @@ Rパッケージ<a href="#rパッケージ"></a>
 </span></span><span class="line"><span class="cl">NAMESPACE    <span class="c1"># 見せるオブジェクトを列挙</span>
 </span></span><span class="line"><span class="cl">README.md    <span class="c1"># 全体の説明を簡単に</span>
 </span></span><span class="line"><span class="cl">R/           <span class="c1"># Rソースコード</span>
-</span></span><span class="line"><span class="cl">data/        <span class="c1"># サンプルデータなど</span>
-</span></span><span class="line"><span class="cl">inst/        <span class="c1"># CITATION</span>
+</span></span><span class="line"><span class="cl">data/        <span class="c1"># 例示データなど</span>
 </span></span><span class="line"><span class="cl">man/         <span class="c1"># マニュアル.Rd</span>
 </span></span><span class="line"><span class="cl">src/         <span class="c1"># C++ソースコード</span>
 </span></span><span class="line"><span class="cl">tests/
@@ -345,8 +344,6 @@ Rコードを含む <code>README.Rmd</code> から <code>build_readme()</code> �
 <dd>ローカルにあるソースからインストール。
 <code>build = TRUE</code> のとき(デフォルト)、わざわざ bundle package を
 <code>tempdir()</code> に作ってからそいつでインストールする。</dd>
-<dt><code>install_github(repo, ref = &quot;HEAD&quot;, subdir = NULL, ...)</code></dt>
-<dd>GitHubリポジトリからインストール。</dd>
 <dt><code>unload(pkg = &quot;.&quot;, quiet = FALSE)</code></dt>
 <dd><code>detach(&quot;package:XXX&quot;)</code> とか <code>unloadNamespace(XXX)</code>
 よりもちゃんとまっさらにパッケージを外す。</dd>
@@ -436,8 +433,7 @@ Rコードを含む <code>README.Rmd</code> から <code>build_readme()</code> �
 <h3 id="タグ">
 タグ<a href="#タグ"></a>
 </h3>
-<p>使用可能なタグ一覧を<a href="https://github.com/klutometis/roxygen/issues/792">求める声があがって久しい</a>けどまだ無さそう。
-<a href="https://roxygen2.r-lib.org/reference/">roxygen2公式reference</a> は充実してきた。</p>
+<p><a href="https://roxygen2.r-lib.org/reference/">https://roxygen2.r-lib.org/reference/</a></p>
 <dl>
 <dt><code>@import pkg1, pkg2, ...</code></dt>
 <dd><code>NAMESPACE</code> で <code>import()</code> するパッケージを指定。
@@ -573,7 +569,7 @@ e.g., <a href="https://github.com/tidyverse/dplyr/blob/HEAD/R/select.R">dplyr/R/
 <li><a href="/rstats/stringr.html">stringr</a></li>
 <li><a href="/rstats/knitr.html">knitr</a></li>
 <li><a href="/rstats/parallel.html">parallel</a></li>
-<li class="active"><a href="/rstats/devtools.html">devtools</a></li>
+<li class="active"><a href="/rstats/devtools.html">Rパッケージ作成</a></li>
 <li><a href="/rstats/rcpp.html">Rcpp</a></li>
 <li><a href="/rstats/bioconductor.html">Bioconductor</a></li>
 <li><a href="/rstats/genomicranges.html">GenomicRanges</a></li>
@@ -621,7 +617,6 @@ e.g., <a href="https://github.com/tidyverse/dplyr/blob/HEAD/R/select.R">dplyr/R/
 <li><a href="/bio/popgen.html">Population Genetics</a></li>
 <li><a href="/bio/repeatmasker.html">RepeatMasker</a></li>
 <li><a href="/bio/samtools.html">SAMtools</a></li>
-<li><a href="/bio/shirokane.html">SHIROKANE</a></li>
 <li><a href="/bio/stochastic_process.html">Stochastic Process</a></li>
 <li><a href="/bio/nig.html">遺伝研スパコン</a></li>
 <li><a href="/bio/mathmorph.html">数理形態学</a></li>
