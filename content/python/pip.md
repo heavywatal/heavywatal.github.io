@@ -8,6 +8,11 @@ weight = -95
 古いPythonではパッケージ管理のためにツールを別途インストールする必要があった。
 Python 3.4 以降では `venv` と `ensurepip` が標準ライブラリに入って少しマシに。
 
+Python本体のインストールに加えて `pip` や `venv`
+の仕事まで超高速に実行できるRust製ツール `uv` が普及し、
+生の `pip` や `venv` を直接使う機会は無くなりつつある。
+[/python/install#uv]({{< relref "install.md#uv" >}}) の項を参照。
+
 科学技術系の利用だけなら、Python本体のインストールからパッケージ管理までぜーんぶ
 [Anaconda]({{< relref "install.md#anaconda" >}}) に任せるのが楽ちんらしい。
 その場合 `pip` を混ぜて使ってはいけないので、本記事はほぼ無用。
@@ -20,46 +25,34 @@ Python 3.4 以降では `venv` と `ensurepip` が標準ライブラリに入っ
 
 [PyPI](https://pypi.org/)
 からの簡単にパッケージをインストールできるようにするツール。
-アンインストール機能の無い `easy_install` に取って代わり、
-現在では公式に推奨されている。
+アンインストール機能の無い `easy_install` に取って代わった。
 Python 3.4以降では標準ライブラリの
 [`ensurepip`](https://docs.python.org/3/library/ensurepip.html)
 によって自動的にインストールされる。
+今は [`uv pip`](https://docs.astral.sh/uv/reference/cli/#uv-pip) を使うのが速い。
 
 Python 3.12以降では [PEP 668](https://peps.python.org/pep-0668/) が有効となり、
-仮想環境の外でグローバルに `pip3 install` しようとすると多くの場合
+仮想環境の外でグローバルに `pip install` しようとすると多くの場合
 `error: externally-managed-environment` と怒られる。
 後述の[`venv`](#venv)で仮想環境を作り、その中でpipを実行する。
 
 -   全体のヘルプ、コマンド毎の詳細ヘルプ:
     ```sh
-    pip3 help
-    pip3 install --help
+    uv pip --help
+    uv pip install --help
     ```
 
 -   よく使うコマンド:
     ```sh
-    pip3 list --outdated
-    pip3 install -U pip
-    pip3 search jupyter
-    ```
-
--   設定ファイルは `~/.config/pip/pip.conf` と公式には書いてあるが
-    `~/.config/python/pip.conf` でも認識される:
-    ```ini
-    [list]
-    format = columns
+    uv pip list --outdated
+    uv pip install -U pip
+    uv pip search jupyter
     ```
 
 -   全パッケージをバージョンまでそっくり引き継ぐには:
     ```sh
-    pip3 freeze >requirements.txt
-    pip3 install -r requirements.txt
-    ```
-
--   手動インストール:
-    ```sh
-    python3 -m ensurepip
+    uv pip freeze >requirements.txt
+    uv pip install -r requirements.txt
     ```
 
 
@@ -72,10 +65,11 @@ Python実行環境を仮想化するパッケージ。
 Python 3.3 以降では `venv` が標準ライブラリ入りしたので
 [`virtualenv`](https://virtualenv.pypa.io/)
 の個別インストールは不要になった。
+今は [`uv venv`](https://docs.astral.sh/uv/reference/cli/#uv-venv) を使うのが速い。
 
 仮想環境を作る:
 ```sh
-python3 -m venv [OPTIONS] ~/.virtualenvs/myproject
+uv venv [OPTIONS] ~/.virtualenvs/myproject
 ```
 
 仮想環境に入る、仮想環境から出る:
@@ -84,16 +78,13 @@ source  ~/.virtualenvs/myproject/bin/activate
 deactivate
 ```
 
-`activate` により `PATH`, `PS1`, `PYTHONHOME` が変更され、
+`activate` により `PATH`, `PS1`, `PYTHONHOME`, `VIRTUAL_ENV` が設定・変更され、
 `deactivate` でそれらは復元される。
 `activate` するときまでの値が保持・復元されるということに注意。
 
-`VIRTUAL_ENV_DISABLE_PROMPT=1` を設定しておけばプロンプト左端に
-`(venv)` を追加させないようにできる。
-
 仮想環境の置き場所はどこでもいいけど、
 各プロジェクトのトップに `.venv` を作って `.venv/bin/activate` するのがモダン。
-プロジェクトの外にまとめる場合は
+プロジェクトの外にまとめる場合は慣習に従って
 `~/.venvs/` とか `~/.virtualenvs/` の下に置けば各種ツールに見つけてもらいやすい。
 例えば
 [vscode-python](https://github.com/microsoft/vscode-python/blob/main/src/client/pythonEnvironments/base/locators/lowLevel/globalVirtualEnvronmentLocator.ts),
@@ -106,18 +97,16 @@ etc.
 `--break-system-packages` というオプションで突破することもできるが、
 グローバルっぽい仮想環境を作るほうがマイルドで安全。
 例えば次のようにシェルを設定して
-`python3 -m venv ${WORKON_HOME}/global` のように仮想環境を作ってPATHを通すとか。
+`uv venv ${VIRTUAL_ENV}` のように仮想環境を作ってPATHを通すとか:
 ```sh
+UV_PYTHON=3.14
 export WORKON_HOME="${HOME}/.virtualenvs"
-PATH=${WORKON_HOME}/global/bin:$PATH
+if [ -d "${VIRTUAL_ENV:=${WORKON_HOME}/${UV_PYTHON}}" ]; then
+  export VIRTUAL_ENV
+  PATH=${VIRTUAL_ENV}/bin:$PATH
+fi
 ```
-
-## `uv`
-
-pipやvenvに相当することを超高速に実行できるrust製ツール。
-おまけにPython本体のインストールもできる。
-
-[/python/install#uv]({{< relref "install.md#uv" >}}) の項を参照。
+これで擬似的に `activate` したような格好になる。
 
 
 ## `setuptools`

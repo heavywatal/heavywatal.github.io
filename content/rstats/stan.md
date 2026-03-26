@@ -32,7 +32,7 @@ cmdstan_version()
 ```
 
 ```py
-%pip3 install cmdstanpy
+%uv pip install cmdstanpy
 import cmdstanpy
 cmdstanpy.install_cmdstan()
 cmdstanpy.cmdstan_path()

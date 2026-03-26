@@ -151,18 +151,6 @@ uvの成熟とともに一般ユーザーにとっての存在意義が薄れて
     exec $SHELL -l
     ```
 
-1.  [pip]({{< relref "pip.md" >}}) のパスを確認し、パッケージを入れる:
-
-    ```sh
-    which pip3
-    pip3 install -U setuptools pip
-    pip3 install -r /path/to/requirements.txt
-    ```
-
-    よく使うパッケージは
-    [`requirements.txt`](https://github.com/heavywatal/dotfiles/blob/master/.config/python/requirements.txt)
-    の形でまとめておくと楽。
-
 
 <https://github.com/pyenv/pyenv/wiki/Common-build-problems>
 
