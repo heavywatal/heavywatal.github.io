@@ -64,6 +64,10 @@ pip — パッケージ管理
 
 <p>古いPythonではパッケージ管理のためにツールを別途インストールする必要があった。
 Python 3.4 以降では <code>venv</code> と <code>ensurepip</code> が標準ライブラリに入って少しマシに。</p>
+<p>Python本体のインストールに加えて <code>pip</code> や <code>venv</code>
+の仕事まで超高速に実行できるRust製ツール <code>uv</code> が普及し、
+生の <code>pip</code> や <code>venv</code> を直接使う機会は無くなりつつある。
+<a href="/python/install.html#uv">/python/install#uv</a> の項を参照。</p>
 <p>科学技術系の利用だけなら、Python本体のインストールからパッケージ管理までぜーんぶ
 <a href="/python/install.html#anaconda">Anaconda</a> に任せるのが楽ちんらしい。
 その場合 <code>pip</code> を混ぜて使ってはいけないので、本記事はほぼ無用。
@@ -74,41 +78,31 @@ Python 3.4 以降では <code>venv</code> と <code>ensurepip</code> が標準�
 <p><a href="https://pip.pypa.io/">https://pip.pypa.io/</a></p>
 <p><a href="https://pypi.org/">PyPI</a>
 からの簡単にパッケージをインストールできるようにするツール。
-アンインストール機能の無い <code>easy_install</code> に取って代わり、
-現在では公式に推奨されている。
+アンインストール機能の無い <code>easy_install</code> に取って代わった。
 Python 3.4以降では標準ライブラリの
 <a href="https://docs.python.org/3/library/ensurepip.html"><code>ensurepip</code></a>
-によって自動的にインストールされる。</p>
+によって自動的にインストールされる。
+今は <a href="https://docs.astral.sh/uv/reference/cli/#uv-pip"><code>uv pip</code></a> を使うのが速い。</p>
 <p>Python 3.12以降では <a href="https://peps.python.org/pep-0668/">PEP 668</a> が有効となり、
-仮想環境の外でグローバルに <code>pip3 install</code> しようとすると多くの場合
+仮想環境の外でグローバルに <code>pip install</code> しようとすると多くの場合
 <code>error: externally-managed-environment</code> と怒られる。
 後述の<a href="#venv"><code>venv</code></a>で仮想環境を作り、その中でpipを実行する。</p>
 <ul>
 <li>
 <p>全体のヘルプ、コマンド毎の詳細ヘルプ:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pip3 <span class="nb">help</span>
-</span></span><span class="line"><span class="cl">pip3 install --help
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">uv pip --help
+</span></span><span class="line"><span class="cl">uv pip install --help
 </span></span></code></pre></div></li>
 <li>
 <p>よく使うコマンド:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pip3 list --outdated
-</span></span><span class="line"><span class="cl">pip3 install -U pip
-</span></span><span class="line"><span class="cl">pip3 search jupyter
-</span></span></code></pre></div></li>
-<li>
-<p>設定ファイルは <code>~/.config/pip/pip.conf</code> と公式には書いてあるが
-<code>~/.config/python/pip.conf</code> でも認識される:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="k">[list]</span>
-</span></span><span class="line"><span class="cl"><span class="na">format</span> <span class="o">=</span> <span class="s">columns</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">uv pip list --outdated
+</span></span><span class="line"><span class="cl">uv pip install -U pip
+</span></span><span class="line"><span class="cl">uv pip search jupyter
 </span></span></code></pre></div></li>
 <li>
 <p>全パッケージをバージョンまでそっくり引き継ぐには:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pip3 freeze &gt;requirements.txt
-</span></span><span class="line"><span class="cl">pip3 install -r requirements.txt
-</span></span></code></pre></div></li>
-<li>
-<p>手動インストール:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">python3 -m ensurepip
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">uv pip freeze &gt;requirements.txt
+</span></span><span class="line"><span class="cl">uv pip install -r requirements.txt
 </span></span></code></pre></div></li>
 </ul>
 <h2 id="venv">
@@ -119,20 +113,19 @@ Python 3.4以降では標準ライブラリの
 これで作った仮想環境内で <code>pip</code> を使ってパッケージ管理する。
 Python 3.3 以降では <code>venv</code> が標準ライブラリ入りしたので
 <a href="https://virtualenv.pypa.io/"><code>virtualenv</code></a>
-の個別インストールは不要になった。</p>
+の個別インストールは不要になった。
+今は <a href="https://docs.astral.sh/uv/reference/cli/#uv-venv"><code>uv venv</code></a> を使うのが速い。</p>
 <p>仮想環境を作る:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">python3 -m venv <span class="o">[</span>OPTIONS<span class="o">]</span> ~/.virtualenvs/myproject
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">uv venv <span class="o">[</span>OPTIONS<span class="o">]</span> ~/.virtualenvs/myproject
 </span></span></code></pre></div><p>仮想環境に入る、仮想環境から出る:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">source</span>  ~/.virtualenvs/myproject/bin/activate
 </span></span><span class="line"><span class="cl">deactivate
-</span></span></code></pre></div><p><code>activate</code> により <code>PATH</code>, <code>PS1</code>, <code>PYTHONHOME</code> が変更され、
+</span></span></code></pre></div><p><code>activate</code> により <code>PATH</code>, <code>PS1</code>, <code>PYTHONHOME</code>, <code>VIRTUAL_ENV</code> が設定・変更され、
 <code>deactivate</code> でそれらは復元される。
 <code>activate</code> するときまでの値が保持・復元されるということに注意。</p>
-<p><code>VIRTUAL_ENV_DISABLE_PROMPT=1</code> を設定しておけばプロンプト左端に
-<code>(venv)</code> を追加させないようにできる。</p>
 <p>仮想環境の置き場所はどこでもいいけど、
 各プロジェクトのトップに <code>.venv</code> を作って <code>.venv/bin/activate</code> するのがモダン。
-プロジェクトの外にまとめる場合は
+プロジェクトの外にまとめる場合は慣習に従って
 <code>~/.venvs/</code> とか <code>~/.virtualenvs/</code> の下に置けば各種ツールに見つけてもらいやすい。
 例えば
 <a href="https://github.com/microsoft/vscode-python/blob/main/src/client/pythonEnvironments/base/locators/lowLevel/globalVirtualEnvronmentLocator.ts">vscode-python</a>,
@@ -144,15 +137,14 @@ etc.
 <code>--break-system-packages</code> というオプションで突破することもできるが、
 グローバルっぽい仮想環境を作るほうがマイルドで安全。
 例えば次のようにシェルを設定して
-<code>python3 -m venv ${WORKON_HOME}/global</code> のように仮想環境を作ってPATHを通すとか。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">WORKON_HOME</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="s2">/.virtualenvs&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">WORKON_HOME</span><span class="si">}</span>/global/bin:<span class="nv">$PATH</span>
-</span></span></code></pre></div><h2 id="uv">
-<code>uv</code><a href="#uv"></a>
-</h2>
-<p>pipやvenvに相当することを超高速に実行できるrust製ツール。
-おまけにPython本体のインストールもできる。</p>
-<p><a href="/python/install.html#uv">/python/install#uv</a> の項を参照。</p>
+<code>uv venv ${VIRTUAL_ENV}</code> のように仮想環境を作ってPATHを通すとか:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nv">UV_PYTHON</span><span class="o">=</span>3.14
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">WORKON_HOME</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="s2">/.virtualenvs&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[</span> -d <span class="s2">&#34;</span><span class="si">${</span><span class="nv">VIRTUAL_ENV</span><span class="p">:=</span><span class="si">${</span><span class="nv">WORKON_HOME</span><span class="si">}</span><span class="p">/</span><span class="si">${</span><span class="nv">UV_PYTHON</span><span class="si">}}</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">export</span> VIRTUAL_ENV
+</span></span><span class="line"><span class="cl">  <span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">VIRTUAL_ENV</span><span class="si">}</span>/bin:<span class="nv">$PATH</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span></code></pre></div><p>これで擬似的に <code>activate</code> したような格好になる。</p>
 <h2 id="setuptools">
 <code>setuptools</code><a href="#setuptools"></a>
 </h2>
