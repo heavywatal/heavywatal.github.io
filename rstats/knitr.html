@@ -223,7 +223,8 @@ tagが <code>cache.extra</code> である必要はない。
 Figure<a href="#figure"></a>
 </h3>
 <ul>
-<li><code>fig.path</code>: <code>cache.path</code> と同様の挙動。</li>
+<li><code>fig.path</code>: <code>cache.path</code> と同様、<code>knit()</code> 呼び出し元を基準とする相対パスprefix。
+推奨に従ってoutput側にいるならデフォルト <code>figure/</code> のままで問題ない。</li>
 <li><code>fig.width: 10</code></li>
 <li><code>fig.height: 5</code></li>
 <li><code>fig.show: hold</code></li>
@@ -237,6 +238,7 @@ Figure<a href="#figure"></a>
 <li><code>fig.retina</code>: <code>dpi</code> に掛け算、 <code>out.width</code> に割り算をして
 見かけサイズ据え置きで解像度を変更する。
 <code>&lt;img&gt;</code> タグに <code>width</code> attribute が追加されることになる。</li>
+<li><code>fig.alt</code>: デフォルトでは <code>fig.cap</code> 流用で、それが <code>NULL</code> なら <code>plot of chunk {label}</code>。</li>
 <li><code>knitr::opts_chunk$set(fig.process = wtl::oxipng)</code>:
 <a href="https://github.com/shssoichiro/oxipng">PNGを圧縮</a>したり
 <a href="https://developers.google.com/speed/webp/docs/cwebp">WebPに変換</a>したりできる。</li>
@@ -385,6 +387,8 @@ litedown<a href="#litedown"></a>
 <li><code>fig.alt</code> はユーザーにちゃんと設定されることを期待して空のまま出力される。</li>
 <li><code>fig.process</code> 未対応</li>
 <li><code>dpi</code> 未対応: <code>dev.args = list(res = 108)</code> とかで代替可能か？</li>
+<li><code>upload.fun = knitr::image_uri</code> 未対応:
+<code>.md</code> → <code>.html</code> 変換時の <code>embed_resources</code> はある。</li>
 </ul>
 </li>
 <li>code chunk の <code>echo</code> 結果が
