@@ -11,14 +11,12 @@ options(
   readr.show_progress = FALSE,
   readr.show_col_types = FALSE
 )
-ggplot2::theme_set(wtl::theme_wtl())
 library(tibble) # nolint: unused_import_linter.
-library(ggplot2) # nolint: unused_import_linter.
+library(ggplot2)
+theme_set(wtl::theme_wtl())
 registerS3method("print", "tbl", wtl::printdf)
 registerS3method("print", "tbl_df", wtl::printdf)
 knitr::opts_chunk$set(comment = "")
-knitr::opts_chunk$set(message = NA)
-knitr::opts_chunk$set(warning = NA)
 knitr::opts_chunk$set(dev = "ragg_png")
 knitr::opts_chunk$set(dpi = 108)
 knitr::opts_chunk$set(fig.process = wtl::oxipng)

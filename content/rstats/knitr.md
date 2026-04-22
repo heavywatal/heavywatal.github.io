@@ -168,7 +168,8 @@ figureやcacheの出力先に使われるのでuniqueになるように注意す
 
 ### Figure
 
-- `fig.path`: `cache.path` と同様の挙動。
+- `fig.path`: `cache.path` と同様、`knit()` 呼び出し元を基準とする相対パスprefix。
+  推奨に従ってoutput側にいるならデフォルト `figure/` のままで問題ない。
 - `fig.width: 10`
 - `fig.height: 5`
 - `fig.show: hold`
@@ -179,6 +180,7 @@ figureやcacheの出力先に使われるのでuniqueになるように注意す
 - `fig.retina`: `dpi` に掛け算、 `out.width` に割り算をして
   見かけサイズ据え置きで解像度を変更する。
   `<img>` タグに `width` attribute が追加されることになる。
+- `fig.alt`: デフォルトでは `fig.cap` 流用で、それが `NULL` なら `plot of chunk {label}`。
 - `knitr::opts_chunk$set(fig.process = wtl::oxipng)`:
   [PNGを圧縮](https://github.com/shssoichiro/oxipng)したり
   [WebPに変換](https://developers.google.com/speed/webp/docs/cwebp)したりできる。
@@ -336,6 +338,8 @@ knitrやrmarkdownの作者がイチから開発しなおしている軽量版。
   - `fig.alt` はユーザーにちゃんと設定されることを期待して空のまま出力される。
   - `fig.process` 未対応
   - `dpi` 未対応: `dev.args = list(res = 108)` とかで代替可能か？
+  - `upload.fun = knitr::image_uri` 未対応:
+    `.md` → `.html` 変換時の `embed_resources` はある。
 - code chunk の `echo` 結果が
   ` ``` {.r} ` という独自形式になってしまう。
   これはバグではなく仕様らしい
