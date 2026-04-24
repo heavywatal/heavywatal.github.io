@@ -36,6 +36,9 @@ Caskじゃない `brew install r` のほうだとバイナリ版パッケージ�
 
 <https://cran.r-project.org/doc/manuals/r-release/NEWS.html>
 
+- 4.6
+  - `%notin%` operator
+  - C++20 default
 - 4.5
   - [`penguins`](https://stat.ethz.ch/R-manual/R-patched/library/datasets/html/penguins.html)
   - `install.packages()` in parallel
