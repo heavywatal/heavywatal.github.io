@@ -14,26 +14,44 @@ tags = ["communication"]
 ## 基本
 
 オプションについては後述するとして、基本は:
-
-    rsync -auv SRC/ DST/
+```sh
+rsync -auvC SRC/ DST/
+```
 
 SRC側の末尾のスラッシュの有無によって結果が大きく異なることに注意。
 DST側は付けても付けなくても同じ。
 
 ```sh
 ## SRC/ 以下のファイルが DST/ 以下に入る
-rsync -auv SRC/ DST
+rsync -auvC SRC/ DST
 
 ## ディレクトリ DST/SRC が作られる
-rsync -auv SRC DST
+rsync -auvC SRC DST
 
 ## 結果は同じだが、下のほうがより明示的
-rsync -auv SRC/DIR DST
-rsync -auv SRC/DIR/ DST/DIR/
+rsync -auvC SRC/DIR DST
+rsync -auvC SRC/DIR/ DST/DIR/
 ```
 
-[sshの設定]({{< relref "ssh.md" >}})をしておけばリモートホストへの転送も可能。
-その場合は宛先を `remote_machine:~/DST` のようにコロンで指定する。
+### ネットワーク越しの送受信
+
+SSHを使ってリモートホストとの送受信も可能。
+その場合は相手側を `remote_machine:~/dir` のようにコロンから絶対パスで指定する。
+
+```sh
+# push
+rsync -auvC SRC/ user@example.com:~/DST/
+
+# pull
+rsync -auvC user@example.com:~/SRC/ DST/
+```
+
+[SSHの設定]({{< relref "ssh.md" >}})をちゃんとやっておくと楽。
+- パスワード無しでログインできる。
+- ユーザー名を省略したり、ホスト名を短縮した別名をつけたりもできる。
+- `RequestTTY yes` を付けてると当然ながら怒られる。
+- リモート側の `.bashrc` とかで標準出力に何かを表示するようにしてあるとコケる
+
 
 ## Options
 
@@ -71,7 +89,7 @@ rsync -auv SRC/DIR/ DST/DIR/
     新しいMacのAPFSはLinuxと同じ `utf8` と見なしておけば良さそう...?
 
 
-## Exclude and include
+### Exclude and include
 
 <https://download.samba.org/pub/rsync/rsync.1#PATTERN_MATCHING_RULES>
 
@@ -95,19 +113,8 @@ rsync -auv SRC/DIR/ DST/DIR/
     基本的にはこれを使う方針で大丈夫そうだが
     `tags`, `core` とかはディレクトリ名として普通に使いそうなので注意。
 :   `RCS SCCS CVS CVS.adm RCSLOG cvslog.* tags TAGS .make.state .nse_depinfo *~ #* .#* ,* _$* *$ *.old *.bak *.BAK *.orig *.rej .del-* *.a *.olb *.o *.obj *.so *.exe *.Z *.elc *.ln core .svn/ .git/ .hg/ .bzr/`
-:   これに加えて **`${HOME}/.cvsignore` も自動で読まれる**というのが便利。
-
-
-## SSH越しの送受信
-
-```sh
-rsync -auv user@example.com:~/dir/ ~/dir/
-```
-
-- [SSH公開鍵を設定]({{< relref "ssh.md" >}})してパスワード無しでログインできるようにしておく。
-- `.ssh/config` でユーザー名とかも登録しておくとさらに楽。
-  `RequestTTY yes` を付けてると当然ながら怒られる。
-- リモート側の `.bashrc` とかで標準出力に何かを表示するようにしてあるとコケる
+:   これに加えて **[`${HOME}/.cvsignore`](https://github.com/heavywatal/dotfiles/blob/master/.cvsignore) も自動で読まれる**というのが便利。
+    リモートとのやり取りの場合、ソース側のファイルが読まれる(コマンド実行側とは限らない)ということに注意。
 
 
 ## wget
