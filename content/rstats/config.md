@@ -54,12 +54,15 @@ Caskじゃない `brew install r` のほうだとバイナリ版パッケージ�
 - 4.1
   - shorthand function `\(x) x + 1`
   - native pipe operator `|>`
+  - C++14 default
 - 4.0
   - `StringsAsFactors = FALSE` by default
   - color palettes: R4, Okabe-Ito, etc.
   - raw character strings `r"(...)"`
   - `tools::R_user_dir()`
   - C++20 support
+- 3.6
+  - C++11 default
 
 
 ## 起動オプション
