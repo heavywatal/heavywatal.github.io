@@ -440,9 +440,9 @@ CMake 3.11 から。
 include(FetchContent)
 FetchContent_Declare(pcglite
   GIT_REPOSITORY https://github.com/heavywatal/pcglite.git
-  GIT_TAG v0.2.1
+  GIT_TAG v0.2.2
   EXCLUDE_FROM_ALL
-  FIND_PACKAGE_ARGS 0.2.1
+  FIND_PACKAGE_ARGS 0.2.2
 )
 FetchContent_MakeAvailable(pcglite)
 cmake_print_variables(pcglite_FOUND pcglite_DIR)
@@ -454,12 +454,19 @@ cmake_print_variables(pcglite_SOURCE_DIR pcglite_BINARY_DIR)
 : ソースに関するオプションは
   [ExternalProject](https://cmake.org/cmake/help/latest/module/ExternalProject.html)
   とほぼ同じで、そちらを見に行く必要がある。
-: `GIT_TAG` はタグだけでなくブランチやハッシュも指定できる。
-  公式推奨はハッシュらしい。
-  `GIT_SHALLOW` が使えるのはタグとブランチのみ。
+: `URL` + `URL_HASH`: 簡単で速い。
+: `GIT_REPOSITORY` + `GIT_TAG`
+  - hash `1a2b3c4d`: 公式推奨。再現性が高く、2回目以降は更新確認も不要。
+    `GIT_SHALLOW` は使えない。
+  - branch `origin/main`: 次点。リモートの名前で指定するほうが将来の変更に追従できて安全。
+    `GIT_REMOTE_NAME` 未指定の場合は `origin` になる。
+  - tag `v0.1.0`: 付け替えが可能だったりして再現性が乏しいので注意。
+  - 省略すると設定によらず `master` 決め打ちになってしまう。
 : `EXCLUDE_FROM_ALL`: (3.28+) findできなかった場合の `add_subdirectory()` に渡される。
   一緒にインストールする必要のない `PRIVATE` 依存のときに。
 : `FIND_PACKAGE_ARGS`: (3.24+)
+  `find_package()` 試行を opt-in し、これに続くものがあれば引数として渡す。
+  つまり最後のオプションとして書く必要がある。
 
 `FetchContent_MakeAvailable()`
 : 宣言された依存ライブラリを利用可能な状態にする。(3.14+)
@@ -629,6 +636,9 @@ cmake --install build
 
 ## Versions
 
+<https://cmake.org/cmake/help/latest/release/>
+
+- 4.2: [Ubuntu 26.04 resolute](https://launchpad.net/ubuntu/resolute/+source/cmake)
 - 4.1: [Fix `^` regex bug](https://cmake.org/cmake/help/latest/policy/CMP0186.html)
 - 3.30: [`FetchContent` without sub-build](https://cmake.org/cmake/help/latest/policy/CMP0168.html)
 - 3.28: `FetchContent_Declare(... EXCLUDE_FROM_ALL)`,
