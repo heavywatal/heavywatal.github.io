@@ -513,9 +513,9 @@ CMake 3.11 から。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">include</span><span class="p">(</span><span class="s">FetchContent</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="nb">FetchContent_Declare</span><span class="p">(</span><span class="s">pcglite</span>
 </span></span><span class="line"><span class="cl">  <span class="s">GIT_REPOSITORY</span> <span class="s">https://github.com/heavywatal/pcglite.git</span>
-</span></span><span class="line"><span class="cl">  <span class="s">GIT_TAG</span> <span class="s">v0.2.1</span>
+</span></span><span class="line"><span class="cl">  <span class="s">GIT_TAG</span> <span class="s">v0.2.2</span>
 </span></span><span class="line"><span class="cl">  <span class="s">EXCLUDE_FROM_ALL</span>
-</span></span><span class="line"><span class="cl">  <span class="s">FIND_PACKAGE_ARGS</span> <span class="s">0.2.1</span>
+</span></span><span class="line"><span class="cl">  <span class="s">FIND_PACKAGE_ARGS</span> <span class="s">0.2.2</span>
 </span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">pcglite</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="nb">cmake_print_variables</span><span class="p">(</span><span class="s">pcglite_FOUND</span> <span class="s">pcglite_DIR</span><span class="p">)</span><span class="err">
@@ -526,12 +526,22 @@ CMake 3.11 から。</p>
 <dd>ソースに関するオプションは
 <a href="https://cmake.org/cmake/help/latest/module/ExternalProject.html">ExternalProject</a>
 とほぼ同じで、そちらを見に行く必要がある。</dd>
-<dd><code>GIT_TAG</code> はタグだけでなくブランチやハッシュも指定できる。
-公式推奨はハッシュらしい。
-<code>GIT_SHALLOW</code> が使えるのはタグとブランチのみ。</dd>
+<dd><code>URL</code> + <code>URL_HASH</code>: 簡単で速い。</dd>
+<dd><code>GIT_REPOSITORY</code> + <code>GIT_TAG</code>
+<ul>
+<li>hash <code>1a2b3c4d</code>: 公式推奨。再現性が高く、2回目以降は更新確認も不要。
+<code>GIT_SHALLOW</code> は使えない。</li>
+<li>branch <code>origin/main</code>: 次点。リモートの名前で指定するほうが将来の変更に追従できて安全。
+<code>GIT_REMOTE_NAME</code> 未指定の場合は <code>origin</code> になる。</li>
+<li>tag <code>v0.1.0</code>: 付け替えが可能だったりして再現性が乏しいので注意。</li>
+<li>省略すると設定によらず <code>master</code> 決め打ちになってしまう。</li>
+</ul>
+</dd>
 <dd><code>EXCLUDE_FROM_ALL</code>: (3.28+) findできなかった場合の <code>add_subdirectory()</code> に渡される。
 一緒にインストールする必要のない <code>PRIVATE</code> 依存のときに。</dd>
-<dd><code>FIND_PACKAGE_ARGS</code>: (3.24+)</dd>
+<dd><code>FIND_PACKAGE_ARGS</code>: (3.24+)
+<code>find_package()</code> 試行を opt-in し、これに続くものがあれば引数として渡す。
+つまり最後のオプションとして書く必要がある。</dd>
 <dt><code>FetchContent_MakeAvailable()</code></dt>
 <dd>宣言された依存ライブラリを利用可能な状態にする。(3.14+)</dd>
 <dd>これひとつを実行することが推奨されているが、各段階を手動で書くこともできる。
@@ -679,7 +689,9 @@ Style guide<a href="#style-guide"></a>
 <h2 id="versions">
 Versions<a href="#versions"></a>
 </h2>
+<p><a href="https://cmake.org/cmake/help/latest/release/">https://cmake.org/cmake/help/latest/release/</a></p>
 <ul>
+<li>4.2: <a href="https://launchpad.net/ubuntu/resolute/+source/cmake">Ubuntu 26.04 resolute</a></li>
 <li>4.1: <a href="https://cmake.org/cmake/help/latest/policy/CMP0186.html">Fix <code>^</code> regex bug</a></li>
 <li>3.30: <a href="https://cmake.org/cmake/help/latest/policy/CMP0168.html"><code>FetchContent</code> without sub-build</a></li>
 <li>3.28: <code>FetchContent_Declare(... EXCLUDE_FROM_ALL)</code>,

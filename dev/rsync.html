@@ -73,21 +73,35 @@ rsync
 基本<a href="#基本"></a>
 </h2>
 <p>オプションについては後述するとして、基本は:</p>
-<pre><code>rsync -auv SRC/ DST/
-</code></pre>
-<p>SRC側の末尾のスラッシュの有無によって結果が大きく異なることに注意。
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">rsync -auvC SRC/ DST/
+</span></span></code></pre></div><p>SRC側の末尾のスラッシュの有無によって結果が大きく異なることに注意。
 DST側は付けても付けなくても同じ。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1">## SRC/ 以下のファイルが DST/ 以下に入る</span>
-</span></span><span class="line"><span class="cl">rsync -auv SRC/ DST
+</span></span><span class="line"><span class="cl">rsync -auvC SRC/ DST
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">## ディレクトリ DST/SRC が作られる</span>
-</span></span><span class="line"><span class="cl">rsync -auv SRC DST
+</span></span><span class="line"><span class="cl">rsync -auvC SRC DST
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">## 結果は同じだが、下のほうがより明示的</span>
-</span></span><span class="line"><span class="cl">rsync -auv SRC/DIR DST
-</span></span><span class="line"><span class="cl">rsync -auv SRC/DIR/ DST/DIR/
-</span></span></code></pre></div><p><a href="/dev/ssh.html">sshの設定</a>をしておけばリモートホストへの転送も可能。
-その場合は宛先を <code>remote_machine:~/DST</code> のようにコロンで指定する。</p>
+</span></span><span class="line"><span class="cl">rsync -auvC SRC/DIR DST
+</span></span><span class="line"><span class="cl">rsync -auvC SRC/DIR/ DST/DIR/
+</span></span></code></pre></div><h3 id="ネットワーク越しの送受信">
+ネットワーク越しの送受信<a href="#ネットワーク越しの送受信"></a>
+</h3>
+<p>SSHを使ってリモートホストとの送受信も可能。
+その場合は相手側を <code>remote_machine:~/dir</code> のようにコロンから絶対パスで指定する。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># push</span>
+</span></span><span class="line"><span class="cl">rsync -auvC SRC/ user@example.com:~/DST/
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># pull</span>
+</span></span><span class="line"><span class="cl">rsync -auvC user@example.com:~/SRC/ DST/
+</span></span></code></pre></div><p><a href="/dev/ssh.html">SSHの設定</a>をちゃんとやっておくと楽。</p>
+<ul>
+<li>パスワード無しでログインできる。</li>
+<li>ユーザー名を省略したり、ホスト名を短縮した別名をつけたりもできる。</li>
+<li><code>RequestTTY yes</code> を付けてると当然ながら怒られる。</li>
+<li>リモート側の <code>.bashrc</code> とかで標準出力に何かを表示するようにしてあるとコケる</li>
+</ul>
 <h2 id="options">
 Options<a href="#options"></a>
 </h2>
@@ -117,9 +131,9 @@ Options<a href="#options"></a>
 <code>--iconv=utf8-mac</code> or <code>--iconv=utf8,utf8-mac</code> 。
 新しいMacのAPFSはLinuxと同じ <code>utf8</code> と見なしておけば良さそう&hellip;?</dd>
 </dl>
-<h2 id="exclude-and-include">
+<h3 id="exclude-and-include">
 Exclude and include<a href="#exclude-and-include"></a>
-</h2>
+</h3>
 <p><a href="https://download.samba.org/pub/rsync/rsync.1#PATTERN_MATCHING_RULES">https://download.samba.org/pub/rsync/rsync.1#PATTERN_MATCHING_RULES</a></p>
 <ul>
 <li>先に記述したものほど優先。</li>
@@ -140,18 +154,9 @@ Exclude and include<a href="#exclude-and-include"></a>
 基本的にはこれを使う方針で大丈夫そうだが
 <code>tags</code>, <code>core</code> とかはディレクトリ名として普通に使いそうなので注意。</dd>
 <dd><code>RCS SCCS CVS CVS.adm RCSLOG cvslog.* tags TAGS .make.state .nse_depinfo *~ #* .#* ,* _$* *$ *.old *.bak *.BAK *.orig *.rej .del-* *.a *.olb *.o *.obj *.so *.exe *.Z *.elc *.ln core .svn/ .git/ .hg/ .bzr/</code></dd>
-<dd>これに加えて <strong><code>${HOME}/.cvsignore</code> も自動で読まれる</strong>というのが便利。</dd>
+<dd>これに加えて <strong><a href="https://github.com/heavywatal/dotfiles/blob/master/.cvsignore"><code>${HOME}/.cvsignore</code></a> も自動で読まれる</strong>というのが便利。
+リモートとのやり取りの場合、ソース側のファイルが読まれる(コマンド実行側とは限らない)ということに注意。</dd>
 </dl>
-<h2 id="ssh越しの送受信">
-SSH越しの送受信<a href="#ssh越しの送受信"></a>
-</h2>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">rsync -auv user@example.com:~/dir/ ~/dir/
-</span></span></code></pre></div><ul>
-<li><a href="/dev/ssh.html">SSH公開鍵を設定</a>してパスワード無しでログインできるようにしておく。</li>
-<li><code>.ssh/config</code> でユーザー名とかも登録しておくとさらに楽。
-<code>RequestTTY yes</code> を付けてると当然ながら怒られる。</li>
-<li>リモート側の <code>.bashrc</code> とかで標準出力に何かを表示するようにしてあるとコケる</li>
-</ul>
 <h2 id="wget">
 wget<a href="#wget"></a>
 </h2>
