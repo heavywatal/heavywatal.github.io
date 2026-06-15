@@ -204,6 +204,7 @@ Contacts
 
 ## Teaching / Outreach
 
+-   「[Rを用いたデータ解析の基礎](/slides/tohoku2026r/)」東北大学 進化学実習 (2026-04)
 -   「[Rによる統計モデリング入門](/slides/tochigi2026/)」
     栃木県[農業総合研究センター](https://www.pref.tochigi.lg.jp/g59/) (2026-02)
 -   「[統計モデリング概論 DSHC 2025](/slides/dshc2025/)」
