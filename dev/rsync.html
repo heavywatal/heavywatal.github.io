@@ -256,25 +256,30 @@ curl<a href="#curl"></a>
 単一ファイルを取得するには手軽で便利。
 インストールスクリプトなどで使われることも多い。</p>
 <dl>
-<dt><code>-f</code>, <code>--fail</code></dt>
+<dt><code>-f, --fail</code></dt>
 <dd>403 Forbidden や 404 Not Found のときにそのページを取得せずエラー終了する。</dd>
-<dt><code>-s</code>, <code>--silent</code></dt>
+<dt><code>-s, --silent</code></dt>
 <dd>プログレスバーやエラーの表示を抑制する。</dd>
-<dd><code>-S</code>, <code>--show-error</code> を追加してエラー表示だけ有効にすることが多い。</dd>
-<dt><code>-L</code>, <code>--location</code></dt>
+<dd><code>-S, --show-error</code> を追加してエラー表示だけ有効にすることが多い。</dd>
+<dt><code>-L, --location</code></dt>
 <dd>3xxリダイレクトを辿る。</dd>
-<dt><code>-o</code>, <code>--output</code></dt>
+<dt><code>-o, --output &lt;file&gt;</code></dt>
 <dd>出力先ファイルを指定。
 デフォルト無指定もしくはハイフン <code>-</code> で標準出力。</dd>
 <dd>URLに <code>{one,two}</code> や <code>[1-3]</code> のような表現を含めて複数ファイルを取得する場合は
 <code>file#1.txt</code> のようなプレースホルダが使える。</dd>
-<dt><code>-O</code>, <code>--remote-name</code></dt>
+<dt><code>-O, --remote-name</code></dt>
 <dd>URLの最後の部分をファイル名として保存。</dd>
 <dd>サーバー側が指定した名前を採用したい場合は
-<code>-J</code>, <code>--remote-header-name</code> を使う。</dd>
-<dt><code>-R</code>, <code>--remote-time</code></dt>
+<code>-J, --remote-header-name</code> を使う。</dd>
+<dt><code>-R, --remote-time</code></dt>
 <dd>リモートファイルのタイムスタンプを取得してローカルファイルに適用。</dd>
-<dt><code>--output-dir</code></dt>
+<dt><code>-z, --time-cond &lt;time|file&gt;</code></dt>
+<dd>指定した時間もしくはローカルファイルのタイムスタンプより新しいリモートファイルのみ取得。</dd>
+<dd>「新しいので取得しない」場合でも成功扱いなので
+<code>TEMP=$(mktemp)</code> にダウンロードしてから <code>mv</code> する作戦のとき空ファイルで上書きしないように
+<code>[ -s &quot;$TEMP&quot; ]</code> でサイズを確認する必要がある。</dd>
+<dt><code>--output-dir &lt;dir&gt;</code></dt>
 <dd>出力先ディレクトリを指定。
 デフォルトは <code>.</code> カレント。
 存在しないディレクトリを作ってもらうには <code>--create-dirs</code> も必要。</dd>
