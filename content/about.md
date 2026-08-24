@@ -38,7 +38,7 @@ Contacts
 : <span class="contacts-icons">
   <a rel="me" href="https://github.com/heavywatal" title="GitHub">
   <iconify-icon inline icon="bi:github"></iconify-icon></a>
-  <a rel="me" href="https://www.facebook.com/profile.php?id=100002135628677" title="Facebook">
+  <a rel="me" href="https://www.facebook.com/heavywatal/" title="Facebook">
   <iconify-icon inline icon="bi:facebook"></iconify-icon></a>
   <a rel="me" href="https://bsky.app/profile/heavywatal.bsky.social" title="Bluesky">
   <iconify-icon inline icon="bi:bluesky"></iconify-icon></a>
@@ -168,6 +168,8 @@ Contacts
 
 **Poster**
 
+-   岩嵜航・牧野能士「aligons: ゲノム配列の進化的保存度を評価・可視化するパイプライン」
+    [日本進化学会 第28回大会](https://sesj2026.agr.nagoya-u.ac.jp/) (2026-08) 名古屋大学
 -   Watal M. Iwasaki, Hideki Innan
     "Simulation of Intratumor Heterogeneity and its Medical Implication"
     POB-093, [SMBE2018](http://smbe2018.jp/) (2018-07) Yokohama, Japan
@@ -204,6 +206,9 @@ Contacts
 
 ## Teaching / Outreach
 
+-   「[生物統計学](/slides/soken2026biostats/)」総研大 (2026-07)
+-   「[統計モデリング入門](/slides/iwate2026stats/)」
+    岩手大学  [連合農学研究科](https://ugas.agr.iwate-u.ac.jp/) (2026-06)
 -   「[Rを用いたデータ解析の基礎](/slides/tohoku2026r/)」東北大学 進化学実習 (2026-04)
 -   「[Rによる統計モデリング入門](/slides/tochigi2026/)」
     栃木県[農業総合研究センター](https://www.pref.tochigi.lg.jp/g59/) (2026-02)
