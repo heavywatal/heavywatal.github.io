@@ -16,22 +16,21 @@ type = "home"
 
 岩嵜 航
 :   [東北大学](https://www.tohoku.ac.jp)
-    [生命科学研究科](https://www.lifesci.tohoku.ac.jp)\
-    [進化ゲノミクス分野 牧野研究室](https://www.lifesci.tohoku.ac.jp/evolgenomics/)
-    特任助教
+    [生命科学研究科](https://www.lifesci.tohoku.ac.jp) 准教授\
+    教育研究支援・企画推進室
 
 Watal M. Iwasaki, PhD
-:   Project Assistant Professor in
-    [Laboratory of Evolutionary Genomics](https://www.lifesci.tohoku.ac.jp/evolgenomics/home-en/),\
+:   Associate Professor,
     [Graduate School of Life Sciences](https://www.lifesci.tohoku.ac.jp/en/),
-    [Tohoku University](https://www.tohoku.ac.jp/en/)
+    [Tohoku University](https://www.tohoku.ac.jp/en/),\
+    Academic Support & Planning Office
 
 Address
-:   980-8578 仙台市青葉区荒巻字青葉6-3 東北大学
-    [理学部生物棟](https://www.google.com/maps/place/38°15'31.4"N+140°50'15.1"E)
-:   Biology bldg., Tohoku University,
-    Aramaki Aoba 6-3, Sendai, 980-8578, Japan
-:   +81-22-795-6693
+:   980-8577 仙台市青葉区片平2-1-1 東北大学
+    [生命科学プロジェクト総合研究棟](https://www.tohoku.ac.jp/map/ja/?f=KH_D04)
+:   [Life Sciences Project Research Laboratory](https://www.tohoku.ac.jp/map/en/?f=KH_D04),
+    Katahira 2-1-1, Sendai, 980-8577, Japan
+:   +81-22-795-5690
 
 Contacts
 :   heavywatalあgmail.com
@@ -63,14 +62,17 @@ Contacts
 
 ## Work Experience
 
-2019-09 – Current
-:   Project Assistant Professor in [Makino Laboratory](https://www.lifesci.tohoku.ac.jp/evolgenomics/), Tohoku University.
+2026-10 - Current
+:   Associate Professor in Graduate School of Life Sciences, Tohoku University.
+
+2019-09 – 2026-09
+:   Project Assistant Professor at [Makino Laboratory](https://www.lifesci.tohoku.ac.jp/evolgenomics/), Tohoku University.
 
 2013-10 – 2019-08
-:   Postdoctoral fellow in [Innan Laboratory](https://rcies.soken.ac.jp/labs/innan/index.html), SOKENDAI (The Graduate University for Advanced Studies).
+:   Postdoctoral fellow at [Innan Laboratory](https://rcies.soken.ac.jp/labs/innan/index.html), SOKENDAI (The Graduate University for Advanced Studies).
 
 2010-07 – 2013-03
-:   JSPS Research Fellow (DC1) in [Kawata Laboratory](http://www.biology.tohoku.ac.jp/lab-www/makino_lab/foreverklabo/), Tohoku University.
+:   JSPS Research Fellow (DC1) at [Kawata Laboratory](http://www.biology.tohoku.ac.jp/lab-www/makino_lab/foreverklabo/), Tohoku University.
 
 
 ## Publications
@@ -206,6 +208,8 @@ Contacts
 
 ## Teaching / Outreach
 
+-   「[統計モデリング概論 DSHC 2026](/slides/dshc2026/)」
+    東京海上 [Data Science Hill Climb](https://tokiomarine-dshc.com/) (2026-09)
 -   「[生物統計学](/slides/soken2026biostats/)」総研大 (2026-07)
 -   「[統計モデリング入門](/slides/iwate2026stats/)」
     岩手大学  [連合農学研究科](https://ugas.agr.iwate-u.ac.jp/) (2026-06)
