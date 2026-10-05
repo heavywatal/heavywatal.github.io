@@ -16,7 +16,7 @@ type = "home"
 
 岩嵜 航
 :   [東北大学](https://www.tohoku.ac.jp)
-    [生命科学研究科](https://www.lifesci.tohoku.ac.jp) 准教授\
+    [生命科学研究科](https://www.lifesci.tohoku.ac.jp) 特任准教授\
     教育研究支援・企画推進室
 
 Watal M. Iwasaki, PhD
@@ -30,7 +30,7 @@ Address
     [生命科学プロジェクト総合研究棟](https://www.tohoku.ac.jp/map/ja/?f=KH_D04)
 :   [Life Sciences Project Research Laboratory](https://www.tohoku.ac.jp/map/en/?f=KH_D04),
     Katahira 2-1-1, Sendai, 980-8577, Japan
-:   +81-22-795-5690
+:   +81-22-217-5690
 
 Contacts
 :   heavywatalあgmail.com
