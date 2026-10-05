@@ -34,7 +34,12 @@ echo:
 clean:
 	fd -d1 -td -tf . development | grep -Ev 'offline|slides|hpc-|jbrowse' | xargs $(RM) -r
 
-.PHONY: hex-stickers
+.PHONY: module hex-stickers
+
+module:
+	mv config/_default/module.toml config/_default/module-disabled.toml
+	hugo mod get -u ./... && hugo mod tidy
+	mv config/_default/module-disabled.toml config/_default/module.toml
 
 HEXSRC := submodules/hex-stickers
 HEXDST := static/_img/hex-stickers
