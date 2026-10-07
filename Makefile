@@ -1,3 +1,5 @@
+export HUGO_MODULE_WORKSPACE=hugo.work
+
 .DEFAULT_GOAL := all
 SUBDIRS := $(wildcard content/*/.knitr)
 .PHONY: all development public watch benchmark hugo clean ${SUBDIRS}
@@ -37,9 +39,7 @@ clean:
 .PHONY: module hex-stickers
 
 module:
-	mv config/_default/module.toml config/_default/module-disabled.toml
-	hugo mod get -u ./... && hugo mod tidy
-	mv config/_default/module-disabled.toml config/_default/module.toml
+	export HUGO_MODULE_WORKSPACE=; hugo mod get -u ./... && hugo mod tidy
 
 HEXSRC := submodules/hex-stickers
 HEXDST := static/_img/hex-stickers
