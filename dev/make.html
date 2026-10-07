@@ -123,9 +123,6 @@ Rule<a href="#rule"></a>
 </span></span><span class="line"><span class="cl">        <span class="k">$(</span>CXX<span class="k">)</span> <span class="k">$(</span>CPPFLAGS<span class="k">)</span> <span class="k">$(</span>CXXFLAGS<span class="k">)</span> -c $&lt; -o <span class="nv">$@</span>
 </span></span></code></pre></div><p>以下に紹介するように、ほかにも様々な変数や関数が用意されていて、
 個別のファイル名などをいちいち入力しなくても済むようになっている。</p>
-<p>ファイル名が明示的に書かれずルールのみで生成された中間ファイルは自動的に削除される。
-<code>.PRECIOUS</code> ターゲットにその名を加えておくとそれを防げる。
-逆に、名前は出すけど中間ファイルとして扱いたい場合は <code>.SECONDARY</code> ターゲットに加える。</p>
 <h3 id="implicit-variables">
 Implicit Variables<a href="#implicit-variables"></a>
 </h3>
@@ -225,7 +222,25 @@ Targets<a href="#targets"></a>
 </dl>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">make clean
 </span></span><span class="line"><span class="cl">make
-</span></span></code></pre></div><h2 id="options">
+</span></span></code></pre></div><p><a href="https://www.gnu.org/software/make/manual/make.html#Special-Targets">https://www.gnu.org/software/make/manual/make.html#Special-Targets</a></p>
+<dl>
+<dt><code>.PHONY: all clean</code></dt>
+<dd>同名のファイルがうっかり存在してもターゲットとして実行したいものを列挙しておく。</dd>
+<dt><code>.PRECIOUS:</code></dt>
+<dd>ファイル名が明示的に書かれずルールのみで生成された中間ファイルは自動的に削除される。
+このターゲットの依存関係にその名を加えておくとそれを防げる。</dd>
+<dt><code>.INTERMEDIATE:</code></dt>
+<dd>列挙されたものを中間ファイルとして扱う。
+下流が最新であれば、これらが存在しなくても再生成されない。</dd>
+<dd>完走後に自動的に消される。</dd>
+<dt><code>.SECONDARY:</code></dt>
+<dd>完走後に自動的に消されないほかは <code>.INTERMEDIATE</code> と同じ。
+ビルドの高速化のために保持したい <code>.o</code> みたいなものに。</dd>
+<dt><code>.ONESHELL:</code></dt>
+<dd>複数行のコマンドを1つのシェルで実行する。
+デフォルトでは1行ごとに違うシェルで実行する仕様。</dd>
+</dl>
+<h2 id="options">
 Options<a href="#options"></a>
 </h2>
 <p><a href="https://www.gnu.org/software/make/manual/make.html#Options-Summary">https://www.gnu.org/software/make/manual/make.html#Options-Summary</a></p>
