@@ -212,43 +212,53 @@ MacのFramework buildでは `${HOME}/Library/Python/2.7` とかになる。
 
 <https://devguide.python.org/versions/>
 
-- [3.14](https://docs.python.org/3.14/whatsnew/3.14.html)
-  - [t-strings](https://docs.python.org/3/library/string.templatelib.html)
+- [3.15](https://docs.python.org/3/whatsnew/3.15.html)
+  - [`lazy import`](https://docs.python.org/3/reference/simple_stmts.html#lazy), `__lazy_modules__`
+  - [`frozendict`](https://docs.python.org/3/builtins/stdtypes.html#frozendict)
+  - [`sentinel`](https://docs.python.org/3/builtins/functions.html#sentinel)
+  - [`profiling`](https://docs.python.org/3/library/profiling.html)
+  - [unpacking in comprehensions](https://docs.python.org/3/tutorial/datastructures.html#unpacking-in-lists-and-list-comprehensions)
+  - [`re.prefixmatch`](https://docs.python.org/3/library/re.html#re.prefixmatch)
+- [3.14](https://docs.python.org/3/whatsnew/3.14.html)
+  - [t-strings](https://docs.python.org/3/builtins/stdtypes.html#template-string-literals-t-strings)
   - [zstd](https://docs.python.org/3/library/compression.zstd.html)
   - PEP 649, 749 "Deferred evaluation of annotations":
     `from __future__ import annotations` が標準動作になった。
     - 未定義クラスをtypingで使う時にquoteしなくてよい。
     - typing用のインポートは `typing.TYPE_CHECKING` が `True` のときだけでよい。
-- [3.13](https://docs.python.org/3.13/whatsnew/3.13.html)
-  - `typing.ReadOnly`, `typing.TypeIs`
+- [3.13](https://docs.python.org/3/whatsnew/3.13.html)
+  - [`typing.ReadOnly`](https://docs.python.org/3/library/typing.html#typing.ReadOnly) for `TypedDict`
+  - [`typing.TypeIs`](https://docs.python.org/3/library/typing.html#typing.TypeIs)
   - Free-threaded CPython
-- [3.12](https://docs.python.org/3.12/whatsnew/3.12.html)
+- [3.12](https://docs.python.org/3/whatsnew/3.12.html)
   - Generics without `TypeVar` or `Generic`
-  - `pathlib.walk()`
+  - [`Path.walk()`](https://docs.python.org/3/library/pathlib.html#pathlib.Path.walk)
   - f-strings improvements
-  - PEP 668 `EXTERNALLY-MANAGED`
-- [3.11](https://docs.python.org/3.11/whatsnew/3.11.html)
+  - [PEP 668](https://peps.python.org/pep-0668/) `EXTERNALLY-MANAGED`
+- [3.11](https://docs.python.org/3/whatsnew/3.11.html)
   - [`tomllib`](https://docs.python.org/3/library/tomllib.html)
-- [3.10](https://docs.python.org/3.10/whatsnew/3.10.html)
-  - `TypeAlias`
+- [3.10](https://docs.python.org/3/whatsnew/3.10.html)
+  - [`typing.TypeAlias`](https://docs.python.org/3/library/typing.html#typing.TypeAlias)
+  - [`typing.TypeGuard`](https://docs.python.org/3/library/typing.html#typing.TypeGuard)
   - `A | B` for `Union[A, B]`
-- [3.9](https://docs.python.org/3.9/whatsnew/3.9.html)
-  - `list` とか `dict` で直に type hint を書ける。
-- [3.8](https://docs.python.org/3.8/whatsnew/3.8.html)
+  - [`match` statements](https://docs.python.org/3/tutorial/controlflow.html#match-statements)
+- [3.9](https://docs.python.org/3/whatsnew/3.9.html)
+  - `list[int]` without `typing.List`
+- [3.8](https://docs.python.org/3/whatsnew/3.8.html)
   - `:=` (walrus operator)
   - `f"{var=}"` for debugging
   - [`importlib.metadata`](https://docs.python.org/3/library/importlib.metadata.html)
-- [3.7](https://docs.python.org/3.7/whatsnew/3.7.html)
+- [3.7](https://docs.python.org/3/whatsnew/3.7.html)
   - [`dataclasses`](https://docs.python.org/3/library/dataclasses.html)
   - [`importlib.resources`](https://docs.python.org/3/library/importlib.resources.html)
   - `dict` insertion order guaranteed
-- [3.6](https://docs.python.org/3.6/whatsnew/3.6.html)
-  - [f-strings](https://docs.python.org/3/library/stdtypes.html#formatted-string-literals-f-strings)
+- [3.6](https://docs.python.org/3/whatsnew/3.6.html)
+  - [f-strings](https://docs.python.org/3/builtins/stdtypes.html#formatted-string-literals-f-strings)
   - `1_000_000`
-- [3.5](https://docs.python.org/3.5/whatsnew/3.5.html)
+- [3.5](https://docs.python.org/3/whatsnew/3.5.html)
   - [`subprocess.run()`](https://docs.python.org/3/library/subprocess.html#subprocess.run)
-- [3.4](https://docs.python.org/3.4/whatsnew/3.4.html)
+- [3.4](https://docs.python.org/3/whatsnew/3.4.html)
   - [`pathlib`](https://docs.python.org/3/library/pathlib.html)
-- [3.3](https://docs.python.org/3.3/whatsnew/3.3.html)
+- [3.3](https://docs.python.org/3/whatsnew/3.3.html)
   - [`venv`](https://docs.python.org/3/library/venv.html)
 
