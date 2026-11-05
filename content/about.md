@@ -16,24 +16,22 @@ type = "home"
 
 岩嵜 航
 :   [東北大学](https://www.tohoku.ac.jp)
-    [生命科学研究科](https://www.lifesci.tohoku.ac.jp) 特任准教授\
-    教育研究支援・企画推進室
+    [生命科学研究科](https://www.lifesci.tohoku.ac.jp) 特任准教授
+:   教育研究支援・企画推進室 (ASPO)
+:   980-8577 仙台市青葉区片平2-1-1
+    [生命科学プロジェクト総合研究棟](https://www.tohoku.ac.jp/map/ja/?f=KH_D04)
 
 Watal M. Iwasaki, PhD
 :   Associate Professor,
     [Graduate School of Life Sciences](https://www.lifesci.tohoku.ac.jp/en/),
-    [Tohoku University](https://www.tohoku.ac.jp/en/),\
-    Academic Support & Planning Office
-
-Address
-:   980-8577 仙台市青葉区片平2-1-1 東北大学
-    [生命科学プロジェクト総合研究棟](https://www.tohoku.ac.jp/map/ja/?f=KH_D04)
+    [Tohoku University](https://www.tohoku.ac.jp/en/)
+:   Academic Support & Planning Office (ASPO)
 :   [Life Sciences Project Research Laboratory](https://www.tohoku.ac.jp/map/en/?f=KH_D04),
     Katahira 2-1-1, Sendai, 980-8577, Japan
-:   +81-22-217-5690
 
-Contacts
-:   heavywatalあgmail.com
+Contact
+:   <heavywatal@tohoku.ac.jp>
+:   +81-22-217-5690
 : <span class="contacts-icons">
   <a rel="me" href="https://github.com/heavywatal" title="GitHub">
   <iconify-icon inline icon="bi:github"></iconify-icon></a>
