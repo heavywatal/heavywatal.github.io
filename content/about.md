@@ -206,6 +206,8 @@ Contact
 
 ## Teaching / Outreach
 
+-   「[Rによるデータ前処理実習](/slides/isct2026/)」
+    東京科学大 [データサイエンス人材育成プログラム](https://tmdu.org/special/data-science) (2026-10)
 -   「[統計モデリング概論 DSHC 2026](/slides/dshc2026/)」
     東京海上 [Data Science Hill Climb](https://tokiomarine-dshc.com/) (2026-09)
 -   「[生物統計学](/slides/soken2026biostats/)」総研大 (2026-07)
