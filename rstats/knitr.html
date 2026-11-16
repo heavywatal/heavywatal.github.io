@@ -382,15 +382,24 @@ litedown<a href="#litedown"></a>
 <li>オプション設定に使うのは
 <a href="https://github.com/search?q=repo%3Ayihui%2Flitedown+reactor+echo+message+collapse"><code>litedown::reactor()</code></a>
 <ul>
-<li><code>echo</code>: 単純な <code>TRUE</code> / <code>FALSE</code> のみ。</li>
+<li><a href="https://pkg.yihui.org/litedown/book/#sec:option-echo"><code>echo</code></a>:
+単純な <code>TRUE</code> / <code>FALSE</code> のみ。</li>
 <li><code>R.options</code> 未対応: <code>withr::local_options()</code> を置いて <code>echo = -1</code> することもできない。</li>
-<li><code>fig.alt</code> はユーザーにちゃんと設定されることを期待して空のまま出力される。</li>
-<li><code>fig.process</code> 未対応</li>
-<li><code>dpi</code> 未対応: <code>dev.args = list(res = 108)</code> とかで代替可能か？</li>
+<li><a href="https://pkg.yihui.org/litedown/book/#sec:option-fig"><code>fig.alt</code></a>
+はユーザーにちゃんと設定されることを期待して空のまま出力される。</li>
+<li><code>fig.process</code> 未対応。</li>
+<li><code>dpi</code> 未対応: <a href="https://pkg.yihui.org/litedown/book/#sec:option-dev"><code>dev.args = list(res = 108)</code></a> とかで代替可能。</li>
 <li><code>upload.fun = knitr::image_uri</code> 未対応:
 <code>.md</code> → <code>.html</code> 変換時の <code>embed_resources</code> はある。</li>
 </ul>
 </li>
+<li>code chunk の検出を
+<a href="https://github.com/github/cmark-gfm">cmark-gfm</a>
+パーサーに任せる。
+文脈無視の正規表現だったknitrよりも頑健とのことだが、
+cmark-gfm が対応しない
+<a href="/misc/markdown.html#definition-lists">definition lists</a>
+などの中にあるものを扱えないという制約にもなる。</li>
 <li>code chunk の <code>echo</code> 結果が
 <code>``` {.r}</code> という独自形式になってしまう。
 これはバグではなく仕様らしい
