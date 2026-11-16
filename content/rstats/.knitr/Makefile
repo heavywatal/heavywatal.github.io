@@ -10,6 +10,7 @@ all: ${KNITTED}
 
 ${DESTINATION}/%.md: %.Rmd setup.R
 	Rscript --no-init-file -e "wtl::exec_knit('$<', '$@')"
+# 	Rscript --no-init-file -e "litedown::fuse('$<', '$@')"
 
 clean:
-	$(RM) -r ${KNITTED} cache ${DESTINATION}/figure/*-1.png
+	$(RM) -r ${KNITTED} ../.cache ../*__files ${DESTINATION}/figure

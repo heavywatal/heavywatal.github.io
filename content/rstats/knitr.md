@@ -333,13 +333,22 @@ knitrやrmarkdownの作者がイチから開発しなおしている軽量版。
   [`litedown::fuse()`](https://cran.r-project.org/web/packages/litedown/refman/litedown.html#fuse)
 - オプション設定に使うのは
   [`litedown::reactor()`](https://github.com/search?q=repo%3Ayihui%2Flitedown+reactor+echo+message+collapse)
-  - `echo`: 単純な `TRUE` / `FALSE` のみ。
+  - [`echo`](https://pkg.yihui.org/litedown/book/#sec:option-echo):
+    単純な `TRUE` / `FALSE` のみ。
   - `R.options` 未対応: `withr::local_options()` を置いて `echo = -1` することもできない。
-  - `fig.alt` はユーザーにちゃんと設定されることを期待して空のまま出力される。
-  - `fig.process` 未対応
-  - `dpi` 未対応: `dev.args = list(res = 108)` とかで代替可能か？
+  - [`fig.alt`](https://pkg.yihui.org/litedown/book/#sec:option-fig)
+    はユーザーにちゃんと設定されることを期待して空のまま出力される。
+  - `fig.process` 未対応。
+  - `dpi` 未対応: [`dev.args = list(res = 108)`](https://pkg.yihui.org/litedown/book/#sec:option-dev) とかで代替可能。
   - `upload.fun = knitr::image_uri` 未対応:
     `.md` → `.html` 変換時の `embed_resources` はある。
+- code chunk の検出を
+  [cmark-gfm](https://github.com/github/cmark-gfm)
+  パーサーに任せる。
+  文脈無視の正規表現だったknitrよりも頑健とのことだが、
+  cmark-gfm が対応しない
+  [definition lists]({{< relref "markdown.md#definition-lists" >}})
+  などの中にあるものを扱えないという制約にもなる。
 - code chunk の `echo` 結果が
   ` ``` {.r} ` という独自形式になってしまう。
   これはバグではなく仕様らしい

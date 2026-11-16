@@ -6,15 +6,19 @@ tags = ["r", "concurrent"]
 weight = -55
 +++
 
+```{r, setup-r}
+#| file: "setup.R"
+#| cache: false
+#| echo: false
+#| results: "asis"
+```
 ```{r, setup-local}
 #| cache: false
 #| echo: false
 options(mc.cores = parallel::detectCores(logical = FALSE))
-knitr::opts_chunk$set(comment = "")
-knitr::opts_chunk$set(message = NA)
-knitr::opts_chunk$set(warning = NA)
-knitr::opts_chunk$set(cache = TRUE, autodep = TRUE)
-if (dir.exists(knitr::opts_chunk$get("cache.path"))) knitr::dep_auto()
+if (!requireNamespace("doParallel", quietly = TRUE)) {
+  install.packages("doParallel")
+}
 ```
 
 ## parallel
