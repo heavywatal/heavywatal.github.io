@@ -251,10 +251,10 @@ GFMに正式に組み込まれたわけではない。
 > [!UNKNOWN]
 > Unknown alert type shown without color or icon.
 
-> [!type]+ title
+> [!note]+ Obsidian Callouts
 > Hogo provides `AlertSign` and `AlertTitle` for the extended syntax like
 > [Obsidian callouts](https://help.obsidian.md/callouts).
-> This theme may also support it if it gets more popular.
+> i.e., `[!type]+ title`
 
 
 ### Lists
