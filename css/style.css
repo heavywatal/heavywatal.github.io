@@ -105,6 +105,12 @@
   box-sizing: inherit;
 }
 
+:root {
+  line-break: strict;
+  overflow-wrap: anywhere;
+  text-spacing-trim: trim-start;
+}
+
 html {
   box-sizing: border-box;
   -webkit-text-size-adjust: 100%;
@@ -127,18 +133,18 @@ a:hover {
   text-decoration: underline;
 }
 
-ul, ol {
+:where(ul, ol) {
   padding-inline-start: 1.8em;
   margin-block: 0.5em;
 }
-li ul, li ol {
+li :where(ul, ol) {
   margin-block: 0;
 }
 
 li {
   margin-block: 0.25em;
 }
-li li, li p {
+li :where(li, p) {
   margin-block: 0.2em;
 }
 
@@ -146,11 +152,14 @@ input[type=search] {
   border-radius: 0;
 }
 
-ul:has(> li > input[type=checkbox]), ul:has(> li > p > input[type=checkbox]) {
+input[type=checkbox] {
+  vertical-align: text-bottom;
+}
+ul:has(> li > :where(input[type=checkbox], p > input[type=checkbox])) {
   list-style-type: none;
 }
-ul > li > input[type=checkbox], ul > li > p > input[type=checkbox] {
-  margin-inline-start: -1.5em;
+ul > li > :where(input[type=checkbox], p > input[type=checkbox]) {
+  margin-inline-start: -1.4em;
 }
 
 dl {
@@ -177,8 +186,9 @@ dd::before {
   opacity: 0.3;
 }
 
-code, pre {
+:where(code, pre) {
   font-family: var(--monospace);
+  text-spacing-trim: space-all;
 }
 
 :not(pre) > code {
@@ -223,7 +233,7 @@ table {
   border-spacing: 0.4em;
 }
 
-th, td {
+:where(th, td) {
   padding-inline: 0.4em;
 }
 
@@ -246,7 +256,7 @@ kbd {
   border-radius: 0.18em;
 }
 
-sub, sup {
+:where(sub, sup) {
   line-height: 1;
 }
 
@@ -532,10 +542,7 @@ article h6::before {
   background: oklch(85% 0 0deg / 0.125);
   margin: 0;
 }
-.menu div,
-.menu label,
-.menu li,
-.menu label.active {
+.menu :is(div, label, li, label.active) {
   border-bottom: 1px solid oklch(63% 0 0deg / 0.4);
 }
 .menu .active {
@@ -543,9 +550,7 @@ article h6::before {
   color: var(--link-text);
   border-color: var(--link-text);
 }
-.menu div:hover,
-.menu label:hover,
-.menu li:hover {
+.menu :is(div, label, li):hover {
   filter: brightness(1.1);
   transform: scale(1.01);
 }
@@ -622,20 +627,26 @@ article h6::before {
   font-weight: 500;
   color: var(--color);
 }
-.markdown-alert-note {
+.markdown-alert-note, .markdown-alert-info, .markdown-alert-todo {
   --color: oklch(var(--lightness) var(--chroma) 256deg);
 }
-.markdown-alert-tip {
+.markdown-alert-tip, .markdown-alert-hint, .markdown-alert-success, .markdown-alert-check, .markdown-alert-done {
   --color: oklch(var(--lightness) var(--chroma) 148deg);
 }
 .markdown-alert-important {
   --color: oklch(var(--lightness) var(--chroma) 295deg);
 }
-.markdown-alert-warning {
+.markdown-alert-warning, .markdown-alert-attention, .markdown-alert-question, .markdown-alert-help, .markdown-alert-faq {
   --color: oklch(var(--lightness) var(--chroma) 75deg);
 }
-.markdown-alert-caution {
+.markdown-alert-caution, .markdown-alert-failure, .markdown-alert-fail, .markdown-alert-missing, .markdown-alert-danger, .markdown-alert-error, .markdown-alert-bug {
   --color: oklch(var(--lightness) var(--chroma) 25deg);
+}
+.markdown-alert-abstract, .markdown-alert-summary, .markdown-alert-tldr {
+  --color: oklch(var(--lightness) var(--chroma) 193deg);
+}
+.markdown-alert-example {
+  --color: oklch(var(--lightness) var(--chroma) 288deg);
 }
 .markdown-alert summary {
   margin: 0.5em 0;
@@ -709,8 +720,7 @@ header .tags {
   margin-inline-start: auto;
 }
 
-.tags a,
-.terms dt a {
+:is(.tags, .terms dt) a {
   font-size: 0.88rem;
   font-weight: 400;
   padding: 0.25em 0.6em;
@@ -719,8 +729,7 @@ header .tags {
   opacity: 0.88;
   background-color: oklch(73% 0 0deg / 0.33);
 }
-.tags a:hover,
-.terms dt a:hover {
+:is(.tags, .terms dt) a:hover {
   opacity: 1;
   text-decoration: none;
 }
@@ -732,209 +741,144 @@ header .tags {
   gap: 0 1.5em;
 }
 
-.chroma .k,
-.chroma .kd,
-.chroma .kn,
-.chroma .kp,
-.chroma .kr,
-.chroma .kt,
-.chroma .ow, .code-inline .k,
-.code-inline .kd,
-.code-inline .kn,
-.code-inline .kp,
-.code-inline .kr,
-.code-inline .kt,
-.code-inline .ow {
-  color: #56B4E9;
+:is(.chroma, .code-inline) :is(.k,
+.kd,
+.kn,
+.kp,
+.kr,
+.kt,
+.ow) {
+  color: #56b4e9;
 }
-.chroma .kc,
-.chroma .no,
-.chroma .nd,
-.chroma .ni,
-.chroma .nn, .code-inline .kc,
-.code-inline .no,
-.code-inline .nd,
-.code-inline .ni,
-.code-inline .nn {
-  color: #0072B2;
+:is(.chroma, .code-inline) :is(.kc,
+.no,
+.nd,
+.ni,
+.nn) {
+  color: #0072b2;
 }
-.chroma .nb,
-.chroma .bp,
-.chroma .ne,
-.chroma .py,
-.chroma .nl,
-.chroma .nt, .code-inline .nb,
-.code-inline .bp,
-.code-inline .ne,
-.code-inline .py,
-.code-inline .nl,
-.code-inline .nt {
-  color: #009E73;
+:is(.chroma, .code-inline) :is(.nb,
+.bp,
+.ne,
+.py,
+.nl,
+.nt) {
+  color: #009e73;
 }
-.chroma .nc,
-.chroma .nf,
-.chroma .fm, .code-inline .nc,
-.code-inline .nf,
-.code-inline .fm {
-  color: #E69F00;
+:is(.chroma, .code-inline) :is(.nc,
+.nf,
+.fm) {
+  color: #e69f00;
 }
-.chroma .na,
-.chroma .nx,
-.chroma .nv,
-.chroma .vc,
-.chroma .vg,
-.chroma .vi,
-.chroma .vm,
-.chroma .si, .code-inline .na,
-.code-inline .nx,
-.code-inline .nv,
-.code-inline .vc,
-.code-inline .vg,
-.code-inline .vi,
-.code-inline .vm,
-.code-inline .si {
-  color: #D55E00;
+:is(.chroma, .code-inline) :is(.na,
+.nx,
+.nv,
+.vc,
+.vg,
+.vi,
+.vm,
+.si) {
+  color: #d55e00;
 }
-.chroma .l,
-.chroma .ld,
-.chroma .s,
-.chroma .sa,
-.chroma .sb,
-.chroma .sc,
-.chroma .dl,
-.chroma .sd,
-.chroma .s2,
-.chroma .se,
-.chroma .sh,
-.chroma .sx,
-.chroma .sr,
-.chroma .s1,
-.chroma .ss, .code-inline .l,
-.code-inline .ld,
-.code-inline .s,
-.code-inline .sa,
-.code-inline .sb,
-.code-inline .sc,
-.code-inline .dl,
-.code-inline .sd,
-.code-inline .s2,
-.code-inline .se,
-.code-inline .sh,
-.code-inline .sx,
-.code-inline .sr,
-.code-inline .s1,
-.code-inline .ss {
-  color: #CC79A7;
+:is(.chroma, .code-inline) :is(.l,
+.ld,
+.s,
+.sa,
+.sb,
+.sc,
+.dl,
+.sd,
+.s2,
+.se,
+.sh,
+.sx,
+.sr,
+.s1,
+.ss) {
+  color: #cc79a7;
 }
-.chroma .m,
-.chroma .mb,
-.chroma .mf,
-.chroma .mh,
-.chroma .mi,
-.chroma .il,
-.chroma .mo, .code-inline .m,
-.code-inline .mb,
-.code-inline .mf,
-.code-inline .mh,
-.code-inline .mi,
-.code-inline .il,
-.code-inline .mo {
-  color: #CC79A7;
+:is(.chroma, .code-inline) :is(.m,
+.mb,
+.mf,
+.mh,
+.mi,
+.il,
+.mo) {
+  color: #cc79a7;
 }
-.chroma .n,
-.chroma .o,
-.chroma .p, .code-inline .n,
-.code-inline .o,
-.code-inline .p {
+:is(.chroma, .code-inline) :is(.n,
+.o,
+.p) {
   opacity: 0.95;
 }
-.chroma .c,
-.chroma .ch,
-.chroma .cm,
-.chroma .cp,
-.chroma .cpf,
-.chroma .c1,
-.chroma .cs,
-.chroma .si, .code-inline .c,
-.code-inline .ch,
-.code-inline .cm,
-.code-inline .cp,
-.code-inline .cpf,
-.code-inline .c1,
-.code-inline .cs,
-.code-inline .si {
+:is(.chroma, .code-inline) :is(.c,
+.ch,
+.cm,
+.cp,
+.cpf,
+.c1,
+.cs,
+.si) {
   opacity: 0.66;
 }
-.chroma .g,
-.chroma .ge,
-.chroma .gr,
-.chroma .go,
-.chroma .gp,
-.chroma .gt, .code-inline .g,
-.code-inline .ge,
-.code-inline .gr,
-.code-inline .go,
-.code-inline .gp,
-.code-inline .gt {
+:is(.chroma, .code-inline) :is(.g,
+.ge,
+.gr,
+.go,
+.gp,
+.gt) {
   font-style: italic;
 }
-.chroma .gh,
-.chroma .gu,
-.chroma .gs, .code-inline .gh,
-.code-inline .gu,
-.code-inline .gs {
+:is(.chroma, .code-inline) :is(.gh,
+.gu,
+.gs) {
   font-weight: bold;
 }
-.chroma .err,
-.chroma .gd, .code-inline .err,
-.code-inline .gd {
+:is(.chroma, .code-inline) :is(.err,
+.gd) {
   background-color: rgba(255, 0, 0, 0.1333333333);
 }
-.chroma .gi, .code-inline .gi {
+:is(.chroma, .code-inline) .gi {
   background-color: rgba(0, 255, 0, 0.1333333333);
 }
-.chroma .gl, .code-inline .gl {
+:is(.chroma, .code-inline) .gl {
   text-decoration: underline;
 }
-.chroma .hl, .code-inline .hl {
+:is(.chroma, .code-inline) .hl {
   background-color: rgba(255, 255, 0, 0.2);
 }
-.chroma .w,
-.chroma .x, .code-inline .w,
-.code-inline .x {
+:is(.chroma, .code-inline) :is(.w,
+.x) {
   background-color: rgba(0, 0, 255, 0.2);
 }
-.chroma .ln, .code-inline .ln {
+:is(.chroma, .code-inline) .ln {
   margin-inline-end: 1em;
 }
-.chroma .ln,
-.chroma .lnt, .code-inline .ln,
-.code-inline .lnt {
+:is(.chroma, .code-inline) :is(.ln,
+.lnt) {
   user-select: none;
   opacity: 0.6;
 }
-.chroma .lnt,
-.chroma .line, .code-inline .lnt,
-.code-inline .line {
+:is(.chroma, .code-inline) :is(.lnt,
+.line) {
   display: block;
 }
-.chroma .lntd, .code-inline .lntd {
+:is(.chroma, .code-inline) .lntd {
   vertical-align: top;
 }
-.chroma .lntd:first-child, .code-inline .lntd:first-child {
+:is(.chroma, .code-inline) .lntd:first-child {
   width: 2em;
 }
-.chroma .lntd:first-child pre, .code-inline .lntd:first-child pre {
+:is(.chroma, .code-inline) .lntd:first-child pre {
   box-shadow: none;
 }
-.chroma .lntd,
-.chroma .lntable, .code-inline .lntd,
-.code-inline .lntable {
+:is(.chroma, .code-inline) :is(.lntd,
+.lntable) {
   padding: 0;
   margin: 0;
   border: 0;
 }
-.chroma .lntable, .code-inline .lntable {
+:is(.chroma, .code-inline) .lntable {
   width: 100%;
   table-layout: fixed;
   border-spacing: 0;
